@@ -1,0 +1,48 @@
+{
+  "bead": "hv-umm2.194",
+  "phase": 5,
+  "implementMin": 108.57531593333333,
+  "implementWindow": {
+    "start": "2026-10-14T19:23:16.251Z",
+    "end": "2026-10-14T21:11:50.769956+00:00"
+  },
+  "localValidationS": {
+    "preflight": 2.458,
+    "weighted300": 326.02,
+    "child-fresh-source": 3.029,
+    "remaining-source": 2.312,
+    "remaining-source-v2": 2.051,
+    "sweep": 323.726,
+    "focused": 8.342,
+    "coverage": 6.52,
+    "heroic-player3": 17.289,
+    "heroic-player3-v4": 28.274,
+    "heroic-player3-v5": 52.694,
+    "heroic-player3-v6": 74.967,
+    "heroic-player3-v7": 52.112,
+    "heroic-player0-v7": 44.808,
+    "heroic-enemy-v7": 47.377,
+    "shadow-player-v7": 46.654,
+    "shadow-enemy-v7": 31.748,
+    "review": 71.678,
+    "knip": 5.477
+  },
+  "hostLoad": 14.91,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "missing-primitive",
+      "minutes": 47.118984,
+      "note": "First dispatch to resumed dispatch gross diagnosis and separately certified hv-pu55 prerequisite/recovery; overlaps prerequisite clock without continuous original claim or additive project time."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 41.442883333333334,
+      "note": "Gross purposeful caller assembly/admission and live QA interval after default sweep. Retained deterministic caller failures: padded slots, fresh event observations after reload, premature geometry, invalid source-in-pile selector. Includes native runs and actual lease waits; not productive editing time. Source-in-pile missing cause was not established by v6 alone; actual v7 owner count/layers + engine UUID proof judged separately."
+    }
+  ]
+}

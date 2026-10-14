@@ -1,0 +1,5003 @@
+{
+  "bead": "hv-umm2.194",
+  "phase": 5,
+  "base": "23b9311936fdccb66e1e8d2f533d4e82ad429770",
+  "sourceEpoch": {
+    "base": "23b9311936fdccb66e1e8d2f533d4e82ad429770",
+    "frozenAt": "2026-10-14T20:10:57.973578+00:00",
+    "hashes": {
+      "src/content/cards/shadow-march-54471b31.ts": "cacea73eda04fbfd84ab4f5fbf04ef09119c84387c4ffd8bf6efed7bda56f41e",
+      "src/content/cards/heroic-rescue-fed69d6e.ts": "bcc99ee4dbda861b8683ed560664e07b800c54837ba8f07aba73a4da7c94f4ab",
+      "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+      "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+    }
+  },
+  "implementation": {
+    "nativeEntities": 4,
+    "allPrintedClauses": 5,
+    "baseDefinitions": 4,
+    "amplifiedDefinitions": 1,
+    "remainingAuthoredLeaves": 2,
+    "readonlyChildLeaves": 2,
+    "newPrimitives": 0,
+    "newRulesDecisions": 0,
+    "knownRDs": [
+      "RD-hv-7x4l.50-2"
+    ],
+    "cardIssues": 0,
+    "immutableFieldProof": {
+      "sha256": "c8813490f9b9db22b9da50d543207c6fc7b5753f587f20a274df7b11f530e864",
+      "fieldsPreserved": [
+        16,
+        17
+      ]
+    },
+    "d20": "Existing public primitive composition; no new permanent scenario/test/index or form-growth claim. Existing child scenario read-only.",
+    "d21": {
+      "sample": [
+        {
+          "uuid": "54471b31-4449-453d-9a6e-814d6225520a",
+          "firstByte": 156,
+          "sampled": false
+        },
+        {
+          "uuid": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+          "firstByte": 60,
+          "sampled": false
+        },
+        {
+          "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+          "firstByte": 31,
+          "sampled": false
+        },
+        {
+          "uuid": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+          "firstByte": 197,
+          "sampled": false
+        }
+      ],
+      "newPromptKinds": 0,
+      "newStatusKinds": 0,
+      "newVisualKinds": 0,
+      "requiredJudgedEntities": 0,
+      "actualChangedWorkflowJudgedCells": 10,
+      "predictionQualification": "Heroic actually uses existing chooseTargets:target, not inventory chooseCards:chooseInZone."
+    }
+  },
+  "dispatchClock": {
+    "primaryStart": "2026-10-14T19:23:16.251Z",
+    "primaryCall": "call_ad2c1100b1b641a7be388481ec1f373a",
+    "primaryProofSHA256": "7d546d845437d8877f1d6e14db0149a1a023c511abeb85181e9260fb3f40e1be",
+    "resumeStart": "2026-10-14T20:10:23.390Z",
+    "resumeCall": "call_9c3f595bf0a64fefbfe866519b314f29",
+    "resumeProofSHA256": "4465950c5af1c0e17fbed18f009ead3a60158c15a4ac30b8374030b31281dd7e",
+    "preResumeGrossMin": 47.118984,
+    "cutoff": "2026-10-14T21:11:50.769956+00:00",
+    "meaning": "Inclusive gross elapsed diagnostic/prerequisite/recovery/resume/check/admission/QA window; released original claim during hv-pu55. Overlaps prerequisite clock, not continuous claim or additive project time. Actual Git terminal and cutoff gap returned externally.",
+    "modelSamplingCPU": "UNKNOWN"
+  },
+  "validation": {
+    "commands": {
+      "preflight": {
+        "command": "npm",
+        "args": [
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+        ],
+        "start": "2026-10-14T20:10:58.038Z",
+        "end": "2026-10-14T20:11:00.496Z",
+        "elapsedS": 2.458,
+        "exitCode": 0,
+        "hostLoad": [
+          11.58642578125,
+          11.662109375,
+          10.64111328125
+        ],
+        "pid": 71216,
+        "pgid": 71216,
+        "gateReleasedAt": "2026-10-14T20:10:58.083Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.mjs": "3310599f9055616ba1783e1d8da935c66b38b4314104eaead651388425faabc5",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439"
+        }
+      },
+      "weighted300": {
+        "command": "lockf",
+        "args": [
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+        ],
+        "start": "2026-10-14T20:11:48.944Z",
+        "end": "2026-10-14T20:17:14.964Z",
+        "elapsedS": 326.02,
+        "exitCode": 0,
+        "hostLoad": [
+          7.56689453125,
+          10.5673828125,
+          10.2939453125
+        ],
+        "pid": 75075,
+        "pgid": 75075,
+        "gateReleasedAt": "2026-10-14T20:11:48.987Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.mjs": "3310599f9055616ba1783e1d8da935c66b38b4314104eaead651388425faabc5",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439"
+        }
+      },
+      "child-fresh-source": {
+        "command": "node_modules/.bin/tsx",
+        "args": [
+          "/tmp/dreamtides-194-resume/readonly-child-actual-source-proof.ts"
+        ],
+        "start": "2026-10-14T20:11:50.125Z",
+        "end": "2026-10-14T20:11:53.154Z",
+        "elapsedS": 3.029,
+        "exitCode": 0,
+        "hostLoad": [
+          7.56689453125,
+          10.5673828125,
+          10.2939453125
+        ],
+        "pid": 75186,
+        "pgid": 75186,
+        "gateReleasedAt": "2026-10-14T20:11:50.173Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.mjs": "3310599f9055616ba1783e1d8da935c66b38b4314104eaead651388425faabc5",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/tmp/dreamtides-194-resume/readonly-child-actual-source-proof.ts": "90b924a3834a37c6cccc53170da9e7f22a9811fe8e4090cfd2a1045c5c292ea8"
+        }
+      },
+      "remaining-source": {
+        "command": "node_modules/.bin/tsx",
+        "args": [
+          "/tmp/dreamtides-194-resume/remaining-actual-source-proof.ts"
+        ],
+        "start": "2026-10-14T20:14:31.461Z",
+        "end": "2026-10-14T20:14:33.773Z",
+        "elapsedS": 2.312,
+        "exitCode": 1,
+        "hostLoad": [
+          5.958984375,
+          8.58154296875,
+          9.5146484375
+        ],
+        "pid": 85815,
+        "pgid": 85815,
+        "gateReleasedAt": "2026-10-14T20:14:31.506Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.mjs": "3310599f9055616ba1783e1d8da935c66b38b4314104eaead651388425faabc5",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/tmp/dreamtides-194-resume/remaining-actual-source-proof.ts": "8b271a11034c1b45275040e094785b7497c0ff270ef53c10f3f6893d2a114293"
+        }
+      },
+      "remaining-source-v2": {
+        "command": "node_modules/.bin/tsx",
+        "args": [
+          "/tmp/dreamtides-194-resume/remaining-actual-source-proof.v2.ts"
+        ],
+        "start": "2026-10-14T20:16:35.878Z",
+        "end": "2026-10-14T20:16:37.929Z",
+        "elapsedS": 2.051,
+        "exitCode": 0,
+        "hostLoad": [
+          4.1357421875,
+          7.05810546875,
+          8.7822265625
+        ],
+        "pid": 90126,
+        "pgid": 90126,
+        "gateReleasedAt": "2026-10-14T20:16:35.920Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.mjs": "3310599f9055616ba1783e1d8da935c66b38b4314104eaead651388425faabc5",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/tmp/dreamtides-194-resume/remaining-actual-source-proof.v2.ts": "843f561ac719431a744156f4803368fc4a214315701ca931f73c36b5ae890b8c"
+        }
+      },
+      "sweep": {
+        "command": "node",
+        "args": [
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.194",
+          "--cards",
+          "54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+        ],
+        "start": "2026-10-14T20:19:06.752Z",
+        "end": "2026-10-14T20:24:30.478Z",
+        "elapsedS": 323.726,
+        "exitCode": 0,
+        "hostLoad": [
+          4.23388671875,
+          6.06591796875,
+          8.10009765625
+        ],
+        "pid": 92923,
+        "pgid": 92923,
+        "gateReleasedAt": "2026-10-14T20:19:06.796Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.mjs": "3310599f9055616ba1783e1d8da935c66b38b4314104eaead651388425faabc5",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/card-sweep.mjs": "83f2d5e65a8e45dcbae1016531fc4e048d93c2749459410f710b13213b904e00"
+        }
+      },
+      "focused": {
+        "command": "npm",
+        "args": [
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/content-gates.test.ts",
+          "-t",
+          "void targets qualified|exact current-turn history|materialize|zone card references|content coverage|verifiedText|authored"
+        ],
+        "start": "2026-10-14T20:22:31.831Z",
+        "end": "2026-10-14T20:22:40.173Z",
+        "elapsedS": 8.342,
+        "exitCode": 0,
+        "hostLoad": [
+          6.7421875,
+          8.2861328125,
+          8.78662109375
+        ],
+        "pid": 57991,
+        "pgid": 57991,
+        "gateReleasedAt": "2026-10-14T20:22:31.873Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.mjs": "3310599f9055616ba1783e1d8da935c66b38b4314104eaead651388425faabc5",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/src/engine/content-gates.test.ts": "8fe0539edece2a8f61e0ee10fa2dbc3f36c52141e446e7dd1b0dd05548de8952"
+        }
+      },
+      "coverage": {
+        "command": "npm",
+        "args": [
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts"
+        ],
+        "start": "2026-10-14T20:23:00.324Z",
+        "end": "2026-10-14T20:23:06.844Z",
+        "elapsedS": 6.52,
+        "exitCode": 0,
+        "hostLoad": [
+          7.9970703125,
+          8.40869140625,
+          8.81103515625
+        ],
+        "pid": 58702,
+        "pgid": 58702,
+        "gateReleasedAt": "2026-10-14T20:23:00.366Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.mjs": "3310599f9055616ba1783e1d8da935c66b38b4314104eaead651388425faabc5",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/src/engine/content-gates.test.ts": "8fe0539edece2a8f61e0ee10fa2dbc3f36c52141e446e7dd1b0dd05548de8952"
+        }
+      },
+      "heroic-player3": {
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-194-resume/void-history-browser.v3.mjs",
+          "--bead",
+          "hv-umm2.194",
+          "--arg",
+          "cell=rescue-player3",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "240"
+        ],
+        "start": "2026-10-14T20:37:01.359Z",
+        "end": "2026-10-14T20:37:18.648Z",
+        "elapsedS": 17.289,
+        "exitCode": 1,
+        "hostLoad": [
+          3.60009765625,
+          4.71435546875,
+          6.6611328125
+        ],
+        "pid": 45084,
+        "pgid": 45084,
+        "gateReleasedAt": "2026-10-14T20:37:01.399Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.mjs": "3310599f9055616ba1783e1d8da935c66b38b4314104eaead651388425faabc5",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-194-resume/void-history-browser.v3.mjs": "1d48ef8e704c1fb8469314b597d5a732a066e942c8eaa77d15250f90c4653b50"
+        }
+      },
+      "heroic-player3-v4": {
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-194-resume/void-history-browser.v4.mjs",
+          "--bead",
+          "hv-umm2.194",
+          "--arg",
+          "cell=rescue-player3",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "240"
+        ],
+        "start": "2026-10-14T20:51:45.717Z",
+        "end": "2026-10-14T20:52:13.991Z",
+        "elapsedS": 28.274,
+        "exitCode": 1,
+        "hostLoad": [
+          16.50146484375,
+          8.576171875,
+          6.9521484375
+        ],
+        "pid": 24324,
+        "pgid": 24324,
+        "gateReleasedAt": "2026-10-14T20:51:45.766Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.mjs": "3310599f9055616ba1783e1d8da935c66b38b4314104eaead651388425faabc5",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-194-resume/void-history-browser.v4.mjs": "75d8184dd35c3ba58128c2dcb0d96bd65f99572a2be4e90014835eaa124c5597"
+        }
+      },
+      "heroic-player3-v5": {
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-194-resume/void-history-browser.v5.mjs",
+          "--bead",
+          "hv-umm2.194",
+          "--arg",
+          "cell=rescue-player3",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "240"
+        ],
+        "start": "2026-10-14T20:54:52.531Z",
+        "end": "2026-10-14T20:55:45.225Z",
+        "elapsedS": 52.694,
+        "exitCode": 1,
+        "hostLoad": [
+          19.12841796875,
+          14.19091796875,
+          9.6875
+        ],
+        "pid": 53977,
+        "pgid": 53977,
+        "gateReleasedAt": "2026-10-14T20:54:52.578Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.v2.mjs": "f6239f95f494e53c9520e4ac2f96a530b055480fc2421e1f728ed2f3e11dc2e6",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-194-resume/void-history-browser.v5.mjs": "0f50ffc914de1f22def5566282a81594add5c0ccf0ed54a200d6f1ca76c4e1bf"
+        }
+      },
+      "heroic-player3-v6": {
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-194-resume/void-history-browser.v6.mjs",
+          "--bead",
+          "hv-umm2.194",
+          "--arg",
+          "cell=rescue-player3",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "240"
+        ],
+        "start": "2026-10-14T20:57:49.796Z",
+        "end": "2026-10-14T20:59:04.763Z",
+        "elapsedS": 74.967,
+        "exitCode": 1,
+        "hostLoad": [
+          8.27978515625,
+          11.45654296875,
+          9.38671875
+        ],
+        "pid": 70538,
+        "pgid": 70538,
+        "gateReleasedAt": "2026-10-14T20:57:49.842Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.v2.mjs": "f6239f95f494e53c9520e4ac2f96a530b055480fc2421e1f728ed2f3e11dc2e6",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-194-resume/void-history-browser.v6.mjs": "2cce210e80af5f4d9bbfaa3320ffa3a3beb31901a3589c067ff5248cfee5ff99"
+        }
+      },
+      "heroic-player3-v7": {
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-194-resume/void-history-browser.v7.mjs",
+          "--bead",
+          "hv-umm2.194",
+          "--arg",
+          "cell=rescue-player3",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "240"
+        ],
+        "start": "2026-10-14T21:01:05.572Z",
+        "end": "2026-10-14T21:01:57.684Z",
+        "elapsedS": 52.112,
+        "exitCode": 0,
+        "hostLoad": [
+          13.9599609375,
+          15.533203125,
+          11.72607421875
+        ],
+        "pid": 958,
+        "pgid": 958,
+        "gateReleasedAt": "2026-10-14T21:01:05.623Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.v2.mjs": "f6239f95f494e53c9520e4ac2f96a530b055480fc2421e1f728ed2f3e11dc2e6",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-194-resume/void-history-browser.v7.mjs": "8f4b7d090f8dc199ba06d426536b7a50c3165ab6646434fc6c99ad48230aee36"
+        }
+      },
+      "heroic-player0-v7": {
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-194-resume/void-history-browser.v7.mjs",
+          "--bead",
+          "hv-umm2.194",
+          "--arg",
+          "cell=rescue-player0",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "240"
+        ],
+        "start": "2026-10-14T21:02:22.502Z",
+        "end": "2026-10-14T21:03:07.310Z",
+        "elapsedS": 44.808,
+        "exitCode": 0,
+        "hostLoad": [
+          8.1318359375,
+          13.29296875,
+          11.208984375
+        ],
+        "pid": 7038,
+        "pgid": 7038,
+        "gateReleasedAt": "2026-10-14T21:02:22.546Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.v2.mjs": "f6239f95f494e53c9520e4ac2f96a530b055480fc2421e1f728ed2f3e11dc2e6",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-194-resume/void-history-browser.v7.mjs": "8f4b7d090f8dc199ba06d426536b7a50c3165ab6646434fc6c99ad48230aee36"
+        }
+      },
+      "heroic-enemy-v7": {
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-194-resume/void-history-browser.v7.mjs",
+          "--bead",
+          "hv-umm2.194",
+          "--arg",
+          "cell=rescue-enemy",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "240"
+        ],
+        "start": "2026-10-14T21:03:17.001Z",
+        "end": "2026-10-14T21:04:04.378Z",
+        "elapsedS": 47.377,
+        "exitCode": 0,
+        "hostLoad": [
+          7.52197265625,
+          12.3447265625,
+          10.99169921875
+        ],
+        "pid": 10743,
+        "pgid": 10743,
+        "gateReleasedAt": "2026-10-14T21:03:17.045Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.v2.mjs": "f6239f95f494e53c9520e4ac2f96a530b055480fc2421e1f728ed2f3e11dc2e6",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-194-resume/void-history-browser.v7.mjs": "8f4b7d090f8dc199ba06d426536b7a50c3165ab6646434fc6c99ad48230aee36"
+        }
+      },
+      "shadow-player-v7": {
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-194-resume/void-history-browser.v7.mjs",
+          "--bead",
+          "hv-umm2.194",
+          "--arg",
+          "cell=shadow-player",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "240"
+        ],
+        "start": "2026-10-14T21:04:16.467Z",
+        "end": "2026-10-14T21:05:03.121Z",
+        "elapsedS": 46.654,
+        "exitCode": 0,
+        "hostLoad": [
+          14.41455078125,
+          13.28955078125,
+          11.42578125
+        ],
+        "pid": 14975,
+        "pgid": 14975,
+        "gateReleasedAt": "2026-10-14T21:04:16.514Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.v2.mjs": "f6239f95f494e53c9520e4ac2f96a530b055480fc2421e1f728ed2f3e11dc2e6",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-194-resume/void-history-browser.v7.mjs": "8f4b7d090f8dc199ba06d426536b7a50c3165ab6646434fc6c99ad48230aee36"
+        }
+      },
+      "shadow-enemy-v7": {
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-194-resume/void-history-browser.v7.mjs",
+          "--bead",
+          "hv-umm2.194",
+          "--arg",
+          "cell=shadow-enemy",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "240"
+        ],
+        "start": "2026-10-14T21:05:25.303Z",
+        "end": "2026-10-14T21:05:57.051Z",
+        "elapsedS": 31.748,
+        "exitCode": 0,
+        "hostLoad": [
+          10.015625,
+          12.4072265625,
+          11.24169921875
+        ],
+        "pid": 75947,
+        "pgid": 75947,
+        "gateReleasedAt": "2026-10-14T21:05:25.345Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.v2.mjs": "f6239f95f494e53c9520e4ac2f96a530b055480fc2421e1f728ed2f3e11dc2e6",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+          "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-194-resume/void-history-browser.v7.mjs": "8f4b7d090f8dc199ba06d426536b7a50c3165ab6646434fc6c99ad48230aee36"
+        }
+      },
+      "review": {
+        "command": "npm",
+        "args": [
+          "run",
+          "review"
+        ],
+        "start": "2026-10-14T21:08:32.811Z",
+        "end": "2026-10-14T21:09:44.489Z",
+        "elapsedS": 71.678,
+        "exitCode": 0,
+        "hostLoad": [
+          14.91259765625,
+          13.39794921875,
+          11.8193359375
+        ],
+        "pid": 48617,
+        "pgid": 48617,
+        "gateReleasedAt": "2026-10-14T21:08:32.860Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.v2.mjs": "f6239f95f494e53c9520e4ac2f96a530b055480fc2421e1f728ed2f3e11dc2e6",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439"
+        }
+      },
+      "knip": {
+        "command": "npm",
+        "args": [
+          "run",
+          "knip"
+        ],
+        "start": "2026-10-14T21:09:52.539Z",
+        "end": "2026-10-14T21:09:58.016Z",
+        "elapsedS": 5.477,
+        "exitCode": 0,
+        "hostLoad": [
+          19.09765625,
+          14.689453125,
+          12.427734375
+        ],
+        "pid": 93576,
+        "pgid": 93576,
+        "gateReleasedAt": "2026-10-14T21:09:52.593Z",
+        "groupAfter": "absent",
+        "sourceValid": true,
+        "callers": {
+          "/private/tmp/dreamtides-194-resume/run-receipt.v2.mjs": "f6239f95f494e53c9520e4ac2f96a530b055480fc2421e1f728ed2f3e11dc2e6",
+          "/tmp/dreamtides-194-resume/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439"
+        }
+      }
+    },
+    "actualSource": {
+      "freshCases": 108,
+      "childCases": 64,
+      "remainingCases": 44,
+      "childResultsSHA256": "bdb01675eff695dd77268c1e068e67cfca820361c0d118c29b8d3464bce4476f",
+      "remainingResultsSHA256": "c7f1a19ed12b5a6e45ad8b02c983b2a3928d37d28fb3c1943832c398bf02f071",
+      "qualification": "Current source cases are fresh; no historical child/prerequisite pass borrowed. Existing focused synthetic contracts cover primitive ownership/control/revalidation/capacity/rollback boundaries."
+    },
+    "focused": {
+      "passed": 195,
+      "skipped": 3908
+    },
+    "coverage": {
+      "passed": 20
+    },
+    "weighted300": {
+      "games": 300,
+      "steps": 102965,
+      "prompts": 7838,
+      "interactiveReruns": 818,
+      "rerunMs": 4.513,
+      "engineWallS": 324.5,
+      "engineCPUS": 359.6,
+      "failures": 0,
+      "results": {
+        "player": 152,
+        "enemy": 148,
+        "draw": 0
+      },
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 3
+      },
+      "heavySlot": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "exactLockWaitS": "UNKNOWN; held command/process chain recorded, elapsed scope includes lock waiting",
+      "coverage": [
+        {
+          "uuid": "54471b31-4449-453d-9a6e-814d6225520a",
+          "included": 617,
+          "exercised": 88
+        },
+        {
+          "uuid": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+          "included": 614,
+          "exercised": 494
+        },
+        {
+          "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+          "included": 615,
+          "exercised": 65
+        },
+        {
+          "uuid": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+          "included": 614,
+          "exercised": 96
+        }
+      ],
+      "qualification": "Actual inclusion/exercise counts do not prove each printed clause."
+    },
+    "preflight": {
+      "requested": 80,
+      "pass": 40,
+      "skip": 40,
+      "fail": 0,
+      "pending": 0,
+      "skipReason": "ineligibleVariant",
+      "variants": [
+        "base",
+        "amplified",
+        "empowered",
+        "kindled",
+        "resonant",
+        "inspired",
+        "enduring",
+        "hastened",
+        "attuned",
+        "perfected"
+      ],
+      "actors": [
+        "player",
+        "enemy"
+      ]
+    },
+    "sweep": {
+      "requested": 80,
+      "rawAttempts": 80,
+      "pass": 40,
+      "skip": 40,
+      "fail": 0,
+      "pending": 0,
+      "retry": 0,
+      "invocation": "invocations/sweep-KpPRcb",
+      "countsByUUID": {
+        "54471b31-4449-453d-9a6e-814d6225520a": 12,
+        "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb": 10,
+        "c32ef131-d283-4bf1-bf65-2d5e5d232168": 10,
+        "7e2f2ac0-4e3c-4520-80c6-c830581b40de": 8
+      },
+      "skipReason": "the card cannot take this variant",
+      "qualification": "Default normal play/resolution path; actual nth/qualified clauses independently exercised. Parent per-cell verification retained."
+    },
+    "review": {
+      "passedTests": 6864,
+      "passedFiles": 253,
+      "exit": 0
+    },
+    "knip": {
+      "exit": 0
+    },
+    "fullReview": "Not required for two existing-form content leaves with zero shared runtime/test-infrastructure/configuration changes. Normal parent review disposition is separate."
+  },
+  "purposefulWorkflow": [
+    {
+      "label": "heroic-player3-v7",
+      "invocation": "run-HKRANJ",
+      "reportSHA256": "d007572934d6e4a3ca4db74040d411c54151e6c2f837c59643d14c87cdcbbba8",
+      "exitCode": 0,
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 4,
+        "serve": 3182,
+        "scenario": 48177,
+        "total": 51431
+      },
+      "caps": [],
+      "nativeCalls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 4378
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 9677
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 4479
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 7097
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 3022
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 9741
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 4415
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 5367
+        }
+      ],
+      "managedOwnership": [
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "observedAt": "2026-10-14T21:01:07.667Z",
+          "record": {
+            "token": "3b965ca9-bc2e-42cc-8248-3642cafcf6a9",
+            "runner": {
+              "pid": 958,
+              "group": 958,
+              "started": "Wed Oct 14 14:01:05 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240"
+            },
+            "server": {
+              "pid": 1028,
+              "group": 1028,
+              "started": "Wed Oct 14 14:01:05 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 3b965ca9-bc2e-42cc-8248-3642cafcf6a9 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "port": 5274
+          }
+        },
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "observedAt": "2026-10-14T21:01:09.670Z",
+          "record": {
+            "token": "54e5d71b-80d8-41f8-bc86-b97784b9556e",
+            "pid": 958,
+            "bead": "hv-umm2.194",
+            "label": "void-history-browser.v7",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T21:01:09.026Z",
+            "providerState": "active",
+            "mcpSessionId": "65171954-6811-446f-8630-f479252b1e81",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ],
+      "normalClose": "Awaited native browser_close/active-call drain/server teardown; native returned without cleanup failure. Raw close response is not embedded.",
+      "cells": [
+        {
+          "cell": "rescue-player3",
+          "uuid": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+          "side": "player",
+          "viewport": "desktop",
+          "source": "i9",
+          "expected": [
+            "i4",
+            "i3",
+            "i2"
+          ],
+          "energy": 35,
+          "visibleVoid": {
+            "owner": "player",
+            "count": 7,
+            "top": "i18",
+            "renderedLayers": [
+              "i18",
+              "i1",
+              "i5"
+            ]
+          },
+          "finalGeometry": [
+            {
+              "selector": "[data-battle-zone=\"player-void\"] [data-card-pile]",
+              "x": 882.5625,
+              "y": 610.0602416992188,
+              "w": 83.4375,
+              "h": 59.59375,
+              "hit": {
+                "x": 885.5625,
+                "y": 639.8571166992188
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 1117.8125,
+              "y": 597,
+              "w": 122.6875,
+              "h": 42,
+              "hit": {
+                "x": 1120.8125,
+                "y": 618
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+              "x": 254.5,
+              "y": 483.5,
+              "w": 89.5,
+              "h": 89.5,
+              "hit": {
+                "x": 257.5,
+                "y": 528.25
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+              "x": 348,
+              "y": 483.5,
+              "w": 89.5,
+              "h": 89.5,
+              "hit": {
+                "x": 351,
+                "y": 528.25
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+              "x": 441.5,
+              "y": 483.5,
+              "w": 89.5,
+              "h": 89.5,
+              "hit": {
+                "x": 444.5,
+                "y": 528.25
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            }
+          ],
+          "reload": true,
+          "captures": [
+            "heroic-qualified3-result-desktop.png"
+          ],
+          "plays": 3,
+          "resolutions": 1,
+          "arrivals": 3,
+          "dissolved": 4,
+          "discarded": 2,
+          "persistedPlayIntents": 4,
+          "choice": {
+            "prompt": {
+              "kind": "chooseTargets",
+              "side": "player",
+              "purpose": {
+                "source": "i9",
+                "cardId": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+                "ability": 0,
+                "role": "target"
+              },
+              "candidates": [
+                "i4",
+                "i3",
+                "i2",
+                "i1"
+              ],
+              "min": 0,
+              "max": 3,
+              "cancellable": true,
+              "id": "4:5:0"
+            },
+            "candidateGeometry": [
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i4\"]",
+                "x": 204,
+                "y": 320.046875,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 207,
+                  "y": 443.2421875
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i3\"]",
+                "x": 388,
+                "y": 320.046875,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 391,
+                  "y": 443.2421875
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i2\"]",
+                "x": 572,
+                "y": 320.046875,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 575,
+                  "y": 443.2421875
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i1\"]",
+                "x": 756,
+                "y": 320.046875,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 759,
+                  "y": 443.2421875
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              }
+            ],
+            "reload": true,
+            "cancel": true,
+            "selected": 3
+          },
+          "enemyChoice": null
+        },
+        {
+          "cell": "rescue-player3",
+          "uuid": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+          "side": "player",
+          "viewport": "mobile",
+          "source": "i9",
+          "expected": [
+            "i4",
+            "i3",
+            "i2"
+          ],
+          "energy": 35,
+          "visibleVoid": {
+            "owner": "player",
+            "count": 7,
+            "top": "i18",
+            "renderedLayers": [
+              "i18",
+              "i1",
+              "i5"
+            ]
+          },
+          "finalGeometry": [
+            {
+              "selector": "[data-battle-zone=\"player-void\"] [data-card-pile]",
+              "x": 313.5625,
+              "y": 603.671875,
+              "w": 68.4375,
+              "h": 48.875,
+              "hit": {
+                "x": 316.5625,
+                "y": 628.109375
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 259.3125,
+              "y": 522.828125,
+              "w": 122.6875,
+              "h": 42,
+              "hit": {
+                "x": 262.3125,
+                "y": 543.828125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+              "x": 23.40625,
+              "y": 415.890625,
+              "w": 53.859375,
+              "h": 53.859375,
+              "hit": {
+                "x": 26.40625,
+                "y": 442.8203125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+              "x": 81.265625,
+              "y": 415.890625,
+              "w": 53.859375,
+              "h": 53.859375,
+              "hit": {
+                "x": 84.265625,
+                "y": 442.8203125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+              "x": 139.125,
+              "y": 415.890625,
+              "w": 53.859375,
+              "h": 53.859375,
+              "hit": {
+                "x": 142.125,
+                "y": 442.8203125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            }
+          ],
+          "reload": true,
+          "captures": [
+            "heroic-qualified-choice-mobile.png",
+            "heroic-qualified3-result-mobile.png"
+          ],
+          "plays": 3,
+          "resolutions": 1,
+          "arrivals": 3,
+          "dissolved": 4,
+          "discarded": 2,
+          "persistedPlayIntents": 4,
+          "choice": {
+            "prompt": {
+              "kind": "chooseTargets",
+              "side": "player",
+              "purpose": {
+                "source": "i9",
+                "cardId": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+                "ability": 0,
+                "role": "target"
+              },
+              "candidates": [
+                "i4",
+                "i3",
+                "i2",
+                "i1"
+              ],
+              "min": 0,
+              "max": 3,
+              "cancellable": true,
+              "id": "4:5:0"
+            },
+            "candidateGeometry": [
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i4\"]",
+                "x": 17,
+                "y": 82.5,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 20,
+                  "y": 205.6953125
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i3\"]",
+                "x": 197,
+                "y": 82.5,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 200,
+                  "y": 205.6953125
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i2\"]",
+                "x": 17,
+                "y": 352.890625,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 20,
+                  "y": 476.0859375
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i1\"]",
+                "x": 197,
+                "y": 352.890625,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 200,
+                  "y": 476.0859375
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              }
+            ],
+            "reload": true,
+            "cancel": true,
+            "selected": 3
+          },
+          "enemyChoice": null
+        }
+      ]
+    },
+    {
+      "label": "heroic-player0-v7",
+      "invocation": "run-FLbLry",
+      "reportSHA256": "bd52d3dbdba7eff874024a4d9dc4e0916afff4164a8ebbec0e4057a5f1d45177",
+      "exitCode": 0,
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 3177,
+        "scenario": 41000,
+        "total": 44248
+      },
+      "caps": [],
+      "nativeCalls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 4392
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 10166
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 3589
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 3294
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 2935
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 9636
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 3586
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 3401
+        }
+      ],
+      "managedOwnership": [
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "observedAt": "2026-10-14T21:02:24.588Z",
+          "record": {
+            "token": "afeebffe-bf3d-4529-87c8-712221d82f7a",
+            "runner": {
+              "pid": 7038,
+              "group": 7038,
+              "started": "Wed Oct 14 14:02:22 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=rescue-player0 --viewports desktop,mobile --timeout 240"
+            },
+            "server": {
+              "pid": 7081,
+              "group": 7081,
+              "started": "Wed Oct 14 14:02:22 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json afeebffe-bf3d-4529-87c8-712221d82f7a /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "port": 5274
+          }
+        },
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "observedAt": "2026-10-14T21:02:26.594Z",
+          "record": {
+            "token": "8b2514c1-d5d9-47a3-94cd-e7a88593b116",
+            "pid": 7038,
+            "bead": "hv-umm2.194",
+            "label": "void-history-browser.v7",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T21:02:25.862Z",
+            "providerState": "active",
+            "mcpSessionId": "0b8eae45-f796-4a17-8f9f-c900672d4e07",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ],
+      "normalClose": "Awaited native browser_close/active-call drain/server teardown; native returned without cleanup failure. Raw close response is not embedded.",
+      "cells": [
+        {
+          "cell": "rescue-player0",
+          "uuid": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+          "side": "player",
+          "viewport": "desktop",
+          "source": "i9",
+          "expected": [],
+          "energy": 35,
+          "visibleVoid": {
+            "owner": "player",
+            "count": 10,
+            "top": "i18",
+            "renderedLayers": [
+              "i18",
+              "i1",
+              "i2"
+            ]
+          },
+          "finalGeometry": [
+            {
+              "selector": "[data-battle-zone=\"player-void\"] [data-card-pile]",
+              "x": 882.5625,
+              "y": 610.0602416992188,
+              "w": 83.4375,
+              "h": 59.59375,
+              "hit": {
+                "x": 885.5625,
+                "y": 639.8571166992188
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 1117.8125,
+              "y": 597,
+              "w": 122.6875,
+              "h": 42,
+              "hit": {
+                "x": 1120.8125,
+                "y": 618
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            }
+          ],
+          "reload": true,
+          "captures": [],
+          "plays": 3,
+          "resolutions": 1,
+          "arrivals": 0,
+          "dissolved": 4,
+          "discarded": 2,
+          "persistedPlayIntents": 4,
+          "choice": {
+            "prompt": {
+              "kind": "chooseTargets",
+              "side": "player",
+              "purpose": {
+                "source": "i9",
+                "cardId": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+                "ability": 0,
+                "role": "target"
+              },
+              "candidates": [
+                "i4",
+                "i3",
+                "i2",
+                "i1"
+              ],
+              "min": 0,
+              "max": 3,
+              "cancellable": true,
+              "id": "4:5:0"
+            },
+            "candidateGeometry": [
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i4\"]",
+                "x": 204,
+                "y": 320.046875,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 207,
+                  "y": 443.2421875
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i3\"]",
+                "x": 388,
+                "y": 320.046875,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 391,
+                  "y": 443.2421875
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i2\"]",
+                "x": 572,
+                "y": 320.046875,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 575,
+                  "y": 443.2421875
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i1\"]",
+                "x": 756,
+                "y": 320.046875,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 759,
+                  "y": 443.2421875
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              }
+            ],
+            "reload": true,
+            "cancel": true,
+            "selected": 0
+          },
+          "enemyChoice": null
+        },
+        {
+          "cell": "rescue-player0",
+          "uuid": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+          "side": "player",
+          "viewport": "mobile",
+          "source": "i9",
+          "expected": [],
+          "energy": 35,
+          "visibleVoid": {
+            "owner": "player",
+            "count": 10,
+            "top": "i18",
+            "renderedLayers": [
+              "i18",
+              "i1",
+              "i2"
+            ]
+          },
+          "finalGeometry": [
+            {
+              "selector": "[data-battle-zone=\"player-void\"] [data-card-pile]",
+              "x": 313.5625,
+              "y": 603.671875,
+              "w": 68.4375,
+              "h": 48.875,
+              "hit": {
+                "x": 316.5625,
+                "y": 628.109375
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 259.3125,
+              "y": 522.828125,
+              "w": 122.6875,
+              "h": 42,
+              "hit": {
+                "x": 262.3125,
+                "y": 543.828125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            }
+          ],
+          "reload": true,
+          "captures": [],
+          "plays": 3,
+          "resolutions": 1,
+          "arrivals": 0,
+          "dissolved": 4,
+          "discarded": 2,
+          "persistedPlayIntents": 4,
+          "choice": {
+            "prompt": {
+              "kind": "chooseTargets",
+              "side": "player",
+              "purpose": {
+                "source": "i9",
+                "cardId": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+                "ability": 0,
+                "role": "target"
+              },
+              "candidates": [
+                "i4",
+                "i3",
+                "i2",
+                "i1"
+              ],
+              "min": 0,
+              "max": 3,
+              "cancellable": true,
+              "id": "4:5:0"
+            },
+            "candidateGeometry": [
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i4\"]",
+                "x": 17,
+                "y": 82.5,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 20,
+                  "y": 205.6953125
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i3\"]",
+                "x": 197,
+                "y": 82.5,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 200,
+                  "y": 205.6953125
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i2\"]",
+                "x": 17,
+                "y": 352.890625,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 20,
+                  "y": 476.0859375
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              {
+                "selector": "[data-testid=\"battle-card-picker-candidate-i1\"]",
+                "x": 197,
+                "y": 352.890625,
+                "w": 176,
+                "h": 246.390625,
+                "hit": {
+                  "x": 200,
+                  "y": 476.0859375
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              }
+            ],
+            "reload": true,
+            "cancel": true,
+            "selected": 0
+          },
+          "enemyChoice": null
+        }
+      ]
+    },
+    {
+      "label": "heroic-enemy-v7",
+      "invocation": "run-Gcf3Sw",
+      "reportSHA256": "be8a5f5536af9c54367c5391cc619c844c9a1a312d75c739caa4897981f38949",
+      "exitCode": 0,
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 3495,
+        "scenario": 43117,
+        "total": 46679
+      },
+      "caps": [],
+      "nativeCalls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 4884
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 792
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 529
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 9722
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 3113
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 764
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 619
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 22692
+        }
+      ],
+      "managedOwnership": [
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "observedAt": "2026-10-14T21:03:19.086Z",
+          "record": {
+            "token": "9d07c86e-9bed-45c4-bf6c-6a1c4d0134f6",
+            "runner": {
+              "pid": 10743,
+              "group": 10743,
+              "started": "Wed Oct 14 14:03:17 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=rescue-enemy --viewports desktop,mobile --timeout 240"
+            },
+            "server": {
+              "pid": 10788,
+              "group": 10788,
+              "started": "Wed Oct 14 14:03:17 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 9d07c86e-9bed-45c4-bf6c-6a1c4d0134f6 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "port": 5274
+          }
+        },
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "observedAt": "2026-10-14T21:03:21.109Z",
+          "record": {
+            "token": "de7bac83-cdf3-40a0-baa6-f6e0c3ef32e4",
+            "pid": 10743,
+            "bead": "hv-umm2.194",
+            "label": "void-history-browser.v7",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T21:03:20.739Z",
+            "providerState": "active",
+            "mcpSessionId": "a28b1e3e-5039-4a98-898a-906031f9fde0",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ],
+      "normalClose": "Awaited native browser_close/active-call drain/server teardown; native returned without cleanup failure. Raw close response is not embedded.",
+      "cells": [
+        {
+          "cell": "rescue-enemy",
+          "uuid": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+          "side": "enemy",
+          "viewport": "desktop",
+          "source": "i18",
+          "expected": [],
+          "energy": 35,
+          "visibleVoid": {
+            "owner": "enemy",
+            "count": 10,
+            "top": "i27",
+            "renderedLayers": [
+              "i27",
+              "i10",
+              "i11"
+            ]
+          },
+          "finalGeometry": [
+            {
+              "selector": "[data-battle-zone=\"enemy-void\"] [data-card-pile]",
+              "x": 882.5625,
+              "y": 86.33036041259766,
+              "w": 83.4375,
+              "h": 59.59374237060547,
+              "hit": {
+                "x": 885.5625,
+                "y": 116.12723159790039
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 1117.8125,
+              "y": 597,
+              "w": 122.6875,
+              "h": 42,
+              "hit": {
+                "x": 1120.8125,
+                "y": 618
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            }
+          ],
+          "reload": true,
+          "captures": [],
+          "plays": 3,
+          "resolutions": 1,
+          "arrivals": 0,
+          "dissolved": 4,
+          "discarded": 2,
+          "persistedPlayIntents": 3,
+          "choice": null,
+          "enemyChoice": {
+            "opened": {
+              "gameId": "usbnx7",
+              "version": 4,
+              "promptId": "4:5:0",
+              "side": "enemy",
+              "kind": "chooseTargets",
+              "role": "target",
+              "source": "i18",
+              "cardId": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+              "privateTo": null,
+              "fingerprint": "7rvjccehqd",
+              "timestamp": "2026-10-14T21:03:25.019Z",
+              "event": "engine.promptOpened",
+              "seq": 37
+            },
+            "answer": {
+              "gameId": "usbnx7",
+              "version": 4,
+              "promptId": "4:5:0",
+              "side": "enemy",
+              "fingerprint": "7rvjccehqd",
+              "value": [],
+              "timestamp": "2026-10-14T21:03:25.055Z",
+              "event": "engine.promptAnswered",
+              "seq": 39
+            },
+            "scope": "reachable first-legal zero; bothactor candidate/three choices independently observed by current actual-source Node acceptance"
+          }
+        },
+        {
+          "cell": "rescue-enemy",
+          "uuid": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+          "side": "enemy",
+          "viewport": "mobile",
+          "source": "i18",
+          "expected": [],
+          "energy": 35,
+          "visibleVoid": {
+            "owner": "enemy",
+            "count": 10,
+            "top": "i27",
+            "renderedLayers": [
+              "i27",
+              "i10",
+              "i11"
+            ]
+          },
+          "finalGeometry": [
+            {
+              "selector": "[data-battle-zone=\"enemy-void\"] [data-card-pile]",
+              "x": 313.5625,
+              "y": 102.140625,
+              "w": 68.4375,
+              "h": 48.875,
+              "hit": {
+                "x": 316.5625,
+                "y": 126.578125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 259.3125,
+              "y": 522.828125,
+              "w": 122.6875,
+              "h": 42,
+              "hit": {
+                "x": 262.3125,
+                "y": 543.828125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            }
+          ],
+          "reload": true,
+          "captures": [],
+          "plays": 3,
+          "resolutions": 1,
+          "arrivals": 0,
+          "dissolved": 4,
+          "discarded": 2,
+          "persistedPlayIntents": 3,
+          "choice": null,
+          "enemyChoice": {
+            "opened": {
+              "gameId": "kdpsap",
+              "version": 4,
+              "promptId": "4:5:0",
+              "side": "enemy",
+              "kind": "chooseTargets",
+              "role": "target",
+              "source": "i18",
+              "cardId": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+              "privateTo": null,
+              "fingerprint": "7rvjccehqd",
+              "timestamp": "2026-10-14T21:03:39.482Z",
+              "event": "engine.promptOpened",
+              "seq": 37
+            },
+            "answer": {
+              "gameId": "kdpsap",
+              "version": 4,
+              "promptId": "4:5:0",
+              "side": "enemy",
+              "fingerprint": "7rvjccehqd",
+              "value": [],
+              "timestamp": "2026-10-14T21:03:39.511Z",
+              "event": "engine.promptAnswered",
+              "seq": 39
+            },
+            "scope": "reachable first-legal zero; bothactor candidate/three choices independently observed by current actual-source Node acceptance"
+          }
+        }
+      ]
+    },
+    {
+      "label": "shadow-player-v7",
+      "invocation": "run-HxcLDc",
+      "reportSHA256": "392fae3b10213ad797b2f78107e07e0945d17837a6b5a39e8181845370892db0",
+      "exitCode": 0,
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 2282,
+        "scenario": 43632,
+        "total": 45978
+      },
+      "caps": [],
+      "nativeCalls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 6649
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 10190
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 669
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 7673
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 4715
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 9722
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 562
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 3451
+        }
+      ],
+      "managedOwnership": [
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "observedAt": "2026-10-14T21:04:18.560Z",
+          "record": {
+            "token": "c54d3039-67b1-4131-a7b7-d6a946800de5",
+            "runner": {
+              "pid": 14975,
+              "group": 14975,
+              "started": "Wed Oct 14 14:04:16 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=shadow-player --viewports desktop,mobile --timeout 240"
+            },
+            "server": {
+              "pid": 15020,
+              "group": 15020,
+              "started": "Wed Oct 14 14:04:16 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c54d3039-67b1-4131-a7b7-d6a946800de5 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "port": 5274
+          }
+        },
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "observedAt": "2026-10-14T21:04:20.561Z",
+          "record": {
+            "token": "d6d819ef-9cb8-43a4-a765-8a78b7a1ca8f",
+            "pid": 14975,
+            "bead": "hv-umm2.194",
+            "label": "void-history-browser.v7",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T21:04:19.020Z",
+            "providerState": "active",
+            "mcpSessionId": "fdbca9ee-8cbc-40e2-bb52-c5f49817f630",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ],
+      "normalClose": "Awaited native browser_close/active-call drain/server teardown; native returned without cleanup failure. Raw close response is not embedded.",
+      "cells": [
+        {
+          "cell": "shadow-player",
+          "uuid": "54471b31-4449-453d-9a6e-814d6225520a",
+          "side": "player",
+          "viewport": "desktop",
+          "source": "i9",
+          "expected": [
+            "i3",
+            "i2",
+            "i1"
+          ],
+          "energy": 33,
+          "visibleVoid": {
+            "owner": "player",
+            "count": 7,
+            "top": "i18",
+            "renderedLayers": [
+              "i18",
+              "i4",
+              "i5"
+            ]
+          },
+          "finalGeometry": [
+            {
+              "selector": "[data-battle-zone=\"player-void\"] [data-card-pile]",
+              "x": 882.5625,
+              "y": 610.0602416992188,
+              "w": 83.4375,
+              "h": 59.59375,
+              "hit": {
+                "x": 885.5625,
+                "y": 639.8571166992188
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 1117.8125,
+              "y": 597,
+              "w": 122.6875,
+              "h": 42,
+              "hit": {
+                "x": 1120.8125,
+                "y": 618
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+              "x": 254.5,
+              "y": 483.5,
+              "w": 89.5,
+              "h": 89.5,
+              "hit": {
+                "x": 257.5,
+                "y": 528.25
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+              "x": 348,
+              "y": 483.5,
+              "w": 89.5,
+              "h": 89.5,
+              "hit": {
+                "x": 351,
+                "y": 528.25
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "x": 441.5,
+              "y": 483.5,
+              "w": 89.5,
+              "h": 89.5,
+              "hit": {
+                "x": 444.5,
+                "y": 528.25
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            }
+          ],
+          "reload": true,
+          "captures": [
+            "shadow-march-desktop.png"
+          ],
+          "plays": 3,
+          "resolutions": 1,
+          "arrivals": 3,
+          "dissolved": 4,
+          "discarded": 2,
+          "persistedPlayIntents": 3,
+          "choice": null,
+          "enemyChoice": null
+        },
+        {
+          "cell": "shadow-player",
+          "uuid": "54471b31-4449-453d-9a6e-814d6225520a",
+          "side": "player",
+          "viewport": "mobile",
+          "source": "i9",
+          "expected": [
+            "i3",
+            "i2",
+            "i1"
+          ],
+          "energy": 33,
+          "visibleVoid": {
+            "owner": "player",
+            "count": 7,
+            "top": "i18",
+            "renderedLayers": [
+              "i18",
+              "i4",
+              "i5"
+            ]
+          },
+          "finalGeometry": [
+            {
+              "selector": "[data-battle-zone=\"player-void\"] [data-card-pile]",
+              "x": 313.5625,
+              "y": 603.671875,
+              "w": 68.4375,
+              "h": 48.875,
+              "hit": {
+                "x": 316.5625,
+                "y": 628.109375
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 259.3125,
+              "y": 522.828125,
+              "w": 122.6875,
+              "h": 42,
+              "hit": {
+                "x": 262.3125,
+                "y": 543.828125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+              "x": 23.40625,
+              "y": 415.890625,
+              "w": 53.859375,
+              "h": 53.859375,
+              "hit": {
+                "x": 26.40625,
+                "y": 442.8203125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+              "x": 81.265625,
+              "y": 415.890625,
+              "w": 53.859375,
+              "h": 53.859375,
+              "hit": {
+                "x": 84.265625,
+                "y": 442.8203125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "x": 139.125,
+              "y": 415.890625,
+              "w": 53.859375,
+              "h": 53.859375,
+              "hit": {
+                "x": 142.125,
+                "y": 442.8203125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            }
+          ],
+          "reload": true,
+          "captures": [],
+          "plays": 3,
+          "resolutions": 1,
+          "arrivals": 3,
+          "dissolved": 4,
+          "discarded": 2,
+          "persistedPlayIntents": 3,
+          "choice": null,
+          "enemyChoice": null
+        }
+      ]
+    },
+    {
+      "label": "shadow-enemy-v7",
+      "invocation": "run-tQTXwo",
+      "reportSHA256": "a46abc4419210d0bb93b6670358f44f0b85beb65d886af2226d07de5f7d50ae0",
+      "exitCode": 0,
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1975,
+        "scenario": 29005,
+        "total": 31051
+      },
+      "caps": [],
+      "nativeCalls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 4000
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 752
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 536
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 9676
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 2488
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 700
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 670
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 10182
+        }
+      ],
+      "managedOwnership": [
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "observedAt": "2026-10-14T21:05:27.390Z",
+          "record": {
+            "token": "4eafc111-a23f-444f-83b7-630e2042012e",
+            "runner": {
+              "pid": 75947,
+              "group": 75947,
+              "started": "Wed Oct 14 14:05:25 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=shadow-enemy --viewports desktop,mobile --timeout 240"
+            },
+            "server": {
+              "pid": 75993,
+              "group": 75993,
+              "started": "Wed Oct 14 14:05:25 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 4eafc111-a23f-444f-83b7-630e2042012e /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "port": 5274
+          }
+        },
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "observedAt": "2026-10-14T21:05:29.389Z",
+          "record": {
+            "token": "8d0a5103-ce61-4a34-b768-494971f04f43",
+            "pid": 75947,
+            "bead": "hv-umm2.194",
+            "label": "void-history-browser.v7",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T21:05:27.500Z",
+            "providerState": "active",
+            "mcpSessionId": "c78979e9-bef1-444d-a609-d0edf27ec657",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ],
+      "normalClose": "Awaited native browser_close/active-call drain/server teardown; native returned without cleanup failure. Raw close response is not embedded.",
+      "cells": [
+        {
+          "cell": "shadow-enemy",
+          "uuid": "54471b31-4449-453d-9a6e-814d6225520a",
+          "side": "enemy",
+          "viewport": "desktop",
+          "source": "i18",
+          "expected": [
+            "i12",
+            "i11",
+            "i10"
+          ],
+          "energy": 33,
+          "visibleVoid": {
+            "owner": "enemy",
+            "count": 7,
+            "top": "i27",
+            "renderedLayers": [
+              "i27",
+              "i13",
+              "i14"
+            ]
+          },
+          "finalGeometry": [
+            {
+              "selector": "[data-battle-zone=\"enemy-void\"] [data-card-pile]",
+              "x": 882.5625,
+              "y": 86.33036041259766,
+              "w": 83.4375,
+              "h": 59.59374237060547,
+              "hit": {
+                "x": 885.5625,
+                "y": 116.12723159790039
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 1117.8125,
+              "y": 597,
+              "w": 122.6875,
+              "h": 42,
+              "hit": {
+                "x": 1120.8125,
+                "y": 618
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i12\"]",
+              "x": 254.5,
+              "y": 183,
+              "w": 89.5,
+              "h": 89.5,
+              "hit": {
+                "x": 257.5,
+                "y": 227.75
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i11\"]",
+              "x": 348,
+              "y": 183,
+              "w": 89.5,
+              "h": 89.5,
+              "hit": {
+                "x": 351,
+                "y": 227.75
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i10\"]",
+              "x": 441.5,
+              "y": 183,
+              "w": 89.5,
+              "h": 89.5,
+              "hit": {
+                "x": 444.5,
+                "y": 227.75
+              },
+              "viewport": {
+                "w": 1440,
+                "h": 900,
+                "dpr": 2
+              }
+            }
+          ],
+          "reload": true,
+          "captures": [],
+          "plays": 3,
+          "resolutions": 1,
+          "arrivals": 3,
+          "dissolved": 4,
+          "discarded": 2,
+          "persistedPlayIntents": 3,
+          "choice": null,
+          "enemyChoice": null
+        },
+        {
+          "cell": "shadow-enemy",
+          "uuid": "54471b31-4449-453d-9a6e-814d6225520a",
+          "side": "enemy",
+          "viewport": "mobile",
+          "source": "i18",
+          "expected": [
+            "i12",
+            "i11",
+            "i10"
+          ],
+          "energy": 33,
+          "visibleVoid": {
+            "owner": "enemy",
+            "count": 7,
+            "top": "i27",
+            "renderedLayers": [
+              "i27",
+              "i13",
+              "i14"
+            ]
+          },
+          "finalGeometry": [
+            {
+              "selector": "[data-battle-zone=\"enemy-void\"] [data-card-pile]",
+              "x": 313.5625,
+              "y": 102.140625,
+              "w": 68.4375,
+              "h": 48.875,
+              "hit": {
+                "x": 316.5625,
+                "y": 126.578125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 259.3125,
+              "y": 522.828125,
+              "w": 122.6875,
+              "h": 42,
+              "hit": {
+                "x": 262.3125,
+                "y": 543.828125
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i12\"]",
+              "x": 23.40625,
+              "y": 222.3125,
+              "w": 53.859375,
+              "h": 53.859375,
+              "hit": {
+                "x": 26.40625,
+                "y": 249.2421875
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i11\"]",
+              "x": 81.265625,
+              "y": 222.3125,
+              "w": 53.859375,
+              "h": 53.859375,
+              "hit": {
+                "x": 84.265625,
+                "y": 249.2421875
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i10\"]",
+              "x": 139.125,
+              "y": 222.3125,
+              "w": 53.859375,
+              "h": 53.859375,
+              "hit": {
+                "x": 142.125,
+                "y": 249.2421875
+              },
+              "viewport": {
+                "w": 390,
+                "h": 844,
+                "dpr": 2
+              }
+            }
+          ],
+          "reload": true,
+          "captures": [],
+          "plays": 3,
+          "resolutions": 1,
+          "arrivals": 3,
+          "dissolved": 4,
+          "discarded": 2,
+          "persistedPlayIntents": 3,
+          "choice": null,
+          "enemyChoice": null
+        }
+      ]
+    }
+  ],
+  "failedCallerEpochs": [
+    {
+      "label": "heroic-player3",
+      "invocation": "run-rzNhxv",
+      "reportSHA256": "f6a787c6ba4ec87adf2df8b626efa0459c987a5546e278bcd45cbb3f2595e54b",
+      "exitCode": 1,
+      "ok": false,
+      "wallMs": {
+        "browserLeaseWait": 4,
+        "serve": 1963,
+        "scenario": 14634,
+        "total": 16656
+      },
+      "caps": [],
+      "nativeCalls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 3919
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 9961
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 753
+        }
+      ],
+      "managedOwnership": [
+        {
+          "file": ".browser-qa.slot-1.lock.server.json",
+          "observedAt": "2026-10-14T20:37:03.441Z",
+          "record": {
+            "token": "64e062c0-2546-42e0-9c05-3312b32e7da7",
+            "runner": {
+              "pid": 45084,
+              "group": 45084,
+              "started": "Wed Oct 14 13:37:01 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v3.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240"
+            },
+            "server": {
+              "pid": 45119,
+              "group": 45119,
+              "started": "Wed Oct 14 13:37:01 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 64e062c0-2546-42e0-9c05-3312b32e7da7 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "port": 5274
+          }
+        },
+        {
+          "file": ".browser-qa.slot-1.lock.owner.json",
+          "observedAt": "2026-10-14T20:37:05.441Z",
+          "record": {
+            "token": "c7918a5c-a7a8-4102-b934-225bfd866762",
+            "pid": 45084,
+            "bead": "hv-umm2.194",
+            "label": "void-history-browser.v3",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T20:37:03.548Z",
+            "providerState": "active",
+            "mcpSessionId": "763bf0a6-d056-419e-b9e8-a8b0391e6b78",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ],
+      "normalClose": "Awaited native browser_close/active-call drain/server teardown; native returned without cleanup failure. Raw close response is not embedded.",
+      "knownReturnedError": "desktop#2: Error: qualified prompt differs {\"kind\":\"chooseTargets\",\"side\":\"player\",\"purpose\":{\"source\":\"i9\",\"cardId\":\"fed69d6e-acb5-40fb-b416-e6ef6c0e63fb\",\"ability\":0,\"role\":\"target\"},\"candidates\":[\"i4\",\"i3\",\"i2\",\"i1\"],\"min\":0,\"max\":3,\"cancellable\":true,\"id\":\"4:5:0\"}\n    at choose (evalmachine.<anonymous>:1657:144)\n    at async evalmachine.<anonymous>:1682:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26"
+    },
+    {
+      "label": "heroic-player3-v4",
+      "invocation": "run-HNRkw0",
+      "reportSHA256": "d2bbfb1f4caffa3ba675c7b68e563089ceb836045bdff3b1732608f71e432513",
+      "exitCode": 1,
+      "ok": false,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 2281,
+        "scenario": 25115,
+        "total": 27489
+      },
+      "caps": [],
+      "nativeCalls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 9708
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 10378
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 4345
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 677
+        }
+      ],
+      "managedOwnership": [],
+      "normalClose": "Awaited native browser_close/active-call drain/server teardown; native returned without cleanup failure. Raw close response is not embedded.",
+      "knownReturnedError": "desktop#3: Error: actual UUID plays/resolution/arrival events mismatch\n    at verify (evalmachine.<anonymous>:1664:85)\n    at async evalmachine.<anonymous>:1679:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26"
+    },
+    {
+      "label": "heroic-player3-v5",
+      "invocation": "run-NLl1pA",
+      "reportSHA256": "3187634207bfc3bf9402c218ef41479b5cf0fcf2649a6dfa524c36a32707a1b0",
+      "exitCode": 1,
+      "ok": false,
+      "wallMs": {
+        "browserLeaseWait": 28613,
+        "serve": 3494,
+        "scenario": 19960,
+        "total": 52121
+      },
+      "caps": [],
+      "nativeCalls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 4760
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 9471
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 4957
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 771
+        }
+      ],
+      "managedOwnership": [
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "observedAt": "2026-10-14T20:55:22.645Z",
+          "record": {
+            "token": "8cac6675-ed73-46a7-9207-5fb5ac2da315",
+            "runner": {
+              "pid": 53977,
+              "group": 53977,
+              "started": "Wed Oct 14 13:54:52 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v5.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240"
+            },
+            "server": {
+              "pid": 59286,
+              "group": 59286,
+              "started": "Wed Oct 14 13:55:21 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 8cac6675-ed73-46a7-9207-5fb5ac2da315 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "port": 5274
+          }
+        },
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "observedAt": "2026-10-14T20:55:26.647Z",
+          "record": {
+            "token": "5ef69b08-7b77-4998-b6c0-0f3c17d4cdff",
+            "pid": 53977,
+            "bead": "hv-umm2.194",
+            "label": "void-history-browser.v5",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T20:55:24.889Z",
+            "providerState": "active",
+            "mcpSessionId": "64b75343-caf2-4af4-8f30-97aa36b21ad5",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ],
+      "normalClose": "Awaited native browser_close/active-call drain/server teardown; native returned without cleanup failure. Raw close response is not embedded.",
+      "knownReturnedError": "desktop#3: Error: settled physical result/control geometry [{\"selector\":\"[data-card-pile]:has([data-battle-card-id=\\\"i9\\\"])\",\"hit\":null,\"viewport\":{\"w\":1440,\"h\":900,\"dpr\":2}},{\"selector\":\"[data-battle-phase-next] button\",\"x\":1117.8125,\"y\":597,\"w\":122.6875,\"h\":42,\"hit\":null,\"viewport\":{\"w\":1440,\"h\":900,\"dpr\":2}},{\"selector\":\"[data-battlefield-card][data-battle-card-id=\\\"i4\\\"]\",\"hit\":null,\"viewport\":{\"w\":1440,\"h\":900,\"dpr\":2}},{\"selector\":\"[data-battlefield-card][data-battle-card-id=\\\"i3\\\"]\",\"hit\":null,\"viewport\":{\"w\":1440,\"h\":900,\"dpr\":2}},{\"selector\":\"[data-battlefield-card][data-battle-card-id=\\\"i2\\\"]\",\"hit\":null,\"viewport\":{\"w\":1440,\"h\":900,\"dpr\":2}}]\n    at verify (evalmachine.<anonymous>:1670:104)\n    at async evalmachine.<anonymous>:1680:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26"
+    },
+    {
+      "label": "heroic-player3-v6",
+      "invocation": "run-dJpuTN",
+      "reportSHA256": "ef484eab2b6f35dae71fe7aefa27927e416d23e4cc463557a3ef5aa34ce3a61e",
+      "exitCode": 1,
+      "ok": false,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 3798,
+        "scenario": 69840,
+        "total": 73713
+      },
+      "caps": [],
+      "nativeCalls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 26146
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 14569
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 10525
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 18599
+        }
+      ],
+      "managedOwnership": [
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "observedAt": "2026-10-14T20:57:51.887Z",
+          "record": {
+            "token": "c6d7cf30-f021-43b9-9bba-d31fd5790880",
+            "runner": {
+              "pid": 70538,
+              "group": 70538,
+              "started": "Wed Oct 14 13:57:49 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v6.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240"
+            },
+            "server": {
+              "pid": 70606,
+              "group": 70606,
+              "started": "Wed Oct 14 13:57:50 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c6d7cf30-f021-43b9-9bba-d31fd5790880 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "port": 5274
+          }
+        },
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "observedAt": "2026-10-14T20:57:53.887Z",
+          "record": {
+            "token": "330ed9b1-baed-4986-afd1-2d1d88be458e",
+            "pid": 70538,
+            "bead": "hv-umm2.194",
+            "label": "void-history-browser.v6",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T20:57:53.859Z",
+            "providerState": "startup-unconfirmed"
+          }
+        },
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "observedAt": "2026-10-14T20:57:55.892Z",
+          "record": {
+            "token": "330ed9b1-baed-4986-afd1-2d1d88be458e",
+            "pid": 70538,
+            "bead": "hv-umm2.194",
+            "label": "void-history-browser.v6",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T20:57:53.859Z",
+            "providerState": "active",
+            "mcpSessionId": "cefc46ab-2ba2-46b6-b77d-e2e61da2fcd0",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ],
+      "normalClose": "Awaited native browser_close/active-call drain/server teardown; native returned without cleanup failure. Raw close response is not embedded.",
+      "knownReturnedError": "desktop#3: QaTimeoutError: waitVisible [data-card-pile]:has([data-battle-card-id=\"i9\"]): timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async verify (evalmachine.<anonymous>:1671:34)\n    at async evalmachine.<anonymous>:1683:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)"
+    }
+  ],
+  "rawWitnesses": {
+    "/tmp/dreamtides-194-resume/source-epoch.json": "c1d32cd00ec6efe4406117a99c437baee6ec7147e1100cb9ec331d222f08bde9",
+    "/tmp/dreamtides-194-resume/resume-native-ack.json": "6ac38d7a93023e711a1bad660fd18e51c1fcf46075e7812fa52c8f7b33e98bd6",
+    "/tmp/dreamtides-194-resume/bead-entities.stdout": "d620b2678e11b1f4b43234a7483b407322eb53a0ab09de7fe541f69205f783de",
+    "/tmp/dreamtides-194-resume/bead-entities.json": "3320312a005599f69ca3b7cc818f9d093bf6a836140193f023bbcb7a02af0ca0",
+    "/tmp/dreamtides-194-resume/remaining-source.receipt.json": "7c8d7acf4aead1285bfff6270c10ed6d37dec0c91ece3e07b1a3644067de4e13",
+    "/tmp/dreamtides-194-resume/remaining-source.log": "2da6f58db6a4e9e439c682ed8abcb16aacf31effa0e0f119bbb78fa21ef74e9a",
+    "/tmp/dreamtides-194-resume/remaining-source-v2.receipt.json": "85be201a964db67da9fba45feda1ec3e269413355768260cba6d13c18d001cb3",
+    "/tmp/dreamtides-194-resume/immutable-field-proof.json": "c8813490f9b9db22b9da50d543207c6fc7b5753f587f20a274df7b11f530e864",
+    "/tmp/dreamtides-194-resume/post-purposeful-resource-proof.json": "b0d5bbf29ad0a0c9035916c4b5588dd415c9dfcafdeecfe0ff1c262a43c78d82",
+    "/tmp/dreamtides-194/gap-handoff-proof.json": "5476a1ae367ed2217cfb415fef67c670f1509169d540ae698fb00a654a18cd42",
+    "/tmp/dreamtides-194/chosen-history-gap.v1.failure.json": "d4e17dfe6acf4b0ef6aa28b4dcd86d385e582b074c35db1e1e173d38d0db508b",
+    "/tmp/dreamtides-194/chosen-history-gap.v2.result.json": "b56d67ad774eae7a2b70d08f31f0cef7dc779865616752fc19cec267dab729ef",
+    "/tmp/dreamtides-194-resume/review-host-load-proof.json": "445aa72bae8ef52a1d0ef1d619e0da9d481866600384456cdb05da8afd6ed6fb",
+    "/tmp/dreamtides-194-resume/pre-git-resource-proof.json": "89cba2e5087859c06105af17f9cc8a7dc6dc9f9ea2050767d8859460f690428d",
+    "/tmp/dreamtides-194-resume/purposeful-runtime-admission.v3.json": "2b79789cf2c14cb7d6e69137ba328b4ad69b90c98d0ba3e445f5b5a5b1554b11",
+    "/tmp/dreamtides-194-resume/purposeful-runtime-admission.v5-observer-v2.json": "0f08d51dd05b0e11dcdb6b1809c4878b11f73bfd3a170aba6705605ecf07207a",
+    "/tmp/dreamtides-194-resume/purposeful-runtime-admission.v4.json": "8f97e41018b982548a870f3aaf60ddd981d07e034f5a40b018191bbbf6d29535",
+    "/tmp/dreamtides-194-resume/purposeful-runtime-admission.v7-observer-v2.json": "c1e6275479284fe490399ecc9ea7d92832d19edab919f55fca3a79ae5899b9d0",
+    "/tmp/dreamtides-194-resume/purposeful-runtime-admission.v6-observer-v2.json": "104b28076a581b556e15f6bc8837322fa75942dcf06c013cb72076d5ed5f20c1",
+    "/tmp/dreamtides-194-resume/default-sweep-runtime-admission.json": "74ae20640b5361e8af6f271e5b5ec642931e3735660886666524ae56e45ed112",
+    "/tmp/dreamtides-194-resume/purposeful-runtime-native-ack.v3.json": "8d827a8d87425b1d23bb8401f80242266c7cbdda099a7604ba43672a8bf1c686",
+    "/tmp/dreamtides-194-resume/purposeful-runtime-native-ack.v5-observer-v2.json": "ca3655cc4a2909b1502cd75f133a46bd3420faf3dea09cba64c89af584335e94",
+    "/tmp/dreamtides-194-resume/purposeful-runtime-native-ack.v4.json": "6abdfad8db22240096f652e8282b49c8868b01c3d51ec3878d049bbe4705a155",
+    "/tmp/dreamtides-194-resume/default-sweep-runtime-native-ack.json": "4a1cb9c550d77120f1ab21edf12d8fff3e968f8caff5771d6a932fac87e12569",
+    "/tmp/dreamtides-194-resume/purposeful-runtime-native-ack.v7-observer-v2.json": "1f21a2a6faa8dd383f23b7f8d9fe039d6090ae87f1e64b57b4631c2a2c8a30c7",
+    "/tmp/dreamtides-194-resume/purposeful-runtime-native-ack.v6-observer-v2.json": "21629099f97139666a6b83b0257951b9dc47008192c5529eb7299805fbea4f67"
+  },
+  "resourceLedger": {
+    "processes": [
+      {
+        "pid": 71216,
+        "ppid": 71198,
+        "pgid": 71216,
+        "birth": "Wed Oct 14 13:10:58 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py npm run lab:preflight -- --cards 54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+        "observedAt": "2026-10-14T20:10:58.081Z"
+      },
+      {
+        "pid": 71243,
+        "ppid": 71216,
+        "pgid": 71216,
+        "birth": "Wed Oct 14 13:10:58 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/tsx scripts/qa/lab-preflight.ts --cards 54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+        "observedAt": "2026-10-14T20:11:00.127Z"
+      },
+      {
+        "pid": 71247,
+        "ppid": 71243,
+        "pgid": 71216,
+        "birth": "Wed Oct 14 13:10:58 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/tsx/dist/loader.mjs scripts/qa/lab-preflight.ts --cards 54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+        "observedAt": "2026-10-14T20:11:00.127Z"
+      },
+      {
+        "pid": 71296,
+        "ppid": 71247,
+        "pgid": 71216,
+        "birth": "Wed Oct 14 13:10:59 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:11:00.127Z"
+      },
+      {
+        "pid": 75075,
+        "ppid": 75055,
+        "pgid": 75075,
+        "birth": "Wed Oct 14 13:11:48 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+        "observedAt": "2026-10-14T20:11:48.986Z"
+      },
+      {
+        "pid": 75085,
+        "ppid": 75075,
+        "pgid": 75075,
+        "birth": "Wed Oct 14 13:11:48 2026",
+        "argv": "npm run fuzz:engine --games 300 --weight-uuids ***,***,***,***",
+        "observedAt": "2026-10-14T20:11:51.034Z"
+      },
+      {
+        "pid": 75103,
+        "ppid": 75085,
+        "pgid": 75075,
+        "birth": "Wed Oct 14 13:11:49 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/tsx scripts/fuzz-engine.ts --games 300 --weight-uuids 54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+        "observedAt": "2026-10-14T20:11:51.034Z"
+      },
+      {
+        "pid": 75107,
+        "ppid": 75103,
+        "pgid": 75075,
+        "birth": "Wed Oct 14 13:11:49 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/tsx/dist/loader.mjs scripts/fuzz-engine.ts --games 300 --weight-uuids 54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+        "observedAt": "2026-10-14T20:11:51.034Z"
+      },
+      {
+        "pid": 75177,
+        "ppid": 75107,
+        "pgid": 75075,
+        "birth": "Wed Oct 14 13:11:50 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:11:51.034Z"
+      },
+      {
+        "pid": 75186,
+        "ppid": 75167,
+        "pgid": 75186,
+        "birth": "Wed Oct 14 13:11:50 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node_modules/.bin/tsx /tmp/dreamtides-194-resume/readonly-child-actual-source-proof.ts",
+        "observedAt": "2026-10-14T20:11:50.172Z"
+      },
+      {
+        "pid": 75198,
+        "ppid": 75186,
+        "pgid": 75186,
+        "birth": "Wed Oct 14 13:11:50 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/tsx/dist/loader.mjs /tmp/dreamtides-194-resume/readonly-child-actual-source-proof.ts",
+        "observedAt": "2026-10-14T20:11:52.219Z"
+      },
+      {
+        "pid": 75254,
+        "ppid": 75198,
+        "pgid": 75186,
+        "birth": "Wed Oct 14 13:11:51 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:11:52.219Z"
+      },
+      {
+        "pid": 85815,
+        "ppid": 85797,
+        "pgid": 85815,
+        "birth": "Wed Oct 14 13:14:31 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node_modules/.bin/tsx /tmp/dreamtides-194-resume/remaining-actual-source-proof.ts",
+        "observedAt": "2026-10-14T20:14:31.506Z"
+      },
+      {
+        "pid": 85827,
+        "ppid": 85815,
+        "pgid": 85815,
+        "birth": "Wed Oct 14 13:14:31 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/tsx/dist/loader.mjs /tmp/dreamtides-194-resume/remaining-actual-source-proof.ts",
+        "observedAt": "2026-10-14T20:14:33.553Z"
+      },
+      {
+        "pid": 85874,
+        "ppid": 85827,
+        "pgid": 85815,
+        "birth": "Wed Oct 14 13:14:32 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:14:33.553Z"
+      },
+      {
+        "pid": 90126,
+        "ppid": 90111,
+        "pgid": 90126,
+        "birth": "Wed Oct 14 13:16:35 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node_modules/.bin/tsx /tmp/dreamtides-194-resume/remaining-actual-source-proof.v2.ts",
+        "observedAt": "2026-10-14T20:16:35.920Z"
+      },
+      {
+        "pid": 92923,
+        "ppid": 92904,
+        "pgid": 92923,
+        "birth": "Wed Oct 14 13:19:06 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node scripts/qa/card-sweep.mjs --bead hv-umm2.194 --cards 54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+        "observedAt": "2026-10-14T20:19:06.794Z"
+      },
+      {
+        "pid": 92946,
+        "ppid": 92923,
+        "pgid": 92946,
+        "birth": "Wed Oct 14 13:19:06 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.194/invocations/sweep-KpPRcb/run-vfPfls/card-sweep.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:19:08.840Z"
+      },
+      {
+        "pid": 92947,
+        "ppid": 92946,
+        "pgid": 92946,
+        "birth": "Wed Oct 14 13:19:06 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:19:08.840Z"
+      },
+      {
+        "pid": 92953,
+        "ppid": 92923,
+        "pgid": 92953,
+        "birth": "Wed Oct 14 13:19:07 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:19:08.840Z"
+      },
+      {
+        "pid": 92954,
+        "ppid": 92953,
+        "pgid": 92953,
+        "birth": "Wed Oct 14 13:19:07 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:19:08.840Z"
+      },
+      {
+        "pid": 92961,
+        "ppid": 92923,
+        "pgid": 92961,
+        "birth": "Wed Oct 14 13:19:07 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-1baf136b130cdddb.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:19:08.840Z"
+      },
+      {
+        "pid": 92962,
+        "ppid": 92961,
+        "pgid": 92961,
+        "birth": "Wed Oct 14 13:19:07 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:19:08.840Z"
+      },
+      {
+        "pid": 92963,
+        "ppid": 92923,
+        "pgid": 92963,
+        "birth": "Wed Oct 14 13:19:07 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json a57a4ca7-409e-48da-96b6-ead8e5e1cf64 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:19:08.840Z"
+      },
+      {
+        "pid": 92982,
+        "ppid": 92963,
+        "pgid": 92963,
+        "birth": "Wed Oct 14 13:19:07 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:19:08.840Z"
+      },
+      {
+        "pid": 93026,
+        "ppid": 92982,
+        "pgid": 92963,
+        "birth": "Wed Oct 14 13:19:08 2026",
+        "argv": "/usr/bin/env node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/vite --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:19:08.840Z"
+      },
+      {
+        "pid": 93034,
+        "ppid": 93026,
+        "pgid": 92963,
+        "birth": "Wed Oct 14 13:19:09 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:19:10.847Z"
+      },
+      {
+        "pid": 57991,
+        "ppid": 57975,
+        "pgid": 57991,
+        "birth": "Wed Oct 14 13:22:31 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/content-gates.test.ts -t void targets qualified|exact current-turn history|materialize|zone card references|content coverage|verifiedText|authored",
+        "observedAt": "2026-10-14T20:22:31.872Z"
+      },
+      {
+        "pid": 58012,
+        "ppid": 57991,
+        "pgid": 57991,
+        "birth": "Wed Oct 14 13:22:32 2026",
+        "argv": "node scripts/review.mjs test src/engine/effects/primitives/contracts.test.ts src/engine/content-gates.test.ts -t void targets qualified|exact current-turn history|materialize|zone card references|content coverage|verifiedText|authored",
+        "observedAt": "2026-10-14T20:22:33.915Z"
+      },
+      {
+        "pid": 58070,
+        "ppid": 58012,
+        "pgid": 57991,
+        "birth": "Wed Oct 14 13:22:32 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/prepare-workspace.mjs",
+        "observedAt": "2026-10-14T20:22:33.915Z"
+      },
+      {
+        "pid": 58071,
+        "ppid": 58070,
+        "pgid": 57991,
+        "birth": "Wed Oct 14 13:22:32 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T20:22:33.915Z"
+      },
+      {
+        "pid": 58132,
+        "ppid": 58012,
+        "pgid": 57991,
+        "birth": "Wed Oct 14 13:22:35 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts src/engine/content-gates.test.ts -t void targets qualified|exact current-turn history|materialize|zone card references|content coverage|verifiedText|authored",
+        "observedAt": "2026-10-14T20:22:35.919Z"
+      },
+      {
+        "pid": 58134,
+        "ppid": 58132,
+        "pgid": 57991,
+        "birth": "Wed Oct 14 13:22:35 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:22:35.919Z"
+      },
+      {
+        "pid": 58251,
+        "ppid": 58012,
+        "pgid": 57991,
+        "birth": "Wed Oct 14 13:22:38 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T20:22:39.921Z"
+      },
+      {
+        "pid": 58702,
+        "ppid": 58689,
+        "pgid": 58702,
+        "birth": "Wed Oct 14 13:23:00 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py npm test -- src/engine/content-gates.test.ts",
+        "observedAt": "2026-10-14T20:23:00.366Z"
+      },
+      {
+        "pid": 58723,
+        "ppid": 58702,
+        "pgid": 58702,
+        "birth": "Wed Oct 14 13:23:00 2026",
+        "argv": "node scripts/review.mjs test src/engine/content-gates.test.ts",
+        "observedAt": "2026-10-14T20:23:02.410Z"
+      },
+      {
+        "pid": 58778,
+        "ppid": 58723,
+        "pgid": 58702,
+        "birth": "Wed Oct 14 13:23:00 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/prepare-workspace.mjs",
+        "observedAt": "2026-10-14T20:23:02.410Z"
+      },
+      {
+        "pid": 58779,
+        "ppid": 58778,
+        "pgid": 58702,
+        "birth": "Wed Oct 14 13:23:00 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T20:23:02.410Z"
+      },
+      {
+        "pid": 58846,
+        "ppid": 58723,
+        "pgid": 58702,
+        "birth": "Wed Oct 14 13:23:03 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/vitest/vitest.mjs run src/engine/content-gates.test.ts",
+        "observedAt": "2026-10-14T20:23:04.413Z"
+      },
+      {
+        "pid": 58848,
+        "ppid": 58846,
+        "pgid": 58702,
+        "birth": "Wed Oct 14 13:23:03 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:23:04.413Z"
+      },
+      {
+        "pid": 58875,
+        "ppid": 58723,
+        "pgid": 58702,
+        "birth": "Wed Oct 14 13:23:05 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T20:23:06.414Z"
+      },
+      {
+        "pid": 45084,
+        "ppid": 45070,
+        "pgid": 45084,
+        "birth": "Wed Oct 14 13:37:01 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v3.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240",
+        "observedAt": "2026-10-14T20:37:01.397Z"
+      },
+      {
+        "pid": 45103,
+        "ppid": 45084,
+        "pgid": 45103,
+        "birth": "Wed Oct 14 13:37:01 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.194/invocations/run-rzNhxv/void-history-browser.v3.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:37:03.440Z"
+      },
+      {
+        "pid": 45104,
+        "ppid": 45103,
+        "pgid": 45103,
+        "birth": "Wed Oct 14 13:37:01 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:37:03.440Z"
+      },
+      {
+        "pid": 45110,
+        "ppid": 45084,
+        "pgid": 45110,
+        "birth": "Wed Oct 14 13:37:01 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:37:03.440Z"
+      },
+      {
+        "pid": 45111,
+        "ppid": 45110,
+        "pgid": 45110,
+        "birth": "Wed Oct 14 13:37:01 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:37:03.440Z"
+      },
+      {
+        "pid": 45117,
+        "ppid": 45084,
+        "pgid": 45117,
+        "birth": "Wed Oct 14 13:37:01 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-1baf136b130cdddb.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:37:03.440Z"
+      },
+      {
+        "pid": 45118,
+        "ppid": 45117,
+        "pgid": 45117,
+        "birth": "Wed Oct 14 13:37:01 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:37:03.440Z"
+      },
+      {
+        "pid": 45119,
+        "ppid": 45084,
+        "pgid": 45119,
+        "birth": "Wed Oct 14 13:37:01 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 64e062c0-2546-42e0-9c05-3312b32e7da7 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:37:03.440Z"
+      },
+      {
+        "pid": 45137,
+        "ppid": 45119,
+        "pgid": 45119,
+        "birth": "Wed Oct 14 13:37:01 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:37:03.440Z"
+      },
+      {
+        "pid": 45163,
+        "ppid": 45137,
+        "pgid": 45119,
+        "birth": "Wed Oct 14 13:37:02 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/vite --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:37:03.440Z"
+      },
+      {
+        "pid": 45164,
+        "ppid": 45163,
+        "pgid": 45119,
+        "birth": "Wed Oct 14 13:37:03 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:37:03.440Z"
+      },
+      {
+        "pid": 24324,
+        "ppid": 24306,
+        "pgid": 24324,
+        "birth": "Wed Oct 14 13:51:45 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v4.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240",
+        "observedAt": "2026-10-14T20:51:45.764Z"
+      },
+      {
+        "pid": 24353,
+        "ppid": 24324,
+        "pgid": 24353,
+        "birth": "Wed Oct 14 13:51:45 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.194/invocations/run-HNRkw0/void-history-browser.v4.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:51:47.819Z"
+      },
+      {
+        "pid": 24354,
+        "ppid": 24353,
+        "pgid": 24353,
+        "birth": "Wed Oct 14 13:51:45 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:51:47.819Z"
+      },
+      {
+        "pid": 24366,
+        "ppid": 24324,
+        "pgid": 24366,
+        "birth": "Wed Oct 14 13:51:45 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:51:47.819Z"
+      },
+      {
+        "pid": 24367,
+        "ppid": 24366,
+        "pgid": 24366,
+        "birth": "Wed Oct 14 13:51:45 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:51:47.819Z"
+      },
+      {
+        "pid": 24374,
+        "ppid": 24324,
+        "pgid": 24374,
+        "birth": "Wed Oct 14 13:51:45 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-1baf136b130cdddb.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:51:47.819Z"
+      },
+      {
+        "pid": 24375,
+        "ppid": 24374,
+        "pgid": 24374,
+        "birth": "Wed Oct 14 13:51:45 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:51:47.819Z"
+      },
+      {
+        "pid": 24376,
+        "ppid": 24324,
+        "pgid": 24376,
+        "birth": "Wed Oct 14 13:51:45 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json 0b4cb43a-c30b-4d9b-be34-24670d2a76d5 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort",
+        "observedAt": "2026-10-14T20:51:47.819Z"
+      },
+      {
+        "pid": 24393,
+        "ppid": 24376,
+        "pgid": 24376,
+        "birth": "Wed Oct 14 13:51:46 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort",
+        "observedAt": "2026-10-14T20:51:47.819Z"
+      },
+      {
+        "pid": 24584,
+        "ppid": 24393,
+        "pgid": 24376,
+        "birth": "Wed Oct 14 13:51:47 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/vite --port 5174 --strictPort",
+        "observedAt": "2026-10-14T20:51:47.819Z"
+      },
+      {
+        "pid": 24602,
+        "ppid": 24584,
+        "pgid": 24376,
+        "birth": "Wed Oct 14 13:51:47 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:51:49.816Z"
+      },
+      {
+        "pid": 53977,
+        "ppid": 53957,
+        "pgid": 53977,
+        "birth": "Wed Oct 14 13:54:52 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v5.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240",
+        "observedAt": "2026-10-14T20:54:52.576Z"
+      },
+      {
+        "pid": 54022,
+        "ppid": 53977,
+        "pgid": 54022,
+        "birth": "Wed Oct 14 13:54:52 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.194/invocations/run-NLl1pA/void-history-browser.v5.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:54:54.627Z"
+      },
+      {
+        "pid": 54023,
+        "ppid": 54022,
+        "pgid": 54022,
+        "birth": "Wed Oct 14 13:54:52 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:54:54.627Z"
+      },
+      {
+        "pid": 59275,
+        "ppid": 53977,
+        "pgid": 59275,
+        "birth": "Wed Oct 14 13:55:21 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:55:22.644Z"
+      },
+      {
+        "pid": 59276,
+        "ppid": 59275,
+        "pgid": 59275,
+        "birth": "Wed Oct 14 13:55:21 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:55:22.644Z"
+      },
+      {
+        "pid": 59283,
+        "ppid": 53977,
+        "pgid": 59283,
+        "birth": "Wed Oct 14 13:55:21 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-1baf136b130cdddb.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:55:22.644Z"
+      },
+      {
+        "pid": 59284,
+        "ppid": 59283,
+        "pgid": 59283,
+        "birth": "Wed Oct 14 13:55:21 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:55:22.644Z"
+      },
+      {
+        "pid": 59286,
+        "ppid": 53977,
+        "pgid": 59286,
+        "birth": "Wed Oct 14 13:55:21 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 8cac6675-ed73-46a7-9207-5fb5ac2da315 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:55:22.644Z"
+      },
+      {
+        "pid": 59309,
+        "ppid": 59286,
+        "pgid": 59286,
+        "birth": "Wed Oct 14 13:55:21 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:55:22.644Z"
+      },
+      {
+        "pid": 59334,
+        "ppid": 59309,
+        "pgid": 59286,
+        "birth": "Wed Oct 14 13:55:21 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs",
+        "observedAt": "2026-10-14T20:55:22.644Z"
+      },
+      {
+        "pid": 59336,
+        "ppid": 59334,
+        "pgid": 59286,
+        "birth": "Wed Oct 14 13:55:21 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T20:55:22.644Z"
+      },
+      {
+        "pid": 59827,
+        "ppid": 59309,
+        "pgid": 59286,
+        "birth": "Wed Oct 14 13:55:24 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/vite --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:55:24.646Z"
+      },
+      {
+        "pid": 59846,
+        "ppid": 59827,
+        "pgid": 59286,
+        "birth": "Wed Oct 14 13:55:24 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:55:24.646Z"
+      },
+      {
+        "pid": 70538,
+        "ppid": 70519,
+        "pgid": 70538,
+        "birth": "Wed Oct 14 13:57:49 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v6.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240",
+        "observedAt": "2026-10-14T20:57:49.839Z"
+      },
+      {
+        "pid": 70589,
+        "ppid": 70538,
+        "pgid": 70589,
+        "birth": "Wed Oct 14 13:57:50 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.194/invocations/run-dJpuTN/void-history-browser.v6.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:57:51.887Z"
+      },
+      {
+        "pid": 70590,
+        "ppid": 70589,
+        "pgid": 70589,
+        "birth": "Wed Oct 14 13:57:50 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:57:51.887Z"
+      },
+      {
+        "pid": 70596,
+        "ppid": 70538,
+        "pgid": 70596,
+        "birth": "Wed Oct 14 13:57:50 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:57:51.887Z"
+      },
+      {
+        "pid": 70597,
+        "ppid": 70596,
+        "pgid": 70596,
+        "birth": "Wed Oct 14 13:57:50 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:57:51.887Z"
+      },
+      {
+        "pid": 70604,
+        "ppid": 70538,
+        "pgid": 70604,
+        "birth": "Wed Oct 14 13:57:50 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-1baf136b130cdddb.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T20:57:51.887Z"
+      },
+      {
+        "pid": 70605,
+        "ppid": 70604,
+        "pgid": 70604,
+        "birth": "Wed Oct 14 13:57:50 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T20:57:51.887Z"
+      },
+      {
+        "pid": 70606,
+        "ppid": 70538,
+        "pgid": 70606,
+        "birth": "Wed Oct 14 13:57:50 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c6d7cf30-f021-43b9-9bba-d31fd5790880 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:57:51.887Z"
+      },
+      {
+        "pid": 70623,
+        "ppid": 70606,
+        "pgid": 70606,
+        "birth": "Wed Oct 14 13:57:50 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:57:51.887Z"
+      },
+      {
+        "pid": 70626,
+        "ppid": 70623,
+        "pgid": 70606,
+        "birth": "Wed Oct 14 13:57:50 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs",
+        "observedAt": "2026-10-14T20:57:51.887Z"
+      },
+      {
+        "pid": 70629,
+        "ppid": 70626,
+        "pgid": 70606,
+        "birth": "Wed Oct 14 13:57:50 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T20:57:51.887Z"
+      },
+      {
+        "pid": 71052,
+        "ppid": 70623,
+        "pgid": 70606,
+        "birth": "Wed Oct 14 13:57:53 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/vite --port 5274 --strictPort",
+        "observedAt": "2026-10-14T20:57:53.887Z"
+      },
+      {
+        "pid": 71062,
+        "ppid": 71052,
+        "pgid": 70606,
+        "birth": "Wed Oct 14 13:57:53 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T20:57:53.887Z"
+      },
+      {
+        "pid": 71107,
+        "ppid": 70538,
+        "pgid": 70538,
+        "birth": "Wed Oct 14 13:57:53 2026",
+        "argv": "(ps)",
+        "observedAt": "2026-10-14T20:57:53.887Z"
+      },
+      {
+        "pid": 958,
+        "ppid": 926,
+        "pgid": 958,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240",
+        "observedAt": "2026-10-14T21:01:05.622Z"
+      },
+      {
+        "pid": 1007,
+        "ppid": 958,
+        "pgid": 1007,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.194/invocations/run-HKRANJ/void-history-browser.v7.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:01:07.667Z"
+      },
+      {
+        "pid": 1008,
+        "ppid": 1007,
+        "pgid": 1007,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:01:07.667Z"
+      },
+      {
+        "pid": 1014,
+        "ppid": 958,
+        "pgid": 1014,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:01:07.667Z"
+      },
+      {
+        "pid": 1015,
+        "ppid": 1014,
+        "pgid": 1014,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:01:07.667Z"
+      },
+      {
+        "pid": 1025,
+        "ppid": 958,
+        "pgid": 1025,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-1baf136b130cdddb.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:01:07.667Z"
+      },
+      {
+        "pid": 1027,
+        "ppid": 1025,
+        "pgid": 1025,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:01:07.667Z"
+      },
+      {
+        "pid": 1028,
+        "ppid": 958,
+        "pgid": 1028,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 3b965ca9-bc2e-42cc-8248-3642cafcf6a9 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:01:07.667Z"
+      },
+      {
+        "pid": 1048,
+        "ppid": 1028,
+        "pgid": 1028,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:01:07.667Z"
+      },
+      {
+        "pid": 1052,
+        "ppid": 1048,
+        "pgid": 1028,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs",
+        "observedAt": "2026-10-14T21:01:07.667Z"
+      },
+      {
+        "pid": 1055,
+        "ppid": 1052,
+        "pgid": 1028,
+        "birth": "Wed Oct 14 14:01:05 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T21:01:07.667Z"
+      },
+      {
+        "pid": 1410,
+        "ppid": 1048,
+        "pgid": 1028,
+        "birth": "Wed Oct 14 14:01:08 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/vite --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:01:09.669Z"
+      },
+      {
+        "pid": 1419,
+        "ppid": 1410,
+        "pgid": 1028,
+        "birth": "Wed Oct 14 14:01:08 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T21:01:09.669Z"
+      },
+      {
+        "pid": 7038,
+        "ppid": 7022,
+        "pgid": 7038,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=rescue-player0 --viewports desktop,mobile --timeout 240",
+        "observedAt": "2026-10-14T21:02:22.545Z"
+      },
+      {
+        "pid": 7064,
+        "ppid": 7038,
+        "pgid": 7064,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.194/invocations/run-FLbLry/void-history-browser.v7.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:02:24.588Z"
+      },
+      {
+        "pid": 7066,
+        "ppid": 7064,
+        "pgid": 7064,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:02:24.588Z"
+      },
+      {
+        "pid": 7072,
+        "ppid": 7038,
+        "pgid": 7072,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:02:24.588Z"
+      },
+      {
+        "pid": 7073,
+        "ppid": 7072,
+        "pgid": 7072,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:02:24.588Z"
+      },
+      {
+        "pid": 7079,
+        "ppid": 7038,
+        "pgid": 7079,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-1baf136b130cdddb.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:02:24.588Z"
+      },
+      {
+        "pid": 7080,
+        "ppid": 7079,
+        "pgid": 7079,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:02:24.588Z"
+      },
+      {
+        "pid": 7081,
+        "ppid": 7038,
+        "pgid": 7081,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json afeebffe-bf3d-4529-87c8-712221d82f7a /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:02:24.588Z"
+      },
+      {
+        "pid": 7098,
+        "ppid": 7081,
+        "pgid": 7081,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:02:24.588Z"
+      },
+      {
+        "pid": 7101,
+        "ppid": 7098,
+        "pgid": 7081,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs",
+        "observedAt": "2026-10-14T21:02:24.588Z"
+      },
+      {
+        "pid": 7104,
+        "ppid": 7101,
+        "pgid": 7081,
+        "birth": "Wed Oct 14 14:02:22 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T21:02:24.588Z"
+      },
+      {
+        "pid": 7253,
+        "ppid": 7098,
+        "pgid": 7081,
+        "birth": "Wed Oct 14 14:02:25 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/vite --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:02:26.593Z"
+      },
+      {
+        "pid": 7259,
+        "ppid": 7253,
+        "pgid": 7081,
+        "birth": "Wed Oct 14 14:02:25 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T21:02:26.593Z"
+      },
+      {
+        "pid": 10743,
+        "ppid": 10726,
+        "pgid": 10743,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=rescue-enemy --viewports desktop,mobile --timeout 240",
+        "observedAt": "2026-10-14T21:03:17.044Z"
+      },
+      {
+        "pid": 10771,
+        "ppid": 10743,
+        "pgid": 10771,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.194/invocations/run-Gcf3Sw/void-history-browser.v7.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:03:19.085Z"
+      },
+      {
+        "pid": 10772,
+        "ppid": 10771,
+        "pgid": 10771,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:03:19.085Z"
+      },
+      {
+        "pid": 10779,
+        "ppid": 10743,
+        "pgid": 10779,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:03:19.085Z"
+      },
+      {
+        "pid": 10780,
+        "ppid": 10779,
+        "pgid": 10779,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:03:19.085Z"
+      },
+      {
+        "pid": 10786,
+        "ppid": 10743,
+        "pgid": 10786,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-1baf136b130cdddb.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:03:19.085Z"
+      },
+      {
+        "pid": 10787,
+        "ppid": 10786,
+        "pgid": 10786,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:03:19.085Z"
+      },
+      {
+        "pid": 10788,
+        "ppid": 10743,
+        "pgid": 10788,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 9d07c86e-9bed-45c4-bf6c-6a1c4d0134f6 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:03:19.085Z"
+      },
+      {
+        "pid": 10805,
+        "ppid": 10788,
+        "pgid": 10788,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:03:19.085Z"
+      },
+      {
+        "pid": 10808,
+        "ppid": 10805,
+        "pgid": 10788,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs",
+        "observedAt": "2026-10-14T21:03:19.085Z"
+      },
+      {
+        "pid": 10811,
+        "ppid": 10808,
+        "pgid": 10788,
+        "birth": "Wed Oct 14 14:03:17 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T21:03:19.085Z"
+      },
+      {
+        "pid": 10969,
+        "ppid": 10805,
+        "pgid": 10788,
+        "birth": "Wed Oct 14 14:03:20 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/vite --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:03:21.109Z"
+      },
+      {
+        "pid": 10983,
+        "ppid": 10969,
+        "pgid": 10788,
+        "birth": "Wed Oct 14 14:03:20 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T21:03:21.109Z"
+      },
+      {
+        "pid": 14975,
+        "ppid": 14958,
+        "pgid": 14975,
+        "birth": "Wed Oct 14 14:04:16 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=shadow-player --viewports desktop,mobile --timeout 240",
+        "observedAt": "2026-10-14T21:04:16.513Z"
+      },
+      {
+        "pid": 15003,
+        "ppid": 14975,
+        "pgid": 15003,
+        "birth": "Wed Oct 14 14:04:16 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.194/invocations/run-HxcLDc/void-history-browser.v7.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:04:18.560Z"
+      },
+      {
+        "pid": 15005,
+        "ppid": 15003,
+        "pgid": 15003,
+        "birth": "Wed Oct 14 14:04:16 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:04:18.560Z"
+      },
+      {
+        "pid": 15011,
+        "ppid": 14975,
+        "pgid": 15011,
+        "birth": "Wed Oct 14 14:04:16 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:04:18.560Z"
+      },
+      {
+        "pid": 15012,
+        "ppid": 15011,
+        "pgid": 15011,
+        "birth": "Wed Oct 14 14:04:16 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:04:18.560Z"
+      },
+      {
+        "pid": 15018,
+        "ppid": 14975,
+        "pgid": 15018,
+        "birth": "Wed Oct 14 14:04:16 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-1baf136b130cdddb.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:04:18.560Z"
+      },
+      {
+        "pid": 15019,
+        "ppid": 15018,
+        "pgid": 15018,
+        "birth": "Wed Oct 14 14:04:16 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:04:18.560Z"
+      },
+      {
+        "pid": 15020,
+        "ppid": 14975,
+        "pgid": 15020,
+        "birth": "Wed Oct 14 14:04:16 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c54d3039-67b1-4131-a7b7-d6a946800de5 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:04:18.560Z"
+      },
+      {
+        "pid": 15037,
+        "ppid": 15020,
+        "pgid": 15020,
+        "birth": "Wed Oct 14 14:04:16 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:04:18.560Z"
+      },
+      {
+        "pid": 15156,
+        "ppid": 15037,
+        "pgid": 15020,
+        "birth": "Wed Oct 14 14:04:18 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/vite --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:04:18.560Z"
+      },
+      {
+        "pid": 15246,
+        "ppid": 15156,
+        "pgid": 15020,
+        "birth": "Wed Oct 14 14:04:18 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T21:04:20.561Z"
+      },
+      {
+        "pid": 75947,
+        "ppid": 75923,
+        "pgid": 75947,
+        "birth": "Wed Oct 14 14:05:25 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=shadow-enemy --viewports desktop,mobile --timeout 240",
+        "observedAt": "2026-10-14T21:05:25.344Z"
+      },
+      {
+        "pid": 75977,
+        "ppid": 75947,
+        "pgid": 75977,
+        "birth": "Wed Oct 14 14:05:25 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.194/invocations/run-tQTXwo/void-history-browser.v7.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:05:27.389Z"
+      },
+      {
+        "pid": 75978,
+        "ppid": 75977,
+        "pgid": 75977,
+        "birth": "Wed Oct 14 14:05:25 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:05:27.389Z"
+      },
+      {
+        "pid": 75984,
+        "ppid": 75947,
+        "pgid": 75984,
+        "birth": "Wed Oct 14 14:05:25 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:05:27.389Z"
+      },
+      {
+        "pid": 75985,
+        "ppid": 75984,
+        "pgid": 75984,
+        "birth": "Wed Oct 14 14:05:25 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:05:27.389Z"
+      },
+      {
+        "pid": 75991,
+        "ppid": 75947,
+        "pgid": 75991,
+        "birth": "Wed Oct 14 14:05:25 2026",
+        "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-1baf136b130cdddb.lock /bin/sh -c echo ready; exec cat >/dev/null",
+        "observedAt": "2026-10-14T21:05:27.389Z"
+      },
+      {
+        "pid": 75992,
+        "ppid": 75991,
+        "pgid": 75991,
+        "birth": "Wed Oct 14 14:05:25 2026",
+        "argv": "cat",
+        "observedAt": "2026-10-14T21:05:27.389Z"
+      },
+      {
+        "pid": 75993,
+        "ppid": 75947,
+        "pgid": 75993,
+        "birth": "Wed Oct 14 14:05:25 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 4eafc111-a23f-444f-83b7-630e2042012e /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:05:27.389Z"
+      },
+      {
+        "pid": 76010,
+        "ppid": 75993,
+        "pgid": 75993,
+        "birth": "Wed Oct 14 14:05:25 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:05:27.389Z"
+      },
+      {
+        "pid": 76083,
+        "ppid": 76010,
+        "pgid": 75993,
+        "birth": "Wed Oct 14 14:05:26 2026",
+        "argv": "node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.bin/vite --port 5274 --strictPort",
+        "observedAt": "2026-10-14T21:05:27.389Z"
+      },
+      {
+        "pid": 76089,
+        "ppid": 76083,
+        "pgid": 75993,
+        "birth": "Wed Oct 14 14:05:27 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T21:05:27.389Z"
+      },
+      {
+        "pid": 48617,
+        "ppid": 48592,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:08:32 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py npm run review",
+        "observedAt": "2026-10-14T21:08:32.858Z"
+      },
+      {
+        "pid": 48653,
+        "ppid": 48617,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:08:33 2026",
+        "argv": "node scripts/review.mjs quick",
+        "observedAt": "2026-10-14T21:08:34.906Z"
+      },
+      {
+        "pid": 48717,
+        "ppid": 48653,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:08:33 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/prepare-workspace.mjs",
+        "observedAt": "2026-10-14T21:08:34.906Z"
+      },
+      {
+        "pid": 48723,
+        "ppid": 48717,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:08:33 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T21:08:34.906Z"
+      },
+      {
+        "pid": 48861,
+        "ppid": 48653,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:08:36 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/typescript/bin/tsc --noEmit false --declaration --emitDeclarationOnly --outDir /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.cache/journey-review/declarations --incremental --tsBuildInfoFile /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.cache/journey-review/tsconfig.tsbuildinfo",
+        "observedAt": "2026-10-14T21:08:36.920Z"
+      },
+      {
+        "pid": 48862,
+        "ppid": 48653,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:08:36 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/typescript/bin/tsc -p tsconfig.node.json --incremental --tsBuildInfoFile /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/.cache/journey-review/tsconfig.node.tsbuildinfo",
+        "observedAt": "2026-10-14T21:08:36.920Z"
+      },
+      {
+        "pid": 48863,
+        "ppid": 48653,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:08:36 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/import-cycles.mjs",
+        "observedAt": "2026-10-14T21:08:36.920Z"
+      },
+      {
+        "pid": 48864,
+        "ppid": 48653,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:08:36 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/run-eslint.mjs src/content/cards/heroic-rescue-fed69d6e.ts src/content/cards/shadow-march-54471b31.ts",
+        "observedAt": "2026-10-14T21:08:36.920Z"
+      },
+      {
+        "pid": 48865,
+        "ppid": 48653,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:08:36 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/vitest/vitest.mjs related --run --passWithNoTests src/content/cards/heroic-rescue-fed69d6e.ts src/content/cards/shadow-march-54471b31.ts",
+        "observedAt": "2026-10-14T21:08:36.920Z"
+      },
+      {
+        "pid": 48874,
+        "ppid": 48865,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:08:36 2026",
+        "argv": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "observedAt": "2026-10-14T21:08:36.920Z"
+      },
+      {
+        "pid": 51261,
+        "ppid": 48865,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:09:06 2026",
+        "argv": "(node)",
+        "observedAt": "2026-10-14T21:09:06.945Z"
+      },
+      {
+        "pid": 51689,
+        "ppid": 48865,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:09:11 2026",
+        "argv": "<defunct>",
+        "observedAt": "2026-10-14T21:09:12.947Z"
+      },
+      {
+        "pid": 66745,
+        "ppid": 48653,
+        "pgid": 48617,
+        "birth": "Wed Oct 14 14:09:42 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T21:09:42.970Z"
+      },
+      {
+        "pid": 93576,
+        "ppid": 93195,
+        "pgid": 93576,
+        "birth": "Wed Oct 14 14:09:52 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-194-resume/held-exec.py npm run knip",
+        "observedAt": "2026-10-14T21:09:52.592Z"
+      },
+      {
+        "pid": 94380,
+        "ppid": 93576,
+        "pgid": 93576,
+        "birth": "Wed Oct 14 14:09:52 2026",
+        "argv": "node scripts/review.mjs knip",
+        "observedAt": "2026-10-14T21:09:54.649Z"
+      },
+      {
+        "pid": 99181,
+        "ppid": 94380,
+        "pgid": 93576,
+        "birth": "Wed Oct 14 14:09:54 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/node_modules/knip/bin/knip.js",
+        "observedAt": "2026-10-14T21:09:54.649Z"
+      },
+      {
+        "pid": 6373,
+        "ppid": 94380,
+        "pgid": 93576,
+        "birth": "Wed Oct 14 14:09:56 2026",
+        "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/setup-assets.ts",
+        "observedAt": "2026-10-14T21:09:56.650Z"
+      }
+    ],
+    "preGitProof": {
+      "at": "2026-10-14T21:10:55.623181+00:00",
+      "ownedRecordedProcessIdentitiesChecked": 168,
+      "remaining": [],
+      "allReceiptsTerminal": true,
+      "sourceValid": true,
+      "sourceHashes": {
+        "src/content/cards/shadow-march-54471b31.ts": "cacea73eda04fbfd84ab4f5fbf04ef09119c84387c4ffd8bf6efed7bda56f41e",
+        "src/content/cards/heroic-rescue-fed69d6e.ts": "bcc99ee4dbda861b8683ed560664e07b800c54837ba8f07aba73a4da7c94f4ab",
+        "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+        "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+      },
+      "producerLabels": [
+        "weighted300",
+        "remaining-source",
+        "heroic-player3-v6",
+        "knip",
+        "focused",
+        "heroic-player3-v7",
+        "review",
+        "preflight",
+        "heroic-player3",
+        "shadow-enemy-v7",
+        "coverage",
+        "heroic-player0-v7",
+        "sweep",
+        "heroic-player3-v5",
+        "shadow-player-v7",
+        "remaining-source-v2",
+        "child-fresh-source",
+        "heroic-enemy-v7",
+        "heroic-player3-v4"
+      ],
+      "normalClose": "Each native SDK returned known success or known caller failure; native awaited browser_close plus active RPC drain and owned server teardown without cleanup failures. Exact session identities retained for dynamic slots and new observer slot0; old v4 supplemental session unknown. No raw close reply claim."
+    },
+    "managedSDKOwnership": [
+      {
+        "label": "sweep",
+        "records": [
+          {
+            "file": ".browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T20:19:08.840Z",
+            "record": {
+              "token": "a57a4ca7-409e-48da-96b6-ead8e5e1cf64",
+              "runner": {
+                "pid": 92923,
+                "group": 92923,
+                "started": "Wed Oct 14 13:19:06 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.194 --cards 54471b31-4449-453d-9a6e-814d6225520a,fed69d6e-acb5-40fb-b416-e6ef6c0e63fb,c32ef131-d283-4bf1-bf65-2d5e5d232168,7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+              },
+              "server": {
+                "pid": 92963,
+                "group": 92963,
+                "started": "Wed Oct 14 13:19:07 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json a57a4ca7-409e-48da-96b6-ead8e5e1cf64 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "port": 5274
+            }
+          },
+          {
+            "file": ".browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T20:19:10.848Z",
+            "record": {
+              "token": "6ddae3a8-5894-457a-94f1-b34b49672d26",
+              "pid": 92923,
+              "bead": "hv-umm2.194",
+              "label": "card-sweep",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T20:19:09.903Z",
+              "providerState": "active",
+              "mcpSessionId": "134a9ae4-42b7-46d5-bdf2-f47faeaa9ffd",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ]
+      },
+      {
+        "label": "heroic-player3",
+        "records": [
+          {
+            "file": ".browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T20:37:03.441Z",
+            "record": {
+              "token": "64e062c0-2546-42e0-9c05-3312b32e7da7",
+              "runner": {
+                "pid": 45084,
+                "group": 45084,
+                "started": "Wed Oct 14 13:37:01 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v3.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240"
+              },
+              "server": {
+                "pid": 45119,
+                "group": 45119,
+                "started": "Wed Oct 14 13:37:01 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 64e062c0-2546-42e0-9c05-3312b32e7da7 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "port": 5274
+            }
+          },
+          {
+            "file": ".browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T20:37:05.441Z",
+            "record": {
+              "token": "c7918a5c-a7a8-4102-b934-225bfd866762",
+              "pid": 45084,
+              "bead": "hv-umm2.194",
+              "label": "void-history-browser.v3",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T20:37:03.548Z",
+              "providerState": "active",
+              "mcpSessionId": "763bf0a6-d056-419e-b9e8-a8b0391e6b78",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ]
+      },
+      {
+        "label": "heroic-player3-v5",
+        "records": [
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T20:55:22.645Z",
+            "record": {
+              "token": "8cac6675-ed73-46a7-9207-5fb5ac2da315",
+              "runner": {
+                "pid": 53977,
+                "group": 53977,
+                "started": "Wed Oct 14 13:54:52 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v5.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240"
+              },
+              "server": {
+                "pid": 59286,
+                "group": 59286,
+                "started": "Wed Oct 14 13:55:21 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 8cac6675-ed73-46a7-9207-5fb5ac2da315 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "port": 5274
+            }
+          },
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T20:55:26.647Z",
+            "record": {
+              "token": "5ef69b08-7b77-4998-b6c0-0f3c17d4cdff",
+              "pid": 53977,
+              "bead": "hv-umm2.194",
+              "label": "void-history-browser.v5",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T20:55:24.889Z",
+              "providerState": "active",
+              "mcpSessionId": "64b75343-caf2-4af4-8f30-97aa36b21ad5",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ]
+      },
+      {
+        "label": "heroic-player3-v6",
+        "records": [
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T20:57:51.887Z",
+            "record": {
+              "token": "c6d7cf30-f021-43b9-9bba-d31fd5790880",
+              "runner": {
+                "pid": 70538,
+                "group": 70538,
+                "started": "Wed Oct 14 13:57:49 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v6.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240"
+              },
+              "server": {
+                "pid": 70606,
+                "group": 70606,
+                "started": "Wed Oct 14 13:57:50 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c6d7cf30-f021-43b9-9bba-d31fd5790880 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "port": 5274
+            }
+          },
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T20:57:53.887Z",
+            "record": {
+              "token": "330ed9b1-baed-4986-afd1-2d1d88be458e",
+              "pid": 70538,
+              "bead": "hv-umm2.194",
+              "label": "void-history-browser.v6",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T20:57:53.859Z",
+              "providerState": "startup-unconfirmed"
+            }
+          },
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T20:57:55.892Z",
+            "record": {
+              "token": "330ed9b1-baed-4986-afd1-2d1d88be458e",
+              "pid": 70538,
+              "bead": "hv-umm2.194",
+              "label": "void-history-browser.v6",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T20:57:53.859Z",
+              "providerState": "active",
+              "mcpSessionId": "cefc46ab-2ba2-46b6-b77d-e2e61da2fcd0",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ]
+      },
+      {
+        "label": "heroic-player3-v7",
+        "records": [
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T21:01:07.667Z",
+            "record": {
+              "token": "3b965ca9-bc2e-42cc-8248-3642cafcf6a9",
+              "runner": {
+                "pid": 958,
+                "group": 958,
+                "started": "Wed Oct 14 14:01:05 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=rescue-player3 --viewports desktop,mobile --timeout 240"
+              },
+              "server": {
+                "pid": 1028,
+                "group": 1028,
+                "started": "Wed Oct 14 14:01:05 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 3b965ca9-bc2e-42cc-8248-3642cafcf6a9 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "port": 5274
+            }
+          },
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T21:01:09.670Z",
+            "record": {
+              "token": "54e5d71b-80d8-41f8-bc86-b97784b9556e",
+              "pid": 958,
+              "bead": "hv-umm2.194",
+              "label": "void-history-browser.v7",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T21:01:09.026Z",
+              "providerState": "active",
+              "mcpSessionId": "65171954-6811-446f-8630-f479252b1e81",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ]
+      },
+      {
+        "label": "heroic-player0-v7",
+        "records": [
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T21:02:24.588Z",
+            "record": {
+              "token": "afeebffe-bf3d-4529-87c8-712221d82f7a",
+              "runner": {
+                "pid": 7038,
+                "group": 7038,
+                "started": "Wed Oct 14 14:02:22 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=rescue-player0 --viewports desktop,mobile --timeout 240"
+              },
+              "server": {
+                "pid": 7081,
+                "group": 7081,
+                "started": "Wed Oct 14 14:02:22 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json afeebffe-bf3d-4529-87c8-712221d82f7a /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "port": 5274
+            }
+          },
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T21:02:26.594Z",
+            "record": {
+              "token": "8b2514c1-d5d9-47a3-94cd-e7a88593b116",
+              "pid": 7038,
+              "bead": "hv-umm2.194",
+              "label": "void-history-browser.v7",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T21:02:25.862Z",
+              "providerState": "active",
+              "mcpSessionId": "0b8eae45-f796-4a17-8f9f-c900672d4e07",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ]
+      },
+      {
+        "label": "heroic-enemy-v7",
+        "records": [
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T21:03:19.086Z",
+            "record": {
+              "token": "9d07c86e-9bed-45c4-bf6c-6a1c4d0134f6",
+              "runner": {
+                "pid": 10743,
+                "group": 10743,
+                "started": "Wed Oct 14 14:03:17 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=rescue-enemy --viewports desktop,mobile --timeout 240"
+              },
+              "server": {
+                "pid": 10788,
+                "group": 10788,
+                "started": "Wed Oct 14 14:03:17 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 9d07c86e-9bed-45c4-bf6c-6a1c4d0134f6 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "port": 5274
+            }
+          },
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T21:03:21.109Z",
+            "record": {
+              "token": "de7bac83-cdf3-40a0-baa6-f6e0c3ef32e4",
+              "pid": 10743,
+              "bead": "hv-umm2.194",
+              "label": "void-history-browser.v7",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T21:03:20.739Z",
+              "providerState": "active",
+              "mcpSessionId": "a28b1e3e-5039-4a98-898a-906031f9fde0",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ]
+      },
+      {
+        "label": "shadow-player-v7",
+        "records": [
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T21:04:18.560Z",
+            "record": {
+              "token": "c54d3039-67b1-4131-a7b7-d6a946800de5",
+              "runner": {
+                "pid": 14975,
+                "group": 14975,
+                "started": "Wed Oct 14 14:04:16 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=shadow-player --viewports desktop,mobile --timeout 240"
+              },
+              "server": {
+                "pid": 15020,
+                "group": 15020,
+                "started": "Wed Oct 14 14:04:16 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c54d3039-67b1-4131-a7b7-d6a946800de5 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "port": 5274
+            }
+          },
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T21:04:20.561Z",
+            "record": {
+              "token": "d6d819ef-9cb8-43a4-a765-8a78b7a1ca8f",
+              "pid": 14975,
+              "bead": "hv-umm2.194",
+              "label": "void-history-browser.v7",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T21:04:19.020Z",
+              "providerState": "active",
+              "mcpSessionId": "fdbca9ee-8cbc-40e2-bb52-c5f49817f630",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ]
+      },
+      {
+        "label": "shadow-enemy-v7",
+        "records": [
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T21:05:27.390Z",
+            "record": {
+              "token": "4eafc111-a23f-444f-83b7-630e2042012e",
+              "runner": {
+                "pid": 75947,
+                "group": 75947,
+                "started": "Wed Oct 14 14:05:25 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-194-resume/void-history-browser.v7.mjs --bead hv-umm2.194 --arg cell=shadow-enemy --viewports desktop,mobile --timeout 240"
+              },
+              "server": {
+                "pid": 75993,
+                "group": 75993,
+                "started": "Wed Oct 14 14:05:25 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 4eafc111-a23f-444f-83b7-630e2042012e /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "port": 5274
+            }
+          },
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T21:05:29.389Z",
+            "record": {
+              "token": "8d0a5103-ce61-4a34-b768-494971f04f43",
+              "pid": 75947,
+              "bead": "hv-umm2.194",
+              "label": "void-history-browser.v7",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-82-194-resume",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T21:05:27.500Z",
+              "providerState": "active",
+              "mcpSessionId": "c78979e9-bef1-444d-a609-d0edf27ec657",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ]
+      }
+    ],
+    "normalCloseQualification": "Each native SDK returned known success or known caller failure; native awaited browser_close plus active RPC drain and owned server teardown without cleanup failures. Exact session identities retained for dynamic slots and new observer slot0; old v4 supplemental session unknown. No raw close reply claim.",
+    "oldV4SupplementalSession": "UNKNOWN: old observer missed slot0; native identity admission/known close still qualified; no invented session ID.",
+    "foreignResourcesTouched": false
+  },
+  "captureJudgment": {
+    "screens": [
+      "heroic-qualified3-result-desktop.png",
+      "heroic-qualified-choice-mobile.png",
+      "heroic-qualified3-result-mobile.png",
+      "shadow-march-desktop.png"
+    ],
+    "desktopPixels": [
+      2880,
+      1800
+    ],
+    "mobilePixels": [
+      780,
+      1688
+    ],
+    "desktopViewport": [
+      1440,
+      900
+    ],
+    "mobileViewport": [
+      390,
+      844
+    ],
+    "dpr": 2,
+    "verdict": "Inspected four actual captures: legal four-member mobile chooser with upTo3/Cancel/Skip; paid visible three exhausted arrivals on desktop/mobile and Shadow cost-filter desktop; positive hit geometry and no clipping of active controls. Synthetic placeholder faces expected."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "sysctl -n vm.loadavg one-minute value observed immediately before npm run review held-launch"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "preflight",
+      "at": "2026-10-14T20:10:58.038Z",
+      "load1m5m15m": [
+        11.58642578125,
+        11.662109375,
+        10.64111328125
+      ]
+    },
+    {
+      "label": "weighted300",
+      "at": "2026-10-14T20:11:48.944Z",
+      "load1m5m15m": [
+        7.56689453125,
+        10.5673828125,
+        10.2939453125
+      ]
+    },
+    {
+      "label": "child-fresh-source",
+      "at": "2026-10-14T20:11:50.125Z",
+      "load1m5m15m": [
+        7.56689453125,
+        10.5673828125,
+        10.2939453125
+      ]
+    },
+    {
+      "label": "remaining-source",
+      "at": "2026-10-14T20:14:31.461Z",
+      "load1m5m15m": [
+        5.958984375,
+        8.58154296875,
+        9.5146484375
+      ]
+    },
+    {
+      "label": "remaining-source-v2",
+      "at": "2026-10-14T20:16:35.878Z",
+      "load1m5m15m": [
+        4.1357421875,
+        7.05810546875,
+        8.7822265625
+      ]
+    },
+    {
+      "label": "sweep",
+      "at": "2026-10-14T20:19:06.752Z",
+      "load1m5m15m": [
+        4.23388671875,
+        6.06591796875,
+        8.10009765625
+      ]
+    },
+    {
+      "label": "focused",
+      "at": "2026-10-14T20:22:31.831Z",
+      "load1m5m15m": [
+        6.7421875,
+        8.2861328125,
+        8.78662109375
+      ]
+    },
+    {
+      "label": "coverage",
+      "at": "2026-10-14T20:23:00.324Z",
+      "load1m5m15m": [
+        7.9970703125,
+        8.40869140625,
+        8.81103515625
+      ]
+    },
+    {
+      "label": "heroic-player3",
+      "at": "2026-10-14T20:37:01.359Z",
+      "load1m5m15m": [
+        3.60009765625,
+        4.71435546875,
+        6.6611328125
+      ]
+    },
+    {
+      "label": "heroic-player3-v4",
+      "at": "2026-10-14T20:51:45.717Z",
+      "load1m5m15m": [
+        16.50146484375,
+        8.576171875,
+        6.9521484375
+      ]
+    },
+    {
+      "label": "heroic-player3-v5",
+      "at": "2026-10-14T20:54:52.531Z",
+      "load1m5m15m": [
+        19.12841796875,
+        14.19091796875,
+        9.6875
+      ]
+    },
+    {
+      "label": "heroic-player3-v6",
+      "at": "2026-10-14T20:57:49.796Z",
+      "load1m5m15m": [
+        8.27978515625,
+        11.45654296875,
+        9.38671875
+      ]
+    },
+    {
+      "label": "heroic-player3-v7",
+      "at": "2026-10-14T21:01:05.572Z",
+      "load1m5m15m": [
+        13.9599609375,
+        15.533203125,
+        11.72607421875
+      ]
+    },
+    {
+      "label": "heroic-player0-v7",
+      "at": "2026-10-14T21:02:22.502Z",
+      "load1m5m15m": [
+        8.1318359375,
+        13.29296875,
+        11.208984375
+      ]
+    },
+    {
+      "label": "heroic-enemy-v7",
+      "at": "2026-10-14T21:03:17.001Z",
+      "load1m5m15m": [
+        7.52197265625,
+        12.3447265625,
+        10.99169921875
+      ]
+    },
+    {
+      "label": "shadow-player-v7",
+      "at": "2026-10-14T21:04:16.467Z",
+      "load1m5m15m": [
+        14.41455078125,
+        13.28955078125,
+        11.42578125
+      ]
+    },
+    {
+      "label": "shadow-enemy-v7",
+      "at": "2026-10-14T21:05:25.303Z",
+      "load1m5m15m": [
+        10.015625,
+        12.4072265625,
+        11.24169921875
+      ]
+    },
+    {
+      "label": "review",
+      "at": "2026-10-14T21:08:32.811Z",
+      "load1m5m15m": [
+        14.91259765625,
+        13.39794921875,
+        11.8193359375
+      ]
+    },
+    {
+      "label": "knip",
+      "at": "2026-10-14T21:09:52.539Z",
+      "load1m5m15m": [
+        19.09765625,
+        14.689453125,
+        12.427734375
+      ]
+    }
+  ]
+}

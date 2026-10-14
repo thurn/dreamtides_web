@@ -1,3 +1,6 @@
+import { event, fromVoid } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 308,
   art: { x: -0.042, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(materialize(fromVoid({ cardType: "character" }, { count: 3, upTo: true, thisTurn: "dissolved" })))],
+  verifiedText: expectedVerifiedText("Materialize up to three chosen characters in your void which dissolved this turn."),
 });

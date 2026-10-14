@@ -1,3 +1,6 @@
+import { dissolvedIn, event } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   artOwned: false,
   cardNumber: 457,
   isStarter: false,
-  pending: true,
+  abilities: () => [event(materialize(dissolvedIn("void", { cardType: "character", costAtMost: 2 })))],
+  verifiedText: expectedVerifiedText("Materialize all ≤2● cost characters in your void which dissolved this turn."),
 });
