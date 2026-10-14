@@ -1,0 +1,134 @@
+{
+  "bead": "hv-umm2.673",
+  "base": "95588ef7435a356f61ac363985b8f154442f6833",
+  "implementationStart": {
+    "at": "2026-10-14T04:06:23.280676+00:00",
+    "writer": "parent session directly; no implementation subagent",
+    "mode": "bounded projectreviewrecipe docsonly",
+    "base": "95588ef7435a356f61ac363985b8f154442f6833",
+    "samplingStart": "UNKNOWN"
+  },
+  "implementWindow": {
+    "start": "2026-10-14T04:06:23.280676+00:00",
+    "end": "2026-10-14T04:15:30.316630+00:00"
+  },
+  "scope": "normalprojectClaudecommand+adjacentrequiredreadscopeguidance only;0runtime/testchanges",
+  "sourceFreeze": {
+    "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-review673-read-grants/docs/plan/workflow.md",
+    "sha256": "aa7496c394979210f4b06b6bdcd410e626a510fa7c6f33e7e4e2277133cb37b4",
+    "base": "95588ef7435a356f61ac363985b8f154442f6833"
+  },
+  "staticRecipe": {
+    "shellSyntaxExit": 0,
+    "explicitReadTools": true,
+    "boundedInputDirs": [
+      "snapshot",
+      "scratch",
+      "warden",
+      "shared"
+    ],
+    "originalReadonlyGitPatternsPreserved": true,
+    "noWriteEditBypass": true,
+    "workflowSHA": "aa7496c394979210f4b06b6bdcd410e626a510fa7c6f33e7e4e2277133cb37b4"
+  },
+  "diagnostic": {
+    "model": "claude-opus-5-5",
+    "session": "6b35d6fd-062a-41d7-bdd6-79451ee3e174",
+    "exit": 0,
+    "seconds": 12.355023292009719,
+    "start": "2026-10-14T04:07:10.507429+00:00",
+    "end": "2026-10-14T04:07:22.862573+00:00",
+    "pid": 77444,
+    "pgid": 77444,
+    "permissionDenials": [],
+    "actualToolTypes": [
+      "Read",
+      "Read",
+      "Grep",
+      "Bash"
+    ],
+    "requiredReads": "uniqueunsuppliedownscratchwitness andwardenSKILL actuallyRead; targetedGrep/fullGitdiff succeeded",
+    "globGrant": "staticallyverified; notexercised",
+    "sourceStable": true,
+    "ownedProcessGroupAbsent": true,
+    "classification": "readaccessdiagnostic; not independentcodecorrectnessreview/controlledspeedup",
+    "trace": "artifacts/qa/hv-umm2.673/audit/diagnostic.stream.jsonl"
+  },
+  "beforeWitnesses": [
+    {
+      "bead": "hv-umm2.232",
+      "limitedNormalReviewS": 211.941244125,
+      "outcome": "scopeLIMITEDRead/Bashdenials; notfullreview",
+      "correctedFullScopeS": 120.259673084,
+      "differentWorkloadNotSpeedClaim": true
+    },
+    {
+      "bead": "hv-umm2.658",
+      "limitedDuration": "UNKNOWN",
+      "outcome": "no reviewdue deniedscratchread; latercorrectednormalreview substantive"
+    }
+  ],
+  "validation": {
+    "review": {
+      "name": "review",
+      "start": "2026-10-14T04:10:41.899434+00:00",
+      "end": "2026-10-14T04:10:42.940379+00:00",
+      "seconds": 1.040871834004065,
+      "startingLoad": [
+        19.1875,
+        12.916015625,
+        13.02685546875
+      ],
+      "pid": 42149,
+      "pgid": 42149,
+      "exit": 0
+    },
+    "knip": {
+      "name": "knip",
+      "start": "2026-10-14T04:10:41.899396+00:00",
+      "end": "2026-10-14T04:10:48.469785+00:00",
+      "seconds": 6.570236083993223,
+      "startingLoad": [
+        19.1875,
+        12.916015625,
+        13.02685546875
+      ],
+      "pid": 42148,
+      "pgid": 42148,
+      "exit": 0
+    }
+  },
+  "resourceLedger": {
+    "install": {
+      "start": "2026-10-14T04:04:41.722736+00:00",
+      "end": "2026-10-14T04:04:49.070250+00:00",
+      "seconds": 7.347464874997968,
+      "pid": 16900,
+      "pgid": 16900,
+      "exit": 0
+    },
+    "diagnostic": {
+      "pid": 77444,
+      "pgid": 77444,
+      "terminalExit": 0,
+      "absent": true
+    },
+    "implementationSubagents": 0
+  },
+  "validationProportionality": "documentationrecipe only; no runtime/API/flow/UI/test/configchange, no full/fuzz/browser/coreCLIreview required",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "value": 19.1875,
+        "measuredFor": "actualfirst npm run review friction-records step at2026-10-14T04:10:42.860Z"
+      }
+    }
+  },
+  "scopeCounts": {
+    "runtimeGross": 0,
+    "workflowDocGross": 12,
+    "newTestEntrypoints": 0,
+    "testNet": 0
+  },
+  "commitCutoffAt": "2026-10-14T04:15:30.316630+00:00"
+}

@@ -1068,9 +1068,19 @@ prompt to `$SCRATCH/review-<bead-id>.prompt` and pass it on stdin, because
 ```sh
 cd "$SNAPSHOT" && /Users/dthurn/.local/bin/claude -p --model claude-opus-5-5 \
   --tools Read,Grep,Glob,Bash --permission-mode dontAsk \
-  --allowedTools 'Bash(git diff:*)' 'Bash(git log:*)' 'Bash(git show:*)' \
+  --add-dir "$SNAPSHOT" "$SCRATCH" \
+    /Users/dthurn/.llms/skills/warden /Users/dthurn/.llms/skills/shared \
+  --allowedTools Read Grep Glob \
+    'Bash(git diff:*)' 'Bash(git log:*)' 'Bash(git show:*)' \
   < "$SCRATCH/review-<bead-id>.prompt" > "$SCRATCH/review-<bead-id>.md"
 ```
+
+The explicit grants cover the required read tools as well as the narrow Git
+commands. Keep the input directories limited to the review snapshot, its
+scratch inputs, and the named review skills. Preserve configured denies and
+`dontAsk`; the reviewer has no Write/Edit tool or mutating Git grant. A report
+with a denied required read or an incomplete diff is scope-limited and does
+not satisfy the review. Inspect those fields before accepting the result.
 
 The review output lands in the session's scratch directory, outside any
 worktree.
