@@ -1,0 +1,70 @@
+{
+  "bead": "hv-umm2.665",
+  "phase": 5,
+  "implementMin": 611.9825199333334,
+  "implementWindow": {
+    "start": "2026-10-14T05:46:10.504000+00:00",
+    "end": "2026-10-14T15:58:09.455196+00:00"
+  },
+  "hostLoad": 26.640625,
+  "localValidationS": {
+    "focused": 15.00367979198927,
+    "content-coverage": 5.6845403329934925,
+    "review": 66.66032604197972,
+    "knip": 4.323452292010188,
+    "preflight": 1.4335423329903278,
+    "sweep": 36.564609875000315,
+    "weighted300": 275.1279944580165,
+    "judged": 34.91147183300927,
+    "judged-v2": 45.35928875001264,
+    "repro216": 1.8499605839897413,
+    "diag216-before52": 2.586232707981253,
+    "causal-probe": 2.4700647499994375,
+    "resume-focused": 17.729821249988163,
+    "resume-focused-exact": 18.984454916993855,
+    "resume-review": 57.932162874989444,
+    "resume-knip": 4.242882666992955,
+    "resume-weighted300": 344.81449216700275,
+    "resume-preflight": 1.2853734999953303,
+    "resume-schema-beforeqa": 0.14748029099428095,
+    "resume-sweep": 102.59796687500784,
+    "resume-sweep-skull-player": 28.17650637499173,
+    "resume-judged": 67.55591279198416,
+    "resume-judged-v2": 63.1692824169877,
+    "resume-skull-negative": 13.717433167010313,
+    "resume-skull-positive": 13.259861083002761,
+    "resume-mobile": 44.50803875000565,
+    "resume-eye-mobile": 17.492614707996836,
+    "resume-skull-negative-mobile": 12.405072374996962,
+    "resume-skull-positive-mobile": 42.464018666010816
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 3.954610516666667,
+      "note": "Historical original checkpoint: observed first-to-second normal caller failure interval includes diagnosis/parent coordination. Initial caller assumed persistent stack-card UI, then a Void gallery instead of the delivered chooser. The public workflow was pending at that checkpoint. Fresh resumption correction wall is separately recorded below. Full original12-cell acceptance is now READY; no uncertain RPC, product write or shared restart."
+    },
+    {
+      "tag": "determinization-fidelity",
+      "minutes": 7.867060666666666,
+      "note": "Historical original checkpoint: inclusive first weighted failure completion through exact one-game replay and causal source-lifetime diagnosis; this wall overlaps normal QA/coordination and is not productive CPU. Resolved temporary allTypes effects disappeared from views after copied sources ceased and changed conditional event costs. A separately admitted prerequisite was pending at that checkpoint. Canonical hv-un67 is now completed and integrated by parent Tollgate update; unchanged authored leaves pass fresh exact weighted300. Original dependency wait is included in implementWindow, not counted as diagnosis CPU."
+    }
+  ],
+  "checkpoint": "Historical checkpoint retained; canonical prerequisite completed and updated-source full acceptance READY.",
+  "resumeReviewStep": {
+    "at": "2026-10-14T15:27:41.513Z",
+    "load": 22.29833984375
+  },
+  "resumeCallerCorrectionWindow": {
+    "start": "2026-10-14T15:40:02.682291+00:00",
+    "end": "2026-10-14T15:49:11.441101+00:00",
+    "inclusiveWallMin": 9.145980166666668,
+    "scope": "Fresh Day admission, visible energy digit, and post-copy render readiness corrections to own ignored caller only.",
+    "qualification": "Wall includes normal failed calls, source/SDK inspection, focused successful calls, resource settlement and parent coordination; overlaps recorded localValidationS and is not inferred scripting CPU. Original measured3.9546105min interval stays separate."
+  }
+}

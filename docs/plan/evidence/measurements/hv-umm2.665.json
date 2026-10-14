@@ -1,0 +1,293 @@
+{
+  "bead": "hv-umm2.665",
+  "status": "Full original acceptance accepted by independent parent collection audit; exact final amendment/certified delivery receipts are owned by executor.",
+  "base": "5acd9d690ee30574f5a70c045a3ef151da5d150d",
+  "updatedCheckpoint": "da0f8a46e6ad4ff9b10c2bed3dcffe41eadf634d",
+  "dispatch": "2026-10-14T05:46:10.504Z",
+  "dispatchCall": "call_66d18c8e58ae4d02a1b2cfe38f105cbd",
+  "samplingStart": "UNKNOWN",
+  "implementWindow": {
+    "start": "2026-10-14T05:46:10.504000+00:00",
+    "end": "2026-10-14T15:58:09.455196+00:00"
+  },
+  "implementMin": 611.9825199333334,
+  "windowQualification": "Original actual dispatch through final cutoff includes initial checks/failures, checkpoint, dependency wait, new helper, all caller corrections/validation/QA and parent collection ACK. Ordinary Git tail is captured in ignored final receipt.",
+  "newHelper": {
+    "dispatch": "2026-10-14T15:25:10.290000+00:00",
+    "call": "call_0efc9f37f78d4db19ced529d56a4e40d",
+    "samplingStart": "UNKNOWN",
+    "readyCutoff": "2026-10-14T15:54:18.456566+00:00",
+    "inclusiveMin": 29.136109433333335,
+    "finalCutoff": "2026-10-14T15:58:09.455196+00:00",
+    "finalInclusiveMin": 32.9860866
+  },
+  "source": {
+    "grossRuntimeLines": 37,
+    "added": 34,
+    "deleted": 3,
+    "testDelta": 0,
+    "newEntrypoints": 0,
+    "newKinds": [],
+    "fallout": 0,
+    "hashes": {
+      "black-attuned-94e5683d": "126f5c2e7be25a645b1dedf3350b922ddfa16c1a4f02c6b0ae58b10ed4e15918",
+      "eye-grimoire-b6333eba": "6642b43c51ca1b293d2a88fd5b326d57547a266dc262bc388d2d38b9a584239a",
+      "skull-drum-dbbade86": "47ff5a0a7978f89c5695957f0c12df45c93a2188589c3eb1530733e4362be2a9"
+    }
+  },
+  "historicalCheckpoint": {
+    "source": "e909338d7abc3ea4fc76d6c24daccaa21b2cb83b",
+    "base": "baf82441a800b74e79d70388524dd511fdf50fca",
+    "fullRecord": "audit/original-checkpoint-measurements.json",
+    "initialChecks": [
+      "focused",
+      "content-coverage",
+      "review",
+      "knip",
+      "preflight",
+      "sweep",
+      "weighted300",
+      "judged",
+      "judged-v2",
+      "repro216",
+      "diag216-before52",
+      "causal-probe"
+    ],
+    "weighted300Failure": "fuzz216 beforeaction52; actual causal allTypes omission proof retained. Initial partial judged games are historical and exclude complete acceptance."
+  },
+  "prerequisite": {
+    "bead": "hv-un67",
+    "resolution": "completed",
+    "source": "9bacf78c89818da057a7809fd3d52e120feca3a9",
+    "tested": "d9a38ff6e8120e4662beb8ddf2ddcf852bb0dc14",
+    "integration": "Parent-only Tollgate update; tested repair is ancestor; all original three leaf hashes unchanged.",
+    "receipt": "audit/resume-update-receipt.json"
+  },
+  "checks": {
+    "resume-focused": {
+      "exit": 0,
+      "wallS": 17.729821249988163,
+      "start": "2026-10-14T15:26:30.038784+00:00",
+      "end": "2026-10-14T15:26:47.775362+00:00",
+      "receipt": "audit/resume-focused.json"
+    },
+    "resume-focused-exact": {
+      "exit": 0,
+      "wallS": 18.984454916993855,
+      "start": "2026-10-14T15:27:10.499460+00:00",
+      "end": "2026-10-14T15:27:29.487000+00:00",
+      "receipt": "audit/resume-focused-exact.json"
+    },
+    "resume-review": {
+      "exit": 0,
+      "wallS": 57.932162874989444,
+      "start": "2026-10-14T15:27:41.215442+00:00",
+      "end": "2026-10-14T15:28:39.154707+00:00",
+      "receipt": "audit/resume-review.json"
+    },
+    "resume-knip": {
+      "exit": 0,
+      "wallS": 4.242882666992955,
+      "start": "2026-10-14T15:28:57.299695+00:00",
+      "end": "2026-10-14T15:29:01.548435+00:00",
+      "receipt": "audit/resume-knip.json"
+    },
+    "resume-weighted300": {
+      "exit": 0,
+      "wallS": 344.81449216700275,
+      "start": "2026-10-14T15:28:57.299694+00:00",
+      "end": "2026-10-14T15:34:42.122339+00:00",
+      "receipt": "audit/resume-weighted300.json"
+    },
+    "resume-preflight": {
+      "exit": 0,
+      "wallS": 1.2853734999953303,
+      "start": "2026-10-14T15:30:02.737301+00:00",
+      "end": "2026-10-14T15:30:04.028304+00:00",
+      "receipt": "audit/resume-preflight.json"
+    },
+    "resume-schema-beforeqa": {
+      "exit": 0,
+      "wallS": 0.14748029099428095,
+      "start": "2026-10-14T15:31:21.954145+00:00",
+      "end": "2026-10-14T15:31:22.109318+00:00",
+      "receipt": "audit/resume-schema-beforeqa.json"
+    },
+    "resume-sweep": {
+      "exit": 1,
+      "wallS": 102.59796687500784,
+      "start": "2026-10-14T15:34:52.382249+00:00",
+      "end": "2026-10-14T15:36:34.986359+00:00",
+      "receipt": "audit/resume-sweep.json"
+    },
+    "resume-sweep-skull-player": {
+      "exit": 0,
+      "wallS": 28.17650637499173,
+      "start": "2026-10-14T15:37:32.841695+00:00",
+      "end": "2026-10-14T15:38:01.026180+00:00",
+      "receipt": "audit/resume-sweep-skull-player.json"
+    },
+    "resume-judged": {
+      "exit": 1,
+      "wallS": 67.55591279198416,
+      "start": "2026-10-14T15:38:55.118336+00:00",
+      "end": "2026-10-14T15:40:02.682291+00:00",
+      "receipt": "audit/resume-judged.json"
+    },
+    "resume-judged-v2": {
+      "exit": 1,
+      "wallS": 63.1692824169877,
+      "start": "2026-10-14T15:41:25.969093+00:00",
+      "end": "2026-10-14T15:42:29.145210+00:00",
+      "receipt": "audit/resume-judged-v2.json"
+    },
+    "resume-skull-negative": {
+      "exit": 0,
+      "wallS": 13.717433167010313,
+      "start": "2026-10-14T15:45:15.966809+00:00",
+      "end": "2026-10-14T15:45:29.689633+00:00",
+      "receipt": "audit/resume-skull-negative.json"
+    },
+    "resume-skull-positive": {
+      "exit": 0,
+      "wallS": 13.259861083002761,
+      "start": "2026-10-14T15:46:15.318523+00:00",
+      "end": "2026-10-14T15:46:28.583911+00:00",
+      "receipt": "audit/resume-skull-positive.json"
+    },
+    "resume-mobile": {
+      "exit": 1,
+      "wallS": 44.50803875000565,
+      "start": "2026-10-14T15:46:33.938621+00:00",
+      "end": "2026-10-14T15:47:18.452444+00:00",
+      "receipt": "audit/resume-mobile.json"
+    },
+    "resume-eye-mobile": {
+      "exit": 0,
+      "wallS": 17.492614707996836,
+      "start": "2026-10-14T15:48:53.941118+00:00",
+      "end": "2026-10-14T15:49:11.441101+00:00",
+      "receipt": "audit/resume-eye-mobile.json"
+    },
+    "resume-skull-negative-mobile": {
+      "exit": 0,
+      "wallS": 12.405072374996962,
+      "start": "2026-10-14T15:49:22.376990+00:00",
+      "end": "2026-10-14T15:49:34.788774+00:00",
+      "receipt": "audit/resume-skull-negative-mobile.json"
+    },
+    "resume-skull-positive-mobile": {
+      "exit": 0,
+      "wallS": 42.464018666010816,
+      "start": "2026-10-14T15:49:38.915112+00:00",
+      "end": "2026-10-14T15:50:21.386663+00:00",
+      "receipt": "audit/resume-skull-positive-mobile.json"
+    }
+  },
+  "review": {
+    "originalFirstStep": {
+      "firstStep": "prepare",
+      "at": "2026-10-14T05:49:07.314Z",
+      "load": 26.640625,
+      "files": 247,
+      "tests": 5937,
+      "scope": "ordinary diff-aware check; no full/cold CLI required for bounded noncore composition"
+    },
+    "freshFirstStep": {
+      "step": "prepare",
+      "at": "2026-10-14T15:27:41.513Z",
+      "load": 22.29833984375,
+      "files": 247,
+      "tests": 6509
+    },
+    "focusedExact": {
+      "files": 4,
+      "tests": 3886,
+      "coverageCases": 20
+    },
+    "initialResumePathCorrection": "First copied historical command included absent src/content/content-gates.test.ts. Exact four existing files rerun in resume-focused-exact; no absent path used as coverage evidence.",
+    "scope": "Ordinary review/Knip/public composition contracts; no new kinds/protocol/tests or cross-cutting change. Canonical prerequisite has its own core review."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 99135,
+    "nativeWallS": 343.3,
+    "nativeCpuS": 363.2,
+    "inclusiveLockedWrapperS": 344.81449216700275,
+    "prompts": 7378,
+    "interactiveReruns": 676,
+    "interactiveMsEach": 5.545,
+    "bounded": {
+      "legality": 0,
+      "prompts": 5
+    },
+    "failures": 0,
+    "includedEach": 600,
+    "exercise": {
+      "94e5683d-a24c-4f89-8afa-652d7c6c79aa": 424,
+      "b6333eba-5573-441c-b286-1cd7f7cb6916": 288,
+      "dbbade86-9fb6-4283-b2dc-9c1ef66fd531": 0
+    },
+    "qualification": "Static zero exercise counter is not payment proof; four actual Skull UI/payment cells demonstrate2 versus1. Literal machine-wide heavy lock; two test workers; heavy process settled before browser start; no kernel queue-duration claim."
+  },
+  "qa": {
+    "preflight": {
+      "pass": 6,
+      "skip": 54,
+      "fail": 0,
+      "abilityExercise": false
+    },
+    "sweep": {
+      "first": "invocations/sweep-9sYKzb",
+      "counts": {
+        "pass": 5,
+        "skip": 54,
+        "fail": 1
+      },
+      "failure": "Skull/player net::ERR_ABORTED; normal emptyCaps native failure. Amplified timeout recovered by native documented retry to ineligible skip.",
+      "focusedSkullPlayer": "invocations/sweep-lps0rD",
+      "focusedPass": 1,
+      "allSixBaseControllerCellsAccepted": true,
+      "qualification": "Initialization only; full original baseline sweep acceptance joins firstfive passes with focused actual sixth pass, preserving failures."
+    },
+    "joinedJudgments": {
+      "cells": 12,
+      "uniqueGames": 12,
+      "rows": 469,
+      "captures": 26
+    },
+    "manifest": "audit/resume-accepted-manifest.json",
+    "sourceIdentical": true,
+    "lostCarryQualification": "Seven accepted prior aggregate cells retained successful exact-call assertion execution, per-game logs/captures and next-navigation raw three-buffer snapshots; later failure lost full return carry. Five focused cells retain full detailed state payload.",
+    "allRawAndNativeCapsEmpty": true,
+    "driverFinalSha256": "6137af551d82c2578e8160128953cff5c50a9ec1ff35a5725878822a82b29783",
+    "normalFailures": [
+      "run-eij5AN any-main admitted Night",
+      "run-jOF4qX energy wrapper contains accessibility label; visible data-card-stat-value digit",
+      "run-gnDepH second Void click before post-copy render readiness; firstReclaim passed"
+    ],
+    "display": "Actual copy travel/derived BattleLog; effective visible energy digit2/1 and actual payment2/1. Printed Reclaim4 remains4 and actual Void route pays4 twice.",
+    "qualification": "Public debug UI staged physical cards, then ordinary controls. No reload or enemy policy-selected ability judgment claim; both-side sweep separately covers baseline."
+  },
+  "failurePaths": "No new protocol/storage/engine transition. Existing conditional statics cover live lower-layer types, public cost behavior, hidden information; copy count contracts cover suspended reload/partial rollback; void-play trigger contracts cover per-source oncePerTurn. Canonical source-lifetime prerequisite is completed; fresh original weighted300 passes. Existing counted-copy suspended fold proves reload, invalid/stale/foreign/concurrent answers and pre-commit cancellation; whenPlayFromVoid proves per-source allowance and queued-trigger reload. No duplicate scenario or new protocol.",
+  "resources": {
+    "allOwnOperationsTerminal": true,
+    "providerAndServerRecordsAbsentAtRecordedObservations": true,
+    "sourceFreezeFiles": 4909,
+    "freeze": "audit/resume-qa-freeze.json",
+    "lastSettlement": "audit/resume-skull-positive-mobile-settlement.json",
+    "ownedRuntimeRemaining": [],
+    "qualification": "Exact owned processes/records checked at each closure; historical numeric PIDs are not cleanup targets. No service restart; initial667 exception already consumed."
+  },
+  "readyCutoff": "2026-10-14T15:54:18.456566+00:00",
+  "finalCommit": "Actual parent collection ACK authorizes one ordinary-date original commit amendment after this cutoff; fullOID and cutoff-to-Git tail recorded in ignored final receipt. No tracked postcommit writes.",
+  "finalCutoff": "2026-10-14T15:58:09.455196+00:00",
+  "parentCollection": {
+    "accepted": true,
+    "scope": "All exact leaves/source freeze,12 actual per-game exports/case-or-executed proof/rawthreeCaps,26DPR2 capture hashes and representative visual judgment; complete raw evidence/custody read.",
+    "receipts": [
+      "audit/parent-source-and-cases-audit.json",
+      "audit/parent-accepted-file-audit.json"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+# hv-umm2.665 pre-existing findings
+
+The original source-qualified weighted run exposed temporary fixed `allTypes` projection fidelity after copied sources cease: omitted effects changed Spirit Animal counts and affordable event plays. The exact fuzz-216 causal diagnostic and original failed300 are retained in the ignored audit. Canonical prerequisite hv-un67 supplies public temporary all-types retention and the conditional expiry privacy guard. Parent Tollgate update incorporates its tested repair; unchanged authored leaves pass a fresh complete weighted300.
+
+Copy travel reports its result in the derived BattleLog. UUID and physical IDs establish mechanical identity. Human legal Void plays use the action chooser. Its controls reflect current presentation readiness; the private caller waits for actual player Day before a new play. CardStatOrb exposes an accessible label around its nested visible digit; cost judgment reads that digit and the public payable route, then verifies payment. Caller and navigation failures remain in raw receipts and the ledger, with actual focused passes recorded separately.
+
+Existing presentation notices contain sourceName. Persisted logs retain UUID/physical action identities; evidence does not claim every raw row is nameless. Local-art restoration warnings are retained in original check stderr; browser captures use current workspace materializations. No shared UI/art or logging repair is part of this composition.

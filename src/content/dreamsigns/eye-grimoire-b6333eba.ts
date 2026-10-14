@@ -1,3 +1,6 @@
+import { triggered, triggeringCard, whenPlayFromVoid } from "../../engine/dsl/triggers";
+import { copyCard } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,12 @@ export default dreamsign({
     "1ad97f42-6157-45b3-8290-e27219c7888a",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [
+    triggered(whenPlayFromVoid("you", { cardType: "event" }), copyCard(triggeringCard()), {
+      oncePerTurn: true,
+    }),
+  ],
+  verifiedText: expectedVerifiedText(
+    "Once per turn, when you play an event from your void, copy it.",
+  ),
 });

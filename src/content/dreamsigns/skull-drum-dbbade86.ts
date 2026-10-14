@@ -1,3 +1,6 @@
+import { characterYouControl, controls, ofSubtype, staticAbility } from "../../engine/dsl/builders";
+import { costModifier } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +18,12 @@ export default dreamsign({
     "eb397537-8a0b-4969-924b-baee5137094c",
   ],
   tags: ["Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    staticAbility(costModifier("you", { cardType: "event" }, -1), {
+      while: controls(characterYouControl(ofSubtype("Spirit Animal")), 3),
+    }),
+  ],
+  verifiedText: expectedVerifiedText(
+    "When you play an event while you control 3 or more spirit animals, it costs 1● less.",
+  ),
 });
