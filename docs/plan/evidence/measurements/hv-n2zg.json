@@ -1,0 +1,243 @@
+{
+  "bead": "hv-n2zg",
+  "phase": 5,
+  "base": "4571cc9ede8cd71d873b95bb7ff383dfc85192c0",
+  "status": "Validated source frozen for one automatic local commit; parent owns candidate certification, promotion and cleanup.",
+  "clock": {
+    "dispatchEnvelopeStart": "2026-10-14T13:19:55.432756+00:00",
+    "observedSpawnReturn": "2026-10-14T13:20:32.961886+00:00",
+    "exactChildSamplingStart": null,
+    "preCommitEvidenceBoundary": "2026-10-14T13:29:58.568013+00:00",
+    "inclusiveElapsedMin": 10.052254283333333,
+    "scope": "Conservative pre-spawn envelope through pre-commit evidence boundary, including source investigation, ACK waits, implementation, verification and evidence. Finalizer refreshes boundary immediately before schema/whitespace/stage/Git; parent retains actual Git timing externally. Exact child sampling start and productive editing time unknown; no backdating or postcommit tracked rewrite."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review command start 2026-10-14T13:25:08.337226+00:00; actual os.getloadavg()[0], not a quiet-host claim"
+      },
+      "localValidationS": {
+        "measuredFor": "Actual outer guarded command elapsed seconds; related review command and Knip overlap, so these are not productive-time totals."
+      }
+    }
+  },
+  "source": {
+    "codeAndRulesSHA256": {
+      "docs/rules.md": "d8e376d2fa313bd8cc796da0149991aecdcae28647f0774177ef642cd7728160",
+      "src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts": "cf3f83eea73832523dbf2d2b75c98f2e088cbb84102956c9b6db6508f8a23300",
+      "src/engine/loops/replay.ts": "3bb3ed4fcc0d73260035fe157a5c830d5fa9ef1ddeb403dc24e1ceee704f736b",
+      "src/engine/loops/tracker.ts": "b1825227382be215aa2493727726308350374a18a24afc31e51a30dc98ff70f8"
+    },
+    "runtimeCommentsProof": {
+      "base": "4571cc9ede8cd71d873b95bb7ff383dfc85192c0",
+      "files": {
+        "src/engine/loops/replay.ts": {
+          "beforeSHA256": "253c0cabceeab869e30b10bca57396e9385adcf53aec2309674110948bc7cfd0",
+          "afterSHA256": "3bb3ed4fcc0d73260035fe157a5c830d5fa9ef1ddeb403dc24e1ceee704f736b",
+          "printedWithoutCommentsBeforeSHA256": "60a53713bb200522213a4745509f34aa0547a121ebac0dd6886c9290fa9bf673",
+          "printedWithoutCommentsAfterSHA256": "60a53713bb200522213a4745509f34aa0547a121ebac0dd6886c9290fa9bf673",
+          "equal": true
+        },
+        "src/engine/loops/tracker.ts": {
+          "beforeSHA256": "ef0ff903d266bfa7ad956622bc10548634677bc03c7b05f2a1689c3f5065f622",
+          "afterSHA256": "b1825227382be215aa2493727726308350374a18a24afc31e51a30dc98ff70f8",
+          "printedWithoutCommentsBeforeSHA256": "b9b21c1f580e9e76124560f16cecf6461fb3a3f9c64e8a20efd4bca73a29a1c6",
+          "printedWithoutCommentsAfterSHA256": "b9b21c1f580e9e76124560f16cecf6461fb3a3f9c64e8a20efd4bca73a29a1c6",
+          "equal": true
+        }
+      }
+    },
+    "initialManifestPath": "/tmp/root-n2zg/initial-source-manifest.json",
+    "initialManifestSHA256": "073bed9c3ef3148f2f64cd775c61e6fbbb58aebce7446a5e1c46ed38a8c3e409",
+    "initialManifestPaths": 4852,
+    "scope": "Exactly the existing both-side late-failure test body, additive named-admission sentence, replay module/replayStep comments and namedRenewals comment. Runtime ASTs equal after comment removal. Shared runner/config, engine-design, runtime expressions and historical evidence unchanged."
+  },
+  "admission": {
+    "proposalSHA256": "c7f03e515015c620cbca541eb61c293daabd69c69e36de77850192816ef43bd2",
+    "parentProofPath": "/tmp/root-n2zg/source-admission-proof.json",
+    "parentProofSHA256": "f96de914311399729550db471cfcfa9001d51b86e86a70b763a58f292f52a254"
+  },
+  "contracts": {
+    "path": "src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts",
+    "lines": 406,
+    "cases": 52,
+    "testDelta": {
+      "files": 0,
+      "lines": 16,
+      "jsdomFiles": 0
+    },
+    "focused": "1 file, 52 passed / 3511 skipped (3563), existing contracts.test.ts with whenNamedAbilityTriggered selector",
+    "relatedReview": "299 files / 7052 tests passed; related tests selected by npm run review, not full-suite or D19 measurement.",
+    "failureProof": "Public runStep observation captures actual effect energyChanged followed by root and observer triggerQueued, including snapshots proving +2 energy, oncePerTurn key and both queued sources before expected unknown-figment throw. Exact fold engine_error message and resolveTop step identify same real primitive, with committed state hash preserved, cleared continuation and no published failed events."
+  },
+  "checks": {
+    "knip": {
+      "receipt": {
+        "started": "2026-10-14T13:25:09.497932+00:00",
+        "pid": 62045,
+        "pgid": 62045,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-admission-review-n2zg",
+        "load": [
+          3.54833984375,
+          3.91259765625,
+          5.56982421875
+        ],
+        "ended": "2026-10-14T13:25:14.790551+00:00",
+        "elapsedSeconds": 5.292499083006987,
+        "exitCode": 0,
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4853,
+        "beforeSHA256": "dc897c1962c589ab4c422d41029b2dec0b9e281c7d4e1c11a61b6fe5b7df439e",
+        "afterSHA256": "dc897c1962c589ab4c422d41029b2dec0b9e281c7d4e1c11a61b6fe5b7df439e",
+        "collectorBeforeSHA256": "ad38e1b1c19fc67430ab86ecf02422e6c74a4bf90ea9a16eb165a979a0d5fa62",
+        "collectorAfterSHA256": "ad38e1b1c19fc67430ab86ecf02422e6c74a4bf90ea9a16eb165a979a0d5fa62",
+        "stdoutSHA256": "f92c0bb795faa988c0d6778c6236feb1a75727d2d383127d1d71c619774b5368",
+        "stderrSHA256": "ff4f79147c8b8b1856aa768d55c8854925d8461305d3100c5789e8e540fb0096"
+      },
+      "receiptSHA256": "10cd6d4bea665ded92ff03c1eea3ff07736f803d221b8e3e12e9e3d7434a892c"
+    },
+    "runtime-comments": {
+      "receipt": {
+        "started": "2026-10-14T13:27:01.204359+00:00",
+        "pid": 64716,
+        "pgid": 64716,
+        "command": [
+          "node",
+          "/tmp/root-n2zg/helper/scope-proof.cjs"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-admission-review-n2zg",
+        "load": [
+          3.9462890625,
+          4.181640625,
+          5.4912109375
+        ],
+        "ended": "2026-10-14T13:27:01.356408+00:00",
+        "elapsedSeconds": 0.15193241700762883,
+        "exitCode": 0,
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4853,
+        "beforeSHA256": "dc897c1962c589ab4c422d41029b2dec0b9e281c7d4e1c11a61b6fe5b7df439e",
+        "afterSHA256": "dc897c1962c589ab4c422d41029b2dec0b9e281c7d4e1c11a61b6fe5b7df439e",
+        "collectorBeforeSHA256": "ad38e1b1c19fc67430ab86ecf02422e6c74a4bf90ea9a16eb165a979a0d5fa62",
+        "collectorAfterSHA256": "ad38e1b1c19fc67430ab86ecf02422e6c74a4bf90ea9a16eb165a979a0d5fa62",
+        "stdoutSHA256": "ba60780638faf60e147d44be1b1b7a8ae64c44f1b9b89bb653a41401463fc024",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "receiptSHA256": "bc7731c05bfdff32cb81a1bac45604d2ec45a9a1eed7199ff8301b1bfb7abf1e"
+    },
+    "focused": {
+      "receipt": {
+        "started": "2026-10-14T13:24:02.003466+00:00",
+        "pid": 60293,
+        "pgid": 60293,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "whenNamedAbilityTriggered"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-admission-review-n2zg",
+        "load": [
+          2.87744140625,
+          3.89990234375,
+          5.69873046875
+        ],
+        "ended": "2026-10-14T13:24:09.513662+00:00",
+        "elapsedSeconds": 7.510059000022011,
+        "exitCode": 0,
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4852,
+        "beforeSHA256": "120aae9baca0c49c9e27d25781ba5720ec95cc6423c886435d85b35ff8159827",
+        "afterSHA256": "120aae9baca0c49c9e27d25781ba5720ec95cc6423c886435d85b35ff8159827",
+        "collectorBeforeSHA256": "ad38e1b1c19fc67430ab86ecf02422e6c74a4bf90ea9a16eb165a979a0d5fa62",
+        "collectorAfterSHA256": "ad38e1b1c19fc67430ab86ecf02422e6c74a4bf90ea9a16eb165a979a0d5fa62",
+        "stdoutSHA256": "f16e06bd4bc82e87360ceabcee124e640f39625f0626afcdc36b964bedb25f38",
+        "stderrSHA256": "ff4f79147c8b8b1856aa768d55c8854925d8461305d3100c5789e8e540fb0096"
+      },
+      "receiptSHA256": "16d65334b0a4ac67112dfbaac80b595f32526242099732a9180bf69d08d07c13"
+    },
+    "review": {
+      "receipt": {
+        "started": "2026-10-14T13:25:08.337226+00:00",
+        "pid": 61943,
+        "pgid": 61943,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-admission-review-n2zg",
+        "load": [
+          3.54833984375,
+          3.91259765625,
+          5.56982421875
+        ],
+        "ended": "2026-10-14T13:26:01.593299+00:00",
+        "elapsedSeconds": 53.255840375000844,
+        "exitCode": 0,
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4853,
+        "beforeSHA256": "dc897c1962c589ab4c422d41029b2dec0b9e281c7d4e1c11a61b6fe5b7df439e",
+        "afterSHA256": "dc897c1962c589ab4c422d41029b2dec0b9e281c7d4e1c11a61b6fe5b7df439e",
+        "collectorBeforeSHA256": "ad38e1b1c19fc67430ab86ecf02422e6c74a4bf90ea9a16eb165a979a0d5fa62",
+        "collectorAfterSHA256": "ad38e1b1c19fc67430ab86ecf02422e6c74a4bf90ea9a16eb165a979a0d5fa62",
+        "stdoutSHA256": "070171fdab06ba7bf5534d724e119e342e32bda98561fcb4d5cd9d0e164a5442",
+        "stderrSHA256": "ff4f79147c8b8b1856aa768d55c8854925d8461305d3100c5789e8e540fb0096"
+      },
+      "receiptSHA256": "0510639ab16f788f78a8e56c9fdca916222f8c8a3b80d0c1eec29f4b6c406823"
+    }
+  },
+  "finalEvidenceChecks": {
+    "preFreeze": "schema and whitespace receipts are retained under /tmp/root-n2zg/helper/{schema,whitespace}.receipt.json after this evidence write.",
+    "automaticGit": "Approved finalizer refreshes only clock fields, then requires schema-final and whitespace-final guarded commands before Git. Those receipts and exact postcommit OID/clean-tree proof are retained outside the commit to avoid circular evidence hashes."
+  },
+  "review": {
+    "source": "0b04ce4b1b73f02488ecc9cba7b407960089142d",
+    "routing": "Normal independent fresh read-only Claude Opus 5.5; same reviewer completed omitted required reads. No new review for bounded test/docs repair.",
+    "originalReportSHA256": "331c9dad5f326c8957ea9417ec1251ff3c4ee1bf4d3d520870ec54d009f257b2",
+    "completionSHA256": "a577d2a9237d6597583222e00c6cf1433431a5212182fe51a2f4827c01ea36ea",
+    "finalDispositionsSHA256": "1186e9975651c5d2af68c375a4cc3d388f19994d004dd2c21b74fae05836871d",
+    "F1": "Accepted; discriminating actual failing prefix observation and exact fold failure.",
+    "F2": "Accepted; public named-classification disclosure with hidden physical source unidentified.",
+    "F3": "Accepted original comment inaccuracies; runtime remains identical.",
+    "supplementalEngineDesign": "Rejected by parent: inverse reading of one-way unlisted-event statement is not a concrete incorrect claim; adjacent seam clause is explicit."
+  },
+  "processOwnership": {
+    "collectorSHA256": "ad38e1b1c19fc67430ab86ecf02422e6c74a4bf90ea9a16eb165a979a0d5fa62",
+    "workers": 2,
+    "allRecordedChildrenReaped": true,
+    "allRecordedGroupsAbsent": true,
+    "sourceWritesWhileChecks": false,
+    "heavyCommands": [],
+    "browser": null,
+    "servers": [],
+    "screenshots": [],
+    "cleanupSignals": []
+  },
+  "collectionCorrections": [
+    "Read-only guessed-path lookup reported src/engine/effects/primitives.test.ts absent; corrected with rg --files to real primitives/contracts.test.ts. No validation or production failure inferred.",
+    "Helper progress message initially misstated skipped count; immediately corrected from exact stdout to 52 passed / 3511 skipped (3563).",
+    "Runner asset-link stderr warns about missing local-art cache files; commands pass and restore assets. No product/runtime defect established by this warning."
+  ],
+  "unintendedFailedValidationCommands": [],
+  "preExistingProductIssues": [],
+  "limits": {
+    "D19": "No full/fuzz/performance run for this bounded test/docs repair. Historical hv-p1ss checks do not validate this changed test. Phase gate retains integrated two-worker low-load D19 measurement duty.",
+    "excluded": "No browser, counterfactual mutation, new framework/reviewer, engine-design or production semantics edits."
+  }
+}

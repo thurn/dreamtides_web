@@ -1,0 +1,21 @@
+{
+  "bead": "hv-n2zg",
+  "phase": 5,
+  "implementMin": 10.052254283333333,
+  "implementWindow": {
+    "start": "2026-10-14T13:19:55.432756+00:00",
+    "end": "2026-10-14T13:29:58.568013+00:00"
+  },
+  "localValidationS": {
+    "focused": 7.510059000022011,
+    "review": 53.255840375000844,
+    "knip": 5.292499083006987
+  },
+  "hostLoad": 3.54833984375,
+  "testDelta": {
+    "files": 0,
+    "lines": 16,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

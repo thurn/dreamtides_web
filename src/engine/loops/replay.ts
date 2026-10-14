@@ -1,7 +1,8 @@
 /**
  * One iteration of an accepted loop (rules § Optional Loops): the loop's
  * recorded steps run again in order, each from the previous one's committed
- * result, answering every prompt from the recording.
+ * result, answering each reached prompt from the recording. A mandatory-loop
+ * draw can leave recorded tail answers unused.
  *
  * The iteration stops early, keeping the last state it reached at a step
  * boundary:
@@ -10,8 +11,9 @@
  * - **opponentDecision:** the opponent holds a decision with a legal
  *   response other than passing;
  * - **changedChoice:** a replayed prompt has a different fingerprint, or a
- *   prompt is added or dropped; the step is discarded, so a top-level action
- *   is left to its player and an automatic step runs on and asks;
+ *   prompt is added or dropped, except for an unused tail after a mandatory-loop
+ *   draw; the step is discarded, so a top-level action is left to its player
+ *   and an automatic step runs on and asks;
  * - **battleEnded:** the battle ended;
  * - **diverged:** a different automatic step comes next, or the iteration
  *   ends at a position other than the loop's checkpoint.
@@ -56,7 +58,10 @@ function sameStep(a: Step, b: Step): boolean {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
-/** Replays one recorded step; `null` when its prompts differ from the recording. */
+/**
+ * Replays one recorded step; `null` when its prompts differ from the recording,
+ * except that a mandatory-loop draw can leave recorded tail answers unused.
+ */
 function replayStep(start: BattleState, recorded: LoopStep, automatic: boolean, catalog: EngineCatalog, observeEvent?: EventObserver) {
   try {
     const result = runStep(start, recorded.step, NO_PROMPTS, catalog, { prefix: recorded.answers, automatic, replay: true, observeEvent });

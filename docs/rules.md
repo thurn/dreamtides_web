@@ -1969,7 +1969,10 @@ has that named trigger, including combined triggers admitted through another
 branch, explicit instructions, and floating or delayed abilities. Disabled,
 already-used once-per-turn, failed-condition, and wrong-zone candidates do
 not trigger it. Resolving an ability does not trigger it again. The occasion
-concerns the ability and names no card. Its reactions follow the whole
+concerns the ability and names no card. An identifiable observer reaction
+establishes that an ability with the watched named trigger was successfully
+admitted, including when its source is hidden, without identifying that hidden
+physical source. Its reactions follow the whole
 causing admission batch and any Dawn-count threshold reactions. Each admitted
 occasion is observed in the causing admissions' FIFO order, with observers
 in the usual simultaneous trigger order. Reactions that themselves have a named trigger can cause

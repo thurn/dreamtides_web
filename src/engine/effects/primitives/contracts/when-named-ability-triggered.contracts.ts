@@ -278,19 +278,35 @@ describe("whenNamedAbilityTriggered", () => {
   });
 
   it.each(SIDES)("rolls back %s admission writes on a later genuine primitive failure", side => {
+    const missing = parseFigmentId("00000000-0000-4000-8000-000000711999");
     const fail = card(29, () => [activated([], p.sequence(p.gainEnergy(2), p.triggerAbility(mages, "materialized"),
-      p.materializeFigments(parseFigmentId("00000000-0000-4000-8000-000000711999"))))]);
+      p.materializeFigments(missing)))]);
     const single = card(30, () => [triggered(onMaterialized(), p.gainEnergy(1), { oncePerTurn: true })], "Mage");
     const w = world(side, [single, fail, watch], { back: [single.id, fail.id, watch.id] });
     const cast = step(w, w.state, { kind: "activate", source: w.ids[side].back[1]!, ability: 0 });
     const before = stateHash(cast.state), fold = createFoldAdapter(w.engine);
+    const observed: { event: EngineEvent; state: BattleState }[] = [];
+    expect(() => runStep(cast.state, { kind: "resolveTop" }, NO_PROMPTS, w.engine.catalog, {
+      observeEvent: (event, snapshot) => {
+        if (event.kind === "energyChanged" || event.kind === "triggerQueued") observed.push({ event, state: snapshot() });
+      },
+    })).toThrow(`Unknown figment ${missing}`);
+    expect(observed.map(({ event }) => event)).toMatchObject([
+      { kind: "energyChanged", side, current: cast.state.sides[side].currentEnergy + 2, change: 2, cause: "effect" },
+      { kind: "triggerQueued", source: w.ids[side].back[0], ability: 0 },
+      { kind: "triggerQueued", source: w.ids[side].back[2], ability: 0 },
+    ]);
+    const admitted = observed[2]?.state;
+    expect(admitted?.sides[side].currentEnergy).toBe(cast.state.sides[side].currentEnergy + 2);
+    expect(admitted?.oncePerTurn).toContain(oncePerTurnKey(w.ids[side].back[0]!, 0));
+    expect(admitted?.triggerQueue.map(t => t.source)).toEqual([w.ids[side].back[0], w.ids[side].back[2]]);
     const loaded = reload({ ...sliceOf(cast.state), inFlight: { step: { kind: "resolveTop" }, automatic: true, answers: [] } });
     const failed = fold.reduce(loaded, { kind: "battleAction", side, action: { kind: "pass" } });
-    expect(failed).toMatchObject({ kind: "applied", error: { kind: "engine_error" } });
+    expect(failed).toMatchObject({ kind: "applied", error: { kind: "engine_error", step: { kind: "resolveTop" }, message: `Unknown figment ${missing}` } });
     if (failed.kind !== "applied") throw new Error("No recovered failure");
     expect(stateHash(failed.slice.committed)).toBe(before);
     expect(failed.slice.inFlight).toBeNull();
-    expect(stateHash(cast.state)).toBe(before);
+    expect(failed.published).toEqual([]);
   });
 
   it.each(SIDES)("keeps independent %s roots that converge on the same named observer distinct", side => {
