@@ -1,3 +1,6 @@
+import { abandonSelfCost, activated, all, anyCharacter, exhaustSelf, storedCounters } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { dissolve, storeCounters } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,11 @@ export default card({
   artOwned: false,
   cardNumber: 44,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated([exhaustSelf()], storeCounters(1)),
+    activated([abandonSelfCost()], dissolve(all(anyCharacter({ costAtMost: storedCounters() })))),
+  ],
+  verifiedText: expectedVerifiedText(
+    "☾: Store 1⧗.\n\nAbandon this character: Dissolve each character with cost less than or equal to the stored ⧗.",
+  ),
 });

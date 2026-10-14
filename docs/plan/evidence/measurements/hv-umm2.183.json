@@ -1,0 +1,795 @@
+{
+  "bead": "hv-umm2.183",
+  "baseOID": "733c23b3487f8cce7c1bae9b9f24b7e3b31e0e01",
+  "dispatch": "2026-10-14T20:12:40.496Z",
+  "modelSamplingStart": "UNKNOWN",
+  "packagingCutoff": "2026-10-14T20:49:52+00:00",
+  "implementationWindowIncludes": "Actual original dispatch through the final automatic commit whole-second endpoint; exact before/after Git bracket is retained in /tmp/183-commit-receipt.json. Includes audit, admission, coordination, waits, all checks, QA/corrections and evidence packaging. Model sampling and queue attribution remain UNKNOWN.",
+  "source": {
+    "at": "2026-10-14T20:26:50.986723+00:00",
+    "baseOID": "733c23b3487f8cce7c1bae9b9f24b7e3b31e0e01",
+    "initialTrackedTreeSHA256": "486efc7964e2111f409d22a4d00f3650ce908e7025d861fec9255d25af05a29e",
+    "initialTrackedEntries": 5075,
+    "sourceHashes": {
+      "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+      "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+      "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+    },
+    "childReadOnlySHA256": {
+      "src/content/cards/twilight-suppressor-60feb0d0.ts": "cd34e0c2ca828673770b2b97e67fb5d2e78c902bd87321c3fe6da8aa5b5290c6",
+      "src/content/specs/cards-ready-183.scenarios.ts": "1e2b3c446d6d03c606ba7e4f887bf113f5efbe695a67b38121419d7248c02b8c",
+      "docs/plan/evidence/qa-ledger/hv-umm2.682.jsonl": "3a096cc762a054b076c39d75500c34ca637abf42c8c1923a03cb99f46c73c245"
+    },
+    "trackedChanged": [
+      "src/content/cards/desolation-s-edge-8855e20c.ts",
+      "src/content/cards/spirit-field-reclaimer-78673e2b.ts"
+    ],
+    "untrackedOwned": [
+      "src/content/specs/cards-71.scenarios.ts"
+    ],
+    "driverSHA256": "436a86dc9f7c19a9dadd58acc9bb9f7e6d1e48687f5881e2202b100c16c4126c",
+    "fallout": []
+  },
+  "originalAcceptance": {
+    "entities": [
+      "60feb0d0-89b8-48fc-b01a-ce54e2c9941f",
+      "8855e20c-e23f-4499-a5e8-a7a46ff81d2b",
+      "78673e2b-a6d1-43de-8850-3d3327de5cc6"
+    ],
+    "child": "hv-umm2.682",
+    "childPathsReadOnly": [
+      "src/content/cards/twilight-suppressor-60feb0d0.ts",
+      "src/content/specs/cards-ready-183.scenarios.ts",
+      "docs/plan/evidence/qa-ledger/hv-umm2.682.jsonl"
+    ],
+    "blockingPrerequisites": "Nine blockers closed/completed; parent epic is non-blocking. Canonical674 child writer partition preserved.",
+    "requiredPrimitivesNew": [],
+    "fallout": [],
+    "newPrimitives": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "rulesAnchors": [
+      "rules \u00a7 Exhausted",
+      "rules \u00a7 Costs, Requirements, and X: printed-order/either-void payments",
+      "rules \u00a7 Support",
+      "rules \u00a7 Counters: live count and own-payment departure snapshot",
+      "C9 adjacency; C13 figment cost0",
+      "RD-hv-umm2.95-1; delivered693 selector bound"
+    ],
+    "ladder": "Not invoked: current normative clauses settle these compositions."
+  },
+  "testDelta": {
+    "entrypoints": 0,
+    "plainScenarioModules": 1,
+    "plainScenarioLines": 114,
+    "cases": 6,
+    "jsdomFiles": 0,
+    "unchangedChildCasesConsumed": 6,
+    "acceptedFocusedCases": 25,
+    "focusedScope": "6 own +6 child +13 content gates; 7 unrelated Apollyon gate cases skipped."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 106106,
+    "failures": 0,
+    "reportedWallS": 325.7,
+    "reportedCPUS": 348.5,
+    "wrapperWallS": 560.3325567500142,
+    "wrapperIncludes": "Heavy lock wait plus process startup/runtime; exact lock acquisition and sampling start UNKNOWN. Difference is not a measured exclusive wait.",
+    "prompts": 7510,
+    "interactiveReruns": 753,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 3
+    },
+    "targets": [
+      {
+        "kind": "card",
+        "uuid": "60feb0d0-89b8-48fc-b01a-ce54e2c9941f",
+        "included": 606,
+        "exercised": 124
+      },
+      {
+        "kind": "card",
+        "uuid": "8855e20c-e23f-4499-a5e8-a7a46ff81d2b",
+        "included": 610,
+        "exercised": 145
+      },
+      {
+        "kind": "card",
+        "uuid": "78673e2b-a6d1-43de-8850-3d3327de5cc6",
+        "included": 614,
+        "exercised": 114
+      }
+    ],
+    "sourceQualification": "Production modules unchanged for every accepted command. Initial weighted receipt records pre-removal scenario hash d43d; only a redundant saved-binding assertion changed after dispatch, and scenarios are outside fuzzer imports. Final focused4 and review cover final54060 scenario."
+  },
+  "preflight": {
+    "pass": 26,
+    "skip": 34,
+    "fail": 0,
+    "variants": "all10",
+    "controllers": "both",
+    "ordering": "Passed while weighted command waited at heavy lock; unchanged source receipt reused by parent disposition. Weighted300 passed before browser acceptance."
+  },
+  "sweep": {
+    "invocation": "sweep-itsYgT",
+    "pass": 26,
+    "skip": 34,
+    "fail": 0,
+    "rawAttempts": 60,
+    "sessions": 1,
+    "retries": 0,
+    "slot": 0,
+    "port": 5174,
+    "serverPGID": 37890,
+    "mcpSessionId": "322f3c66-bba9-4906-ab4e-c00c11b1b1cd"
+  },
+  "judged": {
+    "uuid": "78673e2b-a6d1-43de-8850-3d3327de5cc6",
+    "sampleFirstByte": 21,
+    "sampled": true,
+    "newPromptStatusVisualKinds": [],
+    "acceptedControllers": [
+      "player",
+      "enemy"
+    ],
+    "viewports": [
+      "desktop",
+      "mobile"
+    ],
+    "acceptedFourGames": [
+      {
+        "invocation": "run-sgkSvT",
+        "side": "enemy",
+        "viewport": "desktop",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.183/invocations/run-sgkSvT/judged-desktop.jsonl",
+        "gameId": "6w36rf",
+        "selectedBy": "url",
+        "rows": 35,
+        "reason": null,
+        "file": "judged-desktop.jsonl",
+        "sha256": "ac546e9dc96908e01539c6e0c3d60fed29481f30d38c1557747f4231c52cd3f7",
+        "activationActions": 1,
+        "sourceUUID": "78673e2b-a6d1-43de-8850-3d3327de5cc6"
+      },
+      {
+        "invocation": "run-sgkSvT",
+        "side": "enemy",
+        "viewport": "mobile",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.183/invocations/run-sgkSvT/judged-mobile.jsonl",
+        "gameId": "wnqh2o",
+        "selectedBy": "url",
+        "rows": 35,
+        "reason": null,
+        "file": "judged-mobile.jsonl",
+        "sha256": "28f6ffa91c845583f2192e789369ff8e2aa7b1a3b803cc003fed45fdb318a5ff",
+        "activationActions": 1,
+        "sourceUUID": "78673e2b-a6d1-43de-8850-3d3327de5cc6"
+      },
+      {
+        "invocation": "run-qOnsUP",
+        "side": "player",
+        "viewport": "desktop",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.183/invocations/run-qOnsUP/judged-desktop.jsonl",
+        "gameId": "ddvanv",
+        "selectedBy": "url",
+        "rows": 64,
+        "reason": null,
+        "file": "judged-desktop.jsonl",
+        "sha256": "463f667c9d12c94a309c511a1fbdea38ad5a21f233cd8316798c41be4ae55294",
+        "activationActions": 2,
+        "sourceUUID": "78673e2b-a6d1-43de-8850-3d3327de5cc6"
+      },
+      {
+        "invocation": "run-qOnsUP",
+        "side": "player",
+        "viewport": "mobile",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.183/invocations/run-qOnsUP/judged-mobile.jsonl",
+        "gameId": "f2m32e",
+        "selectedBy": "url",
+        "rows": 62,
+        "reason": null,
+        "file": "judged-mobile.jsonl",
+        "sha256": "2a5ac7647bc0caaafcf64c11dad22353d51ae938ec71c584f7ab4cd49ec182ed",
+        "activationActions": 2,
+        "sourceUUID": "78673e2b-a6d1-43de-8850-3d3327de5cc6"
+      }
+    ],
+    "acceptedLogRows": 196,
+    "screens": [
+      {
+        "invocation": "run-sgkSvT",
+        "file": "spirit-payment-interaction-desktop.png",
+        "sha256": "8925234a51ce88d9048972d6a86a16a7a09ad611a7e6508d6dc34d0f3b9d5361",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "cssViewport": [
+          1440,
+          900
+        ]
+      },
+      {
+        "invocation": "run-sgkSvT",
+        "file": "spirit-support-desktop.png",
+        "sha256": "485e38fcedd3e70e84a0c759448044521d177c85d2b3a85fc8bbcfab27b7cc7b",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "cssViewport": [
+          1440,
+          900
+        ]
+      },
+      {
+        "invocation": "run-sgkSvT",
+        "file": "spirit-support-mobile.png",
+        "sha256": "17c8c6806924a1320df7432d40f382a70eda186d2df370a54a74adde1504eebd",
+        "pixels": [
+          780,
+          1688
+        ],
+        "cssViewport": [
+          390,
+          844
+        ]
+      },
+      {
+        "invocation": "run-qOnsUP",
+        "file": "spirit-payment-interaction-desktop.png",
+        "sha256": "8925234a51ce88d9048972d6a86a16a7a09ad611a7e6508d6dc34d0f3b9d5361",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "cssViewport": [
+          1440,
+          900
+        ]
+      },
+      {
+        "invocation": "run-qOnsUP",
+        "file": "spirit-support-desktop.png",
+        "sha256": "485e38fcedd3e70e84a0c759448044521d177c85d2b3a85fc8bbcfab27b7cc7b",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "cssViewport": [
+          1440,
+          900
+        ]
+      },
+      {
+        "invocation": "run-qOnsUP",
+        "file": "spirit-support-mobile.png",
+        "sha256": "17c8c6806924a1320df7432d40f382a70eda186d2df370a54a74adde1504eebd",
+        "pixels": [
+          780,
+          1688
+        ],
+        "cssViewport": [
+          390,
+          844
+        ]
+      }
+    ],
+    "failedAggregates": [
+      {
+        "invocation": "run-dqYIZy",
+        "cause": "null rank holes in caller expectation",
+        "acceptedCells": 0,
+        "caps": []
+      },
+      {
+        "invocation": "run-cgMnOj",
+        "cause": "caller expected chooser instead of observed direct single activation",
+        "acceptedCells": 0,
+        "caps": []
+      }
+    ],
+    "acceptedProvenance": "run-sgkSvT passed all four cells, but standard final-game exports preserve enemy2 only. Reuse enemy2; changed caller run-qOnsUP playerOnly passes player2 and retains their complete logs. Earlier player record tuples/captures are retained and qualified, not treated as full exported games.",
+    "finalCallerSHA256": "724ed72070209b5fa8c7a9a86fc252c2a4ac6bcb4e99b191880917a9239a8ce0",
+    "callerCorrections": [
+      {
+        "file": "command-caller-correction.json",
+        "cause": "missing pathlib import before source hashing; no child/check launched",
+        "oldSHA256": "06696f13454fde3efec743ef67ecb5225112cfc553b7fc34619d7526179042af",
+        "newSHA256": "3706551652c6aa8b62015b0341cf0670c19f0023dc81a4abb2f4e0ee74e31b39"
+      },
+      {
+        "file": "driver-correction-1.json",
+        "cause": "source inspection CardStatOrb contains hidden accessibility base/change messages; read visible data-card-stat-value numeric child",
+        "oldSHA256": "a122f67bbfdce0676cb7e9f2192af00502c45b82a9e13f6cf7d63adc616040e3",
+        "newSHA256": "554d9e000747867d1946a1bcd8839842d8b7c126b2c877774c8f069ca13ca198"
+      },
+      {
+        "file": "driver-correction-2.json",
+        "cause": "enemy engine completion may precede presentation; wait for actual visible counter/Support before observed display read",
+        "oldSHA256": "554d9e000747867d1946a1bcd8839842d8b7c126b2c877774c8f069ca13ca198",
+        "newSHA256": "436a86dc9f7c19a9dadd58acc9bb9f7e6d1e48687f5881e2202b100c16c4126c"
+      },
+      {
+        "file": "driver-correction-3.json",
+        "cause": "parent caller review: player probe settlement may precede visible presentation; wait for actual visible counter and each front spark",
+        "oldSHA256": "436a86dc9f7c19a9dadd58acc9bb9f7e6d1e48687f5881e2202b100c16c4126c",
+        "newSHA256": "29b6fd32ea2946bb94792f135888a0f3f45291eef2096a8e7bea4dd669855609"
+      },
+      {
+        "file": "driver-correction-4.json",
+        "cause": "labStage returns full nine-slot rank with null holes; compare visible occupied front IDs only, preserving full stage IDs in receipts",
+        "failedInvocation": "run-dqYIZy",
+        "oldSHA256": "29b6fd32ea2946bb94792f135888a0f3f45291eef2096a8e7bea4dd669855609",
+        "newSHA256": "989746ae4bd82aee1b72c4c7972d755826592c6f20ae6e70ba4ea6ac31f65356"
+      },
+      {
+        "file": "driver-correction-5.json",
+        "cause": "observed persisted engine.promptOpened proves single legal activation directly executes on battlefield tap; EngineBattleScreen onBattlefieldCardActivate source537-573 confirms no chooser for1 activation/no payToEnd",
+        "failedInvocation": "run-cgMnOj",
+        "oldSHA256": "989746ae4bd82aee1b72c4c7972d755826592c6f20ae6e70ba4ea6ac31f65356",
+        "newSHA256": "e5fab4dda6be7f1dc9cc414e70c42070fdb96b54aa9fbfc37f65c53cdf9d2f3d"
+      },
+      {
+        "file": "driver-correction-6.json",
+        "cause": "runner default exports lastgame perviewport only; preserve complete player log via existing gameLog.read and runplayerOnly skipping already accepted unchangedenemy workflow",
+        "acceptedEnemyInvocation": "run-sgkSvT",
+        "oldSHA256": "e5fab4dda6be7f1dc9cc414e70c42070fdb96b54aa9fbfc37f65c53cdf9d2f3d",
+        "newSHA256": "724ed72070209b5fa8c7a9a86fc252c2a4ac6bcb4e99b191880917a9239a8ce0"
+      },
+      {
+        "file": "scenario-correction-1.json",
+        "cause": "public InstanceView exposes spark under characteristics, not root",
+        "oldSHA256": "47e00ac684eff57b1fbda3d8b1703455c7d26b6dbc62c82fd28e07c75d24723f",
+        "newSHA256": "09b32f26d43ab202979713fdd3601ab752d96d5aa64c55e85356be492fb244f9"
+      },
+      {
+        "file": "scenario-correction-2.json",
+        "cause": "second remaining single character payment is auto-answered under default; explicitly disable forced answers for this observable chooser contract",
+        "oldSHA256": "09b32f26d43ab202979713fdd3601ab752d96d5aa64c55e85356be492fb244f9",
+        "newSHA256": "d43d273760dc001cc28ee0f5bacc5a6bfa5463a636c94dc93c9f6938e4043047"
+      },
+      {
+        "file": "scenario-correction-3.json",
+        "cause": "parent D19 review: observable post-reload dissolution and cleared live counters suffice; avoid saved binding representation assertion",
+        "oldSHA256": "d43d273760dc001cc28ee0f5bacc5a6bfa5463a636c94dc93c9f6938e4043047",
+        "newSHA256": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+      }
+    ]
+  },
+  "recovery": {
+    "midStepError": "Composition introduces no exception or new transition machinery. Existing banish-from-any-void-cost/stored-counter primitive contracts cover atomic cost rollback and source departure; duplicated synthetic faults are unnecessary.",
+    "reload": "Own Spirit pending-cost fold reload and actual player pending-prompt/settled-game reload; Desolation serialized post-abandon stack resolves inclusive cost band with source counters cleared.",
+    "partialWrite": "Payments use existing atomic step/intent commit; cancelled public Spirit chooser spends no energy/card or counter.",
+    "invalidOrStaleInput": "Own Spirit scenarios bounce stale answered cancelled prompt, wrong side and ineligible event payment; committed state remains original.",
+    "concurrentActors": "One prompt owner; wrong-side answer bounces in each controller scenario. Browser uses each task-owned isolated context and normal enemy host."
+  },
+  "resources": {
+    "allOwnedTerminalBeforeReview": {
+      "at": "2026-10-14T20:40:40.049965+00:00",
+      "knownPidsAndGroups": [
+        94675,
+        52030,
+        54275,
+        59119,
+        56091,
+        62003,
+        37854,
+        37890,
+        41586,
+        41618,
+        42234,
+        42262,
+        43770,
+        43798,
+        46707,
+        46740
+      ],
+      "remainingOwned": [],
+      "scope": "only owned completed groups; shared Playwright provider stays running"
+    },
+    "servers": [
+      {
+        "run": "sweep-itsYgT",
+        "slot": 0,
+        "port": 5174,
+        "pgid": 37890
+      },
+      {
+        "run": "run-dqYIZy",
+        "slot": 1,
+        "port": 5274,
+        "pgid": 41618
+      },
+      {
+        "run": "run-cgMnOj",
+        "slot": 1,
+        "port": 5274,
+        "pgid": 42262
+      },
+      {
+        "run": "run-sgkSvT",
+        "slot": 1,
+        "port": 5274,
+        "pgid": 43798
+      },
+      {
+        "run": "run-qOnsUP",
+        "slot": 1,
+        "port": 5274,
+        "pgid": 46740
+      }
+    ],
+    "finalJudgedMcpSession": "eb814fb7-e20e-4677-b65d-dba5bde99e7f",
+    "cleanup": "Each runner reports exact own group cleanup and port free. All16 owned PID/PGs absent at pre-review audit; shared provider untouched. Final process/owner audit follows checks.",
+    "finalOwnedRemaining": [],
+    "finalOwnedAuditAt": "2026-10-14T20:47:42.092423+00:00"
+  },
+  "commands": [
+    {
+      "name": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "cards-71|cards-ready-183|content"
+      ],
+      "start": "2026-10-14T20:19:34.620035+00:00",
+      "end": "2026-10-14T20:19:41.301183+00:00",
+      "wallS": 6.680880375002744,
+      "exitCode": 1,
+      "pid": 94675,
+      "pgid": 94675,
+      "load": "{ 7.45 6.64 8.23 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "src/content/specs/cards-71.scenarios.ts": "47e00ac684eff57b1fbda3d8b1703455c7d26b6dbc62c82fd28e07c75d24723f"
+      }
+    },
+    {
+      "name": "focused-2",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "cards-71|cards-ready-183|content"
+      ],
+      "start": "2026-10-14T20:19:59.169535+00:00",
+      "end": "2026-10-14T20:20:04.578148+00:00",
+      "wallS": 5.408445999986725,
+      "exitCode": 1,
+      "pid": 52030,
+      "pgid": 52030,
+      "load": "{ 15.49 8.59 8.89 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "src/content/specs/cards-71.scenarios.ts": "09b32f26d43ab202979713fdd3601ab752d96d5aa64c55e85356be492fb244f9"
+      }
+    },
+    {
+      "name": "focused-3",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "cards-71|cards-ready-183|content"
+      ],
+      "start": "2026-10-14T20:20:19.408583+00:00",
+      "end": "2026-10-14T20:20:25.025405+00:00",
+      "wallS": 5.616617833002238,
+      "exitCode": 0,
+      "pid": 54275,
+      "pgid": 54275,
+      "load": "{ 16.55 9.30 9.14 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "src/content/specs/cards-71.scenarios.ts": "d43d273760dc001cc28ee0f5bacc5a6bfa5463a636c94dc93c9f6938e4043047"
+      }
+    },
+    {
+      "name": "focused-4",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "cards-71|cards-ready-183|content"
+      ],
+      "start": "2026-10-14T20:23:18.554123+00:00",
+      "end": "2026-10-14T20:23:25.121859+00:00",
+      "wallS": 6.567544416000601,
+      "exitCode": 0,
+      "pid": 59119,
+      "pgid": 59119,
+      "load": "{ 7.91 8.38 8.80 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+      }
+    },
+    {
+      "name": "weighted300",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "60feb0d0-89b8-48fc-b01a-ce54e2c9941f,8855e20c-e23f-4499-a5e8-a7a46ff81d2b,78673e2b-a6d1-43de-8850-3d3327de5cc6"
+      ],
+      "start": "2026-10-14T20:20:47.901657+00:00",
+      "end": "2026-10-14T20:30:08.228746+00:00",
+      "wallS": 560.3325567500142,
+      "exitCode": 0,
+      "pid": 56091,
+      "pgid": 56091,
+      "load": "{ 16.00 9.85 9.35 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "src/content/specs/cards-71.scenarios.ts": "d43d273760dc001cc28ee0f5bacc5a6bfa5463a636c94dc93c9f6938e4043047"
+      }
+    },
+    {
+      "name": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "60feb0d0-89b8-48fc-b01a-ce54e2c9941f,8855e20c-e23f-4499-a5e8-a7a46ff81d2b,78673e2b-a6d1-43de-8850-3d3327de5cc6"
+      ],
+      "start": "2026-10-14T20:24:17.964376+00:00",
+      "end": "2026-10-14T20:24:20.039008+00:00",
+      "wallS": 2.0746262919856235,
+      "exitCode": 0,
+      "pid": 62003,
+      "pgid": 62003,
+      "load": "{ 15.77 10.03 9.35 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+      }
+    },
+    {
+      "name": "sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.183",
+        "--cards",
+        "60feb0d0-89b8-48fc-b01a-ce54e2c9941f,8855e20c-e23f-4499-a5e8-a7a46ff81d2b,78673e2b-a6d1-43de-8850-3d3327de5cc6",
+        "--port",
+        "5174"
+      ],
+      "start": "2026-10-14T20:30:40.216696+00:00",
+      "end": "2026-10-14T20:33:36.571306+00:00",
+      "wallS": 176.35313779101125,
+      "exitCode": 0,
+      "pid": 37854,
+      "pgid": 37854,
+      "load": "{ 3.55 6.74 8.17 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+      }
+    },
+    {
+      "name": "judged",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.183",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-14T20:34:04.003136+00:00",
+      "end": "2026-10-14T20:34:11.078378+00:00",
+      "wallS": 7.075119415996596,
+      "exitCode": 1,
+      "pid": 41586,
+      "pgid": 41586,
+      "load": "{ 4.25 5.63 7.39 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "docs/plan/evidence/qa-ledger/hv-umm2.183.jsonl": "97dfe130b63bc3afd1dada2f1c3749227c04f89db22a3aa4642306bf2c310ad3",
+        "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+      }
+    },
+    {
+      "name": "judged-2",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.183",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-14T20:34:39.705783+00:00",
+      "end": "2026-10-14T20:35:01.440237+00:00",
+      "wallS": 21.734200417005923,
+      "exitCode": 1,
+      "pid": 42234,
+      "pgid": 42234,
+      "load": "{ 3.65 5.28 7.18 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "docs/plan/evidence/qa-ledger/hv-umm2.183.jsonl": "97dfe130b63bc3afd1dada2f1c3749227c04f89db22a3aa4642306bf2c310ad3",
+        "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+      }
+    },
+    {
+      "name": "judged-3",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.183",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-14T20:35:53.718266+00:00",
+      "end": "2026-10-14T20:36:32.534633+00:00",
+      "wallS": 38.81602387499879,
+      "exitCode": 0,
+      "pid": 43770,
+      "pgid": 43770,
+      "load": "{ 3.23 4.83 6.86 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "docs/plan/evidence/qa-ledger/hv-umm2.183.jsonl": "97dfe130b63bc3afd1dada2f1c3749227c04f89db22a3aa4642306bf2c310ad3",
+        "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+      }
+    },
+    {
+      "name": "judged-player-logs",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.183",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "playerOnly=1"
+      ],
+      "start": "2026-10-14T20:38:16.102624+00:00",
+      "end": "2026-10-14T20:38:50.277717+00:00",
+      "wallS": 34.17465795800672,
+      "exitCode": 0,
+      "pid": 46707,
+      "pgid": 46707,
+      "load": "{ 6.71 5.50 6.80 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "docs/plan/evidence/qa-ledger/hv-umm2.183.jsonl": "97dfe130b63bc3afd1dada2f1c3749227c04f89db22a3aa4642306bf2c310ad3",
+        "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+      }
+    },
+    {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T20:42:39.921827+00:00",
+      "end": "2026-10-14T20:43:34.663143+00:00",
+      "wallS": 54.74077499998384,
+      "exitCode": 0,
+      "pid": 51632,
+      "pgid": 51632,
+      "load": "{ 2.92 4.28 5.93 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "docs/plan/evidence/friction/hv-umm2.183.json": "b137f7f9b86dc5dcd064ef66bf9bd71e05bd4d5d6c839b427615e708332db09c",
+        "docs/plan/evidence/measurements/hv-umm2.183.json": "fd1d79d3c4626f3cfba8965025d30b1cb09bbe7b195bfa3025bbd1f1f8cacaca",
+        "docs/plan/evidence/measurements/hv-umm2.183.md": "ac23c3b70ba90e25cf0770378023a481b7ebf9b60544544155d3c9a428b963a7",
+        "docs/plan/evidence/qa-ledger/hv-umm2.183.jsonl": "3b2d3c34ebd59f42c85875e9e8ab53d2a0f519366eb5aa6428c31d5f2ed017db",
+        "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+      }
+    },
+    {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-14T20:44:52.869906+00:00",
+      "end": "2026-10-14T20:44:57.260972+00:00",
+      "wallS": 4.390914165996946,
+      "exitCode": 0,
+      "pid": 53920,
+      "pgid": 53920,
+      "load": "{ 4.71 4.71 5.88 }",
+      "sourceHashes": {
+        "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+        "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+        "docs/plan/evidence/friction/hv-umm2.183.json": "b137f7f9b86dc5dcd064ef66bf9bd71e05bd4d5d6c839b427615e708332db09c",
+        "docs/plan/evidence/measurements/hv-umm2.183.json": "fd1d79d3c4626f3cfba8965025d30b1cb09bbe7b195bfa3025bbd1f1f8cacaca",
+        "docs/plan/evidence/measurements/hv-umm2.183.md": "ac23c3b70ba90e25cf0770378023a481b7ebf9b60544544155d3c9a428b963a7",
+        "docs/plan/evidence/qa-ledger/hv-umm2.183.jsonl": "3b2d3c34ebd59f42c85875e9e8ab53d2a0f519366eb5aa6428c31d5f2ed017db",
+        "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+      }
+    }
+  ],
+  "validationStatus": "All required checks PASS; final timing-only schema, JSON/JSONL, exact-path, immutable-catalog, source/child hash, owned-resource and staged-whitespace guards complete immediately before Git.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review wrapper start2026-10-14T20:42:39.921827+00:00 before workspace preparation; observed1-minute2.92."
+      }
+    }
+  },
+  "reviewPolicy": {
+    "independentReviewRequired": false,
+    "reason": "Original composition:22 non-test changed source lines, existing kinds only, phase policy does not require per-bead core review. Parent verified policy.",
+    "priorPrerequisiteAttribution": "Delivered95 stored-counter semantics received normal fresh Claude review; accepted bound/document follow-up693 is closed/completed with normal fresh ClaudeOpus5.5 complete cold scope. Its accepted low static-coverage follow-up695 is independent tests-only, and is not an artificial original183 prerequisite. No new independent verdict is inferred or claimed here."
+  },
+  "finalSchemaReceipt": {
+    "file": "final-schema.json",
+    "exitCode": 0,
+    "wallS": 0.13238054100656882
+  },
+  "commitWindowEndpoint": "2026-10-14T20:49:52+00:00",
+  "timingEpochCorrection": {
+    "obsoleteSourceOID": "ccf1edff88fe6469cd0a8aa6b60b7da8bf782af5",
+    "obsoleteCutoff": "2026-10-14T20:47:42.092423+00:00",
+    "obsoleteGitStart": "2026-10-14T20:48:02.175793+00:00",
+    "obsoleteGitEnd": "2026-10-14T20:48:02.235813+00:00",
+    "reason": "Parent requires the tracked window endpoint to match the actual automatic committer second. Initial packaging cutoff was20.14339s earlier; only these two timing/provenance metadata blobs change.",
+    "unchangedSourceSHA256": {
+      "src/content/cards/desolation-s-edge-8855e20c.ts": "c8727460b8a90520f7b1afd722948da6158f6683490c1ef91deb2a16d06cf0da",
+      "src/content/cards/spirit-field-reclaimer-78673e2b.ts": "6cc00dd2bd358f977c51e9bf519adf4646e3f7baf56650a90c5739815a5047dc",
+      "src/content/specs/cards-71.scenarios.ts": "54060e1d37181cd251a7bc15868e742139e9252683e1e960832c84e01b5e9902"
+    },
+    "acceptedChecksReuse": "Production source, private114-line scenario, QAledger, measurementMD, childreadonly hashes and all check/QA receipts unchanged; prior review/Knip remain accepted. Current metadata schema runs before amend.",
+    "initialReceipt": "/tmp/183-commit-receipt-initial.json"
+  }
+}
