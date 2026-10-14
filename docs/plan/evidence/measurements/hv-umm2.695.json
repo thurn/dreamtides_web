@@ -1,0 +1,416 @@
+{
+  "bead": "hv-umm2.695",
+  "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+  "dispatch": {
+    "dispatchAt": "2026-10-14T19:40:28.063Z",
+    "callId": "call_1cb3c795007346ee85c77b52beb2e44b",
+    "agent": "/root/live_scopes695",
+    "samplingSeconds": "UNKNOWN",
+    "source": "parent own host dispatch receipt /tmp/codex-695/dispatch.json"
+  },
+  "scope": "Tests-only public live static/while consumers and independent readerless scope after actual own-payment source departure. Runtime, existing contracts, registration/runner, catalogs, rules and policy stay byte-exact.",
+  "contract": {
+    "path": "src/engine/effects/primitives/contracts/stored-counter-live-scopes.contracts.ts",
+    "lines": 118,
+    "cases": 6,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "observables": [
+      "effective sparks for distinct physical cost 0/1/2 characters after actual counter-store resolutions",
+      "static while condition threshold at current counter count",
+      "own payment moves source to void and clears counters, activation stack scalar remains 2",
+      "separate readerless selector admits only opposing cost-0 physical ID and condition count is exactly 1",
+      "original activation resolves from snapshot to score 3"
+    ],
+    "typeSafety": "Synthetic definitions use branded syntheticId; typed ConditionScope omits resolving readers. No storedCounterCount helper calls, mocks, production defaults or UI string assertions."
+  },
+  "counterfactual": {
+    "fault": "Only boundOf storedCounters branch throws when its sourceCounters reader is absent.",
+    "receipt": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "updates a real static selector"
+      ],
+      "start": "2026-10-14T19:42:45.902661+00:00",
+      "end": "2026-10-14T19:42:53.455545+00:00",
+      "wallS": 7.552743917010957,
+      "cpuS": 9.748108,
+      "pid": 49606,
+      "pgid": 49606,
+      "exitCode": 1,
+      "hostLoad": "{ 6.05 5.78 6.88 }",
+      "stdout": "/tmp/codex-695/cf-static-readerless.stdout",
+      "stderr": "/tmp/codex-695/cf-static-readerless.stderr"
+    },
+    "restoration": {
+      "originalSHA256": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+      "mutatedSHA256": "965c3d7aa446f86e83efab102da01e6e61616ccb27f685c01c90705f7a1efda8",
+      "restoredSHA256": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+      "contractSHA256": "6c16a93cb219ad0b6ae415b1bc1e0ac773d5f86c92a39810947e2fd45d1b415e"
+    },
+    "namedFailures": [
+      "stored-counter live scopes controlled by player > updates a real static selector after each successful stored counter",
+      "stored-counter live scopes controlled by enemy > updates a real static selector after each successful stored counter"
+    ],
+    "actualError": "counterfactual readerless counters rejected",
+    "diffReceipt": "/tmp/codex-695/counterfactual.diff",
+    "qualification": "A synthetic setup can evaluate statics before the first action; the fault fails actual public characteristics/layer expansion, not a fixture expectation edit. Existing activation preparation may also detect this fault; this proof specifically binds the new static seam."
+  },
+  "validation": {
+    "initialFocused": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "stored-counter live scopes"
+      ],
+      "start": "2026-10-14T19:42:23.849274+00:00",
+      "end": "2026-10-14T19:42:33.584485+00:00",
+      "wallS": 9.735055541998008,
+      "cpuS": 12.028267,
+      "pid": 48689,
+      "pgid": 48689,
+      "exitCode": 0,
+      "hostLoad": "{ 5.61 5.68 6.87 }",
+      "stdout": "/tmp/codex-695/focused-initial.stdout",
+      "stderr": "/tmp/codex-695/focused-initial.stderr"
+    },
+    "focused-final": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "start": "2026-10-14T19:43:12.677154+00:00",
+      "end": "2026-10-14T19:43:30.687778+00:00",
+      "wallS": 18.01040762499906,
+      "cpuS": 20.27251,
+      "pid": 50182,
+      "pgid": 50182,
+      "exitCode": 0,
+      "hostLoad": "{ 5.76 5.75 6.83 }",
+      "stdout": "/tmp/codex-695/focused-final.stdout",
+      "stderr": "/tmp/codex-695/focused-final.stderr"
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T19:43:46.721670+00:00",
+      "end": "2026-10-14T19:44:07.713609+00:00",
+      "wallS": 20.991754125017906,
+      "cpuS": 65.080316,
+      "pid": 50964,
+      "pgid": 50964,
+      "exitCode": 0,
+      "hostLoad": "{ 5.16 5.62 6.75 }",
+      "stdout": "/tmp/codex-695/review.stdout",
+      "stderr": "/tmp/codex-695/review.stderr"
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-14T19:44:27.071908+00:00",
+      "end": "2026-10-14T19:44:31.693686+00:00",
+      "wallS": 4.621682333992794,
+      "cpuS": 5.393974,
+      "pid": 51908,
+      "pgid": 51908,
+      "exitCode": 0,
+      "hostLoad": "{ 6.62 6.03 6.85 }",
+      "stdout": "/tmp/codex-695/knip.stdout",
+      "stderr": "/tmp/codex-695/knip.stderr"
+    },
+    "counts": {
+      "initialFocused": 6,
+      "completeEager": 4067,
+      "ordinaryReview": {
+        "files": 1,
+        "tests": 4067
+      },
+      "newCases": 6
+    },
+    "schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-14T19:44:51.972238+00:00",
+      "end": "2026-10-14T19:44:52.041403+00:00",
+      "wallS": 0.06908395900973119,
+      "cpuS": 0.07317799999999999,
+      "pid": 52673,
+      "pgid": 52673,
+      "exitCode": 0,
+      "hostLoad": "{ 7.05 6.19 6.88 }",
+      "stdout": "/tmp/codex-695/schema.stdout",
+      "stderr": "/tmp/codex-695/schema.stderr"
+    },
+    "whitespace": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "<each owned new path>"
+      ],
+      "results": [
+        {
+          "path": "docs/plan/evidence/friction/hv-umm2.695.json",
+          "exitCode": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "path": "docs/plan/evidence/measurements/hv-umm2.695.json",
+          "exitCode": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "path": "docs/plan/evidence/pre-existing/hv-umm2.695.md",
+          "exitCode": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "path": "src/engine/effects/primitives/contracts/stored-counter-live-scopes.contracts.ts",
+          "exitCode": 1,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "qualification": "New-file no-index diff reports 1 for different bytes; --check produces zero diagnostics. Initial helper guard incorrectly required 0, then corrected to account for ordinary no-index difference semantics; no source mutation or repeated validation effect."
+    }
+  },
+  "firstPreparation": {
+    "time": "2026-10-14T19:42:24.069Z",
+    "hostLoad": 5.61474609375,
+    "command": "npm test -- src/engine/effects/primitives/contracts.test.ts -t stored-counter live scopes"
+  },
+  "failurePaths": {
+    "newPersistentTransitions": "None: this commit adds only a plain eager-glob synthetic contract module. Existing store and abandon/payment transitions are exercised without changing producers.",
+    "midStepErrorPartialWrite": "No new write boundary. Existing same-source rollback witness in stored-counter-bounds.contracts.ts: rolls back a successful bound-driven removal prefix when a later instruction fails.",
+    "reloadRestartInvalidStaleForeignConcurrent": "No new state field, prompt, intent, validation or protocol. Existing 693 witness: reloads a postcommit deferred target and refuses invalid, stale, foreign and concurrent answers.",
+    "scopeIsolation": "The new pending-departure witness proves a separate nonresolving condition cannot inherit the still-pending activation scalar; its resolution remains unaffected."
+  },
+  "proportion": "No authored entity, runtime, presentation, runner, repository configuration or architecture change: no browser, entity sweep, weighted fuzz or review:full; focused eager contracts, ordinary review/Knip/schema/whitespace. No low-load full-suite D19 or performance claim.",
+  "runtime": {
+    "groups": [
+      {
+        "label": "focused-initial",
+        "pid": 48689,
+        "pgid": 48689,
+        "exitCode": 0,
+        "settled": true,
+        "port": null
+      },
+      {
+        "label": "cf-static-readerless",
+        "pid": 49606,
+        "pgid": 49606,
+        "exitCode": 1,
+        "settled": true,
+        "port": null
+      },
+      {
+        "label": "focused-final",
+        "pid": 50182,
+        "pgid": 50182,
+        "exitCode": 0,
+        "settled": true,
+        "port": null
+      },
+      {
+        "label": "review",
+        "pid": 50964,
+        "pgid": 50964,
+        "exitCode": 0,
+        "settled": true,
+        "port": null
+      },
+      {
+        "label": "knip",
+        "pid": 51908,
+        "pgid": 51908,
+        "exitCode": 0,
+        "settled": true,
+        "port": null
+      },
+      {
+        "label": "schema",
+        "pid": 52673,
+        "pgid": 52673,
+        "exitCode": 0,
+        "settled": true,
+        "port": null
+      }
+    ],
+    "settlementProof": "Own group IDs absent from ps observation before READY. All collectors returned terminal; no browser/server/native effects.",
+    "sourceFreeze": "New contract SHA is unchanged from initial focused/CF/full eager/review/Knip. Source selectors matches original admitted snapshot and Git has zero tracked production differences."
+  },
+  "npmInstall": {
+    "wallS": 2.398,
+    "owner": "parent",
+    "scope": "Fresh worktree installation completed before helper dispatch"
+  },
+  "frictionCadence": {
+    "canonicalRetrospective": "hv-n913",
+    "uncoveredPhase5RecordsAtDispatch": 6,
+    "phase5RecordsAtDispatch": 645,
+    "retrospectiveDue": false
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Ordinary review prepare step at 2026-10-14T19:43:46.970Z (5.2236328125); group launch separately observed 5.16."
+      }
+    }
+  },
+  "implementationWindowQualification": "Final inclusive cutoff through parent COMMITACK; normal automatic Git timestamps follow immediately. This is elapsed wall time, not editing CPU, sampling time or a D19 budget proof.",
+  "firstTest": {
+    "time": "2026-10-14T19:42:27.403Z",
+    "hostLoad": 6.0458984375,
+    "scope": "Initial filtered eager test step"
+  },
+  "hostLoadSamples": {
+    "focused-initial": [
+      {
+        "step": "prepare",
+        "time": "2026-10-14T19:42:24.069Z",
+        "load": 5.61474609375
+      },
+      {
+        "step": "test",
+        "time": "2026-10-14T19:42:27.403Z",
+        "load": 6.0458984375
+      },
+      {
+        "step": "restore-local-assets",
+        "time": "2026-10-14T19:42:32.064Z",
+        "load": 6.0419921875
+      }
+    ],
+    "cf-static-readerless": [
+      {
+        "step": "prepare",
+        "time": "2026-10-14T19:42:46.104Z",
+        "load": 6.0478515625
+      },
+      {
+        "step": "test",
+        "time": "2026-10-14T19:42:47.787Z",
+        "load": 6.0439453125
+      },
+      {
+        "step": "restore-local-assets",
+        "time": "2026-10-14T19:42:51.978Z",
+        "load": 5.8798828125
+      }
+    ],
+    "focused-final": [
+      {
+        "step": "prepare",
+        "time": "2026-10-14T19:43:12.946Z",
+        "load": 5.763671875
+      },
+      {
+        "step": "test",
+        "time": "2026-10-14T19:43:15.697Z",
+        "load": 5.763671875
+      },
+      {
+        "step": "restore-local-assets",
+        "time": "2026-10-14T19:43:27.922Z",
+        "load": 5.80224609375
+      }
+    ],
+    "review": [
+      {
+        "step": "prepare",
+        "time": "2026-10-14T19:43:46.970Z",
+        "load": 5.2236328125
+      },
+      {
+        "step": "typecheck",
+        "time": "2026-10-14T19:43:49.698Z",
+        "load": 5.2236328125
+      },
+      {
+        "step": "typecheck-node",
+        "time": "2026-10-14T19:43:49.699Z",
+        "load": 5.2236328125
+      },
+      {
+        "step": "import-cycles",
+        "time": "2026-10-14T19:43:49.699Z",
+        "load": 5.2236328125
+      },
+      {
+        "step": "lint",
+        "time": "2026-10-14T19:43:49.699Z",
+        "load": 5.2236328125
+      },
+      {
+        "step": "test-related",
+        "time": "2026-10-14T19:43:49.699Z",
+        "load": 5.2236328125
+      },
+      {
+        "step": "friction-records",
+        "time": "2026-10-14T19:43:49.700Z",
+        "load": 5.2236328125
+      },
+      {
+        "step": "restore-local-assets",
+        "time": "2026-10-14T19:44:06.537Z",
+        "load": 7.654296875
+      }
+    ],
+    "knip": [
+      {
+        "step": "prepare",
+        "time": "2026-10-14T19:44:27.249Z",
+        "load": 6.62060546875
+      },
+      {
+        "step": "knip",
+        "time": "2026-10-14T19:44:28.449Z",
+        "load": 6.62060546875
+      },
+      {
+        "step": "restore-local-assets",
+        "time": "2026-10-14T19:44:30.402Z",
+        "load": 6.62060546875
+      }
+    ]
+  },
+  "sourceEpoch": {
+    "contractSHA256": "6c16a93cb219ad0b6ae415b1bc1e0ac773d5f86c92a39810947e2fd45d1b415e",
+    "selectorsSHA256": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+    "trackedRuntimeDiff": []
+  },
+  "implementationWindow": {
+    "start": "2026-10-14T19:40:28.063Z",
+    "finalEvidenceCutoff": "2026-10-14T19:46:39.594009+00:00",
+    "implementMin": 6.192183483333333,
+    "includes": "Research, contract authoring, focused checks, restored counterfactual, ordinary review/Knip/schema, evidence, coordination and parent READY/COMMITACK wait.",
+    "commitTail": "Actual normal-date Git tail is recorded in /tmp/codex-695/commit-receipt.json after immutable source commit; no postcommit tracked evidence writes."
+  }
+}
