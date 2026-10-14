@@ -31,7 +31,7 @@ import { instanceCard } from "../catalog";
 import { fixedEnergy } from "../dsl/energy";
 import type { EngineCatalog } from "../catalog";
 import { cardMatchesFilter, copiableCostOf, matchesFilter, playedMatchesFilter } from "../continuous/characteristics";
-import { worksInZone } from "../dsl/abilities";
+import { namedTriggersOf, worksInZone } from "../dsl/abilities";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, Variant, MaterializedSelector, MaterializeNth, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
 import type { CardDrawnEvent } from "../events/kinds/card-drawn";
@@ -103,7 +103,8 @@ export function copiedCardMatchesFilter(
 ): boolean {
   const card = instanceCard(catalog, copied);
   return matchesFilter({ cardType: card.cardType, subtype: card.subtype, allTypes: false,
-    cost: fixedEnergy(card.costs), speed: card.speed, spark: card.spark === "x" ? x : card.spark }, filter);
+    cost: fixedEnergy(card.costs), speed: card.speed, spark: card.spark === "x" ? x : card.spark,
+    namedTriggers: namedTriggersOf(card.abilities(copied.variant)) }, filter);
 }
 
 /** Every event kind a trigger can inspect, including all combined branches. */

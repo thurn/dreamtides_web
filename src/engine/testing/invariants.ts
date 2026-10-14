@@ -18,6 +18,7 @@ const CHARACTERISTICS_FIELDS = Object.keys({
   subtype: true,
   allTypes: true,
   keywords: true,
+  namedTriggers: true,
   baseSpark: true,
   spark: true,
 } as const satisfies Record<keyof Characteristics, true>) as readonly (keyof Characteristics)[];

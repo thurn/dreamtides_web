@@ -1,3 +1,6 @@
+import { all, characterYouControl, selectorHasAbility, staticAbility } from "../../engine/dsl/builders";
+import { sparkModifier } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -9,5 +12,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["J11", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [staticAbility(sparkModifier(all(characterYouControl(selectorHasAbility("dawn"))), 1))],
+  verifiedText: expectedVerifiedText("Characters you control with ▸Dawn abilities have +1✦."),
 });

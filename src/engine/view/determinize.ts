@@ -45,11 +45,12 @@
  */
 import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import { Layers } from "../continuous/layers";
-import { matchesFilter } from "../continuous/characteristics";
-import { worksInZone } from "../dsl/abilities";
+import { matchesFilter, type FilterSubject } from "../continuous/characteristics";
+import { BASE_VARIANT } from "../dsl/types";
+import { namedTriggersOf, worksInZone } from "../dsl/abilities";
 import { fixedEnergy } from "../dsl/energy";
 import { resolvePlayer } from "../dsl/selectors";
-import type { CardFilter, Speed, Trigger } from "../dsl/types";
+import type { CardFilter, Trigger, Variant } from "../dsl/types";
 import { triggerBody } from "../triggers/body";
 import { loopSignature } from "../loops/signature";
 import { emptyLoopTracker } from "../loops/types";
@@ -155,7 +156,7 @@ function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, decklis
   const assignedDraws = new Map<Side, Set<InstanceId>>();
   const layers = new Layers(state, catalog);
   const visibleQueue = view.triggerQueue.filter(trigger => trigger.source !== null && trigger.origin !== null);
-  const matches = (filter: CardFilter | undefined, card: Pick<CharacteristicsView, "cardType" | "subtype" | "allTypes" | "spark"> & { readonly speed: Speed }, cost: number) =>
+  const matches = (filter: CardFilter | undefined, card: Omit<FilterSubject, "cost">, cost: number) =>
     filter === undefined || matchesFilter({ ...card, cost }, filter);
   for (const [index, shown] of visibleQueue.entries()) {
     if (shown.subjectCostHidden !== true || shown.source === null || shown.origin === null) continue;
@@ -182,10 +183,17 @@ function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, decklis
       const live = (hidden.length === 0 ? compatible : hidden).map(instance => ({ id: instance.id, cost: fixedEnergy(instanceCard(catalog, instance).costs), key: domain.key, side: domain.sides[0] }));
       if (live.length > 0) return live;
       // Public copiable tuples constrain a ceased copy without identifying its historical original.
+      const printedSubject = (card: ReturnType<typeof instanceCard>, variant: Variant) => ({
+        ...card, namedTriggers: namedTriggersOf(card.abilities(variant)),
+      });
+      const forms: readonly Variant[] = domain.filter?.hasAbility === undefined ? [BASE_VARIANT] : [BASE_VARIANT, { amplified: true }];
       const historical = [
-        ...catalog.cardDefinitions,
-        ...Object.values(view.instances).filter(instance => instance.printing.kind === "card").map(instance => instanceCard(catalog, instance)),
-        ...SIDES.flatMap(side => decklists[side].map(entry => instanceCard(catalog, { printing: { kind: "card", cardId: entry.cardId }, variant: variantOf(entry) }))),
+        ...catalog.cardDefinitions.flatMap(card => forms.map(variant => printedSubject(instanceCard(catalog, { printing: { kind: "card", cardId: card.id }, variant }), variant))),
+        ...Object.values(view.instances).filter(instance => instance.printing.kind === "card").map(instance => printedSubject(instanceCard(catalog, instance), instance.variant)),
+        ...SIDES.flatMap(side => decklists[side].map(entry => {
+          const variant = variantOf(entry);
+          return printedSubject(instanceCard(catalog, { printing: { kind: "card", cardId: entry.cardId }, variant }), variant);
+        })),
       ];
       return historical.filter(card => matches(domain.filter, { ...card, allTypes: false, spark: card.spark === "x" ? 0 : card.spark }, fixedEnergy(card.costs)))
         .map(card => ({ id: undefined, cost: fixedEnergy(card.costs), key: domain.key, side: domain.sides[0] }));
@@ -589,7 +597,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       : [known];
     const compatible = candidates.filter(candidate => {
       const card = instanceCard(catalog, candidate);
-      return filters.some(filter => matchesFilter({ cardType: card.cardType, subtype: card.subtype, allTypes: false, cost: fixedEnergy(card.costs), spark: card.spark === "x" ? 0 : card.spark, speed: card.speed }, filter));
+      return filters.some(filter => matchesFilter({ cardType: card.cardType, subtype: card.subtype, allTypes: false, cost: fixedEnergy(card.costs), spark: card.spark === "x" ? 0 : card.spark, speed: card.speed, namedTriggers: namedTriggersOf(card.abilities(candidate.variant)) }, filter));
     });
     const tuple = compatible[Math.floor(random() * compatible.length)];
     if (tuple === undefined || tuple.printing.kind !== "card") throw new Error("Cannot determinize a hand-copy tuple without a compatible original");

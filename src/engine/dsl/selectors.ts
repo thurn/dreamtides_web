@@ -146,6 +146,7 @@ export function matchesCharacterWith(
   if (selector.controller === "opponent" && instance.controller === controller) return false;
   const bound = (value: BoundValue): number => boundOf(state, catalog, read, value, controller, source, selectorX, sourceSpark);
   const matchesLeaf = (predicate: Omit<CharacterSelector, "controller" | "anyOf">): boolean => {
+    if (predicate.hasAbility !== undefined && !read(id).namedTriggers.includes(predicate.hasAbility)) return false;
     if (predicate.another === true && id === source) return false;
     if (predicate.subtype !== undefined || predicate.notSubtype !== undefined || predicate.sparkAtMost !== undefined || predicate.sparkAtLeast !== undefined) {
       const card = read(id);

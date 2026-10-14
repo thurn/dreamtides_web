@@ -538,7 +538,7 @@ export type EngineStatusCopy =
   | {
       readonly kind: "cost";
       readonly amount: number;
-      readonly cardType: "character" | "event" | null;
+      readonly filter: CardFilter;
       readonly next: boolean;
       readonly expiry: Expiry;
     }
@@ -643,8 +643,8 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
         ? " when its source leaves play"
         : expiryPhrase(status.expiry, human).replace(/^ until/u, " at")}`;
     case "cost": {
-      const cards = status.cardType === null ? "card" : status.cardType;
-      const subject = status.next ? `The next ${cards} played` : `${sentence(cards)}s played`;
+      const cards = permittedCardKind(status.filter, !status.next);
+      const subject = status.next ? `The next ${cards} played` : `${sentence(cards)} played`;
       const change = `${status.next ? "costs" : "cost"} ${String(Math.abs(status.amount))} energy ${status.amount < 0 ? "less" : "more"}`;
       return `${subject} ${change}${expiryPhrase(status.expiry, human)}`;
     }
@@ -922,7 +922,7 @@ function effectStartedText(
       return line(card(change.instance), { kind: "returnsToHand", expiry });
     case "cost":
       return `${engineStatusLabel(
-        { kind: "cost", amount: change.amount, cardType: change.filter.cardType ?? null, next: change.next, expiry },
+        { kind: "cost", amount: change.amount, filter: change.filter, next: change.next, expiry },
         human,
       )} for ${change.player === human ? "you" : "your opponent"}.`;
     case "cardCost":

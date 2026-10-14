@@ -9,6 +9,8 @@ import { eventTargetSpecs } from "../effects/abilities";
 import { mentionsChosenSubtype } from "../effects/primitives/choose-subtype";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
+import { namedTriggersOf } from "../dsl/abilities";
+import { BASE_VARIANT } from "../dsl/types";
 import { fixedEnergy, xCost } from "../dsl/energy";
 import type { Ability, BoundValue, VoidCostBound, CardCost, CardCountValue, CardFilter, CharacterPredicate, CharacterSelector, Cost, PlayerRef, StackItemSelector, TriggeredAbility, Variant, ZoneTargetSpec } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
@@ -167,6 +169,7 @@ function characterFor(
       if (predicates.every(predicate =>
         // The solver places catalog cards, never figments.
         predicate.figment !== true &&
+        (predicate.hasAbility === undefined || namedTriggersOf(card.abilities(BASE_VARIANT)).includes(predicate.hasAbility)) &&
         (predicate.subtype === undefined || card.subtype === predicate.subtype) &&
         (predicate.notSubtype === undefined || card.subtype !== predicate.notSubtype) &&
         meetsBounds(spark, predicate.sparkAtLeast, predicate.sparkAtMost) &&
@@ -192,7 +195,7 @@ function characterFor(
 function cardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[], admits: (cost: number) => boolean = () => true): CardId {
   const found = firstFitting(pool, (card) => {
     const cost = fixedEnergy(card.costs);
-    return matchesFilter({ ...card, allTypes: false, cost, spark: card.spark === null ? null : sparkOf(card) }, filter) && admits(cost);
+    return matchesFilter({ ...card, allTypes: false, namedTriggers: namedTriggersOf(card.abilities(BASE_VARIANT)), cost, spark: card.spark === null ? null : sparkOf(card) }, filter) && admits(cost);
   });
   if (found === undefined) throw new Error(`The lab solver has no card for filter ${JSON.stringify(filter)}`);
   engine.catalog.card(found.id);

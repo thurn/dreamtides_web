@@ -171,7 +171,7 @@ const completeAuthoringFixtures = new Map<string, string>([
     export type Speed = "standard" | "fast";
     export interface CharacterSelector { figment?: boolean; hasAbility?: string; challenging?: boolean; costAtLeast?: number }
     export interface StackItemSelector { costAtMost?: number; sparkAtMost?: number }
-    export interface CardFilter { costAtMost?: number; sparkAtMost?: number }
+    export interface CardFilter { hasAbility?: string; costAtMost?: number; sparkAtMost?: number }
     export interface ZoneCardSpec { zone: "hand" | "void" | "deck" }
     export interface ZoneTargetSpec { zone: "void"; costAtMost?: number | { tag: "x" } }
     export type BoundValue = number | { tag: "x" } | { tag: "sourceSpark" };
@@ -217,11 +217,11 @@ const minimalApiFixtures = [
   ["oncePerTurn", typesModule, 'export interface ActivatedAbility { oncePerTurn?: boolean }'],
   ["speedFast", typesModule, 'export type Speed = "standard" | "fast";'],
   ["selectorFigment", typesModule, 'export interface CharacterSelector { figment?: boolean }'],
-  ["selectorHasAbility", typesModule, 'export interface CharacterSelector { hasAbility?: string }'],
+  ["selectorHasAbility", typesModule, 'export interface CharacterSelector { hasAbility?: string } export interface CardFilter { hasAbility?: string }'],
   ["stackSelectorBounds", typesModule, 'export interface StackItemSelector { costAtMost?: number; sparkAtMost?: number }'],
   ["selectorChallenger", typesModule, 'export interface CharacterSelector { challenging?: boolean }'],
   ["selectorBounds", typesModule, 'export interface CharacterSelector { costAtLeast?: number }'],
-  ["cardFilterBounds", typesModule, 'export interface CardFilter { costAtMost?: number }'],
+  ["cardFilterBounds", typesModule, 'export interface CardFilter { hasAbility?: string; costAtMost?: number }'],
   ["zoneCardRefs", typesModule, 'export interface ZoneCardSpec { zone: "hand" | "deck" }'],
   ["randomSelection", buildersModule, 'export function randomIn() {}'],
   ["valueZoneCounts", buildersModule, 'export function countCards() {}'],

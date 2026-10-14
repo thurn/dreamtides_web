@@ -1,6 +1,6 @@
 import type { CardSubtype } from "../../types/card-identity";
 import type { TransfigurationType } from "../../types/journey";
-import type { CardFilter, Condition, Cost, DeckMods, Keyword, Speed, Variant } from "../dsl/types";
+import type { CardFilter, Condition, Cost, DeckMods, Keyword, NamedTrigger, Speed, Variant } from "../dsl/types";
 import type { LoopTracker } from "../loops/types";
 import type {
   AbilitySource,
@@ -621,6 +621,8 @@ export interface SparkGain {
  * had as it was played (RD-hv-7x4l.34-1).
  */
 export interface PlayedCard {
+  /** Named triggers as played; missing legacy abilities are unknown and match no ability filter. */
+  readonly namedTriggers?: readonly NamedTrigger[];
   readonly instance: InstanceId;
   readonly cardType: "character" | "event";
   readonly subtype: CardSubtype;

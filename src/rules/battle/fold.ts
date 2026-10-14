@@ -1,4 +1,5 @@
 // Immutable battle display metadata and engine slices, plus load validation.
+import { isNamedTrigger } from "../../engine/dsl/abilities";
 import { isFixedChange } from "../../engine/view/knowledge";
 import { BATTLE } from "../../content/battle";
 import type { BattleAvatarSummary, BattleDeckCardDefinition, BattleEnemyDescriptor, BattleSide, FrontRankSlotId } from "../../battle/types";
@@ -539,7 +540,9 @@ function isVariant(value: unknown): boolean {
   );
 }
 
+
 const CARD_FILTER_VALIDATORS = {
+  hasAbility: optional(isNamedTrigger),
   fast: optional((value) => value === true),
   cardType: optional(isCardKind),
   subtype: optional(isString),
@@ -1170,6 +1173,7 @@ function isTurnLog(value: unknown): boolean {
           isCardKind(played.cardType) &&
           isString(played.subtype) &&
           isBoolean(played.allTypes) &&
+          optional(arrayOf(isNamedTrigger))(played.namedTriggers) &&
           // A saved record may omit its captured cost, spark and speed.
           optional(isIndex)(played.cost) &&
           optional(oneOf({ standard: true, fast: true, interrupt: true }))(played.speed) &&

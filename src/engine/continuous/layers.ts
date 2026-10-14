@@ -35,9 +35,9 @@
  */
 import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
-import { worksInZone } from "../dsl/abilities";
+import { namedTriggersOf, worksInZone } from "../dsl/abilities";
 import { matchesCharacterWith, matchingCharactersWith, zoneCountWith, type CharacteristicsReader } from "../dsl/selectors";
-import type { Ability, CharacterRef, Keyword, StaticAbility, StaticCondition } from "../dsl/types";
+import type { Ability, CharacterRef, Keyword, NamedTrigger, StaticAbility, StaticCondition } from "../dsl/types";
 import { conditionHoldsWith } from "../dsl/conditions";
 import { evaluateValue } from "../dsl/values";
 import { chosenSubtypeOf, mentionsChosenSubtype, withChosenSubtype } from "../effects/primitives/choose-subtype";
@@ -58,6 +58,8 @@ export interface Characteristics {
   readonly allTypes: boolean;
   /** Keyword abilities, plus those gained, minus those lost. */
   readonly keywords: readonly Keyword[];
+  /** Named triggered abilities, printed or gained and not lost. */
+  readonly namedTriggers: readonly NamedTrigger[];
   /** A character's base spark after base-spark setting; `null` for an event. */
   readonly baseSpark: number | null;
   /** A character's spark after every modification, never below 0; `null` for an event. */
@@ -484,6 +486,7 @@ export class Layers {
       subtype: definition.subtype,
       allTypes: false,
       keywords: [...keywords],
+      namedTriggers: namedTriggersOf(definition.abilities(instance.variant)),
       baseSpark: base,
       spark: base === null ? null : Math.max(0, base),
     };
@@ -514,13 +517,15 @@ export class Layers {
           };
           break;
         case "abilities": {
-          const gained = gainedGroupAbilities(this.catalog, change).flatMap((ability) => (ability.kind === "keyword" ? [ability.keyword] : []));
-          result = { ...result, keywords: [...result.keywords.filter((keyword) => !gained.includes(keyword)), ...gained] };
+          const abilities = gainedGroupAbilities(this.catalog, change);
+          const gained = abilities.flatMap((ability) => (ability.kind === "keyword" ? [ability.keyword] : []));
+          result = { ...result, keywords: [...result.keywords.filter((keyword) => !gained.includes(keyword)), ...gained],
+            namedTriggers: [...new Set([...result.namedTriggers, ...namedTriggersOf(abilities)])] };
           break;
         }
         case "loseAbilities":
           // Every keyword it has now, printed or gained by an earlier change, is lost; later changes add theirs again.
-          result = { ...result, keywords: [] };
+          result = { ...result, keywords: [], namedTriggers: [] };
           break;
         case "baseSpark":
           if (result.baseSpark !== null) result = { ...result, baseSpark: change.value, spark: Math.max(0, change.value) };

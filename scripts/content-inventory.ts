@@ -420,7 +420,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   ext("costModifierActivated", "cost-modifier.ts", /activated/, { note: `cost modifiers on activated abilities (${GAP_37})` }),
   // Phase 5: DSL additions.
   dsl("selectorFigment", [registered(DSL_TYPES, "CharacterSelector", { option: "figment" })], ["CharacterSelector"], { note: "figment or not" }),
-  dsl("selectorHasAbility", [registered(DSL_TYPES, "CharacterSelector", { option: "hasAbility", pending: "option" })], ["CharacterSelector", "CardFilter"], { note: "\"characters with ▸Materialized abilities\"" }),
+  dsl("selectorHasAbility", [registered(DSL_TYPES, "CharacterSelector", { option: "hasAbility" }), registered(DSL_TYPES, "CardFilter", { option: "hasAbility" })], ["CharacterSelector", "CardFilter"], { note: "\"characters with ▸Materialized abilities\"" }),
   dsl("stackSelectorBounds", [registered(DSL_TYPES, "StackItemSelector", { option: "costAtMost" }), registered(DSL_TYPES, "StackItemSelector", { option: "sparkAtMost" })], ["StackItemSelector"], { note: "cost and ✦ bounds on stack items (\"Prevent a played ≤2● cost card\")" }),
   dsl("selectorChallenger", [registered(DSL_TYPES, "CharacterSelector", { option: "challenging" })], ["CharacterSelector"], { note: "challengers" }),
   dsl("selectorBounds", [registered(DSL_TYPES, "CharacterSelector", { option: "costAtLeast" })], ["CharacterSelector"], { note: "exact, ≥, X-valued, and relative cost and ✦ bounds" }),

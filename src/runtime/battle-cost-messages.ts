@@ -1,4 +1,4 @@
-import type { BoundValue, CardFilter, CharacterSelector, Cost, PaymentCost } from "../engine/dsl/types";
+import type { BoundValue, CardFilter, CharacterSelector, Cost, NamedTrigger, PaymentCost } from "../engine/dsl/types";
 
 /** One cost of a stated Reclaim cost ("Reclaim 0●"), as the player reads it. */
 export function costPhrase(cost: Cost): string {
@@ -35,6 +35,12 @@ export function costPhrase(cost: Cost): string {
   }
 }
 
+/** A named (▸) trigger restriction, shared by card and character descriptions. */
+function namedAbilityPhrase(name: NamedTrigger | undefined): string {
+  const labels = { materialized: "Materialized", dawn: "Dawn", dusk: "Dusk", night: "Night", challenge: "Challenge", dissolved: "Dissolved" } satisfies Record<NamedTrigger, string>;
+  return name === undefined ? "" : `with ▸${labels[name]} abilities`;
+}
+
 /** Each authorable restriction supplies both permission qualification and its ordered copy. */
 export function permissionFilterFields(filter: CardFilter, many: boolean) {
   const { costAtLeast: lower, costAtMost: upper, sparkAtLeast: sparkLower, sparkAtMost: sparkUpper } = filter;
@@ -60,6 +66,7 @@ export function permissionFilterFields(filter: CardFilter, many: boolean) {
     },
     subtype: { qualified: Boolean(filter.subtype), text: filter.subtype },
     cardType: { qualified: filter.cardType !== undefined, text: `${filter.cardType ?? "card"}${many ? "s" : ""}` },
+    hasAbility: { qualified: filter.hasAbility !== undefined, text: namedAbilityPhrase(filter.hasAbility) },
   } satisfies Record<keyof CardFilter, { readonly qualified: boolean; readonly text: string | undefined }>;
 }
 
@@ -96,6 +103,7 @@ function characterLeafPhrase(count: number | "x", selector: Omit<CharacterSelect
     selector.notSubtype === undefined ? "" : `non-${selector.notSubtype}`,
   ].filter(Boolean);
   const restrictions = [
+    namedAbilityPhrase(selector.hasAbility),
     selector.controller === "any" ? "" : selector.controller === "you" ? "you control" : "your opponent controls",
     selector.challenging === undefined ? "" : selector.challenging ? `that ${count === 1 ? "is" : "are"} challenging` : `that ${count === 1 ? "is" : "are"} not challenging`,
     selector.blocking === undefined ? "" : selector.blocking ? `that ${count === 1 ? "is" : "are"} blocking` : `that ${count === 1 ? "is" : "are"} not blocking`,

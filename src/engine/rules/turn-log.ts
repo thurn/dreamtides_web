@@ -13,7 +13,7 @@ export function emptyTurnLog(): TurnLog {
 
 /**
  * Records that `side` played `card`, with its effective type, subtype,
- * "has all character types", and spark and its copiable speed and cost as it is
+ * "has all character types", named triggered abilities and spark, and its copiable speed and cost as it is
  * played, before its "when you play" triggers match. "When you play" filters
  * and counts read these, so a later type or spark change does not alter what
  * an earlier play matched (RD-hv-7x4l.34-1, RD-hv-umm2.464-1), and a card
@@ -21,8 +21,8 @@ export function emptyTurnLog(): TurnLog {
  * still matches by its captured speed, cost and spark.
  */
 export function recordPlayed(state: BattleState, catalog: EngineCatalog, side: Side, card: InstanceId): void {
-  const { cardType, subtype, allTypes, spark } = characteristicsOf(state, catalog, card);
-  state.turnLog.played[side].push({ instance: card, cardType, subtype, allTypes, cost: copiableCostOf(state, catalog, card), spark, speed: instanceCard(catalog, state.instances[card]).speed });
+  const { cardType, subtype, allTypes, spark, namedTriggers } = characteristicsOf(state, catalog, card);
+  state.turnLog.played[side].push({ instance: card, cardType, subtype, allTypes, namedTriggers: [...namedTriggers], cost: copiableCostOf(state, catalog, card), spark, speed: instanceCard(catalog, state.instances[card]).speed });
 }
 
 /** Records that `side` drew a card, before its "when you draw" triggers match. */

@@ -509,7 +509,7 @@ export function engineStatuses(
           badge("costModifier", {
             kind: "cost",
             amount: change.amount,
-            cardType: change.filter.cardType ?? null,
+            filter: change.filter,
             next: change.next,
             expiry,
           }),

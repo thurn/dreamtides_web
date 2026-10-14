@@ -1,4 +1,5 @@
 import { matchesFilter } from "../../continuous/characteristics";
+import { namedTriggersOf } from "../../dsl/abilities";
 import { fixedEnergy } from "../../dsl/energy";
 import { resolvePlayer } from "../../dsl/selectors";
 import { BASE_VARIANT, type CardFilter, type PlayerRef } from "../../dsl/types";
@@ -18,7 +19,7 @@ export const createRandomFromPoolPrimitive = definePrimitive<CreateRandomFromPoo
     const side = resolvePlayer(env.controller, node.player);
     const candidates = (ctx.state.draftPools?.[side] ?? []).filter((cardId) => {
       const card = ctx.catalog.card(cardId);
-      return matchesFilter({ ...card, allTypes: false, cost: fixedEnergy(card.costs),
+      return matchesFilter({ ...card, allTypes: false, namedTriggers: namedTriggersOf(card.abilities(BASE_VARIANT)), cost: fixedEnergy(card.costs),
         spark: card.spark === null ? null : Math.max(0, card.spark === "x" ? 0 : card.spark) }, node.filter);
     });
     if (candidates.length === 0) return;

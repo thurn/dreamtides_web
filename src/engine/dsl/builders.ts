@@ -28,6 +28,7 @@ import type {
   FunctionalZone,
   Keyword,
   MovedCardRef,
+  NamedTrigger,
   OptionalCost,
   PaymentCost,
   PlayerRef,
@@ -453,6 +454,11 @@ export function anyCharacter(extra: Omit<CharacterSelector, "controller"> = {}):
 
 export function ofSubtype(subtype: CardSubtype): Pick<CharacterSelector, "subtype"> {
   return { subtype };
+}
+
+/** Characters or cards with the named (▸) triggered ability. */
+export function selectorHasAbility(hasAbility: NamedTrigger): Pick<CharacterSelector, "hasAbility"> {
+  return { hasAbility };
 }
 
 /** "X": the X chosen for the card or ability as it was played. In a selector's bound, the X paid for its source card. */

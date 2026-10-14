@@ -23,6 +23,7 @@ function publicFilter(ctx: StepContext, env: EffectEnv, filter: CardFilter, view
   // Differing filters in one ability supply no public predicate proof.
   return nodes.length > 0 && nodes.every((node) => {
     const equal = {
+      hasAbility: node.filter.hasAbility === filter.hasAbility,
       fast: node.filter.fast === filter.fast,
       cardType: node.filter.cardType === filter.cardType,
       subtype: node.filter.subtype === filter.subtype,

@@ -1,0 +1,32 @@
+{
+  "bead": "hv-umm2.232",
+  "phase": 5,
+  "implementMin": 232.64737993333335,
+  "implementWindow": {
+    "start": "2026-10-13T23:24:18.984Z",
+    "end": "2026-10-14T03:16:57.826796+00:00"
+  },
+  "localValidationS": {
+    "focused": 13.0643607910024,
+    "review": 73.86488933299552,
+    "knip": 4.185228542017285,
+    "full": 230.45521037498838,
+    "fuzz": 279.52878670801874,
+    "preflight": 2.370523166988278,
+    "sweep": 10.731295250006951,
+    "native": 68.81538858401473
+  },
+  "hostLoad": 8.748046875,
+  "testDelta": {
+    "files": 0,
+    "lines": 329,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "additive-registry-conflict",
+      "minutes": 40.61175478333334,
+      "note": "Actual conflict in canonical inventory and determinize required same-bead native rollback/checkpoint/update/reapply, followed by bounded reader repairs and combined validation/QA. Measured interval is successful update receipt00:14:28.189030Z through final capture judgment00:36:47.628345Z; exact follow-up dispatch remains UNKNOWN, so this is a scoped recovery wall interval, not a claimed exact dispatch duration. Full implementation window also retains candidate/update/ACK/evidence time. Existing trigger disposition applies. Repair2 additionally measures first reapply effect2026-10-14T00:47:36.113779+00:00 through final Knip end2026-10-14T00:59:18.024903+00:00 (11.698518733333334 minutes), including bounded review-finding fixes and repeated checks; exact follow-up dispatch remains UNKNOWN. Other candidate/parking/ACK time is retained in full implementation window. Repair3 adds measured canonical-generator start2026-10-14T03:03:02.917674+00:00 through final Knip end2026-10-14T03:09:38.272522+00:00 (6.5892474666666665 minutes). Parent candidate/upstream fix/provider waits and clean checkpoint/native updates remain included in full window; exact follow-up dispatcher clocks UNKNOWN. Generated inventory was the only textual merge conflict; the sole extra test hunk matches landed retained-copier behavior."
+    }
+  ]
+}

@@ -104,6 +104,8 @@ export type VoidCostBound = BoundValue | TriggerSubjectCostValue;
  */
 export interface CharacterSelector {
   readonly controller: "you" | "opponent" | "any";
+  /** Has this named triggered ability, printed or gained and not lost. */
+  readonly hasAbility?: NamedTrigger;
   /** Every outer predicate applies, plus at least one leaf; an empty list matches nobody. */
   readonly anyOf?: readonly CharacterPredicate[];
   /** Only characters of this type; a character with all character types matches every type. */
@@ -471,6 +473,8 @@ export type CardCost = EnergyCost | EnergyXCost;
  * constants.
  */
 export interface CardFilter {
+  /** Has this named triggered ability, printed or gained and not lost. */
+  readonly hasAbility?: NamedTrigger;
   /** A Fast card, including an Interrupt (rules § Timing categories). */
   readonly fast?: true;
   readonly cardType?: "character" | "event";

@@ -20,6 +20,34 @@ import {
 import { board, cards, deck, engine, screenOf } from "./engine-battle-view-model.fixtures";
 
 describe("buildEngineBattleScreenModel", () => {
+  it.each([false, true])("preserves complete cost predicates in public status and log copy (next=%s)", (next) => {
+    const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day", player: { back: [SYNTHETIC.vanilla1.id] } });
+    const filters = [
+      { cardType: "character" as const },
+      { cardType: "character" as const, hasAbility: "dawn" as const },
+      { cardType: "character" as const, hasAbility: "night" as const },
+      { cardType: "character" as const, hasAbility: "dawn" as const, fast: true as const, costAtMost: 2, sparkAtLeast: 1 },
+    ];
+    for (const viewer of SIDES) {
+      const labels: string[] = [], logs: string[] = [];
+      for (const filter of filters) {
+        const effect = { id: "e900" as const, timestamp: 1, controller: "player" as const, source: ids.player.back[0]!, expiry: { at: "endOfTurn" as const },
+          change: { kind: "cost" as const, player: "player" as const, filter, amount: -1, next } };
+        const observed = engine.view({ ...state, floating: [effect] }, viewer);
+        const statuses = engineStatuses(observed, viewer, enginePrintedKeywords(engine.catalog));
+        expect(statuses.sides.player[0].kind).toBe("costModifier");
+        labels.push(statuses.sides.player[0].label);
+        const line = engineBattleLogText({ kind: "effectStarted", effect: effect.id, ...effect }, { human: viewer, card: () => null, dreamwell: () => null });
+        expect(line).toBeTypeOf("string");
+        if (line === null) throw new Error("Missing public cost log");
+        logs.push(line);
+      }
+      // Equal card types and amounts with distinct restrictions produce distinct public descriptions.
+      expect(new Set(labels).size).toBe(filters.length);
+      expect(new Set(logs).size).toBe(filters.length);
+    }
+  });
+
   it("maps a public hand-return duration to its physical card and owner's status, with a log entry", () => {
     const local = createEngine(testCatalog(CHOSEN_HAND_BANISH_CARDS));
     const { state, ids } = boardState(local.catalog, { active: "player", phase: "day",
