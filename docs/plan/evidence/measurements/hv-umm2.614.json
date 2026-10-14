@@ -1,0 +1,687 @@
+{
+  "bead": "hv-umm2.614",
+  "base": "fd70feb0b8872f600881446c50b778aa6e822271",
+  "sourceSHA256": {
+    "src/engine/dsl/types.ts": "dc4bd0f3bcd161bceb8036a4ccb8c30ab672dd62b779ed62a51f4226374128b5",
+    "src/engine/dsl/selectors.ts": "1c542970996a4af7dd6e7bcea0a287806c707918847fd78a5f222c1668072d51",
+    "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+  },
+  "sourceFirst": {
+    "stage1ProposalSHA256": "d536b726d8134318ad6f4045701ae97f522ac8a74218a04c92ce711db6f32482",
+    "writeACKSHA256": "87ef45aca694d80f7138e55a6f0b86898430ac8ae08085c646892237ff234fb4",
+    "productionChangedLines": 19,
+    "plainContractLines": 230,
+    "newCases": 16,
+    "fallout": [],
+    "primaryScope": [
+      "src/engine/dsl/types.ts",
+      "src/engine/dsl/selectors.ts",
+      "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts"
+    ],
+    "actualNumstat": [
+      "17\t0\tsrc/engine/dsl/selectors.ts",
+      "2\t0\tsrc/engine/dsl/types.ts",
+      "230\t0\tsrc/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts"
+    ]
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "614-review start; sysctl one-minute load"
+      }
+    }
+  },
+  "implementation": {
+    "postClaimDispatchMarker": "2026-10-14T05:04:57.629834+00:00",
+    "evidenceEndpoint": "2026-10-14T05:26:21.986861+00:00",
+    "endpointScope": "Final prospective pre-Git evidence endpoint. Exact Git start/end and marker-to-Git elapsed minutes reside in parent scratch 614-git-commit.json and carry forward; this committed endpoint includes parent Stage2 audit/COMMIT ACK wait.",
+    "firstModelToolStart": "unsampled",
+    "modelSamplingAndCPU": "unsampled",
+    "includes": "source research, Stage1 coordination and ACK wait, implementation, validations and evidence; wall elapsed, not CPU; setup/install precede dispatch"
+  },
+  "checks": [
+    {
+      "name": "614-baseline-red",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "shared-type challenger"
+      ],
+      "startUtc": "2026-10-14T05:18:19.238223+00:00",
+      "endUtc": "2026-10-14T05:18:27.630471+00:00",
+      "wallS": 8.392010999988997,
+      "hostLoadSysctlStart": "{ 5.40 7.50 7.62 }",
+      "observerPid": 15657,
+      "pid": 15672,
+      "pgid": 15672,
+      "birthIdentity": "15672 15672 Tue Oct 13 22:18:19 2026     /usr/bin/env node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts -t shared-type challenger",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 1,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-baseline-red.log",
+      "logSHA256": "e5e395e7b83fab8e80e82d89ff3ed1665be45cb5a70530af923a26a082a43636",
+      "observedGroupMembers": [
+        "15672 15657 15672 Tue Oct 13 22:18:19 2026     npm test src/engine/effects/primitives/contracts.test.ts -t shared-type challenger",
+        "15702 15672 15672 Tue Oct 13 22:18:19 2026     node scripts/review.mjs test src/engine/effects/primitives/contracts.test.ts -t shared-type challenger",
+        "15761 15702 15672 Tue Oct 13 22:18:19 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/prepare-workspace.mjs",
+        "15764 15761 15672 Tue Oct 13 22:18:19 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/setup-assets.ts",
+        "15876 15764 15672 Tue Oct 13 22:18:21 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "15944 15761 15672 Tue Oct 13 22:18:22 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/generate-cumulus-tokens.mjs",
+        "15947 15702 15672 Tue Oct 13 22:18:22 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t shared-type challenger",
+        "15968 15947 15672 Tue Oct 13 22:18:23 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "16167 15702 15672 Tue Oct 13 22:18:26 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/setup-assets.ts"
+      ]
+    },
+    {
+      "name": "614-final-contracts",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "startUtc": "2026-10-14T05:20:34.640664+00:00",
+      "endUtc": "2026-10-14T05:20:49.127084+00:00",
+      "wallS": 14.486071291990811,
+      "hostLoadSysctlStart": "{ 14.12 8.89 8.07 }",
+      "observerPid": 55366,
+      "pid": 55426,
+      "pgid": 55426,
+      "birthIdentity": "55426 55426 Tue Oct 13 22:20:34 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 0,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-final-contracts.log",
+      "logSHA256": "ac4a591d022a0dd7cf4bf6ee6db17c51e23820882cd0164b86903c15a977efd4",
+      "observedGroupMembers": [
+        "55426 55366 55426 Tue Oct 13 22:20:34 2026     npm test src/engine/effects/primitives/contracts.test.ts",
+        "55711 55426 55426 Tue Oct 13 22:20:34 2026     node scripts/review.mjs test src/engine/effects/primitives/contracts.test.ts",
+        "56126 55711 55426 Tue Oct 13 22:20:34 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/prepare-workspace.mjs",
+        "56177 56126 55426 Tue Oct 13 22:20:34 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/setup-assets.ts",
+        "58692 55711 55426 Tue Oct 13 22:20:35 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts",
+        "58964 58692 55426 Tue Oct 13 22:20:36 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "73052 55711 55426 Tue Oct 13 22:20:47 2026     (node)"
+      ]
+    },
+    {
+      "name": "614-first-green",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "shared-type challenger"
+      ],
+      "startUtc": "2026-10-14T05:18:48.411928+00:00",
+      "endUtc": "2026-10-14T05:18:53.972593+00:00",
+      "wallS": 5.560485166992294,
+      "hostLoadSysctlStart": "{ 5.17 7.29 7.54 }",
+      "observerPid": 17411,
+      "pid": 17420,
+      "pgid": 17420,
+      "birthIdentity": "17420 17420 Tue Oct 13 22:18:48 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts -t shared-type challenger",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 0,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-first-green.log",
+      "logSHA256": "26263abcc1ee4bc84b97121f2447919656b211d375ee64da17cf4f510f25486e",
+      "observedGroupMembers": [
+        "17420 17411 17420 Tue Oct 13 22:18:48 2026     npm test src/engine/effects/primitives/contracts.test.ts -t shared-type challenger",
+        "17445 17420 17420 Tue Oct 13 22:18:48 2026     node scripts/review.mjs test src/engine/effects/primitives/contracts.test.ts -t shared-type challenger",
+        "17501 17445 17420 Tue Oct 13 22:18:48 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/prepare-workspace.mjs",
+        "17502 17501 17420 Tue Oct 13 22:18:48 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/setup-assets.ts",
+        "17527 17502 17420 Tue Oct 13 22:18:49 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "17532 17445 17420 Tue Oct 13 22:18:49 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t shared-type challenger",
+        "17542 17532 17420 Tue Oct 13 22:18:49 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "17615 17445 17420 Tue Oct 13 22:18:52 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/setup-assets.ts"
+      ]
+    },
+    {
+      "name": "614-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUtc": "2026-10-14T05:23:26.510712+00:00",
+      "endUtc": "2026-10-14T05:23:32.223001+00:00",
+      "wallS": 5.712031750008464,
+      "hostLoadSysctlStart": "{ 14.78 12.75 9.87 }",
+      "observerPid": 35484,
+      "pid": 35495,
+      "pgid": 35495,
+      "birthIdentity": "35495 35495 Tue Oct 13 22:23:26 2026     node /opt/homebrew/bin/npm run knip",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 0,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-knip.log",
+      "logSHA256": "c9bfd6249f94a735356f2f0fc88d4420af8664cd55dbd8efd305e2b2a5b13032",
+      "observedGroupMembers": [
+        "35495 35484 35495 Tue Oct 13 22:23:26 2026     npm run knip",
+        "35517 35495 35495 Tue Oct 13 22:23:26 2026     node scripts/review.mjs knip",
+        "35576 35517 35495 Tue Oct 13 22:23:26 2026     (node)",
+        "35578 35576 35495 Tue Oct 13 22:23:26 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/setup-assets.ts",
+        "35889 35576 35495 Tue Oct 13 22:23:27 2026     (node)",
+        "35895 35517 35495 Tue Oct 13 22:23:27 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/knip/bin/knip.js",
+        "36070 35517 35495 Tue Oct 13 22:23:30 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/setup-assets.ts"
+      ]
+    },
+    {
+      "name": "614-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-14T05:21:49.445161+00:00",
+      "endUtc": "2026-10-14T05:23:12.132341+00:00",
+      "wallS": 82.68556220800383,
+      "hostLoadSysctlStart": "{ 13.00 9.73 8.46 }",
+      "observerPid": 78033,
+      "pid": 78043,
+      "pgid": 78043,
+      "birthIdentity": "78043 78043 Tue Oct 13 22:21:49 2026     node /opt/homebrew/bin/npm run review",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 0,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-review.log",
+      "logSHA256": "de85d41a2d15bf6b4ca0450ec7969705a8036d4950711f7f0eb2a56321328c68",
+      "observedGroupMembers": [
+        "78043 78033 78043 Tue Oct 13 22:21:49 2026     npm run review",
+        "78063 78043 78043 Tue Oct 13 22:21:49 2026     node scripts/review.mjs quick",
+        "78137 78063 78043 Tue Oct 13 22:21:49 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/prepare-workspace.mjs",
+        "78144 78137 78043 Tue Oct 13 22:21:49 2026     (node)",
+        "78359 78063 78043 Tue Oct 13 22:21:51 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/typescript/bin/tsc --noEmit false --declaration --emitDeclarationOnly --outDir /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/.cache/journey-review/declarations --incremental --tsBuildInfoFile /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/.cache/journey-review/tsconfig.tsbuildinfo",
+        "78360 78063 78043 Tue Oct 13 22:21:51 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/typescript/bin/tsc -p tsconfig.node.json --incremental --tsBuildInfoFile /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/.cache/journey-review/tsconfig.node.tsbuildinfo",
+        "78361 78063 78043 Tue Oct 13 22:21:51 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/import-cycles.mjs",
+        "78362 78063 78043 Tue Oct 13 22:21:51 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/run-eslint.mjs src/engine/dsl/selectors.ts src/engine/dsl/types.ts src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts",
+        "78363 78063 78043 Tue Oct 13 22:21:51 2026     (node)",
+        "78384 78363 78043 Tue Oct 13 22:21:51 2026     <defunct>",
+        "87610 78363 78043 Tue Oct 13 22:22:27 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-BugV6n/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-BugV6n/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-BugV6n/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-BugV6n/release link 15000",
+        "92065 78363 78043 Tue Oct 13 22:22:29 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-BugV6n/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-BugV6n/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-BugV6n/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-BugV6n/release no 15000",
+        "93671 78363 78043 Tue Oct 13 22:22:30 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-JfcHxt/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-JfcHxt/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-JfcHxt/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-JfcHxt/release metadata 15000",
+        "95291 78363 78043 Tue Oct 13 22:22:31 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-JfcHxt/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-JfcHxt/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-JfcHxt/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-JfcHxt/release no 15000",
+        "96929 78363 78043 Tue Oct 13 22:22:32 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-q6Hpbb/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-q6Hpbb/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-q6Hpbb/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-q6Hpbb/release restart 15000",
+        "98671 78363 78043 Tue Oct 13 22:22:33 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-q6Hpbb/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-q6Hpbb/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-q6Hpbb/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-q6Hpbb/release no 15000",
+        "309 78363 78043 Tue Oct 13 22:22:34 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-PQpJ9h/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-PQpJ9h/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-PQpJ9h/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-PQpJ9h/release prune 15000",
+        "2604 78363 78043 Tue Oct 13 22:22:34 2026     (node)",
+        "4216 78363 78043 Tue Oct 13 22:22:35 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-KcE2ii/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-KcE2ii/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-KcE2ii/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-KcE2ii/release stale 15000",
+        "6009 78363 78043 Tue Oct 13 22:22:36 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-KcE2ii/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-KcE2ii/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-KcE2ii/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-KcE2ii/release no 15000",
+        "7572 78363 78043 Tue Oct 13 22:22:37 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-Oky05S/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-Oky05S/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-Oky05S/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-Oky05S/release kill 15000",
+        "9246 78363 78043 Tue Oct 13 22:22:38 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-Oky05S/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-Oky05S/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-Oky05S/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-Oky05S/release no 15000",
+        "11044 78363 78043 Tue Oct 13 22:22:39 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-58IVQU/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-58IVQU/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-58IVQU/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-58IVQU/release link 15000",
+        "12455 78363 78043 Tue Oct 13 22:22:39 2026     (node)",
+        "13815 78363 78043 Tue Oct 13 22:22:40 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-w4StAV/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-w4StAV/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-w4StAV/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-w4StAV/release link 0",
+        "15527 78363 78043 Tue Oct 13 22:22:43 2026     <defunct>",
+        "34340 78063 78043 Tue Oct 13 22:23:09 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/scripts/setup-assets.ts"
+      ]
+    },
+    {
+      "name": "614-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startUtc": "2026-10-14T05:23:48.919413+00:00",
+      "endUtc": "2026-10-14T05:23:49.276012+00:00",
+      "wallS": 0.3564832080155611,
+      "hostLoadSysctlStart": "{ 13.32 12.54 9.86 }",
+      "observerPid": 37906,
+      "pid": 37921,
+      "pgid": 37921,
+      "birthIdentity": "37921 37921 Tue Oct 13 22:23:48 2026     node scripts/friction-triggers.mjs --validate-records",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 0,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-schema.log",
+      "logSHA256": "b39f2da30f52372a3516c0ecf9369a6baba9bfa39a18405d1a8448239e4ab112",
+      "observedGroupMembers": [
+        "37921 37906 37921 Tue Oct 13 22:23:48 2026     node scripts/friction-triggers.mjs --validate-records"
+      ]
+    },
+    {
+      "name": "614-mutant-self",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "requires a distinct live"
+      ],
+      "startUtc": "2026-10-14T05:19:45.694002+00:00",
+      "endUtc": "2026-10-14T05:19:48.837845+00:00",
+      "wallS": 3.143711832992267,
+      "hostLoadSysctlStart": "{ 3.75 6.46 7.21 }",
+      "observerPid": 19148,
+      "pid": 19150,
+      "pgid": 19150,
+      "birthIdentity": "19150 19150 Tue Oct 13 22:19:45 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t requires a distinct live",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 1,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-mutant-self.log",
+      "logSHA256": "14c2f7688e61b21a8a0ceaa94faa8187a70fc9f124025aa6f917c78732c9ec2c",
+      "observedGroupMembers": [
+        "19150 19148 19150 Tue Oct 13 22:19:45 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t requires a distinct live",
+        "19155 19150 19150 Tue Oct 13 22:19:45 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      ]
+    },
+    {
+      "name": "614-mutant-foreign-back",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "requires a distinct live"
+      ],
+      "startUtc": "2026-10-14T05:19:48.904527+00:00",
+      "endUtc": "2026-10-14T05:19:52.026219+00:00",
+      "wallS": 3.1215518329991028,
+      "hostLoadSysctlStart": "{ 3.75 6.46 7.21 }",
+      "observerPid": 19260,
+      "pid": 19262,
+      "pgid": 19262,
+      "birthIdentity": "19262 19262 Tue Oct 13 22:19:48 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t requires a distinct live",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 1,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-mutant-foreign-back.log",
+      "logSHA256": "348d23b7b2419f6e3014822ae17b4d08bf7a6874d51e65d7cb2717cabd63d856",
+      "observedGroupMembers": [
+        "19262 19260 19262 Tue Oct 13 22:19:48 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t requires a distinct live",
+        "19265 19262 19262 Tue Oct 13 22:19:49 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      ]
+    },
+    {
+      "name": "614-mutant-subtype-multiplicity",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "gives AllTypes exactly"
+      ],
+      "startUtc": "2026-10-14T05:19:52.098854+00:00",
+      "endUtc": "2026-10-14T05:19:55.219645+00:00",
+      "wallS": 3.1206513329816516,
+      "hostLoadSysctlStart": "{ 3.77 6.42 7.19 }",
+      "observerPid": 19353,
+      "pid": 19355,
+      "pgid": 19355,
+      "birthIdentity": "19355 19355 Tue Oct 13 22:19:52 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t gives AllTypes exactly",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 1,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-mutant-subtype-multiplicity.log",
+      "logSHA256": "a3c00d3d56f6f18eb1022292414520d0a99cc2bd77ca44c5be4333538c589141",
+      "observedGroupMembers": [
+        "19355 19353 19355 Tue Oct 13 22:19:52 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t gives AllTypes exactly",
+        "19362 19355 19355 Tue Oct 13 22:19:52 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      ]
+    },
+    {
+      "name": "614-mutant-printed-types",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "uses live layer-two type choices"
+      ],
+      "startUtc": "2026-10-14T05:19:55.287192+00:00",
+      "endUtc": "2026-10-14T05:19:59.211507+00:00",
+      "wallS": 3.9241732500086073,
+      "hostLoadSysctlStart": "{ 3.63 6.35 7.16 }",
+      "observerPid": 19502,
+      "pid": 19507,
+      "pgid": 19507,
+      "birthIdentity": "19507 19507 Tue Oct 13 22:19:55 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t uses live layer-two type choices",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 1,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-mutant-printed-types.log",
+      "logSHA256": "91a62cf561faf7eb1e6c8d41319556fdeb27e01aebac3d47468d3f6d26239451",
+      "observedGroupMembers": [
+        "19507 19502 19507 Tue Oct 13 22:19:55 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t uses live layer-two type choices",
+        "19519 19507 19507 Tue Oct 13 22:19:55 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      ]
+    },
+    {
+      "name": "614-mutant-designation-snapshot",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "recalculates roles before designation"
+      ],
+      "startUtc": "2026-10-14T05:19:59.322231+00:00",
+      "endUtc": "2026-10-14T05:20:02.860000+00:00",
+      "wallS": 3.537579125026241,
+      "hostLoadSysctlStart": "{ 6.14 6.82 7.33 }",
+      "observerPid": 19730,
+      "pid": 19739,
+      "pgid": 19739,
+      "birthIdentity": "19739 19739 Tue Oct 13 22:19:59 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t recalculates roles before designation",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 1,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-mutant-designation-snapshot.log",
+      "logSHA256": "9037102b0ad23067780a267edd412086eb8e28f8b5ddb45959359920c42f77f9",
+      "observedGroupMembers": [
+        "19739 19730 19739 Tue Oct 13 22:19:59 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t recalculates roles before designation",
+        "19750 19739 19739 Tue Oct 13 22:19:59 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      ]
+    },
+    {
+      "name": "614-mutant-current-layer",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reads supplied earlier layers"
+      ],
+      "startUtc": "2026-10-14T05:20:02.934133+00:00",
+      "endUtc": "2026-10-14T05:20:07.211978+00:00",
+      "wallS": 4.277688791014953,
+      "hostLoadSysctlStart": "{ 6.14 6.82 7.33 }",
+      "observerPid": 20093,
+      "pid": 20097,
+      "pgid": 20097,
+      "birthIdentity": "20097 20097 Tue Oct 13 22:20:02 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t reads supplied earlier layers",
+      "configuredVitestWorkers": 2,
+      "actualVitestWorkerCount": "unsampled",
+      "exit": 1,
+      "terminal": true,
+      "remainingGroupMembers": [],
+      "logFilename": "614-mutant-current-layer.log",
+      "logSHA256": "9d0c1c050efd842188ad53938a6bc8bd51b3a07a418b55bb9c2d59d3ab2e5db0",
+      "observedGroupMembers": [
+        "20097 20093 20097 Tue Oct 13 22:20:02 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t reads supplied earlier layers",
+        "20111 20097 20097 Tue Oct 13 22:20:03 2026     /Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      ]
+    }
+  ],
+  "redGreen": {
+    "baseline": "14 failed, 2 passed, 3248 skipped before production edits",
+    "firstGreen": "16 passed, 3248 skipped after exact field/branch",
+    "finalContracts": "3264 passed",
+    "normalReview": "299 files / 6739 tests pass, both typechecks/lint/cycles/friction schema pass"
+  },
+  "counterfactuals": [
+    {
+      "name": "614-mutant-self",
+      "exit": 1,
+      "wallS": 3.143711832992267,
+      "mutatedSHA256": {
+        "src/engine/dsl/selectors.ts": "5e03e807619eb20e4aea0e72f56b3e05c368c6194619a87f66748b688e357924",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      },
+      "restoredSHA256": {
+        "src/engine/dsl/selectors.ts": "1c542970996a4af7dd6e7bcea0a287806c707918847fd78a5f222c1668072d51",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      }
+    },
+    {
+      "name": "614-mutant-foreign-back",
+      "exit": 1,
+      "wallS": 3.1215518329991028,
+      "mutatedSHA256": {
+        "src/engine/dsl/selectors.ts": "197c66af424b005952fee5eb99bf5612a1ed63123a5fb9fa26e9edc4c1557fdf",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      },
+      "restoredSHA256": {
+        "src/engine/dsl/selectors.ts": "1c542970996a4af7dd6e7bcea0a287806c707918847fd78a5f222c1668072d51",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      }
+    },
+    {
+      "name": "614-mutant-subtype-multiplicity",
+      "exit": 1,
+      "wallS": 3.1206513329816516,
+      "mutatedSHA256": {
+        "src/engine/dsl/selectors.ts": "1c542970996a4af7dd6e7bcea0a287806c707918847fd78a5f222c1668072d51",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "545e83fc84f46e9059e4a761546db742e0715e71737a6653aa76b6b3558f635b"
+      },
+      "restoredSHA256": {
+        "src/engine/dsl/selectors.ts": "1c542970996a4af7dd6e7bcea0a287806c707918847fd78a5f222c1668072d51",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      }
+    },
+    {
+      "name": "614-mutant-printed-types",
+      "exit": 1,
+      "wallS": 3.9241732500086073,
+      "mutatedSHA256": {
+        "src/engine/dsl/selectors.ts": "59778076234a18e49a1a9b440146229296a9d999708dbc0034a93ee65b82df6f",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      },
+      "restoredSHA256": {
+        "src/engine/dsl/selectors.ts": "1c542970996a4af7dd6e7bcea0a287806c707918847fd78a5f222c1668072d51",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      }
+    },
+    {
+      "name": "614-mutant-designation-snapshot",
+      "exit": 1,
+      "wallS": 3.537579125026241,
+      "mutatedSHA256": {
+        "src/engine/dsl/selectors.ts": "49aa9b6b1954a4245eee1a2f709f8cd48a67b313e43ba0dd62603145e90f305e",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      },
+      "restoredSHA256": {
+        "src/engine/dsl/selectors.ts": "1c542970996a4af7dd6e7bcea0a287806c707918847fd78a5f222c1668072d51",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      }
+    },
+    {
+      "name": "614-mutant-current-layer",
+      "exit": 1,
+      "wallS": 4.277688791014953,
+      "mutatedSHA256": {
+        "src/engine/dsl/selectors.ts": "3ff3db5fc345bc5e2c2f3e3c0660d21048c28351815b7dc4d647b4261c8ef1a9",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      },
+      "restoredSHA256": {
+        "src/engine/dsl/selectors.ts": "1c542970996a4af7dd6e7bcea0a287806c707918847fd78a5f222c1668072d51",
+        "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts": "0d29ca501b72c0f21fdac6d5743cb8a7ec0486988771314d913a85313f602ae5"
+      }
+    }
+  ],
+  "counterfactualDispositions": {
+    "self": "single challenger incorrectly3 instead of1",
+    "foreignBack": "opposing/back same-type partner incorrectly3 instead of1",
+    "multiplicity": "public two-subtype anthem counterexample incorrectly3,3,5,5 instead of3,3,3,3; only admitted contract fixture changed, readonly production spark/layers preserved",
+    "printedTypes": "post-choice pair incorrectly1,1 instead of3,3",
+    "designationSnapshot": "benched former partner incorrectly leaves first challenger3 instead of1",
+    "currentLayer": "static read raises maximum call stack error instead of completing with prior-layer result"
+  },
+  "coreFailurePaths": {
+    "midStepError": {
+      "test": "propagates a supplied reader error without a partial state write",
+      "scope": "No new step/state transition. Public reader failure propagates synchronously; serialized/hash state unchanged."
+    },
+    "reloadRestart": {
+      "tests": [
+        "reads supplied earlier layers and preserves save, hash, RNG and both views during repeated static reads",
+        "reloads a public selector target prompt, refuses invalid, stale and concurrent input, cancels and replays once"
+      ],
+      "scope": "Committed state derives static result after save; fresh public fold replays pending selector prompt."
+    },
+    "partialWrite": {
+      "test": "propagates a supplied reader error without a partial state write",
+      "scope": "Predicate performs reads only, no events/RNG/prompts/persisted field. Purity snapshot covers partial-write failure; no asynchronous operation introduced."
+    },
+    "invalidStale": {
+      "test": "reloads a public selector target prompt, refuses invalid, stale and concurrent input, cancels and replays once",
+      "scope": "Both actors reject invalid target, wrong side, stale attempt/answer; missing instance negative in distinct partner case."
+    },
+    "concurrentActors": {
+      "test": "reloads a public selector target prompt, refuses invalid, stale and concurrent input, cancels and replays once",
+      "scope": "Public fold rejects opposite actor and action while step in flight, then valid commit/replay agrees. Predicate itself grants no writer authority."
+    }
+  },
+  "validationClassification": {
+    "D20": "One synthetic primitive contract module using registered public sparkModifier. No production authoring.",
+    "D21": "Original255/671 retains full UUID authoring/weighted300/preflight/base+Amplified both-controller sweep/judgment/final acceptance. No UUID transferred to614.",
+    "full": "Not applicable: exact optional selector predicate changes no state/privacy/setup/cross-cutting architecture/testinfra/runner/fuzzer. Required normal review/Knip remain.",
+    "browser": "No new UI workflow, prompt kind, status or rendered code; pure headless relational static predicate. No browser/server/provider operation launched; provider coordination remains parent/peer owned.",
+    "schema": "Own friction schema required; no new save/state shape. Existing content gate/aggregate participates in normal review."
+  },
+  "logging": "Pure read emits no event or extra RNG; existing source UUIDs/live role, type and continuous-effect events reconstruct derived result. No logger or UI-copy changes.",
+  "rules": "Existing rules CardTypes/allcharacterTypes/Holdingarole/continuousorder plus BATTLE.untypedSubtypes settle behavior; no new D10 decision, RD or card issue.",
+  "resources": {
+    "processes": 12,
+    "terminalAll": true,
+    "browserServers": [],
+    "heavyCommands": [],
+    "activeOwnRuntimeResources": []
+  },
+  "priorClosedWorkCarry": {
+    "scope": "Priorclosedwork outside614window; allwallintervalsnotCPU. Nativeclosurefractionunsampled; actualsourcehelperGitreceiptused. No oldrecordedits or newmeasurementcorrectionbead.",
+    "f6p9": {
+      "source": "cf5bae7ff124b8bc8ee42a54068f3e6f91a24e07",
+      "dispatch": "2026-10-14T04:19:08.573756+00:00",
+      "actualGitStart": "2026-10-14T04:48:07.831032+00:00",
+      "actualGitEnd": "2026-10-14T04:48:07.877282+00:00",
+      "actualInclusiveSeconds": 1739.303526,
+      "actualInclusiveMinutes": 28.9883921,
+      "prospectiveToActualGitEndS": 0.18952,
+      "candidate": "01a138be-09f4-7421-8944-54731b0e6d3e",
+      "tested": "fd70feb0b8872f600881446c50b778aa6e822271",
+      "approvalWallS": 3.911651915987022,
+      "resourcesSettled": true
+    },
+    "660AcceptanceOnly": {
+      "source": "83b177889cf506529feb3e67a3fe8b7c80a2f37a",
+      "originalImplementerDispatch": "2026-10-14T03:40:05.599000+00:00",
+      "originalActualGitEnd": "2026-10-14T04:10:39.492587+00:00",
+      "tested": "0eb20a168795f52a0fde74f5578a6df20eaff2ce",
+      "nativeClose": "2026-10-14T04:57:50Z",
+      "sourceAll8BlobsPreserved": true,
+      "all4FullAcceptanceComplete": true,
+      "sourceEditsCommitsRuntimeTestsThisOwnClaim": 0,
+      "historicalLoadMethod": "Original660 review os.loadavg6.0625, actualrecordedmethod; not new sysctl measurement"
+    }
+  },
+  "review": "core fresh ClaudeOpus5.5 parent dispatch after exact immutable commit; temporary Sol override expired; no helper reviewer launched",
+  "preExistingIssues": [],
+  "preExistingIssueAudit": "Own pre-existing/hv-umm2.614.md records bounded no-issue outcome and normal temporary art materialization warnings; no correctness issue discovered.",
+  "commitAuthorization": {
+    "ACKFilename": "614-commit-ack.txt",
+    "ACKSHA256": "9bb0ccccc0ba709ad714aa004ff56e8b23d3fabed9e417c051b479039b86a539",
+    "parentStagedAuditSHA256": "d4359e300347b55ec14026bf74cdbf76d7d1142662e742efa38575fae06f2634",
+    "sourceAndContractBytesPreserved": true
+  },
+  "setupBeforeDispatch": {
+    "scope": "Parent-owned native claim, worktree setup and install before post-claim helper dispatch marker; excluded from helper implementWindow, no helper native calls",
+    "receipts": [
+      {
+        "name": "614-claim",
+        "command": [
+          "env",
+          "BEADS_DIR=/Users/dthurn/brain/.beads",
+          "BEADS_DOLT_AUTO_START=0",
+          "BD_NON_INTERACTIVE=1",
+          "BD_NO_HOOKS=true",
+          "bd",
+          "--sandbox",
+          "--dolt-auto-commit",
+          "off",
+          "--actor",
+          "01a12e91-c2c5-7321-b306-fdf0cc7b4ac9",
+          "update",
+          "hv-umm2.614",
+          "--claim",
+          "--json"
+        ],
+        "observerPid": 19589,
+        "pid": 19590,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-14T05:01:35.448630+00:00",
+        "endUtc": "2026-10-14T05:01:35.566172+00:00",
+        "wallS": 0.11757170798955485,
+        "exit": 0,
+        "terminal": true,
+        "logFilename": "614-claim.log",
+        "logSHA256": "31b06994e1f03bab346a87e1d18ec0c4c9609780dd3b5499fbe22196252e84ee",
+        "pgidAndBirth": "unsampled by parent receipt; not inferred"
+      },
+      {
+        "name": "614-worktree",
+        "command": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "worktree",
+          "create",
+          "shared-challenger-type-614"
+        ],
+        "observerPid": 19803,
+        "pid": 19804,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-14T05:01:46.403936+00:00",
+        "endUtc": "2026-10-14T05:01:47.221158+00:00",
+        "wallS": 0.8172413749853149,
+        "exit": 0,
+        "terminal": true,
+        "logFilename": "614-worktree.log",
+        "logSHA256": "3c611d36e6521bce9f496fa07773d3b669d1eaa4f800f70b13aa832e3dab4448",
+        "pgidAndBirth": "unsampled by parent receipt; not inferred"
+      },
+      {
+        "name": "614-install",
+        "command": [
+          "npm",
+          "install"
+        ],
+        "observerPid": 20224,
+        "pid": 20241,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/shared-challenger-type-614",
+        "startUtc": "2026-10-14T05:02:05.809027+00:00",
+        "endUtc": "2026-10-14T05:02:09.074533+00:00",
+        "wallS": 3.2654937919869553,
+        "exit": 0,
+        "terminal": true,
+        "logFilename": "614-install.log",
+        "logSHA256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c",
+        "pgidAndBirth": "unsampled by parent receipt; not inferred"
+      }
+    ]
+  }
+}

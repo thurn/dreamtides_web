@@ -1,3 +1,4 @@
+import { BATTLE } from "../../content/battle";
 import type { EngineCatalog } from "../catalog";
 import { characteristics, copiableCostOf, filterSubjectOf, matchesEveryCard, matchesFilter, type Characteristics } from "../continuous/characteristics";
 import { challengeRoleOf } from "../rules/challenge";
@@ -146,6 +147,22 @@ export function matchesCharacterWith(
   if (selector.controller === "opponent" && instance.controller === controller) return false;
   const bound = (value: BoundValue): number => boundOf(state, catalog, read, value, controller, source, selectorX, sourceSpark);
   const matchesLeaf = (predicate: Omit<CharacterSelector, "controller" | "anyOf">): boolean => {
+    if (predicate.sharesTypeWithAnotherChallenger === true) {
+      if (challengeRoleOf(state, id) !== "challenger") return false;
+      const card = read(id);
+      const untyped: readonly string[] = BATTLE.untypedSubtypes;
+      const shared = charactersInPlay(state, instance.controller).some((partner) => {
+        if (partner === id || state.instances[partner]?.zone !== "play" ||
+            state.instances[partner]?.controller !== instance.controller ||
+            challengeRoleOf(state, partner) !== "challenger") return false;
+        const other = read(partner);
+        if (card.allTypes && other.allTypes) return true;
+        if (card.allTypes) return !untyped.includes(other.subtype);
+        if (other.allTypes) return !untyped.includes(card.subtype);
+        return !untyped.includes(card.subtype) && card.subtype === other.subtype;
+      });
+      if (!shared) return false;
+    }
     if (predicate.hasAbility !== undefined && !read(id).namedTriggers.includes(predicate.hasAbility)) return false;
     if (predicate.another === true && id === source) return false;
     if (predicate.subtype !== undefined || predicate.notSubtype !== undefined || predicate.sparkAtMost !== undefined || predicate.sparkAtLeast !== undefined) {

@@ -134,6 +134,8 @@ export interface CharacterSelector {
    * Holding a role).
    */
   readonly challenging?: boolean;
+  /** A challenger sharing a current type with a distinct challenger its current controller controls. */
+  readonly sharesTypeWithAnotherChallenger?: true;
   /** `true` matches only blockers, `false` only other characters, read as the selector is checked. */
   readonly blocking?: boolean;
 }
