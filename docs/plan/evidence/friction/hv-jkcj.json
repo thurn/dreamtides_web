@@ -1,0 +1,22 @@
+{
+  "bead": "hv-jkcj",
+  "phase": 5,
+  "implementMin": 21.40455958333333,
+  "implementWindow": {
+    "start": "2026-10-14T16:05:11.782000+00:00",
+    "end": "2026-10-14T16:26:36.055575+00:00"
+  },
+  "localValidationS": {
+    "review": 0.38145545800216496,
+    "knip": 6.891784792009275,
+    "schema": 0.07532745800563134,
+    "whitespace": 0.010025625000707805
+  },
+  "hostLoad": 8.8154296875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

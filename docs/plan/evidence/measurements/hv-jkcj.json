@@ -1,0 +1,253 @@
+{
+  "bead": "hv-jkcj",
+  "source": "99136e9a9740bc6ae4f8b358b08db03ef92c0036",
+  "auditStart": "2026-10-14T16:04:14.076Z",
+  "dispatch": {
+    "timestamp": "2026-10-14T16:05:11.782Z",
+    "callId": "call_cd21afddbd864a27a56fc2f02f846764",
+    "tool": "spawn_agent",
+    "task": "/root/sage_jkcj",
+    "samplingStart": "UNKNOWN"
+  },
+  "clock": {
+    "start": "2026-10-14T16:05:11.782000+00:00",
+    "cutoff": "2026-10-14T16:26:36.055575+00:00",
+    "inclusiveMin": 21.40455958333333,
+    "scope": "Fresh Sage dispatch through parent verification, filing, evidence, required checks and final commit. Sampling UNKNOWN; inclusive wall includes research/coordination/waits, never inferred productive CPU.",
+    "finalCommit": "Normal onecommit after finalcutoff; preciseOID/Git-tail in ignoredfinalreceipt; no tracked postcommit writes."
+  },
+  "covers": [
+    "hv-36we",
+    "hv-6uxe",
+    "hv-86bz",
+    "hv-ckqx",
+    "hv-cxgp",
+    "hv-edk7",
+    "hv-fwpx",
+    "hv-n2zg",
+    "hv-ndka",
+    "hv-njkt",
+    "hv-p1ss",
+    "hv-q331",
+    "hv-qqqe",
+    "hv-quq1",
+    "hv-rb9p",
+    "hv-s5on",
+    "hv-umm2.617",
+    "hv-umm2.620",
+    "hv-umm2.626",
+    "hv-umm2.665",
+    "hv-umm2.670",
+    "hv-umm2.674",
+    "hv-umm2.678",
+    "hv-umm2.688",
+    "hv-umm2.689",
+    "hv-un67",
+    "hv-vwcb"
+  ],
+  "sourcePreservation": {
+    "ledgerOriginalBytes": 20868,
+    "ledgerOriginalSha256": "3ccb82fbba16068e590f1a031b72b95f7fffaae4b139f474b39bb837949617e1",
+    "appendOnlyOwnRetrospective": true,
+    "originalFrictionAndMeasurementsUntouched": true,
+    "historicalUnknownsPreserved": 41,
+    "provenance": "audit/sage-audit-provenance.json"
+  },
+  "finding": {
+    "cause": "Accessible required review inputs omitted and unsupported shell reads lead to source-qualified scope completion.",
+    "filed": "hv-2boo",
+    "key": "review-required-scope-packet/phase-5",
+    "prerequisites": [
+      "hv-jkcj",
+      "hv-umm2.673"
+    ],
+    "gateJoin": "hv-umm2.46",
+    "boundedArea": "workflow Reviews dispatch packet and terminal required coverage only",
+    "separateFromPermissionRepair": true,
+    "canonicalDutiesPreserved": [
+      "hv-x24k",
+      "hv-umm2.690",
+      "hv-b7x4",
+      "hv-jryq",
+      "hv-jzoy"
+    ],
+    "noNewTriggerDisposition": true,
+    "proof": "audit/finding-admission-audit.json"
+  },
+  "metrics": {
+    "nativeCi": {
+      "promotions": {
+        "n": 18,
+        "medianStepSumS": 85.275,
+        "rangeS": [
+          19.601,
+          108.003
+        ]
+      },
+      "releases": {
+        "n": 16,
+        "medianStepSumS": 317.4815,
+        "rangeS": [
+          302.73,
+          360.084
+        ]
+      },
+      "historyBounds": {
+        "events": 500,
+        "sequence": [
+          27954,
+          28453
+        ],
+        "firstCreatedAt": [
+          2026,
+          287,
+          13,
+          34,
+          25,
+          471851000,
+          0,
+          0,
+          0
+        ],
+        "lastCreatedAt": [
+          2026,
+          287,
+          16,
+          3,
+          37,
+          315525000,
+          0,
+          0,
+          0
+        ]
+      },
+      "qualification": "Bounded500nativeeventwindow; step sums exclude admission/authority/helper waits. No comparable-load or fullcohort claim."
+    },
+    "cohortGrossMin": 1871.61377335,
+    "grossQualification": "Sum across parallel sessions, not project wall/productive work or idle-lane percentage. 665 original dependency window and ndka UNKNOWN ACK wait stay source-qualified.",
+    "mixedReviewMedianS": 52.1167004,
+    "mixedFocusedMedianS": 10.3554766,
+    "comparisonQualification": "Mixed command/source/cache/load scopes do not establish three comparable consecutive >50% overruns. No A/B or speedup claim.",
+    "staticClasses": {
+      "source": "99136e9a9740bc6ae4f8b358b08db03ef92c0036",
+      "counts": {
+        "testEntrypoints": 381,
+        "engineContracts": 194,
+        "contentScenarios": 64
+      },
+      "explicitJsdomPragma": 83,
+      "over500": [
+        {
+          "path": "scripts/friction-triggers.test.mjs",
+          "lines": 509,
+          "class": "testEntrypoints"
+        },
+        {
+          "path": "src/engine/testing/tooling-card-lab.test.ts",
+          "lines": 519,
+          "class": "testEntrypoints"
+        },
+        {
+          "path": "src/rules/battle/engine-battle-intents.test.ts",
+          "lines": 507,
+          "class": "testEntrypoints"
+        }
+      ],
+      "qualification": "Static tracked file-class count; actual checker exceptions and Vitest discovery require separate source audit. File counts are informational under currentD19."
+    },
+    "d19": "Current file/jsdom counts informational; ~500-line exceptions qualified in native records. q331 exact normal test phase59.6s/upper59.643 at2.304-5.178load is historical source. Current integrated low-load D19 unmeasured; gate46 retains duty.",
+    "budgetsUnchanged": true
+  },
+  "causality": {
+    "privacyRelease": "edk7 original seed43/step301 physical identity leak reproduced with original actions/catalog; changed default pool pass not repair proof. Canonical repair/followups retained.",
+    "determinization": "665 allTypes source lifetime cause fixed separately by un67, then new original weighted300/QA completed on unchanged leaves.",
+    "review": "All limited initial receipts remain qualified; actual completed same-cold-session unchanged-source reads settle obligations. 689 later native completion is coordination on covered record, not added friction coverage.",
+    "ownership": "No foreign WT/provider/product graph rewrite; active canonical duties retain owner/acceptance.",
+    "noDuplicateRepair": true
+  },
+  "auditReport": "audit/sage-final.md",
+  "parsedMeasurementAudit": "audit/sage-complete-measurement-audit.json",
+  "validation": {
+    "review": {
+      "start": "2026-10-14T16:24:52.425219+00:00",
+      "end": "2026-10-14T16:24:52.806633+00:00",
+      "wallS": 0.38145545800216496,
+      "exit": 0,
+      "receipt": "audit/review.json"
+    },
+    "knip": {
+      "start": "2026-10-14T16:24:52.807130+00:00",
+      "end": "2026-10-14T16:24:59.698816+00:00",
+      "wallS": 6.891784792009275,
+      "exit": 0,
+      "receipt": "audit/knip.json"
+    },
+    "schema": {
+      "start": "2026-10-14T16:24:59.699210+00:00",
+      "end": "2026-10-14T16:24:59.774485+00:00",
+      "wallS": 0.07532745800563134,
+      "exit": 0,
+      "receipt": "audit/schema.json"
+    },
+    "whitespace": {
+      "start": "2026-10-14T16:24:59.774893+00:00",
+      "end": "2026-10-14T16:24:59.784879+00:00",
+      "wallS": 0.010025625000707805,
+      "exit": 0,
+      "receipt": "audit/whitespace.json"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual first ordinary review friction-records step; docs-only, no runtime test/lint/typecheck pass claimed.",
+        "step": "friction-records",
+        "at": "2026-10-14T16:24:52.661Z",
+        "load": 8.8154296875
+      }
+    }
+  },
+  "resources": {
+    "sageTerminal": true,
+    "browserRequired": false,
+    "fullRequired": false,
+    "independentCodeReviewRequired": false,
+    "runtimeSourceDelta": 0,
+    "testDelta": 0,
+    "ownedRemaining": []
+  },
+  "limits": "27 entire structured measurement records parsed, narratives/provenance and all existing companion markdown inspected. Raw mechanical receipt inventories checked without replay/certification claims. Native history only500late events; earlier causality from committed/native source-qualified records. No foreign scratch/rollouts/repositories opened.",
+  "hostLoadSamples": [
+    {
+      "command": "review",
+      "at": "2026-10-14T16:24:52.425219+00:00",
+      "scope": "invocation launch",
+      "load": 9.06103515625
+    },
+    {
+      "command": "knip",
+      "at": "2026-10-14T16:24:52.807130+00:00",
+      "scope": "invocation launch",
+      "load": 8.8154296875
+    },
+    {
+      "command": "schema",
+      "at": "2026-10-14T16:24:59.699210+00:00",
+      "scope": "invocation launch",
+      "load": 9.150390625
+    },
+    {
+      "command": "whitespace",
+      "at": "2026-10-14T16:24:59.774893+00:00",
+      "scope": "invocation launch",
+      "load": 9.150390625
+    }
+  ],
+  "parentVerification": {
+    "all27FrictionAndMeasurementHashesExact": true,
+    "allOlderLedgerBytesPreserved": true,
+    "nativeCiBindingsVerified": true,
+    "findingNativeBodyDuplicateAndPrereqAudit": "audit/finding-admission-audit.json",
+    "readOnlySageTerminal": true
+  }
+}
