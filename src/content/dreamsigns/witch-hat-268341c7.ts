@@ -1,3 +1,6 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { draw } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -9,5 +12,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "event" }, 2), draw(1))],
+  verifiedText: expectedVerifiedText("When you play your second event each turn, draw a card."),
 });
