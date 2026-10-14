@@ -1,0 +1,49 @@
+{
+  "bead": "hv-umm2.666",
+  "phase": 5,
+  "implementMin": 102.75212518333333,
+  "implementWindow": {
+    "start": "2026-10-14T06:13:33.134000+00:00",
+    "end": "2026-10-14T07:56:18.261511+00:00"
+  },
+  "localValidationS": {
+    "authored-witness-v01": 5.329147334006848,
+    "before-pending-v01": 7.576980290992651,
+    "caller-syntax-v01": 0.03823787500732578,
+    "caller-syntax-v02": 0.03858745901379734,
+    "caller-syntax-v03": 0.04504704201826826,
+    "caller-syntax-v04": 0.04342716600513086,
+    "caller-syntax-v05": 0.03857487501227297,
+    "control-disable-0-v01": 6.486749250005232,
+    "control-disable-1-v01": 5.408210499997949,
+    "coverage-final-v01": 3.729106042010244,
+    "diff-check-final-v01": 0.024922457989305258,
+    "focused-v01": 5.161623166000936,
+    "judged-mobile-v01": 56.99116845801473,
+    "judged-v01": 4.293189042015001,
+    "judged-v02": 10.76793533298769,
+    "judged-v03": 17.429180916020414,
+    "judged-v04": 64.6973398750124,
+    "judged-v05": 113.28636412497144,
+    "knip-final-v01": 4.436110624985304,
+    "preflight-v01": 1.4993323750095442,
+    "review-final-v01": 53.36838525001076,
+    "schema-final-evidence-v01": 0.1267787499818951,
+    "schema-stage2-v01": 0.10361887500039302,
+    "sweep-v01": 18.66342216701014,
+    "weighted300-v01": 233.51692837500013
+  },
+  "hostLoad": 3.04,
+  "testDelta": {
+    "files": 1,
+    "lines": 126,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 43.02499731666667,
+      "note": "Measured first judged launch through last required mobile completion, including diagnosis/admissions/caller-only recovery/coordination. Five structured caller or optional-action failures: probe readiness, presentation readiness, URL execution context, optional second activation without accepted intent, optional unsampled Black action without accepted play. Root same-task recovery repaired observation boundaries and removed only redundant optional browser actions; all required recipe acceptance and original gross clock preserved. Development opener visual failure belongs to separately filed hv-ndka."
+    }
+  ]
+}

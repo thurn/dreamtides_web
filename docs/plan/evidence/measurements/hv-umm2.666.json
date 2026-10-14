@@ -1,0 +1,1008 @@
+{
+  "bead": "hv-umm2.666",
+  "stage": "Validated exact source frozen for commit and exact candidate delivery",
+  "sourceBase": "0495251c0b9df45104f85476cf485fe7d357d79c",
+  "proposalSHA256": "911cdb8840a1ea4c4a6f3b75cfb89b29e2c3f6d117a8a138223343102691d98a",
+  "firstDispatch": "2026-10-14T06:13:33.134Z",
+  "modelSampling": "UNKNOWN",
+  "actualGit": "UNKNOWN until external receipt; no postcommit tracked clock rewrite",
+  "prospectiveClock": {
+    "start": "2026-10-14T06:13:33.134000+00:00",
+    "end": "2026-10-14T07:56:18.261511+00:00",
+    "inclusiveMinutes": 102.75212518333333,
+    "qualification": "Final one-shot prospective source marker; actual Git start/end/gross wall/marker-to-Git tail are external receipts. No model turn after marker, no postcommit tracked rewrite."
+  },
+  "entities": [
+    {
+      "uuid": "257c160f-7d70-4ebd-bb0f-f83e61907310",
+      "kind": "dreamsign",
+      "name": "Black Cat",
+      "module": "src/content/dreamsigns/black-cat-257c160f.ts",
+      "text": "Copy the second event you play each turn.",
+      "amplifiedText": null,
+      "requiredPrimitives": {
+        "existing": [
+          "copyCard",
+          "triggerNth"
+        ],
+        "new": []
+      },
+      "promptKinds": [],
+      "d21": {
+        "firstByte": 92,
+        "sampled": false
+      }
+    },
+    {
+      "uuid": "c706d0ba-2f41-4b14-95d8-db168ac6246c",
+      "kind": "dreamsign",
+      "name": "Amplified Acorn",
+      "module": "src/content/dreamsigns/amplified-acorn-c706d0ba.ts",
+      "text": "Once per turn, when you discard a card, your next card this turn costs 2● less.",
+      "amplifiedText": null,
+      "requiredPrimitives": {
+        "existing": [
+          "costModifier",
+          "oncePerTurn",
+          "untilEndOfTurn",
+          "whenDiscard"
+        ],
+        "new": []
+      },
+      "promptKinds": [],
+      "d21": {
+        "firstByte": 72,
+        "sampled": false
+      }
+    }
+  ],
+  "wholeTextAgreement": [
+    {
+      "path": "src/content/dreamsigns/black-cat-257c160f.ts",
+      "imports": {
+        "../../engine/dsl/triggers": [
+          "triggered",
+          "whenYouPlay",
+          "triggeringCard"
+        ],
+        "../../engine/effects/primitives/copy-card": [
+          "copyCard"
+        ],
+        "../../engine/dsl/verified-text": [
+          "expectedVerifiedText"
+        ]
+      },
+      "abilities": "() => [triggered(whenYouPlay({ cardType: \"event\" }, 2), copyCard(triggeringCard()))]",
+      "verifiedText": "expectedVerifiedText(exact current complete effectDescription)",
+      "pending": "remove after full authored whole text"
+    },
+    {
+      "path": "src/content/dreamsigns/amplified-acorn-c706d0ba.ts",
+      "imports": {
+        "../../engine/dsl/triggers": [
+          "triggered",
+          "whenDiscard",
+          "untilEndOfTurn"
+        ],
+        "../../engine/effects/primitives/cost-modifier": [
+          "costModifier"
+        ],
+        "../../engine/dsl/verified-text": [
+          "expectedVerifiedText"
+        ]
+      },
+      "abilities": "() => [triggered(whenDiscard(\"you\"), costModifier(\"you\", {}, -2, { next: true, duration: untilEndOfTurn() }), { oncePerTurn: true })]",
+      "verifiedText": "expectedVerifiedText(exact current complete effectDescription)",
+      "pending": "remove after full authored whole text"
+    }
+  ],
+  "newPrimitives": [],
+  "newPromptKinds": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "D10": {
+    "invoked": false,
+    "anchors": [
+      "docs/rules.md Copies on the stack (~802)",
+      "Cost changes (~1015)",
+      "Triggered abilities nth event (~1883)",
+      "Once per turn (~2157)",
+      "D15"
+    ],
+    "existingEntityRulesDecisions": [],
+    "existingEntityCardIssues": [],
+    "C2C17": "No printed conflict or spark gain effect; existing obligations preserved. No ambiguity requires new normative section."
+  },
+  "D20": {
+    "cases": 6,
+    "privateLines": 126,
+    "privatePath": "src/content/specs/dreamsigns-ready-249.scenarios.ts",
+    "newEntryFiles": 0,
+    "jsdomFiles": 0,
+    "qualification": "continuous-costs.test.ts already covers generic unpublished play preservation and pending-X reload; cost-composition.contracts.ts covers mode/route matrices; triggers-patterns.test.ts covers generic nth/once reset. Own cases test actual catalog UUID source composition and same-turn discount creation from discard payment, then qualified public continuation, not copies of those generic matrices."
+  },
+  "checks": {
+    "authored-witness-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-249"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:29:23.184320+00:00",
+      "end": "2026-10-14T06:29:28.513857+00:00",
+      "exit": 0,
+      "wallSeconds": 5.329147334006848,
+      "pid": 89702,
+      "pgid": 89702,
+      "load": "{ 4.30 3.92 5.45 }",
+      "groupRemainingAtExit": []
+    },
+    "before-pending-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-249"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:28:49.711863+00:00",
+      "end": "2026-10-14T06:28:57.289246+00:00",
+      "exit": 1,
+      "wallSeconds": 7.576980290992651,
+      "pid": 89198,
+      "pgid": 89198,
+      "load": "{ 3.68 3.79 5.47 }",
+      "groupRemainingAtExit": []
+    },
+    "caller-syntax-v01": {
+      "argv": [
+        "node",
+        "--check",
+        "artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:36:35.949305+00:00",
+      "end": "2026-10-14T06:36:35.987601+00:00",
+      "exit": 0,
+      "wallSeconds": 0.03823787500732578,
+      "pid": 98055,
+      "pgid": 98055,
+      "load": "{ 4.33 4.45 5.06 }",
+      "groupRemainingAtExit": []
+    },
+    "caller-syntax-v02": {
+      "argv": [
+        "node",
+        "--check",
+        "artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:46:47.030621+00:00",
+      "end": "2026-10-14T06:46:47.069288+00:00",
+      "exit": 0,
+      "wallSeconds": 0.03858745901379734,
+      "pid": 37424,
+      "pgid": 37424,
+      "load": "{ 3.20 3.67 4.32 }",
+      "groupRemainingAtExit": []
+    },
+    "caller-syntax-v03": {
+      "argv": [
+        "node",
+        "--check",
+        "artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T07:00:19.688322+00:00",
+      "end": "2026-10-14T07:00:19.733426+00:00",
+      "exit": 0,
+      "wallSeconds": 0.04504704201826826,
+      "pid": 95405,
+      "pgid": 95405,
+      "load": "{ 5.90 7.75 6.35 }",
+      "groupRemainingAtExit": []
+    },
+    "caller-syntax-v04": {
+      "argv": [
+        "node",
+        "--check",
+        "artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T07:09:52.613449+00:00",
+      "end": "2026-10-14T07:09:52.656962+00:00",
+      "exit": 0,
+      "wallSeconds": 0.04342716600513086,
+      "pid": 9170,
+      "pgid": 9170,
+      "load": "{ 3.78 4.46 5.20 }",
+      "groupRemainingAtExit": []
+    },
+    "caller-syntax-v05": {
+      "argv": [
+        "node",
+        "--check",
+        "artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T07:10:30.814692+00:00",
+      "end": "2026-10-14T07:10:30.853341+00:00",
+      "exit": 0,
+      "wallSeconds": 0.03857487501227297,
+      "pid": 9647,
+      "pgid": 9647,
+      "load": "{ 3.08 4.21 5.08 }",
+      "groupRemainingAtExit": []
+    },
+    "control-disable-0-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-249"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:29:54.166430+00:00",
+      "end": "2026-10-14T06:30:00.653507+00:00",
+      "exit": 1,
+      "wallSeconds": 6.486749250005232,
+      "pid": 90315,
+      "pgid": 90315,
+      "load": "{ 3.79 3.83 5.37 }",
+      "groupRemainingAtExit": []
+    },
+    "control-disable-1-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-249"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:30:00.727707+00:00",
+      "end": "2026-10-14T06:30:06.136217+00:00",
+      "exit": 1,
+      "wallSeconds": 5.408210499997949,
+      "pid": 90475,
+      "pgid": 90475,
+      "load": "{ 3.89 3.85 5.36 }",
+      "groupRemainingAtExit": []
+    },
+    "coverage-final-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:34:40.286456+00:00",
+      "end": "2026-10-14T06:34:44.015703+00:00",
+      "exit": 0,
+      "wallSeconds": 3.729106042010244,
+      "pid": 95758,
+      "pgid": 95758,
+      "load": "{ 7.03 4.55 5.16 }",
+      "groupRemainingAtExit": []
+    },
+    "diff-check-final-v01": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T07:50:34.863026+00:00",
+      "end": "2026-10-14T07:50:34.888042+00:00",
+      "exit": 0,
+      "wallSeconds": 0.024922457989305258,
+      "pid": 84284,
+      "pgid": 84284,
+      "load": "{ 9.04 6.84 5.02 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/continuous/continuous-costs.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:30:26.942808+00:00",
+      "end": "2026-10-14T06:30:32.104692+00:00",
+      "exit": 0,
+      "wallSeconds": 5.161623166000936,
+      "pid": 90939,
+      "pgid": 90939,
+      "load": "{ 3.87 3.85 5.32 }",
+      "groupRemainingAtExit": []
+    },
+    "judged-mobile-v01": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs",
+        "--bead",
+        "hv-umm2.666",
+        "--viewports",
+        "mobile",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T07:38:09.945997+00:00",
+      "end": "2026-10-14T07:39:06.937539+00:00",
+      "exit": 0,
+      "wallSeconds": 56.99116845801473,
+      "pid": 63156,
+      "pgid": 63156,
+      "load": "{ 3.56 3.45 3.56 }",
+      "groupRemainingAtExit": []
+    },
+    "judged-v01": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs",
+        "--bead",
+        "hv-umm2.666",
+        "--viewports",
+        "desktop,mobile",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:56:05.437700+00:00",
+      "end": "2026-10-14T06:56:09.730976+00:00",
+      "exit": 1,
+      "wallSeconds": 4.293189042015001,
+      "pid": 29799,
+      "pgid": 29799,
+      "load": "{ 14.55 7.73 5.72 }",
+      "groupRemainingAtExit": []
+    },
+    "judged-v02": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs",
+        "--bead",
+        "hv-umm2.666",
+        "--viewports",
+        "desktop,mobile",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T07:04:54.284147+00:00",
+      "end": "2026-10-14T07:05:05.052164+00:00",
+      "exit": 1,
+      "wallSeconds": 10.76793533298769,
+      "pid": 4562,
+      "pgid": 4562,
+      "load": "{ 3.62 5.69 5.83 }",
+      "groupRemainingAtExit": []
+    },
+    "judged-v03": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs",
+        "--bead",
+        "hv-umm2.666",
+        "--viewports",
+        "desktop,mobile",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T07:12:42.688744+00:00",
+      "end": "2026-10-14T07:13:00.118012+00:00",
+      "exit": 1,
+      "wallSeconds": 17.429180916020414,
+      "pid": 12018,
+      "pgid": 12018,
+      "load": "{ 2.95 3.82 4.80 }",
+      "groupRemainingAtExit": []
+    },
+    "judged-v04": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs",
+        "--bead",
+        "hv-umm2.666",
+        "--viewports",
+        "desktop,mobile",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T07:16:58.814261+00:00",
+      "end": "2026-10-14T07:18:03.511740+00:00",
+      "exit": 1,
+      "wallSeconds": 64.6973398750124,
+      "pid": 16071,
+      "pgid": 16071,
+      "load": "{ 2.79 3.20 4.26 }",
+      "groupRemainingAtExit": []
+    },
+    "judged-v05": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/discard-discount-qa-v01.mjs",
+        "--bead",
+        "hv-umm2.666",
+        "--viewports",
+        "desktop,mobile",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T07:24:07.668376+00:00",
+      "end": "2026-10-14T07:26:00.955227+00:00",
+      "exit": 1,
+      "wallSeconds": 113.28636412497144,
+      "pid": 22142,
+      "pgid": 22142,
+      "load": "{ 2.82 2.89 3.69 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-final-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:34:35.784705+00:00",
+      "end": "2026-10-14T06:34:40.220944+00:00",
+      "exit": 0,
+      "wallSeconds": 4.436110624985304,
+      "pid": 95511,
+      "pgid": 95511,
+      "load": "{ 6.86 4.47 5.14 }",
+      "groupRemainingAtExit": []
+    },
+    "preflight-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "257c160f-7d70-4ebd-bb0f-f83e61907310,c706d0ba-2f41-4b14-95d8-db168ac6246c",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:53:58.616176+00:00",
+      "end": "2026-10-14T06:54:00.115592+00:00",
+      "exit": 0,
+      "wallSeconds": 1.4993323750095442,
+      "pid": 44715,
+      "pgid": 44715,
+      "load": "{ 3.76 4.21 4.39 }",
+      "groupRemainingAtExit": []
+    },
+    "review-final-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:33:23.443184+00:00",
+      "end": "2026-10-14T06:34:16.812475+00:00",
+      "exit": 0,
+      "wallSeconds": 53.36838525001076,
+      "pid": 93989,
+      "pgid": 93989,
+      "load": "{ 3.04 3.52 4.90 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-final-evidence-v01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T07:50:34.669013+00:00",
+      "end": "2026-10-14T07:50:34.795864+00:00",
+      "exit": 0,
+      "wallSeconds": 0.1267787499818951,
+      "pid": 84273,
+      "pgid": 84273,
+      "load": "{ 9.04 6.84 5.02 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-stage2-v01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:36:36.049791+00:00",
+      "end": "2026-10-14T06:36:36.153487+00:00",
+      "exit": 0,
+      "wallSeconds": 0.10361887500039302,
+      "pid": 98060,
+      "pgid": 98060,
+      "load": "{ 4.33 4.45 5.06 }",
+      "groupRemainingAtExit": []
+    },
+    "sweep-v01": {
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.666",
+        "--dreamsigns",
+        "257c160f-7d70-4ebd-bb0f-f83e61907310,c706d0ba-2f41-4b14-95d8-db168ac6246c",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:54:45.482323+00:00",
+      "end": "2026-10-14T06:55:04.145830+00:00",
+      "exit": 0,
+      "wallSeconds": 18.66342216701014,
+      "pid": 73708,
+      "pgid": 73708,
+      "load": "{ 4.25 4.27 4.40 }",
+      "groupRemainingAtExit": []
+    },
+    "weighted300-v01": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "257c160f-7d70-4ebd-bb0f-f83e61907310,c706d0ba-2f41-4b14-95d8-db168ac6246c"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount",
+      "start": "2026-10-14T06:49:43.960412+00:00",
+      "end": "2026-10-14T06:53:37.477719+00:00",
+      "exit": 0,
+      "wallSeconds": 233.51692837500013,
+      "pid": 40712,
+      "pgid": 40712,
+      "load": "{ 3.88 4.01 4.36 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "sourceControls": [
+    {
+      "path": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount/src/content/dreamsigns/black-cat-257c160f.ts",
+      "restoredSha256": "a0e32ee9f628bfc9869904bb29167fad6d57ea70e195cc83131c51bf6ee1e260",
+      "exit": 1
+    },
+    {
+      "path": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-666-copy-discount/src/content/dreamsigns/amplified-acorn-c706d0ba.ts",
+      "restoredSha256": "618a590f131cf6a35d58994c4572b876cbc9d875ccd84b2133475e5337672d4d",
+      "exit": 1
+    }
+  ],
+  "beforeProof": "Six real pending-leaf failures: two missing copied events, four missing cost effects. No fixture/import/setup failure. Black disable two fail/four pass; Acorn disable four fail/two pass; exact leaf bytes restored. Authored six cases pass.",
+  "localResults": {
+    "review": {
+      "files": 247,
+      "tests": 5943,
+      "exit": 0,
+      "startSysctlLoad": 3.04
+    },
+    "focused": {
+      "files": 2,
+      "tests": 27,
+      "exit": 0
+    },
+    "coverage": {
+      "tests": 20,
+      "exit": 0
+    },
+    "knip": {
+      "exit": 0
+    }
+  },
+  "fiveFailurePaths": {
+    "exception": "No new primitive/fallible IO; existing public fold cost/cancel/save contracts reused and exact own consumer behavior observed. No new exception/storage rollback guarantee.",
+    "cancellation": "Public fold targeted canceled play retains actual authored next effects; normal desktop/mobile targeted UI cancel retains committed hand/energy/effect.",
+    "saveLoad": "Actual public fold serialized pendingtarget/cancel continuation tested; actual browser same game battleId/fullcommittedstate/debughistory/attempt compared beforeafterreload desktop/mobile. No strict log-fold/inflight migration/network storage guarantee inferred.",
+    "duplicateRace": "Actual held physical two-emblem indices, same-turn repeateddiscard, batchdiscard and nextzero-floor consumption tested bothseats; no concurrent thread/network-race guarantee.",
+    "privacy": "Actual legal controllers/publicphysical UUID/source identity; opposingholder isolated in engine and enemy source/far badge flow. No malicious stale-intent guarantee. No enemy nextcard payment inferred fromactualAI discard."
+  },
+  "qaEntryAudit": {
+    "bootstrap": "App.tsx:87-100 guards confirmedHead===0 and avatar null; same-game reload does not bootstrap QA scene again. use-local-game.ts restores exact ?game=id. Actual successful browser same battleId/history remains required before claiming host reload proof.",
+    "costPresentation": "engine-battle-view-model.ts:509 existing side costModifier badge. engine-card-model.ts orbs use copiable characteristics.cost; no literal hand-orb reduction assertion, no UI writer. Judge real status/playability and actual energy paid.",
+    "transport": "Own managed run-scenario with native FIFO lease; new browser launch only after RUNTIMEACK; pending QA/provider/runtime receipts remain UNKNOWN."
+  },
+  "schemaStage2": {
+    "exit": 0,
+    "records": "Read actual schema stdout; historical unknowns retained, not new failures."
+  },
+  "detailedQualifications": [
+    "Browser host reload is only planned; App guards/source restore permit normal try, actual same-ID state comparison needed. Engine/fold continuation/cancel is observed.",
+    "Local fold targeted payment cancels before debit; no strict event replay/network race/rollback/storage IO guarantee.",
+    "Generic cost route matrix and primitive-copy privacy tests reused, not cloned; source-specific public cases exercise this exact UUID composition."
+  ],
+  "runtimeAccepted": {
+    "weighted300": {
+      "exit": 0,
+      "steps": 106240,
+      "prompts": 7373,
+      "interactiveReruns": 809,
+      "includedEach": 600,
+      "BlackActualAttributedExercises": 727,
+      "AcornActualAttributedExercises": 1374,
+      "nativeWallSeconds": 232.3,
+      "nativeCpuSeconds": 250.7,
+      "wrapperWallSeconds": 233.516928375,
+      "qualification": "Fullpool/defaultpolicy/seeds/determinization/invariantchecks unchanged; attributedcounts not whole-clause/both-seat judgment; lockwait UNKNOWN."
+    },
+    "preflight": {
+      "pass": 4,
+      "skip": 36,
+      "fail": 0,
+      "qualification": "Initialization, all variants/both seats; exercisedfalse separately qualified."
+    },
+    "sweep": {
+      "pass": 4,
+      "skip": 36,
+      "fail": 0,
+      "invocation": "sweep-OFirFM",
+      "summarySHA256": "342b720d69c91196cb21cec57bdfd12e03b9da966462fe0866fe34f1130ac9e4"
+    },
+    "desktopJudged": {
+      "completedCalls": 3,
+      "invocation": "run-f2DSw0",
+      "sourceProof": "/tmp/worker666-20261013/runtime-incident-handoff-v05.json",
+      "sourceProofSHA256": "961a8da4456096000780c255f67a355234e6c88d762c080d5cc2ac0c99a3e9c7",
+      "visualInspection": "/tmp/worker666-20261013/partial-desktop-visual-inspection-v01.json",
+      "visualInspectionSHA256": "80216a778c19767e22073f652124ecacdd459b92b73e234f86aaf1c1ae0cb5a9",
+      "qualification": "3requiredAcorncalls completed allassertions/Caps[]/5screens; subsequent agentoptionalBlackcall failed. Aggregate desktop resultnull/individual prior returns UNKNOWN; normal priorcallcompletion/log/captures preserved. No Black UIpass."
+    },
+    "mobileJudged": {
+      "exit": 0,
+      "calls": [
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 14045
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 15869
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 22920
+        }
+      ],
+      "invocation": "run-9qAFMn",
+      "reportPath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/discard-discount-qa-v01.result.json",
+      "reportSHA256": "eadc84ed8cda474ebbc7216919ad2f69bb07288e2642c67120f1af19e8c8bb9b",
+      "visualInspection": "/tmp/worker666-20261013/mobile-visual-inspection-v01.json",
+      "visualInspectionSHA256": "d358f535c928cd731dcc0d6693c12e759a1bd103950f9d3c88d86de072bc7877",
+      "caps": [],
+      "finalResultSummary": {
+        "flow": "real-discard-far-status-expiry",
+        "side": "enemy",
+        "verdict": "pass",
+        "fullResult": "Retained in exact mobile reportPath/reportSHA256, including per-game logs/source events/geometry."
+      }
+    }
+  },
+  "runtimeTerminal": {
+    "path": "/tmp/worker666-20261013/runtime-terminal-handoff-v01.json",
+    "sha256": "a1ca7e1a2c42ae4d9e444764eb52fb2fd54caee59ff5cb91b419962df1cf3341"
+  },
+  "independentRootAcceptance": {
+    "runtimeTerminalSHA": "a1ca7e1a2c42ae4d9e444764eb52fb2fd54caee59ff5cb91b419962df1cf3341",
+    "sourceExceptLedger": 4778,
+    "support": 196,
+    "actualMaterials": 1571,
+    "wholeGroupsGone": [
+      "12018",
+      "12046",
+      "14993",
+      "16071",
+      "16099",
+      "21131",
+      "22142",
+      "22180",
+      "29799",
+      "29835",
+      "37424",
+      "40712",
+      "44715",
+      "4562",
+      "4596",
+      "62024",
+      "62069",
+      "63156",
+      "63184",
+      "63756",
+      "63759",
+      "64358",
+      "71739",
+      "73708",
+      "73740",
+      "89198",
+      "89702",
+      "90315",
+      "90475",
+      "90939",
+      "9170",
+      "93989",
+      "95405",
+      "95511",
+      "95758",
+      "9647",
+      "98055",
+      "98060"
+    ],
+    "protectedLedgerRows": 53,
+    "rootVisualInspection": "desktopactive/targetprompt frompSw44Q; mobileactive/targetprompt/enemy from9qAFMn actually viewed",
+    "D21Disposition": "functional6Acornpass; mobiletargetprompt visualfail debugedgeoverlay / followup hv-ndka underphase5recipe8; BlackunsampledNA noUIcopypass",
+    "followup": "hv-ndka",
+    "humanACWaived": false
+  },
+  "D21FinalDisposition": {
+    "Black": {
+      "sampleByte": 92,
+      "sampled": false,
+      "newPromptStatusVisual": false,
+      "judgedMandatory": false,
+      "UIQualification": "No actual whole Black UI-copy pass; optional failed one-event/click attempt retained. Exact source D20 both seats/727 attributed fuzz exercises/fullbothseat sweep separate evidence."
+    },
+    "Acorn": {
+      "sampleByte": 72,
+      "sampled": false,
+      "judgedReason": "Source exposes existing side cost status, prepayment affordance and duration; required own workflow judgment despite unsampled UUID.",
+      "functionalPasses": 6,
+      "requiredFlowsPerViewport": [
+        "active/cancel/exactsamegame reload/payment/consumption",
+        "unused end-of-turn expiry/statusclear",
+        "normal enemy discard/source/farstatus/expiry"
+      ],
+      "visualFailure": {
+        "bead": "hv-ndka",
+        "source": "EngineBattleScreen.tsx:752 openerVisible gallery-only projection; EngineDebugPanel.tsx:131 fixeddeveloper opener",
+        "capture": "acorn-cancel-prompt-mobile.png",
+        "invocation": "run-9qAFMn",
+        "scope": "Existing development instrumentation overlays far-right Cancel edge. Actual functional center/hit/cancel passes separately. Production panel compiles out; no content or UI rule waiver.",
+        "deliveryRule": "Phase5 recipe8 permits content delivery with outside visualfail naming boundedfollowup; ndka depends on666, gates retain followup."
+      }
+    }
+  },
+  "qaLedger": {
+    "rows": 54,
+    "composition": {
+      "metadata": 2,
+      "sweep": 40,
+      "failedCallerOrOptionalAttempts": 5,
+      "AcornFunctionalDesktopPasses": 3,
+      "AcornFunctionalMobilePasses": 3,
+      "outsideMobileVisualFail": 1
+    },
+    "preservedAcceptedPrefixSHA256": "d73e63435f65a7662b4304b647756b78e167f0a3b54a4f95123523af267ebc77",
+    "currentSHA256": "c784a53445b32e369390d84c3056e63834de1f58a398005dda20e79a5912596d",
+    "noRetrospectiveVerdictRewrite": true
+  },
+  "captureInspection": {
+    "desktop": {
+      "path": "/tmp/worker666-20261013/partial-desktop-visual-inspection-v01.json",
+      "sha256": "80216a778c19767e22073f652124ecacdd459b92b73e234f86aaf1c1ae0cb5a9",
+      "fivePNGs": "2880x1800 actual viewed"
+    },
+    "mobile": {
+      "path": "/tmp/worker666-20261013/mobile-visual-inspection-v01.json",
+      "sha256": "d358f535c928cd731dcc0d6693c12e759a1bd103950f9d3c88d86de072bc7877",
+      "fivePNGs": "780x1688 actual viewed",
+      "rootOutsideVerdict": "Fail naming hv-ndka, functional assertions retained separately."
+    }
+  },
+  "failedAttempts": [
+    {
+      "path": "/tmp/worker666-20261013/runtime-incident-handoff-v01.json",
+      "sha256": "9cc4e9c89a3e402212fbcf073b4ff739e3351b77120e2b7d1ea235b1bbd6856a"
+    },
+    {
+      "path": "/tmp/worker666-20261013/runtime-incident-handoff-v02.json",
+      "sha256": "0395f3938ea7a0053eb349d7a966a5e7237ad3332d6c6e3b310f2d10700a48a6"
+    },
+    {
+      "path": "/tmp/worker666-20261013/runtime-incident-handoff-v03.json",
+      "sha256": "673895b0a6e7f7b50f805ddf92d8124f7f7124b68e2159cf7937c55271b62f58"
+    },
+    {
+      "path": "/tmp/worker666-20261013/runtime-incident-handoff-v04.json",
+      "sha256": "4d5642120c04c63ef24de8e09ae02b9265e077d481520520111a44db7eaae1a8"
+    },
+    {
+      "path": "/tmp/worker666-20261013/runtime-incident-handoff-v05.json",
+      "sha256": "961a8da4456096000780c255f67a355234e6c88d762c080d5cc2ac0c99a3e9c7"
+    }
+  ],
+  "aggregateReturnQualification": "Runner exports only final-step carry. Desktop three required Acorn calls completed normally before optional Black failure; aggregate desktop:null and each earlier standalone result UNKNOWN. Mobile3 completed normally/runner0; aggregate actualfinalenemy result retained, firsttwo standalone returns UNKNOWN. Actual completed calls, assertions, logs, capturegeometries and resultSHAs retained; no fabricated return payload.",
+  "callerRootRecoveries": "Root directly repaired browser-page URL parse; removed only agent-added optional second UIactivation (both-seatD20 stillchecks repeateddiscard) and optional unsampledBlack UIworkflow (fullrecipeengine/fuzz/sweep retained). No source, defaultdeadlines, fullpool policy, humanacceptance or prerequisite waiver. Root native recovery ACKs/freezes v05-v07 preserved in runtime evidence.",
+  "collectorQualifications": [
+    "Followup source-context caller repair syntax included actual .038/.045 receipts; source tests not repeated.",
+    "Collector requiring globally free former slot hit legitimate peer263 new ownership; corrected to exact own identity and old wholegroups gone, nativeFIFO intact. Originalfreeport proof is timebounded.",
+    "Singleviewport aggregate result is unwrapped; print lookup mobile initially raised KeyError after actualsuccessful guard creation, corrected read-only resultshape, no QA retry/effect.",
+    "Generic tooling filename/glob source searches corrected using actual rgfiles; no source permission/inventory/body grant inferred."
+  ],
+  "resources": {
+    "time": "2026-10-14T07:40:10.524774+00:00",
+    "allSourceExceptLedgerMatch": 4778,
+    "allSupportMatch": 196,
+    "allMaterializationsBytesLinksMatch": 1571,
+    "protected50LedgerRowsExact": true,
+    "allOwnProcessGroupsGone": [
+      "12018",
+      "12046",
+      "16071",
+      "16099",
+      "22142",
+      "22180",
+      "29799",
+      "29835",
+      "37424",
+      "40712",
+      "44715",
+      "4562",
+      "4596",
+      "63156",
+      "63184",
+      "73708",
+      "73740",
+      "89198",
+      "89702",
+      "90315",
+      "90475",
+      "90939",
+      "9170",
+      "93989",
+      "95405",
+      "95511",
+      "95758",
+      "9647",
+      "98055",
+      "98060"
+    ],
+    "ownProviderRecordAbsent": true,
+    "foreignOwner": null,
+    "serverRecordAbsent": true,
+    "port5274FreeAtObservation": true,
+    "normalManagedCleanup": "Runner0 and all3mobile calls completed, normal native provider cleanup/owner record absent, ownserver cleanup/wholegroups stopped, no uncertain RPC/close or bypass.",
+    "mobileReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/discard-discount-qa-v01.result.json",
+    "mobileReportSHA256": "eadc84ed8cda474ebbc7216919ad2f69bb07288e2642c67120f1af19e8c8bb9b",
+    "captures": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/acorn-active-mobile.png",
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=c706d0ba-2f41-4b14-95d8-db168ac6246c&as=player&seed=1&debug=1&game=u5wwek",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/acorn-cancel-prompt-mobile.png",
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=c706d0ba-2f41-4b14-95d8-db168ac6246c&as=player&seed=1&debug=1&game=u5wwek",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/acorn-consumed-mobile.png",
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=c706d0ba-2f41-4b14-95d8-db168ac6246c&as=player&seed=1&debug=1&game=u5wwek",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/acorn-expired-mobile.png",
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=c706d0ba-2f41-4b14-95d8-db168ac6246c&as=player&seed=1&debug=1&game=2o3quo",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/acorn-enemy-active-mobile.png",
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=c706d0ba-2f41-4b14-95d8-db168ac6246c&as=enemy&seed=1&debug=1&game=x5vrc2",
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "captureSHAs": {
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/acorn-active-mobile.png": "7abecf31d589791727b547eba652e2b79809fb1229dbf134d8ca39c247c05983",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/acorn-cancel-prompt-mobile.png": "228859a46103e520e170a8fbef102c8b73f9c18a9dd3649f6e17b8fe4b3df961",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/acorn-consumed-mobile.png": "81894cd7efb55288cb1172844f42228bc2c9de07b15bdff34ccdd4a562ce2843",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/acorn-expired-mobile.png": "dbcd92d67d13cc1b7215b75aaab21b2fa37b436fdd3a0bde88a2cdeb6f66ae4b",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.666/invocations/run-9qAFMn/acorn-enemy-active-mobile.png": "3a6a84c285bf870a190e4c09d2900b4deb383b2d26770244581d4f3a814daf98"
+    }
+  },
+  "rootWholeGroupsGone": [
+    "12018",
+    "12046",
+    "14993",
+    "16071",
+    "16099",
+    "21131",
+    "22142",
+    "22180",
+    "29799",
+    "29835",
+    "37424",
+    "40712",
+    "44715",
+    "4562",
+    "4596",
+    "62024",
+    "62069",
+    "63156",
+    "63184",
+    "63756",
+    "63759",
+    "64358",
+    "71739",
+    "73708",
+    "73740",
+    "89198",
+    "89702",
+    "90315",
+    "90475",
+    "90939",
+    "9170",
+    "93989",
+    "95405",
+    "95511",
+    "95758",
+    "9647",
+    "98055",
+    "98060"
+  ],
+  "coreReview": "12production grosschangedlines/existingcomposition/noncore/newformsnone; no perbeadCLI/full. Normal parent phase-gate review retained.",
+  "frictionProblemWindow": {
+    "start": "2026-10-14T06:56:05.437700+00:00",
+    "end": "2026-10-14T07:39:06.937539+00:00",
+    "elapsedMinutes": 43.02499731666667,
+    "qualification": "Full observation/recovery/coordination window, not summed browser CPU; all also included once in grossdispatch-to-Git clock."
+  },
+  "parentAcceptance": "Original hv-umm2.249 retains alloriginalUUIDs/fullfinaljoin. This child fully authors only exact2UUID slice; no siblings/rules/engine/UI/sharedconfig modifications.",
+  "preExistingIssues": {
+    "path": "docs/plan/evidence/pre-existing/hv-umm2.666.md",
+    "visualFollowup": "hv-ndka",
+    "optionalActionQualification": "Earlier initiation stalls establish no product defect; raw reports retained."
+  },
+  "terminalPreparation": {
+    "singleScript": "/tmp/worker666-20261013/commit-terminal-v02.py",
+    "canonicalSchema": "node scripts/friction-triggers.mjs --validate-records",
+    "cachedWhitespace": "git diff --cached --check before Git",
+    "actualGit": "UNKNOWN until external Git receipt"
+  }
+}

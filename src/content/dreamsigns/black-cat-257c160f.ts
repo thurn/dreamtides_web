@@ -1,3 +1,6 @@
+import { triggered, triggeringCard, whenYouPlay } from "../../engine/dsl/triggers";
+import { copyCard } from "../../engine/effects/primitives/copy-card";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +16,6 @@ export default dreamsign({
     "e6863f55-50e7-4c7b-b118-609b5fc5c005",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "event" }, 2), copyCard(triggeringCard()))],
+  verifiedText: expectedVerifiedText("Copy the second event you play each turn."),
 });

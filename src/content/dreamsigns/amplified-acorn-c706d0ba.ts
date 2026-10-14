@@ -1,3 +1,6 @@
+import { triggered, untilEndOfTurn, whenDiscard } from "../../engine/dsl/triggers";
+import { costModifier } from "../../engine/effects/primitives/cost-modifier";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +18,6 @@ export default dreamsign({
     "1a075e25-0344-4103-997c-dd8f8a57c84e",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenDiscard("you"), costModifier("you", {}, -2, { next: true, duration: untilEndOfTurn() }), { oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("Once per turn, when you discard a card, your next card this turn costs 2● less."),
 });
