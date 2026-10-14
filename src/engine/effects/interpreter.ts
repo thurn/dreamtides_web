@@ -610,6 +610,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     scored: env.scored,
     discardedCount: env.discardedCount,
     subjectCost: env.lastKnownSubjectCost,
+    subjectSpark: env.lastKnownSubjectSpark,
     count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)).length,
     countCards: (count) => zoneCount(ctx.state, ctx.catalog, count, env.controller),
     movedCosts: (ref) => env.moved.costs(ref.node),
@@ -839,6 +840,7 @@ export interface ResolveOptions {
   readonly subject?: InstanceId | null;
   readonly handCopy?: import("../state/types").HandCopyContext;
   readonly lastKnownSubjectCost?: number;
+  readonly lastKnownSubjectSpark?: number;
   /** The gain a "when … gains ✦" trigger matched. */
   readonly gain?: SparkGain | null;
   /** The positive challenge award the scoring trigger matched. */
@@ -1044,6 +1046,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     subject: options.subject ?? null,
     ...(options.handCopy === undefined ? {} : { handCopy: options.handCopy }),
     lastKnownSubjectCost: options.lastKnownSubjectCost ?? null,
+    lastKnownSubjectSpark: options.lastKnownSubjectSpark ?? null,
     gain: options.gain ?? null,
     scored: options.scored ?? null,
     discardedCount: options.discardedCount ?? null,

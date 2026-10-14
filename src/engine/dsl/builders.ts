@@ -14,6 +14,7 @@ import type {
   AllSpec,
   BoundValue,
   TriggerSubjectCostValue,
+  TriggerSubjectSparkValue,
   CardCountValue,
   DiscardCountValue,
   CardFilter,
@@ -473,6 +474,9 @@ export function plus(of: ValueExpr, amount: number): ValueExpr {
 
 /** The triggering subject's captured copiable cost; 0 when a resolving effect has no binding. */
 export function triggerSubjectCost(): TriggerSubjectCostValue { return { value: "subjectCost" }; }
+
+/** A lookback subject's effective predeparture spark; 0 without a captured lookback binding. */
+export function triggerSubjectSpark(): TriggerSubjectSparkValue { return { value: "subjectSpark" }; }
 
 /**
  * "That card", for a value: the cards `node`, an earlier node of the same

@@ -107,6 +107,8 @@ export interface ArmedTriggers {
   readonly origin: AbilityOrigin | null;
   /** The departing subject’s copiable cost before it leaves play. */
   readonly subjectCost?: number;
+  /** Public effective spark immediately before the subject leaves play. */
+  readonly subjectSpark?: number;
 }
 
 /**

@@ -103,6 +103,8 @@ export interface EffectEnv {
   readonly subject: InstanceId | null;
   /** Copiable cost captured for this trigger; null outside a bound trigger. */
   readonly lastKnownSubjectCost: number | null;
+  /** Effective predeparture spark of the lookback subject; null without that binding. */
+  readonly lastKnownSubjectSpark: number | null;
   /** The gain a "when … gains ✦" trigger matched; otherwise `null`. */
   readonly gain: SparkGain | null;
   /** The positive challenge award the scoring trigger matched; otherwise `null`. */

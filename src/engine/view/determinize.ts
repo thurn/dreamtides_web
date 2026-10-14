@@ -520,6 +520,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
           ...(trigger.subject === null && (trigger.handCopy !== undefined || trigger.handCopyHidden === true) ? { subjectHiddenFrom: [view.viewer] } : {}),
           ...(trigger.handCopy === undefined ? {} : { handCopy: copy(trigger.handCopy) }),
           ...(trigger.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
+          ...(trigger.lastKnownSubjectSpark === undefined ? {} : { lastKnownSubjectSpark: trigger.lastKnownSubjectSpark }),
           ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
           ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
           ...(trigger.discardedCount === undefined ? {} : { discardedCount: trigger.discardedCount }),

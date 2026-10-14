@@ -1133,7 +1133,7 @@ function isQueuedTrigger(value: unknown): boolean {
     value.source.id !== value.origin.id || value.source.side !== value.controller ||
     value.node !== null || value.subject !== null ||
     value.captured !== undefined || value.gain !== undefined || value.scored !== undefined || value.discardedCount !== undefined ||
-    value.lastKnownSourceSpark !== undefined || value.lastKnownSubjectCost !== undefined || value.subjectHiddenFrom !== undefined || value.handCopy !== undefined
+    value.lastKnownSourceSpark !== undefined || value.lastKnownSubjectCost !== undefined || value.lastKnownSubjectSpark !== undefined || value.subjectHiddenFrom !== undefined || value.handCopy !== undefined
   )) return false;
   return (
     isPlainRecord(value) &&
@@ -1150,6 +1150,7 @@ function isQueuedTrigger(value: unknown): boolean {
     optional(arrayOf(isInstanceId))(value.captured) &&
     optional((spark) => isFiniteNumber(spark) && spark >= 0)(value.lastKnownSourceSpark) &&
     optional((cost) => isFiniteNumber(cost) && cost >= 0)(value.lastKnownSubjectCost) &&
+    optional((spark) => isFiniteNumber(spark) && spark >= 0)(value.lastKnownSubjectSpark) &&
     optional((scored) => isFiniteNumber(scored) && scored >= 0)(value.scored) &&
     optional((count) => typeof count === "number" && Number.isSafeInteger(count) && count > 0)(value.discardedCount) &&
     (value.discardedCount === undefined || value.subject === null) &&

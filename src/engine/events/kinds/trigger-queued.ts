@@ -19,6 +19,8 @@ export interface TriggerQueuedEvent {
   readonly subject: InstanceId | null;
   /** Retained subject cost, visible only to sides that observed the subject at triggering. */
   readonly lastKnownSubjectCost?: number;
+  /** Public predeparture spark; its historical subject need not remain identifiable. */
+  readonly lastKnownSubjectSpark?: number;
   /** The sides that could not identify `subject` as the ability triggered; absent when both could. */
   readonly subjectHiddenFrom?: readonly Side[];
   /** The gain a "when … gains ✦" trigger matched; absent for any other trigger. */
@@ -45,8 +47,8 @@ export const triggerQueued: EventDefinition<TriggerQueuedEvent> = {
     const redacted = redactSource(event, viewer, state);
     const { lastKnownSubjectCost: _subjectCost, ...withoutCost } = redacted;
     const costSeen = redacted.source !== null && redacted.subjectHiddenFrom?.includes(viewer) !== true ? redacted : withoutCost;
-    const { lastKnownSourceSpark, linkedSource, ...anonymous } = costSeen;
-    const seen = costSeen.source === null && (lastKnownSourceSpark !== undefined || linkedSource !== undefined) ? anonymous : costSeen;
+    const { lastKnownSourceSpark, lastKnownSubjectSpark, linkedSource, ...anonymous } = costSeen;
+    const seen = costSeen.source === null && (lastKnownSourceSpark !== undefined || lastKnownSubjectSpark !== undefined || linkedSource !== undefined) ? anonymous : costSeen;
     const { handCopy, ...withoutCopy } = seen;
     const projected = handCopy === undefined || seen.source !== null && handCopy.copier === viewer ? seen : withoutCopy;
     return projected.subject === null || seesSubject(state, seen, viewer) || seesHandCopySubject(state, seen, viewer) ? projected : { ...projected, subject: null };

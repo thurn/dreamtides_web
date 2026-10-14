@@ -46,6 +46,7 @@ import { abilitiesDisabled } from "../rules/ability-disabling";
 import { abilityOrigin, instanceOrigin, oncePerTurnKey, originAbilities } from "../rules/activation";
 import { endFloating, floatingTriggers } from "../rules/floating";
 import { materializedThisTurn, recordMaterialized } from "../rules/turn-log";
+import { effectiveSpark } from "../rules/spark";
 import { charactersInPlay, isFigment } from "../rules/zones";
 import type { AbilitySource, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { opponent, SIDES, sourceInstance } from "../state/ids";
@@ -209,6 +210,7 @@ interface Match {
   /** Visibility captured at a confirmed public departure, even when the subject has since ceased to exist. */
   readonly subjectHiddenFrom?: readonly Side[];
   readonly lastKnownSubjectCost?: number;
+  readonly lastKnownSubjectSpark?: number;
   readonly gain?: SparkGain;
   readonly scored?: number;
   readonly discardedCount?: number;
@@ -559,10 +561,10 @@ function readsSubjectCopy(node: EffectNode, seen = new Set<EffectNode>()): boole
 }
 
 /** Whether this body reads the retained subject value, including nested value and target fields. */
-function readsSubjectCost(value: unknown, seen = new Set<object>()): boolean {
+function readsSubjectValue(value: unknown, kind: "subjectCost" | "subjectSpark", seen = new Set<object>()): boolean {
   if (value === null || typeof value !== "object" || seen.has(value)) return false;
   seen.add(value);
-  return ("value" in value && value.value === "subjectCost") || Object.values(value).some(field => readsSubjectCost(field, seen));
+  return ("value" in value && value.value === kind) || Object.values(value).some(field => readsSubjectValue(field, kind, seen));
 }
 
 /**
@@ -576,13 +578,15 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
   const effect = triggerBody(ctx.catalog, matched.origin, matched.ability, matched.node).effect;
   const linkedSource = everyNode(effect).some((node) => node.op === "linkedBanish")
     ? linkedSourceContext(ctx, matched.source, matched.origin, matched.ability) : null;
-  const { lastKnownSubjectCost: armedCost, handCopy, ...record } = matched;
+  const { lastKnownSubjectCost: armedCost, lastKnownSubjectSpark: armedSpark, handCopy, ...record } = matched;
   const readsCopy = readsSubjectCopy(effect);
-  const subjectCost = readsSubjectCost(effect) ? armedCost ?? (matched.subject !== null && ctx.state.instances[matched.subject] !== undefined
+  const subjectCost = readsSubjectValue(effect, "subjectCost") ? armedCost ?? (matched.subject !== null && ctx.state.instances[matched.subject] !== undefined
     ? copiableCostOf(ctx.state, ctx.catalog, matched.subject) : undefined) : undefined;
+  const subjectSpark = readsSubjectValue(effect, "subjectSpark") ? armedSpark : undefined;
   const retained = { ...record,
     ...(handCopy === undefined || !readsCopy ? {} : { handCopy }),
     ...(subjectCost === undefined ? {} : { lastKnownSubjectCost: subjectCost }),
+    ...(subjectSpark === undefined ? {} : { lastKnownSubjectSpark: subjectSpark }),
     ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     ...(linkedSource === null ? {} : { linkedSource }),
   };
@@ -598,6 +602,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
     subject: trigger.subject,
     ...(trigger.handCopy === undefined ? {} : { handCopy: trigger.handCopy }),
     ...(trigger.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
+    ...(trigger.lastKnownSubjectSpark === undefined ? {} : { lastKnownSubjectSpark: trigger.lastKnownSubjectSpark }),
     ...(trigger.subjectHiddenFrom === undefined ? {} : { subjectHiddenFrom: [...trigger.subjectHiddenFrom] }),
     ...(trigger.gain === undefined ? {} : { gain: trigger.gain }),
     ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
@@ -634,6 +639,7 @@ function matchListener(ctx: StepContext, side: Side, listener: Listener, event: 
     const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedAbility !== undefined);
     if (match !== null) enqueueAbility(ctx, matching, ability, index, { ...match,
       ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
+      ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),
     }, armedAbility ?? null);
   });
 }
@@ -681,6 +687,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
       node: ref.node,
       ...match,
       ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
+      ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),
       ...(captured === undefined ? {} : { captured: [...captured] }),
       ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     });
@@ -765,7 +772,12 @@ function armLookbacks(ctx: StepContext, event: LeftPlayEvent, departing: Departu
       if (armsFor(state, catalog, entry.kind, floating.trigger, event.instance, floating.listener)) entry.floating.push(effect);
     }
   }
-  for (const { kind, abilities, floating } of armed) ctx.armedTriggers[kind].set(event.instance, { abilities, floating, origin, ...(leaving === undefined ? {} : { subjectCost: copiableCostOf(state, catalog, event.instance) }) });
+  for (const { kind, abilities, floating } of armed) ctx.armedTriggers[kind].set(event.instance, { abilities, floating, origin,
+    ...(leaving === undefined ? {} : {
+      subjectCost: copiableCostOf(state, catalog, event.instance),
+      subjectSpark: event.spark ?? effectiveSpark(state, catalog, event.instance),
+    }),
+  });
 }
 
 /** The abilities armed for the look-back `event` of its character, consumed by it. */

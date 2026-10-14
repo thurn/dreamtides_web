@@ -23,6 +23,8 @@ export interface ValueScope {
   readonly discardedCount?: number | null;
   /** Present only in a resolving context; null means no captured subject. */
   readonly subjectCost?: number | null;
+  /** Present only in a resolving context; null means no captured lookback subject. */
+  readonly subjectSpark?: number | null;
   count(selector: CharacterSelector): number;
   countCards(count: CardCountValue): number;
   movedCosts?(ref: MovedCardRef): readonly number[];
@@ -44,6 +46,9 @@ export function thisCharacterSpark(): SourceSparkValue {
 export function evaluateValue(state: BattleState, value: ValueExpr, scope: ValueScope): number {
   if (typeof value === "number") return value;
   switch (value.value) {
+    case "subjectSpark":
+      if (scope.subjectSpark === undefined) throw new Error("A static ability cannot read a triggering subject spark");
+      return scope.subjectSpark ?? 0;
     case "subjectCost":
       if (scope.subjectCost === undefined) throw new Error("A static ability cannot read a triggering subject cost");
       return scope.subjectCost ?? 0;

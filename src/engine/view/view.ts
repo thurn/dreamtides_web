@@ -191,6 +191,8 @@ export interface FloatingEffectView {
  * (`seesSubject`).
  */
 export interface QueuedTriggerView {
+  /** Public predeparture spark, retained while this trigger's source is identifiable. */
+  readonly lastKnownSubjectSpark?: number;
   readonly handCopy?: import("../state/types").HandCopyContext;
   /** A private hand-copy action whose flags remain unknown. */
   readonly handCopyHidden?: true;
@@ -500,6 +502,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       : { handCopyHidden: true, ...(!trigger.handCopy.originalHiddenFrom.includes(viewer)
           ? { handCopyOriginal: { printing: copy(trigger.handCopy.printing), variant: copy(trigger.handCopy.variant) } } : {}) }),
     ...(trigger.lastKnownSubjectCost === undefined || !visibleSource(trigger.source) || trigger.subjectHiddenFrom?.includes(viewer) === true ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
+    ...(trigger.lastKnownSubjectSpark === undefined || !visibleSource(trigger.source) ? {} : { lastKnownSubjectSpark: trigger.lastKnownSubjectSpark }),
     ...(trigger.lastKnownSubjectCost !== undefined && visibleSource(trigger.source) && trigger.subjectHiddenFrom?.includes(viewer) === true ? { subjectCostHidden: true } : {}),
     ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
     ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),

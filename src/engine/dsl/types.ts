@@ -92,6 +92,8 @@ export type BoundValue = number | XValue | CardCountValue | SourceSparkValue;
 
 /** The triggering subject's captured copiable cost, before departure for look-back triggers; resolving effects only. */
 export interface TriggerSubjectCostValue { readonly value: "subjectCost" }
+/** The lookback trigger subject's effective spark immediately before departure; resolving effects only. */
+export interface TriggerSubjectSparkValue { readonly value: "subjectSpark" }
 /** A void target can also compare with its trigger's retained subject cost. */
 export type VoidCostBound = BoundValue | TriggerSubjectCostValue;
 
@@ -344,6 +346,7 @@ export type ValueExpr =
   /** The positive discard occasion captured by this trigger; 0 outside a batch trigger. */
   | { readonly value: "discardedCount" }
   | TriggerSubjectCostValue
+  | TriggerSubjectSparkValue
   | DiscardCountValue
   /**
    * "That card's cost": the copiable cost of the cards `of` names, captured

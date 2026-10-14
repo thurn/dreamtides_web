@@ -567,6 +567,8 @@ export interface HandCopyContext {
 }
 
 interface QueuedAbility {
+  /** Public effective predeparture spark, captured only for a lookback subject value. */
+  readonly lastKnownSubjectSpark?: number;
   /** Copiable subject cost captured for a body that reads it. */
   readonly lastKnownSubjectCost?: number;
   readonly linkedSource?: LinkedSourceContext;

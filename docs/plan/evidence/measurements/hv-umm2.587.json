@@ -1,0 +1,1125 @@
+{
+  "bead": "hv-umm2.587",
+  "base": "5a4554d9a54db598cf25ac8886d3c2885f395a9d",
+  "status": "ordinary and heavy full checks passed; parent final Git authority granted; final schema and automatic Git receipts follow this prospective endpoint",
+  "implementationWindow": {
+    "start": "2026-10-14T03:11:04.502Z",
+    "end": "2026-10-14T03:45:44.576680+00:00",
+    "seconds": 2080.07468,
+    "basis": "Actual parent helper dispatch, inclusive source-free research/admission/coordination/waits/implementation/failed attempts/verification. Prospective endpoint; actual final Git process receipt external. Model sampling start and CPU attribution UNKNOWN."
+  },
+  "writeAck": "2026-10-14T03:24:24.847698Z",
+  "sourceSHA256": {
+    "docs/plan/engine-design.md": "a222d92cfbf18fd3aa1c9d5cc5adb271488bc8332f36dca95876f05a0601610a",
+    "src/engine/dsl/builders.ts": "c49843133ef5f6d7b57fc8135dc92ddd05bfc37216df0e02401e6acd4c1a1884",
+    "src/engine/dsl/types.ts": "bd233dabda14856fdedadc6cd1bb0356110f7e3e0bdd9ae70243050eb70adf3b",
+    "src/engine/dsl/values.ts": "9a9d393a804a0b879b7d3714c3c99c84e307f097f900f7329f7d881ab581642c",
+    "src/engine/effects/interpreter.ts": "e5d968676db3d172d5bc7548c7d4ec8bca475d7004f0e0f86b65c0380506cd86",
+    "src/engine/effects/types.ts": "890571a4540ee9ca03e611288f1ddede8c32914c2566b73d49c28d49a94be1f3",
+    "src/engine/events/kinds/trigger-queued.ts": "d2501a97533858b08f0bd2372de4f4574e2dc47ed9504014a8cab265edbc23dc",
+    "src/engine/state/types.ts": "7f202f525eb6ad3ea268e762cbc40300f28e5ec07219cf27ccbc9d7b85017b9c",
+    "src/engine/steps/types.ts": "1c69381c5265986de88ccf5c6ef56d8cc4a6743ee488f5d263f5d4907e54d8e4",
+    "src/engine/triggers/matcher.ts": "e3998629f0cb3c8a7975e235029fbb7ae90babc40050cfdb09a1aac41e7d4785",
+    "src/engine/triggers/resolve.ts": "d30318c8d054e893c4dc73510ffb50b13d25c5847180c65251ba976cd51db50f",
+    "src/engine/view/determinize.ts": "247fe4ca7914f12ceb00762c8e3f6990482e2f895ad439f7f8cba5aa5a2b2132",
+    "src/engine/view/view.ts": "eb09c3b16afe5afe3d4eab85e898a9424c46e10a200a3caa055233281ab73c14",
+    "src/rules/battle/engine-battle-intents.test.ts": "4c7df05bfa44163a75e314e6bc72462c74fe7a10109838e7a58afc476ea95550",
+    "src/rules/battle/fold.ts": "c3707184d2160ca306bd82a1f96002cd237d6cf5460d648ffb042dc7edadd512",
+    "src/engine/effects/primitives/contracts/trigger-subject-spark.contracts.ts": "cba68fc64abf46334174dc5cb533d99f5d0b3d6158172c374a08885042a99c44"
+  },
+  "commands": {
+    "whitespace": {
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "pid": 42174,
+      "observer": 42167,
+      "start": "2026-10-14T03:40:54.737937+00:00",
+      "end": "2026-10-14T03:40:54.751211+00:00",
+      "seconds": 0.013120250019710511,
+      "exit": 0,
+      "loadStart": [
+        19.0537109375,
+        16.45703125,
+        13.2880859375
+      ],
+      "loadEnd": [
+        19.0537109375,
+        16.45703125,
+        13.2880859375
+      ]
+    },
+    "focus3": {
+      "label": "focus3",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "triggering subject predeparture spark"
+      ],
+      "pid": 13587,
+      "observer": 13579,
+      "start": "2026-10-14T03:29:37.906939+00:00",
+      "end": "2026-10-14T03:29:43.509714+00:00",
+      "seconds": 5.60263512498932,
+      "exit": 0,
+      "loadStart": [
+        7.0673828125,
+        7.3232421875,
+        9.21484375
+      ],
+      "loadEnd": [
+        6.9814453125,
+        7.30126953125,
+        9.19580078125
+      ]
+    },
+    "fuzz-one-inner": {
+      "label": "fuzz-one-inner",
+      "command": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/root-587/helper/fuzz-one.mts"
+      ],
+      "pid": 18912,
+      "observer": 18911,
+      "start": "2026-10-14T03:33:16.674017+00:00",
+      "end": "2026-10-14T03:33:17.479333+00:00",
+      "seconds": 0.8052327919867821,
+      "exit": 1,
+      "loadStart": [
+        4.0693359375,
+        5.89111328125,
+        8.18115234375
+      ],
+      "loadEnd": [
+        4.0693359375,
+        5.89111328125,
+        8.18115234375
+      ]
+    },
+    "focus": {
+      "label": "focus",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "triggering subject predeparture spark"
+      ],
+      "pid": 9874,
+      "observer": 9865,
+      "start": "2026-10-14T03:27:46.996707+00:00",
+      "end": "2026-10-14T03:27:55.982545+00:00",
+      "seconds": 8.985677874996327,
+      "exit": 1,
+      "loadStart": [
+        4.75048828125,
+        7.48046875,
+        9.53857421875
+      ],
+      "loadEnd": [
+        5.29736328125,
+        7.51220703125,
+        9.52587890625
+      ]
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 8307,
+      "observer": 8297,
+      "start": "2026-10-14T03:40:22.438195+00:00",
+      "end": "2026-10-14T03:40:27.258694+00:00",
+      "seconds": 4.820211540994933,
+      "exit": 0,
+      "loadStart": [
+        20.4228515625,
+        16.30322265625,
+        13.1171875
+      ],
+      "loadEnd": [
+        20.46875,
+        16.380859375,
+        13.1630859375
+      ]
+    },
+    "focus2": {
+      "label": "focus2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "triggering subject predeparture spark"
+      ],
+      "pid": 10996,
+      "observer": 10987,
+      "start": "2026-10-14T03:28:21.075650+00:00",
+      "end": "2026-10-14T03:28:26.721290+00:00",
+      "seconds": 5.645474499993725,
+      "exit": 0,
+      "loadStart": [
+        5.033203125,
+        7.2763671875,
+        9.3818359375
+      ],
+      "loadEnd": [
+        4.9501953125,
+        7.2216796875,
+        9.35009765625
+      ]
+    },
+    "schema2": {
+      "label": "schema2",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 55768,
+      "observer": 55766,
+      "start": "2026-10-14T03:41:06.793196+00:00",
+      "end": "2026-10-14T03:41:06.860237+00:00",
+      "seconds": 0.06694983298075385,
+      "exit": 0,
+      "loadStart": [
+        16.48779296875,
+        16.0234375,
+        13.18896484375
+      ],
+      "loadEnd": [
+        16.48779296875,
+        16.0234375,
+        13.18896484375
+      ]
+    },
+    "counterfactuals": [
+      {
+        "label": "negative-capture",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "retains .*effective spark"
+        ],
+        "pid": 14041,
+        "observer": 14040,
+        "start": "2026-10-14T03:29:53.782974+00:00",
+        "end": "2026-10-14T03:29:56.833620+00:00",
+        "seconds": 3.0505282079975586,
+        "exit": 1,
+        "loadStart": [
+          6.9169921875,
+          7.27490234375,
+          9.16357421875
+        ],
+        "loadEnd": [
+          6.60302734375,
+          7.20361328125,
+          9.12744140625
+        ],
+        "source": "src/engine/triggers/matcher.ts",
+        "sha256BeforeAndRestored": "e3998629f0cb3c8a7975e235029fbb7ae90babc40050cfdb09a1aac41e7d4785"
+      },
+      {
+        "label": "negative-routing",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "retains .*effective spark"
+        ],
+        "pid": 14180,
+        "observer": 14179,
+        "start": "2026-10-14T03:29:56.855419+00:00",
+        "end": "2026-10-14T03:29:59.868832+00:00",
+        "seconds": 3.013289499998791,
+        "exit": 1,
+        "loadStart": [
+          6.60302734375,
+          7.20361328125,
+          9.12744140625
+        ],
+        "loadEnd": [
+          6.60302734375,
+          7.20361328125,
+          9.12744140625
+        ],
+        "source": "src/engine/effects/interpreter.ts",
+        "sha256BeforeAndRestored": "e5d968676db3d172d5bc7548c7d4ec8bca475d7004f0e0f86b65c0380506cd86"
+      },
+      {
+        "label": "negative-sampling",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "retains a ceased figment public"
+        ],
+        "pid": 14216,
+        "observer": 14215,
+        "start": "2026-10-14T03:29:59.891426+00:00",
+        "end": "2026-10-14T03:30:02.892120+00:00",
+        "seconds": 3.0005840419908054,
+        "exit": 1,
+        "loadStart": [
+          6.60302734375,
+          7.20361328125,
+          9.12744140625
+        ],
+        "loadEnd": [
+          7.03515625,
+          7.283203125,
+          9.14404296875
+        ],
+        "source": "src/engine/view/determinize.ts",
+        "sha256BeforeAndRestored": "247fe4ca7914f12ceb00762c8e3f6990482e2f895ad439f7f8cba5aa5a2b2132"
+      },
+      {
+        "label": "negative-zero",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "keeps captured zero despite"
+        ],
+        "pid": 14268,
+        "observer": 14265,
+        "start": "2026-10-14T03:30:02.915611+00:00",
+        "end": "2026-10-14T03:30:05.891590+00:00",
+        "seconds": 2.9758716659853235,
+        "exit": 1,
+        "loadStart": [
+          7.03515625,
+          7.283203125,
+          9.14404296875
+        ],
+        "loadEnd": [
+          6.7119140625,
+          7.2119140625,
+          9.10791015625
+        ],
+        "source": "src/engine/dsl/values.ts",
+        "sha256BeforeAndRestored": "9a9d393a804a0b879b7d3714c3c99c84e307f097f900f7329f7d881ab581642c"
+      },
+      {
+        "label": "negative-view-privacy",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "strips the scalar with its subsequently concealed source"
+        ],
+        "pid": 14323,
+        "observer": 14322,
+        "start": "2026-10-14T03:30:05.913832+00:00",
+        "end": "2026-10-14T03:30:09.465393+00:00",
+        "seconds": 3.5514347919961438,
+        "exit": 1,
+        "loadStart": [
+          6.7119140625,
+          7.2119140625,
+          9.10791015625
+        ],
+        "loadEnd": [
+          6.7119140625,
+          7.2119140625,
+          9.10791015625
+        ],
+        "source": "src/engine/view/view.ts",
+        "sha256BeforeAndRestored": "eb09c3b16afe5afe3d4eab85e898a9424c46e10a200a3caa055233281ab73c14"
+      },
+      {
+        "label": "negative-event-privacy",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "strips the scalar with its subsequently concealed source"
+        ],
+        "pid": 14504,
+        "observer": 14503,
+        "start": "2026-10-14T03:30:09.490362+00:00",
+        "end": "2026-10-14T03:30:12.615085+00:00",
+        "seconds": 3.1245438340120018,
+        "exit": 1,
+        "loadStart": [
+          6.7119140625,
+          7.2119140625,
+          9.10791015625
+        ],
+        "loadEnd": [
+          7.05517578125,
+          7.2744140625,
+          9.11865234375
+        ],
+        "source": "src/engine/events/kinds/trigger-queued.ts",
+        "sha256BeforeAndRestored": "d2501a97533858b08f0bd2372de4f4574e2dc47ed9504014a8cab265edbc23dc"
+      },
+      {
+        "label": "negative-event-privacy2",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "strips the scalar with its subsequently concealed source"
+        ],
+        "pid": 17279,
+        "observer": 17278,
+        "start": "2026-10-14T03:32:00.836651+00:00",
+        "end": "2026-10-14T03:32:03.823767+00:00",
+        "seconds": 2.9869868750101887,
+        "exit": 1,
+        "loadStart": [
+          5.01220703125,
+          6.4833984375,
+          8.583984375
+        ],
+        "loadEnd": [
+          5.01220703125,
+          6.4833984375,
+          8.583984375
+        ],
+        "source": "src/engine/events/kinds/trigger-queued.ts",
+        "sha256BeforeAndRestored": "d2501a97533858b08f0bd2372de4f4574e2dc47ed9504014a8cab265edbc23dc"
+      }
+    ],
+    "owning2": {
+      "label": "owning2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "src/engine/policy/policy-worker.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts",
+        "src/engine/rules/copies.test.ts"
+      ],
+      "pid": 12569,
+      "observer": 12560,
+      "start": "2026-10-14T03:29:14.449106+00:00",
+      "end": "2026-10-14T03:29:28.300799+00:00",
+      "seconds": 13.851455041003646,
+      "exit": 0,
+      "loadStart": [
+        6.40234375,
+        7.24560546875,
+        9.24560546875
+      ],
+      "loadEnd": [
+        6.732421875,
+        7.267578125,
+        9.2177734375
+      ]
+    },
+    "focus5": {
+      "label": "focus5",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "triggering subject predeparture spark"
+      ],
+      "pid": 99393,
+      "observer": 99381,
+      "start": "2026-10-14T03:38:38.343880+00:00",
+      "end": "2026-10-14T03:38:45.199375+00:00",
+      "seconds": 6.85531254200032,
+      "exit": 0,
+      "loadStart": [
+        14.84765625,
+        15.40673828125,
+        12.48828125
+      ],
+      "loadEnd": [
+        14.69921875,
+        15.36669921875,
+        12.4912109375
+      ]
+    },
+    "focus4": {
+      "label": "focus4",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "triggering subject predeparture spark"
+      ],
+      "pid": 15985,
+      "observer": 15976,
+      "start": "2026-10-14T03:31:06.674665+00:00",
+      "end": "2026-10-14T03:31:12.016863+00:00",
+      "seconds": 5.342065167002147,
+      "exit": 0,
+      "loadStart": [
+        5.78759765625,
+        6.92431640625,
+        8.8740234375
+      ],
+      "loadEnd": [
+        5.56396484375,
+        6.85888671875,
+        8.83935546875
+      ]
+    },
+    "whitespace2": {
+      "label": "whitespace2",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "pid": 55893,
+      "observer": 55844,
+      "start": "2026-10-14T03:41:06.882463+00:00",
+      "end": "2026-10-14T03:41:06.894120+00:00",
+      "seconds": 0.01156491701840423,
+      "exit": 0,
+      "loadStart": [
+        16.48779296875,
+        16.0234375,
+        13.18896484375
+      ],
+      "loadEnd": [
+        16.48779296875,
+        16.0234375,
+        13.18896484375
+      ]
+    },
+    "full-inner": {
+      "label": "full-inner",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 63314,
+      "observer": 63309,
+      "start": "2026-10-14T03:41:31.602861+00:00",
+      "end": "2026-10-14T03:43:50.735347+00:00",
+      "seconds": 139.1306992089958,
+      "exit": 0,
+      "loadStart": [
+        13.392578125,
+        15.330078125,
+        13.02001953125
+      ],
+      "loadEnd": [
+        16.56982421875,
+        16.08447265625,
+        13.65625
+      ]
+    },
+    "owning": {
+      "label": "owning",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "src/engine/policy/policy-worker.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts",
+        "src/engine/rules/copies.test.ts"
+      ],
+      "pid": 11775,
+      "observer": 11767,
+      "start": "2026-10-14T03:28:48.432813+00:00",
+      "end": "2026-10-14T03:29:05.245921+00:00",
+      "seconds": 16.812851583992597,
+      "exit": 0,
+      "loadStart": [
+        4.62548828125,
+        7.009765625,
+        9.224609375
+      ],
+      "loadEnd": [
+        5.7490234375,
+        7.15234375,
+        9.23681640625
+      ]
+    },
+    "counterfactual-event": {
+      "label": "counterfactual-event",
+      "command": [
+        "python3",
+        "/tmp/root-587/helper/counterfactual-event.py"
+      ],
+      "pid": 17277,
+      "observer": 17268,
+      "start": "2026-10-14T03:32:00.798091+00:00",
+      "end": "2026-10-14T03:32:03.832050+00:00",
+      "seconds": 3.0338337090215646,
+      "exit": 0,
+      "loadStart": [
+        5.01220703125,
+        6.4833984375,
+        8.583984375
+      ],
+      "loadEnd": [
+        5.01220703125,
+        6.4833984375,
+        8.583984375
+      ]
+    },
+    "schema": {
+      "label": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 42038,
+      "observer": 42036,
+      "start": "2026-10-14T03:40:54.598766+00:00",
+      "end": "2026-10-14T03:40:54.715013+00:00",
+      "seconds": 0.11615820799488574,
+      "exit": 0,
+      "loadStart": [
+        19.0537109375,
+        16.45703125,
+        13.2880859375
+      ],
+      "loadEnd": [
+        19.0537109375,
+        16.45703125,
+        13.2880859375
+      ]
+    },
+    "fuzz-three-inner": {
+      "label": "fuzz-three-inner",
+      "command": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/root-587/helper/fuzz-one.mts"
+      ],
+      "pid": 31454,
+      "observer": 31453,
+      "start": "2026-10-14T03:35:39.210318+00:00",
+      "end": "2026-10-14T03:35:40.975489+00:00",
+      "seconds": 1.7650058750004973,
+      "exit": 0,
+      "loadStart": [
+        30.953125,
+        16.28173828125,
+        12.0126953125
+      ],
+      "loadEnd": [
+        29.43505859375,
+        16.21044921875,
+        12.01220703125
+      ]
+    },
+    "whitespace-final": {
+      "label": "whitespace-final",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "pid": 77769,
+      "observer": 77732,
+      "start": "2026-10-14T03:45:11.433551+00:00",
+      "end": "2026-10-14T03:45:11.447143+00:00",
+      "seconds": 0.01348758299718611,
+      "exit": 0,
+      "loadStart": [
+        8.416015625,
+        13.69970703125,
+        12.97998046875
+      ],
+      "loadEnd": [
+        8.416015625,
+        13.69970703125,
+        12.97998046875
+      ]
+    },
+    "review2": {
+      "label": "review2",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 2247,
+      "observer": 2232,
+      "start": "2026-10-14T03:39:01.382851+00:00",
+      "end": "2026-10-14T03:40:10.076677+00:00",
+      "seconds": 68.6929426669958,
+      "exit": 0,
+      "loadStart": [
+        12.41162109375,
+        14.79296875,
+        12.3515625
+      ],
+      "loadEnd": [
+        17.0244140625,
+        15.505859375,
+        12.787109375
+      ]
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 44066,
+      "observer": 43649,
+      "start": "2026-10-14T03:37:01.861315+00:00",
+      "end": "2026-10-14T03:38:27.886860+00:00",
+      "seconds": 86.02311249999912,
+      "exit": 0,
+      "loadStart": [
+        18.25439453125,
+        16.111328125,
+        12.37451171875
+      ],
+      "loadEnd": [
+        14.69921875,
+        15.3896484375,
+        12.44775390625
+      ]
+    },
+    "fuzz-two-inner": {
+      "label": "fuzz-two-inner",
+      "command": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/root-587/helper/fuzz-one.mts"
+      ],
+      "pid": 22071,
+      "observer": 22070,
+      "start": "2026-10-14T03:34:05.087740+00:00",
+      "end": "2026-10-14T03:34:08.283955+00:00",
+      "seconds": 3.1961411249940284,
+      "exit": 1,
+      "loadStart": [
+        17.75634765625,
+        9.20654296875,
+        9.27734375
+      ],
+      "loadEnd": [
+        17.53515625,
+        9.30224609375,
+        9.310546875
+      ]
+    },
+    "schema-final": {
+      "label": "schema-final",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 77758,
+      "observer": 77753,
+      "start": "2026-10-14T03:45:11.334945+00:00",
+      "end": "2026-10-14T03:45:11.411562+00:00",
+      "seconds": 0.07654229097533971,
+      "exit": 0,
+      "loadStart": [
+        8.416015625,
+        13.69970703125,
+        12.97998046875
+      ],
+      "loadEnd": [
+        8.416015625,
+        13.69970703125,
+        12.97998046875
+      ]
+    }
+  },
+  "footprint": {
+    "plainContractModules": 1,
+    "testEntrypoints": 0,
+    "jsdomFiles": 0,
+    "moduleLines": 278,
+    "ownCases": 53,
+    "savedValidationAddedLines": 7
+  },
+  "semantics": "One resolving subjectSpark value binds only abandoned/dissolved lookback effective predeparture spark. leftPlay.spark comes from effectiveSpark before expiry/detach, with getter fallback only while legacy departing instance exists. Explicit0 retained; resolving absence0; static rejects. No live/printed/source fallback. SourceSpark/X/cost semantics unchanged.",
+  "privacy": "Public predeparture numeric fact survives ceased/unknown subject alias, guarded only by identifiable ability source. No marker/sampler/RNG/hidden causal alias. Unknown source queue omission unchanged. Source-free initial claim normal ceased enqueue necessarily got both hidden flags was overstated: ceaseToExist emits before deletion; corrected before writing, no hypothetical failure claimed.",
+  "transport": "Queue/event optional scalar to nullable EffectEnv and ValueScope; clone/JSON/hash/log use existing typed data transport. Worker proof is structured-clone view preservation and existing worker tests, not unknown synthetic manifest ability reconstruction. Saved finite nonnegative scalar accepted, including0/fractional/nullsubject; malformed and bonus placement rejected.",
+  "importers": "/tmp/root-587/helper/importer-census.txt; private readsSubjectValue parameterizes identical old cost traversal; derived EffectEnv constructors spread parent. No external required mechanical fallout.",
+  "failurePaths": {
+    "midStepError": "contains a failed partial resolution: real fold trigger gainPoints(subjectSpark) then missing figment raises contained error; committed score0 and queue scalar retained.",
+    "partialWrite": "Same test explicitly compares output committed stateHash and input committed stateHash with the pre-step hash; both remain equal in this all-public fixture.",
+    "reloadRestart": "reloads suspended prefixes: saved/parsed mode and confirm prefixes preserve prompt identity and resumed/direct final state hashes.",
+    "invalidStale": "Same fold test rejects illegal answer, stale prior prefix and repeated completed answer; owning saved-validation case rejects malformed scalar and Dreamwell bonus placement.",
+    "competingActors": "Same suspended fold rejects unrelated action as stepInFlight and opposite controller answer as notYourPrompt; one valid sequential answer advances and prior intent becomes stale."
+  },
+  "counterfactualEpoch": "Original six mutations ran with51own cases; corrected event mutation with53cases. Later dissolved cases and outputhash assertion are additive; production source bytes match restored hashes.",
+  "negativeClassification": {
+    "capture": "24 intended failures; source restored SHA.",
+    "routing": "16 intended failures and8zero controls pass.",
+    "sampling": "4 intended public projection failures.",
+    "zero": "2 intended truthy fallback source9 versus retained0 failures.",
+    "viewPrivacy": "2 intended scalar disclosure assertions.",
+    "eventPrivacyFirst": "2 ReferenceErrors from incomplete mutation binding removal; NOT semantic evidence.",
+    "eventPrivacyCorrected": "2 intended event scalar disclosure assertions; exact source restored."
+  },
+  "corrections": [
+    {
+      "scope": "first focused fixture",
+      "detail": "6 initial fixture expectation/answer-order failures: gainMaxEnergy affects max only; mode chosen before nested optional; extra condition.player removed. Subsequent positive focus passed."
+    },
+    {
+      "scope": "event privacy counterfactual",
+      "detail": "First mutation referenced removed local and raised ReferenceError; corrected mutation changes condition accessor too. Original failed receipt preserved; corrected semantic assertion failures separately recorded."
+    },
+    {
+      "scope": "scratch fuzz first preflight",
+      "detail": "Duplicate synthetic UUID rejected before gameplay because fuzzEngineCatalog already appends FUZZ_SYNTHETIC; unique cloned branded pool IDs repair setup."
+    },
+    {
+      "scope": "scratch fuzz second preflight",
+      "detail": "Game/action/interactive replay passed; observer incorrectly read Dreamsign source.id, so exercise assertion failed. Correct mapping through init.dreamsigns[side][index] repairs observer only."
+    }
+  ],
+  "full": {
+    "inner": {
+      "label": "full-inner",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 63314,
+      "observer": 63309,
+      "start": "2026-10-14T03:41:31.602861+00:00",
+      "end": "2026-10-14T03:43:50.735347+00:00",
+      "seconds": 139.1306992089958,
+      "exit": 0,
+      "loadStart": [
+        13.392578125,
+        15.330078125,
+        13.02001953125
+      ],
+      "loadEnd": [
+        16.56982421875,
+        16.08447265625,
+        13.65625
+      ]
+    },
+    "outer": {
+      "start": "2026-10-14T03:41:31.576497+00:00",
+      "end": "2026-10-14T03:43:50.740627+00:00",
+      "elapsedS": 139.1624114580045,
+      "exitCode": 0,
+      "pid": 63308,
+      "pgid": 63308,
+      "wrapperPid": 63302
+    },
+    "result": "380files7621tests plus typechecks/lint/cycles/schema/Knip/productionbundle green; canonical heavy lock and JOURNEY_TEST_WORKERS=2.",
+    "sourceQualification": {
+      "differencesBetweenSuccessfulFuzzAndFullFreeze": [
+        "docs/plan/evidence/friction/hv-umm2.587.json",
+        "docs/plan/evidence/measurements/hv-umm2.587.json",
+        "src/engine/effects/primitives/contracts/trigger-subject-spark.contracts.ts"
+      ],
+      "productionSourcesUnchanged": true
+    },
+    "resourceClosure": {
+      "at": "2026-10-14T03:44:16.817770+00:00",
+      "fixtureServerPids": [
+        1136,
+        2207,
+        3189,
+        7365,
+        7985,
+        66430,
+        66585,
+        66938,
+        67427,
+        67889,
+        68315,
+        68849,
+        69022,
+        69324,
+        70004,
+        70361,
+        71320,
+        71711,
+        71863,
+        72392,
+        72846,
+        73360,
+        74273,
+        74512,
+        74728,
+        75376,
+        75698,
+        76255,
+        77213,
+        77557,
+        78490,
+        79974,
+        80395,
+        81181,
+        82358,
+        82847,
+        83014,
+        83311,
+        83922,
+        84324,
+        85263,
+        85625,
+        85822,
+        86268,
+        87169,
+        87364,
+        88150,
+        88256,
+        88489,
+        89176,
+        89747,
+        89907,
+        90243,
+        94228,
+        95176,
+        97561,
+        98271
+      ],
+      "currentIdentitiesAtTheseNumbers": [],
+      "note": "Numeric PID reuse is not ownership; no process killed. Full command terminal, PG63308 absent, synthetic fixtures report teardown as part of passing suite."
+    },
+    "guard": "/tmp/root-587/full-freeze.json; parent4690paths andHEADpostguard passed."
+  },
+  "fuzz": {
+    "result": {
+      "seed": "subject-spark587-one",
+      "failure": null,
+      "result": {
+        "kind": "victory",
+        "winner": "enemy",
+        "reason": "score"
+      },
+      "finalHash": "0da59bc4a52ea5",
+      "actions": 56,
+      "steps": 197,
+      "prompts": 9,
+      "targetCoverage": [
+        {
+          "target": {
+            "kind": "dreamsign",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000587101"
+          },
+          "included": 2,
+          "exercised": 10
+        }
+      ],
+      "interactive": {
+        "failure": null,
+        "reruns": 9,
+        "rerunMs": 19.19999900000016,
+        "rerunMaxMs": 4.080915999999888
+      },
+      "counts": {
+        "player": {
+          "captured": 2,
+          "resolved": 2,
+          "gains": 2
+        },
+        "enemy": {
+          "captured": 3,
+          "resolved": 3,
+          "gains": 3
+        }
+      },
+      "amounts": [
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "observedReplayHash": "0da59bc4a52ea5",
+      "scope": "One synthetic targeted FuzzPool game, exact action replay, interactive replay, and deterministic observed policy replay. No production leaf or shared harness change."
+    },
+    "scope": "One synthetic target game and action/interactive/observed policy replay. Actual ability1 scalar captures/resolutions/matchinggains player2/enemy3; targetCoverage10 also counts Dawn ability and is not five-value exercise. Parent held heavy lock and verified unchanged4688repository paths+script before/after each attempt. No production entity authored, productionweighted300/browser/sweep/extra soak claimed.",
+    "parentReceipt": "/tmp/root-587/fuzz-three.receipt.json",
+    "guard": "/tmp/root-587/fuzz-three-freeze.json"
+  },
+  "resources": {
+    "observedAt": "2026-10-14T03:45:11.253662+00:00",
+    "knownIdentities": [
+      1136,
+      2207,
+      2232,
+      2247,
+      3189,
+      7365,
+      7985,
+      8297,
+      8307,
+      9865,
+      9874,
+      10987,
+      10996,
+      11767,
+      11775,
+      12560,
+      12569,
+      13579,
+      13587,
+      14040,
+      14041,
+      14179,
+      14180,
+      14215,
+      14216,
+      14265,
+      14268,
+      14322,
+      14323,
+      14503,
+      14504,
+      15976,
+      15985,
+      16996,
+      16998,
+      17268,
+      17277,
+      17278,
+      17279,
+      18909,
+      18910,
+      18911,
+      18912,
+      22060,
+      22069,
+      22070,
+      22071,
+      29008,
+      29009,
+      29010,
+      29087,
+      29088,
+      29089,
+      31449,
+      31452,
+      31453,
+      31454,
+      42036,
+      42038,
+      42167,
+      42174,
+      43649,
+      44066,
+      55766,
+      55768,
+      55844,
+      55893,
+      63302,
+      63308,
+      63309,
+      63314,
+      66430,
+      66585,
+      66938,
+      67427,
+      67889,
+      68315,
+      68849,
+      69022,
+      69324,
+      70004,
+      70361,
+      71320,
+      71711,
+      71863,
+      72392,
+      72846,
+      73360,
+      74273,
+      74512,
+      74728,
+      75376,
+      75698,
+      76255,
+      77213,
+      77557,
+      78490,
+      79974,
+      80395,
+      81181,
+      82358,
+      82847,
+      83014,
+      83311,
+      83922,
+      84324,
+      85263,
+      85625,
+      85822,
+      86268,
+      87169,
+      87364,
+      88150,
+      88256,
+      88489,
+      89176,
+      89747,
+      89907,
+      90243,
+      94228,
+      95176,
+      95467,
+      95468,
+      95469,
+      95472,
+      95473,
+      95474,
+      97039,
+      97040,
+      97561,
+      98271,
+      99381,
+      99393
+    ],
+    "currentRows": "",
+    "allAbsent": true,
+    "scope": "Actual known finite helper validators/mutations, parent fuzz/full wrappers/children and57full-suite synthetic fixture server identities. Numeric PID reuse is not ownership; no signaling. No real browser/server/provider/lease QA launched."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final-source aggregate review2 actual start2026-10-14T03:39:01.382851Z;1-minute load12.41162109375."
+      }
+    }
+  },
+  "originalAcceptance": "Original245 retains Black Feather and all five original UUIDs/full acceptance;662 separate other-four ownership unchanged. Parent owns core review/certification/promotion/cleanup."
+}

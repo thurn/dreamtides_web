@@ -370,6 +370,13 @@ describe("LOAD_STATE", () => {
     for (const cost of [null, -1, NaN, Infinity, "2", {}, [], true]) expect(load(cost)).toBeNull();
     expect(load(undefined, true)?.battle).toEqual(payload(undefined, true));
     expect(load(0, true)).toBeNull();
+    for (const spark of [undefined, 0, 2, 1.5]) {
+      expect(load(spark, false, "lastKnownSubjectSpark")?.battle).toEqual(payload(spark, false, "lastKnownSubjectSpark"));
+      const sampled = payload(spark, false, "lastKnownSubjectSpark", null);
+      expect(validateLoadedState(state, { snapshot: state.journey, battle: sampled })?.battle).toEqual(sampled);
+    }
+    for (const spark of [null, -1, NaN, Infinity, -Infinity, "2", {}, [], true]) expect(load(spark, false, "lastKnownSubjectSpark")).toBeNull();
+    expect(load(0, true, "lastKnownSubjectSpark")).toBeNull();
     for (const count of [undefined, 1, 3, battle.engine.slice.committed.nextInstance - 1]) {
       const saved = JSON.parse(JSON.stringify(payload(count, false, "discardedCount"))) as unknown;
       expect(validateLoadedState(state, { snapshot: state.journey, battle: saved })?.battle).toEqual(saved);
