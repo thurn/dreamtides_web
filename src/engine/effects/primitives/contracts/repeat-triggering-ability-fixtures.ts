@@ -5,7 +5,7 @@ import { triggered, whenNamedAbilityTriggered } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
 import type { BattleSlice, IntentOutcome } from "../../../fold/slice";
-import { opponent, type InstanceId, type Side } from "../../../state/ids";
+import { opponent, type InstanceId, type Phase, type Side } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
 import { runStep } from "../../../steps/runner";
 import type { Step } from "../../../steps/kinds";
@@ -20,9 +20,9 @@ export const card = (index: number, abilities: EngineCardDefinition["abilities"]
   ({ ...v.vanilla1, id: syntheticId(0x712000 + index), abilities, subtype });
 export const mages = all(characterYouControl({ subtype: "Mage" }));
 export const deck = [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id];
-export function world(side: Side, cards: readonly EngineCardDefinition[], own: SideSetup, other: SideSetup = {}, emblems: EmblemDefinitions = {}, figments: readonly EngineFigmentDefinition[] = []) {
+export function world(side: Side, cards: readonly EngineCardDefinition[], own: SideSetup, other: SideSetup = {}, emblems: EmblemDefinitions = {}, figments: readonly EngineFigmentDefinition[] = [], phase: Phase = "day") {
   const engine = createEngine(testCatalog(cards, emblems, figments));
-  return { engine, side, ...boardState(engine.catalog, { active: side, phase: "day", scoreToWin: 100,
+  return { engine, side, ...boardState(engine.catalog, { active: side, phase, scoreToWin: 100,
     [side]: { deck, energy: 8, ...own }, [opponent(side)]: { deck, energy: 8, ...other } }) };
 }
 type World = ReturnType<typeof world>;

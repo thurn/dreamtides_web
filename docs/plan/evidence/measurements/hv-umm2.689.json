@@ -1,0 +1,713 @@
+{
+  "bead": "hv-umm2.689",
+  "base": "e14c04cf76a1c5cc0533ec498ceaa42e9878948b",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+  "branch": "wt/visible-trigger-history-689",
+  "recordedAt": "2026-10-14T15:47:18.089155+00:00",
+  "clock": {
+    "start": "2026-10-14T15:13:24.603953+00:00",
+    "endAtEvidenceWrite": "2026-10-14T15:47:18.089155+00:00",
+    "elapsedMinutes": 33.89142003333333,
+    "qualification": "Conservative parent pre-spawn envelope, exact helper sampling start unknown. Inclusive research, native coordination, checks, evidence and waits; productive editing time unknown. Final evidence refresh immediately precedes schema, whitespace, staging and one automatic commit; external finalizer receipt records that remaining tail. No commit date override or postcommit tracked rewrite."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "localValidationS.focused": {
+        "measuredFor": "latest focused-v2 final-runtime owning-contract check, not cumulative epochs"
+      },
+      "localValidationS.related": {
+        "measuredFor": "related-v1 final-runtime view/fold/trigger/all-primitive-contract check"
+      },
+      "hostLoad": {
+        "measuredFor": "review-v1 starting one-minute kernel load via os.getloadavg; same epoch review runtime logs report the same value",
+        "value": 17.81689453125
+      }
+    }
+  },
+  "source": {
+    "initialPathCount": 4904,
+    "runtimePathCount": 4904,
+    "initialManifestSHA256": "e43aac9f0ca807b12c9eb72ff70b89b08ec3a1470734e160e5c9089c092ca749",
+    "runtimeManifestSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+    "runtimeChangedPaths": {
+      "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": "fc73a27406fc5775cfcd023ec0f9a6020f5dba5b46793bb5dde016aaa444246d",
+      "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts": "5a92d50e53ccf62add75133f0ce88dc00e3008cfd0190058998c8c7799347360",
+      "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts": "5f99fe796f10b56fbbd14b4c84d28a3a80b5a283d757e82f7b2a362637058be3",
+      "src/engine/state/types.ts": "4a58755dc1e6d1378742245a73020701e7711a6cf95bce3f8c90946fb4d3f66e",
+      "src/engine/view/determinize.ts": "82276834f2fda926e2588d60740a1b0f4d4aeafea5b62643d26541ce8ea6bdb6",
+      "src/engine/view/view.ts": "bb16302ae4c6569114ed377e9c6e6fcd4f79266b694784947768b579a90165d5",
+      "src/rules/battle/fold.ts": "ff5f3ccdb4b426d46a0c45860d1ab37b9aa1fd988bb969e6c4f520d6e5e164b4"
+    },
+    "fullCheckSameRuntimeManifest": true,
+    "scope": "Seven exact admitted paths only. Existing matcher, resolve, primitive, DSL, closure, expiry, challenge, catalog, rules, UI, shared fixtures/config and fidelity helper stay unchanged. All tracked/untracked source plus ignored src/scripts materializations are included by the receipt collector."
+  },
+  "validation": {
+    "tests": {
+      "originalRuntimeRed": {
+        "failed": 16,
+        "skipped": 3839,
+        "softAssertions": 64,
+        "qualification": "Genuine original runtime producer preconditions passed; row/FIFO/fidelity and continuation assertions failed. Later new fixture gets an Explorer-only draw-cost domain and final copy reveal; original red is retained at its actual fixture epoch, not claimed as exact final-fixture red."
+      },
+      "newGreenV1": {
+        "passed": 12,
+        "failed": 4,
+        "qualification": "All visible row/order/fidelity and real repeat admission assertions passed. Opposing-view continuation assertions over unconstrained hidden copy population/draw cost failed. New synthetic fixture constrained those values with ordinary filtering/reveal; assertions retained, runtime cost/copy readers unchanged."
+      },
+      "newGreenV2": {
+        "passed": 16
+      },
+      "focusedFinal": {
+        "passed": 88,
+        "existingRetained": 66,
+        "newCases": 22
+      },
+      "related": {
+        "passed": 4126,
+        "files": 17
+      },
+      "review": {
+        "passed": 7398,
+        "files": 300
+      },
+      "full": {
+        "passed": 8406,
+        "files": 381,
+        "productionBuild": true
+      }
+    },
+    "commands": [
+      {
+        "label": "focused-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:37:54.851285+00:00",
+        "pid": 24320,
+        "pgid": 24320,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "repeatTriggeringAbility"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          21.806640625,
+          16.91650390625,
+          14.048828125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:37:58.748639+00:00",
+        "elapsedSeconds": 3.897082124982262,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "e1d33777c427a00592bded0a9a6b4260b1b3c8868d836d42e88e1c907655fd2d",
+        "afterSHA256": "e1d33777c427a00592bded0a9a6b4260b1b3c8868d836d42e88e1c907655fd2d",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "14b66276f506ee0f4f3d3832da27e23185252e79a2161e1b3a296044549aa4e6",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "focused-v2",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:39:28.695817+00:00",
+        "pid": 68537,
+        "pgid": 68537,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "repeatTriggeringAbility"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          18.88232421875,
+          16.71337890625,
+          14.2392578125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:39:32.547056+00:00",
+        "elapsedSeconds": 3.851105040987022,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "afterSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "c2c0b63409b45c98acb1b40e4a3445c5d00c63edd8c73afd961b2c96b94158a7",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "full-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:41:09.371437+00:00",
+        "pid": 5626,
+        "pgid": 5626,
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          9.861328125,
+          14.51806640625,
+          13.6796875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:42:47.937037+00:00",
+        "elapsedSeconds": 98.56481566699222,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "afterSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "bd8e1229d0962dad3d779bf2f62a5078bff03c7b75bd763f43be2aac99e6844a",
+        "stderrSHA256": "413096b5d0c5b53e8b96d4d5bf39ebfeb5027feea61231b2eadda9a0b55c272f",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "knip-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:39:45.958290+00:00",
+        "pid": 95398,
+        "pgid": 95398,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          17.81689453125,
+          16.60302734375,
+          14.25634765625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:39:52.461271+00:00",
+        "elapsedSeconds": 6.502777541987598,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "afterSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "9ab6c74c60105f14278b8908fd8d8abc9ffa34d2e5db711a6660ec46a39565cd",
+        "stderrSHA256": "00ba915d21eec9e6a236039eeb9abd1f579dcea89205c98c9d07cdc61dd56afc",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "new-green-v1",
+        "classification": "unintended-new-fixture-domain-failure",
+        "expectedExitCode": 1,
+        "started": "2026-10-14T15:35:15.505984+00:00",
+        "pid": 61372,
+        "pgid": 61372,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "visible-history (original reader|private repeat)"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          9.732421875,
+          11.6689453125,
+          11.8291015625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:35:20.987687+00:00",
+        "elapsedSeconds": 5.4815441250102594,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "91b671d099b147dd918edf16612234fd2b415439ee815028269d784280102683",
+        "afterSHA256": "91b671d099b147dd918edf16612234fd2b415439ee815028269d784280102683",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "f680a6f45b8c4aa2146092c6a2870c83a13440c5fb8fd78d96ba758166da6fa7",
+        "stderrSHA256": "fee07b01839dbf6949add6f70eb3db321e00a7801c586b121031752ccd25501c",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "new-green-v2",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:36:34.031612+00:00",
+        "pid": 72127,
+        "pgid": 72127,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "visible-history (original reader|private repeat)"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          24.36083984375,
+          16.1796875,
+          13.55419921875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:36:38.315964+00:00",
+        "elapsedSeconds": 4.28417529197759,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "a42b865b417ac4fad812a25a063139e4c52d9814a04d552a87f8da7f8903b1fe",
+        "afterSHA256": "a42b865b417ac4fad812a25a063139e4c52d9814a04d552a87f8da7f8903b1fe",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "bd62dc9cb880680c958e0fa6258c18697e8902e355d6a32557ef41dfe0c61be9",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "original-red-v1",
+        "classification": "expected-original-runtime-red",
+        "expectedExitCode": 1,
+        "started": "2026-10-14T15:25:42.173912+00:00",
+        "pid": 46923,
+        "pgid": 46923,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "visible-history (original reader|private repeat)"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          8.96923828125,
+          6.88232421875,
+          10.0068359375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:25:46.422241+00:00",
+        "elapsedSeconds": 4.248143584001809,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "a534058a9ab77980588e9cb8c214b245c16fad509a6d69c7ba661cbfee268678",
+        "afterSHA256": "a534058a9ab77980588e9cb8c214b245c16fad509a6d69c7ba661cbfee268678",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "30b2a228ead79c7012766139359861abcb295a5e7779a2074724a90dea4ad148",
+        "stderrSHA256": "526f2294d27e5624b161a02c13ac1489d6f0f89a92ae769bc94fd80c8733550b",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "related-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:39:45.958254+00:00",
+        "pid": 95396,
+        "pgid": 95396,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/view",
+          "src/engine/fold",
+          "src/engine/triggers",
+          "src/engine/effects/primitives/contracts.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          17.81689453125,
+          16.60302734375,
+          14.25634765625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:40:03.790882+00:00",
+        "elapsedSeconds": 17.832372833014233,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "afterSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "39f3e67a23e5d03b5652c3fd07e49d4da4463bfb999024365b31d326ce0ac9b2",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "review-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:39:45.958273+00:00",
+        "pid": 95397,
+        "pgid": 95397,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          17.81689453125,
+          16.60302734375,
+          14.25634765625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:40:45.980185+00:00",
+        "elapsedSeconds": 60.02134308300447,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "afterSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "4153709ce8446754788c8bf356c0829b0992f222d945ca1bad9445ae02ff95e5",
+        "stderrSHA256": "00ba915d21eec9e6a236039eeb9abd1f579dcea89205c98c9d07cdc61dd56afc",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "schema-draft-v2",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:45:10.798180+00:00",
+        "pid": 49754,
+        "pgid": 49754,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          4.77392578125,
+          9.66015625,
+          11.7783203125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:45:10.886938+00:00",
+        "elapsedSeconds": 0.08861045900266618,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4907,
+        "beforeSHA256": "e3e4d077164899e057e500df96f84b95770a2f4c44bc950ec89729757ccbd174",
+        "afterSHA256": "e3e4d077164899e057e500df96f84b95770a2f4c44bc950ec89729757ccbd174",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "95b7b7308346e53ce6a90381d751ed673983fd016c8cec511104e5ad804301cf",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "schema-draft",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:44:02.311408+00:00",
+        "pid": 48467,
+        "pgid": 48467,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          5.03125,
+          10.7685546875,
+          12.30419921875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:44:02.400968+00:00",
+        "elapsedSeconds": 0.08945495801162906,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4907,
+        "beforeSHA256": "bc286ad00444a4f750ade35a11e77cdd1a9166baa9d039d15f4d3b32535d17b4",
+        "afterSHA256": "bc286ad00444a4f750ade35a11e77cdd1a9166baa9d039d15f4d3b32535d17b4",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "95b7b7308346e53ce6a90381d751ed673983fd016c8cec511104e5ad804301cf",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "schema-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:40:25.877428+00:00",
+        "pid": 3035,
+        "pgid": 3035,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          13.865234375,
+          15.76513671875,
+          14.05810546875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:40:26.019194+00:00",
+        "elapsedSeconds": 0.1415938330173958,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "afterSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "e66700de22d0c9af376530ffaf0c43f9d6a4d05521447bbfe70c9da4400ae8ff",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "whitespace-draft-v2",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:45:10.798180+00:00",
+        "pid": 49755,
+        "pgid": 49755,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          4.77392578125,
+          9.66015625,
+          11.7783203125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:45:10.808850+00:00",
+        "elapsedSeconds": 0.010536834015510976,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4907,
+        "beforeSHA256": "e3e4d077164899e057e500df96f84b95770a2f4c44bc950ec89729757ccbd174",
+        "afterSHA256": "e3e4d077164899e057e500df96f84b95770a2f4c44bc950ec89729757ccbd174",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "whitespace-draft",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:44:02.311401+00:00",
+        "pid": 48468,
+        "pgid": 48468,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          5.03125,
+          10.7685546875,
+          12.30419921875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:44:02.322836+00:00",
+        "elapsedSeconds": 0.011298209021333605,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4907,
+        "beforeSHA256": "bc286ad00444a4f750ade35a11e77cdd1a9166baa9d039d15f4d3b32535d17b4",
+        "afterSHA256": "bc286ad00444a4f750ade35a11e77cdd1a9166baa9d039d15f4d3b32535d17b4",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "whitespace-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T15:40:25.877444+00:00",
+        "pid": 3036,
+        "pgid": 3036,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/visible-trigger-history-689",
+        "hostLoad": [
+          13.865234375,
+          15.76513671875,
+          14.05810546875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T15:40:25.898681+00:00",
+        "elapsedSeconds": 0.021039957995526493,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4904,
+        "beforeSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "afterSHA256": "a86f75741662b0159910f92ecf6c48d1b9cc847f0d6089599882ac1382971fd2",
+        "collectorBeforeSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "collectorAfterSHA256": "38e74a3d63619429b1de371857c0bcd240aad6c9ec739281a5b941090ce92c02",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      }
+    ],
+    "noExtraCounterfactual": "Parent accepted unconditional original-drop source plus unchanged discriminating row/actual-repeat assertions and current green; no source mutant executed.",
+    "heavy": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "workers": 2,
+      "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "qualification": "Actual elapsed includes lock wait, validation and build at measured load. This central sampler check makes no low-load D19 budget or performance claim. No local200-game fuzz because runner/fuzzer unchanged."
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "midstep/partial write",
+      "contract": "rolls back %s genuine repeated mutation prefix on the exact later primitive error",
+      "coverage": "Real repeat admission and gain-energy mutation prefix followed by missing-figment primitive; successful prefix control, stable engine_error, unchanged committed/input hash, cleared inFlight, empty published."
+    },
+    {
+      "path": "reload/restart",
+      "contract": "visible-history original reader for $side/$viewer after current loss=$lost; visible-history private repeat for $side/$viewer after current loss=$lost; visible-history public emblem observer for $side/dreamsign=$sign keeps captured history withheld; visible-history sampled self-subject for %s stays private to later public readers",
+      "coverage": "Actual pending states and samples through JSON, saved-fold parser, fresh fold/engine readers and repeated determinization; exact visible UUID/FIFO/public view and actual finite continuation."
+    },
+    {
+      "path": "invalid/stale/concurrent actor",
+      "contract": "reloads %s optional observer and refuses wrong-side, stale and duplicate continuations",
+      "coverage": "Existing wrong-side, stale/duplicate answer and noncancellable prompt contracts retained; malformed saved causal/history arrays rejected and catalog mismatch atomically recovered with an exact same-fixture valid drain."
+    },
+    {
+      "path": "immutable allowance refusal",
+      "contract": "repeats exact floating node for $side and refuses consumed one-shot=$once",
+      "coverage": "Actual valid ordinary/floating continuation retained; raw malformed repeated saved marker gets stable fold engine_error, unchanged hashes/empty publications; invalid sampler refusal paired with valid sampled fidelity and outcome."
+    },
+    {
+      "path": "later observation/privacy",
+      "contract": "visible-history public emblem observer for $side/dreamsign=$sign keeps captured history withheld; visible-history sampled self-subject for %s stays private to later public readers",
+      "coverage": "New public observer keeps own origin visible; nested guessed original origin/context stays withheld through explicit observedBy, replay and real repetition. Newly synthesized self-subject gets subjectHiddenFrom, while already-shown ordinary subject stays public."
+    },
+    {
+      "path": "termination",
+      "contract": "ends %s admission-only growing causal cycles with a mandatory draw",
+      "coverage": "Existing mandatory-cycle result retained; new compatible ordinary and private repeat continuations drain finitely. Sampling publishes no partial state and input hashes/JSON stay unchanged."
+    }
+  ],
+  "privacyAndLimits": {
+    "metadata": "Optional queued historyHiddenFrom is a snapshot projection obligation, not recovered authoritative audience. It is absent from public DTO/events, survives JSON clone/hash/save/nested capture/repetition and denies origin/context even under later explicit observedBy. Source UUID remains current physical identity.",
+    "candidateDomain": "Visible sources retain exact same printing/variant and represented gained groups only as index requires, without current lost mask/current-zone admission restriction. No unrelated visible-printing fallback. One sampled direct named ordinary cause with exact source/controller/ability/node/self-or-null subject, no recursive observer ancestry or copied authoritative hidden tuple. Missing compatible finite domain refuses.",
+    "currentSourceChange": "Tests prove current active-ability loss after admission. Printing/variant stay fixed; no claim of erased gained-definition/changed-printing/variant producer proof or complete arbitrary erased-history reconstruction.",
+    "deliberateDuplication": "Local immediate readsRepeat mirrors matcher immediate-reader boundary and stops at floatingTrigger; matcher stays read-only. Named/immutable predicate duplication is retained for serialized hv-umm2.690; this helper is not claimed consolidated."
+  },
+  "investigationCorrections": [
+    {
+      "kind": "wrong-directory-read-only",
+      "detail": "One source-read batch omitted explicit workdir and read primary. No writes/runtime occurred there; every relied-on source/consumer was reread from explicit owned workdir before proposal. Separate from test/runtime failures."
+    },
+    {
+      "kind": "subject-privacy-parent-audit",
+      "detail": "Parent audit identified that subject projection is independent of originSeen. Newly sampled self-subjects now carry SIDES subjectHiddenFrom; genuine materialized/public-reader regression and already-shown-subject positive control pass."
+    }
+  ],
+  "delivery": {
+    "coreReview": "Fresh normal cold Claude Opus5.5 review is parent-owned at immutable exact commit; not claimed complete in this helper evidence. Original vwcb reports remain immutable.",
+    "native": "Parent owns claim, exact admission, final freeze, Tollgate, cold review/dispositions/promotion and cleanup.",
+    "browserQA": "No presentation or browser consumer change. Public synthetic engine/fold/view/sampler contracts are proportionate. No server/browser/port binding or captures.",
+    "preExisting": "No new out-of-scope defect identified. Prepared checks report documented optional missing-art cache warnings then restore local asset links; actual output retained.",
+    "runtimeLedger": "Only receipt-owned short validation process groups; every recorded completed group is reaped/absent. No local server, browser, fuzz, provider or foreign process control."
+  }
+}

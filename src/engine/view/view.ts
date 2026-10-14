@@ -509,8 +509,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   const queuedView = (trigger: import("../state/types").QueuedTrigger, observedBy?: readonly Side[]): QueuedTriggerView => {
     const audience = observedBy ?? trigger.repeated?.observedBy ?? trigger.triggeringAbility?.readerObservedBy;
     const instructionSeen = trigger.repeated?.visibleTo.includes(viewer) === true;
-    const originSeen = audience === undefined ? visibleSource(trigger.source) : audience.includes(viewer) &&
-      (trigger.repeated === undefined || instructionSeen || visibleSource(trigger.source));
+    const originSeen = trigger.historyHiddenFrom?.includes(viewer) !== true && (audience === undefined ? visibleSource(trigger.source) : audience.includes(viewer) &&
+      (trigger.repeated === undefined || instructionSeen || visibleSource(trigger.source)));
     const causeKnown = originSeen;
     return {
       ...(!instructionSeen ? {} : { repeated: trigger.repeated.named }),

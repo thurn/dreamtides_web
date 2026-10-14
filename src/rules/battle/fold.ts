@@ -1160,6 +1160,8 @@ function isQueuedTrigger(value: unknown): boolean {
 function isQueuedTriggerRecord(value: unknown): boolean {
   if (!isPlainRecord(value)) return false;
   if (value.kind !== undefined && value.kind !== "dreamwellBonus" && value.kind !== "ruleReaction") return false;
+  if (value.historyHiddenFrom !== undefined && (value.kind !== undefined || !isArrayOf(value.historyHiddenFrom, isSide) ||
+    new Set(value.historyHiddenFrom).size !== value.historyHiddenFrom.length)) return false;
   if (value.repeated !== undefined && (value.kind !== undefined || !isPlainRecord(value.repeated) ||
     Object.keys(value.repeated).some(key => key !== "named" && key !== "observedBy" && key !== "visibleTo") || !isNamedTrigger(value.repeated.named) ||
     !isArrayOf(value.repeated.observedBy, isSide) || new Set(value.repeated.observedBy).size !== value.repeated.observedBy.length ||

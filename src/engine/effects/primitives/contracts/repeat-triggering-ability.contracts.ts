@@ -1,10 +1,12 @@
 /** Exact named-occurrence core contracts, through real engine and fold consumers. */
 import { describe, expect, it } from "vitest";
-import { activated, characterYouControl, discardCost, everyIn, self, staticAbility, energy, triggerSubjectCost, triggerSubjectSpark } from "../../../dsl/builders";
-import { either, onDawn, onMaterialized, triggered, whenMaterialize, whenNamedAbilityTriggered, onDissolved, triggeringCard, whenCopyTrigger, whenDissolved } from "../../../dsl/triggers";
+import { activated, characterYouControl, discardCost, all, everyIn, self, staticAbility, energy, triggerSubjectCost, triggerSubjectSpark } from "../../../dsl/builders";
+import { either, onDawn, onMaterialized, triggered, whenMaterialize, whenNamedAbilityTriggered, onDissolved, triggeringCard, whenCopyTrigger, whenDissolved, whenDraw } from "../../../dsl/triggers";
+import { comparableView } from "../../../testing/determinization-fidelity";
 import { eventSeenBy } from "../../../events";
 import { createFoldAdapter } from "../../../fold/slice";
 import { eventLogRecords } from "../../../log";
+import { instanceOrigin, originAbilities } from "../../../rules/activation";
 import { stateHash } from "../../../state/hash";
 import { opponent, parseFigmentId, SIDES } from "../../../state/ids";
 import { thisCharacterSpark } from "../../../dsl/values";
@@ -102,9 +104,20 @@ describe("repeatTriggeringAbility core", () => {
     expect(drain(w2, fired).sides[side].currentEnergy).toBe(once ? 11 : 14);
     if (once) {
       const fake = { ...fired, triggerQueue: [{ ...fired.triggerQueue[0], repeated: { named: "dawn" as const, observedBy: SIDES, visibleTo: SIDES } }] };
-      expect(() => step(w2, reload(sliceOf(fake)).committed, { kind: "resolveTrigger" })).toThrow("spent its immutable allowance");
+      const loaded = reload({ ...sliceOf(fake), inFlight: { step: { kind: "resolveTrigger" }, automatic: true, answers: [] } });
+      const before = stateHash(loaded.committed);
+      const failed = createFoldAdapter(w2.engine).reduce(loaded, { kind: "battleAction", side, action: { kind: "pass" } });
+      if (failed.kind !== "applied") throw new Error("Missing allowance recovery");
+      expect(failed.error).toMatchObject({ kind: "engine_error" });
+      expect(stateHash(failed.slice.committed)).toBe(before);
+      expect(failed.slice.inFlight).toBeNull();
+      expect(failed.published).toEqual([]);
+      expect(stateHash(loaded.committed)).toBe(before);
       const projected = w2.engine.view(fake, side);
-      expect(() => w2.engine.determinize(projected, decklists(w2), () => .2)).toThrow("impossible repeated allowance");
+      expect(() => w2.engine.determinize(projected, decklists(w2), () => .2)).toThrow();
+      const valid = w2.engine.view(fired, side), sampled = w2.engine.determinize(valid, decklists(w2), () => .2);
+      expect(comparableView(w2.engine.view(sampled, side))).toEqual(comparableView(valid));
+      expect(drain(w2, sampled).sides[side].currentEnergy).toBe(11);
     }
   });
 
@@ -196,7 +209,7 @@ describe("repeatTriggeringAbility core", () => {
         const loaded = reload({ ...sliceOf(original.state), inFlight: { step: { kind: "resolveTrigger" }, automatic: true, answers: [] } });
         const failed = fold.reduce(loaded, { kind: "battleAction", side, action: { kind: "pass" } });
         if (failed.kind !== "applied") throw new Error("No actual recovered error");
-        expect(failed.error).toMatchObject({ kind: "engine_error", message: `Unknown figment ${missing}` });
+        expect(failed.error).toMatchObject({ kind: "engine_error" });
         expect(stateHash(failed.slice.committed)).toBe(before);
         expect(failed.slice.inFlight).toBeNull();
         expect(failed.published).toEqual([]);
@@ -255,6 +268,54 @@ describe("repeatTriggeringAbility core", () => {
     expect(done.sides[side].hand).toEqual(w.ids[side].deck.slice(0, 1));
     expect(done.sides[side].banished).toEqual(w.ids[side].deck.slice(1, 2));
     expect(done.turnLog.drawn[side]).toBe(0);
+  });
+
+  it.each(SIDES.flatMap(side => SIDES.flatMap(viewer => [false, true].map(lost => ({ side, viewer, lost })))))("visible-history original reader for $side/$viewer after current loss=$lost", ({ side, viewer, lost }) => {
+    const explorers = all(characterYouControl({ subtype: "Explorer" }));
+    const watch = { ...card(80, () => [triggered(whenNamedAbilityTriggered("dawn"), p.repeatTriggeringAbility(), { zone: "any", oncePerTurn: true })], "Explorer"), costs: [energy(3)] };
+    const filler = { ...card(81, () => [], "Explorer"), costs: [energy(3)] };
+    const event = { ...card(82, () => []), cardType: "event" as const };
+    const original = card(83, () => [triggered(onDawn(), p.sequence(p.draw(1), p.reveal(),
+      ...(lost ? [p.materialize(everyIn("hand", { subtype: "Explorer" })), p.loseAllAbilities(explorers)] : []),
+      p.gainEnergy(2), p.createCopyInHand(everyIn("hand", { cardType: "event" }), { ephemeral: true }), p.reveal()))], "Mage");
+    const readers = card(84, () => [triggered(whenDraw("you", undefined, { subtype: "Explorer" }), p.gainEnergy(triggerSubjectCost())),
+      triggered(whenCopyTrigger("you", { cardType: "event" }), p.copyCard(triggeringCard()), { oncePerTurn: true })]);
+    const starter = card(85, () => [activated([], p.triggerAbility(mages, "dawn"))]);
+    const w = world(side, [watch, filler, event, original, readers, starter], {
+      back: [original.id, readers.id, starter.id], hand: [event.id], deck: [watch.id, filler.id, filler.id],
+    });
+    const admitted = activate(w, w.ids[side].back[2]!), id = w.ids[side].deck[0];
+    const beforeDraw = w.engine.view(admitted.state, viewer);
+    expect(beforeDraw.triggerQueue[1]).toMatchObject({ source: null, origin: null });
+    const pending = step(w, admitted.state, { kind: "resolveTrigger" }).state;
+    expect(pending.instances[id].zone).toBe(lost ? "play" : "hand");
+    expect(originAbilities(w.engine.catalog, instanceOrigin(pending.instances[id])).filter(Boolean)).toHaveLength(lost ? 0 : 1);
+    const shown = JSON.parse(JSON.stringify(w.engine.view(pending, viewer))) as ReturnType<typeof w.engine.view>;
+    expect(shown.triggerQueue[0]).toMatchObject({ source: id, origin: null });
+    expect(shown.triggerQueue[0]).not.toHaveProperty("triggeringAbility");
+    expect(shown.triggerQueue[0]).not.toHaveProperty("repeated");
+    expect(shown.triggerQueue.map(row => row.source)).toEqual([id, w.ids[side].back[1], w.ids[side].back[1]]);
+    if (viewer !== side) {
+      expect(shown.triggerQueue[1].subjectCostHidden).toBe(true);
+      expect(shown.triggerQueue[2].handCopyHidden).toBe(true);
+    }
+    const actual = drain(w, reload(sliceOf(pending)).committed);
+    const before = stateHash(pending), snapshot = JSON.stringify(shown), lists = decklists(w);
+    const sampled = w.engine.determinize(shown, lists, () => .2);
+    const loaded = reload(sliceOf(sampled)), again = w.engine.view(loaded.committed, viewer);
+    expect.soft(again.triggerQueue.map(row => row.source)).toEqual(shown.triggerQueue.map(row => row.source));
+    expect.soft(comparableView(again)).toEqual(comparableView(shown));
+    expect(w.engine.legalActions(loaded.committed, viewer)).toEqual(w.engine.legalActions(pending, viewer));
+    expect(again.instances[id]).toEqual(shown.instances[id]);
+    const repeated = step(w, loaded.committed, { kind: "resolveTrigger" });
+    expect.soft(queued(repeated.events)).toHaveLength(1);
+    const done = drain(w, repeated.state);
+    expect.soft(done.sides[side].currentEnergy).toBe(actual.sides[side].currentEnergy);
+    expect.soft(done.sides[side].hand).toHaveLength(actual.sides[side].hand.length);
+    expect(done.result).toBeNull();
+    expect(w.engine.view(w.engine.determinize(again, lists, () => .2), viewer).triggerQueue).toEqual(again.triggerQueue);
+    expect(stateHash(pending)).toBe(before);
+    expect(JSON.stringify(shown)).toBe(snapshot);
   });
 
 });

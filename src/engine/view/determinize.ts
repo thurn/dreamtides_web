@@ -49,12 +49,14 @@ import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import { Layers } from "../continuous/layers";
 import { matchesFilter, type FilterSubject } from "../continuous/characteristics";
 import { BASE_VARIANT } from "../dsl/types";
-import { namedTriggersOf, worksInZone } from "../dsl/abilities";
+import { abilityEffect, namedTriggersOf, worksInZone } from "../dsl/abilities";
 import { fixedEnergy } from "../dsl/energy";
 import { resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, Trigger, Variant } from "../dsl/types";
 import { triggerBody } from "../triggers/body";
 import { everyNode } from "../effects/interpreter";
+import { primitiveDefinition } from "../effects/registry";
+import type { EffectNode } from "../effects/types";
 import { loopSignature } from "../loops/signature";
 import { emptyLoopTracker } from "../loops/types";
 import { instanceOrigin, originAbilities } from "../rules/activation";
@@ -163,6 +165,11 @@ function shownOccurrences(queue: readonly QueuedTriggerView[]): QueuedTriggerVie
   return result;
 }
 
+/** Every identified pending source is retained, including a withheld historical body. */
+function retainsQueued(trigger: QueuedTriggerView): boolean {
+  return trigger.source !== null || trigger.repeated !== undefined || trigger.triggeringAbility !== undefined;
+}
+
 /** Concrete queued/captured pairs let private restoration replace only its own occurrence. */
 function queuedOccurrencePairs(state: BattleState, view: BattleView) {
   const pairs: { shown: QueuedTriggerView; get: () => QueuedTrigger; set: (trigger: QueuedTrigger) => void }[] = [];
@@ -172,7 +179,7 @@ function queuedOccurrencePairs(state: BattleState, view: BattleView) {
       () => get().triggeringAbility!.occurrence,
       trigger => { const parent = get(); set({ ...parent, triggeringAbility: { ...parent.triggeringAbility!, occurrence: trigger } }); });
   };
-  view.triggerQueue.filter(trigger => trigger.repeated !== undefined || trigger.triggeringAbility !== undefined || trigger.source !== null && trigger.origin !== null).forEach((shown, index) =>
+  view.triggerQueue.filter(retainsQueued).forEach((shown, index) =>
     add(shown, () => state.triggerQueue[index], trigger => { state.triggerQueue[index] = trigger; }));
   return pairs;
 }
@@ -573,10 +580,21 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
   }
   const hasNamed = (trigger: Trigger, named: import("../dsl/types").NamedTrigger): boolean =>
     trigger.on === named || trigger.on === "either" && trigger.triggers.some(branch => hasNamed(branch, named));
-  const hiddenCause = (shown: QueuedTriggerView, named: import("../dsl/types").NamedTrigger): Pick<QueuedTrigger, "source" | "origin"> => {
-    if (shown.origin !== null || shown.kind !== undefined || shown.anonymousSource !== undefined || shown.source !== null && typeof shown.source !== "string") throw new Error("Cannot determinize inconsistent anonymous cause");
+  // A pending definition can precede current losses. Its printing/variant still
+  // constrain it; represented gained groups matter only past its own indexes.
+  const historicalOrigin = (instance: CardInstance, ability: number): QueuedTrigger["origin"] => {
+    const origin = instanceOrigin(instance);
+    if (origin.kind === "card") {
+      const { lost: _lost, gained, ...printed } = origin;
+      return ability < catalog.card(origin.cardId).abilities(origin.variant).length || gained === undefined ? printed : { ...printed, gained };
+    }
+    if (origin.kind === "figment") { const { lost: _lost, ...printed } = origin; return printed; }
+    return origin;
+  };
+  const hiddenCause = (shown: QueuedTriggerView, named?: import("../dsl/types").NamedTrigger): Pick<QueuedTrigger, "source" | "origin"> => {
+    if (shown.origin !== null || shown.kind !== undefined || shown.anonymousSource !== undefined) throw new Error("Cannot determinize inconsistent anonymous cause");
     const candidates: Pick<QueuedTrigger, "source" | "origin">[] = [];
-    const add = (source: InstanceId, origin: QueuedTrigger["origin"], zone?: import("../state/ids").Zone) => {
+    const add = (source: AbilitySource, origin: QueuedTrigger["origin"], zone?: import("../state/ids").Zone) => {
       const ability = originAbilities(catalog, origin)[shown.ability];
       if (ability === undefined || (shown.node === null && ability.kind !== "triggered")) return;
       if (shown.node === null && ability.kind === "triggered" && zone !== undefined && !worksInZone(ability.zone, zone)) return;
@@ -584,14 +602,26 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
         const body = triggerBody(catalog, origin, shown.ability, shown.node);
         if (shown.repeated !== undefined && (shown.node === null ? ability.kind === "triggered" && ability.oncePerTurn === true
           : (everyNode(body.root)[shown.node] as import("../effects/primitives/floating-trigger").FloatingTriggerNode).once)) return;
-        if (hasNamed(body.trigger, named)) candidates.push({ source, origin });
+        if (named === undefined || hasNamed(body.trigger, named)) candidates.push({ source, origin });
       }
       catch { /* An unrelated catalog body is outside this sampled cause's domain. */ }
     };
-    for (const instance of Object.values(instances)) {
-      if ((shown.source === instance.id || !(instance.id in view.instances)) && instance.controller === shown.controller) add(typeof shown.source === "string" ? shown.source : instance.id, instanceOrigin(instance), instance.zone);
+    if (typeof shown.source === "string") {
+      const instance = instances[shown.source];
+      if (instance !== undefined) add(shown.source, historicalOrigin(instance, shown.ability));
+    } else if (shown.source !== null) {
+      const source = shown.source;
+      if (source.kind === "avatar") {
+        const avatar = sides[source.side]?.avatar;
+        if (avatar != null) add(copy(source), { kind: "avatar", id: avatar.id });
+      } else if (source.kind === "dreamsign") {
+        const dreamsign = sides[source.side]?.dreamsigns[source.index];
+        if (dreamsign !== undefined) add(copy(source), { kind: "dreamsign", id: dreamsign.id });
+      }
+    } else for (const instance of Object.values(instances)) {
+      if (!(instance.id in view.instances) && instance.controller === shown.controller) add(instance.id, instanceOrigin(instance), instance.zone);
     }
-    if (candidates.length === 0) {
+    if (candidates.length === 0 && shown.source === null) {
       const source: InstanceId = typeof shown.source === "string" ? shown.source : `i${next++}`;
       for (const card of catalog.cardDefinitions) {
         for (const variant of [BASE_VARIANT, { amplified: true }]) add(source, { kind: "card", cardId: card.id, variant });
@@ -600,6 +630,51 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     const selected = candidates[Math.floor(random() * candidates.length)];
     if (selected === undefined) throw new Error("Cannot determinize a cause without a compatible named occurrence");
     return selected;
+  };
+  const readsRepeat = (effect: EffectNode, seen = new Set<EffectNode>()): boolean => {
+    if (effect.op === "floatingTrigger" || seen.has(effect)) return false;
+    seen.add(effect);
+    const definition = primitiveDefinition(effect.op);
+    return effect.op === "repeatTriggeringAbility" || [...definition.children?.(effect) ?? [], ...definition.deferred?.(effect) ?? []].some(child => readsRepeat(child, seen));
+  };
+  // Withheld bindings are sampled from direct named occasions. Such a cause
+  // has no invented predecessor, even when its body also watches admissions.
+  const sampledBinding = (shown: QueuedTriggerView, origin: QueuedTrigger["origin"]): QueuedTrigger["triggeringAbility"] => {
+    const body = triggerBody(catalog, origin, shown.ability, shown.node);
+    const branches = (trigger: Trigger): Extract<Trigger, { on: "namedAbilityTriggered" }>[] => trigger.on === "either"
+      ? trigger.triggers.flatMap(branches) : trigger.on === "namedAbilityTriggered" ? [trigger] : [];
+    const observers = readsRepeat(body.effect) ? branches(body.trigger) : [];
+    if (observers.length === 0) return undefined;
+    const observer = observers[Math.floor(random() * observers.length)];
+    const controller = resolvePlayer(shown.controller, observer.player);
+    const candidates: QueuedTrigger[] = [];
+    const add = (source: AbilitySource, candidateOrigin: QueuedTrigger["origin"]): void => {
+      originAbilities(catalog, candidateOrigin).forEach((ability, index) => {
+        const root = abilityEffect(ability);
+        if (root === null) return;
+        const nodes: (number | null)[] = ability.kind === "triggered" ? [null] : [];
+        everyNode(root).forEach((node, at) => { if (node.op === "floatingTrigger") nodes.push(at); });
+        for (const node of nodes) {
+          const candidate = triggerBody(catalog, candidateOrigin, index, node);
+          if (!hasNamed(candidate.trigger, observer.named)) continue;
+          const selfSubject = observer.named === "materialized" || observer.named === "challenge" || observer.named === "dissolved";
+          if (selfSubject && typeof source !== "string") continue;
+          candidates.push({ source, origin: copy(candidateOrigin), controller, ability: index, node,
+            subject: selfSubject && typeof source === "string" ? source : null,
+            ...(selfSubject ? { subjectHiddenFrom: [...SIDES] } : {}), historyHiddenFrom: [...SIDES] });
+        }
+      });
+    };
+    for (const instance of Object.values(instances)) if (instance.controller === controller) add(instance.id, instanceOrigin(instance));
+    if (sides[controller].avatar !== null) add({ kind: "avatar", side: controller }, { kind: "avatar", id: sides[controller].avatar.id });
+    sides[controller].dreamsigns.forEach((dreamsign, index) => add({ kind: "dreamsign", side: controller, index }, { kind: "dreamsign", id: dreamsign.id }));
+    if (candidates.length === 0) {
+      const source: InstanceId = `i${next++}`;
+      for (const card of catalog.cardDefinitions) for (const variant of [BASE_VARIANT, { amplified: true }]) add(source, { kind: "card", cardId: card.id, variant });
+    }
+    const occurrence = candidates[Math.floor(random() * candidates.length)];
+    if (occurrence === undefined) throw new Error("Cannot determinize a withheld reader without a compatible named cause");
+    return { named: observer.named, occurrence, observedBy: [], readerObservedBy: [] };
   };
   const restoreQueued = (shown: QueuedTriggerView, named?: import("../dsl/types").NamedTrigger): QueuedTrigger | null => {
     named ??= shown.repeated;
@@ -614,7 +689,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       identity = { source, origin: copy(shown.origin) };
     } else identity = shown.source !== null && shown.origin !== null
       ? { source: copy(shown.source), origin: copy(shown.origin) }
-      : named === undefined ? null : hiddenCause(shown, named);
+      : named === undefined && !retainsQueued(shown) ? null : hiddenCause(shown, named);
     if (identity !== null && named !== undefined && (shown.kind !== undefined ||
       !hasNamed(triggerBody(catalog, identity.origin, shown.ability, shown.node).trigger, named))) throw new Error("Cannot determinize invalid named cause");
     if (identity === null) return null;
@@ -629,6 +704,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       ...(shown.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: shown.lastKnownSourceSpark }) };
     return {
       ...identity,
+      ...(shown.origin === null ? { historyHiddenFrom: [...SIDES] } : {}),
       ...(shown.repeated === undefined ? {} : { repeated: { named: shown.repeated, observedBy: shown.origin === null ? [] : [view.viewer], visibleTo: [view.viewer] } }),
       ...(shown.kind === "dreamwellBonus" ? { kind: shown.kind } : {}),
       ...(shown.linkedSource === undefined ? {} : { linkedSource: copy(shown.linkedSource) }),
@@ -643,7 +719,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       ...(shown.discardedCount === undefined ? {} : { discardedCount: shown.discardedCount }),
       ...(shown.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: shown.lastKnownSourceSpark }),
       ...(shown.captured === undefined ? {} : { captured: captured(shown.captured) }),
-      ...(shown.triggeringAbility === undefined ? {} : { triggeringAbility: { named: shown.triggeringAbility.named,
+      ...(shown.triggeringAbility === undefined ? shown.origin === null ? { triggeringAbility: sampledBinding(shown, identity.origin) } : {} : { triggeringAbility: { named: shown.triggeringAbility.named,
         occurrence: restoreQueued(shown.triggeringAbility.occurrence, shown.triggeringAbility.named)!,
         observedBy: shown.triggeringAbility.occurrence.origin === null ? [] : [view.viewer],
         readerObservedBy: [view.viewer] } }),

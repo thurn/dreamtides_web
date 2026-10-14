@@ -578,6 +578,8 @@ export interface HandCopyContext {
 }
 
 interface QueuedAbility {
+  /** Sampled historical context withheld by the input view, independent of current source visibility. */
+  readonly historyHiddenFrom?: readonly Side[];
   /** Audience and named classification of an actual explicitly repeated pending occurrence. */
   readonly repeated?: { readonly named: import("../dsl/types").NamedTrigger; readonly observedBy: readonly Side[]; readonly visibleTo: readonly Side[] };
   /** Exact causing named occurrence, retained only for an immediate repeat reader. */
