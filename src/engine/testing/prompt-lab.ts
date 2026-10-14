@@ -74,6 +74,15 @@ function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHook
 
 /** The lab's own cards. */
 export const LAB = {
+  /** One current hand character chosen privately as this event resolves. */
+  materializeChosen: labEvent(0x48100, 0, p.materializeChosen(2)),
+  /** Optionality is a separate confirmation before the private hand choice. */
+  optionalMaterializeChosen: labEvent(0x48101, 0, p.optional(p.materializeChosen(3))),
+  /** Current source counters are read after the preceding store instruction. */
+  counterMaterializeChosen: {
+    ...SYNTHETIC.vanilla0, id: syntheticId(0x48402), status: "authored",
+    abilities: () => [triggered({ on: "materialized" }, p.sequence(p.storeCounters(2), p.materializeChosen({ value: "storedCounters" })))],
+  },
   /** Mandatory effective-spark capture prepares exact-X targets before payment. */
   capturedSparkPlay: {
     ...SYNTHETIC.event0, id: syntheticId(0x60900), costs: [energy(1)], status: "authored",
@@ -303,6 +312,9 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [LAB.materializeChosen.id]: { name: "Lab Hand Arrival", text: "Materialize a ≤2● cost character from your hand." },
+  [LAB.optionalMaterializeChosen.id]: { name: "Lab Hand Invitation", text: "You may materialize a ≤3● cost character from your hand." },
+  [LAB.counterMaterializeChosen.id]: { name: "Lab Stored Arrival", text: "Materialized: Store 2⧗, then materialize a character from your hand with cost at most your stored ⧗." },
   [DSL.optionalEnergyTarget.id]: { name: "Lab Optional Energy", text: "Fast. You may pay an additional 3●. Dissolve a ≤2✦ enemy, or any enemy if paid." },
   [DSL.optionalDiscardTarget.id]: { name: "Lab Optional Discard", text: "Interrupt. You may discard a card as an additional cost. Dissolve a ≤2● cost enemy, or any enemy if paid." },
   [LAB.capturedSparkPlay.id]: { name: "Lab Captured Spark", text: "To play this event, abandon a character. Dissolve an enemy with X✦, where X is its spark." },
@@ -751,6 +763,31 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       player: { hand: deck(BATTLE.handLimit + 2), deck: deck(6) },
       enemy: { deck: deck(6) },
     },
+    script: [],
+  },
+  {
+    name: "materialize-chosen", description: "Privately materialize one current hand character",
+    setup: { active: "player", phase: "day", player: { hand: [LAB.materializeChosen.id, SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id, SYNTHETIC.event0.id], energy: 3, deck: deck(6) }, enemy: { hand: [SYNTHETIC.vanilla3.id], deck: deck(6) } },
+    script: [],
+  },
+  {
+    name: "optional-materialize-chosen", description: "Accept or decline a private hand materialization",
+    setup: { active: "player", phase: "day", player: { hand: [LAB.optionalMaterializeChosen.id, SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla5.id, SYNTHETIC.event0.id], energy: 3, deck: deck(6) }, enemy: { hand: [SYNTHETIC.vanilla3.id], deck: deck(6) } },
+    script: [],
+  },
+  {
+    name: "counter-materialize-chosen", description: "Resolve a hand cost maximum from current source counters",
+    setup: { active: "player", phase: "day", player: { hand: [LAB.counterMaterializeChosen.id, SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id, SYNTHETIC.event0.id], energy: 3, deck: deck(6) }, enemy: { hand: [SYNTHETIC.vanilla3.id], deck: deck(6) } },
+    script: [],
+  },
+  {
+    name: "materialize-chosen-enemy", description: "Observe the opponent's private hand choice and public arrival",
+    setup: { active: "enemy", phase: "day", enemy: { hand: [LAB.materializeChosen.id, SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id], energy: 0, deck: deck(6) }, player: { hand: [SYNTHETIC.vanilla3.id], deck: deck(6) } },
+    script: [],
+  },
+  {
+    name: "optional-materialize-chosen-enemy-2", description: "Observe the opponent accepting or declining a private arrival",
+    setup: { active: "enemy", phase: "day", enemy: { hand: [LAB.optionalMaterializeChosen.id, SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla5.id], energy: 0, deck: deck(6) }, player: { hand: [SYNTHETIC.vanilla3.id], deck: deck(6) } },
     script: [],
   },
   {

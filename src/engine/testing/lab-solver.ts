@@ -248,6 +248,17 @@ function discoveries(effect: Effect): CardFilter[] {
   });
 }
 
+/** Own-hand materialization stages fixed maxima and the source's initial zero stored-counter bound. */
+function chosenHandMaterializations(effect: Effect): CardFilter[] {
+  return everyNode(effect).flatMap((node) => {
+    const chosen = node as Effect;
+    if (chosen.op !== "materializeChosen") return [];
+    const bound = chosen.costAtMost;
+    if (typeof bound === "number") return bound < 0 ? [] : [{ cardType: "character", costAtMost: bound }];
+    return bound.value === "storedCounters" ? [{ cardType: "character", costAtMost: 0 }] : [];
+  });
+}
+
 /** A void reference's filter narrowed by a constant cost bound. */
 function boundedFilter(filter: CardFilter, atMost: number | undefined): CardFilter {
   return atMost === undefined ? filter : { ...filter, costAtMost: Math.min(atMost, filter.costAtMost ?? atMost) };
@@ -478,6 +489,8 @@ export function labBoard(
     stageVoid(spec, subjectCost);
   }
   const played = [...abilities.flatMap((ability) => (ability.kind === "event" ? [ability.effect] : [])), ...materialized];
+  const chosenHandEffects = [...played, ...abilities.flatMap((ability) => ability.kind === "activated" ? [ability.effect] : [])];
+  for (const filter of chosenHandEffects.flatMap(chosenHandMaterializations)) hands[side].push(cardFor(engine, filter, pool));
   for (const filter of played.flatMap(opponentHandChoices)) hands[opponent(side)].push(cardFor(engine, filter, pool));
   for (const filter of played.flatMap(discoveries)) decks[side].push(cardFor(engine, filter, pool));
   for (const { player, filter } of played.flatMap((effect) => voidMaterializations(effect, xRange))) {

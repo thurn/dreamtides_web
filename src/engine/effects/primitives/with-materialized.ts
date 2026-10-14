@@ -3,6 +3,7 @@ import type { BattleState } from "../../state/types";
 import { resolveNode } from "../interpreter";
 import { definePrimitive, type CapturedCardsSpec, type EffectEnv, type EffectNode } from "../types";
 import type { MaterializeNode } from "./materialize";
+import type { MaterializeChosenNode } from "./materialize-chosen";
 import type { MaterializeFigmentsNode } from "./materialize-figments";
 
 /**
@@ -21,7 +22,7 @@ import type { MaterializeFigmentsNode } from "./materialize-figments";
  */
 export interface WithMaterializedNode {
   readonly op: "withMaterialized";
-  readonly materialize: MaterializeNode | MaterializeFigmentsNode;
+  readonly materialize: MaterializeNode | MaterializeFigmentsNode | MaterializeChosenNode;
   readonly effect: EffectNode;
 }
 
@@ -51,7 +52,7 @@ export const withMaterializedPrimitive = definePrimitive<WithMaterializedNode>({
 });
 
 /** Resolves `materialize`, then `effect` with the characters it materialized as `capturedCards()`. */
-export function withMaterialized(materialize: MaterializeNode | MaterializeFigmentsNode, effect: EffectNode): WithMaterializedNode {
+export function withMaterialized(materialize: MaterializeNode | MaterializeFigmentsNode | MaterializeChosenNode, effect: EffectNode): WithMaterializedNode {
   return { op: "withMaterialized", materialize, effect };
 }
 

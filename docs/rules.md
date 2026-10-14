@@ -1416,6 +1416,17 @@ Putting a character directly into play (for example "return to play" or
 "materialize from your void") is not "playing" it: it costs no energy, does not
 use the stack, cannot be Prevented, and does not fire "when you play" triggers.
 
+**Choosing a character from hand** — "Materialize a ≤X● cost character from
+your hand" lets the effect's controller privately choose one matching card
+from the hand they currently hold as that instruction resolves. Compare each
+card's current character type and copiable cost with X read at that moment.
+This choice is not a target. With no matching card, the instruction does
+nothing. The selected card enters under the controller's control through the
+ordinary materialization and capacity rules; it is not played and its printed
+costs are not paid. Other cards in the hand are not revealed by this choice.
+"You may" asks independently whether to perform the instruction before
+choosing a card.
+
 "Discover a character and materialize it" completes the Discover first: the
 chosen card enters your hand and your deck is shuffled. That same character
 then enters play under your control. If the back rank is full when it would

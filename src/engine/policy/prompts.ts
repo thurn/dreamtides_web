@@ -224,6 +224,7 @@ const ROLE_STRATEGIES = {
   lookAtTopBanish: { cards: "gain", number: "largest", chain: "finite" },
   lookAtTop: { cards: "gain", number: "largest", chain: "finite" },
   discover: { cards: "gain", number: "largest", chain: "finite" },
+  materializeChosen: { cards: "gain", number: "largest", chain: "finite" },
   // A free cost to look for, never paid: no answer does less.
   discoverCost: { cards: "hostile", number: "discoverCost", chain: "finite" },
   // An optional take of one card accepts none; a take of several asks its "you may" (youMay) first, then takes the most valuable cards.

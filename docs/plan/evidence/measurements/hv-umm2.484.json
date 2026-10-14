@@ -1,0 +1,3820 @@
+{
+  "bead": "hv-umm2.484",
+  "base": "8775edcaa23ee93b330d71577bc47d4b89db6cfb",
+  "status": "final-commit-authorized-prospective-clock",
+  "clock": {
+    "nativeDispatchStart": "2026-10-14T18:55:02.162Z",
+    "nativeDispatchCall": "call_67d46f35488a40d1aea05b97e8e0ad59",
+    "nativeOrdinal": 61331,
+    "marker": "/tmp/root484-20261014/parent-dispatch-native-v01.json",
+    "modelSampling": "UNKNOWN",
+    "evidenceCutoff": "2026-10-14T20:09:51.252383+00:00",
+    "gitTail": "Prospective pre-Git marker recorded immediately before final schema/staging/cached diff and authorized one commit. Actual Git duration/end and full gross elapsed recorded externally in final archive, without tracked post-commit rewrite.",
+    "included": "Continuous gross elapsed research, parent waits, iterations, heavy lock/start, all validation, QA failures, parent justiciar recovery, evidence revisions and commit-ACK wait through prospective pre-Git marker. Final schema/staging/commit tail recorded externally. Setup separate; modelSampling UNKNOWN.",
+    "prospectivePreGitEnd": "2026-10-14T20:16:36.252276+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review-live-host-v04 test-related child start at 2026-10-14T19:51:39.074Z; actual one-minute value 8.5703125."
+      },
+      "implementMin": {
+        "measuredFor": "Continuous dispatch to prospective pre-Git marker; actual final checks/staging/Git tail external."
+      }
+    }
+  },
+  "scope": {
+    "newPrimitives": [
+      "materializeChosen"
+    ],
+    "newRoles": [
+      "materializeChosen"
+    ],
+    "newStateFields": 0,
+    "newEvents": 0,
+    "productionEntitiesAuthored": 0,
+    "rulesDecision": "hv-umm2.484-1",
+    "preExistingIssues": 0,
+    "localReviewFullRequired": false,
+    "labStaging": "Fixed nonnegative literal and direct storedCounters baseline zero only. Arbitrary other ValueExpr resolves through existing evaluate but this helper deliberately does not stage it.",
+    "readOnlyProductionConsumers": [
+      "87f075b1-b058-4570-a75f-c4f8f544e192 original148",
+      "ccbefadc-aab8-4f8c-a705-07bd70c91731 original182"
+    ]
+  },
+  "sourceFreeze": {
+    "path": "/tmp/root484-20261014/final-source-freeze-v03.json",
+    "sha256": "dc1af3eb1e23a8bdb4b14878b430fe4f2dde2650c0d59445ac8c510ca12204b5",
+    "source": {
+      "src/engine/effects/primitives/materialize-chosen.ts": "d7c813e91e6e9986718d747146c9ec67b744ac4fc481507f436f0aa1825e0efd",
+      "src/engine/effects/primitives/index.ts": "93bfea7caccc6f3898e8f9981967d3d34b90cbe1643e9ddb7c4b24da8bba8f1c",
+      "src/engine/effects/registry.ts": "94f71d375c598d243384ff6e840bae51f88574ac9b6cf9c0e9af1d41c70870ff",
+      "src/engine/prompts/types.ts": "4d672c86ec04a7d21e8f9a0d3ff72b315f87902c512dc81266332903119b651e",
+      "src/runtime/battle-prompt-messages.ts": "4fbb0d61f5b6c7145c5290e8a8c517962171e61f787cda61afd2a912049df51c",
+      "src/engine/policy/prompts.ts": "28fde2722dfe8e957248c8a4ad7a96d8c7153c84059d35b9760cb82ecbf5f9e9",
+      "src/engine/testing/prompt-lab.ts": "8d4119ef3ca9275ae24cb271c8c35f4a16f271c4fc4fdd9d81312226c84ef263",
+      "src/screens/cumulus_adapters/engine-battle-view-model.test.ts": "64427110d2c9e65cb0244262ef9cc01460b912bddcb1a1fbf310820554eb5d1d",
+      "src/engine/testing/lab-solver.ts": "eab82f0a2372e7f443fcad181f8b609de9348ea2b857059e97a983a5f5ed48a0",
+      "src/engine/effects/primitives/with-materialized.ts": "f2930b47196ced45f795301f431b4a675d2076c9b79b5f2cc2c76cf66ccaaf40",
+      "src/engine/effects/primitives/contracts/materialize-chosen.contracts.ts": "3ce9d35892518327cbea4b4feda77552c23faa50ce3a621b39dc6d62079313de",
+      "docs/rules.md": "badd9e06c150708d1d603c8d40484f801f3502cb5a2c2436e8d1baf9de2b5455"
+    },
+    "RD": {
+      "docs/plan/evidence/rules-decisions/hv-umm2.484-1.md": "ff45bfb512577b4fd885724c004da2423ec30f28bf3cef0f3a9173ab4986c342"
+    },
+    "finalFixtureChanges": "Only two own enemy registration energy/irrelevant free-hand entries then two own enemy script[] metadata lines cumulative. Canonical node, tests, rules, RD and LAB definitions unchanged."
+  },
+  "contracts": {
+    "module": "src/engine/effects/primitives/contracts/materialize-chosen.contracts.ts",
+    "lines": 319,
+    "cases": 54,
+    "actors": [
+      "player",
+      "enemy"
+    ],
+    "titles": [
+      "selects the non-first physical duplicate, privately, with arrival triggers but no selected play or payment",
+      "uses the fixed maximum of $0.id",
+      "handles zero, negative, empty or unmatched hands",
+      "filters current effective types, copiable deck-mod costs and amplified variants",
+      "composes optional accepted=%s independently",
+      "preserves earlier opposing knowledge while hiding unknown eligible identities until arrival",
+      "retains foreign ownership and binds only the exact successfully materialized card",
+      "captures actual arrivals when %i back slots precede the source trigger",
+      "blocks a hand source and activated entry ability at full back capacity",
+      "reads live post-instruction source counters and stages fixed/direct-counter forms for the lab",
+      "uses the precise own-payment departure snapshot",
+      "rechecks the current hand after interruption and uses zero after opposing source departure",
+      "ignores temporary play-cost discounts when filtering copiable cost",
+      "accepts an optional instruction with no eligible character without a card prompt",
+      "reads this physical source's current counters=%i independently",
+      "lets live reentry zero supersede an own-payment counter snapshot",
+      "materializes a current copiable hand copy without selecting the original",
+      "saves and reconstructs each prompt, refuses invalid/stale/concurrent answers, and commits once",
+      "rolls back failure after arrival without partial rank, zones, RNG or published events"
+    ],
+    "failurePaths": [
+      "empty, noneligible, negative or zero bounds",
+      "full capacity legality and canonical capacityReached; partly full actual cohort capture",
+      "optional false without chooser; accepted empty",
+      "effective event-to-character and character-to-event DeckMods, costReduction and amplified variant",
+      "copiable hand copy and preserved identity; temporary play discount excluded",
+      "live post-store counters, physical duplicate source counters, precise countersCost departure snapshot and returned source eligibility",
+      "opposing source departure resets counters; current reentry zero supersedes own-payment snapshot",
+      "current hand after interruption",
+      "unknown opposing candidates hidden; earlier legitimate known candidate remains known; selected arrival public",
+      "foreign owner preserved; withMaterialized exact successful enteredPlay cohort",
+      "mid-confirm/mid-choice save/reconstruct/full-state replay",
+      "invalid empty/multiple/duplicate/noncandidate/opponent answer, foreign side, stale attempt, concurrent stepInFlight, notCancellable, old noPendingPrompt",
+      "synthetic failure after actual arrival rolls back zones/ranks/RNG/triggerqueue and partial publication"
+    ],
+    "privacyQualification": "Generic promptView uses current knows; this work preserves existing previously known candidates rather than inventing unconditional privateTo redaction.",
+    "oldMaterialize": "Unchanged canonical transition and existing contract suite checked; withMaterialized existing capture/resolve body byte-preserved, only new type import/two unions."
+  },
+  "validation": {
+    "finalEpochChecks": {
+      "at": "2026-10-14T19:53:36.413252+00:00",
+      "freezeSHA256": "dc1af3eb1e23a8bdb4b14878b430fe4f2dde2650c0d59445ac8c510ca12204b5",
+      "recipeSHA256": "0d0974c4643bdb7b48317a28126fe107e39dc1ee4ca2152e1555cebf45025b75",
+      "checks": [
+        {
+          "name": "sdk-preflight-live-host-v03",
+          "argv": [
+            "npx",
+            "tsx",
+            "/tmp/root484-20261014/preflight-live-host-v03.mts"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:51:17.059497+00:00",
+          "end": "2026-10-14T19:51:18.593838+00:00",
+          "exit": 0,
+          "wallSeconds": 1.5342372090090066,
+          "pid": 56749,
+          "pgid": 56749,
+          "load": "{ 8.00 9.93 8.67 }",
+          "groupRemainingAtExit": [],
+          "rawSHA256": {
+            ".stdout": "5abb349cf890a5031660600514733ad4b1190650c6e011c95491ddf9f3dd3fe9",
+            ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        {
+          "name": "consumption-live-host-v03",
+          "argv": [
+            "npx",
+            "tsx",
+            "/tmp/worker484-20261014/fuzz-consumption484.mts",
+            "/tmp/root484-20261014/fuzz-consumption-live-host-v03.json"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:51:18.661063+00:00",
+          "end": "2026-10-14T19:51:19.879586+00:00",
+          "exit": 0,
+          "wallSeconds": 1.2183834160096012,
+          "pid": 56933,
+          "pgid": 56933,
+          "load": "{ 8.00 9.89 8.67 }",
+          "groupRemainingAtExit": [],
+          "rawSHA256": {
+            ".stdout": "308056db46c9f428611bb66060584a51a544e3dbe0cd703c93c21a5b98e30d00",
+            ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        {
+          "name": "focused-live-host-v03",
+          "argv": [
+            "npm",
+            "test",
+            "--",
+            "src/engine/effects/primitives/contracts.test.ts",
+            "src/engine/testing/tooling.test.ts",
+            "src/engine/testing/tooling-card-lab.test.ts",
+            "src/engine/testing/lab-preflight.test.ts",
+            "src/screens/cumulus_adapters/engine-battle-view-model.test.ts",
+            "src/engine/view/view-knowledge.test.ts"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:51:19.947467+00:00",
+          "end": "2026-10-14T19:51:37.305478+00:00",
+          "exit": 0,
+          "wallSeconds": 17.357719833991723,
+          "pid": 57023,
+          "pgid": 57023,
+          "load": "{ 8.00 9.89 8.67 }",
+          "groupRemainingAtExit": [],
+          "rawSHA256": {
+            ".stdout": "d8c7f13bddfced5c87801a87f49e350c1615ae15ae95dee78d4f333ec9f5f63f",
+            ".stderr": "265997471b8faa46b6f2142de7f1b8092ea812fe4d7d76475bcb22c48de2344b"
+          }
+        },
+        {
+          "name": "review-live-host-v04",
+          "argv": [
+            "npm",
+            "run",
+            "review"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:51:37.380500+00:00",
+          "end": "2026-10-14T19:52:40.279270+00:00",
+          "exit": 0,
+          "wallSeconds": 62.89794249998522,
+          "pid": 62261,
+          "pgid": 62261,
+          "load": "{ 8.57 9.90 8.70 }",
+          "groupRemainingAtExit": [],
+          "rawSHA256": {
+            ".stdout": "48ea9bc143b9de769c85e192247def083b17353e3e3d6dbc092a6745fbff256d",
+            ".stderr": "265997471b8faa46b6f2142de7f1b8092ea812fe4d7d76475bcb22c48de2344b"
+          }
+        },
+        {
+          "name": "knip-live-host-v03",
+          "argv": [
+            "npm",
+            "run",
+            "knip"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:52:40.356922+00:00",
+          "end": "2026-10-14T19:52:44.786441+00:00",
+          "exit": 0,
+          "wallSeconds": 4.42913683297229,
+          "pid": 66710,
+          "pgid": 66710,
+          "load": "{ 10.58 10.23 8.90 }",
+          "groupRemainingAtExit": [],
+          "rawSHA256": {
+            ".stdout": "56c4398c31d5b9ac0d106bc5784ada9a2b4cdc98adc66bb19ed0f7bcb3950733",
+            ".stderr": "265997471b8faa46b6f2142de7f1b8092ea812fe4d7d76475bcb22c48de2344b"
+          }
+        },
+        {
+          "name": "qa-syntax-v05",
+          "argv": [
+            "node",
+            "--check",
+            "/tmp/root484-20261014/qa-chosen-hand-v05.mjs"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:52:44.849027+00:00",
+          "end": "2026-10-14T19:52:44.893279+00:00",
+          "exit": 0,
+          "wallSeconds": 0.044161333004012704,
+          "pid": 67154,
+          "pgid": 67154,
+          "load": "{ 10.46 10.21 8.90 }",
+          "groupRemainingAtExit": [],
+          "rawSHA256": {
+            ".stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        {
+          "name": "live-host-validation-pipeline-v01",
+          "argv": [
+            "python3",
+            "/tmp/root484-20261014/live-host-validation-v01.py"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:51:17.016460+00:00",
+          "end": "2026-10-14T19:52:44.941140+00:00",
+          "exit": 0,
+          "wallSeconds": 87.92359324998688,
+          "pid": 56688,
+          "pgid": 56688,
+          "load": "{ 8.00 9.93 8.67 }",
+          "groupRemainingAtExit": [],
+          "rawSHA256": {
+            ".stdout": "7bf174af6b9ff8f7622a754a4da07996adc9b7950970c18280316c4f79b81077",
+            ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      ],
+      "sourceVerified": 15,
+      "groupsGone": [
+        56688,
+        56749,
+        56933,
+        57023,
+        62261,
+        66710,
+        67154
+      ],
+      "QAUnexecuted": true
+    },
+    "counts": {
+      "focused": 4147,
+      "reviewTests": 7725,
+      "reviewFiles": 306,
+      "SDKCells": 6
+    },
+    "SDK": "Actual runCardLabPreflight with real LAB catalog and both sides. Production CLI UUID lookup rejects nonproduction LAB IDs; private SDK used. No mutable production/copy/default-choice golden tests.",
+    "fuzz300": {
+      "result": {
+        "owned": {
+          "started": "2026-10-14T19:21:29.153Z",
+          "pid": 47760,
+          "pgid": 47716,
+          "load": "{ 20.66 18.76 13.07 }",
+          "argv": [
+            "/opt/homebrew/Cellar/node@24/24.16.0/bin/node",
+            "/tmp/worker484-20261014/fuzz484.mts"
+          ]
+        },
+        "started": "2026-10-14T19:21:29.153Z",
+        "end": "2026-10-14T19:24:27.560Z",
+        "wallSeconds": 178.40381104200003,
+        "games": 300,
+        "requested": 300,
+        "steps": 152317,
+        "prompts": 4112,
+        "failures": 0,
+        "interactiveEvery": 10,
+        "interactiveGames": 30,
+        "reruns": 455,
+        "targetCoverage": [
+          {
+            "target": {
+              "kind": "card",
+              "uuid": "5e5e5e5e-0000-4000-8000-000000048400"
+            },
+            "included": 1062,
+            "exercised": 567
+          },
+          {
+            "target": {
+              "kind": "card",
+              "uuid": "5e5e5e5e-0000-4000-8000-000000048401"
+            },
+            "included": 1040,
+            "exercised": 545
+          },
+          {
+            "target": {
+              "kind": "card",
+              "uuid": "5e5e5e5e-0000-4000-8000-000000048402"
+            },
+            "included": 1022,
+            "exercised": 496
+          }
+        ],
+        "chooser": {
+          "nonforcedPromptsAndAnswers": 707,
+          "forcedPromptsAndAnswers": 335,
+          "successfulNonforcedArrivals": 707,
+          "interactiveRole": {
+            "opened": 70,
+            "answered": 70
+          }
+        },
+        "summaries": [
+          {
+            "ordinal": 0,
+            "seed": "chosen-hand484-0",
+            "steps": 464,
+            "prompts": 11,
+            "finalHash": "0babbf230f594e",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 1,
+            "seed": "chosen-hand484-1",
+            "steps": 420,
+            "prompts": 9,
+            "finalHash": "0a2c636301fa86",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 2,
+            "seed": "chosen-hand484-2",
+            "steps": 483,
+            "prompts": 12,
+            "finalHash": "0316efeef7110f",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 3,
+            "seed": "chosen-hand484-3",
+            "steps": 619,
+            "prompts": 19,
+            "finalHash": "0e2854e302f8bb",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 4,
+            "seed": "chosen-hand484-4",
+            "steps": 546,
+            "prompts": 11,
+            "finalHash": "09b30607b2307b",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 5,
+            "seed": "chosen-hand484-5",
+            "steps": 728,
+            "prompts": 10,
+            "finalHash": "0d5ec272e566a6",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 6,
+            "seed": "chosen-hand484-6",
+            "steps": 408,
+            "prompts": 7,
+            "finalHash": "02dbf3358a5b28",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 7,
+            "seed": "chosen-hand484-7",
+            "steps": 502,
+            "prompts": 9,
+            "finalHash": "1e5a28aed5a00d",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 8,
+            "seed": "chosen-hand484-8",
+            "steps": 747,
+            "prompts": 11,
+            "finalHash": "1a13e28f1e1c88",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 9,
+            "seed": "chosen-hand484-9",
+            "steps": 451,
+            "prompts": 10,
+            "finalHash": "111b566ccb8d73",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 10,
+            "seed": "chosen-hand484-10",
+            "steps": 632,
+            "prompts": 29,
+            "finalHash": "05ec92778aeeb5",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 11,
+            "seed": "chosen-hand484-11",
+            "steps": 595,
+            "prompts": 15,
+            "finalHash": "1606e82411e0d5",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 12,
+            "seed": "chosen-hand484-12",
+            "steps": 578,
+            "prompts": 11,
+            "finalHash": "1383b8df714360",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 13,
+            "seed": "chosen-hand484-13",
+            "steps": 379,
+            "prompts": 8,
+            "finalHash": "014b223a31c30e",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 14,
+            "seed": "chosen-hand484-14",
+            "steps": 565,
+            "prompts": 8,
+            "finalHash": "00bb4d38b71a2d",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 15,
+            "seed": "chosen-hand484-15",
+            "steps": 705,
+            "prompts": 23,
+            "finalHash": "11f0d3e819a5a3",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 16,
+            "seed": "chosen-hand484-16",
+            "steps": 346,
+            "prompts": 9,
+            "finalHash": "178d943bae5fa5",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 17,
+            "seed": "chosen-hand484-17",
+            "steps": 531,
+            "prompts": 22,
+            "finalHash": "0cd02013d72d67",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 18,
+            "seed": "chosen-hand484-18",
+            "steps": 342,
+            "prompts": 12,
+            "finalHash": "16396a8def90a4",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 19,
+            "seed": "chosen-hand484-19",
+            "steps": 491,
+            "prompts": 13,
+            "finalHash": "029724c9e42ab0",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 20,
+            "seed": "chosen-hand484-20",
+            "steps": 700,
+            "prompts": 22,
+            "finalHash": "02da6a4d05d847",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 21,
+            "seed": "chosen-hand484-21",
+            "steps": 756,
+            "prompts": 18,
+            "finalHash": "16e1026300f105",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 22,
+            "seed": "chosen-hand484-22",
+            "steps": 375,
+            "prompts": 11,
+            "finalHash": "10b329641a7754",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 23,
+            "seed": "chosen-hand484-23",
+            "steps": 543,
+            "prompts": 24,
+            "finalHash": "18341ff3aeb9b0",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 24,
+            "seed": "chosen-hand484-24",
+            "steps": 367,
+            "prompts": 8,
+            "finalHash": "1fb63479eaec0a",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 25,
+            "seed": "chosen-hand484-25",
+            "steps": 593,
+            "prompts": 21,
+            "finalHash": "03b70ed884391e",
+            "chooserChoices": 7,
+            "failure": null
+          },
+          {
+            "ordinal": 26,
+            "seed": "chosen-hand484-26",
+            "steps": 386,
+            "prompts": 12,
+            "finalHash": "0380e14a44b992",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 27,
+            "seed": "chosen-hand484-27",
+            "steps": 582,
+            "prompts": 16,
+            "finalHash": "1b2a8c9d9b1799",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 28,
+            "seed": "chosen-hand484-28",
+            "steps": 768,
+            "prompts": 29,
+            "finalHash": "02ff76a17f4564",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 29,
+            "seed": "chosen-hand484-29",
+            "steps": 572,
+            "prompts": 13,
+            "finalHash": "1522ed580c7b97",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 30,
+            "seed": "chosen-hand484-30",
+            "steps": 363,
+            "prompts": 11,
+            "finalHash": "19778d0a91b9b7",
+            "chooserChoices": 6,
+            "failure": null
+          },
+          {
+            "ordinal": 31,
+            "seed": "chosen-hand484-31",
+            "steps": 700,
+            "prompts": 11,
+            "finalHash": "03c66eafd27556",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 32,
+            "seed": "chosen-hand484-32",
+            "steps": 637,
+            "prompts": 8,
+            "finalHash": "15304725a6d032",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 33,
+            "seed": "chosen-hand484-33",
+            "steps": 463,
+            "prompts": 10,
+            "finalHash": "1273539464e8c7",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 34,
+            "seed": "chosen-hand484-34",
+            "steps": 503,
+            "prompts": 10,
+            "finalHash": "0386d1639e8224",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 35,
+            "seed": "chosen-hand484-35",
+            "steps": 617,
+            "prompts": 8,
+            "finalHash": "017d209d788dc7",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 36,
+            "seed": "chosen-hand484-36",
+            "steps": 401,
+            "prompts": 20,
+            "finalHash": "0c62ceb565dd17",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 37,
+            "seed": "chosen-hand484-37",
+            "steps": 402,
+            "prompts": 20,
+            "finalHash": "1d4e2eb8afcd0d",
+            "chooserChoices": 7,
+            "failure": null
+          },
+          {
+            "ordinal": 38,
+            "seed": "chosen-hand484-38",
+            "steps": 591,
+            "prompts": 12,
+            "finalHash": "04dca0fe53ac10",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 39,
+            "seed": "chosen-hand484-39",
+            "steps": 548,
+            "prompts": 9,
+            "finalHash": "0e05045db42784",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 40,
+            "seed": "chosen-hand484-40",
+            "steps": 528,
+            "prompts": 16,
+            "finalHash": "0e50fff31ca455",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 41,
+            "seed": "chosen-hand484-41",
+            "steps": 417,
+            "prompts": 12,
+            "finalHash": "05631169d18f52",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 42,
+            "seed": "chosen-hand484-42",
+            "steps": 593,
+            "prompts": 10,
+            "finalHash": "1f9ebf609dd272",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 43,
+            "seed": "chosen-hand484-43",
+            "steps": 587,
+            "prompts": 12,
+            "finalHash": "00f36864787fbf",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 44,
+            "seed": "chosen-hand484-44",
+            "steps": 557,
+            "prompts": 22,
+            "finalHash": "055201007f2e70",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 45,
+            "seed": "chosen-hand484-45",
+            "steps": 495,
+            "prompts": 21,
+            "finalHash": "10fbe03781099c",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 46,
+            "seed": "chosen-hand484-46",
+            "steps": 389,
+            "prompts": 12,
+            "finalHash": "0da8e8db25e8f1",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 47,
+            "seed": "chosen-hand484-47",
+            "steps": 566,
+            "prompts": 17,
+            "finalHash": "1af97b9e48caa8",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 48,
+            "seed": "chosen-hand484-48",
+            "steps": 581,
+            "prompts": 12,
+            "finalHash": "16a224b1d4fdcb",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 49,
+            "seed": "chosen-hand484-49",
+            "steps": 377,
+            "prompts": 18,
+            "finalHash": "158ea89b393b6a",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 50,
+            "seed": "chosen-hand484-50",
+            "steps": 671,
+            "prompts": 26,
+            "finalHash": "09eb994b969513",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 51,
+            "seed": "chosen-hand484-51",
+            "steps": 502,
+            "prompts": 11,
+            "finalHash": "117e1b9e7babb1",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 52,
+            "seed": "chosen-hand484-52",
+            "steps": 495,
+            "prompts": 21,
+            "finalHash": "1c6bb8982db201",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 53,
+            "seed": "chosen-hand484-53",
+            "steps": 855,
+            "prompts": 22,
+            "finalHash": "13acc3b8e2b0fe",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 54,
+            "seed": "chosen-hand484-54",
+            "steps": 517,
+            "prompts": 12,
+            "finalHash": "0e58f6fd06c197",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 55,
+            "seed": "chosen-hand484-55",
+            "steps": 390,
+            "prompts": 18,
+            "finalHash": "18f695e7697990",
+            "chooserChoices": 6,
+            "failure": null
+          },
+          {
+            "ordinal": 56,
+            "seed": "chosen-hand484-56",
+            "steps": 342,
+            "prompts": 20,
+            "finalHash": "0133a7ca45a2fa",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 57,
+            "seed": "chosen-hand484-57",
+            "steps": 352,
+            "prompts": 16,
+            "finalHash": "0154eaf0425c45",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 58,
+            "seed": "chosen-hand484-58",
+            "steps": 295,
+            "prompts": 7,
+            "finalHash": "16bad6515f6e8f",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 59,
+            "seed": "chosen-hand484-59",
+            "steps": 439,
+            "prompts": 17,
+            "finalHash": "0de40e1fbac5fd",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 60,
+            "seed": "chosen-hand484-60",
+            "steps": 384,
+            "prompts": 10,
+            "finalHash": "11f46ce5dcb513",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 61,
+            "seed": "chosen-hand484-61",
+            "steps": 468,
+            "prompts": 3,
+            "finalHash": "1f9a5c0711615e",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 62,
+            "seed": "chosen-hand484-62",
+            "steps": 600,
+            "prompts": 15,
+            "finalHash": "1db4e3bd54c25e",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 63,
+            "seed": "chosen-hand484-63",
+            "steps": 610,
+            "prompts": 31,
+            "finalHash": "12f66310ee700d",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 64,
+            "seed": "chosen-hand484-64",
+            "steps": 624,
+            "prompts": 19,
+            "finalHash": "194c6695c29021",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 65,
+            "seed": "chosen-hand484-65",
+            "steps": 643,
+            "prompts": 13,
+            "finalHash": "02fe836d41c63b",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 66,
+            "seed": "chosen-hand484-66",
+            "steps": 393,
+            "prompts": 11,
+            "finalHash": "09eebd70b0ebfb",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 67,
+            "seed": "chosen-hand484-67",
+            "steps": 406,
+            "prompts": 13,
+            "finalHash": "15899e73e7b7d3",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 68,
+            "seed": "chosen-hand484-68",
+            "steps": 446,
+            "prompts": 6,
+            "finalHash": "0d114f0322d6ed",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 69,
+            "seed": "chosen-hand484-69",
+            "steps": 682,
+            "prompts": 14,
+            "finalHash": "116534f0dff4e7",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 70,
+            "seed": "chosen-hand484-70",
+            "steps": 408,
+            "prompts": 14,
+            "finalHash": "05ad2babe0a56a",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 71,
+            "seed": "chosen-hand484-71",
+            "steps": 521,
+            "prompts": 9,
+            "finalHash": "10eb0ea279edea",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 72,
+            "seed": "chosen-hand484-72",
+            "steps": 699,
+            "prompts": 23,
+            "finalHash": "04bf93a0a2fd54",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 73,
+            "seed": "chosen-hand484-73",
+            "steps": 478,
+            "prompts": 10,
+            "finalHash": "05f05b034d01a0",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 74,
+            "seed": "chosen-hand484-74",
+            "steps": 299,
+            "prompts": 8,
+            "finalHash": "0b6395960cfa4c",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 75,
+            "seed": "chosen-hand484-75",
+            "steps": 498,
+            "prompts": 7,
+            "finalHash": "050969af60d1bf",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 76,
+            "seed": "chosen-hand484-76",
+            "steps": 613,
+            "prompts": 13,
+            "finalHash": "0aa3f1d2959be2",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 77,
+            "seed": "chosen-hand484-77",
+            "steps": 389,
+            "prompts": 11,
+            "finalHash": "0e3bde57730ded",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 78,
+            "seed": "chosen-hand484-78",
+            "steps": 378,
+            "prompts": 1,
+            "finalHash": "14ca7b0e05ca67",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 79,
+            "seed": "chosen-hand484-79",
+            "steps": 544,
+            "prompts": 8,
+            "finalHash": "0d1ff113db135e",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 80,
+            "seed": "chosen-hand484-80",
+            "steps": 475,
+            "prompts": 6,
+            "finalHash": "0f7a4f76697bf7",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 81,
+            "seed": "chosen-hand484-81",
+            "steps": 601,
+            "prompts": 7,
+            "finalHash": "13be0b91dcca43",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 82,
+            "seed": "chosen-hand484-82",
+            "steps": 482,
+            "prompts": 5,
+            "finalHash": "1d5ab14777a448",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 83,
+            "seed": "chosen-hand484-83",
+            "steps": 495,
+            "prompts": 9,
+            "finalHash": "132eeaaf9d0f88",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 84,
+            "seed": "chosen-hand484-84",
+            "steps": 603,
+            "prompts": 17,
+            "finalHash": "0b248b296fa347",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 85,
+            "seed": "chosen-hand484-85",
+            "steps": 424,
+            "prompts": 11,
+            "finalHash": "00c4e40b1e9bd5",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 86,
+            "seed": "chosen-hand484-86",
+            "steps": 537,
+            "prompts": 7,
+            "finalHash": "052a46d4aedda1",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 87,
+            "seed": "chosen-hand484-87",
+            "steps": 462,
+            "prompts": 15,
+            "finalHash": "0b9c7cb9f98961",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 88,
+            "seed": "chosen-hand484-88",
+            "steps": 619,
+            "prompts": 15,
+            "finalHash": "007fc4f6aad0fd",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 89,
+            "seed": "chosen-hand484-89",
+            "steps": 417,
+            "prompts": 24,
+            "finalHash": "06167c6b32971f",
+            "chooserChoices": 8,
+            "failure": null
+          },
+          {
+            "ordinal": 90,
+            "seed": "chosen-hand484-90",
+            "steps": 464,
+            "prompts": 16,
+            "finalHash": "01fd1927b7e8a0",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 91,
+            "seed": "chosen-hand484-91",
+            "steps": 304,
+            "prompts": 9,
+            "finalHash": "1be1940abb0fb4",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 92,
+            "seed": "chosen-hand484-92",
+            "steps": 389,
+            "prompts": 4,
+            "finalHash": "190c0f8b187caf",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 93,
+            "seed": "chosen-hand484-93",
+            "steps": 319,
+            "prompts": 8,
+            "finalHash": "1ae4fb922fc9dd",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 94,
+            "seed": "chosen-hand484-94",
+            "steps": 425,
+            "prompts": 11,
+            "finalHash": "13ae366f36406e",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 95,
+            "seed": "chosen-hand484-95",
+            "steps": 484,
+            "prompts": 21,
+            "finalHash": "03a901c90a8374",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 96,
+            "seed": "chosen-hand484-96",
+            "steps": 384,
+            "prompts": 6,
+            "finalHash": "0c47372d08c607",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 97,
+            "seed": "chosen-hand484-97",
+            "steps": 702,
+            "prompts": 16,
+            "finalHash": "1d1a221ffead89",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 98,
+            "seed": "chosen-hand484-98",
+            "steps": 527,
+            "prompts": 4,
+            "finalHash": "16a43279e89379",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 99,
+            "seed": "chosen-hand484-99",
+            "steps": 731,
+            "prompts": 14,
+            "finalHash": "0b31992a439950",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 100,
+            "seed": "chosen-hand484-100",
+            "steps": 495,
+            "prompts": 11,
+            "finalHash": "0cddc616609392",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 101,
+            "seed": "chosen-hand484-101",
+            "steps": 388,
+            "prompts": 11,
+            "finalHash": "0fc79576c99f82",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 102,
+            "seed": "chosen-hand484-102",
+            "steps": 278,
+            "prompts": 4,
+            "finalHash": "01bdd56ee45502",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 103,
+            "seed": "chosen-hand484-103",
+            "steps": 437,
+            "prompts": 10,
+            "finalHash": "0e4135e0d4b736",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 104,
+            "seed": "chosen-hand484-104",
+            "steps": 353,
+            "prompts": 7,
+            "finalHash": "15b76add3001d2",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 105,
+            "seed": "chosen-hand484-105",
+            "steps": 754,
+            "prompts": 13,
+            "finalHash": "12d17339b6942c",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 106,
+            "seed": "chosen-hand484-106",
+            "steps": 474,
+            "prompts": 19,
+            "finalHash": "02d579ef7c51d0",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 107,
+            "seed": "chosen-hand484-107",
+            "steps": 460,
+            "prompts": 8,
+            "finalHash": "0afc43a7a50c6c",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 108,
+            "seed": "chosen-hand484-108",
+            "steps": 596,
+            "prompts": 12,
+            "finalHash": "0b408e2136cd2b",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 109,
+            "seed": "chosen-hand484-109",
+            "steps": 428,
+            "prompts": 7,
+            "finalHash": "1272eca55c819d",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 110,
+            "seed": "chosen-hand484-110",
+            "steps": 416,
+            "prompts": 14,
+            "finalHash": "0570997088b039",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 111,
+            "seed": "chosen-hand484-111",
+            "steps": 557,
+            "prompts": 12,
+            "finalHash": "029f158b3ce548",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 112,
+            "seed": "chosen-hand484-112",
+            "steps": 415,
+            "prompts": 17,
+            "finalHash": "00b4a3d9d5772c",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 113,
+            "seed": "chosen-hand484-113",
+            "steps": 304,
+            "prompts": 11,
+            "finalHash": "06c7e2e81fbcc3",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 114,
+            "seed": "chosen-hand484-114",
+            "steps": 284,
+            "prompts": 2,
+            "finalHash": "067ff1c9e82895",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 115,
+            "seed": "chosen-hand484-115",
+            "steps": 416,
+            "prompts": 17,
+            "finalHash": "1cb17a215f4f52",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 116,
+            "seed": "chosen-hand484-116",
+            "steps": 474,
+            "prompts": 18,
+            "finalHash": "0f53402364f7e5",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 117,
+            "seed": "chosen-hand484-117",
+            "steps": 188,
+            "prompts": 3,
+            "finalHash": "17f041575bcf76",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 118,
+            "seed": "chosen-hand484-118",
+            "steps": 548,
+            "prompts": 7,
+            "finalHash": "0eb8fc9652c373",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 119,
+            "seed": "chosen-hand484-119",
+            "steps": 529,
+            "prompts": 22,
+            "finalHash": "069616794c8c60",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 120,
+            "seed": "chosen-hand484-120",
+            "steps": 473,
+            "prompts": 19,
+            "finalHash": "0992658ee814b8",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 121,
+            "seed": "chosen-hand484-121",
+            "steps": 645,
+            "prompts": 14,
+            "finalHash": "14c5e6a72d3e60",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 122,
+            "seed": "chosen-hand484-122",
+            "steps": 559,
+            "prompts": 15,
+            "finalHash": "17154f6d6de801",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 123,
+            "seed": "chosen-hand484-123",
+            "steps": 437,
+            "prompts": 4,
+            "finalHash": "17571fb7889416",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 124,
+            "seed": "chosen-hand484-124",
+            "steps": 288,
+            "prompts": 10,
+            "finalHash": "0e872a31fdb62f",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 125,
+            "seed": "chosen-hand484-125",
+            "steps": 353,
+            "prompts": 7,
+            "finalHash": "1c902e7b40f0e1",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 126,
+            "seed": "chosen-hand484-126",
+            "steps": 543,
+            "prompts": 9,
+            "finalHash": "178a20ed592114",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 127,
+            "seed": "chosen-hand484-127",
+            "steps": 523,
+            "prompts": 25,
+            "finalHash": "1ceaf551314036",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 128,
+            "seed": "chosen-hand484-128",
+            "steps": 633,
+            "prompts": 15,
+            "finalHash": "0b30d5f990e96f",
+            "chooserChoices": 9,
+            "failure": null
+          },
+          {
+            "ordinal": 129,
+            "seed": "chosen-hand484-129",
+            "steps": 665,
+            "prompts": 19,
+            "finalHash": "18244d32ef2d1c",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 130,
+            "seed": "chosen-hand484-130",
+            "steps": 612,
+            "prompts": 20,
+            "finalHash": "18fbba8e4e106b",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 131,
+            "seed": "chosen-hand484-131",
+            "steps": 310,
+            "prompts": 15,
+            "finalHash": "06a93e0b1c6182",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 132,
+            "seed": "chosen-hand484-132",
+            "steps": 549,
+            "prompts": 12,
+            "finalHash": "10b1910fb15d2f",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 133,
+            "seed": "chosen-hand484-133",
+            "steps": 495,
+            "prompts": 13,
+            "finalHash": "0055bcefe543c0",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 134,
+            "seed": "chosen-hand484-134",
+            "steps": 544,
+            "prompts": 25,
+            "finalHash": "04eb33d87cc31c",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 135,
+            "seed": "chosen-hand484-135",
+            "steps": 374,
+            "prompts": 4,
+            "finalHash": "04ecf371bacb2e",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 136,
+            "seed": "chosen-hand484-136",
+            "steps": 372,
+            "prompts": 8,
+            "finalHash": "0c74d08f896d02",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 137,
+            "seed": "chosen-hand484-137",
+            "steps": 645,
+            "prompts": 8,
+            "finalHash": "1c6fc8c44e917b",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 138,
+            "seed": "chosen-hand484-138",
+            "steps": 469,
+            "prompts": 9,
+            "finalHash": "098ae525965e6f",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 139,
+            "seed": "chosen-hand484-139",
+            "steps": 477,
+            "prompts": 16,
+            "finalHash": "0987604f28ff63",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 140,
+            "seed": "chosen-hand484-140",
+            "steps": 461,
+            "prompts": 12,
+            "finalHash": "1fed717a843ce7",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 141,
+            "seed": "chosen-hand484-141",
+            "steps": 569,
+            "prompts": 12,
+            "finalHash": "1c817954143b73",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 142,
+            "seed": "chosen-hand484-142",
+            "steps": 497,
+            "prompts": 15,
+            "finalHash": "12477cbbf7d346",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 143,
+            "seed": "chosen-hand484-143",
+            "steps": 579,
+            "prompts": 8,
+            "finalHash": "1d8c6c67b806de",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 144,
+            "seed": "chosen-hand484-144",
+            "steps": 560,
+            "prompts": 5,
+            "finalHash": "0edd86254f4817",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 145,
+            "seed": "chosen-hand484-145",
+            "steps": 397,
+            "prompts": 21,
+            "finalHash": "0507f1870c135d",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 146,
+            "seed": "chosen-hand484-146",
+            "steps": 431,
+            "prompts": 17,
+            "finalHash": "06c1c6b9d7df65",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 147,
+            "seed": "chosen-hand484-147",
+            "steps": 543,
+            "prompts": 6,
+            "finalHash": "0530837a73bfae",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 148,
+            "seed": "chosen-hand484-148",
+            "steps": 294,
+            "prompts": 5,
+            "finalHash": "1422f1a10a86c8",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 149,
+            "seed": "chosen-hand484-149",
+            "steps": 530,
+            "prompts": 30,
+            "finalHash": "032250100f3b5c",
+            "chooserChoices": 7,
+            "failure": null
+          },
+          {
+            "ordinal": 150,
+            "seed": "chosen-hand484-150",
+            "steps": 289,
+            "prompts": 15,
+            "finalHash": "1ca2079606f1e3",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 151,
+            "seed": "chosen-hand484-151",
+            "steps": 461,
+            "prompts": 10,
+            "finalHash": "0f53b8dd007e4d",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 152,
+            "seed": "chosen-hand484-152",
+            "steps": 552,
+            "prompts": 17,
+            "finalHash": "1ca1b4eb4d0e9b",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 153,
+            "seed": "chosen-hand484-153",
+            "steps": 515,
+            "prompts": 11,
+            "finalHash": "1f0298b1e63f0c",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 154,
+            "seed": "chosen-hand484-154",
+            "steps": 385,
+            "prompts": 10,
+            "finalHash": "0d4cb4a4d3cb5f",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 155,
+            "seed": "chosen-hand484-155",
+            "steps": 559,
+            "prompts": 18,
+            "finalHash": "01237fa77661a2",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 156,
+            "seed": "chosen-hand484-156",
+            "steps": 578,
+            "prompts": 11,
+            "finalHash": "07dbea6d948051",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 157,
+            "seed": "chosen-hand484-157",
+            "steps": 710,
+            "prompts": 18,
+            "finalHash": "1b699bdb7f9ee0",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 158,
+            "seed": "chosen-hand484-158",
+            "steps": 797,
+            "prompts": 14,
+            "finalHash": "049d6c55b8b5b7",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 159,
+            "seed": "chosen-hand484-159",
+            "steps": 556,
+            "prompts": 2,
+            "finalHash": "15edd849c92f46",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 160,
+            "seed": "chosen-hand484-160",
+            "steps": 447,
+            "prompts": 12,
+            "finalHash": "0b4eb6e708c9a1",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 161,
+            "seed": "chosen-hand484-161",
+            "steps": 536,
+            "prompts": 18,
+            "finalHash": "0123e2a80dc6f5",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 162,
+            "seed": "chosen-hand484-162",
+            "steps": 482,
+            "prompts": 18,
+            "finalHash": "0dbc5da0ba03ab",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 163,
+            "seed": "chosen-hand484-163",
+            "steps": 356,
+            "prompts": 0,
+            "finalHash": "14824f183dd61b",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 164,
+            "seed": "chosen-hand484-164",
+            "steps": 552,
+            "prompts": 15,
+            "finalHash": "1f8fe1d315da53",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 165,
+            "seed": "chosen-hand484-165",
+            "steps": 310,
+            "prompts": 14,
+            "finalHash": "062890f554dc63",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 166,
+            "seed": "chosen-hand484-166",
+            "steps": 473,
+            "prompts": 10,
+            "finalHash": "1aabed99007889",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 167,
+            "seed": "chosen-hand484-167",
+            "steps": 330,
+            "prompts": 8,
+            "finalHash": "0846e1dd70a31e",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 168,
+            "seed": "chosen-hand484-168",
+            "steps": 455,
+            "prompts": 10,
+            "finalHash": "1b633571d7f251",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 169,
+            "seed": "chosen-hand484-169",
+            "steps": 526,
+            "prompts": 16,
+            "finalHash": "07f602a72045b4",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 170,
+            "seed": "chosen-hand484-170",
+            "steps": 611,
+            "prompts": 14,
+            "finalHash": "0508cf09c57d2e",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 171,
+            "seed": "chosen-hand484-171",
+            "steps": 322,
+            "prompts": 2,
+            "finalHash": "0bb0359aa3a63f",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 172,
+            "seed": "chosen-hand484-172",
+            "steps": 366,
+            "prompts": 4,
+            "finalHash": "01065f7a64443b",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 173,
+            "seed": "chosen-hand484-173",
+            "steps": 589,
+            "prompts": 16,
+            "finalHash": "096ca98bc8fbf1",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 174,
+            "seed": "chosen-hand484-174",
+            "steps": 708,
+            "prompts": 15,
+            "finalHash": "0a2918bbfa35c1",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 175,
+            "seed": "chosen-hand484-175",
+            "steps": 473,
+            "prompts": 10,
+            "finalHash": "0ea4701871d35c",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 176,
+            "seed": "chosen-hand484-176",
+            "steps": 501,
+            "prompts": 12,
+            "finalHash": "031386e5f5bbdd",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 177,
+            "seed": "chosen-hand484-177",
+            "steps": 355,
+            "prompts": 19,
+            "finalHash": "0533d223412d64",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 178,
+            "seed": "chosen-hand484-178",
+            "steps": 337,
+            "prompts": 13,
+            "finalHash": "0df8ba477a9224",
+            "chooserChoices": 6,
+            "failure": null
+          },
+          {
+            "ordinal": 179,
+            "seed": "chosen-hand484-179",
+            "steps": 347,
+            "prompts": 6,
+            "finalHash": "1aa10594b0e1db",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 180,
+            "seed": "chosen-hand484-180",
+            "steps": 644,
+            "prompts": 15,
+            "finalHash": "131e65e4924be9",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 181,
+            "seed": "chosen-hand484-181",
+            "steps": 514,
+            "prompts": 11,
+            "finalHash": "00fb61d9009ff6",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 182,
+            "seed": "chosen-hand484-182",
+            "steps": 495,
+            "prompts": 11,
+            "finalHash": "0ade54481258a4",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 183,
+            "seed": "chosen-hand484-183",
+            "steps": 668,
+            "prompts": 24,
+            "finalHash": "0ba8a1da74b642",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 184,
+            "seed": "chosen-hand484-184",
+            "steps": 409,
+            "prompts": 15,
+            "finalHash": "11ccd201531d7b",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 185,
+            "seed": "chosen-hand484-185",
+            "steps": 436,
+            "prompts": 16,
+            "finalHash": "0888a3f7fa9236",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 186,
+            "seed": "chosen-hand484-186",
+            "steps": 656,
+            "prompts": 9,
+            "finalHash": "1652680bc4e5a4",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 187,
+            "seed": "chosen-hand484-187",
+            "steps": 535,
+            "prompts": 12,
+            "finalHash": "14a860160bf093",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 188,
+            "seed": "chosen-hand484-188",
+            "steps": 652,
+            "prompts": 6,
+            "finalHash": "16c5936f46eff2",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 189,
+            "seed": "chosen-hand484-189",
+            "steps": 503,
+            "prompts": 13,
+            "finalHash": "1ddcde6e74952e",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 190,
+            "seed": "chosen-hand484-190",
+            "steps": 548,
+            "prompts": 15,
+            "finalHash": "11ae8332d40039",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 191,
+            "seed": "chosen-hand484-191",
+            "steps": 553,
+            "prompts": 25,
+            "finalHash": "1fd91d6164daad",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 192,
+            "seed": "chosen-hand484-192",
+            "steps": 394,
+            "prompts": 4,
+            "finalHash": "0f55791a2f6b26",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 193,
+            "seed": "chosen-hand484-193",
+            "steps": 380,
+            "prompts": 7,
+            "finalHash": "0e11f43598db61",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 194,
+            "seed": "chosen-hand484-194",
+            "steps": 557,
+            "prompts": 22,
+            "finalHash": "05a8128dee7664",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 195,
+            "seed": "chosen-hand484-195",
+            "steps": 716,
+            "prompts": 13,
+            "finalHash": "1233f765c215d8",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 196,
+            "seed": "chosen-hand484-196",
+            "steps": 534,
+            "prompts": 12,
+            "finalHash": "1706aeeda9bd74",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 197,
+            "seed": "chosen-hand484-197",
+            "steps": 498,
+            "prompts": 12,
+            "finalHash": "1d184eb90bfab0",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 198,
+            "seed": "chosen-hand484-198",
+            "steps": 584,
+            "prompts": 10,
+            "finalHash": "1e3ace9345f7fe",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 199,
+            "seed": "chosen-hand484-199",
+            "steps": 362,
+            "prompts": 5,
+            "finalHash": "0c3afad4142cf4",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 200,
+            "seed": "chosen-hand484-200",
+            "steps": 351,
+            "prompts": 19,
+            "finalHash": "12cd90e141257f",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 201,
+            "seed": "chosen-hand484-201",
+            "steps": 277,
+            "prompts": 9,
+            "finalHash": "04bf26847c7d94",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 202,
+            "seed": "chosen-hand484-202",
+            "steps": 578,
+            "prompts": 30,
+            "finalHash": "08f4c7505c8826",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 203,
+            "seed": "chosen-hand484-203",
+            "steps": 712,
+            "prompts": 19,
+            "finalHash": "082dc438ddc239",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 204,
+            "seed": "chosen-hand484-204",
+            "steps": 490,
+            "prompts": 31,
+            "finalHash": "0dc1128f2d127c",
+            "chooserChoices": 8,
+            "failure": null
+          },
+          {
+            "ordinal": 205,
+            "seed": "chosen-hand484-205",
+            "steps": 358,
+            "prompts": 20,
+            "finalHash": "1641a6cb06fdd5",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 206,
+            "seed": "chosen-hand484-206",
+            "steps": 427,
+            "prompts": 13,
+            "finalHash": "1424d006ebc356",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 207,
+            "seed": "chosen-hand484-207",
+            "steps": 322,
+            "prompts": 15,
+            "finalHash": "1890a4a1f1926e",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 208,
+            "seed": "chosen-hand484-208",
+            "steps": 675,
+            "prompts": 16,
+            "finalHash": "19789db87f8ee7",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 209,
+            "seed": "chosen-hand484-209",
+            "steps": 322,
+            "prompts": 9,
+            "finalHash": "12caa01f0ec37e",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 210,
+            "seed": "chosen-hand484-210",
+            "steps": 540,
+            "prompts": 15,
+            "finalHash": "0aaaec2071f339",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 211,
+            "seed": "chosen-hand484-211",
+            "steps": 533,
+            "prompts": 10,
+            "finalHash": "052dbf912e2f66",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 212,
+            "seed": "chosen-hand484-212",
+            "steps": 494,
+            "prompts": 9,
+            "finalHash": "1a212f7ad08d54",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 213,
+            "seed": "chosen-hand484-213",
+            "steps": 345,
+            "prompts": 5,
+            "finalHash": "0fa35615d82ec8",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 214,
+            "seed": "chosen-hand484-214",
+            "steps": 454,
+            "prompts": 12,
+            "finalHash": "023a979e8fff05",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 215,
+            "seed": "chosen-hand484-215",
+            "steps": 555,
+            "prompts": 18,
+            "finalHash": "175238c02fa871",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 216,
+            "seed": "chosen-hand484-216",
+            "steps": 636,
+            "prompts": 13,
+            "finalHash": "19c3f221ccb477",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 217,
+            "seed": "chosen-hand484-217",
+            "steps": 369,
+            "prompts": 5,
+            "finalHash": "1393a769b62a88",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 218,
+            "seed": "chosen-hand484-218",
+            "steps": 587,
+            "prompts": 23,
+            "finalHash": "08161f847de56f",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 219,
+            "seed": "chosen-hand484-219",
+            "steps": 479,
+            "prompts": 19,
+            "finalHash": "16ac7ec647d216",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 220,
+            "seed": "chosen-hand484-220",
+            "steps": 697,
+            "prompts": 13,
+            "finalHash": "15bc7424ddee78",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 221,
+            "seed": "chosen-hand484-221",
+            "steps": 501,
+            "prompts": 14,
+            "finalHash": "0e102caf3eff91",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 222,
+            "seed": "chosen-hand484-222",
+            "steps": 530,
+            "prompts": 24,
+            "finalHash": "0b6523317da958",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 223,
+            "seed": "chosen-hand484-223",
+            "steps": 470,
+            "prompts": 10,
+            "finalHash": "134e81666222c4",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 224,
+            "seed": "chosen-hand484-224",
+            "steps": 547,
+            "prompts": 16,
+            "finalHash": "16d3c278d58cf2",
+            "chooserChoices": 7,
+            "failure": null
+          },
+          {
+            "ordinal": 225,
+            "seed": "chosen-hand484-225",
+            "steps": 601,
+            "prompts": 12,
+            "finalHash": "0fbaa8362b4dc8",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 226,
+            "seed": "chosen-hand484-226",
+            "steps": 651,
+            "prompts": 17,
+            "finalHash": "1dc0855de32f04",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 227,
+            "seed": "chosen-hand484-227",
+            "steps": 376,
+            "prompts": 4,
+            "finalHash": "1a69009c35dc42",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 228,
+            "seed": "chosen-hand484-228",
+            "steps": 564,
+            "prompts": 13,
+            "finalHash": "198ca66c765f58",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 229,
+            "seed": "chosen-hand484-229",
+            "steps": 570,
+            "prompts": 14,
+            "finalHash": "0162031fa58292",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 230,
+            "seed": "chosen-hand484-230",
+            "steps": 472,
+            "prompts": 15,
+            "finalHash": "131a9a04d51d59",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 231,
+            "seed": "chosen-hand484-231",
+            "steps": 463,
+            "prompts": 20,
+            "finalHash": "19ef4ea583a301",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 232,
+            "seed": "chosen-hand484-232",
+            "steps": 463,
+            "prompts": 5,
+            "finalHash": "1f8c347714516d",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 233,
+            "seed": "chosen-hand484-233",
+            "steps": 420,
+            "prompts": 11,
+            "finalHash": "0a1947f858ac21",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 234,
+            "seed": "chosen-hand484-234",
+            "steps": 543,
+            "prompts": 16,
+            "finalHash": "149d95f5333f5e",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 235,
+            "seed": "chosen-hand484-235",
+            "steps": 479,
+            "prompts": 13,
+            "finalHash": "05e21ed8e086ab",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 236,
+            "seed": "chosen-hand484-236",
+            "steps": 504,
+            "prompts": 16,
+            "finalHash": "0296042f22cba1",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 237,
+            "seed": "chosen-hand484-237",
+            "steps": 488,
+            "prompts": 14,
+            "finalHash": "1d5d118988e04b",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 238,
+            "seed": "chosen-hand484-238",
+            "steps": 529,
+            "prompts": 11,
+            "finalHash": "1512c622ae1f6a",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 239,
+            "seed": "chosen-hand484-239",
+            "steps": 602,
+            "prompts": 20,
+            "finalHash": "18e63482541bed",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 240,
+            "seed": "chosen-hand484-240",
+            "steps": 454,
+            "prompts": 16,
+            "finalHash": "17b25c3066786d",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 241,
+            "seed": "chosen-hand484-241",
+            "steps": 945,
+            "prompts": 27,
+            "finalHash": "18204776697841",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 242,
+            "seed": "chosen-hand484-242",
+            "steps": 239,
+            "prompts": 14,
+            "finalHash": "0c78331ca8c9dc",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 243,
+            "seed": "chosen-hand484-243",
+            "steps": 556,
+            "prompts": 18,
+            "finalHash": "19bdec911e765c",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 244,
+            "seed": "chosen-hand484-244",
+            "steps": 521,
+            "prompts": 22,
+            "finalHash": "06a568363329d4",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 245,
+            "seed": "chosen-hand484-245",
+            "steps": 762,
+            "prompts": 21,
+            "finalHash": "15a9e92b6406dd",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 246,
+            "seed": "chosen-hand484-246",
+            "steps": 738,
+            "prompts": 18,
+            "finalHash": "00075b00f0b7f5",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 247,
+            "seed": "chosen-hand484-247",
+            "steps": 398,
+            "prompts": 10,
+            "finalHash": "1c0f0ca0a43acf",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 248,
+            "seed": "chosen-hand484-248",
+            "steps": 501,
+            "prompts": 15,
+            "finalHash": "165f1c37111e74",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 249,
+            "seed": "chosen-hand484-249",
+            "steps": 434,
+            "prompts": 11,
+            "finalHash": "0ca1e7c7308f91",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 250,
+            "seed": "chosen-hand484-250",
+            "steps": 431,
+            "prompts": 13,
+            "finalHash": "0b710e4d1f4d7e",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 251,
+            "seed": "chosen-hand484-251",
+            "steps": 640,
+            "prompts": 23,
+            "finalHash": "18c230c7888458",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 252,
+            "seed": "chosen-hand484-252",
+            "steps": 284,
+            "prompts": 16,
+            "finalHash": "07109124ef3168",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 253,
+            "seed": "chosen-hand484-253",
+            "steps": 549,
+            "prompts": 15,
+            "finalHash": "00ee6a48463195",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 254,
+            "seed": "chosen-hand484-254",
+            "steps": 630,
+            "prompts": 11,
+            "finalHash": "0c76aa934f76c1",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 255,
+            "seed": "chosen-hand484-255",
+            "steps": 593,
+            "prompts": 27,
+            "finalHash": "1679e2153eba50",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 256,
+            "seed": "chosen-hand484-256",
+            "steps": 616,
+            "prompts": 20,
+            "finalHash": "0923f2bb2faf2b",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 257,
+            "seed": "chosen-hand484-257",
+            "steps": 551,
+            "prompts": 17,
+            "finalHash": "1d6b4f8106302a",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 258,
+            "seed": "chosen-hand484-258",
+            "steps": 537,
+            "prompts": 9,
+            "finalHash": "12a4d0ae18b02f",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 259,
+            "seed": "chosen-hand484-259",
+            "steps": 820,
+            "prompts": 22,
+            "finalHash": "03b16f5bcf7951",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 260,
+            "seed": "chosen-hand484-260",
+            "steps": 675,
+            "prompts": 12,
+            "finalHash": "0ca3629d7ee012",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 261,
+            "seed": "chosen-hand484-261",
+            "steps": 660,
+            "prompts": 23,
+            "finalHash": "1880b87bd6fba3",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 262,
+            "seed": "chosen-hand484-262",
+            "steps": 607,
+            "prompts": 13,
+            "finalHash": "1dad29d93aac8f",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 263,
+            "seed": "chosen-hand484-263",
+            "steps": 482,
+            "prompts": 14,
+            "finalHash": "05fd47528184c4",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 264,
+            "seed": "chosen-hand484-264",
+            "steps": 556,
+            "prompts": 8,
+            "finalHash": "1af3aea09c5173",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 265,
+            "seed": "chosen-hand484-265",
+            "steps": 350,
+            "prompts": 10,
+            "finalHash": "0825643a013b9a",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 266,
+            "seed": "chosen-hand484-266",
+            "steps": 601,
+            "prompts": 20,
+            "finalHash": "0589a23e634422",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 267,
+            "seed": "chosen-hand484-267",
+            "steps": 591,
+            "prompts": 7,
+            "finalHash": "0b77e04c987f63",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 268,
+            "seed": "chosen-hand484-268",
+            "steps": 391,
+            "prompts": 26,
+            "finalHash": "0321cb2657d222",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 269,
+            "seed": "chosen-hand484-269",
+            "steps": 543,
+            "prompts": 28,
+            "finalHash": "0ddeb0df6a89ff",
+            "chooserChoices": 6,
+            "failure": null
+          },
+          {
+            "ordinal": 270,
+            "seed": "chosen-hand484-270",
+            "steps": 565,
+            "prompts": 14,
+            "finalHash": "1e95478d08fb12",
+            "chooserChoices": 6,
+            "failure": null
+          },
+          {
+            "ordinal": 271,
+            "seed": "chosen-hand484-271",
+            "steps": 319,
+            "prompts": 6,
+            "finalHash": "1f7b8ee7aa794a",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 272,
+            "seed": "chosen-hand484-272",
+            "steps": 766,
+            "prompts": 15,
+            "finalHash": "15a8de0223886f",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 273,
+            "seed": "chosen-hand484-273",
+            "steps": 460,
+            "prompts": 12,
+            "finalHash": "12f7e66f803ac5",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 274,
+            "seed": "chosen-hand484-274",
+            "steps": 571,
+            "prompts": 12,
+            "finalHash": "0aa640d9b51e0e",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 275,
+            "seed": "chosen-hand484-275",
+            "steps": 404,
+            "prompts": 14,
+            "finalHash": "1e40ad110a5082",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 276,
+            "seed": "chosen-hand484-276",
+            "steps": 312,
+            "prompts": 12,
+            "finalHash": "194cd3a8d0d186",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 277,
+            "seed": "chosen-hand484-277",
+            "steps": 618,
+            "prompts": 30,
+            "finalHash": "14238dbc32b458",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 278,
+            "seed": "chosen-hand484-278",
+            "steps": 607,
+            "prompts": 23,
+            "finalHash": "0a95808f974a73",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 279,
+            "seed": "chosen-hand484-279",
+            "steps": 569,
+            "prompts": 6,
+            "finalHash": "094d05a56f77e0",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 280,
+            "seed": "chosen-hand484-280",
+            "steps": 546,
+            "prompts": 19,
+            "finalHash": "0244e4a2e1d445",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 281,
+            "seed": "chosen-hand484-281",
+            "steps": 514,
+            "prompts": 29,
+            "finalHash": "032e604749b0cb",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 282,
+            "seed": "chosen-hand484-282",
+            "steps": 717,
+            "prompts": 16,
+            "finalHash": "04ea611d011636",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 283,
+            "seed": "chosen-hand484-283",
+            "steps": 428,
+            "prompts": 8,
+            "finalHash": "07b57b11423d31",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 284,
+            "seed": "chosen-hand484-284",
+            "steps": 413,
+            "prompts": 7,
+            "finalHash": "010cad8080d281",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 285,
+            "seed": "chosen-hand484-285",
+            "steps": 512,
+            "prompts": 18,
+            "finalHash": "10b552da0171df",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 286,
+            "seed": "chosen-hand484-286",
+            "steps": 626,
+            "prompts": 32,
+            "finalHash": "08b47f49d6995d",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 287,
+            "seed": "chosen-hand484-287",
+            "steps": 624,
+            "prompts": 9,
+            "finalHash": "18a227b462b7d0",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 288,
+            "seed": "chosen-hand484-288",
+            "steps": 570,
+            "prompts": 14,
+            "finalHash": "03fb8cbf987862",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 289,
+            "seed": "chosen-hand484-289",
+            "steps": 411,
+            "prompts": 7,
+            "finalHash": "1e7e837edfddb6",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 290,
+            "seed": "chosen-hand484-290",
+            "steps": 502,
+            "prompts": 11,
+            "finalHash": "1a27877ebf57ec",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 291,
+            "seed": "chosen-hand484-291",
+            "steps": 728,
+            "prompts": 23,
+            "finalHash": "1486a171b5bd89",
+            "chooserChoices": 0,
+            "failure": null
+          },
+          {
+            "ordinal": 292,
+            "seed": "chosen-hand484-292",
+            "steps": 380,
+            "prompts": 8,
+            "finalHash": "1fc588db7e155a",
+            "chooserChoices": 1,
+            "failure": null
+          },
+          {
+            "ordinal": 293,
+            "seed": "chosen-hand484-293",
+            "steps": 550,
+            "prompts": 13,
+            "finalHash": "0a017101193e92",
+            "chooserChoices": 2,
+            "failure": null
+          },
+          {
+            "ordinal": 294,
+            "seed": "chosen-hand484-294",
+            "steps": 512,
+            "prompts": 7,
+            "finalHash": "1da74bc4eab66a",
+            "chooserChoices": 3,
+            "failure": null
+          },
+          {
+            "ordinal": 295,
+            "seed": "chosen-hand484-295",
+            "steps": 460,
+            "prompts": 20,
+            "finalHash": "0730623d6eec1b",
+            "chooserChoices": 7,
+            "failure": null
+          },
+          {
+            "ordinal": 296,
+            "seed": "chosen-hand484-296",
+            "steps": 485,
+            "prompts": 9,
+            "finalHash": "0049c62e78179c",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 297,
+            "seed": "chosen-hand484-297",
+            "steps": 524,
+            "prompts": 11,
+            "finalHash": "1065d7e452fb3b",
+            "chooserChoices": 4,
+            "failure": null
+          },
+          {
+            "ordinal": 298,
+            "seed": "chosen-hand484-298",
+            "steps": 414,
+            "prompts": 23,
+            "finalHash": "0755f6eb10ca19",
+            "chooserChoices": 5,
+            "failure": null
+          },
+          {
+            "ordinal": 299,
+            "seed": "chosen-hand484-299",
+            "steps": 570,
+            "prompts": 14,
+            "finalHash": "05398ffeef9dbb",
+            "chooserChoices": 0,
+            "failure": null
+          }
+        ]
+      },
+      "outerReceipt": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npx",
+          "tsx",
+          "/tmp/worker484-20261014/fuzz484.mts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+        "start": "2026-10-14T19:21:26.374843+00:00",
+        "end": "2026-10-14T19:24:27.619663+00:00",
+        "exit": 0,
+        "wallSeconds": 181.24329374998342,
+        "pid": 47716,
+        "pgid": 47716,
+        "load": "{ 20.66 18.76 13.07 }",
+        "groupRemainingAtExit": []
+      },
+      "qualification": "Completed preceding whole prompt-lab file epoch; unchanged actual LAB definitions and imported fuzzer consumed dependencies proven byte equal across both bounded fixture-only epochs. Not a claim of a fresh final-whole-file 300 run.",
+      "consumedSHA256": "0593b7ecee5de13942d00b3f4ef530c8be1ee4094230f3f705b6ac0049a71b62",
+      "proofs": [
+        "/tmp/worker484-20261014/fixture-epoch-consumption-proof-v01.json",
+        "/tmp/root484-20261014/live-host-consumption-proof-v01.json"
+      ],
+      "exercise": "Weighted actual new LAB sources; explicit chooser/answer/actual-arrival instrumentation distinct from target cardPlayed counts; 30 interactive games every10 with full replay."
+    }
+  },
+  "iterations": {
+    "focused-v01": "10failed/34passed: own incorrect DeckMods field, response energy, assumed stagedUUID and returned-source extra eligibility.",
+    "focused-v02": "4failed/40passed: remaining fixture assumptions.",
+    "focused-v03": "44passed",
+    "focused-v04": "54passed",
+    "review-v01": "Exit2,69.301023459s: unused own InstanceId import; corrected.",
+    "review-v02": "7725tests/306files,0/75.029648s loadedstart30.81",
+    "SDK-v01": "Scratch .ts CJS could not support existing decide.ts TLA; scratch entry changed to .mts; no library edits.",
+    "SDK-v02": "Six cells passed plus finite seed census.",
+    "qualification": "All raw iteration receipts archived; own local corrections below ten-minute threshold are measurements, not invented pre-existing issues/friction minutes."
+  },
+  "QA": {
+    "audit": {
+      "at": "2026-10-14T20:01:32.386289+00:00",
+      "bead": "hv-umm2.484",
+      "sourceFreeze": "/tmp/root484-20261014/final-source-freeze-v03.json",
+      "acceptedCells": [
+        {
+          "viewport": "desktop",
+          "scene": {
+            "fixture": "materialize-chosen",
+            "source": "5e5e5e5e-0000-4000-8000-000000048400",
+            "actor": "player",
+            "mode": "fixed"
+          },
+          "game": "oovb8n",
+          "source": "i1",
+          "selected": "i3",
+          "answer": [
+            "i3"
+          ],
+          "rows": 34,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-MiuKmA/qa-chosen-hand-v05.result.json",
+          "qualification": "completedper-step before laterenemyfailure",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "e016ddb865b161ef218f3649f651b24199e7482036f39180ae7a77e679735982"
+        },
+        {
+          "viewport": "desktop",
+          "scene": {
+            "fixture": "optional-materialize-chosen",
+            "source": "5e5e5e5e-0000-4000-8000-000000048401",
+            "actor": "player",
+            "mode": "decline"
+          },
+          "game": "6tr36s",
+          "source": "i1",
+          "selected": "i3",
+          "answer": false,
+          "rows": 27,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-MiuKmA/qa-chosen-hand-v05.result.json",
+          "qualification": "completedper-step before laterenemyfailure",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "8ed095cf97ea9606b5d42ed18644dc1401a30027065cd758bb8631aa94d97f27"
+        },
+        {
+          "viewport": "desktop",
+          "scene": {
+            "fixture": "optional-materialize-chosen",
+            "source": "5e5e5e5e-0000-4000-8000-000000048401",
+            "actor": "player",
+            "mode": "accept"
+          },
+          "game": "ahfkhd",
+          "source": "i1",
+          "selected": "i3",
+          "answer": [
+            "i3"
+          ],
+          "rows": 41,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-MiuKmA/qa-chosen-hand-v05.result.json",
+          "qualification": "completedper-step before laterenemyfailure",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "6f82aa0e1ed0d523f23b5905b68b91aacac4a6bfcb0f8837a37afdc660b3e6c0"
+        },
+        {
+          "viewport": "desktop",
+          "scene": {
+            "fixture": "counter-materialize-chosen",
+            "source": "5e5e5e5e-0000-4000-8000-000000048402",
+            "actor": "player",
+            "mode": "counter"
+          },
+          "game": "3yshov",
+          "source": "i1",
+          "selected": "i3",
+          "answer": [
+            "i3"
+          ],
+          "rows": 33,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-MiuKmA/qa-chosen-hand-v05.result.json",
+          "qualification": "completedper-step before laterenemyfailure",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "79ec3203f7c366ea164792723ebaa2167460f5df2a1a49906d99e7aed4e17dd1"
+        },
+        {
+          "viewport": "desktop",
+          "scene": {
+            "fixture": "materialize-chosen-enemy",
+            "source": "5e5e5e5e-0000-4000-8000-000000048400",
+            "actor": "enemy",
+            "mode": "fixed",
+            "policy": "greedy"
+          },
+          "game": "yqdicw",
+          "source": "i8",
+          "selected": "i10",
+          "answer": [
+            "i10"
+          ],
+          "rows": 33,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json",
+          "qualification": "terminalpassed10cellrecovery",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "6cb8e82b3e03f701e0b547c17fe27474a35de7a9cd75e32f27106ee1709c907d"
+        },
+        {
+          "viewport": "desktop",
+          "scene": {
+            "fixture": "optional-materialize-chosen-enemy-2",
+            "source": "5e5e5e5e-0000-4000-8000-000000048401",
+            "actor": "enemy",
+            "mode": "decline",
+            "policy": "random"
+          },
+          "game": "cinfem",
+          "source": "i8",
+          "selected": "i10",
+          "answer": false,
+          "rows": 30,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json",
+          "qualification": "terminalpassed10cellrecovery",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "b52b0f8b4b960915c60989388e5e303dab8fdd5fe0254a49e128f6444c3d898a"
+        },
+        {
+          "viewport": "desktop",
+          "scene": {
+            "fixture": "optional-materialize-chosen-enemy-2",
+            "source": "5e5e5e5e-0000-4000-8000-000000048401",
+            "actor": "enemy",
+            "mode": "accept",
+            "policy": "greedy"
+          },
+          "game": "gfpyw2",
+          "source": "i8",
+          "selected": "i10",
+          "answer": [
+            "i10"
+          ],
+          "rows": 30,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json",
+          "qualification": "terminalpassed10cellrecovery",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "51d51d2f3989c21f7b3641e8940c412bcf4298776f84be7731b6ed3e263444eb"
+        },
+        {
+          "viewport": "mobile",
+          "scene": {
+            "fixture": "materialize-chosen",
+            "source": "5e5e5e5e-0000-4000-8000-000000048400",
+            "actor": "player",
+            "mode": "fixed"
+          },
+          "game": "7cn5co",
+          "source": "i1",
+          "selected": "i3",
+          "answer": [
+            "i3"
+          ],
+          "rows": 29,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json",
+          "qualification": "terminalpassed10cellrecovery",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "e016ddb865b161ef218f3649f651b24199e7482036f39180ae7a77e679735982"
+        },
+        {
+          "viewport": "mobile",
+          "scene": {
+            "fixture": "optional-materialize-chosen",
+            "source": "5e5e5e5e-0000-4000-8000-000000048401",
+            "actor": "player",
+            "mode": "decline"
+          },
+          "game": "gzbtnr",
+          "source": "i1",
+          "selected": "i3",
+          "answer": false,
+          "rows": 27,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json",
+          "qualification": "terminalpassed10cellrecovery",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "8ed095cf97ea9606b5d42ed18644dc1401a30027065cd758bb8631aa94d97f27"
+        },
+        {
+          "viewport": "mobile",
+          "scene": {
+            "fixture": "optional-materialize-chosen",
+            "source": "5e5e5e5e-0000-4000-8000-000000048401",
+            "actor": "player",
+            "mode": "accept"
+          },
+          "game": "uktkqi",
+          "source": "i1",
+          "selected": "i3",
+          "answer": [
+            "i3"
+          ],
+          "rows": 43,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json",
+          "qualification": "terminalpassed10cellrecovery",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "6f82aa0e1ed0d523f23b5905b68b91aacac4a6bfcb0f8837a37afdc660b3e6c0"
+        },
+        {
+          "viewport": "mobile",
+          "scene": {
+            "fixture": "counter-materialize-chosen",
+            "source": "5e5e5e5e-0000-4000-8000-000000048402",
+            "actor": "player",
+            "mode": "counter"
+          },
+          "game": "citawb",
+          "source": "i1",
+          "selected": "i3",
+          "answer": [
+            "i3"
+          ],
+          "rows": 34,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json",
+          "qualification": "terminalpassed10cellrecovery",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "79ec3203f7c366ea164792723ebaa2167460f5df2a1a49906d99e7aed4e17dd1"
+        },
+        {
+          "viewport": "mobile",
+          "scene": {
+            "fixture": "materialize-chosen-enemy",
+            "source": "5e5e5e5e-0000-4000-8000-000000048400",
+            "actor": "enemy",
+            "mode": "fixed",
+            "policy": "greedy"
+          },
+          "game": "3p47x6",
+          "source": "i8",
+          "selected": "i10",
+          "answer": [
+            "i10"
+          ],
+          "rows": 29,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json",
+          "qualification": "terminalpassed10cellrecovery",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "6cb8e82b3e03f701e0b547c17fe27474a35de7a9cd75e32f27106ee1709c907d"
+        },
+        {
+          "viewport": "mobile",
+          "scene": {
+            "fixture": "optional-materialize-chosen-enemy-2",
+            "source": "5e5e5e5e-0000-4000-8000-000000048401",
+            "actor": "enemy",
+            "mode": "decline",
+            "policy": "random"
+          },
+          "game": "cdiohz",
+          "source": "i8",
+          "selected": "i10",
+          "answer": false,
+          "rows": 29,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json",
+          "qualification": "terminalpassed10cellrecovery",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "b52b0f8b4b960915c60989388e5e303dab8fdd5fe0254a49e128f6444c3d898a"
+        },
+        {
+          "viewport": "mobile",
+          "scene": {
+            "fixture": "optional-materialize-chosen-enemy-2",
+            "source": "5e5e5e5e-0000-4000-8000-000000048401",
+            "actor": "enemy",
+            "mode": "accept",
+            "policy": "greedy"
+          },
+          "game": "4zegju",
+          "source": "i8",
+          "selected": "i10",
+          "answer": [
+            "i10"
+          ],
+          "rows": 36,
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json",
+          "qualification": "terminalpassed10cellrecovery",
+          "verdict": "pass",
+          "fullStateReloadEqual": true,
+          "stateSHA256": "51d51d2f3989c21f7b3641e8940c412bcf4298776f84be7731b6ed3e263444eb"
+        }
+      ],
+      "captures": [
+        {
+          "path": "chosen-hand-picker-desktop.png",
+          "filename": "chosen-hand-picker-desktop.png",
+          "sha256": "df8bc65b1f6b670234fd03ad1628b72ba75d5b33b12d90c08f7c6449a0f968ee",
+          "pixels": [
+            2880,
+            1800
+          ],
+          "rootViewed": true,
+          "visual": "ExistingCumulus picker/sourcecopy/eligibleframes/readabletitle, contained submit, intentionalhandfan clipping with actualenabledunoccluded selectionpoint; dynamic source2counterbadge andexactarrivalvisible.",
+          "invocation": "run-MiuKmA",
+          "viewport": "desktop"
+        },
+        {
+          "path": "chosen-hand-counter-arrival-desktop.png",
+          "filename": "chosen-hand-counter-arrival-desktop.png",
+          "sha256": "9b8b82fa76d8d204a8f75217eb19715545af208c9e8dec9b7ad51684eb42a267",
+          "pixels": [
+            2880,
+            1800
+          ],
+          "rootViewed": true,
+          "visual": "ExistingCumulus picker/sourcecopy/eligibleframes/readabletitle, contained submit, intentionalhandfan clipping with actualenabledunoccluded selectionpoint; dynamic source2counterbadge andexactarrivalvisible.",
+          "invocation": "run-MiuKmA",
+          "viewport": "desktop"
+        },
+        {
+          "path": "chosen-hand-picker-mobile.png",
+          "filename": "chosen-hand-picker-mobile.png",
+          "sha256": "9ba6185e65a67a6d2f42f4e7f2a526c093aaa2174e40ec5fd65f58d6dab034b9",
+          "pixels": [
+            780,
+            1688
+          ],
+          "rootViewed": true,
+          "visual": "ExistingCumulus picker/sourcecopy/eligibleframes/readabletitle, contained submit, intentionalhandfan clipping with actualenabledunoccluded selectionpoint; dynamic source2counterbadge andexactarrivalvisible.",
+          "invocation": "run-drOSBH",
+          "viewport": "mobile"
+        }
+      ],
+      "acceptanceJoin": {
+        "v05": "fourcompleteddesktopplayer per-stepcells; overallFAILED/resultnull/mobileunrun retained",
+        "v06": "terminal0;3desktop enemy+7mobile=10 actualcells",
+        "total": 14
+      },
+      "rawSHA256": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-MiuKmA/qa-chosen-hand-v05.result.json": "f8ee1fc8d35a0c06a2eef0f52318fc242c6b35a4205741c19a4494c82feaabc3",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-drOSBH/qa-chosen-hand-v06.result.json": "76d2a0e113e150847f4420c5b93cef8b8c2fc0a0d67700028cd937627f13b563"
+      },
+      "caps": [],
+      "recovery": "Rootdirect transport/URL/normalDusk/harnesssource logging/renderedhandsettlement fixes; no productprimitive/flow/view/policy/renderer rewrite or acceptance waiver."
+    },
+    "auditSHA256": "ba37c8966a0e69fff98910bf225c8d630b878a57bfb02e737cbdca63bf62f324",
+    "runtimeAttempts": [
+      {
+        "version": "v02",
+        "verdict": "fail",
+        "receipt": {
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/worker484-20261014/qa-chosen-hand-v02.mjs",
+            "--bead",
+            "hv-umm2.484",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "360"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:39:46.565741+00:00",
+          "end": "2026-10-14T19:39:50.211408+00:00",
+          "exit": 1,
+          "wallSeconds": 3.6455778329982422,
+          "pid": 44643,
+          "pgid": 44643,
+          "load": "{ 5.95 5.03 6.89 }",
+          "groupRemainingAtExit": []
+        },
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-naDayN/qa-chosen-hand-v02.result.json",
+        "rawSHA256": "8ebe1433f5022744d3672d81c6eccb8f7b033b5f04649007bbae2747bc65bf8f",
+        "failure": "ReferenceError SOURCE: serialized scenario referenced a module binding; before game, zero cells/captures, mobile unrun."
+      },
+      {
+        "version": "v03",
+        "verdict": "fail",
+        "receipt": {
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/root484-20261014/qa-chosen-hand-v03.mjs",
+            "--bead",
+            "hv-umm2.484",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "360"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:42:23.302905+00:00",
+          "end": "2026-10-14T19:42:35.173126+00:00",
+          "exit": 1,
+          "wallSeconds": 11.870002417010255,
+          "pid": 48565,
+          "pgid": 48565,
+          "load": "{ 5.61 5.68 6.87 }",
+          "groupRemainingAtExit": []
+        },
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-WfenRW/qa-chosen-hand-v03.result.json",
+        "rawSHA256": "6ddcf285a497cac8a4b5ec9d0c8c321a6c782c0c87b5d86a1bac679505067af5",
+        "failure": "URL was unavailable in runner VM; reload incomplete, mobile unrun."
+      },
+      {
+        "version": "v04",
+        "verdict": "fail",
+        "receipt": {
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/root484-20261014/qa-chosen-hand-v04.mjs",
+            "--bead",
+            "hv-umm2.484",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "360"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:44:17.790865+00:00",
+          "end": "2026-10-14T19:45:29.517309+00:00",
+          "exit": 1,
+          "wallSeconds": 71.72578554198844,
+          "pid": 51605,
+          "pgid": 51605,
+          "load": "{ 6.49 5.99 6.84 }",
+          "groupRemainingAtExit": []
+        },
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-xXekB0/qa-chosen-hand-v04.result.json",
+        "rawSHA256": "d3fed35bc753d3ad276f3a4d9ca044bded922c44a5bca4ee76d1648ad47b4a78",
+        "failure": "Caller assumed wrong phase settlement; timed out at normal Dusk. Constructor enemy script also lacked normal-host source-play log proof. Mobile unrun."
+      },
+      {
+        "version": "v05",
+        "verdict": "fail",
+        "receipt": {
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/root484-20261014/qa-chosen-hand-v05.mjs",
+            "--bead",
+            "hv-umm2.484",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "360"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:53:54.352410+00:00",
+          "end": "2026-10-14T19:54:44.148762+00:00",
+          "exit": 1,
+          "wallSeconds": 49.79571366700111,
+          "pid": 69580,
+          "pgid": 69580,
+          "load": "{ 6.52 9.04 8.56 }",
+          "groupRemainingAtExit": []
+        },
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/invocations/run-MiuKmA/qa-chosen-hand-v05.result.json",
+        "rawSHA256": "f8ee1fc8d35a0c06a2eef0f52318fc242c6b35a4205741c19a4494c82feaabc3",
+        "failure": "Caller asserted opposing rendered unknown-hand wrappers before presentation settled. Four desktop player cells completed before this overall failure; mobile unrun."
+      },
+      {
+        "version": "v06",
+        "verdict": "pass",
+        "receipt": {
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/root484-20261014/qa-chosen-hand-v06.mjs",
+            "--bead",
+            "hv-umm2.484",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "360"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-484-chosen-hand-materialize",
+          "start": "2026-10-14T19:57:18.977131+00:00",
+          "end": "2026-10-14T19:59:29.303232+00:00",
+          "exit": 0,
+          "wallSeconds": 130.32450950000202,
+          "pid": 34567,
+          "pgid": 34567,
+          "load": "{ 7.86 9.36 8.83 }",
+          "groupRemainingAtExit": []
+        },
+        "qualification": "Ten actual cells: three desktop enemy plus seven mobile. Four desktop player cells come only from accepted v05 prefix."
+      }
+    ],
+    "ledgerCounts": {
+      "failedCallerRows": 4,
+      "acceptedCellRows": 14,
+      "desktop": 7,
+      "mobile": 7
+    },
+    "coverage": "Human selectable source/card prompts actually rendered and interactive before pointer; non-first physical choice, optional accept/decline, player live counter2, normal Greedy enemy fixed/optional acceptance and actual Random enemy optional false. Both actors dynamic API semantics covered by contracts; no claim of dynamic enemy browser cell. Persisted actor-matched logs, full committed state and pending same-game reloads, privacy, geometry, public exact arrivals and Caps audited.",
+    "randomEnemy": "Existing public ai=random normal host first plays source then answers false; final runtime evidence supersedes earlier Node seed/key prediction. Greedy actual true then second candidate i10. URL override retained through same-game reload.",
+    "justiciar": "Parent direct same-task native outcome 01a13c02-0d8b-7aaa-9db2-e427753d8031. Recovery repaired caller module serialization, page-side URL, normal Dusk settlement, rendered opposing hand settlement, and only own enemy normal-host script[] registrations. No AC waiver or shared flow/view/policy/driver changes.",
+    "visualReview": "Root cold viewed exactly three final 2x captures in acceptance audit; screenshots ignored and referenced by filename only."
+  },
+  "custody": {
+    "sessions": [
+      {
+        "path": "/tmp/worker484-20261014/qa-custody-verified-v02.json",
+        "sha256": "c192b43acc82c68544fc4e2cd9382b9c9927c451e69cd5f29b95e143748591c6",
+        "groups": [
+          44643,
+          44694,
+          44737
+        ],
+        "completion": "Actual managed caller settled; no cleanup uncertainty diagnostic; exact captured admitted owner token cleared by guarded native close path that requires confirmed browser_close, settled certain RPCs and SDK transport closure; actual own server/runner/observer groups absent. This is not a claim based on PID/lock alone.",
+        "records": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "ownToken": "f638a007-b3a8-4421-a4fd-89bf23771020",
+            "state": "absent"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "ownToken": "283c45ed-cc58-4c4f-bfaa-2d223379c3c8",
+            "state": "absent"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "ownToken": "f638a007-b3a8-4421-a4fd-89bf23771020",
+            "state": "absent"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "ownToken": "f638a007-b3a8-4421-a4fd-89bf23771020",
+            "state": "absent"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "ownToken": "283c45ed-cc58-4c4f-bfaa-2d223379c3c8",
+            "state": "absent"
+          }
+        ]
+      },
+      {
+        "path": "/tmp/root484-20261014/qa-workflow-v03-custody-verified.json",
+        "sha256": "017f841d56f268892071369e4e6bf503bc6da396ec0b9ae9090f6246e61a04a8",
+        "groups": [
+          48565,
+          48635,
+          48769,
+          48792
+        ],
+        "completion": "Managed terminal result, retained actual active provider identity, no uncertain cleanup/RPC error, exact own token clearance after audited browser_close/RPC drain/transport, own server groups settled and lease released. Foreign records preserved.",
+        "records": [
+          {
+            "kind": "server",
+            "group": 48635,
+            "record": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "ownTokenGone": true
+          },
+          {
+            "kind": "provider",
+            "session": "22347ea3-5818-43b1-8cad-3afdb72ea17d",
+            "protocol": "2025-11-25",
+            "record": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "ownTokenGone": true
+          }
+        ]
+      },
+      {
+        "path": "/tmp/root484-20261014/qa-workflow-v04-custody-verified.json",
+        "sha256": "f27d54958d2a3b4eeeece11dd34b8367c8fcf29f26e7e86fb0c55aca18fd4ff2",
+        "groups": [
+          51605,
+          51682,
+          51727,
+          51792
+        ],
+        "completion": "Managed terminal result, retained actual active provider identity, no uncertain cleanup/RPC error, exact own token clearance after audited browser_close/RPC drain/transport, own server groups settled and lease released. Foreign records preserved.",
+        "records": [
+          {
+            "kind": "server",
+            "group": 51682,
+            "record": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "ownTokenGone": true
+          },
+          {
+            "kind": "provider",
+            "session": "d39eacdb-5ca3-47d3-b6b7-b6586a37ac42",
+            "protocol": "2025-11-25",
+            "record": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "ownTokenGone": true
+          }
+        ]
+      },
+      {
+        "path": "/tmp/root484-20261014/qa-workflow-v05-custody-verified.json",
+        "sha256": "5c62d78c0d1512e01fad0e39747f981d09733c091c6791792dac43af7a9d4fd9",
+        "groups": [
+          69580,
+          69668,
+          69713,
+          69777
+        ],
+        "completion": "Managed terminal result, retained actual active provider identity, no uncertain cleanup/RPC error, exact own token clearance after audited browser_close/RPC drain/transport, own server groups settled and lease released. Foreign records preserved.",
+        "records": [
+          {
+            "kind": "server",
+            "group": 69668,
+            "record": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "ownTokenGone": true
+          },
+          {
+            "kind": "provider",
+            "session": "9aa5d2a9-1483-46a1-b925-1c981ad3b8a5",
+            "protocol": "2025-11-25",
+            "record": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "ownTokenGone": true
+          }
+        ]
+      },
+      {
+        "path": "/tmp/root484-20261014/qa-workflow-v06-custody-verified.json",
+        "sha256": "17db6f39c4d98d903d0b2fbc718eda556f9c19da2b7a86561fe2b1ac09012bfb",
+        "groups": [
+          34567,
+          34637,
+          34692,
+          34750
+        ],
+        "completion": "Managed terminal result, retained actual active provider identity, no uncertain cleanup/RPC error, exact own token clearance after audited browser_close/RPC drain/transport, own server groups settled and lease released. Foreign records preserved.",
+        "records": [
+          {
+            "kind": "server",
+            "group": 34637,
+            "record": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "ownTokenGone": true
+          },
+          {
+            "kind": "provider",
+            "session": "98091dc3-3f8e-45f5-9796-0d67fa649eb9",
+            "protocol": "2025-11-25",
+            "record": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "ownTokenGone": true
+          }
+        ]
+      }
+    ],
+    "freshAt": "2026-10-14T20:09:51.252383+00:00",
+    "recordedGroups": [
+      19162,
+      19960,
+      20367,
+      21603,
+      24072,
+      30686,
+      32936,
+      33989,
+      34284,
+      34567,
+      34637,
+      34692,
+      34750,
+      34771,
+      36690,
+      36693,
+      37576,
+      39158,
+      41258,
+      42165,
+      42186,
+      44643,
+      44694,
+      44737,
+      44757,
+      47716,
+      47850,
+      47856,
+      48097,
+      48565,
+      48635,
+      48768,
+      48769,
+      48792,
+      49638,
+      50792,
+      51237,
+      51605,
+      51682,
+      51694,
+      51727,
+      51792,
+      52100,
+      52635,
+      52858,
+      55876,
+      56688,
+      56749,
+      56933,
+      57023,
+      62261,
+      66710,
+      67154,
+      69580,
+      69668,
+      69713,
+      69777
+    ],
+    "remaining": [],
+    "qualification": "Exact own provider identities/active records, confirmed browser close, settled RPC/transport, own token clearance and server descendants/observers settled. No global slot emptiness or PID-only provider claim; foreign records preserved."
+  },
+  "archive": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.484/final-source-v01",
+  "pending": {
+    "coreReview": "Normal fresh Claude other-family core review pending; parent owns review and disposition. Temporary Sol override expired.",
+    "commit": "Exact one commit authorized by root native 01a13c0e-8123-7290-8093-62f9497d8f54 at 2026-10-14T20:15:45.954Z; actual result recorded externally.",
+    "delivery": "Parent executor owns candidate, approval, landing and acceptance reconciliation."
+  },
+  "commitAuthority": {
+    "nativeId": "01a13c0e-8123-7290-8093-62f9497d8f54",
+    "at": "2026-10-14T20:15:45.954Z",
+    "scope": "Exact one detailed feat(engine) Conventional Commit; only friction/measurements clock/status refreshed, all other fourteen path hashes frozen."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.484",
+  "phase": 5,
+  "implementMin": 81.56817126666667,
+  "implementWindow": {
+    "start": "2026-10-14T18:55:02.162Z",
+    "end": "2026-10-14T20:16:36.252276+00:00"
+  },
+  "localValidationS": {
+    "focused": 17.357719833991723,
+    "review": 62.89794249998522,
+    "knip": 4.42913683297229,
+    "preflight": 1.5342372090090066,
+    "fuzz": 181.24329374998342,
+    "browser": 267.3615889590001
+  },
+  "hostLoad": 8.5703125,
+  "testDelta": {
+    "files": 1,
+    "lines": 319,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 17.479428716666668,
+      "note": "Elapsed first failed caller end to final recovery launch, including parent diagnosis, scratch serialization/VM URL/phase/rendered settlement corrections, own fixture host-script repair, fresh checks and coordination; not pure editing time. Four overall failures retained; fourteen actual accepted cells joined from v05 prefix and v06."
+    }
+  ]
+}

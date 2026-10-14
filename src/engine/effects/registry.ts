@@ -72,6 +72,7 @@ import {
   loseEnergyPrimitive,
   losePointsPrimitive,
   materializePrimitive,
+  materializeChosenPrimitive,
   materializeFigmentCopyPrimitive,
   materializeFigmentsPrimitive,
   modifyCardCostPrimitive,
@@ -281,6 +282,7 @@ const DEFINITIONS = {
   get losePoints() {
     return losePointsPrimitive;
   },
+  get materializeChosen() { return materializeChosenPrimitive; },
   get materialize() {
     return materializePrimitive;
   },
