@@ -1,3 +1,7 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, untilEndOfTurn, whenReturn } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { costModifier } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +19,12 @@ export default dreamsign({
     "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
   ],
   tags: ["Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    triggered(whenReturn(characterYouControl()),
+      costModifier("you", { cardType: "character" }, -1, { next: true, duration: untilEndOfTurn() }),
+      { oncePerTurn: true }),
+  ],
+  verifiedText: expectedVerifiedText(
+    "Once per turn, when you return a character you control to hand, your next character this turn costs 1● less.",
+  ),
 });

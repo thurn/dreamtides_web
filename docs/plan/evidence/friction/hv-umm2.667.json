@@ -1,0 +1,36 @@
+{
+  "bead": "hv-umm2.667",
+  "phase": 5,
+  "implementMin": 65.8074288,
+  "implementWindow": {
+    "start": "2026-10-14T04:30:05.329000+00:00",
+    "end": "2026-10-14T05:35:53.774728+00:00"
+  },
+  "localValidationS": {
+    "focused": 18.349095584009774,
+    "review": 60.72629308301839,
+    "knip": 5.459775708004599,
+    "preflight": 1.2514385409886017,
+    "sweep": 15.21754387501278,
+    "fuzz": 645.1254718750133,
+    "judged": 300.102728124999
+  },
+  "hostLoad": 7.0341796875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 12.890247316666667,
+      "note": "Own caller shape/render/auto-answer mistakes and180s total matrix budget caused retained failed attempts and same-task provider investigation. Combined observed first-QA-launch to authorized recovered-launch window includes verification, coordination and recovery; elapsed wall, not productive CPU. Protected uncertain provider receipt retained; recovered run uses native other usable slot and total600s."
+    },
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 29.8980527,
+      "note": "Observed both-slot retained-record admission rejection to first approved restored-capacity launch. Inclusive interval contains parked approval, peer coordination and parent bounded one-service restart; not native kernel-lease queue duration or productiveCPU. Foreignrecords preserved and old ownrecord archived with actualprocessdeath proof."
+    }
+  ]
+}

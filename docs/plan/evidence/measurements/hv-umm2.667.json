@@ -1,0 +1,581 @@
+{
+  "bead": "hv-umm2.667",
+  "base": "dbf671ef3166fc1e0fd3c8498c1326d38b0b088d",
+  "dispatch": {
+    "at": "2026-10-14T04:30:05.329Z",
+    "callId": "call_4172477e72c44261b025cdf47de8c088",
+    "samplingStart": "UNKNOWN"
+  },
+  "sourceBudget": {
+    "grossRuntime": 26,
+    "leafModules": 2,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "newPrimitives": [],
+    "newPrompts": [],
+    "newFloatingKinds": [],
+    "fallout": []
+  },
+  "D20": "Pure composition of landed whenLeavesPlay/whenReturn, characterYouControl, oncePerTurn, costModifier next character, and untilEndOfTurn. Existing primitive contracts cover controller capture, actual hand destination, replacements, multiple modifiers and floor zero, next actual matching commit and expiry. No scenario module or test entrypoint.",
+  "D21": {
+    "sampleBytes": [
+      48,
+      165
+    ],
+    "sampled": false,
+    "reason": "Native admission additionally requires actual floatingcost badge/payment/nextconsumption/expiry judgment despite no newkind/component. Final12actualdesktop/mobile cases/12games/24captures pass on unchangedsource.",
+    "cases": [
+      {
+        "uuid": "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+        "side": "enemy",
+        "viewport": "desktop",
+        "mode": "enemy-expiry",
+        "gameId": "pa5esv",
+        "logFile": "discount-3-enemy-expiry-desktop-pa5esv.jsonl"
+      },
+      {
+        "uuid": "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+        "side": "enemy",
+        "viewport": "desktop",
+        "mode": "enemy-expiry",
+        "gameId": "ygk3i6",
+        "logFile": "discount-2-enemy-expiry-desktop-ygk3i6.jsonl"
+      },
+      {
+        "uuid": "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+        "side": "player",
+        "viewport": "desktop",
+        "mode": "consume",
+        "gameId": "aynec6",
+        "logFile": "discount-1-consume-desktop-aynec6.jsonl"
+      },
+      {
+        "uuid": "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+        "side": "player",
+        "viewport": "desktop",
+        "mode": "expiry",
+        "gameId": "bxxko7",
+        "logFile": "discount-1-expiry-desktop-bxxko7.jsonl"
+      },
+      {
+        "uuid": "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+        "side": "player",
+        "viewport": "desktop",
+        "mode": "consume",
+        "gameId": "2h4ix9",
+        "logFile": "discount-0-consume-desktop-2h4ix9.jsonl"
+      },
+      {
+        "uuid": "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+        "side": "player",
+        "viewport": "desktop",
+        "mode": "expiry",
+        "gameId": "8pxs7r",
+        "logFile": "discount-0-expiry-desktop-8pxs7r.jsonl"
+      },
+      {
+        "uuid": "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+        "side": "enemy",
+        "viewport": "mobile",
+        "mode": "enemy-expiry",
+        "gameId": "rrefiv",
+        "logFile": "discount-3-enemy-expiry-mobile-rrefiv.jsonl"
+      },
+      {
+        "uuid": "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+        "side": "enemy",
+        "viewport": "mobile",
+        "mode": "enemy-expiry",
+        "gameId": "px7im2",
+        "logFile": "discount-2-enemy-expiry-mobile-px7im2.jsonl"
+      },
+      {
+        "uuid": "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+        "side": "player",
+        "viewport": "mobile",
+        "mode": "consume",
+        "gameId": "5rkpzb",
+        "logFile": "discount-1-consume-mobile-5rkpzb.jsonl"
+      },
+      {
+        "uuid": "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+        "side": "player",
+        "viewport": "mobile",
+        "mode": "expiry",
+        "gameId": "eefmt4",
+        "logFile": "discount-1-expiry-mobile-eefmt4.jsonl"
+      },
+      {
+        "uuid": "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+        "side": "player",
+        "viewport": "mobile",
+        "mode": "consume",
+        "gameId": "ckvyzv",
+        "logFile": "discount-0-consume-mobile-ckvyzv.jsonl"
+      },
+      {
+        "uuid": "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+        "side": "player",
+        "viewport": "mobile",
+        "mode": "expiry",
+        "gameId": "ahvvav",
+        "logFile": "discount-0-expiry-mobile-ahvvav.jsonl"
+      }
+    ],
+    "visual": {
+      "verdict": "pass",
+      "inspectedCaptures": 24,
+      "notes": "Actual cost badge visible on corresponding combatant, hand prices1/2 while active and3 after expiry, marker clears after consumed/expired. Normal controls and target interactions succeed on desktop/mobile. Captures include existing phase/presentation motion and synthetic LabRecruit padding; mobilepost-play hand-motion frames partly cover nearenergy row, so payment is proved by exact physicalstate/logcorrelation rather than universal unobstructed-energy screenshot claim. No new layout/styling or policy-selected enemy discountedplay/reload claim."
+    },
+    "caseProof": "artifacts/qa/hv-umm2.667/audit/final-qa-proof.json; full actual per-case guarantees/payment/physical-card/turn-expiry/Caps and capture metadata reside here and ledger59rows; references preserve originalrawreports."
+  },
+  "printedText": "Both whole immutable battle clauses reproduced exactly in verifiedText inputs; no journey clause in either leaf.",
+  "rules": "Existing normative cost/once-per-turn/departure rules and RD-hv-umm2.102-1 settle these clauses; no ambiguity/RD/card issue or rule edit.",
+  "failurePaths": "No new state transition/prompt/storage schema. Existing next-modifier tests cover cancelled play, reload through X prompt and one-time consumption; whenReturn contracts cover malformed saved state, stale answers, queued-trigger reload and earlier trigger failure. Registered fold and intent guards provide atomic commits and concurrent actor rejection; no new protocol to test.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "ordinary review prepare first step at2026-10-14T04:32:17.920Z; paired review60.726293s"
+      }
+    }
+  },
+  "validation": {
+    "focused": {
+      "start": "2026-10-14T04:31:21.980523+00:00",
+      "end": "2026-10-14T04:31:23.977664+00:00",
+      "wallS": 1.997071291989414,
+      "exit": 1,
+      "pid": 98287,
+      "pgid": 98287,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/focused.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "focused2": {
+      "start": "2026-10-14T04:31:55.347931+00:00",
+      "end": "2026-10-14T04:32:13.697066+00:00",
+      "wallS": 18.349095584009774,
+      "exit": 0,
+      "pid": 1054,
+      "pgid": 1054,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/focused2.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "review": {
+      "start": "2026-10-14T04:32:17.733544+00:00",
+      "end": "2026-10-14T04:33:18.459457+00:00",
+      "wallS": 60.72629308301839,
+      "exit": 0,
+      "pid": 2685,
+      "pgid": 2685,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/review.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "knip": {
+      "start": "2026-10-14T04:32:18.869590+00:00",
+      "end": "2026-10-14T04:32:24.329395+00:00",
+      "wallS": 5.459775708004599,
+      "exit": 0,
+      "pid": 2823,
+      "pgid": 2823,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/knip.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "preflight": {
+      "start": "2026-10-14T04:32:36.529330+00:00",
+      "end": "2026-10-14T04:32:39.629065+00:00",
+      "wallS": 3.0995672080025543,
+      "exit": 1,
+      "pid": 4012,
+      "pgid": 4012,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/preflight.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "preflight-dreamsigns": {
+      "start": "2026-10-14T04:33:03.474349+00:00",
+      "end": "2026-10-14T04:33:04.725879+00:00",
+      "wallS": 1.2514385409886017,
+      "exit": 0,
+      "pid": 5728,
+      "pgid": 5728,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/preflight-dreamsigns.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "sweep": {
+      "start": "2026-10-14T04:33:04.614791+00:00",
+      "end": "2026-10-14T04:33:19.832333+00:00",
+      "wallS": 15.21754387501278,
+      "exit": 0,
+      "pid": 5785,
+      "pgid": 5785,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/sweep.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "direct1": {
+      "start": "2026-10-14T04:34:26.940307+00:00",
+      "end": "2026-10-14T04:34:34.476290+00:00",
+      "wallS": 7.535958499996923,
+      "exit": 1,
+      "pid": 8089,
+      "pgid": 8089,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/direct1.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "direct2": {
+      "start": "2026-10-14T04:35:02.816647+00:00",
+      "end": "2026-10-14T04:35:16.459308+00:00",
+      "wallS": 13.642687499988824,
+      "exit": 1,
+      "pid": 9428,
+      "pgid": 9428,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/direct2.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "direct3": {
+      "start": "2026-10-14T04:35:52.390766+00:00",
+      "end": "2026-10-14T04:37:29.803778+00:00",
+      "wallS": 97.41368695802521,
+      "exit": 1,
+      "pid": 10756,
+      "pgid": 10756,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/direct3.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "direct4": {
+      "start": "2026-10-14T04:38:18.365925+00:00",
+      "end": "2026-10-14T04:39:01.088534+00:00",
+      "wallS": 42.722853874991415,
+      "exit": 1,
+      "pid": 15439,
+      "pgid": 15439,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/direct4.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "fuzz": {
+      "start": "2026-10-14T04:32:20.064360+00:00",
+      "end": "2026-10-14T04:43:05.185000+00:00",
+      "wallS": 645.1254718750133,
+      "exit": 0,
+      "pid": 2975,
+      "pgid": 2975,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/fuzz.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "direct-final-retired": {
+      "start": "2026-10-14T04:40:44.187193+00:00",
+      "end": "2026-10-14T04:43:47.300154+00:00",
+      "wallS": 183.1142531670048,
+      "exit": 2,
+      "pid": 75456,
+      "pgid": 75456,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/direct-final.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "direct-recovered": {
+      "start": "2026-10-14T04:47:20.355146+00:00",
+      "end": "2026-10-14T04:47:41.465881+00:00",
+      "wallS": 21.110802000010153,
+      "exit": 1,
+      "pid": 97582,
+      "pgid": 97582,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/direct-recovered.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "direct-guarded-admission-failure": {
+      "start": "2026-10-14T04:50:59.466548+00:00",
+      "end": "2026-10-14T04:50:59.749671+00:00",
+      "wallS": 0.28298466600244865,
+      "exit": 2,
+      "pid": 66302,
+      "pgid": 66302,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/direct-guarded.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "schema-checkpoint": {
+      "start": "2026-10-14T04:57:44.379142+00:00",
+      "end": "2026-10-14T04:57:44.509902+00:00",
+      "wallS": 0.130520417005755,
+      "exit": 0,
+      "pid": 85286,
+      "pgid": 85286,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/schema-checkpoint.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "direct-approved": {
+      "start": "2026-10-14T05:20:53.349710+00:00",
+      "end": "2026-10-14T05:25:53.457865+00:00",
+      "wallS": 300.102728124999,
+      "exit": 0,
+      "pid": 73492,
+      "pgid": 73492,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/direct-approved.json",
+      "sourceScope": "HEAD9bfb49af0+unchanged frozenleaves, sourcequalification in direct-approved-source.json"
+    },
+    "schema-ready": {
+      "start": "2026-10-14T05:29:08.087423+00:00",
+      "end": "2026-10-14T05:29:08.228988+00:00",
+      "wallS": 0.14146537499618717,
+      "exit": 0,
+      "pid": 66875,
+      "pgid": 66875,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/schema-ready.json",
+      "sourceScope": "Unchanged frozen leaves; originalbase dbf671ef"
+    },
+    "schema-ready-compact": {
+      "start": "2026-10-14T05:33:43.130306+00:00",
+      "end": "2026-10-14T05:33:43.261311+00:00",
+      "wallS": 0.13091691699810326,
+      "exit": 0,
+      "pid": 37009,
+      "pgid": 37009,
+      "receipt": "artifacts/qa/hv-umm2.667/audit/schema-ready-compact.json",
+      "sourceScope": "Evidence-only simplification at HEAD9bfb49af0; leaves/driver/ledger unchanged."
+    }
+  },
+  "qaAttemptQualifications": [
+    "First focused import failure before tests corrected within exact leaf; failed receipt retained.",
+    "Generic --cards preflight rejects Dreamsign domain; exact UUID --dreamsigns preflight and sweep passed.",
+    "Private caller attempts1-4 retain failed raw reports; repairs touch only ignored acceptance caller (render wait, JSONL parse, target auto-answer, structured turnNumber), product source unchanged."
+  ],
+  "sourceCustody": {
+    "leafManifest": "artifacts/qa/hv-umm2.667/audit/source-freeze.json",
+    "allTrackedRuntimeManifest": "artifacts/qa/hv-umm2.667/audit/all-source-freeze.json",
+    "allTrackedRuntimeCount": 2408,
+    "driverManifest": "artifacts/qa/hv-umm2.667/audit/driver-freeze-guarded.json"
+  },
+  "reviewRouting": "Noncore two-leaf composition26gross requires no cold review. Normal other-family Claude route applies to any review required by scope expansion.",
+  "install": {
+    "wallS": 2.822967,
+    "scope": "Parent fresh worktree installation before dispatch; separate from inclusive implementer window."
+  },
+  "completion": "All bounded source and actualacceptance checks complete; parent READY audit/ACK received. Finalinclusivecutoff below immediately precedes schema and normaldate amendment of SINGLE unlandedcheckpoint. Originaldispatch includesallpause/approval/recovery/coordination/QA/waits, samplingUNKNOWN. No postcommittrackedwrites.",
+  "fuzz": {
+    "games": 300,
+    "steps": 115608,
+    "prompts": 7660,
+    "interactiveReruns": 785,
+    "failures": 0,
+    "nativeWallS": 304.0,
+    "nativeCpuS": 321.9,
+    "wrapperInclusiveS": 645.1254718750133,
+    "targetIncluded": [
+      600,
+      600
+    ],
+    "targetExercised": [
+      1358,
+      150
+    ],
+    "executionStart": "Own npm lstart2026-10-14T04:37:59Z (one-second precision); exactsampling/budget-start load UNKNOWN",
+    "heavyWait": "Approx339s from wrapper launch through owned npm lstart; coarse time scope retained, not exact internal lock-acquisition time."
+  },
+  "qaTransportIncident": {
+    "invocation": "invocations/run-xEd2zS",
+    "exit": 2,
+    "wallS": 183.1142531670048,
+    "cause": "Agent-selected --timeout180 is total matrix budget (native runScenarioPlan404 deadline). Exhaustion cut remaining mobile call into RPC transport uncertainty. Product and frozen caller unchanged.",
+    "retained": "20partialcaptures, desktop last-game log96rows; no result.json/mobile exportedlog/fullmatrix verdict. Captures are partial evidence only.",
+    "providerRecord": "Own slot1 token5de98acc-6bd5-43eb-adb3-c0a843c38f35/session8f6b6769-e4ef-4ca5-905d-cbbe435038f7 call-unconfirmed; parent justiciar owns reconciliation before any new browser operation.",
+    "localSettlement": "All19ownlocalgroups absent04:44:40.986Z; independent of unconfirmed remoteprovider.",
+    "next": "Disposition: parent human-authorized one coordinatedrestart at05:19:18.311Z supplied actualoldprovider-tree-death/newendpoint proof, preserving exacthistoricrawrecord and UNKNOWN missingcompletionreceipt. Final run-NI79Yy succeeds with fullactualproof; no currentacceptance debt fromretiredpartialrun."
+  },
+  "qaCallerRepairWindow": {
+    "start": "2026-10-14T04:34:26.940307+00:00",
+    "end": "2026-10-14T04:40:44.187193+00:00",
+    "seconds": 377.246886,
+    "scope": "Combined caller authoring/retained verification repairs: renderwait, JSONLparse, sole-targetautoanswer, structured turn. Includes checks/coordination, not productive CPU. Below10min friction threshold."
+  },
+  "recoveryDecision": "artifacts/qa/hv-umm2.667/audit/recovery/decision.txt (exact native-ACKed same-task decision; historyrawtext retained)",
+  "frictionWindow": {
+    "start": "2026-10-14T04:34:26.940307+00:00",
+    "end": "2026-10-14T04:47:20.355146+00:00",
+    "minutes": 12.890247316666667,
+    "scope": "Inclusive combined caller-verification/recovery interval through actual recovered native launch; not exclusive scripting CPU. First four repairs377.247s, retired matrix183.114s; recovery/waits/proof inside remaining window. Native heavy queue/fuzz not conflated with this interval."
+  },
+  "probeLifecycleCorrection": {
+    "invocation": "invocations/run-PghJVU",
+    "failure": "Expiry polling predicate dereferenced absent window.__engineProbe.slice. React effect99-113 installs/removes probe around render. No battleEnded/Capsfailure inretainedgame9syh38 v10/v11 passes.",
+    "repaired": "Bounded private polling predicate returnsfalse ifpublicprobe absent; native result/stall/deadline remain; finalstate assertions strict. No product/harness edit.",
+    "driverManifest": "artifacts/qa/hv-umm2.667/audit/driver-freeze-guarded.json",
+    "ownNormalCleanup": "OwnPG97582/server97628 absent; no uncertain transport for recoveredinvocation. Prior ownslot1incident retains UNKNOWN completion separately."
+  },
+  "browserCapacityWait": {
+    "observed": "2026-10-14T04:50:59.466548+00:00",
+    "nativeResult": "Exact guardedcaller failed beforeadmission0.282985s becausebothslots retained; no newserver/client/context. Ownslot1 preserved, foreignslot0 belongs245 and was neitheredited norentered. Parentjusticiar handlesnativecapacity; no unchangedretry.",
+    "disposition": "Parent approvedrestart proof restoredcapacity; finalsource-qualified twelve-case acceptance completed. Prior beforeadmissionfailure retained, no unchangedretry."
+  },
+  "checkpointReadout": "artifacts/qa/hv-umm2.667/audit/parked-readout.json",
+  "checkpoint": {
+    "at": "2026-10-14T04:59:04.490791+00:00",
+    "reason": "Both native browser slots protect uncertain provider executions; shared-service restart is prohibited by project instruction without fresh user exception. Approval requested; no restart/record retirement/acceptance waiver.",
+    "helper": "/root/discount667 terminal PARKED",
+    "sourceQualified": true,
+    "candidate": null,
+    "providerCompletion": "UNKNOWN",
+    "next": "Coordinate with service users; actual user exception or genuine provider teardown proof, then native recovery and same guarded caller total600/per-callcap300. Complete actual QA before final source amendment/submission."
+  },
+  "approvedRecovery": {
+    "authority": "Human explicitly Authorize coordinatedrestart; parent performedexactlyoneapprovedmaintenance withbothnativebrowserlocks andno activeforeignprovider/server.",
+    "at": "2026-10-14T05:19:18.311Z",
+    "proofs": [
+      "artifacts/qa/hv-umm2.667/audit/recovery/approved-restart-before.json",
+      "artifacts/qa/hv-umm2.667/audit/recovery/approved-restart-after.json",
+      "artifacts/qa/hv-umm2.667/audit/recovery/approved-restart-native-ack.json"
+    ],
+    "observed": "OldservicePID2298/entireobservedtreegone; distinctnewservicePID18177sole8931listener, oldsession404. Exactownrawrecordbytesarchived SHA77ed26060b3b63ba4441d9b00379dec1871307da0879a18c794348ddfb07edac. No fabricatedcompletionreceipt/foreignrecordwriter/additionalservice maintenance."
+  },
+  "finalQaSourceQualification": {
+    "at": "2026-10-14T05:21:40.754473+00:00",
+    "sourceHead": "9bfb49af0fed19b1fac55302b1aa29047ba51844",
+    "originalBase": "dbf671ef3166fc1e0fd3c8498c1326d38b0b088d",
+    "leafManifest": "source-freeze.json",
+    "qualification": "Source-only leaves byte-identical to all priorchecks; checkpoint is unvalidated evidencestate, not a candidate. Wrapper sourceBase field means originalbase, not currentHEAD. No functionalcheckreruns needed for checkpoint-onlymetadata."
+  },
+  "capacityRecoveryWindow": {
+    "start": "2026-10-14T04:50:59.466548+00:00",
+    "end": "2026-10-14T05:20:53.349710+00:00",
+    "minutes": 29.8980527,
+    "scope": "Both-slot admission rejection through first successful restoredcapacity native launch; includesparked approval/peercoordination/maintenance. Not runner-reported browserLeaseWait."
+  },
+  "finalQaProof": "artifacts/qa/hv-umm2.667/audit/final-qa-proof.json",
+  "finalQA": {
+    "caseCount": 12,
+    "uniqueGames": 12,
+    "totalRows": 862,
+    "normalRawCaps": [],
+    "captureCount": 24,
+    "driverHash": "bae90bb58d4373739dfe78534ec6bf2e687ca411e8150cd199bbde3c389f1de9",
+    "allSourceCount": 2408,
+    "sourceMismatch": [],
+    "normalRuntime": {
+      "pid": 73540,
+      "slot": 1,
+      "port": 5274,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1969,
+        "scenario": 297233,
+        "total": 299269
+      },
+      "localGroups": [
+        73492,
+        73540
+      ],
+      "members": [],
+      "scope": "This successful runner cleanup only; historical incident reconciled under human-authorized actualoldproviderprocessdeath proof; no fabricated historical execution receipt/global port orservice cleanup claim."
+    },
+    "visualJudgment": {
+      "verdict": "pass",
+      "inspectedCaptures": 24,
+      "notes": "Actual cost badge visible on corresponding combatant, hand prices1/2 while active and3 after expiry, marker clears after consumed/expired. Normal controls and target interactions succeed on desktop/mobile. Captures include existing phase/presentation motion and synthetic LabRecruit padding; mobilepost-play hand-motion frames partly cover nearenergy row, so payment is proved by exact physicalstate/logcorrelation rather than universal unobstructed-energy screenshot claim. No new layout/styling or policy-selected enemy discountedplay/reload claim."
+    }
+  },
+  "loggingQualification": {
+    "games": [
+      {
+        "gameId": "pa5esv",
+        "count": 1,
+        "sourceNames": [
+          "Riftwalker"
+        ]
+      },
+      {
+        "gameId": "ygk3i6",
+        "count": 1,
+        "sourceNames": [
+          "Riftwalker"
+        ]
+      },
+      {
+        "gameId": "aynec6",
+        "count": 1,
+        "sourceNames": [
+          "Riftwalker"
+        ]
+      },
+      {
+        "gameId": "bxxko7",
+        "count": 1,
+        "sourceNames": [
+          "Riftwalker"
+        ]
+      },
+      {
+        "gameId": "2h4ix9",
+        "count": 1,
+        "sourceNames": [
+          "Advance Gunner"
+        ]
+      },
+      {
+        "gameId": "8pxs7r",
+        "count": 1,
+        "sourceNames": [
+          "Advance Gunner"
+        ]
+      },
+      {
+        "gameId": "rrefiv",
+        "count": 1,
+        "sourceNames": [
+          "Riftwalker"
+        ]
+      },
+      {
+        "gameId": "px7im2",
+        "count": 1,
+        "sourceNames": [
+          "Riftwalker"
+        ]
+      },
+      {
+        "gameId": "5rkpzb",
+        "count": 1,
+        "sourceNames": [
+          "Riftwalker"
+        ]
+      },
+      {
+        "gameId": "eefmt4",
+        "count": 1,
+        "sourceNames": [
+          "Riftwalker"
+        ]
+      },
+      {
+        "gameId": "ckvyzv",
+        "count": 1,
+        "sourceNames": [
+          "Advance Gunner"
+        ]
+      },
+      {
+        "gameId": "ahvvav",
+        "count": 1,
+        "sourceNames": [
+          "Advance Gunner"
+        ]
+      }
+    ],
+    "scope": "Existing presentation notice.sourceName fields inrawexport retained; mechanics correlated byactualUUID/physicalIDs/effectIDs, nevernames. No nameless-all-rows claim."
+  },
+  "remaining": "Parent sole nativecandidate/certifiedpromotion/cleanup/closure; no implementerwork remaining afterfinalsinglecheckpointamend.",
+  "ledgerCounts": {
+    "rows": 59,
+    "sweepPass": 4,
+    "sweepSkip": 36,
+    "retainedFailedAttempts": 7,
+    "finalJudgedPass": 12,
+    "unresolvedProductFailure": 0
+  },
+  "parentAudit": "artifacts/qa/hv-umm2.667/audit/parent-final-qa-audit.json",
+  "logStartQualification": "Existing src/engine/log.ts143-145 omits cost effectStarted persistence. ActualsourceUUID/physical intents/triggers/replay and activefloating state plus exacteffectEnded corroborate mechanics. No fabricatedcost-start log requirement or universalnamelessrawexport claim.",
+  "implementerFinalCutoff": {
+    "start": "2026-10-14T04:30:05.329000+00:00",
+    "end": "2026-10-14T05:35:53.774728+00:00",
+    "minutes": 65.8074288,
+    "scope": "Actual originaldispatch through immediately before finalschema/Git amendment, includesallpausedapproval/recovery/waits. OrdinaryGit dates; subsecondactualtail recorded inignoredfinalreceipt, not trackedpostcommit."
+  }
+}
