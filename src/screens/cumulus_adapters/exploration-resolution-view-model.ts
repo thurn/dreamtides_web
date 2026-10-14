@@ -144,8 +144,10 @@ function resolvedTransfigurationViews(
 }
 
 /** Saved blocked copies validate attempted counts without presenting phantom cards. */
-function preventedCopyMappings(resolution: import("../../types/journey").ExplorationResolution, state: JourneyState, lookup: JourneyModifierRegistry["lookup"]): readonly import("../../types/journey").ExplorationCardCopy[] | null {
-  if (!validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>, lookup)) return null;
+function preventedCopyMappings(runtime: ExplorationSiteRuntime, state: JourneyState, lookup: JourneyModifierRegistry["lookup"]): readonly import("../../types/journey").ExplorationCardCopy[] | null {
+  const resolution = runtime.resolution;
+  if (resolution === null) return null;
+  if (!validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>, lookup, runtime.actionOffers)) return null;
   return (resolution.preventedNightmareGains ?? []).flatMap((gain) => gain.sourceEntryId === undefined || gain.sourceCardId === undefined ? [] : [{
     sourceEntryId: gain.sourceEntryId, sourceCardId: gain.sourceCardId, mintedEntryId: gain.entryId, mintedCardId: gain.cardId,
   }]);
@@ -279,7 +281,7 @@ function compoundActionRewardForResolution(
   }
 
   const copyMappings = resolution.cardCopies ?? [];
-  const blockedCopies = preventedCopyMappings(resolution, state, lookup);
+  const blockedCopies = preventedCopyMappings(runtime, state, lookup);
   if (blockedCopies === null) return null;
   const copies = copyMappings.flatMap((mapping) => {
     const sourceEntry = state.deck.find(
@@ -413,7 +415,7 @@ function compoundActionRewardForResolution(
           resolution.affectedEntryIds,
           preparation.targets.map((target) => target.entryId),
         ) &&
-        nightmares.length + (validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>, lookup) ? (resolution.preventedNightmareGains?.length ?? 0) : -1) === preparation.nightmareCount &&
+        nightmares.length + (validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>, lookup, runtime.actionOffers) ? (resolution.preventedNightmareGains?.length ?? 0) : -1) === preparation.nightmareCount &&
         matchesNightmareGains() &&
         copies.length === 0
         ? {
@@ -458,7 +460,7 @@ function compoundActionRewardForResolution(
         ) &&
         purged.length === 0 &&
         keywordChanges.length === 0 &&
-        nightmares.length + (validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>, lookup) ? (resolution.preventedNightmareGains?.length ?? 0) : -1) === preparation.nightmareCount &&
+        nightmares.length + (validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>, lookup, runtime.actionOffers) ? (resolution.preventedNightmareGains?.length ?? 0) : -1) === preparation.nightmareCount &&
         sameOrderedIds(resolution.gainedEntryIds ?? [], [
           ...transfigurations.map((mapping) => mapping.entryId),
           ...nightmares.map((card) => card.entryId),
@@ -749,7 +751,7 @@ function randomCardCopiesRewardForResolution(
   }
   const preparation = explorationOfferPlan(offer, "random-deck-target");
   const mappings = resolution.cardCopies ?? [];
-  const blocked = preventedCopyMappings(resolution, state, lookup);
+  const blocked = preventedCopyMappings(runtime, state, lookup);
   if (blocked === null) return null;
   const attempts = [...mappings, ...blocked].sort((left, right) => (preparation?.targets.findIndex((target) => target.entryId === left.sourceEntryId) ?? -1) - (preparation?.targets.findIndex((target) => target.entryId === right.sourceEntryId) ?? -1));
   if (
@@ -1502,7 +1504,7 @@ export function rewardForResolution(
       ).length;
       if (
         nightmares.length === persistedNightmareCount &&
-        nightmares.length + (validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>, lookup) ? (resolution.preventedNightmareGains?.length ?? 0) : -1) === resolvedAction.nightmareCount
+        nightmares.length + (validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>, lookup, runtime.actionOffers) ? (resolution.preventedNightmareGains?.length ?? 0) : -1) === resolvedAction.nightmareCount
       ) {
         return {
           kind: "nightmare-dreamsign-bundle",
@@ -1541,7 +1543,7 @@ export function rewardForResolution(
           }),
     };
   }
-  const blockedCopiesForAction = preventedCopyMappings(resolution, state, lookup);
+  const blockedCopiesForAction = preventedCopyMappings(runtime, state, lookup);
   if (blockedCopiesForAction === null) return null;
   if (resolvedAction?.effectKind === "purge-and-copy") {
     const purgedEntry = resolution.purgedEntrySnapshots?.[0];

@@ -19,9 +19,18 @@ const record = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 /** Optional saved receipts have their own bounded structural and identity contract. */
-export function validPreventedNightmareGains(value: unknown, deck: readonly unknown[], resolution: Record<string, unknown>, lookup: JourneyModifierRegistry["lookup"]): boolean {
+export function validPreventedNightmareGains(value: unknown, deck: readonly unknown[], resolution: Record<string, unknown>, lookup: JourneyModifierRegistry["lookup"], actionOffers: unknown): boolean {
   if (value === undefined) return true;
   if (!Array.isArray(value)) return false;
+  if (!Array.isArray(actionOffers)) return false;
+  const matching: unknown = actionOffers.find((candidate) => record(candidate) && candidate.actionId === resolution.actionId);
+  const offer = record(matching) ? matching : undefined;
+  const preparation = record(offer) && record(offer.preparation) ? offer.preparation : undefined;
+  const plan = preparation !== undefined && record(preparation.plan) ? preparation.plan : undefined;
+  const producer = preparation?.kind === "compound-action" && plan?.kind === "purge-transfigure-copy" ? "compound-copy"
+    : preparation?.kind === "random-deck-target" && plan?.effectKind === "copy-random-cards" ? "random-copy"
+      : offer?.canonicalMechanicId === "purge-and-duplicate" ? "purge-and-copy"
+        : offer?.canonicalMechanicId === "duplicate-deck-entry" ? "selected-copy" : "non-copy";
   const ids = new Set<DeckEntryId>();
   for (const item of value) {
     if (!record(item)) return false;
@@ -33,18 +42,32 @@ export function validPreventedNightmareGains(value: unknown, deck: readonly unkn
       deck.some((entry) => record(entry) && entry.entryId === id) ||
       (Array.isArray(resolution.gainedEntryIds) && resolution.gainedEntryIds.includes(id)) ||
       (Array.isArray(resolution.nightmareGains) && resolution.nightmareGains.some((gain) => record(gain) && gain.entryId === id))) return false;
-    if ((item.sourceEntryId !== undefined || item.sourceCardId !== undefined) &&
-      (deckEntryIdFromUnknown(item.sourceEntryId) === null || item.sourceEntryId === id || cardIdFromUnknown(item.sourceCardId) !== NIGHTMARE_CARD_ID)) return false;
-    if (item.sourceEntryId !== undefined) {
+    const paired = item.sourceEntryId !== undefined || item.sourceCardId !== undefined;
+    if (producer !== "non-copy" || paired) {
+      if (deckEntryIdFromUnknown(item.sourceEntryId) === null || item.sourceEntryId === id || cardIdFromUnknown(item.sourceCardId) !== NIGHTMARE_CARD_ID) return false;
       const selection = record(resolution.selection) ? resolution.selection : undefined;
-      const related = selection?.copyEntryId !== undefined
-        ? selection.copyEntryId === item.sourceEntryId
-        : Array.isArray(selection?.entryIds)
-          ? selection.entryIds.includes(item.sourceEntryId)
-          : Array.isArray(resolution.cardCopies) && (
-            resolution.cardCopies.some((copy) => record(copy) && copy.mintedEntryId === id &&
-              copy.sourceEntryId === item.sourceEntryId && copy.sourceCardId === item.sourceCardId) ||
-            (Array.isArray(resolution.affectedEntryIds) && resolution.affectedEntryIds.includes(item.sourceEntryId)));
+      let related = false;
+      switch (producer) {
+        case "compound-copy":
+          related = Array.isArray(selection?.entryIds) && selection.entryIds.length === 1 &&
+            !selection.entryIds.includes(item.sourceEntryId) &&
+            !(Array.isArray(resolution.purgedEntryIds) && resolution.purgedEntryIds.includes(item.sourceEntryId)) &&
+            Array.isArray(plan?.targets) && plan.targets.some((target) => record(target) && target.entryId === item.sourceEntryId && target.cardId === item.sourceCardId) &&
+            Array.isArray(resolution.cardTransfigurations) && resolution.cardTransfigurations.some((target) => record(target) && target.entryId === item.sourceEntryId && target.cardId === item.sourceCardId) &&
+            Array.isArray(resolution.affectedEntryIds) && resolution.affectedEntryIds.includes(item.sourceEntryId);
+          break;
+        case "random-copy":
+          related = Array.isArray(plan?.targets) && plan.targets.some((target) => record(target) && target.entryId === item.sourceEntryId && target.cardId === item.sourceCardId);
+          break;
+        case "purge-and-copy":
+          related = selection?.copyEntryId === item.sourceEntryId;
+          break;
+        case "selected-copy":
+          related = Array.isArray(selection?.entryIds) && selection.entryIds.includes(item.sourceEntryId);
+          break;
+        case "non-copy":
+          break;
+      }
       if (!related) return false;
     }
     ids.add(id);

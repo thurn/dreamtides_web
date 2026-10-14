@@ -1,0 +1,235 @@
+{
+  "bead": "hv-umm2.656",
+  "phase": 5,
+  "implementationProvenance": {
+    "base": "eb51fb2abab449e4e1850f18b682ef1f5fd689af",
+    "dispatchUTC": "2026-10-13T23:43:17.502Z",
+    "dispatchScope": "Actual original postclaim sole-helper dispatch from parent canonical journal; never resets on WRITEACK/checks.",
+    "claimUTC": "2026-10-13T23:40:17.081912Z",
+    "claimPrefixMin": 3.0070014666666665,
+    "modelStart": "unobserved",
+    "productiveEditsOrCPU": "unobserved",
+    "endpointUTC": "2026-10-14T00:02:30.194397+00:00",
+    "implementMin": 19.21153995,
+    "claimGrossMin": 22.218541416666667,
+    "status": "Local source/public contracts/checks complete; final immutable commit prepared, parent-required fresh cold core review and exact delivery pending",
+    "endpointScope": "Observed UTC immediately before final two timing records/light schema/index/single source commit. Inclusive actual original dispatch window never reset. Actual Git invocation bracket/end/second-precision clocks and cutoff-tail are outside656-final-commit-receipt.json. No postcommit amendment."
+  },
+  "functionalScope": [
+    "src/rules/journey/journey-deck-entry.ts",
+    "src/rules/journey/lifecycle.ts",
+    "src/screens/cumulus_adapters/exploration-resolution-view-model.ts",
+    "src/screens/cumulus_adapters/exploration-view-model.ts",
+    "src/rules/journey/journey-deck-entry.test.ts",
+    "src/screens/cumulus_adapters/exploration-view-model.test.ts"
+  ],
+  "API": {
+    "primitive": "Required fifth actionOffers:unknown existing runtime parser context, no new exported type/factory/persisted field. Closed internal compound/random/purge-and-copy/selected/noncopy producer policy.",
+    "callers": "5validator callsites:1lifecycle+4reward; private mapping helper3callers now receive existingruntime; outer builder1bound arrow forwards selectedregistry to eighthrewardlookup; publicbuilder/rewardsignatures unchanged.",
+    "compatibility": "Wholly omitted legacy valid before context check; genuine pairless noncopy/emptyoffer customscalar allowed. Present known-copy pair mandatory; paired unsupported/missing producer failsclosed. Saved source loss/later purge uses original prepared role, not current deck/holding. This is bounded producer coherence, not full history authentication."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 72,
+    "jsdomFiles": 0
+  },
+  "testSupportScope": {
+    "touchedExistingFiles": 2,
+    "added": 72,
+    "deleted": 0,
+    "net": 72,
+    "entrypointLines": [
+      409,
+      206
+    ],
+    "newFiles": 0,
+    "newJsdomFiles": 0,
+    "existingJsdomFilesTouched": 0,
+    "warmCountCorrection": "Parent earlier warm42+28=70 observed before final type/lint fixes; exact final gitnumstat43+29=72,0deleted; no entrypoint split."
+  },
+  "sourceDiff": {
+    "files": 6,
+    "added": 119,
+    "deleted": 21,
+    "net": 98,
+    "scope": "Functional only, excludes owning evidence. Exact numstat retained in final staged readiness."
+  },
+  "setup": {
+    "initial": "656-stage1-initial-manifest.json and656-stage1-post-manifest.json:2444regular/2actualbindings, full asfound maps identical/cleanbase. No invented1572 count at that stage.",
+    "prepared": "Parent sanctioned scripts/prepare-workspace.mjs terminal0/native61649;656-parent-canonical-setup-receipt.json preserves initial2444bytes and only2ignoredgeneratedregular additions:public/journeys/imageId-extension.json andsrc/cumulus/primitives/tokens.ts. Prepared2446regular/1572bindings+targets.",
+    "prepareElapsed": "uninstrumented, do not infer from delayed receipt collection",
+    "npmInstall": "Parent terminal0 actual3.6716055s23:41:23\u201326Z per656-install receipts; once, no helper install."
+  },
+  "oldBehavior": {
+    "external": "656-old-public-baseline-receipt.json:2.193352s0 before sanctioned setup; pairless copy LOADapplied and realgenericEnduring prepared/resolveAPPLIED validcompanion LOADbounced. Outer Node .png import failure is loader diagnostic only, no builder runtime verdict.",
+    "owningOldFirst": "656-old-tests-receipt.json:5actual receipt-contract failures plus1outer missing derived deck_card presentation argument setup failure;49controls pass.",
+    "owningOldSecond": "656-old-behavior-receipt.json:5receipt failures/49controls; outersetupstillincomplete despite real public preparation. Not6productfailures.",
+    "outerCounterfactual": "656-outer-old-receipt.json:1actual outerbuilder missingreward failure/2controls pass with declared synthetic effectText; only outerlookup call omitted, core parser alreadyfixed. No type/import failure represented as behavior proof.",
+    "firstReviewFailure": "656-review-receipt.json:881tests/77files passed;type/lint2failed readonlyreceipt mutation, subtypebrand andunknownfind annotation. Corrected owning test immutable constructions/brand andparserannotation; raw retained, not algorithm negative."
+  },
+  "validationSummary": {
+    "focused": {
+      "cases": 55,
+      "files": 2,
+      "receipt": "656-focused-fixed-receipt.json",
+      "seconds": 4.808914332999848
+    },
+    "review": {
+      "cases": 881,
+      "files": 77,
+      "typeLintCycles": "0",
+      "receipt": "656-review-final-receipt.json",
+      "seconds": 19.97663575000479
+    },
+    "knip": {
+      "exit": 0,
+      "seconds": 6.267842875007773
+    },
+    "coverage": {
+      "cases": 20,
+      "files": 1,
+      "exit": 0,
+      "seconds": 5.200268832995789
+    },
+    "schema": "Precommit755records/41historicalUnknowns0; final new own friction record light schema result is in outside656-final-commit-receipt.json.",
+    "full": "Not invoked: bounded producer/parser and pure selected-registry forwarding, no sharedinfra/config/crosscutarchitecture/schema/state/domain/renderer change. No source-unchanged aggregate rerun after metadata.",
+    "browser": "Not invoked: public generic synthetic producer/load/customregistry contract repair; ordinary production registry choice/renderer/workflow unchanged. No nativeTurnFourKeysNightmare or new production Raven pass claimed.",
+    "battleFuzzLab": "No battle300/card-lab/sweep substitute for pure journey parser/public model contracts; original264 journey-only applicability remains qualified prior-source evidence."
+  },
+  "checks": [
+    {
+      "receipt": "656-coverage-receipt.json",
+      "startUTC": "2026-10-13T23:57:24.871142+00:00",
+      "endUTC": "2026-10-13T23:57:30.071693+00:00",
+      "wallSeconds": 5.200268832995789,
+      "exitCode": 0,
+      "load1AtCompletion": 12.06787109375
+    },
+    {
+      "receipt": "656-focused-final-receipt.json",
+      "startUTC": "2026-10-13T23:55:02.854332+00:00",
+      "endUTC": "2026-10-13T23:55:07.738140+00:00",
+      "wallSeconds": 4.883731874986552,
+      "exitCode": 0,
+      "load1AtCompletion": 19.419921875
+    },
+    {
+      "receipt": "656-focused-fixed-receipt.json",
+      "startUTC": "2026-10-13T23:56:22.312922+00:00",
+      "endUTC": "2026-10-13T23:56:27.127036+00:00",
+      "wallSeconds": 4.808914332999848,
+      "exitCode": 0,
+      "load1AtCompletion": 12.62841796875
+    },
+    {
+      "receipt": "656-focused-receipt.json",
+      "startUTC": "2026-10-13T23:54:21.879126+00:00",
+      "endUTC": "2026-10-13T23:54:27.046555+00:00",
+      "wallSeconds": 5.167330041993409,
+      "exitCode": 0,
+      "load1AtCompletion": 18.37451171875
+    },
+    {
+      "receipt": "656-install-receipt.json",
+      "startUTC": "2026-10-13T23:41:23.286541+00:00",
+      "endUTC": "2026-10-13T23:41:26.958261+00:00",
+      "wallSeconds": 3.671605500014266,
+      "exitCode": 0,
+      "load1AtCompletion": null
+    },
+    {
+      "receipt": "656-knip-receipt.json",
+      "startUTC": "2026-10-13T23:57:14.237108+00:00",
+      "endUTC": "2026-10-13T23:57:20.505533+00:00",
+      "wallSeconds": 6.267842875007773,
+      "exitCode": 0,
+      "load1AtCompletion": 12.33544921875
+    },
+    {
+      "receipt": "656-old-behavior-receipt.json",
+      "startUTC": "2026-10-13T23:52:51.933288+00:00",
+      "endUTC": "2026-10-13T23:52:58.397997+00:00",
+      "wallSeconds": 6.464632625022205,
+      "exitCode": 1,
+      "load1AtCompletion": 17.53515625
+    },
+    {
+      "receipt": "656-old-public-baseline-receipt.json",
+      "startUTC": "2026-10-13T23:45:15.359977+00:00",
+      "endUTC": "2026-10-13T23:45:17.553184+00:00",
+      "wallSeconds": 2.1933520839957055,
+      "exitCode": 0,
+      "load1AtCompletion": 12.638671875
+    },
+    {
+      "receipt": "656-old-tests-receipt.json",
+      "startUTC": "2026-10-13T23:52:18.244228+00:00",
+      "endUTC": "2026-10-13T23:52:25.355435+00:00",
+      "wallSeconds": 7.111107707984047,
+      "exitCode": 1,
+      "load1AtCompletion": 22.76416015625
+    },
+    {
+      "receipt": "656-outer-old-receipt.json",
+      "startUTC": "2026-10-13T23:53:56.298864+00:00",
+      "endUTC": "2026-10-13T23:54:03.109613+00:00",
+      "wallSeconds": 6.8106845839938615,
+      "exitCode": 1,
+      "load1AtCompletion": 13.56201171875
+    },
+    {
+      "receipt": "656-review-final-receipt.json",
+      "startUTC": "2026-10-13T23:56:37.658685+00:00",
+      "endUTC": "2026-10-13T23:56:57.640679+00:00",
+      "wallSeconds": 19.97663575000479,
+      "exitCode": 0,
+      "load1AtCompletion": 11.88671875
+    },
+    {
+      "receipt": "656-review-receipt.json",
+      "startUTC": "2026-10-13T23:55:14.660678+00:00",
+      "endUTC": "2026-10-13T23:55:37.012746+00:00",
+      "wallSeconds": 22.35205312501057,
+      "exitCode": 2,
+      "load1AtCompletion": 15.30810546875
+    },
+    {
+      "receipt": "656-schema-receipt.json",
+      "startUTC": "2026-10-13T23:59:43.169180+00:00",
+      "endUTC": "2026-10-13T23:59:43.302213+00:00",
+      "wallSeconds": 0.1328774169960525,
+      "exitCode": 0,
+      "load1AtCompletion": 9.06689453125
+    }
+  ],
+  "fiveFailurePaths": {
+    "errorMidStep": "Existing journeyDeckEntry public provider throw/local-log containment and idempotent retry control stays passing. No upstream I/O repair; new parser failures return atomic priorstate and no modifier log.",
+    "reloadRestart": "GenericEnduring companion public SAVE(JSONclone)/LOAD and deterministic sameinput replay; selected/multi/random/purge sourceheldloss and source laterpurged LOAD; wholly omitted/scalarlegacy controls remain passing.",
+    "partialWrite": "Forged snapshot missing pair/foreign orpurgedsource/wrongprinting/missing orunsupportedoffer bounces with exact priorstate, no modifier log. Pure builders/parser create no persistent write; domain transaction unchanged.",
+    "invalidStale": "Existing stale gameplay zeroRNG/log control +current public copy family malformed pair/model controls and preparedcompound copiedcompanion role exclusion ofpurgedvictim.",
+    "concurrentActors": "No new upstream CAS/multi-client arbitration. Existing sameintent/idempotent event replay and atomic stateidentity controls bound this change; no live multi-client QA claim."
+  },
+  "sourceProof": {
+    "manifest": "656-source-final-manifest.json",
+    "regularFiles": 2446,
+    "symlinkBindingsAndResolvedTargets": 1572,
+    "fileTreeSHA": "e10e21a3f2590d61fa59c87776700c15434dc9070ca8a2dd41afdfed5633a3f2",
+    "linkTreeSHA": "e36215a6f3249b68162c1a2a9a7822dcd58cbfb8a5720598e0f06ac0e7f73412",
+    "qaScenesSHA": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+    "changedSincePrepared": "Exactly the6admitted functional files; all other regular bytes and every binding/target match parentpreparedmanifest. No provider/browser/server/slot/session/QAfixture or writer remains after localchecks."
+  },
+  "productionReachability": "Generic supported purge-transfigure-copy with declared Enduring and ordinary Nightmare verified. CurrentproductionTurnFourKeysAttunedNightmare reachability NOT established: printedDraw lacksactivatedenergycost colon; supported type/stat/Fast/Reclaim transformations addnone and preparationrequiresunformedentry. P2publiccontract, no P1productionclaim.",
+  "priorReviewDisposition": "Both verified source656 repairs follow cold652 source9e51/certc6de. Original652 acceptancecheckpoint behind656;264 OPENimmutableacceptancejoin652/653; independentAuguryduplicatekey653 unresolved, never fixed/waived/borrowedPASS here.",
+  "reviewRouting": "Parent owns fresh read-only required cold core review and candidate/certification after immutableterminalcommit. User temporarySolCodexCLI gpt-5.6-sol until2026-10-14T01Z, then normalprojectroute; helper invokes no independentreview.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final local review wrapper completion 1-minute load11.88671875; not stepstart/CPU/causal performance observation."
+      },
+      "localValidationS": {
+        "measuredFor": "Final affected focus/review/Knip actual wrapper seconds including canonical preparation/restore."
+      }
+    }
+  },
+  "frictionScope": "No isolated observed problem >10minutes; stage1/admission7.7237min and local authoring/check/setupfixture/typecorrection intervals retained as whole elapsed wall, not CPU. Empty friction proposed. Original dispatch-to-futurecommit includes all coordination/evidence/endpoint waiting."
+}

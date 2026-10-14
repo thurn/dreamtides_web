@@ -1,3 +1,7 @@
+import { EVENT_CARD_SUBTYPE } from "../../types/card-identity";
+import { buildExplorationRuntime } from "../../session/providers/exploration-provider";
+import { journeyDeckEntry } from "../../rules/journey/journey-deck-entry";
+import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { createJourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { journeySites } from "../../rules/journey/journey-sites";
 import { makeAuguryTestContent } from "../../journey_v2/testing/fixtures";
@@ -174,4 +178,29 @@ it("derives site-local permission and exact stale-intent context from synthetic 
   const used = { ...runtime, journeySiteRerolls: { [signId]: 1 } };
   expect(build(state, used)?.reroll?.available).toBe(false);
   expect(build({ ...state, dreamsigns: [sign, sign] }, used)?.reroll).toMatchObject({ expectedRerollCount: 1, available: true });
+});
+
+it("uses the supplied prevention registry for the complete resolved reward projection", () => {
+  const source = card(sourceId, 17);
+  const bane = { ...card(NIGHTMARE_CARD_ID, 3), cardType: "Event" as const, subtype: EVENT_CARD_SUBTYPE, spark: null };
+  const signId = testDreamsignId("outer-builder-preventer"), actionId = testExplorationActionId("outer-blocked-copy");
+  const modifiers = createJourneyModifierRegistry([journeyDeckEntry(signId, { kind: "preventNightmare" })]);
+  const base = makeAuguryTestContent({ cards: [source, bane] });
+  const action = { id: actionId, label: "Synthetic", effectText: "Synthetic effect", effectKind: "copy-selected-card" as const, count: 1 };
+  const content = { ...base, exploration: { ...base.exploration, encounters: [{ cardId: source.id, prose: "Synthetic", actions: [action] }] } };
+  const entryId = parseDeckEntryId("copy-source");
+  const runtime: ExplorationSiteRuntime = {
+    kind: "exploration", selectionRulesVersion: SELECTION_RULES_VERSION, encounterCardId: source.id,
+    actionOffers: [{ actionId, canonicalMechanicId: "duplicate-deck-entry", offeredCardIds: [], packCardIds: [], replacementCardIdByEntryId: {}, transfigurationByEntryId: {} }],
+    resolution: { actionId, selection: { entryIds: [entryId] }, gainedCardIds: [], gainedEntryIds: [], gainedDreamsignIds: [], purgedCardIds: [], affectedEntryIds: [entryId], essenceGained: 0,
+      preventedNightmareGains: [{ entryId: parseDeckEntryId("blocked-copy"), cardId: NIGHTMARE_CARD_ID, dreamsignId: signId, heldIndex: 0, sourceEntryId: entryId, sourceCardId: NIGHTMARE_CARD_ID }] },
+  };
+  const state = { ...testJourneyState(), deck: [{ entryId, cardNumber: 3, transfiguration: null, isBane: true }] };
+  const prepared = buildExplorationRuntime(state, explorationSite, content, () => 0, source.id);
+  expect(prepared).not.toBeNull();
+  runtime.actionOffers = prepared!.actionOffers;
+  const build = (modifierRegistry = modifiers) => buildExplorationSiteView({ sceneNode: null, site: explorationSite, guide, guideLine: "Synthetic", runtime, state, content, modifierRegistry });
+  expect(build()?.reward).toMatchObject({ kind: "card-copies", count: 0, cards: [] });
+  expect(build(createJourneyModifierRegistry([]))?.reward).toBeNull();
+  expect(build(createJourneyModifierRegistry([journeySites(signId, { kind: "rerollExploration", rerollsPerSite: 1 })]))?.reward).toBeNull();
 });

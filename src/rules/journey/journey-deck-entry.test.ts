@@ -313,9 +313,52 @@ describe("actual prepared Exploration additions and public reward models", () =>
       expect(apply(out.state, "LOAD_STATE", { snapshot: victim }).state).toBe(out.state);
       expect(rewardForResolution(victim.siteRuntime[SITE_ID] as ExplorationSiteRuntime, SITE_ID, victim, content, null, [action], [], (id) => registry.lookup(id))).toBeNull();
     }
+    for (const missing of ["sourceEntryId", "sourceCardId", "both"] as const) {
+      const stripped = clone(out.state.journey), resolved = (stripped.siteRuntime[SITE_ID] as ExplorationSiteRuntime).resolution!;
+      const { sourceEntryId, sourceCardId, ...receipt } = resolved.preventedNightmareGains![0];
+      resolved.preventedNightmareGains = [{ ...receipt, ...(missing === "sourceEntryId" ? { sourceCardId } : {}), ...(missing === "sourceCardId" ? { sourceEntryId } : {}) }];
+      const rejected = apply(out.state, "LOAD_STATE", { snapshot: stripped });
+      expect(rejected.state).toBe(out.state); expect(rejected.logRecords).toBeUndefined();
+      expect(rewardForResolution(stripped.siteRuntime[SITE_ID] as ExplorationSiteRuntime, SITE_ID, stripped, content, null, [action], [], (id) => registry.lookup(id))).toBeNull();
+    }
     const sourceLost = accepted(out.state, "REMOVE_DREAMSIGN", { dreamsignId: RAVEN });
     const sourcePurged = accepted(sourceLost, "REMOVE_DECK_ENTRY", { entryId: "old-bane" });
     expect(apply(sourcePurged, "LOAD_STATE", { snapshot: clone(sourcePurged.journey) }).outcome).toBe("applied");
+  });
+  it("loads the copied Nightmare companion rather than the purged target of a prepared compound", () => {
+    const ordinary = makeAuguryTestCard({ id: OTHER, cardNumber: 2, cardType: "Event", subtype: "", energyCost: 2, isFast: false });
+    const bane = makeAuguryTestCard({ id: NIGHTMARE_CARD_ID, cardNumber: 3, cardType: "Event", subtype: "", energyCost: 2, isFast: false });
+    const action = { id: testExplorationActionId("compound-companion-copy"), label: "Synthetic", effectKind: "purge-one-transfigure-and-copy-others" as const,
+      canonicalMechanicId: "transfigure-deck-entry" as const, selectionPolicyId: "uniform" as const, offerCount: 4 as const, transfiguration: "Enduring" as const };
+    const base = makeAuguryTestContent({ cards: [ordinary, bane] });
+    const content = { ...base, exploration: { ...base.exploration, encounters: [{ cardId: OTHER, prose: "Synthetic", actions: [action] }] } };
+    const before = initial([RAVEN]); before.journey.deck.push(entry("purged", 2), entry("companion", 3, { isBane: true }), entry("other-a", 2), entry("other-b", 2));
+    const runtime = buildExplorationRuntime(before.journey, makeSite("Exploration"), content, () => 0, OTHER)!;
+    before.journey.siteRuntime[SITE_ID] = runtime;
+    registerSiteContentProvider(createSiteContentProvider(content)); registerJourneyTransfigurationProvider(createJourneyTransfigurationProvider(content));
+    const intent = { siteId: SITE_ID, actionId: action.id, selectionRulesVersion: SELECTION_RULES_VERSION, selection: { entryIds: ["purged"] } };
+    const out = apply(before, "RESOLVE_EXPLORATION_CHOICE", intent);
+    expect(out.outcome).toBe("applied");
+    const resolved = out.state.journey.siteRuntime[SITE_ID] as ExplorationSiteRuntime;
+    expect(resolved.resolution?.preventedNightmareGains).toMatchObject([{ sourceEntryId: "companion", sourceCardId: NIGHTMARE_CARD_ID }]);
+    expect(apply(out.state, "LOAD_STATE", { snapshot: clone(out.state.journey) }).outcome).toBe("applied");
+    expect(apply(before, "RESOLVE_EXPLORATION_CHOICE", intent).state).toEqual(out.state);
+    expect(rewardForResolution(resolved, SITE_ID, out.state.journey, content, null, [action], [], (id) => registry.lookup(id))).toMatchObject({ kind: "compound-card-mutation" });
+    for (const source of ["purged", "unrelated", "wrong-printing", "missing-offer", "unsupported-offer", "pairless"] as const) {
+      const forged = clone(out.state.journey), runtime = forged.siteRuntime[SITE_ID] as ExplorationSiteRuntime;
+      const receipt = runtime.resolution!.preventedNightmareGains![0];
+      if (source === "missing-offer") runtime.actionOffers = [];
+      else if (source === "unsupported-offer") runtime.actionOffers = [{ ...runtime.actionOffers[0], canonicalMechanicId: "gain-card", preparation: undefined }];
+      else if (source === "pairless") {
+        const { sourceEntryId: _entry, sourceCardId: _card, ...scalar } = receipt;
+        runtime.resolution!.preventedNightmareGains = [scalar];
+      } else runtime.resolution!.preventedNightmareGains = [{ ...receipt, ...(source === "wrong-printing" ? { sourceCardId: OTHER } : { sourceEntryId: parseDeckEntryId(source) }) }];
+      const rejected = apply(out.state, "LOAD_STATE", { snapshot: forged });
+      expect(rejected.state).toBe(out.state); expect(rejected.logRecords).toBeUndefined();
+    }
+    const lost = accepted(out.state, "REMOVE_DREAMSIGN", { dreamsignId: RAVEN });
+    const purged = accepted(lost, "REMOVE_DECK_ENTRY", { entryId: "companion" });
+    expect(apply(purged, "LOAD_STATE", { snapshot: clone(purged.journey) }).outcome).toBe("applied");
   });
   it("keeps a real prepared compound benefit and zero actual Nightmare cards in its reward model", () => {
     const warrior = makeAuguryTestCard({ id: WARRIOR, cardNumber: 1, cardType: "Character", subtype: "Warrior" });

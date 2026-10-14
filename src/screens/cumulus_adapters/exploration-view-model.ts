@@ -1596,6 +1596,7 @@ export function buildExplorationSiteView(params: {
     params.sceneNode,
     encounter.actions,
     actions,
+    (id) => modifiers.lookup(id),
   );
   const outcomeKind =
     reward === null
