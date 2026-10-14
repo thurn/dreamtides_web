@@ -1200,5 +1200,24 @@
     "providerNativeCandidate": "Parent owns native admission, cold review, exact candidate/certification/cleanup; helper performs none."
   },
   "acceptanceJoin": "Original hv-umm2.238 retains UUID26786698-fdf2-493d-905b-4273a20586c9 and all full entity authoring, recipes, weighted300/preflight/sweep/D21/coverage/final acceptance. This primitive seam transfers no production UUID or UI acceptance.",
-  "preExistingIssues": "No newly identified out-of-scope issue. Optional missing-art preparation warnings were retained and normal restore-local-assets succeeded; no source/generated asset edits."
+  "preExistingIssues": "No newly identified out-of-scope issue. Optional missing-art preparation warnings were retained and normal restore-local-assets succeeded; no source/generated asset edits.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Current evidence-writer endpoint only; not review-start or the implementation interval. Per-command loads remain separate in measurements.",
+        "at": "2026-10-14T17:11:48.615807+00:00"
+      }
+    }
+  },
+  "reviewCorrection": {
+    "bead": "hv-9u6r",
+    "originalSource": "cdfd0d340240390af46748939d5fbb3a1a0293bd",
+    "sourceReview": "/tmp/root-613-review/retry-2/review.md",
+    "sourceReviewSHA256": "ce49115760935ff2ac0c206b436dfd9f5ecfa3dfbd0ffaef47470656cae61835",
+    "findings": [
+      "F1",
+      "F2"
+    ],
+    "description": "Normalization provenance placed in measurements from the original friction record. The exact historical endpoint-only object, 6.8916015625 host load, timestamps, window, raw command evidence and results are preserved."
+  }
 }

@@ -83,11 +83,17 @@ export function modifyCardCost(
 
 /**
  * "Reduce its cost by N●" (rules § Costs, Requirements, and X → A card's own
- * cost; RD-hv-umm2.102-2): a floating layer-6 `cardCost` change, announced
- * by `effectStarted`, on the card the triggering event concerns, wherever it
- * is as the ability resolves, since a card keeps its identity across zones.
- * With no such card, nothing changes. `duration` `null` takes the enclosing
- * `forDuration`'s, else the change is permanent and travels with the card.
+ * cost; RD-hv-umm2.102-2), or change the cost of random cards in a zone:
+ * resolve `card` through `resolveCards`, then start a floating layer-6
+ * `cardCost` change, announced by `effectStarted`, for each selected card.
+ * A `SubjectSpec` names the card the triggering event concerns, wherever it
+ * exists. A `ZoneRandomSpec` names up to `count` distinct current matching
+ * cards in its player's zone, picked without targeting or replacement from
+ * `random:selection`; an empty pool consumes no RNG. Selecting cards moves
+ * and reveals none of them. With no selected card, nothing changes.
+ * `duration` `null` takes the enclosing `forDuration`'s, else the change is
+ * permanent and travels with the card. The event and view hide a change
+ * from a side that cannot identify its card.
  */
 export interface ChangeCardCostNode {
   readonly op: "changeCardCost";
@@ -111,7 +117,16 @@ export const changeCardCostPrimitive = definePrimitive<ChangeCardCostNode>({
   },
 });
 
-/** "Reduce its cost by N●" (`{ reduce: N }`), or "it costs N●" or "N● more", of `card`. */
+/**
+ * "Reduce its cost by N●" (`{ reduce: N }`), "it costs N●" (`{ set: N }`),
+ * or "N● more" (`{ increase: N }`), for the triggering card (`SubjectSpec`)
+ * or up to `count` distinct current matching zone cards (`ZoneRandomSpec`,
+ * such as `randomIn`). Zone picks use `random:selection` without targeting
+ * or replacement, moving or revealing no cards; an empty pool consumes no
+ * RNG. Explicit `duration`, then the enclosing `forDuration`'s, else
+ * permanent; event and view privacy hides the cost change from a side that
+ * cannot identify its card.
+ */
 export function changeCardCost(
   card: SubjectSpec | ZoneRandomSpec,
   cost: CardCostChange,

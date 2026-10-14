@@ -1287,8 +1287,14 @@ analog:
    each `"increase"` adds to the increases, and each `"reduce"` to the
    reductions (RD-hv-umm2.101-1, RD-hv-umm2.102-2). `modifyCardCost`
    runs its nested instruction and changes the cards it put into a hand
-   (RD-hv-umm2.101-2); `changeCardCost` ("reduce its cost by 2●") changes
-   the card a trigger names, wherever it is. The view and the `effectStarted` event hide the
+   (RD-hv-umm2.101-2); `changeCardCost` ("reduce its cost by 2●") resolves
+   either the card a trigger names (`SubjectSpec`), wherever it exists, or
+   up to `count` distinct current matching cards in a player's zone
+   (`ZoneRandomSpec`, such as `randomIn`). Zone picks use `random:selection`
+   without targeting or replacement; an empty pool consumes no RNG.
+   Selection moves and reveals no cards. Each selected card gets a change
+   for the explicit duration, else the enclosing `forDuration`'s, else
+   permanently. The view and the `effectStarted` event hide the
    change, like any floating change naming a card, from a side that cannot
    identify that card, such as the opponent of a side that drew it.
    Play permissions (`playFrom`, `continuous/permissions.ts`) share the

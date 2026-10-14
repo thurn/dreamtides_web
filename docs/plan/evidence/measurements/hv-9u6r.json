@@ -1,0 +1,290 @@
+{
+  "bead": "hv-9u6r",
+  "base": "7203b7ef4a5d6f61657fe31e3e94ee4ec58b6f92",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/random-cost-docs-9u6r",
+  "branch": "wt/random-cost-docs-9u6r",
+  "clock": {
+    "parentClaimEnvelopeStart": "2026-10-14T18:07:23.174206+00:00",
+    "actualHelperDispatch": "Unknown; parent recorded a post-dispatch observation, not exact dispatch or sampling.",
+    "endAtEvidenceWrite": "2026-10-14T18:15:48.208329+00:00",
+    "inclusiveMinutes": 8.417235383333333,
+    "qualification": "Conservative parent claim-envelope includes installation/setup before helper dispatch, source research, admission/coordination, validation and evidence. Sampling/CPU/idle attribution unknown; no performance or D19 claim. Final writer refreshes immediately before final schema, staging, staged whitespace and automatic commit; external finalizer receipt covers the actual tail without date overrides or postcommit tracked evidence rewrite."
+  },
+  "setup": {
+    "npmInstallSeconds": 2.590104,
+    "prepareSeconds": 4.458116,
+    "initialPaths": 5011,
+    "initialManifestSHA256": "755a89c66a053a051319713d53c06ef0f0561b1922127e43e6c1d2fa2909d387"
+  },
+  "source": {
+    "commentsOnly": "Two ChangeCardCostNode/changeCardCost JSDoc comments; both SubjectSpec | ZoneRandomSpec annotations, all imports and every executable source/test byte unchanged.",
+    "documentation": "Existing layer-6 cost-reference paragraph describes both resolving forms, current random pool/count/stream/empty-pool semantics, movement/revelation, duration and privacy.",
+    "historicalCorrection": "Exact old613 schemaNormalization object moved from friction to measurements with additive reviewCorrection; original eight friction fields and every prior measurements deep value remain equal. Historical host load 6.8916015625 remains an evidence-writer endpoint observation.",
+    "preservationProof": {
+      "path": "/tmp/root-9u6r/preservation-v1.json",
+      "sha256": "9cc9a3cc82ed349b8cd8b4788b54003a6a4d42af31d309460322002bec9109d0",
+      "qualification": "Deep compares old records to exact base and strips only JSDoc from the sole changed TS source; whole manifest diff is confined to admitted seven paths."
+    }
+  },
+  "sourceAdmission": {
+    "proposalSHA256": "9ad1847f9c8bd22a23a0e9b4b1d7fcc3d7550c1a318a5e1f5733dc2fbac78d8f",
+    "unchangedProofSHA256": "c83829cf0b0c92593b10bed6d63dda015716021f2a4c19ee7045ea344a967ca0",
+    "nativeACKSHA256": "16ac3f10df58b5d524611eadcd40746c0d2faa0ec9c24e71fa74e46101d60111",
+    "scope": "Two comments and one engine-design paragraph, exact normalization move/additive correction, own three evidence files only. No type/DSL/runtime/test/catalog/UI/rules/config/shared QA edits. Open627 additiveSelfSpec union is distinct from these comment-only changes."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v1 starting kernel one-minute load",
+        "value": 21.26220703125,
+        "at": "2026-10-14T18:12:19.541032+00:00"
+      },
+      "implementWindow": {
+        "measuredFor": "Conservative parent claim-envelope; exact helper dispatch/sampling unknown."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "knip-v1",
+      "at": "2026-10-14T18:13:53.544134+00:00",
+      "values": [
+        10.79150390625,
+        15.1357421875,
+        14.6533203125
+      ],
+      "scope": "Kernel one/five/fifteen minute loads at actual command start."
+    },
+    {
+      "label": "review-v1",
+      "at": "2026-10-14T18:12:19.541032+00:00",
+      "values": [
+        21.26220703125,
+        17.146484375,
+        15.19677734375
+      ],
+      "scope": "Kernel one/five/fifteen minute loads at actual command start."
+    },
+    {
+      "label": "schema-v1",
+      "at": "2026-10-14T18:14:09.054834+00:00",
+      "values": [
+        9.77880859375,
+        14.70263671875,
+        14.50732421875
+      ],
+      "scope": "Kernel one/five/fifteen minute loads at actual command start."
+    },
+    {
+      "label": "whitespace-v1",
+      "at": "2026-10-14T18:14:09.462363+00:00",
+      "values": [
+        9.77880859375,
+        14.70263671875,
+        14.50732421875
+      ],
+      "scope": "Kernel one/five/fifteen minute loads at actual command start."
+    }
+  ],
+  "validation": {
+    "review": "Passed actual diff-aware selected engine aggregate; touched TS path is comments only. Counts below are actual output, not invented documentation-only selection.",
+    "counts": {
+      "testsPassedReported": [
+        7577
+      ],
+      "testFilesPassedReported": [
+        306
+      ]
+    },
+    "commands": [
+      {
+        "label": "knip-v1",
+        "started": "2026-10-14T18:13:53.544134+00:00",
+        "pid": 88755,
+        "pgid": 88755,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/random-cost-docs-9u6r",
+        "hostLoad": [
+          10.79150390625,
+          15.1357421875,
+          14.6533203125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:13:59.738956+00:00",
+        "elapsedSeconds": 6.194635040999856,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5014,
+        "beforeSHA256": "f5efec3620f27a55ac757148afcedd636fd4b29738aaacec8a50934bbac285fe",
+        "afterSHA256": "f5efec3620f27a55ac757148afcedd636fd4b29738aaacec8a50934bbac285fe",
+        "collectorBeforeSHA256": "159a3fc605f0ee73ab60d22cd2088ece5651208d3b83e547c799bcbdb7595e0e",
+        "collectorAfterSHA256": "159a3fc605f0ee73ab60d22cd2088ece5651208d3b83e547c799bcbdb7595e0e",
+        "stdoutSHA256": "b20a6e429467ee86d34ce7fac3772478871925d5bf9a5b0f869e4a4acbb61e6e",
+        "stderrSHA256": "b3a26c9f70c98edaee2df02d9f5ef37c4b81e6f7de0219a624c66eec666ab642",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "review-v1",
+        "started": "2026-10-14T18:12:19.541032+00:00",
+        "pid": 81407,
+        "pgid": 81407,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/random-cost-docs-9u6r",
+        "hostLoad": [
+          21.26220703125,
+          17.146484375,
+          15.19677734375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:13:27.560665+00:00",
+        "elapsedSeconds": 68.0187721659895,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5014,
+        "beforeSHA256": "f5efec3620f27a55ac757148afcedd636fd4b29738aaacec8a50934bbac285fe",
+        "afterSHA256": "f5efec3620f27a55ac757148afcedd636fd4b29738aaacec8a50934bbac285fe",
+        "collectorBeforeSHA256": "159a3fc605f0ee73ab60d22cd2088ece5651208d3b83e547c799bcbdb7595e0e",
+        "collectorAfterSHA256": "159a3fc605f0ee73ab60d22cd2088ece5651208d3b83e547c799bcbdb7595e0e",
+        "stdoutSHA256": "244a801ca25cfe755179d4220e6c3318f0d5af215c73864a4baa65570fd63333",
+        "stderrSHA256": "b3a26c9f70c98edaee2df02d9f5ef37c4b81e6f7de0219a624c66eec666ab642",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "schema-v1",
+        "started": "2026-10-14T18:14:09.054834+00:00",
+        "pid": 89766,
+        "pgid": 89766,
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/random-cost-docs-9u6r",
+        "hostLoad": [
+          9.77880859375,
+          14.70263671875,
+          14.50732421875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:14:09.140944+00:00",
+        "elapsedSeconds": 0.08597816701512784,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5014,
+        "beforeSHA256": "f5efec3620f27a55ac757148afcedd636fd4b29738aaacec8a50934bbac285fe",
+        "afterSHA256": "f5efec3620f27a55ac757148afcedd636fd4b29738aaacec8a50934bbac285fe",
+        "collectorBeforeSHA256": "159a3fc605f0ee73ab60d22cd2088ece5651208d3b83e547c799bcbdb7595e0e",
+        "collectorAfterSHA256": "159a3fc605f0ee73ab60d22cd2088ece5651208d3b83e547c799bcbdb7595e0e",
+        "stdoutSHA256": "fa4d4998424718c8fb28eec731daa86ec108f93bd0c34b4748dbf14d40658c9e",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "whitespace-v1",
+        "started": "2026-10-14T18:14:09.462363+00:00",
+        "pid": 89794,
+        "pgid": 89794,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/random-cost-docs-9u6r",
+        "hostLoad": [
+          9.77880859375,
+          14.70263671875,
+          14.50732421875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:14:09.474954+00:00",
+        "elapsedSeconds": 0.012468791974242777,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5014,
+        "beforeSHA256": "f5efec3620f27a55ac757148afcedd636fd4b29738aaacec8a50934bbac285fe",
+        "afterSHA256": "f5efec3620f27a55ac757148afcedd636fd4b29738aaacec8a50934bbac285fe",
+        "collectorBeforeSHA256": "159a3fc605f0ee73ab60d22cd2088ece5651208d3b83e547c799bcbdb7595e0e",
+        "collectorAfterSHA256": "159a3fc605f0ee73ab60d22cd2088ece5651208d3b83e547c799bcbdb7595e0e",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      }
+    ],
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "notRun": "No new tests, focused executable tests, review:full, fuzz, browser, runtime probe or server: documentation/comments/evidence placement only. Required review and Knip plus schema/whitespace ran once; no repeated passing aggregate.",
+    "epoch": "Validation ran with all seven admitted paths including draft own evidence. Only own friction/measurements JSON clocks and collected receipts change afterward; final schema and staged whitespace cover final metadata."
+  },
+  "review": {
+    "origin": "Normal fresh independent Claude Opus5.5 review of original613 exact sourcecdfd0d340240390af46748939d5fbb3a1a0293bd versus8dbcf0cdfc949b2c53cca1f67da1587c244340f5, findings F1 and F2.",
+    "reportSHA256": "ce49115760935ff2ac0c206b436dfd9f5ecfa3dfbd0ffaef47470656cae61835",
+    "thisBead": "Documentation/comments/metadata below100 gross non-test code lines; no core-review label or new review obligation. Parent determines final routing."
+  },
+  "resources": {
+    "servers": [],
+    "browserContexts": [],
+    "ports": [],
+    "ownedCommandGroups": [
+      {
+        "pgid": 88755,
+        "label": "knip-v1",
+        "absent": true
+      },
+      {
+        "pgid": 81407,
+        "label": "review-v1",
+        "absent": true
+      },
+      {
+        "pgid": 89766,
+        "label": "schema-v1",
+        "absent": true
+      },
+      {
+        "pgid": 89794,
+        "label": "whitespace-v1",
+        "absent": true
+      }
+    ],
+    "qualification": "Every strict command receipt records actual PID/group, reaping and whole source manifest stability. Finalizer guards absence again before its own writer/check/stage/commit processes."
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "fallout": [],
+  "preExistingIssues": [],
+  "investigationCorrections": [
+    "A guessed read-only targets.ts path did not exist; actual randomIn definition was discovered in builders.ts. No repository effect or runtime failure."
+  ],
+  "delivery": {
+    "authority": "Parent owns Beads/Tollgate/update/review/certification/promotion/cleanup; helper executes none.",
+    "oneCommit": "Separate exact fullfreeze/writer/finalizer/message acknowledgment required before one automatic-date Conventional Commit.",
+    "originalAcceptance": "Original238 UUID authoring, weighted fuzz and QA acceptance remain with its original owner; this follow-up changes no capability/content."
+  }
+}

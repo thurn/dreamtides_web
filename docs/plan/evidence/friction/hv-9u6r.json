@@ -1,0 +1,22 @@
+{
+  "bead": "hv-9u6r",
+  "phase": 5,
+  "implementMin": 8.417235383333333,
+  "implementWindow": {
+    "start": "2026-10-14T18:07:23.174206+00:00",
+    "end": "2026-10-14T18:15:48.208329+00:00"
+  },
+  "localValidationS": {
+    "review": 68.0187721659895,
+    "knip": 6.194635040999856,
+    "schema": 0.08597816701512784,
+    "whitespace": 0.012468791974242777
+  },
+  "hostLoad": 21.26220703125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

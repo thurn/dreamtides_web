@@ -13,14 +13,6 @@
     "knip": 5.33951475
   },
   "hostLoad": 6.8916015625,
-  "schemaNormalization": {
-    "fields": {
-      "hostLoad": {
-        "measuredFor": "Current evidence-writer endpoint only; not review-start or the implementation interval. Per-command loads remain separate in measurements.",
-        "at": "2026-10-14T17:11:48.615807+00:00"
-      }
-    }
-  },
   "testDelta": {
     "files": 1,
     "lines": 246,
