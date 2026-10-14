@@ -1,0 +1,22 @@
+{
+  "bead": "hv-lf7t",
+  "phase": 5,
+  "implementMin": 3.3793052166666664,
+  "implementWindow": {
+    "start": "2026-10-14T22:48:59.843125Z",
+    "end": "2026-10-14T22:52:22.601438+00:00"
+  },
+  "localValidationS": {
+    "review": 0.26505595800699666,
+    "knip": 5.488235542026814,
+    "schema": 0.07052775000920519,
+    "triggers": 0.16489604103844613
+  },
+  "hostLoad": 6.04541015625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

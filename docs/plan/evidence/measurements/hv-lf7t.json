@@ -1,0 +1,1227 @@
+{
+  "bead": "hv-lf7t",
+  "baseOid": "ed458bdc01dffc00793499198571ed338e1c62ea",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t",
+  "scope": "Documentation/evidence audit of trigger heavy-slot-wait/phase-5, exactly the three retained source records. Runtime, shared configuration, decisions, budgets, product/rules and acceptance remain binding. No benchmark or new heavy/browser check.",
+  "determination": {
+    "disposition": "reason; no runtime fix",
+    "commonCause": "The shared tag groups distinct scopes, rather than proving one recurring scheduler defect across three beads. Agent-added unnecessary ordinary-check wrappers recur in 551 and 95; their owning records already correct that orchestration. 589 uses the mandated heavy slot for full review and weighted300 fuzz.",
+    "action": "Apply the existing D17 heavy-command list at dispatch. Run ordinary focused tests, review and Knip directly. Preserve required heavy serialization and source-bound raw receipts; distinguish outer launch, inner command/step start, execution and cancellation.",
+    "runtimeRepairRequired": false,
+    "evidenceLimits": [
+      "No measured acquisition timestamp or complete lock-owner/queue-depth history establishes isolated kernel-lock time, fairness, starvation, capacity loss or a runtime scheduler defect.",
+      "A client launch-to-first-step interval can include the external heavy lock, launcher/npm overhead and the independent internal full-review slot. Client wall minus native algorithm wall also includes startup/teardown; it is not pure queue time.",
+      "Host load samples are contemporaneous scope observations, not matched A/B controls. There is no performance claim, budget revision or new measurement-correction bead.",
+      "589 workflow-admission-hold (127.495582 minutes) is a separate gross read-only proof/coordination/admission scope and is excluded from heavy-lock causality. Exact productive versus hold split is unknown."
+    ]
+  },
+  "sourceRecords": [
+    {
+      "bead": "hv-umm2.551",
+      "friction": {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/docs/plan/evidence/friction/hv-umm2.551.json",
+        "sha256": "f82ddef9463ba01b4fee7d1773d5c111a2638a951f076522f406ccd6df394a9e",
+        "bytes": 1640
+      },
+      "measurements": {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/docs/plan/evidence/measurements/hv-umm2.551.json",
+        "sha256": "01a961811ae43157a2e0bcbfd4c7168a6d321ac44ac38b823337875e779fe12b",
+        "bytes": 24698
+      },
+      "nativeSnapshot": {
+        "path": "/tmp/dreamtides-executor-01a1304d/lf7t/hv-umm2.551-native.json",
+        "sha256": "d5baa56adb06567f91c8c26dea272ed9ca18e556afd7f0256c9c91fbef879b31",
+        "bytes": 97813
+      },
+      "nativeOutcome": {
+        "id": "hv-umm2.551",
+        "status": "closed",
+        "started_at": "2026-10-12T15:29:29Z",
+        "closed_at": "2026-10-12T16:17:05Z",
+        "close_reason": "Certified deck-bottom Prevent extension with synthetic contracts, bounded regression repair and cold Sol review; source cleanup complete.",
+        "metadata": {
+          "hive_origin_thread": "01a1305a-56c7-7f63-bcb4-bfed10880d6d",
+          "hive_project": "dreamtides_web",
+          "hive_resolution": "completed",
+          "review_of": "hv-umm2.188",
+          "trigger": "missing-prevent-deck-bottom"
+        }
+      }
+    },
+    {
+      "bead": "hv-umm2.589",
+      "friction": {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/docs/plan/evidence/friction/hv-umm2.589.json",
+        "sha256": "f41cea0910b54db63d05e3d4cd2a9dad6ddf22f2ef6492aa4dbe6d8f6b014359",
+        "bytes": 1513
+      },
+      "measurements": {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/docs/plan/evidence/measurements/hv-umm2.589.json",
+        "sha256": "b04724617b3ebd179b48bc3b66cfa2280d6396532715429b74d4ccd7a20e5942",
+        "bytes": 103611
+      },
+      "nativeSnapshot": {
+        "path": "/tmp/dreamtides-executor-01a1304d/lf7t/hv-umm2.589-native.json",
+        "sha256": "dd5755a90c0503f82c74e90bf8bbc9fa8ca0a34617575445bdbb4eec31ec6be9",
+        "bytes": 483910
+      },
+      "nativeOutcome": {
+        "id": "hv-umm2.589",
+        "status": "closed",
+        "started_at": "2026-10-14T18:43:18Z",
+        "closed_at": "2026-10-14T22:46:51Z",
+        "close_reason": "Certified staging promotion and automatic cleanup complete; required final-range cold core review continues asynchronously under workflow Reviews.",
+        "metadata": {
+          "found_by": "hv-umm2.247",
+          "hive_origin_thread": "01a130c8-03b8-7dd1-b849-2f7c98a2b18e",
+          "hive_project": "dreamtides_web",
+          "hive_resolution": "completed",
+          "improvement": "original-journey-deck-static-spark",
+          "intended_project": "dreamtides_web",
+          "phase5_key": "prim-journey-deck-spark"
+        }
+      }
+    },
+    {
+      "bead": "hv-umm2.95",
+      "friction": {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/docs/plan/evidence/friction/hv-umm2.95.json",
+        "sha256": "3445ce9b628a80f4e17302804a0de9f88c1b18ec3c60875ee075ebfac6e7baf8",
+        "bytes": 794
+      },
+      "measurements": {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/docs/plan/evidence/measurements/hv-umm2.95.json",
+        "sha256": "b6f8a9f7e8228b5934e68b70fe41a0b9e032a81f48597b597f97278b0f5406c4",
+        "bytes": 48979
+      },
+      "nativeSnapshot": {
+        "path": "/tmp/dreamtides-executor-01a1304d/lf7t/hv-umm2.95-native.json",
+        "sha256": "1912cd6c475c5b2ce9bcd66b026df4f378ed6173a02e49eaded397a191c0f256",
+        "bytes": 556560
+      },
+      "nativeOutcome": {
+        "id": "hv-umm2.95",
+        "status": "closed",
+        "started_at": "2026-10-14T16:42:38Z",
+        "closed_at": "2026-10-14T18:45:24Z",
+        "close_reason": "Certified promotion and cleanup verified; complete cold review dispositioned into bounded693 follow-up; full native95 acceptance satisfied.",
+        "metadata": {
+          "hive_origin_thread": "114861d9-a28a-4f78-8eb4-d1317e4f1094",
+          "hive_project": "dreamtides_web",
+          "hive_resolution": "completed",
+          "phase5_key": "prim-stored-counters"
+        }
+      }
+    }
+  ],
+  "audit551": {
+    "frictionTagMinutes": 8.83805,
+    "frictionWindows": {
+      "diagnosis": {
+        "start": "2026-10-12T15:47:05.826Z",
+        "end": "2026-10-12T15:53:38Z",
+        "scope": "Final focused failure terminal to repaired focused lockf launch; elapsed diagnostic/coordination/witness queue/test repair, not isolated editing",
+        "endPrecision": "OS process start has one-second resolution"
+      },
+      "focusedRepairOuter": {
+        "pid": 50176,
+        "process": "lockf wrapper",
+        "start": "2026-10-12T15:53:38Z",
+        "observationSource": "TZ=UTC ps -p 50176 -o pid,lstart,etime while still waiting; OS process-start timestamp has one-second resolution",
+        "observedElapsed": "03:05",
+        "innerStart": "2026-10-12T15:59:20.640Z",
+        "pureKernelWait": null,
+        "wrapperToInnerStartS": 342.64,
+        "scope": "OS lockf process start (one-second resolution) to inner metered command start after acquisition; includes startup, not pure isolated kernel wait"
+      },
+      "earlierQueueDurationKnown": false,
+      "reviewCancelledOuter": {
+        "pid": 77783,
+        "process": "lockf wrapper",
+        "start": "2026-10-12T16:00:19Z",
+        "observationSource": "TZ=UTC ps process-start observed before inner review.log existed; one-second resolution",
+        "innerStart": null,
+        "pureKernelWait": null,
+        "cancelledAt": "2026-10-12T16:03:26.643Z",
+        "exit": 130,
+        "noInnerEffectStarted": true,
+        "wrapperToCancellationS": 187.643
+      },
+      "resourceCorrection": "Agent mistakenly wrapped lightweight focused/review checks in the shared heavy lock. Parent applied D17: an exact owned unstarted review waiter received SIGINT; its actual exit130 and absent PID were verified. Review, Knip and schema execute sequentially without the heavy slot. Fuzz300 keeps its required heavy lock; explicit requested baseline witness also retained its lock."
+    },
+    "execution": {
+      "focusedRepair": {
+        "label": "focused-repair",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/view/view-knowledge.test.ts",
+          "src/engine/view/determinize.test.ts",
+          "src/engine/view/determinize-loops.test.ts",
+          "src/engine/fold/fold.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/testing/tooling.test.ts",
+          "src/runtime/qa-scenes-battle.test.ts",
+          "src/rules/battle/engine-battle-intents.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/prevent-deck-bottom551-root",
+        "start": "2026-10-12T15:59:20.640Z",
+        "end": "2026-10-12T15:59:29.790Z",
+        "wallS": 9.148116249998566,
+        "hostLoad": 8.39,
+        "hostLoadEnd": 8.23,
+        "pid": 75627,
+        "pgid": 75627,
+        "exit": 0,
+        "log": "focused-repair.log",
+        "testCounts": {
+          "files": 9,
+          "cases": 2003
+        }
+      },
+      "reviewFinal": {
+        "label": "review-final",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/prevent-deck-bottom551-root",
+        "start": "2026-10-12T16:05:19.579Z",
+        "end": "2026-10-12T16:06:02.310Z",
+        "wallS": 42.72794912500831,
+        "hostLoad": 4.65,
+        "hostLoadEnd": 4.7,
+        "pid": 14751,
+        "pgid": 14751,
+        "exit": 0,
+        "log": "review-final.log",
+        "testCounts": {
+          "files": 268,
+          "cases": 4524
+        }
+      },
+      "weightedFuzz": {
+        "started": "2026-10-12T15:40:24.439Z",
+        "ended": "2026-10-12T15:43:12.439Z",
+        "hostLoad": 3.73046875,
+        "wallS": 167.99751174999997,
+        "cpuS": 181.745551,
+        "games": 300,
+        "steps": 155154,
+        "failures": []
+      }
+    },
+    "finding": "530.283 seconds combines nonoverlapping unnecessary focused wrapper-to-inner start 342.640 seconds and unstarted review wrapper-to-cancellation 187.643 seconds. OS starts have one-second precision. Existing owning correction retained heavy only for genuinely heavy checks; no pure kernel wait inferred."
+  },
+  "audit589": {
+    "frictionTagMinutes": 16.483851616666666,
+    "intervals": [
+      {
+        "label": "stage1-full",
+        "start": "2026-10-14T21:30:34.704127+00:00",
+        "end": "2026-10-14T21:30:34.727437+00:00",
+        "seconds": 0.02331,
+        "scope": "Observed heavy admission and launcher interval ending at inner command start"
+      },
+      {
+        "label": "stage1-full2",
+        "start": "2026-10-14T21:48:47.248751+00:00",
+        "end": "2026-10-14T21:49:16.705373+00:00",
+        "seconds": 29.456622,
+        "scope": "Observed heavy admission and launcher interval ending at inner command start"
+      },
+      {
+        "label": "stage1-fuzz",
+        "start": "2026-10-14T21:33:05.880654+00:00",
+        "end": "2026-10-14T21:33:05.907398+00:00",
+        "seconds": 0.026744,
+        "scope": "Observed heavy admission and launcher interval ending at inner command start"
+      },
+      {
+        "label": "stage1-fuzz2",
+        "start": "2026-10-14T21:51:23.945014+00:00",
+        "end": "2026-10-14T21:54:55.782767+00:00",
+        "seconds": 211.837753,
+        "scope": "Queued outer client without inner launch; terminal cancellation"
+      },
+      {
+        "label": "stage1-fuzz3",
+        "start": "2026-10-14T21:59:23.634125+00:00",
+        "end": "2026-10-14T22:11:51.320793+00:00",
+        "seconds": 747.686668,
+        "scope": "Observed heavy admission and launcher interval ending at inner command start"
+      }
+    ],
+    "intervalSecondsSum": 989.031097,
+    "rawReceipts": [
+      {
+        "label": "stage1-full",
+        "outer": {
+          "proof": {
+            "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-full-total-receipt.json",
+            "sha256": "3bae1f4fb75d0b7bc3070118508e2127ff1a0985e4d8c16734f80b0b7afb5b87",
+            "bytes": 788
+          },
+          "receipt": {
+            "command": [
+              "lockf",
+              "-k",
+              "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+              "python3",
+              "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+              "stage1-full",
+              "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+              "npm",
+              "run",
+              "review:full"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+            "start": "2026-10-14T21:30:34.704127+00:00",
+            "end": "2026-10-14T21:32:38.805009+00:00",
+            "pid": 98540,
+            "pgid": 98540,
+            "exitCode": 0,
+            "wallSeconds": 124.09996958301053,
+            "cpuSeconds": {
+              "user": 268.887298,
+              "system": 33.089126
+            },
+            "startLoad": [
+              15.84619140625,
+              9.0498046875,
+              10.06298828125
+            ],
+            "endLoad": [
+              23.0419921875,
+              13.57666015625,
+              11.6962890625
+            ]
+          }
+        },
+        "inner": {
+          "proof": {
+            "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-full-receipt.json",
+            "sha256": "0395fa6d6809ab92c5485cfd07e6dc1f51b1b069598dd9c53c1a36473cfd0cad",
+            "bytes": 544
+          },
+          "receipt": {
+            "command": [
+              "npm",
+              "run",
+              "review:full"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+            "start": "2026-10-14T21:30:34.727437+00:00",
+            "end": "2026-10-14T21:32:38.798826+00:00",
+            "pid": 98544,
+            "pgid": 98544,
+            "exitCode": 0,
+            "wallSeconds": 124.07048608298646,
+            "cpuSeconds": {
+              "user": 268.869497,
+              "system": 33.079489
+            },
+            "startLoad": [
+              15.84619140625,
+              9.0498046875,
+              10.06298828125
+            ],
+            "endLoad": [
+              23.0419921875,
+              13.57666015625,
+              11.6962890625
+            ]
+          }
+        }
+      },
+      {
+        "label": "stage1-full2",
+        "outer": {
+          "proof": {
+            "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-full2-total-receipt.json",
+            "sha256": "137407f2c1efc67fc888fd20e547e33d0ecc073f7ac7debed574a3f581236b3a",
+            "bytes": 780
+          },
+          "receipt": {
+            "command": [
+              "lockf",
+              "-k",
+              "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+              "python3",
+              "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+              "stage1-full2",
+              "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+              "npm",
+              "run",
+              "review:full"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+            "start": "2026-10-14T21:48:47.248751+00:00",
+            "end": "2026-10-14T21:50:55.186817+00:00",
+            "pid": 61839,
+            "pgid": 61839,
+            "exitCode": 0,
+            "wallSeconds": 127.93654662498739,
+            "cpuSeconds": {
+              "user": 228.246704,
+              "system": 26.189557
+            },
+            "startLoad": [
+              6.21875,
+              7.3232421875,
+              9.21337890625
+            ],
+            "endLoad": [
+              5.83349609375,
+              6.88134765625,
+              8.77099609375
+            ]
+          }
+        },
+        "inner": {
+          "proof": {
+            "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-full2-receipt.json",
+            "sha256": "7e89867bd6df4c9ec03a7d9a4fed0e36fb47920f4526316712e1111cffc0c04a",
+            "bytes": 534
+          },
+          "receipt": {
+            "command": [
+              "npm",
+              "run",
+              "review:full"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+            "start": "2026-10-14T21:49:16.705373+00:00",
+            "end": "2026-10-14T21:50:55.182295+00:00",
+            "pid": 62518,
+            "pgid": 62518,
+            "exitCode": 0,
+            "wallSeconds": 98.47578416697797,
+            "cpuSeconds": {
+              "user": 228.228842,
+              "system": 26.17871
+            },
+            "startLoad": [
+              5.8984375,
+              7.1455078125,
+              9.0830078125
+            ],
+            "endLoad": [
+              5.83349609375,
+              6.88134765625,
+              8.77099609375
+            ]
+          }
+        }
+      },
+      {
+        "label": "stage1-fuzz",
+        "outer": {
+          "proof": {
+            "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-fuzz-total-receipt.json",
+            "sha256": "8cffeccfc406cee1a1caa29aa70182075be72f09d15310331ac83973e4ac4a6a",
+            "bytes": 921
+          },
+          "receipt": {
+            "command": [
+              "lockf",
+              "-k",
+              "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+              "python3",
+              "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+              "stage1-fuzz",
+              "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+              "npm",
+              "run",
+              "fuzz:engine",
+              "--",
+              "--games",
+              "300",
+              "--weight-uuids",
+              "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+              "--seed",
+              "hv-umm2.589-c4"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+            "start": "2026-10-14T21:33:05.880654+00:00",
+            "end": "2026-10-14T21:43:16.545226+00:00",
+            "pid": 57129,
+            "pgid": 57129,
+            "exitCode": 0,
+            "wallSeconds": 610.6484827090171,
+            "cpuSeconds": {
+              "user": 635.347855,
+              "system": 5.862578
+            },
+            "startLoad": [
+              23.59228515625,
+              14.3974609375,
+              12.04150390625
+            ],
+            "endLoad": [
+              7.87939453125,
+              9.3828125,
+              10.60009765625
+            ]
+          }
+        },
+        "inner": {
+          "proof": {
+            "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-fuzz-receipt.json",
+            "sha256": "48106aba7605ff24829e92462c2c2806801107e110232ecdcb6b7fa589b2021e",
+            "bytes": 676
+          },
+          "receipt": {
+            "command": [
+              "npm",
+              "run",
+              "fuzz:engine",
+              "--",
+              "--games",
+              "300",
+              "--weight-uuids",
+              "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+              "--seed",
+              "hv-umm2.589-c4"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+            "start": "2026-10-14T21:33:05.907398+00:00",
+            "end": "2026-10-14T21:43:16.539595+00:00",
+            "pid": 57135,
+            "pgid": 57135,
+            "exitCode": 0,
+            "wallSeconds": 610.6161227500124,
+            "cpuSeconds": {
+              "user": 635.32828,
+              "system": 5.851815
+            },
+            "startLoad": [
+              23.59228515625,
+              14.3974609375,
+              12.04150390625
+            ],
+            "endLoad": [
+              7.87939453125,
+              9.3828125,
+              10.60009765625
+            ]
+          }
+        }
+      },
+      {
+        "label": "stage1-fuzz2",
+        "outer": {
+          "proof": {
+            "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-fuzz2-total-receipt.json",
+            "sha256": "d10b070784cef1bb8e698ccae16cca636850f9908b6aba3600e0dbab694a23a4",
+            "bytes": 921
+          },
+          "receipt": {
+            "command": [
+              "lockf",
+              "-k",
+              "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+              "python3",
+              "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+              "stage1-fuzz2",
+              "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+              "npm",
+              "run",
+              "fuzz:engine",
+              "--",
+              "--games",
+              "300",
+              "--weight-uuids",
+              "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+              "--seed",
+              "hv-umm2.589-c4"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+            "start": "2026-10-14T21:51:23.945014+00:00",
+            "end": "2026-10-14T21:54:55.782767+00:00",
+            "pid": 96960,
+            "pgid": 96960,
+            "exitCode": -15,
+            "wallSeconds": 211.8352018329897,
+            "cpuSeconds": {
+              "user": 0.000498,
+              "system": 0.00086
+            },
+            "startLoad": [
+              4.4580078125,
+              6.44580078125,
+              8.54638671875
+            ],
+            "endLoad": [
+              7.73193359375,
+              6.82177734375,
+              8.21728515625
+            ]
+          }
+        }
+      },
+      {
+        "label": "stage1-fuzz3",
+        "outer": {
+          "proof": {
+            "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-fuzz3-total-receipt.json",
+            "sha256": "28d7a182623dfc3d36ea9cefa60b0de6005066c5fb8c95d4a78a4b7cf7115d01",
+            "bytes": 923
+          },
+          "receipt": {
+            "command": [
+              "lockf",
+              "-k",
+              "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+              "python3",
+              "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+              "stage1-fuzz3",
+              "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+              "npm",
+              "run",
+              "fuzz:engine",
+              "--",
+              "--games",
+              "300",
+              "--weight-uuids",
+              "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+              "--seed",
+              "hv-umm2.589-c4"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+            "start": "2026-10-14T21:59:23.634125+00:00",
+            "end": "2026-10-14T22:21:19.996984+00:00",
+            "pid": 39156,
+            "pgid": 39156,
+            "exitCode": 0,
+            "wallSeconds": 1316.3481457910093,
+            "cpuSeconds": {
+              "user": 592.676488,
+              "system": 4.953599
+            },
+            "startLoad": [
+              5.57958984375,
+              5.8251953125,
+              7.38525390625
+            ],
+            "endLoad": [
+              4.06884765625,
+              5.95361328125,
+              7.56005859375
+            ]
+          }
+        },
+        "inner": {
+          "proof": {
+            "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-fuzz3-receipt.json",
+            "sha256": "9de1a773c911f528e574df962f06fe8a7c042e0a49be47066e379755022aeb15",
+            "bytes": 680
+          },
+          "receipt": {
+            "command": [
+              "npm",
+              "run",
+              "fuzz:engine",
+              "--",
+              "--games",
+              "300",
+              "--weight-uuids",
+              "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+              "--seed",
+              "hv-umm2.589-c4"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+            "start": "2026-10-14T22:11:51.320793+00:00",
+            "end": "2026-10-14T22:21:19.992084+00:00",
+            "pid": 88135,
+            "pgid": 88135,
+            "exitCode": 0,
+            "wallSeconds": 568.6657660839846,
+            "cpuSeconds": {
+              "user": 592.658364,
+              "system": 4.942775
+            },
+            "startLoad": [
+              13.70751953125,
+              11.06787109375,
+              9.39208984375
+            ],
+            "endLoad": [
+              4.06884765625,
+              5.95361328125,
+              7.56005859375
+            ]
+          }
+        }
+      }
+    ],
+    "extraProofs": [
+      {
+        "path": "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+        "sha256": "6cac42419adb64b3c134150a3fb0f6170fcaa557dc56a706d6707a69b41c8807",
+        "bytes": 1186
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a1304d/589/fuzz2-scoped-cancellation.json",
+        "sha256": "c0a87cbc3782348281fe96e5cae199d3902884610e6235270b632e2e292a0a52",
+        "bytes": 645
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a1304d/589/fuzz2-canceled-settled.json",
+        "sha256": "3b50bcd5f82952689cd7458fd80eee76430b1b1fb4f8d0093aedc2d5ecaa1d8b",
+        "bytes": 128
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-full2.stdout",
+        "sha256": "91574de92699d774b0c651aae339b819c1548e5e6038b19a29a63f7f258fa4bd",
+        "bytes": 2605
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a1304d/589/stage1-fuzz3.stdout",
+        "sha256": "01d5f6259f1556c238b94be5bea747237eb00d2b28fb83fdbd39f5b2863c0589",
+        "bytes": 491
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a1304d/589/integration-final-commit-receipt.json",
+        "sha256": "586d4e24f0d35bb135527620db99da05d62f419108491f5f080d9135b808125d",
+        "bytes": 612
+      }
+    ],
+    "cancelledClient": {
+      "scope": "Only own outer queued lockf group 96960; no inner launch recorded; cancellation and absent group proven by retained settled receipt.",
+      "signal": "SIGTERM",
+      "outerExitCode": -15
+    },
+    "algorithmVsClient": {
+      "finalOuterWallSeconds": 1316.3481457910093,
+      "finalInnerWallSeconds": 568.6657660839846,
+      "nativeReportedWallSeconds": 566.9,
+      "nativeReportedCpuSeconds": 595.9,
+      "qualification": "Native algorithm output rounds to tenths; inner/outer meters use different boundaries. No subtraction is labeled isolated queue."
+    },
+    "fullReviewInternalStart": {
+      "innerCommand": "2026-10-14T21:49:16.705373+00:00",
+      "firstPrepareStep": "2026-10-14T21:49:16.895Z",
+      "scope": "Retained full2 stdout; no internal full-review waiting notice in this attempt. This does not prove zero internal wait across other attempts."
+    },
+    "nativeOutcomeQualification": "Immutable snapshot records certified staging promotion and cleanup with final-range cold review continuing asynchronously. That review is separately parent-owned; this audit neither inspects its conversation/findings nor claims its completion."
+  },
+  "audit95": {
+    "frictionTagMinutes": 10.770579236117118,
+    "heavyReceipts": {
+      "full-authoritative": {
+        "name": "full-authoritative",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+        "pid": 63563,
+        "pgid": 63563,
+        "start": "2026-10-14T17:28:13.956242+00:00",
+        "load": [
+          17.21923828125,
+          13.12548828125,
+          12.302734375
+        ],
+        "exit": 0,
+        "end": "2026-10-14T17:34:56.257132+00:00",
+        "wall": 402.2950422090071,
+        "cpu": 259.374602
+      },
+      "full-final": {
+        "name": "full-final",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+        "pid": 72921,
+        "pgid": 72921,
+        "start": "2026-10-14T17:22:00.550326+00:00",
+        "load": [
+          7.72412109375,
+          11.15087890625,
+          12.109375
+        ],
+        "exit": -15,
+        "end": "2026-10-14T17:26:05.884383+00:00",
+        "wall": 245.3304706250201,
+        "cpu": 0.00233
+      }
+    },
+    "timingQualification": {
+      "fullGroup": 402.2950422090071,
+      "fullLaunchToFirstStep": 308.576758,
+      "fullTestStep": {
+        "at": "2026-10-14T17:33:49.392Z",
+        "load": 7.16650390625,
+        "wall": 62.8,
+        "files": 387,
+        "tests": 8537
+      },
+      "fullPreparation": {
+        "at": "2026-10-14T17:33:22.533Z",
+        "load": 7.017578125
+      },
+      "weightedClient": {
+        "name": "weighted300",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "f3f97e2c-3bb6-4a20-9880-f59c50e5af93,8e7b0eb9-4933-420b-abee-413bf5b3d2fc,a6866438-3632-408d-b464-c10f8a43a5c2"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+        "pid": 94881,
+        "pgid": 94881,
+        "start": "2026-10-14T17:34:56.306213+00:00",
+        "load": [
+          5.3896484375,
+          8.96923828125,
+          10.775390625
+        ],
+        "exit": 0,
+        "end": "2026-10-14T17:41:39.239692+00:00",
+        "wall": 402.92752554200706,
+        "cpu": 333.413883
+      },
+      "weightedNative": {
+        "games": 300,
+        "steps": 104749,
+        "wallS": 310.6,
+        "cpuS": 331.9,
+        "prompts": 7328,
+        "interactiveReruns": 731,
+        "failures": 0,
+        "includedAndExercised": {
+          "f3f97e2c-3bb6-4a20-9880-f59c50e5af93": [
+            608,
+            121
+          ],
+          "8e7b0eb9-4933-420b-abee-413bf5b3d2fc": [
+            614,
+            134
+          ],
+          "a6866438-3632-408d-b464-c10f8a43a5c2": [
+            621,
+            92
+          ]
+        },
+        "qualification": "Aggregate inclusion/exercise counters do not prove a particular ability payment; judged cases supply the specific actions."
+      },
+      "noLowLoadPerformanceClaim": true,
+      "cancelledQueuedFull": "full-queued-cancel.json is a settled wait cancellation, no full checks ran and no test failure is claimed."
+    },
+    "reportedOffsetSeconds": {
+      "cancelledQueuedFull": 245.3304706250201,
+      "fullLaunchToFirstStep": 308.576758,
+      "clientMinusNativeFuzz": 92.32752554200704
+    },
+    "finding": "The full-client cancellation is a settled queued attempt, not a failing full check. The next full launch-to-first-step offset mixes admission/startup and possible internal full-review slot. Weighted client/native difference is an unisolated boundary offset. Do not sum these as pure kernel queue.",
+    "ordinaryWrapperRecurrence": {
+      "focused": {
+        "name": "integration-focused",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/rules/costs.test.ts",
+          "src/engine/rules/costs-discard-hand.test.ts",
+          "src/engine/fold/fold.test.ts",
+          "src/engine/view/view.test.ts",
+          "src/engine/view/determinize.test.ts",
+          "src/engine/rules/turn-log.test.ts",
+          "--maxWorkers=2"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+        "pid": 97884,
+        "pgid": 97884,
+        "start": "2026-10-14T18:16:22.392709+00:00",
+        "load": [
+          6.41796875,
+          11.41796875,
+          13.1982421875
+        ],
+        "exit": 0,
+        "end": "2026-10-14T18:17:29.765828+00:00",
+        "wall": 67.3723799159925,
+        "cpu": 27.689470999999998
+      },
+      "review": {
+        "name": "integration-review",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+        "pid": 59975,
+        "pgid": 59975,
+        "start": "2026-10-14T18:17:50.730228+00:00",
+        "load": [
+          17.4677734375,
+          13.81005859375,
+          13.93994140625
+        ],
+        "exit": 0,
+        "end": "2026-10-14T18:19:03.776693+00:00",
+        "wall": 73.0456462079892,
+        "cpu": 214.512758
+      },
+      "owningQualification": "The focused and ordinary review groups were unnecessarily wrapped in the literal heavy lock despite D17 allowing ordinary checks freely. Their actual argv and measured group wall remain recorded, including queued wait/start overhead; this was an own orchestration overconstraint, not a product defect. Passing checks are retained without redundant reruns. Further ordinary checks run without that wrapper.",
+      "qualification": "This later integration scope shows the same agent-added ordinary-check wrapper overconstraint as 551. It is distinct from the original three heavy-offset measurements and has an existing owning correction; elapsed pure wait remains unknown."
+    }
+  },
+  "currentLauncherAudit": {
+    "sourceProofs": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/docs/plan/workflow.md",
+        "sha256": "a704b90d25f8bdfa81c392d4379485edaafc08f25ae3e8bcfeb231a749c6581f",
+        "bytes": 103642
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/docs/plan/decisions.md",
+        "sha256": "c2282236ad6c119de48679fba67a7a6882d183e781e3d72a4dfdc3b0fae4e757",
+        "bytes": 52815
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/scripts/review.mjs",
+        "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+        "bytes": 16054
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/scripts/review-lock.mjs",
+        "sha256": "13728dbdab0a059e48f8e8bc390aff453f4104d1ba1c3e4208008657cd9e3af6",
+        "bytes": 4776
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/scripts/review-execution.mjs",
+        "sha256": "79615e6cd20c1683b67bf05a499b94c650d291bff14b01f619035c82f72f4982",
+        "bytes": 841
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/scripts/review-plan.mjs",
+        "sha256": "95f59988e0a7db7903255e56c0c0fb3c0fbb9ba4037b91c73f770fefd66eea31",
+        "bytes": 11782
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/scripts/fuzz-engine.ts",
+        "sha256": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+        "bytes": 6547
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/scripts/perf-ab.ts",
+        "sha256": "57c16e3d75edfa3cc02c883dfbd25b831f5c60af1bcc300a9053a64a1df11247",
+        "bytes": 9705
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/scripts/qa/browser-qa-capacity.mjs",
+        "sha256": "03bd65b8bd55266a4b3737acc60b0a8a667210a488800b80b1a6c17ece4e8e58",
+        "bytes": 352
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/scripts/friction-triggers.mjs",
+        "sha256": "ffa59d3d37a0ab0ce4bf4c1ca6afb317399ce7c7e621eca1fe5d9c51ffc821ef",
+        "bytes": 20982
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t/package.json",
+        "sha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+        "bytes": 2249
+      }
+    ],
+    "facts": [
+      "D17/workflow Resources require machine-wide lockf only for the stated heavy commands; ordinary review, focused tests, Knip, install, sweep and scenario commands use no heavy slot.",
+      "package.json routes review commands to scripts/review.mjs. Its requiresFullReviewSlot applies only to full/lint-full/test-full, using journey-full-review.lock under the common Git directory. That lock is distinct from artifacts/heavy.lock and can add another admission layer after external heavy acquisition.",
+      "The review lock uses atomic private-file link creation, owner PID/childPID liveness, unchanged-snapshot stale cleanup and one-second acquisition retries. Inspection found no source-bound defect explaining the three heterogeneous historical reports. Source inspection alone does not establish fairness or runtime race freedom.",
+      "Review execution drains independent concurrent steps via Promise.allSettled before restoration and propagates failure. It does not itself request the machine-wide lockf slot.",
+      "The fuzz launcher does not automatically meter or acquire the external machine-wide heavy lock; the session invokes the required lockf wrapper. Browser capacity is separately two slots. No evidence establishes an owned heavy/browser overlap here."
+    ],
+    "externalSchedulerScope": "No Tollgate/configuration mutation or external-repository audit. D44 gate/release outcomes are retained from immutable native source snapshots; this bead does not rerun or infer gate timings from local friction."
+  },
+  "timing": {
+    "dispatchBounds": {
+      "observedAt": "2026-10-14T22:49:20.953144+00:00",
+      "dispatchLowerBound": "2026-10-14T22:48:59.843125Z",
+      "call": "collaboration.spawn_agent heavy_check_waits_lf7t",
+      "samplingStart": "UNKNOWN",
+      "rootClaimStart": "2026-10-14T22:48:12Z"
+    },
+    "helperWindowStart": "2026-10-14T22:48:59.843125Z",
+    "helperWindowStartQualification": "Conservative pre-dispatch lower bound; actual tool dispatch lies before post-call observation. Actual sampling start UNKNOWN.",
+    "rootClaimStart": "2026-10-14T22:48:12Z",
+    "cutoffProxy": "2026-10-14T22:52:22.601438+00:00",
+    "actualGitStart": "UNKNOWN before commit",
+    "actualGitEnd": "UNKNOWN before commit",
+    "externalGitReceipt": "/tmp/dreamtides-executor-01a1304d/lf7t/git-commit-receipt.json",
+    "scope": "Inclusive gross root/helper windows include setup, research, reading, coordination, waits, validation and evidence through actual Git; no artificial interval truncation. Final cutoff refreshed immediately before Git; exact endpoint/tail retained externally.",
+    "helperGrossMinutesAtCutoff": 3.3793052166666664,
+    "rootGrossMinutesAtCutoff": 4.176690633333333
+  },
+  "ledgerAppend": {
+    "priorSHA256": "e3e083ccd3a73afadf1f244023f9566c472e507e5f029a37b0e59ae22ac961e4",
+    "priorBytes": 21653,
+    "appendedLineSHA256": "55f699b7381f3afbc380eaa0e8d950608aa8bf15fcf0d42cc205d75c2dd9e37e",
+    "oneLineOnly": true
+  },
+  "validation": {
+    "install": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t",
+      "start": "2026-10-14T22:48:30.366853+00:00",
+      "end": "2026-10-14T22:48:33.412848+00:00",
+      "pid": 98079,
+      "pgid": 98079,
+      "exitCode": 0,
+      "wallSeconds": 3.045991583960131,
+      "cpuSeconds": {
+        "user": 2.161381,
+        "system": 4.057251
+      },
+      "startLoad": [
+        11.7802734375,
+        13.14404296875,
+        12.119140625
+      ],
+      "endLoad": [
+        12.0380859375,
+        13.1748046875,
+        12.1357421875
+      ]
+    },
+    "planned": [
+      "npm run review",
+      "npm run knip",
+      "node scripts/friction-triggers.mjs --validate-records",
+      "npm run friction:triggers",
+      "git diff --check and exact allowed-file/ledger-prefix checks"
+    ],
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "proportionality": "Evidence-only audit; no tests, full review, benchmark, fuzz or browser execution. Any unrelated trigger/cadence is reported to parent without mutation.",
+    "actualReceipts": {
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t",
+        "start": "2026-10-14T22:51:09.647252+00:00",
+        "end": "2026-10-14T22:51:09.912280+00:00",
+        "pid": 9939,
+        "pgid": 9939,
+        "exitCode": 0,
+        "wallSeconds": 0.26505595800699666,
+        "cpuSeconds": {
+          "user": 0.20063799999999998,
+          "system": 0.084587
+        },
+        "startLoad": [
+          6.04541015625,
+          10.08349609375,
+          11.033203125
+        ],
+        "endLoad": [
+          6.04541015625,
+          10.08349609375,
+          11.033203125
+        ]
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t",
+        "start": "2026-10-14T22:51:14.551202+00:00",
+        "end": "2026-10-14T22:51:20.039471+00:00",
+        "pid": 10317,
+        "pgid": 10317,
+        "exitCode": 0,
+        "wallSeconds": 5.488235542026814,
+        "cpuSeconds": {
+          "user": 4.888034,
+          "system": 1.653789
+        },
+        "startLoad": [
+          5.88134765625,
+          9.982421875,
+          10.99169921875
+        ],
+        "endLoad": [
+          5.810546875,
+          9.8994140625,
+          10.95654296875
+        ]
+      },
+      "schema": {
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t",
+        "start": "2026-10-14T22:51:30.068506+00:00",
+        "end": "2026-10-14T22:51:30.138998+00:00",
+        "pid": 11409,
+        "pgid": 11409,
+        "exitCode": 0,
+        "wallSeconds": 0.07052775000920519,
+        "cpuSeconds": {
+          "user": 0.054994999999999995,
+          "system": 0.021027999999999998
+        },
+        "startLoad": [
+          5.765625,
+          9.75439453125,
+          10.89208984375
+        ],
+        "endLoad": [
+          5.765625,
+          9.75439453125,
+          10.89208984375
+        ]
+      },
+      "triggers": {
+        "command": [
+          "npm",
+          "run",
+          "friction:triggers"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/heavy-check-waits-lf7t",
+        "start": "2026-10-14T22:51:30.068526+00:00",
+        "end": "2026-10-14T22:51:30.233393+00:00",
+        "pid": 11410,
+        "pgid": 11410,
+        "exitCode": 0,
+        "wallSeconds": 0.16489604103844613,
+        "cpuSeconds": {
+          "user": 0.139147,
+          "system": 0.035167
+        },
+        "startLoad": [
+          5.765625,
+          9.75439453125,
+          10.89208984375
+        ],
+        "endLoad": [
+          5.765625,
+          9.75439453125,
+          10.89208984375
+        ]
+      }
+    },
+    "recordCount": 878,
+    "historicalUnknownCount": 41,
+    "triggerReport": {
+      "path": "/tmp/dreamtides-executor-01a1304d/lf7t/triggers.stdout",
+      "sha256": "3b6cb8335eb39fe21f22a3fd39b9f2b619f3f14b8d3078832997858b6739f825",
+      "heavySlotBeads": [
+        "hv-umm2.551",
+        "hv-umm2.589",
+        "hv-umm2.95"
+      ],
+      "allFiredTriggersDispositioned": true,
+      "phase5Uncovered": 25,
+      "lastRetrospective": "hv-n913",
+      "retrospectiveDue": true,
+      "action": "Reported to parent; helper makes no native filing or retrospective coverage change."
+    },
+    "knipQualification": "Prepared isolated local-asset home reports missing-art warnings; normal restoration reports all 564 card images, 32 avatar portraits/cutouts, 153 dreamsigns, 226 journey images and 521 Exploration images linked. Actual Knip exit0, restoration exit0. Warning output retained; no new product/art defect demonstrated.",
+    "finalChecks": "Final schema, diff, exact allowed-file and ledger-prefix assertions run after this cutoff; immutable actual receipts and final source SHA256 manifest retained externally with actual Git endpoint, tail, source/base and clean status."
+  },
+  "resources": {
+    "ownedHeavyCommands": [],
+    "ownedBrowserResources": [],
+    "ownedLongLivedProcesses": [],
+    "commandReceipts": "All validation subprocesses use run-command.py with UTC/monotonic/PID/process-group/CPU/load receipts; final proof verifies only owned process groups are absent.",
+    "settled": {
+      "at": "2026-10-14T22:52:22.601438+00:00",
+      "ownedPgids": [
+        9939,
+        10317,
+        11409,
+        11410
+      ],
+      "remainingRows": [],
+      "scope": "Only exact task validation process groups checked; no shared/peer resources touched."
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Whole npm run review command starting os.getloadavg()[0]; matches actual friction-records step load6.04541015625 at22:51:09.838Z."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "review command",
+      "start": "2026-10-14T22:51:09.647252+00:00",
+      "oneMinuteStart": 6.04541015625,
+      "oneMinuteEnd": 6.04541015625
+    },
+    {
+      "scope": "knip command",
+      "start": "2026-10-14T22:51:14.551202+00:00",
+      "oneMinuteStart": 5.88134765625,
+      "oneMinuteEnd": 5.810546875
+    },
+    {
+      "scope": "schema command",
+      "start": "2026-10-14T22:51:30.068506+00:00",
+      "oneMinuteStart": 5.765625,
+      "oneMinuteEnd": 5.765625
+    },
+    {
+      "scope": "triggers command",
+      "start": "2026-10-14T22:51:30.068526+00:00",
+      "oneMinuteStart": 5.765625,
+      "oneMinuteEnd": 5.765625
+    }
+  ]
+}
