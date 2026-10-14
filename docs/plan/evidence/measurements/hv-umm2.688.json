@@ -1,0 +1,407 @@
+{
+  "bead": "hv-umm2.688",
+  "phase": 5,
+  "base": "d0f96002cac201acf440f0ea3ab05033db6c3edd",
+  "evidenceStage": "Frozen before single authorized Git commit; actual commit completion and marker tail recorded outside repository without tracked postcommit rewrite.",
+  "grossWindow": {
+    "start": "2026-10-14T14:44:20.600Z",
+    "prospectiveEvidenceEnd": "2026-10-14T15:05:31.107789+00:00",
+    "scope": "Actual parent dispatch through actual Git completion includes research, coordination/admission waits and verification. The friction end is this immediately-before-final-checks/Git frozen marker; the external final window records exact commit completion and marker tail.",
+    "modelSampling": "UNKNOWN",
+    "actualCommitReceipt": "/tmp/worker688-20261014/commit-v01.receipt.json",
+    "actualGitReceipt": "/tmp/worker688-20261014/commit-v01.receipt.json",
+    "actualFinalWindow": "/tmp/worker688-20261014/final-window-v01.json"
+  },
+  "setup": "Parent npm install+prepare completed before helper dispatch; excluded from implementer gross interval. Parent owns actual setup receipts.",
+  "sourceHashes": {
+    "src/engine/loops/event-copy-continuation.ts": "1d54a30cf3a4845c9c3cdddabbbb7538c66278cb3de0f517ed784d0b50cc19af",
+    "src/engine/loops/loops-mandatory.test.ts": "4a2bd60ade614466385f188dfc9da1f53b97381f57bf9cce9882bbf06d03b931",
+    "docs/plan/engine-design.md": "0b606a5b5d07ee5e712f15d7eda1fcf4455d0ee4757c48b25a11fd3488daad77"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v01 outer command start, sysctl vm.loadavg one-minute value; not a budget/performance claim"
+      }
+    }
+  },
+  "validationTotals": {
+    "scope": "Actual outer command wall, including expected negative failure and diagnostic rerun; locked full outer wall includes lock acquisition when present. No unobserved lock-wait estimate.",
+    "wallSeconds": {
+      "focused": 18.118668375973357,
+      "review": 79.23129604200949,
+      "knip": 4.894439499999862,
+      "full": 101.54997958301101,
+      "schema": 0.1911152079992462
+    }
+  },
+  "commands": [
+    {
+      "label": "focused-v01",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-688-ephemeral-copy-passivity",
+      "startUTC": "2026-10-14T14:55:44.786135+00:00",
+      "startHostLoad": "{ 8.00 14.32 13.39 }",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "sourceHEAD": "d0f96002cac201acf440f0ea3ab05033db6c3edd",
+      "sourceHashes": {
+        "src/engine/loops/event-copy-continuation.ts": "1d54a30cf3a4845c9c3cdddabbbb7538c66278cb3de0f517ed784d0b50cc19af",
+        "src/engine/loops/loops-mandatory.test.ts": "4a2bd60ade614466385f188dfc9da1f53b97381f57bf9cce9882bbf06d03b931",
+        "docs/plan/engine-design.md": "0b606a5b5d07ee5e712f15d7eda1fcf4455d0ee4757c48b25a11fd3488daad77"
+      },
+      "pid": 45567,
+      "pgid": 45567,
+      "exitCode": 0,
+      "wallSeconds": 12.633587791991886,
+      "endUTC": "2026-10-14T14:55:57.427208+00:00",
+      "endHostLoad": "{ 7.77 14.06 13.30 }",
+      "groupMembersAfterWait": [],
+      "groupSettled": true,
+      "stdoutPath": "/tmp/worker688-20261014/focused-v01.stdout",
+      "stdoutSHA256": "84cdeba8df1d644e731b7c7569d49f713d5d49a3d2025227b4a1aa79f6251686",
+      "stderrPath": "/tmp/worker688-20261014/focused-v01.stderr",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "full-v01",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-688-ephemeral-copy-passivity",
+      "startUTC": "2026-10-14T14:58:50.181851+00:00",
+      "startHostLoad": "{ 13.99 15.73 14.21 }",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "sourceHEAD": "d0f96002cac201acf440f0ea3ab05033db6c3edd",
+      "sourceHashes": {
+        "src/engine/loops/event-copy-continuation.ts": "1d54a30cf3a4845c9c3cdddabbbb7538c66278cb3de0f517ed784d0b50cc19af",
+        "src/engine/loops/loops-mandatory.test.ts": "4a2bd60ade614466385f188dfc9da1f53b97381f57bf9cce9882bbf06d03b931",
+        "docs/plan/engine-design.md": "0b606a5b5d07ee5e712f15d7eda1fcf4455d0ee4757c48b25a11fd3488daad77"
+      },
+      "pid": 17492,
+      "pgid": 17492,
+      "exitCode": 0,
+      "wallSeconds": 101.54997958301101,
+      "endUTC": "2026-10-14T15:00:31.740276+00:00",
+      "endHostLoad": "{ 14.24 16.09 14.56 }",
+      "groupMembersAfterWait": [],
+      "groupSettled": true,
+      "stdoutPath": "/tmp/worker688-20261014/full-v01.stdout",
+      "stdoutSHA256": "a37a6cd460025b46436576fcbde45f24ff6b41273d11238442436d232aee54ea",
+      "stderrPath": "/tmp/worker688-20261014/full-v01.stderr",
+      "stderrSHA256": "e757120850a70d1acf4cee2e63b9c50d01c6f72789fd742cd1581083dbb1ebd5"
+    },
+    {
+      "label": "knip-v01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-688-ephemeral-copy-passivity",
+      "startUTC": "2026-10-14T14:58:28.777666+00:00",
+      "startHostLoad": "{ 18.88 16.69 14.49 }",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "sourceHEAD": "d0f96002cac201acf440f0ea3ab05033db6c3edd",
+      "sourceHashes": {
+        "src/engine/loops/event-copy-continuation.ts": "1d54a30cf3a4845c9c3cdddabbbb7538c66278cb3de0f517ed784d0b50cc19af",
+        "src/engine/loops/loops-mandatory.test.ts": "4a2bd60ade614466385f188dfc9da1f53b97381f57bf9cce9882bbf06d03b931",
+        "docs/plan/engine-design.md": "0b606a5b5d07ee5e712f15d7eda1fcf4455d0ee4757c48b25a11fd3488daad77"
+      },
+      "pid": 15920,
+      "pgid": 15920,
+      "exitCode": 0,
+      "wallSeconds": 4.894439499999862,
+      "endUTC": "2026-10-14T14:58:33.681746+00:00",
+      "endHostLoad": "{ 17.93 16.53 14.45 }",
+      "groupMembersAfterWait": [],
+      "groupSettled": true,
+      "stdoutPath": "/tmp/worker688-20261014/knip-v01.stdout",
+      "stdoutSHA256": "f37dfcf8a34784de12f2494003fd69bc8aaffce0403db0ee2206d5331569a126",
+      "stderrPath": "/tmp/worker688-20261014/knip-v01.stderr",
+      "stderrSHA256": "0d009c9358e155ba3e9e8dbff45135c09a8239ceac6321bc909373f7d01a6fd8"
+    },
+    {
+      "label": "negative-v01",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "-t",
+        "certifies phase-inert Ephemeral preservation"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-688-ephemeral-copy-passivity",
+      "startUTC": "2026-10-14T14:51:10.358275+00:00",
+      "startHostLoad": "{ 21.92 17.21 13.48 }",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "sourceHEAD": "d0f96002cac201acf440f0ea3ab05033db6c3edd",
+      "sourceHashes": {
+        "src/engine/loops/event-copy-continuation.ts": "762fc6004cace79c68d36235d3084545e5b40188c0990938bc212dfa7e573aa5",
+        "src/engine/loops/loops-mandatory.test.ts": "d56c4d842f39d2ff43eecda115acf883f19b4b4b3bc0fdecc6c935f0c5ca07a2",
+        "docs/plan/engine-design.md": "07fe283cb1c7ddcf4df4f6fbc992aead0d5785475f8f209cd07b266b9370b5e0"
+      },
+      "pid": 10874,
+      "pgid": 10874,
+      "exitCode": 1,
+      "wallSeconds": 2.1189393750100862,
+      "endUTC": "2026-10-14T14:51:12.488580+00:00",
+      "endHostLoad": "{ 21.92 17.21 13.48 }",
+      "groupMembersAfterWait": [],
+      "groupSettled": true,
+      "stdoutPath": "/tmp/worker688-20261014/negative-v01.stdout",
+      "stdoutSHA256": "8e169f87c4fbd5dcc94c6e57a4f6daf51a41942175a80ac473ed55126de36e98",
+      "stderrPath": "/tmp/worker688-20261014/negative-v01.stderr",
+      "stderrSHA256": "5ccdffd6ee520e96d08447c042357b683575f4e2e36c793ea6a65f12ce021f44"
+    },
+    {
+      "label": "negative-v02",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "-t",
+        "certifies phase-inert Ephemeral preservation"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-688-ephemeral-copy-passivity",
+      "startUTC": "2026-10-14T14:52:43.562187+00:00",
+      "startHostLoad": "{ 22.74 17.93 14.08 }",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "sourceHEAD": "d0f96002cac201acf440f0ea3ab05033db6c3edd",
+      "sourceHashes": {
+        "src/engine/loops/event-copy-continuation.ts": "762fc6004cace79c68d36235d3084545e5b40188c0990938bc212dfa7e573aa5",
+        "src/engine/loops/loops-mandatory.test.ts": "4a2bd60ade614466385f188dfc9da1f53b97381f57bf9cce9882bbf06d03b931",
+        "docs/plan/engine-design.md": "07fe283cb1c7ddcf4df4f6fbc992aead0d5785475f8f209cd07b266b9370b5e0"
+      },
+      "pid": 76061,
+      "pgid": 76061,
+      "exitCode": 1,
+      "wallSeconds": 1.7975146669778042,
+      "endUTC": "2026-10-14T14:52:45.371851+00:00",
+      "endHostLoad": "{ 21.56 17.77 14.04 }",
+      "groupMembersAfterWait": [],
+      "groupSettled": true,
+      "stdoutPath": "/tmp/worker688-20261014/negative-v02.stdout",
+      "stdoutSHA256": "b42caf6cd435c16a1d46f990f10ebaa3b8e4119ad244328ae4fa3f9c5623678a",
+      "stderrPath": "/tmp/worker688-20261014/negative-v02.stderr",
+      "stderrSHA256": "0afd32cf3829628266582182234eab1837e762248a3d0df46f11804f504adec3"
+    },
+    {
+      "label": "positive-v01",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "-t",
+        "certifies phase-inert Ephemeral preservation"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-688-ephemeral-copy-passivity",
+      "startUTC": "2026-10-14T14:55:37.625480+00:00",
+      "startHostLoad": "{ 8.73 14.67 13.50 }",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "sourceHEAD": "d0f96002cac201acf440f0ea3ab05033db6c3edd",
+      "sourceHashes": {
+        "src/engine/loops/event-copy-continuation.ts": "1d54a30cf3a4845c9c3cdddabbbb7538c66278cb3de0f517ed784d0b50cc19af",
+        "src/engine/loops/loops-mandatory.test.ts": "4a2bd60ade614466385f188dfc9da1f53b97381f57bf9cce9882bbf06d03b931",
+        "docs/plan/engine-design.md": "0b606a5b5d07ee5e712f15d7eda1fcf4455d0ee4757c48b25a11fd3488daad77"
+      },
+      "pid": 45066,
+      "pgid": 45066,
+      "exitCode": 0,
+      "wallSeconds": 1.5686265419935808,
+      "endUTC": "2026-10-14T14:55:39.203632+00:00",
+      "endHostLoad": "{ 8.73 14.67 13.50 }",
+      "groupMembersAfterWait": [],
+      "groupSettled": true,
+      "stdoutPath": "/tmp/worker688-20261014/positive-v01.stdout",
+      "stdoutSHA256": "7d51fa040dcd02e148999ed51972495708002fec253ce4108f2b6fd6114a3924",
+      "stderrPath": "/tmp/worker688-20261014/positive-v01.stderr",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "review-v01",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-688-ephemeral-copy-passivity",
+      "startUTC": "2026-10-14T14:56:55.636260+00:00",
+      "startHostLoad": "{ 12.71 14.09 13.35 }",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "sourceHEAD": "d0f96002cac201acf440f0ea3ab05033db6c3edd",
+      "sourceHashes": {
+        "src/engine/loops/event-copy-continuation.ts": "1d54a30cf3a4845c9c3cdddabbbb7538c66278cb3de0f517ed784d0b50cc19af",
+        "src/engine/loops/loops-mandatory.test.ts": "4a2bd60ade614466385f188dfc9da1f53b97381f57bf9cce9882bbf06d03b931",
+        "docs/plan/engine-design.md": "0b606a5b5d07ee5e712f15d7eda1fcf4455d0ee4757c48b25a11fd3488daad77"
+      },
+      "pid": 52932,
+      "pgid": 52932,
+      "exitCode": 0,
+      "wallSeconds": 79.23129604200949,
+      "endUTC": "2026-10-14T14:58:14.879931+00:00",
+      "endHostLoad": "{ 21.07 17.02 14.58 }",
+      "groupMembersAfterWait": [],
+      "groupSettled": true,
+      "stdoutPath": "/tmp/worker688-20261014/review-v01.stdout",
+      "stdoutSHA256": "c1377fc42a0ed095e4fd4ea352e87f3234bdb9b83dab9f17c42ec91f17e21ccf",
+      "stderrPath": "/tmp/worker688-20261014/review-v01.stderr",
+      "stderrSHA256": "0d009c9358e155ba3e9e8dbff45135c09a8239ceac6321bc909373f7d01a6fd8"
+    },
+    {
+      "label": "schema-v01",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-688-ephemeral-copy-passivity",
+      "startUTC": "2026-10-14T14:58:38.523438+00:00",
+      "startHostLoad": "{ 17.14 16.39 14.41 }",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "sourceHEAD": "d0f96002cac201acf440f0ea3ab05033db6c3edd",
+      "sourceHashes": {
+        "src/engine/loops/event-copy-continuation.ts": "1d54a30cf3a4845c9c3cdddabbbb7538c66278cb3de0f517ed784d0b50cc19af",
+        "src/engine/loops/loops-mandatory.test.ts": "4a2bd60ade614466385f188dfc9da1f53b97381f57bf9cce9882bbf06d03b931",
+        "docs/plan/engine-design.md": "0b606a5b5d07ee5e712f15d7eda1fcf4455d0ee4757c48b25a11fd3488daad77"
+      },
+      "pid": 16755,
+      "pgid": 16755,
+      "exitCode": 0,
+      "wallSeconds": 0.11389350000536069,
+      "endUTC": "2026-10-14T14:58:38.645201+00:00",
+      "endHostLoad": "{ 17.14 16.39 14.41 }",
+      "groupMembersAfterWait": [],
+      "groupSettled": true,
+      "stdoutPath": "/tmp/worker688-20261014/schema-v01.stdout",
+      "stdoutSHA256": "1a67a919a3f987c4f106606e1fc9beb63e91dfa694954dc9dda235c8168560dc",
+      "stderrPath": "/tmp/worker688-20261014/schema-v01.stderr",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "schema-v02",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-688-ephemeral-copy-passivity",
+      "startUTC": "2026-10-14T15:00:54.428471+00:00",
+      "startHostLoad": "{ 11.32 15.31 14.32 }",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "sourceHEAD": "d0f96002cac201acf440f0ea3ab05033db6c3edd",
+      "sourceHashes": {
+        "src/engine/loops/event-copy-continuation.ts": "1d54a30cf3a4845c9c3cdddabbbb7538c66278cb3de0f517ed784d0b50cc19af",
+        "src/engine/loops/loops-mandatory.test.ts": "4a2bd60ade614466385f188dfc9da1f53b97381f57bf9cce9882bbf06d03b931",
+        "docs/plan/engine-design.md": "0b606a5b5d07ee5e712f15d7eda1fcf4455d0ee4757c48b25a11fd3488daad77"
+      },
+      "pid": 12989,
+      "pgid": 12989,
+      "exitCode": 0,
+      "wallSeconds": 0.0772217079938855,
+      "endUTC": "2026-10-14T15:00:54.515144+00:00",
+      "endHostLoad": "{ 11.32 15.31 14.32 }",
+      "groupMembersAfterWait": [],
+      "groupSettled": true,
+      "stdoutPath": "/tmp/worker688-20261014/schema-v02.stdout",
+      "stdoutSHA256": "1a67a919a3f987c4f106606e1fc9beb63e91dfa694954dc9dda235c8168560dc",
+      "stderrPath": "/tmp/worker688-20261014/schema-v02.stderr",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "expectedNegative": {
+    "unlabeled": "negative-v01 observed four wrong-reason failures; historical, no branch attribution",
+    "labeled": "negative-v02 observed all four failures preserve=true reason resolutionCap expected mandatoryLoop. No-static control full body completes first. No prompts: finite cap16+1; branch attribution direct in stderr.",
+    "positive": "positive-v01 four selected pass after exact one-op classification edit; focused-v01 two entrypoints 3640 pass"
+  },
+  "publicContracts": {
+    "newTest": "certifies phase-inert Ephemeral preservation for %s hand=%s through real copies and reload",
+    "controls": "Both side controllers and hand/stack; normal same-emblem source with no preserve static, actual UUID copies, own/opposing held Ephemeral cards with Offering preserved, unchanged phase/config and no cleanup/resolution events; public per-step serialize/deserialize plus engine.apply/fold parity; initial/per-step input purity.",
+    "discovery": "loops-mandatory.test.ts ordinary Vitest entry; contracts.test.ts eager import.meta.glob discovers existing .contracts.ts modules. Direct .contracts.ts paths are not test entries and were not executed.",
+    "failurePaths": {
+      "errorMidStep": "No new effect or prompt path; classification reads only. New loaded/current input purity. Existing loops-mandatory keeps committed copies and mandatory accounting untouched on suspension or answer-source error, plus when-copy-trigger keeps genuine prompts/partial-copy rollback and competing input stable through terminal reload. Both actual focused aggregate passed.",
+      "reloadRestart": "New test reloads every committed automatic step, including copy queue/accounting, then matches public engine.apply and fold state hash/events for four side/destination cases and both sources.",
+      "partialWrite": "No persistent classifier state or write. New per-step original-state purity and whole input purity; existing copy rollback/suspension contracts above actual passed.",
+      "invalidStale": "New no-prompt witness has no answer input. Existing loops-mandatory bounces malformed, wrong-side and competing stale answers without committing partial copies; existing preserveEphemeralHand suspended hand-limit cleanup rejects invalid/stale/racing input. Actual focused aggregate passed.",
+      "concurrentActors": "Serialized automatic FIFO adds no competing actor interface. Both controllers/opposing held card sentinel tested; existing stale/competing answer fold tests and preserveEphemeralHand racing input tests actual passed."
+    }
+  },
+  "scope": "Exactly one PASSIVE_STATICS op+phase-inert inline comment; passiveFloating preserveEphemeralHand false unchanged, all other source bodies frozen. Docs exact owned list/Ending blocks only. Existing helpers and test bodies unchanged. No API/catalog/production UUID/UI/runtime/config/generator change.",
+  "resources": {
+    "directTaskQA": "No task walkthrough/server/browser. Required full suite synthetic fault-injection identities/ports in stderr are test output; not product QA or owned runtime records.",
+    "settlement": {
+      "utc": "2026-10-14T15:03:01.132397+00:00",
+      "authoritativelyOwnedOuterCommandGroups": [
+        10874,
+        12989,
+        15920,
+        16755,
+        17492,
+        45066,
+        45567,
+        52932,
+        76061
+      ],
+      "remainingOwnGroupRows": [],
+      "allOwnedGroupsSettled": true,
+      "fixtureStderrInterpretation": "Full aggregate includes synthetic QA capacity/browser-identity/signal fault-injection fixtures. Their logged test identities, PIDs and ports are test output, not an authority to claim ownership or diagnose product QA. No browser tool or task server was started. No kill used.",
+      "historicalCorrection": "stage2-resource-settlement-v01.json parsed numeric fixture-output identities together with actual command identities. Root clarified those synthetic numbers must not be treated as ownership; v02 retains only actual recorded Popen command groups."
+    },
+    "settlementArtifact": "/tmp/worker688-20261014/stage2-resource-settlement-v02.json",
+    "settlementSHA256": "a1d55a2020d72c3220c1de8bd06ab3d8094b6e4699c6c11c380edc3d010a10cb",
+    "workerLimit": 2,
+    "heavyCommand": "full-v01 exact lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run review:full",
+    "outerFullWallSeconds": 101.54997958301101,
+    "lockWait": "Not independently measured; included in outer wall. No estimated subtraction or performance-budget claim."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 80,
+    "jsdomFiles": 0
+  },
+  "review": "Fresh normal independent Claude Opus5.5 cold exact-commit review owned by parent after sole commit; pending, not claimed complete.",
+  "counts": {
+    "focusedPositive": 4,
+    "focusedExistingContracts": 3640,
+    "reviewTests": 7140,
+    "reviewFiles": 300,
+    "fullTests": 8148,
+    "fullFiles": 381,
+    "fullBundle": "passed"
+  },
+  "finalValidationExternal": {
+    "schemaReceipt": "/tmp/worker688-20261014/schema-final-v01.receipt.json",
+    "diffCheckReceipt": "/tmp/worker688-20261014/diff-final-v01.receipt.json",
+    "scope": "Final quick checks of this frozen evidence occur before Git. Exact outcomes remain external; earlier actual schema-v01/v02 receipts are embedded."
+  }
+}

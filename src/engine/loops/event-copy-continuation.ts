@@ -57,6 +57,7 @@ const PASSIVE_STATICS: readonly string[] = [
   "additionalDrawPhaseCards", // Phase-only draw counts cannot act in this copy-only FIFO.
   "costModifier", "sparkModifier", "grant", "grantCardKeyword", "giveAllTypes", "setBaseSpark",
   "playFromZone", "playRestriction", "selfCostReduction", "revealDeckTop", "reclaimNotBanished",
+  "preserveEphemeralHand", // Own-Ending cleanup is inert while this FIFO keeps phases fixed.
 ];
 
 /** Explicit floating cases: none expires or offers a payment inside the continuing FIFO. */

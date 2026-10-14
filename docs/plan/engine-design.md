@@ -1324,14 +1324,16 @@ floating record per character. `lockedAtResolution(value)` marks the intent.
 
 **Continuous primitives** (`setBaseSpark`, `grant`/`loseKeyword`,
 `giveAllTypes`, `sparkModifier`, `costModifier`, `playFromZone`,
-`playRestriction`, `grantCardKeyword`, `reclaimNotBanished`) each
+`playRestriction`, `grantCardKeyword`, `reclaimNotBanished`,
+`preserveEphemeralHand`) each
 declare a `continuous` hook: their layer and the changes they make while a
 static ability holds them. The hook reads through `StaticEnv`: `characters`
 and `value` resolve references and values live, and `read` is the reader of
 the layers before its own in the evaluation expanding the ability, never
 another evaluation of the state. Except for the static-only
 `grantCardKeyword` (**Cards outside play**, below) and
-`reclaimNotBanished` ([Zones](#zones-and-zone-changes)), their `resolve` makes
+`reclaimNotBanished` and `preserveEphemeralHand`
+([Zones](#zones-and-zone-changes)), their `resolve` makes
 floating records for their own duration, else the enclosing
 `forDuration`'s, else permanently.
 
@@ -1455,9 +1457,12 @@ Other zone rules:
   cease to exist the same way.
 - **Offering, Reclaim, Ephemeral.** A `play` from `"void"` by Reclaim uses
   Reclaim's costs and marks the card reclaimed; a hand play of an Offering
-  card first chooses its route (RD-hv-7x4l.8-3). Ending step 2 banishes Offering cards
-  anywhere and Ephemeral cards in hands. The statuses travel with the
-  instance; Ephemeral ends as the card leaves a hand.
+  card first chooses its route (RD-hv-7x4l.8-3). Ending step 2 banishes Offering
+  cards outside the stack and banished zone, and Ephemeral cards in hands
+  except a controller's held hand at its own Ending when a live
+  `preserveEphemeralHand` static applies. That exemption retains the
+  Ephemeral flag and leaves Offering and explicit banishment applicable. The
+  statuses travel with the instance; Ephemeral ends as the card leaves a hand.
 - **Granted Reclaim** (`grantReclaim`) starts a floating layer-3 `keyword`
   gain of `reclaim` on void cards, optionally carrying `reclaimCosts`
   ("gains reclaim 0●"). `routeCosts` (`rules/timing.ts`) plays a card by
@@ -2077,7 +2082,8 @@ and figment. Each check names every offending entity:
   registered primitive, and every static ability holds a continuous
   primitive.
 - **Static-only primitives.** A primitive marked `staticOnly`
-  (`grantCardKeyword`, `reclaimNotBanished`) appears only as a static
+  (`grantCardKeyword`, `reclaimNotBanished`, `preserveEphemeralHand`)
+  appears only as a static
   ability's whole effect, never in an event, triggered, or activated ability
   or nested in another node, since resolving it throws.
 - **Undeclared targets.** Every play-time target spec a primitive holds is

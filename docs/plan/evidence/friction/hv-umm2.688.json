@@ -1,0 +1,23 @@
+{
+  "bead": "hv-umm2.688",
+  "phase": 5,
+  "implementMin": 21.175129816666665,
+  "implementWindow": {
+    "start": "2026-10-14T14:44:20.600Z",
+    "end": "2026-10-14T15:05:31.107789+00:00"
+  },
+  "localValidationS": {
+    "focused": 18.118668375973357,
+    "review": 79.23129604200949,
+    "knip": 4.894439499999862,
+    "full": 101.54997958301101,
+    "schema": 0.1911152079992462
+  },
+  "hostLoad": 12.71,
+  "testDelta": {
+    "files": 0,
+    "lines": 80,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

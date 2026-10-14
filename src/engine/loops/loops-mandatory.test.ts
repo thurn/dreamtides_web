@@ -17,7 +17,7 @@ import { toggleEcho, engine, deck, board, sourceOf, activate, repeat, ended } fr
 import { createEngine, type Engine } from "../engine";
 import type { EngineCardDefinition } from "../catalog";
 import { all, enemyCharacter, energy, event, self, staticAbility, target, characterYouControl, winCondition } from "../dsl/builders";
-import { onMaterialized, triggered, whenYouPlay } from "../dsl/triggers";
+import { onMaterialized, triggered, triggeringCard, whenCopyTrigger, whenYouPlay } from "../dsl/triggers";
 import type { Ability, Condition } from "../dsl/types";
 import type { Effect } from "../effects/registry";
 import * as p from "../effects/primitives";
@@ -27,6 +27,7 @@ import { boardState } from "../testing/board";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { eventRedactionViolations, promptRedactionViolations, redactionViolations } from "../testing/redaction";
 import type { EngineEvent } from "../events";
+import { parseDreamsignId } from "../../types/identifiers";
 
 const COPY_LOOP_CONFIG = { mandatoryLoopCheckFrom: 8, mandatoryLoopWindow: 16, resolutionCap: 256 } as const;
 
@@ -244,6 +245,85 @@ describe("mandatory loops", () => {
 });
 
 describe("closed mandatory copy continuations", () => {
+  it.each([
+    ["player", false], ["player", true], ["enemy", false], ["enemy", true],
+  ] as const)("certifies phase-inert Ephemeral preservation for %s hand=%s through real copies and reload", (side, hand) => {
+    // The control has the same permanent copy kernel without the static.
+    for (const preserve of [false, true]) {
+      const sign = parseDreamsignId("5e5e5e5e-0000-4000-8000-000000688001");
+      const subject: EngineCardDefinition = {
+        ...SYNTHETIC.event0, id: syntheticId(0x688002), status: "authored",
+        abilities: () => [event(p.gainPoints(1))],
+      };
+      const local = createEngine(testCatalog([subject], { dreamsigns: [{
+        id: sign, status: "authored", abilities: () => [
+          triggered(whenYouPlay({ cardType: "event" }), hand
+            ? p.createCopyInHand(triggeringCard(), { ephemeral: true }) : p.copyCard(triggeringCard())),
+          triggered(whenCopyTrigger("you", { cardType: "event" }), p.copyCard(triggeringCard())),
+          ...(preserve ? [staticAbility(p.preserveEphemeralHand())] : []),
+        ],
+      }] }));
+      const other = side === "player" ? "enemy" : "player";
+      const setup = boardState(local.catalog, { active: side, phase: "day",
+        [side]: { hand: [subject.id, SYNTHETIC.event0.id], dreamsigns: [sign], deck },
+        [other]: { hand: [SYNTHETIC.event0.id], deck },
+      });
+      const card = setup.ids[side].hand[0];
+      const held = setup.ids[side].hand[1];
+      const opposing = setup.ids[other].hand[0];
+      if (card === undefined || held === undefined || opposing === undefined) throw new Error("missing witness card");
+      setup.state.instances[held].status.ephemeral = true;
+      setup.state.instances[held].status.offering = true;
+      setup.state.instances[opposing].status.ephemeral = true;
+      const state: BattleState = { ...setup.state, config: { ...setup.state.config, ...COPY_LOOP_CONFIG,
+        resolutionCap: COPY_LOOP_CONFIG.mandatoryLoopCheckFrom * 2 } };
+      const input = serializeState(state);
+      const action = { kind: "play", card, from: "hand" } as const;
+      const played = runStep(state, action, NO_PROMPTS, local.catalog);
+      if (played.kind !== "done") throw new Error("witness play suspended");
+      let current = played.state;
+      const events: EngineEvent[] = [...played.events];
+      // Every step saves and reloads; the cap bounds the old classification too.
+      for (let count = 0; count <= state.config.resolutionCap; count++) {
+        const step = nextAutomaticStep(current, local.catalog, local.memo);
+        if (step === null) break;
+        const before = serializeState(current);
+        const loaded = deserializeState(before);
+        const result = runStep(loaded, step, NO_PROMPTS, local.catalog, { automatic: true });
+        if (result.kind !== "done") throw new Error("witness copy suspended");
+        expect(serializeState(loaded)).toBe(before);
+        current = result.state;
+        events.push(...result.events);
+      }
+      expect(current.result, `preserve=${preserve}`).toEqual({ kind: "draw", reason: "mandatoryLoop" });
+      expect(current.automaticSteps).toBe(state.config.mandatoryLoopCheckFrom);
+      expect(current.config).toEqual(state.config);
+      expect(current.turn).toEqual(state.turn);
+      expect(local.decision(current)).toBeNull();
+      expect(current.instances[held]).toEqual(state.instances[held]);
+      expect(current.instances[opposing]).toEqual(state.instances[opposing]);
+      expect(events.some(e => e.kind === "phaseChanged" || e.kind === "banished" ||
+        e.kind === "ceasedToExist" || e.kind === "discarded" || e.kind === "resolved")).toBe(false);
+      const made = events.flatMap(e => e.kind === "cardCopied" ? [e.copy] : []);
+      expect(made.length).toBeGreaterThan(1);
+      expect(new Set(made).size).toBe(made.length);
+      for (const id of made) {
+        expect(current.instances[id]).toMatchObject({ owner: side, controller: side,
+          zone: hand ? "hand" : "stack", status: { created: true, ephemeral: hand } });
+        if (hand) expect(current.sides[side].hand).toContain(id);
+        else expect(current.stack.some(item => item.kind === "card" && item.instance === id)).toBe(true);
+      }
+      const whole = local.apply(state, side, action, NO_PROMPTS);
+      expect(stateHash(current)).toBe(stateHash(whole.state));
+      expect(events).toEqual(whole.events);
+      const folded = foldCopies(local, state, side, action, false);
+      expect(folded.slice.inFlight).toBeNull();
+      expect(stateHash(folded.slice.committed)).toBe(stateHash(current));
+      expect(folded.events).toEqual(events);
+      expect(serializeState(state)).toBe(input);
+    }
+  });
+
   it.each([
     ["player", false], ["player", true], ["enemy", false], ["enemy", true],
   ] as const)("draws real copies for %s hand=%s with independent genuine choices and deterministic reload", (side, hand) => {
