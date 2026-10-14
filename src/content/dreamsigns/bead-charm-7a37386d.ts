@@ -1,3 +1,6 @@
+import { all, characterYouControl, staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { sparkModifier } from "../../engine/effects/primitives/spark-modifier";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -11,5 +14,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["J12", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [staticAbility(sparkModifier(all(characterYouControl({ sharesTypeWithAnotherChallenger: true })), 2))],
+  verifiedText: expectedVerifiedText("Challengers you control that share a character type with another challenger you control have +2✦."),
 });

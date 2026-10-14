@@ -1,0 +1,855 @@
+{
+  "bead": "hv-umm2.676",
+  "phase": 5,
+  "base": "a9b02f84b47f73e8e3e96aca6e5662b83bdb3f93",
+  "scope": {
+    "entities": [
+      "7a37386d-6e7c-4f08-b07f-e92a1fd69893"
+    ],
+    "authored": 1,
+    "newPrimitives": 0,
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "productionFile": "src/content/dreamsigns/bead-charm-7a37386d.ts",
+    "productionSHA256": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43",
+    "productionDelta": {
+      "added": 5,
+      "deleted": 1
+    },
+    "immutableCatalogFields": "UUID, printed text and every original catalog field are retained."
+  },
+  "ruleAndReaderAudit": {
+    "ability": "staticAbility(sparkModifier(all(characterYouControl({ sharesTypeWithAnotherChallenger: true })), 2))",
+    "readers": [
+      "dsl/selectors.ts: matchesCharacterWith",
+      "continuous/layers.ts: static spark modifier selection",
+      "rules/spark.ts: effectiveSpark",
+      "rules/challenge.ts: challengeRoleOf"
+    ],
+    "semantics": "The subject and a distinct partner must both be live challengers with the same controller and overlapping effective character types. Each matching subject receives one +2 bonus regardless of partner count. Source ownership, challenge role, controller and type are read live."
+  },
+  "D20": {
+    "decision": "Ordinary static primitive and delivered selector composition; no scenario module is required.",
+    "existingContracts": "shared-type-challenger.contracts.ts uses synthetic observable contracts for both sides, singleton/nonmatching/opposing partners, multiple/AllTypes/untyped types, roles, type/control changes, static read purity, errors, save/reload and invalid/stale/concurrent prompt input.",
+    "scenarioModulesAdded": 0
+  },
+  "D21": {
+    "firstByte": 219,
+    "sampled": false,
+    "newPromptKinds": 0,
+    "newStatusIndicators": 0,
+    "newVisualEffects": 0,
+    "judgedTotal": 0,
+    "inventoryQualification": "The planning chooseSubtype prompt entry is not an instruction in the immutable printed clause. The authored ability is static and offers no prompt."
+  },
+  "validation": {
+    "focused": "16 pass; 3865 unrelated contract cases unselected",
+    "coverage": "20 pass",
+    "actualNode": {
+      "cases": 18,
+      "controllers": 2,
+      "proof": "Actual authored UUID from contentDreamsignDefinitions through public catalog/board fixture/engine/actions. Two actors and both source holders: Day versus Night, singleton/pair/nonmatching/multiple, supporters/opposing characters, live chooseSubtype change, move and gainControl, next-turn expiry; both views, invariant checks, state hash and cold reload.",
+      "caller": "bead-charm-runtime.ts",
+      "callerSHA256": "eb235a33978cda4cb68d908b5f487fe5fac1abc5fe1217eb6a046b2acbb94b4d",
+      "rawSHA256": "286e1c100862a5dd8328e328f6d0caecad051d55fee69a6752de802905bb4983"
+    },
+    "weightedFuzz": {
+      "games": 300,
+      "steps": 101363,
+      "failures": 0,
+      "included": 600,
+      "exercised": 0,
+      "engineWallS": 337.1,
+      "engineCpuS": 358.5,
+      "outerWallS": 339.93707029201323,
+      "heavyLock": "artifacts/heavy.lock",
+      "workers": 2,
+      "scope": "Engine wall/CPU are fuzzer-owned scopes. Outer wall includes lock acquisition and launch. Exercised counts resolved emblem trigger/activation events; actual static behavior is proved separately by Node and browser. No performance claim."
+    },
+    "preflight": "Base, both controllers: 2 pass, exercised false; static initialization qualification. First invocation used --cards instead of --dreamsigns and returned unknownCard for both sides; changed domain argument passed in a retained second invocation.",
+    "sweep": {
+      "cells": 2,
+      "attempts": 2,
+      "pass": 2,
+      "variants": [
+        "base"
+      ],
+      "controllers": [
+        "player",
+        "enemy"
+      ],
+      "exercised": false,
+      "invocation": "sweep-nZRzh4",
+      "scope": "Existing static emblem initialization check; supplementary proof establishes actual bonus."
+    },
+    "browser": {
+      "pass": true,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "holderLanesPerViewport": [
+        "player",
+        "enemy"
+      ],
+      "proof": "Two distinct physical Warriors added through logged debug UI, repositioned by the normal All Forward button and checked in committed front rank. Normal Day pass designates the exact pair; displayed spark is 3 for the player holder and 1 for the opposing holder. Numeric sparks, physical pair, source ownership and persisted game log prefix survive reload. Normal phase progression expires the challenger role and displays 1. Exact designation events, UUID additions, two physical reposition action logs, positive geometry and empty Caps are checked. Enemy-positive and live type/control changes are proved by Node; the enemy-holder browser lane is an ownership negative.",
+      "caller": "bead-charm-live.mjs",
+      "callerSHA256": "67153026fc43e1f0cd58e2bfe2da86dcbdd47fbf1f7d9e2957212a5bc6b98134",
+      "rawResultSHA256": "45e69c2fb318f3e41416242b13ab83581141850dd65975dac5243327f1b954e1",
+      "invocation": "run-yqh1Pv",
+      "outerWallS": 197.28427520798868,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1976,
+        "scenario": 194719,
+        "total": 196759
+      },
+      "screens": [
+        "bead-charm-player-desktop-challenging.png",
+        "bead-charm-player-mobile-challenging.png",
+        "bead-charm-player-desktop-expired.png"
+      ],
+      "D21Qualification": "Supplementary runtime evidence; unsampled, with zero judged verdicts."
+    },
+    "review": {
+      "pass": true,
+      "tests": 6551,
+      "files": 247,
+      "scope": "Diff-aware required npm run review, including selected lint/typecheck, 247 related test files and friction schema; this is not a local review:full run.",
+      "outerWallS": 51.69677854099427
+    },
+    "knip": {
+      "pass": true,
+      "outerWallS": 5.217236541007878
+    },
+    "schema": {
+      "pass": true,
+      "outerWallS": 0.15933754100115038,
+      "scope": "Final records schema only"
+    },
+    "whitespace": {
+      "pass": true,
+      "outerWallS": 0.044772875000489876,
+      "scope": "Tracked diff whitespace"
+    }
+  },
+  "retainedAttempts": [
+    {
+      "label": "browser-live",
+      "invocation": "run-cCv3Vj",
+      "result": "Failed before any intent because the caller read the probe before loading completed; corrected caller waits for the probe."
+    },
+    {
+      "label": "browser-live-corrected",
+      "invocation": "run-0QSU2Y",
+      "result": "Per-index pointer staging waiter timed out after a reposition action was logged; the exact terminal state was not established. No product defect is inferred. The changed caller uses the existing All Forward shortcut and verifies actual DOM and committed physical front membership before the bonus workflow."
+    }
+  ],
+  "failurePaths": {
+    "newStateTransitions": 0,
+    "errorMidStep": "No new state transition or error handling. Existing selector contracts cover reader failure with unchanged serialized state/hash. Actual repeated static reads and invariant checks cover the authored source.",
+    "reloadOrRestart": "Node cold serialized state and both browser holder lanes on desktop/mobile preserve the actual live bonus and physical identities.",
+    "partialWrite": "No writes in the static selector/spark composition; existing contract hash/purity checks apply.",
+    "invalidOrStaleInput": "No new prompt or input parser; existing public move and selector prompt contracts cover invalid, stale and concurrent input.",
+    "concurrentActors": "Source ownership is read from folded state. Existing synthetic fold contracts cover concurrent actors; actual Node gainControl recomputes the authored bonus.",
+    "contractModule": "src/engine/effects/primitives/contracts/shared-type-challenger.contracts.ts",
+    "owningTests": {
+      "errorMidStepAndPartialWrite": "propagates a supplied reader error without a partial state write",
+      "pureStaticReadsAndColdReload": "reads supplied earlier layers and preserves save, hash, RNG and both views during repeated static reads",
+      "invalidStaleConcurrentInputAndPromptReload": "reloads a public selector target prompt, refuses invalid, stale and concurrent input, cancels and replays once",
+      "liveTypeAndControllerChange": "uses live layer-two type choices and loses the pair when a challenger changes controller"
+    },
+    "noNewTestReason": "This content leaf composes the delivered selector and static primitive and introduces no state transition, parser, prompt, effect kind or new reader. The named existing synthetic contracts cover the public composition mechanisms once (D20); actual authored-source Node and browser evidence verifies catalog wiring and live behavior."
+  },
+  "runtime": {
+    "guardSHA256": "060fa19a2e39286da85a3bf8c983dfabd32f902fa13bafddbb02ff2d27066314",
+    "receiptProtocol": "Each guarded invocation records argv/cwd/time/load/frozen source hash/PID/PG/birth before opening its exec gate, then terminal status/wall/source hash and group absence.",
+    "commands": [
+      {
+        "label": "actual-node",
+        "argv": [
+          "npx",
+          "tsx",
+          "artifacts/qa/hv-umm2.676/bead-charm-runtime.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:18:18.416931+00:00",
+        "load": [
+          24.19580078125,
+          21.6748046875,
+          16.43896484375
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 75883,
+        "pgid": 75883,
+        "birth": "75883 75883 Wed Oct 14 09:18:18 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"npx\", \"tsx\", \"artifacts/qa/hv-umm2.676/bead-charm-runtime.ts\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/actual-node.log",
+        "gateOpened": "2026-10-14T16:18:18.423451+00:00",
+        "end": "2026-10-14T16:18:21.239619+00:00",
+        "wallS": 2.822741625015624,
+        "exit": 0,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "browser-live-corrected",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "artifacts/qa/hv-umm2.676/bead-charm-live.mjs",
+          "--bead",
+          "hv-umm2.676",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "300"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:23:36.950618+00:00",
+        "load": [
+          9.65185546875,
+          13.8173828125,
+          14.2294921875
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 53587,
+        "pgid": 53587,
+        "birth": "53587 53587 Wed Oct 14 09:23:36 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"node\", \"scripts/qa/run-scenario.mjs\", \"artifacts/qa/hv-umm2.676/bead-charm-live.mjs\", \"--bead\", \"hv-umm2.676\", \"--viewports\", \"desktop,mobile\", \"--timeout\", \"300\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/browser-live-corrected.log",
+        "gateOpened": "2026-10-14T16:23:36.956321+00:00",
+        "end": "2026-10-14T16:24:06.438957+00:00",
+        "wallS": 29.488598249998176,
+        "exit": 1,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "browser-live-forward",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "artifacts/qa/hv-umm2.676/bead-charm-live.mjs",
+          "--bead",
+          "hv-umm2.676",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "300"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:26:27.145526+00:00",
+        "load": [
+          6.638671875,
+          10.94091796875,
+          12.970703125
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 64241,
+        "pgid": 64241,
+        "birth": "64241 64241 Wed Oct 14 09:26:27 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"node\", \"scripts/qa/run-scenario.mjs\", \"artifacts/qa/hv-umm2.676/bead-charm-live.mjs\", \"--bead\", \"hv-umm2.676\", \"--viewports\", \"desktop,mobile\", \"--timeout\", \"300\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/browser-live-forward.log",
+        "gateOpened": "2026-10-14T16:26:27.151262+00:00",
+        "end": "2026-10-14T16:29:44.428210+00:00",
+        "wallS": 197.28427520798868,
+        "exit": 0,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "browser-live",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "artifacts/qa/hv-umm2.676/bead-charm-live.mjs",
+          "--bead",
+          "hv-umm2.676",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "300"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:21:35.887654+00:00",
+        "load": [
+          6.78759765625,
+          14.2685546875,
+          14.353515625
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 88768,
+        "pgid": 88768,
+        "birth": "88768 88768 Wed Oct 14 09:21:35 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"node\", \"scripts/qa/run-scenario.mjs\", \"artifacts/qa/hv-umm2.676/bead-charm-live.mjs\", \"--bead\", \"hv-umm2.676\", \"--viewports\", \"desktop,mobile\", \"--timeout\", \"300\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/browser-live.log",
+        "gateOpened": "2026-10-14T16:21:35.893311+00:00",
+        "end": "2026-10-14T16:22:04.593210+00:00",
+        "wallS": 28.70584629199584,
+        "exit": 1,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "coverage",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:18:36.410915+00:00",
+        "load": [
+          20.53955078125,
+          20.98828125,
+          16.28466796875
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 77719,
+        "pgid": 77719,
+        "birth": "77719 77719 Wed Oct 14 09:18:36 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"npm\", \"test\", \"--\", \"src/engine/content-gates.test.ts\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/coverage.log",
+        "gateOpened": "2026-10-14T16:18:36.415563+00:00",
+        "end": "2026-10-14T16:18:41.958500+00:00",
+        "wallS": 5.547654000023613,
+        "exit": 0,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "focused",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "shared-type"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:18:19.572863+00:00",
+        "load": [
+          24.19580078125,
+          21.6748046875,
+          16.43896484375
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 76025,
+        "pgid": 76025,
+        "birth": "76025 76025 Wed Oct 14 09:18:19 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"npm\", \"test\", \"--\", \"src/engine/effects/primitives/contracts.test.ts\", \"-t\", \"shared-type\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/focused.log",
+        "gateOpened": "2026-10-14T16:18:19.578452+00:00",
+        "end": "2026-10-14T16:18:29.448522+00:00",
+        "wallS": 9.875764208001783,
+        "exit": 0,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:19:21.407742+00:00",
+        "load": [
+          12.943359375,
+          18.93212890625,
+          15.76953125
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 80708,
+        "pgid": 80708,
+        "birth": "80708 80708 Wed Oct 14 09:19:21 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"npm\", \"run\", \"knip\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/knip.log",
+        "gateOpened": "2026-10-14T16:19:21.412542+00:00",
+        "end": "2026-10-14T16:19:26.624913+00:00",
+        "wallS": 5.217236541007878,
+        "exit": 0,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "preflight-corrected",
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--dreamsigns",
+          "7a37386d-6e7c-4f08-b07f-e92a1fd69893",
+          "--variants",
+          "base",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:19:20.250568+00:00",
+        "load": [
+          12.943359375,
+          18.93212890625,
+          15.76953125
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 80618,
+        "pgid": 80618,
+        "birth": "80618 80618 Wed Oct 14 09:19:20 2026     (python3.14)",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/preflight-corrected.log",
+        "gateOpened": "2026-10-14T16:19:20.256885+00:00",
+        "end": "2026-10-14T16:19:23.176443+00:00",
+        "wallS": 2.925927208008943,
+        "exit": 0,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "preflight",
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "7a37386d-6e7c-4f08-b07f-e92a1fd69893",
+          "--variants",
+          "base",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:18:37.565760+00:00",
+        "load": [
+          19.294921875,
+          20.72265625,
+          16.21826171875
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 77898,
+        "pgid": 77898,
+        "birth": "77898 77898 Wed Oct 14 09:18:37 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"npm\", \"run\", \"lab:preflight\", \"--\", \"--cards\", \"7a37386d-6e7c-4f08-b07f-e92a1fd69893\", \"--variants\", \"base\", \"--as\", \"both\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/preflight.log",
+        "gateOpened": "2026-10-14T16:18:37.570940+00:00",
+        "end": "2026-10-14T16:18:39.106440+00:00",
+        "wallS": 1.5407185000076424,
+        "exit": 1,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "sweep",
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.676",
+          "--dreamsigns",
+          "7a37386d-6e7c-4f08-b07f-e92a1fd69893",
+          "--variants",
+          "base",
+          "--as",
+          "both",
+          "--timeout",
+          "60"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:21:34.717707+00:00",
+        "load": [
+          6.78759765625,
+          14.2685546875,
+          14.353515625
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 88638,
+        "pgid": 88638,
+        "birth": "88638 88638 Wed Oct 14 09:21:34 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"node\", \"scripts/qa/card-sweep.mjs\", \"--bead\", \"hv-umm2.676\", \"--dreamsigns\", \"7a37386d-6e7c-4f08-b07f-e92a1fd69893\", \"--variants\", \"base\", \"--as\", \"both\", \"--timeout\", \"60\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/sweep.log",
+        "gateOpened": "2026-10-14T16:21:34.722074+00:00",
+        "end": "2026-10-14T16:22:18.283471+00:00",
+        "wallS": 43.566170999984024,
+        "exit": 0,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "weighted-fuzz",
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "7a37386d-6e7c-4f08-b07f-e92a1fd69893"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:18:35.269119+00:00",
+        "load": [
+          20.53955078125,
+          20.98828125,
+          16.28466796875
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 77619,
+        "pgid": 77619,
+        "birth": "77619 77619 Wed Oct 14 09:18:35 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"lockf\", \"-k\", \"/Users/dthurn/dreamtides_web/artifacts/heavy.lock\", \"npm\", \"run\", \"fuzz:engine\", \"--\", \"--games\", \"300\", \"--weight-uuids\", \"7a37386d-6e7c-4f08-b07f-e92a1fd69893\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/weighted-fuzz.log",
+        "gateOpened": "2026-10-14T16:18:35.274744+00:00",
+        "end": "2026-10-14T16:24:15.203449+00:00",
+        "wallS": 339.93707029201323,
+        "exit": 0,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      },
+      {
+        "label": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+        "start": "2026-10-14T16:31:56.751858+00:00",
+        "load": [
+          5.26220703125,
+          10.87109375,
+          12.70458984375
+        ],
+        "sourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "workers": 2,
+        "pid": 40992,
+        "pgid": 40992,
+        "birth": "40992 40992 Wed Oct 14 09:31:56 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import json,os,sys; a=json.loads(sys.argv[1]); b=sys.stdin.buffer.read(1); b==b\"G\" or sys.exit(72); os.execvpe(a[0],a,os.environ) [\"npm\", \"run\", \"review\"]",
+        "launchHeld": false,
+        "log": "/tmp/dreamtides-676/review.log",
+        "gateOpened": "2026-10-14T16:31:56.756634+00:00",
+        "end": "2026-10-14T16:32:48.448197+00:00",
+        "wallS": 51.69677854099427,
+        "exit": 0,
+        "finalSourceHashes": {
+          "src/content/dreamsigns/bead-charm-7a37386d.ts": "a5b35d635c412bd1ebd2e7eaa07841a5e1aca12e22d5e9e117d2d077c0e6be43"
+        },
+        "leaderAfterReap": "",
+        "groupAfterReap": []
+      }
+    ],
+    "browserIdentities": [
+      {
+        "at": "2026-10-14T16:22:09.231602+00:00",
+        "owned": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+            "token": "e34bb9fb-f2a4-4ef5-b18b-f8bf686efc8e",
+            "pid": 88638,
+            "bead": "hv-umm2.676",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T16:21:37.226Z",
+            "providerState": "active",
+            "mcpSessionId": "529d6059-8a67-482c-8f25-9763c4e6d9a5",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+            "token": "f4994ff9-80a5-4214-8941-a05f8db2d728",
+            "runner": {
+              "pid": 88638,
+              "group": 88638,
+              "started": "Wed Oct 14 09:21:34 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.676 --dreamsigns 7a37386d-6e7c-4f08-b07f-e92a1fd69893 --variants base --as both --timeout 60"
+            },
+            "server": {
+              "pid": 88670,
+              "group": 88670,
+              "started": "Wed Oct 14 09:21:34 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/bead-charm-676/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json f4994ff9-80a5-4214-8941-a05f8db2d728 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+            "port": 5274
+          }
+        }
+      },
+      {
+        "at": "2026-10-14T16:23:50.917329+00:00",
+        "owned": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+            "token": "4c3755b2-151a-4b57-a148-1d6e7b1ef858",
+            "pid": 53587,
+            "bead": "hv-umm2.676",
+            "label": "bead-charm-live",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T16:23:40.648Z",
+            "providerState": "active",
+            "mcpSessionId": "9ae22f33-424c-4d20-b2ff-1175c682c518",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+            "token": "4b12c3cc-29a2-462d-b042-b5829c2e136a",
+            "runner": {
+              "pid": 53587,
+              "group": 53587,
+              "started": "Wed Oct 14 09:23:36 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.676/bead-charm-live.mjs --bead hv-umm2.676 --viewports desktop,mobile --timeout 300"
+            },
+            "server": {
+              "pid": 53626,
+              "group": 53626,
+              "started": "Wed Oct 14 09:23:37 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/bead-charm-676/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 4b12c3cc-29a2-462d-b042-b5829c2e136a /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+            "port": 5274
+          }
+        }
+      },
+      {
+        "at": "2026-10-14T16:26:48.216945+00:00",
+        "owned": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+            "token": "e0ae68bb-2c2a-45e6-93b8-174e4245ff7b",
+            "pid": 64241,
+            "bead": "hv-umm2.676",
+            "label": "bead-charm-live",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T16:26:29.338Z",
+            "providerState": "active",
+            "mcpSessionId": "45e4378f-28f8-4335-b43c-dd83365ead8c",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+            "token": "be891858-3e81-454f-90f6-b3253c89d212",
+            "runner": {
+              "pid": 64241,
+              "group": 64241,
+              "started": "Wed Oct 14 09:26:27 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.676/bead-charm-live.mjs --bead hv-umm2.676 --viewports desktop,mobile --timeout 300"
+            },
+            "server": {
+              "pid": 64288,
+              "group": 64288,
+              "started": "Wed Oct 14 09:26:27 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/bead-charm-676/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json be891858-3e81-454f-90f6-b3253c89d212 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-charm-676",
+            "port": 5274
+          }
+        }
+      }
+    ],
+    "cleanup": {
+      "at": "2026-10-14T16:31:38.428615+00:00",
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": null,
+        "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json": null,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": null,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": null
+      },
+      "ownedProcesses": "",
+      "ports": {
+        "5174": "",
+        "5274": ""
+      },
+      "ownedGroupCensus": {
+        "at": "2026-10-14T16:34:09.318827+00:00",
+        "groups": [
+          40992,
+          53587,
+          53626,
+          64241,
+          64288,
+          77619,
+          88638,
+          88670,
+          88768,
+          88990
+        ],
+        "members": []
+      }
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "sysctl -n vm.loadavg one-minute value immediately before the final npm run review launch, recorded at 2026-10-14T16:31:56.727760+00:00"
+      },
+      "implementMin": {
+        "measuredFor": "Inclusive native dispatch 2026-10-14T16:14:37.011Z through the pre-commit boundary. The commit boundary refresh includes all research, coordination, queue waits, attempts, QA and verification; actual Git completion is retained outside the worktree for the owning session."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "hostLoadSamples": {
+    "guardStartOneFiveFifteen": {
+      "actual-node": [
+        24.19580078125,
+        21.6748046875,
+        16.43896484375
+      ],
+      "browser-live-corrected": [
+        9.65185546875,
+        13.8173828125,
+        14.2294921875
+      ],
+      "browser-live-forward": [
+        6.638671875,
+        10.94091796875,
+        12.970703125
+      ],
+      "browser-live": [
+        6.78759765625,
+        14.2685546875,
+        14.353515625
+      ],
+      "coverage": [
+        20.53955078125,
+        20.98828125,
+        16.28466796875
+      ],
+      "focused": [
+        24.19580078125,
+        21.6748046875,
+        16.43896484375
+      ],
+      "knip": [
+        12.943359375,
+        18.93212890625,
+        15.76953125
+      ],
+      "preflight-corrected": [
+        12.943359375,
+        18.93212890625,
+        15.76953125
+      ],
+      "preflight": [
+        19.294921875,
+        20.72265625,
+        16.21826171875
+      ],
+      "sweep": [
+        6.78759765625,
+        14.2685546875,
+        14.353515625
+      ],
+      "weighted-fuzz": [
+        20.53955078125,
+        20.98828125,
+        16.28466796875
+      ],
+      "review": [
+        5.26220703125,
+        10.87109375,
+        12.70458984375
+      ]
+    },
+    "reviewSysctl": {
+      "at": "2026-10-14T16:31:56.727760+00:00",
+      "sysctl": "{ 5.26 10.87 12.70 }",
+      "oneMinute": 5.26
+    }
+  },
+  "implementationWindow": {
+    "start": "2026-10-14T16:14:37.011000+00:00",
+    "preCommitEnd": "2026-10-14T16:35:54.001001+00:00",
+    "implementMin": 21.28316668333333,
+    "scope": "Inclusive native dispatch through immediately before final schema/whitespace and Git. The owning session records actual Git completion and the sub-minute boundary delta from the retained commit receipt."
+  }
+}
