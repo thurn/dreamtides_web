@@ -7,7 +7,7 @@ import { eventSeenBy } from "../../../events";
 import type { EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice } from "../../../fold/slice";
 import { instanceOrigin, originAbilities } from "../../../rules/activation";
-import { stateHash } from "../../../state/hash";
+import { serializeState, stateHash } from "../../../state/hash";
 import { runStep } from "../../../steps/runner";
 import { NO_PROMPTS } from "../../../steps/sources";
 import { opponent, parseFigmentId, SIDES } from "../../../state/ids";
@@ -17,7 +17,7 @@ import { syntheticId } from "../../../testing/synthetic-cards";
 import { parseAvatarId, parseDreamsignId } from "../../../../types/identifiers";
 import { thisCharacterSpark } from "../../../dsl/values";
 import * as p from "../index";
-import { card, world, step, activate, drain, decklists, sliceOf, parseSaved, reload, queued, mages, deck, force, observer } from "./repeat-triggering-ability-fixtures";
+import { card, world, step, activate, drain, decklists, sliceOf, parseSaved, reload, queued, mages, deck, force, observer, floatingWorld, applied } from "./repeat-triggering-ability-fixtures";
 
 describe("repeatTriggeringAbility privacy", () => {
   it.each(SIDES)("preserves %s actual captured cohort after its copied floating creator ceases", side => {
@@ -378,6 +378,87 @@ describe("repeatTriggeringAbility privacy", () => {
       expect(w.engine.view(reload(sliceOf(again)).committed, viewer).triggerQueue).toEqual(visible.triggerQueue);
       expect(drain(w, again).sides[side].currentEnergy).toBe(14);
     }
+  });
+
+  it.each(SIDES.flatMap(side => SIDES.flatMap(viewer =>
+    (["hidden", "visible", "empty", "expired", "unscoped"] as const).map(scenario => ({ side, viewer, scenario })))))(
+    "public floating captured context for $side/$viewer/$scenario survives sampling and real confirmation", ({ side, viewer, scenario }) => {
+    const w = floatingWorld(side, scenario), fold = createFoldAdapter(w.engine);
+    let slice = sliceOf(w.state);
+    slice = applied(fold.reduce(slice, { kind: "battleAction", side, action: { kind: "activate", source: w.maker, ability: 0 } })).slice;
+    // Stack responses, then the six Day/Dusk/Night windows to the next own Dawn.
+    while (fold.pending(slice) === null) {
+      const decision = w.engine.decision(slice.committed);
+      if (decision === null) throw new Error("The producer has no ordinary decision");
+      slice = applied(fold.reduce(slice, { kind: "battleAction", side: decision.side, action: { kind: "pass" } })).slice;
+    }
+    const pending = fold.pending(slice)!;
+    expect(pending.prompt).toMatchObject({ kind: "confirm", side });
+    expect(slice.committed.turn).toMatchObject({ active: side, phase: "dawn" });
+    expect(slice.inFlight).toEqual({ step: { kind: "resolveTrigger" }, automatic: true, answers: [] });
+    const initial = w.engine.view(slice.committed, viewer), lists = decklists(w), energy = slice.committed.sides[side].currentEnergy;
+    expect(initial.triggerQueue[0].source).toBe(w.watch);
+    if (scenario === "visible") expect(initial.triggerQueue[0]).toHaveProperty("triggeringAbility");
+    else {
+      expect(initial.triggerQueue[0].origin).toBeNull();
+      expect(initial.triggerQueue[0]).not.toHaveProperty("triggeringAbility");
+    }
+    const contexts = initial.floating.filter(effect => effect.change.kind === "trigger");
+    if (scenario === "expired") expect(contexts).toEqual([]);
+    if (scenario === "empty") expect(contexts[0].change).toHaveProperty("captured", []);
+    if (scenario === "unscoped") expect(contexts[0].change).not.toHaveProperty("captured");
+    const before = serializeState(slice.committed), hash = stateHash(slice.committed), inputBefore = JSON.stringify(initial);
+    const resume = (saved: BattleSlice, accept: boolean) => {
+      const adapter = createFoldAdapter(w.engine), prompt = adapter.pending(saved);
+      if (prompt === null) throw new Error("The genuine saved reader cannot replay its confirmation");
+      expect(prompt.prompt).toMatchObject({ kind: "confirm", side });
+      const out = applied(adapter.reduce(saved, { kind: "answer", side, promptId: prompt.prompt.id, value: accept },
+        { presented: event => event.kind === "triggerQueued", limit: 1 }));
+      const repeated = out.published.find(event => event.kind === "triggerQueued");
+      return { ...out, repeatedState: repeated === undefined ? undefined : adapter.observed(repeated) };
+    };
+    const real = resume(reload(slice), true), declined = resume(reload(slice), false);
+    expect(real.slice.committed.sides[side].currentEnergy).toBe(energy + 1);
+    expect(declined.slice.committed.sides[side].currentEnergy).toBe(energy);
+    expect(queued(real.published)).toHaveLength(1);
+    expect(queued(declined.published)).toEqual([]);
+    for (const json of [false, true]) {
+      const input = json ? JSON.parse(inputBefore) as typeof initial : initial, inputSnapshot = JSON.stringify(input);
+      const sample = w.engine.determinize(input, lists, () => .2);
+      const saved = reload({ ...slice, committed: sample }), restored = w.engine.view(saved.committed, viewer);
+      expect(comparableView(restored)).toEqual(comparableView(initial));
+      expect(restored.instances[w.watch]).toEqual(initial.instances[w.watch]);
+      expect(w.engine.legalActions(saved.committed, viewer)).toEqual(w.engine.legalActions(slice.committed, viewer));
+      expect(comparableView(w.engine.view(w.engine.determinize(restored, lists, () => .2), viewer))).toEqual(comparableView(initial));
+      const binding = saved.committed.triggerQueue[0].triggeringAbility!.occurrence;
+      if (scenario === "empty" || scenario === "expired") expect(binding.captured).toEqual([]);
+      if (scenario === "unscoped") expect(binding).not.toHaveProperty("captured");
+      const done = resume(saved, true), declinedSample = resume(saved, false);
+      expect(done.slice.committed.sides[side].currentEnergy).toBe(energy + 1);
+      expect(done.slice.committed.triggerQueue).toEqual([]);
+      expect(done.slice.inFlight).toBeNull();
+      expect(queued(done.published)).toHaveLength(1);
+      expect(queued(declinedSample.published)).toEqual([]);
+      expect(declinedSample.slice.committed.sides[side].currentEnergy).toBe(energy);
+      if (scenario === "hidden" || scenario === "visible") {
+        const kinds = done.published.filter(event => (event.kind === "abandoned" || event.kind === "materialized") && event.instance === w.cohort).map(event => event.kind);
+        expect(kinds).toEqual(["abandoned", "materialized"]);
+      }
+      if (done.repeatedState === undefined) throw new Error("The actual repeated admission was not observed");
+      const repeatedView = w.engine.view(done.repeatedState, viewer).triggerQueue[0];
+      if (scenario !== "visible") {
+        expect(repeatedView.origin).toBeNull();
+        expect(repeatedView).not.toHaveProperty("triggeringAbility");
+        expect(repeatedView).not.toHaveProperty("captured");
+      } else {
+        expect(repeatedView.origin).not.toBeNull();
+        expect(repeatedView.captured).toEqual([w.cohort]);
+      }
+      expect(JSON.stringify(input)).toBe(inputSnapshot);
+    }
+    expect(serializeState(slice.committed)).toBe(before);
+    expect(stateHash(slice.committed)).toBe(hash);
+    expect(JSON.stringify(initial)).toBe(inputBefore);
   });
 
 });

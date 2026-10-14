@@ -650,15 +650,32 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
         const root = abilityEffect(ability);
         if (root === null) return;
         const nodes: (number | null)[] = ability.kind === "triggered" ? [null] : [];
-        everyNode(root).forEach((node, at) => { if (node.op === "floatingTrigger") nodes.push(at); });
+        const tree = everyNode(root);
+        tree.forEach((node, at) => { if (node.op === "floatingTrigger") nodes.push(at); });
         for (const node of nodes) {
           const candidate = triggerBody(catalog, candidateOrigin, index, node);
           if (!hasNamedTrigger(candidate.trigger, observer.named)) continue;
           const selfSubject = observer.named === "materialized" || observer.named === "challenge" || observer.named === "dissolved";
           if (selfSubject && typeof source !== "string") continue;
-          candidates.push({ source, origin: copy(candidateOrigin), controller, ability: index, node,
+          const occurrence: QueuedTrigger = { source, origin: copy(candidateOrigin), controller, ability: index, node,
             subject: selfSubject && typeof source === "string" ? source : null,
-            ...(selfSubject ? { subjectHiddenFrom: [...SIDES] } : {}), historyHiddenFrom: [...SIDES] });
+            ...(selfSubject ? { subjectHiddenFrom: [...SIDES] } : {}), historyHiddenFrom: [...SIDES] };
+          const cohorts = node === null ? [] : view.floating.flatMap((effect) => {
+            const change = effect.change;
+            if (effect.controller !== controller || effect.source === null || change.kind !== "trigger" || change.captured === undefined ||
+              canonicalHash(effect.source) !== canonicalHash(source) || canonicalHash(change.ref.origin) !== canonicalHash(candidateOrigin) ||
+              change.ref.ability !== index || change.ref.node !== node) return [];
+            return [captured(change.captured)];
+          });
+          if (cohorts.length > 0) for (const cohort of cohorts) candidates.push({ ...occurrence, captured: cohort });
+          else {
+            const floating = node === null ? undefined : tree[node];
+            // The nearest lexical effect binding may historically have entered no cards.
+            // A materialize input does not introduce its enclosing node's new binding.
+            const scope = floating === undefined ? undefined : tree.filter((entry) =>
+              entry.op === "withMaterialized" && everyNode((entry as import("../effects/primitives/with-materialized").WithMaterializedNode).effect).includes(floating)).pop();
+            candidates.push(scope === undefined ? occurrence : { ...occurrence, captured: [] });
+          }
         }
       });
     };

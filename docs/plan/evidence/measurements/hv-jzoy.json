@@ -1,0 +1,642 @@
+{
+  "bead": "hv-jzoy",
+  "base": "bba5f56d5f026ee7d73438ea60203221a1eab68c",
+  "dispatch": "2026-10-14T16:27:29.570988+00:00",
+  "evidenceCutoff": "2026-10-14T17:23:40.585003+00:00",
+  "elapsedThroughCutoffS": 3371.014015,
+  "futureGit": "Replacement final amendment result UNKNOWN at pre-amend cutoff. Initial f18 actual Git receipt remains immutable historical evidence; external replacement receipt supplies true endpoint/OID/blobs and full inclusive interval within60seconds.",
+  "sourceAdmission": {
+    "proposalSHA256": "26e0f6f7cfe29738e454cfe7c72d63f86aab34fd7369d40da2010aaf8b9873ff",
+    "nativeACK": "source-write-native-ack.json",
+    "typingACK": "typed-fixture-repair-native-ack.json",
+    "scope": "Only sampledBinding projected captured context and lexical bound-empty fallback; existing privacy/necessary private fixture and own evidence. Other source14-manifest bytes unchanged.",
+    "peerAudit": "Fresh7active:100 explicitly excludes named-trigger admission/repetition;95 additive scalar transport separate. Closedb7x4 adds16 distinct existing-case/import lines; ownprivacy<=484 reserves combined<=500 without unrelated rebase."
+  },
+  "originalRuntimeProof": {
+    "receipt": {
+      "pid": 97571,
+      "pgid": 97571,
+      "argv": [
+        "/Users/dthurn/dreamtides_web/.worktrees/sampled-floating-context-jzoy/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/sampledFloating-jzoy/public-probe.mts"
+      ],
+      "start": "2026-10-14T16:49:26.271267+00:00",
+      "end": "2026-10-14T16:49:28.086762+00:00",
+      "wallS": 1.8153525829839054,
+      "exit": 0,
+      "scriptSHA256": "ed36f65ac0e4a0d625ff3ad061027a6bc3728b667a51aa46a3e005dd543aead1",
+      "stdoutSHA256": "b9c84b1abd648b52e522b333bef1e1a067a0b5461fe8a7500aa9c855199213ef",
+      "JSONSHA256": "8143762f3742973d49e1e471476dbee65ab0dc91347bdf53a61f991eec8599eb",
+      "sourceSHA256": {
+        "src/engine/view/determinize.ts": "dc0c1f84d1ca3e97337ca6486165263f14fd4fbd16ed835ba92bdf81d886f7ca",
+        "src/engine/view/view.ts": "78dfc4811edb6a3b63495bad3ac87efa4b93a824b38bb0a709ac211c67ebc29e",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts": "5a92d50e53ccf62add75133f0ce88dc00e3008cfd0190058998c8c7799347360",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": "fc73a27406fc5775cfcd023ec0f9a6020f5dba5b46793bb5dde016aaa444246d",
+        "src/engine/effects/primitives/floating-trigger.ts": "ef9bb03dd6b94b383bd6626d42fcae44ab79053b39c47cbdbbafb9066d5fa193",
+        "src/engine/effects/primitives/with-materialized.ts": "03b4aa2256146a721937faadf2531de39b4c13562b51638f580ef53a8e073390",
+        "src/engine/effects/interpreter.ts": "16841dce52b27eb7c546a8e535344ad586d38eebadb251ffde43940ec1f9f6bd",
+        "src/engine/triggers/matcher.ts": "f34b4d831f58e6a9a704b122557702f6afe7f7cd5ee3615b468ba67c15f898bb",
+        "src/engine/triggers/resolve.ts": "9eaf1247a9ba48c99a488b84b10f2b0db1614852e5205a9e247201f2322fbadc",
+        "src/engine/triggers/body.ts": "65037dc3bf44fb9b527141c08b4d9b9abb9ac64e108a8e409babdbc94191b024",
+        "src/engine/fold/slice.ts": "12546a29eb883d05689bfd05deb77b8e27879e1dac6a9ea2bb0cf8f0e5179107",
+        "src/engine/engine.ts": "94fe39e1b652c82c1cad552f2c2fccfab0f6c13edc24b23f396937ee19ddd426",
+        "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb",
+        "src/rules/battle/fold.ts": "ff5f3ccdb4b426d46a0c45860d1ab37b9aa1fd988bb969e6c4f520d6e5e164b4"
+      },
+      "sourceUnchanged": true,
+      "clean": true,
+      "settled": true
+    },
+    "observations": 8,
+    "hiddenFaultSamples": 8,
+    "visiblePassingSamples": 8,
+    "actualSequence": "Real board/testCatalog synthetics, public fold activate and six phase-window passes. Genuine suspended confirm resolveTrigger step has only step/automatic/empty answers; no hidden captured transfer. Each direct/JSON sample equals complete comparableView, Watch identity/characteristics/legal actions and preserves inputs.",
+    "actualFault": "Real accept energy10/decline9. Hidden sampled accept publishes genuine repeat admission then missing-context automatic resolution error, energy9; visible sampled accepts10. Diagnosticexit0 records expected fault, not isolation PASS. No private runner/queue injection. Original TSX observation used untyped banished-zone selector: actual runtime proof, NOT typed public API proof. Final compiled contracts use supported captured abandon/void materialization on the same resolveCards boundary.",
+    "sourceHashes": {
+      "hiddenPlayer": "081aedeac89066",
+      "hiddenEnemy": "0a5e50ddebf55d",
+      "visiblePlayer": "18d7773f256329",
+      "visibleEnemy": "12f0593d8ac2fd"
+    },
+    "JSONSHA256": "8143762f3742973d49e1e471476dbee65ab0dc91347bdf53a61f991eec8599eb",
+    "sourceEpoch": "91dfbe6afd0a8ac52bbd8c49377fa6d4a4c14f04 original untyped runtime diagnostic; not rerun on replacement base."
+  },
+  "implementation": "Matching public floating ref/source/controller supplies captured through existing member resolver. Scoped floating nodes without a public cohort use a fresh empty valid historical withMaterialized binding, nearest effect enclosure including deferred contexts; materialize input does not establish binding. No blanket arrays/liveeffect/currentzone restriction, hidden original input, dropped row, new state/schema/DSL/helper service, changed690 checks or dead ternary. Bound-empty fallback samples compatible history, does not reconstruct private original membership/full sampling distribution.",
+  "contracts": {
+    "privacyLines": 464,
+    "privateFixtureLines": 89,
+    "newCases": 20,
+    "cases": "Both controllers/viewers \u00d7 hidden-live/visible-live/nested-inner-empty/historical-ended-source/unscoped floating contexts. Direct/JSON/repeated sample, save/reload, genuine confirm true/false, actual gain and live-cohort UUID abandon/materialize, complete comparable views/source characteristics/legal actions/input hash/bytes.",
+    "postRepeatPrivacy": "Existing fold observation presents only triggerQueued, limit1. Actual observed repeat queue view hides sampled origin/binding/captured in withheld-history cases; visible-history positive exposes its known origin/cohort. No constant event-schema omission guard used as privacy proof.",
+    "originalPrivacyLines": 448
+  },
+  "counterfactual": {
+    "receipt": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "public floating captured context"
+      ],
+      "pid": 25384,
+      "pgid": 25384,
+      "start": "2026-10-14T17:00:50.460861+00:00",
+      "end": "2026-10-14T17:00:54.443201+00:00",
+      "wallS": 3.9818797079788055,
+      "exit": 1,
+      "stdoutSHA256": "c40c8a5e54887eb216ea1c063396bec40747aaecc5a7d533c5c678d6da85fe75",
+      "settled": true
+    },
+    "expectedFailures": 12,
+    "passingControls": 8,
+    "skipped": 3881,
+    "wholeFileRestored": true,
+    "restorationReceipt": "counterfactual-restoration.json all14 fixed source hashes equal before aggregates",
+    "sourceEpochQualification": "ONE omission ran initial440line privacy/89fixture epoch. Final448line privacy adds actual fold observed-repeat privacy proof after root inspection; final typed fixture uses supported abandonCards(captured)/materialize(void) instead of the earlier runtime-working but type-invalid banished selector. Sampler correction additionally projects op-checked primitive type without runtime change. Both consumers reach the same resolveCards null-binding branch; earlier source/probe/CF epochs retained explicitly. No repeated CF. This original f18 entry is historical only; integrationRecovery separately records the later admitted supported-typed/newbase omission. TWO total across distinct epochs.",
+    "totalRunsAcrossEpochs": 2
+  },
+  "retainedCheckFailure": {
+    "receipt": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts"
+      ],
+      "pid": 48034,
+      "pgid": 48034,
+      "start": "2026-10-14T16:59:13.174650+00:00",
+      "end": "2026-10-14T16:59:17.456264+00:00",
+      "wallS": 4.281402291991981,
+      "exit": 1,
+      "stdoutSHA256": "98a2369fc88b4c5310a29693a20335293cff4f5b50a61742554cfe8fa470c274",
+      "settled": true
+    },
+    "cause": "Initial focus targeted non-entrypoint .contracts.ts. Vitest No test files found exit1, no semantic tests ran. Existing contracts.test.ts eager glob is the actual importer. Corrected command only; no runner/config changes."
+  },
+  "validation": {
+    "fixed-privacy-focus": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts"
+      ],
+      "pid": 48034,
+      "pgid": 48034,
+      "start": "2026-10-14T16:59:13.174650+00:00",
+      "end": "2026-10-14T16:59:17.456264+00:00",
+      "wallS": 4.281402291991981,
+      "exit": 1,
+      "stdoutSHA256": "98a2369fc88b4c5310a29693a20335293cff4f5b50a61742554cfe8fa470c274",
+      "settled": true
+    },
+    "fixed-new-focus": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "public floating captured context"
+      ],
+      "pid": 64401,
+      "pgid": 64401,
+      "start": "2026-10-14T16:59:50.097577+00:00",
+      "end": "2026-10-14T16:59:55.494066+00:00",
+      "wallS": 5.396282415982569,
+      "exit": 0,
+      "stdoutSHA256": "549dda45fef31b4219569f9f8d662848e2cfaca5f82cca9cbf75d8627181c29e",
+      "settled": true
+    },
+    "counterfactual-context-omission": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "public floating captured context"
+      ],
+      "pid": 25384,
+      "pgid": 25384,
+      "start": "2026-10-14T17:00:50.460861+00:00",
+      "end": "2026-10-14T17:00:54.443201+00:00",
+      "wallS": 3.9818797079788055,
+      "exit": 1,
+      "stdoutSHA256": "c40c8a5e54887eb216ea1c063396bec40747aaecc5a7d533c5c678d6da85fe75",
+      "settled": true
+    },
+    "final-new-focus": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "public floating captured context"
+      ],
+      "pid": 29932,
+      "pgid": 29932,
+      "start": "2026-10-14T17:01:55.784876+00:00",
+      "end": "2026-10-14T17:02:00.157679+00:00",
+      "wallS": 4.372495500021614,
+      "exit": 0,
+      "stdoutSHA256": "a7fb0cb94c4cca7303f24c4c8618e162380492d053ad3162d9c3c25ffacb81d3",
+      "settled": true
+    },
+    "existing-context-focus": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility|withMaterialized|floating|delayed"
+      ],
+      "pid": 31539,
+      "pgid": 31539,
+      "start": "2026-10-14T17:02:20.009003+00:00",
+      "end": "2026-10-14T17:02:24.379263+00:00",
+      "wallS": 4.370049041986931,
+      "exit": 0,
+      "stdoutSHA256": "49239f24d91b7c5bb57aea8f1d74d5e39333f053c6e60eaf935525d77054164e",
+      "settled": true
+    },
+    "surrounding-engine-focus": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/triggers/triggers.test.ts"
+      ],
+      "pid": 33594,
+      "pgid": 33594,
+      "start": "2026-10-14T17:02:48.833984+00:00",
+      "end": "2026-10-14T17:02:55.600483+00:00",
+      "wallS": 6.76628687500488,
+      "exit": 0,
+      "stdoutSHA256": "52404951dc932d9d7356b7535fc17acd8756c9193b6889612feeccab92f402fd",
+      "settled": true
+    },
+    "normal-review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 40400,
+      "pgid": 40400,
+      "start": "2026-10-14T17:04:33.391723+00:00",
+      "end": "2026-10-14T17:05:17.974273+00:00",
+      "wallS": 44.58155750000151,
+      "exit": 2,
+      "stdoutSHA256": "b9f38a9371a032ac05f5eefe736cdf8f8e7ae89f773b16c32ed768ec7ca25136",
+      "settled": true
+    },
+    "typed-final-focus": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "public floating captured context"
+      ],
+      "pid": 8777,
+      "pgid": 8777,
+      "start": "2026-10-14T17:07:25.272508+00:00",
+      "end": "2026-10-14T17:07:29.205912+00:00",
+      "wallS": 3.9332544170028996,
+      "exit": 0,
+      "stdoutSHA256": "a9dda99f912536ba7ce3fdc7a19b3d51a1cae05e59e70306153aa04695bbab26",
+      "settled": true
+    },
+    "final-review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 10839,
+      "pgid": 10839,
+      "start": "2026-10-14T17:07:58.560191+00:00",
+      "end": "2026-10-14T17:08:40.484939+00:00",
+      "wallS": 41.923803250014316,
+      "exit": 0,
+      "stdoutSHA256": "a0e8fe913c3560f39fa07ae06248b2f6331b9119f4a7f52351937030de48fde2",
+      "settled": true
+    },
+    "final-knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 13627,
+      "pgid": 13627,
+      "start": "2026-10-14T17:08:43.945588+00:00",
+      "end": "2026-10-14T17:08:49.689861+00:00",
+      "wallS": 5.743927041999996,
+      "exit": 0,
+      "stdoutSHA256": "3068a1b262905cc9aa1812bf6223198e7ab7e399987a08d375b2e3abdd2fb31e",
+      "settled": true
+    },
+    "combined-new-focus": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "public floating captured context"
+      ],
+      "pid": 56253,
+      "pgid": 56253,
+      "start": "2026-10-14T17:17:42.471251+00:00",
+      "end": "2026-10-14T17:17:46.941338+00:00",
+      "wallS": 4.469919083989225,
+      "exit": 0,
+      "stdoutSHA256": "45b03a84c360ae99bc740b2a955a16e11858ed2b8b62aa17c9ad4347e3a1c3b4",
+      "settled": true
+    },
+    "combined-existing-focus": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility|withMaterialized|floating|delayed"
+      ],
+      "pid": 59144,
+      "pgid": 59144,
+      "start": "2026-10-14T17:18:32.010124+00:00",
+      "end": "2026-10-14T17:18:37.879204+00:00",
+      "wallS": 5.868709250004031,
+      "exit": 0,
+      "stdoutSHA256": "ecf705fa4abc5bc4bbceb9a177ce406bc49361d3946a27827459fcc710cb9d91",
+      "settled": true
+    },
+    "typed-current-context-omission": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "public floating captured context"
+      ],
+      "pid": 65188,
+      "pgid": 65188,
+      "start": "2026-10-14T17:20:28.708280+00:00",
+      "end": "2026-10-14T17:20:32.525500+00:00",
+      "wallS": 3.8170666669902857,
+      "exit": 1,
+      "stdoutSHA256": "4ae322fa477418f06b8e276adca755013f73fd007ba7549770106cad21a7cce7",
+      "settled": true
+    },
+    "combined-review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 65727,
+      "pgid": 65727,
+      "start": "2026-10-14T17:20:46.545977+00:00",
+      "end": "2026-10-14T17:21:19.433871+00:00",
+      "wallS": 32.88731687501422,
+      "exit": 0,
+      "stdoutSHA256": "6080b375c1b386a60c0cef72537ac5b3d5f1209aba0208b7a2bc97b2db492229",
+      "settled": true
+    },
+    "combined-knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 72997,
+      "pgid": 72997,
+      "start": "2026-10-14T17:22:04.433339+00:00",
+      "end": "2026-10-14T17:22:08.009664+00:00",
+      "wallS": 3.5761985830031335,
+      "exit": 0,
+      "stdoutSHA256": "1c6c30be00346750db74ec2ce1111fabe9bb601ecb3747f9e19fa6bfb00934e5",
+      "settled": true
+    }
+  },
+  "validationSummary": {
+    "finalNewFocus": "Typed producer20 PASS,3881 skipped",
+    "existingContextFocus": "163 PASS,3738 skipped (repeat/cohort/floating/delayed filter)",
+    "surroundingFocus": "See actual receipt/stdout",
+    "review": "PASS all normal checks",
+    "knip": "PASS",
+    "workers": 2,
+    "schema": "Final post-evidence schema outcome UNKNOWN at cutoff; exact external terminal receipt required before Git.",
+    "currentEpoch": "Earlier per-label summaries describe originalf18 source; integrationRecovery.checks/summary describe combined replacement source."
+  },
+  "retainedReviewFailure": {
+    "receipt": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 40400,
+      "pgid": 40400,
+      "start": "2026-10-14T17:04:33.391723+00:00",
+      "end": "2026-10-14T17:05:17.974273+00:00",
+      "wallS": 44.58155750000151,
+      "exit": 2,
+      "stdoutSHA256": "b9f38a9371a032ac05f5eefe736cdf8f8e7ae89f773b16c32ed768ec7ca25136",
+      "settled": true
+    },
+    "cause": "Initial113files5968tests passed, but EffectNode generic interface requires op-checked WithMaterializedNode projection and everyIn banished is outside typed CountedZone. Final bounded code uses primitive type projection plus existing supported abandonCards(captured)/materialize(void); no DSL/config/API expansion. Original TSX runtime probe and CF used earlier type-invalid sequel, so its executed missing-context red is qualified by this fixture epoch. Final typed focus/review rerun required."
+  },
+  "failurePaths": {
+    "errorMidStep": "Actual original missing-context automatic step fails after repeat admission; corrected true flow completes. Counterfactual scoped guards fail rather than generic pass-replay recovery.",
+    "reload": "Genuine suspended confirm slice and sampled committed replacement are save-parsed/reloaded then answered through the public fold; no forged queue/inFlight.",
+    "partialWrite": "Pure sampler has no persistent writes; source serialize/hash and public-input snapshots stay unchanged, including sampled continuation branches.",
+    "invalidStaleInput": "Existing standIns member/owner and save nested-cause validation retained; stale prompt handling unchanged. New path constructs no prompt identity or persisted schema; old malformed/refusal tests run in existing filter.",
+    "concurrentActors": "Both controller/viewer orientations use independent pure calls and immutable inputs. No shared mutation, external IO or concurrent authoritative writer introduced. Sequential matrix does not claim a race stress test.",
+    "missingContext": "Actual unchanged producer red and12 omission failures; corrected scoped execution succeeds. Hidden sample true must resolve; decline/visible/unscoped controls discriminate ordinary behavior.",
+    "historyLifetime": "Real source leaves play and floating effect ends during original body, before genuine reader prompt; lexical empty fallback remains executable. Current effect presence and zone are not admission requirements.",
+    "nearestEmpty": "Outer scope enters a real cohort, inner scope enters zero; installed public cohort is empty and remains bound.",
+    "privacyAndPurity": "Actual observed sampled repeated queue hides context; known source/wholeview fidelity, sourcebytes/hash/publicinput and repeat sampling retained. StandIns owns arrays; no original hidden tuple supplied.",
+    "invalidInputs": "Existing resolver validates projected member/owner and saved nested cause shape; existing malformed/spent allowance/source-loss/row alignment cases retained. No new refusal or weakened guards."
+  },
+  "resources": {
+    "ownGroupsAbsent": [
+      8777,
+      10839,
+      13627,
+      19157,
+      19175,
+      25384,
+      29932,
+      31539,
+      33594,
+      40400,
+      48034,
+      56253,
+      59144,
+      64401,
+      65188,
+      65727,
+      69571,
+      72997,
+      89398,
+      97571
+    ],
+    "scratchPublicDiagnosticRun": true,
+    "browserStarted": false,
+    "providerStarted": false,
+    "serverStarted": false,
+    "leasesStarted": false,
+    "heavyRun": false
+  },
+  "proportion": "Local sampledBinding context-only construction preserves DTO/player workflow/state architecture. Root exact ACK: focus/surrounding/review/Knip/schema; no localfull/default200/browser absent widening.",
+  "sourceManifestSHA256": {
+    "src/engine/view/determinize.ts": "be877779c2bf755f11dbf8a737e61966bcde80336e48d385efaea10ae2b69875",
+    "src/engine/view/view.ts": "78dfc4811edb6a3b63495bad3ac87efa4b93a824b38bb0a709ac211c67ebc29e",
+    "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts": "6672448b93c72d0ec3d0e7b21acdfdbcc29fb5592168aa9f2f40753c2c94abab",
+    "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": "9a4cd3515a6667c76871839f4aaad7df933c3cef2b89fdbae287235ea6c41626",
+    "src/engine/effects/primitives/floating-trigger.ts": "ef9bb03dd6b94b383bd6626d42fcae44ab79053b39c47cbdbbafb9066d5fa193",
+    "src/engine/effects/primitives/with-materialized.ts": "03b4aa2256146a721937faadf2531de39b4c13562b51638f580ef53a8e073390",
+    "src/engine/effects/interpreter.ts": "16841dce52b27eb7c546a8e535344ad586d38eebadb251ffde43940ec1f9f6bd",
+    "src/engine/triggers/matcher.ts": "f34b4d831f58e6a9a704b122557702f6afe7f7cd5ee3615b468ba67c15f898bb",
+    "src/engine/triggers/resolve.ts": "9eaf1247a9ba48c99a488b84b10f2b0db1614852e5205a9e247201f2322fbadc",
+    "src/engine/triggers/body.ts": "65037dc3bf44fb9b527141c08b4d9b9abb9ac64e108a8e409babdbc94191b024",
+    "src/engine/fold/slice.ts": "12546a29eb883d05689bfd05deb77b8e27879e1dac6a9ea2bb0cf8f0e5179107",
+    "src/engine/engine.ts": "94fe39e1b652c82c1cad552f2c2fccfab0f6c13edc24b23f396937ee19ddd426",
+    "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb",
+    "src/rules/battle/fold.ts": "ff5f3ccdb4b426d46a0c45860d1ab37b9aa1fd988bb969e6c4f520d6e5e164b4"
+  },
+  "localRoutingQualification": "Initial non-entrypoint contracts.ts focus was a local command routing error; corrected to existing contracts.test.ts eager importer. No pre-existing runner bug/new tooling-fix bead. Under10minutes, detailed retained receipt rather than a guessed friction-minute entry.",
+  "setupReceipt": "npm-install-receipt.json actual2.222545s/PG69571 settled; original dispatch starts beforeTG/npm.",
+  "inclusiveTiming": "Includes ALL TG/npm/source-firstplan/admission/publicprobe/waits/implementation/CF/privacy-strengthening/checks. Pre-Git cutoff is not a fabricated Git completion; external actual receipt supplies endpoint.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "combined-review typecheck starting1-minute hostload",
+        "at": "2026-10-14T17:20:48.134Z"
+      },
+      "implementWindow": {
+        "measuredFor": "Original16:27:29 dispatch through replacement pre-amend cutoff, including initialGit/candidate conflict/native recovery and combined validation; external actual amended Git receipt supplies endpoint."
+      }
+    }
+  },
+  "coldReview": "Root alone fresh normal Claude core after immutable final; original689 static review artifacts/provenance preserved.",
+  "originalBase": "91dfbe6afd0a8ac52bbd8c49377fa6d4a4c14f04",
+  "originalEvidenceCutoff": "2026-10-14T17:10:07.557048+00:00",
+  "originalSourceManifestSHA256": {
+    "src/engine/view/determinize.ts": "be877779c2bf755f11dbf8a737e61966bcde80336e48d385efaea10ae2b69875",
+    "src/engine/view/view.ts": "78dfc4811edb6a3b63495bad3ac87efa4b93a824b38bb0a709ac211c67ebc29e",
+    "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts": "0a4d757fb3285df817f7b74d48fb1b77a09868ad66953e3bbaae2df8e77fa11e",
+    "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": "9a4cd3515a6667c76871839f4aaad7df933c3cef2b89fdbae287235ea6c41626",
+    "src/engine/effects/primitives/floating-trigger.ts": "ef9bb03dd6b94b383bd6626d42fcae44ab79053b39c47cbdbbafb9066d5fa193",
+    "src/engine/effects/primitives/with-materialized.ts": "03b4aa2256146a721937faadf2531de39b4c13562b51638f580ef53a8e073390",
+    "src/engine/effects/interpreter.ts": "16841dce52b27eb7c546a8e535344ad586d38eebadb251ffde43940ec1f9f6bd",
+    "src/engine/triggers/matcher.ts": "f34b4d831f58e6a9a704b122557702f6afe7f7cd5ee3615b468ba67c15f898bb",
+    "src/engine/triggers/resolve.ts": "9eaf1247a9ba48c99a488b84b10f2b0db1614852e5205a9e247201f2322fbadc",
+    "src/engine/triggers/body.ts": "65037dc3bf44fb9b527141c08b4d9b9abb9ac64e108a8e409babdbc94191b024",
+    "src/engine/fold/slice.ts": "12546a29eb883d05689bfd05deb77b8e27879e1dac6a9ea2bb0cf8f0e5179107",
+    "src/engine/engine.ts": "94fe39e1b652c82c1cad552f2c2fccfab0f6c13edc24b23f396937ee19ddd426",
+    "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb",
+    "src/rules/battle/fold.ts": "ff5f3ccdb4b426d46a0c45860d1ab37b9aa1fd988bb969e6c4f520d6e5e164b4"
+  },
+  "integrationRecovery": {
+    "originalSource": "f18a48ae87e54a795cbe69ec07e1544aa30c631a",
+    "originalBase": "91dfbe6afd0a8ac52bbd8c49377fa6d4a4c14f04",
+    "originalCandidate": "01a13b65-7d98-78a1-84c2-da8973cd8fa5",
+    "candidateDisposition": "terminal merge-conflict before authority/no generation; original candidate unapproved. Root native update first failed and rolled back clean; ordinary workflow recovery used.",
+    "parkCheckpoint": "f160e52d18be6c3e792a24629b18a7275621ccc3 MUST NOTsubmit",
+    "updatedCheckpoint": "ec5abdabbd4f03643a0e51723182b7ab7e40e52b MUST NOTsubmit",
+    "newBase": "bba5f56d5f026ee7d73438ea60203221a1eab68c",
+    "nativeACK": "integration-recovery/native-reapply-ack.json",
+    "nativeUpdateReceipt": "integration-recovery/native-update-verified.json",
+    "reapply": {
+      "at": "2026-10-14T17:17:42.443237+00:00",
+      "updatedCheckpoint": "ec5abdabbd4f03643a0e51723182b7ab7e40e52b",
+      "newBase": "bba5f56d5f026ee7d73438ea60203221a1eab68c",
+      "path": "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts",
+      "peerSHA256": "89a64f072225cc79d65ab1005f957829eb78f65ec41f854c2cad23b3ecff5ff7",
+      "ownOriginalSHA256": "0a4d757fb3285df817f7b74d48fb1b77a09868ad66953e3bbaae2df8e77fa11e",
+      "combinedSHA256": "6672448b93c72d0ec3d0e7b21acdfdbcc29fb5592168aa9f2f40753c2c94abab",
+      "combinedLines": 464,
+      "completeOwnedCaseByteExact": true,
+      "peerRecoveredByteExact": true,
+      "otherFiveOwnedSHA256Unchanged": {
+        "src/engine/view/determinize.ts": "be877779c2bf755f11dbf8a737e61966bcde80336e48d385efaea10ae2b69875",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": "9a4cd3515a6667c76871839f4aaad7df933c3cef2b89fdbae287235ea6c41626",
+        "docs/plan/evidence/friction/hv-jzoy.json": "cc189b5b27e1090166b95fe9ea57bd4adb73761a8b67a032aa7ab3a988f5c84d",
+        "docs/plan/evidence/measurements/hv-jzoy.json": "ca4a2a395f6f2f71867b941c49db86c06f65aeac5919d3705ac61c2cd6ad269c",
+        "docs/plan/evidence/pre-existing/hv-jzoy.md": "f98165c228b4a20a964c8574dd6ba71a14b43ec84e1d621a3ab4b9e7ff854281"
+      }
+    },
+    "combinedPrivacyLines": 464,
+    "fixtureLines": 89,
+    "checks": {
+      "combined-new-focus": {
+        "argv": [
+          "node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "public floating captured context"
+        ],
+        "pid": 56253,
+        "pgid": 56253,
+        "start": "2026-10-14T17:17:42.471251+00:00",
+        "end": "2026-10-14T17:17:46.941338+00:00",
+        "wallS": 4.469919083989225,
+        "exit": 0,
+        "stdoutSHA256": "45b03a84c360ae99bc740b2a955a16e11858ed2b8b62aa17c9ad4347e3a1c3b4",
+        "settled": true
+      },
+      "combined-existing-focus": {
+        "argv": [
+          "node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "repeatTriggeringAbility|withMaterialized|floating|delayed"
+        ],
+        "pid": 59144,
+        "pgid": 59144,
+        "start": "2026-10-14T17:18:32.010124+00:00",
+        "end": "2026-10-14T17:18:37.879204+00:00",
+        "wallS": 5.868709250004031,
+        "exit": 0,
+        "stdoutSHA256": "ecf705fa4abc5bc4bbceb9a177ce406bc49361d3946a27827459fcc710cb9d91",
+        "settled": true
+      },
+      "typed-current-context-omission": {
+        "argv": [
+          "node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "public floating captured context"
+        ],
+        "pid": 65188,
+        "pgid": 65188,
+        "start": "2026-10-14T17:20:28.708280+00:00",
+        "end": "2026-10-14T17:20:32.525500+00:00",
+        "wallS": 3.8170666669902857,
+        "exit": 1,
+        "stdoutSHA256": "4ae322fa477418f06b8e276adca755013f73fd007ba7549770106cad21a7cce7",
+        "settled": true
+      },
+      "combined-review": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 65727,
+        "pgid": 65727,
+        "start": "2026-10-14T17:20:46.545977+00:00",
+        "end": "2026-10-14T17:21:19.433871+00:00",
+        "wallS": 32.88731687501422,
+        "exit": 0,
+        "stdoutSHA256": "6080b375c1b386a60c0cef72537ac5b3d5f1209aba0208b7a2bc97b2db492229",
+        "settled": true
+      },
+      "combined-knip": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 72997,
+        "pgid": 72997,
+        "start": "2026-10-14T17:22:04.433339+00:00",
+        "end": "2026-10-14T17:22:08.009664+00:00",
+        "wallS": 3.5761985830031335,
+        "exit": 0,
+        "stdoutSHA256": "1c6c30be00346750db74ec2ce1111fabe9bb601ecb3747f9e19fa6bfb00934e5",
+        "settled": true
+      }
+    },
+    "currentTypedRed": {
+      "nativeACK": "integration-recovery/typed-current-red-native-ack.json",
+      "receipt": {
+        "argv": [
+          "node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "public floating captured context"
+        ],
+        "pid": 65188,
+        "pgid": 65188,
+        "start": "2026-10-14T17:20:28.708280+00:00",
+        "end": "2026-10-14T17:20:32.525500+00:00",
+        "wallS": 3.8170666669902857,
+        "exit": 1,
+        "stdoutSHA256": "4ae322fa477418f06b8e276adca755013f73fd007ba7549770106cad21a7cce7",
+        "settled": true
+      },
+      "expectedFailures": 12,
+      "passingControls": 8,
+      "skipped": 3893,
+      "restoration": "integration-recovery/typed-current-counterfactual-restoration.json; corrected whole determinize and14current hashes restored before aggregates",
+      "totalCounterfactualRuns": 2,
+      "qualification": "Earlier untyped fixture/base epoch remains immutable; newrun only for concrete supported fixture and newpeerbase, not unchanged retry."
+    },
+    "summary": {
+      "newFocus": "20PASS3893skip/3913 total",
+      "existingFocus": "See actual combined existing receipt/stdout includes peer malformed/catalog refusal control",
+      "review": "PASS",
+      "knip": "PASS",
+      "schema": "Future final post-evidence outcome UNKNOWN at pre-amend cutoff; external receipt required before Git."
+    },
+    "initialEvidenceQualification": "Earlier validation/counterfactual/probe receipts and source hashes are exact original epochs; the additional currenttyped/newbase omission is separatelyreceipted and all14 current hashes restored; TWO total across different fixture/base epochs, no relabeling or oldprobe repeat. Immutable original commit/evidence/fullreceipts retained in own integration-recovery original-* snapshots. Current combined checks qualify replacement source only.",
+    "sourceOwnership": "Complete own newcase bytes identical original448; removing own2imports/newcase reconstructs full peer383 byteexact. Production/fixture whole bytes equal f18; no helper native rebase/sourcebody widening.",
+    "dispatchInclusiveThroughCutoffS": 3371.014015,
+    "preAmendCutoff": "2026-10-14T17:23:40.585003+00:00",
+    "futureGit": "UNKNOWN; external actual replacement Git receipt required",
+    "coldReview": "Normal fresh Claude review attempt of original f18/91df failed before reads/zeroAPI tokens: actual429 usage_limit_reached, resetreported10:40am America/Los_Angeles; root retained terminal SIDd9b8/providerPG22556 settlement and removed snapshot. NOT a completed review. D18 native review-debt range/packet will bind final replacement source/base; root retries at later dispatch boundary. No live provider, no helper reviewCLI or alternative reviewer claim."
+  }
+}

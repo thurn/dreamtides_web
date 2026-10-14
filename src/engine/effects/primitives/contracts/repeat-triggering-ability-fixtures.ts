@@ -1,7 +1,7 @@
 /** Private synthetic fixtures consumed only by the two exact-repeat contract modules. */
 import type { EmblemDefinitions, EngineCardDefinition, EngineFigmentDefinition } from "../../../catalog";
-import { activated, all, characterYouControl } from "../../../dsl/builders";
-import { triggered, whenNamedAbilityTriggered } from "../../../dsl/triggers";
+import { activated, all, characterYouControl, topOfDeck, everyIn, self } from "../../../dsl/builders";
+import { triggered, whenNamedAbilityTriggered, onDawn } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
 import type { BattleSlice, IntentOutcome } from "../../../fold/slice";
@@ -70,3 +70,20 @@ export function reload(slice: BattleSlice) {
 }
 export const force = card(0, () => [activated([], p.triggerAbility(mages, "materialized"))]);
 export const observer = card(1, () => [triggered(whenNamedAbilityTriggered("materialized"), p.repeatTriggeringAbility(), { oncePerTurn: true })]);
+
+/** Real floating contexts reached through public fold actions in the privacy contracts. */
+export function floatingWorld(side: Side, scenario: "hidden" | "visible" | "empty" | "expired" | "unscoped") {
+  const cohort = card(101, () => [], "Mage"), hidden = scenario !== "visible", scoped = scenario !== "unscoped";
+  const watch = card(102, () => [triggered(whenNamedAbilityTriggered("dawn"), p.optional(p.repeatTriggeringAbility()), { zone: "any", oncePerTurn: true })]);
+  const maker = card(103, () => {
+    const floating = p.floating(onDawn(), p.sequence(p.draw(1), p.reveal(), p.gainEnergy(1),
+      ...(scoped ? [p.abandonCards([p.capturedCards()]), p.materialize(everyIn("void", { subtype: "Mage" }))] : []),
+      ...(scenario === "expired" ? [p.dissolve(self())] : [])), scenario === "expired" ? "whileSourceInPlay" : "permanent");
+    return [activated([], scoped ? p.withMaterialized(p.materialize(topOfDeck()), scenario === "empty"
+      ? p.withMaterialized(p.materialize(everyIn("void", { subtype: "Mage" })), floating) : floating) : floating)];
+  }, "Explorer");
+  const w = world(side, [maker, cohort, watch], { back: [maker.id, ...(hidden ? [] : [watch.id])],
+    deck: [...(scoped ? [cohort.id] : []), v.vanilla2.id, ...(hidden ? [watch.id] : []), v.vanilla3.id, v.vanilla3.id, v.vanilla3.id] });
+  return { ...w, maker: w.ids[side].back[0]!, watch: hidden ? w.ids[side].deck[scoped ? 2 : 1] : w.ids[side].back[1]!,
+    cohort: scoped ? w.ids[side].deck[0] : undefined };
+}

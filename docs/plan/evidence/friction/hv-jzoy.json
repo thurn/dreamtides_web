@@ -1,0 +1,51 @@
+{
+  "bead": "hv-jzoy",
+  "phase": 5,
+  "implementMin": 56.18356691666667,
+  "implementWindow": {
+    "start": "2026-10-14T16:27:29.570988+00:00",
+    "end": "2026-10-14T17:23:40.585003+00:00"
+  },
+  "localValidationS": {
+    "fixed-privacy-focus": 4.281402291991981,
+    "fixed-new-focus": 5.396282415982569,
+    "counterfactual-context-omission": 3.9818797079788055,
+    "final-new-focus": 4.372495500021614,
+    "existing-context-focus": 4.370049041986931,
+    "surrounding-engine-focus": 6.76628687500488,
+    "normal-review": 44.58155750000151,
+    "typed-final-focus": 3.9332544170028996,
+    "final-review": 41.923803250014316,
+    "final-knip": 5.743927041999996,
+    "public-probe": 1.8153525829839054,
+    "combined-new-focus": 4.469919083989225,
+    "combined-existing-focus": 5.868709250004031,
+    "typed-current-context-omission": 3.8170666669902857,
+    "combined-review": 32.88731687501422,
+    "combined-knip": 3.5761985830031335,
+    "park-checkpoint-git": 0.04136595799354836
+  },
+  "hostLoad": 8.3818359375,
+  "testDelta": {
+    "files": 0,
+    "lines": 98,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 0.07135670486653302,
+      "note": "Observed failed focus run duration only: local command targeted non-entrypoint .contracts.ts; no semantic tests ran. Corrected existing contracts.test.ts eager importer. No pre-existing runner defect/newfixbead."
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 0.7430259583333585,
+      "note": "Observed failed aggregate duration only: generic EffectNode projection and unsupported typed banished selector corrected within admitted body/fixture, with supported abandonCards/captured and materialize void. Not an estimate of editing time."
+    },
+    {
+      "tag": "merge-conflict-recovery",
+      "minutes": 10.648903783333333,
+      "note": "Measured window from explicit park-only ACK to current pre-amend cutoff; includes native root update, saved-delta reapply and combined checks. Original candidate failed before authority/generation. Ordinary shared-file conflict; peer bodies preserved, no serialization edge or manual rebase."
+    }
+  ]
+}
