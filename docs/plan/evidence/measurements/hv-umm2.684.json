@@ -1,0 +1,675 @@
+{
+  "bead": "hv-umm2.684",
+  "phase": 5,
+  "sourceBase": "b8afed590c7f64f47f7d61511335f9985dff443f",
+  "actualDispatch": "2026-10-14T18:16:35.875044Z",
+  "gitCompletion": "UNKNOWN before commit; external final-commit receipt supplies actual endpoint",
+  "content": {
+    "uuids": [
+      "8bf53fe6-8a25-401e-9a99-84343a026bb0",
+      "5b2b2188-b9f0-4b3b-9185-26a820d343c7"
+    ],
+    "baseTexts": 2,
+    "amplifiedTexts": 0,
+    "newPrimitives": [],
+    "newPromptKinds": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "fallout": [],
+    "metadataAudit": "Root read-only TypeScript AST audit verifies every other property syntax unchanged; parent-card-metadata-verification.json."
+  },
+  "composition": {
+    "module": "src/content/specs/cards-ready-192.scenarios.ts",
+    "slug": "cards-ready-192",
+    "cases": 8,
+    "lines": 107,
+    "consumer": "src/content/specs/specs.test.ts through discovered scenario registry and runNamedScenario/runScenario",
+    "contracts": [
+      "Both controllers: Exile counts controlled characters only, reads an additional character materialized before play, floors payment at zero, dissolves only chosen enemy.",
+      "Both controllers: Surveyor watches exactly the second play and draws before choosing a discard including that new card; third play does not repeat its trigger."
+    ],
+    "existingPrimitiveCoverage": [
+      "self-cost-reduction.contracts.ts: suspended play/reload; foreign, stale and concurrent answers; one payment; derived live reduction.",
+      "triggers-patterns.test.ts: nth played-card count and per-turn reset."
+    ],
+    "newStateTransitionImplementation": false
+  },
+  "validation": {
+    "focused": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 4199,
+      "pgid": 4199,
+      "start": "2026-10-14T18:33:34.036885+00:00",
+      "end": "2026-10-14T18:33:46.967833+00:00",
+      "wallS": 12.930643666011747,
+      "exit": 1,
+      "stdoutSHA256": "0e14b552e09343debb9a118624d351530e6456208fc56dc0590f759b43c4d84c",
+      "settled": true
+    },
+    "focused-fixed": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 6004,
+      "pgid": 6004,
+      "start": "2026-10-14T18:34:02.397829+00:00",
+      "end": "2026-10-14T18:34:11.502951+00:00",
+      "wallS": 9.104717040987452,
+      "exit": 0,
+      "stdoutSHA256": "aa2f877e41cbf5cd6ae1d62db5843cd72905f13e5d0031875f0ac2e3ce8e19c5",
+      "settled": true
+    },
+    "entities-after": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "bead:entities",
+        "--",
+        "8bf53fe6-8a25-401e-9a99-84343a026bb0",
+        "5b2b2188-b9f0-4b3b-9185-26a820d343c7"
+      ],
+      "pid": 6241,
+      "pgid": 6241,
+      "start": "2026-10-14T18:34:11.857742+00:00",
+      "end": "2026-10-14T18:34:14.613794+00:00",
+      "wallS": 2.755755207996117,
+      "exit": 0,
+      "stdoutSHA256": "2e4e456b659ce6a4e35cfcacc3973a0055a18017d0466417b445a149edf94810",
+      "settled": true
+    },
+    "preflight": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "8bf53fe6-8a25-401e-9a99-84343a026bb0,5b2b2188-b9f0-4b3b-9185-26a820d343c7",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 6784,
+      "pgid": 6784,
+      "start": "2026-10-14T18:34:26.329217+00:00",
+      "end": "2026-10-14T18:34:28.154665+00:00",
+      "wallS": 1.8253638329915702,
+      "exit": 0,
+      "stdoutSHA256": "be449569ff046faebb01715d8992854fa26d1fc4c9ecd013d86647fdecd49c09",
+      "settled": true
+    },
+    "review": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review"
+      ],
+      "pid": 75736,
+      "pgid": 75736,
+      "start": "2026-10-14T18:37:11.378169+00:00",
+      "end": "2026-10-14T18:38:12.780562+00:00",
+      "wallS": 61.402065790985944,
+      "exit": 0,
+      "stdoutSHA256": "07737584a7077bc84415ac810c2bd826f0995408bfc37065fdf987963e1b6e5d",
+      "settled": true
+    },
+    "knip": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "knip"
+      ],
+      "pid": 80641,
+      "pgid": 80641,
+      "start": "2026-10-14T18:38:26.681626+00:00",
+      "end": "2026-10-14T18:38:34.608406+00:00",
+      "wallS": 7.926658207987202,
+      "exit": 0,
+      "stdoutSHA256": "081989db8ee6e5b9741f7d30f1a3e6bed584721ce694df402ea01b561e2e29c4",
+      "settled": true
+    },
+    "weighted300": {
+      "argv": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "/opt/homebrew/bin/npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "8bf53fe6-8a25-401e-9a99-84343a026bb0,5b2b2188-b9f0-4b3b-9185-26a820d343c7"
+      ],
+      "pid": 8366,
+      "pgid": 8366,
+      "start": "2026-10-14T18:34:48.840805+00:00",
+      "end": "2026-10-14T18:41:18.316391+00:00",
+      "wallS": 389.474071249977,
+      "exit": 0,
+      "stdoutSHA256": "81f3677129702a58056b1ef062a1cc9b41d40aa08767070a187d58b24e65df50",
+      "settled": true
+    },
+    "sweep": {
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.684",
+        "--cards",
+        "8bf53fe6-8a25-401e-9a99-84343a026bb0,5b2b2188-b9f0-4b3b-9185-26a820d343c7",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "pid": 14011,
+      "pgid": 14011,
+      "start": "2026-10-14T18:51:46.932202+00:00",
+      "end": "2026-10-14T18:53:47.364263+00:00",
+      "wallS": 120.43158074998064,
+      "exit": 0,
+      "stdoutSHA256": "bd95176d1747b10b83a7ce8ede407b8e9e713405b1fbf04350ea813f9c44cd21",
+      "settled": true
+    },
+    "judged": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.684/exile-judged.mjs",
+        "--bead",
+        "hv-umm2.684",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 25696,
+      "pgid": 25696,
+      "start": "2026-10-14T18:54:46.709939+00:00",
+      "end": "2026-10-14T18:56:05.480058+00:00",
+      "wallS": 78.76978529099142,
+      "exit": 0,
+      "stdoutSHA256": "eb5c661e626e43484b17bd9941630b5085649254abb28562fe9532c9d5031a7f",
+      "settled": true
+    },
+    "schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 98671,
+      "pgid": 98671,
+      "start": "2026-10-14T18:58:57.250114+00:00",
+      "end": "2026-10-14T18:58:57.382666+00:00",
+      "wallS": 0.13247208300163038,
+      "exit": 0,
+      "stdoutSHA256": "84c5b50bda01be6e1dc0b104e1841de31f5f7c1f610eb9fad6fc546631f97413",
+      "settled": true
+    }
+  },
+  "firstFocusedFailure": {
+    "cause": "Six assertions omitted existing public dissolve removal attribution. Corrected assertions include the actual effect controller and synthetic victim cost; no runtime source repair.",
+    "receipt": "focused.receipt.json",
+    "correctedReceipt": "focused-fixed.receipt.json"
+  },
+  "fuzz": {
+    "at": "2026-10-14T18:42:57.790339+00:00",
+    "sources": {
+      "src/content/cards/exile-8bf53fe6.ts": "626c08bd0a0467c44547ac2b57e377a669c5318023c2e5a11bd474011b96eff7",
+      "src/content/cards/resonance-surveyor-5b2b2188.ts": "f5bc9af3832b2b359b34524cecbbe926fcdd02b9fe9adb3f4a4c85a0c180575c",
+      "src/content/specs/cards-ready-192.scenarios.ts": "7abc7966f1e8e6077a911e88aca4a6e74544da5549e8c76b956b73a4fb83e9ed"
+    },
+    "sourceUnchanged": true,
+    "group8366Members": [],
+    "counts": {
+      "games": 300,
+      "steps": 102557,
+      "prompts": 7662,
+      "interactiveReruns": 795,
+      "failures": 0,
+      "targets": [
+        {
+          "uuid": "8bf53fe6-8a25-401e-9a99-84343a026bb0",
+          "included": 612,
+          "exercised": 411
+        },
+        {
+          "uuid": "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
+          "included": 615,
+          "exercised": 419
+        }
+      ]
+    },
+    "timingScope": {
+      "commandWallS": 389.474071249977,
+      "cliBattleWallS": 386.5,
+      "cliCpuS": 407.7,
+      "slotWaitExact": "UNKNOWN; lockf and npm same observed start second; command-minus-CLI includes startup/import and any slot wait, not a pure wait measurement"
+    }
+  },
+  "preflight": {
+    "requestedCells": 40,
+    "pass": 18,
+    "skip": 22,
+    "pending": 0,
+    "fail": 0,
+    "variants": "all ten lab variants; both controllers; absent amplified text is ineligible",
+    "enemyMode": "scripted-lab-play-first-legal-prompts"
+  },
+  "reviewPolicy": {
+    "nativeCoreLabel": false,
+    "newEnginePrimitiveOrPromptKind": false,
+    "productionChangeLines": 15,
+    "privateScenarioIsTestCode": true,
+    "rootDisposition": "Native original192 and child684 are composition/non-core; normal source-size trigger does not apply. No fresh independent review required on this bounded final content scope.",
+    "temporarySolPolicy": "Expired2026-10-14T01:00Z; normal other-family routing governs any required review."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Review parallel typecheck/lint/import-cycles/test-related command group, 2026-10-14T18:37:14.622Z",
+        "value": 10.0185546875
+      }
+    }
+  },
+  "sourceHashes": {
+    "src/content/cards/exile-8bf53fe6.ts": "626c08bd0a0467c44547ac2b57e377a669c5318023c2e5a11bd474011b96eff7",
+    "src/content/cards/resonance-surveyor-5b2b2188.ts": "f5bc9af3832b2b359b34524cecbbe926fcdd02b9fe9adb3f4a4c85a0c180575c",
+    "src/content/specs/cards-ready-192.scenarios.ts": "7abc7966f1e8e6077a911e88aca4a6e74544da5549e8c76b956b73a4fb83e9ed"
+  },
+  "qa": {
+    "sweep": {
+      "invocation": "invocations/sweep-giCh1f",
+      "rawSummary": "artifacts/qa/hv-umm2.684/invocations/sweep-giCh1f/summary.json",
+      "requestedCells": 40,
+      "pass": 18,
+      "skip": 22,
+      "fail": 0,
+      "pending": 0,
+      "attempts": 40,
+      "sessions": 1,
+      "leaseYields": 0,
+      "browserLeaseWaitMs": 7
+    },
+    "judged": {
+      "invocation": "run-42yeMj",
+      "rawReport": "artifacts/qa/hv-umm2.684/invocations/run-42yeMj/exile-judged.result.json",
+      "cells": 4,
+      "pass": 4,
+      "fail": 0,
+      "caps": [],
+      "error": null,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 9659
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 22007
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 19006
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 8800
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 9739
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 6972
+        }
+      ],
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1959,
+        "scenario": 76184,
+        "total": 78206
+      },
+      "playerLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.684/invocations/run-42yeMj/exile-player-desktop.jsonl",
+          "rows": 51,
+          "gameId": "r3nzvb",
+          "sha256": "fc6599e21208f8afe17298d10fb77e4cd40901ee8274f67237a6e0bc956a3ccf"
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.684/invocations/run-42yeMj/exile-player-mobile.jsonl",
+          "rows": 51,
+          "gameId": "j6zonc",
+          "sha256": "3aefb22b8580dd6462b4d28dc3404ff68cb519e028265de61a61b4a92221cdff"
+        }
+      ],
+      "nativeFinalGameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.684/invocations/run-42yeMj/exile-judged-desktop.jsonl",
+          "gameId": "djg2fx",
+          "selectedBy": "url",
+          "rows": 37,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.684/invocations/run-42yeMj/exile-judged-mobile.jsonl",
+          "gameId": "qgipf3",
+          "selectedBy": "url",
+          "rows": 37,
+          "reason": null
+        }
+      ],
+      "identityAndPayment": {
+        "desktop": {
+          "playerSource": "i3",
+          "playerTarget": "i12",
+          "playerSnapshot": {
+            "energy": 0,
+            "source": "void",
+            "target": "void",
+            "turn": {
+              "round": 2,
+              "turnNumber": 4,
+              "active": "player",
+              "phase": "day",
+              "sideTurns": {
+                "player": 2,
+                "enemy": 2
+              },
+              "extra": false,
+              "lastNormal": "player",
+              "extraTurns": [],
+              "challengeLane": null,
+              "beginning": false
+            }
+          },
+          "playerLog": [
+            "You played Exile.",
+            "Lab Recruit was dissolved."
+          ],
+          "enemySource": "i13",
+          "enemyTarget": "i2",
+          "enemyEnergy": 0,
+          "enemyReveal": {
+            "source": "i13",
+            "text": "EventThis event costs 1 less for each character you control. Dissolve an enemy.ExileEnergy cost2"
+          },
+          "enemyLog": [
+            "Your opponent played Exile.",
+            "Lab Veteran was dissolved."
+          ]
+        },
+        "mobile": {
+          "playerSource": "i3",
+          "playerTarget": "i12",
+          "playerSnapshot": {
+            "energy": 0,
+            "source": "void",
+            "target": "void",
+            "turn": {
+              "round": 2,
+              "turnNumber": 4,
+              "active": "player",
+              "phase": "day",
+              "sideTurns": {
+                "player": 2,
+                "enemy": 2
+              },
+              "extra": false,
+              "lastNormal": "player",
+              "extraTurns": [],
+              "challengeLane": null,
+              "beginning": false
+            }
+          },
+          "playerLog": [
+            "You played Exile.",
+            "Lab Recruit was dissolved."
+          ],
+          "enemySource": "i13",
+          "enemyTarget": "i2",
+          "enemyEnergy": 0,
+          "enemyReveal": {
+            "source": "i13",
+            "text": "EventThis event costs 1 less for each character you control. Dissolve an enemy.ExileEnergy cost2"
+          },
+          "enemyLog": [
+            "Your opponent played Exile.",
+            "Lab Veteran was dissolved."
+          ]
+        }
+      },
+      "playerLogQualification": "Files materialize actual parsed rows returned by qa.gameLog before the opponent game opens. Raw result retains those rows; native final-step exports contain each opponent game.",
+      "captureInspection": {
+        "at": "2026-10-14T18:58:57.205788+00:00",
+        "files": {
+          "exile-target-desktop.png": {
+            "pixels": [
+              2880,
+              1800
+            ],
+            "sha256": "5d2a3f1b5a207f85df094c0cd1dd744f407c3ed5ef56b17955cc2f18bd9174a7"
+          },
+          "exile-resolved-desktop.png": {
+            "pixels": [
+              2880,
+              1800
+            ],
+            "sha256": "d7a74c9f08f9bcb5c53d3c52bf333a0573c8c119aa5edc4fd972a8a1c9a4eb90"
+          },
+          "exile-resolved-mobile.png": {
+            "pixels": [
+              780,
+              1688
+            ],
+            "sha256": "b14a4942c4966f0f0b6ee22dc28349a65c962b7621ed6b5e231f64e50e5d4ad0"
+          }
+        },
+        "judgment": "All three captures actually viewed. Target banner/Cancel and both legal enemy highlights fit; allies are unhighlighted. Desktop/mobile settled captures show paid energy 0/2, chosen enemy in void, one enemy and both allies in play, visible phase controls."
+      },
+      "opponentResponseQualification": "Declared scripted play used the normal live host and revealed its physical source. The empty human hand and lack of responses allowed automatic settling; both driver reports record zero human passes/answers. Rendered control geometry was checked at the resulting phase. This does not claim policy-selected AI play.",
+      "playerReplayLogQualification": "Initial player exports contain 51 actual returned rows per viewport. Raw results additionally retain 54 replayLogs rows after the settled reload, including three log-build observations; committed source play remains exactly once."
+    },
+    "d21": {
+      "sampledUUID": "8bf53fe6-8a25-401e-9a99-84343a026bb0",
+      "firstByte": 14,
+      "unsampledUUID": "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
+      "unsampledFirstByte": 67,
+      "newPresentationForms": false,
+      "sourceManifestSHA256": "193fc21e2abf4e82861687cc69e36d9b25fc96411f36a08482c302e0d58fff14",
+      "callerSHA256": "66ba6818aefa97a392f370ee533045ac1d9aef9ff828172c7aa1845c2e3d82ca"
+    },
+    "cleanup": {
+      "sweep": {
+        "at": "2026-10-14T18:54:46.663833+00:00",
+        "records": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+        },
+        "groupMembers": [],
+        "port5274LsofExit": 1,
+        "port5274Listeners": "",
+        "sourceUnchanged": true,
+        "sourceChecks": {
+          "scripts/qa/card-sweep.mjs": true,
+          "scripts/qa/scenarios/card-lab-play.mjs": true,
+          "scripts/qa/run-scenario.mjs": true,
+          "scripts/qa/prelude.mjs": true,
+          "scripts/qa/browser-qa-capacity.mjs": true,
+          "scripts/qa/browser-lease.mjs": true,
+          "scripts/qa/server-ownership.mjs": true,
+          "scripts/qa/browser-owner-record.mjs": true,
+          "scripts/qa/provider-identity.mjs": true,
+          "scripts/screenshot-runtime.mjs": true,
+          "node_modules/@modelcontextprotocol/sdk/dist/esm/client/index.js": true,
+          "node_modules/@modelcontextprotocol/sdk/dist/esm/client/streamableHttp.js": true,
+          "src/content/cards/exile-8bf53fe6.ts": true,
+          "src/content/cards/resonance-surveyor-5b2b2188.ts": true,
+          "src/content/specs/cards-ready-192.scenarios.ts": true,
+          "src/cumulus/screens/MobileBattleScreen.tsx": true,
+          "src/cumulus/screens/battle-overlays/BattlePromptHost.tsx": true,
+          "src/battle/components/EngineDebugPanel.tsx": true,
+          "src/engine/prompts/types.ts": true,
+          "src/cumulus/screens/battle-overlays/BattleEventLogOverlay.tsx": true,
+          "src/cumulus/components/overlay/GlassDialog.tsx": true,
+          "caller": true
+        }
+      },
+      "judged": {
+        "at": "2026-10-14T18:56:51.403821+00:00",
+        "sourceChecks": {
+          "scripts/qa/card-sweep.mjs": true,
+          "scripts/qa/scenarios/card-lab-play.mjs": true,
+          "scripts/qa/run-scenario.mjs": true,
+          "scripts/qa/prelude.mjs": true,
+          "scripts/qa/browser-qa-capacity.mjs": true,
+          "scripts/qa/browser-lease.mjs": true,
+          "scripts/qa/server-ownership.mjs": true,
+          "scripts/qa/browser-owner-record.mjs": true,
+          "scripts/qa/provider-identity.mjs": true,
+          "scripts/screenshot-runtime.mjs": true,
+          "node_modules/@modelcontextprotocol/sdk/dist/esm/client/index.js": true,
+          "node_modules/@modelcontextprotocol/sdk/dist/esm/client/streamableHttp.js": true,
+          "src/content/cards/exile-8bf53fe6.ts": true,
+          "src/content/cards/resonance-surveyor-5b2b2188.ts": true,
+          "src/content/specs/cards-ready-192.scenarios.ts": true,
+          "src/cumulus/screens/MobileBattleScreen.tsx": true,
+          "src/cumulus/screens/battle-overlays/BattlePromptHost.tsx": true,
+          "src/battle/components/EngineDebugPanel.tsx": true,
+          "src/engine/prompts/types.ts": true,
+          "src/cumulus/screens/battle-overlays/BattleEventLogOverlay.tsx": true,
+          "src/cumulus/components/overlay/GlassDialog.tsx": true,
+          "caller": true
+        },
+        "sourceUnchanged": true,
+        "records": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+        },
+        "groupMembers": [],
+        "port5274LsofExit": 1,
+        "port5274Listeners": "",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.684/invocations/run-42yeMj/exile-judged.result.json",
+        "caps": [],
+        "error": null,
+        "playerExports": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.684/invocations/run-42yeMj/exile-player-desktop.jsonl",
+            "rows": 51,
+            "gameId": "r3nzvb",
+            "sha256": "fc6599e21208f8afe17298d10fb77e4cd40901ee8274f67237a6e0bc956a3ccf"
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.684/invocations/run-42yeMj/exile-player-mobile.jsonl",
+            "rows": 51,
+            "gameId": "j6zonc",
+            "sha256": "3aefb22b8580dd6462b4d28dc3404ff68cb519e028265de61a61b4a92221cdff"
+          }
+        ]
+      }
+    },
+    "providerOwnership": {
+      "sweep": {
+        "at": "2026-10-14T18:52:08.401221+00:00",
+        "ownRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+            "token": "d0b7069d-578d-4111-9862-51b9aa2a24b3",
+            "pid": 14011,
+            "bead": "hv-umm2.684",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-ready-192-684",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T18:51:50.946Z",
+            "providerState": "active",
+            "mcpSessionId": "5cc7f95e-747d-4e71-a98e-57c13c429aef",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      },
+      "judged": {
+        "at": "2026-10-14T18:55:13.735343+00:00",
+        "ownRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+            "token": "8ac7d435-00fe-447c-b0af-659b39504d34",
+            "pid": 25696,
+            "bead": "hv-umm2.684",
+            "label": "exile-judged",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-ready-192-684",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T18:54:48.859Z",
+            "providerState": "active",
+            "mcpSessionId": "d717573a-5d4d-4b6e-bd32-a3c8816b67f4",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+            "token": "5f237ab1-ac20-44ae-ba65-f068eab49f19",
+            "runner": {
+              "pid": 25696,
+              "group": 25696,
+              "started": "Wed Oct 14 11:54:46 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.684/exile-judged.mjs --bead hv-umm2.684 --port 5174 --viewports desktop,mobile"
+            },
+            "server": {
+              "pid": 25733,
+              "group": 25733,
+              "started": "Wed Oct 14 11:54:46 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-ready-192-684/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 5f237ab1-ac20-44ae-ba65-f068eab49f19 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-ready-192-684",
+            "port": 5274
+          }
+        }
+      }
+    }
+  },
+  "qaSourceEpochs": {
+    "finalLaunchedCaller": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.684/exile-judged.mjs",
+      "sha256": "66ba6818aefa97a392f370ee533045ac1d9aef9ff828172c7aa1845c2e3d82ca"
+    },
+    "earlier0a5763": "Prepared and parent-read only; failed root hash guard before any native admission or provider launch. Replaced by final rendered-log caller66ba6818."
+  },
+  "qaEpisode": {
+    "start": "2026-10-14T18:36:40.808307+00:00",
+    "end": "2026-10-14T18:56:05.480058+00:00",
+    "scope": "Observed first caller creation through final native judged completion, including preparation, source/SDK/DOM audit, freeze coordination/admission and actual sweep/judged execution. Overlaps independent validation; not a productive-editing or isolated wait measurement."
+  },
+  "measurementCutoff": "2026-10-14T19:01:49.156127+00:00",
+  "timingQualification": "Friction implementWindow.end is the actual pre-Git measurement cutoff. The commit completion and full dispatch-inclusive endpoint are future UNKNOWN in the committed artifact; final-commit-receipt.json records the actual Git invocation/completion and cutoff tail externally. No productive-editing or isolated-wait duration is inferred."
+}

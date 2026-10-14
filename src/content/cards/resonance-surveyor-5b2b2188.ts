@@ -1,3 +1,6 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { discard, draw, sequence } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 34,
   art: { x: 0, y: -0.522, scale: 2.07 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({}, 2), sequence(draw(1), discard(1)))],
+  verifiedText: expectedVerifiedText("When you play your second card in a turn, draw a card, then discard a card."),
 });

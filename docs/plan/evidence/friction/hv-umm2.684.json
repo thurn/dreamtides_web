@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.684",
+  "phase": 5,
+  "implementMin": 45.22135138333333,
+  "implementWindow": {
+    "start": "2026-10-14T18:16:35.875044+00:00",
+    "end": "2026-10-14T19:01:49.156127+00:00"
+  },
+  "localValidationS": {
+    "focused-fixed": 9.104717040987452,
+    "review": 61.402065790985944,
+    "knip": 7.926658207987202,
+    "weighted300": 389.474071249977,
+    "preflight": 1.8253638329915702,
+    "sweep": 120.43158074998064,
+    "judged": 78.76978529099142
+  },
+  "hostLoad": 10.0185546875,
+  "testDelta": {
+    "files": 0,
+    "lines": 107,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 19.411195850000002,
+      "note": "Prepared one owned three-step caller with exact source/SDK/DOM manifests, coordinated its freeze/admission, then completed native sweep and desktop/mobile judgments. No browser/provider failure; elapsed episode includes coordination and runtime and overlaps independent checks."
+    }
+  ]
+}
