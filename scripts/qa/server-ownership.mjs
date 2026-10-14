@@ -16,9 +16,16 @@ function parseIdentity(line) {
 
 /** @param {number} group */
 function groupMembers(group) {
-  return execFileSync("ps", ["-A", "-o", "pid=,pgid=,lstart=,stat=,command="],
-    { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).split("\n")
-    .flatMap((line) => { const value = parseIdentity(line); return value?.group === group ? [value] : []; });
+  try {
+    return execFileSync("ps", ["-g", String(group), "-o", "pid=,pgid=,lstart=,stat=,command="],
+      { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).split("\n")
+      .flatMap((line) => { const value = parseIdentity(line); return value?.group === group ? [value] : []; });
+  } catch (error) {
+    if (typeof error === "object" && error !== null && "status" in error && error.status === 1 &&
+      "stdout" in error && typeof error.stdout === "string" && error.stdout.trim() === "" &&
+      "stderr" in error && typeof error.stderr === "string" && error.stderr.trim() === "") return [];
+    throw error;
+  }
 }
 
 /** @param {number} pid */

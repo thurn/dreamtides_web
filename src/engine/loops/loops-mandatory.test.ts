@@ -28,6 +28,8 @@ import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards"
 import { eventRedactionViolations, promptRedactionViolations, redactionViolations } from "../testing/redaction";
 import type { EngineEvent } from "../events";
 
+const COPY_LOOP_CONFIG = { mandatoryLoopCheckFrom: 8, mandatoryLoopWindow: 16, resolutionCap: 256 } as const;
+
 function copyChain(side: Side, hand: boolean, options: {
   readonly body?: (effect: Effect) => Effect;
   readonly starter?: (effect: Effect) => Effect;
@@ -63,7 +65,8 @@ function copyChain(side: Side, hand: boolean, options: {
   }
   const card = setup.ids[side].hand[0];
   if (card === undefined) throw new Error("missing card");
-  return { ...setup, local, side, action: { kind: "play", card, from: "hand" } as const };
+  const state: BattleState = { ...setup.state, config: { ...setup.state.config, ...COPY_LOOP_CONFIG } };
+  return { ...setup, state, local, side, action: { kind: "play", card, from: "hand" } as const };
 }
 
 /** A deterministic strategy, with a watchdog which fails rather than ending a game. */
@@ -308,7 +311,7 @@ describe("closed mandatory copy continuations", () => {
   });
 
   it("preserves optional, stopping-mode, target, once-per-turn and count-bounded continuations", () => {
-    const limit = board({ player: { deck }, enemy: { deck } }).state.config.mandatoryLoopCheckFrom + 5;
+    const limit = COPY_LOOP_CONFIG.mandatoryLoopCheckFrom + 5;
     const handBound = { cond: "cardsIn", player: "you", zone: "hand", atMost: limit } as const;
     const cases: (NonNullable<Parameters<typeof copyChain>[2]> & { readonly choose?: CopyDecision })[] = [
       { body: (effect: Effect) => p.optional(effect), choose: (prompt: Prompt, state: BattleState) => prompt.kind === "confirm" ? state.sides.player.hand.length <= limit : undefined },

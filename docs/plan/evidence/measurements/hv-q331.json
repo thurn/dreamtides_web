@@ -1,0 +1,904 @@
+{
+  "bead": "hv-q331",
+  "phase": 5,
+  "base": "19a77931b5bef2f5d50e2f0338de55586805ca68",
+  "dispatch": {
+    "timestamp": "2026-10-14T10:27:13.302Z",
+    "callId": "call_10d69d287c0b482e9215377dd27ce8c2",
+    "agent": "/root/d19_suite_cost_q331"
+  },
+  "boundary": {
+    "precommitBoundaryEnd": "2026-10-14T11:26:56.760270+00:00",
+    "precommitInclusiveMinutes": 59.7243045,
+    "actualCommitCompletion": "Parent final freeze audit and automatic Git completion are externally recorded in scratch/native delivery notes; the precommit boundary is followed by the separately measured final-check/commit delta. Git dates use their automatic values.",
+    "cpuTime": "UNKNOWN",
+    "modelSamplingTime": "UNKNOWN",
+    "productiveEditingTime": "UNKNOWN",
+    "isolatedQueueAttribution": "UNKNOWN"
+  },
+  "result": {
+    "D19": "Met in the final required normal full review at this exact source and observed low-load range.",
+    "fullTestPhaseS": 59.6,
+    "vitestWallS": 59.13,
+    "testPhaseUpperBoundS": 59.643,
+    "boundBasis": "Actual test-step start 2026-10-14T11:16:25.338Z to the later bundle-step start 2026-10-14T11:17:24.981Z. The test child had finished before bundle began.",
+    "configuredFiles": 380,
+    "tests": 7979,
+    "workers": 2,
+    "observedMarginBelow60S": 0.357,
+    "futureAcceptance": "The phase gate must measure its current integrated source; this observation is not a permanent or universal runtime guarantee."
+  },
+  "provenance": {
+    "initialParentManifest": {
+      "path": "/tmp/root-q331/initial-source-manifest.json",
+      "sha256": "b2dce8b486a404d17d636ec96cd9117bbce0179db637743e401a0ab217d82829",
+      "paths": 4819
+    },
+    "guardedManifestPaths": 4822,
+    "manifestScope": "Every tracked/untracked nonignored path plus actual ignored src/scripts file bytes; 4819 parent blobs were admitted before baseline. Three additional ignored materializations and directory MISSING markers are retained consistently.",
+    "finalCodeManifestSHA256": "1996fd7330b59b2f5927aa345c0c7d2e0b7db92395adac21ce2a5ee12d38da14",
+    "finalCodeDiffSHA256": "406d80b758fc00a1360ed0876c0704e80f1c925ecb142467f94bf711423cec2d",
+    "codeSHA256": {
+      "scripts/friction-triggers.test.mjs": "a2f6007c409aec793aa100b52566356abadf507bdb53d45865632e26ebbef751",
+      "scripts/qa/qa-session-mocks.mjs": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+      "scripts/qa/run-scenario-slots.test.mjs": "4d1ae2732a8e2add99676e5f14f331fac6e3573bd29ab802939d7471cb81cbe9",
+      "scripts/qa/server-ownership.mjs": "c108667d1b2f57a6e6d17e661e48ba66b0cee5a7f07aa3dc52f3f708933ab0cb",
+      "scripts/qa/server-ownership.test.mjs": "3c3c03c4c861256856e92113b316077f1480738dd4f65d9a1302b6fab46657eb",
+      "scripts/setup-assets.test.ts": "05aaf744ea0c2c2a70d3d6e834a92b332e7e04bed622306743902c3b50dbc649",
+      "src/engine/core.test.ts": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+      "src/engine/fold/fold.test.ts": "da39eb67cf6d6b27ac5350e40f804bbf1704d7d17b035e2a04838d4acea18d93",
+      "src/engine/loops/loops-mandatory.test.ts": "c1381f3875d50cc5d01bfe21b183b94166b4c1f9505227f166a8f4453a787617",
+      "src/screens/cumulus_adapters/__test-helpers__/presentation-checks.ts": "4ee9961acc7263accb31cd9ea8073657d9ac975443e55131b60d4961868e90b3",
+      "src/screens/cumulus_adapters/engine-battle-presentation.test.ts": "d7ec4156675680bf3262028dfe0fa73ad58ba2cf54ceb3a6cb5a66544f554e9d"
+    },
+    "collectorSHA256": "3805f76b2545059611423f053e39779787e89db243e398b871c6fb88fa3dcd27",
+    "initialProposalSHA256": "b7271f9bb44735d73f54d456ca8eb0f71823e193c5007b0e3bb4c034e15a3239",
+    "diagnosticReporterSHA256": "4880ba4f1038d1b22c6c7a2c87d03072f61169465e9f00ed43e24c612b8d516c",
+    "baselineEntrySHA256": "d22112736796a65c14732e1db68df267bc0bc59099e544476de1a35566d8ada2",
+    "syscallEntrySHA256": "cd7b74b1825842e9ac63fdcdb7d1c12d19efa80411b22f76f5d54bbdc5838587",
+    "syscallPreloadSHA256": "da52a5a69bc83d87206c15790524a87bdd03ff1e5eae88c7bb9f5baebc42510a",
+    "sourceProposalSHA256": "b1f1954f22a2467c466d43cb16eaa62adf90f553faed704c78880d124d78c6f1",
+    "frictionCutProposalSHA256": "f6053686e7a83a2f299ea8b47684a5bef86533126fcd4d38c8db36cabf20a223",
+    "full2EntrySHA256": "efc2f52cd958f1c19b46dc929107bb41afe6137117069777be8baace7495439d",
+    "receiptDirectory": "/tmp/root-q331/helper"
+  },
+  "method": {
+    "checkerClasses": {
+      "baseline1": "Full-suite instrumented profile via actual test-full wrapper; no static/bundle checks.",
+      "syscall1": "Exactly three measured owning files with transparent native-call instrumentation; not a full D19 result.",
+      "after1": "Full-suite same-flag instrumented profile at the stable first ten-body source.",
+      "full1": "Required normal uninstrumented review:full at the first ten-body source; all checks passed but D19 missed.",
+      "friction-focused1": "The complete existing 109-case friction schema/CLI/window module.",
+      "review1": "Required quick review at final eleven-body source: types, node types, lint, import cycles, 15 related files/325 tests.",
+      "knip1": "Explicit required npm run knip at final eleven-body source.",
+      "full2": "Required normal uninstrumented review:full after the admitted friction test change; all checks and D19 passed."
+    },
+    "environment": "Node v24.16.0, Vitest4.1.0, JOURNEY_TEST_WORKERS=2, threads pool; the four agent-detection vars are unset consistently. The top-level actual asset environment/default home is preserved; review internally isolates prepare and performs its normal finally restoration. No shared cache deletion or mutation is part of the change.",
+    "heavyLock": "Every profiling/validation child uses lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock. This lock does not prove Tollgate or the host is otherwise idle. Parent observed the preceding own release green/lag0 before baseline.",
+    "lowLoad": "Retained full/profile entry waits only above the old accepted 7.5 one-minute-load boundary, samples every5s, and caps its low-load wait at10min. All actual low-load waits were effectively zero; continuous samples and actual test-start load are retained. This is a comparison criterion, not a timing CI assertion.",
+    "wallUnits": "localValidationS contains the actual owned command elapsed wall including wrapper work/possible lock acquisition. D19 uses the real full test phase, separately from Vitest wall, prepare/static/bundle/restoration and whole wrapper. Cumulative per-file phase totals are not suite wall or CPU.",
+    "comparability": "The measured sequence is not a controlled causal A/B. Cache inventory, host load, test order and source/workload differ; instrument sorting/reporting/preload overhead is unmeasured. No overhead is subtracted. Old full observations are source-qualified context, not a regression attribution.",
+    "importDiagnosticCaveat": "Per-file collect/setup/environment/test durations are attributable to their files. The top20 importDurations maps retain earlier worker history under shared runners and must not be summed or attributed exclusively to each current file.",
+    "syscallCaveat": "Native-call wrappers preserve arguments/results/the same thrown error. Logging failure invalidates the profile and cannot replace native outcomes. Operation times are nested inclusive; exec includes child work/waits, and child lifetime or first IPC is not pure startup or CPU."
+  },
+  "fullObservations": [
+    {
+      "label": "baseline1",
+      "kind": "instrumented profile",
+      "testPhaseS": 83.3,
+      "vitestWallS": 82.17,
+      "files": 380,
+      "tests": 7976,
+      "D19": "miss",
+      "load": {
+        "samples": 19,
+        "min1m": 3.5693359375,
+        "max1m": 4.25634765625,
+        "first": {
+          "elapsedSeconds": 0.002295791986398399,
+          "load": [
+            3.5693359375,
+            4.62890625,
+            4.9755859375
+          ],
+          "utc": "2026-10-14T10:33:05.053540+00:00"
+        },
+        "last": {
+          "elapsedSeconds": 88.50160295900423,
+          "load": [
+            4.12939453125,
+            4.57763671875,
+            4.9228515625
+          ],
+          "utc": "2026-10-14T10:34:33.553026+00:00"
+        }
+      }
+    },
+    {
+      "label": "after1",
+      "kind": "same-flag instrumented profile",
+      "testPhaseS": 62.3,
+      "vitestWallS": 61.75,
+      "files": 380,
+      "tests": 7979,
+      "D19": "miss",
+      "load": {
+        "count": 14,
+        "min1m": 3.462890625,
+        "max1m": 3.9873046875,
+        "mean1m": 3.71435546875,
+        "first": {
+          "elapsedSeconds": 0.001636375003727153,
+          "load": [
+            3.61083984375,
+            3.2412109375,
+            3.1552734375
+          ],
+          "utc": "2026-10-14T11:05:45.394755+00:00"
+        },
+        "last": {
+          "elapsedSeconds": 64.4534384169965,
+          "load": [
+            3.921875,
+            3.39013671875,
+            3.2138671875
+          ],
+          "utc": "2026-10-14T11:06:49.864174+00:00"
+        }
+      }
+    },
+    {
+      "label": "full1",
+      "kind": "required normal full review",
+      "testPhaseS": 61.8,
+      "vitestWallS": 61.21,
+      "files": 380,
+      "tests": 7979,
+      "D19": "miss",
+      "load": {
+        "samples": 20,
+        "min1m": 2.56640625,
+        "max1m": 4.03955078125,
+        "mean1m": 3.509326171875,
+        "first": {
+          "elapsedSeconds": 0.002215416985563934,
+          "load": [
+            2.56640625,
+            3.056640625,
+            3.10009765625
+          ],
+          "utc": "2026-10-14T11:08:18.743919+00:00"
+        },
+        "last": {
+          "elapsedSeconds": 90.93206545800786,
+          "load": [
+            3.4140625,
+            3.3017578125,
+            3.193359375
+          ],
+          "utc": "2026-10-14T11:09:49.674655+00:00"
+        }
+      }
+    },
+    {
+      "label": "full2",
+      "kind": "required normal full review at final code",
+      "testPhaseS": 59.6,
+      "vitestWallS": 59.13,
+      "files": 380,
+      "tests": 7979,
+      "D19": "met",
+      "load": {
+        "samples": 19,
+        "min1m": 2.30419921875,
+        "max1m": 5.177734375,
+        "mean1m": 4.226845189144737,
+        "testStartUtc": "2026-10-14T11:16:25.338Z",
+        "testStartLoad1m": 5.021484375,
+        "testThenBundleUpperBoundS": 59.643,
+        "first": {
+          "elapsedSeconds": 0.0015873749798629433,
+          "load": [
+            2.30419921875,
+            2.85498046875,
+            3.0107421875
+          ],
+          "utc": "2026-10-14T11:16:02.346478+00:00"
+        },
+        "last": {
+          "elapsedSeconds": 87.99462470799335,
+          "load": [
+            4.56201171875,
+            3.583984375,
+            3.279296875
+          ],
+          "utc": "2026-10-14T11:17:30.340367+00:00"
+        }
+      }
+    }
+  ],
+  "diagnosis": {
+    "syscallProfile": {
+      "owningFiles": 3,
+      "testCases": 59,
+      "traceFiles": 149,
+      "traceRows": 25885,
+      "traceFailures": 0,
+      "nativeFsyncCalls": 295,
+      "nativeFsyncInclusiveMs": 1125.2008329999992,
+      "nativeGitCalls": 269,
+      "nativeGitInclusiveMs": 1697.4067940000011,
+      "nativePsCalls": 795,
+      "nativePsInclusiveMs": 11323.243911000007,
+      "fullHostPsCalls": 230,
+      "fullHostPsInclusiveMs": 9979.020797000006,
+      "assetBarrierSpawnObservedMs": [
+        571,
+        577,
+        586,
+        575,
+        575,
+        603,
+        578,
+        582,
+        580
+      ],
+      "allObservedReaddirInclusiveMs": 7690.406445999998,
+      "tsxCacheQualification": "The total readdir timing includes wrapper/other paths; the dominant entries are repeated reads of the existing global tsx-501 directory, about0.38s each and1.583s first. That shared cache remains untouched.",
+      "nativeActorProbe": "Native import of the actual existing setup-assets.ts with typeof linkArt check passed. It called neither linkArt nor contentArtCatalog."
+    },
+    "finalBehavior": "Native kernel group selection retains complete group members, including unknown members and descendants after leader loss, with the same identity/record/signal checks. Only a status1 error with both captured streams present strings and whitespaceempty is an empty group; all other errors retain their exact identity and evidence. Test actors use the configured Node 24 native erasable-TS path.",
+    "testContracts": "Fixed two-player discard proves inline/fold event sequence, fingerprints, JSON reload and final hash. Existing lab sequences prove actual zone/private/score/phase observation for both viewers and the actual long-loop observation cap. Copy-loop fixtures use explicit 8/16/256 values while all21 relative-side/hand/stack/mode/target/origin/FIFO/privacy/reload/negative contracts pass. Targeted mixed-entity fuzz/replay and the release fuzzer retain their actual consumers.",
+    "frictionCLI": {
+      "cases": 109,
+      "malformedReaderVectors": 48,
+      "nonnullHistoricalVectors": 5,
+      "validWindowVectors": 4,
+      "nominalSuccessfulPathCallsBaseline": 91,
+      "nominalSuccessfulPathCallsFinal": 14,
+      "basis": "Static successful-case expansion, not another syscall-profile run. All parser vectors and exact field errors remain; actual CLI cases cover distinct0/1/2/default/validate/filename/field/UNKNOWN/JSON/ledger/flag/exemption outcomes.",
+      "finalFocusedCumulativeTestsS": 0.759,
+      "after1CumulativeTestsS": 4.387400916999999
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "jsdomFiles": 0,
+    "lines": 40,
+    "entrypointNetLines": 84,
+    "supportNetLines": -44,
+    "caseCountBaseline": 7976,
+    "caseCountFinal": 7979,
+    "caseDelta": 3,
+    "caseBasis": "Four public query-error discriminants and one breadth-only core replay case account for the net3; fixed fold/presentation witnesses retain their cases. File counts are observations, not ceilings.",
+    "changedFileException": {
+      "path": "scripts/friction-triggers.test.mjs",
+      "baselineLines": 510,
+      "finalLines": 509,
+      "reason": "One cohesive parser/CLI/window suite sharing synthetic evidence fixtures; it shrinks and stays near the ~500 guideline. No count-driven split or minifying."
+    },
+    "otherChangedTestMaxLines": 495,
+    "contractCensusCorrection": "The earlier203 label counts185 primitive-directory plain .contracts.ts plus18 support.ts. Whole-repository plain .contracts.ts count191, max499lines. Counts indicate no coverage or performance change."
+  },
+  "failedAndQualifiedEpochs": [
+    {
+      "label": "typecheck1",
+      "actual": "TS2322 from inferred literal fixture-config return state. Explicit BattleState return-state annotation keeps8/16/256 unchanged; typecheck2 passed.",
+      "classification": "own implementation repair, not pre-existing or counterfactual"
+    },
+    {
+      "label": "source-stability-v1",
+      "actual": "git diff --check exit2 found one extra blank EOF line after the admitted core test deletion; one blank line corrected, final check0.",
+      "classification": "own whitespace repair, not runtime failure"
+    },
+    {
+      "label": "source-read-slips",
+      "actual": "Helper first looked for nonexistent docs/plan/metrics.md and an events/foresaw.ts path; corrected to D19 decisions and events/kinds. A helper narrative counted53 rather than48 malformed vectors and was corrected before the cut. Parent dependency lookup first used a primary node_modules path, then the actual owning worktree; parent baseline audit first treated a directory MISSING marker as a file and corrected its reader.",
+      "duration": "Not separately timed; retained within the inclusive helper window. No source/provider/native mutation or product failure followed these reads."
+    },
+    {
+      "label": "preexecution-proposal-refinements",
+      "actual": "Public environment lookup uses actual source pragma; top-level asset environment stays intact; exact env whitelist avoids unrelated token variables; collector guards initial blobs/self hashes. These were refined before any run, not failed product validations."
+    },
+    {
+      "label": "evidence-builder-syntax",
+      "actual": "First scratch-builder attempt failed Python parsing with an unmatched dictionary brace before execution; no repo evidence or source was written. Scratch syntax repaired before evidence generation.",
+      "duration": "Not separately timed; included in the same inclusive helper window."
+    }
+  ],
+  "historicalD19Witnesses": [
+    {
+      "bead": "hv-umm2.236",
+      "stdout": "/tmp/root-236/helper/full-v4.stdout",
+      "stdoutSHA256": "b2abf9d91544e1c47a40b140a20ad0641b558f5a5fe3844a9ab67ab4c8542501",
+      "receipt": "/tmp/root-236/helper/full-v4.receipt.json",
+      "testStart": "2026-10-14T06:37:06.037Z",
+      "testStartLoad": 4.48193359375,
+      "testStepS": 83.0,
+      "configuredFiles": 380,
+      "workers": 2,
+      "meaning": "Actualsource-qualified passing full testphase, notwrapperwall or causalA/B; no continuousloadtrace claimed"
+    },
+    {
+      "bead": "hv-n1i7",
+      "stdout": "/tmp/root-n1i7/helper/full-v1.stdout",
+      "stdoutSHA256": "6ac00a3545fcbddc0b3b8dfd582b92d47dd2b261b60f9057d7b52d2c4909b743",
+      "receipt": "/tmp/root-n1i7/helper/full-v1.receipt.json",
+      "testStart": "2026-10-14T07:32:35.886Z",
+      "testStartLoad": 4.70849609375,
+      "testStepS": 83.4,
+      "configuredFiles": 380,
+      "workers": 2,
+      "meaning": "Actualsource-qualified passing full testphase, notwrapperwall or causalA/B; no continuousloadtrace claimed"
+    },
+    {
+      "bead": "hv-6yev",
+      "stdout": "/tmp/root-hand-empty-6yev/helper/full-final.stdout",
+      "stdoutSHA256": "b800cf76ea51f23f818895c69f1b1a0c25cbd69e0b6a2eac7d4321de6e1e0d01",
+      "receipt": "/tmp/root-hand-empty-6yev/helper/full-final.receipt.json",
+      "testStart": "2026-10-14T09:30:43.130Z",
+      "testStartLoad": 5.65673828125,
+      "testStepS": 80.1,
+      "configuredFiles": 380,
+      "workers": 2,
+      "meaning": "Actualsource-qualified passing full testphase, notwrapperwall or causalA/B; no continuousloadtrace claimed"
+    }
+  ],
+  "review": {
+    "required": "Normal fresh read-only cross-family Claude Opus5.5 review of exact committed source after parent final freeze.",
+    "status": "PENDING; parent owns reviewer launch/disposition and delivery. The temporary Sol routing expired2026-10-14T01:00Z. No review completion is claimed here."
+  },
+  "qa": {
+    "browserRequired": false,
+    "basis": "No player UI, game rules or rendering behavior changes. Native safety/process/lease/provider contracts and final full suite validate the tooling selector and real actors. No browser judgment or deployment is inferred.",
+    "fuzz": "No separate local weighted sweep/fuzz run is claimed. Existing full-suite contract/replay coverage is executed; native release and phase-gate acceptance remain their own obligations."
+  },
+  "resources": {
+    "persistentOwnedProcesses": [],
+    "ports": [],
+    "browserContexts": [],
+    "providers": [],
+    "heavyChildren": "Every receipt records actual reaping and an empty owned PG; parent independently verifies absence. No broad process cleanup or foreign worktree use."
+  },
+  "receipts": [
+    {
+      "label": "baseline1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-q331/helper/baseline-entry.py"
+      ],
+      "startUtc": "2026-10-14T10:33:04.436944+00:00",
+      "endUtc": "2026-10-14T10:34:33.553361+00:00",
+      "elapsedSeconds": 88.5019313749799,
+      "returncode": 0,
+      "pid": 62035,
+      "pgid": 62035,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "33efbdc7174b0da948f02eaadb66e1fe3f116ef7d0734336f9739dd2cd6fb307",
+      "sourceAfterSha256": "33efbdc7174b0da948f02eaadb66e1fe3f116ef7d0734336f9739dd2cd6fb307",
+      "collectorUnchanged": true,
+      "stdoutSha256": "8d5034addacfe6053ac07824176475a701e59c9f79a9561b2614c42bc25ba648",
+      "stderrSha256": "c52cfdf409679f814a5b137546a3b6faea1b5ffb6f06fd9a6ee441ef6c5c16fa",
+      "loadTraceSha256": "23ec2fb0f6e9e905488a2e631e8a4c0131c19f84f70bb98547b8082a8a9bc862",
+      "receiptSHA256": "1355e031e9e9c848aba829e8809706477fa034f6f626eda45e7c531d03b8ab80",
+      "stdout": "/tmp/root-q331/helper/baseline1.stdout",
+      "stderr": "/tmp/root-q331/helper/baseline1.stderr",
+      "loads": "/tmp/root-q331/helper/baseline1.loads.json"
+    },
+    {
+      "label": "syscall1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-q331/helper/syscall-entry.py"
+      ],
+      "startUtc": "2026-10-14T10:41:54.040410+00:00",
+      "endUtc": "2026-10-14T10:42:20.929393+00:00",
+      "elapsedSeconds": 26.596411542006535,
+      "returncode": 0,
+      "pid": 97479,
+      "pgid": 97479,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "33efbdc7174b0da948f02eaadb66e1fe3f116ef7d0734336f9739dd2cd6fb307",
+      "sourceAfterSha256": "33efbdc7174b0da948f02eaadb66e1fe3f116ef7d0734336f9739dd2cd6fb307",
+      "collectorUnchanged": true,
+      "stdoutSha256": "9a4766617139eaf7b2f3189d8761bc9af8c844f7142eb077a3721a506a8a0278",
+      "stderrSha256": "880b6644ec6723f73343661d1633b7f85a2a79bf898240fa6f0d81f99f4cf127",
+      "loadTraceSha256": "474a23358b17e1dd95b0ebb796afb47d16466c75c76f8256d5b81dd62df6a256",
+      "receiptSHA256": "5377e8e201426651e5e89df6706017558f7e4769f5ad6affde41eb72ef2450a3",
+      "stdout": "/tmp/root-q331/helper/syscall1.stdout",
+      "stderr": "/tmp/root-q331/helper/syscall1.stderr",
+      "loads": "/tmp/root-q331/helper/syscall1.loads.json"
+    },
+    {
+      "label": "native-import1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node",
+        "--input-type=module",
+        "-e",
+        "const m = await import(\"file:///Users/dthurn/dreamtides_web/.worktrees/d19-suite-cost-q331/scripts/setup-assets.ts\"); if (typeof m.linkArt !== \"function\") throw new Error(\"missing linker export\");"
+      ],
+      "startUtc": "2026-10-14T10:59:05.647983+00:00",
+      "endUtc": "2026-10-14T10:59:06.242906+00:00",
+      "elapsedSeconds": 0.09125220798887312,
+      "returncode": 0,
+      "pid": 28960,
+      "pgid": 28960,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "33efbdc7174b0da948f02eaadb66e1fe3f116ef7d0734336f9739dd2cd6fb307",
+      "sourceAfterSha256": "33efbdc7174b0da948f02eaadb66e1fe3f116ef7d0734336f9739dd2cd6fb307",
+      "collectorUnchanged": true,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "loadTraceSha256": "ccd61313de5681d60ecec6fd37e4bfae901216bc2362879c616c3a82b1ba28fd",
+      "receiptSHA256": "09c07a5ff154af08bceebce8cdeafe55823ad602bb976a62c7aada2915808183",
+      "stdout": "/tmp/root-q331/helper/native-import1.stdout",
+      "stderr": "/tmp/root-q331/helper/native-import1.stderr",
+      "loads": "/tmp/root-q331/helper/native-import1.loads.json"
+    },
+    {
+      "label": "focused1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "test:full",
+        "--",
+        "scripts/setup-assets.test.ts",
+        "src/engine/core.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/provider-ownership.test.mjs",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/browser-lease.test.mjs"
+      ],
+      "startUtc": "2026-10-14T11:01:49.527703+00:00",
+      "endUtc": "2026-10-14T11:02:12.803750+00:00",
+      "elapsedSeconds": 23.022029500018107,
+      "returncode": 0,
+      "pid": 31052,
+      "pgid": 31052,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "dd942465081c0082b8da7b054175460338ad5914fa2600c657515fe2fbbc4efe",
+      "sourceAfterSha256": "dd942465081c0082b8da7b054175460338ad5914fa2600c657515fe2fbbc4efe",
+      "collectorUnchanged": true,
+      "stdoutSha256": "2e47f001ee459da68302c52632a8cee8c0f97d65702014494c58e1ffd9370a01",
+      "stderrSha256": "b2291b9c13069c73409bb1561f1ac84b088a15d34ea0130376e216c33138590d",
+      "loadTraceSha256": "4bf666c36f6ee60ecfaaab7719ba5170ab2e5debff489834dc56e980dd817fe5",
+      "receiptSHA256": "f7dae953ec98f70dee52c250d01285c9846164bca2b7c25bc4ba50457872510b",
+      "stdout": "/tmp/root-q331/helper/focused1.stdout",
+      "stderr": "/tmp/root-q331/helper/focused1.stderr",
+      "loads": "/tmp/root-q331/helper/focused1.loads.json"
+    },
+    {
+      "label": "focused2",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "test:full",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+      ],
+      "startUtc": "2026-10-14T11:02:50.397576+00:00",
+      "endUtc": "2026-10-14T11:02:57.130886+00:00",
+      "elapsedSeconds": 6.132212290976895,
+      "returncode": 0,
+      "pid": 62514,
+      "pgid": 62514,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "bd52126af68a8f6562bd9958d76f21e36df908f49b17b1074366e513057af891",
+      "sourceAfterSha256": "bd52126af68a8f6562bd9958d76f21e36df908f49b17b1074366e513057af891",
+      "collectorUnchanged": true,
+      "stdoutSha256": "e0d583622415faa84fb9d7a6b4861953cdb64f1826a688794682ead1d5363318",
+      "stderrSha256": "7968d06d35e07dec7b240d2b06b521c0eab10d6531fdfb14efd4f29a208767b3",
+      "loadTraceSha256": "bc97b3a7ad94fe1ca62b750456dddf45cfe2a6a2ff36a444b9dc73614bb11083",
+      "receiptSHA256": "33b9f33f79c1e8c5a2b4b4b0572283c83968cb207a374519a656d0008a997abd",
+      "stdout": "/tmp/root-q331/helper/focused2.stdout",
+      "stderr": "/tmp/root-q331/helper/focused2.stderr",
+      "loads": "/tmp/root-q331/helper/focused2.loads.json"
+    },
+    {
+      "label": "typecheck1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startUtc": "2026-10-14T11:03:21.866340+00:00",
+      "endUtc": "2026-10-14T11:03:29.640794+00:00",
+      "elapsedSeconds": 7.1737243749958,
+      "returncode": 2,
+      "pid": 62970,
+      "pgid": 62970,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "bd52126af68a8f6562bd9958d76f21e36df908f49b17b1074366e513057af891",
+      "sourceAfterSha256": "bd52126af68a8f6562bd9958d76f21e36df908f49b17b1074366e513057af891",
+      "collectorUnchanged": true,
+      "stdoutSha256": "7a0c7b3a6d6e85f4c0bfeb3d2b7023c24b58a4a81c1b71aa47bd9c98ba188b55",
+      "stderrSha256": "7968d06d35e07dec7b240d2b06b521c0eab10d6531fdfb14efd4f29a208767b3",
+      "loadTraceSha256": "f31d3658e99f126323c356b0e0b293d9dd85dbe91eb527b08303c937798b6540",
+      "receiptSHA256": "ceb36f87f38b888a90a769fa16238e0676ee84d95ab52f30a87df95ac006764e",
+      "stdout": "/tmp/root-q331/helper/typecheck1.stdout",
+      "stderr": "/tmp/root-q331/helper/typecheck1.stderr",
+      "loads": "/tmp/root-q331/helper/typecheck1.loads.json"
+    },
+    {
+      "label": "typecheck2",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startUtc": "2026-10-14T11:03:56.843509+00:00",
+      "endUtc": "2026-10-14T11:04:00.734855+00:00",
+      "elapsedSeconds": 3.646107041015057,
+      "returncode": 0,
+      "pid": 63546,
+      "pgid": 63546,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "92c246e90dd64f6eb985ea6b50edfd32a07a8a59f8d70b74217a64d134b3eba3",
+      "sourceAfterSha256": "92c246e90dd64f6eb985ea6b50edfd32a07a8a59f8d70b74217a64d134b3eba3",
+      "collectorUnchanged": true,
+      "stdoutSha256": "3fe8d9e67528f24785996772f0035f5f7907801f026aed83f4dafc0b65d91cc9",
+      "stderrSha256": "7968d06d35e07dec7b240d2b06b521c0eab10d6531fdfb14efd4f29a208767b3",
+      "loadTraceSha256": "8549bbd9a24bc787b8ac64fa8eac9b07aa5095185b571e58e89f32ad8585414d",
+      "receiptSHA256": "9953ab1cd9e51f562e9ee3a00f4c9b2227c6250769acc102469fe77922ec9557",
+      "stdout": "/tmp/root-q331/helper/typecheck2.stdout",
+      "stderr": "/tmp/root-q331/helper/typecheck2.stderr",
+      "loads": "/tmp/root-q331/helper/typecheck2.loads.json"
+    },
+    {
+      "label": "lint1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "lint",
+        "--",
+        "scripts/setup-assets.test.ts",
+        "src/engine/core.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts",
+        "src/screens/cumulus_adapters/__test-helpers__/presentation-checks.ts",
+        "scripts/qa/server-ownership.mjs",
+        "scripts/qa/qa-session-mocks.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/qa/server-ownership.test.mjs"
+      ],
+      "startUtc": "2026-10-14T11:04:14.243544+00:00",
+      "endUtc": "2026-10-14T11:04:20.702102+00:00",
+      "elapsedSeconds": 6.195130667008925,
+      "returncode": 0,
+      "pid": 63823,
+      "pgid": 63823,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "92c246e90dd64f6eb985ea6b50edfd32a07a8a59f8d70b74217a64d134b3eba3",
+      "sourceAfterSha256": "92c246e90dd64f6eb985ea6b50edfd32a07a8a59f8d70b74217a64d134b3eba3",
+      "collectorUnchanged": true,
+      "stdoutSha256": "e369672bca3eec8da8e5515718fb136dfcbb7a7b0e428cafb3b0671c1d4a6b2e",
+      "stderrSha256": "7968d06d35e07dec7b240d2b06b521c0eab10d6531fdfb14efd4f29a208767b3",
+      "loadTraceSha256": "0a0f725b222ef0e0d6cbaf7fb96b7e48b7585c99cee0b03abaddc25b92c0b921",
+      "receiptSHA256": "60d96bc30f5b23c67a38f9488c4acc54bd3fe7b60eea3a6e7310bef11eea6d89",
+      "stdout": "/tmp/root-q331/helper/lint1.stdout",
+      "stderr": "/tmp/root-q331/helper/lint1.stderr",
+      "loads": "/tmp/root-q331/helper/lint1.loads.json"
+    },
+    {
+      "label": "after1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-q331/helper/after-entry.py"
+      ],
+      "startUtc": "2026-10-14T11:05:45.150079+00:00",
+      "endUtc": "2026-10-14T11:06:49.864373+00:00",
+      "elapsedSeconds": 64.45362920800108,
+      "returncode": 0,
+      "pid": 65099,
+      "pgid": 65099,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "5fd61d38e172ec0a6ff27cd1db7755aec4ccb498c83adeee825c21e250a99497",
+      "sourceAfterSha256": "5fd61d38e172ec0a6ff27cd1db7755aec4ccb498c83adeee825c21e250a99497",
+      "collectorUnchanged": true,
+      "stdoutSha256": "f08654bd0adfd7ab9296a3687a8683354c6a2b94d48d9b54567c7c3b885b8a5c",
+      "stderrSha256": "8dc55bcd4cd90bb9a3bd7054f15c2f0b468b303dae7fa90bcd4bd69b274c0579",
+      "loadTraceSha256": "c573a034029662ce8e034696131462c1596908d762032e3461958d147572f0b0",
+      "receiptSHA256": "11022d09dcc1ee0216d491c71167ff0d55e6d5ddf35be5c77da7368fa3503cd3",
+      "stdout": "/tmp/root-q331/helper/after1.stdout",
+      "stderr": "/tmp/root-q331/helper/after1.stderr",
+      "loads": "/tmp/root-q331/helper/after1.loads.json"
+    },
+    {
+      "label": "full1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-q331/helper/full-entry.py"
+      ],
+      "startUtc": "2026-10-14T11:08:18.128766+00:00",
+      "endUtc": "2026-10-14T11:09:49.674862+00:00",
+      "elapsedSeconds": 90.93226641698857,
+      "returncode": 0,
+      "pid": 99158,
+      "pgid": 99158,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "5fd61d38e172ec0a6ff27cd1db7755aec4ccb498c83adeee825c21e250a99497",
+      "sourceAfterSha256": "5fd61d38e172ec0a6ff27cd1db7755aec4ccb498c83adeee825c21e250a99497",
+      "collectorUnchanged": true,
+      "stdoutSha256": "c4f53071a6775c4349360213d0471157ec3181f1a121e767a75d06b6608c982a",
+      "stderrSha256": "ad1015718c1982cea5a3cae55945101c846d52961df3b1b121099bc3db50ccb1",
+      "loadTraceSha256": "687fa3b6940e384be63ede875d4881c03106dd56fb31b9edef035cb7d9ab58fb",
+      "receiptSHA256": "57687e703e2a1c646f52c7f5d3d64a6ea7bad91d8eaf8e4ff0c1a5c472fa6d0c",
+      "stdout": "/tmp/root-q331/helper/full1.stdout",
+      "stderr": "/tmp/root-q331/helper/full1.stderr",
+      "loads": "/tmp/root-q331/helper/full1.loads.json"
+    },
+    {
+      "label": "friction-focused1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "test:full",
+        "--",
+        "scripts/friction-triggers.test.mjs"
+      ],
+      "startUtc": "2026-10-14T11:12:55.472320+00:00",
+      "endUtc": "2026-10-14T11:13:01.237853+00:00",
+      "elapsedSeconds": 5.152103917003842,
+      "returncode": 0,
+      "pid": 35449,
+      "pgid": 35449,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "1996fd7330b59b2f5927aa345c0c7d2e0b7db92395adac21ce2a5ee12d38da14",
+      "sourceAfterSha256": "1996fd7330b59b2f5927aa345c0c7d2e0b7db92395adac21ce2a5ee12d38da14",
+      "collectorUnchanged": true,
+      "stdoutSha256": "d2aa68ebb182065e1cf4dca2a44011505975d6d4d67d4abacb9c4ba776fd4d65",
+      "stderrSha256": "7968d06d35e07dec7b240d2b06b521c0eab10d6531fdfb14efd4f29a208767b3",
+      "loadTraceSha256": "250d963cc00c9ac008859826e6d5bfbddbdf3ef7df810dd46d312258870d6dff",
+      "receiptSHA256": "faf7b72bcca97602ba95c4e5f71ebb0c74151a6111a1a64219dd46df9c8f5713",
+      "stdout": "/tmp/root-q331/helper/friction-focused1.stdout",
+      "stderr": "/tmp/root-q331/helper/friction-focused1.stderr",
+      "loads": "/tmp/root-q331/helper/friction-focused1.loads.json"
+    },
+    {
+      "label": "review1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-14T11:13:47.059229+00:00",
+      "endUtc": "2026-10-14T11:14:14.767824+00:00",
+      "elapsedSeconds": 27.094706582982326,
+      "returncode": 0,
+      "pid": 36207,
+      "pgid": 36207,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "1996fd7330b59b2f5927aa345c0c7d2e0b7db92395adac21ce2a5ee12d38da14",
+      "sourceAfterSha256": "1996fd7330b59b2f5927aa345c0c7d2e0b7db92395adac21ce2a5ee12d38da14",
+      "collectorUnchanged": true,
+      "stdoutSha256": "de921b5a325fa43844d78cc6104e25433bf670d7bf26483e6fb8fd66366f5a87",
+      "stderrSha256": "7968d06d35e07dec7b240d2b06b521c0eab10d6531fdfb14efd4f29a208767b3",
+      "loadTraceSha256": "68869da2f4ba2dc12a31515bf53a1c95eb9e6dd020dc8c2d208d9c1f1f64d323",
+      "receiptSHA256": "69a74e6632c9fe78b46ac22c3fa4e3bbb1ae54d128d1c0647c83410623617108",
+      "stdout": "/tmp/root-q331/helper/review1.stdout",
+      "stderr": "/tmp/root-q331/helper/review1.stderr",
+      "loads": "/tmp/root-q331/helper/review1.loads.json"
+    },
+    {
+      "label": "knip1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUtc": "2026-10-14T11:14:51.273970+00:00",
+      "endUtc": "2026-10-14T11:14:54.698582+00:00",
+      "elapsedSeconds": 3.1868342499947175,
+      "returncode": 0,
+      "pid": 66261,
+      "pgid": 66261,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "1996fd7330b59b2f5927aa345c0c7d2e0b7db92395adac21ce2a5ee12d38da14",
+      "sourceAfterSha256": "1996fd7330b59b2f5927aa345c0c7d2e0b7db92395adac21ce2a5ee12d38da14",
+      "collectorUnchanged": true,
+      "stdoutSha256": "65f7ede35d43546dd59295d08bfd219b1a791bf8313d23e955321b8a62dd8552",
+      "stderrSha256": "7968d06d35e07dec7b240d2b06b521c0eab10d6531fdfb14efd4f29a208767b3",
+      "loadTraceSha256": "a5d64b10e2ba88df5b3863803478367c39b46e64aa30bc397ac6e0850474b14d",
+      "receiptSHA256": "f2a3613f66856b7fce9c00c174a1f8b42b5aec67b15de4b2b7220f56ff829199",
+      "stdout": "/tmp/root-q331/helper/knip1.stdout",
+      "stderr": "/tmp/root-q331/helper/knip1.stderr",
+      "loads": "/tmp/root-q331/helper/knip1.loads.json"
+    },
+    {
+      "label": "full2",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-q331/helper/full2-entry.py"
+      ],
+      "startUtc": "2026-10-14T11:16:02.092198+00:00",
+      "endUtc": "2026-10-14T11:17:30.340606+00:00",
+      "elapsedSeconds": 87.99485529097728,
+      "returncode": 0,
+      "pid": 67256,
+      "pgid": 67256,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "1996fd7330b59b2f5927aa345c0c7d2e0b7db92395adac21ce2a5ee12d38da14",
+      "sourceAfterSha256": "1996fd7330b59b2f5927aa345c0c7d2e0b7db92395adac21ce2a5ee12d38da14",
+      "collectorUnchanged": true,
+      "stdoutSha256": "8f9494b93c54953d8161ff9dd6a24090108582f71564b21fabf51b547686f6d6",
+      "stderrSha256": "c4f9a6c748ef797944711b63fe79b69c2cc5b2c7c04c4698d4484769cfab955a",
+      "loadTraceSha256": "d56e06c2352fcbc4c311a8a446c9705e37477f8c6a174d2ce99cc64645132b22",
+      "receiptSHA256": "e9e72cc4711c24704fce96254a833daafd42333a91da2e2b4e1f60e5f268325f",
+      "stdout": "/tmp/root-q331/helper/full2.stdout",
+      "stderr": "/tmp/root-q331/helper/full2.stderr",
+      "loads": "/tmp/root-q331/helper/full2.loads.json"
+    },
+    {
+      "label": "schema1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startUtc": "2026-10-14T11:21:54.456328+00:00",
+      "endUtc": "2026-10-14T11:21:55.088241+00:00",
+      "elapsedSeconds": 0.0854771250160411,
+      "returncode": 0,
+      "pid": 4365,
+      "pgid": 4365,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "901b777002d781bb443cba21e1a6a12f86263cdbf31f5807ec6a30526d30a9bf",
+      "sourceAfterSha256": "901b777002d781bb443cba21e1a6a12f86263cdbf31f5807ec6a30526d30a9bf",
+      "collectorUnchanged": true,
+      "stdoutSha256": "37c114c39e8e70b2cbdad33e8801a9582b9ea24bd46bfffac51faaa705eb6151",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "loadTraceSha256": "932f0d8852c5dc3e8b51b098ac56616655148206c840fab245bde7e8dea47ed1",
+      "receiptSHA256": "e89dabb75c2e922b32f86d25cc7e2cb244116fd7f803848ce54c419e1b560b24",
+      "stdout": "/tmp/root-q331/helper/schema1.stdout",
+      "stderr": "/tmp/root-q331/helper/schema1.stderr",
+      "loads": "/tmp/root-q331/helper/schema1.loads.json"
+    },
+    {
+      "label": "triggers1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "startUtc": "2026-10-14T11:24:19.242598+00:00",
+      "endUtc": "2026-10-14T11:24:19.973987+00:00",
+      "elapsedSeconds": 0.19918199998210184,
+      "returncode": 0,
+      "pid": 6158,
+      "pgid": 6158,
+      "childReaped": true,
+      "groupMembersAfterWait": [],
+      "sourceUnchanged": true,
+      "sourceChangedPaths": [],
+      "sourceBeforeSha256": "901b777002d781bb443cba21e1a6a12f86263cdbf31f5807ec6a30526d30a9bf",
+      "sourceAfterSha256": "901b777002d781bb443cba21e1a6a12f86263cdbf31f5807ec6a30526d30a9bf",
+      "collectorUnchanged": true,
+      "stdoutSha256": "79decb564f24663db976fd55487e5dcb0101a9bc23a13117867351de21aae43f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "loadTraceSha256": "1de027adb7a09240ff1d794f92d60e481aae4b92b929d80b3608874e709017f2",
+      "receiptSHA256": "c00f7add051b2994697d65857d680dd210e15c71e1e108b61d8795bb76ee743e",
+      "stdout": "/tmp/root-q331/helper/triggers1.stdout",
+      "stderr": "/tmp/root-q331/helper/triggers1.stderr",
+      "loads": "/tmp/root-q331/helper/triggers1.loads.json"
+    }
+  ],
+  "preExistingIssues": [
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-q331.md",
+      "issue": "Dated scope-label correction for historical quq1 contract census; historical bytes stay intact."
+    }
+  ],
+  "independentParentRuntimeAudit": {
+    "path": "/tmp/root-q331/parent-all-runtime-drain-audit.json",
+    "sha256": "7acb8c1346708a714dcdeec5e77e8ee96c1698f71b6689fc77a87bb8eb3cb161",
+    "scope": "Parent independently audited all fourteen pre-evidence runtime receipts: actual process-group absence, child reaping, source and original collector freeze; sole nonzero runtime typecheck1 retained."
+  },
+  "frictionTriggerDisposition": {
+    "report": "/tmp/root-q331/helper/triggers1.stdout",
+    "sha256": "79decb564f24663db976fd55487e5dcb0101a9bc23a13117867351de21aae43f",
+    "exitCode": 0,
+    "phase": 5,
+    "tag": "local-edit-correction",
+    "beads": 52,
+    "disposition": "Existing ledger reason: self-corrected lint/type/import/fixture slips; hv-umm2.345. No new undispositioned trigger or helper-owned duplicate filing. Parent owns canonical native budget/duty queries."
+  }
+}

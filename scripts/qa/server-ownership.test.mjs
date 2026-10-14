@@ -7,11 +7,12 @@ import { once } from "node:events";
 import { closeSync, existsSync, mkdirSync, mkdtempSync, openSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { browserOwnerPath } from "./browser-lease.mjs";
+import { browserOwnerPath, tryBrowserLock } from "./browser-lease.mjs";
 import { processIdentity, reconcileServer, serverRecordPath, spawnOwnedServer } from "./server-ownership.mjs";
 
 const boundaries = vi.hoisted(() => ({ identities: /** @type {Map<number, string>} */ (new Map()),
   missingIdentity: false,
+  groupQueryError: /** @type {Error | null} */ (null),
   fastDelay: false,
   observed: /** @type {((lines: string[]) => void) | null} */ (null),
   advanceLifecycle: /** @type {(() => void) | null} */ (null),
@@ -26,7 +27,8 @@ vi.mock("node:child_process", async (original) => {
       return child;
     },
     execFileSync: (/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").ExecFileSyncOptions} */ options) => {
-      if (command === "ps" && args[0] === "-A") {
+      if (command === "ps" && args[0] === "-g") {
+        if (boundaries.groupQueryError !== null) throw boundaries.groupQueryError;
         const lines = [...boundaries.identities].filter(([pid]) => {
         const child = boundaries.children.get(pid); return child?.exitCode === null && child.signalCode === null;
       }).map(([, line]) => line).concat(boundaries.launched.flatMap((child) => {
@@ -35,6 +37,7 @@ vi.mock("node:child_process", async (original) => {
         return [line.replace(/^(\s*)(\d+)\s+\d+/u, "$1$2 $2")];
       }));
         boundaries.observed?.(lines);
+        if (lines.length === 0) return actual.execFileSync(command, args, options);
         return lines.join("\n");
       }
       const pid = command === "ps" ? Number(args[1]) : 0;
@@ -66,7 +69,7 @@ afterEach(async () => {
     if (child.exitCode !== null || child.signalCode !== null) continue;
     const exited = once(child, "exit"); child.kill("SIGKILL"); await exited;
   }
-  boundaries.missingIdentity = false; boundaries.fastDelay = false; boundaries.observed = null; boundaries.advanceLifecycle = null; boundaries.launched.splice(0);
+  boundaries.missingIdentity = false; boundaries.groupQueryError = null; boundaries.fastDelay = false; boundaries.observed = null; boundaries.advanceLifecycle = null; boundaries.launched.splice(0);
   boundaries.identities.clear(); boundaries.children.clear();
   for (const dir of directories.splice(0)) rmSync(dir, { recursive: true, force: true });
 });
@@ -271,6 +274,24 @@ describe("identity-safe local orphan reconciliation", () => {
     const provider = readFileSync(f.owner, "utf8");
     expect(await reconcileServer(f.slot)).toMatchObject({ state: "stopped", alreadyExited: true });
     expect(existsSync(f.record)).toBe(false); expect(readFileSync(f.owner, "utf8")).toBe(provider);
+  });
+  it.each([
+    { label: "non-empty exit code", status: 2, stdout: "", stderr: "" },
+    { label: "diagnostic", status: 1, stdout: "", stderr: "synthetic query failure" },
+    { label: "partial output", status: 1, stdout: "partial identity", stderr: "" },
+    { label: "missing captured streams", status: 1 },
+  ])("preserves query errors and owned evidence for $label", async (failure) => {
+    const f = fixture(); const server = await serverFixture();
+    record(f, { token: "11111111-1111-4111-8111-111111111111", runner: deadRunner, server: server.identity });
+    const raw = readFileSync(f.record); const provider = readFileSync(f.owner);
+    const error = Object.assign(new Error("synthetic group query failure"), failure);
+    boundaries.groupQueryError = error;
+    const signal = vi.spyOn(process, "kill");
+    await expect(reconcileServer(f.slot)).rejects.toBe(error);
+    expect(readFileSync(f.record)).toEqual(raw); expect(readFileSync(f.owner)).toEqual(provider);
+    expect(signal).not.toHaveBeenCalled(); expect(server.child.exitCode).toBeNull();
+    const released = await tryBrowserLock(f.slot);
+    expect(released).not.toBeNull(); await released?.release();
   });
   it("protects surviving group members when their recorded leader is absent", async () => {
     const f = fixture(); const server = await serverFixture();

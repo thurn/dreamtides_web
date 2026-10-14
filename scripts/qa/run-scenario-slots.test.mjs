@@ -9,6 +9,7 @@ import { pathToFileURL } from "node:url";
 import { setTimeout as delay } from "node:timers/promises";
 import { browserLeasePath, browserLeaseWaiters, browserSlotPath } from "./browser-lease.mjs";
 import { lockHeld } from "./browser-lease-fixture.mjs";
+import { fixtureExecFileSync } from "./qa-session-mocks.mjs";
 import { openQaSession } from "./run-scenario.mjs";
 import * as runtime from "../screenshot-runtime.mjs";
 import * as ownership from "./server-ownership.mjs";
@@ -49,13 +50,7 @@ vi.mock("node:child_process", async (importOriginal) => {
       return child;
     }),
     execFileSync: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").ExecFileSyncOptionsWithStringEncoding} */ options) => {
-      const cwd = command === "git" && args.includes("--git-common-dir") ? fixtureIo.gitCwd : null;
-      const result = actual.execFileSync(command, args, cwd === null ? options : { ...options, cwd });
-      // The contained fixture models a separate group identity at this OS
-      // boundary; cleanup signals its ordinary child directly, never our PG.
-      if (command === "ps") return result.split("\n").map((line) => line.replace(/^(\s*)(\d+)\s+\d+/u,
-        (whole, pad, pid) => fixtureIo.children.some((child) => child.pid === Number(pid)) ? `${pad}${pid} ${pid}` : whole)).join("\n");
-      return result;
+      return fixtureExecFileSync(actual, fixtureIo, command, args, options);
     }),
   };
 });

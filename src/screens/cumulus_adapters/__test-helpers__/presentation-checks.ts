@@ -2,18 +2,11 @@
 // shared by its tests: each applied intent's items show boards that only
 // move forward, the fold observes a bounded number of states and only at
 // presented events, and no item shows a viewer a card it cannot identify.
-// `replayObservedBatches` drives a recorded fuzz game through the shared
-// fold adapter with the mounted feed's observation, as the screen sees it.
 import { expect } from "vitest";
-import { PRESENTATION_OBSERVATION } from "../../../battle/components/battle-presentation";
 import { presentedAsItem, presentationItems, type PresentationItem } from "../../../battle/components/presentation-items";
 import type { BattleState, Engine, EngineEvent, Side } from "../../../engine";
 import { eventSeenBy } from "../../../engine/events";
-import type { BattleIntent, BattleSlice } from "../../../engine/fold/slice";
-import { promptFingerprint } from "../../../engine/prompts/fingerprint";
-import { PHASES, SIDES, type BattleSeed, type InstanceId } from "../../../engine/state/ids";
-import { fuzzInit, playRandomGame, type FuzzGame, type FuzzPool, type RecordedAction } from "../../../engine/testing/fuzz";
-import { batchStates, foldAdapterFor } from "../../../rules/battle/engine-battle";
+import { PHASES, SIDES, type InstanceId } from "../../../engine/state/ids";
 import { parsePresentationId } from "../../../types/identifiers";
 
 /** One applied intent's events, the states they started from and arrive with, and the states observed at each. */
@@ -156,57 +149,4 @@ export function hiddenInformationLeaks(engine: Engine, viewer: Side, batch: Obse
 export function presentObserved(batch: ObservedBatch, viewer: Side, key: string): PresentedBatch {
   const presented = { key: parsePresentationId(key), state: batch.state };
   return { ...batch, items: presentationItems(batch.events, viewer, presented, batch.before, () => null, batch.eventStates) };
-}
-
-/** A recorded game: its init, the answers its creation took, and each action with the answers it took. */
-export type RecordedGame = Pick<FuzzGame, "init" | "startAnswers" | "actions">;
-
-/**
- * Plays the fuzz game of `seed` over `pool` with the Random policy on both
- * sides, as `playFuzzGame` does without its invariant checks, and records it.
- */
-export function recordFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool): RecordedGame & { readonly ended: boolean } {
-  const init = fuzzInit(seed, pool);
-  let startAnswers: RecordedGame["startAnswers"] = [];
-  const actions: RecordedAction[] = [];
-  const game = playRandomGame(engine, init, {
-    committed: (applied, chosen) => {
-      if (chosen === null) startAnswers = applied.answers;
-      else actions.push({ ...chosen, answers: applied.answers });
-    },
-  });
-  return { init, startAnswers, actions, ended: game.end === "result" };
-}
-
-/**
- * Replays a recorded fuzz game through `engine`'s shared fold adapter with
- * the mounted feed's observation (`PRESENTATION_OBSERVATION`), suspending at
- * every prompt and answering it from the recording, and passes each applied
- * intent's observed batch to `visit`.
- */
-export function replayObservedBatches(engine: Engine, game: RecordedGame, visit: (batch: ObservedBatch) => void): void {
-  const fold = foldAdapterFor(engine);
-  const apply = (slice: BattleSlice, intent: BattleIntent): BattleSlice => {
-    const outcome = fold.reduce(slice, intent, PRESENTATION_OBSERVATION);
-    if (outcome.kind !== "applied" || outcome.error !== null) throw new Error(`replayed ${intent.kind} failed`);
-    visit({ events: outcome.published, ...batchStates(fold, slice, outcome.slice, outcome.published) });
-    return outcome.slice;
-  };
-  const answerAll = (start: BattleSlice, answers: RecordedAction["answers"]): BattleSlice => {
-    let slice = start;
-    for (const recorded of answers.filter((answer) => answer.auto !== true)) {
-      const pending = fold.pending(slice);
-      if (pending === null) throw new Error("no pending prompt for a recorded answer");
-      const { id, ...prompt } = pending.prompt;
-      if (promptFingerprint(prompt) !== recorded.fingerprint) throw new Error("a replayed prompt differs from the recording");
-      slice = apply(slice, { kind: "answer", side: pending.prompt.side, promptId: id, value: recorded.value });
-    }
-    return slice;
-  };
-  const started = fold.start(game.init);
-  if (started.kind !== "applied") throw new Error("the replayed battle did not start");
-  let slice = answerAll(started.slice, game.startAnswers);
-  for (const { side, action, answers } of game.actions) {
-    slice = answerAll(apply(slice, { kind: "battleAction", side, action }), answers);
-  }
 }

@@ -1,0 +1,40 @@
+{
+  "bead": "hv-q331",
+  "phase": 5,
+  "implementMin": 59.7243045,
+  "implementWindow": {
+    "start": "2026-10-14T10:27:13.302Z",
+    "end": "2026-10-14T11:26:56.760270+00:00"
+  },
+  "localValidationS": {
+    "baseline1": 88.5019313749799,
+    "syscall1": 26.596411542006535,
+    "native-import1": 0.09125220798887312,
+    "focused1": 23.022029500018107,
+    "focused2": 6.132212290976895,
+    "typecheck1": 7.1737243749958,
+    "typecheck2": 3.646107041015057,
+    "lint1": 6.195130667008925,
+    "after1": 64.45362920800108,
+    "full1": 90.93226641698857,
+    "friction-focused1": 5.152103917003842,
+    "review1": 27.094706582982326,
+    "knip1": 3.1868342499947175,
+    "full2": 87.99485529097728,
+    "schema1": 0.0854771250160411,
+    "triggers1": 0.19918199998210184
+  },
+  "hostLoad": 5.021484375,
+  "testDelta": {
+    "files": 0,
+    "lines": 40,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 0.11956207291659667,
+      "note": "Own inferred literal fixture config caused TS2322; explicit BattleState annotation keeps the validated 8/16/256 values. Minutes are the failed checker wall only; repair/admission and unpartitioned elapsed time remain in the inclusive implement window."
+    }
+  ]
+}

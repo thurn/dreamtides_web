@@ -129,7 +129,7 @@ function actorFixture(root: string, paths: ReturnType<typeof defaultArtPaths>) {
   writeFileSync(input, JSON.stringify({ catalog: CATALOG, paths, linker: pathToFileURL(join(import.meta.dirname, "setup-assets.ts")).href }));
   const actors: Actor[] = [];
   const run = (mode: string, budget = actorBackstopMs): Actor => {
-    const actor = startActor(process.execPath, ["--import", "tsx", actorFile, input, marker, release, mode, String(budget)], mode);
+    const actor = startActor(process.execPath, [actorFile, input, marker, release, mode, String(budget)], mode);
     actors.push(actor);
     return actor;
   };

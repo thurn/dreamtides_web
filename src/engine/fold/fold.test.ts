@@ -6,11 +6,12 @@
 import { describe, expect, it } from "vitest";
 import { promptFingerprint } from "../prompts/fingerprint";
 import { stateHash } from "../state/hash";
-import { battleSeed } from "../state/ids";
 import { ScriptedSource } from "../steps/sources";
 import { boardState } from "../testing/board";
 import { DSL } from "../testing/dsl-cards";
-import { playFuzzGame, replayInteractively, SYNTHETIC_FUZZ_POOL } from "../testing/fuzz";
+import type { EngineEvent } from "../events";
+import type { PromptFingerprint } from "../prompts/types";
+import type { Side } from "../state/ids";
 import { createFoldAdapter, type BattleSlice } from "./slice";
 import {
   v,
@@ -30,15 +31,50 @@ import {
 } from "./fold.fixtures";
 
 describe("inline and interactive equivalence", () => {
-  it("reproduces final states, events, and fingerprints when suspending at every prompt", () => {
-    let prompts = 0;
-    for (let index = 0; index < 12; index++) {
-      const game = playFuzzGame(engine, battleSeed(`fold-equivalence-${String(index)}`), SYNTHETIC_FUZZ_POOL);
-      expect(game.failure).toBeNull();
-      prompts += game.prompts;
-      expect(replayInteractively(engine, game, () => 0).failure).toBeNull();
+  it("reproduces the events, fingerprints and final state across both players' choices and reloads", () => {
+    const { state, ids } = boardState(engine.catalog, {
+      active: "player", phase: "day",
+      player: { hand: [p.eachPlayerDiscards.id, v.vanilla1.id, v.vanilla2.id], energy: 1, deck },
+      enemy: { hand: [v.vanilla1.id, v.vanilla2.id], deck },
+    });
+    const action = { kind: "play", card: ids.player.hand[0], from: "hand" } as const;
+    const answers = new ScriptedSource([[ids.player.hand[1]], [ids.enemy.hand[0]]]);
+    const inline = engine.apply(state, "player", action, answers);
+    answers.assertExhausted();
+    const given = inline.answers.filter((answer) => answer.auto !== true);
+    expect(given).toHaveLength(2);
+
+    let adapter = createFoldAdapter(engine, { checkEventPrefix: true });
+    let current: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+    const events: EngineEvent[] = [];
+    const fingerprints: PromptFingerprint[] = [];
+    const sides: Side[] = [];
+    const apply = (intent: Parameters<typeof adapter.reduce>[1]) => {
+      const outcome = adapter.reduce(current, intent);
+      if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("fold witness failed");
+      current = outcome.slice;
+      events.push(...outcome.published);
+    };
+    apply({ kind: "battleAction", side: "player", action });
+    for (const answer of given) {
+      const pending = adapter.pending(current);
+      if (pending === null) throw new Error("missing genuine discard choice");
+      const { id: _id, ...prompt } = pending.prompt;
+      fingerprints.push(promptFingerprint(prompt));
+      sides.push(pending.prompt.side);
+      current = JSON.parse(JSON.stringify(current)) as BattleSlice;
+      adapter = createFoldAdapter(engine, { checkEventPrefix: true });
+      expect(adapter.pending(current)?.prompt).toEqual(pending.prompt);
+      apply({ kind: "answer", side: pending.prompt.side, promptId: pending.prompt.id, value: answer.value });
     }
-    expect(prompts).toBeGreaterThan(0);
+    expect(sides).toEqual(["player", "enemy"]);
+    expect(fingerprints).toEqual(given.map((answer) => answer.fingerprint));
+    expect(adapter.pending(current)).toBeNull();
+    expect(current.inFlight).toBeNull();
+    expect(events).toEqual(inline.events);
+    expect(stateHash(current.committed)).toBe(stateHash(inline.state));
+    expect(current.committed.sides.player.void).toContain(ids.player.hand[1]);
+    expect(current.committed.sides.enemy.void).toContain(ids.enemy.hand[0]);
   });
 });
 

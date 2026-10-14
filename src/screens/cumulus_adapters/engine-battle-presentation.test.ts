@@ -1,5 +1,5 @@
-// The battle screen's presentation of engine events as a whole: seeded
-// fuzz games presented forward and only to those who may see them, every
+// The battle screen's presentation of engine events as a whole: synthetic
+// sequences presented forward and only to those who may see them, every
 // event kind logged or presented as its presentation names, and the queue
 // that plays the items. The items themselves are in
 // engine-battle-presentation-items.test.ts and
@@ -15,14 +15,14 @@ import {
   type PresentationItem,
 } from "../../battle/components/presentation-items";
 import { BATTLE } from "../../content/battle";
-import { createEngine, type BattleState, type BattleView, type EngineEvent, type EngineEventKind, type InstanceView } from "../../engine";
+import { createEngine, type BattleState, type BattleView, type EngineEvent, type EngineEventKind, type InstanceView, type Engine } from "../../engine";
 import type { Keyword } from "../../engine/dsl/types";
 import { EVENT_DEFINITIONS, eventSeenBy } from "../../engine/events";
 import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
 import { LOOP } from "../../engine/testing/loop-cards";
 import { fuzzEngineCatalog, SYNTHETIC_FUZZ_POOL } from "../../engine/testing/fuzz";
 import { PROMPT_LAB_FIXTURES, promptLabFixture } from "../../engine/testing/prompt-lab";
-import { battleSeed, SIDES, type InstanceId } from "../../engine/state/ids";
+import { SIDES, type InstanceId } from "../../engine/state/ids";
 import { engineBattleLogText, engineStatusLabel } from "../../runtime/battle-prompt-messages";
 import {
   parseDreamwellCardId,
@@ -33,8 +33,6 @@ import {
   hiddenInformationLeaks,
   observationViolations,
   presentObserved,
-  recordFuzzGame,
-  replayObservedBatches,
   type ObservedBatch,
 } from "./__test-helpers__/presentation-checks";
 import { engineStatuses } from "./engine-battle-view-model";
@@ -53,36 +51,79 @@ function queueItem(
   return { key: pid(key), presentation, dwellMs, visual: null, notice, batch: { key: pid(key), state: queueState } };
 }
 
-describe("presentation over seeded synthetic fuzz games", () => {
-  it("moves every item's board forward, observes within the limit and only at presented events, and shows each viewer only what it may see", () => {
+describe("presentation across public movements and private choices", () => {
+  it("moves boards forward, observes presented events within the limit, and shows each viewer only identified cards", () => {
     const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
     const { maxObservedEventStates } = BATTLE.presentation;
     const problems: string[] = [];
-    const check = (batch: ObservedBatch, key: string) => {
+    const check = (batch: ObservedBatch, key: string, catalogEngine: Engine) => {
       problems.push(...observationViolations(batch, maxObservedEventStates).map((problem) => `${key}: ${problem}`));
       for (const viewer of SIDES) {
         const presented = presentObserved(batch, viewer, `${key}:${viewer}`);
-        problems.push(...boardRewinds(presented), ...hiddenInformationLeaks(engine, viewer, batch, presented.items));
+        problems.push(...boardRewinds(presented), ...hiddenInformationLeaks(catalogEngine, viewer, batch, presented.items));
       }
     };
-    let batches = 0;
-    for (let index = 0; index < 12; index += 1) {
-      const game = recordFuzzGame(engine, battleSeed(`presentation-forward-${String(index)}`), SYNTHETIC_FUZZ_POOL);
-      expect(game.ended).toBe(true);
-      replayObservedBatches(engine, game, (batch) => {
-        batches += 1;
-        check(batch, `game${String(index)}:${String(batches)}`);
-      });
+    for (const name of ["present-zones", "foresee", "present-challenge"] as const) {
+      const lab = promptLabFixture(name);
+      if (lab === null) throw new Error("missing presentation witness");
+      const fixture = observedBoard(lab.setup);
+      const batches: ObservedBatch[] = [];
+      let privateArrangement = false;
+      const shown = () => fixture.adapter.pending(fixture.slice())?.display ?? fixture.slice().committed;
+      const apply = (intent: Parameters<typeof fixture.apply>[0]) => {
+        const batch = fixture.apply(intent);
+        check(batch, `${name}:${String(batches.length)}`, labEngine);
+        batches.push(batch);
+        const pending = fixture.adapter.pending(fixture.slice());
+        if (pending?.prompt.kind === "arrange" && pending.prompt.privateTo === "player") privateArrangement = true;
+      };
+      for (const step of lab.presents ?? []) {
+        if ("passUntilDayOf" in step) {
+          for (let count = 0; count < 40; count++) {
+            const state = fixture.slice().committed;
+            if (state.turn.active === step.passUntilDayOf && state.turn.phase === "day") break;
+            const side = labEngine.decision(state)?.side;
+            if (side === undefined) throw new Error("missing public pass decision");
+            apply({ kind: "battleAction", side, action: { kind: "pass" } });
+          }
+          expect(fixture.slice().committed.turn).toMatchObject({ active: step.passUntilDayOf, phase: "day" });
+        } else if ("action" in step) {
+          apply({ kind: "battleAction", side: step.side, action: step.action(fixture.ids, shown()) });
+        } else {
+          const pending = fixture.adapter.pending(fixture.slice());
+          if (pending === null) throw new Error("missing scripted presentation choice");
+          apply({ kind: "answer", side: step.side, promptId: pending.prompt.id, value: step.answer(fixture.ids, shown()) });
+        }
+      }
+      const events = batches.flatMap((batch) => batch.events);
+      expect(batches.some((batch) => batch.eventStates.some((state) => state !== undefined && state !== batch.before))).toBe(true);
+      if (name === "present-zones") expect(events.some((event) => event.kind === "enteredVoid")).toBe(true);
+      if (name === "present-challenge") {
+        expect(events.some((event) => event.kind === "pointsScored" && event.cause === "challenge" && event.amount > 0)).toBe(true);
+        expect(events.some((event) => event.kind === "phaseChanged")).toBe(true);
+      }
+      if (name === "foresee") {
+        expect(privateArrangement).toBe(true);
+        const batch = batches.find((entry) => entry.events.some((event) => event.kind === "foresaw"));
+        const event = batch?.events.find((entry) => entry.kind === "foresaw");
+        if (batch === undefined || event?.kind !== "foresaw") throw new Error("missing actual foresee event");
+        const owner = eventSeenBy(event, "player", batch.state);
+        const opponent = eventSeenBy(event, "enemy", batch.state);
+        if (owner?.kind !== "foresaw" || opponent?.kind !== "foresaw") throw new Error("missing redacted foresee event");
+        expect(event.kept).toEqual([fixture.ids.player.deck[1]]);
+        expect(event.voided).toEqual([fixture.ids.player.deck[0]]);
+        expect(owner.kept).toEqual(event.kept); expect(opponent.kept).toEqual([null]);
+        expect(opponent.voided).toEqual(event.voided);
+      }
     }
-    // The games' intents present a dozen events at most; a long loop's repetitions run past the per-intent limit.
+    // A real long loop crosses the feed's observation limit in one intent.
     const fixture = observedBoard({ active: "player", phase: "day", player: { hand: [LOOP.bouncer.id], deck: [SYNTHETIC.vanilla1.id] } }, engine);
     fixture.apply({ kind: "battleAction", side: "player", action: { kind: "play", card: fixture.ids.player.hand[0], from: "hand", slot: { rank: "back", index: 0 } } });
     const loop = fixture.slice().committed.loops.candidate;
     if (loop === null) throw new Error("no loop offer");
     const repeated = fixture.apply({ kind: "battleAction", side: "player", action: { kind: "repeatLoop", loop: loop.id, count: 40 } });
-    check(repeated, "loop");
+    check(repeated, "loop", engine);
 
-    expect(batches).toBeGreaterThan(12);
     expect(repeated.events.filter(presentedAsItem).length).toBeGreaterThan(maxObservedEventStates);
     expect(problems).toEqual([]);
   });

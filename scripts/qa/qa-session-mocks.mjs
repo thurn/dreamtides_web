@@ -20,6 +20,28 @@ export function processGroup(actual, pid) {
   }
 }
 
+/** The contained fixture's native command boundary; only server PG identity is modeled.
+ * @param {typeof import("node:child_process")} actual
+ * @param {Pick<SessionFixtureIo, "gitCwd" | "children">} fixtureIo
+ * @param {string} command
+ * @param {string[]} args
+ * @param {import("node:child_process").ExecFileSyncOptionsWithStringEncoding} options
+ */
+export function fixtureExecFileSync(actual, fixtureIo, command, args, options) {
+  const cwd = command === "git" && args.includes("--git-common-dir") ? fixtureIo.gitCwd : null;
+  let nativeArgs = args;
+  if (command === "ps" && args[0] === "-g" && fixtureIo.children.some((child) => child.pid === Number(args[1]))) {
+    const group = processGroup(actual, Number(args[1]));
+    if (group === null) return "";
+    nativeArgs = [args[0], String(group), ...args.slice(2)];
+  }
+  const result = actual.execFileSync(command, nativeArgs, cwd === null ? options : { ...options, cwd });
+  // Actual spawn groups and child lifetimes are captured separately.
+  if (command === "ps") return result.split("\n").map((line) => line.replace(/^(\s*)(\d+)\s+\d+/u,
+    (whole, pad, pid) => fixtureIo.children.some((child) => child.pid === Number(pid)) ? `${pad}${pid} ${pid}` : whole)).join("\n");
+  return result;
+}
+
 /** Real native subprocesses contained in the test job, with direct-child cleanup.
  * @param {typeof import("node:child_process")} actual @param {SessionFixtureIo} fixtureIo
  */
@@ -42,13 +64,7 @@ export function childProcessMocks(actual, fixtureIo) {
       fixtureIo.children.push(child); return child;
     },
     execFileSync(/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").ExecFileSyncOptionsWithStringEncoding} */ options) {
-      const cwd = command === "git" && args.includes("--git-common-dir") ? fixtureIo.gitCwd : null;
-      const result = actual.execFileSync(command, args, cwd === null ? options : { ...options, cwd });
-      // Only server identity is modeled; the separately captured groups above
-      // remain actual job containment observations.
-      if (command === "ps") return result.split("\n").map((line) => line.replace(/^(\s*)(\d+)\s+\d+/u,
-        (whole, pad, pid) => fixtureIo.children.some((child) => child.pid === Number(pid)) ? `${pad}${pid} ${pid}` : whole)).join("\n");
-      return result;
+      return fixtureExecFileSync(actual, fixtureIo, command, args, options);
     },
   };
 }

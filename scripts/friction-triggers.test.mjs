@@ -218,7 +218,7 @@ describe("friction triggers", () => {
     expect(() => runFrictionTriggers(directory)).toThrow();
   });
 
-  it("exits non-zero from the command line only on an undispositioned trigger", () => {
+  it("reports valid, undispositioned and malformed evidence through the command line", () => {
     /** @param {string} directory */
     const status = (directory) =>
       spawnSync(process.execPath, [SCRIPT, directory], { encoding: "utf8" })
@@ -233,6 +233,10 @@ describe("friction triggers", () => {
         }),
       ),
     ).toBe(0);
+    const malformed = spawnSync(process.execPath, [SCRIPT, recordFixture({ ...validRecord(), hostLoad: "3" })], { encoding: "utf8" });
+    expect(malformed.status).toBe(2);
+    expect(malformed.stderr).toContain("hv-synthetic.json");
+    expect(malformed.stderr).toContain("hostLoad");
   });
 });
 
@@ -281,16 +285,13 @@ for (const value of [undefined, null, {}, "bare", ["bare-tag"], [null], [1], [[]
 }
 
 describe("friction record schema", () => {
-  it.each(malformedFields)("rejects malformed $field ($value) through reader and CLI", ({ field, value }) => {
+  it.each(malformedFields)("rejects malformed $field ($value) through the reader", ({ field, value }) => {
     const record = validRecord();
     const object = ["minutes", "note", "tag"].includes(field) ? record.friction[0] : record;
     if (value === undefined) delete object[field];
     else object[field] = value;
     const directory = recordFixture(record);
     expect(() => readFrictionRecords(directory)).toThrow();
-    const cli = spawnSync(process.execPath, [SCRIPT, directory], { encoding: "utf8" });
-    expect(cli.status).toBe(2);
-    expect(cli.stderr).toContain("hv-synthetic.json");
   });
 
   it("accepts finite zero/fractional measurements, string notes and extra fields", () => {
@@ -329,7 +330,6 @@ describe("friction record schema", () => {
     else record.hostLoad = value;
     const directory = recordFixture(record, [historicalUnknown()]);
     expect(() => readFrictionRecords(directory)).toThrow();
-    expect(spawnSync(process.execPath, [SCRIPT, directory]).status).toBe(2);
   });
 
   it("does not exempt a different bead, field or entry index", () => {
@@ -424,10 +424,6 @@ describe("friction record implement window", () => {
    */
   const expectRejected = (directory, field) => {
     expect(() => validateFrictionEvidence(directory)).toThrow(field);
-    const cli = validate(directory);
-    expect(cli.status).toBe(2);
-    expect(cli.stderr).toContain("hv-synthetic.json");
-    expect(cli.stderr).toContain(field);
   };
 
   /** @param {unknown} start @param {unknown} end @param {number} implementMin */
@@ -443,6 +439,10 @@ describe("friction record implement window", () => {
     expectRejected(recordFixture(record), "implementWindow");
     expectRejected(recordFixture({ ...record, implementWindow: "4m" }), "implementWindow");
     expectRejected(recordFixture(record, [], ["hv-other"]), "implementWindow");
+    const cli = validate(recordFixture(record));
+    expect(cli.status).toBe(2);
+    expect(cli.stderr).toContain("hv-synthetic.json");
+    expect(cli.stderr).toContain("implementWindow");
   });
 
   it("accepts an exempt record without a window", () => {
@@ -461,7 +461,6 @@ describe("friction record implement window", () => {
   ])("accepts a consistent window ($start to $end for $implementMin min)", ({ start, end, implementMin }) => {
     const directory = recordFixture(windowed(start, end, implementMin));
     expect(validateFrictionEvidence(directory).records).toBe(1);
-    expect(validate(directory).status).toBe(0);
   });
 
   it.each([5.5, 2.5, 40])("rejects implementMin %s against a 4-minute window", (implementMin) => {

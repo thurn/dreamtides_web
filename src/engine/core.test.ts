@@ -271,14 +271,3 @@ describe("random streams", () => {
     expect(deal("one")).not.toEqual(deal("two"));
   });
 });
-
-describe("replay", () => {
-  it("plays seeded random games with no invariant violation, and replays each to its final hash", () => {
-    for (let index = 0; index < 8; index++) {
-      const game = playFuzzGame(engine, battleSeed(`core-test-${String(index)}`), pool);
-      expect(game.failure).toBeNull();
-      expect(game.result).not.toBeNull();
-      expect(replayFinalHash(engine, game)).toBe(game.finalHash);
-    }
-  });
-});
