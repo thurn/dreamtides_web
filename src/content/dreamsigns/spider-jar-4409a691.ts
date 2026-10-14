@@ -1,3 +1,8 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import warrior from "../figments/warrior-bb1a5acd";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +19,8 @@ export default dreamsign({
     "4b01b6c1-ccca-4e19-848a-d799d46088b2",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [
+    triggered(whenYouPlay({ cardType: "character" }, 2), materializeFigments(parseFigmentId(warrior.id), 1, { spark: 1 })),
+  ],
+  verifiedText: expectedVerifiedText("When you play your second character each turn, materialize a 1✦ warrior figment."),
 });

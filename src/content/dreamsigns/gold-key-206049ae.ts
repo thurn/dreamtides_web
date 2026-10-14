@@ -1,3 +1,6 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +16,6 @@ export default dreamsign({
     "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5",
   ],
   tags: ["J12", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "character" }, 3), gainEnergy(2))],
+  verifiedText: expectedVerifiedText("When you play your third character each turn, gain 2●."),
 });

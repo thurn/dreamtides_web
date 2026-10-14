@@ -1,0 +1,479 @@
+{
+  "bead": "hv-umm2.670",
+  "base": "0495251c0b9df45104f85476cf485fe7d357d79c",
+  "dispatch": {
+    "timestamp": "2026-10-14T06:11:32.667Z",
+    "callId": "call_e2c94634b9724292afb172844e83332b",
+    "samplingStart": "UNKNOWN",
+    "agent": "/root/counted670"
+  },
+  "sourceBudget": {
+    "leafModules": 4,
+    "runtimeAdded": 27,
+    "runtimeDeleted": 4,
+    "grossRuntime": 31,
+    "newPrimitives": [],
+    "newPrompts": [],
+    "newFloatingKinds": [],
+    "fallout": [],
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    }
+  },
+  "frozenLeafSHA256": {
+    "spider-jar-4409a691": "d6fbfc41f0bf46965ef28cc1b93a349cc942b210094042d1f9bfe00e5969a61a",
+    "gold-key-206049ae": "b1d410a39f993cd546cd833f643602bb47b4f6b01b14a3c83cc2a5c12dd51194",
+    "green-fly-946dbb36": "03eff855a11fbc4b5e71e6adf51118778be649408120272cc89500d602b6a45f",
+    "spotted-egg-2cbcbebb": "11efcd6342a9145106dee5ca5d1222ca01fbc7b9703c6aa0cde03b59f108d804"
+  },
+  "D20": "No scenario module: single-ability public compositions. Exact synthetic both-controller second-event emblem grant/stack-to-void/copy exclusions/actual zero Reclaim/recovery in grant-triggering-card-reclaim.contracts.ts; nth capture/global reset, once-per-turn emblem, when-erode all causes/owner/fatigue/void grant, figment capacity and current-energy gain contracts cover remaining composition. No mirrored leaf tests. stage1-audit.md retains exact names/API/consumer facts.",
+  "D21": {
+    "firstUUIDSHA256Bytes": [
+      18,
+      82,
+      14,
+      227
+    ],
+    "sampled": [
+      "4409a691-49b4-4fb0-82f6-4f45ae86d8c2",
+      "946dbb36-0a90-495a-bf0f-17351c93d74b"
+    ],
+    "additionalJudgment": "Spotted granted Reclaim indicator/zero route; extra Gold current-energy workflow; enemy Spider opposite-controller judgment.",
+    "acceptedInvocation": "invocations/run-fBn0j7",
+    "acceptedCases": [
+      {
+        "uuid": "4409a691-49b4-4fb0-82f6-4f45ae86d8c2",
+        "side": "player",
+        "viewport": "desktop",
+        "mode": "spider-player",
+        "gameId": "endv9b",
+        "log": "counted-spider-player-desktop-endv9b.jsonl",
+        "rows": 48,
+        "presentationNameRows": 0,
+        "elapsedMs": 13678,
+        "summary": {}
+      },
+      {
+        "uuid": "4409a691-49b4-4fb0-82f6-4f45ae86d8c2",
+        "side": "enemy",
+        "viewport": "desktop",
+        "mode": "spider-enemy",
+        "gameId": "y7rayw",
+        "log": "counted-spider-enemy-desktop-y7rayw.jsonl",
+        "rows": 56,
+        "presentationNameRows": 0,
+        "elapsedMs": 22013,
+        "summary": {
+          "matchingPlays": 5,
+          "controllerMode": "normal AI / synthetic default deck"
+        }
+      },
+      {
+        "uuid": "206049ae-9f28-4a90-9f75-63d9ee5f4a27",
+        "side": "player",
+        "viewport": "desktop",
+        "mode": "gold-player",
+        "gameId": "qdiwvd",
+        "log": "counted-gold-player-desktop-qdiwvd.jsonl",
+        "rows": 56,
+        "presentationNameRows": 0,
+        "elapsedMs": 13582,
+        "summary": {
+          "energyDeltas": [
+            0,
+            0,
+            2,
+            0
+          ]
+        }
+      },
+      {
+        "uuid": "946dbb36-0a90-495a-bf0f-17351c93d74b",
+        "side": "player",
+        "viewport": "desktop",
+        "mode": "green-first",
+        "gameId": "68visw",
+        "log": "counted-green-first-desktop-68visw.jsonl",
+        "rows": 40,
+        "presentationNameRows": 0,
+        "elapsedMs": 13167,
+        "summary": {
+          "energyPaid": 4
+        }
+      },
+      {
+        "uuid": "946dbb36-0a90-495a-bf0f-17351c93d74b",
+        "side": "player",
+        "viewport": "desktop",
+        "mode": "green-renew",
+        "gameId": "d38jt8",
+        "log": "counted-green-renew-desktop-d38jt8.jsonl",
+        "rows": 101,
+        "presentationNameRows": 0,
+        "elapsedMs": 47406,
+        "summary": {
+          "globalTurnNumbers": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "uuid": "2cbcbebb-fb79-4833-a770-2216873147c4",
+        "side": "player",
+        "viewport": "desktop",
+        "mode": "spotted-zero",
+        "gameId": "62v9nv",
+        "log": "counted-spotted-zero-desktop-62v9nv.jsonl",
+        "rows": 54,
+        "presentationNameRows": 0,
+        "elapsedMs": 13475,
+        "summary": {
+          "energyPaid": 0
+        }
+      },
+      {
+        "uuid": "4409a691-49b4-4fb0-82f6-4f45ae86d8c2",
+        "side": "player",
+        "viewport": "mobile",
+        "mode": "spider-player",
+        "gameId": "6werm8",
+        "log": "counted-spider-player-mobile-6werm8.jsonl",
+        "rows": 50,
+        "presentationNameRows": 0,
+        "elapsedMs": 11033,
+        "summary": {}
+      },
+      {
+        "uuid": "4409a691-49b4-4fb0-82f6-4f45ae86d8c2",
+        "side": "enemy",
+        "viewport": "mobile",
+        "mode": "spider-enemy",
+        "gameId": "exe65f",
+        "log": "counted-spider-enemy-mobile-exe65f.jsonl",
+        "rows": 56,
+        "presentationNameRows": 0,
+        "elapsedMs": 19782,
+        "summary": {
+          "matchingPlays": 5,
+          "controllerMode": "normal AI / synthetic default deck"
+        }
+      },
+      {
+        "uuid": "206049ae-9f28-4a90-9f75-63d9ee5f4a27",
+        "side": "player",
+        "viewport": "mobile",
+        "mode": "gold-player",
+        "gameId": "2i5phv",
+        "log": "counted-gold-player-mobile-2i5phv.jsonl",
+        "rows": 58,
+        "presentationNameRows": 0,
+        "elapsedMs": 12271,
+        "summary": {
+          "energyDeltas": [
+            0,
+            0,
+            2,
+            0
+          ]
+        }
+      },
+      {
+        "uuid": "946dbb36-0a90-495a-bf0f-17351c93d74b",
+        "side": "player",
+        "viewport": "mobile",
+        "mode": "green-first",
+        "gameId": "8ca8wo",
+        "log": "counted-green-first-mobile-8ca8wo.jsonl",
+        "rows": 40,
+        "presentationNameRows": 0,
+        "elapsedMs": 10201,
+        "summary": {
+          "energyPaid": 4
+        }
+      },
+      {
+        "uuid": "946dbb36-0a90-495a-bf0f-17351c93d74b",
+        "side": "player",
+        "viewport": "mobile",
+        "mode": "green-renew",
+        "gameId": "f98a64",
+        "log": "counted-green-renew-mobile-f98a64.jsonl",
+        "rows": 101,
+        "presentationNameRows": 0,
+        "elapsedMs": 44011,
+        "summary": {
+          "globalTurnNumbers": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "uuid": "2cbcbebb-fb79-4833-a770-2216873147c4",
+        "side": "player",
+        "viewport": "mobile",
+        "mode": "spotted-zero",
+        "gameId": "2o4dms",
+        "log": "counted-spotted-zero-mobile-2o4dms.jsonl",
+        "rows": 54,
+        "presentationNameRows": 0,
+        "elapsedMs": 11417,
+        "summary": {
+          "energyPaid": 0
+        }
+      }
+    ],
+    "games": 12,
+    "exportedRows": 714,
+    "captures": 18,
+    "allCapturesVisuallyInspected": true,
+    "rawCapsAllThreeArraysEmpty": true,
+    "nativeCaps": [],
+    "qualification": "Normal AI enemy synthetic deck is honestly separate from production human staged workflows. Both-side sweep base smoke may have exercised:false; ineligible variants are skips, not effect exercise. No detailed forced enemy Green/Spotted Reclaim or reload claim. Granted keyword icon is plus, with Reclaim costs in accessible label; printed catalog text remains printed.",
+    "visualQualification": "All18 captures inspected; target granted plus badge and actual controls visible. Large existing desktop gallery can show clipped non-target trailing cards within its scroll region; inspected target rect/hit/badge remains in view. Spotted badge accessible label carries zero energy; immutable card text still prints4."
+  },
+  "checks": {
+    "focused": {
+      "command": "npm test -- src/engine/triggers/triggers.test.ts src/engine/triggers/triggers-patterns.test.ts src/engine/triggers/triggers-dissolved.test.ts src/engine/rules/figments.test.ts src/engine/effects/primitives/contracts.test.ts",
+      "start": "2026-10-14T06:18:24.826455+00:00",
+      "end": "2026-10-14T06:18:40.365032+00:00",
+      "wallS": 15.538185750017874,
+      "exit": 0,
+      "pid": 78608,
+      "pgid": 78608,
+      "loadAtLaunch": 4.23828125
+    },
+    "coverage": {
+      "command": "npm test -- src/engine/content-gates.test.ts",
+      "start": "2026-10-14T06:18:53.432971+00:00",
+      "end": "2026-10-14T06:18:57.148734+00:00",
+      "wallS": 3.71546337500331,
+      "exit": 0,
+      "pid": 79139,
+      "pgid": 79139,
+      "loadAtLaunch": 4.47509765625
+    },
+    "review": {
+      "command": "npm run review",
+      "start": "2026-10-14T06:19:13.678038+00:00",
+      "end": "2026-10-14T06:20:03.959798+00:00",
+      "wallS": 50.28088174998993,
+      "exit": 0,
+      "pid": 79576,
+      "pgid": 79576,
+      "loadAtLaunch": 3.97607421875
+    },
+    "knip": {
+      "command": "npm run knip",
+      "start": "2026-10-14T06:20:11.935031+00:00",
+      "end": "2026-10-14T06:20:15.820547+00:00",
+      "wallS": 3.885368583985837,
+      "exit": 0,
+      "pid": 80654,
+      "pgid": 80654,
+      "loadAtLaunch": 4.5966796875
+    },
+    "preflight": {
+      "command": "npm run lab:preflight -- --cards 4409a691-49b4-4fb0-82f6-4f45ae86d8c2,206049ae-9f28-4a90-9f75-63d9ee5f4a27,946dbb36-0a90-495a-bf0f-17351c93d74b,2cbcbebb-fb79-4833-a770-2216873147c4 --as both",
+      "start": "2026-10-14T06:20:49.987028+00:00",
+      "end": "2026-10-14T06:20:51.124484+00:00",
+      "wallS": 1.137350167002296,
+      "exit": 1,
+      "pid": 81378,
+      "pgid": 81378,
+      "loadAtLaunch": 3.82666015625
+    },
+    "preflight-dreamsigns": {
+      "command": "npm run lab:preflight -- --dreamsigns 4409a691-49b4-4fb0-82f6-4f45ae86d8c2,206049ae-9f28-4a90-9f75-63d9ee5f4a27,946dbb36-0a90-495a-bf0f-17351c93d74b,2cbcbebb-fb79-4833-a770-2216873147c4 --as both",
+      "start": "2026-10-14T06:21:42.056173+00:00",
+      "end": "2026-10-14T06:21:43.061813+00:00",
+      "wallS": 1.0055303330009338,
+      "exit": 0,
+      "pid": 82207,
+      "pgid": 82207,
+      "loadAtLaunch": 3.26220703125
+    },
+    "weighted300": {
+      "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 4409a691-49b4-4fb0-82f6-4f45ae86d8c2,206049ae-9f28-4a90-9f75-63d9ee5f4a27,946dbb36-0a90-495a-bf0f-17351c93d74b,2cbcbebb-fb79-4833-a770-2216873147c4",
+      "start": "2026-10-14T06:26:05.652457+00:00",
+      "end": "2026-10-14T06:30:48.958909+00:00",
+      "wallS": 283.3019262079906,
+      "exit": 0,
+      "pid": 86447,
+      "pgid": 86447,
+      "loadAtLaunch": 3.52099609375
+    },
+    "sweep": {
+      "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.670 --dreamsigns 4409a691-49b4-4fb0-82f6-4f45ae86d8c2,206049ae-9f28-4a90-9f75-63d9ee5f4a27,946dbb36-0a90-495a-bf0f-17351c93d74b,2cbcbebb-fb79-4833-a770-2216873147c4 --as both --port 5174",
+      "start": "2026-10-14T06:34:09.952316+00:00",
+      "end": "2026-10-14T06:34:37.698761+00:00",
+      "wallS": 27.745831667009043,
+      "exit": 0,
+      "pid": 94921,
+      "pgid": 94921,
+      "loadAtLaunch": 4.31103515625
+    },
+    "judged": {
+      "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.670/counted-emblems.mjs --bead hv-umm2.670 --port 5174 --timeout 600",
+      "start": "2026-10-14T06:35:15.030230+00:00",
+      "end": "2026-10-14T06:36:33.255116+00:00",
+      "wallS": 78.22359199999482,
+      "exit": 1,
+      "pid": 96530,
+      "pgid": 96530,
+      "loadAtLaunch": 5.93603515625
+    },
+    "judged-repaired01": {
+      "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.670/counted-emblems.mjs --bead hv-umm2.670 --port 5174 --timeout 600",
+      "start": "2026-10-14T06:46:49.979445+00:00",
+      "end": "2026-10-14T06:47:53.315308+00:00",
+      "wallS": 63.335699082992505,
+      "exit": 1,
+      "pid": 37490,
+      "pgid": 37490,
+      "loadAtLaunch": 3.02001953125
+    },
+    "judged-repaired02": {
+      "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.670/counted-emblems.mjs --bead hv-umm2.670 --port 5174 --timeout 600",
+      "start": "2026-10-14T06:49:13.452968+00:00",
+      "end": "2026-10-14T06:53:16.810046+00:00",
+      "wallS": 243.35666016698815,
+      "exit": 0,
+      "pid": 40083,
+      "pgid": 40083,
+      "loadAtLaunch": 3.87109375
+    }
+  },
+  "reviewScope": {
+    "filesPassed": 247,
+    "testsPassed": 5937,
+    "firstPrepareLogAt": "2026-10-14T06:19:13.903Z",
+    "firstPrepareObservationAt": "2026-10-14T06:19:13.903284+00:00",
+    "hostLoad": 3.97607421875,
+    "qualification": "Log timestamp carries milliseconds; Python stdout-observation timestamp carries additional observer precision."
+  },
+  "focused": {
+    "files": 5,
+    "cases": 3357
+  },
+  "coverage": {
+    "files": 1,
+    "cases": 20
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 106866,
+    "wallNativeS": 281.9,
+    "cpuS": 301.2,
+    "prompts": 7340,
+    "interactive": 655,
+    "failures": 0,
+    "includedEach": 600,
+    "exercisedUUIDOrder": [
+      653,
+      253,
+      1006,
+      819
+    ],
+    "lock": "literal lockf -k artifacts/heavy.lock; released before browser"
+  },
+  "preflight": {
+    "correctedDomain": "--dreamsigns",
+    "pass": 8,
+    "skip": 72,
+    "fail": 0,
+    "preservedWrongDomain": {
+      "commandFlag": "--cards",
+      "exit": 1,
+      "unknownCardRows": 80,
+      "classification": "caller/domain routing recipe failure, not source failure"
+    }
+  },
+  "sweep": {
+    "invocation": "invocations/sweep-xhp1hi",
+    "pass": 8,
+    "skip": 72,
+    "fail": 0,
+    "sessions": 1,
+    "leaseWaitMs": 5,
+    "runnerPG": 94921,
+    "serverPG": 94951,
+    "port": 5274,
+    "settled": true
+  },
+  "judged": {
+    "invocation": "invocations/run-fBn0j7",
+    "callerSHA256": "659c03899ad6d1d2465a9fc69ffea1d62f797196ebe996373faf0e9f829c0659",
+    "wallMs": {
+      "browserLeaseWait": 6,
+      "serve": 1962,
+      "scenario": 240580,
+      "total": 242598
+    },
+    "runnerPG": 40083,
+    "serverPG": 40117,
+    "slot": 0,
+    "port": 5174,
+    "settled": true,
+    "failureAudits": [
+      "judged-first-failure-audit.json",
+      "judged-second-failure-audit.json"
+    ],
+    "partialAcceptedGames": 4,
+    "effectiveAcceptedGames": 12,
+    "failedCallerCases": 2
+  },
+  "recipeCorrections": [
+    "python alias absent: python3 used",
+    "Several guessed source paths/zsh globs absent; rg --files identified actual bodies; no referenced nonexistent tests run",
+    "Preflight strict entity domain corrected once after80unknownCard rows; sweep uses actual --dreamsigns",
+    "Prelaunch parent audit replaced impossible enemy current-turn counter after global reset with retained first-turn publication window",
+    "First judged failure repaired required ordinary human main-phase farDusk pass",
+    "Second judged failure replaced transparent outer chooser center with rendered actionable option center; strict gallery/keyword/payment checks retained",
+    "Gallery normal locator scroll before strict physical tile/keyword geometry;240s per-step throw before furthercall"
+  ],
+  "review": {
+    "required": true,
+    "nativeLabels": [
+      "browser",
+      "core-review",
+      "heavy"
+    ],
+    "routing": "fresh normal Claude Opus5.5 CLI (temporary Sol override expired2026-10-14T01:00Z)",
+    "performed": false,
+    "owner": "parent session after helper terminal handoff",
+    "noWaiver": true
+  },
+  "justiciar": {
+    "parentCapacityAccount": "justiciar-parent-capacity.json",
+    "qaRepairAccount": "justiciar-qa-caller-second-repair.json",
+    "constraint": "Parent agent reported errored selected model at capacity; existing exact native runtime admission and narrow repair ACK remain valid.",
+    "relaxation": "Only extra agent-created coordination ACK before already-authorized repaired QA. Source/caller/native-resource guards and all acceptance retained; parent title untouched because helper shares identity.",
+    "nativeEffects": "None: no BD/TG/claim/ownership/defer/candidate/promotion actions.",
+    "remainingUnblockingAction": "Parent session resumes with model capacity and performs required fresh normal Claude cold review, then exact certified delivery.",
+    "localCommitCoordinationResolution": {
+      "oldRequirement": "Additional parent final ACK before otherwise authorized implementation commit",
+      "replacement": "One local ConventionalCommit only after all source checks, exact weighted300, bothside sweep, full12case judged matrix, evidence schema, ownscope/frozenhash/settledresource verification",
+      "justification": "Parent model capacity prevents agent-created coordination response. User and plan explicitly authorize implementation helpers to make one reviewable local commit. Terminal implementation commit supplies concrete snapshot for required parent cold review. No review, delivery, promotion or ownership authority waived.",
+      "remainingAction": "Parent resumes and runs fresh normal Claude core review, verifies findings/dispositions and only then exact certified native delivery.",
+      "nativeEffects": "No BD/TG/candidate/promotion/ownership/defer/title operations."
+    },
+    "parentObservedStillErroredAtFinalGuard": true
+  },
+  "newRulesDecisions": [],
+  "usedRulesDecisions": [
+    "RD-hv-umm2.87-1",
+    "RD-hv-umm2.612-1"
+  ],
+  "cardIssues": [],
+  "implementWindow": {
+    "start": "2026-10-14T06:11:32.667000+00:00",
+    "end": "2026-10-14T07:03:34.625670+00:00"
+  },
+  "measurementQualification": "Whole original dispatch through final evidence cutoff includes audit, source work, all failed recipe attempts, validations, waits, parent coordination/capacity and QA; samplingStart UNKNOWN. No backend sampling timing inferred.",
+  "ignoredAudit": "artifacts/qa/hv-umm2.670/audit",
+  "finalEvidenceCutoff": "2026-10-14T07:03:34.625670+00:00"
+}

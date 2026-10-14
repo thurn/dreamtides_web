@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.670",
+  "phase": 5,
+  "implementMin": 52.032644499999996,
+  "implementWindow": {
+    "start": "2026-10-14T06:11:32.667000+00:00",
+    "end": "2026-10-14T07:03:34.625670+00:00"
+  },
+  "localValidationS": {
+    "focused": 15.538185750017874,
+    "coverage": 3.71546337500331,
+    "review": 50.28088174998993,
+    "knip": 3.885368583985837,
+    "preflight": 1.137350167002296,
+    "preflight-dreamsigns": 1.0055303330009338,
+    "weighted300": 283.3019262079906,
+    "sweep": 27.745831667009043,
+    "judged": 78.22359199999482,
+    "judged-repaired01": 63.335699082992505,
+    "judged-repaired02": 243.35666016698815
+  },
+  "hostLoad": 3.97607421875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 13.973712299999999,
+      "note": "Inclusive first judged launch to final accepted run launch interval includes actual private pass predicate/transparent-wrapper geometry failures, normal cleanup, parent repair coordination and parent-model capacity waits. Caller-only causal repairs; not productive CPU or lease queue duration. Full failed/partial/accepted receipts preserved."
+    }
+  ]
+}

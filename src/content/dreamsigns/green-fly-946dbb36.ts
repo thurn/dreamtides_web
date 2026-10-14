@@ -1,3 +1,6 @@
+import { triggered, triggeringCard, whenErode } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { grantReclaim } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +16,6 @@ export default dreamsign({
     "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
   ],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenErode(), grantReclaim(triggeringCard()), { oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("The first card you erode each turn gains reclaim."),
 });
