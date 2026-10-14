@@ -1,3 +1,4 @@
+import { getDeckContentProvider } from "./deck";
 import { validPreventedNightmareGains } from "./journey-deck-entry";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "./modifier-registry";
 import { validJourneyTransfigurationScreen } from "./journey-transfiguration";
@@ -526,7 +527,8 @@ function hasValidAtlasSites(atlas: Record<string, unknown>): boolean {
 /**
  * Structural guard: `value` carries every `JourneyState` field this validator
  * relies on, each with the correct primitive/container type. Nullable fields are
- * checked as `null`-or-of-type; content is never inspected.
+ * checked as `null`-or-of-type. Present paired prevention sources additionally
+ * match their canonical UUID through the registered deck content provider.
  */
 function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry): value is JourneyState {
   if (!isRecord(value)) return false;
@@ -563,7 +565,7 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
         dreamsignIdFromUnknown(runtime.journeyEssenceSource) === null)) return false;
     if (isRecord(runtime) && runtime.kind === "exploration" &&
       (!validJourneySiteCounters(runtime.journeySiteRerolls) ||
-        (isRecord(runtime.resolution) && !validPreventedNightmareGains(runtime.resolution.preventedNightmareGains, value.deck as unknown[], runtime.resolution, (id) => registry.lookup(id), runtime.actionOffers)))) return false;
+        (isRecord(runtime.resolution) && !validPreventedNightmareGains(runtime.resolution.preventedNightmareGains, value.deck as unknown[], runtime.resolution, (id) => registry.lookup(id), runtime.actionOffers, (cardId) => getDeckContentProvider()?.resolveCardNumber(cardId) ?? null)))) return false;
     if (
       isRecord(runtime) &&
       runtime.kind === "shop" &&

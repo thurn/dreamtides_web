@@ -217,6 +217,9 @@ describe("Nightmare prevention saved transaction contracts", () => {
     expect(apply(out.state, "LOAD_STATE", { snapshot }).outcome).toBe("applied");
     delete (snapshot.siteRuntime[SITE_ID] as ExplorationSiteRuntime).resolution!.preventedNightmareGains;
     expect(apply(out.state, "LOAD_STATE", { snapshot }).outcome).toBe("applied");
+    registerDeckContentProvider(null);
+    expect(apply(out.state, "LOAD_STATE", { snapshot: clone(out.state.journey) }).outcome).toBe("applied");
+    expect(apply(out.state, "LOAD_STATE", { snapshot }).outcome).toBe("applied");
     expect(apply(out.state, "LOAD_STATE", { snapshot: clone(out.state.journey) }).state.journey.siteRuntime[SITE_ID]).toEqual(out.state.journey.siteRuntime[SITE_ID]);
   });
   it.each([null, {}, [{ entryId: 4 }], [{ entryId: "blocked", cardId: WARRIOR, dreamsignId: RAVEN, heldIndex: 0 }], [{ entryId: "blocked", cardId: NIGHTMARE_CARD_ID, dreamsignId: RAVEN, heldIndex: -1 }], [{ entryId: "blocked", cardId: NIGHTMARE_CARD_ID, dreamsignId: RAVEN, heldIndex: .5 }]])("rejects malformed prevention receipt %j atomically", (receipt) => {
@@ -321,9 +324,36 @@ describe("actual prepared Exploration additions and public reward models", () =>
       expect(rejected.state).toBe(out.state); expect(rejected.logRecords).toBeUndefined();
       expect(rewardForResolution(stripped.siteRuntime[SITE_ID] as ExplorationSiteRuntime, SITE_ID, stripped, content, null, [action], [], (id) => registry.lookup(id))).toBeNull();
     }
+    if (kind === "copy-selected-cards") {
+      const forged = clone(out.state.journey), receipt = (forged.siteRuntime[SITE_ID] as ExplorationSiteRuntime).resolution!;
+      receipt.preventedNightmareGains = [{ ...receipt.preventedNightmareGains![0], sourceEntryId: parseDeckEntryId("warrior") }];
+      const rng = vi.fn(() => 0), rejected = apply(out.state, "LOAD_STATE", { snapshot: forged }, { rng });
+      expect(rejected.state).toBe(out.state); expect(rejected.logRecords).toBeUndefined(); expect(rng).not.toHaveBeenCalled();
+      expect(rewardForResolution(forged.siteRuntime[SITE_ID] as ExplorationSiteRuntime, SITE_ID, forged, content, null, [action], [], (id) => registry.lookup(id))).toBeNull();
+    }
+    if (kind === "copy-selected-card") {
+      const snapshot = clone(out.state.journey), rng = vi.fn(() => 0);
+      for (const availability of ["absent", "unresolved", "throws"] as const) {
+        const resolveCardNumber = vi.fn(() => { if (availability === "throws") throw new Error("synthetic identity unavailable"); return null; });
+        registerDeckContentProvider(availability === "absent" ? null : { resolveCardNumber, resolveDreamsign: sign });
+        const rejected = apply(out.state, "LOAD_STATE", { snapshot }, { rng });
+        expect(rejected.state).toBe(out.state); expect(rejected.logRecords).toBeUndefined(); expect(rng).not.toHaveBeenCalled();
+      }
+      install();
+      expect(apply(out.state, "LOAD_STATE", { snapshot }).outcome).toBe("applied");
+      let modified = accepted(out.state, "TRANSFIGURE_CARD", { entryId: "old-bane", transfiguration: "Enduring" });
+      modified = accepted(modified, "SET_DECK_ENTRY_TYPE", { entryId: "old-bane", typeChange: { predicateId: parseCardTypeChangePredicateId("changed-source"), cardType: "Character", subtype: parseCardSubtype("Warrior"), label: "Synthetic" } });
+      modified = accepted(modified, "SET_DECK_ENTRY_KEYWORDS", { entryId: "old-bane", keywords: { fast: true } });
+      modified = accepted(modified, "SET_DECK_ENTRY_STAT_OVERRIDE", { entryId: "old-bane", override: { spark: 9 } });
+      expect(apply(modified, "LOAD_STATE", { snapshot: clone(modified.journey) }).outcome).toBe("applied");
+    }
     const sourceLost = accepted(out.state, "REMOVE_DREAMSIGN", { dreamsignId: RAVEN });
     const sourcePurged = accepted(sourceLost, "REMOVE_DECK_ENTRY", { entryId: "old-bane" });
+    const resolveCardNumber = vi.fn(() => { throw new Error("gone source needs no identity lookup"); });
+    registerDeckContentProvider({ resolveCardNumber, resolveDreamsign: sign });
     expect(apply(sourcePurged, "LOAD_STATE", { snapshot: clone(sourcePurged.journey) }).outcome).toBe("applied");
+    expect(resolveCardNumber).not.toHaveBeenCalled();
+    install();
   });
   it("loads the copied Nightmare companion rather than the purged target of a prepared compound", () => {
     const ordinary = makeAuguryTestCard({ id: OTHER, cardNumber: 2, cardType: "Event", subtype: "", energyCost: 2, isFast: false });

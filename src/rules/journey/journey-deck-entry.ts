@@ -1,5 +1,5 @@
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
-import { cardIdFromUnknown, parseCardSubtype } from "../../types/card-identity";
+import { cardIdFromUnknown, parseCardSubtype, type CardId } from "../../types/card-identity";
 import { deckEntryIdFromUnknown, dreamsignIdFromUnknown, type DeckEntryId, type DreamsignId } from "../../types/identifiers";
 import type { JourneyDeckEntryEffect, JourneyDeckEntryGain, JourneyState, PreventedNightmareGain } from "../../types/journey";
 import { journeyTransfigurationCard } from "./journey-transfiguration";
@@ -19,7 +19,7 @@ const record = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 /** Optional saved receipts have their own bounded structural and identity contract. */
-export function validPreventedNightmareGains(value: unknown, deck: readonly unknown[], resolution: Record<string, unknown>, lookup: JourneyModifierRegistry["lookup"], actionOffers: unknown): boolean {
+export function validPreventedNightmareGains(value: unknown, deck: readonly unknown[], resolution: Record<string, unknown>, lookup: JourneyModifierRegistry["lookup"], actionOffers: unknown, resolveCardNumber: (cardId: CardId) => number | null): boolean {
   if (value === undefined) return true;
   if (!Array.isArray(value)) return false;
   if (!Array.isArray(actionOffers)) return false;
@@ -69,6 +69,14 @@ export function validPreventedNightmareGains(value: unknown, deck: readonly unkn
           break;
       }
       if (!related) return false;
+      const sources = deck.filter((source) => record(source) && source.entryId === item.sourceEntryId);
+      if (sources.length > 0) {
+        let canonicalNumber: number | null;
+        try { canonicalNumber = resolveCardNumber(NIGHTMARE_CARD_ID); } catch { return false; }
+        if (typeof canonicalNumber !== "number" || !Number.isSafeInteger(canonicalNumber) ||
+          sources.some((source) => !record(source) || typeof source.cardNumber !== "number" ||
+            !Number.isSafeInteger(source.cardNumber) || source.cardNumber !== canonicalNumber)) return false;
+      }
     }
     ids.add(id);
   }

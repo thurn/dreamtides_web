@@ -1,0 +1,247 @@
+{
+  "bead": "hv-96xy",
+  "phase": 5,
+  "implementationProvenance": {
+    "base": "82a6e900746415ca71d9cfd97c6a28ae351e5c6d",
+    "dispatchUTC": "2026-10-14T00:11:54.671Z",
+    "dispatchScope": "Observed original parent canonical postclaim followup_task ordinal22614; never reset after WRITEACK.",
+    "claimUTC": "2026-10-14T00:10:25.151317Z",
+    "claimPrefixMin": 1.4919947166666667,
+    "modelStart": "unobserved",
+    "productiveEditsCPU": "unobserved",
+    "endpointUTC": "2026-10-14T00:30:44.036255+00:00",
+    "implementMin": 18.82275425,
+    "claimGrossMin": 20.314748966666667,
+    "status": "Local source/public contracts/checks complete; final immutable commit prepared, parent-required fresh cold core review and exact delivery pending",
+    "endpointScope": "Observed UTC immediately before final two timing records/light schema/index/single source commit. Inclusive actual original dispatch window never reset. Actual Git invocation bracket/end/second-precision clocks and cutoff-tail are outside96xy-final-commit-receipt.json. No postcommit amendment."
+  },
+  "functionalScope": [
+    "src/rules/journey/journey-deck-entry.ts",
+    "src/rules/journey/lifecycle.ts",
+    "src/screens/cumulus_adapters/exploration-resolution-view-model.ts",
+    "src/rules/journey/journey-deck-entry.test.ts"
+  ],
+  "sourceDiff": {
+    "files": 4,
+    "added": 52,
+    "deleted": 12,
+    "net": 40,
+    "scope": "Only functional source, excludes own evidence."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 30,
+    "jsdomFiles": 0
+  },
+  "testSupportScope": {
+    "touchedExistingFiles": 1,
+    "added": 30,
+    "deleted": 0,
+    "net": 30,
+    "entrypointLines": 439,
+    "newFiles": 0,
+    "newJsdomFiles": 0,
+    "readonlyOuterControlFile": 206,
+    "scope": "All plain contract support lines added-minus-deleted, no new entrypoint/privatealgorithm/UIstrings/productiongoldens."
+  },
+  "sourceContract": {
+    "signature": "Existing primitive required6th resolveCardNumber:(CardId)=>number|null pure callback, no default/exportfactory/persistedschema/providerchange.",
+    "boundaries": "Lifecycle uses existing getDeckContentProvider lambda; all4model validator calls use owncontent cardById lambda. Private mapping helper3callers forward existingcontent; publicmodel/outerbuilder/test/provider signatures unchanged.",
+    "policy": "Every paired knownproducer source record actually present must have safeinteger cardNumber matching canonical NightmareUUID resolved storage index. Only that branch performs lookup. Absent/null/unresolvable/throw returns false atomically; after proper providerrestore same snapshotvalid. No positivecardnumberconstant/name/IsBane/unknownDeckEntrycast.",
+    "history": "Sourcegone bypasses lookup and retains knownproducer/sourcepair role; wholeomitted/[]/genuine pairless scalar bypass. Sourceheldloss is independent. Later form/type/keyword/stat edits preserve base printing/cardNumber. Bounded coherence, not authentication of full eventhistory or identity of an unavailable historical source."
+  },
+  "negative": {
+    "externalV2": "96xy-old-public-baseline-receipt.json:1.063559625s0 actual public mixed preparedprovider\u2192resolve APPLIED\u2192receiptONLYsourceEntryId Warrior substitutionLOAD APPLIED, zeroRNG/logs; independentclone restoring onefield equals originalJSON. No source edits.",
+    "externalV1": "96xy-old-public-baseline-v1*:1.849720792s0 observedAPPLIED but mutable report reference printed restoredsource, bookkeeping only; correctedimmutableartifact authoritative, allraw retained.",
+    "owningOld": "96xy-old-behavior-receipt.json:2actual failures/50passed on52cases: mixedonlysourceEntryId forgeryaccepted, and validpresent source unavailableauthorityaccepted. No import/type/setup failure claimed."
+  },
+  "validationSummary": {
+    "focus": "55cases/2files0, owning439linefile plusreadonlyouter206linecontrol",
+    "review": "881cases/77files,type/lint/cycles0",
+    "knip": "0",
+    "coverage": "20cases/1file0",
+    "schema": "Precommit759records/41historicalUnknowns0; final new own friction record light schema result is in outside96xy-final-commit-receipt.json.",
+    "full": "Not invoked: bounded canonical parser callback/argument forwarding, no sharedinfra/config/crosscutarchitecture/schema/state/application change.",
+    "browser": "Not invoked: no production renderer/player workflow changes; pure public parser/present canonical UUID contract, no new native production Raven/TurnFourKeys capture claim.",
+    "battleLabFuzz": "No generic battle300/card-lab/sweep substitute for journey parser; prior264/652 mechanic/native evidence remains source-qualified, not borrowed newpass."
+  },
+  "receipts": [
+    {
+      "receipt": "96xy-coverage-receipt.json",
+      "startUTC": "2026-10-14T00:25:13.443877+00:00",
+      "endUTC": "2026-10-14T00:25:18.230180+00:00",
+      "wallSeconds": 4.786133957997663,
+      "exitCode": 0,
+      "load1AtCompletion": 11.07080078125
+    },
+    {
+      "receipt": "96xy-doctor-receipt.json",
+      "startUTC": "2026-10-14T00:10:51.806913+00:00",
+      "endUTC": "2026-10-14T00:10:55.697783+00:00",
+      "wallSeconds": 3.890863292006543,
+      "exitCode": 0,
+      "load1AtCompletion": null
+    },
+    {
+      "receipt": "96xy-focused-receipt.json",
+      "startUTC": "2026-10-14T00:23:55.763570+00:00",
+      "endUTC": "2026-10-14T00:24:02.051259+00:00",
+      "wallSeconds": 6.287543208018178,
+      "exitCode": 0,
+      "load1AtCompletion": 10.8828125
+    },
+    {
+      "receipt": "96xy-install-receipt.json",
+      "startUTC": "2026-10-14T00:10:55.698125+00:00",
+      "endUTC": "2026-10-14T00:11:00.460873+00:00",
+      "wallSeconds": 4.762737000011839,
+      "exitCode": 0,
+      "load1AtCompletion": null
+    },
+    {
+      "receipt": "96xy-knip-receipt.json",
+      "startUTC": "2026-10-14T00:25:02.022269+00:00",
+      "endUTC": "2026-10-14T00:25:06.835091+00:00",
+      "wallSeconds": 4.812680500006536,
+      "exitCode": 0,
+      "load1AtCompletion": 10.88720703125
+    },
+    {
+      "receipt": "96xy-old-behavior-receipt.json",
+      "startUTC": "2026-10-14T00:23:10.184544+00:00",
+      "endUTC": "2026-10-14T00:23:17.737389+00:00",
+      "wallSeconds": 7.552653708000435,
+      "exitCode": 1,
+      "load1AtCompletion": 14.67529296875
+    },
+    {
+      "receipt": "96xy-old-public-baseline-receipt.json",
+      "startUTC": "2026-10-14T00:15:38.239261+00:00",
+      "endUTC": "2026-10-14T00:15:39.302923+00:00",
+      "wallSeconds": 1.0635596249776427,
+      "exitCode": 0,
+      "load1AtCompletion": 7.193359375
+    },
+    {
+      "receipt": "96xy-old-public-baseline-v1-receipt.json",
+      "startUTC": "2026-10-14T00:14:45.325429+00:00",
+      "endUTC": "2026-10-14T00:14:47.175264+00:00",
+      "wallSeconds": 1.8497207920008805,
+      "exitCode": 0,
+      "load1AtCompletion": 8.63330078125
+    },
+    {
+      "receipt": "96xy-parent-friction-triggers-receipt.json",
+      "startUTC": "2026-10-14T00:12:22.937933+00:00",
+      "endUTC": "2026-10-14T00:12:23.292516+00:00",
+      "wallSeconds": 0.35461158299585804,
+      "exitCode": 0,
+      "load1AtCompletion": null
+    },
+    {
+      "receipt": "96xy-prepare-receipt.json",
+      "startUTC": "2026-10-14T00:11:00.461343+00:00",
+      "endUTC": "2026-10-14T00:11:03.361539+00:00",
+      "wallSeconds": 2.900183666992234,
+      "exitCode": 0,
+      "load1AtCompletion": null
+    },
+    {
+      "receipt": "96xy-review-receipt.json",
+      "startUTC": "2026-10-14T00:24:27.413410+00:00",
+      "endUTC": "2026-10-14T00:24:50.996304+00:00",
+      "wallSeconds": 23.582508082996355,
+      "exitCode": 0,
+      "load1AtCompletion": 10.40625
+    },
+    {
+      "receipt": "96xy-schema-receipt.json",
+      "startUTC": "2026-10-14T00:27:44.560301+00:00",
+      "endUTC": "2026-10-14T00:27:44.698805+00:00",
+      "wallSeconds": 0.138410790998023,
+      "exitCode": 0,
+      "load1AtCompletion": 15.6259765625
+    }
+  ],
+  "localValidationS": {
+    "focused": 6.287543208018178,
+    "review": 23.582508082996355,
+    "knip": 4.812680500006536
+  },
+  "fiveFailurePaths": {
+    "errorMidStep": "Exact public LOAD with existing canonical provider absent/unresolvable/throw refuses same priorstate/no modifierlogs/RNG; after restore actual snapshotvalid. Existing local-log provider containment/retry control remains passing; no other provider operation exception policy changed.",
+    "reloadRestart": "Public JSONLOAD/deterministic replay existing selected/multiple/random/purge/compound controls; correct receipt and sourceheldloss/sourcepurged accepted. Sourcegone throwing resolver spy receives no calls.",
+    "partialWrite": "Receipt-only source substitution and provider failure return exact priorFoldState/no modifierlogs. Pure parser/model writes no persistent gameflow, domain transaction unchanged.",
+    "invalidStale": "Canonical mismatch on actual selected Warrior despite retainedNightmareUUID rejects; existing sourcepair/knownproducer/purgedvictim/strippedpair/RNGstale controls remain passing.",
+    "concurrentActors": "Upstream CAS/duplicateintent handling unchanged, existing deterministic reducer replay remains tested. No live multi-client repair/QA claim; atomic sourceguard is the bounded additional contract."
+  },
+  "sourceProof": {
+    "manifest": "96xy-source-final-manifest.json",
+    "regularFiles": 2449,
+    "bindingsAndResolvedTargets": 1572,
+    "fileTreeSHA": "7624986b32a3456f3d4b3db119e28461fb0ca30ddf66373eff7c49beb54cbb3a",
+    "linkTreeSHA": "c5167146e4a5ea70ec3ea4bd88a1dd6ad777a67822d6942b656e1e33dac91064",
+    "qaScenesSHA": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+    "scope": "Every regular tracked/nonignoredfunctional and generatedsrc/public byte; every symlink binding andtargethash. Only4admitted regularfiles differ frominitial fullmanifest, allotherbytes/bindings match. No temporaryQA/runtime source mutation."
+  },
+  "setup": {
+    "installSeconds": 4.762737,
+    "installExit": 0,
+    "canonicalPrepareSeconds": 2.900184,
+    "prepareExit": 0,
+    "owner": "Parent ranonce before dispatch; helper performs no install/setup."
+  },
+  "elapsedPhases": [
+    {
+      "name": "claimprefix/setup",
+      "start": "2026-10-14T00:10:25.151317Z",
+      "end": "2026-10-14T00:11:54.671Z",
+      "minutes": 1.4919947166666667,
+      "scope": "Ownership/setupprefix separate from implementWindow; elapsednotCPU."
+    },
+    {
+      "name": "Stage1/admission/observercorrection",
+      "start": "2026-10-14T00:11:54.671Z",
+      "end": "2026-10-14T00:21:48.874856Z",
+      "minutes": 9.9033976,
+      "scope": "Composite9.9034min read/API/publicdiagnostic/parentgraph admission andverified653observercorrection; no isolated>10min friction/productiveedit claim."
+    },
+    {
+      "name": "authoring/requiredvalidation",
+      "start": "2026-10-14T00:21:48.874856Z",
+      "end": "2026-10-14T00:25:18.230180+00:00",
+      "minutes": 3.4892554,
+      "scope": "Tests-first twoactualfailures, bounded4pathpatch/focus/review/Knip/content; actual percommand wrappers retained."
+    }
+  ],
+  "pendingPhase": "Coverage end through future endpoint includes fullsourceproof/evidence/rawarchive/schema/staging/parentendpointcoordination. All included in original dispatchgross, notCPU.",
+  "observerCorrection": {
+    "peer653": {
+      "source": "223eafa00eeb7774d099e55409dbca3ccf9b2957",
+      "landed": "33affa008e2dddf9a46baf105b01f19686b444c0",
+      "candidate": "01a13791-8123-7c00-b397-7144a6017dfc",
+      "certificate": "01a13792-223a-7761-9540-05bf56ad59b0",
+      "completed": true,
+      "baseContainsExactRuntimeAndTestBlobs": true,
+      "nativeQA": "run-WT3f4G",
+      "ownership": "peer01a13331",
+      "qualification": "Nativepeer QA receipts are recorded completion, not our new judged capture; no foreignWT/provider inspection"
+    },
+    "status": "Native653 ALREADYclosed/completed bypeer01a13331; source223eafa/certified33affa exactOfferTile/choicesblobs includedin ownbase82a6. Actual peer runWT3f4G desktop/mobile duplicateAugury/reloadCaps[] sourcequalified, notour newlyjudged browser pass.",
+    "historicalStatement": "Parent earlier assumed653future/unresolved and immutable656 own evidence reflects that stale observer statement. Fresh96xy native proof corrects currentstatus; original656/652failedduplicateattempts retained and notwaived. No oldcommit amended orforeignWT/provider inspected.",
+    "failedPrecondition": "Parent graph observer queriedalreadyclosed653 asfuture andblocked BEFOREnative/source WRITEACK; freshproof resolvedit, no foreignedges/effects orsource mutation. No separate elapsed figure measured."
+  },
+  "reviewDisposition": "Verified cold656 P2 remaining present selectedsource entry/CardUUID mismatch reproducedpublicly and repaired; fresh96xy requiredcoldreview remains parent-owned pending afterterminal exactcommit. 656/652/263/264acceptance checkpoints nativeparent-owned, no closureclaimed.",
+  "reviewRouting": "Fresh readonlyCodexCLI gpt-5.6-sol useroverrideuntil2026-10-14T01Z thennormalprojectroute; parent owns reviewer/candidate/promotion, helper neverinvokes reviewer.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review wrapper completion1-minute load10.40625, notstepstart/causal performance control."
+      },
+      "localValidationS": {
+        "measuredFor": "Actual final focus/review/Knip wrappers includecanonical preparation/restore; rawtimestamps retained."
+      }
+    }
+  },
+  "frictionScope": "Emptyfriction proposed, no isolated>10min issue. Stage1/admission/correction9.9034min compositeelapsed; allwalls including endpointcoordination counted, notCPU/editing."
+}
