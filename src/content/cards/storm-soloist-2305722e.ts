@@ -1,3 +1,6 @@
+import { playedThisTurn, plus } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { gainPoints } from "../../engine/effects/primitives/gain-points";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   artOwned: false,
   cardNumber: 263,
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenYouPlay(), gainPoints(plus(playedThisTurn(), -1)))],
+  verifiedText: "laft0g3ryy",
 });

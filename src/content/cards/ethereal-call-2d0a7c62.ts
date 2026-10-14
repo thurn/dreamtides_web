@@ -1,3 +1,7 @@
+import { event, playedThisTurn } from "../../engine/dsl/builders";
+import { materializeFigments } from "../../engine/effects/primitives/materialize-figments";
+import { parseFigmentId } from "../../engine/state/ids";
+import ethereal from "../figments/ethereal-3eddb1b8";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +25,6 @@ export default card({
   cardNumber: 426,
   art: { x: 0.046, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(materializeFigments(parseFigmentId(ethereal.id), playedThisTurn(), { spark: variant.amplified ? 2 : 1 }))],
+  verifiedText: "1ntddotivpu",
 });

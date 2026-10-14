@@ -1,3 +1,7 @@
+import { discardedIn, energy, event, thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenDiscardSelf } from "../../engine/dsl/triggers";
+import { grantReclaim } from "../../engine/effects/primitives/grant-reclaim";
+import { materialize } from "../../engine/effects/primitives/materialize";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +22,9 @@ export default card({
   artOwned: false,
   cardNumber: 237,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(materialize(discardedIn("void", { cardType: "character" }))),
+    triggered(whenDiscardSelf(), grantReclaim(thisCardIn("void"), { costs: [energy(0)] }), { zone: "void" }),
+  ],
+  verifiedText: "15c449fyx3b",
 });

@@ -1,0 +1,1053 @@
+{
+  "bead": "hv-umm2.193",
+  "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+  "dispatch": "2026-10-14T19:25:21.429Z",
+  "dispatchReceipt": {
+    "nativeJournal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-53-29-01a13063-cf1f-7e21-8cfa-6027541a59e2.jsonl",
+    "timestamp": "2026-10-14T19:25:21.429Z",
+    "ordinal": 31909,
+    "call_id": "call_e1c619ab15e74dd98e50b3be48656faf",
+    "name": "spawn_agent"
+  },
+  "initialManifest": {
+    "at": "2026-10-14T19:28:24.983864+00:00",
+    "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+    "files": {
+      "AGENTS.md": "b646d6232b333c4a19738970f5aad05e0f52075bce9082d6b10d79a30dbd3fd6",
+      "README.md": "e17ead6e7744306943fb2e4efd64a33b8adc6183065e1ef52c765a092c4d4214",
+      "docs/plan/README.md": "5b3aa340429d5c9df8c054a33bbd4bb49fa79f9da42d0f9c0a118a766cd23dd6",
+      "docs/plan/phase-5-content.md": "dd795dc77fb0a98456443a546c9f84d48ecbb163ef45f0f2c55e8fdb9cc5c2ec",
+      "docs/plan/engine-design.md": "b4a1865264b30a03ec335024f00328d261c88ff8830373ca1fa17ed5acd0e8f7",
+      "docs/plan/decisions.md": "c2282236ad6c119de48679fba67a7a6882d183e781e3d72a4dfdc3b0fae4e757",
+      "docs/plan/workflow.md": "a704b90d25f8bdfa81c392d4379485edaafc08f25ae3e8bcfeb231a749c6581f",
+      "docs/rules.md": "763d27268b56ed3a1e256053921f166aea32dd857a49509c9c4e87129d518643",
+      "docs/plan/evidence/parallelism/hv-umm2.606.md": "048d3126d86cbe374a8f5081112dc2477f86cdb6ef159ab70b1ce300d044ab73",
+      "src/content/cards/ethereal-call-2d0a7c62.ts": "542ef6ba3bd309a9459bf4e2e9b98dc6dcdac8051cf51e5f7b22ebba134a09c6",
+      "src/content/cards/first-encounter-70306382.ts": "99b08ffa89d5bc2b1ac2d433abbded76cc11d233eab520a5d717d99b3d36ee57",
+      "src/content/cards/illumination-of-glory-d217303e.ts": "9bfc2c4bfacccc27fbc7abf2f0d10faa46e6a8fb5bfb47fbf9d509fb203a05d7",
+      "src/content/cards/storm-soloist-2305722e.ts": "8ac82d450704a0589a066a03f9fd5527c4488577ca9d5ccb6f187ae554eb5ada",
+      "src/engine/dsl/builders.ts": "e51b8396d23f80f804e7661307be014f1c3e8e18974eb602a71d3c032613609f",
+      "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+      "src/engine/dsl/types.ts": "cecb5a0853597a9bac07f6b4e032fc0c73774de21b92d89251ac4b7b4387a538",
+      "src/engine/dsl/values.ts": "e9afa6c9cacc29b971d8cdcf3fbd28e221170d91cb004fc98b357c103c5fbd3d",
+      "src/engine/dsl/triggers.ts": "783fe8d620b203678ff493feb2be89d58e82d2a95269f274ba762720a916e55c",
+      "src/engine/effects/interpreter.ts": "65fccb147f3bd64c7fa614fa34cb10d089a0c22ff60dfd2b96c0ffb538175d2d",
+      "src/engine/effects/primitives/materialize.ts": "740f34038d7d453cef95088756194a72740b2dfd372dd6eedf1829d2078b3075",
+      "src/engine/effects/primitives/materialize-figments.ts": "4a02034bb87c04396edb77086a513221c615958a923e914ee9fea4787b5bbee7",
+      "src/engine/effects/primitives/grant-reclaim.ts": "ae08bc31160173e9db2460a2cc7138ee13f6ebd54f48bf485ceb5c8310b5ff05",
+      "src/engine/effects/primitives/gain-points.ts": "1c90ce69ba4a35e40099240b8c00574dc9986e7a4229787523d8db5b16d94407",
+      "src/engine/effects/primitives/prevent.ts": "a93ddfc45cab75e2f5ee38bd915474497b382f97964dd10496a0b77255de2322",
+      "src/engine/rules/turn-log.ts": "cedce2c8190f3023726a394fbac1068d2579b6e8625b99f87e5240903f61a08e",
+      "src/engine/rules/timing.ts": "10bf2d5d99938ab00a18450a09f19a287ce1e27fe397073cdcd52668678b661c",
+      "src/engine/rules/zones.ts": "c666f51b57cdb70a45afe0f0b72a7a4891dde94ef34a397eb321bc6f9f0c8134",
+      "src/engine/rules/stack.ts": "1a8ff31ec56b3bb379dcb9838074114a86d05adf371756a5e80ddc002131a0b4",
+      "src/engine/rules/legality.ts": "2926424a552da342d84a37b743e21c801d9dedd6276ee26e8e4205518a15cba5",
+      "src/engine/steps/kinds/play.ts": "9a9adfea0a4b359330c80ad0295660c3d949469ffad903ffbc27430f895bd9fa",
+      "src/engine/triggers/matcher.ts": "2ce911d248cc95b5dfa86417ce0c5a046201cd7b65d327b6f8f1119f59489924",
+      "src/engine/triggers/resolve.ts": "9eaf1247a9ba48c99a488b84b10f2b0db1614852e5205a9e247201f2322fbadc",
+      "src/engine/testing/scenario.ts": "154645bcca302217fa268b8d53f48e2aba44c3d71bad6980d2420d58931bf0ee",
+      "src/content/specs/specs.test.ts": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+      "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+      "scripts/qa/prelude.mjs": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+      "scripts/qa/card-sweep.mjs": "83f2d5e65a8e45dcbae1016531fc4e048d93c2749459410f710b13213b904e00"
+    }
+  },
+  "validationSource": {
+    "src/content/cards/ethereal-call-2d0a7c62.ts": "a3b181939da0fdedc9f00e2fc9397e5257ccd9f014d26cf288a337e82d01acce",
+    "src/content/cards/illumination-of-glory-d217303e.ts": "9e1531aa3117de97ba42695094670a5cd8bb4e00311b580e5119505e2414a817",
+    "src/content/cards/storm-soloist-2305722e.ts": "584a18172de3e78f8ca94240eb9d2b153deb1796fd91548d7abb2ce839bccaca",
+    "src/content/cards/first-encounter-70306382.ts": "4e841527da12120ac269846ec11071cfc7e0b35ebc447123b2dd16ab60e730a2",
+    "src/content/specs/cards-81.scenarios.ts": "035c85545b22f16a8331ba84b5e56b3d26c822c44006fc4d5af6819f61694f55"
+  },
+  "entityFactsExact": "\n> dreamtides-web@0.1.0 bead:entities\n> tsx scripts/bead-entities.ts *** *** *** ***\n\n[\n  {\n    \"uuid\": \"2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7\",\n    \"kind\": \"card\",\n    \"name\": \"Ethereal Call\",\n    \"module\": \"src/content/cards/ethereal-call-2d0a7c62.ts\",\n    \"text\": \"For each card you've played this turn, materialize a 1\u2726 ethereal figment.\",\n    \"amplifiedText\": \"For each card you've played this turn, materialize a 2\u2726 ethereal figment.\",\n    \"requiredPrimitives\": {\n      \"existing\": [\n        \"materializeFigments\",\n        \"turnHistory\",\n        \"untilEndOfTurn\"\n      ],\n      \"new\": []\n    },\n    \"promptKinds\": [],\n    \"d21\": {\n      \"firstByte\": 176,\n      \"sampled\": false\n    }\n  },\n  {\n    \"uuid\": \"d217303e-b115-484a-b22c-0e44d5701389\",\n    \"kind\": \"card\",\n    \"name\": \"Illumination of Glory\",\n    \"module\": \"src/content/cards/illumination-of-glory-d217303e.ts\",\n    \"text\": \"This event cannot be prevented. Gain 2\u235f for each card you have played this turn.\",\n    \"amplifiedText\": null,\n    \"requiredPrimitives\": {\n      \"existing\": [\n        \"gainPoints\",\n        \"keyword\",\n        \"turnHistory\",\n        \"untilEndOfTurn\"\n      ],\n      \"new\": []\n    },\n    \"promptKinds\": [],\n    \"d21\": {\n      \"firstByte\": 240,\n      \"sampled\": false\n    }\n  },\n  {\n    \"uuid\": \"2305722e-59c1-47d7-9e05-dc1c32c946a2\",\n    \"kind\": \"card\",\n    \"name\": \"Storm Soloist\",\n    \"module\": \"src/content/cards/storm-soloist-2305722e.ts\",\n    \"text\": \"When you play a card, gain 1\u235f for each other card you've played this turn.\",\n    \"amplifiedText\": null,\n    \"requiredPrimitives\": {\n      \"existing\": [\n        \"gainPoints\",\n        \"turnHistory\",\n        \"untilEndOfTurn\",\n        \"whenYouPlay\"\n      ],\n      \"new\": []\n    },\n    \"promptKinds\": [],\n    \"d21\": {\n      \"firstByte\": 245,\n      \"sampled\": false\n    }\n  },\n  {\n    \"uuid\": \"70306382-ac0d-4b08-843a-23efb3835c94\",\n    \"kind\": \"card\",\n    \"name\": \"First Encounter\",\n    \"module\": \"src/content/cards/first-encounter-70306382.ts\",\n    \"text\": \"Materialize all characters in your void which were discarded this turn.\\n\\nWhen you discard this card, it gains reclaim 0\u25cf.\",\n    \"amplifiedText\": null,\n    \"requiredPrimitives\": {\n      \"existing\": [\n        \"grantReclaim\",\n        \"materialize\",\n        \"turnHistory\",\n        \"untilEndOfTurn\",\n        \"whenDiscardSelfTrigger\",\n        \"zoneCardRefs\"\n      ],\n      \"new\": []\n    },\n    \"promptKinds\": [\n      \"chooseCards:chooseInZone\"\n    ],\n    \"d21\": {\n      \"firstByte\": 237,\n      \"sampled\": false\n    }\n  }\n]\n",
+  "scope": "Four native UUID leaf modules, one private auto-discovered cards-81 scenario; no runtime, engine, shared test, UI, generator, config or shared registration body changes.",
+  "rules": {
+    "ladder": "not invoked; normative current rules settle all clauses",
+    "anchors": [
+      "Current-turn occurrences and physical membership",
+      "Current-zone discarded membership",
+      "Materialize",
+      "Reclaim",
+      "Prevent",
+      "D13",
+      "D14",
+      "D15"
+    ],
+    "RD": [],
+    "cardIssues": []
+  },
+  "d20": {
+    "module": "src/content/specs/cards-81.scenarios.ts",
+    "cases": 12,
+    "lines": 103,
+    "entrypointDelta": 0,
+    "consumer": "src/content/specs/specs.test.ts through existing auto-discovery; public engine.apply/actions/ScriptedSource synthetic companions",
+    "primitiveCoverage": "Current-turn reset/copy exclusion/current-zone members already covered by public synthetic primitive contracts; new card cases cover own-play inclusivity, triggering-play exclusion, counted earlier own source play, both amplified sparks, exact zero-energy self-Reclaim and duplicate physical current-void members.",
+    "addedSyntheticTestLines": 103,
+    "newPlainScenarioModules": 1
+  },
+  "attempts": [
+    {
+      "name": "focused-original",
+      "verdict": "fail",
+      "counts": {
+        "pass": 10,
+        "fail": 2
+      },
+      "vitestReportedDurationS": 1.51,
+      "wallS": null,
+      "reason": "Scenario expectation used chronological discard order; separate discard occurrences insert newest card at void front. Corrected expectation to current-void order; production implementation unchanged."
+    }
+  ],
+  "commands": [
+    {
+      "name": "focused-corrected",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-81"
+      ],
+      "start": "2026-10-14T19:30:44.858855+00:00",
+      "hostLoad": [
+        2.49462890625,
+        6.4287109375,
+        9.14013671875
+      ],
+      "pid": 33905,
+      "pgid": 33905,
+      "log": "/tmp/193-focused-corrected.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:30:46.723596+00:00",
+      "wallS": 1.86465770797804,
+      "exit": 0
+    },
+    {
+      "name": "coverage",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-14T19:30:50.355368+00:00",
+      "hostLoad": [
+        2.85498046875,
+        6.43798828125,
+        9.12744140625
+      ],
+      "pid": 34046,
+      "pgid": 34046,
+      "log": "/tmp/193-coverage.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:30:52.081996+00:00",
+      "wallS": 1.7265392919944134,
+      "exit": 0
+    },
+    {
+      "name": "weighted-fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7,d217303e-b115-484a-b22c-0e44d5701389,2305722e-59c1-47d7-9e05-dc1c32c946a2,70306382-ac0d-4b08-843a-23efb3835c94"
+      ],
+      "start": "2026-10-14T19:31:06.520386+00:00",
+      "hostLoad": [
+        2.73974609375,
+        6.181640625,
+        8.97265625
+      ],
+      "pid": 34433,
+      "pgid": 34433,
+      "log": "/tmp/193-weighted-fuzz.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:36:01.337139+00:00",
+      "wallS": 294.81428183300886,
+      "exit": 0
+    },
+    {
+      "name": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7,d217303e-b115-484a-b22c-0e44d5701389,2305722e-59c1-47d7-9e05-dc1c32c946a2,70306382-ac0d-4b08-843a-23efb3835c94"
+      ],
+      "start": "2026-10-14T19:31:20.202724+00:00",
+      "hostLoad": [
+        2.619140625,
+        6.04296875,
+        8.890625
+      ],
+      "pid": 34640,
+      "pgid": 34640,
+      "log": "/tmp/193-preflight.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:31:21.649477+00:00",
+      "wallS": 1.446665416995529,
+      "exit": 0
+    },
+    {
+      "name": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.193",
+        "--cards",
+        "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7,d217303e-b115-484a-b22c-0e44d5701389,2305722e-59c1-47d7-9e05-dc1c32c946a2,70306382-ac0d-4b08-843a-23efb3835c94",
+        "--port",
+        "5174"
+      ],
+      "start": "2026-10-14T19:36:18.657750+00:00",
+      "hostLoad": [
+        3.4521484375,
+        4.47998046875,
+        7.29638671875
+      ],
+      "pid": 40457,
+      "pgid": 40457,
+      "log": "/tmp/193-sweep.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:41:04.909336+00:00",
+      "wallS": 286.24925095800427,
+      "exit": 0
+    },
+    {
+      "name": "judged-attempt1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.193",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-14T19:41:09.894986+00:00",
+      "hostLoad": [
+        8.60009765625,
+        5.9716796875,
+        7.0751953125
+      ],
+      "pid": 47009,
+      "pgid": 47009,
+      "log": "/tmp/193-judged-attempt1.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:42:03.912769+00:00",
+      "wallS": 54.01730054200743,
+      "exit": 1
+    },
+    {
+      "name": "judged-attempt2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.193",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-14T19:44:28.518782+00:00",
+      "hostLoad": [
+        6.62060546875,
+        6.0341796875,
+        6.84716796875
+      ],
+      "pid": 52010,
+      "pgid": 52010,
+      "log": "/tmp/193-judged-attempt2.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:44:57.220141+00:00",
+      "wallS": 28.701006707997294,
+      "exit": 1
+    },
+    {
+      "name": "judged-attempt3",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.193",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-14T19:46:07.312747+00:00",
+      "hostLoad": [
+        6.0654296875,
+        5.9462890625,
+        6.720703125
+      ],
+      "pid": 54519,
+      "pgid": 54519,
+      "log": "/tmp/193-judged-attempt3.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:47:31.235460+00:00",
+      "wallS": 83.91331075000926,
+      "exit": 1
+    },
+    {
+      "name": "judged-first-diagnostic",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.193",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "only=3"
+      ],
+      "start": "2026-10-14T19:49:39.600264+00:00",
+      "hostLoad": [
+        11.9755859375,
+        10.9853515625,
+        8.86083984375
+      ],
+      "pid": 22683,
+      "pgid": 22683,
+      "log": "/tmp/193-judged-first-diagnostic.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:50:07.042052+00:00",
+      "wallS": 27.44134670801577,
+      "exit": 1
+    },
+    {
+      "name": "judged-first-final",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.193",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "only=3"
+      ],
+      "start": "2026-10-14T19:51:13.179436+00:00",
+      "hostLoad": [
+        7.99755859375,
+        9.92578125,
+        8.67431640625
+      ],
+      "pid": 52632,
+      "pgid": 52632,
+      "log": "/tmp/193-judged-first-final.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:51:55.706613+00:00",
+      "wallS": 42.52659104199847,
+      "exit": 0
+    },
+    {
+      "name": "judged-mobile-counts",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.193",
+        "--port",
+        "5174",
+        "--viewports",
+        "mobile",
+        "--arg",
+        "skip=3"
+      ],
+      "start": "2026-10-14T19:52:23.956189+00:00",
+      "hostLoad": [
+        9.59521484375,
+        10.03759765625,
+        8.81396484375
+      ],
+      "pid": 65709,
+      "pgid": 65709,
+      "log": "/tmp/193-judged-mobile-counts.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:53:03.982606+00:00",
+      "wallS": 40.02581820799969,
+      "exit": 0
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T19:55:12.400885+00:00",
+      "hostLoad": [
+        6.64990234375,
+        8.73095703125,
+        8.49755859375
+      ],
+      "pid": 71409,
+      "pgid": 71409,
+      "log": "/tmp/193-review.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:56:05.729129+00:00",
+      "wallS": 53.32755358298891,
+      "exit": 0
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-14T19:56:28.759694+00:00",
+      "hostLoad": [
+        13.26123046875,
+        10.3056640625,
+        9.107421875
+      ],
+      "pid": 31375,
+      "pgid": 31375,
+      "log": "/tmp/193-knip.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:56:33.289856+00:00",
+      "wallS": 4.5299898340017535,
+      "exit": 0
+    },
+    {
+      "name": "final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-14T19:58:33.263894+00:00",
+      "hostLoad": [
+        22.11669921875,
+        12.4599609375,
+        9.98681640625
+      ],
+      "pid": 38028,
+      "pgid": 38028,
+      "log": "/tmp/193-final-schema.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:58:33.407320+00:00",
+      "wallS": 0.1433427500014659,
+      "exit": 0
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting sample at 2026-10-14T19:55:12.400885+00:00"
+      }
+    }
+  },
+  "performanceClaims": "None. Wrapper records elapsed wall and observed load only; fuzz may provide actual runtime/CPU summary. No speedup or loaded comparison inferred.",
+  "fallout": [],
+  "removedUnusedExports": [],
+  "failurePaths": {
+    "errorMidStep": "No new engine transition or transaction boundary. Existing primitives use cloned atomic steps; source composition adds no write mechanism. Weighted fuzzer checks invariants and replay.",
+    "reloadRestart": "Actual browser workflow must verify same persisted sides/instances/current-turn history after reload.",
+    "partialWrite": "No new persistence write. Existing engine.action and answer log fold remains sole state writer.",
+    "invalidStaleInput": "No new prompt/input kind. Engine legal actions/choice validation handles normal materialize, discard activation and Reclaim; browser uses public UI intents.",
+    "concurrentActors": "No new concurrency protocol or authority. Existing per-game lock and normal AI/player turn driver; browser runner owns isolated context/server."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 100875,
+    "reportedWallS": 293.6,
+    "reportedCPUS": 314.8,
+    "failures": 0,
+    "prompts": 6981,
+    "interactiveReruns": 768,
+    "targets": [
+      {
+        "uuid": "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7",
+        "included": 614,
+        "exercised": 113
+      },
+      {
+        "uuid": "d217303e-b115-484a-b22c-0e44d5701389",
+        "included": 609,
+        "exercised": 61
+      },
+      {
+        "uuid": "2305722e-59c1-47d7-9e05-dc1c32c946a2",
+        "included": 612,
+        "exercised": 109
+      },
+      {
+        "uuid": "70306382-ac0d-4b08-843a-23efb3835c94",
+        "included": 616,
+        "exercised": 151
+      }
+    ]
+  },
+  "preflight": {
+    "pass": 46,
+    "skip": 34,
+    "fail": 0,
+    "allVariants": true,
+    "bothSeats": true
+  },
+  "sweep": {
+    "pass": 46,
+    "skip": 34,
+    "fail": 0,
+    "rawAttempts": 80,
+    "effectiveCells": 80,
+    "invocation": "sweep-Gb5eRK",
+    "allVariants": true,
+    "bothSeats": true,
+    "actualPort": 5274,
+    "serverPGID": 40487,
+    "cleanup": "runner reported port free and closed owned client/context"
+  },
+  "callerCorrections": [
+    {
+      "at": "2026-10-14T19:36:49.797275+00:00",
+      "oldSHA256": "f3a6993380f81e3e1155ce8e23aa8e89286677d4529ce5d3472c3f80d6c64d7a",
+      "newSHA256": "03db75d0095ad465741f6a2c02ebc9cac6c81fb53d7b5b12e379d50c82275521",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.193/judged.mjs",
+      "reason": "Identify retained solver source by its public printing UUID and declared amplified flag, requiring uniqueness, rather than initial hand slot."
+    },
+    {
+      "at": "2026-10-14T19:37:51.714706+00:00",
+      "oldSHA256": "03db75d0095ad465741f6a2c02ebc9cac6c81fb53d7b5b12e379d50c82275521",
+      "newSHA256": "482891c80719bb49306c015c0082b22f5175979ef312099e9e3a34cba53f6cbd",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.193/judged.mjs",
+      "reason": "Record actual visible player battle-log text and capture, using observed existing data-battle-event-log selectors and rendered close control; no copy assertions."
+    },
+    {
+      "at": "2026-10-14T19:43:53.723565+00:00",
+      "oldSHA256": "cb6dfb1517d24637057a5bd41117d0e11b9d888c0bcd7077b1e7a84c2bb10f55",
+      "newSHA256": "ea1743132f464cf03971469d4325663055d2ed0d4cc4f0cc403f2640359d7ce6",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.193/judged.mjs",
+      "reason": "Existing labAddCard leaves debug DeveloperRail open (prelude1320ff); read actual rail presence/geometry then dismiss through existing rendered close button before normal Day input readiness."
+    },
+    {
+      "at": "2026-10-14T19:43:13.101374+00:00",
+      "oldSHA256": "482891c80719bb49306c015c0082b22f5175979ef312099e9e3a34cba53f6cbd",
+      "newSHA256": "cb6dfb1517d24637057a5bd41117d0e11b9d888c0bcd7077b1e7a84c2bb10f55",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.193/judged.mjs",
+      "failedInvocation": "run-rkGcPJ",
+      "reason": "Wait for actual visible usable Day phase control after committed engine settlement before successive human taps; first play committed while presentation still disabled the second tap."
+    },
+    {
+      "at": "2026-10-14T19:45:51.118739+00:00",
+      "oldSHA256": "de60f7a69444cec0caac5a425cc66958506bd155aad49b7a0154d367d161e97e",
+      "newSHA256": "938198129ecff8fedbb94604057de1bbdc8c46bb83b2428c52a79d05ebcf8073",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.193/judged.mjs",
+      "failedInvocation": "run-8jkSZs",
+      "reason": "Actual QA LOAD_STATE lab emits debug_card_lab_loaded UUID/variant/source declaration and subsequent engine.action physical play, not engine.battleStarted; predicate now matches exported observed log schema. Original init predicate was an incorrect QA premise; no runtime logging change."
+    },
+    {
+      "at": "2026-10-14T19:44:13.586286+00:00",
+      "oldSHA256": "ea1743132f464cf03971469d4325663055d2ed0d4cc4f0cc403f2640359d7ce6",
+      "newSHA256": "de60f7a69444cec0caac5a425cc66958506bd155aad49b7a0154d367d161e97e",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.193/judged.mjs",
+      "reason": "Assert actual visible input and returned tap hit result before settlement; original caller discarded tap boolean and could wait after a missed tap. Exact original hit result is unknown; accepted log contains only first i18 companion play."
+    },
+    {
+      "at": "2026-10-14T19:50:58.704655+00:00",
+      "oldSHA256": "437aabb8e93e705571ef07465ae82861af435709717c52ea5dd5d1e1af13fd95",
+      "newSHA256": "8831619714161514f7b1cf8c48fcac173dad144629dfc3061437b083a62381f6",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.193/judged.mjs",
+      "reason": "Source consumer EngineBattleScreen onZoneOpen601 opens existing void ability chooser when Reclaim playable; choose its observed enabled View Your Void action (runtime copy296), preserve live buttons+capture, then inspect actual gallery identities. No guessed direct pile-to-browser transition."
+    },
+    {
+      "at": "2026-10-14T19:49:20.663102+00:00",
+      "oldSHA256": "938198129ecff8fedbb94604057de1bbdc8c46bb83b2428c52a79d05ebcf8073",
+      "newSHA256": "437aabb8e93e705571ef07465ae82861af435709717c52ea5dd5d1e1af13fd95",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.193/judged.mjs",
+      "reason": "Narrow to only=3 for First desktop diagnosis; assert actual void overlay, preserve all gallery physical IDs/rectangles/opacity and capture before selection. Earlier desktop0-2 source-bound successful calls/captures retained; add per-step successful receipt notes for future runs."
+    },
+    {
+      "name": "judged-first-diagnostic",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.193",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "only=3"
+      ],
+      "start": "2026-10-14T19:49:39.600264+00:00",
+      "hostLoad": [
+        11.9755859375,
+        10.9853515625,
+        8.86083984375
+      ],
+      "pid": 22683,
+      "pgid": 22683,
+      "log": "/tmp/193-judged-first-diagnostic.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:50:07.042052+00:00",
+      "wallS": 27.44134670801577,
+      "exit": 1
+    },
+    {
+      "at": "2026-10-14T19:52:23.916208+00:00",
+      "oldSHA256": "8831619714161514f7b1cf8c48fcac173dad144629dfc3061437b083a62381f6",
+      "newSHA256": "ac9140933f46ee15a7f1bcfa7678bc3abc90ad5d84b42972f61649c0796f3d03",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.193/judged.mjs",
+      "reason": "Run remaining mobile0-2 only via skip=3, retaining completed First bothviewport receipts and prior completed desktop0-2 calls; no duplicate proven matrix cells."
+    }
+  ],
+  "browserRuns": [
+    {
+      "invocation": "run-rkGcPJ",
+      "serverPGID": 47037,
+      "port": 5274,
+      "terminal": true,
+      "runnerCaps": [],
+      "reportSHA256": "74bb1a2a181c177936a5d053cea4a633a2d010d7c8b800ae0718780decbc4e93",
+      "ok": false,
+      "error": "desktop#0: Error: qa.battle ordinary hand play resolves: stalled: no progress for 45000 ms; last action none; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":false,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":3}}; history near:day\n    at fail (evalmachine.<anonymous>:1346:7)\n    at Object.playUntil (evalmachine.<anonymous>:1373:54)\n    at async play (evalmachine.<anonymous>:1685:5)\n    at async judged (evalmachine.<anonymous>:1699:34)\n    at async evalmachine.<anonymous>:1777:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 51150
+        }
+      ],
+      "cleanup": "runner log reports port free; no shared provider shutdown"
+    },
+    {
+      "invocation": "run-8jkSZs",
+      "serverPGID": 52055,
+      "port": 5174,
+      "terminal": true,
+      "runnerCaps": [],
+      "reportSHA256": "e90a6e31bdbd9b469703e4133135333f4b23ddf782a5f0659f863682d35cff7c",
+      "ok": false,
+      "error": "desktop#0: QaTimeoutError: persisted UUID play/effect evidence: the persisted log of game j43pz8 (45 lines) did not satisfy the predicate within 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:695:17)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async judged (evalmachine.<anonymous>:1767:16)\n    at async evalmachine.<anonymous>:1794:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)",
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 25918
+        }
+      ],
+      "cleanup": "runner log reports port free; no shared provider shutdown"
+    },
+    {
+      "invocation": "run-Qpn637",
+      "serverPGID": 54554,
+      "port": 5274,
+      "terminal": true,
+      "runnerCaps": [],
+      "reportSHA256": "578eeb82e5409f545f565825a92a3f1f55b9c0401813fabd6541225dd96eaeec",
+      "ok": false,
+      "error": "desktop#3: QaTimeoutError: waitVisible [data-gallery-entry-id=\"i5\"]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async judged (evalmachine.<anonymous>:1738:5)\n    at async evalmachine.<anonymous>:1794:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 14558
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 15928
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 18399
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 31790
+        }
+      ],
+      "cleanup": "runner log reports port free; no shared provider shutdown"
+    },
+    {
+      "invocation": "run-bCL5Zm",
+      "serverPGID": 22730,
+      "port": 5274,
+      "terminal": true,
+      "runnerCaps": [],
+      "reportSHA256": "6b61c4058d699536a299a94b37c0316e325e364fa6f3a51677aa72c1e8cc0133",
+      "ok": false,
+      "error": "desktop#3: QaTimeoutError: waitVisible [data-card-zone-browser=\"viewer:void\"]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async judged (evalmachine.<anonymous>:1739:5)\n    at async evalmachine.<anonymous>:1806:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 1331
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 635
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 718
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 21878
+        }
+      ],
+      "cleanup": "runner log reports port free; no shared provider shutdown"
+    },
+    {
+      "invocation": "run-1Ywj5E",
+      "serverPGID": 52679,
+      "port": 5274,
+      "terminal": true,
+      "runnerCaps": [],
+      "reportSHA256": "cd1eb217581024e5b8ad8b5d1d8b00dc8a440d1c88d8a126bd3688f7b1aae0a5",
+      "ok": true,
+      "error": null,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 1160
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 626
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 550
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 20620
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 553
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 1791
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 617
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 14055
+        }
+      ],
+      "cleanup": "runner log reports port free; no shared provider shutdown"
+    },
+    {
+      "invocation": "run-T4xWwp",
+      "serverPGID": 65756,
+      "port": 5274,
+      "terminal": true,
+      "runnerCaps": [],
+      "reportSHA256": "f4d7143c20e1b10a64efb2f89a8435054a7b1b0d6c7e6709e2f5af6598d2f18e",
+      "ok": true,
+      "error": null,
+      "calls": [
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 14416
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 12325
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 9639
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 710
+        }
+      ],
+      "cleanup": "runner log reports port free; no shared provider shutdown"
+    }
+  ],
+  "callerFinalSHA256": "ac9140933f46ee15a7f1bcfa7678bc3abc90ad5d84b42972f61649c0796f3d03",
+  "judged": {
+    "sampledUUIDs": [],
+    "newPromptStatusVisualKinds": [],
+    "voluntaryPassCells": 10,
+    "failedCallerAttempts": 4,
+    "desktopCountsProof": {
+      "invocation": "run-Qpn637",
+      "callerSHA256": "938198129ecff8fedbb94604057de1bbdc8c46bb83b2428c52a79d05ebcf8073",
+      "completedCalls": [
+        0,
+        1,
+        2
+      ],
+      "qualification": "Overall invocation failed in step3. Ordered calls0-2 completed and returned before step3 entry; exact retained caller runs board, DOM, UUID log, UI log, and same-fields reload assertions before returning. Final raw return objects were not retained by the failed aggregate. Six captures and navigation/call receipts retained; these three individual calls are pass evidence, not an aggregate pass."
+    },
+    "firstBothViewports": "run-1Ywj5E",
+    "mobileCounts": "run-T4xWwp",
+    "reloadScope": "exact serialized sides, instances and turnLog; no full-state hash claim",
+    "geometryScope": "actual battlefield cards and First source gallery tile, positive boxes within logical viewport and centre hit; no whole-app geometry claim",
+    "visualInspection": "Implementer and parent inspected desktop Call board and points log, mobile amplified Call and points log, mobile First Reclaim browser and desktop First settled duplicate characters. Declared synthetic placeholder art; no clipping/overlap found in changed surfaces."
+  },
+  "runtimeSettlement": {
+    "at": "2026-10-14T19:55:12.338482+00:00",
+    "recordedGroups": [
+      22683,
+      22730,
+      33905,
+      34046,
+      34433,
+      34640,
+      40457,
+      40487,
+      47009,
+      47037,
+      52010,
+      52055,
+      52632,
+      52679,
+      54519,
+      54554,
+      65709,
+      65756
+    ],
+    "liveRecordedGroupMembers": []
+  },
+  "artifacts": [
+    {
+      "file": "invocations/run-1Ywj5E/cards-81-3-desktop.png",
+      "sha256": "71757749fb8500d6b80d4c36e2cb43e36e5c62988f8539b7894d0d69cc776546"
+    },
+    {
+      "file": "invocations/run-1Ywj5E/cards-81-3-mobile.png",
+      "sha256": "e2d4294208a7714073e6b91e8297c9ab73a961d9f470854e4343aaa7b898a7e2"
+    },
+    {
+      "file": "invocations/run-1Ywj5E/cards-81-log-3-desktop.png",
+      "sha256": "d76b7d313cc4058dfbb623466f7aeddb678a0055ea5e4a233a06d72bb008a098"
+    },
+    {
+      "file": "invocations/run-1Ywj5E/cards-81-log-3-mobile.png",
+      "sha256": "02012d4c5ea66117dbc3ad7aa5affc8bd9c67fb198aae36f4820b505934df460"
+    },
+    {
+      "file": "invocations/run-1Ywj5E/first-encounter-browser-before-desktop.png",
+      "sha256": "6b99b44a8b1f6a104f73b86d9410ec0c4f61ca54e680ebd480d6632bbecc0a97"
+    },
+    {
+      "file": "invocations/run-1Ywj5E/first-encounter-browser-before-mobile.png",
+      "sha256": "97a6abf5610ffe98c1daac734085169b1d67ebd0bda17998cfcc1a43943ce25b"
+    },
+    {
+      "file": "invocations/run-1Ywj5E/first-encounter-reclaim-desktop.png",
+      "sha256": "6b99b44a8b1f6a104f73b86d9410ec0c4f61ca54e680ebd480d6632bbecc0a97"
+    },
+    {
+      "file": "invocations/run-1Ywj5E/first-encounter-reclaim-mobile.png",
+      "sha256": "97a6abf5610ffe98c1daac734085169b1d67ebd0bda17998cfcc1a43943ce25b"
+    },
+    {
+      "file": "invocations/run-1Ywj5E/first-encounter-void-choice-desktop.png",
+      "sha256": "03ad187d5ecf091fc3340d10f1d0c37df0e6c73e32e3445cf491f2071cb81de3"
+    },
+    {
+      "file": "invocations/run-1Ywj5E/first-encounter-void-choice-mobile.png",
+      "sha256": "1bdfb21e8c63111cc43805eb944023561e9fe2bb062aa23aee435bfb97bfc273"
+    },
+    {
+      "file": "invocations/run-Qpn637/cards-81-0-desktop.png",
+      "sha256": "3d58282dda000621d448193bdc75a0ea4acf0f446cfdcf7b16cbafe8945ca051"
+    },
+    {
+      "file": "invocations/run-Qpn637/cards-81-1-desktop.png",
+      "sha256": "b95d5da4fe80522dbb30108d6bae8bfe3ded41ad9fa52e692994640f227a0716"
+    },
+    {
+      "file": "invocations/run-Qpn637/cards-81-2-desktop.png",
+      "sha256": "822f85b4c112e0afe3608395911a8eac7ba3b10da24a109a5499eaf520c162cb"
+    },
+    {
+      "file": "invocations/run-Qpn637/cards-81-log-0-desktop.png",
+      "sha256": "5a2aac972d91a2bb9e6abcb58e4cf8933153215c4f5d86a784741e3c83132e09"
+    },
+    {
+      "file": "invocations/run-Qpn637/cards-81-log-1-desktop.png",
+      "sha256": "2b48a39866a13653af700dac89bc3b5bf2d25d27140e6b8c16048eadcc98ceab"
+    },
+    {
+      "file": "invocations/run-Qpn637/cards-81-log-2-desktop.png",
+      "sha256": "212bde5cee50b43a2a167509962a8abe09df490dbea245764458e83b988f2707"
+    },
+    {
+      "file": "invocations/run-T4xWwp/cards-81-0-mobile.png",
+      "sha256": "cc4a3b336bd8d0fe377ab63aa96009ae74260c99fa432d4840bf6ad756c2ddb6"
+    },
+    {
+      "file": "invocations/run-T4xWwp/cards-81-1-mobile.png",
+      "sha256": "0410355e7f80a1e1833beb5111b53359982c9d864894cb0728c7d4e6e6f52f5f"
+    },
+    {
+      "file": "invocations/run-T4xWwp/cards-81-2-mobile.png",
+      "sha256": "306112191aa3e6ef1360131bf18bb79f2baf0ff7c5c4a59aa285de0dc211f23d"
+    },
+    {
+      "file": "invocations/run-T4xWwp/cards-81-log-0-mobile.png",
+      "sha256": "b722bb2da1c19c64f0361abbabb6da87d9f6f68982891e164b974295718d5a2b"
+    },
+    {
+      "file": "invocations/run-T4xWwp/cards-81-log-1-mobile.png",
+      "sha256": "c582619445a5a782d5a9e040f1a1246eacdcb363620a6daa5fa976819d345cfd"
+    },
+    {
+      "file": "invocations/run-T4xWwp/cards-81-log-2-mobile.png",
+      "sha256": "b37765cfb2ff8509abc4c7a03d36bce586e413eef7b9ad69c0fbb9dc6af9fb77"
+    }
+  ],
+  "preExistingIssues": [],
+  "ordinaryValidation": {
+    "reviewPassedFiles": 253,
+    "reviewPassedTests": 6854,
+    "mainTypecheck": 0,
+    "nodeTypecheck": 0,
+    "frictionSchema": 0,
+    "lint": 0,
+    "importCycles": 0,
+    "Knip": 0,
+    "fallout": [],
+    "removedUnusedExports": [],
+    "fullLocalReview": "Not required: no architecture, config or test infrastructure change.",
+    "workspaceArt": "Ordinary checks use their isolated asset-preparation mode and restore 564/564 card images plus all actual local assets before finishing; QA used the restored linked assets."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 103,
+    "jsdomFiles": 0
+  },
+  "reviewRouting": {
+    "coreReviewRequired": false,
+    "reason": "Original composition bead, existing primitives and existing prompt/status/visual kinds; no phase gate."
+  },
+  "finalPackaging": {
+    "at": "2026-10-14T19:59:31.128202+00:00",
+    "paths": [
+      "docs/plan/evidence/friction/hv-umm2.193.json",
+      "docs/plan/evidence/measurements/hv-umm2.193.json",
+      "docs/plan/evidence/measurements/hv-umm2.193.md",
+      "docs/plan/evidence/qa-ledger/hv-umm2.193.jsonl",
+      "src/content/cards/ethereal-call-2d0a7c62.ts",
+      "src/content/cards/first-encounter-70306382.ts",
+      "src/content/cards/illumination-of-glory-d217303e.ts",
+      "src/content/cards/storm-soloist-2305722e.ts",
+      "src/content/specs/cards-81.scenarios.ts"
+    ],
+    "sourceHashes": {
+      "src/content/cards/ethereal-call-2d0a7c62.ts": "a3b181939da0fdedc9f00e2fc9397e5257ccd9f014d26cf288a337e82d01acce",
+      "src/content/cards/illumination-of-glory-d217303e.ts": "9e1531aa3117de97ba42695094670a5cd8bb4e00311b580e5119505e2414a817",
+      "src/content/cards/storm-soloist-2305722e.ts": "584a18172de3e78f8ca94240eb9d2b153deb1796fd91548d7abb2ce839bccaca",
+      "src/content/cards/first-encounter-70306382.ts": "4e841527da12120ac269846ec11071cfc7e0b35ebc447123b2dd16ab60e730a2",
+      "src/content/specs/cards-81.scenarios.ts": "035c85545b22f16a8331ba84b5e56b3d26c822c44006fc4d5af6819f61694f55"
+    },
+    "recordedGroups": [
+      22683,
+      22730,
+      31375,
+      33905,
+      34046,
+      34433,
+      34640,
+      38028,
+      40457,
+      40487,
+      47009,
+      47037,
+      52010,
+      52055,
+      52632,
+      52679,
+      54519,
+      54554,
+      65709,
+      65756,
+      71409
+    ],
+    "liveMembers": [],
+    "qaLedgerRows": 94,
+    "schemaReceipt": {
+      "name": "final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-14T19:58:33.263894+00:00",
+      "hostLoad": [
+        22.11669921875,
+        12.4599609375,
+        9.98681640625
+      ],
+      "pid": 38028,
+      "pgid": 38028,
+      "log": "/tmp/193-final-schema.log",
+      "state": "terminal",
+      "end": "2026-10-14T19:58:33.407320+00:00",
+      "wallS": 0.1433427500014659,
+      "exit": 0
+    },
+    "whitespace": "pass",
+    "removedUnusedExports": [],
+    "fallout": []
+  },
+  "commitClock": {
+    "gitCommitterTimestamp": "2026-10-14T20:00:38+00:00",
+    "meaning": "Commit invocation bracket is retained in the parent receipt; friction end is the actual configured Git committer timestamp, within the final packaging/commit bracket."
+  },
+  "implementWindow": {
+    "start": "2026-10-14T19:25:21.429Z",
+    "end": "2026-10-14T20:00:38+00:00"
+  },
+  "implementMin": 35.27618333333333
+}

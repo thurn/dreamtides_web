@@ -1,3 +1,5 @@
+import { event, keyword, playedThisTurn, times } from "../../engine/dsl/builders";
+import { gainPoints } from "../../engine/effects/primitives/gain-points";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 203,
   art: { x: 0.138, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("cannotBePrevented"), event(gainPoints(times(playedThisTurn(), 2)))],
+  verifiedText: "tom9pd07ez",
 });
