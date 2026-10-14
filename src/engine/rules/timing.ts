@@ -103,8 +103,8 @@ export function routePayable(state: BattleState, catalog: EngineCatalog, side: S
 /**
  * The routes a card in `from` could be played by, before costs and timing:
  * Offering needs the keyword; from the void, a play permission covering the
- * card for its owner comes first, then Reclaim, which needs the keyword or a
- * reclaim ability.
+ * card for its owner comes first, then Reclaim, which needs the keyword or
+ * an explicit Reclaim ability whose keyword has not been lost.
  */
 export function playRoutes(state: BattleState, catalog: EngineCatalog, id: InstanceId, from: PlayZone): PlayRoute[] {
   const instance = instanceOf(state, id);
@@ -116,7 +116,9 @@ export function playRoutes(state: BattleState, catalog: EngineCatalog, id: Insta
     const permitted = playPermission(state, catalog, id, instance.owner) !== null;
     const reclaimable =
       hasKeyword(state, catalog, id, "reclaim") ||
-      instanceCard(catalog, instance).abilities(instance.variant).some((ability) => ability.kind === "reclaim");
+      (definition.abilities(instance.variant).some((ability) => ability.kind === "reclaim") &&
+        !characteristics(state, catalog).changes(3).some(({ change }) =>
+          change.kind === "keyword" && change.instance === id && change.keyword === "reclaim" && !change.gains));
     return [...(permitted ? (["permission"] as const) : []), ...(reclaimable ? (["reclaim"] as const) : []), ...(permitted ? alternative : [])];
   }
   return [...(hasKeyword(state, catalog, id, "offering") ? ["hand", "offering"] as const : ["hand"] as const), ...alternative];

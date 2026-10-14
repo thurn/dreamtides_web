@@ -1,0 +1,289 @@
+{
+  "bead": "hv-umm2.372",
+  "base": "5acd9d690ee30574f5a70c045a3ef151da5d150d",
+  "grossStart": "2026-10-14T15:19:20.146000+00:00",
+  "evidenceEnd": "2026-10-14T16:07:23.837667+00:00",
+  "modelSampling": "UNKNOWN",
+  "windowProvenance": "native parent dispatch through final precommit evidence timestamp; subsequent schema/commit receipts retained in scratch; no tracked postcommit rewrite",
+  "setupSeparate": {
+    "performedBy": "root before helper dispatch",
+    "installS": 3.708938,
+    "prepareS": 4.554519,
+    "provenance": "parent supplied actual setup receipts"
+  },
+  "scope": "playRoutes printed explicit-Reclaim eligibility and adjacent documentation; cost bodies, other timing functions, source consumers and existing contracts unchanged",
+  "testDelta": {
+    "files": 1,
+    "lines": 222,
+    "jsdomFiles": 0
+  },
+  "causal": {
+    "publicInstruction": "activate sequence(loseKeyword(self(), reclaim, untilEndOfTurn), dissolve(self()))",
+    "selected": 14,
+    "oldSemanticFailures": 6,
+    "oldPositiveControlsPassed": 8,
+    "fixedPassed": 14,
+    "contractSHA256": "aff524cb13ccedb0e6e05b8860ab64f2abee6aa13525b576d13adee07a50eefb"
+  },
+  "focusedAggregate": {
+    "files": 2,
+    "testsPassed": 3871
+  },
+  "review": {
+    "testFiles": 300,
+    "testsPassed": 7394,
+    "typechecks": "both passed",
+    "lint": "passed",
+    "importCycles": "passed",
+    "frictionSchema": "passed",
+    "classification": "D18 bounded existing-form bugfix; no core/new-form marker or per-bead independent review; no local full/fuzz needed"
+  },
+  "hostLoad": {
+    "oneMinute": 4.7080078125,
+    "measuredFor": "review-v01 wrapper start"
+  },
+  "checks": [
+    {
+      "name": "causal-v01",
+      "start": "2026-10-14T15:37:34.381052+00:00",
+      "end": "2026-10-14T15:37:40.343031+00:00",
+      "outerWallS": 5.961855250003282,
+      "exit": 1,
+      "pid": 77947,
+      "pgid": 77947,
+      "groupSettled": true,
+      "receipt": "causal-v01.receipt.json",
+      "receiptSHA256": "fd125127ef65e3c4287ded5f35684750a953aa39092084e597dce278ad11d46e",
+      "logSHA256": {
+        "causal-v01.stdout": "9577ea676e9c94ab39c3ba094a8b219c57ff0d31c954c82c0b196205854008e1",
+        "causal-v01.stderr": "e88cf342885bd98215a3b30c2d70631d52d9faa525be344286c06ebbe942a456"
+      }
+    },
+    {
+      "name": "fixed14-v01",
+      "start": "2026-10-14T15:42:58.352177+00:00",
+      "end": "2026-10-14T15:43:02.356970+00:00",
+      "outerWallS": 4.004804666998098,
+      "exit": 0,
+      "pid": 44597,
+      "pgid": 44597,
+      "groupSettled": true,
+      "receipt": "fixed14-v01.receipt.json",
+      "receiptSHA256": "61ae5b4236b574bd6839a2f9b5122788adbcc71f65e8771d3babd606ec011b5e",
+      "logSHA256": {
+        "fixed14-v01.stdout": "e152302002750728625aeda9baa86a3a0b93abf4bf741fefb90e61435f7a89ff",
+        "fixed14-v01.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "focused-aggregate-v01",
+      "start": "2026-10-14T15:43:10.645030+00:00",
+      "end": "2026-10-14T15:43:27.625276+00:00",
+      "outerWallS": 16.98017616700963,
+      "exit": 0,
+      "pid": 45307,
+      "pgid": 45307,
+      "groupSettled": true,
+      "receipt": "focused-aggregate-v01.receipt.json",
+      "receiptSHA256": "4cf26badc2c2656942cfc81ca6e28403eb1ff38e769635a6471acc83bfb91a51",
+      "logSHA256": {
+        "focused-aggregate-v01.stdout": "af6c75c1b5e99b0fedd5eacdc05d64f1245842d893c0a48fe2627786a600b619",
+        "focused-aggregate-v01.stderr": "dfe82063065c63a198df910b0d2f9a51536cf6bd3243a4b8322e313f5fdcb00e"
+      }
+    },
+    {
+      "name": "review-v01",
+      "start": "2026-10-14T15:44:06.559895+00:00",
+      "end": "2026-10-14T15:44:57.813974+00:00",
+      "outerWallS": 51.25376779198996,
+      "exit": 0,
+      "pid": 48513,
+      "pgid": 48513,
+      "groupSettled": true,
+      "receipt": "review-v01.receipt.json",
+      "receiptSHA256": "d7d549515016793034c10f02d2f3921756ee49d58c04b271732539584b4537e7",
+      "logSHA256": {
+        "review-v01.stdout": "179b67c3797a0fea0642399e2dc9bd95bbec21de24282be27ab8f0e9e2f52cfe",
+        "review-v01.stderr": "dfe82063065c63a198df910b0d2f9a51536cf6bd3243a4b8322e313f5fdcb00e"
+      }
+    },
+    {
+      "name": "knip-v01",
+      "start": "2026-10-14T15:45:25.459927+00:00",
+      "end": "2026-10-14T15:45:29.549979+00:00",
+      "outerWallS": 4.090064666001126,
+      "exit": 0,
+      "pid": 50109,
+      "pgid": 50109,
+      "groupSettled": true,
+      "receipt": "knip-v01.receipt.json",
+      "receiptSHA256": "0c624f8b50f7a05ce1097c929f9e8272b1b53e1c835f88366465e73960f2a9a6",
+      "logSHA256": {
+        "knip-v01.stdout": "81309ce4978baf5751d48949d4cc0874bab62d139c182e2e75324316adc1f579",
+        "knip-v01.stderr": "dfe82063065c63a198df910b0d2f9a51536cf6bd3243a4b8322e313f5fdcb00e"
+      }
+    },
+    {
+      "name": "schema-v01",
+      "start": "2026-10-14T15:46:10.467181+00:00",
+      "end": "2026-10-14T15:46:10.529944+00:00",
+      "outerWallS": 0.06280016698292457,
+      "exit": 0,
+      "pid": 51123,
+      "pgid": 51123,
+      "groupSettled": true,
+      "receipt": "schema-v01.receipt.json",
+      "receiptSHA256": "cf85caff6b5fed653cc9f3afc77b1ef90d5dfd5b4a2f8bae08a1a9fc0f28dbb0",
+      "logSHA256": {
+        "schema-v01.stdout": "794b3d22bbef2f81a35060977169e010af628921c736fe4c1cd5507fb4760e27",
+        "schema-v01.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "diff-check-v01",
+      "start": "2026-10-14T15:47:59.046575+00:00",
+      "end": "2026-10-14T15:47:59.073704+00:00",
+      "outerWallS": 0.02716770800179802,
+      "exit": 0,
+      "pid": 53674,
+      "pgid": 53674,
+      "groupSettled": true,
+      "receipt": "diff-check-v01.receipt.json",
+      "receiptSHA256": "fad94cbfb4a1a97041cb5e4e420e5f77f8eb23c53c84c9ebc93d9ddb3e24e0d6",
+      "logSHA256": {
+        "diff-check-v01.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "diff-check-v01.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "qa-v01",
+      "start": "2026-10-14T15:55:22.285768+00:00",
+      "end": "2026-10-14T15:55:30.313507+00:00",
+      "outerWallS": 8.027740291989176,
+      "exit": 1,
+      "pid": 92931,
+      "pgid": 92931,
+      "groupSettled": true,
+      "receipt": "qa-v01.receipt.json",
+      "receiptSHA256": "3eb75f6515f98001f6854b55e18751f7ba9365bbbf78cf520abbc0641a7c9a87",
+      "logSHA256": {
+        "qa-v01.stdout": "4193eb202d403cb822a3ce429f2a09ff969df1eed6cd58a8240e5adf9c071438",
+        "qa-v01.stderr": "59600e1e04a427839ef3891646272386142bdf311ee5a4c384a42d738bb3cc18"
+      }
+    },
+    {
+      "name": "qa-v02",
+      "start": "2026-10-14T15:58:49.018390+00:00",
+      "end": "2026-10-14T15:59:42.378791+00:00",
+      "outerWallS": 53.36005354099325,
+      "exit": 0,
+      "pid": 97109,
+      "pgid": 97109,
+      "groupSettled": true,
+      "receipt": "qa-v02.receipt.json",
+      "receiptSHA256": "2013d367ce0ab797c01e4599b26792302836477266b58082969ab7b05c8aa104",
+      "logSHA256": {
+        "qa-v02.stdout": "b69adfca5085aebdb434a2485ec4671683fc9dac4ee0e206be0a7857fc636c01",
+        "qa-v02.stderr": "d24eaf8970ecce953e758c6e855fdb1522e75ad286dc1548b8cc8624e92212b1",
+        "qa-v02-owned-records.jsonl": "7b874df37f0b076203ca7cdd8aaec37da6e70415153baa8cc269a4eeb511cc55"
+      }
+    }
+  ],
+  "runtimeQa": {
+    "coverage": "production positive printed-Reclaim parity only; negative keyword-loss acceptance covered by public synthetic engine contracts",
+    "recipe": "qa-reclaim-parity-v02.mjs",
+    "recipeSHA256": "c8de770a46c6f025cf63c2a02af44eb960982505ab3aab2aee80414e0248465d",
+    "firstAttempt": {
+      "verdict": "recipe failed before interaction/capture",
+      "cause": "MCP sandbox URL unavailable; browser context supplies origin/port in v02",
+      "providerIdentity": "UNKNOWN; record not retained before clear",
+      "cleanup": "owned groups/records settled, no cleanup error"
+    },
+    "successfulInvocation": "run-e9miPx",
+    "slot": 1,
+    "port": 5274,
+    "serverPid": 97179,
+    "providerIdentityEvidence": {
+      "filename": "qa-v02-owned-records.jsonl",
+      "sha256": "7b874df37f0b076203ca7cdd8aaec37da6e70415153baa8cc269a4eeb511cc55",
+      "retained": true
+    },
+    "cleanup": "runner finally returned with confirmed provider completion/record clear; no cleanup error; own server/runner groups absent and exact records cleared",
+    "caps": [],
+    "captures": [
+      {
+        "filename": "printed-reclaim-void-desktop.png",
+        "pixels": [
+          2880,
+          1800
+        ]
+      },
+      {
+        "filename": "printed-reclaim-committed-desktop.png",
+        "pixels": [
+          2880,
+          1800
+        ]
+      },
+      {
+        "filename": "printed-reclaim-void-mobile.png",
+        "pixels": [
+          780,
+          1688
+        ]
+      }
+    ],
+    "views": {
+      "desktop": {
+        "uuid": "a37876f4-08a7-4352-bb3a-6d24f5c9407d",
+        "source": "i10",
+        "hand": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "costPaid": 4,
+        "finalEnergy": 2,
+        "finalZone": "banished",
+        "playedViaReclaim": true,
+        "reloadGameId": "ctzcp9",
+        "reloadStateEqual": true
+      },
+      "mobile": {
+        "uuid": "a37876f4-08a7-4352-bb3a-6d24f5c9407d",
+        "source": "i10",
+        "hand": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "costPaid": 4,
+        "finalEnergy": 2,
+        "finalZone": "banished",
+        "playedViaReclaim": true,
+        "reloadGameId": "zvj2bt",
+        "reloadStateEqual": true
+      }
+    },
+    "persistedLogs": [
+      {
+        "viewport": "desktop",
+        "filename": "qa-reclaim-parity-v02-desktop.jsonl",
+        "rows": 40,
+        "gameId": "ctzcp9",
+        "selectedBy": "url"
+      },
+      {
+        "viewport": "mobile",
+        "filename": "qa-reclaim-parity-v02-mobile.jsonl",
+        "rows": 38,
+        "gameId": "zvj2bt",
+        "selectedBy": "url"
+      }
+    ]
+  },
+  "failureApplicability": {
+    "invalidOrStale": "real engine IllegalAction and fold illegalAction rejection preserve hash and publish/log nothing after loss/reload",
+    "reload": "fresh engine/fold derives lost route rejection and public affordance; production same-game reload preserves full committed state",
+    "partialWriteOrMidStepError": "pure eligibility has no writes; existing grant rollback contracts retained; rejected play opens no step",
+    "interrupt": "real activated loss resolves via existing stack; existing departure-before-resolution contracts retained; no new interrupt protocol",
+    "concurrentActors": "owner/opponent authority on same physical card; both owner rows covered",
+    "expiry": "end-of-turn loss expires, printed route returns and pays original cost",
+    "lossAllAbilities": "actual public loss ends on departure and original printed Reclaim works in void"
+  },
+  "preExisting": "no additional concrete separate defect verified"
+}
