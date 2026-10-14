@@ -1,4 +1,6 @@
 import { card } from "../define";
+import { ofSubtype, staticAbility } from "../../engine/dsl/builders";
+import { costModifierNth } from "../../engine/effects/primitives";
 
 export default card({
   name: "Tethered Hollow",
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 115,
   art: { x: 0.353, y: 0.931, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(costModifierNth("you", { cardType: "character", ...ofSubtype("Warrior") }, 1, { reduce: 3 }))],
+  verifiedText: "1f9cj8kmz2y",
 });

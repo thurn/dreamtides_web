@@ -1,0 +1,431 @@
+{
+  "bead": "hv-umm2.202",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/cards-types-202",
+  "branch": "cards-types-202",
+  "base": "007cba556ab332e9989b1f3d8d6176597ef46953",
+  "dispatchWindow": {
+    "originalStart": "2026-10-14T21:13:11.191037+00:00",
+    "preGitMeasuredThrough": "2026-10-14T22:08:23.389541+00:00",
+    "futureActualGitEnd": "UNKNOWN",
+    "externalReceipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/final-commit-receipt.json",
+    "qualification": "The friction endpoint is an actual pre-Git measurement. The separate external receipt qualifies the complete original dispatch through actual Git and its cutoff/tail. Setup, research, root coordination, queue waits, checks, all failures, QA and cleanup are included."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review starting typecheck group",
+        "source": "review.stdout.txt",
+        "value": 21.4677734375
+      },
+      "implementWindow.end": {
+        "measuredFor": "pre-Git endpoint; actual Git future UNKNOWN until external receipt",
+        "cutoff": "2026-10-14T22:08:23.389541+00:00"
+      },
+      "localValidationS.fuzz": {
+        "measuredFor": "one locked wrapper including queue; reported engine runtime357.1s separately",
+        "exactKernelWait": "UNKNOWN"
+      }
+    }
+  },
+  "source": {
+    "frozenManifest": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-frozen-manifest.json",
+      "sha256": "50c4257154f3df69febad846f35e8fa292aaf652510338ca82ae0e525520d698"
+    },
+    "bindings": 70,
+    "ownCardSHA256": "a41ba762383e0f22770fd02405a78ecef259dff18f0b475cfa015d4f56a17234",
+    "privateScenarioSHA256": "6a8ecee9af076a706652f48d935f27abf953e1b5237d35e66a822917dd1a2a01",
+    "immutablePropertyProof": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/card-metadata-verification.json",
+      "sha256": "d9b4a290253089fff6955d8dea22300cd7dbedf2da34064ced831a0ef2592dbb"
+    },
+    "childWholeByteProof": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/child-readonly-verification.json",
+      "sha256": "d2a9bf4cfb400a79a81c2bb1209aba3745ab7cb15be1c147b7811411611dc09b"
+    },
+    "supportedForm": "staticAbility(costModifierNth(\"you\",{cardType:\"character\",...ofSubtype(\"Warrior\")},1,{reduce:3}))",
+    "newCapabilities": [],
+    "fallout": [],
+    "child687ReviewedSource": "996a582aeb373a1d7e7489fc80bd023f2b0af36f",
+    "childScenario": "Optional cards-ready-202 scenario absent consistently with child0D20; read-only slice/full original four-UUID join retained."
+  },
+  "validation": {
+    "receipts": [
+      {
+        "label": "install",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/npm-install-receipt.json",
+        "receiptSHA256": "365481dcb46ef4269850c45c7090d9c8d9c886d4d061197aba6ac1b99ab7c2e2",
+        "exit": 0,
+        "start": "2026-10-14T21:13:53.493458+00:00",
+        "end": "2026-10-14T21:13:56.581835+00:00",
+        "wallS": 3.088416,
+        "pgid": 43928,
+        "stdoutSHA256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c"
+      },
+      {
+        "label": "entities-before",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/entities.receipt.json",
+        "receiptSHA256": "a8c5ff027da9f90752d15630787e4bb253e3b43d842e606acb2d3720c200cfe9",
+        "exit": 0,
+        "start": "2026-10-14T21:14:35.461967+00:00",
+        "end": "2026-10-14T21:14:38.952147+00:00",
+        "wallS": 3.489825,
+        "pgid": 48433,
+        "stdoutSHA256": "0ce398964de152e4514107f438ed7ad9263e664de0d194f01d7b0acb81fd66e8"
+      },
+      {
+        "label": "focused",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/focused.receipt.json",
+        "receiptSHA256": "6a80b3ed0869fdfb9cbf434c5ca4579f3ea673eeaa813d0667d2ec3ccc999c75",
+        "exit": 0,
+        "start": "2026-10-14T21:32:43.313332+00:00",
+        "end": "2026-10-14T21:32:52.472208+00:00",
+        "wallS": 9.158711,
+        "pgid": 47585,
+        "stdoutSHA256": "857d348af217557c4d7692b371db9964241aec566bbae828bb1fbbb1808d3a84"
+      },
+      {
+        "label": "entities-after",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/entities-after.receipt.json",
+        "receiptSHA256": "ab0a52b3eb2637cf9c1847830f3629fbb92b9fcf5809f328e81b8025adbc5ad3",
+        "exit": 0,
+        "start": "2026-10-14T21:33:02.575199+00:00",
+        "end": "2026-10-14T21:33:05.736959+00:00",
+        "wallS": 3.161618,
+        "pgid": 56718,
+        "stdoutSHA256": "0ce398964de152e4514107f438ed7ad9263e664de0d194f01d7b0acb81fd66e8"
+      },
+      {
+        "label": "review",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/review.receipt.json",
+        "receiptSHA256": "0ef23c41a57ea6181a710550cf5904204e67d4061a93382ff7dc4b5a66223be1",
+        "exit": 0,
+        "start": "2026-10-14T21:33:16.690551+00:00",
+        "end": "2026-10-14T21:34:18.713333+00:00",
+        "wallS": 62.021897,
+        "pgid": 58310,
+        "stdoutSHA256": "c4aaeb1b90c661329dcb8fc345e703c47bc954397798248d0cbd0043e091a108"
+      },
+      {
+        "label": "knip",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/knip.receipt.json",
+        "receiptSHA256": "1ecfee0b45b9c94a459b093502fc11f7b1672ab0692f3760bcf9666cb6e8fa46",
+        "exit": 0,
+        "start": "2026-10-14T21:34:20.834652+00:00",
+        "end": "2026-10-14T21:34:26.325974+00:00",
+        "wallS": 5.49095,
+        "pgid": 63979,
+        "stdoutSHA256": "b2e4cd19bf986a464ffa71754b3b2fb5c11ee4a00ad8911d165b44fec2e264da"
+      },
+      {
+        "label": "weighted300",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/weighted300.receipt.json",
+        "receiptSHA256": "6282716aba22ac36d8c0bb9e1c725e0ac6e55fb36b5f2a654e6a57f649e1d683",
+        "exit": 0,
+        "start": "2026-10-14T21:34:36.726782+00:00",
+        "end": "2026-10-14T21:49:16.682210+00:00",
+        "wallS": 879.935498,
+        "pgid": 65165,
+        "stdoutSHA256": "27bace49b78a1c0be905511a4d2b7c3c3e8037505f937bc76d3ef5ea94aa1c91"
+      },
+      {
+        "label": "preflight",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/preflight.receipt.json",
+        "receiptSHA256": "e2028d1e8b41a7c7561dddfe9ead9618779608e84490f53d5d1011146b02e604",
+        "exit": 0,
+        "start": "2026-10-14T21:49:28.092821+00:00",
+        "end": "2026-10-14T21:49:29.901503+00:00",
+        "wallS": 1.808551,
+        "pgid": 62842,
+        "stdoutSHA256": "ee65cf9377a237f08113b50663f30f9c521bccb06d25851776f0b95dcabc52e8"
+      },
+      {
+        "label": "qa-sweep",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-sweep.receipt.json",
+        "receiptSHA256": "5e7d4b18d9fcffb77410f3fb39d24c8849a3689a832db5325a1a999765145d7d",
+        "exit": 1,
+        "start": "2026-10-14T21:51:40.104824+00:00",
+        "end": "2026-10-14T21:56:15.005301+00:00",
+        "wallS": 274.897036,
+        "pgid": 97300,
+        "stdoutSHA256": "8e31174cf67bcabddb30815ff524cae48d90c107bba895a0e76cc6118ed87b47"
+      },
+      {
+        "label": "qa-owner-observer",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-owner-observer.receipt.json",
+        "receiptSHA256": "f048dcb8a65cf6b10627175c62824029c8c244c7b49c0c146a537cd1d1376d18",
+        "exit": 0,
+        "start": "2026-10-14T21:51:38.946102+00:00",
+        "end": "2026-10-14T21:56:48.506459+00:00",
+        "wallS": 309.556473,
+        "pgid": 97276,
+        "stdoutSHA256": "61eabfe13c85d40ea9841e85de33168c3fc05c01eeee24c1e002d48af84aad28"
+      },
+      {
+        "label": "qa-recovery-kindled-player",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-recovery-kindled-player.receipt.json",
+        "receiptSHA256": "bf26e47345a22e49a047df25753c460ad84ee440da95c41fd75c448d61e8d610",
+        "exit": 0,
+        "start": "2026-10-14T21:59:45.833900+00:00",
+        "end": "2026-10-14T21:59:57.287788+00:00",
+        "wallS": 11.453657,
+        "pgid": 39559,
+        "stdoutSHA256": "ffb1efeba263bb4fb0822fc11797d6ceec33f30706187b4942a26e4d49e69300"
+      },
+      {
+        "label": "qa-recovery-observer",
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-recovery-observer.receipt.json",
+        "receiptSHA256": "c2e2d03c757a827207e36c14915dba91266260f0a4fbdc17377c9601a30f7264",
+        "exit": 0,
+        "start": "2026-10-14T21:59:44.679091+00:00",
+        "end": "2026-10-14T22:00:11.207934+00:00",
+        "wallS": 26.528425,
+        "pgid": 39536,
+        "stdoutSHA256": "aad4cae1da25ae322b935d8e7eeafa0daba0435c22d8118d654c9b7b7d2c5636"
+      }
+    ],
+    "focused": {
+      "files": 2,
+      "tests": 485,
+      "privateD20Cases": 6
+    },
+    "review": {
+      "files": 253,
+      "tests": 7043,
+      "typecheck": 0,
+      "lint": 0,
+      "cycles": 0
+    },
+    "knipExit": 0,
+    "weighted300": {
+      "games": 300,
+      "steps": 103974,
+      "failures": 0,
+      "reportedWallS": 357.1,
+      "reportedCPUS": 379.4,
+      "included": [613,612,616,619],
+      "exercised": [97,133,195,122],
+      "UUIDOrder": ["c8579b20-95ff-4b1d-b4c6-6bd049fc4760","eed92573-8052-494c-adae-9838de5375a1","d95533f4-7809-44a8-a882-7675c61cee1c","6497d8b1-85b8-486d-99e2-5c141486d508"],
+      "before": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/weighted300-source-before.json",
+        "sha256": "9427f4f67d605629ccecf7f1b04b5ce4cc3d742486d6471abe8120ff14071846"
+      },
+      "after": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/weighted300-source-after.json",
+        "sha256": "4120a403fdfbdcf86a1e0d75296a34a382b5fcbfa012a532de3cf8379620cfbf"
+      },
+      "liveObservation": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/weighted300-live-observations.jsonl",
+        "sha256": "08697e6271221991236887d681648f10b31d14c3d0e7dd8590528c62629ac0b5"
+      },
+      "qualification": "One invocation; process-start lstart is an observation, not exact kernel acquisition."
+    },
+    "preflight": {
+      "requested": 80,
+      "pass": 32,
+      "skip": 48,
+      "pending": 0,
+      "fail": 0,
+      "raw": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/preflight.stdout.txt",
+        "sha256": "ee65cf9377a237f08113b50663f30f9c521bccb06d25851776f0b95dcabc52e8"
+      },
+      "qualification": "Every eligible cell resolved/materialized the selected physical instance into the correct side/play; skipped variants are actually ineligible."
+    }
+  },
+  "qa": {
+    "frozenArgv": ["/opt/homebrew/bin/node","scripts/qa/card-sweep.mjs","--bead","hv-umm2.202","--cards","c8579b20-95ff-4b1d-b4c6-6bd049fc4760,eed92573-8052-494c-adae-9838de5375a1,d95533f4-7809-44a8-a882-7675c61cee1c,6497d8b1-85b8-486d-99e2-5c141486d508","--variants","all","--as","both","--port","5174"],
+    "originalAttemptCounts": {
+      "pass": 31,
+      "skip": 48,
+      "fail": 2
+    },
+    "originalEffectiveCounts": {
+      "pass": 31,
+      "skip": 48,
+      "fail": 1
+    },
+    "finalLatestCounts": {
+      "pass": 32,
+      "skip": 48,
+      "fail": 0
+    },
+    "finalLedgerRows": 86,
+    "sweepAttempts": 82,
+    "latestUniqueCells": 80,
+    "original85LedgerByteExact": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-original-ledger.jsonl",
+      "sha256": "6697a35c31c8e8d92d20b3e9cfbe7857417bbdeb6d1612e52d60e19efb11f082"
+    },
+    "originalAll33RawReportProof": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/parent-original-qa-verification.json",
+      "sha256": "d034b99fcfb5e87249e94f9330094e0fb26a4fa0e0e80af162e673b6c3545ca5"
+    },
+    "originalSummary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-FGmdCT",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.202/invocations/sweep-FGmdCT",
+      "counts": {
+        "pass": 31,
+        "skip": 48,
+        "fail": 1
+      },
+      "attemptCounts": {
+        "pass": 31,
+        "skip": 48,
+        "fail": 2
+      },
+      "hostLoad": 3.98046875,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 2284,
+        "scenario": 271988.899459,
+        "cleanup": 371.17908299999544,
+        "execution": 274719.000167,
+        "total": 274724.000167
+      }
+    },
+    "finalCheckpoint": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-final-checkpoint.json",
+      "sha256": "fe07f225bd368928f7b0344b5a3932cf9768f2cf95e0ec24484879c53c7c5abb"
+    },
+    "rootAcceptance": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/parent-qa-verification.json",
+      "sha256": "17bdacc5fac0361389de41a8b83680e6547d807de580bd04e14636d4ad1978a3"
+    },
+    "nativeAcceptance": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-acceptance-native-ack.json",
+      "sha256": "8a1d6ddf1842ad00ac71e1b5a91b9e6da2e57e6bdabff9295fb0d7472f22d2f8"
+    },
+    "D21": {
+      "firstBytes": [62,223,67,73],
+      "sampled": [false,false,false,false],
+      "newForms": false,
+      "decisions": "Four not-required rows, no judged PASS or invented capture."
+    },
+    "failureProvenance": {
+      "kindledPlayerAttempt1": {
+        "rawReport": "invocations/sweep-FGmdCT/run-Xgg513/sweep-d95533f4-7809-44a8-a882-7675c61cee1c-kindled-player-attempt-1.result.json",
+        "sha256": "c4c931490dfdf60f129be2ca3734db1378f87f6a45b79399c745465ac109e232",
+        "observed": "Goto ERR_ABORTED before incoming lab; old empowered URL persisted."
+      },
+      "perfectedPlayerAttempt1": {
+        "rawReport": "invocations/sweep-FGmdCT/run-Xgg513/sweep-d95533f4-7809-44a8-a882-7675c61cee1c-perfected-player-attempt-1.result.json",
+        "sha256": "5597b105d669f03288dfaab8f3d5ea2d159039c85e0df6e873b9c19066bb0314",
+        "observed": "Requested root navigated, then outgoing empowered game URL superseded it; lab wait timeout."
+      },
+      "perfectedPlayerAutomaticAttempt2": {
+        "rawReport": "invocations/sweep-FGmdCT/run-Xgg513/sweep-d95533f4-7809-44a8-a882-7675c61cee1c-perfected-player-attempt-2.result.json",
+        "sha256": "cc3ae522005de4e741190eb8d685f7107e7d7e2a89025d477604ec8357539cdd",
+        "qualification": "Existing frozen shared timeout-only retry passed; no manual repeat."
+      },
+      "kindledPlayerBoundedAttempt2": {
+        "admission": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-navigation-recovery-native-ack.json",
+          "sha256": "8cc31fd69731a4ad8fa9ea6b7adb774d7ce7eb475060d0ae06ea4857593df966"
+        },
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.202/invocations/run-AJRpvh/card-lab-play.result.json",
+        "sha256": "7feda4257f28678daf95d6d3c5ae239dd1631a1d7bc32cf770dd76cb031cff16",
+        "startingDocument": "about:blank",
+        "verdict": "pass"
+      },
+      "cause": "UNKNOWN initiating navigation cause; bounded isolation passed, no shared source fix claimed."
+    },
+    "actualExport": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.202/invocations/run-AJRpvh/card-lab-play-desktop.jsonl",
+      "sha256": "6a05d3344adc9f51ebb957a043cb74d66774ffca201acc81c1c7085902e6c53b",
+      "gameId": "gxusc7",
+      "rows": 29,
+      "selectedBy": "url"
+    },
+    "scopeQualification": "All34 actual reports have empty Caps/outer error null. Standard sweep does not export per-cell JSONL/gameID/physical IDs. Exactly one recovery export is retained. Enemy initial card play is scripted lab bootstrap, not AI-policy choice proof. No extra green runs or reconciliation/probes.",
+    "liveSessions": [
+      {
+        "invocation": "sweep-FGmdCT",
+        "runnerPG": 97300,
+        "serverPG": 97379,
+        "observerPG": 97276,
+        "observedAt": "2026-10-14T21:51:42.728430+00:00",
+        "sessionId": "a691e67d-ff3d-404d-814d-73dfff7242bd",
+        "endpoint": "http://localhost:8931/mcp",
+        "protocolVersion": "2025-11-25",
+        "port": 5274,
+        "ownerBytes": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-live-records/97300-2c28c6017209452e5accb2d04d5c2c13e95cde7c47cc153b8b7edbb32d8d996f.owner.json",
+          "sha256": "2c28c6017209452e5accb2d04d5c2c13e95cde7c47cc153b8b7edbb32d8d996f"
+        },
+        "serverBytes": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-live-records/97300-2c28c6017209452e5accb2d04d5c2c13e95cde7c47cc153b8b7edbb32d8d996f.server.json",
+          "sha256": "d4e3096391b386fb3b0bd48dc0da272ecf558f027c461d1ba4efb952f66ec314"
+        },
+        "processLifetimeProof": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-live-records/observations.jsonl",
+          "sha256": "c893a1dc9fbd1a6d5cc8dcde56928be83c550570137b312d9e305f193c6a2f41"
+        },
+        "settlement": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-original-runner-settlement.json",
+          "sha256": "e6bc1e03fba172463ccef5f83dfee30632cb2fdfdcfcbffd99f5ecc1cb7619ef"
+        }
+      },
+      {
+        "invocation": "run-AJRpvh",
+        "runnerPG": 39559,
+        "serverPG": 39629,
+        "observerPG": 39536,
+        "observedAt": "2026-10-14T21:59:48.919062+00:00",
+        "sessionId": "57c7ecea-bd31-4255-8430-745cfbbc3e3d",
+        "endpoint": "http://localhost:8931/mcp",
+        "protocolVersion": "2025-11-25",
+        "port": 5274,
+        "ownerBytes": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-live-records/39559-7d6c0fd9716c97d1bb22619115f0ca642780e2f1b2269c1d6809302caf4b38ff.owner.json",
+          "sha256": "7d6c0fd9716c97d1bb22619115f0ca642780e2f1b2269c1d6809302caf4b38ff"
+        },
+        "serverBytes": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-live-records/39559-7d6c0fd9716c97d1bb22619115f0ca642780e2f1b2269c1d6809302caf4b38ff.server.json",
+          "sha256": "eedc02503d0de7ab61d5615b10dbc445c7e8bdbe238435cabb54e69dcf54b1ae"
+        },
+        "processLifetimeProof": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-live-records/observations.jsonl",
+          "sha256": "c893a1dc9fbd1a6d5cc8dcde56928be83c550570137b312d9e305f193c6a2f41"
+        },
+        "settlement": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-recovery-runner-settlement.json",
+          "sha256": "576cea77a82e6ede43b311550c2d43d1bdedcb37569e2abf70eafa2ab094d8a3"
+        }
+      }
+    ],
+    "allOwnerSnapshots": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-live-records/observations.jsonl",
+      "sha256": "c893a1dc9fbd1a6d5cc8dcde56928be83c550570137b312d9e305f193c6a2f41",
+      "images": 3,
+      "qualification": "Two literal LIVE sessions plus one startup-unconfirmed snapshot with null metadata retained honestly."
+    }
+  },
+  "resources": {
+    "liveSessionsReference": "#/qa/liveSessions",
+    "allSettledOwnedPGs": [43928,48433,47585,56718,58310,63979,65165,62842,97300,97379,97276,39559,39629,39536],
+    "allCollectedHandles": [36353,2750,26564,93402,93698,29250,67240,22343,41293,79596,87760,29532],
+    "remainingOwned": [],
+    "normalClosure": "Confirmed native browser_close/client close, owner clear, own server stop/lease release. Startup-null metadata is retained as unknown, not a future identity. Foreign identities/listeners preserved.",
+    "settlementProof": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/qa-recovery-runner-settlement.json",
+      "sha256": "576cea77a82e6ede43b311550c2d43d1bdedcb37569e2abf70eafa2ab094d8a3"
+    }
+  },
+  "reviewClassification": {
+    "required": false,
+    "basis": "Native originalnotcore/existing forms/5gross production lines; six private cases are test code; child687 normal review COMPLETE.",
+    "proof": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/parent-qa-verification.json",
+      "sha256": "17bdacc5fac0361389de41a8b83680e6547d807de580bd04e14636d4ad1978a3"
+    }
+  },
+  "preGitTimingRepair": {
+    "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards90-202/pre-git-cutoff-refresh.json",
+    "sha256": "18f850782a2b50bd35232cb24a6e7bafc9c8e2ece02b39f5df080a74fc746f37"
+  },
+  "remainingBeforeCommit": ["own schema/all staged whitespace/frozen allowed paths/resources","one admitted detailed local commit/actual endpoint receipt"]
+}
