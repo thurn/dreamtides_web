@@ -2729,8 +2729,10 @@ single main window of a turn (one player's Day, Dusk, or Night), a sequence of
 that player's actions returns the battle to an equivalent position — the stack
 empty, no triggered abilities waiting, and everything the same except victory
 points, current and maximum ●, counters, gained spark, the cards in each deck
-and void, how many cards each player has played and drawn this turn, and the
-characters each player has materialized this turn — and those differences
+and void, the current-turn history of each player's plays, draws, discards, departures
+from play, dissolutions, abandons and materializations, and the count of Dawn
+ability admissions (including recorded physical occurrences, characteristics,
+figment provenance and known lower bounds) — and those differences
 gained something for that player and nothing for the opponent, the player is
 offered a shortcut:
 
@@ -2740,8 +2742,7 @@ offered a shortcut:
 A difference is a gain for a player when their victory points, current or
 maximum ●, counters on cards they control, gained spark on cards they control,
 or cards in their deck increase. A player's cards in their void may change in
-either direction, and the cards played and drawn and the characters
-materialized this turn may grow, without counting as a gain or a loss. The
+either direction, and that current-turn history may grow, without counting as a gain or a loss. The
 sequence qualifies only if none of the player's own values fell, none of the
 opponent's rose, and at least one changed. A sequence in which the opponent had a decision — a legal response
 other than passing, or a choice with more than one option — is never offered.
@@ -2767,13 +2768,16 @@ before it; otherwise it resolves normally and the player makes the choice. The
 shortcut remains on offer after Repeat ×N completes or after 10,000
 repetitions. Taking any other action withdraws it.
 
-The cards played and drawn this turn are left out of the comparison so that a
-sequence that plays or draws a card can repeat. A card that counts them — for
-example "When you play your second card in a turn, gain 1⍟" — can therefore
-trigger during the sequence on offer and not during a repetition, or the other
-way around. That repetition stops at the first point it differs, and after the
-player performs the sequence once more themselves, it is offered as it now
-repeats.
+Current-turn counts and occurrence records are left out of the comparison so
+that a sequence that plays, draws, discards, moves, dissolves, abandons, or
+materializes cards can repeat. The characteristics and figment provenance
+captured for those occurrences belong to the same history. A card that reads
+that history — for example "When you play your second card in a turn, gain
+1⍟" — can therefore trigger during the sequence on offer and not during a
+repetition, or the other way around. Each repetition runs the actual rules with
+the current history and stops at the first point it differs, keeping the steps
+already completed. After the player performs the sequence once more themselves,
+it is offered as it now repeats.
 
 ### Mandatory Loops
 
@@ -2787,7 +2791,10 @@ such a loop, so:
   battle ends in a draw. The order in which cards entered their zones is part
   of the state, but not when they did. The repeat may be noticed a few cycles
   after it first happens, and a loop more than 4,096 game actions long is
-  ended by the limit below instead; the result is the same.
+  ended by the limit below instead; the result is the same. The complete
+  current-turn history is part of this exact-state comparison. A sequence whose
+  history keeps growing has distinct states and falls under the 100,000-action
+  limit unless a closed copy continuation is proved.
 - If such a sequence runs for more than 100,000 consecutive automatic game
   actions without repeating, the battle also ends in a draw.
 - A proved closed copy continuation ends in a draw at the mandatory-check

@@ -1,0 +1,513 @@
+{
+  "bead": "hv-umm2.692",
+  "base": "65bca05176caa99e76aafc34f9a7d350df14467a",
+  "sourceScope": "Existing synthetic hand-limit fixture configuration + current-state documentation/RD only. No executable runtime or loop classification change.",
+  "implementWindow": {
+    "start": "2026-10-14T18:22:38.727284+00:00",
+    "end": "2026-10-14T18:37:56.632096+00:00"
+  },
+  "implementMin": 15.298413533333333,
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "measuredFor": "Conservative parent post-claim envelope; includes setup before helper. Exact helper dispatch/sampling unknown. Pre-commit evidence endpoint; actual commit tail is externally retained by parent/finalizer."
+      },
+      "hostLoad": {
+        "measuredFor": "review-v2 starting 1-minute load"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "history-contracts-v1",
+      "started": "2026-10-14T18:32:10.366425+00:00",
+      "load": [
+        10.38330078125,
+        12.64892578125,
+        13.287109375
+      ]
+    },
+    {
+      "label": "loop-controls-v1",
+      "started": "2026-10-14T18:32:16.689961+00:00",
+      "load": [
+        12.3544921875,
+        13.01953125,
+        13.4140625
+      ]
+    },
+    {
+      "label": "review-v1",
+      "started": "2026-10-14T18:33:29.163007+00:00",
+      "load": [
+        13.9013671875,
+        13.51708984375,
+        13.578125
+      ]
+    },
+    {
+      "label": "history-contracts-v2",
+      "started": "2026-10-14T18:34:51.691617+00:00",
+      "load": [
+        10.58251953125,
+        12.69287109375,
+        13.26611328125
+      ]
+    },
+    {
+      "label": "review-v2",
+      "started": "2026-10-14T18:35:04.891249+00:00",
+      "load": [
+        16.06982421875,
+        13.80126953125,
+        13.65087890625
+      ]
+    },
+    {
+      "label": "knip-v1",
+      "started": "2026-10-14T18:36:30.831068+00:00",
+      "load": [
+        12.80322265625,
+        13.62158203125,
+        13.61767578125
+      ]
+    },
+    {
+      "label": "schema-v1",
+      "started": "2026-10-14T18:36:47.041707+00:00",
+      "load": [
+        11.560546875,
+        13.31103515625,
+        13.5068359375
+      ]
+    },
+    {
+      "label": "whitespace-v1",
+      "started": "2026-10-14T18:36:47.611081+00:00",
+      "load": [
+        11.560546875,
+        13.31103515625,
+        13.5068359375
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "label": "history-contracts-v1",
+      "receipt": "/tmp/root-692/history-contracts-v1.receipt.json",
+      "receiptSHA256": "2b8d2ae7a0d7aedfbe1bbf3f6b139e378a42a70cfb9297b95a6399d1daca9fbe",
+      "started": "2026-10-14T18:32:10.366425+00:00",
+      "pid": 43101,
+      "pgid": 43101,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "exact current-turn history"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-review-692",
+      "hostLoad": [
+        10.38330078125,
+        12.64892578125,
+        13.287109375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T18:32:18.804969+00:00",
+      "elapsedSeconds": 8.439621041999999,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5018,
+      "beforeSHA256": "4a9212839cd530c1629ee4f007d35040c592a5e82ac17799257cae2b6bbddc74",
+      "afterSHA256": "4a9212839cd530c1629ee4f007d35040c592a5e82ac17799257cae2b6bbddc74",
+      "collectorBeforeSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "collectorAfterSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "stdoutSHA256": "26ee64a57a3eb8dc16c1790acec4b6278375331943874a4fd672cb3f7bd0f00d",
+      "stderrSHA256": "1b76e9d084d589e55580af21484f3f2eda298c4c575361e44649cf2efcef5339",
+      "terminalTestSummary": [
+        "Test Files  1 passed (1)",
+        "Tests  39 passed | 3917 skipped (3956)"
+      ]
+    },
+    {
+      "label": "loop-controls-v1",
+      "receipt": "/tmp/root-692/loop-controls-v1.receipt.json",
+      "receiptSHA256": "c56a1cab9a27067bf4f426fc5b90743c585f5d4a590aea3870e6a7374d4724a4",
+      "started": "2026-10-14T18:32:16.689961+00:00",
+      "pid": 43518,
+      "pgid": 43518,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-review-692",
+      "hostLoad": [
+        12.3544921875,
+        13.01953125,
+        13.4140625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T18:32:21.559513+00:00",
+      "elapsedSeconds": 4.869904375,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5018,
+      "beforeSHA256": "4a9212839cd530c1629ee4f007d35040c592a5e82ac17799257cae2b6bbddc74",
+      "afterSHA256": "4a9212839cd530c1629ee4f007d35040c592a5e82ac17799257cae2b6bbddc74",
+      "collectorBeforeSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "collectorAfterSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "stdoutSHA256": "0b6ca10a1f89dc79bbae07e4261b387ebf600f0ece56ed9502d0dd1d2f85ffaa",
+      "stderrSHA256": "1b76e9d084d589e55580af21484f3f2eda298c4c575361e44649cf2efcef5339",
+      "terminalTestSummary": [
+        "Test Files  2 passed (2)",
+        "Tests  45 passed (45)"
+      ]
+    },
+    {
+      "label": "review-v1",
+      "receipt": "/tmp/root-692/review-v1.receipt.json",
+      "receiptSHA256": "40d4351e36f44cead959aaf94f75c50881a1c940e1f592037edb304b6002e8b2",
+      "started": "2026-10-14T18:33:29.163007+00:00",
+      "pid": 3929,
+      "pgid": 3929,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-review-692",
+      "hostLoad": [
+        13.9013671875,
+        13.51708984375,
+        13.578125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T18:34:39.998972+00:00",
+      "elapsedSeconds": 70.835579375,
+      "exitCode": 2,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5021,
+      "beforeSHA256": "4fc4cf9a1284acfe8fb2217e271ade80c85e0a5dd2425a0d7ca864d8e0d8b54b",
+      "afterSHA256": "4fc4cf9a1284acfe8fb2217e271ade80c85e0a5dd2425a0d7ca864d8e0d8b54b",
+      "collectorBeforeSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "collectorAfterSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "stdoutSHA256": "d1bd3a70487201ca0c8892183bb73ecb5c5de1df348f4196288e3de17cf2029b",
+      "stderrSHA256": "1b76e9d084d589e55580af21484f3f2eda298c4c575361e44649cf2efcef5339",
+      "terminalTestSummary": [
+        "Test Files  306 passed (306)",
+        "Tests  7581 passed (7581)"
+      ]
+    },
+    {
+      "label": "history-contracts-v2",
+      "receipt": "/tmp/root-692/history-contracts-v2.receipt.json",
+      "receiptSHA256": "ba6f43d1604e17f671375a6ce4e6677a05cc4582f3143aa895cbf54e8bff4f63",
+      "started": "2026-10-14T18:34:51.691617+00:00",
+      "pid": 8636,
+      "pgid": 8636,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "exact current-turn history"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-review-692",
+      "hostLoad": [
+        10.58251953125,
+        12.69287109375,
+        13.26611328125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T18:35:01.324229+00:00",
+      "elapsedSeconds": 9.632410834000002,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5021,
+      "beforeSHA256": "1e0c27753b840f7e97cff4f804923ac926812c7a0408956b56d79eadb88e8b29",
+      "afterSHA256": "1e0c27753b840f7e97cff4f804923ac926812c7a0408956b56d79eadb88e8b29",
+      "collectorBeforeSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "collectorAfterSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "stdoutSHA256": "25f7a169c8a52beade5ca9e350ce1b556d8823de6256df88c1a9144de5a796e2",
+      "stderrSHA256": "1b76e9d084d589e55580af21484f3f2eda298c4c575361e44649cf2efcef5339",
+      "terminalTestSummary": [
+        "Test Files  1 passed (1)",
+        "Tests  39 passed | 3917 skipped (3956)"
+      ]
+    },
+    {
+      "label": "review-v2",
+      "receipt": "/tmp/root-692/review-v2.receipt.json",
+      "receiptSHA256": "731bb1653a880d15c8558ee5a9c6d9ef95d8a2e9c133aab2230a51fce6d2ec45",
+      "started": "2026-10-14T18:35:04.891249+00:00",
+      "pid": 10029,
+      "pgid": 10029,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-review-692",
+      "hostLoad": [
+        16.06982421875,
+        13.80126953125,
+        13.65087890625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T18:36:22.799585+00:00",
+      "elapsedSeconds": 77.907844667,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5021,
+      "beforeSHA256": "54597cb2b730f4c7a7cb378c2f32663d79c19e378764296bf5ec1ee4436e1195",
+      "afterSHA256": "54597cb2b730f4c7a7cb378c2f32663d79c19e378764296bf5ec1ee4436e1195",
+      "collectorBeforeSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "collectorAfterSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "stdoutSHA256": "2ce27105e2d5a8e114974e9cf4d6a1e8445e209c43c02050877a93c9ae6c821f",
+      "stderrSHA256": "1b76e9d084d589e55580af21484f3f2eda298c4c575361e44649cf2efcef5339",
+      "terminalTestSummary": [
+        "Test Files  306 passed (306)",
+        "Tests  7581 passed (7581)"
+      ]
+    },
+    {
+      "label": "knip-v1",
+      "receipt": "/tmp/root-692/knip-v1.receipt.json",
+      "receiptSHA256": "ef268a1ff9e193d2035c4248e3ef7c16757ef12b54e1f40d9ab3cdc75358c721",
+      "started": "2026-10-14T18:36:30.831068+00:00",
+      "pid": 73139,
+      "pgid": 73139,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-review-692",
+      "hostLoad": [
+        12.80322265625,
+        13.62158203125,
+        13.61767578125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T18:36:39.962604+00:00",
+      "elapsedSeconds": 9.129120916,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5021,
+      "beforeSHA256": "54597cb2b730f4c7a7cb378c2f32663d79c19e378764296bf5ec1ee4436e1195",
+      "afterSHA256": "54597cb2b730f4c7a7cb378c2f32663d79c19e378764296bf5ec1ee4436e1195",
+      "collectorBeforeSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "collectorAfterSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "stdoutSHA256": "9c6a4da26dd7b33c4c49c0aa63fb13ad6fd312b09c21b6dadcf99834f6047e0b",
+      "stderrSHA256": "1b76e9d084d589e55580af21484f3f2eda298c4c575361e44649cf2efcef5339",
+      "terminalTestSummary": []
+    },
+    {
+      "label": "schema-v1",
+      "receipt": "/tmp/root-692/schema-v1.receipt.json",
+      "receiptSHA256": "456210dba81733cd18c6539b01edba23db9f0a0f2530267ce46ebaebba9b35af",
+      "started": "2026-10-14T18:36:47.041707+00:00",
+      "pid": 74342,
+      "pgid": 74342,
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers",
+        "--",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-review-692",
+      "hostLoad": [
+        11.560546875,
+        13.31103515625,
+        13.5068359375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T18:36:47.236139+00:00",
+      "elapsedSeconds": 0.19428845800000002,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5021,
+      "beforeSHA256": "cb4d63fec1eb7744ac882b87a3d5db67c3f7758063fb924328447ab8b7174fcc",
+      "afterSHA256": "cb4d63fec1eb7744ac882b87a3d5db67c3f7758063fb924328447ab8b7174fcc",
+      "collectorBeforeSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "collectorAfterSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "stdoutSHA256": "3c9ba6f463786472743fdb291e522de42844b1baa46d937994f0e6dda9ddedcb",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "terminalTestSummary": []
+    },
+    {
+      "label": "whitespace-v1",
+      "receipt": "/tmp/root-692/whitespace-v1.receipt.json",
+      "receiptSHA256": "43b0d50996377a9974527f9154c865d3192d36c1af8eced5a0259547731ffcdd",
+      "started": "2026-10-14T18:36:47.611081+00:00",
+      "pid": 74393,
+      "pgid": 74393,
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-review-692",
+      "hostLoad": [
+        11.560546875,
+        13.31103515625,
+        13.5068359375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T18:36:47.635671+00:00",
+      "elapsedSeconds": 0.024463417000000015,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5021,
+      "beforeSHA256": "cb4d63fec1eb7744ac882b87a3d5db67c3f7758063fb924328447ab8b7174fcc",
+      "afterSHA256": "cb4d63fec1eb7744ac882b87a3d5db67c3f7758063fb924328447ab8b7174fcc",
+      "collectorBeforeSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "collectorAfterSHA256": "f3aa1e2c53f380e5bae539149a8e0c42a804074a1c510f3e7c0823a37f054816",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "terminalTestSummary": []
+    }
+  ],
+  "focusedCoverage": {
+    "history": {
+      "selected": 39,
+      "filtered": 3917,
+      "entrypoint": "src/engine/effects/primitives/contracts.test.ts",
+      "nameFilter": "exact current-turn history"
+    },
+    "loops": {
+      "selected": 45,
+      "files": 2,
+      "scope": "Both existing optional/mandatory loop files, unfiltered; historical first fixture epoch, unchanged executable loop bytes. Existing play-history divergence and exact-repeat/cap controls; not category-specific new discard/departure replay coverage."
+    }
+  },
+  "validationQualification": "Initial focused39 and loop45 source epochs contain the earlier readonly config assignment. Runtime passes did not establish type safety. Review-v1 exposes own readonly assignment error; corrected fixture replaces mutable boardState result.state rather than readonly state.config. Focused39 is rerun as v2; unchanged loop45 is historical. No runtime loop bytes changed. Required aggregate and Knip bind their actual full source epochs. No new tests, mutants, probes, runtime/browser/fuzz/full/performance execution. Every source epoch and actual receipt hash is retained; passing old100 counts/times/evidence are unchanged.",
+  "testDelta": {
+    "files": 0,
+    "lines": 1,
+    "jsdomFiles": 0
+  },
+  "fallout": [],
+  "failurePaths": {
+    "midStepError": "No new state transition; fixture config and docs only. Existing engine error handling is byte-identical.",
+    "reloadRestart": "No saved representation or public runtime behavior changes.",
+    "partialWrite": "No engine persistence or transaction write change.",
+    "invalidStaleInput": "No intent/answer validation change.",
+    "concurrentActors": "No ownership/actor/event flow change."
+  },
+  "runtimeLedger": {
+    "persistentProcesses": [],
+    "serverPorts": [],
+    "browserContexts": [],
+    "commandGroups": [
+      {
+        "label": "history-contracts-v1",
+        "pid": 43101,
+        "pgid": 43101,
+        "childReaped": true,
+        "remainingGroup": false
+      },
+      {
+        "label": "loop-controls-v1",
+        "pid": 43518,
+        "pgid": 43518,
+        "childReaped": true,
+        "remainingGroup": false
+      },
+      {
+        "label": "review-v1",
+        "pid": 3929,
+        "pgid": 3929,
+        "childReaped": true,
+        "remainingGroup": false
+      },
+      {
+        "label": "history-contracts-v2",
+        "pid": 8636,
+        "pgid": 8636,
+        "childReaped": true,
+        "remainingGroup": false
+      },
+      {
+        "label": "review-v2",
+        "pid": 10029,
+        "pgid": 10029,
+        "childReaped": true,
+        "remainingGroup": false
+      },
+      {
+        "label": "knip-v1",
+        "pid": 73139,
+        "pgid": 73139,
+        "childReaped": true,
+        "remainingGroup": false
+      },
+      {
+        "label": "schema-v1",
+        "pid": 74342,
+        "pgid": 74342,
+        "childReaped": true,
+        "remainingGroup": false
+      },
+      {
+        "label": "whitespace-v1",
+        "pid": 74393,
+        "pgid": 74393,
+        "childReaped": true,
+        "remainingGroup": false
+      }
+    ]
+  },
+  "rulesDecisions": [
+    "RD-hv-umm2.692-1"
+  ],
+  "cardIssues": [],
+  "preExistingSourceDefects": [],
+  "review": "Core-review required; parent owns fresh normal Claude Opus5.5 immutable exact-source packet and verified dispositions. This implementation evidence makes no independent-review verdict.",
+  "auditNotes": [
+    "Actual Dawn history counts successful named-Dawn ability admissions, not phases or resolutions; total is global with per-viewer known lower bounds.",
+    "Peer691 optional physical discardedCards member is absent at this source and is not documented as delivered.",
+    "Read-only initial filename guesses and overlarge output truncation were corrected by actual bounded reads; no engine/test failure or source defect was inferred.",
+    "Focused test wrappers overlapped for approximately 2.1 seconds at two workers each. Both strict command manifests remained unchanged, no server was alive, no source/evidence writes overlapped.",
+    "Source-first audit missed BattleState.config readonly; first aggregate typecheck reports own fixture error. Exact parent-native correction replaces b.state object; source-first proposal and actual failing epoch retained, no pre-existing defect claim.",
+    "Workspace linker printed existing missing-local-art warnings during review materialization/restoration; commands passed. No art source edits or browser visual claim."
+  ]
+}

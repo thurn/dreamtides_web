@@ -112,6 +112,7 @@ describe("exact current-turn history", () => {
   it.each(SIDES)("counts the actual hand-limit discard before next-turn reset for %s", side => {
     const b = boardState(engine.catalog, { active: side, phase: "night", scoreToWin: 100,
       [side]: { hand: Array.from({ length: 13 }, () => v.vanilla0.id), deck }, [opponent(side)]: { deck } });
+    b.state = { ...b.state, config: { ...b.state.config, handLimit: 10 } };
     const observed: number[] = [];
     engine.apply(b.state, side, { kind: "pass" }, answers(), (state, _step, events) => {
       if (events.some(event => event.kind === "discardBatch")) observed.push(read(state, side, discardedThisTurn()));

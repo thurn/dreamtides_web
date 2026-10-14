@@ -65,9 +65,11 @@ const STATE_FIELDS = {
   triggerQueue: "position",
   floating: "position",
   /**
-   * Cards played and drawn and characters materialized this turn grow with
-   * every play, draw, and materialization, so a loop that plays, draws, or
-   * materializes never repeats them (RD-hv-7x4l.36-1).
+   * Current-turn play, draw, discard, departure, dissolve, abandon,
+   * materialization and Dawn-ability admission history only grows within a main
+   * window. Its physical occurrences, captured characteristics and figment
+   * provenance share that resource role (RD-hv-7x4l.36-1,
+   * RD-hv-umm2.692-1); replay checks actual rules against the recording.
    */
   turnLog: "resource",
   nextEffect: "resource",
