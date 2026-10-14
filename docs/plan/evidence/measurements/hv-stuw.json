@@ -1,0 +1,641 @@
+{
+  "bead": "hv-stuw",
+  "base": "fd70feb0b8872f600881446c50b778aa6e822271",
+  "evidenceCutoff": "2026-10-14T05:09:34.616702+00:00",
+  "dispatch": "2026-10-14T04:54:36.094445+00:00",
+  "elapsedThroughCutoffS": 898.522257,
+  "gitCompletion": "UNKNOWN at evidence cutoff; actual commit and <=60s cutoff tail recorded externally by helper Git receipt, then certified by parent.",
+  "proposalSHA256": "a169be9f2a39b10ed63b175ccae69ec617c8ba346d1b646e35faa87a61fcd601",
+  "sourceAdmission": "Exact native primary and conditional effectStarted.redact ACK before writes; parent retains source-write-admission.json.",
+  "implementation": {
+    "bodies": [
+      "keptWithoutSource: resolved numeric baseSpark obligation, existing target/expiry guards unchanged",
+      "effectStarted.redact: baseSpark sourceLeavesPlay requires identifiable expiry source"
+    ],
+    "unchangedContracts": [
+      "isFixedEffect permanent expiry.never snapshot boundary",
+      "numeric resolution and layer ordering",
+      "source:null controller-avatar determinization convention",
+      "state/fold schema and source lifetime"
+    ],
+    "sourceFiles": {
+      "src/engine/rules/floating.ts": {
+        "sha256": "b605d26f0cd45121805c62d4fe23b33f1eac0b4e4cb9353a5811318feb06fcb6",
+        "lines": 222
+      },
+      "src/engine/events/kinds/effect-started.ts": {
+        "sha256": "881e9754abe0dd0b57b0f6102897434d923d0ce1c8606bec4e34f87e330929b9",
+        "lines": 78
+      },
+      "src/engine/effects/primitives/contracts/temporary-base-spark-retention.contracts.ts": {
+        "sha256": "034a78442d453fd95184863cd7d9c39a570dc340cb3b2e5eddafb8cb43df64ff",
+        "lines": 193
+      }
+    }
+  },
+  "tests": {
+    "publicConsumer": "contracts.test.ts import.meta.glob contracts/*.contracts.ts eager; no registry or test entrypoint edit",
+    "newContracts": 12,
+    "testModuleLines": 193,
+    "bothControllersAndViewers": true,
+    "copyWitness": "Two real copied events target first character; visible original independently targets second character. Later ordinary play opens real opposing Interrupt window. Removing retention exposes extra sampled removal action for both orientations.",
+    "publicShape": "Public characteristics expose spark, not baseSpark; resolved raw baseSpark value is asserted in preserved floating change, with sampled/public characteristics and complete legal actions equal.",
+    "counterfactuals": {
+      "oldRetention": {
+        "initialFullSuite": "6 expected failures: missing copied/hidden-source obligations and resumed sampled spark1 instead of7",
+        "finalTargeted": "2 expected failures on explicit extra sampled Interrupt play action"
+      },
+      "missingExpiryGuard": "2 expected real-departure failures: redacted event.source:null but private expiry.source leaked",
+      "restoration": "Both admitted production byte arrays restored in finally blocks, SHA256 equals fixed scratch copies before final validation."
+    },
+    "iterationFailures": [
+      "focused-initial and focused-corrected each6 fixture failures: intermediate original-only opposing window skipped by ordinary priority/automatic stepping; no engine defect inferred",
+      "review-initial: tests all passed but own fixture needed typed JSON transport and immutable instance replacement for readonly printing; corrected before final checks",
+      "focused-response4 fixture assertion failures: public characteristics has spark but no baseSpark field; corrected assertions use actual stable public shape"
+    ],
+    "controls": [
+      "visible original source in void",
+      "unknown hand-source/decoy printing swap and same-view seeded sample",
+      "hidden changed target omitted",
+      "real sourceLeavesPlay departure and source hidden in shuffled deck",
+      "visible source-dependent expiry unchanged",
+      "permanent setter remains through Ending with never snapshots",
+      "serialized real fold restart identical and later expiry",
+      "repeated both-viewer projection/sampling preserves original stateHash"
+    ]
+  },
+  "failurePaths": {
+    "newTransitions": "None. Production fix changes pure projection classification and bounded event redaction, creates no state mutation, prompt, persistence write, retry, or scheduling protocol.",
+    "errorMidStep": "No new error-producing transition or operation; existing fold runner rollback contracts cover atomic steps. New pure projection read immutability check and actual serialized committed fixture ensure classifier cannot partially write authoritative state. Additional injected failure would mirror unchanged fold mechanics and is not proposed.",
+    "interrupt": "Synthetic opposing Interrupt removal legality is compared at a real response window after copied setter source cessation. This directly reproduces the changed behavior.",
+    "reloadRestart": "Fresh fold adapter around serialized committed state reproduces same public effects/legality and later duration expiry.",
+    "partialWrite": "No writes or partially persisted representation added. Repeated view and determinize calls assert unchanged original stateHash. No invented partial-write test.",
+    "invalidStaleInput": "Projection accepts no action/input. Existing fold stale/invalid prompt contracts remain unmodified. Hidden/ceased malformed identity projection cases are directly covered as privacy boundary controls.",
+    "concurrentActors": "No concurrent mutation or new actor coordination. Both viewers repeatedly project same immutable committed state and determinize independent copies, with original stateHash stable. Existing single-intent fold protocol remains authoritative."
+  },
+  "checks": {
+    "focused-initial": {
+      "name": "focused-initial",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public base spark retention"
+      ],
+      "start": "2026-10-14T05:01:08.621655+00:00",
+      "loadStart": [
+        4.43359375,
+        5.78076171875,
+        8.29296875
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 19116,
+      "pgid": 19116,
+      "exit": 1,
+      "end": "2026-10-14T05:01:12.785928+00:00",
+      "wallS": 4.164101666974602
+    },
+    "focused-corrected": {
+      "name": "focused-corrected",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public base spark retention"
+      ],
+      "start": "2026-10-14T05:01:21.483581+00:00",
+      "loadStart": [
+        4.2861328125,
+        5.705078125,
+        8.236328125
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 19280,
+      "pgid": 19280,
+      "exit": 1,
+      "end": "2026-10-14T05:01:24.767151+00:00",
+      "wallS": 3.2834215839975514
+    },
+    "focused-response": {
+      "name": "focused-response",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public base spark retention"
+      ],
+      "start": "2026-10-14T05:01:59.786389+00:00",
+      "loadStart": [
+        5.3056640625,
+        5.81298828125,
+        8.15966796875
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 20144,
+      "pgid": 20144,
+      "exit": 1,
+      "end": "2026-10-14T05:02:03.580744+00:00",
+      "wallS": 3.7941875830001663
+    },
+    "focused-public-shape": {
+      "name": "focused-public-shape",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public base spark retention"
+      ],
+      "start": "2026-10-14T05:02:12.443064+00:00",
+      "loadStart": [
+        5.177734375,
+        5.76904296875,
+        8.11669921875
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 20418,
+      "pgid": 20418,
+      "exit": 0,
+      "end": "2026-10-14T05:02:15.904496+00:00",
+      "wallS": 3.4612538749934174
+    },
+    "counterfactual-retention": {
+      "name": "counterfactual-retention",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public base spark retention"
+      ],
+      "start": "2026-10-14T05:02:24.108371+00:00",
+      "loadStart": [
+        4.67041015625,
+        5.63134765625,
+        8.0263671875
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 20571,
+      "pgid": 20571,
+      "exit": 1,
+      "end": "2026-10-14T05:02:27.300902+00:00",
+      "wallS": 3.192360041983193
+    },
+    "counterfactual-expiry": {
+      "name": "counterfactual-expiry",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "redacts source-dependent expiry"
+      ],
+      "start": "2026-10-14T05:02:27.325125+00:00",
+      "loadStart": [
+        4.67041015625,
+        5.63134765625,
+        8.0263671875
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 20623,
+      "pgid": 20623,
+      "exit": 1,
+      "end": "2026-10-14T05:02:30.474203+00:00",
+      "wallS": 3.1489019170112442
+    },
+    "focused-existing": {
+      "name": "focused-existing",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts"
+      ],
+      "start": "2026-10-14T05:02:53.044233+00:00",
+      "loadStart": [
+        4.150390625,
+        5.43408203125,
+        7.884765625
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 21081,
+      "pgid": 21081,
+      "exit": 0,
+      "end": "2026-10-14T05:03:08.372574+00:00",
+      "wallS": 15.32777875001193
+    },
+    "counterfactual-final-retention": {
+      "name": "counterfactual-final-retention",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps two ceased copies"
+      ],
+      "start": "2026-10-14T05:03:22.449006+00:00",
+      "loadStart": [
+        4.4609375,
+        5.39013671875,
+        7.78271484375
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 21537,
+      "pgid": 21537,
+      "exit": 1,
+      "end": "2026-10-14T05:03:26.104797+00:00",
+      "wallS": 3.655456625012448
+    },
+    "review-initial": {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T05:03:55.380309+00:00",
+      "loadStart": [
+        3.70849609375,
+        5.10595703125,
+        7.58203125
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 22113,
+      "pgid": 22113,
+      "exit": 2,
+      "end": "2026-10-14T05:05:04.533082+00:00",
+      "wallS": 69.1514153330063
+    },
+    "review": {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T05:05:13.778058+00:00",
+      "loadStart": [
+        6.26806640625,
+        5.71044921875,
+        7.59619140625
+      ],
+      "sysctlLoad": "{ 6.27 5.71 7.60 }",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 23460,
+      "pgid": 23460,
+      "exit": 0,
+      "end": "2026-10-14T05:06:13.643064+00:00",
+      "wallS": 59.861173457989935
+    },
+    "knip": {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-14T05:06:18.864425+00:00",
+      "loadStart": [
+        5.49267578125,
+        5.56201171875,
+        7.39697265625
+      ],
+      "sysctlLoad": "{ 5.49 5.56 7.40 }",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 24724,
+      "pgid": 24724,
+      "exit": 0,
+      "end": "2026-10-14T05:06:23.057115+00:00",
+      "wallS": 4.190344041009666
+    },
+    "full": {
+      "name": "full",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-14T05:06:23.080399+00:00",
+      "loadStart": [
+        5.49267578125,
+        5.56201171875,
+        7.39697265625
+      ],
+      "sysctlLoad": "{ 5.49 5.56 7.40 }",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 24870,
+      "pgid": 24870,
+      "exit": 0,
+      "end": "2026-10-14T05:08:13.948559+00:00",
+      "wallS": 110.8635683329776
+    },
+    "schema": {
+      "name": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-14T05:09:01.804645+00:00",
+      "loadStart": [
+        4.28173828125,
+        5.3291015625,
+        7.00244140625
+      ],
+      "sysctlLoad": "{ 4.28 5.33 7.00 }",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-base-spark-stuw",
+      "workers": 2,
+      "pid": 56718,
+      "pgid": 56718,
+      "exit": 0,
+      "end": "2026-10-14T05:09:01.923321+00:00",
+      "wallS": 0.11593833297956735
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review starting sysctl -n vm.loadavg 1-minute value; exact raw sysctl output and os.getloadavg tuple retained per receipt; not CPU or performance claim"
+      }
+    }
+  },
+  "logging": {
+    "existing": "addFloating effectStarted carries effect/controller/source/expiry/resolved numeric change. Public projection hides causal source and hidden source-dependent expiry; no event/schema/copy additions.",
+    "actualConsumers": [
+      "events.eventSeenBy",
+      "battle/components/presentation-items.ts batch.state",
+      "screens/cumulus_adapters/engine-battle-log-view-model.ts result state",
+      "testing/determinization-fidelity.ts owedFloating"
+    ]
+  },
+  "qa": {
+    "browser": "Not run: pure internal view/event projection correction, same authoritative stats/view shape and existing presentation consumers; no new component/event kind/flow",
+    "captures": [],
+    "default300": "Not run locally: staged validation smoke covers unchanged fuzzer and step runner. Original664 must consume landed fix and run exact recorded witness plus literal locked weighted300 and sweep."
+  },
+  "resources": {
+    "workers": 2,
+    "processes": [
+      {
+        "check": "focused-initial",
+        "pid": 19116,
+        "pgid": 19116,
+        "exit": 1,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "focused-corrected",
+        "pid": 19280,
+        "pgid": 19280,
+        "exit": 1,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "focused-response",
+        "pid": 20144,
+        "pgid": 20144,
+        "exit": 1,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "focused-public-shape",
+        "pid": 20418,
+        "pgid": 20418,
+        "exit": 0,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "counterfactual-retention",
+        "pid": 20571,
+        "pgid": 20571,
+        "exit": 1,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "counterfactual-expiry",
+        "pid": 20623,
+        "pgid": 20623,
+        "exit": 1,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "focused-existing",
+        "pid": 21081,
+        "pgid": 21081,
+        "exit": 0,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "counterfactual-final-retention",
+        "pid": 21537,
+        "pgid": 21537,
+        "exit": 1,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "review-initial",
+        "pid": 22113,
+        "pgid": 22113,
+        "exit": 2,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "review",
+        "pid": 23460,
+        "pgid": 23460,
+        "exit": 0,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "knip",
+        "pid": 24724,
+        "pgid": 24724,
+        "exit": 0,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "full",
+        "pid": 24870,
+        "pgid": 24870,
+        "exit": 0,
+        "port": null,
+        "terminal": true
+      },
+      {
+        "check": "schema",
+        "pid": 56718,
+        "pgid": 56718,
+        "exit": 0,
+        "port": null,
+        "terminal": true
+      }
+    ],
+    "browserContexts": [],
+    "servers": [],
+    "leases": [],
+    "pending": "Parent cold independent Claude Opus5.5 exact-code review, certification and original664 downstream validation remain outside helper completion.",
+    "settlement": {
+      "at": "2026-10-14T05:09:34.596032+00:00",
+      "allKnownPGsAbsent": true,
+      "syntheticFixturePGs": [
+        25778,
+        25924,
+        26159,
+        26457,
+        26750,
+        27035,
+        27361,
+        27489,
+        27666,
+        28098,
+        28297,
+        28965,
+        29210,
+        29309,
+        29645,
+        29945,
+        30244,
+        30812,
+        31035,
+        31172,
+        31536,
+        31809,
+        32134,
+        32878,
+        33011,
+        33636,
+        34575,
+        34822,
+        35447,
+        36025,
+        36352,
+        36483,
+        36636,
+        37059,
+        37245,
+        37893,
+        38158,
+        38258,
+        38543,
+        39066,
+        39212,
+        39653,
+        39766,
+        39943,
+        40337,
+        40723,
+        40889,
+        41021,
+        41793,
+        43296,
+        44004,
+        45837,
+        46288,
+        47760,
+        48476,
+        49055,
+        51068,
+        51447
+      ],
+      "classification": "No task browser/provider/server/lease was acquired. Full and related repository tests launch isolated synthetic server/lease fixtures and intentionally inject cleanup failure messages; all parsed emitted process groups are absent. Their scratch fixtures are outside project QA ownership and are test-owned, not live shared browser-slot records.",
+      "receiptSHA256": "aff59413ad5d5dabdf7db58836d6d9af8b8f5d28f03e46aa01eb5a900495276d",
+      "ports": "Isolated synthetic fixtures emitted 5174/5274 and cleaned them; full output retains each emitted lifecycle. No task QA server/port was acquired."
+    }
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "falloutFiles": [],
+  "preExistingIssues": "No unrelated source issue encountered. Prepare checks use temporary asset materializations and restore local art; expected temporary missing-art warnings are captured in check stderr.",
+  "checkTranscriptSHA256": {
+    "focused-initial": {
+      "stdout": "7cbe280a459777807dd755ef63dd4268c0bf3877d40ca744154e27179adcdc99",
+      "stderr": "fd5ddfe27399275585f8d1542eb0368cc3aae77bf3a2cd738c97a761635ab5a8"
+    },
+    "focused-corrected": {
+      "stdout": "c68cdbef8d7628ca9887e9198c0ddb16fff1ff59ac4049ac57c66c33e12ccb07",
+      "stderr": "fd5ddfe27399275585f8d1542eb0368cc3aae77bf3a2cd738c97a761635ab5a8"
+    },
+    "focused-response": {
+      "stdout": "ccf595936479b5fd8afffaf9467b72934cf05ea00ec008d043a36bded367d8fe",
+      "stderr": "2f704f0af517ba39949738067be6990cf6bfeb11e6427338f7a586067e0ee80c"
+    },
+    "focused-public-shape": {
+      "stdout": "0933b60df640c8a8bca97d142fd7ac18d54e90e0c255263042b804a2e8c2e1df",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "counterfactual-retention": {
+      "stdout": "dbeb78bb6cd9178e77ea064422e4ba249b6bfd4cf980d3f13f7464fc4cdbf69b",
+      "stderr": "1957705afd80d7cc7d3e53d22e7715eb6e1af3b812554d61c34917e41d7441f3"
+    },
+    "counterfactual-expiry": {
+      "stdout": "17625267d8f766d63499275cae2b5ded77087727ab899034f6059eb300499905",
+      "stderr": "7a6c883b8babd1be7f4bd702c103558ce3a1bed6442d866fa9c0dc8b61aa3e72"
+    },
+    "focused-existing": {
+      "stdout": "b7e2bb778e70e83e35beeb3c4b80f8d05c8b8344dffd7d3d03f22baf6be3fde6",
+      "stderr": "8b6c7ca35a0927bcb6da51b4b5f574043f2bcab527e3bf0774ebce9d25f199a2"
+    },
+    "counterfactual-final-retention": {
+      "stdout": "f442c71c767bf4dc1047b919739bed5827f0d14180a407145a8cea250cc2fee8",
+      "stderr": "dfdd9b0c5603a21f7c0d9e4c415e5f016a64e9af05c380dd776387381a287041"
+    },
+    "review-initial": {
+      "stdout": "cebc933f37ecdbe2ef08cd815fae2189690553d12cc6b398e6b94db665b96b6f",
+      "stderr": "8b6c7ca35a0927bcb6da51b4b5f574043f2bcab527e3bf0774ebce9d25f199a2"
+    },
+    "review": {
+      "stdout": "73b6aeb1650c8c37973e8a709e5a75b252cf71d5952f5da24befc563831d5e09",
+      "stderr": "8b6c7ca35a0927bcb6da51b4b5f574043f2bcab527e3bf0774ebce9d25f199a2"
+    },
+    "knip": {
+      "stdout": "852dd9fc09d0859ad49d21d30e4fd45cb5b39733353a2a4075806d3c08d69e1c",
+      "stderr": "8b6c7ca35a0927bcb6da51b4b5f574043f2bcab527e3bf0774ebce9d25f199a2"
+    },
+    "full": {
+      "stdout": "2bbbcdfe9b5bd7d62e4f90e21a0051643ea7e3a06c90621ff2b8aab4951df496",
+      "stderr": "ee2c5c8ea13295c4f54977f90b110c8e02cd8f099038514d43a355252773525b"
+    },
+    "schema": {
+      "stdout": "b39f2da30f52372a3516c0ecf9369a6baba9bfa39a18405d1a8448239e4ab112",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

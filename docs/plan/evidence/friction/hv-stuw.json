@@ -1,0 +1,23 @@
+{
+  "bead": "hv-stuw",
+  "phase": 5,
+  "implementMin": 14.97537095,
+  "implementWindow": {
+    "start": "2026-10-14T04:54:36.094445+00:00",
+    "end": "2026-10-14T05:09:34.616702+00:00"
+  },
+  "localValidationS": {
+    "focused-existing": 15.32777875001193,
+    "review": 59.861173457989935,
+    "knip": 4.190344041009666,
+    "full": 110.8635683329776,
+    "schema": 0.11593833297956735
+  },
+  "hostLoad": 6.27,
+  "testDelta": {
+    "files": 1,
+    "lines": 193,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

@@ -201,13 +201,14 @@ export function carriesLegality(change: FloatingChange): boolean {
 }
 
 /**
- * Legality data, recorded hand returns, and lost abilities remain obligations
+ * Legality data, recorded hand returns, lost abilities, and resolved numeric
+ * base-spark settings remain obligations
  * with a redacted source: a character that lost its abilities has none in
  * every determinization, whatever became of the effect's source. Their
  * changed card and expiry identities must still be visible.
  */
 export function keptWithoutSource(change: FloatingChange): boolean {
-  return carriesLegality(change) || change.kind === "banishedToHandUntil" || change.kind === "loseAbilities";
+  return carriesLegality(change) || change.kind === "banishedToHandUntil" || change.kind === "loseAbilities" || change.kind === "baseSpark";
 }
 
 /** Ends the floating effects that change `id`, when it ceases to exist. */
