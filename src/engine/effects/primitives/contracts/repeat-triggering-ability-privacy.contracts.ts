@@ -4,9 +4,12 @@ import { activated, all, characterYouControl, everyIn, self, staticAbility, ener
 import { either, onDawn, onMaterialized, triggered, whenMaterialize, whenNamedAbilityTriggered, whenDraw, whenGainsSpark } from "../../../dsl/triggers";
 import type { EngineFigmentDefinition } from "../../../catalog";
 import { eventSeenBy } from "../../../events";
+import type { EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice } from "../../../fold/slice";
 import { instanceOrigin, originAbilities } from "../../../rules/activation";
 import { stateHash } from "../../../state/hash";
+import { runStep } from "../../../steps/runner";
+import { NO_PROMPTS } from "../../../steps/sources";
 import { opponent, parseFigmentId, SIDES } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
 import { comparableView } from "../../../testing/determinization-fidelity";
@@ -78,6 +81,11 @@ describe("repeatTriggeringAbility privacy", () => {
     const w = world(side, [source, observer, force], { back: [source.id, observer.id, force.id] });
     const original = step(w, activate(w, w.ids[side].back[2]!).state, { kind: "resolveTrigger" });
     const originalHash = stateHash(original.state);
+    const control = runStep(original.state, { kind: "resolveTrigger" }, NO_PROMPTS, w.engine.catalog);
+    expect(control.kind).toBe("done");
+    if (control.kind !== "done") throw new Error("Expected valid captured reader");
+    expect(queued(control.events)).toHaveLength(1);
+    expect(drain(w, control.state).sides[side].currentEnergy).toBe(10);
     expect(drain(w, reload(sliceOf(original.state)).committed).sides[side].currentEnergy).toBe(10);
     expect(stateHash(original.state)).toBe(originalHash);
     for (const malformed of [null, { named: "unknown", occurrence: original.state.triggerQueue[0] },
@@ -102,6 +110,14 @@ describe("repeatTriggeringAbility privacy", () => {
     const watch = bad.committed.triggerQueue[0];
     bad.committed.triggerQueue[0] = { ...watch, triggeringAbility: { ...watch.triggeringAbility!, occurrence: { ...watch.triggeringAbility!.occurrence, ability: 99 } } };
     const loaded = reload({ ...bad, inFlight: { step: { kind: "resolveTrigger" }, automatic: true, answers: [] } }), before = stateHash(loaded.committed);
+    const seen: EngineEvent[] = [];
+    expect(() => runStep(loaded.committed, { kind: "resolveTrigger" }, NO_PROMPTS, w.engine.catalog,
+      { observeEvent: event => { seen.push(event); } })).toThrow();
+    expect(seen).toContainEqual(expect.objectContaining({ kind: "triggerResolved", source: w.ids[side].back[1], applied: true }));
+    expect(queued(seen)).toEqual([]);
+    expect(seen.some(event => event.kind === "energyChanged")).toBe(false);
+    expect(stateHash(loaded.committed)).toBe(before);
+    // Supplementary recovery checks follow the direct refusal and same-API valid control.
     const failed = createFoldAdapter(w.engine).reduce(loaded, { kind: "battleAction", side, action: { kind: "pass" } });
     if (failed.kind !== "applied") throw new Error("No catalog reader recovery");
     expect(failed.error).toMatchObject({ kind: "engine_error" });

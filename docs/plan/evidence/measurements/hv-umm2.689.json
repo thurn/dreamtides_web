@@ -659,27 +659,27 @@
     {
       "path": "midstep/partial write",
       "contract": "rolls back %s genuine repeated mutation prefix on the exact later primitive error",
-      "coverage": "Real repeat admission and gain-energy mutation prefix followed by missing-figment primitive; successful prefix control, stable engine_error, unchanged committed/input hash, cleared inFlight, empty published."
+      "coverage": "Historical hv-umm2.689: the valid control executed a real repeat/gain-energy continuation, but the failing fold replay did not observe that prefix. Successful nonsuspending inFlight replay has the same engine_error/hash/null-inFlight/empty-publication shape, so this epoch did not discriminate removal of the late primitive error. hv-b7x4 repairs the current contract with actual prefix observation and a genuine pending-answer success/failure route; its outcomes belong to that bead evidence."
     },
     {
       "path": "reload/restart",
       "contract": "visible-history original reader for $side/$viewer after current loss=$lost; visible-history private repeat for $side/$viewer after current loss=$lost; visible-history public emblem observer for $side/dreamsign=$sign keeps captured history withheld; visible-history sampled self-subject for %s stays private to later public readers",
-      "coverage": "Actual pending states and samples through JSON, saved-fold parser, fresh fold/engine readers and repeated determinization; exact visible UUID/FIFO/public view and actual finite continuation."
+      "coverage": "Actual pending states and samples passed JSON, saved-fold parser, fresh readers and repeated determinization at the recorded hv-umm2.689 epochs. The original-red run covered 16 earlier original-reader/private-repeat cases; the six later emblem/self-subject cases and subjectHiddenFrom addition had no original-red execution. hv-b7x4 qualifies this historical proof boundary without changing raw outcomes."
     },
     {
       "path": "invalid/stale/concurrent actor",
       "contract": "reloads %s optional observer and refuses wrong-side, stale and duplicate continuations",
-      "coverage": "Existing wrong-side, stale/duplicate answer and noncancellable prompt contracts retained; malformed saved causal/history arrays rejected and catalog mismatch atomically recovered with an exact same-fixture valid drain."
+      "coverage": "Existing wrong-side, stale/duplicate answer and noncancellable prompt contracts retained; malformed saved causal/history arrays rejected. Historical hv-umm2.689 catalog-mismatch fold recovery was nondiscriminating because successful nonsuspending inFlight replay returns the same error recovery shape; its valid drain used another route. hv-b7x4 supplies current direct-reader refusal and same-API valid-control discrimination, with outcomes recorded separately."
     },
     {
       "path": "immutable allowance refusal",
       "contract": "repeats exact floating node for $side and refuses consumed one-shot=$once",
-      "coverage": "Actual valid ordinary/floating continuation retained; raw malformed repeated saved marker gets stable fold engine_error, unchanged hashes/empty publications; invalid sampler refusal paired with valid sampled fidelity and outcome."
+      "coverage": "Historical hv-umm2.689 retained actual valid ordinary/floating outcomes and invalid sampler refusal with valid sampled fidelity/outcome. Its malformed repeated saved-marker fold engine_error/hash/empty-publication assertions did not distinguish successful nonsuspending replay from immutable refusal. hv-b7x4 supplies direct runStep refusal with same-API valid resolution; current outcomes are separate from these original receipts."
     },
     {
       "path": "later observation/privacy",
       "contract": "visible-history public emblem observer for $side/dreamsign=$sign keeps captured history withheld; visible-history sampled self-subject for %s stays private to later public readers",
-      "coverage": "New public observer keeps own origin visible; nested guessed original origin/context stays withheld through explicit observedBy, replay and real repetition. Newly synthesized self-subject gets subjectHiddenFrom, while already-shown ordinary subject stays public."
+      "coverage": "Historical hv-umm2.689 later emblem/self-subject cases checked public observer origin, withheld nested origin/context, replay/repetition, sampled subject privacy and an already-public subject control. Actual captured audiences were empty: overriding a later explicit nonempty observedBy was not discriminatingly witnessed, and nested denial is defense in depth. Top-level history marker necessity was tested. The six later cases and subjectHiddenFrom addition had no original-red execution. Qualification provenance: hv-b7x4; original runtime outcomes/epochs remain unchanged."
     },
     {
       "path": "termination",
@@ -688,7 +688,7 @@
     }
   ],
   "privacyAndLimits": {
-    "metadata": "Optional queued historyHiddenFrom is a snapshot projection obligation, not recovered authoritative audience. It is absent from public DTO/events, survives JSON clone/hash/save/nested capture/repetition and denies origin/context even under later explicit observedBy. Source UUID remains current physical identity.",
+    "metadata": "Optional queued historyHiddenFrom is a persisted, validated private snapshot projection obligation, not recovered authoritative audience. It is absent from public DTO/events, survives clone/hash/save/nested capture/repetition and gates historical origin/context independently of current physical source UUID visibility. Historical hv-umm2.689 proves top-level marker necessity; its nested producer captures had empty audiences, so denial over explicit nonempty observedBy is defense in depth without discriminating runtime proof. Its six later emblem/self-subject cases and subjectHiddenFrom addition had no original-red execution. This hv-b7x4 qualification preserves all original raw receipts, source epochs and outcomes.",
     "candidateDomain": "Visible sources retain exact same printing/variant and represented gained groups only as index requires, without current lost mask/current-zone admission restriction. No unrelated visible-printing fallback. One sampled direct named ordinary cause with exact source/controller/ability/node/self-or-null subject, no recursive observer ancestry or copied authoritative hidden tuple. Missing compatible finite domain refuses.",
     "currentSourceChange": "Tests prove current active-ability loss after admission. Printing/variant stay fixed; no claim of erased gained-definition/changed-printing/variant producer proof or complete arbitrary erased-history reconstruction.",
     "deliberateDuplication": "Local immediate readsRepeat mirrors matcher immediate-reader boundary and stops at floatingTrigger; matcher stays read-only. Named/immutable predicate duplication is retained for serialized hv-umm2.690; this helper is not claimed consolidated."

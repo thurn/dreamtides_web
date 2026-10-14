@@ -1,0 +1,717 @@
+{
+  "bead": "hv-b7x4",
+  "base": "3f6e65be3bbf560a8a535987484b43da9bf5dd7c",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+  "branch": "wt/repeat-refusal-proofs-b7x4",
+  "recordedAt": "2026-10-14T16:38:38.226433+00:00",
+  "clock": {
+    "start": "2026-10-14T16:17:39.343792+00:00",
+    "endAtEvidenceWrite": "2026-10-14T16:38:38.226433+00:00",
+    "elapsedMinutes": 20.98137735,
+    "qualification": "Conservative parent pre-spawn envelope; exact helper sampling start and productive editing time unknown. Includes research, coordination/admission, check execution, waits and evidence. Final evidence refresh precedes schema/whitespace/staging/one automatic commit; external finalizer receipt measures that tail. No Git date override or postcommit tracked rewrite."
+  },
+  "source": {
+    "initialPaths": 4933,
+    "initialManifestSHA256": "e5696f7e882140c8f2e55e926cab569eeeff2b04e1c0b176c06237d15e12ecab",
+    "validatedBaselineSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+    "validatedBaselinePaths": 4933,
+    "scope": "Two existing test modules, one design paragraph and six explicitly admitted old689 JSON claim fields. All final production sources and private fixture are byte-identical to base. Three own evidence files added; source manifests include tracked/untracked and ignored src/scripts materializations.",
+    "contractPreservation": [
+      {
+        "file": "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts",
+        "groups": 19,
+        "changedGroups": 2,
+        "lines": 374
+      },
+      {
+        "file": "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts",
+        "groups": 13,
+        "changedGroups": 1,
+        "lines": 383
+      }
+    ],
+    "privateFixtureSHA256": "fc73a27406fc5775cfcd023ec0f9a6020f5dba5b46793bb5dde016aaa444246d",
+    "reviewKnipEpochReuse": "Review/Knip passed exact corrected baseline before temporary CFs; every CF restored all4933 bytes and selected contracts passed afterward. No final test/doc/source edit followed those checks. Own evidence is validated separately; no duplicate aggregate run."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "localValidationS.focused": {
+        "measuredFor": "Current corrected88-case repeat group, not cumulative epochs"
+      },
+      "localValidationS.related": {
+        "measuredFor": "Unfiltered four direct fold/view files65cases"
+      },
+      "hostLoad": {
+        "measuredFor": "review-v1 starting one-minute kernel load via os.getloadavg",
+        "value": 23.24462890625
+      }
+    }
+  },
+  "validation": {
+    "tests": {
+      "preliminaryRefusals": {
+        "passed": 8,
+        "epoch": "before semantic event-observation cleanup"
+      },
+      "preliminaryFilteredConsumers": {
+        "passed": 269,
+        "filesPassed": 4,
+        "filesSkipped": 1,
+        "qualification": "Filter did not select every direct consumer; unfiltered current65-case run supplies that coverage."
+      },
+      "focusedCurrent": {
+        "passed": 88,
+        "originalCasesRetained": 88,
+        "newCases": 0
+      },
+      "directConsumersCurrent": {
+        "passed": 65,
+        "files": 4
+      },
+      "review": {
+        "passed": 3881,
+        "files": 1
+      },
+      "counterfactual": {
+        "immutable": {
+          "failed": 2,
+          "passed": 2
+        },
+        "late-error": {
+          "failed": 2
+        },
+        "catalog-reader": {
+          "failed": 2
+        }
+      },
+      "restored": {
+        "immutable": {
+          "passed": 4
+        },
+        "late-error": {
+          "passed": 2
+        },
+        "catalog-reader": {
+          "passed": 2
+        }
+      }
+    },
+    "commands": [
+      {
+        "label": "focused-refusals-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T16:24:43.163577+00:00",
+        "pid": 57970,
+        "pgid": 57970,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "repeats exact floating node|rolls back .* genuine repeated mutation|rejects malformed .* saved causal records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          9.24072265625,
+          12.73828125,
+          13.78173828125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:24:48.071536+00:00",
+        "elapsedSeconds": 4.907818707986735,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "036ac1508652c584210df14d563c8025d8328413cbcc800b55f6c49184dff026",
+        "afterSHA256": "036ac1508652c584210df14d563c8025d8328413cbcc800b55f6c49184dff026",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "fa3c1c20c73400fbec5fc9d76e536b8ec1e4ae04a0eb7c612baedc28b2febabc",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receiptSHA256": "637a40507aaaa74faa36bafd72fb206aeebda0ad2da3033428f2762d81dbf278"
+      },
+      {
+        "label": "focused-repeat-and-consumers-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T16:25:24.157764+00:00",
+        "pid": 60495,
+        "pgid": 60495,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/fold/fold-observation.test.ts",
+          "src/engine/view/determinize.test.ts",
+          "src/engine/view/view.test.ts",
+          "-t",
+          "repeatTriggeringAbility|fold|view|determinize"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          8.748046875,
+          12.173828125,
+          13.52587890625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:25:28.766529+00:00",
+        "elapsedSeconds": 4.6086362920177635,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "036ac1508652c584210df14d563c8025d8328413cbcc800b55f6c49184dff026",
+        "afterSHA256": "036ac1508652c584210df14d563c8025d8328413cbcc800b55f6c49184dff026",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "6c455799638dccf62778d0c045e1392d526aca525028e768d8af84a792be3fbd",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receiptSHA256": "4e87acd7ede1cf6e13bc12f0754527b4003913f0a115a8fe4346cce464718dfa"
+      },
+      {
+        "label": "focused-repeat-v2",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T16:25:48.741698+00:00",
+        "pid": 62076,
+        "pgid": 62076,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "repeatTriggeringAbility"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          7.73095703125,
+          11.6611328125,
+          13.30078125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:25:52.280338+00:00",
+        "elapsedSeconds": 3.538552249985514,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "afterSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "efb1c99f8650b18a9efbc9ed73c9278092a3be193d0a23e4aa3b58ba10fccb54",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receiptSHA256": "3fcc349c67240f3bcb81842f85223073cbf8b1555158c4305709d4d2826520e5"
+      },
+      {
+        "label": "direct-consumers-v2",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T16:26:14.608944+00:00",
+        "pid": 63531,
+        "pgid": 63531,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/fold/fold-observation.test.ts",
+          "src/engine/view/determinize.test.ts",
+          "src/engine/view/view.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          6.66796875,
+          11.0927734375,
+          13.0478515625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:26:16.624762+00:00",
+        "elapsedSeconds": 2.0157137920032255,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "afterSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "d71a44b58ebe5b3c7689badb78ce58fde2ac2063e1a1dd96c3038622ec701477",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receiptSHA256": "0fe8e5f699833ea2230473a484ebadce56913a3f01ea3f19640e72bf35e47023"
+      },
+      {
+        "label": "review-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T16:28:37.228578+00:00",
+        "pid": 6604,
+        "pgid": 6604,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          23.24462890625,
+          14.84228515625,
+          14.166015625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:29:02.584625+00:00",
+        "elapsedSeconds": 25.35612941699219,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "afterSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "ba72363d649d61942aeaadd6b8eaba39fb6fddfb38ff5c0dc087cc131391df2e",
+        "stderrSHA256": "525efc1d88567c292bfb464591e652b28523b416de58121186113e881f205819",
+        "receiptSHA256": "4c971651a6fd65ba731b4cb35349fcb66a4fb787aad8f60a743f0b24f5342cd1"
+      },
+      {
+        "label": "knip-v1",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T16:29:10.206773+00:00",
+        "pid": 30185,
+        "pgid": 30185,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          20.537109375,
+          15.15869140625,
+          14.31103515625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:29:16.661983+00:00",
+        "elapsedSeconds": 6.455147832981311,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "afterSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "e39a3372fb7e7e5907ff8a04fe697f0f1c63440bc967ebb51d0cdd0377c5a6e1",
+        "stderrSHA256": "525efc1d88567c292bfb464591e652b28523b416de58121186113e881f205819",
+        "receiptSHA256": "e54390214ffe2232a848f75d5c7cb6337e42e9c5b495b8d50d17f7c08ff48efa"
+      },
+      {
+        "label": "cf-immutable",
+        "classification": "intentional-semantic-counterfactual-failure",
+        "expectedExitCode": 1,
+        "started": "2026-10-14T16:33:17.630308+00:00",
+        "pid": 79899,
+        "pgid": 79899,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "repeats exact floating node"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          22.3681640625,
+          13.7109375,
+          13.54443359375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:33:21.351148+00:00",
+        "elapsedSeconds": 3.7207494580000002,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "84ef46671c63132c46c6116509fd3ad5612f6dc80f93aaca2f0b25cd13380de6",
+        "afterSHA256": "84ef46671c63132c46c6116509fd3ad5612f6dc80f93aaca2f0b25cd13380de6",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "9171656e9e9ba60c37aeb55bb3c0c177a726674d1047fa4fe9c02f2a9431d1eb",
+        "stderrSHA256": "924df7605d7cd4df39ad2b97ad2000af6bac5a8eefe3fb550d65a7fa8180e924",
+        "receiptSHA256": "4b425beb94dc718089f06b6a2edfa0d3da5ae7550f9de4e2f084500710ae6d16"
+      },
+      {
+        "label": "cf-immutable-restored",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T16:33:22.046784+00:00",
+        "pid": 96283,
+        "pgid": 96283,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "repeats exact floating node"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          24.58056640625,
+          14.31298828125,
+          13.7578125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:33:25.656989+00:00",
+        "elapsedSeconds": 3.610104834,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "afterSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "d7ffdfda7b733f2ef78ef74c573747160c2c1a9a0bd0da744c5cc4ccf569eedb",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receiptSHA256": "9a05327536ff8a7b381c5c28317b267482cc523fc0449582c3824443dea30259"
+      },
+      {
+        "label": "cf-late-error",
+        "classification": "intentional-semantic-counterfactual-failure",
+        "expectedExitCode": 1,
+        "started": "2026-10-14T16:33:41.541648+00:00",
+        "pid": 4595,
+        "pgid": 4595,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "rolls back .* genuine repeated mutation"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          21.99755859375,
+          14.41455078125,
+          13.8076171875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:33:45.098340+00:00",
+        "elapsedSeconds": 3.556557875,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "582bccf41cb1a8872b6d5da9159c2086fc97f58422c22cb77ca9bfb806d128f1",
+        "afterSHA256": "582bccf41cb1a8872b6d5da9159c2086fc97f58422c22cb77ca9bfb806d128f1",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "a3ed971eb49701633067558483867311866dc5fc389472055762f8450ab0197e",
+        "stderrSHA256": "8b29fb8df97f2c4ed88869c0d72bbbcc1f0e285295087cd94d21d66b5f55e1ca",
+        "receiptSHA256": "2c8cb7a1b0d399edd712a7550764e089f46e97248cee6fd0584f69b8b28cec9f"
+      },
+      {
+        "label": "cf-late-error-restored",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T16:33:45.723475+00:00",
+        "pid": 5019,
+        "pgid": 5019,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "rolls back .* genuine repeated mutation"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          22.79833984375,
+          14.7060546875,
+          13.9140625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:33:49.515057+00:00",
+        "elapsedSeconds": 3.7914937920000003,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "afterSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "45d1b12af86045225a9b177a42200c289719bf116a738484f9bd884eed645b77",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receiptSHA256": "fc2958d633b215157b0ce44afd11119fd3783baaa1c583afdf5d7a6bba63f159"
+      },
+      {
+        "label": "cf-catalog-reader",
+        "classification": "intentional-semantic-counterfactual-failure",
+        "expectedExitCode": 1,
+        "started": "2026-10-14T16:34:02.816020+00:00",
+        "pid": 6028,
+        "pgid": 6028,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "rejects malformed .* saved causal records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          21.7626953125,
+          14.8935546875,
+          13.99609375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:34:07.059438+00:00",
+        "elapsedSeconds": 4.243317167000001,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "6b1b615ad764abd40446e219b42249777d8db63af46bc508f9a53e8bddce4dfe",
+        "afterSHA256": "6b1b615ad764abd40446e219b42249777d8db63af46bc508f9a53e8bddce4dfe",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "1f04a6481610225ac6d86223439f24243d359757e0355636c6ee7f71faeca172",
+        "stderrSHA256": "2134b43786a082c91099a687e4f82f56e58f42556aa3c8a34931b5ef020c26b7",
+        "receiptSHA256": "c2bb6fce4c2a8d771348bb1fa01e8fd4a17067b8993e3e4e63784138a0eca118"
+      },
+      {
+        "label": "cf-catalog-reader-restored",
+        "classification": "passing-validation",
+        "expectedExitCode": 0,
+        "started": "2026-10-14T16:34:07.732551+00:00",
+        "pid": 6284,
+        "pgid": 6284,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "rejects malformed .* saved causal records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-refusal-proofs-b7x4",
+        "hostLoad": [
+          20.900390625,
+          14.82861328125,
+          13.978515625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:34:11.704543+00:00",
+        "elapsedSeconds": 3.971908542,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4933,
+        "beforeSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "afterSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+        "collectorBeforeSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "collectorAfterSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+        "stdoutSHA256": "0bb4135ca11caa112df6ebb4d56e32061f2ca0f7a9b3a33997aa17c39ea13f7f",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receiptSHA256": "067e5164f12e6a682d85ba5ee4bf36c48f4bec10bf487d90b079a05cbbd0ff41"
+      }
+    ],
+    "schemaWhitespace": "Separate receipt-backed checks follow own evidence draft/final refresh.",
+    "performance": "Elapsed values include measured host load. No D19 low-load timing/budget claim."
+  },
+  "counterfactual": {
+    "planSHA256": "6a879160938a57d41278fc65df01259bd44cbe90a8025a9a03e499212203953a",
+    "scriptSHA256": "76ae1b3aa1a9073fdc9c57c7bd39ed8679a793fecf90ba4f5a7d6a419970a31d",
+    "collectorSHA256": "bd599c95d6ef9ae1fced755ad03c4251595588a8fd9591f896c5f4d909d81286",
+    "baselineSHA256": "c8a1d98356ef8f3dac7c141487bcfb6140993979c806d5c5a78f2028e522cec9",
+    "cases": [
+      {
+        "name": "immutable",
+        "file": "src/engine/triggers/resolve.ts",
+        "originalSHA256": "9eaf1247a9ba48c99a488b84b10f2b0db1614852e5205a9e247201f2322fbadc",
+        "old": "if (!hasImmutableRepeatAllowance(ctx.catalog, origin, ability, node, repeatedBody)) throw new Error(\"A repeated occurrence has spent its immutable allowance\");",
+        "new": "if (false && !hasImmutableRepeatAllowance(ctx.catalog, origin, ability, node, repeatedBody)) throw new Error(\"A repeated occurrence has spent its immutable allowance\");",
+        "mutatedSHA256": "b86ddab0801b4820276b15d795d74a07a85e1b8c4d8bee0acc847ab679090ef4",
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "repeats exact floating node"
+        ],
+        "expectedFailedCases": 2,
+        "expectedFailure": "Direct public runStep refusal toThrow receives a successful completed step, after same-API valid control already passed; no private error text/setup/type failure accepted."
+      },
+      {
+        "name": "late-error",
+        "file": "src/engine/effects/primitives/materialize-figments.ts",
+        "originalSHA256": "4a02034bb87c04396edb77086a513221c615958a923e914ee9fea4787b5bbee7",
+        "old": "  resolve(ctx, node, env) {",
+        "new": "  resolve(ctx, node, env) {\n    if (node.figment === \"00000000-0000-4000-8000-000000712999\") return;",
+        "mutatedSHA256": "f0c27dad20eb8e0c7cd8470ea48e4274bfc61b923ef5ebe71cead4d0bd94f1e4",
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "rolls back .* genuine repeated mutation"
+        ],
+        "expectedFailedCases": 2,
+        "expectedFailure": "Direct public runStep refusal toThrow receives a successful completed step, after same-API valid control already passed; no private error text/setup/type failure accepted."
+      },
+      {
+        "name": "catalog-reader",
+        "file": "src/engine/triggers/matcher.ts",
+        "originalSHA256": "f34b4d831f58e6a9a704b122557702f6afe7f7cd5ee3615b468ba67c15f898bb",
+        "old": "  const original = binding.occurrence;",
+        "new": "  const original = binding.occurrence.ability === 99 ? { ...binding.occurrence, ability: 0 } : binding.occurrence;",
+        "mutatedSHA256": "6a6cf14e2b901cfc7f6ed7e1e9681a06e0634ccf3bb02299587fb4f8f0decda9",
+        "command": [
+          "/opt/homebrew/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "rejects malformed .* saved causal records"
+        ],
+        "expectedFailedCases": 2,
+        "expectedFailure": "Direct public runStep refusal toThrow receives a successful completed step, after same-API valid control already passed; no private error text/setup/type failure accepted."
+      }
+    ],
+    "restoration": [
+      {
+        "name": "immutable",
+        "started": "2026-10-14T16:33:17.235375+00:00",
+        "ended": "2026-10-14T16:33:21.825990+00:00",
+        "elapsedSeconds": 4.590464875,
+        "mutantCollectorExit": 1,
+        "sourceRestoredExactly": true,
+        "allPathsRestoredExactly": true,
+        "restoredPaths": 4933,
+        "cleanup": [],
+        "collectorPid": 79198,
+        "collectorGroupAbsent": true,
+        "scriptSHA256": "76ae1b3aa1a9073fdc9c57c7bd39ed8679a793fecf90ba4f5a7d6a419970a31d",
+        "planSHA256": "6a879160938a57d41278fc65df01259bd44cbe90a8025a9a03e499212203953a"
+      },
+      {
+        "name": "late-error",
+        "started": "2026-10-14T16:33:41.101061+00:00",
+        "ended": "2026-10-14T16:33:45.506290+00:00",
+        "elapsedSeconds": 4.4051272919999995,
+        "mutantCollectorExit": 1,
+        "sourceRestoredExactly": true,
+        "allPathsRestoredExactly": true,
+        "restoredPaths": 4933,
+        "cleanup": [],
+        "collectorPid": 4506,
+        "collectorGroupAbsent": true,
+        "scriptSHA256": "76ae1b3aa1a9073fdc9c57c7bd39ed8679a793fecf90ba4f5a7d6a419970a31d",
+        "planSHA256": "6a879160938a57d41278fc65df01259bd44cbe90a8025a9a03e499212203953a"
+      },
+      {
+        "name": "catalog-reader",
+        "started": "2026-10-14T16:34:02.431607+00:00",
+        "ended": "2026-10-14T16:34:07.500719+00:00",
+        "elapsedSeconds": 5.06892125,
+        "mutantCollectorExit": 1,
+        "sourceRestoredExactly": true,
+        "allPathsRestoredExactly": true,
+        "restoredPaths": 4933,
+        "cleanup": [],
+        "collectorPid": 6018,
+        "collectorGroupAbsent": true,
+        "scriptSHA256": "76ae1b3aa1a9073fdc9c57c7bd39ed8679a793fecf90ba4f5a7d6a419970a31d",
+        "planSHA256": "6a879160938a57d41278fc65df01259bd44cbe90a8025a9a03e499212203953a"
+      }
+    ],
+    "failureQualification": "All three mutants fail earliest at the direct public runStep toThrow assertion because the mutated step completes successfully. Same-API positive control precedes that assertion. Late-error fail branch later observed-prefix/fold assertions and catalog post-refusal observations are not reached under mutants; their full contracts passed on genuine baseline and restored source. No import/setup/type failure, private error text or fake primitive is used."
+  },
+  "failurePaths": [
+    {
+      "path": "immutable refusal",
+      "coverage": "Actual delayed/floating producer plus explicitly malformed saved repeated marker. Same public runStep valid resolution gains3; malformed repeated resolution throws, input hashes stay fixed. Supplementary fold recovery assertions describe error shape, not discrimination. Resolver-only guard bypass yields two intended failures; ordinary controls remain passing."
+    },
+    {
+      "path": "midstep/partial write",
+      "coverage": "Actual fold activation/normal priority pass reaches an existing optional confirm; reload preserves prompt. Public runStep event-time snapshots prove watcher resolution, one real repeated admission, then gain3 with energy13 and queued root before genuine missing-figment error. Input energy10/hash remains fixed. Answering the real prompt commits energy15/publications on valid path, while actual failure returns engine_error/exact committed hash/null inFlight/empty publications. Exact missing-UUID no-op yields two intended direct-refusal failures; restored paths pass."
+    },
+    {
+      "path": "catalog mismatch",
+      "coverage": "Malformed parser cases retained. Exact saved causal ability99 accepted structurally then direct runtime reader refuses; same-API valid cause admits actual repeat and drains to10. Watcher resolution occurs but no repeated admission or energy change before refusal; hashes stay fixed. Supplementary fold recovery remains. Exact ability99-to0 faulty reader yields two intended refusal failures; restored paths pass."
+    }
+  ],
+  "historical689": {
+    "source": "be28c1524e17f25cf25cab220a8157859809745a",
+    "landed": "60d9a9f344797841b88817db6dce98e85d604d9e",
+    "scope": "Only failurePaths indices0..4 coverage and privacyAndLimits.metadata strings changed with explicit hv-b7x4 provenance. Every raw command, count, clock, outcome, receipt/hash/source epoch and immutable original report/disposition stays unchanged.",
+    "coverageLimits": "Original three nonsuspending replay recovery shapes were nondiscriminating. Original16-case red did not execute six later emblem/self-subject cases or subjectHiddenFrom addition. Actual nested audiences were empty: explicit nonempty observedBy denial is defense in depth, not a discriminating runtime proof. Top-level marker necessity was tested.",
+    "immutableReviewSHA256": "206c3b95557faf472825f15c9a8720974806c726d7c6d0f86d392ab68cf59ea0",
+    "immutableCompletionSHA256": "692c573f1ba3cae17011a3d8de4809f56af0646bf7c8823a4056eeda26dd60b9",
+    "immutableDispositionSHA256": "f6aa0cfc148cce2747259d957410cfaf8f24a4e9b2664ca1cd137e69047f7b59"
+  },
+  "investigationCorrections": [
+    {
+      "kind": "read-only filename guesses",
+      "detail": "Initial rg/cat batches named absent guessed files; actual implementations were located/read before proposal. These are read-only search errors, not engine/test failures."
+    }
+  ],
+  "delivery": {
+    "coreReview": "Parent-owned fresh normal cold review at final immutable commit; not yet claimed complete.",
+    "native": "Parent owns Beads/Tollgate/admission/delivery/dispositions and cleanup.",
+    "fullFuzzBrowser": "Bounded tests/docs/evidence; no production/runner/config/UI change. No full/fuzz/browser/server/captures needed or started.",
+    "preExisting": "No new out-of-scope issue found. Required prepared checks issue optional missing-art-cache warnings and successfully restore local asset links.",
+    "runtime": "Only receipt-owned validation groups; all completed groups independently checked absent. No server/browser/provider/heavy/foreign process control."
+  }
+}

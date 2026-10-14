@@ -4,10 +4,14 @@ import { activated, characterYouControl, discardCost, all, everyIn, self, static
 import { either, onDawn, onMaterialized, triggered, whenMaterialize, whenNamedAbilityTriggered, onDissolved, triggeringCard, whenCopyTrigger, whenDissolved, whenDraw } from "../../../dsl/triggers";
 import { comparableView } from "../../../testing/determinization-fidelity";
 import { eventSeenBy } from "../../../events";
+import type { EngineEvent } from "../../../events";
 import { createFoldAdapter } from "../../../fold/slice";
 import { eventLogRecords } from "../../../log";
 import { instanceOrigin, originAbilities } from "../../../rules/activation";
 import { stateHash } from "../../../state/hash";
+import type { BattleState } from "../../../state/types";
+import { runStep } from "../../../steps/runner";
+import { NO_PROMPTS, ScriptedSource } from "../../../steps/sources";
 import { opponent, parseFigmentId, SIDES } from "../../../state/ids";
 import { thisCharacterSpark } from "../../../dsl/values";
 import * as p from "../index";
@@ -104,6 +108,16 @@ describe("repeatTriggeringAbility core", () => {
     expect(drain(w2, fired).sides[side].currentEnergy).toBe(once ? 11 : 14);
     if (once) {
       const fake = { ...fired, triggerQueue: [{ ...fired.triggerQueue[0], repeated: { named: "dawn" as const, observedBy: SIDES, visibleTo: SIDES } }] };
+      const untouched = stateHash(fake), validBefore = stateHash(fired);
+      const control = runStep(fired, { kind: "resolveTrigger" }, NO_PROMPTS, w2.engine.catalog);
+      expect(control.kind).toBe("done");
+      if (control.kind !== "done") throw new Error("Expected ordinary floating resolution");
+      expect(control.state.sides[side].currentEnergy).toBe(11);
+      expect(control.events).toContainEqual(expect.objectContaining({ kind: "energyChanged", side, change: 3 }));
+      expect(stateHash(fired)).toBe(validBefore);
+      expect(() => runStep(fake, { kind: "resolveTrigger" }, NO_PROMPTS, w2.engine.catalog)).toThrow();
+      expect(stateHash(fake)).toBe(untouched);
+      // Recovery shape is supplementary; the direct refusal above distinguishes a successful resolution.
       const loaded = reload({ ...sliceOf(fake), inFlight: { step: { kind: "resolveTrigger" }, automatic: true, answers: [] } });
       const before = stateHash(loaded.committed);
       const failed = createFoldAdapter(w2.engine).reduce(loaded, { kind: "battleAction", side, action: { kind: "pass" } });
@@ -194,27 +208,66 @@ describe("repeatTriggeringAbility core", () => {
     const source = card(37, () => [triggered(onMaterialized(), p.gainEnergy(2))], "Mage");
     const missing = parseFigmentId("00000000-0000-4000-8000-000000712999");
     for (const fail of [false, true]) {
-      const watch = card(38, () => [triggered(whenNamedAbilityTriggered("materialized"), p.sequence(p.repeatTriggeringAbility(), p.gainEnergy(3),
-        ...(fail ? [p.materializeFigments(missing)] : [])), { oncePerTurn: true })]);
+      const watch = card(38, () => [triggered(whenNamedAbilityTriggered("materialized"), p.optional(p.sequence(p.repeatTriggeringAbility(), p.gainEnergy(3),
+        ...(fail ? [p.materializeFigments(missing)] : []))), { oncePerTurn: true })]);
       const w = world(side, [source, watch, force], { back: [source.id, watch.id, force.id] });
-      const out = activate(w, w.ids[side].back[2]!);
-      const original = step(w, out.state, { kind: "resolveTrigger" });
+      const fold = createFoldAdapter(w.engine);
+      let opened = applied(fold.reduce(sliceOf(w.state), { kind: "battleAction", side, action: { kind: "activate", source: w.ids[side].back[2]!, ability: 0 } }));
+      if (opened.slice.inFlight === null) {
+        const decision = w.engine.decision(opened.slice.committed);
+        if (decision === null) throw new Error("Expected a normal priority decision");
+        opened = applied(fold.reduce(opened.slice, { kind: "battleAction", side: decision.side, action: { kind: "pass" } }));
+      }
+      const pending = fold.pending(opened.slice);
+      if (pending?.prompt.kind !== "confirm") throw new Error("Expected actual repeat confirmation");
+      expect(pending.prompt.side).toBe(side);
+      const loaded = reload(opened.slice), before = stateHash(loaded.committed);
+      expect(fold.pending(loaded)?.prompt).toEqual(pending.prompt);
+      expect(loaded.committed.sides[side].currentEnergy).toBe(10);
+      const seen: { event: EngineEvent; state: BattleState }[] = [], answers = new ScriptedSource([true]);
+      const run = () => runStep(loaded.committed, { kind: "resolveTrigger" }, answers, w.engine.catalog,
+        { observeEvent: (event, snapshot) => { seen.push({ event, state: snapshot() }); } });
       if (!fail) {
-        const control = step(w, original.state, { kind: "resolveTrigger" });
+        const control = run();
+        expect(control.kind).toBe("done");
+        if (control.kind !== "done") throw new Error("Expected accepted repeat resolution");
         expect(queued(control.events)).toHaveLength(1);
         expect(control.state.sides[side].currentEnergy).toBe(13);
         expect(drain(w, control.state).sides[side].currentEnergy).toBe(15);
       } else {
-        const before = stateHash(original.state), fold = createFoldAdapter(w.engine);
-        const loaded = reload({ ...sliceOf(original.state), inFlight: { step: { kind: "resolveTrigger" }, automatic: true, answers: [] } });
-        const failed = fold.reduce(loaded, { kind: "battleAction", side, action: { kind: "pass" } });
-        if (failed.kind !== "applied") throw new Error("No actual recovered error");
-        expect(failed.error).toMatchObject({ kind: "engine_error" });
-        expect(stateHash(failed.slice.committed)).toBe(before);
-        expect(failed.slice.inFlight).toBeNull();
-        expect(failed.published).toEqual([]);
-        expect(stateHash(original.state)).toBe(before);
+        expect(run).toThrow();
       }
+      answers.assertExhausted();
+      const resolved = seen.findIndex(row => row.event.kind === "triggerResolved" && row.event.source === w.ids[side].back[1]);
+      expect(resolved).toBeGreaterThanOrEqual(0);
+      expect(seen[resolved].event).toMatchObject({ kind: "triggerResolved", applied: true });
+      expect(queued(seen.map(row => row.event))).toHaveLength(1);
+      const repeat = seen.findIndex(row => row.event.kind === "triggerQueued");
+      const gained = seen.findIndex(row => row.event.kind === "energyChanged");
+      expect(repeat).toBeGreaterThan(resolved);
+      expect(gained).toBeGreaterThan(repeat);
+      expect(seen[repeat].event).toMatchObject({ kind: "triggerQueued", source: w.ids[side].back[0] });
+      expect(seen[gained].event).toMatchObject({ kind: "energyChanged", side, current: 13, change: 3, cause: "effect" });
+      expect(seen[gained].state.triggerQueue).toHaveLength(1);
+      expect(seen[gained].state.triggerQueue[0].source).toBe(w.ids[side].back[0]);
+      expect(seen[gained].state.sides[side].currentEnergy).toBe(13);
+      expect(stateHash(loaded.committed)).toBe(before);
+      const result = fold.reduce(loaded, { kind: "answer", side, promptId: pending.prompt.id, value: true });
+      if (result.kind !== "applied") throw new Error("Expected actual repeat answer");
+      if (fail) {
+        expect(result.error).toMatchObject({ kind: "engine_error" });
+        expect(stateHash(result.slice.committed)).toBe(before);
+        expect(result.published).toEqual([]);
+      } else {
+        expect(result.error).toBeNull();
+        expect(result.slice.committed.sides[side].currentEnergy).toBe(15);
+        expect(result.slice.committed.triggerQueue).toEqual([]);
+        expect(queued(result.published)).toHaveLength(1);
+        expect(result.published).toContainEqual(expect.objectContaining({ kind: "energyChanged", side, change: 3 }));
+        expect(stateHash(result.slice.committed)).not.toBe(before);
+      }
+      expect(result.slice.inFlight).toBeNull();
+      expect(stateHash(loaded.committed)).toBe(before);
     }
   });
 

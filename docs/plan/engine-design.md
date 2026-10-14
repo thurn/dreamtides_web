@@ -969,12 +969,24 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   departure values without a current hidden source alias. Anonymous live
   sources use shared member numbers and immutable owners; ceased sources use
   an anonymous historical identity. Unknown historical definitions are sampled
-  from compatible named occurrences. Private subject costs and copy actions
+  from compatible named occurrences. A visible physical source keeps its UUID
+  even when the pending historical definition is private. Reconstructed unknown
+  history carries an optional persisted `historyHiddenFrom` projection obligation:
+  save validation checks it, nested captures and repetition preserve it, and
+  public views withhold the historical origin and its bound context from those
+  viewers independently of the source's current visibility. This private marker
+  is absent from public DTOs and trigger events. An immediate repeat reader with
+  unknown history receives one sampled compatible direct named ordinary cause,
+  without claiming recovered authoritative history or recursive causal ancestry.
+  Private subject costs and copy actions
   preserve their original concealment during reconstruction. Known queued
   cohort readers retain shared members and immutable owners without exposing
   hidden current printings; explicit empty cohorts remain bound. The authoritative
   trigger log keeps causes; every public trigger event omits that binding.
-  Pure causal/audience metadata is excluded from admission-cycle signatures.
+  Admission-cycle signatures exclude the queued `triggeringAbility` and
+  `repeated` fields; the other queued fields, including `historyHiddenFrom` and
+  `subjectHiddenFrom`, remain in the signature alongside the trigger and the
+  step's consumed-allowance revisions.
 - **Player-rule reactions.** A static `ruleModifier` Dawn threshold appends a
   `QueuedTrigger` with `kind: "ruleReaction"`, `node: null` and `subject: null`
   after the causing event's full admission batch or the complete resolved
