@@ -1,3 +1,6 @@
+import { whenDiscard, triggered } from "../../engine/dsl/triggers";
+import { gainEnergy } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +16,6 @@ export default dreamsign({
     "e95b00e1-dbff-453d-bdd6-f92034988107",
   ],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenDiscard(), gainEnergy(1), { oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("Once per turn, when you discard a card, gain 1●."),
 });

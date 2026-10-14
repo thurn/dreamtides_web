@@ -1,0 +1,37 @@
+{
+  "bead": "hv-umm2.660",
+  "phase": 5,
+  "implementMin": 30.563842183333335,
+  "implementWindow": {
+    "start": "2026-10-14T03:40:05.599000+00:00",
+    "end": "2026-10-14T04:10:39.429531+00:00"
+  },
+  "localValidationS": {
+    "judged-3": 106.97061345799011,
+    "judged-4": 20.472080291016027,
+    "preflight": 2.3219857910007704,
+    "judged-5": 142.72532704100013,
+    "judged-2": 118.57292454197886,
+    "diagnostic-6": 29.202645667013712,
+    "review": 52.431874041008996,
+    "focused": 17.214531834004447,
+    "knip": 4.092287084000418,
+    "sweep": 69.57569512500777,
+    "fuzz": 232.8393233329989,
+    "judged-1": 30.014581250026822,
+    "schema": 0.15759995899861678
+  },
+  "hostLoad": 6.0625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 11.628120966666668,
+      "note": "Coupled ignored observer/log-bootstrap, result-carry, lazy-probe readiness and retained-hover diagnosis through the actual mobile geometry failure; includes queue/execution/collection and visual judgment, not pure editing or CPU time. Source bytes unchanged. Presentation follow-up hv-f6p9."
+    }
+  ]
+}

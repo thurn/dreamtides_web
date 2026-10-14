@@ -1,0 +1,2013 @@
+{
+  "bead": "hv-umm2.660",
+  "sourceBase": "406d79b7beebf5f37e4177e92cfaf99fe6a9f5b3",
+  "sourceSHA256": {
+    "src/content/dreamsigns/ice-crystals-253a106d.ts": "d24924e10020fa3785afe2d5b16cf0eafb7bbd9e7e6964cc1d0657ec9e38976f",
+    "src/content/dreamsigns/garlic-bulb-a92d2b95.ts": "ec988f7f496896708502d9225f354b02674ec40b665eddf3948513074210940b",
+    "src/content/dreamsigns/honeycombs-9aaed05a.ts": "a2b0a249e8580e40f35fe435151b41b248f7efd145e2607fd1c2f52982e7366e",
+    "src/content/dreamsigns/black-horn-c92438fc.ts": "37e1ddc2c28ed92e59a82bbb7b60134b635a399eb5db8a5e742af5013c0aeae4"
+  },
+  "scope": {
+    "authored": 4,
+    "newPrimitives": 0,
+    "newPromptKinds": 0,
+    "newStatuses": 0,
+    "rulesDecisionsReused": [
+      "RD-hv-umm2.229-2"
+    ],
+    "newRulesDecisions": [],
+    "cardIssues": [],
+    "falloutFiles": [],
+    "d20": "Four direct single-trigger/single-effect compositions. Existing public contracts cover primitive/trigger behavior; no scenario module."
+  },
+  "validation": {
+    "judged-3": {
+      "label": "judged-3",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/dawn-removal-judged.mjs",
+        "--bead",
+        "hv-umm2.660",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 78566,
+      "pgid": 78566,
+      "startedAt": "2026-10-14T03:55:10.656259+00:00",
+      "endedAt": "2026-10-14T03:56:57.628168+00:00",
+      "wallSeconds": 106.97061345799011,
+      "exitCode": 1,
+      "loadAtEnd": [
+        14.74609375,
+        15.37158203125,
+        13.90869140625
+      ]
+    },
+    "judged-4": {
+      "label": "judged-4",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/dawn-removal-judged.mjs",
+        "--bead",
+        "hv-umm2.660",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 32952,
+      "pgid": 32952,
+      "startedAt": "2026-10-14T03:57:25.998414+00:00",
+      "endedAt": "2026-10-14T03:57:46.470816+00:00",
+      "wallSeconds": 20.472080291016027,
+      "exitCode": 1,
+      "loadAtEnd": [
+        10.521484375,
+        14.07470703125,
+        13.50732421875
+      ]
+    },
+    "preflight": {
+      "label": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "253a106d-f64e-4a60-9471-446a18ee8959,a92d2b95-c63d-4c1c-831b-902c44deee57,9aaed05a-2223-42f2-9b9d-81a53eab811c,c92438fc-8e1f-4f97-9dcf-8ca0edaa8607",
+        "--as",
+        "both",
+        "--variants",
+        "all"
+      ],
+      "pid": 77614,
+      "pgid": 77614,
+      "startedAt": "2026-10-14T03:45:09.253642+00:00",
+      "endedAt": "2026-10-14T03:45:11.575731+00:00",
+      "wallSeconds": 2.3219857910007704,
+      "exitCode": 0,
+      "loadAtEnd": [
+        8.416015625,
+        13.69970703125,
+        12.97998046875
+      ]
+    },
+    "judged-5": {
+      "label": "judged-5",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/dawn-removal-judged.mjs",
+        "--bead",
+        "hv-umm2.660",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 40563,
+      "pgid": 40563,
+      "startedAt": "2026-10-14T03:59:14.186991+00:00",
+      "endedAt": "2026-10-14T04:01:36.914110+00:00",
+      "wallSeconds": 142.72532704100013,
+      "exitCode": 1,
+      "loadAtEnd": [
+        21.71044921875,
+        17.4541015625,
+        14.93212890625
+      ]
+    },
+    "judged-2": {
+      "label": "judged-2",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/dawn-removal-judged.mjs",
+        "--bead",
+        "hv-umm2.660",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 2856,
+      "pgid": 2856,
+      "startedAt": "2026-10-14T03:51:38.559452+00:00",
+      "endedAt": "2026-10-14T03:53:37.133874+00:00",
+      "wallSeconds": 118.57292454197886,
+      "exitCode": 0,
+      "loadAtEnd": [
+        9.3310546875,
+        12.55810546875,
+        12.59619140625
+      ]
+    },
+    "diagnostic-6": {
+      "label": "diagnostic-6",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/dawn-removal-judged.mjs",
+        "--bead",
+        "hv-umm2.660",
+        "--viewports",
+        "mobile"
+      ],
+      "pid": 6729,
+      "pgid": 6729,
+      "startedAt": "2026-10-14T04:02:13.221042+00:00",
+      "endedAt": "2026-10-14T04:02:42.424108+00:00",
+      "wallSeconds": 29.202645667013712,
+      "exitCode": 1,
+      "loadAtEnd": [
+        12.18701171875,
+        15.42138671875,
+        14.3466796875
+      ]
+    },
+    "review": {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 80060,
+      "pgid": 80060,
+      "startedAt": "2026-10-14T03:45:55.990277+00:00",
+      "endedAt": "2026-10-14T03:46:48.422853+00:00",
+      "wallSeconds": 52.431874041008996,
+      "exitCode": 0,
+      "loadAtEnd": [
+        6.8232421875,
+        11.64501953125,
+        12.25244140625
+      ]
+    },
+    "focused": {
+      "label": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 70605,
+      "pgid": 70605,
+      "startedAt": "2026-10-14T03:43:42.607116+00:00",
+      "endedAt": "2026-10-14T03:43:59.821965+00:00",
+      "wallSeconds": 17.214531834004447,
+      "exitCode": 0,
+      "loadAtEnd": [
+        15.767578125,
+        15.93212890625,
+        13.630859375
+      ]
+    },
+    "knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 81347,
+      "pgid": 81347,
+      "startedAt": "2026-10-14T03:46:53.254825+00:00",
+      "endedAt": "2026-10-14T03:46:57.347249+00:00",
+      "wallSeconds": 4.092287084000418,
+      "exitCode": 0,
+      "loadAtEnd": [
+        7.009765625,
+        11.52490234375,
+        12.2021484375
+      ]
+    },
+    "entities": {
+      "label": "entities",
+      "argv": [
+        "npm",
+        "run",
+        "bead:entities",
+        "--",
+        "253a106d-f64e-4a60-9471-446a18ee8959",
+        "a92d2b95-c63d-4c1c-831b-902c44deee57",
+        "9aaed05a-2223-42f2-9b9d-81a53eab811c",
+        "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607"
+      ],
+      "pid": 80420,
+      "pgid": 80420,
+      "startedAt": "2026-10-14T03:46:08.476645+00:00",
+      "endedAt": "2026-10-14T03:46:09.315533+00:00",
+      "wallSeconds": 0.8387907500145957,
+      "exitCode": 0,
+      "loadAtEnd": [
+        7.15087890625,
+        12.39990234375,
+        12.537109375
+      ]
+    },
+    "sweep": {
+      "label": "sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.660",
+        "--dreamsigns",
+        "253a106d-f64e-4a60-9471-446a18ee8959,a92d2b95-c63d-4c1c-831b-902c44deee57,9aaed05a-2223-42f2-9b9d-81a53eab811c,c92438fc-8e1f-4f97-9dcf-8ca0edaa8607",
+        "--as",
+        "both",
+        "--variants",
+        "all"
+      ],
+      "pid": 17936,
+      "pgid": 17936,
+      "startedAt": "2026-10-14T03:49:21.719025+00:00",
+      "endedAt": "2026-10-14T03:50:31.295623+00:00",
+      "wallSeconds": 69.57569512500777,
+      "exitCode": 0,
+      "loadAtEnd": [
+        24.49560546875,
+        14.9150390625,
+        13.21337890625
+      ]
+    },
+    "fuzz": {
+      "label": "fuzz",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "253a106d-f64e-4a60-9471-446a18ee8959,a92d2b95-c63d-4c1c-831b-902c44deee57,9aaed05a-2223-42f2-9b9d-81a53eab811c,c92438fc-8e1f-4f97-9dcf-8ca0edaa8607"
+      ],
+      "pid": 78330,
+      "pgid": 78330,
+      "startedAt": "2026-10-14T03:45:20.691405+00:00",
+      "endedAt": "2026-10-14T03:49:13.533571+00:00",
+      "wallSeconds": 232.8393233329989,
+      "exitCode": 0,
+      "loadAtEnd": [
+        15.68896484375,
+        11.71240234375,
+        12.0615234375
+      ]
+    },
+    "judged-1": {
+      "label": "judged-1",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/dawn-removal-judged.mjs",
+        "--bead",
+        "hv-umm2.660",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 94612,
+      "pgid": 94612,
+      "startedAt": "2026-10-14T03:50:34.721789+00:00",
+      "endedAt": "2026-10-14T03:51:04.736850+00:00",
+      "wallSeconds": 30.014581250026822,
+      "exitCode": 1,
+      "loadAtEnd": [
+        20.4970703125,
+        14.88427734375,
+        13.26171875
+      ]
+    },
+    "schema": {
+      "label": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 89435,
+      "pgid": 89435,
+      "startedAt": "2026-10-14T04:10:10.530060+00:00",
+      "endedAt": "2026-10-14T04:10:10.687781+00:00",
+      "wallSeconds": 0.15759995899861678,
+      "exitCode": 0,
+      "loadAtEnd": [
+        14.72802734375,
+        11.365234375,
+        12.50439453125
+      ]
+    }
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 101287,
+    "prompts": 7435,
+    "interactiveReruns": 738,
+    "failures": 0,
+    "engineWallSeconds": 231.8,
+    "engineCpuSeconds": 248.7,
+    "targetsIncludedEach": 600,
+    "exercised": [
+      3156,
+      1980,
+      1343,
+      562
+    ],
+    "admission": "Literal outer lockf -k command retained until npm child terminal. Inclusive wall includes admission/run; pure lock-wait not measured."
+  },
+  "focused": {
+    "files": 3,
+    "tests": 3204,
+    "includes": "Existing engine primitive contracts, trigger contracts and content gates."
+  },
+  "review": {
+    "files": 247,
+    "tests": 5776,
+    "kind": "npm run review; no review:full needed for bounded leaf composition"
+  },
+  "preflight": {
+    "pass": 8,
+    "skip": 72,
+    "fail": 0,
+    "actualOwnDawnExercisedBothSeats": true,
+    "otherBaseCellsInitializationOnly": 6
+  },
+  "qa": {
+    "ledgerCounts": {
+      "sweep/pass": 8,
+      "sweep/skip": 72,
+      "judged/fail": 6,
+      "judged/pass": 3
+    },
+    "effectiveJudgedCases": {
+      "pass": 3,
+      "fail": 1,
+      "failure": "hv-f6p9 owns mobile human energy-display overlap and re-judgment under recipe step 8."
+    },
+    "sweep": "sweep-abTMsi",
+    "finalCases": [
+      {
+        "viewport": "desktop",
+        "owner": "player",
+        "verdict": "pass",
+        "invocation": "run-ZwhHDW",
+        "gameId": "5826qv",
+        "physicalVictims": [
+          "i51",
+          "i52"
+        ],
+        "spellInstances": [
+          "i53",
+          "i54"
+        ],
+        "zones": [
+          {
+            "id": "i51",
+            "zone": "void",
+            "printing": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          },
+          {
+            "id": "i52",
+            "zone": "banished",
+            "printing": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "gains": [
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 10,
+            "max": 10,
+            "change": 2,
+            "maxChange": 0,
+            "cause": "effect"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 11,
+            "max": 10,
+            "change": 2,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        ],
+        "payments": [
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 8,
+            "max": 10,
+            "change": -2,
+            "maxChange": 0,
+            "cause": "payment"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 9,
+            "max": 10,
+            "change": -1,
+            "maxChange": 0,
+            "cause": "payment"
+          }
+        ],
+        "source": {
+          "kind": "dreamsign",
+          "side": "player",
+          "index": 0
+        },
+        "queued": [
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": "i51",
+            "subjectHiddenFrom": []
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": "i52",
+            "subjectHiddenFrom": []
+          }
+        ],
+        "resolved": [
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          }
+        ],
+        "logs": {
+          "gameId": "5826qv",
+          "rowCount": 51,
+          "actions": [
+            {
+              "gameId": "5826qv",
+              "version": 8,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i53",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "13ldilbsos8",
+                  "value": [
+                    "i51"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-14T03:59:47.535Z",
+              "event": "engine.action",
+              "seq": 29
+            },
+            {
+              "gameId": "5826qv",
+              "version": 11,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "hkc6htt99h",
+                  "value": [
+                    "i52"
+                  ],
+                  "auto": true
+                }
+              ],
+              "timestamp": "2026-10-14T03:59:51.375Z",
+              "event": "engine.action",
+              "seq": 38
+            }
+          ],
+          "triggers": [
+            {
+              "gameId": "5826qv",
+              "version": 9,
+              "detail": {
+                "kind": "triggerQueued",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "player",
+                  "index": 0
+                },
+                "controller": "player",
+                "ability": 0,
+                "node": null,
+                "subject": "i51",
+                "subjectHiddenFrom": []
+              },
+              "timestamp": "2026-10-14T03:59:47.536Z",
+              "event": "engine.trigger",
+              "seq": 30
+            },
+            {
+              "gameId": "5826qv",
+              "version": 10,
+              "detail": {
+                "kind": "triggerResolved",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "player",
+                  "index": 0
+                },
+                "controller": "player",
+                "ability": 0,
+                "node": null,
+                "applied": true
+              },
+              "timestamp": "2026-10-14T03:59:47.536Z",
+              "event": "engine.trigger",
+              "seq": 31
+            },
+            {
+              "gameId": "5826qv",
+              "version": 12,
+              "detail": {
+                "kind": "triggerQueued",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "player",
+                  "index": 0
+                },
+                "controller": "player",
+                "ability": 0,
+                "node": null,
+                "subject": "i52",
+                "subjectHiddenFrom": []
+              },
+              "timestamp": "2026-10-14T03:59:51.375Z",
+              "event": "engine.trigger",
+              "seq": 39
+            },
+            {
+              "gameId": "5826qv",
+              "version": 13,
+              "detail": {
+                "kind": "triggerResolved",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "player",
+                  "index": 0
+                },
+                "controller": "player",
+                "ability": 0,
+                "node": null,
+                "applied": true
+              },
+              "timestamp": "2026-10-14T03:59:51.375Z",
+              "event": "engine.trigger",
+              "seq": 40
+            }
+          ],
+          "init": [
+            {
+              "gameId": "5826qv",
+              "card": "",
+              "dreamsign": "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607",
+              "variant": "base",
+              "side": "player",
+              "stage": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base"
+              ],
+              "entityKind": "dreamsign",
+              "cardStatus": "authored",
+              "cardType": "Dreamsign",
+              "timestamp": "2026-10-14T03:59:35.969Z",
+              "event": "debug_card_lab_loaded",
+              "seq": 14
+            }
+          ],
+          "debug": [
+            {
+              "gameId": "5826qv",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "enemy",
+                "card": "5e5e5e5e-0000-4000-8000-000000000002",
+                "zone": "play"
+              },
+              "timestamp": "2026-10-14T03:59:42.964Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 19
+            },
+            {
+              "gameId": "5826qv",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "enemy",
+                "card": "5e5e5e5e-0000-4000-8000-000000000002",
+                "zone": "play"
+              },
+              "timestamp": "2026-10-14T03:59:43.210Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 20
+            },
+            {
+              "gameId": "5826qv",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "player",
+                "card": "027ae231-6569-49bb-866f-7c36ec794a11",
+                "zone": "hand"
+              },
+              "timestamp": "2026-10-14T03:59:44.705Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 21
+            },
+            {
+              "gameId": "5826qv",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "player",
+                "card": "8b7883ee-a235-4793-aa56-086fb1e28d36",
+                "zone": "hand"
+              },
+              "timestamp": "2026-10-14T03:59:45.188Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 22
+            }
+          ]
+        },
+        "geometry": [
+          {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "vw": 1440,
+            "vh": 900
+          },
+          {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "vw": 1440,
+            "vh": 900
+          },
+          {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "vw": 1440,
+            "vh": 900
+          }
+        ],
+        "renderedEnergy": {
+          "current": 11,
+          "max": 10,
+          "box": {
+            "x": 621.4375,
+            "y": 612.8571166992188,
+            "width": 197.125,
+            "height": 54
+          }
+        },
+        "visibleLog": [
+          "You played Scorched Reckoning.",
+          "Lab Recruit was dissolved.",
+          "Your Dreamsign's triggered ability resolved.",
+          "You gained 2 energy.",
+          "You played Bladefall.",
+          "Lab Recruit was banished.",
+          "Your Dreamsign's triggered ability resolved.",
+          "You gained 2 energy."
+        ]
+      },
+      {
+        "viewport": "desktop",
+        "owner": "enemy",
+        "verdict": "pass",
+        "invocation": "run-ZwhHDW",
+        "gameId": "6nud5s",
+        "physicalVictims": [
+          "i51",
+          "i52"
+        ],
+        "spellInstances": [
+          "i53",
+          "i54"
+        ],
+        "zones": [
+          {
+            "id": "i51",
+            "zone": "banished",
+            "printing": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          },
+          {
+            "id": "i52",
+            "zone": "void",
+            "printing": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "gains": [
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 6,
+            "max": 10,
+            "change": 2,
+            "maxChange": 0,
+            "cause": "effect"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 10,
+            "max": 10,
+            "change": 2,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        ],
+        "payments": [
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 4,
+            "max": 10,
+            "change": -1,
+            "maxChange": 0,
+            "cause": "payment"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 8,
+            "max": 10,
+            "change": -2,
+            "maxChange": 0,
+            "cause": "payment"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 9,
+            "max": 10,
+            "change": -1,
+            "maxChange": 0,
+            "cause": "payment"
+          }
+        ],
+        "source": {
+          "kind": "dreamsign",
+          "side": "enemy",
+          "index": 0
+        },
+        "queued": [
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "enemy",
+              "index": 0
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "subject": "i51",
+            "subjectHiddenFrom": []
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "enemy",
+              "index": 0
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "subject": "i52",
+            "subjectHiddenFrom": []
+          }
+        ],
+        "resolved": [
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamsign",
+              "side": "enemy",
+              "index": 0
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamsign",
+              "side": "enemy",
+              "index": 0
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          }
+        ],
+        "logs": {
+          "gameId": "6nud5s",
+          "rowCount": 91,
+          "actions": [
+            {
+              "gameId": "6nud5s",
+              "version": 20,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "2bezh3h442v",
+                  "value": [
+                    "i51"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-14T04:00:32.829Z",
+              "event": "engine.action",
+              "seq": 49
+            },
+            {
+              "gameId": "6nud5s",
+              "version": 55,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i53",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "1cdyis7ro09",
+                  "value": [
+                    "i52"
+                  ],
+                  "auto": true
+                }
+              ],
+              "timestamp": "2026-10-14T04:00:52.593Z",
+              "event": "engine.action",
+              "seq": 64
+            }
+          ],
+          "triggers": [
+            {
+              "gameId": "6nud5s",
+              "version": 21,
+              "detail": {
+                "kind": "triggerQueued",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "enemy",
+                  "index": 0
+                },
+                "controller": "enemy",
+                "ability": 0,
+                "node": null,
+                "subject": "i51",
+                "subjectHiddenFrom": []
+              },
+              "timestamp": "2026-10-14T04:00:32.830Z",
+              "event": "engine.trigger",
+              "seq": 50
+            },
+            {
+              "gameId": "6nud5s",
+              "version": 22,
+              "detail": {
+                "kind": "triggerResolved",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "enemy",
+                  "index": 0
+                },
+                "controller": "enemy",
+                "ability": 0,
+                "node": null,
+                "applied": true
+              },
+              "timestamp": "2026-10-14T04:00:32.831Z",
+              "event": "engine.trigger",
+              "seq": 51
+            },
+            {
+              "gameId": "6nud5s",
+              "version": 56,
+              "detail": {
+                "kind": "triggerQueued",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "enemy",
+                  "index": 0
+                },
+                "controller": "enemy",
+                "ability": 0,
+                "node": null,
+                "subject": "i52",
+                "subjectHiddenFrom": []
+              },
+              "timestamp": "2026-10-14T04:00:52.593Z",
+              "event": "engine.trigger",
+              "seq": 65
+            },
+            {
+              "gameId": "6nud5s",
+              "version": 57,
+              "detail": {
+                "kind": "triggerResolved",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "enemy",
+                  "index": 0
+                },
+                "controller": "enemy",
+                "ability": 0,
+                "node": null,
+                "applied": true
+              },
+              "timestamp": "2026-10-14T04:00:52.594Z",
+              "event": "engine.trigger",
+              "seq": 66
+            }
+          ],
+          "init": [
+            {
+              "gameId": "6nud5s",
+              "card": "",
+              "dreamsign": "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607",
+              "variant": "base",
+              "side": "enemy",
+              "stage": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base"
+              ],
+              "entityKind": "dreamsign",
+              "cardStatus": "authored",
+              "cardType": "Dreamsign",
+              "timestamp": "2026-10-14T04:00:05.395Z",
+              "event": "debug_card_lab_loaded",
+              "seq": 17
+            }
+          ],
+          "debug": [
+            {
+              "gameId": "6nud5s",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "player",
+                "card": "5e5e5e5e-0000-4000-8000-000000000002",
+                "zone": "play"
+              },
+              "timestamp": "2026-10-14T04:00:26.752Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 39
+            },
+            {
+              "gameId": "6nud5s",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "player",
+                "card": "5e5e5e5e-0000-4000-8000-000000000002",
+                "zone": "play"
+              },
+              "timestamp": "2026-10-14T04:00:30.036Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 40
+            },
+            {
+              "gameId": "6nud5s",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "enemy",
+                "card": "027ae231-6569-49bb-866f-7c36ec794a11",
+                "zone": "hand"
+              },
+              "timestamp": "2026-10-14T04:00:30.378Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 41
+            },
+            {
+              "gameId": "6nud5s",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "enemy",
+                "card": "8b7883ee-a235-4793-aa56-086fb1e28d36",
+                "zone": "hand"
+              },
+              "timestamp": "2026-10-14T04:00:31.365Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 42
+            }
+          ]
+        },
+        "geometry": [
+          {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "vw": 1440,
+            "vh": 900
+          },
+          {
+            "x": 1115.97216796875,
+            "y": 596.3699951171875,
+            "width": 126.3681640625,
+            "height": 43.260009765625,
+            "hit": true,
+            "vw": 1440,
+            "vh": 900
+          },
+          {
+            "x": 1115.99462890625,
+            "y": 596.377685546875,
+            "width": 126.3232421875,
+            "height": 43.24462890625,
+            "hit": true,
+            "vw": 1440,
+            "vh": 900
+          },
+          {
+            "x": 1115.97216796875,
+            "y": 596.3699951171875,
+            "width": 126.3681640625,
+            "height": 43.260009765625,
+            "hit": true,
+            "vw": 1440,
+            "vh": 900
+          }
+        ],
+        "renderedEnergy": {
+          "current": 9,
+          "max": 10,
+          "box": {
+            "x": 632.421875,
+            "y": 89.12723541259766,
+            "width": 175.15625,
+            "height": 53.99999237060547
+          }
+        },
+        "visibleLog": [
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play.",
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play.",
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play.",
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play.",
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play.",
+          "Your opponent played Bladefall.",
+          "Lab Recruit was banished.",
+          "Your opponent's Dreamsign's triggered ability resolved.",
+          "Your opponent gained 2 energy.",
+          "Your turn began.",
+          "You drew Lab Recruit.",
+          "Your opponent's turn began.",
+          "Your opponent drew a card.",
+          "Your opponent played Scorched Reckoning.",
+          "Lab Recruit was dissolved.",
+          "Your opponent's Dreamsign's triggered ability resolved.",
+          "Your opponent gained 2 energy.",
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play."
+        ]
+      },
+      {
+        "viewport": "mobile",
+        "owner": "enemy",
+        "verdict": "pass",
+        "invocation": "run-DTYdJy",
+        "gameId": "hcktgc",
+        "physicalVictims": [
+          "i51",
+          "i52"
+        ],
+        "spellInstances": [
+          "i53",
+          "i54"
+        ],
+        "zones": [
+          {
+            "id": "i51",
+            "zone": "banished",
+            "printing": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          },
+          {
+            "id": "i52",
+            "zone": "void",
+            "printing": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "gains": [
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 6,
+            "max": 10,
+            "change": 2,
+            "maxChange": 0,
+            "cause": "effect"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 10,
+            "max": 10,
+            "change": 2,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        ],
+        "payments": [
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 4,
+            "max": 10,
+            "change": -1,
+            "maxChange": 0,
+            "cause": "payment"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 8,
+            "max": 10,
+            "change": -2,
+            "maxChange": 0,
+            "cause": "payment"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 9,
+            "max": 10,
+            "change": -1,
+            "maxChange": 0,
+            "cause": "payment"
+          }
+        ],
+        "source": {
+          "kind": "dreamsign",
+          "side": "enemy",
+          "index": 0
+        },
+        "queued": [
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "enemy",
+              "index": 0
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "subject": "i51",
+            "subjectHiddenFrom": []
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "enemy",
+              "index": 0
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "subject": "i52",
+            "subjectHiddenFrom": []
+          }
+        ],
+        "resolved": [
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamsign",
+              "side": "enemy",
+              "index": 0
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamsign",
+              "side": "enemy",
+              "index": 0
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          }
+        ],
+        "logs": {
+          "gameId": "hcktgc",
+          "rowCount": 91,
+          "actions": [
+            {
+              "gameId": "hcktgc",
+              "version": 20,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "2bezh3h442v",
+                  "value": [
+                    "i51"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-14T03:53:09.665Z",
+              "event": "engine.action",
+              "seq": 48
+            },
+            {
+              "gameId": "hcktgc",
+              "version": 55,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i53",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "1cdyis7ro09",
+                  "value": [
+                    "i52"
+                  ],
+                  "auto": true
+                }
+              ],
+              "timestamp": "2026-10-14T03:53:26.049Z",
+              "event": "engine.action",
+              "seq": 64
+            }
+          ],
+          "triggers": [
+            {
+              "gameId": "hcktgc",
+              "version": 22,
+              "detail": {
+                "kind": "triggerResolved",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "enemy",
+                  "index": 0
+                },
+                "controller": "enemy",
+                "ability": 0,
+                "node": null,
+                "applied": true
+              },
+              "timestamp": "2026-10-14T03:53:09.666Z",
+              "event": "engine.trigger",
+              "seq": 50
+            },
+            {
+              "gameId": "hcktgc",
+              "version": 57,
+              "detail": {
+                "kind": "triggerResolved",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "enemy",
+                  "index": 0
+                },
+                "controller": "enemy",
+                "ability": 0,
+                "node": null,
+                "applied": true
+              },
+              "timestamp": "2026-10-14T03:53:26.050Z",
+              "event": "engine.trigger",
+              "seq": 66
+            }
+          ],
+          "init": [
+            {
+              "gameId": "hcktgc",
+              "card": "",
+              "dreamsign": "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607",
+              "variant": "base",
+              "side": "enemy",
+              "stage": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base"
+              ],
+              "entityKind": "dreamsign",
+              "cardStatus": "authored",
+              "cardType": "Dreamsign",
+              "timestamp": "2026-10-14T03:52:54.693Z",
+              "event": "debug_card_lab_loaded",
+              "seq": 16
+            }
+          ],
+          "debug": [
+            {
+              "gameId": "hcktgc",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "player",
+                "card": "5e5e5e5e-0000-4000-8000-000000000002",
+                "zone": "play"
+              },
+              "timestamp": "2026-10-14T03:53:08.817Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 38
+            },
+            {
+              "gameId": "hcktgc",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "player",
+                "card": "5e5e5e5e-0000-4000-8000-000000000002",
+                "zone": "play"
+              },
+              "timestamp": "2026-10-14T03:53:09.025Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 39
+            },
+            {
+              "gameId": "hcktgc",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "enemy",
+                "card": "027ae231-6569-49bb-866f-7c36ec794a11",
+                "zone": "hand"
+              },
+              "timestamp": "2026-10-14T03:53:09.253Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 40
+            },
+            {
+              "gameId": "hcktgc",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "op": {
+                "kind": "addCard",
+                "side": "enemy",
+                "card": "8b7883ee-a235-4793-aa56-086fb1e28d36",
+                "zone": "hand"
+              },
+              "timestamp": "2026-10-14T03:53:09.415Z",
+              "event": "battle_engine_debug_requested",
+              "seq": 41
+            }
+          ]
+        },
+        "geometry": [
+          {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "vw": 390,
+            "vh": 844
+          },
+          {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "vw": 390,
+            "vh": 844
+          },
+          {
+            "x": 257.6230773925781,
+            "y": 522.249755859375,
+            "width": 126.06634521484375,
+            "height": 43.15673828125,
+            "hit": true,
+            "vw": 390,
+            "vh": 844
+          },
+          {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "vw": 390,
+            "vh": 844
+          },
+          {
+            "x": 257.4721984863281,
+            "y": 522.1981201171875,
+            "width": 126.36810302734375,
+            "height": 43.260009765625,
+            "hit": true,
+            "vw": 390,
+            "vh": 844
+          }
+        ],
+        "renderedEnergy": {
+          "current": 9,
+          "max": 10,
+          "box": {
+            "x": 107.421875,
+            "y": 99.578125,
+            "width": 175.15625,
+            "height": 54
+          }
+        },
+        "visibleLog": [
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play.",
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play.",
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play.",
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play.",
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play.",
+          "Your opponent played Bladefall.",
+          "Lab Recruit was banished.",
+          "Your opponent's Dreamsign's triggered ability resolved.",
+          "Your opponent gained 2 energy.",
+          "Your turn began.",
+          "You drew Lab Recruit.",
+          "Your opponent's turn began.",
+          "Your opponent drew a card.",
+          "Your opponent played Scorched Reckoning.",
+          "Lab Recruit was dissolved.",
+          "Your opponent's Dreamsign's triggered ability resolved.",
+          "Your opponent gained 2 energy.",
+          "Your opponent played Lab Recruit.",
+          "Lab Recruit entered play."
+        ]
+      }
+    ],
+    "mobileHumanDiagnostic": {
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-Tua2sR/dawn-removal-judged.result.json",
+      "error": "mobile#0: Error: energy visibility diagnostic {\"owner\":\"player\",\"energy\":\"11\",\"energyBox\":{\"x\":101.4375,\"y\":619.171875,\"width\":67.5625,\"height\":17.859375,\"right\":169,\"bottom\":637.03125},\"statusBox\":{\"x\":96.4375,\"y\":601.109375,\"width\":197.125,\"height\":54,\"right\":293.5625,\"bottom\":655.109375},\"viewport\":{\"width\":390,\"height\":844},\"hit\":\"<div data-card-stat-value=\\\"\\\" style=\\\"font-family: Anton, system-ui, sans-serif; font-weight: 400; color: rgb(255, 255, 255); line-height: 1; text-align: center; white-space: nowrap; overflow: hidden; text-shadow: rgba(0, 0, 0, 0.9) 0px 0px 0.04em, rgba(0, 0, 0, 0.7) 0px 0px 0.08em, rgba(0, 0, 0, 0.85) 0px 0.035em 0.06em; position: relative; transform: translateY(0.06em); width: var(--cv-energy-orb-font-size); height: var(--cv-energy-orb-font-size); display: flex; align-items: center; justify-content: center; font-size: min(var(--cv-energy-orb-font-size), 13.679443359375px);\\\">1</div>\",\"hand\":{\"x\":0,\"y\":616.109375,\"width\":390,\"height\":227.875,\"right\":390,\"bottom\":843.984375},\"cards\":[{\"id\":\"i21\",\"rect\":{\"x\":1.129530429840088,\"y\":619.8659057617188,\"width\":170.82589721679688,\"height\":224.12811279296875,\"right\":171.95542764663696,\"bottom\":843.9940185546875}},{\"id\":\"i3\",\"rect\":{\"x\":60.513671875,\"y\":615.8369140625,\"width\":160.50009155273438,\"height\":217.1741943359375,\"right\":221.01376342773438,\"bottom\":833.0111083984375}},{\"id\":\"i7\",\"rect\":{\"x\":120.1328125,\"y\":617.109375,\"width\":149.734375,\"height\":209.625,\"right\":269.8671875,\"bottom\":826.734375}},{\"id\":\"i24\",\"rect\":{\"x\":168.98623657226562,\"y\":615.8369140625,\"width\":160.50009155273438,\"height\":217.1741943359375,\"right\":329.486328125,\"bottom\":833.0111083984375}},{\"id\":\"i2\",\"rect\":{\"x\":218.04457092285156,\"y\":619.8659057617188,\"width\":170.82591247558594,\"height\":224.12811279296875,\"right\":388.8704833984375,\"bottom\":843.9940185546875}}],\"phase\":{\"x\":257.4721984863281,\"y\":522.1981201171875,\"width\":126.36810302734375,\"height\":43.260009765625,\"right\":383.8403015136719,\"bottom\":565.4581298828125}}; original Error: settled unobscured energy resource: TimeoutError: page.waitForFunction: Timeout 14997ms exceeded.\n    at judged (evalmachine.<anonymous>:1778:11)\n    at async evalmachine.<anonymous>:1799:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "gameLogs": [
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-Tua2sR/dawn-removal-judged-mobile.jsonl",
+          "gameId": "w227j9",
+          "selectedBy": "url",
+          "rows": 50,
+          "reason": null
+        }
+      ],
+      "caps": [],
+      "behavior": "Both removal actions and all causal trigger/energy/payment/physical/persisted-log assertions passed before the later layout guard, as recorded by successful action steps and the exact failing guard location. The diagnostic reads current energy 11 and actual covering physical hand-card geometry.",
+      "visualVerdict": "fail; existing energy display is covered by the mobile hand even after pointer rest and 15s.",
+      "followup": "hv-f6p9"
+    },
+    "exportQualification": "Automatic full JSONL export is only the last game per viewport, not every game opened in a plan. Desktop human persisted subsets are retained by carried report; enemy full exports are retained for desktop and mobile; failing focused mobile human has its actual 50-row export. Raw energyChanged/dissolved/banished data is probe/report evidence, not invented persisted JSONL rows.",
+    "attempts": [
+      {
+        "label": "judged-1",
+        "invocation": "run-ZDmvjb",
+        "ok": false,
+        "error": "desktop#0: QaTimeoutError: UUID emblem initialization, debug staging and both ordinary public plays: the persisted log of game uuejsj (51 lines) did not satisfy the predicate within 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:695:17)\n    at async judged (evalmachine.<anonymous>:1741:14)\n    at async evalmachine.<anonymous>:1770:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 26846
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-ZDmvjb/dawn-removal-judged-desktop.jsonl",
+            "gameId": "uuejsj",
+            "selectedBy": "url",
+            "rows": 51,
+            "reason": null
+          }
+        ],
+        "captures": []
+      },
+      {
+        "label": "judged-2",
+        "invocation": "run-DTYdJy",
+        "ok": true,
+        "error": null,
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 15412
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 45396
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 11468
+          },
+          {
+            "viewport": "mobile",
+            "step": 1,
+            "ms": 43517
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-DTYdJy/dawn-removal-judged-desktop.jsonl",
+            "gameId": "e2qu2s",
+            "selectedBy": "url",
+            "rows": 91,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-DTYdJy/dawn-removal-judged-mobile.jsonl",
+            "gameId": "hcktgc",
+            "selectedBy": "url",
+            "rows": 92,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "black-horn-player-desktop.png",
+          "black-horn-player-log-desktop.png",
+          "black-horn-enemy-desktop.png",
+          "black-horn-enemy-log-desktop.png",
+          "black-horn-player-mobile.png",
+          "black-horn-player-log-mobile.png",
+          "black-horn-enemy-mobile.png",
+          "black-horn-enemy-log-mobile.png"
+        ]
+      },
+      {
+        "label": "judged-3",
+        "invocation": "run-QkD5bL",
+        "ok": false,
+        "error": "mobile#0: Error: settled unobscured energy resource: TimeoutError: page.waitForFunction: Timeout 14999ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at async judged (evalmachine.<anonymous>:1752:3)\n    at async evalmachine.<anonymous>:1779:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 32597
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 46706
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 24235
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-QkD5bL/dawn-removal-judged-desktop.jsonl",
+            "gameId": "7tfczw",
+            "selectedBy": "url",
+            "rows": 96,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-QkD5bL/dawn-removal-judged-mobile.jsonl",
+            "gameId": "2yvxkv",
+            "selectedBy": "url",
+            "rows": 51,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "black-horn-player-desktop.png",
+          "black-horn-player-log-desktop.png",
+          "black-horn-enemy-desktop.png",
+          "black-horn-enemy-log-desktop.png"
+        ]
+      },
+      {
+        "label": "judged-4",
+        "invocation": "run-ZHVOi7",
+        "ok": false,
+        "error": "desktop#0: Error: page.evaluate: Error: qa.labAddCard: missing engine probe (use debug=1)\n    at eval (eval at evaluate (:311:30), <anonymous>:3:40)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 15839
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-ZHVOi7/dawn-removal-judged-desktop.jsonl",
+            "gameId": "rfvp2q",
+            "selectedBy": "url",
+            "rows": 18,
+            "reason": null
+          }
+        ],
+        "captures": []
+      },
+      {
+        "label": "judged-5",
+        "invocation": "run-ZwhHDW",
+        "ok": false,
+        "error": "mobile#0: Error: settled unobscured energy resource: TimeoutError: page.waitForFunction: Timeout 14997ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at async judged (evalmachine.<anonymous>:1760:3)\n    at async evalmachine.<anonymous>:1787:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 42746
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 67422
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 28081
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-ZwhHDW/dawn-removal-judged-desktop.jsonl",
+            "gameId": "6nud5s",
+            "selectedBy": "url",
+            "rows": 92,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-ZwhHDW/dawn-removal-judged-mobile.jsonl",
+            "gameId": "6kemdd",
+            "selectedBy": "url",
+            "rows": 51,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "black-horn-player-desktop.png",
+          "black-horn-player-log-desktop.png",
+          "black-horn-enemy-desktop.png",
+          "black-horn-enemy-log-desktop.png"
+        ]
+      },
+      {
+        "label": "diagnostic-6",
+        "invocation": "run-Tua2sR",
+        "ok": false,
+        "error": "mobile#0: Error: energy visibility diagnostic {\"owner\":\"player\",\"energy\":\"11\",\"energyBox\":{\"x\":101.4375,\"y\":619.171875,\"width\":67.5625,\"height\":17.859375,\"right\":169,\"bottom\":637.03125},\"statusBox\":{\"x\":96.4375,\"y\":601.109375,\"width\":197.125,\"height\":54,\"right\":293.5625,\"bottom\":655.109375},\"viewport\":{\"width\":390,\"height\":844},\"hit\":\"<div data-card-stat-value=\\\"\\\" style=\\\"font-family: Anton, system-ui, sans-serif; font-weight: 400; color: rgb(255, 255, 255); line-height: 1; text-align: center; white-space: nowrap; overflow: hidden; text-shadow: rgba(0, 0, 0, 0.9) 0px 0px 0.04em, rgba(0, 0, 0, 0.7) 0px 0px 0.08em, rgba(0, 0, 0, 0.85) 0px 0.035em 0.06em; position: relative; transform: translateY(0.06em); width: var(--cv-energy-orb-font-size); height: var(--cv-energy-orb-font-size); display: flex; align-items: center; justify-content: center; font-size: min(var(--cv-energy-orb-font-size), 13.679443359375px);\\\">1</div>\",\"hand\":{\"x\":0,\"y\":616.109375,\"width\":390,\"height\":227.875,\"right\":390,\"bottom\":843.984375},\"cards\":[{\"id\":\"i21\",\"rect\":{\"x\":1.129530429840088,\"y\":619.8659057617188,\"width\":170.82589721679688,\"height\":224.12811279296875,\"right\":171.95542764663696,\"bottom\":843.9940185546875}},{\"id\":\"i3\",\"rect\":{\"x\":60.513671875,\"y\":615.8369140625,\"width\":160.50009155273438,\"height\":217.1741943359375,\"right\":221.01376342773438,\"bottom\":833.0111083984375}},{\"id\":\"i7\",\"rect\":{\"x\":120.1328125,\"y\":617.109375,\"width\":149.734375,\"height\":209.625,\"right\":269.8671875,\"bottom\":826.734375}},{\"id\":\"i24\",\"rect\":{\"x\":168.98623657226562,\"y\":615.8369140625,\"width\":160.50009155273438,\"height\":217.1741943359375,\"right\":329.486328125,\"bottom\":833.0111083984375}},{\"id\":\"i2\",\"rect\":{\"x\":218.04457092285156,\"y\":619.8659057617188,\"width\":170.82591247558594,\"height\":224.12811279296875,\"right\":388.8704833984375,\"bottom\":843.9940185546875}}],\"phase\":{\"x\":257.4721984863281,\"y\":522.1981201171875,\"width\":126.36810302734375,\"height\":43.260009765625,\"right\":383.8403015136719,\"bottom\":565.4581298828125}}; original Error: settled unobscured energy resource: TimeoutError: page.waitForFunction: Timeout 14997ms exceeded.\n    at judged (evalmachine.<anonymous>:1778:11)\n    at async evalmachine.<anonymous>:1799:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 26256
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.660/invocations/run-Tua2sR/dawn-removal-judged-mobile.jsonl",
+            "gameId": "w227j9",
+            "selectedBy": "url",
+            "rows": 50,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "black-horn-player-energy-diagnostic-mobile.png"
+        ]
+      }
+    ],
+    "sourceFrozenThroughoutAllRuns": true,
+    "pointerRepair": "Move pointer to actual phase-control centre without clicking; the focused diagnostic still confirms physical overlap. No style/state/policy edits.",
+    "actualImageSizes": {
+      "run-DTYdJy/black-horn-player-desktop.png": [
+        2880,
+        1800
+      ],
+      "run-DTYdJy/black-horn-player-log-desktop.png": [
+        2880,
+        1800
+      ],
+      "run-DTYdJy/black-horn-enemy-desktop.png": [
+        2880,
+        1800
+      ],
+      "run-DTYdJy/black-horn-enemy-log-desktop.png": [
+        2880,
+        1800
+      ],
+      "run-DTYdJy/black-horn-player-mobile.png": [
+        780,
+        1688
+      ],
+      "run-DTYdJy/black-horn-player-log-mobile.png": [
+        780,
+        1688
+      ],
+      "run-DTYdJy/black-horn-enemy-mobile.png": [
+        780,
+        1688
+      ],
+      "run-DTYdJy/black-horn-enemy-log-mobile.png": [
+        780,
+        1688
+      ],
+      "run-ZwhHDW/black-horn-player-desktop.png": [
+        2880,
+        1800
+      ],
+      "run-ZwhHDW/black-horn-player-log-desktop.png": [
+        2880,
+        1800
+      ],
+      "run-ZwhHDW/black-horn-enemy-desktop.png": [
+        2880,
+        1800
+      ],
+      "run-ZwhHDW/black-horn-enemy-log-desktop.png": [
+        2880,
+        1800
+      ],
+      "run-Tua2sR/black-horn-player-energy-diagnostic-mobile.png": [
+        780,
+        1688
+      ]
+    }
+  },
+  "runtime": {
+    "allOwnedPidsGone": [
+      2856,
+      2925,
+      6729,
+      6768,
+      17936,
+      18169,
+      32952,
+      32993,
+      40563,
+      40600,
+      70605,
+      77614,
+      78330,
+      78566,
+      78841,
+      80060,
+      80420,
+      81347,
+      94612,
+      94818
+    ],
+    "serverPort": 5274,
+    "settlement": "Each managed invocation returned trusted normal cleanup acknowledgement with own port free. No uncertain RPC outcome; no persistent owned helper process remains."
+  },
+  "timing": {
+    "dispatchAt": "2026-10-14T03:40:05.599000+00:00",
+    "cutoffAt": "2026-10-14T04:10:39.429531+00:00",
+    "inclusiveWallSeconds": 1833.830531,
+    "meaning": "Dispatch-through-before-commit elapsed wall includes audit, coordination, slot wait, verification and QA, not CPU/productive editing time.",
+    "actualGitOutcome": "UNKNOWN at committed cutoff; external post-Git receipt records exact commit and inclusive duration without amending.",
+    "maximumExpectedCutoffToCommitSeconds": 60,
+    "coupledObserverEpisode": {
+      "start": "2026-10-14T03:51:04.736850+00:00",
+      "end": "2026-10-14T04:02:42.424108+00:00",
+      "wallSeconds": 697.687258,
+      "minutes": 11.628120966666668,
+      "meaning": "First observation failure through actual focused geometry diagnosis terminal; includes ignored observation/result-carry/pointer/probe-readiness repairs, queue/execution/collection and visual judgment, not pure editing or CPU time."
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review beginning at 2026-10-14T03:45:56.174Z",
+        "method": "Actual review.mjs os.loadavg()[0] one-minute load sample from captured stdout; receipt samples separately measured at command end."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "judged-3 command end",
+      "at": "2026-10-14T03:56:57.628168+00:00",
+      "oneMinute": 14.74609375
+    },
+    {
+      "scope": "judged-4 command end",
+      "at": "2026-10-14T03:57:46.470816+00:00",
+      "oneMinute": 10.521484375
+    },
+    {
+      "scope": "preflight command end",
+      "at": "2026-10-14T03:45:11.575731+00:00",
+      "oneMinute": 8.416015625
+    },
+    {
+      "scope": "judged-5 command end",
+      "at": "2026-10-14T04:01:36.914110+00:00",
+      "oneMinute": 21.71044921875
+    },
+    {
+      "scope": "judged-2 command end",
+      "at": "2026-10-14T03:53:37.133874+00:00",
+      "oneMinute": 9.3310546875
+    },
+    {
+      "scope": "diagnostic-6 command end",
+      "at": "2026-10-14T04:02:42.424108+00:00",
+      "oneMinute": 12.18701171875
+    },
+    {
+      "scope": "review command end",
+      "at": "2026-10-14T03:46:48.422853+00:00",
+      "oneMinute": 6.8232421875
+    },
+    {
+      "scope": "focused command end",
+      "at": "2026-10-14T03:43:59.821965+00:00",
+      "oneMinute": 15.767578125
+    },
+    {
+      "scope": "knip command end",
+      "at": "2026-10-14T03:46:57.347249+00:00",
+      "oneMinute": 7.009765625
+    },
+    {
+      "scope": "entities command end",
+      "at": "2026-10-14T03:46:09.315533+00:00",
+      "oneMinute": 7.15087890625
+    },
+    {
+      "scope": "sweep command end",
+      "at": "2026-10-14T03:50:31.295623+00:00",
+      "oneMinute": 24.49560546875
+    },
+    {
+      "scope": "fuzz command end",
+      "at": "2026-10-14T03:49:13.533571+00:00",
+      "oneMinute": 15.68896484375
+    },
+    {
+      "scope": "judged-1 command end",
+      "at": "2026-10-14T03:51:04.736850+00:00",
+      "oneMinute": 20.4970703125
+    }
+  ]
+}

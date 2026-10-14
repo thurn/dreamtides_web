@@ -1,3 +1,6 @@
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { erode } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,6 @@ export default dreamsign({
     "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(onDawn(), erode(1))],
+  verifiedText: expectedVerifiedText("▸Dawn: Erode 1."),
 });

@@ -1,3 +1,6 @@
+import { whenRemovesEnemy, triggered } from "../../engine/dsl/triggers";
+import { gainEnergy } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +13,6 @@ export default dreamsign({
   rarity: "Rare",
   tideIds: ["7343b376-88d2-45fe-8b5e-79763480ee7e"],
   tags: ["J12", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenRemovesEnemy(), gainEnergy(2))],
+  verifiedText: expectedVerifiedText("When you dissolve or banish an enemy character, gain 2●."),
 });

@@ -1,3 +1,6 @@
+import { whenYouPlay, triggered } from "../../engine/dsl/triggers";
+import { foresee } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +16,6 @@ export default dreamsign({
     "e6863f55-50e7-4c7b-b118-609b5fc5c005",
   ],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "event" }), foresee(1), { oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("Once per turn, when you play an event, foresee 1."),
 });
