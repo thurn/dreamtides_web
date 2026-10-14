@@ -1,3 +1,6 @@
+import { triggered, triggeringCard, whenDraw } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { changeCardCost } from "../../engine/effects/primitives/modify-card-cost";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -9,5 +12,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenDraw("you", 2), changeCardCost(triggeringCard(), { reduce: 2 }))],
+  verifiedText: expectedVerifiedText("The second card you draw each turn costs 2● less."),
 });

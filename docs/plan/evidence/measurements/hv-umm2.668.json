@@ -1,0 +1,1666 @@
+{
+  "bead": "hv-umm2.668",
+  "entityUuids": [
+    "a42c99b2-f480-4f63-91a0-bd556120427d"
+  ],
+  "base": "5a4554d9a54db598cf25ac8886d3c2885f395a9d",
+  "hostDispatchAt": "2026-10-14T03:11:02.201Z",
+  "sourceWriteAck": "Parent exact native admission acknowledged before own source writes. Root receipt source-write-admission.json.",
+  "actualGitEnd": "UNKNOWN at committed cutoff; parent/implementer external post-Git receipt records exact endpoint without amending source.",
+  "measurementCutoff": "2026-10-14T03:32:44.469240+00:00",
+  "windowQualification": "Inclusive wall time from actual post-claim implementation dispatch, including source-free audit, coordination, checks, slot admission and browser attempts; not CPU or productive editing time. Cutoff immediately precedes final schema/Git.",
+  "validation": {
+    "focused": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-251"
+      ],
+      "startedAt": "2026-10-14T03:15:07.926365+00:00",
+      "endedAt": "2026-10-14T03:15:13.063048+00:00",
+      "wallS": 5.136530749994563,
+      "userS": 4.959153,
+      "sysS": 1.814342,
+      "exitCode": 0,
+      "pid": 70098,
+      "pgid": 70098,
+      "hostLoadAtEnd": 4.0751953125
+    },
+    "coverage": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "startedAt": "2026-10-14T03:15:46.172834+00:00",
+      "endedAt": "2026-10-14T03:15:50.478181+00:00",
+      "wallS": 4.305221291986527,
+      "userS": 4.189679,
+      "sysS": 1.439531,
+      "exitCode": 0,
+      "pid": 71143,
+      "pgid": 71143,
+      "hostLoadAtEnd": 4.53466796875
+    },
+    "preflight": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "a42c99b2-f480-4f63-91a0-bd556120427d"
+      ],
+      "startedAt": "2026-10-14T03:16:02.746831+00:00",
+      "endedAt": "2026-10-14T03:16:03.861712+00:00",
+      "wallS": 1.114779958006693,
+      "userS": 1.035754,
+      "sysS": 0.386961,
+      "exitCode": 1,
+      "pid": 71668,
+      "pgid": 71668,
+      "hostLoadAtEnd": 4.064453125
+    },
+    "preflight-dreamsign": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "a42c99b2-f480-4f63-91a0-bd556120427d"
+      ],
+      "startedAt": "2026-10-14T03:18:04.039062+00:00",
+      "endedAt": "2026-10-14T03:18:07.489006+00:00",
+      "wallS": 3.4496683329925872,
+      "userS": 1.247496,
+      "sysS": 0.840695,
+      "exitCode": 0,
+      "pid": 8506,
+      "pgid": 8506,
+      "hostLoadAtEnd": 19.17822265625
+    },
+    "fuzz": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "a42c99b2-f480-4f63-91a0-bd556120427d"
+      ],
+      "startedAt": "2026-10-14T03:16:09.814789+00:00",
+      "endedAt": "2026-10-14T03:23:37.005965+00:00",
+      "wallS": 447.1860567080148,
+      "userS": 297.57278,
+      "sysS": 3.643152,
+      "exitCode": 0,
+      "pid": 71831,
+      "pgid": 71831,
+      "hostLoadAtEnd": 7.6689453125
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-14T03:18:16.406000+00:00",
+      "endedAt": "2026-10-14T03:19:18.340787+00:00",
+      "wallS": 61.93396004199167,
+      "userS": 155.562907,
+      "sysS": 20.521302,
+      "exitCode": 0,
+      "pid": 27967,
+      "pgid": 27967,
+      "hostLoadAtEnd": 17.05322265625
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startedAt": "2026-10-14T03:19:21.890783+00:00",
+      "endedAt": "2026-10-14T03:19:26.455288+00:00",
+      "wallS": 4.564341583987698,
+      "userS": 4.010615,
+      "sysS": 1.280834,
+      "exitCode": 0,
+      "pid": 33283,
+      "pgid": 33283,
+      "hostLoadAtEnd": 15.76025390625
+    },
+    "sweep": {
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.668",
+        "--dreamsigns",
+        "a42c99b2-f480-4f63-91a0-bd556120427d"
+      ],
+      "startedAt": "2026-10-14T03:23:56.299081+00:00",
+      "endedAt": "2026-10-14T03:24:05.939381+00:00",
+      "wallS": 9.640116541995667,
+      "userS": 5.600939,
+      "sysS": 2.8705089999999998,
+      "exitCode": 0,
+      "pid": 2220,
+      "pgid": 2220,
+      "hostLoadAtEnd": 7.7158203125
+    },
+    "judged-1": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.668/green-amulet-judged.mjs",
+        "--bead",
+        "hv-umm2.668",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "startedAt": "2026-10-14T03:24:18.413160+00:00",
+      "endedAt": "2026-10-14T03:24:45.254626+00:00",
+      "wallS": 26.84109741699649,
+      "userS": 6.681604,
+      "sysS": 3.012854,
+      "exitCode": 1,
+      "pid": 3733,
+      "pgid": 3733,
+      "hostLoadAtEnd": 7.439453125
+    },
+    "judged-2": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.668/green-amulet-judged.mjs",
+        "--bead",
+        "hv-umm2.668",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "startedAt": "2026-10-14T03:25:32.636269+00:00",
+      "endedAt": "2026-10-14T03:26:46.094332+00:00",
+      "wallS": 73.45715949998703,
+      "userS": 5.249634,
+      "sysS": 2.403241,
+      "exitCode": 1,
+      "pid": 6387,
+      "pgid": 6387,
+      "hostLoadAtEnd": 4.70703125
+    },
+    "judged-3": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.668/green-amulet-judged.mjs",
+        "--bead",
+        "hv-umm2.668",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "startedAt": "2026-10-14T03:28:02.880628+00:00",
+      "endedAt": "2026-10-14T03:30:25.778212+00:00",
+      "wallS": 142.89589099999284,
+      "userS": 5.488073,
+      "sysS": 2.576134,
+      "exitCode": 0,
+      "pid": 10467,
+      "pgid": 10467,
+      "hostLoadAtEnd": 6.80126953125
+    },
+    "schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startedAt": "2026-10-14T03:31:55.180358+00:00",
+      "endedAt": "2026-10-14T03:31:55.292405+00:00",
+      "wallS": 0.11197070899652317,
+      "userS": 0.054300999999999995,
+      "sysS": 0.023739999999999997,
+      "exitCode": 0,
+      "pid": 17153,
+      "pgid": 17153,
+      "hostLoadAtEnd": 4.75390625
+    }
+  },
+  "checks": {
+    "focusedCases": 4,
+    "coverageCases": 20,
+    "reviewFiles": 247,
+    "reviewCases": 5751,
+    "knip": 0,
+    "preflightCorrected": {
+      "pass": 2,
+      "skip": 18,
+      "fail": 0,
+      "exercised": false
+    },
+    "sweep": {
+      "pass": 2,
+      "skip": 18,
+      "fail": 0
+    },
+    "judgedFinal": {
+      "pass": 4,
+      "incompleteHistoricalFail": 2
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 123515,
+      "prompts": 8020,
+      "interactiveReruns": 890,
+      "failures": 0,
+      "included": 600,
+      "exercised": 2801,
+      "reportedEngineWallS": 279.1,
+      "reportedEngineCpuS": 299.6
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review start at 2026-10-14T03:18:16.634Z, 1-minute load19.7685546875 from actual review output."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "review",
+      "at": "2026-10-14T03:18:16.634Z",
+      "oneMinute": 19.7685546875
+    }
+  ],
+  "heavyAdmission": {
+    "literalCommand": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids a42c99b2-f480-4f63-91a0-bd556120427d",
+    "outerWallS": 447.1860567080148,
+    "reportedEngineWallS": 279.1,
+    "pureLockWait": "UNKNOWN: outer timer includes admission, startup, command and collection; engine wall timer has a narrower scope. Difference is not represented as pure lock wait.",
+    "outerPidPgid": 71831,
+    "observedChildPids": [
+      31529,
+      31549,
+      31552,
+      31620
+    ],
+    "settled": true
+  },
+  "rulesAudit": {
+    "composition": "triggered(whenDraw(\"you\",2),changeCardCost(triggeringCard(),{reduce:2}))",
+    "duration": "Existing rules Durations: no stated duration is permanent; Zone Changes preserves properties. No D10 ladder invocation/new normative clause/RD needed.",
+    "requiredPrimitivesQualification": "Historical costModifierNth inventory planning label is resolved for this exact slice by native scope, closed audit603 row40 and delivered actual draw-nth/physical-cost APIs. No inventory or engine writes.",
+    "clarifications": "C2 and C17 name other mechanics/UUIDs; D15 copies do not change this actual-draw trigger. No per-UUID existing RD/cardIssue found.",
+    "newPrimitives": []
+  },
+  "sourceFreeze": {
+    "receipt": "browser-source-freeze-3.json",
+    "allOrdinarySourceHashesUnchangedThroughQa": true,
+    "ordinaryFileHashes": {
+      "src/content/dreamsigns/green-amulet-a42c99b2.ts": "a4b3fb536744be1925bbcc2d4e158e9d0ea278a0506aeb32ac359a381af82170",
+      "src/content/specs/dreamsigns-ready-251.scenarios.ts": "46ebb3931a087ca53e6001ec8fa9e23ad9922b1ea7946beab7aeefbe125d4bcf",
+      "docs/plan/evidence/pre-existing/hv-umm2.668.md": "270f3544b2b9ced181743b5d0e0150e1fa9f56f326d0aa80d50bd4d9291e541f"
+    },
+    "ignoredDriverSha256": "96e94837eb3c30e96f2f91af13b0e5111580a5da3effc253bfb4df5cb01817cc",
+    "onlyNativeLedgerAndScratchRuntimeWritesDuringOwnBrowser": true
+  },
+  "qa": {
+    "finalInvocation": "invocations/run-anxu0y",
+    "finalError": null,
+    "caps": [],
+    "judgments": [
+      {
+        "uuid": "a42c99b2-f480-4f63-91a0-bd556120427d",
+        "variant": "base",
+        "mode": "judged",
+        "verdict": "pass",
+        "notes": "Exact authored Dreamsign, real event-first draw and physical second i52 versus same-printing third i51; source-scoped queue retains hidden opponent subject, reduce2 expiry never. Three initial normal character plays left draw ordinal0; real two draw-two spells gave visible1 versus3, exposed card hits and full visible cost/phase-control bounds. Actual discounted play paid2→1; same e1 retained on physical i52 in play after Ending with no effectEnded. Desktop/mobile source, geometry, caps and logs checked; raw draw/cardCost events are probe/report observations. Stored UUID setup/actions/trigger rows were read; runner exports the final enemy game101 JSONL rows per viewport, while player stored init/trigger/action subsets remain in the report. Existing synthetic opening-card art is blank.",
+        "bead": "hv-umm2.668",
+        "commit": "5a4554d9a54db598cf25ac8886d3c2885f395a9d",
+        "side": "player",
+        "viewport": "desktop",
+        "screens": [
+          "green-amulet-reduced-desktop.png"
+        ],
+        "invocation": "invocations/run-anxu0y",
+        "evidenceDir": "artifacts/qa/hv-umm2.668/invocations/run-anxu0y",
+        "rawReport": "green-amulet-judged.result.json"
+      },
+      {
+        "uuid": "a42c99b2-f480-4f63-91a0-bd556120427d",
+        "variant": "base",
+        "mode": "judged",
+        "verdict": "pass",
+        "notes": "Exact authored Dreamsign, real event-first draw and physical second i52 versus same-printing third i51; source-scoped queue retains hidden opponent subject, reduce2 expiry never. Normal AI turn draw and real draw spell exercised the enemy source; opponent hand identity stays private at trigger capture. Enemy subsequently played physical i52/i51; capture includes normal turn-announcement transition. Desktop/mobile source, geometry, caps and logs checked; raw draw/cardCost events are probe/report observations. Stored UUID setup/actions/trigger rows were read; runner exports the final enemy game101 JSONL rows per viewport, while player stored init/trigger/action subsets remain in the report. Existing synthetic opening-card art is blank.",
+        "bead": "hv-umm2.668",
+        "commit": "5a4554d9a54db598cf25ac8886d3c2885f395a9d",
+        "side": "enemy",
+        "viewport": "desktop",
+        "screens": [
+          "green-amulet-enemy-desktop.png"
+        ],
+        "invocation": "invocations/run-anxu0y",
+        "evidenceDir": "artifacts/qa/hv-umm2.668/invocations/run-anxu0y",
+        "rawReport": "green-amulet-judged.result.json"
+      },
+      {
+        "uuid": "a42c99b2-f480-4f63-91a0-bd556120427d",
+        "variant": "base",
+        "mode": "judged",
+        "verdict": "pass",
+        "notes": "Exact authored Dreamsign, real event-first draw and physical second i52 versus same-printing third i51; source-scoped queue retains hidden opponent subject, reduce2 expiry never. Three initial normal character plays left draw ordinal0; real two draw-two spells gave visible1 versus3, exposed card hits and full visible cost/phase-control bounds. Actual discounted play paid2→1; same e1 retained on physical i52 in play after Ending with no effectEnded. Desktop/mobile source, geometry, caps and logs checked; raw draw/cardCost events are probe/report observations. Stored UUID setup/actions/trigger rows were read; runner exports the final enemy game101 JSONL rows per viewport, while player stored init/trigger/action subsets remain in the report. Existing synthetic opening-card art is blank.",
+        "bead": "hv-umm2.668",
+        "commit": "5a4554d9a54db598cf25ac8886d3c2885f395a9d",
+        "side": "player",
+        "viewport": "mobile",
+        "screens": [
+          "green-amulet-reduced-mobile.png"
+        ],
+        "invocation": "invocations/run-anxu0y",
+        "evidenceDir": "artifacts/qa/hv-umm2.668/invocations/run-anxu0y",
+        "rawReport": "green-amulet-judged.result.json"
+      },
+      {
+        "uuid": "a42c99b2-f480-4f63-91a0-bd556120427d",
+        "variant": "base",
+        "mode": "judged",
+        "verdict": "pass",
+        "notes": "Exact authored Dreamsign, real event-first draw and physical second i52 versus same-printing third i51; source-scoped queue retains hidden opponent subject, reduce2 expiry never. Normal AI turn draw and real draw spell exercised the enemy source; opponent hand identity stays private at trigger capture. Enemy subsequently played physical i52/i51; capture includes normal turn-announcement transition. Desktop/mobile source, geometry, caps and logs checked; raw draw/cardCost events are probe/report observations. Stored UUID setup/actions/trigger rows were read; runner exports the final enemy game101 JSONL rows per viewport, while player stored init/trigger/action subsets remain in the report. Existing synthetic opening-card art is blank.",
+        "bead": "hv-umm2.668",
+        "commit": "5a4554d9a54db598cf25ac8886d3c2885f395a9d",
+        "side": "enemy",
+        "viewport": "mobile",
+        "screens": [
+          "green-amulet-enemy-mobile.png"
+        ],
+        "invocation": "invocations/run-anxu0y",
+        "evidenceDir": "artifacts/qa/hv-umm2.668/invocations/run-anxu0y",
+        "rawReport": "green-amulet-judged.result.json"
+      }
+    ],
+    "captures": [
+      {
+        "file": "green-amulet-reduced-desktop.png",
+        "sha256": "4bd99190a4ffd1ce8708dadaf476e7135e993b991842d7dffd41b45632ece3fb",
+        "dimensions": [
+          2880,
+          1800
+        ]
+      },
+      {
+        "file": "green-amulet-enemy-desktop.png",
+        "sha256": "63fc8e552a9ac61d781c20c7dd20e8dc6267618b686b6b0879d05b2a79ebd590",
+        "dimensions": [
+          2880,
+          1800
+        ]
+      },
+      {
+        "file": "green-amulet-reduced-mobile.png",
+        "sha256": "ab6ef13ee2145a131502147f71f874e81ad6c68958ffe5e67aedf78d9ba32537",
+        "dimensions": [
+          780,
+          1688
+        ]
+      },
+      {
+        "file": "green-amulet-enemy-mobile.png",
+        "sha256": "b70039dfc3391c07799ca0e6cd26008679d8fededbe148243bb29c4730f40007",
+        "dimensions": [
+          780,
+          1688
+        ]
+      }
+    ],
+    "playerProof": {
+      "desktop": {
+        "verdict": "pass",
+        "uuid": "a42c99b2-f480-4f63-91a0-bd556120427d",
+        "side": "player",
+        "viewport": "desktop",
+        "stagedOrder": [
+          "i53",
+          "i52",
+          "i51"
+        ],
+        "spell1": "i54",
+        "spell2": "i55",
+        "drawn": [
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i53"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i52"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i51"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i24"
+          }
+        ],
+        "queued": {
+          "kind": "triggerQueued",
+          "source": {
+            "kind": "dreamsign",
+            "side": "player",
+            "index": 0
+          },
+          "controller": "player",
+          "ability": 0,
+          "node": null,
+          "subject": "i52",
+          "subjectHiddenFrom": [
+            "enemy"
+          ]
+        },
+        "effectStarted": {
+          "kind": "effectStarted",
+          "effect": "e1",
+          "controller": "player",
+          "source": {
+            "kind": "dreamsign",
+            "side": "player",
+            "index": 0
+          },
+          "expiry": {
+            "at": "never"
+          },
+          "change": {
+            "kind": "cardCost",
+            "instance": "i52",
+            "mode": "reduce",
+            "amount": 2
+          }
+        },
+        "handCosts": {
+          "discounted": [
+            {
+              "value": "1",
+              "width": 135.12603759765625,
+              "height": 184.85760498046875
+            }
+          ],
+          "duplicate": [
+            {
+              "value": "3",
+              "width": 141.18115234375,
+              "height": 189.02117919921875
+            }
+          ]
+        },
+        "paid": {
+          "before": 2,
+          "after": 1,
+          "amount": 1
+        },
+        "geometry": {
+          "boxes": [
+            {
+              "x": 742.9437866210938,
+              "y": 731.2620849609375,
+              "width": 131.41339111328125,
+              "height": 182.2509765625,
+              "right": 874.357177734375,
+              "bottom": 913.5130615234375
+            },
+            {
+              "x": 875.9002685546875,
+              "y": 730.7586669921875,
+              "width": 136.3504638671875,
+              "height": 185.70849609375,
+              "right": 1012.250732421875,
+              "bottom": 916.4671630859375
+            }
+          ],
+          "visible": [
+            {
+              "width": 131.41339111328125,
+              "height": 168.7379150390625
+            },
+            {
+              "width": 136.3504638671875,
+              "height": 169.2413330078125
+            }
+          ],
+          "stats": [
+            {
+              "value": "1",
+              "x": 751.6484375,
+              "y": 733.9298095703125,
+              "width": 15.6832275390625,
+              "height": 15.6832275390625,
+              "right": 767.3316650390625,
+              "bottom": 749.613037109375
+            },
+            {
+              "value": "3",
+              "x": 889.1336669921875,
+              "y": 733.6041259765625,
+              "width": 16.10296630859375,
+              "height": 16.1029052734375,
+              "right": 905.2366333007812,
+              "bottom": 749.70703125
+            }
+          ],
+          "candidates": [
+            {
+              "x": 756.0851257324218,
+              "y": 748.1358764648437
+            },
+            {
+              "x": 889.5353149414062,
+              "y": 747.6828002929688
+            }
+          ],
+          "controlHit": true,
+          "controlBox": {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "right": 1240.5,
+            "bottom": 639
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "qualification": "Hand fan uses viewport intersection; full art-card bounding boxes can extend below the viewport. Rendered 1/3 energy values and actual exposed play hit are checked independently."
+        },
+        "permanentAfterEnding": {
+          "turn": {
+            "round": 1,
+            "turnNumber": 2,
+            "active": "enemy",
+            "phase": "day",
+            "sideTurns": {
+              "player": 1,
+              "enemy": 1
+            },
+            "extra": false,
+            "lastNormal": "enemy",
+            "extraTurns": [],
+            "challengeLane": null,
+            "beginning": false
+          },
+          "effect": {
+            "controller": "player",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "expiry": {
+              "at": "never"
+            },
+            "change": {
+              "kind": "cardCost",
+              "instance": "i52",
+              "mode": "reduce",
+              "amount": 2
+            },
+            "id": "e1",
+            "timestamp": 25
+          },
+          "zone": "play"
+        },
+        "stored": {
+          "rows": 101,
+          "init": {
+            "gameId": "6t5i9t",
+            "card": "",
+            "dreamsign": "a42c99b2-f480-4f63-91a0-bd556120427d",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base"
+            ],
+            "entityKind": "dreamsign",
+            "cardStatus": "authored",
+            "cardType": "Dreamsign",
+            "timestamp": "2026-10-14T03:28:07.880Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          },
+          "trigger": {
+            "gameId": "6t5i9t",
+            "version": 20,
+            "detail": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            },
+            "timestamp": "2026-10-14T03:28:13.941Z",
+            "event": "engine.trigger",
+            "seq": 60
+          },
+          "plays": [
+            {
+              "gameId": "6t5i9t",
+              "version": 4,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i6",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:08.657Z",
+              "event": "engine.action",
+              "seq": 26
+            },
+            {
+              "gameId": "6t5i9t",
+              "version": 6,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i17",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:10.266Z",
+              "event": "engine.action",
+              "seq": 36
+            },
+            {
+              "gameId": "6t5i9t",
+              "version": 8,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i15",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:11.831Z",
+              "event": "engine.action",
+              "seq": 45
+            },
+            {
+              "gameId": "6t5i9t",
+              "version": 18,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:13.941Z",
+              "event": "engine.action",
+              "seq": 58
+            },
+            {
+              "gameId": "6t5i9t",
+              "version": 21,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i55",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:16.042Z",
+              "event": "engine.action",
+              "seq": 67
+            },
+            {
+              "gameId": "6t5i9t",
+              "version": 23,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i52",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:19.715Z",
+              "event": "engine.action",
+              "seq": 72
+            }
+          ]
+        },
+        "screens": [
+          "green-amulet-reduced-desktop.png"
+        ],
+        "logQualification": "Raw draw order and generic cardCost starts are actual engine probe/report observations. Stored UUID setup intents, initialization, public play actions and source-scoped triggers reconstruct the effect through the deterministic fold; raw draw/effect events are not claimed as separately persisted rows."
+      },
+      "mobile": {
+        "verdict": "pass",
+        "uuid": "a42c99b2-f480-4f63-91a0-bd556120427d",
+        "side": "player",
+        "viewport": "mobile",
+        "stagedOrder": [
+          "i53",
+          "i52",
+          "i51"
+        ],
+        "spell1": "i54",
+        "spell2": "i55",
+        "drawn": [
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i53"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i52"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i51"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i24"
+          }
+        ],
+        "queued": {
+          "kind": "triggerQueued",
+          "source": {
+            "kind": "dreamsign",
+            "side": "player",
+            "index": 0
+          },
+          "controller": "player",
+          "ability": 0,
+          "node": null,
+          "subject": "i52",
+          "subjectHiddenFrom": [
+            "enemy"
+          ]
+        },
+        "effectStarted": {
+          "kind": "effectStarted",
+          "effect": "e1",
+          "controller": "player",
+          "source": {
+            "kind": "dreamsign",
+            "side": "player",
+            "index": 0
+          },
+          "expiry": {
+            "at": "never"
+          },
+          "change": {
+            "kind": "cardCost",
+            "instance": "i52",
+            "mode": "reduce",
+            "amount": 2
+          }
+        },
+        "handCosts": {
+          "discounted": [
+            {
+              "value": "1",
+              "width": 160.50009155273438,
+              "height": 217.1741943359375
+            }
+          ],
+          "duplicate": [
+            {
+              "value": "3",
+              "width": 170.82591247558594,
+              "height": 224.12811279296875
+            }
+          ]
+        },
+        "paid": {
+          "before": 2,
+          "after": 1,
+          "amount": 1
+        },
+        "geometry": {
+          "boxes": [
+            {
+              "x": 139.64956665039062,
+              "y": 615.9647827148438,
+              "width": 154.09158325195312,
+              "height": 212.71484375,
+              "right": 293.74114990234375,
+              "bottom": 828.6796264648438
+            },
+            {
+              "x": 178.78152465820312,
+              "y": 616.21826171875,
+              "width": 162.60137939453125,
+              "height": 218.61328125,
+              "right": 341.3829040527344,
+              "bottom": 834.83154296875
+            }
+          ],
+          "visible": [
+            {
+              "width": 154.09158325195312,
+              "height": 212.71484375
+            },
+            {
+              "width": 162.60137939453125,
+              "height": 218.61328125
+            }
+          ],
+          "stats": [
+            {
+              "value": "1",
+              "x": 151.02561950683594,
+              "y": 619.1052856445312,
+              "width": 21.1640625,
+              "height": 21.1640625,
+              "right": 172.18968200683594,
+              "bottom": 640.2693481445312
+            },
+            {
+              "value": "3",
+              "x": 197.92428588867188,
+              "y": 619.6666870117188,
+              "width": 21.995376586914062,
+              "height": 21.99542236328125,
+              "right": 219.91966247558594,
+              "bottom": 641.662109375
+            }
+          ],
+          "candidates": [
+            {
+              "x": 155.05872497558593,
+              "y": 637.2362670898438
+            },
+            {
+              "x": 195.04166259765626,
+              "y": 638.07958984375
+            }
+          ],
+          "controlHit": true,
+          "controlBox": {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "right": 382,
+            "bottom": 564.828125
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "qualification": "Hand fan uses viewport intersection; full art-card bounding boxes can extend below the viewport. Rendered 1/3 energy values and actual exposed play hit are checked independently."
+        },
+        "permanentAfterEnding": {
+          "turn": {
+            "round": 1,
+            "turnNumber": 2,
+            "active": "enemy",
+            "phase": "day",
+            "sideTurns": {
+              "player": 1,
+              "enemy": 1
+            },
+            "extra": false,
+            "lastNormal": "enemy",
+            "extraTurns": [],
+            "challengeLane": null,
+            "beginning": false
+          },
+          "effect": {
+            "controller": "player",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "expiry": {
+              "at": "never"
+            },
+            "change": {
+              "kind": "cardCost",
+              "instance": "i52",
+              "mode": "reduce",
+              "amount": 2
+            },
+            "id": "e1",
+            "timestamp": 25
+          },
+          "zone": "play"
+        },
+        "stored": {
+          "rows": 102,
+          "init": {
+            "gameId": "zeyx69",
+            "card": "",
+            "dreamsign": "a42c99b2-f480-4f63-91a0-bd556120427d",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base"
+            ],
+            "entityKind": "dreamsign",
+            "cardStatus": "authored",
+            "cardType": "Dreamsign",
+            "timestamp": "2026-10-14T03:29:18.472Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          },
+          "trigger": {
+            "gameId": "zeyx69",
+            "version": 20,
+            "detail": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            },
+            "timestamp": "2026-10-14T03:29:24.447Z",
+            "event": "engine.trigger",
+            "seq": 60
+          },
+          "plays": [
+            {
+              "gameId": "zeyx69",
+              "version": 4,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i6",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:19.130Z",
+              "event": "engine.action",
+              "seq": 26
+            },
+            {
+              "gameId": "zeyx69",
+              "version": 6,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i17",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:20.732Z",
+              "event": "engine.action",
+              "seq": 36
+            },
+            {
+              "gameId": "zeyx69",
+              "version": 8,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i15",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:22.281Z",
+              "event": "engine.action",
+              "seq": 45
+            },
+            {
+              "gameId": "zeyx69",
+              "version": 18,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:24.446Z",
+              "event": "engine.action",
+              "seq": 58
+            },
+            {
+              "gameId": "zeyx69",
+              "version": 21,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i55",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:26.590Z",
+              "event": "engine.action",
+              "seq": 69
+            },
+            {
+              "gameId": "zeyx69",
+              "version": 23,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i52",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:29.242Z",
+              "event": "engine.action",
+              "seq": 74
+            }
+          ]
+        },
+        "screens": [
+          "green-amulet-reduced-mobile.png"
+        ],
+        "logQualification": "Raw draw order and generic cardCost starts are actual engine probe/report observations. Stored UUID setup intents, initialization, public play actions and source-scoped triggers reconstruct the effect through the deterministic fold; raw draw/effect events are not claimed as separately persisted rows."
+      }
+    },
+    "enemyProof": {
+      "desktop": {
+        "verdict": "pass",
+        "uuid": "a42c99b2-f480-4f63-91a0-bd556120427d",
+        "side": "enemy",
+        "viewport": "desktop",
+        "stagedOrder": [
+          "i53",
+          "i52",
+          "i51"
+        ],
+        "spell1": "i54",
+        "spell2": null,
+        "drawn": [
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i53"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i52"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i51"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i29"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i33"
+          }
+        ],
+        "queued": {
+          "kind": "triggerQueued",
+          "source": {
+            "kind": "dreamsign",
+            "side": "enemy",
+            "index": 0
+          },
+          "controller": "enemy",
+          "ability": 0,
+          "node": null,
+          "subject": "i52",
+          "subjectHiddenFrom": [
+            "player"
+          ]
+        },
+        "effectStarted": {
+          "kind": "effectStarted",
+          "effect": "e1",
+          "controller": "enemy",
+          "source": {
+            "kind": "dreamsign",
+            "side": "enemy",
+            "index": 0
+          },
+          "expiry": {
+            "at": "never"
+          },
+          "change": {
+            "kind": "cardCost",
+            "instance": "i52",
+            "mode": "reduce",
+            "amount": 2
+          }
+        },
+        "handCosts": null,
+        "paid": null,
+        "geometry": null,
+        "permanentAfterEnding": null,
+        "stored": {
+          "rows": 101,
+          "init": {
+            "gameId": "mc2aep",
+            "card": "",
+            "dreamsign": "a42c99b2-f480-4f63-91a0-bd556120427d",
+            "variant": "base",
+            "side": "enemy",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base"
+            ],
+            "entityKind": "dreamsign",
+            "cardStatus": "authored",
+            "cardType": "Dreamsign",
+            "timestamp": "2026-10-14T03:28:33.099Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          },
+          "trigger": {
+            "gameId": "mc2aep",
+            "version": 54,
+            "detail": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            },
+            "timestamp": "2026-10-14T03:29:01.517Z",
+            "event": "engine.trigger",
+            "seq": 63
+          },
+          "plays": [
+            {
+              "gameId": "mc2aep",
+              "version": 4,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i36",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:33.727Z",
+              "event": "engine.action",
+              "seq": 27
+            },
+            {
+              "gameId": "mc2aep",
+              "version": 6,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i45",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:33.792Z",
+              "event": "engine.action",
+              "seq": 30
+            },
+            {
+              "gameId": "mc2aep",
+              "version": 8,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i31",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:33.861Z",
+              "event": "engine.action",
+              "seq": 33
+            },
+            {
+              "gameId": "mc2aep",
+              "version": 10,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i46",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:33.923Z",
+              "event": "engine.action",
+              "seq": 36
+            },
+            {
+              "gameId": "mc2aep",
+              "version": 12,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i27",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:28:33.989Z",
+              "event": "engine.action",
+              "seq": 39
+            },
+            {
+              "gameId": "mc2aep",
+              "version": 52,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:01.517Z",
+              "event": "engine.action",
+              "seq": 61
+            },
+            {
+              "gameId": "mc2aep",
+              "version": 55,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i52",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:01.755Z",
+              "event": "engine.action",
+              "seq": 66
+            },
+            {
+              "gameId": "mc2aep",
+              "version": 57,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i51",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:01.994Z",
+              "event": "engine.action",
+              "seq": 69
+            },
+            {
+              "gameId": "mc2aep",
+              "version": 59,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "void"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:02.179Z",
+              "event": "engine.action",
+              "seq": 72
+            }
+          ]
+        },
+        "screens": [
+          "green-amulet-enemy-desktop.png"
+        ],
+        "logQualification": "Raw draw order and generic cardCost starts are actual engine probe/report observations. Stored UUID setup intents, initialization, public play actions and source-scoped triggers reconstruct the effect through the deterministic fold; raw draw/effect events are not claimed as separately persisted rows."
+      },
+      "mobile": {
+        "verdict": "pass",
+        "uuid": "a42c99b2-f480-4f63-91a0-bd556120427d",
+        "side": "enemy",
+        "viewport": "mobile",
+        "stagedOrder": [
+          "i53",
+          "i52",
+          "i51"
+        ],
+        "spell1": "i54",
+        "spell2": null,
+        "drawn": [
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i53"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i52"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i51"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i29"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i33"
+          }
+        ],
+        "queued": {
+          "kind": "triggerQueued",
+          "source": {
+            "kind": "dreamsign",
+            "side": "enemy",
+            "index": 0
+          },
+          "controller": "enemy",
+          "ability": 0,
+          "node": null,
+          "subject": "i52",
+          "subjectHiddenFrom": [
+            "player"
+          ]
+        },
+        "effectStarted": {
+          "kind": "effectStarted",
+          "effect": "e1",
+          "controller": "enemy",
+          "source": {
+            "kind": "dreamsign",
+            "side": "enemy",
+            "index": 0
+          },
+          "expiry": {
+            "at": "never"
+          },
+          "change": {
+            "kind": "cardCost",
+            "instance": "i52",
+            "mode": "reduce",
+            "amount": 2
+          }
+        },
+        "handCosts": null,
+        "paid": null,
+        "geometry": null,
+        "permanentAfterEnding": null,
+        "stored": {
+          "rows": 101,
+          "init": {
+            "gameId": "etxqxz",
+            "card": "",
+            "dreamsign": "a42c99b2-f480-4f63-91a0-bd556120427d",
+            "variant": "base",
+            "side": "enemy",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base"
+            ],
+            "entityKind": "dreamsign",
+            "cardStatus": "authored",
+            "cardType": "Dreamsign",
+            "timestamp": "2026-10-14T03:29:42.623Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          },
+          "trigger": {
+            "gameId": "etxqxz",
+            "version": 54,
+            "detail": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            },
+            "timestamp": "2026-10-14T03:30:10.637Z",
+            "event": "engine.trigger",
+            "seq": 63
+          },
+          "plays": [
+            {
+              "gameId": "etxqxz",
+              "version": 4,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i36",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:43.237Z",
+              "event": "engine.action",
+              "seq": 27
+            },
+            {
+              "gameId": "etxqxz",
+              "version": 6,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i45",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:43.292Z",
+              "event": "engine.action",
+              "seq": 30
+            },
+            {
+              "gameId": "etxqxz",
+              "version": 8,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i31",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:43.356Z",
+              "event": "engine.action",
+              "seq": 33
+            },
+            {
+              "gameId": "etxqxz",
+              "version": 10,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i46",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:43.444Z",
+              "event": "engine.action",
+              "seq": 36
+            },
+            {
+              "gameId": "etxqxz",
+              "version": 12,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i27",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:29:43.514Z",
+              "event": "engine.action",
+              "seq": 39
+            },
+            {
+              "gameId": "etxqxz",
+              "version": 52,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:30:10.636Z",
+              "event": "engine.action",
+              "seq": 61
+            },
+            {
+              "gameId": "etxqxz",
+              "version": 55,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i52",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:30:10.980Z",
+              "event": "engine.action",
+              "seq": 66
+            },
+            {
+              "gameId": "etxqxz",
+              "version": 57,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i51",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:30:11.394Z",
+              "event": "engine.action",
+              "seq": 69
+            },
+            {
+              "gameId": "etxqxz",
+              "version": 59,
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "void"
+              },
+              "answers": [],
+              "timestamp": "2026-10-14T03:30:11.596Z",
+              "event": "engine.action",
+              "seq": 72
+            }
+          ]
+        },
+        "screens": [
+          "green-amulet-enemy-mobile.png"
+        ],
+        "logQualification": "Raw draw order and generic cardCost starts are actual engine probe/report observations. Stored UUID setup intents, initialization, public play actions and source-scoped triggers reconstruct the effect through the deterministic fold; raw draw/effect events are not claimed as separately persisted rows."
+      }
+    },
+    "falseTapObservations": [],
+    "logExportQualification": "The scenario uses two separate games per viewport. qa.gameLog read actual persisted rows for each; player init/action/trigger subsets are retained in the result, final enemy game is automatically exported in full (101 JSONL rows each). Raw cardDrawn and generic cardCost starts come from attributed engine probe/report, not separate stored rows.",
+    "historicalAttempts": [
+      {
+        "invocation": "invocations/run-QeJqO7",
+        "verdict": "incomplete fail",
+        "cause": "Full-hand bounding-box assertion rejected the viewport-cropped hand fan before payment. Exact draws/source/cost values and caps passed. Ignored driver corrected to observe visible region, energy-stat bounds and real exposed hits.",
+        "sourceRepaired": false
+      },
+      {
+        "invocation": "invocations/run-LFQrai",
+        "verdict": "desktop complete, mobile incomplete fail",
+        "cause": "Mobile first staged spell lacked an exposed tap point at initial observation. Compact normal-play setup and bounded settled-tap observation repaired ignored driver. Desktop complete judgments retained without treating the whole failed invocation as four passes.",
+        "sourceRepaired": false
+      }
+    ],
+    "cleanup": [
+      {
+        "at": "2026-10-14T03:24:18.387840+00:00",
+        "runner": 2220,
+        "serverGroup": 2260,
+        "ownedGroupsAbsent": true,
+        "ownActiveRecords": [],
+        "normalRunnerExit": 0,
+        "qualification": "Trusted normal runner reported cleanup and free owned port; no uncertain provider outcome. No extra missing-session reconciliation required."
+      },
+      {
+        "at": "2026-10-14T03:25:32.564284+00:00",
+        "runner": 3733,
+        "serverGroup": 3776,
+        "ownedGroupsAbsent": true,
+        "ownActiveRecords": [],
+        "normalCleanup": true,
+        "scenarioExit": 1,
+        "providerUncertain": false
+      },
+      {
+        "at": "2026-10-14T03:28:02.811370+00:00",
+        "runner": 6387,
+        "serverGroup": 6428,
+        "ownedGroupsAbsent": true,
+        "ownActiveRecords": [],
+        "normalCleanup": true,
+        "scenarioExit": 1,
+        "providerUncertain": false
+      },
+      {
+        "at": "2026-10-14T03:30:42.111755+00:00",
+        "runner": 10467,
+        "serverGroup": 10506,
+        "ownedGroupsAbsent": true,
+        "ownActiveRecords": [],
+        "scenarioExit": 0,
+        "normalCleanup": true,
+        "providerUncertain": false,
+        "ordinarySourceAndDriverUnchanged": true
+      }
+    ]
+  },
+  "reviewRouting": "Noncore composition;6 gross production lines, no new form or prompt. No mandated independent cold review for this leaf. Parent final actual-diff decision; normal cross-family routing restored for any new required review.",
+  "testDelta": {
+    "files": 1,
+    "lines": 74,
+    "jsdomFiles": 0
+  },
+  "parentInspection": "Parent read all four final judgments/captures and exact resource/source-freeze proof before this commit. Parent-QA-review.json retains its independent verification."
+}
