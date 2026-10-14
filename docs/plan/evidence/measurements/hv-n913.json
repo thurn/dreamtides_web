@@ -1,0 +1,1214 @@
+{
+  "bead": "hv-n913",
+  "source": "ea99c699cc152574cc4923fe306dd88f97e7aa05",
+  "dispatch": {
+    "timestamp": "2026-10-14T18:56:57.678Z",
+    "call_id": "call_d1b37be7222f4e6882344f23ea46585d",
+    "name": "spawn_agent"
+  },
+  "clock": {
+    "start": "2026-10-14T18:56:57.678000+00:00",
+    "cutoff": "2026-10-14T19:16:22.777565+00:00",
+    "inclusiveMin": 19.418326083333334,
+    "scope": "Actual read-only Sage dispatch through parent native evidence collection, audit verification, evidence packaging, required checks and final Git. Actual model sampling and productive CPU UNKNOWN. Final exact Git endpoint/bracket is retained in ignored parent receipt; source record uses immediately preceding cutoff.",
+    "finalCommit": "Exact actual Git bracket and source/candidate captured outside committed source; immediately preceding source cutoff is qualified separately."
+  },
+  "covers": [
+    "hv-1glz",
+    "hv-2boo",
+    "hv-5q7o",
+    "hv-9u6r",
+    "hv-b7x4",
+    "hv-jkcj",
+    "hv-jryq",
+    "hv-jzoy",
+    "hv-umm2.100",
+    "hv-umm2.127",
+    "hv-umm2.263",
+    "hv-umm2.372",
+    "hv-umm2.613",
+    "hv-umm2.675",
+    "hv-umm2.676",
+    "hv-umm2.677",
+    "hv-umm2.679",
+    "hv-umm2.681",
+    "hv-umm2.682",
+    "hv-umm2.683",
+    "hv-umm2.685",
+    "hv-umm2.686",
+    "hv-umm2.687",
+    "hv-umm2.690",
+    "hv-umm2.692",
+    "hv-umm2.95",
+    "hv-x24k"
+  ],
+  "sourcePreservation": {
+    "base": "ea99c699cc152574cc4923fe306dd88f97e7aa05",
+    "count": 27,
+    "records": [
+      {
+        "bead": "hv-1glz",
+        "frictionSHA256": "a93575b45a22b2e14f96f65a3a2ec838e6fbb248bc51441a4865084a7646d4d0",
+        "measurementSHA256": "cdd93314e93aed923927cadefb9981acc114b49d0c16d40fd8289f8a23b9a529",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "recordedAt",
+          "clock",
+          "schemaNormalization",
+          "hostLoadSamples",
+          "scope",
+          "correction",
+          "preservation",
+          "validation",
+          "preparedAssetWarnings",
+          "resources",
+          "delivery"
+        ]
+      },
+      {
+        "bead": "hv-2boo",
+        "frictionSHA256": "88f8e741da1b367f6587c9dbca46c9ce6da8d1b65eef5c704bcaee4a999f6bc4",
+        "measurementSHA256": "612bbce0f90f61100372bebe358df67ebaed7cf5d22b72fef07d19833751e26b",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "clock",
+          "setup",
+          "scope",
+          "finding",
+          "representativePacket",
+          "guidance",
+          "sourcePreservation",
+          "validation",
+          "schemaNormalization",
+          "resources",
+          "limits"
+        ]
+      },
+      {
+        "bead": "hv-5q7o",
+        "frictionSHA256": "ab2e6389353d4a62ff30b20ff4fed36a50205863ac15ee2582a9be03956c9ee2",
+        "measurementSHA256": "5270f94ff0199214c7fdd7f0de709d915707241e5fa82ffe112122f258e7b092",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "dispatch",
+          "evidenceCutoff",
+          "elapsedThroughCutoffS",
+          "futureGit",
+          "admission",
+          "scope",
+          "publicProducer",
+          "contracts",
+          "counterfactual",
+          "validation",
+          "validationSummary",
+          "failurePaths",
+          "resources",
+          "sourceSHA256",
+          "setup",
+          "schemaNormalization",
+          "coldReview"
+        ]
+      },
+      {
+        "bead": "hv-9u6r",
+        "frictionSHA256": "93e3adb63737d2a7822fbf4e5088444c5f2808a05357f416ddd8eabd8337a7aa",
+        "measurementSHA256": "4d53ab1971ea5de8b532a8b3809bea579a875ddc82554568833c4ff2ea4421e2",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "worktree",
+          "branch",
+          "clock",
+          "setup",
+          "source",
+          "sourceAdmission",
+          "schemaNormalization",
+          "hostLoadSamples",
+          "validation",
+          "review",
+          "resources",
+          "rulesDecisions",
+          "cardIssues",
+          "fallout",
+          "preExistingIssues",
+          "investigationCorrections",
+          "delivery"
+        ]
+      },
+      {
+        "bead": "hv-b7x4",
+        "frictionSHA256": "6c9a7cd0c2fafbd963bc852dcb3b0ed271d908ba3afd5fc0aa73833fb13e25b9",
+        "measurementSHA256": "8fd60bf7d3741f927484bea441fa97aefe24e6de7d8a91105ba8d887df1f14a8",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "worktree",
+          "branch",
+          "recordedAt",
+          "clock",
+          "source",
+          "schemaNormalization",
+          "validation",
+          "counterfactual",
+          "failurePaths",
+          "historical689",
+          "investigationCorrections",
+          "delivery",
+          "evidenceCorrection"
+        ]
+      },
+      {
+        "bead": "hv-jkcj",
+        "frictionSHA256": "4c8c13cc66135b261b6e5a7022f46d5b2a93dc76cf533985ec98858d41a686c2",
+        "measurementSHA256": "7ef4b7d672e31e8519261da2743b7c8ea31bb200b0ebb87d7af4a6e0f30fefaa",
+        "measurementKeys": [
+          "bead",
+          "source",
+          "auditStart",
+          "dispatch",
+          "clock",
+          "covers",
+          "sourcePreservation",
+          "finding",
+          "metrics",
+          "causality",
+          "auditReport",
+          "parsedMeasurementAudit",
+          "validation",
+          "schemaNormalization",
+          "resources",
+          "limits",
+          "hostLoadSamples",
+          "parentVerification"
+        ]
+      },
+      {
+        "bead": "hv-jryq",
+        "frictionSHA256": "6faca06c6b348375a68535d2a83617836e04358fb789d8a0810243a9da262380",
+        "measurementSHA256": "289d7e918fefdcaf2256476e3c71f55dbfa2842765d2c9ab98447472f46e267e",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "dispatch",
+          "evidenceCutoff",
+          "elapsedThroughCutoffS",
+          "futureGit",
+          "admission",
+          "implementation",
+          "domainQualification",
+          "tests",
+          "validation",
+          "validationSummary",
+          "failurePaths",
+          "heavy",
+          "resources",
+          "sourceManifestSHA256",
+          "setup",
+          "schemaNormalization",
+          "coldReview"
+        ]
+      },
+      {
+        "bead": "hv-jzoy",
+        "frictionSHA256": "887a47724c32e491362aac2e6aaf80267180121be5f40c1b68ba00997ac2cb2c",
+        "measurementSHA256": "e74a4cb4404e2b94d7a81e5c3378c457bf0a9f26945adf7c8fa307b9a3ec582b",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "dispatch",
+          "evidenceCutoff",
+          "elapsedThroughCutoffS",
+          "futureGit",
+          "sourceAdmission",
+          "originalRuntimeProof",
+          "implementation",
+          "contracts",
+          "counterfactual",
+          "retainedCheckFailure",
+          "validation",
+          "validationSummary",
+          "retainedReviewFailure",
+          "failurePaths",
+          "resources",
+          "proportion",
+          "sourceManifestSHA256",
+          "localRoutingQualification",
+          "setupReceipt",
+          "inclusiveTiming",
+          "schemaNormalization",
+          "coldReview",
+          "originalBase",
+          "originalEvidenceCutoff",
+          "originalSourceManifestSHA256",
+          "integrationRecovery"
+        ]
+      },
+      {
+        "bead": "hv-umm2.100",
+        "frictionSHA256": "4f3b9b57272d3127b2aa0fad781af3f8da07ae3b0a675668168d048a618bf308",
+        "measurementSHA256": "e52de491357228493b5ae478e2e2f3e237c8283454f1499f315067f971071d21",
+        "measurementKeys": [
+          "bead",
+          "baseOID",
+          "dispatchUTC",
+          "originalEntities",
+          "authored",
+          "amplifiedTextPresent",
+          "namedValues",
+          "newCondition",
+          "membership",
+          "newEffectOpEventPromptStatus",
+          "recordPlayedByteUnchanged",
+          "primitiveContracts",
+          "contractLines",
+          "fixtureLines",
+          "scenarioCount",
+          "sourceScope",
+          "preExistingPrerequisite",
+          "runtime",
+          "recoveryContracts",
+          "receipts",
+          "validationQualification",
+          "clockQualification",
+          "fullExecution",
+          "evidenceSnapshotUTC",
+          "functionalFreeze",
+          "actualTestDelta",
+          "implementWindow",
+          "implementMin",
+          "dispatchReceipt",
+          "sourceClockQualification",
+          "qaCommitQualification",
+          "qaSourceProjectionQualification",
+          "initialCheckpoint",
+          "metadataAmendmentQualification"
+        ]
+      },
+      {
+        "bead": "hv-umm2.127",
+        "frictionSHA256": "d59ed5766a6f6b2a7021bfea90dac5c64f55002fcb250216e47d150b0020f6e3",
+        "measurementSHA256": "11adab307237f03efe00cac2fb2912f0a2fbb22d344b9d7a41272e74a591611c",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "assignmentClock",
+          "setupSeparate",
+          "source",
+          "ordinaryValidation",
+          "preflight",
+          "weighted300",
+          "qa",
+          "status",
+          "decisions",
+          "rawEvidence"
+        ]
+      },
+      {
+        "bead": "hv-umm2.263",
+        "frictionSHA256": "2114e746d1f142fd4bface811676acc76743c45d757f5971dfe0ccc6574bcb20",
+        "measurementSHA256": "ff0e6278d5a83d903088b954302a26916b0cd331635d4f6d1ffab20ae05e1b42",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "implementationProvenance",
+          "schemaNormalization",
+          "validation",
+          "support",
+          "failureInterruptRecovery",
+          "nativeQA",
+          "sourceFreeze",
+          "historicalProvenance",
+          "rawReceiptIndex",
+          "reviewStatus",
+          "constructionCounts",
+          "visualReviews",
+          "workflowRecovery",
+          "coreReviewHistory"
+        ]
+      },
+      {
+        "bead": "hv-umm2.372",
+        "frictionSHA256": "4defa50dfa483bab3077076d1cca05acda35e666f4b1d1751d6e3fa520b1efed",
+        "measurementSHA256": "1ffdc5dd2b3452f3d73c676876076c45d3c00f8dccdd7576e40d37707e6582be",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "grossStart",
+          "evidenceEnd",
+          "modelSampling",
+          "windowProvenance",
+          "setupSeparate",
+          "scope",
+          "testDelta",
+          "causal",
+          "focusedAggregate",
+          "review",
+          "hostLoad",
+          "checks",
+          "runtimeQa",
+          "failureApplicability",
+          "preExisting"
+        ]
+      },
+      {
+        "bead": "hv-umm2.613",
+        "frictionSHA256": "4fac5a5a997fee96a11c05877ef848bc10be70cdc2fc59b6bc8e107146e23d86",
+        "measurementSHA256": "4f4348e794b871e707205df76083196b40429c18e0e64c49ce6f72f900f6ba50",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "worktree",
+          "branch",
+          "clock",
+          "setup",
+          "source",
+          "validation",
+          "developmentFailures",
+          "failurePaths",
+          "counterfactuals",
+          "commands",
+          "resources",
+          "acceptanceJoin",
+          "preExistingIssues",
+          "schemaNormalization",
+          "reviewCorrection"
+        ]
+      },
+      {
+        "bead": "hv-umm2.675",
+        "frictionSHA256": "3a864159f231b776761ddaf08d99314d67d755c9a74323948cd5a27ef6ee1433",
+        "measurementSHA256": "d1edd9701fa25eb1adaea22ce952811b3815fe0e2b67e0f97a15cc121b8cd819",
+        "measurementKeys": [
+          "bead",
+          "status",
+          "ownershipWindow",
+          "source",
+          "schemaNormalization",
+          "validation",
+          "coverage",
+          "fuzz",
+          "preflight",
+          "D21",
+          "reviewRouting",
+          "externalObserverFailures",
+          "resources",
+          "remaining",
+          "qa",
+          "qaSupportFriction",
+          "preExistingIssues",
+          "finalEvidenceSchema",
+          "pendingActualGitReceipt"
+        ]
+      },
+      {
+        "bead": "hv-umm2.676",
+        "frictionSHA256": "f193c902d8f97affe04eb04d757f9acd8236795b4a54d88b531492006a613e7a",
+        "measurementSHA256": "ac590728fd60709f48c5416a77ca6271d7010182ab7aff497dee3e9cef67c669",
+        "measurementKeys": [
+          "bead",
+          "phase",
+          "base",
+          "scope",
+          "ruleAndReaderAudit",
+          "D20",
+          "D21",
+          "validation",
+          "retainedAttempts",
+          "failurePaths",
+          "runtime",
+          "schemaNormalization",
+          "testDelta",
+          "hostLoadSamples",
+          "implementationWindow"
+        ]
+      },
+      {
+        "bead": "hv-umm2.677",
+        "frictionSHA256": "3684701c3f5922c7dfd7e02e044cb973a6021ef19c08bdad867f35f54bec262c",
+        "measurementSHA256": "f6a3c047cd86f9c84e6352e69935f1e32d81f97504daef55e0749d97b45d6e99",
+        "measurementKeys": [
+          "bead",
+          "phase",
+          "base",
+          "scope",
+          "ruleAndReaderAudit",
+          "D20",
+          "D21",
+          "validation",
+          "failedAttempts",
+          "commands",
+          "resources",
+          "schemaNormalization",
+          "testDelta",
+          "clock",
+          "reviewRouting",
+          "delivery",
+          "failurePaths"
+        ]
+      },
+      {
+        "bead": "hv-umm2.679",
+        "frictionSHA256": "382eca5100218c3a3fb3352243c0dcd613f9eec5f3aa00abd9a38d97a7f7ce56",
+        "measurementSHA256": "516d47538bf7b64dc92c7fc89b5bf7c16c3ed0a26ce9c750ad9214fbaeb0738d",
+        "measurementKeys": [
+          "bead",
+          "status",
+          "clock",
+          "schemaNormalization",
+          "sourceFreeze",
+          "validation",
+          "decisions",
+          "commands",
+          "hostLoadSamples",
+          "recoveryObservations",
+          "browser"
+        ]
+      },
+      {
+        "bead": "hv-umm2.681",
+        "frictionSHA256": "8edb60535c5c1d06e30dc3a3531d22cdc5df7ea3ca4b509f7e3979508486e70d",
+        "measurementSHA256": "684e664441091f19979b2b82ab8e80f87b15adb27baaace2d84c5a0fe954ac5e",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "branch",
+          "recordedAt",
+          "entities",
+          "counts",
+          "clock",
+          "schemaNormalization",
+          "source",
+          "rules",
+          "d20",
+          "d21",
+          "validation",
+          "qa",
+          "failurePaths",
+          "resources",
+          "fallout",
+          "preExistingIssues",
+          "investigationCorrections",
+          "delivery"
+        ]
+      },
+      {
+        "bead": "hv-umm2.682",
+        "frictionSHA256": "6ea8351e03e20e2526990deb1f63f5580c9563535a2ac073a2207292b9948d93",
+        "measurementSHA256": "2579d4fe71ba6b381fff5387285c3ebb579cada10002fed1734a60679aea6e73",
+        "measurementKeys": [
+          "bead",
+          "status",
+          "ownershipWindow",
+          "source",
+          "validation",
+          "qa",
+          "diagnostics",
+          "schemaNormalization",
+          "heavyStartupAndQueueObservation",
+          "heavyResult",
+          "preQAResourceClosure",
+          "reviewClassification"
+        ]
+      },
+      {
+        "bead": "hv-umm2.683",
+        "frictionSHA256": "b8abfb681b51a9456648a4772747f15ad25e3842a0d6a9ed2d0f87bf15431aa2",
+        "measurementSHA256": "f540ee88fce7b75ef9b4e4fcb22aeb75d8e6ef16418d1c02f4f2597d5d97fdf9",
+        "measurementKeys": [
+          "bead",
+          "sourceBase",
+          "stage",
+          "sourceScope",
+          "timing",
+          "schemaNormalization",
+          "commands",
+          "heavySlot",
+          "validation",
+          "diagnostics",
+          "rules",
+          "testDelta",
+          "qa",
+          "reviewPolicy",
+          "preExistingIssues",
+          "callerDiagnostic"
+        ]
+      },
+      {
+        "bead": "hv-umm2.685",
+        "frictionSHA256": "d94f738a8c465663f375739a7a9ec19418c77d6c6d4e8926b81d7c75fd18ec0c",
+        "measurementSHA256": "96fe1e8964cc138f392426f338035e2212664b8f404def555adfbe58dca5af4c",
+        "measurementKeys": [
+          "bead",
+          "phase",
+          "base",
+          "entities",
+          "sourceEpoch",
+          "finalSourceCheck",
+          "dispatchClock",
+          "implementation",
+          "validation",
+          "failures",
+          "resources",
+          "schemaNormalization",
+          "hostLoadSamples",
+          "timingQualification",
+          "scratchProvenance",
+          "implementWindow",
+          "commitBoundary"
+        ]
+      },
+      {
+        "bead": "hv-umm2.686",
+        "frictionSHA256": "194503f71ce99dde752fb028cdd7b65150ba3fe728331363c5e1e6a186e8fcd4",
+        "measurementSHA256": "76abd20c889dbb732c517f251f72c5f0b82d8ac0127c0cb0f2f66783fbcad961",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "sourceEpoch",
+          "dispatch",
+          "timingScope",
+          "checks",
+          "schemaNormalization",
+          "d20",
+          "d21",
+          "counts",
+          "actualSourceNode",
+          "preflight",
+          "runtimeInProgress",
+          "failures",
+          "coreFailurePaths",
+          "sweep",
+          "weightedFuzz",
+          "browserDesktop",
+          "providerQuarantine",
+          "pendingAcceptance",
+          "browserMobile",
+          "finalCaptures",
+          "resourceSettlement",
+          "inclusiveWindow",
+          "frictionWindow"
+        ]
+      },
+      {
+        "bead": "hv-umm2.687",
+        "frictionSHA256": "7cea9b84f16dd3137fd1dda11fd8d700728650e9105410a4e417ae1421e300ed",
+        "measurementSHA256": "8dd19a33792c609d324decfa2f16f5e09ea7388dd203a3d7be0d2a0cfd6ce2fb",
+        "measurementKeys": [
+          "bead",
+          "phase",
+          "base",
+          "scope",
+          "clauseAudit",
+          "D20",
+          "D21",
+          "checks",
+          "browser",
+          "callers",
+          "retainedFailures",
+          "failurePaths",
+          "runtime",
+          "schemaNormalization",
+          "testDelta",
+          "implementationWindow",
+          "timingQualification",
+          "independentReview"
+        ]
+      },
+      {
+        "bead": "hv-umm2.690",
+        "frictionSHA256": "2e075d7ad640fe8196d7d5de08f44e978757d1de36fd2b40b5aff18063ac9577",
+        "measurementSHA256": "667134c8faa09ca36ffbbdf0a96217a29bc14f35109bcf9ab453b8e3d5070383",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "worktree",
+          "branch",
+          "recordedAt",
+          "clock",
+          "schemaNormalization",
+          "source",
+          "validation",
+          "failurePaths",
+          "investigationCorrections",
+          "delivery"
+        ]
+      },
+      {
+        "bead": "hv-umm2.692",
+        "frictionSHA256": "c6c716c2352fc6d1db12036a57e3a99e2ed16198921be72f266f8228e4ff58c6",
+        "measurementSHA256": "1780a7b65570f4f74c3d066879689c873c48d9d61715fd39eac3d06e45e866f9",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "sourceScope",
+          "implementWindow",
+          "implementMin",
+          "schemaNormalization",
+          "hostLoadSamples",
+          "checks",
+          "focusedCoverage",
+          "validationQualification",
+          "testDelta",
+          "fallout",
+          "failurePaths",
+          "runtimeLedger",
+          "rulesDecisions",
+          "cardIssues",
+          "preExistingSourceDefects",
+          "review",
+          "auditNotes"
+        ]
+      },
+      {
+        "bead": "hv-umm2.95",
+        "frictionSHA256": "3445ce9b628a80f4e17302804a0de9f88c1b18ec3c60875ee075ebfac6e7baf8",
+        "measurementSHA256": "b6f8a9f7e8228b5934e68b70fe41a0b9e032a81f48597b597f97278b0f5406c4",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "dispatch",
+          "cutoff",
+          "inclusiveImplementationMin",
+          "commitStatus",
+          "firstActualOrdinaryReviewStep",
+          "schemaNormalization",
+          "hostLoadSamples",
+          "sourceBudget",
+          "actualCheckReceipts",
+          "timingQualification",
+          "scope",
+          "d10",
+          "inventoryProjection",
+          "frozenQASource",
+          "counterfactuals",
+          "failureRecoveryPaths",
+          "retainedFailures",
+          "qa",
+          "resources",
+          "samplingStart",
+          "originalImplementation",
+          "integration",
+          "originalCheckSource",
+          "counterfactualSourceEpoch"
+        ]
+      },
+      {
+        "bead": "hv-x24k",
+        "frictionSHA256": "b42d09fc9e020ba0e9c9d39b7a41d5a3562bbb19799cd558262c4dd26cbf3248",
+        "measurementSHA256": "9b7cda91a59c6c853385e2f45aeb18de779161ee5142cca89124aa872b8aa92c",
+        "measurementKeys": [
+          "bead",
+          "base",
+          "dispatch",
+          "evidenceCutoff",
+          "elapsedThroughCutoffS",
+          "futureGit",
+          "admission",
+          "diagnostic",
+          "implementation",
+          "tests",
+          "counterfactual",
+          "validation",
+          "validationSummary",
+          "retainedCheckFailure",
+          "failurePaths",
+          "resources",
+          "proportion",
+          "sourceManifestSHA256",
+          "inclusiveTiming",
+          "schemaNormalization",
+          "hostLoadSamples",
+          "schema",
+          "coldReview"
+        ]
+      }
+    ],
+    "originalLedgerSHA256": "edbf5c219c9e8d7e6ea9df987a9ad9615280d7287dc28a6329a4c52852e4b556",
+    "originalLedgerBytes": 21243
+  },
+  "validation": {
+    "review-v1": {
+      "bead": "hv-n913",
+      "label": "review-v1",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retro-n913",
+      "sourceManifestSHA256": "f3a9719ac14f54df1df66e7edc10acb7ae4dd730626bf8a1e51c4ff221547e79",
+      "pid": 51293,
+      "pgid": 51293,
+      "processIdentityBeforeEffect": "51293 51271 51293 Wed Oct 14 12:14:40 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import os,sys;fd=int(sys.argv[1]);os.read(fd,1);os.close(fd);os.execvp(sys.argv[2],sys.argv[2:]) 3 npm run review",
+      "start": "2026-10-14T19:14:40.237280+00:00",
+      "launchLoad": "{ 2.90 4.54 7.25 }",
+      "state": "settled",
+      "end": "2026-10-14T19:14:40.477548+00:00",
+      "elapsedS": 0.24017008300870657,
+      "exit": 0,
+      "childReaped": true,
+      "remainingOwnedGroup": [],
+      "sourceUnchanged": true,
+      "stdoutSHA256": "1adca5750a2e987c880beedf2817c151036182c6302ec382acafacffbcf2854a",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "knip-v1": {
+      "bead": "hv-n913",
+      "label": "knip-v1",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retro-n913",
+      "sourceManifestSHA256": "f3a9719ac14f54df1df66e7edc10acb7ae4dd730626bf8a1e51c4ff221547e79",
+      "pid": 51545,
+      "pgid": 51545,
+      "processIdentityBeforeEffect": "51545 51521 51545 Wed Oct 14 12:14:50 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import os,sys;fd=int(sys.argv[1]);os.read(fd,1);os.close(fd);os.execvp(sys.argv[2],sys.argv[2:]) 3 npm run knip",
+      "start": "2026-10-14T19:14:50.050019+00:00",
+      "launchLoad": "{ 2.91 4.49 7.20 }",
+      "state": "settled",
+      "end": "2026-10-14T19:14:55.438572+00:00",
+      "elapsedS": 5.388428333972115,
+      "exit": 0,
+      "childReaped": true,
+      "remainingOwnedGroup": [],
+      "sourceUnchanged": true,
+      "stdoutSHA256": "bed80e5ede3cd43c881ea745ef29da6fd4f769358324016f3886f2595f3ee002",
+      "stderrSHA256": "0e68e55f749c97e1a49151a5594ce51d3e4cd74da8af38e36279039bab731744"
+    },
+    "schema-v1": {
+      "bead": "hv-n913",
+      "label": "schema-v1",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retro-n913",
+      "sourceManifestSHA256": "78407a68b34d701dd2a9adf406aa62709d1a792223f1fed9ede4426909d7bfc9",
+      "pid": 52355,
+      "pgid": 52355,
+      "processIdentityBeforeEffect": "52355 52337 52355 Wed Oct 14 12:15:27 2026     /opt/homebrew/opt/python@3.14/bin/python3.14 -c import os,sys;fd=int(sys.argv[1]);os.read(fd,1);os.close(fd);os.execvp(sys.argv[2],sys.argv[2:]) 3 node scripts/friction-triggers.mjs --validate-records",
+      "start": "2026-10-14T19:15:27.683257+00:00",
+      "launchLoad": "{ 2.80 4.29 7.02 }",
+      "state": "settled",
+      "end": "2026-10-14T19:15:27.756281+00:00",
+      "elapsedS": 0.07293145800940692,
+      "exit": 0,
+      "childReaped": true,
+      "remainingOwnedGroup": [],
+      "sourceUnchanged": true,
+      "stdoutSHA256": "5f9c5ba6e8756406be146d71e4f161396452e10960684e91798c9227ebd56e57",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual ordinary review friction-records step starting load; document-only schema pass, no runtime test/lint/typecheck pass claim.",
+        "at": "2026-10-14T19:14:40.411Z",
+        "load": 2.89794921875
+      }
+    }
+  },
+  "budgetChanges": [],
+  "filedImprovements": [],
+  "resources": {
+    "browserRequired": false,
+    "fullRequired": false,
+    "independentCodeReviewRequired": false,
+    "runtimeSourceDelta": 0,
+    "testDelta": 0,
+    "sageTerminal": true,
+    "ownedRemaining": []
+  },
+  "qualification": "Read-only audit of all27 frozen friction/measurement records. Native supplemental13 exact candidate receipts establish their promotion/generation/results only. Partial500event history/loadunknowns do not establish whole-interval repair counts, production defects, speedup or integrated D19 compliance. Mechanical receipts inspected without rerunning validation or rejudging images.",
+  "sage": {
+    "task": "/root/sage_retro_n913",
+    "terminal": true,
+    "readonly": true,
+    "completeCohort": 27,
+    "inputInventorySHA256": "63336c50f1e409584a16c793fb00d5243762481a57a60508da3b0e6e7bdd0d67",
+    "findings": [],
+    "filedImprovements": [],
+    "newTriggerDispositions": [],
+    "budgetsUnchanged": true
+  },
+  "auditReport": "docs/plan/evidence/retrospectives/hv-n913.md",
+  "nativeGateSample": {
+    "n": 13,
+    "medianStepSumS": 88.216,
+    "rangeS": [
+      20.407,
+      105.802
+    ],
+    "candidates": [
+      {
+        "candidate": "01a13b48-2647-7812-92d5-b06ccae55773",
+        "generation": "01a13b48-2cbb-7321-a845-77f57880fb60",
+        "buildset": "01a13b48-2d82-7442-bac3-884859a0e7d8",
+        "tested": "8dbcf0cdfc949b2c53cca1f67da1587c244340f5",
+        "stepSumS": 39.2,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 5085,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 34115,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "d7855fafacc8a84be3dc39aff41d31070ad28060d0e3f4ea5455d7c84e35d43f"
+      },
+      {
+        "candidate": "01a13b59-ec71-7af1-9999-b00c96642c5b",
+        "generation": "01a13b59-f354-7c90-8325-adf6319fe78c",
+        "buildset": "01a13b59-f4c8-7342-8a5e-cab874f2cfc5",
+        "tested": "e3d899fbd732319980b8f279665edefbdddbe9fd",
+        "stepSumS": 94.372,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 4740,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 89632,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "a4b84e27dd556e65c919fb58b2467a817281b7f17436bd9b2d195ad223a8142c"
+      },
+      {
+        "candidate": "01a13b73-5146-7fa0-b58b-07ddae89384f",
+        "generation": "01a13b73-572f-7bd3-adc0-630a2bd4331a",
+        "buildset": "01a13b73-577e-7a83-8178-bd2c791fe674",
+        "tested": "698e19d506bd49034a4feb9ac829f5502c3d3d0f",
+        "stepSumS": 85.263,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 4531,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 80732,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "5cc758d6d7be9ec8fdf6a34678bc92236c8d9ae5e08bf0f6a097fa74545c8af5"
+      },
+      {
+        "candidate": "01a13b82-e390-7220-b4c6-fb05ba72a6d0",
+        "generation": "01a13b82-f806-7471-9955-05ccf23adf52",
+        "buildset": "01a13b82-f8bd-7c60-bc48-619bc9fa7f07",
+        "tested": "ae5a64df23fcf5a6b60e77a72d22e915e923b25a",
+        "stepSumS": 100.594,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 6383,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 94211,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "1533768b5f4f36421e4e6dc5535474b1f2905eedc8eb439c87a48472b87ea14f"
+      },
+      {
+        "candidate": "01a13b84-26b8-7421-9167-1a44d0292e6f",
+        "generation": "01a13b84-2e79-7e30-af87-7cbe78850576",
+        "buildset": "01a13b84-2f32-7851-8b11-b2035cfeaae1",
+        "tested": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+        "stepSumS": 101.695,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 5249,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 96446,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "226aad439b96a3436230e5b3a1c91f413c52836f71509660e07a534ef908d6ae"
+      },
+      {
+        "candidate": "01a13b88-e9e6-7e70-b494-1bb23a3e82ca",
+        "generation": "01a13b88-eea5-7fe3-9d91-acbc214b6dba",
+        "buildset": "01a13b88-ef18-7222-88f7-c749ac355c66",
+        "tested": "c7830e0ebfca3cb05dc50b5dd7b37ddfb9f20434",
+        "stepSumS": 88.216,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 4631,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 83585,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "2bd64afe106e7a54b38ae3ba46f83b1a9cc6492d00b450d78a56ab6d04715c3b"
+      },
+      {
+        "candidate": "01a13b8a-e8c8-7c73-b12e-24fc95196add",
+        "generation": "01a13b96-8ee5-7461-aa56-ea70083a9ee6",
+        "buildset": "01a13b96-905f-7d21-b07d-f64ebf739262",
+        "tested": "7203b7ef4a5d6f61657fe31e3e94ee4ec58b6f92",
+        "stepSumS": 105.802,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 6862,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 98940,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "ddbd0c17525f69ceed66990ea63fa871cf4d7f1cd786a4024de5dac65ec78ee5"
+      },
+      {
+        "candidate": "01a13b8a-a7be-7741-93ed-5a3540369f76",
+        "generation": "01a13b8a-ac2a-7c42-8075-54f1da205045",
+        "buildset": "01a13b8a-acc4-7a50-999e-1e72a48b9ba8",
+        "tested": "4c9be8b23da1f29f2fdefd125f001251e22f1d26",
+        "stepSumS": 87.466,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 4490,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 82976,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "544256050070a723df572245a47826d5dee7f254fcab08f46e28aed9648a8f22"
+      },
+      {
+        "candidate": "01a13b96-1ce5-7fd3-adbf-dca04c4d72c8",
+        "generation": "01a13b96-8edf-7441-9253-69e7392dfec3",
+        "buildset": "01a13b96-9052-7b42-8e4c-99f37d3a6f93",
+        "tested": "4c6cf587203796b97a39aa0ddd0b8e23a9f3fe20",
+        "stepSumS": 20.407,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 5322,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 15085,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "2208b62a7674d5eae0235442de5e8470c584a8739270460231415eec12b6e009"
+      },
+      {
+        "candidate": "01a13b9b-2c70-7071-acea-ef0746c38ab3",
+        "generation": "01a13b9b-3247-74d3-aa22-ae949e9aa727",
+        "buildset": "01a13b9b-32c0-7f23-b7c1-4cde1acd37de",
+        "tested": "b8afed590c7f64f47f7d61511335f9985dff443f",
+        "stepSumS": 31.168,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 5651,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 25517,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "d39922387cdd11787dee59900ce846561a11ca1f60f460a605946c05ea2bf038"
+      },
+      {
+        "candidate": "01a13ba1-8a31-7a03-be8b-be89f9e1133a",
+        "generation": "01a13ba1-8fae-7733-8961-a008bc9dd36f",
+        "buildset": "01a13ba1-90c2-7b63-962f-0910c5de3acf",
+        "tested": "65bca05176caa99e76aafc34f9a7d350df14467a",
+        "stepSumS": 103.25,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 4277,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 98973,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "55a87e715884127ca8fa44f2a21b3643e3319be739651ce54f786922f0b0ff11"
+      },
+      {
+        "candidate": "01a13ba7-3f27-7122-b196-67e5f527344f",
+        "generation": "01a13ba7-4447-72b3-900a-4da3fc5284e9",
+        "buildset": "01a13ba7-44f0-7262-82ff-eb9ae67c1651",
+        "tested": "5a8a744dfa1f1c339de355b16f7da16d31283030",
+        "stepSumS": 88.827,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 5478,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 83349,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "46b631604cccf30b54729032192ce713a54475e2d04e31caced5be206e09126b"
+      },
+      {
+        "candidate": "01a13bac-dc55-7dc3-844a-dc23e5e213f0",
+        "generation": "01a13bac-e1f4-7f02-8288-5c4f5fc88a6c",
+        "buildset": "01a13bac-e297-7422-b998-71f9426a1c7a",
+        "tested": "06785f79317fb3af0e564d2798513cd458519ad0",
+        "stepSumS": 87.763,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsed_ms": 4663,
+            "reused_from_attempt_id": null
+          },
+          {
+            "name": "review-gate",
+            "elapsed_ms": 83100,
+            "reused_from_attempt_id": null
+          }
+        ],
+        "receiptSHA256": "c95cbd90298979c4e3c1e127f7d33c0a6e68a77dbb154e6f9d73fd2473bba6b7"
+      }
+    ],
+    "qualification": "Exact current-generation passed buildset step sums; no whole pipeline/admission/wait/comparable-load attribution."
+  },
+  "metrics": {
+    "releases": {
+      "n": 20,
+      "medianStepSumS": 327.3635,
+      "rangeS": [
+        306.359,
+        382.37
+      ],
+      "medianStatusElapsedS": 328.2375,
+      "reviewFullMedianS": 112.4745,
+      "fuzz200MedianS": 208.34,
+      "loads": "UNKNOWN"
+    },
+    "localSelectedReview": {
+      "n": 27,
+      "medianS": 59.455,
+      "rangeS": [
+        0.271,
+        77.908
+      ],
+      "scope": "One selected actual ordinary invocation per cohort bead; mixed scopes/cache/source/load."
+    },
+    "focused": {
+      "n": 23,
+      "medianS": 7.58,
+      "rangeS": [
+        3.539,
+        20.985
+      ],
+      "scope": "Mixed file/aggregate/filter selections."
+    },
+    "cohortGrossMin": 2077.365,
+    "grossQualification": "Sum of overlapping ownership windows including interruptions, not project wall/productive CPU.",
+    "staticClasses": {
+      "testEntrypoints": 387,
+      "primitiveContractModules": 198,
+      "scenarioModules": 68,
+      "explicitJsdomPragmas": 85,
+      "informational": true
+    },
+    "history": {
+      "events": 500,
+      "sequence": [
+        28628,
+        29127
+      ],
+      "first": "2026-10-14T16:39:52.107115Z",
+      "last": "2026-10-14T18:51:46.765198Z",
+      "promotions": 21,
+      "mergeConflicts": 2,
+      "releasePassEvents": 17,
+      "releaseSupersessions": 3,
+      "wholeIntervalCoverage": false
+    },
+    "d19": "Historical q331 final normal test59.6s/upper59.643 at continuous load2.304\u20135.178; current100/95 test62.8s observed at starting5.592/7.167. Gate46 retains integrated measurement. No comparable triple, speedclaim or budgetrevision."
+  },
+  "causality": {
+    "canonicalReviewReadability": [
+      "hv-2boo",
+      "hv-umm2.673"
+    ],
+    "canonicalQA": [
+      "hv-umm2.308",
+      "hv-umm2.391",
+      "hv-umm2.428"
+    ],
+    "existingFollowups": [
+      "hv-umm2.691",
+      "hv-umm2.693",
+      "hv-odqg"
+    ],
+    "allFiredTagsDispositioned": true,
+    "newDistinctCause": false,
+    "newTests": false
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-14T19:14:39.617381+00:00",
+      "load": 2.98,
+      "scope": "Parent pre-validation launch observation"
+    },
+    {
+      "command": "review-v1",
+      "at": "2026-10-14T19:14:40.237280+00:00",
+      "loadRaw": "{ 2.90 4.54 7.25 }",
+      "scope": "Invocation launch"
+    },
+    {
+      "command": "knip-v1",
+      "at": "2026-10-14T19:14:50.050019+00:00",
+      "loadRaw": "{ 2.91 4.49 7.20 }",
+      "scope": "Invocation launch"
+    }
+  ],
+  "parentVerification": {
+    "all27FrictionAndMeasurementHashesMatch": true,
+    "olderLedgerPrefixExact": true,
+    "candidateGenerationCertificateBindingsMatch": true,
+    "readOnlySageTerminal": true,
+    "nativePhaseSummaryACK": true
+  }
+}

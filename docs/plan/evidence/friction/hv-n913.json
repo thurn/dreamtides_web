@@ -1,0 +1,21 @@
+{
+  "bead": "hv-n913",
+  "phase": 5,
+  "implementMin": 19.418326083333334,
+  "implementWindow": {
+    "start": "2026-10-14T18:56:57.678000+00:00",
+    "end": "2026-10-14T19:16:22.777565+00:00"
+  },
+  "localValidationS": {
+    "review-v1": 0.24017008300870657,
+    "knip-v1": 5.388428333972115,
+    "schema-v1": 0.07293145800940692
+  },
+  "hostLoad": 2.89794921875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
