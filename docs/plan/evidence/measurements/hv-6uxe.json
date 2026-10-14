@@ -1,0 +1,684 @@
+{
+  "bead": "hv-6uxe",
+  "base": "8bade8063807c4b049cf18ee843550081482ee38",
+  "status": "Validated bounded test/evidence repair; both exact admitted counterfactuals restored and final controls pass. One automatic commit requires exact parent final-freeze admission.",
+  "clock": {
+    "start": "2026-10-14T14:25:05.154226+00:00",
+    "preCommitEvidenceBoundary": "2026-10-14T14:45:38.900402+00:00",
+    "inclusiveElapsedMin": 20.56243626666667,
+    "qualification": "Conservative parent pre-spawn bound includes research, coordination waits, validation, evidence and final automatic Git; exact child sampling/productive time unknown. Tracked endpoint is the last evidence write before commit; external finalizer receipt covers actual final checks and Git. No postcommit tracked rewrite."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-2 starting load"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "schema-1": {
+      "start": "2026-10-14T14:37:16.300719+00:00",
+      "oneMinute": 19.3349609375,
+      "fiveMinute": 12.3759765625,
+      "fifteenMinute": 10.8056640625
+    },
+    "knip-1": {
+      "start": "2026-10-14T14:35:46.732147+00:00",
+      "oneMinute": 10.986328125,
+      "fiveMinute": 10.27099609375,
+      "fifteenMinute": 10.02978515625
+    },
+    "review-1": {
+      "start": "2026-10-14T14:35:46.732115+00:00",
+      "oneMinute": 10.986328125,
+      "fiveMinute": 10.27099609375,
+      "fifteenMinute": 10.02978515625
+    },
+    "focused-1": {
+      "start": "2026-10-14T14:34:15.268381+00:00",
+      "oneMinute": 7.04052734375,
+      "fiveMinute": 10.15576171875,
+      "fifteenMinute": 9.9931640625
+    },
+    "restored-generic": {
+      "start": "2026-10-14T14:40:50.648054+00:00",
+      "oneMinute": 10.154296875,
+      "fiveMinute": 12.037109375,
+      "fifteenMinute": 11.09033203125
+    },
+    "cf1-boundary": {
+      "start": "2026-10-14T14:40:35.832296+00:00",
+      "oneMinute": 10.88671875,
+      "fiveMinute": 12.263671875,
+      "fifteenMinute": 11.15185546875
+    },
+    "cf1-generic": {
+      "start": "2026-10-14T14:40:40.087839+00:00",
+      "oneMinute": 10.7353515625,
+      "fiveMinute": 12.20947265625,
+      "fifteenMinute": 11.13916015625
+    },
+    "restored-active-turn": {
+      "start": "2026-10-14T14:40:46.449549+00:00",
+      "oneMinute": 10.51611328125,
+      "fiveMinute": 12.13916015625,
+      "fifteenMinute": 11.12060546875
+    },
+    "whitespace-2": {
+      "start": "2026-10-14T14:42:16.005733+00:00",
+      "oneMinute": 9.6923828125,
+      "fiveMinute": 11.55029296875,
+      "fifteenMinute": 11.0
+    },
+    "cf2-transfer": {
+      "start": "2026-10-14T14:40:42.065010+00:00",
+      "oneMinute": 10.7353515625,
+      "fiveMinute": 12.20947265625,
+      "fifteenMinute": 11.13916015625
+    },
+    "whitespace-1": {
+      "start": "2026-10-14T14:37:19.560805+00:00",
+      "oneMinute": 20.58935546875,
+      "fiveMinute": 12.75146484375,
+      "fifteenMinute": 10.947265625
+    },
+    "schema-2": {
+      "start": "2026-10-14T14:42:15.503819+00:00",
+      "oneMinute": 9.6923828125,
+      "fiveMinute": 11.55029296875,
+      "fifteenMinute": 11.0
+    },
+    "generic-control-1": {
+      "start": "2026-10-14T14:34:38.562819+00:00",
+      "oneMinute": 7.3017578125,
+      "fiveMinute": 10.01416015625,
+      "fifteenMinute": 9.9462890625
+    },
+    "knip-2": {
+      "start": "2026-10-14T14:41:41.010236+00:00",
+      "oneMinute": 10.88525390625,
+      "fiveMinute": 11.98876953125,
+      "fifteenMinute": 11.12744140625
+    },
+    "review-2": {
+      "start": "2026-10-14T14:36:40.539461+00:00",
+      "oneMinute": 10.27880859375,
+      "fiveMinute": 10.02734375,
+      "fifteenMinute": 9.94384765625
+    }
+  },
+  "validation": {
+    "cf1-boundary": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "rechecks cleanup-born materialization triggers across the Ending turn boundary"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:40:35.832296+00:00",
+      "end": "2026-10-14T14:40:39.696241+00:00",
+      "wallS": 3.8637608340000003,
+      "exitCode": 1,
+      "pid": 81917,
+      "pgid": 81917,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "b1a798b89ae3197b607a310cbce405dc923735acf6757da89f232145c38e835f",
+      "afterManifestSHA256": "b1a798b89ae3197b607a310cbce405dc923735acf6757da89f232145c38e835f",
+      "sourceChanged": [],
+      "stdoutSHA256": "fe1f16fd72a87db0b0a6663900880141e90d81bd4e23e535cea55b774b1b3cbb",
+      "stderrSHA256": "987041736ec418ebd2d2284d853a712adc3a928763b0ae0bb4bcc1dc892e9d98",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "expected semantic counterfactual failure"
+    },
+    "cf1-generic": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "-t",
+        "checks an intervening 'if' when the ability triggers and again as it resolves"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:40:40.087839+00:00",
+      "end": "2026-10-14T14:40:41.166653+00:00",
+      "wallS": 1.0786702090000002,
+      "exitCode": 0,
+      "pid": 82247,
+      "pgid": 82247,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "b1a798b89ae3197b607a310cbce405dc923735acf6757da89f232145c38e835f",
+      "afterManifestSHA256": "b1a798b89ae3197b607a310cbce405dc923735acf6757da89f232145c38e835f",
+      "sourceChanged": [],
+      "stdoutSHA256": "5b04409a7bd52cf83890a42ff2c3c44149aa6df3acfe01bf9c526c0af9e88ed4",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "cf2-transfer": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "binds transferred static and queued conditions to the current controller"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:40:42.065010+00:00",
+      "end": "2026-10-14T14:40:45.900623+00:00",
+      "wallS": 3.83543375,
+      "exitCode": 1,
+      "pid": 82369,
+      "pgid": 82369,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "afbb69e53e41dba4c8979869db0b041006a0ed28330d949586d544f9893bf458",
+      "afterManifestSHA256": "afbb69e53e41dba4c8979869db0b041006a0ed28330d949586d544f9893bf458",
+      "sourceChanged": [],
+      "stdoutSHA256": "c13ff9eb56157aa712c9a48c55e7e73967259314441c68f0a3855231191f9002",
+      "stderrSHA256": "9fa727ea6e383f4224b299660874c7cb282233ca5d0ede95a1220ec51fadbb94",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "expected semantic counterfactual failure"
+    },
+    "focused-1": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "active-turn condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:34:15.268381+00:00",
+      "end": "2026-10-14T14:34:19.809641+00:00",
+      "wallS": 4.541049957973883,
+      "exitCode": 0,
+      "pid": 14169,
+      "pgid": 14169,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "02a58af6d80717a2f51eeaf3499a7c79e2d433d27ffa806b18163e430f6ee763",
+      "afterManifestSHA256": "02a58af6d80717a2f51eeaf3499a7c79e2d433d27ffa806b18163e430f6ee763",
+      "sourceChanged": [],
+      "stdoutSHA256": "25e137ad9b37ce579e26cee05e379b21c428f8bb6ab226898b568352cb2f015b",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "generic-control-1": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "-t",
+        "checks an intervening 'if' when the ability triggers and again as it resolves"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:34:38.562819+00:00",
+      "end": "2026-10-14T14:34:39.756376+00:00",
+      "wallS": 1.1933406669995748,
+      "exitCode": 0,
+      "pid": 15621,
+      "pgid": 15621,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "02a58af6d80717a2f51eeaf3499a7c79e2d433d27ffa806b18163e430f6ee763",
+      "afterManifestSHA256": "02a58af6d80717a2f51eeaf3499a7c79e2d433d27ffa806b18163e430f6ee763",
+      "sourceChanged": [],
+      "stdoutSHA256": "9db6920de5b8ebec64c0855deae381061bf61997ca49da81e6ad5d3b71f72ebe",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "knip-1": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:35:46.732147+00:00",
+      "end": "2026-10-14T14:35:51.950672+00:00",
+      "wallS": 5.218351250019623,
+      "exitCode": 0,
+      "pid": 18657,
+      "pgid": 18657,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "951b7b5213f22a425b1464f0992ab5d8bbb1e4774e6805bdcfc7b779e1b72bd3",
+      "afterManifestSHA256": "951b7b5213f22a425b1464f0992ab5d8bbb1e4774e6805bdcfc7b779e1b72bd3",
+      "sourceChanged": [],
+      "stdoutSHA256": "44ffac193bd4637bcd009e061aba59066483040905c3790de5a513343cc9666e",
+      "stderrSHA256": "5324d9885b1a93e10e8b1a6548c39b8dac400df7b1db74c9190675d88821aff1",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "knip-2": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:41:41.010236+00:00",
+      "end": "2026-10-14T14:41:45.174118+00:00",
+      "wallS": 4.1637213329959195,
+      "exitCode": 0,
+      "pid": 86237,
+      "pgid": 86237,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "d3a67d3f52c957c1dfca5a55a335051228c40b0f168a5e975c9343326e3b6783",
+      "afterManifestSHA256": "d3a67d3f52c957c1dfca5a55a335051228c40b0f168a5e975c9343326e3b6783",
+      "sourceChanged": [],
+      "stdoutSHA256": "6c9610ce350c278592475f14289a7aba0617942d860ee4c25cea65318130f027",
+      "stderrSHA256": "5324d9885b1a93e10e8b1a6548c39b8dac400df7b1db74c9190675d88821aff1",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "restored-active-turn": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "active-turn condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:40:46.449549+00:00",
+      "end": "2026-10-14T14:40:50.274803+00:00",
+      "wallS": 3.8250256249999994,
+      "exitCode": 0,
+      "pid": 82656,
+      "pgid": 82656,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "e5ab89fbb3000300fd333e49fbf5f21efec40829b6580ba4e7f6b7e5cf2ac02f",
+      "afterManifestSHA256": "e5ab89fbb3000300fd333e49fbf5f21efec40829b6580ba4e7f6b7e5cf2ac02f",
+      "sourceChanged": [],
+      "stdoutSHA256": "037dc590785420ae0de3f7b0cccbf6b9aa6839696a47adb685d0516acc74b679",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "restored-generic": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "-t",
+        "checks an intervening 'if' when the ability triggers and again as it resolves"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:40:50.648054+00:00",
+      "end": "2026-10-14T14:40:51.762862+00:00",
+      "wallS": 1.114598625,
+      "exitCode": 0,
+      "pid": 82931,
+      "pgid": 82931,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "e5ab89fbb3000300fd333e49fbf5f21efec40829b6580ba4e7f6b7e5cf2ac02f",
+      "afterManifestSHA256": "e5ab89fbb3000300fd333e49fbf5f21efec40829b6580ba4e7f6b7e5cf2ac02f",
+      "sourceChanged": [],
+      "stdoutSHA256": "611c46655ca3816c51a83fe4149f426e5907479a40dc70b4fa491c29838c4ebf",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "review-1": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:35:46.732115+00:00",
+      "end": "2026-10-14T14:36:05.119332+00:00",
+      "wallS": 18.3868797920004,
+      "exitCode": 1,
+      "pid": 18656,
+      "pgid": 18656,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "951b7b5213f22a425b1464f0992ab5d8bbb1e4774e6805bdcfc7b779e1b72bd3",
+      "afterManifestSHA256": "951b7b5213f22a425b1464f0992ab5d8bbb1e4774e6805bdcfc7b779e1b72bd3",
+      "sourceChanged": [],
+      "stdoutSHA256": "c428b9dd6b05e76842193381bb35d427ddc4463d4879a4691b22717f9d194757",
+      "stderrSHA256": "5324d9885b1a93e10e8b1a6548c39b8dac400df7b1db74c9190675d88821aff1",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "unintended lint failure superseded by review-2"
+    },
+    "review-2": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:36:40.539461+00:00",
+      "end": "2026-10-14T14:37:04.380641+00:00",
+      "wallS": 23.840748999995412,
+      "exitCode": 0,
+      "pid": 20957,
+      "pgid": 20957,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "df5971f60926dd1975d00cfdd7b0987613cd42776a679bca6de7884457af4e2e",
+      "afterManifestSHA256": "df5971f60926dd1975d00cfdd7b0987613cd42776a679bca6de7884457af4e2e",
+      "sourceChanged": [],
+      "stdoutSHA256": "65d3f388cd669c032c1c3dbbcd66fa222f3ef3f5ec744c95cf3af1d787a6f067",
+      "stderrSHA256": "5324d9885b1a93e10e8b1a6548c39b8dac400df7b1db74c9190675d88821aff1",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "schema-1": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:37:16.300719+00:00",
+      "end": "2026-10-14T14:37:16.379723+00:00",
+      "wallS": 0.07891029200982302,
+      "exitCode": 0,
+      "pid": 5769,
+      "pgid": 5769,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "e5ab89fbb3000300fd333e49fbf5f21efec40829b6580ba4e7f6b7e5cf2ac02f",
+      "afterManifestSHA256": "e5ab89fbb3000300fd333e49fbf5f21efec40829b6580ba4e7f6b7e5cf2ac02f",
+      "sourceChanged": [],
+      "stdoutSHA256": "ca0edf5606384d869c347826e45441a53a34036e4471592a8e75cd424353f630",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "schema-2": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:42:15.503819+00:00",
+      "end": "2026-10-14T14:42:15.639481+00:00",
+      "wallS": 0.13548695799545385,
+      "exitCode": 0,
+      "pid": 88496,
+      "pgid": 88496,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "f6f2ccdc25a0bb6100ba8184342f1251074052ec972ea08fe88cbfb0bf3154ca",
+      "afterManifestSHA256": "f6f2ccdc25a0bb6100ba8184342f1251074052ec972ea08fe88cbfb0bf3154ca",
+      "sourceChanged": [],
+      "stdoutSHA256": "ca0edf5606384d869c347826e45441a53a34036e4471592a8e75cd424353f630",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "whitespace-1": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:37:19.560805+00:00",
+      "end": "2026-10-14T14:37:19.573335+00:00",
+      "wallS": 0.012367541989078745,
+      "exitCode": 0,
+      "pid": 7137,
+      "pgid": 7137,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "e5ab89fbb3000300fd333e49fbf5f21efec40829b6580ba4e7f6b7e5cf2ac02f",
+      "afterManifestSHA256": "e5ab89fbb3000300fd333e49fbf5f21efec40829b6580ba4e7f6b7e5cf2ac02f",
+      "sourceChanged": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    },
+    "whitespace-2": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+      "start": "2026-10-14T14:42:16.005733+00:00",
+      "end": "2026-10-14T14:42:16.017311+00:00",
+      "wallS": 0.011399749986594543,
+      "exitCode": 0,
+      "pid": 88518,
+      "pgid": 88518,
+      "childReaped": true,
+      "actualGroupAbsent": true,
+      "beforeManifestSHA256": "f6f2ccdc25a0bb6100ba8184342f1251074052ec972ea08fe88cbfb0bf3154ca",
+      "afterManifestSHA256": "f6f2ccdc25a0bb6100ba8184342f1251074052ec972ea08fe88cbfb0bf3154ca",
+      "sourceChanged": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "collectorSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+      "classification": "passed"
+    }
+  },
+  "tests": {
+    "activeTurnCases": 16,
+    "ownDuplicateGenericCasesDeleted": 2,
+    "newCases": 4,
+    "contractLines": 329,
+    "retainedGroups": 6,
+    "sixGroupsBytePreserved": true,
+    "olderGenericSecondCheckUnchanged": true,
+    "eachPlayerUnchanged": true,
+    "fixtures": "Synthetic normal cards only; initial board fixture followed by legal public play/pass actions and committed StepObserver snapshots."
+  },
+  "findings": {
+    "F1": "Real normal Ending-expiry witness queues two old-turn-true relative conditions before turnStarted in one advancePhase; both resolve applied=false on new active side with no points/banish/effect body. Actual same-side extra turn is a positive control at the identical boundary, applied=true with points and banish. Both actor orientations and you/opponent refs.",
+    "F2": "Pure turnOf compares public active with controller-relative player and has no new write/resource/exception path. Only own generic fault pair, missing-figment fixtures and unused imports are removed. Existing fold atomicity and six condition groups remain intact. Future catalog validation is hypothetical and supplies no production scope.",
+    "F3": "Public gainControl moves four owner-other sources. Static modifiers and queued once-per-turn triggers bind current controller on its own and physical owner turns; both refs positive/negative, captured queue origins/controllers, resolution, repeated-play suppression and reset are asserted."
+  },
+  "historicalQualification": {
+    "original626Source": "fc57d92fab421d6f50bc3b3f7dbc1f335ed7b473",
+    "falseAssumption": "The historical statement that the queue always drains before turn advancement is false. Late Ending expiry can queue before beginNextTurn in the same advancePhase step.",
+    "preserved": "Original626 measurements, recipes, counterfactual command epochs and full source hashes remain historical immutable records. Its old generic applied-guard bypass was caught by the generic warrior control, not a turnOf-specific boundary witness. The genuine figment error mechanism remains valid for that source epoch. This bead records current reachable behavior and current validation only.",
+    "reviewReports": {
+      "review.md": "968d941a25e82701ff040cccde7853259573b5b761ac6aed41c608a7441797c2",
+      "completion.md": "ddb572e67f6285bc7527613b3e6dc3374efcf8cf7854a646ec01c9d5a93bc142"
+    },
+    "routing": "Original fresh normal independent Claude Opus5.5 review fully completed, initial153.473497541s plus same-review75.482657167s. No new core review required solely for this accepted bounded test/evidence follow-up; parent records native repair dispositions."
+  },
+  "failurePaths": {
+    "errorMidStepPartialWrite": "No new production state transition/write/resource/exception; unchanged older generic fold atomicity remains. Pure condition inspections remain immutable.",
+    "reloadRestart": "Retained modal cancel/reload/replay and eachPlayer fold reload contracts.",
+    "invalidStaleConcurrent": "Retained modal test rejects wrong actor, illegal answer, concurrent battle action, stale restart; cancel and restart replay match.",
+    "turnInterleaving": "New actual Ending normal false and actual extra positive witnesses.",
+    "controlInterleaving": "New actual transfer and two successive turns with both refs and real once use.",
+    "privacy": "Retained hidden-printing/determinization and static inspection purity contracts."
+  },
+  "counterfactuals": [
+    {
+      "id": "cf1-turnof-recheck",
+      "path": "src/engine/triggers/resolve.ts",
+      "originalSHA256": "428b9e4a678d99c85a14d7298f4a4bb4b7eb49906faa414b100d848778f3aeff",
+      "mutantSHA256": "8724e0fd30ac8430b61598dd849d3f860b5abb3bf77e687bceaea5d80102976f",
+      "restoredSHA256": "428b9e4a678d99c85a14d7298f4a4bb4b7eb49906faa414b100d848778f3aeff",
+      "restoredFullManifestEqual": true,
+      "mutantManifestSHA256": "b1a798b89ae3197b607a310cbce405dc923735acf6757da89f232145c38e835f",
+      "restoredManifestSHA256": "e5ab89fbb3000300fd333e49fbf5f21efec40829b6580ba4e7f6b7e5cf2ac02f",
+      "checks": [
+        {
+          "label": "cf1-boundary",
+          "classification": "expected semantic counterfactual failure",
+          "receipt": {
+            "started": "2026-10-14T14:40:35.832296+00:00",
+            "pid": 81917,
+            "pgid": 81917,
+            "command": [
+              "/opt/homebrew/bin/node",
+              "node_modules/vitest/vitest.mjs",
+              "run",
+              "src/engine/effects/primitives/contracts.test.ts",
+              "-t",
+              "rechecks cleanup-born materialization triggers across the Ending turn boundary"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+            "hostLoad": [
+              10.88671875,
+              12.263671875,
+              11.15185546875
+            ],
+            "JOURNEY_TEST_WORKERS": "2",
+            "ended": "2026-10-14T14:40:39.696241+00:00",
+            "elapsedSeconds": 3.8637608340000003,
+            "exitCode": 1,
+            "timedOut": false,
+            "cleanup": [],
+            "childReaped": true,
+            "remainingGroup": false,
+            "sourceChanged": [],
+            "manifestFiles": 4874,
+            "beforeSHA256": "b1a798b89ae3197b607a310cbce405dc923735acf6757da89f232145c38e835f",
+            "afterSHA256": "b1a798b89ae3197b607a310cbce405dc923735acf6757da89f232145c38e835f",
+            "collectorBeforeSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+            "collectorAfterSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+            "stdoutSHA256": "fe1f16fd72a87db0b0a6663900880141e90d81bd4e23e535cea55b774b1b3cbb",
+            "stderrSHA256": "987041736ec418ebd2d2284d853a712adc3a928763b0ae0bb4bcc1dc892e9d98"
+          }
+        },
+        {
+          "label": "cf1-generic",
+          "classification": "unchanged generic condition positive control under turnOf-only mutant",
+          "receipt": {
+            "started": "2026-10-14T14:40:40.087839+00:00",
+            "pid": 82247,
+            "pgid": 82247,
+            "command": [
+              "/opt/homebrew/bin/node",
+              "node_modules/vitest/vitest.mjs",
+              "run",
+              "src/engine/triggers/triggers-patterns.test.ts",
+              "-t",
+              "checks an intervening 'if' when the ability triggers and again as it resolves"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+            "hostLoad": [
+              10.7353515625,
+              12.20947265625,
+              11.13916015625
+            ],
+            "JOURNEY_TEST_WORKERS": "2",
+            "ended": "2026-10-14T14:40:41.166653+00:00",
+            "elapsedSeconds": 1.0786702090000002,
+            "exitCode": 0,
+            "timedOut": false,
+            "cleanup": [],
+            "childReaped": true,
+            "remainingGroup": false,
+            "sourceChanged": [],
+            "manifestFiles": 4874,
+            "beforeSHA256": "b1a798b89ae3197b607a310cbce405dc923735acf6757da89f232145c38e835f",
+            "afterSHA256": "b1a798b89ae3197b607a310cbce405dc923735acf6757da89f232145c38e835f",
+            "collectorBeforeSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+            "collectorAfterSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+            "stdoutSHA256": "5b04409a7bd52cf83890a42ff2c3c44149aa6df3acfe01bf9c526c0af9e88ed4",
+            "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cf2-physical-owner",
+      "path": "src/engine/dsl/conditions.ts",
+      "originalSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+      "mutantSHA256": "04922edc37d03d3fbb9a8bbd9e3616dba59431cc6343ddced211b3165ca1c56e",
+      "restoredSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+      "restoredFullManifestEqual": true,
+      "mutantManifestSHA256": "afbb69e53e41dba4c8979869db0b041006a0ed28330d949586d544f9893bf458",
+      "restoredManifestSHA256": "e5ab89fbb3000300fd333e49fbf5f21efec40829b6580ba4e7f6b7e5cf2ac02f",
+      "checks": [
+        {
+          "label": "cf2-transfer",
+          "classification": "expected semantic counterfactual failure",
+          "receipt": {
+            "started": "2026-10-14T14:40:42.065010+00:00",
+            "pid": 82369,
+            "pgid": 82369,
+            "command": [
+              "/opt/homebrew/bin/node",
+              "node_modules/vitest/vitest.mjs",
+              "run",
+              "src/engine/effects/primitives/contracts.test.ts",
+              "-t",
+              "binds transferred static and queued conditions to the current controller"
+            ],
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-review-6uxe",
+            "hostLoad": [
+              10.7353515625,
+              12.20947265625,
+              11.13916015625
+            ],
+            "JOURNEY_TEST_WORKERS": "2",
+            "ended": "2026-10-14T14:40:45.900623+00:00",
+            "elapsedSeconds": 3.83543375,
+            "exitCode": 1,
+            "timedOut": false,
+            "cleanup": [],
+            "childReaped": true,
+            "remainingGroup": false,
+            "sourceChanged": [],
+            "manifestFiles": 4874,
+            "beforeSHA256": "afbb69e53e41dba4c8979869db0b041006a0ed28330d949586d544f9893bf458",
+            "afterSHA256": "afbb69e53e41dba4c8979869db0b041006a0ed28330d949586d544f9893bf458",
+            "collectorBeforeSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+            "collectorAfterSHA256": "b9210b639fe484fc9603fc536ec0471d6fbe7e017c89b04c71845ccdeea3cb40",
+            "stdoutSHA256": "c13ff9eb56157aa712c9a48c55e7e73967259314441c68f0a3855231191f9002",
+            "stderrSHA256": "9fa727ea6e383f4224b299660874c7cb282233ca5d0ede95a1220ec51fadbb94"
+          }
+        }
+      ]
+    }
+  ],
+  "unintendedFailures": [
+    {
+      "epoch": "review-1",
+      "exitCode": 1,
+      "diagnosis": "Four lint errors only in new matcher-return callbacks and redundant assertions; typechecks/schema/imports and all3599 eager owning contracts passed. Corrected within new tests; review-2 passes.",
+      "classification": "actual unintended failed epoch retained, superseded by corrected-source review-2"
+    },
+    {
+      "epoch": "evidence-refresh-1",
+      "exitCode": 1,
+      "diagnosis": "Scratch evidence updater included aggregate counterfactual receipt as a command receipt; KeyError command before any repository evidence write. Filter now selects actual command receipts. No runtime/source mutation.",
+      "classification": "actual scratch tooling failure retained"
+    }
+  ],
+  "limits": [
+    "No local full suite, fuzz or browser: tests/evidence only; gate retains current D19 full-suite budget duty.",
+    "No runtime/API/state/type/schema/config/catalog change; original249/255 UUIDs/full recipes/semantic final joins preserved.",
+    "Knip-1 passes on the immediately preceding source: later contract-only changes replace two matcher-return maps with loops and remove two redundant assertions; imports/exports/identifiers unchanged. Final Knip-2 confirms final source.",
+    "No production performance or low-load budget claim.",
+    "No pre-existing unrelated issue encountered.",
+    "Parent owns native operations, gate46 join, certification, promotion, cleanup and original-review dispositions."
+  ],
+  "resources": {
+    "servers": [],
+    "browsers": [],
+    "heavy": [],
+    "providers": [],
+    "commandGroups": "Each validation receipt records child reaping and actual group absence; final resource check repeats all recorded groups."
+  }
+}

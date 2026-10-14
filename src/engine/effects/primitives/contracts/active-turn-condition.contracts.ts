@@ -2,29 +2,28 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { characteristicsOf } from "../../../continuous/characteristics";
-import { energy, event, self, staticAbility, turnOf } from "../../../dsl/builders";
-import { triggered, whenYouPlay } from "../../../dsl/triggers";
+import { all, enemyCharacter, energy, event, self, staticAbility, turnOf } from "../../../dsl/builders";
+import { onMaterialized, triggered, whenMaterialize, whenYouPlay } from "../../../dsl/triggers";
 import type { PlayerRef } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
-import type { EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { oncePerTurnKey } from "../../../rules/activation";
 import { deserializeState, serializeState, stateHash } from "../../../state/hash";
-import { opponent, parseFigmentId, SIDES, type Side } from "../../../state/ids";
+import { opponent, SIDES, type InstanceId, type Side } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
-import { runStep } from "../../../steps/runner";
 import { NO_PROMPTS } from "../../../steps/sources";
 import { boardState } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
-import { at, passUntil } from "../../../testing/trigger-harness";
+import { at, passUntil, type Observed } from "../../../testing/trigger-harness";
 import { conditionHolds } from "../../interpreter";
 import type { Effect } from "../../registry";
+import { banishUntil } from "../banish-until";
 import { chooseOne } from "../choose-one";
 import { eachPlayer } from "../each-player";
+import { gainControl } from "../gain-control";
 import { gainPoints } from "../gain-points";
 import { ifThen } from "../if-then";
-import { materializeFigments } from "../materialize-figments";
 import { sequence } from "../sequence";
 import { sparkModifier } from "../spark-modifier";
 import { takeExtraTurn } from "../take-extra-turn";
@@ -44,10 +43,15 @@ const watchers = REFS.map((ref, i): EngineCardDefinition => ({ ...v.vanilla1, id
 }));
 const modal = REFS.map((ref, i) => spell(0x30 + i, chooseOne(branch(ref), gainPoints(3))));
 const rebound = REFS.map((ref, i) => spell(0x40 + i, eachPlayer(branch(ref))));
-const missing = parseFigmentId("5e5e5e5e-0000-4000-8000-000000062699");
-const faults = REFS.map((ref, i) => spell(0x50 + i, sequence(branch(ref), materializeFigments(missing))));
 const extra = spell(0x60, takeExtraTurn());
-const engine = createEngine(testCatalog([...reads, ...statics, ...watchers, ...modal, ...rebound, ...faults, extra]));
+const returning: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x62670), costs: [energy(0)], status: "authored",
+  abilities: () => [triggered(onMaterialized(), sequence(gainPoints(1), banishUntil(self(), "untilEndOfTurn")), { condition: turnOf("you") })],
+};
+const returnWatcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x62671), status: "authored",
+  abilities: () => [triggered(whenMaterialize({ controller: "opponent" }), gainPoints(1), { condition: turnOf("opponent") })],
+};
+const transfer = spell(0x72, gainControl(all(enemyCharacter())));
+const engine = createEngine(testCatalog([...reads, ...statics, ...watchers, ...modal, ...rebound, extra, returning, returnWatcher, transfer]));
 const deck = [v.vanilla1.id, v.vanilla2.id, v.vanilla1.id, v.vanilla2.id];
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 const slice = (committed: BattleState): BattleSlice => ({ committed, inFlight: null, publishedEvents: 0, attempt: 0 });
@@ -66,6 +70,13 @@ function cast(b: ReturnType<typeof scene>, side: Side) {
   return engine.apply(ready, side, { kind: "play", card: b.ids[side].hand[0], from: "hand" }, NO_PROMPTS);
 }
 const finish = (state: BattleState) => passUntil(engine, state, s => s.stack.length === 0);
+function playResolved(state: BattleState, side: Side, card: InstanceId) {
+  const steps: Observed[] = [];
+  const played = engine.apply(state, side, { kind: "play", card, from: "hand" }, NO_PROMPTS,
+    (next, step, events) => steps.push({ state: next, step, events }));
+  const done = finish(played.state);
+  return { state: done.state, events: [...played.events, ...done.events], steps: [...steps, ...done.steps] };
+}
 function checkStatic(state: BattleState, b: ReturnType<typeof scene>, side: Side) {
   for (const [i, ref] of REFS.entries()) {
     const holds = expected(side, state.turn.active, ref);
@@ -212,30 +223,107 @@ describe("active-turn condition", () => {
     }
   });
 
-  it.each(SIDES)("%s rolls back a genuine error after the correct conditional branch and reloads its committed boundary", side => {
-    for (const [i, ref] of REFS.entries()) {
-      const b = scene(side, side, faults[i]);
-      const started = cast(b, side);
-      const before = serializeState(started.state);
-      const observed: EngineEvent[] = [];
-      const error = `Unknown figment ${missing}`;
-      expect(() => runStep(started.state, { kind: "resolveTop" }, NO_PROMPTS, engine.catalog, { observeEvent: e => observed.push(e) })).toThrow(error);
-      expect(observed.filter(e => e.kind === "pointsScored")).toEqual([expect.objectContaining({ side, amount: expected(side, side, ref) ? 1 : 2 })]);
-      expect(observed.filter(e => e.kind === "resolved" || e.kind === "pointsScored").map(e => e.kind)).toEqual(["resolved", "pointsScored"]);
-      expect(serializeState(started.state)).toBe(before);
-      const resolve = (state: BattleState) => createFoldAdapter(engine, { checkEventPrefix: true }).reduce(slice(state),
-        { kind: "battleAction", side: opponent(side), action: { kind: "pass" } });
-      const direct = resolve(started.state);
-      const loaded = resolve(deserializeState(before));
-      if (direct.kind !== "applied" || loaded.kind !== "applied") throw new Error("fault resolution bounced");
-      expect(direct.error?.message).toBe(error);
-      expect(loaded.error).toEqual(direct.error);
-      expect(stateHash(direct.slice.committed)).toBe(stateHash(started.state));
-      expect(stateHash(loaded.slice.committed)).toBe(stateHash(direct.slice.committed));
-      expect(direct.slice.inFlight).toBeNull();
-      expect(direct.slice.committed.stack).toHaveLength(1);
-      expect(direct.published.filter(e => e.kind === "pointsScored" || e.kind === "resolved")).toEqual([]);
-      expect(loaded.published).toEqual(direct.published);
+  it.each(SIDES)("%s rechecks cleanup-born materialization triggers across the Ending turn boundary", side => {
+    const other = opponent(side);
+    for (const extraTurn of [false, true]) {
+      const b = boardState(engine.catalog, { active: side, phase: "day",
+        [side]: { hand: [returning.id, extra.id], deck, energy: 10 },
+        [other]: { back: [returnWatcher.id], deck, energy: 10 } });
+      const source = b.ids[side].hand[0];
+      const watcher = b.ids[other].back[0]!;
+      const sources = [source, watcher];
+      let current = b.state;
+      if (extraTurn) current = playResolved(current, side, b.ids[side].hand[1]).state;
+      const played = playResolved(current, side, source);
+      expect(played.state.instances[source].zone).toBe("banished");
+      for (const controller of SIDES) expect(played.state.sides[controller].score).toBe(1);
+      expect(played.events.filter(e => e.kind === "triggerResolved")).toHaveLength(2);
+      for (const id of sources) expect(played.events).toContainEqual(expect.objectContaining({ kind: "triggerResolved", source: id, applied: true }));
+      const next = passUntil(engine, played.state, s => s.turn.turnNumber > current.turn.turnNumber &&
+        at(engine, extraTurn ? side : other, "day")(s));
+      const boundaryIndex = next.steps.findIndex(s => s.events.some(e => e.kind === "turnStarted"));
+      expect(boundaryIndex).toBeGreaterThan(0);
+      const boundary = next.steps[boundaryIndex];
+      // Cleanup's returned character creates a fresh duration after that expiry pass.
+      const cleanup = next.steps.slice(0, boundaryIndex).find(s => s.events.some(e => e.kind === "materialized" && e.instance === source));
+      expect(cleanup?.state.turn.active).toBe(side);
+      expect(cleanup?.state.triggerQueue.map(t => t.source)).toEqual(sources);
+      const beforeBoundary = next.steps[boundaryIndex - 1].state;
+      expect(beforeBoundary.turn.active).toBe(side);
+      expect(beforeBoundary.instances[source].zone).toBe("banished");
+      expect(beforeBoundary.floating).toContainEqual(expect.objectContaining({ change: { kind: "banishedUntil", instance: source, side } }));
+      for (const controller of SIDES) expect(beforeBoundary.sides[controller].score).toBe(2);
+      expect(boundary.step.kind).toBe("advancePhase");
+      const started = boundary.events.findIndex(e => e.kind === "turnStarted");
+      expect(boundary.events.slice(0, started)).toContainEqual(expect.objectContaining({ kind: "materialized", instance: source, side }));
+      for (const [i, id] of sources.entries()) {
+        const controller = i === 0 ? side : other;
+        expect(boundary.events.slice(0, started)).toContainEqual(expect.objectContaining({ kind: "triggerQueued", source: id, controller }));
+        expect(conditionHolds(beforeBoundary, engine.catalog, turnOf(REFS[i]), { controller, source: id, optionalPaid: [] })).toBe(true);
+      }
+      expect(boundary.state.triggerQueue.map(t => [t.source, t.controller])).toEqual([[source, side], [watcher, other]]);
+      expect(boundary.events[started]).toMatchObject({ kind: "turnStarted", side: extraTurn ? side : other, extra: extraTurn });
+      expect(boundary.state.turn.active).toBe(extraTurn ? side : other);
+      const resolutions = next.steps.slice(boundaryIndex + 1).filter(s => s.step.kind === "resolveTrigger");
+      expect(resolutions).toHaveLength(2);
+      for (const [i, resolved] of resolutions.entries()) {
+        expect(resolved.events).toContainEqual(expect.objectContaining({ kind: "triggerResolved", source: sources[i], applied: extraTurn }));
+        expect(resolved.events.filter(e => e.kind === "pointsScored")).toHaveLength(extraTurn ? 1 : 0);
+        if (!extraTurn) expect(resolved.events.filter(e => e.kind === "banished" || e.kind === "effectStarted")).toEqual([]);
+      }
+      for (const controller of SIDES) expect(next.state.sides[controller].score).toBe(extraTurn ? 3 : 2);
+      expect(next.state.instances[source].zone).toBe(extraTurn ? "banished" : "play");
+      expect(next.state.floating.some(e => e.change.kind === "banishedUntil" && e.change.instance === source)).toBe(extraTurn);
+      expect(invariantViolations(next.state, engine.catalog)).toEqual([]);
     }
+  });
+
+  it.each(SIDES)("%s binds transferred static and queued conditions to the current controller", side => {
+    const owner = opponent(side);
+    const b = boardState(engine.catalog, { active: side, phase: "day",
+      [side]: { hand: [transfer.id, ...Array.from({ length: 4 }, () => v.interruptEvent.id)], deck, energy: 10 },
+      [owner]: { back: [...statics, ...watchers].map(c => c.id), hand: [v.event0.id, v.event0.id], deck, energy: 10 } });
+    const stolen = b.ids[owner].back.map(id => id!);
+    const taken = playResolved(b.state, side, b.ids[side].hand[0]);
+    expect(taken.events.filter(e => e.kind === "controlChanged")).toHaveLength(4);
+    for (const instance of stolen) expect(taken.events).toContainEqual(expect.objectContaining({ kind: "controlChanged", instance, from: owner, to: side }));
+    const inspect = (state: BattleState) => {
+      for (const id of stolen) expect(state.instances[id]).toMatchObject({ owner, controller: side, zone: "play" });
+      for (const [i, ref] of REFS.entries()) {
+        expect(characteristicsOf(state, engine.catalog, stolen[i]).spark).toBe(expected(side, state.turn.active, ref) ? 3 : 1);
+      }
+    };
+    let current = taken.state;
+    for (const active of [side, owner]) {
+      if (active === owner) current = passUntil(engine, current, at(engine, owner, "day")).state;
+      inspect(current);
+      const events = [] as ReturnType<typeof playResolved>["events"];
+      const steps: Observed[] = [];
+      for (let repeat = 0; repeat < 2; repeat++) {
+        if (active === owner) {
+          const opened = engine.apply(current, owner, { kind: "play", card: b.ids[owner].hand[repeat], from: "hand" }, NO_PROMPTS);
+          current = opened.state;
+          events.push(...opened.events);
+        }
+        const played = playResolved(current, side, b.ids[side].hand[1 + (active === side ? 0 : 2) + repeat]);
+        current = played.state;
+        events.push(...played.events);
+        steps.push(...played.steps);
+      }
+      for (const [i, ref] of REFS.entries()) {
+        const source = stolen[statics.length + i];
+        const yes = expected(side, active, ref);
+        expect(events.filter(e => e.kind === "triggerQueued" && e.source === source)).toHaveLength(yes ? 1 : 0);
+        expect(events.filter(e => e.kind === "triggerResolved" && e.source === source)).toEqual(yes
+          ? [expect.objectContaining({ controller: side, applied: true })] : []);
+        expect(steps.flatMap(s => s.state.triggerQueue).filter(t => t.source === source)).toEqual(yes
+          ? [expect.objectContaining({ controller: side, origin: { kind: "card", cardId: watchers[i].id, variant: { amplified: false } } })] : []);
+        expect(current.oncePerTurn.includes(oncePerTurnKey(source, 0))).toBe(yes);
+      }
+      expect(current.sides[side].score).toBe(active === side ? 1 : 2);
+      expect(current.sides[owner].score).toBe(0);
+      inspect(current);
+    }
+    expect(invariantViolations(current, engine.catalog)).toEqual([]);
   });
 });
