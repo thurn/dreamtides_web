@@ -1,0 +1,10 @@
+{
+  "bead": "hv-whi3",
+  "phase": 5,
+  "implementMin": 12.70232785,
+  "implementWindow": {"start": "2026-10-14T05:34:02.721592+00:00", "end": "2026-10-14T05:46:44.861263+00:00"},
+  "localValidationS": {"focused": 6.427770165988477, "review": 25.45285316699301, "knip": 4.629052500007674, "schema": 0.35375962499529123},
+  "hostLoad": 7.67,
+  "testDelta": {"files": 0, "lines": 0, "jsdomFiles": 0},
+  "friction": []
+}

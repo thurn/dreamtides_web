@@ -106,6 +106,7 @@ function characterLeafPhrase(count: number | "x", selector: Omit<CharacterSelect
     selector.controller === "any" ? "" : selector.controller === "you" ? "you control" : "your opponent controls",
     namedAbilityPhrase(selector.hasAbility),
     selector.challenging === undefined ? "" : selector.challenging ? `that ${count === 1 ? "is" : "are"} challenging` : `that ${count === 1 ? "is" : "are"} not challenging`,
+    selector.sharesTypeWithAnotherChallenger === true ? `that ${selector.challenging === true ? "" : count === 1 ? "is challenging and " : "are challenging and "}${count === 1 ? "shares" : "share"} a character type with another challenger their controller controls` : "",
     selector.blocking === undefined ? "" : selector.blocking ? `that ${count === 1 ? "is" : "are"} blocking` : `that ${count === 1 ? "is" : "are"} not blocking`,
     ...(["sparkAtMost", "sparkAtLeast", "costAtMost", "costAtLeast"] as const).flatMap((key) => {
       const bound = selector[key];
