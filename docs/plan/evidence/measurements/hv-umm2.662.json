@@ -1,0 +1,892 @@
+{
+  "bead": "hv-umm2.662",
+  "phase": 5,
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final-v01 start"
+      },
+      "implementWindow": {
+        "measuredFor": "Current prospective evidence marker before actual final Git; actual Git start/end/delta will be external immutable receipt; no finished commit timing claimed."
+      }
+    }
+  },
+  "firstDispatch": {
+    "toolEntry": "2026-10-14T03:53:00.649Z",
+    "callId": "call_9a74d8659881498b9032d1e8ee5269c1",
+    "modelSampling": "UNKNOWN",
+    "inclusiveClock": "Do not reset across stages or admission waits."
+  },
+  "clockMarker": "2026-10-14T04:23:19.428643+00:00",
+  "actualGit": "UNKNOWN; Stage 3 not authorized",
+  "entities": [
+    {
+      "uuid": "dec81fa2-7865-448c-95bc-622b884cea9e",
+      "path": "src/content/dreamsigns/rune-stone-dec81fa2.ts",
+      "beforeSHA256": "afed818d80055206251873d77e3129f75073702eb594b1babbbe97daec5c5394",
+      "abilities": "() => [staticAbility(sparkModifier(all(characterYouControl({ figment: true })), 1))]",
+      "imports": {
+        "../../engine/dsl/builders": [
+          "all",
+          "characterYouControl",
+          "staticAbility"
+        ],
+        "../../engine/dsl/triggers": [],
+        "../../engine/effects/primitives/spark-modifier": [
+          "sparkModifier"
+        ],
+        "../../engine/dsl/verified-text": [
+          "expectedVerifiedText"
+        ]
+      },
+      "verifiedText": "expectedVerifiedText(\"Figments you control have +1✦.\")",
+      "canonicalData": "Every existing field byte/value preserved; replace pending:true only with authored abilities/verifiedText. No journey clause or amplified variant exists.",
+      "publicConsumer": "contentDreamsignDefinitions -> createEngine emblem collection; shared discovered content scenario runner and real full-pool fuzzer/lab."
+    },
+    {
+      "uuid": "adc23870-55f8-4f23-b973-a358fc257414",
+      "path": "src/content/dreamsigns/gold-feather-adc23870.ts",
+      "beforeSHA256": "ced9edbb30daca89ba3d0dd532c8794a1f2b7653b11e4c0b62866b0513ec29e9",
+      "abilities": "() => [triggered(whenAbandon(), gainSpark(randomCharacter(characterYouControl()), 1))]",
+      "imports": {
+        "../../engine/dsl/builders": [
+          "characterYouControl",
+          "randomCharacter"
+        ],
+        "../../engine/dsl/triggers": [
+          "triggered",
+          "whenAbandon"
+        ],
+        "../../engine/effects/primitives/gain-spark": [
+          "gainSpark"
+        ],
+        "../../engine/dsl/verified-text": [
+          "expectedVerifiedText"
+        ]
+      },
+      "verifiedText": "expectedVerifiedText(\"When you abandon a character, a random character you control gains +1✦.\")",
+      "canonicalData": "Every existing field byte/value preserved; replace pending:true only with authored abilities/verifiedText. No journey clause or amplified variant exists.",
+      "publicConsumer": "contentDreamsignDefinitions -> createEngine emblem collection; shared discovered content scenario runner and real full-pool fuzzer/lab."
+    },
+    {
+      "uuid": "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+      "path": "src/content/dreamsigns/red-heart-8b87b0c7.ts",
+      "beforeSHA256": "50d581c0909e4ef7d97c610682f1230f6f043aca85ab5621b48bde0f968538fe",
+      "abilities": "() => [triggered(whenErode(), gainSpark(randomCharacter(characterYouControl()), 1))]",
+      "imports": {
+        "../../engine/dsl/builders": [
+          "characterYouControl",
+          "randomCharacter"
+        ],
+        "../../engine/dsl/triggers": [
+          "triggered",
+          "whenErode"
+        ],
+        "../../engine/effects/primitives/gain-spark": [
+          "gainSpark"
+        ],
+        "../../engine/dsl/verified-text": [
+          "expectedVerifiedText"
+        ]
+      },
+      "verifiedText": "expectedVerifiedText(\"When you erode a card, a random character you control gains +1✦.\")",
+      "canonicalData": "Every existing field byte/value preserved; replace pending:true only with authored abilities/verifiedText. No journey clause or amplified variant exists.",
+      "publicConsumer": "contentDreamsignDefinitions -> createEngine emblem collection; shared discovered content scenario runner and real full-pool fuzzer/lab."
+    },
+    {
+      "uuid": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+      "path": "src/content/dreamsigns/candle-89c83d7e.ts",
+      "beforeSHA256": "6286939d1fbd1b46d9688ac5502d2de1e74eda71083e044a8bab7bb151345e59",
+      "abilities": "() => [triggered(whenYouPlay({ cardType: \"event\" }), gainSpark(highestSpark(), 1))]",
+      "imports": {
+        "../../engine/dsl/builders": [
+          "highestSpark"
+        ],
+        "../../engine/dsl/triggers": [
+          "triggered",
+          "whenYouPlay"
+        ],
+        "../../engine/effects/primitives/gain-spark": [
+          "gainSpark"
+        ],
+        "../../engine/dsl/verified-text": [
+          "expectedVerifiedText"
+        ]
+      },
+      "verifiedText": "expectedVerifiedText(\"When you play an event, the character you control with the highest ✦ gains +1✦.\")",
+      "canonicalData": "Every existing field byte/value preserved; replace pending:true only with authored abilities/verifiedText. No journey clause or amplified variant exists.",
+      "publicConsumer": "contentDreamsignDefinitions -> createEngine emblem collection; shared discovered content scenario runner and real full-pool fuzzer/lab."
+    }
+  ],
+  "sourcePlanSHA256": "5d6347ee7d2ced900eb5b54386565235ed12ababc1308e6879fdb2990a9e1499",
+  "cases": {
+    "namedCases": 12,
+    "seats": [
+      "player",
+      "enemy"
+    ],
+    "physicalPlainModules": 1,
+    "configuredTestEntryFiles": 0,
+    "jsdomFiles": 0,
+    "lines": 138,
+    "moduleSHA256": "207ee799567df93c9ed12927a70df1758c7839416f6b778fb5f8b9a071a31450",
+    "extraNestedWitnesses": "Gold protected figment and ceased figment branch; Red batch and reload branch; all use real engine/synthetic explicit fixtures. Other specs run directly on shared catalog."
+  },
+  "D20": "Bounded interactions among emblem multiplicity, static effective spark, lifecycle departure, batch Erode/Fatigue, and singular highest current entry exceed a single primitive exercise. Broad uniformity/slot/rank/view/fold/error matrices remain in existing primitive contracts; no duplication of those matrices.",
+  "D10": {
+    "invoked": false,
+    "anchors": [
+      "docs/rules.md Spark: highest effective at instruction resolution, oldest current play entry tie, non-target, no controlled character no-op; random characters uniformly from live matching physical instances, non-target protection permitted, empty no RNG; statics/Support not spark gains.",
+      "docs/rules.md Ability Types: when you abandon sees abandoner/controller, actual costs and effects, created subjects still abandoned and cease; when you erode each actual deck-to-void Erode occurrence including batches and opponent-caused Erode, no Fatigue/discard/dissolve match.",
+      "docs/rules.md Figment Copies and C5: figment copies participate in figment synergy; C17 static has versus additional gains; D15 stack copies are not played.",
+      "Exact source-audit603 rows52/53/55/56 and highest-spark-reference/random-character-reference existing contracts."
+    ],
+    "newRules": [],
+    "newCardIssues": []
+  },
+  "fiveFailurePaths": {
+    "midStepError": "No new engine transition or fallible body introduced; no new injected rollback test. Existing primitive fold/error contracts are source coverage, not claimed new acceptance witness.",
+    "reloadRestart": "Actual Engine serializeState/deserializeState/stateHash and repeated action comparisons in limited cases, qualified: not strict saved-game parser/IndexedDB/browser/fold in-flight/replay promise.",
+    "partialWrite": "No new storage/backend/write path; N/A to content-only composition. QA evidence append is managed actual protocol, not game IO test.",
+    "invalidStaleInput": "No new player input/prompt: N/A new validation. Legal nonmatching character plays/empty pools are ordinary semantic witnesses, not malformed intent proof.",
+    "concurrentActors": "Actual duplicate held-copy listeners and both-controller restrictions plus sequential inputs only; no concurrent thread/provider/storage race claims."
+  },
+  "commands": {
+    "control-4-v01": {
+      "name": "control-4-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-245.*real play-entry"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:02:15.213703+00:00",
+      "endedAt": "2026-10-14T04:02:20.141362+00:00",
+      "elapsedSeconds": 4.9274245419946965,
+      "exitCode": 1,
+      "processGroup": 6894,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 14.53 16.11 14.54 }",
+      "hostLoadOneMinute": 14.53
+    },
+    "knip-final-v01": {
+      "name": "knip-final-v01",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:04:41.730455+00:00",
+      "endedAt": "2026-10-14T04:04:46.778794+00:00",
+      "elapsedSeconds": 5.048189416993409,
+      "exitCode": 0,
+      "processGroup": 16903,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 8.59 13.09 13.56 }",
+      "hostLoadOneMinute": 8.59
+    },
+    "sweep-v01": {
+      "name": "sweep-v01",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.662",
+        "--dreamsigns",
+        "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:16:19.373353+00:00",
+      "endedAt": "2026-10-14T04:16:50.528717+00:00",
+      "elapsedSeconds": 31.156002874980913,
+      "exitCode": 0,
+      "processGroup": 22627,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 22.46 17.70 15.06 }",
+      "hostLoadOneMinute": 22.46
+    },
+    "weighted300-v01": {
+      "name": "weighted300-v01",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:08:50.631502+00:00",
+      "endedAt": "2026-10-14T04:15:30.916214+00:00",
+      "elapsedSeconds": 400.313238792005,
+      "exitCode": 0,
+      "processGroup": 83763,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 6.96 10.56 12.41 }",
+      "hostLoadOneMinute": 6.96
+    },
+    "final-focused-v01": {
+      "name": "final-focused-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-245"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:02:44.970819+00:00",
+      "endedAt": "2026-10-14T04:02:51.899796+00:00",
+      "elapsedSeconds": 6.9286616669851355,
+      "exitCode": 0,
+      "processGroup": 9021,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 12.19 15.42 14.35 }",
+      "hostLoadOneMinute": 12.19
+    },
+    "control-1-v01": {
+      "name": "control-1-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-245.*static figment copies"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:02:02.109447+00:00",
+      "endedAt": "2026-10-14T04:02:06.374711+00:00",
+      "elapsedSeconds": 4.265020791994175,
+      "exitCode": 1,
+      "processGroup": 5800,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 15.81 16.40 14.63 }",
+      "hostLoadOneMinute": 15.81
+    },
+    "post-runtime-schema-v01": {
+      "name": "post-runtime-schema-v01",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:20:17.027602+00:00",
+      "endedAt": "2026-10-14T04:20:17.097408+00:00",
+      "elapsedSeconds": 0.06970504100900143,
+      "exitCode": 0,
+      "processGroup": 94461,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 13.79 16.76 15.35 }",
+      "hostLoadOneMinute": 13.79
+    },
+    "authored-focused-v01": {
+      "name": "authored-focused-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-245"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:01:29.796564+00:00",
+      "endedAt": "2026-10-14T04:01:34.787612+00:00",
+      "elapsedSeconds": 4.990878500015242,
+      "exitCode": 0,
+      "processGroup": 3440,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 23.66 17.67 14.98 }",
+      "hostLoadOneMinute": 23.66
+    },
+    "normalized-schema-v01": {
+      "name": "normalized-schema-v01",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:05:38.925067+00:00",
+      "endedAt": "2026-10-14T04:05:39.077602+00:00",
+      "elapsedSeconds": 0.1524128339951858,
+      "exitCode": 0,
+      "processGroup": 44939,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 12.51 13.46 13.67 }",
+      "hostLoadOneMinute": 12.51
+    },
+    "control-2-v01": {
+      "name": "control-2-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-245.*paid departure"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:02:06.400061+00:00",
+      "endedAt": "2026-10-14T04:02:10.572821+00:00",
+      "elapsedSeconds": 4.172615916992072,
+      "exitCode": 1,
+      "processGroup": 6138,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 15.19 16.27 14.59 }",
+      "hostLoadOneMinute": 15.19
+    },
+    "review-final-v01": {
+      "name": "review-final-v01",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:03:25.274309+00:00",
+      "endedAt": "2026-10-14T04:04:29.229080+00:00",
+      "elapsedSeconds": 63.95388829198782,
+      "exitCode": 0,
+      "processGroup": 11849,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 9.41 14.30 13.98 }",
+      "hostLoadOneMinute": 9.41
+    },
+    "preflight-v01": {
+      "name": "preflight-v01",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:16:01.525924+00:00",
+      "endedAt": "2026-10-14T04:16:03.106550+00:00",
+      "elapsedSeconds": 1.5806897500006016,
+      "exitCode": 0,
+      "processGroup": 87647,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 19.99 17.01 14.77 }",
+      "hostLoadOneMinute": 19.99
+    },
+    "post-runtime-schema-v02": {
+      "name": "post-runtime-schema-v02",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:20:59.506532+00:00",
+      "endedAt": "2026-10-14T04:20:59.577648+00:00",
+      "elapsedSeconds": 0.07101662500645034,
+      "exitCode": 0,
+      "processGroup": 97487,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 10.38 15.52 14.96 }",
+      "hostLoadOneMinute": 10.38
+    },
+    "before-pending-v01": {
+      "name": "before-pending-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-245"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:00:57.175781+00:00",
+      "endedAt": "2026-10-14T04:01:04.400005+00:00",
+      "elapsedSeconds": 7.224039708002238,
+      "exitCode": 1,
+      "processGroup": 98939,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 26.95 17.52 14.83 }",
+      "hostLoadOneMinute": 26.95
+    },
+    "before-empty-v01": {
+      "name": "before-empty-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-245.*abandoning the sole"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:01:14.113021+00:00",
+      "endedAt": "2026-10-14T04:01:19.361218+00:00",
+      "elapsedSeconds": 5.248039416008396,
+      "exitCode": 1,
+      "processGroup": 1339,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 25.79 17.72 14.94 }",
+      "hostLoadOneMinute": 25.79
+    },
+    "content-gate-final-v01": {
+      "name": "content-gate-final-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:05:04.133084+00:00",
+      "endedAt": "2026-10-14T04:05:09.458539+00:00",
+      "elapsedSeconds": 5.325257292017341,
+      "exitCode": 0,
+      "processGroup": 18616,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 10.60 13.23 13.60 }",
+      "hostLoadOneMinute": 10.6
+    },
+    "control-3-v01": {
+      "name": "control-3-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-245.*batch occurrences"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+      "startedAt": "2026-10-14T04:02:10.598959+00:00",
+      "endedAt": "2026-10-14T04:02:15.184775+00:00",
+      "elapsedSeconds": 4.585664666024968,
+      "exitCode": 1,
+      "processGroup": 6466,
+      "wholeGroupGone": true,
+      "hostLoadRaw": "{ 15.19 16.27 14.59 }",
+      "hostLoadOneMinute": 15.19
+    }
+  },
+  "counterfactuals": {
+    "createdAt": "2026-10-14T04:02:20.145627+00:00",
+    "results": [
+      {
+        "uuid": "dec81fa2-7865-448c-95bc-622b884cea9e",
+        "path": "src/content/dreamsigns/rune-stone-dec81fa2.ts",
+        "case": "static figment copies",
+        "exitCode": 1,
+        "semanticAssertionFailure": true,
+        "selectedCases": 2,
+        "sourceBeforeSHA256": "1f68c3f097bb67843d603f307fe14ad23019f1a9b3dc3477a05cc2391b9358c4",
+        "zeroTestsExcluded": true,
+        "restoredSHA256": "1f68c3f097bb67843d603f307fe14ad23019f1a9b3dc3477a05cc2391b9358c4",
+        "exactRestored": true
+      },
+      {
+        "uuid": "adc23870-55f8-4f23-b973-a358fc257414",
+        "path": "src/content/dreamsigns/gold-feather-adc23870.ts",
+        "case": "paid departure",
+        "exitCode": 1,
+        "semanticAssertionFailure": true,
+        "selectedCases": 2,
+        "sourceBeforeSHA256": "f257555808005cb72d7a8a96865d8663443563dfaef5a7daa00e3cabbb727b17",
+        "zeroTestsExcluded": true,
+        "restoredSHA256": "f257555808005cb72d7a8a96865d8663443563dfaef5a7daa00e3cabbb727b17",
+        "exactRestored": true
+      },
+      {
+        "uuid": "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+        "path": "src/content/dreamsigns/red-heart-8b87b0c7.ts",
+        "case": "batch occurrences",
+        "exitCode": 1,
+        "semanticAssertionFailure": true,
+        "selectedCases": 2,
+        "sourceBeforeSHA256": "597a9c84ca11e2155bf1aa520f11e7999dd152868d4804fd5ea3410a93a457ea",
+        "zeroTestsExcluded": true,
+        "restoredSHA256": "597a9c84ca11e2155bf1aa520f11e7999dd152868d4804fd5ea3410a93a457ea",
+        "exactRestored": true
+      },
+      {
+        "uuid": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+        "path": "src/content/dreamsigns/candle-89c83d7e.ts",
+        "case": "real play-entry",
+        "exitCode": 1,
+        "semanticAssertionFailure": true,
+        "selectedCases": 2,
+        "sourceBeforeSHA256": "ddc02b5097f11b786c7efe21494c4d3dc01911bf6a421469227b8b1fc5507f92",
+        "zeroTestsExcluded": true,
+        "restoredSHA256": "ddc02b5097f11b786c7efe21494c4d3dc01911bf6a421469227b8b1fc5507f92",
+        "exactRestored": true
+      }
+    ]
+  },
+  "failures": {
+    "before-pending-v01": "exit1: 10 genuine absent-effect assertions while exact leaves pending;2 automatic-singleton answer fixture errors NOT counted as semantic proof.",
+    "before-empty-v01": "corrected singleton answer fixture, two actual missing-trigger assertions exit1.",
+    "readOnlyCollectors": [
+      "Several combined read commands ended nonzero because guessed read-only filenames did not exist (highest-spark.contracts.ts/random-character.contracts.ts/src/content/engine-catalog.ts/copy-figment.ts/abandon-character.ts/pass.ts). Correct owning source filenames were then located with rg and read. No validation or source mutation was performed; no missing-capability claim follows from those collector errors."
+    ],
+    "runtimeReadOnlyCollectors": "Guessed worktree-local artifacts/runtime.mjs/qa-session.mjs paths absent; corrected owning primary artifact/run-scenario.mjs source by rg. These readonly collector misses were not semantic/QA failures, did not mutate anything, and caused no runtime retries."
+  },
+  "scope": "Only exact four leaves + own private plain module/evidence; original245 full five-UUID acceptance and Black Feather587 join retained. No excluded engine/UI/shared body/config/registration/provider writes. No primitive/new prompt/status/VFX.",
+  "reviewRequirement": "Not core-review,27 changed production lines, pure compositions; no local review:full or per-bead CLI cold review. Final parent actual diff check and phase gate cold review still required.",
+  "runtime": {
+    "weighted": {
+      "wrapper": {
+        "name": "weighted300-v01",
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+        "startedAt": "2026-10-14T04:08:50.631502+00:00",
+        "endedAt": "2026-10-14T04:15:30.916214+00:00",
+        "elapsedSeconds": 400.313238792005,
+        "exitCode": 0,
+        "processGroup": 83763,
+        "wholeGroupGone": true,
+        "hostLoadRaw": "{ 6.96 10.56 12.41 }",
+        "hostLoadOneMinute": 6.96
+      },
+      "nativeWallSeconds": 282.9,
+      "nativeCPUSeconds": 301.8,
+      "steps": 113606,
+      "prompts": 6706,
+      "interactiveReruns": 658,
+      "games": 300,
+      "failures": 0,
+      "results": {
+        "player": 152,
+        "enemy": 147,
+        "draw": 1
+      },
+      "targets": [
+        {
+          "kind": "dreamsign",
+          "uuid": "dec81fa2-7865-448c-95bc-622b884cea9e",
+          "included": 600,
+          "exercised": 0
+        },
+        {
+          "kind": "dreamsign",
+          "uuid": "adc23870-55f8-4f23-b973-a358fc257414",
+          "included": 600,
+          "exercised": 641
+        },
+        {
+          "kind": "dreamsign",
+          "uuid": "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+          "included": 600,
+          "exercised": 1071
+        },
+        {
+          "kind": "dreamsign",
+          "uuid": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "included": 600,
+          "exercised": 3536
+        }
+      ],
+      "lockWaitSeconds": "UNKNOWN",
+      "pool": "Default full pool/policy/seed and original invariants/hash/determinization/interactive settings unchanged.",
+      "attributionQualification": "Included != exercised. Rune Stone passive static shows0attributed triggers, not missing authorship. Aggregate physical source counts do not certify every seat, clause or state."
+    },
+    "preflight": {
+      "receipt": {
+        "name": "preflight-v01",
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--dreamsigns",
+          "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+        "startedAt": "2026-10-14T04:16:01.525924+00:00",
+        "endedAt": "2026-10-14T04:16:03.106550+00:00",
+        "elapsedSeconds": 1.5806897500006016,
+        "exitCode": 0,
+        "processGroup": 87647,
+        "wholeGroupGone": true,
+        "hostLoadRaw": "{ 19.99 17.01 14.77 }",
+        "hostLoadOneMinute": 19.99
+      },
+      "summary": {
+        "event": "labPreflightSummary",
+        "cards": [],
+        "avatars": [],
+        "dreamsigns": [
+          "dec81fa2-7865-448c-95bc-622b884cea9e",
+          "adc23870-55f8-4f23-b973-a358fc257414",
+          "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+          "89c83d7e-5617-49b4-b6cd-214680fe0627"
+        ],
+        "variants": [
+          "base",
+          "amplified",
+          "empowered",
+          "kindled",
+          "resonant",
+          "inspired",
+          "enduring",
+          "hastened",
+          "attuned",
+          "perfected"
+        ],
+        "sides": [
+          "player",
+          "enemy"
+        ],
+        "counts": {
+          "pass": 8,
+          "pending": 0,
+          "skip": 72,
+          "fail": 0
+        },
+        "elapsedMs": 23.482083000000102,
+        "hostLoad": 19.98974609375,
+        "enemyMode": "normal-dreamsign-first-turn-first-legal-prompts"
+      },
+      "qualification": "8base/both-side initialization passes/72ineligible skips, exercised:false"
+    },
+    "sweep": {
+      "receipt": {
+        "name": "sweep-v01",
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.662",
+          "--dreamsigns",
+          "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "--variants",
+          "all",
+          "--as",
+          "both",
+          "--port",
+          "5174"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-662-spark-emblems",
+        "startedAt": "2026-10-14T04:16:19.373353+00:00",
+        "endedAt": "2026-10-14T04:16:50.528717+00:00",
+        "elapsedSeconds": 31.156002874980913,
+        "exitCode": 0,
+        "processGroup": 22627,
+        "wholeGroupGone": true,
+        "hostLoadRaw": "{ 22.46 17.70 15.06 }",
+        "hostLoadOneMinute": 22.46
+      },
+      "summary": {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-Hy4OeU",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.662/invocations/sweep-Hy4OeU",
+        "counts": {
+          "pass": 8,
+          "skip": 72
+        },
+        "attemptCounts": {
+          "pass": 8,
+          "skip": 72
+        },
+        "hostLoad": 22.4580078125,
+        "sessions": 1,
+        "leaseYields": 0,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 2057,
+          "scenario": 28191.473624000002,
+          "cleanup": 620.6812500000015,
+          "execution": 30940.419375,
+          "total": 30947.419375
+        }
+      },
+      "summaryPath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.662/invocations/sweep-Hy4OeU/summary.json",
+      "summarySHA256": "c673523be5a5d79eac7abb2cb8c439b4a18e8cf250522c4ff49c2e6cb62bd2a0",
+      "results": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.662/invocations/sweep-Hy4OeU/run-sgnvrD/sweep-dec81fa2-7865-448c-95bc-622b884cea9e-base-enemy-attempt-1.result.json": {
+          "SHA256": "4ec91bdd101a98f647463f7d60d43124937ec86789c66bafcf3e8dfbf47f7d52",
+          "uuid": "dec81fa2-7865-448c-95bc-622b884cea9e",
+          "side": "enemy",
+          "Caps": [],
+          "captures": [],
+          "exercised": false,
+          "verdict": "pass",
+          "qualified": "Existing card-lab first-Day initialization only; semantic proof is separate 12 scenarios and actual attributed weighted fuzzer triggers."
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.662/invocations/sweep-Hy4OeU/run-sgnvrD/sweep-8b87b0c7-e7d5-4c53-b99b-b1e2407cb519-base-player-attempt-1.result.json": {
+          "SHA256": "8a4c121076618f31110297585c19fec161264b059de379e0aa22117c58d3a8b0",
+          "uuid": "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+          "side": "player",
+          "Caps": [],
+          "captures": [],
+          "exercised": false,
+          "verdict": "pass",
+          "qualified": "Existing card-lab first-Day initialization only; semantic proof is separate 12 scenarios and actual attributed weighted fuzzer triggers."
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.662/invocations/sweep-Hy4OeU/run-sgnvrD/sweep-8b87b0c7-e7d5-4c53-b99b-b1e2407cb519-base-enemy-attempt-1.result.json": {
+          "SHA256": "57f182e0cbfba5143c40ccd658a025491b7579fe41e9fb71b531fc36a3192cf5",
+          "uuid": "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+          "side": "enemy",
+          "Caps": [],
+          "captures": [],
+          "exercised": false,
+          "verdict": "pass",
+          "qualified": "Existing card-lab first-Day initialization only; semantic proof is separate 12 scenarios and actual attributed weighted fuzzer triggers."
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.662/invocations/sweep-Hy4OeU/run-sgnvrD/sweep-adc23870-55f8-4f23-b973-a358fc257414-base-player-attempt-1.result.json": {
+          "SHA256": "59077b5e664d972e539051de8ac9b319eb849c6380936a9631e51f7394298b0e",
+          "uuid": "adc23870-55f8-4f23-b973-a358fc257414",
+          "side": "player",
+          "Caps": [],
+          "captures": [],
+          "exercised": false,
+          "verdict": "pass",
+          "qualified": "Existing card-lab first-Day initialization only; semantic proof is separate 12 scenarios and actual attributed weighted fuzzer triggers."
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.662/invocations/sweep-Hy4OeU/run-sgnvrD/sweep-dec81fa2-7865-448c-95bc-622b884cea9e-base-player-attempt-1.result.json": {
+          "SHA256": "41c8a2210a0ec76467dfce5d3d6a50da237cec3d4d11b517953ba740b4c76ed3",
+          "uuid": "dec81fa2-7865-448c-95bc-622b884cea9e",
+          "side": "player",
+          "Caps": [],
+          "captures": [],
+          "exercised": false,
+          "verdict": "pass",
+          "qualified": "Existing card-lab first-Day initialization only; semantic proof is separate 12 scenarios and actual attributed weighted fuzzer triggers."
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.662/invocations/sweep-Hy4OeU/run-sgnvrD/sweep-89c83d7e-5617-49b4-b6cd-214680fe0627-base-player-attempt-1.result.json": {
+          "SHA256": "48fb5ac06ff36ddf244e6712d5f535f6af289d2bc7dd03e923d5d149bf5abac0",
+          "uuid": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "side": "player",
+          "Caps": [],
+          "captures": [],
+          "exercised": false,
+          "verdict": "pass",
+          "qualified": "Existing card-lab first-Day initialization only; semantic proof is separate 12 scenarios and actual attributed weighted fuzzer triggers."
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.662/invocations/sweep-Hy4OeU/run-sgnvrD/sweep-89c83d7e-5617-49b4-b6cd-214680fe0627-base-enemy-attempt-1.result.json": {
+          "SHA256": "1e0e52f8be72f9dbc69c82b78f6715b59ca8130ac20b6d901d4a9249f8140d37",
+          "uuid": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "side": "enemy",
+          "Caps": [],
+          "captures": [],
+          "exercised": false,
+          "verdict": "pass",
+          "qualified": "Existing card-lab first-Day initialization only; semantic proof is separate 12 scenarios and actual attributed weighted fuzzer triggers."
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.662/invocations/sweep-Hy4OeU/run-sgnvrD/sweep-adc23870-55f8-4f23-b973-a358fc257414-base-enemy-attempt-1.result.json": {
+          "SHA256": "39e2aa4631f53d8b30704d22bbc9bbeb076972cd01a14ecdd301dc4c4ce8e517",
+          "uuid": "adc23870-55f8-4f23-b973-a358fc257414",
+          "side": "enemy",
+          "Caps": [],
+          "captures": [],
+          "exercised": false,
+          "verdict": "pass",
+          "qualified": "Existing card-lab first-Day initialization only; semantic proof is separate 12 scenarios and actual attributed weighted fuzzer triggers."
+        }
+      },
+      "ownServerPG": 22679,
+      "ownServerPGGone": true,
+      "actualPort": 5274,
+      "requestedPort": 5174,
+      "ownerIdentityAbsent": true,
+      "nativeCleanupProtocol": "Successful existing openQaSession.close joins active RPC, confirmed browser_close, execution-completed owner clear, owned server stop and lease releases; throws uncertainty. Native sweep exit0/cleanup620.68125ms/ownPGgone/ownrecordabsence bind this acceptance. Not a claim that shared Playwright service or Chromium is globally gone.",
+      "nativeTerminalPortFree": true,
+      "judgedRequired": 0,
+      "captures": 0,
+      "attempts": {
+        "pass": 8,
+        "skip": 72
+      },
+      "retries": 0
+    },
+    "QAledger": {
+      "path": "docs/plan/evidence/qa-ledger/hv-umm2.662.jsonl",
+      "rows": 84,
+      "prefixRows": 4,
+      "prefixExact": true,
+      "nativePass": 8,
+      "nativeIneligibleSkip": 72,
+      "SHA256": "6cb59d46a8c276178e0056e88d4b5dd2b12a961ff6ef20e43fc32d1cf907b0ee",
+      "commitFieldQualification": "Native ledger commit0994ede4 is the actual precommitbaselineHEAD; exact authoring runtime bytes are bound by4710fileSHAfreeze/appendprefix/actualresultSHAs. It is not the future authoredcommitOID; no repeatedQA needed merely for final Git."
+    },
+    "sourceFreeze": {
+      "sourceFiles": 4710,
+      "supportFiles": 45,
+      "allFrozenSourceExceptAppendOnlyLedgerExactThroughOwnProviderCleanup": true,
+      "finalGuard": "/tmp/worker662-20261013/post-sweep-guard-v01.json",
+      "parentNativePostRuntimeAcknowledgment": "2026-10-14T04:19:25.881114Z"
+    },
+    "failurePaths": "Runtime3requiredcommandsall0/no retries; readonly collector filename misses retained separately."
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": [],
+  "undone": [
+    "actual final Git requires separateStage3parentACK",
+    "parent candidate/certified promotion/cleanup/nativeacceptance"
+  ],
+  "resources": {
+    "recordedCommandGroups": 17,
+    "allRecordedGroupsGone": true,
+    "ownServerGroup": 22679,
+    "ownServerGroupGone": true,
+    "actualPort": 5274,
+    "requestedPort": 5174,
+    "ownProviderIdentityAbsent": true,
+    "protocol": "Successful existing openQaSession.close joins active RPC, confirmed browser_close, execution-completed owner clear, owned server stop and lease releases; throws uncertainty. Native sweep exit0/cleanup620.68125ms/ownPGgone/ownrecordabsence bind this acceptance. Not a claim that shared Playwright service or Chromium is globally gone.",
+    "globalSharedServiceState": "Not claimed; only own invocation resources settled."
+  },
+  "qualification": [
+    "Protected non-target recipients exercised by private actual Gold/Heart real-engine branches; Rune+Candle shared figment uses stable vanilla2, not protected card. Existing highest reference contract covers protection separately.",
+    "Reload path actually tests Red Heart serialized end-state/hash plus next empty-deck Erode action equality, not mid-trigger browser/fold/storage/replay. Candle actual play age uses ordinary real plays, no additional reload claim.",
+    "Fatigue tests exact occurrence only, no mutable point/defaultgameend/algorithm assertions.",
+    "Post-controls extra ceased-figment/Fatigue assertions strengthen fixture only; four leaf and selected controls source unchanged; no duplicated controls required."
+  ],
+  "D21": {
+    "judgedRequired": 0,
+    "metadataSkipRows": 4,
+    "nativeSweepPass": 8,
+    "nativeIneligibleVariantSkip": 72,
+    "CapsEmptyReports": 8,
+    "captures": 0,
+    "semanticQualification": "Dreamsign sweep/preflight initialize first-Day only, each exercised:false; behavioral proof is exact12scenario cases and actual full-pool fuzzer attribution. Rune passive static0attributed exercises does not mean unimplemented."
+  },
+  "originalAcceptance": "Original hv-umm2.245 retains allfiveUUIDandfullrecipe; Black Feather/587joined separately. This exactfour-UUID child makes no parent completion claim."
+}

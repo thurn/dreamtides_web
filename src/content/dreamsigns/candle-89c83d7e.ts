@@ -1,3 +1,7 @@
+import { highestSpark } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives/gain-spark";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +18,6 @@ export default dreamsign({
     "1ad97f42-6157-45b3-8290-e27219c7888a",
   ],
   tags: ["J11", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "event" }), gainSpark(highestSpark(), 1))],
+  verifiedText: expectedVerifiedText("When you play an event, the character you control with the highest ✦ gains +1✦."),
 });

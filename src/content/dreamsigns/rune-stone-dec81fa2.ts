@@ -1,3 +1,6 @@
+import { all, characterYouControl, staticAbility } from "../../engine/dsl/builders";
+import { sparkModifier } from "../../engine/effects/primitives/spark-modifier";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +16,6 @@ export default dreamsign({
     "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
   ],
   tags: ["J10", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [staticAbility(sparkModifier(all(characterYouControl({ figment: true })), 1))],
+  verifiedText: expectedVerifiedText("Figments you control have +1✦."),
 });

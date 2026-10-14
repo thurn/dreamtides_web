@@ -1,3 +1,7 @@
+import { characterYouControl, randomCharacter } from "../../engine/dsl/builders";
+import { triggered, whenErode } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives/gain-spark";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +14,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["e4d7c1fe-cae0-4cec-8254-2656eff4359b"],
   tags: ["J11", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(whenErode(), gainSpark(randomCharacter(characterYouControl()), 1))],
+  verifiedText: expectedVerifiedText("When you erode a card, a random character you control gains +1✦."),
 });

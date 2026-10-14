@@ -1,3 +1,7 @@
+import { characterYouControl, randomCharacter } from "../../engine/dsl/builders";
+import { triggered, whenAbandon } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives/gain-spark";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +19,6 @@ export default dreamsign({
     "ee5e7dd2-0c11-4349-94e1-ec1ae35b20af",
   ],
   tags: ["J11", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(whenAbandon(), gainSpark(randomCharacter(characterYouControl()), 1))],
+  verifiedText: expectedVerifiedText("When you abandon a character, a random character you control gains +1✦."),
 });

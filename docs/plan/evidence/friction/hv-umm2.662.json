@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.662",
+  "phase": 5,
+  "implementMin": 30.31299405,
+  "implementWindow": {
+    "start": "2026-10-14T03:53:00.649000+00:00",
+    "end": "2026-10-14T04:23:19.428643+00:00"
+  },
+  "localValidationS": {
+    "control-4-v01": 4.9274245419946965,
+    "knip-final-v01": 5.048189416993409,
+    "sweep-v01": 31.156002874980913,
+    "weighted300-v01": 400.313238792005,
+    "final-focused-v01": 6.9286616669851355,
+    "control-1-v01": 4.265020791994175,
+    "post-runtime-schema-v01": 0.06970504100900143,
+    "authored-focused-v01": 4.990878500015242,
+    "normalized-schema-v01": 0.1524128339951858,
+    "control-2-v01": 4.172615916992072,
+    "review-final-v01": 63.95388829198782,
+    "preflight-v01": 1.5806897500006016,
+    "post-runtime-schema-v02": 0.07101662500645034,
+    "before-pending-v01": 7.224039708002238,
+    "before-empty-v01": 5.248039416008396,
+    "content-gate-final-v01": 5.325257292017341,
+    "control-3-v01": 4.585664666024968
+  },
+  "hostLoad": 9.41,
+  "testDelta": {
+    "files": 1,
+    "lines": 138,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
