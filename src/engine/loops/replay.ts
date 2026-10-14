@@ -60,7 +60,8 @@ function sameStep(a: Step, b: Step): boolean {
 function replayStep(start: BattleState, recorded: LoopStep, automatic: boolean, catalog: EngineCatalog, observeEvent?: EventObserver) {
   try {
     const result = runStep(start, recorded.step, NO_PROMPTS, catalog, { prefix: recorded.answers, automatic, replay: true, observeEvent });
-    return result.kind === "done" && result.answers.length === recorded.answers.length ? result : null;
+    const terminal = result.kind === "done" && result.state.result?.kind === "draw" && result.state.result.reason === "mandatoryLoop";
+    return result.kind === "done" && (terminal || result.answers.length === recorded.answers.length) ? result : null;
   } catch (error) {
     if (error instanceof ReplayDivergence || error instanceof UnrecordedPrompt || error instanceof IllegalAnswer) return null;
     throw error;

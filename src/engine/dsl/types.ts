@@ -636,6 +636,8 @@ export type MaterializeNth = number | { readonly atLeast: number };
 /** What makes a triggered ability trigger (rules § Ability Types → Triggered abilities). */
 export type Trigger =
   | { readonly on: NamedTrigger }
+  /** A successful named-bearing ability admission; the occasion has no card subject. */
+  | { readonly on: "namedAbilityTriggered"; readonly named: NamedTrigger; readonly player: PlayerRef }
   /** "When you play your `nth` … this turn" counts only the plays that match. */
   | { readonly on: "play"; readonly player: PlayerRef; readonly filter: CardFilter; readonly nth?: number; readonly from?: never }
   /**

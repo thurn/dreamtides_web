@@ -5,6 +5,7 @@ import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
 import { Context } from "./context";
 import { Suspend } from "./errors";
+import { AdmissionCycleDraw } from "../triggers/named-admissions";
 import { feasibilityGuard, type SearchMemo } from "./feasibility";
 import { stepDefinition, type Step } from "./kinds";
 import type { AnswerSource, EventObserver, RecordedAnswer, StepResult } from "./types";
@@ -81,7 +82,13 @@ export function runStep(
         disclosed: ctx.disclosed,
       };
     }
-    throw error;
+    if (!(error instanceof AdmissionCycleDraw) || work.result?.kind !== "draw" || work.result.reason !== "mandatoryLoop") throw error;
+  }
+  // A proved admission cycle completes immediately, including a terminal
+  // state adopted from an optional-loop replay. Its effect cannot continue.
+  if (work.result?.kind === "draw" && work.result.reason === "mandatoryLoop") {
+    work.version += 1;
+    return { kind: "done", state: work, events: ctx.events, answers: ctx.answers };
   }
   ctx.completeDeckTopReveals();
   checkVictory(ctx, ctx.events);

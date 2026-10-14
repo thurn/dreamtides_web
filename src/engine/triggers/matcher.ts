@@ -56,6 +56,7 @@ import type { ArmedAbility, ArmedTriggers, LookbackEventKind, StepContext, Trigg
 import { sidesBlindTo } from "../view/knowledge";
 import { ruleReactionBody, triggerBody } from "./body";
 import { observeRuleReactions, sourceObserved } from "./rule-reactions";
+import { observeNamedAdmissions, type NamedAdmission } from "./named-admissions";
 
 /** Every trigger kind except the `either` combinator, which matches through its branches. */
 type TriggerKind = Exclude<Trigger["on"], "either">;
@@ -77,6 +78,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   draw: ["cardDrawn"],
   foresee: ["foresaw"],
   handBecomesEmpty: ["handEmptied"],
+  namedAbilityTriggered: ["triggerQueued"],
   copy: ["cardCopied"],
   discard: ["discarded"],
   discardBatch: ["discardBatch"],
@@ -237,15 +239,16 @@ function matchTrigger(
   listener: Listener,
   inZone: boolean,
   armed: boolean,
+  admission?: NamedAdmission,
 ): Match | null {
   if (trigger.on === "either") {
     for (const branch of trigger.triggers) {
-      const match = matchTrigger(state, catalog, branch, event, listener, inZone, armed);
+      const match = matchTrigger(state, catalog, branch, event, listener, inZone, armed, admission);
       if (match !== null) return match;
     }
     return null;
   }
-  const match = matchKind(state, catalog, trigger, event, listener, inZone, armed);
+  const match = matchKind(state, catalog, trigger, event, listener, inZone, armed, admission);
   if (match !== null && !TRIGGER_EVENTS[trigger.on].includes(event.kind)) {
     throw new Error(`Trigger ${trigger.on} matched ${event.kind}, which TRIGGER_EVENTS does not list`);
   }
@@ -318,6 +321,7 @@ function matchKind(
   listener: Listener,
   inZone: boolean,
   armed: boolean,
+  admission?: NamedAdmission,
 ): Match | null {
   const self = sourceInstance(listener.source);
   const you = listener.controller;
@@ -339,6 +343,9 @@ function matchKind(
   }
   if (!inZone) return null;
   switch (trigger.on) {
+    case "namedAbilityTriggered":
+      return admission !== undefined && event.kind === "triggerQueued" &&
+        admission.queued.controller === resolvePlayer(you, trigger.player) && hasNamed(admission.trigger, trigger.named) ? NO_SUBJECT : null;
     case "materialized":
       return event.kind === "materialized" && self !== null && event.instance === self ? { subject: self } : null;
     case "dawn":
@@ -542,19 +549,20 @@ function enqueueAbility(
   index: number,
   match: Match,
   armed: ArmedAbility | null = null,
-): void {
+): NamedAdmission | null {
   const { state, catalog } = ctx;
   const key = oncePerTurnKey(listener.source, index);
   const { disabled, used } = armed === null ? triggerBlocks(state, catalog, listener.source, index) : armedBlocks(ctx, armed, key);
-  if (disabled || (ability.oncePerTurn === true && used)) return;
+  if (disabled || (ability.oncePerTurn === true && used)) return null;
   const scope = { controller: listener.controller, source: listener.source, optionalPaid: [] };
-  if (ability.condition !== undefined && !conditionHolds(state, catalog, ability.condition, scope)) return;
+  if (ability.condition !== undefined && !conditionHolds(state, catalog, ability.condition, scope)) return null;
   if (ability.oncePerTurn === true) {
     ctx.triggerUses.oncePerTurn.push(key);
     if (armed === null || !gainedRecordsDropped(state, catalog, listener, index)) state.oncePerTurn.push(key);
   }
-  enqueue(ctx, { source: listener.source, controller: listener.controller, origin: listener.origin, ability: index, node: null, ...match });
+  const admitted = enqueue(ctx, { source: listener.source, controller: listener.controller, origin: listener.origin, ability: index, node: null, ...match }, ability.trigger);
   recordDawnAdmission(ctx, listener.source, ability.trigger);
+  return admitted;
 }
 
 /** A delayed/floating body binds its own future subject, outside this copy occasion. */
@@ -578,7 +586,7 @@ function readsSubjectValue(value: unknown, kind: "subjectCost" | "subjectSpark",
  * it triggers (a card drawn into or discarded from a hidden hand), which
  * never see it as this trigger's subject.
  */
-function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
+function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger): NamedAdmission {
   const self = sourceInstance(matched.source);
   const lastKnownSourceSpark = self === null ? matched.lastKnownSourceSpark : (ctx.departedSourceSpark.get(self) ?? matched.lastKnownSourceSpark);
   const effect = triggerBody(ctx.catalog, matched.origin, matched.ability, matched.node).effect;
@@ -616,6 +624,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
     ...(trigger.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
     ...(trigger.linkedSource === undefined ? {} : { linkedSource: trigger.linkedSource }),
   });
+  return { queued: trigger, trigger: descriptor };
 }
 
 /**
@@ -627,7 +636,8 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
  * controller (RD-hv-umm2.342-1); its other abilities use their current
  * controller.
  */
-function matchListener(ctx: StepContext, side: Side, listener: Listener, event: EngineEvent, armed: ArmedTriggers): void {
+function matchListener(ctx: StepContext, side: Side, listener: Listener, event: EngineEvent, armed: ArmedTriggers, admission?: NamedAdmission): NamedAdmission[] {
+  const admitted: NamedAdmission[] = [];
   const departing = isLookbackEvent(event) && listener.source === event.instance;
   const dissolving = departing && event.kind === "dissolved";
   // A departed card's abilities as it left play, those it had gained included (rules § Gaining abilities).
@@ -642,12 +652,14 @@ function matchListener(ctx: StepContext, side: Side, listener: Listener, event: 
     );
     if (matching.controller !== side) return;
     const inZone = matching.emblem || worksInZone(ability.zone, matching.zone);
-    const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedAbility !== undefined);
-    if (match !== null) enqueueAbility(ctx, matching, ability, index, { ...match,
+    const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedAbility !== undefined, admission);
+    const queued = match === null ? null : enqueueAbility(ctx, matching, ability, index, { ...match,
       ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
       ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),
     }, armedAbility ?? null);
+    if (queued !== null) admitted.push(queued);
   });
+  return admitted;
 }
 
 /** A floating or delayed trigger's ability, and the listener it matches as: an emblem of its controller. */
@@ -669,7 +681,8 @@ function effectNumber(id: EffectId): number {
  * since, but a one-shot trigger that has triggered this step does not
  * trigger again from any record still holding it.
  */
-function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: ArmedTriggers): void {
+function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: ArmedTriggers, admission?: NamedAdmission): NamedAdmission[] {
+  const admitted: NamedAdmission[] = [];
   const armedHere = armed.floating.filter((effect) => effect.controller === side);
   const current = floatingTriggers(ctx.state, side).filter((effect) => !armedHere.some((entry) => entry.id === effect.id));
   const live = armedHere.filter((effect) => !ctx.triggerUses.once.has(effect.id));
@@ -679,13 +692,13 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
     if (floating === null || effect.change.kind !== "trigger") continue;
     const { ref, once, captured, lastKnownSourceSpark } = effect.change;
     const isArmed = armedHere.includes(effect);
-    const match = matchTrigger(ctx.state, ctx.catalog, floating.trigger, event, floating.listener, true, isArmed);
+    const match = matchTrigger(ctx.state, ctx.catalog, floating.trigger, event, floating.listener, true, isArmed, admission);
     if (match === null) continue;
     if (once) {
       ctx.triggerUses.once.add(effect.id);
       endFloating(ctx, (entry) => entry.id === effect.id);
     }
-    enqueue(ctx, {
+    admitted.push(enqueue(ctx, {
       source: effect.source,
       controller: side,
       origin: ref.origin,
@@ -696,9 +709,10 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
       ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),
       ...(captured === undefined ? {} : { captured: [...captured] }),
       ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
-    });
+    }, floating.trigger));
     recordDawnAdmission(ctx, effect.source, floating.trigger);
   }
+  return admitted;
 }
 
 const NOTHING_ARMED: ArmedTriggers = { abilities: new Map(), floating: [], origin: null };
@@ -821,7 +835,7 @@ function departure(state: BattleState, event: EngineEvent): Departure | null {
  */
 export function matchEvent(ctx: StepContext, event: EngineEvent): void {
   const { state } = ctx;
-  if (state.turn.turnNumber === 0 || state.result !== null || !TRIGGERING.includes(event.kind)) return;
+  if (state.turn.turnNumber === 0 || state.result !== null || event.kind === "triggerQueued" || !TRIGGERING.includes(event.kind)) return;
   if (event.kind === "leftPlay") {
     const instance = state.instances[event.instance];
     if (instance !== undefined) ctx.departedSourceObjects.set(event.instance, {
@@ -830,14 +844,51 @@ export function matchEvent(ctx: StepContext, event: EngineEvent): void {
   }
   if (event.kind === "materialized") recordMaterialized(state, ctx.catalog, event.side, event.instance);
   const beforeDawn = state.turnLog.dawnProgress?.total ?? 0;
+  const admitted: NamedAdmission[] = [];
   const departing = departure(state, event);
   const armed = isLookbackEvent(event) ? takeArmed(ctx, event) : NOTHING_ARMED;
   for (const side of [state.turn.active, opponent(state.turn.active)]) {
-    for (const listener of listeners(state, side, departing)) matchListener(ctx, side, listener, event, armed);
-    matchFloating(ctx, side, event, armed);
+    for (const listener of listeners(state, side, departing)) admitted.push(...matchListener(ctx, side, listener, event, armed));
+    admitted.push(...matchFloating(ctx, side, event, armed));
   }
   if (event.kind === "leftPlay") armLookbacks(ctx, event, departing);
   queueDawnReactions(ctx, beforeDawn);
+  observeNamedAdmissions(ctx, admitted, (entry) => matchNamedAdmission(ctx, entry), () => hasNamedAdmissionObserver(ctx));
+}
+
+/** Structural presence only: real admission retains all condition and allowance checks. */
+function containsNamedAdmissionObserver(trigger: Trigger): boolean {
+  return trigger.on === "namedAbilityTriggered" || (trigger.on === "either" && trigger.triggers.some(containsNamedAdmissionObserver));
+}
+
+/** Current functional observers, including gained abilities and captured floating refs. */
+function hasNamedAdmissionObserver(ctx: StepContext): boolean {
+  for (const side of SIDES) {
+    for (const listener of listeners(ctx.state, side, null)) {
+      if (originAbilities(ctx.catalog, listener.origin).some(ability => ability.kind === "triggered" &&
+        (listener.emblem || worksInZone(ability.zone, listener.zone)) && containsNamedAdmissionObserver(ability.trigger))) return true;
+    }
+    for (const effect of floatingTriggers(ctx.state, side)) {
+      const selected = floatingListener(ctx, effect);
+      if (selected !== null && containsNamedAdmissionObserver(selected.trigger)) return true;
+    }
+  }
+  return false;
+}
+
+/** Match one retained occurrence without re-emitting or trusting an ordinary announcement. */
+function matchNamedAdmission(ctx: StepContext, admission: NamedAdmission): NamedAdmission[] {
+  const { queued } = admission;
+  const event: EngineEvent = { kind: "triggerQueued", source: queued.source, controller: queued.controller,
+    ability: queued.ability, node: queued.node, subject: queued.subject };
+  const beforeDawn = ctx.state.turnLog.dawnProgress?.total ?? 0;
+  const admitted: NamedAdmission[] = [];
+  for (const side of [ctx.state.turn.active, opponent(ctx.state.turn.active)]) {
+    for (const listener of listeners(ctx.state, side, null)) admitted.push(...matchListener(ctx, side, listener, event, NOTHING_ARMED, admission));
+    admitted.push(...matchFloating(ctx, side, event, NOTHING_ARMED, admission));
+  }
+  queueDawnReactions(ctx, beforeDawn);
+  return admitted;
 }
 
 function hasNamed(trigger: Trigger, named: NamedTrigger): boolean {
@@ -856,17 +907,21 @@ export function triggerNamed(ctx: StepContext, id: InstanceId, named: NamedTrigg
 /** One named-trigger instruction admits every selected source before its reactions. */
 export function triggerNamedBatch(ctx: StepContext, ids: readonly InstanceId[], named: NamedTrigger): void {
   const beforeDawn = ctx.state.turnLog.dawnProgress?.total ?? 0;
-  for (const id of ids) enqueueNamed(ctx, id, named);
+  const admitted = ids.flatMap((id) => enqueueNamed(ctx, id, named));
   queueDawnReactions(ctx, beforeDawn);
+  observeNamedAdmissions(ctx, admitted, (entry) => matchNamedAdmission(ctx, entry), () => hasNamedAdmissionObserver(ctx));
 }
 
-function enqueueNamed(ctx: StepContext, id: InstanceId, named: NamedTrigger): void {
+function enqueueNamed(ctx: StepContext, id: InstanceId, named: NamedTrigger): NamedAdmission[] {
+  const admitted: NamedAdmission[] = [];
   const listener = cardListener(ctx.state, id);
   originAbilities(ctx.catalog, listener.origin).forEach((ability, index) => {
     if (ability.kind !== "triggered" || !hasNamed(ability.trigger, named)) return;
     if (named !== "dissolved" && !worksInZone(ability.zone, listener.zone)) return;
-    enqueueAbility(ctx, listener, ability, index, { subject: id });
+    const queued = enqueueAbility(ctx, listener, ability, index, { subject: id });
+    if (queued !== null) admitted.push(queued);
   });
+  return admitted;
 }
 
 /** Count successful admissions, not candidates or resolutions, and keep observer-qualified lower bounds. */

@@ -1,0 +1,24 @@
+{
+  "bead": "hv-p1ss",
+  "phase": 5,
+  "implementMin": 64.81218413333333,
+  "implementWindow": {
+    "start": "2026-10-14T11:59:53.924093+00:00",
+    "end": "2026-10-14T13:04:42.655141+00:00"
+  },
+  "localValidationS": {
+    "focused": 38.47808625298785,
+    "review": 168.60492279101163,
+    "knip": 13.245047499978682,
+    "counterfactual": 58.460506331932265,
+    "full": 518.4798982079956,
+    "fuzz": 338.0184086660156
+  },
+  "hostLoad": 18.0703125,
+  "testDelta": {
+    "files": 1,
+    "lines": 390,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

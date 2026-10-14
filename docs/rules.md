@@ -1963,6 +1963,20 @@ its source becomes public later. This knowledge persists if the source is
 hidden again. A hidden
 source's trigger does not otherwise reveal its named-trigger classification.
 
+**When a named ability triggers:** An ability that watches you trigger a
+named ability sees each successful admission of an ability you control that
+has that named trigger, including combined triggers admitted through another
+branch, explicit instructions, and floating or delayed abilities. Disabled,
+already-used once-per-turn, failed-condition, and wrong-zone candidates do
+not trigger it. Resolving an ability does not trigger it again. The occasion
+concerns the ability and names no card. Its reactions follow the whole
+causing admission batch and any Dawn-count threshold reactions. Each admitted
+occasion is observed in the causing admissions' FIFO order, with observers
+in the usual simultaneous trigger order. Reactions that themselves have a named trigger can cause
+further reactions. If these admissions repeat unavoidably before any body
+can resolve or any player can choose, the battle ends in a mandatory-loop
+draw; an optional instruction in a waiting body cannot stop that sequence.
+
 Each player sees a triggered ability trigger and resolve when they can see its
 card, avatar, or dreamsign, but not a hidden card the triggering event
 concerns: when "When you draw a card" triggers, the opponent learns that it

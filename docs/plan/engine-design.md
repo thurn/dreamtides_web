@@ -946,6 +946,17 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   source moves or ceases to exist. A "when … gains ✦" trigger also records
   `gain`, the matched gain's amount and expiry, which the trigger's effect
   reads as `env.gain`, the view shows, and `triggerQueued` logs.
+- **Named-admission observers.** `whenNamedAbilityTriggered(named, player)`
+  matches successful named-bearing occurrences after their complete causing
+  batch and its Dawn-threshold reactions. The matcher passes the exact
+  retained queued occurrence and selected trigger descriptor through a
+  synchronous internal seam; the observer has no card subject. Ordinary
+  queue announcements do not supply that seam. Per-root causal ancestry,
+  qualified by monotone once-per-turn and one-shot consumption, proves
+  admission-only mandatory cycles without conflating independent occasions.
+  A terminal control signal stops further effect resolution and deck-top
+  revelation. Ordinary queued observers use the existing save/view
+  transport; this seam introduces no persisted occurrence snapshot.
 - **Player-rule reactions.** A static `ruleModifier` Dawn threshold appends a
   `QueuedTrigger` with `kind: "ruleReaction"`, `node: null` and `subject: null`
   after the causing event's full admission batch or the complete resolved

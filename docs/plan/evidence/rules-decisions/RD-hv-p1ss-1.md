@@ -1,0 +1,8 @@
+# RD-hv-p1ss-1: Successful named-ability admission observers
+
+- Ladder: not invoked; existing named/combined-trigger, Counting Dawn, D14 and Infinite Loops clauses settle the behavior.
+- rules.md: Ability Types → Counting ▸Dawn abilities; When a named ability triggers; Trigger timing and order; Infinite Loops → Mandatory Loops.
+- Affects: 2d4eb3ee-0931-45ed-8365-69f18096ead5 (capability prerequisite only; production authoring belongs hv-umm2.237).
+- Why: Successful named-bearing admissions include either branches, explicit instructions and floating/delayed callbacks. Existing Counting Dawn excludes disabled, failed-condition, spent and wrong-zone candidates and resolution. D14 puts observer reactions after the complete causing batch; established Dawn-threshold ordering remains first. The observer occasion concerns an ability, so it has no card subject. A cycle entirely within admissions has no reachable body or prompt and is mandatory under Infinite Loops, including when a waiting body is optional. Once-per-turn/one-shot consumption can terminate a chain; independent root occasions are distinct. The exact retained occurrence reaches the internal matcher seam without a current-source rescan. Persisted exact-repeat transport and first-occurrence policy belong their dependent forms.
+
+The current clause generalizes the existing successful named-Dawn definition, rather than adopting a prototype or reference-engine rule. Read-only Rust battle rules345–355 describe the older Materialized/Judgment/Dissolved combined triggers and supply no named-admission observer precedent. No new ambiguity was resolved from that different ruleset.

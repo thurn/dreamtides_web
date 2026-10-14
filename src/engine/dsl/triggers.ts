@@ -66,6 +66,11 @@ export const onChallenge = (): Trigger => named("challenge");
 /** ▸Dissolved. */
 export const onDissolved = (): Trigger => named("dissolved");
 
+/** "When you trigger a named ability": each successful admission, with no card subject. */
+export function whenNamedAbilityTriggered(named: NamedTrigger, player: PlayerRef = "you"): Trigger {
+  return { on: "namedAbilityTriggered", named, player };
+}
+
 /** "When you play a card matching `filter`", or "your `nth` such card this turn". */
 export function whenYouPlay(filter: CardFilter = {}, nth?: number): Trigger {
   return { on: "play", player: "you", filter, ...(nth === undefined ? {} : { nth }) };

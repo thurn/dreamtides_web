@@ -1,0 +1,2963 @@
+{
+  "bead": "hv-p1ss",
+  "phase": 5,
+  "base": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+  "status": "Pre-commit evidence snapshot; parent freeze and independent exact-commit review pending.",
+  "clock": {
+    "dispatchEnvelopeStart": "2026-10-14T11:59:53.924093+00:00",
+    "observedSpawnReturn": "2026-10-14T12:00:31.200891+00:00",
+    "maximumEnvelopeOvercountS": 37.276798,
+    "exactHelperDispatchToolTimestamp": null,
+    "preCommitEvidenceBoundary": "2026-10-14T13:04:42.655141+00:00",
+    "inclusiveElapsedMin": 64.81218413333333,
+    "scope": "Conservative earlier dispatch bound through this pre-commit boundary, including source research, design, native-admission waits, implementation, checks, resource waits and evidence. Refresh immediately before automatic Git. Parent records external Git delta; no backdating or postcommit tracked rewrite.",
+    "productiveEditingTime": null,
+    "modelCpuTime": null,
+    "isolatedKernelLockQueueTime": null,
+    "parentClaimUTC": "2026-10-14T11:56:21Z",
+    "parentSetupSeparate": {
+      "npmInstallS": 2.676591791998362,
+      "prepareWorkspaceS": 3.5064648329862393,
+      "doctorHealthy": true
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v2 guarded command starting 2026-10-14T12:43:38.711342+00:00; actual os.getloadavg()[0], not a quiet-host assertion"
+      },
+      "localValidationS": {
+        "measuredFor": "Sum of actual outer guarded command walls per category, including all failed attempts and counterfactual controls. Full/fuzz include resource backoff; categories run partly concurrently and must not be summed into productive time."
+      }
+    }
+  },
+  "source": {
+    "currentCodeAndContractSHA256": {
+      "src/engine/dsl/types.ts": "4905fd1d4748aa8aabb4260858f985e20b67e6cece9546f7115598b0c219495e",
+      "src/engine/dsl/triggers.ts": "783fe8d620b203678ff493feb2be89d58e82d2a95269f274ba762720a916e55c",
+      "src/engine/triggers/matcher.ts": "acc698ce9476e42da24f572c644f5618eeec13cdbb897e16577e1e94183931f8",
+      "src/engine/triggers/named-admissions.ts": "351988816027c3bb3d6eaec09ae5737cf22529ce4bcc4ed7af37798114abfdb3",
+      "src/engine/loops/tracker.ts": "ef0ff903d266bfa7ad956622bc10548634677bc03c7b05f2a1689c3f5065f622",
+      "src/engine/loops/replay.ts": "253c0cabceeab869e30b10bca57396e9385adcf53aec2309674110948bc7cfd0",
+      "src/engine/steps/context.ts": "d36d3d84dc519eac3b19d61ac90c72157a18780a27d87af6861d3808dec4eb0c",
+      "src/engine/steps/runner.ts": "c592a8432dbfd761f08a5944edd43eb167b81dd9ef79f4b99ed0150cfec3dddd",
+      "src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts": "40a771b6418494f3a599dfddbde7fd2b1e66efe454c842083ab2c72df066661c"
+    },
+    "validatedFullManifestSHA256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+    "validatedManifestKeys": 4835,
+    "initialManifestKeys": 4831,
+    "initialStableKeys": 4822,
+    "initialChangedKeys": {
+      "docs/plan/engine-design.md": {
+        "before": "4821eaf8efaf5a654282a6554f24223c909682ae800a9a24b3c43a84bf485f5a",
+        "after": "31d0edf9556da59a5d4467f3b60a03076e8b9371f080b0936dd83115849382ca"
+      },
+      "docs/rules.md": {
+        "before": "8730189609ff5659b51ec52468fe330e94a398c7e13571a3c43be3a4c3e66123",
+        "after": "89bddc3dd775a6be572a67248b509f24744d9fc05c262ac2e87eb2579398fc7d"
+      },
+      "src/engine/dsl/triggers.ts": {
+        "before": "03f2204e630831d28b9e62f0324fbec04fac1c34ee15745beaf19c3515f97450",
+        "after": "783fe8d620b203678ff493feb2be89d58e82d2a95269f274ba762720a916e55c"
+      },
+      "src/engine/dsl/types.ts": {
+        "before": "4d3cd3efd968596ad8724b6dfcadc9d8d452ab168f6eb5a1c4ecb20ddb8dff40",
+        "after": "4905fd1d4748aa8aabb4260858f985e20b67e6cece9546f7115598b0c219495e"
+      },
+      "src/engine/loops/replay.ts": {
+        "before": "0ea7189305755e536da5ed7b6446f235c0f40384e50a664bbafa48537ad32e06",
+        "after": "253c0cabceeab869e30b10bca57396e9385adcf53aec2309674110948bc7cfd0"
+      },
+      "src/engine/loops/tracker.ts": {
+        "before": "86d4245b1f792a02e46b4ae24fc566e91ed5196ef58a32a77a0971e20ac220fd",
+        "after": "ef0ff903d266bfa7ad956622bc10548634677bc03c7b05f2a1689c3f5065f622"
+      },
+      "src/engine/steps/context.ts": {
+        "before": "915ad07440316b5c7aac606c3077662762713e60952a472ca365ff2b23c5eab1",
+        "after": "d36d3d84dc519eac3b19d61ac90c72157a18780a27d87af6861d3808dec4eb0c"
+      },
+      "src/engine/steps/runner.ts": {
+        "before": "c315e9bc2f7e1e7d69d8441883645c6d34acfcb5b21d040ea4ec4962077bde0a",
+        "after": "c592a8432dbfd761f08a5944edd43eb167b81dd9ef79f4b99ed0150cfec3dddd"
+      },
+      "src/engine/triggers/matcher.ts": {
+        "before": "5d19b12c2935056f32c4d168f38e957de25916636438f3aa47d2fdc2e0e82af3",
+        "after": "acc698ce9476e42da24f572c644f5618eeec13cdbb897e16577e1e94183931f8"
+      }
+    },
+    "scope": "Exactly eight production files, one new contract module, two additive normative clauses, own RD/friction/measurements. No state/view/save/event schema, catalogs, UI, shared test entrypoint/config or generated outputs. Source-only final documentation phrase/evidence do not alter the nine validated code/test hashes."
+  },
+  "admission": {
+    "sourceProposalSHA256": "a82091df1ca082b4685d4d01d563b7f3acedfe18ddf51bc551652c2e7bfd3f11",
+    "sourceProofSHA256": "e832e72c1d1981993575b646438e7990047ccf8b5185908eeb9f86b8adc70d35",
+    "parentAuditSHA256": "e033830da0a610e7f9be3c65a907e26339a8c9db9016137c358fec04fb6f43b4",
+    "fastpathProposalSHA256": "1d54ea300fc268c63bbf724a991afe677312bde072da99eac37f4c89aae80211",
+    "sourceAndFastpathNativeAckArtifacts": [
+      "/tmp/root-p1ss/source-admission.stdout",
+      "/tmp/root-p1ss/fastpath-admission.stdout"
+    ],
+    "onePublicForm": "whenNamedAbilityTriggered(named, player=you)",
+    "productionCatalogEntities": 0,
+    "dependentAcceptance": "Original hv-umm2.237 retains firstTimeEachTurn, both content UUIDs, weighted300 and both-side/D21 acceptance. Dependent hv-vwcb owns exact-repeat public effect/persisted occurrence transport."
+  },
+  "contracts": {
+    "path": "src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts",
+    "lines": 390,
+    "cases": 52,
+    "jsdom": false,
+    "registry": "Existing eager contracts.test.ts discovery; unchanged test runner/config.",
+    "focusedCurrent": "52 passed in fastpath-focused-1",
+    "relatedCurrent": "299 files / 7026 tests passed in review-v2",
+    "fullCurrent": "380 files / 8034 tests passed in full-final-v2"
+  },
+  "unintendedFailedCommands": {
+    "focused-1": "32/34 passed; helper expected noPrompt instead of actual typed noPendingPrompt. Expectation repaired.",
+    "focused-2": "42/44 passed; helper imported parseDreamsignId from wrong module. Corrected to types/identifiers.",
+    "review-1": "Related tests passed; helper Array.at unsupported by configured TS library produced type/lint failure. Replaced with indexed access. No production bug inferred."
+  },
+  "counterfactualEpochs": [
+    {
+      "epoch": "v1",
+      "planSHA256": "d3df455b266bdcbd50085cb2cdbd6e4e44b69ec291e4244457caadb1aaeefa24",
+      "runnerSHA256": "eab263c5db0d8a7b4a87961a36e54d26c2e139f53993c0367bcc310f4e22588b",
+      "plan": {
+        "scope": "Only exact temporary body mutations below; each restored before next. No other source/evidence edits while running; no hangs or source-loader absence mutations. Parent ACK required before executing.",
+        "baseline": {
+          "src/engine/dsl/types.ts": "4905fd1d4748aa8aabb4260858f985e20b67e6cece9546f7115598b0c219495e",
+          "src/engine/dsl/triggers.ts": "783fe8d620b203678ff493feb2be89d58e82d2a95269f274ba762720a916e55c",
+          "src/engine/triggers/matcher.ts": "dab28be72707bea71615e165e41e7634fb3344c78747d7d60bc09d42d8fc53cb",
+          "src/engine/triggers/named-admissions.ts": "fc3d2423201ee4a98d935cb40c570723f16f3fdf3954e35c2132b6da7ca0c58d",
+          "src/engine/loops/tracker.ts": "ef0ff903d266bfa7ad956622bc10548634677bc03c7b05f2a1689c3f5065f622",
+          "src/engine/loops/replay.ts": "253c0cabceeab869e30b10bca57396e9385adcf53aec2309674110948bc7cfd0",
+          "src/engine/steps/context.ts": "d36d3d84dc519eac3b19d61ac90c72157a18780a27d87af6861d3808dec4eb0c",
+          "src/engine/steps/runner.ts": "c592a8432dbfd761f08a5944edd43eb167b81dd9ef79f4b99ed0150cfec3dddd",
+          "src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts": "46b8746eecbdfe6fd9d2101b9a8b52bd3e30a1e5921d58c7bdcfec3c253c1333"
+        },
+        "guardSHA": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "whenNamedAbilityTriggered.*(observes actual|batches all explicit|keeps independent|cancels)"
+        ],
+        "cases": 8,
+        "mutations": [
+          {
+            "label": "cf-no-match",
+            "path": "src/engine/triggers/matcher.ts",
+            "edits": [
+              {
+                "before": "    case \"namedAbilityTriggered\":\n      return admission !== undefined && event.kind === \"triggerQueued\" &&\n        admission.queued.controller === resolvePlayer(you, trigger.player) && hasNamed(admission.trigger, trigger.named) ? NO_SUBJECT : null;\n",
+                "after": "    case \"namedAbilityTriggered\":\n      return null;\n"
+              }
+            ],
+            "expected": {
+              "failed": 6,
+              "passed": 2
+            },
+            "discriminators": "actual observer cardinality/energy/points; explicit batch and bridge observers missing",
+            "controls": "both planning cancellation cases pass unchanged",
+            "mutatedSHA": "ff3082be94a023f69c98a5bb32ef1fc1a0bcbdd56732e99f24242571c0fa85be"
+          },
+          {
+            "label": "cf-early-batch",
+            "path": "src/engine/triggers/matcher.ts",
+            "edits": [
+              {
+                "before": "  const admitted = ids.flatMap((id) => enqueueNamed(ctx, id, named));\n  queueDawnReactions(ctx, beforeDawn);\n  observeNamedAdmissions(ctx, admitted, (entry) => matchNamedAdmission(ctx, entry));",
+                "after": "  for (const id of ids) {\n    const admitted = enqueueNamed(ctx, id, named);\n    observeNamedAdmissions(ctx, admitted, (entry) => matchNamedAdmission(ctx, entry));\n  }\n  queueDawnReactions(ctx, beforeDawn);"
+              }
+            ],
+            "expected": {
+              "failed": 2,
+              "passed": 6
+            },
+            "discriminators": "two causing sources and two observer sources expected root-major/source-minor wholebatch queue order",
+            "controls": "single-source actual admissions, one-source convergent roots and cancellations remain pass",
+            "mutatedSHA": "575e9f8d785dc7e54d1e67dc2e59b775c3534c94cd8e1e47580e14878a6c41e0"
+          },
+          {
+            "label": "cf-global-ancestry",
+            "path": "src/engine/triggers/named-admissions.ts",
+            "edits": [
+              {
+                "before": "  let wave = roots.filter(({ trigger }) => namedBearing(trigger)).map(admission => ({ admission, ancestry: new Set<string>() }));",
+                "after": "  const visited = new Set<string>();\n  let wave = roots.filter(({ trigger }) => namedBearing(trigger)).map(admission => ({ admission, ancestry: visited }));"
+              },
+              {
+                "before": "      const parents = new Set([...ancestry, key]);",
+                "after": "      ancestry.add(key);\n      const parents = ancestry;"
+              }
+            ],
+            "expected": {
+              "failed": 2,
+              "passed": 6
+            },
+            "discriminators": "two independent roots converge onto identical named-Dawn bridge; shared visited falsely draws whereas real per-causal ancestry is finite",
+            "controls": "ordinary actual materialization, explicit nonnamed observers and planning cancellation remain pass",
+            "mutatedSHA": "dfbc83d54836e3ad894311e878f7a0b240c2fd996196ae8a2cdcc78674d6116c"
+          }
+        ]
+      },
+      "terminal": [
+        {
+          "label": "cf-no-match",
+          "started": "2026-10-14T12:28:33.044404+00:00",
+          "ended": "2026-10-14T12:28:40.731390+00:00",
+          "expected_exit": 1,
+          "actual_exit": 1,
+          "original_sha": "dab28be72707bea71615e165e41e7634fb3344c78747d7d60bc09d42d8fc53cb",
+          "mutated_sha": "ff3082be94a023f69c98a5bb32ef1fc1a0bcbdd56732e99f24242571c0fa85be",
+          "restored_sha": "dab28be72707bea71615e165e41e7634fb3344c78747d7d60bc09d42d8fc53cb",
+          "full_source_restored": true,
+          "child_reaped": true,
+          "remaining_group": false,
+          "receipt_sha": "256a5a652d8add3d7701ceb4524256d1a97f52341001bdea9fb697054cd5d9db",
+          "restored_manifest_sha": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918"
+        },
+        {
+          "label": "cf-early-batch",
+          "started": "2026-10-14T12:28:40.874379+00:00",
+          "ended": "2026-10-14T12:28:47.937164+00:00",
+          "expected_exit": 1,
+          "actual_exit": 1,
+          "original_sha": "dab28be72707bea71615e165e41e7634fb3344c78747d7d60bc09d42d8fc53cb",
+          "mutated_sha": "575e9f8d785dc7e54d1e67dc2e59b775c3534c94cd8e1e47580e14878a6c41e0",
+          "restored_sha": "dab28be72707bea71615e165e41e7634fb3344c78747d7d60bc09d42d8fc53cb",
+          "full_source_restored": true,
+          "child_reaped": true,
+          "remaining_group": false,
+          "receipt_sha": "78903f3b26a651278460c4029640c9fb8df88270a928ae9cf0f8028a8f4d2950",
+          "restored_manifest_sha": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918"
+        },
+        {
+          "label": "cf-global-ancestry",
+          "started": "2026-10-14T12:28:48.078484+00:00",
+          "ended": "2026-10-14T12:28:54.174409+00:00",
+          "expected_exit": 1,
+          "actual_exit": 1,
+          "original_sha": "fc3d2423201ee4a98d935cb40c570723f16f3fdf3954e35c2132b6da7ca0c58d",
+          "mutated_sha": "dfbc83d54836e3ad894311e878f7a0b240c2fd996196ae8a2cdcc78674d6116c",
+          "restored_sha": "fc3d2423201ee4a98d935cb40c570723f16f3fdf3954e35c2132b6da7ca0c58d",
+          "full_source_restored": true,
+          "child_reaped": true,
+          "remaining_group": false,
+          "receipt_sha": "201fcb5748f9a05b66ef35d2894dd33b35fe6fa86a43f7b0fb7fa6f784df69ff",
+          "restored_manifest_sha": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918"
+        }
+      ],
+      "semanticOutcomes": [
+        "disable successful match:6fail2pass, observers missing; cancellation controls pass",
+        "flush per source:2fail6pass, root/observer wholebatch order wrong; other controls pass",
+        "global visited:2fail6pass, false draw on independent roots converging to identical named bridge; finite controls pass"
+      ],
+      "restoredControl": "cf-restored8/8",
+      "qualification": "Each one-file exact mutation followed by actual expected semantic assertions, reap/emptygroup, fullmanifest restoration before next; old epoch retained, no hanging or parser/absence mutation."
+    },
+    {
+      "epoch": "-v2",
+      "planSHA256": "d96a49cafcf6714f9b2a9470a46bed0c084fc4c7e7c8bf1bfb3c35250e44f5a8",
+      "runnerSHA256": "e045e208103f408f2a4707880647fd475decaa4264d3815cfa2839a50aff2fd6",
+      "plan": {
+        "scope": "Only exact temporary body mutations below; each restored before next. No other source/evidence edits while running; no hangs or source-loader absence mutations. Parent ACK required before executing.",
+        "baseline": {
+          "src/engine/dsl/types.ts": "4905fd1d4748aa8aabb4260858f985e20b67e6cece9546f7115598b0c219495e",
+          "src/engine/dsl/triggers.ts": "783fe8d620b203678ff493feb2be89d58e82d2a95269f274ba762720a916e55c",
+          "src/engine/triggers/matcher.ts": "acc698ce9476e42da24f572c644f5618eeec13cdbb897e16577e1e94183931f8",
+          "src/engine/triggers/named-admissions.ts": "351988816027c3bb3d6eaec09ae5737cf22529ce4bcc4ed7af37798114abfdb3",
+          "src/engine/loops/tracker.ts": "ef0ff903d266bfa7ad956622bc10548634677bc03c7b05f2a1689c3f5065f622",
+          "src/engine/loops/replay.ts": "253c0cabceeab869e30b10bca57396e9385adcf53aec2309674110948bc7cfd0",
+          "src/engine/steps/context.ts": "d36d3d84dc519eac3b19d61ac90c72157a18780a27d87af6861d3808dec4eb0c",
+          "src/engine/steps/runner.ts": "c592a8432dbfd761f08a5944edd43eb167b81dd9ef79f4b99ed0150cfec3dddd",
+          "src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts": "40a771b6418494f3a599dfddbde7fd2b1e66efe454c842083ab2c72df066661c"
+        },
+        "guardSHA": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "whenNamedAbilityTriggered.*(observes actual|batches all explicit|keeps independent|cancels)"
+        ],
+        "cases": 8,
+        "mutations": [
+          {
+            "label": "cfv2-no-match",
+            "path": "src/engine/triggers/matcher.ts",
+            "edits": [
+              {
+                "before": "    case \"namedAbilityTriggered\":\n      return admission !== undefined && event.kind === \"triggerQueued\" &&\n        admission.queued.controller === resolvePlayer(you, trigger.player) && hasNamed(admission.trigger, trigger.named) ? NO_SUBJECT : null;\n",
+                "after": "    case \"namedAbilityTriggered\":\n      return null;\n"
+              }
+            ],
+            "expected": {
+              "failed": 6,
+              "passed": 2
+            },
+            "discriminators": "actual observer cardinality/energy/points; explicit batch and bridge observers missing",
+            "controls": "both planning cancellation cases pass unchanged",
+            "mutatedSHA": "8bcb5903568d6538a47689e31fcece0d9d0d9666c327c5db27f90528588286f0"
+          },
+          {
+            "label": "cfv2-early-batch",
+            "path": "src/engine/triggers/matcher.ts",
+            "edits": [
+              {
+                "before": "  const admitted = ids.flatMap((id) => enqueueNamed(ctx, id, named));\n  queueDawnReactions(ctx, beforeDawn);\n  observeNamedAdmissions(ctx, admitted, (entry) => matchNamedAdmission(ctx, entry), () => hasNamedAdmissionObserver(ctx));",
+                "after": "  for (const id of ids) {\n    const admitted = enqueueNamed(ctx, id, named);\n    observeNamedAdmissions(ctx, admitted, (entry) => matchNamedAdmission(ctx, entry), () => hasNamedAdmissionObserver(ctx));\n  }\n  queueDawnReactions(ctx, beforeDawn);"
+              }
+            ],
+            "expected": {
+              "failed": 2,
+              "passed": 6
+            },
+            "discriminators": "two causing sources and two observer sources expected root-major/source-minor wholebatch queue order",
+            "controls": "single-source actual admissions, one-source convergent roots and cancellations remain pass",
+            "mutatedSHA": "4dc9fa8b002ee55c0f6cb308b314af262b64caf570665d2d2cb416b95544aef4"
+          },
+          {
+            "label": "cfv2-global-ancestry",
+            "path": "src/engine/triggers/named-admissions.ts",
+            "edits": [
+              {
+                "before": "  let wave = roots.filter(({ trigger }) => namedBearing(trigger)).map(admission => ({ admission, ancestry: new Set<string>() }));",
+                "after": "  const visited = new Set<string>();\n  let wave = roots.filter(({ trigger }) => namedBearing(trigger)).map(admission => ({ admission, ancestry: visited }));"
+              },
+              {
+                "before": "      const parents = new Set([...ancestry, key]);",
+                "after": "      ancestry.add(key);\n      const parents = ancestry;"
+              }
+            ],
+            "expected": {
+              "failed": 2,
+              "passed": 6
+            },
+            "discriminators": "two independent roots converge onto identical named-Dawn bridge; shared visited falsely draws whereas real per-causal ancestry is finite",
+            "controls": "ordinary actual materialization, explicit nonnamed observers and planning cancellation remain pass",
+            "mutatedSHA": "a52645d3295f8e5103767604bcd95ffe3411c4e04190c7f08539fcee19389733"
+          }
+        ],
+        "epoch": "v2 post absent-observer gate, original v1 files remain immutable"
+      },
+      "terminal": [
+        {
+          "label": "cfv2-no-match",
+          "started": "2026-10-14T12:42:33.812085+00:00",
+          "ended": "2026-10-14T12:42:45.767962+00:00",
+          "expected_exit": 1,
+          "actual_exit": 1,
+          "original_sha": "acc698ce9476e42da24f572c644f5618eeec13cdbb897e16577e1e94183931f8",
+          "mutated_sha": "8bcb5903568d6538a47689e31fcece0d9d0d9666c327c5db27f90528588286f0",
+          "restored_sha": "acc698ce9476e42da24f572c644f5618eeec13cdbb897e16577e1e94183931f8",
+          "full_source_restored": true,
+          "child_reaped": true,
+          "remaining_group": false,
+          "receipt_sha": "3581b96e13be93f4bb8a58708afacb145ca8c23d5264f8d5ded3a9560753b344",
+          "restored_manifest_sha": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a"
+        },
+        {
+          "label": "cfv2-early-batch",
+          "started": "2026-10-14T12:42:45.912514+00:00",
+          "ended": "2026-10-14T12:42:54.268823+00:00",
+          "expected_exit": 1,
+          "actual_exit": 1,
+          "original_sha": "acc698ce9476e42da24f572c644f5618eeec13cdbb897e16577e1e94183931f8",
+          "mutated_sha": "4dc9fa8b002ee55c0f6cb308b314af262b64caf570665d2d2cb416b95544aef4",
+          "restored_sha": "acc698ce9476e42da24f572c644f5618eeec13cdbb897e16577e1e94183931f8",
+          "full_source_restored": true,
+          "child_reaped": true,
+          "remaining_group": false,
+          "receipt_sha": "771249d0852c4ec8a12fd3b6103790ab8dc030ae0741d56ebf999dd2624f1443",
+          "restored_manifest_sha": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a"
+        },
+        {
+          "label": "cfv2-global-ancestry",
+          "started": "2026-10-14T12:42:54.441571+00:00",
+          "ended": "2026-10-14T12:43:01.951374+00:00",
+          "expected_exit": 1,
+          "actual_exit": 1,
+          "original_sha": "351988816027c3bb3d6eaec09ae5737cf22529ce4bcc4ed7af37798114abfdb3",
+          "mutated_sha": "a52645d3295f8e5103767604bcd95ffe3411c4e04190c7f08539fcee19389733",
+          "restored_sha": "351988816027c3bb3d6eaec09ae5737cf22529ce4bcc4ed7af37798114abfdb3",
+          "full_source_restored": true,
+          "child_reaped": true,
+          "remaining_group": false,
+          "receipt_sha": "eb3f0102838817ebf8120130d1dc4c69b4155a4830f799cfe4a89f064db55509",
+          "restored_manifest_sha": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a"
+        }
+      ],
+      "semanticOutcomes": [
+        "disable successful match:6fail2pass, observers missing; cancellation controls pass",
+        "flush per source:2fail6pass, root/observer wholebatch order wrong; other controls pass",
+        "global visited:2fail6pass, false draw on independent roots converging to identical named bridge; finite controls pass"
+      ],
+      "restoredControl": "cfv2-restored8/8",
+      "qualification": "Each one-file exact mutation followed by actual expected semantic assertions, reap/emptygroup, fullmanifest restoration before next; old epoch retained, no hanging or parser/absence mutation."
+    }
+  ],
+  "checks": {
+    "cf-early-batch": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered.*(observes actual|batches all explicit|keeps independent|cancels)"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:28:41.034983+00:00",
+      "ended": "2026-10-14T12:28:47.456822+00:00",
+      "elapsed_seconds": 6.421667749993503,
+      "pid": 26480,
+      "pgid": 26480,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        3.16552734375,
+        3.08154296875,
+        3.33740234375
+      ],
+      "stdout_sha256": "534877ead51e039162984841fc9b0abc356957dee429e27f1390bdfb30296a36",
+      "stderr_sha256": "c812764a48b3421328d4c481585e8656042f43df6992e377b0bf9c609c616de7",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "dc45fb1082a4e6981e3530db9250753780cf78c3cdd4175b17cc60ca7c1b5a81",
+      "after_sha256": "dc45fb1082a4e6981e3530db9250753780cf78c3cdd4175b17cc60ca7c1b5a81",
+      "receiptSHA256": "78903f3b26a651278460c4029640c9fb8df88270a928ae9cf0f8028a8f4d2950",
+      "load_start": [
+        3.18017578125,
+        3.0830078125,
+        3.33984375
+      ]
+    },
+    "cf-global-ancestry": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered.*(observes actual|batches all explicit|keeps independent|cancels)"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:28:48.238501+00:00",
+      "ended": "2026-10-14T12:28:53.704363+00:00",
+      "elapsed_seconds": 5.465680458990391,
+      "pid": 26907,
+      "pgid": 26907,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        3.31201171875,
+        3.11328125,
+        3.3466796875
+      ],
+      "stdout_sha256": "33357dc702adfe8a298cc9a9ae020d2309dfd090f00a5fd0b20247f2b3264bfe",
+      "stderr_sha256": "a241a8ab4dc6c40cb8bbef516491978f56ffd4afe6a24a07e83863aa5fab3885",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "2d1a4fc97f73e7b558b5768de53bde6291a35f570867e4200c25c1e8ee7b5d30",
+      "after_sha256": "2d1a4fc97f73e7b558b5768de53bde6291a35f570867e4200c25c1e8ee7b5d30",
+      "receiptSHA256": "201fcb5748f9a05b66ef35d2894dd33b35fe6fa86a43f7b0fb7fa6f784df69ff",
+      "load_start": [
+        3.16552734375,
+        3.08154296875,
+        3.33740234375
+      ]
+    },
+    "cf-no-match": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered.*(observes actual|batches all explicit|keeps independent|cancels)"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:28:33.202838+00:00",
+      "ended": "2026-10-14T12:28:40.263780+00:00",
+      "elapsed_seconds": 7.060740957997041,
+      "pid": 26173,
+      "pgid": 26173,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        3.18017578125,
+        3.0830078125,
+        3.33984375
+      ],
+      "stdout_sha256": "226911a2f81454f19e9d27d1cbc202bc20a71990a497028be562b87d578b312a",
+      "stderr_sha256": "ffeca0a3eb5b2a96132dbe708d1308def1ecd7c8eece88a41bee85a33aa313a2",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "4caeac0f8c5276552b71856ee643e256237509203e95270f4f0b45665f49caea",
+      "after_sha256": "4caeac0f8c5276552b71856ee643e256237509203e95270f4f0b45665f49caea",
+      "receiptSHA256": "256a5a652d8add3d7701ceb4524256d1a97f52341001bdea9fb697054cd5d9db",
+      "load_start": [
+        3.00927734375,
+        3.05126953125,
+        3.33203125
+      ]
+    },
+    "cf-restored": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered.*(observes actual|batches all explicit|keeps independent|cancels)"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:29:13.419309+00:00",
+      "ended": "2026-10-14T12:29:18.647870+00:00",
+      "elapsed_seconds": 5.2283858329756185,
+      "pid": 27461,
+      "pgid": 27461,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        3.01904296875,
+        3.05615234375,
+        3.31787109375
+      ],
+      "stdout_sha256": "e68f4d2e3c6e95b61ffef1427796e021505c3664aa70997aa65cea2c969fbbbe",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918",
+      "after_sha256": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918",
+      "receiptSHA256": "7bc9bd8f5e1aa455e646f370ecd28d7a1048bdb094e0cc7adc07669e861ff206",
+      "load_start": [
+        2.8466796875,
+        3.0234375,
+        3.30810546875
+      ]
+    },
+    "cfv2-early-batch": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered.*(observes actual|batches all explicit|keeps independent|cancels)"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:42:46.082485+00:00",
+      "ended": "2026-10-14T12:42:53.713410+00:00",
+      "elapsed_seconds": 7.630760500003817,
+      "pid": 82352,
+      "pgid": 82352,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        11.896484375,
+        10.4921875,
+        7.90673828125
+      ],
+      "stdout_sha256": "1a2ff251be73dae523781f8cbd7162bc1ba007858d78534cebb66ce293a4b122",
+      "stderr_sha256": "c812764a48b3421328d4c481585e8656042f43df6992e377b0bf9c609c616de7",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "da765ab54b52423aadfaa51186045ef7d7bea76d222ffb236ce01d0e64c5f880",
+      "after_sha256": "da765ab54b52423aadfaa51186045ef7d7bea76d222ffb236ce01d0e64c5f880",
+      "receiptSHA256": "771249d0852c4ec8a12fd3b6103790ab8dc030ae0741d56ebf999dd2624f1443",
+      "load_start": [
+        8.23193359375,
+        9.7578125,
+        7.63525390625
+      ]
+    },
+    "cfv2-global-ancestry": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered.*(observes actual|batches all explicit|keeps independent|cancels)"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:42:54.642237+00:00",
+      "ended": "2026-10-14T12:43:01.357709+00:00",
+      "elapsed_seconds": 6.715253790986026,
+      "pid": 83087,
+      "pgid": 83087,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        15.02490234375,
+        11.20166015625,
+        8.18798828125
+      ],
+      "stdout_sha256": "fc1da58c5424acc6c2b82483ba2a1f859075b5751de0db394c847d52642d0a23",
+      "stderr_sha256": "a241a8ab4dc6c40cb8bbef516491978f56ffd4afe6a24a07e83863aa5fab3885",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "ebcee87bdd4d73326f27e3a963d608f51e75f5f41f179acf414aea6ddcea48d4",
+      "after_sha256": "ebcee87bdd4d73326f27e3a963d608f51e75f5f41f179acf414aea6ddcea48d4",
+      "receiptSHA256": "eb3f0102838817ebf8120130d1dc4c69b4155a4830f799cfe4a89f064db55509",
+      "load_start": [
+        11.896484375,
+        10.4921875,
+        7.90673828125
+      ]
+    },
+    "cfv2-no-match": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered.*(observes actual|batches all explicit|keeps independent|cancels)"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:42:33.998867+00:00",
+      "ended": "2026-10-14T12:42:44.944536+00:00",
+      "elapsed_seconds": 10.945477583009051,
+      "pid": 81385,
+      "pgid": 81385,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        8.23193359375,
+        9.7578125,
+        7.63525390625
+      ],
+      "stdout_sha256": "15c2c3f39b20401c8b41a34e77f643701c49f6d43231c2c0ebde253832639a09",
+      "stderr_sha256": "ffeca0a3eb5b2a96132dbe708d1308def1ecd7c8eece88a41bee85a33aa313a2",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "e6f036f8a65a48c5783cc9d173f9b80150d5746a995b851aa8837248a68d27fe",
+      "after_sha256": "e6f036f8a65a48c5783cc9d173f9b80150d5746a995b851aa8837248a68d27fe",
+      "receiptSHA256": "3581b96e13be93f4bb8a58708afacb145ca8c23d5264f8d5ded3a9560753b344",
+      "load_start": [
+        7.89599609375,
+        9.779296875,
+        7.60595703125
+      ]
+    },
+    "cfv2-restored": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered.*(observes actual|batches all explicit|keeps independent|cancels)"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:43:12.341664+00:00",
+      "ended": "2026-10-14T12:43:21.334513+00:00",
+      "elapsed_seconds": 8.992539457976818,
+      "pid": 8270,
+      "pgid": 8270,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        18.14208984375,
+        12.19873046875,
+        8.6171875
+      ],
+      "stdout_sha256": "0845c0a6b77c7d6e27b2d126c68a0f6fad137d0acbb083e67fd0671a192f9528",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "after_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "receiptSHA256": "01ece7c94f6446fde83bc30e9492ce1a9778c04803fe91d82d4fd980e52efa19",
+      "load_start": [
+        17.5859375,
+        11.87109375,
+        8.4599609375
+      ]
+    },
+    "fastpath-focused-1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:40:36.629858+00:00",
+      "ended": "2026-10-14T12:40:44.671046+00:00",
+      "elapsed_seconds": 8.041006791987456,
+      "pid": 77042,
+      "pgid": 77042,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        12.21337890625,
+        11.34619140625,
+        7.8046875
+      ],
+      "stdout_sha256": "1b0f9664356bdaf393d574d4c81af3bd2169d607cdd4725614abac39ee5a85b9",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "after_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "receiptSHA256": "13b853b7d7ff3f3f05298a2af65816d87aa283b4561f22b3f4295d5141cb5919",
+      "load_start": [
+        12.05810546875,
+        11.3017578125,
+        7.7685546875
+      ]
+    },
+    "focused-1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:22:03.333421+00:00",
+      "ended": "2026-10-14T12:22:10.259925+00:00",
+      "elapsed_seconds": 6.926353959017433,
+      "pid": 20253,
+      "pgid": 20253,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        2.560546875,
+        2.484375,
+        3.3583984375
+      ],
+      "stdout_sha256": "9c1fd674f70fef82029101b7f2f8241ffe87830e2fac59a29a513f32d75d1203",
+      "stderr_sha256": "68b73f3e93b9b642d1b8eec758e0635c8c7300cda070a49c971e01f2db1a53ad",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4834,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "52ea8d9165e233e44606db42732d3bc727d9890cc112d13b7978f1a675288f44",
+      "after_sha256": "52ea8d9165e233e44606db42732d3bc727d9890cc112d13b7978f1a675288f44",
+      "receiptSHA256": "c443f0edc65c52017bbe94f3e17287968c3490c709b95af15e5805e0ef204488",
+      "load_start": [
+        2.56103515625,
+        2.48388671875,
+        3.369140625
+      ]
+    },
+    "focused-2": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:23:18.580807+00:00",
+      "ended": "2026-10-14T12:23:25.606011+00:00",
+      "elapsed_seconds": 7.02500420899014,
+      "pid": 21279,
+      "pgid": 21279,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        2.9296875,
+        2.5986328125,
+        3.3251953125
+      ],
+      "stdout_sha256": "c7be32544ad7b27d3e4a9648b739ee91ba261d220fb715274fbc5106242d9a24",
+      "stderr_sha256": "f2d0bdb43ce420c99c9ab080c4dd5e70712f0a2aae46ad02490f13869642d817",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4834,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "0cae9a140c0dd97d1dd2959350ce3d75ac86b9f047e5ad9d50ef061c18f63d8c",
+      "after_sha256": "0cae9a140c0dd97d1dd2959350ce3d75ac86b9f047e5ad9d50ef061c18f63d8c",
+      "receiptSHA256": "ebf3ebdb228dc99fe6ea771570aaddb1834fa4beb9ea0363da5fa4e19dcff1f9",
+      "load_start": [
+        2.7431640625,
+        2.5517578125,
+        3.3173828125
+      ]
+    },
+    "focused-3": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:23:33.708431+00:00",
+      "ended": "2026-10-14T12:23:40.183866+00:00",
+      "elapsed_seconds": 6.475137834000634,
+      "pid": 21533,
+      "pgid": 21533,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        3.5166015625,
+        2.734375,
+        3.3603515625
+      ],
+      "stdout_sha256": "546450db3f232d02e127d5ff90dde9d3f92c386d4da7182ee5ef6d9c8d654b9f",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4834,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "531bf55e086713c9dc35c149e6ee74bc5a9a8c54b9461adfaae034dd2736226d",
+      "after_sha256": "531bf55e086713c9dc35c149e6ee74bc5a9a8c54b9461adfaae034dd2736226d",
+      "receiptSHA256": "2fc63b961f60cab666ffdee216b8903908b76605ef627ee6f25a7782525808a8",
+      "load_start": [
+        2.77490234375,
+        2.57177734375,
+        3.3115234375
+      ]
+    },
+    "focused-4": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:24:14.901931+00:00",
+      "ended": "2026-10-14T12:24:19.919947+00:00",
+      "elapsed_seconds": 5.017827417002991,
+      "pid": 22163,
+      "pgid": 22163,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        3.33642578125,
+        2.78271484375,
+        3.3466796875
+      ],
+      "stdout_sha256": "16f36cb4ce10220b078bf3eb9f3ed44b135a8419093736ef26efd44095759c89",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4834,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "031e33a7993641b7fd9290d07987cb0c4d3441bedc513d5dd43772cfd6ae78ce",
+      "after_sha256": "031e33a7993641b7fd9290d07987cb0c4d3441bedc513d5dd43772cfd6ae78ce",
+      "receiptSHA256": "dbbf528e4b3d87bf5aefce427da24ca60bb402ef1431fdfeed1fc89cb3414bfb",
+      "load_start": [
+        3.36572265625,
+        2.779296875,
+        3.34912109375
+      ]
+    },
+    "focused-5": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenNamedAbilityTriggered"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:26:17.316830+00:00",
+      "ended": "2026-10-14T12:26:22.309735+00:00",
+      "elapsed_seconds": 4.992756041989196,
+      "pid": 23864,
+      "pgid": 23864,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        3.58154296875,
+        3.1396484375,
+        3.4130859375
+      ],
+      "stdout_sha256": "512a5de4ba0654d7ddbd2e7c4ac59f0045f193e3f8f91800d218dceeed9e96f5",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918",
+      "after_sha256": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918",
+      "receiptSHA256": "710b192c2cc3497ddaad42d78a149112e2c38c770489571d08691796d8d7a5d8",
+      "load_start": [
+        3.71923828125,
+        3.1591796875,
+        3.421875
+      ]
+    },
+    "full-final-v2": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-p1ss/helper/heavy-entry-v2.py",
+        "full-final-v2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:45:04.252939+00:00",
+      "ended": "2026-10-14T12:51:35.448278+00:00",
+      "elapsed_seconds": 391.1948940829898,
+      "pid": 50565,
+      "pgid": 50565,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        25.77587890625,
+        16.16015625,
+        11.58642578125
+      ],
+      "stdout_sha256": "d3a530548983dbaae38ae226b9d6913463cbce20f8bf683e719479c35bb1a9f7",
+      "stderr_sha256": "72acc5b00f7a71058da3e46f3fda3ef8b3015178a45cfc9efb4015c7726e1cc1",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "after_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "receiptSHA256": "ec202f796dad0620962ad0a5a3cef64a20801f49ec4efaf1f82142753afafaad",
+      "load_start": [
+        13.73681640625,
+        12.150390625,
+        8.98388671875
+      ]
+    },
+    "full-final": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-p1ss/helper/heavy-entry.py",
+        "full-final",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:30:49.131538+00:00",
+      "ended": "2026-10-14T12:32:56.416746+00:00",
+      "elapsed_seconds": 127.2850041250058,
+      "pid": 29625,
+      "pgid": 29625,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        4.572265625,
+        3.82861328125,
+        3.587890625
+      ],
+      "stdout_sha256": "f50b3dd9f2ee58f681fd8754a842bab14756e1ca649d0be6d3c1efd943c34bbb",
+      "stderr_sha256": "32bc450a21609699f64a0a836d326d33b9167ec6ac74a3b09cafb2239fe0586c",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918",
+      "after_sha256": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918",
+      "receiptSHA256": "9201e818f34e4dfa349ff984c5888d56af5ac787df61cd249fcf9f53400ae624",
+      "load_start": [
+        3.810546875,
+        3.39306640625,
+        3.42431640625
+      ]
+    },
+    "fuzz-200": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-p1ss/helper/heavy-entry-v2.py",
+        "fuzz-200",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:52:46.558806+00:00",
+      "ended": "2026-10-14T12:58:24.583847+00:00",
+      "elapsed_seconds": 338.0184086660156,
+      "pid": 33959,
+      "pgid": 33959,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        7.2626953125,
+        9.6083984375,
+        10.10986328125
+      ],
+      "stdout_sha256": "4bff02cfa49261808758961e798bfa04b90b4c49f6a1e2a08d9c33d97708adc2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "after_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "receiptSHA256": "09815142b255348e96f2aad4506b575100e8717e533585b776752420a5520a28",
+      "load_start": [
+        16.5107421875,
+        15.67822265625,
+        11.78466796875
+      ]
+    },
+    "knip-final": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:29:28.005541+00:00",
+      "ended": "2026-10-14T12:29:33.194346+00:00",
+      "elapsed_seconds": 5.188631291995989,
+      "pid": 27807,
+      "pgid": 27807,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        3.6796875,
+        3.1865234375,
+        3.35888671875
+      ],
+      "stdout_sha256": "9096a5e27a6a2e32b171260a3f89c676da5d8f0fa6995c03c916b3ba03e17dbe",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918",
+      "after_sha256": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918",
+      "receiptSHA256": "0e623af94f4b3ec49dedbdfae33a46e4670e2665b0323c11ad91cbd363a8413c",
+      "load_start": [
+        2.78173828125,
+        3.00439453125,
+        3.29638671875
+      ]
+    },
+    "knip-v2": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:43:38.711510+00:00",
+      "ended": "2026-10-14T12:43:46.768186+00:00",
+      "elapsed_seconds": 8.056416207982693,
+      "pid": 41140,
+      "pgid": 41140,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        17.07568359375,
+        12.42333984375,
+        8.80029296875
+      ],
+      "stdout_sha256": "3a32e30037a5c435e69cc9a0b7d64f0c3761ab19f95e75fbb085659d1c47d174",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "after_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "receiptSHA256": "d760ac5bbfd50cfe12a649b49f0a5627749f2fe96f202a1cdd52349b6ccc26a4",
+      "load_start": [
+        18.0703125,
+        12.45458984375,
+        8.76904296875
+      ]
+    },
+    "review-1": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:24:57.878966+00:00",
+      "ended": "2026-10-14T12:25:46.280117+00:00",
+      "elapsed_seconds": 48.400991375005106,
+      "pid": 22803,
+      "pgid": 22803,
+      "exit_code": 2,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        4.47265625,
+        3.22900390625,
+        3.45654296875
+      ],
+      "stdout_sha256": "027f7817be01156c1fe0ef3bc44647f19bc8812db15ebe7b7fe48afb91f14815",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "69a4c7b97ab92d5e0e9a9fc8646f1f032123452c14c8bf5b52e00fa08f2c0409",
+      "after_sha256": "69a4c7b97ab92d5e0e9a9fc8646f1f032123452c14c8bf5b52e00fa08f2c0409",
+      "receiptSHA256": "5fbaf69b2d440be616d920bfb98a6762a8e36d9bb2f047f478e814f01f16228e",
+      "load_start": [
+        3.1708984375,
+        2.8046875,
+        3.33056640625
+      ]
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:29:28.005540+00:00",
+      "ended": "2026-10-14T12:30:20.028780+00:00",
+      "elapsed_seconds": 52.023075250006514,
+      "pid": 27808,
+      "pgid": 27808,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        4.76513671875,
+        3.53125,
+        3.4736328125
+      ],
+      "stdout_sha256": "cb6d61dd0920ddda65aceca904ec20d8efcf4c1c53d408ef0f3aa61982b97019",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918",
+      "after_sha256": "7f2cac5c11099c342da50c3711f01474a93bee4081b140f204ffe181fabd1918",
+      "receiptSHA256": "e9a30ac8e820a7e31facd01beb058ba8f64e511589a2bd1915c7d371df0c4341",
+      "load_start": [
+        2.78173828125,
+        3.00439453125,
+        3.29638671875
+      ]
+    },
+    "review-v2": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+      "started": "2026-10-14T12:43:38.711342+00:00",
+      "ended": "2026-10-14T12:44:46.892617+00:00",
+      "elapsed_seconds": 68.18085616600001,
+      "pid": 41139,
+      "pgid": 41139,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "load_end": [
+        11.6748046875,
+        11.69580078125,
+        8.77099609375
+      ],
+      "stdout_sha256": "0c9c22e76643685ca83101c0dfa328c192b4147d49a03ae0c5f867b81352ab05",
+      "stderr_sha256": "14182397802abc72a04618ef49978672a44d40494215569a13f17ce88d7a1b4f",
+      "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+      "manifest_files": 4835,
+      "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+      "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+      "before_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "after_sha256": "b7635d02a92fc4cb4b7f0334fb2ff1dd51bfa09ced36becd3f34c6fcbd693f4a",
+      "receiptSHA256": "720216dbdb62d096342e12e59262d58757bc80f7cd882199dfc3440d2c14f6b7",
+      "load_start": [
+        18.0703125,
+        12.45458984375,
+        8.76904296875
+      ]
+    }
+  },
+  "heavyCommands": {
+    "full-final": {
+      "started": "2026-10-14T12:30:49.156959+00:00",
+      "ended": "2026-10-14T12:32:56.412531+00:00",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "elapsedSeconds": 127.25524862500606,
+      "exitCode": 0,
+      "pid": 29627,
+      "pgid": 29625,
+      "childReaped": true,
+      "entrySHA": "d7f85f91694951470a3da9773d264ae58d68b3fdd7648a13e9349cff661778df",
+      "entryUnchanged": true,
+      "loadSHA": "ba1184202cbb44e69bae66210b410e35e8abf03d277577237a9256ec50e033c0",
+      "loadSamples": [
+        {
+          "atUTC": "2026-10-14T12:30:49.157223+00:00",
+          "load": [
+            3.810546875,
+            3.39306640625,
+            3.42431640625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:30:54.162728+00:00",
+          "load": [
+            3.58544921875,
+            3.35302734375,
+            3.40966796875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:30:59.167400+00:00",
+          "load": [
+            3.6982421875,
+            3.3798828125,
+            3.4189453125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:04.170739+00:00",
+          "load": [
+            3.72216796875,
+            3.39013671875,
+            3.421875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:09.172064+00:00",
+          "load": [
+            3.82421875,
+            3.41650390625,
+            3.4306640625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:14.177155+00:00",
+          "load": [
+            3.7578125,
+            3.4091796875,
+            3.427734375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:19.178337+00:00",
+          "load": [
+            3.93701171875,
+            3.4521484375,
+            3.4423828125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:24.178697+00:00",
+          "load": [
+            3.86181640625,
+            3.4443359375,
+            3.439453125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:29.183746+00:00",
+          "load": [
+            3.87255859375,
+            3.453125,
+            3.4423828125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:34.186471+00:00",
+          "load": [
+            3.80224609375,
+            3.4453125,
+            3.439453125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:39.187325+00:00",
+          "load": [
+            3.89794921875,
+            3.470703125,
+            3.4482421875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:44.192384+00:00",
+          "load": [
+            4.06591796875,
+            3.51220703125,
+            3.462890625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:49.197438+00:00",
+          "load": [
+            4.220703125,
+            3.55322265625,
+            3.4775390625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:54.197560+00:00",
+          "load": [
+            4.68310546875,
+            3.66015625,
+            3.515625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:31:59.202616+00:00",
+          "load": [
+            4.7880859375,
+            3.69873046875,
+            3.52978515625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:04.204789+00:00",
+          "load": [
+            4.724609375,
+            3.70361328125,
+            3.5322265625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:09.209841+00:00",
+          "load": [
+            4.58642578125,
+            3.69189453125,
+            3.52880859375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:14.212261+00:00",
+          "load": [
+            4.619140625,
+            3.71337890625,
+            3.537109375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:19.213723+00:00",
+          "load": [
+            4.5693359375,
+            3.7177734375,
+            3.53955078125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:24.213907+00:00",
+          "load": [
+            4.68359375,
+            3.75537109375,
+            3.5537109375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:29.214922+00:00",
+          "load": [
+            4.62841796875,
+            3.75927734375,
+            3.55615234375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:34.219842+00:00",
+          "load": [
+            4.57763671875,
+            3.76318359375,
+            3.55859375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:39.224899+00:00",
+          "load": [
+            4.53125,
+            3.76708984375,
+            3.56103515625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:44.225041+00:00",
+          "load": [
+            4.728515625,
+            3.8203125,
+            3.5810546875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:49.227969+00:00",
+          "load": [
+            4.58984375,
+            3.806640625,
+            3.57763671875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:54.229046+00:00",
+          "load": [
+            4.62255859375,
+            3.826171875,
+            3.5859375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:32:56.412104+00:00",
+          "load": [
+            4.572265625,
+            3.82861328125,
+            3.587890625
+          ]
+        }
+      ],
+      "load1Range": [
+        3.58544921875,
+        4.7880859375
+      ],
+      "load1Mean": 4.2578305844907405,
+      "receiptSHA256": "c84e7554543fb2e314836ff8f90990e4518ff949cf2d4bf875e276ce7c4939b4"
+    },
+    "full-final-v2": {
+      "started": "2026-10-14T12:49:14.478469+00:00",
+      "acquiredUTC": "2026-10-14T12:45:04.286180+00:00",
+      "ended": "2026-10-14T12:51:35.442020+00:00",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "elapsedSeconds": 140.9634892080212,
+      "exitCode": 0,
+      "pid": 27101,
+      "pgid": 50565,
+      "childReaped": true,
+      "entrySHA": "36518b4bf106cfa1446565faecac3ee6532d73b8bb5b45b09d702d22093ef64d",
+      "entryUnchanged": true,
+      "loadSHA": "3f19f151ccfc3b8def9d0708608718f8408a73c3402866eab13f73a1951e1c91",
+      "loadSamples": [
+        {
+          "atUTC": "2026-10-14T12:49:14.478460+00:00",
+          "load": [
+            7.369140625,
+            10.37451171875,
+            9.11279296875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:49:19.482884+00:00",
+          "load": [
+            7.33935546875,
+            10.318359375,
+            9.10009765625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:49:24.483004+00:00",
+          "load": [
+            7.47216796875,
+            10.29638671875,
+            9.09912109375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:49:29.483332+00:00",
+          "load": [
+            7.59423828125,
+            10.2744140625,
+            9.09814453125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:49:34.488410+00:00",
+          "load": [
+            7.94677734375,
+            10.302734375,
+            9.11474609375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:49:39.493475+00:00",
+          "load": [
+            8.19091796875,
+            10.31396484375,
+            9.12548828125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:49:44.493572+00:00",
+          "load": [
+            8.41552734375,
+            10.3251953125,
+            9.13623046875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:49:49.498535+00:00",
+          "load": [
+            8.2216796875,
+            10.2529296875,
+            9.11767578125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:49:54.498938+00:00",
+          "load": [
+            8.28369140625,
+            10.23193359375,
+            9.11669921875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:49:59.500208+00:00",
+          "load": [
+            9.8623046875,
+            10.52685546875,
+            9.22705078125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:04.502168+00:00",
+          "load": [
+            9.79296875,
+            10.50146484375,
+            9.2255859375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:09.503459+00:00",
+          "load": [
+            12.45166015625,
+            11.04052734375,
+            9.42333984375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:14.504344+00:00",
+          "load": [
+            15.7783203125,
+            11.75341796875,
+            9.68408203125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:19.505248+00:00",
+          "load": [
+            19.0791015625,
+            12.50439453125,
+            9.9609375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:24.510322+00:00",
+          "load": [
+            19.87353515625,
+            12.77783203125,
+            10.072265625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:29.511463+00:00",
+          "load": [
+            21.16455078125,
+            13.1630859375,
+            10.22412109375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:34.516517+00:00",
+          "load": [
+            21.6318359375,
+            13.392578125,
+            10.322265625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:39.517556+00:00",
+          "load": [
+            23.9033203125,
+            14.0,
+            10.5546875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:44.521819+00:00",
+          "load": [
+            24.79150390625,
+            14.3486328125,
+            10.69775390625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:49.521922+00:00",
+          "load": [
+            23.60693359375,
+            14.2763671875,
+            10.693359375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:54.526346+00:00",
+          "load": [
+            24.03857421875,
+            14.5205078125,
+            10.80029296875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:50:59.530515+00:00",
+          "load": [
+            24.35546875,
+            14.744140625,
+            10.90087890625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:51:04.530776+00:00",
+          "load": [
+            22.96533203125,
+            14.615234375,
+            10.8779296875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:51:09.530917+00:00",
+          "load": [
+            23.6083984375,
+            14.88720703125,
+            10.99560546875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:51:14.535986+00:00",
+          "load": [
+            23.3994140625,
+            14.98828125,
+            11.05419921875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:51:19.540687+00:00",
+          "load": [
+            23.607421875,
+            15.1708984375,
+            11.1416015625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:51:24.545074+00:00",
+          "load": [
+            22.837890625,
+            15.1513671875,
+            11.158203125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:51:29.550144+00:00",
+          "load": [
+            22.0498046875,
+            15.115234375,
+            11.1689453125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:51:34.555197+00:00",
+          "load": [
+            25.40869140625,
+            15.9267578125,
+            11.47802734375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:51:35.441152+00:00",
+          "load": [
+            25.77587890625,
+            16.16015625,
+            11.58642578125
+          ]
+        }
+      ],
+      "load1Range": [
+        7.33935546875,
+        25.77587890625
+      ],
+      "load1Mean": 17.027213541666665,
+      "resourceWait": {
+        "samples": [
+          {
+            "atUTC": "2026-10-14T12:45:04.286487+00:00",
+            "load": [
+              13.73681640625,
+              12.150390625,
+              8.98388671875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:09.291483+00:00",
+            "load": [
+              14.478515625,
+              12.330078125,
+              9.06591796875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:14.291746+00:00",
+            "load": [
+              15.72119140625,
+              12.623046875,
+              9.1884765625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:19.296918+00:00",
+            "load": [
+              15.0224609375,
+              12.529296875,
+              9.17529296875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:24.302265+00:00",
+            "load": [
+              17.0224609375,
+              12.9853515625,
+              9.35546875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:29.307556+00:00",
+            "load": [
+              16.7802734375,
+              13.001953125,
+              9.38232421875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:34.312753+00:00",
+            "load": [
+              16.0771484375,
+              12.91845703125,
+              9.3740234375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:39.317709+00:00",
+            "load": [
+              15.51025390625,
+              12.85302734375,
+              9.37158203125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:44.322915+00:00",
+            "load": [
+              15.86962890625,
+              12.97119140625,
+              9.43359375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:49.323704+00:00",
+            "load": [
+              15.2392578125,
+              12.88818359375,
+              9.4248046875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:54.325507+00:00",
+            "load": [
+              14.8193359375,
+              12.83984375,
+              9.427734375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:45:59.330929+00:00",
+            "load": [
+              14.03271484375,
+              12.70947265625,
+              9.4013671875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:04.331239+00:00",
+            "load": [
+              13.78955078125,
+              12.6806640625,
+              9.41064453125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:09.335996+00:00",
+            "load": [
+              13.48583984375,
+              12.6357421875,
+              9.4140625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:14.339663+00:00",
+            "load": [
+              12.96630859375,
+              12.5419921875,
+              9.39990234375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:19.341535+00:00",
+            "load": [
+              12.568359375,
+              12.46630859375,
+              9.3916015625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:24.360081+00:00",
+            "load": [
+              14.2841796875,
+              12.82373046875,
+              9.53564453125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:29.365148+00:00",
+            "load": [
+              14.26123046875,
+              12.8427734375,
+              9.5615234375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:34.366086+00:00",
+            "load": [
+              13.83984375,
+              12.77880859375,
+              9.55810546875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:39.370772+00:00",
+            "load": [
+              13.2119140625,
+              12.666015625,
+              9.537109375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:44.372023+00:00",
+            "load": [
+              12.63427734375,
+              12.55517578125,
+              9.51611328125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:49.374065+00:00",
+            "load": [
+              12.0224609375,
+              12.4296875,
+              9.4892578125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:54.374529+00:00",
+            "load": [
+              11.9404296875,
+              12.40576171875,
+              9.498046875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:46:59.380000+00:00",
+            "load": [
+              11.38427734375,
+              12.28271484375,
+              9.4716796875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:04.385317+00:00",
+            "load": [
+              11.03271484375,
+              12.19482421875,
+              9.45703125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:09.386551+00:00",
+            "load": [
+              10.54931640625,
+              12.0751953125,
+              9.4306640625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:14.389347+00:00",
+            "load": [
+              10.5048828125,
+              12.04052734375,
+              9.43359375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:19.389721+00:00",
+            "load": [
+              10.06396484375,
+              11.92333984375,
+              9.4072265625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:24.391092+00:00",
+            "load": [
+              9.818359375,
+              11.84130859375,
+              9.39306640625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:29.392663+00:00",
+            "load": [
+              10.15283203125,
+              11.876953125,
+              9.419921875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:34.398566+00:00",
+            "load": [
+              9.89990234375,
+              11.7958984375,
+              9.4052734375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:39.403896+00:00",
+            "load": [
+              9.34716796875,
+              11.6494140625,
+              9.36767578125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:44.408867+00:00",
+            "load": [
+              9.0791015625,
+              11.55517578125,
+              9.34765625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:49.414401+00:00",
+            "load": [
+              8.83251953125,
+              11.462890625,
+              9.32763671875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:54.415682+00:00",
+            "load": [
+              8.685546875,
+              11.388671875,
+              9.31396484375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:47:59.419554+00:00",
+            "load": [
+              8.71044921875,
+              11.3486328125,
+              9.31201171875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:04.420790+00:00",
+            "load": [
+              8.4931640625,
+              11.259765625,
+              9.29248046875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:09.426013+00:00",
+            "load": [
+              8.45361328125,
+              11.20556640625,
+              9.28466796875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:14.429677+00:00",
+            "load": [
+              8.5771484375,
+              11.185546875,
+              9.28857421875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:19.434919+00:00",
+            "load": [
+              8.37060546875,
+              11.09912109375,
+              9.26904296875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:24.440104+00:00",
+            "load": [
+              8.0205078125,
+              10.98095703125,
+              9.23779296875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:29.445558+00:00",
+            "load": [
+              7.7783203125,
+              10.88134765625,
+              9.212890625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:34.449453+00:00",
+            "load": [
+              7.7958984375,
+              10.83349609375,
+              9.20556640625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:39.453275+00:00",
+            "load": [
+              8.13232421875,
+              10.8525390625,
+              9.2216796875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:44.458621+00:00",
+            "load": [
+              7.96142578125,
+              10.77197265625,
+              9.20263671875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:49.461366+00:00",
+            "load": [
+              7.72412109375,
+              10.67578125,
+              9.177734375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:54.466627+00:00",
+            "load": [
+              8.466796875,
+              10.78076171875,
+              9.22314453125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:48:59.469125+00:00",
+            "load": [
+              8.02880859375,
+              10.6513671875,
+              9.1865234375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:49:04.473862+00:00",
+            "load": [
+              7.6259765625,
+              10.52392578125,
+              9.14990234375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:49:09.475926+00:00",
+            "load": [
+              7.57568359375,
+              10.46533203125,
+              9.13720703125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:49:14.477440+00:00",
+            "load": [
+              7.369140625,
+              10.37451171875,
+              9.11279296875
+            ]
+          }
+        ],
+        "elapsedSeconds": 250.19115291701746,
+        "expiredBeforeCommand": false
+      },
+      "receiptSHA256": "2598016becfcdeef4bc373ca55b9f3998e45fac4769f329e3f4a8d13836139d0"
+    },
+    "fuzz-200": {
+      "started": "2026-10-14T12:54:46.670691+00:00",
+      "acquiredUTC": "2026-10-14T12:52:46.587214+00:00",
+      "ended": "2026-10-14T12:58:24.579373+00:00",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "elapsedSeconds": 217.9023357500264,
+      "exitCode": 0,
+      "pid": 45948,
+      "pgid": 33959,
+      "childReaped": true,
+      "entrySHA": "36518b4bf106cfa1446565faecac3ee6532d73b8bb5b45b09d702d22093ef64d",
+      "entryUnchanged": true,
+      "loadSHA": "958b8d384fdc5c0fd909ef351cac2c51a4c4b0e2fbdf6a4dd44606784a2a421b",
+      "loadSamples": [
+        {
+          "atUTC": "2026-10-14T12:54:46.670674+00:00",
+          "load": [
+            7.29541015625,
+            12.71142578125,
+            11.1328125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:54:51.675403+00:00",
+          "load": [
+            7.271484375,
+            12.6162109375,
+            11.1083984375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:54:56.680240+00:00",
+          "load": [
+            7.00927734375,
+            12.47314453125,
+            11.06640625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:01.681992+00:00",
+          "load": [
+            6.92822265625,
+            12.365234375,
+            11.03662109375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:06.683272+00:00",
+          "load": [
+            6.7734375,
+            12.24267578125,
+            11.0009765625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:11.683876+00:00",
+          "load": [
+            6.95166015625,
+            12.1884765625,
+            10.98876953125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:16.684357+00:00",
+          "load": [
+            6.955078125,
+            12.10205078125,
+            10.96533203125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:21.688447+00:00",
+          "load": [
+            6.63818359375,
+            11.95068359375,
+            10.91845703125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:26.693506+00:00",
+          "load": [
+            6.5869140625,
+            11.8515625,
+            10.88916015625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:31.698570+00:00",
+          "load": [
+            6.53955078125,
+            11.75439453125,
+            10.8603515625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:36.703638+00:00",
+          "load": [
+            6.576171875,
+            11.67529296875,
+            10.83740234375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:41.703742+00:00",
+          "load": [
+            6.52978515625,
+            11.5810546875,
+            10.80859375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:46.704346+00:00",
+          "load": [
+            6.6474609375,
+            11.521484375,
+            10.7919921875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:51.704905+00:00",
+          "load": [
+            6.99560546875,
+            11.5126953125,
+            10.79296875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:55:56.705660+00:00",
+          "load": [
+            6.75537109375,
+            11.3876953125,
+            10.7529296875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:01.708834+00:00",
+          "load": [
+            6.61474609375,
+            11.28125,
+            10.71875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:06.711984+00:00",
+          "load": [
+            6.8056640625,
+            11.2431640625,
+            10.70849609375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:11.712598+00:00",
+          "load": [
+            6.90087890625,
+            11.18896484375,
+            10.6923828125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:16.715276+00:00",
+          "load": [
+            6.98876953125,
+            11.1357421875,
+            10.67626953125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:21.720336+00:00",
+          "load": [
+            6.7490234375,
+            11.01708984375,
+            10.63671875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:26.721415+00:00",
+          "load": [
+            7.00927734375,
+            11.0,
+            10.6328125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:31.726473+00:00",
+          "load": [
+            7.00830078125,
+            10.93359375,
+            10.611328125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:36.729707+00:00",
+          "load": [
+            6.68701171875,
+            10.8017578125,
+            10.56640625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:41.730337+00:00",
+          "load": [
+            6.4716796875,
+            10.6884765625,
+            10.52783203125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:46.732668+00:00",
+          "load": [
+            6.43359375,
+            10.6103515625,
+            10.5009765625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:51.734586+00:00",
+          "load": [
+            6.318359375,
+            10.51708984375,
+            10.46826171875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:56:56.737994+00:00",
+          "load": [
+            6.05224609375,
+            10.39208984375,
+            10.42431640625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:01.743056+00:00",
+          "load": [
+            5.8876953125,
+            10.28564453125,
+            10.38623046875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:06.745242+00:00",
+          "load": [
+            5.736328125,
+            10.18115234375,
+            10.3486328125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:11.745800+00:00",
+          "load": [
+            5.59716796875,
+            10.078125,
+            10.31103515625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:16.746118+00:00",
+          "load": [
+            5.38916015625,
+            9.96044921875,
+            10.26806640625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:21.751173+00:00",
+          "load": [
+            5.27783203125,
+            9.861328125,
+            10.23095703125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:26.753136+00:00",
+          "load": [
+            5.25537109375,
+            9.7802734375,
+            10.2001953125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:31.755258+00:00",
+          "load": [
+            5.79541015625,
+            9.81689453125,
+            10.21044921875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:36.756639+00:00",
+          "load": [
+            5.8115234375,
+            9.75341796875,
+            10.185546875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:41.763230+00:00",
+          "load": [
+            5.986328125,
+            9.72412109375,
+            10.17236328125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:46.765115+00:00",
+          "load": [
+            6.3876953125,
+            9.7451171875,
+            10.1767578125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:51.768872+00:00",
+          "load": [
+            6.7568359375,
+            9.765625,
+            10.18115234375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:57:56.771185+00:00",
+          "load": [
+            7.01611328125,
+            9.76904296875,
+            10.1796875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:58:01.774389+00:00",
+          "load": [
+            7.0947265625,
+            9.7392578125,
+            10.16650390625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:58:06.776524+00:00",
+          "load": [
+            7.0068359375,
+            9.6767578125,
+            10.14208984375
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:58:11.778783+00:00",
+          "load": [
+            7.326171875,
+            9.6982421875,
+            10.14697265625
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:58:16.780611+00:00",
+          "load": [
+            7.4599609375,
+            9.6865234375,
+            10.14013671875
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:58:21.785792+00:00",
+          "load": [
+            7.2626953125,
+            9.6083984375,
+            10.10986328125
+          ]
+        },
+        {
+          "atUTC": "2026-10-14T12:58:24.578665+00:00",
+          "load": [
+            7.2626953125,
+            9.6083984375,
+            10.10986328125
+          ]
+        }
+      ],
+      "load1Range": [
+        5.25537109375,
+        7.4599609375
+      ],
+      "load1Mean": 6.595638020833333,
+      "resourceWait": {
+        "samples": [
+          {
+            "atUTC": "2026-10-14T12:52:46.587487+00:00",
+            "load": [
+              16.5107421875,
+              15.67822265625,
+              11.78466796875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:52:51.591263+00:00",
+            "load": [
+              16.0693359375,
+              15.60009765625,
+              11.77978515625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:52:56.592815+00:00",
+            "load": [
+              15.1025390625,
+              15.4072265625,
+              11.73388671875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:01.596992+00:00",
+            "load": [
+              14.37353515625,
+              15.2509765625,
+              11.7001953125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:06.597559+00:00",
+            "load": [
+              14.10302734375,
+              15.18017578125,
+              11.69580078125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:11.598705+00:00",
+            "load": [
+              14.0947265625,
+              15.16015625,
+              11.708984375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:16.599787+00:00",
+            "load": [
+              14.0869140625,
+              15.140625,
+              11.72216796875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:21.601767+00:00",
+            "load": [
+              14.39990234375,
+              15.18798828125,
+              11.7587890625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:26.607107+00:00",
+            "load": [
+              13.88720703125,
+              15.068359375,
+              11.736328125
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:31.609041+00:00",
+            "load": [
+              13.01513671875,
+              14.86767578125,
+              11.68505859375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:36.614241+00:00",
+            "load": [
+              12.212890625,
+              14.67041015625,
+              11.6337890625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:41.615046+00:00",
+            "load": [
+              11.55517578125,
+              14.4931640625,
+              11.5888671875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:46.620531+00:00",
+            "load": [
+              11.02978515625,
+              14.33544921875,
+              11.5498046875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:51.625873+00:00",
+            "load": [
+              10.546875,
+              14.18017578125,
+              11.51123046875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:53:56.631145+00:00",
+            "load": [
+              10.3427734375,
+              14.0771484375,
+              11.490234375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:54:01.631882+00:00",
+            "load": [
+              9.91455078125,
+              13.92626953125,
+              11.4521484375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:54:06.637217+00:00",
+            "load": [
+              10.16162109375,
+              13.91064453125,
+              11.4609375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:54:11.640702+00:00",
+            "load": [
+              9.828125,
+              13.779296875,
+              11.4287109375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:54:16.645957+00:00",
+            "load": [
+              9.28125,
+              13.60009765625,
+              11.37890625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:54:21.647505+00:00",
+            "load": [
+              8.85791015625,
+              13.4404296875,
+              11.33544921875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:54:26.652744+00:00",
+            "load": [
+              8.548828125,
+              13.30029296875,
+              11.2978515625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:54:31.655348+00:00",
+            "load": [
+              8.34423828125,
+              13.1787109375,
+              11.2666015625
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:54:36.657784+00:00",
+            "load": [
+              8.076171875,
+              13.04248046875,
+              11.2294921875
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:54:41.662088+00:00",
+            "load": [
+              7.66943359375,
+              12.87548828125,
+              11.18115234375
+            ]
+          },
+          {
+            "atUTC": "2026-10-14T12:54:46.667351+00:00",
+            "load": [
+              7.29541015625,
+              12.71142578125,
+              11.1328125
+            ]
+          }
+        ],
+        "elapsedSeconds": 120.08023012499325,
+        "expiredBeforeCommand": false
+      },
+      "receiptSHA256": "09d32502985ed0ca0643e6326d92e82783142efbd27d998c15c990a0ef132d5c"
+    }
+  },
+  "performance": {
+    "oldSource": "full-final: test phase95.3s/Vitest94.69s at load1 3.585449\u20134.788086; actual >60 observation on PRE-fastpath source. Minimal absent-observer gate admitted after source-first proof; no controlled A/B attribution.",
+    "currentSource": "full-final-v2: test phase107.9s/Vitest107.25s, functional PASS. Command load1 7.339355\u201325.775879, mean17.027214; not a low-load budget measurement or proof of speedup/regression.",
+    "D19": "P1ss is a primitive bead, not a phase gate. Current-source low-load <=60s budget UNMEASURED; phase-gate46 retains the integrated two-worker low-host-load measurement duty. No third full solely for a bead-level benchmark, no waiver of phase-gate D19.",
+    "resourceBackoff": "Private measurement-entry heuristic load1<=7.5, capped600s, sampled5s under native heavy lock. D17 on18cores/64GB has no hard load target. Launch-to-entry includes interpreter startup and queue; isolated kernel wait unknown.",
+    "workers": "Vitest JOURNEY_TEST_WORKERS=2. scripts/fuzz-engine.ts executes the 200-game loop serially; environment variable does not parallelize fuzz."
+  },
+  "fuzz": {
+    "command": [
+      "npm",
+      "run",
+      "fuzz:engine",
+      "--",
+      "--games",
+      "200"
+    ],
+    "games": 200,
+    "steps": 69413,
+    "prompts": 4863,
+    "interactiveReruns": 469,
+    "interactiveMeanMs": 4.302,
+    "failures": 0,
+    "bounded": {
+      "legality": 0,
+      "prompts": 3
+    },
+    "results": {
+      "player": 95,
+      "enemy": 105,
+      "draw": 0
+    },
+    "scriptWallS": 216.3,
+    "scriptCpuS": 250.0,
+    "innerWallS": 217.9023357500264,
+    "outerWallS": 338.0184086660156,
+    "resourceBackoffS": 120.08023012499325,
+    "weightedTargets": [],
+    "qualification": "Required local runner regression coverage; no weighted300 or original237 content acceptance claim."
+  },
+  "processOwnership": {
+    "collectorSHA256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+    "entryV1SHA256": "d7f85f91694951470a3da9773d264ae58d68b3fdd7648a13e9349cff661778df",
+    "entryV2SHA256": "36518b4bf106cfa1446565faecac3ee6532d73b8bb5b45b09d702d22093ef64d",
+    "allRecordedChildrenReaped": true,
+    "allRecordedGroupsAbsent": true,
+    "cleanupSignals": [],
+    "sourceWritesWhileOwnedChecks": false,
+    "nativeHeavyLock": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock"
+  },
+  "collectionCorrections": [
+    "At12:33:06Z helper inferred liveness from an uncollected tool session. Actual full-final receipt terminal was12:32:56.412531Z; corrected promptly. Recorded elapsed session time is not a running-test measurement.",
+    "cfv2-restored exec printed only output and omitted its PTY session ID. Did not retry the command. Recovered actual terminal from guard receipt; independent killpg(8270,0) found no group.",
+    "Read-only path lookup misses/truncated searches were corrected with bounded actual-file reads. No tool or production failure inferred."
+  ],
+  "failurePaths": {
+    "suspensionReload": "Real optional observer prompt round-trips via public fold; exact normal queued captured bindings survive reload. New occurrence seam is synchronous and ephemeral, with no new save field.",
+    "invalidConcurrentInput": "Wrong side, cancellation, stale/duplicate answers rejected through public fold; committed version/hash unchanged. Valid positive/negative continuations tested.",
+    "partialWrite": "After real admission and energy mutation, actual missing-figment primitive error yields engine_error and leaves committed queue/once/energy/hash unchanged.",
+    "planningCancel": "Cost planning cancellation before payment causes no admission and preserves committed hash.",
+    "mandatoryCycle": "Per-causal ancestry plus monotone limiter revision draws; independent identical roots remain finite. Runner stops further effects/prompts; Context blocks newly eligible deck-top revelation. Once/one-shot/two-side controls and optional-repeat tail-answer terminal preservation pass.",
+    "privacy": "Hidden hand opposite-viewer and unlearned deck BOTH-viewer tests begin nonvacuously unidentified, expose no source physical/printing alias, retain null observer subject and comparable determinization fidelity. Existing printed remember-then-hidden behavior remains covered by unchanged related tests."
+  },
+  "QA": {
+    "browser": null,
+    "server": null,
+    "screenshots": [],
+    "reason": "Standalone engine Trigger leaf with existing real draw/points/energy/optional child consumers; zero catalog/UI/presentation changes. Original237 retains sampled workflow and desktop/mobile visual acceptance.",
+    "externalProvider": null,
+    "preExistingProductIssues": [],
+    "review": "Parent will launch normal fresh read-only Claude Opus5.5 review against exact committed snapshot; expired Sol override is not used."
+  },
+  "finalEvidenceChecks": {
+    "evidence-schema-final": {
+      "receipt": {
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+        "started": "2026-10-14T13:01:19.486425+00:00",
+        "ended": "2026-10-14T13:01:19.597044+00:00",
+        "elapsed_seconds": 0.1104430409905035,
+        "pid": 60743,
+        "pgid": 60743,
+        "exit_code": 0,
+        "child_reaped": true,
+        "changed_paths": [],
+        "remaining_group_before_cleanup": false,
+        "cleanup_signals": [],
+        "remaining_group_after_cleanup": false,
+        "load_end": [
+          3.0224609375,
+          6.55859375,
+          8.72998046875
+        ],
+        "stdout_sha256": "02f4049c46a984a886fa2134278895b82814e14eaf825eceb27e4f053a155837",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+        "manifest_files": 4837,
+        "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+        "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/measurements/hv-p1ss.json\n?? docs/plan/evidence/measurements/hv-p1ss.md\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+        "before_sha256": "31982f91895cb694e58f4c85202324a92662787379757674c8e23fda68d02c59",
+        "after_sha256": "31982f91895cb694e58f4c85202324a92662787379757674c8e23fda68d02c59"
+      },
+      "receiptSHA256": "005eb6e87cd68369583123a6ed1817c9d8db4ad71930b4232c264d22ebccfc8c"
+    },
+    "whitespace-final": {
+      "receipt": {
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/named-ability-admission-p1ss",
+        "started": "2026-10-14T13:01:19.486439+00:00",
+        "ended": "2026-10-14T13:01:19.501821+00:00",
+        "elapsed_seconds": 0.015216832980513573,
+        "pid": 60742,
+        "pgid": 60742,
+        "exit_code": 0,
+        "child_reaped": true,
+        "changed_paths": [],
+        "remaining_group_before_cleanup": false,
+        "cleanup_signals": [],
+        "remaining_group_after_cleanup": false,
+        "load_end": [
+          3.0224609375,
+          6.55859375,
+          8.72998046875
+        ],
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "collector_sha256": "e8153ec2dfad63a2d09d6cbf5c0d9ed0d20ffb03d211b78ac23fd2870d683166",
+        "manifest_files": 4837,
+        "head": "e74ba05aace7c6d524ee9c29a0cd8bdb20c4ba3c",
+        "status": " M docs/plan/engine-design.md\n M docs/rules.md\n M src/engine/dsl/triggers.ts\n M src/engine/dsl/types.ts\n M src/engine/loops/replay.ts\n M src/engine/loops/tracker.ts\n M src/engine/steps/context.ts\n M src/engine/steps/runner.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-p1ss.json\n?? docs/plan/evidence/measurements/hv-p1ss.json\n?? docs/plan/evidence/measurements/hv-p1ss.md\n?? docs/plan/evidence/rules-decisions/RD-hv-p1ss-1.md\n?? src/engine/effects/primitives/contracts/when-named-ability-triggered.contracts.ts\n?? src/engine/triggers/named-admissions.ts\n",
+        "before_sha256": "31982f91895cb694e58f4c85202324a92662787379757674c8e23fda68d02c59",
+        "after_sha256": "31982f91895cb694e58f4c85202324a92662787379757674c8e23fda68d02c59"
+      },
+      "receiptSHA256": "15f8c58dfec41448721ec11e6c3f8a7cffa11905b71c1de92805d1ad3b731d87"
+    }
+  }
+}

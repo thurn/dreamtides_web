@@ -271,7 +271,7 @@ export class Context implements StepContext {
 
   /** Settle active static revelations at a stable prompt/event/setup boundary. */
   refreshDeckTopReveals(): void {
-    if (this.deckTopRevealsDeferred || this.refreshingDeckTops || this.emitting > 0) return;
+    if (this.state.result !== null || this.deckTopRevealsDeferred || this.refreshingDeckTops || this.emitting > 0) return;
     for (const [id, timestamp] of this.leavingPlay) {
       const instance = this.state.instances[id];
       if (instance?.zone === "play" && instance.enteredZoneAt === timestamp) return;
