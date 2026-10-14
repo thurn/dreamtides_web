@@ -951,6 +951,7 @@ function effectStartedText(
     case "preserveEphemeralHand":
     case "reclaimNotBanished":
     case "ruleModifier":
+    case "additionalDrawPhaseCards":
       // Only a static ability makes this change, so no effect starts with it.
       return null;
     case "abilities":

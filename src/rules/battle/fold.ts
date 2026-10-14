@@ -1052,6 +1052,7 @@ const FLOATING_CHANGE_VALIDATORS: {
     optional(oneOf({ triggered: true, triggeredAndActivated: true }))(value.mode),
   banishedUntil: (value) => isInstanceId(value.instance) && isSide(value.side),
   banishedToHandUntil: (value) => isInstanceId(value.instance) && isIndex(value.banishedAt) && value.banishedAt > 0,
+  additionalDrawPhaseCards: () => false, // Draw-phase instructions are static-only.
   ruleModifier: () => false, // Player rules are static-only.
   preserveEphemeralHand: () => false, // A static instruction never enters saved floating effects.
   revealDeckTop: () => false, // A static instruction never enters saved floating effects.

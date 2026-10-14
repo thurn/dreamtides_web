@@ -169,6 +169,7 @@ export function changedInstance(change: FloatingChange): InstanceId | null {
     case "preserveEphemeralHand":
     case "reclaimNotBanished":
     case "ruleModifier":
+    case "additionalDrawPhaseCards":
       return null;
     default:
       return change.instance;

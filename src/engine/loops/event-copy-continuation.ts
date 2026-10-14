@@ -49,11 +49,12 @@ const EMITTED: readonly EngineEventKind[] = [
 
 /**
  * These handlers produce only continuous characteristic/permission/visibility
- * changes. Copiable values and permanent emblem abilities are independent of
+ * changes or phase-only draw counts. Copiable values and permanent emblem abilities are independent of
  * their dynamic selectors, zone growth and conditional applicability.
  * Unknown static operations require a new reviewed case.
  */
 const PASSIVE_STATICS: readonly string[] = [
+  "additionalDrawPhaseCards", // Phase-only draw counts cannot act in this copy-only FIFO.
   "costModifier", "sparkModifier", "grant", "grantCardKeyword", "giveAllTypes", "setBaseSpark",
   "playFromZone", "playRestriction", "selfCostReduction", "revealDeckTop", "reclaimNotBanished",
 ];
@@ -90,6 +91,7 @@ function passiveFloating(state: BattleState, catalog: EngineCatalog): boolean {
           banished?.zone === "banished" && banished.enteredZoneAt === change.banishedAt;
       }
       case "preserveEphemeralHand": return false;
+      case "additionalDrawPhaseCards": return false;
       case "ruleModifier": return false; // Static-only rules carry no floating passivity proof.
       case "abilities": case "loseAbilities": case "banishedUntil": return false;
     }

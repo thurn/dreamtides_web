@@ -1,3 +1,4 @@
+import { Layers } from "../continuous/layers";
 import { characteristics } from "../continuous/characteristics";
 import { carriesEnergy } from "../effects/primitives/rule-modifier";
 import type { Phase, Side } from "../state/ids";
@@ -36,7 +37,9 @@ function enterPhase(ctx: StepContext, phase: Phase): void {
         active === state.config.startingSide &&
         state.config.skipFirstDraw;
       if (!skips) {
+        const additional = new Layers(state, ctx.catalog).additionalDrawPhaseCount(active);
         drawCard(ctx, active);
+        for (let index = 0; index < additional; index++) drawCard(ctx, active);
       }
       return;
     }

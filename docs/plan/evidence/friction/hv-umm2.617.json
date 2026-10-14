@@ -1,0 +1,60 @@
+{
+  "bead": "hv-umm2.617",
+  "phase": 5,
+  "implementMin": 73.20894025,
+  "implementWindow": {
+    "start": "2026-10-14T13:41:41.435Z",
+    "end": "2026-10-14T14:54:53.971415+00:00"
+  },
+  "localValidationS": {
+    "focused": 6.660727708978811,
+    "focused-v2": 5.4415409170032945,
+    "affected": 13.07196579198353,
+    "review": 50.97756045800634,
+    "focused-v3": 7.604228416981641,
+    "review-v2": 59.814563874999294,
+    "knip": 5.720870666002156,
+    "full": 135.24544237498776,
+    "loop-witness-before": 6.703494290995877,
+    "loop-witness-after": 7.242774458980421,
+    "repaired-affected": 15.12630466700648,
+    "repaired-review": 63.08718475000933,
+    "repaired-knip": 3.9624292499793228,
+    "repaired-full": 95.07638870802475,
+    "schema": 0.11603500001365319,
+    "schema-final": 0.11195141600910574,
+    "integrated-affected": 16.723360625008354,
+    "integrated-review": 66.44146891697892,
+    "integrated-knip": 3.921120333019644,
+    "integrated-full": 123.08685212497949,
+    "integrated-schema": 0.12908795900875703
+  },
+  "hostLoad": 3.45166015625,
+  "testDelta": {
+    "files": 1,
+    "lines": 294,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 0.42701206666666663,
+      "note": "Inclusive first failed new-contract import check through corrected focused-v2 completion. Actual whenDraw import correction, not a runtime feature failure. Read-only lookup typos are retained in stage1 proposal; their separate elapsed time is UNKNOWN and remains included in implementWindow."
+    },
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 2.034904716666667,
+      "note": "Inclusive first ordinary review through native-admitted missing own-kind passiveFloating exhaustive case and focused-v3 completion; also includes own unsupported readonly-array .at correction. Shared interval is not separated into CPU costs."
+    },
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 2.3245443666666668,
+      "note": "Actual four public modal-copy renewal witnesses (both controllers,count0/count2) exceeded finite answer guard with new static held, despite passing no-own-static baselines. Exact source-backed/native-admitted one own-op PASSIVE_STATICS repair then same witnesses passed. Inclusive failure-to-proof interval includes authority coordination; no unchanged retry or broad loop rewrite."
+    },
+    {
+      "tag": "additive-registry-conflict",
+      "minutes": 8.280598633333334,
+      "note": "Inclusive first failed parent Tollgate update through verified three-path parking, parent native update to18dc3e, exact saved own-body reapply preserving all peer bytes and combined focused check. Original candidate terminal merge-conflict/unapproved; old source/check/review receipts are historical. No checkpoint submitted or raw rebase; exact native/parking/reapply proof retained. Interval also includes the accepted own brittle opening fixture correction, not separated into CPU costs."
+    }
+  ]
+}

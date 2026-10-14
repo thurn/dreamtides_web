@@ -1,0 +1,333 @@
+{
+  "bead": "hv-umm2.617",
+  "base": "18dc3e8002ba7dc9f67c2bf0ac73e769c5e2bb81",
+  "dispatch": {
+    "timestamp": "2026-10-14T13:41:41.435Z",
+    "callId": "call_b005a4a54c0548f7b24aa955c0114084",
+    "samplingStart": "UNKNOWN",
+    "agent": "/root/additional617"
+  },
+  "cutoff": "2026-10-14T14:54:53.971415+00:00",
+  "inclusiveImplementationMin": 73.20894025,
+  "firstActualOrdinaryReviewStep": {
+    "step": "prepare",
+    "timestamp": "2026-10-14T14:05:15.082Z",
+    "load": 3.45166015625
+  },
+  "sourceBudget": {
+    "runtimeAdded": 59,
+    "runtimeDeleted": 1,
+    "grossRuntime": 60,
+    "newPrimitives": [
+      "additionalDrawPhaseCards"
+    ],
+    "newStaticChangeKinds": [
+      "additionalDrawPhaseCards"
+    ],
+    "newSavedFields": [],
+    "newPrompts": [],
+    "productionUUIDs": [],
+    "testDelta": {
+      "files": 1,
+      "lines": 294,
+      "jsdomFiles": 0
+    },
+    "sharedFixtureOrDiscoveryWrites": 0
+  },
+  "frozenSourceSHA256": {
+    "src/engine/continuous/layers.ts": "5c6363392cc3699d4d8fdcaf6c17b4f23f74e4957a581680983d8718259a7c93",
+    "src/engine/effects/primitives/additional-draw-phase.ts": "d34dd5e76872bc8538c491fdf69328612ba0a1fee7763cb397f2af0eaf48b79d",
+    "src/engine/effects/primitives/contracts/additional-draw-phase.contracts.ts": "04d09e19342231236c9038863aca9680709a5e0c8bb74c0ebf1e50491a0282e9",
+    "src/engine/effects/primitives/index.ts": "c7199fa66e1471463a714a643ce1de70f8251c16e5286b5e1f190354c34e12ae",
+    "src/engine/effects/registry.ts": "9ed9c6d55a010a92749b9fca521d6066b1f760486212a50a879543c822e991dc",
+    "src/engine/loops/event-copy-continuation.ts": "2e4a8a49bc1725f261a7e0581cb69eaa209913c038b71364fe95fa6554099dd1",
+    "src/engine/rules/floating.ts": "946695bc4c3b5eb5ca4667f31b5008cba13bf434c73633de6facd9c3ae53718c",
+    "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb",
+    "src/engine/state/types.ts": "37fca95d24bcca9485f410d760cc170e27a9ca29ff7d0931402fbcc31d4262f4",
+    "src/rules/battle/fold.ts": "a648788a908b0ce23e0ca21af71d782ea789908b1a0dcd51ad96aefb4b409fb5",
+    "src/runtime/battle-prompt-messages.ts": "cde913ffb2cdc0749408a3cca6d175e2e1e3908edad5d3d68f242c1225f7f680"
+  },
+  "validation": [
+    {
+      "name": "focused",
+      "wallSeconds": 6.660727708978811,
+      "exitCode": 1,
+      "receipt": "focused.json"
+    },
+    {
+      "name": "focused-v2",
+      "wallSeconds": 5.4415409170032945,
+      "exitCode": 0,
+      "receipt": "focused-v2.json"
+    },
+    {
+      "name": "affected",
+      "wallSeconds": 13.07196579198353,
+      "exitCode": 0,
+      "receipt": "affected.json"
+    },
+    {
+      "name": "review",
+      "wallSeconds": 50.97756045800634,
+      "exitCode": 2,
+      "receipt": "review.json"
+    },
+    {
+      "name": "focused-v3",
+      "wallSeconds": 7.604228416981641,
+      "exitCode": 0,
+      "receipt": "focused-v3.json"
+    },
+    {
+      "name": "review-v2",
+      "wallSeconds": 59.814563874999294,
+      "exitCode": 0,
+      "receipt": "review-v2.json"
+    },
+    {
+      "name": "knip",
+      "wallSeconds": 5.720870666002156,
+      "exitCode": 0,
+      "receipt": "knip.json"
+    },
+    {
+      "name": "full",
+      "wallSeconds": 135.24544237498776,
+      "exitCode": 0,
+      "receipt": "full.json"
+    },
+    {
+      "name": "loop-witness-before",
+      "wallSeconds": 6.703494290995877,
+      "exitCode": 1,
+      "receipt": "loop-witness-before.json"
+    },
+    {
+      "name": "loop-witness-after",
+      "wallSeconds": 7.242774458980421,
+      "exitCode": 0,
+      "receipt": "loop-witness-after.json"
+    },
+    {
+      "name": "repaired-affected",
+      "wallSeconds": 15.12630466700648,
+      "exitCode": 0,
+      "receipt": "repaired-affected.json"
+    },
+    {
+      "name": "repaired-review",
+      "wallSeconds": 63.08718475000933,
+      "exitCode": 0,
+      "receipt": "repaired-review.json"
+    },
+    {
+      "name": "repaired-knip",
+      "wallSeconds": 3.9624292499793228,
+      "exitCode": 0,
+      "receipt": "repaired-knip.json"
+    },
+    {
+      "name": "repaired-full",
+      "wallSeconds": 95.07638870802475,
+      "exitCode": 0,
+      "receipt": "repaired-full.json"
+    },
+    {
+      "name": "schema",
+      "wallSeconds": 0.11603500001365319,
+      "exitCode": 0,
+      "receipt": "schema.json"
+    },
+    {
+      "name": "schema-final",
+      "wallSeconds": 0.11195141600910574,
+      "exitCode": 0,
+      "receipt": "schema-final.json"
+    },
+    {
+      "name": "integrated-affected",
+      "wallSeconds": 16.723360625008354,
+      "exitCode": 0,
+      "receipt": "integrated-affected.json"
+    },
+    {
+      "name": "integrated-review",
+      "wallSeconds": 66.44146891697892,
+      "exitCode": 0,
+      "receipt": "integrated-review.json"
+    },
+    {
+      "name": "integrated-knip",
+      "wallSeconds": 3.921120333019644,
+      "exitCode": 0,
+      "receipt": "integrated-knip.json"
+    },
+    {
+      "name": "integrated-full",
+      "wallSeconds": 123.08685212497949,
+      "exitCode": 0,
+      "receipt": "integrated-full.json"
+    },
+    {
+      "name": "integrated-schema",
+      "wallSeconds": 0.12908795900875703,
+      "exitCode": 0,
+      "receipt": "integrated-schema.json"
+    }
+  ],
+  "D10": {
+    "ladder": "4 adapted official Magic2026-09-25",
+    "firstDrawSkip": "explicit Dreamtides rules; ladder not invoked",
+    "officialReceipt": "official-rules-verification.json",
+    "RD": "RD-hv-umm2.617-1.md",
+    "normativeBeforeBehavior": true,
+    "P5": "victory after completed phase rules step, normal then extras"
+  },
+  "contractCaseInventory": "contract-case-inventory.json",
+  "currentPassingPublicCaseCount": 38,
+  "finalFullResult": {
+    "files": 380,
+    "tests": 8150,
+    "testSuiteWallSeconds": 80.26,
+    "firstTestStepLoad": 19.63671875,
+    "receipt": "integrated-full.json"
+  },
+  "counterfactualProof": {
+    "semanticMutantsExecuted": false,
+    "kind": "reasoning against passing observable contracts",
+    "mapping": [
+      {
+        "failure": "per-card recursive extra draw",
+        "cases": [
+          "ordinary event draws use own count",
+          "numbered trigger draw without recursion"
+        ]
+      },
+      {
+        "failure": "wrong controller phase",
+        "cases": [
+          "both controllers and you/opponent refs beneficiary/wrong phase"
+        ]
+      },
+      {
+        "failure": "normal replaced by extra",
+        "cases": [
+          "ordered physical normal+summed duplicate-source counts"
+        ]
+      },
+      {
+        "failure": "silent first-skip policy",
+        "normative": "rules subsection+RD+official source",
+        "cases": [
+          "explicit skipFirstDraw true/false, both starting sides"
+        ]
+      },
+      {
+        "failure": "draw/count/Fatigue bypass or duplicate loss",
+        "cases": [
+          "short/empty ordinary Fatigue",
+          "nth real draws only",
+          "held copies add"
+        ]
+      }
+    ]
+  },
+  "copyIntegration": {
+    "actualPublicBeforeAfter": true,
+    "before": "loop-witness-before.json",
+    "after": "loop-witness-after.json",
+    "cases": 4,
+    "heldCounts": [
+      0,
+      2
+    ],
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "beforeOutcome": "finite64-answer watchdog failure after no-own-static baseline mandatoryLoop assertions passed",
+    "afterOutcome": "mandatoryLoop, nonforced answers and no cardDrawn",
+    "repair": "own PASSIVE_STATICS op only and associated intro; own floating-kind still false",
+    "privateDetectorAssertions": false
+  },
+  "recovery": {
+    "newStaticPrompt": false,
+    "newStateOrHistoryProtocol": false,
+    "ownCases": "actual optional ordinary draw-trigger confirm: complete phase draws committed; public load/reload, refusal, true once, stale/foreign/invalid/competing/cancel bounces, event prefix",
+    "existingCases": [
+      {
+        "file": "draw-trigger-filter.contracts.ts",
+        "case": "rolls back a failed draw's partial queue, counter and allowance, then retries exactly once"
+      },
+      {
+        "file": "draw-trigger-filter.contracts.ts",
+        "case": "resumes a saved prompt after drawing, rejects stale or foreign answers, and publishes one reduction"
+      },
+      {
+        "file": "rule-modifier.contracts.ts",
+        "case": "rolls back a real partial resolving write when a later instruction throws"
+      },
+      {
+        "file": "rule-modifier.contracts.ts",
+        "case": "cancels either precommit route or additional-cost prompt without paying"
+      },
+      {
+        "file": "rule-modifier.contracts.ts",
+        "case": "persists route and cost prefixes, rejects stale/competing answers, and commits one payment"
+      }
+    ],
+    "reason": "No new payment/step-cancellation/resolving-write protocol: reuse existing public runner/fold transaction contracts executed by full primitive discovery; factory and static changes validate before individual draws."
+  },
+  "QA": {
+    "applicable": false,
+    "reason": "Zero production provider/UUID and no new graphical workflow/status; ordinary draw event rendering stays on existing public path. Mechanical runtime switch case returns null only; Cumulus read. No artificial browser/catalog/DOM injection or actual shared-provider interaction.",
+    "originalJoin": "hv-umm2.257 retains Antler whole text, discard, production recipes, weighted300/preflight/sweep/D21",
+    "defaultPoolFuzz": "not run: cannot exercise unconsumed new primitive"
+  },
+  "logging": "Existing phaseChanged/cardDrawn/Fatigue/trigger events retain physical IDs and ordinary counts. Replayed source catalog/static UUIDs and held copies reconstruct the phase count; no engine logger calls or display strings.",
+  "preExistingIssues": "No product issue confirmed. Hermetic prepare missing-art warnings are workspace-materialization output and asset restoration passed; not a graphical QA claim.",
+  "coreReview": {
+    "required": true,
+    "owner": "parent",
+    "route": "fresh read-only normal Claude Opus5.5; temporary Sol override expired",
+    "statusAtHelperCutoff": "fresh integrated range review required before promotion; original range historical",
+    "initialHistorical": {
+      "at": "2026-10-14T14:39:09.328762+00:00",
+      "head": "8abcf79cfaf9ac08f1987eeb92ddf62680b8d6e1",
+      "base": "4571cc9ede8cd71d873b95bb7ff383dfc85192c0",
+      "reviewSession": "75c4f9bf-628d-402d-9aab-7c6a70a8dd2e",
+      "wallSeconds": 101.59942208300345,
+      "success": true,
+      "permissionDenials": [],
+      "full878Line15FileDiffInspected": true,
+      "findingAccepted": "brittle production opening-size/skip default assertions",
+      "actualLines": [
+        122,
+        123,
+        126
+      ],
+      "reviewerDiffOffsetCitations": [
+        591,
+        592,
+        595
+      ],
+      "runtimeFindings": 0,
+      "source": "historical original range; final updated range still owed",
+      "reviewerGroupGone": true,
+      "snapshotCleanRemoved": true
+    },
+    "findingRepair": "Opening test uses fixed synthetic config before public beginBattle lifecycle; no production tunable assertions",
+    "integration": {
+      "originalSource": "8abcf79cfaf9ac08f1987eeb92ddf62680b8d6e1",
+      "updatedCheckpoint": "327a799ce4fdcbb5910cf3f66f140a25c289eeca",
+      "updatedBase": "18dc3e8002ba7dc9f67c2bf0ac73e769c5e2bb81",
+      "initialCandidate": "01a13ad1-661f-7a22-b421-10b0c3558d25",
+      "outcome": "terminal merge-conflict/unapproved, historical; no checkpoint submission",
+      "parking": "merge-recovery/parking-receipt.json",
+      "nativeUpdate": "update-v2-receipt.json",
+      "peerProof": "merge-recovery/reapply-proof.json"
+    }
+  },
+  "artifactRoot": "artifacts/qa/hv-umm2.617/audit/",
+  "runtimeOwnershipReceipt": "runtime-final-audit.json"
+}

@@ -84,6 +84,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   playLimit: 6,
   reclaimNotBanished: 6,
   ruleModifier: 6,
+  additionalDrawPhaseCards: 6,
 };
 
 /** Whether a floating change is a continuous change the layers apply. */
@@ -273,6 +274,7 @@ function changed(change: ContinuousChange): InstanceId | null {
     case "playLimit":
     case "reclaimNotBanished":
     case "ruleModifier":
+    case "additionalDrawPhaseCards":
       return null;
     default:
       return change.instance;
@@ -313,6 +315,14 @@ export class Layers {
   preservesEphemeralHand(side: Side): boolean {
     return this.statics.some((entry) => entry.controller === side && entry.node.op === "preserveEphemeralHand" &&
       this.expand(entry).some((change) => change.kind === "preserveEphemeralHand" && change.player === side));
+  }
+
+  /** Sum applicable static Draw-phase instructions only, without expanding unrelated layer-6 rules. */
+  additionalDrawPhaseCount(side: Side): number {
+    return this.statics.reduce((total, entry) => entry.node.op === "additionalDrawPhaseCards"
+      ? total + this.expand(entry).reduce((count, change) =>
+          change.kind === "additionalDrawPhaseCards" && change.player === side ? count + change.count : count, 0)
+      : total, 0);
   }
 
   /** Every change of `layer`, in the order it applies. */

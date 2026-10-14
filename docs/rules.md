@@ -509,6 +509,18 @@ and Ending run as automatic bookends.
 skip the Dreamwell draw in round 1. The first player's first turn skips the Draw
 phase.
 
+**Additional Draw-phase cards:** “Draw N additional cards during your Draw
+phase” adds N cards to the active player's ordinary one-card draw. As that Draw
+phase begins, determine the total additional count from every applicable static
+ability; each held copy adds its count. Draw the ordinary card first, then that
+many additional cards, one at a time. These draws form the phase's rules action;
+abilities they trigger wait for it to finish and then resolve in the usual
+order. The first player's skipped first Draw phase draws neither the ordinary
+card nor additional Draw-phase cards. An extra turn has an ordinary Draw phase
+and receives its applicable additional cards. Additional Draw-phase cards do
+not apply to cards drawn by effects. Each requested card follows the ordinary
+draw and Fatigue rules.
+
 **Extra turns:** An effect such as "Take an extra turn after this one" gives its
 controller another turn immediately after the current turn. An extra turn is a
 full turn: it runs all eight phases, including the Dreamwell draw and the Draw,

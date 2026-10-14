@@ -408,6 +408,8 @@ export type RuleModifierInstruction =
   | { readonly rule: "dawnThreshold"; readonly count: number };
 
 export type ContinuousChange =
+  /** Static-only additional cards for the named player's Draw phase. */
+  | { readonly kind: "additionalDrawPhaseCards"; readonly player: Side; readonly count: number }
   | ({ readonly kind: "ruleModifier"; readonly player: Side } & RuleModifierInstruction)
   /** Layer 2: the character has all character types. */
   | { readonly kind: "allTypes"; readonly instance: InstanceId }
