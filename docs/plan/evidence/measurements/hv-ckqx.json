@@ -1,0 +1,878 @@
+{
+  "bead": "hv-ckqx",
+  "base": "0c1c502f08655810790bb1f65348c5518de291c0",
+  "actualModelStart": "UNKNOWN",
+  "preHelperGrossProxy": "2026-10-14T14:01:29.082789+00:00",
+  "actualGit": "UNKNOWN until externally recorded commit",
+  "grossIncludes": [
+    "setup",
+    "source-first audit",
+    "helper research and authoring",
+    "parent coordination",
+    "queues",
+    "checks",
+    "QA and resource closure if performed",
+    "evidence through actual Git"
+  ],
+  "sourceFirst": {
+    "publicObservedCases": 102,
+    "realLeaks": "Six forms loss/cardCost/named playFrom/reclaim/cannotBeTargeted/combined disabling; both controllers/viewers; actual source return then blind hand shuffle ends records but public-target effectStarted and real battleLogEntries carry null causal source/private expiry identity.",
+    "negativeControls": "General cost/playFrom/cannotPlay/playLimit, recorded hand return and nonretained controls already absent; baseSpark/allTypes already guarded. Ordinary spark with emitted sparkSeenBy follows explicit creation-time observer policy.",
+    "jsonRestartAndInputImmutability": true,
+    "rawStateOrEventInjection": false,
+    "typedReplacementCardCost": "Initial changeCardCost(everyIn(void)) observation was runtime-permissive but rejected by typed DSL; only five other initial forms qualified. Accepted replacement public modifyCardCost(returnToHand(all friendly another), set0,duration) then materialize(all own hand) reproduced same private-expiry leak for both controllers/viewers under authorized oldguard at14:32:04.368717Z, exactrestore. Corrected typed contract passed118cases and full typed review-r2."
+  },
+  "validation": [
+    {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/ckqx/helper/before.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:08:11.733438+00:00",
+      "end": "2026-10-14T14:08:13.952022+00:00",
+      "pid": 47684,
+      "pgid": 47684,
+      "exitCode": 0,
+      "wallSeconds": 2.2186002090165857,
+      "cpuSeconds": {
+        "user": 2.120318,
+        "system": 1.000465
+      },
+      "startLoad": [
+        13.09423828125,
+        8.01025390625,
+        7.515625
+      ],
+      "endLoad": [
+        13.72705078125,
+        8.2255859375,
+        7.59423828125
+      ]
+    },
+    {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/ckqx/helper/before.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:07:37.781412+00:00",
+      "end": "2026-10-14T14:07:43.155831+00:00",
+      "pid": 46436,
+      "pgid": 46436,
+      "exitCode": 1,
+      "wallSeconds": 5.374382500012871,
+      "cpuSeconds": {
+        "user": 2.828987,
+        "system": 1.615037
+      },
+      "startLoad": [
+        10.08984375,
+        6.9541015625,
+        7.140625
+      ],
+      "endLoad": [
+        11.12939453125,
+        7.27001953125,
+        7.25
+      ]
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx/artifacts/qa/hv-ckqx/workflows.mjs",
+        "--bead",
+        "hv-ckqx",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:51:38.768653+00:00",
+      "end": "2026-10-14T14:53:00.786708+00:00",
+      "pid": 14467,
+      "pgid": 14467,
+      "exitCode": 0,
+      "wallSeconds": 82.01727274997393,
+      "cpuSeconds": {
+        "user": 7.161309,
+        "system": 3.305
+      },
+      "startLoad": [
+        18.3173828125,
+        16.7314453125,
+        13.4111328125
+      ],
+      "endLoad": [
+        18.857421875,
+        17.3662109375,
+        13.9638671875
+      ]
+    },
+    {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/ckqx/helper/controls-before.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:09:29.273822+00:00",
+      "end": "2026-10-14T14:09:31.207809+00:00",
+      "pid": 51062,
+      "pgid": 51062,
+      "exitCode": 0,
+      "wallSeconds": 1.9340065419964958,
+      "cpuSeconds": {
+        "user": 1.415719,
+        "system": 0.625006
+      },
+      "startLoad": [
+        13.9677734375,
+        9.22314453125,
+        8.00634765625
+      ],
+      "endLoad": [
+        13.9677734375,
+        9.22314453125,
+        8.00634765625
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retained effect expiry privacy.*omits hidden source-bound expiry.*observerSpark"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:26:00.197011+00:00",
+      "end": "2026-10-14T14:26:05.541154+00:00",
+      "pid": 40645,
+      "pgid": 40645,
+      "exitCode": 1,
+      "wallSeconds": 5.344111374986824,
+      "cpuSeconds": {
+        "user": 5.607335,
+        "system": 1.7661149999999999
+      },
+      "startLoad": [
+        3.06591796875,
+        6.05908203125,
+        8.53515625
+      ],
+      "endLoad": [
+        3.140625,
+        6.0244140625,
+        8.50830078125
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retained effect expiry privacy.*omits hidden source-bound expiry"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:25:21.795550+00:00",
+      "end": "2026-10-14T14:25:27.158478+00:00",
+      "pid": 39468,
+      "pgid": 39468,
+      "exitCode": 1,
+      "wallSeconds": 5.362901332991896,
+      "cpuSeconds": {
+        "user": 5.646794,
+        "system": 1.773191
+      },
+      "startLoad": [
+        3.37548828125,
+        6.53515625,
+        8.81591796875
+      ],
+      "endLoad": [
+        3.42529296875,
+        6.49267578125,
+        8.78759765625
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retained effect expiry privacy.*omits hidden source-bound expiry.*cardCost"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:35:33.731907+00:00",
+      "end": "2026-10-14T14:35:38.977037+00:00",
+      "pid": 18215,
+      "pgid": 18215,
+      "exitCode": 1,
+      "wallSeconds": 5.245098999992479,
+      "cpuSeconds": {
+        "user": 5.495282,
+        "system": 1.6963949999999999
+      },
+      "startLoad": [
+        5.36962890625,
+        9.11083984375,
+        9.619140625
+      ],
+      "endLoad": [
+        11.85595703125,
+        10.427734375,
+        10.0830078125
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retained effect expiry privacy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:32:30.329219+00:00",
+      "end": "2026-10-14T14:32:38.798427+00:00",
+      "pid": 6818,
+      "pgid": 6818,
+      "exitCode": 0,
+      "wallSeconds": 8.46915337498649,
+      "cpuSeconds": {
+        "user": 6.6360339999999995,
+        "system": 2.513784
+      },
+      "startLoad": [
+        9.74755859375,
+        11.86962890625,
+        10.51513671875
+      ],
+      "endLoad": [
+        9.79248046875,
+        11.80810546875,
+        10.50830078125
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/primitives.test.ts",
+        "-t",
+        "retained effect expiry privacy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:23:35.593839+00:00",
+      "end": "2026-10-14T14:23:39.947108+00:00",
+      "pid": 36969,
+      "pgid": 36969,
+      "exitCode": 1,
+      "wallSeconds": 4.353269874991383,
+      "cpuSeconds": {
+        "user": 2.218611,
+        "system": 1.16351
+      },
+      "startLoad": [
+        4.197265625,
+        8.03271484375,
+        9.5888671875
+      ],
+      "endLoad": [
+        4.10107421875,
+        7.94873046875,
+        9.5498046875
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retained effect expiry privacy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:23:49.117199+00:00",
+      "end": "2026-10-14T14:23:54.585444+00:00",
+      "pid": 37391,
+      "pgid": 37391,
+      "exitCode": 1,
+      "wallSeconds": 5.4682151669985615,
+      "cpuSeconds": {
+        "user": 5.7613389999999995,
+        "system": 1.75458
+      },
+      "startLoad": [
+        3.7841796875,
+        7.75244140625,
+        9.46142578125
+      ],
+      "endLoad": [
+        3.64111328125,
+        7.65673828125,
+        9.41748046875
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retained effect expiry privacy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:24:40.073526+00:00",
+      "end": "2026-10-14T14:24:45.397229+00:00",
+      "pid": 38549,
+      "pgid": 38549,
+      "exitCode": 0,
+      "wallSeconds": 5.323670250014402,
+      "cpuSeconds": {
+        "user": 5.657893,
+        "system": 1.722079
+      },
+      "startLoad": [
+        3.09326171875,
+        6.966796875,
+        9.07275390625
+      ],
+      "endLoad": [
+        3.08544921875,
+        6.90087890625,
+        9.037109375
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/events/events.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation-log.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model-display.test.ts",
+        "src/battle/components/battle-presentation.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:27:41.916688+00:00",
+      "end": "2026-10-14T14:28:00.289132+00:00",
+      "pid": 75309,
+      "pgid": 75309,
+      "exitCode": 0,
+      "wallSeconds": 18.37227633400471,
+      "cpuSeconds": {
+        "user": 22.1899,
+        "system": 3.493626
+      },
+      "startLoad": [
+        4.89501953125,
+        5.7275390625,
+        8.12060546875
+      ],
+      "endLoad": [
+        5.2685546875,
+        5.76025390625,
+        8.07568359375
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:02:08.422117+00:00",
+      "end": "2026-10-14T14:02:08.585879+00:00",
+      "pid": 35963,
+      "pgid": 35963,
+      "exitCode": 0,
+      "wallSeconds": 0.16378899998380803,
+      "cpuSeconds": {
+        "user": 0.13453299999999999,
+        "system": 0.037798
+      },
+      "startLoad": [
+        5.5869140625,
+        7.5693359375,
+        7.6708984375
+      ],
+      "endLoad": [
+        5.5869140625,
+        7.5693359375,
+        7.6708984375
+      ]
+    },
+    {
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:36:24.304969+00:00",
+      "end": "2026-10-14T14:38:18.368304+00:00",
+      "pid": 19774,
+      "pgid": 19774,
+      "exitCode": 0,
+      "wallSeconds": 114.06205841602059,
+      "cpuSeconds": {
+        "user": 251.046936,
+        "system": 30.86641
+      },
+      "startLoad": [
+        7.787109375,
+        9.59326171875,
+        9.79443359375
+      ],
+      "endLoad": [
+        14.84375,
+        12.52783203125,
+        10.97900390625
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:01:30.372918+00:00",
+      "end": "2026-10-14T14:01:32.906363+00:00",
+      "pid": 33594,
+      "pgid": 33594,
+      "exitCode": 0,
+      "wallSeconds": 2.533442042011302,
+      "cpuSeconds": {
+        "user": 1.999604,
+        "system": 3.945683
+      },
+      "startLoad": [
+        6.48583984375,
+        7.9931640625,
+        7.8193359375
+      ],
+      "endLoad": [
+        6.36669921875,
+        7.943359375,
+        7.802734375
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:36:03.308166+00:00",
+      "end": "2026-10-14T14:36:07.424255+00:00",
+      "pid": 19165,
+      "pgid": 19165,
+      "exitCode": 0,
+      "wallSeconds": 4.116069125011563,
+      "cpuSeconds": {
+        "user": 3.560614,
+        "system": 1.135821
+      },
+      "startLoad": [
+        10.5341796875,
+        10.20751953125,
+        10.0107421875
+      ],
+      "endLoad": [
+        10.0908203125,
+        10.12060546875,
+        9.98095703125
+      ]
+    },
+    {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/ckqx/helper/qa-preflight.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:42:30.429809+00:00",
+      "end": "2026-10-14T14:42:33.733787+00:00",
+      "pid": 89230,
+      "pgid": 89230,
+      "exitCode": 0,
+      "wallSeconds": 3.3039863749872893,
+      "cpuSeconds": {
+        "user": 1.335153,
+        "system": 0.8224889999999999
+      },
+      "startLoad": [
+        9.91943359375,
+        11.5068359375,
+        10.994140625
+      ],
+      "endLoad": [
+        9.91943359375,
+        11.5068359375,
+        10.994140625
+      ]
+    },
+    {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/ckqx/helper/qa-preflight.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:29:59.538995+00:00",
+      "end": "2026-10-14T14:30:00.936222+00:00",
+      "pid": 40153,
+      "pgid": 40153,
+      "exitCode": 1,
+      "wallSeconds": 1.3972422079823446,
+      "cpuSeconds": {
+        "user": 0.9089079999999999,
+        "system": 0.601793
+      },
+      "startLoad": [
+        16.806640625,
+        10.248046875,
+        9.5693359375
+      ],
+      "endLoad": [
+        16.806640625,
+        10.248046875,
+        9.5693359375
+      ]
+    },
+    {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/ckqx/helper/qa-preflight.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:31:32.618895+00:00",
+      "end": "2026-10-14T14:31:34.244240+00:00",
+      "pid": 2486,
+      "pgid": 2486,
+      "exitCode": 1,
+      "wallSeconds": 1.6253682500100695,
+      "cpuSeconds": {
+        "user": 1.15832,
+        "system": 0.483247
+      },
+      "startLoad": [
+        17.54833984375,
+        13.2607421875,
+        10.869140625
+      ],
+      "endLoad": [
+        17.26416015625,
+        13.27294921875,
+        10.88720703125
+      ]
+    },
+    {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/ckqx/helper/qa-preflight.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:32:29.189023+00:00",
+      "end": "2026-10-14T14:32:32.287579+00:00",
+      "pid": 6749,
+      "pgid": 6749,
+      "exitCode": 0,
+      "wallSeconds": 3.0985503750271164,
+      "cpuSeconds": {
+        "user": 1.271096,
+        "system": 0.793021
+      },
+      "startLoad": [
+        9.74755859375,
+        11.86962890625,
+        10.51513671875
+      ],
+      "endLoad": [
+        9.74755859375,
+        11.86962890625,
+        10.51513671875
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:34:10.998537+00:00",
+      "end": "2026-10-14T14:35:05.505094+00:00",
+      "pid": 13853,
+      "pgid": 13853,
+      "exitCode": 0,
+      "wallSeconds": 54.50594912501401,
+      "cpuSeconds": {
+        "user": 140.771591,
+        "system": 13.65918
+      },
+      "startLoad": [
+        5.99951171875,
+        10.0068359375,
+        9.9404296875
+      ],
+      "endLoad": [
+        7.1845703125,
+        9.74951171875,
+        9.853515625
+      ]
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:28:37.002631+00:00",
+      "end": "2026-10-14T14:29:40.466596+00:00",
+      "pid": 81444,
+      "pgid": 81444,
+      "exitCode": 2,
+      "wallSeconds": 63.463298916991334,
+      "cpuSeconds": {
+        "user": 183.442968,
+        "system": 17.601088
+      },
+      "startLoad": [
+        12.99560546875,
+        7.44580078125,
+        8.58349609375
+      ],
+      "endLoad": [
+        15.2509765625,
+        9.60546875,
+        9.33740234375
+      ]
+    },
+    {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/ckqx/helper/typed-cardcost-before.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx",
+      "start": "2026-10-14T14:32:04.368717+00:00",
+      "end": "2026-10-14T14:32:05.540290+00:00",
+      "pid": 5074,
+      "pgid": 5074,
+      "exitCode": 0,
+      "wallSeconds": 1.1715997499995865,
+      "cpuSeconds": {
+        "user": 1.050394,
+        "system": 0.418645
+      },
+      "startLoad": [
+        12.51220703125,
+        12.5224609375,
+        10.69873046875
+      ],
+      "endLoad": [
+        12.51220703125,
+        12.5224609375,
+        10.69873046875
+      ]
+    }
+  ],
+  "counterfactuals": [
+    {
+      "counterfactual": "restore old three-kind expiry guard",
+      "actualExitCode": 1,
+      "sourceBeforeSha256": "b8a69e19f5ee08dcfad106cf764de2929f56fbe83a164fd873896d9a45219b2e",
+      "restoredSha256": "b8a69e19f5ee08dcfad106cf764de2929f56fbe83a164fd873896d9a45219b2e",
+      "exactRestoration": true
+    },
+    {
+      "counterfactual": "move exact guard before creation-time spark observer branch",
+      "actualExitCode": 1,
+      "sourceBeforeSha256": "b8a69e19f5ee08dcfad106cf764de2929f56fbe83a164fd873896d9a45219b2e",
+      "restoredSha256": "b8a69e19f5ee08dcfad106cf764de2929f56fbe83a164fd873896d9a45219b2e",
+      "exactRestoration": true
+    },
+    {
+      "counterfactual": "admitted oldguard exact restoration for replacement accepted typed public cardCost witness",
+      "actualExitCode": 0,
+      "sourceBeforeSha256": "b8a69e19f5ee08dcfad106cf764de2929f56fbe83a164fd873896d9a45219b2e",
+      "restoredSha256": "b8a69e19f5ee08dcfad106cf764de2929f56fbe83a164fd873896d9a45219b2e",
+      "exactRestoration": true
+    },
+    {
+      "counterfactual": "old three-kind guard on corrected accepted typed cardCost contract",
+      "actualExitCode": 1,
+      "sourceBeforeSha256": "b8a69e19f5ee08dcfad106cf764de2929f56fbe83a164fd873896d9a45219b2e",
+      "restoredSha256": "b8a69e19f5ee08dcfad106cf764de2929f56fbe83a164fd873896d9a45219b2e",
+      "exactRestoration": true
+    }
+  ],
+  "qualifications": [
+    "First source-free .ts observer failed CJS/top-level-await transform before results; corrected external .mts succeeded.",
+    "Focused first path primitives.test.ts nonexistent: no tests; corrected contracts.test.ts.",
+    "Initial eight contract authoring failures: one-choice banishment autoanswered before consuming scripted answer; public floating view excludes private sourceObservedBy metadata. Corrected two real hand candidates/public fields; 118 cases passed.",
+    "Temporary counterfactual old guard yielded exactly twelve regression failures and twenty-two controls passed; moving guard before observer branch yielded exactly two explicit-policy failures. Both restored exact SHA256 b8a69e19f5ee08dcfad106cf764de2929f56fbe83a164fd873896d9a45219b2e.",
+    "Short guessed-path reads and patch-context correction are authoring overhead, retained in gross; no discovered product issue.",
+    "First npm review failed lint newline and invalid typed cardCost fixture while runtime7190 tests passed. Fixture corrected through valid public DSL, source-first witness repeated; review-r2 lint/typechecks/schema/cycles and7190tests passed54.505949s.",
+    "Additional exact oldguard fault on corrected typed cardCost tests produced2expected failures; source SHA256 restored b8a69e19... before Knip/full.",
+    "QA preflight first duplicate builtin UUID catalog rejected before actions; UUID-based filtering corrected. Second exercised recipe but final observer used nonexistent points instead of score; corrected field. Third passed3.098550s with normal actions/real log/sourceLeaves expiry/restored activation and score+1. No QA provider/browser/server started.",
+    "Foundation requested nonexistent events/events.test.ts ignored; actual five recognized files passed3741cases, no claimed event-path coverage.",
+    "Full locked review114.062058s inclusive; prepare14:36:24.476Z vs wrapper14:36:24.304969Z leaves at most0.171031s startup+lockwait, no isolated queue duration. All380files/8198tests, lint/types/Knip/schema/cycles/bundle passed.",
+    "Initial positive QA Dusk activation absence is timing-compatible, not standalone suppression proof. Refined accepted same fixtures/public phase passes hold HUMAN DAY while source live; source-bound disabling active/activation unavailable, normal Voyage departure at SAME DAY restores activation and actual score+1. qa-preflight-day-control passed3.303986s; no browser resources yet."
+  ],
+  "failureRecoveryPaths": {
+    "malformed": "Actual existing saved-fold validator rejects malformed nextEffect; no schema writes.",
+    "refusal": "Public fold rejects invalid activation/target answer without mutating committed input.",
+    "interrupt": "Uncommitted target choice cancellation restores original committed hash and no floating effects.",
+    "restart": "Actual JSON state/event transport and saved completed/mid-target fold restart reproduce projection and answer results.",
+    "postcommit": "No new state transition. Existing disable-triggers rollback contract and foundation/full suite cover resolving exceptions without injected private throw; no new exception semantics claimed."
+  },
+  "consumerImpact": "Hidden expiry starts are absent from actual eventSeenBy and real player log entries in typed public engine contracts; retained-source numeric/allTypes and creation-time Spark policies have explicit regression controls. Existing known-source same-Day positive desktop/mobile player workflow passed normal play/materialization, combined suppression, public log, reload, normal return/expiry, restored activation+1, final reload and persisted UUID logs. No negative same-batch DOM witness claimed.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual successful npm review-r2 invocation start only,14:34:10.998537Z load5.99951171875"
+      },
+      "implementWindow": {
+        "start": "Conservative post-claim pre-helper worktree verification proxy; actual model start UNKNOWN",
+        "end": "Evidence refresh endpoint; not actual Git until external receipt"
+      }
+    }
+  },
+  "qaPlan": {
+    "path": "/tmp/dreamtides-executor-01a1304d/ckqx/helper/qa-plan.md",
+    "caller": "/Users/dthurn/dreamtides_web/.worktrees/retained-effect-expiry-privacy-ckqx/artifacts/qa/hv-ckqx/workflows.mjs",
+    "ledger": "docs/plan/evidence/qa/hv-ckqx.json",
+    "preflightReceipt": "/tmp/dreamtides-executor-01a1304d/ckqx/qa-preflight-day-control-receipt.json",
+    "status": "Actual native desktop/mobile PASS; complete resource closure/exactfullsource/support postguard and independent parentrelease observed",
+    "preparedBeforeQaHadNoProviderServerBrowserLease": true,
+    "currentAllResourcesClosed": true
+  },
+  "qa": {
+    "ledger": "docs/plan/evidence/qa/hv-ckqx.json",
+    "actualNativeReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-ckqx/invocations/run-5BqajI/workflows.result.json",
+    "nativeWallMs": {
+      "browserLeaseWait": 7,
+      "serve": 2339,
+      "scenario": 79033,
+      "total": 81441
+    },
+    "wrapperWallSeconds": 82.01727274997393,
+    "cpuSeconds": {
+      "user": 7.161309,
+      "system": 3.305
+    },
+    "desktopMobilePassed": true,
+    "calls": [
+      {
+        "viewport": "desktop",
+        "step": 0,
+        "ms": 13506
+      },
+      {
+        "viewport": "desktop",
+        "step": 1,
+        "ms": 34630
+      },
+      {
+        "viewport": "desktop",
+        "step": 2,
+        "ms": 6053
+      },
+      {
+        "viewport": "mobile",
+        "step": 0,
+        "ms": 12943
+      },
+      {
+        "viewport": "mobile",
+        "step": 1,
+        "ms": 8092
+      },
+      {
+        "viewport": "mobile",
+        "step": 2,
+        "ms": 3808
+      }
+    ],
+    "captures": [
+      "ckqx-desktop-live.png",
+      "ckqx-desktop-expired.png",
+      "ckqx-mobile-live.png",
+      "ckqx-mobile-expired.png"
+    ],
+    "persistedGameLogs": [
+      {
+        "viewport": "desktop",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-ckqx/invocations/run-5BqajI/workflows-desktop.jsonl",
+        "gameId": "6tizt2",
+        "selectedBy": "url",
+        "rows": 78,
+        "reason": null
+      },
+      {
+        "viewport": "mobile",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-ckqx/invocations/run-5BqajI/workflows-mobile.jsonl",
+        "gameId": "6bb3d6",
+        "selectedBy": "url",
+        "rows": 79,
+        "reason": null
+      }
+    ],
+    "caps": [],
+    "parentVisualReview": "All four captures approved; relevant targets/status/transitions unobstructed, ordinary hand fanning.",
+    "closure": {
+      "nativeRunnerExitCode": 0,
+      "runnerGroup": 14467,
+      "serverGroup": 14509,
+      "groupsGone": true,
+      "port": 5274,
+      "portFree": true,
+      "slot": 1,
+      "ownOwnerAndServerRecordsAbsent": true,
+      "protocolQualification": "Actual exit0 after awaited native close and no cleanup errors, plus absent ownership records, groups gone and port free, qualifies normal browser close/RPC and SDK drain under unchanged runner protocol. No raw browser_close response is fabricated.",
+      "helperPostguard": "/tmp/dreamtides-executor-01a1304d/ckqx/helper/qa-postguard.json",
+      "parentRelease": "/tmp/dreamtides-executor-01a1304d/ckqx/qa-parent-release.json",
+      "sourcePaths": 4866,
+      "supportPaths": 11,
+      "typesBytesSymlinksAndCompletePathSetsExact": true,
+      "currentAllResourcesClosed": true
+    }
+  },
+  "sourcePreservation": {
+    "coreGuardSha256": "b8a69e19f5ee08dcfad106cf764de2929f56fbe83a164fd873896d9a45219b2e",
+    "helperPostguard": "/tmp/dreamtides-executor-01a1304d/ckqx/helper/qa-postguard.json",
+    "parentRelease": "/tmp/dreamtides-executor-01a1304d/ckqx/qa-parent-release.json",
+    "fullSourceAndSupportPathSetsTypesBytesSymlinksExact": true
+  },
+  "finalTimingRefresh": {
+    "utc": "2026-10-14T15:00:51.050980+00:00",
+    "grossProxyStart": "2026-10-14T14:01:29.082789+00:00",
+    "grossMinutesToRefresh": 59.366136516666664,
+    "scope": "Gross all setup/research/parent coordination/queues/checks/QA and closure/evidence through this final refresh; actual Git endpoint and bounded cutoff gap recorded externally by commit receipt.",
+    "actualModelStart": "UNKNOWN",
+    "actualGitStart": "UNKNOWN until external commit receipt",
+    "actualGitEnd": "UNKNOWN until external commit receipt",
+    "allowedCutoffGapSeconds": 60
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "bead": "hv-ckqx",
+  "phase": 5,
+  "implementMin": 59.366136516666664,
+  "implementWindow": {
+    "start": "2026-10-14T14:01:29.082789+00:00",
+    "end": "2026-10-14T15:00:51.050980+00:00"
+  },
+  "localValidationS": {
+    "focused": 5.323670250014402,
+    "focused-final": 8.46915337498649,
+    "foundation": 18.37227633400471,
+    "review": 54.50594912501401,
+    "knip": 4.116069125011563,
+    "full-inclusive": 114.06205841602059,
+    "browser-positive": 82.01727274997393
+  },
+  "hostLoad": 5.99951171875,
+  "testDelta": {
+    "files": 1,
+    "lines": 194,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

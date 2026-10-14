@@ -1,0 +1,459 @@
+{
+  "bead": "hv-ckqx",
+  "status": "passed",
+  "scope": "Existing AMP Pallid positive source-bound public log/activation workflow. Hidden-negative same-batch disclosure uses actual typed synthetic public engine and real battleLogEntries contracts, both controllers and both viewers; no negative DOM recipe claimed.",
+  "invocation": "run-5BqajI",
+  "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-ckqx/invocations/run-5BqajI/workflows.result.json",
+  "reportSha256": "23761f778b926edb95eb60f0f92fc2277bf0c9d129cf0297e4089d8b2815c3e7",
+  "nativeWallMs": {
+    "browserLeaseWait": 7,
+    "serve": 2339,
+    "scenario": 79033,
+    "total": 81441
+  },
+  "calls": [
+    {
+      "viewport": "desktop",
+      "step": 0,
+      "ms": 13506
+    },
+    {
+      "viewport": "desktop",
+      "step": 1,
+      "ms": 34630
+    },
+    {
+      "viewport": "desktop",
+      "step": 2,
+      "ms": 6053
+    },
+    {
+      "viewport": "mobile",
+      "step": 0,
+      "ms": 12943
+    },
+    {
+      "viewport": "mobile",
+      "step": 1,
+      "ms": 8092
+    },
+    {
+      "viewport": "mobile",
+      "step": 2,
+      "ms": 3808
+    }
+  ],
+  "caps": [],
+  "captures": [
+    "ckqx-desktop-live.png",
+    "ckqx-desktop-expired.png",
+    "ckqx-mobile-live.png",
+    "ckqx-mobile-expired.png"
+  ],
+  "cells": [
+    {
+      "viewport": "desktop",
+      "status": "passed",
+      "controller": "enemy",
+      "humanViewer": "player",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "source": {
+        "instance": "i11",
+        "printing": "ce09ddfa-c349-4b32-b524-fb74444cddcb",
+        "variant": "amplified",
+        "zone": "hand"
+      },
+      "target": {
+        "instance": "i1",
+        "printing": "5e5e5e5e-0000-4000-8000-000000056240"
+      },
+      "turnNumber": 5,
+      "livePublication": {
+        "seq": 3,
+        "index": 5,
+        "kind": "effectStarted",
+        "instance": null,
+        "event": {
+          "kind": "effectStarted",
+          "effect": "e1",
+          "controller": "enemy",
+          "source": "i11",
+          "expiry": {
+            "at": "sourceLeavesPlay",
+            "source": "i11"
+          },
+          "change": {
+            "kind": "disableTriggers",
+            "instance": "i1",
+            "mode": "triggeredAndActivated"
+          }
+        },
+        "cards": {
+          "i11": "ce09ddfa-c349-4b32-b524-fb74444cddcb"
+        }
+      },
+      "liveGeometry": {
+        "id": "i1",
+        "x": 254.5,
+        "y": 483.5,
+        "width": 89.5,
+        "height": 89.5,
+        "hit": true,
+        "visible": true,
+        "rank": "player-back",
+        "slot": "B0",
+        "playable": false,
+        "badges": [
+          {
+            "label": "Triggered abilities do not trigger; activated abilities cannot be activated while its source is in play",
+            "source": null
+          }
+        ]
+      },
+      "liveLogMatches": 1,
+      "departurePublications": {
+        "effectEnded": [
+          {
+            "seq": 8,
+            "index": 4,
+            "kind": "effectEnded",
+            "instance": null,
+            "event": {
+              "kind": "effectEnded",
+              "effect": "e1"
+            },
+            "cards": {}
+          }
+        ],
+        "returnedToHand": [
+          {
+            "seq": 8,
+            "index": 5,
+            "kind": "returnedToHand",
+            "instance": "i11",
+            "event": {
+              "kind": "returnedToHand",
+              "instance": "i11",
+              "side": "enemy"
+            },
+            "cards": {
+              "i11": "ce09ddfa-c349-4b32-b524-fb74444cddcb"
+            }
+          }
+        ]
+      },
+      "expiredGeometry": {
+        "id": "i1",
+        "x": 254.5,
+        "y": 483.5,
+        "width": 89.5,
+        "height": 89.5,
+        "hit": true,
+        "visible": true,
+        "rank": "player-back",
+        "slot": "B0",
+        "playable": true,
+        "badges": []
+      },
+      "activation": {
+        "seq": 9,
+        "index": 1,
+        "kind": "abilityActivated",
+        "instance": null,
+        "event": {
+          "kind": "abilityActivated",
+          "side": "player",
+          "source": "i1",
+          "ability": 1
+        },
+        "cards": {
+          "i1": "5e5e5e5e-0000-4000-8000-000000056240"
+        }
+      },
+      "scoreDelta": 1,
+      "finalGeometry": {
+        "id": "i1",
+        "x": 254.5,
+        "y": 483.5,
+        "width": 89.5,
+        "height": 89.5,
+        "hit": true,
+        "visible": true,
+        "rank": "player-back",
+        "slot": "B0",
+        "playable": true,
+        "badges": []
+      },
+      "finalPublicLogMatches": 1,
+      "persistedLogs": {
+        "gameId": "6tizt2",
+        "rows": 78,
+        "play": {
+          "gameId": "6tizt2",
+          "version": 0,
+          "side": "enemy",
+          "action": {
+            "kind": "play",
+            "card": "i11",
+            "from": "hand"
+          },
+          "answers": [],
+          "timestamp": "2026-10-14T14:51:45.022Z",
+          "event": "engine.action",
+          "seq": 27
+        },
+        "bounce": {
+          "gameId": "6tizt2",
+          "version": 20,
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i2",
+            "from": "hand"
+          },
+          "answers": [
+            {
+              "fingerprint": "1mvp1clzp8n",
+              "value": [
+                "i11"
+              ]
+            }
+          ],
+          "timestamp": "2026-10-14T14:52:16.838Z",
+          "event": "engine.action",
+          "seq": 15
+        },
+        "activation": {
+          "gameId": "6tizt2",
+          "version": 22,
+          "side": "player",
+          "action": {
+            "kind": "activate",
+            "source": "i1",
+            "ability": 1
+          },
+          "answers": [],
+          "timestamp": "2026-10-14T14:52:29.732Z",
+          "event": "engine.action",
+          "seq": 24
+        }
+      }
+    },
+    {
+      "viewport": "mobile",
+      "status": "passed",
+      "controller": "enemy",
+      "humanViewer": "player",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "source": {
+        "instance": "i11",
+        "printing": "ce09ddfa-c349-4b32-b524-fb74444cddcb",
+        "variant": "amplified",
+        "zone": "hand"
+      },
+      "target": {
+        "instance": "i1",
+        "printing": "5e5e5e5e-0000-4000-8000-000000056240"
+      },
+      "turnNumber": 5,
+      "livePublication": {
+        "seq": 3,
+        "index": 5,
+        "kind": "effectStarted",
+        "instance": null,
+        "event": {
+          "kind": "effectStarted",
+          "effect": "e1",
+          "controller": "enemy",
+          "source": "i11",
+          "expiry": {
+            "at": "sourceLeavesPlay",
+            "source": "i11"
+          },
+          "change": {
+            "kind": "disableTriggers",
+            "instance": "i1",
+            "mode": "triggeredAndActivated"
+          }
+        },
+        "cards": {
+          "i11": "ce09ddfa-c349-4b32-b524-fb74444cddcb"
+        }
+      },
+      "liveGeometry": {
+        "id": "i1",
+        "x": 23.40625,
+        "y": 415.890625,
+        "width": 53.859375,
+        "height": 53.859375,
+        "hit": true,
+        "visible": true,
+        "rank": "player-back",
+        "slot": "B0",
+        "playable": false,
+        "badges": [
+          {
+            "label": "Triggered abilities do not trigger; activated abilities cannot be activated while its source is in play",
+            "source": null
+          }
+        ]
+      },
+      "liveLogMatches": 1,
+      "departurePublications": {
+        "effectEnded": [
+          {
+            "seq": 8,
+            "index": 4,
+            "kind": "effectEnded",
+            "instance": null,
+            "event": {
+              "kind": "effectEnded",
+              "effect": "e1"
+            },
+            "cards": {}
+          }
+        ],
+        "returnedToHand": [
+          {
+            "seq": 8,
+            "index": 5,
+            "kind": "returnedToHand",
+            "instance": "i11",
+            "event": {
+              "kind": "returnedToHand",
+              "instance": "i11",
+              "side": "enemy"
+            },
+            "cards": {
+              "i11": "ce09ddfa-c349-4b32-b524-fb74444cddcb"
+            }
+          }
+        ]
+      },
+      "expiredGeometry": {
+        "id": "i1",
+        "x": 23.40625,
+        "y": 415.890625,
+        "width": 53.859375,
+        "height": 53.859375,
+        "hit": true,
+        "visible": true,
+        "rank": "player-back",
+        "slot": "B0",
+        "playable": true,
+        "badges": []
+      },
+      "activation": {
+        "seq": 9,
+        "index": 1,
+        "kind": "abilityActivated",
+        "instance": null,
+        "event": {
+          "kind": "abilityActivated",
+          "side": "player",
+          "source": "i1",
+          "ability": 1
+        },
+        "cards": {
+          "i1": "5e5e5e5e-0000-4000-8000-000000056240"
+        }
+      },
+      "scoreDelta": 1,
+      "finalGeometry": {
+        "id": "i1",
+        "x": 23.40625,
+        "y": 415.890625,
+        "width": 53.859375,
+        "height": 53.859375,
+        "hit": true,
+        "visible": true,
+        "rank": "player-back",
+        "slot": "B0",
+        "playable": true,
+        "badges": []
+      },
+      "finalPublicLogMatches": 1,
+      "persistedLogs": {
+        "gameId": "6bb3d6",
+        "rows": 79,
+        "play": {
+          "gameId": "6bb3d6",
+          "version": 0,
+          "side": "enemy",
+          "action": {
+            "kind": "play",
+            "card": "i11",
+            "from": "hand"
+          },
+          "answers": [],
+          "timestamp": "2026-10-14T14:52:39.146Z",
+          "event": "engine.action",
+          "seq": 27
+        },
+        "bounce": {
+          "gameId": "6bb3d6",
+          "version": 20,
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i2",
+            "from": "hand"
+          },
+          "answers": [
+            {
+              "fingerprint": "1mvp1clzp8n",
+              "value": [
+                "i11"
+              ]
+            }
+          ],
+          "timestamp": "2026-10-14T14:52:53.127Z",
+          "event": "engine.action",
+          "seq": 15
+        },
+        "activation": {
+          "gameId": "6bb3d6",
+          "version": 22,
+          "side": "player",
+          "action": {
+            "kind": "activate",
+            "source": "i1",
+            "ability": 1
+          },
+          "answers": [],
+          "timestamp": "2026-10-14T14:52:56.698Z",
+          "event": "engine.action",
+          "seq": 24
+        }
+      }
+    }
+  ],
+  "sameBatchNegativeDOMClaim": false,
+  "resourceClosure": {
+    "nativeRunnerExitCode": 0,
+    "runnerGroup": 14467,
+    "serverGroup": 14509,
+    "groupsGone": true,
+    "port": 5274,
+    "portFree": true,
+    "slot": 1,
+    "ownOwnerAndServerRecordsAbsent": true,
+    "protocolQualification": "Actual exit0 after awaited native close and no cleanup errors, plus absent ownership records, groups gone and port free, qualifies normal browser close/RPC and SDK drain under unchanged runner protocol. No raw browser_close response is fabricated.",
+    "helperPostguard": "/tmp/dreamtides-executor-01a1304d/ckqx/helper/qa-postguard.json",
+    "parentRelease": "/tmp/dreamtides-executor-01a1304d/ckqx/qa-parent-release.json",
+    "sourcePaths": 4866,
+    "supportPaths": 11,
+    "typesBytesSymlinksAndCompletePathSetsExact": true
+  },
+  "parentVisualReview": {
+    "approved": true,
+    "captures": 4,
+    "finding": "Relevant target/source/status/control geometry unobstructed; existing hand fanning observed as normal."
+  },
+  "qualifications": [
+    "Initial external Dusk activation absence did not isolate STANDARD activation timing; accepted successful refined preflight and actual browser compare availability before/after source departure at SAME human Day.",
+    "All browser interaction uses existing CardLabStage, normal enemy scripted AMP materialization and ordinary human phase/play/target/activation controls. No new registered fixture or browser state/engine injection."
+  ],
+  "mode": "judged",
+  "commit": "0c1c502f08655810790bb1f65348c5518de291c0"
+}

@@ -1251,6 +1251,11 @@ analog:
    same scalar. The `effectStarted` projection also keeps unidentifiable
    source-dependent expiry identities private. Permanent observations use
    the fixed remembered-effect model.
+   Retained public `effectStarted` announcements require an identifiable
+   `sourceLeavesPlay` expiry source even when their changed card is public
+   and their causal source is redacted. This also applies when the effect
+   ended during its publishing batch. Spark announcements carrying recorded
+   creation-time observers use those observers' visibility policy.
 5. **Spark modifications:** permanent gained spark (`status.gainedSpark`),
    spark with a duration, anthems, Support, and per-figment shares (`spark`).
    The result is clamped at 0; the modifications themselves are not.
