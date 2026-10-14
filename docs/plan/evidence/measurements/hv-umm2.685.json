@@ -1,0 +1,4942 @@
+{
+  "bead": "hv-umm2.685",
+  "phase": 5,
+  "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+  "entities": [
+    "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+    "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+  ],
+  "sourceEpoch": {
+    "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+    "frozenAt": "2026-10-14T17:56:57.935Z",
+    "hashes": {
+      "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+      "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+    }
+  },
+  "finalSourceCheck": {
+    "at": "2026-10-14T18:19:09.838Z",
+    "hashes": {
+      "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+      "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+    },
+    "valid": true
+  },
+  "dispatchClock": {
+    "start": "2026-10-14T17:54:19.029Z",
+    "callId": "call_6b7b6a7291f14715b8efdcd418698215",
+    "proofHash": "3b56db25fa76d49cdf24a084f970af0ff5175e8424a30718ef699804579c42b4",
+    "meaning": "Native parent spawn dispatch; inclusive wall time through commit preparation includes research, admission, queue, QA, recovery and checks. Actual Git completion and final endpoint gap are returned to the parent."
+  },
+  "implementation": {
+    "allPrintedClauses": 3,
+    "baseDefinitions": 2,
+    "amplifiedDefinitions": 1,
+    "newPrimitives": 0,
+    "newRulesDecisions": 0,
+    "cardIssues": 0,
+    "preExistingDefects": 0,
+    "changedProductionPaths": [
+      "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts",
+      "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts"
+    ],
+    "immutableFields": "Original UUIDs, printed texts, costs, types, spark, metadata and art fields preserved; only authoring imports, abilities and verifiedText replace pending.",
+    "rules": [
+      "docs/rules.md numbered draws among all cards drawn this turn; RD-hv-umm2.235-1",
+      "RD-hv-umm2.93-2 explicitly covers Titan; hv-umm2.468 atomic entry"
+    ],
+    "d20": "Independent public composition. Existing owning synthetic contracts supply the nth and functional-zone behavior; no new scenario or tests.",
+    "d21": {
+      "sample": [
+        {
+          "uuid": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+          "firstByte": 197,
+          "sampled": false
+        },
+        {
+          "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+          "firstByte": 31,
+          "sampled": false
+        }
+      ],
+      "newPromptKinds": 0,
+      "newStatusKinds": 0,
+      "newVisualKinds": 0,
+      "judgedTotal": 0,
+      "qualification": "Inventory chooser/grant projections do not describe these actual abilities. Self-void materialize raises no chooser; with awakened sets entry readiness without granting a lasting keyword. Existing materialization, exhaustion and response controls were exercised."
+    }
+  },
+  "validation": {
+    "focused": {
+      "exit": 0,
+      "tests": 3977,
+      "files": 4,
+      "coverageGate": true,
+      "owningContracts": [
+        "triggers-patterns: counts the nth card played this turn, and resets the count each turn",
+        "triggers-patterns: matches draws by count, discards, abandons, and leaving play",
+        "triggers-patterns: fires a void ability only while the card is in the void",
+        "draw-trigger-filter: grouped all-draw ordinals, both actors, Fatigue/reset, saved prompt, foreign/invalid/stale answers, transactional rollback",
+        "materialize: not a play/payment, full-rank capacity, live void recheck, prompt bounce, rollback",
+        "when-play-from-void-trigger: does nothing when its card left the void before it resolves, and stays in the void with the back rank full",
+        "when-play-from-void-trigger: with awakened, returns its card ready, and awakens nothing when an earlier trigger returned it"
+      ]
+    },
+    "actualSource": {
+      "cases": 64,
+      "exit": 0,
+      "receipt": "actual-source-v2.receipt.json",
+      "resultsSha256": "c7306a40e26f37b7609056b1840650a4275d2bec742f5a3cb29567fee472551e",
+      "scope": "Exact imported production leaves converted by engineCardFromContent. Both actors and printed variants. Third grouped/split actual draw, no fourth trigger, turn reset, opposite draw ignored, absent outside void, stolen source actually dissolves to owner void, source departure/capacity. Second real play of any card kinds; actual copies and direct materializations do not count as plays; live self-void departure/prior materialization/capacity; amplified ready at materialized announcement, no exhaustionChanged or persistent keyword. Every actual play matched serialized public-fold replay."
+    },
+    "weighted300": {
+      "exit": 0,
+      "games": 300,
+      "defaultWeights": true,
+      "testWorkerEnv": 2,
+      "fuzzerProcesses": 1,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "slotAcquired": "npm/tsx child observed at 2026-10-14T18:00:38Z; no heavy queue claim",
+      "steps": 104811,
+      "prompts": 7576,
+      "interactiveReruns": 712,
+      "engineWallS": 322.9,
+      "cpuS": 342.7,
+      "failures": 0,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 6
+      },
+      "coverage": [
+        {
+          "uuid": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+          "included": 615,
+          "exercised": 93
+        },
+        {
+          "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+          "included": 617,
+          "exercised": 60
+        }
+      ]
+    },
+    "preflight": {
+      "exit": 0,
+      "variants": [
+        "base",
+        "amplified",
+        "empowered",
+        "kindled",
+        "resonant",
+        "inspired",
+        "enduring",
+        "hastened",
+        "attuned",
+        "perfected"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "counts": {
+        "pass": 18,
+        "skip": 22,
+        "pending": 0,
+        "fail": 0
+      },
+      "qualification": "Default all ten variants and both actors; skips are genuinely ineligible. Ordinary played-card fixture proof, not source-specific void-trigger proof."
+    },
+    "sweep": {
+      "exit": 0,
+      "invocation": "sweep-JNKKbA",
+      "pass": 18,
+      "skip": 22,
+      "pending": 0,
+      "fail": 0,
+      "rawAttempts": 40,
+      "effectiveCells": 40,
+      "retries": 0,
+      "qualification": "Same default all variants/both actor scope. Complete structured reports and generated forty-line ledger retained. No capture flag."
+    },
+    "browser": {
+      "effectiveCells": 12,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "acceptedRuns": [
+        {
+          "scope": "desktop-five",
+          "invocation": "run-FPpiAY",
+          "file": "draw-void-browser.result.json",
+          "sha256": "5e361df9f967929e4dfaa80ba3690f50605c0ced0ed9d84aec864269ad80b051",
+          "calls": [
+            {
+              "viewport": "desktop",
+              "step": 0,
+              "ms": 36170
+            },
+            {
+              "viewport": "desktop",
+              "step": 1,
+              "ms": 18322
+            },
+            {
+              "viewport": "desktop",
+              "step": 2,
+              "ms": 13843
+            },
+            {
+              "viewport": "desktop",
+              "step": 3,
+              "ms": 14081
+            },
+            {
+              "viewport": "desktop",
+              "step": 4,
+              "ms": 18009
+            },
+            {
+              "viewport": "desktop",
+              "step": 5,
+              "ms": 4178
+            }
+          ],
+          "caps": [],
+          "cells": [
+            {
+              "uuid": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+              "side": "player",
+              "variant": "base",
+              "source": "i10",
+              "sourceVariant": {
+                "amplified": false
+              },
+              "exhausted": true,
+              "observation": "settled full card resolution",
+              "stack": 0,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 254.5,
+                  "y": 483.5,
+                  "w": 89.5,
+                  "h": 89.5,
+                  "hit": true,
+                  "rank": "player-back"
+                },
+                "control": {
+                  "w": 122.6875,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 2,
+                    "index": 7,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i10",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i4",
+                      "subjectHiddenFrom": [
+                        "enemy"
+                      ]
+                    },
+                    "cards": {
+                      "i10": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                      "i4": "5e5e5e5e-0000-4000-8000-000000000002"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 2,
+                    "index": 9,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i10",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i10": "7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 2,
+                    "index": 11,
+                    "kind": "materialized",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i10",
+                      "side": "player",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i10": "7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 2,
+                    "index": 2,
+                    "kind": "cardPlayed",
+                    "instance": "i1",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "player",
+                      "instance": "i1"
+                    },
+                    "cards": {
+                      "i1": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "zbomp7",
+                    "version": 0,
+                    "side": "player",
+                    "action": {
+                      "kind": "play",
+                      "card": "i1",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:06:39.120Z",
+                    "event": "engine.action",
+                    "seq": 27
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "zbomp7",
+                    "version": 1,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i10",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i4",
+                      "subjectHiddenFrom": [
+                        "enemy"
+                      ]
+                    },
+                    "timestamp": "2026-10-14T18:06:39.121Z",
+                    "event": "engine.trigger",
+                    "seq": 28
+                  },
+                  {
+                    "gameId": "zbomp7",
+                    "version": 2,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i10",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:06:39.121Z",
+                    "event": "engine.trigger",
+                    "seq": 29
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i1",
+                    "from": "hand"
+                  }
+                }
+              ]
+            },
+            {
+              "uuid": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+              "side": "enemy",
+              "variant": "base",
+              "source": "i18",
+              "sourceVariant": {
+                "amplified": false
+              },
+              "exhausted": true,
+              "observation": "settled full card resolution",
+              "stack": 0,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 254.5,
+                  "y": 183,
+                  "w": 89.5,
+                  "h": 89.5,
+                  "hit": true,
+                  "rank": "enemy-back"
+                },
+                "control": {
+                  "w": 122.6875,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 2,
+                    "index": 7,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i18",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i12",
+                      "subjectHiddenFrom": [
+                        "player"
+                      ]
+                    },
+                    "cards": {
+                      "i18": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                      "i12": "5e5e5e5e-0000-4000-8000-000000000002"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 2,
+                    "index": 9,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i18",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i18": "7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 2,
+                    "index": 11,
+                    "kind": "materialized",
+                    "instance": "i18",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i18",
+                      "side": "enemy",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i18": "7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 2,
+                    "index": 2,
+                    "kind": "cardPlayed",
+                    "instance": "i9",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i9"
+                    },
+                    "cards": {
+                      "i9": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83"
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "index": 1,
+                    "kind": "cardPlayed",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i10"
+                    },
+                    "cards": {
+                      "i10": "5e5e5e5e-0000-4000-8000-000000000002"
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "index": 1,
+                    "kind": "cardPlayed",
+                    "instance": "i11",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i11"
+                    },
+                    "cards": {
+                      "i11": "5e5e5e5e-0000-4000-8000-000000000002"
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "index": 2,
+                    "kind": "cardPlayed",
+                    "instance": "i12",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i12"
+                    },
+                    "cards": {
+                      "i12": "5e5e5e5e-0000-4000-8000-000000000002"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "n4ev9f",
+                    "version": 0,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i9",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:06:51.942Z",
+                    "event": "engine.action",
+                    "seq": 27
+                  },
+                  {
+                    "gameId": "n4ev9f",
+                    "version": 3,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i10",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:06:52.939Z",
+                    "event": "engine.action",
+                    "seq": 33
+                  },
+                  {
+                    "gameId": "n4ev9f",
+                    "version": 5,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i11",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:06:52.994Z",
+                    "event": "engine.action",
+                    "seq": 36
+                  },
+                  {
+                    "gameId": "n4ev9f",
+                    "version": 7,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i12",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:06:53.026Z",
+                    "event": "engine.action",
+                    "seq": 40
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "n4ev9f",
+                    "version": 1,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i18",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i12",
+                      "subjectHiddenFrom": [
+                        "player"
+                      ]
+                    },
+                    "timestamp": "2026-10-14T18:06:51.942Z",
+                    "event": "engine.trigger",
+                    "seq": 28
+                  },
+                  {
+                    "gameId": "n4ev9f",
+                    "version": 2,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i18",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:06:51.943Z",
+                    "event": "engine.trigger",
+                    "seq": 29
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i9",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i10",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i11",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i12",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "pass"
+                  }
+                }
+              ]
+            },
+            {
+              "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+              "side": "player",
+              "variant": "base",
+              "source": "i11",
+              "sourceVariant": {
+                "amplified": false
+              },
+              "exhausted": true,
+              "observation": "settled full card resolution",
+              "stack": 0,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 254.5,
+                  "y": 483.5,
+                  "w": 89.5,
+                  "h": 89.5,
+                  "hit": true,
+                  "rank": "player-back"
+                },
+                "control": {
+                  "w": 122.6875,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 3,
+                    "index": 2,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i11",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i2"
+                    },
+                    "cards": {
+                      "i11": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+                      "i2": "5e5e5e5e-0000-4000-8000-000000000001"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 3,
+                    "index": 3,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i11",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i11": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 3,
+                    "index": 5,
+                    "kind": "materialized",
+                    "instance": "i11",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i11",
+                      "side": "player",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i11": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 2,
+                    "index": 0,
+                    "kind": "cardPlayed",
+                    "instance": "i1",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "player",
+                      "instance": "i1"
+                    },
+                    "cards": {
+                      "i1": "5e5e5e5e-0000-4000-8000-00000000000b"
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "index": 1,
+                    "kind": "cardPlayed",
+                    "instance": "i2",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "player",
+                      "instance": "i2"
+                    },
+                    "cards": {
+                      "i2": "5e5e5e5e-0000-4000-8000-000000000001"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "p2p678",
+                    "version": 0,
+                    "side": "player",
+                    "action": {
+                      "kind": "play",
+                      "card": "i1",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:07:12.334Z",
+                    "event": "engine.action",
+                    "seq": 26
+                  },
+                  {
+                    "gameId": "p2p678",
+                    "version": 2,
+                    "side": "player",
+                    "action": {
+                      "kind": "play",
+                      "card": "i2",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:07:13.570Z",
+                    "event": "engine.action",
+                    "seq": 34
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "p2p678",
+                    "version": 2,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i11",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i2"
+                    },
+                    "timestamp": "2026-10-14T18:07:13.569Z",
+                    "event": "engine.trigger",
+                    "seq": 33
+                  },
+                  {
+                    "gameId": "p2p678",
+                    "version": 3,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i11",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:07:13.570Z",
+                    "event": "engine.trigger",
+                    "seq": 35
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i1",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i2",
+                    "from": "hand"
+                  }
+                }
+              ]
+            },
+            {
+              "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+              "side": "enemy",
+              "variant": "base",
+              "source": "i19",
+              "sourceVariant": {
+                "amplified": false
+              },
+              "exhausted": true,
+              "observation": "settled full card resolution",
+              "stack": 0,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 254.5,
+                  "y": 183,
+                  "w": 89.5,
+                  "h": 89.5,
+                  "hit": true,
+                  "rank": "enemy-back"
+                },
+                "control": {
+                  "w": 122.6875,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 3,
+                    "index": 2,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i19",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i10"
+                    },
+                    "cards": {
+                      "i19": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+                      "i10": "5e5e5e5e-0000-4000-8000-000000000001"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 3,
+                    "index": 3,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i19",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i19": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 3,
+                    "index": 5,
+                    "kind": "materialized",
+                    "instance": "i19",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i19",
+                      "side": "enemy",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i19": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 2,
+                    "index": 0,
+                    "kind": "cardPlayed",
+                    "instance": "i9",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i9"
+                    },
+                    "cards": {
+                      "i9": "5e5e5e5e-0000-4000-8000-00000000000b"
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "index": 1,
+                    "kind": "cardPlayed",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i10"
+                    },
+                    "cards": {
+                      "i10": "5e5e5e5e-0000-4000-8000-000000000001"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "axp4bs",
+                    "version": 0,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i9",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:07:24.686Z",
+                    "event": "engine.action",
+                    "seq": 26
+                  },
+                  {
+                    "gameId": "axp4bs",
+                    "version": 2,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i10",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:07:24.979Z",
+                    "event": "engine.action",
+                    "seq": 31
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "axp4bs",
+                    "version": 2,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i19",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i10"
+                    },
+                    "timestamp": "2026-10-14T18:07:24.978Z",
+                    "event": "engine.trigger",
+                    "seq": 30
+                  },
+                  {
+                    "gameId": "axp4bs",
+                    "version": 3,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i19",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:07:24.979Z",
+                    "event": "engine.trigger",
+                    "seq": 32
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i9",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i10",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "pass"
+                  }
+                }
+              ]
+            },
+            {
+              "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+              "side": "player",
+              "variant": "amplified",
+              "source": "i1",
+              "sourceVariant": {
+                "amplified": true,
+                "transfigurations": [
+                  "Amplified"
+                ],
+                "deckMods": {
+                  "sparkBonus": 0,
+                  "costReduction": 0,
+                  "fast": false,
+                  "reclaim": null,
+                  "typeChange": null
+                }
+              },
+              "exhausted": false,
+              "observation": "settled full card resolution",
+              "stack": 0,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 254.5,
+                  "y": 483.5,
+                  "w": 89.5,
+                  "h": 89.5,
+                  "hit": true,
+                  "rank": "player-back"
+                },
+                "control": {
+                  "w": 122.6875,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 4,
+                    "index": 8,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i1",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i18",
+                      "lastKnownSourceSpark": 5
+                    },
+                    "cards": {
+                      "i1": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+                      "i18": "7b55efd1-6d9f-4156-9de7-1c71ccc410cb"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 4,
+                    "index": 9,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i1",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i1": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 3,
+                    "index": 3,
+                    "kind": "materialized",
+                    "instance": "i1",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i1",
+                      "side": "player",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i1": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "index": 11,
+                    "kind": "materialized",
+                    "instance": "i1",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i1",
+                      "side": "player",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i1": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 3,
+                    "index": 1,
+                    "kind": "cardPlayed",
+                    "instance": "i1",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "player",
+                      "instance": "i1"
+                    },
+                    "cards": {
+                      "i1": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "index": 7,
+                    "kind": "cardPlayed",
+                    "instance": "i18",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "player",
+                      "instance": "i18"
+                    },
+                    "cards": {
+                      "i18": "7b55efd1-6d9f-4156-9de7-1c71ccc410cb"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "5dostq",
+                    "version": 1,
+                    "side": "player",
+                    "action": {
+                      "kind": "play",
+                      "card": "i1",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:07:41.001Z",
+                    "event": "engine.action",
+                    "seq": 28
+                  },
+                  {
+                    "gameId": "5dostq",
+                    "version": 3,
+                    "side": "player",
+                    "action": {
+                      "kind": "play",
+                      "card": "i18",
+                      "from": "hand"
+                    },
+                    "answers": [
+                      {
+                        "fingerprint": "1emw0ki3ct0",
+                        "value": [
+                          "i1"
+                        ],
+                        "auto": true
+                      }
+                    ],
+                    "timestamp": "2026-10-14T18:07:42.792Z",
+                    "event": "engine.action",
+                    "seq": 35
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "5dostq",
+                    "version": 3,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i1",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i18",
+                      "lastKnownSourceSpark": 5
+                    },
+                    "timestamp": "2026-10-14T18:07:42.791Z",
+                    "event": "engine.trigger",
+                    "seq": 34
+                  },
+                  {
+                    "gameId": "5dostq",
+                    "version": 4,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i1",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:07:42.792Z",
+                    "event": "engine.trigger",
+                    "seq": 36
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i1",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i18",
+                    "from": "hand"
+                  }
+                }
+              ]
+            }
+          ],
+          "runError": "desktop#5: Error: qa.labAddCard: battle changed while staging\n    at Object.labAddCard (evalmachine.<anonymous>:859:87)\n    at async workflow (evalmachine.<anonymous>:1665:9)\n    at async evalmachine.<anonymous>:1720:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+          "qualification": "The runner stopped on the sixth setup. The first five completed actualClause notes are accepted; that setup failure is retained separately."
+        },
+        {
+          "scope": "desktop-amplified-enemy",
+          "invocation": "run-h0RQg1",
+          "file": "draw-void-enemy-amplified.v3.result.json",
+          "sha256": "726f917f82698cfdf0b28f090e99e7dfa48c631463453e69fadd571f24c2a409",
+          "calls": [
+            {
+              "viewport": "desktop",
+              "step": 0,
+              "ms": 21842
+            }
+          ],
+          "caps": [],
+          "cells": [
+            {
+              "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+              "side": "enemy",
+              "variant": "amplified",
+              "source": "i10",
+              "sourceVariant": {
+                "amplified": true,
+                "transfigurations": [
+                  "Amplified"
+                ],
+                "deckMods": {
+                  "sparkBonus": 0,
+                  "costReduction": 0,
+                  "fast": false,
+                  "reclaim": null,
+                  "typeChange": null
+                }
+              },
+              "exhausted": false,
+              "observation": "trigger resolved and returned ready at stable human response while second event awaits response",
+              "stack": 1,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 254.5,
+                  "y": 183,
+                  "w": 89.5,
+                  "h": 89.5,
+                  "hit": true,
+                  "rank": "enemy-back"
+                },
+                "control": {
+                  "w": 123.60009765625,
+                  "h": 43.260009765625,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 1440,
+                  "h": 900,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 5,
+                    "index": 9,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i10",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i19",
+                      "lastKnownSourceSpark": 5
+                    },
+                    "cards": {
+                      "i10": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+                      "i19": "7ea13d02-9d97-492e-9edb-f326eb3b4d1c"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 5,
+                    "index": 10,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i10",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i10": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 4,
+                    "index": 1,
+                    "kind": "materialized",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i10",
+                      "side": "enemy",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i10": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "index": 12,
+                    "kind": "materialized",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i10",
+                      "side": "enemy",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i10": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 2,
+                    "index": 2,
+                    "kind": "cardPlayed",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i10"
+                    },
+                    "cards": {
+                      "i10": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "index": 8,
+                    "kind": "cardPlayed",
+                    "instance": "i19",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i19"
+                    },
+                    "cards": {
+                      "i19": "7ea13d02-9d97-492e-9edb-f326eb3b4d1c"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "kyjjbx",
+                    "version": 0,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i10",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:11:11.949Z",
+                    "event": "engine.action",
+                    "seq": 27
+                  },
+                  {
+                    "gameId": "kyjjbx",
+                    "version": 3,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i19",
+                      "from": "hand"
+                    },
+                    "answers": [
+                      {
+                        "fingerprint": "cost-choice-v1:15hndxo2yh3",
+                        "value": 0,
+                        "auto": true
+                      },
+                      {
+                        "fingerprint": "sc0lu8pko0",
+                        "value": [
+                          "i10"
+                        ],
+                        "auto": true
+                      }
+                    ],
+                    "timestamp": "2026-10-14T18:11:15.502Z",
+                    "event": "engine.action",
+                    "seq": 37
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "kyjjbx",
+                    "version": 3,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i10",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i19",
+                      "lastKnownSourceSpark": 5
+                    },
+                    "timestamp": "2026-10-14T18:11:15.502Z",
+                    "event": "engine.trigger",
+                    "seq": 36
+                  },
+                  {
+                    "gameId": "kyjjbx",
+                    "version": 4,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i10",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:11:15.502Z",
+                    "event": "engine.trigger",
+                    "seq": 38
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i10",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i19",
+                    "from": "hand"
+                  }
+                }
+              ]
+            }
+          ],
+          "runError": null,
+          "qualification": "all exported cells passed"
+        },
+        {
+          "scope": "mobile-six",
+          "invocation": "run-Yw3rOu",
+          "file": "draw-void-browser.v3.result.json",
+          "sha256": "9c64eedad5cbdeaef21e4d2ce5c687459cd888fc4b92dd6532ea9e8ed55b2331",
+          "calls": [
+            {
+              "viewport": "mobile",
+              "step": 0,
+              "ms": 14577
+            },
+            {
+              "viewport": "mobile",
+              "step": 1,
+              "ms": 16948
+            },
+            {
+              "viewport": "mobile",
+              "step": 2,
+              "ms": 9702
+            },
+            {
+              "viewport": "mobile",
+              "step": 3,
+              "ms": 10181
+            },
+            {
+              "viewport": "mobile",
+              "step": 4,
+              "ms": 12981
+            },
+            {
+              "viewport": "mobile",
+              "step": 5,
+              "ms": 13685
+            }
+          ],
+          "caps": [],
+          "cells": [
+            {
+              "uuid": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+              "side": "player",
+              "variant": "base",
+              "source": "i10",
+              "sourceVariant": {
+                "amplified": false
+              },
+              "exhausted": true,
+              "observation": "settled full card resolution",
+              "stack": 0,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 23.40625,
+                  "y": 415.890625,
+                  "w": 53.859375,
+                  "h": 53.859375,
+                  "hit": true,
+                  "rank": "player-back"
+                },
+                "control": {
+                  "w": 122.6875,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 2,
+                    "index": 7,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i10",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i4",
+                      "subjectHiddenFrom": [
+                        "enemy"
+                      ]
+                    },
+                    "cards": {
+                      "i10": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                      "i4": "5e5e5e5e-0000-4000-8000-000000000002"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 2,
+                    "index": 9,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i10",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i10": "7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 2,
+                    "index": 11,
+                    "kind": "materialized",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i10",
+                      "side": "player",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i10": "7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 2,
+                    "index": 2,
+                    "kind": "cardPlayed",
+                    "instance": "i1",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "player",
+                      "instance": "i1"
+                    },
+                    "cards": {
+                      "i1": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "wk2z4z",
+                    "version": 0,
+                    "side": "player",
+                    "action": {
+                      "kind": "play",
+                      "card": "i1",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:12:05.683Z",
+                    "event": "engine.action",
+                    "seq": 27
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "wk2z4z",
+                    "version": 1,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i10",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i4",
+                      "subjectHiddenFrom": [
+                        "enemy"
+                      ]
+                    },
+                    "timestamp": "2026-10-14T18:12:05.683Z",
+                    "event": "engine.trigger",
+                    "seq": 28
+                  },
+                  {
+                    "gameId": "wk2z4z",
+                    "version": 2,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i10",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:12:05.685Z",
+                    "event": "engine.trigger",
+                    "seq": 29
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i1",
+                    "from": "hand"
+                  }
+                }
+              ]
+            },
+            {
+              "uuid": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+              "side": "enemy",
+              "variant": "base",
+              "source": "i18",
+              "sourceVariant": {
+                "amplified": false
+              },
+              "exhausted": true,
+              "observation": "settled full card resolution",
+              "stack": 0,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 23.40625,
+                  "y": 222.3125,
+                  "w": 53.859375,
+                  "h": 53.859375,
+                  "hit": true,
+                  "rank": "enemy-back"
+                },
+                "control": {
+                  "w": 122.6875,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 2,
+                    "index": 7,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i18",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i12",
+                      "subjectHiddenFrom": [
+                        "player"
+                      ]
+                    },
+                    "cards": {
+                      "i18": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                      "i12": "5e5e5e5e-0000-4000-8000-000000000002"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 2,
+                    "index": 9,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i18",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i18": "7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 2,
+                    "index": 11,
+                    "kind": "materialized",
+                    "instance": "i18",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i18",
+                      "side": "enemy",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i18": "7e2f2ac0-4e3c-4520-80c6-c830581b40de"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 2,
+                    "index": 2,
+                    "kind": "cardPlayed",
+                    "instance": "i9",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i9"
+                    },
+                    "cards": {
+                      "i9": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83"
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "index": 1,
+                    "kind": "cardPlayed",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i10"
+                    },
+                    "cards": {
+                      "i10": "5e5e5e5e-0000-4000-8000-000000000002"
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "index": 1,
+                    "kind": "cardPlayed",
+                    "instance": "i11",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i11"
+                    },
+                    "cards": {
+                      "i11": "5e5e5e5e-0000-4000-8000-000000000002"
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "index": 2,
+                    "kind": "cardPlayed",
+                    "instance": "i12",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i12"
+                    },
+                    "cards": {
+                      "i12": "5e5e5e5e-0000-4000-8000-000000000002"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "nnbjpt",
+                    "version": 0,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i9",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:12:16.784Z",
+                    "event": "engine.action",
+                    "seq": 27
+                  },
+                  {
+                    "gameId": "nnbjpt",
+                    "version": 3,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i10",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:12:18.138Z",
+                    "event": "engine.action",
+                    "seq": 33
+                  },
+                  {
+                    "gameId": "nnbjpt",
+                    "version": 5,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i11",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:12:18.183Z",
+                    "event": "engine.action",
+                    "seq": 36
+                  },
+                  {
+                    "gameId": "nnbjpt",
+                    "version": 7,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i12",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:12:18.251Z",
+                    "event": "engine.action",
+                    "seq": 40
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "nnbjpt",
+                    "version": 1,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i18",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i12",
+                      "subjectHiddenFrom": [
+                        "player"
+                      ]
+                    },
+                    "timestamp": "2026-10-14T18:12:16.784Z",
+                    "event": "engine.trigger",
+                    "seq": 28
+                  },
+                  {
+                    "gameId": "nnbjpt",
+                    "version": 2,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i18",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:12:16.785Z",
+                    "event": "engine.trigger",
+                    "seq": 29
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i9",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i10",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i11",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i12",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "pass"
+                  }
+                }
+              ]
+            },
+            {
+              "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+              "side": "player",
+              "variant": "base",
+              "source": "i11",
+              "sourceVariant": {
+                "amplified": false
+              },
+              "exhausted": true,
+              "observation": "settled full card resolution",
+              "stack": 0,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 23.40625,
+                  "y": 415.890625,
+                  "w": 53.859375,
+                  "h": 53.859375,
+                  "hit": true,
+                  "rank": "player-back"
+                },
+                "control": {
+                  "w": 122.6875,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 3,
+                    "index": 2,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i11",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i2"
+                    },
+                    "cards": {
+                      "i11": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+                      "i2": "5e5e5e5e-0000-4000-8000-000000000001"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 3,
+                    "index": 3,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i11",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i11": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 3,
+                    "index": 5,
+                    "kind": "materialized",
+                    "instance": "i11",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i11",
+                      "side": "player",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i11": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 2,
+                    "index": 0,
+                    "kind": "cardPlayed",
+                    "instance": "i1",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "player",
+                      "instance": "i1"
+                    },
+                    "cards": {
+                      "i1": "5e5e5e5e-0000-4000-8000-00000000000b"
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "index": 1,
+                    "kind": "cardPlayed",
+                    "instance": "i2",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "player",
+                      "instance": "i2"
+                    },
+                    "cards": {
+                      "i2": "5e5e5e5e-0000-4000-8000-000000000001"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "sd8jnm",
+                    "version": 0,
+                    "side": "player",
+                    "action": {
+                      "kind": "play",
+                      "card": "i1",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:12:33.475Z",
+                    "event": "engine.action",
+                    "seq": 27
+                  },
+                  {
+                    "gameId": "sd8jnm",
+                    "version": 2,
+                    "side": "player",
+                    "action": {
+                      "kind": "play",
+                      "card": "i2",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:12:34.633Z",
+                    "event": "engine.action",
+                    "seq": 34
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "sd8jnm",
+                    "version": 2,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i11",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i2"
+                    },
+                    "timestamp": "2026-10-14T18:12:34.633Z",
+                    "event": "engine.trigger",
+                    "seq": 33
+                  },
+                  {
+                    "gameId": "sd8jnm",
+                    "version": 3,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i11",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:12:34.634Z",
+                    "event": "engine.trigger",
+                    "seq": 35
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i1",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i2",
+                    "from": "hand"
+                  }
+                }
+              ]
+            },
+            {
+              "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+              "side": "enemy",
+              "variant": "base",
+              "source": "i19",
+              "sourceVariant": {
+                "amplified": false
+              },
+              "exhausted": true,
+              "observation": "settled full card resolution",
+              "stack": 0,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 23.40625,
+                  "y": 222.3125,
+                  "w": 53.859375,
+                  "h": 53.859375,
+                  "hit": true,
+                  "rank": "enemy-back"
+                },
+                "control": {
+                  "w": 122.6875,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 3,
+                    "index": 2,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i19",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i10"
+                    },
+                    "cards": {
+                      "i19": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+                      "i10": "5e5e5e5e-0000-4000-8000-000000000001"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 3,
+                    "index": 3,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i19",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i19": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 3,
+                    "index": 5,
+                    "kind": "materialized",
+                    "instance": "i19",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i19",
+                      "side": "enemy",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i19": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 2,
+                    "index": 0,
+                    "kind": "cardPlayed",
+                    "instance": "i9",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i9"
+                    },
+                    "cards": {
+                      "i9": "5e5e5e5e-0000-4000-8000-00000000000b"
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "index": 1,
+                    "kind": "cardPlayed",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i10"
+                    },
+                    "cards": {
+                      "i10": "5e5e5e5e-0000-4000-8000-000000000001"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "v6aquv",
+                    "version": 0,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i9",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:12:42.112Z",
+                    "event": "engine.action",
+                    "seq": 26
+                  },
+                  {
+                    "gameId": "v6aquv",
+                    "version": 2,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i10",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:12:42.159Z",
+                    "event": "engine.action",
+                    "seq": 31
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "v6aquv",
+                    "version": 2,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i19",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i10"
+                    },
+                    "timestamp": "2026-10-14T18:12:42.159Z",
+                    "event": "engine.trigger",
+                    "seq": 30
+                  },
+                  {
+                    "gameId": "v6aquv",
+                    "version": 3,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i19",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:12:42.159Z",
+                    "event": "engine.trigger",
+                    "seq": 32
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i9",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i10",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "pass"
+                  }
+                }
+              ]
+            },
+            {
+              "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+              "side": "player",
+              "variant": "amplified",
+              "source": "i1",
+              "sourceVariant": {
+                "amplified": true,
+                "transfigurations": [
+                  "Amplified"
+                ],
+                "deckMods": {
+                  "sparkBonus": 0,
+                  "costReduction": 0,
+                  "fast": false,
+                  "reclaim": null,
+                  "typeChange": null
+                }
+              },
+              "exhausted": false,
+              "observation": "settled full card resolution",
+              "stack": 0,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 23.40625,
+                  "y": 415.890625,
+                  "w": 53.859375,
+                  "h": 53.859375,
+                  "hit": true,
+                  "rank": "player-back"
+                },
+                "control": {
+                  "w": 122.6875,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 4,
+                    "index": 8,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i1",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i18",
+                      "lastKnownSourceSpark": 5
+                    },
+                    "cards": {
+                      "i1": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+                      "i18": "7b55efd1-6d9f-4156-9de7-1c71ccc410cb"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 4,
+                    "index": 9,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i1",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i1": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 3,
+                    "index": 3,
+                    "kind": "materialized",
+                    "instance": "i1",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i1",
+                      "side": "player",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i1": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "index": 11,
+                    "kind": "materialized",
+                    "instance": "i1",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i1",
+                      "side": "player",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i1": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 3,
+                    "index": 1,
+                    "kind": "cardPlayed",
+                    "instance": "i1",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "player",
+                      "instance": "i1"
+                    },
+                    "cards": {
+                      "i1": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "index": 7,
+                    "kind": "cardPlayed",
+                    "instance": "i18",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "player",
+                      "instance": "i18"
+                    },
+                    "cards": {
+                      "i18": "7b55efd1-6d9f-4156-9de7-1c71ccc410cb"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "55m56b",
+                    "version": 1,
+                    "side": "player",
+                    "action": {
+                      "kind": "play",
+                      "card": "i1",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:12:53.965Z",
+                    "event": "engine.action",
+                    "seq": 28
+                  },
+                  {
+                    "gameId": "55m56b",
+                    "version": 3,
+                    "side": "player",
+                    "action": {
+                      "kind": "play",
+                      "card": "i18",
+                      "from": "hand"
+                    },
+                    "answers": [
+                      {
+                        "fingerprint": "1emw0ki3ct0",
+                        "value": [
+                          "i1"
+                        ],
+                        "auto": true
+                      }
+                    ],
+                    "timestamp": "2026-10-14T18:12:55.639Z",
+                    "event": "engine.action",
+                    "seq": 35
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "55m56b",
+                    "version": 3,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i1",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i18",
+                      "lastKnownSourceSpark": 5
+                    },
+                    "timestamp": "2026-10-14T18:12:55.639Z",
+                    "event": "engine.trigger",
+                    "seq": 34
+                  },
+                  {
+                    "gameId": "55m56b",
+                    "version": 4,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i1",
+                      "controller": "player",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:12:55.639Z",
+                    "event": "engine.trigger",
+                    "seq": 36
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i1",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i18",
+                    "from": "hand"
+                  }
+                }
+              ]
+            },
+            {
+              "uuid": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+              "side": "enemy",
+              "variant": "amplified",
+              "source": "i10",
+              "sourceVariant": {
+                "amplified": true,
+                "transfigurations": [
+                  "Amplified"
+                ],
+                "deckMods": {
+                  "sparkBonus": 0,
+                  "costReduction": 0,
+                  "fast": false,
+                  "reclaim": null,
+                  "typeChange": null
+                }
+              },
+              "exhausted": false,
+              "observation": "trigger resolved and returned ready at stable human response while second event awaits response",
+              "stack": 1,
+              "reload": true,
+              "geometry": {
+                "source": {
+                  "x": 23.40625,
+                  "y": 222.3125,
+                  "w": 53.859375,
+                  "h": 53.859375,
+                  "hit": true,
+                  "rank": "enemy-back"
+                },
+                "control": {
+                  "w": 120,
+                  "h": 42,
+                  "hit": true
+                },
+                "viewport": {
+                  "w": 390,
+                  "h": 844,
+                  "dpr": 2
+                }
+              },
+              "events": {
+                "queued": [
+                  {
+                    "seq": 5,
+                    "index": 9,
+                    "kind": "triggerQueued",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerQueued",
+                      "source": "i10",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i19",
+                      "lastKnownSourceSpark": 5
+                    },
+                    "cards": {
+                      "i10": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+                      "i19": "7ea13d02-9d97-492e-9edb-f326eb3b4d1c"
+                    }
+                  }
+                ],
+                "resolved": [
+                  {
+                    "seq": 5,
+                    "index": 10,
+                    "kind": "triggerResolved",
+                    "instance": null,
+                    "event": {
+                      "kind": "triggerResolved",
+                      "source": "i10",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "cards": {
+                      "i10": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "materialized": [
+                  {
+                    "seq": 4,
+                    "index": 1,
+                    "kind": "materialized",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i10",
+                      "side": "enemy",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i10": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "index": 12,
+                    "kind": "materialized",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "materialized",
+                      "instance": "i10",
+                      "side": "enemy",
+                      "slot": {
+                        "rank": "back",
+                        "index": 0
+                      }
+                    },
+                    "cards": {
+                      "i10": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  }
+                ],
+                "played": [
+                  {
+                    "seq": 2,
+                    "index": 2,
+                    "kind": "cardPlayed",
+                    "instance": "i10",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i10"
+                    },
+                    "cards": {
+                      "i10": "c32ef131-d283-4bf1-bf65-2d5e5d232168"
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "index": 8,
+                    "kind": "cardPlayed",
+                    "instance": "i19",
+                    "event": {
+                      "kind": "cardPlayed",
+                      "side": "enemy",
+                      "instance": "i19"
+                    },
+                    "cards": {
+                      "i19": "7ea13d02-9d97-492e-9edb-f326eb3b4d1c"
+                    }
+                  }
+                ]
+              },
+              "persisted": {
+                "actions": [
+                  {
+                    "gameId": "md3ham",
+                    "version": 0,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i10",
+                      "from": "hand"
+                    },
+                    "answers": [],
+                    "timestamp": "2026-10-14T18:13:06.015Z",
+                    "event": "engine.action",
+                    "seq": 27
+                  },
+                  {
+                    "gameId": "md3ham",
+                    "version": 3,
+                    "side": "enemy",
+                    "action": {
+                      "kind": "play",
+                      "card": "i19",
+                      "from": "hand"
+                    },
+                    "answers": [
+                      {
+                        "fingerprint": "cost-choice-v1:15hndxo2yh3",
+                        "value": 0,
+                        "auto": true
+                      },
+                      {
+                        "fingerprint": "sc0lu8pko0",
+                        "value": [
+                          "i10"
+                        ],
+                        "auto": true
+                      }
+                    ],
+                    "timestamp": "2026-10-14T18:13:08.768Z",
+                    "event": "engine.action",
+                    "seq": 37
+                  }
+                ],
+                "triggers": [
+                  {
+                    "gameId": "md3ham",
+                    "version": 3,
+                    "detail": {
+                      "kind": "triggerQueued",
+                      "source": "i10",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "subject": "i19",
+                      "lastKnownSourceSpark": 5
+                    },
+                    "timestamp": "2026-10-14T18:13:08.768Z",
+                    "event": "engine.trigger",
+                    "seq": 36
+                  },
+                  {
+                    "gameId": "md3ham",
+                    "version": 4,
+                    "detail": {
+                      "kind": "triggerResolved",
+                      "source": "i10",
+                      "controller": "enemy",
+                      "ability": 0,
+                      "node": null,
+                      "applied": true
+                    },
+                    "timestamp": "2026-10-14T18:13:08.769Z",
+                    "event": "engine.trigger",
+                    "seq": 38
+                  }
+                ]
+              },
+              "intents": [
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i10",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "player",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                {
+                  "kind": "battleAction",
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i19",
+                    "from": "hand"
+                  }
+                }
+              ]
+            }
+          ],
+          "runError": null,
+          "qualification": "all exported cells passed"
+        }
+      ],
+      "qualification": "Enemy amplified source trigger has resolved and returned the source ready; the second event remains stacked at a stable answerable human response. Other accepted cells reached complete card resolution. The state meaning is preserved across reload.",
+      "finalCaptures": [
+        {
+          "file": "champion-third-draw-desktop.png",
+          "invocation": "run-FPpiAY",
+          "pixels": [
+            2880,
+            1800
+          ],
+          "dpr": 2,
+          "meaning": "Third draw resolved; base Champion materialized exhausted, source and ordinary phase control settled."
+        },
+        {
+          "file": "titan-amplified-second-play-desktop.png",
+          "invocation": "run-FPpiAY",
+          "pixels": [
+            2880,
+            1800
+          ],
+          "dpr": 2,
+          "meaning": "Second play paid mandatory abandon cost on actual amplified source; Titan returned ready; event resolved and phase control settled."
+        },
+        {
+          "file": "champion-third-draw-mobile.png",
+          "invocation": "run-Yw3rOu",
+          "pixels": [
+            780,
+            1688
+          ],
+          "dpr": 2,
+          "meaning": "Third draw resolved; base Champion materialized exhausted; mobile source/hand/control settled."
+        }
+      ],
+      "visualInspection": "All three dimensions verified; implementing helper inspected mobile Champion and amplified desktop Titan, and parent independently inspected all three, retained source geometry and hit checks passed."
+    },
+    "review": {
+      "exit": 0,
+      "seconds": 65.423,
+      "relatedTests": 6654,
+      "relatedFiles": 253
+    },
+    "knip": {
+      "exit": 0,
+      "seconds": 7.235
+    }
+  },
+  "failures": [
+    {
+      "producer": "actual-source",
+      "receipt": "actual-source.receipt.json",
+      "cause": "Caller manufactured illegal opposite controller on a void card. Public relocation resets void controller to owner. Revised caller instead dissolves a genuinely opponent-controlled in-play source into owner void.",
+      "disposition": "Not a production defect; first bytes/hash/failure retained, revised actual-source-v2 passed."
+    },
+    {
+      "producer": "browser",
+      "receipt": "browser.receipt.json",
+      "cause": "Sixth desktop setup labAddCard rejected before submission while enemy first play changed committed state.",
+      "disposition": "First five completed desktop workflows retained. Changed caller waits for rendered stable human response; no unchanged retry."
+    },
+    {
+      "producer": "browser-enemy-amplified-v2",
+      "receipt": "browser-enemy-amplified-v2.receipt.json",
+      "cause": "Empty human hand allowed automatic response passes, so source had materialized before the awaited stack response.",
+      "disposition": "Changed fixture adds a no-effect Interrupt to hold an answerable response; v3 passed both viewports."
+    },
+    {
+      "producer": "browser-intent-replay",
+      "receipt": "browser-intent-replay.receipt.json",
+      "cause": "Optional reconstructed public-fold supplement used a wrong hand-order assertion after debug insertion (at(-1) is original source).",
+      "disposition": "No reconstruction/cost-order claim. Retained once, not repaired or repeated; live observed selected events, persisted cost answers, physical variant and reload are accepted evidence."
+    }
+  ],
+  "resources": {
+    "producers": [
+      {
+        "label": "actual-source-v2",
+        "command": "./node_modules/.bin/tsx",
+        "args": [
+          "/tmp/dreamtides-685/actual-source-proof.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T17:59:45.138Z",
+        "hostLoad": [
+          3.7861328125,
+          11.30419921875,
+          13.29833984375
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.mjs": "a2d5e5e2b2886a9d9ff4799e0730200953c407c9ea9693584849100249cfeb5f",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa",
+          "/tmp/dreamtides-685/actual-source-proof.ts": "0490cce89d47b581dd77bbce96bb96c2ebeec0736288d5122bd9073d9072a4ab"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 66884,
+        "processes": [
+          {
+            "pid": 66894,
+            "ppid": 66884,
+            "pgid": 66894,
+            "birth": "Wed Oct 14 10:59:45 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py ./node_modules/.bin/tsx /tmp/dreamtides-685/actual-source-proof.ts",
+            "observedAt": "2026-10-14T17:59:45.177Z"
+          },
+          {
+            "pid": 66904,
+            "ppid": 66894,
+            "pgid": 66894,
+            "birth": "Wed Oct 14 10:59:45 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/tsx/dist/loader.mjs /tmp/dreamtides-685/actual-source-proof.ts",
+            "observedAt": "2026-10-14T17:59:47.220Z"
+          },
+          {
+            "pid": 66925,
+            "ppid": 66904,
+            "pgid": 66894,
+            "birth": "Wed Oct 14 10:59:45 2026",
+            "argv": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+            "observedAt": "2026-10-14T17:59:47.220Z"
+          }
+        ],
+        "pid": 66894,
+        "pgid": 66894,
+        "gateReleasedAt": "2026-10-14T17:59:45.177Z",
+        "signal": null,
+        "end": "2026-10-14T17:59:52.544Z",
+        "elapsedS": 7.406,
+        "exitCode": 0,
+        "terminalReap": "child close event received",
+        "groupAfter": "absent"
+      },
+      {
+        "label": "actual-source",
+        "command": "./node_modules/.bin/tsx",
+        "args": [
+          "/tmp/dreamtides-685/actual-source-proof.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T17:58:39.722Z",
+        "hostLoad": [
+          5.40625,
+          13.314453125,
+          14.11376953125
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.mjs": "efc2d1660ef9781019560ef370ec69174a8fd31054a63d4bf1804f5e354a44f7",
+          "/tmp/dreamtides-685/actual-source-proof.ts": "75ea431352ec8e4c4bebd59e3cbdc51d5503992cb95c50055b4f27f34a251918"
+        },
+        "gate": "hashes verified before spawn",
+        "wrapperPid": 65232,
+        "processes": [
+          {
+            "pid": 65249,
+            "ppid": 65232,
+            "pgid": 65249,
+            "birth": "Wed Oct 14 10:58:39 2026",
+            "argv": "node ./node_modules/.bin/tsx /tmp/dreamtides-685/actual-source-proof.ts",
+            "observedAt": "2026-10-14T17:58:39.765Z"
+          },
+          {
+            "pid": 65262,
+            "ppid": 65249,
+            "pgid": 65249,
+            "birth": "Wed Oct 14 10:58:39 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/tsx/dist/loader.mjs /tmp/dreamtides-685/actual-source-proof.ts",
+            "observedAt": "2026-10-14T17:58:41.809Z"
+          }
+        ],
+        "pid": 65249,
+        "pgid": 65249,
+        "signal": null,
+        "end": "2026-10-14T17:58:43.618Z",
+        "elapsedS": 3.896,
+        "exitCode": 1,
+        "terminalReap": "child close event received",
+        "groupAfter": "absent"
+      },
+      {
+        "label": "browser-enemy-amplified-v2",
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-685/draw-void-enemy-amplified.v2.mjs",
+          "--bead",
+          "hv-umm2.685",
+          "--viewports",
+          "desktop",
+          "--arg",
+          "cells=5",
+          "--timeout",
+          "180"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T18:08:45.452Z",
+        "hostLoad": [
+          15.3359375,
+          17.0263671875,
+          14.85107421875
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.v3.mjs": "ad99ed00ff6c7027dae15656af37ab20bf540e59bd35c2856c2fdae744c6467c",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa",
+          "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-685/draw-void-enemy-amplified.v2.mjs": "fc249cfe06da548be301250fc1ec85b872c31460e35b78a278178c86b96bf7a4"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 9207,
+        "processes": [
+          {
+            "pid": 9223,
+            "ppid": 9207,
+            "pgid": 9223,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-685/draw-void-enemy-amplified.v2.mjs --bead hv-umm2.685 --viewports desktop --arg cells=5 --timeout 180",
+            "observedAt": "2026-10-14T18:08:45.499Z"
+          },
+          {
+            "pid": 9260,
+            "ppid": 9223,
+            "pgid": 9260,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.685/invocations/run-O87xyk/draw-void-enemy-amplified.v2.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:08:47.553Z"
+          },
+          {
+            "pid": 9261,
+            "ppid": 9260,
+            "pgid": 9260,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:08:47.553Z"
+          },
+          {
+            "pid": 9267,
+            "ppid": 9223,
+            "pgid": 9267,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:08:47.553Z"
+          },
+          {
+            "pid": 9268,
+            "ppid": 9267,
+            "pgid": 9267,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:08:47.553Z"
+          },
+          {
+            "pid": 9275,
+            "ppid": 9223,
+            "pgid": 9275,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-081d448d5496f551.lock /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:08:47.553Z"
+          },
+          {
+            "pid": 9276,
+            "ppid": 9275,
+            "pgid": 9275,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:08:47.553Z"
+          },
+          {
+            "pid": 9277,
+            "ppid": 9223,
+            "pgid": 9277,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json db906ca2-89fc-4bfb-beb7-4e4000f25534 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:08:47.553Z"
+          },
+          {
+            "pid": 9294,
+            "ppid": 9277,
+            "pgid": 9277,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:08:47.553Z"
+          },
+          {
+            "pid": 9297,
+            "ppid": 9294,
+            "pgid": 9277,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs",
+            "observedAt": "2026-10-14T18:08:47.553Z"
+          },
+          {
+            "pid": 9300,
+            "ppid": 9297,
+            "pgid": 9277,
+            "birth": "Wed Oct 14 11:08:45 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/setup-assets.ts",
+            "observedAt": "2026-10-14T18:08:47.553Z"
+          },
+          {
+            "pid": 9474,
+            "ppid": 9294,
+            "pgid": 9277,
+            "birth": "Wed Oct 14 11:08:48 2026",
+            "argv": "node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/.bin/vite --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:08:49.564Z"
+          },
+          {
+            "pid": 9496,
+            "ppid": 9474,
+            "pgid": 9277,
+            "birth": "Wed Oct 14 11:08:48 2026",
+            "argv": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+            "observedAt": "2026-10-14T18:08:49.564Z"
+          }
+        ],
+        "pid": 9223,
+        "pgid": 9223,
+        "managedOwnership": [
+          {
+            "file": ".browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T18:08:47.554Z",
+            "record": {
+              "token": "db906ca2-89fc-4bfb-beb7-4e4000f25534",
+              "runner": {
+                "pid": 9223,
+                "group": 9223,
+                "started": "Wed Oct 14 11:08:45 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-685/draw-void-enemy-amplified.v2.mjs --bead hv-umm2.685 --viewports desktop --arg cells=5 --timeout 180"
+              },
+              "server": {
+                "pid": 9277,
+                "group": 9277,
+                "started": "Wed Oct 14 11:08:45 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json db906ca2-89fc-4bfb-beb7-4e4000f25534 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+              "port": 5274
+            }
+          },
+          {
+            "file": ".browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T18:08:49.565Z",
+            "record": {
+              "token": "a387776c-890d-4fad-89a0-385d6d14e756",
+              "pid": 9223,
+              "bead": "hv-umm2.685",
+              "label": "draw-void-enemy-amplified.v2",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T18:08:49.224Z",
+              "providerState": "active",
+              "mcpSessionId": "7b935472-6c32-477a-97ca-0a20a47aab15",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "gateReleasedAt": "2026-10-14T18:08:45.502Z",
+        "signal": null,
+        "end": "2026-10-14T18:09:24.459Z",
+        "elapsedS": 39.007,
+        "exitCode": 1,
+        "terminalReap": "child close event received",
+        "finalSourceHashes": {
+          "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+          "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+        },
+        "sourceValid": true,
+        "groupAfter": "absent"
+      },
+      {
+        "label": "browser-enemy-amplified-v3",
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-685/draw-void-enemy-amplified.v3.mjs",
+          "--bead",
+          "hv-umm2.685",
+          "--viewports",
+          "desktop",
+          "--arg",
+          "cells=5",
+          "--timeout",
+          "180"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T18:11:03.380Z",
+        "hostLoad": [
+          14.3212890625,
+          15.46728515625,
+          14.4951171875
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.v3.mjs": "ad99ed00ff6c7027dae15656af37ab20bf540e59bd35c2856c2fdae744c6467c",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa",
+          "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-685/draw-void-enemy-amplified.v3.mjs": "d269c59cfa62bb187218cbcb8604056a66d659387ba059a68064153bbf3bdee4"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 19918,
+        "processes": [
+          {
+            "pid": 19932,
+            "ppid": 19918,
+            "pgid": 19932,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-685/draw-void-enemy-amplified.v3.mjs --bead hv-umm2.685 --viewports desktop --arg cells=5 --timeout 180",
+            "observedAt": "2026-10-14T18:11:03.424Z"
+          },
+          {
+            "pid": 19968,
+            "ppid": 19932,
+            "pgid": 19968,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.685/invocations/run-h0RQg1/draw-void-enemy-amplified.v3.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:11:05.472Z"
+          },
+          {
+            "pid": 19969,
+            "ppid": 19968,
+            "pgid": 19968,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:11:05.472Z"
+          },
+          {
+            "pid": 19975,
+            "ppid": 19932,
+            "pgid": 19975,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:11:05.472Z"
+          },
+          {
+            "pid": 19976,
+            "ppid": 19975,
+            "pgid": 19975,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:11:05.472Z"
+          },
+          {
+            "pid": 19984,
+            "ppid": 19932,
+            "pgid": 19984,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-081d448d5496f551.lock /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:11:05.472Z"
+          },
+          {
+            "pid": 19985,
+            "ppid": 19984,
+            "pgid": 19984,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:11:05.472Z"
+          },
+          {
+            "pid": 19986,
+            "ppid": 19932,
+            "pgid": 19986,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c6be2f77-6da8-4a53-9f98-44a2b20f9066 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:11:05.472Z"
+          },
+          {
+            "pid": 20007,
+            "ppid": 19986,
+            "pgid": 19986,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:11:05.472Z"
+          },
+          {
+            "pid": 20011,
+            "ppid": 20007,
+            "pgid": 19986,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs",
+            "observedAt": "2026-10-14T18:11:05.472Z"
+          },
+          {
+            "pid": 20014,
+            "ppid": 20011,
+            "pgid": 19986,
+            "birth": "Wed Oct 14 11:11:03 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/setup-assets.ts",
+            "observedAt": "2026-10-14T18:11:05.472Z"
+          },
+          {
+            "pid": 20225,
+            "ppid": 20007,
+            "pgid": 19986,
+            "birth": "Wed Oct 14 11:11:06 2026",
+            "argv": "node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/.bin/vite --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:11:07.477Z"
+          },
+          {
+            "pid": 20231,
+            "ppid": 20225,
+            "pgid": 19986,
+            "birth": "Wed Oct 14 11:11:07 2026",
+            "argv": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+            "observedAt": "2026-10-14T18:11:07.477Z"
+          },
+          {
+            "pid": 22284,
+            "ppid": 19932,
+            "pgid": 19932,
+            "birth": "Wed Oct 14 11:11:29 2026",
+            "argv": "(ps)",
+            "observedAt": "2026-10-14T18:11:29.506Z"
+          }
+        ],
+        "pid": 19932,
+        "pgid": 19932,
+        "managedOwnership": [
+          {
+            "file": ".browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T18:11:05.473Z",
+            "record": {
+              "token": "c6be2f77-6da8-4a53-9f98-44a2b20f9066",
+              "runner": {
+                "pid": 19932,
+                "group": 19932,
+                "started": "Wed Oct 14 11:11:03 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-685/draw-void-enemy-amplified.v3.mjs --bead hv-umm2.685 --viewports desktop --arg cells=5 --timeout 180"
+              },
+              "server": {
+                "pid": 19986,
+                "group": 19986,
+                "started": "Wed Oct 14 11:11:03 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c6be2f77-6da8-4a53-9f98-44a2b20f9066 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+              "port": 5274
+            }
+          },
+          {
+            "file": ".browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T18:11:07.478Z",
+            "record": {
+              "token": "5dde75a3-c5f4-4027-b443-4df99cdadd1f",
+              "pid": 19932,
+              "bead": "hv-umm2.685",
+              "label": "draw-void-enemy-amplified.v3",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T18:11:07.424Z",
+              "providerState": "active",
+              "mcpSessionId": "5758a749-9626-4c0b-bcb0-e7ba1c6f469e",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          },
+          {
+            "file": ".browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T18:11:29.506Z",
+            "record": {
+              "token": "c6be2f77-6da8-4a53-9f98-44a2b20f9066",
+              "runner": {
+                "pid": 19932,
+                "group": 19932,
+                "started": "Wed Oct 14 11:11:03 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-685/draw-void-enemy-amplified.v3.mjs --bead hv-umm2.685 --viewports desktop --arg cells=5 --timeout 180"
+              },
+              "server": {
+                "pid": 19986,
+                "group": 19986,
+                "started": "Wed Oct 14 11:11:03 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c6be2f77-6da8-4a53-9f98-44a2b20f9066 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+              "port": 5274,
+              "members": [
+                {
+                  "pid": 19986,
+                  "group": 19986,
+                  "started": "Wed Oct 14 11:11:03 2026",
+                  "state": "Ss",
+                  "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c6be2f77-6da8-4a53-9f98-44a2b20f9066 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+                },
+                {
+                  "pid": 20007,
+                  "group": 19986,
+                  "started": "Wed Oct 14 11:11:03 2026",
+                  "state": "S",
+                  "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+                },
+                {
+                  "pid": 20225,
+                  "group": 19986,
+                  "started": "Wed Oct 14 11:11:06 2026",
+                  "state": "S",
+                  "command": "node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/.bin/vite --port 5274 --strictPort"
+                },
+                {
+                  "pid": 20231,
+                  "group": 19986,
+                  "started": "Wed Oct 14 11:11:07 2026",
+                  "state": "S",
+                  "command": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+                }
+              ]
+            }
+          }
+        ],
+        "gateReleasedAt": "2026-10-14T18:11:03.426Z",
+        "signal": null,
+        "end": "2026-10-14T18:11:29.738Z",
+        "elapsedS": 26.358,
+        "exitCode": 0,
+        "terminalReap": "child close event received",
+        "finalSourceHashes": {
+          "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+          "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+        },
+        "sourceValid": true,
+        "groupAfter": "absent"
+      },
+      {
+        "label": "browser-intent-replay",
+        "command": "./node_modules/.bin/tsx",
+        "args": [
+          "/tmp/dreamtides-685/browser-intent-replay.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T18:14:38.333Z",
+        "hostLoad": [
+          7.8701171875,
+          13.7724609375,
+          14.17626953125
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.v3.mjs": "ad99ed00ff6c7027dae15656af37ab20bf540e59bd35c2856c2fdae744c6467c",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa",
+          "/tmp/dreamtides-685/browser-intent-replay.ts": "284b786cc9be9a802a3d12c0b4fe43c4ebae6167ca6443378fb070fc5a0c866b"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 91524,
+        "processes": [
+          {
+            "pid": 91539,
+            "ppid": 91524,
+            "pgid": 91539,
+            "birth": "Wed Oct 14 11:14:38 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py ./node_modules/.bin/tsx /tmp/dreamtides-685/browser-intent-replay.ts",
+            "observedAt": "2026-10-14T18:14:38.378Z"
+          },
+          {
+            "pid": 91561,
+            "ppid": 91539,
+            "pgid": 91539,
+            "birth": "Wed Oct 14 11:14:38 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/tsx/dist/loader.mjs /tmp/dreamtides-685/browser-intent-replay.ts",
+            "observedAt": "2026-10-14T18:14:40.426Z"
+          },
+          {
+            "pid": 91597,
+            "ppid": 91561,
+            "pgid": 91539,
+            "birth": "Wed Oct 14 11:14:39 2026",
+            "argv": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+            "observedAt": "2026-10-14T18:14:40.426Z"
+          }
+        ],
+        "pid": 91539,
+        "pgid": 91539,
+        "managedOwnership": [],
+        "gateReleasedAt": "2026-10-14T18:14:38.380Z",
+        "signal": null,
+        "end": "2026-10-14T18:14:40.596Z",
+        "elapsedS": 2.263,
+        "exitCode": 1,
+        "terminalReap": "child close event received",
+        "finalSourceHashes": {
+          "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+          "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+        },
+        "sourceValid": true,
+        "groupAfter": "absent"
+      },
+      {
+        "label": "browser-mobile-v3",
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-685/draw-void-browser.v3.mjs",
+          "--bead",
+          "hv-umm2.685",
+          "--viewports",
+          "mobile",
+          "--timeout",
+          "900"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T18:11:56.962Z",
+        "hostLoad": [
+          20.6015625,
+          16.71484375,
+          14.99365234375
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.v3.mjs": "ad99ed00ff6c7027dae15656af37ab20bf540e59bd35c2856c2fdae744c6467c",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa",
+          "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-685/draw-void-browser.v3.mjs": "f65004f9e3a530bb9bb22dc646733a5a455c1b4584149b85918235c38d0b96d0"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 58894,
+        "processes": [
+          {
+            "pid": 59084,
+            "ppid": 58894,
+            "pgid": 59084,
+            "birth": "Wed Oct 14 11:11:56 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-685/draw-void-browser.v3.mjs --bead hv-umm2.685 --viewports mobile --timeout 900",
+            "observedAt": "2026-10-14T18:11:57.008Z"
+          },
+          {
+            "pid": 60122,
+            "ppid": 59084,
+            "pgid": 60122,
+            "birth": "Wed Oct 14 11:11:57 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.685/invocations/run-Yw3rOu/draw-void-browser.v3.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:11:59.057Z"
+          },
+          {
+            "pid": 60123,
+            "ppid": 60122,
+            "pgid": 60122,
+            "birth": "Wed Oct 14 11:11:57 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:11:59.057Z"
+          },
+          {
+            "pid": 60155,
+            "ppid": 59084,
+            "pgid": 60155,
+            "birth": "Wed Oct 14 11:11:57 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:11:59.057Z"
+          },
+          {
+            "pid": 60156,
+            "ppid": 60155,
+            "pgid": 60155,
+            "birth": "Wed Oct 14 11:11:57 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:11:59.057Z"
+          },
+          {
+            "pid": 60162,
+            "ppid": 59084,
+            "pgid": 60162,
+            "birth": "Wed Oct 14 11:11:57 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-081d448d5496f551.lock /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:11:59.057Z"
+          },
+          {
+            "pid": 60163,
+            "ppid": 60162,
+            "pgid": 60162,
+            "birth": "Wed Oct 14 11:11:57 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:11:59.057Z"
+          },
+          {
+            "pid": 60164,
+            "ppid": 59084,
+            "pgid": 60164,
+            "birth": "Wed Oct 14 11:11:57 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 7286bfbf-d423-433c-bb2f-ff6e2c6e2cc9 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:11:59.057Z"
+          },
+          {
+            "pid": 60183,
+            "ppid": 60164,
+            "pgid": 60164,
+            "birth": "Wed Oct 14 11:11:57 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:11:59.057Z"
+          },
+          {
+            "pid": 62013,
+            "ppid": 60183,
+            "pgid": 60164,
+            "birth": "Wed Oct 14 11:11:58 2026",
+            "argv": "node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/.bin/vite --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:11:59.057Z"
+          },
+          {
+            "pid": 62038,
+            "ppid": 62013,
+            "pgid": 60164,
+            "birth": "Wed Oct 14 11:11:59 2026",
+            "argv": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+            "observedAt": "2026-10-14T18:12:01.058Z"
+          }
+        ],
+        "pid": 59084,
+        "pgid": 59084,
+        "managedOwnership": [
+          {
+            "file": ".browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T18:11:59.058Z",
+            "record": {
+              "token": "7286bfbf-d423-433c-bb2f-ff6e2c6e2cc9",
+              "runner": {
+                "pid": 59084,
+                "group": 59084,
+                "started": "Wed Oct 14 11:11:56 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-685/draw-void-browser.v3.mjs --bead hv-umm2.685 --viewports mobile --timeout 900"
+              },
+              "server": {
+                "pid": 60164,
+                "group": 60164,
+                "started": "Wed Oct 14 11:11:57 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 7286bfbf-d423-433c-bb2f-ff6e2c6e2cc9 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+              "port": 5274
+            }
+          },
+          {
+            "file": ".browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T18:12:01.059Z",
+            "record": {
+              "token": "eed67772-69f8-41f5-ae96-249266513cbb",
+              "pid": 59084,
+              "bead": "hv-umm2.685",
+              "label": "draw-void-browser.v3",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T18:11:59.487Z",
+              "providerState": "active",
+              "mcpSessionId": "4b549267-5c5f-4eb6-8b17-6034818dadb2",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "gateReleasedAt": "2026-10-14T18:11:57.009Z",
+        "signal": null,
+        "end": "2026-10-14T18:13:18.041Z",
+        "elapsedS": 81.079,
+        "exitCode": 0,
+        "terminalReap": "child close event received",
+        "finalSourceHashes": {
+          "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+          "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+        },
+        "sourceValid": true,
+        "groupAfter": "absent"
+      },
+      {
+        "label": "browser",
+        "command": "node",
+        "args": [
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-685/draw-void-browser.mjs",
+          "--bead",
+          "hv-umm2.685",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "900"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T18:06:09.617Z",
+        "hostLoad": [
+          29.27734375,
+          16.07568359375,
+          13.99365234375
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.v3.mjs": "ad99ed00ff6c7027dae15656af37ab20bf540e59bd35c2856c2fdae744c6467c",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa",
+          "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "/tmp/dreamtides-685/draw-void-browser.mjs": "7377403a145c9154630b8e8c6f666f8fe45b1101c10f7717fd15d0fde8ed7b49"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 35394,
+        "processes": [
+          {
+            "pid": 35750,
+            "ppid": 35394,
+            "pgid": 35750,
+            "birth": "Wed Oct 14 11:06:09 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py node scripts/qa/run-scenario.mjs /tmp/dreamtides-685/draw-void-browser.mjs --bead hv-umm2.685 --viewports desktop,mobile --timeout 900",
+            "observedAt": "2026-10-14T18:06:09.685Z"
+          },
+          {
+            "pid": 36347,
+            "ppid": 35750,
+            "pgid": 36347,
+            "birth": "Wed Oct 14 11:06:09 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.685/invocations/run-FPpiAY/draw-void-browser.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:06:11.767Z"
+          },
+          {
+            "pid": 36348,
+            "ppid": 36347,
+            "pgid": 36347,
+            "birth": "Wed Oct 14 11:06:09 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:06:11.767Z"
+          },
+          {
+            "pid": 36378,
+            "ppid": 35750,
+            "pgid": 36378,
+            "birth": "Wed Oct 14 11:06:09 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:06:11.767Z"
+          },
+          {
+            "pid": 36393,
+            "ppid": 36378,
+            "pgid": 36378,
+            "birth": "Wed Oct 14 11:06:09 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:06:11.767Z"
+          },
+          {
+            "pid": 36410,
+            "ppid": 35750,
+            "pgid": 36410,
+            "birth": "Wed Oct 14 11:06:09 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-081d448d5496f551.lock /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:06:11.767Z"
+          },
+          {
+            "pid": 36412,
+            "ppid": 36410,
+            "pgid": 36410,
+            "birth": "Wed Oct 14 11:06:09 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:06:11.767Z"
+          },
+          {
+            "pid": 36414,
+            "ppid": 35750,
+            "pgid": 36414,
+            "birth": "Wed Oct 14 11:06:09 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json db4fc590-5cfe-47f1-a6c3-aec9a65e7a16 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:06:11.767Z"
+          },
+          {
+            "pid": 36434,
+            "ppid": 36414,
+            "pgid": 36414,
+            "birth": "Wed Oct 14 11:06:10 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:06:11.767Z"
+          },
+          {
+            "pid": 36512,
+            "ppid": 36434,
+            "pgid": 36414,
+            "birth": "Wed Oct 14 11:06:10 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs",
+            "observedAt": "2026-10-14T18:06:11.767Z"
+          },
+          {
+            "pid": 36540,
+            "ppid": 36512,
+            "pgid": 36414,
+            "birth": "Wed Oct 14 11:06:10 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/setup-assets.ts",
+            "observedAt": "2026-10-14T18:06:11.767Z"
+          },
+          {
+            "pid": 41682,
+            "ppid": 36434,
+            "pgid": 36414,
+            "birth": "Wed Oct 14 11:06:12 2026",
+            "argv": "node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/.bin/vite --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:06:13.777Z"
+          },
+          {
+            "pid": 42053,
+            "ppid": 41682,
+            "pgid": 36414,
+            "birth": "Wed Oct 14 11:06:12 2026",
+            "argv": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+            "observedAt": "2026-10-14T18:06:13.777Z"
+          }
+        ],
+        "pid": 35750,
+        "pgid": 35750,
+        "managedOwnership": [
+          {
+            "file": ".browser-qa.slot-1.lock.server.json",
+            "observedAt": "2026-10-14T18:06:11.767Z",
+            "record": {
+              "token": "db4fc590-5cfe-47f1-a6c3-aec9a65e7a16",
+              "runner": {
+                "pid": 35750,
+                "group": 35750,
+                "started": "Wed Oct 14 11:06:09 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-685/draw-void-browser.mjs --bead hv-umm2.685 --viewports desktop,mobile --timeout 900"
+              },
+              "server": {
+                "pid": 36414,
+                "group": 36414,
+                "started": "Wed Oct 14 11:06:09 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json db4fc590-5cfe-47f1-a6c3-aec9a65e7a16 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+              "port": 5274
+            }
+          },
+          {
+            "file": ".browser-qa.slot-1.lock.owner.json",
+            "observedAt": "2026-10-14T18:06:13.778Z",
+            "record": {
+              "token": "bbc52a35-3033-44c2-94e7-6e4f15722daf",
+              "pid": 35750,
+              "bead": "hv-umm2.685",
+              "label": "draw-void-browser",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T18:06:13.206Z",
+              "providerState": "active",
+              "mcpSessionId": "bf8666a7-ac78-4b97-af7f-bf18e56eb0fd",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "gateReleasedAt": "2026-10-14T18:06:09.687Z",
+        "signal": null,
+        "end": "2026-10-14T18:07:58.315Z",
+        "elapsedS": 108.698,
+        "exitCode": 1,
+        "terminalReap": "child close event received",
+        "finalSourceHashes": {
+          "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+          "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+        },
+        "sourceValid": true,
+        "groupAfter": "absent"
+      },
+      {
+        "label": "focused",
+        "command": "npm",
+        "args": [
+          "test",
+          "--",
+          "src/engine/triggers/triggers-patterns.test.ts",
+          "src/engine/triggers/triggers.test.ts",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/content-gates.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T17:56:58.030Z",
+        "hostLoad": [
+          9.48876953125,
+          16.79931640625,
+          15.306640625
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.mjs": "efc2d1660ef9781019560ef370ec69174a8fd31054a63d4bf1804f5e354a44f7"
+        },
+        "gate": "hashes verified before spawn",
+        "wrapperPid": 58775,
+        "processes": [
+          {
+            "pid": 58793,
+            "ppid": 58775,
+            "pgid": 58793,
+            "birth": "Wed Oct 14 10:56:58 2026",
+            "argv": "node /opt/homebrew/bin/npm test -- src/engine/triggers/triggers-patterns.test.ts src/engine/triggers/triggers.test.ts src/engine/effects/primitives/contracts.test.ts src/engine/content-gates.test.ts",
+            "observedAt": "2026-10-14T17:56:58.074Z"
+          },
+          {
+            "pid": 58823,
+            "ppid": 58793,
+            "pgid": 58793,
+            "birth": "Wed Oct 14 10:56:58 2026",
+            "argv": "node scripts/review.mjs test src/engine/triggers/triggers-patterns.test.ts src/engine/triggers/triggers.test.ts src/engine/effects/primitives/contracts.test.ts src/engine/content-gates.test.ts",
+            "observedAt": "2026-10-14T17:57:00.116Z"
+          },
+          {
+            "pid": 58986,
+            "ppid": 58823,
+            "pgid": 58793,
+            "birth": "Wed Oct 14 10:56:59 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/vitest/vitest.mjs run src/engine/triggers/triggers-patterns.test.ts src/engine/triggers/triggers.test.ts src/engine/effects/primitives/contracts.test.ts src/engine/content-gates.test.ts",
+            "observedAt": "2026-10-14T17:57:00.116Z"
+          },
+          {
+            "pid": 59007,
+            "ppid": 58986,
+            "pgid": 58793,
+            "birth": "Wed Oct 14 10:57:00 2026",
+            "argv": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+            "observedAt": "2026-10-14T17:57:02.130Z"
+          }
+        ],
+        "pid": 58793,
+        "pgid": 58793,
+        "signal": null,
+        "end": "2026-10-14T17:57:13.416Z",
+        "elapsedS": 15.386,
+        "exitCode": 0,
+        "terminalReap": "child close event received",
+        "groupAfter": "absent"
+      },
+      {
+        "label": "knip",
+        "command": "npm",
+        "args": [
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T18:18:09.860Z",
+        "hostLoad": [
+          23.283203125,
+          15.38916015625,
+          14.50341796875
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.v3.mjs": "ad99ed00ff6c7027dae15656af37ab20bf540e59bd35c2856c2fdae744c6467c",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 61516,
+        "processes": [
+          {
+            "pid": 61534,
+            "ppid": 61516,
+            "pgid": 61534,
+            "birth": "Wed Oct 14 11:18:09 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py npm run knip",
+            "observedAt": "2026-10-14T18:18:09.918Z"
+          },
+          {
+            "pid": 61566,
+            "ppid": 61534,
+            "pgid": 61534,
+            "birth": "Wed Oct 14 11:18:10 2026",
+            "argv": "node scripts/review.mjs knip",
+            "observedAt": "2026-10-14T18:18:11.974Z"
+          },
+          {
+            "pid": 61626,
+            "ppid": 61566,
+            "pgid": 61534,
+            "birth": "Wed Oct 14 11:18:10 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/prepare-workspace.mjs",
+            "observedAt": "2026-10-14T18:18:11.974Z"
+          },
+          {
+            "pid": 61629,
+            "ppid": 61626,
+            "pgid": 61534,
+            "birth": "Wed Oct 14 11:18:10 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/setup-assets.ts",
+            "observedAt": "2026-10-14T18:18:11.974Z"
+          },
+          {
+            "pid": 61789,
+            "ppid": 61566,
+            "pgid": 61534,
+            "birth": "Wed Oct 14 11:18:13 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/knip/bin/knip.js",
+            "observedAt": "2026-10-14T18:18:13.974Z"
+          },
+          {
+            "pid": 61913,
+            "ppid": 61566,
+            "pgid": 61534,
+            "birth": "Wed Oct 14 11:18:15 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/setup-assets.ts",
+            "observedAt": "2026-10-14T18:18:15.979Z"
+          }
+        ],
+        "pid": 61534,
+        "pgid": 61534,
+        "managedOwnership": [],
+        "gateReleasedAt": "2026-10-14T18:18:09.919Z",
+        "signal": null,
+        "end": "2026-10-14T18:18:17.095Z",
+        "elapsedS": 7.235,
+        "exitCode": 0,
+        "terminalReap": "child close event received",
+        "finalSourceHashes": {
+          "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+          "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+        },
+        "sourceValid": true,
+        "groupAfter": "absent"
+      },
+      {
+        "label": "preflight",
+        "command": "npm",
+        "args": [
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "7e2f2ac0-4e3c-4520-80c6-c830581b40de,c32ef131-d283-4bf1-bf65-2d5e5d232168"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T18:00:28.338Z",
+        "hostLoad": [
+          3.2763671875,
+          10.14794921875,
+          12.7705078125
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.mjs": "a2d5e5e2b2886a9d9ff4799e0730200953c407c9ea9693584849100249cfeb5f",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 67592,
+        "processes": [
+          {
+            "pid": 67601,
+            "ppid": 67592,
+            "pgid": 67601,
+            "birth": "Wed Oct 14 11:00:28 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py npm run lab:preflight -- --cards 7e2f2ac0-4e3c-4520-80c6-c830581b40de,c32ef131-d283-4bf1-bf65-2d5e5d232168",
+            "observedAt": "2026-10-14T18:00:28.381Z"
+          }
+        ],
+        "pid": 67601,
+        "pgid": 67601,
+        "gateReleasedAt": "2026-10-14T18:00:28.381Z",
+        "signal": null,
+        "end": "2026-10-14T18:00:29.825Z",
+        "elapsedS": 1.487,
+        "exitCode": 0,
+        "terminalReap": "child close event received",
+        "groupAfter": "absent"
+      },
+      {
+        "label": "review",
+        "command": "npm",
+        "args": [
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T18:16:58.798Z",
+        "hostLoad": [
+          11.9599609375,
+          12.07666015625,
+          13.35546875
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.v3.mjs": "ad99ed00ff6c7027dae15656af37ab20bf540e59bd35c2856c2fdae744c6467c",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 225,
+        "processes": [
+          {
+            "pid": 253,
+            "ppid": 225,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:16:58 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py npm run review",
+            "observedAt": "2026-10-14T18:16:58.851Z"
+          },
+          {
+            "pid": 282,
+            "ppid": 253,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:16:58 2026",
+            "argv": "node scripts/review.mjs quick",
+            "observedAt": "2026-10-14T18:17:00.925Z"
+          },
+          {
+            "pid": 493,
+            "ppid": 282,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:17:00 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/typescript/bin/tsc --noEmit false --declaration --emitDeclarationOnly --outDir /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/.cache/journey-review/declarations --incremental --tsBuildInfoFile /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/.cache/journey-review/tsconfig.tsbuildinfo",
+            "observedAt": "2026-10-14T18:17:00.925Z"
+          },
+          {
+            "pid": 494,
+            "ppid": 282,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:17:00 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/typescript/bin/tsc -p tsconfig.node.json --incremental --tsBuildInfoFile /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/.cache/journey-review/tsconfig.node.tsbuildinfo",
+            "observedAt": "2026-10-14T18:17:00.925Z"
+          },
+          {
+            "pid": 495,
+            "ppid": 282,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:17:00 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/import-cycles.mjs",
+            "observedAt": "2026-10-14T18:17:00.925Z"
+          },
+          {
+            "pid": 496,
+            "ppid": 282,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:17:00 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/run-eslint.mjs src/content/cards/dark-lord-s-champion-7e2f2ac0.ts src/content/cards/titan-of-forgotten-echoes-c32ef131.ts",
+            "observedAt": "2026-10-14T18:17:00.925Z"
+          },
+          {
+            "pid": 497,
+            "ppid": 282,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:17:00 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/vitest/vitest.mjs related --run --passWithNoTests src/content/cards/dark-lord-s-champion-7e2f2ac0.ts src/content/cards/titan-of-forgotten-echoes-c32ef131.ts",
+            "observedAt": "2026-10-14T18:17:00.925Z"
+          },
+          {
+            "pid": 498,
+            "ppid": 282,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:17:00 2026",
+            "argv": "(node)",
+            "observedAt": "2026-10-14T18:17:00.925Z"
+          },
+          {
+            "pid": 533,
+            "ppid": 497,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:17:00 2026",
+            "argv": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+            "observedAt": "2026-10-14T18:17:02.919Z"
+          },
+          {
+            "pid": 58038,
+            "ppid": 497,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:17:30 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-kdEvEW/actor.mjs /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-kdEvEW/input.json /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-kdEvEW/paused /var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-kdEvEW/release no 15000",
+            "observedAt": "2026-10-14T18:17:30.939Z"
+          },
+          {
+            "pid": 58399,
+            "ppid": 497,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:17:34 2026",
+            "argv": "<defunct>",
+            "observedAt": "2026-10-14T18:17:36.952Z"
+          },
+          {
+            "pid": 61132,
+            "ppid": 282,
+            "pgid": 253,
+            "birth": "Wed Oct 14 11:18:02 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/setup-assets.ts",
+            "observedAt": "2026-10-14T18:18:02.968Z"
+          }
+        ],
+        "pid": 253,
+        "pgid": 253,
+        "managedOwnership": [],
+        "gateReleasedAt": "2026-10-14T18:16:58.853Z",
+        "signal": null,
+        "end": "2026-10-14T18:18:04.221Z",
+        "elapsedS": 65.423,
+        "exitCode": 0,
+        "terminalReap": "child close event received",
+        "finalSourceHashes": {
+          "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+          "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+        },
+        "sourceValid": true,
+        "groupAfter": "absent"
+      },
+      {
+        "label": "sweep",
+        "command": "node",
+        "args": [
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.685",
+          "--cards",
+          "7e2f2ac0-4e3c-4520-80c6-c830581b40de,c32ef131-d283-4bf1-bf65-2d5e5d232168"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T18:01:02.545Z",
+        "hostLoad": [
+          4.052734375,
+          9.59033203125,
+          12.4609375
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.mjs": "a2d5e5e2b2886a9d9ff4799e0730200953c407c9ea9693584849100249cfeb5f",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa",
+          "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/card-sweep.mjs": "83f2d5e65a8e45dcbae1016531fc4e048d93c2749459410f710b13213b904e00"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 68675,
+        "processes": [
+          {
+            "pid": 68687,
+            "ppid": 68675,
+            "pgid": 68687,
+            "birth": "Wed Oct 14 11:01:02 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py node scripts/qa/card-sweep.mjs --bead hv-umm2.685 --cards 7e2f2ac0-4e3c-4520-80c6-c830581b40de,c32ef131-d283-4bf1-bf65-2d5e5d232168",
+            "observedAt": "2026-10-14T18:01:02.588Z"
+          },
+          {
+            "pid": 68719,
+            "ppid": 68687,
+            "pgid": 68719,
+            "birth": "Wed Oct 14 11:01:02 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.685/invocations/sweep-JNKKbA/run-vCG3eu/card-sweep.server.log /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:01:04.632Z"
+          },
+          {
+            "pid": 68720,
+            "ppid": 68719,
+            "pgid": 68719,
+            "birth": "Wed Oct 14 11:01:02 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:01:04.632Z"
+          },
+          {
+            "pid": 68726,
+            "ppid": 68687,
+            "pgid": 68726,
+            "birth": "Wed Oct 14 11:01:02 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:01:04.632Z"
+          },
+          {
+            "pid": 68727,
+            "ppid": 68726,
+            "pgid": 68726,
+            "birth": "Wed Oct 14 11:01:02 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:01:04.632Z"
+          },
+          {
+            "pid": 68733,
+            "ppid": 68687,
+            "pgid": 68733,
+            "birth": "Wed Oct 14 11:01:02 2026",
+            "argv": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-081d448d5496f551.lock /bin/sh -c echo ready; exec cat >/dev/null",
+            "observedAt": "2026-10-14T18:01:04.632Z"
+          },
+          {
+            "pid": 68734,
+            "ppid": 68733,
+            "pgid": 68733,
+            "birth": "Wed Oct 14 11:01:02 2026",
+            "argv": "cat",
+            "observedAt": "2026-10-14T18:01:04.632Z"
+          },
+          {
+            "pid": 68735,
+            "ppid": 68687,
+            "pgid": 68735,
+            "birth": "Wed Oct 14 11:01:02 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 1b826dd4-07d5-45ac-a651-defce51a60f1 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:01:04.632Z"
+          },
+          {
+            "pid": 68750,
+            "ppid": 68735,
+            "pgid": 68735,
+            "birth": "Wed Oct 14 11:01:02 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:01:04.632Z"
+          },
+          {
+            "pid": 68792,
+            "ppid": 68750,
+            "pgid": 68735,
+            "birth": "Wed Oct 14 11:01:04 2026",
+            "argv": "node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/.bin/vite --port 5274 --strictPort",
+            "observedAt": "2026-10-14T18:01:04.632Z"
+          },
+          {
+            "pid": 68800,
+            "ppid": 68792,
+            "pgid": 68735,
+            "birth": "Wed Oct 14 11:01:04 2026",
+            "argv": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+            "observedAt": "2026-10-14T18:01:04.632Z"
+          }
+        ],
+        "pid": 68687,
+        "pgid": 68687,
+        "gateReleasedAt": "2026-10-14T18:01:02.588Z",
+        "signal": null,
+        "end": "2026-10-14T18:02:59.047Z",
+        "elapsedS": 116.502,
+        "exitCode": 0,
+        "terminalReap": "child close event received",
+        "groupAfter": "absent"
+      },
+      {
+        "label": "weighted300",
+        "command": "lockf",
+        "args": [
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "7e2f2ac0-4e3c-4520-80c6-c830581b40de,c32ef131-d283-4bf1-bf65-2d5e5d232168"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685",
+        "start": "2026-10-14T18:00:38.281Z",
+        "hostLoad": [
+          3.6015625,
+          9.99365234375,
+          12.68505859375
+        ],
+        "source": {
+          "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+          "frozenAt": "2026-10-14T17:56:57.935Z",
+          "hashes": {
+            "src/content/cards/dark-lord-s-champion-7e2f2ac0.ts": "738fb6e10599f88eab10e63a2931b8388e6154c755f7e739765d746c51fa50ec",
+            "src/content/cards/titan-of-forgotten-echoes-c32ef131.ts": "c01751a63c84c4595b9ac9bcba88220d6d0c46e529e800c172f67f77c013b537"
+          }
+        },
+        "callers": {
+          "/private/tmp/dreamtides-685/run-receipt.mjs": "a2d5e5e2b2886a9d9ff4799e0730200953c407c9ea9693584849100249cfeb5f",
+          "/tmp/dreamtides-685/held-exec.py": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa"
+        },
+        "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+        "wrapperPid": 67807,
+        "processes": [
+          {
+            "pid": 67817,
+            "ppid": 67807,
+            "pgid": 67817,
+            "birth": "Wed Oct 14 11:00:38 2026",
+            "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-685/held-exec.py lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 7e2f2ac0-4e3c-4520-80c6-c830581b40de,c32ef131-d283-4bf1-bf65-2d5e5d232168",
+            "observedAt": "2026-10-14T18:00:38.322Z"
+          },
+          {
+            "pid": 67827,
+            "ppid": 67817,
+            "pgid": 67817,
+            "birth": "Wed Oct 14 11:00:38 2026",
+            "argv": "npm run fuzz:engine --games 300 --weight-uuids ***,***",
+            "observedAt": "2026-10-14T18:00:40.367Z"
+          },
+          {
+            "pid": 67846,
+            "ppid": 67827,
+            "pgid": 67817,
+            "birth": "Wed Oct 14 11:00:38 2026",
+            "argv": "node /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/.bin/tsx scripts/fuzz-engine.ts --games 300 --weight-uuids 7e2f2ac0-4e3c-4520-80c6-c830581b40de,c32ef131-d283-4bf1-bf65-2d5e5d232168",
+            "observedAt": "2026-10-14T18:00:40.367Z"
+          },
+          {
+            "pid": 67847,
+            "ppid": 67846,
+            "pgid": 67817,
+            "birth": "Wed Oct 14 11:00:38 2026",
+            "argv": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/tsx/dist/loader.mjs scripts/fuzz-engine.ts --games 300 --weight-uuids 7e2f2ac0-4e3c-4520-80c6-c830581b40de,c32ef131-d283-4bf1-bf65-2d5e5d232168",
+            "observedAt": "2026-10-14T18:00:40.367Z"
+          },
+          {
+            "pid": 67861,
+            "ppid": 67847,
+            "pgid": 67817,
+            "birth": "Wed Oct 14 11:00:39 2026",
+            "argv": "/Users/dthurn/dreamtides_web/.worktrees/draw-void-cards-685/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+            "observedAt": "2026-10-14T18:00:40.367Z"
+          }
+        ],
+        "pid": 67817,
+        "pgid": 67817,
+        "gateReleasedAt": "2026-10-14T18:00:38.323Z",
+        "signal": null,
+        "end": "2026-10-14T18:06:02.428Z",
+        "elapsedS": 324.147,
+        "exitCode": 0,
+        "terminalReap": "child close event received",
+        "groupAfter": "absent"
+      }
+    ],
+    "qualification": "Focused and first actual-source runs used v1 with identity sampled after spawn, retained honestly. Subsequent v2 held exec PID/PG/birth was flushed before gate release; v3 additionally fails closed, rejects reused labels and compares final source hashes. Earlier v2 terminal source binding is qualified by independent final unchanged-source check. Every terminal producer has child close/reap and own group absent. Browser native cleanup confirms browser_close and port free; owner absence alone is not completion evidence. Sweep native successful cleanup did not preserve its provider session ID in the supplementary recorder; later browser sessions retain exact native owner/server snapshots.",
+    "sharedProvider": "http://localhost:8931/mcp preserved; only owned contexts/groups closed; native lock and managed record formats unchanged."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "immediately before npm run review admission and evidence preparation",
+        "at": "2026-10-14T18:16:58.665Z",
+        "source": "sysctl -n vm.loadavg one-minute value"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "actual-source-v2",
+      "at": "2026-10-14T17:59:45.138Z",
+      "value": 3.7861328125,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "actual-source",
+      "at": "2026-10-14T17:58:39.722Z",
+      "value": 5.40625,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "browser-enemy-amplified-v2",
+      "at": "2026-10-14T18:08:45.452Z",
+      "value": 15.3359375,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "browser-enemy-amplified-v3",
+      "at": "2026-10-14T18:11:03.380Z",
+      "value": 14.3212890625,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "browser-intent-replay",
+      "at": "2026-10-14T18:14:38.333Z",
+      "value": 7.8701171875,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "browser-mobile-v3",
+      "at": "2026-10-14T18:11:56.962Z",
+      "value": 20.6015625,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "browser",
+      "at": "2026-10-14T18:06:09.617Z",
+      "value": 29.27734375,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "focused",
+      "at": "2026-10-14T17:56:58.030Z",
+      "value": 9.48876953125,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "knip",
+      "at": "2026-10-14T18:18:09.860Z",
+      "value": 23.283203125,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "preflight",
+      "at": "2026-10-14T18:00:28.338Z",
+      "value": 3.2763671875,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "review",
+      "at": "2026-10-14T18:16:58.798Z",
+      "value": 11.9599609375,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "sweep",
+      "at": "2026-10-14T18:01:02.545Z",
+      "value": 4.052734375,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "scope": "weighted300",
+      "at": "2026-10-14T18:00:38.281Z",
+      "value": 3.6015625,
+      "source": "node os.loadavg 1-minute value at wrapper invocation, before process gate release"
+    },
+    {
+      "at": "2026-10-14T18:16:58.665Z",
+      "value": 11.96,
+      "raw": "{ 11.96 12.08 13.36 }",
+      "scope": "immediately before npm run review admission and evidence preparation",
+      "source": "sysctl -n vm.loadavg one-minute value"
+    }
+  ],
+  "timingQualification": "Elapsed loaded-host timings include native process overhead and applicable waits. No A/B comparison or productive-time/speedup claim.",
+  "scratchProvenance": {
+    "root": "/tmp/dreamtides-685",
+    "retainedCallers": [
+      {
+        "file": "actual-source-proof.ts",
+        "sha256": "0490cce89d47b581dd77bbce96bb96c2ebeec0736288d5122bd9073d9072a4ab"
+      },
+      {
+        "file": "actual-source-proof.v1.ts",
+        "sha256": "75ea431352ec8e4c4bebd59e3cbdc51d5503992cb95c50055b4f27f34a251918"
+      },
+      {
+        "file": "browser-intent-replay.ts",
+        "sha256": "284b786cc9be9a802a3d12c0b4fe43c4ebae6167ca6443378fb070fc5a0c866b"
+      },
+      {
+        "file": "draw-void-browser.mjs",
+        "sha256": "7377403a145c9154630b8e8c6f666f8fe45b1101c10f7717fd15d0fde8ed7b49"
+      },
+      {
+        "file": "draw-void-browser.v2.mjs",
+        "sha256": "aa8855645e862758b444ab6b5ccbd16dfa20280a508c11ab4ecd3ad837b60f24"
+      },
+      {
+        "file": "draw-void-browser.v3.mjs",
+        "sha256": "f65004f9e3a530bb9bb22dc646733a5a455c1b4584149b85918235c38d0b96d0"
+      },
+      {
+        "file": "draw-void-enemy-amplified.v2.mjs",
+        "sha256": "fc249cfe06da548be301250fc1ec85b872c31460e35b78a278178c86b96bf7a4"
+      },
+      {
+        "file": "draw-void-enemy-amplified.v3.mjs",
+        "sha256": "d269c59cfa62bb187218cbcb8604056a66d659387ba059a68064153bbf3bdee4"
+      },
+      {
+        "file": "held-exec.py",
+        "sha256": "0f942142fddb993b858694601fca8f4905c6ca64c57a0f0e5905f9467d1bf3fa"
+      },
+      {
+        "file": "make-review-scope.py",
+        "sha256": "687a55639711cd6e54102ad087f8ee93c60706e31293d4aa9144add69fa353b5"
+      },
+      {
+        "file": "review-runner.py",
+        "sha256": "038ff23cf12f05111aba9377fb9cf84df3a9a6b6d2362cc53fa6573dbffa275c"
+      },
+      {
+        "file": "run-receipt.mjs",
+        "sha256": "a2d5e5e2b2886a9d9ff4799e0730200953c407c9ea9693584849100249cfeb5f"
+      },
+      {
+        "file": "run-receipt.v1.mjs",
+        "sha256": "efc2d1660ef9781019560ef370ec69174a8fd31054a63d4bf1804f5e354a44f7"
+      },
+      {
+        "file": "run-receipt.v2.mjs",
+        "sha256": "a2d5e5e2b2886a9d9ff4799e0730200953c407c9ea9693584849100249cfeb5f"
+      },
+      {
+        "file": "run-receipt.v3.mjs",
+        "sha256": "ad99ed00ff6c7027dae15656af37ab20bf540e59bd35c2856c2fdae744c6467c"
+      },
+      {
+        "file": "write-evidence.mjs",
+        "sha256": "c7d2dd1f925e721c6adc2621b609c8dad84568a14a6bcadb0d38e9d21cf3a7bf"
+      }
+    ],
+    "nativeBeadRequestHash": "b48821b543f43825c1946396373481dddde036bd9d7271ad41cc3b00350143d0"
+  },
+  "implementWindow": {
+    "start": "2026-10-14T17:54:19.029Z",
+    "end": "2026-10-14T18:22:30.465867+00:00"
+  },
+  "commitBoundary": {
+    "evidenceRefreshedAt": "2026-10-14T18:22:30.465867+00:00",
+    "qualification": "The evidence timestamp immediately precedes Git completion; the actual completion timestamp and measured endpoint gap are retained in the helper commit receipt and returned to the parent."
+  }
+}

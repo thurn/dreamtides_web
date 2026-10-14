@@ -1,3 +1,7 @@
+import { thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenDraw } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,6 @@ export default card({
   cardNumber: 490,
   art: { x: 0, y: -0.343, scale: 1.5 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenDraw("you", 3), materialize(thisCardIn("void")), { zone: "void" })],
+  verifiedText: expectedVerifiedText("When you draw your third card in a turn, materialize this character from your void."),
 });

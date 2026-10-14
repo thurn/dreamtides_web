@@ -1,3 +1,7 @@
+import { thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +25,9 @@ export default card({
   cardNumber: 224,
   art: { x: 0.16, y: 1, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(whenYouPlay({}, 2), materialize(thisCardIn("void"), { awakened: variant.amplified }), { zone: "void" })],
+  verifiedText: expectedVerifiedText(
+    "When you play your second card in a turn, materialize this character from your void.",
+    "When you play your second card in a turn, materialize this character from your void with awakened.",
+  ),
 });
