@@ -1,0 +1,201 @@
+{
+  "bead": "hv-umm2.672",
+  "phase": 5,
+  "base": "406d79b7beebf5f37e4177e92cfaf99fe6a9f5b3",
+  "censusAt": "2026-10-14T03:40:00.826Z",
+  "covers": [
+    "hv-8ddd",
+    "hv-96xy",
+    "hv-jln7",
+    "hv-t55j",
+    "hv-umm2.150",
+    "hv-umm2.232",
+    "hv-umm2.233",
+    "hv-umm2.235",
+    "hv-umm2.264",
+    "hv-umm2.514",
+    "hv-umm2.583",
+    "hv-umm2.588",
+    "hv-umm2.649",
+    "hv-umm2.650",
+    "hv-umm2.651",
+    "hv-umm2.652",
+    "hv-umm2.653",
+    "hv-umm2.654",
+    "hv-umm2.655",
+    "hv-umm2.656",
+    "hv-umm2.657",
+    "hv-umm2.658",
+    "hv-umm2.668",
+    "hv-umm2.97",
+    "hv-wmtb",
+    "hv-z9d1"
+  ],
+  "dispatch": {
+    "at": "2026-10-14T03:42:48.225Z",
+    "callId": "call_0cba3f7391124d5d9ef22a9ead5c36f9",
+    "name": "spawn_agent",
+    "agent": "/root/retro672",
+    "samplingStart": "UNKNOWN",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-retro672-phase5",
+    "base": "406d79b7beebf5f37e4177e92cfaf99fe6a9f5b3",
+    "mode": "freshreadonlySage26recordaudit",
+    "censusFrozenAt": "2026-10-14T03:40:00.826Z"
+  },
+  "auditInputCount": 55,
+  "inputCustody": "artifacts/qa/hv-umm2.672/audit/audit-input-freeze.json",
+  "nativeCandidatePopulation": {
+    "rows": 36,
+    "promoted": 26,
+    "conflicted": 7,
+    "canceled": 3,
+    "gateElapsedMedianS": 106.511,
+    "gateElapsedRangeS": [
+      17.238,
+      132.835
+    ],
+    "gateStepSumMedianS": 106.3545,
+    "gateStepSumRangeS": [
+      17.161,
+      132.721
+    ],
+    "frozenInputsMatched": 55,
+    "covered": 26
+  },
+  "releaseObserved": {
+    "n": 17,
+    "medianS": 292.416,
+    "rangeS": [
+      267.75,
+      344.436
+    ]
+  },
+  "releaseQualification": "17 observed passing runs; bounded500events, source/load/partial-history qualifiers retained",
+  "reviewFinding": {
+    "key": "normal-review-read-grants/phase-5",
+    "filed": "hv-umm2.673",
+    "verifiedWitnesses": [
+      "hv-umm2.232",
+      "hv-umm2.658"
+    ],
+    "noControlledSpeedClaim": true
+  },
+  "reviewRouting": "Normal Claude Opus5.5 after01Z; historical authorizedSol beforedeadline valid; limited requiredread reports do not satisfy fullreview",
+  "sourceQualifications": {
+    "selectorFullAndBrowser": "731c805479f9cf759ff5a460f1512d3a47acb7d8",
+    "selectorWeightedFuzz": "6a231b164c22b8141cdbe541e54a23d6f84490ad",
+    "selectorFinalFocusedReview": "59d0c3a965822cc52023db822327372f79f331a9",
+    "formatterQA": "four synthetic public browser module cases, no authored payment/gameflow claim"
+  },
+  "noNewTriggerDisposition": true,
+  "noBudgetRevision": true,
+  "validation": {
+    "review": {
+      "start": "2026-10-14T03:58:31.136542+00:00",
+      "end": "2026-10-14T03:58:31.500027+00:00",
+      "seconds": 0.3635120839753654,
+      "pid": 37339,
+      "pgid": 37339,
+      "exit": 0
+    },
+    "knip": {
+      "name": "knip",
+      "start": "2026-10-14T03:56:29.608148+00:00",
+      "end": "2026-10-14T03:56:35.792694+00:00",
+      "seconds": 6.184357709018514,
+      "startingLoad": [
+        17.09130859375,
+        15.7900390625,
+        13.9970703125
+      ],
+      "pid": 28322,
+      "pgid": 28322,
+      "exit": 0
+    },
+    "initialReview": {
+      "name": "review",
+      "start": "2026-10-14T03:56:29.608132+00:00",
+      "end": "2026-10-14T03:56:29.974431+00:00",
+      "seconds": 0.3661886250192765,
+      "startingLoad": [
+        17.09130859375,
+        15.7900390625,
+        13.9970703125
+      ],
+      "pid": 28323,
+      "pgid": 28323,
+      "exit": 0
+    }
+  },
+  "resourceLedger": {
+    "install": {
+      "start": "2026-10-14T03:39:04.916548+00:00",
+      "end": "2026-10-14T03:39:07.800284+00:00",
+      "seconds": 2.8837367920204997,
+      "pid": 2543,
+      "pgid": 2543,
+      "exit": 0
+    },
+    "auditor": "terminal; readonlyscratchonly/no tests/providers/browser/CLIreview or repo/native mutations",
+    "checkGroups": [
+      28323,
+      28322,
+      37339
+    ]
+  },
+  "ledgerBaseSha256": "1e1d93b900414c1a65db0c554fec508423df8cf6ca98a7ad42cf7f253a1a03ce",
+  "ledgerOwnAppend": {
+    "retrospective": "2026-10-13",
+    "phase": 5,
+    "bead": "hv-umm2.672",
+    "covers": [
+      "hv-8ddd",
+      "hv-96xy",
+      "hv-jln7",
+      "hv-t55j",
+      "hv-umm2.150",
+      "hv-umm2.232",
+      "hv-umm2.233",
+      "hv-umm2.235",
+      "hv-umm2.264",
+      "hv-umm2.514",
+      "hv-umm2.583",
+      "hv-umm2.588",
+      "hv-umm2.649",
+      "hv-umm2.650",
+      "hv-umm2.651",
+      "hv-umm2.652",
+      "hv-umm2.653",
+      "hv-umm2.654",
+      "hv-umm2.655",
+      "hv-umm2.656",
+      "hv-umm2.657",
+      "hv-umm2.658",
+      "hv-umm2.668",
+      "hv-umm2.97",
+      "hv-wmtb",
+      "hv-z9d1"
+    ]
+  },
+  "windowIncludes": [
+    "read-onlysageaudit",
+    "parentnativeproofcollection",
+    "findingverification/dedupedfiling",
+    "evidencewriting/validation",
+    "ACK/clock/commit handling"
+  ],
+  "preAuditSetup": "nativeclaim/worktree/install/census/inputcollection separatelyretained; actualhelperdispatch anchors implementWindow",
+  "implementWindow": {
+    "start": "2026-10-14T03:42:48.225Z",
+    "end": "2026-10-14T03:59:28.919719+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "actualfirst npm run review friction-records step at2026-10-14T03:58:31.381Z",
+        "value": 8.7802734375
+      }
+    }
+  },
+  "commitCutoffAt": "2026-10-14T03:59:28.919719+00:00"
+}
