@@ -1167,6 +1167,13 @@ analog:
    gain or loss naming a card outside play (`rules/battle/fold.ts`).
    Disabled triggers are floating records that the trigger matcher reads.
 4. **Base-spark setting:** "base ✦ becomes 7" (`baseSpark`).
+   Views retain each resolved numeric setting with its effect identity,
+   controller, timestamp and original expiry when its target and any
+   source-dependent expiry identity are visible (`keptWithoutSource`). An
+   unseen causal source is redacted, and determinization reconstructs the
+   same scalar. The `effectStarted` projection also keeps unidentifiable
+   source-dependent expiry identities private. Permanent observations use
+   the fixed remembered-effect model.
 5. **Spark modifications:** permanent gained spark (`status.gainedSpark`),
    spark with a duration, anthems, Support, and per-figment shares (`spark`).
    The result is clamped at 0; the modifications themselves are not.

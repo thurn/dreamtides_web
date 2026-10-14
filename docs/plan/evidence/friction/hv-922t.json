@@ -1,0 +1,21 @@
+{
+  "bead": "hv-922t",
+  "phase": 5,
+  "implementMin": 2.5316164333333333,
+  "implementWindow": {
+    "start": "2026-10-14T05:21:55.496144+00:00",
+    "end": "2026-10-14T05:24:27.393130+00:00"
+  },
+  "localValidationS": {
+    "review": 0.3511611249996349,
+    "knip": 6.447372541995719,
+    "schema": 0.0796742090024054
+  },
+  "hostLoad": 19.7,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
