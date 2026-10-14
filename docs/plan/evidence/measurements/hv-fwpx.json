@@ -1,0 +1,356 @@
+{
+  "bead": "hv-fwpx",
+  "base": "837bf2b9e53f811f2dbd9c939d6c9cf14f225416",
+  "clock": {
+    "start": "2026-10-14T14:50:50.048724+00:00",
+    "preCommitEvidenceBoundary": "2026-10-14T15:04:31.513226+00:00",
+    "inclusiveElapsedMin": 13.691075033333334,
+    "qualification": "Conservative parent pre-spawn bound includes research, coordination waits, validation, evidence and final Git. Exact helper sampling/productive editing time unknown. External finalizer receipt covers final checks and actual commit; tracked endpoint is final evidence write, with no postcommit tracked rewrite."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-1 command starting one-minute host load"
+      }
+    }
+  },
+  "scope": {
+    "nonTestSourceLines": 2,
+    "testFilesDelta": 0,
+    "testLinesDelta": 104,
+    "finalTestModuleLines": 374,
+    "productionUUIDs": [],
+    "fallout": [],
+    "sourceFirstProof": "/tmp/root-fwpx/source-first-proof.json",
+    "sourceAdmission": "/tmp/root-fwpx/source-admission-native.json",
+    "otherSolverBodies": "Read-only; all 4883 initial source paths matched before native WRITE ACK."
+  },
+  "causalRegression": {
+    "originalSolverEpoch": "original-solver-red",
+    "expectedExitCode": 1,
+    "results": {
+      "existingPassed": 30,
+      "newPassed": 2,
+      "newFailed": 14,
+      "directFailures": 8,
+      "preflightFixtureFailed": 6
+    },
+    "qualification": "Both composed count-1 preflights passed using the resource staged for optional reveal. Direct cases require independently payable composed resources. Tests precede the sole missing-case source change; original solver hash and command before/after manifests are retained. No additional production mutant."
+  },
+  "testDevelopmentFailure": {
+    "epoch": "missing-case-green",
+    "exitCode": 1,
+    "failed": 4,
+    "passed": 42,
+    "cause": "Own count-2 zone-array assertion assumed payment event order equals top-first Banished storage order. Corrected only new test to exact physical membership/cardinality; exact ordered payment-event assertions retained."
+  },
+  "validation": {
+    "publicFixtures": {
+      "epoch": "public-fixtures-green",
+      "files": 4,
+      "tests": 109,
+      "status": "pass",
+      "actualSyntheticPreflightCells": 8,
+      "optionalDefaultOutcomeAsserted": false
+    },
+    "review": {
+      "epoch": "review-1",
+      "status": "pass",
+      "relatedFiles": 23,
+      "relatedTests": 4081
+    },
+    "knip": "pass",
+    "sourceEpochQualification": {
+      "soleEditAfterFocused": "      expect(played.state.sides[side].banished).toHaveLength(count);",
+      "focusedSHA256": "b725d8d6372b10852740451191377619d04c8d0a26f69c53c01b80de0adddf15",
+      "reconstructedFocusedSHA256": "b725d8d6372b10852740451191377619d04c8d0a26f69c53c01b80de0adddf15",
+      "finalSHA256": "de2722e62353f9ace736012f554087fb4823e419f027c2b81d07672ed08a9c80",
+      "reviewBeforeSHA256": "de2722e62353f9ace736012f554087fb4823e419f027c2b81d07672ed08a9c80",
+      "reviewCacheMtime": "2026-10-14T14:58:27.944758+00:00",
+      "reviewCacheSHA256": "22294c5ab0cc96d10f0d75eabcb2709855989cba747a211b0c60af637324d1f1",
+      "review23Files": [
+        "shared:src/engine/testing/lab-cost-staging.test.ts",
+        "shared:src/engine/testing/tooling-card-lab.test.ts",
+        "shared:src/engine/testing/tooling-card-lab-script.test.ts",
+        "shared:src/engine/testing/lab-preflight.test.ts",
+        "isolated:src/App.test.tsx",
+        "isolated:src/components/app-shell.test.tsx",
+        "isolated:src/components/BattleSiteRoute.test.tsx",
+        "isolated:src/components/ScreenRouter-sites.test.tsx",
+        "isolated:src/components/ScreenRouter.test.tsx",
+        "shared:src/engine/policy/policy.test.ts",
+        "shared:src/runtime/qa-scenes-battle.test.ts",
+        "shared:src/screens/cumulus_adapters/engine-battle-view-model.test.ts",
+        "shared:src/engine/rules/costs-discard-hand.test.ts",
+        "shared:src/engine/policy/policy-worker.test.ts",
+        "shared:src/battle/engine-ai/engine-ai-driver.test.ts",
+        "shared:src/runtime/qa-scenes-karev.test.ts",
+        "shared:src/engine/testing/tooling.test.ts",
+        "shared:scripts/tournament/contracts.test.ts",
+        "shared:src/runtime/qa-scenes-sites.test.ts",
+        "shared:src/runtime/qa-scenes-atlas.test.ts",
+        "shared:src/runtime/qa-scenes-dreamsign.test.ts",
+        "shared:src/runtime/qa-scenes.test.ts",
+        "shared:src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "requiredFourIncluded": true
+    }
+  },
+  "processes": {
+    "workers": 2,
+    "heavy": false,
+    "browser": false,
+    "server": false,
+    "provider": false,
+    "qaPortBound": null,
+    "allRecordedChildrenReaped": true,
+    "allRecordedProcessGroupsAbsent": true
+  },
+  "acceptanceOwnership": "hv-umm2.127 retains its original five UUID/base-amplified/weighted-300/preflight/sweep/UI/full acceptance after this cause fix lands. These synthetic checks claim only hv-fwpx acceptance.",
+  "commands": [
+    {
+      "epoch": "knip-1",
+      "started": "2026-10-14T14:58:34.452098+00:00",
+      "pid": 16342,
+      "pgid": 16342,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-banish-fixture-fwpx",
+      "hostLoad": [
+        17.931640625,
+        16.5302734375,
+        14.44580078125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:58:38.822398+00:00",
+      "elapsedSeconds": 4.370127333007986,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4886,
+      "beforeSHA256": "e6abcd915a63b805f987860058321266308a654aaa2b6d5294634a742819c301",
+      "afterSHA256": "e6abcd915a63b805f987860058321266308a654aaa2b6d5294634a742819c301",
+      "collectorBeforeSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "collectorAfterSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "stdoutSHA256": "99c4184117b665e2f275217978a72b7046b7347181d6da7fd09faeea75293363",
+      "stderrSHA256": "e404f4f899037368afe2b984483e8e92e5d0addd03a6e6b09ed901cd20f295e7",
+      "receiptSHA256": "c7b7fb6b3dc337f95ff077ce989f14d87ad76942e8fca3e6b33e99f83d95d16d"
+    },
+    {
+      "epoch": "missing-case-green",
+      "started": "2026-10-14T14:56:06.304657+00:00",
+      "pid": 47144,
+      "pgid": 47144,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-banish-fixture-fwpx",
+      "hostLoad": [
+        7.8486328125,
+        13.87646484375,
+        13.248046875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:56:11.478952+00:00",
+      "elapsedSeconds": 5.1740817920072,
+      "exitCode": 1,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4883,
+      "beforeSHA256": "1c3de62c79ed532dc909a48c5717eb401219283a53dbdb6890e9036d75784934",
+      "afterSHA256": "1c3de62c79ed532dc909a48c5717eb401219283a53dbdb6890e9036d75784934",
+      "collectorBeforeSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "collectorAfterSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "stdoutSHA256": "842f6e462839d072aa307deb0ec8851166e2670d51859efd03ae7a6ab9e2144a",
+      "stderrSHA256": "19f39ec831b6680117ced4d13490fb176953d3cc66e3ce535bd35655d3a3bb5a",
+      "receiptSHA256": "4fa1cd00868cef2037661077150e7c74939d5e7dbf3c6013661b0130c35a98cf"
+    },
+    {
+      "epoch": "original-solver-red",
+      "started": "2026-10-14T14:55:46.368802+00:00",
+      "pid": 45725,
+      "pgid": 45725,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-banish-fixture-fwpx",
+      "hostLoad": [
+        7.9990234375,
+        14.3193359375,
+        13.3857421875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:55:51.075516+00:00",
+      "elapsedSeconds": 4.7065291670151055,
+      "exitCode": 1,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4883,
+      "beforeSHA256": "d2685393274e9fb6d9fd1d0abfcd1f29d786c4fed19dcf76ee74a2460d91069a",
+      "afterSHA256": "d2685393274e9fb6d9fd1d0abfcd1f29d786c4fed19dcf76ee74a2460d91069a",
+      "collectorBeforeSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "collectorAfterSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "stdoutSHA256": "6505305158e9be86e4331b2d2163997fa4280bac9cb120d919eab32ee0e2ab28",
+      "stderrSHA256": "de3b03563aecf4b93f1d5d82dee008bd023fb4a6ed809769b3bb393751667050",
+      "receiptSHA256": "16fcb8ed6431a1bf4380f37cbd6e2d2c9642a67548282c910953356c06bc2a75"
+    },
+    {
+      "epoch": "public-fixtures-green",
+      "started": "2026-10-14T14:56:43.127231+00:00",
+      "pid": 50006,
+      "pgid": 50006,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-cost-staging.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/testing/tooling-card-lab-script.test.ts",
+        "src/engine/testing/lab-preflight.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-banish-fixture-fwpx",
+      "hostLoad": [
+        9.9443359375,
+        13.68017578125,
+        13.197265625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:56:48.748031+00:00",
+      "elapsedSeconds": 5.6205448750115465,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4883,
+      "beforeSHA256": "54d07bcfeaa16c64fc1006801576be062e2f2917626104f70316d1025ce67b98",
+      "afterSHA256": "54d07bcfeaa16c64fc1006801576be062e2f2917626104f70316d1025ce67b98",
+      "collectorBeforeSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "collectorAfterSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "stdoutSHA256": "08708aa7036cabcabb33a4b4736d2381b0515e2bfe77b8a2159e38dc48319b03",
+      "stderrSHA256": "e404f4f899037368afe2b984483e8e92e5d0addd03a6e6b09ed901cd20f295e7",
+      "receiptSHA256": "fad56a6cd28c33c3a943ae4e7ae4ee0c32cd33afef4d18ad9ed93066b7f631c1"
+    },
+    {
+      "epoch": "review-1",
+      "started": "2026-10-14T14:57:55.161261+00:00",
+      "pid": 13489,
+      "pgid": 13489,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-banish-fixture-fwpx",
+      "hostLoad": [
+        19.10205078125,
+        16.3330078125,
+        14.28076171875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:58:29.193714+00:00",
+      "elapsedSeconds": 34.03198650002014,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4886,
+      "beforeSHA256": "e6abcd915a63b805f987860058321266308a654aaa2b6d5294634a742819c301",
+      "afterSHA256": "e6abcd915a63b805f987860058321266308a654aaa2b6d5294634a742819c301",
+      "collectorBeforeSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "collectorAfterSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "stdoutSHA256": "c13b162ab578707d73aba11d4f188e9a9a7d5dc22fd79346e3acd699646db102",
+      "stderrSHA256": "e404f4f899037368afe2b984483e8e92e5d0addd03a6e6b09ed901cd20f295e7",
+      "receiptSHA256": "480c2f8405bb8dbc006996c2d4e62a4c93fc3806836e6acd9b1a925e11c51ef7"
+    },
+    {
+      "epoch": "schema-1",
+      "started": "2026-10-14T14:59:10.886041+00:00",
+      "pid": 19222,
+      "pgid": 19222,
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-banish-fixture-fwpx",
+      "hostLoad": [
+        18.31396484375,
+        16.51513671875,
+        14.5185546875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:59:11.017770+00:00",
+      "elapsedSeconds": 0.1315688340109773,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4886,
+      "beforeSHA256": "55784bee8400bc1067ceb5671086f53d3d9e858ec06e9ad91224e9f2df868365",
+      "afterSHA256": "55784bee8400bc1067ceb5671086f53d3d9e858ec06e9ad91224e9f2df868365",
+      "collectorBeforeSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "collectorAfterSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "stdoutSHA256": "0570e0b277042f5c5be6d1b04f5588a98015db27cd5ea57098198207a51230b0",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiptSHA256": "d5c99bbabb35f2330b41d8e00f1961da5fa3478e42a54c58f3e8e03fdf879b70"
+    },
+    {
+      "epoch": "whitespace-1",
+      "started": "2026-10-14T14:59:51.211720+00:00",
+      "pid": 9217,
+      "pgid": 9217,
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-banish-fixture-fwpx",
+      "hostLoad": [
+        19.05126953125,
+        17.046875,
+        14.81103515625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:59:51.230349+00:00",
+      "elapsedSeconds": 0.01845354199758731,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4886,
+      "beforeSHA256": "55784bee8400bc1067ceb5671086f53d3d9e858ec06e9ad91224e9f2df868365",
+      "afterSHA256": "55784bee8400bc1067ceb5671086f53d3d9e858ec06e9ad91224e9f2df868365",
+      "collectorBeforeSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "collectorAfterSHA256": "99cf8e70fe27e1a7481bc0cbafed6b4bc2dd93f134478b04dd97e2cd03cf3712",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiptSHA256": "97fa28538b37074c1167b3a39e123b28e0131ffec32c25211ae39ef6187c331f"
+    }
+  ]
+}

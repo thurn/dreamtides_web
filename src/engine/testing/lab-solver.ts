@@ -353,6 +353,8 @@ function costNeeds(costs: readonly Cost[]): CostNeeds {
         return { ...empty, voidCards: Array.from({ length: cost.count === "x" ? cost.min : cost.count }, () => ({ player: "you" as const, filter: cost.filter })) };
       case "banishFromAnyVoid":
         return { ...empty, voidCards: Array.from({ length: cost.count }, () => ({ player: cost.player, filter: cost.filter })) };
+      case "banishFromHand":
+        return { ...empty, handCards: Array.from({ length: cost.count }, () => ({})) };
       case "return":
         return { ...empty, characters: Array.from({ length: cost.count }, () => cost.selector) };
       case "abandon": {

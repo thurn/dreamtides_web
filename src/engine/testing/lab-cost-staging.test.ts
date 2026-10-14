@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
 import { abandonCost, abandonXCost, activated, additionalCost, banishFromVoidCost, choiceCost, discardCostFilter, discardHandCost, event, optionalCost, pointsCost, revealCost, target, enemyCharacter, energy, x } from "../dsl/builders";
 import type { AdditionalCost } from "../dsl/types";
+import type { EngineEvent } from "../events";
 import { createEngine } from "../engine";
 import { dissolve, gainPoints, sequence } from "../effects/primitives";
 import type { InstanceId } from "../state/ids";
@@ -12,6 +13,7 @@ import { DSL } from "./dsl-cards";
 import { cloneState } from "../state/clone";
 import { boardState } from "./board";
 import { labBoard } from "./lab-solver";
+import { runCardLabPreflight } from "./lab-preflight";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 import { CHOSEN_HAND_BANISH_CARDS, HAND_BANISH } from "./chosen-hand-banish-cards";
 
@@ -28,8 +30,110 @@ function source(index: number, costs: readonly AdditionalCost[], targeting = fal
   };
 }
 
+const handBanishCases = [
+  { count: 1, composed: false }, { count: 2, composed: false },
+  { count: 1, composed: true }, { count: 2, composed: true },
+];
+function handBanishSource(count: number, composed: boolean): EngineCardDefinition {
+  const costs: AdditionalCost[] = [
+    ...(composed ? [discardCostFilter({ cardType: "event" })] : []),
+    { cost: "banishFromHand", count },
+    ...(composed ? [optionalCost(revealCost(1))] : []),
+  ];
+  return { ...SYNTHETIC.vanilla1, id: syntheticId(0x51220 + count + (composed ? 10 : 0)), status: "authored", abilities: () => [additionalCost(...costs)] };
+}
+
 for (const side of ["player", "enemy"] as const) {
   describe(`additional-cost lab staging as ${side}`, () => {
+    it.each(handBanishCases)("stages and pays $count hand banishes with composition=$composed", ({ count, composed }) => {
+      const card = handBanishSource(count, composed);
+      const engine = createEngine(testCatalog([mage, card]));
+      const solved = labBoard(engine, card.id, pool, side);
+      const state = boardState(engine.catalog, solved.setup).state;
+      const original = cloneState(state);
+      const before = state.sides[side].hand;
+      const sourceId = before[0];
+      expect(before).toHaveLength(1 + count + (composed ? 2 : 0));
+      expect(new Set(before).size).toBe(before.length);
+      expect(state.instances[sourceId].printing).toMatchObject({ kind: "card", cardId: card.id });
+      for (const id of before) expect(state.instances[id]).toMatchObject({ owner: side, controller: side, zone: "hand" });
+      let discarded: readonly InstanceId[] = [];
+      let banished: readonly InstanceId[] = [];
+      let revealed: readonly InstanceId[] = [];
+      let sourceOnStack = false;
+      const played = engine.apply({ ...state, config: { ...state.config, autoAnswerForcedPrompts: false } }, side, { kind: "play", card: sourceId, from: "hand" }, {
+        answer(prompt) {
+          if (prompt.kind === "confirm") return true;
+          if (prompt.kind !== "chooseCards") throw new Error(`Unexpected ${prompt.kind}`);
+          expect(prompt.candidates).not.toContain(sourceId);
+          const selected = prompt.candidates.slice(0, prompt.min);
+          if (prompt.purpose.role === "discardCost") discarded = selected;
+          else if (prompt.purpose.role === "offeringCost") {
+            expect(prompt.candidates).toEqual(before.filter(id => id !== sourceId && !discarded.includes(id)));
+            expect([prompt.min, prompt.max]).toEqual([count, count]);
+            banished = selected;
+          } else if (prompt.purpose.role === "revealCost") revealed = selected;
+          else throw new Error(`Unexpected cost role ${prompt.purpose.role}`);
+          return selected;
+        },
+      }, (next, step) => {
+        if (step.kind !== "play") return;
+        expect(next.stack.some(item => item.kind === "card" && item.instance === sourceId)).toBe(true);
+        expect(next.instances[sourceId].zone).toBe("stack");
+        for (const id of banished) expect(next.instances[id].zone).toBe("banished");
+        sourceOnStack = true;
+      });
+      expect(sourceOnStack).toBe(true);
+      expect(banished).toHaveLength(count);
+      expect(discarded).toHaveLength(composed ? 1 : 0);
+      expect(revealed).toHaveLength(composed ? 1 : 0);
+      expect(new Set([...discarded, ...banished, ...revealed]).size).toBe(before.length - 1);
+      const payments = played.events.flatMap<{ kind: string; ids: readonly InstanceId[] }>(event => event.kind === "discarded" || event.kind === "banished" ? [{ kind: event.kind, ids: [event.instance] }] : event.kind === "revealed" ? [{ kind: event.kind, ids: event.instances }] : []);
+      expect(payments).toEqual([
+        ...discarded.map(id => ({ kind: "discarded", ids: [id] })),
+        ...banished.map(id => ({ kind: "banished", ids: [id] })),
+        ...(composed ? [{ kind: "revealed", ids: revealed }] : []),
+      ]);
+      const playIndex = played.events.findIndex(event => event.kind === "cardPlayed" && event.instance === sourceId);
+      expect(playIndex).toBeGreaterThan(-1);
+      expect(played.events.slice(playIndex + 1).some(event => event.kind === "discarded" || event.kind === "banished" || event.kind === "revealed")).toBe(false);
+      expect(played.events).toContainEqual({ kind: "resolved", instance: sourceId });
+      expect(played.events).toContainEqual(expect.objectContaining({ kind: "materialized", instance: sourceId, side }));
+      expect(played.state.instances[sourceId].zone).toBe("play");
+      expect(played.state.sides[side].banished).toHaveLength(count);
+      expect(new Set(played.state.sides[side].banished)).toEqual(new Set(banished));
+      expect(played.state.sides[side].void).toEqual(discarded);
+      expect(played.state.sides[side].hand).toEqual(revealed);
+      expect(invariantViolations(played.state, engine.catalog)).toEqual([]);
+      expect(state).toEqual(original);
+
+      const events: EngineEvent[] = [];
+      const lab = cardLabBattle(engine, { entry: { cardId: card.id }, side, variant: "base" }, pool, published => events.push(...published));
+      const scripted = events.find(event => event.kind === "cardPlayed" && event.side === side);
+      const labSource = scripted?.kind === "cardPlayed" ? scripted.instance : lab.slice.committed.sides[side].hand[0];
+      expect(lab.slice.committed.instances[labSource].printing).toMatchObject({ kind: "card", cardId: card.id });
+      expect(lab.slice.committed.instances[labSource].zone).not.toBe("banished");
+      expect(events.filter(event => event.kind === "banished").map(event => event.instance)).not.toContain(labSource);
+      expect(invariantViolations(lab.slice.committed, engine.catalog)).toEqual([]);
+    });
+
+    it.each(handBanishCases)("preflights $count mandatory hand banishes with composition=$composed", ({ count, composed }) => {
+      const card = handBanishSource(count, composed);
+      const engine = createEngine(testCatalog([mage, card]));
+      const result = runCardLabPreflight(engine, { entry: { cardId: card.id }, side, variant: "base" }, pool);
+      expect(result).toMatchObject({ uuid: card.id, side, verdict: "pass", reason: null, resolved: true, zone: "play" });
+      expect(result.instance).not.toBeNull();
+      const payments = result.events.filter(event => event.kind === "banished" || event.kind === "discarded");
+      expect(payments.map(event => event.kind)).toEqual([...(composed ? ["discarded"] : []), ...Array.from({ length: count }, () => "banished")]);
+      expect(new Set(payments.map(event => event.instance)).size).toBe(count + (composed ? 1 : 0));
+      expect(payments.map(event => event.instance)).not.toContain(result.instance);
+      const playIndex = result.events.findIndex(event => event.kind === "cardPlayed" && event.instance === result.instance && event.side === side);
+      expect(playIndex).toBeGreaterThan(-1);
+      expect(result.events.slice(playIndex + 1).some(event => event.kind === "banished" || event.kind === "discarded")).toBe(false);
+      expect(result.events).toContainEqual({ kind: "resolved", instance: result.instance });
+      expect(result.events).toContainEqual(expect.objectContaining({ kind: "materialized", instance: result.instance, side }));
+    });
+
     for (const card of [DSL.optionalEnergyTarget, DSL.optionalDiscardTarget]) it(`stages both payment-dependent target restrictions for ${card.id}`, () => {
       const engine = createEngine(testCatalog([card]));
       const candidates = [SYNTHETIC.vanilla5, SYNTHETIC.vanilla1, SYNTHETIC.event0];
