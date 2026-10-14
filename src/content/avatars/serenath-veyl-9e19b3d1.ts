@@ -1,3 +1,5 @@
+import { activated, energy, exhaustSelf, materializedThisTurn, thisTurn } from "../../engine/dsl/builders";
+import { draw, ifThen } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -57,5 +59,6 @@ export default avatar({
       "7343b376-88d2-45fe-8b5e-79763480ee7e",
     ],
   },
-  pending: true,
+  abilities: () => [activated([energy(1), exhaustSelf()], ifThen(thisTurn(materializedThisTurn("you", true)), draw(1)))],
+  verifiedText: "2dy72yo1jw8",
 });

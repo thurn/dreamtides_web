@@ -1,3 +1,5 @@
+import { activated, characterYouControl, energy, exhaustSelf, target } from "../../engine/dsl/builders";
+import { modifyCardCost, returnToHand } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -42,5 +44,6 @@ export default avatar({
     "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
     "eed92573-8052-494c-adae-9838de5375a1",
   ],
-  pending: true,
+  abilities: () => [activated([energy(2), exhaustSelf()], modifyCardCost(returnToHand(target(characterYouControl())), { reduce: 1 }))],
+  verifiedText: "18uwcn9a5fu",
 });

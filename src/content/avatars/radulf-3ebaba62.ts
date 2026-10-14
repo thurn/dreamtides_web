@@ -1,3 +1,5 @@
+import { characterYouControl, controls, staticAbility } from "../../engine/dsl/builders";
+import { costModifierNth } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -42,5 +44,6 @@ export default avatar({
     "de946f5a-1e27-4d40-ae44-9ef8cc041949",
     "33cf7dca-d8d2-42b7-854a-b3f503b03488",
   ],
-  pending: true,
+  abilities: () => [staticAbility(costModifierNth("you", { cardType: "character" }, 1, { reduce: 1 }), { while: controls(characterYouControl(), 3) })],
+  verifiedText: "21s753u7w3x",
 });

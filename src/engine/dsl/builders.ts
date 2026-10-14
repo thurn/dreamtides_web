@@ -593,6 +593,8 @@ export function scoredAmount(): ValueExpr {
 export function playedThisTurn(player: PlayerRef = "you"): CurrentTurnCountValue { return { value: "playedThisTurn", player }; }
 /** Plays captured as characters, even after later type changes or cessation. */
 export function charactersPlayedThisTurn(player: PlayerRef = "you"): CurrentTurnCountValue { return { value: "charactersPlayedThisTurn", player }; }
+/** Plays captured as events, even after later type changes or cessation; copies are not plays. */
+export function eventsPlayedThisTurn(player: PlayerRef = "you"): CurrentTurnCountValue { return { value: "eventsPlayedThisTurn", player }; }
 /** Actual completed discards, including payments and created-card cessation. */
 export function discardedThisTurn(player: PlayerRef = "you"): CurrentTurnCountValue { return { value: "discardedThisTurn", player }; }
 /** Characters that left play, by their controller and type immediately before departure. */

@@ -1,3 +1,5 @@
+import { activated, energy, eventsPlayedThisTurn, exhaustSelf, thisTurn } from "../../engine/dsl/builders";
+import { drawMatching, ifThen } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -40,5 +42,6 @@ export default avatar({
     "006e2f95-59a2-4cda-a777-e64f4aa31060",
     "18979c10-39b8-42fb-ac1d-dd784da498d1",
   ],
-  pending: true,
+  abilities: () => [activated([energy(2), exhaustSelf()], ifThen(thisTurn(eventsPlayedThisTurn()), drawMatching({ cardType: "event" })))],
+  verifiedText: "ey8qlocyqh",
 });

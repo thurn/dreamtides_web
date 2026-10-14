@@ -1,0 +1,484 @@
+{
+  "bead": "hv-umm2.225",
+  "base": "14e1625fd28436b6ffb07a7260e616eb1ea899bf",
+  "sourceFiles": {
+    "src/content/avatars/yveth-coravel-fe2510d9.ts": "7eaaf87008a90eceb74a4c490299c12c29d79a4912ebe0f12a771dd010235c90",
+    "src/content/avatars/radulf-3ebaba62.ts": "ffa886404b5424aad7f5c7cd2f09fefb2d26f548c4a91bed7921b9a54191b422",
+    "src/content/avatars/serenath-veyl-9e19b3d1.ts": "0ee75d6ef6bf644c407ed49de22e422a72671b12a406ca250ab91e34fdae2570",
+    "src/content/avatars/ovanel-f6208407.ts": "4c809d6a160f0b4a8b26123cde2ac3fb69599052a98c94dbe21590a217b9e911",
+    "src/engine/dsl/types.ts": "ca5985242f39c9ebfada259b653855bbb0f6aa28bae43d4f715bbfd5b6848d1d",
+    "src/engine/dsl/builders.ts": "1a62d0b5efae70f6a32f48d42454f410e55818f290753eda976335b04b9579ff",
+    "src/engine/dsl/values.ts": "69fc617eeb49d107a20dc2a19754357b2e7e2e73c68b48a986658a0e8cfd8e7a",
+    "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "016cd4b7fc841517ff787298660994e832082588d570c685935a525936414353",
+    "src/content/specs/avatars-05.scenarios.ts": "79c122f406956f3f75d5e8bd6ee3d689e5a4328e9a244a35748456e984d21e11"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "measuredFor": "Claim-inclusive ownership envelope through pre-commit evidence cutoff; includes setup/report before helper dispatch. Exact dispatch instant unrecorded; actual Git tail recorded externally."
+      },
+      "implementMin": {
+        "measuredFor": "Elapsed claim-inclusive envelope, not CPU or productive editing time."
+      },
+      "localValidationS.fuzz": {
+        "measuredFor": "Outer locked all-four weighted300 command, including acquisition/startup; driver wall/CPU recorded separately."
+      },
+      "testDelta.lines": {
+        "measuredFor": "Owning plain contract net lines plus private scenario module; zero new .test entrypoints/jsdom files."
+      },
+      "friction.minutes": {
+        "measuredFor": "First workflow invocation start to final mobile qualification end, including successful work/turns; incremental cost not separately measured."
+      }
+    }
+  },
+  "evidenceCutoff": "2026-10-14T22:21:37.554711+00:00",
+  "sourceManifests": {
+    "epoch-1": "ad80c73e098a517dad6f21d09d85d3da5223422d76e6d209346101279b3c2657",
+    "epoch-2": "9869bb0500026a5aca26bf26b4bc62dbfd83ccd907698e8b6e930f1ecabe4236",
+    "epoch-3": "425b3163994823ac78106ecc7b60d9d6f871cd384a01b4d308ccadd122263803",
+    "epoch-4": "7297217b3d5f3e8fc39c20999fc6ec9983d45022e2daf84dabdea667e99fa1cf",
+    "epoch-5": "90b99b9457af25f8c701def70bcd718ca96077e1cc2d07930c5ccc55a4936226",
+    "epoch-6": "6936c375e895a300459932f3a82154e09861199ea2fd2a934dfdf33d5126ba61",
+    "epoch-7": "4c00e9cca12cb46e237e7acb04b1e945bb9f824c78a2f307efd779a3bc7889ca"
+  },
+  "commands": [
+    {
+      "epoch": "verified-derive-v1",
+      "seconds": 3.50685937498929,
+      "exit": 0,
+      "source": "epoch-1",
+      "stdoutSHA256": "549c1d482ec86a05c07609a4b169eb8c15439e328943af48e33ed96340265176"
+    },
+    {
+      "epoch": "scenario-focus-v1",
+      "seconds": 6.417897415987682,
+      "exit": 1,
+      "source": "epoch-2",
+      "stdoutSHA256": "4877cb5bc03f5629c043541862615924dfe7db63c99f1840ba0d175136cf750b"
+    },
+    {
+      "epoch": "scenario-focus-v2",
+      "seconds": 5.686351624986855,
+      "exit": 0,
+      "source": "epoch-3",
+      "stdoutSHA256": "e1b6abd23bc9476508a819efe3fee168fcd805a02fe96c0d94041a9f4742d910"
+    },
+    {
+      "epoch": "history-focus-v1",
+      "seconds": 7.8295593750081025,
+      "exit": 0,
+      "source": "epoch-3",
+      "stdoutSHA256": "664a5edcae0c1de568b15131dd1419f95c92141b11932f87bdf2d0dac1602c68"
+    },
+    {
+      "epoch": "history-focus-v2",
+      "seconds": 5.885092625016114,
+      "exit": 0,
+      "source": "epoch-4",
+      "stdoutSHA256": "ceff681d90038316006882161c8ef8d8a6a2bedbf198ecbd4b707f053866030d"
+    },
+    {
+      "epoch": "composition-controls-v1",
+      "seconds": 5.910254291986348,
+      "exit": 0,
+      "source": "epoch-4",
+      "stdoutSHA256": "674ef0f911c9ba3e984b9daa1f173564bd1309e75c996f8b47c40f61671ab1f5"
+    },
+    {
+      "epoch": "content-gates-v1",
+      "seconds": 4.098491874989122,
+      "exit": 0,
+      "source": "epoch-4",
+      "stdoutSHA256": "838951cfff555b9dba9e28a78546ea2d1795bd670d7603e9f9876967acfd674b"
+    },
+    {
+      "epoch": "event-count-zero-v1",
+      "seconds": 10.054568250023294,
+      "exit": 1,
+      "source": "epoch-5",
+      "stdoutSHA256": "491840811aadd3b2e11889a02a85c593cda56a9690ffe5298963cf9237c571a6"
+    },
+    {
+      "epoch": "event-count-restored-v1",
+      "seconds": 8.720060749998083,
+      "exit": 0,
+      "source": "epoch-4",
+      "stdoutSHA256": "3a94a9e838a6cb5a84793bd84706e04c1c32f9e6552cacd8b04dd5ff8bdc3e55"
+    },
+    {
+      "epoch": "review-v1",
+      "seconds": 61.80204279100872,
+      "exit": 1,
+      "source": "epoch-4",
+      "stdoutSHA256": "28cbd2caea73fe7780c8ce6a314efe7f5490d184f789948a71fc66d3a64dab4c"
+    },
+    {
+      "epoch": "review-v2",
+      "seconds": 58.57093674998032,
+      "exit": 0,
+      "source": "epoch-6",
+      "stdoutSHA256": "da6358a5b1ada17840eadf5e9d32960aac858dc32b815d66da9ea859c094f8bd"
+    },
+    {
+      "epoch": "knip-v1",
+      "seconds": 6.18231616698904,
+      "exit": 0,
+      "source": "epoch-6",
+      "stdoutSHA256": "0d0c54db10e83ef3f2f07028294d2036b4bef9913535e757fcb0dccc6e439f9c"
+    },
+    {
+      "epoch": "weighted300-v1",
+      "seconds": 356.9355634160165,
+      "exit": 0,
+      "source": "epoch-6",
+      "stdoutSHA256": "32dc47d28e04f5923ff3cd3490688e54689855b7c623ce962677c5e97b8caa20"
+    },
+    {
+      "epoch": "preflight-v1",
+      "seconds": 1.590980834007496,
+      "exit": 0,
+      "source": "epoch-6",
+      "stdoutSHA256": "37c9826c027253ac16d07dde8e9af43959436e582faa061890abcb7d6d139ff0"
+    },
+    {
+      "epoch": "qa-caller-syntax-v1",
+      "seconds": 0.04459508301806636,
+      "exit": 0,
+      "source": "epoch-6",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "epoch": "browser-sweep-v1",
+      "seconds": 28.094326958002057,
+      "exit": 0,
+      "source": "epoch-6",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "epoch": "workflow-yveth-v1",
+      "seconds": 6.006751209002687,
+      "exit": 1,
+      "source": "epoch-7",
+      "stdoutSHA256": "91ac3cf826375468c6b28d051da431af5f5e45beea64f22d8fe657530e981bb0"
+    },
+    {
+      "epoch": "qa-caller-syntax-v2",
+      "seconds": 0.04491954197874293,
+      "exit": 0,
+      "source": "epoch-7",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "epoch": "workflow-yveth-v2",
+      "seconds": 26.497155833989382,
+      "exit": 0,
+      "source": "epoch-7",
+      "stdoutSHA256": "39e84ef7634ca71e227873e7c3dc5ef11a80b5bc5ce44205d6933a0417801118"
+    },
+    {
+      "epoch": "workflow-radulf-v2",
+      "seconds": 54.598129958001664,
+      "exit": 1,
+      "source": "epoch-7",
+      "stdoutSHA256": "7f70efa0ccf2954e3f49bf7706c7b1e461cc8f382a7e24d4fc61eb6b6990388a"
+    },
+    {
+      "epoch": "qa-caller-syntax-v3",
+      "seconds": 0.04644483301672153,
+      "exit": 0,
+      "source": "epoch-7",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "epoch": "workflow-radulf-v3",
+      "seconds": 35.33219279200421,
+      "exit": 0,
+      "source": "epoch-7",
+      "stdoutSHA256": "6876be7e3acc98f5d3d965a65b08255f5ad4b8af456b68bf182113c651b2fbf9"
+    },
+    {
+      "epoch": "workflow-serenath-v3",
+      "seconds": 85.3200496659847,
+      "exit": 0,
+      "source": "epoch-7",
+      "stdoutSHA256": "b571c77d2ca1079efdd32f5304358fe45eabc5f9c159b90360daba22ce2c71ef"
+    },
+    {
+      "epoch": "workflow-ovanel-v3",
+      "seconds": 78.35486916700029,
+      "exit": 1,
+      "source": "epoch-7",
+      "stdoutSHA256": "3a60ce3d2cf4ec6ae848469a2d3506ece345a3e99f887c88b9e380b90ed26899"
+    },
+    {
+      "epoch": "qa-caller-syntax-v4",
+      "seconds": 0.046985624998342246,
+      "exit": 0,
+      "source": "epoch-7",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "epoch": "workflow-ovanel-mobile-v4",
+      "seconds": 41.565016458014725,
+      "exit": 0,
+      "source": "epoch-7",
+      "stdoutSHA256": "f1a4fc723e2848c3dfcf496cc9ec25d6efae492bf721bb231cea496de523366d"
+    }
+  ],
+  "tests": {
+    "scenarioCases": 20,
+    "historyCases": 43,
+    "existingCompositionControls": 108,
+    "contentIndexVerifiedCoverageCases": 35,
+    "reviewTests": 7966,
+    "reviewFiles": 306,
+    "newScenarioModules": 1,
+    "newTestEntrypoints": 0,
+    "contractLineDelta": 38,
+    "scenarioLines": 157
+  },
+  "faultWitness": {
+    "newCaseOnly": "eventsPlayedThisTurn evaluator returns zero",
+    "semanticFailures": 4,
+    "restoredPasses": 4,
+    "runnerSHA256": "29f780dcd1e7535d12e938e69d102443e5d1610afce52c4d9731d0237838b874",
+    "diffSHA256": "be56f7a0ae22a9111d5d20865d9774bc453daea56b21706804df13bf9648fa27",
+    "restoredFullManifestSHA256": "7297217b3d5f3e8fc39c20999fc6ec9983d45022e2daf84dabdea667e99fa1cf",
+    "qualification": "Later owning-contract cleanup deletes only an unused import; production count/witness semantics are byte-identical."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 105081,
+    "driverWallS": 317.3,
+    "driverCpuS": 338.9,
+    "outerWallS": 356.9355634160165,
+    "failures": 0,
+    "prompts": 7522,
+    "interactiveReruns": 750,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 7
+    },
+    "targets": [
+      {
+        "uuid": "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+        "included": 150,
+        "exercised": 66
+      },
+      {
+        "uuid": "3ebaba62-9000-429d-b203-2a5a9724389a",
+        "included": 150,
+        "exercised": 0
+      },
+      {
+        "uuid": "9e19b3d1-12f2-43c1-9cb1-08de7cd32e32",
+        "included": 150,
+        "exercised": 105
+      },
+      {
+        "uuid": "f6208407-c4e9-42ac-b533-346704f5e39e",
+        "included": 150,
+        "exercised": 84
+      }
+    ],
+    "exerciseScope": "Avatar instrumentation counts activation/applied trigger/copy bonus; static Radulf has zero under that counter. Real D20 and browser payments separately prove its cost effect. Outer-minus-driver is not isolated lock wait."
+  },
+  "qa": {
+    "initialization": {
+      "effective": {
+        "pass": 8,
+        "skip": 72,
+        "fail": 0,
+        "pending": 0
+      },
+      "attempts": 80,
+      "invocation": "sweep-2ShxEq",
+      "allExercisedFalse": true,
+      "browserLeaseWaitMs": 5,
+      "actualPort": 5274,
+      "source": "all four; default all variants and both actors"
+    },
+    "workflowEffectivePasses": 8,
+    "workflowFailedAttemptsRetained": 3,
+    "workflowCells": [
+      {
+        "epoch": "workflow-yveth-v1",
+        "viewport": "desktop",
+        "verdict": "fail",
+        "invocation": "run-erDIDB",
+        "rawReportSHA256": "91ac3cf826375468c6b28d051da431af5f5e45beea64f22d8fe657530e981bb0",
+        "callerVersion": 1
+      },
+      {
+        "epoch": "workflow-yveth-v2",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "invocation": "run-PNHDCv",
+        "rawReportSHA256": "39e84ef7634ca71e227873e7c3dc5ef11a80b5bc5ce44205d6933a0417801118",
+        "callerVersion": 2,
+        "uuid": "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+        "reloadExact": true,
+        "gameId": "cdkhru"
+      },
+      {
+        "epoch": "workflow-yveth-v2",
+        "viewport": "mobile",
+        "verdict": "pass",
+        "invocation": "run-PNHDCv",
+        "rawReportSHA256": "39e84ef7634ca71e227873e7c3dc5ef11a80b5bc5ce44205d6933a0417801118",
+        "callerVersion": 2,
+        "uuid": "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+        "reloadExact": true,
+        "gameId": "dbib2h"
+      },
+      {
+        "epoch": "workflow-radulf-v2",
+        "viewport": "desktop",
+        "verdict": "fail",
+        "invocation": "run-5Mk8hf",
+        "rawReportSHA256": "7f70efa0ccf2954e3f49bf7706c7b1e461cc8f382a7e24d4fc61eb6b6990388a",
+        "callerVersion": 2
+      },
+      {
+        "epoch": "workflow-radulf-v3",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "invocation": "run-Zgq8PW",
+        "rawReportSHA256": "6876be7e3acc98f5d3d965a65b08255f5ad4b8af456b68bf182113c651b2fbf9",
+        "callerVersion": 3,
+        "uuid": "3ebaba62-9000-429d-b203-2a5a9724389a",
+        "reloadExact": true,
+        "gameId": "p8fzf9"
+      },
+      {
+        "epoch": "workflow-radulf-v3",
+        "viewport": "mobile",
+        "verdict": "pass",
+        "invocation": "run-Zgq8PW",
+        "rawReportSHA256": "6876be7e3acc98f5d3d965a65b08255f5ad4b8af456b68bf182113c651b2fbf9",
+        "callerVersion": 3,
+        "uuid": "3ebaba62-9000-429d-b203-2a5a9724389a",
+        "reloadExact": true,
+        "gameId": "pdpszr"
+      },
+      {
+        "epoch": "workflow-serenath-v3",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "invocation": "run-sry8Hl",
+        "rawReportSHA256": "b571c77d2ca1079efdd32f5304358fe45eabc5f9c159b90360daba22ce2c71ef",
+        "callerVersion": 3,
+        "uuid": "9e19b3d1-12f2-43c1-9cb1-08de7cd32e32",
+        "reloadExact": true,
+        "gameId": "ymeesc"
+      },
+      {
+        "epoch": "workflow-serenath-v3",
+        "viewport": "mobile",
+        "verdict": "pass",
+        "invocation": "run-sry8Hl",
+        "rawReportSHA256": "b571c77d2ca1079efdd32f5304358fe45eabc5f9c159b90360daba22ce2c71ef",
+        "callerVersion": 3,
+        "uuid": "9e19b3d1-12f2-43c1-9cb1-08de7cd32e32",
+        "reloadExact": true,
+        "gameId": "n72zh5"
+      },
+      {
+        "epoch": "workflow-ovanel-v3",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "invocation": "run-HyyhGI",
+        "rawReportSHA256": "3a60ce3d2cf4ec6ae848469a2d3506ece345a3e99f887c88b9e380b90ed26899",
+        "callerVersion": 3,
+        "uuid": "f6208407-c4e9-42ac-b533-346704f5e39e",
+        "reloadExact": true,
+        "gameId": "p43862"
+      },
+      {
+        "epoch": "workflow-ovanel-v3",
+        "viewport": "mobile",
+        "verdict": "fail",
+        "invocation": "run-HyyhGI",
+        "rawReportSHA256": "3a60ce3d2cf4ec6ae848469a2d3506ece345a3e99f887c88b9e380b90ed26899",
+        "callerVersion": 3
+      },
+      {
+        "epoch": "workflow-ovanel-mobile-v4",
+        "viewport": "mobile",
+        "verdict": "pass",
+        "invocation": "run-rLAjKH",
+        "rawReportSHA256": "f1a4fc723e2848c3dfcf496cc9ec25d6efae492bf721bb231cea496de523366d",
+        "callerVersion": 4,
+        "uuid": "f6208407-c4e9-42ac-b533-346704f5e39e",
+        "reloadExact": true,
+        "gameId": "r6xe7d"
+      }
+    ],
+    "callerSHA256s": {
+      "1": "a9d7f12b9eb22b4714cd5f1e5c50a0bf502d359ef0745bd0c391e7ec02407e68",
+      "2": "81a0107a86a3558f05875e371954a91efbb155485789a9f538141a1b00da1130",
+      "3": "e99a4b72dd329696cd9615e1b0bf8d396ebffecd1639dcabb79d0d9bd0e16e77",
+      "4": "03306cb81fa81aba5f93f57ef0c289dc6614cbc0fb4bb2233761aadda5551065"
+    },
+    "captureFiles": [
+      "avatar-return-target-desktop.png",
+      "avatar-fe2510d9-desktop.png",
+      "avatar-return-target-mobile.png",
+      "avatar-fe2510d9-mobile.png",
+      "avatar-3ebaba62-desktop.png",
+      "avatar-3ebaba62-mobile.png",
+      "avatar-9e19b3d1-desktop.png",
+      "avatar-9e19b3d1-mobile.png",
+      "avatar-f6208407-desktop.png",
+      "avatar-f6208407-mobile.png"
+    ],
+    "captureDimensions": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        390,
+        844
+      ]
+    },
+    "caps": "empty for all reports including failed callers",
+    "humanJudged": 0,
+    "d21FirstBytes": [
+      233,
+      194,
+      240,
+      121
+    ],
+    "d21Sampled": [
+      false,
+      false,
+      false,
+      false
+    ],
+    "limits": "Scripted workflow evidence; no enemy Avatar activation claim. Opponent actions/policy are only as actually logged. Seven prior successful viewport cells retained when final mobile caller changes."
+  },
+  "resources": {
+    "ownGroupsObservedAbsent": 40,
+    "resourceProofSHA256": "9534a042159b587d0d6b399fefddf316d3a1dc5747a28c14a348034d280c3a0d",
+    "ownProviderRecords": "absent after cleanup; foreign server ownership record preserved",
+    "postReleasePortObservation": "Serenath native cleanup port free and own group absent; later global-listener assertion failed, then listener gone with identity unrecorded. Authorized Ovanel dispatch used its own slot; no foreign control."
+  },
+  "review": {
+    "required": true,
+    "routing": "normal cold read-only Claude Opus 5.5",
+    "statusAtImplementationEvidence": "Parent owns exact-source review and dispositions; no verdict claimed here."
+  },
+  "scope": {
+    "entities": 4,
+    "pendingInBatch": 0,
+    "newPrimitiveOps": 0,
+    "newPublicDslForms": [
+      "eventsPlayedThisTurn"
+    ],
+    "rd": [],
+    "cardIssues": [],
+    "preExistingSourceIssues": [],
+    "readOnly": "Printed/catalog data; other engine/state/Condition/registry/UI/opponents/lab/QA/config bodies."
+  }
+}

@@ -350,7 +350,7 @@ export interface DiscardCountValue {
 /** A number an effect reads when it resolves. */
 /** Exact public occurrence counts for the current turn, relative to the reader's controller. */
 export type CurrentTurnCountValue =
-  | { readonly value: "playedThisTurn" | "charactersPlayedThisTurn" | "discardedThisTurn" | "leftPlayThisTurn" | "dissolvedThisTurn" | "abandonedThisTurn"; readonly player: PlayerRef }
+  | { readonly value: "playedThisTurn" | "charactersPlayedThisTurn" | "eventsPlayedThisTurn" | "discardedThisTurn" | "leftPlayThisTurn" | "dissolvedThisTurn" | "abandonedThisTurn"; readonly player: PlayerRef }
   | { readonly value: "materializedThisTurn"; readonly player: PlayerRef; readonly figment?: boolean };
 
 export type ValueExpr =

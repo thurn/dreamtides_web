@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.225",
+  "phase": 5,
+  "implementMin": 47.05572298333333,
+  "implementWindow": {
+    "start": "2026-10-14T21:34:34.211332+00:00",
+    "end": "2026-10-14T22:21:37.554711+00:00"
+  },
+  "localValidationS": {
+    "review": 58.57093674998032,
+    "focused": 21.58019041697844,
+    "fuzz": 356.9355634160165,
+    "knip": 6.18231616698904
+  },
+  "hostLoad": 5.802734375,
+  "testDelta": {
+    "files": 0,
+    "lines": 195,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 13.569523183333333,
+      "note": "Caller readiness diagnosis/qualification interval from first workflow start through final mobile pass; includes passing cells and normal opponent turns, not isolated incremental work. Retains missing lazy probe, presentation input lock and pre-click missing hit point; explicit observable waits qualify later passes."
+    }
+  ]
+}

@@ -3,11 +3,15 @@ import { describe, expect, it } from "vitest";
 import { parseEngineBattleFold } from "../../../../rules/battle/fold";
 import { characteristicsOf } from "../../../continuous/characteristics";
 import { costModifier } from "../../../continuous/costs";
-import { playedThisTurn, charactersPlayedThisTurn, discardedThisTurn, leftPlayThisTurn, dissolvedThisTurn, abandonedThisTurn, materializedThisTurn, thisTurn } from "../../../dsl/builders";
+import { event, playedThisTurn, charactersPlayedThisTurn, eventsPlayedThisTurn, discardedThisTurn, leftPlayThisTurn, dissolvedThisTurn, abandonedThisTurn, materializedThisTurn, thisTurn } from "../../../dsl/builders";
 import { conditionHoldsWith } from "../../../dsl/conditions";
 import { NO_DECK_MODS } from "../../../dsl/types";
 import type { CurrentTurnCountValue } from "../../../dsl/types";
 import { evaluateValue } from "../../../dsl/values";
+import { createEngine } from "../../../engine";
+import { createCard } from "../create-card";
+import { syntheticId, testCatalog } from "../../../testing/synthetic-cards";
+import { passUntil } from "../../../testing/trigger-harness";
 import { createFoldAdapter } from "../../../fold/slice";
 import { serializeState, deserializeState, stateHash } from "../../../state/hash";
 import { SIDES, opponent, battleSeed, type InstanceId, type Side } from "../../../state/ids";
@@ -16,7 +20,7 @@ import { boardState } from "../../../testing/board";
 import { determinizationDivergences } from "../../../testing/determinization-fidelity";
 import { H, engine, deck, v, run, applied, slice, answers } from "./turn-history.fixtures";
 
-const counts = [playedThisTurn, charactersPlayedThisTurn, discardedThisTurn, leftPlayThisTurn, dissolvedThisTurn, abandonedThisTurn, materializedThisTurn] as const;
+const counts = [playedThisTurn, charactersPlayedThisTurn, eventsPlayedThisTurn, discardedThisTurn, leftPlayThisTurn, dissolvedThisTurn, abandonedThisTurn, materializedThisTurn] as const;
 const read = (state: BattleState, side: Side, value: CurrentTurnCountValue) => evaluateValue(state, value, {
   controller: side, source: { kind: "avatar", side }, x: null, count: () => 0, countCards: () => 0,
 });
@@ -40,9 +44,13 @@ describe("exact current-turn history", () => {
     const one = play(b.state, side, b.ids[side].hand[0]).state;
     expect(holds(one, playedThisTurn())).toBe(false);
     expect(holds(one, charactersPlayedThisTurn())).toBe(true);
+    expect(read(one, side, eventsPlayedThisTurn())).toBe(1);
     const two = play(one, side, b.ids[side].hand[1]).state;
     expect(read(two, side, playedThisTurn())).toBe(2);
     expect(read(two, side, charactersPlayedThisTurn())).toBe(1);
+    expect(read(two, side, eventsPlayedThisTurn())).toBe(1);
+    expect(read(two, opponent(side), eventsPlayedThisTurn("opponent"))).toBe(1);
+    expect(read(two, side, eventsPlayedThisTurn("opponent"))).toBe(0);
     expect(holds(two, charactersPlayedThisTurn())).toBe(false);
     expect(read(two, opponent(side), playedThisTurn("opponent"))).toBe(2);
     expect(read(two, side, playedThisTurn("opponent"))).toBe(0);
@@ -60,6 +68,7 @@ describe("exact current-turn history", () => {
     state = play(state, side, b.ids[side].hand[2]).state;
     expect(state.instances[source]).toBeUndefined();
     expect(read(state, side, playedThisTurn())).toBe(3);
+    expect(read(state, side, eventsPlayedThisTurn())).toBe(2);
     expect(read(state, side, charactersPlayedThisTurn())).toBe(1);
     expect(engine.view(state, opponent(side)).turnLog.played[side][0]?.instance).toBeNull();
   });
@@ -76,6 +85,7 @@ describe("exact current-turn history", () => {
     expect(state.instances[source]).toBeUndefined();
     expect(read(state, side, charactersPlayedThisTurn())).toBe(1);
     expect(read(state, side, playedThisTurn())).toBe(2);
+    expect(read(state, side, eventsPlayedThisTurn())).toBe(1);
   });
 
   it.each(SIDES)("counts an actual figment independently of figment copies for %s", side => {
@@ -96,6 +106,31 @@ describe("exact current-turn history", () => {
     expect(read(out.state, side, charactersPlayedThisTurn())).toBe(1);
     expect(read(out.state, side, materializedThisTurn())).toBe(2);
     expect(read(out.state, side, materializedThisTurn("you", true))).toBe(0);
+  });
+
+  it.each(SIDES)("counts one committed Event despite a separately resolving stack copy for %s", side => {
+    const b = setup(side, [v.event0.id], [H.mirror.id]);
+    const out = play(b.state, side, b.ids[side].hand[0]);
+    expect(out.events.filter(event => event.kind === "cardCopied")).toHaveLength(1);
+    expect(out.events.filter(event => event.kind === "resolved")).toHaveLength(2);
+    expect(read(out.state, side, eventsPlayedThisTurn())).toBe(1);
+    expect(read(out.state, side, charactersPlayedThisTurn())).toBe(0);
+  });
+
+  it.each(SIDES)("retains a genuinely created Event play after that physical Event ceases for %s", side => {
+    const creator = { ...v.event0, id: syntheticId(0x100225), abilities: () => [event(createCard(v.event0.id))] };
+    const local = createEngine(testCatalog([creator]));
+    const b = boardState(local.catalog, { active: side, phase: "day", [side]: { hand: [creator.id], deck }, [opponent(side)]: { deck } });
+    const made = local.apply(b.state, side, { kind: "play", card: b.ids[side].hand[0], from: "hand" }, answers());
+    const ready = passUntil(local, made.state, state => state.stack.length === 0, answers()).state;
+    const created = ready.sides[side].hand[0];
+    expect(ready.instances[created]).toMatchObject({ printing: { kind: "card", cardId: v.event0.id }, status: { created: true } });
+    const played = local.apply(ready, side, { kind: "play", card: created, from: "hand" }, answers());
+    const done = passUntil(local, played.state, state => state.stack.length === 0, answers());
+    expect([...played.events, ...done.events]).toContainEqual({ kind: "ceasedToExist", side, instance: created, from: "stack" });
+    expect(done.state.instances[created]).toBeUndefined();
+    expect(read(done.state, side, eventsPlayedThisTurn())).toBe(2);
+    expect(read(done.state, side, charactersPlayedThisTurn())).toBe(0);
   });
 
   it.each(SIDES)("cancels an uncommitted prepared play without incrementing history for %s", side => {
@@ -253,6 +288,7 @@ describe("exact current-turn history", () => {
     const loaded = parseEngineBattleFold(JSON.parse(JSON.stringify(saved(dissolved))));
     expect(loaded).not.toBeNull();
     expect(read(loaded!.slice.committed, side, dissolvedThisTurn())).toBe(2);
+    expect(read(loaded!.slice.committed, side, eventsPlayedThisTurn())).toBe(1);
     expect(deserializeState(serializeState(dissolved))).toEqual(dissolved);
     expect(determinizationDivergences(engine, dissolved, decks(dissolved), battleSeed("history-public"), 0)).toEqual([]);
     const hidden = play(dissolved, side, b.ids[side].hand[1]).state;
@@ -264,6 +300,7 @@ describe("exact current-turn history", () => {
     const hiddenIds = new Set([...sampled.sides[side].deck, ...sampled.sides[side].hand]);
     expect(sampled.turnLog.dissolved?.[side].some(card => hiddenIds.has(card.instance))).toBe(false);
     expect(read(sampled, side, dissolvedThisTurn())).toBe(2);
+    expect(read(sampled, side, eventsPlayedThisTurn())).toBe(2);
   });
 
   it("loads legacy absent counts conservatively and rejects invalid own fields through public LOAD", () => {
@@ -344,6 +381,7 @@ describe("exact current-turn history", () => {
     expect(failed.kind).toBe("applied");
     if (failed.kind !== "applied") throw new Error("Expected engine failure");
     expect(failed.error).not.toBeNull();
+    expect(read(failed.slice.committed, "player", eventsPlayedThisTurn())).toBe(read(pending.committed, "player", eventsPlayedThisTurn()));
     expect(read(failed.slice.committed, "player", discardedThisTurn())).toBe(0);
     expect(read(failed.slice.committed, "player", dissolvedThisTurn())).toBe(0);
     expect(stateHash(b.state)).toBe(before);

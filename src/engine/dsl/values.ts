@@ -52,6 +52,7 @@ export function evaluateValue(state: BattleState, value: ValueExpr, scope: Value
     case "storedCounters": return storedCounterCount(state, scope.source, scope.paymentSourceCounters);
     case "playedThisTurn": return playedThisTurn(state, resolvePlayer(scope.controller, value.player));
     case "charactersPlayedThisTurn": return charactersPlayedCountThisTurn(state, resolvePlayer(scope.controller, value.player));
+    case "eventsPlayedThisTurn": return state.turnLog.played[resolvePlayer(scope.controller, value.player)].filter(record => record.cardType === "event").length;
     case "discardedThisTurn": return discardedCountThisTurn(state, resolvePlayer(scope.controller, value.player));
     case "leftPlayThisTurn": return leftPlayCountThisTurn(state, resolvePlayer(scope.controller, value.player));
     case "dissolvedThisTurn": return dissolvedCountThisTurn(state, resolvePlayer(scope.controller, value.player));
