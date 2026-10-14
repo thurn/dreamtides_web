@@ -1,0 +1,225 @@
+{
+  "bead": "hv-umm2.678",
+  "sourceBase": "dfa72163e91071d2315f06f94f8941782933713b",
+  "scope": "Documentation-only bounded normative last-turn ruling; no source, catalog, UI, tests or configuration changes.",
+  "implementerDispatch": {
+    "timestamp": "2026-10-14T15:01:33.794Z",
+    "precision": "native tool dispatch; model sampling start unknown",
+    "callId": "call_6053b25656ea407088467bfa13a301ae"
+  },
+  "checks": [
+    {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/last-turn-history-scopes-678",
+      "start": "2026-10-14T15:11:18.096282+00:00",
+      "end": "2026-10-14T15:11:18.474844+00:00",
+      "elapsedS": 0.33101500000339,
+      "pid": 85708,
+      "pgid": 85708,
+      "exitCode": 0,
+      "hostLoadRaw": "{ 24.30 18.46 15.95 }",
+      "hostLoad1m": 24.3,
+      "remainingGroup": [],
+      "log": "/tmp/dreamtides-678/review.log"
+    },
+    {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/last-turn-history-scopes-678",
+      "start": "2026-10-14T15:11:18.475196+00:00",
+      "end": "2026-10-14T15:11:25.135322+00:00",
+      "elapsedS": 6.615844540996477,
+      "pid": 85856,
+      "pgid": 85856,
+      "exitCode": 0,
+      "hostLoadRaw": "{ 24.30 18.46 15.95 }",
+      "hostLoad1m": 24.3,
+      "remainingGroup": [],
+      "log": "/tmp/dreamtides-678/knip.log"
+    },
+    {
+      "name": "frictionSchema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/last-turn-history-scopes-678",
+      "start": "2026-10-14T15:11:25.135615+00:00",
+      "end": "2026-10-14T15:11:25.253010+00:00",
+      "elapsedS": 0.06978208301006816,
+      "pid": 94502,
+      "pgid": 94502,
+      "exitCode": 0,
+      "hostLoadRaw": "{ 23.57 18.51 15.99 }",
+      "hostLoad1m": 23.57,
+      "remainingGroup": [],
+      "log": "/tmp/dreamtides-678/frictionSchema.log"
+    },
+    {
+      "name": "whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/last-turn-history-scopes-678",
+      "start": "2026-10-14T15:11:25.253332+00:00",
+      "end": "2026-10-14T15:11:25.307887+00:00",
+      "elapsedS": 0.008437583019258454,
+      "pid": 94955,
+      "pgid": 94955,
+      "exitCode": 0,
+      "hostLoadRaw": "{ 23.57 18.51 15.99 }",
+      "hostLoad1m": 23.57,
+      "remainingGroup": [],
+      "log": "/tmp/dreamtides-678/whitespace.log"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "name": "review",
+      "start": "2026-10-14T15:11:18.096282+00:00",
+      "hostLoadRaw": "{ 24.30 18.46 15.95 }",
+      "hostLoad1m": 24.3
+    },
+    {
+      "name": "knip",
+      "start": "2026-10-14T15:11:18.475196+00:00",
+      "hostLoadRaw": "{ 24.30 18.46 15.95 }",
+      "hostLoad1m": 24.3
+    },
+    {
+      "name": "frictionSchema",
+      "start": "2026-10-14T15:11:25.135615+00:00",
+      "hostLoadRaw": "{ 23.57 18.51 15.99 }",
+      "hostLoad1m": 23.57
+    },
+    {
+      "name": "whitespace",
+      "start": "2026-10-14T15:11:25.253332+00:00",
+      "hostLoadRaw": "{ 23.57 18.51 15.99 }",
+      "hostLoad1m": 23.57
+    },
+    {
+      "name": "review",
+      "start": "2026-10-14T15:21:11.031494+00:00",
+      "hostLoadRaw": "{ 6.44 9.42 12.01 }",
+      "hostLoad1m": 6.44
+    },
+    {
+      "name": "frictionSchema",
+      "start": "2026-10-14T15:21:11.491212+00:00",
+      "hostLoadRaw": "{ 6.44 9.42 12.01 }",
+      "hostLoad1m": 6.44
+    },
+    {
+      "name": "whitespace",
+      "start": "2026-10-14T15:21:11.632584+00:00",
+      "hostLoadRaw": "{ 6.44 9.42 12.01 }",
+      "hostLoad1m": 6.44
+    }
+  ],
+  "validationLimits": "Host load is observed, not controlled. Documentation review runs its selected documentation/schema checks; runtime history/copy/cost behavior and consumer QA remain owned by hv-umm2.622 and hv-umm2.623. No benchmark or low-load compliance claim.",
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "proposalHashes": {
+    "/tmp/dreamtides-678/proposed-paragraph.md": "26df25ca61e371a43d7ebd645c728b5ca9eed43f8af5541c1a72bf75d3b5bfa8",
+    "/tmp/dreamtides-678/proposed-RD.md": "646a2dbeedd021df675cd4328c6441156f0f1dbb6103380ed78c267547a61752"
+  },
+  "scopeVerified": "One additive Turn Structure paragraph and own RD/friction/measurement evidence only.",
+  "runtimeResources": "Each validation child was waited/reaped; recorded process groups were absent after exit. No server, browser provider or heavy lock was used.",
+  "ruleEvidenceCorrection": {
+    "correctedRdSha256": "ea49e6c0c41d83a24b589b8a6c57aabb759bf5d3b2559b67bc1e0f70edcf9ef5",
+    "scope": "Exact one-sentence provenance clarification: current prototype ledger records historical source, and is not claimed to exist at that historical commit. Normative paragraph unchanged."
+  },
+  "knipReuse": "Previously passed Knip reused after documentation-only provenance correction; all code/export/catalog/configuration bytes remain unchanged.",
+  "correctedEvidenceChecks": [
+    {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/last-turn-history-scopes-678",
+      "start": "2026-10-14T15:21:11.031494+00:00",
+      "end": "2026-10-14T15:21:11.490852+00:00",
+      "elapsedS": 0.4058560419944115,
+      "pid": 39693,
+      "pgid": 39693,
+      "exitCode": 0,
+      "hostLoadRaw": "{ 6.44 9.42 12.01 }",
+      "hostLoad1m": 6.44,
+      "remainingGroup": [],
+      "log": "/tmp/dreamtides-678/review-corrected.log"
+    },
+    {
+      "name": "frictionSchema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/last-turn-history-scopes-678",
+      "start": "2026-10-14T15:21:11.491212+00:00",
+      "end": "2026-10-14T15:21:11.632224+00:00",
+      "elapsedS": 0.08770670901867561,
+      "pid": 39825,
+      "pgid": 39825,
+      "exitCode": 0,
+      "hostLoadRaw": "{ 6.44 9.42 12.01 }",
+      "hostLoad1m": 6.44,
+      "remainingGroup": [],
+      "log": "/tmp/dreamtides-678/frictionSchema-corrected.log"
+    },
+    {
+      "name": "whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/last-turn-history-scopes-678",
+      "start": "2026-10-14T15:21:11.632584+00:00",
+      "end": "2026-10-14T15:21:11.695817+00:00",
+      "elapsedS": 0.010650999989593402,
+      "pid": 39832,
+      "pgid": 39832,
+      "exitCode": 0,
+      "hostLoadRaw": "{ 6.44 9.42 12.01 }",
+      "hostLoad1m": 6.44,
+      "remainingGroup": [],
+      "log": "/tmp/dreamtides-678/whitespace-corrected.log"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Documentation review starting at2026-10-14T15:21:11.031494+00:00 after exact RD provenance correction; earlier review and Knip samples retained separately."
+      }
+    }
+  },
+  "commitBoundary": {
+    "cutoff": "2026-10-14T15:24:39.388690+00:00",
+    "precision": "Final precommit wall-clock boundary; actual Git return and subsecond validation/commit tail retained in the parent delivery receipt. Inclusive dispatch-to-cutoff includes all research, coordination, checks and cold-review coverage waits."
+  },
+  "coldRulingReview": {
+    "provider": "Normal Claude Opus5.5 read-only cold Warden ruling review",
+    "scope": "Exact normative paragraph26df25ca61e371a43d7ebd645c728b5ca9eed43f8af5541c1a72bf75d3b5bfa8 and final RD ea49e6c0c41d83a24b589b8a6c57aabb759bf5d3b2559b67bc1e0f70edcf9ef5",
+    "result": "No actionable findings. Initial report had incomplete prototype access; safe read coverage completion reported all required reads complete and no permission denials. Parent owns provider receipts, independently checked process group absence and removed the review snapshot."
+  }
+}

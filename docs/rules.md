@@ -531,6 +531,34 @@ count, so it does not count toward the turn limit (see
 most recently is taken first. After all pending extra turns finish, the normal
 turn order resumes with the opponent of the last player who took a normal turn.
 
+**Settled last-turn meaning:** For “the first event you played last turn” and
+“if a character you control scored ⍟ last turn”, “last turn” is the immediately
+preceding completed turn of the battle, whichever player took it. “You” is the
+ability’s controller. The first clause selects that player’s earliest event
+play in that turn, including an Interrupt played during the opponent’s turn;
+a copy put on the stack is not a play. The second clause checks, when the cost
+is determined, whether a character currently in play under that player’s
+control made a positive challenge award in the preceding turn. It can be a
+character that scored for the opponent and has since changed controller; a
+scorer that has left play or is currently controlled by the opponent does not
+qualify. An ordinary card that leaves and returns to play keeps its physical
+identity and can qualify again. A distinct card or created copy does not
+inherit another character’s scoring history, and a character that ceased to
+exist cannot qualify. Flat point gains and Fatigue are not character scoring.
+Every completed extra turn replaces the preceding turn for these checks, just
+as a normal turn does. The preceding turn’s play and scoring facts stay fixed
+through all phases and Ending cleanup of the current turn; current control and
+presence are checked anew for the cost condition. The transition into the next
+turn replaces those facts with the completed turn’s facts before any
+start-of-turn abilities. Before any turn has completed, both histories are
+empty: there is no event to copy and the scoring condition is false. A player’s
+first turn can nevertheless read facts from an opponent’s already completed
+turn. Each battle starts with empty histories; round changes do not select or
+preserve an older turn. The “first character you play each turn” is counted
+separately for that player in the current turn, including plays during the
+opponent’s turn, and that count starts afresh for both players as every normal
+or extra turn begins.
+
 ## Exhaust and Awaken
 
 The **exhausted** status marks a character that cannot challenge, block, or
