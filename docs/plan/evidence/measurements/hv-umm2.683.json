@@ -1,0 +1,2683 @@
+{
+  "bead": "hv-umm2.683",
+  "sourceBase": "ae5a64df23fcf5a6b60e77a72d22e915e923b25a",
+  "stage": "Validated terminal writer pre-Git cutoff; certified delivery remains parent-owned",
+  "sourceScope": [
+    "src/content/cards/nullifier-6da831c8.ts",
+    "src/content/cards/echo-architect-21965e95.ts",
+    "src/content/specs/cards-ready-191.scenarios.ts"
+  ],
+  "timing": {
+    "rootGross": {
+      "start": "2026-10-14T17:46:30.154441+00:00",
+      "end": "2026-10-14T18:34:22.583832+00:00",
+      "elapsedMinutes": 47.873823183333336,
+      "scope": "All root claim/setup/brief/coordination, helper research/proofs/implementation/checks/heavy queue and evidence; end is a pre-Git proxy, not commit time"
+    },
+    "helperDispatch": {
+      "bead": "hv-umm2.683",
+      "helper": "/root/nullifier_echo_architect683",
+      "preDispatchObservedAt": "2026-10-14T17:52:58Z",
+      "dispatchAcknowledgmentObservedAt": "2026-10-14T17:53:28.935672+00:00",
+      "exactDispatchInstant": "UNKNOWN; bounded by independent observations before tool call and after acknowledgment",
+      "actualModelStart": "UNKNOWN",
+      "knownClaimCall": "2026-10-14T17:46:30.154441+00:00",
+      "claimAck": "2026-10-14T17:46:30.545913+00:00",
+      "scope": "Gross ownership includes ALL setup/research/parent brief writing and coordination before/after helper dispatch, then validation/queues/QA/evidence through actualGitend. These time bounds are elapsed observations, not productive editing time."
+    },
+    "actualModelStart": "UNKNOWN",
+    "actualGitStart": "UNKNOWN at committed pre-Git cutoff; actual command receipt retained externally",
+    "actualGitEnd": "UNKNOWN at committed pre-Git cutoff; parent records actual terminal receipt",
+    "preGitCutoffProxy": "2026-10-14T18:34:22.583832+00:00",
+    "externalGitReceipt": "/tmp/dreamtides-executor-01a1304d/683/git-commit-receipt.json"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "startScope": "independently observed lower bound before helper dispatch; exact dispatch/model sampling start UNKNOWN",
+        "endScope": "Final pre-Git cutoff proxy; actual external Git start/end independently retained by parent; no future-fact evidence amend"
+      },
+      "hostLoad": {
+        "measuredFor": "successful npm run review command start on this source range",
+        "source": "review-receipt.json.startLoad[0]"
+      }
+    }
+  },
+  "commands": {
+    "install": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T17:48:01.787085+00:00",
+      "end": "2026-10-14T17:48:04.905246+00:00",
+      "pid": 30369,
+      "pgid": 30369,
+      "exitCode": 0,
+      "wallSeconds": 3.1181515420030337,
+      "cpuSeconds": {
+        "user": 2.144226,
+        "system": 5.28805
+      },
+      "startLoad": [
+        13.3603515625,
+        16.35107421875,
+        13.3115234375
+      ],
+      "endLoad": [
+        13.3603515625,
+        16.35107421875,
+        13.3115234375
+      ]
+    },
+    "doctor-dispatch": {
+      "command": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T17:48:02.952019+00:00",
+      "end": "2026-10-14T17:48:11.978285+00:00",
+      "pid": 30442,
+      "pgid": 30442,
+      "exitCode": 0,
+      "wallSeconds": 9.026184083981207,
+      "cpuSeconds": {
+        "user": 0.022129,
+        "system": 0.021289
+      },
+      "startLoad": [
+        13.3603515625,
+        16.35107421875,
+        13.3115234375
+      ],
+      "endLoad": [
+        15.1044921875,
+        16.6337890625,
+        13.447265625
+      ]
+    },
+    "entity-brief": {
+      "command": [
+        "npm",
+        "run",
+        "bead:entities",
+        "--",
+        "6da831c8-6fda-4078-9f2b-873db2416aad",
+        "21965e95-0c8c-470c-a1e1-06d7b87a8d00"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T17:48:49.894390+00:00",
+      "end": "2026-10-14T17:48:53.750626+00:00",
+      "pid": 71843,
+      "pgid": 71843,
+      "exitCode": 0,
+      "wallSeconds": 3.856224832998123,
+      "cpuSeconds": {
+        "user": 0.817249,
+        "system": 0.7054659999999999
+      },
+      "startLoad": [
+        17.5341796875,
+        17.30712890625,
+        13.83447265625
+      ],
+      "endLoad": [
+        16.6103515625,
+        17.119140625,
+        13.7880859375
+      ]
+    },
+    "friction-dispatch": {
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T17:48:49.894299+00:00",
+      "end": "2026-10-14T17:48:50.182639+00:00",
+      "pid": 71842,
+      "pgid": 71842,
+      "exitCode": 0,
+      "wallSeconds": 0.2883715839998331,
+      "cpuSeconds": {
+        "user": 0.14713199999999999,
+        "system": 0.063275
+      },
+      "startLoad": [
+        17.5341796875,
+        17.30712890625,
+        13.83447265625
+      ],
+      "endLoad": [
+        17.5341796875,
+        17.30712890625,
+        13.83447265625
+      ]
+    },
+    "stage0-proof": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/stage0-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T17:56:53.107229+00:00",
+      "end": "2026-10-14T17:56:54.995732+00:00",
+      "pid": 58476,
+      "pgid": 58476,
+      "exitCode": 1,
+      "wallSeconds": 1.888513874990167,
+      "cpuSeconds": {
+        "user": 1.324246,
+        "system": 0.728005
+      },
+      "startLoad": [
+        9.79248046875,
+        16.98193359375,
+        15.36181640625
+      ],
+      "endLoad": [
+        9.79248046875,
+        16.98193359375,
+        15.36181640625
+      ]
+    },
+    "stage0-proof-diagnostic": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/stage0-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T17:57:06.439189+00:00",
+      "end": "2026-10-14T17:57:10.031031+00:00",
+      "pid": 59466,
+      "pgid": 59466,
+      "exitCode": 1,
+      "wallSeconds": 3.5918403750110883,
+      "cpuSeconds": {
+        "user": 3.374639,
+        "system": 0.889373
+      },
+      "startLoad": [
+        8.7978515625,
+        16.41015625,
+        15.18603515625
+      ],
+      "endLoad": [
+        8.7978515625,
+        16.41015625,
+        15.18603515625
+      ]
+    },
+    "stage0-proof-final": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/stage0-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T17:57:21.545908+00:00",
+      "end": "2026-10-14T17:57:25.582681+00:00",
+      "pid": 60469,
+      "pgid": 60469,
+      "exitCode": 1,
+      "wallSeconds": 4.0367637499875855,
+      "cpuSeconds": {
+        "user": 3.558448,
+        "system": 1.057753
+      },
+      "startLoad": [
+        7.86962890625,
+        15.833984375,
+        15.00146484375
+      ],
+      "endLoad": [
+        7.86962890625,
+        15.833984375,
+        15.00146484375
+      ]
+    },
+    "stage0-proof-pass": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/stage0-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T17:57:38.324045+00:00",
+      "end": "2026-10-14T17:57:43.457861+00:00",
+      "pid": 61529,
+      "pgid": 61529,
+      "exitCode": 1,
+      "wallSeconds": 5.133792500011623,
+      "cpuSeconds": {
+        "user": 3.035286,
+        "system": 1.117643
+      },
+      "startLoad": [
+        7.3681640625,
+        15.3349609375,
+        14.83740234375
+      ],
+      "endLoad": [
+        7.17822265625,
+        15.1630859375,
+        14.779296875
+      ]
+    },
+    "stage0-proof-success": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/stage0-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T17:58:01.976135+00:00",
+      "end": "2026-10-14T17:58:06.984627+00:00",
+      "pid": 63009,
+      "pgid": 63009,
+      "exitCode": 0,
+      "wallSeconds": 5.008479999989504,
+      "cpuSeconds": {
+        "user": 3.180099,
+        "system": 1.224914
+      },
+      "startLoad": [
+        6.35546875,
+        14.45556640625,
+        14.53369140625
+      ],
+      "endLoad": [
+        6.24658203125,
+        14.29833984375,
+        14.4775390625
+      ]
+    },
+    "stage0-parent-replay": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/stage0-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T17:59:18.632654+00:00",
+      "end": "2026-10-14T17:59:20.183996+00:00",
+      "pid": 66456,
+      "pgid": 66456,
+      "exitCode": 0,
+      "wallSeconds": 1.5513579999969807,
+      "cpuSeconds": {
+        "user": 1.127228,
+        "system": 0.657408
+      },
+      "startLoad": [
+        4.40234375,
+        12.06591796875,
+        13.61865234375
+      ],
+      "endLoad": [
+        4.40234375,
+        12.06591796875,
+        13.61865234375
+      ]
+    },
+    "focused": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-ready-191"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:02:04.000555+00:00",
+      "end": "2026-10-14T18:02:09.129566+00:00",
+      "pid": 70280,
+      "pgid": 70280,
+      "exitCode": 0,
+      "wallSeconds": 5.12900487499428,
+      "cpuSeconds": {
+        "user": 5.046897,
+        "system": 1.927305
+      },
+      "startLoad": [
+        4.9150390625,
+        8.8515625,
+        11.9892578125
+      ],
+      "endLoad": [
+        4.84130859375,
+        8.77099609375,
+        11.9423828125
+      ]
+    },
+    "content-gates": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:02:20.798408+00:00",
+      "end": "2026-10-14T18:02:25.280039+00:00",
+      "pid": 70779,
+      "pgid": 70779,
+      "exitCode": 0,
+      "wallSeconds": 4.481619250000222,
+      "cpuSeconds": {
+        "user": 4.150118,
+        "system": 1.804644
+      },
+      "startLoad": [
+        4.705078125,
+        8.61279296875,
+        11.84912109375
+      ],
+      "endLoad": [
+        4.568359375,
+        8.51953125,
+        11.796875
+      ]
+    },
+    "review": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:02:56.938147+00:00",
+      "end": "2026-10-14T18:03:49.937114+00:00",
+      "pid": 71781,
+      "pgid": 71781,
+      "exitCode": 0,
+      "wallSeconds": 52.99846916599199,
+      "cpuSeconds": {
+        "user": 132.691562,
+        "system": 16.563224
+      },
+      "startLoad": [
+        5.095703125,
+        8.2216796875,
+        11.55517578125
+      ],
+      "endLoad": [
+        6.56298828125,
+        8.236328125,
+        11.37548828125
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:04:25.480027+00:00",
+      "end": "2026-10-14T18:04:30.586826+00:00",
+      "pid": 74530,
+      "pgid": 74530,
+      "exitCode": 0,
+      "wallSeconds": 5.106789833022049,
+      "cpuSeconds": {
+        "user": 4.301404,
+        "system": 1.4354069999999999
+      },
+      "startLoad": [
+        13.93701171875,
+        9.630859375,
+        11.7412109375
+      ],
+      "endLoad": [
+        15.06298828125,
+        9.935546875,
+        11.83642578125
+      ]
+    },
+    "heavy-slot": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/683/run-command.py",
+        "weighted300",
+        "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "6da831c8-6fda-4078-9f2b-873db2416aad,21965e95-0c8c-470c-a1e1-06d7b87a8d00"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:04:43.960833+00:00",
+      "end": "2026-10-14T18:11:41.774584+00:00",
+      "pid": 75680,
+      "pgid": 75680,
+      "exitCode": 0,
+      "wallSeconds": 417.8096177909756,
+      "cpuSeconds": {
+        "user": 356.973795,
+        "system": 3.896515
+      },
+      "startLoad": [
+        18.52197265625,
+        10.9248046875,
+        12.1533203125
+      ],
+      "endLoad": [
+        16.6767578125,
+        15.82080078125,
+        14.6552734375
+      ]
+    },
+    "weighted300": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "6da831c8-6fda-4078-9f2b-873db2416aad,21965e95-0c8c-470c-a1e1-06d7b87a8d00"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:06:02.398597+00:00",
+      "end": "2026-10-14T18:11:41.769209+00:00",
+      "pid": 12792,
+      "pgid": 12792,
+      "exitCode": 0,
+      "wallSeconds": 339.36727645798237,
+      "cpuSeconds": {
+        "user": 356.953354,
+        "system": 3.884331
+      },
+      "startLoad": [
+        29.21484375,
+        15.8408203125,
+        13.8994140625
+      ],
+      "endLoad": [
+        16.6767578125,
+        15.82080078125,
+        14.6552734375
+      ]
+    },
+    "lab-preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "6da831c8-6fda-4078-9f2b-873db2416aad,21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:06:08.134848+00:00",
+      "end": "2026-10-14T18:06:10.028522+00:00",
+      "pid": 31498,
+      "pgid": 31498,
+      "exitCode": 0,
+      "wallSeconds": 1.893726374983089,
+      "cpuSeconds": {
+        "user": 1.598575,
+        "system": 0.6812969999999999
+      },
+      "startLoad": [
+        29.27734375,
+        16.07568359375,
+        13.99365234375
+      ],
+      "endLoad": [
+        29.27734375,
+        16.07568359375,
+        13.99365234375
+      ]
+    },
+    "judged-node-preflight": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/judged-preflight.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:07:50.744524+00:00",
+      "end": "2026-10-14T18:07:55.366869+00:00",
+      "pid": 5136,
+      "pgid": 5136,
+      "exitCode": 1,
+      "wallSeconds": 4.622336041997187,
+      "cpuSeconds": {
+        "user": 1.772526,
+        "system": 1.248065
+      },
+      "startLoad": [
+        24.33935546875,
+        18.48974609375,
+        15.18603515625
+      ],
+      "endLoad": [
+        23.19091796875,
+        18.3486328125,
+        15.1552734375
+      ]
+    },
+    "judged-node-preflight-final": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/judged-preflight.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:08:08.411463+00:00",
+      "end": "2026-10-14T18:08:17.069855+00:00",
+      "pid": 6635,
+      "pgid": 6635,
+      "exitCode": 1,
+      "wallSeconds": 8.658352333004586,
+      "cpuSeconds": {
+        "user": 6.696428,
+        "system": 1.652094
+      },
+      "startLoad": [
+        20.3486328125,
+        17.96875,
+        15.076171875
+      ],
+      "endLoad": [
+        19.01953125,
+        17.77001953125,
+        15.03955078125
+      ]
+    },
+    "judged-node-preflight-success": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/judged-preflight.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:08:30.809814+00:00",
+      "end": "2026-10-14T18:08:38.223196+00:00",
+      "pid": 8165,
+      "pgid": 8165,
+      "exitCode": 0,
+      "wallSeconds": 7.413341625011526,
+      "cpuSeconds": {
+        "user": 7.305509,
+        "system": 1.594128
+      },
+      "startLoad": [
+        18.19921875,
+        17.6298828125,
+        15.02099609375
+      ],
+      "endLoad": [
+        16.3232421875,
+        17.24658203125,
+        14.9150390625
+      ]
+    },
+    "caller-scope-check": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/caller-scope-check.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:12:49.765601+00:00",
+      "end": "2026-10-14T18:12:49.823802+00:00",
+      "pid": 84703,
+      "pgid": 84703,
+      "exitCode": 0,
+      "wallSeconds": 0.05823645798955113,
+      "cpuSeconds": {
+        "user": 0.048021999999999995,
+        "system": 0.009046
+      },
+      "startLoad": [
+        19.1337890625,
+        17.095703125,
+        15.24951171875
+      ],
+      "endLoad": [
+        19.1337890625,
+        17.095703125,
+        15.24951171875
+      ]
+    },
+    "caller-scope-final": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/caller-scope-check.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:14:18.201135+00:00",
+      "end": "2026-10-14T18:14:18.248272+00:00",
+      "pid": 90281,
+      "pgid": 90281,
+      "exitCode": 0,
+      "wallSeconds": 0.0471678749890998,
+      "cpuSeconds": {
+        "user": 0.04049,
+        "system": 0.0064789999999999995
+      },
+      "startLoad": [
+        9.19091796875,
+        14.41552734375,
+        14.4072265625
+      ],
+      "endLoad": [
+        9.19091796875,
+        14.41552734375,
+        14.4072265625
+      ]
+    },
+    "caller-scope-settled": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/caller-scope-check.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:14:32.424194+00:00",
+      "end": "2026-10-14T18:14:32.470771+00:00",
+      "pid": 91136,
+      "pgid": 91136,
+      "exitCode": 0,
+      "wallSeconds": 0.04660425000474788,
+      "cpuSeconds": {
+        "user": 0.040012,
+        "system": 0.006379
+      },
+      "startLoad": [
+        8.1201171875,
+        13.9208984375,
+        14.23046875
+      ],
+      "endLoad": [
+        8.1201171875,
+        13.9208984375,
+        14.23046875
+      ]
+    },
+    "caller-no-undef": {
+      "command": [
+        "./node_modules/.bin/eslint",
+        "--no-config-lookup",
+        "--rule",
+        "no-undef:error",
+        "--global",
+        "window",
+        "--global",
+        "document",
+        "--global",
+        "innerWidth",
+        "--global",
+        "innerHeight",
+        "--global",
+        "location",
+        "artifacts/qa/hv-umm2.683/judged.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:14:32.494752+00:00",
+      "end": "2026-10-14T18:14:32.630935+00:00",
+      "pid": 91141,
+      "pgid": 91141,
+      "exitCode": 0,
+      "wallSeconds": 0.1362131249916274,
+      "cpuSeconds": {
+        "user": 0.15506999999999999,
+        "system": 0.025244
+      },
+      "startLoad": [
+        8.1201171875,
+        13.9208984375,
+        14.23046875
+      ],
+      "endLoad": [
+        8.1201171875,
+        13.9208984375,
+        14.23046875
+      ]
+    },
+    "evidence-schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:13:50.809492+00:00",
+      "end": "2026-10-14T18:13:50.941254+00:00",
+      "pid": 88571,
+      "pgid": 88571,
+      "exitCode": 0,
+      "wallSeconds": 0.13182558299740776,
+      "cpuSeconds": {
+        "user": 0.054646,
+        "system": 0.031278
+      },
+      "startLoad": [
+        11.3828125,
+        15.32421875,
+        14.71630859375
+      ],
+      "endLoad": [
+        11.3828125,
+        15.32421875,
+        14.71630859375
+      ]
+    },
+    "caller-scope-qa2": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/caller-scope-check.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:22:40.352686+00:00",
+      "end": "2026-10-14T18:22:40.402748+00:00",
+      "pid": 35760,
+      "pgid": 35760,
+      "exitCode": 0,
+      "wallSeconds": 0.05009591701673344,
+      "cpuSeconds": {
+        "user": 0.042187999999999996,
+        "system": 0.006931
+      },
+      "startLoad": [
+        6.8779296875,
+        11.6611328125,
+        13.259765625
+      ],
+      "endLoad": [
+        6.8779296875,
+        11.6611328125,
+        13.259765625
+      ]
+    },
+    "caller-no-undef-qa2": {
+      "command": [
+        "./node_modules/.bin/eslint",
+        "--no-config-lookup",
+        "--rule",
+        "no-undef:error",
+        "--global",
+        "window",
+        "--global",
+        "document",
+        "--global",
+        "innerWidth",
+        "--global",
+        "innerHeight",
+        "--global",
+        "location",
+        "artifacts/qa/hv-umm2.683/judged.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:22:40.427989+00:00",
+      "end": "2026-10-14T18:22:40.734702+00:00",
+      "pid": 35764,
+      "pgid": 35764,
+      "exitCode": 0,
+      "wallSeconds": 0.3067472499969881,
+      "cpuSeconds": {
+        "user": 0.170317,
+        "system": 0.056351
+      },
+      "startLoad": [
+        6.8779296875,
+        11.6611328125,
+        13.259765625
+      ],
+      "endLoad": [
+        6.8779296875,
+        11.6611328125,
+        13.259765625
+      ]
+    },
+    "qa-sweep": {
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/run-qa-observed.py",
+        "qa-sweep",
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.683",
+        "--cards",
+        "6da831c8-6fda-4078-9f2b-873db2416aad,21965e95-0c8c-470c-a1e1-06d7b87a8d00"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:17:34.111275+00:00",
+      "end": "2026-10-14T18:20:00.241471+00:00",
+      "pid": 58267,
+      "pgid": 58267,
+      "exitCode": 0,
+      "wallSeconds": 146.1287832079979,
+      "cpuSeconds": {
+        "user": 9.310135,
+        "system": 5.165361
+      },
+      "startLoad": [
+        16.84521484375,
+        13.49560546875,
+        13.8330078125
+      ],
+      "endLoad": [
+        16.56298828125,
+        15.9892578125,
+        14.876953125
+      ]
+    },
+    "qa-judged": {
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/run-qa-observed.py",
+        "qa-judged",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/artifacts/qa/hv-umm2.683/judged.mjs",
+        "--bead",
+        "hv-umm2.683",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:20:06.681068+00:00",
+      "end": "2026-10-14T18:21:10.089411+00:00",
+      "pid": 24837,
+      "pgid": 24837,
+      "exitCode": 1,
+      "wallSeconds": 63.40773645800073,
+      "cpuSeconds": {
+        "user": 5.97762,
+        "system": 2.826444
+      },
+      "startLoad": [
+        15.63671875,
+        15.806640625,
+        14.81884765625
+      ],
+      "endLoad": [
+        8.26123046875,
+        13.62255859375,
+        14.0703125
+      ]
+    },
+    "qa-judged2": {
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/683/helper/run-qa-observed.py",
+        "qa-judged2",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/artifacts/qa/hv-umm2.683/judged.mjs",
+        "--bead",
+        "hv-umm2.683",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:25:26.298807+00:00",
+      "end": "2026-10-14T18:27:13.378115+00:00",
+      "pid": 2203,
+      "pgid": 2203,
+      "exitCode": 0,
+      "wallSeconds": 107.07828837499255,
+      "cpuSeconds": {
+        "user": 6.934121,
+        "system": 3.624085
+      },
+      "startLoad": [
+        9.74365234375,
+        13.05517578125,
+        13.7138671875
+      ],
+      "endLoad": [
+        13.2685546875,
+        12.4208984375,
+        13.3232421875
+      ]
+    },
+    "evidence-schema-ready": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:15:51.208053+00:00",
+      "end": "2026-10-14T18:15:51.277946+00:00",
+      "pid": 95944,
+      "pgid": 95944,
+      "exitCode": 0,
+      "wallSeconds": 0.06992416700813919,
+      "cpuSeconds": {
+        "user": 0.056140999999999996,
+        "system": 0.019034
+      },
+      "startLoad": [
+        6.26123046875,
+        12.00732421875,
+        13.47216796875
+      ],
+      "endLoad": [
+        6.26123046875,
+        12.00732421875,
+        13.47216796875
+      ]
+    },
+    "final-evidence-schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+      "start": "2026-10-14T18:30:59.461681+00:00",
+      "end": "2026-10-14T18:30:59.580319+00:00",
+      "pid": 38528,
+      "pgid": 38528,
+      "exitCode": 0,
+      "wallSeconds": 0.11867354201967828,
+      "cpuSeconds": {
+        "user": 0.055527,
+        "system": 0.025873999999999998
+      },
+      "startLoad": [
+        13.55419921875,
+        13.923828125,
+        13.77294921875
+      ],
+      "endLoad": [
+        13.55419921875,
+        13.923828125,
+        13.77294921875
+      ]
+    }
+  },
+  "heavySlot": {
+    "queueAndStartupSeconds": 78.437764,
+    "executionSeconds": 339.36727645798237,
+    "outerWallSeconds": 417.8096177909756,
+    "qaLeaseHeldOrWaitingDuringHeavy": false
+  },
+  "validation": {
+    "focused": {
+      "pass": 4,
+      "skipped": 386
+    },
+    "review": {
+      "files": 253,
+      "tests": 6658,
+      "pass": true
+    },
+    "knip": "pass",
+    "weighted300": {
+      "games": 300,
+      "steps": 103188,
+      "prompts": 7290,
+      "interactiveReruns": 740,
+      "failures": 0,
+      "targets": [
+        {
+          "uuid": "6da831c8-6fda-4078-9f2b-873db2416aad",
+          "included": 619,
+          "exercised": 130
+        },
+        {
+          "uuid": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+          "included": 615,
+          "exercised": 139
+        }
+      ]
+    },
+    "labPreflight": {
+      "cards": [
+        "6da831c8-6fda-4078-9f2b-873db2416aad",
+        "21965e95-0c8c-470c-a1e1-06d7b87a8d00"
+      ],
+      "variants": [
+        "base",
+        "amplified",
+        "empowered",
+        "kindled",
+        "resonant",
+        "inspired",
+        "enduring",
+        "hastened",
+        "attuned",
+        "perfected"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "pass": 16,
+      "skip": 24,
+      "fail": 0
+    },
+    "judgedNodePreflight": {
+      "passed": true,
+      "rows": [
+        {
+          "scene": "nullifier-player",
+          "event": "i3",
+          "battery": "i2",
+          "displayedCost": 2,
+          "disabledAt": 1,
+          "activationEarnedEnergy": 2,
+          "payment": -2
+        },
+        {
+          "scene": "nullifier-enemy",
+          "enemyEvent": "i13",
+          "playerEvent": "i2",
+          "disabledAt": 1,
+          "payments": [
+            {
+              "side": "enemy",
+              "change": -2
+            },
+            {
+              "side": "player",
+              "change": -2
+            }
+          ]
+        },
+        {
+          "scene": "echo-player",
+          "event": "i2",
+          "copied": [
+            {
+              "kind": "cardCopied",
+              "side": "player",
+              "original": "i2",
+              "copy": "i19"
+            }
+          ],
+          "score": 2,
+          "energy": 0,
+          "replay": true
+        }
+      ]
+    },
+    "callerScope": "node syntax, no-undef and three fresh VM serialization-to-stage-sentinel checks passed; NOT browser behavior proof"
+  },
+  "diagnostics": [
+    {
+      "labels": [
+        "stage0-proof",
+        "stage0-proof-diagnostic"
+      ],
+      "cause": "Scratch proof guessed optional-before-target answer order; actual public sequence is X,target,optional,copy target"
+    },
+    {
+      "labels": [
+        "stage0-proof-final",
+        "stage0-proof-pass"
+      ],
+      "cause": "Scratch proof overasserted energy-event component partition; corrected to public total debit and no extra copy charge"
+    },
+    {
+      "labels": [
+        "judged-node-preflight"
+      ],
+      "cause": "Scratch observer read cost outside characteristics; fixed public view field path"
+    },
+    {
+      "labels": [
+        "judged-node-preflight-final"
+      ],
+      "cause": "Normal initial turn preserved 0 energy; fixture sets player1 before ordinary battery activation earns second energy"
+    },
+    {
+      "labels": [
+        "qa-judged"
+      ],
+      "cause": "Caller stalled at mandatory human Dusk with stack0 because passWhen allowed only responses; authorized bounded Dusk pass repair, full new freeze and judged-only retry passed; source unchanged"
+    }
+  ],
+  "rules": {
+    "newDecisions": [],
+    "existing": [
+      "RD-hv-7x4l.1-3",
+      "RD-hv-7x4l.7-3",
+      "RD-hv-7x4l.8-4"
+    ],
+    "cardIssues": []
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 122,
+    "jsdomFiles": 0,
+    "privateScenarioModules": 1,
+    "privateScenarios": 4,
+    "scope": "D20 plain scenario module counted as test code, matching project ledger convention; no new .test runner file"
+  },
+  "qa": {
+    "mandatoryNullifier": true,
+    "attempts": [
+      {
+        "invocation": "invocations/run-soLVrE",
+        "exitCode": 1,
+        "receipt": {
+          "command": [
+            "python3",
+            "/tmp/dreamtides-executor-01a1304d/683/helper/run-qa-observed.py",
+            "qa-judged",
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/artifacts/qa/hv-umm2.683/judged.mjs",
+            "--bead",
+            "hv-umm2.683",
+            "--viewports",
+            "desktop,mobile"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+          "start": "2026-10-14T18:20:06.681068+00:00",
+          "end": "2026-10-14T18:21:10.089411+00:00",
+          "pid": 24837,
+          "pgid": 24837,
+          "exitCode": 1,
+          "wallSeconds": 63.40773645800073,
+          "cpuSeconds": {
+            "user": 5.97762,
+            "system": 2.826444
+          },
+          "startLoad": [
+            15.63671875,
+            15.806640625,
+            14.81884765625
+          ],
+          "endLoad": [
+            8.26123046875,
+            13.62255859375,
+            14.0703125
+          ]
+        },
+        "cause": "Caller passWhen blocked mandatory human far:dusk main pass at stack0; no source/caps defect indicated",
+        "completedObservations": [
+          "Nullifier player desktop tax/threshold/payment/log",
+          "Nullifier enemy desktop live taxed event reveal before Dusk stall"
+        ],
+        "notClaimed": [
+          "complete enemy judgment",
+          "mobile",
+          "Echo"
+        ],
+        "archive": "Only final enemy game g7p9ow/35 rows archived; earlier player muxpwb completion note has own observed row count",
+        "fullFreezeMatched": true,
+        "parentRelease": {
+          "releasedAt": "2026-10-14T18:22:05.437778+00:00",
+          "fullFreezeUnchanged": true,
+          "repositoryManualPaths": 4989,
+          "externalSupportPaths": 10,
+          "completePathSetsBaseBranchStatusUnchanged": true,
+          "allRecordedGroupsGone": [
+            5136,
+            6635,
+            8165,
+            12792,
+            24837,
+            24839,
+            24877,
+            30369,
+            30442,
+            31498,
+            58267,
+            58269,
+            58331,
+            58476,
+            59466,
+            60469,
+            61529,
+            63009,
+            66456,
+            70280,
+            70779,
+            71781,
+            71842,
+            71843,
+            74530,
+            75680,
+            84703,
+            88571,
+            90281,
+            91136,
+            91141,
+            95944
+          ],
+          "ownRecordsAndTokensGone": [
+            "448c405b-3e7d-4d26-bf61-6e1f5f5081a8",
+            "494b10d4-95ca-4538-bc8e-69471d6898a2",
+            "70db315e-965e-40a7-b9a2-c630b6bb328f",
+            "93d1ea82-09ca-4be9-a565-fcb5367e1637"
+          ],
+          "nativeSweepExit": 0,
+          "nativeJudgedExit": 1,
+          "normalClosure": "native awaited terminal receipts; live handles observed, not fabricated raw close replies",
+          "callerRepairAllowed": true
+        }
+      }
+    ],
+    "sweep": {
+      "invocation": "invocations/sweep-tThlEZ",
+      "effectiveCells": {
+        "pass": 16,
+        "skip": 24,
+        "fail": 0
+      },
+      "rawAttempts": {
+        "pass": 16,
+        "skip": 24
+      },
+      "receipt": {
+        "command": [
+          "python3",
+          "/tmp/dreamtides-executor-01a1304d/683/helper/run-qa-observed.py",
+          "qa-sweep",
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.683",
+          "--cards",
+          "6da831c8-6fda-4078-9f2b-873db2416aad,21965e95-0c8c-470c-a1e1-06d7b87a8d00"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+        "start": "2026-10-14T18:17:34.111275+00:00",
+        "end": "2026-10-14T18:20:00.241471+00:00",
+        "pid": 58267,
+        "pgid": 58267,
+        "exitCode": 0,
+        "wallSeconds": 146.1287832079979,
+        "cpuSeconds": {
+          "user": 9.310135,
+          "system": 5.165361
+        },
+        "startLoad": [
+          16.84521484375,
+          13.49560546875,
+          13.8330078125
+        ],
+        "endLoad": [
+          16.56298828125,
+          15.9892578125,
+          14.876953125
+        ]
+      },
+      "nativeSummary": {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-tThlEZ",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.683/invocations/sweep-tThlEZ",
+        "counts": {
+          "pass": 16,
+          "skip": 24
+        },
+        "attemptCounts": {
+          "pass": 16,
+          "skip": 24
+        },
+        "hostLoad": 16.84521484375,
+        "sessions": 1,
+        "leaseYields": 0,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 2988,
+          "scenario": 142294.54775,
+          "cleanup": 399.8657499999972,
+          "execution": 145772.73291700002,
+          "total": 145779.73291700002
+        }
+      },
+      "sourceChecksReusable": true
+    },
+    "repair": "Only caller human Dusk pass guard, same three recipes retained; no source/check/sweep/heavy repetition",
+    "NullifierNonapplicable": [
+      "new prompt kind",
+      "target",
+      "duration"
+    ],
+    "final": {
+      "invocation": "invocations/run-zkAGKf",
+      "verdict": "pass",
+      "viewportCases": 6,
+      "rawCaps": [],
+      "rawError": null,
+      "receipt": {
+        "command": [
+          "python3",
+          "/tmp/dreamtides-executor-01a1304d/683/helper/run-qa-observed.py",
+          "qa-judged2",
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/artifacts/qa/hv-umm2.683/judged.mjs",
+          "--bead",
+          "hv-umm2.683",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+        "start": "2026-10-14T18:25:26.298807+00:00",
+        "end": "2026-10-14T18:27:13.378115+00:00",
+        "pid": 2203,
+        "pgid": 2203,
+        "exitCode": 0,
+        "wallSeconds": 107.07828837499255,
+        "cpuSeconds": {
+          "user": 6.934121,
+          "system": 3.624085
+        },
+        "startLoad": [
+          9.74365234375,
+          13.05517578125,
+          13.7138671875
+        ],
+        "endLoad": [
+          13.2685546875,
+          12.4208984375,
+          13.3232421875
+        ]
+      },
+      "nativeWallMs": {
+        "browserLeaseWait": 12409,
+        "serve": 1960,
+        "scenario": 90909,
+        "total": 105332
+      },
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 10489
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 14845
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 16238
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 6333
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 11188
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 31816
+        }
+      ],
+      "perStepCompletionNotes": [
+        {
+          "label": "nullifier-player-completed",
+          "data": {
+            "sourceController": "player",
+            "uuid": "6da831c8-6fda-4078-9f2b-873db2416aad",
+            "source": "i1",
+            "event": "i3",
+            "battery": "i2",
+            "sourceGeometry": {
+              "id": "i1",
+              "x": 254.5,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 344,
+              "bottom": 573,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "point": {
+                "x": 299.25,
+                "y": 528.25
+              },
+              "cost": null,
+              "playable": false
+            },
+            "threshold": {
+              "id": "i3",
+              "x": 705.484375,
+              "y": 732,
+              "width": 128.90625,
+              "height": 180.46875,
+              "right": 834.390625,
+              "bottom": 912.46875,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "point": {
+                "x": 769.9375,
+                "y": 822.234375
+              },
+              "cost": 2,
+              "playable": false
+            },
+            "affordable": {
+              "id": "i3",
+              "x": 705.484375,
+              "y": 732,
+              "width": 128.90625,
+              "height": 180.46875,
+              "right": 834.390625,
+              "bottom": 912.46875,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "point": {
+                "x": 769.9375,
+                "y": 822.234375
+              },
+              "cost": 2,
+              "playable": true
+            },
+            "reveal": null,
+            "debit": -2,
+            "logs": {
+              "gameId": "ebwvu6",
+              "observedRows": 34,
+              "actions": [
+                {
+                  "side": "player",
+                  "action": {
+                    "kind": "activate",
+                    "source": "i2",
+                    "ability": 0
+                  }
+                },
+                {
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i3",
+                    "from": "hand"
+                  }
+                }
+              ]
+            },
+            "plainLog": {
+              "lines": [
+                "You activated Card.",
+                "You gained 1 energy.",
+                "You played Card."
+              ],
+              "x": 283,
+              "y": 450.390625,
+              "width": 874,
+              "height": 81.71875,
+              "right": 1157,
+              "bottom": 532.109375,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            },
+            "nonapplicable": [
+              "new prompt",
+              "target",
+              "duration"
+            ]
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "nullifier-enemy-completed",
+          "data": {
+            "sourceController": "enemy",
+            "uuid": "6da831c8-6fda-4078-9f2b-873db2416aad",
+            "source": "i11",
+            "event": "i2",
+            "battery": "i1",
+            "sourceGeometry": {
+              "id": "i11",
+              "x": 254.5,
+              "y": 183,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 344,
+              "bottom": 272.5,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "point": {
+                "x": 299.25,
+                "y": 227.75
+              },
+              "cost": null,
+              "playable": false
+            },
+            "threshold": {
+              "id": "i2",
+              "x": 626.599365234375,
+              "y": 731.552978515625,
+              "width": 141.18115234375,
+              "height": 189.02117919921875,
+              "right": 767.780517578125,
+              "bottom": 920.5741577148438,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "point": {
+                "x": 697.18994140625,
+                "y": 826.0635681152344
+              },
+              "cost": 2,
+              "playable": false
+            },
+            "affordable": {
+              "id": "i2",
+              "x": 626.599365234375,
+              "y": 731.552978515625,
+              "width": 141.18115234375,
+              "height": 189.02117919921875,
+              "right": 767.780517578125,
+              "bottom": 920.5741577148438,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "point": {
+                "x": 697.18994140625,
+                "y": 826.0635681152344
+              },
+              "cost": 2,
+              "playable": true
+            },
+            "reveal": {
+              "id": "i13",
+              "x": 613.5881958007812,
+              "y": 215.78836059570312,
+              "width": 212.8236083984375,
+              "height": 297.9529724121094,
+              "right": 826.4118041992188,
+              "bottom": 513.7413330078125,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "from": "hand"
+            },
+            "debit": -2,
+            "logs": {
+              "gameId": "rjbrjv",
+              "observedRows": 51,
+              "actions": [
+                {
+                  "side": "enemy",
+                  "action": {
+                    "kind": "activate",
+                    "source": "i12",
+                    "ability": 0
+                  }
+                },
+                {
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i13",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "side": "enemy",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                {
+                  "side": "player",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                {
+                  "side": "enemy",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                {
+                  "side": "player",
+                  "action": {
+                    "kind": "activate",
+                    "source": "i1",
+                    "ability": 0
+                  }
+                },
+                {
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i2",
+                    "from": "hand"
+                  }
+                }
+              ]
+            },
+            "plainLog": {
+              "lines": [
+                "Your opponent activated Card.",
+                "Your opponent gained 1 energy.",
+                "Your opponent played Card.",
+                "Your turn began.",
+                "You drew Lab Recruit.",
+                "You activated Card.",
+                "You gained 1 energy.",
+                "You played Card."
+              ],
+              "x": 283,
+              "y": 380.6875,
+              "width": 874,
+              "height": 221.125,
+              "right": 1157,
+              "bottom": 601.8125,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            },
+            "nonapplicable": [
+              "new prompt",
+              "target",
+              "duration"
+            ]
+          },
+          "at": "desktop#1"
+        },
+        {
+          "label": "echo-completed",
+          "data": {
+            "uuid": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+            "source": "i1",
+            "original": "i2",
+            "copied": "i19",
+            "eventUuid": "5e5e5e5e-0000-4000-8000-0000000000d9",
+            "affordance": {
+              "source": {
+                "x": 254.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "right": 344,
+                "bottom": 573
+              },
+              "hand": {
+                "x": 705.484375,
+                "y": 732,
+                "width": 128.90625,
+                "height": 180.46875,
+                "right": 834.390625,
+                "bottom": 912.46875
+              },
+              "point": {
+                "x": 769.9375,
+                "y": 822.234375
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "cost": 1,
+              "playable": true
+            },
+            "prompts": [
+              {
+                "id": "0:1:0",
+                "geometry": {
+                  "x": 1150.578125,
+                  "y": 597,
+                  "width": 89.921875,
+                  "height": 42,
+                  "right": 1240.5,
+                  "bottom": 639,
+                  "hit": true,
+                  "viewport": {
+                    "width": 1440,
+                    "height": 900
+                  }
+                },
+                "source": "i2"
+              },
+              {
+                "id": "1:2:0",
+                "geometry": {
+                  "x": 1150.578125,
+                  "y": 597,
+                  "width": 89.921875,
+                  "height": 42,
+                  "right": 1240.5,
+                  "bottom": 639,
+                  "hit": true,
+                  "viewport": {
+                    "width": 1440,
+                    "height": 900
+                  }
+                },
+                "source": "i19"
+              }
+            ],
+            "debit": -1,
+            "resolutions": [
+              "i19",
+              "i2"
+            ],
+            "score": 2,
+            "logs": {
+              "gameId": "nmqb82",
+              "observedRows": 42
+            },
+            "plainLog": [
+              "You played Lab Crossroads.",
+              "Echo Architect's triggered ability resolved.",
+              "You copied Lab Crossroads.",
+              "You gained 1 point.",
+              "You gained 1 point."
+            ],
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=21965e95-0c8c-470c-a1e1-06d7b87a8d00&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%2221965e95-0c8c-470c-a1e1-06d7b87a8d00%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-0000000000d9%22%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A1%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=nmqb82",
+            "sameSavedGame": true,
+            "exactCommittedReload": true
+          },
+          "at": "desktop#2"
+        },
+        {
+          "label": "nullifier-player-completed",
+          "data": {
+            "sourceController": "player",
+            "uuid": "6da831c8-6fda-4078-9f2b-873db2416aad",
+            "source": "i1",
+            "event": "i3",
+            "battery": "i2",
+            "sourceGeometry": {
+              "id": "i1",
+              "x": 23.40625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 77.265625,
+              "bottom": 469.75,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "point": {
+                "x": 50.3359375,
+                "y": 442.8203125
+              },
+              "cost": null,
+              "playable": false
+            },
+            "threshold": {
+              "id": "i3",
+              "x": 120.1328125,
+              "y": 664.109375,
+              "width": 149.734375,
+              "height": 209.625,
+              "right": 269.8671875,
+              "bottom": 873.734375,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "point": {
+                "x": 195,
+                "y": 768.921875
+              },
+              "cost": 2,
+              "playable": false
+            },
+            "affordable": {
+              "id": "i3",
+              "x": 120.1328125,
+              "y": 664.109375,
+              "width": 149.734375,
+              "height": 209.625,
+              "right": 269.8671875,
+              "bottom": 873.734375,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "point": {
+                "x": 195,
+                "y": 768.921875
+              },
+              "cost": 2,
+              "playable": true
+            },
+            "reveal": null,
+            "debit": -2,
+            "logs": {
+              "gameId": "99panj",
+              "observedRows": 34,
+              "actions": [
+                {
+                  "side": "player",
+                  "action": {
+                    "kind": "activate",
+                    "source": "i2",
+                    "ability": 0
+                  }
+                },
+                {
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i3",
+                    "from": "hand"
+                  }
+                }
+              ]
+            },
+            "plainLog": {
+              "lines": [
+                "You activated Card.",
+                "You gained 1 energy.",
+                "You played Card."
+              ],
+              "x": 12,
+              "y": 112.25,
+              "width": 366,
+              "height": 81.71875,
+              "right": 378,
+              "bottom": 193.96875,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            },
+            "nonapplicable": [
+              "new prompt",
+              "target",
+              "duration"
+            ]
+          },
+          "at": "mobile#0"
+        },
+        {
+          "label": "nullifier-enemy-completed",
+          "data": {
+            "sourceController": "enemy",
+            "uuid": "6da831c8-6fda-4078-9f2b-873db2416aad",
+            "source": "i11",
+            "event": "i2",
+            "battery": "i1",
+            "sourceGeometry": {
+              "id": "i11",
+              "x": 23.40625,
+              "y": 222.3125,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 77.265625,
+              "bottom": 276.171875,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "point": {
+                "x": 50.3359375,
+                "y": 249.2421875
+              },
+              "cost": null,
+              "playable": false
+            },
+            "threshold": {
+              "id": "i2",
+              "x": 63.52015686035156,
+              "y": 666.8659057617188,
+              "width": 170.82589721679688,
+              "height": 224.12811279296875,
+              "right": 234.34605407714844,
+              "bottom": 890.9940185546875,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "point": {
+                "x": 148.93310546875,
+                "y": 778.9299621582031
+              },
+              "cost": 2,
+              "playable": false
+            },
+            "affordable": {
+              "id": "i2",
+              "x": 63.52015686035156,
+              "y": 666.8659057617188,
+              "width": 170.82589721679688,
+              "height": 224.12811279296875,
+              "right": 234.34605407714844,
+              "bottom": 890.9940185546875,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "point": {
+                "x": 148.93310546875,
+                "y": 778.9299621582031
+              },
+              "cost": 2,
+              "playable": true
+            },
+            "reveal": {
+              "id": "i13",
+              "x": 123.21001434326172,
+              "y": 194.50570678710938,
+              "width": 143.5799560546875,
+              "height": 201.001708984375,
+              "right": 266.7899703979492,
+              "bottom": 395.5074157714844,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "from": "hand"
+            },
+            "debit": -2,
+            "logs": {
+              "gameId": "suo5rc",
+              "observedRows": 51,
+              "actions": [
+                {
+                  "side": "enemy",
+                  "action": {
+                    "kind": "activate",
+                    "source": "i12",
+                    "ability": 0
+                  }
+                },
+                {
+                  "side": "enemy",
+                  "action": {
+                    "kind": "play",
+                    "card": "i13",
+                    "from": "hand"
+                  }
+                },
+                {
+                  "side": "enemy",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                {
+                  "side": "player",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                {
+                  "side": "enemy",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                {
+                  "side": "player",
+                  "action": {
+                    "kind": "activate",
+                    "source": "i1",
+                    "ability": 0
+                  }
+                },
+                {
+                  "side": "player",
+                  "action": {
+                    "kind": "play",
+                    "card": "i2",
+                    "from": "hand"
+                  }
+                }
+              ]
+            },
+            "plainLog": {
+              "lines": [
+                "Your opponent activated Card.",
+                "Your opponent gained 1 energy.",
+                "Your opponent played Card.",
+                "Your turn began.",
+                "You drew Lab Recruit.",
+                "You activated Card.",
+                "You gained 1 energy.",
+                "You played Card."
+              ],
+              "x": 12,
+              "y": 112.25,
+              "width": 366,
+              "height": 221.125,
+              "right": 378,
+              "bottom": 333.375,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            },
+            "nonapplicable": [
+              "new prompt",
+              "target",
+              "duration"
+            ]
+          },
+          "at": "mobile#1"
+        },
+        {
+          "label": "echo-completed",
+          "data": {
+            "uuid": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+            "source": "i1",
+            "original": "i2",
+            "copied": "i19",
+            "eventUuid": "5e5e5e5e-0000-4000-8000-0000000000d9",
+            "affordance": {
+              "source": {
+                "x": 23.40625,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "right": 77.265625,
+                "bottom": 469.75
+              },
+              "hand": {
+                "x": 120.1328125,
+                "y": 664.109375,
+                "width": 149.734375,
+                "height": 209.625,
+                "right": 269.8671875,
+                "bottom": 873.734375
+              },
+              "point": {
+                "x": 195,
+                "y": 768.921875
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "cost": 1,
+              "playable": true
+            },
+            "prompts": [
+              {
+                "id": "0:1:0",
+                "geometry": {
+                  "x": 292.078125,
+                  "y": 522.828125,
+                  "width": 89.921875,
+                  "height": 42,
+                  "right": 382,
+                  "bottom": 564.828125,
+                  "hit": true,
+                  "viewport": {
+                    "width": 390,
+                    "height": 844
+                  }
+                },
+                "source": "i2"
+              },
+              {
+                "id": "1:2:0",
+                "geometry": {
+                  "x": 292.078125,
+                  "y": 522.828125,
+                  "width": 89.921875,
+                  "height": 42,
+                  "right": 382,
+                  "bottom": 564.828125,
+                  "hit": true,
+                  "viewport": {
+                    "width": 390,
+                    "height": 844
+                  }
+                },
+                "source": "i19"
+              }
+            ],
+            "debit": -1,
+            "resolutions": [
+              "i19",
+              "i2"
+            ],
+            "score": 2,
+            "logs": {
+              "gameId": "ba3uz8",
+              "observedRows": 42
+            },
+            "plainLog": [
+              "You played Lab Crossroads.",
+              "Echo Architect's triggered ability resolved.",
+              "You copied Lab Crossroads.",
+              "You gained 1 point.",
+              "You gained 1 point."
+            ],
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=21965e95-0c8c-470c-a1e1-06d7b87a8d00&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%2221965e95-0c8c-470c-a1e1-06d7b87a8d00%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-0000000000d9%22%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A1%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=ba3uz8",
+            "sameSavedGame": true,
+            "exactCommittedReload": true
+          },
+          "at": "mobile#2"
+        }
+      ],
+      "finalArchives": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.683/invocations/run-zkAGKf/judged-desktop.jsonl",
+          "gameId": "nmqb82",
+          "selectedBy": "url",
+          "rows": 46,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.683/invocations/run-zkAGKf/judged-mobile.jsonl",
+          "gameId": "ba3uz8",
+          "selectedBy": "url",
+          "rows": 46,
+          "reason": null
+        }
+      ],
+      "archiveQualification": "Runner archives only final Echo game per viewport: nmqb82/ba3uz8 each46 rows. Earlier Nullifier games have actual per-scene observed34/51 rows, Echo observed42 before reload/archive; these are observations, not exported earlier games.",
+      "captureFilenames": [
+        "nullifier-player-threshold-desktop.png",
+        "nullifier-player-log-desktop.png",
+        "nullifier-enemy-reveal-desktop.png",
+        "nullifier-enemy-threshold-desktop.png",
+        "nullifier-enemy-log-desktop.png",
+        "echo-original-mode-desktop.png",
+        "echo-copy-mode-desktop.png",
+        "echo-copy-log-desktop.png",
+        "nullifier-player-threshold-mobile.png",
+        "nullifier-player-log-mobile.png",
+        "nullifier-enemy-reveal-mobile.png",
+        "nullifier-enemy-threshold-mobile.png",
+        "nullifier-enemy-log-mobile.png",
+        "echo-original-mode-mobile.png",
+        "echo-copy-mode-mobile.png",
+        "echo-copy-log-mobile.png"
+      ],
+      "freeze": {
+        "repoPaths": 4990,
+        "externalSupportPaths": 10,
+        "entireQaLedger": true,
+        "helperFullGuard": "matched",
+        "parentIndependentRelease": {
+          "releasedAt": "2026-10-14T18:28:54.552212+00:00",
+          "fullFreezeUnchanged": true,
+          "repositoryManualPaths": 4990,
+          "externalSupportPaths": 10,
+          "entireQaLedgerFrozenAndUnchanged": true,
+          "completePathSetsBaseBranchStatusUnchanged": true,
+          "allRecordedGroupsGone": [
+            2203,
+            2204,
+            3926,
+            5136,
+            6635,
+            8165,
+            12792,
+            24837,
+            24839,
+            24877,
+            30369,
+            30442,
+            31498,
+            35760,
+            35764,
+            58267,
+            58269,
+            58331,
+            58476,
+            59466,
+            60469,
+            61529,
+            63009,
+            66456,
+            70280,
+            70779,
+            71781,
+            71842,
+            71843,
+            74530,
+            75680,
+            84703,
+            88571,
+            90281,
+            91136,
+            91141,
+            95944
+          ],
+          "ownRecordsAndTokensGone": [
+            "448c405b-3e7d-4d26-bf61-6e1f5f5081a8",
+            "494b10d4-95ca-4538-bc8e-69471d6898a2",
+            "70db315e-965e-40a7-b9a2-c630b6bb328f",
+            "74b62475-d320-4d5b-b218-b100fa6f1f5f",
+            "93d1ea82-09ca-4be9-a565-fcb5367e1637",
+            "e33d579a-940b-48cb-b70a-94acac2533b2"
+          ],
+          "judgedExit": 0,
+          "judgedOk": true,
+          "caps": [],
+          "nativeWallMs": {
+            "browserLeaseWait": 12409,
+            "serve": 1960,
+            "scenario": 90909,
+            "total": 105332
+          },
+          "qaResultPath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.683/invocations/run-zkAGKf/judged.result.json",
+          "normalClosure": "native awaited normal closure; exact live ownership identities retained; no fabricated raw provider close reply"
+        }
+      },
+      "resources": {
+        "terminal": {
+          "at": "2026-10-14T18:28:03.149376+00:00",
+          "ownGroups": [
+            2203,
+            2204,
+            3926
+          ],
+          "liveMembers": [],
+          "normalExit": 0,
+          "terminalRunnerIdentity": null,
+          "ownerObservations": [
+            {
+              "observedAt": "2026-10-14T18:25:40.975857+00:00",
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "record": {
+                "token": "74b62475-d320-4d5b-b218-b100fa6f1f5f",
+                "pid": 2204,
+                "bead": "hv-umm2.683",
+                "label": "judged",
+                "checkout": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+                "slot": 1,
+                "port": 5274,
+                "startedAt": "2026-10-14T18:25:40.877Z",
+                "providerState": "active",
+                "mcpSessionId": "2db178e8-21e2-414f-8281-90ff7b20bc3a",
+                "mcpUrl": "http://localhost:8931/mcp",
+                "mcpProtocolVersion": "2025-11-25"
+              },
+              "runnerIdentity": "2204  2204 Wed Oct 14 11:25:26 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/artifacts/qa/hv-umm2.683/judged.mjs --bead hv-umm2.683 --viewports desktop,mobile"
+            }
+          ],
+          "serverObservations": [
+            {
+              "observedAt": "2026-10-14T18:25:39.019047+00:00",
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "record": {
+                "token": "e33d579a-940b-48cb-b70a-94acac2533b2",
+                "runner": {
+                  "pid": 2204,
+                  "group": 2204,
+                  "started": "Wed Oct 14 11:25:26 2026",
+                  "state": "Ss",
+                  "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/artifacts/qa/hv-umm2.683/judged.mjs --bead hv-umm2.683 --viewports desktop,mobile"
+                },
+                "server": {
+                  "pid": 3926,
+                  "group": 3926,
+                  "started": "Wed Oct 14 11:25:38 2026",
+                  "state": "Rs",
+                  "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json e33d579a-940b-48cb-b70a-94acac2533b2 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+                },
+                "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+                "port": 5274
+              },
+              "runnerIdentity": "2204  2204 Wed Oct 14 11:25:26 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/artifacts/qa/hv-umm2.683/judged.mjs --bead hv-umm2.683 --viewports desktop,mobile",
+              "serverIdentity": "3926  3926 Wed Oct 14 11:25:38 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json e33d579a-940b-48cb-b70a-94acac2533b2 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "observedAt": "2026-10-14T18:27:13.030469+00:00",
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "record": {
+                "token": "e33d579a-940b-48cb-b70a-94acac2533b2",
+                "runner": {
+                  "pid": 2204,
+                  "group": 2204,
+                  "started": "Wed Oct 14 11:25:26 2026",
+                  "state": "Ss",
+                  "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/artifacts/qa/hv-umm2.683/judged.mjs --bead hv-umm2.683 --viewports desktop,mobile"
+                },
+                "server": {
+                  "pid": 3926,
+                  "group": 3926,
+                  "started": "Wed Oct 14 11:25:38 2026",
+                  "state": "Rs",
+                  "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json e33d579a-940b-48cb-b70a-94acac2533b2 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+                },
+                "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683",
+                "port": 5274,
+                "members": [
+                  {
+                    "pid": 3926,
+                    "group": 3926,
+                    "started": "Wed Oct 14 11:25:38 2026",
+                    "state": "Ss",
+                    "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json e33d579a-940b-48cb-b70a-94acac2533b2 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+                  },
+                  {
+                    "pid": 3941,
+                    "group": 3926,
+                    "started": "Wed Oct 14 11:25:38 2026",
+                    "state": "S",
+                    "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+                  },
+                  {
+                    "pid": 3969,
+                    "group": 3926,
+                    "started": "Wed Oct 14 11:25:40 2026",
+                    "state": "S",
+                    "command": "node /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/node_modules/.bin/vite --port 5274 --strictPort"
+                  },
+                  {
+                    "pid": 3971,
+                    "group": 3926,
+                    "started": "Wed Oct 14 11:25:40 2026",
+                    "state": "S",
+                    "command": "/Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+                  }
+                ]
+              },
+              "runnerIdentity": "2204  2204 Wed Oct 14 11:25:26 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/artifacts/qa/hv-umm2.683/judged.mjs --bead hv-umm2.683 --viewports desktop,mobile",
+              "serverIdentity": "3926  3926 Wed Oct 14 11:25:38 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/nullifier-echo-architect-683/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json e33d579a-940b-48cb-b70a-94acac2533b2 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            }
+          ]
+        },
+        "normalNativeClosure": "Awaited native runner exit0/portfree receipt plus own matched token records removed and PID/PG absent establishes browser/provider/RPC/SDK cleanup; no invented provider raw reply"
+      },
+      "visualJudgment": "Taxed event orb2 and disabled threshold1 visibly match both source controllers; ordinary activation earns energy2 and normal play debits2. Enemy live reveal has cost2 and bounded visible card. Echo copy badge, two independent mode prompts and two point resolutions appear clearly; player-facing log is readable at both viewports. Hand fan clipping is intentional, with verified visible hit points. Six representative desktop/mobile/copy/reveal/log captures visually inspected; no source presentation defect.",
+      "independentParentVisualAcceptance": {
+        "checkedAt": "2026-10-14T18:30:14.022744+00:00",
+        "captures": [
+          {
+            "filename": "nullifier-player-threshold-desktop.png",
+            "path": "nullifier-player-threshold-desktop.png",
+            "bytes": 2892917,
+            "sha256": "629b0a50fe8729f47f91cf68d431d3ae514c409329dc0da4b5a42d4c0d5f5273",
+            "actualPixelSize": [
+              2880,
+              1800
+            ],
+            "logicalViewport": [
+              1440,
+              900
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "nullifier-player-log-desktop.png",
+            "path": "nullifier-player-log-desktop.png",
+            "bytes": 2762751,
+            "sha256": "ccddb3a67bcd8a5e71c08f8b87787f254769f7198242392c13a57568c8f95b0d",
+            "actualPixelSize": [
+              2880,
+              1800
+            ],
+            "logicalViewport": [
+              1440,
+              900
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "nullifier-enemy-reveal-desktop.png",
+            "path": "nullifier-enemy-reveal-desktop.png",
+            "bytes": 2773352,
+            "sha256": "417d9e4b152dcb772f550815cb9d55375aec19b0d3d9071fdf3b6b92b7b9017f",
+            "actualPixelSize": [
+              2880,
+              1800
+            ],
+            "logicalViewport": [
+              1440,
+              900
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "nullifier-enemy-threshold-desktop.png",
+            "path": "nullifier-enemy-threshold-desktop.png",
+            "bytes": 2880029,
+            "sha256": "c2e35a25ebd50f000cc605f376616a780fffdacb37817aa4de01184966a46b8b",
+            "actualPixelSize": [
+              2880,
+              1800
+            ],
+            "logicalViewport": [
+              1440,
+              900
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "nullifier-enemy-log-desktop.png",
+            "path": "nullifier-enemy-log-desktop.png",
+            "bytes": 2607748,
+            "sha256": "416a2d3bde744df78546e645dcdc81653ffe96ff05c5ac70dca866c9b32223d9",
+            "actualPixelSize": [
+              2880,
+              1800
+            ],
+            "logicalViewport": [
+              1440,
+              900
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "echo-original-mode-desktop.png",
+            "path": "echo-original-mode-desktop.png",
+            "bytes": 2922968,
+            "sha256": "1c394beb2b62531fb35b83885e32a40d9e87e484395c23c2bcff85ad9a168c1f",
+            "actualPixelSize": [
+              2880,
+              1800
+            ],
+            "logicalViewport": [
+              1440,
+              900
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "echo-copy-mode-desktop.png",
+            "path": "echo-copy-mode-desktop.png",
+            "bytes": 2801972,
+            "sha256": "041d535ca3c3b285ddaf4433696592fbe2835d6c20948cbc1221eb5eadeb9f0b",
+            "actualPixelSize": [
+              2880,
+              1800
+            ],
+            "logicalViewport": [
+              1440,
+              900
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "echo-copy-log-desktop.png",
+            "path": "echo-copy-log-desktop.png",
+            "bytes": 2705981,
+            "sha256": "c3854e832e1d18168c4c235a286bb900e009bc0205a5ef61174f9dfbb58f7846",
+            "actualPixelSize": [
+              2880,
+              1800
+            ],
+            "logicalViewport": [
+              1440,
+              900
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "nullifier-player-threshold-mobile.png",
+            "path": "nullifier-player-threshold-mobile.png",
+            "bytes": 1059263,
+            "sha256": "2d3cd6dcc5fd7ca8717e19245f794de1bc4da6259b65cf089fceaf707e570b5f",
+            "actualPixelSize": [
+              780,
+              1688
+            ],
+            "logicalViewport": [
+              390,
+              844
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "nullifier-player-log-mobile.png",
+            "path": "nullifier-player-log-mobile.png",
+            "bytes": 263398,
+            "sha256": "b5c3c4632d93e2fb2e235ed031e93cb8c2d820f186236763f7ec23c1227c45c8",
+            "actualPixelSize": [
+              780,
+              1688
+            ],
+            "logicalViewport": [
+              390,
+              844
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "nullifier-enemy-reveal-mobile.png",
+            "path": "nullifier-enemy-reveal-mobile.png",
+            "bytes": 956003,
+            "sha256": "080535df645ac2e2cb803a7dcff9cf79cdd5ae762ad8f02755adeb82e78df9a7",
+            "actualPixelSize": [
+              780,
+              1688
+            ],
+            "logicalViewport": [
+              390,
+              844
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "nullifier-enemy-threshold-mobile.png",
+            "path": "nullifier-enemy-threshold-mobile.png",
+            "bytes": 1035904,
+            "sha256": "77c7ffa8f93febc051508bc092d7c7a7bf5a3b2df7e98e297bed16f834f83369",
+            "actualPixelSize": [
+              780,
+              1688
+            ],
+            "logicalViewport": [
+              390,
+              844
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "nullifier-enemy-log-mobile.png",
+            "path": "nullifier-enemy-log-mobile.png",
+            "bytes": 335611,
+            "sha256": "f3196e681d61109e2281cd064e42e5188ee9a4db82e1861142e08152128c5d6c",
+            "actualPixelSize": [
+              780,
+              1688
+            ],
+            "logicalViewport": [
+              390,
+              844
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "echo-original-mode-mobile.png",
+            "path": "echo-original-mode-mobile.png",
+            "bytes": 1084589,
+            "sha256": "db1b59cce3d077fdabf31bc61dea4faccc3d7756d054c8a8051cc347e0fc5325",
+            "actualPixelSize": [
+              780,
+              1688
+            ],
+            "logicalViewport": [
+              390,
+              844
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "echo-copy-mode-mobile.png",
+            "path": "echo-copy-mode-mobile.png",
+            "bytes": 998644,
+            "sha256": "0f88f50435130487426cd1e5da90f9e2ca227db753ec8aed809929be1f580f4a",
+            "actualPixelSize": [
+              780,
+              1688
+            ],
+            "logicalViewport": [
+              390,
+              844
+            ],
+            "parentViewed": true
+          },
+          {
+            "filename": "echo-copy-log-mobile.png",
+            "path": "echo-copy-log-mobile.png",
+            "bytes": 279274,
+            "sha256": "52c2a7cacfa8b66bd415fa2f34fd9ae01107e518f8688b6e531f44dca9532228",
+            "actualPixelSize": [
+              780,
+              1688
+            ],
+            "logicalViewport": [
+              390,
+              844
+            ],
+            "parentViewed": true
+          }
+        ],
+        "verdict": "pass",
+        "observations": [
+          "Tax2 is visible on unplayable event at energy1; normal battery activation and paid play are independently asserted.",
+          "Enemy event reveal is visible and within viewport; underlying phase control is disabled during reveal.",
+          "Original mode prompt has Cancel; committed copy mode has distinct physical source and copy marker, with two usable mode choices.",
+          "Echo log names the copy and both point gains; Nullifier fixture logs preserve both actor plays and energy activation.",
+          "All prompt choices, source board cards and log controls remain within bounds; fanned hand cards retain intentional bottom clipping with visible hit points and actual successful play."
+        ],
+        "notAColdRendererReview": true
+      }
+    }
+  },
+  "reviewPolicy": {
+    "coreReviewLabel": false,
+    "nonTestProductionChangedLines": 19,
+    "substantialThreshold": "more than100 production non-test additions+deletions",
+    "normalFamilyRouting": "Claude Opus5.5 if threshold/core required; temporary Sol override expired2026-10-14T01:00Z"
+  },
+  "preExistingIssues": [],
+  "callerDiagnostic": {
+    "cause": "Broad generation replacement temporarily inserted Echo-only affordance into both Nullifier entries; no-undef caught original undefined before freeze/runtime, corrected and scope/static checks passed",
+    "status": "short caller diagnostic, no product gap or ten-minute friction"
+  }
+}

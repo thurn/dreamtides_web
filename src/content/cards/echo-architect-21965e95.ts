@@ -1,3 +1,7 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { triggered, triggeringCard, whenYouPlay } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { copyCard, costModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +22,9 @@ export default card({
   cardNumber: 26,
   art: { x: 0, y: 0, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    staticAbility(costModifier("you", { cardType: "event" }, 1)),
+    triggered(whenYouPlay({ cardType: "event" }), copyCard(triggeringCard())),
+  ],
+  verifiedText: expectedVerifiedText("Events cost you 1● more.\n\nWhen you play an event, copy it."),
 });
