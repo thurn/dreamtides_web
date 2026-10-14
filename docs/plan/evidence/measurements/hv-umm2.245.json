@@ -1,0 +1,869 @@
+{
+  "bead": "hv-umm2.245",
+  "stage": "Final validated original whole-five-UUID evidence, prepared for exactly one authorized Conventional Commit; subsequent root certified delivery/native closure owed.",
+  "base": "0ee02fa28cbfabfae4cc17db69745ce76b6c7a49",
+  "scope": "Original whole-five-UUID acceptance; child662 four certified leaves/scenarios/evidence read-only; Black authoring only",
+  "firstHelperDispatch": {
+    "at": "2026-10-14T04:30:23.433000+00:00",
+    "callId": "call_d9744058fb314080be75380368dc2295",
+    "sampling": "UNKNOWN"
+  },
+  "implementationClock": {
+    "marker": "2026-10-14T05:19:22.107816+00:00",
+    "qualification": "Actual UTC prospective marker written immediately before final schema/staging/commit in one terminal script. Actual future Git start/end/return UNKNOWN at this tracked write. External actual Git receipt and final handoff provide measured completion and honest marker-to-return gap; no tracked postcommit rewrite. Gross window includes all research/admissions/checks/incident/qualified recovery/idle/QA through actual Git return."
+  },
+  "localChecks": {
+    "knip-final-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:40:27.181211+00:00",
+      "end": "2026-10-14T04:40:32.305572+00:00",
+      "exit": 0,
+      "wallSeconds": 5.123971750028431,
+      "pid": 72915,
+      "pgid": 72915,
+      "load": "{ 24.15 15.28 13.20 }",
+      "groupRemainingAtExit": []
+    },
+    "sweep-v01": {
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.245",
+        "--dreamsigns",
+        "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,73efd845-6009-4686-860c-01c7f5b1c074,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:48:42.158938+00:00",
+      "end": "2026-10-14T04:50:37.966536+00:00",
+      "exit": 2,
+      "wallSeconds": 115.80841966700973,
+      "pid": 99714,
+      "pgid": 99714,
+      "load": "{ 3.74 7.38 10.12 }",
+      "groupRemainingAtExit": []
+    },
+    "weighted300-v01": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,73efd845-6009-4686-860c-01c7f5b1c074,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:44:32.963270+00:00",
+      "end": "2026-10-14T04:48:19.262741+00:00",
+      "exit": 0,
+      "wallSeconds": 226.30114329099888,
+      "pid": 92355,
+      "pgid": 92355,
+      "load": "{ 7.59 11.49 12.12 }",
+      "groupRemainingAtExit": []
+    },
+    "control-literal2-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-battle-08"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:38:14.916611+00:00",
+      "end": "2026-10-14T04:38:19.242760+00:00",
+      "exit": 1,
+      "wallSeconds": 4.326065207977081,
+      "pid": 15305,
+      "pgid": 15305,
+      "load": "{ 5.11 7.35 10.42 }",
+      "groupRemainingAtExit": []
+    },
+    "full-join-focused-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-(battle-08|ready-245)"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:39:03.440741+00:00",
+      "end": "2026-10-14T04:39:09.907787+00:00",
+      "exit": 0,
+      "wallSeconds": 6.466990791988792,
+      "pid": 18325,
+      "pgid": 18325,
+      "load": "{ 20.30 10.68 11.45 }",
+      "groupRemainingAtExit": []
+    },
+    "authored-focused-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-battle-08"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:37:46.056881+00:00",
+      "end": "2026-10-14T04:37:53.266357+00:00",
+      "exit": 0,
+      "wallSeconds": 7.209238249983173,
+      "pid": 14306,
+      "pgid": 14306,
+      "load": "{ 5.27 7.62 10.62 }",
+      "groupRemainingAtExit": []
+    },
+    "normalized-schema-v01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:41:18.947725+00:00",
+      "end": "2026-10-14T04:41:19.096643+00:00",
+      "exit": 0,
+      "wallSeconds": 0.14881229199818335,
+      "pid": 78506,
+      "pgid": 78506,
+      "load": "{ 19.53 15.45 13.39 }",
+      "groupRemainingAtExit": []
+    },
+    "control-leaf-disable-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-battle-08"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:38:10.250090+00:00",
+      "end": "2026-10-14T04:38:14.843213+00:00",
+      "exit": 1,
+      "wallSeconds": 4.593092750001233,
+      "pid": 15056,
+      "pgid": 15056,
+      "load": "{ 4.86 7.34 10.43 }",
+      "groupRemainingAtExit": []
+    },
+    "review-final-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:39:10.041741+00:00",
+      "end": "2026-10-14T04:40:17.463773+00:00",
+      "exit": 0,
+      "wallSeconds": 67.42243412497919,
+      "pid": 18736,
+      "pgid": 18736,
+      "load": "{ 22.11 11.22 11.63 }",
+      "groupRemainingAtExit": []
+    },
+    "preflight-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,73efd845-6009-4686-860c-01c7f5b1c074,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:48:30.845865+00:00",
+      "end": "2026-10-14T04:48:32.051798+00:00",
+      "exit": 0,
+      "wallSeconds": 1.2058719169872347,
+      "pid": 99352,
+      "pgid": 99352,
+      "load": "{ 3.96 7.55 10.21 }",
+      "groupRemainingAtExit": []
+    },
+    "before-pending-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-battle-08"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:37:28.898133+00:00",
+      "end": "2026-10-14T04:37:35.974242+00:00",
+      "exit": 1,
+      "wallSeconds": 7.075992333004251,
+      "pid": 13585,
+      "pgid": 13585,
+      "load": "{ 5.36 7.75 10.72 }",
+      "groupRemainingAtExit": []
+    },
+    "sweep-fresh-provider-v02": {
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.245",
+        "--dreamsigns",
+        "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,73efd845-6009-4686-860c-01c7f5b1c074,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T05:06:39.097653+00:00",
+      "end": "2026-10-14T05:07:11.469123+00:00",
+      "exit": 0,
+      "wallSeconds": 32.370797916984884,
+      "pid": 25354,
+      "pgid": 25354,
+      "load": "{ 5.08 5.46 7.32 }",
+      "groupRemainingAtExit": []
+    },
+    "content-gate-final-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T04:40:32.928178+00:00",
+      "end": "2026-10-14T04:40:38.488020+00:00",
+      "exit": 0,
+      "wallSeconds": 5.559768209001049,
+      "pid": 74518,
+      "pgid": 74518,
+      "load": "{ 23.82 15.36 13.24 }",
+      "groupRemainingAtExit": []
+    },
+    "postruntime-schema-v01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+      "start": "2026-10-14T05:15:58.569922+00:00",
+      "end": "2026-10-14T05:15:58.640574+00:00",
+      "exit": 0,
+      "wallSeconds": 0.07057366700610146,
+      "pid": 6368,
+      "pgid": 6368,
+      "load": "{ 8.71 9.01 8.10 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "controls": {
+    "utc": "2026-10-14T04:38:19.293605+00:00",
+    "originalSha256": "b4e1a3182db2e33d478ca0a8620c8fb538a94b88137ed992774966c5e0bb132c",
+    "controls": [
+      {
+        "name": "control-leaf-disable-v01",
+        "mutatedSha256": "50a1da38b1c77cf40ac5bd9d0110d61b36d4ff371c82f0a69a4def05090ad475",
+        "exit": 1,
+        "restoredSha256": "b4e1a3182db2e33d478ca0a8620c8fb538a94b88137ed992774966c5e0bb132c",
+        "restoredExactly": true
+      },
+      {
+        "name": "control-literal2-v01",
+        "mutatedSha256": "dfa023e416f7ee62ea6b89f946dc8795414b1ed1cf3ee1aa60904137eb3c6b43",
+        "exit": 1,
+        "restoredSha256": "b4e1a3182db2e33d478ca0a8620c8fb538a94b88137ed992774966c5e0bb132c",
+        "restoredExactly": true
+      }
+    ]
+  },
+  "sourceSemantics": {
+    "path": "src/content/dreamsigns/black-feather-73efd845.ts",
+    "imports": [
+      "characterYouControl, randomCharacter, triggerSubjectSpark from ../../engine/dsl/builders",
+      "triggered, whenAbandon from ../../engine/dsl/triggers",
+      "gainSpark from ../../engine/effects/primitives/gain-spark",
+      "expectedVerifiedText from ../../engine/dsl/verified-text"
+    ],
+    "abilities": "() => [triggered(whenAbandon(), gainSpark(randomCharacter(characterYouControl()), triggerSubjectSpark()))]",
+    "verifiedText": "expectedVerifiedText(\"When you abandon a character, a random character you control gains +X\u2726 where X is the abandoned character's \u2726.\")",
+    "pending": "Remove pending:true only. No journey clause exists. All printed data/art/tides/tags/rarity retained exactly. Existing emblem controller comes from triggered/whenAbandon defaultyou; randomCharacter is non-target controlled battlefield selection; gainSpark defaults permanent; resolving retained subject spark supplies effective predeparture amount, not source/printed/copiable cost/X."
+  },
+  "d20": {
+    "ownPlainModules": 1,
+    "ownCases": 6,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "configuredEntryDelta": 0,
+    "jsdomDelta": 0,
+    "readOnlyChildCases": 12,
+    "qualification": "Actual shared leaf witnesses precede meaningful actual private Engine API synthetic interactions; primitive587 matrix not duplicated."
+  },
+  "fiveFailurePaths": {
+    "midStepError": "No new fallible interpreter/storage path introduced by this leaf; existing primitive587rollback evidence consumedread-only, no new injected rollback claim. N.A to consumer implementation.",
+    "reloadRestart": "Actual engine JSON state serialize/deserialize/hash and retained permanent gain finalstate; not host reload/replay/strictfold/IndexedDB.",
+    "partialTransientWrite": "No new IO/inflightprompt/cancel path. N.A; do not claim injected partial write.",
+    "invalidStaleInputs": "No new intent/input route; matchingcontroller and actualdeparture witness, not malicious/stale-intent validation.",
+    "concurrentIntents": "Physical duplicateheldBlack emblems and Gold sequential resolution actual; not concurrentthreads/storage/providersrace."
+  },
+  "rules": "D10 not invoked: current Spark effective/zero/permanence/Additional spark + RD-hv-7x4l.46-1/C17 binding and engine-design Values triggerSubjectSpark explicit semantics settle composition. No new RD/cardissue/rules writer proposed. D15 copies not played is unchanged/read-only; fixtures use actual abandoned figment copies, not played-copy trigger inference.",
+  "runtime": {
+    "state": "Complete original full-five-UUID recipe with initial transport failure retained and ONE qualified recovery rerun",
+    "targets": [
+      {
+        "uuid": "dec81fa2-7865-448c-95bc-622b884cea9e",
+        "included": 600,
+        "exercised": 0
+      },
+      {
+        "uuid": "adc23870-55f8-4f23-b973-a358fc257414",
+        "included": 600,
+        "exercised": 515
+      },
+      {
+        "uuid": "73efd845-6009-4686-860c-01c7f5b1c074",
+        "included": 600,
+        "exercised": 515
+      },
+      {
+        "uuid": "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+        "included": 600,
+        "exercised": 1741
+      },
+      {
+        "uuid": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+        "included": 600,
+        "exercised": 3055
+      }
+    ],
+    "weighted300": {
+      "receipt": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,73efd845-6009-4686-860c-01c7f5b1c074,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+        "start": "2026-10-14T04:44:32.963270+00:00",
+        "end": "2026-10-14T04:48:19.262741+00:00",
+        "exit": 0,
+        "wallSeconds": 226.30114329099888,
+        "pid": 92355,
+        "pgid": 92355,
+        "load": "{ 7.59 11.49 12.12 }",
+        "groupRemainingAtExit": []
+      },
+      "native": {
+        "games": 300,
+        "steps": 103834,
+        "wallNativeS": 225.1,
+        "cpuNativeS": 242.1,
+        "prompts": 6333,
+        "interactiveReruns": 565,
+        "failures": 0,
+        "results": {
+          "player": 149,
+          "enemy": 151,
+          "draw": 0
+        },
+        "targets": [
+          {
+            "uuid": "dec81fa2-7865-448c-95bc-622b884cea9e",
+            "included": 600,
+            "exercised": 0
+          },
+          {
+            "uuid": "adc23870-55f8-4f23-b973-a358fc257414",
+            "included": 600,
+            "exercised": 515
+          },
+          {
+            "uuid": "73efd845-6009-4686-860c-01c7f5b1c074",
+            "included": 600,
+            "exercised": 515
+          },
+          {
+            "uuid": "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+            "included": 600,
+            "exercised": 1741
+          },
+          {
+            "uuid": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+            "included": 600,
+            "exercised": 3055
+          }
+        ],
+        "qualification": "Original full pool/default policy/seed/hash/determinization/interactive remain unchanged; targetinclusion != exercise. Rune0 is static attribution boundary, not no semantic behavior. Aggregatecounts notperseat/fullclauses. LockwaitUNKNOWN, wrapper226.301143s distinctnative225.1/242.1CPU; no matched performanceclaim."
+      }
+    },
+    "preflight": {
+      "receipt": {
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--dreamsigns",
+          "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,73efd845-6009-4686-860c-01c7f5b1c074,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+        "start": "2026-10-14T04:48:30.845865+00:00",
+        "end": "2026-10-14T04:48:32.051798+00:00",
+        "exit": 0,
+        "wallSeconds": 1.2058719169872347,
+        "pid": 99352,
+        "pgid": 99352,
+        "load": "{ 3.96 7.55 10.21 }",
+        "groupRemainingAtExit": []
+      },
+      "counts": {
+        "pass": 10,
+        "skip": 90,
+        "fail": 0,
+        "exercised": false
+      },
+      "qualification": "10 first-Day scene initializations,90ineligiblevariants; exercisedfalse, not gameplay proof"
+    },
+    "firstSweep": {
+      "handoffPath": "/tmp/worker245-20261013/runtime-incident-handoff-v01.json",
+      "handoffSha256": "00e0d04a6873096a8623ca49476d6d23f07d6625e2c13b1e0851a57b2303b994",
+      "receipt": {
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.245",
+          "--dreamsigns",
+          "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,73efd845-6009-4686-860c-01c7f5b1c074,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "--variants",
+          "all",
+          "--as",
+          "both",
+          "--port",
+          "5174"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+        "start": "2026-10-14T04:48:42.158938+00:00",
+        "end": "2026-10-14T04:50:37.966536+00:00",
+        "exit": 2,
+        "wallSeconds": 115.80841966700973,
+        "pid": 99714,
+        "pgid": 99714,
+        "load": "{ 3.74 7.38 10.12 }",
+        "groupRemainingAtExit": []
+      },
+      "counts": {
+        "pass": 6,
+        "skip": 54,
+        "fail": 1
+      },
+      "summary": "Absent due browser cleanup transporterror",
+      "providerClose": "UNCONFIRMED: MCPtimeout and browser_close POSTSessionnotfound, mcpExecutionCompleted missing. Physicalresource recovery qualified below, no normalreceipt fabricated.",
+      "originalRowBytePrefixSha256": "9906aab939d9c9df25bb10a409090d76a4e659bf9db15166d566c8d53d94b0ac",
+      "retryQualification": "Transportfailure is not semantic deadline-only cell retry; parent same-taskjusticiar authorized ONE fullsweep after actual physicalteardown/quarantine recovery, not native timeout-only auto retry."
+    },
+    "recovery": {
+      "admissionPath": "/tmp/root245-20261013/justiciar-exit-retry-admission-v01.json",
+      "admissionSha256": "97d874cadcf89b052679e7465ca8b3f7fc086ae50630ec3b088362e62f97ee1f",
+      "archivePath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json.incident-reconciled-503014db-2892-4475-b5c1-8935b0210b8a.json",
+      "archiveSha256": "d752274e180cf86d89118f36483bf0c7578b6d91b47f854b217d4608bc98e9d9",
+      "archiveToken": "6f071f12-2db2-4fc7-b4e6-91938bc78cbb",
+      "qualifiedProof": "Parent native kernel-lock exactOWNatomic archival used recorded exact404 absence + deadrunner/server + real configuredbrowser processabsence. Original Node callbackterminal not directlyobservable; mcpExecutionCompleted/browser_close success NEVER fabricated. Sharedservice/userChrome/foreignpeer667 orslot1 records untouched, no restart/signals/cap/config/source changes. Detailed parent evidence/proofSHAs linked from admission.",
+      "helperDocumentationMistake": "Unsupported provider-ownership --help invocation exit64 beforelock/record/probe/rename, already recorded in originalincident, no correct-slotreconciliation byhelper."
+    },
+    "freshSuccessfulSweep": {
+      "receipt": {
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.245",
+          "--dreamsigns",
+          "dec81fa2-7865-448c-95bc-622b884cea9e,adc23870-55f8-4f23-b973-a358fc257414,73efd845-6009-4686-860c-01c7f5b1c074,8b87b0c7-e7d5-4c53-b99b-b1e2407cb519,89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "--variants",
+          "all",
+          "--as",
+          "both",
+          "--port",
+          "5174"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-245-spark-batch",
+        "start": "2026-10-14T05:06:39.097653+00:00",
+        "end": "2026-10-14T05:07:11.469123+00:00",
+        "exit": 0,
+        "wallSeconds": 32.370797916984884,
+        "pid": 25354,
+        "pgid": 25354,
+        "load": "{ 5.08 5.46 7.32 }",
+        "groupRemainingAtExit": []
+      },
+      "summaryPath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/summary.json",
+      "summarySha256": "900759a5795de5e419d7646123b19908695b58cdd441c644ecf85b897d07af54",
+      "summary": {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-Ndle0E",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E",
+        "counts": {
+          "pass": 10,
+          "skip": 90
+        },
+        "attemptCounts": {
+          "pass": 10,
+          "skip": 90
+        },
+        "hostLoad": 5.0849609375,
+        "sessions": 1,
+        "leaseYields": 0,
+        "wallMs": {
+          "browserLeaseWait": 12,
+          "serve": 1982,
+          "scenario": 29557.951334,
+          "cleanup": 555.8205830000006,
+          "execution": 32170.463083,
+          "total": 32182.463083
+        }
+      },
+      "reports": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/run-ws5KL0/sweep-73efd845-6009-4686-860c-01c7f5b1c074-base-enemy-attempt-1.result.json",
+          "sha256": "e4fc3728ee1e61089c86a1014617e3bdfb46b4007f2734507e3fa2418c9767c5",
+          "uuid": "73efd845-6009-4686-860c-01c7f5b1c074",
+          "side": "enemy",
+          "verdict": "pass",
+          "caps": [],
+          "captures": [],
+          "exercised": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/run-ws5KL0/sweep-73efd845-6009-4686-860c-01c7f5b1c074-base-player-attempt-1.result.json",
+          "sha256": "2f04af959fd78bcb3bab35f71b586426f28396f45f74c41c588669f255435565",
+          "uuid": "73efd845-6009-4686-860c-01c7f5b1c074",
+          "side": "player",
+          "verdict": "pass",
+          "caps": [],
+          "captures": [],
+          "exercised": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/run-ws5KL0/sweep-89c83d7e-5617-49b4-b6cd-214680fe0627-base-enemy-attempt-1.result.json",
+          "sha256": "9daee357e950e82e6d49a236e8de68ff5e526f2867db090f8e1ae7caec7b2525",
+          "uuid": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "side": "enemy",
+          "verdict": "pass",
+          "caps": [],
+          "captures": [],
+          "exercised": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/run-ws5KL0/sweep-89c83d7e-5617-49b4-b6cd-214680fe0627-base-player-attempt-1.result.json",
+          "sha256": "4fcc93b902e0a43ab78417c812d8d092221fe01fc2655ca69cec949eae0e0899",
+          "uuid": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "side": "player",
+          "verdict": "pass",
+          "caps": [],
+          "captures": [],
+          "exercised": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/run-ws5KL0/sweep-8b87b0c7-e7d5-4c53-b99b-b1e2407cb519-base-enemy-attempt-1.result.json",
+          "sha256": "cda7bb19b21f79063905169c4a800161006b01ae062232ebd081d5c478bf3ca7",
+          "uuid": "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+          "side": "enemy",
+          "verdict": "pass",
+          "caps": [],
+          "captures": [],
+          "exercised": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/run-ws5KL0/sweep-8b87b0c7-e7d5-4c53-b99b-b1e2407cb519-base-player-attempt-1.result.json",
+          "sha256": "daa1d8e5daeea872d5dc8012ccceda05d805157e00190ed55382f5b988a5c748",
+          "uuid": "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+          "side": "player",
+          "verdict": "pass",
+          "caps": [],
+          "captures": [],
+          "exercised": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/run-ws5KL0/sweep-adc23870-55f8-4f23-b973-a358fc257414-base-enemy-attempt-1.result.json",
+          "sha256": "3fab915f21c249d8f4d2cf7ce62458bf6e7b5bea0f04c63fac6ac0f421d078ad",
+          "uuid": "adc23870-55f8-4f23-b973-a358fc257414",
+          "side": "enemy",
+          "verdict": "pass",
+          "caps": [],
+          "captures": [],
+          "exercised": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/run-ws5KL0/sweep-adc23870-55f8-4f23-b973-a358fc257414-base-player-attempt-1.result.json",
+          "sha256": "77cbb809e53c898c8d4d2526388bb8bc3fa8b1d0bab729119816af85d041b4db",
+          "uuid": "adc23870-55f8-4f23-b973-a358fc257414",
+          "side": "player",
+          "verdict": "pass",
+          "caps": [],
+          "captures": [],
+          "exercised": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/run-ws5KL0/sweep-dec81fa2-7865-448c-95bc-622b884cea9e-base-enemy-attempt-1.result.json",
+          "sha256": "8854350e309816d5420ff2393d52d52952cbe5c01fb7834183382376b1584850",
+          "uuid": "dec81fa2-7865-448c-95bc-622b884cea9e",
+          "side": "enemy",
+          "verdict": "pass",
+          "caps": [],
+          "captures": [],
+          "exercised": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.245/invocations/sweep-Ndle0E/run-ws5KL0/sweep-dec81fa2-7865-448c-95bc-622b884cea9e-base-player-attempt-1.result.json",
+          "sha256": "2b793c1412c7c83353f227d390c7bbc4a1cbaec9e1c31bc6ca94e93e0f496f37",
+          "uuid": "dec81fa2-7865-448c-95bc-622b884cea9e",
+          "side": "player",
+          "verdict": "pass",
+          "caps": [],
+          "captures": [],
+          "exercised": false
+        }
+      ],
+      "retryCells": "Freshinvocation10pass/90ineligible/0fail/0nativecellretries; original ledgerfailure preserved withactuallater sameUUID/player/base pass. All5UUID eachseatbase fullycovered.",
+      "qualifications": "All10actualresults exercise=[]/exercisedfalse, init firstDay only, not played-semanticgameflow. Contentproof remains own6/child12/publicrealEngine/fuzz aggregate. Native managednormalclose confirms allactiveRPCjoined/executioncompleted/ownerrecordclear/lease release by existingclose protocol and actualexit0; no literalHTTPackpacket/livefreshsessionID capture claimed. FreshSessionID UNKNOWN because ownowner alreadycleared at attemptedcapture, native sessions1/actualinitialize+close successful."
+    },
+    "resources": {
+      "ownRecordedGroupsGone": [
+        13585,
+        14306,
+        15056,
+        15305,
+        18325,
+        18736,
+        25354,
+        72915,
+        74518,
+        78506,
+        92355,
+        99352,
+        99714
+      ],
+      "ownOldServerPgid": 99751,
+      "ownNewServerPgid": 25397,
+      "ownServerGroupsRemaining": [],
+      "slot0OwnerRecordAbsentAtCheck": true,
+      "slot0ServerRecordAbsentAtCheck": true,
+      "normalNativeCleanup": "Newrunexit0 + stderrserver25397cleanupport5174free + owner/serverabsence + ownPGabsence; originalrunqualifiedphysicalrecoveryseparate. No futureglobalportfree/sharedChromeprocessgone/foreigncleanup claim."
+    },
+    "ledger": {
+      "path": "docs/plan/evidence/qa-ledger/hv-umm2.245.jsonl",
+      "sha256": "568df6ece1e931ae5474204873e26e1c0e863e549bf46c869f8cc650ba372fc6",
+      "rows": 166,
+      "metadataJudgedSkipRows": 5,
+      "firstFailureRows": 61,
+      "freshSweepRows": 100,
+      "effectiveWholeScope": {
+        "pass": 10,
+        "skip": 90,
+        "fail": 0
+      },
+      "judged": 0,
+      "prefix66Exact": true,
+      "note": "FiveunsampledD21 metadata rows + failedinitial6pass54skip1transportfail + fresh10pass90skip; no failedrow removed or rewritten."
+    },
+    "handoff": {
+      "path": "/tmp/worker245-20261013/runtime-terminal-handoff-v02.json",
+      "sha256": "fd69cc32369c4046a427f610eb948ef4614b7ddf9a6d96e3557e52cfa95b23e5"
+    },
+    "freeze": {
+      "path": "/tmp/worker245-20261013/runtime-source-freeze-v01.json",
+      "sha256": "cdaff19267be8e5d68bb2733d49f7bbf215f05630524f90b4d316657d9e42bb9",
+      "regularSourceFiles": 4742,
+      "immutableSupportFiles": 44,
+      "frozen4741NonLedgerBytes": "Exact until all heavy/browser resources settled and parent explicitpostruntimeWRITEACK. Nativeappendonly ledger166 preserved5metadata andentire66failedrun prefix; no source/scenario/fixture/code repairs across controls/runtime."
+    },
+    "qualification": "Fuzz targetincluded600 each vs actualattributedoperations separately; Rune staticexercise0 is attribution boundary. Aggregatecounts not proof everyclause/controller. Native init/exercisedfalse sweep not semanticgameplay. Actual own6 +child12 deterministic public synthetic Engine interactions provide consumer/interaction proof; default fullpool300 adds broad invariants/hash/determinization/interactive checks. No cap/policy/seed/algorithm/invariant waiver, no screenshots/judgmentquota/QA harness/config change, no repeatedfuzz/preflight/localaggregate."
+  },
+  "d21": {
+    "bytes": [
+      160,
+      80,
+      183,
+      178,
+      91
+    ],
+    "sampled": [],
+    "newPromptKinds": [],
+    "newStatusOrVfx": [],
+    "judgedRequired": 0,
+    "mustRecord": "5metadata skip rows and all actual native sweep verdicts without pretending judged gameplay"
+  },
+  "reviewRouting": "Composition/non-core existing primitives; no new form/config/crosscut/<100 non-test line budget; no per-bead CLI/full expected, final actual diff governs. Phase gate review retained. Normal Claude cross-family route restored after 2026-10-14T01:00Z.",
+  "hostLoadQualification": "Friction hostLoad22.11 is actual successful review-final-v01 start sysctl vm.loadavg one-minute component. Raw samples eachreceipt. No matched-load/suite wall budget/performance inference.",
+  "provenanceQualification": "Raw receipt command stdout/stderr files are in worker scratch and will be archived to primary artifacts/qa/hv-umm2.245. Current Stage2 measurements do not imply runtime validation or completed acceptance.",
+  "localCheckCounts": {
+    "originalWholeBatchFocus": 18,
+    "newConsumerCases": 6,
+    "readOnlyChildCases": 12,
+    "reviewFiles": 247,
+    "reviewTests": 5909,
+    "coverageGateCases": 20,
+    "baselineExpectedBehaviorFailures": 6,
+    "restoredNegativeControls": 2,
+    "eachNegativeControlFailedCases": 6
+  },
+  "testDelta": {
+    "physicalPlainModules": 1,
+    "lines": 91,
+    "configuredTestEntrypoints": 0,
+    "jsdomFiles": 0
+  },
+  "nonTestDiff": {
+    "productionFiles": 1,
+    "addedLines": 6,
+    "deletedLines": 1,
+    "totalChangedLines": 7,
+    "qualification": "Only existing composer imports/abilities/verifiedText and pending replacement; no per-bead core CLI review/full required. Phase gate review retained."
+  },
+  "clockQualifiers": {
+    "modelSampling": "UNKNOWN",
+    "GitReturn": "UNKNOWN at this pre-Git tracked write; exact external actualGitreceipt/finalhandoff after commit",
+    "currentMarker": "Prospective final precommit marker; actualschema/stage/cachedcheck/Git cost follows; not falsely known actualGitcompletion"
+  },
+  "zeroQualifier": "Actual gainSpark emits amount0 and evaluates non-target selection; tests assert amount0/no additionalgain, not absence of RNG/event. C17 matcher positive condition remains existing read-only code.",
+  "preExistingIssues": [],
+  "scopeProtection": "Child662 four leaf modules, private138-line12-case scenario, evidence; primitive587 core matrix; engine/rules/UI/shared index/QA configuration all read-only. No new RD/cardissue/source scope.",
+  "sourceValidationProvenance": {
+    "base": "0ee02fa28cbfabfae4cc17db69745ce76b6c7a49",
+    "productionLeaf": {
+      "path": "src/content/dreamsigns/black-feather-73efd845.ts",
+      "sha256": "b4e1a3182db2e33d478ca0a8620c8fb538a94b88137ed992774966c5e0bb132c"
+    },
+    "privateScenario": {
+      "path": "src/content/specs/dreamsigns-battle-08.scenarios.ts",
+      "sha256": "bc04c8b11b607e3a3ccb7c54f505661b7f7a10a98e65058ef56dd840b1a3b130"
+    },
+    "ledger": {
+      "path": "docs/plan/evidence/qa-ledger/hv-umm2.245.jsonl",
+      "sha256": "568df6ece1e931ae5474204873e26e1c0e863e549bf46c869f8cc650ba372fc6",
+      "rows": 166,
+      "metadataJudgedSkipRows": 5,
+      "firstFailureRows": 61,
+      "freshSweepRows": 100,
+      "effectiveWholeScope": {
+        "pass": 10,
+        "skip": 90,
+        "fail": 0
+      },
+      "judged": 0,
+      "prefix66Exact": true,
+      "note": "FiveunsampledD21 metadata rows + failedinitial6pass54skip1transportfail + fresh10pass90skip; no failedrow removed or rewritten."
+    },
+    "runtimeHeadQualification": "Working-tree exact frozen authoring bytes bound by4742 SHAmanifest; QAledger commit is precommit mergebase0ee02, not futureauthoringcommit. Final source OID/actualGitcompletion parentreceipt tobecreated Stage3. No passedcandidate/cert/publication claim."
+  },
+  "childAcceptanceJoin": {
+    "bead": "hv-umm2.662",
+    "nativeState": "Closed/completed certified delivery acknowledged by parent before245claim; c3021627 authored/tested0ee02 source alreadyinownbase",
+    "readOnlySourcePaths": [
+      "src/content/dreamsigns/rune-stone-dec81fa2.ts",
+      "src/content/dreamsigns/gold-feather-adc23870.ts",
+      "src/content/dreamsigns/red-heart-8b87b0c7.ts",
+      "src/content/dreamsigns/candle-89c83d7e.ts",
+      "src/content/specs/dreamsigns-ready-245.scenarios.ts",
+      "docs/plan/evidence/friction/hv-umm2.662.json",
+      "docs/plan/evidence/measurements/hv-umm2.662.json",
+      "docs/plan/evidence/qa-ledger/hv-umm2.662.jsonl"
+    ],
+    "proof": "4737 outside-own originaltracked SHAs unchanged incl all childsource/evidence; root662 nativeprerequisite/final-delivery-v01 retained. Focused actual18 includes child12+own6. Originalwhole5UUID300/preflight/sweep completed here; childslice alone never used tocloseoriginal245.",
+    "allOriginalScope": [
+      "dec81fa2-7865-448c-95bc-622b884cea9e",
+      "adc23870-55f8-4f23-b973-a358fc257414",
+      "73efd845-6009-4686-860c-01c7f5b1c074",
+      "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+      "89c83d7e-5617-49b4-b6cd-214680fe0627"
+    ]
+  },
+  "fullAcceptanceDisposition": {
+    "emblemAbilities": "Five full clauses authored as actualheldemblems: childRuneFigmentstatic, Goldabandonrandom1, Hearteroderandom1, CandleplayEventlivehighest1; ownBlackabandonrandomsubjectSpark effective retained afterceased. Blackhasno journey clause; remove pending andverifyexactcanonicaltext only. Childalreadycertified/read-only; no partialfullbatch completionclaim.",
+    "canonicalData": "Names/art/text/rarity/tides/tags all immutable, UUID identities/brandedhelpers throughout; no new content balance/tunable orcopy writer.",
+    "newPrimitives": [],
+    "rulesDecisionsCreated": [],
+    "rulesDecisionsConsumed": [
+      "RD-hv-7x4l.46-1",
+      "D10/D11/D15/C17/current Spark effective/permanent/zero/additional",
+      "delivered587 triggerSubjectSpark semantics,583 randomCharacter,588 highestSpark; actual public APIs/read-only use"
+    ],
+    "cardIssuesCreated": [],
+    "preExistingIssues": [],
+    "d20": "6 boundedBlackconsumerinteractioncases in one91lineplainoriginalslug module; child12 cases/private ownchildmodule locationacceptedbycanonicalpartition. No sharedentry/jsdom/primitive matrix duplicated. Actualgenuine pending6fail, restoredleafdisable6fail, restoredliteral2sixfail demonstrate leafbinding/effectivevsprinted amount.",
+    "wholeBatchRuntime": "300fullpoolall5weightedpass; preflight10pass90skip; finalmanagedsweep10pass90skip/errorbuffers[]/no captures; originalfirsttransportfail kept withlateractualsamecellpass afterqualifiedexact-own recovery. NoUnfixed currentruntimefail.",
+    "d21": "All5byte160/80/183/178/91 unsampled; no newprompt/status/VFX;0judged genuinelyrequired/5metadata skiprows, allactualattemptsretained.",
+    "requiredValidation": "Actual18focus/review247files5909tests/Knip/contentgate20/schema passed. Only allowed postruntimeown evidence refreshed; schema checkfollows. Production/test/runtimebytes unchanged, no aggregate repeat.",
+    "reviewRequirement": "7changedproductionlines/composition/noncore/no newform/config/crosscut; no perbeadCLI orreview:full. Normalotherfamilyphasegate review remains required; no reviewdebt claim.",
+    "delivery": "OWED after exactvalidatedStage3commit: rootcandidate/exactordinaryapproval/certifiedpromotion/cleanup/nativeacceptanceclose; helperdoesnotownBeads/Tollgate/push. No deploy/publish/remoteconfirmation claim."
+  },
+  "incidentFriction": {
+    "tag": "qa-runner-mcp-timeout",
+    "window": {
+      "start": "2026-10-14T04:50:37.966536+00:00",
+      "end": "2026-10-14T05:07:11.469123+00:00"
+    },
+    "minutes": 16.55837645,
+    "qualification": "Actual elapsed transportfailureterminal\u2192freshsuccessfulnative return incl parentindependent recovery/coordination/admission, not modelproductive time. RootcauseofunderlyingMCPtimeout UNKNOWN; do not infer policy/code defect from load/elapsed."
+  },
+  "postRuntimeEvidenceAuthority": {
+    "nativeComment": "01a138d4-5bb3-7af8-ba6b-13db7b81ef67",
+    "ackAt": "2026-10-14T05:13:23.634723Z",
+    "proofPath": "/tmp/root245-20261013/postruntime-admission-v01.json",
+    "proofSha256": "7114620fa6bc6cdd46160b073f102d478cd2239b880815879af9b213045c7456",
+    "allowed": "Ownfriction+measurements only thenschema; no source/scenario/ledger/support changes ornewruntime/check/Git."
+  },
+  "finalCommitAuthority": {
+    "nativeComment": "01a138d8-a008-7947-afec-49c2ff42e070",
+    "ackAt": "2026-10-14T05:18:03.271638Z",
+    "admissionPath": "/tmp/root245-20261013/commit-admission-v01.json",
+    "admissionSha256": "c9820df1131e08876e0fbd87c209ab4a4fb7c21d395db146eb2331d11befd897",
+    "sourceProofSha256": "82db5454d01638d2b827772a1efe93bba5d315ab4c9b078e15bb416cef86bd83",
+    "proposalSha256": "be4cd947bd0b8181421e262c32ad825f38034ea2f5e2d5654233cc20d1022df8"
+  }
+}

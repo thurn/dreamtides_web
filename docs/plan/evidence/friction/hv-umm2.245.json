@@ -1,0 +1,38 @@
+{
+  "bead": "hv-umm2.245",
+  "phase": 5,
+  "implementMin": 48.9779136,
+  "implementWindow": {
+    "start": "2026-10-14T04:30:23.433000+00:00",
+    "end": "2026-10-14T05:19:22.107816+00:00"
+  },
+  "localValidationS": {
+    "knip-final-v01": 5.123971750028431,
+    "sweep-v01": 115.80841966700973,
+    "weighted300-v01": 226.30114329099888,
+    "control-literal2-v01": 4.326065207977081,
+    "full-join-focused-v01": 6.466990791988792,
+    "authored-focused-v01": 7.209238249983173,
+    "normalized-schema-v01": 0.14881229199818335,
+    "control-leaf-disable-v01": 4.593092750001233,
+    "review-final-v01": 67.42243412497919,
+    "preflight-v01": 1.2058719169872347,
+    "before-pending-v01": 7.075992333004251,
+    "sweep-fresh-provider-v02": 32.370797916984884,
+    "content-gate-final-v01": 5.559768209001049,
+    "postruntime-schema-v01": 0.07057366700610146
+  },
+  "hostLoad": 22.11,
+  "testDelta": {
+    "files": 1,
+    "lines": 91,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "qa-runner-mcp-timeout",
+      "minutes": 16.55837645,
+      "note": "Elapsed first transport-failed sweep terminal to qualified exact-own physical-provider recovery and one fresh successful full-scope sweep. Initial MCP request timeout and missing session prevented normal close receipt; no completed callback/browser_close success fabricated. Parent archived only exact own quarantined record with physical cessation evidence; fresh native sweep succeeded. Includes coordination/admission/recovery/retry wait, not productive-time estimate."
+    }
+  ]
+}
