@@ -50,7 +50,7 @@ import { materializedThisTurn, recordMaterialized } from "../rules/turn-log";
 import { effectiveSpark } from "../rules/spark";
 import { charactersInPlay, isFigment } from "../rules/zones";
 import type { AbilitySource, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
-import { opponent, SIDES, sourceInstance } from "../state/ids";
+import { opponent, SIDES, sourceInstance, sourceKey } from "../state/ids";
 import type { BattleState, FloatingEffect, GainedAbilities, HandCopyContext, MaterializedCard, Printing, QueuedTrigger, SparkGain } from "../state/types";
 import type { ArmedAbility, ArmedTriggers, LookbackEventKind, StepContext, TriggerBlocks, TriggerListener } from "../steps/types";
 import { sidesBlindTo } from "../view/knowledge";
@@ -879,15 +879,23 @@ function queueDawnReactions(ctx: StepContext, before: number): void {
   const { state, catalog } = ctx;
   const progress = state.turnLog.dawnProgress;
   if (state.turn.phase !== "dawn" || progress === undefined || progress.total === before) return;
-  for (const { change, staticSource: source, staticAbility: ability } of characteristics(state, catalog).changes(6)) {
-    if (change.kind !== "ruleModifier" || change.rule !== "dawnThreshold" || change.player !== state.turn.active ||
-        before >= change.count || progress.total < change.count || source === null || ability === null) continue;
-    const origin = abilityOrigin(state, source);
-    if (origin === null) throw new Error("A live rule reaction has no ability origin");
-    ruleReactionBody(catalog, origin, ability);
-    state.triggerQueue.push({ kind: "ruleReaction", source, controller: change.player, origin, ability, node: null, subject: null });
-    // The identifiable public reaction itself establishes that its threshold was met.
-    observeRuleReactions(ctx);
-    ctx.emit({ kind: "triggerQueued", source, controller: change.player, ability, node: null, subject: null });
+  const changes = characteristics(state, catalog).changes(6);
+  for (const side of [state.turn.active, opponent(state.turn.active)]) {
+    for (const listener of listeners(state, side, null)) {
+      const sourceChanges = changes.filter(({ staticSource }) =>
+        staticSource !== null && sourceKey(staticSource) === sourceKey(listener.source))
+        .sort((a, b) => (a.staticAbility ?? 0) - (b.staticAbility ?? 0));
+      for (const { change, staticSource: source, staticAbility: ability } of sourceChanges) {
+        if (change.kind !== "ruleModifier" || change.rule !== "dawnThreshold" || change.player !== state.turn.active ||
+            before >= change.count || progress.total < change.count || source === null || ability === null) continue;
+        const origin = abilityOrigin(state, source);
+        if (origin === null) throw new Error("A live rule reaction has no ability origin");
+        ruleReactionBody(catalog, origin, ability);
+        state.triggerQueue.push({ kind: "ruleReaction", source, controller: change.player, origin, ability, node: null, subject: null });
+        // The identifiable public reaction itself establishes that its threshold was met.
+        observeRuleReactions(ctx);
+        ctx.emit({ kind: "triggerQueued", source, controller: change.player, ability, node: null, subject: null });
+      }
+    }
   }
 }

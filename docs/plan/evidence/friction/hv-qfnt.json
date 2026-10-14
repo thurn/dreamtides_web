@@ -1,0 +1,24 @@
+{
+  "bead": "hv-qfnt",
+  "phase": 5,
+  "implementMin": 16.800045533333336,
+  "implementWindow": {
+    "start": "2026-10-14T08:04:51.088Z",
+    "end": "2026-10-14T08:21:39.090732+00:00"
+  },
+  "localValidationS": {
+    "old-focused-v1": 7.099054124992108,
+    "repaired-focused-v1": 6.8582093750010245,
+    "typecheck-v1": 5.4950093340012245,
+    "review-v1": 61.150281374983024,
+    "knip-v1": 3.8593018329993356,
+    "final-friction-schema-v1": 0.064007084001787
+  },
+  "hostLoad": 3,
+  "testDelta": {
+    "files": 1,
+    "lines": 176,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

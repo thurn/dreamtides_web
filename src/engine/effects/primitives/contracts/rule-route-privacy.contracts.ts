@@ -1,9 +1,10 @@
 /** Route metadata follows source identity while owner prompts and transactions remain intact. */
 import { describe, expect, it } from "vitest";
-import { additionalCost, discardCost, energy, event, keyword } from "../../../dsl/builders";
+import { additionalCost, choiceCost, discardCost, energy, event, keyword } from "../../../dsl/builders";
 import { createFoldAdapter } from "../../../fold/slice";
 import { promptFingerprint } from "../../../prompts/fingerprint";
 import { isLegalAnswer } from "../../../prompts/answers";
+import { isWellFormedPrompt } from "../../../prompts/structure";
 import type { ChooseModePrompt } from "../../../prompts/types";
 import { stateHash } from "../../../state/hash";
 import { SIDES, opponent, type Side } from "../../../state/ids";
@@ -24,7 +25,25 @@ function pending(side: Side, speed: "fast" | "interrupt", offering: boolean, kno
   const opened = applied(fold.reduce(sliceOf(w.state), { kind: "battleAction", side, action: { kind: "play", card: source, from: "hand" } }));
   const shown = fold.pending(opened.slice);
   if (shown?.prompt.kind !== "chooseMode") throw new Error("Expected real route prompt");
+  expect(isWellFormedPrompt(shown.prompt)).toBe(true);
   return { ...w, fold, opened, shown, prompt: shown.prompt, source };
+}
+
+function pendingCost(side: Side, known: boolean) {
+  const spell = card(0x173, draw(1), { speed: "standard", abilities: () => [
+    additionalCost(choiceCost([energy(4)], [energy(1)])), event(draw(1)),
+  ] });
+  const w = world(side, [spell], { [side]: { hand: [spell.id], dreamsigns: [], energy: 10, deck } });
+  const source = w.ids[side].hand[0];
+  if (known) revealToBoth(w.state, [source]);
+  const fold = createFoldAdapter(w.engine);
+  const opened = applied(fold.reduce(sliceOf(w.state), { kind: "battleAction", side, action: { kind: "play", card: source, from: "hand" } }));
+  const shown = fold.pending(opened.slice);
+  if (shown?.prompt.kind !== "chooseMode" || shown.prompt.purpose.role !== "chooseCost") throw new Error("Expected real cost choice");
+  expect(isWellFormedPrompt(shown.prompt)).toBe(true);
+  expect(shown.prompt.costOptions).toEqual([[energy(4)], [energy(1)]]);
+  expect(shown.prompt.options.every(option => option.route === undefined)).toBe(true);
+  return { ...w, fold, opened, shown, prompt: shown.prompt };
 }
 
 describe("rule route projection privacy", () => {
@@ -50,27 +69,38 @@ describe("rule route projection privacy", () => {
     expect(cancelled.slice.committed.sides[side].currentEnergy).toBe(10);
   });
 
-  it.each(SIDES)("retains identified routes while keeping independent private cost redaction for %s", side => {
+  it.each(SIDES)("retains identified routes and owner metadata for %s", side => {
     const w = pending(side, "fast", false, true), other = opponent(side);
-    const prompt: ChooseModePrompt = { ...w.prompt, costOptions: [[energy(4)], [energy(1)]] };
-    const before = stateHash(w.shown.display), serialized = JSON.stringify(prompt);
-    expect(promptView(prompt, other, w.shown.display)).toEqual(prompt);
-    const privatePrompt = { ...prompt, privateTo: side };
-    const projected = promptView(privatePrompt, other, w.shown.display) as ChooseModePrompt;
-    const { costOptions: _costs, ...withoutCosts } = privatePrompt;
-    expect(projected).toEqual(withoutCosts);
-    expect(projected.options).toEqual(prompt.options);
-    expect(promptView(privatePrompt, side, w.shown.display)).toEqual(privatePrompt);
+    const before = stateHash(w.shown.display), serialized = JSON.stringify(w.prompt);
+    expect(promptView(w.prompt, other, w.shown.display)).toEqual(w.prompt);
+    expect(promptView(w.prompt, side, w.shown.display)).toEqual(w.prompt);
     expect(stateHash(w.shown.display)).toBe(before);
-    expect(JSON.stringify(prompt)).toBe(serialized);
+    expect(JSON.stringify(w.prompt)).toBe(serialized);
   });
 
-  it.each(SIDES)("preserves hidden cost redaction and full owner metadata for %s", side => {
-    const w = pending(side, "interrupt", false), other = opponent(side);
-    const costed: ChooseModePrompt = { ...w.prompt, costOptions: [[energy(4)], [energy(1)]] };
-    const hidden = promptView(costed, other, w.shown.display) as ChooseModePrompt;
-    expect(hidden).not.toHaveProperty("costOptions");
-    expect(hidden.options.every(option => option.route === undefined)).toBe(true);
-    expect(promptView(costed, side, w.shown.display)).toEqual(costed);
+  it.each(SIDES.flatMap(side => [false, true].map(known => ({ side, known })) ))("projects real chooseCost metadata for $side known=$known", ({ side, known }) => {
+    const w = pendingCost(side, known), other = opponent(side);
+    const before = stateHash(w.shown.display), serialized = JSON.stringify(w.prompt), saved = JSON.stringify(w.opened.slice);
+    const projected = promptView(w.prompt, other, w.shown.display) as ChooseModePrompt;
+    if (known) expect(projected).toEqual(w.prompt);
+    else {
+      const { costOptions: _costs, ...withoutCosts } = w.prompt;
+      expect(projected).toEqual({ ...withoutCosts, purpose: { ...withoutCosts.purpose, source: null, cardId: null } });
+    }
+    expect(promptView(w.prompt, side, w.shown.display)).toEqual(w.prompt);
+    // Projection-only private control: planCosts emits the actual non-private prompt above.
+    const privatePrompt: ChooseModePrompt = { ...w.prompt, privateTo: side };
+    expect(isWellFormedPrompt(privatePrompt)).toBe(true);
+    expect(promptView(privatePrompt, other, w.shown.display)).not.toHaveProperty("costOptions");
+    expect(promptView(privatePrompt, side, w.shown.display)).toEqual(privatePrompt);
+    expect(stateHash(w.shown.display)).toBe(before);
+    expect(JSON.stringify(w.prompt)).toBe(serialized);
+    expect(JSON.stringify(w.opened.slice)).toBe(saved);
+    const reloaded = createFoldAdapter(w.engine).pending(restored(w.opened.slice));
+    expect(reloaded?.prompt).toEqual(w.prompt);
+    expect(promptFingerprint(reloaded!.prompt)).toBe(promptFingerprint(w.prompt));
+    const cancelled = applied(w.fold.reduce(w.opened.slice, { kind: "cancel", side, promptId: w.prompt.id }));
+    expect(stateHash(cancelled.slice.committed)).toBe(stateHash(w.state));
+    expect(cancelled.slice.committed.sides[side].currentEnergy).toBe(10);
   });
 });

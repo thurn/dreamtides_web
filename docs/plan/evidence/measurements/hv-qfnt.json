@@ -1,0 +1,307 @@
+{
+  "bead": "hv-qfnt",
+  "status": "Local implementation acceptance complete; normal cold independent review and parent-owned Tollgate delivery pending.",
+  "baseOID": "49ca84f6eb751820e1d715af69d7b27e2866037c",
+  "implementationWindow": {
+    "start": "2026-10-14T08:04:51.088Z",
+    "end": "2026-10-14T08:21:39.090732+00:00",
+    "elapsedMinutes": 16.800045533333336,
+    "basis": "Actual post-claim helper dispatch through the observed automatic precommit boundary, including research, admissions, coordination waits, edits and verification. Model sampling start is unknown. The external final-git receipt records automatic Git start/end and endpoint differences."
+  },
+  "scope": "queueDawnReactions consumes live layer-6 statics in D14 listener order and stable per-source ability index order. Continuous applicability and the predicate/origin/strict-body/queue/observation/event sequence are preserved. Two plain eagerly discovered contracts; current prompt/route/cost documentation; only coreFailurePathMap in the previous measurement.",
+  "sourceHashes": {
+    "src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts": "b4fde298514725ff6c35cd7191150eae5f782e170a7a7ad427f3054e74394ef8",
+    "src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts": "b41c8dfbd827a1a7141e0a1b97f0e9c9090f70f1f33a98cd7dc2f6ae7d176a20",
+    "src/engine/triggers/matcher.ts": "508298939bea8f009b2cbe591a1b7803f762101da7a859a9750e134e55fae276",
+    "docs/plan/engine-design.md": "4e10bd2c5a2b40205c4888a4e9f1acf586b8dda90c1834eff81979d64da94a67",
+    "docs/plan/evidence/measurements/hv-n1i7.json": "f5871cfa58e3bb7960d43bbb0b2aa4b202ae44362e4d760a0b91b414089922f2"
+  },
+  "commands": {
+    "old-focused-v1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "threshold reaction source order|rule route projection privacy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/threshold-order-contracts-qfnt",
+      "started": "2026-10-14T08:11:28.591693+00:00",
+      "ended": "2026-10-14T08:11:35.691087+00:00",
+      "elapsed_seconds": 7.099054124992108,
+      "pid": 30773,
+      "pgid": 30773,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "8df451ace52e07bb88e250090ead0761cbc81de9b1bca65653951721ef4c5f9f",
+      "manifest_files": 4797,
+      "head": "49ca84f6eb751820e1d715af69d7b27e2866037c",
+      "status": " M src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n?? src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts\n",
+      "before_sha256": "765ebccc409949f106a52a76def3f1022d7f0dcb42117632da7453eaf1259be4",
+      "after_sha256": "765ebccc409949f106a52a76def3f1022d7f0dcb42117632da7453eaf1259be4"
+    },
+    "repaired-focused-v1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "ruleModifier|rule reaction observation containment|rule route projection privacy|threshold reaction source order"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/threshold-order-contracts-qfnt",
+      "started": "2026-10-14T08:14:49.512527+00:00",
+      "ended": "2026-10-14T08:14:56.371096+00:00",
+      "elapsed_seconds": 6.8582093750010245,
+      "pid": 33381,
+      "pgid": 33381,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "8df451ace52e07bb88e250090ead0761cbc81de9b1bca65653951721ef4c5f9f",
+      "manifest_files": 4797,
+      "head": "49ca84f6eb751820e1d715af69d7b27e2866037c",
+      "status": " M docs/plan/engine-design.md\n M docs/plan/evidence/measurements/hv-n1i7.json\n M src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n M src/engine/triggers/matcher.ts\n?? src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts\n",
+      "before_sha256": "93f3a7dc045391d5606150fa3961afda7fc7e59a5e769bb63f6ec4956d49b875",
+      "after_sha256": "93f3a7dc045391d5606150fa3961afda7fc7e59a5e769bb63f6ec4956d49b875"
+    },
+    "typecheck-v1": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/threshold-order-contracts-qfnt",
+      "started": "2026-10-14T08:15:01.219730+00:00",
+      "ended": "2026-10-14T08:15:06.714955+00:00",
+      "elapsed_seconds": 5.4950093340012245,
+      "pid": 33662,
+      "pgid": 33662,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "8df451ace52e07bb88e250090ead0761cbc81de9b1bca65653951721ef4c5f9f",
+      "manifest_files": 4797,
+      "head": "49ca84f6eb751820e1d715af69d7b27e2866037c",
+      "status": " M docs/plan/engine-design.md\n M docs/plan/evidence/measurements/hv-n1i7.json\n M src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n M src/engine/triggers/matcher.ts\n?? src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts\n",
+      "before_sha256": "93f3a7dc045391d5606150fa3961afda7fc7e59a5e769bb63f6ec4956d49b875",
+      "after_sha256": "93f3a7dc045391d5606150fa3961afda7fc7e59a5e769bb63f6ec4956d49b875"
+    },
+    "review-v1": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/threshold-order-contracts-qfnt",
+      "started": "2026-10-14T08:15:20.368839+00:00",
+      "ended": "2026-10-14T08:16:21.519938+00:00",
+      "elapsed_seconds": 61.150281374983024,
+      "pid": 33975,
+      "pgid": 33975,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "8df451ace52e07bb88e250090ead0761cbc81de9b1bca65653951721ef4c5f9f",
+      "manifest_files": 4797,
+      "head": "49ca84f6eb751820e1d715af69d7b27e2866037c",
+      "status": " M docs/plan/engine-design.md\n M docs/plan/evidence/measurements/hv-n1i7.json\n M src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n M src/engine/triggers/matcher.ts\n?? src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts\n",
+      "before_sha256": "93f3a7dc045391d5606150fa3961afda7fc7e59a5e769bb63f6ec4956d49b875",
+      "after_sha256": "93f3a7dc045391d5606150fa3961afda7fc7e59a5e769bb63f6ec4956d49b875"
+    },
+    "knip-v1": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/threshold-order-contracts-qfnt",
+      "started": "2026-10-14T08:16:35.667700+00:00",
+      "ended": "2026-10-14T08:16:39.527194+00:00",
+      "elapsed_seconds": 3.8593018329993356,
+      "pid": 35217,
+      "pgid": 35217,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "8df451ace52e07bb88e250090ead0761cbc81de9b1bca65653951721ef4c5f9f",
+      "manifest_files": 4797,
+      "head": "49ca84f6eb751820e1d715af69d7b27e2866037c",
+      "status": " M docs/plan/engine-design.md\n M docs/plan/evidence/measurements/hv-n1i7.json\n M src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n M src/engine/triggers/matcher.ts\n?? src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts\n",
+      "before_sha256": "fc3910e53969f2590c3e52e10178d16027a8d7f264dc0ae4fdab07dd3f4678a8",
+      "after_sha256": "fc3910e53969f2590c3e52e10178d16027a8d7f264dc0ae4fdab07dd3f4678a8"
+    },
+    "final-friction-schema-v1": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/threshold-order-contracts-qfnt",
+      "started": "2026-10-14T08:20:37.566816+00:00",
+      "ended": "2026-10-14T08:20:37.630987+00:00",
+      "elapsed_seconds": 0.064007084001787,
+      "pid": 38590,
+      "pgid": 38590,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "8df451ace52e07bb88e250090ead0761cbc81de9b1bca65653951721ef4c5f9f",
+      "manifest_files": 4800,
+      "head": "49ca84f6eb751820e1d715af69d7b27e2866037c",
+      "status": " M docs/plan/engine-design.md\n M docs/plan/evidence/measurements/hv-n1i7.json\n M src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n M src/engine/triggers/matcher.ts\n?? docs/plan/evidence/friction/hv-qfnt.json\n?? docs/plan/evidence/measurements/hv-qfnt.json\n?? docs/plan/evidence/pre-existing/hv-qfnt.md\n?? src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts\n",
+      "before_sha256": "70860b72e7a49e6240b487184e0f946a618cb7098ef70595d5ad72dc1625688e",
+      "after_sha256": "70860b72e7a49e6240b487184e0f946a618cb7098ef70595d5ad72dc1625688e"
+    }
+  },
+  "commandScope": "Serial commands use the frozen scratch collector, isolated child process groups, JOURNEY_TEST_WORKERS=2, exact complete pre/post source/support/self manifests and full stdout/stderr files. All children were reaped and every owned group absent before and after cleanup. Outer wall times include preparation, child command and cleanup; no inference of exclusive CPU or model time.",
+  "oldSourceWitness": {
+    "command": "old-focused-v1",
+    "production": "All initial tracked production/source hashes match the exact clean base; only two admitted contracts differ. Parent independently checked all 4,797 command guard entries and all 4,794 initial tracked entries except the admitted route contract.",
+    "selectedCases": 22,
+    "semanticFailures": 6,
+    "passingControls": 16,
+    "basis": "Four phase/named source-order cases and two hidden-hand ordered-queue cases fail on actual public triggerQueued event or triggerQueue order. Both named witnesses first pass actual returned/reentered back-source timestamp > front-source timestamp, restored B1 placement and total 2-to-3 assertions. Return/materialize/named instructions run through public runStep; no timestamp, battle-state, private matcher, catalog or save corruption supplies the witness.",
+    "observedOrder": "Old reaction consumption visits fixed player-side emblems then enemy-side emblems, then card sources by entry timestamp. In the player named case, reentered back i3 follows front i1, opponent front i16 and opponent back i17. In the enemy named case, player emblems precede active enemy emblems and reentered back i18 follows active front i16. Each source retains its numeric ability order.",
+    "requiredOrder": "Active-side avatar, Dreamsign indices, back-rank source, front-rank source, then the opposing side in the same source order; numeric ability order within each source. Whole ordinary admission batch precedes these reactions.",
+    "limitations": "Old-source ordering assertions stop before later replay/drain/privacy assertions. Those later assertions pass only on the repaired source. No setup failure or abandoned attempt occurred. Production-only ordering failure is unobserved: the current catalog carrier is the Hourglass Dreamsign."
+  },
+  "finalValidation": {
+    "focused": {
+      "cases": 151,
+      "originalRuleModifierCases": 107,
+      "observerCases": 22,
+      "routeCases": 14,
+      "orderCases": 8
+    },
+    "review": {
+      "files": 299,
+      "cases": 6939,
+      "vitestWallSeconds": 52.01
+    },
+    "typecheck": "passed",
+    "knip": "passed",
+    "full": "not run: bounded local ordering, test-fixture and documentation scope; no infrastructure or cross-cutting architecture edit",
+    "weighted": "not run: synthetic public contract discriminates the admitted ordering defect; production catalog has one Dreamsign carrier"
+  },
+  "validationEpochs": [
+    {
+      "labels": [
+        "old-focused-v1"
+      ],
+      "manifestSHA256": "765ebccc409949f106a52a76def3f1022d7f0dcb42117632da7453eaf1259be4",
+      "source": "Old production with admitted tests only."
+    },
+    {
+      "labels": [
+        "repaired-focused-v1",
+        "typecheck-v1",
+        "review-v1"
+      ],
+      "manifestSHA256": "93f3a7dc045391d5606150fa3961afda7fc7e59a5e769bb63f6ec4956d49b875",
+      "source": "Final production/tests and first admitted docs/map text."
+    },
+    {
+      "labels": [
+        "knip-v1"
+      ],
+      "manifestSHA256": "fc3910e53969f2590c3e52e10178d16027a8d7f264dc0ae4fdab07dd3f4678a8",
+      "source": "Identical production/tests; only permission paragraph corrected to include identified current deck top, following direct playPermission source read."
+    }
+  ],
+  "testDelta": {
+    "files": 1,
+    "lines": 176,
+    "jsdomFiles": 0
+  },
+  "testDeltaBasis": "One new 146-line plain contract and a 30-line increase to the existing 76-line route contract; no entrypoint, shared helper, configuration or jsdom changes. Eight new ordering cases; twelve previous route cases become fourteen structurally valid route/cost cases.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "value": 3,
+        "measuredFor": "Actual review-v1 prepare-start one-minute load sample at 2026-10-14T08:15:20.528Z. No current-load backfill."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "reviewPrepareStart": {
+      "timestamp": "2026-10-14T08:15:20.528Z",
+      "load": 3,
+      "source": "/tmp/root-qfnt/helper/review-v1.stdout"
+    }
+  },
+  "coreFailurePathMap": [
+    {
+      "path": "error mid-step",
+      "proof": "src/engine/effects/primitives/contracts/rule-modifier-dawn.contracts.ts: \"rolls back new admission/progress/reaction writes when the same resolving step fails\" and src/engine/effects/primitives/contracts/rule-modifier.contracts.ts: \"rolls back a real partial resolving write when a later instruction throws\" passed. This ordering edit adds no new failure operation or recovery transition; the existing strict reaction validation and atomic runner remain the consumers."
+    },
+    {
+      "path": "reload/restart",
+      "proof": "src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts: \"orders the complete $occasion batch by source and ability for $side\" round-trips the actual admitted queue through parseJourneyBattleFoldState and compares drained events and state hashes for both phase/named occasions and actors. \"keeps a hidden hand carrier private within the ordered queue for %s\" also drains the parsed private-source queue."
+    },
+    {
+      "path": "partial write",
+      "proof": "src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts: \"orders the complete $occasion batch by source and ability for $side\" verifies original and admitted state purity. src/engine/effects/primitives/contracts/rule-modifier-dawn.contracts.ts: \"rolls back new admission/progress/reaction writes when the same resolving step fails\" covers failed partial admission. No persistence/write protocol is added; queue construction remains one existing atomic step."
+    },
+    {
+      "path": "invalid/stale input",
+      "proof": "src/engine/effects/primitives/contracts/rule-modifier.contracts.ts: \"persists route and cost prefixes, rejects stale/competing answers, and commits one payment\" passed. src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts: \"resolves an earlier valid callback despite saved $label for $side\" passed for eight malformed descriptors and both actors. Ordering consumes live, validated statics and adds no player input, prompt role or parser acceptance."
+    },
+    {
+      "path": "concurrent actors",
+      "proof": "src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts: \"orders the complete $occasion batch by source and ability for $side\" covers both active-side orientations and opponent-held rules affecting that player; its fixture includes an inactive-target carrier that must not enqueue. src/engine/effects/primitives/contracts/rule-modifier.contracts.ts: \"persists route and cost prefixes, rejects stale/competing answers, and commits one payment\" rejects competing answers/in-flight actions. No concurrent-write or new actor state exists."
+    },
+    {
+      "path": "cancellation",
+      "proof": "src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts: \"withholds hidden $speed route categories for $side (Offering=$offering)\" and \"projects real chooseCost metadata for $side known=$known\" cancel actual precommit prompts without payment or committed changes. Queue ordering raises no prompt and adds no cancellation transition."
+    },
+    {
+      "path": "crossing/order/privacy",
+      "proof": "src/engine/effects/primitives/contracts/threshold-reaction-order.contracts.ts: \"orders the complete $occasion batch by source and ability for $side\" covers phase and whole named batch ordering, sparse printed ability indices and public views/events; \"keeps a hidden hand carrier private within the ordered queue for %s\" covers private-source view/event projection and parsed queue resolution; \"queues no callback before the threshold for %s\" covers the noncrossing guard. All run for both actors."
+    },
+    {
+      "path": "gained/lost/controller/captured body",
+      "proof": "src/engine/effects/primitives/contracts/rule-modifier-dawn.contracts.ts: \"tracks a static rule source around the crossing: %s\", \"uses the rule source's new controller at the crossing for %s\", \"reloads a queued reaction after its physical source departs for $side returns=$returns\", and \"keeps an already queued reaction after its physical source loses the rule\" passed. The ordering edit reads existing characteristics output and keeps captured origin/controller/ability/body behavior unchanged."
+    }
+  ],
+  "privacyFixtureQualification": "Actual engine-generated chooseCost prompt comes from planCosts for a synthetic event with choiceCost. Each prompt is checked with isWellFormedPrompt. privateTo is an explicitly projection-only structurally valid variant of that real chooseCost prompt; production planCosts does not emit privateTo. Route prompts carry no costOptions.",
+  "inheritedEvidenceQualification": "Original 141 focused cases, full 7,930 tests, weighted 300 games/98,660 steps/0 failures and twelve browser judgments retain their original source qualification. They are not executions of this follow-up source. Only the new 151-case focused and 6,939-case related review results are this source.",
+  "qaQualification": {
+    "newBrowserRun": false,
+    "basis": "Current production threshold carrier is the Hourglass Dreamsign; its same-source ability order and callback behavior are retained. The proven failure uses synthetic multiple card/emblem carriers. No UI or player workflow/layout body changes. EngineBattleScreen.tsx199-205 projects non-answering prompts; prompt-host-view-model.ts259-273 returns waiting before options418-433; policy/decide.ts88-103 projects only its owed actor prompt and126-128 returns null while waiting. Parent accepted focused source/engine validation."
+  },
+  "runtime": {
+    "activeOwnedResources": [],
+    "commands": "Five isolated children reaped, all process groups absent at terminal and postguard; no cleanup signals. No browser, server or provider launched. Parent owns independent review and Tollgate delivery."
+  },
+  "preExistingEvidence": "docs/plan/evidence/pre-existing/hv-qfnt.md",
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "remaining": [
+    "Normal cold independent source review and parent-owned exact candidate delivery/cleanup."
+  ],
+  "windowEndpointStatus": "The recorded end is the observed automatic precommit boundary for this commit. Actual Git start/end and boundary differences are retained in the external final-git receipt. Independent cold review runs after Git and is measured separately from implementation.",
+  "finalSchemaValidation": {
+    "initial": "final-friction-schema-v1 passed on all 4,800 unchanged hashes. The automatic finalization validates the final clock/evidence schema and staged diff before Git; external final-git receipt records actual results."
+  }
+}

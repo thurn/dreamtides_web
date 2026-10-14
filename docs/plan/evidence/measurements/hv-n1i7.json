@@ -531,27 +531,27 @@
   "coreFailurePathMap": [
     {
       "path": "error mid-step",
-      "proof": "Earlier ordinary callbacks complete despite each of eight saved-descriptor categories, in both orientations. Strict actual reaction resolution still returns structured engine_error, publishes no events, and preserves committed hash/queue. Authored ability factories still throw outside lookup catches."
+      "proof": "src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts: \"resolves an earlier valid callback despite saved $label for $side\" covers all eight malformed descriptors in both orientations, then strict resolution returns structured engine_error with no published events and unchanged committed hash/queue. \"propagates an authored ability factory error outside catalog lookup for %s\" keeps authored factory errors strict."
     },
     {
       "path": "reload/restart",
-      "proof": "Malformed descriptors enter through parseJourneyBattleFoldState. Route prompt reload retains prompt/fingerprint. Existing ruleModifier transactional recovery contracts passed and cover payment-prefix reload/replay."
+      "proof": "src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts: \"resolves an earlier valid callback despite saved $label for $side\" loads malformed descriptors through parseJourneyBattleFoldState. src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts: \"withholds hidden $speed route categories for $side (Offering=$offering)\" preserves prompt/fingerprint after reload. src/engine/effects/primitives/contracts/rule-modifier.contracts.ts: \"persists route and cost prefixes, rejects stale/competing answers, and commits one payment\" covers payment-prefix reload/replay."
     },
     {
       "path": "partial write",
-      "proof": "Strict resolution failure retains the queued entry and committed hash after the work queue shifts. Existing rollback and private-disclosure recovery contracts passed; source changes are limited to observation/projection."
+      "proof": "src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts: \"resolves an earlier valid callback despite saved $label for $side\" retains the queued entry and committed hash when strict resolution fails after the work queue shifts. src/engine/effects/primitives/contracts/rule-modifier.contracts.ts: \"rolls back a real partial resolving write when a later instruction throws\" and src/engine/effects/primitives/contracts/rule-modifier-dawn.contracts.ts: \"rolls back new admission/progress/reaction writes when the same resolving step fails\" cover atomic rollback. The latter file's \"retains a privately observed committed reaction after its Foresee continuation fails for %s\" covers private-disclosure recovery."
     },
     {
       "path": "invalid/stale input",
-      "proof": "Eight malformed-descriptor categories are tested in both orientations. Existing route stale/illegal-answer contracts passed in the original ruleModifier suite."
+      "proof": "src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts: \"resolves an earlier valid callback despite saved $label for $side\" covers eight malformed descriptors in both orientations. src/engine/effects/primitives/contracts/rule-modifier.contracts.ts: \"persists route and cost prefixes, rejects stale/competing answers, and commits one payment\" rejects illegal and stale route/cost answers."
     },
     {
       "path": "concurrent actors",
-      "proof": "Existing competing-answer and step-in-flight contracts passed; this repair introduces no new concurrency state transition."
+      "proof": "src/engine/effects/primitives/contracts/rule-modifier.contracts.ts: \"persists route and cost prefixes, rejects stale/competing answers, and commits one payment\" rejects the opposing actor's answer and an action while a step is in flight. Observation/projection introduces no new concurrency state transition."
     },
     {
       "path": "cancellation",
-      "proof": "Hidden-route cancellation keeps source hidden and state hash unchanged. A public-parser accepted inconsistent persisted inFlight play replays a cancellable route prompt and now cancels without an escaping observer error. That witness is corrupt-save-only; ordinary legal resolver/cancel reachability is unproven."
+      "proof": "src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts: \"withholds hidden $speed route categories for $side (Offering=$offering)\" preserves hidden source and committed hash after cancellation. src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts: \"contains cancellation of a corrupt saved in-flight play for %s\" replays a public-parser accepted inconsistent persisted inFlight play and cancels without an escaping observer error. That witness is corrupt-save-only; ordinary legal resolver/cancel reachability is unproven."
     }
   ],
   "privacyAndResolutionContract": "Invalid observation descriptors establish no new known floor and do not alter authoritative total or queue. Visible valid thresholds retain observation; private/unidentified sources retain privacy. Strict ruleReactionBody at actual resolution remains unchanged, as do Context, fold, parser, catalog APIs, sampler behavior and UI.",

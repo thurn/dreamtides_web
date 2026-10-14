@@ -732,7 +732,9 @@ interface PromptPurpose {
 
 type Prompt =
   | { kind: "chooseTargets" | "chooseCards"; candidates: InstanceId[]; min: number; max: number }  // complete legal set
-  | { kind: "chooseMode"; options: { mode: number; legal: boolean }[];
+  | { kind: "chooseMode"; options: { mode: number; legal: boolean;
+        route?: "normal" | "offering" | "reclaim" | "eventAlternative" }[];
+      costOptions?: PaymentCost[][]; // role "chooseCost": each mode's payment alternative
       subtypes?: CardSubtype[] }   // a character type choice (role "chooseSubtype"): each mode's type
   | { kind: "chooseNumber"; min: number; max: number }
   | { kind: "arrange"; cards: InstanceId[];
@@ -744,7 +746,11 @@ type Prompt =
 ```
 
 A view of a prompt for the side that does not answer it leaves out
-`allowed`, which names cards.
+`allowed`, which names cards. A route option's `route` appears only on a
+`playRoute` or `voidRoute` prompt, and the view strips it when that side
+cannot identify the source. A `chooseCost` prompt's `costOptions` appear
+only when that side identifies the source and the prompt is public to it.
+The answering side keeps its options and costs.
 
 Rules code passes a `PromptSpec` (a prompt without `cancellable`) to
 `choose`. A prompt has no id inside the engine; the fold adds one
@@ -1414,12 +1420,18 @@ Other zone rules:
   from a static ability, a lasting permission naming cards by filter; from a
   resolving effect, a floating one naming its cards or a filter, with `next`
   for one play. `playPermission` (`continuous/permissions.ts`) reads which
-  one covers a card in the void its player owns: a lasting one, else the
-  earliest `next` one. `playRoutes` then offers the `"permission"` route,
-  for the card's normal costs, ahead of `"reclaim"`; a card with both asks
-  the `voidRoute` prompt. The play step ends the `next` permission it used
-  with its cost modifiers, after the commit point, and only for the
-  permission route (RD-hv-umm2.81-1 to -3).
+  one covers a card in the void its player owns or its identified current
+  deck top: a lasting one, else the earliest `next` one. `playRoutes` offers the `"permission"` route,
+  for the card's normal costs, then `"reclaim"`, then an applicable
+  `"eventAlternative"`; a deck play offers permission then the event
+  alternative. A hand play offers normal costs, Offering, then the event
+  alternative. Multiple routes raise `voidRoute` for the void and
+  `playRoute` otherwise. The event alternative replaces the base energy
+  cost of a Fast or Interrupt event and needs independent permission to
+  play from the void or deck (RD-hv-umm2.236-1). After the commit point, a
+  permission route or a non-hand event alternative ends the `next`
+  permission it used and records its once-per-turn allowance, along with
+  consuming the play's cost modifiers (RD-hv-umm2.81-1 to -3).
 - **Copies** (`rules/copies.ts`): stack copies (D15), figment copies (C5),
   and created copies in a hand, each announced by `cardCreated`.
 
@@ -1498,7 +1510,9 @@ mandatory payment card or count is prepared before those choices, without
 payment or movement. Selected cards stay reserved separately from targets
 and other costs. Targetless effects and nested alternatives or optional
 costs keep their own printed-order planning protocol. Energy-X uses the
-route's cost modifications; Offering fixes printed energy-X to zero.
+route's cost modifications; Offering and the event alternative fix printed
+energy-X to zero. An independent additional count-X cost can still bind X
+when the printed energy cost has no X.
 Every payment in the same plan agrees with that binding.
 A variable void banish binds X to the chosen count the same way, but its
 least X defaults to 1 (the energy-X default): a void with fewer matching cards
@@ -2328,7 +2342,10 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 - **`promptView(prompt, side, display)`** is a pending prompt as `side` sees
   it: its purpose names a source card only when `side` can identify it
   (`purposeView`), even for the side answering, which otherwise sees it
-  whole; any other side sees only the cards it can identify.
+  whole; any other side sees only the cards it can identify. A non-answering
+  side sees `costOptions` only for an identified source and a prompt public
+  to it; an unidentified source also strips each mode option's `route`.
+  Option counts and legality flags remain in the projected prompt.
 - **Events** are judged in the state that arrives with them. Each kind's
   `privateTo` shows the whole event to one side or both.
   `eventSeenBy(event, side, state)` is the event as that side sees it:
