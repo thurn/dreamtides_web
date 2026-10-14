@@ -1,0 +1,273 @@
+{
+  "bead": "hv-x24k",
+  "base": "e61efdd19432639774b7c2cea26e1f82dee0fabf",
+  "dispatch": "2026-10-14T15:48:12.257918+00:00",
+  "evidenceCutoff": "2026-10-14T16:13:13.551308+00:00",
+  "elapsedThroughCutoffS": 1501.29339,
+  "futureGit": "UNKNOWN at committed pre-Git cutoff; external actual Git receipt supplies endpoint, OID, blobs and complete dispatch-inclusive interval.",
+  "admission": {
+    "proposalSHA": "c0cbabb18674da8940d3ed86cfdd58870742670265f37663cb83f233fa35e0cd",
+    "parentACK": "source-write-parent-ack.json",
+    "nativeACK": "source-write-admission-native.json",
+    "scope": "Two existing nested ownership copies; existing view.test.ts; own friction/measurements; original qqqe pre-existing finding provenance.",
+    "peerAudit": "Fresh 138/8: 689 closed; 690 hasNamed/hiddenCause/restoreQueued bodies independent of playedView/anonymous. No incompatible body or filename-only dependency."
+  },
+  "diagnostic": {
+    "receipt": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/playedViewAlias-x24k/public-witness.mts"
+      ],
+      "pid": 92756,
+      "pgid": 92756,
+      "start": "2026-10-14T15:55:14.473952+00:00",
+      "end": "2026-10-14T15:55:16.223614+00:00",
+      "wallS": 1.7496820410015061,
+      "exit": 0,
+      "stdoutSHA": "94079825e30a28ecfa12cc03a91b3b290fea7bda68d396030ff5775c5d533c1c",
+      "settled": true
+    },
+    "observations": 12,
+    "legacyControls": 4,
+    "producer": "Existing registered synthetic materializedOrDawn, legal Day play and public resolution; both active/controller sides and both viewers. Actual names materialized,dawn in order.",
+    "actualFault": "View and direct sample arrays alias source and other viewer; mutations change authoritative serialization/hash. JSON sample independently aliases its transported input array, leaving source/live/opposite viewer unchanged. Independent deserialized observations remain intact. Diagnostic exit0 records expected violations, not isolation PASS.",
+    "playerHashes": [
+      "1fe55236b49dfe",
+      "1a4311320e6ae1"
+    ],
+    "enemyHashes": [
+      "11e6cfbcc65e1c",
+      "067a202fa58599"
+    ],
+    "qualification": "Earlier provisional player hash in a progress message differed; these hashes are from final actual JSON independently verified by root."
+  },
+  "implementation": "Exactly ...card to ...copy(card) in playedView and deal anonymous. Existing copy helper preserves values/order/optional absence; known-instance redaction, derived cost/spark, anonymous instance reservation and materialized scalars unchanged. No state/rules/knowledge/queue/schema/API/UI/catalog changes.",
+  "tests": {
+    "file": "src/engine/view/view.test.ts",
+    "lines": 389,
+    "total": 20,
+    "priorCases": 14,
+    "newCases": 6,
+    "coverage": "Both controllers/viewers; real public producer, full comparable view, direct/JSON/repeated sampling, named value/order, present empty and absent legacy arrays. Actual nested references must be independently owned; Reflect.set attempts may be refused by frozen readonly arrays. Source serialization/hash, input view, opposite viewer and independent deserialized values remain intact. No writable DTO requirement or same-cached-view reset promise."
+  },
+  "counterfactual": {
+    "receipt": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/view/view.test.ts",
+        "-t",
+        "named-trigger history ownership"
+      ],
+      "pid": 64538,
+      "pgid": 64538,
+      "start": "2026-10-14T16:04:50.694605+00:00",
+      "end": "2026-10-14T16:04:51.976400+00:00",
+      "wallS": 1.2832641249988228,
+      "exit": 1,
+      "stdoutSHA": "00b1c48e39faf34edb0d890b44d3042bd069ec698c25efedcaea29dc88e2efd3",
+      "settled": true
+    },
+    "expectedFailures": 4,
+    "passingLegacyControls": 2,
+    "skippedPriorCases": 14,
+    "sourceEpochQualification": "Counterfactual used initial Object.hasOwn test epoch; final test replaces only two property-presence calls with compatible Object.prototype.hasOwnProperty.call. Selected ownership assertions and production expressions unchanged; no repeated counterfactual.",
+    "restoration": "Exactly both admitted copy calls omitted once. Fixed whole files restored in finally, all seven source hashes equal before aggregate checks. Full restoration receipt retained in own scratch counterfactual-restoration.json."
+  },
+  "validation": {
+    "public-witness": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/playedViewAlias-x24k/public-witness.mts"
+      ],
+      "pid": 92756,
+      "pgid": 92756,
+      "start": "2026-10-14T15:55:14.473952+00:00",
+      "end": "2026-10-14T15:55:16.223614+00:00",
+      "wallS": 1.7496820410015061,
+      "exit": 0,
+      "stdoutSHA": "94079825e30a28ecfa12cc03a91b3b290fea7bda68d396030ff5775c5d533c1c",
+      "settled": true
+    },
+    "fixed-view-focus": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/view.test.ts"
+      ],
+      "pid": 59844,
+      "pgid": 59844,
+      "start": "2026-10-14T16:03:37.877655+00:00",
+      "end": "2026-10-14T16:03:44.367557+00:00",
+      "wallS": 6.4899003749887925,
+      "exit": 0,
+      "stdoutSHA": "11906ac46b75c888dd6392105fb29785cebb9bcad76d4387bfa70bf1ec27ed0c",
+      "settled": true
+    },
+    "counterfactual-nested-copy": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/view/view.test.ts",
+        "-t",
+        "named-trigger history ownership"
+      ],
+      "pid": 64538,
+      "pgid": 64538,
+      "start": "2026-10-14T16:04:50.694605+00:00",
+      "end": "2026-10-14T16:04:51.976400+00:00",
+      "wallS": 1.2832641249988228,
+      "exit": 1,
+      "stdoutSHA": "00b1c48e39faf34edb0d890b44d3042bd069ec698c25efedcaea29dc88e2efd3",
+      "settled": true
+    },
+    "affected-engine-focus": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/rules/turn-log.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/triggers/triggers-redaction.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-prompts.test.ts"
+      ],
+      "pid": 70798,
+      "pgid": 70798,
+      "start": "2026-10-14T16:07:41.523206+00:00",
+      "end": "2026-10-14T16:07:47.675707+00:00",
+      "wallS": 6.15258370799711,
+      "exit": 0,
+      "stdoutSHA": "efb4f8bd6d3cf3c9abf5fb2bdb2c1be569550f0be2a0984735bdeeb4b5ad1553",
+      "settled": true
+    },
+    "normal-review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 72935,
+      "pgid": 72935,
+      "start": "2026-10-14T16:09:03.720743+00:00",
+      "end": "2026-10-14T16:10:03.731395+00:00",
+      "wallS": 60.011160083988216,
+      "exit": 2,
+      "stdoutSHA": "5bcc9e8e08a5b6b692bc2332cd2f95cc8050a582c4c1a4926445351ae2bec214",
+      "settled": true
+    },
+    "final-view-focus": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/view.test.ts"
+      ],
+      "pid": 34554,
+      "pgid": 34554,
+      "start": "2026-10-14T16:10:22.197817+00:00",
+      "end": "2026-10-14T16:10:25.995361+00:00",
+      "wallS": 3.797615124989534,
+      "exit": 0,
+      "stdoutSHA": "8f60a27b0f27175262fd7d7f3c1b223785e071ab9faa51762e518eaf8192472d",
+      "settled": true
+    },
+    "final-review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 36047,
+      "pgid": 36047,
+      "start": "2026-10-14T16:10:44.368812+00:00",
+      "end": "2026-10-14T16:11:52.565922+00:00",
+      "wallS": 68.19774900001357,
+      "exit": 0,
+      "stdoutSHA": "ae6e31dce34fd88ac2b82ebdba46d42252d85600cba5dc6bc2dc220fcd214976",
+      "settled": true
+    },
+    "final-knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 55200,
+      "pgid": 55200,
+      "start": "2026-10-14T16:11:57.755847+00:00",
+      "end": "2026-10-14T16:12:03.178937+00:00",
+      "wallS": 5.4231787500029895,
+      "exit": 0,
+      "stdoutSHA": "c11159e0cd7b8bdce1d1297f473689709acf167af8713f4f51f8d8aa67a0d329",
+      "settled": true
+    }
+  },
+  "validationSummary": {
+    "fixedFocus": "1 file /20 tests PASS",
+    "affectedFocus": "7 files /108 tests PASS",
+    "review": "300 files /7396 tests and all normal lint/types/cycles/schema checks PASS",
+    "knip": "PASS",
+    "workers": 2
+  },
+  "retainedCheckFailure": "Initial normal review exited2 after tests300/7396 PASS because new optional-presence checks used Object.hasOwn unsupported by current compiler library (TS2550 and lint unsafe-call). Changed exactly those two admitted test calls to Object.prototype.hasOwnProperty.call without semantics/config changes. Failed receipt retained; final focus/review required.",
+  "failurePaths": {
+    "ownership": "Source/view, direct sample/input and JSON sample/input alias boundaries exercised with actual references plus frozen-compatible mutation attempts.",
+    "compatibility": "Absent legacy optional array and present empty array; full ordered DTO roundtrip/repeated sampling; existing redaction and fold/trigger controls.",
+    "actors": "Both active/controller orientations and both viewers; independent snapshot guards. Sequential deterministic observations, no concurrent sharedIO claim."
+  },
+  "resources": {
+    "recordedOwnGroups": [
+      34554,
+      36047,
+      55200,
+      59844,
+      64538,
+      70798,
+      72935,
+      84130,
+      92756
+    ],
+    "remaining": [],
+    "scratchPublicDiagnosticRun": true,
+    "browserStarted": false,
+    "providerStarted": false,
+    "serverStarted": false,
+    "leasesStarted": false,
+    "heavyRun": false
+  },
+  "proportion": "Two existing nested-copy expressions preserve DTO values and player workflow. Focused contracts plus normal review/Knip/schema; no browser or full/heavy200 required by admitted D19 validation ladder.",
+  "sourceManifestSHA256": {
+    "src/engine/view/view.ts": "00633ac2efcc5ca49a1d6e8a7e2349248fed3580f43720cbc1537b3f251b8b72",
+    "src/engine/view/view.test.ts": "f1595d2be23a7452da16e251aa775971ce9301ad12deb62b95ceb7f1b1259702",
+    "src/engine/view/view.fixtures.ts": "0b699081de79e5c4ae4e3d5dc10a16b375df6822c2733a2a2ad5796c073c63f9",
+    "src/engine/view/determinize.ts": "654abf1e7dc567a17f1010f2c3fdb8828773dee400104912c155ead25825c541",
+    "src/engine/engine.ts": "94fe39e1b652c82c1cad552f2c2fccfab0f6c13edc24b23f396937ee19ddd426",
+    "src/engine/state/types.ts": "7ca4b7432f219aa6f5644746c1752a41f8545f9a2c3a99041693f65bcd37e528",
+    "src/rules/battle/fold.ts": "d6ed7329e26a1bb495666dd4fad3f162e162fc4c7cdc357c2f77f5e6ad12571d"
+  },
+  "inclusiveTiming": "Original dispatch includes TG/npm, source-free diagnosis, admission, implementation, counterfactual, validation and waits. Cutoff is pre-Git, not fabricated Git completion; external receipt records final Git and remaining interval.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final-review typecheck starting host 1-minute load",
+        "at": "2026-10-14T16:10:45.940Z"
+      },
+      "implementWindow": {
+        "measuredFor": "Original dispatch through pre-Git cutoff; actual Git endpoint externally receipted within 60 seconds."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-14T16:10:45.940Z",
+      "load1m": 22.03662109375,
+      "scope": "final-review typecheck start"
+    }
+  ],
+  "schema": "Final post-evidence schema receipt is external; future command outcome UNKNOWN at committed pre-Git cutoff.",
+  "coldReview": "Root alone performs fresh normal Claude core review after immutable actual FINAL; temporary Sol routing window expired."
+}

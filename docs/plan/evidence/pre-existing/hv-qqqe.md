@@ -1,0 +1,7 @@
+# hv-qqqe pre-existing finding
+
+The normal cold Claude Opus 5.5 review of hv-qqqe identified an independently existing played-history ownership defect. Reviewed source: `1e34d849463525f9f7af525e909ec74e7650ddd0`; base: `837bf2b9e53f811f2dbd9c939d6c9cf14f225416`; postpromotion tested source: `e61efdd19432639774b7c2cea26e1f82dee0fabf`. Reviewer session: `9257b390-e3e5-43d9-bf69-a13f0a2716f2`.
+
+The reviewer confirmed by reading that `view.ts::playedView` spreads `PlayedCard`, whose optional `namedTriggers` array shares storage with authoritative turn history. This violates the documented public view ownership contract. The reviewer did not execute this finding; root verified the source and accepted finding 3 as pre-existing, filing hv-x24k. The hv-qqqe challenge-ordering change does not cause or cover this defect. Original completion and disposition records are retained by the executor as `original-qqqe-cold-review-completion.stdout.json` and `original-qqqe-verified-review-dispositions.json`.
+
+The hv-x24k source-free public producer subsequently reproduced the source/view alias for both controllers and viewers, and independently demonstrated the same nested alias in `determinize.ts::deal`'s anonymous history reconstruction from a JSON-transported input. Its own measurements contain the actual diagnostic hashes, nested-copy scope and validation receipts. This record documents the original hv-qqqe discovery and its bounded followup; historical hv-qqqe receipts remain intact.

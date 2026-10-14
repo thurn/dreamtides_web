@@ -431,7 +431,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     // cost or spark.
     const cost = card.cost ?? (known ? copiableCostOf(state, catalog, card.instance) : undefined);
     const spark = card.spark !== undefined ? card.spark : known ? layers.of(card.instance).spark : undefined;
-    return { ...card, instance: known ? card.instance : null, ...(cost === undefined ? {} : { cost }), ...(spark === undefined ? {} : { spark }) };
+    return { ...copy(card), instance: known ? card.instance : null, ...(cost === undefined ? {} : { cost }), ...(spark === undefined ? {} : { spark }) };
   };
   const materializedView = (card: MaterializedCard): MaterializedCardView => ({ ...card, instance: visible(card.instance) ? card.instance : null });
   const visibleSource = (source: AbilitySource): boolean => typeof source !== "string" || visible(source);

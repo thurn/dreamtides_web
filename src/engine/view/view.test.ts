@@ -21,6 +21,9 @@ import { cloneState } from "../state/clone";
 import { view } from "./view";
 import { testCardSubtype } from "../../types/test-identities";
 import { catalog, v, fixture } from "./view.fixtures";
+import { TRIGGER } from "../testing/trigger-cards";
+import { passUntil } from "../testing/trigger-harness";
+import { comparableView } from "../testing/determinization-fidelity";
 
 /** Overwrites every array and object field reachable from `value`, innermost first. */
 function vandalize(value: unknown): void {
@@ -298,4 +301,89 @@ it("keeps public play facts without exposing hidden current printing or identity
     changed.knownTo[viewer].push(historical);
     expect(view(changed, viewer, catalog).turnLog.played.player[0]).toMatchObject({ instance: historical, cost: storedCost ?? 5 });
   }
+});
+
+function playedHistory(active: Side, cardId = TRIGGER.materializedOrDawn.id) {
+  const engine = createEngine(catalog);
+  const board = boardState(catalog, { active, phase: "day",
+    [active]: { hand: [cardId], deck: [v.vanilla1.id], energy: 10 },
+    [opponent(active)]: { deck: [v.vanilla2.id] } });
+  const owned = (side: Side) => Object.values(board.state.instances).flatMap((card) =>
+    card.owner === side && card.printing.kind === "card" ? [{ cardId: card.printing.cardId, ...card.variant }] : []);
+  const decks = { player: owned("player"), enemy: owned("enemy") };
+  const played = engine.apply(board.state, active, { kind: "play", card: board.ids[active].hand[0], from: "hand" }, NO_PROMPTS);
+  const resolved = passUntil(engine, played.state, (state) => state.stack.length === 0);
+  return { engine, state: resolved.state, decks, events: [...played.events, ...resolved.events] };
+}
+
+for (const active of SIDES) describe(`named-trigger history ownership for ${active}`, () => {
+  it("keeps returned named-trigger arrays separate from source and independent observers", () => {
+    for (const viewer of SIDES) {
+      const { engine, state, events } = playedHistory(active);
+      const before = serializeState(state), hash = stateHash(state);
+      const seen = engine.view(state, viewer), other = engine.view(state, opponent(viewer));
+      const independent = engine.view(deserializeState(before), viewer);
+      const otherBefore = JSON.stringify(other), independentBefore = JSON.stringify(independent);
+      const names = seen.turnLog.played[active][0].namedTriggers;
+      if (names === undefined) throw new Error("The public named-trigger history is absent");
+      expect(events).toContainEqual(expect.objectContaining({ kind: "cardPlayed", side: active }));
+      expect(events).toContainEqual(expect.objectContaining({ kind: "materialized", side: active }));
+      expect(names).toEqual(["materialized", "dawn"]);
+      expect(names).not.toBe(state.turnLog.played[active][0].namedTriggers);
+      expect(names).not.toBe(other.turnLog.played[active][0].namedTriggers);
+      expect(names).not.toBe(independent.turnLog.played[active][0].namedTriggers);
+      Reflect.set(names, "length", 0);
+      expect(serializeState(state)).toBe(before);
+      expect(stateHash(state)).toBe(hash);
+      expect(JSON.stringify(other)).toBe(otherBefore);
+      expect(JSON.stringify(independent)).toBe(independentBefore);
+    }
+  });
+
+  it("keeps direct and JSON sampled named-trigger arrays separate from their input views", () => {
+    for (const viewer of SIDES) for (const json of [false, true]) {
+      const { engine, state, decks } = playedHistory(active);
+      const before = serializeState(state), hash = stateHash(state);
+      const seen = engine.view(state, viewer), other = engine.view(state, opponent(viewer));
+      const independent = engine.view(deserializeState(before), viewer);
+      const input = json ? JSON.parse(JSON.stringify(seen)) as typeof seen : seen;
+      const inputBefore = JSON.stringify(input), otherBefore = JSON.stringify(other), independentBefore = JSON.stringify(independent);
+      const restored = engine.determinize(input, decks, () => 0.4);
+      const restoredView = engine.view(restored, viewer);
+      expect(comparableView(restoredView)).toEqual(comparableView(seen));
+      expect(comparableView(engine.view(engine.determinize(restoredView, decks, () => 0.4), viewer))).toEqual(comparableView(seen));
+      const names = restored.turnLog.played[active][0].namedTriggers;
+      if (names === undefined) throw new Error("The sampled named-trigger history is absent");
+      expect(names).toEqual(["materialized", "dawn"]);
+      expect(names).not.toBe(input.turnLog.played[active][0].namedTriggers);
+      Reflect.set(names, "length", 0);
+      expect(JSON.stringify(input)).toBe(inputBefore);
+      expect(serializeState(state)).toBe(before);
+      expect(stateHash(state)).toBe(hash);
+      expect(JSON.stringify(other)).toBe(otherBefore);
+      expect(JSON.stringify(independent)).toBe(independentBefore);
+    }
+  });
+
+  it("preserves absent legacy named triggers and present empty named-trigger arrays", () => {
+    for (const viewer of SIDES) for (const cardId of [TRIGGER.materializedOrDawn.id, v.vanilla2.id]) {
+      const { engine, state, decks } = playedHistory(active, cardId);
+      const before = serializeState(state);
+      const seen = engine.view(state, viewer);
+      const expected = cardId === v.vanilla2.id ? [] : ["materialized", "dawn"];
+      expect(seen.turnLog.played[active][0].namedTriggers).toEqual(expected);
+      const transported = JSON.parse(JSON.stringify(seen)) as typeof seen;
+      const restored = engine.determinize(transported, decks, () => 0.4);
+      expect(comparableView(engine.view(restored, viewer))).toEqual(comparableView(seen));
+      expect(restored.turnLog.played[active][0].namedTriggers).toEqual(expected);
+      expect(Object.prototype.hasOwnProperty.call(restored.turnLog.played[active][0], "namedTriggers")).toBe(true);
+      const legacy = { ...transported, turnLog: { ...transported.turnLog, played: { ...transported.turnLog.played,
+        [active]: transported.turnLog.played[active].map(({ namedTriggers: _names, ...old }) => old) } } };
+      const sampledLegacy = engine.determinize(legacy, decks, () => 0.4);
+      const legacyView = engine.view(sampledLegacy, viewer);
+      expect(Object.prototype.hasOwnProperty.call(legacyView.turnLog.played[active][0], "namedTriggers")).toBe(false);
+      expect(comparableView(legacyView)).toEqual(comparableView(legacy));
+      expect(serializeState(state)).toBe(before);
+    }
+  });
 });

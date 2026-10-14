@@ -373,7 +373,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
   // These facts name no current card and remain anonymous when viewed again.
   const anonymous = <T extends { readonly instance: InstanceId | null }>(cards: readonly T[]) => cards.map((card) => {
     const instance: InstanceId = card.instance ?? `i${next++}`;
-    return { ...card, instance };
+    return { ...copy(card), instance };
   });
   const playedCards = { player: anonymous(view.turnLog.played.player), enemy: anonymous(view.turnLog.played.enemy) };
   const materializedCards = { player: anonymous(view.turnLog.materialized.player), enemy: anonymous(view.turnLog.materialized.enemy) };

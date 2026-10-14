@@ -1,0 +1,26 @@
+{
+  "bead": "hv-x24k",
+  "phase": 5,
+  "implementMin": 25.0215565,
+  "implementWindow": {
+    "start": "2026-10-14T15:48:12.257918+00:00",
+    "end": "2026-10-14T16:13:13.551308+00:00"
+  },
+  "localValidationS": {
+    "public-witness": 1.7496820410015061,
+    "fixed-view-focus": 6.4899003749887925,
+    "counterfactual-nested-copy": 1.2832641249988228,
+    "affected-engine-focus": 6.15258370799711,
+    "normal-review": 60.011160083988216,
+    "final-view-focus": 3.797615124989534,
+    "final-review": 68.19774900001357,
+    "final-knip": 5.4231787500029895
+  },
+  "hostLoad": 22.03662109375,
+  "testDelta": {
+    "files": 0,
+    "lines": 88,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
