@@ -1,3 +1,6 @@
+import { triggered, whenYouPlay, triggeringCard } from "../../engine/dsl/triggers";
+import { copyCard } from "../../engine/effects/primitives/copy-card";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,6 @@ export default dreamsign({
     "22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "event", costAtMost: 2 }), copyCard(triggeringCard()), { oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("Once per turn, when you play a ≤2● cost event, copy it."),
 });

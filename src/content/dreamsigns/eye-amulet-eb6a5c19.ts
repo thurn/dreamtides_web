@@ -1,3 +1,6 @@
+import { all, characterYouControl, controlsNone, staticAbility } from "../../engine/dsl/builders";
+import { sparkModifier } from "../../engine/effects/primitives/spark-modifier";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -11,5 +14,6 @@ export default dreamsign({
   rarity: "Common",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["J12", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [staticAbility(sparkModifier(all(characterYouControl({ challenging: true })), 2), { while: controlsNone(characterYouControl({ challenging: false })) })],
+  verifiedText: expectedVerifiedText("When all characters you control are challengers, they have +2✦."),
 });

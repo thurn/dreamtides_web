@@ -1,3 +1,7 @@
+import { controlsNone, characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay, triggeringCard } from "../../engine/dsl/triggers";
+import { copyCard } from "../../engine/effects/primitives/copy-card";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +18,6 @@ export default dreamsign({
     "ab89d262-45d4-438d-8670-79d91f6e944f",
   ],
   tags: ["J10", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "event" }), copyCard(triggeringCard()), { condition: controlsNone(characterYouControl()), oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("Once per turn, when you play an event while you control no characters, copy it."),
 });

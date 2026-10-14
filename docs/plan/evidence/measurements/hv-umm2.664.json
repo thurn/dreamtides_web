@@ -1,0 +1,671 @@
+{
+  "bead": "hv-umm2.664",
+  "stage": "Validated own four-UUID source frozen for exact candidate delivery",
+  "firstDispatch": "2026-10-14T05:29:08.345Z",
+  "modelSampling": "UNKNOWN",
+  "actualGit": "UNKNOWN until external receipt",
+  "proposalSHA256": "6bf4c5815ab66a25bb57bcb394c16e9de485cdb5503841b5564dc52a4f148d14",
+  "sourceBase": "ced45de93f6f82d188b527c145e046b37ac05724",
+  "entities": [
+    {
+      "uuid": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+      "kind": "dreamsign",
+      "name": "Trinket Necklace",
+      "module": "src/content/dreamsigns/trinket-necklace-989b55bd.ts",
+      "text": "Challengers you control have +1\u2726.",
+      "amplifiedText": null,
+      "requiredPrimitives": {
+        "existing": [
+          "selectorChallenger",
+          "sparkModifier"
+        ],
+        "new": []
+      },
+      "promptKinds": [],
+      "d21": {
+        "firstByte": 223,
+        "sampled": false
+      }
+    },
+    {
+      "uuid": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+      "kind": "dreamsign",
+      "name": "Eye Amulet",
+      "module": "src/content/dreamsigns/eye-amulet-eb6a5c19.ts",
+      "text": "When all characters you control are challengers, they have +2\u2726.",
+      "amplifiedText": null,
+      "requiredPrimitives": {
+        "existing": [
+          "selectorChallenger",
+          "sparkModifier"
+        ],
+        "new": []
+      },
+      "promptKinds": [],
+      "d21": {
+        "firstByte": 214,
+        "sampled": false
+      }
+    },
+    {
+      "uuid": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+      "kind": "dreamsign",
+      "name": "Storm Tome",
+      "module": "src/content/dreamsigns/storm-tome-49f216a2.ts",
+      "text": "Once per turn, when you play a \u22642\u25cf cost event, copy it.",
+      "amplifiedText": null,
+      "requiredPrimitives": {
+        "existing": [
+          "cardFilterBounds",
+          "copyCard",
+          "oncePerTurn",
+          "whenYouPlay"
+        ],
+        "new": []
+      },
+      "promptKinds": [],
+      "d21": {
+        "firstByte": 162,
+        "sampled": false
+      }
+    },
+    {
+      "uuid": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+      "kind": "dreamsign",
+      "name": "Clover",
+      "module": "src/content/dreamsigns/clover-56523397.ts",
+      "text": "Once per turn, when you play an event while you control no characters, copy it.",
+      "amplifiedText": null,
+      "requiredPrimitives": {
+        "existing": [
+          "conditionControls",
+          "copyCard",
+          "oncePerTurn",
+          "whenYouPlay"
+        ],
+        "new": []
+      },
+      "promptKinds": [],
+      "d21": {
+        "firstByte": 199,
+        "sampled": false
+      }
+    }
+  ],
+  "D10": {
+    "newRD": false,
+    "newCardIssue": false,
+    "existingNorms": [
+      "rules Holding a role",
+      "rules Intervening conditions",
+      "rules Once per turn",
+      "RD-hv-7x4l.34-1 played captured characteristics",
+      "D15/C6 copies may retarget",
+      "C2 figment identity",
+      "C17 additional spark excludes statics"
+    ]
+  },
+  "D20": {
+    "scenarioModule": null,
+    "reason": "All four are single existing primitive compositions. No interaction of multiple own abilities, unusual targeting, replacement, functional-zone or nth counter beyond primitive contracts. Existing contracts own those mechanics; no duplicate private matrix/module.",
+    "scratchConsumerWitness": "One ignored scratch tsx public-Engine synthetic observer, four outcomes both seats (eight total): live challenger+1; all-own challengers+2; eligible event actual cardCopied; empty-own-board event actual cardCopied. READONLY baseline before source expects eight genuine semantic failures; authoring makes eight pass; disable each own leaf sequentially yields its two missing-effect failures, finally restore exact authored SHA. Not a committed content scenario module/test file."
+  },
+  "D21": {
+    "requiredJudged": 0,
+    "reason": "All four SHA first bytes >=26, no new prompt/status/visual kinds. Copy uses established prompt surface. All-form both-seat automated sweep mandatory and init pass/exercised=false qualified."
+  },
+  "failurePaths": {
+    "interruption": "No new async or cancellation capability; existing copy prevention/cease contracts unchanged.",
+    "error/partialWrite": "No storage/IO writer. Existing primitive/fold rollback ownership unchanged; own valid-input witnesses make no new rollback claim.",
+    "restart": "No saved-state shape. Existing serializer and once-per-turn contracts unchanged; final-state JSON/hash if observed qualifies only final roundtrip, not in-flight replay.",
+    "staleInput": "No intent routing or prompt kind. Existing prompt/fold contracts own stale rejection, own cases use legal inputs only.",
+    "concurrentInput": "Each held physical source is a separate listener under sequential engine ordering; no thread race guarantee."
+  },
+  "runtimeAcceptancePending": false,
+  "historicalWitnessQualification": "Immutable checkpoint bb66a89f Git stat only confirms four leaves, no private module. No prior pass evidence borrowed. stuw completed before own base. Current fuzz147 regenerated catalog/seed game is not byte-identical old35-action repair proof; original full literal300 remains required.",
+  "checks": {
+    "authored-witness-v01": {
+      "argv": [
+        "npx",
+        "tsx",
+        "/tmp/worker664-20261013/consumer-witness-v01.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+      "start": "2026-10-14T05:35:09.521044+00:00",
+      "end": "2026-10-14T05:35:11.395899+00:00",
+      "exit": 0,
+      "wallSeconds": 1.8747330420010258,
+      "pid": 56099,
+      "pgid": 56099,
+      "load": "{ 7.85 11.14 11.38 }",
+      "groupRemainingAtExit": []
+    },
+    "before-pending-v01": {
+      "argv": [
+        "npx",
+        "tsx",
+        "/tmp/worker664-20261013/consumer-witness-v01.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+      "start": "2026-10-14T05:34:36.463311+00:00",
+      "end": "2026-10-14T05:34:39.645649+00:00",
+      "exit": 1,
+      "wallSeconds": 3.182184083998436,
+      "pid": 40741,
+      "pgid": 40741,
+      "load": "{ 7.78 11.47 11.50 }",
+      "groupRemainingAtExit": []
+    },
+    "control-disable-0-v01": {
+      "argv": [
+        "npx",
+        "tsx",
+        "/tmp/worker664-20261013/consumer-witness-v01.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+      "start": "2026-10-14T05:35:27.045370+00:00",
+      "end": "2026-10-14T05:35:28.908240+00:00",
+      "exit": 1,
+      "wallSeconds": 1.8627174590073992,
+      "pid": 72511,
+      "pgid": 72511,
+      "load": "{ 8.06 10.97 11.31 }",
+      "groupRemainingAtExit": []
+    },
+    "control-disable-1-v01": {
+      "argv": [
+        "npx",
+        "tsx",
+        "/tmp/worker664-20261013/consumer-witness-v01.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+      "start": "2026-10-14T05:35:28.980739+00:00",
+      "end": "2026-10-14T05:35:30.847116+00:00",
+      "exit": 1,
+      "wallSeconds": 1.866242374991998,
+      "pid": 72647,
+      "pgid": 72647,
+      "load": "{ 8.06 10.97 11.31 }",
+      "groupRemainingAtExit": []
+    },
+    "control-disable-2-v01": {
+      "argv": [
+        "npx",
+        "tsx",
+        "/tmp/worker664-20261013/consumer-witness-v01.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+      "start": "2026-10-14T05:35:30.917712+00:00",
+      "end": "2026-10-14T05:35:32.757644+00:00",
+      "exit": 1,
+      "wallSeconds": 1.839798625005642,
+      "pid": 72768,
+      "pgid": 72768,
+      "load": "{ 7.97 10.90 11.29 }",
+      "groupRemainingAtExit": []
+    },
+    "control-disable-3-v01": {
+      "argv": [
+        "npx",
+        "tsx",
+        "/tmp/worker664-20261013/consumer-witness-v01.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+      "start": "2026-10-14T05:35:32.832974+00:00",
+      "end": "2026-10-14T05:35:34.715105+00:00",
+      "exit": 1,
+      "wallSeconds": 1.8819999999832362,
+      "pid": 72898,
+      "pgid": 72898,
+      "load": "{ 7.97 10.90 11.29 }",
+      "groupRemainingAtExit": []
+    },
+    "coverage-final-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+      "start": "2026-10-14T05:37:26.788318+00:00",
+      "end": "2026-10-14T05:37:35.774824+00:00",
+      "exit": 0,
+      "wallSeconds": 8.986299875017721,
+      "pid": 12273,
+      "pgid": 12273,
+      "load": "{ 17.10 12.36 11.75 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/rules/copies.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+      "start": "2026-10-14T05:35:38.946695+00:00",
+      "end": "2026-10-14T05:35:43.810563+00:00",
+      "exit": 0,
+      "wallSeconds": 4.863722250011051,
+      "pid": 73365,
+      "pgid": 73365,
+      "load": "{ 7.73 10.80 11.25 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-final-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+      "start": "2026-10-14T05:37:15.912899+00:00",
+      "end": "2026-10-14T05:37:20.801362+00:00",
+      "exit": 0,
+      "wallSeconds": 4.888310666981852,
+      "pid": 90269,
+      "pgid": 90269,
+      "load": "{ 16.99 12.17 11.67 }",
+      "groupRemainingAtExit": []
+    },
+    "review-final-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+      "start": "2026-10-14T05:35:55.175626+00:00",
+      "end": "2026-10-14T05:36:57.532000+00:00",
+      "exit": 0,
+      "wallSeconds": 62.3554242499813,
+      "pid": 74612,
+      "pgid": 74612,
+      "load": "{ 7.59 10.57 11.16 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "consumerWitness": {
+    "before": "8 missing-effect failures; no import/fixture failure",
+    "authored": "8/8 pass, four UUIDs both seats",
+    "leafDisableControls": [
+      {
+        "path": "src/content/dreamsigns/trinket-necklace-989b55bd.ts",
+        "receipt": "control-disable-0-v01.receipt.json",
+        "failedCases": [
+          {
+            "uuid": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+            "side": "player",
+            "verdict": "fail",
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 3\n"
+          },
+          {
+            "uuid": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+            "side": "enemy",
+            "verdict": "fail",
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 3\n"
+          }
+        ]
+      },
+      {
+        "path": "src/content/dreamsigns/eye-amulet-eb6a5c19.ts",
+        "receipt": "control-disable-1-v01.receipt.json",
+        "failedCases": [
+          {
+            "uuid": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+            "side": "player",
+            "verdict": "fail",
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 4\n"
+          },
+          {
+            "uuid": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+            "side": "enemy",
+            "verdict": "fail",
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 4\n"
+          }
+        ]
+      },
+      {
+        "path": "src/content/dreamsigns/storm-tome-49f216a2.ts",
+        "receipt": "control-disable-2-v01.receipt.json",
+        "failedCases": [
+          {
+            "uuid": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+            "side": "player",
+            "verdict": "fail",
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 1\n"
+          },
+          {
+            "uuid": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+            "side": "enemy",
+            "verdict": "fail",
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 1\n"
+          }
+        ]
+      },
+      {
+        "path": "src/content/dreamsigns/clover-56523397.ts",
+        "receipt": "control-disable-3-v01.receipt.json",
+        "failedCases": [
+          {
+            "uuid": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+            "side": "player",
+            "verdict": "fail",
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 1\n"
+          },
+          {
+            "uuid": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+            "side": "enemy",
+            "verdict": "fail",
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 1\n"
+          }
+        ]
+      }
+    ],
+    "qualified": "Sequential valid public inputs only; does not duplicate primitive test matrices or claim in-flight rollback, replay or thread races."
+  },
+  "review": {
+    "files": 247,
+    "tests": 5921,
+    "exit": 0,
+    "seconds": 62.3554242499813,
+    "hostLoad": 7.59
+  },
+  "focus": {
+    "files": 2,
+    "tests": 29
+  },
+  "coverage": {
+    "tests": 20
+  },
+  "sourceDiff": {
+    "productionAddedLines": 21,
+    "productionDeletedLines": 4,
+    "grossNonTest": 25,
+    "newScenarioModules": 0,
+    "newTestEntryFiles": 0,
+    "newJsdomFiles": 0
+  },
+  "stuwConsumption": {
+    "at": "2026-10-14T05:34:32.358990+00:00",
+    "readOnlyCanonicalRepair": "hv-stuw",
+    "sourceAndTested": "7cad4715f79affbf21be9a5b6f1c15d70eae6ebd",
+    "candidate": "01a138d3-1438-7222-9408-6c8ad4a8fe86",
+    "certificate": "01a138d4-ada7-77f0-bee0-f83f8d0188ef",
+    "actualCurrentBaseContainsRepairAnd5FilesExact": {
+      "docs/plan/evidence/friction/hv-stuw.json": "a7c9ce7a2039344a117c0e52e0ee98b6b17caa707f36ce8a44a6e37055556ec6",
+      "docs/plan/evidence/measurements/hv-stuw.json": "6fa4eb75dec4b3dfd6be356ffa8812ef3e1dfc3fb0ba6264c4c128d478465bd4",
+      "src/engine/effects/primitives/contracts/temporary-base-spark-retention.contracts.ts": "034a78442d453fd95184863cd7d9c39a570dc340cb3b2e5eddafb8cb43df64ff",
+      "src/engine/events/kinds/effect-started.ts": "881e9754abe0dd0b57b0f6102897434d923d0ce1c8606bec4e34f87e330929b9",
+      "src/engine/rules/floating.ts": "b605d26f0cd45121805c62d4fe23b33f1eac0b4e4cb9353a5811318feb06fcb6"
+    },
+    "normalClaudeCore": "Nativeclosedcompleted fullsource review afterexpiry/0blocking; acceptedLowdocfollowup922t peerowned unchanged",
+    "ownAcceptance": "Mandatorynew147regeneratedwitness/currentfullpool literal300/allformsbothseat sweep stillowed, nocopyoldCI/gamebyteidentity or fulloriginal247 claim"
+  },
+  "wholeScopeAgreement": "All four whole battle clauses use existing emblems; no amplified/journey clauses. Original247 retains its other entities and final full acceptance join.",
+  "newPrimitives": [],
+  "newRulesDecisions": [],
+  "newCardIssues": [],
+  "coreReview": {
+    "perBeadRequired": false,
+    "reason": "Existing primitive content composition only, 25 gross production lines, no cross-cutting architecture, config or new prompt",
+    "phaseGate": "Normal independent Claude phase review remains required at phase gate."
+  },
+  "timingCutoff": {
+    "at": "2026-10-14T05:58:34.810533+00:00",
+    "inclusiveMinutes": 29.441092216666668,
+    "actualGitEnd": "UNKNOWN until future external receipt",
+    "modelSampling": "UNKNOWN",
+    "firstDispatch": "2026-10-14T05:29:08.345Z",
+    "qualification": "THIS fresh-owner attempt inclusive research, admissions, checks, waits, runtime, recovery and Git. Historical other-actor bb66 unvalidated attempt retained separately (dispatch-to-checkpointGit1635.425195s/cutoff25.926285s native record); own interval is not whole-bead aggregate or a reset of that earlier attempt. Model sampling and unobserved historical resource wait UNKNOWN."
+  },
+  "runtime": {
+    "bead": "hv-umm2.664",
+    "at": "2026-10-14T05:49:06.522766+00:00",
+    "freezeSourceCount": 4758,
+    "supportCount": 56,
+    "allFrozenExactExceptNativeLedgerAppend": true,
+    "original4PrefixExact": true,
+    "ledgerCount": 84,
+    "ledgerSHA256": "7366fd4cf3728420920205089836be1ed2596d748034f121f5dfa61f9b4a4482",
+    "runtimeReceipts": {
+      "sweep-v01": {
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.664",
+          "--dreamsigns",
+          "989b55bd-139f-40dc-b1fd-eb2f7b1c091a,eb6a5c19-26a6-41ef-ac7a-ce1152557b5c,49f216a2-0596-4124-bb40-60ac9afe6e0b,56523397-6c48-4df6-846b-9e4f15d7fdee",
+          "--variants",
+          "all",
+          "--as",
+          "both",
+          "--port",
+          "5174"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+        "start": "2026-10-14T05:47:01.737030+00:00",
+        "end": "2026-10-14T05:48:00.150298+00:00",
+        "exit": 0,
+        "wallSeconds": 58.41239641600987,
+        "pid": 11796,
+        "pgid": 11796,
+        "load": "{ 3.69 7.52 9.79 }",
+        "groupRemainingAtExit": []
+      },
+      "weighted300-v01": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "989b55bd-139f-40dc-b1fd-eb2f7b1c091a,eb6a5c19-26a6-41ef-ac7a-ce1152557b5c,49f216a2-0596-4124-bb40-60ac9afe6e0b,56523397-6c48-4df6-846b-9e4f15d7fdee"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+        "start": "2026-10-14T05:42:29.808493+00:00",
+        "end": "2026-10-14T05:46:29.646068+00:00",
+        "exit": 0,
+        "wallSeconds": 239.83423037498142,
+        "pid": 3735,
+        "pgid": 3735,
+        "load": "{ 8.20 10.89 11.37 }",
+        "groupRemainingAtExit": []
+      },
+      "preflight-v01": {
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--dreamsigns",
+          "989b55bd-139f-40dc-b1fd-eb2f7b1c091a,eb6a5c19-26a6-41ef-ac7a-ce1152557b5c,49f216a2-0596-4124-bb40-60ac9afe6e0b,56523397-6c48-4df6-846b-9e4f15d7fdee",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+        "start": "2026-10-14T05:46:47.458747+00:00",
+        "end": "2026-10-14T05:46:49.927312+00:00",
+        "exit": 0,
+        "wallSeconds": 2.468456625007093,
+        "pid": 11536,
+        "pgid": 11536,
+        "load": "{ 3.97 7.77 9.92 }",
+        "groupRemainingAtExit": []
+      },
+      "fuzz147-v01": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--seed",
+          "fuzz",
+          "--first",
+          "147",
+          "--games",
+          "1",
+          "--weight-uuids",
+          "989b55bd-139f-40dc-b1fd-eb2f7b1c091a,eb6a5c19-26a6-41ef-ac7a-ce1152557b5c,49f216a2-0596-4124-bb40-60ac9afe6e0b,56523397-6c48-4df6-846b-9e4f15d7fdee"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-664-challenger-emblems",
+        "start": "2026-10-14T05:40:29.967468+00:00",
+        "end": "2026-10-14T05:42:09.054918+00:00",
+        "exit": 0,
+        "wallSeconds": 99.08600695800851,
+        "pid": 94924,
+        "pgid": 94924,
+        "load": "{ 12.37 12.41 11.90 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    "fuzz147": "0 fail/486steps39prompts/native1.3wall1.8CPU/currentcatalogregenerated notbyteidenticalhistorical35actions/lockwaitUNKNOWN",
+    "weighted300": "0fail101354steps7580prompts712interactive/native238.5wall255.9CPU/includes600each/attributionStorm1808Clover546static0/lockwaitUNKNOWN",
+    "preflight": "8baseinitpass72ineligibleSkip0fail; exercisedfalse",
+    "sweepSummary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-g2IRne",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.664/invocations/sweep-g2IRne",
+      "counts": {
+        "pass": 8,
+        "skip": 72
+      },
+      "attemptCounts": {
+        "pass": 8,
+        "skip": 72
+      },
+      "hostLoad": 3.6904296875,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 4,
+        "serve": 1702,
+        "scenario": 55867.839502,
+        "cleanup": 609.841124999999,
+        "execution": 58236.981792,
+        "total": 58240.981792
+      }
+    },
+    "summarySHA256": "6c35c502c0cf0ac43de787e25a694eaad54c8a3056da501ccf6cfc8f0b90d945",
+    "reports": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.664/invocations/sweep-g2IRne/run-v9imCZ/sweep-49f216a2-0596-4124-bb40-60ac9afe6e0b-base-enemy-attempt-1.result.json",
+        "sha256": "57fc7cb111602134dc228c07b9b1936275f050bb5e4192981e73bcffc337dbef",
+        "caps": [],
+        "error": null,
+        "uuid": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+        "side": "enemy",
+        "exercised": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.664/invocations/sweep-g2IRne/run-v9imCZ/sweep-49f216a2-0596-4124-bb40-60ac9afe6e0b-base-player-attempt-1.result.json",
+        "sha256": "8dd1e13b459dded17b8d0d9d8d051b0d712e47181ac791cd9bef05cb0aa58aad",
+        "caps": [],
+        "error": null,
+        "uuid": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+        "side": "player",
+        "exercised": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.664/invocations/sweep-g2IRne/run-v9imCZ/sweep-56523397-6c48-4df6-846b-9e4f15d7fdee-base-enemy-attempt-1.result.json",
+        "sha256": "be2bab3bd97e7c3341338fa11bb3b87618b8fb06cc813f8d320ad14ac1832779",
+        "caps": [],
+        "error": null,
+        "uuid": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+        "side": "enemy",
+        "exercised": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.664/invocations/sweep-g2IRne/run-v9imCZ/sweep-56523397-6c48-4df6-846b-9e4f15d7fdee-base-player-attempt-1.result.json",
+        "sha256": "cd7d3d9e8b539b042e0cc057871d5b4f56c0d13a3deec8284f5bc21e6e2d778a",
+        "caps": [],
+        "error": null,
+        "uuid": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+        "side": "player",
+        "exercised": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.664/invocations/sweep-g2IRne/run-v9imCZ/sweep-989b55bd-139f-40dc-b1fd-eb2f7b1c091a-base-enemy-attempt-1.result.json",
+        "sha256": "e86d1acfe16b5080933e87b3a21b280b236c4e60853eb475f8524f7f360c002d",
+        "caps": [],
+        "error": null,
+        "uuid": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+        "side": "enemy",
+        "exercised": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.664/invocations/sweep-g2IRne/run-v9imCZ/sweep-989b55bd-139f-40dc-b1fd-eb2f7b1c091a-base-player-attempt-1.result.json",
+        "sha256": "1e891e26c1125ab9649534ba08db43699d22f31c87960c929dfbea449d2e5b45",
+        "caps": [],
+        "error": null,
+        "uuid": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+        "side": "player",
+        "exercised": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.664/invocations/sweep-g2IRne/run-v9imCZ/sweep-eb6a5c19-26a6-41ef-ac7a-ce1152557b5c-base-enemy-attempt-1.result.json",
+        "sha256": "572fecce92b7c28d4b83f8fcf6da78fd64cfdf33deca0e98802b0e53688af300",
+        "caps": [],
+        "error": null,
+        "uuid": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+        "side": "enemy",
+        "exercised": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.664/invocations/sweep-g2IRne/run-v9imCZ/sweep-eb6a5c19-26a6-41ef-ac7a-ce1152557b5c-base-player-attempt-1.result.json",
+        "sha256": "5d8e8c89be7c03762d4a7f3d9c6ec3b46c9712d080fb5bd87de1954846f8d295",
+        "caps": [],
+        "error": null,
+        "uuid": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+        "side": "player",
+        "exercised": false
+      }
+    ],
+    "qualification": "Automated emblem initialization, exercisedfalse; semantic behavior proved separately by eight own synthetic public consumer witnesses and full weighted fuzzer. No judged samples required; zero PNG/capture requirement. Historical actor source/checkpoint remains reference only.",
+    "cleanup": {
+      "runnerPG": 11796,
+      "serverPG": 11826,
+      "all15HelperGroupsAndOwnServerAbsent": true,
+      "port5274Free": true,
+      "ownNativeSlot": 1,
+      "nativeOwnerAndServerRecordsAbsent": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "normalCloseQualified": "Actual native sweep exit0/summary cleanup609.841ms and protected owner removal follow awaitsession.close protocol with successful browser_close/drained clients; no forged standalone RPC receipt. Sharedservice/peercontexts untouched."
+    },
+    "trackedEvidenceWritesDuringRuntime": false,
+    "GitMutation": false
+  },
+  "runtimeQualification": "Both preflight and sweep verify initialization with exercised=false. Own synthetic consumer witnesses and full weighted fuzz prove semantic behavior; no D21 judged samples required. Source freeze and native ledger append preserve all prior rows; normal managed cleanup qualified by successful runner/summary/owner removal protocol, no manufactured standalone browser RPC receipt.",
+  "historicalOtherActorAttempt": {
+    "source": "bb66a89f34b57f7752701f024202a156a51a24ba",
+    "status": "UNVALIDATED historical checkpoint, source reference only",
+    "dispatchToCheckpointGitS": 1635.425195,
+    "cutoffToGitReturnS": 25.926285,
+    "failedWeighted300": "fuzz147 after35 committed actions, ceased-copy temporarybaseSpark public projection divergence; canonical stuw precedes this fresh base",
+    "priorValidationBorrowed": false,
+    "historicalResourceWait": "UNKNOWN",
+    "freshWitness": "Current default seed first147 generated from current catalog; not byte-identical historical35-action snapshot replay"
+  },
+  "acceptanceJoin": "Own complete four UUID slice only; original hv-umm2.247 retains every other filed UUID and complete final recipe/acceptance.",
+  "schemaPreCommit": {
+    "required": true,
+    "actualTerminalOutcome": "UNKNOWN until external terminal receipt",
+    "command": "node scripts/friction-triggers.mjs --validate-records"
+  }
+}
