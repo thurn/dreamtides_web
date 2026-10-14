@@ -1,4 +1,7 @@
 import { card } from "../define";
+import { activated, countersXCost, randomIn, x } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { materialize, storeCounters } from "../../engine/effects/primitives";
 
 export default card({
   name: "Celestial Lookout",
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 392,
   art: { x: 0.671, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(whenYouPlay({ cardType: "character" }), storeCounters(variant.amplified ? 2 : 1)),
+    activated([countersXCost(0)], materialize(randomIn("deck", 1, { cardType: "character" }, { player: "opponent", costExactly: x() }))),
+  ],
+  verifiedText: "sy6uqb3pm4",
 });

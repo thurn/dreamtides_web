@@ -1,4 +1,7 @@
 import { card } from "../define";
+import { activated, energy, exhaustSelf, storedCounters } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { gainEnergy, storeCounters } from "../../engine/effects/primitives";
 
 export default card({
   name: "Dawnhorn Elder",
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 430,
   art: { x: -0.084, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([energy(2), exhaustSelf()], storeCounters(variant.amplified ? 2 : 1)),
+    triggered(onDawn(), gainEnergy(storedCounters())),
+  ],
+  verifiedText: "6qizaiuh73",
 });

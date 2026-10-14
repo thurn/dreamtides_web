@@ -1,0 +1,2059 @@
+{
+  "bead": "hv-umm2.184",
+  "phase": 5,
+  "sourceBase": "0d4d6a16e8da8c0499bea45bee467d682bcbeb69",
+  "actualDispatch": "2026-10-14T20:15:35.300350+00:00",
+  "recordPhase": "Final accepted QA evidence; immutable pre-Git record. Actual final Git endpoint supplied separately.",
+  "gitCompletion": "UNKNOWN before Git; separate actual final-commit receipt supplies inclusive endpoint",
+  "frictionEndpointQualification": "Final tracked implementWindow.end is a pre-Git measurement cut-off. Original20:15:35.300350Z dispatch includes setup/research/coordination/checks/all failures/heavy and browser waits/QA/cleanup; separate actual final-commit receipt qualifies the inclusive through-Git endpoint. Future endpoint is UNKNOWN in this immutable record.",
+  "content": {
+    "uuids": [
+      "691883df-63d8-4664-a1fe-d5f3b5becd11",
+      "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+      "374ec185-b0f7-40e6-9988-09e96abccebe"
+    ],
+    "baseTexts": 3,
+    "amplifiedTexts": 3,
+    "printedClauses": 6,
+    "newPrimitives": [],
+    "newPromptKinds": [],
+    "newStatusVisualForms": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "fallout": [],
+    "metadataAudit": "Parent TypeScript AST syntax preservation audit passed all3; parent-card-metadata-verification.json. Only pending/abilities/verifiedText change.",
+    "sourceHashes": {
+      "src/content/cards/dawnhorn-elder-691883df.ts": "23e4f01b768ee7d720376115ee6cfea946a4cd259551371ffd05b6bd48cbc670",
+      "src/content/cards/eclipse-herald-764b62f6.ts": "aa1450c38411d4f715ab9c48ed98c40f08c03a9c4bc3db689871b8846bce712b",
+      "src/content/cards/celestial-lookout-374ec185.ts": "f7fc1688c5276a89dd36c050796be2f98dc3901e5bd49d6f8e169a54f9a534bb",
+      "src/content/specs/cards-72.scenarios.ts": "79162be20505f5f2d1f7f825e5a3e6f95bfadb3842e7ce89b22b38c0d6c62009"
+    }
+  },
+  "composition": {
+    "module": "src/content/specs/cards-72.scenarios.ts",
+    "slug": "cards-72",
+    "cases": 8,
+    "lines": 153,
+    "consumer": "NamedScenario registry and public engine/runScenario; Lookout same-cost noncharacter uses a declared local synthetic cost-2 event in its public private-catalog run, not the shared catalog.",
+    "scope": [
+      "Herald both controllers/base+amplified: lower/at-X candidates, above-X excluded, selected positive spark dissolves after all source counters spent.",
+      "Lookout both controllers/base+amplified: character-only storage, paid X and exact current-cost random physical opponent-deck transfer, owner/controller/back-rank/exhaustion, own deck unchanged, no materialized-as-play trigger."
+    ],
+    "dawnhornScenario": "Not needed under D20: ordinary primitive composition, with full required weighted fuzz/preflight/sweep.",
+    "newStateTransitionImplementation": false
+  },
+  "validation": {
+    "focused": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 46777,
+      "pgid": 46777,
+      "start": "2026-10-14T20:38:18.036932+00:00",
+      "end": "2026-10-14T20:38:24.579942+00:00",
+      "wallS": 6.542904292000458,
+      "exit": 1,
+      "stdoutSHA256": "3debca43a818ac29f509d5248756138fd36b48dbb519163a84e4baed51de75a1",
+      "settled": true
+    },
+    "focused-repaired": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 47741,
+      "pgid": 47741,
+      "start": "2026-10-14T20:38:53.730768+00:00",
+      "end": "2026-10-14T20:38:59.146666+00:00",
+      "wallS": 5.41576824997901,
+      "exit": 0,
+      "stdoutSHA256": "1cac1200d1608f45e76eac8048325a2d3465a11775881aec4917602e17b714e4",
+      "settled": true
+    },
+    "focused-final": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 48288,
+      "pgid": 48288,
+      "start": "2026-10-14T20:39:28.684592+00:00",
+      "end": "2026-10-14T20:39:33.654941+00:00",
+      "wallS": 4.9702407919976395,
+      "exit": 0,
+      "stdoutSHA256": "22d1cd81b07fabf7468feda56f9ecef88ceee0593d04889d8c9e010c3bb4d3cf",
+      "settled": true
+    },
+    "entities-after": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "bead:entities",
+        "--",
+        "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "374ec185-b0f7-40e6-9988-09e96abccebe"
+      ],
+      "pid": 48529,
+      "pgid": 48529,
+      "start": "2026-10-14T20:39:37.693244+00:00",
+      "end": "2026-10-14T20:39:38.653663+00:00",
+      "wallS": 0.9603423340013251,
+      "exit": 0,
+      "stdoutSHA256": "05552b13db82fd597b30d656ccb58e71d48d39fce14f2fa2deae1fe46456b885",
+      "settled": true
+    },
+    "review": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review"
+      ],
+      "pid": 48672,
+      "pgid": 48672,
+      "start": "2026-10-14T20:39:44.894155+00:00",
+      "end": "2026-10-14T20:40:34.614276+00:00",
+      "wallS": 49.71967537497403,
+      "exit": 0,
+      "stdoutSHA256": "74cb8eab88ee241c8ccf92653661f1e2611bea18069da061dd15be6da240e97f",
+      "settled": true
+    },
+    "knip": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "knip"
+      ],
+      "pid": 49640,
+      "pgid": 49640,
+      "start": "2026-10-14T20:40:38.994977+00:00",
+      "end": "2026-10-14T20:40:43.335062+00:00",
+      "wallS": 4.339964165992569,
+      "exit": 0,
+      "stdoutSHA256": "1b1dc41474cf995ea6b9152890e7bc47388c450847d11180a69ba276c5dc7f59",
+      "settled": true
+    },
+    "weighted300": {
+      "argv": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "/opt/homebrew/bin/npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "691883df-63d8-4664-a1fe-d5f3b5becd11,764b62f6-6af9-40ad-8d1f-653cc1a11030,374ec185-b0f7-40e6-9988-09e96abccebe"
+      ],
+      "pid": 50230,
+      "pgid": 50230,
+      "start": "2026-10-14T20:41:07.446021+00:00",
+      "end": "2026-10-14T20:49:08.342276+00:00",
+      "wallS": 480.89256445900537,
+      "exit": 0,
+      "stdoutSHA256": "5ab792fdc6f21450dae15c66f0438467f388c308621a0430624557c90f812206",
+      "settled": true
+    },
+    "preflight": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "691883df-63d8-4664-a1fe-d5f3b5becd11,764b62f6-6af9-40ad-8d1f-653cc1a11030,374ec185-b0f7-40e6-9988-09e96abccebe",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 61739,
+      "pgid": 61739,
+      "start": "2026-10-14T20:50:19.634394+00:00",
+      "end": "2026-10-14T20:50:22.658634+00:00",
+      "wallS": 3.0241703749925364,
+      "exit": 0,
+      "stdoutSHA256": "b057838fe2f6de306007bfadbd935fc940fcc456ce5917b8c44d7ba039a3d948",
+      "settled": true
+    },
+    "sweep": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.184",
+        "--cards",
+        "691883df-63d8-4664-a1fe-d5f3b5becd11,764b62f6-6af9-40ad-8d1f-653cc1a11030,374ec185-b0f7-40e6-9988-09e96abccebe",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "pid": 68820,
+      "pgid": 68820,
+      "start": "2026-10-14T20:52:57.498777+00:00",
+      "end": "2026-10-14T20:57:52.630801+00:00",
+      "wallS": 295.1297106250131,
+      "exit": 1,
+      "stdoutSHA256": "2f810c5dd170024ebd7eb7b7bd8888448d05bc57f71a55c5aa5659469ac95029",
+      "settled": true
+    },
+    "qa-observer": {
+      "argv": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/retain-qa-owners.py"
+      ],
+      "pid": 65353,
+      "pgid": 65353,
+      "start": "2026-10-14T20:52:56.347108+00:00",
+      "end": "2026-10-14T20:58:25.079989+00:00",
+      "wallS": 328.7303151660017,
+      "exit": 0,
+      "stdoutSHA256": "f23aa7327e9b26fbea470b188dfa03446ef045db9a989da48e4e77fad3913288",
+      "settled": true
+    },
+    "recovery-amplified-player": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "scripts/qa/run-scenario.mjs",
+        "card-lab-play",
+        "--bead",
+        "hv-umm2.184",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "90",
+        "--arg",
+        "card=691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "--arg",
+        "variant=amplified",
+        "--arg",
+        "as=player",
+        "--arg",
+        "timeoutMs=60000"
+      ],
+      "pid": 86307,
+      "pgid": 86307,
+      "start": "2026-10-14T20:59:22.702873+00:00",
+      "end": "2026-10-14T20:59:49.993722+00:00",
+      "wallS": 27.290541041991673,
+      "exit": 0,
+      "stdoutSHA256": "e871e2293ba6dbd2988cf0bccbd4a11560d05555f0a920233c999ebb98eb2824",
+      "settled": true
+    },
+    "recovery-perfected-enemy": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "scripts/qa/run-scenario.mjs",
+        "card-lab-play",
+        "--bead",
+        "hv-umm2.184",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "90",
+        "--arg",
+        "card=691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "--arg",
+        "variant=perfected",
+        "--arg",
+        "as=enemy",
+        "--arg",
+        "timeoutMs=60000"
+      ],
+      "pid": 96959,
+      "pgid": 96959,
+      "start": "2026-10-14T21:00:15.417185+00:00",
+      "end": "2026-10-14T21:00:26.941810+00:00",
+      "wallS": 11.52444700000342,
+      "exit": 0,
+      "stdoutSHA256": "444f8177714c9d5c443f4f33294d5fed6d71ecc5101182cf501e58b1fae70a4f",
+      "settled": true
+    },
+    "qa-observer-recovery": {
+      "argv": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/retain-qa-owners.py"
+      ],
+      "pid": 84524,
+      "pgid": 84524,
+      "start": "2026-10-14T20:59:21.548069+00:00",
+      "end": "2026-10-14T21:01:26.064469+00:00",
+      "wallS": 124.51424487499753,
+      "exit": 0,
+      "stdoutSHA256": "6a8c02dad36bcf8e2f3144065421c840117ce5e2c78e4ba9171a28f4e8336dae",
+      "settled": true
+    }
+  },
+  "failureDisposition": {
+    "firstFocused": {
+      "testsFailed": 8,
+      "testsPassed": 461,
+      "scope": "Private fixture expected returned stack to remain pending; engine drains no-op responses automatically.",
+      "productionDefect": false,
+      "repair": "Public committed-step observation of X+source0, and full actual effect events.",
+      "retainedReceipt": "focused.receipt.json",
+      "retainedStdout": "focused.stdout.txt"
+    },
+    "focusedRepaired": {
+      "testsPassed": 469,
+      "retainedReceipt": "focused-repaired.receipt.json",
+      "sourceSnapshot": "scenario-focus-repaired1.ts.txt",
+      "sourceSHA256": "8be9bd37c5934d3ddcc907fdeedd2bebb4f56e3de3a74d81650fd112de5a415a"
+    },
+    "focusedFinal": {
+      "testsPassed": 469,
+      "reasonForRerun": "Remove unnecessary no-op fast response fixtures, explicit public character play action, and assert payment observer ran.",
+      "retainedReceipt": "focused-final.receipt.json",
+      "sourceSHA256": "79162be20505f5f2d1f7f825e5a3e6f95bfadb3842e7ce89b22b38c0d6c62009"
+    }
+  },
+  "heavy": {
+    "reportedFuzzWallS": 303.2,
+    "reportedCpuS": 323.7,
+    "inclusiveLockfWallS": 480.89256445900537,
+    "exactKernelWaitS": "UNKNOWN: lockf exposes no exact acquisition timestamp; retain live command-start/launcher-only observations. Difference from reported fuzz wall includes wait plus command startup/cleanup.",
+    "sourceBefore": "weighted300-source-before.json",
+    "sourceAfter": "weighted300-source-after.json",
+    "liveObservation": "weighted300-live.json",
+    "furtherObservation": "weighted300-observations.jsonl",
+    "games": 300,
+    "steps": 103534,
+    "prompts": 7328,
+    "interactiveReruns": 774,
+    "failures": 0,
+    "targetCoverage": [
+      {
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "included": 610,
+        "exercised": 183
+      },
+      {
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "included": 617,
+        "exercised": 113
+      },
+      {
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "included": 617,
+        "exercised": 110
+      }
+    ]
+  },
+  "qa": {
+    "status": "Root factual QA accepted; final latest unique60 cells36pass24skip0unresolvedfail; original2failure attempts retained.",
+    "requestedCells": 60,
+    "argv": [
+      "/opt/homebrew/bin/node",
+      "scripts/qa/card-sweep.mjs",
+      "--bead",
+      "hv-umm2.184",
+      "--cards",
+      "691883df-63d8-4664-a1fe-d5f3b5becd11,764b62f6-6af9-40ad-8d1f-653cc1a11030,374ec185-b0f7-40e6-9988-09e96abccebe",
+      "--variants",
+      "all",
+      "--as",
+      "both",
+      "--port",
+      "5174"
+    ],
+    "sharedCallerSHA256": "2b0de8945ac6414bd98f11783376cbcfc01dfc302f22d5dd235ac2cc386368e6",
+    "observerSHA256": "c962397d3b70d046e3b74181ea78cb64560e8d00712e3b497b7a17670ea3181b",
+    "sdkVersion": "1.29.0",
+    "d21": {
+      "sampleBytes": [
+        159,
+        138,
+        246
+      ],
+      "sampled": [
+        false,
+        false,
+        false
+      ],
+      "newForms": false,
+      "judgments": "not-required, never recorded as passes"
+    },
+    "preflightSummary": {
+      "event": "labPreflightSummary",
+      "cards": [
+        "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "374ec185-b0f7-40e6-9988-09e96abccebe"
+      ],
+      "avatars": [],
+      "dreamsigns": [],
+      "variants": [
+        "base",
+        "amplified",
+        "empowered",
+        "kindled",
+        "resonant",
+        "inspired",
+        "enduring",
+        "hastened",
+        "attuned",
+        "perfected"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "counts": {
+        "pass": 36,
+        "pending": 0,
+        "skip": 24,
+        "fail": 0
+      },
+      "elapsedMs": 30.81145800000013,
+      "hostLoad": 3.5146484375,
+      "enemyMode": "scripted-lab-play-first-legal-prompts"
+    },
+    "frozenManifestSHA256": "b47731d689a1bf3bc80a964ee60a615b5cf07ba459fb6742df47a8aa77bc44ed",
+    "verificationSHA256": "30ff3fd8171d0e7bcc71bde64427bb3e7288a481439edc6d9c1426b36b4b946e",
+    "originalCounts": {
+      "pass": 34,
+      "fail": 2,
+      "skip": 24
+    },
+    "qualifiedLatestUniqueCells": 60,
+    "qualifiedLatestCounts": {
+      "pass": 36,
+      "skip": 24
+    },
+    "rawReports": [
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-kindled-enemy-attempt-1.result.json",
+        "sha256": "4302c1b6f9bf2f3b54222b92a5945c04518fa686a12053e10ae97511d4bddf41",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "kindled",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-base-player-attempt-1.result.json",
+        "sha256": "02bd48eac12297cc66a2f18165a6c6cb9fbd8bc2173ffecc7cd6372ccf19c92a",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "base",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-perfected-player-attempt-1.result.json",
+        "sha256": "e0db5c299c8656b4690334ebecaec2e51af187b20855a5d8a0f421a42a5e452e",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "perfected",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-attuned-player-attempt-1.result.json",
+        "sha256": "7f82865a2c789063d451da177cf9e77b496e7115928d41ab9f82087229a961dc",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "attuned",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-amplified-player-attempt-1.result.json",
+        "sha256": "1a70983e5ce1d0d4f67aa57bcb60a54fbae35f982a5d2cb8ffac0ea82509f6ff",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "variant": "amplified",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-kindled-enemy-attempt-1.result.json",
+        "sha256": "20b7a0919bef792eaface4e1eaee4f90a14a7411fd862ae813b2bcec5a3db84b",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "variant": "kindled",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-empowered-player-attempt-1.result.json",
+        "sha256": "88318ada5596539a4fad55f1eb72ffa491b3613a915e70e2d25678a43a798ae6",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "variant": "empowered",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-base-enemy-attempt-1.result.json",
+        "sha256": "ce372197743aaa7d9f8612666199450bcae4e64ef69d0ff984b1d706546d48b4",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "variant": "base",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-attuned-enemy-attempt-1.result.json",
+        "sha256": "b64111cf53b5d62f28c52536948c9d7292909b33fd7c323ba145580a31756e6d",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "attuned",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-perfected-enemy-attempt-1.result.json",
+        "sha256": "2987d91bacff25244150128ccdc6e0560e17e533da38e31bf8b22aeea9cfee54",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "variant": "perfected",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-empowered-enemy-attempt-1.result.json",
+        "sha256": "ead7b203088292bed0b4a42e8738c849da734e10ede21eac98ece30b23466d08",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "variant": "empowered",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-kindled-player-attempt-1.result.json",
+        "sha256": "9698e47e4751244edc3bf1d849c9714b95fb56fcf28396553a6ffc4e970af9e3",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "kindled",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-amplified-enemy-attempt-1.result.json",
+        "sha256": "2abdd6f66beea8a66857df5cfde80d990acb439be02b131f50984ed17bd579b6",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "amplified",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-base-player-attempt-1.result.json",
+        "sha256": "6c47faa2e962e6d13286cdd09d1b812d594711f808da95b41e9a758264e4bb95",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "variant": "base",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-kindled-player-attempt-1.result.json",
+        "sha256": "6879abf0543e66ace34e89dfd6b441651934b1b7679d66d17e4060d6f8c3a213",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "variant": "kindled",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-base-enemy-attempt-1.result.json",
+        "sha256": "08f4a2bdc4d43b987bcaf82540482f3860ca589e9642b74dc454dbf68547bd79",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "base",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-amplified-player-attempt-1.result.json",
+        "sha256": "1deb3d1b4f8440d9c44f9258bf6911fc083f8a5eeb48f03b85702439969497dc",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "amplified",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-perfected-player-attempt-1.result.json",
+        "sha256": "b37fbd1da9f3365eab46414eb09e568103286b82215bb5b4e2dfdda943cc3410",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "variant": "perfected",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-empowered-player-attempt-1.result.json",
+        "sha256": "acfd2b4f64051525e505ac2b95080dff593a542e9cfb7745d3ba2088cb328040",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "empowered",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-perfected-enemy-attempt-1.result.json",
+        "sha256": "50dbdb3aa24f3641a3d7b1e38f0608076f10b93b72244135600b8e7c262e7a03",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "perfected",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-764b62f6-6af9-40ad-8d1f-653cc1a11030-empowered-enemy-attempt-1.result.json",
+        "sha256": "3b51629dc2aa67b1e15361e544a41561287c323c62f8d4113aac24a80ac2274c",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "variant": "empowered",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-Q3O6Ot/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-amplified-enemy-attempt-1.result.json",
+        "sha256": "a8837c536a86f8c077532d65936d3ad858e2404dff78335870cd1aa16d15925f",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "variant": "amplified",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-attuned-enemy-attempt-1.result.json",
+        "sha256": "9e24a3849459fd37b39316813f27c6ae6dd287dfc4d6721ed07f8b51b505f558",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "attuned",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-base-enemy-attempt-1.result.json",
+        "sha256": "8465a49d6186a2f4ae59b6f1b4b0c00bc7e58cf8fb934ceffa682c15650f1160",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "base",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-attuned-player-attempt-1.result.json",
+        "sha256": "f263357544a0ca42a581fbe4eba4c50907d64a4f2959c503b5aa54e6519b965e",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "attuned",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-resonant-player-attempt-1.result.json",
+        "sha256": "55a141bb59e2ae3da3dbca079b36aba03fab204a50b92da73ef9824b58a7e84e",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "resonant",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-base-player-attempt-1.result.json",
+        "sha256": "edbc855ae96a96b0d5d371ea7541edb9f90accd902576267dc501846b8ec78c5",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "base",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-perfected-player-attempt-1.result.json",
+        "sha256": "81b3c9d265b6e6fb9a8cbbfeea5ed678d9864f96c7a10dec5fce27bd7d65005e",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "perfected",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-kindled-enemy-attempt-1.result.json",
+        "sha256": "806b5cec5c6d442045a974920ed51d2b1938a387035b35a29da6eb3a2183ddc7",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "kindled",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-amplified-enemy-attempt-1.result.json",
+        "sha256": "8ba85a828fe35456a385de4af6c379c9608ad2347452834948ce219c6f7b6fec",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "amplified",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-empowered-enemy-attempt-1.result.json",
+        "sha256": "9013f1dacfd2c2b50e89933595a95cb49d457345913960b54a80daecf22127a3",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "empowered",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-empowered-player-attempt-1.result.json",
+        "sha256": "cea76afa5860a9ac5809404f11b04d18c78ae46794dd4e9cf4af33b277d3df03",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "empowered",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-amplified-player-attempt-1.result.json",
+        "sha256": "f7bda41ca71d973e99d8a0980b19844d3553acf4ffe0d557fdc39239a014ca68",
+        "verdict": "fail",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [
+          "unknown"
+        ],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds"
+        ],
+        "gameLogsExported": false,
+        "notes": "Error: page.goto: net::ERR_ABORTED at http://localhost:5274/?goto=card-lab&card=691883df-63d8-4664-a1fe-d5f3b5becd11&variant=amplified&as=player&seed=1&debug=1\nCall log:\n  - navigating to \"http://localhost:5274/?goto=card-lab&card=691883df-63d8-4664-a1fe-d5f3b5becd11&variant=amplified&as=player&seed=1&debug=1\", waiting until \"domcontentloaded\"\n"
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-perfected-enemy-attempt-1.result.json",
+        "sha256": "026b0285b099f5e4bc1202a1e3a9f972d1f0848020db38af9c4528dab1834b36",
+        "verdict": "fail",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [
+          "unknown"
+        ],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds"
+        ],
+        "gameLogsExported": false,
+        "notes": "Error: page.goto: net::ERR_ABORTED at http://localhost:5274/?goto=card-lab&card=691883df-63d8-4664-a1fe-d5f3b5becd11&variant=perfected&as=enemy&seed=1&debug=1\nCall log:\n  - navigating to \"http://localhost:5274/?goto=card-lab&card=691883df-63d8-4664-a1fe-d5f3b5becd11&variant=perfected&as=enemy&seed=1&debug=1\", waiting until \"domcontentloaded\"\n"
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-kindled-player-attempt-1.result.json",
+        "sha256": "adc12cb9294593695f2d0afd7507c8846baf1b4a57d22fe07376ba2a67298b5d",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "kindled",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/sweep-zJqmdH/run-njafP3/sweep-691883df-63d8-4664-a1fe-d5f3b5becd11-resonant-enemy-attempt-1.result.json",
+        "sha256": "09240d400566c206931ea22416c11cacd34e7d2a29804fcd2a0c8a6a28db06a1",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": false,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "resonant",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      },
+      {
+        "path": "invocations/run-qlZ2ez/card-lab-play.result.json",
+        "sha256": "ef95584fb4ffe5e514015234f178cff800059c2d32e091e10e06db0f10fcfeaa",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": true,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "amplified",
+        "side": "player",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ]
+      },
+      {
+        "path": "invocations/run-bHEQcw/card-lab-play.result.json",
+        "sha256": "94692e1ec1770cc13a59196dd984725c99f082ac5961eb0da8fb3b457a4dda1d",
+        "verdict": "pass",
+        "error": null,
+        "capsCount": 0,
+        "failureKinds": [],
+        "returnedKeys": [
+          "verdict",
+          "notes",
+          "failureKinds",
+          "lab",
+          "zone",
+          "answered",
+          "passes",
+          "events",
+          "screens"
+        ],
+        "gameLogsExported": true,
+        "uuid": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "variant": "perfected",
+        "side": "enemy",
+        "zone": "play",
+        "cardStatus": "authored",
+        "eventKinds": [
+          "energyChanged",
+          "handEmptied",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ]
+      }
+    ],
+    "gameLogExports": [
+      {
+        "viewport": "desktop",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.184/invocations/run-qlZ2ez/card-lab-play-desktop.jsonl",
+        "gameId": "42wvmr",
+        "selectedBy": "url",
+        "rows": 29,
+        "reason": null,
+        "sha256": "57112bf570ad37e4e2f11dce6ca398e4bcff2f0034f086ec4c8e6b16f4f7c904",
+        "eventKinds": {
+          "local_game_opened": 1,
+          "draft_pool_constructed": 1,
+          "build_avatar_package_rarity_capped": 1,
+          "atlas_generated": 1,
+          "atlas_known_dreamsign_placed": 2,
+          "dreamscape_site_composition": 4,
+          "atlas_node_revealed": 4,
+          "atlas_dreamscape_selected": 2,
+          "atlas_initial_reveal": 1,
+          "draft_pool_initialized": 1,
+          "debug_card_lab_loaded": 1,
+          "game_event": 2,
+          "battle_engine_screen_opened": 1,
+          "screen_rendered": 1,
+          "journey_url_synced": 1,
+          "battle_engine_intent_requested": 1,
+          "engine.handEmptied": 1,
+          "engine.action": 1,
+          "battle_engine_presentation_queued": 1,
+          "ai.workerBoot": 1
+        }
+      },
+      {
+        "viewport": "desktop",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.184/invocations/run-bHEQcw/card-lab-play-desktop.jsonl",
+        "gameId": "mvkac2",
+        "selectedBy": "url",
+        "rows": 31,
+        "reason": null,
+        "sha256": "bd661b02b927dd0a6689f6e2575aabc9fbe49ff157c6196b4b0977cd0e2c57d8",
+        "eventKinds": {
+          "local_game_opened": 1,
+          "draft_pool_constructed": 1,
+          "build_avatar_package_rarity_capped": 1,
+          "atlas_generated": 1,
+          "atlas_known_dreamsign_placed": 2,
+          "dreamscape_site_composition": 4,
+          "atlas_node_revealed": 4,
+          "atlas_dreamscape_selected": 2,
+          "atlas_initial_reveal": 1,
+          "draft_pool_initialized": 1,
+          "debug_card_lab_loaded": 1,
+          "game_event": 3,
+          "battle_engine_screen_opened": 1,
+          "screen_rendered": 1,
+          "journey_url_synced": 1,
+          "battle_engine_intent_requested": 1,
+          "engine.action": 2,
+          "battle_engine_presentation_queued": 1,
+          "ai.workerBoot": 1,
+          "ai.decision": 1
+        }
+      }
+    ],
+    "loggingScopeQualification": "Unchanged standard card-sweep does not set exportGameLog and returns labUUID/variant/controller, zone and event-kind names, not physical source IDs or persisted game IDs. Only the two explicit native run-scenario repair sessions actually export JSONL. Root source-backed qualification qa-log-export-qualification.txt records this scope. D40 event-to-log implementation retained; do not infer missing behavior from original goto-aborted cells.",
+    "navigationCause": "UNKNOWN; original native navigation aborts before incoming lab observation. Fresh-session isolation is a bounded successful retest, not a proven shared/product source fix.",
+    "liveSessions": [
+      {
+        "observedAt": "2026-10-14T20:53:02.023231+00:00",
+        "sessionId": "2862a37d-48b1-4899-b156-f017de6f816e",
+        "endpoint": "http://localhost:8931/mcp",
+        "protocolVersion": "2025-11-25",
+        "pid": 68820,
+        "port": 5274,
+        "token": "613269ff-6ddd-44f0-9821-e0cff4320b2a",
+        "ownerFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/68820-340630fd8d96fa7d28eb4ee719824e06ff60f573ac191fe9bf34633c25477cb5.owner.json",
+        "ownerSHA256": "340630fd8d96fa7d28eb4ee719824e06ff60f573ac191fe9bf34633c25477cb5",
+        "serverFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/68820-340630fd8d96fa7d28eb4ee719824e06ff60f573ac191fe9bf34633c25477cb5.server.json",
+        "serverSHA256": "e82630511d20eefb9060327d9db4fd4084674229f0bdd4f912f85210db6c8674"
+      },
+      {
+        "observedAt": "2026-10-14T20:55:31.644374+00:00",
+        "sessionId": "f4725301-5639-4bdc-b440-f61afdb7092f",
+        "endpoint": "http://localhost:8931/mcp",
+        "protocolVersion": "2025-11-25",
+        "pid": 68820,
+        "port": 5174,
+        "token": "222c4523-f0c9-499f-bc20-93cad3fa2d0d",
+        "ownerFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/68820-bf11090ed77586f4d1dcf3e71d03e7dbb7a3841779201e5b1f378282b2a7a467.owner.json",
+        "ownerSHA256": "bf11090ed77586f4d1dcf3e71d03e7dbb7a3841779201e5b1f378282b2a7a467",
+        "serverFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/68820-bf11090ed77586f4d1dcf3e71d03e7dbb7a3841779201e5b1f378282b2a7a467.server.json",
+        "serverSHA256": "224263d142f8615c4be4634eaf181e8a88fef302cc1c3d15d2a8cd0d43ce03e7"
+      },
+      {
+        "observedAt": "2026-10-14T20:59:25.889337+00:00",
+        "sessionId": "da763ab1-1a17-44ea-ae0e-ceb77c97b179",
+        "endpoint": "http://localhost:8931/mcp",
+        "protocolVersion": "2025-11-25",
+        "pid": 86307,
+        "port": 5274,
+        "token": "89fa59a5-4f1a-490a-82c6-6e3e5a676bbc",
+        "ownerFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/86307-ca455544e5961729df3a8b716cf0827f904fd2631c13c727f1e0767cbf6a5e0f.owner.json",
+        "ownerSHA256": "ca455544e5961729df3a8b716cf0827f904fd2631c13c727f1e0767cbf6a5e0f",
+        "serverFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/86307-ca455544e5961729df3a8b716cf0827f904fd2631c13c727f1e0767cbf6a5e0f.server.json",
+        "serverSHA256": "0028ff44478b7aa27daa305522ee4c7ec8df4b84345b73dc577cef40c2592839"
+      },
+      {
+        "observedAt": "2026-10-14T21:00:19.373062+00:00",
+        "sessionId": "121bd1ff-fb41-4d87-a6c4-c46763bbe13e",
+        "endpoint": "http://localhost:8931/mcp",
+        "protocolVersion": "2025-11-25",
+        "pid": 96959,
+        "port": 5274,
+        "token": "5d613c77-f10b-4197-a032-d52cb04bac9d",
+        "ownerFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/96959-27bf8470132290fc24aa931e7d0b5a7a884f072a3334fe6450ea26cec8ec9c0d.owner.json",
+        "ownerSHA256": "27bf8470132290fc24aa931e7d0b5a7a884f072a3334fe6450ea26cec8ec9c0d",
+        "serverFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/96959-27bf8470132290fc24aa931e7d0b5a7a884f072a3334fe6450ea26cec8ec9c0d.server.json",
+        "serverSHA256": "c4b820e4cab4c0211859149f53000dc81eb219fedc6fa739946db78069d24b91"
+      }
+    ],
+    "parentAcceptance": {
+      "record": "parent-qa-verification.json",
+      "sha256": "f994b508f3581b42f8d475982a3ab8ec52a2e6b226eac75c366a3df5956408c7",
+      "nativeNoteSHA256": "8c61bec559f8736c2906f88ecb2ff915f6ab579a67bffb2690489016b0368689",
+      "nativeAckSHA256": "80929b39e0383740fea1030aef4f1676a9db75f6eb5e06da168b62c6042d94ea",
+      "acceptedAt": "2026-10-14T21:03:18.856837+00:00"
+    },
+    "persistedLogQualification": "Original standard60cell sweep exports no per-cell JSONL; exactly two recovery exports verified, not generalized to full matrix.",
+    "persistedLogActionScopes": [
+      {
+        "gameId": "42wvmr",
+        "rows": 29,
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.184/invocations/run-qlZ2ez/card-lab-play-desktop.jsonl",
+        "sha256": "57112bf570ad37e4e2f11dce6ca398e4bcff2f0034f086ec4c8e6b16f4f7c904",
+        "labUUIDVariantSideVerified": true,
+        "engineActionKinds": [
+          "play"
+        ],
+        "qualification": "One public human play-intent action observed."
+      },
+      {
+        "gameId": "mvkac2",
+        "rows": 31,
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.184/invocations/run-bHEQcw/card-lab-play-desktop.jsonl",
+        "sha256": "bd661b02b927dd0a6689f6e2575aabc9fbe49ff157c6196b4b0977cd0e2c57d8",
+        "labUUIDVariantSideVerified": true,
+        "engineActionKinds": [
+          "pass",
+          "pass"
+        ],
+        "qualification": "Enemy initial card play is scripted lab fixture; persisted later enemy passes are not an enemy play-intent proof."
+      }
+    ]
+  },
+  "resources": {
+    "observedAt": "2026-10-14T21:01:25.855107+00:00",
+    "groupsChecked": [
+      60928,
+      68820,
+      69588,
+      86307,
+      86638,
+      96959,
+      96998
+    ],
+    "remainingGroupMembers": [],
+    "ownerRecordStates": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "existsNow": true,
+        "ownedRecordRemaining": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+        "existsNow": false,
+        "ownedRecordRemaining": false
+      }
+    ],
+    "liveSessions": [
+      {
+        "observedAt": "2026-10-14T20:53:02.023231+00:00",
+        "slotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+        "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "ownerSHA256": "340630fd8d96fa7d28eb4ee719824e06ff60f573ac191fe9bf34633c25477cb5",
+        "ownerFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/68820-340630fd8d96fa7d28eb4ee719824e06ff60f573ac191fe9bf34633c25477cb5.owner.json",
+        "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "serverSHA256": "e82630511d20eefb9060327d9db4fd4084674229f0bdd4f912f85210db6c8674",
+        "serverFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/68820-340630fd8d96fa7d28eb4ee719824e06ff60f573ac191fe9bf34633c25477cb5.server.json",
+        "processIdentities": [
+          "68820 68717 68820 Wed Oct 14 13:52:57 2026     /opt/homebrew/bin/node scripts/qa/card-sweep.mjs --bead hv-umm2.184 --cards 691883df-63d8-4664-a1fe-d5f3b5becd11,764b62f6-6af9-40ad-8d1f-653cc1a11030,374ec185-b0f7-40e6-9988-09e96abccebe --variants all --as both --port 5174",
+          "69588 68820 69588 Wed Oct 14 13:52:57 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 582bc19c-10fa-430c-9186-bfa8f9d64b70 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+          "69751 69588 69588 Wed Oct 14 13:52:57 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+          "77015 69751 69588 Wed Oct 14 13:53:00 2026     node /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/node_modules/.bin/vite --port 5274 --strictPort",
+          "77966 77015 69588 Wed Oct 14 13:53:00 2026     /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+        ],
+        "providerState": "active",
+        "sessionId": "2862a37d-48b1-4899-b156-f017de6f816e",
+        "endpoint": "http://localhost:8931/mcp",
+        "protocolVersion": "2025-11-25",
+        "pid": 68820,
+        "port": 5274,
+        "token": "613269ff-6ddd-44f0-9821-e0cff4320b2a"
+      },
+      {
+        "observedAt": "2026-10-14T20:55:31.644374+00:00",
+        "slotPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+        "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+        "ownerSHA256": "bf11090ed77586f4d1dcf3e71d03e7dbb7a3841779201e5b1f378282b2a7a467",
+        "ownerFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/68820-bf11090ed77586f4d1dcf3e71d03e7dbb7a3841779201e5b1f378282b2a7a467.owner.json",
+        "serverPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+        "serverSHA256": "224263d142f8615c4be4634eaf181e8a88fef302cc1c3d15d2a8cd0d43ce03e7",
+        "serverFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/68820-bf11090ed77586f4d1dcf3e71d03e7dbb7a3841779201e5b1f378282b2a7a467.server.json",
+        "processIdentities": [
+          "60928 68820 60928 Wed Oct 14 13:55:29 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json 51b94809-d0ad-4272-af7d-643d1e95e638 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort",
+          "60945 60928 60928 Wed Oct 14 13:55:29 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort",
+          "61041 60945 60928 Wed Oct 14 13:55:31 2026     node /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/node_modules/.bin/vite --port 5174 --strictPort",
+          "61047 61041 60928 Wed Oct 14 13:55:31 2026     /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+          "68820 68717 68820 Wed Oct 14 13:52:57 2026     /opt/homebrew/bin/node scripts/qa/card-sweep.mjs --bead hv-umm2.184 --cards 691883df-63d8-4664-a1fe-d5f3b5becd11,764b62f6-6af9-40ad-8d1f-653cc1a11030,374ec185-b0f7-40e6-9988-09e96abccebe --variants all --as both --port 5174"
+        ],
+        "providerState": "active",
+        "sessionId": "f4725301-5639-4bdc-b440-f61afdb7092f",
+        "endpoint": "http://localhost:8931/mcp",
+        "protocolVersion": "2025-11-25",
+        "pid": 68820,
+        "port": 5174,
+        "token": "222c4523-f0c9-499f-bc20-93cad3fa2d0d"
+      },
+      {
+        "observedAt": "2026-10-14T20:59:25.889337+00:00",
+        "slotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+        "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "ownerSHA256": "ca455544e5961729df3a8b716cf0827f904fd2631c13c727f1e0767cbf6a5e0f",
+        "ownerFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/86307-ca455544e5961729df3a8b716cf0827f904fd2631c13c727f1e0767cbf6a5e0f.owner.json",
+        "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "serverSHA256": "0028ff44478b7aa27daa305522ee4c7ec8df4b84345b73dc577cef40c2592839",
+        "serverFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/86307-ca455544e5961729df3a8b716cf0827f904fd2631c13c727f1e0767cbf6a5e0f.server.json",
+        "processIdentities": [
+          "86307 86295 86307 Wed Oct 14 13:59:22 2026     /opt/homebrew/bin/node scripts/qa/run-scenario.mjs card-lab-play --bead hv-umm2.184 --port 5174 --viewports desktop --timeout 90 --arg card=691883df-63d8-4664-a1fe-d5f3b5becd11 --arg variant=amplified --arg as=player --arg timeoutMs=60000",
+          "86638 86307 86638 Wed Oct 14 13:59:22 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json fd94d671-a9ca-4046-9e79-a925a404b9d1 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+          "86681 86638 86638 Wed Oct 14 13:59:23 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+          "89225 86681 86638 Wed Oct 14 13:59:25 2026     node /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/node_modules/.bin/vite --port 5274 --strictPort",
+          "89494 89225 86638 Wed Oct 14 13:59:25 2026     /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+        ],
+        "providerState": "active",
+        "sessionId": "da763ab1-1a17-44ea-ae0e-ceb77c97b179",
+        "endpoint": "http://localhost:8931/mcp",
+        "protocolVersion": "2025-11-25",
+        "pid": 86307,
+        "port": 5274,
+        "token": "89fa59a5-4f1a-490a-82c6-6e3e5a676bbc"
+      },
+      {
+        "observedAt": "2026-10-14T21:00:19.373062+00:00",
+        "slotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+        "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "ownerSHA256": "27bf8470132290fc24aa931e7d0b5a7a884f072a3334fe6450ea26cec8ec9c0d",
+        "ownerFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/96959-27bf8470132290fc24aa931e7d0b5a7a884f072a3334fe6450ea26cec8ec9c0d.owner.json",
+        "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "serverSHA256": "c4b820e4cab4c0211859149f53000dc81eb219fedc6fa739946db78069d24b91",
+        "serverFile": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/qa-live-records/96959-27bf8470132290fc24aa931e7d0b5a7a884f072a3334fe6450ea26cec8ec9c0d.server.json",
+        "processIdentities": [
+          "96959 96949 96959 Wed Oct 14 14:00:15 2026     /opt/homebrew/bin/node scripts/qa/run-scenario.mjs card-lab-play --bead hv-umm2.184 --port 5174 --viewports desktop --timeout 90 --arg card=691883df-63d8-4664-a1fe-d5f3b5becd11 --arg variant=perfected --arg as=enemy --arg timeoutMs=60000",
+          "96998 96959 96998 Wed Oct 14 14:00:15 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 474c1ee1-8e57-4e21-9a14-cc30fafb80f8 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+          "97015 96998 96998 Wed Oct 14 14:00:15 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+          "97193 97015 96998 Wed Oct 14 14:00:18 2026     node /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/node_modules/.bin/vite --port 5274 --strictPort",
+          "97200 97193 96998 Wed Oct 14 14:00:18 2026     /Users/dthurn/dreamtides_web/.worktrees/cards-counters-184/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+        ],
+        "providerState": "active",
+        "sessionId": "121bd1ff-fb41-4d87-a6c4-c46763bbe13e",
+        "endpoint": "http://localhost:8931/mcp",
+        "protocolVersion": "2025-11-25",
+        "pid": 96959,
+        "port": 5274,
+        "token": "5d613c77-f10b-4197-a032-d52cb04bac9d"
+      }
+    ],
+    "qualification": "All original/recovery native handles collected, certain responses completed, native own browser/server/lease teardown completed. Foreign reused slot/port records remain untouched; archived live identities bind each owned session.",
+    "observerReceipts": {
+      "qa-observer": {
+        "argv": [
+          "python3",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/retain-qa-owners.py"
+        ],
+        "pid": 65353,
+        "pgid": 65353,
+        "start": "2026-10-14T20:52:56.347108+00:00",
+        "end": "2026-10-14T20:58:25.079989+00:00",
+        "wallS": 328.7303151660017,
+        "exit": 0,
+        "stdoutSHA256": "f23aa7327e9b26fbea470b188dfa03446ef045db9a989da48e4e77fad3913288",
+        "settled": true
+      },
+      "qa-observer-recovery": {
+        "argv": [
+          "python3",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards72-184/retain-qa-owners.py"
+        ],
+        "pid": 84524,
+        "pgid": 84524,
+        "start": "2026-10-14T20:59:21.548069+00:00",
+        "end": "2026-10-14T21:01:26.064469+00:00",
+        "wallS": 124.51424487499753,
+        "exit": 0,
+        "stdoutSHA256": "6a8c02dad36bcf8e2f3144065421c840117ce5e2c78e4ba9171a28f4e8336dae",
+        "settled": true
+      }
+    },
+    "allGroupsChecked": [
+      60928,
+      65353,
+      68820,
+      69588,
+      84524,
+      86307,
+      86638,
+      96959,
+      96998
+    ],
+    "runtimeResourcesHeld": [],
+    "portQualification": {
+      "observedAt": "2026-10-14T21:04:00.351309+00:00",
+      "5174": {
+        "listener": false
+      },
+      "5274": {
+        "listener": true,
+        "pid": 10969,
+        "ownedBy184": false,
+        "foreignNativeRecordConfirmed": true
+      },
+      "qualification": "Each native own teardown reported its port free. Port5274 is subsequently reused by another native QA owner; preserve that live foreign resource. Own runner/server/observer groups and exact own records are absent."
+    }
+  },
+  "preExisting": {
+    "navigationCause": "UNKNOWN; only source-frozen failed-cell fresh-session recovery was performed.",
+    "loggingObservation": [
+      {
+        "export": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.184/invocations/run-qlZ2ez/card-lab-play-desktop.jsonl",
+        "exportSHA256": "57112bf570ad37e4e2f11dce6ca398e4bcff2f0034f086ec4c8e6b16f4f7c904",
+        "atlasNodeRevealedWithDisplayName": 4,
+        "fields": [
+          "dreamscapeId",
+          "dreamscapeName"
+        ]
+      },
+      {
+        "export": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.184/invocations/run-bHEQcw/card-lab-play-desktop.jsonl",
+        "exportSHA256": "bd661b02b927dd0a6689f6e2575aabc9fbe49ff157c6196b4b0977cd0e2c57d8",
+        "atlasNodeRevealedWithDisplayName": 4,
+        "fields": [
+          "dreamscapeId",
+          "dreamscapeName"
+        ]
+      }
+    ],
+    "atlasSourceSHA256": "7c9d2d78a6227ca4382d93d7c4fbe813a19240529bd5aef847a9156096c0088c",
+    "atlasWrite": false
+  },
+  "setup": {
+    "freshNpmInstall": {
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "install"
+      ],
+      "start": "2026-10-14T20:15:38.301861+00:00",
+      "end": "2026-10-14T20:15:40.885369+00:00",
+      "pid": 88865,
+      "pgid": 88865,
+      "exit": 0,
+      "wallS": 2.5835246249916963,
+      "stdoutSHA256": "c52e4d018ce31ebeeed8f8e50ecc98705da1552b5f9f03a17813073b3272b789"
+    },
+    "initialEntities": {
+      "argv": [
+        "npm",
+        "run",
+        "bead:entities",
+        "--",
+        "691883df-63d8-4664-a1fe-d5f3b5becd11",
+        "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "374ec185-b0f7-40e6-9988-09e96abccebe"
+      ],
+      "pid": 89285,
+      "pgid": 89285,
+      "start": "2026-10-14T20:15:53.391363+00:00",
+      "end": "2026-10-14T20:15:54.587066+00:00",
+      "wallS": 1.1956237500126008,
+      "exit": 0,
+      "stdoutSHA256": "05552b13db82fd597b30d656ccb58e71d48d39fce14f2fa2deae1fe46456b885",
+      "settled": true
+    },
+    "nativeDispatchMarkerSHA256": "2234e88643bd660e22dd03703fd2e1dc37becff7d462ae7a00a990ee900969ec"
+  }
+}

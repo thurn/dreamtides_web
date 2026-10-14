@@ -1,0 +1,44 @@
+{
+  "bead": "hv-umm2.184",
+  "phase": 5,
+  "implementMin": 50.90452968333333,
+  "implementWindow": {
+    "start": "2026-10-14T20:15:35.300350+00:00",
+    "end": "2026-10-14T21:06:29.572131+00:00"
+  },
+  "localValidationS": {
+    "focused": 6.542904292000458,
+    "focused-repaired": 5.41576824997901,
+    "focused-final": 4.9702407919976395,
+    "review": 49.71967537497403,
+    "knip": 4.339964165992569,
+    "weighted300": 480.89256445900537,
+    "preflight": 3.0241703749925364,
+    "sweep": 295.1297106250131,
+    "recovery-amplified-player": 27.290541041991673,
+    "recovery-perfected-enemy": 11.52444700000342
+  },
+  "hostLoad": 4.49853515625,
+  "testDelta": {
+    "files": 0,
+    "lines": 153,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 1.26030015,
+      "note": "Eight new private cases initially assumed engine.apply returned a suspended stack. Public StepObserver now verifies the committed paid X while source counters are zero; effects use the complete paid+settle events. Final focused rerun followed removal of artificial no-op fast response fixtures and an explicit public play action, with a guard that the payment observer actually ran. No production/shared source repair."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 8.476094866666667,
+      "note": "Full60-cell sweep retained two pre-scene ERR_ABORTED navigation failures, cause UNKNOWN. Exactly one admitted fresh native session for each failed cell passed from about:blank; original fails retained and final latest36pass24skip. Episode includes runtime, coordination and cleanup; no green-cell or shared-source repeat."
+    },
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 0.13755,
+      "note": "Actual native full-sweep lease wait across two sessions and one fair yield, recorded separately from execution."
+    }
+  ]
+}

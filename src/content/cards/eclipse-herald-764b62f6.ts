@@ -1,4 +1,6 @@
 import { card } from "../define";
+import { activated, countersXCost, energy, enemyCharacter, target, x } from "../../engine/dsl/builders";
+import { dissolve, storeCounters } from "../../engine/effects/primitives";
 
 export default card({
   name: "Eclipse Herald",
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 377,
   art: { x: 0.21, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([energy(3)], storeCounters(variant.amplified ? 2 : 1)),
+    activated([countersXCost(0)], dissolve(target(enemyCharacter({ sparkAtMost: x() })))),
+  ],
+  verifiedText: "2a7j1u1osf7",
 });
