@@ -588,6 +588,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     };
     for (const [challenger, blocker] of Object.entries(state.challenge.blockers) as [InstanceId, InstanceId][]) pair(challenger, blocker);
     for (const blocker of state.challenge.unpairedBlockers ?? []) pair(null, blocker);
+    // Paired bindings precede unpaired membership in every projected view.
+    hiddenBlockers.sort((left, right) => Number(left.challenger === null) - Number(right.challenger === null));
     return { challengers, blockers,
       ...(hiddenChallengers.length + hiddenBlockers.length === 0 ? {} : { hidden: { challengers: hiddenChallengers, blockers: hiddenBlockers } }) };
   })();

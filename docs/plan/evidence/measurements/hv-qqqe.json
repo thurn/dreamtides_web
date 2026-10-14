@@ -1,0 +1,439 @@
+{
+  "bead": "hv-qqqe",
+  "base": "837bf2b9e53f811f2dbd9c939d6c9cf14f225416",
+  "dispatch": "2026-10-14T14:50:48.944293+00:00",
+  "evidenceCutoff": "2026-10-14T15:33:40.064670+00:00",
+  "elapsedThroughCutoffS": 2571.120377,
+  "gitCompletion": "Final amended Git result UNKNOWN at actualpre-amend cutoff; superseded df451 initialGit result knownexactlyandretained. Independentexternal amendmentreceipt supplies truecompletion/hash/blob/fullinclusivewindow.",
+  "stage": "Ready for ONEamendment ofunsubmittedlocalcommit at actualpre-amend cutoff. Finalreadonly-safe422line36focus andnormalreview300/7142/Knip pass; finalschema/stage/Git immediate next. Original df451 localGit receipt retainedassuperseded, rootcoldcore/nativecertification remainowed afteractualFINAL.",
+  "sourceAdmission": {
+    "proposalSHA": "505218bf92e81877f7b2c23eb11c252e4aba73a6743663bc7f97d4707a1f3a76",
+    "parentACK": "source-write-parent-ack.json",
+    "nativeACK": "source-write-admission-native.json",
+    "scope": "view.ts final hiddenBlockers sort/comment2lines ONLY, existing422line36testmodule, originaledk7 JSON QA/heavy/concurrentActors stringvalues ONLY, own2records",
+    "peerAudit": "Fresh144/9active parentcensus: VWcbclosed;678rules-only,688loopsdoc,CKQXeffectStartedguard/viewreadonly,fwpxcostcase; no incompatiblechallengebody or filename-onlyedge."
+  },
+  "diagnostics": {
+    "mixed": {
+      "observations": 4,
+      "activeSides": [
+        "player",
+        "enemy"
+      ],
+      "viewers": [
+        "player",
+        "enemy"
+      ],
+      "actualSourceHashes": [
+        "149aae503e754a",
+        "13aff32acdb083"
+      ],
+      "failure": "Oldview emits null+member mixedbindings fromrawmap order; sampled deal partitions pairmap+unpairedarray; subsequentview returns member+null. Entire comparableView differs inarrayorder only. ActualnormalDay/Dusk/Night ceasedfigment+return/shuffle+thirdlivechallengerF2toF0 producer.",
+      "publicControl": "Sourcebytes/hash, hiddenphysicalabsence/redaction, viewerlegalactions, actualblockerSpark7 andlivechallengerSpark5/scored0 laneevents matchsampled."
+    },
+    "visibleChallengerHiddenBlocker": {
+      "observations": 4,
+      "actualSourceHashes": [
+        "0430c43deceec5",
+        "0763346517ee06"
+      ],
+      "result": "Knownchallenger +member0 hiddenblocker retainsfullJSON/repeatpublicview, legality andvisiblechallenger5/scoring5; watchedidentifiedpairshape preserved."
+    },
+    "isolation": {
+      "observations": 4,
+      "actualSourceHashes": [
+        "0517d741b9a238",
+        "0fed38e5dc1020"
+      ],
+      "result": "Historicalsourcefree diagnostic successfullymutated writable actualreturnedDTO/sample onobservedinitialsource andretained source/other-viewer/independentvalues anddistinctgamevalues. Finalpermanentguards useReflect.set andallowreadonly/frozenDTOs to refuseattempts, so runtimeDTOwritability is not required."
+    },
+    "checkpointFormatterFailure": "Sourcefree checkpoint print-only notstatus NameError occurred aftercheckpoint persisted; scratchreportfixed, no source/engine/check failure."
+  },
+  "production": "Stablepaired-before-null partition of newlyallocated hiddenBlockers only; within-group order/member/descriptors/identifiedshape/privacy/role/lifetime unchanged. Existingdeal/inputvalidation unchanged; no new state/schema/knowledge/fold/rules/DSL/catalog/UI/policy field or mechanics.",
+  "tests": {
+    "file": "src/engine/view/challenge-privacy.test.ts",
+    "lines": 422,
+    "total": 36,
+    "priorCasesPreserved": 32,
+    "newCases": 4,
+    "fixture": "Existingregistered synthetics/boardState; normalpublicactions; no mutable productiondata/private rule/UIstring/timing/default gate.",
+    "isolation": "Actualseen\u2192determinize mutable sample then sampleJSONchange; Reflect.set attempts on returnedreadonlyDTO challenge/status may succeed orbe refused. Sourcebytes/hash, actualinputseen beforeattempts, other viewer andindependentdeserializedsnapshot guards remain mandatory. No successfulDTOmutation/JSONchange requirement; deepdifferentgame inequality retained.",
+    "delta": {
+      "added": 104,
+      "removed": 11,
+      "net": 93,
+      "changed": 115
+    }
+  },
+  "counterfactual": {
+    "command": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/view/challenge-privacy.test.ts",
+        "-t",
+        "mixed|visible challenger"
+      ],
+      "pid": 56996,
+      "pgid": 56996,
+      "start": "2026-10-14T15:14:41.350289+00:00",
+      "end": "2026-10-14T15:14:42.458213+00:00",
+      "wallS": 1.107946667005308,
+      "exit": 1,
+      "stdoutSHA": "b3d21a222da719d0dee505354e0ec213bf78fcd4c2945e10ae31f6317f3d9ee8",
+      "settled": true
+    },
+    "expectedSemanticFailures": 2,
+    "passingControls": 2,
+    "skipped": 32,
+    "failureField": "Complete comparableView challenge.hidden.blockers order",
+    "restoration": {
+      "atUTC": "2026-10-14T15:14:42.462374+00:00",
+      "before": {
+        "src/engine/view/view.ts": "f6c6cb1ed65303be9422312ee5bd8c5771ea09d1f0e5230981b29494a2e60f1d",
+        "src/engine/view/determinize.ts": "6c92b0cdb7282122466d1101efab32300a29d3c1644204df0c993caf6960464b",
+        "src/engine/view/challenge-privacy.test.ts": "8074474d37b7fc7a99198cad7a7e9e61c27403ce71973fd2cbfc8e7600f9e62b",
+        "src/engine/engine.ts": "94fe39e1b652c82c1cad552f2c2fccfab0f6c13edc24b23f396937ee19ddd426",
+        "src/engine/rules/challenge.ts": "2b423ff986c425d72f1b00e739b51dbc751118a03611b13b500e8e9ed34d68a5",
+        "src/engine/state/types.ts": "56be5bd9cede25721a7835921c086704fa8e051080b1b6f1ebb4352cede3d0d9",
+        "src/rules/battle/fold.ts": "52aacc47a4e5d2e606f4e8332379b8b114aff59e16903d0c4358b26173f2e246",
+        "docs/plan/evidence/measurements/hv-edk7.json": "59cb135cd1516821fdd303fb31b84be7e95a923bf77a24a345f3f632a98dd417"
+      },
+      "after": {
+        "src/engine/view/view.ts": "f6c6cb1ed65303be9422312ee5bd8c5771ea09d1f0e5230981b29494a2e60f1d",
+        "src/engine/view/determinize.ts": "6c92b0cdb7282122466d1101efab32300a29d3c1644204df0c993caf6960464b",
+        "src/engine/view/challenge-privacy.test.ts": "8074474d37b7fc7a99198cad7a7e9e61c27403ce71973fd2cbfc8e7600f9e62b",
+        "src/engine/engine.ts": "94fe39e1b652c82c1cad552f2c2fccfab0f6c13edc24b23f396937ee19ddd426",
+        "src/engine/rules/challenge.ts": "2b423ff986c425d72f1b00e739b51dbc751118a03611b13b500e8e9ed34d68a5",
+        "src/engine/state/types.ts": "56be5bd9cede25721a7835921c086704fa8e051080b1b6f1ebb4352cede3d0d9",
+        "src/rules/battle/fold.ts": "52aacc47a4e5d2e606f4e8332379b8b114aff59e16903d0c4358b26173f2e246",
+        "docs/plan/evidence/measurements/hv-edk7.json": "59cb135cd1516821fdd303fb31b84be7e95a923bf77a24a345f3f632a98dd417"
+      },
+      "allRestored": true,
+      "sourceBody": "Exactly admitted comment and stablepartition sort removed thenfixedwholebytes restored in finally"
+    },
+    "qualification": "ONEearlier order-only omission with initial422line test-modulehash:2mixedFAIL2controlsPASS32skipped, all8hashes restoredfinally beforeaggregate. Initialreadonlytypecast/pairedguard produced423lineepoch; finalReflect.set frozen-compatiblepurity refinement returns422lines withdistincttesthash. Fourcounterfactual-selectedmixed/control bodies and2lineproductionfix unchangedbyreadonly refinement; norepeatCF."
+  },
+  "historicalCorrection": "Originaledk7 QA/heavy/concurrentActors fields only reflect original bd11 sourceepoch and actuallyretainedfinalqaRuntime/finalHeavy/finalSettlement; sequentialoriginal32 guardweakness qualified, notretroactivelynewtests. Allotheroriginalbytes/receipts/clocks/counts/state/event/manifests/GitUNKNOWN retained.",
+  "failurePaths": {
+    "sourcePurity": "Source serialize/hash, actual mutable-sample ownership versus inputview, reflective readonlyDTOmutation attempts that may be rejected, both viewers andindependent snapshots/differentgame values, repeated JSON sampling. Ordinaryrole/membership/privateidentity contracts unchanged.",
+    "invalidInputs": "Existing32contract malformedpartial/duplicate/unbound/index/order/parser errors and fold stale/illegal/cancel/midstep/reload guards retained. No consumer validation widening.",
+    "actors": "Bothactive/controller orientations and viewer pairs, independent snapshot/differentgame values; sequential guards, no concurrent sharedIO mutation."
+  },
+  "validation": {
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 35775,
+      "pgid": 35775,
+      "start": "2026-10-14T15:20:12.290996+00:00",
+      "end": "2026-10-14T15:20:16.692304+00:00",
+      "wallS": 4.401298459008103,
+      "exit": 0,
+      "stdoutSHA": "23581aa14a635269d81b37b31f2430deff6b89840e071659fb3f7e7ac3720c9f",
+      "settled": true
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 88687,
+      "pgid": 88687,
+      "start": "2026-10-14T15:16:31.946872+00:00",
+      "end": "2026-10-14T15:17:36.096434+00:00",
+      "wallS": 64.1489668750146,
+      "exit": 2,
+      "stdoutSHA": "262bad5717959d42ce1c092d3d36cda125a94d822699b94e75bf505c63d27359",
+      "settled": true
+    },
+    "surrounding-focus": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/policy/policy.test.ts",
+        "src/engine/policy/policy-worker.test.ts"
+      ],
+      "pid": 57060,
+      "pgid": 57060,
+      "start": "2026-10-14T15:14:42.487262+00:00",
+      "end": "2026-10-14T15:14:47.388398+00:00",
+      "wallS": 4.901134707994061,
+      "exit": 0,
+      "stdoutSHA": "85a203664c2e16575a50e3bdf3e75114128a8f541df3d26ea4bf88910f12496d",
+      "settled": true
+    },
+    "fixed-new-focus": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/challenge-privacy.test.ts"
+      ],
+      "pid": 53565,
+      "pgid": 53565,
+      "start": "2026-10-14T15:13:55.384318+00:00",
+      "end": "2026-10-14T15:14:01.137627+00:00",
+      "wallS": 5.753282499994384,
+      "exit": 0,
+      "stdoutSHA": "afc739b5211b7719a1fc64fa19eea10e2aadd209f9519a38eb5a6702cbf5de43",
+      "settled": true
+    },
+    "readonly-safe-knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 89790,
+      "pgid": 89790,
+      "start": "2026-10-14T15:31:55.643884+00:00",
+      "end": "2026-10-14T15:32:01.051651+00:00",
+      "wallS": 5.407781291985884,
+      "exit": 0,
+      "stdoutSHA": "9ef94340b9e91431af8f60c978fcd3efebfeabc46dd8322e415f443ef0fcb3eb",
+      "settled": true
+    },
+    "public-witness": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/challengeBinding-qqqe/public-witness.mts"
+      ],
+      "pid": 16197,
+      "pgid": 16197,
+      "start": "2026-10-14T14:58:31.961362+00:00",
+      "end": "2026-10-14T14:58:33.827840+00:00",
+      "wallS": 1.8665038330073003,
+      "exit": 0,
+      "stdoutSHA": "874fb892118cb6b298d45386685bb3d9511e1893bbdfa9df2a0101662715e301",
+      "settled": true
+    },
+    "review-final": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 30251,
+      "pgid": 30251,
+      "start": "2026-10-14T15:18:48.691669+00:00",
+      "end": "2026-10-14T15:19:42.010959+00:00",
+      "wallS": 53.318790040997555,
+      "exit": 0,
+      "stdoutSHA": "6b69437d41b3f6a3522a251f6dcac77c3a8fea4b4764842a0954fde0a550bbcd",
+      "settled": true
+    },
+    "readonly-safe-review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 24510,
+      "pgid": 24510,
+      "start": "2026-10-14T15:30:18.313366+00:00",
+      "end": "2026-10-14T15:31:25.326612+00:00",
+      "wallS": 67.01287325000158,
+      "exit": 0,
+      "stdoutSHA": "a3d7a9c949ea2d8aaf9c33dcb5a40c95cc7afa362a0f5c65697fbda888b13b91",
+      "settled": true
+    },
+    "public-isolation": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/challengeBinding-qqqe/public-isolation.mts"
+      ],
+      "pid": 81535,
+      "pgid": 81535,
+      "start": "2026-10-14T14:59:35.041673+00:00",
+      "end": "2026-10-14T14:59:36.206774+00:00",
+      "wallS": 1.1651353749912232,
+      "exit": 0,
+      "stdoutSHA": "141756722fef208a7de3350a24d43fd85199f9ffa8053727f3d1638f5e41407c",
+      "settled": true
+    },
+    "readonly-safe-focus": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/challenge-privacy.test.ts"
+      ],
+      "pid": 17672,
+      "pgid": 17672,
+      "start": "2026-10-14T15:28:35.573198+00:00",
+      "end": "2026-10-14T15:28:39.973178+00:00",
+      "wallS": 4.3999980830121785,
+      "exit": 0,
+      "stdoutSHA": "1b66084670970ee0f0b7420378e7cebdd4c7d2bb5be36bf6dc948a2b023f8754",
+      "settled": true
+    },
+    "counterfactual-order-only": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/view/challenge-privacy.test.ts",
+        "-t",
+        "mixed|visible challenger"
+      ],
+      "pid": 56996,
+      "pgid": 56996,
+      "start": "2026-10-14T15:14:41.350289+00:00",
+      "end": "2026-10-14T15:14:42.458213+00:00",
+      "wallS": 1.107946667005308,
+      "exit": 1,
+      "stdoutSHA": "b3d21a222da719d0dee505354e0ec213bf78fcd4c2945e10ae31f6317f3d9ee8",
+      "settled": true
+    },
+    "final-git-commit": {
+      "argv": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/challengeBinding-qqqe/commit-message.txt"
+      ],
+      "pid": 42324,
+      "pgid": 42324,
+      "start": "2026-10-14T15:23:01.384951+00:00",
+      "end": "2026-10-14T15:23:01.422149+00:00",
+      "wallS": 0.037225999985821545,
+      "exit": 0,
+      "stdoutSHA": "63ebfc5b9afa493e134bb3f8940c6f3feecbf28f1c3957392e94b01e812d8d90",
+      "settled": true
+    },
+    "final-new-focus": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/challenge-privacy.test.ts"
+      ],
+      "pid": 29804,
+      "pgid": 29804,
+      "start": "2026-10-14T15:18:43.187441+00:00",
+      "end": "2026-10-14T15:18:48.665477+00:00",
+      "wallS": 5.4780145839904435,
+      "exit": 0,
+      "stdoutSHA": "4f9c09ab565e47e5f6d2fb771354c0fdf47a0987b4bc3d7e725c362275d5a93e",
+      "settled": true
+    },
+    "final-schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 42316,
+      "pgid": 42316,
+      "start": "2026-10-14T15:23:01.197046+00:00",
+      "end": "2026-10-14T15:23:01.319577+00:00",
+      "wallS": 0.12256104202242568,
+      "exit": 0,
+      "stdoutSHA": "0570e0b277042f5c5be6d1b04f5588a98015db27cd5ea57098198207a51230b0",
+      "settled": true
+    }
+  },
+  "QA": "No liveworkflow/presentation/state/runtime architecture change: focusedpublicJSON/fold/policy/worker contracts +normalreview sufficient. No browser/resources started. Originaledk7twohumanQA retainedhistorical, not qqqe validation.",
+  "heavy": "Notrequired: oneexistingarraycanonicalization/test/3oldfieldcorrection, no crosscuttingarchitecture/config/testframework. ParentexactproportionalACK; originalheavy200/full is historical, no duplicate run.",
+  "review": "Rootalone freshnormalClaude Opus5.5 core afterimmutableactualFINAL; temporarySol override expired.",
+  "hostLoad": "Readonly-safe finalreview parallelcheck step15:30:19.921Z actual1-minute load8.5439453125, actualwall67.01287325s; no separateCPU/lockwait inferred.",
+  "inclusiveTiming": {
+    "dispatch": "2026-10-14T14:50:48.944293+00:00",
+    "preAmendCutoff": "2026-10-14T15:33:40.064670+00:00",
+    "throughCutoffS": 2571.120377,
+    "scope": "ALLoriginalpostclaimTGsetup/npm/sourcefree/admission/authoring/CF/initialfailed+pasingchecks/initialGit/rootinspection+hold/readonly-contractrefinement/finalchecks andwaits. Externalactual amendmentreceipt suppliesremaining schema/stage/Gitendpoint within60s.",
+    "futureGit": "FinalamendedresultUNKNOWN atcutoff; initialactualreceiptretained, no ancestor/originaledk7records changed."
+  },
+  "validationSummary": {
+    "finalFocus": "Frozen-compatible Reflect.set guard epoch422lines/36tests PASS4.3999980830121785s; actualmutable sample andreadonlyDTO attempt/source/observer checks.",
+    "surrounding": "7files123tests PASS4.901134707994061s",
+    "initialReview": "300files7142tests/lint/nodeTypes/cycles/schema passed, mainTypecheck exited2 on intentional readonlyInstanceView.status mutation;64.1489668750146s retained. Narrow mutableproperty cast for ownedDTO test probe fixes type; explicit paired member0/secondvisibleblocker guard added withinadmittedcase. No productionbody/cache/invariant change.",
+    "finalReview": "Frozen-compatible finalepoch300files7142tests/lint/main+nodeTypes/cycles/schema817 PASS67.01287325000158s; initialwritableDTO review53.318790040997555s remains historical.",
+    "knip": "Frozen-compatible finalepoch PASS5.407781291985884s; prior4.401298459008103s retainedhistorical.",
+    "counterfactual": "ONEearlier order-only omission with initial422line test-modulehash:2mixedFAIL2controlsPASS32skipped, all8hashes restoredfinally beforeaggregate. Initialreadonlytypecast/pairedguard produced423lineepoch; finalReflect.set frozen-compatiblepurity refinement returns422lines withdistincttesthash. Fourcounterfactual-selectedmixed/control bodies and2lineproductionfix unchangedbyreadonly refinement; norepeatCF."
+  },
+  "sourceManifest": {
+    "src/engine/view/view.ts": "f6c6cb1ed65303be9422312ee5bd8c5771ea09d1f0e5230981b29494a2e60f1d",
+    "src/engine/view/challenge-privacy.test.ts": "aec833368cafe88fcec624b25a408eb228ed6f5b2784c2a4548933a2dd07cc6a",
+    "docs/plan/evidence/measurements/hv-edk7.json": "59cb135cd1516821fdd303fb31b84be7e95a923bf77a24a345f3f632a98dd417"
+  },
+  "scopeProof": {
+    "fivePaths": [
+      "docs/plan/evidence/friction/hv-qqqe.json",
+      "docs/plan/evidence/measurements/hv-edk7.json",
+      "docs/plan/evidence/measurements/hv-qqqe.json",
+      "src/engine/view/challenge-privacy.test.ts",
+      "src/engine/view/view.ts"
+    ],
+    "productionDiff": "Exact2line comment/sort afterexistingpairloops; fixedCFwholefile bytes match",
+    "historicalFieldsChanged": [
+      "QA",
+      "heavy",
+      "failurePaths.concurrentActors"
+    ],
+    "historicalOtherBytesUnchanged": true,
+    "historicalRecoveredSHA": "39360cdc3384d68eb308bda8185e46eba2abc0c66af8c5acd9659597255bd41f",
+    "originalSHA": "39360cdc3384d68eb308bda8185e46eba2abc0c66af8c5acd9659597255bd41f",
+    "readOnlySourceHashesMatch": {
+      "src/engine/view/determinize.ts": true,
+      "src/engine/engine.ts": true,
+      "src/engine/rules/challenge.ts": true,
+      "src/engine/state/types.ts": true,
+      "src/rules/battle/fold.ts": true
+    },
+    "readonlySafeRefinement": {
+      "prior": "df451e49b72c7ad480137729ea6236a61b7d994f",
+      "sourceAndOldMetricBytesUnchanged": true,
+      "testOnlyExactlyReflectSetAndRemovedDTOChangeAssertion": true,
+      "oldHistoricalThreeFieldsUnchanged": true,
+      "paths": [
+        "docs/plan/evidence/friction/hv-qqqe.json",
+        "docs/plan/evidence/measurements/hv-edk7.json",
+        "docs/plan/evidence/measurements/hv-qqqe.json",
+        "src/engine/view/challenge-privacy.test.ts",
+        "src/engine/view/view.ts"
+      ]
+    }
+  },
+  "settlement": {
+    "recordedOwnGroups": [
+      14124,
+      16197,
+      17672,
+      24510,
+      29804,
+      30251,
+      35775,
+      42316,
+      42324,
+      53565,
+      56996,
+      57060,
+      81535,
+      88687,
+      89790
+    ],
+    "remaining": [],
+    "browserResourcesStarted": false,
+    "providerServerLeasesStarted": false,
+    "heavyRun": false
+  },
+  "purityRefinement": {
+    "parentACK": "purity-refinement-parent-ack.json",
+    "nativeACK": "purity-refinement-native.json",
+    "supersededSource": "df451e49b72c7ad480137729ea6236a61b7d994f",
+    "initialGitReceipt": "superseded-final-git-receipt.json exactinitialreceipt retained",
+    "reason": "PublicInstanceView.status isreadonly. Requiring caller mutation to succeed/requiringDTOJSONchange overconstrains safelyfrozen compliantfutureoutputs. Reflect.set attempts on actualDTO exerciseownership without requiringwritability; source/hash/other-viewer/independentvalues and mutable-sample guards retained.",
+    "scope": "Existingpuritybody only; no production/order/CF change orrepeat. New422lines vsinitialfinal423; oldedk7 QA/heavy/concurrentActorsvalues byte-identical toinitialcommit. Oneunsubmittedlocalcommit willbe amended, parent837 preserved."
+  }
+}

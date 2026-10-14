@@ -92,6 +92,24 @@ function hidden(active: Side, figment = false) {
   if (!figment) state = play(state, active, initial.ids[active].hand[1], initial.original);
   return { ...initial, returned, state };
 }
+function mixed(active: Side) {
+  const defending = opponent(active);
+  const board = boardState(engine.catalog, {
+    active, phase: "day", scoreToWin: 100,
+    [active]: { front: [null, mover.id, mover.id], back: [challengerAnthem.id], hand: [bounce.id, bounce.id, shuffle.id], deck: [v.vanilla1.id], energy: 20,
+      figments: [{ slot: { rank: "front" as const, index: 0 }, printing: { kind: "figment" as const, figment: ZONE_FIGMENT.warrior.id } }] },
+    [defending]: { front: [mover.id, mover.id], back: [blockerAnthem.id], deck: [v.vanilla1.id], energy: 20 },
+  });
+  const designated = passUntil(engine, board.state, at(engine, active, "night")).state;
+  const ceased = board.ids[active].front[0]!;
+  const concealed = board.ids[active].front[1]!;
+  const live = board.ids[active].front[2]!;
+  let state = play(designated, active, board.ids[active].hand[0], ceased);
+  state = play(state, active, board.ids[active].hand[1], concealed);
+  state = play(state, active, board.ids[active].hand[2], concealed);
+  state = activate(state, active, live);
+  return { state, ceased, concealed, live, blocker: board.ids[defending].front[0]!, secondBlocker: board.ids[defending].front[1]! };
+}
 function entries(state: BattleState) {
   const owned = (side: Side): BattleInit["decks"][Side] => Object.values(state.instances).flatMap((instance) =>
     instance.owner === side && !instance.status.created && instance.printing.kind === "card"
@@ -192,6 +210,63 @@ for (const active of SIDES) describe(`challenge privacy for ${active}`, () => {
     }
   });
 
+  it("preserves complete mixed paired and unpaired blocker views through repeated JSON sampling", () => {
+    const { state, ceased, concealed, live, blocker, secondBlocker } = mixed(active);
+    const before = serializeState(state);
+    const hash = stateHash(state);
+    expect(state.instances[ceased]).toBeUndefined();
+    expect(state.instances[concealed].zone).toBe("deck");
+    for (const viewer of SIDES) {
+      const seen = engine.view(state, viewer);
+      expect(strings(seen).has(ceased)).toBe(false);
+      expect(strings(seen).has(concealed)).toBe(false);
+      expect(seen.challenge?.hidden?.blockers).toHaveLength(2);
+      expect(seen.challenge?.hidden?.blockers).toContainEqual({ challenger: null, blocker });
+      expect(seen.challenge?.hidden?.blockers).toContainEqual({ challenger: { member: 0 }, blocker: secondBlocker });
+      const restored = engine.determinize(JSON.parse(JSON.stringify(seen)) as BattleView, entries(state), () => 0.4);
+      expect(comparableView(engine.view(restored, viewer))).toEqual(comparableView(seen));
+      expect(comparableView(engine.view(sampled(restored, viewer), viewer))).toEqual(comparableView(seen));
+      expect(engine.view(restored, viewer).instances[blocker].characteristics.spark).toBe(7);
+      expect(seen.instances[blocker].characteristics.spark).toBe(7);
+      expect(engine.legalActions(restored, viewer)).toEqual(engine.legalActions(state, viewer));
+      const actualLanes = engine.apply(state, active, { kind: "pass" }, NO_PROMPTS).events.filter((event) => event.kind === "laneResolved");
+      const sampledLanes = engine.apply(restored, active, { kind: "pass" }, NO_PROMPTS).events.filter((event) => event.kind === "laneResolved");
+      expect(sampledLanes).toEqual(actualLanes);
+      expect(actualLanes).toContainEqual(expect.objectContaining({ challenger: live, blocker, challengerSpark: 5, blockerSpark: 7, scored: 0 }));
+    }
+    expect(redactionViolations(state, engine.catalog)).toEqual([]);
+    expect(serializeState(state)).toBe(before);
+    expect(stateHash(state)).toBe(hash);
+  });
+
+  it("preserves a visible challenger and hidden remembered blocker through repeated JSON sampling", () => {
+    const initial = setup(active);
+    let state = engine.apply(initial.state, active, { kind: "play", card: initial.ids[active].hand[4], from: "hand" }, NO_PROMPTS).state;
+    state = play(state, initial.defending, initial.ids[initial.defending].hand[0], initial.blocker);
+    const watched = state;
+    state = engine.apply(state, active, { kind: "play", card: initial.ids[active].hand[3], from: "hand" }, answers(initial.next)).state;
+    state = play(state, initial.defending, initial.ids[initial.defending].hand[1], initial.blocker);
+    const before = serializeState(state);
+    for (const viewer of SIDES) {
+      expect(engine.view(watched, viewer).challenge).toEqual(watched.challenge);
+      const seen = engine.view(state, viewer);
+      expect(strings(seen).has(initial.blocker)).toBe(false);
+      expect(seen.challenge?.challengers).toContain(initial.original);
+      expect(seen.challenge?.hidden?.blockers).toContainEqual({ challenger: initial.original, blocker: { member: 0 } });
+      const restored = engine.determinize(JSON.parse(JSON.stringify(seen)) as BattleView, entries(state), () => 0.4);
+      expect(comparableView(engine.view(restored, viewer))).toEqual(comparableView(seen));
+      expect(comparableView(engine.view(sampled(restored, viewer), viewer))).toEqual(comparableView(seen));
+      expect(engine.legalActions(restored, viewer)).toEqual(engine.legalActions(state, viewer));
+      expect(seen.instances[initial.original].characteristics.spark).toBe(5);
+      const actualLanes = engine.apply(state, active, { kind: "pass" }, NO_PROMPTS).events.filter((event) => event.kind === "laneResolved");
+      const sampledLanes = engine.apply(restored, active, { kind: "pass" }, NO_PROMPTS).events.filter((event) => event.kind === "laneResolved");
+      expect(sampledLanes).toEqual(actualLanes);
+      expect(actualLanes).toContainEqual(expect.objectContaining({ challenger: initial.original, blocker: null, challengerSpark: 5, scored: 5 }));
+    }
+    expect(redactionViolations(state, engine.catalog)).toEqual([]);
+    expect(serializeState(state)).toBe(before);
+  });
+
   it("retains a hidden member's designation when it materializes and moves forward again", () => {
     const initial = hidden(active);
     for (const viewer of SIDES) {
@@ -231,21 +306,39 @@ for (const active of SIDES) describe(`challenge privacy for ${active}`, () => {
   });
 
   it("keeps snapshot, hashing, JSON transport, reload and different-game observations pure", () => {
-    const { state } = hidden(active);
-    const before = serializeState(state);
-    const hash = stateHash(state);
     for (const viewer of SIDES) {
+      const { state, next } = hidden(active);
+      const before = serializeState(state);
+      const hash = stateHash(state);
       const seen = engine.view(state, viewer);
-      const transported = JSON.parse(JSON.stringify(seen)) as BattleView;
-      const restored = engine.determinize(transported, entries(state), () => 0.4);
+      const seenBefore = JSON.stringify(seen);
+      const other = engine.view(state, opponent(viewer));
+      const otherBefore = JSON.stringify(other);
+      const independent = engine.view(deserializeState(before), viewer);
+      const independentBefore = JSON.stringify(independent);
+      const different = engine.view(hidden(opponent(active)).state, viewer);
+      expect(different).not.toEqual(seen);
+      expect(different.turn.active).not.toBe(seen.turn.active);
+      const transported = JSON.parse(seenBefore) as BattleView;
+      expect(comparableView(engine.view(engine.determinize(transported, entries(state), () => 0.4), viewer))).toEqual(comparableView(seen));
+      const restored = engine.determinize(seen, entries(state), () => 0.4);
       expect(comparableView(engine.view(restored, viewer))).toEqual(comparableView(seen));
-      expect(engine.view(deserializeState(before), viewer)).toEqual(seen);
-      expect(engine.view(hidden(opponent(active)).state, viewer)).not.toBe(seen);
-      transported.challenge!.challengers.splice(0);
-      expect(engine.view(state, viewer)).toEqual(seen);
+      const sampledBefore = serializeState(restored);
+      restored.challenge!.challengers.splice(0);
+      restored.instances[next].status.gainedSpark += 1;
+      restored.sides[active].hand.splice(0);
+      expect(serializeState(restored)).not.toBe(sampledBefore);
+      expect(JSON.stringify(seen)).toBe(seenBefore);
+      expect(serializeState(state)).toBe(before);
+      expect(stateHash(state)).toBe(hash);
+      Reflect.set(seen.challenge!.challengers, "length", 0);
+      Reflect.set(seen.instances[next].status, "gainedSpark", seen.instances[next].status.gainedSpark + 1);
+      expect(JSON.stringify(other)).toBe(otherBefore);
+      expect(JSON.stringify(independent)).toBe(independentBefore);
+      expect(engine.view(deserializeState(before), viewer)).toEqual(independent);
+      expect(serializeState(state)).toBe(before);
+      expect(stateHash(state)).toBe(hash);
     }
-    expect(stateHash(state)).toBe(hash);
-    expect(serializeState(state)).toBe(before);
   });
 
   it("reveals no hidden-zone position through designation-member bindings", () => {

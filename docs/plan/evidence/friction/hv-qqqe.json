@@ -1,0 +1,32 @@
+{
+  "bead": "hv-qqqe",
+  "phase": 5,
+  "implementMin": 42.85200628333334,
+  "implementWindow": {
+    "start": "2026-10-14T14:50:48.944293+00:00",
+    "end": "2026-10-14T15:33:40.064670+00:00"
+  },
+  "localValidationS": {
+    "knip": 4.401298459008103,
+    "review": 64.1489668750146,
+    "surrounding-focus": 4.901134707994061,
+    "fixed-new-focus": 5.753282499994384,
+    "readonly-safe-knip": 5.407781291985884,
+    "public-witness": 1.8665038330073003,
+    "review-final": 53.318790040997555,
+    "readonly-safe-review": 67.01287325000158,
+    "public-isolation": 1.1651353749912232,
+    "readonly-safe-focus": 4.3999980830121785,
+    "counterfactual-order-only": 1.107946667005308,
+    "final-git-commit": 0.037225999985821545,
+    "final-new-focus": 5.4780145839904435,
+    "final-schema": 0.12256104202242568
+  },
+  "hostLoad": 8.5439453125,
+  "testDelta": {
+    "files": 0,
+    "lines": 115,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

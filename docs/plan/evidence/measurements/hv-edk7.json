@@ -517,7 +517,7 @@
     "invalidOrStale": "Public illegal action throws without source mutation; fold illegal answer, noncancellable prompt, duplicate/stale answer bounce with committed state retained. Malformed/partial/unbound/order/duplicate DTO binds reject without view mutation; new optional authoritative field uses existing typed save validator.",
     "restart": "JSON transported BattleView sampled and viewed repeatedly, public saved-fold parser for normal/legacy/new sampled membership, serialized states retain hash/view, in-flight prompt JSON restart reaches same authoritative state.",
     "partialWrite": "Added state field is plain membership in a newly constructed sampled state only; normal rules input states stay byte-identical. No new disk/transaction writer. Public fold suspension/rejection/replay covers applicable partial-step writes.",
-    "concurrentActors": "Pure separate-game and both-viewer observations do not share snapshot/member aliases; immutable source serialize/hash assertions retained. No new shared I/O/worker mutation.",
+    "concurrentActors": "Historical original32-case suite checked authoritative serialization/hash, both-viewer observations, mutation of a JSON copy and different-game reference observations. Direct returned-view/sample alias mutations and value-based different-game guards are strengthened in hv-qqqe. These are sequential independent game/viewer guards, not concurrent shared-runtime writes; a reused memoized same-state/same-viewer DTO is not an independent observation.",
     "roles": "Observable C17 static spark, same-viewer legal actions and actual scoring cover visible, returned, hidden, unrecorded/ceased original associations, both hidden endpoints, materialization/reentry, Night movement, current control, Dusk reset and end-turn."
   },
   "scope": {
@@ -532,8 +532,8 @@
     "documentation": "Additive Views and hidden information challenge bullet only",
     "readOnly": "Authoritative knownTo/provenance/rules beyond exact2bodies, state cloning/hash/loops, policy, UI/runtime/Cumulus, catalogs/DSL/invariant assertion/config remain untouched"
   },
-  "QA": "Not started; exact finite source-free recipe and separate driver/runtime admission pending. No screenshots or browser/provider/server/lease resources started.",
-  "heavy": "Not run. Exact literal outer-lock review:full and separate default200 smoke remain pending after all managed QA resources settle; no weighted300 because zero production entities authored.",
+  "QA": "Historical hv-edk7 source bd11d04ec41d56d1a78337206afb290d7ff3c1eb: run-cO87MJ completed two human desktop/mobile workflows and both real viewers, native worker/inline parity, JSON sampling, same-game reload, geometry and Caps0; two full57-row JSONL exports, zero captures. Prior driver failure run-dRYk4f and repaired passes retained. See qaRuntime/finalSettlement. Original source proof, not current hv-qqqe validation.",
+  "heavy": "Historical hv-edk7 source bd11d04ec41d56d1a78337206afb290d7ff3c1eb: exact literal outer-lock review:full381files8040tests and separate default200 smoke67839steps4799prompts490interactive reruns/failures0 completed after managed QA cleanup. See finalHeavy. Zero new production entities, no weighted300. Original source proof, not current hv-qqqe validation.",
   "validationSummary": {
     "finalReview": "300files/7032tests,lint,bothTypechecks,cycles,808frictionrecords PASS;70.50565483400715s",
     "initialReview": "All300files7032tests passed, but16unsafe-anylint errors innewguard andone fixture Record cast typecheck error; retained actualexit2/61.141358875s. Boolean helper prevents Array.isArray narrowing readonly fields to any; explicit player/enemy decklist construction fixes cast. Exact bounded admitted edits only.",
