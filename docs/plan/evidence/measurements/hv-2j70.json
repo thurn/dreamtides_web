@@ -1,0 +1,206 @@
+{
+  "bead": "hv-2j70",
+  "base": "98b95f856b96df0cb615b6d173759d7799faef34",
+  "scope": "Documentation only: existing Player-rule reactions bullet and Play permissions paragraph, plus this bead's two evidence files.",
+  "status": "Local prose audit, review, Knip and initial evidence schema passed. Source and evidence are frozen at this observed local Git boundary; candidate submission, certified promotion and cleanup remain pending with the parent.",
+  "implementationClock": {
+    "start": "2026-10-14T08:34:25.302Z",
+    "startSource": "Actual parent host post-claim dispatch call_b8752a57497e493aba68093d3bd92573; /tmp/root-2j70/dispatch.json. Sampling start is unknown.",
+    "end": "2026-10-14T08:37:57.951224+00:00",
+    "scope": "Inclusive elapsed wall time from actual post-claim dispatch through the observed local Git boundary, sampled immediately before final schema, staging and automatic Git commit; includes research, coordination, editing, validation and waits. Actual Git start/end and boundary difference are retained externally in /tmp/root-2j70/helper/git.receipt.json. No Git date override."
+  },
+  "sourceAudit": {
+    "thresholdReactions": [
+      "docs/plan/decisions.md: D14",
+      "docs/plan/engine-design.md: Triggers / Ordering",
+      "src/engine/triggers/matcher.ts: listeners, matchEvent, triggerNamedBatch, queueDawnReactions"
+    ],
+    "permissions": [
+      "src/engine/continuous/permissions.ts: playPermission",
+      "src/engine/rules/timing.ts: playRoutes and routeCostModifier",
+      "src/engine/steps/kinds/play.ts: planCardPlay, commitCardPlay and play.run"
+    ],
+    "conclusions": [
+      "Reactions follow the complete causing event or named-source admission batch, with active-side/source order followed by numeric source ability index independently of continuous-layer timestamps. The Ordering link targets its containing Triggers section; Ordering is an existing bold bullet without its own heading anchor.",
+      "Permission selection prefers applicable unlimited, then earliest unused once-per-turn static, then earliest next; owned void or identified owned current deck top qualifies. Only the selected finite permission or once allowance is consumed as applicable. All committed routes consume their applicable cost modifiers.",
+      "Existing route order, independent permission requirement and printed energy-X handling remain byte-identical outside the two admitted passages."
+    ]
+  },
+  "validationEpoch": {
+    "validatedDocumentSHA256": "4821eaf8efaf5a654282a6554f24223c909682ae800a9a24b3c43a84bf485f5a",
+    "reviewScope": "Only engine-design.md differed during review; npm run review reported one changed file and no applicable checks. This is not a lint, typecheck or runtime-test pass claim.",
+    "checks": {
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-order-docs-2j70",
+        "started": "2026-10-14T08:35:48.876253+00:00",
+        "ended": "2026-10-14T08:35:49.098454+00:00",
+        "elapsed_seconds": 0.22210524999536574,
+        "pid": 70668,
+        "pgid": 70668,
+        "exit_code": 0,
+        "child_reaped": true,
+        "changed_paths": [],
+        "remaining_group_before_cleanup": false,
+        "cleanup_signals": [],
+        "remaining_group_after_cleanup": false,
+        "collector_sha256": "99cecaae23f2a7419ff26ee6a00be53db124f003f25b72438e3c9d42611b2f2b",
+        "manifest_files": 4805,
+        "head": "98b95f856b96df0cb615b6d173759d7799faef34",
+        "status": " M docs/plan/engine-design.md\n",
+        "before_sha256": "0f96e0b17cdbcb59b1b6f45d6d37bb04553d814dcd77a61e4805e0890fab2295",
+        "after_sha256": "0f96e0b17cdbcb59b1b6f45d6d37bb04553d814dcd77a61e4805e0890fab2295"
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-order-docs-2j70",
+        "started": "2026-10-14T08:35:54.468266+00:00",
+        "ended": "2026-10-14T08:36:00.024804+00:00",
+        "elapsed_seconds": 5.557194041990442,
+        "pid": 70851,
+        "pgid": 70851,
+        "exit_code": 0,
+        "child_reaped": true,
+        "changed_paths": [],
+        "remaining_group_before_cleanup": false,
+        "cleanup_signals": [],
+        "remaining_group_after_cleanup": false,
+        "collector_sha256": "99cecaae23f2a7419ff26ee6a00be53db124f003f25b72438e3c9d42611b2f2b",
+        "manifest_files": 4805,
+        "head": "98b95f856b96df0cb615b6d173759d7799faef34",
+        "status": " M docs/plan/engine-design.md\n",
+        "before_sha256": "0f96e0b17cdbcb59b1b6f45d6d37bb04553d814dcd77a61e4805e0890fab2295",
+        "after_sha256": "0f96e0b17cdbcb59b1b6f45d6d37bb04553d814dcd77a61e4805e0890fab2295"
+      }
+    },
+    "collector": "/tmp/root-2j70/helper/guarded_check.py",
+    "collectorSHA256": "99cecaae23f2a7419ff26ee6a00be53db124f003f25b72438e3c9d42611b2f2b",
+    "guard": "Each check captured a full tracked/untracked plus all src/scripts and collector-self manifest before launch and after child/group drain; 4805 entries and identical hashes, no changed path.",
+    "environment": {
+      "JOURNEY_TEST_WORKERS": "2"
+    },
+    "ownEvidenceAuthoredAfterChecks": true,
+    "initialEvidenceSchema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-order-docs-2j70",
+      "started": "2026-10-14T08:36:55.378996+00:00",
+      "ended": "2026-10-14T08:36:55.436157+00:00",
+      "elapsed_seconds": 0.057004708010936156,
+      "pid": 71781,
+      "pgid": 71781,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "99cecaae23f2a7419ff26ee6a00be53db124f003f25b72438e3c9d42611b2f2b",
+      "manifest_files": 4807,
+      "head": "98b95f856b96df0cb615b6d173759d7799faef34",
+      "status": " M docs/plan/engine-design.md\n?? docs/plan/evidence/friction/hv-2j70.json\n?? docs/plan/evidence/measurements/hv-2j70.json\n",
+      "before_sha256": "9306200566f992d8890b0f8005b921a17f384f76b4cfb5df93f5b3d102280e0e",
+      "after_sha256": "9306200566f992d8890b0f8005b921a17f384f76b4cfb5df93f5b3d102280e0e"
+    },
+    "knipQualification": "Knip exited 0. Its workspace preparation emitted temporary asset-copy missing-art warnings, then restore-local-assets relinked the workspace assets and exited 0. Full outputs retained externally; this docs-only task makes no asset or runtime QA claim.",
+    "finalEvidenceSchemaReceipt": "/tmp/root-2j70/helper/schema-final.receipt.json"
+  },
+  "hostLoadSamples": [
+    {
+      "observedAt": "2026-10-14T08:35:48.476692+00:00",
+      "command": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "raw": "{ 3.03 3.92 4.80 }",
+      "oneMinute": 3.03,
+      "measuredFor": "Immediately before guarded npm run review dispatch"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Immediately before guarded npm run review dispatch"
+      }
+    }
+  },
+  "notApplicable": {
+    "focusedTests": "No production or test change; source-to-prose audit covers both accepted advisories. Test delta is zero.",
+    "fullFuzzBrowser": "No test infrastructure, cross-cutting architecture, runtime behavior or presentation change. No full, fuzz, weighted or browser run was executed for this source.",
+    "independentReview": "Bounded non-core documentation follow-up does not require a new model review. Earlier independent Claude review and prior test counts belong to hv-qfnt; they are not validation of this bead.",
+    "failureRecovery": "No new state transition or runtime behavior; no new failure, interrupt, reload, partial-write, stale-input or concurrent-actor path. No failure-path test map applies."
+  },
+  "runtimeLedger": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 70668,
+      "pgid": 70668,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-order-docs-2j70",
+      "port": null,
+      "childReaped": true,
+      "processGroupGone": true,
+      "cleanupSignals": []
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 70851,
+      "pgid": 70851,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-order-docs-2j70",
+      "port": null,
+      "childReaped": true,
+      "processGroupGone": true,
+      "cleanupSignals": []
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 71781,
+      "pgid": 71781,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-order-docs-2j70",
+      "port": null,
+      "childReaped": true,
+      "processGroupGone": true,
+      "cleanupSignals": []
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "qaEvidence": [],
+  "falloutFiles": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": [],
+  "failedValidationAttempts": [],
+  "priorReview": {
+    "source": "0faaba7e13ac6c8acadc83ecf25298760d8791ba",
+    "report": "/tmp/root-qfnt-review/final-review.md",
+    "reportSHA256": "c42c00535f73c729326979f38209e1355623ffb9a1da2b03150121baf4fdcb38",
+    "disposition": "Both accepted Low documentation advisories are addressed; no code finding. Prior validation retains its original source qualification."
+  }
+}

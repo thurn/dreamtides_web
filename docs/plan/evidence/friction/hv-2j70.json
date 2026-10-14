@@ -1,0 +1,20 @@
+{
+  "bead": "hv-2j70",
+  "phase": 5,
+  "implementMin": 3.5441537333333333,
+  "implementWindow": {
+    "start": "2026-10-14T08:34:25.302Z",
+    "end": "2026-10-14T08:37:57.951224+00:00"
+  },
+  "localValidationS": {
+    "review": 0.22210524999536574,
+    "knip": 5.557194041990442
+  },
+  "hostLoad": 3.03,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

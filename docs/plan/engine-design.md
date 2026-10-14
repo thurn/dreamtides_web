@@ -949,8 +949,11 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
 - **Player-rule reactions.** A static `ruleModifier` Dawn threshold appends a
   `QueuedTrigger` with `kind: "ruleReaction"`, `node: null` and `subject: null`
   after the causing event's full admission batch or the complete resolved
-  source list of one named-trigger instruction. `ruleReactionBody` validates
-  the captured origin's whole static instruction and returns its deferred
+  source list of one named-trigger instruction. Simultaneous reactions follow
+  D14's active-side and source order (see [Ordering](#triggers)), then each
+  source's numeric ability index, independently of continuous-layer timestamps.
+  `ruleReactionBody` validates the captured origin's whole static instruction
+  and returns its deferred
   child; this kind supplies no floating-trigger node or invented named trigger.
   The ordinary FIFO and existing UUID-bearing trigger logs resolve it after
   its source moves or loses abilities. A departing physical source retains
@@ -1421,17 +1424,20 @@ Other zone rules:
   resolving effect, a floating one naming its cards or a filter, with `next`
   for one play. `playPermission` (`continuous/permissions.ts`) reads which
   one covers a card in the void its player owns or its identified current
-  deck top: a lasting one, else the earliest `next` one. `playRoutes` offers the `"permission"` route,
-  for the card's normal costs, then `"reclaim"`, then an applicable
+  deck top: an applicable unlimited permission, else the earliest unused
+  once-per-turn static permission, else the earliest `next` permission.
+  `playRoutes` offers the `"permission"` route for the card's normal costs,
+  then `"reclaim"`, then an applicable
   `"eventAlternative"`; a deck play offers permission then the event
   alternative. A hand play offers normal costs, Offering, then the event
   alternative. Multiple routes raise `voidRoute` for the void and
   `playRoute` otherwise. The event alternative replaces the base energy
   cost of a Fast or Interrupt event and needs independent permission to
   play from the void or deck (RD-hv-umm2.236-1). After the commit point, a
-  permission route or a non-hand event alternative ends the `next`
-  permission it used and records its once-per-turn allowance, along with
-  consuming the play's cost modifiers (RD-hv-umm2.81-1 to -3).
+  permission route or a non-hand event alternative ends the selected `next`
+  permission or records the selected once-per-turn allowance, as applicable.
+  Every committed route consumes its applicable cost modifiers
+  (`commitCardPlay`, `steps/kinds/play.ts`; RD-hv-umm2.81-1 to -3).
 - **Copies** (`rules/copies.ts`): stack copies (D15), figment copies (C5),
   and created copies in a hand, each announced by `cardCreated`.
 
