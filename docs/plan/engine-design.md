@@ -1178,6 +1178,13 @@ analog:
    character is that character type" (`subtype`). A static ability naming
    its source's chosen type (`CHOSEN_SUBTYPE`) reads the latest `subtype`
    change that source made to itself, and makes no change without one.
+   Views retain resolved floating `allTypes` changes with their effect identity,
+   controller, timestamp and original expiry when the target and any
+   source-dependent expiry identity are visible, redacting an unseen causal
+   source. Determinization reconstructs the same effective types and the
+   subtype-dependent costs and legal actions they support. Temporary changes
+   expire at their recorded boundary; permanent observations use the fixed
+   remembered-effect model.
 3. **Ability adds and removes:** keywords gained and lost (`keyword`), the
    abilities of another card or figment type a character gained
    (`abilities`, made by `gainAbilities` and by `loseAllAbilities` with

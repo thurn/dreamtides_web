@@ -1,0 +1,23 @@
+{
+  "bead": "hv-un67",
+  "phase": 5,
+  "implementMin": 45.909522566666666,
+  "implementWindow": {
+    "start": "2026-10-14T12:40:57.944446+00:00",
+    "end": "2026-10-14T13:26:52.515800+00:00"
+  },
+  "localValidationS": {
+    "focused-final": 6.673014541011071,
+    "foundation": 13.96760745800566,
+    "review": 57.107474541990086,
+    "knip": 4.419304167007795,
+    "full-execution": 95.73164275000454
+  },
+  "hostLoad": 7.2626953125,
+  "testDelta": {
+    "files": 1,
+    "lines": 247,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

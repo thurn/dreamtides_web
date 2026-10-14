@@ -1,0 +1,945 @@
+{
+  "bead": "hv-un67",
+  "base": "7aef89cf4f5c1e7c8f21036742a822b9c0e10e40",
+  "windowProvenance": {
+    "start": "Conservative post-claim parent verification proxy, actual model start UNKNOWN; helper dispatch bracket after12:41:00.707570Z before12:44:27.882311Z.",
+    "cutoff": "2026-10-14T13:26:52.515800+00:00",
+    "end": "Prospective final evidence cutoff; actual Git endpoint UNKNOWN until external receipt. Includes research, coordination, admissions, attempted checks, counterfactuals, locked validation, QA, cleanup, visual review and evidence."
+  },
+  "gitEndpoint": "UNKNOWN",
+  "functionalSha256": {
+    "src/engine/rules/floating.ts": "c72f7692e3f8753a664b4b770094b0a8336af03d6a766ab32d1b295dbf1ec65e",
+    "src/engine/events/kinds/effect-started.ts": "e7fd017fd851676f9cfefb6acba93be1a466476db893ebfb1d55be7e30f902f4",
+    "src/engine/effects/primitives/contracts/temporary-public-all-types-retention.contracts.ts": "d9c6fda02b3de6a1bc6b6061e1cbd01f7e4ae200fd2736b9f6856562551598d0",
+    "docs/plan/engine-design.md": "6119bb30e0e0f8aa2605ea5147cd3add8162e8130dc569f67a9fba1830b58389"
+  },
+  "sourceFirst": {
+    "before": "Public synthetic createEngine/apply/view/determinize reproduced both controllers: copied sources ceased, subject allTypes true in real/false sampled, conditional play cost3/5 and legaltrue/false. Ordinary source stayed visible.",
+    "classificationOnly": "Exact same public activated whileSourceInPlay -> return self -> shuffle hand emitted two real effects. Deck source unidentifiable to both viewers; classification-only projected a PRESENT public-target event with null causal source and a private expiry.source. Original baseline events were ABSENT. Parent fresh native guard admission preceded guard edit.",
+    "scope": "Only keptWithoutSource allTypes classification/comment, existing eventStarted sourceLeavesPlay identity guard/comment, one247-line synthetic public contract, additive current layer2 documentation. Existing numeric/baseSpark and sparkSeenBy observer paths, view/determinize/knowledge/fidelity/fold/schema/AI/UI/harness/catalog bodies are read-only."
+  },
+  "beforeConditionalQualifications": [
+    "classification-observe inherited repositoryWrites:false from source-free observer template; that runtime observer wrote no repository file, but the preceding admitted classification source edit exists. This field is not proof of an unchanged source tree.",
+    "browser-workflows.receipt.json browserResources:not started is stale generic wrapper boilerplate. The actual browser run owned slot1, provider session, runner and server below. Preserve raw receipt; disregard that field for browser absence or closure."
+  ],
+  "validation": [
+    {
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/dreamtides-executor-01a1304d/un67/helper/before.ts"
+      ],
+      "pid": 1777,
+      "pgid": 1777,
+      "identity": " 1777  1777 Wed Oct 14 05:46:15 2026     node node_modules/tsx/dist/cli.mjs /tmp/dreamtides-executor-01a1304d/un67/helper/before.ts\n",
+      "start": "2026-10-14T12:46:15.486080+00:00",
+      "end": "2026-10-14T12:46:18.049445+00:00",
+      "wallSeconds": 2.563260082999477,
+      "cpuSeconds": 2.647134,
+      "load": [
+        12.568359375,
+        12.46630859375,
+        9.3916015625
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "before"
+    },
+    {
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/dreamtides-executor-01a1304d/un67/helper/classification-observe.ts"
+      ],
+      "pid": 72124,
+      "pgid": 72124,
+      "identity": "72124 72124 Wed Oct 14 05:51:22 2026     node node_modules/tsx/dist/cli.mjs /tmp/dreamtides-executor-01a1304d/un67/helper/classification-observe.ts\n",
+      "start": "2026-10-14T12:51:22.750618+00:00",
+      "end": "2026-10-14T12:51:24.817225+00:00",
+      "wallSeconds": 2.0664009579923004,
+      "cpuSeconds": 2.250574,
+      "load": [
+        22.837890625,
+        15.1513671875,
+        11.158203125
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "classification-observe"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/temporary-public-all-types-retention.contracts.ts"
+      ],
+      "pid": 41522,
+      "pgid": 41522,
+      "identity": "41522 41522 Wed Oct 14 05:53:48 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts/temporary-public-all-types-retention.contracts.ts\n",
+      "start": "2026-10-14T12:53:48.437887+00:00",
+      "end": "2026-10-14T12:53:52.297212+00:00",
+      "wallSeconds": 3.8592361659975722,
+      "cpuSeconds": 4.799775,
+      "load": [
+        10.546875,
+        14.18017578125,
+        11.51123046875
+      ],
+      "exit": 1,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "focused-classification"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public all-types retention"
+      ],
+      "pid": 42766,
+      "pgid": 42766,
+      "identity": "42766 42766 Wed Oct 14 05:54:07 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts -t temporary public all-types retention\n",
+      "start": "2026-10-14T12:54:07.951180+00:00",
+      "end": "2026-10-14T12:54:14.651672+00:00",
+      "wallSeconds": 6.700441666005645,
+      "cpuSeconds": 8.969725,
+      "load": [
+        9.828125,
+        13.779296875,
+        11.4287109375
+      ],
+      "exit": 1,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "focused-r2"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public all-types retention"
+      ],
+      "pid": 44445,
+      "pgid": 44445,
+      "identity": "44445 44445 Wed Oct 14 05:54:28 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts -t temporary public all-types retention\n",
+      "start": "2026-10-14T12:54:28.669484+00:00",
+      "end": "2026-10-14T12:54:35.545757+00:00",
+      "wallSeconds": 6.876203292020364,
+      "cpuSeconds": 8.95713,
+      "load": [
+        8.076171875,
+        13.04248046875,
+        11.2294921875
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "focused-r3"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public all-types retention"
+      ],
+      "pid": 48768,
+      "pgid": 48768,
+      "identity": "48768 48768 Wed Oct 14 05:55:26 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts -t temporary public all-types retention\n",
+      "start": "2026-10-14T12:55:26.663870+00:00",
+      "end": "2026-10-14T12:55:33.337022+00:00",
+      "wallSeconds": 6.673014541011071,
+      "cpuSeconds": 9.095105,
+      "load": [
+        6.53955078125,
+        11.75439453125,
+        10.8603515625
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "focused-final"
+    },
+    {
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public all-types retention"
+      ],
+      "pid": 51648,
+      "pgid": 51648,
+      "identity": "51648 51648 Wed Oct 14 05:56:10 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t temporary public all-types retention\n",
+      "start": "2026-10-14T12:56:10.409868+00:00",
+      "end": "2026-10-14T12:56:14.510445+00:00",
+      "wallSeconds": 4.10046941699693,
+      "cpuSeconds": 6.1908,
+      "load": [
+        6.90087890625,
+        11.18896484375,
+        10.6923828125
+      ],
+      "exit": 1,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "fault-classification"
+    },
+    {
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public all-types retention"
+      ],
+      "pid": 51880,
+      "pgid": 51880,
+      "identity": "51880 51880 Wed Oct 14 05:56:14 2026     node node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts -t temporary public all-types retention\n",
+      "start": "2026-10-14T12:56:14.557463+00:00",
+      "end": "2026-10-14T12:56:18.198652+00:00",
+      "wallSeconds": 3.6410874589928426,
+      "cpuSeconds": 5.506286,
+      "load": [
+        6.98876953125,
+        11.1357421875,
+        10.67626953125
+      ],
+      "exit": 1,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "fault-expiry-guard"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "pid": 54085,
+      "pgid": 54085,
+      "identity": "54085 54085 Wed Oct 14 05:56:49 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts\n",
+      "start": "2026-10-14T12:56:49.348902+00:00",
+      "end": "2026-10-14T12:57:03.316600+00:00",
+      "wallSeconds": 13.96760745800566,
+      "cpuSeconds": 18.873114,
+      "load": [
+        5.8876953125,
+        10.28564453125,
+        10.38623046875
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "foundation"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 55091,
+      "pgid": 55091,
+      "identity": "55091 55091 Wed Oct 14 05:57:23 2026     node /opt/homebrew/bin/npm run review\n",
+      "start": "2026-10-14T12:57:23.946519+00:00",
+      "end": "2026-10-14T12:58:21.060253+00:00",
+      "wallSeconds": 57.107474541990086,
+      "cpuSeconds": 180.781127,
+      "load": [
+        7.2626953125,
+        9.6083984375,
+        10.10986328125
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "review"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 59232,
+      "pgid": 59232,
+      "identity": "59232 59232 Wed Oct 14 06:00:26 2026     node /opt/homebrew/bin/npm run knip\n",
+      "start": "2026-10-14T13:00:26.981938+00:00",
+      "end": "2026-10-14T13:00:31.401325+00:00",
+      "wallSeconds": 4.419304167007795,
+      "cpuSeconds": 4.88927,
+      "load": [
+        3.7978515625,
+        7.2626953125,
+        9.0849609375
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "knip"
+    },
+    {
+      "argv": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/un67/helper/run.py",
+        "full-execution",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 60450,
+      "pgid": 60450,
+      "identity": "60450 60450 Wed Oct 14 06:01:16 2026     /usr/bin/lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock python3 /tmp/dreamtides-executor-01a1304d/un67/helper/run.py full-execution npm run review:full\n",
+      "start": "2026-10-14T13:01:16.106968+00:00",
+      "end": "2026-10-14T13:02:51.890122+00:00",
+      "wallSeconds": 95.78278854198288,
+      "cpuSeconds": 243.497743,
+      "load": [
+        5.443359375,
+        6.3935546875,
+        8.4326171875
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "full-lock"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 60453,
+      "pgid": 60453,
+      "identity": "60453 60453 Wed Oct 14 06:01:16 2026     node /opt/homebrew/bin/npm run review:full\n",
+      "start": "2026-10-14T13:01:16.133396+00:00",
+      "end": "2026-10-14T13:02:51.865401+00:00",
+      "wallSeconds": 95.73164275000454,
+      "cpuSeconds": 243.46666499999998,
+      "load": [
+        5.443359375,
+        6.3935546875,
+        8.4326171875
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "full-execution"
+    },
+    {
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/dreamtides-executor-01a1304d/un67/helper/greedy-preflight.ts"
+      ],
+      "pid": 99128,
+      "pgid": 99128,
+      "identity": "99128 99128 Wed Oct 14 06:05:28 2026     node node_modules/tsx/dist/cli.mjs /tmp/dreamtides-executor-01a1304d/un67/helper/greedy-preflight.ts\n",
+      "start": "2026-10-14T13:05:28.171962+00:00",
+      "end": "2026-10-14T13:05:30.575844+00:00",
+      "wallSeconds": 2.4037963330047205,
+      "cpuSeconds": 3.474762,
+      "load": [
+        2.916015625,
+        4.8818359375,
+        7.46728515625
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "greedy-preflight"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/temporary-public-all-types-un67/artifacts/qa/hv-un67/player-workflows.mjs",
+        "--bead",
+        "hv-un67",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ],
+      "pid": 43798,
+      "pgid": 43798,
+      "identity": "43798 43798 Wed Oct 14 06:13:41 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/.worktrees/temporary-public-all-types-un67/artifacts/qa/hv-un67/player-workflows.mjs --bead hv-un67 --viewports desktop,mobile --timeout 600\n",
+      "start": "2026-10-14T13:13:41.212268+00:00",
+      "end": "2026-10-14T13:16:29.199394+00:00",
+      "wallSeconds": 167.98654912499478,
+      "cpuSeconds": 10.015682,
+      "load": [
+        4.15576171875,
+        5.72509765625,
+        7.236328125
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "browser-workflows"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 56189,
+      "pgid": 56189,
+      "identity": "56189 56189 Wed Oct 14 06:21:00 2026     node scripts/friction-triggers.mjs --validate-records\n",
+      "start": "2026-10-14T13:21:00.908888+00:00",
+      "end": "2026-10-14T13:21:00.972490+00:00",
+      "wallSeconds": 0.06353424998815171,
+      "cpuSeconds": 0.068229,
+      "load": [
+        3.79736328125,
+        4.6572265625,
+        6.349609375
+      ],
+      "exit": 2,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "schema-initial"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 57358,
+      "pgid": 57358,
+      "identity": "57358 57358 Wed Oct 14 06:21:52 2026     node scripts/friction-triggers.mjs --validate-records\n",
+      "start": "2026-10-14T13:21:52.313438+00:00",
+      "end": "2026-10-14T13:21:52.376417+00:00",
+      "wallSeconds": 0.06290312498458661,
+      "cpuSeconds": 0.06870799999999999,
+      "load": [
+        3.173828125,
+        4.3798828125,
+        6.1416015625
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started",
+      "label": "schema-corrected"
+    },
+    {
+      "label": "schema-final",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 58971,
+      "pgid": 58971,
+      "identity": "58971 58971 Wed Oct 14 06:23:02 2026     node scripts/friction-triggers.mjs --validate-records\n",
+      "start": "2026-10-14T13:23:02.569649+00:00",
+      "end": "2026-10-14T13:23:02.735164+00:00",
+      "wallSeconds": 0.16544725000858307,
+      "cpuSeconds": 0.120924,
+      "load": [
+        3.00048828125,
+        4.09765625,
+        5.89453125
+      ],
+      "exit": 0,
+      "remainingGroup": "",
+      "browserResources": "not started"
+    }
+  ],
+  "results": {
+    "focused": "16 passed,3511 skipped,3527 discovered; both controllers and both viewers.",
+    "foundation": "3527 passed on exact restored source.",
+    "review": "299 files,7016 tests passed; typechecks/lint/import-cycle checks passed.",
+    "knip": "Passed.",
+    "full": "380 files,8024 tests passed; full lint,types,dead-code,bundle checks passed under native heavy lock,2 testworkers. Vitest64.28s at startload4.33935546875; this is not a low-load phasegate60s benchmark.",
+    "heavyQueue": "Outer start13:01:16.106968Z, inner start13:01:16.133396Z:0.026428s admission/launch upper bound including wrapper overhead, not pure lock queue. Outer95.782789s/inner95.731643s overlap and are not additive.",
+    "weightedFuzz": "Internal projection prerequisite has no entity weighted recipe; original hv-umm2.665 retains its full weighted300/content browser acceptance after this prerequisite lands."
+  },
+  "counterfactual": {
+    "classification": "Removing only allTypes classification caused6 failures; actual sampled tuple false/5/false contrasts true/3/true for both controllers, with hidden-source/fold projection failures.",
+    "expiryGuard": "Removing only allTypes disjunction from expiry privacy guard caused2 failures. Actual public-target event is present with hidden expiry identity; null causal source alone is insufficient.",
+    "restoration": {
+      "exactRestored": {
+        "classification": "c72f7692e3f8753a664b4b770094b0a8336af03d6a766ab32d1b295dbf1ec65e",
+        "expiry-guard": "e7fd017fd851676f9cfefb6acba93be1a466476db893ebfb1d55be7e30f902f4"
+      }
+    },
+    "positiveAfterRestore": "Foundation, review, Knip and locked full all pass exact restored source."
+  },
+  "failurePathCoverage": {
+    "illegalAction": "Public fold illegal hand play and no legal target refuse without effects.",
+    "invalidAnswer": "Actual public target prompt rejects opposing physical target; original committed state unchanged.",
+    "cancellation": "Actual before-commit target prompt cancels; committed state/effect list preserved.",
+    "serializedReplay": "JSON save/restart preserves pending target prompt and answer result; independent fold pass after copied source departure preserves effect obligations. Original state hashes unchanged.",
+    "exceptionAndMalformedSchema": "Projection classification and privacy guard introduce no resolver, payload or schema. Generic post-commit exception/atomic rollback, malformed-save validation and replay divergence remain existing full-suite contracts; no engine-private injected throw or new schema expansion is claimed."
+  },
+  "browserQA": {
+    "invocation": "run-O80ZzH",
+    "nativeResultFile": "player-workflows.result.json",
+    "nativeEvidenceDirectory": "artifacts/qa/hv-un67/invocations/run-O80ZzH",
+    "wallMs": {
+      "browserLeaseWait": 4,
+      "serve": 3482,
+      "scenario": 163830,
+      "total": 167370
+    },
+    "calls": [
+      {
+        "viewport": "desktop",
+        "step": 0,
+        "ms": 37523
+      },
+      {
+        "viewport": "desktop",
+        "step": 1,
+        "ms": 46973
+      },
+      {
+        "viewport": "mobile",
+        "step": 0,
+        "ms": 34755
+      },
+      {
+        "viewport": "mobile",
+        "step": 1,
+        "ms": 44577
+      }
+    ],
+    "caps": [],
+    "cells": [
+      {
+        "cell": "desktop#0",
+        "holder": "player",
+        "emblem": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+        "shapeshift": "5e5e5e5e-0000-4000-8000-000000000a12",
+        "conditional": "5e5e5e5e-0000-4000-8000-00000005130b",
+        "original": "i53",
+        "copy": "i54",
+        "subjects": [
+          "i51"
+        ],
+        "effects": [
+          {
+            "controller": "player",
+            "source": "i54",
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "allTypes",
+              "instance": "i51"
+            },
+            "id": "e1",
+            "timestamp": 15
+          },
+          {
+            "controller": "player",
+            "source": "i53",
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "allTypes",
+              "instance": "i51"
+            },
+            "id": "e2",
+            "timestamp": 15
+          }
+        ],
+        "rendered": [
+          {
+            "id": "i51",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=49f216a2-0596-4124-bb40-60ac9afe6e0b&as=player&seed=1&debug=1&ai=greedy&game=zknpwg",
+            "viewport": [
+              1440,
+              900
+            ],
+            "rect": {
+              "left": 254.5,
+              "top": 483.5,
+              "right": 344,
+              "bottom": 573,
+              "width": 89.5,
+              "height": 89.5
+            },
+            "hit": true,
+            "badges": [
+              {
+                "labelPresent": true,
+                "left": 258.078125,
+                "right": 281.34375,
+                "top": 487.078125,
+                "bottom": 510.34375,
+                "width": 23.265625,
+                "height": 23.265625
+              },
+              {
+                "labelPresent": true,
+                "left": 258.078125,
+                "right": 281.34375,
+                "top": 512.34375,
+                "bottom": 535.609375,
+                "width": 23.265625,
+                "height": 23.265625
+              }
+            ]
+          }
+        ],
+        "capture": "un67-player-retained-types-desktop",
+        "reload": true,
+        "expired": true,
+        "logRows": 102
+      },
+      {
+        "cell": "desktop#1",
+        "holder": "enemy",
+        "emblem": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+        "shapeshift": "5e5e5e5e-0000-4000-8000-000000000a12",
+        "conditional": "5e5e5e5e-0000-4000-8000-00000005130b",
+        "original": "i52",
+        "copy": "i53",
+        "subjects": [
+          "i34"
+        ],
+        "effects": [
+          {
+            "controller": "enemy",
+            "source": "i53",
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "allTypes",
+              "instance": "i34"
+            },
+            "id": "e1",
+            "timestamp": 26
+          },
+          {
+            "controller": "enemy",
+            "source": "i52",
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "allTypes",
+              "instance": "i34"
+            },
+            "id": "e2",
+            "timestamp": 26
+          }
+        ],
+        "rendered": [
+          {
+            "id": "i34",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=49f216a2-0596-4124-bb40-60ac9afe6e0b&as=enemy&seed=1&debug=1&ai=greedy&game=i4wcky",
+            "viewport": [
+              1440,
+              900
+            ],
+            "rect": {
+              "left": 254.5,
+              "top": 183,
+              "right": 344,
+              "bottom": 272.5,
+              "width": 89.5,
+              "height": 89.5
+            },
+            "hit": true,
+            "badges": [
+              {
+                "labelPresent": true,
+                "left": 258.078125,
+                "right": 281.34375,
+                "top": 186.578125,
+                "bottom": 209.84375,
+                "width": 23.265625,
+                "height": 23.265625
+              },
+              {
+                "labelPresent": true,
+                "left": 258.078125,
+                "right": 281.34375,
+                "top": 211.84375,
+                "bottom": 235.109375,
+                "width": 23.265625,
+                "height": 23.265625
+              }
+            ]
+          }
+        ],
+        "capture": "un67-enemy-retained-types-desktop",
+        "reload": true,
+        "expired": true,
+        "logRows": 109
+      },
+      {
+        "cell": "mobile#0",
+        "holder": "player",
+        "emblem": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+        "shapeshift": "5e5e5e5e-0000-4000-8000-000000000a12",
+        "conditional": "5e5e5e5e-0000-4000-8000-00000005130b",
+        "original": "i53",
+        "copy": "i54",
+        "subjects": [
+          "i51"
+        ],
+        "effects": [
+          {
+            "controller": "player",
+            "source": "i54",
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "allTypes",
+              "instance": "i51"
+            },
+            "id": "e1",
+            "timestamp": 15
+          },
+          {
+            "controller": "player",
+            "source": "i53",
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "allTypes",
+              "instance": "i51"
+            },
+            "id": "e2",
+            "timestamp": 15
+          }
+        ],
+        "rendered": [
+          {
+            "id": "i51",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=49f216a2-0596-4124-bb40-60ac9afe6e0b&as=player&seed=1&debug=1&ai=greedy&game=jwxi6s",
+            "viewport": [
+              390,
+              844
+            ],
+            "rect": {
+              "left": 23.40625,
+              "top": 415.890625,
+              "right": 77.265625,
+              "bottom": 469.75,
+              "width": 53.859375,
+              "height": 53.859375
+            },
+            "hit": true,
+            "badges": [
+              {
+                "labelPresent": true,
+                "left": 25.546875,
+                "right": 39.546875,
+                "top": 418.03125,
+                "bottom": 432.03125,
+                "width": 14,
+                "height": 14
+              },
+              {
+                "labelPresent": true,
+                "left": 25.546875,
+                "right": 39.546875,
+                "top": 434.03125,
+                "bottom": 448.03125,
+                "width": 14,
+                "height": 14
+              }
+            ]
+          }
+        ],
+        "capture": "un67-player-retained-types-mobile",
+        "reload": true,
+        "expired": true,
+        "logRows": 102
+      },
+      {
+        "cell": "mobile#1",
+        "holder": "enemy",
+        "emblem": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+        "shapeshift": "5e5e5e5e-0000-4000-8000-000000000a12",
+        "conditional": "5e5e5e5e-0000-4000-8000-00000005130b",
+        "original": "i52",
+        "copy": "i53",
+        "subjects": [
+          "i34"
+        ],
+        "effects": [
+          {
+            "controller": "enemy",
+            "source": "i53",
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "allTypes",
+              "instance": "i34"
+            },
+            "id": "e1",
+            "timestamp": 26
+          },
+          {
+            "controller": "enemy",
+            "source": "i52",
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "allTypes",
+              "instance": "i34"
+            },
+            "id": "e2",
+            "timestamp": 26
+          }
+        ],
+        "rendered": [
+          {
+            "id": "i34",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=49f216a2-0596-4124-bb40-60ac9afe6e0b&as=enemy&seed=1&debug=1&ai=greedy&game=5xrn7e",
+            "viewport": [
+              390,
+              844
+            ],
+            "rect": {
+              "left": 23.40625,
+              "top": 251.25,
+              "right": 62.796875,
+              "bottom": 290.640625,
+              "width": 39.390625,
+              "height": 39.390625
+            },
+            "hit": true,
+            "badges": [
+              {
+                "labelPresent": true,
+                "left": 24.96875,
+                "right": 35.203125,
+                "top": 252.8125,
+                "bottom": 263.046875,
+                "width": 10.234375,
+                "height": 10.234375
+              },
+              {
+                "labelPresent": true,
+                "left": 24.96875,
+                "right": 35.203125,
+                "top": 265.046875,
+                "bottom": 275.28125,
+                "width": 10.234375,
+                "height": 10.234375
+              }
+            ]
+          }
+        ],
+        "capture": "un67-enemy-retained-types-mobile",
+        "reload": true,
+        "expired": true,
+        "logRows": 109
+      }
+    ],
+    "persistedLogArchiveScope": "Every cell independently read persisted engine.action play and per-effect engine.effectEnded: player102 rows and enemy109 rows. Native end-of-viewport export archives only its final enemy game (109 rows per viewport); complete player JSONL export is not claimed.",
+    "nativeGameLogs": [
+      {
+        "viewport": "desktop",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-un67/invocations/run-O80ZzH/player-workflows-desktop.jsonl",
+        "gameId": "i4wcky",
+        "selectedBy": "url",
+        "rows": 109,
+        "reason": null
+      },
+      {
+        "viewport": "mobile",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-un67/invocations/run-O80ZzH/player-workflows-mobile.jsonl",
+        "gameId": "5xrn7e",
+        "selectedBy": "url",
+        "rows": 109,
+        "reason": null
+      }
+    ],
+    "visualReview": "Parent independently viewed all4captures after resource closure, verified exact two duration clock badges on copied targets, opposing conditional Spark4, and unclipped subject geometry. Source/support freeze was preserved."
+  },
+  "resourceClosure": {
+    "activeIdentity": {
+      "runnerPid": 43798,
+      "runnerGroup": 43798,
+      "serverPid": 43827,
+      "serverGroup": 43827,
+      "wrapperPid": 43790,
+      "slot": 1,
+      "port": 5274,
+      "providerToken": "c6d8f9c6-9e3a-4b90-8ed9-0e2a9dd8ad07",
+      "mcpSessionId": "d5440980-c2bd-4a6d-ba40-7e0394b7797a",
+      "protocol": "2025-11-25",
+      "serverToken": "b5e703bc-8f23-445f-84fa-5d72ff048d98"
+    },
+    "terminal": "Native runner success returned, all4RPC calls settled, normal cleanup completed. Actual runner/server/wrapper process groups absent; own live owner/server records absent, port5274 free. No foreign process/record changes or service restart.",
+    "helperPostguard": {
+      "utc": "2026-10-14T13:17:06.817166+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/temporary-public-all-types-un67",
+      "filesChecked": 4836,
+      "supportsChecked": 9,
+      "changed": [],
+      "pathChanges": {
+        "added": [],
+        "removed": []
+      },
+      "supportPathChanges": {
+        "added": [],
+        "removed": []
+      },
+      "exact": true,
+      "resource": {
+        "currentOwnedRuntimeRows": [],
+        "currentCoordinatorRecords": [],
+        "allOwnedRuntimeClosed": true,
+        "historicalNumericIDsAreNotOwnership": true
+      }
+    },
+    "parentRelease": "13:18:24.845740Z parent independent full4836-source/9-support hash/type/symlink/pathset comparison exact; all own resources settled and5274 free.",
+    "rawReceiptQualification": "Actual native ownership and closure supersede stale wrapper browserResources:not started boilerplate; raw receipt is preserved."
+  },
+  "requiredReview": "Core-review: parent owns fresh read-only Claude Opus5.5 after immutable commit/helper terminal. Temporary Sol routing expired01:00Z. Review remains parent delivery work, not yet performed.",
+  "schemaAuthoringCorrection": "Initial own friction item used detail instead of required note; validator rejected own record before any promotion/commit. Corrected own item key, failed receipt retained.",
+  "schemaResult": "Friction evidence valid: 805 records, 41 historical unknown measurements",
+  "shortAuthoringCorrectionSpan": {
+    "tag": "local-edit-correction",
+    "minutes": 0.7851311666666666,
+    "note": "Focused selection of plain auto-discovered module selected no tests; existing contracts.test.ts entrypoint corrected it. Own target-prompt fixture expected chooseCards while public prompt is chooseTargets; corrected. This inclusive attempt/correction interval also contains the expected conditional-guard privacy failures, and is not pure CPU or a product incident."
+  },
+  "frictionDisposition": "The0.785131-minute own authoring correction span is below the workflow approximately10-minute friction threshold; failed attempts and exact span remain measurement evidence. No friction tag is filed.",
+  "schemaNormalization": {
+    "receiptLoad": "Generic wrapper load array is read after child termination; all start samples, where cited, come separately from the actual native command stdout.",
+    "testDelta": "One plain auto-discovered247-line synthetic contract module; no entrypoint or jsdom/harness additions.",
+    "wallScope": "Wrapper elapsed and waited child CPU; outer heavy-lock/inner execution times overlap and are not additive.",
+    "fields": {
+      "hostLoad": {
+        "value": 7.2626953125,
+        "measuredFor": "Review-end one-minute host load from generic run.py os.getloadavg after command exit; not a start-of-review sample or performance comparison."
+      }
+    }
+  }
+}
