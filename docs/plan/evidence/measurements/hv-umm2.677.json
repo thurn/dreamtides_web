@@ -1,0 +1,655 @@
+{
+  "bead": "hv-umm2.677",
+  "phase": 5,
+  "base": "aa4d2dc3c8516f7f13e2a820c977c5e1ed8d3f2a",
+  "scope": {
+    "entities": [
+      "0d668e16-1729-4289-ad1d-0fb3c1374ee9"
+    ],
+    "authored": 1,
+    "newPrimitives": 0,
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "productionFile": "src/content/dreamsigns/skull-pendant-0d668e16.ts",
+    "productionSHA256": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a",
+    "productionDelta": {
+      "added": 7,
+      "deleted": 1
+    },
+    "immutableCatalogFields": "All original data fields retained; abilities and verifiedText are authored."
+  },
+  "ruleAndReaderAudit": {
+    "ability": "staticAbility(costModifier(\"you\", { cardType: \"character\", hasAbility: \"materialized\" }, -1))",
+    "readers": [
+      "continuous/costs.ts: costModifier",
+      "continuous/characteristics.ts: filterSubjectOf and matchesFilter",
+      "continuous/layers.ts: effective namedTriggers",
+      "dsl/abilities.ts: recursive namedTriggersOf",
+      "rules/timing.ts: routeCostModifier",
+      "view/view.ts: effective cost"
+    ],
+    "semantics": "The one cost modifier applies to its holder playing an effective Character with the named Materialized ability. Combined, gained, lost and variant abilities follow the existing effective layers. Multiple matching abilities supply one matching filter, and reductions floor at zero."
+  },
+  "D20": {
+    "decision": "Ordinary static primitive and named-ability filter composition; private scenario module is unnecessary.",
+    "existingContracts": "Named ability presence: combined triggers, variants, effective gained/lost abilities, selective disabling, controllers and reload/sample. Cost modifications: effective cost, legality, payment, floor and reload.",
+    "scenarioModulesAdded": 0
+  },
+  "D21": {
+    "firstByte": 208,
+    "sampled": false,
+    "newPromptKinds": 0,
+    "newStatusIndicators": 0,
+    "newVisualEffects": 0,
+    "judgedTotal": 0
+  },
+  "validation": {
+    "focused": "30 pass; 3823 unrelated contract cases unselected",
+    "coverage": "20 pass",
+    "actualNode": {
+      "cases": 28,
+      "controllers": 2,
+      "proof": "Actual authored UUID Dreamsign through public catalog, fixture, view, legality and fold. Matching single/multiple/combined named abilities, nonmatching Dawn/vanilla, Event type conjunction and zero-floor; both holders/actors; exact energy payment, cardPlayed/resolved, invariants and JSON reload.",
+      "caller": "skull-pendant-runtime.ts",
+      "callerSHA256": "34cba65b38df4b9f2c510bbf98527a660db2e2098aefc72cdf2654773076ea6a",
+      "rawSHA256": "48e41b3f2067f1b3951de3ff139c21159f018a684f8e082e56fd163bea9ab478"
+    },
+    "weightedFuzz": {
+      "games": 300,
+      "steps": 105191,
+      "failures": 0,
+      "included": 600,
+      "exercised": 0,
+      "engineWallS": 334.5,
+      "engineCpuS": 356.5,
+      "outerWallS": 430.62367749999976,
+      "queueAndLaunchApproxS": 95,
+      "scope": "Engine wall/CPU are fuzzer-owned scopes. Outer wall includes machine heavy-slot wait and launch. Exercised counts resolving emblem trigger/activation events; actual static discount is proved by Node and browser payments.",
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "workers": 2,
+      "defaultsRetained": true
+    },
+    "preflight": {
+      "baseBothControllers": 2,
+      "verdict": "pass",
+      "exercised": false,
+      "proofScope": "Emblem initialization and first Day."
+    },
+    "sweep": {
+      "baseBothControllers": 2,
+      "effectivePass": 2,
+      "attemptPass": 2,
+      "exercised": false,
+      "proofScope": "Exact emblem initialization and first Day; actual static payment is supplementary.",
+      "invocation": "invocations/sweep-ST5mwL",
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1965,
+        "scenario": 8949.045625,
+        "cleanup": 354.12375000000065,
+        "execution": 11334.432208,
+        "total": 11339.432208
+      }
+    },
+    "browser": {
+      "verdict": "pass",
+      "caps": [],
+      "actualWorkflowCount": 4,
+      "proof": [
+        {
+          "viewport": "desktop",
+          "holder": "player",
+          "gameId": "j56w7t",
+          "guardian": {
+            "instance": "i51",
+            "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+            "displayed": "2",
+            "energy": [
+              9,
+              7
+            ],
+            "payment": 2
+          },
+          "controlPayment": 1,
+          "reload": {
+            "energy": 7,
+            "zone": "play",
+            "logLines": 41
+          },
+          "persistedKinds": [
+            "engine.action",
+            "engine.action",
+            "battle_engine_debug_requested"
+          ]
+        },
+        {
+          "viewport": "desktop",
+          "holder": "enemy",
+          "gameId": "mac2hr",
+          "guardian": {
+            "instance": "i51",
+            "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+            "displayed": "3",
+            "energy": [
+              9,
+              6
+            ],
+            "payment": 3
+          },
+          "controlPayment": 1,
+          "reload": {
+            "energy": 6,
+            "zone": "play",
+            "logLines": 72
+          },
+          "persistedKinds": [
+            "engine.action",
+            "engine.action",
+            "battle_engine_debug_requested"
+          ]
+        },
+        {
+          "viewport": "mobile",
+          "holder": "player",
+          "gameId": "t3qa48",
+          "guardian": {
+            "instance": "i51",
+            "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+            "displayed": "2",
+            "energy": [
+              9,
+              7
+            ],
+            "payment": 2
+          },
+          "controlPayment": 1,
+          "reload": {
+            "energy": 7,
+            "zone": "play",
+            "logLines": 41
+          },
+          "persistedKinds": [
+            "engine.action",
+            "engine.action",
+            "battle_engine_debug_requested"
+          ]
+        },
+        {
+          "viewport": "mobile",
+          "holder": "enemy",
+          "gameId": "gqt637",
+          "guardian": {
+            "instance": "i51",
+            "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+            "displayed": "3",
+            "energy": [
+              9,
+              6
+            ],
+            "payment": 3
+          },
+          "controlPayment": 1,
+          "reload": {
+            "energy": 6,
+            "zone": "play",
+            "logLines": 72
+          },
+          "persistedKinds": [
+            "engine.action",
+            "engine.action",
+            "battle_engine_debug_requested"
+          ]
+        }
+      ],
+      "report": "skull-pendant-cost.result.json",
+      "invocation": "invocations/run-OMnT93",
+      "reportSHA256": "524ea6f0dab0f7cd6f97167ee71f36c701e14b7562fc55624389171e60fe855b",
+      "caller": "skull-pendant-cost.mjs",
+      "callerSHA256": "a3cec2cc4aae9ee415cd865c78cd0b57a1f771cc70f8cd2d4a73c5dfc1dd3296",
+      "logScope": "Persisted engine.action and UUID debug producer records are inspected for both lanes; payment events are retained in the raw report. Managed runner exports final enemy-lane full game JSONL per viewport.",
+      "screenshots": [
+        "skull-pendant-player-desktop-before-payment.png",
+        "skull-pendant-player-desktop-paid.png",
+        "skull-pendant-player-mobile-before-payment.png"
+      ],
+      "imageInspection": "Visible effective cost 2 before payment; desktop paid energy 7 and actual Character in play. Geometry, pointer access and reload are asserted on all four lanes.",
+      "capturePixels": {
+        "desktop": [
+          2880,
+          1800
+        ],
+        "mobile": [
+          780,
+          1688
+        ]
+      },
+      "cssViewports": {
+        "desktop": [
+          1440,
+          900
+        ],
+        "mobile": [
+          390,
+          844
+        ]
+      }
+    },
+    "knip": "pass",
+    "review": {
+      "verdict": "pass",
+      "wallS": 48.623591875017155,
+      "testFiles": 247,
+      "tests": 6515,
+      "lint": "pass",
+      "typechecks": "pass",
+      "importCycles": "pass",
+      "frictionSchema": "pass"
+    },
+    "localFull": "Source composition scope uses related review; infrastructure and cross-cutting architecture are unchanged.",
+    "whitespace": "pass",
+    "finalSchema": "pass"
+  },
+  "failedAttempts": [
+    {
+      "label": "actual-node",
+      "exit": 1,
+      "rawSHA256": "036b2dd773d019429264d1aaea3f073c79026bf5367fba5c0817d63cffbb13dc",
+      "cause": "Ignored caller expected an unresolved stack endpoint. Existing fold automatically settles the play when the opposite fixture has no legal response.",
+      "disposition": "Caller expects Character play or Event void plus one resolved event, retaining every payment/control check. Corrected fresh-label invocation passed 28 cases; production source stayed identical."
+    }
+  ],
+  "commands": [
+    {
+      "label": "actual-node-corrected",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "artifacts/qa/hv-umm2.677/skull-pendant-runtime.ts"
+      ],
+      "start": "2026-10-14T15:54:57.292262+00:00",
+      "end": "2026-10-14T15:54:58.397270+00:00",
+      "wallS": 1.1050234999856912,
+      "exit": 0,
+      "pid": 92452,
+      "pgid": 92452,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "56f100c02085c448bf3b121338b0ac86b244d8ad0c261f95e598d3b2b77ff2c2"
+    },
+    {
+      "label": "actual-node",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "artifacts/qa/hv-umm2.677/skull-pendant-runtime.ts"
+      ],
+      "start": "2026-10-14T15:50:26.773759+00:00",
+      "end": "2026-10-14T15:50:28.180262+00:00",
+      "wallS": 1.4065207079984248,
+      "exit": 1,
+      "pid": 69013,
+      "pgid": 69013,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "fb75035f9529b84900c2f88c2145d9820e4dac0078923b027bd7d7a98d228906"
+    },
+    {
+      "label": "browser-cost",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.677/skull-pendant-cost.mjs",
+        "--bead",
+        "hv-umm2.677",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "360"
+      ],
+      "start": "2026-10-14T15:56:10.803930+00:00",
+      "end": "2026-10-14T15:57:30.446852+00:00",
+      "wallS": 79.64241995901102,
+      "exit": 0,
+      "pid": 94418,
+      "pgid": 94418,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "6185344e93de78e47f4383f0c951ffdda7153206b96412db997eff42b2b5b19f"
+    },
+    {
+      "label": "coverage",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-14T15:41:46.412197+00:00",
+      "end": "2026-10-14T15:41:51.238915+00:00",
+      "wallS": 4.826709417015081,
+      "exit": 0,
+      "pid": 28935,
+      "pgid": 28935,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "5ac8a4c63ac044b362604d05ac21bb30d21a4fe3b3721219a7d5475be162a335"
+    },
+    {
+      "label": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/continuous/continuous-costs.test.ts",
+        "-t",
+        "named ability presence|cost modifications"
+      ],
+      "start": "2026-10-14T15:41:37.448409+00:00",
+      "end": "2026-10-14T15:41:45.028294+00:00",
+      "wallS": 7.579856625001412,
+      "exit": 0,
+      "pid": 9683,
+      "pgid": 9683,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "a9033962eee1600137ecfec51ba121dcd7ec83966067cafdde8a07d896915969"
+    },
+    {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-14T15:53:38.148921+00:00",
+      "end": "2026-10-14T15:53:43.613432+00:00",
+      "wallS": 5.464498457993614,
+      "exit": 0,
+      "pid": 88306,
+      "pgid": 88306,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "ea3ee4e4ee8281ebb71641460a5bd9842a9bbe7c6a2b0f2f601f3480c9fc3df9"
+    },
+    {
+      "label": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "0d668e16-1729-4289-ad1d-0fb3c1374ee9",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "start": "2026-10-14T15:41:47.570481+00:00",
+      "end": "2026-10-14T15:41:49.059205+00:00",
+      "wallS": 1.4887382919841912,
+      "exit": 0,
+      "pid": 29736,
+      "pgid": 29736,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "16a396da25544cb569cc650921fdb2dba2bf33bf60c8533989ea2b65d4614a64"
+    },
+    {
+      "label": "sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.677",
+        "--dreamsigns",
+        "0d668e16-1729-4289-ad1d-0fb3c1374ee9",
+        "--variants",
+        "base",
+        "--as",
+        "both",
+        "--timeout",
+        "60"
+      ],
+      "start": "2026-10-14T15:55:21.441580+00:00",
+      "end": "2026-10-14T15:55:32.958003+00:00",
+      "wallS": 11.516374625003664,
+      "exit": 0,
+      "pid": 92862,
+      "pgid": 92862,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "b5038b24a5f8b08d9e3f1e1edbcf68acf2293afd63b388a4043f94012de3ca62"
+    },
+    {
+      "label": "weighted-fuzz",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "0d668e16-1729-4289-ad1d-0fb3c1374ee9"
+      ],
+      "start": "2026-10-14T15:55:21.441537+00:00",
+      "end": "2026-10-14T16:02:32.068101+00:00",
+      "wallS": 430.62367749999976,
+      "exit": 0,
+      "pid": 92863,
+      "pgid": 92863,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "145553eb602778b435795cab06f921e81f7777ec947041dd0eb395a0a4df7888"
+    },
+    {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T16:04:35.085628+00:00",
+      "end": "2026-10-14T16:05:23.675839+00:00",
+      "wallS": 48.623591875017155,
+      "exit": 0,
+      "pid": 63468,
+      "pgid": 63468,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "cf1511abfa5ec4dbd51e75a9bc44588bd415672bf998a614d41f2b7d35287068"
+    },
+    {
+      "label": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-14T16:06:36.017022+00:00",
+      "end": "2026-10-14T16:06:36.095469+00:00",
+      "wallS": 0.07847325000329874,
+      "exit": 0,
+      "pid": 69601,
+      "pgid": 69601,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "eaf81cbdb9996d5d7ed7321ded7ac72ef6250d58c3f893ef1db4b8625bde0da4"
+    },
+    {
+      "label": "whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "start": "2026-10-14T16:06:36.164380+00:00",
+      "end": "2026-10-14T16:06:36.187691+00:00",
+      "wallS": 0.02332966699032113,
+      "exit": 0,
+      "pid": 69612,
+      "pgid": 69612,
+      "sourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "finalSourceHashes": {
+        "src/content/dreamsigns/skull-pendant-0d668e16.ts": "0bd174e2e89cd58e6b6621df9f5900cf1ad415f41b7daca221a6d2d39095397a"
+      },
+      "groupAfterReap": [],
+      "receiptSHA256": "24ea48a77c85a0bd9a72c78a85b163c760fd86606bdbf1465d0d3718f40e8c4b"
+    }
+  ],
+  "resources": {
+    "guardSHA256": "3721b51b49470902a1b8c491b0d9fc550793fd972a20c08c1c8704d96a891e24",
+    "launchProtocol": "Own new process group gated before execution; PID/group/birth/source/load receipt retained before gate opens. Every invocation reaped; all owned groups absent.",
+    "browserProvider": {
+      "slot": 1,
+      "port": 5274,
+      "runnerPid": 94418,
+      "serverGroup": 94447,
+      "mcpSessionId": "5e69235b-2d3c-4e62-9b8f-ff73a5750e34",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25",
+      "cleanup": "Managed success; owned server/provider records absent, owned groups absent, port free.",
+      "sweepServerGroup": 92895,
+      "sweepIdentityScope": "Managed runner verifies/publishes provider and server identity before use; this helper sampled sweep only after cleanup, so its exact MCP session ID is not independently retained.",
+      "peerResources": "Untouched"
+    },
+    "finalRuntimeGroupCheck": {
+      "at": "2026-10-14T16:06:35.982550+00:00",
+      "groups": [
+        "92452",
+        "69013",
+        "94418",
+        "28935",
+        "9683",
+        "88306",
+        "29736",
+        "92862",
+        "92863",
+        "63468",
+        "92895",
+        "94447"
+      ],
+      "remaining": []
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "sysctl -n vm.loadavg at evidence preparation immediately before final review wrapper launch",
+        "raw": "{ 6.56 10.09 10.25 }",
+        "at": "2026-10-14T16:04:35.052673+00:00",
+        "value": 6.56
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "clock": {
+    "dispatch": "2026-10-14T15:32:27.885000+00:00",
+    "dispatchProof": "Native actual spawn call_804b10fb0e7340e5b7aafaee72bc910e",
+    "evidenceBoundary": "2026-10-14T16:08:27.452848+00:00",
+    "scope": "Inclusive research, admission/coordination waits, caller construction, all validation and resource cleanup. Final commit receipt records actual Git endpoint."
+  },
+  "reviewRouting": "Required inherited cold review belongs to parent after exact source commit under current normal Claude routing.",
+  "delivery": "Parent owns exact Tollgate submission, promotion, cleanup and native completion after the single source commit.",
+  "failurePaths": {
+    "newStateTransitions": 0,
+    "D20Disposition": "This content adds one static composition; it uses existing cost calculation, legal play and payment transactions. Existing deterministic synthetic contracts pin their recovery paths. Broad new per-entity CI tests are unnecessary; actual source payment is verified separately in the Node/browser runtime evidence.",
+    "midStepErrorAndPartialWrite": {
+      "module": "src/engine/continuous/continuous-costs.test.ts",
+      "contract": "leave a 'next card' modifier in place when a play stops before its commit point",
+      "scope": "A cost-planning error drops the private step state; this static modifier introduces no effect record or additional state write."
+    },
+    "reloadOrRestart": {
+      "modules": [
+        "src/engine/continuous/continuous-costs.test.ts",
+        "src/engine/effects/primitives/contracts/selector-has-ability.contracts.ts"
+      ],
+      "contracts": [
+        "survive a reload while a discounted play waits at its X prompt, and use the modifier up once",
+        "reloads target selection, refuses invalid and concurrent input, and rechecks after an opponent's loss effect"
+      ],
+      "actualSource": "All four browser source/payment lanes restore exact energy, physical Character zone and selected emblem membership after reload."
+    },
+    "invalidStaleAndConcurrentInput": {
+      "module": "src/engine/effects/primitives/contracts/selector-has-ability.contracts.ts",
+      "contracts": [
+        "reloads target selection, refuses invalid and concurrent input, and rechecks after an opponent's loss effect",
+        "accepts every formal named trigger and rejects inherited or descriptive names at the public guard and save boundary"
+      ],
+      "scope": "Named-ability input and selection guards use existing contracts; the content introduces no new public input or choice."
+    },
+    "interruptionAndRecovery": {
+      "module": "src/engine/effects/primitives/contracts/selector-has-ability.contracts.ts",
+      "contracts": [
+        "reads preceding layers, removes lost abilities, preserves later gains, and recovers after expiry",
+        "still has a named ability while triggering is disabled"
+      ],
+      "scope": "The filter follows effective abilities at the current cost read; existing layer ordering and expiry determine recovery."
+    }
+  }
+}

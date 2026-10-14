@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { costModifier } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +18,8 @@ export default dreamsign({
     "51903b9a-825b-4d9a-8a6d-071670c3caaa",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [
+    staticAbility(costModifier("you", { cardType: "character", hasAbility: "materialized" }, -1)),
+  ],
+  verifiedText: expectedVerifiedText("Characters with ▸Materialized abilities cost you 1● less."),
 });
