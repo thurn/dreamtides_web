@@ -555,7 +555,10 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   // latest committed render's code, so the interactions below change only
   // with the values they carry and the board's memoized regions can skip.
   const handlers = useStableHandlers<BoardHandlers>({
-    onHandCardActivate: (id) => playHandCard(id, undefined, "hand-tap"),
+    onHandCardActivate: (id) => {
+      if ((affordances.activations.get(id)?.length ?? 0) > 0) setAbilityChooser({ kind: "card", id });
+      else playHandCard(id, undefined, "hand-tap");
+    },
     onHandCardDrop: (target) => {
       if (drag?.source !== "near-hand") return;
       playHandCard(drag.id, target, "hand-drag");

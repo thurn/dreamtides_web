@@ -148,7 +148,7 @@ export function inPlaySources(state: BattleState, side: Side): AbilitySource[] {
   ];
 }
 
-/** Whether an activated ability works from `zone`: a card's in play unless it names the void (rules § Ability Types). */
+/** Whether an activated ability works from `zone`: a card's in play unless it names the hand or void (rules § Ability Types). */
 function activatesFrom(ability: ActivatedAbility, zone: Zone): boolean {
   return (ability.zone ?? "play") === zone;
 }
@@ -158,20 +158,25 @@ function activatesFrom(ability: ActivatedAbility, zone: Zone): boolean {
  * `inPlaySources`, then the cards in its void with an ability that works
  * there, in the order they were created for the battle (rules § Ability
  * Types → Where activated abilities work). A void holds only its owner's
- * cards, so `side` owns each. Cards in other zones have no activated
+ * cards, so `side` owns each. Hand sources follow them in creation order,
+ * held and controlled by `side`. Cards in other zones have no activated
  * abilities that work.
  */
 export function abilitySources(state: BattleState, catalog: EngineCatalog, side: Side): AbilitySource[] {
   const fromVoid = state.sides[side].void
     .filter((id) => originAbilities(catalog, instanceOrigin(state.instances[id])).some((ability) => ability.kind === "activated" && activatesFrom(ability, "void")))
     .sort((a, b) => instanceNumber(a) - instanceNumber(b));
-  return [...inPlaySources(state, side), ...fromVoid];
+  const fromHand = state.sides[side].hand
+    .filter((id) => state.instances[id]?.zone === "hand" && state.instances[id].controller === side &&
+      originAbilities(catalog, instanceOrigin(state.instances[id])).some((ability) => ability.kind === "activated" && activatesFrom(ability, "hand")))
+    .sort((a, b) => instanceNumber(a) - instanceNumber(b));
+  return [...inPlaySources(state, side), ...fromVoid, ...fromHand];
 }
 
 /**
  * Whether `side` may begin activating the ability now: it controls the
  * source, the source's card is in the zone the ability works from (play,
- * or its owner's void), the ability's timing allows it, an ability that would put
+ * its holder's hand, or its owner's void), the ability's timing allows it, an ability that would put
  * characters into play has an open back-rank position, a once-per-turn
  * ability is unused this turn, and the costs that need no choice are
  * payable. The dry run of the `activate` step checks the choices.
@@ -187,6 +192,9 @@ export function canActivate(
   if (typeof source === "string" && abilitiesDisabled(state, catalog, source, "activated")) return false;
   const ability = activatedAbilityAt(state, catalog, source, index);
   if (ability === null) return false;
+  if (ability.zone === "hand" && (typeof source !== "string" || state.instances[source]?.zone !== "hand" ||
+    !state.sides[side].hand.includes(source) ||
+    ability.costs.filter(cost => cost.cost === "revealSource").length !== 1)) return false;
   if (typeof source === "string" && !activatesFrom(ability, state.instances[source].zone)) return false;
   if (!timingAllows(state, side, ability.speed)) return false;
   if (effectEntersPlay(ability.effect) && freeBackSlotsAfterStack(state, catalog, side) <= 0) return false;

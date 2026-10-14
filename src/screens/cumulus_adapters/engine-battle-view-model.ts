@@ -984,7 +984,11 @@ function chooserOptions(
       const payments = (affordances.payToEnd.get(chooser.id) ?? []).map(payment);
       const voidPlay = affordances.voidPlays.get(chooser.id);
       const instance = instances.get(chooser.id);
-      const plays = voidPlay === undefined || instance === undefined ? [] : [act({ kind: "playFromVoid", name: cards(instance).displaySnapshot.name }, voidPlay)];
+      const handPlay = instance?.zone === "hand" ? affordances.plays.get(chooser.id) : undefined;
+      const plays = instance === undefined ? [] : [
+        ...(voidPlay === undefined ? [] : [act({ kind: "playFromVoid", name: cards(instance).displaySnapshot.name }, voidPlay)]),
+        ...(handPlay === undefined ? [] : [act({ kind: "playFromHand", name: cards(instance).displaySnapshot.name }, handPlay)]),
+      ];
       if (activations.length + payments.length === 0) return [];
       const abilities = instance === undefined ? [] : instanceCard(catalog, instance).abilities(instance.variant);
       const activatedIndices = abilities.flatMap((ability, index) => ability.kind === "activated" ? [index] : []);

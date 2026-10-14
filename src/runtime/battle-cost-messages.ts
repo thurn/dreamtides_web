@@ -30,6 +30,8 @@ export function costPhrase(cost: Cost): string {
       return `banish ${cost.count === "x" ? "X cards" : plural(cost.count, "card", "cards")} from your void`;
     case "banishFromHand":
       return `banish ${plural(cost.count, "other card", "other cards")} from your hand`;
+    case "revealSource":
+      return "reveal this card from your hand";
     case "reveal":
       return `reveal ${plural(cost.count, "card", "cards")}`;
     case "choice":

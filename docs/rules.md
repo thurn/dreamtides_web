@@ -2568,6 +2568,29 @@ response or a cost banished it, the ability does nothing to it, and the rest
 of the ability still resolves. A card's "you win the game" ability never works
 from the void (see [Objective](#objective)).
 
+**Activating a card from your hand:** An activated ability that says to reveal
+this card from your hand works while its physical source is in your hand,
+under its usual timing and once-per-turn limit. The hand's holder activates
+it, including a card owned by the opponent. Activating it does not play the
+card or move it out of hand. A source reveal cost reveals that exact card to
+both players once when the committed payment is made; choosing costs or
+cancelling an activation reveals nothing. An already known source may pay
+this cost again in a later activation. The ability requires exactly one
+source-reveal cost as a direct, mandatory part of its payment list; an
+optional-only, nested-only or repeated mandatory source reveal does not
+permit a hand activation.
+
+The source must still be in your hand when this cost is paid. It cannot also
+be a target or pay another cost in the same activation. An earlier chosen
+cost to discard your hand makes a later source reveal unpayable; declining
+an optional discard does not. When source reveal comes first, that card is
+reserved and a later discard of your hand takes the remaining cards.
+Repeating a source reveal within one payment plan is unpayable. In the
+ability's effect, "this card" refers to the physical source, distinct from a
+character abandoned to pay its cost. A lasting cost change to this source
+travels with that physical card through ordinary zones as described under
+[Costs, Requirements, and X](#costs-requirements-and-x).
+
 **Static abilities** — Always-on rule modifications that apply while their source
 is in play, such as cost reductions, spark bonuses for matching characters, or
 other rule changes. Avatar and dreamsign static abilities work throughout the

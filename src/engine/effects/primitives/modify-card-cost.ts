@@ -1,5 +1,5 @@
 import { startContinuous } from "../../continuous/resolve";
-import type { Duration, SubjectSpec, ZoneRandomSpec } from "../../dsl/types";
+import type { Duration, SelfSpec, SubjectSpec, ZoneRandomSpec } from "../../dsl/types";
 import type { InstanceId } from "../../state/ids";
 import type { CardCostMode } from "../../state/types";
 import type { StepContext } from "../../steps/types";
@@ -86,7 +86,8 @@ export function modifyCardCost(
  * cost; RD-hv-umm2.102-2), or change the cost of random cards in a zone:
  * resolve `card` through `resolveCards`, then start a floating layer-6
  * `cardCost` change, announced by `effectStarted`, for each selected card.
- * A `SubjectSpec` names the card the triggering event concerns, wherever it
+ * A `SelfSpec` names the physical source. A `SubjectSpec` names the card
+ * the triggering event concerns, wherever it
  * exists. A `ZoneRandomSpec` names up to `count` distinct current matching
  * cards in its player's zone, picked without targeting or replacement from
  * `random:selection`; an empty pool consumes no RNG. Selecting cards moves
@@ -97,7 +98,7 @@ export function modifyCardCost(
  */
 export interface ChangeCardCostNode {
   readonly op: "changeCardCost";
-  readonly card: SubjectSpec | ZoneRandomSpec;
+  readonly card: SelfSpec | SubjectSpec | ZoneRandomSpec;
   readonly mode: CardCostMode;
   readonly amount: number;
   readonly duration: Duration | null;
@@ -119,7 +120,8 @@ export const changeCardCostPrimitive = definePrimitive<ChangeCardCostNode>({
 
 /**
  * "Reduce its cost by N●" (`{ reduce: N }`), "it costs N●" (`{ set: N }`),
- * or "N● more" (`{ increase: N }`), for the triggering card (`SubjectSpec`)
+ * or "N● more" (`{ increase: N }`), for the physical source (`SelfSpec`),
+ * the triggering card (`SubjectSpec`)
  * or up to `count` distinct current matching zone cards (`ZoneRandomSpec`,
  * such as `randomIn`). Zone picks use `random:selection` without targeting
  * or replacement, moving or revealing no cards; an empty pool consumes no
@@ -128,7 +130,7 @@ export const changeCardCostPrimitive = definePrimitive<ChangeCardCostNode>({
  * cannot identify its card.
  */
 export function changeCardCost(
-  card: SubjectSpec | ZoneRandomSpec,
+  card: SelfSpec | SubjectSpec | ZoneRandomSpec,
   cost: CardCostChange,
   options: { readonly duration?: Duration } = {},
 ): ChangeCardCostNode {

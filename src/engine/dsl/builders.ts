@@ -81,8 +81,9 @@ export function staticAbility(effect: Effect, options: { readonly zone?: Functio
 
 /**
  * "Cost: Effect". Standard speed unless stated. Works in play unless `zone`
- * is "void": "Abandon a character: Materialize this character from your
- * void" works only while its card is in its owner's void.
+ * names "hand" or "void". Hand activation requires one mandatory top-level
+ * revealSourceCost(), paid by the acting holder. Void activation works while
+ * the card is in its owner's void.
  */
 export function activated(
   costs: readonly Cost[],
@@ -95,7 +96,7 @@ export function activated(
     effect,
     speed: options.speed ?? "standard",
     ...(options.oncePerTurn === true ? { oncePerTurn: true } : {}),
-    ...(options.zone === "void" ? { zone: "void" } : {}),
+    ...(options.zone === "void" || options.zone === "hand" ? { zone: options.zone } : {}),
   };
 }
 
@@ -237,6 +238,11 @@ export function banishXCost(options: { readonly min?: number; readonly filter?: 
 /** "Reveal N cards from your hand" (matching the filter) as a cost. */
 export function revealCost(count = 1, filter: CardFilter = {}): PaymentCost {
   return { cost: "reveal", count, filter };
+}
+
+/** "Reveal this card from your hand": reveal only the physical ability source. */
+export function revealSourceCost(): PaymentCost {
+  return { cost: "revealSource", count: 1 };
 }
 
 /** "A or B": each option is the list of costs paid when it is chosen. */

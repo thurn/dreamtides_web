@@ -578,7 +578,9 @@ export type PaymentCost =
   /** Banish other cards from your hand, as Offering pays. */
   | { readonly cost: "banishFromHand"; readonly count: number }
   /** Reveal cards from your hand that match the filter; they stay in hand. */
-  | { readonly cost: "reveal"; readonly count: number; readonly filter: CardFilter };
+  | { readonly cost: "reveal"; readonly count: number; readonly filter: CardFilter }
+  /** Reveal this exact physical source from the acting holder's hand. */
+  | { readonly cost: "revealSource"; readonly count: 1 };
 
 /** "A or B": the player chooses one alternative and pays every cost in it. */
 export interface ChoiceCost {
@@ -607,11 +609,11 @@ export type AdditionalCost = PaymentCost | AbandonXCost | ChoiceCost | OptionalC
 export type Cost = AdditionalCost | EnergyXCost;
 
 /**
- * Where an activated ability works: in play, or from its card's owner's void
+ * Where an activated ability works: in play, from its holder's hand, or its owner's void
  * ("…: Materialize this character from your void"). An emblem's abilities
  * always work.
  */
-export type ActivationZone = Extract<FunctionalZone, "play" | "void">;
+export type ActivationZone = Extract<FunctionalZone, "play" | "void" | "hand">;
 
 /** "Cost: Effect" — an ability its controller activates; it goes on the stack. */
 export interface ActivatedAbility {
@@ -621,8 +623,9 @@ export interface ActivatedAbility {
   readonly speed: Speed;
   readonly oncePerTurn?: boolean;
   /**
-   * Where its card must be to activate it; absent means play. From the void,
-   * its card's owner activates it, and ☾ and other costs only a character in
+   * Where its card must be to activate it; absent means play. From the hand,
+   * its holder activates it with one mandatory top-level revealSource cost.
+   * From the void, its owner activates it, and ☾ and other costs only a character in
    * play can pay are unpayable (rules § Ability Types → Where activated
    * abilities work).
    */

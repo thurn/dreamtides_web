@@ -1,0 +1,34 @@
+{
+  "bead": "hv-umm2.627",
+  "phase": 5,
+  "implementMin": 101.85540736666667,
+  "implementWindow": {
+    "start": "2026-10-14T22:16:23.137895+00:00",
+    "end": "2026-10-14T23:58:14.462337+00:00"
+  },
+  "localValidationS": {
+    "focused-final": 15.843666542030405,
+    "review": 86.12119816697668,
+    "review-repair": 68.83562354097376,
+    "knip": 9.012849832943175,
+    "review-full": 113.17861599999014,
+    "engine300": 368.21167770796455,
+    "integration-focused": 19.405037083022762,
+    "integration-review": 58.612564167007804,
+    "integration-knip": 3.8469236249802634,
+    "integration-full": 311.68347691698
+  },
+  "hostLoad": 6.98876953125,
+  "testDelta": {
+    "files": 1,
+    "lines": 358,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "qa-readiness",
+      "minutes": 13.751160833333333,
+      "note": "Two retained failed QA attempts and bounded caller-readiness recovery; measured first QA start through passing QA start, including own cleanup, root diagnosis/coordination and caller repairs; excludes final passing run. No product change."
+    }
+  ]
+}

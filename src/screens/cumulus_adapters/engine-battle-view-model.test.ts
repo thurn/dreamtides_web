@@ -17,11 +17,13 @@ import { createFoldAdapter, type BattleSlice } from "../../engine/fold/slice";
 import { boardState } from "../../engine/testing/board";
 import { dreamwellLabBattle } from "../../engine/testing/card-lab";
 import { SYNTHETIC_CARDS, SYNTHETIC } from "../../engine/testing/synthetic-cards";
-import { PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle } from "../../engine/testing/prompt-lab";
+import { LAB, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle } from "../../engine/testing/prompt-lab";
 import { firstLegalAnswer, isLegalAnswer } from "../../engine/prompts/answers";
 import type { Answer, PromptRole } from "../../engine/prompts/types";
 import { parseBattleCardId, parseBattleId, parseDreamwellCardId, parsePromptId } from "../../types/identifiers";
 import {
+  handPlayAction,
+  withChooser,
   buildEngineBattleScreenModel,
   enginePrintedKeywords,
   type EngineBattleViewInput,
@@ -334,3 +336,27 @@ function selectionsOf(model: EngineBattleScreenModel) {
   if (model.prompt.surface.kind !== "choice") throw new Error("Expected payment choices");
   return model.prompt.surface.options.map(option => option.select.kind === "answer" ? option.select.answer : null);
 }
+
+
+describe("hand source chooser", () => {
+  for (const canPlay of [false, true]) it(`offers the activation with play=${canPlay} through the existing chooser`, () => {
+    const fixture = PROMPT_LAB_FIXTURES.find(f => f.name === (canPlay ? "hand-source-play-and-activate" : "hand-source-activation-only"))!;
+    const slice = promptLabBattle(labEngine, fixture).slice;
+    const model = screenOf(slice.committed, null, slice.committed, true, labEngine);
+    const source = slice.committed.sides.player.hand[0];
+    const id = parseBattleCardId(source);
+    expect(model.view.nearHand.cards.find(c => c.id === id)?.showPlayableOutline).toBe(true);
+    expect(model.affordances.activations.get(id)).toEqual([{ kind: "activate", source, ability: 0 }]);
+    const play = handPlayAction(model, "player", id);
+    expect(play).toEqual(canPlay ? { kind: "play", card: source, from: "hand" } : null);
+    const chosen = withChooser(model, { kind: "card", id }, cards, () => null, labEngine.catalog);
+    expect(chosen.prompt.surface.kind).toBe("choice");
+    if (chosen.prompt.surface.kind !== "choice") throw new Error("missing chooser");
+    expect(chosen.prompt.surface.options.map(o => o.select)).toEqual([
+      ...(canPlay ? [{ kind: "action", action: play }] : []),
+      { kind: "action", action: { kind: "activate", source, ability: 0 } }, { kind: "close" },
+    ]);
+    expect(slice.committed.sides.player.hand).toContain(source);
+    expect(model.engine.instances[source].printing).toEqual(expect.objectContaining({ cardId: LAB.handSource.id }));
+  });
+});

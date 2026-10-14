@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { additionalCost, abandonSparkCapture, choiceCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, abandonXCost, all, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
+import { additionalCost, revealSourceCost, abandonSparkCapture, choiceCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, abandonXCost, all, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
 import { onDusk, triggered, whenDraw } from "../dsl/triggers";
 import { keyword } from "../dsl/builders";
 import { playedAnotherEventThisTurn } from "../dsl/builders";
@@ -86,6 +86,12 @@ export const LAB = {
     ...SYNTHETIC.vanilla2, id: syntheticId(0x69601), status: "authored",
     abilities: () => [additionalCost(optionalCost(energy(1)))],
   },
+  /** A hand source with an exact committed reveal payment and physical self effect. */
+  handSource: {
+    id: syntheticId(0x63000), cardType: "character", costs: [energy(4)], spark: 2, subtype: "Warrior",
+    speed: "standard", status: "authored",
+    abilities: () => [activated([abandonCost(), revealSourceCost()], p.changeCardCost(self(), { reduce: 1 }), { zone: "hand" })],
+  } satisfies EngineCardDefinition,
   /** One current hand character chosen privately as this event resolves. */
   materializeChosen: labEvent(0x48100, 0, p.materializeChosen(2)),
   /** Optionality is a separate confirmation before the private hand choice. */
@@ -351,6 +357,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [DECK_TOP.erode.id]: { name: "Lab Two Erosions", text: "Erode 2." },
   [CAPTURE.caller.id]: { name: "Lab Ember Keeper", text: "☾: Materialize two awakened Ember figments. Abandon them at end of turn." },
   [CAPTURE.watcher.id]: { name: "Lab Departure Witness", text: "When you abandon a character, gain 1⍟." },
+  [LAB.handSource.id]: { name: "Lab Hand Source", text: "Abandon a character, reveal this card from your hand: Reduce the cost of this card by 1●." },
   [HAND_BANISH.freeCard.id]: { name: "Lab Hand Keeper", text: "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play." },
   [HAND_BANISH.paidCard.id]: { name: "Lab Paid Hand Keeper", text: "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play." },
   [HAND_BANISH.freeCharacter.id]: { name: "Lab Character Keeper", text: "▸Materialized: Banish a chosen character from the opponent's hand until this character leaves play." },
@@ -529,6 +536,14 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       hand: [LAB.playedAnotherEventDraw.id, SYNTHETIC.event0.id], energy: 5, deck: deck(8),
     }, enemy: { deck: deck(8) } },
     script: prior ? [playHand(1)] : [],
+  })),
+  ...[false, true].map((canPlay): PromptLabFixture => ({
+    name: canPlay ? "hand-source-play-and-activate" : "hand-source-activation-only",
+    description: "A hand source offers its activation beside a legal play when affordable",
+    setup: { active: "player", phase: "day",
+      player: { hand: [LAB.handSource.id, SYNTHETIC.event0.id], back: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id], energy: canPlay ? 4 : 0, deck: deck(6) },
+      enemy: { hand: [SYNTHETIC.event0.id], deck: deck(6) } },
+    script: [],
   })),
   {
     name: "optional-cost-targets", description: "Optional energy or discard decisions bind one enemy target before payment",

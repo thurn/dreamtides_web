@@ -10,15 +10,16 @@ import { targetsNeedX } from "../immediate-x";
 import { readsStoredCounters } from "../../dsl/values";
 
 /**
- * Activates an ability of a card in play, of a card in its owner's void
- * whose ability works there, or of an emblem: play-time choices
+ * Activates an ability of a card in play, in its holder's hand with its
+ * required exact-source reveal cost, in its owner's void when its ability
+ * works there, or of an emblem: play-time choices
  * (X and any mandatory card-cost capture needed by targeting, then modes,
  * then targets, then the costs' alternatives, optional
  * costs, and cards; payment-dependent targets prepare these decisions before modes and targets), then the commit point,
  * then the costs, then the ability goes on the stack and the opponent
  * receives priority (D13). The stack item keeps the source's ability
  * origin as activated, so it resolves as activated even after its card has
- * left play or the void.
+ * left its activation zone.
  */
 export interface ActivateStep {
   readonly kind: "activate";

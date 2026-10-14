@@ -190,12 +190,19 @@ export function costsPayable(
   modifier: CostModifier = NO_COST_MODIFIER,
 ): boolean {
   if (!validOpponentGrants(costs)) return false;
+  if (costs.some(cost => cost.cost === "revealSource") && !canRevealSource(state, side, source)) return false;
   if (hasNestedAbandonX(costs)) return false;
   if (hasNestedCounterX(costs) || invalidCounterMinimum(costs)) return false;
   if (adjustedEnergy(minimumEnergy(costs), modifier) > state.sides[side].currentEnergy) return false;
   if (spent(costs, "counters") + sum(costs.map(cost => cost.cost === "countersX" ? cost.min : 0)) > storedCounters(state, source)) return false;
   if (spent(costs, "points") > state.sides[side].score) return false;
   return costs.every((cost) => cost.cost !== "exhaustSelf" || canPayExhaust(state, source));
+}
+
+/** Only the acting holder's physical hand source can pay a source reveal. */
+function canRevealSource(state: BattleState, side: Side, source: AbilitySource): boolean {
+  return typeof source === "string" && state.instances[source]?.zone === "hand" &&
+    state.instances[source].controller === side && state.sides[side].hand.includes(source);
 }
 
 /** A cost paid with chosen cards. */
@@ -241,6 +248,8 @@ function cardCandidates(
       return matchingCharacters(state, catalog, cost.selector, side, source, selectorX);
     case "discard":
       return state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
+    case "revealSource":
+      return typeof source === "string" && canRevealSource(state, side, source) ? [source] : [];
     case "reveal":
       return state.sides[side].hand.filter((id) => cardMatchesFilter(state, catalog, id, cost.filter));
     case "banishFromAnyVoid": {
@@ -260,6 +269,7 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
   return: "returnCost",
   discard: "discardCost",
   reveal: "revealCost",
+  revealSource: "revealCost",
   banishFromVoid: "banishCost",
   banishFromAnyVoid: "banishAnyVoidCost",
   banishFromHand: "offeringCost",
@@ -417,6 +427,9 @@ export function planCosts(
 
   /** Plans one payment cost; `nested` costs are budgeted here, top-level parts were budgeted up front. */
   const plan = (cost: PaymentCost | AbandonXCost, nested: boolean, isLast = false): void => {
+    if (cost.cost === "revealSource" && payments.some(payment => discardsHand(payment.cost))) {
+      throw new Infeasible("Source reveal cannot follow a chosen whole-hand discard");
+    }
     if (sourceDeparted && cannotFollowDeparture(cost)) throw new Infeasible("A departed source cannot pay a later source cost");
     if (cost.cost === "countersX") {
       if (capturedX === null || !Number.isSafeInteger(capturedX) || capturedX < cost.min) throw new Infeasible("Counter X needs its prepared binding");
@@ -604,6 +617,14 @@ function payPoints(ctx: StepContext, side: Side, amount: number): void {
 export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, plan: CostPlan,
   options: { readonly retainSourceCounters?: true } = {},
 ): number | null {
+  for (const [index, payment] of plan.payments.entries()) {
+    if (payment.cost.cost !== "revealSource") continue;
+    if (typeof source !== "string" || !canRevealSource(ctx.state, side, source) || payment.cards.length !== 1 || payment.cards[0] !== source ||
+      plan.payments.some((other, otherIndex) => otherIndex !== index && other.cards.includes(source)) ||
+      plan.payments.slice(0, index).some(other => discardsHand(other.cost))) {
+      throw new Infeasible("Source reveal needs its distinct physical hand source");
+    }
+  }
   let paymentSourceCounters: number | null = null;
   spendEnergy(ctx, side, plan.energy.fixed);
   spendEnergy(ctx, side, plan.energy.x);
@@ -646,6 +667,11 @@ export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, pl
       case "banishFromVoid":
       case "banishFromHand":
         for (const id of cards) banish(ctx, id);
+        break;
+      case "revealSource":
+        if (typeof source !== "string" || !canRevealSource(ctx.state, side, source)) throw new Infeasible("Source left hand before its reveal payment");
+        revealToBoth(ctx.state, [source]);
+        ctx.emit({ kind: "revealed", side, instances: [source] });
         break;
       case "reveal":
         revealToBoth(ctx.state, cards);

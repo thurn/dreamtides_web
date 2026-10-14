@@ -263,6 +263,8 @@ export type EngineAbilityOption =
   | { readonly kind: "ability"; readonly index: number; readonly text: string | null }
   /** Play a card from the void, by a play permission or Reclaim. */
   | { readonly kind: "playFromVoid"; readonly name: string }
+  /** Play the held card rather than activate its hand ability. */
+  | { readonly kind: "playFromHand"; readonly name: string }
   | {
       readonly kind: "emblem";
       readonly emblem: "avatar" | "dreamsign";
@@ -287,6 +289,7 @@ export function engineAbilityOptionLabel(option: EngineAbilityOption): string {
   switch (option.kind) {
     case "ability":
       return option.text ?? `Ability ${String(option.index + 1)}`;
+    case "playFromHand":
     case "playFromVoid":
       return `Play ${option.name}`;
     case "emblem": {
