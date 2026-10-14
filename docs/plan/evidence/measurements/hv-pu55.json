@@ -1,0 +1,1033 @@
+{
+  "bead": "hv-pu55",
+  "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+  "observedAt": "2026-10-14T19:53:58.926Z",
+  "dispatch": {
+    "session": "01a13a7a-741e-7cc1-a0dd-3f8eb1805ecf",
+    "task": "/root/cards_82_194",
+    "bead": "hv-pu55",
+    "dispatch": {
+      "timestamp": "2026-10-14T19:33:07.810Z",
+      "call_id": "call_88234f61fe2a43f08a4da61b357ff68c",
+      "target": "cards_82_194",
+      "argumentSHA256": "319a0d66a8160209faaa75a3c8d1f982b3810b1ae1c12e3729af3c8d22a4bb17",
+      "nativeSource": "/Users/dthurn/.codex/sessions/2026/10/14/rollout-2026-10-14T05-54-26-01a13a7a-741e-7cc1-a0dd-3f8eb1805ecf.jsonl",
+      "messageStorage": "Native followup message encrypted; target/call/ACK bound to actual single newpu55 followup."
+    },
+    "ack": "",
+    "scope": "Actual newpu55 hostfollowup dispatch through finalGit inclusive, prior194dispatch/setup separate, samplingUNKNOWN."
+  },
+  "clock": {
+    "scope": "Actual pu55 followup dispatch through near-Git evidence cutoff, including reads, source edits, failures, checks and waits; exact Git completion recorded externally after commit.",
+    "samplingCPU": "UNKNOWN",
+    "original194Clock": "Separate prior read-only investigation; excluded from pu55."
+  },
+  "sourceEpoch": {
+    "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+    "frozenAt": "2026-10-14T19:48:12.511993+00:00",
+    "hashes": {
+      "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+      "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+      "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+      "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+      "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "c1eb34fa7d771ec286591bdab7c701b85fecc8ae0d870a9b570024529bc770d3"
+    }
+  },
+  "admissions": {
+    "source-admission-note.json": {
+      "sha256": "c27210a9b1e9abeb6972742c8f81e20ed9ebb125c7f289725d66cedd0604ffdc",
+      "scope": "Exact parent native claimed Areas"
+    },
+    "live-qa-scope-admission.json": {
+      "sha256": "82746cbf33a800c192578f62b7d991ddf22dcc23b6f767c83782aaac47ad1545",
+      "scope": "Same-task justiciar replaces agent-created synthetic live gate with public engine/fold contracts; original194 browser acceptance retained."
+    },
+    "justiciar-live-qa-scope.json": {
+      "sha256": "a57b6c9dee6c8c80ae2c652b57d77e9a7b4a6e2d90465679a726535701a52d44",
+      "scope": "Same-task justiciar replaces agent-created synthetic live gate with public engine/fold contracts; original194 browser acceptance retained."
+    }
+  },
+  "importerAudit": {
+    "observedAt": "2026-10-14T19:49:55.390131+00:00",
+    "parentImporterCensusPathCount": 94,
+    "currentSymbolMatchPathCount": 95,
+    "matchingLines": 303,
+    "currentFiles": {
+      "scripts/content-inventory.test.ts": "9ac866bf93bb6b58033f9689cd9f9a68f56254bef621323f844499a33b4bfef4",
+      "scripts/content-inventory.ts": "aef8d9cd0544a6b7d84294c6a1b74142a34a3952296ac508c7d42f0fe5d7dba5",
+      "src/content/avatars/seraveth-6488452d.ts": "9c31183ed08fbd9e9c3e2b54b369d09c223a5d115708e086c306672301c1e664",
+      "src/content/avatars/zeva-4d5e3933.ts": "ea012b273f0409d35abd18869b472d6bd705daf9bfbd8677430148c548320911",
+      "src/content/cards/archive-of-the-forgotten-69552516.ts": "22bb9e221eda3da5b4d2f876f8f40227761f63c633489c424843642169d5df1b",
+      "src/content/cards/aurora-rider-886c9d49.ts": "30e030e59d3f044c1a17a8411e08ecb68223dff2a30152d4a4b779ecb3ece9b9",
+      "src/content/cards/burning-revenant-426825c7.ts": "f503132429bada90db4173d63befe64e4611cd78cff32958099a0ede5b470a73",
+      "src/content/cards/chaos-crasher-ed4d5342.ts": "33dad74b260bc059ba344152650ab83867ca265ca3f7f31ad7b0bb7971abbe24",
+      "src/content/cards/cinderblade-legionnaire-4b2f044c.ts": "f27221b10c13d09e9961ce6338e83e93a04fca31c6b02e2efc55aa9055b0baf9",
+      "src/content/cards/cloudtop-chronicler-3811a0a2.ts": "9d335e0eb206e6226056a33db713c4cb1b8f03a8589a920555ad0b9612ba99a7",
+      "src/content/cards/collapse-protocol-7f90d17b.ts": "9d878bfa8db32b40399828363002f4cdbdbc0db2e4a33a955f6855f7fbb95513",
+      "src/content/cards/emberwatch-rescuer-1cfc72e9.ts": "3a65a5c2d572a03e255cdbca9b6bd9466e48f38b8441576af42aa3cb8f968931",
+      "src/content/cards/eternal-soul-4e1c0192.ts": "ad5839c8fd6e3678faabbfd80fe8167e4fcbcf0c643523b3d750bf0689f37ac0",
+      "src/content/cards/frostbound-defiant-28f8d95a.ts": "f2627895a8e239fcc981cc6085cbc3135cdd3d2fb19fac1eec1a3fd8655e8064",
+      "src/content/cards/infernal-cavalier-b64f0beb.ts": "20a2c6e0294d269444afd03d1bd97ce0aff9ac0c1b61c064ce284d6a786e844b",
+      "src/content/cards/keeper-of-the-lightpath-3a4ee059.ts": "45f15cb0d3b49c9e1f7e26a7c008c62b20172249e5cfeabdc371d8cdd28975bb",
+      "src/content/cards/memory-tracer-db4618f6.ts": "3c8c211fc61c007a1beb69b5d19fcf136dced7acf27bb311af5864675534863f",
+      "src/content/cards/pastward-wanderer-95711262.ts": "e6cc4a082f7608144184fc8d78e4041e3c9b40982e7279b0aac7c9d46c9702ac",
+      "src/content/cards/pathfinder-b5a5c1ba.ts": "f64d98588bca361a169cda96905773e935c2fe54390fbddeaeb974ab21fd6c59",
+      "src/content/cards/phantom-angler-4ee2f0a5.ts": "dfc60b9fcd6838336633a4d515661bc76b8612ac03ba2906b5ab475558b1f4bf",
+      "src/content/cards/phantom-flotilla-3e83cbe2.ts": "325d7ecb2d1aff46e6bcbd5f112b23d65b2949fd6a60041a1e2081a3f33d6294",
+      "src/content/cards/price-of-redemption-4dc2a049.ts": "d7306d78eb101b1a2f44687ba67718880a07681b3e9dafb8374743de9890203b",
+      "src/content/cards/prophet-of-the-consumed-8a5d7d67.ts": "3584853e4e400a33b90ceea85d73a1b167674ef2c63b87c1a9391a8c8a71197d",
+      "src/content/cards/relic-collector-6af8cf81.ts": "8cbfd3b1816fc5b275aea79dd8972e978f0935b657837a1e96b351e65b4bdda6",
+      "src/content/cards/remnant-curator-ce0c8dc8.ts": "fb62de2e959a2a91adce9ed69f00adf0fe5db6e21c7d7f05db005fa4c695c6c8",
+      "src/content/cards/return-to-nowhere-e3431bd0.ts": "3c1878dbb21b6fb448326fb36c8d0d54daaffe453ff27d2ad5e048639794aa0f",
+      "src/content/cards/ritekeeper-995c570b.ts": "2284e4373aa4369d6ecf10add5d7196f4bde1f3532de57e644cbb6a0fab777fb",
+      "src/content/cards/ruptured-dynamo-ed02e610.ts": "56ebe7e4278c4fc120bb590600ddef702ee6b61639d9825fc64de36d98bd4b23",
+      "src/content/cards/seeker-of-lost-paths-738a5af0.ts": "da0f9382a5ecf269f193599d669ae909d91e5490997a2afe745f21def77fd279",
+      "src/content/cards/soulflame-predator-401bb341.ts": "8584a0574aa11ffbc04cc16c2470b59d3c46c0daf6354ae50a1d5acc8f86be49",
+      "src/content/cards/soulkindler-4edf2d8d.ts": "a8167cafa8a1e2acd8e673f310aca4768080ce73b24d7ee0ee946244ff5eb47d",
+      "src/content/cards/spirit-of-smoldering-echoes-8951e112.ts": "e9690673167b69b271e8a66618c59bfa116d709ff2c92f6445b934b9d53ce9e4",
+      "src/content/cards/thief-of-memory-e72245f2.ts": "9ed77c46dc36e92a8cddf217abdbbffd889fbf777273724f4b8689528892b361",
+      "src/content/cards/tidewreck-navigator-34ea77a8.ts": "41df2c8f4da186c7a476fc7aa9b74e42d5ea3a378501c90819f3997119e83f21",
+      "src/content/cards/underworld-witch-81074582.ts": "a51b6ea7025bfb5a52139ffd2564f7910af589ce9c0c5b9190be85b1885f603c",
+      "src/content/cards/veilpath-gatekeeper-cc21a902.ts": "da3292e43853ae77a95c425892f6a18b4c9d64ebde76762e58569911af58ee25",
+      "src/content/cards/void-claimant-920ef495.ts": "bdfc56ba45a019bc7b6bcbfefbf96ad31549ed938f931af73201b4eb378494e4",
+      "src/content/cards/void-salvager-975f49d3.ts": "45828bbf45e49e7b111a05d674565e149f26f7269b0c8318d038662537ecbe36",
+      "src/content/cards/whisper-forager-bf323913.ts": "4d5585137dcf14ee17508270f8fad6d53f0ee5487eac5145000c04c5cdb17a82",
+      "src/content/cards/whisper-of-the-past-5931e388.ts": "bb29c51866fcced151d9c46a680a8b0d68ebf2b5a8d31c5e5688b3952ef3e84f",
+      "src/content/dreamwell/firmament-mirror-14dec460.ts": "8b7ad4b2137f41ab4844f6d4bf6bce07f8075dda2c85be2be56ceb7fb4425b89",
+      "src/content/dreamwell/leaf-light-canopy-2b23a60c.ts": "3f9dcc962d783eadfb91cf522f61c0efde6d73797ad8fd5126e471efd9151009",
+      "src/content/dreamwell/luminous-enigma-556057bb.ts": "ed08aae1356a15c18070bfac35159574f7bf2be461dede17ba538221c9ff3107",
+      "src/content/dreamwell/rusted-edifice-a0fbcbd9.ts": "a03845c91fb361abbb95a243c14cdbe2c7c6aa4b5709306cb128a44821de34bf",
+      "src/content/specs/avatars-03.scenarios.ts": "0f066a1ed607464e2796c8bd4fa23126559237968a31cfa83af8276bceb0e658",
+      "src/engine/content-gates.test.ts": "8fe0539edece2a8f61e0ee10fa2dbc3f36c52141e446e7dd1b0dd05548de8952",
+      "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+      "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+      "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+      "src/engine/effects/primitives/contracts/abandon-lookback.contracts.ts": "53ca0313838f28ea1905e86c2d83f9b0b7ec1c7d8cce1e07375922ecac75b554",
+      "src/engine/effects/primitives/contracts/activated-from-void.contracts.ts": "f6979f52f4824c85c13b10bf20c01936c96cd46040376378841fb9b0c71bcf07",
+      "src/engine/effects/primitives/contracts/activated-x-targets.contracts.ts": "27321618a3cb1ec5eef5619b9692b6839fa909889bb86891647482dd121f2a0e",
+      "src/engine/effects/primitives/contracts/banish-cards.contracts.ts": "af96b9fa73781b3521c67e804ee177dcfb2773acd139d253af0548fb121f8cba",
+      "src/engine/effects/primitives/contracts/bound-source-spark.contracts.ts": "7928c1a458c452f7a39d7702071292cf7ad7bb61082bf8f87221bd4245ecec39",
+      "src/engine/effects/primitives/contracts/card-filter-bounds.contracts.ts": "c62412cd412122773b1838248df72bc8616ebe689830f03b4495b1e0b488333b",
+      "src/engine/effects/primitives/contracts/cost-captured-x-targets.contracts.ts": "9b362dfe803bb524310db99967ce28f18b68ba88f38788a52ed305f82ffa8e2e",
+      "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts": "f6c33f359fabf4183ca33264ca85b5e7c2d936e695cb35b911128db3340680b2",
+      "src/engine/effects/primitives/contracts/dissolve.contracts.ts": "b21fc652abfee767a69a799ac20f0baac00cdf2cd4143018f5c1afdb0622d722",
+      "src/engine/effects/primitives/contracts/gain-abilities.contracts.ts": "b1662476c1cc2143def85bb900eadb6b5d2b7f963fb4cddd86446dbe517a825a",
+      "src/engine/effects/primitives/contracts/gem-codex-copy-modifier.contracts.ts": "097460e0c8cb43f509825d86e1b6088eb4bd6ebd0dcd07bd6b1d673c26c8dbed",
+      "src/engine/effects/primitives/contracts/grant-reclaim.contracts.ts": "c1d861966a32399adb84a9410f9956682a2bd478c69d383ee2f2b7139b495431",
+      "src/engine/effects/primitives/contracts/lose-all-abilities-support.ts": "8447f7387c77fa984a90ac4ff9e75ec6ab348b1920d76f77b2cf89aede36272c",
+      "src/engine/effects/primitives/contracts/materialize.contracts.ts": "4d48bcdcdf6138586183dec739b55d0621297f6d552a4e24526bf904572fb9e5",
+      "src/engine/effects/primitives/contracts/once-per-turn-play-from-zone.contracts.ts": "999a57e47d3d111ff6cbe7a62651b6743f1418d89edf8947578d5e66300314bc",
+      "src/engine/effects/primitives/contracts/play-from-zone-recovery.contracts.ts": "93f0835a38833779d405760f1350126357e03d2313e6420cf297be3d45f7dbf0",
+      "src/engine/effects/primitives/contracts/play-from-zone-support.ts": "fa31cd0dc6eb098205a8a5deef38085cd5ec3dc0583df9328fb0ebfc47a7f164",
+      "src/engine/effects/primitives/contracts/play-from-zone.contracts.ts": "b25345ae4f04238a7b82c8eb6b04f5bd01922eaf275ddf9d171ddc440ed70636",
+      "src/engine/effects/primitives/contracts/play-self-from-zone-recovery.contracts.ts": "a1bfe60176c8952318dc61f280947d599a1ea4d73bee0dd0f20669b4b9740d3a",
+      "src/engine/effects/primitives/contracts/play-self-from-zone.contracts.ts": "e696788d16a0943468120fe4fc42d7c001f63ff8ceecb851a7d79b4ca300ab26",
+      "src/engine/effects/primitives/contracts/play-time-targets.contracts.ts": "68e985a1338290b9c2a07702303f49a9240f6280ade82a93feb9286d06392bd8",
+      "src/engine/effects/primitives/contracts/put-in-deck.contracts.ts": "b2d5086903887cc9cf11df338cead21b3fac187d5b9d906401a59bb5e4679e19",
+      "src/engine/effects/primitives/contracts/random-selection-support.ts": "6f9e4478662b373e6356d0f2016767b8aca49745bc187b005005f9c8f8c4773f",
+      "src/engine/effects/primitives/contracts/random-selection.contracts.ts": "34419d39b428b6c389888f106d174773d1a970d1ecde01a6a772cfe2d770807a",
+      "src/engine/effects/primitives/contracts/reclaim-not-banished-recovery.contracts.ts": "4e5a6b21708982465fa78bebbc8b541c5751f991f00be6863c3e8b2b4b8c864d",
+      "src/engine/effects/primitives/contracts/reclaim-not-banished-support.ts": "4aa9edd626098ad8847437f16d6bc4015d95a2a3620c3724a3b6c9aab6431e8f",
+      "src/engine/effects/primitives/contracts/reclaim-not-banished.contracts.ts": "b2e13f60b65c36262f5ec54633b5ee9299bcfc004beb07c00a5eb0d65ca11eb8",
+      "src/engine/effects/primitives/contracts/return-from-void.contracts.ts": "a1117d2ef1d2a59d764e7c9e626d4c9e9465e59899ee08d90eb95d1e22dbd5db",
+      "src/engine/effects/primitives/contracts/self-cost-reduction.contracts.ts": "8a735966e57209e824c9ffbf9a78daf4813ca84bed2d4c2a695ed64ef13dd56b",
+      "src/engine/effects/primitives/contracts/shuffle-into.contracts.ts": "cf2217e2d44fd9cae9996730339dd619d038f288ee4b2e588286fcf79defbb23",
+      "src/engine/effects/primitives/contracts/stored-counter-bounds.contracts.ts": "e6481be513be986c82001c1d7b59c4da07305d218b46acbb663eb6a20aa5d571",
+      "src/engine/effects/primitives/contracts/strict-void-cost.contracts.ts": "6e8720ea785541aebbeb6766f59a362d1eee72945740abca080cf5980a103da6",
+      "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "52d833331c10fca9d0a3b373b6a2a114cd5126a6587db730e3491fa46c053904",
+      "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "c1eb34fa7d771ec286591bdab7c701b85fecc8ae0d870a9b570024529bc770d3",
+      "src/engine/effects/primitives/contracts/void-target-x-bound.contracts.ts": "70ee78a1a251b3a5d78f1ec1d1bd69952ed06775626d3129376a0f4d60d16211",
+      "src/engine/effects/primitives/contracts/when-play-from-void-trigger.contracts.ts": "329b53fdf95c1a7b255d6f109a77302179f49a2119e24abdc38169e55cc92365",
+      "src/engine/effects/primitives/contracts/when-reclaim-trigger.contracts.ts": "a1b5eb01ce0f71b0a68361bc686c0591e9ab4b2114f8724341f65d638f74155b",
+      "src/engine/effects/primitives/contracts/zone-card-refs.contracts.ts": "66b9b0e71bd51a394ead46f224bde42659af946ee437e5e603c9611da01c5940",
+      "src/engine/rules/activation.ts": "fa6d8b78098a3443fbc294ce38f168b3d045b522d1e26b5e0e1c035d3bcaf409",
+      "src/engine/rules/zones.ts": "c666f51b57cdb70a45afe0f0b72a7a4891dde94ef34a397eb321bc6f9f0c8134",
+      "src/engine/testing/dsl-cards.ts": "9af068811ac961e84583a3d02d605ff03e38e2b7d544c9385a77bcb8a8d88ae6",
+      "src/engine/testing/lab-preflight.test.ts": "55a9476b6a99483db7e88c1921dd70596901ec8f4712b6bed17557a53170ba9d",
+      "src/engine/testing/lab-solver.ts": "bd5d0b91bd74cfe1ddc8e7fcd3eced29a208cf2c0cd9554e74af34df19baaadb",
+      "src/engine/testing/prompt-lab.ts": "64289d59606fdcf1f88c57829ce725cf40b3b57c9f02c2ae411d1b08be8ced90",
+      "src/engine/testing/tooling-card-lab.test.ts": "b1a8166381ecba126bc89485aa69e4f5e52c165a8b26688d93d9795becb5f8d9",
+      "src/screens/cumulus_adapters/engine-battle-view-model-display.test.ts": "8a3ebfebe605324dc12bba5597b6072597e83bcca9d401e895fc8412f02e2618"
+    },
+    "scope": "Complete src+scripts public symbol importer census; sole new importer is private qualified contract module. No export identity is reshaped; full typechecks determine forced fallout.",
+    "addedImporters": [
+      "src/engine/effects/primitives/contracts/void-target-history.contracts.ts"
+    ],
+    "missingPriorImporters": []
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review wrapper start"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "affected-v1",
+      "start": "2026-10-14T19:40:57.754Z",
+      "values": [
+        7.7783203125,
+        5.73193359375,
+        7.005859375
+      ]
+    },
+    {
+      "label": "affected-v2",
+      "start": "2026-10-14T19:42:01.107Z",
+      "values": [
+        6.42431640625,
+        5.82373046875,
+        6.958984375
+      ]
+    },
+    {
+      "label": "focused-final",
+      "start": "2026-10-14T19:48:12.579Z",
+      "values": [
+        21.0908203125,
+        11.58251953125,
+        8.828125
+      ]
+    },
+    {
+      "label": "focused-v1",
+      "start": "2026-10-14T19:36:45.426Z",
+      "values": [
+        3.6162109375,
+        4.4521484375,
+        7.205078125
+      ]
+    },
+    {
+      "label": "focused-v2",
+      "start": "2026-10-14T19:37:58.717Z",
+      "values": [
+        4.66552734375,
+        4.537109375,
+        6.99951171875
+      ]
+    },
+    {
+      "label": "focused-v3",
+      "start": "2026-10-14T19:38:47.209Z",
+      "values": [
+        4.921875,
+        4.646484375,
+        6.89990234375
+      ]
+    },
+    {
+      "label": "focused-v4",
+      "start": "2026-10-14T19:39:40.162Z",
+      "values": [
+        5.76806640625,
+        4.962890625,
+        6.89013671875
+      ]
+    },
+    {
+      "label": "fuzz300",
+      "start": "2026-10-14T19:42:15.681Z",
+      "values": [
+        5.806640625,
+        5.71728515625,
+        6.900390625
+      ]
+    },
+    {
+      "label": "knip",
+      "start": "2026-10-14T19:50:01.177Z",
+      "values": [
+        10.861328125,
+        10.81689453125,
+        8.8505859375
+      ]
+    },
+    {
+      "label": "omission-counterfactual",
+      "start": "2026-10-14T19:40:38.806Z",
+      "values": [
+        6.48095703125,
+        5.33984375,
+        6.900390625
+      ]
+    },
+    {
+      "label": "review-full",
+      "start": "2026-10-14T19:50:30.075Z",
+      "values": [
+        8.60498046875,
+        10.275390625,
+        8.7216796875
+      ]
+    },
+    {
+      "label": "review-v2",
+      "start": "2026-10-14T19:48:53.226Z",
+      "values": [
+        14.77001953125,
+        11.22216796875,
+        8.826171875
+      ]
+    },
+    {
+      "label": "review",
+      "start": "2026-10-14T19:45:57.368Z",
+      "values": [
+        4.48046875,
+        5.6396484375,
+        6.62353515625
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "label": "affected-v1",
+      "command": "npm",
+      "args": [
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "void targets qualified|zone card references|exact current-turn history|materialize|stored counter|void target|strict.*void|cost.*capture"
+      ],
+      "start": "2026-10-14T19:40:57.754Z",
+      "end": "2026-10-14T19:41:05.038Z",
+      "elapsedS": 7.284,
+      "exitCode": 0,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:40:57.690866+00:00",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "750b52fd4966f4034f849c97279060bd688f7a336fb29250f7b1ae0ed9ae0d95"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+        "/Users/dthurn/dreamtides_web/.worktrees/void-target-history-pu55/src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948"
+      },
+      "pid": 46555,
+      "pgid": 46555,
+      "processIdentity": {
+        "pid": 46555,
+        "ppid": 46541,
+        "pgid": 46555,
+        "birth": "Wed Oct 14 12:40:57 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm test -- src/engine/effects/primitives/contracts.test.ts -t void targets qualified|zone card references|exact current-turn history|materialize|stored counter|void target|strict.*void|cost.*capture",
+        "observedAt": "2026-10-14T19:40:57.799Z"
+      },
+      "observedDescendantCount": 5,
+      "receiptSHA256": "4a6b7c3a30c5fee83a6563ac9cdc50b8250d9fee8d8fbb04d6343637799c35fa",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:40:57.799Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "affected-v1.log",
+      "receipt": "affected-v1.receipt.json"
+    },
+    {
+      "label": "affected-v2",
+      "command": "npm",
+      "args": [
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "void targets qualified|zone card references|exact current-turn history|materialize|stored counter|void target|strict.*void|cost.*capture|discarded"
+      ],
+      "start": "2026-10-14T19:42:01.107Z",
+      "end": "2026-10-14T19:42:08.881Z",
+      "elapsedS": 7.774,
+      "exitCode": 0,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:42:01.047Z",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "a0b74456020d1a66a7d7f0c9914b5b06cffee08fce77b04e0f11a219a50fd6cf"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+        "/Users/dthurn/dreamtides_web/.worktrees/void-target-history-pu55/src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948"
+      },
+      "pid": 47978,
+      "pgid": 47978,
+      "processIdentity": {
+        "pid": 47978,
+        "ppid": 47957,
+        "pgid": 47978,
+        "birth": "Wed Oct 14 12:42:01 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm test -- src/engine/effects/primitives/contracts.test.ts -t void targets qualified|zone card references|exact current-turn history|materialize|stored counter|void target|strict.*void|cost.*capture|discarded",
+        "observedAt": "2026-10-14T19:42:01.149Z"
+      },
+      "observedDescendantCount": 4,
+      "receiptSHA256": "730fba8717f10c8d30f121ec7da84610a17d6972e0c793b6c1d9559017275fa9",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:42:01.150Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "affected-v2.log",
+      "receipt": "affected-v2.receipt.json"
+    },
+    {
+      "label": "focused-final",
+      "command": "npm",
+      "args": [
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "void targets qualified"
+      ],
+      "start": "2026-10-14T19:48:12.579Z",
+      "end": "2026-10-14T19:48:21.554Z",
+      "elapsedS": 8.975,
+      "exitCode": 0,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:48:12.511993+00:00",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "c1eb34fa7d771ec286591bdab7c701b85fecc8ae0d870a9b570024529bc770d3"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+        "/Users/dthurn/dreamtides_web/.worktrees/void-target-history-pu55/src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948"
+      },
+      "pid": 60464,
+      "pgid": 60464,
+      "processIdentity": {
+        "pid": 60464,
+        "ppid": 60440,
+        "pgid": 60464,
+        "birth": "Wed Oct 14 12:48:12 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm test -- src/engine/effects/primitives/contracts.test.ts -t void targets qualified",
+        "observedAt": "2026-10-14T19:48:12.628Z"
+      },
+      "observedDescendantCount": 7,
+      "receiptSHA256": "0fb43ba6a8863907b6f1e8e59957d9019883462f86ad08bc304a9ffdeff71c26",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:48:12.631Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "focused-final.log",
+      "receipt": "focused-final.receipt.json"
+    },
+    {
+      "label": "focused-v1",
+      "command": "npm",
+      "args": [
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "void targets qualified"
+      ],
+      "start": "2026-10-14T19:36:45.426Z",
+      "end": "2026-10-14T19:36:52.269Z",
+      "elapsedS": 6.843,
+      "exitCode": 1,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:36:45.371Z",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "5ef881157c18c786198538f903f4f6597f2c0e7d16b7d6f127557ea79f2a1d3b"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+        "/Users/dthurn/dreamtides_web/.worktrees/void-target-history-pu55/src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948"
+      },
+      "pid": 41001,
+      "pgid": 41001,
+      "processIdentity": {
+        "pid": 41001,
+        "ppid": 40986,
+        "pgid": 41001,
+        "birth": "Wed Oct 14 12:36:45 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm test -- src/engine/effects/primitives/contracts.test.ts -t void targets qualified",
+        "observedAt": "2026-10-14T19:36:45.464Z"
+      },
+      "observedDescendantCount": 8,
+      "receiptSHA256": "886e3411b899aba24105ce53a5f2f803097fbf4700dc420334f4f00a24dc7c94",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:36:45.466Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "focused-v1.log",
+      "receipt": "focused-v1.receipt.json"
+    },
+    {
+      "label": "focused-v2",
+      "command": "npm",
+      "args": [
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "void targets qualified"
+      ],
+      "start": "2026-10-14T19:37:58.717Z",
+      "end": "2026-10-14T19:38:06.793Z",
+      "elapsedS": 8.076,
+      "exitCode": 1,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:37:58.652Z",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "09e48a075b770d284e90a203b03f2a943d195ce07f4e9b8ecf69028a6ce3c556"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+        "/Users/dthurn/dreamtides_web/.worktrees/void-target-history-pu55/src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948"
+      },
+      "pid": 42469,
+      "pgid": 42469,
+      "processIdentity": {
+        "pid": 42469,
+        "ppid": 42454,
+        "pgid": 42469,
+        "birth": "Wed Oct 14 12:37:58 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm test -- src/engine/effects/primitives/contracts.test.ts -t void targets qualified",
+        "observedAt": "2026-10-14T19:37:58.759Z"
+      },
+      "observedDescendantCount": 6,
+      "receiptSHA256": "feec55a61b04b16aced5a0bbcbafc40563ce4054cc490ba89fa3664d88eefc90",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:37:58.762Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "focused-v2.log",
+      "receipt": "focused-v2.receipt.json"
+    },
+    {
+      "label": "focused-v3",
+      "command": "npm",
+      "args": [
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "void targets qualified"
+      ],
+      "start": "2026-10-14T19:38:47.209Z",
+      "end": "2026-10-14T19:38:55.528Z",
+      "elapsedS": 8.319,
+      "exitCode": 1,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:38:47.149Z",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "ff4511f31ca0a3c947e32c90016322e2ac1e304200dac4ae526ad2bb5a08ea93"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+        "/Users/dthurn/dreamtides_web/.worktrees/void-target-history-pu55/src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948"
+      },
+      "pid": 43412,
+      "pgid": 43412,
+      "processIdentity": {
+        "pid": 43412,
+        "ppid": 43397,
+        "pgid": 43412,
+        "birth": "Wed Oct 14 12:38:47 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm test -- src/engine/effects/primitives/contracts.test.ts -t void targets qualified",
+        "observedAt": "2026-10-14T19:38:47.250Z"
+      },
+      "observedDescendantCount": 7,
+      "receiptSHA256": "069dfa316328cf5867dd33c3d0cb91948a725620490112524fe6fbd93f06b213",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:38:47.253Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "focused-v3.log",
+      "receipt": "focused-v3.receipt.json"
+    },
+    {
+      "label": "focused-v4",
+      "command": "npm",
+      "args": [
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "void targets qualified"
+      ],
+      "start": "2026-10-14T19:39:40.162Z",
+      "end": "2026-10-14T19:39:46.063Z",
+      "elapsedS": 5.901,
+      "exitCode": 0,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:39:40.103Z",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "750b52fd4966f4034f849c97279060bd688f7a336fb29250f7b1ae0ed9ae0d95"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+        "/Users/dthurn/dreamtides_web/.worktrees/void-target-history-pu55/src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948"
+      },
+      "pid": 44429,
+      "pgid": 44429,
+      "processIdentity": {
+        "pid": 44429,
+        "ppid": 44414,
+        "pgid": 44429,
+        "birth": "Wed Oct 14 12:39:40 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm test -- src/engine/effects/primitives/contracts.test.ts -t void targets qualified",
+        "observedAt": "2026-10-14T19:39:40.203Z"
+      },
+      "observedDescendantCount": 4,
+      "receiptSHA256": "51f59510fbcca63a921b637fee55fc5869cde1dbe22ee67adcccb3fdb5dbc598",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:39:40.204Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "focused-v4.log",
+      "receipt": "focused-v4.receipt.json"
+    },
+    {
+      "label": "fuzz300",
+      "command": "lockf",
+      "args": [
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300"
+      ],
+      "start": "2026-10-14T19:42:15.681Z",
+      "end": "2026-10-14T19:47:25.635Z",
+      "elapsedS": 309.954,
+      "exitCode": 0,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:42:01.047Z",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "a0b74456020d1a66a7d7f0c9914b5b06cffee08fce77b04e0f11a219a50fd6cf"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439"
+      },
+      "pid": 48440,
+      "pgid": 48440,
+      "processIdentity": {
+        "pid": 48440,
+        "ppid": 48426,
+        "pgid": 48440,
+        "birth": "Wed Oct 14 12:42:15 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300",
+        "observedAt": "2026-10-14T19:42:15.724Z"
+      },
+      "observedDescendantCount": 5,
+      "receiptSHA256": "faaad68b0f2ddde3e518281458fd2e344328a75229ea93a6c1d96c519c4d3707",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:42:15.725Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "fuzz300.log",
+      "receipt": "fuzz300.receipt.json"
+    },
+    {
+      "label": "knip",
+      "command": "npm",
+      "args": [
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-14T19:50:01.177Z",
+      "end": "2026-10-14T19:50:05.798Z",
+      "elapsedS": 4.621,
+      "exitCode": 0,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:48:12.511993+00:00",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "c1eb34fa7d771ec286591bdab7c701b85fecc8ae0d870a9b570024529bc770d3"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439"
+      },
+      "pid": 24080,
+      "pgid": 24080,
+      "processIdentity": {
+        "pid": 24080,
+        "ppid": 24062,
+        "pgid": 24080,
+        "birth": "Wed Oct 14 12:50:01 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm run knip",
+        "observedAt": "2026-10-14T19:50:01.225Z"
+      },
+      "observedDescendantCount": 4,
+      "receiptSHA256": "83cb427e9471ad0d1eea53c6110075601e91fec946299ddc3229c0d14740784f",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:50:01.226Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "knip.log",
+      "receipt": "knip.receipt.json"
+    },
+    {
+      "label": "omission-counterfactual",
+      "command": "npm",
+      "args": [
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "offers genuine dissolved physical"
+      ],
+      "start": "2026-10-14T19:40:38.806Z",
+      "end": "2026-10-14T19:40:47.394Z",
+      "elapsedS": 8.588,
+      "exitCode": 1,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:40:38.745543+00:00",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "65fccb147f3bd64c7fa614fa34cb10d089a0c22ff60dfd2b96c0ffb538175d2d",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "750b52fd4966f4034f849c97279060bd688f7a336fb29250f7b1ae0ed9ae0d95"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439",
+        "/Users/dthurn/dreamtides_web/.worktrees/void-target-history-pu55/src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948"
+      },
+      "pid": 46069,
+      "pgid": 46069,
+      "processIdentity": {
+        "pid": 46069,
+        "ppid": 46055,
+        "pgid": 46069,
+        "birth": "Wed Oct 14 12:40:38 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm test -- src/engine/effects/primitives/contracts.test.ts -t offers genuine dissolved physical",
+        "observedAt": "2026-10-14T19:40:38.848Z"
+      },
+      "observedDescendantCount": 5,
+      "receiptSHA256": "e93ede4148af91fdeff12c5610bf2b40a413cf672a30807653ed2c281097cb42",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:40:38.849Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "omission-counterfactual.log",
+      "receipt": "omission-counterfactual.receipt.json"
+    },
+    {
+      "label": "review-full",
+      "command": "lockf",
+      "args": [
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-14T19:50:30.075Z",
+      "end": "2026-10-14T19:52:15.650Z",
+      "elapsedS": 105.575,
+      "exitCode": 0,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:48:12.511993+00:00",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "c1eb34fa7d771ec286591bdab7c701b85fecc8ae0d870a9b570024529bc770d3"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439"
+      },
+      "pid": 25964,
+      "pgid": 25964,
+      "processIdentity": {
+        "pid": 25964,
+        "ppid": 25947,
+        "pgid": 25964,
+        "birth": "Wed Oct 14 12:50:30 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run review:full",
+        "observedAt": "2026-10-14T19:50:30.114Z"
+      },
+      "observedDescendantCount": 106,
+      "receiptSHA256": "cd8fc31792da80eec265d74fd42c2647a84f156b196d7a447986a1b18f129a71",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:50:30.115Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "review-full.log",
+      "receipt": "review-full.receipt.json"
+    },
+    {
+      "label": "review-v2",
+      "command": "npm",
+      "args": [
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T19:48:53.226Z",
+      "end": "2026-10-14T19:49:55.943Z",
+      "elapsedS": 62.717,
+      "exitCode": 0,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:48:12.511993+00:00",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "c1eb34fa7d771ec286591bdab7c701b85fecc8ae0d870a9b570024529bc770d3"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439"
+      },
+      "pid": 19138,
+      "pgid": 19138,
+      "processIdentity": {
+        "pid": 19138,
+        "ppid": 19116,
+        "pgid": 19138,
+        "birth": "Wed Oct 14 12:48:53 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm run review",
+        "observedAt": "2026-10-14T19:48:53.268Z"
+      },
+      "observedDescendantCount": 11,
+      "receiptSHA256": "a103b5e48c7dd0cc5409bcf8bd35302244a8fc61341be74db3dc8f9bdb479dc1",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:48:53.271Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "review-v2.log",
+      "receipt": "review-v2.receipt.json"
+    },
+    {
+      "label": "review",
+      "command": "npm",
+      "args": [
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T19:45:57.368Z",
+      "end": "2026-10-14T19:46:54.198Z",
+      "elapsedS": 56.83,
+      "exitCode": 2,
+      "source": {
+        "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+        "frozenAt": "2026-10-14T19:42:01.047Z",
+        "hashes": {
+          "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+          "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+          "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+          "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+          "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "a0b74456020d1a66a7d7f0c9914b5b06cffee08fce77b04e0f11a219a50fd6cf"
+        }
+      },
+      "callers": {
+        "/private/tmp/dreamtides-pu55/run-receipt.mjs": "252f4628cdae2d9181f8c3544847c30aa87fc5eba2631914d813787e61afa8db",
+        "/tmp/dreamtides-pu55/held-exec.py": "6f09d2be0eca6d2e67015205f1aec1b454e240179e4ee45af43bc92985a0b439"
+      },
+      "pid": 54249,
+      "pgid": 54249,
+      "processIdentity": {
+        "pid": 54249,
+        "ppid": 54224,
+        "pgid": 54249,
+        "birth": "Wed Oct 14 12:45:57 2026",
+        "argv": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-pu55/held-exec.py npm run review",
+        "observedAt": "2026-10-14T19:45:57.412Z"
+      },
+      "observedDescendantCount": 13,
+      "receiptSHA256": "a8cfcc69d86727beea93bfec2ce989f7bf90d36564ccec3896f023596d016b50",
+      "managedOwnership": [],
+      "gate": "held exec shim PID/PG/birth and all caller hashes flushed before release",
+      "gateReleasedAt": "2026-10-14T19:45:57.413Z",
+      "sourceValid": true,
+      "terminalReap": "child close event received",
+      "groupAfter": "absent",
+      "log": "review.log",
+      "receipt": "review.receipt.json"
+    }
+  ],
+  "counterfactual": {
+    "scope": "Exactly new membership guard omitted; two both-actor public candidate assertions fail on stale/discarded physical cards. Source restored byte-for-byte.",
+    "restoration": {
+      "restoredAt": "2026-10-14T19:40:57.690866+00:00",
+      "restoredSHA256": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+      "exactBackupMatch": true,
+      "counterfactualExit": 1,
+      "log": "omission-counterfactual.log"
+    }
+  },
+  "failureQualifications": {
+    "focused-v1": "Test fixture assumptions: void source order, Veil protects against opponent effects, public view void holds IDs, interrupt engine.apply auto-resolves, capacity source order. No source defect.",
+    "focused-v2": "Fixture event collection omitted responded.events; direct engine API throws on intentional failure rather than fold capture.",
+    "focused-v3": "Fold error occurs during answer auto-resolution; assert error outcome directly.",
+    "omission-counterfactual": "Expected defect reproduction, not an acceptance failure.",
+    "review": "Own fixture static types corrected: typed Array.from capacity fixture and optional materialized history access. Runtime tests passed; retained exit2/56.830s."
+  },
+  "fuzz300": {
+    "games": 300,
+    "steps": 100808,
+    "prompts": 7400,
+    "interactiveReruns": 742,
+    "wallS": 308.3,
+    "cpuS": 329.7,
+    "failures": 0,
+    "results": {
+      "player": 151,
+      "enemy": 148,
+      "draw": 1
+    },
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 5
+    },
+    "weighted": false,
+    "scope": "Exact terminal frozen runtime source; subsequent contract-only type corrections preserve all three runtime source hashes."
+  },
+  "coverage": {
+    "newContractCases": 16,
+    "bothActors": true,
+    "affectedPasses": 372,
+    "entrypointsAdded": 0,
+    "contractLines": 232,
+    "primitiveOperationsAdded": 0,
+    "eventsAdded": 0,
+    "promptRolesAdded": 0,
+    "productionUUIDsAuthored": 0,
+    "rulesDecisions": [],
+    "liveBrowser": "No execution or proof claimed. Fixed lab registration cannot host private new consumer; native justiciar admission retains original194 actual Heroic live workflow."
+  },
+  "resources": {
+    "liveBrowserProvidersStarted": 0,
+    "liveQAServersStarted": 0,
+    "syntheticAggregateFixtureProcesses": "Existing full-review unit contracts may spawn isolated temporary server/process fixtures using mocked SDK transports; native descendant receipts and final exact identity audit govern cleanup, not live browser acceptance.",
+    "activeChecks": [],
+    "terminalGroupsAbsent": true
+  },
+  "resourceSettlement": {
+    "observedAt": "2026-10-14T19:53:28.539816+00:00",
+    "receiptLabels": [
+      "affected-v1",
+      "affected-v2",
+      "focused-final",
+      "focused-v1",
+      "focused-v2",
+      "focused-v3",
+      "focused-v4",
+      "fuzz300",
+      "knip",
+      "omission-counterfactual",
+      "review",
+      "review-full",
+      "review-v2"
+    ],
+    "uniqueOwnedPIDBirths": 185,
+    "exactRecordedIdentitiesStillPresent": [],
+    "allNativeChildrenReaped": true,
+    "allParentGroupsAbsent": true,
+    "fuzzRuntimeSourceMatchesFinal": true,
+    "sourceFreeze": {
+      "base": "720427f116ca72debf9faca06b84c4e1a8b1b865",
+      "frozenAt": "2026-10-14T19:48:12.511993+00:00",
+      "hashes": {
+        "src/engine/dsl/types.ts": "e05e167be89d322f4c03bb9e02d4a304a19bda9c55f6277467968bba5edac61e",
+        "src/engine/dsl/builders.ts": "4751427883bff421d6e22b8e315c21b54ae78b2e63f882b266571bd49a2f1627",
+        "src/engine/effects/interpreter.ts": "f5bb41dfea42493991a0ddad7725962fc0d1aae44dfcd91e6b65e2c4e193249e",
+        "src/engine/dsl/selectors.ts": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+        "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "c1eb34fa7d771ec286591bdab7c701b85fecc8ae0d870a9b570024529bc770d3"
+      }
+    },
+    "liveBrowserProvidersStarted": 0,
+    "liveQAServersStarted": 0,
+    "syntheticFullReviewFixtureDescendants": "Included in the exact process identity audit; this is not live UI evidence."
+  },
+  "limits": "Foundation synthetic and unweighted integration evidence does not replace original194 full four-UUID weighted300, default preflight/sweep, D21 and actual Heroic browser clauses."
+}

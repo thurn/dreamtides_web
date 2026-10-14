@@ -366,7 +366,9 @@ export function self(): SelfSpec {
  * as targets; "up to N" with `upTo`, "another" with `another`, the
  * opponent's void with `player: "opponent"`, and "≤X● cost" with
  * `costAtMost`, a bound such as a constant, the source's X (`x()`), or
- * "this character's ✦" (`thisCharacterSpark()`).
+ * "this character's ✦" (`thisCharacterSpark()`). `thisTurn` requires a
+ * successful current-turn occurrence for each physical target, checked both
+ * when offered and as the effect resolves.
  */
 export function fromVoid(
   filter: CardFilter = {},
@@ -377,6 +379,7 @@ export function fromVoid(
     readonly another?: boolean;
     readonly costAtMost?: ZoneTargetSpec["costAtMost"];
     readonly costLessThan?: ZoneTargetSpec["costLessThan"];
+    readonly thisTurn?: ZoneTargetSpec["thisTurn"];
   } = {},
 ): ZoneTargetSpec {
   return {
@@ -390,6 +393,7 @@ export function fromVoid(
     ...(options.another === true ? { another: true } : {}),
     ...(options.costAtMost === undefined ? {} : { costAtMost: options.costAtMost }),
     ...(options.costLessThan === undefined ? {} : { costLessThan: options.costLessThan }),
+    ...(options.thisTurn === undefined ? {} : { thisTurn: options.thisTurn }),
   };
 }
 

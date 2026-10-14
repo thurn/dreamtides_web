@@ -247,6 +247,8 @@ interface ZoneCardsBase {
  * the filter and the cost bound, and can be targeted.
  */
 export interface ZoneTargetSpec extends ZoneCardsBase {
+  /** Intersects current-zone physical targets with successful occurrences this turn. */
+  readonly thisTurn?: ZoneEverySpec["thisTurn"];
   readonly pick: "target";
   readonly zone: "void";
   readonly count: number;

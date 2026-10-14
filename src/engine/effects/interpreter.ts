@@ -227,6 +227,7 @@ function voidTargetMatching(
   sourceCounters?: SourceCountersReader,
 ): boolean {
   if (!inZoneMatching(state, catalog, spec, resolvePlayer(controller, spec.player), source, id)) return false;
+  if (spec.thisTurn !== undefined && !matchesCurrentTurnMembership(state, id, spec.thisTurn, resolvePlayer(controller, spec.player))) return false;
   const cost = copiableCostOf(state, catalog, id);
   const bound = (value: NonNullable<ZoneTargetSpec["costAtMost"]>) => boundNow(state, catalog, value, controller, source, selectorX, sourceSpark, subjectCost, sourceCounters);
   return (spec.costAtMost === undefined || cost <= bound(spec.costAtMost)) &&

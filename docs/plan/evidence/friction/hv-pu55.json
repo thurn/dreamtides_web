@@ -1,0 +1,31 @@
+{
+  "bead": "hv-pu55",
+  "phase": 5,
+  "implementWindow": {
+    "start": "2026-10-14T19:33:07.810Z",
+    "end": "2026-10-14T19:53:58.926Z"
+  },
+  "implementMin": 20.851933333333335,
+  "localValidationS": {
+    "affected-v1": 7.284,
+    "affected-v2": 7.774,
+    "focused-final": 8.975,
+    "focused-v1": 6.843,
+    "focused-v2": 8.076,
+    "focused-v3": 8.319,
+    "focused-v4": 5.901,
+    "fuzz300": 309.954,
+    "knip": 4.621,
+    "omission-counterfactual": 8.588,
+    "review-full": 105.575,
+    "review-v2": 62.717,
+    "review": 56.83
+  },
+  "hostLoad": 14.77001953125,
+  "testDelta": {
+    "files": 0,
+    "lines": 232,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
