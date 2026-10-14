@@ -1,0 +1,350 @@
+{
+  "bead": "hv-36we",
+  "base": "5acd9d690ee30574f5a70c045a3ef151da5d150d",
+  "actualModelStart": "UNKNOWN",
+  "preHelperGrossProxy": "2026-10-14T15:11:44.284759+00:00",
+  "actualGit": "UNKNOWN until external commit receipt",
+  "grossIncludes": [
+    "post-claim setup and worktree verification",
+    "source-free public witness research",
+    "helper authoring",
+    "parent coordination",
+    "queues",
+    "validation",
+    "evidence through actual Git"
+  ],
+  "publicWitness": {
+    "observer": "/tmp/dreamtides-executor-01a1304d/36we/helper/public-created-source-observer.ts",
+    "actualCases": 6,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "viewers": [
+      "player",
+      "enemy"
+    ],
+    "publicPath": "createFoldAdapter.reduce battleAction activate materializeFigmentCopy(self()), then copy activation sequence source-bound loss/permanent loss/ordinary Spark and returnToHand(self()). The completed copied activation publishes effectStarted and ceasedToExist in the same batch.",
+    "sourceBound": "Both loss announcements absent for both viewers after source cessation.",
+    "permanent": "Original-target loss remains with causal source null; copy-target announcement absent.",
+    "ordinarySpark": "Recorded sparkSeenBy includes both viewers; both announcements remain visible by that policy.",
+    "stateAndEventTransport": true,
+    "inputImmutability": true,
+    "rawStateOrEventInjection": false
+  },
+  "contractScope": {
+    "originalCases": 118,
+    "addedCreatedSourceCases": 6,
+    "productionDelta": 0,
+    "stableLiveFields": [
+      "count",
+      "id (effectStarted.effect)",
+      "controller",
+      "source",
+      "expiry",
+      "change"
+    ],
+    "publicPrivateProjectionAssertion": false,
+    "lines": 258
+  },
+  "validation": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retained effect expiry privacy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-expiry-contract-controls-36we",
+      "start": "2026-10-14T15:19:51.025640+00:00",
+      "end": "2026-10-14T15:19:57.930519+00:00",
+      "pid": 34347,
+      "pgid": 34347,
+      "exitCode": 0,
+      "wallSeconds": 6.904839000024367,
+      "cpuSeconds": {
+        "user": 7.278862,
+        "system": 2.277671
+      },
+      "startLoad": [
+        8.2783203125,
+        10.5322265625,
+        12.623046875
+      ],
+      "endLoad": [
+        7.935546875,
+        10.42333984375,
+        12.572265625
+      ]
+    },
+    {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-expiry-contract-controls-36we",
+      "start": "2026-10-14T15:21:24.305463+00:00",
+      "end": "2026-10-14T15:21:28.524918+00:00",
+      "pid": 40054,
+      "pgid": 40054,
+      "exitCode": 0,
+      "wallSeconds": 4.219444167014444,
+      "cpuSeconds": {
+        "user": 3.7292,
+        "system": 1.135532
+      },
+      "startLoad": [
+        6.439453125,
+        9.32080078125,
+        11.9423828125
+      ],
+      "endLoad": [
+        6.80419921875,
+        9.3486328125,
+        11.9365234375
+      ]
+    },
+    {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-expiry-contract-controls-36we",
+      "start": "2026-10-14T15:21:09.512204+00:00",
+      "end": "2026-10-14T15:21:28.064563+00:00",
+      "pid": 39586,
+      "pgid": 39586,
+      "exitCode": 0,
+      "wallSeconds": 18.552201540995156,
+      "cpuSeconds": {
+        "user": 57.624048,
+        "system": 6.289662
+      },
+      "startLoad": [
+        6.47900390625,
+        9.47607421875,
+        12.04296875
+      ],
+      "endLoad": [
+        6.80419921875,
+        9.3486328125,
+        11.9365234375
+      ]
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-expiry-contract-controls-36we",
+      "start": "2026-10-14T15:22:32.337212+00:00",
+      "end": "2026-10-14T15:22:32.463075+00:00",
+      "pid": 41662,
+      "pgid": 41662,
+      "exitCode": 0,
+      "wallSeconds": 0.12589479199959897,
+      "cpuSeconds": {
+        "user": 0.051871,
+        "system": 0.031574
+      },
+      "startLoad": [
+        3.755859375,
+        7.9169921875,
+        11.20361328125
+      ],
+      "endLoad": [
+        3.755859375,
+        7.9169921875,
+        11.20361328125
+      ]
+    },
+    {
+      "command": [
+        "/Users/dthurn/dreamtides_web/.worktrees/retained-expiry-contract-controls-36we/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/36we/helper/public-created-source-observer.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-expiry-contract-controls-36we",
+      "start": "2026-10-14T15:15:21.145244+00:00",
+      "end": "2026-10-14T15:15:23.447601+00:00",
+      "pid": 59656,
+      "pgid": 59656,
+      "exitCode": 0,
+      "wallSeconds": 2.30236512501142,
+      "cpuSeconds": {
+        "user": 1.525002,
+        "system": 0.790532
+      },
+      "startLoad": [
+        5.82373046875,
+        11.4912109375,
+        13.4990234375
+      ],
+      "endLoad": [
+        5.82373046875,
+        11.4912109375,
+        13.4990234375
+      ]
+    }
+  ],
+  "qualifications": [
+    "Stage0 scratch diagnostic printed event.id, an undefined label; no identity assertion used it. Committed contract compares public floating id with actual effectStarted.effect.",
+    "Short Stage0 guessed-path reads identified events/view directory entrypoints; no product failure. An explicit ps lookup returned exit1 because terminal PID59656 was absent.",
+    "Focused first authoring run passed124 tests. Extra blank line normalized before full typed/lint review.",
+    "No production behavior change; no new state transition, browser/server/lease/full review or independent cold CLI required by admitted scope.",
+    "Review stderr contains missing-art warnings for disposable review asset materialization; command exited0 and restored local assets. No confirmed product issue or missing runtime asset claim is made."
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual successful npm review invocation start at 2026-10-14T15:21:09.512204+00:00; wrapper host 1-minute load 6.47900390625"
+      },
+      "implementWindow": {
+        "start": "Conservative post-claim/pre-helper gross proxy; actual model start UNKNOWN",
+        "end": "Evidence refresh cutoff; actual Git end recorded externally, allowable cutoff gap at most60 seconds."
+      }
+    }
+  },
+  "resourceLedger": {
+    "runtimeServers": [],
+    "browserSessions": [],
+    "providerLeases": [],
+    "commandReceipts": "/tmp/dreamtides-executor-01a1304d/36we/helper",
+    "allCommandGroupsTerminalAtEvidenceReady": true,
+    "commandGroups": [
+      {
+        "pid": 34347,
+        "pgid": 34347,
+        "groupAbsent": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 40054,
+        "pgid": 40054,
+        "groupAbsent": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 39586,
+        "pgid": 39586,
+        "groupAbsent": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 41662,
+        "pgid": 41662,
+        "groupAbsent": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 59656,
+        "pgid": 59656,
+        "groupAbsent": true,
+        "exitCode": 0
+      }
+    ]
+  },
+  "finalTimingRefresh": {
+    "utc": "2026-10-14T15:25:52.516823+00:00",
+    "grossProxyStart": "2026-10-14T15:11:44.284759+00:00",
+    "grossMinutesToRefresh": 14.137201066666668,
+    "scope": "Post-claim/pre-helper gross proxy through refresh includes setup within that window, research, parent coordination, check queues, validation, and evidence. Actual Git end and cutoff gap recorded externally.",
+    "actualModelStart": "UNKNOWN",
+    "actualGitStart": "UNKNOWN until external receipt",
+    "actualGitEnd": "UNKNOWN until external receipt",
+    "allowedCutoffGapSeconds": 60
+  },
+  "hostLoadSamples": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retained effect expiry privacy"
+      ],
+      "utc": "2026-10-14T15:19:51.025640+00:00",
+      "load": [
+        8.2783203125,
+        10.5322265625,
+        12.623046875
+      ],
+      "scope": "actual invocation start"
+    },
+    {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "utc": "2026-10-14T15:21:24.305463+00:00",
+      "load": [
+        6.439453125,
+        9.32080078125,
+        11.9423828125
+      ],
+      "scope": "actual invocation start"
+    },
+    {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "utc": "2026-10-14T15:21:09.512204+00:00",
+      "load": [
+        6.47900390625,
+        9.47607421875,
+        12.04296875
+      ],
+      "scope": "actual invocation start"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "utc": "2026-10-14T15:22:32.337212+00:00",
+      "load": [
+        3.755859375,
+        7.9169921875,
+        11.20361328125
+      ],
+      "scope": "actual invocation start"
+    },
+    {
+      "command": [
+        "/Users/dthurn/dreamtides_web/.worktrees/retained-expiry-contract-controls-36we/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/36we/helper/public-created-source-observer.ts"
+      ],
+      "utc": "2026-10-14T15:15:21.145244+00:00",
+      "load": [
+        5.82373046875,
+        11.4912109375,
+        13.4990234375
+      ],
+      "scope": "actual invocation start"
+    }
+  ],
+  "validationResult": {
+    "focused": "124 passed;3721 skipped;one recognized contracts.test.ts",
+    "review": "PASS lint/typechecks/import cycles/friction schema/related contracts tests; actual3845 tests",
+    "knip": "PASS",
+    "schema": "Explicit final light validation receipt retained externally; review also validated records",
+    "failures": []
+  }
+}

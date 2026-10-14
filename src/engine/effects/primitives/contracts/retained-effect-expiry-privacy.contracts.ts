@@ -71,7 +71,7 @@ function world(form: typeof forms[number], side: Side, lifecycle: "resident" | "
   for (const entry of events) expect(entry.expiry).toEqual(duration === "permanent" ? { at: "never" } : { at: "sourceLeavesPlay", source: sourceId });
   return { ...w, engine, source: sourceId, done, events };
 }
-function project(w: ReturnType<typeof world>, viewer: Side, state = w.done.state, events = w.events) {
+function project(w: { engine: ReturnType<typeof createEngine>; state: BattleState; done: { state: BattleState }; events: ReturnType<typeof starts> }, viewer: Side, state = w.done.state, events = w.events) {
   const before = stateHash(state), eventBefore = JSON.stringify(events), view = w.engine.view(state, viewer);
   const projected = events.map(entry => eventSeenBy(entry, viewer, state));
   const log = battleLogEntries(events, viewer, state, view, w.engine.view(w.state, viewer), "privacy");
@@ -79,6 +79,41 @@ function project(w: ReturnType<typeof world>, viewer: Side, state = w.done.state
   expect(stateHash(state)).toBe(before);
   expect(JSON.stringify(events)).toBe(eventBefore);
   return { view, projected, log };
+}
+
+const createdCases = SIDES.flatMap(side => (["sourceBound", "permanent", "observerSpark"] as const).map(form => ({ side, form })));
+function createdWorld(side: Side, form: typeof createdCases[number]["form"]) {
+  const effect = form === "observerSpark" ? p.gainSpark(friendly, 2, "whileSourceInPlay")
+    : p.loseAllAbilities(friendly, { duration: form === "permanent" ? "permanent" : "whileSourceInPlay" });
+  const source: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0xc4c003), status: "authored",
+    abilities: () => [activated([], p.materializeFigmentCopy(self())), activated([], p.sequence(effect, p.returnToHand(self())))] };
+  const engine = createEngine(testCatalog([source])), fold = createFoldAdapter(engine);
+  const w = boardState(engine.catalog, { active: side, phase: "day", [side]: { back: [source.id] }, [opponent(side)]: { back: [v.vanilla3.id] } });
+  const original = occupied(w.ids[side].back[0]), before = stateHash(w.state);
+  const creation = fold.reduce(slice(w.state), { kind: "battleAction", side, action: { kind: "activate", source: original, ability: 0 } });
+  const made = applied(creation);
+  if (creation.kind !== "applied") throw new Error("Expected public copy creation");
+  expect(made.inFlight).toBeNull();
+  const materialized = creation.published.filter(entry => entry.kind === "materialized" && entry.instance !== original);
+  expect(materialized).toHaveLength(1);
+  const entry = materialized[0];
+  if (entry.kind !== "materialized") throw new Error("Expected materialized public copy");
+  const copy = entry.instance;
+  for (const viewer of SIDES) expect(engine.view(made.committed, viewer).instances[copy]?.printing.kind).toBe("figmentCopy");
+  const madeBefore = stateHash(made.committed);
+  const activation = fold.reduce(made, { kind: "battleAction", side, action: { kind: "activate", source: copy, ability: 1 } });
+  const done = applied(activation);
+  if (activation.kind !== "applied") throw new Error("Expected public copied-source activation");
+  expect(done.inFlight).toBeNull();
+  const events = starts(activation.published);
+  expect(events).toHaveLength(2);
+  for (const event of events) expect(event).toMatchObject({ controller: side, source: copy,
+    expiry: form === "permanent" ? { at: "never" } : { at: "sourceLeavesPlay", source: copy } });
+  expect(activation.published.filter(event => event.kind === "ceasedToExist" && event.instance === copy)).toHaveLength(1);
+  expect(invariantViolations(done.committed, engine.catalog)).toEqual([]);
+  expect(stateHash(w.state)).toBe(before);
+  expect(stateHash(made.committed)).toBe(madeBefore);
+  return { engine, state: made.committed, source: copy, original, done: { state: done.committed }, events };
 }
 
 describe("retained effect expiry privacy", () => {
@@ -113,7 +148,9 @@ describe("retained effect expiry privacy", () => {
       const seen = project(w, viewer);
       expect(seen.view.instances[w.source]).toBeDefined();
       expect(seen.projected).toEqual(w.events);
-      expect(seen.view.floating).toEqual(w.done.state.floating.map(({ id, controller, source, timestamp, expiry, change }) => ({ id, controller, source, timestamp, expiry, change })));
+      expect(seen.view.floating).toHaveLength(form.count);
+      expect(seen.view.floating.map(({ id, controller, source, expiry, change }) => ({ id, controller, source, expiry, change })))
+        .toEqual(w.events.map(({ effect, controller, source, expiry, change }) => ({ id: effect, controller, source, expiry, change })));
       expect(seen.log).toHaveLength(form.count);
       for (const entry of seen.log) expect(entry.event).toMatchObject({ kind: "effectStarted", source: w.source, expiry: { at: "sourceLeavesPlay", source: w.source } });
     }
@@ -145,6 +182,33 @@ describe("retained effect expiry privacy", () => {
         for (const entry of publicEvents) expect(eventSeenBy(entry, viewer, w.done.state)).toEqual({ ...entry, source: null });
       }
     });
+
+  it.each(createdCases)("preserves $form public observer policy after a created source ceases for $side", ({ side, form }) => {
+    const w = createdWorld(side, form), restarted = deserializeState(serializeState(w.done.state));
+    const transported = JSON.parse(JSON.stringify(w.events)) as typeof w.events;
+    for (const viewer of SIDES) {
+      for (const [state, events] of [[w.done.state, w.events], [restarted, transported]] as const) {
+        const seen = project(w, viewer, state, events);
+        expect(seen.view.instances[w.source]).toBeUndefined();
+        if (form === "sourceBound") {
+          expect(seen.view.floating).toEqual([]);
+          expect(seen.projected).toEqual([null, null]);
+          expect(seen.log).toEqual([]);
+        } else if (form === "permanent") {
+          const publicEvent = events.find(event => event.change.kind === "loseAbilities" && event.change.instance === w.original);
+          if (publicEvent === undefined) throw new Error("Expected permanent public loss announcement");
+          expect(seen.view.floating).toHaveLength(1);
+          expect(seen.projected.filter(event => event !== null)).toEqual([{ ...publicEvent, source: null }]);
+          expect(seen.log).toHaveLength(1);
+        } else {
+          expect(seen.view.floating).toEqual([]);
+          expect(events.every(event => event.change.kind === "spark" && event.sparkSeenBy?.length === 2)).toBe(true);
+          expect(seen.projected).toEqual(events);
+          expect(seen.log).toHaveLength(2);
+        }
+      }
+    }
+  });
 
   it.each(SIDES)("restarts a completed public source departure without changing projections for %s", side => {
     const w = world(forms[0], side, "deck"), input = { init: {
