@@ -1,3 +1,6 @@
+import { event, dissolvedThisTurn } from "../../engine/dsl/builders";
+import { draw } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 63,
   art: { x: 0.171, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(draw(dissolvedThisTurn()))],
+  verifiedText: expectedVerifiedText("Draw a card for each character you controlled that dissolved this turn."),
 });

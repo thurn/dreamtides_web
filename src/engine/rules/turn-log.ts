@@ -5,10 +5,10 @@
 import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristicsOf, copiableCostOf } from "../continuous/characteristics";
 import type { InstanceId, Side } from "../state/ids";
-import type { BattleState, MaterializedCard, TurnLog } from "../state/types";
+import type { BattleState, MaterializedCard, TurnDeparture, TurnLog } from "../state/types";
 
 export function emptyTurnLog(): TurnLog {
-  return { played: { player: [], enemy: [] }, drawn: { player: 0, enemy: 0 }, materialized: { player: [], enemy: [] } };
+  return { discarded: { player: 0, enemy: 0 }, leftPlay: { player: [], enemy: [] }, dissolved: { player: [], enemy: [] }, abandoned: { player: [], enemy: [] }, played: { player: [], enemy: [] }, drawn: { player: 0, enemy: 0 }, materialized: { player: [], enemy: [] } };
 }
 
 /**
@@ -39,7 +39,7 @@ export function recordDrawn(state: BattleState, side: Side): void {
 export function recordMaterialized(state: BattleState, catalog: EngineCatalog, side: Side, card: InstanceId): void {
   const { cardType, subtype, allTypes } = characteristicsOf(state, catalog, card);
   state.turnLog.materialized ??= { player: [], enemy: [] };
-  state.turnLog.materialized[side].push({ instance: card, cardType, subtype, allTypes });
+  state.turnLog.materialized[side].push({ instance: card, cardType, subtype, allTypes, figment: state.instances[card].printing.kind !== "card" });
 }
 
 /** The characters `side` materialized this turn, in order; none recorded for a saved state that lacks the record. */
@@ -50,4 +50,37 @@ export function materializedThisTurn(state: BattleState, side: Side): readonly M
 /** How many cards `side` has played this turn, by every route (copies are never played). */
 export function playedThisTurn(state: BattleState, side: Side): number {
   return state.turnLog.played[side].length;
+}
+
+/** Commits a complete validated discard cohort's public count. */
+export function recordDiscarded(state: BattleState, side: Side, count: number): void {
+  state.turnLog.discarded ??= { player: 0, enemy: 0 };
+  state.turnLog.discarded[side] += count;
+}
+/** Records one announced character departure before controller or type can change. */
+export function recordLeftPlay(state: BattleState, catalog: EngineCatalog, side: Side, card: InstanceId): void {
+  state.turnLog.leftPlay ??= { player: [], enemy: [] };
+  state.turnLog.leftPlay[side].push({ instance: card, cardType: characteristicsOf(state, catalog, card).cardType });
+}
+/** Records one admitted dissolution or abandon before movement/cessation. */
+export function recordDissolved(state: BattleState, catalog: EngineCatalog, side: Side, card: InstanceId, abandoned: boolean): void {
+  const occurrence = { instance: card, cardType: characteristicsOf(state, catalog, card).cardType };
+  state.turnLog.dissolved ??= { player: [], enemy: [] };
+  state.turnLog.dissolved[side].push(occurrence);
+  if (abandoned) recordAbandoned(state, side, occurrence);
+}
+/** An abandon replaced by banishment keeps its captured predeparture type. */
+export function recordAbandoned(state: BattleState, side: Side, occurrence: TurnDeparture): void {
+  state.turnLog.abandoned ??= { player: [], enemy: [] };
+  state.turnLog.abandoned[side].push({ ...occurrence });
+}
+export function charactersPlayedCountThisTurn(state: BattleState, side: Side): number {
+  return state.turnLog.played[side].filter(card => card.cardType === "character").length;
+}
+export function discardedCountThisTurn(state: BattleState, side: Side): number { return state.turnLog.discarded?.[side] ?? 0; }
+export function leftPlayCountThisTurn(state: BattleState, side: Side): number { return state.turnLog.leftPlay?.[side].filter(card => card.cardType === "character").length ?? 0; }
+export function dissolvedCountThisTurn(state: BattleState, side: Side): number { return state.turnLog.dissolved?.[side].filter(card => card.cardType === "character").length ?? 0; }
+export function abandonedCountThisTurn(state: BattleState, side: Side): number { return state.turnLog.abandoned?.[side].filter(card => card.cardType === "character").length ?? 0; }
+export function materializedCountThisTurn(state: BattleState, side: Side, figment?: boolean): number {
+  return materializedThisTurn(state, side).filter(card => figment === undefined || card.figment === figment).length;
 }

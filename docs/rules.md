@@ -1922,6 +1922,46 @@ draws 6 cards" has every player discard first, then every player draw. An "each
 player" effect never asks for targets or modes, since one player would choose
 them for everyone.
 
+### Current-turn occurrences and physical membership
+
+"This turn" covers the active turn for both players. Each ordinary or extra
+turn starts with empty play, discard, departure and materialization history.
+A committed play counts once for the player who played it, by its effective
+character or event type at play time. A copied stack card and a cancelled play
+do not count as played. Later type changes, control changes or cessation do
+not change that play's count.
+
+Each actual discarded card counts for the player whose hand it left, including
+payments, the hand-limit discard and created cards that cease to exist. A
+completed discard occasion adds its actual count; separate occasions add
+separately. Drawing or moving those cards afterwards does not reduce the count.
+
+A character that leaves play counts for the player who controlled it immediately
+before departure, by its effective type then. Each successful dissolution or
+abandonment counts separately, including repeated departures of the same
+physical character and created characters that cease to exist. A dissolve
+prevented by Veil counts neither as a dissolve nor as leaving play. A reclaimed
+character's move replaced by banishment counts as leaving play; when abandoned,
+it also counts as abandoned, and it does not count as dissolved.
+
+"Characters in your void which dissolved this turn" names each physical
+character currently in that void which successfully dissolved during the turn,
+once each in the void's current order. The character's controller when it
+dissolved does not change which void currently holds it. "Cards in your void which you abandoned this turn" additionally requires that
+you controlled the card when you abandoned it. A card another player abandoned
+does not satisfy your abandonment history merely because you own its current
+void. A departed card in another zone or one that ceased
+to exist is not a member; repeated occurrences of one card do not duplicate it.
+
+Every actual materialization counts, including rematerialization and figment
+copies. Figment qualifications use whether the character was a figment when it
+materialized. Legacy saved records with absent new history start with zero
+counts; existing materialization records retain their total, while absent
+figment provenance is unknown and does not match a figment qualification.
+Historical counts are public. A historical physical identity is shown only
+while that observer can identify its current card; hidden historical identities
+do not identify sampled hidden cards.
+
 ## Ability Types
 
 **Event abilities** — Effects printed on event cards. They resolve when the event

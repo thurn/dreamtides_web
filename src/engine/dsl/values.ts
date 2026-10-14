@@ -1,4 +1,5 @@
 /** Evaluating value expressions, for resolving effects and static abilities alike. */
+import { playedThisTurn, charactersPlayedCountThisTurn, discardedCountThisTurn, leftPlayCountThisTurn, dissolvedCountThisTurn, abandonedCountThisTurn, materializedCountThisTurn } from "../rules/turn-log";
 import { supportersOf } from "../continuous/support";
 import type { AbilitySource, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
@@ -46,6 +47,13 @@ export function thisCharacterSpark(): SourceSparkValue {
 export function evaluateValue(state: BattleState, value: ValueExpr, scope: ValueScope): number {
   if (typeof value === "number") return value;
   switch (value.value) {
+    case "playedThisTurn": return playedThisTurn(state, resolvePlayer(scope.controller, value.player));
+    case "charactersPlayedThisTurn": return charactersPlayedCountThisTurn(state, resolvePlayer(scope.controller, value.player));
+    case "discardedThisTurn": return discardedCountThisTurn(state, resolvePlayer(scope.controller, value.player));
+    case "leftPlayThisTurn": return leftPlayCountThisTurn(state, resolvePlayer(scope.controller, value.player));
+    case "dissolvedThisTurn": return dissolvedCountThisTurn(state, resolvePlayer(scope.controller, value.player));
+    case "abandonedThisTurn": return abandonedCountThisTurn(state, resolvePlayer(scope.controller, value.player));
+    case "materializedThisTurn": return materializedCountThisTurn(state, resolvePlayer(scope.controller, value.player), value.figment);
     case "subjectSpark":
       if (scope.subjectSpark === undefined) throw new Error("A static ability cannot read a triggering subject spark");
       return scope.subjectSpark ?? 0;

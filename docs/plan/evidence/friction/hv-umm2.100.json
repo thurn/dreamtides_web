@@ -1,0 +1,56 @@
+{
+  "bead": "hv-umm2.100",
+  "phase": 5,
+  "implementMin": 66.17578898333333,
+  "implementWindow": {
+    "start": "2026-10-14T16:44:38.897000+00:00",
+    "end": "2026-10-14T17:50:49.444339+00:00"
+  },
+  "localValidationS": {
+    "focused": 11.934857540996745,
+    "focused2": 10.956910500011873,
+    "focused3": 7.387049833021592,
+    "focused4": 8.170803500019247,
+    "types": 12.905585999978939,
+    "affected": 20.44471275000251,
+    "affected2": 18.18305587497889,
+    "final-affected": 21.576698832999682,
+    "replay": 6.835112792003201,
+    "replay-regeneration": 1.6730331660073716,
+    "repaired-focused": 9.173761583020678,
+    "weighted300": 330.000669208006,
+    "lab-preflight": 1.946249667002121,
+    "knip": 5.131577667023521,
+    "review-unlocked": 65.7824660000042,
+    "review-final": 66.47164237502147,
+    "full": 338.46153641698766,
+    "card-sweep": 196.33337866698275,
+    "judged-player": 53.122288875019876,
+    "judged-player2": 31.19834591599647,
+    "judged-enemy": 49.24209374998463,
+    "knip-final": 5.620469374989625
+  },
+  "hostLoad": 5.3896484375,
+  "testDelta": {
+    "files": 3,
+    "lines": 445,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 2.1476607597166244,
+      "note": "Measured failed-command wall subtotal, not total diagnosis time. Own fixture path/reference/LOAD/forced-choice corrections; additive figment expected-record fixtures; sanctioned replay finalHash drift; inventory witness retained at original forms; per-call InlineSource purity. Raw failed receipts retained."
+    },
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 3.0683833333333337,
+      "note": "Measured gross dispatch-to-first native source-admission interval (updated_at16:47:43Z), including own read-only source/routing/overlap/D10 audit; not pure waiting or CPU. Subsequent exact abandoned-actor/materialization fixture/replay output ACKs are retained individually by parent; no unrelated body or UUID transfer."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 0.8853714812503313,
+      "note": "Measured failed startup wrapper wall53.122s includes51s browser lease wait; own external constants omitted by function serialization. Moved all constants inside same ignored driver; later four real workflows pass. This is not an exercised game failure or pure scripting-time attribution."
+    }
+  ]
+}

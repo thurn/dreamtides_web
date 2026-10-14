@@ -20,6 +20,7 @@ import type {
   FloatingChange,
   FloatingEffect,
   MaterializedCard,
+  TurnDeparture,
   PlayedCard,
   Printing,
   SparkGain,
@@ -282,7 +283,13 @@ export interface MaterializedCardView extends Omit<MaterializedCard, "instance">
 }
 
 /** This turn's public plays, draw counts, and materializations. */
+export interface TurnDepartureView extends Omit<TurnDeparture, "instance"> { readonly instance: InstanceId | null; }
+
 export interface TurnLogView {
+  readonly discarded?: Readonly<Record<Side, number>>;
+  readonly leftPlay?: Readonly<Record<Side, readonly TurnDepartureView[]>>;
+  readonly dissolved?: Readonly<Record<Side, readonly TurnDepartureView[]>>;
+  readonly abandoned?: Readonly<Record<Side, readonly TurnDepartureView[]>>;
   /** A lower bound established by this viewer's observations, never the private total. */
   readonly dawnProgress?: { readonly knownCount: number };
   readonly played: Readonly<Record<Side, readonly PlayedCardView[]>>;
@@ -434,6 +441,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     return { ...copy(card), instance: known ? card.instance : null, ...(cost === undefined ? {} : { cost }), ...(spark === undefined ? {} : { spark }) };
   };
   const materializedView = (card: MaterializedCard): MaterializedCardView => ({ ...card, instance: visible(card.instance) ? card.instance : null });
+  const departureView = (cards: readonly TurnDeparture[] = []): TurnDepartureView[] => cards.map(card => ({ ...card, instance: visible(card.instance) ? card.instance : null }));
   const visibleSource = (source: AbilitySource): boolean => typeof source !== "string" || visible(source);
   const visibleChoices = (choices: EffectChoices): EffectChoices => ({
     modes: [...choices.modes],
@@ -661,6 +669,10 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     linkedBanished: liveLinkedBanished(state).filter((record) => visible(record.source)).map(copy),
     triggerQueue,
     turnLog: {
+      discarded: { player: state.turnLog.discarded?.player ?? 0, enemy: state.turnLog.discarded?.enemy ?? 0 },
+      leftPlay: { player: departureView(state.turnLog.leftPlay?.player), enemy: departureView(state.turnLog.leftPlay?.enemy) },
+      dissolved: { player: departureView(state.turnLog.dissolved?.player), enemy: departureView(state.turnLog.dissolved?.enemy) },
+      abandoned: { player: departureView(state.turnLog.abandoned?.player), enemy: departureView(state.turnLog.abandoned?.enemy) },
       dawnProgress: { knownCount: state.turnLog.dawnProgress?.known[viewer] ?? 0 },
       played: {
         player: state.turnLog.played.player.map(playedView),

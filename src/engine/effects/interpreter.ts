@@ -1,3 +1,4 @@
+import { matchesCurrentTurnMembership } from "../dsl/selectors";
 import type { LinkedSourceContext } from "../state/types";
 import { linkedSourceContext } from "../rules/linked-banish";
 import type { EngineCatalog } from "../catalog";
@@ -760,7 +761,7 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
   switch (ref.pick) {
     case "every": {
       const atMost = ref.costAtMost === undefined ? null : evaluate(ctx, ref.costAtMost, env);
-      return state.sides[side][ref.zone].filter((id) => matches(id) && (atMost === null || copiableCostOf(state, catalog, id) <= atMost));
+      return state.sides[side][ref.zone].filter((id) => matches(id) && (ref.thisTurn === undefined || matchesCurrentTurnMembership(state, id, ref.thisTurn, side)) && (atMost === null || copiableCostOf(state, catalog, id) <= atMost));
     }
     case "top":
       return state.sides[side].deck.slice(0, Math.max(0, ref.count)).filter(matches);

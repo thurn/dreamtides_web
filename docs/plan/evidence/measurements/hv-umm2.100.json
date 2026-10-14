@@ -1,0 +1,617 @@
+{
+  "bead": "hv-umm2.100",
+  "baseOID": "8dbcf0cdfc949b2c53cca1f67da1587c244340f5",
+  "dispatchUTC": "2026-10-14T16:44:38.897Z",
+  "originalEntities": [
+    "72debe2e-1f47-4a66-83c3-71bb72876663",
+    "f7c68226-def4-4eb0-bdfe-b028482e1351",
+    "2a230602-a39b-4ec2-a467-97b92b389aff"
+  ],
+  "authored": 3,
+  "amplifiedTextPresent": 0,
+  "namedValues": [
+    "playedThisTurn",
+    "charactersPlayedThisTurn",
+    "discardedThisTurn",
+    "leftPlayThisTurn",
+    "dissolvedThisTurn",
+    "abandonedThisTurn",
+    "materializedThisTurn"
+  ],
+  "newCondition": "thisTurn",
+  "membership": [
+    "dissolvedIn",
+    "abandonedIn"
+  ],
+  "newEffectOpEventPromptStatus": false,
+  "recordPlayedByteUnchanged": true,
+  "primitiveContracts": 39,
+  "contractLines": 350,
+  "fixtureLines": 64,
+  "scenarioCount": 1,
+  "sourceScope": "Exact current-turn occurrence fields/readers/collector calls/projection only; old recordPlayed/create/clone/turn/reset bodies unchanged; no last-turn/general-history/consumer UUID transfer.",
+  "preExistingPrerequisite": "hv-umm2.691 for discarded physical membership in original193, with gate46join; outside this count-only discard scope.",
+  "runtime": {
+    "sweep": {
+      "invocation": "sweep-KCPBD5/run-BZc0wB",
+      "pass": 30,
+      "skip": 30,
+      "capsEmpty": true,
+      "group": 53268,
+      "port": 5274,
+      "groupAbsent": true,
+      "qualification": "Default Wake/Fortune sweep cells resolve with zero matching history; not exercised membership proof."
+    },
+    "judged": {
+      "successfulWorkflows": 4,
+      "captures": {
+        "invocations/run-iFA54F/history-before-player-desktop.png": {
+          "sha256": "1ca539a7a3d4c10bb226903788bf7757a29d0beb948130ff0ba27eb91265eaef",
+          "bytes": 3050560
+        },
+        "invocations/run-iFA54F/history-dissolved-reload-player-desktop.png": {
+          "sha256": "e5b8d71acbf105858c55f113e4a3f1b387d8e05e14dea77388e9afbf556d4d4f",
+          "bytes": 2928662
+        },
+        "invocations/run-iFA54F/history-materialized-player-desktop.png": {
+          "sha256": "32152ca080eabb90e5542c584c18e2efaa6810f9b3150716749c892efc79fdc3",
+          "bytes": 2850886
+        },
+        "invocations/run-iFA54F/history-before-player-mobile.png": {
+          "sha256": "349e914ec56e71b9e655f5beca4eb539c2a84fe7f077e9ec574837e9c63b671c",
+          "bytes": 1200452
+        },
+        "invocations/run-iFA54F/history-dissolved-reload-player-mobile.png": {
+          "sha256": "d7cd20af15e1ffe9a925465dff827af75c51584a4579f1d4758117979107a892",
+          "bytes": 1130114
+        },
+        "invocations/run-iFA54F/history-materialized-player-mobile.png": {
+          "sha256": "50ee9e8592f0ad457cc3cc359703b5bc136bd7bd4abc56dc778fa64a3dc2246a",
+          "bytes": 1091953
+        },
+        "invocations/run-VKjZu6/history-before-enemy-desktop.png": {
+          "sha256": "7373ab2d2a22bf184f2ea031e57c09517f57fece64030c4ba3eb56d00e96065e",
+          "bytes": 3025826
+        },
+        "invocations/run-VKjZu6/history-dissolved-reload-enemy-desktop.png": {
+          "sha256": "891d4e9706a5ef1ceada207fcdb87598512b04c64c5d0a88c6dc1cb5b5b8261a",
+          "bytes": 2943275
+        },
+        "invocations/run-VKjZu6/history-materialized-enemy-desktop.png": {
+          "sha256": "2289d97d6b3e53784b271f66e49ac927e35fef75fefb744fccaf25d56b967523",
+          "bytes": 2831760
+        },
+        "invocations/run-VKjZu6/history-before-enemy-mobile.png": {
+          "sha256": "f720bdb79962d3a1fdaad707f0d6631ae0b00be6302652defa8fe1e4433cf9f0",
+          "bytes": 1078386
+        },
+        "invocations/run-VKjZu6/history-dissolved-reload-enemy-mobile.png": {
+          "sha256": "77581a4971f8fe316b3f07936bf2576255e9262af887d8a4214da6016d86de84",
+          "bytes": 1030740
+        },
+        "invocations/run-VKjZu6/history-materialized-enemy-mobile.png": {
+          "sha256": "a46c2c9f67cab416e6ae7ce24bc32a8cbfc0627eaf268c7755324726f617bf3e",
+          "bytes": 1025777
+        }
+      },
+      "player": "run-iFA54F",
+      "enemy": "run-VKjZu6",
+      "playerGroup": 74522,
+      "enemyGroup": 78050,
+      "groupsAbsent": true,
+      "qualification": "Enemy uses validated declared script/live UI host, not policy-selected play. Physical pointer automation, not touch or screen-reader speech.",
+      "visualQualification": "Changed materialized target/status and relevant response/phase controls are visible, with positive geometry and unoccluded hits. Existing near-hand Lab Quickstep resting preview is cropped at the viewport bottom in the enemy captures; it does not obscure the changed far target or measured hit. No whole-capture no-clipping claim or unrelated renderer repair."
+    },
+    "startupFailure": {
+      "invocationRaw": "100-judged-player.txt",
+      "cause": "Own constants outside serialized function",
+      "exercised": false,
+      "captures": 0,
+      "group": 72715,
+      "groupAbsent": true
+    },
+    "driverSHA256": "0607090ab92ab2f162573b3bc957211ffc72105d0b2de93b0dd25f5e53d54b6f",
+    "transportQualification": "Native runner validates stateful MCP identity before browser admission and requires browser_close confirmation, settled active calls and durable owner clear before terminal success. Exact session IDs/context IDs were not copied before native owner clear and are unobserved, not fabricated. All successful CLI calls settle normally; own startup failure has no teardown diagnostic and its owned group is absent."
+  },
+  "recoveryContracts": {
+    "play": "prepared target cancellation writes zero; stack copies excluded; effective type captured before later characteristic changes and ceased source; ordinary and extra turns reset both sides",
+    "discard": "effect/payment/hand-limit actual occurrences; created cessation/Reclaim replacement; cold LOAD absent counters0 and malformed negative/fraction/string rejects; effect error rollback",
+    "departure": "actual return/banish/dissolve/abandon; predeparture foreign owner/controller capture; Veil prevention excludes; Reclaim abandon countsabandoned/departure only; repeated occurrence count vs unique current-zone physical membership",
+    "materialization": "ordinary/rematerialize/figment/figmentcopy captures bool; ceased identity count retained; old absent provenanceunknown but total retained",
+    "suspend": "uncommitted display-only writes; cold LOAD replay; stale/invalid/foreign answers and concurrent action bounce withoutwrites; completion once; duplicate answerbounces",
+    "privacy": "unidentifiable historical IDs null; anonymous IDs reserved before hidden mint; sampling fidelity preserves observer-safe counts/current identifiable membership"
+  },
+  "receipts": {
+    "100-lab-preflight": {
+      "label": "lab-preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "72debe2e-1f47-4a66-83c3-71bb72876663,f7c68226-def4-4eb0-bdfe-b028482e1351,2a230602-a39b-4ec2-a467-97b92b389aff"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:06:39.468549+00:00",
+      "endUTC": "2026-10-14T17:06:41.415040+00:00",
+      "wallSeconds": 1.946249667002121,
+      "hostLoadStart": [
+        12.80224609375,
+        12.98095703125,
+        13.4365234375
+      ],
+      "hostLoadEnd": [
+        12.80224609375,
+        12.98095703125,
+        13.4365234375
+      ],
+      "sourceTrackedSha256": "7616df471020ee090d5a6dbddbb0bdeb3202391505bc5da0dd81b0ec560d4fd7",
+      "sourceTrackedAfterSha256": "7616df471020ee090d5a6dbddbb0bdeb3202391505bc5da0dd81b0ec560d4fd7",
+      "exitCode": 0,
+      "raw": "/tmp/100-lab-preflight.txt"
+    },
+    "100-repaired-focused": {
+      "label": "repaired-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "inventory descriptor|declared capability lifecycle|exact current-turn history"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:15:26.941012+00:00",
+      "endUTC": "2026-10-14T17:15:36.115049+00:00",
+      "wallSeconds": 9.173761583020678,
+      "hostLoadStart": [
+        20.30126953125,
+        14.42529296875,
+        13.20947265625
+      ],
+      "hostLoadEnd": [
+        18.5634765625,
+        14.24609375,
+        13.15966796875
+      ],
+      "sourceTrackedSha256": "ad7c882b940cc1d5c8f95db70ddb7fb18c9ea8a2e789ae934e6156c6dcf965ca",
+      "sourceTrackedAfterSha256": "ad7c882b940cc1d5c8f95db70ddb7fb18c9ea8a2e789ae934e6156c6dcf965ca",
+      "exitCode": 0,
+      "raw": "/tmp/100-repaired-focused.txt"
+    },
+    "100-card-sweep": {
+      "label": "card-sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.100",
+        "--cards",
+        "72debe2e-1f47-4a66-83c3-71bb72876663,f7c68226-def4-4eb0-bdfe-b028482e1351,2a230602-a39b-4ec2-a467-97b92b389aff",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:16:52.045770+00:00",
+      "endUTC": "2026-10-14T17:20:08.380878+00:00",
+      "wallSeconds": 196.33337866698275,
+      "hostLoadStart": [
+        10.06298828125,
+        12.57080078125,
+        12.61376953125
+      ],
+      "hostLoadEnd": [
+        12.53271484375,
+        13.095703125,
+        12.85302734375
+      ],
+      "sourceTrackedSha256": "4248f8870b65e9194f254a499baa2ade80b378d2a6504385ec4701a940b0a65d",
+      "sourceTrackedAfterSha256": "8a61f63ab855fa70442badebc25396ab45185f8471f94a9eeabaaf327fbe82ce",
+      "exitCode": 0,
+      "raw": "/tmp/100-card-sweep.txt"
+    },
+    "100-final-affected": {
+      "label": "final-affected",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/turn-log.test.ts",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/rules/replay/replay.test.ts",
+        "src/rules/battle/engine-battle-replay.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:04:57.266554+00:00",
+      "endUTC": "2026-10-14T17:05:18.843757+00:00",
+      "wallSeconds": 21.576698832999682,
+      "hostLoadStart": [
+        8.49609375,
+        11.2568359375,
+        12.88427734375
+      ],
+      "hostLoadEnd": [
+        13.361328125,
+        12.2060546875,
+        13.1875
+      ],
+      "sourceTrackedSha256": "cb8dfd4a3135aa4cc88c800e6ff872ebe6847ce22f0a1ef8081dd23d19af9a58",
+      "sourceTrackedAfterSha256": "cb8dfd4a3135aa4cc88c800e6ff872ebe6847ce22f0a1ef8081dd23d19af9a58",
+      "exitCode": 0,
+      "raw": "/tmp/100-final-affected.txt"
+    },
+    "100-weighted300": {
+      "label": "weighted300",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "72debe2e-1f47-4a66-83c3-71bb72876663,f7c68226-def4-4eb0-bdfe-b028482e1351,2a230602-a39b-4ec2-a467-97b92b389aff"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:06:24.729056+00:00",
+      "endUTC": "2026-10-14T17:11:54.736527+00:00",
+      "wallSeconds": 330.000669208006,
+      "hostLoadStart": [
+        14.24072265625,
+        13.25439453125,
+        13.53955078125
+      ],
+      "hostLoadEnd": [
+        6.994140625,
+        9.16650390625,
+        11.50732421875
+      ],
+      "sourceTrackedSha256": "7616df471020ee090d5a6dbddbb0bdeb3202391505bc5da0dd81b0ec560d4fd7",
+      "sourceTrackedAfterSha256": "7616df471020ee090d5a6dbddbb0bdeb3202391505bc5da0dd81b0ec560d4fd7",
+      "exitCode": 0,
+      "raw": "/tmp/100-weighted300.txt"
+    },
+    "100-judged-player2": {
+      "label": "judged-player2",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.100/turn-history.mjs",
+        "--bead",
+        "hv-umm2.100",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "as=player",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:23:29.900724+00:00",
+      "endUTC": "2026-10-14T17:24:01.099592+00:00",
+      "wallSeconds": 31.19834591599647,
+      "hostLoadStart": [
+        5.658203125,
+        9.6396484375,
+        11.43603515625
+      ],
+      "hostLoadEnd": [
+        6.30908203125,
+        9.36181640625,
+        11.26123046875
+      ],
+      "sourceTrackedSha256": "80ebb014a9b53e61eb8f734450a045ba2f30ce7177cc7e9f7a867f7c5109bb06",
+      "sourceTrackedAfterSha256": "80ebb014a9b53e61eb8f734450a045ba2f30ce7177cc7e9f7a867f7c5109bb06",
+      "exitCode": 0,
+      "raw": "/tmp/100-judged-player2.txt"
+    },
+    "100-review-unlocked": {
+      "label": "review-unlocked",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:11:54.909536+00:00",
+      "endUTC": "2026-10-14T17:13:00.693450+00:00",
+      "wallSeconds": 65.7824660000042,
+      "hostLoadStart": [
+        6.994140625,
+        9.16650390625,
+        11.50732421875
+      ],
+      "hostLoadEnd": [
+        19.09619140625,
+        11.751953125,
+        12.27197265625
+      ],
+      "sourceTrackedSha256": "7616df471020ee090d5a6dbddbb0bdeb3202391505bc5da0dd81b0ec560d4fd7",
+      "sourceTrackedAfterSha256": "7616df471020ee090d5a6dbddbb0bdeb3202391505bc5da0dd81b0ec560d4fd7",
+      "exitCode": 1,
+      "raw": "/tmp/100-review-unlocked.txt"
+    },
+    "100-judged-player": {
+      "label": "judged-player",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.100/turn-history.mjs",
+        "--bead",
+        "hv-umm2.100",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "as=player",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:21:05.329896+00:00",
+      "endUTC": "2026-10-14T17:21:58.453046+00:00",
+      "wallSeconds": 53.122288875019876,
+      "hostLoadStart": [
+        9.63818359375,
+        12.03125,
+        12.46142578125
+      ],
+      "hostLoadEnd": [
+        8.1357421875,
+        11.28857421875,
+        12.1630859375
+      ],
+      "sourceTrackedSha256": "8a61f63ab855fa70442badebc25396ab45185f8471f94a9eeabaaf327fbe82ce",
+      "sourceTrackedAfterSha256": "8a61f63ab855fa70442badebc25396ab45185f8471f94a9eeabaaf327fbe82ce",
+      "exitCode": 1,
+      "raw": "/tmp/100-judged-player.txt"
+    },
+    "100-knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:06:39.468462+00:00",
+      "endUTC": "2026-10-14T17:06:44.600266+00:00",
+      "wallSeconds": 5.131577667023521,
+      "hostLoadStart": [
+        12.80224609375,
+        12.98095703125,
+        13.4365234375
+      ],
+      "hostLoadEnd": [
+        12.33740234375,
+        12.88134765625,
+        13.3984375
+      ],
+      "sourceTrackedSha256": "7616df471020ee090d5a6dbddbb0bdeb3202391505bc5da0dd81b0ec560d4fd7",
+      "sourceTrackedAfterSha256": "7616df471020ee090d5a6dbddbb0bdeb3202391505bc5da0dd81b0ec560d4fd7",
+      "exitCode": 0,
+      "raw": "/tmp/100-knip.txt"
+    },
+    "100-judged-enemy": {
+      "label": "judged-enemy",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.100/turn-history.mjs",
+        "--bead",
+        "hv-umm2.100",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "as=enemy",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:24:39.259673+00:00",
+      "endUTC": "2026-10-14T17:25:28.502564+00:00",
+      "wallSeconds": 49.24209374998463,
+      "hostLoadStart": [
+        6.2685546875,
+        9.0048828125,
+        11.052734375
+      ],
+      "hostLoadEnd": [
+        6.77197265625,
+        8.6865234375,
+        10.81396484375
+      ],
+      "sourceTrackedSha256": "80ebb014a9b53e61eb8f734450a045ba2f30ce7177cc7e9f7a867f7c5109bb06",
+      "sourceTrackedAfterSha256": "80ebb014a9b53e61eb8f734450a045ba2f30ce7177cc7e9f7a867f7c5109bb06",
+      "exitCode": 0,
+      "raw": "/tmp/100-judged-enemy.txt"
+    },
+    "100-review-final": {
+      "label": "review-final",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:28:59.204307+00:00",
+      "endUTC": "2026-10-14T17:30:05.677000+00:00",
+      "wallSeconds": 66.47164237502147,
+      "hostLoadStart": [
+        17.4736328125,
+        13.80908203125,
+        12.5986328125
+      ],
+      "hostLoadEnd": [
+        13.95947265625,
+        13.5537109375,
+        12.59814453125
+      ],
+      "sourceTrackedSha256": "dd27d089508178997ad0e22d5dbea23c2c1906f9a4a82a1d524718ccbc6ed297",
+      "sourceTrackedAfterSha256": "dd27d089508178997ad0e22d5dbea23c2c1906f9a4a82a1d524718ccbc6ed297",
+      "exitCode": 0,
+      "raw": "/tmp/100-review-final.txt"
+    },
+    "100-full": {
+      "label": "full",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:30:48.928606+00:00",
+      "endUTC": "2026-10-14T17:36:27.395062+00:00",
+      "wallSeconds": 338.46153641698766,
+      "hostLoadStart": [
+        10.6162109375,
+        12.78271484375,
+        12.36083984375
+      ],
+      "hostLoadEnd": [
+        5.99755859375,
+        8.228515625,
+        10.3037109375
+      ],
+      "sourceTrackedSha256": "dd27d089508178997ad0e22d5dbea23c2c1906f9a4a82a1d524718ccbc6ed297",
+      "sourceTrackedAfterSha256": "dd27d089508178997ad0e22d5dbea23c2c1906f9a4a82a1d524718ccbc6ed297",
+      "exitCode": 0,
+      "raw": "/tmp/100-full.txt"
+    },
+    "100-knip-final": {
+      "label": "knip-final",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:39:05.505230+00:00",
+      "endUTC": "2026-10-14T17:39:11.125983+00:00",
+      "wallSeconds": 5.620469374989625,
+      "hostLoadStart": [
+        3.4130859375,
+        6.19140625,
+        9.1142578125
+      ],
+      "hostLoadEnd": [
+        3.73681640625,
+        6.16845703125,
+        9.0712890625
+      ],
+      "sourceTrackedSha256": "11987ef09af0bfd09b47aaba2311614f8976f1c3f02d9d5b7227c9fc9f3edd9b",
+      "sourceTrackedAfterSha256": "11987ef09af0bfd09b47aaba2311614f8976f1c3f02d9d5b7227c9fc9f3edd9b",
+      "exitCode": 0,
+      "raw": "/tmp/100-knip-final.txt"
+    },
+    "100-evidence-schema": {
+      "label": "evidence-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-100-root",
+      "startUTC": "2026-10-14T17:42:08.005854+00:00",
+      "endUTC": "2026-10-14T17:42:08.202326+00:00",
+      "wallSeconds": 0.1963172089890577,
+      "hostLoadStart": [
+        8.7578125,
+        7.71435546875,
+        9.15625
+      ],
+      "hostLoadEnd": [
+        8.7578125,
+        7.71435546875,
+        9.15625
+      ],
+      "sourceTrackedSha256": "9085ce40a63bbea289e8f11452766a6ad4e47c6350050f3fca629a2526c3191a",
+      "sourceTrackedAfterSha256": "9085ce40a63bbea289e8f11452766a6ad4e47c6350050f3fca629a2526c3191a",
+      "exitCode": 0,
+      "raw": "/tmp/100-evidence-schema.txt"
+    }
+  },
+  "validationQualification": "Final unlocked review7535cases/306files and locked two-worker full8544cases/387files passed with identical unchanged whole-source SHA dd27d089508178997ad0e22d5dbea23c2c1906f9a4a82a1d524718ccbc6ed297. Weighted300 source7616df... predates only tests, exact inventory witness representation/planning output, docs/evidence changes; game/fuzz-consumed source unchanged. Final endpoint updates are own evidence only.",
+  "clockQualification": "Inclusive implement window starts original dispatch. Final commit endpoint is coordinated with parent; CPU/model/idle attribution unknown.",
+  "fullExecution": {
+    "prepareStartUTC": "2026-10-14T17:34:56.466Z",
+    "typeLintStartUTC": "2026-10-14T17:34:57.810Z",
+    "hostLoad": 5.3896484375,
+    "testStartUTC": "2026-10-14T17:35:20.506Z",
+    "testHostLoad": 5.591796875,
+    "testVitestWallS": 62.26,
+    "testPhaseWallS": 62.8,
+    "workers": 2,
+    "testFiles": 387,
+    "cases": 8544,
+    "wrapperIncludesHeavySlotWait": true,
+    "performanceQualification": "Observed above60s suite goal at this load; not a low-load budget certification or cross-bead comparison.",
+    "executionFromActualPrepareUTCToTerminalS": 90.929062,
+    "qualification": "Wrapper includes waiting for heavy slot; actual prepare-to-terminal is wall time, not CPU or editing. Stage starts and actual full test host load retained."
+  },
+  "evidenceSnapshotUTC": "2026-10-14T17:39:05.427309+00:00",
+  "functionalFreeze": {
+    "fileCount": 2457,
+    "treeSHA256": "a10a3cb97cc316b43255c0b73294b26b4ef3f2d3b2b8b20bdbe9794451c0d288",
+    "atUTC": "2026-10-14T17:39:56.302905+00:00",
+    "allFilesExactBeforeCommit": true,
+    "qualification": "Captured after terminal green full check, before final evidence/commit packaging; helper reports no functional writes since full source before/after dd27d0 exact. Evidence-only endpoint writes excluded."
+  },
+  "actualTestDelta": {
+    "newPlainContractLines": 350,
+    "newConsumedFixtureLines": 64,
+    "newScenarioLines": 31,
+    "newPlainModules": 3,
+    "newTestEntrypoints": 0,
+    "newJsdomFiles": 0,
+    "existingMaterializedExpectedFixtureNetLines": 0,
+    "totalAddedSupportLines": 445
+  },
+  "implementWindow": {
+    "start": "2026-10-14T16:44:38.897000+00:00",
+    "end": "2026-10-14T17:50:49.444339+00:00"
+  },
+  "implementMin": 66.17578898333333,
+  "dispatchReceipt": {
+    "ordinal": 29637,
+    "callId": "call_24046de0348847cb893efb969f1d555f",
+    "startUTC": "2026-10-14T16:44:38.897Z"
+  },
+  "sourceClockQualification": "The inclusive final endpoint extends from the original actual dispatch through evidence-only amendment packaging. Original checkpoint and both actual Git brackets/whole-second committer deltas are retained outside the worktree; no productive CPU attribution is inferred.",
+  "qaCommitQualification": "commit denotes checkout HEAD/base only; this invocation executed the modified worktree, not clean base source. Actual repository source digests are bound to its command receipt.",
+  "qaSourceProjectionQualification": "Regular repository tracked and untracked files excluding ignored files; primary ignored QA driver/captures are outside this digest. Historical driver startup and successful driver correction remain separate attempts.",
+  "initialCheckpoint": {
+    "sourceOID": "9ed59446c8caf5fa18c3ebb8459b4b7f69c9a773",
+    "implementWindow": {
+      "start": "2026-10-14T16:44:38.897000+00:00",
+      "end": "2026-10-14T17:43:14.382872+00:00"
+    },
+    "implementMin": 58.5914312,
+    "actualGitStartUTC": "2026-10-14T17:43:14.593003+00:00",
+    "actualGitEndUTC": "2026-10-14T17:43:14.668595+00:00",
+    "committerTimestamp": "2026-10-14T10:43:14-07:00",
+    "committerMinusEndpointSeconds": -0.382872,
+    "receipt": "receipts/100-initial-checkpoint-source-receipt.json",
+    "qualification": "Original local checkpoint retained outside the worktree; final inclusive window extends through the authorized evidence-only amendment from the same original dispatch."
+  },
+  "metadataAmendmentQualification": "QA provenance and prose corrections only; every one of the 2457 frozen functional files remains exact. No aggregate validation, fuzz or browser rerun is warranted by these metadata-only changes. All original 65 QA row fields/results/verdicts/captures remain preserved."
+}

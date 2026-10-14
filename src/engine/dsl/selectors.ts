@@ -7,6 +7,7 @@ import { charactersInPlay, slotOf } from "../rules/zones";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { opponent, sourceInstance, SIDES } from "../state/ids";
 import type { BattleState } from "../state/types";
+import type { ZoneEverySpec } from "./types";
 import type { BoundValue, VoidCostBound, CardCountValue, CharacterSelector, PlayerRef, StackItemSelector } from "./types";
 
 /**
@@ -266,4 +267,10 @@ export function matchingStackItems(
     .flatMap((item) => (item.kind === "card" ? [item.instance] : []))
     .reverse()
     .filter((id) => matchesStackItem(state, catalog, selector, id, controller, source));
+}
+
+/** Dissolved membership accepts either departing controller; abandoned membership requires the named abandoning side. */
+export function matchesCurrentTurnMembership(state: BattleState, id: InstanceId, kind: NonNullable<ZoneEverySpec["thisTurn"]>, side: Side): boolean {
+  const records = kind === "dissolved" ? state.turnLog.dissolved : state.turnLog.abandoned;
+  return (kind === "abandoned" ? [side] : SIDES).some(controller => records?.[controller].some(card => card.instance === id) === true);
 }

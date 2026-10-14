@@ -1,3 +1,6 @@
+import { staticAbility, thisTurn, discardedThisTurn } from "../../engine/dsl/builders";
+import { selfCostReduction } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 329,
   art: { x: 0.882, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(selfCostReduction(3), { zone: "any", while: thisTurn(discardedThisTurn()) })],
+  verifiedText: expectedVerifiedText("If you've discarded a card this turn, this character costs 3● less."),
 });

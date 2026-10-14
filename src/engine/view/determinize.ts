@@ -375,6 +375,10 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
   });
   const playedCards = { player: anonymous(view.turnLog.played.player), enemy: anonymous(view.turnLog.played.enemy) };
   const materializedCards = { player: anonymous(view.turnLog.materialized.player), enemy: anonymous(view.turnLog.materialized.enemy) };
+  const departures = (kind: "leftPlay" | "dissolved" | "abandoned") => ({
+    player: anonymous(view.turnLog[kind]?.player ?? []), enemy: anonymous(view.turnLog[kind]?.enemy ?? []),
+  });
+  const leftPlayCards = departures("leftPlay"), dissolvedCards = departures("dissolved"), abandonedCards = departures("abandoned");
   const mint = (owner: Side, holder: Side, zone: "deck" | "hand", entry: DeckEntry, created: boolean, poolCandidates?: CardInstance["poolCandidates"]): InstanceId => {
     const id: InstanceId = `i${next}`;
     next += 1;
@@ -813,6 +817,8 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
         change: floatingChange(effect.change, captured) };
     })].sort((a, b) => a.timestamp - b.timestamp || Number(a.id.slice(1)) - Number(b.id.slice(1))),
     turnLog: {
+      discarded: { player: view.turnLog.discarded?.player ?? 0, enemy: view.turnLog.discarded?.enemy ?? 0 },
+      leftPlay: leftPlayCards, dissolved: dissolvedCards, abandoned: abandonedCards,
       // Unobserved historical admissions are omitted, as unknown queued bodies are.
       // This is a conservative reconstruction, not the authoritative count.
       dawnProgress: { total: view.turnLog.dawnProgress?.knownCount ?? 0,

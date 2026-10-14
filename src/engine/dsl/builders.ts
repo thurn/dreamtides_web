@@ -21,6 +21,7 @@ import type {
   CharacterSelector,
   ChoiceCost,
   Condition,
+  CurrentTurnCountValue,
   Cost,
   CountedZone,
   EnergyCost,
@@ -564,4 +565,33 @@ export function discardedCount(): ValueExpr {
 /** The points awarded by the challenge that triggered this ability, captured at scoring. */
 export function scoredAmount(): ValueExpr {
   return { value: "scored" };
+}
+
+/** Actual committed plays; stack copies are not plays. */
+export function playedThisTurn(player: PlayerRef = "you"): CurrentTurnCountValue { return { value: "playedThisTurn", player }; }
+/** Plays captured as characters, even after later type changes or cessation. */
+export function charactersPlayedThisTurn(player: PlayerRef = "you"): CurrentTurnCountValue { return { value: "charactersPlayedThisTurn", player }; }
+/** Actual completed discards, including payments and created-card cessation. */
+export function discardedThisTurn(player: PlayerRef = "you"): CurrentTurnCountValue { return { value: "discardedThisTurn", player }; }
+/** Characters that left play, by their controller and type immediately before departure. */
+export function leftPlayThisTurn(player: PlayerRef = "you"): CurrentTurnCountValue { return { value: "leftPlayThisTurn", player }; }
+/** Successful dissolutions, counting repeated occurrences of one physical character. */
+export function dissolvedThisTurn(player: PlayerRef = "you"): CurrentTurnCountValue { return { value: "dissolvedThisTurn", player }; }
+/** Successful abandons; a reclaimed abandon counts even when banished. */
+export function abandonedThisTurn(player: PlayerRef = "you"): CurrentTurnCountValue { return { value: "abandonedThisTurn", player }; }
+/** Actual materializations; an optional figment qualification reads captured provenance. */
+export function materializedThisTurn(player: PlayerRef = "you", figment?: boolean): CurrentTurnCountValue {
+  return { value: "materializedThisTurn", player, ...(figment === undefined ? {} : { figment }) };
+}
+/** Inclusive bounds over one exact current-turn count. */
+export function thisTurn(count: CurrentTurnCountValue, atLeast = 1, atMost?: number): Condition & { readonly cond: "thisTurn" } {
+  return { cond: "thisTurn", count, atLeast, ...(atMost === undefined ? {} : { atMost }) };
+}
+/** Current-zone physical cards which successfully dissolved this turn, once each in zone order. */
+export function dissolvedIn(zone: CountedZone, filter: CardFilter = {}, player: PlayerRef = "you"): ZoneEverySpec {
+  return { ...everyIn(zone, filter, { player }), thisTurn: "dissolved" };
+}
+/** Current-zone physical cards the selected player abandoned this turn, once each in zone order. */
+export function abandonedIn(zone: CountedZone, filter: CardFilter = {}, player: PlayerRef = "you"): ZoneEverySpec {
+  return { ...everyIn(zone, filter, { player }), thisTurn: "abandoned" };
 }

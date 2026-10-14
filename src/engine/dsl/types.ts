@@ -272,6 +272,8 @@ export interface ZoneTargetSpec extends ZoneCardsBase {
  * void").
  */
 export interface ZoneEverySpec extends ZoneCardsBase {
+  /** Intersects current-zone physical members with successful occurrences this turn. */
+  readonly thisTurn?: "dissolved" | "abandoned";
   readonly pick: "every";
   readonly zone: CountedZone;
   /** Excludes the effect's source. */
@@ -340,7 +342,13 @@ export interface DiscardCountValue {
 }
 
 /** A number an effect reads when it resolves. */
+/** Exact public occurrence counts for the current turn, relative to the reader's controller. */
+export type CurrentTurnCountValue =
+  | { readonly value: "playedThisTurn" | "charactersPlayedThisTurn" | "discardedThisTurn" | "leftPlayThisTurn" | "dissolvedThisTurn" | "abandonedThisTurn"; readonly player: PlayerRef }
+  | { readonly value: "materializedThisTurn"; readonly player: PlayerRef; readonly figment?: boolean };
+
 export type ValueExpr =
+  | CurrentTurnCountValue
   | number
   | XValue
   /** The positive points awarded by the challenge that triggered this ability; 0 outside a scoring trigger. */
@@ -387,6 +395,7 @@ export type Duration =
 
 /** A condition an effect checks when it resolves. */
 export type Condition =
+  | { readonly cond: "thisTurn"; readonly count: CurrentTurnCountValue; readonly atLeast: number; readonly atMost?: number }
   /**
    * Characters in play matching the selector number at least `atLeast` and,
    * with `atMost`, at most that: "If you control no shadow figments" is

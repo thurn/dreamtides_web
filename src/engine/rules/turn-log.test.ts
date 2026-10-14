@@ -74,8 +74,8 @@ function resolved(state: BattleState, side: Side, card: InstanceId, source: Answ
   return { state: rest.state, events: [...cast.events, ...rest.events] };
 }
 
-const record = (instance: InstanceId, subtype: string, allTypes = false): MaterializedCard =>
-  ({ instance, cardType: "character", subtype: subtype as MaterializedCard["subtype"], allTypes });
+const record = (instance: InstanceId, subtype: string, allTypes = false, figment = false): MaterializedCard =>
+  ({ instance, cardType: "character", subtype: subtype as MaterializedCard["subtype"], allTypes, figment });
 
 /** The instances each `materialized` event announced for `side`, in order. */
 const announced = (events: readonly EngineEvent[], side: Side): InstanceId[] =>
@@ -116,7 +116,7 @@ describe("turn log materializations", () => {
     expect(state.instances[copy]).toBeUndefined();
     expect(state.turnLog.materialized).toEqual({
       // The Survivor's first record keeps the types it had then, though it now has all character types.
-      player: [record(survivor, "Survivor"), record(copy, "Survivor"), record(survivor, "Survivor", true)],
+      player: [record(survivor, "Survivor"), record(copy, "Survivor", false, true), record(survivor, "Survivor", true)],
       enemy: [record(interrupt, "Warrior")],
     });
     for (const side of SIDES) expect(materializedThisTurn(state, side).map((card) => card.instance)).toEqual(announced(events, side));

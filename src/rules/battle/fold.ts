@@ -1210,8 +1210,10 @@ function isQueuedTriggerRecord(value: unknown): boolean {
 }
 
 function isTurnLog(value: unknown): boolean {
+  const departures = optional(sideRecord(arrayOf(card => isPlainRecord(card) && isInstanceId(card.instance) && isCardKind(card.cardType))));
   return (
     isPlainRecord(value) &&
+    optional(sideRecord(isIndex))(value.discarded) && departures(value.leftPlay) && departures(value.dissolved) && departures(value.abandoned) &&
     sideRecord(
       arrayOf(
         (played) =>
@@ -1239,7 +1241,7 @@ function isTurnLog(value: unknown): boolean {
             isInstanceId(materialized.instance) &&
             isCardKind(materialized.cardType) &&
             isString(materialized.subtype) &&
-            isBoolean(materialized.allTypes),
+            isBoolean(materialized.allTypes) && optional(isBoolean)(materialized.figment),
         ),
       ),
     )(value.materialized)

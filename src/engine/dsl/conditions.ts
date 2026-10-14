@@ -5,6 +5,7 @@ import type { AbilitySource, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { matchingCharactersWith, resolvePlayer, zoneCountWith, type CharacteristicsReader, type SourceSparkReader } from "./selectors";
+import { evaluateValue } from "./values";
 import type { Condition } from "./types";
 
 /** The condition's controller, source, and captured stack-item bindings. */
@@ -27,6 +28,10 @@ export function conditionHoldsWith(
   scope: ConditionScope,
 ): boolean {
   switch (condition.cond) {
+    case "thisTurn": {
+      const count = evaluateValue(state, condition.count, { controller: scope.controller, source: scope.source, x: null, count: () => 0, countCards: () => 0 });
+      return count >= condition.atLeast && (condition.atMost === undefined || count <= condition.atMost);
+    }
     case "controls": {
       const count = matchingCharactersWith(state, catalog, read, condition.selector, scope.controller, scope.source, scope.x ?? undefined, scope.sourceSpark).length;
       return count >= condition.atLeast && (condition.atMost === undefined || count <= condition.atMost);

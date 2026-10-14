@@ -2,7 +2,7 @@ import type { EventOf } from "../events";
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { StepContext } from "../steps/types";
-import { recordDrawn } from "./turn-log";
+import { recordDrawn, recordDiscarded } from "./turn-log";
 import { instanceOf, moveInstance } from "./zones";
 
 /** Sets `side`'s energy, as `cause` does; neither total goes below 0. The event carries the actual changes. */
@@ -134,6 +134,7 @@ export function discardCards(ctx: StepContext, side: Side, cards: readonly Insta
     throw new Error("Discard requires distinct current-hand cards of the discarding side");
   }
   for (const card of cohort) discardOne(ctx, side, card);
+  recordDiscarded(ctx.state, side, cohort.length);
   ctx.emit({ kind: "discardBatch", side, count: cohort.length });
   return cohort.length;
 }

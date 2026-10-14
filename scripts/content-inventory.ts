@@ -434,7 +434,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("valueCardStats", [callable(DSL_BUILDERS, "costOf")], ["ValueExpr"], { note: "\"this character's ✦\", \"that card's cost\"" }),
   dsl("storedCounters", [registered(DSL_TYPES, "ValueExpr", { member: "storedCounters", pending: "member" })], ["ValueExpr", "PaymentCost"], { note: "stored ⧗ values and X⧗ costs" }),
   dsl("conditionCardCounts", [callable(DSL_BUILDERS, "conditionCardCounts")], ["Condition"], { note: "\"if there are 3 or more events in your void\"" }),
-  dsl("turnHistory", [registered(DSL_TYPES, "ValueExpr", { member: "playedThisTurn", pending: "member" }), registered(DSL_TYPES, "Condition", { member: "thisTurn", pending: "member" })], ["ValueExpr", "Condition"], { note: "turn counters: cards played, discarded, dissolved this turn" }),
+  dsl("turnHistory", [registered(DSL_TYPES, "ValueExpr", { member: "playedThisTurn" }), registered(DSL_TYPES, "Condition", { member: "thisTurn" })], ["ValueExpr", "Condition"], { note: "turn counters: cards played, discarded, dissolved this turn" }),
   dsl("historyRefs", [registered("src/engine/effects/types.ts", "CardRef", { member: "lastPlayed", pending: "member" })], ["CardRef"], { note: `"the last warrior you played" (${GAP_38})` }),
   dsl("staticZones", [registered(DSL_TYPES, "StaticAbility", { option: "zone" })], ["StaticAbility"], { note: `statics that work from hand, void, or deck (C4; ${GAP_37})` }),
   dsl("activatedFromVoid", [registered(DSL_TYPES, "ActivatedAbility", { option: "zone" })], ["Ability"], { note: "activated abilities that work from the void (\"…: Materialize this character from your void\")" }),

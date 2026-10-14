@@ -673,6 +673,8 @@ export interface PlayedCard {
  * record.
  */
 export interface MaterializedCard {
+  /** Captured figment/figment-copy provenance; absent legacy provenance is unknown. */
+  readonly figment?: boolean;
   readonly instance: InstanceId;
   readonly cardType: "character" | "event";
   readonly subtype: CardSubtype;
@@ -687,7 +689,19 @@ export interface DawnProgress {
   known: Record<Side, number>;
 }
 
+/** A successful physical departure, with the effective type before its controller resets. */
+export interface TurnDeparture {
+  readonly instance: InstanceId;
+  readonly cardType: "character" | "event";
+}
+
 export interface TurnLog {
+  /** Completed discard occurrence counts, including cards that cease to exist. */
+  discarded?: Record<Side, number>;
+  /** Predeparture controller groups; repeated physical occurrences remain separate. */
+  leftPlay?: Record<Side, TurnDeparture[]>;
+  dissolved?: Record<Side, TurnDeparture[]>;
+  abandoned?: Record<Side, TurnDeparture[]>;
   /** True admissions and each side's known lower bound; absent legacy history starts at zero. */
   dawnProgress?: DawnProgress;
   /** Cards each side played this turn, in order. Copies are not played (D15). */

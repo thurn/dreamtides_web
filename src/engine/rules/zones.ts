@@ -12,6 +12,7 @@
  * 3. Veil: a dissolve by an effect the opponent controls removes Veil
  *    instead (RD-hv-7x4l.8-1).
  */
+import { recordLeftPlay, recordDissolved, recordAbandoned } from "./turn-log";
 import type { AbilitySource, InstanceId, Side, Slot, Zone } from "../state/ids";
 import { BACK_RANK_SIZE, sourceInstance } from "../state/ids";
 import { effectiveSpark } from "./spark";
@@ -116,6 +117,7 @@ function captureSourceSpark(ctx: StepContext, instance: CardInstance): number {
 function depart(ctx: StepContext, instance: CardInstance, to: Zone | null): void {
   if (instance.zone === "play" && to !== "play") {
     const spark = captureSourceSpark(ctx, instance);
+    recordLeftPlay(ctx.state, ctx.catalog, instance.controller, instance.id);
     ctx.emit({ kind: "leftPlay", instance: instance.id, side: instance.controller, to, spark });
     expireAt(ctx, { at: "sourceLeavesPlay", source: instance.id });
   } else if (instance.zone === "void") {
@@ -487,7 +489,9 @@ export function dissolve(ctx: StepContext, id: InstanceId, by: Side | null, aban
   const instance = instanceOf(state, id);
   const side = instance.controller;
   if (banishedAsReclaimed(state, catalog, instance)) {
+    const abandonedRecord = abandoned ? { instance: id, cardType: characteristics(state, catalog).of(id).cardType } : null;
     banish(ctx, id, abandoned ? null : by, abandoned ? undefined : challenge);
+    if (abandonedRecord !== null) recordAbandoned(state, side, abandonedRecord);
     if (abandoned) ctx.emit({ kind: "abandoned", instance: id, side });
     return;
   }
@@ -496,6 +500,7 @@ export function dissolve(ctx: StepContext, id: InstanceId, by: Side | null, aban
     addFloating(ctx, { controller: by, source, expiry: { at: "never" }, change: { kind: "keyword", instance: id, keyword: "veil", gains: false } });
     return;
   }
+  recordDissolved(state, catalog, side, id, abandoned);
   const removal = abandoned ? undefined : captureEnemyRemoval(ctx, id, by, challenge);
   if (instance.status.created) {
     ceaseToExist(ctx, id, { dissolved: true, abandoned, ...(removal === undefined ? {} : { removal }) });
