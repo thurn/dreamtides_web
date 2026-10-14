@@ -205,17 +205,16 @@ describe("played another event this turn", () => {
       const b = board(side, [prior.id, ...(takeExtra ? [extra.id] : [])]);
       let state = cast(b.state, side, b.ids[side].hand[0]).state;
       if (takeExtra) state = cast(state, side, b.ids[side].hand[1]).state;
-      const turn = state.turn.turnNumber;
-      state = passUntil(engine, state, next => next.turn.turnNumber !== turn).state;
-      const read = engine.apply(state, engine.decision(state)!.side, { kind: "pass" }, NO_PROMPTS);
-      expect(state.turn.active).toBe(takeExtra ? side : opponent(side));
-      const actor = state.turn.active;
-      const day = passUntil(engine, read.state, next => next.turn.active === actor && next.turn.phase === "day").state;
-      if (actor === side) expect(engine.apply(day, side, { kind: "activate", source: { kind: "avatar", side }, ability: 0 }, NO_PROMPTS).state.sides[side].score).toBe(2);
-      else {
-        const ownDay = passUntil(engine, day, next => next.turn.active === side && next.turn.phase === "day").state;
-        expect(engine.apply(ownDay, side, { kind: "activate", source: { kind: "avatar", side }, ability: 0 }, NO_PROMPTS).state.sides[side].score).toBe(2);
-      }
+      state = engine.apply(state, side, { kind: "activate", source: { kind: "avatar", side }, ability: 0 }, NO_PROMPTS).state;
+      expect(state.sides[side].score).toBe(7);
+      const turn = state.turn.turnNumber + (takeExtra ? 1 : 2);
+      const day = passUntil(engine, state, next => next.turn.turnNumber >= turn && next.turn.phase === "day").state;
+      expect(day.turn.turnNumber).toBe(turn);
+      expect(day.turn.active).toBe(side);
+      expect(day.turn.phase).toBe("day");
+      expect(day.turn.extra).toBe(takeExtra);
+      expect(engine.decision(day)).toEqual({ kind: "main", side });
+      expect(engine.apply(day, side, { kind: "activate", source: { kind: "avatar", side }, ability: 0 }, NO_PROMPTS).state.sides[side].score).toBe(9);
     }
   });
 

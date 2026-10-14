@@ -1908,9 +1908,19 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X, a `countCards` zone count, or `thisCharacterSpark()` (RD-hv-umm2.501-1), or `storedCounters()` (rules § Counters), figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid` and `everyIn`, each with an optional `costAtMost`, a constant or X, and for `fromVoid` also a zone count, `thisCharacterSpark()` or `storedCounters()`: `fromVoid` checks it as its targets are offered and again as the effect resolves (RD-hv-umm2.495-1), `everyIn` reads it once as the effect resolves (RD-hv-umm2.86-2); `topOfDeck`, `randomIn`, `thisCardIn`) | |
 | Values | `storedCounters()` (the source's live in-play count, or the same activation's own payment-departure count, RD-hv-umm2.95-1), `triggerSubjectSpark()` (the abandoned or dissolved lookback subject’s effective predeparture spark; captured zero stays zero, resolving without a binding reads 0, static scopes reject it; the public scalar survives subject cessation and sampling while its ability source is identifiable), `triggerSubjectCost()` (the trigger subject’s captured copiable cost; resolving null reads 0, static scopes reject it), constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost"), `thisCharacterSpark()` (the source's effective ✦ in a resolving effect, its retained last-known ✦ once it has left play, RD-hv-umm2.460-1) | turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
-| Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `turnOf(player)` (the named controller-relative player's active turn, including extra turns; resolving and static), `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`), `topCardMatches(filter = {}, player = "you")` (resolving; excluded from `StaticCondition`) | |
+| Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `turnOf(player)` (the named controller-relative player's active turn, including extra turns; resolving and static), `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `playedAnotherEventThisTurn()` (another physical event played by the resolving effect's controller this turn; excluded from `StaticCondition`), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`), `topCardMatches(filter = {}, player = "you")` (resolving; excluded from `StaticCondition`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
 | Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenPlayFromVoid(player, filter)` (a play from the void by Reclaim or a permission, by the stack item's `playedFromVoid` record), `whenMaterialize(subject, nth?)` (with `nth` an exact count or `{ atLeast }` of the turn log's matching materializations, the triggering character included), `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenErode(player, filter)`, `whenErodeSelf()` (works from the void), `whenReclaim(player, filter)`, `whenReclaimSelf()` (works from the stack), `whenAbandon`, `whenLeavesPlay`, `whenReturn(selector, { toYourHand? })` (a `leftPlay` for a hand, as the character last was in play), `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `atEndOfTurn(player?)` (as the Ending phase begins), `either` | |
+
+`playedAnotherEventThisTurn()` reads the resolving effect's retained controller
+and the current turn's committed plays, using each play's captured effective
+event type and physical card identity. Every play of the same physical source
+is excluded, including Reclaim; a different physical card with the same UUID
+qualifies. An emblem or Dreamwell source has no physical card to exclude.
+Ordinary and extra turns each start with fresh history. This source-bound
+resolving condition follows [rules § Current-turn occurrences and physical
+membership](../rules.md#current-turn-occurrences-and-physical-membership) and
+[RD-hv-umm2.697-1](evidence/rules-decisions/RD-hv-umm2.697-1.md).
 
 `topCardMatches` checks only the current top card of the named player's deck,
 using effective type, subtype and spark plus copiable cost and speed. It is
@@ -2067,7 +2077,8 @@ supplies the reader of the layers before the static effect. `StaticCondition`
 uses public information: controlled-character selectors and their static
 numeric bounds, energy, source zone and Reclaim status, unfiltered hand and
 deck sizes, and optionally filtered public void counts. It excludes optional
-cost-payment history, resolving-only source-spark reads, and hidden-printing
+cost-payment history, resolving-only source-spark reads, source-bound
+current-turn event history (`playedAnotherEventThisTurn()`), and hidden-printing
 filters. Omitting `while` makes the static ability unconditional.
 
 Dreamsigns and avatars use the same DSL as emblem abilities (P4). Dreamwell

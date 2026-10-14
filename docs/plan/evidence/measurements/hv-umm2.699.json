@@ -1,0 +1,383 @@
+{
+  "bead": "hv-umm2.699",
+  "baseOID": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09",
+  "dispatch": {
+    "timestamp": "2026-10-14T23:15:27.950Z",
+    "ordinal": 35822,
+    "callId": "call_9be99173caad4ee4860e3d5fcffca5b4",
+    "name": "spawn_agent",
+    "taskName": "extra_turn699",
+    "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-53-29-01a13063-cf1f-7e21-8cfa-6027541a59e2.jsonl"
+  },
+  "implementWindow": {
+    "start": "2026-10-14T23:15:27.950Z",
+    "end": "2026-10-14T23:22:12+00:00"
+  },
+  "clockQualification": "Whole original helper dispatch through normal automatic Git committer second; audit, admission, waits, mutation, checks, packaging and Git included. External bracket in receipts/helper/commit-bracket.json preserves subsecond precision. No date override or performance claim.",
+  "admission": "Parent-owned exact native /tmp/699-finite-admission-native.json; read before tracked writes.",
+  "scope": {
+    "allowedPaths": [
+      "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts",
+      "docs/plan/engine-design.md",
+      "docs/plan/evidence/friction/hv-umm2.699.json",
+      "docs/plan/evidence/measurements/hv-umm2.699.json",
+      "docs/plan/evidence/measurements/hv-umm2.699.md"
+    ],
+    "fallout": [],
+    "otherTrackedBytesUnchanged": true,
+    "allOtherContractBodiesUnchanged": true,
+    "contractLines": 299,
+    "existingFormCases": 22,
+    "addedCases": 0,
+    "testDelta": {
+      "files": 0,
+      "lines": -1,
+      "jsdomFiles": 0
+    }
+  },
+  "sourceSHA256": {
+    "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "fd82956e62df1db9d65e33becf4fc704b950fcf3a611e9bf70d3638a5c8d6f24",
+    "docs/plan/engine-design.md": "cbe96a58abc73e6eb94fb4b0efe6ec00e3f257ab250ccd7400fd22a5401175b3",
+    "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb"
+  },
+  "observations": {
+    "actors": [
+      "player",
+      "enemy"
+    ],
+    "positiveControl": "Public avatar effect scores7 after committed prior event, in each ordinary/extra loop.",
+    "ordinary": "First Day decision of same actor next ordinary turn, exact ordinal+2 (opponent ordinary turn intervenes), active actor, phase day, extra false, decision main; immediate public reader score9.",
+    "extra": "First Day decision of requested extra turn, exact ordinal+1, active actor, phase day, extra true, decision main; immediate public reader score9.",
+    "mutationFailure": "Both actor cases fail expected9/received14 at final avatar score assertion. False ordinary loop and its positive control finish before each extra loop failure. No private history assertion or observable state injection."
+  },
+  "mutation": {
+    "caller": "/tmp/699-extra-reset-mutant.py",
+    "startedAt": "2026-10-14T23:18:57.056930+00:00",
+    "runtimePath": "src/engine/rules/turn.ts",
+    "oldSHA256": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb",
+    "mutantSHA256": "2eba0edd360f7b2dce134b8ec7a4ccda4bfc9cd5b0132b9e1694385c5c80e177",
+    "backup": "turn.ts.original",
+    "mutation": "save committed played, reset log, restore played only on extra turns",
+    "childTerminal": true,
+    "childExitCode": 1,
+    "restoredAt": "2026-10-14T23:19:06.083420+00:00",
+    "restoredSHA256": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb",
+    "runtimeDiff": "",
+    "runtimeStagedDiff": "",
+    "callerSHA256": "0e635d92475392492f5123ff936f42b739b02eda0ca5e8d0de6fbe1c7e8aa63b",
+    "retainedCaller": "receipts/helper/699-extra-reset-mutant.py"
+  },
+  "checks": [
+    {
+      "label": "focused-new-01",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "played another event this turn"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/history-extra-turn-699-root",
+      "startedAt": "2026-10-14T23:18:32.060004+00:00",
+      "hostLoadRaw": "{ 10.02 12.34 13.33 }",
+      "workers": 2,
+      "head": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09",
+      "sourceManifest": "focused-new-01.source.json",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09"
+      },
+      "pid": 33410,
+      "endedAt": "2026-10-14T23:18:42.951486+00:00",
+      "wallS": 10.891369417018723,
+      "exitCode": 0,
+      "stdout": "focused-new-01.stdout",
+      "stderr": "focused-new-01.stderr",
+      "terminal": true
+    },
+    {
+      "label": "mutant-reset-01",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "resets the historical predicate"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/history-extra-turn-699-root",
+      "startedAt": "2026-10-14T23:18:57.533129+00:00",
+      "hostLoadRaw": "{ 8.77 11.85 13.12 }",
+      "workers": 2,
+      "head": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09",
+      "sourceManifest": "mutant-reset-01.source.json",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09"
+      },
+      "pid": 35306,
+      "endedAt": "2026-10-14T23:19:06.077926+00:00",
+      "wallS": 8.544721708982252,
+      "exitCode": 1,
+      "stdout": "mutant-reset-01.stdout",
+      "stderr": "mutant-reset-01.stderr",
+      "terminal": true
+    },
+    {
+      "label": "focused-restored-01",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "played another event this turn"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/history-extra-turn-699-root",
+      "startedAt": "2026-10-14T23:19:27.945305+00:00",
+      "hostLoadRaw": "{ 11.73 12.17 13.19 }",
+      "workers": 2,
+      "head": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09",
+      "sourceManifest": "focused-restored-01.source.json",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09"
+      },
+      "pid": 37596,
+      "endedAt": "2026-10-14T23:19:36.579967+00:00",
+      "wallS": 8.634594542032573,
+      "exitCode": 0,
+      "stdout": "focused-restored-01.stdout",
+      "stderr": "focused-restored-01.stderr",
+      "terminal": true
+    },
+    {
+      "label": "review-final-01",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/history-extra-turn-699-root",
+      "startedAt": "2026-10-14T23:20:26.703193+00:00",
+      "hostLoadRaw": "{ 22.32 15.26 14.29 }",
+      "workers": 2,
+      "head": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09",
+      "sourceManifest": "review-final-01.source.json",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09"
+      },
+      "pid": 50268,
+      "endedAt": "2026-10-14T23:20:52.704670+00:00",
+      "wallS": 26.001170208968688,
+      "exitCode": 0,
+      "stdout": "review-final-01.stdout",
+      "stderr": "review-final-01.stderr",
+      "terminal": true
+    },
+    {
+      "label": "knip-final-01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/history-extra-turn-699-root",
+      "startedAt": "2026-10-14T23:20:56.883192+00:00",
+      "hostLoadRaw": "{ 24.63 16.74 14.87 }",
+      "workers": 2,
+      "head": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09",
+      "sourceManifest": "knip-final-01.source.json",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09"
+      },
+      "pid": 1630,
+      "endedAt": "2026-10-14T23:21:02.292713+00:00",
+      "wallS": 5.409496542008128,
+      "exitCode": 0,
+      "stdout": "knip-final-01.stdout",
+      "stderr": "knip-final-01.stderr",
+      "terminal": true
+    },
+    {
+      "label": "schema-final-01",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/history-extra-turn-699-root",
+      "startedAt": "2026-10-14T23:21:29.710462+00:00",
+      "hostLoadRaw": "{ 18.76 16.07 14.69 }",
+      "workers": 2,
+      "head": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09",
+      "sourceManifest": "schema-final-01.source.json",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09"
+      },
+      "pid": 5565,
+      "endedAt": "2026-10-14T23:21:29.797950+00:00",
+      "wallS": 0.08752966695465147,
+      "exitCode": 0,
+      "stdout": "schema-final-01.stdout",
+      "stderr": "schema-final-01.stderr",
+      "terminal": true
+    },
+    {
+      "label": "whitespace-final-01",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/history-extra-turn-699-root",
+      "startedAt": "2026-10-14T23:21:29.950187+00:00",
+      "hostLoadRaw": "{ 18.76 16.07 14.69 }",
+      "workers": 2,
+      "head": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09",
+      "sourceManifest": "whitespace-final-01.source.json",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09"
+      },
+      "pid": 5585,
+      "endedAt": "2026-10-14T23:21:29.971466+00:00",
+      "wallS": 0.0213198330020532,
+      "exitCode": 0,
+      "stdout": "whitespace-final-01.stdout",
+      "stderr": "whitespace-final-01.stderr",
+      "terminal": true
+    }
+  ],
+  "validationScope": "Focused existing form, ordinary diff-aware review and knip, schema and whitespace. No runtime delivered, infrastructure, UI, production leaf, or new rules decision; no local full/browser/fuzz. Tollgate gate/release and fresh normal Claude Opus5.5 core review remain parent-owned after immutable commit.",
+  "hostLoadSamples": [
+    {
+      "label": "focused-new-01",
+      "at": "2026-10-14T23:18:32.060004+00:00",
+      "raw": "{ 10.02 12.34 13.33 }"
+    },
+    {
+      "label": "mutant-reset-01",
+      "at": "2026-10-14T23:18:57.533129+00:00",
+      "raw": "{ 8.77 11.85 13.12 }"
+    },
+    {
+      "label": "focused-restored-01",
+      "at": "2026-10-14T23:19:27.945305+00:00",
+      "raw": "{ 11.73 12.17 13.19 }"
+    },
+    {
+      "label": "review-final-01",
+      "at": "2026-10-14T23:20:26.703193+00:00",
+      "raw": "{ 22.32 15.26 14.29 }"
+    },
+    {
+      "label": "knip-final-01",
+      "at": "2026-10-14T23:20:56.883192+00:00",
+      "raw": "{ 24.63 16.74 14.87 }"
+    },
+    {
+      "label": "schema-final-01",
+      "at": "2026-10-14T23:21:29.710462+00:00",
+      "raw": "{ 18.76 16.07 14.69 }"
+    },
+    {
+      "label": "whitespace-final-01",
+      "at": "2026-10-14T23:21:29.950187+00:00",
+      "raw": "{ 18.76 16.07 14.69 }"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final-01 starting sysctl1-minute load"
+      }
+    }
+  },
+  "retainedAuditFailures": {
+    "failures": [
+      {
+        "kind": "audit-read",
+        "error": "zsh optional scripts/*budget* glob unmatched; guessed primitives.test.ts path absent"
+      },
+      {
+        "kind": "audit-read",
+        "error": "guessed scripts/eslint-rules path absent; actual eslint-rules imports subsequently observed"
+      },
+      {
+        "kind": "manifest-01",
+        "exitCode": 1,
+        "error": "IsADirectoryError on tracked .claude/skills symlink; repaired to hash link text without traversing targets"
+      }
+    ],
+    "trackedWrites": false,
+    "productDefects": []
+  },
+  "parentAdmissionEncodingFailure": "Parent initial grant encoding had JS delimiter error before effects; retained by parent, corrected with clean/native rechecks.",
+  "resources": {
+    "workers": 2,
+    "heavyCommands": 0,
+    "browserOrProviders": 0,
+    "ownedLongLivedProcesses": [],
+    "allRecordedChildrenTerminal": true,
+    "noForeignCleanup": true
+  },
+  "preExistingProductIssues": [],
+  "rulesDecisionsCreated": [],
+  "cardIssuesCreated": [],
+  "review": "Mandatory fresh source-bound normal Claude Opus5.5 core review is parent-owned; no independent review completion claimed.",
+  "failurePaths": "No new state transition. Existing reset contract observes both actors through public activated avatar effect at ordinary/extra first Day. Mid-step/reload/partial-write/stale-input contracts remain unchanged and are outside bounded follow-up scope.",
+  "receiptRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.699/receipts/helper",
+  "parentIndependentMutationProof": {
+    "path": "receipts/parent/699-parent-mutation-proof.json",
+    "sha256": "16d898cc3fdc7fea2ffa6c59fce93bc9b27a5a177f4fc380aaadd3b8d016cee0"
+  },
+  "sourceEpochs": {
+    "focused-new-01": {
+      "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "fd82956e62df1db9d65e33becf4fc704b950fcf3a611e9bf70d3638a5c8d6f24",
+      "docs/plan/engine-design.md": "cbe96a58abc73e6eb94fb4b0efe6ec00e3f257ab250ccd7400fd22a5401175b3",
+      "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb"
+    },
+    "mutant-reset-01": {
+      "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "fd82956e62df1db9d65e33becf4fc704b950fcf3a611e9bf70d3638a5c8d6f24",
+      "docs/plan/engine-design.md": "cbe96a58abc73e6eb94fb4b0efe6ec00e3f257ab250ccd7400fd22a5401175b3",
+      "src/engine/rules/turn.ts": "2eba0edd360f7b2dce134b8ec7a4ccda4bfc9cd5b0132b9e1694385c5c80e177"
+    },
+    "focused-restored-01": {
+      "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "fd82956e62df1db9d65e33becf4fc704b950fcf3a611e9bf70d3638a5c8d6f24",
+      "docs/plan/engine-design.md": "cbe96a58abc73e6eb94fb4b0efe6ec00e3f257ab250ccd7400fd22a5401175b3",
+      "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb"
+    },
+    "review-final-01": {
+      "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "fd82956e62df1db9d65e33becf4fc704b950fcf3a611e9bf70d3638a5c8d6f24",
+      "docs/plan/engine-design.md": "cbe96a58abc73e6eb94fb4b0efe6ec00e3f257ab250ccd7400fd22a5401175b3",
+      "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb"
+    },
+    "knip-final-01": {
+      "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "fd82956e62df1db9d65e33becf4fc704b950fcf3a611e9bf70d3638a5c8d6f24",
+      "docs/plan/engine-design.md": "cbe96a58abc73e6eb94fb4b0efe6ec00e3f257ab250ccd7400fd22a5401175b3",
+      "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb"
+    },
+    "schema-final-01": {
+      "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "fd82956e62df1db9d65e33becf4fc704b950fcf3a611e9bf70d3638a5c8d6f24",
+      "docs/plan/engine-design.md": "cbe96a58abc73e6eb94fb4b0efe6ec00e3f257ab250ccd7400fd22a5401175b3",
+      "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb"
+    },
+    "whitespace-final-01": {
+      "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "fd82956e62df1db9d65e33becf4fc704b950fcf3a611e9bf70d3638a5c8d6f24",
+      "docs/plan/engine-design.md": "cbe96a58abc73e6eb94fb4b0efe6ec00e3f257ab250ccd7400fd22a5401175b3",
+      "src/engine/rules/turn.ts": "af01df614e74a0bd1b9872e69ae62a32d7c73dc9e5e2ef262438a1033da170bb"
+    }
+  },
+  "checkTotals": {
+    "focusedNewPassed": 22,
+    "focusedRestoredPassed": 22,
+    "mutantActorFailures": 2,
+    "ordinaryReviewPassed": 4461,
+    "ordinaryReviewRelatedFiles": 1
+  }
+}
