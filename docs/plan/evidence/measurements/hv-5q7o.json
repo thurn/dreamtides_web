@@ -1,0 +1,201 @@
+{
+  "bead": "hv-5q7o",
+  "base": "4c9be8b23da1f29f2fdefd125f001251e22f1d26",
+  "dispatch": "2026-10-14T17:56:31.459927+00:00",
+  "evidenceCutoff": "2026-10-14T18:08:29.478859+00:00",
+  "elapsedThroughCutoffS": 718.018932,
+  "futureGit": "UNKNOWN at actual pre-Git cutoff; external actual completion receipt supplies final OID/blobs/clock and dispatch-inclusive interval within60seconds.",
+  "admission": {
+    "nativeACK": "source-write-native-ack.json",
+    "verification": "source-write-verification.json",
+    "proposalSHA256": "2468fcb934938ebd252ec26bc9280dc2c65e81908e7e5a401db7fc0b61e20164",
+    "collectorSHA256": "030a4fdcb726a02494d3c3607fa4e63b10a83e3ee10caa957b9aa0a2c0403cee",
+    "counterfactualDriverSHA256": "eab253957abd9b1d2f675278bf69eab8b5bc50525da88eab094bbc778bb3e52b",
+    "peerAudit": "Root fully read8 active native scopes; no exact fixture/privacy/lexical-body overlap."
+  },
+  "scope": "Only sibling fixture/matrix and3own records; production bytes unchanged. Existing20 matrix controls preserved;4additional controller/viewer sibling cases.",
+  "publicProducer": "Normal activated sequence(withMaterialized(materialize(topOfDeck()),sequence()),floating) actually materializes synthetic cohort into play before separate onDawn floating sibling. Real queued cause and observed repeat have absent captured; direct/JSON sampled saved cause and observed repeat preserve absence. No rawstate/queue injection or private helper invocation.",
+  "contracts": {
+    "matrix": 24,
+    "added": 4,
+    "existing": 20,
+    "privacyAndContinuation": "Genuine public fold optional confirm true/false, save/reload, energy+1/0, observed repeat queue snapshots, legalActions, repeated sampling, direct/JSON comparableView, both viewers and source/input hash/bytes guards.",
+    "fileLines": {
+      "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": 91,
+      "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts": 470
+    },
+    "testDeltaLinesMeasuredFor": "Net+8 existing private fixture/contract lines; no new module."
+  },
+  "counterfactual": {
+    "attempts": 1,
+    "sourceEpoch": "Same final fixture/privacy bytes; only temporary sampler lexical predicate changed.",
+    "result": "Exactly4siblingFAIL20existingPASS; absent captured assertion receives [] at sampled saved occurrence BEFORE mutant sampled continuation. Fixed24 separately proves actual real/sample repeated snapshots. Expected diagnostic red, not a production defect.",
+    "actualInnerExit": 1,
+    "actualOuterExit": 0,
+    "restoration": "Whole corrected determinize bytes restored in finally; all10 fixed source SHA identical before surrounding/aggregate.",
+    "receipts": [
+      "counterfactual-manifest.json",
+      "counterfactual-restoration.json",
+      "counterfactual-verified.json",
+      "sibling-mutant.receipt.json"
+    ]
+  },
+  "validation": {
+    "fixed-context-focus": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "public floating captured context"
+      ],
+      "pid": 77663,
+      "pgid": 77663,
+      "start": "2026-10-14T18:05:17.414549+00:00",
+      "end": "2026-10-14T18:05:22.302521+00:00",
+      "wallS": 4.8878276250034105,
+      "exit": 0,
+      "stdoutSHA256": "9c087be6386d54d39b1873adadbf8fb8e087ff25591b55b13ca28cd575ca294b",
+      "settled": true
+    },
+    "counterfactual-driver": {
+      "argv": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floatingSibling-5q7o/sibling-counterfactual.py"
+      ],
+      "pid": 78645,
+      "pgid": 78645,
+      "start": "2026-10-14T18:05:32.667990+00:00",
+      "end": "2026-10-14T18:05:40.070379+00:00",
+      "wallS": 7.402288792014588,
+      "exit": 0,
+      "stdoutSHA256": "0c4a73012b255383e800b63e306f80788631ad127361676b6aa108a65481d4b0",
+      "settled": true
+    },
+    "sibling-mutant": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "public floating captured context"
+      ],
+      "pid": 78653,
+      "pgid": 78653,
+      "start": "2026-10-14T18:05:32.726015+00:00",
+      "end": "2026-10-14T18:05:40.048830+00:00",
+      "wallS": 7.322705458005657,
+      "exit": 1,
+      "stdoutSHA256": "d42ab8b3a3860cad1cbe5ac83587442568c82223e0a959af068a589cad2bb7fb",
+      "settled": true
+    },
+    "surrounding-focus": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility|withMaterialized|floating|delayed"
+      ],
+      "pid": 87005,
+      "pgid": 87005,
+      "start": "2026-10-14T18:05:52.143675+00:00",
+      "end": "2026-10-14T18:05:57.759521+00:00",
+      "wallS": 5.61569133301964,
+      "exit": 0,
+      "stdoutSHA256": "4d6546ca39f46b80d8e4c197a12a87ee871f0933f5eba34625e028a76b960c5b",
+      "settled": true
+    },
+    "normal-review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 32733,
+      "pgid": 32733,
+      "start": "2026-10-14T18:06:08.593497+00:00",
+      "end": "2026-10-14T18:06:35.060179+00:00",
+      "wallS": 26.46627274999628,
+      "exit": 0,
+      "stdoutSHA256": "d0c766dd754f6fedda8d2efbfd2207f57b7d93cbb1481a2034f0b09cb02076c5",
+      "settled": true
+    },
+    "light-knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 97956,
+      "pgid": 97956,
+      "start": "2026-10-14T18:06:49.767774+00:00",
+      "end": "2026-10-14T18:06:55.099174+00:00",
+      "wallS": 5.331233458011411,
+      "exit": 0,
+      "stdoutSHA256": "d75df8ed04d070b45eb7a0a4275f5091714866bcdfee394b1f7563a1a31a210c",
+      "settled": true
+    }
+  },
+  "validationSummary": {
+    "fixed": "24PASS",
+    "surrounding": "167PASS",
+    "review": "PASS; current related-test routing1 importer3917PASS plus lint/typecheck/typecheck-node/import-cycles",
+    "knip": "PASS",
+    "workers": 2,
+    "schema": "Future at cutoff; exact final-evidence schema receipt externally retained before Git.",
+    "whitespace": "Future at cutoff; exact staged whitespace receipt externally retained before Git."
+  },
+  "failurePaths": {
+    "errorMidStep": "Public applied requires no engine error; real accepted and declined continuations succeed. ONE temporary mutant pins shape mismatch. No new transition/error handling.",
+    "reload": "Genuine saved optional-confirm slice, direct/JSON sampled committed states and public parser/pending replay covered.",
+    "partialWrite": "No production persistence change; input serialization and authoritative source hash/bytes guards remain. Diagnostic whole-file finally restores all10 fixed hashes.",
+    "invalidStaleInput": "Existing parseSaved/pending-confirm guards and surrounding malformed/immutable-admission controls unchanged. No new input/schema path.",
+    "concurrentActors": "Four independent controller/viewer sibling cells retain purity/visibility/legality guards plus existing20. No shared IO/cache/service or race-stress claim."
+  },
+  "resources": {
+    "ownGroupsAbsent": [
+      59083,
+      77663,
+      78645,
+      78653,
+      87005,
+      32733,
+      97956
+    ],
+    "remaining": [],
+    "scratchCounterfactualRun": true,
+    "browser": false,
+    "provider": false,
+    "liveAppServer": false,
+    "leases": false,
+    "captures": 0,
+    "heavyFull": false,
+    "defaultFuzz": false
+  },
+  "sourceSHA256": {
+    "src/engine/triggers/body.ts": "0304002782eeb7499500002295eb747b73fd8ee514de271797be41935cf83d99",
+    "src/engine/triggers/matcher.ts": "2ce911d248cc95b5dfa86417ce0c5a046201cd7b65d327b6f8f1119f59489924",
+    "src/engine/view/determinize.ts": "1f5750d0abd44d313afa6b7cf03a6d49b7ba39f7f9717916475ada24dac1de27",
+    "src/engine/effects/interpreter.ts": "16841dce52b27eb7c546a8e535344ad586d38eebadb251ffde43940ec1f9f6bd",
+    "src/engine/effects/registry.ts": "3efd70c237c170889e635e65fd3e1e0320c336ec5d36b17098a7536c732ad190",
+    "src/engine/effects/types.ts": "ec0e2189803ec90a8ecdb4141e79ae11387f4a5162108fa8fb1ac24e18eaf76c",
+    "src/engine/triggers/resolve.ts": "9eaf1247a9ba48c99a488b84b10f2b0db1614852e5205a9e247201f2322fbadc",
+    "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts": "392ec7ac4f99a69f58ea4ccd3f64a3f361d0985760b44b1fb6af5c8fc2ed80ca",
+    "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+    "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": "3b5382adb8ba3b7235858b1d9c36df0b1df218f9a506764545d0c0946291e3d7"
+  },
+  "setup": "Fresh npm2.455073s/PG59083 terminal; dispatch begins before setup.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual1minute host load at pre-Git evidence cutoff",
+        "at": "2026-10-14T18:08:29.478859+00:00"
+      },
+      "implementWindow": {
+        "measuredFor": "Dispatch through actual pre-Git cutoff including setup/sourcefirst/admission/test/CF/check/wait costs; final endpoint externally receipted."
+      }
+    }
+  },
+  "coldReview": "Root alone normal fresh Claude Opus5.5 core after final; no helper review claimed."
+}

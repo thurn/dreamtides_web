@@ -381,7 +381,7 @@ describe("repeatTriggeringAbility privacy", () => {
   });
 
   it.each(SIDES.flatMap(side => SIDES.flatMap(viewer =>
-    (["hidden", "visible", "empty", "expired", "unscoped"] as const).map(scenario => ({ side, viewer, scenario })))))(
+    (["hidden", "visible", "empty", "expired", "unscoped", "sibling"] as const).map(scenario => ({ side, viewer, scenario })))))(
     "public floating captured context for $side/$viewer/$scenario survives sampling and real confirmation", ({ side, viewer, scenario }) => {
     const w = floatingWorld(side, scenario), fold = createFoldAdapter(w.engine);
     let slice = sliceOf(w.state);
@@ -406,7 +406,11 @@ describe("repeatTriggeringAbility privacy", () => {
     const contexts = initial.floating.filter(effect => effect.change.kind === "trigger");
     if (scenario === "expired") expect(contexts).toEqual([]);
     if (scenario === "empty") expect(contexts[0].change).toHaveProperty("captured", []);
-    if (scenario === "unscoped") expect(contexts[0].change).not.toHaveProperty("captured");
+    if (scenario === "unscoped" || scenario === "sibling") expect(contexts[0].change).not.toHaveProperty("captured");
+    if (scenario === "sibling") {
+      expect(slice.committed.instances[w.cohort!].zone).toBe("play");
+      expect(slice.committed.triggerQueue[0].triggeringAbility!.occurrence).not.toHaveProperty("captured");
+    }
     const before = serializeState(slice.committed), hash = stateHash(slice.committed), inputBefore = JSON.stringify(initial);
     const resume = (saved: BattleSlice, accept: boolean) => {
       const adapter = createFoldAdapter(w.engine), prompt = adapter.pending(saved);
@@ -422,6 +426,7 @@ describe("repeatTriggeringAbility privacy", () => {
     expect(declined.slice.committed.sides[side].currentEnergy).toBe(energy);
     expect(queued(real.published)).toHaveLength(1);
     expect(queued(declined.published)).toEqual([]);
+    if (scenario === "sibling") expect(real.repeatedState!.triggerQueue[0]).not.toHaveProperty("captured");
     for (const json of [false, true]) {
       const input = json ? JSON.parse(inputBefore) as typeof initial : initial, inputSnapshot = JSON.stringify(input);
       const sample = w.engine.determinize(input, lists, () => .2);
@@ -432,7 +437,7 @@ describe("repeatTriggeringAbility privacy", () => {
       expect(comparableView(w.engine.view(w.engine.determinize(restored, lists, () => .2), viewer))).toEqual(comparableView(initial));
       const binding = saved.committed.triggerQueue[0].triggeringAbility!.occurrence;
       if (scenario === "empty" || scenario === "expired") expect(binding.captured).toEqual([]);
-      if (scenario === "unscoped") expect(binding).not.toHaveProperty("captured");
+      if (scenario === "unscoped" || scenario === "sibling") expect(binding).not.toHaveProperty("captured");
       const done = resume(saved, true), declinedSample = resume(saved, false);
       expect(done.slice.committed.sides[side].currentEnergy).toBe(energy + 1);
       expect(done.slice.committed.triggerQueue).toEqual([]);
@@ -445,6 +450,7 @@ describe("repeatTriggeringAbility privacy", () => {
         expect(kinds).toEqual(["abandoned", "materialized"]);
       }
       if (done.repeatedState === undefined) throw new Error("The actual repeated admission was not observed");
+      if (scenario === "sibling") expect(done.repeatedState.triggerQueue[0]).not.toHaveProperty("captured");
       const repeatedView = w.engine.view(done.repeatedState, viewer).triggerQueue[0];
       if (scenario !== "visible") {
         expect(repeatedView.origin).toBeNull();

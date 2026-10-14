@@ -72,18 +72,20 @@ export const force = card(0, () => [activated([], p.triggerAbility(mages, "mater
 export const observer = card(1, () => [triggered(whenNamedAbilityTriggered("materialized"), p.repeatTriggeringAbility(), { oncePerTurn: true })]);
 
 /** Real floating contexts reached through public fold actions in the privacy contracts. */
-export function floatingWorld(side: Side, scenario: "hidden" | "visible" | "empty" | "expired" | "unscoped") {
-  const cohort = card(101, () => [], "Mage"), hidden = scenario !== "visible", scoped = scenario !== "unscoped";
+export function floatingWorld(side: Side, scenario: "hidden" | "visible" | "empty" | "expired" | "unscoped" | "sibling") {
+  const cohort = card(101, () => [], "Mage"), hidden = scenario !== "visible", scoped = scenario !== "unscoped" && scenario !== "sibling";
+  const materializing = scoped || scenario === "sibling";
   const watch = card(102, () => [triggered(whenNamedAbilityTriggered("dawn"), p.optional(p.repeatTriggeringAbility()), { zone: "any", oncePerTurn: true })]);
   const maker = card(103, () => {
     const floating = p.floating(onDawn(), p.sequence(p.draw(1), p.reveal(), p.gainEnergy(1),
       ...(scoped ? [p.abandonCards([p.capturedCards()]), p.materialize(everyIn("void", { subtype: "Mage" }))] : []),
       ...(scenario === "expired" ? [p.dissolve(self())] : [])), scenario === "expired" ? "whileSourceInPlay" : "permanent");
-    return [activated([], scoped ? p.withMaterialized(p.materialize(topOfDeck()), scenario === "empty"
-      ? p.withMaterialized(p.materialize(everyIn("void", { subtype: "Mage" })), floating) : floating) : floating)];
+    return [activated([], scenario === "sibling" ? p.sequence(p.withMaterialized(p.materialize(topOfDeck()), p.sequence()), floating)
+      : scoped ? p.withMaterialized(p.materialize(topOfDeck()), scenario === "empty"
+        ? p.withMaterialized(p.materialize(everyIn("void", { subtype: "Mage" })), floating) : floating) : floating)];
   }, "Explorer");
   const w = world(side, [maker, cohort, watch], { back: [maker.id, ...(hidden ? [] : [watch.id])],
-    deck: [...(scoped ? [cohort.id] : []), v.vanilla2.id, ...(hidden ? [watch.id] : []), v.vanilla3.id, v.vanilla3.id, v.vanilla3.id] });
-  return { ...w, maker: w.ids[side].back[0]!, watch: hidden ? w.ids[side].deck[scoped ? 2 : 1] : w.ids[side].back[1]!,
-    cohort: scoped ? w.ids[side].deck[0] : undefined };
+    deck: [...(materializing ? [cohort.id] : []), v.vanilla2.id, ...(hidden ? [watch.id] : []), v.vanilla3.id, v.vanilla3.id, v.vanilla3.id] });
+  return { ...w, maker: w.ids[side].back[0]!, watch: hidden ? w.ids[side].deck[materializing ? 2 : 1] : w.ids[side].back[1]!,
+    cohort: materializing ? w.ids[side].deck[0] : undefined };
 }
