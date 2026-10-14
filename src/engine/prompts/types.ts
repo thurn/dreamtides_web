@@ -1,4 +1,4 @@
-import type { PaymentCost } from "../dsl/types";
+import type { Cost, PaymentCost } from "../dsl/types";
 import type { CardSubtype } from "../../types/card-identity";
 import type { AvatarId, CardId, DreamsignId, DreamwellSource, InstanceId, Side, Slot } from "../state/ids";
 
@@ -170,8 +170,10 @@ export interface ChooseSlotPrompt extends PromptBase {
 }
 
 export interface ModeOption {
-  /** Semantic play-route identity; present when a prompt includes the optional event alternative. */
-  readonly route?: "normal" | "offering" | "reclaim" | "eventAlternative";
+  /** Semantic play-route identity; present when a prompt includes an alternative base. */
+  readonly route?: "normal" | "offering" | "reclaim" | "eventAlternative" | "alternativeCost";
+  /** Authored alternative base payments; omitted from a concealed display projection. */
+  readonly costs?: readonly Cost[];
   readonly mode: number;
   readonly legal: boolean;
 }

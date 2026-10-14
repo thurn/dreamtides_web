@@ -996,6 +996,37 @@ character or discard a card." The player chooses one alternative they can pay
 as they play the card and pays only that one. The card cannot be played if no
 alternative can be paid.
 
+**Card-defined alternative costs:** "You may play this card for N● by …"
+offers the stated energy and payments in place of the card's normal energy
+base. The player may instead pay its normal costs. Choose one play route:
+a card-defined alternative, Offering, Reclaim, and an optional event base
+are separate routes and cannot be combined. Additional mandatory, optional
+and choice costs still apply once. Normal-base setters, including first or
+nth play setters, apply to the normal route; the alternative chooses its
+own base. Increases and reductions change the whole chosen energy payment,
+with the usual zero floor, and never change its nonenergy payments.
+
+An alternative cost grants no permission to play from a void or deck and
+changes no timing or play requirement. Independent permission supplies that
+access and is used normally when the alternative is chosen. Reclaim alone
+supplies only its Reclaim route. An immediate-play instruction supplies
+access during that instruction and permits the card's alternative payment.
+A replaced printed X● is zero unless the alternative itself includes X●;
+that alternative's X is chosen normally. An additional count or captured X
+can bind normally when the printed energy has no X. Payments sharing an X
+fixed at zero must be compatible with that value.
+
+**Giving the opponent ⍟ as a cost:** "By giving the opponent N⍟" creates
+that many points for the opponent of the player playing the card. It spends
+none of the payer's points and needs no points in their score. Choose the
+route and all legal targets before committing; cancelled or failed plays
+pay nothing. The grant is paid with the chosen route before the card enters
+the stack, and stays paid if the card is prevented or its target becomes
+illegal. A copy on the stack pays no cost again. Reaching the victory
+threshold through this payment wins in the check after the completed play,
+before the card resolves. A play during a resolving instruction uses that
+instruction's completed-action check.
+
 **Optional additional costs** are written as "You may X to play this event",
 paired with "If the additional cost was paid, do Y." The player chooses whether
 to pay as they play the card, and can choose to pay only if they can pay the

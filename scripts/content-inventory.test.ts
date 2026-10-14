@@ -147,7 +147,7 @@ const completeAuthoringFixtures = new Map<string, string>([
     export function controls() {} export function costPaid() {}
     export function randomIn() {} export function countCards() {}
     export function costOf() {} export function conditionCardCounts() {}
-    export function pointsCost() {} export function returnCost() {}
+    export function pointsCost() {} export function giveOpponentPointsCost() {} export function returnCost() {}
     export function discardHandCost() {} export function discardCostFilter() {}
     export function banishXCost() {} export function banishFromAnyVoidCost() {}
     export function abandonXCost() {}
@@ -160,7 +160,7 @@ const completeAuthoringFixtures = new Map<string, string>([
   `],
   ["src/engine/dsl/types.ts", `
     export type PaymentCost = { tag: "banishFromHand"; count: number } | { tag: "discard"; count: "x"; min?: number };
-    export type Condition = { tag: "energyAtLeast"; amount: number } | { tag: "thisTurn" };
+    export type Condition = { tag: "energyAtLeast"; amount: number } | { tag: "thisTurn" } | { tag: "sourceWasAlternativePlayed" };
     export type ValueExpr = { tag: "handSize" } | { tag: "storedCounters" } | { tag: "playedThisTurn" };
     export type Trigger = { tag: "play"; nth?: number; from?: "hand" | "void" }
       | { tag: "draw"; filter?: object } | { tag: "materialize"; nth?: number }
@@ -176,7 +176,8 @@ const completeAuthoringFixtures = new Map<string, string>([
     export interface ZoneTargetSpec { zone: "void"; costAtMost?: number | { tag: "x" } }
     export type BoundValue = number | { tag: "x" } | { tag: "sourceSpark" };
     export interface StaticAbility { zone?: FunctionalZone }
-    export type Ability = { tag: "playCondition" } | { tag: "alternativeCost" };
+    export interface AlternativeCostAbility { tag: "alternativeCost"; condition?: Condition }
+    export type Ability = { tag: "playCondition" } | AlternativeCostAbility;
     export interface TriggeredAbility { oncePerTurn?: boolean }
     export interface DeckMods {
       typeChange?: { cardType: "character" | "event"; subtype: string };
@@ -192,7 +193,7 @@ const expectedCapabilityNames = [
   "selectorFigment", "selectorHasAbility", "stackSelectorBounds", "selectorChallenger",
   "selectorBounds", "cardFilterBounds", "zoneCardRefs", "randomSelection", "valueZoneCounts",
   "valueCardStats", "storedCounters", "conditionCardCounts", "turnHistory", "historyRefs",
-  "staticZones", "playCondition", "alternativeCost", "pointsCost", "returnCost",
+  "staticZones", "playCondition", "alternativeCost", "conditionalAlternativeCost", "alternativePlayResult", "pointsCost", "giveOpponentPointsCost", "returnCost",
   "discardHandCost", "discardCostFilter", "banishXCost", "banishFromAnyVoidCost",
   "whenDissolvedTrigger", "whenDiscardSelfTrigger", "whenReclaimTrigger", "whenReturnTrigger",
   "whenErodeTrigger", "whenForeseeTrigger", "whenCopyTrigger", "whenRemovesEnemyTrigger",
@@ -233,6 +234,9 @@ const minimalApiFixtures = [
   ["staticZones", typesModule, 'export interface StaticAbility { zone?: "hand" | "void" }'],
   ["playCondition", typesModule, 'export type Ability = { kind: "playCondition" };'],
   ["alternativeCost", typesModule, 'export type Ability = { kind: "alternativeCost" };'],
+  ["conditionalAlternativeCost", typesModule, 'export interface AlternativeCostAbility { condition?: { kind: "controls" } }'],
+  ["alternativePlayResult", typesModule, 'export type Condition = { kind: "sourceWasAlternativePlayed" };'],
+  ["giveOpponentPointsCost", buildersModule, 'export function giveOpponentPointsCost() {}'],
   ["pointsCost", buildersModule, 'export function pointsCost() {}'],
   ["returnCost", buildersModule, 'export function returnCost() {}'],
   ["discardHandCost", buildersModule, 'export function discardHandCost() {}'],

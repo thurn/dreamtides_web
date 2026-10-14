@@ -421,7 +421,7 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
         prompt,
         prompt.options.map((option) => ({
           copy:
-            option.route !== undefined ? { kind: "playRoute", route: option.route } : prompt.purpose.role === "playRoute"
+            option.route !== undefined ? { kind: "playRoute", route: option.route, ...(option.costs === undefined ? {} : { costs: option.costs }) } : prompt.purpose.role === "playRoute"
               ? { kind: "route", index: option.mode }
               : prompt.purpose.role === "voidRoute"
                 ? { kind: "voidRoute", index: option.mode }

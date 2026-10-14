@@ -11,6 +11,7 @@ import type {
   ActivationZone,
   AdditionalCost,
   AdditionalCostAbility,
+  AlternativeCostAbility,
   AllSpec,
   BoundValue,
   StoredCountersValue,
@@ -199,6 +200,17 @@ export function countersCost(amount: number): PaymentCost {
 export function pointsCost(amount: number): PaymentCost {
   if (!Number.isSafeInteger(amount) || amount < 1) throw new Error("pointsCost amount must be a positive safe integer");
   return { cost: "points", amount };
+}
+
+/** A card’s optional replacement payment, chosen separately from its normal costs. */
+export function alternativeCost(...costs: readonly Cost[]): AlternativeCostAbility {
+  return { kind: "alternativeCost", costs };
+}
+
+/** Give the payer’s opponent N points as a cost, without spending the payer’s score. */
+export function giveOpponentPointsCost(amount: number): PaymentCost {
+  if (!Number.isSafeInteger(amount) || amount < 1) throw new Error("giveOpponentPointsCost amount must be a positive safe integer");
+  return { cost: "giveOpponentPoints", amount };
 }
 
 /** "Banish N cards from your void" (matching the filter) as a cost. */

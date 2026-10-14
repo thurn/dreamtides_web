@@ -1,3 +1,6 @@
+import { alternativeCost, energy, event, enemyCharacter, giveOpponentPointsCost, target } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { dissolve } from "../../engine/effects/primitives/dissolve";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 500,
   art: { x: 0, y: 0.814, scale: 1 },
   isStarter: false,
-  pending: true,
+  abilities: () => [alternativeCost(energy(0), giveOpponentPointsCost(5)), event(dissolve(target(enemyCharacter())))],
+  verifiedText: expectedVerifiedText("You may play this card for 0● by giving the opponent 5⍟. Dissolve an enemy."),
 });

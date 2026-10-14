@@ -441,7 +441,10 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("activatedFromVoid", [registered(DSL_TYPES, "ActivatedAbility", { option: "zone" })], ["Ability"], { note: "activated abilities that work from the void (\"…: Materialize this character from your void\")" }),
   dsl("grantReclaimTriggeringCard", [registered(`${P}grant-reclaim.ts`, "ReclaimCards", { member: "subject" })], ["CardRef"], { note: "Reclaim granted to the card a trigger concerns (\"When you discard a card, it gains reclaim\")" }),
   dsl("playCondition", [registered(DSL_TYPES, "Ability", { member: "playCondition" })], ["Ability"], { note: "\"Play this event only if …\"" }),
-  dsl("alternativeCost", [registered(DSL_TYPES, "Ability", { member: "alternativeCost", pending: "member" })], ["Ability"], { note: "\"you may play this card for …\"" }),
+  dsl("alternativeCost", [registered(DSL_TYPES, "Ability", { member: "alternativeCost" })], ["Ability"], { note: "\"you may play this card for …\"" }),
+  dsl("conditionalAlternativeCost", [registered(DSL_TYPES, "AlternativeCostAbility", { option: "condition", pending: "option" })], ["Ability"], { note: "a condition qualifying only the alternative play route" }),
+  dsl("alternativePlayResult", [registered(DSL_TYPES, "Condition", { member: "sourceWasAlternativePlayed", pending: "member" })], ["Condition"], { note: "\"if played this way\" after a card-defined alternative" }),
+  dsl("giveOpponentPointsCost", [callable(DSL_BUILDERS, "giveOpponentPointsCost")], ["PaymentCost"], { note: "give the payer’s opponent ⍟ as a cost" }),
   dsl("pointsCost", [callable(DSL_BUILDERS, "pointsCost")], ["PaymentCost"], { note: "pay ⍟ as a cost" }),
   dsl("returnCost", [callable(DSL_BUILDERS, "returnCost")], ["PaymentCost"], { note: "\"Return a character you control to hand:\" as a cost" }),
   dsl("discardHandCost", [callable(DSL_BUILDERS, "discardHandCost")], ["PaymentCost"], { note: "discard every eligible hand card as a cost, without a choice" }),
@@ -788,6 +791,8 @@ interface Correction {
 }
 
 const CORRECTIONS: Readonly<Record<string, Correction>> = {
+  "a56e0f68-30b6-404e-9b83-a7584177f21e": { add: ["give-opponent-points-cost"], remove: ["points-cost"], note: "Alternative payment gives the opponent points; the payer spends no score" },
+  "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa": { add: ["conditional-alternative-cost"], note: "Conditional alternative payment and the amplified selected-route entry need dedicated forms" },
   // Card flow, energy, and removal readings the rules miss or over-read.
   "25d00336-5ad7-433b-8ced-71720a9f074a": { add: ["banish-self"], note: "\"Banish this card\" moves the resolving event to banishment" },
   "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188": { add: ["discard"], note: "\"That player discard X cards\" (sic) is a discard; log the typo" },
@@ -828,6 +833,8 @@ const KEYWORD_TAGS: ReadonlySet<string> = new Set(["kw-awakened", "kw-vengeful",
 
 // Extra tags a correction may add that no rule defines.
 const EXTRA_TAGS: Readonly<Record<string, TagInfo>> = {
+  "give-opponent-points-cost": { family: 4, needs: ["giveOpponentPointsCost"] },
+  "conditional-alternative-cost": { family: 15, needs: ["conditionalAlternativeCost", "alternativePlayResult"] },
   "banish-self": { family: 5, needs: ["banishCards"] },
   "type-remap": { family: 0, needs: ["typeRemap", "journeyDeckEntry", "journeyOnGain"] },
 };

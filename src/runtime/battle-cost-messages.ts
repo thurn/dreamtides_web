@@ -20,6 +20,8 @@ export function costPhrase(cost: Cost): string {
       return "remove X memory counters";
     case "counters":
       return `remove ${plural(cost.amount, "memory counter", "memory counters")}`;
+    case "giveOpponentPoints":
+      return `give your opponent ${plural(cost.amount, "point", "points")}`;
     case "points":
       return `pay ${plural(cost.amount, "point", "points")}`;
     case "banishFromAnyVoid":

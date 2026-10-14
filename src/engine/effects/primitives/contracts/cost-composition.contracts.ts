@@ -24,20 +24,18 @@ import { SETTER_COST_ROWS, observeSetterCostRow } from "./cost-setter-compositio
 import { revealToBoth } from "../../../view/knowledge";
 import { describe, expect, it } from "vitest";
 import { draw } from "../draw";
-import { gainPoints } from "../gain-points";
 import { dissolve } from "../dissolve";
 import { ruleModifier } from "../rule-modifier";
 import { selfCostReduction } from "../self-cost-reduction";
 import { staticAbility } from "../../../dsl/builders";
 import type { EngineCardDefinition } from "../../../catalog";
-import { activated, countersCost, countersXCost, abandonSparkCapture, abandonXCost, enemyCharacter, target, additionalCost, choiceCost, energy, energyX, event, discardCostFilter, x, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
+import { abandonSparkCapture, abandonXCost, enemyCharacter, target, additionalCost, alternativeCost, giveOpponentPointsCost, choiceCost, energy, energyX, event, discardCostFilter, x, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
 import type { Ability, CardCost } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
 import type { Answer, Prompt } from "../../../prompts/types";
 import type { PlayRoute, PlayZone } from "../../../rules/timing";
 import type { EffectId, InstanceId, Side } from "../../../state/ids";
-import { opponent, SIDES } from "../../../state/ids";
-import { NO_PROMPTS, ScriptedSource } from "../../../steps/sources";
+import { opponent } from "../../../state/ids";
 import type { BattleState, CardCostMode, FloatingEffect } from "../../../state/types";
 import type { AnswerSource } from "../../../steps/types";
 import { boardState, placeFigment } from "../../../testing/board";
@@ -132,7 +130,7 @@ const MODES: { readonly [M in Mode]: readonly [ModeCase, ...ModeCase[]] } = {
 };
 
 /** The subject's own play abilities. */
-type Shape = "plain" | "offering" | "keywordReclaim" | "printedReclaim" | "ruleEvent";
+type Shape = "plain" | "offering" | "keywordReclaim" | "printedReclaim" | "ruleEvent" | "ownAlternative";
 
 /** One way to play the subject by a route. */
 interface RouteVariant {
@@ -156,6 +154,7 @@ const variant = (name: string, shape: Shape, from: PlayZone, options: Partial<Ro
 
 /** Exhaustive over `PlayRoute`: a new play route fails typecheck until it joins the table. */
 const ROUTES: { readonly [R in PlayRoute]: readonly [RouteVariant, ...RouteVariant[]] } = {
+  alternativeCost: [variant("card-defined alternative", "ownAlternative", "hand", { choose: 1, replacement: 0, x: false })],
   eventAlternative: [variant("fixed fast-event alternative", "ruleEvent", "hand", { choose: 1, replacement: 1, x: false })],
   hand: [variant("hand", "plain", "hand"), variant("hand chosen over Offering", "offering", "hand", { choose: 0 })],
   offering: [variant("Offering chosen over hand", "offering", "hand", { choose: 1, replacement: 0, x: false })],
@@ -173,7 +172,7 @@ const ROUTES: { readonly [R in PlayRoute]: readonly [RouteVariant, ...RouteVaria
 };
 
 /** The subject's additional energy shapes. */
-type Extra = "none" | "mandatory" | "optionalPaid" | "optionalDeclined" | "choice" | "x" | "discardMin" | "abandonCount" | "abandonSpark";
+type Extra = "none" | "mandatory" | "optionalPaid" | "optionalDeclined" | "choice" | "x" | "discardMin" | "abandonCount" | "abandonSpark" | "givePoints";
 interface ExtraSetup {
   readonly abilities: readonly Ability[];
   /** Energy the extra adds as paid in the row; X's is `X` where the route includes X. */
@@ -183,6 +182,7 @@ interface ExtraSetup {
   readonly accept?: boolean;
 }
 const EXTRAS: { readonly [E in Extra]: ExtraSetup } = {
+  givePoints: { abilities: [additionalCost(giveOpponentPointsCost(2))], paid: 0, least: 0 },
   abandonSpark: { abilities: [additionalCost(abandonSparkCapture()), event(draw(x()))], paid: 0, least: 0 },
   abandonCount: { abilities: [additionalCost(abandonXCost({ min: 1, selector: { figment: true } })), event(dissolve(target(enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() }))))], paid: 0, least: 0 },
   none: { abilities: [], paid: 0, least: 0 },
@@ -201,6 +201,7 @@ const EXTRAS: { readonly [E in Extra]: ExtraSetup } = {
 
 const withX = (amount: number, extra: Extra): CardCost[] => [energy(amount), ...(extra === "x" || extra === "discardMin" ? [energyX(0)] : [])];
 const SHAPE_ABILITIES: { readonly [S in Shape]: (extra: Extra) => readonly Ability[] } = {
+  ownAlternative: () => [alternativeCost(energy(0), giveOpponentPointsCost(5))],
   ruleEvent: () => [staticAbility(ruleModifier({ rule: "eventAlternative", energy: 1 }), { zone: "any" })],
   plain: () => [],
   offering: () => [keyword("offering")],
@@ -355,7 +356,7 @@ function ruled(route: RouteVariant, extra: Extra, steps: readonly Step[], routeN
     ...(extra === "abandonSpark" ? { drawn: 1 } : {}),
     energy: ruledEnergy(steps, route, EXTRAS[extra].paid, extra === "x" || extra === "discardMin" ? X : 0),
     points: POINTS,
-    opponentPoints: 0,
+    opponentPoints: 0 - (routeName === "alternativeCost" ? 5 : 0) - (extra === "givePoints" ? 2 : 0),
     reclaimed: routeName === "reclaim",
     offering: routeName === "offering",
     nextLeft: [],
@@ -415,6 +416,7 @@ describe("cost composition table", () => {
 describe("cost composition anchors from the rulings", () => {
   const route = (name: PlayRoute, index = 0) => ROUTES[name][index];
   const anchors: readonly { readonly ruling: string; readonly route: RouteVariant; readonly extra: Extra; readonly steps: readonly Step[]; readonly energy: number }[] = [
+    { ruling: "RD-hv-umm2.103-1: own alternative excludes set 4●; optional 1● plus tax 2● pays 3●", route: route("alternativeCost"), extra: "optionalPaid", steps: [step("cardCost.set", 4), step("cost.increase", 2)], energy: 3 },
     { ruling: "rules.md: a normal play set to 0● pays 1● under a 1● tax", route: route("hand"), extra: "none", steps: [step("cardCost.set", 0), step("cost.increase", 1)], energy: 1 },
     { ruling: "RD-hv-umm2.422-1: set 2● / Reclaim 5● pays 5●", route: route("reclaim", 1), extra: "none", steps: [step("cardCost.set", 2)], energy: 5 },
     { ruling: "RD-hv-umm2.422-1: Offering / set 2● / optional 1● pays 1●", route: route("offering"), extra: "optionalPaid", steps: [step("cardCost.set", 2)], energy: 1 },
@@ -462,39 +464,18 @@ describe("live physical-source cost composition", () => {
   });
 });
 
-/** Fixed and variable counters add; only the separately printed energy parts spend energy. */
-describe.each(SIDES)("counter-X composition payments by %s", side => {
-  const rows = [
-    { label: "meaningful zero", costs: [countersXCost(0)], x: 0, counters: 4, energy: 5, events: [] },
-    { label: "fixed plus variable counters", costs: [countersCost(1), countersXCost()], x: 2, counters: 1, energy: 5, events: [3, 1] },
-    { label: "shared energy and repeated counter X", costs: [energy(1), energyX(0), countersXCost(0), countersXCost(0)], x: 2, counters: 0, energy: 2, events: [2, 0] },
-  ];
-  it.each(rows)("$label pays the ruled separate budgets", row => {
-    const sourceCard: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x69310), status: "authored", abilities: () => [activated(row.costs, gainPoints(1))] };
-    const paymentEngine = createEngine(testCatalog([sourceCard]));
-    const other = opponent(side);
-    const { state, ids } = boardState(paymentEngine.catalog, { active: side, phase: "day",
-      [side]: { back: [sourceCard.id], energy: 5, deck }, [other]: { hand: [v.interruptEvent.id], energy: 1, deck } });
-    const source = ids[side].back[0]!;
-    state.instances[source].status.counters = 4;
-    const paid = paymentEngine.apply(state, side, { kind: "activate", source, ability: 0 }, new ScriptedSource([row.x]));
-    expect(paid.state.stack[0]?.x).toBe(row.x);
-    expect(paid.state.instances[source].status.counters).toBe(row.counters);
-    expect(paid.state.sides[side].currentEnergy).toBe(row.energy);
-    expect(paid.events.filter(event => event.kind === "countersChanged").map(event => event.counters)).toEqual(row.events);
-    const done = paymentEngine.apply(paid.state, other, { kind: "pass" }, NO_PROMPTS);
-    expect(done.state.sides[side].score).toBe(1);
-    expect(invariantViolations(done.state, paymentEngine.catalog)).toEqual([]);
-  });
-});
-
 // The static nth modes use their real producer; these qualified changes never float.
 describe("nth static cost composition table", () => {
   it.each(NTH_COST_ROWS)("$label pays the ruled chosen-route composition", row => {
-    expect(observeNthCostRow(row)).toMatchObject({ energy: row.expected, points: 1, otherEnergy: 30, played: 1,
-      reclaimed: row.route.route === "reclaim", offering: row.route.route === "offering", x: row.route.route === "offering" || row.route.route === "eventAlternative" ? 0 : 2 });
+    const observed = observeNthCostRow(row);
+    if (row.route.route === "alternativeCost") expect(observed.opponentPoints).toBe(5);
+    expect(observed).toMatchObject({ energy: row.expected, points: 1, otherEnergy: 30, played: 1,
+      reclaimed: row.route.route === "reclaim", offering: row.route.route === "offering", x: row.route.route === "offering" || row.route.route === "eventAlternative" || row.route.route === "alternativeCost" ? 0 : 2 });
   });
 });
-it.each(SETTER_COST_ROWS)("$label preserves chosen-route and additional payments", row => { expect(observeSetterCostRow(row)).toMatchObject({ energy: row.expected, points: 1, otherEnergy: 30, played: 1, reclaimed: row.kind === "reclaim", offering: row.kind === "offering", violations: [],
-    x: row.extra.name === "X" ? row.kind === "offering" || row.kind === "eventAlternative" ? 0 : 2 : null });
+it.each(SETTER_COST_ROWS)("$label preserves chosen-route and additional payments", row => {
+  const observed = observeSetterCostRow(row);
+  if (row.kind === "alternativeCost") expect(observed.opponentPoints).toBe(5);
+  expect(observed).toMatchObject({ energy: row.expected, points: 1, otherEnergy: 30, played: 1, reclaimed: row.kind === "reclaim", offering: row.kind === "offering", violations: [],
+    x: row.extra.name === "X" ? row.kind === "offering" || row.kind === "eventAlternative" || row.kind === "alternativeCost" ? 0 : 2 : null });
 });

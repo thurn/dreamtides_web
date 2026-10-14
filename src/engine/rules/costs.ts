@@ -20,6 +20,7 @@ import type {
   PromptRole,
 } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
+import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { discardCards, gainPoints, spendEnergy } from "./resources";
@@ -168,6 +169,13 @@ function spent(costs: readonly Cost[], kind: "counters" | "points"): number {
   return sum(costs.map((cost) => (cost.cost === kind ? cost.amount : 0)));
 }
 
+/** Only the new opponent-grant shape is checked here; ordinary cost validation is unchanged. */
+function validOpponentGrants(costs: readonly Cost[]): boolean {
+  return costs.every(cost => cost.cost === "choice" ? cost.options.every(validOpponentGrants) :
+    cost.cost === "optional" ? validOpponentGrants(cost.costs) :
+      cost.cost !== "giveOpponentPoints" || Number.isSafeInteger(cost.amount) && cost.amount > 0);
+}
+
 /**
  * Whether `side` could pay the mandatory costs that need no card choice:
  * the energy (with X at its minimum), any ☾, any ⧗, and any ⍟. Legality's
@@ -181,6 +189,7 @@ export function costsPayable(
   costs: readonly Cost[],
   modifier: CostModifier = NO_COST_MODIFIER,
 ): boolean {
+  if (!validOpponentGrants(costs)) return false;
   if (hasNestedAbandonX(costs)) return false;
   if (hasNestedCounterX(costs) || invalidCounterMinimum(costs)) return false;
   if (adjustedEnergy(minimumEnergy(costs), modifier) > state.sides[side].currentEnergy) return false;
@@ -349,6 +358,7 @@ export function planCosts(
   modifier: CostModifier = NO_COST_MODIFIER,
   options: { readonly endsPlayTime?: true; readonly selectorX?: number; readonly preparedPayments?: readonly PlannedCost[] } = {},
 ): CostPlan {
+  if (!validOpponentGrants(costs)) throw new Infeasible("Opponent-point payments require positive safe integers");
   if (hasNestedAbandonX(costs)) throw new Infeasible("Abandon X must be a top-level mandatory cost");
   if (hasNestedCounterX(costs) || invalidCounterMinimum(costs)) throw new Infeasible("Counter X requires a valid top-level mandatory cost");
   const { state, catalog } = ctx;
@@ -382,6 +392,7 @@ export function planCosts(
    * (`cardsAssignable`).
    */
   const affordable = (list: readonly PaymentCost[]): boolean => {
+    if (!validOpponentGrants(list)) return false;
     if (sourceDeparted && list.some(cannotFollowDeparture)) return false;
     if (!resourcesPayable(
       baseEnergy + sum(list.map((cost) => (cost.cost === "energy" ? cost.amount : 0))),
@@ -611,6 +622,10 @@ export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, pl
       case "countersX":
         if (plan.x === null || !Number.isSafeInteger(plan.x) || plan.x < cost.min) throw new Error("A counter-X payment needs its chosen X");
         spendCounters(ctx, source, plan.x);
+        break;
+      case "giveOpponentPoints":
+        if (!validOpponentGrants([cost])) throw new Error("Opponent-point payments require positive safe integers");
+        gainPoints(ctx, opponent(side), cost.amount, "effect");
         break;
       case "points":
         payPoints(ctx, side, cost.amount);

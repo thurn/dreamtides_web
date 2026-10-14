@@ -165,7 +165,7 @@ export function engineMovementPromptHeading(fieldSide: Side, viewer: Side, sourc
 
 /** One answer button of an engine choice prompt. */
 export type EnginePromptOptionCopy =
-  | { readonly kind: "playRoute"; readonly route: NonNullable<import("../engine/prompts/types").ModeOption["route"]> }
+  | { readonly kind: "playRoute"; readonly route: NonNullable<import("../engine/prompts/types").ModeOption["route"]>; readonly costs?: readonly Cost[] }
   | { readonly kind: "yes" }
   | { readonly kind: "no" }
   | { readonly kind: "pay"; readonly energy: number }
@@ -193,6 +193,7 @@ export type EnginePromptOptionCopy =
 export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string {
   switch (option.kind) {
     case "playRoute":
+      if (option.route === "alternativeCost") return option.costs === undefined ? "Use Alternative Cost" : `Alternative Base: ${option.costs.map(costPhrase).join(" and ")}`;
       return { normal: "Pay Its Cost", offering: "Play as an Offering", reclaim: "Reclaim", eventAlternative: "Use Alternative Cost" }[option.route];
     case "yes":
       return "Yes";

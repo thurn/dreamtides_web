@@ -1,0 +1,37 @@
+{
+  "bead": "hv-umm2.103",
+  "phase": 5,
+  "implementMin": 132.99133398333333,
+  "implementWindow": {
+    "start": "2026-10-14T21:06:31.112Z",
+    "end": "2026-10-14T23:19:30.592039+00:00"
+  },
+  "localValidationS": {
+    "review": 77.3883265000186,
+    "focusedFinalWitnesses": 14.288216499960981,
+    "knip": 5.7940216670394875,
+    "reviewFull": 239.06263412500266,
+    "fuzz": 804.7125853330072,
+    "preflight": 3.0565733749826904,
+    "sweep": 101.82007866600179,
+    "judgedAccepted": 163.412910457002
+  },
+  "hostLoad": 7.2373046875,
+  "testDelta": {
+    "files": 0,
+    "lines": 433,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "source-first-admission",
+      "minutes": 20,
+      "note": "Approximateparent-reported admission/audit wait; grosswindow includes source-free research/finite native bodyadmission, coordination and everywait; not productiveediting time."
+    },
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 10.4,
+      "note": "Approximatecombined full/fuzz lockqueue overhead fromactual command receipts vs loggedworksteps; onequeuedrequesteach, no requeue. Actualhighload worktimings remainqualified inmeasurements."
+    }
+  ]
+}

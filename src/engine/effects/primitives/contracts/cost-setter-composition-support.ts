@@ -1,6 +1,6 @@
 /** Real public static setters across the chosen-route payment boundaries (RD-hv-umm2.696-1). */
 import type { EngineCardDefinition } from "../../../catalog";
-import { additionalCost, choiceCost, energy, energyX, event, everyIn, keyword, optionalCost, pointsCost, reclaim, staticAbility } from "../../../dsl/builders";
+import { additionalCost, alternativeCost, choiceCost, energy, energyX, event, everyIn, giveOpponentPointsCost, keyword, optionalCost, pointsCost, reclaim, staticAbility } from "../../../dsl/builders";
 import type { Ability } from "../../../dsl/types";
 import type { Answer } from "../../../prompts/types";
 import { playRoutes, type PlayRoute, type PlayZone } from "../../../rules/timing";
@@ -33,6 +33,7 @@ const ROUTES: { readonly [R in PlayRoute]: readonly Route[] } = {
   ],
   offering: [{ name: "Offering", from: "hand", replacement: 0 }],
   eventAlternative: [{ name: "event alternative", from: "hand", replacement: 1 }],
+  alternativeCost: [{ name: "card-defined alternative", from: "hand", replacement: 0 }],
 };
 const EXTRAS = [
   { name: "fixed", energy: 0 }, { name: "mandatory", energy: 1 },
@@ -43,7 +44,7 @@ export const SETTER_COST_ROWS = SIDES.flatMap(side =>
   (Object.entries(ROUTES) as [PlayRoute, readonly Route[]][]).flatMap(([kind, routes]) => routes.flatMap(route => EXTRAS.map(extra => ({
     side, kind, route, extra, label: `${side} continuous set by ${route.name}, ${extra.name}`,
     // Normal set0 or replacement base, then the chosen extra/X, tax3 and reduction1.
-    expected: (route.replacement ?? 0) + extra.energy + (extra.name === "X" && kind !== "offering" && kind !== "eventAlternative" ? 2 : 0) + 2,
+    expected: (route.replacement ?? 0) + extra.energy + (extra.name === "X" && kind !== "offering" && kind !== "eventAlternative" && kind !== "alternativeCost" ? 2 : 0) + 2,
   })))));
 
 export function observeSetterCostRow(row: typeof SETTER_COST_ROWS[number]) {
@@ -55,6 +56,7 @@ export function observeSetterCostRow(row: typeof SETTER_COST_ROWS[number]) {
   if (extra.name === "alternative additional") extras.push(additionalCost(choiceCost([energy(1)], [energy(3)])));
   if (kind === "reclaim" && route.explicit !== "granted") extras.push(route.explicit === "printed" ? reclaim(energy(5), ...(hasX ? [energyX(0)] : [])) : keyword("reclaim"));
   if (kind === "offering") extras.push(keyword("offering"));
+  if (kind === "alternativeCost") extras.push(alternativeCost(energy(0), giveOpponentPointsCost(5)));
   const subject: EngineCardDefinition = { ...v.event0, id: syntheticId(0x696100), costs: [energy(2), ...(hasX ? [energyX(0)] : [])], speed: "fast", status: "authored", abilities: () => extras };
   const provider: EngineCardDefinition = { ...v.vanilla0, id: syntheticId(0x696101), status: "authored", abilities: () => [
     staticAbility(costSetter("you", { cardType: "event", costAtMost: 2 }, 0)),
@@ -87,6 +89,7 @@ export function observeSetterCostRow(row: typeof SETTER_COST_ROWS[number]) {
   });
   return { energy: state.sides[side].currentEnergy - result.state.sides[side].currentEnergy,
     points: state.sides[side].score - result.state.sides[side].score,
+    opponentPoints: result.state.sides[opponent(side)].score - state.sides[opponent(side)].score,
     otherEnergy: result.state.sides[opponent(side)].currentEnergy,
     played: result.state.turnLog.played[side].filter(record => record.instance === id).length,
     reclaimed: result.state.instances[id].status.playedViaReclaim, offering: result.state.instances[id].status.offering,

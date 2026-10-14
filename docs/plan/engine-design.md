@@ -736,7 +736,8 @@ interface PromptPurpose {
 type Prompt =
   | { kind: "chooseTargets" | "chooseCards"; candidates: InstanceId[]; min: number; max: number }  // complete legal set
   | { kind: "chooseMode"; options: { mode: number; legal: boolean;
-        route?: "normal" | "offering" | "reclaim" | "eventAlternative" }[];
+        route?: "normal" | "offering" | "reclaim" | "eventAlternative" | "alternativeCost";
+        costs?: readonly Cost[] }[];
       costOptions?: PaymentCost[][]; // role "chooseCost": each mode's payment alternative
       subtypes?: CardSubtype[] }   // a character type choice (role "chooseSubtype"): each mode's type
   | { kind: "chooseNumber"; min: number; max: number }
@@ -1547,6 +1548,9 @@ Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
 - ⍟ (`pointsCost`), payable only with the payer's full amount and paid as
   a `pointsScored` loss; the card-lab solver gives the playing side the ⍟ a
   top-level ⍟ additional cost needs;
+- giving the opponent ⍟ (`giveOpponentPointsCost`, `giveOpponentPoints`), a
+  positive safe integer awarded to the actual payer's opponent before stack
+  entry, spending no payer score;
 - a choice between costs ("A or B", `choiceCost`);
 - optional additional costs (`optionalCost`);
 - Offering's banish from hand, by the Offering route.
@@ -1711,6 +1715,17 @@ can't use `import.meta.glob`.
 must hold before payment for an ordinary play or a play during a resolving
 effect. It reads the acting controller's current state and effective card
 characteristics, resolves no effect, and stores no independent battle record.
+
+`alternativeCost(...costs)` is a declaration-only card ability that offers
+one replacement play route. `giveOpponentPointsCost(n)` grants the actual
+payer's opponent points as a payment, without spending the payer's score.
+The alternative's base replaces normal-base setters, while additional costs,
+energy adjustments, requirements and targeting keep their ordinary protocol.
+It grants no zone access: an independent permission or immediate-play
+instruction supplies non-hand access. The existing route chooser names its
+base payments; a concealed viewer receives neither route identity nor payment
+metadata. Saved steps reconstruct the prompt and compare its existing
+fingerprint, whose options include those payments.
 
 **Primitive registry.** Each primitive lives in its own module under
 `src/engine/effects/primitives/`, exporting its node type, its
@@ -2481,8 +2496,9 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   it: its purpose names a source card only when `side` can identify it
   (`purposeView`), even for the side answering, which otherwise sees it
   whole; any other side sees only the cards it can identify. A non-answering
-  side sees `costOptions` only for an identified source and a prompt public
-  to it; an unidentified source also strips each mode option's `route`.
+  side sees `costOptions` and mode option `costs` only for an identified
+  source and a prompt public to it; an unidentified source also strips each
+  mode option's `route` and `costs`.
   Option counts and legality flags remain in the projected prompt.
 - **Events** are judged in the state that arrives with them. Each kind's
   `privateTo` shows the whole event to one side or both.

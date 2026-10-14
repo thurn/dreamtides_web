@@ -564,6 +564,8 @@ export type PaymentCost =
    * least N⍟ (rules § Costs, Requirements, and X → Paying ⍟).
    */
   | { readonly cost: "points"; readonly amount: number }
+  /** Give the payer’s opponent points as a payment; the payer spends no points. */
+  | { readonly cost: "giveOpponentPoints"; readonly amount: number }
   /** Banish matching cards from the payer, opponent, or either public void. */
   | { readonly cost: "banishFromAnyVoid"; readonly player: PlayerRef | "any"; readonly count: number; readonly filter: CardFilter }
   /** Banish a fixed number of cards from your void that match the filter. */
@@ -634,6 +636,12 @@ export interface ActivatedAbility {
 export interface AdditionalCostAbility {
   readonly kind: "additionalCost";
   readonly costs: readonly AdditionalCost[];
+}
+
+/** A card-defined replacement for its printed energy costs; additional costs still apply. */
+export interface AlternativeCostAbility {
+  readonly kind: "alternativeCost";
+  readonly costs: readonly Cost[];
 }
 
 /** The named (▸) triggers: each concerns the ability's own card or its controller's phase. */
@@ -848,6 +856,7 @@ export type Ability =
   | EventCopyModifierAbility
   | PlayConditionAbility
   | AdditionalCostAbility
+  | AlternativeCostAbility
   | ReclaimAbility
   | { readonly kind: "keyword"; readonly keyword: Keyword }
   | ActivatedAbility

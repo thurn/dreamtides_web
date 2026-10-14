@@ -1,7 +1,7 @@
 /** Synthetic public witnesses for static nth cost qualification and chosen-route composition. */
 import type { EngineCardDefinition } from "../../../catalog";
 import { createEngine, type Engine } from "../../../engine";
-import { additionalCost, choiceCost, energy, energyX, event, everyIn, keyword, optionalCost, pointsCost, reclaim, staticAbility } from "../../../dsl/builders";
+import { additionalCost, alternativeCost, giveOpponentPointsCost, choiceCost, energy, energyX, event, everyIn, keyword, optionalCost, pointsCost, reclaim, staticAbility } from "../../../dsl/builders";
 import type { Ability } from "../../../dsl/types";
 import type { Answer } from "../../../prompts/types";
 import { playRoutes, type PlayRoute, type PlayZone } from "../../../rules/timing";
@@ -42,6 +42,7 @@ const NTH_ROUTES = [
   { name: "printed Reclaim", route: "reclaim", from: "void", set: 12, reduce: 11 },
   { name: "granted Reclaim", route: "reclaim", from: "void", set: 11, reduce: 10 },
   { name: "Offering", route: "offering", from: "hand", set: 5, reduce: 4 },
+  { name: "card alternative", route: "alternativeCost", from: "hand", set: 5, reduce: 4 },
   { name: "event alternative", route: "eventAlternative", from: "hand", set: 6, reduce: 5 },
 ] as const satisfies readonly { name: string; route: PlayRoute; from: PlayZone; set: number; reduce: number }[];
 export const NTH_COST_ROWS = SIDES.flatMap(side => NTH_ROUTES.flatMap(route => (["set", "reduce"] as const).map(mode => ({
@@ -52,6 +53,7 @@ export function observeNthCostRow(row: typeof NTH_COST_ROWS[number]) {
   const { side, route, mode } = row;
   const filter = { cardType: "event", costAtLeast: 2, costAtMost: 2 } as const;
   const extras: Ability[] = [additionalCost(energy(1), optionalCost(energy(1)), choiceCost([energy(1)], [pointsCost(2)]), pointsCost(1)), event(gainPoints(0))];
+  if (route.name === "card alternative") extras.unshift(alternativeCost(energy(0), giveOpponentPointsCost(5)));
   if (route.name === "plain Reclaim") extras.push(keyword("reclaim"));
   if (route.name === "printed Reclaim") extras.push(reclaim(energy(5), energyX(0)));
   if (route.name === "Offering") extras.push(keyword("offering"));
@@ -92,5 +94,6 @@ export function observeNthCostRow(row: typeof NTH_COST_ROWS[number]) {
     reclaimed: result.state.instances[id].status.playedViaReclaim,
     offering: result.state.instances[id].status.offering,
     x: boundX,
+    ...(route.name === "card alternative" ? { opponentPoints: result.state.sides[opponent(side)].score - state.sides[opponent(side)].score } : {}),
   };
 }
