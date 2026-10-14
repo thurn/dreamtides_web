@@ -1,0 +1,59 @@
+{
+  "bead": "hv-umm2.663",
+  "phase": 5,
+  "implementMin": 101.62002451666667,
+  "implementWindow": {
+    "start": "2026-10-14T04:21:02.475634+00:00",
+    "end": "2026-10-14T06:02:39.677105+00:00"
+  },
+  "localValidationS": {
+    "coverage": 4.282878833007999,
+    "exact-content-observe": 1.7928647499938961,
+    "exact-content-status-observe": 2.0405188750009984,
+    "focused": 7.410534166992875,
+    "knip": 8.393057791981846,
+    "oak-additional-observe": 4.573112415993819,
+    "preflight": 1.3694389169977512,
+    "qa-serialization-r4-final": 0.04362062498694286,
+    "qa-serialization-r4": 0.04539262500475161,
+    "qa-serialization-r5": 0.046632250014226884,
+    "qa-serialization-r6-final": 0.05001316699781455,
+    "qa-serialization-r6": 0.04901666598743759,
+    "qa-serialization": 0.0474867080047261,
+    "qa-workflows-r2": 64.37951354100369,
+    "qa-workflows-r3": 61.19086837497889,
+    "qa-workflows-r4": 41.63678787500248,
+    "qa-workflows-r5": 60.392772124992916,
+    "qa-workflows-r6": 94.83833404097822,
+    "qa-workflows-r7": 46.64922670798842,
+    "qa-workflows": 3.158127750008134,
+    "review": 74.84099479200086,
+    "schema-corrected": 0.10891504201572388,
+    "schema": 0.05192149998038076,
+    "serialization-r7": 0.047787917021196336,
+    "sweep": 22.948755833000178,
+    "weighted-fuzz": 426.1324506670062,
+    "wolf-greedy-observe-esm": 1.4236357919871807,
+    "wolf-greedy-observe": 2.4134719590074383,
+    "wolf-greedy-support-observe": 1.921154916024534,
+    "schema-final": 0.11635254102293402
+  },
+  "hostLoad": 9.36572265625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 37.6317,
+      "note": "Sum of five nonoverlapping failed-runtime-terminal through repaired-ready/ACK windows; includes diagnostic, scratch correction and independent guard/ACK coordination. R1 closure serialization, R3 illegal ordinary Night reposition, R4 unknown bounded readiness, R5 stochastic target placement, R6 required chooser scroll. R3 window includes coordinated maintenance hold while preparing support. Exact windows in measurements; runtime durations separately measured, not added to this minutes total."
+    },
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 22.52547506666667,
+      "note": "Gross R2 startup through R3 capacity ACK, including native lease rejection, parent justiciar/foreign-owner coordination and capacity wait. R2 admitted no owned provider/server/browser/lease. Separate from the scripting windows; peer maintenance and exact later queue costs remain in gross implementation wall."
+    }
+  ]
+}

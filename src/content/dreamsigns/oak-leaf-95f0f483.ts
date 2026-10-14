@@ -1,3 +1,6 @@
+import { triggered, triggeringCard, whenReturn } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainTriggeringCardSpark } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,10 @@ export default dreamsign({
     "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
   ],
   tags: ["Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    triggered(whenReturn({ controller: "you" }), gainTriggeringCardSpark(triggeringCard(), 2)),
+  ],
+  verifiedText: expectedVerifiedText(
+    "When you return a character you control to hand, it gains +2✦.",
+  ),
 });

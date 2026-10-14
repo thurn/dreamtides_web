@@ -1,3 +1,6 @@
+import { all, characterYouControl, controls, staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { sparkModifier } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -12,5 +15,9 @@ export default dreamsign({
     "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5",
   ],
   tags: ["J12", "Tag OK"],
-  pending: true,
+  abilities: () => {
+    const challengers = characterYouControl({ challenging: true });
+    return [staticAbility(sparkModifier(all(challengers), 2), { while: controls(challengers, 3) })];
+  },
+  verifiedText: expectedVerifiedText("When you have 3 or more challengers, they have +2✦."),
 });

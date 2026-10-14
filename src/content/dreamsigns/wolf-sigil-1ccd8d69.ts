@@ -1,3 +1,6 @@
+import { triggered, triggeringCard, whenDissolvesEnemyInChallenge } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainSpark } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +13,10 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["J12", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    triggered(whenDissolvesEnemyInChallenge(), gainSpark(triggeringCard(), 2)),
+  ],
+  verifiedText: expectedVerifiedText(
+    "When a character you control dissolves an enemy in a challenge, it gains +2✦.",
+  ),
 });
