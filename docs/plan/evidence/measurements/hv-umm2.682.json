@@ -1,0 +1,1182 @@
+{
+  "bead": "hv-umm2.682",
+  "status": "Parent verified exact EVIDENCEREADY and granted COMMITACK after bounded current-state metric corrections. Final pre-Git cutoff follows; actual Git end retained externally, no tracked postcommit facts.",
+  "ownershipWindow": {
+    "start": "2026-10-14T16:57:21.502335+00:00",
+    "basis": "Known actual parent claim invocation ownership proxy; implementer model start UNKNOWN. Full gross includes root setup/research/briefwriting/coordination, proofs, checks, heavy queues, QA, recovery and evidence through externally recorded actual Git end.",
+    "claimAck": "2026-10-14T16:57:21.602408+00:00",
+    "implementerModelStart": "UNKNOWN",
+    "helperDispatch": {
+      "bead": "hv-umm2.682",
+      "helper": "/root/twilight_suppressor_counters682",
+      "preDispatchObservedAt": "2026-10-14T17:00:37Z",
+      "dispatchAcknowledgmentObservedAt": "2026-10-14T17:02:56.836468+00:00",
+      "exactDispatchInstant": "UNKNOWN; bounded by independent observations before tool call and after acknowledgment",
+      "actualModelStart": "UNKNOWN",
+      "knownClaimCall": "2026-10-14T16:57:21.502335+00:00",
+      "claimAck": "2026-10-14T16:57:21.602408+00:00",
+      "scope": "Gross ownership includes all setup/research/parentcoord before and after helper dispatch; known elapsed observation bounds are not productive editing time."
+    },
+    "preQACutoff": "2026-10-14T17:23:41.769009+00:00",
+    "grossToCutoffMin": 26.3377779,
+    "finalPreGitCutoff": "2026-10-14T17:39:16.657298+00:00",
+    "grossToPreGitCutoffMin": 41.91924938333333,
+    "actualGitEnd": "UNKNOWN in tracked pre-Git evidence; actual invocation/end retained externally after commit, no second evidence commit."
+  },
+  "source": {
+    "cardIds": [
+      "60feb0d0-89b8-48fc-b01a-ce54e2c9941f"
+    ],
+    "base": "c85079b3187d2bb45fe2c9cb64b391b337a37df8",
+    "nonTestAdded": 11,
+    "nonTestRemoved": 1,
+    "newPrimitives": [],
+    "D20": {
+      "module": "src/content/specs/cards-ready-183.scenarios.ts",
+      "cases": 6,
+      "reason": "Two printed abilities couple normal character-play counter earning, atomic ordered counter/character payment and flat points after selected/self/created departure; synthetic surroundings and public Engine/fold paths.",
+      "lines": 130
+    },
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "preExistingIssues": [],
+    "fallout": []
+  },
+  "validation": {
+    "caller-scope-final": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/682/helper/caller-scope-proof.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:15:35.826353+00:00",
+      "end": "2026-10-14T17:15:35.885983+00:00",
+      "pid": 47464,
+      "pgid": 47464,
+      "exitCode": 0,
+      "wallSeconds": 0.05966120900120586,
+      "cpuSeconds": {
+        "user": 0.051739999999999994,
+        "system": 0.00862
+      },
+      "startLoad": [
+        18.5634765625,
+        14.24609375,
+        13.15966796875
+      ],
+      "endLoad": [
+        18.5634765625,
+        14.24609375,
+        13.15966796875
+      ]
+    },
+    "doctor-dispatch": {
+      "command": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T16:58:13.080370+00:00",
+      "end": "2026-10-14T16:58:14.488184+00:00",
+      "pid": 98593,
+      "pgid": 98593,
+      "exitCode": 0,
+      "wallSeconds": 1.407828958996106,
+      "cpuSeconds": {
+        "user": 0.020385,
+        "system": 0.012955999999999999
+      },
+      "startLoad": [
+        8.26416015625,
+        12.919921875,
+        13.42333984375
+      ],
+      "endLoad": [
+        7.92236328125,
+        12.771484375,
+        13.36767578125
+      ]
+    },
+    "caller-scope": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/682/helper/caller-scope-proof.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:14:50.067816+00:00",
+      "end": "2026-10-14T17:14:50.129397+00:00",
+      "pid": 88224,
+      "pgid": 88224,
+      "exitCode": 0,
+      "wallSeconds": 0.06161312499898486,
+      "cpuSeconds": {
+        "user": 0.05304,
+        "system": 0.009478
+      },
+      "startLoad": [
+        21.23046875,
+        13.65673828125,
+        12.8896484375
+      ],
+      "endLoad": [
+        21.23046875,
+        13.65673828125,
+        12.8896484375
+      ]
+    },
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "60feb0d0-89b8-48fc-b01a-ce54e2c9941f"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:11:36.992226+00:00",
+      "end": "2026-10-14T17:11:39.061751+00:00",
+      "pid": 21665,
+      "pgid": 21665,
+      "exitCode": 0,
+      "wallSeconds": 2.06952324998565,
+      "cpuSeconds": {
+        "user": 1.462311,
+        "system": 0.687201
+      },
+      "startLoad": [
+        6.71337890625,
+        9.2666015625,
+        11.59814453125
+      ],
+      "endLoad": [
+        6.71337890625,
+        9.2666015625,
+        11.59814453125
+      ]
+    },
+    "caller-scope-ready": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/682/helper/caller-scope-proof.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:19:14.917567+00:00",
+      "end": "2026-10-14T17:19:14.977754+00:00",
+      "pid": 61590,
+      "pgid": 61590,
+      "exitCode": 0,
+      "wallSeconds": 0.060216958983801305,
+      "cpuSeconds": {
+        "user": 0.052063,
+        "system": 0.008789
+      },
+      "startLoad": [
+        14.66064453125,
+        13.470703125,
+        12.962890625
+      ],
+      "endLoad": [
+        14.66064453125,
+        13.470703125,
+        12.962890625
+      ]
+    },
+    "entity-brief": {
+      "command": [
+        "npm",
+        "run",
+        "bead:entities",
+        "--",
+        "60feb0d0-89b8-48fc-b01a-ce54e2c9941f"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T16:58:47.439546+00:00",
+      "end": "2026-10-14T16:58:49.124782+00:00",
+      "pid": 1631,
+      "pgid": 1631,
+      "exitCode": 0,
+      "wallSeconds": 1.6852454580075573,
+      "cpuSeconds": {
+        "user": 0.8501839999999999,
+        "system": 0.459675
+      },
+      "startLoad": [
+        12.904296875,
+        13.36962890625,
+        13.5546875
+      ],
+      "endLoad": [
+        12.904296875,
+        13.36962890625,
+        13.5546875
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:11:35.836588+00:00",
+      "end": "2026-10-14T17:12:33.271486+00:00",
+      "pid": 21555,
+      "pgid": 21555,
+      "exitCode": 0,
+      "wallSeconds": 57.433762457978446,
+      "cpuSeconds": {
+        "user": 149.263501,
+        "system": 15.659799
+      },
+      "startLoad": [
+        6.71337890625,
+        9.2666015625,
+        11.59814453125
+      ],
+      "endLoad": [
+        8.70068359375,
+        9.35205078125,
+        11.4794921875
+      ]
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:10:44.767880+00:00",
+      "end": "2026-10-14T17:10:50.536424+00:00",
+      "pid": 20405,
+      "pgid": 20405,
+      "exitCode": 1,
+      "wallSeconds": 5.768455999990692,
+      "cpuSeconds": {
+        "user": 6.493681,
+        "system": 1.918695
+      },
+      "startLoad": [
+        5.748046875,
+        9.6337890625,
+        11.865234375
+      ],
+      "endLoad": [
+        5.60791015625,
+        9.5400390625,
+        11.81884765625
+      ]
+    },
+    "judged": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682/artifacts/qa/hv-umm2.682/judged.mjs",
+        "--bead",
+        "hv-umm2.682",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:30:16.889272+00:00",
+      "end": "2026-10-14T17:31:02.461312+00:00",
+      "pid": 44993,
+      "pgid": 44993,
+      "exitCode": 0,
+      "wallSeconds": 45.57143054201151,
+      "cpuSeconds": {
+        "user": 7.150814,
+        "system": 3.14724
+      },
+      "startLoad": [
+        13.869140625,
+        13.53759765625,
+        12.6025390625
+      ],
+      "endLoad": [
+        9.89453125,
+        12.51513671875,
+        12.2724609375
+      ]
+    },
+    "caller-scope-visual": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/682/helper/caller-scope-proof.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:18:53.291810+00:00",
+      "end": "2026-10-14T17:18:53.355422+00:00",
+      "pid": 60358,
+      "pgid": 60358,
+      "exitCode": 0,
+      "wallSeconds": 0.06364720800775103,
+      "cpuSeconds": {
+        "user": 0.053751,
+        "system": 0.009448
+      },
+      "startLoad": [
+        14.4306640625,
+        13.30859375,
+        12.8916015625
+      ],
+      "endLoad": [
+        14.4306640625,
+        13.30859375,
+        12.8916015625
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:14:07.133445+00:00",
+      "end": "2026-10-14T17:14:13.254750+00:00",
+      "pid": 85471,
+      "pgid": 85471,
+      "exitCode": 0,
+      "wallSeconds": 6.1212093330104835,
+      "cpuSeconds": {
+        "user": 4.071172,
+        "system": 1.8205959999999999
+      },
+      "startLoad": [
+        13.47265625,
+        11.62255859375,
+        12.18896484375
+      ],
+      "endLoad": [
+        13.1943359375,
+        11.59521484375,
+        12.17578125
+      ]
+    },
+    "caller-scope-env": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/682/helper/caller-scope-proof.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:19:48.268791+00:00",
+      "end": "2026-10-14T17:19:48.326012+00:00",
+      "pid": 63702,
+      "pgid": 63702,
+      "exitCode": 0,
+      "wallSeconds": 0.05724995900527574,
+      "cpuSeconds": {
+        "user": 0.050172999999999995,
+        "system": 0.007685999999999999
+      },
+      "startLoad": [
+        13.341796875,
+        13.2900390625,
+        12.91552734375
+      ],
+      "endLoad": [
+        13.341796875,
+        13.2900390625,
+        12.91552734375
+      ]
+    },
+    "stage0-parentproof": {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/682/helper/stage0-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:07:38.118140+00:00",
+      "end": "2026-10-14T17:07:41.880338+00:00",
+      "pid": 9496,
+      "pgid": 9496,
+      "exitCode": 0,
+      "wallSeconds": 3.762152207986219,
+      "cpuSeconds": {
+        "user": 1.4930809999999999,
+        "system": 1.084214
+      },
+      "startLoad": [
+        9.12255859375,
+        11.88720703125,
+        12.99755859375
+      ],
+      "endLoad": [
+        8.9521484375,
+        11.8056640625,
+        12.96240234375
+      ]
+    },
+    "knip-final": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:18:05.475474+00:00",
+      "end": "2026-10-14T17:18:10.872750+00:00",
+      "pid": 57720,
+      "pgid": 57720,
+      "exitCode": 0,
+      "wallSeconds": 5.397244666004553,
+      "cpuSeconds": {
+        "user": 4.381863,
+        "system": 1.997719
+      },
+      "startLoad": [
+        13.33837890625,
+        13.00732421875,
+        12.77197265625
+      ],
+      "endLoad": [
+        13.31103515625,
+        13.0068359375,
+        12.77294921875
+      ]
+    },
+    "stage0-proof-fixed-import": {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/682/helper/stage0-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:04:49.889236+00:00",
+      "end": "2026-10-14T17:04:54.751567+00:00",
+      "pid": 41690,
+      "pgid": 41690,
+      "exitCode": 1,
+      "wallSeconds": 4.862273833015934,
+      "cpuSeconds": {
+        "user": 3.921981,
+        "system": 1.219635
+      },
+      "startLoad": [
+        6.79833984375,
+        10.974609375,
+        12.79541015625
+      ],
+      "endLoad": [
+        8.49609375,
+        11.2568359375,
+        12.88427734375
+      ]
+    },
+    "cardSweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.682",
+        "--cards",
+        "60feb0d0-89b8-48fc-b01a-ce54e2c9941f"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:26:38.940882+00:00",
+      "end": "2026-10-14T17:29:31.443356+00:00",
+      "pid": 90329,
+      "pgid": 90329,
+      "exitCode": 0,
+      "wallSeconds": 172.50005000000237,
+      "cpuSeconds": {
+        "user": 8.641695,
+        "system": 5.831011
+      },
+      "startLoad": [
+        19.3759765625,
+        11.32373046875,
+        11.59814453125
+      ],
+      "endLoad": [
+        15.0771484375,
+        13.62158203125,
+        12.578125
+      ]
+    },
+    "focused-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:16:09.935735+00:00",
+      "end": "2026-10-14T17:16:16.363395+00:00",
+      "pid": 50525,
+      "pgid": 50525,
+      "exitCode": 0,
+      "wallSeconds": 6.430032167001627,
+      "cpuSeconds": {
+        "user": 6.952801,
+        "system": 2.088251
+      },
+      "startLoad": [
+        13.3486328125,
+        13.42578125,
+        12.90380859375
+      ],
+      "endLoad": [
+        12.83984375,
+        13.31884765625,
+        12.869140625
+      ]
+    },
+    "schema-ready": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:23:08.326828+00:00",
+      "end": "2026-10-14T17:23:08.452651+00:00",
+      "pid": 74233,
+      "pgid": 74233,
+      "exitCode": 0,
+      "wallSeconds": 0.12585349997971207,
+      "cpuSeconds": {
+        "user": 0.053959,
+        "system": 0.029249999999999998
+      },
+      "startLoad": [
+        6.349609375,
+        10.03271484375,
+        11.61376953125
+      ],
+      "endLoad": [
+        6.349609375,
+        10.03271484375,
+        11.61376953125
+      ]
+    },
+    "schema-preqa": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:17:46.093051+00:00",
+      "end": "2026-10-14T17:17:46.240906+00:00",
+      "pid": 56460,
+      "pgid": 56460,
+      "exitCode": 0,
+      "wallSeconds": 0.1478898330242373,
+      "cpuSeconds": {
+        "user": 0.06375299999999999,
+        "system": 0.041075
+      },
+      "startLoad": [
+        12.38818359375,
+        12.79052734375,
+        12.69140625
+      ],
+      "endLoad": [
+        12.38818359375,
+        12.79052734375,
+        12.69140625
+      ]
+    },
+    "focused-fixed": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:11:22.868120+00:00",
+      "end": "2026-10-14T17:11:27.655081+00:00",
+      "pid": 21258,
+      "pgid": 21258,
+      "exitCode": 0,
+      "wallSeconds": 4.7868960830091964,
+      "cpuSeconds": {
+        "user": 5.638621,
+        "system": 1.562409
+      },
+      "startLoad": [
+        6.78173828125,
+        9.4033203125,
+        11.68701171875
+      ],
+      "endLoad": [
+        7.19921875,
+        9.4462890625,
+        11.6884765625
+      ]
+    },
+    "caller-nodecheck": {
+      "command": [
+        "node",
+        "--check",
+        "artifacts/qa/hv-umm2.682/judged.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:15:58.693853+00:00",
+      "end": "2026-10-14T17:15:58.736615+00:00",
+      "pid": 49713,
+      "pgid": 49713,
+      "exitCode": 0,
+      "wallSeconds": 0.04279137501725927,
+      "cpuSeconds": {
+        "user": 0.036252,
+        "system": 0.006607999999999999
+      },
+      "startLoad": [
+        15.3544921875,
+        13.7919921875,
+        13.021484375
+      ],
+      "endLoad": [
+        15.3544921875,
+        13.7919921875,
+        13.021484375
+      ]
+    },
+    "friction-dispatch": {
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T16:58:47.439484+00:00",
+      "end": "2026-10-14T16:58:47.717929+00:00",
+      "pid": 1630,
+      "pgid": 1630,
+      "exitCode": 0,
+      "wallSeconds": 0.2785068330122158,
+      "cpuSeconds": {
+        "user": 0.164969,
+        "system": 0.07173
+      },
+      "startLoad": [
+        12.904296875,
+        13.36962890625,
+        13.5546875
+      ],
+      "endLoad": [
+        12.904296875,
+        13.36962890625,
+        13.5546875
+      ]
+    },
+    "stage0-proof": {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/682/helper/stage0-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:04:31.989418+00:00",
+      "end": "2026-10-14T17:04:34.253339+00:00",
+      "pid": 40295,
+      "pgid": 40295,
+      "exitCode": 1,
+      "wallSeconds": 2.263910625013523,
+      "cpuSeconds": {
+        "user": 1.556478,
+        "system": 0.822979
+      },
+      "startLoad": [
+        5.6865234375,
+        11.06201171875,
+        12.86962890625
+      ],
+      "endLoad": [
+        5.6865234375,
+        11.06201171875,
+        12.86962890625
+      ]
+    },
+    "fuzz": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "60feb0d0-89b8-48fc-b01a-ce54e2c9941f"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:11:48.211090+00:00",
+      "end": "2026-10-14T17:22:36.667239+00:00",
+      "pid": 22086,
+      "pgid": 22086,
+      "exitCode": 0,
+      "wallSeconds": 648.4594313749985,
+      "cpuSeconds": {
+        "user": 341.653635,
+        "system": 3.431965
+      },
+      "startLoad": [
+        6.8916015625,
+        9.22314453125,
+        11.55517578125
+      ],
+      "endLoad": [
+        6.7177734375,
+        10.4794921875,
+        11.82275390625
+      ]
+    },
+    "install": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T16:57:55.859968+00:00",
+      "end": "2026-10-14T16:57:58.530670+00:00",
+      "pid": 97513,
+      "pgid": 97513,
+      "exitCode": 0,
+      "wallSeconds": 2.6706775829952676,
+      "cpuSeconds": {
+        "user": 1.928752,
+        "system": 4.06482
+      },
+      "startLoad": [
+        8.87646484375,
+        13.27587890625,
+        13.55615234375
+      ],
+      "endLoad": [
+        8.87646484375,
+        13.27587890625,
+        13.55615234375
+      ]
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:16:33.475855+00:00",
+      "end": "2026-10-14T17:17:27.964697+00:00",
+      "pid": 51922,
+      "pgid": 51922,
+      "exitCode": 0,
+      "wallSeconds": 54.491829917009454,
+      "cpuSeconds": {
+        "user": 136.052108,
+        "system": 15.028312
+      },
+      "startLoad": [
+        11.22509765625,
+        12.9423828125,
+        12.7421875
+      ],
+      "endLoad": [
+        11.056640625,
+        12.61376953125,
+        12.63037109375
+      ]
+    },
+    "stage0-proof-complete": {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/682/helper/stage0-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:05:11.950668+00:00",
+      "end": "2026-10-14T17:05:16.705434+00:00",
+      "pid": 43375,
+      "pgid": 43375,
+      "exitCode": 0,
+      "wallSeconds": 4.754713625006843,
+      "cpuSeconds": {
+        "user": 4.064854,
+        "system": 1.243381
+      },
+      "startLoad": [
+        12.3486328125,
+        11.990234375,
+        13.1181640625
+      ],
+      "endLoad": [
+        13.361328125,
+        12.2060546875,
+        13.1875
+      ]
+    },
+    "caller-scope-ready-final": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/682/helper/caller-scope-proof.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:23:41.656496+00:00",
+      "end": "2026-10-14T17:23:41.711602+00:00",
+      "pid": 74866,
+      "pgid": 74866,
+      "exitCode": 0,
+      "wallSeconds": 0.05513654198148288,
+      "cpuSeconds": {
+        "user": 0.048347,
+        "system": 0.006887
+      },
+      "startLoad": [
+        6.16259765625,
+        9.55810546875,
+        11.375
+      ],
+      "endLoad": [
+        6.16259765625,
+        9.55810546875,
+        11.375
+      ]
+    }
+  },
+  "qa": {
+    "requiredSweep": "Complete: all ten native variants submitted for BOTH controllers; 8 eligible PASS, 12 ineligible SKIP, zero FAIL.",
+    "D21": {
+      "firstByte": 249,
+      "sampled": false,
+      "newPromptKinds": [],
+      "newStatusKinds": [],
+      "newVisualKinds": [],
+      "requiredJudgments": 0
+    },
+    "optionalWorkflow": "One quiescent normal player counter/selected-abandon/recharge/self-abandon/cancel/score/persisted-log/reload workflow per desktop/mobile through existing markers and controls. Caller scope proof establishes serialization, not browser behavior.",
+    "caller": "artifacts/qa/hv-umm2.682/judged.mjs",
+    "status": "pass, normal resource closure and full independent RELEASE confirmed",
+    "callerScope": "Initial String(entry) isolated smoke and full stub execution passed. Browser globals available only in page callbacks; no actual browser behavior claimed by stub. Final isolated/stub scope proof includes complete committed state equality after reload and independently reviewable actual rect right/bottom; stub remains scope-only.",
+    "sweep": {
+      "invocation": "invocations/sweep-miOZjc",
+      "counts": {
+        "pass": 8,
+        "skip": 12,
+        "fail": 0
+      },
+      "variants": [
+        "base",
+        "amplified",
+        "empowered",
+        "kindled",
+        "resonant",
+        "inspired",
+        "enduring",
+        "hastened",
+        "attuned",
+        "perfected"
+      ],
+      "controllers": [
+        "player",
+        "enemy"
+      ],
+      "nativeSummary": {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-miOZjc",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.682/invocations/sweep-miOZjc",
+        "counts": {
+          "pass": 8,
+          "skip": 12
+        },
+        "attemptCounts": {
+          "pass": 8,
+          "skip": 12
+        },
+        "hostLoad": 19.3759765625,
+        "sessions": 1,
+        "leaseYields": 0,
+        "wallMs": {
+          "browserLeaseWait": 108790,
+          "serve": 4448,
+          "scenario": 57520.70695800001,
+          "cleanup": 1439.7700419999892,
+          "execution": 63469.724208,
+          "total": 172259.724208
+        }
+      }
+    },
+    "workflow": {
+      "invocation": "invocations/run-PUPmsC",
+      "viewports": {
+        "desktop": {
+          "saved": {
+            "gameId": "njygbs",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "source": "i1",
+            "selected": "i2",
+            "next": "i3",
+            "counters": 0,
+            "score": 2,
+            "sourceZone": "void",
+            "selectedZone": "void",
+            "nextZone": "play"
+          },
+          "reload": true,
+          "logRowsObservedBeforeReload": 76,
+          "finalGameOnlyExportRows": 79,
+          "actualGameId": "njygbs",
+          "normalCommittedActivationCount": 2,
+          "UUIDPromptCount": 3,
+          "scope": "Player-controller coupled normal workflow; other controller covered by public D20 and allvariant native sweep.",
+          "reportNotes": "All five completed recipe notes per viewport retained in native report; notes without gameId share same current viewport game."
+        },
+        "mobile": {
+          "saved": {
+            "gameId": "wvax5n",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "source": "i1",
+            "selected": "i2",
+            "next": "i3",
+            "counters": 0,
+            "score": 2,
+            "sourceZone": "void",
+            "selectedZone": "void",
+            "nextZone": "play"
+          },
+          "reload": true,
+          "logRowsObservedBeforeReload": 78,
+          "finalGameOnlyExportRows": 81,
+          "actualGameId": "wvax5n",
+          "normalCommittedActivationCount": 2,
+          "UUIDPromptCount": 3,
+          "scope": "Player-controller coupled normal workflow; other controller covered by public D20 and allvariant native sweep.",
+          "reportNotes": "All five completed recipe notes per viewport retained in native report; notes without gameId share same current viewport game."
+        }
+      },
+      "captures": [
+        "counter-payment-desktop.png",
+        "counter-self-payment-desktop.png",
+        "counter-payment-mobile.png",
+        "counter-self-payment-mobile.png"
+      ],
+      "error": null,
+      "caps": [],
+      "actualVisualInspection": "Four actual captures inspected: numeric counter1 and legal controlled candidate highlights, prompt/Cancel/control bounds, final points2/source absent/remaining character and phase controls; no changed-workflow clipping or overlap. Fanned hand extends below viewport by design, visible native tap point + normal action result verified."
+    },
+    "mandatoryJudgmentTotal": 0,
+    "optionalWorkflowPassTotal": 2,
+    "resources": {
+      "sweep": {
+        "runnerPid": 90329,
+        "runnerGroup": 90329,
+        "serverPid": 70214,
+        "serverGroup": 70214,
+        "slot": 1,
+        "port": 5274,
+        "token": "UNKNOWN",
+        "mcpSessionId": "UNKNOWN",
+        "lstart": "UNKNOWN"
+      },
+      "workflow": {
+        "runnerPid": 44993,
+        "runnerGroup": 44993,
+        "serverPid": 46669,
+        "serverGroup": 46669,
+        "slot": 1,
+        "port": 5274,
+        "token": "UNKNOWN",
+        "mcpSessionId": "UNKNOWN",
+        "lstart": "UNKNOWN"
+      },
+      "qualification": "Native stderr supplies actual owned PID/PG/port/invocation and awaited successful close path plus reported portfree; helper/parent did not cache exact token/MCPsession/lstart before exit. Normal browser/provider/RPC/SDK closure is protocol inference, not claimed raw close reply. Reused shared port/slot records have no ownership implication; unrelated records read in late broad snapshot are not own evidence.",
+      "remainingOwnedProcesses": [],
+      "remainingOwnQueueTickets": []
+    },
+    "freeze": {
+      "manifestSha256": "af11336802799e19ed192928c34bfab3b6165908e820860d2913afd20db845d2",
+      "files": 4978,
+      "typeBytesSHA256Symlinks": "all equal",
+      "repoPathSet": "complete cached+untracked equal excluding only native auto ownQAledger",
+      "externalSupportPathSet": "complete recursive5 code/support paths equal",
+      "manualGitStatusBase": "unchanged",
+      "parentQAACK": "2026-10-14T17:26:08.589393+00:00",
+      "helperFullPostguard": {
+        "observedAt": "2026-10-14T17:32:17.463587+00:00",
+        "checks": {
+          "repositoryPathSetEqual": true,
+          "externalSupportPathSetEqual": true,
+          "baseEqual": true,
+          "manualGitStatusEqual": true,
+          "ownedProcesses": [],
+          "ownedQueueTickets": [],
+          "manifestSHA256": "af11336802799e19ed192928c34bfab3b6165908e820860d2913afd20db845d2",
+          "head": "c85079b3187d2bb45fe2c9cb64b391b337a37df8",
+          "manualGitStatus": " M src/content/cards/twilight-suppressor-60feb0d0.ts\n?? docs/plan/evidence/friction/hv-umm2.682.json\n?? docs/plan/evidence/measurements/hv-umm2.682.json\n?? src/content/specs/cards-ready-183.scenarios.ts"
+        },
+        "protocolQualification": "Native awaited success and normal server process-group cleanup/portfree receipts support browser/provider/RPC/SDK closure inference; exact raw close reply and unobserved token/MCPsession/lstart remain UNKNOWN. Slot reuse has no ownership implication."
+      },
+      "parentRelease": {
+        "observedAt": "2026-10-14T17:33:19.498557+00:00",
+        "checkedFiles": 4978,
+        "manifestUnchanged": true,
+        "fileTypeBytesTargetsUnchanged": true,
+        "completeRepositoryPathSetUnchanged": true,
+        "completeRecursiveExternalSupportPathSetUnchanged": true,
+        "headAndManualGitStatusUnchanged": true,
+        "ownedRecords": [],
+        "ownedGroupsLive": [],
+        "workflows": [
+          {
+            "viewport": "desktop",
+            "gameId": "njygbs",
+            "observedRows": 76,
+            "exportedRows": 79,
+            "score": 2,
+            "counters": 0,
+            "sameCommittedState": true
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "wvax5n",
+            "observedRows": 78,
+            "exportedRows": 81,
+            "score": 2,
+            "counters": 0,
+            "sameCommittedState": true
+          }
+        ],
+        "cleanupQualification": "Native eachrunner terminalexit0 after awaited normal provider/browser/RPC/SDK/server/lease close; exact own PID/PG/ports/invocations retained, token/MCPsession/lstart unobserved and UNKNOWN. Reused foreign slot records are not own evidence. Parent observed empty own records; no fabricated rawprovider reply or birth identity. Later foreign port occupancy does not contradict native portfree at owncleanup.",
+        "release": "Manual own QAledger/evidence/capture verification and finalcommit preparation now permitted; no production/caller changes required."
+      }
+    },
+    "preQaResourcesBorn": []
+  },
+  "diagnostics": [
+    {
+      "attempt": "stage0-proof",
+      "kind": "scratch scripting error",
+      "detail": "Incorrect guessed primitives.ts import, corrected to actual exported primitives/index.ts."
+    },
+    {
+      "attempt": "stage0-proof-fixed-import",
+      "kind": "scratch scripting error",
+      "detail": "Incorrect guessed pointsChanged event name, corrected to actual public pointsScored; no engine fault."
+    },
+    {
+      "attempt": "focused",
+      "kind": "private scenario scripting error",
+      "detail": "Created-source runScenario omitted self-abandon scripted answer; 2 failures/404 passes; explicit normal choice added, focused-fixed and focused-final all406 pass."
+    },
+    {
+      "attempt": "late QA birth snapshot",
+      "kind": "observation qualification",
+      "detail": "Helper observed native PID/PG/port but missed exact token/MCPsession/lstart before fast normal closure. A broad slot1 glob read unrelated historical/current records after slot reuse; those were never attributed as owned, no foreign action taken. Later narrow identity matching retained no unrelated record. Parent independently accepted honest UNKNOWN and native awaited-close inference; successful QA not rerun solely to fabricate identity metadata."
+    }
+  ],
+  "schemaNormalization": {
+    "hostLoad": "Actual successful final npm run review invocation start load11.22509765625 from external wrapper os.getloadavg()[0] at2026-10-14T17:16:33.475855Z; scope is that invocation, not averaged bead or QA load.",
+    "implementWindow": "Gross actual claim invocation through pre-Git cutoff, never inferred model start/productive-only time; actual Git end recorded externally.",
+    "endBasis": "Refresh only own friction/measurements pre-Git cutoff after COMMITACK and perform schema/diff/Git within60s; actual Git end remains externally measured."
+  },
+  "heavyStartupAndQueueObservation": {
+    "observedAt": "2026-10-14T17:19:17.539466+00:00",
+    "group": 22086,
+    "processes": [
+      "22086 22076 22086 Wed Oct 14 10:11:48 2026     lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 60feb0d0-89b8-48fc-b01a-ce54e2c9941f",
+      "54403 22086 22086 Wed Oct 14 10:17:12 2026     npm run fuzz:engine --games 300 --weight-uuids ***        ",
+      "54431 54403 22086 Wed Oct 14 10:17:12 2026     node /Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682/node_modules/.bin/tsx scripts/fuzz-engine.ts --games 300 --weight-uuids 60feb0d0-89b8-48fc-b01a-ce54e2c9941f",
+      "54439 54431 22086 Wed Oct 14 10:17:12 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682/node_modules/tsx/dist/loader.mjs scripts/fuzz-engine.ts --games 300 --weight-uuids 60feb0d0-89b8-48fc-b01a-ce54e2c9941f",
+      "54478 54439 22086 Wed Oct 14 10:17:13 2026     /Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+    ],
+    "stdoutBytes": 97,
+    "qualification": "Lockf wrapper start17:11:48.211090Z until first child lstart17:17:12Z ~323.789s with one-second lstart precision is combined startup and heavy queue, not isolated exact lock wait; full wrapper elapsed remains gross."
+  },
+  "heavyResult": {
+    "games": 300,
+    "weightUUIDs": [
+      "60feb0d0-89b8-48fc-b01a-ce54e2c9941f"
+    ],
+    "receipt": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "60feb0d0-89b8-48fc-b01a-ce54e2c9941f"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/twilight-suppressor-counters-682",
+      "start": "2026-10-14T17:11:48.211090+00:00",
+      "end": "2026-10-14T17:22:36.667239+00:00",
+      "pid": 22086,
+      "pgid": 22086,
+      "exitCode": 0,
+      "wallSeconds": 648.4594313749985,
+      "cpuSeconds": {
+        "user": 341.653635,
+        "system": 3.431965
+      },
+      "startLoad": [
+        6.8916015625,
+        9.22314453125,
+        11.55517578125
+      ],
+      "endLoad": [
+        6.7177734375,
+        10.4794921875,
+        11.82275390625
+      ]
+    },
+    "stdoutSummary": [
+      "fuzz:engine 300 games, 103005 steps, 323.3 s wall, 343.4 s CPU (0.9 games/s wall, 0.9 games/s CPU); prompts 7577; interactive re-runs 724 (4.923 ms each); feasibility bounded {\"legality\":0,\"prompts\":5}; results {\"player\":150,\"enemy\":149,\"draw\":1}; failures 0",
+      "fuzz targets: [{\"kind\":\"card\",\"uuid\":\"60feb0d0-89b8-48fc-b01a-ce54e2c9941f\",\"included\":607,\"exercised\":130}]"
+    ],
+    "qualification": "Wrapper wall648.459s includes combined heavy queue/startup; native worker reports its own active execution duration. All queue and CPU retained in full gross window, never productive-only time."
+  },
+  "preQAResourceClosure": {
+    "observedAt": "2026-10-14T17:23:08.252351+00:00",
+    "ownedCommandGroups": [
+      1630,
+      1631,
+      9496,
+      20405,
+      21258,
+      21555,
+      21665,
+      22086,
+      40295,
+      41690,
+      43375,
+      47464,
+      49713,
+      50525,
+      51922,
+      56460,
+      57720,
+      60358,
+      61590,
+      63702,
+      85471,
+      88224,
+      97513,
+      98593
+    ],
+    "remainingOwnedProcesses": [],
+    "status": "All short command/check/heavy groups terminal; no QA resources or lease started"
+  },
+  "reviewClassification": {
+    "requiredColdReview": false,
+    "basis": "Parent classified actual production delta 11 additions/1 deletion, below more-than100 non-test changed-line threshold; child is not core-review, introduces no engine form/prompt/hub change. Private scenario is semantic test, excluded from production threshold.",
+    "routing": "Normal cross-family Claude routing applies when review required; temporary Sol override expired at2026-10-14T01:00Z. No independent CLI code review invoked for this bounded leaf."
+  }
+}
