@@ -1,9 +1,9 @@
 /** Resolving one queued trigger (D14): the body of the `resolveTrigger` step. */
-import { chooseOnResolution, conditionHolds, everyNode, purposeOf, resolveEffect } from "../effects/interpreter";
+import { chooseOnResolution, conditionHolds, purposeOf, resolveEffect } from "../effects/interpreter";
 import type { QueuedTrigger } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { originAbilities } from "../rules/activation";
-import { ruleReactionBody, triggerBody } from "./body";
+import { hasImmutableRepeatAllowance, hasNamedTrigger, ruleReactionBody, triggerBody } from "./body";
 import { observeRuleReactions } from "./rule-reactions";
 
 /**
@@ -26,13 +26,9 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   if (trigger.repeated !== undefined) {
     if (trigger.kind !== undefined) throw new Error("A repeated occurrence must be a triggered ability");
     const named = trigger.repeated.named;
-    const matches = (descriptor: import("../dsl/types").Trigger): boolean => descriptor.on === named ||
-      descriptor.on === "either" && descriptor.triggers.some(matches);
     const repeatedBody = triggerBody(ctx.catalog, origin, ability, node);
-    if (!matches(repeatedBody.trigger)) throw new Error("A repeated occurrence has no matching named trigger");
-    const definition = originAbilities(ctx.catalog, origin)[ability];
-    if (node === null ? definition?.kind === "triggered" && definition.oncePerTurn === true
-      : (everyNode(repeatedBody.root)[node] as import("../effects/primitives/floating-trigger").FloatingTriggerNode).once) throw new Error("A repeated occurrence has spent its immutable allowance");
+    if (!hasNamedTrigger(repeatedBody.trigger, named)) throw new Error("A repeated occurrence has no matching named trigger");
+    if (!hasImmutableRepeatAllowance(ctx.catalog, origin, ability, node, repeatedBody)) throw new Error("A repeated occurrence has spent its immutable allowance");
   }
   if (trigger.kind === "ruleReaction") observeRuleReactions(ctx, [trigger]);
   const applied =

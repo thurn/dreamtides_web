@@ -53,7 +53,7 @@ import { abilityEffect, namedTriggersOf, worksInZone } from "../dsl/abilities";
 import { fixedEnergy } from "../dsl/energy";
 import { resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, Trigger, Variant } from "../dsl/types";
-import { triggerBody } from "../triggers/body";
+import { hasImmutableRepeatAllowance, hasNamedTrigger, triggerBody } from "../triggers/body";
 import { everyNode } from "../effects/interpreter";
 import { primitiveDefinition } from "../effects/registry";
 import type { EffectNode } from "../effects/types";
@@ -578,8 +578,6 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       throw new Error("Cannot determinize invalid hidden subject cost");
     }
   }
-  const hasNamed = (trigger: Trigger, named: import("../dsl/types").NamedTrigger): boolean =>
-    trigger.on === named || trigger.on === "either" && trigger.triggers.some(branch => hasNamed(branch, named));
   // A pending definition can precede current losses. Its printing/variant still
   // constrain it; represented gained groups matter only past its own indexes.
   const historicalOrigin = (instance: CardInstance, ability: number): QueuedTrigger["origin"] => {
@@ -600,9 +598,8 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       if (shown.node === null && ability.kind === "triggered" && zone !== undefined && !worksInZone(ability.zone, zone)) return;
       try {
         const body = triggerBody(catalog, origin, shown.ability, shown.node);
-        if (shown.repeated !== undefined && (shown.node === null ? ability.kind === "triggered" && ability.oncePerTurn === true
-          : (everyNode(body.root)[shown.node] as import("../effects/primitives/floating-trigger").FloatingTriggerNode).once)) return;
-        if (named === undefined || hasNamed(body.trigger, named)) candidates.push({ source, origin });
+        if (shown.repeated !== undefined && !hasImmutableRepeatAllowance(catalog, origin, shown.ability, shown.node, body)) return;
+        if (named === undefined || hasNamedTrigger(body.trigger, named)) candidates.push({ source, origin });
       }
       catch { /* An unrelated catalog body is outside this sampled cause's domain. */ }
     };
@@ -656,7 +653,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
         everyNode(root).forEach((node, at) => { if (node.op === "floatingTrigger") nodes.push(at); });
         for (const node of nodes) {
           const candidate = triggerBody(catalog, candidateOrigin, index, node);
-          if (!hasNamed(candidate.trigger, observer.named)) continue;
+          if (!hasNamedTrigger(candidate.trigger, observer.named)) continue;
           const selfSubject = observer.named === "materialized" || observer.named === "challenge" || observer.named === "dissolved";
           if (selfSubject && typeof source !== "string") continue;
           candidates.push({ source, origin: copy(candidateOrigin), controller, ability: index, node,
@@ -691,13 +688,11 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       ? { source: copy(shown.source), origin: copy(shown.origin) }
       : named === undefined && !retainsQueued(shown) ? null : hiddenCause(shown, named);
     if (identity !== null && named !== undefined && (shown.kind !== undefined ||
-      !hasNamed(triggerBody(catalog, identity.origin, shown.ability, shown.node).trigger, named))) throw new Error("Cannot determinize invalid named cause");
+      !hasNamedTrigger(triggerBody(catalog, identity.origin, shown.ability, shown.node).trigger, named))) throw new Error("Cannot determinize invalid named cause");
     if (identity === null) return null;
     if (shown.repeated !== undefined) {
-      const ability = originAbilities(catalog, identity.origin)[shown.ability];
       const body = triggerBody(catalog, identity.origin, shown.ability, shown.node);
-      if (shown.node === null ? ability?.kind === "triggered" && ability.oncePerTurn === true
-        : (everyNode(body.root)[shown.node] as import("../effects/primitives/floating-trigger").FloatingTriggerNode).once) throw new Error("Cannot determinize an impossible repeated allowance");
+      if (!hasImmutableRepeatAllowance(catalog, identity.origin, shown.ability, shown.node, body)) throw new Error("Cannot determinize an impossible repeated allowance");
     }
     if (shown.kind === "ruleReaction") return { kind: "ruleReaction", ...identity, controller: shown.controller,
       ability: shown.ability, node: null, subject: null,

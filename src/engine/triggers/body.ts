@@ -1,7 +1,7 @@
 /** Reading a queued or floating trigger's definition from the catalog. */
 import type { EngineCatalog } from "../catalog";
 import { abilityEffect } from "../dsl/abilities";
-import type { Condition, Trigger } from "../dsl/types";
+import type { Condition, NamedTrigger, Trigger } from "../dsl/types";
 import { everyNode } from "../effects/interpreter";
 import type { FloatingTriggerNode } from "../effects/primitives/floating-trigger";
 import type { EffectNode } from "../effects/types";
@@ -38,6 +38,30 @@ export function triggerBody(
   if (found?.op !== "floatingTrigger") throw new Error(`Node ${String(node)} of ability ${String(ability)} is not a floating trigger`);
   const floating = found as FloatingTriggerNode;
   return { trigger: floating.trigger, effect: floating.effect, root, condition: null };
+}
+
+/** Whether any branch of a trigger describes this named occasion. */
+export function hasNamedTrigger(trigger: Trigger, named: NamedTrigger): boolean {
+  return trigger.on === named || (trigger.on === "either" && trigger.triggers.some((branch) => hasNamedTrigger(branch, named)));
+}
+
+/**
+ * Whether a captured occurrence has an immutable repeat allowance. `body`
+ * comes from `triggerBody` for the same origin, ability and node. Current
+ * source disabling and intervening conditions are separate mutable checks.
+ */
+export function hasImmutableRepeatAllowance(
+  catalog: EngineCatalog,
+  origin: AbilityOrigin,
+  ability: number,
+  node: number | null,
+  body: TriggerBody,
+): boolean {
+  if (node === null) {
+    const definition = originAbilities(catalog, origin)[ability];
+    return !(definition?.kind === "triggered" && definition.oncePerTurn === true);
+  }
+  return !(everyNode(body.root)[node] as FloatingTriggerNode).once;
 }
 
 /** A queued static threshold reaction has its own kind, with no floating-trigger node. */

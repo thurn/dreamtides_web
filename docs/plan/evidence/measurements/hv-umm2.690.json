@@ -1,0 +1,554 @@
+{
+  "bead": "hv-umm2.690",
+  "base": "60d9a9f344797841b88817db6dce98e85d604d9e",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+  "branch": "wt/captured-repeat-checks-690",
+  "recordedAt": "2026-10-14T16:10:33.674578+00:00",
+  "clock": {
+    "start": "2026-10-14T15:53:41.449361+00:00",
+    "endAtEvidenceWrite": "2026-10-14T16:10:33.674578+00:00",
+    "elapsedMinutes": 16.870420283333335,
+    "qualification": "Conservative parent pre-spawn bound, exact helper sampling start unknown. Inclusive research, native coordination, admission waits, checks and evidence; productive editing time unknown. Final evidence refresh immediately precedes schema/whitespace/staging/one automatic commit; external finalizer receipt records the actual remaining tail. No Git date override or postcommit tracked rewrite."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "localValidationS.focused": {
+        "measuredFor": "focused-v1 all existing primitive contracts and five trigger/view test modules"
+      },
+      "hostLoad": {
+        "measuredFor": "review-v1 starting one-minute kernel load via os.getloadavg; same epoch review logs record the same starting observation",
+        "value": 17.15478515625
+      }
+    }
+  },
+  "source": {
+    "initialPathCount": 4918,
+    "runtimePathCount": 4918,
+    "initialManifestSHA256": "5cb1c1cd243a70dac4e5e1fea63a93bd386dc8d0569aec557166ba4ad2914530",
+    "runtimeManifestSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+    "runtimeChangedPaths": {
+      "src/engine/triggers/body.ts": "65037dc3bf44fb9b527141c08b4d9b9abb9ac64e108a8e409babdbc94191b024",
+      "src/engine/triggers/matcher.ts": "f34b4d831f58e6a9a704b122557702f6afe7f7cd5ee3615b468ba67c15f898bb",
+      "src/engine/triggers/resolve.ts": "9eaf1247a9ba48c99a488b84b10f2b0db1614852e5205a9e247201f2322fbadc",
+      "src/engine/view/determinize.ts": "c431217f0097ada717aca9578c697fa04ef7e1614b59e076285ae6b8e8bf4021"
+    },
+    "allOther4914PathsUnchanged": true,
+    "allExistingTestsUnchanged": true,
+    "scope": "Exactly four admitted runtime files. Two shared definition predicates replace existing named/immutable rule copies at five matcher/one resolver/three sampler named calls and four immutable rulesites. Captured body decode/error boundaries, matcher ordinary definition-kind guard, mutable ordinary-only current disable, conditions, FIFO/Dawn and 689 transport are preserved. No state/schema/DSL/rules/catalog/UI/runner/readsRepeat changes."
+  },
+  "validation": {
+    "tests": {
+      "focused-v1": {
+        "files": 6,
+        "passed": 3976
+      },
+      "review-v1": {
+        "files": 300,
+        "passed": 7412
+      },
+      "full-v1": {
+        "files": 381,
+        "passed": 8420
+      }
+    },
+    "commands": [
+      {
+        "label": "focused-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:00:33.575194+00:00",
+        "pid": 59756,
+        "pgid": 59756,
+        "command": [
+          "/opt/homebrew/bin/npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/triggers/triggers.test.ts",
+          "src/engine/triggers/triggers-patterns.test.ts",
+          "src/engine/triggers/triggers-redaction.test.ts",
+          "src/engine/view/determinize.test.ts",
+          "src/engine/view/view.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          12.01318359375,
+          9.1572265625,
+          9.708984375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:00:52.505454+00:00",
+        "elapsedSeconds": 18.9300151670177,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4918,
+        "beforeSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "afterSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "ff7ff9a9a3c2858abad642ef94e5446b718a6c73a237b9f4fa4a4e07a2c670b2",
+        "stderrSHA256": "e47214a78afd5ac87476cb56a4136602a474279ed1a8300c5529ffb4ceb7f4d9",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "full-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:02:29.300579+00:00",
+        "pid": 23800,
+        "pgid": 23800,
+        "command": [
+          "/usr/bin/lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "/opt/homebrew/bin/npm",
+          "run",
+          "review:full"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          14.26513671875,
+          11.9599609375,
+          10.818359375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:04:13.950466+00:00",
+        "elapsedSeconds": 104.64897025,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4918,
+        "beforeSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "afterSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "c78f1ec057fb87929bf3a4f6b88369413b3830cb66930e3b8bf099cfcf72b65e",
+        "stderrSHA256": "104712627f8a11feb002a45f83737323616e4b68bbf68a12b997782028be9a65",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "knip-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:02:11.085159+00:00",
+        "pid": 22005,
+        "pgid": 22005,
+        "command": [
+          "/opt/homebrew/bin/npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          16.5263671875,
+          12.19970703125,
+          10.87451171875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:02:16.572151+00:00",
+        "elapsedSeconds": 5.486796499986667,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4918,
+        "beforeSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "afterSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "2c0509bc2b311f6c31f7b3ef8dc1e1e4c3d06088ec10fa97728d732522ead09f",
+        "stderrSHA256": "e47214a78afd5ac87476cb56a4136602a474279ed1a8300c5529ffb4ceb7f4d9",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "review-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:00:59.520834+00:00",
+        "pid": 61510,
+        "pgid": 61510,
+        "command": [
+          "/opt/homebrew/bin/npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          17.15478515625,
+          10.5634765625,
+          10.19775390625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:02:03.118114+00:00",
+        "elapsedSeconds": 63.59668337501353,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4918,
+        "beforeSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "afterSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "055049d2c1991f1a8b5c8a97c65fafa3f3f781050379d8a8eb6fcb6a5c4e9496",
+        "stderrSHA256": "e47214a78afd5ac87476cb56a4136602a474279ed1a8300c5529ffb4ceb7f4d9",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "schema-draft-v2",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:05:53.332968+00:00",
+        "pid": 68420,
+        "pgid": 68420,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          6.26220703125,
+          9.2392578125,
+          9.91259765625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:05:53.420429+00:00",
+        "elapsedSeconds": 0.08732429100000003,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4922,
+        "beforeSHA256": "e4ad5a6b866cc118f45a91b9e0829d3ccfa0693b3b67b096815b7bef8be0b162",
+        "afterSHA256": "e4ad5a6b866cc118f45a91b9e0829d3ccfa0693b3b67b096815b7bef8be0b162",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "a5a577ec1cac3d573d10a69f56fcd1efc1ef045a672bb0a5954b63ba4e3c202f",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "schema-draft-v3",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:09:20.046762+00:00",
+        "pid": 94185,
+        "pgid": 94185,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          18.3193359375,
+          9.96142578125,
+          9.81689453125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:09:20.173303+00:00",
+        "elapsedSeconds": 0.12639241700000003,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4922,
+        "beforeSHA256": "9db2308ef03d3fc1990afcf29b7276db816e8eed0fd71aa014c2f3ad9597dc38",
+        "afterSHA256": "9db2308ef03d3fc1990afcf29b7276db816e8eed0fd71aa014c2f3ad9597dc38",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "a5a577ec1cac3d573d10a69f56fcd1efc1ef045a672bb0a5954b63ba4e3c202f",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "schema-draft",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:05:00.327295+00:00",
+        "pid": 65086,
+        "pgid": 65086,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          6.97216796875,
+          9.9208984375,
+          10.18359375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:05:00.417670+00:00",
+        "elapsedSeconds": 0.09031445800000001,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4922,
+        "beforeSHA256": "2fc1f8349dc005d57bc7b4af73b5fdc097903672c1656d8e0fc892d84a06ebd8",
+        "afterSHA256": "2fc1f8349dc005d57bc7b4af73b5fdc097903672c1656d8e0fc892d84a06ebd8",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "a5a577ec1cac3d573d10a69f56fcd1efc1ef045a672bb0a5954b63ba4e3c202f",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "schema-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:02:23.486122+00:00",
+        "pid": 23489,
+        "pgid": 23489,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          14.63671875,
+          11.9931640625,
+          10.8232421875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:02:23.577154+00:00",
+        "elapsedSeconds": 0.090843583,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4918,
+        "beforeSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "afterSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "37785fac2fb0d003135782afcdfa81529d3ffea8c2b3b1f34b0162588095c2a8",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "whitespace-draft-v2",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:05:53.796798+00:00",
+        "pid": 68454,
+        "pgid": 68454,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          6.26220703125,
+          9.2392578125,
+          9.91259765625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:05:53.809629+00:00",
+        "elapsedSeconds": 0.01266783299999999,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4922,
+        "beforeSHA256": "e4ad5a6b866cc118f45a91b9e0829d3ccfa0693b3b67b096815b7bef8be0b162",
+        "afterSHA256": "e4ad5a6b866cc118f45a91b9e0829d3ccfa0693b3b67b096815b7bef8be0b162",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "whitespace-draft-v3",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:09:20.676295+00:00",
+        "pid": 96379,
+        "pgid": 96379,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          18.3193359375,
+          9.96142578125,
+          9.81689453125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:09:20.688693+00:00",
+        "elapsedSeconds": 0.012219832999999986,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4922,
+        "beforeSHA256": "9db2308ef03d3fc1990afcf29b7276db816e8eed0fd71aa014c2f3ad9597dc38",
+        "afterSHA256": "9db2308ef03d3fc1990afcf29b7276db816e8eed0fd71aa014c2f3ad9597dc38",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "whitespace-draft",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:05:00.863965+00:00",
+        "pid": 65136,
+        "pgid": 65136,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          6.97216796875,
+          9.9208984375,
+          10.18359375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:05:00.888495+00:00",
+        "elapsedSeconds": 0.024369042000000007,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4922,
+        "beforeSHA256": "2fc1f8349dc005d57bc7b4af73b5fdc097903672c1656d8e0fc892d84a06ebd8",
+        "afterSHA256": "2fc1f8349dc005d57bc7b4af73b5fdc097903672c1656d8e0fc892d84a06ebd8",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "whitespace-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T16:02:28.793247+00:00",
+        "pid": 23760,
+        "pgid": 23760,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-repeat-checks-690",
+        "hostLoad": [
+          14.26513671875,
+          11.9599609375,
+          10.818359375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T16:02:28.806363+00:00",
+        "elapsedSeconds": 0.012928292000000008,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4918,
+        "beforeSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "afterSHA256": "b5834b7a44d3e93d5bca4a3a4f73c95c5756ce2d5fd361237b709854c3c22303",
+        "collectorBeforeSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "collectorAfterSHA256": "aa8296ae9b9e1c6fced2152f3e17255f2fd0cbe7e72185066c8866a808c037c3",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      }
+    ],
+    "noNewTests": "Mechanical rule extraction uses existing public synthetic contracts; no implementation-mirror helper tests or mutants. All old 66 + 689 22 owning contracts unchanged.",
+    "existingRefusalTestLimitation": "Three inherited fold-inFlight error/refusal assertions also recover as engine_error when replay completes successfully. Their passing status does not discriminate the intended spent-allowance/catalog-mismatch/late-primitive failures. They stay byte-identical;690 makes no repair or refusal-proof claim from those assertions. Filed followup hv-b7x4 owns the bounded 689 test and measurement-claim repair.",
+    "heavy": {
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review:full"
+      ],
+      "workers": 2,
+      "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "qualification": "One local full for shared central cross-cutting definition extraction. Actual elapsed includes lock wait/check/build at recorded host load. No private load gate, D19 budget/performance claim, local 200-game fuzz or browser."
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "midstep/partial write",
+      "contract": "rolls back %s genuine repeated mutation prefix on the exact later primitive error",
+      "coverage": "Inherited real successful mutation-prefix control is retained. Its failing fold-inFlight branch has the explicit replay-completion limitation above; not counted as discriminating rollback proof."
+    },
+    {
+      "path": "reload/restart",
+      "contract": "visible-history original reader for $side/$viewer after current loss=$lost; visible-history private repeat for $side/$viewer after current loss=$lost; visible-history public emblem observer for $side/dreamsign=$sign keeps captured history withheld; visible-history sampled self-subject for %s stays private to later public readers",
+      "coverage": "Unchanged 689 genuine producer continuations across JSON/fold/save/sample/re-view preserve source UUID/FIFO/public facts and finite real repeated effects."
+    },
+    {
+      "path": "invalid/stale/concurrent actor",
+      "contract": "reloads %s optional observer and refuses wrong-side, stale and duplicate continuations",
+      "coverage": "Existing actor/continuation controls retained. Malformed-save parser refusals are direct; catalog mismatch fold-inFlight refusal has the stated limitation. Headless synchronous source extraction introduces no new concurrency mechanism."
+    },
+    {
+      "path": "immutable allowance",
+      "contract": "repeats exact floating node for $side and refuses consumed one-shot=$once; keeps %s gained definition and its spent once limit through record cleanup",
+      "coverage": "Direct actual admission energy/queue outcomes and invalid sampler refusal with valid sample continuation remain. Three inherited fold error branches are not offered as discriminating guard evidence. Mechanical audit preserves ordinary oncePerTurn versus actual floating-node.once and existing return/filter/throw distinctions."
+    },
+    {
+      "path": "invalid catalog/queue",
+      "contract": "throws, leaving the committed state alone, for an empty queue or a queued ability that is not a trigger",
+      "coverage": "Existing direct runStep throw with unchanged committed hash remains meaningful; helper uses caller-decoded matching body and preserves all triggerBody errors."
+    },
+    {
+      "path": "termination",
+      "contract": "ends %s admission-only growing causal cycles with a mandatory draw; ends a trigger cycle nobody can stop, which repeats a state exactly, in a draw",
+      "coverage": "Existing mandatory loop outcomes and finite compatible sample drains retained. No new recursive runtime traversal beyond the exact existing either descriptor walk."
+    }
+  ],
+  "investigationCorrections": [
+    {
+      "kind": "read-only-shell-glob",
+      "detail": "Two unquoted read-only inventory globs had no match; exact path/rg inventory used subsequently. No source/runtime/test effect."
+    },
+    {
+      "kind": "initial-proposal-proof-qualification",
+      "detail": "Parent identified completed-replay engine_error behavior in inherited 689 fold tests. Source-first proposal coverage was qualified before validation/evidence; existing assertions remain unchanged and are not claimed as failure-discrimination proof."
+    },
+    {
+      "kind": "scratch-writer-generation",
+      "detail": "An initial nested-string scratch writer-generation draft had a Python SyntaxError before any filesystem effect. Recreated the scratch writer with direct patch text; no source/runtime/test failure."
+    }
+  ],
+  "delivery": {
+    "coreReview": "Parent owns fresh normal cold Claude Opus5.5 review at immutable final commit; not claimed complete here.",
+    "native": "Parent owns Beads/Tollgate/source admission/finalfreeze/provider/promotion/cleanup.",
+    "browserQA": "No presentation or browser behavior change; existing headless engine/fold/view contracts are proportionate. No dedicated bead QA server/port or captures. Full-suite tooling tests may create their own temporary synthetic server process groups; no persistent QA runtime is claimed.",
+    "preExistingFile": "docs/plan/evidence/pre-existing/hv-umm2.690.md",
+    "runtimeLedger": "Only receipt-owned validation process groups. All completed recorded groups reaped/absent. No foreign process control, provider, dedicated browser/server or fuzz resource. Full-suite tooling tests own their temporary synthetic server lifecycle."
+  }
+}

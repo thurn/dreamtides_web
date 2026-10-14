@@ -54,7 +54,7 @@ import { opponent, SIDES, sourceInstance, sourceKey } from "../state/ids";
 import type { BattleState, FloatingEffect, GainedAbilities, HandCopyContext, MaterializedCard, Printing, QueuedTrigger, SparkGain } from "../state/types";
 import type { ArmedAbility, ArmedTriggers, LookbackEventKind, StepContext, TriggerBlocks, TriggerListener } from "../steps/types";
 import { sidesBlindTo } from "../view/knowledge";
-import { ruleReactionBody, triggerBody } from "./body";
+import { hasImmutableRepeatAllowance, hasNamedTrigger, ruleReactionBody, triggerBody } from "./body";
 import { observeRuleReactions, sourceObserved } from "./rule-reactions";
 import { observeNamedAdmissions, type NamedAdmission } from "./named-admissions";
 
@@ -346,7 +346,7 @@ function matchKind(
   switch (trigger.on) {
     case "namedAbilityTriggered":
       return admission !== undefined && event.kind === "triggerQueued" &&
-        admission.queued.controller === resolvePlayer(you, trigger.player) && hasNamed(admission.trigger, trigger.named)
+        admission.queued.controller === resolvePlayer(you, trigger.player) && hasNamedTrigger(admission.trigger, trigger.named)
           ? { subject: null, triggeringAbility: { named: trigger.named, occurrence: admission.queued,
             observedBy: admission.queued.repeated?.observedBy ?? SIDES.filter(viewer => sourceObserved({ state }, admission.queued.source, viewer)) } } : null;
     case "materialized":
@@ -661,7 +661,7 @@ function matchListener(ctx: StepContext, side: Side, listener: Listener, event: 
     if (ability.kind !== "triggered") return;
     const armedAbility = armed.abilities.get(oncePerTurnKey(listener.source, index));
     const matching = armedAbility?.listener ?? (
-      dissolving && hasNamed(ability.trigger, "dissolved")
+      dissolving && hasNamedTrigger(ability.trigger, "dissolved")
         ? { ...departed, controller: event.side }
         : listener
     );
@@ -906,10 +906,6 @@ function matchNamedAdmission(ctx: StepContext, admission: NamedAdmission): Named
   return admitted;
 }
 
-function hasNamed(trigger: Trigger, named: NamedTrigger): boolean {
-  return trigger.on === named || (trigger.on === "either" && trigger.triggers.some((branch) => hasNamed(branch, named)));
-}
-
 /**
  * Queues the `named` triggered abilities of the card `id` outside their
  * occasion ("trigger its ▸Materialized ability"), subject to the same
@@ -924,16 +920,14 @@ export function repeatCapturedTrigger(ctx: StepContext, binding: NonNullable<Que
   const original = binding.occurrence;
   if (original.kind !== undefined) throw new Error("A repeated cause must be a triggered ability");
   const body = triggerBody(ctx.catalog, original.origin, original.ability, original.node);
-  if (!hasNamed(body.trigger, binding.named)) throw new Error("A repeated cause has no matching named trigger");
+  if (!hasNamedTrigger(body.trigger, binding.named)) throw new Error("A repeated cause has no matching named trigger");
   if (original.node === null) {
     const ability = originAbilities(ctx.catalog, original.origin)[original.ability];
     if (ability?.kind !== "triggered") throw new Error("A repeated cause has no triggered definition");
-    // This captured occurrence spent its allowance even if gained records ended.
-    if (ability.oncePerTurn === true || triggerBlocks(ctx.state, ctx.catalog, original.source, original.ability).disabled) return;
-  } else {
-    const node = everyNode(body.root)[original.node] as import("../effects/primitives/floating-trigger").FloatingTriggerNode;
-    if (node.once) return;
   }
+  // This captured occurrence spent its allowance even if gained records ended.
+  if (!hasImmutableRepeatAllowance(ctx.catalog, original.origin, original.ability, original.node, body)) return;
+  if (original.node === null && triggerBlocks(ctx.state, ctx.catalog, original.source, original.ability).disabled) return;
   if (body.condition !== null && !conditionHolds(ctx.state, ctx.catalog, body.condition,
     { controller: original.controller, source: original.source, optionalPaid: [] })) return;
   const beforeDawn = ctx.state.turnLog.dawnProgress?.total ?? 0;
@@ -957,7 +951,7 @@ function enqueueNamed(ctx: StepContext, id: InstanceId, named: NamedTrigger): Na
   const admitted: NamedAdmission[] = [];
   const listener = cardListener(ctx.state, id);
   originAbilities(ctx.catalog, listener.origin).forEach((ability, index) => {
-    if (ability.kind !== "triggered" || !hasNamed(ability.trigger, named)) return;
+    if (ability.kind !== "triggered" || !hasNamedTrigger(ability.trigger, named)) return;
     if (named !== "dissolved" && !worksInZone(ability.zone, listener.zone)) return;
     const queued = enqueueAbility(ctx, listener, ability, index, { subject: id });
     if (queued !== null) admitted.push(queued);
@@ -967,7 +961,7 @@ function enqueueNamed(ctx: StepContext, id: InstanceId, named: NamedTrigger): Na
 
 /** Count successful admissions, not candidates or resolutions, and keep observer-qualified lower bounds. */
 function recordDawnAdmission(ctx: StepContext, source: AbilitySource, trigger: Trigger, repeatAudience?: readonly Side[]): void {
-  if (ctx.state.turn.phase !== "dawn" || !hasNamed(trigger, "dawn")) return;
+  if (ctx.state.turn.phase !== "dawn" || !hasNamedTrigger(trigger, "dawn")) return;
   const progress = ctx.state.turnLog.dawnProgress ??= { total: 0, known: { player: 0, enemy: 0 } };
   progress.total += 1;
   for (const viewer of SIDES) if (repeatAudience === undefined ? sourceObserved(ctx, source, viewer) : repeatAudience.includes(viewer)) progress.known[viewer] += 1;
