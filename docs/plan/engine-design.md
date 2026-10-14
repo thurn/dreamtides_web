@@ -150,6 +150,7 @@ interface CardInstance {
   controller: Side;                    // in a hand, the side holding it; in a deck, void, or Banished, its owner
   zone: Zone;                          // "deck" | "hand" | "stack" | "play" | "void" | "banished"
   readonly variant: Variant;           // { amplified }; Phases 4.1 and 5 add the rest (D39, below)
+  readonly journeyDeck?: boolean;     // immutable physical input-deck membership; omitted means unknown
   readonly poolCandidates?: readonly CardId[]; // immutable eligible copies captured by pool creation
   status: { exhausted: boolean; gainedSpark: number; counters: number; created: boolean;
             reclaimed: boolean; playedViaReclaim: boolean; offering: boolean; ephemeral: boolean;
@@ -1347,13 +1348,13 @@ floating record per character. `lockedAtResolution(value)` marks the intent.
 **Continuous primitives** (`setBaseSpark`, `grant`/`loseKeyword`,
 `giveAllTypes`, `sparkModifier`, `costModifier`, `playFromZone`,
 `playRestriction`, `grantCardKeyword`, `reclaimNotBanished`,
-`preserveEphemeralHand`) each
+`preserveEphemeralHand`, `journeyDeckSparkModifier`) each
 declare a `continuous` hook: their layer and the changes they make while a
 static ability holds them. The hook reads through `StaticEnv`: `characters`
 and `value` resolve references and values live, and `read` is the reader of
 the layers before its own in the evaluation expanding the ability, never
 another evaluation of the state. Except for the static-only
-`grantCardKeyword` (**Cards outside play**, below) and
+`grantCardKeyword` and `journeyDeckSparkModifier` (**Cards outside play**, below),
 `reclaimNotBanished` and `preserveEphemeralHand`
 ([Zones](#zones-and-zone-changes)), their `resolve` makes
 floating records for their own duration, else the enclosing
@@ -2155,7 +2156,8 @@ and figment. Each check names every offending entity:
   registered primitive, and every static ability holds a continuous
   primitive.
 - **Static-only primitives.** A primitive marked `staticOnly`
-  (`grantCardKeyword`, `reclaimNotBanished`, `preserveEphemeralHand`)
+  (`grantCardKeyword`, `reclaimNotBanished`, `preserveEphemeralHand`,
+  `journeyDeckSparkModifier`)
   appears only as a static
   ability's whole effect, never in an event, triggered, or activated ability
   or nested in another node, since resolving it throws.

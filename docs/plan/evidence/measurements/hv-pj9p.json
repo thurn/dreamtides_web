@@ -1,0 +1,111 @@
+{
+  "bead": "hv-pj9p",
+  "base": "9360f3189c064a9f6b57b1f113b4c926f65e7d77",
+  "sourceFiles": {
+    "src/rules/battle/journey-deck-spark-state.ts": {"baseSha256": "7d7cfcb1876e7554ed56e260478d24be43b07ed31ceb842a850dd8d977a3dc0a", "sha256": "35ec54cb44d352f7d90e3f2e8bf7c94780a65d146ec24469c64bca0a47ed8dfa"},
+    "src/rules/battle/fold.ts": {"baseSha256": "9ab99756a82011619aa67a951d83dc21ad95ccb4d17077c1cc60320f48ebbe4a", "sha256": "532dff51dd4747e39aed1c4d91809692c87ba37a35564af62668628cd9c530dc"},
+    "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts": {"baseSha256": "84f24b54bb29ff5e5b64f4e9deb1826e5d034edf869093ee33164ae2c7c4e29b", "sha256": "b1ec3139587d13c40ac8b15bde54bae12e0be4ee00541664abf5463d5b8164bc"},
+    "docs/rules.md": {"baseSha256": "120b102c6682b1c0df2b0e3ef38693ed8796572f6edcfb57a7d90c17bc0c2098", "sha256": "adaea2f1572129d622b7b352e9f310eb8b6fe4519b2b83c9a8ed08fa1dba0882"},
+    "docs/plan/engine-design.md": {"baseSha256": "231501e04cb4b5ad9c850fc144b980748a775f8b04e917d63e3485e16c517c2e", "sha256": "783170c0282332a532fdbb056067040399d1d6febb2dabe7ff5833e256ca7215"}
+  },
+  "window": {
+    "dispatchLowerBound": "2026-10-14T23:04:48.377599+00:00",
+    "dispatchUpperBound": "2026-10-14T23:05:47.080840+00:00",
+    "samplingStart": "UNKNOWN",
+    "rootClaim": "2026-10-14T23:04:05+00:00",
+    "end": "2026-10-14T23:12:13.510678+00:00",
+    "endMeaning": "Final precommit evidence cutoff. Exact commit start/end/OID and cutoff-to-commit lag are retained externally in pj9p/commit-receipt.json and final-manifest.json; cutoff precedes commit by under 60 seconds.",
+    "scope": "gross elapsed research, edits, coordination and validation; not productive coding time"
+  },
+  "producerProof": [
+    "initialState declares one ordinary true physical instance per actual init.decks entry, counted by immutable owner.",
+    "Debug mint declares ordinary false; createInstance declares false and created. Ordinary originals persist through every zone; only created records cease.",
+    "True live and remembered declarations must be ordinary and noncreated. Live true totals equal immutable declared owner deck lengths in committed and retained history base.",
+    "The C4 requirement uses exact declared/retained ability metadata. Unknown created bits and unrelated legacy states retain acceptance. Membership is never inferred from current appearance, IDs, names or printing UUID equality."
+  ],
+  "checks": {
+    "before-contradictions": {"exit": 1, "wallS": 8.703756750037428, "cpuS": {"user": 8.587742, "system": 2.900603}, "utc": ["2026-10-14T23:06:40.966806+00:00", "2026-10-14T23:06:49.670650+00:00"], "pid": 62399, "pgid": 62399, "load1m": [13.685546875, 12.73095703125]},
+    "before-checkpoint": {"exit": 1, "wallS": 11.338714542041998, "cpuS": {"user": 7.418717, "system": 3.047022}, "utc": ["2026-10-14T23:07:27.087377+00:00", "2026-10-14T23:07:38.426211+00:00"], "pid": 66044, "pgid": 66044, "load1m": [9.6318359375, 9.14013671875]},
+    "focused-c4": {"exit": 1, "wallS": 8.36942474998068, "cpuS": {"user": 6.958826, "system": 2.318815}, "utc": ["2026-10-14T23:08:13.587256+00:00", "2026-10-14T23:08:21.956758+00:00"], "pid": 69397, "pgid": 69397, "load1m": [8.33349609375, 8.1279296875]},
+    "focused-c4-2": {"exit": 0, "wallS": 7.57795745896874, "cpuS": {"user": 7.948368, "system": 2.328683}, "utc": ["2026-10-14T23:09:05.643393+00:00", "2026-10-14T23:09:13.221407+00:00"], "pid": 72809, "pgid": 72809, "load1m": [7.7900390625, 7.962890625]},
+    "focused-final": {"exit": 0, "wallS": 21.60127491602907, "cpuS": {"user": 27.848977, "system": 3.180936}, "utc": ["2026-10-14T23:09:34.042301+00:00", "2026-10-14T23:09:55.643826+00:00"], "pid": 74518, "pgid": 74518, "load1m": [7.16552734375, 12.7177734375]},
+    "review": {"exit": 0, "wallS": 34.38233695802046, "cpuS": {"user": 101.647873, "system": 10.382628}, "utc": ["2026-10-14T23:10:34.675242+00:00", "2026-10-14T23:11:09.058006+00:00"], "pid": 32445, "pgid": 32445, "load1m": [16.279296875, 13.5576171875]},
+    "knip": {"exit": 0, "wallS": 4.685230833012611, "cpuS": {"user": 4.112068, "system": 1.369982}, "utc": ["2026-10-14T23:11:14.560841+00:00", "2026-10-14T23:11:19.246101+00:00"], "pid": 37695, "pgid": 37695, "load1m": [12.8720703125, 12.6416015625]}
+  },
+  "checkDispositions": {
+    "before-contradictions": "Expected red: 16 public Boolean-declaration controls (both actors/current+history/original false/debug true/created true/figment true) accepted at unmodified runtime base; 1 unrelated matching test passed. Exact assertion sites retained in scratch logs.",
+    "before-checkpoint": "Expected red: 2 actual persistence controls (both actors) passed valid checkpoint and unknown fallback, then failed missing rejection of known original false.",
+    "focused-c4": "2 own test accounting failures: appending refused raw events extended preserved replay length. Corrected expected count by known appended-event count and explicitly flushed persistence. No production repair for this fixture error.",
+    "focused-c4-2": "52 C4 controls passed after fixture correction.",
+    "focused-final": "Full primitive contracts and seven relevant host/privacy suites pass; includes 60 C4 controls with eight additional remembered-origin negatives and unrelated-known acceptance."
+  },
+  "failurePathControls": {
+    "requiredUnknown": "rejects unknown required provenance and accepts unrelated legacy states for %s",
+    "optionalType": "same contract rejects journeyDeck string through public parse",
+    "knownBoolean": "rejects a contradictory $declaration C4 declaration in $boundary for $side",
+    "historyBoundary": "same declaration matrix selects actual retained history base separately from committed state",
+    "checkpointRecovery": "rejects C4 origin checkpoints and uses the normal persisted-genesis fallback for %s: hash-valid missing/current false/history false, valid source checkpoint, exact rebuilt state",
+    "rawImport": "same persisted contract: LOAD_STATE replay refusal and append retain exact prior state; actual valid raw import accepted",
+    "staleAndActor": "bounces stale, foreign, illegal, and out-of-turn intents (fold-intents.test.ts)",
+    "cancel": "keeps provenance through refusal, pending reload, cancel and partial resolution failure for %s",
+    "partialFailure": "same C4 contract checks unchanged instances, nextInstance and floating effects after contained resolution error",
+    "concurrentIntent": "bounces an action based before a partner’s event and applies a matching answer through it (engine-battle-intents.test.ts)",
+    "privacy": "keeps private draw permutations equal and conserves sampled global origin for %s; both actual cohorts, equal private view, sample projection and owner totals retained"
+  },
+  "retainedQualification": {
+    "bead": "hv-umm2.589",
+    "source": "ed458bdc01dffc00793499198571ed338e1c62ea",
+    "scope": "Original full/fuzz/browser evidence qualifies its original capability source. This bounded validation/doc/test repair does not repeat or claim new content/browser evidence. Original 247 five-UUID acceptance remains with its owner."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting 1-minute load"
+      }
+    }
+  },
+  "resources": {
+    "testWorkers": 2,
+    "heavySlot": "not needed for these bounded checks",
+    "browser": "not started",
+    "server": "not started",
+    "liveOwnedProcesses": "All receipt children settled before commit; no server, browser or lease was started."
+  },
+  "reviewDelivery": "Parent owns fresh normal Claude Opus 5.5 cold review, findings/disposition and exact certified delivery; expired temporary Sol override unused.",
+  "counts": {
+    "focusedFinal": {
+      "files": 8,
+      "tests": 4549,
+      "C4": 60
+    },
+    "reviewRelated": {
+      "files": 92,
+      "tests": 5494
+    },
+    "contractLines": 360
+  },
+  "commandScopes": {
+    "focused-final": [
+      "env",
+      "JOURNEY_TEST_WORKERS=2",
+      "npm",
+      "test",
+      "--",
+      "src/engine/effects/primitives/contracts.test.ts",
+      "src/rules/battle/engine-battle-intents.test.ts",
+      "src/rules/battle/engine-battle-replay.test.ts",
+      "src/rules/replay/replay.test.ts",
+      "src/engine/fold/fold-intents.test.ts",
+      "src/engine/view/view-knowledge.test.ts",
+      "src/engine/view/determinize.test.ts",
+      "src/engine/view/hidden-card-status.test.ts"
+    ],
+    "before-contradictions": "npm test -- src/engine/effects/primitives/contracts.test.ts -t contradictory",
+    "before-checkpoint": "npm test -- src/engine/effects/primitives/contracts.test.ts -t C4 origin checkpoints",
+    "focused-c4 / focused-c4-2": "npm test -- src/engine/effects/primitives/contracts.test.ts -t journey-deck",
+    "review": "npm run review",
+    "knip": "npm run knip",
+    "receiptDirectory": "/tmp/dreamtides-executor-01a1304d/pj9p"
+  },
+  "preExistingIssues": "None encountered outside this finite repair. Asset-cache preparation warnings did not fail validation."
+}

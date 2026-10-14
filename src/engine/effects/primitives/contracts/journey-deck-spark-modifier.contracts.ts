@@ -93,6 +93,9 @@ function act(w: ReturnType<typeof world>, state: BattleState, side: Side, action
   return { state: settled.state, events: [...started.events, ...settled.events] };
 }
 const slice = (committed: BattleState): BattleSlice => ({ committed, inFlight: null, publishedEvents: 0, attempt: 0 });
+function accepts(w: ReturnType<typeof world>, state: BattleState, init = w.init): void {
+  expect(parseEngineBattleFold({ init, slice: withHistory(slice(state)) }, w.engine.catalog)).not.toBeNull();
+}
 function legacy(state: BattleState): BattleState {
   const saved = JSON.parse(serializeState(state)) as BattleState;
   for (const card of Object.values(saved.instances)) delete (card as { journeyDeck?: boolean }).journeyDeck;
@@ -108,6 +111,7 @@ describe("journey-deck spark", () => {
     expect(new Set(owned).size).toBe(4); expect(owned.every(id => w.state.instances[id].journeyDeck === true)).toBe(true);
     expect(owned.every(id => w.state.instances[id].status.gainedSpark === 0)).toBe(true);
     expect(ids(w.state, opponent(side)).map(id => spark(w.engine, w.state, id))).toEqual([1]);
+    accepts(w, w.state);
     const saved = serializeState(w.state); expect(cloneState(w.state)).toEqual(w.state); expect(stateHash(cloneState(w.state))).toBe(stateHash(w.state));
     expect(w.engine.view(deserializeState(saved), side)).toEqual(w.engine.view(w.state, side)); expect(serializeState(w.state)).toBe(saved);
   });
@@ -117,7 +121,7 @@ describe("journey-deck spark", () => {
       { cardId: v.event1.id, deckMods: mods(0, "character") }, { cardId: v.vanilla1.id, deckMods: mods(0, "event") }];
     const w = world(side, { own }); const before = serializeState(w.state);
     expect(ids(w.state, side).map(id => spark(w.engine, w.state, id))).toEqual([2, 4, 3, 1, null]);
-    expect(serializeState(w.state)).toBe(before);
+    expect(serializeState(w.state)).toBe(before); accepts(w, w.state);
   });
   it.each(SIDES)("keeps the bonus on the real stack and Banished visit for %s", side => {
     const w = world(side, { own: [entry(v.vanilla1), entry(v.vanilla2), entry(banisher), entry(v.vanilla1)], other: [entry(response)] });
@@ -125,13 +129,13 @@ describe("journey-deck spark", () => {
     const init = { ...w.init, setup: { ...w.init.setup!, placements: [...w.init.setup!.placements, { side: opponent(side), deckIndex: 0, zone: "hand" as const }] } };
     const start = w.engine.createBattle(init, NO_PROMPTS).state; const played = start.sides[side].hand[0];
     const stacked = w.engine.apply(start, side, { kind: "play", card: played, from: "hand" }, NO_PROMPTS).state;
-    expect(stacked.instances[played].zone).toBe("stack"); expect(spark(w.engine, stacked, played)).toBe(3);
+    expect(stacked.instances[played].zone).toBe("stack"); expect(spark(w.engine, stacked, played)).toBe(3); accepts(w, stacked, init);
     const playedState = passUntil(w.engine, stacked, s => s.stack.length === 0).state;
     // Banisher starts in the declared void; debug adds an executable spell without changing the original cohort.
     const debug = applyDebugOp(w.engine, withHistory(slice(playedState)), { kind: "addCard", side, card: banisher.id, zone: "hand" });
     if (debug.kind !== "applied") throw Error("debug spell rejected"); const spell = debug.slice.committed.sides[side].hand[0];
     const removed = act(w, debug.slice.committed, side, { kind: "play", card: spell, from: "hand" }, played);
-    expect(removed.state.instances[played].zone).toBe("banished"); expect(spark(w.engine, removed.state, played)).toBe(3);
+    expect(removed.state.instances[played].zone).toBe("banished"); expect(spark(w.engine, removed.state, played)).toBe(3); accepts(w, removed.state, init);
   });
   it.each(SIDES)("excludes same-printing created hand/card/figment copies and debug additions for %s", side => {
     const w = world(side, { own: [entry(copier), entry(v.vanilla2), entry(v.vanilla3), entry(v.vanilla1)] }); const sourceId = w.state.sides[side].backRank[0]!;
@@ -143,7 +147,7 @@ describe("journey-deck spark", () => {
     expect(made.map(c => spark(w.engine, state, c.id))).toEqual([1, 1, 1]);
     const debug = applyDebugOp(w.engine, withHistory(slice(state)), { kind: "addCard", side, card: v.vanilla1.id, zone: "hand" });
     if (debug.kind !== "applied") throw Error("debug rejected"); const added = debug.slice.committed.sides[side].hand[0];
-    expect(debug.slice.committed.instances[added]).toMatchObject({ journeyDeck: false, status: { created: false } }); expect(spark(w.engine, debug.slice.committed, added)).toBe(1);
+    expect(debug.slice.committed.instances[added]).toMatchObject({ journeyDeck: false, status: { created: false } }); expect(spark(w.engine, debug.slice.committed, added)).toBe(1); accepts(w, debug.slice.committed);
   });
   it.each(SIDES)("keeps origin under stolen control and a foreign held hand for %s", owner => {
     const side = opponent(owner); const w = world(side, { sign: false, own: [entry(thief), entry(v.vanilla2), entry(v.vanilla3), entry(v.vanilla1)], other: [entry(v.vanilla1), entry(v.vanilla1)] });
@@ -152,6 +156,7 @@ describe("journey-deck spark", () => {
     state = act(w, state, side, { kind: "activate", source: sourceId, ability: 0 }, victim).state;
     state = act(w, state, side, { kind: "activate", source: sourceId, ability: 1 }, held).state;
     for (const id of [victim, held]) { expect(state.instances[id]).toMatchObject({ owner, controller: side, journeyDeck: true }); expect(spark(w.engine, state, id)).toBe(2); }
+    accepts(w, state, init);
     for (const viewer of SIDES) { const seen = w.engine.view(state, viewer); const sampled = w.engine.determinize(seen, init.decks, () => 0.4); expect(w.engine.view(sampled, viewer)).toEqual(seen); }
   });
   it.each(SIDES)("includes C4 in ordinary final hand spark filters without recursive reads for %s", side => {
@@ -194,10 +199,46 @@ describe("journey-deck spark", () => {
     expect(hasUnknownJourneyDeckSparkOrigins(fold, w.engine.catalog)).toBe(true); expect(parseEngineBattleFold(fold, w.engine.catalog)).toBeNull();
     expect(() => w.engine.view(old, side)).toThrow(); expect(parseEngineBattleFold({ init: w.init, slice: slice(w.state) }, w.engine.catalog)).not.toBeNull();
     const unrelated = world(side, { sign: false }); expect(parseEngineBattleFold({ init: unrelated.init, slice: slice(legacy(unrelated.state)) }, unrelated.engine.catalog)).not.toBeNull();
+    const unrelatedKnown = cloneState(unrelated.state);
+    (Object.values(unrelatedKnown.instances)[0] as { journeyDeck: boolean }).journeyDeck = false;
+    accepts(unrelated, unrelatedKnown);
     const malformed = JSON.parse(JSON.stringify({ init: w.init, slice: slice(w.state) })) as typeof fold;
     (Object.values(malformed.slice.committed.instances)[0] as unknown as { journeyDeck: unknown }).journeyDeck = "true";
     expect(parseEngineBattleFold(malformed, w.engine.catalog)).toBeNull();
   });
+  it.each(SIDES.flatMap(side => ["current", "history"].flatMap(boundary =>
+    ["original false", "debug true", "created true", "figment true", "remembered created true", "remembered figment true"].map(declaration => ({ side, boundary, declaration })))))(
+    "rejects a contradictory $declaration C4 declaration in $boundary for $side", ({ side, boundary, declaration }) => {
+      const w = world(side, { own: [entry(copier), entry(v.vanilla1), entry(v.vanilla3), entry(v.vanilla1)] });
+      const caller = w.state.sides[side].backRank[0]!;
+      let state = act(w, w.state, side, { kind: "activate", source: caller, ability: 0 }).state;
+      state = act(w, state, side, { kind: "activate", source: caller, ability: 1 }).state;
+      const added = applyDebugOp(w.engine, withHistory(slice(state)), { kind: "addCard", side, card: v.vanilla1.id, zone: "hand" });
+      if (added.kind !== "applied") throw Error("debug rejected");
+      const valid = { init: w.init, slice: withHistory(slice(added.slice.committed)) };
+      expect(parseEngineBattleFold(valid, w.engine.catalog)).not.toBeNull();
+      const malformed = JSON.parse(JSON.stringify(valid)) as typeof valid;
+      const saved = boundary === "current" ? malformed.slice.committed : malformed.slice.history!.base.committed;
+      const cards = Object.values(saved.instances), original = cards.find(card => card.owner === side && card.journeyDeck === true)!;
+      const additional = cards.find(card => card.owner === side && !card.status.created && card.journeyDeck === false)!;
+      const created = cards.find(card => card.owner === side && card.status.created && card.printing.kind === "card")!;
+      const figment = cards.find(card => card.owner === side && card.printing.kind === "figmentCopy")!;
+      if (declaration.startsWith("remembered")) {
+        const record = Object.values(saved.rememberedCards ?? {}).flat().find(card => card.instance ===
+          (declaration === "remembered created true" ? created.id : figment.id))!;
+        (record as { journeyDeck: boolean }).journeyDeck = true;
+        if (declaration === "remembered figment true") record.status.created = false;
+      } else if (declaration === "original false") (original as { journeyDeck: boolean }).journeyDeck = false;
+      else if (declaration === "debug true") (additional as { journeyDeck: boolean }).journeyDeck = true;
+      else {
+        // Keep the total exact so the ordinary/non-created requirement is independently exercised.
+        (original as { journeyDeck: boolean }).journeyDeck = false;
+        const card = declaration === "created true" ? created : figment;
+        (card as { journeyDeck: boolean }).journeyDeck = true;
+        if (declaration === "figment true") card.status.created = false;
+      }
+      expect(parseEngineBattleFold(malformed, w.engine.catalog)).toBeNull();
+    });
   it.each(SIDES)("preserves an unknown legacy creation marker while sampling both viewers for %s", side => {
     const w = world(side, { own: [entry(copier), entry(v.vanilla1), entry(v.vanilla3), entry(v.vanilla1)] });
     const made = act(w, w.state, side, { kind: "activate", source: w.state.sides[side].backRank[0]!, ability: 0 }).state;
@@ -216,14 +257,11 @@ describe("journey-deck spark", () => {
     const byOrigin = new Map<boolean, { state: BattleState; engine: Engine; init: BattleInit }>();
     for (let index = 0; index < 64 && byOrigin.size < 2; index++) {
       const w = world(side, { own: [entry(drawer), entry(v.vanilla1), entry(v.vanilla3)], seed: battleSeed(`c4-hidden-${side}-${index}`), sign: false });
-      const debug = applyDebugOp(w.engine, withHistory(slice(w.state)), { kind: "addCard", side, card: v.vanilla2.id, zone: "deck" }); if (debug.kind !== "applied") throw Error("debug rejected");
-      const originalDeck = w.state.sides[side].deck[0];
-      // This layout has no original deck entry; use the declared extra ordinary entry below.
       const init = { ...w.init, decks: { ...w.init.decks, [side]: [...w.init.decks[side], entry(v.vanilla1)] } };
       const start = w.engine.createBattle(init, NO_PROMPTS).state;
       const added = applyDebugOp(w.engine, withHistory(slice(start)), { kind: "addCard", side, card: v.vanilla2.id, zone: "deck" }); if (added.kind !== "applied") throw Error("debug rejected");
       const next = act(w, added.slice.committed, side, { kind: "activate", source: start.sides[side].backRank[0]!, ability: 0 }).state;
-      const drawn = next.sides[side].hand[next.sides[side].hand.length - 1]; if (drawn === originalDeck) throw Error("unexpected cohort");
+      const drawn = next.sides[side].hand[next.sides[side].hand.length - 1];
       byOrigin.set(next.instances[drawn].journeyDeck === true, { state: next, engine: w.engine, init });
     }
     expect(byOrigin.size).toBe(2); const a = byOrigin.get(true)!, b = byOrigin.get(false)!;
@@ -276,12 +314,12 @@ describe("journey-deck spark", () => {
     expect(failed.slice.committed.instances).toEqual(played.slice.committed.instances); expect(failed.slice.committed.nextInstance).toBe(played.slice.committed.nextInstance);
     expect(failed.slice.committed.floating).toEqual(played.slice.committed.floating);
   });
-  it("rejects only C4 legacy checkpoints and uses the normal persisted-genesis fallback", async () => {
+  it.each(SIDES)("rejects C4 origin checkpoints and uses the normal persisted-genesis fallback for %s", async side => {
     registerReplayFixtureProviders(); const provider = getBattleInitProvider(); if (provider === null) throw Error("fixture provider missing");
     const sign: EngineDreamsignDefinition = { id: SIGN, status: "authored", abilities: () => [staticAbility(bonus(2, 1))] };
     const catalog = { ...provider.engine.catalog, dreamsign: (id: typeof SIGN) => id === SIGN ? sign : provider.engine.catalog.dreamsign(id) };
     const engine = createEngine(catalog);
-    registerBattleInitProvider({ ...provider, engine, beginBattle(input) { const declared = provider.beginBattle(input); return declared === null ? null : { ...declared, engineInit: { ...declared.engineInit, dreamsigns: { player: [SIGN] } } }; } });
+    registerBattleInitProvider({ ...provider, engine, beginBattle(input) { const declared = provider.beginBattle(input); return declared === null ? null : { ...declared, engineInit: { ...declared.engineInit, dreamsigns: { [side]: [SIGN] } } }; } });
     const genesis = decodeGenesis(JSON.stringify(battleFixture.genesis)); if (genesis === null || !isFoldableGenesis(genesis)) throw Error("fixture genesis missing");
     const store = createMemoryKeyValueStore(), repository = createGameRepository(store), gameId = parseGameId("c4-origin-reload");
     const game = await createLocalGame(repository, GAME_ENGINE_CONFIG, { gameId, genesis, localPlayerId: parseClientId("c4-origin-actor") }, { checkpointInterval: 1, now: () => 0, eventClock: () => "2026-01-01T00:00:00.000Z" });
@@ -291,15 +329,30 @@ describe("journey-deck spark", () => {
       const checkpoint = await store.get(`game/${gameId}/checkpoint`) as StoredCheckpoint;
       const snapshot = JSON.parse(checkpoint.state) as FoldState;
       if (snapshot.battle === null) throw Error("missing battle"); const old = { ...snapshot, battle: { ...snapshot.battle, engine: { ...snapshot.battle.engine, slice: { ...snapshot.battle.engine.slice, committed: legacy(snapshot.battle.engine.slice.committed) } } } };
-      expect(() => assertJourneyDeckSparkCheckpoint(old)).toThrow();
-      await store.putAll([[`game/${gameId}/checkpoint`, { ...checkpoint, state: JSON.stringify(old), stateHash: hashState(old) }]]);
-      const reloaded = await openLocalGame(repository, GAME_ENGINE_CONFIG, gameId, { now: () => 0 }); if (reloaded === null) throw Error("reload missing");
-      try { expect(reloaded.opened).toMatchObject({ checkpointSeq: 0, checkpointRejected: true, replayedEvents: checkpoint.seq, replayFoldErrors: 0 }); expect(GAME_ENGINE_CONFIG.encode(reloaded.log.state())).toBe(current); } finally { await reloaded.close(); }
+      const validReload = await openLocalGame(repository, GAME_ENGINE_CONFIG, gameId, { now: () => 0 }); if (validReload === null) throw Error("reload missing");
+      try { expect(validReload.opened).toMatchObject({ checkpointSeq: checkpoint.seq, checkpointRejected: false, replayedEvents: 0 }); } finally { await validReload.close(); }
       const envelope = decodeEvent(JSON.stringify(battleFixture.events[0].event));
-      const raw = { seq: checkpoint.seq + 1, event: { ...envelope, type: "LOAD_STATE" as const, payload: { snapshot: old.journey, battle: old.battle } } };
-      expect(replayEngineBattle(engine, old.battle, [raw], () => []).kind).toBe("failed");
-      expect(replayEngineBattle(engine, snapshot.battle, [{ ...raw, event: { ...raw.event, payload: { snapshot: snapshot.journey, battle: snapshot.battle } } }], () => []).kind).toBe("done");
-      game.log.append({ type: raw.event.type, payload: raw.event.payload }); expect(GAME_ENGINE_CONFIG.encode(game.log.state())).toBe(current);
+      const invalid = [old];
+      for (const boundary of ["current", "history"]) {
+        const saved = JSON.parse(JSON.stringify(snapshot)) as typeof snapshot;
+        if (saved.battle === null) throw Error("missing battle");
+        const engine = saved.battle.engine, history = withHistory(engine.slice);
+        (engine as { slice: BattleSlice }).slice = history;
+        const state = boundary === "current" ? history.committed : history.history!.base.committed;
+        const original = Object.values(state.instances).find(card => card.owner === side && card.journeyDeck === true)!;
+        (original as { journeyDeck: boolean }).journeyDeck = false;
+        invalid.push(saved as typeof old);
+      }
+      for (const [index, saved] of invalid.entries()) {
+        expect(() => assertJourneyDeckSparkCheckpoint(saved)).toThrow();
+        await store.putAll([[`game/${gameId}/checkpoint`, { ...checkpoint, state: JSON.stringify(saved), stateHash: hashState(saved) }]]);
+        const reloaded = await openLocalGame(repository, GAME_ENGINE_CONFIG, gameId, { now: () => 0 }); if (reloaded === null) throw Error("reload missing");
+        try { expect(reloaded.opened).toMatchObject({ checkpointSeq: 0, checkpointRejected: true, replayedEvents: checkpoint.seq + index, replayFoldErrors: 0 }); expect(GAME_ENGINE_CONFIG.encode(reloaded.log.state())).toBe(current); } finally { await reloaded.close(); }
+        const raw = { seq: checkpoint.seq + 1, event: { ...envelope, type: "LOAD_STATE" as const, payload: { snapshot: saved.journey, battle: saved.battle } } };
+        expect(replayEngineBattle(engine, saved.battle, [raw], () => []).kind).toBe("failed");
+        expect(replayEngineBattle(engine, snapshot.battle, [{ ...raw, event: { ...raw.event, payload: { snapshot: snapshot.journey, battle: snapshot.battle } } }], () => []).kind).toBe("done");
+        game.log.append({ type: raw.event.type, payload: raw.event.payload }); await game.flush(); expect(GAME_ENGINE_CONFIG.encode(game.log.state())).toBe(current);
+      }
       registerBattleInitProvider(provider); expect(() => GAME_ENGINE_CONFIG.decode(JSON.stringify(old))).not.toThrow();
     } finally { await game.close(); }
   });

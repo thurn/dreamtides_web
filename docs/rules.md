@@ -691,7 +691,9 @@ and it needs +3✦ more to reach 1✦.
 has its printed spark after its variant and deck-entry modifications, with X
 in a printed ✦ counting as 0, plus the spark it gained and any unexpired
 spark with a duration. Spark a character _has_ from a static ability applies
-only in play. A criterion such as "a ≤2✦ character" or "a ≥3✦ card" compares
+in play; a dreamsign's cost-qualified journey-deck spark bonus applies to
+matching original journey-deck cards in every battle zone (C4). A criterion
+such as "a ≤2✦ character" or "a ≥3✦ card" compares
 that spark wherever the card is, and the effective spark of a character in
 play. An event has no spark and never meets a ✦ criterion. A "when you play"
 criterion with a ✦ bound reads the spark the card had as it was played, like

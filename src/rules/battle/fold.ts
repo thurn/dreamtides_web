@@ -1,6 +1,6 @@
 // Immutable battle display metadata and engine slices, plus load validation.
 import type { EngineCatalog } from "../../engine/catalog";
-import { hasUnknownJourneyDeckSparkOrigins } from "./journey-deck-spark-state";
+import { hasInvalidJourneyDeckSparkOrigins } from "./journey-deck-spark-state";
 import { isNamedTrigger } from "../../engine/dsl/abilities";
 import { isFixedChange } from "../../engine/view/knowledge";
 import { BATTLE } from "../../content/battle";
@@ -111,7 +111,7 @@ export type TutorialBattlePresentation = OpponentPlayPresentation | DreamwellRev
 export function parseEngineBattleFold(value: unknown, catalog?: EngineCatalog): EngineBattleFold | null {
   if (!isPlainRecord(value) || !isEngineBattleInit(value.init) || !isBattleSlice(value.slice, true)) return null;
   const fold = value as unknown as EngineBattleFold;
-  return hasConsistentDraftPools(fold) && !hasUnknownJourneyDeckSparkOrigins(fold, catalog) ? fold : null;
+  return hasConsistentDraftPools(fold) && !hasInvalidJourneyDeckSparkOrigins(fold, catalog) ? fold : null;
 }
 
 function hasConsistentDraftPools(fold: EngineBattleFold): boolean {

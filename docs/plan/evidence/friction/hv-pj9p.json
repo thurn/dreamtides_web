@@ -1,0 +1,21 @@
+{
+  "bead": "hv-pj9p",
+  "phase": 5,
+  "implementMin": 7.41888465,
+  "implementWindow": {
+    "start": "2026-10-14T23:04:48.377599+00:00",
+    "end": "2026-10-14T23:12:13.510678+00:00"
+  },
+  "localValidationS": {
+    "focused": 21.60127491602907,
+    "review": 34.38233695802046,
+    "knip": 4.685230833012611
+  },
+  "hostLoad": 16.279296875,
+  "testDelta": {
+    "files": 0,
+    "lines": 53,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
