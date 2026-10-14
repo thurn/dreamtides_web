@@ -22,6 +22,19 @@ import { testCardId, testDreamsignId, testExplorationActionId, testTutorialActio
 import { AUGURY_DECLINE } from "./actions.fixtures";
 
 describe("game actions facade", () => {
+  it("writes physical Dreamsign permission identities and ordinals without widening optional fields", () => {
+    const captured: EventDraft[] = [], actions = makeActions((draft) => { captured.push(draft); return Promise.resolve(captured.length); });
+    const source = testDreamsignId("permission-source"), target = testDreamsignId("permission-target"), siteId = parseSiteId("earned-site");
+    void actions.resolveDreamsignCopy(source, 2, 1, 19, 0, target);
+    void actions.resolveAfterBattleDreamsign(siteId, source, 2, 1, 20, target, 0);
+    void actions.resolveAfterBattleDreamsign(siteId, source, 2, 1, 20, null);
+    expect(captured).toEqual([
+      { type: "RESOLVE_DREAMSIGN_COPY", payload: { sourceDreamsignId: source, heldIndex: 2, choiceIndex: 1, permissionSeq: 19, targetHeldIndex: 0, expectedTargetDreamsignId: target } },
+      { type: "RESOLVE_AFTER_BATTLE_DREAMSIGN", payload: { siteId, dreamsignId: source, heldIndex: 2, choiceIndex: 1, earnedSeq: 20, offeredDreamsignId: target, purgeIndex: 0 } },
+      { type: "RESOLVE_AFTER_BATTLE_DREAMSIGN", payload: { siteId, dreamsignId: source, heldIndex: 2, choiceIndex: 1, earnedSeq: 20, offeredDreamsignId: null } },
+    ]);
+  });
+
   it("writes each engine intent with its side and, for the AI host, its actor", () => {
     const captured: EventDraft[] = [];
     const actions = makeActions((draft) => {

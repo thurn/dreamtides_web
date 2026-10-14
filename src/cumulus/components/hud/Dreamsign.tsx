@@ -1,3 +1,4 @@
+import { JOURNEY_SITE_MESSAGES } from "../../../runtime/journey-site-messages";
 // Dreamsign — the unified dreamsign entity for Cumulus. A dreamsign is a
 // minor passive collectible; its art floats directly on the media with no
 // chrome — no tile border, background, or frame — so the collectible reads as
@@ -90,6 +91,13 @@ export interface DreamsignProps {
   testid?: DomTestId;
   /** Fired on a tap / click that was not a deliberate hold-to-read. */
   onPress?: () => void;
+  /** Physical collection action context, announced with its one-based slot.
+   * Omit for ordinary collectible/reveal buttons. This does not change appearance
+   * or activation; the caller supplies the actual physical held index. */
+  action?: { readonly kind: "copy" | "replace"; readonly heldIndex: number };
+  /** Tentative selection for a choice button. Omit for ordinary reveal-only
+   * objects; the semantic value is exposed through aria-pressed only. */
+  selected?: boolean;
   /** Keeps details readable while suppressing selection. */
   unavailable?: boolean;
   /**
@@ -110,6 +118,8 @@ export function Dreamsign({
   dreamsign,
   testid = "dreamsign-art-tile",
   onPress,
+  action,
+  selected,
   unavailable = false,
   variant = "flat",
 }: DreamsignProps): React.ReactElement {
@@ -163,9 +173,14 @@ export function Dreamsign({
       role="button"
       tabIndex={0}
       aria-disabled={unavailable || undefined}
+      aria-pressed={selected}
       data-testid={testid}
       data-dreamsign-id={dreamsignId}
-      ariaLabelMessage={`Dreamsign: ${dreamsign.name}`}
+      ariaLabelMessage={action === undefined
+        ? `Dreamsign: ${dreamsign.name}`
+        : action.kind === "copy"
+          ? JOURNEY_SITE_MESSAGES.dreamsignCopyFromSlot(dreamsign.name, action.heldIndex)
+          : JOURNEY_SITE_MESSAGES.dreamsignReplaceInSlot(dreamsign.name, action.heldIndex)}
       onPointerDown={(event) => {
         lastPointerType.current = event.pointerType;
         pointerDown?.(event);

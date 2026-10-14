@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { parseBuildGitSha } from "../types/build-identity";
 import type { JourneyState } from "../types/journey";
 import {
-  JOURNEY_SAVE_FILE_FORMAT,
+  JOURNEY_SAVE_FILE_FORMAT, serializedJourneyScreenType,
   JOURNEY_SAVE_FILE_VERSION,
   chooseJourneySaveFile,
   createJourneySaveFile,
@@ -26,6 +26,10 @@ afterEach(() => {
 });
 
 describe("journey save files", () => {
+  it("recognizes the durable Dreamsign purpose label at the portable snapshot boundary", () => {
+    expect(serializedJourneyScreenType({ screen: { type: "journeyDreamsign" } })).toBe("journeyDreamsign");
+  });
+
   it("serializes and parses the versioned portable envelope", () => {
     const save = createJourneySaveFile("  Before Atlas  ", JOURNEY_STATE, {
       savedAt: "2026-07-29T12:00:00.000Z",

@@ -25,6 +25,9 @@ import {
  * /atlas                             Dream Atlas
  * /dreamscape/<layer>-<biome>        a dreamscape's site-selection screen
  * /dreamscape/<layer>-<biome>/<site> a specific site within a dreamscape
+ * /dreamsign/<site-id>               earned Dreamsign choice
+ * /purge/<site-id>                   earned purge choice
+ * /transfiguration/<site-id>         earned transfiguration choice
  * /complete                          journey victory
  * /failed                            journey defeat
  * ```
@@ -37,6 +40,8 @@ export function screenToJourneyPath(
   switch (screen.type) {
     case "journeyStart":
       return "/";
+    case "journeyDreamsign":
+      return screen.choice.kind === "copy" ? screenToJourneyPath({ ...state, screen: screen.choice.continuation }, artCatalog) : `/dreamsign/${screen.choice.siteId}`;
     case "journeyTransfiguration":
       return `/transfiguration/${screen.choice.siteId}`;
     case "journeyPurge":

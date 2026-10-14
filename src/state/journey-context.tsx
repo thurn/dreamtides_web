@@ -368,6 +368,8 @@ export interface JourneyMutations {
    * Purge the given deck entries at a Purge site. The reducer derives the
    * authoritative price from the selected entries, site, and folded modifiers.
    */
+  resolveAfterBattleDreamsign: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, earnedSeq: number, offeredDreamsignId: DreamsignId | null, purgeIndex?: number) => void;
+  resolveDreamsignCopy: (sourceDreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, targetHeldIndex: number, expectedTargetDreamsignId: DreamsignId) => void;
   resolveJourneyTransfiguration: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => void;
   resolveJourneyPurge: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => void;
   purgeDeckCards: (

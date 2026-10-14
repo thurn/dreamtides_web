@@ -237,10 +237,28 @@ export interface AfterBattleTransfigurationSource {
   readonly maxCount: number;
 }
 
+export type JourneyOnGainEffect =
+  | { readonly kind: "afterBattleDreamsignChoice"; readonly offerCount: number }
+  | { readonly kind: "randomTransfigurationOnGain"; readonly numerator: number; readonly denominator: number }
+  | { readonly kind: "copyOwnedDreamsignOnGain" };
+export interface JourneyDreamsignGain { readonly dreamsignId: DreamsignId; readonly heldIndex: number }
+export interface JourneySuspendedBattle { readonly battleId: import("./identifiers").BattleId; readonly mode: "journey" | "tutorial" }
+export interface AfterBattleDreamsignSource {
+  readonly kind: "dreamsign"; readonly dreamsignId: DreamsignId; readonly heldIndex: number;
+  readonly earnedSeq: number; readonly offerCount: number;
+  readonly offeredDreamsigns: readonly Dreamsign[]; readonly remainingPoolIds: readonly DreamsignId[];
+}
+export interface JourneyDreamsignCopyChoice {
+  readonly kind: "copy"; readonly sources: readonly JourneyDreamsignGain[]; readonly index: number;
+  readonly permissionSeq: number; readonly heldIds: readonly DreamsignId[];
+  readonly continuation: Exclude<Screen, { type: "journeyDreamsign" }> | { readonly type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice };
+  readonly suspendedBattle: JourneySuspendedBattle | null;
+}
+
 export interface AfterBattleJourneyChoice {
   readonly kind: "afterBattle";
   readonly siteId: SiteId;
-  readonly sources: readonly (AfterBattlePurgeSource | AfterBattleTransfigurationSource)[];
+  readonly sources: readonly (AfterBattlePurgeSource | AfterBattleTransfigurationSource | AfterBattleDreamsignSource)[];
   readonly index: number;
   readonly returnTo: "atlas" | "journeyComplete" | "journeyFailed";
 }
@@ -1264,6 +1282,7 @@ export type Screen =
        */
       tutorialAvatarId?: AvatarId;
     }
+  | { type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice | JourneyDreamsignCopyChoice }
   | { type: "journeyPurge"; readonly choice: JourneyPurgeChoice }
   | { type: "journeyTransfiguration"; readonly choice: AfterBattleJourneyChoice }
   | { type: "atlas" }

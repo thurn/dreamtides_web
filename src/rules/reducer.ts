@@ -1,3 +1,5 @@
+import { journeyDreamsignGains } from "./journey/journey-dreamsign-gains";
+import { resolveAfterBattleDreamsign, resolveDreamsignCopy, validDreamsignCopyIntent } from "./journey/journey-on-gain";
 import { essencePurgeSource, essenceReplacementSource } from "./journey/journey-essence";
 // The root fold and CAS (compare-and-swap) policy for the event-sourcing rules
 // layer.
@@ -104,7 +106,7 @@ export function reduceGameEvent(
     }
     // rule 4 — prompt gate
     if (
-      pendingEnginePrompt(state.battle, battleEngine()) !== null
+      pendingEnginePrompt(state.battle, battleEngine()) !== null && !(event.type === "RESOLVE_DREAMSIGN_COPY" && validDreamsignCopyIntent(state.journey, event.payload ?? {}, state.battle, modifiers))
     ) {
       return bounce(state, "prompt_pending");
     }
@@ -174,6 +176,8 @@ function finishTransition(
     const applied = modifiers.apply({
       before: before.journey,
       journey: result.state.journey,
+      dreamsignGains: journeyDreamsignGains(before.journey, result.state.journey, event),
+      battleBinding: result.state.battle === null ? null : { battleId: result.state.battle.init.battleId, mode: result.state.battle.mode.kind },
       eventType: event.type,
       seq, random, transfigurations,
       siteId,
@@ -311,6 +315,10 @@ export function routeDomain(
   const payload = event.payload ?? {};
   const journey = state.journey;
   const type: GameEventType = event.type;
+  if (journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "copy" &&
+    (isGameplayEventType(type) || type === "BATTLE_DEBUG") && type !== "RESOLVE_DREAMSIGN_COPY") return bounce(state);
+  if (journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "afterBattle" && isGameplayEventType(type) &&
+    type !== "RESOLVE_AFTER_BATTLE_DREAMSIGN" && type !== "ADD_DREAMSIGN" && type !== "REMOVE_DREAMSIGN") return bounce(state);
   if (
     tutorialBattleOf(state.battle)?.tutorialPresentation != null &&
     type !== "COMPLETE_TUTORIAL_BATTLE_PRESENTATION" &&
@@ -413,6 +421,14 @@ export function routeDomain(
       return journeyCase(state, deck.addCard(journey, payload, ctx));
     case "REMOVE_DECK_ENTRY":
       return journeyCase(state, deck.removeDeckEntry(journey, payload));
+    case "RESOLVE_DREAMSIGN_COPY": {
+      const result = journeyCase(state, resolveDreamsignCopy(journey, payload, state.battle, modifiers));
+      return result.outcome === "bounced" ? result : { ...result, logRecords: [{ event: "journey_modifier_applied", fields: { dreamsignId: payload.sourceDreamsignId, heldIndex: payload.heldIndex, hook: "dreamsign_copy_resolved", choiceIndex: payload.choiceIndex, permissionSeq: payload.permissionSeq, targetHeldIndex: payload.targetHeldIndex, targetDreamsignId: payload.expectedTargetDreamsignId } }] };
+    }
+    case "RESOLVE_AFTER_BATTLE_DREAMSIGN": {
+      const result = journeyCase(state, resolveAfterBattleDreamsign(journey, payload, modifiers));
+      return result.outcome === "bounced" ? result : { ...result, logRecords: [{ event: "journey_dreamsign_choice_resolved", fields: { siteId: payload.siteId, dreamsignId: payload.dreamsignId, heldIndex: payload.heldIndex, choiceIndex: payload.choiceIndex, earnedSeq: payload.earnedSeq, offeredDreamsignId: payload.offeredDreamsignId, purgeIndex: payload.purgeIndex ?? null } }] };
+    }
     case "RESOLVE_JOURNEY_TRANSFIGURATION":
       return journeyCase(state, resolveJourneyTransfiguration(journey, payload, ctx, modifiers));
     case "RESOLVE_JOURNEY_PURGE": {

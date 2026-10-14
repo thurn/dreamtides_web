@@ -99,6 +99,7 @@ export interface SiteOpenResult {
  * never a throw).
  */
 export interface SiteContentProvider {
+  prepareAfterBattleDreamsignOffer?(input: { journey: JourneyState; offerCount: number; random: () => number }): { offeredDreamsigns: readonly Dreamsign[]; remainingDreamsignPool: readonly DreamsignId[] } | null;
   /** Immutable validated site rules captured with the provider registration. */
   sitesData: SitesData;
   /** Immutable validated economy data captured with the provider registration. */
@@ -1200,4 +1201,9 @@ export function purgeDeckCards(
 
   return { journey: completeAndReturn({ ...journey, deck, essence }, siteId),
     purges: removed.map(({ entryId }) => ({ entryId })) };
+}
+
+/** Real pool preparation for one earned source; absence is not an empty pool. */
+export function prepareAfterBattleDreamsignOffer(journey: JourneyState, offerCount: number, random: () => number) {
+  return contentProvider?.prepareAfterBattleDreamsignOffer?.({ journey, offerCount, random }) ?? null;
 }

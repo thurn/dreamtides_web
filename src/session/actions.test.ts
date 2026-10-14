@@ -120,6 +120,8 @@ function captureAllDrafts(): EventDraft[] {
   void actions.removeDeckEntry(parseDeckEntryId("entry-1"));
   void actions.purgeDeckCards(parseSiteId("site-1"), [parseDeckEntryId("entry-1")]);
   void actions.resolveJourneyTransfiguration(parseSiteId("site-1"), testDreamsignId("dreamsign-1"), 0, 0, [parseDeckEntryId("entry-1")]);
+  void actions.resolveAfterBattleDreamsign(parseSiteId("site-1"), testDreamsignId("source"), 0, 0, 1, testDreamsignId("offered"));
+  void actions.resolveDreamsignCopy(testDreamsignId("source"), 1, 0, 1, 0, testDreamsignId("target"));
   void actions.resolveJourneyPurge(parseSiteId("site-1"), testDreamsignId("dreamsign-1"), 0, 0, [parseDeckEntryId("entry-1")]);
   void actions.duplicateDeckEntry(parseDeckEntryId("entry-1"));
   void actions.setDeckEntryStatOverride(parseDeckEntryId("entry-1"), null);

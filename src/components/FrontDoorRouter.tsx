@@ -1,3 +1,6 @@
+import { useGameState } from "../session/hooks";
+import { JourneyDreamsignScreenAdapter } from "../screens/cumulus_adapters/JourneyDreamsignScreenAdapter";
+import { CumulusJourneyChrome } from "./CumulusJourneyChrome";
 import { useEffect, type ReactNode } from "react";
 import { logEvent } from "../logging";
 import { LoadingScreenAdapter } from "../screens/cumulus_adapters/LoadingScreenAdapter";
@@ -24,6 +27,7 @@ export function FrontDoorRouter({
   readonly journey?: ReactNode;
 }) {
   const { state, battle } = useFrontDoor();
+  const screen = useGameState().journey.screen;
 
   useEffect(() => {
     if (state.phase === "journey") return;
@@ -51,8 +55,11 @@ export function FrontDoorRouter({
     return journey;
   }
 
+  const copyChoice = screen.type === "journeyDreamsign" && screen.choice.kind === "copy" && state.phase === "tutorial" ? screen.choice : null;
   const content =
-    state.phase === "loading" ? (
+    copyChoice !== null ? (
+      <CumulusJourneyChrome><JourneyDreamsignScreenAdapter /></CumulusJourneyChrome>
+    ) : state.phase === "loading" ? (
       <LoadingScreenAdapter playbackSpeed={tutorialPlaybackSpeed} />
     ) : state.phase === "tutorial" &&
       battle !== null &&
@@ -72,7 +79,7 @@ export function FrontDoorRouter({
   return (
     <ErrorBoundary
       scope={`screen:front-door:${state.phase}`}
-      resetKey={`${state.phase}:${state.journeyId ?? "none"}`}
+      resetKey={`${state.phase}:${state.journeyId ?? "none"}${copyChoice === null ? "" : `:copy:${String(copyChoice.permissionSeq)}:${String(copyChoice.index)}`}`}
     >
       {content}
     </ErrorBoundary>

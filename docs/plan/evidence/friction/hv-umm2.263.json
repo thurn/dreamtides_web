@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.263",
+  "phase": 5,
+  "implementMin": 1233.3017090666665,
+  "implementWindow": {
+    "start": "2026-10-13T19:58:42.537000Z",
+    "end": "2026-10-14T16:32:00.639544+00:00"
+  },
+  "localValidationS": {
+    "focused": 5.631538167013787,
+    "review": 59.45497374999104,
+    "knip": 3.70630787499249
+  },
+  "hostLoad": 8.65234375,
+  "testDelta": {
+    "files": 6,
+    "lines": 786,
+    "jsdomFiles": 2
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 21.717657116666665,
+      "note": "Bounded elapsed Rat inspector gate diagnosis/recovery from first failing native observation through phase-qualified visible-observer syntax completion. Includes failed runtime, source-first observation and coordination; unknown historical closed-menu cause, no productive/CPU or new shared Select defect claim. Overlapping intervals are not summed."
+    }
+  ]
+}

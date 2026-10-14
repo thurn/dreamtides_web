@@ -1,4 +1,4 @@
-import { appendAfterBattleSource, advanceAfterBattle, validAfterBattleChoice } from "./journey-after-battle";
+import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, validAfterBattleChoice } from "./journey-after-battle";
 import type { DreamsignId } from "../../types/identifiers";
 import { deckEntryIdFromUnknown, dreamsignIdFromUnknown, siteIdFromUnknown } from "../../types/identifiers";
 import type { AfterBattlePurgeSource, JourneyPurgeChoice, JourneyPurgeEffect, JourneyPurgeTransition, JourneyState } from "../../types/journey";
@@ -16,7 +16,7 @@ const record = (value: unknown): value is Record<string, unknown> =>
 export function currentPurgeSource(choice: JourneyPurgeChoice): AfterBattlePurgeSource | undefined {
   const source = choice.kind === "afterBattle" ? choice.sources[choice.index] :
     { dreamsignId: choice.dreamsignId, heldIndex: choice.heldIndex, maxCount: choice.count };
-  return source?.kind === "transfiguration" ? undefined : source;
+  return source?.kind === "transfiguration" || source?.kind === "dreamsign" ? undefined : source;
 }
 
 /** Strict purpose shape and saved continuation checks, independent of catalog defaults. */
@@ -57,9 +57,7 @@ export function journeyPurge(dreamsignId: DreamsignId, descriptor: JourneyPurgeE
           before.screen.siteId !== siteId || findSite(before, siteId)?.type !== "Battle") return null;
         const next = appendAfterBattleSource(journey, siteId, { dreamsignId, heldIndex, maxCount: effect.maxCount });
         if (next === null) return null;
-        const screen = next.screen;
-        if (screen.type !== "journeyPurge" && screen.type !== "journeyTransfiguration") return null;
-        const count = screen.choice.kind === "afterBattle" ? screen.choice.sources.length : 0;
+        const count = afterBattleChoice(next.screen)!.sources.length;
         return { journey: next, before: { permissions: count - 1 }, after: { permissions: count, maxCount: effect.maxCount },
           target: { siteIds: [siteId] } };
       }

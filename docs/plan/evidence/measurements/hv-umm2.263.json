@@ -1,0 +1,1992 @@
+{
+  "bead": "hv-umm2.263",
+  "base": "e75c54a03294e47b5380a39f014c0e7629aa95d3",
+  "implementationProvenance": {
+    "originalDispatch": "2026-10-13T19:58:42.537Z",
+    "claim": "2026-10-13T19:56:49.096621Z",
+    "claimPrefixMin": 1.890674,
+    "resumeDispatch": "2026-10-14T03:30:41.537Z",
+    "implementationPhaseDispatch": "2026-10-14T04:01:19.104Z",
+    "asOf": "2026-10-14T16:32:00.639544+00:00",
+    "status": "Actualfinaltest-onlyamendedendpoint, allrequiredproductionreviewfindingsdisposed",
+    "finalCommitUTC": "2026-10-14T16:32:00.639544+00:00",
+    "scope": "Inclusive elapsed original dispatch through checkpoint/dependency waiting, other repair work, empty-worktree restart, implementation, checks, QA recipe recovery, model capacity interruption and coordination. Not CPU/productive editing. Phase clocks do not reset gross. Inclusive interval also retains second helper capacity failure and root driver timing recovery.",
+    "modelStart": "unknown",
+    "CPUTime": "unknown",
+    "tokenUse": "unknown",
+    "firstCommitHistoricalReceipt": "263-final-commit-receipt.json"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "qualification": "Finalcommitpreparationobservation; exactGitbracket/committerprecisiondelta in263-final-production-reviewed-commit-receipt.json withinone minute. Everypriorendpoint historical; originaldispatchinclusivegrossneverresets."
+      },
+      "hostLoad": {
+        "measuredFor": "Actual finalreview typecheck/lint/test START2026-10-14T16:24:40.797Z observedload8.65234375. This is the sampled startup scope, not a controlledperformancecomparison."
+      },
+      "testDelta": {
+        "scope": "All changed test entrypoints plus consumed51-line plain fixture; net added-minus-deleted. Files count six new entrypoints, excludes one fixture; jsdom two new entrypoints."
+      }
+    }
+  },
+  "validation": {
+    "postLayoutFocused": {
+      "receipt": "263-final-reset-focus-receipt.json",
+      "seconds": 5.631538167013787,
+      "exitCode": 0,
+      "sourceSHA": "48cdc01c43720b6dcb5a1fdb89860775446c251edddd63dabebc361583e03c74",
+      "files": 1,
+      "cases": 13
+    },
+    "postLayoutReview": {
+      "receipt": "263-final-reset-review-receipt.json",
+      "seconds": 59.45497374999104,
+      "exitCode": 0,
+      "sourceSHA": "48cdc01c43720b6dcb5a1fdb89860775446c251edddd63dabebc361583e03c74",
+      "files": 255,
+      "cases": 5842
+    },
+    "postLayoutKnip": {
+      "receipt": "263-final-reset-knip-receipt.json",
+      "seconds": 3.70630787499249,
+      "exitCode": 0,
+      "sourceSHA": "48cdc01c43720b6dcb5a1fdb89860775446c251edddd63dabebc361583e03c74"
+    },
+    "preLayoutFull": {
+      "receipt": "263-resume-final-full-receipt.json",
+      "seconds": 106.66305066700443,
+      "files": 386,
+      "cases": 7648,
+      "testSeconds": 78.72,
+      "exitCode": 0,
+      "workers": 2,
+      "lock": "primary artifacts/heavy.lock exclusive",
+      "completionLoad": 4.23681640625,
+      "qualification": "Crosscut full follows initialprimitive/types/reducer/AI implementation and precedes boundedpresentation, existingproducer-role/URL cases andrender-error-boundary refinements. Currentfocused/relatedreview/native andmeaningfulnegativecontrols coverthose refinements. Not final-source-identical full orcontrolledperformancebaseline."
+    },
+    "contentInventory": {
+      "receipt": "263-resume-final-content-check-receipt.json",
+      "seconds": 3.562814500008244,
+      "exitCode": 0
+    },
+    "evidenceInputReview": "Earlier packaging aggregate held before launch. Required current review57.7836s ran after initial evidence existed; later own evidence normalization uses lightweight schema/JSON/diff checks, no unchanged full/aggregate repeat.",
+    "priorPostLayoutChecks": {
+      "postLayoutFocused": {
+        "receipt": "263-copy-ui-screen-receipt.json",
+        "seconds": 4.508329792006407,
+        "files": 1,
+        "cases": 3,
+        "exitCode": 0
+      },
+      "postLayoutReview": {
+        "receipt": "263-copy-ui-review-receipt.json",
+        "seconds": 58.42051170900231,
+        "files": 255,
+        "cases": 5833,
+        "exitCode": 0
+      },
+      "postLayoutKnip": {
+        "receipt": "263-copy-ui-knip-receipt.json",
+        "seconds": 4.728264291974483,
+        "exitCode": 0
+      }
+    },
+    "capRepairChecks": {
+      "focus": {
+        "startUTC": "2026-10-14T13:16:41.980720+00:00",
+        "endUTC": "2026-10-14T13:16:46.642099+00:00",
+        "elapsedSeconds": 4.661296708014561,
+        "exitCode": 0,
+        "PID": 48471,
+        "PGID": 48471,
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/cumulus/screens/JourneyDreamsignScreen.test.tsx"
+        ],
+        "raw": "/tmp/263-cap-final-focus.txt",
+        "scope": "Final admitted cap presentation/accessibility source; no full repeat"
+      },
+      "review": {
+        "startUTC": "2026-10-14T13:17:01.272172+00:00",
+        "endUTC": "2026-10-14T13:18:03.531969+00:00",
+        "elapsedSeconds": 62.25950829099747,
+        "exitCode": 0,
+        "PID": 49287,
+        "PGID": 49287,
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "raw": "/tmp/263-cap-final-review.txt",
+        "scope": "Final admitted cap presentation/accessibility source; no full repeat"
+      },
+      "knip": {
+        "startUTC": "2026-10-14T13:18:29.630569+00:00",
+        "endUTC": "2026-10-14T13:18:34.307678+00:00",
+        "elapsedSeconds": 4.677013791981153,
+        "exitCode": 0,
+        "PID": 52291,
+        "PGID": 52291,
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "raw": "/tmp/263-cap-final-knip.txt",
+        "scope": "Final admitted cap presentation/accessibility source; no full repeat"
+      }
+    },
+    "finalSelectedScrollRepairChecks": {
+      "old-focus": {
+        "startUTC": "2026-10-14T13:58:02.905912+00:00",
+        "endUTC": "2026-10-14T13:58:10.992471+00:00",
+        "elapsedSeconds": 8.086087083007442,
+        "exitCode": 1,
+        "PID": 497,
+        "PGID": 497,
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/cumulus/screens/JourneyDreamsignScreen.test.tsx"
+        ],
+        "raw": "/tmp/263-final-visual-old-focus.txt",
+        "scope": "Admitted selected accessibility and owned inner-scroll/rim/header presentation repair; no full repeat"
+      },
+      "focus": {
+        "startUTC": "2026-10-14T13:58:40.494981+00:00",
+        "endUTC": "2026-10-14T13:58:45.687586+00:00",
+        "elapsedSeconds": 5.192410832998576,
+        "exitCode": 0,
+        "PID": 21541,
+        "PGID": 21541,
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/cumulus/screens/JourneyDreamsignScreen.test.tsx"
+        ],
+        "raw": "/tmp/263-final-visual-focus.txt",
+        "scope": "Admitted selected accessibility and owned inner-scroll/rim/header presentation repair; no full repeat"
+      },
+      "review": {
+        "startUTC": "2026-10-14T13:59:01.279594+00:00",
+        "endUTC": "2026-10-14T13:59:59.064062+00:00",
+        "elapsedSeconds": 57.78357108301134,
+        "exitCode": 0,
+        "PID": 23569,
+        "PGID": 23569,
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "raw": "/tmp/263-final-visual-review.txt",
+        "scope": "Admitted selected accessibility and owned inner-scroll/rim/header presentation repair; no full repeat"
+      },
+      "knip": {
+        "startUTC": "2026-10-14T14:00:35.908076+00:00",
+        "endUTC": "2026-10-14T14:00:39.829653+00:00",
+        "elapsedSeconds": 3.921444125007838,
+        "exitCode": 0,
+        "PID": 29800,
+        "PGID": 29800,
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "raw": "/tmp/263-final-visual-knip.txt",
+        "scope": "Admitted selected accessibility and owned inner-scroll/rim/header presentation repair; no full repeat"
+      }
+    },
+    "persistentLiveRepairChecks": [
+      {
+        "label": "focus",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/cumulus/screens/JourneyDreamsignScreen.test.tsx"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T14:30:01.795403+00:00",
+        "raw": "/tmp/263-persistent-live-focus.txt",
+        "status": "terminal",
+        "pid": 40437,
+        "pgid": 40437,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T14:30:08.739155+00:00",
+        "elapsedSeconds": 6.943575292010792
+      },
+      {
+        "label": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T14:30:08.739404+00:00",
+        "raw": "/tmp/263-persistent-live-review.txt",
+        "status": "terminal",
+        "pid": 40927,
+        "pgid": 40927,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T14:31:12.652026+00:00",
+        "elapsedSeconds": 63.91189233298064
+      },
+      {
+        "label": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T14:31:12.652332+00:00",
+        "raw": "/tmp/263-persistent-live-knip.txt",
+        "status": "terminal",
+        "pid": 875,
+        "pgid": 875,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T14:31:16.612080+00:00",
+        "elapsedSeconds": 3.9597072080068756
+      }
+    ],
+    "coreRepairFinalChecks": [
+      {
+        "label": "focus",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-dreamsign-gains.test.ts",
+          "src/runtime/screen-url.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T15:08:22.508960+00:00",
+        "raw": "/tmp/263-core-repair-typed-focus.txt",
+        "status": "terminal",
+        "pid": 12767,
+        "pgid": 12767,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T15:08:29.759853+00:00",
+        "elapsedSeconds": 7.250759292015573
+      },
+      {
+        "label": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T15:08:29.760170+00:00",
+        "raw": "/tmp/263-core-repair-typed-review.txt",
+        "status": "terminal",
+        "pid": 13825,
+        "pgid": 13825,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T15:09:40.509703+00:00",
+        "elapsedSeconds": 70.7488812909869
+      },
+      {
+        "label": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T15:09:40.510603+00:00",
+        "raw": "/tmp/263-core-repair-typed-knip.txt",
+        "status": "terminal",
+        "pid": 77430,
+        "pgid": 77430,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T15:09:44.809642+00:00",
+        "elapsedSeconds": 4.298963665991323
+      }
+    ],
+    "coreRepairOldContracts": {
+      "startUTC": "2026-10-14T15:03:19.350089+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-dreamsign-gains.test.ts",
+        "src/runtime/screen-url.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+      "raw": "/tmp/263-core-repair-old-contracts.txt",
+      "pid": 76200,
+      "pgid": 76200,
+      "exitCode": 1,
+      "endUTC": "2026-10-14T15:03:25.708070+00:00",
+      "elapsedSeconds": 6.357962834008504,
+      "counts": {
+        "failed": 7,
+        "controlsPassed": 16,
+        "total": 23,
+        "genuineProducerFailures": 4,
+        "earnedURLFailures": 3
+      }
+    },
+    "coreRepairFirstAggregate": {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+      "startUTC": "2026-10-14T15:05:25.183633+00:00",
+      "raw": "/tmp/263-core-repair-final-review.txt",
+      "status": "terminal",
+      "pid": 84080,
+      "pgid": 84080,
+      "exitCode": 1,
+      "endUTC": "2026-10-14T15:06:42.798875+00:00",
+      "elapsedSeconds": 77.61448362498777,
+      "qualification": "Tests5842/255 passed but lintfailed nesteduntypedmatcher innewsyntheticcase;77.6145s exit1. Actualloggedidentity/slot projection corrected without contractwaiver; currentaggregate0."
+    },
+    "lowReviewOldRoute": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/components/app-shell.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+      "startUTC": "2026-10-14T15:50:17.617054+00:00",
+      "raw": "/tmp/263-low-review-old-route.txt",
+      "pid": 57703,
+      "pgid": 57703,
+      "exitCode": 1,
+      "endUTC": "2026-10-14T15:50:23.451564+00:00",
+      "elapsedSeconds": 5.83451558399247,
+      "counts": {
+        "genuineRenderEscapeFailure": 1,
+        "controlsPassed": 12,
+        "cases": 13
+      }
+    },
+    "lowReviewFinalChecks": [
+      {
+        "label": "focus",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/components/app-shell.test.tsx",
+          "src/cumulus/screens/JourneyDreamsignScreen.test.tsx",
+          "src/screens/cumulus_adapters/journey-dreamsign-view-model.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T16:01:24.846395+00:00",
+        "raw": "/tmp/263-low-review-nonempty-focus.txt",
+        "status": "terminal",
+        "pid": 796,
+        "pgid": 796,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T16:01:34.504345+00:00",
+        "elapsedSeconds": 9.657747250021202
+      },
+      {
+        "label": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T16:01:34.504567+00:00",
+        "raw": "/tmp/263-low-review-nonempty-review.txt",
+        "status": "terminal",
+        "pid": 7303,
+        "pgid": 7303,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T16:02:41.602819+00:00",
+        "elapsedSeconds": 67.09780512499856
+      },
+      {
+        "label": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T16:02:41.603301+00:00",
+        "raw": "/tmp/263-low-review-nonempty-knip.txt",
+        "status": "terminal",
+        "pid": 24665,
+        "pgid": 24665,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T16:02:46.200365+00:00",
+        "elapsedSeconds": 4.597041667002486
+      }
+    ],
+    "priorLowReviewChecks": [
+      {
+        "label": "focus",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/components/app-shell.test.tsx",
+          "src/cumulus/screens/JourneyDreamsignScreen.test.tsx",
+          "src/screens/cumulus_adapters/journey-dreamsign-view-model.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T15:53:34.463457+00:00",
+        "raw": "/tmp/263-low-review-final-focus.txt",
+        "status": "terminal",
+        "pid": 87842,
+        "pgid": 87842,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T15:53:44.933701+00:00",
+        "elapsedSeconds": 10.469980125024449
+      },
+      {
+        "label": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T15:53:44.933957+00:00",
+        "raw": "/tmp/263-low-review-final-review.txt",
+        "status": "terminal",
+        "pid": 88770,
+        "pgid": 88770,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T15:54:42.606081+00:00",
+        "elapsedSeconds": 57.67173516601906
+      },
+      {
+        "label": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T15:54:42.606283+00:00",
+        "raw": "/tmp/263-low-review-final-knip.txt",
+        "status": "terminal",
+        "pid": 92035,
+        "pgid": 92035,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T15:54:46.142632+00:00",
+        "elapsedSeconds": 3.5363373339932878
+      }
+    ],
+    "finalResetCoverageChecks": [
+      {
+        "label": "focus",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/components/app-shell.test.tsx"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T16:24:33.775157+00:00",
+        "raw": "/tmp/263-final-reset-focus.txt",
+        "status": "terminal",
+        "pid": 57154,
+        "pgid": 57154,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T16:24:39.406763+00:00",
+        "elapsedSeconds": 5.631538167013787
+      },
+      {
+        "label": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T16:24:39.406984+00:00",
+        "raw": "/tmp/263-final-reset-review.txt",
+        "status": "terminal",
+        "pid": 57631,
+        "pgid": 57631,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T16:25:38.861472+00:00",
+        "elapsedSeconds": 59.45497374999104
+      },
+      {
+        "label": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-on-gain-263-resume-sol",
+        "startUTC": "2026-10-14T16:25:38.861704+00:00",
+        "raw": "/tmp/263-final-reset-knip.txt",
+        "status": "terminal",
+        "pid": 61335,
+        "pgid": 61335,
+        "exitCode": 0,
+        "endUTC": "2026-10-14T16:25:42.567969+00:00",
+        "elapsedSeconds": 3.70630787499249
+      }
+    ],
+    "finalResetNegativeControls": [
+      {
+        "label": "no-index",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/components/app-shell.test.tsx"
+        ],
+        "startUTC": "2026-10-14T16:23:16.465540+00:00",
+        "raw": "/tmp/263-reset-negative-no-index.txt",
+        "pid": 51860,
+        "pgid": 51860,
+        "exitCode": 1,
+        "endUTC": "2026-10-14T16:23:22.847024+00:00",
+        "elapsedSeconds": 6.381449624983361,
+        "productionBytesRestored": true
+      },
+      {
+        "label": "no-permission",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/components/app-shell.test.tsx"
+        ],
+        "startUTC": "2026-10-14T16:23:22.847746+00:00",
+        "raw": "/tmp/263-reset-negative-no-permission.txt",
+        "pid": 52658,
+        "pgid": 52658,
+        "exitCode": 1,
+        "endUTC": "2026-10-14T16:23:28.612273+00:00",
+        "elapsedSeconds": 5.764591540995752,
+        "productionBytesRestored": true
+      }
+    ]
+  },
+  "support": {
+    "base": "e75c54a03294e47b5380a39f014c0e7629aa95d3",
+    "scope": "All changed test entrypoints plus consumed plain fixture; net is added-minus-deleted. Plain fixture included in lines, excluded from test-file count.",
+    "rows": [
+      {
+        "path": "src/components/app-shell.test.tsx",
+        "new": false,
+        "added": 35,
+        "deleted": 2,
+        "lines": 318,
+        "plainFixture": false,
+        "jsdom": true,
+        "net": 33
+      },
+      {
+        "path": "src/runtime/screen-url.test.ts",
+        "new": false,
+        "added": 13,
+        "deleted": 1,
+        "lines": 210,
+        "plainFixture": false,
+        "jsdom": false,
+        "net": 12
+      },
+      {
+        "path": "src/screens/cumulus_adapters/registry.test.tsx",
+        "new": false,
+        "added": 1,
+        "deleted": 0,
+        "lines": 83,
+        "plainFixture": false,
+        "jsdom": false,
+        "net": 1
+      },
+      {
+        "path": "src/session/actions-payloads.test.ts",
+        "new": false,
+        "added": 13,
+        "deleted": 0,
+        "lines": 339,
+        "plainFixture": false,
+        "jsdom": false,
+        "net": 13
+      },
+      {
+        "path": "src/session/actions.test.ts",
+        "new": false,
+        "added": 2,
+        "deleted": 0,
+        "lines": 316,
+        "plainFixture": false,
+        "jsdom": false,
+        "net": 2
+      },
+      {
+        "path": "src/state/journey-save-files.test.ts",
+        "new": false,
+        "added": 5,
+        "deleted": 1,
+        "lines": 166,
+        "plainFixture": false,
+        "jsdom": true,
+        "net": 4
+      },
+      {
+        "path": "src/battle/engine-ai/use-engine-ai.test.tsx",
+        "new": true,
+        "added": 55,
+        "deleted": 0,
+        "lines": 55,
+        "plainFixture": false,
+        "jsdom": true,
+        "net": 55
+      },
+      {
+        "path": "src/cumulus/screens/JourneyDreamsignScreen.test.tsx",
+        "new": true,
+        "added": 74,
+        "deleted": 0,
+        "lines": 74,
+        "plainFixture": false,
+        "jsdom": true,
+        "net": 74
+      },
+      {
+        "path": "src/rules/journey/journey-dreamsign-gains.test.ts",
+        "new": true,
+        "added": 122,
+        "deleted": 0,
+        "lines": 122,
+        "plainFixture": false,
+        "jsdom": false,
+        "net": 122
+      },
+      {
+        "path": "src/rules/journey/journey-on-gain-after-battle.test.ts",
+        "new": true,
+        "added": 178,
+        "deleted": 0,
+        "lines": 178,
+        "plainFixture": false,
+        "jsdom": false,
+        "net": 178
+      },
+      {
+        "path": "src/rules/journey/journey-on-gain-fixtures.ts",
+        "new": true,
+        "added": 51,
+        "deleted": 0,
+        "lines": 51,
+        "plainFixture": true,
+        "jsdom": false,
+        "net": 51
+      },
+      {
+        "path": "src/rules/journey/journey-on-gain.test.ts",
+        "new": true,
+        "added": 198,
+        "deleted": 0,
+        "lines": 198,
+        "plainFixture": false,
+        "jsdom": false,
+        "net": 198
+      },
+      {
+        "path": "src/screens/cumulus_adapters/journey-dreamsign-view-model.test.ts",
+        "new": true,
+        "added": 43,
+        "deleted": 0,
+        "lines": 43,
+        "plainFixture": false,
+        "jsdom": false,
+        "net": 43
+      }
+    ],
+    "supportAdded": 790,
+    "supportDeleted": 4,
+    "supportNet": 786,
+    "newTestFiles": 6,
+    "newJsdomFiles": 2,
+    "newFixtureFiles": 1,
+    "functionalChangedPaths": [
+      "docs/rules.md",
+      "src/battle/engine-ai/use-engine-ai.test.tsx",
+      "src/battle/engine-ai/use-engine-ai.ts",
+      "src/components/FrontDoorRouter.tsx",
+      "src/components/app-shell.test.tsx",
+      "src/content/define.ts",
+      "src/content/dreamsigns/red-cheese-7e8c86cc.ts",
+      "src/content/dreamsigns/voodoo-doll-0df9d72c.ts",
+      "src/content/dreamsigns/white-rat-ab1da9d3.ts",
+      "src/cumulus/components/hud/Dreamsign.tsx",
+      "src/cumulus/screens/JourneyDreamsignScreen.test.tsx",
+      "src/cumulus/screens/JourneyDreamsignScreen.tsx",
+      "src/rules/events.ts",
+      "src/rules/invariants.ts",
+      "src/rules/journey/journey-after-battle.ts",
+      "src/rules/journey/journey-dreamsign-gains.test.ts",
+      "src/rules/journey/journey-dreamsign-gains.ts",
+      "src/rules/journey/journey-on-gain-after-battle.test.ts",
+      "src/rules/journey/journey-on-gain-fixtures.ts",
+      "src/rules/journey/journey-on-gain.test.ts",
+      "src/rules/journey/journey-on-gain.ts",
+      "src/rules/journey/journey-purge.ts",
+      "src/rules/journey/lifecycle.ts",
+      "src/rules/journey/modifier-registry.ts",
+      "src/rules/journey/sites.ts",
+      "src/rules/reducer.ts",
+      "src/runtime/journey-site-messages.ts",
+      "src/runtime/screen-url.test.ts",
+      "src/runtime/screen-url.ts",
+      "src/screens/cumulus_adapters/JourneyDreamsignScreenAdapter.tsx",
+      "src/screens/cumulus_adapters/journey-dreamsign-view-model.test.ts",
+      "src/screens/cumulus_adapters/journey-dreamsign-view-model.ts",
+      "src/screens/cumulus_adapters/registry.test.tsx",
+      "src/screens/cumulus_adapters/registry.tsx",
+      "src/session/actions-payloads.test.ts",
+      "src/session/actions.test.ts",
+      "src/session/actions.ts",
+      "src/session/providers/site-provider.ts",
+      "src/state/game-journey-context.tsx",
+      "src/state/journey-context.tsx",
+      "src/state/journey-save-files.test.ts",
+      "src/state/journey-save-files.ts",
+      "src/types/journey.ts"
+    ],
+    "functionalAdded": 1349,
+    "functionalDeleted": 36,
+    "entrypointNet": 735,
+    "fixtureNet": 51
+  },
+  "failureInterruptRecovery": [
+    {
+      "path": "error mid-step",
+      "tests": [
+        "contains Rat content %s before partial writes and retries/replays the same event once",
+        "contains earned offer provider %s with battle/reward/pool untouched, then retries and replays"
+      ],
+      "files": [
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-on-gain-after-battle.test.ts"
+      ],
+      "proof": "Real LocalLog null/throw produces fold_error bounce, original fold/no partial modifier diagnostics; restore provider retries and replay agrees."
+    },
+    {
+      "path": "interrupt/restart",
+      "tests": [
+        "preserves the durable copy through reload and rejects malformed/stale/concurrent intentions atomically",
+        "suspends Red\u2192Doll before remaining Slug/Slime and reloads the exact terminal queue, final=%s",
+        "pairs a real public tutorial battle copy with its front-door identity on reload and continuation"
+      ],
+      "files": [
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-on-gain-after-battle.test.ts"
+      ],
+      "proof": "Public LOAD restores permission and exact continuation; native pending/final reloads; bound battle init/engine/emblems retained."
+    },
+    {
+      "path": "partial write",
+      "tests": [
+        "excludes prohibited additions before Rat, with held sources %s/%s",
+        "contains Rat content %s before partial writes and retries/replays the same event once"
+      ],
+      "files": [
+        "src/rules/journey/journey-on-gain.test.ts"
+      ],
+      "proof": "Input immutability, prohibition before denominator/targets/Tome, complete preflight before atomic fold acceptance; missing content preserves existing error contract."
+    },
+    {
+      "path": "invalid/stale state",
+      "tests": [
+        "rejects forged saved target holdings, source order and continuation purposes",
+        "rejects a premature free decline and stale/concurrent earned choice without effects or draws"
+      ],
+      "files": [
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-on-gain-after-battle.test.ts"
+      ],
+      "proof": "Out-of-range/omitted UUID, wrong epoch/purpose/source order, early free decline and completed-event replay do not change fold/log/draw."
+    },
+    {
+      "path": "concurrent actors",
+      "tests": [
+        "preserves the durable copy through reload and rejects malformed/stale/concurrent intentions atomically",
+        "suspends a real battle unchanged and resolves a restored copy with a pending prompt after CAS",
+        "discards a late host answer while copy owns the fold and submits only after the preserved battle resumes"
+      ],
+      "files": [
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/battle/engine-ai/use-engine-ai.test.tsx"
+      ],
+      "proof": "Actual intervening/unknown CAS refusal, strict gameplay copy guard, real driver late policy host emits zero intents while suspended and one after preserved resume; no new arbitration policy."
+    }
+  ],
+  "nativeQA": {
+    "scenarioPassInvocations": 17,
+    "desktopMobileWorkflows": 34,
+    "uniqueSuccessCaptures": 420,
+    "PNGQualification": "Parent independently verified2x CSS dimensions; native1440x900/390x844 mouse/keyboard, not physical touch. Existing unchanged synthetic touch contracts qualified separately.",
+    "successes": [
+      {
+        "invocation": "run-kgdZ4t",
+        "mode": "doll",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-kgdZ4t/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 12
+      },
+      {
+        "invocation": "run-oVOEkZ",
+        "mode": "rat",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-oVOEkZ/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 52
+      },
+      {
+        "invocation": "run-NqkN0a",
+        "mode": "doll-same",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-NqkN0a/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 12
+      },
+      {
+        "invocation": "run-xNveU8",
+        "mode": "red-matrix",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-xNveU8/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 30
+      },
+      {
+        "invocation": "run-Tp9za4",
+        "mode": "doll",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-Tp9za4/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 18
+      },
+      {
+        "invocation": "run-uZZMwt",
+        "mode": "doll",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-uZZMwt/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 18
+      },
+      {
+        "invocation": "run-ES8Uc1",
+        "mode": "doll",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-ES8Uc1/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 18
+      },
+      {
+        "invocation": "run-gxbNX8",
+        "mode": "doll",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-gxbNX8/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 18
+      },
+      {
+        "invocation": "run-EilGKf",
+        "mode": "doll",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-EilGKf/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 18
+      },
+      {
+        "invocation": "run-JSMPGs",
+        "mode": "doll",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-JSMPGs/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 18
+      },
+      {
+        "invocation": "run-bFsPWU",
+        "mode": "doll",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-bFsPWU/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 18
+      },
+      {
+        "invocation": "run-hN7vt2",
+        "mode": "red-matrix",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-hN7vt2/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 34,
+        "sourceSHA": "e2b8fe3205032aa2aea3a74ef6354608a7bffa6c346687dee03bae447007b4c0",
+        "elapsedSeconds": 435.3369704579818,
+        "receipt": "263-cap-native-01-red-matrix-receipt.json",
+        "qualification": "Prior cap repair source e2b8; superseded presentation qualified only"
+      },
+      {
+        "invocation": "run-rs8Bxa",
+        "mode": "doll-same-extra",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-rs8Bxa/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 24,
+        "sourceSHA": "e2b8fe3205032aa2aea3a74ef6354608a7bffa6c346687dee03bae447007b4c0",
+        "elapsedSeconds": 91.12355699998443,
+        "receipt": "263-cap-native-02-doll-same-extra-receipt.json",
+        "qualification": "Prior cap repair source e2b8; superseded presentation qualified only"
+      },
+      {
+        "invocation": "run-Rtzk2Z",
+        "mode": "red-matrix",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-Rtzk2Z/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 34,
+        "sourceSHA": "823b287b8fb68385e87fed2029daffb6266e6f5c043d594375169d59f2c6717b",
+        "elapsedSeconds": 474.02700579201337,
+        "receipt": "263-actual-cap-observer-native-01-red-matrix-receipt.json",
+        "qualification": "Current final source823b. Actual pressed selection/body scrolling/header/rim/nativephysicalcontrols/reload."
+      },
+      {
+        "invocation": "run-pbOiZv",
+        "mode": "doll-same-extra",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-pbOiZv/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 24,
+        "sourceSHA": "823b287b8fb68385e87fed2029daffb6266e6f5c043d594375169d59f2c6717b",
+        "elapsedSeconds": 92.86892841698136,
+        "receipt": "263-actual-cap-observer-native-02-doll-same-extra-receipt.json",
+        "qualification": "Current final source823b. Actual pressed selection/body scrolling/header/rim/nativephysicalcontrols/reload."
+      },
+      {
+        "invocation": "run-rahDLJ",
+        "mode": "red-matrix",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-rahDLJ/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 36,
+        "sourceSHA": "821f2a7df3905d1c1f22cdaa76cb59be837b981fe44bf54803f4ea8be88b64dc",
+        "elapsedSeconds": 482.2830872920167,
+        "receipt": "263-persistent-live-native-01-red-matrix-receipt.json",
+        "qualification": "Finalcurrentpersistentemptyliveparagraph/publicDOM thenfilledstatus, noactualscreenreader speechclaim."
+      },
+      {
+        "invocation": "run-OReAPs",
+        "mode": "red-matrix",
+        "views": [
+          "desktop",
+          "mobile"
+        ],
+        "rawReport": "invocations/run-OReAPs/journey-on-gain.result.json",
+        "caps": [],
+        "captures": 36,
+        "sourceSHA": "e847830ae9db80f7a7442800590a92a6dc51bb091a0b5cf5196669e42b997765",
+        "elapsedSeconds": 437.41189233298064,
+        "receipt": "263-core-repair-earned-url-native-01-red-matrix-receipt.json",
+        "qualification": "Current earnedpath/publicrole/simpleproducerfix;12actualpre/postpendingreloadpathname+gamequery observations."
+      }
+    ],
+    "failures": [
+      {
+        "invocation": "run-P3zjUD",
+        "classification": "product-layout",
+        "observation": "Copy target had zero-size geometry on desktop; mobile not attempted. Screen-owned square/padding repair, followed by run-kgdZ4t PASS.",
+        "rawReport": "invocations/run-P3zjUD/journey-on-gain.result.json",
+        "error": "desktop#0: Error: pending copy geometry [{\"selector\":\"[data-dreamsign-choice-index=\\\"0\\\"] [role=\\\"button\\\"]\",\"box\":{\"x\":720,\"y\":466.25,\"width\":0,\"height\":0},\"vw\":1440,\"vh\":900},{\"selector\":\"[data-journey-dreamsign-scene]\",\"box\":{\"x\":0,\"y\":0,\"width\":1440,\"height\":900},\"vw\":1440,\"vh\":900},{\"selector\":\"[data-testid=\\\"dreamscape-menu-button\\\"]\",\"box\":{\"x\":1370,\"y\":22,\"width\":48,\"height\":48},\"vw\":1440,\"vh\":900},{\"selector\":\"[aria-label=\\\"Essence Total\\\"]\",\"box\":{\"x\":144.375,\"y\":839,\"width\":99.875,\"height\":35},\"vw\":1440,\"vh\":900}]\n    at geometry (evalmachine.<anonymous>:1692:209)\n    at async prepareOrComplete (evalmachine.<anonymous>:1771:5)\n    at async evalmachine.<anonymous>:1791:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "screens": [
+          "invocations/run-P3zjUD/doll-desktop-before-grant.png",
+          "invocations/run-P3zjUD/doll-desktop-visible-infocard.png",
+          "invocations/run-P3zjUD/doll-desktop-pending.png"
+        ]
+      },
+      {
+        "invocation": "run-saBcfy",
+        "classification": "recipe-observation",
+        "observation": "Selected-option locator timeout; historical cause UNKNOWN. Caps empty; 59 log rows; no mobile verdict.",
+        "rawReport": "invocations/run-saBcfy/journey-on-gain.result.json",
+        "error": "desktop#0: QaTimeoutError: waitVisible [role=\"listbox\"] [role=\"option\"][aria-selected=\"true\"]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async inspectEntries (evalmachine.<anonymous>:1720:9)\n    at async prepareOrComplete (evalmachine.<anonymous>:1786:25)\n    at async evalmachine.<anonymous>:1840:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)",
+        "caps": [],
+        "screens": [
+          "invocations/run-saBcfy/rat-desktop-before-grant.png",
+          "invocations/run-saBcfy/rat-desktop-visible-infocard.png"
+        ]
+      },
+      {
+        "invocation": "run-v2q88N",
+        "classification": "recipe-observation",
+        "observation": "Actual trigger expanded=false and no listbox after click. Agent-created dropdown gate removed under justiciar; no Rat effect defect established.",
+        "rawReport": "invocations/run-v2q88N/journey-on-gain.result.json",
+        "error": "desktop#0: Error: Rat form attachment observation {\"entryId\":\"deck-4\",\"cardUUID\":\"a28ad36d-fa74-4190-a463-7efd3a6233d0\",\"trigger\":{\"present\":true,\"expanded\":\"false\",\"rect\":{\"x\":46,\"y\":468.15625,\"width\":143.546875,\"height\":42},\"effectiveOpacity\":1,\"visibleLabels\":[\"Kindled\"]},\"listboxes\":[],\"viewport\":{\"width\":1440,\"height\":900}}; Error: expanded form menu attached selection: TimeoutError: page.waitForFunction: Timeout 4998ms exceeded.\n    at inspectEntries (evalmachine.<anonymous>:1744:92)\n    at async prepareOrComplete (evalmachine.<anonymous>:1820:25)\n    at async evalmachine.<anonymous>:1874:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "screens": [
+          "invocations/run-v2q88N/rat-desktop-before-grant.png",
+          "invocations/run-v2q88N/rat-desktop-visible-infocard.png"
+        ]
+      },
+      {
+        "invocation": "run-q3BzEA",
+        "classification": "recipe-identity",
+        "observation": "Before-grant Revelation DOM/log equality assertion used presentation literal as gameplay SiteId. Recipe corrected; no product verdict.",
+        "rawReport": "invocations/run-q3BzEA/journey-on-gain.result.json",
+        "error": "desktop#0: Error: site scene/availability/overflow {\"href\":\"http://localhost:5274/dreamscape/0-firstlight-meadow/dreamsign-revelation?goto=dreamsign-revelation&seed=1&debug=1&game=qy5gy9\",\"path\":\"/dreamscape/0-firstlight-meadow/dreamsign-revelation\",\"query\":\"?goto=dreamsign-revelation&seed=1&debug=1&game=qy5gy9\",\"rootPresent\":true,\"siteIds\":[\"dreamsign-revelation\"],\"rootSiteId\":null,\"visibleCardIds\":[],\"rewardNode\":null,\"documentWidth\":1440,\"vw\":1440}\n    at observeSiteContinuation (evalmachine.<anonymous>:1767:273)\n    at async prepareOrComplete (evalmachine.<anonymous>:1772:26)\n    at async evalmachine.<anonymous>:1853:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "screens": []
+      },
+      {
+        "invocation": "run-UxQc8Y",
+        "classification": "recipe-geometry",
+        "observation": "Before-grant Shop outer wrapper zero own box while fixed child SiteLayout rendered. Recipe root corrected; Caps empty; mobile not attempted.",
+        "rawReport": "invocations/run-UxQc8Y/journey-on-gain.result.json",
+        "error": "desktop#0: QaTimeoutError: waitVisible [data-testid=\"cumulus-card-shop-site-screen\"]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async observeSiteContinuation (evalmachine.<anonymous>:1752:39)\n    at async prepareOrComplete (evalmachine.<anonymous>:1772:26)\n    at async evalmachine.<anonymous>:1853:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)",
+        "caps": [],
+        "screens": []
+      },
+      {
+        "invocation": "run-Eq6ruo",
+        "classification": "agent-authored premature cap observer; belowcap state before realadmin actor",
+        "observation": "pending(1) happens before loweringcapacity, actual allthree aria-pressed=null is correct freepick behavior; n>0 assertion misplaced. Corrected n>1 thirdcap observer +secondcap false assertion after same realadmin actor. No productsourcechange, blindretry or acceptancewaiver; mobile/DollSameunattempted.",
+        "rawReport": "invocations/run-Eq6ruo/journey-on-gain.result.json",
+        "error": "desktop#2: Error: new cap permission retained selected offer [{\"id\":\"257c160f-7d70-4ebd-bb0f-f83e61907310\",\"pressed\":null},{\"id\":\"89c83d7e-5617-49b4-b6cd-214680fe0627\",\"pressed\":null},{\"id\":\"8b87b0c7-e7d5-4c53-b99b-b1e2407cb519\",\"pressed\":null}]\n    at pending (evalmachine.<anonymous>:1693:272)\n    at async completeRedQueue (evalmachine.<anonymous>:1732:18)\n    at async evalmachine.<anonymous>:1813:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "screens": [
+          "invocations/run-Eq6ruo/red-matrix-desktop-actual-battle-result.png",
+          "invocations/run-Eq6ruo/red-matrix-desktop-before-grant.png",
+          "invocations/run-Eq6ruo/red-matrix-desktop-free-result.png",
+          "invocations/run-Eq6ruo/red-matrix-desktop-right1-pending-reloaded.png",
+          "invocations/run-Eq6ruo/red-matrix-desktop-right1-pending.png",
+          "invocations/run-Eq6ruo/red-matrix-desktop-three-real-sources.png",
+          "invocations/run-Eq6ruo/red-matrix-desktop-visible-infocard.png"
+        ],
+        "receipt": "263-final-selected-scroll-native-01-red-matrix-receipt.json",
+        "elapsedSeconds": 248.43658087501535,
+        "sourceSHA": "823b287b8fb68385e87fed2029daffb6266e6f5c043d594375169d59f2c6717b"
+      }
+    ],
+    "startupCells": 6,
+    "startupExercised": false,
+    "startupAnswered": 0,
+    "startupPasses": 0,
+    "startupSweepReceipt": "263-final-five-06-startup-sweep-receipt.json",
+    "startupSweepSeconds": 30.54939116598689,
+    "startupQualification": "Six PASS startup cells initialize three journey-only Dreamsigns on both sides, zero exercised hook behavior. Managed original six ledger rows preserved byte-exact.",
+    "weighted300": {
+      "receipt": "263-resume-weighted-battle-applicability-receipt.json",
+      "exitCode": 1,
+      "seconds": 1.1860575000173412,
+      "games": 0,
+      "qualification": "Requested300 weighted run rejects empty battle abilities before games; not a300-game pass."
+    },
+    "preflight": {
+      "receipt": "263-resume-lab-applicability-receipt.json",
+      "exitCode": 0,
+      "seconds": 1.6965324170014355,
+      "cells": 6,
+      "exercised": false,
+      "qualification": "Actual startup PASS, not ineligible or hook coverage."
+    },
+    "actorQualification": "debugADD representative is not realpurchase/rewardtransaction; owningpublicproducer tests separate. Rewardinline node/dreamscape, Revelationpresentationliteral, Battlepreviewlogs/URL/Begin boundary separatelyqualified. NativeRed uses actualordinaryengineEND, not forcedscore/outcome. Livejourney/tutorialeditor unexposed/publicpairedLOAD/realAI contracts qualify. Fullrecordfidelity syntheticcontract, nativephysicalUUID/count/view/log/reload observed.",
+    "identityQualification": "site-1 and similar raw values are branded SiteId, not contentUUID; raw SiteId values retained. ContentDreamsign/card UUID only. Restoredscreen follows resolution by logarrayorder; no monotonicseq assumption acrossbootstrap/reload.",
+    "rawProof": "263-parent-core-repair-url-qa-proof.json",
+    "parentReadProof": "263-parent-core-repair-url-qa-proof.json",
+    "sourceQualification": "Latest2Redsourcee847. Priorlatest2DollSameextra823b copybranch and20originalunaffectedbranches qualified. LastpureproducerExploration2cases/URLcase leaves4presentationbytes unchanged; existing24imagevisualproofqualified. Intermediatehistoriesretained,34executionsnotuniquelogicalcoverage;6nativefailuresretained. Finalmessagecentralization/currenthealthyrouter markup/geometry/words/handlers areexactmechanicalsame, formerpositiveQAretainedqualified; scopederror path old1fail12controls\u2192all13 coveredbypublicsyntheticroutecontract. No newnativeepisode/screenreader/physicaltouchclaim. No repeatedunchangedfull/browser.",
+    "retainedPriorUnchangedWorkflowProofs": 20,
+    "latestCurrentWorkflowProofs": 2,
+    "effectiveWorkflowScope": "Original22matrix plus same-printing two-target copy bothsizes; latestRed2/currentcap source821f pluslatestqualifiedcopy2 and20qualifiedunaffectedbranch proofs.",
+    "parentSourceFreeze": "263-parent-core-repair-after-url-qa.json",
+    "latestQualifiedUnchangedCopyProofs": 2
+  },
+  "sourceFreeze": {
+    "regularFiles": 2470,
+    "symlinkBindingsAndTargets": 1572,
+    "fileTreeSHA": "48cdc01c43720b6dcb5a1fdb89860775446c251edddd63dabebc361583e03c74",
+    "linkTreeSHA": "2da9011ac30593b611ab8707255c8245f59eb74a8c69e1e9622850d8efe3339e",
+    "qaScenesSHA": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+    "driverSHA": "d9068851cedab3b44907a18351bcd45e1b1f2f7d40de58f19378415c67c862d3",
+    "fullManifest": "263-parent-final-reset-source-freeze.json",
+    "resourceProof": "263-final-reset-endpoint-review-disposition-ack.json",
+    "ownedResources": [],
+    "qualification": "everyactualmanagedRPC concrete response and normal finally terminal; exact ownedrunner/server groups/pairs/ports absent in retained receipt/finalobservation, actualmatched SID/protocol/endpoint and owner-server identity copies retained. Unexposedcontext/browserIDs qualified; no global-slotabsence gate/foreignservice mutation."
+  },
+  "historicalProvenance": {
+    "initialStage1": "263-stage1-proposal.md; source-free guidance, not implementation on prior base",
+    "resumedStage1": "263-resume-stage1-terminal.json; exact e75 public baseline/full before-after proof",
+    "currentPrerequisites": "264/652/653/656/96xy/t55j completed in e75 base. Prior653-unresolved observer statement superseded by verified peer source223eafa/cert33affa/runWT3f4G; no borrowed new QA pass.",
+    "reachability": "Signed Exploration preparer rejects duplicate held UUIDs; unique-held genuine compound applies. Planner purge-all duplicate premise is unreachable by current public preparer; no foreign planner fix/private forged plan.",
+    "authoringFailures": "All listed nonzero test/type/lint/setup receipts retained. Owning old behavior, Rat prohibition priority and non-Battle hook guard failures are genuine negatives; fixture/import/type/lint/setup failures are bookkeeping, not product negative proof.",
+    "runtimePackaging": "Prior assert-only mismatch unretained: UNKNOWN cause. Requiring global other-slot absence was an agent packaging error; only exact owned groups/records/port identity required. Differing later listeners were not mutated.",
+    "capacity": "Actual model-capacity interruption while OS batch continued; five calls completed normally. No measured productive/CPU or isolated capacity duration asserted."
+  },
+  "rawReceiptIndex": [
+    {
+      "receipt": "263-cold-visual-review-receipt.json",
+      "exitCode": 0,
+      "seconds": 77.27317058399785,
+      "startUTC": "2026-10-14T13:03:43.853283+00:00",
+      "endUTC": "2026-10-14T13:05:01.126646+00:00"
+    },
+    {
+      "receipt": "263-copy-ui-knip-receipt.json",
+      "exitCode": 0,
+      "seconds": 4.728264291974483,
+      "startUTC": "2026-10-14T05:58:07.751511+00:00",
+      "endUTC": "2026-10-14T05:58:12.479803+00:00"
+    },
+    {
+      "receipt": "263-copy-ui-review-receipt.json",
+      "exitCode": 0,
+      "seconds": 58.42051170900231,
+      "startUTC": "2026-10-14T05:57:09.329432+00:00",
+      "endUTC": "2026-10-14T05:58:07.750716+00:00"
+    },
+    {
+      "receipt": "263-copy-ui-screen-receipt.json",
+      "exitCode": 0,
+      "seconds": 4.508329792006407,
+      "startUTC": "2026-10-14T05:57:04.820554+00:00",
+      "endUTC": "2026-10-14T05:57:09.329040+00:00"
+    },
+    {
+      "receipt": "263-driver-rat-observer-syntax-receipt.json",
+      "exitCode": 0,
+      "seconds": 0.03715808299602941,
+      "startUTC": "2026-10-14T06:45:26.583127+00:00",
+      "endUTC": "2026-10-14T06:45:26.620350+00:00"
+    },
+    {
+      "receipt": "263-driver-site-syntax-receipt.json",
+      "exitCode": 0,
+      "seconds": 0.04473029202199541,
+      "startUTC": "2026-10-14T06:28:40.103932+00:00",
+      "endUTC": "2026-10-14T06:28:40.148955+00:00"
+    },
+    {
+      "receipt": "263-driver-site-v2-syntax-receipt.json",
+      "exitCode": 0,
+      "seconds": 0.03761529101757333,
+      "startUTC": "2026-10-14T06:31:26.054178+00:00",
+      "endUTC": "2026-10-14T06:31:26.092014+00:00"
+    },
+    {
+      "receipt": "263-driver-syntax-receipt.json",
+      "exitCode": 0,
+      "seconds": 0.04523708301712759,
+      "startUTC": "2026-10-14T05:40:10.022690+00:00",
+      "endUTC": "2026-10-14T05:40:10.068031+00:00"
+    },
+    {
+      "receipt": "263-driver-v2-syntax-receipt.json",
+      "exitCode": 0,
+      "seconds": 0.04162299999734387,
+      "startUTC": "2026-10-14T05:43:40.264834+00:00",
+      "endUTC": "2026-10-14T05:43:40.306569+00:00"
+    },
+    {
+      "receipt": "263-driver-v3-syntax-receipt.json",
+      "exitCode": 0,
+      "seconds": 0.038269000011496246,
+      "startUTC": "2026-10-14T05:45:36.588352+00:00",
+      "endUTC": "2026-10-14T05:45:36.626707+00:00"
+    },
+    {
+      "receipt": "263-driver-visible-rat-observer-syntax-receipt.json",
+      "exitCode": 0,
+      "seconds": 0.040563292015576735,
+      "startUTC": "2026-10-14T06:54:17.787159+00:00",
+      "endUTC": "2026-10-14T06:54:17.827791+00:00"
+    },
+    {
+      "receipt": "263-driver-visible-rat-v2-syntax-receipt.json",
+      "exitCode": 0,
+      "seconds": 0.043269541987683624,
+      "startUTC": "2026-10-14T06:56:14.856820+00:00",
+      "endUTC": "2026-10-14T06:56:14.900223+00:00"
+    },
+    {
+      "receipt": "263-final-five-01-shop-receipt.json",
+      "exitCode": 0,
+      "seconds": 71.51880595801049,
+      "startUTC": "2026-10-14T12:46:12.809766+00:00",
+      "endUTC": "2026-10-14T12:47:24.328595+00:00"
+    },
+    {
+      "receipt": "263-final-five-02-gamble-receipt.json",
+      "exitCode": 0,
+      "seconds": 75.16692570902524,
+      "startUTC": "2026-10-14T12:47:26.689429+00:00",
+      "endUTC": "2026-10-14T12:48:41.856389+00:00"
+    },
+    {
+      "receipt": "263-final-five-03-exploration-receipt.json",
+      "exitCode": 0,
+      "seconds": 66.21813320799265,
+      "startUTC": "2026-10-14T12:48:44.080960+00:00",
+      "endUTC": "2026-10-14T12:49:50.299116+00:00"
+    },
+    {
+      "receipt": "263-final-five-04-augury-receipt.json",
+      "exitCode": 0,
+      "seconds": 124.542424165993,
+      "startUTC": "2026-10-14T12:49:52.542491+00:00",
+      "endUTC": "2026-10-14T12:51:57.084956+00:00"
+    },
+    {
+      "receipt": "263-final-five-05-battle-receipt.json",
+      "exitCode": 0,
+      "seconds": 62.52916320800432,
+      "startUTC": "2026-10-14T12:51:57.205512+00:00",
+      "endUTC": "2026-10-14T12:52:59.734705+00:00"
+    },
+    {
+      "receipt": "263-final-five-06-startup-sweep-receipt.json",
+      "exitCode": 0,
+      "seconds": 30.54939116598689,
+      "startUTC": "2026-10-14T12:53:01.149817+00:00",
+      "endUTC": "2026-10-14T12:53:31.699220+00:00"
+    },
+    {
+      "receipt": "263-final-sites-01-dreamsign-revelation-receipt.json",
+      "exitCode": 0,
+      "seconds": 100.02312137497938,
+      "startUTC": "2026-10-14T12:37:41.100251+00:00",
+      "endUTC": "2026-10-14T12:39:21.123412+00:00"
+    },
+    {
+      "receipt": "263-final-sites-02-shop-receipt.json",
+      "exitCode": 1,
+      "seconds": 26.052300667011878,
+      "startUTC": "2026-10-14T12:39:23.489355+00:00",
+      "endUTC": "2026-10-14T12:39:49.541665+00:00"
+    },
+    {
+      "receipt": "263-observational-01-rat-receipt.json",
+      "exitCode": 0,
+      "seconds": 205.88570070799324,
+      "startUTC": "2026-10-14T06:58:56.861453+00:00",
+      "endUTC": "2026-10-14T07:02:22.747418+00:00"
+    },
+    {
+      "receipt": "263-observational-02-doll-same-receipt.json",
+      "exitCode": 0,
+      "seconds": 64.71274037499097,
+      "startUTC": "2026-10-14T07:02:22.864415+00:00",
+      "endUTC": "2026-10-14T07:03:27.577229+00:00"
+    },
+    {
+      "receipt": "263-observational-03-red-matrix-receipt.json",
+      "exitCode": 0,
+      "seconds": 433.5942390409764,
+      "startUTC": "2026-10-14T07:03:27.715477+00:00",
+      "endUTC": "2026-10-14T07:10:41.310285+00:00"
+    },
+    {
+      "receipt": "263-observational-04-doll-reward-receipt.json",
+      "exitCode": 0,
+      "seconds": 74.53077825001674,
+      "startUTC": "2026-10-14T07:10:41.454093+00:00",
+      "endUTC": "2026-10-14T07:11:55.984947+00:00"
+    },
+    {
+      "receipt": "263-observational-05-doll-dreamsign-revelation-receipt.json",
+      "exitCode": 1,
+      "seconds": 6.8595933329779655,
+      "startUTC": "2026-10-14T07:11:56.127854+00:00",
+      "endUTC": "2026-10-14T07:12:02.987428+00:00"
+    },
+    {
+      "receipt": "263-public-baseline-esm-receipt.json",
+      "exitCode": 0,
+      "seconds": 1.752562375011621,
+      "startUTC": "2026-10-13T20:04:51.625987+00:00",
+      "endUTC": "2026-10-13T20:04:53.378614+00:00"
+    },
+    {
+      "receipt": "263-public-baseline-receipt.json",
+      "exitCode": 1,
+      "seconds": 0.9802035840111785,
+      "startUTC": "2026-10-13T20:04:41.357136+00:00",
+      "endUTC": "2026-10-13T20:04:42.337421+00:00"
+    },
+    {
+      "receipt": "263-qa-doll-pilot-receipt.json",
+      "exitCode": 1,
+      "seconds": 38.77687645799597,
+      "startUTC": "2026-10-14T05:48:27.202627+00:00",
+      "endUTC": "2026-10-14T05:49:05.980163+00:00"
+    },
+    {
+      "receipt": "263-qa-doll-repaired-pilot-receipt.json",
+      "exitCode": 0,
+      "seconds": 117.2744004589913,
+      "startUTC": "2026-10-14T06:03:40.165396+00:00",
+      "endUTC": "2026-10-14T06:05:37.441922+00:00"
+    },
+    {
+      "receipt": "263-rat-diagnostic-pilot-receipt.json",
+      "exitCode": 1,
+      "seconds": 21.74891187500907,
+      "startUTC": "2026-10-14T06:48:01.250057+00:00",
+      "endUTC": "2026-10-14T06:48:22.999274+00:00"
+    },
+    {
+      "receipt": "263-remaining-01-rat-receipt.json",
+      "exitCode": 1,
+      "seconds": 30.413666292006383,
+      "startUTC": "2026-10-14T06:34:31.840796+00:00",
+      "endUTC": "2026-10-14T06:35:02.254928+00:00"
+    },
+    {
+      "receipt": "263-resume-choice-contracts-receipt.json",
+      "exitCode": 1,
+      "seconds": 5.634422333998373,
+      "startUTC": "2026-10-14T04:37:37.411394+00:00",
+      "endUTC": "2026-10-14T04:37:43.046239+00:00"
+    },
+    {
+      "receipt": "263-resume-choice-screen-receipt.json",
+      "exitCode": 1,
+      "seconds": 4.556739499996183,
+      "startUTC": "2026-10-14T04:45:18.202994+00:00",
+      "endUTC": "2026-10-14T04:45:22.759788+00:00"
+    },
+    {
+      "receipt": "263-resume-complete-owning-focus-receipt.json",
+      "exitCode": 0,
+      "seconds": 11.65703004199895,
+      "startUTC": "2026-10-14T04:52:52.466179+00:00",
+      "endUTC": "2026-10-14T04:53:04.123504+00:00"
+    },
+    {
+      "receipt": "263-resume-dispatch-friction-receipt.json",
+      "exitCode": 0,
+      "seconds": 0.1190721669991035,
+      "startUTC": "2026-10-14T03:28:07.971640+00:00",
+      "endUTC": "2026-10-14T03:28:08.090805+00:00"
+    },
+    {
+      "receipt": "263-resume-doctor-receipt.json",
+      "exitCode": 0,
+      "seconds": 1.2343991249799728,
+      "startUTC": "2026-10-14T03:21:49.190453+00:00",
+      "endUTC": "2026-10-14T03:21:50.424981+00:00"
+    },
+    {
+      "receipt": "263-resume-earned-composition-fixed-receipt.json",
+      "exitCode": 0,
+      "seconds": 6.178520957997534,
+      "startUTC": "2026-10-14T04:38:46.263345+00:00",
+      "endUTC": "2026-10-14T04:38:52.441907+00:00"
+    },
+    {
+      "receipt": "263-resume-earned-composition-receipt.json",
+      "exitCode": 1,
+      "seconds": 5.2619669169944245,
+      "startUTC": "2026-10-14T04:38:25.220444+00:00",
+      "endUTC": "2026-10-14T04:38:30.482454+00:00"
+    },
+    {
+      "receipt": "263-resume-earned-terminal-contracts-receipt.json",
+      "exitCode": 0,
+      "seconds": 6.089845707989298,
+      "startUTC": "2026-10-14T04:47:58.534395+00:00",
+      "endUTC": "2026-10-14T04:48:04.624269+00:00"
+    },
+    {
+      "receipt": "263-resume-expanded-types-receipt.json",
+      "exitCode": 2,
+      "seconds": 10.02475912499358,
+      "startUTC": "2026-10-14T04:44:11.800681+00:00",
+      "endUTC": "2026-10-14T04:44:21.825455+00:00"
+    },
+    {
+      "receipt": "263-resume-final-content-check-receipt.json",
+      "exitCode": 0,
+      "seconds": 3.562814500008244,
+      "startUTC": "2026-10-14T05:08:49.037382+00:00",
+      "endUTC": "2026-10-14T05:08:52.600323+00:00"
+    },
+    {
+      "receipt": "263-resume-final-full-receipt.json",
+      "exitCode": 0,
+      "seconds": 106.66305066700443,
+      "startUTC": "2026-10-14T05:09:33.849529+00:00",
+      "endUTC": "2026-10-14T05:11:20.514588+00:00"
+    },
+    {
+      "receipt": "263-resume-final-knip-receipt.json",
+      "exitCode": 0,
+      "seconds": 4.298233500012429,
+      "startUTC": "2026-10-14T05:06:28.633512+00:00",
+      "endUTC": "2026-10-14T05:06:32.931922+00:00"
+    },
+    {
+      "receipt": "263-resume-final-plain-contracts-fixed-receipt.json",
+      "exitCode": 0,
+      "seconds": 4.271621749998303,
+      "startUTC": "2026-10-14T04:57:17.620206+00:00",
+      "endUTC": "2026-10-14T04:57:21.891985+00:00"
+    },
+    {
+      "receipt": "263-resume-final-plain-contracts-receipt.json",
+      "exitCode": 1,
+      "seconds": 4.179169624985661,
+      "startUTC": "2026-10-14T04:56:46.725759+00:00",
+      "endUTC": "2026-10-14T04:56:50.905085+00:00"
+    },
+    {
+      "receipt": "263-resume-final-review-battle-guard-receipt.json",
+      "exitCode": 0,
+      "seconds": 58.44528720798553,
+      "startUTC": "2026-10-14T05:04:05.237552+00:00",
+      "endUTC": "2026-10-14T05:05:03.684005+00:00"
+    },
+    {
+      "receipt": "263-resume-final-review-corrected-receipt.json",
+      "exitCode": 0,
+      "seconds": 52.43780116701964,
+      "startUTC": "2026-10-14T05:01:23.257464+00:00",
+      "endUTC": "2026-10-14T05:02:15.696263+00:00"
+    },
+    {
+      "receipt": "263-resume-final-review-receipt.json",
+      "exitCode": 1,
+      "seconds": 54.81020195799647,
+      "startUTC": "2026-10-14T04:59:06.635019+00:00",
+      "endUTC": "2026-10-14T05:00:01.446273+00:00"
+    },
+    {
+      "receipt": "263-resume-final-types-receipt.json",
+      "exitCode": 2,
+      "seconds": 9.662337457994,
+      "startUTC": "2026-10-14T04:57:21.918879+00:00",
+      "endUTC": "2026-10-14T04:57:31.581520+00:00"
+    },
+    {
+      "receipt": "263-resume-first-synthetic-focus-receipt.json",
+      "exitCode": 0,
+      "seconds": 5.843483167001978,
+      "startUTC": "2026-10-14T04:23:12.850238+00:00",
+      "endUTC": "2026-10-14T04:23:18.693769+00:00"
+    },
+    {
+      "receipt": "263-resume-first-wiring-receipt.json",
+      "exitCode": 1,
+      "seconds": 5.947648125002161,
+      "startUTC": "2026-10-14T04:16:49.306370+00:00",
+      "endUTC": "2026-10-14T04:16:55.254051+00:00"
+    },
+    {
+      "receipt": "263-resume-install-receipt.json",
+      "exitCode": 0,
+      "seconds": 2.464749999984633,
+      "startUTC": "2026-10-14T03:21:50.429964+00:00",
+      "endUTC": "2026-10-14T03:21:52.894709+00:00"
+    },
+    {
+      "receipt": "263-resume-inventory-generation-receipt.json",
+      "exitCode": 0,
+      "seconds": 2.8614897500083316,
+      "startUTC": "2026-10-14T04:58:45.452298+00:00",
+      "endUTC": "2026-10-14T04:58:48.313934+00:00"
+    },
+    {
+      "receipt": "263-resume-lab-applicability-receipt.json",
+      "exitCode": 0,
+      "seconds": 1.6965324170014355,
+      "startUTC": "2026-10-14T05:14:13.194502+00:00",
+      "endUTC": "2026-10-14T05:14:14.891196+00:00"
+    },
+    {
+      "receipt": "263-resume-live-copy-atomic-receipt.json",
+      "exitCode": 0,
+      "seconds": 7.425889750011265,
+      "startUTC": "2026-10-14T04:39:43.417360+00:00",
+      "endUTC": "2026-10-14T04:39:50.843322+00:00"
+    },
+    {
+      "receipt": "263-resume-livebattle-baseline-receipt.json",
+      "exitCode": 0,
+      "seconds": 1.3726474579889327,
+      "startUTC": "2026-10-14T03:53:44.131959+00:00",
+      "endUTC": "2026-10-14T03:53:45.504689+00:00"
+    },
+    {
+      "receipt": "263-resume-native-update-receipt.json",
+      "exitCode": 5,
+      "seconds": 0.6152543339994736,
+      "startUTC": "2026-10-14T03:17:54.671741+00:00",
+      "endUTC": "2026-10-14T03:17:55.287099+00:00"
+    },
+    {
+      "receipt": "263-resume-nonbattle-earning-old-receipt.json",
+      "exitCode": 1,
+      "seconds": 5.9678029170027,
+      "startUTC": "2026-10-14T05:03:41.954301+00:00",
+      "endUTC": "2026-10-14T05:03:47.922278+00:00"
+    },
+    {
+      "receipt": "263-resume-old-after-battle-receipt.json",
+      "exitCode": 1,
+      "seconds": 6.687556958000641,
+      "startUTC": "2026-10-14T04:03:51.227290+00:00",
+      "endUTC": "2026-10-14T04:03:57.915034+00:00"
+    },
+    {
+      "receipt": "263-resume-old-owning-receipt.json",
+      "exitCode": 1,
+      "seconds": 8.267406916012987,
+      "startUTC": "2026-10-14T04:03:25.397299+00:00",
+      "endUTC": "2026-10-14T04:03:33.664950+00:00"
+    },
+    {
+      "receipt": "263-resume-own-model-screen-receipt.json",
+      "exitCode": 0,
+      "seconds": 4.884996958018746,
+      "startUTC": "2026-10-14T04:46:43.829902+00:00",
+      "endUTC": "2026-10-14T04:46:48.714937+00:00"
+    },
+    {
+      "receipt": "263-resume-prepare-receipt.json",
+      "exitCode": 0,
+      "seconds": 1.9093051250092685,
+      "startUTC": "2026-10-14T03:21:52.895633+00:00",
+      "endUTC": "2026-10-14T03:21:54.804923+00:00"
+    },
+    {
+      "receipt": "263-resume-public-baseline-receipt.json",
+      "exitCode": 0,
+      "seconds": 1.9817872080020607,
+      "startUTC": "2026-10-14T03:33:36.208419+00:00",
+      "endUTC": "2026-10-14T03:33:38.190339+00:00"
+    },
+    {
+      "receipt": "263-resume-public-boundaries-receipt.json",
+      "exitCode": 0,
+      "seconds": 9.84960145902005,
+      "startUTC": "2026-10-14T04:49:58.689918+00:00",
+      "endUTC": "2026-10-14T04:50:08.539573+00:00"
+    },
+    {
+      "receipt": "263-resume-rat-priority-fixed-receipt.json",
+      "exitCode": 0,
+      "seconds": 4.740051917004166,
+      "startUTC": "2026-10-14T04:35:53.102177+00:00",
+      "endUTC": "2026-10-14T04:35:57.842293+00:00"
+    },
+    {
+      "receipt": "263-resume-rat-priority-old-receipt.json",
+      "exitCode": 1,
+      "seconds": 4.796319875022164,
+      "startUTC": "2026-10-14T04:35:29.150711+00:00",
+      "endUTC": "2026-10-14T04:35:33.947076+00:00"
+    },
+    {
+      "receipt": "263-resume-real-acquisition-producers-fixed-receipt.json",
+      "exitCode": 0,
+      "seconds": 5.0912831670138985,
+      "startUTC": "2026-10-14T04:43:55.726754+00:00",
+      "endUTC": "2026-10-14T04:44:00.818074+00:00"
+    },
+    {
+      "receipt": "263-resume-real-acquisition-producers-receipt.json",
+      "exitCode": 1,
+      "seconds": 4.917157249990851,
+      "startUTC": "2026-10-14T04:42:16.487826+00:00",
+      "endUTC": "2026-10-14T04:42:21.405017+00:00"
+    },
+    {
+      "receipt": "263-resume-real-actor-lifecycle-fixed-receipt.json",
+      "exitCode": 0,
+      "seconds": 5.723718291992554,
+      "startUTC": "2026-10-14T04:55:32.903175+00:00",
+      "endUTC": "2026-10-14T04:55:38.627071+00:00"
+    },
+    {
+      "receipt": "263-resume-real-actor-lifecycle-receipt.json",
+      "exitCode": 1,
+      "seconds": 7.4569297910202295,
+      "startUTC": "2026-10-14T04:54:38.536092+00:00",
+      "endUTC": "2026-10-14T04:54:45.993243+00:00"
+    },
+    {
+      "receipt": "263-resume-source-types-receipt.json",
+      "exitCode": 2,
+      "seconds": 10.320626125001581,
+      "startUTC": "2026-10-14T04:20:19.709623+00:00",
+      "endUTC": "2026-10-14T04:20:30.030249+00:00"
+    },
+    {
+      "receipt": "263-resume-tutorial-copy-public-receipt.json",
+      "exitCode": 0,
+      "seconds": 5.34972170801484,
+      "startUTC": "2026-10-14T04:52:01.704886+00:00",
+      "endUTC": "2026-10-14T04:52:07.054820+00:00"
+    },
+    {
+      "receipt": "263-resume-weighted-battle-applicability-receipt.json",
+      "exitCode": 1,
+      "seconds": 1.1860575000173412,
+      "startUTC": "2026-10-14T05:12:12.556365+00:00",
+      "endUTC": "2026-10-14T05:12:13.742572+00:00"
+    },
+    {
+      "receipt": "263-cap-native-01-red-matrix-receipt.json",
+      "exitCode": 0,
+      "seconds": 435.3369704579818,
+      "startUTC": "2026-10-14T13:39:38.554104+00:00",
+      "endUTC": "2026-10-14T13:46:53.897303+00:00"
+    },
+    {
+      "receipt": "263-cap-native-02-doll-same-extra-receipt.json",
+      "exitCode": 0,
+      "seconds": 91.12355699998443,
+      "startUTC": "2026-10-14T13:46:54.073039+00:00",
+      "endUTC": "2026-10-14T13:48:25.197991+00:00"
+    },
+    {
+      "receipt": "263-final-selected-scroll-native-01-red-matrix-receipt.json",
+      "exitCode": 1,
+      "seconds": 248.43658087501535,
+      "startUTC": "2026-10-14T14:06:15.177744+00:00",
+      "endUTC": "2026-10-14T14:10:23.617968+00:00"
+    },
+    {
+      "receipt": "263-actual-cap-observer-native-01-red-matrix-receipt.json",
+      "exitCode": 0,
+      "seconds": 474.02700579201337,
+      "startUTC": "2026-10-14T14:11:48.864677+00:00",
+      "endUTC": "2026-10-14T14:19:42.892002+00:00"
+    },
+    {
+      "receipt": "263-actual-cap-observer-native-02-doll-same-extra-receipt.json",
+      "exitCode": 0,
+      "seconds": 92.86892841698136,
+      "startUTC": "2026-10-14T14:19:43.057804+00:00",
+      "endUTC": "2026-10-14T14:21:15.927913+00:00"
+    },
+    {
+      "receipt": "263-final-visual-old-focus-receipt.json",
+      "exitCode": 1,
+      "seconds": 8.086087083007442,
+      "startUTC": "2026-10-14T13:58:02.905912+00:00",
+      "endUTC": "2026-10-14T13:58:10.992471+00:00"
+    },
+    {
+      "receipt": "263-final-visual-focus-receipt.json",
+      "exitCode": 0,
+      "seconds": 5.192410832998576,
+      "startUTC": "2026-10-14T13:58:40.494981+00:00",
+      "endUTC": "2026-10-14T13:58:45.687586+00:00"
+    },
+    {
+      "receipt": "263-final-visual-review-receipt.json",
+      "exitCode": 0,
+      "seconds": 57.78357108301134,
+      "startUTC": "2026-10-14T13:59:01.279594+00:00",
+      "endUTC": "2026-10-14T13:59:59.064062+00:00"
+    },
+    {
+      "receipt": "263-final-visual-knip-receipt.json",
+      "exitCode": 0,
+      "seconds": 3.921444125007838,
+      "startUTC": "2026-10-14T14:00:35.908076+00:00",
+      "endUTC": "2026-10-14T14:00:39.829653+00:00"
+    },
+    {
+      "receipt": "263-persistent-live-focus-receipt.json",
+      "exitCode": 0,
+      "seconds": 6.943575292010792,
+      "startUTC": "2026-10-14T14:30:01.795403+00:00",
+      "endUTC": "2026-10-14T14:30:08.739155+00:00"
+    },
+    {
+      "receipt": "263-persistent-live-review-receipt.json",
+      "exitCode": 0,
+      "seconds": 63.91189233298064,
+      "startUTC": "2026-10-14T14:30:08.739404+00:00",
+      "endUTC": "2026-10-14T14:31:12.652026+00:00"
+    },
+    {
+      "receipt": "263-persistent-live-knip-receipt.json",
+      "exitCode": 0,
+      "seconds": 3.9597072080068756,
+      "startUTC": "2026-10-14T14:31:12.652332+00:00",
+      "endUTC": "2026-10-14T14:31:16.612080+00:00"
+    },
+    {
+      "receipt": "263-persistent-live-native-01-red-matrix-receipt.json",
+      "exitCode": 0,
+      "seconds": 482.2830872920167,
+      "startUTC": "2026-10-14T14:33:20.780894+00:00",
+      "endUTC": "2026-10-14T14:41:23.069784+00:00"
+    },
+    {
+      "receipt": "263-core-repair-typed-focus-receipt.json",
+      "exitCode": 0,
+      "seconds": 7.250759292015573,
+      "startUTC": "2026-10-14T15:08:22.508960+00:00",
+      "endUTC": "2026-10-14T15:08:29.759853+00:00"
+    },
+    {
+      "receipt": "263-core-repair-typed-review-receipt.json",
+      "exitCode": 0,
+      "seconds": 70.7488812909869,
+      "startUTC": "2026-10-14T15:08:29.760170+00:00",
+      "endUTC": "2026-10-14T15:09:40.509703+00:00"
+    },
+    {
+      "receipt": "263-core-repair-typed-knip-receipt.json",
+      "exitCode": 0,
+      "seconds": 4.298963665991323,
+      "startUTC": "2026-10-14T15:09:40.510603+00:00",
+      "endUTC": "2026-10-14T15:09:44.809642+00:00"
+    },
+    {
+      "receipt": "263-core-repair-earned-url-native-01-red-matrix-receipt.json",
+      "exitCode": 0,
+      "seconds": 437.41189233298064,
+      "startUTC": "2026-10-14T15:14:11.115700+00:00",
+      "endUTC": "2026-10-14T15:21:28.532137+00:00"
+    },
+    {
+      "receipt": "263-low-review-nonempty-focus-receipt.json",
+      "exitCode": 0,
+      "seconds": 9.657747250021202,
+      "startUTC": "2026-10-14T16:01:24.846395+00:00",
+      "endUTC": "2026-10-14T16:01:34.504345+00:00"
+    },
+    {
+      "receipt": "263-low-review-nonempty-review-receipt.json",
+      "exitCode": 0,
+      "seconds": 67.09780512499856,
+      "startUTC": "2026-10-14T16:01:34.504567+00:00",
+      "endUTC": "2026-10-14T16:02:41.602819+00:00"
+    },
+    {
+      "receipt": "263-low-review-nonempty-knip-receipt.json",
+      "exitCode": 0,
+      "seconds": 4.597041667002486,
+      "startUTC": "2026-10-14T16:02:41.603301+00:00",
+      "endUTC": "2026-10-14T16:02:46.200365+00:00"
+    },
+    {
+      "receipt": "263-final-reset-focus-receipt.json",
+      "exitCode": 0,
+      "seconds": 5.631538167013787,
+      "startUTC": "2026-10-14T16:24:33.775157+00:00",
+      "endUTC": "2026-10-14T16:24:39.406763+00:00"
+    },
+    {
+      "receipt": "263-final-reset-review-receipt.json",
+      "exitCode": 0,
+      "seconds": 59.45497374999104,
+      "startUTC": "2026-10-14T16:24:39.406984+00:00",
+      "endUTC": "2026-10-14T16:25:38.861472+00:00"
+    },
+    {
+      "receipt": "263-final-reset-knip-receipt.json",
+      "exitCode": 0,
+      "seconds": 3.70630787499249,
+      "startUTC": "2026-10-14T16:25:38.861704+00:00",
+      "endUTC": "2026-10-14T16:25:42.567969+00:00"
+    }
+  ],
+  "reviewStatus": "Requirednormalotherfamily fulloriginalbase\u21924c258 core/visual complete408.8836s plus4c258\u21922fb currentproductionrepaircomplete129.8846s allmandatorypolicy/sourceinputs. Allconfirmedfindings accepted/repaired, lasttest-onlyresetcoverage gap fixed withmeaningfulnegativecontrols andfinalaggregate/Knip. Finalproductionbytes identicalreviewed2fb; sourceonlytest/evidence amendment, no unresolvedreview debt orfinalvisual defect.",
+  "constructionCounts": {
+    "changedFunctionalPaths": 44,
+    "sourceProductionPaths": 29,
+    "testEntrypointPaths": 12,
+    "plainFixturePaths": 1,
+    "currentRulesPaths": 1,
+    "inventoryPaths": 1,
+    "newSourceFiles": 12,
+    "newTestEntrypoints": 6,
+    "newJsdomEntrypoints": 2,
+    "newPlainFixture": 1,
+    "supportAdded": 790,
+    "supportDeleted": 4,
+    "supportNet": 786,
+    "scope": "Final50paths:29production,12testentrypoints,1plainfixture,1rules,1inventory plus6evidence. Testsupport fromactualbasee75 nums includes51fixture; entrypointnet735, sixnewtests/twojsdom andonefixtureunchanged. Largest339lines. Finalrepair adds0entrypoints/fixtures; centralmessages additive existingfile.",
+    "productionCodeAdded": 522,
+    "productionCodeDeleted": 32,
+    "productionCodeChurn": 554
+  },
+  "visualReviews": [
+    {
+      "receipt": "263-cold-visual-review-receipt.json",
+      "seconds": 77.27317058399785,
+      "images": 15,
+      "sources": 3,
+      "findings": "Three accepted: pending selectedgain visible summary, distinctphysicalcopy/replacementaccessibility, tokenizedparagraphspacing. Exactsource e2b8; sourcechecks/native4recapturespassed."
+    },
+    {
+      "receipt": "263-final-cold-visual-receipt.json",
+      "seconds": 149.79672095901333,
+      "images": 22,
+      "sources": 4,
+      "findings": "Accepted selected aria-pressed, innerbody scrolling preservingPanelrim, sentencecaseprompt. Rejected previewno-op premise: existingsemanticfocus/hover/hold InfoCard reveal actualsource/QA; sharedbutton preserved. Source823b checks/native4recapturespassed. 26inputs hashes/reviewergroup verified. Reviewer Atlascoverage remark scoped: Atlascopycaptures exist, no returnedAtlas claim."
+    },
+    {
+      "receipt": "263-current-final-visual-receipt.json",
+      "seconds": 129.00050941601512,
+      "images": 22,
+      "sources": 4,
+      "status": "Concrete0/all26inputbytesexact/reviewergroupgone. Accepted persistentemptyliveparagraph andpreviewoutside liveparagraph, currentsource821f+checks+Red2recapturepass. Boundedcontentscroll expresslynotdefect; fieldnamingriskhasnoconcretefailure/currentmodediscriminants separatecopyphysicalindex fromofferposition. Freshcombinedexactcommitcore/finalvisual24images stillowed."
+    }
+  ],
+  "workflowRecovery": [
+    {
+      "proof": "263-driver-helper-capacity-recovery.json",
+      "qualification": "Helper capacity failure before any driver/runtime/source mutation; solehelpererrored/stopped, root allowedselfimplementation, no model switch/newagent; originalgrossretained."
+    },
+    {
+      "proof": "263-premature-cap-observer-recovery.json",
+      "qualification": "Concrete nativefalse and normaldrain, rootassertionordering repaired inignoredrecipe only; no productsourcechange/fullrerun/acceptancewaiver."
+    }
+  ],
+  "coreReviewHistory": [
+    {
+      "receipt": "263-immutable-core-visual-review-receipt.json",
+      "head": "d650538d43030baf8f30d2683005f2ff349e5d77",
+      "base": "e75c54a03294e47b5380a39f014c0e7629aa95d3",
+      "seconds": 383.01560995800537,
+      "model": "claude-opus-5-5",
+      "completePatchRead": true,
+      "visualInputsRead": "24PNGs/4presentation sources, parent28inputSHA+patch/snapshot/teardown proof",
+      "codePolicyComplete": false,
+      "missingRequiredInputs": [
+        "docs/plan/README.md",
+        "docs/plan/engine-design.md",
+        "docs/plan/phase-5-content.md relevantrecipe",
+        "Cumulus SKILL.md"
+      ],
+      "dispositions": [
+        {
+          "finding": 1,
+          "status": "accepted and repaired",
+          "verification": "ActualpublicExploration writer ignoresreplacementbelowcap andappends; oldreceiptselectedoldslot andthrewfold_error. Newrole conditional beforecount>=max otherwiseexplicitappendslot. Sixgenuineproducer matrixcases named/random with belowcap existing/missing selection vsatcap controls, immutablestate/replay/physicalUUID logs. Fourgenuineoldfailures, sixfixedpass."
+        },
+        {
+          "finding": 2,
+          "status": "accepted and repaired",
+          "verification": "EarnedDreamsignone-way path wasatlasforanyreturnTo; explicit /dreamsign/<siteId> likeother earnedscreens. ThreeoldURL failures/allfixed; native12actualpre/postreloadpath+gamequery observations passed."
+        }
+      ],
+      "candidate": "01a13ae1-971c-7d13-a429-a838b2f5c6d1 canceled/notauthorized beforeedits",
+      "followup": "Freshnormalotherfamily exactamendedrange mustreadALLmandatorypolicies/fullpatch; no completedrequiredcoreclaim fromthisrun."
+    },
+    {
+      "receipt": "263-final-required-core-review-receipt.json",
+      "head": "4c258be78f2caa2b3fad7d1322597fc1d047eec9",
+      "base": "e75c54a03294e47b5380a39f014c0e7629aa95d3",
+      "seconds": 408.883570749982,
+      "model": "claude-opus-5-5",
+      "completePatchRead": "4560linesEOF",
+      "completePolicyReads": "AGENTS144/README340/engine-design2759/phase5642/Cumulus152 allfull",
+      "completeVisualReads": "24PNGs/4sources; parent33inputSHA/snapshot/patch/teardownverified",
+      "codePolicyComplete": true,
+      "optionalToolLimit": "Bashgitdenied butcompleteverifiedpatch/mandatoryReadpolicies/code/images available/actuallyread; no deniedrequiredinputs",
+      "dispositions": [
+        {
+          "finding": 1,
+          "status": "accepted/repaired",
+          "verification": "ExplicitnativeUIcopymodule requirement; nine dreamsign-prefixedmessages/formatters inexistingJSM, exact English/formatsemantics mechanicallypreserved, alloldkeys read-only. VM/screen/optional actionlabels consumeonlynewentries."
+        },
+        {
+          "finding": 2,
+          "status": "accepted/repaired",
+          "verification": "Actualearlytutorialcopyreturn bypassedsharedscopedErrorBoundary; moveexistingownedcopybranchinside withpermissionseq/index suffixresetkey. Controlledmockthrow escapedoldroute1failure12controls; nowcontainment/logscope/resume proven withinexisting13casefile. NormalhealthyDOM/route same. Nativeeditor remainsunexposed, no newnativeclaim."
+        },
+        {
+          "finding": 3,
+          "status": "accepted/repaired",
+          "verification": "Fourordinalcontains UIlabelwording asserts removed; physicalcallback/datahooks, distinctnonemptyallcopy/replacementnames kept. No goldenUIstrings; owning3cases pass."
+        }
+      ],
+      "candidate": "01a13b09-66d3-7c70-9dd9-2d910f5f80b8 canceled/notauthorized beforechanges",
+      "followup": "Freshnormalotherfamily exactcurrentrepairrange4c258\u2192amendedsource reviewpending; priorfullcore envelope andnewreview required."
+    },
+    {
+      "receipt": "263-final-repair-review-receipt.json",
+      "head": "2fb8458a818b8d2548186d826ce5471beb38ee60",
+      "repairBase": "4c258be78f2caa2b3fad7d1322597fc1d047eec9",
+      "originalBase": "e75c54a03294e47b5380a39f014c0e7629aa95d3",
+      "seconds": 129.88459170798887,
+      "model": "claude-opus-5-5",
+      "codePolicyComplete": true,
+      "completeReads": "641linepatchEOF/all7fullchangedfiles/all5fullpolicies andsurrounds, parenthash/snapshot/teardownproof",
+      "findings": [
+        {
+          "finding": 1,
+          "status": "accepted/fixed/verified",
+          "verification": "Onlytestgap: samecopy index andpermissionseq transitions afterrendererror andactualfallback notcovered. Existingonecase nowasserts fallback/indexreset/seqreset/normalresume. Droppingonlyindex andonlyseq separately failsoneintendedobservableDOMassert with12controlspassing, exactproductionrollback, restored13casespass. All2469otherfunctionalfiles/1572targets identicaltoreviewedproduction; no new productionreviewneeded for this coverage-onlyfix."
+        }
+      ],
+      "verdict": "No correctness/architecture/accessibility/brittle-testdefect; alladvisoryfindings disposed"
+    }
+  ]
+}

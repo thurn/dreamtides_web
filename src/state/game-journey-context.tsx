@@ -217,6 +217,10 @@ export function GameJourneyProvider({
         dispatch(actions.setDeckEntryType(entryId, typeChange)),
       changeDeckEntryType: (entryId, typeChange) =>
         dispatch(actions.setDeckEntryType(entryId, typeChange)),
+      resolveAfterBattleDreamsign: (siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, offeredDreamsignId, purgeIndex) =>
+        dispatch(actions.resolveAfterBattleDreamsign(siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, offeredDreamsignId, purgeIndex)),
+      resolveDreamsignCopy: (sourceDreamsignId, heldIndex, choiceIndex, permissionSeq, targetHeldIndex, expectedTargetDreamsignId) =>
+        dispatch(actions.resolveDreamsignCopy(sourceDreamsignId, heldIndex, choiceIndex, permissionSeq, targetHeldIndex, expectedTargetDreamsignId)),
       resolveJourneyTransfiguration: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>
         dispatch(actions.resolveJourneyTransfiguration(siteId, dreamsignId, heldIndex, choiceIndex, entryIds)),
       resolveJourneyPurge: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>

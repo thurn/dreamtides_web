@@ -1,5 +1,14 @@
-/** Player-facing journeySites copy shared by the site builders. */
+/** Player-facing journey copy shared by screen builders and Cumulus controls. */
 export const JOURNEY_SITE_MESSAGES = {
+  dreamsignCopyTitle: "Become a Copy",
+  dreamsignCopyInstruction: "Choose another Dreamsign you own.",
+  dreamsignOfferTitle: "A Dreamsign Awaits",
+  dreamsignOfferInstruction: "Choose a Dreamsign to gain.",
+  dreamsignSelectedGain: (name: string) => `You will gain ${name}.`,
+  dreamsignReplaceInstruction: "Choose a Dreamsign to replace.",
+  dreamsignKeep: "Keep Your Dreamsigns",
+  dreamsignCopyFromSlot: (name: string, heldIndex: number) => `Copy ${name} from slot ${String(heldIndex + 1)}`,
+  dreamsignReplaceInSlot: (name: string, heldIndex: number) => `Replace ${name} in slot ${String(heldIndex + 1)}`,
   randomTransfigurationTitle: "Transfigure Cards",
   randomTransfigurationInstruction: (count: number) => `You may apply a random transfiguration to up to ${String(count)} cards after this battle.`,
   continue: "Continue",

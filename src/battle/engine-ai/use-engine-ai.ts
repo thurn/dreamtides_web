@@ -24,6 +24,7 @@ function browserPolicyWorker(): PolicyWorker {
 
 export function useEngineAi(policy: PolicyId, enabled = true): void {
   const state = useGameState();
+  const runnable = enabled && !(state.journey.screen.type === "journeyDreamsign" && state.journey.screen.choice.kind === "copy");
   const actions = useActions();
   const clientId = useClientId();
   const engine = getBattleInitProvider()?.engine ?? null;
@@ -34,7 +35,7 @@ export function useEngineAi(policy: PolicyId, enabled = true): void {
   const [driver, setDriver] = useState<EngineAiDriver | null>(null);
 
   useEffect(() => {
-    if (!enabled || engine === null || engineInit === null || battleId === null) return undefined;
+    if (!runnable || engine === null || engineInit === null || battleId === null) return undefined;
     const created = new EngineAiDriver({
       side: "enemy",
       policy,
@@ -62,9 +63,9 @@ export function useEngineAi(policy: PolicyId, enabled = true): void {
     return () => {
       created.dispose();
     };
-  }, [actions, actor, battleId, engine, engineInit, policy, enabled]);
+  }, [actions, actor, battleId, engine, engineInit, policy, runnable]);
 
   useEffect(() => {
-    driver?.update(state);
-  }, [driver, state]);
+    if (runnable) driver?.update(state);
+  }, [driver, state, runnable]);
 }

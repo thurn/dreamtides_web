@@ -28,6 +28,7 @@ export interface ImportedJourneySave {
 }
 
 const JOURNEY_SCREEN_TYPES = [
+  "journeyDreamsign",
   "journeyPurge",
   "journeyTransfiguration",
   "journeyStart",

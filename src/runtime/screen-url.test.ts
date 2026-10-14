@@ -4,7 +4,7 @@
 import { describe, expect, it } from "vitest";
 import {
   testDreamscapeArtKey,
-  testDreamscapeId,
+  testDreamscapeId, testDreamsignId,
 } from "../types/test-identities";
 import type { DreamscapeArtCatalog } from "../data/dreamscapes";
 import { testJourneyState } from "../testing/journey-genesis";
@@ -118,6 +118,18 @@ describe("screen-url", () => {
           ART_CATALOG,
         ),
       ).toBe("/failed");
+    });
+
+    it("maps a suspended choice to its exact continuation path", () => {
+      const base = testJourneyState(), source = testDreamsignId("url-source");
+      const suspended: JourneyState = { ...base, screen: { type: "journeyDreamsign", choice: { kind: "copy", sources: [{ dreamsignId: source, heldIndex: 1 }], heldIds: [testDreamsignId("url-target"), source], index: 0, permissionSeq: 1, continuation: { type: "journeyFailed" }, suspendedBattle: null } } };
+      expect(screenToJourneyPath(suspended, ART_CATALOG)).toBe("/failed");
+    });
+
+    it.each(["atlas", "journeyComplete", "journeyFailed"] as const)("reflects an earned Dreamsign choice before returning to %s", (returnTo) => {
+      const base = testJourneyState(), source = testDreamsignId("url-earned-source"), siteId = parseSiteId("url-earned-site");
+      const earned: JourneyState = { ...base, screen: { type: "journeyDreamsign", choice: { kind: "afterBattle", siteId, sources: [{ kind: "dreamsign", dreamsignId: source, heldIndex: 0, earnedSeq: 1, offerCount: 3, offeredDreamsigns: [], remainingPoolIds: [] }], index: 0, returnTo } } };
+      expect(screenToJourneyPath(earned, ART_CATALOG)).toBe(`/dreamsign/${siteId}`);
     });
 
     it("keys the dreamscape screen by the layer and dreamscape id", () => {

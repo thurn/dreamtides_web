@@ -11,6 +11,7 @@ describe("screenFor", () => {
   it.each<NonSiteScreen>([
     { type: "journeyPurge", choice: { kind: "essenceSite", siteId: parseSiteId("essence"), dreamsignId: testDreamsignId("source"), heldIndex: 0, count: 2 } },
     { type: "journeyTransfiguration", choice: { kind: "afterBattle", siteId: parseSiteId("battle"), sources: [{ kind: "transfiguration", dreamsignId: testDreamsignId("source"), heldIndex: 0, maxCount: 3 }], index: 0, returnTo: "atlas" } },
+    { type: "journeyDreamsign", choice: { kind: "copy", sources: [{ dreamsignId: testDreamsignId("source"), heldIndex: 1 }], index: 0, permissionSeq: 1, heldIds: [testDreamsignId("target"), testDreamsignId("source")], continuation: { type: "journeyStart" }, suspendedBattle: null } },
     { type: "journeyStart" },
     { type: "dreamscape" },
     { type: "atlas" },

@@ -1,3 +1,7 @@
+import red, { journeyOnGainEffect as redEffect } from "../../content/dreamsigns/red-cheese-7e8c86cc";
+import rat, { journeyOnGainEffect as ratEffect } from "../../content/dreamsigns/white-rat-ab1da9d3";
+import doll, { journeyOnGainEffect as dollEffect } from "../../content/dreamsigns/voodoo-doll-0df9d72c";
+import { journeyOnGain, prepareJourneyOnGain, finishJourneyOnGain } from "./journey-on-gain";
 import raven, { journeyDeckEntryEffect as ravenEffect } from "../../content/dreamsigns/raven-skull-31df4c62";
 import acorn, { journeyDeckEntryEffect as acornEffect } from "../../content/dreamsigns/brown-acorn-9f34b5f6";
 import crystal, { journeyDeckEntryEffect as crystalEffect } from "../../content/dreamsigns/blue-crystal-c2af5460";
@@ -35,6 +39,7 @@ import type { GameplayEventType } from "../events";
  */
 export interface JourneyModifierDefinition {
   readonly dreamsignId: DreamsignId;
+  readonly journeyOnGain?: import("../../types/journey").JourneyOnGainEffect;
   readonly journeyDeckEntry?: import("../../types/journey").JourneyDeckEntryEffect;
   readonly journeySites?: JourneySitesEffect;
   readonly journeyDraft?: JourneyDraftEffect;
@@ -71,6 +76,8 @@ export interface JourneyModifierDefinition {
       readonly nodeId?: AtlasNodeId;
       readonly beforeCardId?: CardId;
       readonly afterCardId?: CardId;
+      readonly offeredDreamsignIds?: readonly DreamsignId[];
+      readonly drawIndices?: readonly number[];
       readonly incomingDreamsignId?: DreamsignId;
       readonly purges?: readonly JourneyPurgeOccurrence[];
       readonly transfigurations?: readonly { readonly entryId: import("../../types/identifiers").DeckEntryId; readonly cardId: CardId; readonly type: import("../../types/journey").TransfigurationType }[];
@@ -82,6 +89,8 @@ export interface JourneyModifierDefinition {
 export interface JourneyModifierRegistry {
   lookup(dreamsignId: DreamsignId): JourneyModifierDefinition | undefined;
   apply(input: {
+    dreamsignGains?: readonly import("../../types/journey").JourneyDreamsignGain[];
+    battleBinding?: import("../../types/journey").JourneySuspendedBattle | null;
     before: JourneyState;
     journey: JourneyState;
     eventType: GameplayEventType;
@@ -118,12 +127,12 @@ export function createJourneyModifierRegistry(
   const lookup = (dreamsignId: DreamsignId) => byId.get(dreamsignId);
   return Object.freeze({
     lookup,
-    apply({ before, journey, eventType, seq, random, transfigurations, siteId, purges }) {
+    apply({ before, journey, eventType, seq, random, transfigurations, siteId, purges, dreamsignGains = [], battleBinding = null }) {
       const logRecords: ReducerLogRecord[] = [];
       let next = journey;
       // Fixed post-domain holdings; local physical occurrence cursors preserve
       // once-per-copy reactions without reconsidering an older failed threshold.
-      const held = journey.dreamsigns.map(({ id }, heldIndex) => ({ id, heldIndex, definition: byId.get(id) }));
+      const held = next.dreamsigns.map(({ id }, heldIndex) => ({ id, heldIndex, definition: byId.get(id) }));
       const entrySources = held.filter((source) => source.definition?.journeyDeckEntry !== undefined);
       const transformed = [...transfigurations];
       const consumed = new Map<number, Set<import("../../types/identifiers").DeckEntryId>>();
@@ -139,6 +148,17 @@ export function createJourneyModifierRegistry(
         next = applied.journey;
         return true;
       };
+      // Prohibited initial additions are excluded before acquisition effects
+      // measure the deck. Positive observers retain their ordinary wave order.
+      const initialProhibitions = entrySources.filter((item) => item.definition!.journeyDeckEntry!.kind === "preventNightmare");
+      if (initialProhibitions.length > 0 && eventType !== "START_JOURNEY") {
+        const initialGains = journeyDeckEntryGains(before, next);
+        for (const source of initialProhibitions) invoke(source, initialGains);
+      }
+      const acquisition = prepareJourneyOnGain({ before, journey: next, gains: dreamsignGains, lookup, seq, random, siteId });
+      next = acquisition.journey;
+      logRecords.push(...acquisition.logRecords);
+      transformed.push(...acquisition.transfigurations);
       const gainWave = (previous: JourneyState) => {
         if (entrySources.length === 0 || eventType === "START_JOURNEY") return;
         const gains = journeyDeckEntryGains(previous, next);
@@ -175,13 +195,16 @@ export function createJourneyModifierRegistry(
         copied = false;
         for (const source of held.filter((item) => item.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent")) copied = reactCopy(source) || copied;
       } while (copied);
-      return { journey: next, logRecords };
+      return { journey: finishJourneyOnGain(next, acquisition.copySources, seq, battleBinding), logRecords };
     },
   } satisfies JourneyModifierRegistry);
 }
 
 /** The production registry's fixed catalog registrations. */
 export const journeyModifierRegistry = createJourneyModifierRegistry([
+  journeyOnGain(parseDreamsignId(red.id), redEffect),
+  journeyOnGain(parseDreamsignId(rat.id), ratEffect),
+  journeyOnGain(parseDreamsignId(doll.id), dollEffect),
   journeyDeckEntry(parseDreamsignId(raven.id), ravenEffect),
   journeyDeckEntry(parseDreamsignId(acorn.id), acornEffect),
   journeyDeckEntry(parseDreamsignId(crystal.id), crystalEffect),

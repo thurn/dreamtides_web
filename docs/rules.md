@@ -2864,3 +2864,40 @@ can trigger an Event copy once per held source. Receiving a copy or reward that
 already carries a form provides no further transfiguration occurrence. Domain
 random draws keep their indices; modifier draws continue after the last index the
 domain consumed.
+
+## Journey Dreamsign Acquisition Effects
+
+A successful gameplay acquisition belongs to the concrete held slot it fills,
+including a replacement with the same Dreamsign identity. Preparing an offer,
+loading a journey, and converting a Dreamsign into a copy are not acquisitions.
+Initial prohibitions on card additions apply before acquisition effects measure
+or transform the deck. Acquisition effects then apply before positive journey
+observers; each observer uses the holdings after the validated operation.
+
+A random transfiguration of half your deck selects distinct eligible unformed
+entries, limited to the whole-number floor of half the total deck size. Entries
+with no applicable form are ineligible. Each selected entry receives one uniformly
+chosen applicable form and retains its physical identity and permanent changes.
+Unavailable content prevents the operation from committing. The original
+transformations provide Event-copy occurrences; their resulting copies do not
+provide further transformations.
+
+A Dreamsign that becomes a copy converts its acquired physical held slot into
+the full record of another held slot. Another slot with the same identity is a
+legal target. Conversion is mandatory when another slot exists; with no other
+slot it has a limited effect and retains its identity. Conversion supplies no
+acquisition occurrence. Its saved choice owns gameplay until resolved, preserves
+its exact continuation, and suspends any live battle without modifying that
+battle's initialization, emblems, engine state or pending prompt. A valid copy
+resolution obeys normal conflict checks and can complete while its suspended
+battle has a prompt. Other battle and journey mutations wait for the choice.
+
+Each held source that offers a Dreamsign after each battle earns its own prepared
+choice in the shared held-copy order with earned purge and transfiguration
+choices, including victory, final victory, defeat and draw. Up to the printed
+number of distinct available Dreamsigns are offered. An available choice below
+the collection limit requires one pick; at the limit the player may replace a
+held slot or keep the current collection. An empty offer permits continuing and
+provides no substitute reward. Prepared choices survive source loss and reload.
+Resolving an acquired Dreamsign's effects preserves the remaining earned queue
+and the battle's exact terminal continuation and committed rewards.

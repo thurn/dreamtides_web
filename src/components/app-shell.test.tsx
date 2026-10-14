@@ -1,5 +1,7 @@
 // @vitest-environment jsdom
 
+import type { Screen, JourneyDreamsignCopyChoice } from "../types/journey";
+import { testDreamsignId } from "../types/test-identities";
 import { act, type ReactElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -22,16 +24,21 @@ const stateMocks = vi.hoisted<{
     phase: "main" | "mainExiting" | "loading" | "tutorial" | "journey";
     journeyId: JourneyId | null;
   };
+  screen: Screen;
   battle?: { mode?: { kind: "tutorial" | "journey" } } | null;
-}>(() => ({ frontDoor: { phase: "main", journeyId: null } }));
+}>(() => ({ frontDoor: { phase: "main", journeyId: null }, screen: { type: "journeyStart" } }));
 const adapterMocks = vi.hoisted(() => ({
   mainSpeed: null as number | null,
   loadingSpeed: null as number | null,
   tutorialSpeed: null as number | null,
   tutorialDirectLive: null as boolean | null,
   tutorialVictoryPreview: null as boolean | null,
+  copyFails: null as boolean | null,
 }));
 
+vi.mock("../session/hooks", () => ({ useGameState: () => ({ journey: { screen: stateMocks.screen } }) }));
+vi.mock("../screens/cumulus_adapters/JourneyDreamsignScreenAdapter", () => ({ JourneyDreamsignScreenAdapter: () => { if (adapterMocks.copyFails) throw new Error("copy-render-failure"); return <main data-copy-permission />; } }));
+vi.mock("./CumulusJourneyChrome", () => ({ CumulusJourneyChrome: ({ children }: { children: ReactElement }) => children }));
 vi.mock("../state/front-door-context", () => ({
   useFrontDoor: () => ({ state: stateMocks.frontDoor, battle: stateMocks.battle }),
 }));
@@ -226,7 +233,7 @@ describe("FrontDoorRouter", () => {
     vi.spyOn(console, "log").mockImplementation(() => {});
     window.history.replaceState(null, "", "/main?game=room42#shared");
     stateMocks.frontDoor = { phase: "main", journeyId: null };
-    stateMocks.battle = null;
+    stateMocks.battle = null; stateMocks.screen = { type: "journeyStart" };
     for (const key of Object.keys(adapterMocks) as Array<keyof typeof adapterMocks>) {
       adapterMocks[key] = null;
     }
@@ -282,4 +289,30 @@ describe("FrontDoorRouter", () => {
     rerender(router());
     expect(adapterMocks.tutorialVictoryPreview).toBe(true);
   });
+  it("prioritizes a folded copy permission over live tutorial and resumes the tutorial route", () => {
+    stateMocks.frontDoor = { phase: "tutorial", journeyId }; stateMocks.battle = { mode: { kind: "tutorial" } };
+    const source = testDreamsignId("route-source"), target = testDreamsignId("route-target");
+    const choice: JourneyDreamsignCopyChoice = { kind: "copy", sources: [{ dreamsignId: source, heldIndex: 1 }, { dreamsignId: source, heldIndex: 2 }], index: 0, permissionSeq: 9, heldIds: [target, source, source], continuation: { type: "journeyStart" }, suspendedBattle: null };
+    stateMocks.screen = { type: "journeyDreamsign", choice };
+    const rendered = renderInCumulus(<FrontDoorRouter avatars={AVATARS} />);
+    expect(rendered.container.querySelector("[data-copy-permission]")).not.toBeNull(); expect(rendered.container.querySelector("[data-tutorial-live-battle]")).toBeNull();
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    adapterMocks.copyFails = true; rendered.rerender(<FrontDoorRouter avatars={AVATARS} />);
+    expect(rendered.container.querySelector("[data-copy-permission]")).toBeNull();
+    expect(logEvent).toHaveBeenCalledWith("error_boundary_caught", expect.objectContaining({ scope: "screen:front-door:tutorial", message: "copy-render-failure" }));
+    expect(rendered.container.querySelector('[data-testid="error-boundary-fallback"]')).not.toBeNull();
+    adapterMocks.copyFails = false;
+    stateMocks.screen = { type: "journeyDreamsign", choice: { ...choice, index: 1 } }; rendered.rerender(<FrontDoorRouter avatars={AVATARS} />);
+    expect(rendered.container.querySelector("[data-copy-permission]")).not.toBeNull();
+    expect(rendered.container.querySelector('[data-testid="error-boundary-fallback"]')).toBeNull();
+    adapterMocks.copyFails = true; rendered.rerender(<FrontDoorRouter avatars={AVATARS} />);
+    expect(rendered.container.querySelector('[data-testid="error-boundary-fallback"]')).not.toBeNull();
+    adapterMocks.copyFails = false;
+    stateMocks.screen = { type: "journeyDreamsign", choice: { ...choice, index: 1, permissionSeq: 10 } }; rendered.rerender(<FrontDoorRouter avatars={AVATARS} />);
+    expect(rendered.container.querySelector("[data-copy-permission]")).not.toBeNull();
+    expect(rendered.container.querySelector('[data-testid="error-boundary-fallback"]')).toBeNull();
+    stateMocks.screen = { type: "journeyStart" }; rendered.rerender(<FrontDoorRouter avatars={AVATARS} />);
+    expect(rendered.container.querySelector("[data-copy-permission]")).toBeNull(); expect(rendered.container.querySelector("[data-tutorial-live-battle]")).not.toBeNull();
+  });
+
 });
