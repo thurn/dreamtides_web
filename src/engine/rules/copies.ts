@@ -7,7 +7,8 @@
 import { instanceCard } from "../catalog";
 import { eventAbilities } from "../effects/abilities";
 import { chooseForCopy, purposeOf } from "../effects/interpreter";
-import { instanceOrigin } from "./activation";
+import { abilityOrigin, inPlaySources, instanceOrigin, originAbilities } from "./activation";
+import type { EventOf } from "../events";
 import type { InstanceId, Side } from "../state/ids";
 import type { HandCopyContext, Printing } from "../state/types";
 import { sidesBlindTo } from "../view/knowledge";
@@ -16,6 +17,19 @@ import { createFigments } from "./figments";
 import { addFloating } from "./floating";
 import { freeBackSlotsAfterStack } from "./timing";
 import { createInstance, instanceOf } from "./zones";
+
+type BonusFrom = NonNullable<EventOf<"cardCopied">["bonusFrom"]>;
+type CopyModifier = Omit<BonusFrom, "primary">;
+
+/** The current physical ability occurrences, captured before this attempt's choices. */
+function eventCopyModifiers(ctx: StepContext, event: boolean, side: Side): CopyModifier[] {
+  if (!event) return [];
+  return inPlaySources(ctx.state, side).flatMap(source => {
+    const origin = abilityOrigin(ctx.state, source);
+    return origin === null ? [] : originAbilities(ctx.catalog, origin).flatMap((ability, index) =>
+      ability.kind === "eventCopyModifier" ? [{ source, origin, ability: index }] : []);
+  });
+}
 
 /**
  * Copies the card `original` on the stack for `controller` (D15): the copy is
@@ -29,6 +43,16 @@ import { createInstance, instanceOf } from "./zones";
  * Returns the copy, or `null` when the original is no longer on the stack.
  */
 export function copyOnStack(ctx: StepContext, original: InstanceId, controller: Side): InstanceId | null {
+  const present = ctx.state.stack.some(item => item.kind === "card" && item.instance === original);
+  if (!present) return null;
+  const modifiers = eventCopyModifiers(ctx, instanceCard(ctx.catalog, instanceOf(ctx.state, original)).cardType === "event", controller);
+  const primary = copyStackOnce(ctx, original, controller);
+  if (primary !== null) for (const modifier of modifiers) copyStackOnce(ctx, original, controller, { primary, ...modifier });
+  return primary;
+}
+
+/** One physical copy; modifier bonuses use this same choice and occurrence path. */
+function copyStackOnce(ctx: StepContext, original: InstanceId, controller: Side, bonusFrom?: BonusFrom): InstanceId | null {
   const { state, catalog } = ctx;
   const index = state.stack.findIndex((item) => item.kind === "card" && item.instance === original);
   const item = state.stack[index];
@@ -61,7 +85,7 @@ export function copyOnStack(ctx: StepContext, original: InstanceId, controller: 
     x: item.x,
     optionalPaid: [...item.optionalPaid],
   });
-  ctx.emit({ kind: "cardCopied", side: controller, original, copy: copy.id });
+  ctx.emit({ kind: "cardCopied", side: controller, original, copy: copy.id, ...(bonusFrom === undefined ? {} : { bonusFrom }) });
   return copy.id;
 }
 
@@ -109,9 +133,16 @@ export function createCopyInHand(ctx: StepContext, of: InstanceId, side: Side, e
 
 /** Repeats a hand-copy action even after its created original has ceased. */
 export function createCapturedHandCopy(ctx: StepContext, original: InstanceId, captured: HandCopyContext, side: Side): InstanceId {
+  const modifiers = eventCopyModifiers(ctx, instanceCard(ctx.catalog, captured).cardType === "event", side);
+  const primary = copyHandOnce(ctx, original, captured, side);
+  for (const modifier of modifiers) copyHandOnce(ctx, original, captured, side, { primary, ...modifier });
+  return primary;
+}
+
+function copyHandOnce(ctx: StepContext, original: InstanceId, captured: HandCopyContext, side: Side, bonusFrom?: BonusFrom): InstanceId {
   const copy = createInstance(ctx, captured.printing, side, captured.variant, "hand");
   copy.status.ephemeral = captured.ephemeral;
   ctx.state.sides[side].hand.push(copy.id);
-  ctx.emit({ kind: "cardCopied", side, original, copy: copy.id, zone: "hand", originalHiddenFrom: [...captured.originalHiddenFrom] });
+  ctx.emit({ kind: "cardCopied", side, original, copy: copy.id, zone: "hand", originalHiddenFrom: [...captured.originalHiddenFrom], ...(bonusFrom === undefined ? {} : { bonusFrom }) });
   return copy.id;
 }

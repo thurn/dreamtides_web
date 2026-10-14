@@ -18,6 +18,7 @@
  * | `triggerQueued`, `triggerResolved` events | `engine.trigger` |
  * | a new loop on offer; `loopStarted`, `loopEnded` events | `engine.loop` |
  * | random-stream counters advanced by a step | `engine.rng`, one per stream |
+ * | a bonus-attributed `cardCopied` event | `engine.copyBonus`, with its primary, physical modifier source and captured ability origin |
  * | a `winConditionMet` event | `engine.winCondition` |
  * | a `dreamwellDrawn` event | `engine.dreamwell`, with UUID, side and energy |
  * | an `effectStarted` event whose character gains another card's abilities | `engine.abilitiesGained` |
@@ -82,6 +83,7 @@ export type EngineLogRecord =
       readonly value: Answer;
     })
   | (RecordBase & { readonly event: "engine.promptCancelled"; readonly promptId: PromptId; readonly side: Side })
+  | (RecordBase & { readonly event: "engine.copyBonus"; readonly detail: EventOf<"cardCopied"> & { readonly bonusFrom: NonNullable<EventOf<"cardCopied">["bonusFrom"]> } })
   | (RecordBase & { readonly event: "engine.trigger"; readonly detail: EventOf<"triggerQueued"> | EventOf<"triggerResolved"> })
   | (RecordBase & {
       readonly event: "engine.loop";
@@ -122,6 +124,8 @@ export function engineLogLine(record: EngineLogRecord, gameId: GameId, timestamp
 /** The record an engine event maps to, or `null` for an event the log leaves to replay. */
 export function eventLogRecord(event: EngineEvent, version: number): EngineLogRecord | null {
   switch (event.kind) {
+    case "cardCopied":
+      return event.bonusFrom === undefined ? null : { event: "engine.copyBonus", version, detail: { ...event, bonusFrom: event.bonusFrom } };
     case "triggerQueued":
     case "triggerResolved":
       return { event: "engine.trigger", version, detail: event };

@@ -899,7 +899,18 @@ Further rules:
   and reports `noLegalTarget` for a part whose targets are all illegal then.
   The copy keeps the item's `x` and
   `optionalPaid`, emits `cardCopied` instead of `cardPlayed`, and changes no
-  priority.
+  priority. A controlled in-play character, figment or emblem with
+  additionalEventCopy contributes one bonus per successful individual event-copy
+  attempt; distinct physical ability occurrences add together. The reader uses
+  current effective ability groups and captures source, origin and ability index
+  before choices. Private raw-copy helpers create the primary and bonuses without
+  applying modifiers to bonuses; ordinary cardCopied observers still match each
+  physical copy and can make fresh operations. Each bonus records bonusFrom with
+  its primary and captured modifier provenance, logged as engine.copyBonus even
+  if that source leaves later in the instruction. Separately addressed hand-output
+  cost changes exclude bonus IDs from the instruction's emitted-event slice,
+  preserving primary-only changes. This accounting is transient and reconstructed
+  by step replay.
 
 ## Triggers
 

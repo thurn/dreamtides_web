@@ -1753,13 +1753,22 @@ characters follow [Figment Copies](#figment-copies).
 
 "When you copy an event" triggers for each successful copy on the stack or
 created in a hand, by the copied card's copiable values as the copy is made.
-"It" names the original physical card. "Copy it an additional time" makes
-another copy in the same destination. A hand copy keeps that copy action's
+"It" names the original physical card. An in-play controlled source with
+"When you copy an event, copy it an additional time" modifies each successful
+individual copy attempt: the requested copy gains one additional physical copy
+for each currently active occurrence of that ability. These modifiers contribute
+additively once to that attempt, including when a fixed count requests several
+independent copies. They do not apply again to its bonus copies. A copy-operation modifier is a
+passive ability, not a triggered or activated ability. Suppressing triggered
+abilities does not suppress it; losing the modifier ability removes its
+contribution. Each copy has
+independent legal modes and targets and uses the same destination. A hand copy keeps that copy action's
 Ephemeral flag and the original's captured copiable printing and variant,
 even if a created original has ceased to exist. Separately addressed changes,
 such as making one created copy cost 0●, affect only that copy. Additional
-copies trigger copy abilities, including the ability making them; see
-[Mandatory Loops](#mandatory-loops).
+copies are successful copy occasions observed by ordinary triggered abilities.
+A trigger that copies a card makes a fresh copying attempt, with its applicable
+modifiers, and can produce a genuine [Mandatory Loop](#mandatory-loops).
 
 **Gain control** — Move an opponent's character to the leftmost open back
 position on the receiving side. It preserves its state and is exhausted through

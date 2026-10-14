@@ -45,9 +45,14 @@ export const modifyCardCostPrimitive = definePrimitive<ModifyCardCostNode>({
 /** The cards `effect` puts into a hand as it resolves, in the order they arrive. */
 function movedIntoHand(ctx: StepContext, effect: EffectNode, env: EffectEnv): InstanceId[] {
   const since = ctx.state.clock;
+  const eventStart = ctx.events.length;
   env.run(effect);
+  // Separately addressed cost changes apply to requested outputs, not the
+  // additional copies an operation modifier produced alongside them.
+  const bonuses = new Set(ctx.events.slice(eventStart).flatMap(event =>
+    event.kind === "cardCopied" && event.bonusFrom !== undefined ? [event.copy] : []));
   return Object.values(ctx.state.instances)
-    .filter((instance) => instance.enteredZoneAt > since && instance.zone === "hand")
+    .filter((instance) => instance.enteredZoneAt > since && instance.zone === "hand" && !bonuses.has(instance.id))
     .sort((a, b) => a.enteredZoneAt - b.enteredZoneAt)
     .map((instance) => instance.id);
 }

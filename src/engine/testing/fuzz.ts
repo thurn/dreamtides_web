@@ -485,6 +485,10 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool, o
               const printing = observed.instances[event.instance]?.printing;
               if (printing?.kind === "card" && printing.cardId === target.uuid) coverage.exercised += 1;
             }
+            if ((target.kind === "avatar" || target.kind === "dreamsign") && event.kind === "cardCopied" && event.bonusFrom !== undefined) {
+              const { source, origin } = event.bonusFrom;
+              if (typeof source !== "string" && source.kind === target.kind && origin.kind === target.kind && origin.id === target.uuid) coverage.exercised += 1;
+            }
             if ((target.kind === "avatar" || target.kind === "dreamsign") &&
                 (event.kind === "abilityActivated" || (event.kind === "triggerResolved" && event.applied))) {
               const source = event.source;

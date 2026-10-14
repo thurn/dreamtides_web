@@ -1,0 +1,5 @@
+# hv-umm2.654 qualifications
+
+The current retained hand-copy primitive passes its effect controller rather than retained copier for an opponent-controlled observer. Native hv-8ddd owns that caller and the related continuation-side proof. Those bodies are read-only here; this change preserves the public destination argument and does not claim the peer defect repaired.
+
+A saved queued or suspended Gem trigger authored under the self-recursive interpretation refers to an ability whose current form carries no effect. The existing fold error boundary clears the failed in-flight step atomically and retains committed state, including the stale queued trigger. The saved battle cannot advance under the current catalog: a normal action bounces and retrying the automatic trigger errors again. A public synthetic legacy-origin witness verifies the retained queue and repeated error boundary. Current-rule saves replay exactly. Historical identical erroneous-rule replay, migration and recovery are not promised under the explicit semantic correction.

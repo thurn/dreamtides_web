@@ -116,6 +116,8 @@ export interface ArmedTriggers {
 export interface StepContext {
   readonly state: BattleState;
   readonly catalog: EngineCatalog;
+  /** Events already emitted by this private step, in causal order; replay reconstructs them. */
+  readonly events: readonly EngineEvent[];
   /** Optional presentation observation, forwarded by nested step replay. */
   readonly observeEvent?: EventObserver;
   /**

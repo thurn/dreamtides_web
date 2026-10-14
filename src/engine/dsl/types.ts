@@ -794,10 +794,16 @@ export interface WinConditionAbility {
   readonly condition: Condition;
 }
 
+/** One additional physical event copy per successful copy attempt, from an in-play controlled source. */
+export interface EventCopyModifierAbility {
+  readonly kind: "eventCopyModifier";
+}
+
 export type Ability =
   | { readonly kind: "event"; readonly effect: Effect }
   | StaticAbility
   | WinConditionAbility
+  | EventCopyModifierAbility
   | AdditionalCostAbility
   | ReclaimAbility
   | { readonly kind: "keyword"; readonly keyword: Keyword }

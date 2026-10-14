@@ -24,6 +24,7 @@ import type {
   CountedZone,
   EnergyCost,
   EnergyXCost,
+  EventCopyModifierAbility,
   FunctionalZone,
   Keyword,
   MovedCardRef,
@@ -48,6 +49,11 @@ import type {
   ZoneRandomSpec,
   ZoneTopSpec,
 } from "./types";
+
+/** An in-play controlled source adds one copy to each successful event-copy attempt. */
+export function additionalEventCopy(): EventCopyModifierAbility {
+  return { kind: "eventCopyModifier" };
+}
 
 export function event(effect: Effect): Ability {
   return { kind: "event", effect };
