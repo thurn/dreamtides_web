@@ -1,0 +1,1324 @@
+{
+  "bead": "hv-edk7",
+  "base": "84ee36c672ab8fb4dbf29bbcc893e36b833cb170",
+  "dispatch": "2026-10-14T12:53:22.476287+00:00",
+  "evidenceCutoff": "2026-10-14T14:34:17.588195+00:00",
+  "elapsedThroughCutoffS": 6055.111908,
+  "stage": "Ready for one local Conventional Commit at actual pre-Git evidence cutoff. All source-stage, exact historical replay, two live human QA cells and separated outer-heavy full/default200 checks passed and own resources settled. Root alone performs cold review/certified delivery.",
+  "gitCompletion": "UNKNOWN at actual pre-Git evidence cutoff; independently recorded external actual Git receipt supplies completion time, hash, committed blob manifest and complete dispatch-to-Git interval. No future Git result is assumed.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful full-review test step starting2026-10-14T14:26:42.761Z actual1-minute load3.51123046875; full outer validation wall95.23905475s includes any lock/setup wait, not separately measuredCPU or wait."
+      }
+    }
+  },
+  "sourceAdmission": {
+    "initialProposalSHA": "bf2915d0ecb7e438060036d97f847bf32ee3197d9997a9a3e4e3b78d2c9701ec",
+    "orphanDeltaSHA": "e7359efcc9f3fbb55c606c4b254d764716f81b849b0c0466579bc42bba59f857",
+    "extraAuthority": "Root same-task justiciar inspected public parser/normal Day-Dusk-Night sequence proving a visible blocker remains valid after its old challenger association becomes hidden/ceased. Replaced the initial agent-created pure-view-only restriction with exact ChallengeState field, laneRoles membership, designateBlockers reset and isChallengeState optional typed validation. User privacy/role/UUID/knowledge invariants and full acceptance preserved. Native source-write-admission.json and orphan-source-write-admission.json precede tracked writes."
+  },
+  "proofs": {
+    "original": "Immutable original baf824 source/catalog reconstructs fuzz43 resolveTop301,71actions/31prompts; current engine with same exact init/actions/answers reproduces both views exposing i20 only via challenge.challengers. Default current catalog one-game pass is qualified input difference, not original repair evidence.",
+    "fixedInline": {
+      "actions": 71,
+      "steps": 301,
+      "finalHash": "0b3ac83f841957",
+      "expectedCurrentHash": "0b3ac83f841957",
+      "sameAuthoritativeStateBytes": true,
+      "eventsHash": 1667376948651622,
+      "expectedHistoricalEventsHash": 1667376948651622,
+      "events": 597,
+      "leaks": []
+    },
+    "fixedFold": {
+      "actions": 71,
+      "answered": 31,
+      "finalHash": "0b3ac83f841957",
+      "pendingLeakCount": 0,
+      "committedLeaks": [],
+      "challenge": {
+        "challengers": [
+          "i61",
+          "i20"
+        ],
+        "blockers": {}
+      }
+    },
+    "legacy": "Public normal synthetic return-shuffle-move produces a still-visible blocker of another live challenger; parseEngineBattleFold accepts legacy optional-memory absence. Both oriented permanent public contracts assert actual blocker characteristic, viewer legal actions and lane scoring, repeated sampling/reload. Real ceased figment original-key cases assert same public role.",
+    "counterfactual": "Restoring raw challenge view copy makes6focused synthetic privacy cases fail; fixed whole-file bytes restored in finally and SHA verified.",
+    "fixtureCorrections": "Initial own answer observer handled chooseCards but omitted actual chooseTargets, fixed only in private fixture; opponent unseen hand action IDs are not a viewer contract, corrected to each viewer own legal actions. Visible summoner restores from both hidden zones because anonymous remembered members do not disclose hand versus deck location. Failed attempts retained; no production assertion weakening."
+  },
+  "validation": {
+    "schema-final-source": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 25891,
+      "pgid": 25891,
+      "start": "2026-10-14T13:43:32.249991+00:00",
+      "end": "2026-10-14T13:43:32.359431+00:00",
+      "wallS": 0.10947158400085755,
+      "exit": 0,
+      "stdoutSHA": "0efbd41c441af2f0299b2ff3f73c035ab30303ad028f5a5f9355ef0198f642bc",
+      "settled": true
+    },
+    "fixed-historical-fold": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hiddenIdentity-edk7/fixed-current-fold-replay.mts"
+      ],
+      "pid": 81765,
+      "pgid": 81765,
+      "start": "2026-10-14T13:31:48.977128+00:00",
+      "end": "2026-10-14T13:31:50.759737+00:00",
+      "wallS": 1.7826443329977337,
+      "exit": 0,
+      "stdoutSHA": "fe38600e645370429004bbb05f81d385660604e5aa79c12ac9f312fd15a14fa6",
+      "settled": true
+    },
+    "focused-controls": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/view",
+        "src/engine/fold",
+        "src/engine/rules/challenge.test.ts",
+        "src/engine/policy/policy.test.ts",
+        "src/engine/policy/policy-worker.test.ts"
+      ],
+      "pid": 28956,
+      "pgid": 28956,
+      "start": "2026-10-14T13:29:34.541360+00:00",
+      "end": "2026-10-14T13:29:37.030569+00:00",
+      "wallS": 2.489241250004852,
+      "exit": 0,
+      "stdoutSHA": "0429fb976d51b65194e3cf6e4d3ad78261813a6f6a8c9bc743da6752a7692bb5",
+      "settled": true
+    },
+    "knip-first": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 5410,
+      "pgid": 5410,
+      "start": "2026-10-14T13:33:56.738865+00:00",
+      "end": "2026-10-14T13:34:02.074643+00:00",
+      "wallS": 5.335823500005063,
+      "exit": 0,
+      "stdoutSHA": "27071be85a97d64841c2f60008d67a907f7086296eb5619cdf59e20213ebe1e6",
+      "settled": true
+    },
+    "focused-new-first": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/challenge-privacy.test.ts"
+      ],
+      "pid": 61765,
+      "pgid": 61765,
+      "start": "2026-10-14T13:25:03.722272+00:00",
+      "end": "2026-10-14T13:25:07.450913+00:00",
+      "wallS": 3.728658624982927,
+      "exit": 1,
+      "stdoutSHA": "b872c7cc70ef1099651d17e0ae46e19e3662a595fd2b3cc12ea877197755103b",
+      "settled": true
+    },
+    "fixed-historical-inline": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hiddenIdentity-edk7/fixed-historical-inline.mts"
+      ],
+      "pid": 73938,
+      "pgid": 73938,
+      "start": "2026-10-14T13:31:46.575780+00:00",
+      "end": "2026-10-14T13:31:48.949714+00:00",
+      "wallS": 2.373975499998778,
+      "exit": 0,
+      "stdoutSHA": "f277a65f8dc929e5a1813f8030441a04f1bc4ccc92fd2e80f8c736c0fcb295cc",
+      "settled": true
+    },
+    "historical-current-replay": {
+      "argv": [
+        "/Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hiddenIdentity-edk7/historical-current-replay.mts"
+      ],
+      "pid": 57040,
+      "pgid": 57040,
+      "start": "2026-10-14T12:58:41.668600+00:00",
+      "end": "2026-10-14T12:58:44.995806+00:00",
+      "wallS": 3.3272140840126667,
+      "exit": 0,
+      "stdoutSHA": "e7961cf0c2bed25cd4b112dbdee7c022f8f241f835918cade61f9e981536cbc1",
+      "settled": true
+    },
+    "review-first": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 69916,
+      "pgid": 69916,
+      "start": "2026-10-14T13:33:44.136027+00:00",
+      "end": "2026-10-14T13:34:45.277478+00:00",
+      "wallS": 61.14135887500015,
+      "exit": 2,
+      "stdoutSHA": "38988242507c2ed89a12092243a5dfcb7032f02e677b79ac8f20e4751e039145",
+      "settled": true
+    },
+    "focused-new-public-actions-fixed": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/view/challenge-privacy.test.ts"
+      ],
+      "pid": 65350,
+      "pgid": 65350,
+      "start": "2026-10-14T13:27:30.668920+00:00",
+      "end": "2026-10-14T13:27:31.949980+00:00",
+      "wallS": 1.2811137499811593,
+      "exit": 1,
+      "stdoutSHA": "590f3f91a681b8f01d00c6fe85746c549adcdc4a2d10d658429c29817aad0ac1",
+      "settled": true
+    },
+    "focused-new-reentry-domain-fixed": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/view/challenge-privacy.test.ts"
+      ],
+      "pid": 25003,
+      "pgid": 25003,
+      "start": "2026-10-14T13:28:33.091112+00:00",
+      "end": "2026-10-14T13:28:34.586945+00:00",
+      "wallS": 1.4958710419887211,
+      "exit": 0,
+      "stdoutSHA": "f744afadbfeb73d32d34f7bde9f4f452c0bc03448a868682360fb74deee1cfaa",
+      "settled": true
+    },
+    "counterfactual-raw-challenge-view": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/view/challenge-privacy.test.ts",
+        "-t",
+        "anonymizes|retains actual visible blocking"
+      ],
+      "pid": 28630,
+      "pgid": 28630,
+      "start": "2026-10-14T13:29:20.131549+00:00",
+      "end": "2026-10-14T13:29:21.128986+00:00",
+      "wallS": 0.9974655829719268,
+      "exit": 1,
+      "stdoutSHA": "10503fa02fff227c38be61bbf146777aad788ea75dc135775736ada3500b2c8b",
+      "settled": true
+    },
+    "current-fuzz43": {
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--seed",
+        "fuzz",
+        "--first",
+        "43",
+        "--games",
+        "1",
+        "--interactive-every",
+        "10"
+      ],
+      "pid": 51585,
+      "pgid": 51585,
+      "start": "2026-10-14T12:56:09.826931+00:00",
+      "end": "2026-10-14T12:56:13.700119+00:00",
+      "wallS": 3.8732242499827407,
+      "exit": 0,
+      "stdoutSHA": "1a5a5d4d6198a5b5d65aceae20d08ebb139d398cd574965cb7812a54afb0bb77",
+      "settled": true
+    },
+    "review-type-lint-fixed": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 29365,
+      "pgid": 29365,
+      "start": "2026-10-14T13:35:22.931114+00:00",
+      "end": "2026-10-14T13:36:33.444719+00:00",
+      "wallS": 70.50565483400715,
+      "exit": 0,
+      "stdoutSHA": "b6c0b49e658a6d6e34b5b88a25310c1ebf5839abb5c8361e7a176709818a56ad",
+      "settled": true
+    },
+    "legacy-orphan-blocker": {
+      "argv": [
+        "/Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hiddenIdentity-edk7/legacy-orphan-blocker.mts"
+      ],
+      "pid": 29967,
+      "pgid": 29967,
+      "start": "2026-10-14T13:10:05.400725+00:00",
+      "end": "2026-10-14T13:10:06.696330+00:00",
+      "wallS": 1.2956442499998957,
+      "exit": 1,
+      "stdoutSHA": "fc1d7be56c84094ae2378419692e191cc4a6ceafd277a02c7b6f6764c9ac27f1",
+      "settled": true
+    },
+    "legacy-orphan-blocker-fixed-observer": {
+      "argv": [
+        "/Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hiddenIdentity-edk7/legacy-orphan-blocker.mts"
+      ],
+      "pid": 32193,
+      "pgid": 32193,
+      "start": "2026-10-14T13:10:39.421470+00:00",
+      "end": "2026-10-14T13:10:40.516260+00:00",
+      "wallS": 1.0948185420129448,
+      "exit": 1,
+      "stdoutSHA": "6bd3641eeb50dc64bb6053e7a0a19c5cce6af26c7685ee2c482f71a23abc6ca8",
+      "settled": true
+    },
+    "knip-final-source": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 25499,
+      "pgid": 25499,
+      "start": "2026-10-14T13:43:26.619839+00:00",
+      "end": "2026-10-14T13:43:32.223835+00:00",
+      "wallS": 5.603957249986706,
+      "exit": 0,
+      "stdoutSHA": "8b9b0ebcce3ee305baaa56af3076c704c205909d637ca7a697082d4ab970485c",
+      "settled": true
+    },
+    "focused-new-prompt-fixed": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/view/challenge-privacy.test.ts"
+      ],
+      "pid": 63657,
+      "pgid": 63657,
+      "start": "2026-10-14T13:26:18.092632+00:00",
+      "end": "2026-10-14T13:26:19.451115+00:00",
+      "wallS": 1.3585180410009343,
+      "exit": 1,
+      "stdoutSHA": "a64b07a9a54b9173197f79042465da02497a9c8a3d3b6bd75273b16584cb6aa5",
+      "settled": true
+    },
+    "retained-command-fixed": {
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--seed",
+        "fuzz",
+        "--first",
+        "43",
+        "--games",
+        "1",
+        "--interactive-every",
+        "10"
+      ],
+      "pid": 25903,
+      "pgid": 25903,
+      "start": "2026-10-14T13:43:32.385452+00:00",
+      "end": "2026-10-14T13:43:35.010975+00:00",
+      "wallS": 2.6255201250023674,
+      "exit": 0,
+      "stdoutSHA": "7a3830ab10b3571633b0a027fe2cf03c423d52291a78fa3346bf96039a1bf523",
+      "settled": true
+    },
+    "current-fold-replay": {
+      "argv": [
+        "/Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hiddenIdentity-edk7/current-fold-replay.mts"
+      ],
+      "pid": 96030,
+      "pgid": 96030,
+      "start": "2026-10-14T13:03:18.442175+00:00",
+      "end": "2026-10-14T13:03:20.298357+00:00",
+      "wallS": 1.8562054169888142,
+      "exit": 0,
+      "stdoutSHA": "aad5481bc953165e1164e7031bf3b9760c8b5df2ddc07aa37a7d481d1fb6f6d2",
+      "settled": true
+    },
+    "legacy-orphan-blocker-forced-choice": {
+      "argv": [
+        "/Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hiddenIdentity-edk7/legacy-orphan-blocker.mts"
+      ],
+      "pid": 34617,
+      "pgid": 34617,
+      "start": "2026-10-14T13:10:57.392829+00:00",
+      "end": "2026-10-14T13:10:58.455512+00:00",
+      "wallS": 1.0627132919908036,
+      "exit": 0,
+      "stdoutSHA": "e4f721b1995c05c700804eb0732a31cde5dae28555916c4e356828fc73db0c8c",
+      "settled": true
+    },
+    "qa-driver-syntax": {
+      "argv": [
+        "node",
+        "--check",
+        "artifacts/qa/hv-edk7/challenge-privacy-judged.mjs"
+      ],
+      "pid": 51976,
+      "pgid": 51976,
+      "start": "2026-10-14T14:09:43.689507+00:00",
+      "end": "2026-10-14T14:09:43.746632+00:00",
+      "wallS": 0.05716537497937679,
+      "exit": 0,
+      "stdoutSHA": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "settled": true
+    },
+    "qa-runtime-one": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root/artifacts/qa/hv-edk7/challenge-privacy-judged.mjs",
+        "--bead",
+        "hv-edk7",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "pid": 13872,
+      "pgid": 13872,
+      "start": "2026-10-14T14:12:59.210247+00:00",
+      "end": "2026-10-14T14:14:17.058497+00:00",
+      "wallS": 77.84765391700785,
+      "exit": 1,
+      "stdoutSHA": "62e292267f6935972f6298a28db868e94081bff322f65588f3358304fe7b926c",
+      "settled": true
+    },
+    "qa-driver-inline-syntax": {
+      "argv": [
+        "node",
+        "--check",
+        "artifacts/qa/hv-edk7/challenge-privacy-judged.mjs"
+      ],
+      "pid": 93649,
+      "pgid": 93649,
+      "start": "2026-10-14T14:19:00.600463+00:00",
+      "end": "2026-10-14T14:19:00.641384+00:00",
+      "wallS": 0.04095349999261089,
+      "exit": 0,
+      "stdoutSHA": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "settled": true
+    },
+    "final-review-full": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 41214,
+      "pgid": 41214,
+      "start": "2026-10-14T14:26:18.606754+00:00",
+      "end": "2026-10-14T14:27:53.846884+00:00",
+      "wallS": 95.23905474998173,
+      "exit": 0,
+      "stdoutSHA": "df8a6114d32057bdfa75c20eb43a47167101029a852ba2ddc6bb6cea66c8299d",
+      "settled": true
+    },
+    "final-fuzz-200": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "pid": 75880,
+      "pgid": 75880,
+      "start": "2026-10-14T14:28:05.094423+00:00",
+      "end": "2026-10-14T14:31:48.551263+00:00",
+      "wallS": 223.45428529099445,
+      "exit": 0,
+      "stdoutSHA": "d773e4faed019eb905d064408fb40d1af870fb640db999372b666c8ac42dce4c",
+      "settled": true
+    },
+    "qa-runtime-two": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root/artifacts/qa/hv-edk7/challenge-privacy-judged.mjs",
+        "--bead",
+        "hv-edk7",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "pid": 35040,
+      "pgid": 35040,
+      "start": "2026-10-14T14:22:11.727999+00:00",
+      "end": "2026-10-14T14:22:40.334991+00:00",
+      "wallS": 28.60667041700799,
+      "exit": 0,
+      "stdoutSHA": "42c8d26e69cba4ca7bd0d189b5be3031c7d6ba468060f7140daedc9f9865d824",
+      "settled": true,
+      "identityCaptures": {
+        "server": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hiddenIdentity-edk7/qa-runtime-two.server-identity.json",
+          "source": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "sha256": "f630597c82906a0dc09724586ab3b0aa884114914453aee567947394b41b4b54",
+          "capturedAtUTC": "2026-10-14T14:22:13.899271+00:00",
+          "verifiedOwn": true
+        },
+        "provider": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hiddenIdentity-edk7/qa-runtime-two.provider-identity.json",
+          "source": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "sha256": "5eaef4e0fb1451cdf1cff1e41954625435b15086f886c00a7dc0a8e104f89332",
+          "capturedAtUTC": "2026-10-14T14:22:14.004206+00:00",
+          "verifiedOwn": true
+        }
+      },
+      "identityErrors": []
+    },
+    "final-syntax": {
+      "argv": [
+        "node",
+        "--check",
+        "artifacts/qa/hv-edk7/challenge-privacy-judged.mjs"
+      ],
+      "pid": 93649,
+      "pgid": 93649,
+      "start": "2026-10-14T14:19:00.600463+00:00",
+      "end": "2026-10-14T14:19:00.641384+00:00",
+      "wallS": 0.04095349999261089,
+      "exit": 0,
+      "stdoutSHA": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "settled": true
+    }
+  },
+  "failurePaths": {
+    "replay": "Exact71 original actions and31answers current inline/fold converge byte-identical normal authoritative state and same597raw events/digest; fixed privacy at301.",
+    "invalidOrStale": "Public illegal action throws without source mutation; fold illegal answer, noncancellable prompt, duplicate/stale answer bounce with committed state retained. Malformed/partial/unbound/order/duplicate DTO binds reject without view mutation; new optional authoritative field uses existing typed save validator.",
+    "restart": "JSON transported BattleView sampled and viewed repeatedly, public saved-fold parser for normal/legacy/new sampled membership, serialized states retain hash/view, in-flight prompt JSON restart reaches same authoritative state.",
+    "partialWrite": "Added state field is plain membership in a newly constructed sampled state only; normal rules input states stay byte-identical. No new disk/transaction writer. Public fold suspension/rejection/replay covers applicable partial-step writes.",
+    "concurrentActors": "Pure separate-game and both-viewer observations do not share snapshot/member aliases; immutable source serialize/hash assertions retained. No new shared I/O/worker mutation.",
+    "roles": "Observable C17 static spark, same-viewer legal actions and actual scoring cover visible, returned, hidden, unrecorded/ceased original associations, both hidden endpoints, materialization/reentry, Night movement, current control, Dusk reset and end-turn."
+  },
+  "scope": {
+    "production": [
+      "view.ts ChallengeView/BattleView.challenge plus exact projection",
+      "determinize.ts deal assigned-member reconstruction only",
+      "state/types.ts ChallengeState optional unpairedBlockers only",
+      "rules/challenge.ts laneRoles membership plus designateBlockers reset only",
+      "rules/battle/fold.ts isChallengeState optional typed array validation only"
+    ],
+    "tests": "One coherent plain node-mode challenge-privacy.test.ts under500 lines; no shared helper/entrypoint/fixtures, mutable production-content or UI-string assertion",
+    "documentation": "Additive Views and hidden information challenge bullet only",
+    "readOnly": "Authoritative knownTo/provenance/rules beyond exact2bodies, state cloning/hash/loops, policy, UI/runtime/Cumulus, catalogs/DSL/invariant assertion/config remain untouched"
+  },
+  "QA": "Not started; exact finite source-free recipe and separate driver/runtime admission pending. No screenshots or browser/provider/server/lease resources started.",
+  "heavy": "Not run. Exact literal outer-lock review:full and separate default200 smoke remain pending after all managed QA resources settle; no weighted300 because zero production entities authored.",
+  "validationSummary": {
+    "finalReview": "300files/7032tests,lint,bothTypechecks,cycles,808frictionrecords PASS;70.50565483400715s",
+    "initialReview": "All300files7032tests passed, but16unsafe-anylint errors innewguard andone fixture Record cast typecheck error; retained actualexit2/61.141358875s. Boolean helper prevents Array.isArray narrowing readonly fields to any; explicit player/enemy decklist construction fixes cast. Exact bounded admitted edits only.",
+    "finalKnip": "PASS final-source5.603957249986706s",
+    "finalSchema": "PASS808records/.10947158400085755s; refreshed own evidence schema checked again below",
+    "retainedCommand": "PASS currentcatalog417steps50prompts0interactive reruns,2.6255201250023674s; index43not divisible10, so interactive evidence is exact retained71-actionfold replay separately."
+  },
+  "sourceManifest": {
+    "src/engine/view/view.ts": "ffa888e72fc9cbb42a2bc8e322e3a92c4bbd03139ee9f71e66082831b034b0b2",
+    "src/engine/view/determinize.ts": "6c92b0cdb7282122466d1101efab32300a29d3c1644204df0c993caf6960464b",
+    "src/engine/state/types.ts": "f75df856a7ad2b4f3ae42aebacb678be6d5cc174368a75be50ccab0d7c9d6e67",
+    "src/engine/rules/challenge.ts": "2b423ff986c425d72f1b00e739b51dbc751118a03611b13b500e8e9ed34d68a5",
+    "src/rules/battle/fold.ts": "e01767124bd29375757fcb9d7a61c1898bc99418c291fa4149e44a388b9e9f17",
+    "src/engine/view/challenge-privacy.test.ts": "ebe7534f37433f42ed2f6628cfd01c153b875e629255aedfe61ac9607e96d84b",
+    "docs/plan/engine-design.md": "4842111e0469cffea0509e0259ccc2d0ca0bf9eae673a743deef61b053c8fd8a"
+  },
+  "QARecipeSHA": "0d85715e47baa80874d6e469310d5e55e90b9f73503deff47c1f948739358601",
+  "qaPreparation": {
+    "driver": "artifacts/qa/hv-edk7/challenge-privacy-judged.mjs",
+    "driverSHA256": "1efcfec493c349af2e054de5d363ad4f70f37b19b07389de272b4b497fdb5a2e",
+    "recipeSHA256": "0d85715e47baa80874d6e469310d5e55e90b9f73503deff47c1f948739358601",
+    "liveCells": 2,
+    "viewports": [
+      "desktop",
+      "mobile"
+    ],
+    "bothRealViews": true,
+    "bothControllerCoverage": "32 public synthetic contracts, not additional live enemy Night script",
+    "worker": "Own readonly actual module worker loaded/init/ready/ONE decide per viewport; finally termination; iteration-only16; choice never applied",
+    "captures": 0,
+    "resourcesStarted": true,
+    "verdict": "Final desktopPASS/mobilePASS after retained firstdesktopdriverFAIL; actual twohumanlive cells andboth realobservers,32synthetics coverbothcontrollerorientations.",
+    "cleanup": "Managed positive finally cleanup and own native lease/process identities; no foreign cleanup or all-foreign-absence gate",
+    "inclusiveWindow": "Original12:53:22.476287Z through current pre-Git cutoff includes all diagnosis, recovery, coordination, driver preparation and waits. Future QA/heavy/Git included when actually incurred.",
+    "resourcesSettled": true
+  },
+  "qaFailedAttempt": {
+    "invocation": "run-dRYk4f",
+    "error": "Gallery-only driver predicate missed actual inline chooseCards and defaultanswered [i4,i1], then45s timeout",
+    "gameId": "7gtcsi",
+    "fullLogRows": 54,
+    "caps": 0,
+    "captures": 0,
+    "mobileReached": false,
+    "workerReached": false,
+    "reloadReached": false,
+    "receipt": "qa-runtime-one.receipt.json",
+    "checkpoint": "qa-runtime-one-failed-checkpoint.json",
+    "ownRunnerPG": 13872,
+    "ownServerPG": 13915,
+    "port": 5174,
+    "settlement": "Normal managedfinally, no reconciliation/cleanup exception, ownrecordabsent/25PGabsent/portfree",
+    "mcpSID": "UNKNOWN: not copied before ownrecord normalclear, no fabricatedidentity",
+    "repair": "Exactignoredobserver-only chooseCards interception beforeautoanswer, supportedvisibleinline/gallery candidatefallback, exactphysicalpair excludingmarker, selectedDOM+acceptedanswer proof, near-frontdeparture/handarrival DOM; source/gameplay/catalog/policy unchanged",
+    "nextIdentityReceipt": "Capture exactownprovider/server records immediately afterverifiedownrunner/bead/checkout/port creation; no foreignrecordreads"
+  },
+  "qaRuntime": {
+    "invocation": "run-cO87MJ",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-edk7/invocations/run-cO87MJ",
+    "reportSHA256": "485388c04aa2f28c6aa0d90a185d87df9669847db21ddd2ddaef1a662450087e",
+    "ok": true,
+    "caps": [],
+    "captures": [],
+    "calls": [
+      {
+        "viewport": "desktop",
+        "step": 0,
+        "ms": 9590
+      },
+      {
+        "viewport": "desktop",
+        "step": 1,
+        "ms": 1684
+      },
+      {
+        "viewport": "desktop",
+        "step": 2,
+        "ms": 2499
+      },
+      {
+        "viewport": "mobile",
+        "step": 0,
+        "ms": 8061
+      },
+      {
+        "viewport": "mobile",
+        "step": 1,
+        "ms": 1726
+      },
+      {
+        "viewport": "mobile",
+        "step": 2,
+        "ms": 2271
+      }
+    ],
+    "wallMs": {
+      "browserLeaseWait": 5,
+      "serve": 1962,
+      "scenario": 25832,
+      "total": 27855
+    },
+    "provider": {
+      "token": "64cfcbcb-97e6-46bc-9113-7eda9dbee632",
+      "pid": 35040,
+      "bead": "hv-edk7",
+      "label": "challenge-privacy-judged",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root",
+      "slot": 1,
+      "port": 5274,
+      "startedAt": "2026-10-14T14:22:13.890Z",
+      "providerState": "active",
+      "mcpSessionId": "d43b0de9-f389-44ce-9288-747130181112",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25"
+    },
+    "server": {
+      "token": "d0c9d66f-59a1-4c44-bceb-a46be8961890",
+      "runner": {
+        "pid": 35040,
+        "group": 35040,
+        "started": "Wed Oct 14 07:22:11 2026",
+        "state": "Ss",
+        "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root/artifacts/qa/hv-edk7/challenge-privacy-judged.mjs --bead hv-edk7 --viewports desktop,mobile --timeout 900"
+      },
+      "server": {
+        "pid": 35079,
+        "group": 35079,
+        "started": "Wed Oct 14 07:22:11 2026",
+        "state": "Rs",
+        "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json d0c9d66f-59a1-4c44-bceb-a46be8961890 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+      },
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-identity-edk7-root",
+      "port": 5274
+    },
+    "clientName": "qa-challenge-privacy-judged-35040",
+    "ownershipPaired": true,
+    "ownRecordPresence": {
+      "server": false,
+      "provider": false
+    },
+    "managedCleanup": "Normal positivefinally completed with confirmedbrowser_close/activeRPCjoin/exactownrecordclear/ownedserverstop/ownlease release; no cleanup/reconciliation exception; ownserverPG35079 port5274free; ownslot1 recordsabsent/all29recorded ownPGabsent. Sharedprovider remains untouched. No404/allforeignabsence demand.",
+    "cells": {
+      "desktop": {
+        "gameId": "f2xhjd",
+        "selected": [
+          "i1",
+          "i5"
+        ],
+        "selectionDOM": {
+          "selectedPhysical": [
+            "i1",
+            "i5"
+          ],
+          "inlineSelectionObserved": true,
+          "expected": [
+            "i1",
+            "i5"
+          ]
+        },
+        "acceptedSelection": {
+          "gameId": "f2xhjd",
+          "version": 5,
+          "promptId": "5:6:0",
+          "side": "player",
+          "fingerprint": "a5t4gl3wb1",
+          "value": [
+            "i1",
+            "i5"
+          ],
+          "timestamp": "2026-10-14T14:22:22.273Z",
+          "event": "engine.promptAnswered",
+          "seq": 48
+        },
+        "returnDOM": {
+          "original": "i1",
+          "nearFrontPresent": false,
+          "samePhysicalHandPresent": true
+        },
+        "worker": {
+          "protocol": [
+            "loaded",
+            "ready",
+            "decided"
+          ],
+          "id": 1,
+          "result": {
+            "choice": {
+              "kind": "action",
+              "action": {
+                "kind": "play",
+                "card": "i4",
+                "from": "hand"
+              }
+            },
+            "candidates": [
+              {
+                "choice": {
+                  "kind": "action",
+                  "action": {
+                    "kind": "play",
+                    "card": "i4",
+                    "from": "hand"
+                  }
+                },
+                "score": 2.3,
+                "visits": 2
+              },
+              {
+                "choice": {
+                  "kind": "action",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                "score": 1.9,
+                "visits": 2
+              }
+            ],
+            "iterations": 4,
+            "determinizations": 2
+          },
+          "budget": {
+            "iterations": 16
+          },
+          "actionApplied": false,
+          "terminated": true
+        },
+        "stateHash": "1cc16ce6f81b0d",
+        "reloadStateHash": "1cc16ce6f81b0d",
+        "sameViewReload": true,
+        "viewers": [
+          "player",
+          "enemy"
+        ],
+        "challenge": {
+          "player": {
+            "challengers": [],
+            "blockers": {},
+            "hidden": {
+              "challengers": [
+                {
+                  "index": 0,
+                  "member": 0
+                }
+              ],
+              "blockers": []
+            }
+          },
+          "enemy": {
+            "challengers": [],
+            "blockers": {},
+            "hidden": {
+              "challengers": [
+                {
+                  "index": 0,
+                  "member": 0
+                }
+              ],
+              "blockers": []
+            }
+          }
+        },
+        "geometry": {
+          "boardGeometry": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+            "width": 89.5,
+            "height": 89.5,
+            "opacity": 0.972671,
+            "point": {
+              "x": 305.25,
+              "y": 403.425
+            }
+          },
+          "returnedHandGeometry": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+            "width": 141.18115234375,
+            "height": 189.02117919921875,
+            "opacity": 1,
+            "point": {
+              "x": 850.547607421875,
+              "y": 759.9061553955078
+            }
+          },
+          "pickerGeometry": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "width": 135.12603759765625,
+              "height": 184.85760498046875,
+              "opacity": 1,
+              "point": {
+                "x": 570.319091796875,
+                "y": 758.4915191650391
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i5\"]",
+              "width": 128.90625,
+              "height": 180.46875,
+              "opacity": 1,
+              "point": {
+                "x": 709.484375,
+                "y": 759.0703125
+              }
+            },
+            {
+              "selector": "[data-testid=\"battle-card-picker-submit\"]",
+              "width": 89.328125,
+              "height": 42,
+              "opacity": 1,
+              "point": {
+                "x": 1155.171875,
+                "y": 603.3
+              }
+            }
+          ],
+          "markerGeometry": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+            "width": 141.18115234375,
+            "height": 189.02117919921875,
+            "opacity": 1,
+            "point": {
+              "x": 564.146240234375,
+              "y": 759.9061553955078
+            }
+          },
+          "phaseGeometry": {
+            "selector": "[data-battle-phase-next] button",
+            "width": 122.6875,
+            "height": 42,
+            "opacity": 1,
+            "point": {
+              "x": 1121.8125,
+              "y": 603.3
+            }
+          }
+        },
+        "reloadGeometry": {
+          "markerGeometry": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+            "width": 141.18115234375,
+            "height": 189.02117919921875,
+            "opacity": 1,
+            "point": {
+              "x": 564.146240234375,
+              "y": 759.9061553955078
+            }
+          },
+          "phaseGeometry": {
+            "selector": "[data-battle-phase-next] button",
+            "width": 122.6875,
+            "height": 42,
+            "opacity": 1,
+            "point": {
+              "x": 1121.8125,
+              "y": 603.3
+            }
+          }
+        },
+        "baseDeckCounts": {
+          "player": 12,
+          "enemy": 8
+        },
+        "fullJSONL": {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-edk7/invocations/run-cO87MJ/challenge-privacy-judged-desktop.jsonl",
+          "gameId": "f2xhjd",
+          "selectedBy": "url",
+          "rows": 57,
+          "reason": null
+        },
+        "rawEventCount": 20,
+        "logSubsetQualification": "Persisted subsets; complete JSONL exported by managed runner. Prior raw probe history retained separately and not presumed durable on reload."
+      },
+      "mobile": {
+        "gameId": "97hgsz",
+        "selected": [
+          "i1",
+          "i5"
+        ],
+        "selectionDOM": {
+          "selectedPhysical": [
+            "i1",
+            "i5"
+          ],
+          "inlineSelectionObserved": true,
+          "expected": [
+            "i1",
+            "i5"
+          ]
+        },
+        "acceptedSelection": {
+          "gameId": "97hgsz",
+          "version": 5,
+          "promptId": "5:6:0",
+          "side": "player",
+          "fingerprint": "a5t4gl3wb1",
+          "value": [
+            "i1",
+            "i5"
+          ],
+          "timestamp": "2026-10-14T14:22:34.609Z",
+          "event": "engine.promptAnswered",
+          "seq": 48
+        },
+        "returnDOM": {
+          "original": "i1",
+          "nearFrontPresent": false,
+          "samePhysicalHandPresent": true
+        },
+        "worker": {
+          "protocol": [
+            "loaded",
+            "ready",
+            "decided"
+          ],
+          "id": 1,
+          "result": {
+            "choice": {
+              "kind": "action",
+              "action": {
+                "kind": "play",
+                "card": "i4",
+                "from": "hand"
+              }
+            },
+            "candidates": [
+              {
+                "choice": {
+                  "kind": "action",
+                  "action": {
+                    "kind": "play",
+                    "card": "i4",
+                    "from": "hand"
+                  }
+                },
+                "score": 2.3,
+                "visits": 2
+              },
+              {
+                "choice": {
+                  "kind": "action",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                "score": 1.9,
+                "visits": 2
+              }
+            ],
+            "iterations": 4,
+            "determinizations": 2
+          },
+          "budget": {
+            "iterations": 16
+          },
+          "actionApplied": false,
+          "terminated": true
+        },
+        "stateHash": "1cc16ce6f81b0d",
+        "reloadStateHash": "1cc16ce6f81b0d",
+        "sameViewReload": true,
+        "viewers": [
+          "player",
+          "enemy"
+        ],
+        "challenge": {
+          "player": {
+            "challengers": [],
+            "blockers": {},
+            "hidden": {
+              "challengers": [
+                {
+                  "index": 0,
+                  "member": 0
+                }
+              ],
+              "blockers": []
+            }
+          },
+          "enemy": {
+            "challengers": [],
+            "blockers": {},
+            "hidden": {
+              "challengers": [
+                {
+                  "index": 0,
+                  "member": 0
+                }
+              ],
+              "blockers": []
+            }
+          }
+        },
+        "geometry": {
+          "boardGeometry": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+            "width": 53.859375,
+            "height": 53.859375,
+            "opacity": 0.955311,
+            "point": {
+              "x": 56.328125,
+              "y": 366.11015625
+            }
+          },
+          "returnedHandGeometry": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+            "width": 170.82591247558594,
+            "height": 224.12811279296875,
+            "opacity": 1,
+            "point": {
+              "x": 210.73207092285156,
+              "y": 700.4851226806641
+            }
+          },
+          "pickerGeometry": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "width": 160.50009155273438,
+              "height": 217.1741943359375,
+              "opacity": 1,
+              "point": {
+                "x": 64.513671875,
+                "y": 695.4130432128907
+              }
+            },
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i5\"]",
+              "width": 149.734375,
+              "height": 209.625,
+              "opacity": 1,
+              "point": {
+                "x": 124.1328125,
+                "y": 695.553125
+              }
+            },
+            {
+              "selector": "[data-testid=\"battle-card-picker-submit\"]",
+              "width": 89.328125,
+              "height": 42,
+              "opacity": 1,
+              "point": {
+                "x": 296.671875,
+                "y": 529.128125
+              }
+            }
+          ],
+          "markerGeometry": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+            "width": 170.82589721679688,
+            "height": 224.12811279296875,
+            "opacity": 1,
+            "point": {
+              "x": 32.42640495300293,
+              "y": 700.4851226806641
+            }
+          },
+          "phaseGeometry": {
+            "selector": "[data-battle-phase-next] button",
+            "width": 122.6875,
+            "height": 42,
+            "opacity": 1,
+            "point": {
+              "x": 263.3125,
+              "y": 529.128125
+            }
+          }
+        },
+        "reloadGeometry": {
+          "markerGeometry": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+            "width": 170.82589721679688,
+            "height": 224.12811279296875,
+            "opacity": 0.994458,
+            "point": {
+              "x": 32.42640495300293,
+              "y": 700.4851226806641
+            }
+          },
+          "phaseGeometry": {
+            "selector": "[data-battle-phase-next] button",
+            "width": 122.6875,
+            "height": 42,
+            "opacity": 0.994458,
+            "point": {
+              "x": 263.3125,
+              "y": 529.128125
+            }
+          }
+        },
+        "baseDeckCounts": {
+          "player": 12,
+          "enemy": 8
+        },
+        "fullJSONL": {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-edk7/invocations/run-cO87MJ/challenge-privacy-judged-mobile.jsonl",
+          "gameId": "97hgsz",
+          "selectedBy": "url",
+          "rows": 57,
+          "reason": null
+        },
+        "rawEventCount": 20,
+        "logSubsetQualification": "Persisted subsets; complete JSONL exported by managed runner. Prior raw probe history retained separately and not presumed durable on reload."
+      }
+    },
+    "qualification": "Twohumanliveworkflowcells/BOTHrealviews. Normal opponent forcedpasses are separate from readonly actual nativeworker. Existinglab remainingdeck syntheticvanillafixtures qualified; production UUIDs unchanged. Bothcontroller orientations/orphan/movement/reentry/legacy/ceased contracts in32publicsynthetics. Exacthistorical71actions samecurrentauthoritativehash/eventdigest retains originalcauseproof. No ordinaryevidence/Git/source/driver/check writes throughout active resources.",
+    "previousFailureRetained": true,
+    "screens": []
+  },
+  "finalHeavy": {
+    "reviewFull": {
+      "files": 381,
+      "tests": 8040,
+      "lint": true,
+      "types": true,
+      "nodeTypes": true,
+      "knip": true,
+      "cycles": true,
+      "frictionSchema": true,
+      "productionBundle": true,
+      "receipt": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "pid": 41214,
+        "pgid": 41214,
+        "start": "2026-10-14T14:26:18.606754+00:00",
+        "end": "2026-10-14T14:27:53.846884+00:00",
+        "wallS": 95.23905474998173,
+        "exit": 0,
+        "stdoutSHA": "df8a6114d32057bdfa75c20eb43a47167101029a852ba2ddc6bb6cea66c8299d",
+        "settled": true
+      }
+    },
+    "default200": {
+      "games": 200,
+      "steps": 67839,
+      "prompts": 4799,
+      "interactiveReruns": 490,
+      "failures": 0,
+      "results": {
+        "player": 92,
+        "enemy": 108,
+        "draw": 0
+      },
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 1
+      },
+      "reportedWallS": 222.3,
+      "reportedCPUS": 237.7,
+      "receipt": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "200"
+        ],
+        "pid": 75880,
+        "pgid": 75880,
+        "start": "2026-10-14T14:28:05.094423+00:00",
+        "end": "2026-10-14T14:31:48.551263+00:00",
+        "wallS": 223.45428529099445,
+        "exit": 0,
+        "stdoutSHA": "d773e4faed019eb905d064408fb40d1af870fb640db999372b666c8ac42dce4c",
+        "settled": true
+      }
+    },
+    "workers": 2,
+    "heavyLock": "Exact literal outer lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock; full and default200 separate sequential processes, after liveQAcompletecleanup",
+    "heavyLockWaitS": "UNKNOWN: no distinct native lock-admission timestamp; actual outer receipts include waits",
+    "weighted300": "Not applicable: zero newly authored production content entities. Default200 confirms canonical release smoke; exact historical71actions prove original changed-catalog causal repair."
+  },
+  "finalSettlement": {
+    "atUTC": "2026-10-14T14:33:13.434634+00:00",
+    "recordedOwnGroups": [
+      5410,
+      13872,
+      13915,
+      25003,
+      25499,
+      25891,
+      25903,
+      28630,
+      28956,
+      29365,
+      29967,
+      32193,
+      34617,
+      35040,
+      35079,
+      39685,
+      41214,
+      42071,
+      42252,
+      42626,
+      42759,
+      43412,
+      43456,
+      44074,
+      44159,
+      44366,
+      44810,
+      45100,
+      45472,
+      46130,
+      46261,
+      46347,
+      46923,
+      47202,
+      47580,
+      48241,
+      48373,
+      48464,
+      49037,
+      49266,
+      50375,
+      50612,
+      51392,
+      51585,
+      51976,
+      52446,
+      52710,
+      53317,
+      53434,
+      53934,
+      54495,
+      54709,
+      54794,
+      55405,
+      55518,
+      56058,
+      56584,
+      56839,
+      56854,
+      57040,
+      57585,
+      57746,
+      58245,
+      58386,
+      58633,
+      59141,
+      59490,
+      59614,
+      61765,
+      61771,
+      62314,
+      63657,
+      64982,
+      65350,
+      65403,
+      66890,
+      67514,
+      68091,
+      69916,
+      70309,
+      70734,
+      73938,
+      75880,
+      81765,
+      90605,
+      93649,
+      95502,
+      96030
+    ],
+    "remaining": [],
+    "providerRecordPresent": false,
+    "serverRecordPresent": false,
+    "qualification": "Full logs include intentional synthetic tooling-failure paths, all381/8040 pass and allrecorded fixture servergroups absent. OwnliveQA managedcleanup alreadycertified. Source/test/docs/driver allfrozenmatches."
+  },
+  "inclusiveTiming": {
+    "start": "2026-10-14T12:53:22.476287+00:00",
+    "preGitCutoff": "2026-10-14T14:34:17.588195+00:00",
+    "throughCutoffS": 6055.111908,
+    "included": "All diagnosis, historical extraction/replay, admission/justiciar recovery, focused/failed/passing checks, driver preparation, bothQAattempts, resources/cleanup, heavy verification, coordination and waits from originaldispatch. FinalactualGit receipt supplies remaining staging/schema/Git duration.",
+    "gitResult": "UNKNOWN atcutoff; cutoff must precedeactualGit by\u226460s verifiedexternally."
+  }
+}

@@ -301,6 +301,17 @@ interface PoolCreatedHandView {
   readonly member?: number;
 }
 
+/** Turn-long designations, with unidentified observed cards related only by anonymous members. */
+interface ChallengeView extends Readonly<Omit<ChallengeState, "unpairedBlockers">> {
+  readonly hidden?: {
+    readonly challengers: readonly { readonly index: number; readonly member: number }[];
+    readonly blockers: readonly {
+      readonly challenger: InstanceId | { readonly member: number } | null;
+      readonly blocker: InstanceId | { readonly member: number };
+    }[];
+  };
+}
+
 export interface BattleView {
   /** Public non-zone source multisets, without any link to hidden physical cards. */
   readonly draftPools?: BattleState["draftPools"];
@@ -344,7 +355,7 @@ export interface BattleView {
   readonly oncePerTurn: readonly OncePerTurnKey[];
   /** The shared Dreamwell: cards left before the next cycle, and the catalog cycles are built from. */
   readonly dreamwell: { readonly remaining: number; readonly catalog: readonly DreamwellCardId[] };
-  readonly challenge: Readonly<ChallengeState> | null;
+  readonly challenge: ChallengeView | null;
   readonly loop: LoopView | null;
   /** `BattleState.automaticChoices`: choices answered in automatic steps since the last top-level action. */
   readonly automaticChoices: number;
@@ -535,6 +546,30 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   }
   hiddenCards.player.sort((a, b) => a.member - b.member);
   hiddenCards.enemy.sort((a, b) => a.member - b.member);
+  // A designation survives until turn end, independently of the card's current zone or role.
+  const challenge: ChallengeView | null = state.challenge === null ? null : (() => {
+    const reference = (id: InstanceId): InstanceId | { readonly member: number } | null =>
+      visible(id) ? id : anonymousSource(id);
+    const entries = state.challenge.challengers.flatMap((id) => {
+      const shown = reference(id);
+      return shown === null ? [] : [shown];
+    });
+    const challengers = entries.filter((id): id is InstanceId => typeof id === "string");
+    const hiddenChallengers = entries.flatMap((id, index) => typeof id === "string" ? [] : [{ index, member: id.member }]);
+    const blockers: Record<InstanceId, InstanceId> = {};
+    const hiddenBlockers: NonNullable<ChallengeView["hidden"]>["blockers"][number][] = [];
+    const pair = (challenger: InstanceId | null, blocker: InstanceId): void => {
+      const source = challenger === null ? null : reference(challenger);
+      const target = reference(blocker);
+      if (target === null) return;
+      if (typeof source === "string" && typeof target === "string") blockers[source] = target;
+      else hiddenBlockers.push({ challenger: source, blocker: target });
+    };
+    for (const [challenger, blocker] of Object.entries(state.challenge.blockers) as [InstanceId, InstanceId][]) pair(challenger, blocker);
+    for (const blocker of state.challenge.unpairedBlockers ?? []) pair(null, blocker);
+    return { challengers, blockers,
+      ...(hiddenChallengers.length + hiddenBlockers.length === 0 ? {} : { hidden: { challengers: hiddenChallengers, blockers: hiddenBlockers } }) };
+  })();
   const poolCreatedHands: Record<Side, PoolCreatedHandView[]> = { player: [], enemy: [] };
   for (const holder of ["player", "enemy"] as const) {
     for (const id of state.sides[holder].hand) {
@@ -620,7 +655,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       return source.startsWith("avatar:") || source.startsWith("dreamsign:") || source in instances;
     }),
     dreamwell: { remaining: state.dreamwell.deck.length - state.dreamwell.next, catalog: [...state.dreamwell.catalog] },
-    challenge: copy(state.challenge),
+    challenge,
     loop:
       state.loops.candidate === null
         ? null

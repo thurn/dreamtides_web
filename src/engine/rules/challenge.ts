@@ -46,6 +46,7 @@ export function designateBlockers(ctx: StepContext): void {
     }
   }
   challenge.blockers = blockers;
+  delete challenge.unpairedBlockers;
   ctx.emit({ kind: "blockersDesignated", side: defending, blockers });
 }
 
@@ -75,7 +76,8 @@ export function laneRoles(state: BattleState, lane: number): LaneRoles | null {
   }
   const opposite = state.sides[opponent(active)].frontRank[lane] ?? null;
   const blocker =
-    opposite !== null && Object.values(challenge.blockers).includes(opposite)
+    opposite !== null && (Object.values(challenge.blockers).includes(opposite) ||
+      challenge.unpairedBlockers?.includes(opposite) === true)
       ? opposite
       : null;
   return { challenger, blocker };

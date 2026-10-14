@@ -2277,6 +2277,12 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   could not (`QueuedTrigger.subjectHiddenFrom`), so a card drawn into a
   hidden hand and then discarded is never named as the draw trigger's
   subject (rules § Ability Types → Triggered abilities).
+- **Challenge designations** last until turn end. Identified cards retain their
+  physical designation records; previously observed hidden cards use the existing
+  anonymous member bindings, without revealing a hidden identity or position.
+  Sampling restores those members to their dealt cards. A blocker whose original
+  challenger association is unavailable retains its designation as unpaired blocker
+  membership; current front-rank positions and control determine its live role.
 - **Historical plays** retain public type, subtype, all-types and copiable
   cost facts in turn order even when their card has ceased or become hidden.
   A record links to its instance only while this viewer identifies it.

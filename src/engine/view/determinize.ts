@@ -541,6 +541,51 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     source: effect.source === null ? { kind: "avatar", side: effect.controller } : copy(effect.source),
     affects: [...effect.affects],
   }));
+  const challenge: BattleState["challenge"] = view.challenge === null ? null : (() => {
+    const shown = view.challenge;
+    const resolve = (reference: InstanceId | { readonly member: number }): InstanceId => {
+      if (typeof reference === "string") {
+        if (view.instances[reference] === undefined) throw new Error("Cannot determinize an unidentified challenge card");
+        return reference;
+      }
+      if (reference === null || !Number.isSafeInteger(reference.member) || reference.member < 0) throw new Error("Cannot determinize an invalid challenge member");
+      const id = assigned.get(reference.member);
+      if (id === undefined) throw new Error("Cannot determinize an unbound challenge member");
+      return id;
+    };
+    const challengers = shown.challengers.map(resolve);
+    const designated = new Set(challengers);
+    if (designated.size !== challengers.length) throw new Error("Cannot determinize duplicate challengers");
+    const blockers: Record<InstanceId, InstanceId> = {};
+    const blocked = new Set<InstanceId>();
+    const unpairedBlockers: InstanceId[] = [];
+    const pair = (challenger: InstanceId | null, blocker: InstanceId): void => {
+      if (blocked.has(blocker) || (challenger !== null && blockers[challenger] !== undefined)) throw new Error("Cannot determinize duplicate blockers");
+      blocked.add(blocker);
+      if (challenger === null) unpairedBlockers.push(blocker);
+      else blockers[challenger] = blocker;
+    };
+    for (const [challenger, blocker] of Object.entries(shown.blockers) as [InstanceId, InstanceId][]) pair(resolve(challenger), resolve(blocker));
+    if (shown.hidden !== undefined) {
+      const bindings = shown.hidden;
+      const complete = (value: typeof bindings): boolean => Array.isArray(value?.challengers) && Array.isArray(value?.blockers);
+      if (!complete(bindings)) throw new Error("Cannot determinize partial challenge bindings");
+      let previous = -1;
+      for (const entry of bindings.challengers) {
+        if (!Number.isSafeInteger(entry?.index) || entry.index <= previous || entry.index > challengers.length) throw new Error("Cannot determinize invalid challenge order");
+        const id = resolve(entry);
+        if (designated.has(id)) throw new Error("Cannot determinize duplicate challengers");
+        designated.add(id);
+        challengers.splice(entry.index, 0, id);
+        previous = entry.index;
+      }
+      for (const entry of bindings.blockers) {
+        if (entry === null || (entry.challenger !== null && typeof entry.challenger === "string" && typeof entry.blocker === "string")) throw new Error("Cannot determinize invalid anonymous blocker binding");
+        pair(entry.challenger === null ? null : resolve(entry.challenger), resolve(entry.blocker));
+      }
+    }
+    return { challengers, blockers, ...(unpairedBlockers.length === 0 ? {} : { unpairedBlockers }) };
+  })();
   const clock = Math.max(0, ...Object.values(instances).map((instance) => instance.enteredZoneAt), ...view.floating.map((effect) => effect.timestamp));
   const state: BattleState = {
     version: view.version,
@@ -584,7 +629,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     nextEffect: highest([view.payable, view.floating, descriptors], "e") + 1,
     oncePerTurn: [...view.oncePerTurn],
     dreamwell: { deck: [], next: 0, catalog: [] },
-    challenge: copy(view.challenge),
+    challenge,
     automaticSteps: 0,
     automaticChoices: view.automaticChoices,
     loops: emptyLoopTracker(),

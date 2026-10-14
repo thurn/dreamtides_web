@@ -750,6 +750,8 @@ export interface ChallengeState {
   challengers: InstanceId[];
   /** Designated at the end of Dusk: challenger → blocker. */
   blockers: Record<InstanceId, InstanceId>;
+  /** Sampled blocker designations whose original challenger association is unavailable. */
+  unpairedBlockers?: InstanceId[];
 }
 
 export interface DreamwellState {

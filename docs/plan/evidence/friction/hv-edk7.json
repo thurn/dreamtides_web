@@ -1,0 +1,35 @@
+{
+  "bead": "hv-edk7",
+  "phase": 5,
+  "implementMin": 100.9185318,
+  "implementWindow": {
+    "start": "2026-10-14T12:53:22.476287+00:00",
+    "end": "2026-10-14T14:34:17.588195+00:00"
+  },
+  "localValidationS": {
+    "focused": 2.489241250004852,
+    "retainedInline": 2.373975499998778,
+    "retainedFold": 1.7826443329977337,
+    "review": 70.50565483400715,
+    "knip": 5.603957249986706,
+    "schema": 0.10947158400085755,
+    "retainedCommand": 2.6255201250023674,
+    "qaFailedFirstAttempt": 77.84765391700785,
+    "reviewFull": 95.23905474998173,
+    "default200": 223.45428529099445,
+    "qaPassingAttempt": 28.60667041700799
+  },
+  "hostLoad": 3.51123046875,
+  "testDelta": {
+    "files": 1,
+    "lines": 329,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 9.049574683333333,
+      "note": "Coupled legacy public-role investigation and exact admission recovery window; initial agent view-only constraint could not retain a visible blocker with an unavailable original association. Same-task justiciar admitted explicit unpaired membership within existing acceptance."
+    }
+  ]
+}

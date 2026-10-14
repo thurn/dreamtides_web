@@ -1221,6 +1221,7 @@ function isChallengeState(value: unknown): boolean {
   return (
     isPlainRecord(value) &&
     isArrayOf(value.challengers, isInstanceId) &&
+    (value.unpairedBlockers === undefined || isArrayOf(value.unpairedBlockers, isInstanceId)) &&
     isPlainRecord(value.blockers) &&
     Object.entries(value.blockers).every(
       ([challenger, blocker]) =>
