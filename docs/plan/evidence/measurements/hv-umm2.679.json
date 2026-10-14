@@ -1,0 +1,400 @@
+{
+  "bead": "hv-umm2.679",
+  "status": "Final source and acceptance evidence; prospective commit clock recorded before final schema/diff and single local commit.",
+  "clock": {
+    "start": "2026-10-14T16:18:25.604Z",
+    "parentDispatchCallId": "call_98da37b517e949a4a0aba94363cfe1a6",
+    "nativeProof": "parent-dispatch-native-v01.json",
+    "modelSampling": "UNKNOWN",
+    "setupExcluded": {
+      "installS": 2.816321125,
+      "prepareS": 3.49039025,
+      "doctorS": 1.428394125
+    },
+    "prospectiveEnd": "2026-10-14T16:52:54.971593+00:00",
+    "grossMinToProspectiveEnd": 34.48945988333333,
+    "endSemantics": "Prospective pre-commit marker; actual Git receipt end and small commit tail retained separately in parent/native evidence. No tracked post-commit clock rewrite.",
+    "finalCommitAuthority": "Parent final ACK native2026-10-14T16:51:39.840Z"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v01 start"
+      }
+    }
+  },
+  "sourceFreeze": {
+    "src/content/cards/dreamvale-monarch-965ce3b2.ts": "e2199f8f1c5498eeccf3d97b8fb8216e814f5539eedcecd3b54310783cecd029",
+    "src/content/cards/frost-visionary-bbf83d18.ts": "02d367896c0043c42cdfc330d2a056596b83c54e5c1b4c4f2f2745459633d0e5",
+    "src/content/cards/searcher-in-the-mists-1d92e103.ts": "86d7e8f26e9dd373ec01000f3da733be2f5092d2501de117053b93ec907306b3",
+    "src/content/cards/oracle-of-shifting-skies-e455225f.ts": "5d906fa0fe95ac01ccd4a410552add02f7dc622b31fffe05e08a64eb09198982"
+  },
+  "validation": {
+    "focusedCases": 466,
+    "reviewTests": 6551,
+    "preflight": {
+      "pass": 40,
+      "skip": 40,
+      "fail": 0,
+      "pending": 0,
+      "variants": "all",
+      "controllers": "both"
+    },
+    "weightedFuzz": {
+      "games": 300,
+      "steps": 94248,
+      "prompts": 6592,
+      "interactiveReruns": 650,
+      "failures": 0,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 3
+      },
+      "lockWaitS": 62.71608,
+      "executionS": 293.6336253340123,
+      "outerLockS": 356.4042633329809,
+      "targets": [
+        {
+          "uuid": "965ce3b2-a722-475c-99c5-5b35685d2404",
+          "included": 609,
+          "exercised": 125
+        },
+        {
+          "uuid": "bbf83d18-81b6-48c8-886f-4b9f0feb599f",
+          "included": 618,
+          "exercised": 139
+        },
+        {
+          "uuid": "1d92e103-8415-433d-97d6-ac8a83660b34",
+          "included": 611,
+          "exercised": 223
+        },
+        {
+          "uuid": "e455225f-c444-44a2-8796-805cae2b755f",
+          "included": 616,
+          "exercised": 173
+        }
+      ]
+    }
+  },
+  "decisions": {
+    "D20": "Simple named-trigger draw, combined independent named-trigger erode, and filtered event-play Foresee compose existing public forms. No scenario module or test added.",
+    "D21": {
+      "sha256FirstBytes": [
+        251,
+        157,
+        130,
+        120
+      ],
+      "sampled": [],
+      "newPromptStatusVisual": [],
+      "judgedRequired": 0
+    },
+    "review": "D18 composition child without core marker, no new primitive/DSL/prompt, non-test churn20. No per-bead cold review required.",
+    "full": "Content-only existing forms; no cross-cutting infrastructure/config/architecture. Required quick review and Knip executed; weighted300 is the mandatory D17 heavy run.",
+    "ambiguities": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "preExistingIssues": []
+  },
+  "commands": [
+    {
+      "name": "focused-v01",
+      "exit": 0,
+      "wallSeconds": 5.831680417002644,
+      "receiptSHA256": "4c86864881798ffcde5bb68211ba971bd9e4cb61354c9a157f5838510da42928",
+      "stdoutSHA256": "0996a8aea0616d5c375545ccb9f84a6a5ff006670acd00a79d3e56eea36d69b7",
+      "stderrSHA256": "2fc342002825c07c4bf1b05bfcd6826e970fe54416dcd8834f2f49b90784f0e9",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "fuzz-lock-v01",
+      "exit": 0,
+      "wallSeconds": 356.4042633329809,
+      "receiptSHA256": "1b866f56ee508311fdecdef9378d6eb69bca9fc681db7fa4f916f191a173dc1c",
+      "stdoutSHA256": "5dac11ee2de53db88779a1c29ed5797c1e8aef42c8f348396906c2c139b3073d",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "fuzz-run-v01",
+      "exit": 0,
+      "wallSeconds": 293.6336253340123,
+      "receiptSHA256": "f87f36a274e4ea5265bb30ce351e621f7475ab7104564f7b1458e6cc76acba7d",
+      "stdoutSHA256": "9ba45bebb74a8fd1d48bd145aa2e9c5b93a0c142826f5f1943d4f883f467fa1e",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "hash-v01",
+      "exit": 0,
+      "wallSeconds": 1.5845448749896605,
+      "receiptSHA256": "c121b531ccc3d4e3099fac184b23c07eda2fd480e290214b97c6c4812b7df2f4",
+      "stdoutSHA256": "cce1f971fe7d0e6b24b0e700c4c58bc6bd36e1902643f264f126cf30edf82634",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "knip-v01",
+      "exit": 0,
+      "wallSeconds": 6.843445707985666,
+      "receiptSHA256": "bdff842dbe748a89c1a78ce1bb00742455385de5fc58b0a938c528dce3e98025",
+      "stdoutSHA256": "f6b1d189fa7ecdcc1c1a5ad20abad2c8dfc0c1d61254b3b844834fd9bcc20a8d",
+      "stderrSHA256": "2fc342002825c07c4bf1b05bfcd6826e970fe54416dcd8834f2f49b90784f0e9",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "preflight-v01",
+      "exit": 0,
+      "wallSeconds": 2.5456503329914995,
+      "receiptSHA256": "30a159a50e4754966119f6513ff0173a144165549312712fe864201c4592281d",
+      "stdoutSHA256": "4e176663bc336386260a33cfd26071b221378782ec5d51391a58db66a419bcd2",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "review-v01",
+      "exit": 0,
+      "wallSeconds": 60.667162792000454,
+      "receiptSHA256": "886bf14476745b682141e7dbdeab2f5d7f0572ababcd87dc6d5a969ca4183e6c",
+      "stdoutSHA256": "bcbc911de636afc449034c1ef70c52e4f4120ac2e67529b86577ce9cb2c0b0e1",
+      "stderrSHA256": "2fc342002825c07c4bf1b05bfcd6826e970fe54416dcd8834f2f49b90784f0e9",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "schema-v01",
+      "exit": 0,
+      "wallSeconds": 0.11776254200958647,
+      "receiptSHA256": "83669aeeca07d8b4c32313e346d634240754300cccb5171ec8ff0c9e0530c098",
+      "stdoutSHA256": "c44ae4f826628912889c25258754f8e720762ac5f3f9f94d153fcea7bef90711",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "diff-v01",
+      "exit": 0,
+      "wallSeconds": 0.02575454200268723,
+      "receiptSHA256": "cfaa2d6d084641d24559906ed9965783313d297f13e8be40e46ca29ffc4355fd",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "sweep-v01",
+      "exit": 0,
+      "wallSeconds": 502.7700805409986,
+      "receiptSHA256": "47471fa2022625641efb5a957f96e0ad89db209ab345d713a5f92a01fddbb7e8",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "60b43d0983cbebf0fc850985c5f7e5e0e7a09e4c5547db55f755e61376c99350",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "clauses-v01",
+      "exit": 1,
+      "wallSeconds": 14.689176124986261,
+      "receiptSHA256": "5868392b4fbf579dad75923e26b644584a14ad2263f5e981c72c17da40e28e8d",
+      "stdoutSHA256": "f27b5a95cd7d6dc59e2a1af41ecd5890b8b12bdd2680a1af7d4ed2e5c6475d99",
+      "stderrSHA256": "0236e78b15265586578a5adf9ac46b13d4c5208d3a673037fc2c038f4bc4ce96",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "clauses-v02",
+      "exit": 0,
+      "wallSeconds": 118.52923237500363,
+      "receiptSHA256": "6de208d74621316306573e70404d7f0e99532f7a20f33bfed57db5da4184008d",
+      "stdoutSHA256": "d83eb1770469a65f49b95f3579c8211d7b7a7604961702610ba279f1099ffd40",
+      "stderrSHA256": "f1f5bd68349396cbb663774d60995b6a2a7d29069bf231ccd1769629bd5828c9",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "schema-postqa-v01",
+      "exit": 0,
+      "wallSeconds": 0.1341320840001572,
+      "receiptSHA256": "28e75269c230a77265fda8c11662104ce0ce3425b7ddaf760098bfc63a423468",
+      "stdoutSHA256": "c44ae4f826628912889c25258754f8e720762ac5f3f9f94d153fcea7bef90711",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ownedProcessGroup": "settled/reaped"
+    },
+    {
+      "name": "diff-postqa-v01",
+      "exit": 0,
+      "wallSeconds": 0.02707275000284426,
+      "receiptSHA256": "d3f9101ba8a9cd7f42c270a9681ba1e1ec200114b20262cb12a2656940ecb03d",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ownedProcessGroup": "settled/reaped"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "command": "focused-v01",
+      "start": "2026-10-14T16:21:08.575160+00:00",
+      "load": "{ 6.67 14.90 14.57 }"
+    },
+    {
+      "command": "fuzz-lock-v01",
+      "start": "2026-10-14T16:23:12.509371+00:00",
+      "load": "{ 11.06 14.40 14.44 }"
+    },
+    {
+      "command": "fuzz-run-v01",
+      "start": "2026-10-14T16:24:15.225451+00:00",
+      "load": "{ 9.63 13.23 13.99 }"
+    },
+    {
+      "command": "hash-v01",
+      "start": "2026-10-14T16:20:44.106066+00:00",
+      "load": "{ 7.34 15.72 14.84 }"
+    },
+    {
+      "command": "knip-v01",
+      "start": "2026-10-14T16:22:59.732973+00:00",
+      "load": "{ 12.06 14.70 14.55 }"
+    },
+    {
+      "command": "preflight-v01",
+      "start": "2026-10-14T16:21:36.133103+00:00",
+      "load": "{ 6.79 14.27 14.35 }"
+    },
+    {
+      "command": "review-v01",
+      "start": "2026-10-14T16:21:48.269019+00:00",
+      "load": "{ 11.15 14.90 14.58 }"
+    },
+    {
+      "command": "schema-v01",
+      "start": "2026-10-14T16:30:21.283626+00:00",
+      "load": "{ 10.74 13.41 13.72 }"
+    },
+    {
+      "command": "diff-v01",
+      "start": "2026-10-14T16:30:21.479655+00:00",
+      "load": "{ 10.74 13.41 13.72 }"
+    },
+    {
+      "command": "sweep-v01",
+      "start": "2026-10-14T16:32:53.375825+00:00",
+      "load": "{ 10.79 11.09 12.64 }"
+    },
+    {
+      "command": "clauses-v01",
+      "start": "2026-10-14T16:41:31.800440+00:00",
+      "load": "{ 21.37 21.32 17.55 }"
+    },
+    {
+      "command": "clauses-v02",
+      "start": "2026-10-14T16:46:06.305468+00:00",
+      "load": "{ 12.70 14.32 15.19 }"
+    }
+  ],
+  "recoveryObservations": [
+    {
+      "kind": "source-free hash probe syntax",
+      "result": "Initial inline probe had one excess closing parenthesis and esbuild rejected it; corrected scratch TS file hash-v01 passed. No card source effects preceded that diagnostic failure. No complete timing/child receipt recorded for the failed inline probe."
+    }
+  ],
+  "browser": {
+    "complete": true,
+    "sweep": {
+      "pass": 40,
+      "skip": 40,
+      "fail": 0,
+      "pending": 0,
+      "sessions": 1,
+      "leaseWaitMs": 8,
+      "outerWallS": 502.7700805409986,
+      "invocation": "invocations/sweep-tQd12H",
+      "captures": []
+    },
+    "workflow": {
+      "passedCells": 8,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "variants": [
+        "base",
+        "amplified"
+      ],
+      "SearcherController": "enemy",
+      "OracleController": "player",
+      "clauses": "Searcher entry erode4/5; actual opposing Dissolved erode4, or erode3+two fatigue (points1,2) for amplified short-deck5; Oracle own event-play Foresee1/2. Eight full committed states survive same-game reload; actual persisted intent/trigger/prompt identities correlated.",
+      "caps": [],
+      "invocation": "run-qqroVx",
+      "captures": [
+        {
+          "filename": "oracle-foresee-desktop.png",
+          "cssViewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "raster": {
+            "width": 2880,
+            "height": 1800
+          },
+          "sha256": "85d036fbe1c120a287f481350af85cf9c8b4b312b2585ce183b7c3f2b533359b"
+        },
+        {
+          "filename": "oracle-resolved-desktop.png",
+          "cssViewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "raster": {
+            "width": 2880,
+            "height": 1800
+          },
+          "sha256": "d2a2c663e346bffc6afd6382db8c958260e161b9cbc14518620d739d6b706a9f"
+        },
+        {
+          "filename": "oracle-foresee-mobile.png",
+          "cssViewport": {
+            "width": 390,
+            "height": 844
+          },
+          "raster": {
+            "width": 780,
+            "height": 1688
+          },
+          "sha256": "afd97cbd5bf84b6b262e3aa6154bdd69ca84de8e8ec5525176d111fc1df16df5"
+        }
+      ],
+      "pixelsInspected": "Desktop prompt and final board and mobile prompt read after capture; header/two source cards/Confirm visible, exact screen controls used and geometry/state proven."
+    },
+    "recipe": {
+      "initial": "qa-clauses-v03.mjs",
+      "initialSHA256": "075b088657c1d5aca60f982151fa87766ae77929fdb14a7102b9f2c031323c84",
+      "recovered": "qa-clauses-recovered-v04.mjs",
+      "recoveredSHA256": "63478acfe900cb2c3469df130ed6f38370d10c881ed0f8eda4120e1966f507e9"
+    },
+    "recovery": {
+      "failedInvocation": "invocations/run-166kKK",
+      "failure": "Whole-card rectangle bound for intentional clipped hand track; stopped before removal play with empty Caps. Existing NearHand source clips offset cards; existing battle.tap scans unoccluded visible points. Same-task justiciar root native16:45:45Z admitted hand-only visible track/viewport geometry, preserved full prompt bounds and all state/log/reload acceptance. Failed row retained as ineffective recipe-constraint failure; eight corrected cells pass.",
+      "sourceChanges": false,
+      "initialProviderIdentity": "Not captured before short failed run; actual returned rejection/normal managed cleanup + own records absent and both PGs gone retained.",
+      "recoveredProviderIdentity": "Captured immediately with actual token/session/protocol; exact own tokens cleared/PGs gone, managed confirmed close/drain/transport/server/lease cleanup."
+    },
+    "resourceProofs": [
+      {
+        "filename": "sweep-live-owner-v01.json",
+        "sha256": "977509d7c3c2d3824179f3c4aca484aba216451d0573a6bc048272192e92df1d"
+      },
+      {
+        "filename": "sweep-cleanup-v01.json",
+        "sha256": "c6361a3b183ab0cc50ee624115793a1eacb8edef0ef81ff58733015c69d708e5"
+      },
+      {
+        "filename": "clauses-cleanup-v01.json",
+        "sha256": "2ba997525cad2a349fa6d9aa1822a09be2327bef27332922b3366c9d203569d8"
+      },
+      {
+        "filename": "clauses-v02-live-owner.json",
+        "sha256": "27768ab78e090bcd8963e4fb34b97f846584c20d0ebfed71f3cd7c19da8f4f5e"
+      },
+      {
+        "filename": "clauses-cleanup-v02.json",
+        "sha256": "0b28a75d450e267f05c7c6a2a0b9acb6724b8084f7e7759e64914ac1fcc08a67"
+      }
+    ]
+  }
+}

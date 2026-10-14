@@ -1,3 +1,5 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { foresee } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 27,
   art: { x: 0.546, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(whenYouPlay({ cardType: "event" }), foresee(variant.amplified ? 2 : 1))],
+  verifiedText: "18x8j0ntcq7",
 });

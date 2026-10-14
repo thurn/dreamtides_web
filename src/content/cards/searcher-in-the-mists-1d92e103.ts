@@ -1,3 +1,5 @@
+import { either, onDissolved, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { erode } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 477,
   art: { x: -0.546, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(either(onMaterialized(), onDissolved()), erode(variant.amplified ? 5 : 4))],
+  verifiedText: "38zg6s240h",
 });
