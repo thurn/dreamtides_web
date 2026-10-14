@@ -1,0 +1,85 @@
+{
+  "bead": "hv-njkt",
+  "base": "7aef89cf4f5c1e7c8f21036742a822b9c0e10e40",
+  "scope": "Test-only exact sourced predicate and three player projection assertions; own evidence",
+  "reviewOf": "hv-rb9p",
+  "reviewModel": "claude-opus-5-5",
+  "reviewSession": "6a01e8e6-9e26-4237-a4b2-50cc778484fb",
+  "findingDisposition": "Accepted LOW shared helper weakens non-holder event-kind absence; precise exact projected kind records now required, draw-only strict absence restored via kind predicate. Source runtime unchanged.",
+  "ancestorQualification": "rb9p retained holder queue/payable/noLegalTarget lists and physical/printing secrecy but loosened player event-kind absence; this followup restores it. Ancestor committed evidence and original failures preserved.",
+  "checks": {
+    "focused": {
+      "name": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/triggers/triggers-redaction.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/privacy-assertions-njkt",
+      "start": "2026-10-14T12:40:19.523244+00:00",
+      "pid": 75433,
+      "pgid": 75433,
+      "exit": 0,
+      "end": "2026-10-14T12:40:36.573613+00:00",
+      "wallS": 17.05026433299645
+    },
+    "review": {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/privacy-assertions-njkt",
+      "start": "2026-10-14T12:40:36.573907+00:00",
+      "pid": 77034,
+      "pgid": 77034,
+      "exit": 0,
+      "end": "2026-10-14T12:40:51.429846+00:00",
+      "wallS": 14.855957166000735
+    },
+    "knip": {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/privacy-assertions-njkt",
+      "start": "2026-10-14T12:40:51.430086+00:00",
+      "pid": 78348,
+      "pgid": 78348,
+      "exit": 0,
+      "end": "2026-10-14T12:40:55.539410+00:00",
+      "wallS": 4.109345832985127
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 4,
+    "jsdomFiles": 0
+  },
+  "grossTestLines": 14,
+  "qa": "No runtime/presentation change; no browser/server/provider/lease resources. Focused tests and configured quick review plus Knip; no full or300 warranted for assertions only.",
+  "reviewRequirement": "Not core-review or phasegate, zero non-test code change; no additional independent review mandated. Original exact cold finding verified and prescribed correction implemented.",
+  "preExistingIssues": [],
+  "fallout": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "resources": {
+    "allCheckGroupsAbsent": true,
+    "browser": [],
+    "server": [],
+    "leases": []
+  },
+  "clock": {
+    "at": "2026-10-14T12:39:09.191315+00:00",
+    "qualification": "Postclaim marker inclusive freshTGsetup/npm installation/read/source/focused/review/Knip/evidence through Git; filing and nativeclaim overhead before marker not sampled."
+  },
+  "evidenceCutoff": "2026-10-14T12:42:24.544416+00:00",
+  "elapsedThroughCutoffS": 195.353101,
+  "gitCompletion": "UNKNOWN at committed cutoff; actual external Git receipt records completion/tail; no fabricated future timestamp.",
+  "checkSelectionQualification": "Focused2files3520cases; configuredquick review selected one related redaction test file9cases pluslint/types/cycles. No fullaggregate run claimed. Evidence schema final receipt external."
+}

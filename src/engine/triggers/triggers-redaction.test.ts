@@ -87,9 +87,9 @@ describe("trigger subjects hidden from a side", () => {
 /** The event kinds that name an ability's source. */
 const SOURCED_KINDS: readonly EngineEvent["kind"][] = ["triggerQueued", "triggerResolved", "effectStarted", "payableEffectRegistered", "noLegalTarget", "winConditionMet"];
 
-/** Whether `entry` identifies an ability's source, rather than redacting it. */
+/** Whether `entry` is an event kind that names an ability's source. */
 function sourced(entry: EngineEvent): boolean {
-  return SOURCED_KINDS.includes(entry.kind) && namedSources(entry).some(source => source !== null);
+  return SOURCED_KINDS.includes(entry.kind);
 }
 
 /** The sources the `kind` events in `events` name, in order. */
@@ -133,7 +133,7 @@ describe("trigger sources hidden from a side", () => {
     const publicSpark = result.events.filter(entry => entry.kind === "effectStarted" && entry.change.kind === "spark");
     expect(publicSpark).toHaveLength(1);
     expect(enemy.filter(entry => entry.kind === "effectStarted")).toEqual(publicSpark.map(entry => ({ ...entry, source: null })));
-    expect(seenBy(result.events, "player", result.state).some(sourced)).toBe(false);
+    expect(seenBy(result.events, "player", result.state).filter(sourced)).toEqual(publicSpark.map(entry => ({ ...entry, source: null })));
     for (const viewer of SIDES) {
       const named = strings([seenBy(result.events, viewer, result.state), engine.view(result.state, viewer)]);
       for (const id of [...hidden, ...cards]) expect(named.has(id)).toBe(false);
@@ -153,7 +153,9 @@ describe("trigger sources hidden from a side", () => {
     expect(sourcesOf(enemy, "triggerQueued")).toEqual(hidden);
     expect(sourcesOf(enemy, "payableEffectRegistered")).toEqual([hidden[1]]);
     expect(enemy.some((entry) => entry.kind === "effectStarted" && entry.source === hidden[0])).toBe(true);
-    expect(seenBy(result.events, "player", result.state).some(sourced)).toBe(false);
+    const publicSpark = result.events.filter(entry => entry.kind === "effectStarted" && entry.change.kind === "spark");
+    expect(publicSpark).toHaveLength(1);
+    expect(seenBy(result.events, "player", result.state).filter(sourced)).toEqual(publicSpark.map(entry => ({ ...entry, source: null })));
     const reloaded = deserializeState(JSON.stringify(result.state));
     expect(seenBy(result.events, "enemy", reloaded)).toEqual(enemy);
   });
@@ -169,7 +171,9 @@ describe("trigger sources hidden from a side", () => {
     expect(enemy).toEqual(result.events.filter((entry) => entry.kind !== "cardDrawn" || entry.side === "enemy"));
     expect(sourcesOf(enemy, "triggerResolved")).toEqual(hidden);
     expect(sourcesOf(enemy, "noLegalTarget")).toEqual([hidden[2]]);
-    expect(seenBy(result.events, "player", result.state).some(sourced)).toBe(false);
+    const publicSpark = result.events.filter(entry => entry.kind === "effectStarted" && entry.change.kind === "spark");
+    expect(publicSpark).toHaveLength(1);
+    expect(seenBy(result.events, "player", result.state).filter(sourced)).toEqual(publicSpark.map(entry => ({ ...entry, source: null })));
   });
 
   it("names a deck card drawn by its own trigger to its holder, which now identifies it, and to no one else", () => {
