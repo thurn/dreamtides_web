@@ -1,0 +1,596 @@
+{
+  "bead": "hv-quq1",
+  "phase": 5,
+  "base": "62d6b3170115e85712368f3783dcfd1dd6b90f30",
+  "freeze": {
+    "at": "2026-10-14T10:11:58.420987+00:00",
+    "head": "62d6b3170115e85712368f3783dcfd1dd6b90f30",
+    "files": 4815,
+    "manifestSHA256": "f256bb16202e538b54303e7d3c9d0810fcacf64b00641b113181de1b59abeed4",
+    "covers": [
+      "hv-2j70",
+      "hv-6yev",
+      "hv-922t",
+      "hv-f6p9",
+      "hv-n1i7",
+      "hv-qfnt",
+      "hv-stuw",
+      "hv-sw0d",
+      "hv-umm2.236",
+      "hv-umm2.245",
+      "hv-umm2.587",
+      "hv-umm2.614",
+      "hv-umm2.628",
+      "hv-umm2.659",
+      "hv-umm2.660",
+      "hv-umm2.661",
+      "hv-umm2.662",
+      "hv-umm2.663",
+      "hv-umm2.664",
+      "hv-umm2.666",
+      "hv-umm2.667",
+      "hv-umm2.669",
+      "hv-umm2.671",
+      "hv-umm2.672",
+      "hv-umm2.673",
+      "hv-whi3"
+    ],
+    "frictionHashes": {
+      "hv-2j70": "6b13f4ba3f8e10b3a065de38a14853d1d094f69f7596c9074791a7e1cd7769d3",
+      "hv-6yev": "bd9227596020571051f65abc20e86966aa55442e6498da5c1cd8a10e572698c0",
+      "hv-922t": "fbcdb0ce600e66b046b88890a73699ea81072580900cde4b89977f1da48e5910",
+      "hv-f6p9": "468696e7a13203b91a7fb1010c05753ecde493c9ee1187336292190f4c660807",
+      "hv-n1i7": "7480aef32efb1c883a84c5370830ac40889e8bba3bb9e1b5960602958a9bef56",
+      "hv-qfnt": "2bea3b88470e5cd03780d9daec76c01e70753b650c512b3e7ffa11c9e34eedf6",
+      "hv-stuw": "a7c9ce7a2039344a117c0e52e0ee98b6b17caa707f36ce8a44a6e37055556ec6",
+      "hv-sw0d": "09848dc5ef39d687bbe3a9d0e7ea9d0fd815e0a388cc59a70f499ded11780355",
+      "hv-umm2.236": "3d7585aae18d7d7c3b56727520cbde40839ae63ad7e3e54d81a8cd0da1831904",
+      "hv-umm2.245": "5d879e6781866cbca81969b8947a7ee522f4034c9db7ace7bff33da765b1e433",
+      "hv-umm2.587": "3c915a1e78ac8d473ad32b09d05f62d72a667e47a52fe0b537070d4841c1cf98",
+      "hv-umm2.614": "63ef2099c1ab5aa1ab295027fd93cce57058b91cd3be8596cab74388503418fc",
+      "hv-umm2.628": "4b1fe551b51ec84ea4ab8e29e7e669cf914f985ad1f6e5c13e9dd2bf3c68b907",
+      "hv-umm2.659": "944a925f05ad096b77afdaf2c7411ba77425506231c636ed458668763468521a",
+      "hv-umm2.660": "83b6064e88b790e2b3468b0d91002226a45d8a3f4b23278ea19742aa6aadd8e3",
+      "hv-umm2.661": "2c5a3b1b7875eada761f33ad0657737a4e842024ad837fa5aa8bd793bdbd1558",
+      "hv-umm2.662": "1ee9343c82fd26eb479e688dbb016182e8dc6ae575083cc2e1f5f2120ca33f35",
+      "hv-umm2.663": "ed0f3104ba3feaeba77cc7d5ac2391b0041955820da727fd0222faa1883bd07e",
+      "hv-umm2.664": "cc47aea9f1a84d147e4d22e7726d046bc9b7bbc5068ff74b53076d0790975e79",
+      "hv-umm2.666": "2c6fedb78418d62b69d0a7b0440a60925b14e151e4fc6742b2ea9ed4e97e4bf4",
+      "hv-umm2.667": "082b399e8451673350266a09ff2a81b3044529a4c4e94c1a3ea7d45f98046aa6",
+      "hv-umm2.669": "89181aee96543a85c057f36bd9883c981b06fd8188e437580b6291da5c30c6ea",
+      "hv-umm2.671": "1df68772813ca639573c3ff59aca2506f57e1680907ee419f206d50e09f25b9e",
+      "hv-umm2.672": "df98d4fdcd3008e06b8bdeca348b810f053887535239fdb5a242fb7cd6a68246",
+      "hv-umm2.673": "176940fd84adcfc7db13b527329fb416f4f2ce3af1ff0622842d23bba1dfae02",
+      "hv-whi3": "a2e808bdf4408dd373e5edb9257f7c2c0b31673d56282ad8674444cdd0ce283a"
+    },
+    "ledgerSHA256": "6bfe8705e34fabce7d3d4c754441b2c9c3284d1cb6aabc92c86815c5ff698507"
+  },
+  "dispatch": {
+    "timestamp": "2026-10-14T10:12:28.259Z",
+    "call_id": "call_d87fd50c2ef940b1a5424804969e4ffc",
+    "agent": "/root/phase5_retrospective_quq1"
+  },
+  "auditor": {
+    "actualFinalTimestamp": "2026-10-14T10:19:46.311Z",
+    "agent": "/root/phase5_retrospective_quq1",
+    "finalSHA256": "9186d764e56be37f516e89ce99b172c2e7e7b6e0c1157814287f9e1968fbd713",
+    "noWritesOrResources": true
+  },
+  "boundary": {
+    "precommitEnd": "2026-10-14T10:23:47.241008+00:00",
+    "inclusiveMinutes": 11.316366799999999,
+    "actualCommitEnd": "UNKNOWN until actual external automatic Git receipt; parent retains delta separately",
+    "cpuTime": "UNKNOWN",
+    "modelSamplingTime": "UNKNOWN",
+    "productiveEditingTime": "UNKNOWN",
+    "isolatedQueueTime": "UNKNOWN"
+  },
+  "currentAuditLoad": {
+    "at": "2026-10-14T10:21:43.110485+00:00",
+    "load1": 2.7578125,
+    "scope": "Parent evidence preparation; not a command-duration trace or historical load"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Parent evidence preparation; not a command-duration trace or historical load",
+        "value": 2.7578125
+      }
+    }
+  },
+  "initialManifestFiles": 4815,
+  "unchangedProduction": true,
+  "ledger": {
+    "previousSHA256": "6bfe8705e34fabce7d3d4c754441b2c9c3284d1cb6aabc92c86815c5ff698507",
+    "previousBytes": 20471,
+    "appendedLines": 1,
+    "line": {
+      "retrospective": "2026-10-14",
+      "phase": 5,
+      "bead": "hv-quq1",
+      "covers": [
+        "hv-2j70",
+        "hv-6yev",
+        "hv-922t",
+        "hv-f6p9",
+        "hv-n1i7",
+        "hv-qfnt",
+        "hv-stuw",
+        "hv-sw0d",
+        "hv-umm2.236",
+        "hv-umm2.245",
+        "hv-umm2.587",
+        "hv-umm2.614",
+        "hv-umm2.628",
+        "hv-umm2.659",
+        "hv-umm2.660",
+        "hv-umm2.661",
+        "hv-umm2.662",
+        "hv-umm2.663",
+        "hv-umm2.664",
+        "hv-umm2.666",
+        "hv-umm2.667",
+        "hv-umm2.669",
+        "hv-umm2.671",
+        "hv-umm2.672",
+        "hv-umm2.673",
+        "hv-whi3"
+      ]
+    },
+    "oldPrefixPreserved": true
+  },
+  "gate": {
+    "population": 26,
+    "stepSumMedianS": 103.5935,
+    "stepSumRangeS": [
+      18.652,
+      125.166
+    ],
+    "nativeElapsedMedianS": 103.681,
+    "nativeElapsedRangeS": [
+      18.759,
+      125.269
+    ],
+    "allFinalPromoted": true,
+    "freshStepsNoReuse": true,
+    "automaticCleanupCompleted": 25,
+    "notEligible614ReconciledByOwner": 1
+  },
+  "finalCandidates": {
+    "hv-2j70": {
+      "candidate": "01a13990-7648-71e3-990e-652ab6080483",
+      "source": "b8b66925609c63ce06b5470ca13707eb980fd633",
+      "tested": "b8b66925609c63ce06b5470ca13707eb980fd633",
+      "buildset": "01a13990-7b05-7632-96b9-46a659c17d92",
+      "cleanup": "completed"
+    },
+    "hv-6yev": {
+      "candidate": "01a139c9-5290-7541-8759-197f025c07cb",
+      "source": "b01fb5a8efe8dbaeff9c1a2c7da7dc751a763f81",
+      "tested": "b01fb5a8efe8dbaeff9c1a2c7da7dc751a763f81",
+      "buildset": "01a139c9-5930-7571-87b6-80b5aa42ac13",
+      "cleanup": "completed"
+    },
+    "hv-922t": {
+      "candidate": "01a138df-5258-7a13-81fc-c936693f97db",
+      "source": "c9d2885dcf27bf91ad485c4e66db63d074baddbd",
+      "tested": "c9d2885dcf27bf91ad485c4e66db63d074baddbd",
+      "buildset": "01a138df-56e7-7be3-a95a-e7b0ec22fc95",
+      "cleanup": "completed"
+    },
+    "hv-f6p9": {
+      "candidate": "01a138be-09f4-7421-8944-54731b0e6d3e",
+      "source": "cf5bae7ff124b8bc8ee42a54068f3e6f91a24e07",
+      "tested": "fd70feb0b8872f600881446c50b778aa6e822271",
+      "buildset": "01a138be-0efb-7ed1-a48a-713980c7b850",
+      "cleanup": "completed"
+    },
+    "hv-n1i7": {
+      "candidate": "01a1395f-9410-7fa2-941e-0bc86b17a1be",
+      "source": "49ca84f6eb751820e1d715af69d7b27e2866037c",
+      "tested": "49ca84f6eb751820e1d715af69d7b27e2866037c",
+      "buildset": "01a1395f-9b09-73c0-8637-15fde267cbf9",
+      "cleanup": "completed"
+    },
+    "hv-qfnt": {
+      "candidate": "01a13981-6f17-74d0-8178-cb216839a559",
+      "source": "0faaba7e13ac6c8acadc83ecf25298760d8791ba",
+      "tested": "98b95f856b96df0cb615b6d173759d7799faef34",
+      "buildset": "01a13981-79f7-7b30-b0bf-4373f18f9a66",
+      "cleanup": "completed"
+    },
+    "hv-stuw": {
+      "candidate": "01a138d3-1438-7222-9408-6c8ad4a8fe86",
+      "source": "7cad4715f79affbf21be9a5b6f1c15d70eae6ebd",
+      "tested": "7cad4715f79affbf21be9a5b6f1c15d70eae6ebd",
+      "buildset": "01a138d3-19fb-7641-bf99-d6bf67904a8b",
+      "cleanup": "completed"
+    },
+    "hv-sw0d": {
+      "candidate": "01a139e3-083c-7041-96eb-a490087976ab",
+      "source": "62d6b3170115e85712368f3783dcfd1dd6b90f30",
+      "tested": "62d6b3170115e85712368f3783dcfd1dd6b90f30",
+      "buildset": "01a139e3-0eff-7fa0-b4a2-92af9c9e8f7f",
+      "cleanup": "completed"
+    },
+    "hv-umm2.236": {
+      "candidate": "01a13931-5968-7d33-ba0b-b65fb427c47b",
+      "source": "ad39d0f812ad5f3996f22e2e896953e7cbf046f0",
+      "tested": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "buildset": "01a13931-5f58-7672-a5f6-d8983a62e663",
+      "cleanup": "completed"
+    },
+    "hv-umm2.245": {
+      "candidate": "01a138da-555f-7541-a845-5f7670f1abc3",
+      "source": "978f8df9bd24cf29cefbc0fe34c19fd62c729121",
+      "tested": "ced45de93f6f82d188b527c145e046b37ac05724",
+      "buildset": "01a138da-5aa8-7c53-892a-af085d5b6680",
+      "cleanup": "completed"
+    },
+    "hv-umm2.587": {
+      "candidate": "01a13887-b6c8-7703-80ef-729b50b90fdb",
+      "source": "c478bad1e8f01b71045e16f70da4130b1450e7fb",
+      "tested": "e986f347a53b31d0b7b7bf3d66ab664b72afc659",
+      "buildset": "01a13887-bd7e-7360-a7f7-64ea79b3d003",
+      "cleanup": "completed"
+    },
+    "hv-umm2.614": {
+      "candidate": "01a138e0-8484-7a20-9205-324926475f85",
+      "source": "f4bd62a97a2f7ab273def6740acc1a06d914cf37",
+      "tested": "3cf50d1fcc8dfaaca34300f33779c8367dd52dad",
+      "buildset": "01a138e0-8b01-7f81-863c-15cdfc92e5e4",
+      "cleanup": "not-eligible"
+    },
+    "hv-umm2.628": {
+      "candidate": "01a1389a-3501-7dd2-a58c-f8676d59fb41",
+      "source": "2b5a09d13ac356fd833dcb297fc52c016df61170",
+      "tested": "5505d8a6fa44b36968fd5e18d9a77c106b52ee7b",
+      "buildset": "01a1389a-3b7c-7e63-9b0b-31e5f5e061dc",
+      "cleanup": "completed"
+    },
+    "hv-umm2.659": {
+      "candidate": "01a13880-dddd-70f2-8a19-9c56c1ed695b",
+      "source": "bf3bc96467fefd8b5384958635368cb0ab1ff113",
+      "tested": "0994ede4ad0dc7a738af02717623e496b29ec908",
+      "buildset": "01a13880-e39f-7b02-acb2-18274d85a95f",
+      "cleanup": "completed"
+    },
+    "hv-umm2.660": {
+      "candidate": "01a1389e-1c28-7382-9186-869c00d3131b",
+      "source": "83b177889cf506529feb3e67a3fe8b7c80a2f37a",
+      "tested": "0eb20a168795f52a0fde74f5578a6df20eaff2ce",
+      "buildset": "01a1389e-23bf-74e0-80b8-16aa76e09cae",
+      "cleanup": "completed"
+    },
+    "hv-umm2.661": {
+      "candidate": "01a1388c-5872-7501-8e9d-368dfb236e23",
+      "source": "247bf9131068f8f00cb4ccff0f6dda9475cb79d1",
+      "tested": "0d0e3b7fa012416b2292c9da2a3aaeae592f9f35",
+      "buildset": "01a1388c-6006-7f30-b24c-a0dfd12bfda1",
+      "cleanup": "completed"
+    },
+    "hv-umm2.662": {
+      "candidate": "01a138a7-1f5c-7461-b53a-8cea1ac05443",
+      "source": "c30216270495b7d48a06225f901d68fc4c410763",
+      "tested": "0ee02fa28cbfabfae4cc17db69745ce76b6c7a49",
+      "buildset": "01a138a7-2570-7761-a999-d6b83362ac86",
+      "cleanup": "completed"
+    },
+    "hv-umm2.663": {
+      "candidate": "01a13902-ac48-7090-accf-348196206ce1",
+      "source": "0ff3589be5bf25dd4020e7f99112f1d48c2dea73",
+      "tested": "0495251c0b9df45104f85476cf485fe7d357d79c",
+      "buildset": "01a13902-b18b-7353-a895-52ce603cfbfd",
+      "cleanup": "completed"
+    },
+    "hv-umm2.664": {
+      "candidate": "01a138fe-65f3-7f00-aeb7-295a9e415969",
+      "source": "3fb6adb3f5f13e9e3bc67328c8837323d62427c6",
+      "tested": "35445e4cd55d99d2d6e598187344f8bd2903ac1e",
+      "buildset": "01a138fe-6bb0-7cd1-98d6-c304df5eb0f7",
+      "cleanup": "completed"
+    },
+    "hv-umm2.666": {
+      "candidate": "01a1396d-b663-79b1-b87c-d2f37ec368f9",
+      "source": "a38eb98e653f983205c731e79950c04fe9380d1f",
+      "tested": "e1d0eb429ef1dc1436ee6cc3eb9b7c98fe2649e1",
+      "buildset": "01a1396d-bc08-7380-b584-b744b8229d27",
+      "cleanup": "completed"
+    },
+    "hv-umm2.667": {
+      "candidate": "01a138e9-d7d3-76f3-bc8c-dc25cca2347b",
+      "source": "81d5290c694fd64f32619366105f081ba219c5f5",
+      "tested": "baf82441a800b74e79d70388524dd511fdf50fca",
+      "buildset": "01a138e9-ddf4-7b63-b0b1-2ec8f8b726df",
+      "cleanup": "completed"
+    },
+    "hv-umm2.669": {
+      "candidate": "01a1389d-88b4-7080-9f54-bdcd3a64778a",
+      "source": "b0d5000bd8891cd9ff9b703b58a448d8ba2339fa",
+      "tested": "af17dbf51732c216fabcc672d14432d011122347",
+      "buildset": "01a1389d-8f5a-7182-a9da-ff00dd025f4d",
+      "cleanup": "completed"
+    },
+    "hv-umm2.671": {
+      "candidate": "01a1387b-c09d-76c3-8481-6d39a00f2597",
+      "source": "994f6f21e30831eda2370765c1e0191b1b32a5bc",
+      "tested": "c38acab2946ec7b1eb7bdea7aaf6487ab706aba9",
+      "buildset": "01a1387b-c672-75e1-81cf-e3b5de42d357",
+      "cleanup": "completed"
+    },
+    "hv-umm2.672": {
+      "candidate": "01a13891-3fd0-7f52-8f68-925328ff5dc3",
+      "source": "1d09186803355d6410df553ecf7b25d2668e060f",
+      "tested": "95588ef7435a356f61ac363985b8f154442f6833",
+      "buildset": "01a13891-46c7-7382-8eb8-4919307209de",
+      "cleanup": "completed"
+    },
+    "hv-umm2.673": {
+      "candidate": "01a1389f-dc69-7343-ba73-9dd5ba6817f6",
+      "source": "e80a141741eb300135265bdc01db9433d0ce43a7",
+      "tested": "dbf671ef3166fc1e0fd3c8498c1326d38b0b088d",
+      "buildset": "01a1389f-e3f8-76b0-870f-27d37df4831c",
+      "cleanup": "completed"
+    },
+    "hv-whi3": {
+      "candidate": "01a138f3-79f8-7363-a220-0d7392484646",
+      "source": "2e4b2ae68fb9e0f19537da64c4a798454dda6624",
+      "tested": "422abd065903c39fcbed5edadddca09edab6ceac",
+      "buildset": "01a138f3-7f16-7341-bf9f-c9cde535b6d0",
+      "cleanup": "completed"
+    }
+  },
+  "releaseSnapshot": {
+    "population": 25,
+    "states": {
+      "check-passed": 20,
+      "check-failed": 3,
+      "superseded": 1,
+      "running": 1
+    },
+    "passingStepSumMedianS": 307.8485,
+    "passingStepSumRangeS": [
+      291.87,
+      342.028
+    ],
+    "passingFuzzMedianS": 183.1585,
+    "passingFuzzRangeS": [
+      164.018,
+      204.922
+    ],
+    "passingFullReviewMedianS": 124.9905,
+    "passingFullReviewRangeS": [
+      114.01,
+      144.691
+    ],
+    "state": "pending",
+    "lag": 1,
+    "holds": [],
+    "pause": null,
+    "qualification": "Bounded retained snapshot, not one-to-one complete retrospective population or publication proof; historical fuzz failures retain canonical hv-edk7"
+  },
+  "history": {
+    "retainedEvents": 500,
+    "sequenceRange": [
+      27068,
+      27567
+    ],
+    "completeInterval": false
+  },
+  "checkerCensus": {
+    "configuredEntrypoints": 380,
+    "physicalEntrypointLines": 84257,
+    "jsdomFiles": 83,
+    "jsdomLines": 19958,
+    "engineContentJsdom": 0,
+    "isolatedMockFiles": 44,
+    "sharedDomFiles": 49,
+    "plainPrimitiveContractModules": 203,
+    "plainScenarioModules": 64,
+    "contractScenarioModulesOver500": 0,
+    "rawCoveredFrictionDelta": {
+      "files": 17,
+      "lines": 3045,
+      "jsdomFiles": 0,
+      "qualification": "Includes plain modules, not configured-entrypoint delta"
+    },
+    "over500Entrypoints": [
+      {
+        "path": "src/engine/testing/tooling-card-lab.test.ts",
+        "lines": 519,
+        "reason": "Existing572 bounded declared-board correctness contracts"
+      },
+      {
+        "path": "src/rules/battle/engine-battle-intents.test.ts",
+        "lines": 507,
+        "reason": "Coherent saved-state/intent validation boundary including587 captured departed-subject scalar"
+      },
+      {
+        "path": "scripts/friction-triggers.test.mjs",
+        "lines": 510,
+        "reason": "Existing573 coherent synthetic CLI/evidence contract"
+      }
+    ],
+    "countsAreBudgetCeilings": false
+  },
+  "D19Witnesses": [
+    {
+      "bead": "hv-umm2.236",
+      "stdout": "/tmp/root-236/helper/full-v4.stdout",
+      "stdoutSHA256": "b2abf9d91544e1c47a40b140a20ad0641b558f5a5fe3844a9ab67ab4c8542501",
+      "receipt": "/tmp/root-236/helper/full-v4.receipt.json",
+      "testStart": "2026-10-14T06:37:06.037Z",
+      "testStartLoad": 4.48193359375,
+      "testStepS": 83.0,
+      "configuredFiles": 380,
+      "workers": 2,
+      "meaning": "Actualsource-qualified passing full testphase, notwrapperwall or causalA/B; no continuousloadtrace claimed"
+    },
+    {
+      "bead": "hv-n1i7",
+      "stdout": "/tmp/root-n1i7/helper/full-v1.stdout",
+      "stdoutSHA256": "6ac00a3545fcbddc0b3b8dfd582b92d47dd2b261b60f9057d7b52d2c4909b743",
+      "receipt": "/tmp/root-n1i7/helper/full-v1.receipt.json",
+      "testStart": "2026-10-14T07:32:35.886Z",
+      "testStartLoad": 4.70849609375,
+      "testStepS": 83.4,
+      "configuredFiles": 380,
+      "workers": 2,
+      "meaning": "Actualsource-qualified passing full testphase, notwrapperwall or causalA/B; no continuousloadtrace claimed"
+    },
+    {
+      "bead": "hv-6yev",
+      "stdout": "/tmp/root-hand-empty-6yev/helper/full-final.stdout",
+      "stdoutSHA256": "b800cf76ea51f23f818895c69f1b1a0c25cbd69e0b6a2eac7d4321de6e1e0d01",
+      "receipt": "/tmp/root-hand-empty-6yev/helper/full-final.receipt.json",
+      "testStart": "2026-10-14T09:30:43.130Z",
+      "testStartLoad": 5.65673828125,
+      "testStepS": 80.1,
+      "configuredFiles": 380,
+      "workers": 2,
+      "meaning": "Actualsource-qualified passing full testphase, notwrapperwall or causalA/B; no continuousloadtrace claimed"
+    }
+  ],
+  "improvements": [
+    {
+      "bead": "hv-s5on",
+      "key": "candidate-owned-worktree-context/phase-5",
+      "cause": "Implicit candidate process cwd and missing returned path/branch guard",
+      "dependsOn": "hv-quq1",
+      "gateJoin": "hv-umm2.46",
+      "dedupeBefore": [],
+      "dedupeAfter": [
+        "hv-s5on"
+      ]
+    },
+    {
+      "bead": "hv-q331",
+      "key": "full-suite-budget/phase-5/since-hv-mwpi",
+      "cause": "Current observable two-worker low-starting-load full suite exceeds D19; precise cost cause pending profile",
+      "dependsOn": "hv-quq1",
+      "gateJoin": "hv-umm2.46",
+      "dedupeBefore": [],
+      "dedupeAfter": [
+        "hv-q331"
+      ]
+    }
+  ],
+  "reviewCompletionSeconds": {
+    "hv-n1i7": [
+      273.025,
+      235.069
+    ],
+    "hv-qfnt": [
+      250.423,
+      46.116
+    ],
+    "hv-6yev": [
+      370.318,
+      157.159
+    ]
+  },
+  "canonicalFindingsPreserved": [
+    "hv-edk7",
+    "hv-rb9p",
+    "hv-ndka"
+  ],
+  "historicalUnknownMeasurements": 41,
+  "newTriggerDispositions": [],
+  "budgetRevision": null,
+  "localValidationReceipts": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective-quq1",
+      "started": "2026-10-14T10:22:17.808897+00:00",
+      "ended": "2026-10-14T10:22:18.096229+00:00",
+      "elapsed_seconds": 0.28718162499717437,
+      "pid": 87281,
+      "pgid": 87281,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "0239d4784013ebb1830f65dc50150d001c219902122accb99fab95f5c766790c",
+      "manifest_files": 4821,
+      "head": "62d6b3170115e85712368f3783dcfd1dd6b90f30",
+      "status": "A  docs/plan/evidence/friction/hv-quq1.json\nM  docs/plan/evidence/introspection.jsonl\nA  docs/plan/evidence/measurements/hv-quq1.json\nA  docs/plan/evidence/measurements/hv-quq1.md\nA  docs/plan/evidence/pre-existing/hv-quq1.md\n",
+      "before_sha256": "29f31e359b52afc0258d43144ac21bf30b7a46e6cc7ef48fcef0d370798434f9",
+      "after_sha256": "29f31e359b52afc0258d43144ac21bf30b7a46e6cc7ef48fcef0d370798434f9",
+      "label": "review-1",
+      "receiptSHA256": "afeee030d7df3676d93026bd880b7a8c7502f115a0494aa6c5a4043e2da27cae",
+      "stdoutSHA256": "db0a6a2e2e9fb4b739efe64ba9549c666b099d65040a062a723e7cec8e1decc9",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective-quq1",
+      "started": "2026-10-14T10:22:22.193670+00:00",
+      "ended": "2026-10-14T10:22:28.106655+00:00",
+      "elapsed_seconds": 5.91284479101887,
+      "pid": 87411,
+      "pgid": 87411,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "0239d4784013ebb1830f65dc50150d001c219902122accb99fab95f5c766790c",
+      "manifest_files": 4821,
+      "head": "62d6b3170115e85712368f3783dcfd1dd6b90f30",
+      "status": "A  docs/plan/evidence/friction/hv-quq1.json\nM  docs/plan/evidence/introspection.jsonl\nA  docs/plan/evidence/measurements/hv-quq1.json\nA  docs/plan/evidence/measurements/hv-quq1.md\nA  docs/plan/evidence/pre-existing/hv-quq1.md\n",
+      "before_sha256": "29f31e359b52afc0258d43144ac21bf30b7a46e6cc7ef48fcef0d370798434f9",
+      "after_sha256": "29f31e359b52afc0258d43144ac21bf30b7a46e6cc7ef48fcef0d370798434f9",
+      "label": "knip-1",
+      "receiptSHA256": "0a1d790555a1a9635c8af2a9bc922c60de0d53242b9883aac413d85aaa62e590",
+      "stdoutSHA256": "369def04f74682e8d511cee97412cc348771a5d4e7fd98d48bd3475de01c4046",
+      "stderrSHA256": "756b6c7329a9e342ba1480f8f3d433ce481a1aa195dc74524bdf38c41940abc8"
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "failurePaths": "No new production state transitions; historical evidence/acceptance qualifications in companion Markdown. No new rollback/storage/race proof inferred.",
+  "parentReadOnlyInvocationSlips": [
+    "Unmatched shell glob prevented search invocation; corrected literal paths.",
+    "Local json.loads rejected NDJSON ExtraData after gate calculations; corrected per-frame local decoding, no repeated native effects."
+  ],
+  "resources": {
+    "helper": "Sole read-only Sage actualFINAL, no spawnedprocesses/resources/writes",
+    "persistentOwnedProcesses": [],
+    "browsers": [],
+    "servers": [],
+    "ports": [],
+    "reviewProviders": [],
+    "heavyCommands": [],
+    "parentMetadataAndSetupReceipts": "/tmp/root-quq1/*.receipt.json; all terminal before validation"
+  },
+  "provenance": {
+    "sage-final.md": "9186d764e56be37f516e89ce99b172c2e7e7b6e0c1157814287f9e1968fbd713",
+    "freeze.json": "48b6806ca2e85299452d1305b793eeb640892dc0ba15c852a8cf668b734ca58c",
+    "initial-source-manifest.json": "f256bb16202e538b54303e7d3c9d0810fcacf64b00641b113181de1b59abeed4",
+    "friction-start.report.json": "48dce5fe1fe80a59c9647ab4d5eb7d983481510d38806a85c01f2c5fa9c1aa37",
+    "final-candidates.json": "61027c7dad090f37e928c6de82671b9e4d6dfe34f5b96680673c3df76f0174d4",
+    "gate-summary.json": "b5561e9df48ae7c990635816b4d4db80b2ebac75cc23e81df8ca15f7fb81ab70",
+    "current-D19-witnesses.json": "5f93e18531c6b8976e4ed6e88804ca426d9f9105bd214d7a31be9fff85f1bfb9",
+    "audit-release.stdout": "5d675e7055f509545c2896a312fdd6902c5435ec248235065b843e59864327fc",
+    "audit-history.stdout": "159a52f7733db9937e00657ff3dde104419d6c90c23e1271d5b9e5852eaa1bf6",
+    "audit-doctor.stdout": "b904d0652980f003821e840695d58f8125559488d03c989181a9b13cd1f81e7f",
+    "candidate-context-specific-dedupe.json": "90ce35a9f0645152b7767b4860e03d7e54f60ff9d86efdbfcf7bf58efc39ae31",
+    "performance-duty-hits.json": "a9c49ec90cbde2487c4f935c8316089c890ef9b7d0625089b54a8acd037eda62",
+    "dispatch.json": "cf18ef8bb5c0832fd9254df601e1eb31ae28be731f2bef848b1be22d6538ef32"
+  },
+  "validationQualification": "Review quick selected friction schema only, not runtime/lint/type/suite proof. Knip passed. Fresh terminal schema/cached whitespace follow below and are retained in external receipts. No full/browser/performance benchmark belongs to this docs-only audit."
+}

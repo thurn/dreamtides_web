@@ -1,0 +1,20 @@
+{
+  "bead": "hv-quq1",
+  "phase": 5,
+  "implementMin": 11.316366799999999,
+  "implementWindow": {
+    "start": "2026-10-14T10:12:28.259Z",
+    "end": "2026-10-14T10:23:47.241008+00:00"
+  },
+  "localValidationS": {
+    "review": 0.28718162499717437,
+    "knip": 5.91284479101887
+  },
+  "hostLoad": 2.7578125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

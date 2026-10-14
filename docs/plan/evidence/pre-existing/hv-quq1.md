@@ -1,0 +1,6 @@
+# Verified workflow findings encountered by hv-quq1
+
+- **Candidate invocation context:** native `.614` candidate metadata records the primary checkout and `master`, producing cleanup not eligible. The first `6yev` candidate repeats that context and was canceled before authority; its unchanged source was correctly resubmitted from its own worktree. Current collection guidance leaves actual submission cwd implicit. Bounded project recipe repair: `hv-s5on`, dependent on this retrospective and joined into gate `.46`. These are parent invocation/recovery facts, not source or Tollgate correctness failures.
+- **Current D19 full-suite cost:** actual passing full test phases are 83.0/83.4/80.1 seconds at two workers and starting loads 4.48/4.71/5.66. The 60-second target requires a fresh bounded current-source diagnosis/test-cut response, `hv-q331`, dependent on this retrospective and joined into gate `.46`. Precise cause awaits a low-load profile; older `mwpi` measurements and `.526` fuzz work do not certify this current suite. No arbitrary pruning, budget revision or weakened acceptance is inferred.
+
+Canonical privacy, temporary numeric spark and development-opener findings remain `hv-edk7`, `hv-rb9p` and `hv-ndka`, respectively. The audit preserves their ownership and source/QA qualifications.
