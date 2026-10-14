@@ -1,0 +1,594 @@
+{
+  "bead": "hv-umm2.671",
+  "base": "95ef6ded0009ffbce7559eaffd50cd5a61d8b192",
+  "entities": [
+    "72ef4b11-5366-4798-aab0-09e5ffbb1ed8"
+  ],
+  "scope": {
+    "leaf": "src/content/dreamsigns/wing-72ef4b11.ts",
+    "nonTestLinesAdded": 5,
+    "nonTestLinesRemoved": 1,
+    "scenarios": "D20 pure public primitive composition; no private scenario module",
+    "existingRules": "maximum energy changes only production; all-draw ordinal per turn; opening hand triggers suppressed; no unsettled ambiguity or new RD/card issue; no journey clause",
+    "excludedBodies": "Engine/UI/runtime/policy/catalog indexes/inventory/shared scenario index/QA drivers/config remain read-only"
+  },
+  "sourceAudit": {
+    "wholeText": "When you draw your second card each turn, gain 1 maximum ●.",
+    "composition": "triggered(whenDraw(\"you\",2),gainMaxEnergy(1))",
+    "d21": {
+      "firstByte": 64,
+      "sampled": false,
+      "newPromptStatusVisualKind": false,
+      "mandatedJudgment": false
+    },
+    "knownEntityRulesDecisionsOrIssues": []
+  },
+  "checks": {
+    "wing-runtime": {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/671/helper/wing-runtime.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/wing-second-draw-671",
+      "start": "2026-10-14T03:15:57.179156+00:00",
+      "end": "2026-10-14T03:16:00.016792+00:00",
+      "pid": 71523,
+      "pgid": 71523,
+      "exitCode": 0,
+      "wallSeconds": 2.837635500007309,
+      "cpuSeconds": {
+        "user": 2.279766,
+        "system": 1.109068
+      },
+      "startLoad": [
+        4.33154296875,
+        7.05078125,
+        9.97607421875
+      ],
+      "endLoad": [
+        4.33154296875,
+        7.05078125,
+        9.97607421875
+      ]
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "gainMaxEnergy|drawTriggerFilter|named triggers|when patterns|queues one|second draw"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/wing-second-draw-671",
+      "start": "2026-10-14T03:16:19.674826+00:00",
+      "end": "2026-10-14T03:16:27.229853+00:00",
+      "pid": 72048,
+      "pgid": 72048,
+      "exitCode": 0,
+      "wallSeconds": 7.554984874994261,
+      "cpuSeconds": {
+        "user": 7.976673,
+        "system": 2.464354
+      },
+      "startLoad": [
+        5.02294921875,
+        7.03076171875,
+        9.89990234375
+      ],
+      "endLoad": [
+        6.1689453125,
+        7.2099609375,
+        9.9296875
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/wing-second-draw-671",
+      "start": "2026-10-14T03:16:19.674676+00:00",
+      "end": "2026-10-14T03:16:25.745221+00:00",
+      "pid": 72047,
+      "pgid": 72047,
+      "exitCode": 0,
+      "wallSeconds": 6.070518041989999,
+      "cpuSeconds": {
+        "user": 5.164794,
+        "system": 1.815255
+      },
+      "startLoad": [
+        5.02294921875,
+        7.03076171875,
+        9.89990234375
+      ],
+      "endLoad": [
+        6.1689453125,
+        7.2099609375,
+        9.9296875
+      ]
+    },
+    "coverage": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/wing-second-draw-671",
+      "start": "2026-10-14T03:17:07.468728+00:00",
+      "end": "2026-10-14T03:17:13.457333+00:00",
+      "pid": 73671,
+      "pgid": 73671,
+      "exitCode": 0,
+      "wallSeconds": 5.988590499997372,
+      "cpuSeconds": {
+        "user": 5.220902,
+        "system": 1.937987
+      },
+      "startLoad": [
+        6.74755859375,
+        7.203125,
+        9.7998046875
+      ],
+      "endLoad": [
+        7.16796875,
+        7.28271484375,
+        9.8125
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/wing-second-draw-671",
+      "start": "2026-10-14T03:16:41.318971+00:00",
+      "end": "2026-10-14T03:17:53.518186+00:00",
+      "pid": 72654,
+      "pgid": 72654,
+      "exitCode": 0,
+      "wallSeconds": 72.19846787501592,
+      "cpuSeconds": {
+        "user": 162.075965,
+        "system": 22.879618
+      },
+      "startLoad": [
+        6.2109375,
+        7.16650390625,
+        9.8662109375
+      ],
+      "endLoad": [
+        16.4326171875,
+        9.544921875,
+        10.517578125
+      ]
+    },
+    "weighted-fuzz": {
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "72ef4b11-5366-4798-aab0-09e5ffbb1ed8"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/wing-second-draw-671",
+      "start": "2026-10-14T03:17:08.627521+00:00",
+      "end": "2026-10-14T03:27:44.401110+00:00",
+      "pid": 73764,
+      "pgid": 73764,
+      "exitCode": 0,
+      "wallSeconds": 635.7664293340058,
+      "cpuSeconds": {
+        "user": 276.70517,
+        "system": 3.347721
+      },
+      "startLoad": [
+        6.74755859375,
+        7.203125,
+        9.7998046875
+      ],
+      "endLoad": [
+        5.0771484375,
+        7.59033203125,
+        9.58935546875
+      ]
+    },
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "72ef4b11-5366-4798-aab0-09e5ffbb1ed8",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/wing-second-draw-671",
+      "start": "2026-10-14T03:18:13.451657+00:00",
+      "end": "2026-10-14T03:18:15.133616+00:00",
+      "pid": 26208,
+      "pgid": 26208,
+      "exitCode": 0,
+      "wallSeconds": 1.681976834021043,
+      "cpuSeconds": {
+        "user": 1.2538799999999999,
+        "system": 0.519029
+      },
+      "startLoad": [
+        18.44287109375,
+        10.4873046875,
+        10.83447265625
+      ],
+      "endLoad": [
+        18.44287109375,
+        10.4873046875,
+        10.83447265625
+      ]
+    },
+    "sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.671",
+        "--dreamsigns",
+        "72ef4b11-5366-4798-aab0-09e5ffbb1ed8",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/wing-second-draw-671",
+      "start": "2026-10-14T03:29:03.607679+00:00",
+      "end": "2026-10-14T03:29:13.983493+00:00",
+      "pid": 12184,
+      "pgid": 12184,
+      "exitCode": 0,
+      "wallSeconds": 10.37573916700785,
+      "cpuSeconds": {
+        "user": 6.142224,
+        "system": 3.003806
+      },
+      "startLoad": [
+        5.7490234375,
+        7.15234375,
+        9.23681640625
+      ],
+      "endLoad": [
+        6.40234375,
+        7.24560546875,
+        9.24560546875
+      ]
+    },
+    "qa-workflow": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/671/helper/wing-player-workflow.mjs",
+        "--bead",
+        "hv-umm2.671",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/wing-second-draw-671",
+      "start": "2026-10-14T03:30:06.071677+00:00",
+      "end": "2026-10-14T03:30:34.180948+00:00",
+      "pid": 14342,
+      "pgid": 14342,
+      "exitCode": 0,
+      "wallSeconds": 28.108995874994434,
+      "cpuSeconds": {
+        "user": 6.891147,
+        "system": 2.972338
+      },
+      "startLoad": [
+        6.7119140625,
+        7.2119140625,
+        9.10791015625
+      ],
+      "endLoad": [
+        7.05712890625,
+        7.25634765625,
+        9.068359375
+      ]
+    }
+  },
+  "publicContracts": {
+    "focused": "38 selected public synthetic contracts;3143 skipped across3files. gainMaxEnergy/drawTriggerFilter, named/when triggers and held emblem queue contracts",
+    "review": "247files/5747tests pass",
+    "coverage": "20 tests pass",
+    "exactContent": "actual UUID through public contentDreamsignDefinitions/createEngine; both holders/one and two held copies/source indexes; first/second/third max-only; turn reset then second draw during opponent turn; Fatigue and opening suppression. Scratch source+stdout hash retained",
+    "exactContentScratch": "/tmp/dreamtides-executor-01a1304d/671/helper/wing-runtime.ts",
+    "exactContentScratchSHA256": "7412ff889511a75fbec0faede2caa8641961a09e916726b97621de9d676dc0cb",
+    "weighted": "300 games/121961steps/8082prompts/832interactive reruns; results162player137enemy1draw; failures0; UUID included600/exercised2791",
+    "weightedTiming": {
+      "wrapperWallSeconds": 635.7664293340058,
+      "nativeEngineReportedWallSeconds": 245.0,
+      "nativeEngineReportedCPUSeconds": 278.6,
+      "wrapperChildrenRusageUserSeconds": 276.70517,
+      "wrapperChildrenRusageSystemSeconds": 3.347721,
+      "wrapperStart": "2026-10-14T03:17:08.627521+00:00",
+      "observedEngineBirthUTC": "2026-10-14T03:23:37Z",
+      "birthClockPrecisionSeconds": 1,
+      "queueApproxSeconds": 388.37,
+      "qualification": "Observed kernel waiter then engine birth supports approximate queue; wrapper minus reported engine duration also includes startup/teardown. CPU activity was never used as game-progress proof."
+    }
+  },
+  "qa": {
+    "preflight": "20 cells:2pass/18ineligible skip/0fail; both sides/all variants; initialization not second-draw exercise",
+    "sweep": "20effectivecells and20attempts:2pass/18ineligible skip/0fail; invocation sweep-J3yO9b; native allocator slot0/5174;1session/0yields; provider active identity not directly captured because live inspection occurred after terminal, honestly qualified",
+    "workflow": {
+      "desktop": {
+        "uuid": "72ef4b11-5366-4798-aab0-09e5ffbb1ed8",
+        "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+        "states": [
+          {
+            "ordinal": 1,
+            "current": 8,
+            "maximum": 10,
+            "source": "i51"
+          },
+          {
+            "ordinal": 2,
+            "current": 6,
+            "maximum": 11,
+            "source": "i52"
+          },
+          {
+            "ordinal": 3,
+            "current": 4,
+            "maximum": 11,
+            "source": "i53"
+          }
+        ],
+        "resolutions": 1,
+        "change": {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 6,
+          "max": 11,
+          "change": 0,
+          "maxChange": 1,
+          "cause": "effect"
+        },
+        "reloaded": true,
+        "geometry": {
+          "current": 4,
+          "maximum": 11,
+          "width": 175.15625,
+          "height": 54,
+          "visible": true,
+          "hit": true,
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=72ef4b11-5366-4798-aab0-09e5ffbb1ed8&as=player&seed=1&debug=1&game=dim7gq",
+          "viewport": [
+            1440,
+            900
+          ]
+        },
+        "logRows": 51
+      },
+      "mobile": {
+        "uuid": "72ef4b11-5366-4798-aab0-09e5ffbb1ed8",
+        "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+        "states": [
+          {
+            "ordinal": 1,
+            "current": 8,
+            "maximum": 10,
+            "source": "i51"
+          },
+          {
+            "ordinal": 2,
+            "current": 6,
+            "maximum": 11,
+            "source": "i52"
+          },
+          {
+            "ordinal": 3,
+            "current": 4,
+            "maximum": 11,
+            "source": "i53"
+          }
+        ],
+        "resolutions": 1,
+        "change": {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 6,
+          "max": 11,
+          "change": 0,
+          "maxChange": 1,
+          "cause": "effect"
+        },
+        "reloaded": true,
+        "geometry": {
+          "current": 4,
+          "maximum": 11,
+          "width": 175.15625,
+          "height": 54,
+          "visible": true,
+          "hit": true,
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=72ef4b11-5366-4798-aab0-09e5ffbb1ed8&as=player&seed=1&debug=1&game=iop3r5",
+          "viewport": [
+            390,
+            844
+          ]
+        },
+        "logRows": 51
+      }
+    },
+    "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.671/invocations/run-SwU6hB/wing-player-workflow.result.json",
+    "caps": [],
+    "captureFilenames": [
+      "671-wing-third-draw-desktop.png",
+      "671-wing-third-draw-mobile.png"
+    ],
+    "captures": "Desktop actualPNG2880x1800 displayed1996x1248 by image tool; mobile actual780x1688. Both helper and parent inspected changed status region; no new visual finding. Native viewport1440x900/390x844.",
+    "runtimeClosure": {
+      "sweep": "Native terminal0, native owned server12232/port5174 cleanup-free, runner12184 andserver12232groupempty, exactownrecordsabsent; detailedqualified helper/sweep-resource-settlement.json",
+      "workflow": "Actual active provider050fe4ef-7609-4f66-a6b8-3a5f3158d04f/nativeprotocol2025-11-25 captured; runner14342/server14376 births/groups recorded. Native terminal0 awaits confirmed browserclose, RPC settlement, SDKclose, ownerclear, serverstop, leaserelease; own groups/records absent; helper/workflow-resource-settlement.json"
+    },
+    "freeze": {
+      "parentQAACK": "2026-10-14T03:28:46.936276Z",
+      "helperPostGuard": "2026-10-14T03:31:18.962680Z",
+      "parentIndependentGuardAndRelease": "2026-10-14T03:31:56.747805Z",
+      "fullSourcePaths": 4684,
+      "supports": 4,
+      "allBytesTargetsAndPathSetsExact": true,
+      "manualSourceSupportEvidenceGitChecksFrozenWhileLive": true,
+      "nativeAutoLedgerOnlyDeclaredMutableSourceOutput": true
+    }
+  },
+  "reviewRouting": {
+    "requiredIndependentReview": false,
+    "reason": "5 non-test lines/minimal composition;671notcore-review; no new primitive/prompt",
+    "currentPolicy": "Normal cross-family routing reinstated after temporary Sol override expired2026-10-14T01:00:00Z"
+  },
+  "preExistingIssues": [],
+  "resourceClosure": "All owned check/fuzz/QA runtime groups settled; no own providers/SDK/RPC/browser/server/lease remains. Peer records were only inspected and never touched.",
+  "timing": {
+    "dispatchProxyUTC": "2026-10-14T03:08:08.544160+00:00",
+    "actualModelStart": "UNKNOWN",
+    "preCommitEndpoint": "2026-10-14T03:35:58.707422+00:00",
+    "actualGitStart": "UNKNOWN until actual command",
+    "actualGitEnd": "UNKNOWN until actual command",
+    "actualGitExternalReceipt": "/tmp/dreamtides-executor-01a1304d/671/git-commit-receipt.json",
+    "qualification": "Gross wall includes all source audit/coordination/ACKs/checks/heavy queue/QA/reload/artifact inspection/evidence work. Tracked endpoint is a fresh pre-commit proxy; root records actualGit externally after command; no forced Git dates/postcommit evidence rewrite.",
+    "parentCOMMITACK": "2026-10-14T03:34:52.384866Z"
+  },
+  "hostLoadSamples": {
+    "wing-runtime": {
+      "start": [
+        4.33154296875,
+        7.05078125,
+        9.97607421875
+      ],
+      "end": [
+        4.33154296875,
+        7.05078125,
+        9.97607421875
+      ]
+    },
+    "focused": {
+      "start": [
+        5.02294921875,
+        7.03076171875,
+        9.89990234375
+      ],
+      "end": [
+        6.1689453125,
+        7.2099609375,
+        9.9296875
+      ]
+    },
+    "knip": {
+      "start": [
+        5.02294921875,
+        7.03076171875,
+        9.89990234375
+      ],
+      "end": [
+        6.1689453125,
+        7.2099609375,
+        9.9296875
+      ]
+    },
+    "coverage": {
+      "start": [
+        6.74755859375,
+        7.203125,
+        9.7998046875
+      ],
+      "end": [
+        7.16796875,
+        7.28271484375,
+        9.8125
+      ]
+    },
+    "review": {
+      "start": [
+        6.2109375,
+        7.16650390625,
+        9.8662109375
+      ],
+      "end": [
+        16.4326171875,
+        9.544921875,
+        10.517578125
+      ]
+    },
+    "weighted-fuzz": {
+      "start": [
+        6.74755859375,
+        7.203125,
+        9.7998046875
+      ],
+      "end": [
+        5.0771484375,
+        7.59033203125,
+        9.58935546875
+      ]
+    },
+    "preflight": {
+      "start": [
+        18.44287109375,
+        10.4873046875,
+        10.83447265625
+      ],
+      "end": [
+        18.44287109375,
+        10.4873046875,
+        10.83447265625
+      ]
+    },
+    "sweep": {
+      "start": [
+        5.7490234375,
+        7.15234375,
+        9.23681640625
+      ],
+      "end": [
+        6.40234375,
+        7.24560546875,
+        9.24560546875
+      ]
+    },
+    "qa-workflow": {
+      "start": [
+        6.7119140625,
+        7.2119140625,
+        9.10791015625
+      ],
+      "end": [
+        7.05712890625,
+        7.25634765625,
+        9.068359375
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review start"
+      }
+    }
+  }
+}
