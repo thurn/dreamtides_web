@@ -1,0 +1,537 @@
+{
+  "bead": "hv-86bz",
+  "base": "d9a38ff6e8120e4662beb8ddf2ddcf852bb0dc14",
+  "windowProvenance": {
+    "start": "Conservative post-claim parent fresh worktree verification proxy; actual model start UNKNOWN. Includes setup, audits, source-free observation, coordination, test authoring, all failed and expected negative attempts, final checks and evidence.",
+    "cutoff": "2026-10-14T13:56:00.078918+00:00",
+    "end": "Final prospective evidence cutoff immediately before light final checks and Git. Actual Git endpoint UNKNOWN until external receipt; parent records actual post-claim proxy through Git end externally. Includes all setup, audits, observers, authoring, coordination, failed and negative attempts, checks, integrity verification and commit preparation."
+  },
+  "gitEndpoint": "UNKNOWN",
+  "functionalSha256": {
+    "src/engine/effects/primitives/contracts/temporary-public-all-types-retention.contracts.ts": "534f462e40552258fbee730e4fc8e3fac2435c21a4e0f93c9ee9ac76db8b0bde",
+    "src/engine/rules/floating.ts": "c72f7692e3f8753a664b4b770094b0a8336af03d6a766ab32d1b295dbf1ec65e",
+    "src/engine/events/kinds/effect-started.ts": "e7fd017fd851676f9cfefb6acba93be1a466476db893ebfb1d55be7e30f902f4",
+    "src/engine/view/knowledge.ts": "117c3e9e940c1f0e2be113efeab7ecc45add076bf9c8d92027814238a07741e4",
+    "src/engine/view/view.ts": "e54f1fc1cec2f5083545f0fab130f0a77c52c433654130d839e2892515a90980",
+    "src/engine/view/determinize.ts": "d0800e3b695264a244f54b60cdf9bdf2751728e46f9c574985995ef4cd95aef2",
+    "src/engine/testing/determinization-fidelity.ts": "08aa82eec654a4dc1d834493959ee68a0ad78edcd7ca95abbc3fc6b2797a4e45"
+  },
+  "sourceFirst": {
+    "before": "16 actual public synthetic observer rows cover both controllers and both viewers. Hidden hand permanent trigger produces two never effects; opposing viewer never sees source and has a nonempty target record with empty remembered effects. Public floating/event source null, real/sample public types and holder conditional cost3/3 and legal sets agree. Actual two permanent event copies cease; three effects remain through turn, target memory exact copy effect IDs. Visible ordinary permanent control has exact nonempty e1 memory. Serialized fold replay is identical and input is unchanged.",
+    "scope": "One existing 319-line synthetic contract, shared existing decklists import, default-preserving copied helper option, two new both-controller controls and narrow nonvacuous permanent observation control. All production bodies remain identical to base; no runtime, schema, harness, catalog or UI change."
+  },
+  "validation": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retains permanent changes from a never-seen hand source"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:50:18.448668+00:00",
+      "end": "2026-10-14T13:50:23.700915+00:00",
+      "pid": 40261,
+      "pgid": 40261,
+      "exitCode": 1,
+      "wallSeconds": 5.252203375013778,
+      "cpuSeconds": {
+        "user": 5.648891,
+        "system": 1.70094
+      },
+      "startLoad": [
+        3.77490234375,
+        5.734375,
+        7.6201171875
+      ],
+      "endLoad": [
+        4.27294921875,
+        5.80517578125,
+        7.6337890625
+      ],
+      "label": "classifier-fault",
+      "processGroupGone": true
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public all-types retention"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:50:38.820116+00:00",
+      "end": "2026-10-14T13:50:44.115757+00:00",
+      "pid": 40762,
+      "pgid": 40762,
+      "exitCode": 0,
+      "wallSeconds": 5.295595917006722,
+      "cpuSeconds": {
+        "user": 5.6650789999999995,
+        "system": 1.7125869999999999
+      },
+      "startLoad": [
+        3.99658203125,
+        5.66748046875,
+        7.55224609375
+      ],
+      "endLoad": [
+        3.91650390625,
+        5.623046875,
+        7.525390625
+      ],
+      "label": "focused-final",
+      "processGroupGone": true
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "temporary public all-types retention"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:49:42.638670+00:00",
+      "end": "2026-10-14T13:49:50.248074+00:00",
+      "pid": 39461,
+      "pgid": 39461,
+      "exitCode": 1,
+      "wallSeconds": 7.609325500001432,
+      "cpuSeconds": {
+        "user": 6.661754,
+        "system": 2.30602
+      },
+      "startLoad": [
+        3.56640625,
+        5.9501953125,
+        7.77392578125
+      ],
+      "endLoad": [
+        3.84130859375,
+        5.96728515625,
+        7.76904296875
+      ],
+      "label": "focused-r1",
+      "processGroupGone": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:51:39.469478+00:00",
+      "end": "2026-10-14T13:51:43.553902+00:00",
+      "pid": 42276,
+      "pgid": 42276,
+      "exitCode": 0,
+      "wallSeconds": 4.084394583012909,
+      "cpuSeconds": {
+        "user": 3.559576,
+        "system": 1.117623
+      },
+      "startLoad": [
+        5.0703125,
+        5.59375,
+        7.390625
+      ],
+      "endLoad": [
+        5.064453125,
+        5.58349609375,
+        7.37646484375
+      ],
+      "label": "knip",
+      "processGroupGone": true
+    },
+    {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/86bz/helper/permanent-observer.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:44:30.530584+00:00",
+      "end": "2026-10-14T13:44:33.745267+00:00",
+      "pid": 29526,
+      "pgid": 29526,
+      "exitCode": 1,
+      "wallSeconds": 3.214674874994671,
+      "cpuSeconds": {
+        "user": 2.727472,
+        "system": 0.7190519999999999
+      },
+      "startLoad": [
+        6.49951171875,
+        9.259765625,
+        9.35302734375
+      ],
+      "endLoad": [
+        6.29931640625,
+        9.17236328125,
+        9.3212890625
+      ],
+      "label": "permanent-before-r2",
+      "processGroupGone": true
+    },
+    {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/86bz/helper/permanent-observer.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:45:00.288110+00:00",
+      "end": "2026-10-14T13:45:03.671521+00:00",
+      "pid": 31462,
+      "pgid": 31462,
+      "exitCode": 0,
+      "wallSeconds": 3.383402041014051,
+      "cpuSeconds": {
+        "user": 3.237409,
+        "system": 0.861954
+      },
+      "startLoad": [
+        5.18505859375,
+        8.67626953125,
+        9.13720703125
+      ],
+      "endLoad": [
+        5.169921875,
+        8.615234375,
+        9.11279296875
+      ],
+      "label": "permanent-before-r3",
+      "processGroupGone": true
+    },
+    {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/86bz/helper/permanent-observer.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:44:07.181943+00:00",
+      "end": "2026-10-14T13:44:09.388294+00:00",
+      "pid": 28154,
+      "pgid": 28154,
+      "exitCode": 1,
+      "wallSeconds": 2.2063511250016745,
+      "cpuSeconds": {
+        "user": 1.447716,
+        "system": 0.7586309999999999
+      },
+      "startLoad": [
+        6.8212890625,
+        9.51806640625,
+        9.4453125
+      ],
+      "endLoad": [
+        6.8212890625,
+        9.51806640625,
+        9.4453125
+      ],
+      "label": "permanent-before",
+      "processGroupGone": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:51:06.180560+00:00",
+      "end": "2026-10-14T13:51:24.253956+00:00",
+      "pid": 41409,
+      "pgid": 41409,
+      "exitCode": 0,
+      "wallSeconds": 18.073173583019525,
+      "cpuSeconds": {
+        "user": 57.12461,
+        "system": 6.141735
+      },
+      "startLoad": [
+        3.29248046875,
+        5.37060546875,
+        7.39013671875
+      ],
+      "endLoad": [
+        4.625,
+        5.53955078125,
+        7.40380859375
+      ],
+      "label": "review",
+      "processGroupGone": true
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:53:14.427668+00:00",
+      "end": "2026-10-14T13:53:14.544962+00:00",
+      "pid": 49261,
+      "pgid": 49261,
+      "exitCode": 0,
+      "wallSeconds": 0.11732270801439881,
+      "cpuSeconds": {
+        "user": 0.053209,
+        "system": 0.026784
+      },
+      "startLoad": [
+        4.08203125,
+        5.19482421875,
+        7.04736328125
+      ],
+      "endLoad": [
+        4.08203125,
+        5.19482421875,
+        7.04736328125
+      ],
+      "label": "schema",
+      "processGroupGone": true
+    }
+  ],
+  "counterfactual": {
+    "beforeSha256": "c72f7692e3f8753a664b4b770094b0a8336af03d6a766ab32d1b295dbf1ec65e",
+    "startedAt": "2026-10-14T13:50:18.429182+00:00",
+    "faultExitCode": 1,
+    "restoredSha256": "c72f7692e3f8753a664b4b770094b0a8336af03d6a766ab32d1b295dbf1ec65e",
+    "restoredAt": "2026-10-14T13:50:23.704518+00:00",
+    "exactlyRestored": true
+  },
+  "expectedNegative": "Removing only allTypes in keptWithoutSource yielded exactly two new hidden permanent test failures, both controllers: opponent public floating was empty instead of two never effects. Production bytes were restored in finally before all normal final checks. Other observed permanent controls are not asserted to fail under that fault.",
+  "failedAttempts": [
+    {
+      "label": "permanent-before",
+      "classification": "source-free observer authoring: explicit directory import incorrectly used events.ts; corrected to events/index.ts before any gameplay observation."
+    },
+    {
+      "label": "permanent-before-r2",
+      "classification": "source-free observer authoring: local visible fixture variable shadowed synthetic v; corrected."
+    },
+    {
+      "label": "focused-r1",
+      "classification": "New observed-copy expectation omitted existing public rememberedSource:null field; actual output supplied correction. 18 tests passed and two new copy tests failed; no production fault."
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review concurrent typecheck, typecheck-node, import-cycles, lint and test-related starting step:2026-10-14T13:51:07.402/403Z, wrapper start3.29248046875 retained separately"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "classifier-fault": {
+      "start": [
+        3.77490234375,
+        5.734375,
+        7.6201171875
+      ],
+      "end": [
+        4.27294921875,
+        5.80517578125,
+        7.6337890625
+      ]
+    },
+    "focused-final": {
+      "start": [
+        3.99658203125,
+        5.66748046875,
+        7.55224609375
+      ],
+      "end": [
+        3.91650390625,
+        5.623046875,
+        7.525390625
+      ]
+    },
+    "focused-r1": {
+      "start": [
+        3.56640625,
+        5.9501953125,
+        7.77392578125
+      ],
+      "end": [
+        3.84130859375,
+        5.96728515625,
+        7.76904296875
+      ]
+    },
+    "knip": {
+      "start": [
+        5.0703125,
+        5.59375,
+        7.390625
+      ],
+      "end": [
+        5.064453125,
+        5.58349609375,
+        7.37646484375
+      ]
+    },
+    "permanent-before-r2": {
+      "start": [
+        6.49951171875,
+        9.259765625,
+        9.35302734375
+      ],
+      "end": [
+        6.29931640625,
+        9.17236328125,
+        9.3212890625
+      ]
+    },
+    "permanent-before-r3": {
+      "start": [
+        5.18505859375,
+        8.67626953125,
+        9.13720703125
+      ],
+      "end": [
+        5.169921875,
+        8.615234375,
+        9.11279296875
+      ]
+    },
+    "permanent-before": {
+      "start": [
+        6.8212890625,
+        9.51806640625,
+        9.4453125
+      ],
+      "end": [
+        6.8212890625,
+        9.51806640625,
+        9.4453125
+      ]
+    },
+    "review": {
+      "start": [
+        3.29248046875,
+        5.37060546875,
+        7.39013671875
+      ],
+      "end": [
+        4.625,
+        5.53955078125,
+        7.40380859375
+      ]
+    },
+    "schema": {
+      "start": [
+        4.08203125,
+        5.19482421875,
+        7.04736328125
+      ],
+      "end": [
+        4.08203125,
+        5.19482421875,
+        7.04736328125
+      ]
+    }
+  },
+  "productionIntegrity": {
+    "trackedSourceFilesComparedToBase": 2423,
+    "manifestSha256": "f6ca371ad3708cab19e42ac0d96b0768019398d7dfe9ae7eab50b12cdeeaaf8e",
+    "productionDiff": "empty",
+    "scope": "Every tracked src/ and scripts/ path except the admitted existing contract was compared byte-for-byte with HEAD; no test-only change is relabeled production."
+  },
+  "resourceClosure": {
+    "ownObservedChildGroups": [
+      40261,
+      40762,
+      39461,
+      42276,
+      29526,
+      31462,
+      28154,
+      41409,
+      49261
+    ],
+    "allGone": true,
+    "browser": "not started",
+    "server": "not started",
+    "provider": "not started",
+    "qaLease": "not requested",
+    "sdk": "not started"
+  },
+  "parentSetupReceipts": {
+    "install-receipt.json": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:41:21.084178+00:00",
+      "end": "2026-10-14T13:41:23.849219+00:00",
+      "pid": 98116,
+      "pgid": 98116,
+      "exitCode": 0,
+      "wallSeconds": 2.7650438339915127,
+      "cpuSeconds": {
+        "user": 2.104301,
+        "system": 4.227966
+      },
+      "startLoad": [
+        12.22607421875,
+        11.380859375,
+        9.94677734375
+      ],
+      "endLoad": [
+        13.96923828125,
+        11.75634765625,
+        10.08740234375
+      ]
+    },
+    "friction-dispatch-receipt.json": {
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/permanent-all-types-controls-86bz",
+      "start": "2026-10-14T13:41:37.534862+00:00",
+      "end": "2026-10-14T13:41:37.764471+00:00",
+      "pid": 16969,
+      "pgid": 16969,
+      "exitCode": 0,
+      "wallSeconds": 0.22964008399867453,
+      "cpuSeconds": {
+        "user": 0.143805,
+        "system": 0.050262
+      },
+      "startLoad": [
+        12.08056640625,
+        11.44189453125,
+        10.00341796875
+      ],
+      "endLoad": [
+        12.08056640625,
+        11.44189453125,
+        10.00341796875
+      ]
+    }
+  },
+  "sourceModuleLines": 319,
+  "testDiff": {
+    "added": 82,
+    "deleted": 10,
+    "net": 72
+  },
+  "reviewPolicy": "Pure test/evidence change, zero non-test code lines; independent core CLI, browser QA and full review are not required for this bounded follow-up. Phase gate46 review remains required.",
+  "finalCommitPreparation": {
+    "parentCommitAck": "2026-10-14T13:55:13.342547+00:00",
+    "cutoff": "2026-10-14T13:56:00.078918+00:00",
+    "fixedContractSha256": "534f462e40552258fbee730e4fc8e3fac2435c21a4e0f93c9ee9ac76db8b0bde",
+    "fixedPreExistingSha256": "f4940398f94e8260fd309cae7509c0a8a50bb95816edb7698642291c567ac1c3",
+    "actualGitEndpoint": "UNKNOWN"
+  }
+}

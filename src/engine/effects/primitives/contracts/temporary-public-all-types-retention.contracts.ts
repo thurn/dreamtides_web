@@ -18,7 +18,7 @@ import { determinizationDivergences } from "../../../testing/determinization-fid
 import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { at, passUntil } from "../../../testing/trigger-harness";
-import type { Decklists } from "../../../view/determinize";
+import { decklists } from "./with-materialized-support";
 import type { BattleView } from "../../../view/view";
 import * as p from "../index";
 
@@ -38,9 +38,12 @@ const hidden: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x57c006),
   abilities: () => [triggered(whenOpponentPlays(), give(), { zone: "hand", oncePerTurn: true })] };
 const decoy: EngineCardDefinition = { ...hidden, id: syntheticId(0x57c007), abilities: () => [] };
 const lasting = spell(8, give("permanent"));
+const permanentHidden: EngineCardDefinition = { ...hidden, id: syntheticId(0x57c011),
+  abilities: () => [triggered(whenOpponentPlays(), give("permanent"), { zone: "hand", oncePerTurn: true })] };
+const permanentPump = spell(12, p.giveAllTypes(target(characterYouControl()), "permanent"));
 const idle = spell(9, p.gainPoints(1));
 const hide = spell(10, p.sequence(p.returnToHand(target(characterYouControl())), p.shuffleInto([everyIn("hand")])));
-const engine = createEngine(testCatalog([pump, reducer, probe, leaving, resident, hidden, decoy, lasting, idle, hide], { dreamsigns: [{
+const engine = createEngine(testCatalog([pump, reducer, probe, leaving, resident, hidden, decoy, lasting, idle, hide, permanentHidden, permanentPump], { dreamsigns: [{
   id: sign, status: "authored", abilities: () => [triggered(whenYouPlay({ cardType: "event" }), p.copyCardTimes(triggeringCard(), 2))],
 }] }));
 const deck = [v.vanilla3.id, v.vanilla5.id, v.vanilla3.id, v.vanilla5.id];
@@ -53,11 +56,6 @@ function occupied(id: InstanceId | null | undefined): InstanceId {
 function applied(outcome: IntentOutcome): BattleSlice {
   if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("Expected successful synthetic fold");
   return outcome.slice;
-}
-function decklists(state: BattleState): Decklists {
-  const cards = (side: Side) => Object.values(state.instances).flatMap(instance => instance.owner === side && instance.printing.kind === "card"
-    ? [{ cardId: instance.printing.cardId, ...instance.variant }] : []);
-  return { player: cards("player"), enemy: cards("enemy") };
 }
 const play = (state: BattleState, side: Side, card: InstanceId, answers = NO_PROMPTS) => engine.apply(state, side, { kind: "play", card, from: "hand" }, answers);
 const settle = (state: BattleState) => passUntil(engine, state, next => next.stack.length === 0 && next.triggerQueue.length === 0);
@@ -77,9 +75,9 @@ function checkProjection(state: BattleState) {
   expect(determinizationDivergences(engine, state, decklists(state), battleSeed("retained-public-all-types"), 0)).toEqual([]);
   expect(stateHash(state)).toBe(before);
 }
-function copied(side: Side) {
+function copied(side: Side, permanent = false) {
   const w = boardState(engine.catalog, { active: side, phase: "day", [side]: {
-    back: [reducer.id, v.vanilla1.id, v.vanilla3.id], hand: [pump.id, probe.id], dreamsigns: [sign], deck, energy: 3,
+    back: [reducer.id, v.vanilla1.id, v.vanilla3.id], hand: [permanent ? permanentPump.id : pump.id, probe.id], dreamsigns: [sign], deck, energy: 3,
   }, [opponent(side)]: { deck } });
   const subject = occupied(w.ids[side].back[2]), ordinary = occupied(w.ids[side].back[1]);
   const before = stateHash(w.state), answers = new ScriptedSource([[ordinary], [subject], [subject]]);
@@ -195,6 +193,74 @@ describe("temporary public all-types retention", () => {
     checkProjection(visible.state);
   });
 
+  it.each(SIDES)("retains permanent changes from a never-seen hand source for %s", side => {
+    const other = opponent(side);
+    const w = boardState(engine.catalog, { active: other, phase: "day", [side]: {
+      back: [reducer.id, v.vanilla1.id], hand: [permanentHidden.id, decoy.id, probe.id], deck, energy: 3,
+    }, [other]: { hand: [idle.id], deck } });
+    const source = w.ids[side].hand[0], subject = occupied(w.ids[side].back[1]), before = stateHash(w.state);
+    expect(engine.view(w.state, other).instances[source]).toBeUndefined();
+    expect(w.state.rememberedCards?.[other].flatMap(record => record.effects) ?? []).toEqual([]);
+    const first = play(w.state, other, w.ids[other].hand[0]), rest = settle(first.state), state = rest.state;
+    const events = starts([...first.events, ...rest.events]);
+    expect(events).toHaveLength(2);
+    expect(state.floating).toHaveLength(2);
+    const ended = passUntil(engine, state, at(engine, side, "day")).state;
+    for (const current of [state, ended]) {
+      expect(current.floating).toEqual(state.floating);
+      expect(current.floating.map(effect => effect.expiry)).toEqual([{ at: "never" }, { at: "never" }]);
+      for (const viewer of SIDES) {
+        const seen = engine.view(current, viewer);
+        expect(seen.instances[subject].characteristics.allTypes).toBe(true);
+        expect(seen.floating).toEqual(current.floating.map(effect => ({ ...effect, source: viewer === side ? source : null })));
+        const remembered = current.rememberedCards?.[viewer].find(record => record.instance === subject);
+        expect(remembered).toBeDefined();
+        expect(remembered?.effects.map(effect => effect.id)).toEqual(viewer === side ? [events[1].effect] : []);
+        if (viewer === other) {
+          expect(seen.instances[source]).toBeUndefined();
+          for (const secret of [source, permanentHidden.id, decoy.id]) expect(JSON.stringify(seen)).not.toContain(`"${secret}"`);
+        }
+      }
+      expect(engine.view(current, side).instances[w.ids[side].hand[2]].characteristics.cost).toBe(3);
+      checkProjection(current);
+    }
+    expect(engine.legalActions(ended, side)).toContainEqual({ kind: "play", card: w.ids[side].hand[2], from: "hand" });
+    for (const raw of [events, JSON.parse(JSON.stringify(events)) as EngineEvent[]]) for (const entry of starts(raw)) {
+      expect(eventSeenBy(entry, other, ended)).toEqual({ ...entry, source: null });
+      expect(eventSeenBy(entry, side, ended)).toEqual(entry);
+    }
+    const input = { init: { seed: "permanent-public-all-types", scoreToWin: 25, decks: { player: [], enemy: [] }, dreamwell: [] }, slice: slice(ended) };
+    const parsed = parseEngineBattleFold(JSON.parse(JSON.stringify(input)));
+    if (parsed === null) throw new Error("Synthetic permanent type effect failed save validation");
+    const intent = { kind: "battleAction", side, action: { kind: "pass" } } as const;
+    const direct = createFoldAdapter(engine).reduce(input.slice, intent), restarted = createFoldAdapter(engine).reduce(parsed.slice, intent);
+    expect(restarted).toEqual(direct);
+    checkProjection(applied(restarted).committed);
+    expect(stateHash(w.state)).toBe(before);
+  });
+
+  it.each(SIDES)("retains observed permanent copy effects after their real sources cease for %s", side => {
+    const w = copied(side, true), ended = passUntil(engine, w.state, at(engine, opponent(side), "day")).state;
+    const copyEffects = w.state.floating.filter(effect => typeof effect.source === "string" && w.copies.includes(effect.source));
+    expect(copyEffects).toHaveLength(2);
+    for (const current of [w.state, ended]) {
+      expect(current.floating).toEqual(w.state.floating);
+      expect(current.floating.map(effect => effect.expiry)).toEqual([{ at: "never" }, { at: "never" }, { at: "never" }]);
+      for (const viewer of SIDES) {
+        const seen = engine.view(current, viewer);
+        expect(seen.instances[w.subject].characteristics.allTypes).toBe(true);
+        expect(seen.floating.filter(effect => copyEffects.some(original => original.id === effect.id)))
+          .toEqual(copyEffects.map(effect => ({ ...effect, source: null, rememberedSource: null })));
+        const remembered = current.rememberedCards?.[viewer].find(record => record.instance === w.subject);
+        expect(remembered?.effects).toEqual(copyEffects);
+        for (const entry of starts(w.events).filter(entry => copyEffects.some(effect => effect.id === entry.effect)))
+          expect(eventSeenBy(entry, viewer, current)).toEqual({ ...entry, source: null });
+      }
+      expect(engine.view(current, side).instances[w.ids[side].hand[1]].characteristics.cost).toBe(3);
+      checkProjection(current);
+    }
+  });
+
   it.each(SIDES)("retains permanent observations in the permanent snapshot model for %s", side => {
     const w = boardState(engine.catalog, { active: side, phase: "day", [side]: { back: [v.vanilla1.id], hand: [lasting.id], deck } });
     const state = settle(play(w.state, side, w.ids[side].hand[0]).state).state;
@@ -202,7 +268,13 @@ describe("temporary public all-types retention", () => {
     expect(state.floating).toHaveLength(1);
     expect(state.floating[0].expiry).toEqual({ at: "never" });
     expect(ended.floating).toEqual(state.floating);
-    for (const viewer of SIDES) expect(ended.rememberedCards?.[viewer].flatMap(record => record.effects).every(effect => effect.expiry.at === "never")).toBe(true);
+    for (const viewer of SIDES) {
+      const remembered = ended.rememberedCards?.[viewer].find(record => record.instance === occupied(w.ids[side].back[0]));
+      expect(remembered).toBeDefined();
+      expect(remembered?.effects).toEqual([state.floating[0]]);
+      expect(remembered?.effects[0]).toMatchObject({ id: state.floating[0].id, source: w.ids[side].hand[0],
+        expiry: { at: "never" }, change: { kind: "allTypes", instance: w.ids[side].back[0] } });
+    }
     checkProjection(ended);
   });
 

@@ -1,0 +1,21 @@
+{
+  "bead": "hv-86bz",
+  "phase": 5,
+  "implementMin": 14.675305416666667,
+  "implementWindow": {
+    "start": "2026-10-14T13:41:19.560593+00:00",
+    "end": "2026-10-14T13:56:00.078918+00:00"
+  },
+  "localValidationS": {
+    "focused-final": 5.295595917006722,
+    "review": 18.073173583019525,
+    "knip": 4.084394583012909
+  },
+  "hostLoad": 3.90966796875,
+  "testDelta": {
+    "files": 0,
+    "lines": 72,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
