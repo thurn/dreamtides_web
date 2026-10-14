@@ -1,0 +1,981 @@
+{
+  "bead": "hv-umm2.681",
+  "base": "bba5f56d5f026ee7d73438ea60203221a1eab68c",
+  "branch": "wt/grim-recruiter-681",
+  "recordedAt": "2026-10-14T17:50:30.137183+00:00",
+  "entities": [
+    "cf173b05-7bf2-465b-91e2-41f213c536d1"
+  ],
+  "counts": {
+    "authoredCards": 1,
+    "baseClauses": 2,
+    "amplifiedVariants": 0,
+    "newPrimitives": 0,
+    "newPromptKinds": 0,
+    "scenarioCases": 4
+  },
+  "clock": {
+    "start": "2026-10-14T17:15:51.188625+00:00",
+    "endAtEvidenceWrite": "2026-10-14T17:50:30.137183+00:00",
+    "elapsedMinutes": 34.649142633333334,
+    "qualification": "Conservative inclusive parent claim/pre-setup envelope. Parent launch acknowledgment 2026-10-14T17:20:00.117693+00:00 is an observation after spawn, not exact sampling start. Includes setup, research, native admission and capacity waits, validation, failed fixture-script repair and evidence. Productive editing time unknown. Final writer refresh precedes final schema/whitespace/staging/one automatic commit; external finalizer receipt covers actual tail without date overrides or postcommit tracked rewrite."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v1 starting kernel one-minute load",
+        "value": 24.70654296875
+      },
+      "testDelta": {
+        "measuredFor": "One new plain D20 scenario module; four actual content integration cases, fixed synthetic filler; no jsdom/test-runner files."
+      }
+    }
+  },
+  "source": {
+    "initialPaths": 4977,
+    "runtimePaths": 4978,
+    "initialManifestSHA256": "d831ca1737370d3b81f7a1e634b790b23df1fe68f211b53942be4d9b04bdafd3",
+    "runtimeManifestSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+    "runtimeChangedPaths": {
+      "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+      "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad"
+    },
+    "allOtherInitialPathsUnchanged": true,
+    "printedFieldsImmutable": true,
+    "verifiedText": "12usqe9prdp",
+    "forms": [
+      "activated([abandonCost()],storeCounters(1))",
+      "activated([energy(2),countersCost(2)],materializeFigments(Warrior UUID bb1a5acd-1a03-4aa3-826d-f0a301843845,2,{spark:1}))"
+    ],
+    "scope": "One UUID leaf and one private auto-discovered cards-ready-182 scenario; all runtime/DSL/state/rules/UI/catalog/shared QA/config/generator/other content source read-only."
+  },
+  "rules": {
+    "d10": "Not invoked: existing Counters/Activated abilities/Costs/Figments/capacity and RD-hv-umm2.94-1 settle clauses, including self-abandon stores nothing.",
+    "newRulesDecisions": [],
+    "cardIssues": []
+  },
+  "d20": {
+    "needed": "Own first ability earns the exact source counters its second ability spends. Four cases cover both controllers and self-payment disappearance using genuine top-level actions.",
+    "tests": "cards-ready-182 physical source/fodder identity, counters1/2/0, two-energy payment, two distinct exhausted1spark exact Warrior outputs, opposite resources unchanged; self-abandon resolves with no counters/figments.",
+    "primitiveControls": "Existing store-counters contract owns direct late-error prefix/rollback, persisted pending choice, cancellation, stale/foreign/concurrent refusal, insufficient stored counters and independent source departure. Filtered 619 controls passed; not claimed full contract suite."
+  },
+  "d21": {
+    "firstByte": 29,
+    "sampled": false,
+    "newPromptStatusVisual": false,
+    "mandatoryJudged": false,
+    "additionalWorkflow": "Proportional human-player base desktop/mobile normal rendered activation, cost cancellation and pending reload, earned/spent resources, physical figments, public events, geometry, persisted game logs and final reload; two supplemental judged ledger pass rows. Not an enemy live activation or policy-selected AI witness."
+  },
+  "validation": {
+    "counts": {
+      "own-scenarios-v1": {
+        "testFilesPassedReported": [
+          1
+        ],
+        "testsPassedReported": [
+          4
+        ]
+      },
+      "synthetic-controls-v1": {
+        "testFilesPassedReported": [
+          1
+        ],
+        "testsPassedReported": [
+          619
+        ]
+      },
+      "content-gates-v1": {
+        "testFilesPassedReported": [
+          1
+        ],
+        "testsPassedReported": [
+          20
+        ]
+      },
+      "review-v1": {
+        "testFilesPassedReported": [
+          253
+        ],
+        "testsPassedReported": [
+          6632
+        ]
+      }
+    },
+    "commands": [
+      {
+        "label": "card-sweep-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:34:27.625671+00:00",
+        "pid": 90593,
+        "pgid": 90593,
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.681",
+          "--cards",
+          "cf173b05-7bf2-465b-91e2-41f213c536d1",
+          "--port",
+          "5175"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          6.3544921875,
+          9.49755859375,
+          11.02001953125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:36:33.109702+00:00",
+        "elapsedSeconds": 125.481999417,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl"
+        ],
+        "allowedDocumentWrites": [
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl"
+        ],
+        "unexpectedSourceChanged": [],
+        "manifestFiles": 4978,
+        "beforeSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "afterSHA256": "b5c902d3798f69eb0dc687a568b08a9d99c067c97f6e50599746bc31be59e35f",
+        "collectorBeforeSHA256": "90894b4d62ee6eb95b187d1569f6fa7fde071d3179b14fd188c43c04d884b4d1",
+        "collectorAfterSHA256": "90894b4d62ee6eb95b187d1569f6fa7fde071d3179b14fd188c43c04d884b4d1",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "4ad625457f540f800f1a70db3db27d9cb7d2ecb8e5027e12ce736c82a53b8fab",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "content-gates-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:24:52.130730+00:00",
+        "pid": 78155,
+        "pgid": 78155,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          5.9990234375,
+          8.80810546875,
+          10.9462890625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:24:56.720934+00:00",
+        "elapsedSeconds": 4.589992709,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4978,
+        "beforeSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "afterSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "68a93de2682707a18bc2cb3744b884fc20e1ef8cae58288b8aaacf3736e74def",
+        "stderrSHA256": "acf03abd3b369f0a85c18d539dbc429bcaa205b9d7cf516788a3dc4343894510",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "human-workflow-v1",
+        "classification": "fixture-script-failure-repaired-v2",
+        "started": "2026-10-14T17:37:22.981432+00:00",
+        "pid": 33892,
+        "pgid": 33892,
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "grim-recruiter-workflow",
+          "--bead",
+          "hv-umm2.681",
+          "--port",
+          "5175",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          3.8486328125,
+          7.2421875,
+          9.8046875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:37:30.055584+00:00",
+        "elapsedSeconds": 7.073923125,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4979,
+        "beforeSHA256": "b5c902d3798f69eb0dc687a568b08a9d99c067c97f6e50599746bc31be59e35f",
+        "afterSHA256": "b5c902d3798f69eb0dc687a568b08a9d99c067c97f6e50599746bc31be59e35f",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "cd3273a01ff13417a067efa6b27f8751b3c21cdb0be4fae6b0d4f199a450f755",
+        "stderrSHA256": "55d8513dafaf5fe9c05851ccaa4c392af7fd7e04e7749922caa15ae6694bf03d",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "human-workflow-v2",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:42:09.584199+00:00",
+        "pid": 148,
+        "pgid": 148,
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "grim-recruiter-workflow",
+          "--bead",
+          "hv-umm2.681",
+          "--port",
+          "5175",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          8.7578125,
+          7.71435546875,
+          9.15625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:43:14.160939+00:00",
+        "elapsedSeconds": 64.57559154100001,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4979,
+        "beforeSHA256": "b5c902d3798f69eb0dc687a568b08a9d99c067c97f6e50599746bc31be59e35f",
+        "afterSHA256": "b5c902d3798f69eb0dc687a568b08a9d99c067c97f6e50599746bc31be59e35f",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "6bf29ee97bcda7bcbacd4b4642c746e368ffd950e9bdd3830609effa941e328b",
+        "stderrSHA256": "d9504680866485df36020d82977449c4be5502e51624df8a341d428d61743b01",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "knip-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:48:20.976285+00:00",
+        "pid": 31474,
+        "pgid": 31474,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          17.177734375,
+          17.0380859375,
+          13.6083984375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:48:25.800414+00:00",
+        "elapsedSeconds": 4.823904875,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4981,
+        "beforeSHA256": "eacef65db1b5e1366f2e2ef9784f1a1a129852f29becd4d73d9c3f556dc9eb16",
+        "afterSHA256": "eacef65db1b5e1366f2e2ef9784f1a1a129852f29becd4d73d9c3f556dc9eb16",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "98be84b921ca3b1cf2aff74be6c98d86b56626d120abd233fbe8e1b336b35cc4",
+        "stderrSHA256": "acf03abd3b369f0a85c18d539dbc429bcaa205b9d7cf516788a3dc4343894510",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "lab-preflight-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:34:11.165119+00:00",
+        "pid": 86155,
+        "pgid": 86155,
+        "command": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "cf173b05-7bf2-465b-91e2-41f213c536d1",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          6.8193359375,
+          9.74658203125,
+          11.1337890625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:34:14.033328+00:00",
+        "elapsedSeconds": 2.868067875,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4978,
+        "beforeSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "afterSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "694f2b3b875a6ba39470befc978ba9ca2f3bdfc936e14a5d0ad021f3f27a85eb",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "own-scenarios-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:24:26.112001+00:00",
+        "pid": 75728,
+        "pgid": 75728,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "-t",
+          "cards-ready-182"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          5.82958984375,
+          9.02099609375,
+          11.08349609375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:24:30.856318+00:00",
+        "elapsedSeconds": 4.744126250000001,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4978,
+        "beforeSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "afterSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "b9711da3a31ac0122cd2fec6a1b6de147f4af8e167e99243d7d0caee02f35a49",
+        "stderrSHA256": "acf03abd3b369f0a85c18d539dbc429bcaa205b9d7cf516788a3dc4343894510",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "review-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:46:18.002833+00:00",
+        "pid": 22816,
+        "pgid": 22816,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          24.70654296875,
+          18.02490234375,
+          13.40283203125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:47:18.509847+00:00",
+        "elapsedSeconds": 60.505971792,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4981,
+        "beforeSHA256": "eacef65db1b5e1366f2e2ef9784f1a1a129852f29becd4d73d9c3f556dc9eb16",
+        "afterSHA256": "eacef65db1b5e1366f2e2ef9784f1a1a129852f29becd4d73d9c3f556dc9eb16",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "03eab15fad6a9d15b5a3c9b4c278062110c042a5681ed048ecf1ed43b52918a9",
+        "stderrSHA256": "acf03abd3b369f0a85c18d539dbc429bcaa205b9d7cf516788a3dc4343894510",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "schema-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:48:40.636682+00:00",
+        "pid": 48482,
+        "pgid": 48482,
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          19.9140625,
+          17.744140625,
+          13.9453125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:48:40.717479+00:00",
+        "elapsedSeconds": 0.08067887500000004,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4981,
+        "beforeSHA256": "b557d7f5b56d2c1111a39ec5a565757bba08cc04c2e747cc3850f583cf672b70",
+        "afterSHA256": "b557d7f5b56d2c1111a39ec5a565757bba08cc04c2e747cc3850f583cf672b70",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "27f3e11d79c009c1f9b04ddae0b80c43bf537e4406ae3a58ea28f17b0d0cbd7f",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "synthetic-controls-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:24:34.127659+00:00",
+        "pid": 75947,
+        "pgid": 75947,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "storeCounters|spending stored|storeCounters across|cost composition|figment"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          5.6826171875,
+          8.9375,
+          11.04150390625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:24:41.913865+00:00",
+        "elapsedSeconds": 7.785954707999999,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4978,
+        "beforeSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "afterSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "8cad1a7e5c4015ad27afd09f4eea71b5660b4de2d6ea7511495a047612c223c2",
+        "stderrSHA256": "acf03abd3b369f0a85c18d539dbc429bcaa205b9d7cf516788a3dc4343894510",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "verified-text-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:23:51.988459+00:00",
+        "pid": 75053,
+        "pgid": 75053,
+        "command": [
+          "node_modules/.bin/tsx",
+          "-e",
+          "import { expectedVerifiedText } from \"./src/engine/dsl/verified-text.ts\"; import card from \"./src/content/cards/grim-recruiter-cf173b05.ts\"; console.log(expectedVerifiedText(card.renderedText));"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          5.9228515625,
+          9.39208984375,
+          11.29443359375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:23:53.204157+00:00",
+        "elapsedSeconds": 1.2155349579999999,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4977,
+        "beforeSHA256": "d831ca1737370d3b81f7a1e634b790b23df1fe68f211b53942be4d9b04bdafd3",
+        "afterSHA256": "d831ca1737370d3b81f7a1e634b790b23df1fe68f211b53942be4d9b04bdafd3",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "13113b275766fa2fc51bf86932c89c43168620e85bfcc1c9b31f7642430f08ce",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "weighted-fuzz-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:25:00.860260+00:00",
+        "pid": 80573,
+        "pgid": 80573,
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "cf173b05-7bf2-465b-91e2-41f213c536d1"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          5.9794921875,
+          8.71435546875,
+          10.8876953125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:33:22.307544+00:00",
+        "elapsedSeconds": 501.439961333,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4978,
+        "beforeSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "afterSHA256": "c36a5d56b5f08455d793c6b0cc1deee4afc519eb3906b211d42f3559a939ca72",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "633856311caebcba7282f4ad2ed67498ac473bd2f7a4d714e0f7aa77893f2da2",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "whitespace-v1",
+        "classification": "passing-validation",
+        "started": "2026-10-14T17:48:44.880071+00:00",
+        "pid": 64966,
+        "pgid": 64966,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/grim-recruiter-681",
+        "hostLoad": [
+          18.7998046875,
+          17.548828125,
+          13.8984375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T17:48:44.890773+00:00",
+        "elapsedSeconds": 0.010562375000000013,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 4981,
+        "beforeSHA256": "b557d7f5b56d2c1111a39ec5a565757bba08cc04c2e747cc3850f583cf672b70",
+        "afterSHA256": "b557d7f5b56d2c1111a39ec5a565757bba08cc04c2e747cc3850f583cf672b70",
+        "collectorBeforeSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "collectorAfterSHA256": "cb59b08e45cfb916985e0a8e88d2465e56129eb99ba81af0a33aad34e5670516",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      }
+    ],
+    "heavy": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "cf173b05-7bf2-465b-91e2-41f213c536d1"
+      ],
+      "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "workers": 2,
+      "games": 300,
+      "steps": 103429,
+      "failures": 0,
+      "targetIncluded": 611,
+      "targetExercised": 130,
+      "targetExerciseMeaning": "cardPlayed count, not all activation clauses",
+      "reportedExecutionWallS": 334.1,
+      "reportedCpuS": 356.5,
+      "outerElapsedS": 501.439961333,
+      "outsideReportedExecutionS": 167.33996133299996,
+      "qualification": "Difference includes heavy-lock wait, startup, collection and rounded driver execution. Not a separately measured pure lease wait; no low-load/D19 performance claim."
+    },
+    "preflight": {
+      "pass": 10,
+      "skip": 10,
+      "fail": 0,
+      "controllers": [
+        "player",
+        "enemy"
+      ],
+      "variants": "all requested, five eligible per controller; amplified ineligible"
+    },
+    "sweep": {
+      "invocation": "invocations/sweep-KM0ieG",
+      "counts": {
+        "pass": 10,
+        "skip": 10
+      },
+      "attemptCounts": {
+        "pass": 10,
+        "skip": 10
+      },
+      "wallMs": {
+        "browserLeaseWait": 59383,
+        "serve": 2880,
+        "scenario": 62551.931583000005,
+        "cleanup": 395.82324999998673,
+        "execution": 65884.86550000001,
+        "total": 125267.86550000001
+      },
+      "actualSlot": 1,
+      "actualPort": 5274,
+      "requestedPort": 5175,
+      "serverPGID": 13494,
+      "meaning": "Card play/initialization controls for both actors/all eligible variants; exercised:false is preserved and never offered as activation-clause proof."
+    },
+    "notRun": "No review:full for bounded content composition; no engine/UI/architecture/QA infrastructure changes. No redundant passing-check reruns."
+  },
+  "qa": {
+    "failedV1": {
+      "invocation": "invocations/run-uENv7K",
+      "error": "Own script assumed labStage back arrays had declared length3, but actual public API returns ten rank slots including null holes. Failed before activation; no application error/caps.",
+      "oldScriptSHA256": "84d8103b89ca40b5a6c4f0ffa92dfbdb2a047e4cebb66d27f20898e741f4965e",
+      "repair": "Select declared physical slots1and2 explicitly; all distinctness, action, cost, identity, geometry/reload/log/Caps guards retained. Separate native ACK before new epoch.",
+      "serverPGID": 33920
+    },
+    "passingV2": {
+      "invocation": "invocations/run-1YYo5H",
+      "scriptSHA256": "8fe4b796d9f096b86081911a782c5f746479aa43cb40ac99450c0c94398ba37b",
+      "caps": [],
+      "actualSlot": 1,
+      "actualPort": 5274,
+      "serverPGID": 194,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 2283,
+        "scenario": 61638,
+        "total": 63999
+      },
+      "views": {
+        "desktop": {
+          "source": {
+            "instance": "i1",
+            "uuid": "cf173b05-7bf2-465b-91e2-41f213c536d1"
+          },
+          "victims": [
+            "i2",
+            "i3"
+          ],
+          "created": [
+            "i20",
+            "i21"
+          ],
+          "publishedEventCount": 22,
+          "finalReloadVerified": true,
+          "geometry": {
+            "cancelGeometry": [
+              {
+                "target": "[data-testid=battle-prompt-cancel]",
+                "x": 826.625,
+                "y": 20.75,
+                "width": 88.375,
+                "height": 42,
+                "inViewport": true,
+                "hit": true
+              }
+            ],
+            "pendingGeometry": [
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+                "x": 254.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+                "x": 348,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+                "x": 441.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "target": "[data-testid=battle-prompt-cancel]",
+                "x": 826.625,
+                "y": 20.75,
+                "width": 88.375,
+                "height": 42,
+                "inViewport": true,
+                "hit": true
+              }
+            ],
+            "chooserGeometry": [
+              {
+                "target": "[data-testid=battle-choice-prompt-option-1]",
+                "x": 1151,
+                "y": 660.75,
+                "width": 124,
+                "height": 74,
+                "inViewport": true,
+                "hit": true
+              }
+            ],
+            "finalGeometry": [
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+                "x": 254.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i20\"]",
+                "x": 348,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i21\"]",
+                "x": 441.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "inViewport": true,
+                "hit": true
+              }
+            ]
+          }
+        },
+        "mobile": {
+          "source": {
+            "instance": "i1",
+            "uuid": "cf173b05-7bf2-465b-91e2-41f213c536d1"
+          },
+          "victims": [
+            "i2",
+            "i3"
+          ],
+          "created": [
+            "i20",
+            "i21"
+          ],
+          "publishedEventCount": 22,
+          "finalReloadVerified": true,
+          "geometry": {
+            "cancelGeometry": [
+              {
+                "target": "[data-testid=battle-prompt-cancel]",
+                "x": 269.125,
+                "y": 20.75,
+                "width": 88.375,
+                "height": 42,
+                "inViewport": true,
+                "hit": true
+              }
+            ],
+            "pendingGeometry": [
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+                "x": 23.40625,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+                "x": 81.265625,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+                "x": 139.125,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "target": "[data-testid=battle-prompt-cancel]",
+                "x": 269.125,
+                "y": 20.75,
+                "width": 88.375,
+                "height": 42,
+                "inViewport": true,
+                "hit": true
+              }
+            ],
+            "chooserGeometry": [
+              {
+                "target": "[data-testid=battle-choice-prompt-option-1]",
+                "x": 139.65625,
+                "y": 727.859375,
+                "width": 110.671875,
+                "height": 88,
+                "inViewport": true,
+                "hit": true
+              }
+            ],
+            "finalGeometry": [
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+                "x": 23.40625,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i20\"]",
+                "x": 81.265625,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "target": "[data-battlefield-card][data-battle-card-id=\"i21\"]",
+                "x": 139.125,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "inViewport": true,
+                "hit": true
+              }
+            ]
+          }
+        }
+      },
+      "logs": [
+        {
+          "viewport": "desktop",
+          "gameId": "iz7p59",
+          "rows": 73,
+          "filename": "grim-recruiter-workflow-desktop.jsonl"
+        },
+        {
+          "viewport": "mobile",
+          "gameId": "kjkapp",
+          "rows": 73,
+          "filename": "grim-recruiter-workflow-mobile.jsonl"
+        }
+      ],
+      "captures": [
+        {
+          "filename": "grim-recruiter-abandon-pending-desktop.png",
+          "sha256": "da7235097fdc6d77a2d8890c163e105bd8457a31fec26031c3542987a0ee40db",
+          "viewportCSS": [
+            1440,
+            900
+          ],
+          "pixelScale": 2,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "grim-recruiter-final-desktop.png",
+          "sha256": "3005c800fd75ef6483a3c42284e1eb08b6c7f0735e9f3748cac465e069b490b6",
+          "viewportCSS": [
+            1440,
+            900
+          ],
+          "pixelScale": 2,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "grim-recruiter-final-mobile.png",
+          "sha256": "261fa056a01624df89a38d6518ca925b49798e66b24a60e7ec7bcfd1e1daa53e",
+          "viewportCSS": [
+            390,
+            844
+          ],
+          "pixelScale": 2,
+          "visuallyInspected": true
+        }
+      ]
+    },
+    "proofLimits": "Declared card-lab setup is fixture placement, not a normal pay3 source-card play witness. Sweep supplies play/initialization proof. Human workflow covers player only. No repeated spend-affordance inspection or dedicated insufficient-energy card test is claimed. Logs include cancelled/reopened attempts; exact successful published abilities are0/0/1. Final reload resets mounted probe history; committed physical state replay is checked.",
+    "parentAuditSHA256": "d52b834118dd4a187137757999e29317404c7c6c8de4e66bb9085c27ef904c7f",
+    "cleanupProofSHA256": "b4c5ab3f4f8a5cb6088458e8ac8dfa456b07f859724cbf59858d526856c4337f"
+  },
+  "failurePaths": {
+    "midStepPartialWrite": "Existing synthetic storeCounters contract observes real mutation before a deliberate invalid second store; direct input hash and fold publication rollback. No new transition/persistence format in leaf.",
+    "reloadCancel": "Actual base card abandon prompt survives reload; normal rendered cancellation preserves committed state; final spent physical state replays on both viewports.",
+    "invalidStaleConcurrent": "Existing owning synthetic fold contracts; no duplicated per-card generic protocol matrix.",
+    "resourceRefusal": "Existing source-counter legality and cost-composition contracts; own definition integrated earn/spend exact resources. No inference of ability exercise from sweep initialization."
+  },
+  "resources": {
+    "validationProcessGroups": "Every command receipt owns its child process group and verifies reaping/absence; actual server PGs13494/33920/194 independently absent and5274free after runs. Official runner owns isolated MCP clients/provider teardown/lease/server lifecycle. Existing slot0 retained ownership observation was contention and did not prevent acquiring slot1; no foreign reconciliation/control.",
+    "cleanupProofSHA256": "b4c5ab3f4f8a5cb6088458e8ac8dfa456b07f859724cbf59858d526856c4337f",
+    "noSourceWritesWhileServersLive": true
+  },
+  "fallout": [],
+  "preExistingIssues": [],
+  "investigationCorrections": [
+    "Read-only guessed source filenames/globs had no match; corrected using actual discovered source paths without runtime effect.",
+    "First post-QA image lookup used root capture path; actual runner invocation path was then read and all three PNGs verified/viewed. No QA rerun/source effect."
+  ],
+  "delivery": {
+    "review": "Composition/no core label/new kind; gross non-test leaf9added1removed lines, below100. Parent determines final review obligation.",
+    "authority": "Parent owns Beads/Tollgate/update/review/promotion/certification/cleanup; none executed by helper.",
+    "originalAcceptance": "Original182 retains all three original UUIDs and full acceptance; this child owns only admitted leaf/private scenario.",
+    "oneCommit": "Held pending exact final freeze/writer/finalizer/message ACK."
+  }
+}

@@ -1,4 +1,8 @@
+import { abandonCost, activated, countersCost, energy } from "../../engine/dsl/builders";
+import { materializeFigments, storeCounters } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
 import { card } from "../define";
+import warrior from "../figments/warrior-bb1a5acd";
 
 export default card({
   name: "Grim Recruiter",
@@ -19,5 +23,9 @@ export default card({
   cardNumber: 480,
   art: { x: 0.353, y: 0.266, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated([abandonCost()], storeCounters(1)),
+    activated([energy(2), countersCost(2)], materializeFigments(parseFigmentId(warrior.id), 2, { spark: 1 })),
+  ],
+  verifiedText: "12usqe9prdp",
 });
