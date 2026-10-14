@@ -1,3 +1,6 @@
+import { triggered, whenDiscard } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { draw } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -9,5 +12,6 @@ export default dreamsign({
   rarity: "Rare",
   tideIds: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenDiscard(), draw(1), { oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("Once per turn, when you discard a card, draw a card."),
 });

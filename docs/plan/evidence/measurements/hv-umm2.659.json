@@ -1,0 +1,1469 @@
+{
+  "bead": "hv-umm2.659",
+  "stage": "Implementation checks and mandatory runtime accepted; final single commit amendment prepared, parent certified delivery remains owed",
+  "dispatch": {
+    "toolEntry": "2026-10-14T02:42:56.843Z",
+    "callId": "call_4f094a8ab2fa4d029aa53b37ec4105e2",
+    "modelSampling": "UNKNOWN",
+    "inclusiveWindow": "Original first helper dispatch through research, all admissions/waits, parent administrative checkpoint/Tollgate baseline integration, own iterations/checks/QA/collection, evidence and eventual final Git. Current endpoint is a draft evidence endpoint, not actual final commit; no clock reset."
+  },
+  "base": "95ef6ded0009ffbce7559eaffd50cd5a61d8b192",
+  "source": {
+    "entities": [
+      "62e1a588-f719-415c-9434-80aa08ce2e6a",
+      "9d134dfc-4643-47f3-a7ec-ea770587cea1"
+    ],
+    "newPrimitives": 0,
+    "importerFallout": [],
+    "productionLinesAddedDeleted": 13,
+    "verifiedText": "expectedVerifiedText of exact canonical printed clause, no amplified text",
+    "D10": "Not invoked: existing rules Cost changes, Zones When you discard and Ability Types Once per turn settle clauses; no rules/RD edits",
+    "D20": "Physical held-copy allowance, qualifying matcher versus paid cost, turn renewal and discard feedback/replacement",
+    "logging": "Existing public Engine triggerQueued/triggerResolved/cardDrawn/discarded/ceasedToExist events with physical source/subject/controller identities; no custom logger",
+    "wholePrintedTextImplemented": true
+  },
+  "testDelta": {
+    "physicalPlainScenarioModules": 1,
+    "configuredTestEntrypoints": 0,
+    "jsdomFiles": 0,
+    "lines": 176,
+    "cases": 26,
+    "namespace": "0x65901-0x65904 inline synthetic UUIDs; existing namespace search zero matches",
+    "stableContracts": "Actual public event physical identity/source/controller/state outcomes on synthetic fixtures; no production copy/default policy/string/timing gate"
+  },
+  "before": {
+    "leavesBefore": {
+      "src/content/dreamsigns/red-pin-62e1a588.ts": "103da95b9d971927e0f3538a8c9e4201b4947b10e2bd71a3bba8c098b537d83c",
+      "src/content/dreamsigns/leaf-bundle-9d134dfc.ts": "2c1a4995ded77acec0d8388deb0fc03152386d704c6bab6a5296df4b20d6c1a3"
+    },
+    "publicFailure": "Four both-seat actual cardDrawn arrays [] versus required physical deck head; no fixture/import error",
+    "baselineReceipt": "before-pending.receipt.json",
+    "baselineLeafHashesVerified": true
+  },
+  "counterfactuals": [
+    {
+      "label": "control-red-disabled",
+      "path": "src/content/dreamsigns/red-pin-62e1a588.ts",
+      "shaBefore": "705f2ac3613fafb4da159c5d39be0a70dcb3372dee031dd755ffa4a7359c37e4",
+      "shaAfter": "705f2ac3613fafb4da159c5d39be0a70dcb3372dee031dd755ffa4a7359c37e4",
+      "restored": true,
+      "exitCode": 1,
+      "assertionFailure": true
+    },
+    {
+      "label": "control-leaf-disabled",
+      "path": "src/content/dreamsigns/leaf-bundle-9d134dfc.ts",
+      "shaBefore": "a7876f0059f41d9e1a4278b1b2701ec7ae001b1d28274f7355085aaa0867b0dd",
+      "shaAfter": "a7876f0059f41d9e1a4278b1b2701ec7ae001b1d28274f7355085aaa0867b0dd",
+      "restored": true,
+      "exitCode": 1,
+      "assertionFailure": true
+    },
+    {
+      "label": "control-red-once",
+      "path": "src/content/dreamsigns/red-pin-62e1a588.ts",
+      "shaBefore": "705f2ac3613fafb4da159c5d39be0a70dcb3372dee031dd755ffa4a7359c37e4",
+      "shaAfter": "705f2ac3613fafb4da159c5d39be0a70dcb3372dee031dd755ffa4a7359c37e4",
+      "restored": true,
+      "exitCode": 1,
+      "assertionFailure": true
+    }
+  ],
+  "failurePaths": {
+    "midStepError": {
+      "applicability": "N.A. new composition scope",
+      "tests": [],
+      "reason": "Two content leaves compose existing automatic draw and trigger matching; no new fallible primitive/error handler/storage body. No deliberate mid-step exception/rollback injection is claimed."
+    },
+    "reloadRestart": {
+      "applicability": "Exercised actual Engine serialized state",
+      "tests": [
+        "62e1a588-f719-415c-9434-80aa08ce2e6a player duplicate held copies remain used after serialization and renew next turn",
+        "62e1a588-f719-415c-9434-80aa08ce2e6a enemy duplicate held copies remain used after serialization and renew next turn",
+        "9d134dfc-4643-47f3-a7ec-ea770587cea1 player paid discard of its drawn card does not renew duplicate copies",
+        "9d134dfc-4643-47f3-a7ec-ea770587cea1 enemy paid discard of its drawn card does not renew duplicate copies"
+      ],
+      "reason": "serializeState/deserializeState and stateHash equality on actual once-used state; second legal qualifying action consumes no further draw, actual pass-driven new turn renews independent held copies. Trusted Engine state serialization, not strict parseEngineBattleFold/replay/IndexedDB/UI reload."
+    },
+    "partialTransientWrite": {
+      "applicability": "N.A. new composition scope",
+      "tests": [],
+      "reason": "No new external storage/IO transaction or in-flight prompt schema; automatic draw offers no new human decision. No partially written provider/IO/storage failure or cancelled-payment continuation test is claimed."
+    },
+    "invalidStaleInputs": {
+      "applicability": "N.A. new input/schema surface",
+      "tests": [],
+      "matchingNegativeTests": [
+        "62e1a588-f719-415c-9434-80aa08ce2e6a player nonmatching costs and Event preserve the first qualifying play",
+        "62e1a588-f719-415c-9434-80aa08ce2e6a enemy nonmatching costs and Event preserve the first qualifying play",
+        "62e1a588-f719-415c-9434-80aa08ce2e6a player opposing controller play leaves holder allowance available",
+        "62e1a588-f719-415c-9434-80aa08ce2e6a enemy opposing controller play leaves holder allowance available",
+        "9d134dfc-4643-47f3-a7ec-ea770587cea1 player opponent and own effect discards consume only holder occasion",
+        "9d134dfc-4643-47f3-a7ec-ea770587cea1 enemy opponent and own effect discards consume only holder occasion"
+      ],
+      "reason": "These are legal nonmatching costs/types/controller occasions, not malicious/invalid/stale fold intents; no new target/input/parser/form."
+    },
+    "concurrentIntents": {
+      "applicability": "Bounded same-occasion listener and sequential-intent interaction only",
+      "tests": [
+        "62e1a588-f719-415c-9434-80aa08ce2e6a player duplicate held copies remain used after serialization and renew next turn",
+        "62e1a588-f719-415c-9434-80aa08ce2e6a enemy duplicate held copies remain used after serialization and renew next turn",
+        "9d134dfc-4643-47f3-a7ec-ea770587cea1 player paid discard of its drawn card does not renew duplicate copies",
+        "9d134dfc-4643-47f3-a7ec-ea770587cea1 enemy paid discard of its drawn card does not renew duplicate copies"
+      ],
+      "reason": "Two physical held copies respond independently to one actual occasion and each retains its allowance across later legal actions. This exercises existing synchronous FIFO listeners, not threaded/multi-provider/racing storage writers."
+    }
+  },
+  "commands": [
+    {
+      "label": "authored-witness",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-238"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T02:51:33.511801+00:00",
+      "endedAt": "2026-10-14T02:51:39.839766+00:00",
+      "elapsedSeconds": 6.327838208992034,
+      "pid": 72758,
+      "processGroup": 72758,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 24.18,
+      "hostLoadRaw": "{ 24.18 13.22 8.34 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 5.6974849999999995,
+      "childCpuSystemS": 1.968248
+    },
+    {
+      "label": "before-pending",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-238"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T02:50:45.874352+00:00",
+      "endedAt": "2026-10-14T02:50:51.773966+00:00",
+      "elapsedSeconds": 5.899481250002282,
+      "pid": 53383,
+      "processGroup": 53383,
+      "exitCode": 1,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 13.82,
+      "hostLoadRaw": "{ 13.82 10.29 7.12 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 5.777698,
+      "childCpuSystemS": 1.960659
+    },
+    {
+      "label": "combined-coverage",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:04:44.986754+00:00",
+      "endedAt": "2026-10-14T03:04:49.719107+00:00",
+      "elapsedSeconds": 4.732123832975049,
+      "pid": 83322,
+      "processGroup": 83322,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 23.44,
+      "hostLoadRaw": "{ 23.44 17.96 14.00 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 4.674288,
+      "childCpuSystemS": 1.588186
+    },
+    {
+      "label": "combined-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-238"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:03:11.601209+00:00",
+      "endedAt": "2026-10-14T03:03:16.989057+00:00",
+      "elapsedSeconds": 5.387697917001788,
+      "pid": 37155,
+      "processGroup": 37155,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 14.86,
+      "hostLoadRaw": "{ 14.86 15.12 12.64 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 4.909725,
+      "childCpuSystemS": 1.717103
+    },
+    {
+      "label": "combined-knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:04:35.499934+00:00",
+      "endedAt": "2026-10-14T03:04:40.262556+00:00",
+      "elapsedSeconds": 4.762448790977942,
+      "pid": 82378,
+      "processGroup": 82378,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 23.72,
+      "hostLoadRaw": "{ 23.72 17.84 13.91 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 4.0731720000000005,
+      "childCpuSystemS": 1.273537
+    },
+    {
+      "label": "combined-review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:03:21.100520+00:00",
+      "endedAt": "2026-10-14T03:04:28.852681+00:00",
+      "elapsedSeconds": 67.75129949999973,
+      "pid": 57032,
+      "processGroup": 57032,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 16.38,
+      "hostLoadRaw": "{ 16.38 15.46 12.79 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 177.93079500000002,
+      "childCpuSystemS": 22.434318
+    },
+    {
+      "label": "combined-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:05:41.806351+00:00",
+      "endedAt": "2026-10-14T03:05:41.927710+00:00",
+      "elapsedSeconds": 0.12125254201237112,
+      "pid": 87199,
+      "processGroup": 87199,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 13.54,
+      "hostLoadRaw": "{ 13.54 16.15 13.57 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 0.053885999999999996,
+      "childCpuSystemS": 0.027797
+    },
+    {
+      "label": "control-leaf-disabled",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "paid discard draws the physical deck head"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T02:53:34.409123+00:00",
+      "endedAt": "2026-10-14T02:53:39.576290+00:00",
+      "elapsedSeconds": 5.166985584015492,
+      "pid": 71151,
+      "processGroup": 71151,
+      "exitCode": 1,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 15.26,
+      "hostLoadRaw": "{ 15.26 13.93 9.30 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 5.001435,
+      "childCpuSystemS": 1.788935
+    },
+    {
+      "label": "control-red-disabled",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "exact cost character draws the physical deck head"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T02:53:28.495111+00:00",
+      "endedAt": "2026-10-14T02:53:34.377357+00:00",
+      "elapsedSeconds": 5.882082583004376,
+      "pid": 69856,
+      "processGroup": 69856,
+      "exitCode": 1,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 15.45,
+      "hostLoadRaw": "{ 15.45 13.94 9.28 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 5.438195,
+      "childCpuSystemS": 1.9017089999999999
+    },
+    {
+      "label": "control-red-once",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "duplicate held copies remain used after serialization and renew next turn"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T02:53:39.607479+00:00",
+      "endedAt": "2026-10-14T02:53:44.521167+00:00",
+      "elapsedSeconds": 4.913533999992069,
+      "pid": 81409,
+      "processGroup": 81409,
+      "exitCode": 1,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 17.9,
+      "hostLoadRaw": "{ 17.90 14.56 9.58 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 4.85275,
+      "childCpuSystemS": 1.702258
+    },
+    {
+      "label": "expanded-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-238"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T02:52:56.213669+00:00",
+      "endedAt": "2026-10-14T02:53:02.666254+00:00",
+      "elapsedSeconds": 6.452359624992823,
+      "pid": 65983,
+      "processGroup": 65983,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 17.05,
+      "hostLoadRaw": "{ 17.05 14.00 9.13 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 5.8384990000000005,
+      "childCpuSystemS": 2.126128
+    },
+    {
+      "label": "final-fixture-coverage",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:09:37.515408+00:00",
+      "endedAt": "2026-10-14T03:09:42.119298+00:00",
+      "elapsedSeconds": 4.6036998750059865,
+      "pid": 54504,
+      "processGroup": 54504,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 12.9,
+      "hostLoadRaw": "{ 12.90 14.03 13.15 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 4.559129,
+      "childCpuSystemS": 1.5104769999999998
+    },
+    {
+      "label": "final-fixture-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-238"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:07:33.521292+00:00",
+      "endedAt": "2026-10-14T03:07:42.903251+00:00",
+      "elapsedSeconds": 9.381498875009129,
+      "pid": 94362,
+      "processGroup": 94362,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 8.2,
+      "hostLoadRaw": "{ 8.20 13.31 12.76 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 5.323155,
+      "childCpuSystemS": 2.963012
+    },
+    {
+      "label": "final-fixture-knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:09:26.565173+00:00",
+      "endedAt": "2026-10-14T03:09:30.317409+00:00",
+      "elapsedSeconds": 3.7520267500076443,
+      "pid": 53001,
+      "processGroup": 53001,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 13.53,
+      "hostLoadRaw": "{ 13.53 14.18 13.20 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 3.7282159999999998,
+      "childCpuSystemS": 1.179491
+    },
+    {
+      "label": "final-fixture-review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:08:09.843500+00:00",
+      "endedAt": "2026-10-14T03:09:11.173968+00:00",
+      "elapsedSeconds": 61.329544459003955,
+      "pid": 97244,
+      "processGroup": 97244,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 10.2,
+      "hostLoadRaw": "{ 10.20 13.22 12.74 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 143.189302,
+      "childCpuSystemS": 19.851992
+    },
+    {
+      "label": "final-fixture-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:10:40.059596+00:00",
+      "endedAt": "2026-10-14T03:10:40.173011+00:00",
+      "elapsedSeconds": 0.11328616700484417,
+      "pid": 58705,
+      "processGroup": 58705,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 7.05,
+      "hostLoadRaw": "{ 7.05 12.10 12.49 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 0.053142,
+      "childCpuSystemS": 0.024213
+    },
+    {
+      "label": "restored-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-ready-238"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T02:53:53.992232+00:00",
+      "endedAt": "2026-10-14T02:53:59.331160+00:00",
+      "elapsedSeconds": 5.338729250011966,
+      "pid": 11339,
+      "processGroup": 11339,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 17.07,
+      "hostLoadRaw": "{ 17.07 14.49 9.62 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 5.30842,
+      "childCpuSystemS": 1.7467030000000001
+    },
+    {
+      "label": "review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T02:54:54.634416+00:00",
+      "endedAt": "2026-10-14T02:55:54.509825+00:00",
+      "elapsedSeconds": 59.874990416981746,
+      "pid": 29714,
+      "processGroup": 29714,
+      "exitCode": 2,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 21.56,
+      "hostLoadRaw": "{ 21.56 16.57 10.77 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 165.250353,
+      "childCpuSystemS": 19.967812
+    },
+    {
+      "label": "runtime-preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "62e1a588-f719-415c-9434-80aa08ce2e6a,9d134dfc-4643-47f3-a7ec-ea770587cea1",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:19:25.748674+00:00",
+      "endedAt": "2026-10-14T03:19:27.223632+00:00",
+      "elapsedSeconds": 1.4747670410142746,
+      "pid": 33682,
+      "processGroup": 33682,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 15.76,
+      "hostLoadRaw": "{ 15.76 11.52 11.21 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 1.178444,
+      "childCpuSystemS": 0.513467
+    },
+    {
+      "label": "runtime-sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.659",
+        "--dreamsigns",
+        "62e1a588-f719-415c-9434-80aa08ce2e6a,9d134dfc-4643-47f3-a7ec-ea770587cea1",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:20:23.962847+00:00",
+      "endedAt": "2026-10-14T03:20:41.669078+00:00",
+      "elapsedSeconds": 17.705880499997875,
+      "pid": 71985,
+      "processGroup": 71985,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 14.47,
+      "hostLoadRaw": "{ 14.47 12.04 11.42 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 6.938022,
+      "childCpuSystemS": 4.003495
+    },
+    {
+      "label": "runtime-weighted300",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "62e1a588-f719-415c-9434-80aa08ce2e6a,9d134dfc-4643-47f3-a7ec-ea770587cea1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:14:50.847801+00:00",
+      "endedAt": "2026-10-14T03:18:56.429048+00:00",
+      "elapsedSeconds": 245.5783929169993,
+      "pid": 69677,
+      "processGroup": 69677,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 3.99,
+      "hostLoadRaw": "{ 3.99 7.68 10.42 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 255.4665,
+      "childCpuSystemS": 3.988856
+    },
+    {
+      "label": "post-runtime-final-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:32:49.979659+00:00",
+      "endedAt": "2026-10-14T03:32:50.042044+00:00",
+      "elapsedSeconds": 0.06228970899246633,
+      "pid": 18285,
+      "processGroup": 18285,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 4.25,
+      "hostLoadRaw": "{ 4.25 6.10 8.33 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 0.050798,
+      "childCpuSystemS": 0.015638
+    },
+    {
+      "label": "stage3-final-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-659-qualifying-draws",
+      "startedAt": "2026-10-14T03:38:09.808762+00:00",
+      "endedAt": "2026-10-14T03:38:09.966744+00:00",
+      "elapsedSeconds": 0.1578117500175722,
+      "pid": 96869,
+      "processGroup": 96869,
+      "exitCode": 0,
+      "processGroupAbsent": true,
+      "hostLoadAtStart": 13.93,
+      "hostLoadRaw": "{ 13.93 15.34 12.36 }",
+      "hostLoadMethod": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "childCpuUserS": 0.068919,
+      "childCpuSystemS": 0.041057
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "label": "authored-witness",
+      "startedAt": "2026-10-14T02:51:33.511801+00:00",
+      "value": 24.18,
+      "raw": "{ 24.18 13.22 8.34 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "before-pending",
+      "startedAt": "2026-10-14T02:50:45.874352+00:00",
+      "value": 13.82,
+      "raw": "{ 13.82 10.29 7.12 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "combined-coverage",
+      "startedAt": "2026-10-14T03:04:44.986754+00:00",
+      "value": 23.44,
+      "raw": "{ 23.44 17.96 14.00 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "combined-focused",
+      "startedAt": "2026-10-14T03:03:11.601209+00:00",
+      "value": 14.86,
+      "raw": "{ 14.86 15.12 12.64 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "combined-knip",
+      "startedAt": "2026-10-14T03:04:35.499934+00:00",
+      "value": 23.72,
+      "raw": "{ 23.72 17.84 13.91 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "combined-review",
+      "startedAt": "2026-10-14T03:03:21.100520+00:00",
+      "value": 16.38,
+      "raw": "{ 16.38 15.46 12.79 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "combined-schema",
+      "startedAt": "2026-10-14T03:05:41.806351+00:00",
+      "value": 13.54,
+      "raw": "{ 13.54 16.15 13.57 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "control-leaf-disabled",
+      "startedAt": "2026-10-14T02:53:34.409123+00:00",
+      "value": 15.26,
+      "raw": "{ 15.26 13.93 9.30 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "control-red-disabled",
+      "startedAt": "2026-10-14T02:53:28.495111+00:00",
+      "value": 15.45,
+      "raw": "{ 15.45 13.94 9.28 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "control-red-once",
+      "startedAt": "2026-10-14T02:53:39.607479+00:00",
+      "value": 17.9,
+      "raw": "{ 17.90 14.56 9.58 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "expanded-focused",
+      "startedAt": "2026-10-14T02:52:56.213669+00:00",
+      "value": 17.05,
+      "raw": "{ 17.05 14.00 9.13 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "final-fixture-coverage",
+      "startedAt": "2026-10-14T03:09:37.515408+00:00",
+      "value": 12.9,
+      "raw": "{ 12.90 14.03 13.15 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "final-fixture-focused",
+      "startedAt": "2026-10-14T03:07:33.521292+00:00",
+      "value": 8.2,
+      "raw": "{ 8.20 13.31 12.76 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "final-fixture-knip",
+      "startedAt": "2026-10-14T03:09:26.565173+00:00",
+      "value": 13.53,
+      "raw": "{ 13.53 14.18 13.20 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "final-fixture-review",
+      "startedAt": "2026-10-14T03:08:09.843500+00:00",
+      "value": 10.2,
+      "raw": "{ 10.20 13.22 12.74 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "final-fixture-schema",
+      "startedAt": "2026-10-14T03:10:40.059596+00:00",
+      "value": 7.05,
+      "raw": "{ 7.05 12.10 12.49 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "restored-focused",
+      "startedAt": "2026-10-14T02:53:53.992232+00:00",
+      "value": 17.07,
+      "raw": "{ 17.07 14.49 9.62 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "review-final",
+      "startedAt": "2026-10-14T02:54:54.634416+00:00",
+      "value": 21.56,
+      "raw": "{ 21.56 16.57 10.77 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "runtime-preflight",
+      "startedAt": "2026-10-14T03:19:25.748674+00:00",
+      "value": 15.76,
+      "raw": "{ 15.76 11.52 11.21 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "runtime-sweep",
+      "startedAt": "2026-10-14T03:20:23.962847+00:00",
+      "value": 14.47,
+      "raw": "{ 14.47 12.04 11.42 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "runtime-weighted300",
+      "startedAt": "2026-10-14T03:14:50.847801+00:00",
+      "value": 3.99,
+      "raw": "{ 3.99 7.68 10.42 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "post-runtime-final-schema",
+      "startedAt": "2026-10-14T03:32:49.979659+00:00",
+      "value": 4.25,
+      "raw": "{ 4.25 6.10 8.33 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    },
+    {
+      "label": "stage3-final-schema",
+      "startedAt": "2026-10-14T03:38:09.808762+00:00",
+      "value": 13.93,
+      "raw": "{ 13.93 15.34 12.36 }",
+      "method": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ]
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual successful final-fixture-review starting sysctl -n vm.loadavg 1-minute10.20 at2026-10-14T03:08:09.843500Z; each other command load separately scoped, not a game CPU/throughput comparison",
+        "method": [
+          "sysctl",
+          "-n",
+          "vm.loadavg"
+        ]
+      },
+      "testDelta": {
+        "files": "One new physical plain scenario module, zero new configured Vitest entry points, zero jsdom entries; not a historical entrypoint comparison"
+      }
+    }
+  },
+  "runtime": {
+    "status": "Mandatory exact runtime recipe passed on final frozen source",
+    "launchACK": "2026-10-14T03:14:04.739483Z",
+    "parentPostAcceptance": {
+      "at": "2026-10-14T03:30:10.059019+00:00",
+      "runtimePassed": true,
+      "sourceAnd70SupportUnchangedExceptNativeLedgerAppend": true,
+      "42LedgerRowsAndOriginalPrefixVerified": true,
+      "all26RecordedGroupsAbsent": [
+        11339,
+        12220,
+        13460,
+        29575,
+        29714,
+        30667,
+        33682,
+        37155,
+        53001,
+        53383,
+        54504,
+        57032,
+        58705,
+        65983,
+        69677,
+        69856,
+        71151,
+        71985,
+        72161,
+        72758,
+        81409,
+        82378,
+        83322,
+        87199,
+        94362,
+        97244
+      ],
+      "actualQA5274OwnCloseAndLaterPeerReuseQualified": true,
+      "UIOnlyFourInitializationCells": true,
+      "noJudgedNoCapturesRequired": true,
+      "fullBehaviorEvidence": "26deterministicbothseatcontracts +300nativefullpool actualtrigger896/1819; inclusion600/600 notexercise/allclauseclaim",
+      "evidenceWriteAdmission": "ONLY ownfriction+measurements now; sourceleaves/scenario/QAledger/support remain frozen; schemaonlyneededafterevidence, no aggregate/fuzz/QA repetition. Fivefailurepaths enumerateactualscope/testnames/genuineN.A., production/test/entrycounts andload/clock/steps/collectorcorrections qualified. No Git untilStage3 AMEND ACK."
+    },
+    "frozenSource": "runtime-source-freeze-v02.json SHA256f8a52e9b9de6a234cc415ba12fad892d265610261f4fece3f6ba9a0aac6baa5b;4686 regular tracked +70 immutable scratch support/receipt inputs",
+    "fuzz": {
+      "exit0": true,
+      "metrics": "fuzz:engine 300 games, 109409 steps, 243.3 s wall, 258.0 s CPU (1.2 games/s wall, 1.2 games/s CPU); prompts 7064; interactive re-runs 723 (3.449 ms each); feasibility bounded {\"legality\":0,\"prompts\":1}; results {\"player\":159,\"enemy\":141,\"draw\":0}; failures 0",
+      "targets": [
+        {
+          "kind": "dreamsign",
+          "uuid": "62e1a588-f719-415c-9434-80aa08ce2e6a",
+          "included": 600,
+          "exercised": 896
+        },
+        {
+          "kind": "dreamsign",
+          "uuid": "9d134dfc-4643-47f3-a7ec-ea770587cea1",
+          "included": 600,
+          "exercised": 1819
+        }
+      ],
+      "defaults": "Original full pool/policy first0/interactiveEvery10/invariants/hash/determinization retained; aggregate applied trigger exercise, not per-seat/allclause claim"
+    },
+    "fuzzTimingQualification": {
+      "wrapperS": 245.5783929169993,
+      "nativeReportedGameWallS": 243.3,
+      "nativeReportedCPUS": 258.0,
+      "wrapperChildCpuUserS": 255.4665,
+      "wrapperChildCpuSystemS": 3.988856,
+      "wrapperStartLoad": 3.99,
+      "scope": "Wrapper elapsed includes native heavy-lock wait, npm/tsx startup, loop and teardown; native loop timer excludes wrapper/startup. Heavy-slot wait was not separately measured, so do not infer it from the difference or claim isolated benchmark/pricing."
+    },
+    "actualCoverage": {
+      "62e1a588-f719-415c-9434-80aa08ce2e6a": {
+        "includedHeldCopies": 600,
+        "appliedSourceExercises": 896
+      },
+      "9d134dfc-4643-47f3-a7ec-ea770587cea1": {
+        "includedHeldCopies": 600,
+        "appliedSourceExercises": 1819
+      },
+      "scope": "Aggregate native per-UUID counts across300 games; includes actual applied triggerResolved/abilityActivated origin match, not per-seat/per-clause/full-branch coverage. Actual300games109409steps7064prompts/723reportedinteractive reruns/0failures; original default full pool/policy,first0,interactiveEvery10/invariants/replayhash/determinization retained."
+    },
+    "preflight": {
+      "event": "labPreflightSummary",
+      "cards": [],
+      "avatars": [],
+      "dreamsigns": [
+        "62e1a588-f719-415c-9434-80aa08ce2e6a",
+        "9d134dfc-4643-47f3-a7ec-ea770587cea1"
+      ],
+      "variants": [
+        "base",
+        "amplified",
+        "empowered",
+        "kindled",
+        "resonant",
+        "inspired",
+        "enduring",
+        "hastened",
+        "attuned",
+        "perfected"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "counts": {
+        "pass": 4,
+        "pending": 0,
+        "skip": 36,
+        "fail": 0
+      },
+      "elapsedMs": 17.07987500000013,
+      "hostLoad": 15.76025390625,
+      "enemyMode": "normal-dreamsign-first-turn-first-legal-prompts"
+    },
+    "sweep": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-J9n0NK",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.659/invocations/sweep-J9n0NK",
+      "counts": {
+        "pass": 4,
+        "skip": 36
+      },
+      "attemptCounts": {
+        "pass": 4,
+        "skip": 36
+      },
+      "hostLoad": 14.46923828125,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1977,
+        "scenario": 14859.714583000003,
+        "cleanup": 601.3840410000012,
+        "execution": 17501.103666,
+        "total": 17507.103666
+      }
+    },
+    "sweepQualification": "Four base/both-seat initialization/normal-first-Day UI cells with empty Caps; 36 ineligible skips, zero retries. These initialization-only cells do not claim printed trigger exercise; actual trigger proofs are separate deterministic26 and weighted896/1819 counts.",
+    "fourReportSHA256s": [
+      {
+        "filename": "sweep-62e1a588-f719-415c-9434-80aa08ce2e6a-base-enemy-attempt-1.result.json",
+        "sha256": "5fa0af14bc397bf0d386d83a09b72be0e665d97d0d8aeb02a52a64ff085c01a2",
+        "caps": [],
+        "error": null,
+        "exercised": false,
+        "captures": []
+      },
+      {
+        "filename": "sweep-62e1a588-f719-415c-9434-80aa08ce2e6a-base-player-attempt-1.result.json",
+        "sha256": "295c8bc5b94df478a1415df3f6b87371b7cdfd88cf12cda1a8d75a2cb30bc96e",
+        "caps": [],
+        "error": null,
+        "exercised": false,
+        "captures": []
+      },
+      {
+        "filename": "sweep-9d134dfc-4643-47f3-a7ec-ea770587cea1-base-enemy-attempt-1.result.json",
+        "sha256": "25d0f9d09ef3dd19eed2dbeb27e4a655c5d9a9cefae23e2ac048efdaf6587e0e",
+        "caps": [],
+        "error": null,
+        "exercised": false,
+        "captures": []
+      },
+      {
+        "filename": "sweep-9d134dfc-4643-47f3-a7ec-ea770587cea1-base-player-attempt-1.result.json",
+        "sha256": "ea2320a11e2caaa92c97c2e44a825a5290e8b90322474f71197e4658640b46f7",
+        "caps": [],
+        "error": null,
+        "exercised": false,
+        "captures": []
+      }
+    ],
+    "D21": {
+      "firstBytes": [
+        246,
+        56
+      ],
+      "sampled": [
+        false,
+        false
+      ],
+      "newPromptStatusVisual": false,
+      "judgedRequired": 0,
+      "judgedRuns": 0,
+      "judgedApplicabilitySkipRows": 2,
+      "actualCaptures": 0,
+      "captureNA": "Unsampled existing composition introduces no new visual/prompt/status; no judged or visual capture obligation. Browser results are initialization-only cells with exercised:false, distinct from26 deterministic trigger cases and fuzz source exercise."
+    },
+    "ledger": {
+      "rows": 42,
+      "sweepRows": 40,
+      "nativeBasePass": 4,
+      "nativeIneligibleSkip": 36,
+      "retryCount": 0,
+      "originalTwoApplicabilityRowsPrefixPreserved": true
+    },
+    "port": {
+      "requested": 5174,
+      "actual": 5274,
+      "actualServerGroup": 72161,
+      "reason": "Native browser lease slot1 uses its existing >=5274 partition despite requested5174; no driver/config change. Own port free at native close03:20:41 and server group absent; later different bead668 legitimately reused slot/port. No foreign cleanup required."
+    },
+    "resources": {
+      "at": "2026-10-14T03:27:45.355864+00:00",
+      "regularTrackedAccounted": 4686,
+      "regularTrackedUnchangedExceptNativeLedgerAppend": 4685,
+      "immutableSupportSHAsExact": 70,
+      "ledgerOriginalPrefixExact": true,
+      "nativeLedgerAppendOnly": true,
+      "allOwnGroupsAbsent": [
+        65983,
+        69856,
+        72758,
+        83322,
+        29714,
+        82378,
+        81409,
+        97244,
+        57032,
+        71151,
+        58705,
+        53001,
+        37155,
+        94362,
+        53383,
+        54504,
+        11339,
+        87199,
+        69677,
+        33682,
+        71985,
+        72161
+      ],
+      "requestedPort": 5174,
+      "actualPort": 5274,
+      "actualServerGroup": 72161,
+      "actualPortDrainedAtNativeClose": true,
+      "ownOwnerRecordAbsentAtInitialInspection": true,
+      "ownServerRecordAbsentAtInitialInspection": true,
+      "currentSlotOwner": null,
+      "currentOwnerIsOwn": false,
+      "resourceQualification": "Native sweep exit0 and cleanup stderr confirmed own server group72161/port5274 free before close03:20:41; all own groups now absent. Initially slot1 owner/server records absent. Slot/port later legitimately reused by different native bead668; do not require foreign owner to disappear or touch it.",
+      "providerAndRPC": "Existing native openQaSession close requires confirmed browser_close, joins all activeCalls, persists execution-completed then clears own record; unconfirmed provider/RPC/ownership/lease cleanup rejects sweep. Actual native exit0 + initial own record absence + wholegroups absence confirm this protocol; no shared-provider process absence claim",
+      "noSourceEvidenceGitRefresh": true
+    },
+    "collectorCorrections": {
+      "ownCollectorFailures": [
+        {
+          "exit": 1,
+          "cause": "First read-only collector searched stdout for native server cleanup metadata; QA say metadata is actually stderr. Inputs independently verified exact; no QA command failure"
+        },
+        {
+          "exit": 1,
+          "cause": "Second read-only collector demanded a strict Python bind after native cleanup. At initial inspection own server group and own records absent and lsof had no listener; later another native owner hv-umm2.668/PID6387 took slot1 and port5274 at03:25:34Z with server node6464 born03:25:33Z, after own cleanup03:20:41Z. Guard requires own resources absent, not a globally unused slot indefinitely. No foreign resource changed"
+        }
+      ],
+      "noRuntimeRetry": true,
+      "noSourceEffects": true
+    },
+    "allRuntimeCommandExits": 0,
+    "sourceBytesUnchangedThroughRuntime": true
+  },
+  "resources": {
+    "recordedGroupsAbsent": true,
+    "groups": [
+      72758,
+      53383,
+      83322,
+      37155,
+      82378,
+      57032,
+      87199,
+      71151,
+      69856,
+      81409,
+      65983,
+      54504,
+      94362,
+      53001,
+      97244,
+      11339,
+      29714,
+      58705
+    ],
+    "noGitMutation": false,
+    "noGitMutationByHelper": true,
+    "parentAdministrativeCheckpoint": "Historical Stage2 administrative d727cad2f197f3dfb9c1a1ac383202ebbf1ac40b was not candidate eligible. Parent Stage3 admits one final amendment on base95ef6; source/ordinary candidate certification and closure owned by parent.",
+    "allRecordedParentAndHelperGroupsAbsent": [
+      11339,
+      12220,
+      13460,
+      29575,
+      29714,
+      30667,
+      33682,
+      37155,
+      53001,
+      53383,
+      54504,
+      57032,
+      58705,
+      65983,
+      69677,
+      69856,
+      71151,
+      71985,
+      72161,
+      72758,
+      81409,
+      82378,
+      83322,
+      87199,
+      94362,
+      97244,
+      18285
+    ],
+    "noActiveValidatorRuntimeBrowserServerWriter": true,
+    "resourceMeaning": "Only this session resources; peer668 later slot1 owner/server untouched, no shared-provider process absence claim",
+    "terminalWriterMeaning": "Sole helper becomes terminal after this final evidence write and handoff; no validator/runtime/own browser/server/RPC remains. Parent Stage3 may reactivate only bounded AMEND-CLOCK work."
+  },
+  "review": {
+    "core": false,
+    "productionAddedDeleted": 13,
+    "parentOwnsDecision": true,
+    "noHelperReviewer": true,
+    "noFull": "Two existing compositions/plain scenario module, no configuration/infrastructure/cross-cut changes"
+  },
+  "original238AcceptanceJoin": "Preserved; all sibling entities read-only; this bead acceptance remains incomplete until runtime and certified parent delivery",
+  "baselineIntegration": {
+    "at": "2026-10-14T03:02:09.117799+00:00",
+    "sourceAdministrativeUNVALIDATED": "d727cad2f197f3dfb9c1a1ac383202ebbf1ac40b",
+    "newBase": "95ef6ded0009ffbce7559eaffd50cd5a61d8b192",
+    "repaired654SourceIncluded": "d0853ad4b41f589dc465fe6bab866b6ed3963938",
+    "oneUniqueCommit": true,
+    "clean": true,
+    "allSixOwnSHAsPreserved": {
+      "src/content/dreamsigns/red-pin-62e1a588.ts": "705f2ac3613fafb4da159c5d39be0a70dcb3372dee031dd755ffa4a7359c37e4",
+      "src/content/dreamsigns/leaf-bundle-9d134dfc.ts": "a7876f0059f41d9e1a4278b1b2701ec7ae001b1d28274f7355085aaa0867b0dd",
+      "src/content/specs/dreamsigns-ready-238.scenarios.ts": "9c56b07cc0981fafc57e0db642170e2ba8920b23c346ca77fbcce9a9cd8f23fd",
+      "docs/plan/evidence/friction/hv-umm2.659.json": "b1059170f812b4507b1e7b55f90a1fe6e065d938b1c20ca09794dfde8a9f774b",
+      "docs/plan/evidence/measurements/hv-umm2.659.json": "0d4ce785348ceb89063c52e70ed06a3b46ab204855189acea7033a6450732245",
+      "docs/plan/evidence/qa-ledger/hv-umm2.659.jsonl": "8f477a8dc2d33dcf0743ee65488259d60e02b4c622517c67edc0f69c11fa6614"
+    },
+    "freezeRegularTrackedCount": 4686,
+    "packageUnchangedNoReinstallNeeded": true,
+    "notCandidateEligible": true,
+    "oldSourceEvidenceQualification": "BEFORE/26focused/3finally-restoredcontrols remainoldcd436 baseline evidence; only private typepredicatechanged afteroldfailedreview; final combinedsource checks owed. No oldaggregate pass claim becauseoldreviewexit2."
+  },
+  "oldSourceQualification": {
+    "base": "cd436a759bffb5d17e955de0bd2dba80314c4e8b",
+    "beforeFourGenuineMissingDraws": true,
+    "focusedCases": 26,
+    "controlsFinallyRestored": 3,
+    "failedReview": {
+      "exit": 2,
+      "filesPassed": 247,
+      "testsPassed": 5690,
+      "cause": "Own private filter helper typing: EngineEvent source access TS2339 and resulting unsafe return; explicit TriggerResolved type predicate fixed, behavior unchanged"
+    },
+    "noOldReviewPassClaim": true
+  },
+  "previousCombinedValidation": {
+    "focusedCases": 26,
+    "review": {
+      "files": 247,
+      "tests": 5773,
+      "lint": 0,
+      "typecheck": 0,
+      "cycles": 0,
+      "exit": 0
+    },
+    "knipExit": 0,
+    "coverageCases": 20,
+    "sourceSameSincePredicateCorrection": false,
+    "sourceLeafHashes": {
+      "src/content/dreamsigns/red-pin-62e1a588.ts": "705f2ac3613fafb4da159c5d39be0a70dcb3372dee031dd755ffa4a7359c37e4",
+      "src/content/dreamsigns/leaf-bundle-9d134dfc.ts": "a7876f0059f41d9e1a4278b1b2701ec7ae001b1d28274f7355085aaa0867b0dd",
+      "src/content/specs/dreamsigns-ready-238.scenarios.ts": "9c56b07cc0981fafc57e0db642170e2ba8920b23c346ca77fbcce9a9cd8f23fd"
+    },
+    "schema": {
+      "exit": 0,
+      "records": 770,
+      "scope": "All actual friction records; own friction bytes unchanged after this successful check",
+      "historicalUnknowns": 41
+    },
+    "qualification": "169-line module before parent fixture hygiene corrections; all green receipts retained, superseded final module checks owed"
+  },
+  "ownFixtureCorrections": [
+    {
+      "reason": "Parent inspection: hand-limit case pinned production default10; private fixture now explicitly sets handLimit10 through boardState configured state and actual local.apply; no engine writer"
+    },
+    {
+      "reason": "Parent inspection: empty-deck title promised spent allowance but initially only one qualifying occasion; case now exercises two real qualifying plays/discards in same turn and observes exactly one applied emblem trigger and one Fatigue occurrence. Removed unrelated point-algorithm/score assertion"
+    }
+  ],
+  "finalValidation": {
+    "sourceScenarioLines": 176,
+    "focusedCases": 26,
+    "review": {
+      "files": 247,
+      "tests": 5773,
+      "exit": 0,
+      "receipt": "final-fixture-review.receipt.json"
+    },
+    "knip": {
+      "exit": 0,
+      "receipt": "final-fixture-knip.receipt.json"
+    },
+    "coverage": {
+      "cases": 20,
+      "exit": 0,
+      "receipt": "final-fixture-coverage.receipt.json"
+    },
+    "schema": {
+      "exit": 0,
+      "receipt": "final-fixture-schema.receipt.json",
+      "records": 770,
+      "historicalUnknowns": 41,
+      "scope": "Own current friction unchanged after this schema check; detailed measurement receives actual receipt only"
+    },
+    "sourceLeafScenarioSHAs": {
+      "src/content/dreamsigns/red-pin-62e1a588.ts": "705f2ac3613fafb4da159c5d39be0a70dcb3372dee031dd755ffa4a7359c37e4",
+      "src/content/dreamsigns/leaf-bundle-9d134dfc.ts": "a7876f0059f41d9e1a4278b1b2701ec7ae001b1d28274f7355085aaa0867b0dd",
+      "src/content/specs/dreamsigns-ready-238.scenarios.ts": "a1e86804593cff62d6fcf2a04ebf4aefc8a70a956c76774710d507df74456aba"
+    },
+    "mutantsNotRepeated": "Before/three exact restored controls remain honest oldcd436 source-qualified; four direct witness/duplicate-reload controls unchanged by synthetic handLimit/Fatigue fixture hygiene",
+    "latestEvidenceSchema": {
+      "exit": 0,
+      "receipt": "stage3-final-schema.receipt.json",
+      "records": 770,
+      "historicalUnknowns": 41,
+      "scope": "Actual final near-Git friction bytes; measurement then appends this actual receipt only. Actual Git endpoint remains external and unknown until command returns."
+    }
+  },
+  "finalCommit": {
+    "status": "Prospective final AMEND prepared under parent Stage3 ACK; actual Git result and source OID recorded externally after command",
+    "originalDispatch": "2026-10-14T02:42:56.843Z",
+    "currentEvidenceEndpoint": "2026-10-14T03:38:09.773863+00:00",
+    "actualGitEndpoint": "UNKNOWN before actual Git",
+    "instruction": "One detailed final ConventionalCommit with Bead:hv-umm2.659 by AMEND parent admin checkpoint after exact Stage3 ACK; helper never candidate/approve/update/native Beads; parent certified ordinary promotion/cleanup/native acceptance closure owed.",
+    "prospectiveMarker": {
+      "at": "2026-10-14T03:38:09.773863+00:00",
+      "kind": "Fractional UTC pre-Git evidence refresh, not actual commit timestamp",
+      "includesAllDispatchResearchAdmissionsWaitsParentAdministrationChecksRuntimeAndCollection": true
+    },
+    "amendsAdministrativeSource": "d727cad2f197f3dfb9c1a1ac383202ebbf1ac40b",
+    "base": "95ef6ded0009ffbce7559eaffd50cd5a61d8b192",
+    "actualReceipt": "External stage3-final-git.receipt.json and final-commit-handoff-v01.json after actual Git; no circular source-OID or invented pre-execution Git time in this file"
+  }
+}

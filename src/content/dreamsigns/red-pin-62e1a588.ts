@@ -1,3 +1,7 @@
+import { costExactly } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { draw } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +17,6 @@ export default dreamsign({
     "e1620ab4-7e68-4a57-a6eb-d7a3380c4dc5",
   ],
   tags: ["J15", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "character", ...costExactly(2) }), draw(1), { oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("Once per turn, when you play a 2● cost character, draw a card."),
 });
