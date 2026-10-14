@@ -1,3 +1,6 @@
+import { energy, reclaim, self, staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { giveAllTypes } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 98,
   art: { x: -0.512, y: -0.074, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(giveAllTypes(self())), reclaim(energy(0))],
+  verifiedText: expectedVerifiedText("This character has all character types.\n\nReclaim 0●"),
 });

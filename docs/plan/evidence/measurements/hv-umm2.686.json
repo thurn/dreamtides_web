@@ -1,0 +1,671 @@
+{
+  "bead": "hv-umm2.686",
+  "base": "e3d899fbd732319980b8f279665edefbdddbe9fd",
+  "sourceEpoch": "three admitted card leaves; all runtime checks bind exact source hashes",
+  "dispatch": "2026-10-14T17:08:29.974Z",
+  "timingScope": "Inclusive elapsed implementation from native dispatch through actual Git endpoint; provisional end is refreshed at commit. Loaded validation receipts are observations, not speedup or productive-time claims.",
+  "checks": {
+    "actual-node": {
+      "argv": [
+        "npx",
+        "tsx",
+        "artifacts/qa/hv-umm2.686/type-reclaim-runtime.ts"
+      ],
+      "start": "2026-10-14T17:15:21.851487+00:00",
+      "end": "2026-10-14T17:15:24.951806+00:00",
+      "wallS": 3.100282083993079,
+      "exit": 0,
+      "load": [
+        21.45947265625,
+        14.55078125,
+        13.24609375
+      ],
+      "reaped": true
+    },
+    "focused": {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/continuous/continuous-zones.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "-t",
+        "gainEnergy|banish removes|alternative character predicates|effective all-types|characteristics|functional|fires \u25b8Dawn|Reclaim"
+      ],
+      "start": "2026-10-14T17:15:50.703002+00:00",
+      "end": "2026-10-14T17:15:56.056864+00:00",
+      "wallS": 5.35378249999485,
+      "exit": 0,
+      "load": [
+        15.9951171875,
+        13.89013671875,
+        13.05126953125
+      ],
+      "reaped": true
+    },
+    "coverage": {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-14T17:15:50.699004+00:00",
+      "end": "2026-10-14T17:15:53.947546+00:00",
+      "wallS": 3.248502250004094,
+      "exit": 0,
+      "load": [
+        15.9951171875,
+        13.89013671875,
+        13.05126953125
+      ],
+      "reaped": true
+    },
+    "preflight": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9,40b44ed7-d737-455b-bd42-e617a263b110,401fdd0a-356b-49c1-806d-d50617b084d2"
+      ],
+      "start": "2026-10-14T17:15:50.705495+00:00",
+      "end": "2026-10-14T17:15:52.954794+00:00",
+      "wallS": 2.2492837499885354,
+      "exit": 0,
+      "load": [
+        15.9951171875,
+        13.89013671875,
+        13.05126953125
+      ],
+      "reaped": true
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-14T17:15:50.700440+00:00",
+      "end": "2026-10-14T17:15:56.342134+00:00",
+      "wallS": 5.641602874995442,
+      "exit": 0,
+      "load": [
+        15.9951171875,
+        13.89013671875,
+        13.05126953125
+      ],
+      "reaped": true
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T17:17:50.513097+00:00",
+      "end": "2026-10-14T17:18:54.350342+00:00",
+      "wallS": 63.83640470798127,
+      "exit": 0,
+      "load": [
+        12.35693359375,
+        12.77734375,
+        12.68701171875
+      ],
+      "reaped": true,
+      "tests": 6616,
+      "testFiles": 253
+    },
+    "weightedFuzz": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9,40b44ed7-d737-455b-bd42-e617a263b110,401fdd0a-356b-49c1-806d-d50617b084d2"
+      ],
+      "start": "2026-10-14T17:15:50.702354+00:00",
+      "end": "2026-10-14T17:27:45.195093+00:00",
+      "wallS": 714.496493499988,
+      "exit": 0,
+      "load": [
+        15.9951171875,
+        13.89013671875,
+        13.05126953125
+      ],
+      "reaped": true
+    },
+    "browserMobileSplit": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.686/type-reclaim-live.mjs",
+        "--bead",
+        "hv-umm2.686",
+        "--viewports",
+        "mobile",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-14T17:37:23.723434+00:00",
+      "end": "2026-10-14T17:38:43.915439+00:00",
+      "wallS": 80.19088741601445,
+      "exit": 0,
+      "load": [
+        3.8486328125,
+        7.2421875,
+        9.8046875
+      ],
+      "reaped": true,
+      "reportWallMs": {
+        "browserLeaseWait": 6,
+        "serve": 2267,
+        "scenario": 77311,
+        "total": 79642
+      }
+    },
+    "schema-final": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-14T17:40:21.503326+00:00",
+      "end": "2026-10-14T17:40:21.623569+00:00",
+      "wallS": 0.12026975001208484,
+      "exit": 0,
+      "reaped": true
+    },
+    "whitespace-final": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "start": "2026-10-14T17:40:21.713025+00:00",
+      "end": "2026-10-14T17:40:21.736278+00:00",
+      "wallS": 0.02326462499331683,
+      "exit": 0,
+      "reaped": true
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final own evidence/schema checkpoint",
+        "command": "sysctl -n vm.loadavg",
+        "observedAt": "2026-10-14T17:40:21.426757+00:00",
+        "reason": "Review guard sampled os.getloadavg at its own start. Friction uses the actual sysctl sample at final schema checkpoint; per-command prior load observations remain in checks."
+      }
+    }
+  },
+  "d20": "Independent public primitive composition; no private scenario added. Synthetic core contracts and actual-source runtime cover failures without production-data test gates.",
+  "d21": {
+    "sampled": false,
+    "judged": 0,
+    "newPromptStatusVisualKinds": []
+  },
+  "counts": {
+    "cards": 3,
+    "basePrintings": 3,
+    "amplifiedPrintings": 2,
+    "newPrimitives": 0,
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "sweepPass": 32,
+    "sweepSkip": 28,
+    "judged": 0
+  },
+  "actualSourceNode": {
+    "pass": 22,
+    "path": "type-reclaim-runtime.ts",
+    "sha256": "16265029aa6e36fc15451071651881f527f4aa88995942734fa7aebc2c4dda58",
+    "coverage": "Both actors and all full clauses; Sky Dawn 1/2, play-only and copied all-types, free Reclaim vs normal2 and banished departure, Warrior/Monster/alltypes OR and ownership/type negatives, pending/save/reload and illegal/foreign/duplicate answer guards."
+  },
+  "preflight": {
+    "pass": 32,
+    "skip": 28,
+    "fail": 0,
+    "variants": "default all ten transfigurations",
+    "controllers": "both",
+    "qualification": "Initial play/payment/materialization does not exercise every future Dawn or Reclaim clause."
+  },
+  "runtimeInProgress": [],
+  "failures": [
+    {
+      "command": "browser-live",
+      "exit": 1,
+      "wallS": 72.23228550000931,
+      "invocation": "invocations/run-3io95H",
+      "cause": "Ignored caller compared amplified target candidates to padded rank array containing six null holes, rather than occupied physical instances. Actual four eligible candidates and every prior source workflow passed.",
+      "repair": "Filter null rank holes in expected amplified candidate set; retained first failed reports/captures; exact providers/server/groups fully settled before one changed-caller retry.",
+      "sourceChange": false,
+      "capsEmpty": true,
+      "newCallerHash": "58928d6e24de8c7e6a0b94476cab58f6ab2bee8b827b9c779de3bc1c7019e843"
+    },
+    {
+      "command": "browser-live-padded-ranks",
+      "exit": 1,
+      "wallS": 27.215839333977783,
+      "invocation": "invocations/run-tsRrHZ",
+      "cause": "Ignored Dawn advancing predicate queried qa.battle.events during a transient EngineDebugPanel probe update, raising missing-probe; no source mutation or Caps error.",
+      "repair": "Read a waitFor-backed current raw probe snapshot for moving-Dawn predicate; settled documented event-helper checks retained. New caller hash4a207337a8f611abc3caf49a3106b28874459aa41d02d655b5add68f1697bbea, retained failed receipt and complete owned teardown before changed-caller run.",
+      "sourceChange": false
+    },
+    {
+      "command": "browser-live-probe-ready",
+      "exit": 1,
+      "wallS": 408.1834496250085,
+      "invocation": "invocations/run-Dm9VO4",
+      "cause": "One self-contained mobile MCP call ran past the documented300s call limit and lost its response; cleanup cannot certify execution and browser close. Desktopcallcompleted90723ms with emptyCaps and persisted31-row final game log.",
+      "repair": "Split the five independent workflows into five self-contained exported steps, use mobile-only viewport, and wait rendered answerable target promptID before final mobilecapture. The uncertain own provider record was retained for bounded native incident investigation, then its exact original bytes were archived under the owned slot lock after positive OS teardown and exact transport404. Attempt3 mobile remains failed/unknown; no execution-completed receipt was inferred.",
+      "sourceChange": false
+    }
+  ],
+  "coreFailurePaths": [
+    {
+      "module": "src/engine/effects/primitives/contracts/selector-any-of.contracts.ts",
+      "test": "reloads targeting, rejects illegal, foreign, stale and concurrent input, then accepts once",
+      "reason": "Existing public union-target protocol guards; actual-source Node separately proves exact current source candidate set and illegal/foreign/duplicate guards."
+    },
+    {
+      "module": "src/engine/effects/primitives/contracts/selector-any-of.contracts.ts",
+      "test": "rechecks a fixed branch after an actual opponent interrupt changes its target",
+      "reason": "Existing public target branch revalidation, selected by focused alternative character predicates."
+    },
+    {
+      "module": "src/engine/continuous/continuous-zones.test.ts",
+      "test": "apply only while their card is in a zone they work from: play unless they name one, and 'any' is play, void, hand, and deck",
+      "reason": "Shared ordinary/functional static reader; required related review covers this file; actual-source Node checks own printed/copy alltypes in play and hand/void negatives."
+    },
+    {
+      "module": "src/engine/rules/zones.test.ts",
+      "test": "a reclaimed character is banished instead of dissolved, without \u25b8Dissolved, and instead of returning to hand",
+      "reason": "Shared Reclaim exit replacement; related review passes and actual-source Node contrasts reclaimed vs ordinary departure for both actors."
+    },
+    {
+      "module": "src/engine/triggers/triggers-patterns.test.ts",
+      "test": "fires \u25b8Dawn, \u25b8Dusk, \u25b8Night, and \u25b8Challenge in their controller's phases, \u25b8Challenge only for challengers",
+      "reason": "Existing controller phase contract, focused pass; actual-source Node asserts both printed Dawn amounts by controller."
+    },
+    {
+      "module": "src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+      "test": "RD-hv-umm2.422-1: Reclaim 0\u25cf / set 0\u25cf / optional 1\u25cf pays 1\u25cf",
+      "reason": "Existing composition matrix distinguishes explicit alternative base and additional costs; selected Reclaim contracts and related review pass. Own new source introduces no cost mode."
+    }
+  ],
+  "sweep": {
+    "pass": 32,
+    "skip": 28,
+    "fail": 0,
+    "attemptPass": 32,
+    "attemptSkip": 28,
+    "invocation": "invocations/sweep-w5Huy5",
+    "controllers": "both",
+    "variants": "default all ten transfigurations",
+    "qualification": "The 32 eligible plays and materializations validate initial paths. Separate actual-source Node/browser prove subsequent Dawn, alternative free Reclaim and typed-target continuation."
+  },
+  "weightedFuzz": {
+    "games": 300,
+    "steps": 101865,
+    "failures": 0,
+    "engineWallS": 307.1,
+    "engineCpuS": 327.5,
+    "prompts": 7141,
+    "interactiveReruns": 717,
+    "outerWallS": 714.496493499988,
+    "targets": [
+      {
+        "uuid": "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
+        "included": 609,
+        "exercised": 161
+      },
+      {
+        "uuid": "40b44ed7-d737-455b-bd42-e617a263b110",
+        "included": 617,
+        "exercised": 132
+      },
+      {
+        "uuid": "401fdd0a-356b-49c1-806d-d50617b084d2",
+        "included": 615,
+        "exercised": 196
+      }
+    ],
+    "qualification": "Outer guarded wall includes machine heavy-lock queue, process launch and cleanup; engine wall and CPU are fuzzer-owned observations. Target counters do not establish individual printed-clause coverage; actual-source Node and browser prove those separately.",
+    "queueObservation": "Guard start17:15:50.702354Z; owned npm/tsx/node process birth17:22:36Z observed at second resolution. Queue plus launch approximately405seconds; no exact subphase wall/CPU inferred."
+  },
+  "browserDesktop": {
+    "acceptedCallMs": 90723,
+    "invocation": "invocations/run-Dm9VO4",
+    "qualification": "Overall two-viewport command failed and final result object is null; completed desktopcall metadata plus executed assertions, QA operation logs and final31-row persistedlog establish its accepted scope. Earlytargetcapture shows raw pending eligibility and visible enemy geometry during presentation transition; it does not assert rendered target highlighting or source display. Paid desktopcapture visibly shows Spinner in play exhausted, selected enemySky slot empty, energy0/2, settled NextPhase.",
+    "captures": [
+      "typed-target-desktop.png",
+      "typed-target-paid-desktop.png"
+    ],
+    "workflow": "Actual Skybase/amplifiedDawn, base/amplifiedtyped enemy targets including Sky/Lightgrove alltypes, targetpendingreload and banish, freeReclaim0, settled replay/logprefix/physicalgeometry/Caps."
+  },
+  "providerQuarantine": {
+    "sessionId": "0425d169-49b9-46cd-b910-6071b04992f3",
+    "slot": 0,
+    "port": 5174,
+    "state": "call-and-close-unconfirmed",
+    "recordSHA256": "93fbc97afc15014dbbf9cabba62dcdcecf8ce95cd17f648d06a00bfc7605fd2d",
+    "documentedReconcileOnce": "provider-completion-unconfirmed",
+    "localGroupsReaped": [
+      75317,
+      75352
+    ],
+    "serverAbsent": true,
+    "portFree": true,
+    "disposition": {
+      "state": "exact-own-record-archived-after-native-teardown-investigation",
+      "archivedOriginalSHA256": "93fbc97afc15014dbbf9cabba62dcdcecf8ce95cd17f648d06a00bfc7605fd2d",
+      "archive": "browser-qa.lock.owner.json.incident-hv-umm2.686-440e94a2-38fd-4f1b-b476-e10f07c914d9.json",
+      "nativeIncidentReceipt": "incident-archive.receipt.json",
+      "settledOsCensusAt": "2026-10-14T17:34:20.984Z",
+      "exact404": "Session not found",
+      "conservativeFirstGuardRetained": "incident-archive-first-attempt.json",
+      "completionReceiptInferred": false,
+      "qualification": "Native parent justiciar established exact record retirement authority from positive OS teardown plus unchanged byte identity/local absence and exact transport404. A later unrelated browser lifecycle was preserved. The timed-out mobile execution remains failed/unknown."
+    }
+  },
+  "pendingAcceptance": [
+    "one authorized local ConventionalCommit and parent delivery/review"
+  ],
+  "browserMobile": {
+    "pass": 5,
+    "invocation": "invocations/run-fvhZW7",
+    "caller": "type-reclaim-live.mjs",
+    "callerSHA256": "94ef31c27d51fd970240eb2e5ec1fd983ff45a874cf5b78a1b5e63e138e92fda",
+    "calls": [
+      {
+        "viewport": "mobile",
+        "step": 0,
+        "ms": 27828
+      },
+      {
+        "viewport": "mobile",
+        "step": 1,
+        "ms": 21884
+      },
+      {
+        "viewport": "mobile",
+        "step": 2,
+        "ms": 11126
+      },
+      {
+        "viewport": "mobile",
+        "step": 3,
+        "ms": 9788
+      },
+      {
+        "viewport": "mobile",
+        "step": 4,
+        "ms": 6685
+      }
+    ],
+    "results": [
+      {
+        "uuid": "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
+        "variant": "base",
+        "id": "i1",
+        "geometry": {
+          "id": "i1",
+          "width": 149.734375,
+          "height": 209.625,
+          "viewport": true,
+          "hit": true
+        },
+        "gain": [
+          {
+            "seq": 9,
+            "index": 10,
+            "kind": "energyChanged",
+            "instance": null,
+            "event": {
+              "kind": "energyChanged",
+              "side": "player",
+              "current": 6,
+              "max": 5,
+              "change": 1,
+              "maxChange": 0,
+              "cause": "effect"
+            },
+            "cards": {}
+          }
+        ],
+        "reload": {
+          "gameId": "psmbnk",
+          "lines": 57,
+          "boundPrinting": "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
+          "actionInstance": "i1",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1"
+        }
+      },
+      {
+        "uuid": "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
+        "variant": "amplified",
+        "id": "i1",
+        "geometry": {
+          "id": "i1",
+          "width": 149.734375,
+          "height": 209.625,
+          "viewport": true,
+          "hit": true
+        },
+        "gain": [
+          {
+            "seq": 9,
+            "index": 10,
+            "kind": "energyChanged",
+            "instance": null,
+            "event": {
+              "kind": "energyChanged",
+              "side": "player",
+              "current": 7,
+              "max": 5,
+              "change": 2,
+              "maxChange": 0,
+              "cause": "effect"
+            },
+            "cards": {}
+          }
+        ],
+        "reload": {
+          "gameId": "bjqkm5",
+          "lines": 61,
+          "boundPrinting": "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
+          "actionInstance": "i1",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1"
+        }
+      },
+      {
+        "uuid": "40b44ed7-d737-455b-bd42-e617a263b110",
+        "variant": "base",
+        "id": "i2",
+        "selected": "i13",
+        "expected": [
+          "i11",
+          "i13",
+          "i14"
+        ],
+        "geometry": {
+          "id": "i13",
+          "width": 53.859375,
+          "height": 53.859375,
+          "viewport": true,
+          "hit": true
+        },
+        "banished": {
+          "events": [
+            {
+              "seq": 3,
+              "index": 1,
+              "kind": "banished",
+              "instance": "i13",
+              "event": {
+                "kind": "banished",
+                "instance": "i13",
+                "side": "enemy",
+                "removal": {
+                  "kind": "effect",
+                  "controller": "player",
+                  "victimCost": 1
+                }
+              },
+              "cards": {
+                "i13": "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9"
+              }
+            }
+          ],
+          "more": false,
+          "cursor": {
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "seq": 3,
+            "index": 1
+          }
+        },
+        "reload": {
+          "gameId": "ytytr8",
+          "lines": 42,
+          "boundPrinting": "40b44ed7-d737-455b-bd42-e617a263b110",
+          "actionInstance": "i2",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1"
+        }
+      },
+      {
+        "uuid": "40b44ed7-d737-455b-bd42-e617a263b110",
+        "variant": "amplified",
+        "id": "i2",
+        "selected": "i12",
+        "expected": [
+          "i11",
+          "i12",
+          "i13",
+          "i14"
+        ],
+        "geometry": {
+          "id": "i12",
+          "width": 53.859375,
+          "height": 53.859375,
+          "viewport": true,
+          "hit": true
+        },
+        "banished": {
+          "events": [
+            {
+              "seq": 3,
+              "index": 1,
+              "kind": "banished",
+              "instance": "i12",
+              "event": {
+                "kind": "banished",
+                "instance": "i12",
+                "side": "enemy",
+                "removal": {
+                  "kind": "effect",
+                  "controller": "player",
+                  "victimCost": 3
+                }
+              },
+              "cards": {
+                "i12": "3e6a5236-9850-4a69-9fe1-48389365a399"
+              }
+            }
+          ],
+          "more": false,
+          "cursor": {
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "seq": 3,
+            "index": 1
+          }
+        },
+        "reload": {
+          "gameId": "uxydhn",
+          "lines": 42,
+          "boundPrinting": "40b44ed7-d737-455b-bd42-e617a263b110",
+          "actionInstance": "i2",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1"
+        }
+      },
+      {
+        "uuid": "401fdd0a-356b-49c1-806d-d50617b084d2",
+        "id": "i9",
+        "from": "void",
+        "paid": [],
+        "geometry": {
+          "id": "i9",
+          "width": 53.859375,
+          "height": 53.859375,
+          "viewport": true,
+          "hit": true
+        },
+        "reload": {
+          "gameId": "wbenf2",
+          "lines": 28,
+          "boundPrinting": "401fdd0a-356b-49c1-806d-d50617b084d2",
+          "actionInstance": "i9",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1"
+        }
+      }
+    ],
+    "caps": [],
+    "captures": [
+      "typed-target-mobile.png"
+    ],
+    "captureMeaning": "Exact rendered answerable base Materialized target prompt ID was awaited. The source is visibly exhausted; Warrior and both all-types enemy characters are highlighted, the Monster is excluded. This is supplementary workflow verification; D21 judged count remains0."
+  },
+  "finalCaptures": [
+    {
+      "invocation": "invocations/run-Dm9VO4",
+      "filename": "typed-target-desktop.png",
+      "meaning": "Raw pending eligibility and enemy geometry during presentation transition; visible highlighting/source materialization not asserted."
+    },
+    {
+      "invocation": "invocations/run-Dm9VO4",
+      "filename": "typed-target-paid-desktop.png",
+      "meaning": "Settled paid interaction; exhausted Spinner visibly in play, selected enemySky slot empty, energy0/2, NextPhase."
+    },
+    {
+      "invocation": "invocations/run-fvhZW7",
+      "filename": "typed-target-mobile.png",
+      "meaning": "Rendered answerable base Materialized prompt with exact physical candidates and source display, independently viewed by parent."
+    }
+  ],
+  "resourceSettlement": {
+    "allLocalGuardGroupsReaped": true,
+    "browserManagedServerGroupsAbsent": [
+      53290,
+      65596,
+      73455,
+      75352,
+      33991
+    ],
+    "ownedPort5174FreeAt": "2026-10-14T17:39:23.782870+00:00",
+    "finalProviderRecordAbsent": true,
+    "finalServerRecordAbsent": true,
+    "unknownAttempt3ProviderDisposition": "Native bounded justiciar original-byte archive after positive teardown/transport404; no execution-completed receipt inferred.",
+    "sharedProviderPreserved": true
+  },
+  "inclusiveWindow": {
+    "start": "2026-10-14T17:08:29.974000+00:00",
+    "preCommitEnd": "2026-10-14T17:42:52.958919+00:00",
+    "commitBoundaryRefreshRequired": false,
+    "qualification": "Inclusive elapsed wall includes research, admission, caller repairs, machine heavy queue, every validation, native incident investigation and waits. This end is the immediate pre-Git boundary; actual Git endpoint and gap are reported in parent notes and the retained commit-final receipt. No productive editing time or A/B comparison inferred."
+  },
+  "frictionWindow": {
+    "tag": "browser-qa-scripting",
+    "start": "2026-10-14T17:20:42.956216+00:00",
+    "end": "2026-10-14T17:38:43.915439+00:00",
+    "qualification": "Inclusive supplementary browser window covers accepted desktop/mobile workflows, caller predicate fixes, lost single-call response, split repair, bounded native provider teardown investigation and queue/waits; not exclusive productive repair time. Machine heavy queue is recorded separately without a >10minute friction entry."
+  }
+}

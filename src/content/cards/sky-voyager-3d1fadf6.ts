@@ -1,3 +1,7 @@
+import { self, staticAbility } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainEnergy, giveAllTypes } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,12 @@ export default card({
   cardNumber: 159,
   art: { x: -0.252, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    staticAbility(giveAllTypes(self())),
+    triggered(onDawn(), gainEnergy(variant.amplified ? 2 : 1)),
+  ],
+  verifiedText: expectedVerifiedText(
+    "This character has all character types.\n\n▸Dawn: Gain 1●.",
+    "This character has all character types.\n\n▸Dawn: Gain 2●.",
+  ),
 });

@@ -1,3 +1,7 @@
+import { enemyCharacter, ofSubtype, target } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { banish } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,13 @@ export default card({
   cardNumber: 160,
   art: { x: -0.126, y: 0.976, scale: 1.16 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onMaterialized(), banish(target(enemyCharacter(variant.amplified
+      ? { anyOf: [ofSubtype("Warrior"), ofSubtype("Monster")] }
+      : ofSubtype("Warrior"))))),
+  ],
+  verifiedText: expectedVerifiedText(
+    "▸Materialized: Banish an enemy warrior.",
+    "▸Materialized: Banish an enemy warrior or monster.",
+  ),
 });
