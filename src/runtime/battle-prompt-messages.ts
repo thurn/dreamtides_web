@@ -163,6 +163,7 @@ export function engineMovementPromptHeading(fieldSide: Side, viewer: Side, sourc
 
 /** One answer button of an engine choice prompt. */
 export type EnginePromptOptionCopy =
+  | { readonly kind: "playRoute"; readonly route: NonNullable<import("../engine/prompts/types").ModeOption["route"]> }
   | { readonly kind: "yes" }
   | { readonly kind: "no" }
   | { readonly kind: "pay"; readonly energy: number }
@@ -189,6 +190,8 @@ export type EnginePromptOptionCopy =
 /** Label of one answer button of an engine choice prompt. */
 export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string {
   switch (option.kind) {
+    case "playRoute":
+      return { normal: "Pay Its Cost", offering: "Play as an Offering", reclaim: "Reclaim", eventAlternative: "Use Alternative Cost" }[option.route];
     case "yes":
       return "Yes";
     case "no":
@@ -945,6 +948,7 @@ function effectStartedText(
       return `${change.player === human ? "You" : "Your opponent"} may play only ${plural(change.count, "card", "cards")} each turn${expiryPhrase(expiry, human)}.`;
     case "revealDeckTop":
     case "reclaimNotBanished":
+    case "ruleModifier":
       // Only a static ability makes this change, so no effect starts with it.
       return null;
     case "abilities":

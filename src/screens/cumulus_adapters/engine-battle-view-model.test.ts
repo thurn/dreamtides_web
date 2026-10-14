@@ -303,3 +303,34 @@ describe("prompt surfaces over the prompt lab", () => {
 });
 
 function choiceView(view: import("../../cumulus/screens/MobileBattleScreen").MobileBattleView) { return view.prompt.surface.kind === "choice" ? view.prompt.surface.choice : null; }
+
+describe("typed payment route presentation", () => {
+  it.each(["playRoute", "voidRoute"] as const)("keeps three legal %s routes beside the status with their original answers", role => {
+    const from = role === "voidRoute" ? "void" : "hand";
+    const { state, ids } = boardState(labEngine.catalog, { active: "player", phase: "day", player: { [from]: [SYNTHETIC.event0.id], energy: 10 } });
+    const routes = role === "voidRoute" ? ["normal", "reclaim", "eventAlternative"] as const : ["normal", "offering", "eventAlternative"] as const;
+    const options = routes.map((route, mode) => ({ route, mode, legal: true }));
+    const prompt: PendingEnginePrompt = { id: parsePromptId("1:0:0"), kind: "chooseMode", side: "player", cancellable: true,
+      purpose: { source: ids.player[from][0], cardId: SYNTHETIC.event0.id, ability: null, role }, options };
+    const model = screenOf(state, prompt, state, true, labEngine);
+    expect(model.prompt.surface).toMatchObject({ kind: "choice", presentation: "chooser" });
+    expect(choiceView(model.view)?.presentation).toBe("chooser");
+    expect(selectionsOf(model)).toEqual([0, 1, 2]);
+    const smaller: Extract<PendingEnginePrompt, { kind: "chooseMode" }>[] = [
+      { ...prompt, options: options.slice(0, 2) },
+      { ...prompt, options: options.map((option, index) => ({ ...option, legal: index < 2 })) },
+      { ...prompt, options: options.map(({ mode, legal }) => ({ mode, legal })) },
+      { ...prompt, purpose: { ...prompt.purpose, role: "chooseOne" } },
+    ];
+    for (const other of smaller) {
+      const inline = screenOf(state, other, state, true, labEngine);
+      expect(choiceView(inline.view)?.presentation).toBeUndefined();
+      expect(selectionsOf(inline)).toEqual(other.options.filter(option => option.legal).map(option => option.mode));
+    }
+  });
+});
+
+function selectionsOf(model: EngineBattleScreenModel) {
+  if (model.prompt.surface.kind !== "choice") throw new Error("Expected payment choices");
+  return model.prompt.surface.options.map(option => option.select.kind === "answer" ? option.select.answer : null);
+}

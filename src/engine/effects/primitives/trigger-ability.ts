@@ -1,5 +1,5 @@
 import type { CharacterRef, NamedTrigger } from "../../dsl/types";
-import { triggerNamed } from "../../triggers/matcher";
+import { triggerNamedBatch } from "../../triggers/matcher";
 import { resolveCharacters } from "../interpreter";
 import { characterTarget, definePrimitive } from "../types";
 
@@ -18,7 +18,7 @@ export const triggerAbilityPrimitive = definePrimitive<TriggerAbilityNode>({
   op: "triggerAbility",
   targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
-    for (const id of resolveCharacters(ctx, node.subject, env)) triggerNamed(ctx, id, node.trigger);
+    triggerNamedBatch(ctx, resolveCharacters(ctx, node.subject, env), node.trigger);
   },
 });
 

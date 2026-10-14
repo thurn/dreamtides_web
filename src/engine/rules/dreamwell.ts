@@ -1,3 +1,4 @@
+import { carriesEnergy } from "../effects/primitives/rule-modifier";
 import type { EngineCatalog } from "../catalog";
 import { BASE_VARIANT } from "../dsl/types";
 import type { DreamwellCardId, Side } from "../state/ids";
@@ -43,7 +44,8 @@ export function buildDreamwellDeck(
 
 /**
  * Draws the next Dreamwell card for `side`: its `energyAdded` permanently
- * raises maximum ●, and current ● updates to the new maximum. A Dreamwell
+ * raises maximum ●. Current ● refills to the new maximum, or with carry
+ * retains excess and adds energyAdded. A Dreamwell
  * card with an unimplemented bonus has only its energy effect. Authored
  * event bonuses join the resolution FIFO after the energy refill.
  */
@@ -63,7 +65,8 @@ export function drawDreamwell(ctx: StepContext, side: Side): void {
     ctx.emit({ kind: "pendingAbility", side, cardId: card, instance: null, reason: "drawn" });
   }
   const max = state.sides[side].maxEnergy + definition.energyAdded;
-  setEnergy(ctx, side, max, max);
+  const current = carriesEnergy(state, ctx.catalog, side) ? Math.max(state.sides[side].currentEnergy + definition.energyAdded, max) : max;
+  setEnergy(ctx, side, current, max);
   if (definition.status !== "authored") return;
   const source = { kind: "dreamwell", side, id: card } as const;
   definition.abilities(BASE_VARIANT).forEach((ability, index) => {

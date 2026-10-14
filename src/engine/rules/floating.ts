@@ -167,6 +167,7 @@ export function changedInstance(change: FloatingChange): InstanceId | null {
     case "playLimit":
     case "revealDeckTop":
     case "reclaimNotBanished":
+    case "ruleModifier":
       return null;
     default:
       return change.instance;

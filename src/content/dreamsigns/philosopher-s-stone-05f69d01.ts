@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { ruleModifier } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -9,5 +12,6 @@ export default dreamsign({
   rarity: "Rare",
   tideIds: ["51903b9a-825b-4d9a-8a6d-071670c3caaa"],
   tags: ["J12", "Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(ruleModifier({ rule: "carryEnergy" }))],
+  verifiedText: expectedVerifiedText("Your unspent ● carries over between turns."),
 });

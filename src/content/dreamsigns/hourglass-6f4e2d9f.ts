@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { ruleModifier, draw } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,6 @@ export default dreamsign({
     "4b01b6c1-ccca-4e19-848a-d799d46088b2",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(ruleModifier({ rule: "dawnThreshold", count: 3, effect: draw(1) }))],
+  verifiedText: expectedVerifiedText("If 3 or more ▸Dawn abilities trigger during your Dawn phase, draw a card."),
 });

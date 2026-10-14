@@ -28,6 +28,7 @@ import {
   copyCardPrimitive,
   copyCardTimesPrimitive,
   costModifierPrimitive,
+  ruleModifierPrimitive,
   selfCostReductionPrimitive,
   createCardPrimitive,
   createRandomFromPoolPrimitive,
@@ -112,6 +113,7 @@ export type Effect = {
 }[keyof Exports];
 
 const DEFINITIONS = {
+  get ruleModifier() { return ruleModifierPrimitive; },
   get abandon() {
     return abandonPrimitive;
   },

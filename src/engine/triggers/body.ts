@@ -39,3 +39,12 @@ export function triggerBody(
   const floating = found as FloatingTriggerNode;
   return { trigger: floating.trigger, effect: floating.effect, root, condition: null };
 }
+
+/** A queued static threshold reaction has its own kind, with no floating-trigger node. */
+export function ruleReactionBody(catalog: EngineCatalog, origin: AbilityOrigin, ability: number): Pick<TriggerBody, "effect" | "root" | "condition"> {
+  const definition = originAbilities(catalog, origin)[ability];
+  if (definition?.kind !== "static" || definition.effect.op !== "ruleModifier") throw new Error("Invalid rule reaction ability");
+  const root = definition.effect;
+  if (root.rule !== "dawnThreshold") throw new Error("Invalid rule reaction instruction");
+  return { effect: root.effect, root, condition: null };
+}

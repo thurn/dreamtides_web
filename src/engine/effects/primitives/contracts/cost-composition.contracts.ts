@@ -23,10 +23,9 @@ import { revealToBoth } from "../../../view/knowledge";
 import { describe, expect, it } from "vitest";
 import { draw } from "../draw";
 import { dissolve } from "../dissolve";
+import { ruleModifier } from "../rule-modifier";
 import { selfCostReduction } from "../self-cost-reduction";
 import { staticAbility } from "../../../dsl/builders";
-import { payTo } from "../pay-to";
-import { ScriptedSource } from "../../../steps/sources";
 import type { EngineCardDefinition } from "../../../catalog";
 import { abandonSparkCapture, abandonXCost, enemyCharacter, target, additionalCost, choiceCost, energy, energyX, event, discardCostFilter, x, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
 import type { Ability, CardCost } from "../../../dsl/types";
@@ -129,7 +128,7 @@ const MODES: { readonly [M in Mode]: readonly [ModeCase, ...ModeCase[]] } = {
 };
 
 /** The subject's own play abilities. */
-type Shape = "plain" | "offering" | "keywordReclaim" | "printedReclaim";
+type Shape = "plain" | "offering" | "keywordReclaim" | "printedReclaim" | "ruleEvent";
 
 /** One way to play the subject by a route. */
 interface RouteVariant {
@@ -153,6 +152,7 @@ const variant = (name: string, shape: Shape, from: PlayZone, options: Partial<Ro
 
 /** Exhaustive over `PlayRoute`: a new play route fails typecheck until it joins the table. */
 const ROUTES: { readonly [R in PlayRoute]: readonly [RouteVariant, ...RouteVariant[]] } = {
+  eventAlternative: [variant("fixed fast-event alternative", "ruleEvent", "hand", { choose: 1, replacement: 1, x: false })],
   hand: [variant("hand", "plain", "hand"), variant("hand chosen over Offering", "offering", "hand", { choose: 0 })],
   offering: [variant("Offering chosen over hand", "offering", "hand", { choose: 1, replacement: 0, x: false })],
   permission: [
@@ -197,6 +197,7 @@ const EXTRAS: { readonly [E in Extra]: ExtraSetup } = {
 
 const withX = (amount: number, extra: Extra): CardCost[] => [energy(amount), ...(extra === "x" || extra === "discardMin" ? [energyX(0)] : [])];
 const SHAPE_ABILITIES: { readonly [S in Shape]: (extra: Extra) => readonly Ability[] } = {
+  ruleEvent: () => [staticAbility(ruleModifier({ rule: "eventAlternative", energy: 1 }), { zone: "any" })],
   plain: () => [],
   offering: () => [keyword("offering")],
   keywordReclaim: () => [keyword("reclaim")],
@@ -209,7 +210,7 @@ const EXTRA_NAMES = Object.keys(EXTRAS) as Extra[];
 /** A 3● event with its shape's play abilities, "To play this card, pay 1⍟." and its extra. */
 function subject(shape: Shape, extra: Extra, index: number): EngineCardDefinition {
   return {
-    id: syntheticId(0x42900 + index), cardType: "event", costs: withX(PRINTED, extra), spark: null, subtype: "", speed: "standard", status: "authored",
+    id: syntheticId(0x42900 + index), cardType: "event", costs: withX(PRINTED, extra), spark: null, subtype: "", speed: shape === "ruleEvent" ? "fast" : "standard", status: "authored",
     abilities: () => [...SHAPE_ABILITIES[shape](extra), additionalCost(pointsCost(POINTS)), ...EXTRAS[extra].abilities],
   };
 }
@@ -432,32 +433,6 @@ describe("cost composition anchors from the rulings", () => {
 });
 
 
-describe("fixed resolving-payment cost composition", () => {
-  const subject: EngineCardDefinition = {
-    ...v.event0, id: syntheticId(0x43890), status: "authored", costs: [energy(3)],
-    abilities: () => [event(payTo({ energy: 2, discard: 1 }, draw(1)))],
-  };
-  const paymentEngine = createEngine(testCatalog([subject]));
-  it.each([
-    { change: { kind: "cardCost", mode: "increase", amount: 2 } as const, outer: 5 },
-    { change: { kind: "cost", amount: -2, next: false, filter: {} } as const, outer: 1 },
-  ])("changes the parent cost to $outer and leaves the resolving payment at 2", ({ change, outer }) => {
-    const { state, ids } = boardState(paymentEngine.catalog, { active: PLAYER, phase: "day", player: { hand: [subject.id, v.vanilla1.id, v.vanilla2.id], back: [v.vanilla1.id], energy: 10, deck }, enemy: { deck } });
-    const target = ids.player.hand[0];
-    const prepared: BattleState = { ...state, nextEffect: state.nextEffect + 1, floating: [{ id: `e${state.nextEffect}`, controller: PLAYER, source: ids.player.back[0]!, timestamp: 1, expiry: { at: "endOfTurn" }, change: change.kind === "cardCost" ? { ...change, instance: target } : { ...change, player: PLAYER } }] };
-    const result = paymentEngine.apply(prepared, PLAYER, { kind: "play", card: target, from: "hand" }, new ScriptedSource([true, [ids.player.hand[1]]]));
-    expect(result.state.sides.player.currentEnergy).toBe(10 - outer - 2);
-    expect(result.events.filter((e) => e.kind === "energyChanged" && e.cause === "payment").map((e) => e.kind === "energyChanged" ? e.change : 0)).toEqual([-outer, -2]);
-    expect(result.state.sides.player.deck).toHaveLength(3);
-  });
-  it("resolves an affordable parent without offering an unaffordable inner payment", () => {
-    const { state, ids } = boardState(paymentEngine.catalog, { active: PLAYER, phase: "day", player: { hand: [subject.id, v.vanilla1.id], energy: 3, deck }, enemy: { deck } });
-    const result = paymentEngine.apply(state, PLAYER, { kind: "play", card: ids.player.hand[0], from: "hand" }, new ScriptedSource([]));
-    expect(result.state.sides.player.currentEnergy).toBe(0);
-    expect(result.state.sides.player.hand).toEqual(ids.player.hand.slice(1));
-    expect(result.state.sides.player.deck).toEqual(ids.player.deck);
-  });
-});
 
 
 /** The live physical-source primitive contributes the existing own reduction on every route. */

@@ -1047,6 +1047,7 @@ const FLOATING_CHANGE_VALIDATORS: {
     optional(oneOf({ triggered: true, triggeredAndActivated: true }))(value.mode),
   banishedUntil: (value) => isInstanceId(value.instance) && isSide(value.side),
   banishedToHandUntil: (value) => isInstanceId(value.instance) && isIndex(value.banishedAt) && value.banishedAt > 0,
+  ruleModifier: () => false, // Player rules are static-only.
   revealDeckTop: () => false, // A static instruction never enters saved floating effects.
   playFrom: (value) =>
     isSide(value.player) &&
@@ -1125,7 +1126,13 @@ function isHandCopyContext(value: unknown): boolean {
 
 function isQueuedTrigger(value: unknown): boolean {
   if (!isPlainRecord(value)) return false;
-  if (value.kind !== undefined && value.kind !== "dreamwellBonus") return false;
+  if (value.kind !== undefined && value.kind !== "dreamwellBonus" && value.kind !== "ruleReaction") return false;
+  if (value.kind === "ruleReaction" && (
+    !isPlainRecord(value.origin) || value.origin.kind === "dreamwell" || value.node !== null || value.subject !== null ||
+    value.captured !== undefined || value.gain !== undefined || value.scored !== undefined || value.discardedCount !== undefined ||
+    value.lastKnownSubjectCost !== undefined || value.lastKnownSubjectSpark !== undefined ||
+    value.subjectHiddenFrom !== undefined || value.handCopy !== undefined || value.linkedSource !== undefined
+  )) return false;
   if (isPlainRecord(value.origin) && value.origin.kind === "dreamwell" && value.node === null && value.kind !== "dreamwellBonus") return false;
   if (value.kind === "dreamwellBonus" && (
     !isPlainRecord(value.source) || value.source.kind !== "dreamwell" ||
@@ -1182,6 +1189,8 @@ function isTurnLog(value: unknown): boolean {
       ),
     )(value.played) &&
     sideRecord(isIndex)(value.drawn) &&
+    optional((progress) => isPlainRecord(progress) && isIndex(progress.total) &&
+      sideRecord((known) => isIndex(known) && known <= (progress.total as number))(progress.known))(value.dawnProgress) &&
     // A saved turn log may lack its materializations (TurnLog.materialized).
     optional(
       sideRecord(

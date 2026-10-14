@@ -338,6 +338,17 @@ An effect that says "Lose N●" reduces current ● by N, stopping at 0, and
 leaves maximum ● unchanged. This loss is not an energy payment; resolve the
 remaining instructions even if fewer than N● were available.
 
+**Carrying unspent ●:** "Your unspent ● carries over between turns" keeps
+that player's current pool. Their first own-turn refresh sets current ● to
+maximum ● normally; at each later own-turn refresh, add maximum ● to current
+● once. This also applies to extra turns. A Dreamwell draw still refills to
+its new maximum: with carry, current ● becomes the greater of that new
+maximum and the previous current pool plus the card's energy production.
+Several carry abilities hold the same rule and do not multiply a refresh.
+The rule applies as each refresh happens, after start-of-turn abilities have
+resolved; gaining or losing it afterward does not change an earlier refresh.
+A gain of maximum ● outside a refresh changes only maximum ●.
+
 **Dreamwell numbers and cycling:**
 
 - Dreamwell cards carry order numbers 1–4 that set their position in the deck:
@@ -1044,6 +1055,18 @@ duration ends, wherever the card is, and with no stated duration it is
 permanent: a card returned to hand costing 2● more still costs 2● more if it is
 played and later returns to a hand again. The card's cost for conditions is
 unchanged.
+
+**Optional event base:** "You may play ❖ and ❖❖ events for 1●" offers an
+alternative ● base for those events, alongside their normal costs. It
+replaces the normal base, including a card's own base-setting change; other
+cost increases, reductions, additional costs and timing restrictions apply.
+A replaced printed X● has X = 0; a separate additional count-X still binds
+normally. Several copies offer the same choice once. Offering, plain
+Reclaim and explicit Reclaim are separate alternative routes and cannot be
+combined with this base. The ability grants no permission to play from a
+void or deck. An independent permission can supply that access and is used
+up normally when its player chooses this alternative; a card with only
+Reclaim uses its Reclaim route. Cancelling before commitment pays nothing.
 
 **Requirements** are written as "Play this event only if X." A card with a
 requirement cannot be played unless the requirement is met.
@@ -1897,6 +1920,29 @@ in. One created during the Ending phase, after that turn's "at end of turn"
 abilities triggered, triggers at the end of the next turn instead, and a
 character that enters play then does not trigger "At the end of your turn"
 that turn.
+
+**Counting ▸Dawn abilities:** "If 3 or more ▸Dawn abilities trigger during
+your Dawn phase, draw a card" counts actual successful admissions during
+that phase, including either player's abilities. A named-Dawn ability
+counts whenever it triggers then: through its Dawn branch, another branch
+of a combined trigger, or an instruction that triggers its named ability.
+Each admission counts once, including repeated admissions of the same
+ability. A floating or delayed named-Dawn trigger also counts. A disabled
+ability, a failed intervening condition or an already-used once-per-turn
+ability does not trigger and contributes nothing. Resolving an ability does
+not count it again.
+
+When the count first reaches 3 that turn, each applicable copy of the draw
+rule queues one draw. These reactions follow all simultaneous abilities
+admitted by the causing event or the complete source list of one named-trigger
+instruction. A source gained
+after that crossing does not react retroactively; losing and reacquiring it
+does not cause another crossing. A queued reaction resolves even after its
+source loses the rule. The count starts fresh each turn. Observing an
+identifiable reaction establishes that its threshold was met, including when
+its source becomes public later. This knowledge persists if the source is
+hidden again. A hidden
+source's trigger does not otherwise reveal its named-trigger classification.
 
 Each player sees a triggered ability trigger and resolve when they can see its
 card, avatar, or dreamsign, but not a hidden card the triggering event

@@ -46,7 +46,9 @@ function wellFormedFields(prompt: Prompt): boolean {
       const { subtypes, costOptions } = prompt;
       return (
         distinct(prompt.options.map((option) => option.mode)) &&
-        prompt.options.every((option) => Number.isInteger(option.mode)) &&
+        prompt.options.every((option) => Number.isInteger(option.mode) && (option.route === undefined ||
+          ((prompt.purpose.role === "playRoute" || prompt.purpose.role === "voidRoute") &&
+            ["normal", "offering", "reclaim", "eventAlternative"].includes(option.route)))) &&
         (subtypes === undefined || (distinct(subtypes) && prompt.options.every((option) => option.mode >= 0 && option.mode < subtypes.length))) &&
         (costOptions === undefined || (prompt.purpose.role === "chooseCost" && prompt.options.every((option) => option.mode >= 0 && option.mode < costOptions.length)))
       );

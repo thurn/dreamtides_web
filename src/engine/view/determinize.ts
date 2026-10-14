@@ -505,10 +505,14 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       throw new Error("Cannot determinize invalid hidden subject cost");
     }
   }
-  const triggerQueue: QueuedTrigger[] = view.triggerQueue.flatMap((trigger) =>
+  const triggerQueue: QueuedTrigger[] = view.triggerQueue.flatMap<QueuedTrigger>((trigger) =>
     trigger.source === null || trigger.origin === null
       ? []
-      : [{
+      : trigger.kind === "ruleReaction"
+        ? [{ kind: "ruleReaction" as const, source: copy(trigger.source), controller: trigger.controller,
+          origin: copy(trigger.origin), ability: trigger.ability, node: null, subject: null,
+          ...(trigger.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }) }]
+        : [{
           ...(trigger.kind === "dreamwellBonus" ? { kind: trigger.kind } : {}),
           ...(trigger.linkedSource === undefined ? {} : { linkedSource: copy(trigger.linkedSource) }),
           source: copy(trigger.source),
@@ -566,6 +570,11 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
         change: floatingChange(effect.change, captured) };
     })].sort((a, b) => a.timestamp - b.timestamp || Number(a.id.slice(1)) - Number(b.id.slice(1))),
     turnLog: {
+      // Unobserved historical admissions are omitted, as unknown queued bodies are.
+      // This is a conservative reconstruction, not the authoritative count.
+      dawnProgress: { total: view.turnLog.dawnProgress?.knownCount ?? 0,
+        known: { player: viewer === "player" ? view.turnLog.dawnProgress?.knownCount ?? 0 : 0,
+          enemy: viewer === "enemy" ? view.turnLog.dawnProgress?.knownCount ?? 0 : 0 } },
       played: playedCards,
       drawn: { ...view.turnLog.drawn },
       materialized: materializedCards,

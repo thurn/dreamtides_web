@@ -105,7 +105,7 @@ export interface PromptChoiceOption {
 
 /** The control row's choice buttons: what they ask, and each option with what it does. */
 export interface PromptChoices {
-  /** A local action chooser uses its titled panel even with a short option list. */
+  /** Local action choices and multi-route payments use the existing choice panel. */
   readonly presentation?: "chooser";
   readonly key: MobileBattlePromptKey;
   readonly label: string;
@@ -421,7 +421,7 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
         prompt,
         prompt.options.map((option) => ({
           copy:
-            prompt.purpose.role === "playRoute"
+            option.route !== undefined ? { kind: "playRoute", route: option.route } : prompt.purpose.role === "playRoute"
               ? { kind: "route", index: option.mode }
               : prompt.purpose.role === "voidRoute"
                 ? { kind: "voidRoute", index: option.mode }
@@ -467,6 +467,9 @@ function choice(
     host,
     surface: {
       kind: "choice",
+      ...(prompt.kind === "chooseMode" && (prompt.purpose.role === "playRoute" || prompt.purpose.role === "voidRoute") &&
+        prompt.options.filter(option => option.legal && option.route !== undefined).length >= 3
+        ? { presentation: "chooser" as const } : {}),
       key: prompt.id,
       label: host?.heading?.title ?? "",
       options: options

@@ -12,6 +12,7 @@ export * from "./choose-player";
 export * from "./choose-subtype";
 export * from "./copy-card";
 export * from "./cost-modifier";
+export * from "./rule-modifier";
 export * from "./create-card";
 export * from "./create-random-from-pool";
 export * from "./create-copy-in-hand";

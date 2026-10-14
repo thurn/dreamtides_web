@@ -1,3 +1,4 @@
+import { sourcePrivacy } from "../events/sources";
 import { liveLinkedBanished } from "../rules/linked-banish";
 import type { LinkedBanishedCards, LinkedSourceContext } from "../state/types";
 import type { LoopAction, LoopCandidate, LoopId } from "../loops/types";
@@ -198,7 +199,7 @@ export interface QueuedTriggerView {
   readonly handCopyHidden?: true;
   /** Copiable values of an original this viewer observed, without its hidden alias. */
   readonly handCopyOriginal?: Pick<import("../state/types").HandCopyContext, "printing" | "variant">;
-  readonly kind?: "dreamwellBonus";
+  readonly kind?: "dreamwellBonus" | "ruleReaction";
   readonly linkedSource?: LinkedSourceContext;
   readonly controller: Side;
   readonly source: AbilitySource | null;
@@ -278,6 +279,8 @@ export interface MaterializedCardView extends Omit<MaterializedCard, "instance">
 
 /** This turn's public plays, draw counts, and materializations. */
 export interface TurnLogView {
+  /** A lower bound established by this viewer's observations, never the private total. */
+  readonly dawnProgress?: { readonly knownCount: number };
   readonly played: Readonly<Record<Side, readonly PlayedCardView[]>>;
   readonly drawn: Readonly<Record<Side, number>>;
   readonly materialized: Readonly<Record<Side, readonly MaterializedCardView[]>>;
@@ -488,8 +491,12 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         : observed !== undefined && !sourceSeen && typeof record.source === "string"
           ? { rememberedSource: anonymousSource(record.source) } : {}) };
   });
-  const triggerQueue = state.triggerQueue.map((trigger): QueuedTriggerView => ({
-    ...(trigger.kind === "dreamwellBonus" ? { kind: trigger.kind } : {}),
+  const triggerQueue = state.triggerQueue.filter(trigger => {
+    if (trigger.kind !== "ruleReaction") return true;
+    const holder = sourcePrivacy(trigger.source, state);
+    return (holder === null || holder === viewer) && visibleSource(trigger.source);
+  }).map((trigger): QueuedTriggerView => ({
+    ...(trigger.kind === undefined ? {} : { kind: trigger.kind }),
     ...(trigger.linkedSource === undefined || !visibleSource(trigger.source) ? {} : { linkedSource: copy(trigger.linkedSource) }),
     controller: trigger.controller,
     source: visibleSource(trigger.source) ? copy(trigger.source) : null,
@@ -596,6 +603,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     linkedBanished: liveLinkedBanished(state).filter((record) => visible(record.source)).map(copy),
     triggerQueue,
     turnLog: {
+      dawnProgress: { knownCount: state.turnLog.dawnProgress?.known[viewer] ?? 0 },
       played: {
         player: state.turnLog.played.player.map(playedView),
         enemy: state.turnLog.played.enemy.map(playedView),

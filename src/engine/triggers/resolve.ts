@@ -3,7 +3,8 @@ import { chooseOnResolution, conditionHolds, purposeOf, resolveEffect } from "..
 import type { QueuedTrigger } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { originAbilities } from "../rules/activation";
-import { triggerBody } from "./body";
+import { ruleReactionBody, triggerBody } from "./body";
+import { observeRuleReactions } from "./rule-reactions";
 
 /**
  * Resolves `trigger`. Its intervening "if" is checked again first; if it no
@@ -21,7 +22,8 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   const { source, controller, origin, ability, node, subject, gain, scored, discardedCount, captured, lastKnownSourceSpark, lastKnownSubjectCost, lastKnownSubjectSpark, linkedSource } = trigger;
   const body = trigger.kind === "dreamwellBonus"
     ? dreamwellBody(ctx, trigger)
-    : triggerBody(ctx.catalog, origin, ability, node);
+    : trigger.kind === "ruleReaction" ? ruleReactionBody(ctx.catalog, origin, ability) : triggerBody(ctx.catalog, origin, ability, node);
+  if (trigger.kind === "ruleReaction") observeRuleReactions(ctx, [trigger]);
   const applied =
     body.condition === null ||
     conditionHolds(ctx.state, ctx.catalog, body.condition, { controller, source, optionalPaid: [] });

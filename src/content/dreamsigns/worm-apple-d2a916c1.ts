@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { ruleModifier } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +16,6 @@ export default dreamsign({
     "e6863f55-50e7-4c7b-b118-609b5fc5c005",
   ],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(ruleModifier({ rule: "eventAlternative", energy: 1 }))],
+  verifiedText: expectedVerifiedText("You may play ❖ and ❖❖ events for 1●."),
 });

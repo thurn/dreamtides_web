@@ -9,6 +9,7 @@ import { drawRandom } from "../state/rng";
 import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
 import { matchEvent } from "../triggers/matcher";
+import { observeRuleReactions } from "../triggers/rule-reactions";
 import { continuouslyRevealedTops } from "../continuous/permissions";
 import { SIDES } from "../state/ids";
 import { identifies, rememberKnownCards, revealToBoth, showPrivately } from "../view/knowledge";
@@ -207,6 +208,7 @@ export class Context implements StepContext {
     // A private prompt cannot conceal the already public current top.
     revealToBoth(this.state, publicTops);
     this.refreshDeckTopReveals();
+    observeRuleReactions(this);
     this.disclosed.push({ side, cards: [...cards] });
   }
 
@@ -245,6 +247,7 @@ export class Context implements StepContext {
     }
     this.settleKnowledge();
     rememberKnownCards(this.state);
+    observeRuleReactions(this);
     this.emitting += 1;
     try {
       this.events.push(event);

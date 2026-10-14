@@ -168,6 +168,8 @@ export interface ChooseSlotPrompt extends PromptBase {
 }
 
 export interface ModeOption {
+  /** Semantic play-route identity; present when a prompt includes the optional event alternative. */
+  readonly route?: "normal" | "offering" | "reclaim" | "eventAlternative";
   readonly mode: number;
   readonly legal: boolean;
 }

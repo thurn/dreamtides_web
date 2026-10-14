@@ -1,3 +1,4 @@
+import { carriesEnergy } from "../effects/primitives/rule-modifier";
 import type { Phase, Side } from "../state/ids";
 import { opponent, PHASES } from "../state/ids";
 import type { StepContext } from "../steps/types";
@@ -18,10 +19,11 @@ function enterPhase(ctx: StepContext, phase: Phase): void {
   const active = state.turn.active;
   switch (phase) {
     case "dreamwell": {
-      // Current ● resets to maximum at the start of the turn; the Dreamwell
-      // draw then raises the maximum from round 2 on, and in every extra turn.
+      // Refresh adds maximum ● to retained energy after the first own turn
+      // when carry applies; otherwise it sets current to maximum. The Dreamwell
+      // draw then raises maximum from round 2 on, and in every extra turn.
       const side = state.sides[active];
-      setEnergy(ctx, active, side.maxEnergy, side.maxEnergy);
+      setEnergy(ctx, active, carriesEnergy(state, ctx.catalog, active) && state.turn.sideTurns[active] > 1 ? side.currentEnergy + side.maxEnergy : side.maxEnergy, side.maxEnergy);
       if (state.turn.round >= 2 || state.turn.extra) {
         drawDreamwell(ctx, active);
       }

@@ -1,3 +1,4 @@
+import { alternativeEventEnergy } from "../effects/primitives/rule-modifier";
 import { identifies } from "../view/knowledge";
 import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristics, characteristicsOf, filterSubjectOf, matchesFilter } from "../continuous/characteristics";
@@ -23,9 +24,10 @@ export type PlayZone = "hand" | "void" | "deck";
  * owner's void by a play permission (continuous/permissions.ts), for its
  * normal costs; or from its owner's void by Reclaim, for its reclaim costs
  * in place of its printed energy cost, or its normal costs with plain
- * Reclaim.
+ * Reclaim. An applicable event alternative replaces printed energy costs
+ * from hand or a zone independently allowed by a play permission.
  */
-export type PlayRoute = "hand" | "offering" | "permission" | "reclaim";
+export type PlayRoute = "hand" | "offering" | "permission" | "reclaim" | "eventAlternative";
 
 /**
  * The Reclaim costs an effect granted `id` (rules § Keywords and Effects →
@@ -53,7 +55,7 @@ function explicitReclaimCosts(state: BattleState, catalog: EngineCatalog, id: In
 
 /** Cost changes for the selected route; explicit replacement routes exclude own base setters. */
 export function routeCostModifier(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId, route: PlayRoute): CostModifier {
-  const replaced = route === "offering" || (route === "reclaim" && explicitReclaimCosts(state, catalog, id) !== null);
+  const replaced = route === "offering" || route === "eventAlternative" || (route === "reclaim" && explicitReclaimCosts(state, catalog, id) !== null);
   return costModifier(state, catalog, id, side, undefined, { applyOwnSet: !replaced });
 }
 
@@ -68,6 +70,11 @@ export function routeCosts(state: BattleState, catalog: EngineCatalog, id: Insta
   const definition = instanceCard(catalog, instance);
   const { variant } = instance;
   switch (route) {
+    case "eventAlternative": {
+      const amount = alternativeEventEnergy(state, catalog, instance.controller);
+      if (amount === null) throw new Error("The alternative event cost is unavailable");
+      return [{ cost: "energy", amount }, ...additionalCosts(definition, variant)];
+    }
     case "hand":
     case "permission":
       return playCosts(definition, variant);
@@ -101,15 +108,18 @@ export function routePayable(state: BattleState, catalog: EngineCatalog, side: S
  */
 export function playRoutes(state: BattleState, catalog: EngineCatalog, id: InstanceId, from: PlayZone): PlayRoute[] {
   const instance = instanceOf(state, id);
-  if (from === "deck") return playPermission(state, catalog, id, instance.owner) === null ? [] : ["permission"];
+  const definition = instanceCard(catalog, instance);
+  const alternative: PlayRoute[] = characteristicsOf(state, catalog, id).cardType === "event" &&
+    definition.speed !== "standard" && alternativeEventEnergy(state, catalog, instance.controller) !== null ? ["eventAlternative"] : [];
+  if (from === "deck") return playPermission(state, catalog, id, instance.owner) === null ? [] : ["permission", ...alternative];
   if (from === "void") {
     const permitted = playPermission(state, catalog, id, instance.owner) !== null;
     const reclaimable =
       hasKeyword(state, catalog, id, "reclaim") ||
       instanceCard(catalog, instance).abilities(instance.variant).some((ability) => ability.kind === "reclaim");
-    return [...(permitted ? (["permission"] as const) : []), ...(reclaimable ? (["reclaim"] as const) : [])];
+    return [...(permitted ? (["permission"] as const) : []), ...(reclaimable ? (["reclaim"] as const) : []), ...(permitted ? alternative : [])];
   }
-  return hasKeyword(state, catalog, id, "offering") ? ["hand", "offering"] : ["hand"];
+  return [...(hasKeyword(state, catalog, id, "offering") ? ["hand", "offering"] as const : ["hand"] as const), ...alternative];
 }
 
 /** Whether `side` has a Fast window now: its own Day or Night, or the opponent's Dusk. */

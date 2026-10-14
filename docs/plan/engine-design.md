@@ -940,6 +940,38 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   source moves or ceases to exist. A "when … gains ✦" trigger also records
   `gain`, the matched gain's amount and expiry, which the trigger's effect
   reads as `env.gain`, the view shows, and `triggerQueued` logs.
+- **Player-rule reactions.** A static `ruleModifier` Dawn threshold appends a
+  `QueuedTrigger` with `kind: "ruleReaction"`, `node: null` and `subject: null`
+  after the causing event's full admission batch or the complete resolved
+  source list of one named-trigger instruction. `ruleReactionBody` validates
+  the captured origin's whole static instruction and returns its deferred
+  child; this kind supplies no floating-trigger node or invented named trigger.
+  The ordinary FIFO and existing UUID-bearing trigger logs resolve it after
+  its source moves or loses abilities. A departing physical source retains
+  its ordinary optional last-known source spark through save/load and
+  determinization.
+- **Dawn progress.** Optional `turnLog.dawnProgress` holds the actual admission
+  total and each viewer's observer-qualified lower bound. Absent legacy history
+  starts at zero and turn reset omits it. A private admission contributes to
+  a viewer's known count only when source privacy permits that viewer and the
+  viewer can identify the source. An observed identifiable threshold reaction
+  raises that viewer's lower bound to its threshold. Event boundaries settle
+  this observation after source knowledge and before presentation snapshots;
+  an observable resolution records it even after the queue entry is shifted.
+  A private prompt records the floor after disclosing its cards and before
+  publishing its display. Recovery retains disclosed identities and derives
+  the floor from the committed queue with copied progress knowledge; gameplay
+  admissions and reactions from the failed step remain transactional.
+  Knowledge persists if a source becomes private again. The view exports only
+  `{ knownCount }`, never the private total; private or unidentified
+  `ruleReaction` entries are omitted. Determinization reconstructs its total
+  from the deciding viewer's lower bound and starts the other side's knowledge
+  empty. This is the D22 conservative empty reconstruction of unobserved
+  historical admissions, rather than an exact hidden-history posterior. It
+  preserves an observed crossing after its reaction drains, so a later
+  admission cannot repeat that draw in the sample. New-kind saved tuples and
+  finite nonnegative safe-integer progress validate before load; the strict
+  descriptor validates before resolution writes.
 - **Copy occasions.** `whenCopyTrigger(player, filter)` matches successful
   stack and hand copies by their copiable values at creation. The original
   physical card is the queued subject. Bodies that copy that subject retain
@@ -1730,6 +1762,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, count, optional })` (`count` cards, all when fewer match; an optional take of several asks its "you may" first, then takes exactly that many), `lookAtTop(n, { draw, ephemeral })`, `lookAtTopBanish(n)` / `putLinkedBanishedInHand(producerOffset = -1)` (paired source-object memory, RD-hv-umm2.486-1), `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs | capturedCards())` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, grouped by source zone in first-reference order, each in its original zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
 | Characters | `abandon(chooser, predicate)` (one own character chosen at resolution, not a target), `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materialize(from)` (zone-card references or the character a nested Discover moves into hand), `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `rematerialize`, `move(slotRule)`, `gainAbilities(banishCards(…))` (the source, while in play, gains every ability of each card the banish moved; layer 3 `abilities`), `loseAllAbilities(subject, { duration, sourceGains })` (each character loses all its abilities while in play, layer 3 `loseAbilities`; with `sourceGains`, the source, while in play, gains the abilities each had as it lost them) |
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
+| Player rules | `ruleModifier(instruction, player)` | Static-only: optional Fast/Interrupt Event base, energy carry, or Dawn threshold with a deferred child. |
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15), `banishSelfOnResolve` ("Banish this card": the resolving event goes from the stack to its owner's Banished zone as the instruction resolves, so `resolveTop` does not put it into the void; RD-hv-umm2.475-1) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X, a `countCards` zone count, or `thisCharacterSpark()` (RD-hv-umm2.501-1), figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid` and `everyIn`, each with an optional `costAtMost`, a constant or X, and for `fromVoid` also a zone count or `thisCharacterSpark()`: `fromVoid` checks it as its targets are offered and again as the effect resolves (RD-hv-umm2.495-1), `everyIn` reads it once as the effect resolves (RD-hv-umm2.86-2); `topOfDeck`, `randomIn`, `thisCardIn`) | |

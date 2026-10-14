@@ -20,7 +20,7 @@ import { targetsNeedX } from "../immediate-x";
 /**
  * Plays a card from the hand of the side holding it, or from its owner's
  * void by a play permission or Reclaim: play-time choices (Offering or the
- * card's costs, when it has Offering; a permission or Reclaim, when both
+ * card's costs, when it has Offering; an applicable event alternative; a permission or Reclaim, when both
  * cover a void card; X and mandatory captures needed by immediate choices, then each event ability's modes, then its targets,
  * then the additional costs' alternatives, optional costs, and cards; a payment-dependent target prepares these decisions before modes and targets), then
  * the commit point, then the costs (the energy and X together after cost
@@ -61,6 +61,7 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
       purpose: purpose(0, from === "void" ? "voidRoute" : "playRoute"),
       options: routes.map((option, index) => ({
         mode: index,
+        ...(routes.includes("eventAlternative") ? { route: option === "hand" || option === "permission" ? "normal" as const : option } : {}),
         legal: routePayable(state, catalog, side, card, option),
       })),
     });
@@ -77,11 +78,11 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
     x = chosen.x ?? null;
     choices = [{ modes: chosen.modes ?? [], targets: chosen.targets ?? [] }];
   } else {
-    // Offering fixes printed energy-X at zero; a separate count-only X is prepared normally.
+    // Offering and event alternatives fix printed energy-X at zero; a separate count-only X is prepared normally.
     const abilities = eventAbilities(definition, instance.variant);
     const prepared = prepareCostX(ctx, side, card, costs, (role) => purpose(role === "chooseX" ? 0 : costAbility, role),
       abilities.some(({ effect }) => targetsNeedX(effect)), { modifier, excluded: [card],
-        ...(route === "offering" && xCost(definition.costs) !== null ? { fixedX: 0 } : {}) });
+        ...((route === "offering" || route === "eventAlternative") && xCost(definition.costs) !== null ? { fixedX: 0 } : {}) });
     x = prepared.x;
     preparedPayments = prepared.payments;
     if (abilities.some(({ effect }) => targetsNeedOptionalCost(effect))) {
@@ -134,7 +135,7 @@ export const play: StepDefinition<PlayStep> = {
     const side = instanceOf(state, step.card).controller;
     if (!canPlay(state, catalog, side, step.card, step.from)) throw new Error(`Card ${step.card} cannot be played now`);
     const prepared = planCardPlay(ctx, step.card, playRoutes(state, catalog, step.card, step.from), step.from);
-    const permission = prepared.route === "permission" ? playPermission(state, catalog, step.card, side) : null;
+    const permission = (prepared.route === "permission" || prepared.route === "eventAlternative" && step.from !== "hand") ? playPermission(state, catalog, step.card, side) : null;
     ctx.commitPoint();
     commitCardPlay(ctx, step.card, prepared, { permission, ...(step.slot === undefined ? {} : { slot: step.slot }) });
   },

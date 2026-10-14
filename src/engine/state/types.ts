@@ -401,7 +401,14 @@ export interface EffectRef {
  * ability applies. Values and affected cards are fixed when the change is
  * made (RD-hv-7x4l.7-1).
  */
+/** Bounded player rules; numeric tunables belong to their authored abilities. */
+export type RuleModifierInstruction =
+  | { readonly rule: "eventAlternative"; readonly energy: number }
+  | { readonly rule: "carryEnergy" }
+  | { readonly rule: "dawnThreshold"; readonly count: number };
+
 export type ContinuousChange =
+  | ({ readonly kind: "ruleModifier"; readonly player: Side } & RuleModifierInstruction)
   /** Layer 2: the character has all character types. */
   | { readonly kind: "allTypes"; readonly instance: InstanceId }
   /**
@@ -606,6 +613,7 @@ interface QueuedAbility {
 export type QueuedTrigger = QueuedAbility & (
   | { readonly kind?: undefined }
   | { readonly kind: "dreamwellBonus" }
+  | { readonly kind: "ruleReaction"; readonly node: null; readonly subject: null }
 );
 
 /**
@@ -663,7 +671,15 @@ export interface MaterializedCard {
 }
 
 /** Counters for the current turn, reset as each turn begins. */
+export interface DawnProgress {
+  total: number;
+  /** Observer-qualified lower bounds, retained after the observed sources move. */
+  known: Record<Side, number>;
+}
+
 export interface TurnLog {
+  /** True admissions and each side's known lower bound; absent legacy history starts at zero. */
+  dawnProgress?: DawnProgress;
   /** Cards each side played this turn, in order. Copies are not played (D15). */
   played: Record<Side, PlayedCard[]>;
   /** Cards each side drew this turn. */

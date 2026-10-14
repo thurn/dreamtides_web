@@ -82,6 +82,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   cannotPlay: 6,
   playLimit: 6,
   reclaimNotBanished: 6,
+  ruleModifier: 6,
 };
 
 /** Whether a floating change is a continuous change the layers apply. */
@@ -269,6 +270,7 @@ function changed(change: ContinuousChange): InstanceId | null {
     case "cannotPlay":
     case "playLimit":
     case "reclaimNotBanished":
+    case "ruleModifier":
       return null;
     default:
       return change.instance;

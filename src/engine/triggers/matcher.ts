@@ -1,3 +1,4 @@
+import { characteristics } from "../continuous/characteristics";
 import { linkedSourceContext, sourceAbilityGroups } from "../rules/linked-banish";
 /**
  * The event bus and trigger matcher (D14; rules § Ability Types → Trigger
@@ -53,7 +54,8 @@ import { opponent, SIDES, sourceInstance } from "../state/ids";
 import type { BattleState, FloatingEffect, GainedAbilities, HandCopyContext, MaterializedCard, Printing, QueuedTrigger, SparkGain } from "../state/types";
 import type { ArmedAbility, ArmedTriggers, LookbackEventKind, StepContext, TriggerBlocks, TriggerListener } from "../steps/types";
 import { sidesBlindTo } from "../view/knowledge";
-import { triggerBody } from "./body";
+import { ruleReactionBody, triggerBody } from "./body";
+import { observeRuleReactions, sourceObserved } from "./rule-reactions";
 
 /** Every trigger kind except the `either` combinator, which matches through its branches. */
 type TriggerKind = Exclude<Trigger["on"], "either">;
@@ -549,6 +551,7 @@ function enqueueAbility(
     if (armed === null || !gainedRecordsDropped(state, catalog, listener, index)) state.oncePerTurn.push(key);
   }
   enqueue(ctx, { source: listener.source, controller: listener.controller, origin: listener.origin, ability: index, node: null, ...match });
+  recordDawnAdmission(ctx, listener.source, ability.trigger);
 }
 
 /** A delayed/floating body binds its own future subject, outside this copy occasion. */
@@ -691,6 +694,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
       ...(captured === undefined ? {} : { captured: [...captured] }),
       ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     });
+    recordDawnAdmission(ctx, effect.source, floating.trigger);
   }
 }
 
@@ -822,6 +826,7 @@ export function matchEvent(ctx: StepContext, event: EngineEvent): void {
     });
   }
   if (event.kind === "materialized") recordMaterialized(state, ctx.catalog, event.side, event.instance);
+  const beforeDawn = state.turnLog.dawnProgress?.total ?? 0;
   const departing = departure(state, event);
   const armed = isLookbackEvent(event) ? takeArmed(ctx, event) : NOTHING_ARMED;
   for (const side of [state.turn.active, opponent(state.turn.active)]) {
@@ -829,6 +834,7 @@ export function matchEvent(ctx: StepContext, event: EngineEvent): void {
     matchFloating(ctx, side, event, armed);
   }
   if (event.kind === "leftPlay") armLookbacks(ctx, event, departing);
+  queueDawnReactions(ctx, beforeDawn);
 }
 
 function hasNamed(trigger: Trigger, named: NamedTrigger): boolean {
@@ -841,10 +847,47 @@ function hasNamed(trigger: Trigger, named: NamedTrigger): boolean {
  * checks as an ability that triggers on its own.
  */
 export function triggerNamed(ctx: StepContext, id: InstanceId, named: NamedTrigger): void {
+  triggerNamedBatch(ctx, [id], named);
+}
+
+/** One named-trigger instruction admits every selected source before its reactions. */
+export function triggerNamedBatch(ctx: StepContext, ids: readonly InstanceId[], named: NamedTrigger): void {
+  const beforeDawn = ctx.state.turnLog.dawnProgress?.total ?? 0;
+  for (const id of ids) enqueueNamed(ctx, id, named);
+  queueDawnReactions(ctx, beforeDawn);
+}
+
+function enqueueNamed(ctx: StepContext, id: InstanceId, named: NamedTrigger): void {
   const listener = cardListener(ctx.state, id);
   originAbilities(ctx.catalog, listener.origin).forEach((ability, index) => {
     if (ability.kind !== "triggered" || !hasNamed(ability.trigger, named)) return;
     if (named !== "dissolved" && !worksInZone(ability.zone, listener.zone)) return;
     enqueueAbility(ctx, listener, ability, index, { subject: id });
   });
+}
+
+/** Count successful admissions, not candidates or resolutions, and keep observer-qualified lower bounds. */
+function recordDawnAdmission(ctx: StepContext, source: AbilitySource, trigger: Trigger): void {
+  if (ctx.state.turn.phase !== "dawn" || !hasNamed(trigger, "dawn")) return;
+  const progress = ctx.state.turnLog.dawnProgress ??= { total: 0, known: { player: 0, enemy: 0 } };
+  progress.total += 1;
+  for (const viewer of SIDES) if (sourceObserved(ctx, source, viewer)) progress.known[viewer] += 1;
+}
+
+/** Threshold reactions follow every simultaneous admission in their causing batch (D14). */
+function queueDawnReactions(ctx: StepContext, before: number): void {
+  const { state, catalog } = ctx;
+  const progress = state.turnLog.dawnProgress;
+  if (state.turn.phase !== "dawn" || progress === undefined || progress.total === before) return;
+  for (const { change, staticSource: source, staticAbility: ability } of characteristics(state, catalog).changes(6)) {
+    if (change.kind !== "ruleModifier" || change.rule !== "dawnThreshold" || change.player !== state.turn.active ||
+        before >= change.count || progress.total < change.count || source === null || ability === null) continue;
+    const origin = abilityOrigin(state, source);
+    if (origin === null) throw new Error("A live rule reaction has no ability origin");
+    ruleReactionBody(catalog, origin, ability);
+    state.triggerQueue.push({ kind: "ruleReaction", source, controller: change.player, origin, ability, node: null, subject: null });
+    // The identifiable public reaction itself establishes that its threshold was met.
+    observeRuleReactions(ctx);
+    ctx.emit({ kind: "triggerQueued", source, controller: change.player, ability, node: null, subject: null });
+  }
 }

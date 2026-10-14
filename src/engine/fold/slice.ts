@@ -28,6 +28,7 @@ import type { Step } from "../steps/kinds";
 import { runStep } from "../steps/runner";
 import { INTERACTIVE } from "../steps/sources";
 import type { EventObserver, RecordedAnswer, StepResult } from "../steps/types";
+import { observeRuleReactions } from "../triggers/rule-reactions";
 
 /** Compare structured physical/emblem UUID identities, including a dreamsign's position. */
 function samePurpose(left: PromptPurpose, right: PromptPurpose): boolean {
@@ -372,6 +373,12 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
         }
       }
       committed = keepPublishedKnowledge(keepDisclosures(committed, shown.display, shown.disclosed), shown.display, exposures);
+      const progress = committed.turnLog.dawnProgress;
+      if (progress !== undefined) {
+        committed = { ...committed, turnLog: { ...committed.turnLog,
+          dawnProgress: { ...progress, known: { ...progress.known } } } };
+        observeRuleReactions({ state: committed, catalog: engine.catalog });
+      }
     }
     return { committed, inFlight: null, publishedEvents: 0, attempt: slice.attempt };
   }
