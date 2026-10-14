@@ -280,6 +280,9 @@ describe("identity-safe local orphan reconciliation", () => {
     { label: "diagnostic", status: 1, stdout: "", stderr: "synthetic query failure" },
     { label: "partial output", status: 1, stdout: "partial identity", stderr: "" },
     { label: "missing captured streams", status: 1 },
+    { label: "missing captured stderr", status: 1, stdout: "" },
+    { label: "non-string captured stderr", status: 1, stdout: "", stderr: Buffer.alloc(0) },
+    { label: "non-string captured stdout", status: 1, stdout: Buffer.alloc(0), stderr: "" },
   ])("preserves query errors and owned evidence for $label", async (failure) => {
     const f = fixture(); const server = await serverFixture();
     record(f, { token: "11111111-1111-4111-8111-111111111111", runner: deadRunner, server: server.identity });

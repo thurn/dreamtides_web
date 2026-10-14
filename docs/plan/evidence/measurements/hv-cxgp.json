@@ -1,0 +1,248 @@
+{
+  "bead": "hv-cxgp",
+  "base": "d65014e29192726611cab1434dfc1a073643b457",
+  "dispatch": {
+    "dispatchEnvelopeUtc": "2026-10-14T11:47:07.856191+00:00",
+    "semantics": "Recorded immediately before spawn; later returnbound qualifies actualunknown tool dispatch, not precise invented timestamp",
+    "spawnReturnedUtc": "2026-10-14T11:47:29.181532+00:00",
+    "agent": "/root/q331_review_coverage_cxgp",
+    "actualToolCallId": "not exposed",
+    "qualification": "Actualdispatch within retained envelope/returnbounds; earlierbound conservativelyincludes parentbriefdelivery envelope, not invented exacttool time"
+  },
+  "boundary": {
+    "precommitBoundaryEnd": "2026-10-14T11:51:59.967673+00:00",
+    "precommitInclusiveMinutes": 4.8685247,
+    "qualification": "Conservative dispatch-envelope start includes up to21.325341s parent briefing/dispatch. Commit cannot record its own future terminal time; parent and retained commit receipt report actual automatic Git start/end and external delta. All research, coordination, waits, validation and evidence time included.",
+    "cpuTime": "UNKNOWN",
+    "modelSamplingTime": "UNKNOWN",
+    "productiveEditingTime": "UNKNOWN",
+    "isolatedQueueTime": "UNKNOWN"
+  },
+  "preparation": {
+    "npmInstallS": 2.426592708012322,
+    "prepareWorkspaceS": 1.8090557499963325,
+    "doctorHealthy": true,
+    "releaseAtSetup": "pendinglag1 noholds/pause on own prior docs source; q3311a45 already released/remoteobservedgreen"
+  },
+  "reviewProvenance": {
+    "at": "2026-10-14T11:38:09.921656+00:00",
+    "reviewer": "normal independent Claude Opus5.5",
+    "source": "1a45c0cc89a5725b5e99cd5c088a52450e4c30dd",
+    "base": "19a77931b5bef2f5d50e2f0338de55586805ca68",
+    "session": "49c7c240-9d23-471e-86fa-84911ae8b50d",
+    "elapsedS": 249.38899808301358,
+    "fullChangedScopeAccepted": true,
+    "requiredReadsDenied": false,
+    "limitations": "No tests/nativeOScalls by coldreviewer; macOSps semantics supplied by parent priorlocalman+realfixture evidence; unchangedoutside-diff helper/tests spotchecked. No requiredchangedbody or requiredconsumer reportedunread.",
+    "reportSha256": "cbe44b8bc65ee555b31d32cc1f09a69ecb8f2699349347e21fee8da21a61bf4b",
+    "findings": [
+      {
+        "id": "F1",
+        "disposition": "accepted",
+        "verified": "actual348 productiondefault despitefactory8/16/256; no inventedfuturecapfailure",
+        "followup": "hv-cxgp"
+      },
+      {
+        "id": "F2",
+        "disposition": "accepted",
+        "verified": "missingstderrguard notindependentlytested; currentproductionguardcorrect",
+        "followup": "hv-cxgp"
+      }
+    ],
+    "snapshotCleanAtFinal": true,
+    "reviewChildReapedAndPGGone": true
+  },
+  "dispositions": {
+    "F1": "Resolved: dormant hand-count victory uses named COPY_LOOP_CONFIG threshold8+5; both controller victories retain exact result and hand length. Explicit8/16/256 fixture settings and all21 loop guards preserved.",
+    "F2": "Resolved: public query-error vector includes independent missingstderr, Bufferstderr, Bufferstdout, with all original rows and SAMEerror rejection, exactrecord/provider bytes, no signals, livechild and actual releasedslot assertions retained."
+  },
+  "sourceSHA256": {
+    "src/engine/loops/loops-mandatory.test.ts": "4c3d4a804664f4ba45a8304fff50250fed972abf3c9e30b7b7765799bc7d580d",
+    "scripts/qa/server-ownership.test.mjs": "600ae556a5b38ae8d4224b4521be01a4f58166c757e1e357dc1b8591157a8d18"
+  },
+  "collectorSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-1 launch",
+        "value": 3.291015625
+      }
+    }
+  },
+  "receipts": [
+    {
+      "started": "2026-10-14T11:48:47.265925+00:00",
+      "pid": 18227,
+      "pgid": 18227,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "scripts/qa/server-ownership.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/q331-review-coverage-cxgp",
+      "load": [
+        3.75830078125,
+        6.39599609375,
+        5.8564453125
+      ],
+      "ended": "2026-10-14T11:48:53.782492+00:00",
+      "elapsedSeconds": 6.5164015000045765,
+      "exitCode": 0,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4829,
+      "beforeSHA256": "7211ef177c5d4d9f31e043f47edc6071936cefbc4a6558610f97d1d1cd15c34e",
+      "afterSHA256": "7211ef177c5d4d9f31e043f47edc6071936cefbc4a6558610f97d1d1cd15c34e",
+      "collectorBeforeSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+      "collectorAfterSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+      "stdoutSHA256": "ef9a6e0ce97c8b048aacea094a5d4a4baa04b3c1d38b28ecc9e75c4d81e70c2f",
+      "stderrSHA256": "f2e4cf2912a1d3de42bc74d18d5878b89a9023dc6ef558b48e6f227bf7a3d303"
+    },
+    {
+      "started": "2026-10-14T11:49:54.135607+00:00",
+      "pid": 22099,
+      "pgid": 22099,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/q331-review-coverage-cxgp",
+      "load": [
+        3.09228515625,
+        5.6943359375,
+        5.630859375
+      ],
+      "ended": "2026-10-14T11:49:58.022595+00:00",
+      "elapsedSeconds": 3.886856750003062,
+      "exitCode": 0,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4832,
+      "beforeSHA256": "d22c033859321c7670ef2cfc7fa58c5d4c128e26f79c176069288e86e50a3df8",
+      "afterSHA256": "d22c033859321c7670ef2cfc7fa58c5d4c128e26f79c176069288e86e50a3df8",
+      "collectorBeforeSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+      "collectorAfterSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+      "stdoutSHA256": "df8eb42ecaba318e58d5470b5e36c712c007f017e985890551a04c9716daaf46",
+      "stderrSHA256": "f2e4cf2912a1d3de42bc74d18d5878b89a9023dc6ef558b48e6f227bf7a3d303"
+    },
+    {
+      "started": "2026-10-14T11:49:41.437971+00:00",
+      "pid": 20402,
+      "pgid": 20402,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/q331-review-coverage-cxgp",
+      "load": [
+        3.291015625,
+        5.8203125,
+        5.67431640625
+      ],
+      "ended": "2026-10-14T11:49:52.369991+00:00",
+      "elapsedSeconds": 10.931848207983421,
+      "exitCode": 0,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4832,
+      "beforeSHA256": "d22c033859321c7670ef2cfc7fa58c5d4c128e26f79c176069288e86e50a3df8",
+      "afterSHA256": "d22c033859321c7670ef2cfc7fa58c5d4c128e26f79c176069288e86e50a3df8",
+      "collectorBeforeSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+      "collectorAfterSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+      "stdoutSHA256": "51a8071002bba0da542512ef274f6175fbba1f5bdf5cf2f1666b0917c5b49134",
+      "stderrSHA256": "f2e4cf2912a1d3de42bc74d18d5878b89a9023dc6ef558b48e6f227bf7a3d303"
+    },
+    {
+      "started": "2026-10-14T11:50:21.408167+00:00",
+      "pid": 22480,
+      "pgid": 22480,
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/q331-review-coverage-cxgp",
+      "load": [
+        3.02001953125,
+        5.4208984375,
+        5.53271484375
+      ],
+      "ended": "2026-10-14T11:50:21.465413+00:00",
+      "elapsedSeconds": 0.057127917010802776,
+      "exitCode": 0,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4832,
+      "beforeSHA256": "15c715dc1199c19b2e7cb23e2a1594aa673e21c7eb0aed44b930bc21cde32bf2",
+      "afterSHA256": "15c715dc1199c19b2e7cb23e2a1594aa673e21c7eb0aed44b930bc21cde32bf2",
+      "collectorBeforeSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+      "collectorAfterSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+      "stdoutSHA256": "9cebf17f0a67f82c2af3bd676b21b79c5e5e778a508c1a58eec97ba4d1955c94",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "started": "2026-10-14T11:50:21.725164+00:00",
+      "pid": 22488,
+      "pgid": 22488,
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/q331-review-coverage-cxgp",
+      "load": [
+        3.02001953125,
+        5.4208984375,
+        5.53271484375
+      ],
+      "ended": "2026-10-14T11:50:21.734063+00:00",
+      "elapsedSeconds": 0.00877249997574836,
+      "exitCode": 0,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4832,
+      "beforeSHA256": "15c715dc1199c19b2e7cb23e2a1594aa673e21c7eb0aed44b930bc21cde32bf2",
+      "afterSHA256": "15c715dc1199c19b2e7cb23e2a1594aa673e21c7eb0aed44b930bc21cde32bf2",
+      "collectorBeforeSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+      "collectorAfterSHA256": "2c0f5ad895481aea458a0900aea24bde3a242daf9a5192b3d4b1ea22714c164c",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "validationTotals": {
+    "focusedFiles": 2,
+    "focusedCases": 50,
+    "loopCases": 21,
+    "ownershipCases": 29,
+    "addedCases": 3,
+    "testDelta": {
+      "files": 0,
+      "lines": 3,
+      "jsdomFiles": 0
+    }
+  },
+  "scopeLimits": "Test-only two admitted bodies; all production, QAhelpers/config/content/rules/UI and older evidence frozen. Current production guard already passes: no old-source counterfactual failure claim or temporary production mutation. No browser/fuzz/full suite benchmark needed; prior q33159.6s is old-source-only, current D19 remains independently measured by phase gate.",
+  "resources": {
+    "persistentProcesses": [],
+    "ports": [],
+    "browserContexts": [],
+    "heavyCommands": [],
+    "reviewProvidersStarted": []
+  },
+  "failures": [],
+  "collectorReadSlips": [
+    "Prewrite audit initially attempted to read directory symlink as regularfile; it exited before writes. Corrected is_file semantics and verified all4828 original entries.",
+    "Initial optional exact heading search returned1 and prevented its dependent wt read; read correctly next call. Prior helper collector filename was guessed with dash; actual underscore name located; own collector written independently."
+  ],
+  "warnings": "Wrapper isolated asset preparation emits expected missing-art warnings; final restore reports linked localart. Source hashes before/after exact, no generated source differences.",
+  "preExistingIssues": []
+}

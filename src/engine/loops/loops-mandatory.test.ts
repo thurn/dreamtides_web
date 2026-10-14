@@ -345,7 +345,7 @@ describe("closed mandatory copy continuations", () => {
   });
 
   it.each(["player", "enemy"] as const)("allows a dormant hand-count victory beyond the mandatory threshold for %s", side => {
-    const limit = board({ player: { deck }, enemy: { deck } }).state.config.mandatoryLoopCheckFrom + 5;
+    const limit = COPY_LOOP_CONFIG.mandatoryLoopCheckFrom + 5;
     const { state, local, action } = copyChain(side, true, { extra: [winCondition({ cond: "cardsIn", player: "you", zone: "hand", atLeast: limit })] });
     const result = local.apply(state, side, action, copyAnswers(limit * 4 + 20));
     expect(result.state.result).toEqual({ kind: "victory", winner: side, reason: "winCondition" });
