@@ -1,5 +1,5 @@
 import { startContinuous } from "../../continuous/resolve";
-import type { Duration, SubjectSpec } from "../../dsl/types";
+import type { Duration, SubjectSpec, ZoneRandomSpec } from "../../dsl/types";
 import type { InstanceId } from "../../state/ids";
 import type { CardCostMode } from "../../state/types";
 import type { StepContext } from "../../steps/types";
@@ -91,7 +91,7 @@ export function modifyCardCost(
  */
 export interface ChangeCardCostNode {
   readonly op: "changeCardCost";
-  readonly card: SubjectSpec;
+  readonly card: SubjectSpec | ZoneRandomSpec;
   readonly mode: CardCostMode;
   readonly amount: number;
   readonly duration: Duration | null;
@@ -113,7 +113,7 @@ export const changeCardCostPrimitive = definePrimitive<ChangeCardCostNode>({
 
 /** "Reduce its cost by N●" (`{ reduce: N }`), or "it costs N●" or "N● more", of `card`. */
 export function changeCardCost(
-  card: SubjectSpec,
+  card: SubjectSpec | ZoneRandomSpec,
   cost: CardCostChange,
   options: { readonly duration?: Duration } = {},
 ): ChangeCardCostNode {

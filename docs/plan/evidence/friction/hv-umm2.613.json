@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.613",
+  "phase": 5,
+  "implementMin": 30.602092433333333,
+  "implementWindow": {
+    "start": "2026-10-14T16:41:12.490261+00:00",
+    "end": "2026-10-14T17:11:48.615807+00:00"
+  },
+  "localValidationS": {
+    "focused": 5.849221209,
+    "related": 8.367423582999999,
+    "review": 65.343121916,
+    "knip": 5.33951475
+  },
+  "hostLoad": 6.8916015625,
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Current evidence-writer endpoint only; not review-start or the implementation interval. Per-command loads remain separate in measurements.",
+        "at": "2026-10-14T17:11:48.615807+00:00"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 246,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
