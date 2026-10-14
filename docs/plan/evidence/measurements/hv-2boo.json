@@ -1,0 +1,114 @@
+{
+  "bead": "hv-2boo",
+  "base": "58277293ffb953f47ad3396b060941d4224c227b",
+  "clock": {
+    "start": "2026-10-14T16:30:37.480157+00:00",
+    "cutoff": "2026-10-14T16:37:50.888303+00:00",
+    "inclusiveMin": 7.2234691,
+    "implementer": "parent session as implementer per workflow936",
+    "samplingStart": "UNKNOWN",
+    "qualification": "Session implementation interval includes source audit, packet construction, documentation, checks, coordination and finalGit. Setup recorded separately; no productiveCPU or speedup inference.",
+    "finalCommit": "One normaldate commit; exactOID/shortGit-tail in ignoredfinalreceipt. No tracked postcommit writes."
+  },
+  "setup": {
+    "start": "2026-10-14T16:30:34.760582+00:00",
+    "end": "2026-10-14T16:30:37.297212+00:00",
+    "wallS": 2.5363817090110388,
+    "pid": 36035,
+    "pgid": 36035,
+    "exitCode": 0
+  },
+  "scope": {
+    "workflowSection": "Reviews normal/shared dispatch and immediately adjacent completion guidance",
+    "grossRuntimeLines": 0,
+    "testDelta": 0,
+    "newKinds": [],
+    "fallout": [],
+    "codeOrInfrastructureChange": false
+  },
+  "finding": {
+    "from": "hv-jkcj",
+    "prerequisite": "hv-umm2.673",
+    "cause": "Accessible required read omissions and unsupported requested shell reads recur; explicit full-source packet/terminal actualcoverage prevents accepting a limited report.",
+    "actualWitnesses": [
+      "hv-umm2.670",
+      "hv-umm2.626",
+      "hv-p1ss",
+      "hv-edk7",
+      "hv-qqqe",
+      "hv-umm2.678",
+      "hv-vwcb",
+      "hv-umm2.689"
+    ],
+    "limitedAndCompletedEpochsRetained": true,
+    "routingToolsDeniesColdContextAsyncAcceptancePreserved": true,
+    "noApprovalOrSpeedupClaim": true
+  },
+  "representativePacket": {
+    "base": "18dc3e8002ba7dc9f67c2bf0ac73e769c5e2bb81",
+    "head": "ffb934a3790b226054533217c6d99f7b666da5d8",
+    "actualChangedPaths": 15,
+    "readFirstContextPaths": 7,
+    "packet": "audit/representative-scope-packet.json",
+    "sha256": "f2b08c83ad1aaa0d9316c223c0ec0495c3c0a15faf9e465847dade0e6ac9a815",
+    "sourceLineRangesAndHashesVerified": true,
+    "qualification": "Static scope enumeration on already completed original617 source. No new review/provider/snapshot/testexecution and no invented historical read coverage."
+  },
+  "guidance": {
+    "beforeDispatch": "Immutable packet, exact base/head, requiredchangedmaterial/relevantnormative context, optionalcontext separate; actualauthorizedreadinstructions.",
+    "completion": "Actual complete/partial/unread/denied account and success; sourceinspection separatefromexecutedchecks. Originalpacket retained when source-bound supplement completes unchanged-source coldscope; changedrangeorcontaminatedcontext needs properfreshreview.",
+    "phaseGates": "Fullengine/primitives plus prescribedcontent sample remains.",
+    "grants": "Existing Read/Grep/Glob/narrowGit/configured denies/dontAsk/family/model/async rules unchanged."
+  },
+  "sourcePreservation": {
+    "originalWorkflowSha256": "3ba4e8bec59f9053092da08a1d92be871304650e06f1c061f972842497b307b4",
+    "allOutsideReviewsBytesExact": true,
+    "staticAudit": "audit/static-packet-audit.json"
+  },
+  "validation": {
+    "review": {
+      "start": "2026-10-14T16:36:08.162780+00:00",
+      "end": "2026-10-14T16:36:08.488724+00:00",
+      "wallS": 0.3259781670058146,
+      "exit": 0,
+      "receipt": "audit/review.json"
+    },
+    "knip": {
+      "start": "2026-10-14T16:36:08.489081+00:00",
+      "end": "2026-10-14T16:36:14.273246+00:00",
+      "wallS": 5.784243583009811,
+      "exit": 0,
+      "receipt": "audit/knip.json"
+    },
+    "schema": {
+      "start": "2026-10-14T16:36:14.273591+00:00",
+      "end": "2026-10-14T16:36:14.341881+00:00",
+      "wallS": 0.06833162499242462,
+      "exit": 0,
+      "receipt": "audit/schema.json"
+    },
+    "whitespace": {
+      "start": "2026-10-14T16:36:14.342217+00:00",
+      "end": "2026-10-14T16:36:14.352329+00:00",
+      "wallS": 0.010151624999707565,
+      "exit": 0,
+      "receipt": "audit/whitespace.json"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual first ordinary documentation review friction-records step; sourceinspection/staticpacket proof is separate from codechecks.",
+        "at": "2026-10-14T16:36:08.369Z",
+        "load": 12.8603515625
+      }
+    }
+  },
+  "resources": {
+    "browserRequired": false,
+    "fullRequired": false,
+    "coldCodeReviewRequired": false,
+    "ownedRuntimeRemaining": []
+  },
+  "limits": "A source-packet recipe is a guidance improvement; no measured reduction in reviewer latency or failure rates is asserted. Prior reviewers/findings/settled obligations preserved."
+}

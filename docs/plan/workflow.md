@@ -1089,6 +1089,31 @@ under the session's scratch directory. It is created with
 `git worktree add --detach` (read-only use, like `wt-sequence`'s review
 snapshots) and removed when the review returns.
 
+Before dispatch, save an immutable **required-scope packet** in the session's
+scratch directory, bound to the full base and head OIDs and the review
+snapshot. Derive the changed-path inventory from that exact diff. Enumerate
+the required changed code, tests, rules/RDs and evidence, plus the mandatory
+read-first documents and relevant normative sections. List optional context
+separately. The packet follows the bead's acceptance and current phase review
+policy; phase gates keep their full engine/primitive scope and prescribed
+content sample. Include the packet's path in the prompt, without author
+conversation or prior findings in a fresh reviewer's initial context.
+
+Make each required input readable with the reviewer's authorized tools.
+For long files, give the full required line ranges and request successive
+reads through their end. A path list or a truncated first chunk is not a
+completed read. Required historical material can be copied to scratch from
+its exact source object with provenance recorded by the dispatcher. For the
+Claude recipe, instruct individual `Read`, `Grep` and `Glob` calls and simple
+granted Git commands; do not request shell `cat`, loops, chained commands or
+ungranted Git forms. Keep the existing tool grants and configured denies.
+
+The reviewer returns a scope account before its findings: each required path
+or section is complete, partial or unread, with any denied read identified.
+It distinguishes source inspection from checks actually run. The dispatcher
+checks that account against the packet, actual read coverage and a successful
+terminal result; a no-findings sentence alone does not establish complete scope.
+
 **During the temporary override, every session reviews with Codex. Under
 normal routing, Claude Code sessions review with Codex:**
 
@@ -1102,6 +1127,9 @@ architecture issues, brittle tests, missing coverage for changed behavior, or
 duplication likely to diverge. For each finding cite file and line, explain the
 concrete failure mode, and why it belongs to this change. If none, say so.
 
+Required-scope packet: <immutable scratch packet path bound to base/head>
+Read every required input and report complete/partial/unread coverage and any
+denied required read before findings. Use the authorized tools for this recipe.
 Request: <bead title + acceptance criteria + relevant docs/plan page section>
 Repository instructions: AGENTS.md, docs/plan/README.md, docs/plan/engine-design.md
 EOF
@@ -1128,6 +1156,15 @@ scratch inputs, and the named review skills. Preserve configured denies and
 `dontAsk`; the reviewer has no Write/Edit tool or mutating Git grant. A report
 with a denied required read or an incomplete diff is scope-limited and does
 not satisfy the review. Inspect those fields before accepting the result.
+
+When required scope is incomplete on an unchanged range, the same cold
+reviewer may finish the missing reads using the packet or a source-bound
+supplement. Retain the original packet, initial limited result and completion
+receipts, verify the completed scope, and
+disposition the findings against the exact source. Once the scope is complete,
+its correctness review satisfies the obligation without another approval or
+repeat review. A changed base/head or a contaminated cold context requires a
+proper fresh review of the changed range.
 
 The review output lands in the session's scratch directory, outside any
 worktree.
