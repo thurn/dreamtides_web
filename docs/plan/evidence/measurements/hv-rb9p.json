@@ -1,0 +1,630 @@
+{
+  "bead": "hv-rb9p",
+  "base": "3cf50d1fcc8dfaaca34300f33779c8367dd52dad",
+  "dispatch": "2026-10-14T05:34:02.821454+00:00",
+  "evidenceCutoff": "2026-10-14T06:59:01.022377+00:00",
+  "elapsedThroughCutoffS": 5098.200923,
+  "gitCompletion": "UNKNOWN at evidence cutoff. The helper external Git receipt records actual completion and <=60s cutoff tail; no future result or review is claimed here.",
+  "sourceAdmission": "Native primary-source-write-admission.json, conditional-source-and-qa-admission.json and test-and-driver-source-write-admission.json ACK before each exact body/path write; parent retains actual native receipts.",
+  "implementation": {
+    "bodies": [
+      "floating.keptWithoutSource resolved numeric spark class only",
+      "effectStarted.redact existing numeric sourceLeavesPlay expiry-identity guard, after unchanged captured sparkSeenBy branch",
+      "triggers-redaction sourced predicate detects actual non-null causal identity; single public Spark scalar projection exact metadata; original hidden source, queued/payable/noLegalTarget, reload and printing controls retained"
+    ],
+    "publicConsumer": "New197line/26case coherent synthetic contract module discovered by existing contracts.test.ts glob; no entrypoint/registration edit",
+    "sourceFiles": {
+      "src/engine/rules/floating.ts": {
+        "sha256": "4a270784cc00e0eb8b1f9d21db8b518bd5818128beb551e84ae811bb9abd942d",
+        "lines": 222
+      },
+      "src/engine/events/kinds/effect-started.ts": {
+        "sha256": "0ee024835e85666a2791bfb5b776037bf47648c7bf4bbcabb9e765f63f11c917",
+        "lines": 78
+      },
+      "src/engine/triggers/triggers-redaction.test.ts": {
+        "sha256": "b5aa4f52ba4f3e84867d0aa11161939d3285992092d23e11bd305f7c87220ce1",
+        "lines": 221
+      },
+      "src/engine/effects/primitives/contracts/temporary-public-spark-retention.contracts.ts": {
+        "sha256": "f6da32a106d2b3e3b76ef8fab79df5813387d96d735ae6e0450ec024d5819a3d",
+        "lines": 197
+      },
+      "docs/plan/engine-design.md": {
+        "sha256": "5ea6413e2717076dcab7ef2bb452c545ac516714ad9aac6e6d814dd08cf7aaf9",
+        "lines": 2770
+      }
+    },
+    "unchanged": [
+      "Creation-time sparkSeenBy causal observer policy and raw historical source IDs",
+      "Permanent status.gainedSpark storage and remembered expiry.never boundary",
+      "Actual source lifetime/duration rules, target privacy and view/determinization schema",
+      "Copied spell priority and normal intent flow",
+      "UI runtime, catalogs, policy, shared QA drivers and configuration"
+    ]
+  },
+  "proofs": {
+    "initialRuntime": "One bounded read-only diagnostic executed16synthetic cases on unchanged source. Real two copied numeric gains/modifiers change subject7 while both viewer samples show1; later opposing real response has no<=2removal but samples gaini9/i1. Visible original targets a different subject; both copy sources truly ceased. Hidden source controls showreal4/opposingsample1, ownercorrect; no printing or physical source disclosure.",
+    "postClassifierGuard": "Actual real source departure into shuffled deck leaves targeti2 public. Newly public legacy effectStarted e2 returns source:null with unidentifiable expiry.source:i1 for both controllers. Corrected focused run2expectedlegacyfail/2gainobserverpass; first exact quoted-value title filter selectedzero and is not a passing proof.",
+    "counterfactuals": {
+      "oldClass": "4 direct copied opposing Interrupt cases fail with extra sampled removal, both forms/controllers; exact fixed bytes restored and SHA checked in finally.",
+      "missingGuard": "2legacy expiry identity leak cases fail,2capturedgain observer controls pass; exact guard fixed bytes restored/SHA checked in finally."
+    },
+    "controls": "Visible original/visible source-bound effects; two ceased copies; unknown-source printing swap/same-view seeded sample; hidden target omission; sourceLeavesPlay expiry privacy; permanent physical gain and permanent modifiers never snapshots; both controllers/viewers; saved state and real parsed fold restart equality; repeatedprojection immutable stateHash; endingboundary Spark1/removal eligibility restored.",
+    "initialAggregate": "3 expectations in existing source-kind-only trigger-redaction assertions failed against correctly public scalar source:null; exact native test migration preserves all privacy controls and asserts complete public scalar metadata. This is changed-contract fallout, not a pre-existing issue or waiver.",
+    "failurePaths": {
+      "errorMidStep": "No new state transition or I/O; classifier is total boolean over existing discriminated data. Existing 648 real injected post-gain rollback and recovery test retained and rerun. New obligations tested only through real successful engine writes.",
+      "Interrupt": "New direct copied-source opposing response legality cases fail on old classifier.",
+      "restart": "New serialized state/parsed saved fold equality, retention and expiry after fresh fold adapter.",
+      "partialWrite": "Pure read-only projection/classification does not write persisted state; no newly introduced transaction/partial-write path. Repeat stateHash assertions cover mutation. Existing fold atomicity remains public regression consumer.",
+      "invalidOrStale": "No input schema/action/prompt acceptance changes. Existing648 wrong-side illegalAnswer stalePrompt notCancellable and duplicate answer tests retained and rerun.",
+      "concurrentActors": "No shared mutable actor state introduced; both-controller/viewer cases and immutable repeated projections cover this change. Existing648 stepInFlight rejection retained and rerun."
+    }
+  },
+  "validation": {
+    "public-spark-diagnostic": {
+      "start": "2026-10-14T05:38:52.621805+00:00",
+      "command": [
+        "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/sparkRetention-next/public-spark-diagnostic.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p",
+      "pid": 38656,
+      "pgid": 38656,
+      "exit": 0,
+      "wallSeconds": 2.220534374995623,
+      "end": "2026-10-14T05:38:54.842371+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "legacy-expiry-witness": {
+      "start": "2026-10-14T05:44:09.688679+00:00",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps departed modifier source expiry identity private"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p",
+      "purpose": "Actual postclassification legacy departure guard witness; expected failure retained",
+      "pid": 8453,
+      "pgid": 8453,
+      "exit": 0,
+      "wallSeconds": 7.154981875006342,
+      "end": "2026-10-14T05:44:16.843761+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "legacy-expiry-witness-corrected": {
+      "start": "2026-10-14T05:44:27.826675+00:00",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "expiry identity private"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p",
+      "purpose": "Corrected broad title match; prior exact filter selected zero tests, not a passing witness",
+      "pid": 8839,
+      "pgid": 8839,
+      "exit": 1,
+      "wallSeconds": 5.452929417020641,
+      "end": "2026-10-14T05:44:33.279682+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "counterfactual-old-classifier": {
+      "name": "counterfactual-old-classifier",
+      "start": "2026-10-14T05:56:22.592680+00:00",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "opposing Interrupt legality"
+      ],
+      "pid": 88307,
+      "pgid": 88307,
+      "exit": 1,
+      "restoredSHA256": "4a270784cc00e0eb8b1f9d21db8b518bd5818128beb551e84ae811bb9abd942d",
+      "expectedFixedSHA256": "4a270784cc00e0eb8b1f9d21db8b518bd5818128beb551e84ae811bb9abd942d",
+      "wallSeconds": 5.324993165995693,
+      "end": "2026-10-14T05:56:27.917860+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "counterfactual-missing-expiry-guard": {
+      "name": "counterfactual-missing-expiry-guard",
+      "start": "2026-10-14T05:56:36.848248+00:00",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "expiry identity private"
+      ],
+      "pid": 88664,
+      "pgid": 88664,
+      "exit": 1,
+      "restoredSHA256": "0ee024835e85666a2791bfb5b776037bf47648c7bf4bbcabb9e765f63f11c917",
+      "expectedFixedSHA256": "0ee024835e85666a2791bfb5b776037bf47648c7bf4bbcabb9e765f63f11c917",
+      "wallSeconds": 5.017208667006344,
+      "end": "2026-10-14T05:56:41.865643+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "focused-existing-fixed": {
+      "name": "focused-existing-fixed",
+      "start": "2026-10-14T05:56:49.231861+00:00",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/determinize-loops.test.ts",
+        "src/engine/view/hidden-card-status.test.ts",
+        "src/engine/view/static-play-permissions.test.ts"
+      ],
+      "pid": 89114,
+      "pgid": 89114,
+      "exit": 0,
+      "wallSeconds": 11.920675125002163,
+      "end": "2026-10-14T05:57:01.152807+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "review": {
+      "name": "review",
+      "start": "2026-10-14T05:57:35.922520+00:00",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 90254,
+      "pgid": 90254,
+      "exit": 1,
+      "wallSeconds": 68.82295199998771,
+      "end": "2026-10-14T05:58:44.746693+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "knip": {
+      "name": "knip",
+      "start": "2026-10-14T05:59:29.489898+00:00",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 93125,
+      "pgid": 93125,
+      "exit": 0,
+      "wallSeconds": 5.872223333019065,
+      "end": "2026-10-14T05:59:35.362393+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "schema": {
+      "name": "schema",
+      "start": "2026-10-14T05:59:35.362899+00:00",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 95850,
+      "pgid": 95850,
+      "exit": 0,
+      "wallSeconds": 0.13270175000070594,
+      "end": "2026-10-14T05:59:35.495616+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "focused-final-source": {
+      "name": "focused-final-source",
+      "start": "2026-10-14T06:25:36.748965+00:00",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/triggers/triggers-redaction.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/view.test.ts"
+      ],
+      "pid": 85710,
+      "pgid": 85710,
+      "exit": 0,
+      "wallSeconds": 13.200894165987847,
+      "end": "2026-10-14T06:25:49.950187+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "review-final-source": {
+      "name": "review-final-source",
+      "start": "2026-10-14T06:25:49.950530+00:00",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 86051,
+      "pgid": 86051,
+      "exit": 0,
+      "wallSeconds": 60.755239374993835,
+      "end": "2026-10-14T06:26:50.706730+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "managed-qa-1": {
+      "name": "managed-qa-1",
+      "start": "2026-10-14T06:32:53.681080+00:00",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p/artifacts/qa/hv-rb9p/public-spark-retention-judged.mjs",
+        "--bead",
+        "hv-rb9p",
+        "--viewports",
+        "desktop,mobile",
+        "--port",
+        "5174",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p",
+      "pid": 93399,
+      "pgid": 93399,
+      "exit": 1,
+      "wallSeconds": 54.55711362499278,
+      "end": "2026-10-14T06:33:48.239176+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "managed-qa-2": {
+      "name": "managed-qa-2",
+      "start": "2026-10-14T06:37:06.636006+00:00",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p/artifacts/qa/hv-rb9p/public-spark-retention-judged.mjs",
+        "--bead",
+        "hv-rb9p",
+        "--viewports",
+        "desktop,mobile",
+        "--port",
+        "5174",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p",
+      "pid": 98660,
+      "pgid": 98660,
+      "exit": 1,
+      "wallSeconds": 63.321835665992694,
+      "end": "2026-10-14T06:38:09.958952+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "managed-qa-3": {
+      "name": "managed-qa-3",
+      "start": "2026-10-14T06:39:55.794683+00:00",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p/artifacts/qa/hv-rb9p/public-spark-retention-judged.mjs",
+        "--bead",
+        "hv-rb9p",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "reuseDesktop=1",
+        "--port",
+        "5174",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p",
+      "pid": 30953,
+      "pgid": 30953,
+      "exit": 1,
+      "wallSeconds": 45.43879079198814,
+      "end": "2026-10-14T06:40:41.234310+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "managed-qa-4": {
+      "name": "managed-qa-4",
+      "start": "2026-10-14T06:42:02.402658+00:00",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p/artifacts/qa/hv-rb9p/public-spark-retention-judged.mjs",
+        "--bead",
+        "hv-rb9p",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "reuseDesktop=1",
+        "--port",
+        "5174",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p",
+      "pid": 32971,
+      "pgid": 32971,
+      "exit": 1,
+      "wallSeconds": 48.966765958000906,
+      "end": "2026-10-14T06:42:51.356552+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "managed-qa-5": {
+      "name": "managed-qa-5",
+      "start": "2026-10-14T06:43:59.802254+00:00",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p/artifacts/qa/hv-rb9p/public-spark-retention-judged.mjs",
+        "--bead",
+        "hv-rb9p",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "reuseDesktop=1",
+        "--port",
+        "5174",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p",
+      "pid": 34843,
+      "pgid": 34843,
+      "exit": 0,
+      "wallSeconds": 126.73186837500543,
+      "end": "2026-10-14T06:46:06.534150+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "managed-qa-expiry-capture": {
+      "name": "managed-qa-expiry-capture",
+      "start": "2026-10-14T06:49:04.829751+00:00",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p/artifacts/qa/hv-rb9p/public-spark-retention-judged.mjs",
+        "--bead",
+        "hv-rb9p",
+        "--viewports",
+        "mobile",
+        "--arg",
+        "onlyNumeric=1",
+        "--arg",
+        "captureExpiredOnly=1",
+        "--port",
+        "5174",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p",
+      "pid": 39822,
+      "pgid": 39822,
+      "exit": 0,
+      "wallSeconds": 32.9443562089873,
+      "end": "2026-10-14T06:49:37.774269+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    },
+    "full-heavy": {
+      "name": "full-heavy",
+      "start": "2026-10-14T06:51:08.145571+00:00",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/public-spark-retention-rb9p",
+      "hostLoad": 4.7119140625,
+      "qualification": "Literal outer D17 lock; wall includes admission/startup. Pure lock wait not independently measured; no inferred wait or performance claim.",
+      "pid": 41937,
+      "pgid": 41937,
+      "exit": 0,
+      "wallSeconds": 264.05885891697835,
+      "end": "2026-10-14T06:55:32.204925+00:00",
+      "collected": true,
+      "processGroupAbsent": true
+    }
+  },
+  "fullScope": {
+    "testFiles": 380,
+    "tests": 7784,
+    "outcome": "PASS lint/typecheck/typecheck-node/import-cycles/Knip/friction schema/fulltests/productionbundle developmentmodule exclusion",
+    "heavyCommand": [
+      "lockf",
+      "-k",
+      "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "npm",
+      "run",
+      "review:full"
+    ],
+    "outerWallS": 264.05885891697835,
+    "firstObservedPrepare": "2026-10-14T06:53:37.714Z",
+    "workerConfiguration": "vitest.config.ts defaults JOURNEY_TEST_WORKERS to2 and clamps availableParallelism; inherited environment currently None",
+    "admissionQualification": "Outer wall includes heavy admission/startup/checks; pure lock wait not independently measured and no throughput/performance claim made.",
+    "localFuzz": "Not run: staged mode, neither fuzzer nor step runner changed. Foreign664 retains its weighted300/sweep acceptance."
+  },
+  "qa": {
+    "fullInvocation": "run-6fndg3",
+    "stateWorkflowCases": 6,
+    "callCount": 12,
+    "outcome": "PASS desktop/mobile numeric human and supported scripted enemy plus actual FieldReverent hidden-deck baseSpark workflow; allactive+expiry states, both-viewer publicprojection/sampling/actionparity, exact IDs/controller/amount/expiry, rendered status count/Spark, numeric geometry andCaps.",
+    "productionUUIDs": {
+      "copy": {
+        "id": "fb967cc1-4199-4a08-8070-724e07cebea5",
+        "leaf": "src/content/cards/entropy-cascade-fb967cc1.ts",
+        "behavior": "3energy; next event this turn copied twice; no cost filter; delayed trigger consumed once"
+      },
+      "spark": {
+        "id": "3cda9dd7-cb81-43c1-9db5-1444d7363e13",
+        "leaf": "src/content/cards/spirit-bond-3cda9dd7.ts",
+        "behavior": "7energy; untilEndOfTurn numeric Spark modification all own characters, locked count of own characters"
+      },
+      "subject": {
+        "id": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+        "leaf": "src/content/cards/aspiring-guardian-66959155.ts",
+        "behavior": "vanilla character Spark1, no triggers/statics/activation"
+      },
+      "base": {
+        "id": "4f7cb174-6324-46a8-9973-44adfa7fef9f",
+        "leaf": "src/content/cards/field-reverent-4f7cb174.ts",
+        "behavior": "activation energyX minimum0; all own character baseSparkX untilEndOfTurn"
+      },
+      "return": {
+        "id": "25173cac-333f-4efc-9a03-b532d5783419",
+        "leaf": "src/content/cards/stratospheric-voyage-25173cac.ts",
+        "behavior": "2energy Interrupt; return chosen anyCharacter to its controller hand, gain2energy"
+      },
+      "shuffle": {
+        "id": "3725379c-676d-4efd-81ee-7e45d80db6d0",
+        "leaf": "src/content/cards/fragments-of-vision-3725379c.ts",
+        "behavior": "1energy Interrupt; draw3 then choose2hand cards to shuffle into own deck; also unused enemy marker to hold real human response"
+      },
+      "excluded": "No pending foreign664 Dreamsigns, no Cosmonaut cost-filter mismatch, no new test catalog injection"
+    },
+    "enemyRefinement": "Secrets6f0b709d-0f57-46de-bfba-6a8b4df2b991 cost1/no-draw marker; exact11initialenergy pays3+7+1 to0. Normalvalidated initialphysical enemyScript refs; human passes genuine responsewindows. No forced prompt answers or illegalplay.",
+    "privacyQualification": "Formerly public Fieldprinting may remain in authorized anonymous memory. Actual sourcephysicalID is absent current visibleinstances and retained targetrecord, whose source:null; no global knownUUID absence assertion. Copies printing remains legitimately public on original invoid.",
+    "persistedLogs": {
+      "desktop": [
+        {
+          "case": "numeric-player",
+          "rowsRead": 54,
+          "qualification": "Complete persisted rows carried before navigation, not separately exported first-two-game JSONL files"
+        },
+        {
+          "case": "numeric-enemy",
+          "rowsRead": 64,
+          "qualification": "Complete persisted rows carried before navigation, not separately exported first-two-game JSONL files"
+        },
+        {
+          "case": "base-hidden-player",
+          "rowsRead": 82,
+          "qualification": "Complete persisted rows carried before navigation, not separately exported first-two-game JSONL files"
+        }
+      ],
+      "mobile": [
+        {
+          "case": "numeric-player",
+          "rowsRead": 54,
+          "qualification": "Complete persisted rows carried before navigation, not separately exported first-two-game JSONL files"
+        },
+        {
+          "case": "numeric-enemy",
+          "rowsRead": 64,
+          "qualification": "Complete persisted rows carried before navigation, not separately exported first-two-game JSONL files"
+        },
+        {
+          "case": "base-hidden-player",
+          "rowsRead": 80,
+          "qualification": "Complete persisted rows carried before navigation, not separately exported first-two-game JSONL files"
+        }
+      ]
+    },
+    "autoFullExports": {
+      "desktop": 82,
+      "mobile": 80,
+      "qualification": "Only eachviewport lastbasegame automaticfullJSONL; typed raweffectStarted/cardCopied from eagerprobe, not invented persisted rows. ActualpersistedLOAD_STATE/debugload/action/prompt/trigger/effectEnded/return/RNG verified."
+    },
+    "captures": [
+      {
+        "file": "numeric-player-active-desktop.png",
+        "invocation": "run-fQMNtL",
+        "pixels": "2880x1800",
+        "judgment": "Three clear durationicons andSpark4; unobscured phasecontrol/status. Reused same frozenproduction sourceframe; finaldesktop workflowrerun independentlypassed."
+      },
+      {
+        "file": "numeric-player-active-mobile.png",
+        "invocation": "run-6fndg3",
+        "pixels": "780x1688",
+        "judgment": "Three clear durationicons andSpark4, phasecontrol/resources visible."
+      },
+      {
+        "file": "numeric-enemy-active-mobile.png",
+        "invocation": "run-6fndg3",
+        "pixels": "780x1688",
+        "judgment": "Far-side durationcolumn/Spark4 clear during legitimate response; passcontrol/energy unobscured."
+      },
+      {
+        "file": "base-hidden-player-active-mobile.png",
+        "invocation": "run-6fndg3",
+        "pixels": "780x1688",
+        "judgment": "Public target single durationicon/Spark5 clear with source actually indeck, phasecontrol/resources visible."
+      },
+      {
+        "file": "numeric-player-expired-mobile.png",
+        "invocation": "run-I82JwB",
+        "pixels": "780x1688",
+        "judgment": "After radialannouncement absent, targetSpark1 and no durationicons visible; actualclearchangedstate."
+      }
+    ],
+    "captureCorrection": {
+      "initialVisualFail": "run-6fndg3 numeric-player-expired-mobile caught transient OpponentTurn radialannouncement coveringtarget. Keptfailedimage/row; no product/layoutmutation.",
+      "targetedInvocation": "run-I82JwB",
+      "actualCases": 1,
+      "calls": "Two realnumeric gameplaysteps plus4carry-onlyno-ops, notsix additionalgamecases",
+      "result": "PASS normalstateworkflow/logs andclear replacementimage; no additionalactiveimages taken. Five finalmeaningfulframes; oneextra historicalunexpectedocclusionimage retained."
+    },
+    "incompleteRuns": [
+      "run-q7YRID handtap beforecurrentplaycontrolready/no secondintent",
+      "run-fQMNtL assumedgalleryshufflecandidate; firstnumericdesktopimage retained, laterfailure means desktopresultnull notfullacceptance",
+      "run-DQgPFv rawchooseCards beforedrawpresentation rendered; surface:null/answerable:false/no i5hit",
+      "run-AsIv3q targeteffects correct but finalphasecontrolstilldisabled duringpresentationclose"
+    ],
+    "ledger": {
+      "rows": 12,
+      "pass": 7,
+      "fail": 5
+    },
+    "cleanup": "Everymanagedrunreturnedcertaincallresponse/normalbrowserclose andownedservercleanup; runner/serverprocess groups observedabsent, no ownprovider/serverrecord remains. Foreign670 replacementrecord wasidentified/preserved duringone boundary. No uncertainRPC/restart/foreigncleanup.",
+    "qualificationCorrection": "Source-free no-browser inference superseded becauseactualengineStatuses consumes retainedspark/baseSpark as visible durationbadges. NativeexactfocusedQA dischargedruntimepresentation, includingancestorstuw existingstatuspath; no historicalQA fabricated."
+  },
+  "frictionWindows": {
+    "scopeAdmission": {
+      "start": "2026-10-14T06:01:03.930632+00:00",
+      "end": "2026-10-14T06:24:17.097255+00:00",
+      "minutes": 23.219443716666667,
+      "qualification": "Coupled source-free existing-test/productionQA proposal through exactnativeadmission; includesparentread-only investigation/coordination andwait, notproductiveedit time."
+    },
+    "qaScripting": {
+      "start": "2026-10-14T06:32:53.681080+00:00",
+      "end": "2026-10-14T06:49:37.774269+00:00",
+      "minutes": 16.734886483333334,
+      "qualification": "Coupled firstmanagedbrowserlaunch through finalclearcapture/settlement; includes all incompleteattempts, read-only diagnosis, recipefixes and waits, notCPUtime."
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "full-heavy firstobservedprepare 2026-10-14T06:53:37.714Z load3.85107421875"
+      }
+    }
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": [],
+  "fallout": [],
+  "review": "Mandatory cold normal Claude Opus5.5 review is parent-owned after actual helper FINAL; not yet claimed."
+}

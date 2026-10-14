@@ -87,9 +87,9 @@ describe("trigger subjects hidden from a side", () => {
 /** The event kinds that name an ability's source. */
 const SOURCED_KINDS: readonly EngineEvent["kind"][] = ["triggerQueued", "triggerResolved", "effectStarted", "payableEffectRegistered", "noLegalTarget", "winConditionMet"];
 
-/** Whether `entry` names an ability's source. */
+/** Whether `entry` identifies an ability's source, rather than redacting it. */
 function sourced(entry: EngineEvent): boolean {
-  return SOURCED_KINDS.includes(entry.kind);
+  return SOURCED_KINDS.includes(entry.kind) && namedSources(entry).some(source => source !== null);
 }
 
 /** The sources the `kind` events in `events` name, in order. */
@@ -114,7 +114,7 @@ describe("trigger sources hidden from a side", () => {
     });
   const cards = [L.anywhereDelayed.id, L.anywherePayable.id, L.anywhereDissolveOwn.id];
 
-  it("shows a deck card's triggers to its holder without the card, hides its effect from it, and shows the opponent none of them", () => {
+  it("redacts hidden deck sources and retains their public numeric Spark change", () => {
     const { state, ids } = deckSetup();
     const hidden = ids.enemy.deck.slice(0, 3);
     const result = play(state, "player", ids.player.hand[0]);
@@ -129,8 +129,10 @@ describe("trigger sources hidden from a side", () => {
     expect(sourcesOf(enemy, "triggerResolved")).toEqual([null, null, null]);
     expect(sourcesOf(enemy, "payableEffectRegistered")).toEqual([null]);
     expect(sourcesOf(enemy, "noLegalTarget")).toEqual([null]);
-    // A floating effect from a source its holder cannot see is not in its view, and the event would name the card.
-    expect(enemy.some((entry) => entry.kind === "effectStarted")).toBe(false);
+    // The public scalar carries its exact metadata without identifying the hidden causal source.
+    const publicSpark = result.events.filter(entry => entry.kind === "effectStarted" && entry.change.kind === "spark");
+    expect(publicSpark).toHaveLength(1);
+    expect(enemy.filter(entry => entry.kind === "effectStarted")).toEqual(publicSpark.map(entry => ({ ...entry, source: null })));
     expect(seenBy(result.events, "player", result.state).some(sourced)).toBe(false);
     for (const viewer of SIDES) {
       const named = strings([seenBy(result.events, viewer, result.state), engine.view(result.state, viewer)]);

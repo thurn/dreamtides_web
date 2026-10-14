@@ -61,8 +61,8 @@ export const effectStarted: EventDefinition<EffectStartedEvent> = {
     }
     const changed = changedInstance(event.change);
     if (changed !== null && !identifies(state, changed, viewer)) return null;
-    // A public base-spark setting still keeps its source-dependent expiry identity private.
-    if (event.change.kind === "baseSpark" && event.expiry.at === "sourceLeavesPlay" && !identifies(state, event.expiry.source, viewer)) return null;
+    // Public numeric Spark changes still keep their source-dependent expiry identity private.
+    if ((event.change.kind === "baseSpark" || event.change.kind === "spark") && event.expiry.at === "sourceLeavesPlay" && !identifies(state, event.expiry.source, viewer)) return null;
     const combined = event.change.kind === "disableTriggers" && event.change.mode === "triggeredAndActivated";
     const flags = state.floating.find(effect => effect.id === event.effect)?.sourceObservedBy;
     const observed = !combined || event.source !== null && event.change.kind === "disableTriggers" &&
