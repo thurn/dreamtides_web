@@ -1,0 +1,29 @@
+{
+  "bead": "hv-f6p9",
+  "phase": 5,
+  "implementMin": 28.985233433333335,
+  "implementWindow": {
+    "start": "2026-10-14T04:19:08.573756+00:00",
+    "end": "2026-10-14T04:48:07.687762+00:00"
+  },
+  "localValidationS": {
+    "install": 3.5256866659910884,
+    "baseline": 16.801,
+    "focused": 8.82035983298556,
+    "review": 29.577605917002074,
+    "knip": 3.986877249990357,
+    "setup1": 8.021613459015498,
+    "settle2": 11.083914708986413,
+    "matrix3": 73.6064475000021,
+    "effects4": 126.54392070800532,
+    "observer5": 10.583194249978988,
+    "interactions6": 105.78525491600158
+  },
+  "hostLoad": 11.1,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

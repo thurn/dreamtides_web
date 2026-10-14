@@ -2166,7 +2166,7 @@ const NearHand = memo(function NearHand({
             : interactions?.pendingCardId !== undefined &&
           interactions.pendingCardId !== null
             ? "visible"
-            : "hidden",
+            : "clip",
         display: isDesktop ? "flex" : undefined,
         alignItems: isDesktop ? "flex-start" : undefined,
         justifyContent: isDesktop ? "center" : undefined,
