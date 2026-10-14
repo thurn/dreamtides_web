@@ -1,3 +1,6 @@
+import { enemyCharacter, target, x } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -7,6 +10,7 @@ export default card({
   renderedText: "▸Materialized: Gain control of a ≤X● cost enemy.",
   energyCost: 3,
   energyCosts: ["3", "X"],
+  xMinimum: 0,
   cardType: "Character",
   subtype: "Ancient",
   rarity: "Common",
@@ -19,5 +23,6 @@ export default card({
   cardNumber: 337,
   art: { x: 0.522, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), p.gainControl(target(enemyCharacter({ costAtMost: x() }))))],
+  verifiedText: "1fgajhpmomz",
 });

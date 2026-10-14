@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.675",
+  "phase": 5,
+  "implementMin": 78.42323415000001,
+  "implementWindow": {
+    "start": "2026-10-14T15:32:37.243975+00:00",
+    "end": "2026-10-14T16:51:02.638024+00:00"
+  },
+  "localValidationS": {
+    "review": 55.1095287920034,
+    "focused": 15.204140125017148,
+    "knip": 6.937827041983837,
+    "fuzz": 302.9631152090151,
+    "preflight": 1.8590729579736944,
+    "cardSweep": 295.0930123339931,
+    "judged": 96.67822354199598
+  },
+  "hostLoad": 8.85888671875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 45.7649239,
+      "note": "Cumulative owned QA caller/fixture recovery: serialized closure scope and omitted external supports, DOM settlement/readiness, VM URL scope and game/battle identity, fanned-hand geometry, legitimate AI replay, and reload observation deadline. All failed attempts/guards retained; production source and successful sweep unchanged."
+    }
+  ]
+}

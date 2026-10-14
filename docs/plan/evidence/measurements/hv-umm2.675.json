@@ -1,0 +1,2186 @@
+{
+  "bead": "hv-umm2.675",
+  "status": "Parent verified EVIDENCEREADY and issued COMMITACK; this is the final pre-Git file cutoff, actual Git end is observed externally.",
+  "ownershipWindow": {
+    "start": "2026-10-14T15:32:37.243975+00:00",
+    "basis": "actual parent claim invocation known ownership proxy; model start UNKNOWN",
+    "claimAck": "2026-10-14T15:32:37.621591+00:00",
+    "implementerModelStart": "UNKNOWN",
+    "scope": "gross full owned window including setup, research, parent coordination, checks, heavy/QA queues and evidence through actual Git",
+    "helperDispatch": {
+      "actualDispatchAt": "UNKNOWN",
+      "preDispatchWorktreeVerificationAt": "2026-10-14T15:33:15.368791+00:00",
+      "source": "Parent-provided actual observed prehelper worktree verification; distinct from dispatch or model execution start."
+    },
+    "finalPreGitCutoff": "2026-10-14T16:51:02.638024+00:00",
+    "grossToPreGitCutoffMin": 78.42323415000001
+  },
+  "source": {
+    "cardIds": [
+      "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+      "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d"
+    ],
+    "base": "aa4d2dc3c8516f7f13e2a820c977c5e1ed8d3f2a",
+    "nonTestAdded": 14,
+    "nonTestRemoved": 2,
+    "newPrimitives": [],
+    "D20": {
+      "scenarioAdded": false,
+      "reason": "Pure composition already covered by return-stack-card coupled primitive contracts and public synthetic action proof; no behavior beyond composing existing forms."
+    },
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "fallout": []
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "successful npm run review invocation at start; provided external wrapper os.getloadavg()[0]"
+      },
+      "implementWindow": {
+        "startBasis": "Actual parent claim invocation known ownership proxy at15:32:37.243975Z; claim acknowledgment15:32:37.621591Z separately recorded. Implementer dispatch/model start unavailable and UNKNOWN. Gross includes all setup/research/coordination/queues/checks/heavy/QA/recovery/evidence to Git.",
+        "endBasis": "Final pre-Git file cutoff proxy refreshed within60s of Git invocation; exact actual Git end and gross ownership-through-Git-end retained in external commit receipt/native parent delivery."
+      }
+    }
+  },
+  "validation": {
+    "actualleaf-proof": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/675/helper/actualleaf-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+      "start": "2026-10-14T15:51:02.500974+00:00",
+      "end": "2026-10-14T15:51:05.028795+00:00",
+      "pid": 78999,
+      "pgid": 78999,
+      "exitCode": 0,
+      "wallSeconds": 2.527841208007885,
+      "cpuSeconds": {
+        "user": 2.342906,
+        "system": 1.121232
+      },
+      "startLoad": [
+        12.58056640625,
+        10.9423828125,
+        11.37841796875
+      ],
+      "endLoad": [
+        12.58056640625,
+        10.9423828125,
+        11.37841796875
+      ]
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+      "start": "2026-10-14T15:51:05.052830+00:00",
+      "end": "2026-10-14T15:51:20.257029+00:00",
+      "pid": 79127,
+      "pgid": 79127,
+      "exitCode": 0,
+      "wallSeconds": 15.204140125017148,
+      "cpuSeconds": {
+        "user": 18.928226,
+        "system": 2.542989
+      },
+      "startLoad": [
+        12.58056640625,
+        10.9423828125,
+        11.37841796875
+      ],
+      "endLoad": [
+        11.63916015625,
+        10.8134765625,
+        11.32421875
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+      "start": "2026-10-14T15:51:51.136282+00:00",
+      "end": "2026-10-14T15:52:46.246159+00:00",
+      "pid": 81917,
+      "pgid": 81917,
+      "exitCode": 0,
+      "wallSeconds": 55.1095287920034,
+      "cpuSeconds": {
+        "user": 154.797784,
+        "system": 16.02705
+      },
+      "startLoad": [
+        8.85888671875,
+        10.21044921875,
+        11.08642578125
+      ],
+      "endLoad": [
+        8.05908203125,
+        9.771484375,
+        10.86669921875
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+      "start": "2026-10-14T15:53:34.843787+00:00",
+      "end": "2026-10-14T15:53:41.781617+00:00",
+      "pid": 87998,
+      "pgid": 87998,
+      "exitCode": 0,
+      "wallSeconds": 6.937827041983837,
+      "cpuSeconds": {
+        "user": 4.499076,
+        "system": 1.713836
+      },
+      "startLoad": [
+        7.2314453125,
+        9.25537109375,
+        10.60986328125
+      ],
+      "endLoad": [
+        7.52880859375,
+        9.24755859375,
+        10.5908203125
+      ]
+    },
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "4ef8b2e7-3525-4c25-aa30-f751467f182f,95d37f76-eb3d-4bcd-a8af-0ae37feabd4d"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+      "start": "2026-10-14T15:51:52.291785+00:00",
+      "end": "2026-10-14T15:51:54.150835+00:00",
+      "pid": 82057,
+      "pgid": 82057,
+      "exitCode": 0,
+      "wallSeconds": 1.8590729579736944,
+      "cpuSeconds": {
+        "user": 1.515902,
+        "system": 0.623939
+      },
+      "startLoad": [
+        8.4697265625,
+        10.10693359375,
+        11.04443359375
+      ],
+      "endLoad": [
+        8.4697265625,
+        10.10693359375,
+        11.04443359375
+      ]
+    },
+    "workflow-preflight3": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/675/helper/workflow-preflight.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+      "start": "2026-10-14T15:54:16.904721+00:00",
+      "end": "2026-10-14T15:54:19.291601+00:00",
+      "pid": 90609,
+      "pgid": 90609,
+      "exitCode": 0,
+      "wallSeconds": 2.386916082992684,
+      "cpuSeconds": {
+        "user": 1.647843,
+        "system": 0.876427
+      },
+      "startLoad": [
+        7.97216796875,
+        9.1953125,
+        10.517578125
+      ],
+      "endLoad": [
+        7.97216796875,
+        9.1953125,
+        10.517578125
+      ]
+    },
+    "fuzz": {
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "4ef8b2e7-3525-4c25-aa30-f751467f182f,95d37f76-eb3d-4bcd-a8af-0ae37feabd4d"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+      "start": "2026-10-14T15:51:53.465948+00:00",
+      "end": "2026-10-14T15:56:56.431090+00:00",
+      "pid": 82150,
+      "pgid": 82150,
+      "exitCode": 0,
+      "wallSeconds": 302.9631152090151,
+      "cpuSeconds": {
+        "user": 321.227721,
+        "system": 3.283101
+      },
+      "startLoad": [
+        8.4697265625,
+        10.10693359375,
+        11.04443359375
+      ],
+      "endLoad": [
+        4.845703125,
+        7.34765625,
+        9.5419921875
+      ]
+    },
+    "workflow-preflight8": {
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/675/helper/workflow-preflight.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+      "start": "2026-10-14T16:37:43.609512+00:00",
+      "end": "2026-10-14T16:37:47.569968+00:00",
+      "pid": 35389,
+      "pgid": 35389,
+      "exitCode": 0,
+      "wallSeconds": 3.960525290982332,
+      "cpuSeconds": {
+        "user": 1.703632,
+        "system": 1.222082
+      },
+      "startLoad": [
+        18.01904296875,
+        16.79931640625,
+        15.017578125
+      ],
+      "endLoad": [
+        18.01904296875,
+        16.79931640625,
+        15.017578125
+      ]
+    }
+  },
+  "coverage": {
+    "scope": "both exact authored UUIDs; full coverage gate primitive/verifiedText/status and printed-energy checks passed; global Phase5 pending set remains separately owned",
+    "focused": {
+      "files": 2,
+      "tests": 3865
+    },
+    "review": {
+      "files": 247,
+      "tests": 6515
+    }
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 104755,
+    "failures": 0,
+    "feasibilityBounds": {
+      "legality": 0,
+      "prompts": 4
+    },
+    "targetCoverage": [
+      {
+        "uuid": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+        "included": 611,
+        "exercised": 111
+      },
+      {
+        "uuid": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+        "included": 621,
+        "exercised": 379
+      }
+    ]
+  },
+  "preflight": {
+    "allAvailableVariants": true,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "declaredCells": 40,
+    "pass": 22,
+    "skip": 18,
+    "pending": 0,
+    "fail": 0
+  },
+  "D21": {
+    "sample": [
+      {
+        "uuid": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+        "firstByte": 180,
+        "sampled": false
+      },
+      {
+        "uuid": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+        "firstByte": 28,
+        "sampled": false
+      }
+    ],
+    "newKinds": [],
+    "requiredJudgments": 0,
+    "proportionateWorkflowQA": "All4 known workflows on desktop/mobile passed; 8 optional judged rows appended after final fullclosure/release. Mandatory D21 sampled/new-kind judgments0."
+  },
+  "reviewRouting": {
+    "coreReview": false,
+    "normalReviewThreshold": "14 added and 2 removed non-test source lines, below >100; no new primitive/prompt/core-review label",
+    "phaseGateReview": "retained by normal Phase5 final gate"
+  },
+  "externalObserverFailures": [
+    {
+      "label": "workflow-preflight",
+      "cause": "Node observer omitted existing public withHistory scene boundary; external observer repaired using actual withHistory API",
+      "retained": true
+    },
+    {
+      "label": "workflow-preflight2",
+      "cause": "transient incorrect public import name in external observer; repaired to actual withHistory export",
+      "retained": true
+    }
+  ],
+  "resources": {
+    "remaining": [],
+    "cleanup": "Each native runner awaited owned server/group, provider/browser/RPC/SDK and lease cleanup. Actual native completion/port-free plus independent absence checks retained. Provider closure inferred from unchanged native protocol; no separate closure event invented.",
+    "birthAndClosure": [
+      {
+        "label": "judged",
+        "mainPid": 26308,
+        "mainPgid": 26308,
+        "serverPid": null,
+        "port": null,
+        "start": "2026-10-14T16:14:17.707992+00:00",
+        "end": "2026-10-14T16:14:17.925910+00:00",
+        "exitCode": 2
+      },
+      {
+        "label": "judged2",
+        "mainPid": 73447,
+        "mainPgid": 73447,
+        "serverPid": 74078,
+        "port": 5274,
+        "start": "2026-10-14T16:14:43.007762+00:00",
+        "end": "2026-10-14T16:14:58.807829+00:00",
+        "exitCode": 1
+      },
+      {
+        "label": "judged3",
+        "mainPid": 79018,
+        "mainPgid": 79018,
+        "serverPid": 79055,
+        "port": 5274,
+        "start": "2026-10-14T16:18:55.663559+00:00",
+        "end": "2026-10-14T16:19:09.738983+00:00",
+        "exitCode": 1
+      },
+      {
+        "label": "judged5",
+        "mainPid": 54180,
+        "mainPgid": 54180,
+        "serverPid": 54227,
+        "port": 5174,
+        "start": "2026-10-14T16:23:45.371885+00:00",
+        "end": "2026-10-14T16:24:14.472260+00:00",
+        "exitCode": 1
+      },
+      {
+        "label": "judged6",
+        "mainPid": 70105,
+        "mainPgid": 70105,
+        "serverPid": 70152,
+        "port": 5174,
+        "start": "2026-10-14T16:28:04.272680+00:00",
+        "end": "2026-10-14T16:29:56.126612+00:00",
+        "exitCode": 1
+      },
+      {
+        "label": "judged7",
+        "mainPid": 6891,
+        "mainPgid": 6891,
+        "serverPid": 6939,
+        "port": 5174,
+        "start": "2026-10-14T16:34:15.144582+00:00",
+        "end": "2026-10-14T16:35:21.636656+00:00",
+        "exitCode": 1
+      },
+      {
+        "label": "judged8",
+        "mainPid": 41800,
+        "mainPgid": 41800,
+        "serverPid": 41850,
+        "port": 5174,
+        "start": "2026-10-14T16:38:58.730458+00:00",
+        "end": "2026-10-14T16:39:53.312573+00:00",
+        "exitCode": 1
+      },
+      {
+        "label": "judged9",
+        "mainPid": 13840,
+        "mainPgid": 13840,
+        "serverPid": 13888,
+        "port": 5274,
+        "start": "2026-10-14T16:42:31.508101+00:00",
+        "end": "2026-10-14T16:44:08.188254+00:00",
+        "exitCode": 0
+      }
+    ],
+    "finalOwnedGroupsGone": [
+      13840,
+      13888
+    ],
+    "finalPort5274Free": true
+  },
+  "remaining": [
+    "Single authorized Git invocation and its actual external receipt; parent certified delivery follows."
+  ],
+  "qa": {
+    "sweep": {
+      "actual": {
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.675",
+          "--cards",
+          "4ef8b2e7-3525-4c25-aa30-f751467f182f,95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+          "--port",
+          "5174"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+        "start": "2026-10-14T16:09:07.268422+00:00",
+        "end": "2026-10-14T16:14:02.359026+00:00",
+        "pid": 73245,
+        "pgid": 73245,
+        "exitCode": 0,
+        "wallSeconds": 295.0930123339931,
+        "cpuSeconds": {
+          "user": 10.526447,
+          "system": 4.803558
+        },
+        "startLoad": [
+          16.92041015625,
+          9.42919921875,
+          9.63134765625
+        ],
+        "endLoad": [
+          20.26806640625,
+          18.30810546875,
+          13.7783203125
+        ]
+      },
+      "eligiblePass": 22,
+      "ineligibleSkip": 18,
+      "failed": 0,
+      "rawAttempts": 40,
+      "baseAmplifiedCells": 6,
+      "controllers": [
+        "player",
+        "enemy"
+      ],
+      "invocation": "invocations/sweep-rsXxN2",
+      "leaseWaitMs": 8,
+      "leaseYields": 0,
+      "serverPid": 73285,
+      "port": 5274
+    },
+    "workflows": {
+      "actual": {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "artifacts/qa/hv-umm2.675/judged.mjs",
+          "--bead",
+          "hv-umm2.675",
+          "--viewports",
+          "desktop,mobile",
+          "--port",
+          "5174"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+        "start": "2026-10-14T16:42:31.508101+00:00",
+        "end": "2026-10-14T16:44:08.188254+00:00",
+        "pid": 13840,
+        "pgid": 13840,
+        "exitCode": 0,
+        "wallSeconds": 96.67822354199598,
+        "cpuSeconds": {
+          "user": 7.08523,
+          "system": 3.448922
+        },
+        "startLoad": [
+          10.857421875,
+          18.31298828125,
+          16.67724609375
+        ],
+        "endLoad": [
+          7.150390625,
+          15.08251953125,
+          15.59814453125
+        ]
+      },
+      "pass": 8,
+      "caps": [],
+      "mergedCompletedNotes": [
+        {
+          "label": "hv-umm2.675 cosmic completed",
+          "data": {
+            "card": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+            "paidX": 0,
+            "source": "i1",
+            "target": "i10",
+            "gameId": "q4z5f7",
+            "observedRows": 37,
+            "energy": 2,
+            "owner": "enemy",
+            "controller": "player",
+            "exhausted": true,
+            "numberGeometry": {
+              "selector": "[data-testid=\"battle-number-picker-submit\"]",
+              "x": 1142.8125,
+              "y": 597,
+              "width": 97.6875,
+              "height": 42,
+              "right": 1240.5,
+              "bottom": 639,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hit": true,
+              "rank": null
+            },
+            "targetGeometry": null,
+            "boardGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i10\"]",
+              "x": 348,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 437.5,
+              "bottom": 573,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hit": true,
+              "rank": "player-back"
+            },
+            "replay": {
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=4ef8b2e7-3525-4c25-aa30-f751467f182f&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22energy%22%3A5%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000001%22%2C%225e5e5e5e-0000-4000-8000-000000000003%22%2C%225e5e5e5e-0000-4000-8000-000000000004%22%5D%2C%22hand%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=q4z5f7",
+              "gameId": "q4z5f7",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "sameCommitted": true,
+              "source": "i1",
+              "target": "i10"
+            }
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "hv-umm2.675 cosmic completed",
+          "data": {
+            "card": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+            "paidX": 2,
+            "source": "i1",
+            "target": "i11",
+            "gameId": "2frf8t",
+            "observedRows": 56,
+            "energy": 0,
+            "owner": "enemy",
+            "controller": "player",
+            "exhausted": true,
+            "numberGeometry": {
+              "selector": "[data-testid=\"battle-number-picker-submit\"]",
+              "x": 1142.8125,
+              "y": 597,
+              "width": 97.6875,
+              "height": 42,
+              "right": 1240.5,
+              "bottom": 639,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hit": true,
+              "rank": null
+            },
+            "targetGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i11\"]",
+              "x": 348,
+              "y": 183,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 437.5,
+              "bottom": 272.5,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hit": true,
+              "rank": "enemy-back"
+            },
+            "boardGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i11\"]",
+              "x": 348,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 437.5,
+              "bottom": 573,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hit": true,
+              "rank": "player-back"
+            },
+            "replay": {
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=4ef8b2e7-3525-4c25-aa30-f751467f182f&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22energy%22%3A5%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000001%22%2C%225e5e5e5e-0000-4000-8000-000000000003%22%2C%225e5e5e5e-0000-4000-8000-000000000004%22%5D%2C%22hand%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=2frf8t",
+              "gameId": "2frf8t",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "sameCommitted": true,
+              "source": "i1",
+              "target": "i11"
+            }
+          },
+          "at": "desktop#1"
+        },
+        {
+          "label": "hv-umm2.675 veil completed",
+          "data": {
+            "card": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+            "amplified": false,
+            "source": "i1",
+            "target": "i10",
+            "targetCard": "5e5e5e5e-0000-4000-8000-000000000004",
+            "gameId": "pzp9re",
+            "observedRows": 50,
+            "zone": "hand",
+            "controller": "enemy",
+            "owner": "enemy",
+            "effects": [
+              {
+                "controller": "player",
+                "source": "i1",
+                "expiry": {
+                  "at": "never"
+                },
+                "change": {
+                  "kind": "cardCost",
+                  "instance": "i10",
+                  "mode": "increase",
+                  "amount": 2
+                },
+                "id": "e1",
+                "timestamp": 5
+              }
+            ],
+            "opponentEnergy": 0,
+            "turn": {
+              "round": 2,
+              "turnNumber": 5,
+              "active": "enemy",
+              "phase": "dusk",
+              "sideTurns": {
+                "player": 2,
+                "enemy": 3
+              },
+              "extra": false,
+              "lastNormal": "enemy",
+              "extraTurns": [],
+              "challengeLane": null,
+              "beginning": false
+            },
+            "responseGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "x": 705.484375,
+              "y": 732,
+              "width": 128.90625,
+              "height": 180.46875,
+              "right": 834.390625,
+              "bottom": 912.46875,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "centerHit": true,
+              "centerTop": {
+                "tag": "DIV",
+                "id": "",
+                "testId": null,
+                "cardId": null
+              },
+              "actionablePoint": {
+                "x": 709.484375,
+                "y": 822.234375,
+                "insideViewport": true,
+                "top": {
+                  "tag": "DIV",
+                  "id": "",
+                  "testId": null,
+                  "cardId": null
+                }
+              },
+              "matches": [
+                {
+                  "tag": "DIV",
+                  "role": "button",
+                  "disabled": null,
+                  "printing": null
+                }
+              ]
+            },
+            "sourceGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "x": 254.5,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 344,
+              "bottom": 573,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hit": true,
+              "rank": "player-back"
+            },
+            "replay": {
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=95d37f76-eb3d-4bcd-a8af-0ae37feabd4d&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22energy%22%3A8%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000004%22%2C%225e5e5e5e-0000-4000-8000-00000000000e%22%5D%2C%22energy%22%3A3%7D%2C%22enemyScript%22%3A%5B%7B%22kind%22%3A%22play%22%2C%22ref%22%3A%7B%22zone%22%3A%22hand%22%2C%22index%22%3A0%7D%7D%5D%7D&game=pzp9re",
+              "gameId": "pzp9re",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "sameCommitted": true,
+              "source": "i1",
+              "target": "i10"
+            }
+          },
+          "at": "desktop#2"
+        },
+        {
+          "label": "hv-umm2.675 veil completed",
+          "data": {
+            "card": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+            "amplified": true,
+            "source": "i1",
+            "target": "i10",
+            "targetCard": "5e5e5e5e-0000-4000-8000-000000049001",
+            "gameId": "8cx5ie",
+            "observedRows": 49,
+            "zone": "hand",
+            "controller": "enemy",
+            "owner": "enemy",
+            "effects": [
+              {
+                "controller": "player",
+                "source": "i1",
+                "expiry": {
+                  "at": "never"
+                },
+                "change": {
+                  "kind": "cardCost",
+                  "instance": "i10",
+                  "mode": "increase",
+                  "amount": 2
+                },
+                "id": "e1",
+                "timestamp": 5
+              }
+            ],
+            "opponentEnergy": 0,
+            "turn": {
+              "round": 2,
+              "turnNumber": 5,
+              "active": "enemy",
+              "phase": "dusk",
+              "sideTurns": {
+                "player": 2,
+                "enemy": 3
+              },
+              "extra": false,
+              "lastNormal": "enemy",
+              "extraTurns": [],
+              "challengeLane": null,
+              "beginning": false
+            },
+            "responseGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "x": 705.484375,
+              "y": 732,
+              "width": 128.90625,
+              "height": 180.46875,
+              "right": 834.390625,
+              "bottom": 912.46875,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "centerHit": true,
+              "centerTop": {
+                "tag": "DIV",
+                "id": "",
+                "testId": null,
+                "cardId": null
+              },
+              "actionablePoint": {
+                "x": 709.484375,
+                "y": 822.234375,
+                "insideViewport": true,
+                "top": {
+                  "tag": "DIV",
+                  "id": "",
+                  "testId": null,
+                  "cardId": null
+                }
+              },
+              "matches": [
+                {
+                  "tag": "DIV",
+                  "role": "button",
+                  "disabled": null,
+                  "printing": null
+                }
+              ]
+            },
+            "sourceGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "x": 254.5,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 344,
+              "bottom": 573,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hit": true,
+              "rank": "player-back"
+            },
+            "replay": {
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=95d37f76-eb3d-4bcd-a8af-0ae37feabd4d&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22energy%22%3A8%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000049001%22%2C%225e5e5e5e-0000-4000-8000-00000000000e%22%5D%2C%22energy%22%3A4%7D%2C%22enemyScript%22%3A%5B%7B%22kind%22%3A%22play%22%2C%22ref%22%3A%7B%22zone%22%3A%22hand%22%2C%22index%22%3A0%7D%7D%5D%7D&game=8cx5ie",
+              "gameId": "8cx5ie",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "sameCommitted": true,
+              "source": "i1",
+              "target": "i10"
+            }
+          },
+          "at": "desktop#3"
+        },
+        {
+          "label": "hv-umm2.675 cosmic completed",
+          "data": {
+            "card": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+            "paidX": 0,
+            "source": "i1",
+            "target": "i10",
+            "gameId": "omxhqb",
+            "observedRows": 37,
+            "energy": 2,
+            "owner": "enemy",
+            "controller": "player",
+            "exhausted": true,
+            "numberGeometry": {
+              "selector": "[data-testid=\"battle-number-picker-submit\"]",
+              "x": 284.3125,
+              "y": 522.828125,
+              "width": 97.6875,
+              "height": 42,
+              "right": 382,
+              "bottom": 564.828125,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hit": true,
+              "rank": null
+            },
+            "targetGeometry": null,
+            "boardGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i10\"]",
+              "x": 81.265625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 135.125,
+              "bottom": 469.75,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hit": true,
+              "rank": "player-back"
+            },
+            "replay": {
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=4ef8b2e7-3525-4c25-aa30-f751467f182f&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22energy%22%3A5%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000001%22%2C%225e5e5e5e-0000-4000-8000-000000000003%22%2C%225e5e5e5e-0000-4000-8000-000000000004%22%5D%2C%22hand%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=omxhqb",
+              "gameId": "omxhqb",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "sameCommitted": true,
+              "source": "i1",
+              "target": "i10"
+            }
+          },
+          "at": "mobile#0"
+        },
+        {
+          "label": "hv-umm2.675 cosmic completed",
+          "data": {
+            "card": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+            "paidX": 2,
+            "source": "i1",
+            "target": "i11",
+            "gameId": "hhsax6",
+            "observedRows": 58,
+            "energy": 0,
+            "owner": "enemy",
+            "controller": "player",
+            "exhausted": true,
+            "numberGeometry": {
+              "selector": "[data-testid=\"battle-number-picker-submit\"]",
+              "x": 284.3125,
+              "y": 522.828125,
+              "width": 97.6875,
+              "height": 42,
+              "right": 382,
+              "bottom": 564.828125,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hit": true,
+              "rank": null
+            },
+            "targetGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i11\"]",
+              "x": 81.265625,
+              "y": 222.3125,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 135.125,
+              "bottom": 276.171875,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hit": true,
+              "rank": "enemy-back"
+            },
+            "boardGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i11\"]",
+              "x": 81.265625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 135.125,
+              "bottom": 469.75,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hit": true,
+              "rank": "player-back"
+            },
+            "replay": {
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=4ef8b2e7-3525-4c25-aa30-f751467f182f&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22energy%22%3A5%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000001%22%2C%225e5e5e5e-0000-4000-8000-000000000003%22%2C%225e5e5e5e-0000-4000-8000-000000000004%22%5D%2C%22hand%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=hhsax6",
+              "gameId": "hhsax6",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "sameCommitted": true,
+              "source": "i1",
+              "target": "i11"
+            }
+          },
+          "at": "mobile#1"
+        },
+        {
+          "label": "hv-umm2.675 veil completed",
+          "data": {
+            "card": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+            "amplified": false,
+            "source": "i1",
+            "target": "i10",
+            "targetCard": "5e5e5e5e-0000-4000-8000-000000000004",
+            "gameId": "n2qyzz",
+            "observedRows": 49,
+            "zone": "hand",
+            "controller": "enemy",
+            "owner": "enemy",
+            "effects": [
+              {
+                "controller": "player",
+                "source": "i1",
+                "expiry": {
+                  "at": "never"
+                },
+                "change": {
+                  "kind": "cardCost",
+                  "instance": "i10",
+                  "mode": "increase",
+                  "amount": 2
+                },
+                "id": "e1",
+                "timestamp": 5
+              }
+            ],
+            "opponentEnergy": 0,
+            "turn": {
+              "round": 2,
+              "turnNumber": 5,
+              "active": "enemy",
+              "phase": "dusk",
+              "sideTurns": {
+                "player": 2,
+                "enemy": 3
+              },
+              "extra": false,
+              "lastNormal": "enemy",
+              "extraTurns": [],
+              "challengeLane": null,
+              "beginning": false
+            },
+            "responseGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "x": 120.1328125,
+              "y": 664.109375,
+              "width": 149.734375,
+              "height": 209.625,
+              "right": 269.8671875,
+              "bottom": 873.734375,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "centerHit": true,
+              "centerTop": {
+                "tag": "DIV",
+                "id": "",
+                "testId": null,
+                "cardId": null
+              },
+              "actionablePoint": {
+                "x": 124.1328125,
+                "y": 768.921875,
+                "insideViewport": true,
+                "top": {
+                  "tag": "DIV",
+                  "id": "",
+                  "testId": null,
+                  "cardId": null
+                }
+              },
+              "matches": [
+                {
+                  "tag": "DIV",
+                  "role": "button",
+                  "disabled": null,
+                  "printing": null
+                }
+              ]
+            },
+            "sourceGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "x": 23.40625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 77.265625,
+              "bottom": 469.75,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hit": true,
+              "rank": "player-back"
+            },
+            "replay": {
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=95d37f76-eb3d-4bcd-a8af-0ae37feabd4d&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22energy%22%3A8%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000004%22%2C%225e5e5e5e-0000-4000-8000-00000000000e%22%5D%2C%22energy%22%3A3%7D%2C%22enemyScript%22%3A%5B%7B%22kind%22%3A%22play%22%2C%22ref%22%3A%7B%22zone%22%3A%22hand%22%2C%22index%22%3A0%7D%7D%5D%7D&game=n2qyzz",
+              "gameId": "n2qyzz",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "sameCommitted": true,
+              "source": "i1",
+              "target": "i10"
+            }
+          },
+          "at": "mobile#2"
+        },
+        {
+          "label": "hv-umm2.675 veil completed",
+          "data": {
+            "card": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+            "amplified": true,
+            "source": "i1",
+            "target": "i10",
+            "targetCard": "5e5e5e5e-0000-4000-8000-000000049001",
+            "gameId": "wss9cs",
+            "observedRows": 49,
+            "zone": "hand",
+            "controller": "enemy",
+            "owner": "enemy",
+            "effects": [
+              {
+                "controller": "player",
+                "source": "i1",
+                "expiry": {
+                  "at": "never"
+                },
+                "change": {
+                  "kind": "cardCost",
+                  "instance": "i10",
+                  "mode": "increase",
+                  "amount": 2
+                },
+                "id": "e1",
+                "timestamp": 5
+              }
+            ],
+            "opponentEnergy": 0,
+            "turn": {
+              "round": 2,
+              "turnNumber": 5,
+              "active": "enemy",
+              "phase": "dusk",
+              "sideTurns": {
+                "player": 2,
+                "enemy": 3
+              },
+              "extra": false,
+              "lastNormal": "enemy",
+              "extraTurns": [],
+              "challengeLane": null,
+              "beginning": false
+            },
+            "responseGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "x": 120.1328125,
+              "y": 664.109375,
+              "width": 149.734375,
+              "height": 209.625,
+              "right": 269.8671875,
+              "bottom": 873.734375,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "centerHit": true,
+              "centerTop": {
+                "tag": "DIV",
+                "id": "",
+                "testId": null,
+                "cardId": null
+              },
+              "actionablePoint": {
+                "x": 124.1328125,
+                "y": 768.921875,
+                "insideViewport": true,
+                "top": {
+                  "tag": "DIV",
+                  "id": "",
+                  "testId": null,
+                  "cardId": null
+                }
+              },
+              "matches": [
+                {
+                  "tag": "DIV",
+                  "role": "button",
+                  "disabled": null,
+                  "printing": null
+                }
+              ]
+            },
+            "sourceGeometry": {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+              "x": 23.40625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 77.265625,
+              "bottom": 469.75,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hit": true,
+              "rank": "player-back"
+            },
+            "replay": {
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=95d37f76-eb3d-4bcd-a8af-0ae37feabd4d&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22energy%22%3A8%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000049001%22%2C%225e5e5e5e-0000-4000-8000-00000000000e%22%5D%2C%22energy%22%3A4%7D%2C%22enemyScript%22%3A%5B%7B%22kind%22%3A%22play%22%2C%22ref%22%3A%7B%22zone%22%3A%22hand%22%2C%22index%22%3A0%7D%7D%5D%7D&game=wss9cs",
+              "gameId": "wss9cs",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "sameCommitted": true,
+              "source": "i1",
+              "target": "i10"
+            }
+          },
+          "at": "mobile#3"
+        }
+      ],
+      "archivedGameLogs": [
+        {
+          "viewport": "desktop",
+          "gameId": "8cx5ie",
+          "rows": 53,
+          "filename": "judged-desktop.jsonl"
+        },
+        {
+          "viewport": "mobile",
+          "gameId": "wss9cs",
+          "rows": 53,
+          "filename": "judged-mobile.jsonl"
+        }
+      ],
+      "archiveQualification": "Eight individual recipes observed actual gameIds/row counts and retained compact UUID/physical state/geometry/reload metadata in merged notes; JSONL exports only final amplified game per viewport.",
+      "captures": [
+        {
+          "filename": "cosmic-x-zero-picker-desktop.png",
+          "cssWidth": 1440,
+          "cssHeight": 900,
+          "devicePixels": [
+            2880,
+            1800
+          ]
+        },
+        {
+          "filename": "cosmic-control-desktop.png",
+          "cssWidth": 1440,
+          "cssHeight": 900,
+          "devicePixels": [
+            2880,
+            1800
+          ]
+        },
+        {
+          "filename": "veil-amplified-return-desktop.png",
+          "cssWidth": 1440,
+          "cssHeight": 900,
+          "devicePixels": [
+            2880,
+            1800
+          ]
+        },
+        {
+          "filename": "cosmic-control-mobile.png",
+          "cssWidth": 390,
+          "cssHeight": 844,
+          "devicePixels": [
+            780,
+            1688
+          ]
+        },
+        {
+          "filename": "veil-amplified-return-mobile.png",
+          "cssWidth": 390,
+          "cssHeight": 844,
+          "devicePixels": [
+            780,
+            1688
+          ]
+        }
+      ],
+      "visual": "Implementer inspected mobile transferred board and desktop amplified return; parent independently inspected all5 final captures, dimensions and geometry; normal opponent hand fan clipping is existing presentation. Returned amplified lab card visibly displays cost6; no new badge claim."
+    },
+    "attempts": [
+      {
+        "label": "judged",
+        "actual": {
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "judged",
+            "--bead",
+            "hv-umm2.675",
+            "--viewports",
+            "desktop,mobile",
+            "--port",
+            "5174"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+          "start": "2026-10-14T16:14:17.707992+00:00",
+          "end": "2026-10-14T16:14:17.925910+00:00",
+          "pid": 26308,
+          "pgid": 26308,
+          "exitCode": 2,
+          "wallSeconds": 0.21795758401276544,
+          "cpuSeconds": {
+            "user": 0.1535,
+            "system": 0.045165
+          },
+          "startLoad": [
+            21.93212890625,
+            18.76708984375,
+            14.0205078125
+          ],
+          "endLoad": [
+            21.93212890625,
+            18.76708984375,
+            14.0205078125
+          ]
+        },
+        "qualification": "Pre-runtime short-name CLI lookup targeted primary; corrected admitted own-worktree file argument; no resources born."
+      },
+      {
+        "label": "judged2",
+        "actual": {
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "artifacts/qa/hv-umm2.675/judged.mjs",
+            "--bead",
+            "hv-umm2.675",
+            "--viewports",
+            "desktop,mobile",
+            "--port",
+            "5174"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+          "start": "2026-10-14T16:14:43.007762+00:00",
+          "end": "2026-10-14T16:14:58.807829+00:00",
+          "pid": 73447,
+          "pgid": 73447,
+          "exitCode": 1,
+          "wallSeconds": 15.800226332998136,
+          "cpuSeconds": {
+            "user": 5.752596,
+            "system": 2.837646
+          },
+          "startLoad": [
+            21.390625,
+            18.896484375,
+            14.20458984375
+          ],
+          "endLoad": [
+            20.65380859375,
+            18.8525390625,
+            14.27001953125
+          ]
+        },
+        "qualification": "Caller read DOM rank before transfer animation settled; state passed.",
+        "invocation": "run-vGuUbo",
+        "evidenceDir": "invocations/run-vGuUbo",
+        "error": "desktop#0: Error: target on wrong DOM rank\n    at cosmicWorkflow (evalmachine.<anonymous>:1679:182)\n    at async evalmachine.<anonymous>:1710:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 10682
+          }
+        ],
+        "serverPid": 74078,
+        "port": 5274,
+        "slot": 1,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "69x68n",
+            "rows": 36,
+            "filename": "judged-desktop.jsonl"
+          }
+        ]
+      },
+      {
+        "label": "judged3",
+        "actual": {
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "artifacts/qa/hv-umm2.675/judged.mjs",
+            "--bead",
+            "hv-umm2.675",
+            "--viewports",
+            "desktop,mobile",
+            "--port",
+            "5174"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+          "start": "2026-10-14T16:18:55.663559+00:00",
+          "end": "2026-10-14T16:19:09.738983+00:00",
+          "pid": 79018,
+          "pgid": 79018,
+          "exitCode": 1,
+          "wallSeconds": 14.075570624991087,
+          "cpuSeconds": {
+            "user": 5.437926,
+            "system": 2.82042
+          },
+          "startLoad": [
+            16.61376953125,
+            20.06494140625,
+            16.06201171875
+          ],
+          "endLoad": [
+            14.56884765625,
+            19.44091796875,
+            15.9091796875
+          ]
+        },
+        "qualification": "Native VM caller used URL global outside browser context; actual X0 state/DOM/logs passed before caller failed.",
+        "invocation": "run-YecOFs",
+        "evidenceDir": "invocations/run-YecOFs",
+        "error": "desktop#0: ReferenceError: URL is not defined\n    at reload (evalmachine.<anonymous>:1658:94)\n    at async cosmicWorkflow (evalmachine.<anonymous>:1682:69)\n    at async evalmachine.<anonymous>:1713:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 9959
+          }
+        ],
+        "serverPid": 79055,
+        "port": 5274,
+        "slot": 1,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "8a8qs9",
+            "rows": 37,
+            "filename": "judged-desktop.jsonl"
+          }
+        ]
+      },
+      {
+        "label": "judged5",
+        "actual": {
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "artifacts/qa/hv-umm2.675/judged.mjs",
+            "--bead",
+            "hv-umm2.675",
+            "--viewports",
+            "desktop,mobile",
+            "--port",
+            "5174"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+          "start": "2026-10-14T16:23:45.371885+00:00",
+          "end": "2026-10-14T16:24:14.472260+00:00",
+          "pid": 54180,
+          "pgid": 54180,
+          "exitCode": 1,
+          "wallSeconds": 29.10064066600171,
+          "cpuSeconds": {
+            "user": 5.671569,
+            "system": 2.813861
+          },
+          "startLoad": [
+            8.86279296875,
+            13.51025390625,
+            14.115234375
+          ],
+          "endLoad": [
+            9.6259765625,
+            13.22705078125,
+            13.9892578125
+          ]
+        },
+        "qualification": "Veil before hook measured unrelated response button before readiness; prior successful return values were overwritten by later steps, not retained per-step metadata.",
+        "invocation": "run-peRt6A",
+        "evidenceDir": "invocations/run-peRt6A",
+        "error": "desktop#2: Error: unusable geometry {\"selector\":\"[data-battle-phase-next] button\",\"x\":1115.995361328125,\"y\":596.3779296875,\"width\":126.32177734375,\"height\":43.244140625,\"right\":1242.317138671875,\"bottom\":639.6220703125,\"viewport\":{\"width\":1440,\"height\":900},\"hit\":false,\"rank\":null}\n    at checkGeometry (evalmachine.<anonymous>:1657:165)\n    at before (evalmachine.<anonymous>:1691:209)\n    at async Object.playUntil (evalmachine.<anonymous>:1374:36)\n    at async veilWorkflow (evalmachine.<anonymous>:1689:2)\n    at async evalmachine.<anonymous>:1713:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 11675
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 9984
+          },
+          {
+            "viewport": "desktop",
+            "step": 2,
+            "ms": 3539
+          }
+        ],
+        "serverPid": 54227,
+        "port": 5174,
+        "slot": 0,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "6fu4yh",
+            "rows": 38,
+            "filename": "judged-desktop.jsonl"
+          }
+        ]
+      },
+      {
+        "label": "judged6",
+        "actual": {
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "artifacts/qa/hv-umm2.675/judged.mjs",
+            "--bead",
+            "hv-umm2.675",
+            "--viewports",
+            "desktop,mobile",
+            "--port",
+            "5174"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+          "start": "2026-10-14T16:28:04.272680+00:00",
+          "end": "2026-10-14T16:29:56.126612+00:00",
+          "pid": 70105,
+          "pgid": 70105,
+          "exitCode": 1,
+          "wallSeconds": 111.85487037498388,
+          "cpuSeconds": {
+            "user": 6.709333,
+            "system": 2.879231
+          },
+          "startLoad": [
+            14.6533203125,
+            12.529296875,
+            13.35498046875
+          ],
+          "endLoad": [
+            14.1484375,
+            14.23046875,
+            14.0126953125
+          ]
+        },
+        "qualification": "Caller required full fanned hand footprint; actual UI card extends below viewport intentionally. Cosmic completed notes retained.",
+        "invocation": "run-R7pPTw",
+        "evidenceDir": "invocations/run-R7pPTw",
+        "error": "desktop#2: Error: qa.battle Veilpiercer base: stalled: no progress for 45000 ms; last action pass (main) at near:night; {\"at\":\"far:day\",\"prompt\":null,\"window\":\"respond\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"respond\",\"side\":\"player\"},\"pending\":null,\"stack\":1,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":15}}; history near:day > near:dusk > near:night > far:dawn > far:day\n    at fail (evalmachine.<anonymous>:1346:7)\n    at Object.playUntil (evalmachine.<anonymous>:1373:54)\n    at async veilWorkflow (evalmachine.<anonymous>:1690:2)\n    at async evalmachine.<anonymous>:1715:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 36319
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 17942
+          },
+          {
+            "viewport": "desktop",
+            "step": 2,
+            "ms": 53253
+          }
+        ],
+        "serverPid": 70152,
+        "port": 5174,
+        "slot": 0,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "vhi6bi",
+            "rows": 38,
+            "filename": "judged-desktop.jsonl"
+          }
+        ]
+      },
+      {
+        "label": "judged7",
+        "actual": {
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "artifacts/qa/hv-umm2.675/judged.mjs",
+            "--bead",
+            "hv-umm2.675",
+            "--viewports",
+            "desktop,mobile",
+            "--port",
+            "5174"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+          "start": "2026-10-14T16:34:15.144582+00:00",
+          "end": "2026-10-14T16:35:21.636656+00:00",
+          "pid": 6891,
+          "pgid": 6891,
+          "exitCode": 1,
+          "wallSeconds": 66.49263775002328,
+          "cpuSeconds": {
+            "user": 5.827151,
+            "system": 2.977156
+          },
+          "startLoad": [
+            18.509765625,
+            14.52001953125,
+            13.87890625
+          ],
+          "endLoad": [
+            20.1650390625,
+            16.029296875,
+            14.50244140625
+          ]
+        },
+        "qualification": "Normal Veil return succeeded; opponent8energy legitimately replayed the same returned card for its increased cost, invalidating caller final-hand fixture premise.",
+        "invocation": "run-GCSg3F",
+        "evidenceDir": "invocations/run-GCSg3F",
+        "error": "desktop#2: Error: return recipient, variant or permanent physical cost invalid\n    at veilWorkflow (evalmachine.<anonymous>:1696:368)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async evalmachine.<anonymous>:1716:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 37569
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 13594
+          },
+          {
+            "viewport": "desktop",
+            "step": 2,
+            "ms": 11272
+          }
+        ],
+        "serverPid": 6939,
+        "port": 5174,
+        "slot": 0,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "zg4qzj",
+            "rows": 57,
+            "filename": "judged-desktop.jsonl"
+          }
+        ]
+      },
+      {
+        "label": "judged8",
+        "actual": {
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "artifacts/qa/hv-umm2.675/judged.mjs",
+            "--bead",
+            "hv-umm2.675",
+            "--viewports",
+            "desktop,mobile",
+            "--port",
+            "5174"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+          "start": "2026-10-14T16:38:58.730458+00:00",
+          "end": "2026-10-14T16:39:53.312573+00:00",
+          "pid": 41800,
+          "pgid": 41800,
+          "exitCode": 1,
+          "wallSeconds": 54.58102916699136,
+          "cpuSeconds": {
+            "user": 5.688345,
+            "system": 2.877481
+          },
+          "startLoad": [
+            24.37939453125,
+            19.35888671875,
+            16.1484375
+          ],
+          "endLoad": [
+            30.9267578125,
+            21.76513671875,
+            17.2109375
+          ]
+        },
+        "qualification": "Reload15s observer timeout, Caps[]; no load-causality or card failure inferred.",
+        "invocation": "run-4I2A0o",
+        "evidenceDir": "invocations/run-4I2A0o",
+        "error": "desktop#0: Error: same persisted physical battle: TimeoutError: page.waitForFunction: Timeout 14813ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async reload (evalmachine.<anonymous>:1659:255)\n    at async cosmicWorkflow (evalmachine.<anonymous>:1683:69)\n    at async evalmachine.<anonymous>:1717:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 49769
+          }
+        ],
+        "serverPid": 41850,
+        "port": 5174,
+        "slot": 0,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "7ar78u",
+            "rows": 37,
+            "filename": "judged-desktop.jsonl"
+          }
+        ]
+      },
+      {
+        "label": "judged9",
+        "actual": {
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "artifacts/qa/hv-umm2.675/judged.mjs",
+            "--bead",
+            "hv-umm2.675",
+            "--viewports",
+            "desktop,mobile",
+            "--port",
+            "5174"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/x-control-played-returns-675",
+          "start": "2026-10-14T16:42:31.508101+00:00",
+          "end": "2026-10-14T16:44:08.188254+00:00",
+          "pid": 13840,
+          "pgid": 13840,
+          "exitCode": 0,
+          "wallSeconds": 96.67822354199598,
+          "cpuSeconds": {
+            "user": 7.08523,
+            "system": 3.448922
+          },
+          "startLoad": [
+            10.857421875,
+            18.31298828125,
+            16.67724609375
+          ],
+          "endLoad": [
+            7.150390625,
+            15.08251953125,
+            15.59814453125
+          ]
+        },
+        "qualification": "All8workflow recipes passed with per-step notes; only final2 games exported.",
+        "invocation": "run-JABq3r",
+        "evidenceDir": "invocations/run-JABq3r",
+        "error": null,
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 11086
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 9511
+          },
+          {
+            "viewport": "desktop",
+            "step": 2,
+            "ms": 21034
+          },
+          {
+            "viewport": "desktop",
+            "step": 3,
+            "ms": 13247
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 7192
+          },
+          {
+            "viewport": "mobile",
+            "step": 1,
+            "ms": 8317
+          },
+          {
+            "viewport": "mobile",
+            "step": 2,
+            "ms": 10388
+          },
+          {
+            "viewport": "mobile",
+            "step": 3,
+            "ms": 12045
+          }
+        ],
+        "serverPid": 13888,
+        "port": 5274,
+        "slot": 1,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "8cx5ie",
+            "rows": 53,
+            "filename": "judged-desktop.jsonl"
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "wss9cs",
+            "rows": 53,
+            "filename": "judged-mobile.jsonl"
+          }
+        ]
+      }
+    ],
+    "freezeManifests": [
+      {
+        "manifest": "ready-manifest",
+        "createdAt": "2026-10-14T15:59:21.853964+00:00",
+        "sha256": "6bc77cee3dfed43d4faa4cbd39066c1f4be61633e75eb607b6e4459836916ba7",
+        "fileCount": 4915,
+        "externalSupportCount": 0,
+        "qualification": "First manifest omitted external code/support and callback lacked serialized scope; parent rejected before resources."
+      },
+      {
+        "manifest": "ready2-manifest",
+        "createdAt": "2026-10-14T16:06:05.568187+00:00",
+        "sha256": "cfc5ad192c2af065769d025952d2034e10a34a9662cad7be7f283b62dce7e0dd",
+        "fileCount": 4922,
+        "externalSupportCount": 7,
+        "qualification": "First READY had complete repository/caller paths but omitted external coded support, and caller serialized closures depended on outer bindings; parent rejected QA before any resources. Preserve original manifest and preQA release."
+      },
+      {
+        "manifest": "ready3-manifest",
+        "createdAt": "2026-10-14T16:17:44.729239+00:00",
+        "sha256": "94af6954fdc549b4b96ef861c5b5e5c8383c7874e4e69f74cd1a3728b5de4014",
+        "fileCount": 4923,
+        "externalSupportCount": 8,
+        "qualification": "Sweep 22pass18skip valid. Judged2 desktop X0 state passed but geometry inspected immediately after 9ms committed-state settlement; retained caller failure. Parent released fullclosure before bounded geometry settlement repair. Source unchanged."
+      },
+      {
+        "manifest": "ready4-manifest",
+        "createdAt": "2026-10-14T16:21:37.586803+00:00",
+        "sha256": "4576b7c26281e4802e703a22d8703dec22bcdf6e6a9104fd3e017d9d86d719d6",
+        "fileCount": 4926,
+        "externalSupportCount": 11,
+        "qualification": "Sweep 22pass18skip valid. Judged2 early DOM measurement repaired after fullclosure. Judged3 X0 state+DOM+UUIDlogs passed then nativeVM URL reference failed; preserved, fullclosure release preceded bounded browsercontext URL fix. Production unchanged."
+      },
+      {
+        "manifest": "ready5-manifest",
+        "createdAt": "2026-10-14T16:23:06.144042+00:00",
+        "sha256": "552ec508fe7be15aca9e22ac231b80dd422a640eeba90e4a7375337dc31be2b6",
+        "fileCount": 4927,
+        "externalSupportCount": 12,
+        "qualification": "READY4 QA rejected before resources: unsupported equality between saved game ID and engine battle ID, missed by controlled stubs. Parent no-runtime release preceded fix; before/after saved game IDs now compared independently from engine battle ID. Sweep remains22pass18skip, source unchanged."
+      },
+      {
+        "manifest": "ready6-manifest",
+        "createdAt": "2026-10-14T16:27:09.006996+00:00",
+        "sha256": "71a7bd8fa8ce2115ea6547eeaf25ec16430083032fcdfa8e088d4c40f5bc80cb",
+        "fileCount": 4928,
+        "externalSupportCount": 13,
+        "qualification": "Judged5 desktop Cosmic X0+X2 passed; Veil stopped before action because before hook ran before response UI readiness and measured unrelated phase button. Caller now gates b.canPass and actual source-card fullbounds/hit; blocks response pass while waiting for source readiness. Sweep22pass18skip/source unchanged."
+      },
+      {
+        "manifest": "ready7-manifest",
+        "createdAt": "2026-10-14T16:33:21.392895+00:00",
+        "sha256": "4d79453a94374d473ee912fc8ccbb573956eacdc173500b0c59c45079d726ab7",
+        "fileCount": 4929,
+        "externalSupportCount": 14,
+        "qualification": "Judged6 retained desktop Cosmic X0+X2 notes. Veil stalled before action: center/fullbox geometry stricter than documented fanned-hand tap. Bounded diagnosed observer retains first/last matching elements/bounds/center cover and visible in-viewport actionable point; documented native tap plus normal transition accepts hand action. Board/prompt full bounds remain strict. Source/sweep unchanged."
+      },
+      {
+        "manifest": "ready8-manifest",
+        "createdAt": "2026-10-14T16:38:09.829508+00:00",
+        "sha256": "db7bfd47e7af016ef157af4c05f00961dc82f91a7dda2417633b69a7a495a2c8",
+        "fileCount": 4931,
+        "externalSupportCount": 16,
+        "qualification": "Judged7 Veil normalcast/return succeeded; enemy8energy legitimately replayed same returned physical subject, violating fixture final-hand assumption. Actual game log retained. Same public fixture now opponentexact3/4energy, actual opener spends all, public Node proof remains enemyDay0energy returnedhand and5/6cost; browserstrongquiescenthandcheck retained. Source/sweepunchanged."
+      },
+      {
+        "manifest": "ready9-manifest",
+        "createdAt": "2026-10-14T16:41:43.548071+00:00",
+        "sha256": "a2ba786884676ac84e8f232701540c5beab3f80ce8b57b5d9f7c344a8e19c1a9",
+        "fileCount": 4932,
+        "externalSupportCount": 17,
+        "qualification": "Judged8 X0 actualinteraction/UUIDlog reached, reload observer15s timedout Caps[]; no loadcausality asserted. Bounded reloadwait60s plus probe-safe actualhref/game/source/target diagnostics/capture; same URLgame and exactcommittedstate assertions intact. Source/sweep unchanged."
+      }
+    ],
+    "parentControlReceipts": [
+      {
+        "receipt": "preqa-parent-release.json",
+        "observedAt": null,
+        "verdict": null,
+        "checkedFiles": null,
+        "changedFiles": null,
+        "ownedGroupsLive": null,
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "preqa4-parent-release.json",
+        "observedAt": "2026-10-14T16:22:30.148212+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4926,
+        "changedFiles": [],
+        "ownedGroupsLive": null,
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa2-parent-release.json",
+        "observedAt": "2026-10-14T16:16:35.857099+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4922,
+        "changedFiles": [],
+        "ownedGroupsLive": [],
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa3-parent-release.json",
+        "observedAt": "2026-10-14T16:20:06.121498+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4923,
+        "changedFiles": [],
+        "ownedGroupsLive": [],
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa5-parent-release.json",
+        "observedAt": "2026-10-14T16:25:21.982906+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4927,
+        "changedFiles": [],
+        "ownedGroupsLive": [],
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa6-parent-release.json",
+        "observedAt": "2026-10-14T16:31:15.158881+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4928,
+        "changedFiles": [],
+        "ownedGroupsLive": [],
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa7-parent-release.json",
+        "observedAt": "2026-10-14T16:36:42.758253+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4929,
+        "changedFiles": [],
+        "ownedGroupsLive": [],
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa8-parent-release.json",
+        "observedAt": "2026-10-14T16:40:57.994560+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4931,
+        "changedFiles": [],
+        "ownedGroupsLive": [],
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa9-parent-release.json",
+        "observedAt": "2026-10-14T16:45:07.749398+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4932,
+        "changedFiles": [],
+        "ownedGroupsLive": [],
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa-parent-ready2-ack.json",
+        "observedAt": null,
+        "verdict": null,
+        "checkedFiles": null,
+        "changedFiles": null,
+        "ownedGroupsLive": null,
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa-parent-ready3-ack.json",
+        "observedAt": "2026-10-14T16:18:36.500904+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4923,
+        "changedFiles": [],
+        "ownedGroupsLive": null,
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa-parent-ready5-ack.json",
+        "observedAt": "2026-10-14T16:23:34.615396+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4927,
+        "changedFiles": [],
+        "ownedGroupsLive": null,
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa-parent-ready6-ack.json",
+        "observedAt": "2026-10-14T16:27:46.763324+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4928,
+        "changedFiles": [],
+        "ownedGroupsLive": null,
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa-parent-ready7-ack.json",
+        "observedAt": "2026-10-14T16:34:02.490078+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4929,
+        "changedFiles": [],
+        "ownedGroupsLive": null,
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa-parent-ready8-ack.json",
+        "observedAt": "2026-10-14T16:38:46.246465+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4931,
+        "changedFiles": [],
+        "ownedGroupsLive": null,
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      },
+      {
+        "receipt": "qa-parent-ready9-ack.json",
+        "observedAt": "2026-10-14T16:42:18.350775+00:00",
+        "verdict": "pass",
+        "checkedFiles": 4932,
+        "changedFiles": [],
+        "ownedGroupsLive": null,
+        "scope": "Independent parent full-file/path-set/manual-Git and owned-resource guard; normal protocol closure is inferred, no provider-closure event invented."
+      }
+    ],
+    "finalPostguard": {
+      "observedAt": "2026-10-14T16:44:33.103322+00:00",
+      "checkedFiles": 4932,
+      "changedFiles": [],
+      "repositoryExtra": [],
+      "repositoryMissing": [],
+      "supportPathSetUnchanged": true,
+      "headUnchanged": true,
+      "manualGitStatusUnchanged": true,
+      "ownRuntimeCommands": [],
+      "verdict": "pass"
+    },
+    "finalIndependentRelease": {
+      "observedAt": "2026-10-14T16:45:07.749398+00:00",
+      "checkedFiles": 4932,
+      "changedFiles": [],
+      "repositoryExtra": [],
+      "repositoryMissing": [],
+      "supportPathSetUnchanged": true,
+      "headUnchanged": true,
+      "manualGitStatusUnchanged": true,
+      "ownRuntimeCommands": [],
+      "verdict": "pass",
+      "ownedRecords": [],
+      "ownedGroupsLive": [],
+      "port5274Free": true,
+      "verifiedWorkflowNotes": [
+        {
+          "at": "desktop#0",
+          "card": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+          "paidX": 0,
+          "amplified": null,
+          "gameId": "q4z5f7",
+          "observedRows": 37,
+          "replay": true
+        },
+        {
+          "at": "desktop#1",
+          "card": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+          "paidX": 2,
+          "amplified": null,
+          "gameId": "2frf8t",
+          "observedRows": 56,
+          "replay": true
+        },
+        {
+          "at": "desktop#2",
+          "card": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+          "paidX": null,
+          "amplified": false,
+          "gameId": "pzp9re",
+          "observedRows": 50,
+          "replay": true
+        },
+        {
+          "at": "desktop#3",
+          "card": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+          "paidX": null,
+          "amplified": true,
+          "gameId": "8cx5ie",
+          "observedRows": 49,
+          "replay": true
+        },
+        {
+          "at": "mobile#0",
+          "card": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+          "paidX": 0,
+          "amplified": null,
+          "gameId": "omxhqb",
+          "observedRows": 37,
+          "replay": true
+        },
+        {
+          "at": "mobile#1",
+          "card": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+          "paidX": 2,
+          "amplified": null,
+          "gameId": "hhsax6",
+          "observedRows": 58,
+          "replay": true
+        },
+        {
+          "at": "mobile#2",
+          "card": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+          "paidX": null,
+          "amplified": false,
+          "gameId": "n2qyzz",
+          "observedRows": 49,
+          "replay": true
+        },
+        {
+          "at": "mobile#3",
+          "card": "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+          "paidX": null,
+          "amplified": true,
+          "gameId": "wss9cs",
+          "observedRows": 49,
+          "replay": true
+        }
+      ],
+      "archiveQualification": "Only final game each viewport exported; other six games observed metadata in per-step notes. No claim of eight archives.",
+      "release": "Combined sweep and judged QA now closed; manual evidence/capture verification and final commit preparation permitted",
+      "cleanupQualification": "Native exit0 after awaited normal close; no uncertain/reconciliation failure, provider and RPC drain inferred from unchanged native protocol; not separately captured raw provider reply."
+    }
+  },
+  "qaSupportFriction": {
+    "start": "2026-10-14T15:59:21.853964+00:00",
+    "startBasis": "First full READY caller/manifest timestamp; gross elapsed window, not productive authoring estimate.",
+    "end": "2026-10-14T16:45:07.749398+00:00",
+    "scope": "Cumulative own QA caller/fixture preparation, parent coordination, pre-resource rejection, normal failed-run closure/release, bounded repairs and final8-case acceptance. Mandatory fullfreeze/normal cleanup preserved; no card source or shared body repair.",
+    "causes": [
+      "initial external-support manifest omission",
+      "outer callback closures lost by native serialization",
+      "early DOM settlement assumption",
+      "native VM web global misuse",
+      "saved game versus battle identity conflation caught pre-runtime",
+      "unrelated response control readiness",
+      "fanned-hand footprint mistaken for required action geometry",
+      "legitimate AI replay broke final-hand fixture premise",
+      "reload observer deadline"
+    ],
+    "type": "own QA support recovery; not a proven production defect",
+    "qualification": "Gross incident window includes mandated freeze, resource closure, parent coordination, validation and final judgment; not productive editing time. Initial successful sweep time and final pass are separately reported."
+  },
+  "preExistingIssues": [],
+  "finalEvidenceSchema": {
+    "receipt": "schema-evidence-receipt.json",
+    "wallSeconds": 0.12436237497604452,
+    "exitCode": 0
+  },
+  "pendingActualGitReceipt": {
+    "receipt": "commit-receipt.json",
+    "start": "Pending immediately after this cutoff; actual start/end recorded by provided wrapper.",
+    "end": "UNKNOWN until authorized Git",
+    "scope": "commit-receipt.json records actual Git start/end/PID/PG and parent delivery uses gross claim-call-to-actual-Git-end; pre-Git committed window is a cutoff proxy within60s, never labelled actual model execution."
+  }
+}

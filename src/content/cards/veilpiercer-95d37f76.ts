@@ -1,3 +1,6 @@
+import { stackItem } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +23,9 @@ export default card({
   artOwned: false,
   cardNumber: 464,
   isStarter: false,
-  pending: true,
+  abilities: (v) => [triggered(onMaterialized(), p.modifyCardCost(
+    p.returnToHand({ kind: "stackTarget", selector: stackItem({ costAtMost: v.amplified ? 4 : 3 }) }, { toOpponentHand: true }),
+    { increase: 2 },
+  ))],
+  verifiedText: "2bglppjii4e",
 });
