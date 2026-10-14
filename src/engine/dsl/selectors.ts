@@ -227,6 +227,11 @@ export function matchesStackItem(
   if (selector.controller === "you" && item.controller !== controller) return false;
   if (selector.controller === "opponent" && item.controller === controller) return false;
   if (selector.cardType !== undefined && characteristics(state, catalog).of(id).cardType !== selector.cardType) return false;
+  if (selector.costAtMost !== undefined && copiableCostOf(state, catalog, id) > selector.costAtMost) return false;
+  if (selector.sparkAtMost !== undefined) {
+    const spark = characteristics(state, catalog).of(id).spark;
+    if (spark === null || spark > selector.sparkAtMost) return false;
+  }
   if (selector.preventable === true && hasKeyword(state, catalog, id, "cannotBePrevented")) return false;
   return true;
 }

@@ -1,0 +1,2153 @@
+{
+  "bead": "hv-umm2.97",
+  "phase": 5,
+  "recordedUtc": "2026-10-14T00:21:03.018728+00:00",
+  "base": "1c61a0a205d9289b8a9cf34302c2318b3cc7c131",
+  "implementationWindow": {
+    "start": "2026-10-13T23:12:08.485424+00:00",
+    "prospectiveEvidenceEndpoint": "2026-10-14T00:21:03.018728+00:00",
+    "grossElapsedMinutes": 68.9088884,
+    "actualCommitEndUtc": null,
+    "meaning": "Inclusive post-claim dispatch through combined-validation amendment marker, including source-first research, coordination, all checks, QA, parent audits, waits, first commit and generated-inventory conflict recovery. Wall time, not CPU. Actual ensuing amend endpoint retained externally; no future Git endpoint is invented in source."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final successful source review R2 prepare/typecheck phase start, not outer npm invocation start or later snapshot",
+        "sampleUtc": "2026-10-13T23:30:32.495Z",
+        "value": 9.50341796875
+      },
+      "implementWindow.end": {
+        "measuredFor": "Final precommit marker immediately before schema, stage and authorized one Git commit; exact later Git end retained externally for subsequent own carry"
+      },
+      "testDelta": {
+        "meaning": "Two eager plain synthetic contract modules, 151 and235 lines; zero added test entry/runner or jsdom files. Two literal synthetic inventory fixture declarations changed with zero net test lines."
+      }
+    }
+  },
+  "scope": {
+    "entities": [
+      "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+      "6196d53d-a226-490d-a3bb-159a78d1b2b7",
+      "99101fce-f2b4-4032-b999-317ce3e4a6dd"
+    ],
+    "newDSL": "stackSelectorBounds: numeric inclusive costAtMost and sparkAtMost",
+    "newMovementMode": "Existing move to=reposition, one pure destination policy shared with ordinary actions, direct existing reposition step for swaps/merges/events. Unoccupied and abandoned-cost modes preserve behavior.",
+    "originalAllRecipeAcceptanceRetained": true,
+    "D20": "Ordinary primitive composition; no production card-specific scenario module needed. Synthetic group contracts, weighted soak and full browser sweep supply acceptance.",
+    "D21": [
+      {
+        "uuid": "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+        "firstByte": 251,
+        "sampled": false,
+        "newSurface": false
+      },
+      {
+        "uuid": "6196d53d-a226-490d-a3bb-159a78d1b2b7",
+        "firstByte": 105,
+        "sampled": false,
+        "newSurface": false
+      },
+      {
+        "uuid": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+        "firstByte": 247,
+        "sampled": false,
+        "judgedReason": "New defined repositioning effect mode, occupied swaps/exhaustion/Fast Night/reload"
+      }
+    ]
+  },
+  "sourceFirst": {
+    "startMarker": {
+      "recordedUtc": "2026-10-13T23:12:08.485424+00:00",
+      "provisionalPort": 5174,
+      "reserved": false,
+      "bound": false
+    },
+    "sourceACK": "2026-10-13T23:22:04.495253+00:00",
+    "grossMinutes": 9.933497149999999,
+    "scope": "compoundsourcefirst research/importer/nativecoord/proposal+Dune printedterm correction/ladder/delta/admission; not isolatedproductiveediting/CPU",
+    "ruling": "movement-parent-ruling.json",
+    "paths": 20,
+    "actualSourcePhaseNotYetValidated": true,
+    "JSsyntaxFailure": "one parent functions cell rejected SyntaxError before any nestedtools; corrected finite call; no nativeeffect",
+    "originalPreliminaryACK": "nativeonly, never delivered tohelper, superseded beforetrackedwrites"
+  },
+  "rulesRuling": {
+    "bead": "hv-umm2.97",
+    "recordedUtc": "2026-10-13T23:19:41.789654+00:00",
+    "sourceWrites": 0,
+    "ruling": "D10step5: defined Reposition position restrictions, occupied swap/exhausted-front restrictions, printed activation timing replaces ordinary action window; existing generic Move remains same",
+    "supersedes": "premature routine move(self()) interpretation in preliminary admission; no helper WRITEACK delivered/no source effect",
+    "prototype": "20b88e5e5^ src/battle/automation/automation-audit.json exact99101fce says manual/scriptablefalse/onlySupportautomated",
+    "priorRD": "RD96-1 covers only Move-to-unoccupied texts, no valid identicalRepositionprecedent",
+    "Rust": "actual readonly successfulrg no99101fce/Dune/Repositionthis rule; oldMain/reserved rules differ so cannot supply changed restrictions",
+    "MTG": "officialMagicRulespage current2026-09-25 TXT101.1 supports specific card instruction; no positionalmechanic analogue, not authority forDreamtides exact swap/exhaustion",
+    "sourceURL": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260925.txt",
+    "requiredArtifacts": [
+      "docs/rules.md additive currentstate Repositioning by an ability",
+      "RD-hv-umm2.97-1.md",
+      "99101fce-f2b4-4032-b999-317ce3e4a6dd--hv-umm2.97.md"
+    ],
+    "next": "solehelper readonly delta precise existingmove-mode extension; fullcurrentnativeoverlap audit beforefreshsourceACK",
+    "resources": "no trackedwriters/validation/provider/browser/server/candidate"
+  },
+  "ruleArtifactProvenance": [
+    {
+      "filename": "RD-hv-umm2.97-1.md",
+      "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.97-1.md",
+      "sha256": "4fa8c11f503ff3fd380b11b15db5d813081394035fd30e53f120e1421b66721d"
+    },
+    {
+      "filename": "99101fce-f2b4-4032-b999-317ce3e4a6dd--hv-umm2.97.md",
+      "immutablePrintedFieldsPreserved": true
+    }
+  ],
+  "commands": {
+    "97-source-focused": {
+      "name": "97-source-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "stack selector bounds|reposition effect|^move|^prevent"
+      ],
+      "observerPid": 28751,
+      "pid": 28764,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+      "startUtc": "2026-10-13T23:25:25.215694+00:00",
+      "endUtc": "2026-10-13T23:25:32.832176+00:00",
+      "wallS": 7.6165475840098225,
+      "exit": 1,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/97-source-focused.log"
+    },
+    "97-source-focused-r2": {
+      "name": "97-source-focused-r2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "stack selector bounds|reposition effect|^move|^prevent"
+      ],
+      "observerPid": 30290,
+      "pid": 30302,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+      "startUtc": "2026-10-13T23:25:49.336912+00:00",
+      "endUtc": "2026-10-13T23:25:55.423012+00:00",
+      "wallS": 6.086165709013585,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/97-source-focused-r2.log"
+    },
+    "97-source-focused-r3": {
+      "name": "97-source-focused-r3",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/rules/figments.test.ts",
+        "-t",
+        "stack selector bounds|reposition effect|^move|^prevent|reposition|figment"
+      ],
+      "observerPid": 59238,
+      "pid": 59249,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+      "startUtc": "2026-10-13T23:26:45.455161+00:00",
+      "endUtc": "2026-10-13T23:26:51.344936+00:00",
+      "wallS": 5.889832416025456,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/97-source-focused-r3.log"
+    },
+    "97-source-focused-r4": {
+      "name": "97-source-focused-r4",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/rules/figments.test.ts",
+        "-t",
+        "stack selector bounds|reposition effect|^move|^prevent|reposition|figment"
+      ],
+      "observerPid": 64410,
+      "pid": 64422,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+      "startUtc": "2026-10-13T23:27:22.038249+00:00",
+      "endUtc": "2026-10-13T23:27:30.005636+00:00",
+      "wallS": 7.967473458003951,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/97-source-focused-r4.log"
+    },
+    "97-source-inventory": {
+      "name": "97-source-inventory",
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "observerPid": 31204,
+      "pid": 31214,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+      "startUtc": "2026-10-13T23:26:01.430877+00:00",
+      "endUtc": "2026-10-13T23:26:03.759120+00:00",
+      "wallS": 2.3282913750153966,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/97-source-inventory.log"
+    },
+    "97-source-review": {
+      "name": "97-source-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 64830,
+      "pid": 64842,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+      "startUtc": "2026-10-13T23:27:30.069129+00:00",
+      "endUtc": "2026-10-13T23:28:44.830246+00:00",
+      "wallS": 74.76145625000936,
+      "exit": 1,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/97-source-review.log"
+    },
+    "97-source-knip": {
+      "name": "97-source-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "observerPid": 87168,
+      "pid": 87295,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+      "startUtc": "2026-10-13T23:28:03.429360+00:00",
+      "endUtc": "2026-10-13T23:28:10.078544+00:00",
+      "wallS": 6.649240333994385,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/97-source-knip.log"
+    },
+    "97-source-ast-fixtures": {
+      "name": "97-source-ast-fixtures",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts"
+      ],
+      "observerPid": 26394,
+      "pid": 26407,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+      "startUtc": "2026-10-13T23:30:21.665363+00:00",
+      "endUtc": "2026-10-13T23:30:30.168185+00:00",
+      "wallS": 8.502885708992835,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/97-source-ast-fixtures.log"
+    },
+    "97-source-schema": {
+      "name": "97-source-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "observerPid": 27069,
+      "pid": 27079,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+      "startUtc": "2026-10-13T23:30:32.436312+00:00",
+      "endUtc": "2026-10-13T23:30:32.566044+00:00",
+      "wallS": 0.1297732079983689,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/97-source-schema.log"
+    },
+    "97-source-review-r2": {
+      "name": "97-source-review-r2",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 26936,
+      "pid": 26945,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+      "startUtc": "2026-10-13T23:30:31.274604+00:00",
+      "endUtc": "2026-10-13T23:31:42.189840+00:00",
+      "wallS": 70.91554016599548,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/97-source-review-r2.log"
+    },
+    "97-fuzz-locked": {
+      "name": "97-fuzz-locked",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a12e91/611-audit/check-with-resources.py",
+        "97-fuzz-execution",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "0fde04ac-8552-45ce-83a3-5ab2384b36da,6196d53d-a226-490d-a3bb-159a78d1b2b7,99101fce-f2b4-4032-b999-317ce3e4a6dd"
+      ],
+      "startUtc": "2026-10-13T23:35:25.462280+00:00",
+      "observerPid": 48860,
+      "observerPgid": 48860,
+      "loadStart": [
+        9.99169921875,
+        14.68896484375,
+        12.77978515625
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 48870,
+      "pgid": 48860,
+      "exit": 0,
+      "endUtc": "2026-10-13T23:39:29.551228+00:00",
+      "wallS": 244.08983641699888,
+      "terminal": true,
+      "loadEnd": [
+        3.94140625,
+        9.3671875,
+        10.94580078125
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/97-fuzz-locked.log"
+    },
+    "97-fuzz-execution": {
+      "name": "97-fuzz-execution",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "0fde04ac-8552-45ce-83a3-5ab2384b36da,6196d53d-a226-490d-a3bb-159a78d1b2b7,99101fce-f2b4-4032-b999-317ce3e4a6dd"
+      ],
+      "startUtc": "2026-10-13T23:35:25.486267+00:00",
+      "observerPid": 48872,
+      "observerPgid": 48860,
+      "loadStart": [
+        9.99169921875,
+        14.68896484375,
+        12.77978515625
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 48875,
+      "pgid": 48860,
+      "exit": 0,
+      "endUtc": "2026-10-13T23:39:29.547370+00:00",
+      "wallS": 244.06199474999448,
+      "terminal": true,
+      "loadEnd": [
+        3.94140625,
+        9.3671875,
+        10.94580078125
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/97-fuzz-execution.log"
+    },
+    "97-preflight": {
+      "name": "97-preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "0fde04ac-8552-45ce-83a3-5ab2384b36da,6196d53d-a226-490d-a3bb-159a78d1b2b7,99101fce-f2b4-4032-b999-317ce3e4a6dd"
+      ],
+      "startUtc": "2026-10-13T23:39:38.426720+00:00",
+      "observerPid": 59623,
+      "observerPgid": 59623,
+      "loadStart": [
+        3.70556640625,
+        9.22802734375,
+        10.88720703125
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 59633,
+      "pgid": 59623,
+      "exit": 0,
+      "endUtc": "2026-10-13T23:39:39.675510+00:00",
+      "wallS": 1.248826499999268,
+      "terminal": true,
+      "loadEnd": [
+        3.56884765625,
+        9.10791015625,
+        10.8349609375
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/97-preflight.log"
+    },
+    "97-sweep": {
+      "name": "97-sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.97",
+        "--cards",
+        "0fde04ac-8552-45ce-83a3-5ab2384b36da,6196d53d-a226-490d-a3bb-159a78d1b2b7,99101fce-f2b4-4032-b999-317ce3e4a6dd"
+      ],
+      "startUtc": "2026-10-13T23:39:54.980995+00:00",
+      "observerPid": 60244,
+      "observerPgid": 60244,
+      "loadStart": [
+        3.5537109375,
+        8.8388671875,
+        10.70849609375
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 60252,
+      "pgid": 60244,
+      "exit": 0,
+      "endUtc": "2026-10-13T23:45:20.750144+00:00",
+      "wallS": 325.77033329199185,
+      "terminal": true,
+      "loadEnd": [
+        11.86669921875,
+        13.31982421875,
+        12.39599609375
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/97-sweep.log"
+    },
+    "97-dune-judged": {
+      "name": "97-dune-judged",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/97-audit/dune-judged.mjs",
+        "--bead",
+        "hv-umm2.97",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "startUtc": "2026-10-13T23:46:04.296903+00:00",
+      "observerPid": 57829,
+      "observerPgid": 57829,
+      "loadStart": [
+        8.86181640625,
+        12.35546875,
+        12.08349609375
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 57839,
+      "pgid": 57829,
+      "exit": 1,
+      "endUtc": "2026-10-13T23:46:11.594513+00:00",
+      "wallS": 7.297668499988504,
+      "terminal": true,
+      "loadEnd": [
+        8.80224609375,
+        12.2275390625,
+        12.041015625
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/97-dune-judged.log"
+    },
+    "97-dune-judged-r2": {
+      "name": "97-dune-judged-r2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/97-audit/dune-judged-r2.mjs",
+        "--bead",
+        "hv-umm2.97",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "startUtc": "2026-10-13T23:47:38.478180+00:00",
+      "observerPid": 85561,
+      "observerPgid": 85561,
+      "loadStart": [
+        18.19287109375,
+        13.49169921875,
+        12.48388671875
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 85736,
+      "pgid": 85561,
+      "exit": 1,
+      "endUtc": "2026-10-13T23:48:36.430499+00:00",
+      "wallS": 57.952556000003824,
+      "terminal": true,
+      "loadEnd": [
+        13.48974609375,
+        13.0498046875,
+        12.38916015625
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/97-dune-judged-r2.log"
+    },
+    "97-dune-judged-r3": {
+      "name": "97-dune-judged-r3",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/97-audit/dune-judged-r3.mjs",
+        "--bead",
+        "hv-umm2.97",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "startUtc": "2026-10-13T23:51:15.656073+00:00",
+      "observerPid": 78931,
+      "observerPgid": 78931,
+      "loadStart": [
+        9.43212890625,
+        12.5791015625,
+        12.38525390625
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 78944,
+      "pgid": 78931,
+      "exit": 0,
+      "endUtc": "2026-10-13T23:52:22.310836+00:00",
+      "wallS": 66.65503254099167,
+      "terminal": true,
+      "loadEnd": [
+        23.6142578125,
+        15.78857421875,
+        13.578125
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/97-dune-judged-r3.log"
+    },
+    "97-final-schema": {
+      "name": "97-final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startUtc": "2026-10-14T00:03:40.859453+00:00",
+      "observerPid": 33277,
+      "observerPgid": 33277,
+      "loadStart": [
+        14.34765625,
+        11.251953125,
+        12.07568359375
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 33288,
+      "pgid": 33277,
+      "exit": 0,
+      "endUtc": "2026-10-14T00:03:41.001402+00:00",
+      "wallS": 0.1419948340044357,
+      "terminal": true,
+      "loadEnd": [
+        14.34765625,
+        11.251953125,
+        12.07568359375
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/97-final-schema.log"
+    }
+  },
+  "hostLoadSamples": {
+    "97-source-focused": {
+      "startUtc": "2026-10-13T23:25:25.215694+00:00",
+      "endUtc": "2026-10-13T23:25:32.832176+00:00"
+    },
+    "97-source-focused-r2": {
+      "startUtc": "2026-10-13T23:25:49.336912+00:00",
+      "endUtc": "2026-10-13T23:25:55.423012+00:00"
+    },
+    "97-source-focused-r3": {
+      "startUtc": "2026-10-13T23:26:45.455161+00:00",
+      "endUtc": "2026-10-13T23:26:51.344936+00:00"
+    },
+    "97-source-focused-r4": {
+      "startUtc": "2026-10-13T23:27:22.038249+00:00",
+      "endUtc": "2026-10-13T23:27:30.005636+00:00"
+    },
+    "97-source-inventory": {
+      "startUtc": "2026-10-13T23:26:01.430877+00:00",
+      "endUtc": "2026-10-13T23:26:03.759120+00:00"
+    },
+    "97-source-review": {
+      "startUtc": "2026-10-13T23:27:30.069129+00:00",
+      "endUtc": "2026-10-13T23:28:44.830246+00:00"
+    },
+    "97-source-knip": {
+      "startUtc": "2026-10-13T23:28:03.429360+00:00",
+      "endUtc": "2026-10-13T23:28:10.078544+00:00"
+    },
+    "97-source-ast-fixtures": {
+      "startUtc": "2026-10-13T23:30:21.665363+00:00",
+      "endUtc": "2026-10-13T23:30:30.168185+00:00"
+    },
+    "97-source-schema": {
+      "startUtc": "2026-10-13T23:30:32.436312+00:00",
+      "endUtc": "2026-10-13T23:30:32.566044+00:00"
+    },
+    "97-source-review-r2": {
+      "startUtc": "2026-10-13T23:30:31.274604+00:00",
+      "endUtc": "2026-10-13T23:31:42.189840+00:00"
+    },
+    "97-fuzz-locked": {
+      "startUtc": "2026-10-13T23:35:25.462280+00:00",
+      "loadStart": [
+        9.99169921875,
+        14.68896484375,
+        12.77978515625
+      ],
+      "endUtc": "2026-10-13T23:39:29.551228+00:00",
+      "loadEnd": [
+        3.94140625,
+        9.3671875,
+        10.94580078125
+      ]
+    },
+    "97-fuzz-execution": {
+      "startUtc": "2026-10-13T23:35:25.486267+00:00",
+      "loadStart": [
+        9.99169921875,
+        14.68896484375,
+        12.77978515625
+      ],
+      "endUtc": "2026-10-13T23:39:29.547370+00:00",
+      "loadEnd": [
+        3.94140625,
+        9.3671875,
+        10.94580078125
+      ]
+    },
+    "97-preflight": {
+      "startUtc": "2026-10-13T23:39:38.426720+00:00",
+      "loadStart": [
+        3.70556640625,
+        9.22802734375,
+        10.88720703125
+      ],
+      "endUtc": "2026-10-13T23:39:39.675510+00:00",
+      "loadEnd": [
+        3.56884765625,
+        9.10791015625,
+        10.8349609375
+      ]
+    },
+    "97-sweep": {
+      "startUtc": "2026-10-13T23:39:54.980995+00:00",
+      "loadStart": [
+        3.5537109375,
+        8.8388671875,
+        10.70849609375
+      ],
+      "endUtc": "2026-10-13T23:45:20.750144+00:00",
+      "loadEnd": [
+        11.86669921875,
+        13.31982421875,
+        12.39599609375
+      ]
+    },
+    "97-dune-judged": {
+      "startUtc": "2026-10-13T23:46:04.296903+00:00",
+      "loadStart": [
+        8.86181640625,
+        12.35546875,
+        12.08349609375
+      ],
+      "endUtc": "2026-10-13T23:46:11.594513+00:00",
+      "loadEnd": [
+        8.80224609375,
+        12.2275390625,
+        12.041015625
+      ]
+    },
+    "97-dune-judged-r2": {
+      "startUtc": "2026-10-13T23:47:38.478180+00:00",
+      "loadStart": [
+        18.19287109375,
+        13.49169921875,
+        12.48388671875
+      ],
+      "endUtc": "2026-10-13T23:48:36.430499+00:00",
+      "loadEnd": [
+        13.48974609375,
+        13.0498046875,
+        12.38916015625
+      ]
+    },
+    "97-dune-judged-r3": {
+      "startUtc": "2026-10-13T23:51:15.656073+00:00",
+      "loadStart": [
+        9.43212890625,
+        12.5791015625,
+        12.38525390625
+      ],
+      "endUtc": "2026-10-13T23:52:22.310836+00:00",
+      "loadEnd": [
+        23.6142578125,
+        15.78857421875,
+        13.578125
+      ]
+    }
+  },
+  "validationReuse": {
+    "focused": "Final R4 engine contracts125selected/3files, production/test hashes unchanged after runtime",
+    "AST": "Exact independent descriptor fixture suite96pass after two admitted fields",
+    "review": "Final299files6319tests/compile/lint/import cycles pass. Earlier6317of6319 pass and2stale fixture failures retained. Six late-bound cycles, no evaluation-time reads.",
+    "knip": "Pass on final production/import bytes; subsequent two literal test fields and evidence do not add imports/exports, reuse authorized by parent.",
+    "fuzz": "300 weighted all3,125224steps/9064prompts/876interactive re-runs/failures0; targets actually exercised357/262/431",
+    "preflight": "60 default variant/controller cells38pass22ineligible skips0fail",
+    "sweep": "60 default cells38pass22ineligible skips0fail,38raw pass attempts/no retries,12base/amplified/both-controller cells confirmed from raw result.lab.side. Top-level ledger has no side/as.",
+    "judged": "R3 both viewports actual Caps[], paid occupied swaps/forbidden exhausted fronts/Fast Night/same pending reload/cancel unavailable/state/status/UUID event and persisted causal logs.",
+    "noFull": "Bounded optional descriptor, matcher, existing move mode and small policy extraction plus literal fixture data, not cross-cutting architecture/config/runner infrastructure. Required local normal review and acceptance completed; Tollgate certification remains parent-owned."
+  },
+  "runtimeProvenance": {
+    "runtimePacketSHA256": "b44cade52ccf2b5bd022442bf2dadae1159006020651a19d92fc200f721c9732",
+    "frozen17SourceHashesUnchanged": true,
+    "sourceManifest": [
+      {
+        "path": "docs/plan/evidence/content-inventory.json",
+        "sha256": "b432247b6b41f609d684edc0261d9bf9a2455c6715f233dee52cab35fa6a760f",
+        "lines": 9825,
+        "added": 620,
+        "deleted": 630
+      },
+      {
+        "path": "docs/rules.md",
+        "sha256": "9278dace203f923584d187a7eb4fb244b224195fb5eac94ae0bb56c23e4a2832",
+        "lines": 2667,
+        "added": 7,
+        "deleted": 0
+      },
+      {
+        "path": "scripts/content-inventory.test.ts",
+        "sha256": "31120994395c80c1d30cd54a48f2b3ab3e1f421f3478efd7d9f73d2d6608fe35",
+        "lines": 401,
+        "added": 2,
+        "deleted": 2
+      },
+      {
+        "path": "scripts/content-inventory.ts",
+        "sha256": "128f7023ff996a1feb6b95ef14e9f8688cf25ac3bf8d6dc9e78ace1e80d12cad",
+        "lines": 1771,
+        "added": 1,
+        "deleted": 1
+      },
+      {
+        "path": "src/content/cards/dune-interceptor-99101fce.ts",
+        "sha256": "11f6585276426f9a5277db0234c3062f806735c84aaa6a016149566c843a9ee2",
+        "lines": 33,
+        "added": 9,
+        "deleted": 1
+      },
+      {
+        "path": "src/content/cards/null-sphere-6196d53d.ts",
+        "sha256": "5389387af2e177a08506afb5a563b70946a0ba8654d75471730aac776b9e2136",
+        "lines": 26,
+        "added": 5,
+        "deleted": 1
+      },
+      {
+        "path": "src/content/cards/toll-of-passage-0fde04ac.ts",
+        "sha256": "641eb7c392a5489b45fe73da2bdadf07a02e30e5d017d6db98a50dc34d763d1e",
+        "lines": 27,
+        "added": 5,
+        "deleted": 1
+      },
+      {
+        "path": "src/engine/dsl/builders.ts",
+        "sha256": "e269a301e45e0fef71bbc5e8f754ce6b1a7d8299bb23c89a13c77ad21e1bece7",
+        "lines": 529,
+        "added": 8,
+        "deleted": 3
+      },
+      {
+        "path": "src/engine/dsl/selectors.ts",
+        "sha256": "b2e145848330036b89a9e854b0cfb8bbf75116616f055f621b388212799e21e4",
+        "lines": 251,
+        "added": 5,
+        "deleted": 0
+      },
+      {
+        "path": "src/engine/dsl/types.ts",
+        "sha256": "ffe08502c3016067955ef008a1d68949d485887a8b594a4a4c75122b3d87afb7",
+        "lines": 793,
+        "added": 4,
+        "deleted": 0
+      },
+      {
+        "path": "src/engine/effects/primitives/move.ts",
+        "sha256": "90455662a0853eef391e901f4e387708ea190e46935c79c40b1c73d4eef4eeb5",
+        "lines": 66,
+        "added": 16,
+        "deleted": 2
+      },
+      {
+        "path": "src/engine/rules/decision.ts",
+        "sha256": "fcb77be89ba109c2e352da4a277c2bb27ee91bb79241a54648c9e86976e7099d",
+        "lines": 118,
+        "added": 5,
+        "deleted": 33
+      },
+      {
+        "path": "docs/plan/evidence/card-issues/99101fce-f2b4-4032-b999-317ce3e4a6dd--hv-umm2.97.md",
+        "sha256": "e30ae41fdb64887cb513ba7101984c31afe412cb9010b734573e94537430c400",
+        "lines": 4,
+        "added": 4,
+        "deleted": 0
+      },
+      {
+        "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.97-1.md",
+        "sha256": "4fa8c11f503ff3fd380b11b15db5d813081394035fd30e53f120e1421b66721d",
+        "lines": 5,
+        "added": 5,
+        "deleted": 0
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/reposition-effect.contracts.ts",
+        "sha256": "9849505377d7de5c314ffabb02e15338d2aa6838ed7f9e20172816d3a4586739",
+        "lines": 235,
+        "added": 235,
+        "deleted": 0
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/stack-selector-bounds.contracts.ts",
+        "sha256": "99b4191fa488c758d54885c8410660fd62d54f8a4b51dc67dc08f6b12bcb32e6",
+        "lines": 151,
+        "added": 151,
+        "deleted": 0
+      },
+      {
+        "path": "src/engine/rules/reposition.ts",
+        "sha256": "752adaf98e1a7961f5ac5dcd7ec8bb9c7e964b6743018e40d059b3abe66a1f66",
+        "lines": 27,
+        "added": 27,
+        "deleted": 0
+      }
+    ],
+    "fuzz": {
+      "actualGames": 300,
+      "steps": 125224,
+      "prompts": 9064,
+      "interactiveReruns": 876,
+      "failures": 0,
+      "targets": [
+        {
+          "uuid": "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+          "included": 613,
+          "exercised": 357
+        },
+        {
+          "uuid": "6196d53d-a226-490d-a3bb-159a78d1b2b7",
+          "included": 621,
+          "exercised": 262
+        },
+        {
+          "uuid": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+          "included": 614,
+          "exercised": 431
+        }
+      ],
+      "lockBoundaryGapSeconds": 0.023987,
+      "lockBoundaryGapQualification": "includes process startup, not isolated lock contention",
+      "actualWorkers": "unobserved; correct JOURNEY_TEST_WORKERS=2 configured; fuzz itself one seeded-engine process"
+    },
+    "sweepSummary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-oYtgTb",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.97/invocations/sweep-oYtgTb",
+      "counts": {
+        "pass": 38,
+        "skip": 22
+      },
+      "attemptCounts": {
+        "pass": 38,
+        "skip": 22
+      },
+      "hostLoad": 3.5537109375,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1985,
+        "scenario": 322902.06675,
+        "cleanup": 623.1422499999753,
+        "execution": 325588.067875,
+        "total": 325593.067875
+      }
+    },
+    "preflight": {
+      "cells": 60,
+      "pass": 38,
+      "skip": 22,
+      "fail": 0,
+      "defaults": [
+        "base",
+        "amplified",
+        "empowered",
+        "kindled",
+        "resonant",
+        "inspired",
+        "enduring",
+        "hastened",
+        "attuned",
+        "perfected"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/97-preflight.log"
+    },
+    "judgedCalls": [
+      {
+        "viewport": "desktop",
+        "step": 0,
+        "ms": 8493
+      },
+      {
+        "viewport": "desktop",
+        "step": 1,
+        "ms": 8079
+      },
+      {
+        "viewport": "mobile",
+        "step": 0,
+        "ms": 38808
+      },
+      {
+        "viewport": "mobile",
+        "step": 1,
+        "ms": 8343
+      }
+    ],
+    "caps": [],
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "filename": "dune-judged-r3-desktop.jsonl",
+        "invocation": "run-VYiYct",
+        "gameId": "ctpoah",
+        "rows": 64
+      },
+      {
+        "viewport": "mobile",
+        "filename": "dune-judged-r3-mobile.jsonl",
+        "invocation": "run-VYiYct",
+        "gameId": "maek3u",
+        "rows": 68
+      }
+    ],
+    "rawArtifactHashes": [
+      {
+        "invocation": "run-FX2jbm",
+        "filename": "dune-judged.result.json",
+        "bytes": 13897,
+        "sha256": "e40a46d26c6352780b90bfac094d74fcb5b0e7ac28a60fa43db5fda8b9d15681"
+      },
+      {
+        "invocation": "run-FX2jbm",
+        "filename": "dune-judged-desktop.jsonl",
+        "bytes": 18952,
+        "sha256": "c66894ae3d6049c8306cb447e2452cfead7bc8f797e9fba95b10e2cce0ad83ea"
+      },
+      {
+        "invocation": "run-WCYpyA",
+        "filename": "dune-judged-r2.result.json",
+        "bytes": 14477,
+        "sha256": "2ae7ba8f694d7cce7040f9ecd562c288580cc24c91fa073cb15fcaa7482f8d03"
+      },
+      {
+        "invocation": "run-WCYpyA",
+        "filename": "dune-judged-r2-desktop.jsonl",
+        "bytes": 20843,
+        "sha256": "0b92036ae2e75ac66d46e908f3d97fe2d917cad32a3d9a1f99b8b62fc7d0eca0"
+      },
+      {
+        "invocation": "run-VYiYct",
+        "filename": "dune-judged-r3.result.json",
+        "bytes": 63528,
+        "sha256": "953e82a26cdc21dbf338088eac1b8ca77d55daecc58001638fd1e80e60644c67"
+      },
+      {
+        "invocation": "run-VYiYct",
+        "filename": "dune-judged-r3-desktop.jsonl",
+        "bytes": 29578,
+        "sha256": "01f2495653d37962f79d82da2fdf4fa7be91823fe4c1671a786ee1248904c6eb"
+      },
+      {
+        "invocation": "run-VYiYct",
+        "filename": "dune-judged-r3-mobile.jsonl",
+        "bytes": 32492,
+        "sha256": "681f85757f167ae27f5fd7f6af75e0556515db8bea2307d4085c19871faa1fd9"
+      }
+    ],
+    "captures": [
+      {
+        "filename": "dune-night-pending-desktop.png",
+        "invocation": "run-VYiYct",
+        "sha256": "af7fd8cb454d69047bfaff45ee4ca1d0b46b9e4c0c5977b191d7c9c0a9334361",
+        "cssViewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "actualReadDPR": 2,
+        "pngPixels": {
+          "width": 2880,
+          "height": 1800
+        },
+        "dimensionVerification": "PNG image data, 2880 x 1800, 8-bit/color RGB, non-interlaced"
+      },
+      {
+        "filename": "dune-final-desktop.png",
+        "invocation": "run-VYiYct",
+        "sha256": "aa1f94c3f906616dd7c2e60bcad179fff66fced176865b99540768eb1519c2de",
+        "cssViewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "actualReadDPR": 2,
+        "pngPixels": {
+          "width": 2880,
+          "height": 1800
+        },
+        "dimensionVerification": "PNG image data, 2880 x 1800, 8-bit/color RGB, non-interlaced"
+      },
+      {
+        "filename": "dune-night-pending-mobile.png",
+        "invocation": "run-VYiYct",
+        "sha256": "f16f1fee0398d6aa14f237a8c7b555fad1e2e7d2153d447e46e0d9391252e60f",
+        "cssViewport": {
+          "width": 390,
+          "height": 844
+        },
+        "actualReadDPR": 2,
+        "pngPixels": {
+          "width": 780,
+          "height": 1688
+        },
+        "dimensionVerification": "PNG image data, 780 x 1688, 8-bit/color RGB, non-interlaced"
+      },
+      {
+        "filename": "dune-final-mobile.png",
+        "invocation": "run-VYiYct",
+        "sha256": "0cb42ed22197e657463f937a84ca15adab3797c1b85467666e6296c6d41d5552",
+        "cssViewport": {
+          "width": 390,
+          "height": 844
+        },
+        "actualReadDPR": 2,
+        "pngPixels": {
+          "width": 780,
+          "height": 1688
+        },
+        "dimensionVerification": "PNG image data, 780 x 1688, 8-bit/color RGB, non-interlaced"
+      }
+    ],
+    "logsQualification": "Persisted gameLog engine.action+sourceUUID promptOpened+correlatedpromptAnswered reconstruct cause; detailedrepositioned swappedWith comes fromactual qa.battle.events/physicalID-to-UUID map, not nonexistent dedicatedpersistedrecord.",
+    "choiceGridQualification": "Existing scroll grid shows a subset of position rows. Selected occupied F0 is visible, enabled and hittable; no assertion that all rows fit simultaneously. Parent inspected desktop pending and mobile final; helper inspected desktop/mobile pending and mobile final.",
+    "cancelQualification": "Noncancellablepostcommit and noCancelcontrol visible; explicitinvalid/stale/cancelintent rejection pinned syntheticfoldcontracts, not privatebrowser submission.",
+    "normalWindowQualification": "Browser normalDay pass auto-advances enemyDusk and reachesNight withactualFastactivation; ordinaryreposition absence pinned syntheticlegalActions, no nonexistentprobe.actions claim",
+    "geometryByViewport": {
+      "desktop": {
+        "choice": {
+          "enabled": true,
+          "x": 1019,
+          "y": 760,
+          "width": 124,
+          "height": 42,
+          "hit": true,
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          }
+        },
+        "swappedCards": [
+          {
+            "id": "i2",
+            "slot": "F0",
+            "x": 301.25,
+            "y": 390,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            }
+          },
+          {
+            "id": "i1",
+            "slot": "B0",
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            }
+          }
+        ],
+        "exhaustedBackChoice": {
+          "enabled": true,
+          "x": 1151,
+          "y": 610,
+          "width": 124,
+          "height": 42,
+          "hit": true,
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          }
+        }
+      },
+      "mobile": {
+        "choice": {
+          "enabled": true,
+          "x": 21,
+          "y": 781.109375,
+          "width": 110.65625,
+          "height": 42,
+          "hit": true,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          }
+        },
+        "swappedCards": [
+          {
+            "id": "i2",
+            "slot": "F0",
+            "x": 52.328125,
+            "y": 358.03125,
+            "width": 53.859375,
+            "height": 53.859375,
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            }
+          },
+          {
+            "id": "i1",
+            "slot": "B0",
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375,
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            }
+          }
+        ],
+        "exhaustedBackChoice": {
+          "enabled": true,
+          "x": 139.65625,
+          "y": 677.109375,
+          "width": 110.671875,
+          "height": 42,
+          "hit": true,
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          }
+        }
+      }
+    },
+    "sourceQualification": "Historical b520a530/frozen original-source evidence. frozen17SourceHashesUnchanged refers to that runtime workflow, not to byte equality of the later combined base. Combined recovery is qualified separately."
+  },
+  "resourceScope": {
+    "knownOwnedGroups": [
+      48860,
+      57829,
+      57886,
+      59623,
+      60244,
+      60282,
+      78931,
+      78981,
+      85561,
+      86106
+    ],
+    "currentSurvivors": [],
+    "liveSnapshots": [
+      "/tmp/dreamtides-executor-01a12e91/97-audit/sweep-live-resources.json",
+      "/tmp/dreamtides-executor-01a12e91/97-audit/judged-r2-live-resources.json",
+      "/tmp/dreamtides-executor-01a12e91/97-audit/judged-r3-live-resources.json"
+    ],
+    "cleanupProofs": [
+      "/tmp/dreamtides-executor-01a12e91/97-audit/sweep-cleanup-proof.json",
+      "/tmp/dreamtides-executor-01a12e91/97-audit/judged-attempt1-cleanup.json",
+      "/tmp/dreamtides-executor-01a12e91/97-audit/judged-r2-cleanup-proof.json",
+      "/tmp/dreamtides-executor-01a12e91/97-audit/judged-r3-cleanup-proof.json"
+    ],
+    "ownedSlot": 1,
+    "actualStrictPort": 5274,
+    "endpoint": "http://localhost:8931/mcp",
+    "protocol": "2025-11-25",
+    "providerCompletionQualification": "EverymanagedRPC returned actualresult/error; managedrunner closes browser, drainscalls, closestransport, stopsserver andclears exactprovider/server records in normalcleanup. Known exacttokens gone +noownedprocessgroups. No invented standalonehistoricalclosepayload; shortfirstSID unobserved.",
+    "servers": 0,
+    "providers": 0,
+    "contexts": 0,
+    "pendingToolCells": 0
+  },
+  "observerCorrections": {
+    "records": [
+      {
+        "attempt": "97-dune-judged",
+        "verdict": "fail",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.97/invocations/run-FX2jbm/dune-judged.result.json",
+        "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.97/invocations/run-FX2jbm/dune-judged-desktop.jsonl",
+        "reason": "Committedmaterializedpredicate passed, then cardnot hittable; rendered/hit/affordance absentfirstattempt. Animation-onlycause was hypothesis, notproof.29actualgame rows includeplayi4 +4queuedpresentationitems.",
+        "captures": 0,
+        "providerSID": "not sampled in7.3s firstattempt, not guessed"
+      },
+      {
+        "attempt": "97-dune-judged-r2",
+        "verdict": "fail",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.97/invocations/run-WCYpyA/dune-judged-r2.result.json",
+        "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.97/invocations/run-WCYpyA/dune-judged-r2-desktop.jsonl",
+        "reason": "Rendered i4/B2/89.5x89.5/rolebutton, taptrue but no activationrequest/action;45s driverstall. Queuedtravel+notice andactuallegal-affordance map show visible/debugpressable not sufficientcurrentactivationreadiness.",
+        "captures": 0,
+        "providerSID": "dbe8973e-60c2-4099-a9f6-0547fb21aa3e"
+      },
+      {
+        "attempt": "97-dune-judged-r3",
+        "verdict": "pass",
+        "correction": "Boundedexactsource playable-outline (derivedlegalactivation forplay-zone withno otheraction) +probe source/exhausted/pendingnull/stack0, thenoneactualtap. No arbitrarydelay/privatequeueclear/broadretry. ActualBattlePromptHost273-286 normalnotice auto-dismiss timer lets readiness recover; bothviewports complete. Parent earlier explicitdismissrequired hypothesis withdrawn afteractualUI timerread."
+      }
+    ],
+    "grossFirstAttemptStartThroughSuccessfulR3EndMinutes": 6.300232216666667,
+    "meaning": "Compound QA observer setup, two negative readiness observations, inspection, guard correction, provider startup/cleanup and waits; not CPU or isolated editing. Below approximately10minute friction threshold; no manufactured friction tag.",
+    "normalNoticeEvidence": "Current BattlePromptHost.tsx273-286 uses NOTICE_MS auto-dismiss via normal onDismiss. Earlier animation-only and explicit-dismiss-required hypotheses are qualified/withdrawn. R3 actual playable-source guard allowed normal lifecycle, no private queue clear or product code change.",
+    "sourceReviewFixtures": "Initial4focused failures were fixture lookup/merge thirdsubject/deckMods transport errors; subsequent two independent AST fixtures needed admitted sparkAtMost fields. All negative command receipts retained, final successful checks explicit.",
+    "schemaReadCorrections": [
+      "Initial guessed source paths/globs corrected to actual files; not missing-capability evidence.",
+      "First packet builder guessed top-level ledger side/as; external assertion failed before artifact write, actual raw lab.side verified.",
+      "Inventory status comparison initially assumed every entity has status; corrected optional status read, no source/runtime effect."
+    ],
+    "workerConfiguration": "Earlier commands supplied unused JTW_REVIEW_WORKERS=2; actual vitest config JOURNEY_TEST_WORKERS default2/capped availableParallelism, worker threads unobserved. Later runtime commands correctly set JOURNEY_TEST_WORKERS=2. No redundant validation solely for unused env."
+  },
+  "inventoryRefresh": {
+    "normalGenerator": true,
+    "statusRefresh": [
+      {
+        "uuid": "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+        "before": "pending",
+        "after": "authored",
+        "module": "src/content/cards/toll-of-passage-0fde04ac.ts"
+      },
+      {
+        "uuid": "6196d53d-a226-490d-a3bb-159a78d1b2b7",
+        "before": "pending",
+        "after": "authored",
+        "module": "src/content/cards/null-sphere-6196d53d.ts"
+      },
+      {
+        "uuid": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+        "before": "pending",
+        "after": "authored",
+        "module": "src/content/cards/dune-interceptor-99101fce.ts"
+      },
+      {
+        "uuid": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+        "before": "pending",
+        "after": "authored",
+        "module": "src/content/dreamsigns/raven-skull-31df4c62.ts"
+      },
+      {
+        "uuid": "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+        "before": "pending",
+        "after": "authored",
+        "module": "src/content/dreamsigns/brown-acorn-9f34b5f6.ts"
+      },
+      {
+        "uuid": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+        "before": "pending",
+        "after": "authored",
+        "module": "src/content/dreamsigns/blue-crystal-c2af5460.ts"
+      }
+    ],
+    "qualification": "Own3card statuses reflect this change. Three journey Dreamsign leaf modules were already authored at the worktree base; stale generated projection refresh is not foreign leaf editing or new completion credit. Native scope remains exact3cardUUIDs."
+  },
+  "historicalCarryOutsideThisWindow": {
+    "qualification": "Closed source/evidence unchanged; historical corrections only. These windows precede this97dispatch and are not added to implementMin or each other; overlapping611/646 intervals never summed. Statuses in old carry are as of their recorded observation, not current foreign assignment assertions.",
+    "post646FinalCarry": {
+      "carryForward": "next ownsourcebead only; closed611/646 evidence immutable",
+      "utc": "2026-10-13T18:43:27.886637+00:00",
+      "646": {
+        "source": "81caf54956b61f3a6c2982e3400b793b4bc52b2a",
+        "candidate": "01a1368a-4599-7532-9689-d97a3c8dc347",
+        "tested": "34dfc2499e43dc252e00e50e465d27f5f40ac952",
+        "certificate": "01a1368b-d4fa-7b20-8725-d60078ced9a5",
+        "actualCloseEndUtc": "2026-10-13T18:38:42.742338+00:00",
+        "wholeOwnershipMin": 50.5710636,
+        "wallMeaning": "all root/helper research/setup/checks/corrections/nativecoordination/2coldreviews/waits/cancel/amend/promotion/cleanup/close wall NOT CPU",
+        "finalReview": {
+          "observerPid": 41249,
+          "pid": 41262,
+          "startUtc": "2026-10-13T18:33:13.466767+00:00",
+          "endUtc": "2026-10-13T18:35:57.002179+00:00",
+          "wallS": 163.53451258398127,
+          "exit": 0,
+          "terminal": true,
+          "snapshot": "/tmp/dreamtides-executor-01a12e91/review-hv-umm2.646-r2-81caf549",
+          "output": "/tmp/dreamtides-executor-01a12e91/review-hv-umm2.646-r2.md",
+          "log": "/tmp/dreamtides-executor-01a12e91/646-review-r2-cli.log",
+          "model": "gpt-5.6-sol",
+          "sandbox": "read-only",
+          "routing": "temporary same-family user override",
+          "retries": 0
+        },
+        "disposition": "all3in-scopeP1s accepted resolved; finalcold No findings",
+        "finalCommit": {
+          "name": "646-r2-final-commit",
+          "command": [
+            "git",
+            "commit",
+            "--amend",
+            "--file",
+            "/tmp/dreamtides-executor-01a12e91/646-r2-commit-message.txt"
+          ],
+          "startUtc": "2026-10-13T18:31:43.656022+00:00",
+          "observerPid": 35804,
+          "observerPgid": 35789,
+          "loadStart": [
+            8.8701171875,
+            8.35400390625,
+            7.35009765625
+          ],
+          "limits": {
+            "RLIMIT_NPROC": [
+              10666,
+              16000
+            ],
+            "RLIMIT_NOFILE": [
+              1048575,
+              9223372036854775807
+            ],
+            "RLIMIT_CPU": [
+              9223372036854775807,
+              9223372036854775807
+            ]
+          },
+          "configuredVitestWorkers": "2",
+          "actualExecutedWorkerCount": "not independently sampled",
+          "pid": 35806,
+          "pgid": 35789,
+          "exit": 0,
+          "endUtc": "2026-10-13T18:31:43.686492+00:00",
+          "wallS": 0.030505499977152795,
+          "terminal": true,
+          "loadEnd": [
+            8.8701171875,
+            8.35400390625,
+            7.35009765625
+          ],
+          "log": "/tmp/dreamtides-executor-01a12e91/646-r2-final-commit.log"
+        },
+        "releaseAtDelivery": {
+          "lag": {
+            "commits": 1,
+            "since": [
+              2026,
+              286,
+              18,
+              37,
+              31,
+              716227000,
+              0,
+              0,
+              0
+            ]
+          },
+          "release_state": "pending",
+          "release_block_reasons": [],
+          "promotion_pause": null
+        },
+        "observerCorrection": "delivery note malformed18:48? token: actualclaim17:48:08.478522Z; no futureclaim18:48, actualclose18:38:42.742338Z"
+      },
+      "611": {
+        "actualCloseEndUtc": "2026-10-13T18:40:47.027558+00:00",
+        "wholeFlowElapsedMin": 115.96060898333333,
+        "firstClaimReleaseUpperBoundMin": 63.31812505,
+        "acceptanceReclaimWindowMin": 0.7131264666666667,
+        "ordinaryUnassignedDependencyWaitLowerBoundMin": 51.92935746666667,
+        "overlapQualification": "whole flow includes unassigned646repair dependency interval; never sum overallflow with646ownership or count as CPU",
+        "acceptanceProof": "/tmp/dreamtides-executor-01a12e91/611-final-acceptance-join.json",
+        "finalResolution": "completed originalall criteria, ownimmutable5artifacts/rules/export/getter preserved,38reruns valid same-sourcefinalcert"
+      },
+      "648": {
+        "defect": "older ordinary/additional temporary companion suppression",
+        "nativeStatus": "peerclaimed01a13046-4c66-7813-9606-9913f0743415; donteditforeignsource/assignment",
+        "actualWitness": {
+          "name": "646-old-temp-witness",
+          "command": [
+            "./node_modules/.bin/tsx",
+            "/tmp/dreamtides-executor-01a12e91/646-old-temp-witness.mts"
+          ],
+          "observerPid": 45201,
+          "pid": 45210,
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-observers-646",
+          "startUtc": "2026-10-13T18:26:33.080727+00:00",
+          "endUtc": "2026-10-13T18:26:34.054497+00:00",
+          "wallS": 0.9738083749834914,
+          "exit": 0,
+          "terminal": true,
+          "log": "/tmp/dreamtides-executor-01a12e91/646-old-temp-witness.log"
+        },
+        "rootSourceWrites": "none; temp readonly TS uses actual Engine on ownedWT",
+        "repairedHere": false
+      },
+      "queue": "fresh648 and644takenby peers; rootunfinished[]; inspectfreshready before retainednativeawait",
+      "observerSyntaxCorrection": "postclosefunctionsJS malformed workdir property rejected before anynestedtool executed; corrected batching succeeded; no native effects"
+    },
+    "sourceFree266": {
+      "claimStartUtc": "2026-10-13T19:57:44.462423+00:00",
+      "actualReleaseReceipt": {
+        "name": "266-checkpoint-release",
+        "command": [
+          "env",
+          "BEADS_DIR=/Users/dthurn/brain/.beads",
+          "BEADS_DOLT_AUTO_START=0",
+          "BD_NON_INTERACTIVE=1",
+          "BD_NO_HOOKS=true",
+          "bd",
+          "--sandbox",
+          "--dolt-auto-commit",
+          "off",
+          "--actor",
+          "01a12e91-c2c5-7321-b306-fdf0cc7b4ac9",
+          "update",
+          "hv-umm2.266",
+          "--status",
+          "open",
+          "--assignee",
+          "",
+          "--json"
+        ],
+        "observerPid": 5332,
+        "pid": 5336,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-13T20:19:18.641338+00:00",
+        "endUtc": "2026-10-13T20:19:18.759710+00:00",
+        "wallS": 0.11840574999223463,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/266-checkpoint-release.log"
+      },
+      "grossOwnershipMinutes": 21.57162145,
+      "meaning": "Readonly research/coordination/interruption/justiciar checkpoint/cleanup/release, no source commit, candidate or product acceptance completed."
+    },
+    "retainedNativeAwaits10through13": {
+      "10": {
+        "name": "retained-await-10",
+        "command": [
+          "/Users/dthurn/hive/bin/hive",
+          "executor",
+          "await",
+          "--session",
+          "01a12e91-c2c5-7321-b306-fdf0cc7b4ac9",
+          "--json"
+        ],
+        "observerPid": 8475,
+        "pid": 8485,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-13T20:20:27.692486+00:00",
+        "endUtc": "2026-10-13T21:25:28.133861+00:00",
+        "wallS": 3900.395081916009,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/retained-await-10.log"
+      },
+      "11": {
+        "name": "retained-await-11",
+        "command": [
+          "/Users/dthurn/hive/bin/hive",
+          "executor",
+          "await",
+          "--session",
+          "01a12e91-c2c5-7321-b306-fdf0cc7b4ac9",
+          "--json"
+        ],
+        "observerPid": 2524,
+        "pid": 2532,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-13T21:25:55.293160+00:00",
+        "endUtc": "2026-10-13T21:40:36.894566+00:00",
+        "wallS": 881.6085083750077,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/retained-await-11.log"
+      },
+      "12": {
+        "name": "retained-await-12",
+        "command": [
+          "/Users/dthurn/hive/bin/hive",
+          "executor",
+          "await",
+          "--session",
+          "01a12e91-c2c5-7321-b306-fdf0cc7b4ac9",
+          "--json"
+        ],
+        "observerPid": 36649,
+        "pid": 36650,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-13T21:41:02.662217+00:00",
+        "endUtc": "2026-10-13T22:46:03.109905+00:00",
+        "wallS": 3900.413470917003,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/retained-await-12.log"
+      },
+      "13": {
+        "name": "retained-await-13",
+        "command": [
+          "/Users/dthurn/hive/bin/hive",
+          "executor",
+          "await",
+          "--session",
+          "01a12e91-c2c5-7321-b306-fdf0cc7b4ac9",
+          "--json"
+        ],
+        "observerPid": 66389,
+        "pid": 66407,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-13T22:46:21.041066+00:00",
+        "endUtc": "2026-10-13T23:10:06.749505+00:00",
+        "wallS": 1425.6965210829803,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/retained-await-13.log"
+      }
+    }
+  },
+  "pendingParentActions": {
+    "coreReview": "Required fresh cold reviewer not dispatched by helper; actual parent routing at dispatch controls Sol temporary before2026-10-14T01:00Z and normal cross-family afterward",
+    "actualCommit": "First source commit and temporary checkpoint completed; authorized amendment follows this marker. Actual resulting OID/clock external, unknown at source write.",
+    "candidatePromotionReleaseNativeClose": "First candidate terminal merge-conflict recorded in combined recovery; replacement candidate/promotion/release/native close remain parent-owned and pending."
+  },
+  "finalEvidenceChecks": {
+    "schema": "752records/41historical unknowns valid",
+    "JSON": "all own files and64ledger lines parsed",
+    "friction": "eight fields exact",
+    "ledger": "60originalsweep rows byte-preserved,193472bytes SHA884d7fa758750a5f7abc062df3e4e99859474f46ff0a78a68d2918786e6b94ab plus4ownappend",
+    "diffCheck": "git diff --check passed",
+    "source": "Original runtime17 hashes historical; combined post-update preservation snapshot qualified in combinedBaseRecovery.",
+    "recordAuthoringCorrection": "Initial external Python script omitted a space after else in a numeric conditional; parser rejected before any source write. Corrected script ran once and appended4rows once. No runtime/validation/native effect."
+  },
+  "combinedBaseRecovery": {
+    "base": "1c61a0a205d9289b8a9cf34302c2318b3cc7c131",
+    "postUpdateHead": "3b401ea7ca62ae3cc64c031dc455d7041e507d7e",
+    "originalValidatedCommit": "b520a530c56083fcf7c67bff62d5b77b28256f94",
+    "firstCommitReceipt": {
+      "actualGitStart": "2026-10-14T00:12:01.770077Z",
+      "actualGitEnd": "2026-10-14T00:12:01.823535Z",
+      "markerTailSeconds": 0.361999,
+      "inclusiveMinutes": 59.888968516666665
+    },
+    "parentNativeReceipts": {
+      "97-candidate": {
+        "name": "97-candidate",
+        "command": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "candidate",
+          "b520a530c56083fcf7c67bff62d5b77b28256f94"
+        ],
+        "observerPid": 15679,
+        "pid": 15689,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+        "startUtc": "2026-10-14T00:16:13.432314+00:00",
+        "endUtc": "2026-10-14T00:16:16.192438+00:00",
+        "wallS": 2.760126124980161,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/97-candidate.log"
+      },
+      "97-conflict-diagnose": {
+        "name": "97-conflict-diagnose",
+        "command": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "diagnose",
+          "01a137c4-4bd1-7aa3-b868-279482e1973a"
+        ],
+        "observerPid": 17090,
+        "pid": 17093,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-14T00:16:36.136411+00:00",
+        "endUtc": "2026-10-14T00:16:36.361883+00:00",
+        "wallS": 0.22550125000998378,
+        "exit": 5,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/97-conflict-diagnose.log"
+      },
+      "97-conflict-cancel": {
+        "name": "97-conflict-cancel",
+        "command": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "cancel",
+          "01a137c4-4bd1-7aa3-b868-279482e1973a"
+        ],
+        "observerPid": 17116,
+        "pid": 17121,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-14T00:16:36.443644+00:00",
+        "endUtc": "2026-10-14T00:16:36.738224+00:00",
+        "wallS": 0.2946303749922663,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/97-conflict-cancel.log"
+      },
+      "97-update-r1": {
+        "name": "97-update-r1",
+        "command": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "update"
+        ],
+        "observerPid": 17536,
+        "pid": 17547,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+        "startUtc": "2026-10-14T00:16:41.764109+00:00",
+        "endUtc": "2026-10-14T00:16:42.326876+00:00",
+        "wallS": 0.5628054169937968,
+        "exit": 5,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/97-update-r1.log"
+      },
+      "97-update-doctor": {
+        "name": "97-update-doctor",
+        "command": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "doctor"
+        ],
+        "observerPid": 18277,
+        "pid": 18280,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-14T00:16:53.829980+00:00",
+        "endUtc": "2026-10-14T00:16:55.263393+00:00",
+        "wallS": 1.4334372500015888,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/97-update-doctor.log"
+      },
+      "97-update-r2": {
+        "name": "97-update-r2",
+        "command": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "update"
+        ],
+        "observerPid": 21145,
+        "pid": 21157,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stack-selector-bounds-97",
+        "startUtc": "2026-10-14T00:17:41.482698+00:00",
+        "endUtc": "2026-10-14T00:17:41.996150+00:00",
+        "wallS": 0.513478832988767,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/97-update-r2.log"
+      },
+      "97-update-r2-doctor": {
+        "name": "97-update-r2-doctor",
+        "command": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "doctor"
+        ],
+        "observerPid": 21721,
+        "pid": 21727,
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "startUtc": "2026-10-14T00:17:51.790466+00:00",
+        "endUtc": "2026-10-14T00:17:53.256701+00:00",
+        "wallS": 1.4662583750032354,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/97-update-r2-doctor.log"
+      }
+    },
+    "checkpointReceipt": {
+      "bead": "hv-umm2.97",
+      "kind": "temporary-unsubmitted-inventory-checkpoint",
+      "previousOid": "b520a530c56083fcf7c67bff62d5b77b28256f94",
+      "checkpointOid": "ee5f64dcc28ae4730de91aea12c3d879e309db69",
+      "oldBase": "9258bdb90f8c61d6d1004b2e398ff3b76f02b279",
+      "start": "2026-10-14T00:17:27.029333Z",
+      "gitStart": "2026-10-14T00:17:27.047218Z",
+      "gitEnd": "2026-10-14T00:17:27.083192Z",
+      "gitSeconds": 0.03594441700261086,
+      "gitExit": 0,
+      "gitOutput": "[stack-selector-bounds-97 ee5f64dcc] feat(engine): implement bounded stack interrupts and ability repositioning\n Date: Tue Oct 13 17:12:01 2026 -0700\n 20 files changed, 2264 insertions(+), 44 deletions(-)\n create mode 100644 docs/plan/evidence/card-issues/99101fce-f2b4-4032-b999-317ce3e4a6dd--hv-umm2.97.md\n create mode 100644 docs/plan/evidence/friction/hv-umm2.97.json\n create mode 100644 docs/plan/evidence/measurements/hv-umm2.97.json\n create mode 100644 docs/plan/evidence/pre-existing/hv-umm2.97.md\n create mode 100644 docs/plan/evidence/qa-ledger/hv-umm2.97.jsonl\n create mode 100644 docs/plan/evidence/rules-decisions/RD-hv-umm2.97-1.md\n create mode 100644 src/engine/effects/primitives/contracts/reposition-effect.contracts.ts\n create mode 100644 src/engine/effects/primitives/contracts/stack-selector-bounds.contracts.ts\n create mode 100644 src/engine/rules/reposition.ts\n",
+      "inventoryBeforeSha256": "b432247b6b41f609d684edc0261d9bf9a2455c6715f233dee52cab35fa6a760f",
+      "inventoryCheckpointSha256": "521a7e6b18d8f91029ac986429badf6b1ea66a8b80a6f746a20b86232901ac4a",
+      "other20PathsUnchanged": true,
+      "otherPathHashes": {
+        "docs/plan/evidence/card-issues/99101fce-f2b4-4032-b999-317ce3e4a6dd--hv-umm2.97.md": "e30ae41fdb64887cb513ba7101984c31afe412cb9010b734573e94537430c400",
+        "docs/plan/evidence/friction/hv-umm2.97.json": "8e461f19dc84361427a0a51d2cb2852d5b61b09df12719814d4bf517f2060b14",
+        "docs/plan/evidence/measurements/hv-umm2.97.json": "8da97b58b53da5d36383f6e436cc6b1870bcd800517a4e6149ece3e6a95ac31b",
+        "docs/plan/evidence/pre-existing/hv-umm2.97.md": "f3ed7400b72e1f80a8b6166503bef95f4012a9d32ec2755dca72e03affba9c91",
+        "docs/plan/evidence/qa-ledger/hv-umm2.97.jsonl": "a02224a6b5bf243393b7e57175fc25068652f4b907c45fcc4ea579fc402f022e",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.97-1.md": "4fa8c11f503ff3fd380b11b15db5d813081394035fd30e53f120e1421b66721d",
+        "docs/rules.md": "9278dace203f923584d187a7eb4fb244b224195fb5eac94ae0bb56c23e4a2832",
+        "scripts/content-inventory.test.ts": "31120994395c80c1d30cd54a48f2b3ab3e1f421f3478efd7d9f73d2d6608fe35",
+        "scripts/content-inventory.ts": "128f7023ff996a1feb6b95ef14e9f8688cf25ac3bf8d6dc9e78ace1e80d12cad",
+        "src/content/cards/dune-interceptor-99101fce.ts": "11f6585276426f9a5277db0234c3062f806735c84aaa6a016149566c843a9ee2",
+        "src/content/cards/null-sphere-6196d53d.ts": "5389387af2e177a08506afb5a563b70946a0ba8654d75471730aac776b9e2136",
+        "src/content/cards/toll-of-passage-0fde04ac.ts": "641eb7c392a5489b45fe73da2bdadf07a02e30e5d017d6db98a50dc34d763d1e",
+        "src/engine/dsl/builders.ts": "e269a301e45e0fef71bbc5e8f754ce6b1a7d8299bb23c89a13c77ad21e1bece7",
+        "src/engine/dsl/selectors.ts": "b2e145848330036b89a9e854b0cfb8bbf75116616f055f621b388212799e21e4",
+        "src/engine/dsl/types.ts": "ffe08502c3016067955ef008a1d68949d485887a8b594a4a4c75122b3d87afb7",
+        "src/engine/effects/primitives/contracts/reposition-effect.contracts.ts": "9849505377d7de5c314ffabb02e15338d2aa6838ed7f9e20172816d3a4586739",
+        "src/engine/effects/primitives/contracts/stack-selector-bounds.contracts.ts": "99b4191fa488c758d54885c8410660fd62d54f8a4b51dc67dc08f6b12bcb32e6",
+        "src/engine/effects/primitives/move.ts": "90455662a0853eef391e901f4e387708ea190e46935c79c40b1c73d4eef4eeb5",
+        "src/engine/rules/decision.ts": "fcb77be89ba109c2e352da4a277c2bb27ee91bb79241a54648c9e86976e7099d",
+        "src/engine/rules/reposition.ts": "752adaf98e1a7961f5ac5dcd7ec8bb9c7e964b6743018e40d059b3abe66a1f66"
+      },
+      "worktreeClean": true,
+      "writersTerminal": true,
+      "submitted": false
+    },
+    "disposition": "Candidate terminal merge-conflict only generated inventory; cancellation already-terminal/no effect; diagnose exit5 lacks prepared generation, not a test failure. First update exit5 rolled back cleanly; base-inventory-only unsubmitted checkpoint allowed second parent update to succeed. Normal regeneration against combined base changed only inventory. No implementation edit.",
+    "checks": {
+      "inventory": {
+        "name": "97-combined-inventory",
+        "command": [
+          "npx",
+          "tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "startUtc": "2026-10-14T00:18:41.001435+00:00",
+        "observerPid": 24597,
+        "observerPgid": 24597,
+        "loadStart": [
+          7.65966796875,
+          8.9375,
+          10.41943359375
+        ],
+        "sysctlLoadAtStart": "{ 7.66 8.94 10.42 }",
+        "limits": {
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "configuredVitestWorkers": "2",
+        "actualExecutedWorkerCount": "not independently sampled",
+        "pid": 24635,
+        "pgid": 24597,
+        "exit": 0,
+        "endUtc": "2026-10-14T00:18:43.546917+00:00",
+        "wallS": 2.545488917006878,
+        "terminal": true,
+        "loadEnd": [
+          7.65966796875,
+          8.9375,
+          10.41943359375
+        ],
+        "log": "/tmp/dreamtides-executor-01a12e91/97-combined-inventory.log"
+      },
+      "focused": {
+        "name": "97-combined-focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/rules/turn.test.ts",
+          "src/engine/rules/figments.test.ts",
+          "-t",
+          "stack selector bounds|reposition effect|^move|^prevent|reposition|figment"
+        ],
+        "startUtc": "2026-10-14T00:18:49.300515+00:00",
+        "observerPid": 25138,
+        "observerPgid": 25138,
+        "loadStart": [
+          7.4462890625,
+          8.8720703125,
+          10.38720703125
+        ],
+        "sysctlLoadAtStart": "{ 7.45 8.87 10.39 }",
+        "limits": {
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "configuredVitestWorkers": "2",
+        "actualExecutedWorkerCount": "not independently sampled",
+        "pid": 25178,
+        "pgid": 25138,
+        "exit": 0,
+        "endUtc": "2026-10-14T00:18:59.047751+00:00",
+        "wallS": 9.747191875008866,
+        "terminal": true,
+        "loadEnd": [
+          9.43994140625,
+          9.24072265625,
+          10.49951171875
+        ],
+        "log": "/tmp/dreamtides-executor-01a12e91/97-combined-focused.log"
+      },
+      "ast": {
+        "name": "97-combined-ast",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "scripts/content-inventory.test.ts"
+        ],
+        "startUtc": "2026-10-14T00:18:49.303213+00:00",
+        "observerPid": 25139,
+        "observerPgid": 25139,
+        "loadStart": [
+          7.4462890625,
+          8.8720703125,
+          10.38720703125
+        ],
+        "sysctlLoadAtStart": "{ 7.45 8.87 10.39 }",
+        "limits": {
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "configuredVitestWorkers": "2",
+        "actualExecutedWorkerCount": "not independently sampled",
+        "pid": 25180,
+        "pgid": 25139,
+        "exit": 0,
+        "endUtc": "2026-10-14T00:19:01.653127+00:00",
+        "wallS": 12.349820249975892,
+        "terminal": true,
+        "loadEnd": [
+          9.404296875,
+          9.236328125,
+          10.49072265625
+        ],
+        "log": "/tmp/dreamtides-executor-01a12e91/97-combined-ast.log"
+      },
+      "review": {
+        "name": "97-combined-review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "startUtc": "2026-10-14T00:18:49.299010+00:00",
+        "observerPid": 25140,
+        "observerPgid": 25140,
+        "loadStart": [
+          7.4462890625,
+          8.8720703125,
+          10.38720703125
+        ],
+        "sysctlLoadAtStart": "{ 7.45 8.87 10.39 }",
+        "limits": {
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "configuredVitestWorkers": "2",
+        "actualExecutedWorkerCount": "not independently sampled",
+        "pid": 25175,
+        "pgid": 25140,
+        "exit": 0,
+        "endUtc": "2026-10-14T00:19:59.683058+00:00",
+        "wallS": 70.38332416699268,
+        "terminal": true,
+        "loadEnd": [
+          9.31201171875,
+          9.21484375,
+          10.40234375
+        ],
+        "log": "/tmp/dreamtides-executor-01a12e91/97-combined-review.log"
+      },
+      "knip": {
+        "name": "97-combined-knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "startUtc": "2026-10-14T00:18:49.299920+00:00",
+        "observerPid": 25141,
+        "observerPgid": 25141,
+        "loadStart": [
+          7.4462890625,
+          8.8720703125,
+          10.38720703125
+        ],
+        "sysctlLoadAtStart": "{ 7.45 8.87 10.39 }",
+        "limits": {
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "configuredVitestWorkers": "2",
+        "actualExecutedWorkerCount": "not independently sampled",
+        "pid": 25176,
+        "pgid": 25141,
+        "exit": 0,
+        "endUtc": "2026-10-14T00:18:54.760421+00:00",
+        "wallS": 5.460484624985838,
+        "terminal": true,
+        "loadEnd": [
+          7.650390625,
+          8.890625,
+          10.384765625
+        ],
+        "log": "/tmp/dreamtides-executor-01a12e91/97-combined-knip.log"
+      },
+      "schema": {
+        "name": "97-combined-schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "startUtc": "2026-10-14T00:20:12.625208+00:00",
+        "observerPid": 30207,
+        "observerPgid": 30198,
+        "loadStart": [
+          9.02734375,
+          9.15478515625,
+          10.35986328125
+        ],
+        "sysctlLoadAtStart": "{ 9.03 9.15 10.36 }",
+        "limits": {
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "configuredVitestWorkers": "2",
+        "actualExecutedWorkerCount": "not independently sampled",
+        "pid": 30210,
+        "pgid": 30198,
+        "exit": 0,
+        "endUtc": "2026-10-14T00:20:12.702966+00:00",
+        "wallS": 0.07779341700370423,
+        "terminal": true,
+        "loadEnd": [
+          9.02734375,
+          9.15478515625,
+          10.35986328125
+        ],
+        "log": "/tmp/dreamtides-executor-01a12e91/97-combined-schema.log"
+      }
+    },
+    "actualResults": {
+      "focused": "131 selected pass across3 files using the original focused selection",
+      "AST": "95 pass using unchanged inventory test file; retiring a peer pending DSL form changes generated fixture case count",
+      "review": "299 files/6458 tests pass; typechecks/lint pass,6 late-bound cycles/no evaluation-time reads",
+      "knip": "pass",
+      "schema": "761 records/41 historical unknowns valid"
+    },
+    "preservation": "All 4643 tracked file hashes captured after native update remained identical through regeneration/checks except content-inventory.json. This includes every peer leaf and whenCopyTrigger row; own QA ledger and all implementation bodies unchanged. Native update added peer DSL members/docs/registration; original source-versus-combined diff retained externally.",
+    "runtimeReuse": "300 weighted fuzz,60 default variant/both-controller cells and desktop/mobile Dune judged QA are evidence for original b520a530 source and its frozen manifest. They were not rerun or represented as combined-base runtime. No actual behavior failure or helper implementation change warrants new runtime. Combined focused/AST/review/Knip/schema passed.",
+    "fullReview": "Bounded generated-inventory recovery and own evidence do not change cross-cutting architecture/config/test runner infrastructure; no local full.",
+    "resources": "Each command receipt records terminal exit, observed PG, actual start loads and limits. JOURNEY_TEST_WORKERS=2 configured; actual worker count not independently sampled. Independent checks overlapped: durations not summed or presented as CPU. No provider/server/browser/reviewer was started in recovery."
+  }
+}

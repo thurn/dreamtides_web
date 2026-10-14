@@ -1,5 +1,7 @@
 import type { CharacterRef } from "../../dsl/types";
 import type { ChooseSlotPrompt } from "../../prompts/types";
+import { legalRepositionSlots } from "../../rules/reposition";
+import { reposition } from "../../steps/kinds/reposition";
 import { occupant, setOccupant, slotOf } from "../../rules/zones";
 import type { Slot } from "../../state/ids";
 import { resolveCharacters } from "../interpreter";
@@ -9,8 +11,8 @@ import { characterTarget, definePrimitive } from "../types";
 export interface MoveNode {
   readonly op: "move";
   readonly subject: CharacterRef;
-  /** Choose an empty position, or use the position of the character abandoned for this activation. */
-  readonly to: "unoccupied" | "abandonedCost";
+  /** Empty position, an abandoned cost's position, or the normal repositioning position rules. */
+  readonly to: "unoccupied" | "abandonedCost" | "reposition";
 }
 
 export const movePrimitive = definePrimitive<MoveNode>({
@@ -23,6 +25,18 @@ export const movePrimitive = definePrimitive<MoveNode>({
       const from = slotOf(state, id);
       if (instance?.zone !== "play" || from === null) continue;
       const side = instance.controller;
+      if (node.to === "reposition") {
+        const slots = legalRepositionSlots(state, id);
+        if (slots.length === 0) continue;
+        const index = ctx.choose<ChooseSlotPrompt>({
+          kind: "chooseSlot", side: env.controller, purpose: env.purpose("move"), fieldSide: side, slots,
+        });
+        const to = slots[index];
+        if (to !== undefined && legalRepositionSlots(state, id).some((slot) => slot.rank === to.rank && slot.index === to.index)) {
+          reposition.run(ctx, { kind: "reposition", card: id, to });
+        }
+        continue;
+      }
       let to: Slot | undefined;
       if (node.to === "abandonedCost") {
         const paid = env.abandonedPosition;

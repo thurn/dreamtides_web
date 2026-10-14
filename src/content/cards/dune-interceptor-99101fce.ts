@@ -1,3 +1,7 @@
+import { activated, energy, self, stackItem } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { move, prevent } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +25,9 @@ export default card({
   cardNumber: 423,
   art: { x: -0.078, y: 0.188, scale: 1.97 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onMaterialized(), prevent(stackItem({ costAtMost: variant.amplified ? 3 : 2 }))),
+    activated([energy(1)], move(self(), { to: "reposition" }), { speed: "fast" }),
+  ],
+  verifiedText: expectedVerifiedText("▸Materialized: Prevent a played ≤2● cost card.\n\n❖ – 1●: Reposition this character.", "▸Materialized: Prevent a played ≤3● cost card.\n\n❖ – 1●: Reposition this character."),
 });

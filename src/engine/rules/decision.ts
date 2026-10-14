@@ -1,12 +1,12 @@
 import type { EngineCatalog } from "../catalog";
-import type { Side, Slot } from "../state/ids";
-import { BACK_RANK_SIZE, FRONT_RANK_SIZE, opponent } from "../state/ids";
+import type { Side } from "../state/ids";
+import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { Action, Decision } from "./actions";
 import { legalMoves, type LegalityMemo } from "./legality";
-import { mergeable } from "./figments";
+import { legalRepositionSlots } from "./reposition";
 import { payableNow } from "./payable";
-import { charactersInPlay, instanceOf, occupant, slotOf } from "./zones";
+import { charactersInPlay } from "./zones";
 
 /** The side that acts in the current main window, or `null` outside Day, Dusk, and Night. */
 export function mainWindowSide(state: BattleState): Side | null {
@@ -35,36 +35,8 @@ function legalRepositions(state: BattleState, side: Side): Action[] {
     return [];
   }
   const actions: Action[] = [];
-  const slots: Slot[] = [
-    ...Array.from({ length: BACK_RANK_SIZE }, (_, index): Slot => ({ rank: "back", index })),
-    ...Array.from({ length: FRONT_RANK_SIZE }, (_, index): Slot => ({ rank: "front", index })),
-  ];
   for (const card of charactersInPlay(state, side)) {
-    const from = slotOf(state, card);
-    if (from === null) {
-      continue;
-    }
-    const exhausted = instanceOf(state, card).status.exhausted;
-    for (const to of slots) {
-      if (to.rank === from.rank && to.index === from.index) {
-        continue;
-      }
-      const other = occupant(state, side, to);
-      if (other !== null && mergeable(state, card, other)) {
-        // A merge, legal only between two exhausted figments or two ready ones.
-        if (exhausted === instanceOf(state, other).status.exhausted) actions.push({ kind: "reposition", card, to });
-        continue;
-      }
-      // An exhausted character cannot be moved to the front rank, by either
-      // half of a swap.
-      if (exhausted && to.rank === "front") {
-        continue;
-      }
-      if (other !== null && from.rank === "front" && instanceOf(state, other).status.exhausted) {
-        continue;
-      }
-      actions.push({ kind: "reposition", card, to });
-    }
+    actions.push(...legalRepositionSlots(state, card).map((to): Action => ({ kind: "reposition", card, to })));
   }
   return actions;
 }

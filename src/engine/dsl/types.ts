@@ -149,6 +149,10 @@ export interface StackItemSelector {
   /** Whose item, relative to the effect's controller. */
   readonly controller: "you" | "opponent" | "any";
   readonly cardType?: "character" | "event";
+  /** Inclusive copiable cost cap: variant and deck-entry changes, with X counting as 0. */
+  readonly costAtMost?: number;
+  /** Inclusive spark cap outside play; cards with no spark never match. */
+  readonly sparkAtMost?: number;
   /** Only items that can be prevented: excludes cards that cannot be prevented. */
   readonly preventable?: boolean;
 }

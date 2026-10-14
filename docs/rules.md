@@ -382,6 +382,13 @@ characters. The active player repositions during their Day phase; the opposing
 player repositions during the Dusk phase. An **exhausted character cannot be
 moved to the front rank** by either player.
 
+**Repositioning by an ability:** An instruction to reposition a character uses
+the position, swapping, exhaustion, and compatible-figment merging rules of
+repositioning. It follows the ability's timing. The ability's controller chooses
+a legal position within the character's current controller's battlefield as it
+resolves. If the character is absent from play or has no legal destination,
+it does not reposition.
+
 **Movement by an effect:** An ability that moves a character resolves within
 its current controller's battlefield and preserves its identity, controller,
 exhaustion, and other state. The ability's controller chooses an unoccupied position

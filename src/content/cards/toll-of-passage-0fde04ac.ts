@@ -1,3 +1,6 @@
+import { event, stackItem } from "../../engine/dsl/builders";
+import { prevent } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 118,
   art: { x: -0.456, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(prevent(stackItem({ costAtMost: variant.amplified ? 3 : 2 })))],
+  verifiedText: expectedVerifiedText("Prevent a played ≤2● cost card.", "Prevent a played ≤3● cost card."),
 });

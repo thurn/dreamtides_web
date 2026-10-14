@@ -283,11 +283,16 @@ export function winCondition(condition: Condition): WinConditionAbility {
   return { kind: "winCondition", condition };
 }
 
-/** Cards on the stack: by controller relative to the effect's controller, and card type. */
+/** Stack cards by controller, card type, copiable cost, and spark outside play. */
 export function stackItem(
-  extra: Partial<Pick<StackItemSelector, "controller" | "cardType">> = {},
+  extra: Partial<Pick<StackItemSelector, "controller" | "cardType" | "costAtMost" | "sparkAtMost">> = {},
 ): StackItemSelector {
-  return { kind: "stackItem", controller: extra.controller ?? "any", ...(extra.cardType === undefined ? {} : { cardType: extra.cardType }) };
+  return {
+    kind: "stackItem", controller: extra.controller ?? "any",
+    ...(extra.cardType === undefined ? {} : { cardType: extra.cardType }),
+    ...(extra.costAtMost === undefined ? {} : { costAtMost: extra.costAtMost }),
+    ...(extra.sparkAtMost === undefined ? {} : { sparkAtMost: extra.sparkAtMost }),
+  };
 }
 
 /** "Reclaim N●" or "Reclaim – costs": played from your void for `costs` in place of its printed energy cost. Plain Reclaim is `keyword("reclaim")`. */
