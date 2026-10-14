@@ -1,3 +1,5 @@
+import { conditionCardCounts, staticAbility } from "../../engine/dsl/builders";
+import { playFromZone } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,10 @@ export default card({
   cardNumber: 155,
   art: { x: -0.378, y: 1, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    staticAbility(playFromZone("void", { cardType: "character" }, { oncePerTurn: true }), {
+      while: conditionCardCounts("hand", 0, { atMost: variant.amplified ? 2 : 1 }),
+    }),
+  ],
+  verifiedText: "25bdz679xi5",
 });

@@ -1,3 +1,5 @@
+import { characterYouControl, controls, staticAbility } from "../../engine/dsl/builders";
+import { playFromZone, revealDeckTop } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,9 @@ export default card({
   cardNumber: 110,
   art: { x: -0.228, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    staticAbility(revealDeckTop(), { while: controls(characterYouControl(), variant.amplified ? 2 : 3) }),
+    staticAbility(playFromZone("deck", { cardType: "character" })),
+  ],
+  verifiedText: "1kkvqfu7jzt",
 });

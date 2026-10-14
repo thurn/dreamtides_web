@@ -1,3 +1,6 @@
+import { topCardMatches, topOfDeck } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { draw, ifThen, materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,12 @@ export default card({
   cardNumber: 268,
   art: { x: 0, y: -0.152, scale: 1.87 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(onMaterialized(), ifThen(
+      topCardMatches({ cardType: "character", costAtMost: 2 }),
+      materialize(topOfDeck(1, { cardType: "character", costAtMost: 2 })),
+      ifThen(topCardMatches(), draw(1)),
+    )),
+  ],
+  verifiedText: "y28nagosk1",
 });

@@ -1,0 +1,37 @@
+{
+  "bead": "hv-umm2.150",
+  "phase": 5,
+  "implementMin": 48.18539988333334,
+  "implementWindow": {
+    "start": "2026-10-13T23:47:27.389000+00:00",
+    "end": "2026-10-14T00:35:38.512993+00:00"
+  },
+  "localValidationS": {
+    "focused": 4.435233874974074,
+    "review": 54.644586375012295,
+    "knip": 5.603776834002929,
+    "coverage": 3.8558494999888353,
+    "preflight": 1.2645982079848181,
+    "weightedFuzz300": 246.0866500409902,
+    "sweep": 207.0475570000126,
+    "judgedFinals": 373.31084429094335
+  },
+  "hostLoad": 10.34,
+  "testDelta": {
+    "files": 0,
+    "lines": 194,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 1.0875460513833484,
+      "note": "Measured failed-command wall only: fixture event/answer assumptions and nullable IDs; scratch hash expression typo; guessed nonexistent focused coverage path. All corrected, final review/gate pass. Editing time unknown."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 2.3241972909663065,
+      "note": "Measured five failed managed driver runs only: excluded module globals, staging rail dismissal, single-target auto commit, optional play-time target ordering, and board versus gallery hand surface. Distinct bounded repairs after provider drain; final nine workflows pass both viewports. Repair editing time unknown."
+    }
+  ]
+}
