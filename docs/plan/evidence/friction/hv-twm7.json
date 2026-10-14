@@ -1,0 +1,21 @@
+{
+  "bead": "hv-twm7",
+  "phase": 5,
+  "implementMin": 3.8216226166666667,
+  "implementWindow": {
+    "start": "2026-10-14T22:57:15.702643Z",
+    "end": "2026-10-14T23:01:05+00:00"
+  },
+  "localValidationS": {
+    "focused": 0.6441716240369715,
+    "review": 0.3286496250075288,
+    "knip": 6.490060125011951
+  },
+  "hostLoad": 15.19,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

@@ -1,0 +1,275 @@
+{
+  "bead": "hv-twm7",
+  "base": "a2db1b2c2576290e27d66eb9c40bc7cc8cd86f3e",
+  "scope": "Accepted F2/F3 historical evidence corrections from completed normal independent review of hv-umm2.225; no runtime validation replay.",
+  "historical": {
+    "sourceBase": "14e1625fd28436b6ffb07a7260e616eb1ea899bf",
+    "sourceCommit": "840c38e0c650457926f78170a24a5d4256232778",
+    "beforeFiles": [
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.225.json",
+        "sha256": "b508a570ac56b540ad50c7e1418884014c3a79e211a8f39c2523d7f5242a302a",
+        "bytes": 901
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.225.json",
+        "sha256": "b40a0462786574c69e1be0e64be92a3e554edea1dca7e50ddf3486660269a09b",
+        "bytes": 17129
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.225.md",
+        "sha256": "72024bfef0e7de391883b3b3406050e2b78d7fa688896dbeb1522352dcedd469",
+        "bytes": 5956
+      }
+    ],
+    "originalValues": {
+      "implementWindow": {
+        "start": "2026-10-14T21:34:34.211332+00:00",
+        "end": "2026-10-14T22:21:37.554711+00:00"
+      },
+      "implementMin": 47.05572298333333,
+      "testDelta": {
+        "files": 0,
+        "lines": 195,
+        "jsdomFiles": 0
+      },
+      "schemaNormalizationFields": {
+        "implementWindow": {
+          "measuredFor": "Claim-inclusive ownership envelope through pre-commit evidence cutoff; includes setup/report before helper dispatch. Exact dispatch instant unrecorded; actual Git tail recorded externally."
+        },
+        "implementMin": {
+          "measuredFor": "Elapsed claim-inclusive envelope, not CPU or productive editing time."
+        }
+      }
+    },
+    "preservedEvidenceCutoff": "2026-10-14T22:21:37.554711+00:00",
+    "canonicalWindow": {
+      "start": "2026-10-14T21:36:59.839Z",
+      "end": "2026-10-14T15:21:39-07:00",
+      "minutes": 44.652683333333336,
+      "endPrecision": "Automatic Git committer second; not a fabricated high-resolution commit timestamp."
+    },
+    "dispatchProof": {
+      "path": "/tmp/root-225-review/actual-dispatch-native-log-proof.json",
+      "sha256": "62cd71c8294e5e456dfd9d9047c2de0c35449c0acbd5715d5e2f4202dc8a7ef8",
+      "source": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl",
+      "record": {
+        "timestamp": "2026-10-14T21:36:59.839Z",
+        "callId": "call_9672202e421a452c951de8cd1bd79652",
+        "name": "spawn_agent",
+        "taskName": "avatars_05_225",
+        "argumentsSHA256": "2aeb622d49214dae86003399985ea281aaaa7ad05cdff840523d65f390af5b67",
+        "ackTimestamp": "2026-10-14T21:37:01.005Z",
+        "ackOutput": "{\"task_name\":\"/root/avatars_05_225\"}"
+      }
+    },
+    "externalTail": "Original finalizer receipt retained externally; its interval follows the preserved pre-commit evidenceCutoff.",
+    "testUnits": {
+      "plainNewModules": 1,
+      "configuredNewEntrypoints": 0,
+      "jsdomFiles": 0,
+      "scenarioModuleLines": 157,
+      "contractNetLines": 38,
+      "aggregateNetLines": 195,
+      "scenarioModuleSHA256": "79c122f406956f3f75d5e8bd6ee3d689e5a4328e9a244a35748456e984d21e11",
+      "contractSHA256": "016cd4b7fc841517ff787298660994e832082588d570c685935a525936414353",
+      "vitestConfigSHA256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+      "configuredEntrypointPattern": "src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+      "originalVitestConfigSHA256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+      "configMatchesOriginalCommit": true
+    }
+  },
+  "ownClock": {
+    "dispatchBounds": {
+      "lower": "2026-10-14T22:57:15.702643Z",
+      "upper": "2026-10-14T22:57:52.009135Z"
+    },
+    "sampling": "UNKNOWN",
+    "measuredFor": "Conservative earliest parent dispatch bound through own automatic Git commit; actual dispatch lies within the recorded bounds.",
+    "rootGrossStart": "2026-10-14T22:56:39Z",
+    "rootGrossScope": "Independent claim-inclusive parent ownership envelope; not implementer dispatch.",
+    "commitEndPrecision": "Automatic Git committer second; actual observed commit and finalizer tail retained externally."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "measuredFor": "Earliest dispatch bound through automatic Git commit; upper/lower dispatch bounds qualified in ownClock."
+      },
+      "hostLoad": {
+        "measuredFor": "sysctl vm.loadavg one-minute sample immediately before required review; exact time and output in validation.hostLoadObservation."
+      }
+    }
+  },
+  "evidenceCutoff": "2026-10-14T23:01:05.021608+00:00",
+  "validation": {
+    "commands": {
+      "focused": {
+        "command": [
+          "python3",
+          "/tmp/dreamtides-executor-01a1304d/twm7/verify.py"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-measurement-units-twm7",
+        "start": "2026-10-14T22:59:30.256719+00:00",
+        "end": "2026-10-14T22:59:30.828102+00:00",
+        "pid": 14093,
+        "pgid": 14093,
+        "exitCode": 0,
+        "wallSeconds": 0.571407083014492,
+        "cpuSeconds": {
+          "user": 0.101784,
+          "system": 0.240149
+        },
+        "startLoad": [
+          16.2314453125,
+          19.8564453125,
+          16.3251953125
+        ],
+        "endLoad": [
+          16.2314453125,
+          19.8564453125,
+          16.3251953125
+        ],
+        "stdoutSHA256": "6262706246a029bf5572a90f56305f9ec525205f00662a15259ccbb09d136102",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "schema": {
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-measurement-units-twm7",
+        "start": "2026-10-14T22:59:30.853905+00:00",
+        "end": "2026-10-14T22:59:30.926630+00:00",
+        "pid": 14158,
+        "pgid": 14158,
+        "exitCode": 0,
+        "wallSeconds": 0.07276454102247953,
+        "cpuSeconds": {
+          "user": 0.058941,
+          "system": 0.019621
+        },
+        "startLoad": [
+          16.2314453125,
+          19.8564453125,
+          16.3251953125
+        ],
+        "endLoad": [
+          16.2314453125,
+          19.8564453125,
+          16.3251953125
+        ],
+        "stdoutSHA256": "dac0790eac3b70058b41cd5a0457089f7eb4bf3414e2ca0ce7c75f93f8a1d1ea",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-measurement-units-twm7",
+        "start": "2026-10-14T22:59:37.521724+00:00",
+        "end": "2026-10-14T22:59:37.850339+00:00",
+        "pid": 14663,
+        "pgid": 14663,
+        "exitCode": 0,
+        "wallSeconds": 0.3286496250075288,
+        "cpuSeconds": {
+          "user": 0.228128,
+          "system": 0.113839
+        },
+        "startLoad": [
+          15.19287109375,
+          19.5146484375,
+          16.2451171875
+        ],
+        "endLoad": [
+          15.19287109375,
+          19.5146484375,
+          16.2451171875
+        ],
+        "stdoutSHA256": "cdf62a9c7b6dc58032d2c227858124eb7d0b0e724bc5b12aac24875336a50324",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-measurement-units-twm7",
+        "start": "2026-10-14T22:59:42.377417+00:00",
+        "end": "2026-10-14T22:59:48.867523+00:00",
+        "pid": 15060,
+        "pgid": 15060,
+        "exitCode": 0,
+        "wallSeconds": 6.490060125011951,
+        "cpuSeconds": {
+          "user": 5.62451,
+          "system": 1.8732769999999999
+        },
+        "startLoad": [
+          14.93701171875,
+          19.3896484375,
+          16.22021484375
+        ],
+        "endLoad": [
+          14.14111328125,
+          19.150390625,
+          16.154296875
+        ],
+        "stdoutSHA256": "c54c731b7e8e6715fb50eba2a139bcdf57f25acfb88567f9898bfdda2c89d236",
+        "stderrSHA256": "fd7bb1a0118a1f275886a487fcba2b88f898d98fbb2975651a44fb30e389a3b3"
+      }
+    },
+    "semanticProof": {
+      "historicalJSONPaths": {
+        "friction": [
+          ".implementMin",
+          ".implementWindow.end",
+          ".implementWindow.start",
+          ".testDelta.files"
+        ],
+        "measurement": [
+          ".schemaNormalization.fields.implementMin.measuredFor",
+          ".schemaNormalization.fields.implementWindow.measuredFor",
+          ".schemaNormalization.fields.testDelta.files"
+        ]
+      },
+      "markdown": "Only first Clocks and resource scope paragraph differs; all other bytes exact.",
+      "preservedTrackedPaths": 5162,
+      "sourceAssertions": {
+        "scenarioModuleLines": 157,
+        "contractNetLines": 38,
+        "aggregate": 195,
+        "originalModuleBytesExact": true,
+        "entrypointDelta": 0,
+        "jsdomDelta": 0
+      },
+      "changedPaths": [
+        "docs/plan/evidence/friction/hv-umm2.225.json",
+        "docs/plan/evidence/measurements/hv-umm2.225.json",
+        "docs/plan/evidence/measurements/hv-umm2.225.md"
+      ],
+      "allAssertionsPassed": true
+    },
+    "reviewScope": "Diff-aware required review validates friction records for these five evidence paths; no runtime rerun.",
+    "hostLoadObservation": {
+      "observedAt": "2026-10-14T22:59:37.490533+00:00",
+      "command": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "stdout": "{ 15.19 19.51 16.25 }"
+    },
+    "ownedChildGroupsAbsentBeforeCommit": [
+      14093,
+      14158,
+      14663,
+      15060
+    ],
+    "processObservation": "Actual ps snapshot: no members of the four completed validation groups. Finalizer/collector settlement is recorded externally after exit."
+  }
+}

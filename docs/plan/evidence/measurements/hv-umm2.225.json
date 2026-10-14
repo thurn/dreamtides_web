@@ -15,10 +15,10 @@
   "schemaNormalization": {
     "fields": {
       "implementWindow": {
-        "measuredFor": "Claim-inclusive ownership envelope through pre-commit evidence cutoff; includes setup/report before helper dispatch. Exact dispatch instant unrecorded; actual Git tail recorded externally."
+        "measuredFor": "Actual recovered implementer dispatch 2026-10-14T21:36:59.839Z through automatic Git committer time 2026-10-14T15:21:39-07:00 (second precision). Original claim-inclusive envelope, pre-commit evidenceCutoff and external Git tail provenance are retained in hv-twm7 measurements."
       },
       "implementMin": {
-        "measuredFor": "Elapsed claim-inclusive envelope, not CPU or productive editing time."
+        "measuredFor": "Elapsed actual implementer dispatch through automatic Git commit, 44.65268333333333 minutes; includes research, coordination, waits and verification."
       },
       "localValidationS.fuzz": {
         "measuredFor": "Outer locked all-four weighted300 command, including acquisition/startup; driver wall/CPU recorded separately."
@@ -28,6 +28,9 @@
       },
       "friction.minutes": {
         "measuredFor": "First workflow invocation start to final mobile qualification end, including successful work/turns; incremental cost not separately measured."
+      },
+      "testDelta.files": {
+        "measuredFor": "Net new test modules: one plain avatars-05.scenarios.ts module. Configured .test/.spec entrypoint delta is zero; jsdom file delta is zero. Aggregate testDelta.lines remains 195."
       }
     }
   },
