@@ -1,0 +1,590 @@
+{
+  "bead": "hv-umm2.680",
+  "base": "886709f28a0ccc21fe2fd4b5934843fd35549677",
+  "status": "validated-precommit-evidence",
+  "clock": {
+    "nativeDispatchStart": "2026-10-14T17:53:58.120Z",
+    "nativeDispatchCall": "call_1b4cd573f0c246c6a5d18c00a88aae40",
+    "nativeDispatchEvidence": "/tmp/root680-20261014/parent-dispatch-native-v01.json",
+    "prospectiveEnd": "2026-10-14T18:46:01.866768+00:00",
+    "grossMinutes": 52.06244613333333,
+    "included": "All research, source/check authoring, parent admission/review waits, heavy lock wait, browser execution/failure, root diagnosis/recovery/verification and evidence finalization through this prospective marker.",
+    "modelSampling": "UNKNOWN",
+    "gitTail": "Not measured: commit has not been authorized or run. Actual Git end/tail will be retained externally; this prospective end is not an actual Git time.",
+    "setupSeparate": [
+      {
+        "name": "worktree-create-v01",
+        "seconds": 0.8580407910048962,
+        "exit": 0,
+        "receipt": "/tmp/root680-20261014/worktree-create-v01.receipt.json"
+      },
+      {
+        "name": "install-v01",
+        "seconds": 2.571431541000493,
+        "exit": 0,
+        "receipt": "/tmp/root680-20261014/install-v01.receipt.json"
+      },
+      {
+        "name": "prepare-v01",
+        "seconds": 2.2822067079832777,
+        "exit": 0,
+        "receipt": "/tmp/root680-20261014/prepare-v01.receipt.json"
+      },
+      {
+        "name": "doctor-v01",
+        "seconds": 1.4436257079942152,
+        "exit": 0,
+        "receipt": "/tmp/root680-20261014/doctor-v01.receipt.json"
+      },
+      {
+        "name": "bead-entities-v01",
+        "seconds": 1.266733333002776,
+        "exit": 0,
+        "receipt": "/tmp/root680-20261014/bead-entities-v01.receipt.json"
+      }
+    ]
+  },
+  "sourceFreeze": {
+    "src/content/cards/the-deathsworn-1ce0f0f2.ts": "c5b4de337893f954857156956c152a988298adcd074575b5421390b8c6664e6a",
+    "src/content/cards/veil-of-the-wastes-409147ec.ts": "9477d34a5bba8de0083e1df25fdaed692ea811ed9f00e1fd3f1e4bd6a1f53a57",
+    "src/content/specs/cards-ready-148.scenarios.ts": "5bf1c3d4a10e400a58b66eb3dfbd7d7cec92fd1ade855388758be487297839b6"
+  },
+  "metadata": "Both complete admitted leaf hashes preserve every existing metadata/UUID/printed/base-amplified field.",
+  "outsideBaseline": {
+    "regularCount": 4988,
+    "outsideLeafCount": 4986,
+    "changes": []
+  },
+  "counts": {
+    "entities": 2,
+    "amplifiedEntities": 1,
+    "newPrimitives": 0,
+    "RD": 0,
+    "cardIssues": 0,
+    "productionNonTestChangedLines": 22,
+    "scenarios": 26,
+    "scenarioLines": 118,
+    "focusedTests": 4364,
+    "reviewTests": 6680,
+    "reviewFiles": 253,
+    "preflight": {
+      "requested": 40,
+      "pass": 18,
+      "skip": 22,
+      "pending": 0,
+      "fail": 0
+    },
+    "sweep": {
+      "requested": 40,
+      "pass": 18,
+      "skip": 22,
+      "fail": 0,
+      "sessions": 1,
+      "leaseYields": 0
+    },
+    "purpose": {
+      "recoveredPass": 6,
+      "historicalFailure": 1,
+      "diagnosticAcceptanceCount": 0
+    },
+    "ledger": {
+      "rows": 47,
+      "pass": 24,
+      "skip": 22,
+      "historicalIneffectiveFail": 1,
+      "unresolvedFail": 0
+    }
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 103388,
+    "prompts": 7495,
+    "interactiveReruns": 768,
+    "failures": 0,
+    "executionSeconds": 329.01655258302344,
+    "lockWaitToInnerStartSeconds": 334.76697,
+    "outerSeconds": 663.8397833749768,
+    "exercised": {
+      "1ce0f0f2-4b1a-483d-b93b-74c36e946a08": 139,
+      "409147ec-d959-4f66-b126-564702e2cd4a": 100
+    }
+  },
+  "D20": "Private functional-void scenarios cover exact1 versus inclusive\u22641 (zero/two), copiable cost2/3 and reduced3\u21922, opposite-controller and held-hand negatives, duplicate UUID physical source preservation, and finite coupled returns. FIFO/source-creation order (docs/rules.md2327\u20132339) permits two Veil bodies but one return; stale second body does nothing. Public synthetic discard/play actions, no shared fixture or engine/API change.",
+  "D21": [
+    {
+      "uuid": "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+      "firstHashByte": 214,
+      "sampled": false
+    },
+    {
+      "uuid": "409147ec-d959-4f66-b126-564702e2cd4a",
+      "firstHashByte": 151,
+      "sampled": false
+    }
+  ],
+  "newPromptStatusVisual": false,
+  "reviewRouting": "D18 ordinary existing-form composition, not core-review; no per-bead cold review or local review:full required. Temporary Sol routing expired2026-10-14T01Z.",
+  "purpose": {
+    "sixCells": [
+      {
+        "uuid": "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+        "variant": "base",
+        "viewport": "desktop",
+        "gameId": "53taxa",
+        "source": "i13",
+        "logRowsBeforeReload": 38,
+        "screens": [
+          "void-return-base-desktop.png"
+        ]
+      },
+      {
+        "uuid": "409147ec-d959-4f66-b126-564702e2cd4a",
+        "variant": "base",
+        "viewport": "desktop",
+        "gameId": "6e7jg8",
+        "source": "i12",
+        "logRowsBeforeReload": 38,
+        "screens": []
+      },
+      {
+        "uuid": "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+        "variant": "amplified",
+        "viewport": "desktop",
+        "gameId": "yun5eg",
+        "source": "i1",
+        "logRowsBeforeReload": 52,
+        "screens": [
+          "void-return-amplified-coupled-desktop.png"
+        ]
+      },
+      {
+        "uuid": "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+        "variant": "base",
+        "viewport": "mobile",
+        "gameId": "f5xgbs",
+        "source": "i13",
+        "logRowsBeforeReload": 38,
+        "screens": [
+          "void-return-base-mobile.png"
+        ]
+      },
+      {
+        "uuid": "409147ec-d959-4f66-b126-564702e2cd4a",
+        "variant": "base",
+        "viewport": "mobile",
+        "gameId": "awmtyx",
+        "source": "i12",
+        "logRowsBeforeReload": 38,
+        "screens": []
+      },
+      {
+        "uuid": "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+        "variant": "amplified",
+        "viewport": "mobile",
+        "gameId": "f6mvyp",
+        "source": "i1",
+        "logRowsBeforeReload": 52,
+        "screens": []
+      }
+    ],
+    "rawResult": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.680/invocations/run-lWTZqy/qa-void-materialize-v02.result.json",
+    "rawResultSha256": "5e78f5a77b0b51df3f8d1bed4d8e0e2a42d7336accaa603fa16191e5341c8a97",
+    "rootStateLogVerification": "/tmp/root680-20261014/purpose-independent-verification-v02.json",
+    "rootGeometryLogVerification": "/tmp/root680-20261014/purpose-independent-geometry-log-v02.json",
+    "completeLogsBeforeReload": "38/38/52 per viewport for the three scenes; full lines retained inside raw results.",
+    "finalGameExports": [
+      {
+        "viewport": "desktop",
+        "gameId": "yun5eg",
+        "rows": 56,
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.680/invocations/run-lWTZqy/qa-void-materialize-v02-desktop.jsonl"
+      },
+      {
+        "viewport": "mobile",
+        "gameId": "f6mvyp",
+        "rows": 56,
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.680/invocations/run-lWTZqy/qa-void-materialize-v02-mobile.jsonl"
+      }
+    ],
+    "captures": [
+      {
+        "filename": "void-return-base-desktop.png",
+        "invocation": "run-lWTZqy",
+        "css": [
+          1440,
+          900
+        ],
+        "pixels": [
+          2880,
+          1800
+        ],
+        "sha256": "1af8b7796c3a0d033336c1784b543d8bbdf684f6d34075e62dfb8a59d1eb92db",
+        "viewedBy": "root"
+      },
+      {
+        "filename": "void-return-amplified-coupled-desktop.png",
+        "invocation": "run-lWTZqy",
+        "css": [
+          1440,
+          900
+        ],
+        "pixels": [
+          2880,
+          1800
+        ],
+        "sha256": "9d8a16c11282a05f34528b340d5f51a6e8b70e892dacfed5f6d80185409c206c",
+        "viewedBy": "root"
+      },
+      {
+        "filename": "void-return-base-mobile.png",
+        "invocation": "run-lWTZqy",
+        "css": [
+          390,
+          844
+        ],
+        "pixels": [
+          780,
+          1688
+        ],
+        "sha256": "15764895264a4bfac2f66d6c199dbc49bd592c8d92afdf9dbf6f790fa33d1410",
+        "viewedBy": "root"
+      }
+    ]
+  },
+  "recovery": {
+    "owner": "root directly, same-task justiciar",
+    "historicalFailure": {
+      "receipt": "/tmp/worker680-20261014/workflow-v01.receipt.json",
+      "rawPacket": "/tmp/worker680-20261014/runtime-failure-packet-v01.json",
+      "desktopResult": null,
+      "mobile": "unrun",
+      "acceptanceCount": 0
+    },
+    "diagnostic": {
+      "receipt": "/tmp/root680-20261014/discard-diagnostic-v01.receipt.json",
+      "exit": 0,
+      "seconds": 15.081418665999081,
+      "acceptanceCount": 0
+    },
+    "oldAdmission": "Engine pending plus battle.tap dispatch success without a rendered selectable exact physical candidate.",
+    "replacement": "Wait for the actual physical candidate role=button, picker-candidate ancestor and submit control; then real pointer input, selected state, enabled confirm and exact persisted answer. Per-scene exported notes preserve completed evidence if a later stage throws.",
+    "productChanges": 0,
+    "acceptanceWaived": false,
+    "sourceChanges": 0,
+    "scriptSha256": "3781bf0e23bd9736aebd343bef8c2999d62bf1029aeb7369a90f48fb4184aad5",
+    "nativePlan": "/tmp/root680-20261014/justiciar-discard-plan-v01-native.stdout",
+    "nativeRepair": "/tmp/root680-20261014/justiciar-discard-repair-v01-native.stdout",
+    "nativeOutcome": "/tmp/root680-20261014/justiciar-discard-outcome-v01-native.stdout",
+    "frictionWindowSeconds": 781.10333
+  },
+  "resourceOutcomes": [
+    {
+      "run": "sweep-v01",
+      "exit": 0,
+      "wallSeconds": 154.71504124999046,
+      "runnerPG": 33304,
+      "observerPG": 33433,
+      "observerExit": 0,
+      "ownGroupsRemaining": [],
+      "sessions": [
+        {
+          "providerToken": "38893373-7e9b-4a21-b336-e5b1679e41d5",
+          "mcpSessionId": "de55d99c-3ab9-4581-a4e2-d74d5eea268a",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25",
+          "slot": 1,
+          "port": 5274,
+          "serverPG": 33348,
+          "serverToken": "c5370f22-1045-4523-8cfe-7d51d7911746",
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "ownTokensCleared": true
+        }
+      ],
+      "receipt": "/tmp/worker680-20261014/sweep-v01.receipt.json",
+      "ownerEvidence": "/tmp/worker680-20261014/sweep-v01-all-live-owners.json",
+      "cleanupEvidence": "/tmp/worker680-20261014/sweep-v01-cleanup-v01.json",
+      "completion": "Native runner terminal result and exact own owner/server tokens cleared; audited managedclose clears owner only after confirmed browser_close, active RPC drain and no uncertain call, closes own transport, stops own server PG and releases lease. Shared service/other records untouched."
+    },
+    {
+      "run": "workflow-v01",
+      "exit": 1,
+      "wallSeconds": 44.243247917009285,
+      "runnerPG": 1696,
+      "observerPG": 1786,
+      "observerExit": 0,
+      "ownGroupsRemaining": [],
+      "sessions": [
+        {
+          "providerToken": "4f0df07a-8cae-41a2-974b-1d5500a4fe22",
+          "mcpSessionId": "88a008ab-ce00-4c91-af4b-3627434a191a",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25",
+          "slot": 0,
+          "port": 5174,
+          "serverPG": 1742,
+          "serverToken": "d6eee80e-690c-4569-bc53-46ce684ab87a",
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+          "serverPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+          "ownTokensCleared": true
+        }
+      ],
+      "receipt": "/tmp/worker680-20261014/workflow-v01.receipt.json",
+      "ownerEvidence": "/tmp/worker680-20261014/workflow-v01-all-live-owners.json",
+      "cleanupEvidence": "/tmp/worker680-20261014/workflow-v01-cleanup-v01.json",
+      "completion": "Native runner terminal result and exact own owner/server tokens cleared; audited managedclose clears owner only after confirmed browser_close, active RPC drain and no uncertain call, closes own transport, stops own server PG and releases lease. Shared service/other records untouched."
+    },
+    {
+      "run": "discard-diagnostic-v01",
+      "exit": 0,
+      "wallSeconds": 15.081418665999081,
+      "runnerPG": 6533,
+      "observerPG": 6683,
+      "observerExit": 0,
+      "ownGroupsRemaining": [],
+      "sessions": [
+        {
+          "providerToken": "9b9f57a7-60a7-4824-bdbe-6265f0f2de48",
+          "mcpSessionId": "dcaf1a7c-5b81-496f-b62d-723bdf28b857",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25",
+          "slot": 1,
+          "port": 5274,
+          "serverPG": 6612,
+          "serverToken": "25537bdc-f7c2-47cb-96ac-849fc6a547ea",
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "ownTokensCleared": true
+        }
+      ],
+      "receipt": "/tmp/root680-20261014/discard-diagnostic-v01.receipt.json",
+      "ownerEvidence": "/tmp/root680-20261014/discard-diagnostic-v01-all-live-owners.json",
+      "cleanupEvidence": "/tmp/root680-20261014/discard-diagnostic-v01-cleanup-v01.json",
+      "completion": "Native runner terminal result and exact own owner/server tokens cleared; audited managedclose clears owner only after confirmed browser_close, active RPC drain and no uncertain call, closes own transport, stops own server PG and releases lease. Shared service/other records untouched."
+    },
+    {
+      "run": "purpose-recovery-v02",
+      "exit": 0,
+      "wallSeconds": 114.07706333399983,
+      "runnerPG": 69875,
+      "observerPG": 70071,
+      "observerExit": 0,
+      "ownGroupsRemaining": [],
+      "sessions": [
+        {
+          "providerToken": "a6fc0fe4-33dc-4bd2-b952-ea511be1f553",
+          "mcpSessionId": "be35cf9d-359a-41ba-b82f-af965cf79980",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25",
+          "slot": 1,
+          "port": 5274,
+          "serverPG": 69973,
+          "serverToken": "a9f96d7a-5396-484b-8fbe-5dd7dc88e723",
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "ownTokensCleared": true
+        }
+      ],
+      "receipt": "/tmp/root680-20261014/purpose-recovery-v02.receipt.json",
+      "ownerEvidence": "/tmp/root680-20261014/purpose-recovery-v02-all-live-owners.json",
+      "cleanupEvidence": "/tmp/root680-20261014/purpose-recovery-v02-cleanup-v01.json",
+      "completion": "Native runner terminal result and exact own owner/server tokens cleared; audited managedclose clears owner only after confirmed browser_close, active RPC drain and no uncertain call, closes own transport, stops own server PG and releases lease. Shared service/other records untouched."
+    }
+  ],
+  "rawCommandReferences": [
+    {
+      "name": "focused-v01",
+      "receipt": "/tmp/worker680-20261014/focused-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "706611ced23d9ce5aefb1258a9cd067bd22e42b342983e58f0fc30904630331c",
+        ".stdout": "664cae021d463ec5823bbe012febb5f63412e64b6b5dfa6c80a37e8a7983a0ea",
+        ".stderr": "f1948861b54523fe617b27cda80b96982a881f09b5e3be7e4ca1fa5b8176ff06"
+      }
+    },
+    {
+      "name": "review-v01",
+      "receipt": "/tmp/worker680-20261014/review-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "f872f6eb90f8125a17a8f680cff0a9bb3156880197ac7da48c901c20750aa75c",
+        ".stdout": "fc40dc0c9e13bf71654f41e95bad9c921421c7219feb4d1475f73ff428c0b852",
+        ".stderr": "f1948861b54523fe617b27cda80b96982a881f09b5e3be7e4ca1fa5b8176ff06"
+      }
+    },
+    {
+      "name": "knip-v01",
+      "receipt": "/tmp/worker680-20261014/knip-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "ede23ac93c973d5c4a7ca099aa99328baad7bfcb07910b5b79df6d185bb4510e",
+        ".stdout": "dddfff05bc07447cdfc4ff317429b70941df30e47fb15b890274996011f26288",
+        ".stderr": "f1948861b54523fe617b27cda80b96982a881f09b5e3be7e4ca1fa5b8176ff06"
+      }
+    },
+    {
+      "name": "preflight-v01",
+      "receipt": "/tmp/worker680-20261014/preflight-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "1814374aa134b13bf89762c1372f1e8aad327185022f250e8d28954852217786",
+        ".stdout": "34cfc9f60f931f67bb2d5af9757ee3fe74c772e918e616b200c9b237169db8ef",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "weighted300-inner-v01",
+      "receipt": "/tmp/worker680-20261014/weighted300-inner-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "0af56e6a406db2dd03241d97ed2cad88aa07dfea2588a1d6a7b1642f43f0ee50",
+        ".stdout": "5211ad792a857ac95fc8ed7f1e0a6fe67fbbbe20b72bebc50371398fcea8f196",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "weighted300-outer-v01",
+      "receipt": "/tmp/worker680-20261014/weighted300-outer-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "8d21ab1e18c4adb248fa727fc49896541878063aeaf046083aefeaee101996d7",
+        ".stdout": "3d4007194eaf94f7ab0afcba271218479aae886dee183e00fe1d24fce64a1da5",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "sweep-v01",
+      "receipt": "/tmp/worker680-20261014/sweep-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "854715e592bc08ec3a316a65f31453273d10fd85f9f2a88846ee8ef3e7403d10",
+        ".stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".stderr": "813dd6cf82435ea48b12af4b06155201fe2a9a9cc8b2dbe00226c1116cb6d54e"
+      }
+    },
+    {
+      "name": "workflow-v01",
+      "receipt": "/tmp/worker680-20261014/workflow-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "52ebd99f930b8683582e2e64e25a1e2b9a87cfd6c6fc5a598161fc496b4b5291",
+        ".stdout": "e90b7b547902a26d5d14ec7b9262602e40a41079c86652bf34b4336e1f69f839",
+        ".stderr": "30f9005f3e0fc25682fdbe4fcd866fc881092069f1a745222ca41dd9f148dcfc"
+      }
+    },
+    {
+      "name": "qa-syntax-v01",
+      "receipt": "/tmp/worker680-20261014/qa-syntax-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "f89ab32312a62f977132b089331366b88ac2e171e573fb73a0f92c29e7199a51",
+        ".stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "qa-syntax-v02",
+      "receipt": "/tmp/worker680-20261014/qa-syntax-v02.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "810420fba18bb1351f6865bf40fddf3d24b1ea1c1d7bd69fa365d9583f257ea2",
+        ".stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "sweep-observer-v01",
+      "receipt": "/tmp/worker680-20261014/sweep-observer-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "66f477f70f8f6abb15160ec41795f5c512d6124262b156639985350dbe8e0751",
+        ".stdout": "938d079800e0c1db95c6319f7c4ddee746ec821fc4c33061811f21d29d10ff22",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "workflow-observer-v01",
+      "receipt": "/tmp/worker680-20261014/workflow-observer-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "6be9063788fdf8086b857d8f1346e033c8790561f32cf17dc56da3f7b2c53365",
+        ".stdout": "acd5a6196be12f7747bd529cef520e9984a87f9e24b7bddbe95200a6ccf09ed6",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "sweep-initial-owner-v01",
+      "receipt": "/tmp/worker680-20261014/sweep-initial-owner-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "92b00d82156f98d111ebc7ccecf9926ab44d2bbd7805c064af951a5de7f74ebc",
+        ".stdout": "c71c2b8c9ae559526c65c043b446a1f1e42850ee7951a535d02b0d9208b951be",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "workflow-initial-owner-v01",
+      "receipt": "/tmp/worker680-20261014/workflow-initial-owner-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "0379d48701439009e07d0ee745cdb929221e9427968a5232d62954bff1c7af4b",
+        ".stdout": "221f8b0a39bea801310144a67fb0cf9a9bff6664dabeff9e21ed909261f83471",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "discard-diagnostic-v01",
+      "receipt": "/tmp/root680-20261014/discard-diagnostic-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "7536d9cffb1daef7e5a9c14194c35a50ac37b790d6d02f90129a16a22125de82",
+        ".stdout": "c39970b00a1f4cb298d4a45244f7c26a5492407a35f8c5243821f2a319bad0f7",
+        ".stderr": "c5b9358f593c47a04326153d38f96a4c8ea6f41a311109350869812036e1d0e9"
+      }
+    },
+    {
+      "name": "purpose-recovery-v02",
+      "receipt": "/tmp/root680-20261014/purpose-recovery-v02.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "a5663e9358b4f911ffd3176cc61b1c77b5b8135b6194278eb01cc7d4e5bec759",
+        ".stdout": "5e78f5a77b0b51df3f8d1bed4d8e0e2a42d7336accaa603fa16191e5341c8a97",
+        ".stderr": "b891d17e576eec1c752b241882556a7cf519d542e4850da72956556140336dc2"
+      }
+    },
+    {
+      "name": "discard-diagnostic-owner-v01",
+      "receipt": "/tmp/root680-20261014/discard-diagnostic-owner-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "1af3dce1c4553419abfd2adb2f798b75650050920c6cc04bef347b2a71235cfc",
+        ".stdout": "43c1c2143887d28e7287b7a5e2195c0d3f3ccd79edc6353dcff98f8e245025fa",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "purpose-recovery-owner-v02",
+      "receipt": "/tmp/root680-20261014/purpose-recovery-owner-v02.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "ba2bd1d8f7a19c1b7e33f88333299ce8ead449283a627f6a95789ea7a904e4c2",
+        ".stdout": "7d5b4dcf244cb629b97784187d38bd0e0825ce35d25ec84506cf6761663c4850",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "final-schema-v01",
+      "receipt": "/tmp/worker680-20261014/final-schema-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "9e8e32967c73efadf1652c00a13028234370309a73200d364aa2999003ab1d08",
+        ".stdout": "9314d5a0ac0d3d7343390e28c032f625ac64c16a39b1137d2d7e7f5f9dd6cd46",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "final-diff-check-v01",
+      "receipt": "/tmp/worker680-20261014/final-diff-check-v01.receipt.json",
+      "rawSha256": {
+        ".receipt.json": "1de92eab280f0e3bf084938ab801655c2bda03b7395f7bdfddd410bb8c278bee",
+        ".stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "retainedGreenVerification": "/tmp/root680-20261014/justiciar-retained-green-verification-v01.json",
+  "preExisting": "No pre-existing product issue established; the failed recipe was agent-created and is recorded as scripting friction.",
+  "delivery": "This validated frozen snapshot is authorized for one local Conventional Commit. Actual Git endpoint and tail are recorded externally after execution; candidate submission and certified promotion remain root-owned and pending.",
+  "finalChecks": {
+    "schema": {
+      "exit": 0,
+      "seconds": 0.12672820800798945
+    },
+    "diff": {
+      "exit": 0,
+      "seconds": 0.026642874989192933
+    },
+    "note": "These actual final checks follow the prospective draft clock marker; no actual Git endpoint is asserted."
+  }
+}

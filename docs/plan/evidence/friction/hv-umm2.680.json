@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.680",
+  "phase": 5,
+  "implementMin": 52.06244613333333,
+  "implementWindow": {
+    "start": "2026-10-14T17:53:58.120Z",
+    "end": "2026-10-14T18:46:01.866768+00:00"
+  },
+  "localValidationS": {
+    "focused": 14.846001458994579,
+    "review": 56.36858995902003,
+    "knip": 6.548645167000359,
+    "preflight": 2.513067666994175,
+    "fuzz": 329.01655258302344,
+    "fuzzLockWait": 334.76697,
+    "fuzzLockOuter": 663.8397833749768,
+    "sweep": 154.71504124999046,
+    "purposeFailure": 44.243247917009285,
+    "rootDiagnostic": 15.081418665999081,
+    "purposeRecovery": 114.07706333399983
+  },
+  "hostLoad": 14.82,
+  "testDelta": {
+    "files": 1,
+    "lines": 118,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 13.018388833333335,
+      "note": "Measured failed-purpose terminal to native recovery verification: 2026-10-14T18:25:41.466740+00:00 through 2026-10-14T18:38:42.57007Z. The agent recipe admitted the engine pending prompt before its selectable UI was rendered and treated pointer dispatch as selection. Root directly replaced admission with the exact physical candidate role/button, picker-candidate ancestor and actual submit control, observed selection, enabled confirmation and persisted answer. Full six-cell state/log/reload/geometry/Caps acceptance retained; no product/source change or acceptance waiver. Diagnostic is not acceptance."
+    }
+  ]
+}

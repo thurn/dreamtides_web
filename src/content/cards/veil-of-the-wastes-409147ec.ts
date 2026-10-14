@@ -1,3 +1,7 @@
+import { characterYouControl, thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +22,8 @@ export default card({
   artOwned: false,
   cardNumber: 482,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(whenMaterialize(characterYouControl({ costAtMost: 2 })), materialize(thisCardIn("void")), { zone: "void" }),
+  ],
+  verifiedText: expectedVerifiedText("When you materialize a ≤2● cost character, return this card from your void to play."),
 });

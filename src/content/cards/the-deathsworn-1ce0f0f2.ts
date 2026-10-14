@@ -1,3 +1,7 @@
+import { characterYouControl, thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +24,12 @@ export default card({
   artOwned: false,
   cardNumber: 10,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(
+      whenMaterialize(characterYouControl({ sparkAtMost: 1, ...(variant.amplified ? {} : { sparkAtLeast: 1 }) })),
+      materialize(thisCardIn("void")),
+      { zone: "void" },
+    ),
+  ],
+  verifiedText: expectedVerifiedText("When you materialize a character with 1✦, materialize this character from your void.", "When you materialize a ≤1✦ character, materialize this character from your void."),
 });
