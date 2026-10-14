@@ -1,3 +1,6 @@
+import { staticAbility, turnOf } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { costModifierNth } from "../../engine/effects/primitives/cost-modifier";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,6 @@ export default dreamsign({
     "0b873395-ad12-4a9f-ab50-5820fc92dd19",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(costModifierNth("you", { fast: true }, 1, { reduce: 1 }), { while: turnOf("opponent") })],
+  verifiedText: expectedVerifiedText("The first ❖ card you play during the opponent's turn costs 1● less."),
 });

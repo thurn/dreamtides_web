@@ -1,3 +1,6 @@
+import { discardedThisTurn, staticAbility, times } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { costModifier } from "../../engine/effects/primitives/cost-modifier";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +13,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(costModifier("you", { cardType: "event" }, times(discardedThisTurn(), -1)))],
+  verifiedText: expectedVerifiedText("When you play an event, it costs 1● less for each card you have discarded this turn."),
 });

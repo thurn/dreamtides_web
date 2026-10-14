@@ -1,0 +1,1139 @@
+{
+  "bead": "hv-umm2.249",
+  "phase": 5,
+  "base": "ae5615455b519d93501aacabc78cdd651c8d7bf2",
+  "evidenceCutoff": "2026-10-14T23:53:48.399114+00:00",
+  "allOriginalUUIDs": [
+    "86f64a29-7338-4759-81da-4c7656e543d2",
+    "257c160f-7d70-4ebd-bb0f-f83e61907310",
+    "553d2317-32f9-47bc-bae0-5018ca26d56a",
+    "c706d0ba-2f41-4b14-95d8-db168ac6246c"
+  ],
+  "sourceSHA256": {
+    "src/content/dreamsigns/spice-blossoms-86f64a29.ts": "4edba40825a07cf649d2d58538a59af90319ed134e9965600fe929a506fa77a0",
+    "src/content/dreamsigns/egg-nest-553d2317.ts": "20716eb9fa6f526f139232bf7ef84454a02c1f14dc38d6b5976f641ddd311838",
+    "src/content/specs/dreamsigns-battle-12.scenarios.ts": "6b0e772a680806250904f8f7bece38477ddc2529fa8686ce64c161df21e88461"
+  },
+  "productionGrossChangedLines": 12,
+  "newPrimitives": [],
+  "newForms": [],
+  "rulesLadder": "Not invoked; existing normative rules settle current-turn actual discards, Fast including Interrupt, filtered committed-play ordinals, opponent active turn and whole chosen energy reduction. No new RD/rules/card issue required.",
+  "writeAuthority": "Two original remaining content leaves, own private auto-discovered scenario and own four evidence paths. Child666 leaves/scenario/evidence and all engine/UI/config/hubs/shared index read-only.",
+  "actualDispatch": {
+    "start": "2026-10-14T23:22:54.389Z",
+    "ack": "2026-10-14T23:22:55.437Z",
+    "proofSHA256": "ab50ee5fa81469dc73649fd3eff46506c35b81a49f1ad45df44d91b461146dea",
+    "claimSetupSeparate": true,
+    "modelSamplingCPU": "UNKNOWN"
+  },
+  "testDelta": {
+    "plainScenarioModules": 1,
+    "lines": 136,
+    "configuredTestEntrypoints": 0,
+    "jsdomFiles": 0,
+    "ownCases": 12,
+    "childCasesReadOnly": 6
+  },
+  "checks": {
+    "pending-v1": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-battle-12"
+      ],
+      "start": "2026-10-14T23:27:32.108355+00:00",
+      "end": "2026-10-14T23:27:35.164319+00:00",
+      "wallSeconds": 3.055813333019614,
+      "exit": 1,
+      "hostLoad1min": 6.32763671875,
+      "pgid": 88649,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "1e1dfd9251ccf02443f9a727bfed92bf6ccf229e864d37ce55cba58f479cbcfc",
+      "afterManifestSHA256": "1e1dfd9251ccf02443f9a727bfed92bf6ccf229e864d37ce55cba58f479cbcfc",
+      "stdoutSHA256": "7fc3dfbe79636585af984d7db7ea84aa41edeafc73566db06a55748b1009eb23",
+      "stderrSHA256": "0e2fd524d1fbcea1d4f6dcdfd9e3d98d4e49bcc0ae115593803bcac40572f95e"
+    },
+    "pending-v2": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-battle-12"
+      ],
+      "start": "2026-10-14T23:27:48.438116+00:00",
+      "end": "2026-10-14T23:27:50.926468+00:00",
+      "wallSeconds": 2.488197458034847,
+      "exit": 1,
+      "hostLoad1min": 6.1865234375,
+      "pgid": 90038,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "d4afe4f0d91f0202cd09438102b75f65804f05240225b128b4ff261141e49a19",
+      "afterManifestSHA256": "d4afe4f0d91f0202cd09438102b75f65804f05240225b128b4ff261141e49a19",
+      "stdoutSHA256": "8c828d6059fd441d556c8ef2fff0eae734e1a8abfbc9925ec12d1236d57ed00f",
+      "stderrSHA256": "90e06ce430403ef462410b6b6c3ba61f294124354aee57feffebb26812c26847"
+    },
+    "authored-v1": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-battle-12|dreamsigns-ready-249"
+      ],
+      "start": "2026-10-14T23:28:04.295723+00:00",
+      "end": "2026-10-14T23:28:06.866851+00:00",
+      "wallSeconds": 2.5709853330045007,
+      "exit": 1,
+      "hostLoad1min": 5.9169921875,
+      "pgid": 91091,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "366cb0a5f99ca90089fe7eeef810b25681651eb72ab01dbc535e7b963bea4dcf",
+      "afterManifestSHA256": "366cb0a5f99ca90089fe7eeef810b25681651eb72ab01dbc535e7b963bea4dcf",
+      "stdoutSHA256": "22fbbff3cde88c680dcd9d4caba5180c992203c6c14eec3716f1dbdc5ed8be64",
+      "stderrSHA256": "2e02d0ad58232c314330e1cf02eb899730f10781448aa7d56e20ee230e262dee"
+    },
+    "authored-v2": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-battle-12|dreamsigns-ready-249|scenario registry"
+      ],
+      "start": "2026-10-14T23:28:20.040568+00:00",
+      "end": "2026-10-14T23:28:22.565491+00:00",
+      "wallSeconds": 2.5247579159913585,
+      "exit": 0,
+      "hostLoad1min": 5.7568359375,
+      "pgid": 92049,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "afterManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "stdoutSHA256": "3b381d8ecb9cf8a0c9b0adc69d08df7141eb83b788dd34a18c862be78919e2ea",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "primitives-v1": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "exact current-turn history|costModifierNth|active turn|turnOf"
+      ],
+      "start": "2026-10-14T23:28:32.665683+00:00",
+      "end": "2026-10-14T23:28:38.505067+00:00",
+      "wallSeconds": 5.839157500013243,
+      "exit": 0,
+      "hostLoad1min": 5.98876953125,
+      "pgid": 93029,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "afterManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "stdoutSHA256": "02c70de01c9956cad25206028963433b7992078bf56bbe1db38eca4968bc8bbf",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "nth-turn-v1": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "static nth costs|active-turn condition"
+      ],
+      "start": "2026-10-14T23:28:43.315586+00:00",
+      "end": "2026-10-14T23:28:47.688831+00:00",
+      "wallSeconds": 4.372987666982226,
+      "exit": 0,
+      "hostLoad1min": 6.451171875,
+      "pgid": 93860,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "afterManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "stdoutSHA256": "220db3ff3733559d7d9099769b42239018640d4a632a300f88b95fb4712d7585",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "coverage-v1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-14T23:28:50.798570+00:00",
+      "end": "2026-10-14T23:28:55.629118+00:00",
+      "wallSeconds": 4.830366708047222,
+      "exit": 0,
+      "hostLoad1min": 6.3349609375,
+      "pgid": 94340,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "afterManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "stdoutSHA256": "65bde96e617f4653a35861f23af884f8968ed0b2703370457052344fe1a99506",
+      "stderrSHA256": "80bba58649c8685b3efde6c2112ee6d11eab024873fda59ef5494590d90b2216"
+    },
+    "weighted300-v1": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "86f64a29-7338-4759-81da-4c7656e543d2,257c160f-7d70-4ebd-bb0f-f83e61907310,553d2317-32f9-47bc-bae0-5018ca26d56a,c706d0ba-2f41-4b14-95d8-db168ac6246c"
+      ],
+      "start": "2026-10-14T23:29:06.103845+00:00",
+      "end": "2026-10-14T23:36:46.562563+00:00",
+      "wallSeconds": 460.4713397080195,
+      "exit": 0,
+      "hostLoad1min": 6.8701171875,
+      "pgid": 95275,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "afterManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "stdoutSHA256": "0ebc02003a349ee432ef049047aa3693849e2d325d548e9a8a21e5eff0401460",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "preflight-v1": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "86f64a29-7338-4759-81da-4c7656e543d2,257c160f-7d70-4ebd-bb0f-f83e61907310,553d2317-32f9-47bc-bae0-5018ca26d56a,c706d0ba-2f41-4b14-95d8-db168ac6246c",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "start": "2026-10-14T23:37:01.001849+00:00",
+      "end": "2026-10-14T23:37:02.424537+00:00",
+      "wallSeconds": 1.422560542006977,
+      "exit": 0,
+      "hostLoad1min": 4.41064453125,
+      "pgid": 80143,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "afterManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "stdoutSHA256": "1e2f8241d3110eb2669ba60a18299445221d7927ec3aac72355c516161077808",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sweep-v1": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.249",
+        "--dreamsigns",
+        "86f64a29-7338-4759-81da-4c7656e543d2,257c160f-7d70-4ebd-bb0f-f83e61907310,553d2317-32f9-47bc-bae0-5018ca26d56a,c706d0ba-2f41-4b14-95d8-db168ac6246c",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "start": "2026-10-14T23:37:17.733234+00:00",
+      "end": "2026-10-14T23:37:46.413085+00:00",
+      "wallSeconds": 28.679424666974228,
+      "exit": 0,
+      "hostLoad1min": 4.376953125,
+      "pgid": 80516,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [
+        "docs/plan/evidence/qa-ledger/hv-umm2.249.jsonl"
+      ],
+      "beforeManifestSHA256": "ae6560b8acb5ebc465fba752e1302a7a671a386312facbb5ceb3ca44364e7500",
+      "afterManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "5b87c8d24ddddeef657c6d4e947e1c9d5315cf8a7e6698c787de77a704163454"
+    },
+    "custom-cost-v1": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-249/cost-workflow-v1.mjs",
+        "--bead",
+        "hv-umm2.249",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-14T23:38:20.209422+00:00",
+      "end": "2026-10-14T23:38:26.475953+00:00",
+      "wallSeconds": 6.266341874958016,
+      "exit": 1,
+      "hostLoad1min": 5.75634765625,
+      "pgid": 82206,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "afterManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "stdoutSHA256": "41beb3edb6c6c3981086620d490a950cba3ca6d0d39e5a4d60697afea950df4f",
+      "stderrSHA256": "11fe2a65794112584ad899fb30e6ed19ada036b31f4e822fdb9d0c0da83bc4b8"
+    },
+    "review-v1": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T23:39:23.501239+00:00",
+      "end": "2026-10-14T23:40:18.273218+00:00",
+      "wallSeconds": 54.771437166957185,
+      "exit": 0,
+      "hostLoad1min": 7.92529296875,
+      "pgid": 83723,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "afterManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "stdoutSHA256": "e0cedd3042348a4a568904e3fe3899887800cd1b0949081523184274eed3a944",
+      "stderrSHA256": "80bba58649c8685b3efde6c2112ee6d11eab024873fda59ef5494590d90b2216"
+    },
+    "knip-v1": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-14T23:40:22.215207+00:00",
+      "end": "2026-10-14T23:40:26.617980+00:00",
+      "wallSeconds": 4.402602249989286,
+      "exit": 0,
+      "hostLoad1min": 8.896484375,
+      "pgid": 85344,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "afterManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "stdoutSHA256": "77fbd497ba6868db45357812072eeda1c47a875275cd597fd3da47128255c8ac",
+      "stderrSHA256": "80bba58649c8685b3efde6c2112ee6d11eab024873fda59ef5494590d90b2216"
+    },
+    "custom-cost-v2": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-249/cost-workflow-v2.mjs",
+        "--bead",
+        "hv-umm2.249",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-14T23:40:36.810040+00:00",
+      "end": "2026-10-14T23:40:49.441499+00:00",
+      "wallSeconds": 12.631231500010472,
+      "exit": 1,
+      "hostLoad1min": 7.873046875,
+      "pgid": 85781,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "afterManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "stdoutSHA256": "ee003874341c2ad0953b450c96f8ca34f4792e87d83c98616abb68b60a735b2b",
+      "stderrSHA256": "2b13063a561ec73dedde896d2a96ff304c25e957e6a9b583d5014a571dccdf63"
+    },
+    "custom-cost-v3": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-249/cost-workflow-v3.mjs",
+        "--bead",
+        "hv-umm2.249",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-14T23:42:20.943955+00:00",
+      "end": "2026-10-14T23:46:47.310955+00:00",
+      "wallSeconds": 266.36503166600596,
+      "exit": 0,
+      "hostLoad1min": 7.3388671875,
+      "pgid": 88535,
+      "remainingGroup": false,
+      "childReaped": true,
+      "sourceChanged": [],
+      "beforeManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "afterManifestSHA256": "51e58755b7757cfd76d9bfaaedb218c2685b5ea75617b24cd5c606c590e76591",
+      "stdoutSHA256": "6230ed12732d321b367699285ae4b4ff1c045e0c7d2cc9a89eed4c614d78f94b",
+      "stderrSHA256": "351b3ae17536f64343e62f3cf91b25c03164ed39c577092822b529b655332efe"
+    }
+  },
+  "results": {
+    "focused": {
+      "ownAndChildPlusRegistry": 19,
+      "existingHistoryContracts": 43,
+      "existingNthActiveTurnContracts": 56,
+      "contentGates": 20
+    },
+    "review": {
+      "tests": 7397,
+      "files": 255,
+      "ordinaryReview": true,
+      "fullReview": false
+    },
+    "knip": {
+      "exit": 0
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 103633,
+      "failures": 0,
+      "prompts": 8021,
+      "interactiveReruns": 803,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 6
+      },
+      "driverWallSeconds": 459.1,
+      "driverCPUSeconds": 490.2,
+      "eachIncluded": 600,
+      "exercised": [
+        0,
+        740,
+        0,
+        1362
+      ],
+      "qualification": "Default full pool, seeds, policy, determinization and invariants unchanged. Outer460.471s includes lock/start overhead; exact lock wait unmeasured. Static effects emit neither activation nor applied trigger event, so source exercise counter0 is not a payment assertion. Own public D20 and browser payments provide that evidence (fuzz.ts479-499)."
+    },
+    "preflight": {
+      "pass": 8,
+      "skip": 72,
+      "pending": 0,
+      "fail": 0,
+      "qualification": "Base both seats; all9other recognized variants ineligible. Initialization distinct from ability exercise."
+    },
+    "sweep": {
+      "invocation": "invocations/sweep-5wtGBP",
+      "summarySHA256": "481909ef86bc21273e1251047769786cf9e36e9e7812ff000d8b9a21965b1781",
+      "pass": 8,
+      "skip": 72,
+      "pending": 0,
+      "fail": 0,
+      "actualAttempts": 80,
+      "effectiveCells": 80,
+      "sessions": 1,
+      "leaseYields": 0,
+      "port": 5274,
+      "browserLeaseWaitMs": 6,
+      "qualification": "All original4UUIDs/all variants/both controllers; initialization separate from whole clauses."
+    },
+    "live": {
+      "invocations": 3,
+      "failedCallerInvocations": 2,
+      "successfulInvocation": "run-jJtjop",
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 56735
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 69726
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 68752
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 68858
+        }
+      ],
+      "passedWorkflowCells": 4,
+      "actualCallAttempts": 6,
+      "reportSHA256": "6230ed12732d321b367699285ae4b4ff1c045e0c7d2cc9a89eed4c614d78f94b",
+      "resultShape": "Both Spice and Egg actual full results retained through carry per desktop/mobile; no missing prior-step result payload.",
+      "acceptedCaptures": 14,
+      "caps": [],
+      "flows": [
+        {
+          "viewport": "desktop",
+          "flow": "spice",
+          "uuid": "86f64a29-7338-4759-81da-4c7656e543d2",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "costs": [
+            [
+              "discard-reduced event",
+              0,
+              10,
+              10
+            ],
+            [
+              "character unaffected by Event reduction",
+              1,
+              10,
+              9
+            ],
+            [
+              "fresh-turn full Event payment",
+              1,
+              10,
+              9
+            ]
+          ],
+          "reload": [
+            {
+              "label": "exact-game-reload",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=86f64a29-7338-4759-81da-4c7656e543d2&as=player&seed=1&debug=1&game=6ehrof",
+              "beforeHistoryEntries": 11,
+              "afterHistoryEntries": 11,
+              "beforeAttempt": 7,
+              "afterAttempt": 7,
+              "fullCommittedEqual": true,
+              "fullHistoryEqual": true
+            }
+          ],
+          "geometries": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i55\"]",
+              "x": 254.5,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hits": [
+                true,
+                true
+              ]
+            },
+            {
+              "selector": "[data-testid=battle-prompt-cancel]",
+              "x": 826.625,
+              "y": 20.75,
+              "width": 88.375,
+              "height": 42,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hits": [
+                true,
+                true
+              ]
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 1115.97216796875,
+              "y": 596.3699951171875,
+              "width": 126.3681640625,
+              "height": 43.260009765625,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hits": [
+                true,
+                true
+              ]
+            }
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          },
+          "finalTurn": {
+            "round": 2,
+            "turnNumber": 3,
+            "active": "player",
+            "phase": "day",
+            "sideTurns": {
+              "player": 2,
+              "enemy": 1
+            },
+            "extra": false,
+            "lastNormal": "player",
+            "extraTurns": [],
+            "challengeLane": null,
+            "beginning": false
+          }
+        },
+        {
+          "viewport": "desktop",
+          "flow": "egg",
+          "uuid": "553d2317-32f9-47bc-bae0-5018ca26d56a",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "costs": [
+            [
+              "own-turn full Interrupt",
+              1,
+              10,
+              9
+            ],
+            [
+              "first opponent-turn matching Interrupt",
+              0,
+              9,
+              9
+            ],
+            [
+              "second opponent-turn matching Interrupt",
+              1,
+              9,
+              8
+            ],
+            [
+              "next opponent-turn first matching Interrupt",
+              0,
+              10,
+              10
+            ]
+          ],
+          "reload": [
+            {
+              "label": "exact-game-reload",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=553d2317-32f9-47bc-bae0-5018ca26d56a&as=player&seed=1&debug=1&game=5dvhot",
+              "beforeHistoryEntries": 28,
+              "afterHistoryEntries": 28,
+              "beforeAttempt": 37,
+              "afterAttempt": 37,
+              "fullCommittedEqual": true,
+              "fullHistoryEqual": true
+            }
+          ],
+          "geometries": [
+            {
+              "selector": "[data-testid=battle-prompt-cancel]",
+              "x": 826.625,
+              "y": 20.75,
+              "width": 88.375,
+              "height": 42,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hits": [
+                true,
+                true
+              ]
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 1115.9952392578125,
+              "y": 596.3778686523438,
+              "width": 126.322021484375,
+              "height": 43.2442626953125,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "hits": [
+                true,
+                true
+              ]
+            }
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          },
+          "finalTurn": {
+            "round": 2,
+            "turnNumber": 4,
+            "active": "enemy",
+            "phase": "dusk",
+            "sideTurns": {
+              "player": 2,
+              "enemy": 2
+            },
+            "extra": false,
+            "lastNormal": "enemy",
+            "extraTurns": [],
+            "challengeLane": null,
+            "beginning": false
+          }
+        },
+        {
+          "viewport": "mobile",
+          "flow": "spice",
+          "uuid": "86f64a29-7338-4759-81da-4c7656e543d2",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "costs": [
+            [
+              "discard-reduced event",
+              0,
+              10,
+              10
+            ],
+            [
+              "character unaffected by Event reduction",
+              1,
+              10,
+              9
+            ],
+            [
+              "fresh-turn full Event payment",
+              1,
+              10,
+              9
+            ]
+          ],
+          "reload": [
+            {
+              "label": "exact-game-reload",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=86f64a29-7338-4759-81da-4c7656e543d2&as=player&seed=1&debug=1&game=p2c4tf",
+              "beforeHistoryEntries": 11,
+              "afterHistoryEntries": 11,
+              "beforeAttempt": 7,
+              "afterAttempt": 7,
+              "fullCommittedEqual": true,
+              "fullHistoryEqual": true
+            }
+          ],
+          "geometries": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i55\"]",
+              "x": 23.40625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hits": [
+                true,
+                true
+              ]
+            },
+            {
+              "selector": "[data-testid=battle-prompt-cancel]",
+              "x": 269.125,
+              "y": 20.75,
+              "width": 88.375,
+              "height": 42,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hits": [
+                true,
+                true
+              ]
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 257.4721984863281,
+              "y": 522.1981201171875,
+              "width": 126.36810302734375,
+              "height": 43.260009765625,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hits": [
+                true,
+                true
+              ]
+            }
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          },
+          "finalTurn": {
+            "round": 2,
+            "turnNumber": 3,
+            "active": "player",
+            "phase": "day",
+            "sideTurns": {
+              "player": 2,
+              "enemy": 1
+            },
+            "extra": false,
+            "lastNormal": "player",
+            "extraTurns": [],
+            "challengeLane": null,
+            "beginning": false
+          }
+        },
+        {
+          "viewport": "mobile",
+          "flow": "egg",
+          "uuid": "553d2317-32f9-47bc-bae0-5018ca26d56a",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "costs": [
+            [
+              "own-turn full Interrupt",
+              1,
+              10,
+              9
+            ],
+            [
+              "first opponent-turn matching Interrupt",
+              0,
+              9,
+              9
+            ],
+            [
+              "second opponent-turn matching Interrupt",
+              1,
+              9,
+              8
+            ],
+            [
+              "next opponent-turn first matching Interrupt",
+              0,
+              10,
+              10
+            ]
+          ],
+          "reload": [
+            {
+              "label": "exact-game-reload",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=553d2317-32f9-47bc-bae0-5018ca26d56a&as=player&seed=1&debug=1&game=8nf68i",
+              "beforeHistoryEntries": 28,
+              "afterHistoryEntries": 28,
+              "beforeAttempt": 37,
+              "afterAttempt": 37,
+              "fullCommittedEqual": true,
+              "fullHistoryEqual": true
+            }
+          ],
+          "geometries": [
+            {
+              "selector": "[data-testid=battle-prompt-cancel]",
+              "x": 269.125,
+              "y": 20.75,
+              "width": 88.375,
+              "height": 42,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hits": [
+                true,
+                true
+              ]
+            },
+            {
+              "selector": "[data-battle-phase-next] button",
+              "x": 257.4721984863281,
+              "y": 522.1981201171875,
+              "width": 126.36810302734375,
+              "height": 43.260009765625,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "hits": [
+                true,
+                true
+              ]
+            }
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          },
+          "finalTurn": {
+            "round": 2,
+            "turnNumber": 4,
+            "active": "enemy",
+            "phase": "dusk",
+            "sideTurns": {
+              "player": 2,
+              "enemy": 2
+            },
+            "extra": false,
+            "lastNormal": "enemy",
+            "extraTurns": [],
+            "challengeLane": null,
+            "beginning": false
+          }
+        }
+      ],
+      "logQualification": "Each flow reads whole persisted rows and asserts physical player play intent. Runner separately exports final Egg game only perviewport; earlier Spice engine-event pages/full retained records and actual log-read guard passed, standalone Spice JSONL not exported.",
+      "scriptSHA256": "d70c73f536f027b66e8a05275f892f3b153e612e7d1bbf79a8a304cf1c886b99"
+    }
+  },
+  "failedAttempts": {
+    "pending-v1": "10 payment assertion failures +2 Day/Dusk caller fixture failures; fixture corrected first.",
+    "pending-v2": "All12 fail at actual expected energy debit. Subsequent fixture expands Egg target alternatives and Spice natural next-turn debit; no before-proof of those later continuations inferred.",
+    "authored-v1": "16pass/2fail: single legal Egg target autoanswered. Added second legal synthetic target; no source expression change.",
+    "custom-cost-v1": "Immediate probe read before app readiness, no behavior reached; explicit ready report/probe wait fixes caller.",
+    "custom-cost-v2": "Gallery-only selector for actual own-hand discard choice; screenshot read, corrected exact physical near-hand tap plus enabled Submit. No discard/payment pass inferred.",
+    "custom-cost-v3": "All4 workflow cells pass. All failed raw reports retained; no default deadline widening, source fault or acceptance waiver."
+  },
+  "D21": {
+    "firstBytes": [
+      249,
+      92,
+      44,
+      72
+    ],
+    "sampled": [],
+    "newPromptStatusEffectKinds": [],
+    "qualification": "Own changed-clause workflows are actual voluntary functional/visual judgment using existing presentation, not new D21 kind coverage. Child Black optional failed UI-copy attempt stays qualified, no Black UI-copy pass. Child Acorn original visual failure and hv-ndka corrected rejudgment both retained read-only."
+  },
+  "childAcceptanceJoin": {
+    "bead": "hv-umm2.666",
+    "readOnlyUUIDs": [
+      "257c160f-7d70-4ebd-bb0f-f83e61907310",
+      "c706d0ba-2f41-4b14-95d8-db168ac6246c"
+    ],
+    "scenario": "src/content/specs/dreamsigns-ready-249.scenarios.ts",
+    "scenarioCasesConsumed": 6,
+    "evidence": [
+      "docs/plan/evidence/measurements/hv-umm2.666.json",
+      "docs/plan/evidence/qa-ledger/hv-umm2.666.jsonl",
+      "docs/plan/evidence/qa-ledger/hv-ndka.jsonl"
+    ],
+    "wholeOriginalValidationRetained": true
+  },
+  "failurePaths": {
+    "exception": "No new fallible IO/form. Existing engine/fold atomic contracts reused; no new storage rollback/network guarantee.",
+    "cancel": "Both-seat synthetic serialized pending target cancel preserves committed state and real discount/ordinal. Actual player UI cancel both source workflows on both viewports before commit; no debit/ordinal use.",
+    "saveLoad": "Serialized pending fold cancellation plus actual same persisted game after cancellation; nonempty histories11/28 and attempts7/37 unchanged, full committed/history equal. No UI in-flight reload/migration claim.",
+    "duplicate": "Both sides, real created cessation, batch/additional-cost discards and multiple matching physical plays tested. Generic repeated occurrences/extra-turn behavior reused from primitive contracts, not claimed as new own cases/network race proof.",
+    "privacy": "Public scalar counters and physical UUID/source event receipts; opposing holder isolated in D20. Existing knowledge/redaction contracts unchanged; no malicious concurrent intent claim."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v1 actual command collector start, OS1-minute load sample; review tool logs same7.92529296875",
+        "method": "os.getloadavg on macOS"
+      },
+      "implementWindow": {
+        "start": "Actual parent native dispatch; claim/setup separate",
+        "end": "Finalizer updates immediately before automatic Git; external receipt captures tail and actual Git metadata; no postcommit tracked rewrite"
+      },
+      "testDelta.files": {
+        "unit": "Net new plain scenario module1; configured.test entrypoint delta0 separate"
+      }
+    }
+  },
+  "ledgerPackaging": {
+    "oldNativeRows": 80,
+    "oldPrefixSHA256": "594f6c6e4b101023bc76ef65b4a8b280c8728b20f5516e539297679682d95247",
+    "appendedRows": 10,
+    "wholeNativePrefixPreserved": true
+  },
+  "resources": {
+    "observed": "2026-10-14T23:49:17.737011+00:00",
+    "allOwnedGroupsAbsent": [
+      80143,
+      80516,
+      80557,
+      82206,
+      82234,
+      83723,
+      85344,
+      85781,
+      85811,
+      88535,
+      88563,
+      88649,
+      90038,
+      91091,
+      92049,
+      93029,
+      93860,
+      94340,
+      95275
+    ],
+    "nativeNormalBrowserCleanup": "All3custom runs and sweep close their own native browser/provider/server session before returning; actual own server groups absent, each recorded port free at teardown. Fresh parent ownership-record check is separate.",
+    "providerUncertainty": false,
+    "noHeavyBrowserOverlap": true,
+    "sourceFixedEveryEpoch": true
+  },
+  "capturedImages": [
+    {
+      "file": "spice-discard-prompt-desktop.png",
+      "invocation": "run-jJtjop",
+      "sha256": "6979d8411c095dd18b2d042ce301ee0465f0e1e93bd767f55b407041f091e893",
+      "width": 1440,
+      "height": 900,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "spice-cancel-desktop.png",
+      "invocation": "run-jJtjop",
+      "sha256": "9b1d1be8012d0d317bcafad43eb1d772cfb08ecec8e1c9b853f6f5d7a5e06f0d",
+      "width": 1440,
+      "height": 900,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "spice-first-paid-desktop.png",
+      "invocation": "run-jJtjop",
+      "sha256": "7708c374e619b06211e6739d3ad5580b3804e6084d71b7d4434de5ea1f76b75a",
+      "width": 1440,
+      "height": 900,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "spice-reset-paid-desktop.png",
+      "invocation": "run-jJtjop",
+      "sha256": "91789278c9453d13dce62890d23c005e123c9cbe17f259ff059047ca36e7cb40",
+      "width": 1440,
+      "height": 900,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "egg-cancel-desktop.png",
+      "invocation": "run-jJtjop",
+      "sha256": "9513f868e1842eaf65dec5bc294f8cd5062eda96246301acc4456e4894c9c1bf",
+      "width": 1440,
+      "height": 900,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "egg-first-paid-desktop.png",
+      "invocation": "run-jJtjop",
+      "sha256": "3f311a9c280ac53a58b403f643359d1d96f427aba5eb3d8ad6fba76ae1352f78",
+      "width": 1440,
+      "height": 900,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "egg-reset-paid-desktop.png",
+      "invocation": "run-jJtjop",
+      "sha256": "8d2af6c40836ec06e484a4424dc7999b4e3de341d829e8d51c7e6d110742dec5",
+      "width": 1440,
+      "height": 900,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "spice-discard-prompt-mobile.png",
+      "invocation": "run-jJtjop",
+      "sha256": "e945a456ba9ecf791c33b28c291a670747c2799ca8b2c71b15b5cc10e405727a",
+      "width": 390,
+      "height": 844,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "spice-cancel-mobile.png",
+      "invocation": "run-jJtjop",
+      "sha256": "0e9fa1762cd13ce525f0c454f29ac5fb7963eb8cd56603ed9a542c9161185cde",
+      "width": 390,
+      "height": 844,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "spice-first-paid-mobile.png",
+      "invocation": "run-jJtjop",
+      "sha256": "c81909c9d0c949d69eb6d0b1ecf37a4f8b6d5790611b65a5c004067a2b503ab1",
+      "width": 390,
+      "height": 844,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "spice-reset-paid-mobile.png",
+      "invocation": "run-jJtjop",
+      "sha256": "ba91321ab603aff0483d6c92cd7b49f45fa71c30297675d99d87f385116e541a",
+      "width": 390,
+      "height": 844,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "egg-cancel-mobile.png",
+      "invocation": "run-jJtjop",
+      "sha256": "93fe02c02ec276dca2ef0e28fc23e7eabf8d855939c8d0d232007f41708c7d8e",
+      "width": 390,
+      "height": 844,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "egg-first-paid-mobile.png",
+      "invocation": "run-jJtjop",
+      "sha256": "7ce73d5597cb270be670450dfcb3f94e494e6b52e4e31feedb433f3a0c5def4e",
+      "width": 390,
+      "height": 844,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    },
+    {
+      "file": "egg-reset-paid-mobile.png",
+      "invocation": "run-jJtjop",
+      "sha256": "80b812b13912114ab422be97f7f4eb61d7a1411282e68b97c4a894de217ba03b",
+      "width": 390,
+      "height": 844,
+      "viewed": true,
+      "verdict": "pass",
+      "notes": "Prompt/Cancel, highlighted targets, payment/status/hand and phase controls readable; measured active control centre/right samples hit correctly. Fanned hand intentionally extends below viewport."
+    }
+  ],
+  "localReviewWarnings": "Optional review art-cache warnings during disposable preparation; normal restore-local-assets completes and source manifests fixed. No runtime source issue established.",
+  "measurementLimits": "No performance comparison, causal budget improvement, Black UI-copy pass, enemy-controller custom workflow, strict log-replay/network/migration or unobserved source-path guarantee."
+}
