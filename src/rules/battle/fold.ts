@@ -738,7 +738,12 @@ function isBattleState(value: unknown): boolean {
     hasConsistentPoolCandidates(value) &&
     (() => {
       const state = value as unknown as BattleState;
-      return state.triggerQueue.every(({ discardedCount }) => discardedCount === undefined || discardedCount < state.nextInstance);
+      return state.triggerQueue.every(trigger => {
+        for (let current: typeof trigger | undefined = trigger; current !== undefined; current = current.triggeringAbility?.occurrence) {
+          if (current.discardedCount !== undefined && current.discardedCount >= state.nextInstance) return false;
+        }
+        return true;
+      });
     })()
   );
 }
@@ -1101,7 +1106,12 @@ function hasConsistentLinkedBanish(value: Record<string, unknown>): boolean {
     record.cards.some((member, index) => member.enteredBanishedAt > state.clock || record.cards.slice(0, index).some((earlier) => earlier.instance === member.instance && earlier.enteredBanishedAt === member.enteredBanishedAt)) ||
     records.slice(0, index).some((earlier) => earlier.source === record.source && earlier.enteredPlayAt === record.enteredPlayAt &&
       earlier.gainedFrom === record.gainedFrom && earlier.ability === record.ability))) return false;
-  return state.triggerQueue.every((trigger) => trigger.linkedSource === undefined || trigger.linkedSource.enteredPlayAt <= state.clock);
+  return state.triggerQueue.every(trigger => {
+    for (let current: typeof trigger | undefined = trigger; current !== undefined; current = current.triggeringAbility?.occurrence) {
+      if (current.linkedSource !== undefined && current.linkedSource.enteredPlayAt > state.clock) return false;
+    }
+    return true;
+  });
 }
 
 function isLinkedSource(value: unknown): boolean {
@@ -1126,8 +1136,33 @@ function isHandCopyContext(value: unknown): boolean {
 }
 
 function isQueuedTrigger(value: unknown): boolean {
+  const ancestors = new Set<object>();
+  let current = value;
+  while (true) {
+    if (!isPlainRecord(current) || ancestors.has(current) || !isQueuedTriggerRecord(current)) return false;
+    ancestors.add(current);
+    if (current.triggeringAbility === undefined) return true;
+    const cause = current.triggeringAbility;
+    if (current.kind !== undefined || current.subject !== null || !isPlainRecord(cause) ||
+      Object.keys(cause).some(key => key !== "named" && key !== "occurrence" && key !== "observedBy" && key !== "readerObservedBy") || !isNamedTrigger(cause.named) ||
+      (cause.observedBy !== undefined && (!isArrayOf(cause.observedBy, isSide) || new Set(cause.observedBy).size !== cause.observedBy.length)) ||
+      (cause.readerObservedBy !== undefined && (!isArrayOf(cause.readerObservedBy, isSide) || new Set(cause.readerObservedBy).size !== cause.readerObservedBy.length)) ||
+      !isPlainRecord(cause.occurrence) || cause.occurrence.kind !== undefined) return false;
+    const original = cause.occurrence;
+    if (!isPlainRecord(original.origin) || (typeof original.source === "string"
+      ? original.origin.kind !== "card" && original.origin.kind !== "figment"
+      : !isPlainRecord(original.source) || original.origin.kind !== original.source.kind)) return false;
+    current = original;
+  }
+}
+
+function isQueuedTriggerRecord(value: unknown): boolean {
   if (!isPlainRecord(value)) return false;
   if (value.kind !== undefined && value.kind !== "dreamwellBonus" && value.kind !== "ruleReaction") return false;
+  if (value.repeated !== undefined && (value.kind !== undefined || !isPlainRecord(value.repeated) ||
+    Object.keys(value.repeated).some(key => key !== "named" && key !== "observedBy" && key !== "visibleTo") || !isNamedTrigger(value.repeated.named) ||
+    !isArrayOf(value.repeated.observedBy, isSide) || new Set(value.repeated.observedBy).size !== value.repeated.observedBy.length ||
+    !isArrayOf(value.repeated.visibleTo, isSide) || new Set(value.repeated.visibleTo).size !== value.repeated.visibleTo.length)) return false;
   if (value.kind === "ruleReaction" && (
     !isPlainRecord(value.origin) || value.origin.kind === "dreamwell" || value.node !== null || value.subject !== null ||
     value.captured !== undefined || value.gain !== undefined || value.scored !== undefined || value.discardedCount !== undefined ||

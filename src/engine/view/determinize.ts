@@ -54,6 +54,7 @@ import { fixedEnergy } from "../dsl/energy";
 import { resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, Trigger, Variant } from "../dsl/types";
 import { triggerBody } from "../triggers/body";
+import { everyNode } from "../effects/interpreter";
 import { loopSignature } from "../loops/signature";
 import { emptyLoopTracker } from "../loops/types";
 import { instanceOrigin, originAbilities } from "../rules/activation";
@@ -76,6 +77,7 @@ import {
   type HiddenCardDescriptor,
   type HiddenZoneView,
   type InstanceView,
+  type QueuedTriggerView,
 } from "./view";
 
 /** Each side's journey decklist, with each entry's variant (D39). */
@@ -153,16 +155,39 @@ export function determinize(view: BattleView, decklists: Decklists, random: () =
 }
 
 /** Samples opaque values, keeping the viewer's original concealment rather than acquiring observations. */
+function shownOccurrences(queue: readonly QueuedTriggerView[]): QueuedTriggerView[] {
+  const result: QueuedTriggerView[] = [];
+  for (const trigger of queue) {
+    for (let current: QueuedTriggerView | undefined = trigger; current !== undefined; current = current.triggeringAbility?.occurrence) result.push(current);
+  }
+  return result;
+}
+
+/** Concrete queued/captured pairs let private restoration replace only its own occurrence. */
+function queuedOccurrencePairs(state: BattleState, view: BattleView) {
+  const pairs: { shown: QueuedTriggerView; get: () => QueuedTrigger; set: (trigger: QueuedTrigger) => void }[] = [];
+  const add = (shown: QueuedTriggerView, get: () => QueuedTrigger, set: (trigger: QueuedTrigger) => void): void => {
+    pairs.push({ shown, get, set });
+    if (shown.triggeringAbility !== undefined) add(shown.triggeringAbility.occurrence,
+      () => get().triggeringAbility!.occurrence,
+      trigger => { const parent = get(); set({ ...parent, triggeringAbility: { ...parent.triggeringAbility!, occurrence: trigger } }); });
+  };
+  view.triggerQueue.filter(trigger => trigger.repeated !== undefined || trigger.triggeringAbility !== undefined || trigger.source !== null && trigger.origin !== null).forEach((shown, index) =>
+    add(shown, () => state.triggerQueue[index], trigger => { state.triggerQueue[index] = trigger; }));
+  return pairs;
+}
+
 function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, decklists: Decklists, catalog: EngineCatalog, random: () => number): void {
   const sharedDraws = new Map<string, number>();
   const assignedDraws = new Map<Side, Set<InstanceId>>();
   const layers = new Layers(state, catalog);
-  const visibleQueue = view.triggerQueue.filter(trigger => trigger.source !== null && trigger.origin !== null);
+  const visibleQueue = queuedOccurrencePairs(state, view);
   const matches = (filter: CardFilter | undefined, card: Omit<FilterSubject, "cost">, cost: number) =>
     filter === undefined || matchesFilter({ ...card, cost }, filter);
-  for (const [index, shown] of visibleQueue.entries()) {
-    if (shown.subjectCostHidden !== true || shown.source === null || shown.origin === null) continue;
-    const body = triggerBody(catalog, shown.origin, shown.ability, shown.node);
+  for (const { shown, get, set } of visibleQueue) {
+    if (shown.subjectCostHidden !== true || shown.origin === null) continue;
+    const restored = get();
+    const body = triggerBody(catalog, restored.origin, restored.ability, restored.node);
     const domains = (trigger: Trigger): { sides: readonly Side[]; filter?: CardFilter; key?: string }[] => {
       if (trigger.on === "either") return trigger.triggers.flatMap(domains);
       // Current matching can conceal draws and created discards in another hand. Self, play, board and void occasions expose their subject at matching.
@@ -213,7 +238,7 @@ function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, decklis
       if (selected.id !== undefined) assigned.add(selected.id);
       assignedDraws.set(selected.side, assigned);
     }
-    state.triggerQueue[index] = { ...state.triggerQueue[index], lastKnownSubjectCost: cost, subjectHiddenFrom: [view.viewer] };
+    set({ ...get(), lastKnownSubjectCost: cost, subjectHiddenFrom: [view.viewer] });
   }
 }
 
@@ -259,11 +284,20 @@ function standIns(
   instances: Readonly<Record<InstanceId, CardInstance>>,
   random: () => number,
   remembered: ReadonlyMap<number, InstanceId>,
-): (cards: readonly CapturedCardView[]) => InstanceId[] {
+): (cards: NonNullable<QueuedTriggerView["captured"]>) => InstanceId[] {
   const hidden = SIDES.flatMap((side) => [...sides[side].deck, ...sides[side].hand]).filter((id) => !(id in view.instances));
   const chosen = new Map<number, InstanceId | null>(remembered);
   const taken = new Set<InstanceId>(remembered.values());
-  const pick = (card: HiddenCapturedCardView): InstanceId | null => {
+  const pick = (card: Exclude<NonNullable<QueuedTriggerView["captured"]>[number], string>): InstanceId | null => {
+    if (!("printing" in card)) {
+      if (!Number.isSafeInteger(card.member) || card.member < 0 || !SIDES.includes(card.owner) ||
+        Object.keys(card).some(key => key !== "member" && key !== "owner")) throw new Error("Cannot determinize invalid captured owner/member");
+      const pool = hidden.filter(id => !taken.has(id) && instances[id].owner === card.owner);
+      const selected = pool[Math.floor(random() * pool.length)];
+      if (selected === undefined) throw new Error("Cannot determinize captured member without an owned hidden card");
+      taken.add(selected);
+      return selected;
+    }
     const owned = hidden.filter((id) => !taken.has(id) && instances[id].owner === card.owner);
     const printed = owned.filter((id) => canonicalHash(instances[id].printing) === canonicalHash(card.printing));
     const varied = printed.filter((id) => canonicalHash(instances[id].variant) === canonicalHash(card.variant));
@@ -429,7 +463,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     assigned.set(descriptor.member, id);
   }
   const capturedFacts = [...view.floating.flatMap(({ change }) => change.kind === "trigger" ? change.captured ?? [] : []),
-    ...view.triggerQueue.flatMap((trigger) => trigger.captured ?? [])].filter((card): card is HiddenCapturedCardView => typeof card !== "string");
+    ...shownOccurrences(view.triggerQueue).flatMap((trigger) => trigger.captured ?? [])].filter((card): card is HiddenCapturedCardView => typeof card !== "string" && "printing" in card && "variant" in card);
   const rememberedSource = (source: AbilitySource | { readonly member: number } | null, allowUnknown = false): AbilitySource => {
     if (source !== null && typeof source === "object" && "member" in source) {
       const resolved = assigned.get(source.member);
@@ -500,40 +534,122 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     opaque.set(effect.id, source);
     return source;
   };
+  const causeOwners = new Map<number, Side>();
+  for (const occurrence of shownOccurrences(view.triggerQueue)) {
+    const anonymous = occurrence.anonymousSource;
+    if (anonymous !== undefined && (occurrence.source !== null || occurrence.origin === null || occurrence.kind !== undefined ||
+      ("ceased" in anonymous ? anonymous.ceased !== true || Object.keys(anonymous).length !== 1
+        : !Number.isSafeInteger(anonymous.member) || anonymous.member < 0 || !SIDES.includes(anonymous.owner) ||
+          Object.keys(anonymous).some(key => key !== "member" && key !== "owner")))) throw new Error("Cannot determinize invalid anonymous cause source");
+    const minimal = (occurrence.captured ?? []).filter((card): card is { readonly member: number; readonly owner: Side } => typeof card !== "string" && !("printing" in card));
+    for (const fact of [...minimal, ...(anonymous === undefined || "ceased" in anonymous ? [] : [anonymous])]) {
+      if (!Number.isSafeInteger(fact.member) || fact.member < 0 || !SIDES.includes(fact.owner) ||
+        Object.keys(fact).some(key => key !== "member" && key !== "owner")) throw new Error("Cannot determinize invalid captured owner/member");
+      const earlier = causeOwners.get(fact.member);
+      if (earlier !== undefined && earlier !== fact.owner) throw new Error("Cannot determinize inconsistent cause owner");
+      causeOwners.set(fact.member, fact.owner);
+      const old = assigned.get(fact.member);
+      if (old !== undefined) {
+        if (instances[old]?.owner !== fact.owner) throw new Error("Cannot determinize incompatible cause owner");
+        continue;
+      }
+      const available = hidden.filter(id => instances[id].owner === fact.owner && ![...assigned.values()].includes(id));
+      const independent = capturedFacts.find(card => card.member === fact.member);
+      if (independent !== undefined && independent.owner !== fact.owner) throw new Error("Cannot determinize inconsistent captured owner");
+      const printed = independent === undefined ? [] : available.filter(id => canonicalHash(instances[id].printing) === canonicalHash(independent.printing));
+      const varied = independent === undefined ? [] : printed.filter(id => canonicalHash(instances[id].variant) === canonicalHash(independent.variant));
+      const pool = [varied, printed, available].find(ids => ids.length > 0) ?? [];
+      const selected = pool[Math.floor(random() * pool.length)];
+      if (selected === undefined) throw new Error("Cannot determinize anonymous cause without a hidden owned member");
+      assigned.set(fact.member, selected);
+    }
+  }
   const captured = standIns(view, sides, instances, random, assigned);
-  for (const trigger of view.triggerQueue) {
+  for (const trigger of shownOccurrences(view.triggerQueue)) {
     if (trigger.subjectCostHidden !== undefined && (trigger.subjectCostHidden !== true || trigger.lastKnownSubjectCost !== undefined ||
-        trigger.subject !== null || trigger.source === null || trigger.origin === null || trigger.kind === "dreamwellBonus")) {
+        trigger.subject !== null || trigger.source === null && trigger.anonymousSource === undefined || trigger.origin === null || trigger.kind === "dreamwellBonus")) {
       throw new Error("Cannot determinize invalid hidden subject cost");
     }
   }
-  const triggerQueue: QueuedTrigger[] = view.triggerQueue.flatMap<QueuedTrigger>((trigger) =>
-    trigger.source === null || trigger.origin === null
-      ? []
-      : trigger.kind === "ruleReaction"
-        ? [{ kind: "ruleReaction" as const, source: copy(trigger.source), controller: trigger.controller,
-          origin: copy(trigger.origin), ability: trigger.ability, node: null, subject: null,
-          ...(trigger.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }) }]
-        : [{
-          ...(trigger.kind === "dreamwellBonus" ? { kind: trigger.kind } : {}),
-          ...(trigger.linkedSource === undefined ? {} : { linkedSource: copy(trigger.linkedSource) }),
-          source: copy(trigger.source),
-          controller: trigger.controller,
-          origin: copy(trigger.origin),
-          ability: trigger.ability,
-          node: trigger.node,
-          subject: trigger.subject ?? (trigger.handCopy !== undefined || trigger.handCopyHidden === true ? `i${next++}` : null),
-          ...(trigger.subject === null && (trigger.handCopy !== undefined || trigger.handCopyHidden === true) ? { subjectHiddenFrom: [view.viewer] } : {}),
-          ...(trigger.handCopy === undefined ? {} : { handCopy: copy(trigger.handCopy) }),
-          ...(trigger.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
-          ...(trigger.lastKnownSubjectSpark === undefined ? {} : { lastKnownSubjectSpark: trigger.lastKnownSubjectSpark }),
-          ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
-          ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
-          ...(trigger.discardedCount === undefined ? {} : { discardedCount: trigger.discardedCount }),
-          ...(trigger.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
-          ...(trigger.captured === undefined ? {} : { captured: captured(trigger.captured) }),
-        }],
-  );
+  const hasNamed = (trigger: Trigger, named: import("../dsl/types").NamedTrigger): boolean =>
+    trigger.on === named || trigger.on === "either" && trigger.triggers.some(branch => hasNamed(branch, named));
+  const hiddenCause = (shown: QueuedTriggerView, named: import("../dsl/types").NamedTrigger): Pick<QueuedTrigger, "source" | "origin"> => {
+    if (shown.origin !== null || shown.kind !== undefined || shown.anonymousSource !== undefined || shown.source !== null && typeof shown.source !== "string") throw new Error("Cannot determinize inconsistent anonymous cause");
+    const candidates: Pick<QueuedTrigger, "source" | "origin">[] = [];
+    const add = (source: InstanceId, origin: QueuedTrigger["origin"], zone?: import("../state/ids").Zone) => {
+      const ability = originAbilities(catalog, origin)[shown.ability];
+      if (ability === undefined || (shown.node === null && ability.kind !== "triggered")) return;
+      if (shown.node === null && ability.kind === "triggered" && zone !== undefined && !worksInZone(ability.zone, zone)) return;
+      try {
+        const body = triggerBody(catalog, origin, shown.ability, shown.node);
+        if (shown.repeated !== undefined && (shown.node === null ? ability.kind === "triggered" && ability.oncePerTurn === true
+          : (everyNode(body.root)[shown.node] as import("../effects/primitives/floating-trigger").FloatingTriggerNode).once)) return;
+        if (hasNamed(body.trigger, named)) candidates.push({ source, origin });
+      }
+      catch { /* An unrelated catalog body is outside this sampled cause's domain. */ }
+    };
+    for (const instance of Object.values(instances)) {
+      if ((shown.source === instance.id || !(instance.id in view.instances)) && instance.controller === shown.controller) add(typeof shown.source === "string" ? shown.source : instance.id, instanceOrigin(instance), instance.zone);
+    }
+    if (candidates.length === 0) {
+      const source: InstanceId = typeof shown.source === "string" ? shown.source : `i${next++}`;
+      for (const card of catalog.cardDefinitions) {
+        for (const variant of [BASE_VARIANT, { amplified: true }]) add(source, { kind: "card", cardId: card.id, variant });
+      }
+    }
+    const selected = candidates[Math.floor(random() * candidates.length)];
+    if (selected === undefined) throw new Error("Cannot determinize a cause without a compatible named occurrence");
+    return selected;
+  };
+  const restoreQueued = (shown: QueuedTriggerView, named?: import("../dsl/types").NamedTrigger): QueuedTrigger | null => {
+    named ??= shown.repeated;
+    const knownReader = shown.triggeringAbility !== undefined && shown.origin !== null;
+    if (named === undefined && !knownReader && shown.anonymousSource !== undefined) throw new Error("Anonymous source belongs only to a captured cause");
+    let identity: Pick<QueuedTrigger, "source" | "origin"> | null;
+    if ((named !== undefined || knownReader) && shown.source === null && shown.origin !== null) {
+      const anonymous = shown.anonymousSource;
+      if (anonymous === undefined) throw new Error("Cannot determinize known cause without anonymous source");
+      const source: InstanceId | undefined = "ceased" in anonymous ? `i${next++}` : assigned.get(anonymous.member);
+      if (source === undefined) throw new Error("Cannot determinize missing cause member");
+      identity = { source, origin: copy(shown.origin) };
+    } else identity = shown.source !== null && shown.origin !== null
+      ? { source: copy(shown.source), origin: copy(shown.origin) }
+      : named === undefined ? null : hiddenCause(shown, named);
+    if (identity !== null && named !== undefined && (shown.kind !== undefined ||
+      !hasNamed(triggerBody(catalog, identity.origin, shown.ability, shown.node).trigger, named))) throw new Error("Cannot determinize invalid named cause");
+    if (identity === null) return null;
+    if (shown.repeated !== undefined) {
+      const ability = originAbilities(catalog, identity.origin)[shown.ability];
+      const body = triggerBody(catalog, identity.origin, shown.ability, shown.node);
+      if (shown.node === null ? ability?.kind === "triggered" && ability.oncePerTurn === true
+        : (everyNode(body.root)[shown.node] as import("../effects/primitives/floating-trigger").FloatingTriggerNode).once) throw new Error("Cannot determinize an impossible repeated allowance");
+    }
+    if (shown.kind === "ruleReaction") return { kind: "ruleReaction", ...identity, controller: shown.controller,
+      ability: shown.ability, node: null, subject: null,
+      ...(shown.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: shown.lastKnownSourceSpark }) };
+    return {
+      ...identity,
+      ...(shown.repeated === undefined ? {} : { repeated: { named: shown.repeated, observedBy: shown.origin === null ? [] : [view.viewer], visibleTo: [view.viewer] } }),
+      ...(shown.kind === "dreamwellBonus" ? { kind: shown.kind } : {}),
+      ...(shown.linkedSource === undefined ? {} : { linkedSource: copy(shown.linkedSource) }),
+      controller: shown.controller, ability: shown.ability, node: shown.node,
+      subject: shown.subject ?? (shown.handCopy !== undefined || shown.handCopyHidden === true ? `i${next++}` : null),
+      ...(shown.subject === null && (shown.handCopy !== undefined || shown.handCopyHidden === true) ? { subjectHiddenFrom: [view.viewer] } : {}),
+      ...(shown.handCopy === undefined ? {} : { handCopy: copy(shown.handCopy) }),
+      ...(shown.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: shown.lastKnownSubjectCost }),
+      ...(shown.lastKnownSubjectSpark === undefined ? {} : { lastKnownSubjectSpark: shown.lastKnownSubjectSpark }),
+      ...(shown.gain === undefined ? {} : { gain: copy(shown.gain) }),
+      ...(shown.scored === undefined ? {} : { scored: shown.scored }),
+      ...(shown.discardedCount === undefined ? {} : { discardedCount: shown.discardedCount }),
+      ...(shown.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: shown.lastKnownSourceSpark }),
+      ...(shown.captured === undefined ? {} : { captured: captured(shown.captured) }),
+      ...(shown.triggeringAbility === undefined ? {} : { triggeringAbility: { named: shown.triggeringAbility.named,
+        occurrence: restoreQueued(shown.triggeringAbility.occurrence, shown.triggeringAbility.named)!,
+        observedBy: shown.triggeringAbility.occurrence.origin === null ? [] : [view.viewer],
+        readerObservedBy: [view.viewer] } }),
+    };
+  };
+  const triggerQueue = view.triggerQueue.flatMap(trigger => { const restored = restoreQueued(trigger); return restored === null ? [] : [restored]; });
   const payable: PayableEffect[] = view.payable.map((effect) => ({
     id: effect.id,
     payer: effect.payer,
@@ -635,8 +751,8 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     loops: emptyLoopTracker(),
     result: copy(view.result),
   };
-  for (const [index, shown] of view.triggerQueue.filter(trigger => trigger.source !== null && trigger.origin !== null).entries()) {
-    const restored = state.triggerQueue[index];
+  for (const { shown, get, set } of queuedOccurrencePairs(state, view)) {
+    const restored = get();
     if (shown.handCopy !== undefined && (shown.handCopyHidden !== undefined || shown.handCopyOriginal !== undefined || shown.handCopy.copier !== view.viewer)) throw new Error("Cannot determinize conflicting hand-copy context");
     if (shown.handCopyHidden === undefined) {
       if (shown.handCopyOriginal !== undefined) throw new Error("Cannot determinize unbound hand-copy original");
@@ -658,11 +774,12 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     });
     const tuple = compatible[Math.floor(random() * compatible.length)];
     if (tuple === undefined || tuple.printing.kind !== "card") throw new Error("Cannot determinize a hand-copy tuple without a compatible original");
-    state.triggerQueue[index] = { ...restored, handCopy: { printing: copy(tuple.printing), variant: copy(tuple.variant), ephemeral: false, copier,
-      originalHiddenFrom: shown.handCopyOriginal !== undefined || shown.subject !== null ? [] : [view.viewer] } };
+    set({ ...restored, handCopy: { printing: copy(tuple.printing), variant: copy(tuple.variant), ephemeral: false, copier,
+      originalHiddenFrom: shown.handCopyOriginal !== undefined || shown.subject !== null ? [] : [view.viewer] } });
   }
   state.nextInstance = next;
-  for (const trigger of state.triggerQueue) {
+  for (const { get } of queuedOccurrencePairs(state, view)) {
+    const trigger = get();
     if (trigger.discardedCount !== undefined) state.nextInstance = Math.max(state.nextInstance, trigger.discardedCount + 1);
   }
   if (descriptors.length > 0) {

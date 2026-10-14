@@ -1,0 +1,32 @@
+{
+  "bead": "hv-vwcb",
+  "phase": 5,
+  "implementMin": 96.74175765,
+  "implementWindow": {
+    "start": "2026-10-14T13:11:19.735Z",
+    "end": "2026-10-14T14:48:04.240459+00:00"
+  },
+  "localValidationS": {
+    "counterfactual": 8.451091289520264,
+    "focused": 108.34512948989868,
+    "evidence": 1.2375996112823486,
+    "full": 108.49331212043762,
+    "knip": 5.958053112030029,
+    "prepare": 2.4809389114379883,
+    "review": 108.15628600120544,
+    "typecheck": 128.80904746055603
+  },
+  "hostLoad": 12.052734375,
+  "testDelta": {
+    "files": 3,
+    "lines": 587,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "captured-reader-privacy",
+      "minutes": 45,
+      "note": "Approximate observed elapsed44.9minutes from initial28case baseline13:31:47Z through cohort transport baseline14:16:44Z, including exact audience/member reconstruction investigation, amendments and checks; concurrent other acceptance work included, not isolated editing time."
+    }
+  ]
+}

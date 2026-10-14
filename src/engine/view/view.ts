@@ -192,6 +192,10 @@ export interface FloatingEffectView {
  * (`seesSubject`).
  */
 export interface QueuedTriggerView {
+  readonly repeated?: import("../dsl/types").NamedTrigger;
+  /** Nested observed cause only: immutable ownership/member, or known cessation; no hidden current definition. */
+  readonly anonymousSource?: { readonly member: number; readonly owner: Side } | { readonly ceased: true };
+  readonly triggeringAbility?: { readonly named: import("../dsl/types").NamedTrigger; readonly occurrence: QueuedTriggerView };
   /** Public predeparture spark, retained while this trigger's source is identifiable. */
   readonly lastKnownSubjectSpark?: number;
   readonly handCopy?: import("../state/types").HandCopyContext;
@@ -224,7 +228,7 @@ export interface QueuedTriggerView {
    * change; absent when it kept none, and when the viewer cannot see its
    * source, so a hidden source's captured cards stay unknown.
    */
-  readonly captured?: readonly CapturedCardView[];
+  readonly captured?: readonly (CapturedCardView | { readonly member: number; readonly owner: Side })[];
 }
 
 /**
@@ -502,32 +506,49 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         : observed !== undefined && !sourceSeen && typeof record.source === "string"
           ? { rememberedSource: anonymousSource(record.source) } : {}) };
   });
+  const queuedView = (trigger: import("../state/types").QueuedTrigger, observedBy?: readonly Side[]): QueuedTriggerView => {
+    const audience = observedBy ?? trigger.repeated?.observedBy ?? trigger.triggeringAbility?.readerObservedBy;
+    const instructionSeen = trigger.repeated?.visibleTo.includes(viewer) === true;
+    const originSeen = audience === undefined ? visibleSource(trigger.source) : audience.includes(viewer) &&
+      (trigger.repeated === undefined || instructionSeen || visibleSource(trigger.source));
+    const causeKnown = originSeen;
+    return {
+      ...(!instructionSeen ? {} : { repeated: trigger.repeated.named }),
+      ...(trigger.triggeringAbility === undefined || !originSeen ? {} : { triggeringAbility: {
+        named: trigger.triggeringAbility.named, occurrence: queuedView(trigger.triggeringAbility.occurrence, trigger.triggeringAbility.observedBy ?? []),
+      } }),
+      ...(trigger.kind === undefined ? {} : { kind: trigger.kind }),
+      ...(trigger.linkedSource === undefined || !originSeen || !visibleSource(trigger.source) ? {} : { linkedSource: copy(trigger.linkedSource) }),
+      controller: trigger.controller,
+      source: visibleSource(trigger.source) ? copy(trigger.source) : null,
+      origin: originSeen ? copy(trigger.origin) : null,
+      ...(audience === undefined || !originSeen || visibleSource(trigger.source) || typeof trigger.source !== "string" ? {} : { anonymousSource:
+        state.instances[trigger.source] === undefined ? { ceased: true as const }
+          : { member: memberFor(trigger.source), owner: state.instances[trigger.source].owner } }),
+      ability: trigger.ability,
+      node: trigger.node,
+      subject: seesSubject(state, trigger, viewer) || seesHandCopySubject(state, trigger, viewer) ? trigger.subject : null,
+      ...(trigger.handCopy === undefined || !causeKnown ? {} : trigger.handCopy.copier === viewer
+        ? { handCopy: copy(trigger.handCopy) }
+        : { handCopyHidden: true, ...(!trigger.handCopy.originalHiddenFrom.includes(viewer)
+            ? { handCopyOriginal: { printing: copy(trigger.handCopy.printing), variant: copy(trigger.handCopy.variant) } } : {}) }),
+      ...(trigger.lastKnownSubjectCost === undefined || !causeKnown || trigger.subjectHiddenFrom?.includes(viewer) === true ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
+      ...(trigger.lastKnownSubjectSpark === undefined || !causeKnown ? {} : { lastKnownSubjectSpark: trigger.lastKnownSubjectSpark }),
+      ...(trigger.lastKnownSubjectCost !== undefined && causeKnown && trigger.subjectHiddenFrom?.includes(viewer) === true ? { subjectCostHidden: true } : {}),
+      ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
+      ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
+      ...(trigger.discardedCount === undefined ? {} : { discardedCount: trigger.discardedCount }),
+      ...(trigger.lastKnownSourceSpark === undefined || !causeKnown ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
+      ...(trigger.captured === undefined || !originSeen ? {} : { captured: audience === undefined ? capturedView(trigger.captured)
+        : trigger.captured.flatMap((id): NonNullable<QueuedTriggerView["captured"]>[number][] => visible(id) ? [id]
+          : state.instances[id] === undefined ? [] : [{ member: memberFor(id), owner: state.instances[id].owner }]) }),
+    };
+  };
   const triggerQueue = state.triggerQueue.filter(trigger => {
     if (trigger.kind !== "ruleReaction") return true;
     const holder = sourcePrivacy(trigger.source, state);
     return (holder === null || holder === viewer) && visibleSource(trigger.source);
-  }).map((trigger): QueuedTriggerView => ({
-    ...(trigger.kind === undefined ? {} : { kind: trigger.kind }),
-    ...(trigger.linkedSource === undefined || !visibleSource(trigger.source) ? {} : { linkedSource: copy(trigger.linkedSource) }),
-    controller: trigger.controller,
-    source: visibleSource(trigger.source) ? copy(trigger.source) : null,
-    origin: visibleSource(trigger.source) ? copy(trigger.origin) : null,
-    ability: trigger.ability,
-    node: trigger.node,
-    subject: seesSubject(state, trigger, viewer) || seesHandCopySubject(state, trigger, viewer) ? trigger.subject : null,
-    ...(trigger.handCopy === undefined || !visibleSource(trigger.source) ? {} : trigger.handCopy.copier === viewer
-      ? { handCopy: copy(trigger.handCopy) }
-      : { handCopyHidden: true, ...(!trigger.handCopy.originalHiddenFrom.includes(viewer)
-          ? { handCopyOriginal: { printing: copy(trigger.handCopy.printing), variant: copy(trigger.handCopy.variant) } } : {}) }),
-    ...(trigger.lastKnownSubjectCost === undefined || !visibleSource(trigger.source) || trigger.subjectHiddenFrom?.includes(viewer) === true ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
-    ...(trigger.lastKnownSubjectSpark === undefined || !visibleSource(trigger.source) ? {} : { lastKnownSubjectSpark: trigger.lastKnownSubjectSpark }),
-    ...(trigger.lastKnownSubjectCost !== undefined && visibleSource(trigger.source) && trigger.subjectHiddenFrom?.includes(viewer) === true ? { subjectCostHidden: true } : {}),
-    ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
-    ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
-    ...(trigger.discardedCount === undefined ? {} : { discardedCount: trigger.discardedCount }),
-    ...(trigger.lastKnownSourceSpark === undefined || !visibleSource(trigger.source) ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
-    ...(trigger.captured === undefined || !visibleSource(trigger.source) ? {} : { captured: capturedView(trigger.captured) }),
-  }));
+  }).map(trigger => queuedView(trigger));
   const descriptor = (record: RememberedCard): HiddenCardDescriptor => ({
     member: memberFor(record.instance), owner: record.owner, printing: copy(record.printing),
     variant: copy(record.variant), status: copy(record.status),

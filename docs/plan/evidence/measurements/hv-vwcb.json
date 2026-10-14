@@ -1,0 +1,3766 @@
+{
+  "bead": "hv-vwcb",
+  "phase": 5,
+  "base": "4571cc9ede8cd71d873b95bb7ff383dfc85192c0",
+  "status": "Pre-Git evidence boundary; refresh immediately before authorized automatic Git. Parent records actual external Git delta; no future timestamp or postcommit tracked rewrite.",
+  "clock": {
+    "exactDispatchUTC": "2026-10-14T13:11:19.735Z",
+    "dispatchProof": {
+      "source": "/Users/dthurn/.codex/sessions/2026/10/14/rollout-2026-10-14T05-54-26-01a13a7a-741e-7cc1-a0dd-3f8eb1805ecf.jsonl",
+      "eventType": "own native spawn_agent request",
+      "matches": [
+        {
+          "timestamp": "2026-10-14T13:11:19.735Z",
+          "call_id": "call_5ad43e7329a94bb28141077fd380a7dc",
+          "name": "spawn_agent"
+        }
+      ]
+    },
+    "preCommitEvidenceBoundary": "2026-10-14T14:48:04.240459+00:00",
+    "inclusiveElapsedMin": 96.74175765,
+    "scope": "Dispatch through current boundary includes research, finite proposals/admission waits, coding, all checks, fault checks, review coordination and evidence. Claim/setup before dispatch separate. Productive editing/model CPU/isolated kernel queue unknown."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final actual os.getloadavg()[0] at 2026-10-14T14:39:57.472905+00:00; same1min host metric, no quiet-host claim"
+      },
+      "localValidationS": {
+        "measuredFor": "Sum of all guarded outer command walls by category including failed fixture/type attempts and expected counterfactual failures. Initial unguarded tsc1 total wall unknown/excluded, its tool yielded10.001736s then0.0000095s only; no invented total. Categories not productive CPU or additive elapsed when checks overlap."
+      }
+    }
+  },
+  "source": {
+    "counterfactualBaselineManifestSHA256": "ad57c889fae17d827f5761a4e8e84b9c6486fcee5ed237001f25c19f5aff7c9d",
+    "currentChangedSource": {
+      "docs/plan/engine-design.md": {
+        "sha256": "4a057e649ad2538c6b5024add108567e2e87b7ac3bfd1150b809e0f1a380829b",
+        "lines": 2855
+      },
+      "docs/plan/evidence/rules-decisions/RD-hv-vwcb-1.md": {
+        "sha256": "c0bb8e3672c37315b7b5ba4665d19137c8e41e977499872d3453b8c7558062c0",
+        "lines": 32
+      },
+      "docs/rules.md": {
+        "sha256": "bfad5ef04a626b0df4ea5be9a3ef620f163400985d4dda40dfb4b93d732707f3",
+        "lines": 2821
+      },
+      "src/engine/effects/interpreter.ts": {
+        "sha256": "16841dce52b27eb7c546a8e535344ad586d38eebadb251ffde43940ec1f9f6bd",
+        "lines": 1112
+      },
+      "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": {
+        "sha256": "7b602fd2fa34b013614b1ba19507c56c38251c100754c05239cb614067d04b6d",
+        "lines": 72
+      },
+      "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts": {
+        "sha256": "bc780a974eef3175404735fa2c7e3a717d2c8069608218bdb3cfdc0a7d362115",
+        "lines": 255
+      },
+      "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts": {
+        "sha256": "0d747f61032978a688cdd0f86de03186e62f526ae4cbf4c5f5b107936617acd5",
+        "lines": 260
+      },
+      "src/engine/effects/primitives/index.ts": {
+        "sha256": "8cea7469c0ea5d45468c0794f4bb6b37c7e0b0129191ebc932bee7ef3df1654d",
+        "lines": 89
+      },
+      "src/engine/effects/primitives/repeat-triggering-ability.ts": {
+        "sha256": "172f0457384d3345b6ea34ad44f6092dc54b0fbfdabad241c4456c24fb6d1443",
+        "lines": 18
+      },
+      "src/engine/effects/registry.ts": {
+        "sha256": "0706d54954db56534fc9055b7223152a397c5fd84ee7e76313f134a9c421079e",
+        "lines": 401
+      },
+      "src/engine/effects/types.ts": {
+        "sha256": "ec0e2189803ec90a8ecdb4141e79ae11387f4a5162108fa8fb1ac24e18eaf76c",
+        "lines": 239
+      },
+      "src/engine/events/kinds/trigger-queued.ts": {
+        "sha256": "d2bab9ce0446455288281baf3c2d615d824694eaaa97f8676ab6536505190174",
+        "lines": 59
+      },
+      "src/engine/rules/zones.ts": {
+        "sha256": "adf076a2c84ea2be9ee105e275e6942328d24d9d0e3982f54d7e0c803b92c18d",
+        "lines": 578
+      },
+      "src/engine/state/types.ts": {
+        "sha256": "a926962f041d278d2e3b93d73ce8470b5234ca1fe9fc7ee45512fa67f49b8fd7",
+        "lines": 864
+      },
+      "src/engine/triggers/matcher.ts": {
+        "sha256": "ae1dbbd4bc6f6727f1f3402a5ee3d477a93b3fc10c961a8f658b209214a81b4e",
+        "lines": 1000
+      },
+      "src/engine/triggers/named-admissions.ts": {
+        "sha256": "f3cc586e6bc98458e445f2939d80a30796ac89c62f442baaedfa74ffcfb2de9c",
+        "lines": 55
+      },
+      "src/engine/triggers/resolve.ts": {
+        "sha256": "61c686df0cc50c7b8fda565265f5e78ebe51d2d605636cb389fec957c2ca2034",
+        "lines": 78
+      },
+      "src/engine/view/determinize.ts": {
+        "sha256": "a3974de912e7b1d8c1a0d1c6039f98e71e9e170cc1ae92286f317d1261bcb431",
+        "lines": 1050
+      },
+      "src/engine/view/view.ts": {
+        "sha256": "098250a5aa03e66f87ec12436e4ba76986a4bf4b6c79b91c329c7da934069968",
+        "lines": 735
+      },
+      "src/rules/battle/fold.ts": {
+        "sha256": "365e4f93a71829965fda8d71ef06d25d3f0421237a386f138b16a40b049e63b9",
+        "lines": 1473
+      }
+    },
+    "qualification": "After CF exact restoration only narrow lint typing/assertion fixes (two paths) and removal of an extra final blank line in the private fixture preceded final full source validation."
+  },
+  "guardedCommands": [
+    {
+      "label": "cf-current-source",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeats exactly the first .*admitted body|keeps .*initial variant and definition through ordinary ability loss|refuses .*fresh ordinary admission while its source is disabled|checks .*captured intervening condition at repeat admission and resolution"
+      ],
+      "start": "2026-10-14T14:39:06.655797+00:00",
+      "loadStart": [
+        15.32568359375,
+        13.25634765625,
+        11.35107421875
+      ],
+      "runnerPid": 68399,
+      "pid": 68410,
+      "pgid": 68410,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:39:10.756409+00:00",
+      "wallS": 4.329722166061401,
+      "loadEnd": [
+        14.65869140625,
+        13.15234375,
+        11.3251953125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "cf-nested-departure",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "propagates captured .*departure spark|refuses .*fresh ordinary admission while its source is disabled|checks .*captured intervening condition at repeat admission and resolution"
+      ],
+      "start": "2026-10-14T14:39:10.930545+00:00",
+      "loadStart": [
+        14.65869140625,
+        13.15234375,
+        11.3251953125
+      ],
+      "runnerPid": 73751,
+      "pid": 73920,
+      "pgid": 73920,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:39:14.981505+00:00",
+      "wallS": 4.121369123458862,
+      "loadEnd": [
+        14.125,
+        13.06640625,
+        11.3056640625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "cohort-debug",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility.*actual captured cohort"
+      ],
+      "start": "2026-10-14T14:09:22.154246+00:00",
+      "loadStart": [
+        12.2666015625,
+        8.72509765625,
+        7.818359375
+      ],
+      "runnerPid": 50572,
+      "pid": 50612,
+      "pgid": 50612,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:09:27.867890+00:00",
+      "wallS": 6.062731981277466,
+      "loadEnd": [
+        14.4873046875,
+        9.244140625,
+        8.0068359375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "cohort-witness-2",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility.*actual captured cohort"
+      ],
+      "start": "2026-10-14T14:10:05.248525+00:00",
+      "loadStart": [
+        24.189453125,
+        12.09423828125,
+        9.087890625
+      ],
+      "runnerPid": 75443,
+      "pid": 75452,
+      "pgid": 75452,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:10:10.240496+00:00",
+      "wallS": 5.096527099609375,
+      "loadEnd": [
+        26.255859375,
+        12.72314453125,
+        9.3271484375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "cohort-witness",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility.*actual captured cohort"
+      ],
+      "start": "2026-10-14T14:08:43.936390+00:00",
+      "loadStart": [
+        11.8876953125,
+        8.27294921875,
+        7.630859375
+      ],
+      "runnerPid": 48692,
+      "pid": 48707,
+      "pgid": 48707,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:08:49.218509+00:00",
+      "wallS": 5.637840986251831,
+      "loadEnd": [
+        11.81640625,
+        8.31787109375,
+        7.650390625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "evidence-final-v2",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-14T14:46:30.514401+00:00",
+      "loadStart": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ],
+      "runnerPid": 29262,
+      "pid": 29355,
+      "pgid": 29355,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:46:30.690791+00:00",
+      "wallS": 0.24057793617248535,
+      "loadEnd": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "evidence-final",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-14T14:44:41.593785+00:00",
+      "loadStart": [
+        5.0078125,
+        9.48583984375,
+        10.2880859375
+      ],
+      "runnerPid": 27094,
+      "pid": 27115,
+      "pgid": 27115,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:44:41.760833+00:00",
+      "wallS": 0.23560094833374023,
+      "loadEnd": [
+        5.0078125,
+        9.48583984375,
+        10.2880859375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-1",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:31:08.415604+00:00",
+      "loadStart": [
+        5.0712890625,
+        6.146484375,
+        6.17333984375
+      ],
+      "runnerPid": 31443,
+      "pid": 31460,
+      "pgid": 31460,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:31:12.724078+00:00",
+      "wallS": 4.385823011398315,
+      "loadEnd": [
+        6.5869140625,
+        6.44287109375,
+        6.27734375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-10",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:58:05.726696+00:00",
+      "loadStart": [
+        15.1767578125,
+        8.9013671875,
+        7.9736328125
+      ],
+      "runnerPid": 1760,
+      "pid": 2188,
+      "pgid": 2188,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:58:10.411488+00:00",
+      "wallS": 5.058095932006836,
+      "loadEnd": [
+        16.84423828125,
+        9.35107421875,
+        8.1376953125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-11",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:59:26.076322+00:00",
+      "loadStart": [
+        9.73388671875,
+        8.81103515625,
+        8.03271484375
+      ],
+      "runnerPid": 25234,
+      "pid": 25240,
+      "pgid": 25240,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:59:30.334988+00:00",
+      "wallS": 4.350610017776489,
+      "loadEnd": [
+        9.5947265625,
+        8.79736328125,
+        8.0322265625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-12",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:00:55.573548+00:00",
+      "loadStart": [
+        7.2724609375,
+        8.3125,
+        7.92138671875
+      ],
+      "runnerPid": 31344,
+      "pid": 31350,
+      "pgid": 31350,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:00:59.296261+00:00",
+      "wallS": 3.7948129177093506,
+      "loadEnd": [
+        7.01025390625,
+        8.24072265625,
+        7.89794921875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-13",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:16:40.399818+00:00",
+      "loadStart": [
+        13.30419921875,
+        14.326171875,
+        11.6708984375
+      ],
+      "runnerPid": 84338,
+      "pid": 84375,
+      "pgid": 84375,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:16:44.563518+00:00",
+      "wallS": 4.477816104888916,
+      "loadEnd": [
+        12.87939453125,
+        14.220703125,
+        11.64892578125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-14",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:25:49.056041+00:00",
+      "loadStart": [
+        2.98388671875,
+        6.146484375,
+        8.59521484375
+      ],
+      "runnerPid": 40343,
+      "pid": 40362,
+      "pgid": 40362,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:25:52.543977+00:00",
+      "wallS": 3.7036421298980713,
+      "loadEnd": [
+        2.98388671875,
+        6.146484375,
+        8.59521484375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-15",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:26:14.734326+00:00",
+      "loadStart": [
+        3.03173828125,
+        5.90771484375,
+        8.4375
+      ],
+      "runnerPid": 41079,
+      "pid": 41089,
+      "pgid": 41089,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:26:17.978979+00:00",
+      "wallS": 3.309631109237671,
+      "loadEnd": [
+        3.03173828125,
+        5.90771484375,
+        8.4375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-16",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:27:13.855438+00:00",
+      "loadStart": [
+        3.77099609375,
+        5.6025390625,
+        8.14892578125
+      ],
+      "runnerPid": 74233,
+      "pid": 74235,
+      "pgid": 74235,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:27:17.875323+00:00",
+      "wallS": 4.093003988265991,
+      "loadEnd": [
+        3.77099609375,
+        5.6025390625,
+        8.14892578125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-18",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:33:04.821459+00:00",
+      "loadStart": [
+        7.92529296875,
+        11.2109375,
+        10.330078125
+      ],
+      "runnerPid": 9240,
+      "pid": 9263,
+      "pgid": 9263,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:33:08.704196+00:00",
+      "wallS": 4.1570868492126465,
+      "loadEnd": [
+        7.53076171875,
+        11.07421875,
+        10.287109375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-19",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:34:31.712286+00:00",
+      "loadStart": [
+        7.154296875,
+        10.03173828125,
+        9.9521484375
+      ],
+      "runnerPid": 15125,
+      "pid": 15138,
+      "pgid": 15138,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:34:36.079493+00:00",
+      "wallS": 4.4454100131988525,
+      "loadEnd": [
+        7.3017578125,
+        10.01416015625,
+        9.9462890625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-2",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:31:43.395632+00:00",
+      "loadStart": [
+        13.5029296875,
+        8.16064453125,
+        6.90673828125
+      ],
+      "runnerPid": 61354,
+      "pid": 61634,
+      "pgid": 61634,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:31:47.280105+00:00",
+      "wallS": 3.9635419845581055,
+      "loadEnd": [
+        14.98388671875,
+        8.55615234375,
+        7.0537109375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-3",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:36:21.937359+00:00",
+      "loadStart": [
+        17.8115234375,
+        14.65234375,
+        10.287109375
+      ],
+      "runnerPid": 36984,
+      "pid": 37035,
+      "pgid": 37035,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:36:27.909853+00:00",
+      "wallS": 6.2712719440460205,
+      "loadEnd": [
+        17.10546875,
+        14.55810546875,
+        10.279296875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-4",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:40:59.397416+00:00",
+      "loadStart": [
+        11.1171875,
+        11.17236328125,
+        9.84423828125
+      ],
+      "runnerPid": 57985,
+      "pid": 58030,
+      "pgid": 58030,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:41:04.707932+00:00",
+      "wallS": 5.660882949829102,
+      "loadEnd": [
+        10.466796875,
+        11.03662109375,
+        9.8037109375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-5",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:48:40.044412+00:00",
+      "loadStart": [
+        4.14892578125,
+        6.58203125,
+        8.12646484375
+      ],
+      "runnerPid": 38048,
+      "pid": 38080,
+      "pgid": 38080,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:48:43.392385+00:00",
+      "wallS": 3.419701099395752,
+      "loadEnd": [
+        3.9765625,
+        6.505859375,
+        8.09033203125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-6",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:50:05.855903+00:00",
+      "loadStart": [
+        3.53759765625,
+        5.7900390625,
+        7.67333984375
+      ],
+      "runnerPid": 39983,
+      "pid": 39993,
+      "pgid": 39993,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:50:09.180273+00:00",
+      "wallS": 3.391906976699829,
+      "loadEnd": [
+        3.734375,
+        5.79345703125,
+        7.6630859375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-7",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:51:48.787738+00:00",
+      "loadStart": [
+        4.89892578125,
+        5.54052734375,
+        7.3505859375
+      ],
+      "runnerPid": 42550,
+      "pid": 42575,
+      "pgid": 42575,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:51:52.323095+00:00",
+      "wallS": 3.6069979667663574,
+      "loadEnd": [
+        4.89892578125,
+        5.54052734375,
+        7.3505859375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-8",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:53:58.150301+00:00",
+      "loadStart": [
+        5.896484375,
+        5.44677734375,
+        7.03955078125
+      ],
+      "runnerPid": 51190,
+      "pid": 51221,
+      "pgid": 51221,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:54:01.985165+00:00",
+      "wallS": 4.070000886917114,
+      "loadEnd": [
+        5.896484375,
+        5.44677734375,
+        7.03955078125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-9",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:56:48.591242+00:00",
+      "loadStart": [
+        11.03857421875,
+        6.5634765625,
+        7.13134765625
+      ],
+      "runnerPid": 58084,
+      "pid": 58117,
+      "pgid": 58117,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:56:52.409665+00:00",
+      "wallS": 4.109934091567993,
+      "loadEnd": [
+        11.03857421875,
+        6.5634765625,
+        7.13134765625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-lint-restored",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:41:08.867800+00:00",
+      "loadStart": [
+        9.14111328125,
+        11.72314453125,
+        10.99462890625
+      ],
+      "runnerPid": 84086,
+      "pid": 84108,
+      "pgid": 84108,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:41:13.126580+00:00",
+      "wallS": 4.322542190551758,
+      "loadEnd": [
+        12.41259765625,
+        12.3583984375,
+        11.22314453125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-restored",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:39:32.881679+00:00",
+      "loadStart": [
+        12.6201171875,
+        12.78466796875,
+        11.2353515625
+      ],
+      "runnerPid": 76991,
+      "pid": 77005,
+      "pgid": 77005,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:39:37.456058+00:00",
+      "wallS": 4.65237021446228,
+      "loadEnd": [
+        12.490234375,
+        12.7548828125,
+        11.23388671875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused17",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts"
+      ],
+      "start": "2026-10-14T14:32:39.055003+00:00",
+      "loadStart": [
+        9.79248046875,
+        11.80810546875,
+        10.50830078125
+      ],
+      "runnerPid": 7459,
+      "pid": 7502,
+      "pgid": 7502,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:32:45.039903+00:00",
+      "wallS": 6.302947044372559,
+      "loadEnd": [
+        9.56884765625,
+        11.72802734375,
+        10.4873046875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "full-final",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-14T14:42:08.725579+00:00",
+      "loadStart": [
+        9.5576171875,
+        11.5869140625,
+        11.0068359375
+      ],
+      "runnerPid": 87978,
+      "pid": 87995,
+      "pgid": 87995,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:43:57.117199+00:00",
+      "wallS": 108.49331212043762,
+      "loadEnd": [
+        7.8759765625,
+        10.63330078125,
+        10.71630859375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-14T14:39:57.472927+00:00",
+      "loadStart": [
+        12.052734375,
+        12.626953125,
+        11.22216796875
+      ],
+      "runnerPid": 79482,
+      "pid": 79506,
+      "pgid": 79506,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:40:03.324172+00:00",
+      "wallS": 5.958053112030029,
+      "loadEnd": [
+        11.48779296875,
+        12.5,
+        11.185546875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "prepare-1",
+      "command": [
+        "npm",
+        "run",
+        "prepare-workspace"
+      ],
+      "start": "2026-10-14T13:29:37.852826+00:00",
+      "loadStart": [
+        8.72021484375,
+        6.9326171875,
+        6.43115234375
+      ],
+      "runnerPid": 29089,
+      "pid": 29110,
+      "pgid": 29110,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:29:40.092872+00:00",
+      "wallS": 2.4809389114379883,
+      "loadEnd": [
+        8.72021484375,
+        6.9326171875,
+        6.43115234375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "review-final-v2",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T14:41:10.032378+00:00",
+      "loadStart": [
+        12.41259765625,
+        12.3583984375,
+        11.22314453125
+      ],
+      "runnerPid": 84223,
+      "pid": 84239,
+      "pgid": 84239,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:42:02.380733+00:00",
+      "wallS": 52.41257619857788,
+      "loadEnd": [
+        9.86767578125,
+        11.681640625,
+        11.03662109375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "review-final",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T14:39:57.472905+00:00",
+      "loadStart": [
+        12.052734375,
+        12.626953125,
+        11.22216796875
+      ],
+      "runnerPid": 79481,
+      "pid": 79507,
+      "pgid": 79507,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:40:53.109554+00:00",
+      "wallS": 55.74370980262756,
+      "loadEnd": [
+        10.154296875,
+        12.037109375,
+        11.09033203125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "stage-final-v2",
+      "command": [
+        "git",
+        "add",
+        "--",
+        "docs/plan/evidence/friction/hv-vwcb.json",
+        "docs/plan/evidence/measurements/hv-vwcb.json",
+        "docs/plan/evidence/measurements/hv-vwcb.md",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts"
+      ],
+      "start": "2026-10-14T14:46:29.957587+00:00",
+      "loadStart": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ],
+      "runnerPid": 29276,
+      "pid": 29282,
+      "pgid": 29282,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:46:30.074958+00:00",
+      "wallS": 0.20325613021850586,
+      "loadEnd": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "stage-final",
+      "command": [
+        "git",
+        "add",
+        "--",
+        "docs/plan/engine-design.md",
+        "docs/rules.md",
+        "docs/plan/evidence/rules-decisions/RD-hv-vwcb-1.md",
+        "docs/plan/evidence/friction/hv-vwcb.json",
+        "docs/plan/evidence/measurements/hv-vwcb.json",
+        "docs/plan/evidence/measurements/hv-vwcb.md",
+        "src/engine/effects/interpreter.ts",
+        "src/engine/effects/primitives/index.ts",
+        "src/engine/effects/primitives/repeat-triggering-ability.ts",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts",
+        "src/engine/effects/registry.ts",
+        "src/engine/effects/types.ts",
+        "src/engine/events/kinds/trigger-queued.ts",
+        "src/engine/rules/zones.ts",
+        "src/engine/state/types.ts",
+        "src/engine/triggers/matcher.ts",
+        "src/engine/triggers/named-admissions.ts",
+        "src/engine/triggers/resolve.ts",
+        "src/engine/view/determinize.ts",
+        "src/engine/view/view.ts",
+        "src/rules/battle/fold.ts"
+      ],
+      "start": "2026-10-14T14:46:11.455559+00:00",
+      "loadStart": [
+        3.306640625,
+        7.73876953125,
+        9.5302734375
+      ],
+      "runnerPid": 28767,
+      "pid": 28772,
+      "pgid": 28772,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:46:11.588237+00:00",
+      "wallS": 0.2009563446044922,
+      "loadEnd": [
+        3.306640625,
+        7.73876953125,
+        9.5302734375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-10",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T14:27:18.027916+00:00",
+      "loadStart": [
+        3.77099609375,
+        5.6025390625,
+        8.14892578125
+      ],
+      "runnerPid": 74223,
+      "pid": 74346,
+      "pgid": 74346,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:27:29.327423+00:00",
+      "wallS": 11.362115621566772,
+      "loadEnd": [
+        4.6953125,
+        5.71875,
+        8.14599609375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-11",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-14T14:33:15.695919+00:00",
+      "loadStart": [
+        7.32763671875,
+        10.97314453125,
+        10.255859375
+      ],
+      "runnerPid": 9971,
+      "pid": 9987,
+      "pgid": 9987,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:33:26.245808+00:00",
+      "wallS": 10.614974975585938,
+      "loadEnd": [
+        7.04931640625,
+        10.79248046875,
+        10.19970703125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-12",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-14T14:33:49.266751+00:00",
+      "loadStart": [
+        6.62646484375,
+        10.390625,
+        10.07080078125
+      ],
+      "runnerPid": 12399,
+      "pid": 12415,
+      "pgid": 12415,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:33:59.202604+00:00",
+      "wallS": 10.00691294670105,
+      "loadEnd": [
+        6.36328125,
+        10.2119140625,
+        10.01123046875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-2",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T13:31:47.466372+00:00",
+      "loadStart": [
+        14.98388671875,
+        8.55615234375,
+        7.0537109375
+      ],
+      "runnerPid": 61083,
+      "pid": 77186,
+      "pgid": 77186,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:31:59.303318+00:00",
+      "wallS": 11.91386890411377,
+      "loadEnd": [
+        13.9033203125,
+        8.537109375,
+        7.064453125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-3",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T13:48:03.353699+00:00",
+      "loadStart": [
+        5.1123046875,
+        7.044921875,
+        8.34912109375
+      ],
+      "runnerPid": 37070,
+      "pid": 37081,
+      "pgid": 37081,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:48:12.885671+00:00",
+      "wallS": 9.817982912063599,
+      "loadEnd": [
+        4.8671875,
+        6.927734375,
+        8.2919921875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-4",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T13:52:49.767295+00:00",
+      "loadStart": [
+        5.07275390625,
+        5.4580078125,
+        7.193359375
+      ],
+      "runnerPid": 46159,
+      "pid": 46170,
+      "pgid": 46170,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:52:59.565543+00:00",
+      "wallS": 10.101287841796875,
+      "loadEnd": [
+        4.75390625,
+        5.37646484375,
+        7.1435546875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-5",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T13:59:30.510228+00:00",
+      "loadStart": [
+        9.5947265625,
+        8.79736328125,
+        8.0322265625
+      ],
+      "runnerPid": 25223,
+      "pid": 25500,
+      "pgid": 25500,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:59:42.319452+00:00",
+      "wallS": 11.88029170036316,
+      "loadEnd": [
+        9.275390625,
+        8.75390625,
+        8.025390625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-6",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T14:00:59.460505+00:00",
+      "loadStart": [
+        7.01025390625,
+        8.24072265625,
+        7.89794921875
+      ],
+      "runnerPid": 31333,
+      "pid": 31606,
+      "pgid": 31606,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:01:09.645153+00:00",
+      "wallS": 10.249903678894043,
+      "loadEnd": [
+        6.94091796875,
+        8.18310546875,
+        7.88134765625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-7",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T14:18:09.812320+00:00",
+      "loadStart": [
+        9.1103515625,
+        12.62548828125,
+        11.2763671875
+      ],
+      "runnerPid": 90437,
+      "pid": 90459,
+      "pgid": 90459,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:18:21.608676+00:00",
+      "wallS": 12.098829746246338,
+      "loadEnd": [
+        8.8525390625,
+        12.45556640625,
+        11.2314453125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-8",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T14:22:32.110343+00:00",
+      "loadStart": [
+        6.24169921875,
+        9.1787109375,
+        10.0869140625
+      ],
+      "runnerPid": 35532,
+      "pid": 35555,
+      "pgid": 35555,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:22:41.983433+00:00",
+      "wallS": 10.159893989562988,
+      "loadEnd": [
+        6.1240234375,
+        9.056640625,
+        10.03271484375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-9",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T14:25:52.687363+00:00",
+      "loadStart": [
+        2.98388671875,
+        6.146484375,
+        8.59521484375
+      ],
+      "runnerPid": 40333,
+      "pid": 40478,
+      "pgid": 40478,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:26:01.846300+00:00",
+      "wallS": 9.218115091323853,
+      "loadEnd": [
+        3.06591796875,
+        6.05908203125,
+        8.53515625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-restored",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-14T14:39:34.033541+00:00",
+      "loadStart": [
+        12.490234375,
+        12.7548828125,
+        11.23388671875
+      ],
+      "runnerPid": 77086,
+      "pid": 77101,
+      "pgid": 77101,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:39:45.348190+00:00",
+      "wallS": 11.384870052337646,
+      "loadEnd": [
+        11.953125,
+        12.630859375,
+        11.20751953125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "whitespace-final-v2",
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "start": "2026-10-14T14:46:30.245074+00:00",
+      "loadStart": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ],
+      "runnerPid": 29293,
+      "pid": 29336,
+      "pgid": 29336,
+      "exit": 0,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:46:30.359365+00:00",
+      "wallS": 0.1829850673675537,
+      "loadEnd": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "whitespace-final",
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "start": "2026-10-14T14:46:11.740803+00:00",
+      "loadStart": [
+        3.306640625,
+        7.73876953125,
+        9.5302734375
+      ],
+      "runnerPid": 28756,
+      "pid": 28786,
+      "pgid": 28786,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:46:11.854788+00:00",
+      "wallS": 0.1742231845855713,
+      "loadEnd": [
+        3.306640625,
+        7.73876953125,
+        9.5302734375
+      ],
+      "sourceUnchanged": true
+    }
+  ],
+  "failedAttempts": [
+    {
+      "label": "cf-current-source",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeats exactly the first .*admitted body|keeps .*initial variant and definition through ordinary ability loss|refuses .*fresh ordinary admission while its source is disabled|checks .*captured intervening condition at repeat admission and resolution"
+      ],
+      "start": "2026-10-14T14:39:06.655797+00:00",
+      "loadStart": [
+        15.32568359375,
+        13.25634765625,
+        11.35107421875
+      ],
+      "runnerPid": 68399,
+      "pid": 68410,
+      "pgid": 68410,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:39:10.756409+00:00",
+      "wallS": 4.329722166061401,
+      "loadEnd": [
+        14.65869140625,
+        13.15234375,
+        11.3251953125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "cf-nested-departure",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "propagates captured .*departure spark|refuses .*fresh ordinary admission while its source is disabled|checks .*captured intervening condition at repeat admission and resolution"
+      ],
+      "start": "2026-10-14T14:39:10.930545+00:00",
+      "loadStart": [
+        14.65869140625,
+        13.15234375,
+        11.3251953125
+      ],
+      "runnerPid": 73751,
+      "pid": 73920,
+      "pgid": 73920,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:39:14.981505+00:00",
+      "wallS": 4.121369123458862,
+      "loadEnd": [
+        14.125,
+        13.06640625,
+        11.3056640625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "cohort-debug",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility.*actual captured cohort"
+      ],
+      "start": "2026-10-14T14:09:22.154246+00:00",
+      "loadStart": [
+        12.2666015625,
+        8.72509765625,
+        7.818359375
+      ],
+      "runnerPid": 50572,
+      "pid": 50612,
+      "pgid": 50612,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:09:27.867890+00:00",
+      "wallS": 6.062731981277466,
+      "loadEnd": [
+        14.4873046875,
+        9.244140625,
+        8.0068359375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "cohort-witness-2",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility.*actual captured cohort"
+      ],
+      "start": "2026-10-14T14:10:05.248525+00:00",
+      "loadStart": [
+        24.189453125,
+        12.09423828125,
+        9.087890625
+      ],
+      "runnerPid": 75443,
+      "pid": 75452,
+      "pgid": 75452,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:10:10.240496+00:00",
+      "wallS": 5.096527099609375,
+      "loadEnd": [
+        26.255859375,
+        12.72314453125,
+        9.3271484375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "cohort-witness",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility.*actual captured cohort"
+      ],
+      "start": "2026-10-14T14:08:43.936390+00:00",
+      "loadStart": [
+        11.8876953125,
+        8.27294921875,
+        7.630859375
+      ],
+      "runnerPid": 48692,
+      "pid": 48707,
+      "pgid": 48707,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:08:49.218509+00:00",
+      "wallS": 5.637840986251831,
+      "loadEnd": [
+        11.81640625,
+        8.31787109375,
+        7.650390625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-1",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:31:08.415604+00:00",
+      "loadStart": [
+        5.0712890625,
+        6.146484375,
+        6.17333984375
+      ],
+      "runnerPid": 31443,
+      "pid": 31460,
+      "pgid": 31460,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:31:12.724078+00:00",
+      "wallS": 4.385823011398315,
+      "loadEnd": [
+        6.5869140625,
+        6.44287109375,
+        6.27734375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-10",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:58:05.726696+00:00",
+      "loadStart": [
+        15.1767578125,
+        8.9013671875,
+        7.9736328125
+      ],
+      "runnerPid": 1760,
+      "pid": 2188,
+      "pgid": 2188,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:58:10.411488+00:00",
+      "wallS": 5.058095932006836,
+      "loadEnd": [
+        16.84423828125,
+        9.35107421875,
+        8.1376953125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-14",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:25:49.056041+00:00",
+      "loadStart": [
+        2.98388671875,
+        6.146484375,
+        8.59521484375
+      ],
+      "runnerPid": 40343,
+      "pid": 40362,
+      "pgid": 40362,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:25:52.543977+00:00",
+      "wallS": 3.7036421298980713,
+      "loadEnd": [
+        2.98388671875,
+        6.146484375,
+        8.59521484375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-15",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T14:26:14.734326+00:00",
+      "loadStart": [
+        3.03173828125,
+        5.90771484375,
+        8.4375
+      ],
+      "runnerPid": 41079,
+      "pid": 41089,
+      "pgid": 41089,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:26:17.978979+00:00",
+      "wallS": 3.309631109237671,
+      "loadEnd": [
+        3.03173828125,
+        5.90771484375,
+        8.4375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-4",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:40:59.397416+00:00",
+      "loadStart": [
+        11.1171875,
+        11.17236328125,
+        9.84423828125
+      ],
+      "runnerPid": 57985,
+      "pid": 58030,
+      "pgid": 58030,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:41:04.707932+00:00",
+      "wallS": 5.660882949829102,
+      "loadEnd": [
+        10.466796875,
+        11.03662109375,
+        9.8037109375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused-6",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility"
+      ],
+      "start": "2026-10-14T13:50:05.855903+00:00",
+      "loadStart": [
+        3.53759765625,
+        5.7900390625,
+        7.67333984375
+      ],
+      "runnerPid": 39983,
+      "pid": 39993,
+      "pgid": 39993,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:50:09.180273+00:00",
+      "wallS": 3.391906976699829,
+      "loadEnd": [
+        3.734375,
+        5.79345703125,
+        7.6630859375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "focused17",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts",
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts"
+      ],
+      "start": "2026-10-14T14:32:39.055003+00:00",
+      "loadStart": [
+        9.79248046875,
+        11.80810546875,
+        10.50830078125
+      ],
+      "runnerPid": 7459,
+      "pid": 7502,
+      "pgid": 7502,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:32:45.039903+00:00",
+      "wallS": 6.302947044372559,
+      "loadEnd": [
+        9.56884765625,
+        11.72802734375,
+        10.4873046875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "review-final",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T14:39:57.472905+00:00",
+      "loadStart": [
+        12.052734375,
+        12.626953125,
+        11.22216796875
+      ],
+      "runnerPid": 79481,
+      "pid": 79507,
+      "pgid": 79507,
+      "exit": 1,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:40:53.109554+00:00",
+      "wallS": 55.74370980262756,
+      "loadEnd": [
+        10.154296875,
+        12.037109375,
+        11.09033203125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-11",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-14T14:33:15.695919+00:00",
+      "loadStart": [
+        7.32763671875,
+        10.97314453125,
+        10.255859375
+      ],
+      "runnerPid": 9971,
+      "pid": 9987,
+      "pgid": 9987,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:33:26.245808+00:00",
+      "wallS": 10.614974975585938,
+      "loadEnd": [
+        7.04931640625,
+        10.79248046875,
+        10.19970703125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-2",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T13:31:47.466372+00:00",
+      "loadStart": [
+        14.98388671875,
+        8.55615234375,
+        7.0537109375
+      ],
+      "runnerPid": 61083,
+      "pid": 77186,
+      "pgid": 77186,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:31:59.303318+00:00",
+      "wallS": 11.91386890411377,
+      "loadEnd": [
+        13.9033203125,
+        8.537109375,
+        7.064453125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-3",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T13:48:03.353699+00:00",
+      "loadStart": [
+        5.1123046875,
+        7.044921875,
+        8.34912109375
+      ],
+      "runnerPid": 37070,
+      "pid": 37081,
+      "pgid": 37081,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:48:12.885671+00:00",
+      "wallS": 9.817982912063599,
+      "loadEnd": [
+        4.8671875,
+        6.927734375,
+        8.2919921875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-4",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T13:52:49.767295+00:00",
+      "loadStart": [
+        5.07275390625,
+        5.4580078125,
+        7.193359375
+      ],
+      "runnerPid": 46159,
+      "pid": 46170,
+      "pgid": 46170,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:52:59.565543+00:00",
+      "wallS": 10.101287841796875,
+      "loadEnd": [
+        4.75390625,
+        5.37646484375,
+        7.1435546875
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-5",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T13:59:30.510228+00:00",
+      "loadStart": [
+        9.5947265625,
+        8.79736328125,
+        8.0322265625
+      ],
+      "runnerPid": 25223,
+      "pid": 25500,
+      "pgid": 25500,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T13:59:42.319452+00:00",
+      "wallS": 11.88029170036316,
+      "loadEnd": [
+        9.275390625,
+        8.75390625,
+        8.025390625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-7",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T14:18:09.812320+00:00",
+      "loadStart": [
+        9.1103515625,
+        12.62548828125,
+        11.2763671875
+      ],
+      "runnerPid": 90437,
+      "pid": 90459,
+      "pgid": 90459,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:18:21.608676+00:00",
+      "wallS": 12.098829746246338,
+      "loadEnd": [
+        8.8525390625,
+        12.45556640625,
+        11.2314453125
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-8",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T14:22:32.110343+00:00",
+      "loadStart": [
+        6.24169921875,
+        9.1787109375,
+        10.0869140625
+      ],
+      "runnerPid": 35532,
+      "pid": 35555,
+      "pgid": 35555,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:22:41.983433+00:00",
+      "wallS": 10.159893989562988,
+      "loadEnd": [
+        6.1240234375,
+        9.056640625,
+        10.03271484375
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "tsc-9",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-14T14:25:52.687363+00:00",
+      "loadStart": [
+        2.98388671875,
+        6.146484375,
+        8.59521484375
+      ],
+      "runnerPid": 40333,
+      "pid": 40478,
+      "pgid": 40478,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:26:01.846300+00:00",
+      "wallS": 9.218115091323853,
+      "loadEnd": [
+        3.06591796875,
+        6.05908203125,
+        8.53515625
+      ],
+      "sourceUnchanged": true
+    },
+    {
+      "label": "whitespace-final",
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "start": "2026-10-14T14:46:11.740803+00:00",
+      "loadStart": [
+        3.306640625,
+        7.73876953125,
+        9.5302734375
+      ],
+      "runnerPid": 28756,
+      "pid": 28786,
+      "pgid": 28786,
+      "exit": 2,
+      "groupSurvived": false,
+      "end": "2026-10-14T14:46:11.854788+00:00",
+      "wallS": 0.1742231845855713,
+      "loadEnd": [
+        3.306640625,
+        7.73876953125,
+        9.5302734375
+      ],
+      "sourceUnchanged": true
+    }
+  ],
+  "unguardedInitialAttempt": {
+    "command": "npx tsc --noEmit",
+    "session": 66181,
+    "exit": 2,
+    "reason": "Generated Cumulus token mirrors absent before workspace preparation; prepare1 then rerun.",
+    "pid": null,
+    "totalWallS": null,
+    "qualification": "Unified executor reported completion; exact native PID/full elapsed were not collected."
+  },
+  "sourceEpochs": {
+    "cf-current-source": {
+      "beforeSHA256": "b7a0c2a4e6c1b1ad02e9da85cd5379c2bd500e4878b9223e5bda7bfdc5696595",
+      "afterSHA256": "b7a0c2a4e6c1b1ad02e9da85cd5379c2bd500e4878b9223e5bda7bfdc5696595",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "cf-nested-departure": {
+      "beforeSHA256": "11f013edf287384a94950f7689358b51a4f5ac99d273d7268e42fc25a66b6f81",
+      "afterSHA256": "11f013edf287384a94950f7689358b51a4f5ac99d273d7268e42fc25a66b6f81",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "cohort-debug": {
+      "beforeSHA256": "49cfffdffaf7023c25c80dc95e02c864766ec1425e6daab747a79525f41a8435",
+      "afterSHA256": "49cfffdffaf7023c25c80dc95e02c864766ec1425e6daab747a79525f41a8435",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "cohort-witness-2": {
+      "beforeSHA256": "81934ef09e0761a63cdfa96613e4ce2dc417db80df56fafacb8a55d6dbfafcc6",
+      "afterSHA256": "81934ef09e0761a63cdfa96613e4ce2dc417db80df56fafacb8a55d6dbfafcc6",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "cohort-witness": {
+      "beforeSHA256": "68e63798e8f4b61cb8ec0034b517553d0262243137ce588e3eb19fbe6d93e15b",
+      "afterSHA256": "68e63798e8f4b61cb8ec0034b517553d0262243137ce588e3eb19fbe6d93e15b",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "evidence-final-v2": {
+      "beforeSHA256": "15969278b040579bd883db7f880ee744ecca171270f1298bc0ee5c39dee25ced",
+      "afterSHA256": "15969278b040579bd883db7f880ee744ecca171270f1298bc0ee5c39dee25ced",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "evidence-final": {
+      "beforeSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "afterSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "focused-1": {
+      "beforeSHA256": "8758167a901bf838e17104285f53334edb0779e93f0405ad117ce7a7bfeb91b0",
+      "afterSHA256": "8758167a901bf838e17104285f53334edb0779e93f0405ad117ce7a7bfeb91b0",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-10": {
+      "beforeSHA256": "f05ff3e07c410ab1c6073d1b5facb1a21a0653164e2254f135d134b039b39089",
+      "afterSHA256": "f05ff3e07c410ab1c6073d1b5facb1a21a0653164e2254f135d134b039b39089",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-11": {
+      "beforeSHA256": "84c7077fe11d68c6b73f6d9f43ee7d8505e17eb1876e7ab8d5000bdf73ca0105",
+      "afterSHA256": "84c7077fe11d68c6b73f6d9f43ee7d8505e17eb1876e7ab8d5000bdf73ca0105",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-12": {
+      "beforeSHA256": "ed5b9f11b8019577b8e3d919f6ba6b7e27895fa55a1fa7dd61533d3fe28f7348",
+      "afterSHA256": "ed5b9f11b8019577b8e3d919f6ba6b7e27895fa55a1fa7dd61533d3fe28f7348",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-13": {
+      "beforeSHA256": "c98f106a2d225dacab6c6a88a179e172c9a80704f13a8176247061175a0f9d85",
+      "afterSHA256": "c98f106a2d225dacab6c6a88a179e172c9a80704f13a8176247061175a0f9d85",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-14": {
+      "beforeSHA256": "c427514a7d8afc6c8bc046cdedb3c73ed3a2e94a85a8d1e8a669bb6ace0c5a96",
+      "afterSHA256": "c427514a7d8afc6c8bc046cdedb3c73ed3a2e94a85a8d1e8a669bb6ace0c5a96",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "focused-15": {
+      "beforeSHA256": "6cf3ceb5af0e1b950c15a94e4b636db967cf62aa70582fcca29f8ed1b76c6c6a",
+      "afterSHA256": "6cf3ceb5af0e1b950c15a94e4b636db967cf62aa70582fcca29f8ed1b76c6c6a",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "focused-16": {
+      "beforeSHA256": "abb3d991388e0141009d65b439fd57ffc8a8f5538852120a9ea16be08a79d64a",
+      "afterSHA256": "abb3d991388e0141009d65b439fd57ffc8a8f5538852120a9ea16be08a79d64a",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "focused-18": {
+      "beforeSHA256": "c71844a876506746cb555702285253f88145292b84b52145c601fc30c2e1ab49",
+      "afterSHA256": "c71844a876506746cb555702285253f88145292b84b52145c601fc30c2e1ab49",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "focused-19": {
+      "beforeSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "afterSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "focused-2": {
+      "beforeSHA256": "3d3a5e4d9658ddc65f29e8a99b5c69b81443a525873f19732fb300df25023bd1",
+      "afterSHA256": "3d3a5e4d9658ddc65f29e8a99b5c69b81443a525873f19732fb300df25023bd1",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-3": {
+      "beforeSHA256": "1baf045b0c36fdb20ad7d2af8c207c036d6a31756e5a7beb0c9ce8ed53e83897",
+      "afterSHA256": "1baf045b0c36fdb20ad7d2af8c207c036d6a31756e5a7beb0c9ce8ed53e83897",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-4": {
+      "beforeSHA256": "8a26fd350df87817b872aab4046172f717f52b5670a3e38c5e44d1c103dcbfa1",
+      "afterSHA256": "8a26fd350df87817b872aab4046172f717f52b5670a3e38c5e44d1c103dcbfa1",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-5": {
+      "beforeSHA256": "b976003601b4e0f7cbfe472a654f090459c4d71c9927d305ea5bcde10d3de276",
+      "afterSHA256": "b976003601b4e0f7cbfe472a654f090459c4d71c9927d305ea5bcde10d3de276",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-6": {
+      "beforeSHA256": "6a0bdd4fd732694b001c9a9c83d85423589487bfb5dcbd2926490caf315004de",
+      "afterSHA256": "6a0bdd4fd732694b001c9a9c83d85423589487bfb5dcbd2926490caf315004de",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-7": {
+      "beforeSHA256": "93aabb62b7a8bdf5744f03bff482ea49e7b164c41707e060a31345f5b8d5adbb",
+      "afterSHA256": "93aabb62b7a8bdf5744f03bff482ea49e7b164c41707e060a31345f5b8d5adbb",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-8": {
+      "beforeSHA256": "002e34f3084e0c421ddd285acead8c172745870816abb433e909be29cf4479cd",
+      "afterSHA256": "002e34f3084e0c421ddd285acead8c172745870816abb433e909be29cf4479cd",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-9": {
+      "beforeSHA256": "20c7556f4782faa0f2955ff592be0519176ae5e55daf4149fea45c85b3cbb75c",
+      "afterSHA256": "20c7556f4782faa0f2955ff592be0519176ae5e55daf4149fea45c85b3cbb75c",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "focused-lint-restored": {
+      "beforeSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "afterSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "focused-restored": {
+      "beforeSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "afterSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "focused17": {
+      "beforeSHA256": "c71844a876506746cb555702285253f88145292b84b52145c601fc30c2e1ab49",
+      "afterSHA256": "c71844a876506746cb555702285253f88145292b84b52145c601fc30c2e1ab49",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "full-final": {
+      "beforeSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "afterSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "knip-final": {
+      "beforeSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "afterSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "prepare-1": {
+      "beforeSHA256": "6290eda1458bf07f50df040d1c984905955130827a33f16b0c9319bb72980c07",
+      "afterSHA256": "6290eda1458bf07f50df040d1c984905955130827a33f16b0c9319bb72980c07",
+      "manifestKeys": 2330,
+      "unchanged": true
+    },
+    "review-final-v2": {
+      "beforeSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "afterSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "review-final": {
+      "beforeSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "afterSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "stage-final-v2": {
+      "beforeSHA256": "15969278b040579bd883db7f880ee744ecca171270f1298bc0ee5c39dee25ced",
+      "afterSHA256": "15969278b040579bd883db7f880ee744ecca171270f1298bc0ee5c39dee25ced",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "stage-final": {
+      "beforeSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "afterSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "tsc-10": {
+      "beforeSHA256": "abb3d991388e0141009d65b439fd57ffc8a8f5538852120a9ea16be08a79d64a",
+      "afterSHA256": "abb3d991388e0141009d65b439fd57ffc8a8f5538852120a9ea16be08a79d64a",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "tsc-11": {
+      "beforeSHA256": "6b2430946d1a81ccd96105f8437a99032c49e2888482ca1aaf2dbb176f9c0870",
+      "afterSHA256": "6b2430946d1a81ccd96105f8437a99032c49e2888482ca1aaf2dbb176f9c0870",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "tsc-12": {
+      "beforeSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "afterSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "tsc-2": {
+      "beforeSHA256": "3d3a5e4d9658ddc65f29e8a99b5c69b81443a525873f19732fb300df25023bd1",
+      "afterSHA256": "3d3a5e4d9658ddc65f29e8a99b5c69b81443a525873f19732fb300df25023bd1",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "tsc-3": {
+      "beforeSHA256": "de90b7bb92e31749babb1aa7dad83c008f5fb1c9b26d706451f78096c975223a",
+      "afterSHA256": "de90b7bb92e31749babb1aa7dad83c008f5fb1c9b26d706451f78096c975223a",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "tsc-4": {
+      "beforeSHA256": "93aabb62b7a8bdf5744f03bff482ea49e7b164c41707e060a31345f5b8d5adbb",
+      "afterSHA256": "93aabb62b7a8bdf5744f03bff482ea49e7b164c41707e060a31345f5b8d5adbb",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "tsc-5": {
+      "beforeSHA256": "84c7077fe11d68c6b73f6d9f43ee7d8505e17eb1876e7ab8d5000bdf73ca0105",
+      "afterSHA256": "84c7077fe11d68c6b73f6d9f43ee7d8505e17eb1876e7ab8d5000bdf73ca0105",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "tsc-6": {
+      "beforeSHA256": "ed5b9f11b8019577b8e3d919f6ba6b7e27895fa55a1fa7dd61533d3fe28f7348",
+      "afterSHA256": "ed5b9f11b8019577b8e3d919f6ba6b7e27895fa55a1fa7dd61533d3fe28f7348",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "tsc-7": {
+      "beforeSHA256": "c98f106a2d225dacab6c6a88a179e172c9a80704f13a8176247061175a0f9d85",
+      "afterSHA256": "c98f106a2d225dacab6c6a88a179e172c9a80704f13a8176247061175a0f9d85",
+      "manifestKeys": 2331,
+      "unchanged": true
+    },
+    "tsc-8": {
+      "beforeSHA256": "1990d5a3964d2532c0cffc15d5be7f3a544249dbc14a2e0dca31d2e88e285921",
+      "afterSHA256": "1990d5a3964d2532c0cffc15d5be7f3a544249dbc14a2e0dca31d2e88e285921",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "tsc-9": {
+      "beforeSHA256": "c427514a7d8afc6c8bc046cdedb3c73ed3a2e94a85a8d1e8a669bb6ace0c5a96",
+      "afterSHA256": "c427514a7d8afc6c8bc046cdedb3c73ed3a2e94a85a8d1e8a669bb6ace0c5a96",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "tsc-restored": {
+      "beforeSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "afterSHA256": "31e2f1e94d6e045a0fd1e70ce1a567a2a5f7b9832da47a4a58ff739b7ca42e63",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "whitespace-final-v2": {
+      "beforeSHA256": "15969278b040579bd883db7f880ee744ecca171270f1298bc0ee5c39dee25ced",
+      "afterSHA256": "15969278b040579bd883db7f880ee744ecca171270f1298bc0ee5c39dee25ced",
+      "manifestKeys": 2333,
+      "unchanged": true
+    },
+    "whitespace-final": {
+      "beforeSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "afterSHA256": "59b165688c934eb10242826bbe098b4426ef422053e97c74207e78c9aa84ea6a",
+      "manifestKeys": 2333,
+      "unchanged": true
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "cf-current-source",
+      "start": [
+        15.32568359375,
+        13.25634765625,
+        11.35107421875
+      ],
+      "end": [
+        14.65869140625,
+        13.15234375,
+        11.3251953125
+      ]
+    },
+    {
+      "label": "cf-nested-departure",
+      "start": [
+        14.65869140625,
+        13.15234375,
+        11.3251953125
+      ],
+      "end": [
+        14.125,
+        13.06640625,
+        11.3056640625
+      ]
+    },
+    {
+      "label": "cohort-debug",
+      "start": [
+        12.2666015625,
+        8.72509765625,
+        7.818359375
+      ],
+      "end": [
+        14.4873046875,
+        9.244140625,
+        8.0068359375
+      ]
+    },
+    {
+      "label": "cohort-witness-2",
+      "start": [
+        24.189453125,
+        12.09423828125,
+        9.087890625
+      ],
+      "end": [
+        26.255859375,
+        12.72314453125,
+        9.3271484375
+      ]
+    },
+    {
+      "label": "cohort-witness",
+      "start": [
+        11.8876953125,
+        8.27294921875,
+        7.630859375
+      ],
+      "end": [
+        11.81640625,
+        8.31787109375,
+        7.650390625
+      ]
+    },
+    {
+      "label": "evidence-final-v2",
+      "start": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ],
+      "end": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ]
+    },
+    {
+      "label": "evidence-final",
+      "start": [
+        5.0078125,
+        9.48583984375,
+        10.2880859375
+      ],
+      "end": [
+        5.0078125,
+        9.48583984375,
+        10.2880859375
+      ]
+    },
+    {
+      "label": "focused-1",
+      "start": [
+        5.0712890625,
+        6.146484375,
+        6.17333984375
+      ],
+      "end": [
+        6.5869140625,
+        6.44287109375,
+        6.27734375
+      ]
+    },
+    {
+      "label": "focused-10",
+      "start": [
+        15.1767578125,
+        8.9013671875,
+        7.9736328125
+      ],
+      "end": [
+        16.84423828125,
+        9.35107421875,
+        8.1376953125
+      ]
+    },
+    {
+      "label": "focused-11",
+      "start": [
+        9.73388671875,
+        8.81103515625,
+        8.03271484375
+      ],
+      "end": [
+        9.5947265625,
+        8.79736328125,
+        8.0322265625
+      ]
+    },
+    {
+      "label": "focused-12",
+      "start": [
+        7.2724609375,
+        8.3125,
+        7.92138671875
+      ],
+      "end": [
+        7.01025390625,
+        8.24072265625,
+        7.89794921875
+      ]
+    },
+    {
+      "label": "focused-13",
+      "start": [
+        13.30419921875,
+        14.326171875,
+        11.6708984375
+      ],
+      "end": [
+        12.87939453125,
+        14.220703125,
+        11.64892578125
+      ]
+    },
+    {
+      "label": "focused-14",
+      "start": [
+        2.98388671875,
+        6.146484375,
+        8.59521484375
+      ],
+      "end": [
+        2.98388671875,
+        6.146484375,
+        8.59521484375
+      ]
+    },
+    {
+      "label": "focused-15",
+      "start": [
+        3.03173828125,
+        5.90771484375,
+        8.4375
+      ],
+      "end": [
+        3.03173828125,
+        5.90771484375,
+        8.4375
+      ]
+    },
+    {
+      "label": "focused-16",
+      "start": [
+        3.77099609375,
+        5.6025390625,
+        8.14892578125
+      ],
+      "end": [
+        3.77099609375,
+        5.6025390625,
+        8.14892578125
+      ]
+    },
+    {
+      "label": "focused-18",
+      "start": [
+        7.92529296875,
+        11.2109375,
+        10.330078125
+      ],
+      "end": [
+        7.53076171875,
+        11.07421875,
+        10.287109375
+      ]
+    },
+    {
+      "label": "focused-19",
+      "start": [
+        7.154296875,
+        10.03173828125,
+        9.9521484375
+      ],
+      "end": [
+        7.3017578125,
+        10.01416015625,
+        9.9462890625
+      ]
+    },
+    {
+      "label": "focused-2",
+      "start": [
+        13.5029296875,
+        8.16064453125,
+        6.90673828125
+      ],
+      "end": [
+        14.98388671875,
+        8.55615234375,
+        7.0537109375
+      ]
+    },
+    {
+      "label": "focused-3",
+      "start": [
+        17.8115234375,
+        14.65234375,
+        10.287109375
+      ],
+      "end": [
+        17.10546875,
+        14.55810546875,
+        10.279296875
+      ]
+    },
+    {
+      "label": "focused-4",
+      "start": [
+        11.1171875,
+        11.17236328125,
+        9.84423828125
+      ],
+      "end": [
+        10.466796875,
+        11.03662109375,
+        9.8037109375
+      ]
+    },
+    {
+      "label": "focused-5",
+      "start": [
+        4.14892578125,
+        6.58203125,
+        8.12646484375
+      ],
+      "end": [
+        3.9765625,
+        6.505859375,
+        8.09033203125
+      ]
+    },
+    {
+      "label": "focused-6",
+      "start": [
+        3.53759765625,
+        5.7900390625,
+        7.67333984375
+      ],
+      "end": [
+        3.734375,
+        5.79345703125,
+        7.6630859375
+      ]
+    },
+    {
+      "label": "focused-7",
+      "start": [
+        4.89892578125,
+        5.54052734375,
+        7.3505859375
+      ],
+      "end": [
+        4.89892578125,
+        5.54052734375,
+        7.3505859375
+      ]
+    },
+    {
+      "label": "focused-8",
+      "start": [
+        5.896484375,
+        5.44677734375,
+        7.03955078125
+      ],
+      "end": [
+        5.896484375,
+        5.44677734375,
+        7.03955078125
+      ]
+    },
+    {
+      "label": "focused-9",
+      "start": [
+        11.03857421875,
+        6.5634765625,
+        7.13134765625
+      ],
+      "end": [
+        11.03857421875,
+        6.5634765625,
+        7.13134765625
+      ]
+    },
+    {
+      "label": "focused-lint-restored",
+      "start": [
+        9.14111328125,
+        11.72314453125,
+        10.99462890625
+      ],
+      "end": [
+        12.41259765625,
+        12.3583984375,
+        11.22314453125
+      ]
+    },
+    {
+      "label": "focused-restored",
+      "start": [
+        12.6201171875,
+        12.78466796875,
+        11.2353515625
+      ],
+      "end": [
+        12.490234375,
+        12.7548828125,
+        11.23388671875
+      ]
+    },
+    {
+      "label": "focused17",
+      "start": [
+        9.79248046875,
+        11.80810546875,
+        10.50830078125
+      ],
+      "end": [
+        9.56884765625,
+        11.72802734375,
+        10.4873046875
+      ]
+    },
+    {
+      "label": "full-final",
+      "start": [
+        9.5576171875,
+        11.5869140625,
+        11.0068359375
+      ],
+      "end": [
+        7.8759765625,
+        10.63330078125,
+        10.71630859375
+      ]
+    },
+    {
+      "label": "knip-final",
+      "start": [
+        12.052734375,
+        12.626953125,
+        11.22216796875
+      ],
+      "end": [
+        11.48779296875,
+        12.5,
+        11.185546875
+      ]
+    },
+    {
+      "label": "prepare-1",
+      "start": [
+        8.72021484375,
+        6.9326171875,
+        6.43115234375
+      ],
+      "end": [
+        8.72021484375,
+        6.9326171875,
+        6.43115234375
+      ]
+    },
+    {
+      "label": "review-final-v2",
+      "start": [
+        12.41259765625,
+        12.3583984375,
+        11.22314453125
+      ],
+      "end": [
+        9.86767578125,
+        11.681640625,
+        11.03662109375
+      ]
+    },
+    {
+      "label": "review-final",
+      "start": [
+        12.052734375,
+        12.626953125,
+        11.22216796875
+      ],
+      "end": [
+        10.154296875,
+        12.037109375,
+        11.09033203125
+      ]
+    },
+    {
+      "label": "stage-final-v2",
+      "start": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ],
+      "end": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ]
+    },
+    {
+      "label": "stage-final",
+      "start": [
+        3.306640625,
+        7.73876953125,
+        9.5302734375
+      ],
+      "end": [
+        3.306640625,
+        7.73876953125,
+        9.5302734375
+      ]
+    },
+    {
+      "label": "tsc-10",
+      "start": [
+        3.77099609375,
+        5.6025390625,
+        8.14892578125
+      ],
+      "end": [
+        4.6953125,
+        5.71875,
+        8.14599609375
+      ]
+    },
+    {
+      "label": "tsc-11",
+      "start": [
+        7.32763671875,
+        10.97314453125,
+        10.255859375
+      ],
+      "end": [
+        7.04931640625,
+        10.79248046875,
+        10.19970703125
+      ]
+    },
+    {
+      "label": "tsc-12",
+      "start": [
+        6.62646484375,
+        10.390625,
+        10.07080078125
+      ],
+      "end": [
+        6.36328125,
+        10.2119140625,
+        10.01123046875
+      ]
+    },
+    {
+      "label": "tsc-2",
+      "start": [
+        14.98388671875,
+        8.55615234375,
+        7.0537109375
+      ],
+      "end": [
+        13.9033203125,
+        8.537109375,
+        7.064453125
+      ]
+    },
+    {
+      "label": "tsc-3",
+      "start": [
+        5.1123046875,
+        7.044921875,
+        8.34912109375
+      ],
+      "end": [
+        4.8671875,
+        6.927734375,
+        8.2919921875
+      ]
+    },
+    {
+      "label": "tsc-4",
+      "start": [
+        5.07275390625,
+        5.4580078125,
+        7.193359375
+      ],
+      "end": [
+        4.75390625,
+        5.37646484375,
+        7.1435546875
+      ]
+    },
+    {
+      "label": "tsc-5",
+      "start": [
+        9.5947265625,
+        8.79736328125,
+        8.0322265625
+      ],
+      "end": [
+        9.275390625,
+        8.75390625,
+        8.025390625
+      ]
+    },
+    {
+      "label": "tsc-6",
+      "start": [
+        7.01025390625,
+        8.24072265625,
+        7.89794921875
+      ],
+      "end": [
+        6.94091796875,
+        8.18310546875,
+        7.88134765625
+      ]
+    },
+    {
+      "label": "tsc-7",
+      "start": [
+        9.1103515625,
+        12.62548828125,
+        11.2763671875
+      ],
+      "end": [
+        8.8525390625,
+        12.45556640625,
+        11.2314453125
+      ]
+    },
+    {
+      "label": "tsc-8",
+      "start": [
+        6.24169921875,
+        9.1787109375,
+        10.0869140625
+      ],
+      "end": [
+        6.1240234375,
+        9.056640625,
+        10.03271484375
+      ]
+    },
+    {
+      "label": "tsc-9",
+      "start": [
+        2.98388671875,
+        6.146484375,
+        8.59521484375
+      ],
+      "end": [
+        3.06591796875,
+        6.05908203125,
+        8.53515625
+      ]
+    },
+    {
+      "label": "tsc-restored",
+      "start": [
+        12.490234375,
+        12.7548828125,
+        11.23388671875
+      ],
+      "end": [
+        11.953125,
+        12.630859375,
+        11.20751953125
+      ]
+    },
+    {
+      "label": "whitespace-final-v2",
+      "start": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ],
+      "end": [
+        7.0126953125,
+        8.2255859375,
+        9.65869140625
+      ]
+    },
+    {
+      "label": "whitespace-final",
+      "start": [
+        3.306640625,
+        7.73876953125,
+        9.5302734375
+      ],
+      "end": [
+        3.306640625,
+        7.73876953125,
+        9.5302734375
+      ]
+    }
+  ],
+  "processOwnership": {
+    "guardSHA256": "156b4b9f718ba38de4620546e2241a5ef70d55ff857384ab0130c26497b9acc0",
+    "allGuardedChildrenReaped": true,
+    "allGuardedGroupsAbsent": true,
+    "sourceWritesWhileChecks": false,
+    "server": null,
+    "browser": null,
+    "ports": [],
+    "existingFullInfrastructureFixtures": {
+      "checkedAt": "2026-10-14T14:44:41.418028+00:00",
+      "groups": [
+        {
+          "pid": 1255,
+          "pgid": 1255,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 1531,
+          "pgid": 1531,
+          "port": 5175,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 2214,
+          "pgid": 2214,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 2308,
+          "pgid": 2308,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 2943,
+          "pgid": 2943,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 3424,
+          "pgid": 3424,
+          "port": 5275,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 3573,
+          "pgid": 3573,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 3724,
+          "pgid": 3724,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 4312,
+          "pgid": 4312,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 4456,
+          "pgid": 4456,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 5244,
+          "pgid": 5244,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 5428,
+          "pgid": 5428,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 5648,
+          "pgid": 5648,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 6007,
+          "pgid": 6007,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 6561,
+          "pgid": 6561,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 6716,
+          "pgid": 6716,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 7162,
+          "pgid": 7162,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 7386,
+          "pgid": 7386,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 7508,
+          "pgid": 7508,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 8300,
+          "pgid": 8300,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 8385,
+          "pgid": 8385,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 8535,
+          "pgid": 8535,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 10924,
+          "pgid": 10924,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 11647,
+          "pgid": 11647,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 15141,
+          "pgid": 15141,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 15627,
+          "pgid": 15627,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 17189,
+          "pgid": 17189,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 17855,
+          "pgid": 17855,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 18485,
+          "pgid": 18485,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 20197,
+          "pgid": 20197,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 20620,
+          "pgid": 20620,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 90304,
+          "pgid": 90304,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 90438,
+          "pgid": 90438,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 90807,
+          "pgid": 90807,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 90955,
+          "pgid": 90955,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 91603,
+          "pgid": 91603,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 91647,
+          "pgid": 91647,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 92224,
+          "pgid": 92224,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 92347,
+          "pgid": 92347,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 92437,
+          "pgid": 92437,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 93050,
+          "pgid": 93050,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 93170,
+          "pgid": 93170,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 93694,
+          "pgid": 93694,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 94302,
+          "pgid": 94302,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 94506,
+          "pgid": 94506,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 94591,
+          "pgid": 94591,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 95224,
+          "pgid": 95224,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 95313,
+          "pgid": 95313,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 96030,
+          "pgid": 96030,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 96403,
+          "pgid": 96403,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 96551,
+          "pgid": 96551,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 96708,
+          "pgid": 96708,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 97289,
+          "pgid": 97289,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 97435,
+          "pgid": 97435,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 98432,
+          "pgid": 98432,
+          "port": 5274,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 99073,
+          "pgid": 99073,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        },
+        {
+          "pid": 99797,
+          "pgid": 99797,
+          "port": 5174,
+          "absent": true,
+          "scope": "Existing full-suite synthetic infrastructure test server in temporary fixture checkout; cleanup logged by test, no product browser QA."
+        }
+      ],
+      "allAbsent": true,
+      "portQualification": "Test logs record each own fixture port free at its cleanup; current global port occupancy not asserted."
+    }
+  },
+  "counterfactual": {
+    "planSHA256": "a2598da663507dfda0c15e603dcf6d0e21ac26a8e72f146b047b8da7572a3d79",
+    "runnerSHA256": "a9ca9c256b9b1535711efa83a83ee687b61b0c975a363e96d197e230c4760c2f",
+    "actualOutcomes": {
+      "currentSource": "4 assertion failures/4controls pass, score4vs2 and energy12vs16",
+      "nestedDeparture": "2 assertion failures/6controls pass, energy17vs26; proposal predicted22 but dormant void source reads0, original9 plus repeat0; same-step map controls pass"
+    },
+    "restorations": {
+      "cf-current-source.restoration.json": {
+        "docs/plan/engine-design.md": true,
+        "docs/plan/evidence/rules-decisions/RD-hv-vwcb-1.md": true,
+        "docs/rules.md": true,
+        "src/engine/effects/interpreter.ts": true,
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": true,
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts": true,
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts": true,
+        "src/engine/effects/primitives/index.ts": true,
+        "src/engine/effects/primitives/repeat-triggering-ability.ts": true,
+        "src/engine/effects/registry.ts": true,
+        "src/engine/effects/types.ts": true,
+        "src/engine/events/kinds/trigger-queued.ts": true,
+        "src/engine/rules/zones.ts": true,
+        "src/engine/state/types.ts": true,
+        "src/engine/triggers/matcher.ts": true,
+        "src/engine/triggers/named-admissions.ts": true,
+        "src/engine/triggers/resolve.ts": true,
+        "src/engine/view/determinize.ts": true,
+        "src/engine/view/view.ts": true,
+        "src/rules/battle/fold.ts": true
+      },
+      "cf-nested-departure.restoration.json": {
+        "docs/plan/engine-design.md": true,
+        "docs/plan/evidence/rules-decisions/RD-hv-vwcb-1.md": true,
+        "docs/rules.md": true,
+        "src/engine/effects/interpreter.ts": true,
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": true,
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts": true,
+        "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts": true,
+        "src/engine/effects/primitives/index.ts": true,
+        "src/engine/effects/primitives/repeat-triggering-ability.ts": true,
+        "src/engine/effects/registry.ts": true,
+        "src/engine/effects/types.ts": true,
+        "src/engine/events/kinds/trigger-queued.ts": true,
+        "src/engine/rules/zones.ts": true,
+        "src/engine/state/types.ts": true,
+        "src/engine/triggers/matcher.ts": true,
+        "src/engine/triggers/named-admissions.ts": true,
+        "src/engine/triggers/resolve.ts": true,
+        "src/engine/view/determinize.ts": true,
+        "src/engine/view/view.ts": true,
+        "src/rules/battle/fold.ts": true
+      }
+    }
+  },
+  "failurePaths": {
+    "exactReader": "Different sibling bodies, captured amplified and gained definitions, actual copied/figment cease, public departure9 versus copiable5",
+    "eligibility": "Spent ordinary allowance persists after gained-record cleanup; currentlydisabled newadmission refuses; delayed one-shot refuses; condition rechecks admission/resolution; late disable does not cancel queued success",
+    "termination": "Mandatory growing causal cycles draw; independent convergent finite roots fully drain with actual results; pure transport excluded from eligibility ancestry key",
+    "suspensionReload": "Actual optional observer accepts/declines after reload; exact cause survives own fold, source/cohort/copy/scalar readers before/after pending repeat",
+    "concurrentStale": "Wrong side, bounce/cancel, stale version and duplicate followup preserve committed hash",
+    "partialWrite": "Successful energy and repeat prefix control then exact unknown figment error rolls back state/version/queue and publishes no events",
+    "planningCancel": "Before payment/admission planning cancel preserves committed state",
+    "malformed": "Saved binding cycle/duplicate audience/specialkind and raw catalog mismatched named/index rejected; impossible repeated immutable limits rejected rawreader/sampler",
+    "privacy": "Historicaloriginal and observerinstruction audiences separate; blind private hand/deck no class/marker/UUID, original old referent remainsunknown after current visibility; live anonymous member/immutableowner excludes current hidden tuple; known ceasedcopy and ceasedobserver continue; minimal cohort obeys remembered/printed constraints"
+  },
+  "inspectionQualification": {
+    "linkedCleanup": "Actual departed linkedproducer contract uses existing pending return obligation and passes. No sole-nested lostobligation or loop-clock witness established; linked-banish/linkedPosition/loop bodies untouched."
+  },
+  "QA": {
+    "browser": false,
+    "screenshots": [],
+    "reason": "New internal effect primitive and synthetic engine/fold consumers; zero production entities, UI/presentation consumers or workflow changes. Original237 retains TWO UUIDs, weighted300 and both-side D21.",
+    "preExistingProductIssues": [],
+    "rules": "RD-hv-vwcb-1 records normative D10 decision before code.",
+    "coreReview": "Parent owns required normal fresh read-only Claude Opus5.5 exactcommit review; temporary Sol override expired. Completion not asserted."
+  },
+  "performance": {
+    "claim": "Functional validation only. D19 low-load budget unmeasured; primitive bead is not phasegate. No speedup/regression attribution.",
+    "workers": 2,
+    "heavyLock": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "fuzz": "Not required locally: step runner/fuzzer unchanged; no weighted300/originalcontent acceptance claim."
+  }
+}

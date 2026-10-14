@@ -210,6 +210,7 @@ function subjectMatches(
 
 /** A match, the card its event concerns, and the gain a "when … gains ✦" trigger matched. */
 interface Match {
+  readonly triggeringAbility?: QueuedTrigger["triggeringAbility"];
   readonly handCopy?: HandCopyContext;
   readonly subject: InstanceId | null;
   /** Visibility captured at a confirmed public departure, even when the subject has since ceased to exist. */
@@ -345,7 +346,9 @@ function matchKind(
   switch (trigger.on) {
     case "namedAbilityTriggered":
       return admission !== undefined && event.kind === "triggerQueued" &&
-        admission.queued.controller === resolvePlayer(you, trigger.player) && hasNamed(admission.trigger, trigger.named) ? NO_SUBJECT : null;
+        admission.queued.controller === resolvePlayer(you, trigger.player) && hasNamed(admission.trigger, trigger.named)
+          ? { subject: null, triggeringAbility: { named: trigger.named, occurrence: admission.queued,
+            observedBy: admission.queued.repeated?.observedBy ?? SIDES.filter(viewer => sourceObserved({ state }, admission.queued.source, viewer)) } } : null;
     case "materialized":
       return event.kind === "materialized" && self !== null && event.instance === self ? { subject: self } : null;
     case "dawn":
@@ -586,18 +589,29 @@ function readsSubjectValue(value: unknown, kind: "subjectCost" | "subjectSpark",
  * it triggers (a card drawn into or discarded from a hidden hand), which
  * never see it as this trigger's subject.
  */
+function readsRepeat(node: EffectNode, seen = new Set<EffectNode>()): boolean {
+  if (seen.has(node) || node.op === "floatingTrigger") return false;
+  seen.add(node);
+  if (node.op === "repeatTriggeringAbility") return true;
+  const definition = primitiveDefinition(node.op);
+  return [...definition.children?.(node) ?? [], ...definition.deferred?.(node) ?? []].some(child => readsRepeat(child, seen));
+}
+
 function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger): NamedAdmission {
   const self = sourceInstance(matched.source);
   const lastKnownSourceSpark = self === null ? matched.lastKnownSourceSpark : (ctx.departedSourceSpark.get(self) ?? matched.lastKnownSourceSpark);
   const effect = triggerBody(ctx.catalog, matched.origin, matched.ability, matched.node).effect;
-  const linkedSource = everyNode(effect).some((node) => node.op === "linkedBanish")
-    ? linkedSourceContext(ctx, matched.source, matched.origin, matched.ability) : null;
-  const { lastKnownSubjectCost: armedCost, lastKnownSubjectSpark: armedSpark, handCopy, ...record } = matched;
+  const linkedSource = matched.linkedSource ?? (everyNode(effect).some((node) => node.op === "linkedBanish")
+    ? linkedSourceContext(ctx, matched.source, matched.origin, matched.ability) : null);
+  const { lastKnownSubjectCost: armedCost, lastKnownSubjectSpark: armedSpark, handCopy, triggeringAbility, ...record } = matched;
   const readsCopy = readsSubjectCopy(effect);
   const subjectCost = readsSubjectValue(effect, "subjectCost") ? armedCost ?? (matched.subject !== null && ctx.state.instances[matched.subject] !== undefined
     ? copiableCostOf(ctx.state, ctx.catalog, matched.subject) : undefined) : undefined;
   const subjectSpark = readsSubjectValue(effect, "subjectSpark") ? armedSpark : undefined;
   const retained = { ...record,
+    ...(triggeringAbility === undefined || !readsRepeat(effect) ? {} : { triggeringAbility: JSON.parse(JSON.stringify({ ...triggeringAbility,
+      readerObservedBy: triggeringAbility.readerObservedBy ?? matched.repeated?.observedBy ?? SIDES.filter(viewer => sourceObserved(ctx, matched.source, viewer)),
+    })) as NonNullable<QueuedTrigger["triggeringAbility"]> }),
     ...(handCopy === undefined || !readsCopy ? {} : { handCopy }),
     ...(subjectCost === undefined ? {} : { lastKnownSubjectCost: subjectCost }),
     ...(subjectSpark === undefined ? {} : { lastKnownSubjectSpark: subjectSpark }),
@@ -609,6 +623,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
   ctx.state.triggerQueue.push(trigger);
   ctx.emit({
     kind: "triggerQueued",
+    ...(trigger.triggeringAbility === undefined ? {} : { triggeringAbility: trigger.triggeringAbility }),
     source: trigger.source,
     controller: trigger.controller,
     ability: trigger.ability,
@@ -904,6 +919,32 @@ export function triggerNamed(ctx: StepContext, id: InstanceId, named: NamedTrigg
   triggerNamedBatch(ctx, [id], named);
 }
 
+/** Explicitly repeats one captured definition, never the source's current ability list. */
+export function repeatCapturedTrigger(ctx: StepContext, binding: NonNullable<QueuedTrigger["triggeringAbility"]>): void {
+  const original = binding.occurrence;
+  if (original.kind !== undefined) throw new Error("A repeated cause must be a triggered ability");
+  const body = triggerBody(ctx.catalog, original.origin, original.ability, original.node);
+  if (!hasNamed(body.trigger, binding.named)) throw new Error("A repeated cause has no matching named trigger");
+  if (original.node === null) {
+    const ability = originAbilities(ctx.catalog, original.origin)[original.ability];
+    if (ability?.kind !== "triggered") throw new Error("A repeated cause has no triggered definition");
+    // This captured occurrence spent its allowance even if gained records ended.
+    if (ability.oncePerTurn === true || triggerBlocks(ctx.state, ctx.catalog, original.source, original.ability).disabled) return;
+  } else {
+    const node = everyNode(body.root)[original.node] as import("../effects/primitives/floating-trigger").FloatingTriggerNode;
+    if (node.once) return;
+  }
+  if (body.condition !== null && !conditionHolds(ctx.state, ctx.catalog, body.condition,
+    { controller: original.controller, source: original.source, optionalPaid: [] })) return;
+  const beforeDawn = ctx.state.turnLog.dawnProgress?.total ?? 0;
+  const admitted = enqueue(ctx, { ...original, repeated: { named: binding.named, observedBy: binding.observedBy ?? [], visibleTo: binding.readerObservedBy ?? [] } }, body.trigger);
+  const audience = SIDES.filter(viewer => (binding.observedBy?.includes(viewer) === true && sourceObserved(ctx, original.source, viewer)) ||
+    (binding.readerObservedBy?.includes(viewer) === true && (binding.named === "dawn" || binding.observedBy?.includes(viewer) === true)));
+  recordDawnAdmission(ctx, original.source, body.trigger, audience);
+  queueDawnReactions(ctx, beforeDawn);
+  observeNamedAdmissions(ctx, [admitted], (entry) => matchNamedAdmission(ctx, entry), () => hasNamedAdmissionObserver(ctx));
+}
+
 /** One named-trigger instruction admits every selected source before its reactions. */
 export function triggerNamedBatch(ctx: StepContext, ids: readonly InstanceId[], named: NamedTrigger): void {
   const beforeDawn = ctx.state.turnLog.dawnProgress?.total ?? 0;
@@ -925,11 +966,11 @@ function enqueueNamed(ctx: StepContext, id: InstanceId, named: NamedTrigger): Na
 }
 
 /** Count successful admissions, not candidates or resolutions, and keep observer-qualified lower bounds. */
-function recordDawnAdmission(ctx: StepContext, source: AbilitySource, trigger: Trigger): void {
+function recordDawnAdmission(ctx: StepContext, source: AbilitySource, trigger: Trigger, repeatAudience?: readonly Side[]): void {
   if (ctx.state.turn.phase !== "dawn" || !hasNamed(trigger, "dawn")) return;
   const progress = ctx.state.turnLog.dawnProgress ??= { total: 0, known: { player: 0, enemy: 0 } };
   progress.total += 1;
-  for (const viewer of SIDES) if (sourceObserved(ctx, source, viewer)) progress.known[viewer] += 1;
+  for (const viewer of SIDES) if (repeatAudience === undefined ? sourceObserved(ctx, source, viewer) : repeatAudience.includes(viewer)) progress.known[viewer] += 1;
 }
 
 /** Threshold reactions follow every simultaneous admission in their causing batch (D14). */

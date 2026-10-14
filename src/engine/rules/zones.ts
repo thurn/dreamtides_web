@@ -93,8 +93,14 @@ export function charactersInPlay(state: BattleState, side: Side): InstanceId[] {
 function captureSourceSpark(ctx: StepContext, instance: CardInstance): number {
   const lastKnownSourceSpark = effectiveSpark(ctx.state, ctx.catalog, instance.id);
   ctx.departedSourceSpark.set(instance.id, lastKnownSourceSpark);
-  ctx.state.triggerQueue = ctx.state.triggerQueue.map((trigger) => sourceInstance(trigger.source) === instance.id
-    ? { ...trigger, lastKnownSourceSpark } : trigger);
+  const retain = (trigger: import("../state/types").QueuedTrigger): import("../state/types").QueuedTrigger => ({
+    ...trigger,
+    ...(sourceInstance(trigger.source) === instance.id ? { lastKnownSourceSpark } : {}),
+    ...(trigger.triggeringAbility === undefined ? {} : { triggeringAbility: {
+      ...trigger.triggeringAbility, occurrence: retain(trigger.triggeringAbility.occurrence),
+    } }),
+  });
+  ctx.state.triggerQueue = ctx.state.triggerQueue.map(retain);
   ctx.state.stack = ctx.state.stack.map((item) => item.kind === "ability" && sourceInstance(item.source) === instance.id
     ? { ...item, lastKnownSourceSpark } : item);
   ctx.state.floating = ctx.state.floating.map((effect) => effect.change.kind === "trigger" && sourceInstance(effect.source) === instance.id

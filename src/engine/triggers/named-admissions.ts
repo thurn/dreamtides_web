@@ -38,7 +38,9 @@ export function observeNamedAdmissions(
     for (const { admission, ancestry } of wave) {
       // Processing-time revisions are used consistently, including when a
       // sibling consumed an allowance after this occurrence was enqueued.
-      const key = JSON.stringify([admission, ctx.triggerUses.oncePerTurn.length, ctx.triggerUses.once.size]);
+      // Causal bindings are consumed by resolving bodies, never admission eligibility.
+      const { triggeringAbility: _cause, repeated: _audience, ...queued } = admission.queued;
+      const key = JSON.stringify([{ queued, trigger: admission.trigger }, ctx.triggerUses.oncePerTurn.length, ctx.triggerUses.once.size]);
       if (ancestry.has(key)) {
         endBattle(ctx, { kind: "draw", reason: "mandatoryLoop" });
         throw new AdmissionCycleDraw();

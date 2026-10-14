@@ -576,6 +576,10 @@ export interface HandCopyContext {
 }
 
 interface QueuedAbility {
+  /** Audience and named classification of an actual explicitly repeated pending occurrence. */
+  readonly repeated?: { readonly named: import("../dsl/types").NamedTrigger; readonly observedBy: readonly Side[]; readonly visibleTo: readonly Side[] };
+  /** Exact causing named occurrence, retained only for an immediate repeat reader. */
+  readonly triggeringAbility?: { readonly named: import("../dsl/types").NamedTrigger; readonly occurrence: QueuedTrigger; readonly observedBy?: readonly Side[]; readonly readerObservedBy?: readonly Side[] };
   /** Public effective predeparture spark, captured only for a lookback subject value. */
   readonly lastKnownSubjectSpark?: number;
   /** Copiable subject cost captured for a body that reads it. */

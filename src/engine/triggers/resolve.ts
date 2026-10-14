@@ -1,5 +1,5 @@
 /** Resolving one queued trigger (D14): the body of the `resolveTrigger` step. */
-import { chooseOnResolution, conditionHolds, purposeOf, resolveEffect } from "../effects/interpreter";
+import { chooseOnResolution, conditionHolds, everyNode, purposeOf, resolveEffect } from "../effects/interpreter";
 import type { QueuedTrigger } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { originAbilities } from "../rules/activation";
@@ -23,6 +23,17 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   const body = trigger.kind === "dreamwellBonus"
     ? dreamwellBody(ctx, trigger)
     : trigger.kind === "ruleReaction" ? ruleReactionBody(ctx.catalog, origin, ability) : triggerBody(ctx.catalog, origin, ability, node);
+  if (trigger.repeated !== undefined) {
+    if (trigger.kind !== undefined) throw new Error("A repeated occurrence must be a triggered ability");
+    const named = trigger.repeated.named;
+    const matches = (descriptor: import("../dsl/types").Trigger): boolean => descriptor.on === named ||
+      descriptor.on === "either" && descriptor.triggers.some(matches);
+    const repeatedBody = triggerBody(ctx.catalog, origin, ability, node);
+    if (!matches(repeatedBody.trigger)) throw new Error("A repeated occurrence has no matching named trigger");
+    const definition = originAbilities(ctx.catalog, origin)[ability];
+    if (node === null ? definition?.kind === "triggered" && definition.oncePerTurn === true
+      : (everyNode(repeatedBody.root)[node] as import("../effects/primitives/floating-trigger").FloatingTriggerNode).once) throw new Error("A repeated occurrence has spent its immutable allowance");
+  }
   if (trigger.kind === "ruleReaction") observeRuleReactions(ctx, [trigger]);
   const applied =
     body.condition === null ||
@@ -33,6 +44,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   if (choices === null) return;
   resolveEffect(ctx, body.effect, {
     source,
+    ...(trigger.triggeringAbility === undefined ? {} : { triggeringAbility: trigger.triggeringAbility }),
     ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     ...(linkedSource === undefined ? {} : { linkedSource }),
     origin,

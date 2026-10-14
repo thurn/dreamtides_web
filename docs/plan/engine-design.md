@@ -956,7 +956,25 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   admission-only mandatory cycles without conflating independent occasions.
   A terminal control signal stops further effect resolution and deck-top
   revelation. Ordinary queued observers use the existing save/view
-  transport; this seam introduces no persisted occurrence snapshot.
+  transport. A cause is persisted only when an immediate repeat reader needs it.
+- **Exact repeated occurrences.** `repeatTriggeringAbility()` reads the exact
+  causing named occurrence retained only for an immediate repeat reader.
+  `triggeringAbility` carries the captured origin, ability/node, controller,
+  subject and existing bindings, plus separate original-definition and
+  observing-instruction audiences. Successful repeats carry a `repeated`
+  named/audience marker visible to viewers who know that instruction through the
+  pending FIFO reader. Save validation walks nested causes; catalog readers
+  validate named classification and immutable limits before resolution.
+  Audience-qualified views preserve known historical origins and public
+  departure values without a current hidden source alias. Anonymous live
+  sources use shared member numbers and immutable owners; ceased sources use
+  an anonymous historical identity. Unknown historical definitions are sampled
+  from compatible named occurrences. Private subject costs and copy actions
+  preserve their original concealment during reconstruction. Known queued
+  cohort readers retain shared members and immutable owners without exposing
+  hidden current printings; explicit empty cohorts remain bound. The authoritative
+  trigger log keeps causes; every public trigger event omits that binding.
+  Pure causal/audience metadata is excluded from admission-cycle signatures.
 - **Player-rule reactions.** A static `ruleModifier` Dawn threshold appends a
   `QueuedTrigger` with `kind: "ruleReaction"`, `node: null` and `subject: null`
   after the causing event's full admission batch or the complete resolved

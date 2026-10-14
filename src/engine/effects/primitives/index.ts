@@ -79,6 +79,7 @@ export * from "./store-counters";
 export * from "./take-extra-turn";
 export * from "./take-from-among";
 export * from "./trigger-ability";
+export * from "./repeat-triggering-ability";
 export * from "./win-the-game";
 export * from "./with-materialized";
 export * from "./pay-to";

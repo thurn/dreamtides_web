@@ -7,6 +7,8 @@ import type { EventDefinition } from "../types";
 
 /** A triggered ability or drawn Dreamwell event bonus joined the resolution FIFO (D14). */
 export interface TriggerQueuedEvent {
+  /** Authoritative causal data for the production log; public events omit it. */
+  readonly triggeringAbility?: import("../../state/types").QueuedTrigger["triggeringAbility"];
   readonly linkedSource?: LinkedSourceContext;
   readonly handCopy?: import("../../state/types").HandCopyContext;
   readonly kind: "triggerQueued";
@@ -44,7 +46,8 @@ export const triggerQueued: EventDefinition<TriggerQueuedEvent> = {
   kind: "triggerQueued",
   privateTo: (event, state) => sourcePrivacy(event.source, state),
   redact(event, viewer, state) {
-    const redacted = redactSource(event, viewer, state);
+    const { triggeringAbility: _cause, ...publicEvent } = event;
+    const redacted = redactSource(publicEvent, viewer, state);
     const { lastKnownSubjectCost: _subjectCost, ...withoutCost } = redacted;
     const costSeen = redacted.source !== null && redacted.subjectHiddenFrom?.includes(viewer) !== true ? redacted : withoutCost;
     const { lastKnownSourceSpark, lastKnownSubjectSpark, linkedSource, ...anonymous } = costSeen;

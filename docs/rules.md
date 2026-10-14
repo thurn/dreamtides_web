@@ -2256,6 +2256,21 @@ delayed trigger controls it.
 character's ▸Materialized ability" makes that ability trigger as if its
 occasion had happened. It waits and resolves like any other triggered ability.
 
+**Triggering that ability again:** An instruction to trigger the ability that
+caused it names exactly that admitted ability, with its original controller,
+definition, subject and captured bindings. It admits one further occurrence,
+which joins the end of the waiting line and counts as a named ability
+triggering. Losing the ability, changing its source's zone or definition, or
+its source ceasing to exist does not replace that referent. A current disable
+of the original character's triggered abilities prevents a fresh ordinary
+occurrence. Its intervening condition must hold again, both when repeated and
+when it resolves. A once-per-turn original has spent its allowance, even if
+its gained definition's records have ended; a delayed one-shot original has
+spent its sole occasion. Neither triggers again. A repeating floating ability
+retains its own captured context. Each successful occurrence chooses its own
+modes and targets when it resolves. An instruction without a causing admitted
+ability does nothing.
+
 **Disabled triggers:** While an effect says a character's triggered abilities
 do not trigger, its abilities do not trigger; an ability that triggered before
 that effect began still resolves.
