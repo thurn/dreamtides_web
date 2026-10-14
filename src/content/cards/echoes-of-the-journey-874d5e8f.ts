@@ -1,3 +1,5 @@
+import { event, playedThisTurn } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,10 @@ export default card({
   cardNumber: 84,
   art: { x: 0.546, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.modifyCardCost(
+    p.draw(playedThisTurn(), "you", { ephemeral: true }),
+    { set: 0 },
+    { duration: "untilEndOfTurn" },
+  ))],
+  verifiedText: "1pm72bpnofs",
 });

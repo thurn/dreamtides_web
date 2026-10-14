@@ -1,3 +1,5 @@
+import { event, playedThisTurn, times } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 335,
   art: { x: 0.322, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.choosePlayer((player) => p.erode(times(playedThisTurn(), 2), player)))],
+  verifiedText: "18qw63577yl",
 });

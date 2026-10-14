@@ -1,0 +1,425 @@
+{
+  "bead": "hv-umm2.190",
+  "sourceBase": "84c588853856ad1da50ab660b380e84949daaec8",
+  "originalUUIDs": [
+    "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+    "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+    "874d5e8f-4e12-4426-a2e7-1ab761d2ca12",
+    "29d25251-8b42-4d3d-97e6-6c3abaabd9a2"
+  ],
+  "authoredUUIDs": [
+    "874d5e8f-4e12-4426-a2e7-1ab761d2ca12",
+    "29d25251-8b42-4d3d-97e6-6c3abaabd9a2"
+  ],
+  "readonlyChild": "hv-umm2.675",
+  "scope": "Two existing event compositions, one private 12-case scenario module. Printed data, engine/shared QA and child source unchanged; no new API, prompt, status or visual kind.",
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "measuredFor": "Parent post-claim envelope through final evidence writer; exact helper dispatch/sampling start unknown. Automatic commit follows this observation; external finalizer receipt records its actual end and commit date."
+      },
+      "testDelta": {
+        "measuredFor": "Zero new test-runner files; one new plain scenario module adds 138 test lines and 12 cases."
+      },
+      "hostLoad": {
+        "measuredFor": "Actual final required review-v2 command start, one-minute host load."
+      }
+    }
+  },
+  "sourceFirst": {
+    "initialManifestPaths": 5095,
+    "initialManifestSHA256": "15a956f7a569b49c787745f17fd48ccc6bcfa082aa312fdf8c52d88e1ed03124",
+    "proposalSHA256": "e7b03afb826589a65d5e3e78d567d6e52de11185d981959769cd8be12e6827a1",
+    "unchangedProofSHA256": "165218ec016ac1e5992576a9124790e7731db398f06eec378e7a739b4c6992d4",
+    "writeAdmissionSHA256": "1bccc375e4eee8bc8d6a12385012adc04666b7bcb9e25747594e1324722ddca9"
+  },
+  "validation": {
+    "verified-hash-v1": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--input-type=module",
+        "-e",
+        "import { expectedVerifiedText } from \"./src/engine/dsl/verified-text.ts\"; import echoes from \"./src/content/cards/echoes-of-the-journey-874d5e8f.ts\"; import horror from \"./src/content/cards/blooming-horror-29d25251.ts\"; console.log(JSON.stringify([echoes,horror].map(card => ({uuid:card.id,verifiedText:expectedVerifiedText(card.renderedText,card.amplifiedText)}))))"
+      ],
+      "started": "2026-10-14T21:06:00.123792+00:00",
+      "ended": "2026-10-14T21:06:00.961956+00:00",
+      "elapsedSeconds": 0.838074041006621,
+      "hostLoad": [
+        8.89453125,
+        11.89404296875,
+        11.10302734375
+      ],
+      "exitCode": 0,
+      "pid": 78612,
+      "pgid": 78612,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "3b354142e1af03ea30c8482e558b40aad1849fca6c5a7e7f91ce6738a90219e2",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiptSHA256": "0d74dceb8325108cf0ef49f3887cd01bad7026e12498ab93596621ea1c3af1bc"
+    },
+    "scenario-focus-v1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-78"
+      ],
+      "started": "2026-10-14T21:06:47.123303+00:00",
+      "ended": "2026-10-14T21:06:52.374336+00:00",
+      "elapsedSeconds": 5.250900959013961,
+      "hostLoad": [
+        6.24609375,
+        10.71875,
+        10.71240234375
+      ],
+      "exitCode": 1,
+      "pid": 81691,
+      "pgid": 81691,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "af3c0311c068a321daad917ab115e51c624c4b906aacf383ccea27609c91881d",
+      "stderrSHA256": "2c26224169d906488214120b4c525b37b557a7a6ee1b2231844bf20902db9405",
+      "receiptSHA256": "d214feff9df9a24f7bb40c8542bd54b294fc438cc6a1bdb56fea5f3c55e33a24"
+    },
+    "scenario-focus-v2": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-78"
+      ],
+      "started": "2026-10-14T21:07:03.048988+00:00",
+      "ended": "2026-10-14T21:07:09.547309+00:00",
+      "elapsedSeconds": 6.497937124979217,
+      "hostLoad": [
+        9.76171875,
+        11.2587890625,
+        10.9033203125
+      ],
+      "exitCode": 0,
+      "pid": 83310,
+      "pgid": 83310,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "93bf49f4eb06da5d5c1042b68308a6ce8b7bd841a65d9b32ffd83312caf463c5",
+      "stderrSHA256": "2ce8035ecb6a0ebdb33da57dfe1dd4d4be36f7d1d305f92799236dffa06330af",
+      "receiptSHA256": "148db78ee3bdb7eec89aede9d0a71e96d92bd187d5c6963fda75c92839d55212"
+    },
+    "scenario-focus-v3": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-78"
+      ],
+      "started": "2026-10-14T21:26:23.202842+00:00",
+      "ended": "2026-10-14T21:26:27.525630+00:00",
+      "elapsedSeconds": 4.322643624996999,
+      "hostLoad": [
+        7.45068359375,
+        8.03369140625,
+        10.46337890625
+      ],
+      "exitCode": 0,
+      "pid": 35810,
+      "pgid": 35810,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "537745c62f7127f2b01b43f6500dc7e8849ba8868ecb4493662101440e18ff78",
+      "stderrSHA256": "2ce8035ecb6a0ebdb33da57dfe1dd4d4be36f7d1d305f92799236dffa06330af",
+      "receiptSHA256": "9cdc22a726bd6e81dff4e2ec31725141567aeed84e374455edf511fbe28a73b7"
+    },
+    "primitive-controls-v1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "choosePlayer|exact current-turn history|modifyCardCost|draw moves cards|reads the amplified variant|erode moves the top"
+      ],
+      "started": "2026-10-14T21:07:14.365340+00:00",
+      "ended": "2026-10-14T21:07:22.134856+00:00",
+      "elapsedSeconds": 7.769285916991066,
+      "hostLoad": [
+        14.1572265625,
+        12.154296875,
+        11.22509765625
+      ],
+      "exitCode": 0,
+      "pid": 85327,
+      "pgid": 85327,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "48a68ea7f02727e893ae91d3c2048eebb05872084b4b88d4af6c1d73b6a21f12",
+      "stderrSHA256": "2ce8035ecb6a0ebdb33da57dfe1dd4d4be36f7d1d305f92799236dffa06330af",
+      "receiptSHA256": "317670298c760f0a6bd973ded657a95489e508a61edcdaedf06739a396bdc7e6"
+    },
+    "content-gates-v1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "started": "2026-10-14T21:07:25.931666+00:00",
+      "ended": "2026-10-14T21:07:31.251619+00:00",
+      "elapsedSeconds": 5.319756083015818,
+      "hostLoad": [
+        17.74267578125,
+        12.98828125,
+        11.53173828125
+      ],
+      "exitCode": 0,
+      "pid": 13323,
+      "pgid": 13323,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "1f9cd5094b6fcba8e2cb741936528547cc0172486b53b2ccdbf7a1f126d6f570",
+      "stderrSHA256": "2ce8035ecb6a0ebdb33da57dfe1dd4d4be36f7d1d305f92799236dffa06330af",
+      "receiptSHA256": "edfd4c7045240366491814f8032eed40b985d026a891aef38028b873d3a0e235"
+    },
+    "weighted300-v1": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "4ef8b2e7-3525-4c25-aa30-f751467f182f,95d37f76-eb3d-4bcd-a8af-0ae37feabd4d,874d5e8f-4e12-4426-a2e7-1ab761d2ca12,29d25251-8b42-4d3d-97e6-6c3abaabd9a2"
+      ],
+      "started": "2026-10-14T21:07:33.374649+00:00",
+      "ended": "2026-10-14T21:13:27.982819+00:00",
+      "elapsedSeconds": 354.6052110409946,
+      "hostLoad": [
+        21.083984375,
+        13.86083984375,
+        11.85791015625
+      ],
+      "exitCode": 0,
+      "pid": 39368,
+      "pgid": 39368,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "77b0d1c65584e561bb3faa91fc836e8fcea9a8f3058ddcb467dc454203037e49",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiptSHA256": "8229e988f296c0a891aa78596547647c9dd6ef98014009b638921caa7255ebaf"
+    },
+    "preflight-v1": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "4ef8b2e7-3525-4c25-aa30-f751467f182f,95d37f76-eb3d-4bcd-a8af-0ae37feabd4d,874d5e8f-4e12-4426-a2e7-1ab761d2ca12,29d25251-8b42-4d3d-97e6-6c3abaabd9a2"
+      ],
+      "started": "2026-10-14T21:13:35.432941+00:00",
+      "ended": "2026-10-14T21:13:37.437856+00:00",
+      "elapsedSeconds": 2.0046904999762774,
+      "hostLoad": [
+        22.20263671875,
+        16.7744140625,
+        13.77783203125
+      ],
+      "exitCode": 0,
+      "pid": 41789,
+      "pgid": 41789,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "4a0ff35889fb01042e376cdcc9ffb7a10d7672e7a59d626be8459326fe48dce0",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiptSHA256": "5d45adb8d2c727c1b392387d9be25bfddfa1e96b7627cbfbdc69a7a02433df80"
+    },
+    "sweep-v1": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.190",
+        "--cards",
+        "4ef8b2e7-3525-4c25-aa30-f751467f182f,95d37f76-eb3d-4bcd-a8af-0ae37feabd4d,874d5e8f-4e12-4426-a2e7-1ab761d2ca12,29d25251-8b42-4d3d-97e6-6c3abaabd9a2",
+        "--port",
+        "5174",
+        "--capture"
+      ],
+      "started": "2026-10-14T21:17:18.544787+00:00",
+      "ended": "2026-10-14T21:25:04.329302+00:00",
+      "elapsedSeconds": 465.78067625002586,
+      "hostLoad": [
+        13.9755859375,
+        15.65869140625,
+        13.96875
+      ],
+      "exitCode": 0,
+      "pid": 15445,
+      "pgid": 15445,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [
+        "docs/plan/evidence/qa-ledger/hv-umm2.190.jsonl"
+      ],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "c968ba8f2fcf40214c066d5245543d7d0202d573bfe59e93a3b08519faebe663",
+      "receiptSHA256": "3ddd2438b32fb62f412f834b2377c512a2178cbb88b555a5785df7907f583c91"
+    },
+    "review-v1": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "started": "2026-10-14T21:25:24.644367+00:00",
+      "ended": "2026-10-14T21:26:18.558726+00:00",
+      "elapsedSeconds": 53.91375325000263,
+      "hostLoad": [
+        5.2861328125,
+        7.73193359375,
+        10.5361328125
+      ],
+      "exitCode": 2,
+      "pid": 34454,
+      "pgid": 34454,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "4645f67a28d30f4eda6a9d54be0b7c9ca57621662c0be8e2859037bdf2f33b71",
+      "stderrSHA256": "2ce8035ecb6a0ebdb33da57dfe1dd4d4be36f7d1d305f92799236dffa06330af",
+      "receiptSHA256": "121b00ca0dac2c359f77ca63dce24c4c26a1437d99bf8c07b7b1e232aa075094"
+    },
+    "review-v2": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "started": "2026-10-14T21:26:40.242616+00:00",
+      "ended": "2026-10-14T21:27:29.033222+00:00",
+      "elapsedSeconds": 48.79012191601214,
+      "hostLoad": [
+        6.37255859375,
+        7.76904296875,
+        10.326171875
+      ],
+      "exitCode": 0,
+      "pid": 36280,
+      "pgid": 36280,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "3e18bac784ff787ddb9d5e4dfc4ae3f2fa9a068824929233d2703b76c5000902",
+      "stderrSHA256": "2ce8035ecb6a0ebdb33da57dfe1dd4d4be36f7d1d305f92799236dffa06330af",
+      "receiptSHA256": "c644d7277c7f980a07c51cd677f3adb492676cffa1149bc883e7f65ddbe18d10"
+    },
+    "knip-v1": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "started": "2026-10-14T21:27:32.839437+00:00",
+      "ended": "2026-10-14T21:27:38.650385+00:00",
+      "elapsedSeconds": 5.810808374983026,
+      "hostLoad": [
+        5.86767578125,
+        7.43994140625,
+        10.0458984375
+      ],
+      "exitCode": 0,
+      "pid": 37368,
+      "pgid": 37368,
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "stdoutSHA256": "9348e10511caa0f261d5d2d7178f230173fa88ed9217671d9766415a37e8816e",
+      "stderrSHA256": "2ce8035ecb6a0ebdb33da57dfe1dd4d4be36f7d1d305f92799236dffa06330af",
+      "receiptSHA256": "f2ebbf2130c738614cbda1ab40ccf9e97a930b20dfd193d5c88b3fcde22020fa"
+    }
+  },
+  "reviewScope": {
+    "files": 253,
+    "tests": 6968,
+    "kind": "Diff-related tests, not the full-suite D19 low-load budget measurement."
+  },
+  "failurePaths": {
+    "newStateMachine": false,
+    "reason": "Composition uses existing step commitment, replay, draw/erode, cost and choice machinery and introduces no state format. Existing synthetic primitive controls and weighted interactive replay supply shared cancel/reload/refusal/stale/partial-write/error/concurrent behavior, without claiming new per-leaf recovery tests.",
+    "actualFirstFocusFailure": "Four cases completed their effect assertions then read nonexistent RecordedAnswer.prompt. Corrected to public auto/value. Original v1 exit 1 with 8 pass / 4 fail and v2 exit 0 with 12 pass receipts retained; no runtime fix.",
+    "actualFirstReviewFailure": "Review-v1 exit2: one draw-event assertion filter did not narrow EngineEvent in TypeScript, producing TS2339 and a corresponding lint error. Corrected only that assertion to an equivalent flatMap with branch-local narrowing. Focus-v3 and review-v2 validate the final test source; original failed review and its passing runtime test results remain retained.",
+    "resetCoverage": "Own next-Day scenario proves reset between own plays; it alone does not distinguish global-turn reset from own-turn-only reset."
+  },
+  "weighted": {
+    "outerSeconds": 354.6052110409946,
+    "driverSummary": [
+      "fuzz:engine 300 games, 100559 steps, 352.8 s wall, 372.8 s CPU (0.9 games/s wall, 0.8 games/s CPU); prompts 7210; interactive re-runs 718 (5.488 ms each); feasibility bounded {\"legality\":0,\"prompts\":6}; results {\"player\":138,\"enemy\":162,\"draw\":0}; failures 0",
+      "fuzz targets: [{\"kind\":\"card\",\"uuid\":\"4ef8b2e7-3525-4c25-aa30-f751467f182f\",\"included\":609,\"exercised\":103},{\"kind\":\"card\",\"uuid\":\"95d37f76-eb3d-4bcd-a8af-0ae37feabd4d\",\"included\":621,\"exercised\":392},{\"kind\":\"card\",\"uuid\":\"874d5e8f-4e12-4426-a2e7-1ab761d2ca12\",\"included\":615,\"exercised\":52},{\"kind\":\"card\",\"uuid\":\"29d25251-8b42-4d3d-97e6-6c3abaabd9a2\",\"included\":613,\"exercised\":106}]"
+    ],
+    "timingQualification": "Outer wall includes startup, shared-lock admission and receipt collection; difference from driver wall is not a pure lease-wait measurement. Exercise counts are observed coverage, not a statistical gate or complete per-clause proof."
+  },
+  "postSweepTestCorrection": {
+    "beforeSHA256": "2c86f283d6b285cabe807866086ed6bf16f9c40c00d7330aaa9d79268a21d3e6",
+    "afterSHA256": "cd5bf7364056438b86f6be574b590535834cba466cea8a2fbbe333943469799f",
+    "qualification": "Before blob reconstructed by reversing the exact one-line correction, verified byte-for-byte by hash against actual review-v1 before manifest. Only test assertion narrowing changed; two production leaves, two child leaves and all trusted drivers equal their weighted/swept hashes.",
+    "diff": "--- scenario-review-v1\n+++ scenario-final\n@@ -34,7 +34,7 @@\n     },\n     check: ({ state, ids, events }) => {\n       const drawn = ids[side].deck.slice(0, 3), held = ids[side].hand[3];\n-      expect(events.filter((event) => event.kind === \"cardDrawn\" && event.side === side).map((event) => event.instance)).toEqual(drawn);\n+      expect(events.flatMap((event) => event.kind === \"cardDrawn\" && event.side === side ? [event.instance] : [])).toEqual(drawn);\n       expect(state.sides[side].hand).toEqual([held, ...drawn]);\n       expect(state.sides[side].currentEnergy).toBe(0);\n       expect(state.turnLog.played[side].map((play) => play.instance)).toEqual(ids[side].hand.slice(0, 3));\n"
+  },
+  "qa": {
+    "counts": {
+      "pass": 46,
+      "skip": 34,
+      "pending": 0,
+      "fail": 0
+    },
+    "rows": 80,
+    "ledgerSHA256": "8df1abb28fcaad7db695a924ba191894f21a81051a3904809106013132487022",
+    "mode": "Scripted sweep through official MCP and existing runner; default all variants/both actors for original four UUIDs.",
+    "enemyMode": "Scripted lab play with first legal prompt answers; does not prove policy-selected AI play.",
+    "D21": {
+      "firstBytes": [
+        180,
+        28,
+        144,
+        160
+      ],
+      "sampled": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "newKinds": false,
+      "mandatoryJudgedSet": [],
+      "humanJudgmentClaimed": false
+    },
+    "evidence": "Raw reports, complete game logs, runtime cleanup and captures remain in primary ignored artifacts/qa/hv-umm2.190/ invocation paths recorded in ledger."
+  },
+  "rules": {
+    "D10": "Not invoked; current rules settle source inclusion/controller-relative choice/genuine draw cohort/Ephemeral/expiry.",
+    "newRD": [],
+    "cardIssues": [],
+    "preExistingIssues": []
+  },
+  "finalEvidenceObservation": "2026-10-14T21:29:40.299154+00:00",
+  "finalization": "Finalizer stages all seven own paths, validates schema/staged whitespace, creates one automatic-date commit. Actual final tail and whole manifest are external scratch receipt; no tracked post-commit rewrite."
+}
