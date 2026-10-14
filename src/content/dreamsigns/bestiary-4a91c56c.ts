@@ -1,3 +1,8 @@
+import { triggered, whenDiscard } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import ethereal from "../figments/ethereal-3eddb1b8";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +19,10 @@ export default dreamsign({
     "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [
+    triggered(whenDiscard(), materializeFigments(parseFigmentId(ethereal.id), 1, { spark: 2 })),
+  ],
+  verifiedText: expectedVerifiedText(
+    "When you discard a card, materialize a 2✦ radiant figment.",
+  ),
 });

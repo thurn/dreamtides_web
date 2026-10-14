@@ -1,3 +1,7 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, triggeringCard, whenGainsSpark } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainAdditionalSpark } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +14,10 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["5354646a-9811-4f7e-85ea-cf8fec8f8f15"],
   tags: ["J11", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    triggered(whenGainsSpark(characterYouControl()), gainAdditionalSpark(triggeringCard(), 1)),
+  ],
+  verifiedText: expectedVerifiedText(
+    "When a character you control gains ✦, it gains 1 additional ✦.",
+  ),
 });

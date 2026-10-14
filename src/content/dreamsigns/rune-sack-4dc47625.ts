@@ -1,3 +1,7 @@
+import { characterYouControl, controls } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +17,12 @@ export default dreamsign({
     "69d696b6-c7aa-460a-8868-a5fa70930c45",
   ],
   tags: ["J10", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    triggered(onDawn(), gainEnergy(2), {
+      condition: controls(characterYouControl({ figment: true }), 3),
+    }),
+  ],
+  verifiedText: expectedVerifiedText(
+    "▸Dawn: If you control 3 or more figments, gain 2●.",
+  ),
 });
