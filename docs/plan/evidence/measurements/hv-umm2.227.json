@@ -1,0 +1,500 @@
+{
+  "bead": "hv-umm2.227",
+  "base": "f4228ce24c399ccf96bb60c9aba8ff59072c41d9",
+  "evidenceCutoff": "2026-10-14T22:57:02.026138+00:00",
+  "clock": {
+    "implementStart": "2026-10-14T22:31:11.424Z",
+    "source": "actual native host spawn function_call timestamp; ACK22:31:11.970Z/call_36f3e56e423846cf8f28a7fff431da5c; parent scratch actual-dispatch-native-log-proof.json",
+    "claimEnvelopeStart": "2026-10-14T22:30:33.036649+00:00",
+    "claimEnvelopeScope": "ownership/setup begins before implementation dispatch; separate from friction implementWindow",
+    "endScope": "final clock-only write immediately before schema/staging/staged whitespace/one automatic-date commit; external finalizer receipt records actual Git metadata and cutoff tail; no postcommit tracked rewrite"
+  },
+  "scope": {
+    "uuids": [
+      "84e7020c-7384-4cc3-a20f-ab05f03cc375",
+      "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
+      "91d4c3b5-fd63-480b-9ed5-979109a227bb",
+      "bfc40414-5264-41bf-86e1-a0f41ee4f5b5"
+    ],
+    "count": 4,
+    "newForms": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "preExistingSourceIssues": [],
+    "sourceSHA256": {
+      "src/content/avatars/rael-84e7020c.ts": "a66115808ea07dd99394d9e2befba7ba9cef26595499872c3c01fa91d23cdc33",
+      "src/content/avatars/grath-94e7c651.ts": "252353820c10fab1d80692ccd46903dc3d84fefcf6afe54a472e69435249b09f",
+      "src/content/avatars/valdren-91d4c3b5.ts": "5599352a5dc6d2de4368cd06ec405cccc9bb41ea527cb1c4f104fe0cf3cebb47",
+      "src/content/avatars/eldrik-bfc40414.ts": "03cd6c30cb829ae738b90b04fcdef27863e07823c8eef2268ce0c1b58cb1b7c0",
+      "src/content/specs/avatars-07.scenarios.ts": "cd7414991723c3c5670f78a289967318927bc46548b4f635b0964cf949283760"
+    },
+    "printedMetadata": "unchanged; only imports/abilities/verifiedText/pending retirement in four leaves",
+    "opponentProgression": "ability_active_from_layer source unchanged",
+    "coreReview": {
+      "required": false,
+      "grossNonTestLines": 24,
+      "reason": "four existing-form compositions; no phase core-review label/new public form/architecture; default threshold >100 non-test lines"
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 122,
+    "jsdomFiles": 0,
+    "configuredTestEntrypoints": 0,
+    "convention": "phase5 retrospective n913 counts plain scenario/fixture modules; private auto-discovered scenario is one added test module, not a new .test entrypoint",
+    "scenarios": 12,
+    "d20": "both actors; Rael filtered Event ordinal/reset, Eldrik filtered Warrior payments/reset, Valdren physical void target/plain Reclaim/EOT expiry. Grath direct primitive composition uses fuzz and actual workflow QA."
+  },
+  "commands": [
+    {
+      "epoch": "scenario-v1",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "avatars-07"
+      ],
+      "started": "2026-10-14T22:35:48.530831+00:00",
+      "ended": "2026-10-14T22:35:56.069417+00:00",
+      "outerSeconds": 7.538335167046171,
+      "hostLoad1m": 13.5,
+      "exit": 0,
+      "receiptSHA256": "02442e5cbd8725dd847b864ee06e7e0356819e831655766912669f1bbd2548ec",
+      "stdoutSHA256": "a2a60da144976e3322129dd63c080a381e6d451a5354ae963cf87febd26cb367",
+      "sourceEpoch": "feae4bb02cdb036327fec0d9af5dbd93154b7a50ec546c3d233d40702743aea7"
+    },
+    {
+      "epoch": "composition-controls-v1",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "static nth costs|grantReclaim"
+      ],
+      "started": "2026-10-14T22:35:58.887792+00:00",
+      "ended": "2026-10-14T22:36:07.597530+00:00",
+      "outerSeconds": 8.709447583998553,
+      "hostLoad1m": 14.69140625,
+      "exit": 0,
+      "receiptSHA256": "c5827ed8825988a4666dd58bda7d0e2e204f7a356e03bd16587bb4cb3ed2116c",
+      "stdoutSHA256": "ca664fac832e3a73cb54e2a9808680a5ff1d84c4789736996b1a3891e5be982a",
+      "sourceEpoch": "feae4bb02cdb036327fec0d9af5dbd93154b7a50ec546c3d233d40702743aea7"
+    },
+    {
+      "epoch": "trigger-controls-v1",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/triggers/triggers-patterns.test.ts"
+      ],
+      "started": "2026-10-14T22:36:16.153443+00:00",
+      "ended": "2026-10-14T22:36:20.776683+00:00",
+      "outerSeconds": 4.623062124999706,
+      "hostLoad1m": 18.0615234375,
+      "exit": 0,
+      "receiptSHA256": "b2dec63926b1bd3fe4faa9207373c62e7718ce4a49487348adc1a32212fde621",
+      "stdoutSHA256": "e23d5612cc295807361abda43040d403e6c3a40ca3ffeec07defff62963b2639",
+      "sourceEpoch": "feae4bb02cdb036327fec0d9af5dbd93154b7a50ec546c3d233d40702743aea7"
+    },
+    {
+      "epoch": "content-gates-v1",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/content-index.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "started": "2026-10-14T22:36:29.662833+00:00",
+      "ended": "2026-10-14T22:36:35.120281+00:00",
+      "outerSeconds": 5.457229624968022,
+      "hostLoad1m": 22.41064453125,
+      "exit": 0,
+      "receiptSHA256": "fd555a5f11520b7fa0d420edd26c118d68e59b88be370f4201da362774040d32",
+      "stdoutSHA256": "8a91886003217dfc15d78bef9e61473918bcd53e53266725bf3455a0c8b086b0",
+      "sourceEpoch": "feae4bb02cdb036327fec0d9af5dbd93154b7a50ec546c3d233d40702743aea7"
+    },
+    {
+      "epoch": "review-v1",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "started": "2026-10-14T22:36:35.541841+00:00",
+      "ended": "2026-10-14T22:37:40.262999+00:00",
+      "outerSeconds": 64.72023537498899,
+      "hostLoad1m": 23.16064453125,
+      "exit": 0,
+      "receiptSHA256": "5cb590eb83610e5b1d04aec9bf4c83a91c74225ed11d22f7ff44e5bbd833738e",
+      "stdoutSHA256": "170354a3ef3ef157875241d266e5928ca29c88de634411c53d82e541b8ce5d74",
+      "sourceEpoch": "feae4bb02cdb036327fec0d9af5dbd93154b7a50ec546c3d233d40702743aea7"
+    },
+    {
+      "epoch": "knip-v1",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "started": "2026-10-14T22:37:23.454978+00:00",
+      "ended": "2026-10-14T22:37:30.613603+00:00",
+      "outerSeconds": 7.158379334025085,
+      "hostLoad1m": 21.455078125,
+      "exit": 0,
+      "receiptSHA256": "53fe669be7a0a3d2f124b4b4adca3353b0981701b14a04b4704a73a9fd7999c5",
+      "stdoutSHA256": "d7e800df22b6dc12cd419bf721d25d7cd2c41c6c845bab6924075f2ec81fb464",
+      "sourceEpoch": "feae4bb02cdb036327fec0d9af5dbd93154b7a50ec546c3d233d40702743aea7"
+    },
+    {
+      "epoch": "weighted-300-v1",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "84e7020c-7384-4cc3-a20f-ab05f03cc375,94e7c651-25e9-4a62-9de4-eaf5ba20542c,91d4c3b5-fd63-480b-9ed5-979109a227bb,bfc40414-5264-41bf-86e1-a0f41ee4f5b5"
+      ],
+      "started": "2026-10-14T22:37:49.977874+00:00",
+      "ended": "2026-10-14T22:43:06.595031+00:00",
+      "outerSeconds": 316.6131697919918,
+      "hostLoad1m": 17.78125,
+      "exit": 0,
+      "receiptSHA256": "1a79846f4b72903794b36e0edde9d3fcb1a3f538d1c1bc7ee631d7141468af87",
+      "stdoutSHA256": "365a3de4747f6184b227f80bfa78d8ef64a5cf3ede56efb61648ad6deb7ecf5b",
+      "sourceEpoch": "feae4bb02cdb036327fec0d9af5dbd93154b7a50ec546c3d233d40702743aea7"
+    },
+    {
+      "epoch": "preflight-v1",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--avatars",
+        "84e7020c-7384-4cc3-a20f-ab05f03cc375,94e7c651-25e9-4a62-9de4-eaf5ba20542c,91d4c3b5-fd63-480b-9ed5-979109a227bb,bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "started": "2026-10-14T22:43:11.456326+00:00",
+      "ended": "2026-10-14T22:43:14.444793+00:00",
+      "outerSeconds": 2.9883112909737974,
+      "hostLoad1m": 4.3505859375,
+      "exit": 0,
+      "receiptSHA256": "c83b524efd1597cbbf6a293c38a46af9cbfe45c625a5985524a6b89c3bc7e8cf",
+      "stdoutSHA256": "54432bfab99352b6457461c05b346bad3743f5212b0f250e19f621933c1a78e3",
+      "sourceEpoch": "feae4bb02cdb036327fec0d9af5dbd93154b7a50ec546c3d233d40702743aea7"
+    }
+  ],
+  "checkOverlap": {
+    "intervalStart": "2026-10-14T22:37:23.454978+00:00",
+    "intervalEnd": "2026-10-14T22:37:30.613603+00:00",
+    "seconds": 7.158625,
+    "scope": "Knip was mistakenly launched before review returned terminal. Both execute prepare/local-art materializations; tracked/untracked/ignored src/scripts bytes were identical. Source freeze is not all-workspace/materialization freeze. Parent recorded deviation; passing results retained, no repeat merely for overlap, no isolated/comparable performance claim. Subsequent commands sequential."
+  },
+  "weighted": {
+    "games": 300,
+    "steps": 101854,
+    "failures": 0,
+    "driverWallSeconds": 313.7,
+    "driverCPUSeconds": 335.7,
+    "lock": "primary artifacts/heavy.lock via lockf -k",
+    "testWorkerEnvironment": 2,
+    "targetCounts": [
+      {
+        "uuid": "84e7020c-7384-4cc3-a20f-ab05f03cc375",
+        "included": 150,
+        "exercised": 198
+      },
+      {
+        "uuid": "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
+        "included": 150,
+        "exercised": 44
+      },
+      {
+        "uuid": "91d4c3b5-fd63-480b-9ed5-979109a227bb",
+        "included": 150,
+        "exercised": 54
+      },
+      {
+        "uuid": "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+        "included": 150,
+        "exercised": 0
+      }
+    ],
+    "qualification": "Avatar exercise instrumentation counts applied triggered resolutions/activations, not static effects; Eldrik0 is not a static coverage metric. Public composition cases and actual desktop/mobile payment workflow establish its behavior. Outer minus driver time is not claimed pure lock wait."
+  },
+  "preflight": {
+    "pass": 8,
+    "skip": 72,
+    "pending": 0,
+    "fail": 0,
+    "scope": "all4 --avatars/allvariants/bothsides; eight base initializer cells, no Avatar-specific exercise claim"
+  },
+  "qa": {
+    "sweep": {
+      "invocation": "invocations/sweep-bnPjss",
+      "pass": 8,
+      "skip": 72,
+      "effectiveCells": 80,
+      "actualAttempts": 80,
+      "retries": 0,
+      "captures": 8,
+      "scope": "Avatar initialization only, all8 rawreports errornull/Caps[]"
+    },
+    "workflows": [
+      {
+        "epoch": "workflow-rael-v1",
+        "callerVersion": 1,
+        "exit": 0,
+        "started": "2026-10-14T22:45:14.595246+00:00",
+        "ended": "2026-10-14T22:47:04.296987+00:00",
+        "outerSeconds": 109.70028466597432,
+        "invocation": "run-mzNuu5",
+        "report": "invocations/run-mzNuu5/avatar-workflow.result.json",
+        "wallMs": {
+          "browserLeaseWait": 47714,
+          "serve": 2579,
+          "scenario": 58532,
+          "total": 108887
+        },
+        "port": 5174,
+        "slot": 0,
+        "caps": [],
+        "error": null,
+        "viewportPasses": [
+          "desktop",
+          "mobile"
+        ],
+        "attemptedViewports": [
+          "desktop",
+          "mobile"
+        ],
+        "receiptSHA256": "1dba5d442049dca8c8e8d7b087983aaf510417561149ada6eae24ed9b6e1c46b",
+        "stdoutSHA256": "36fe16f553ea275c030d23ec90b9128fb78e2940feabce352c746079fe12ce63",
+        "captures": [
+          "invocations/run-mzNuu5/rael-foresee-prompt-desktop.png",
+          "invocations/run-mzNuu5/avatar-84e7020c-desktop.png",
+          "invocations/run-mzNuu5/rael-foresee-prompt-mobile.png",
+          "invocations/run-mzNuu5/avatar-84e7020c-mobile.png"
+        ]
+      },
+      {
+        "epoch": "workflow-grath-v1",
+        "callerVersion": 1,
+        "exit": 0,
+        "started": "2026-10-14T22:47:26.995452+00:00",
+        "ended": "2026-10-14T22:48:15.911079+00:00",
+        "outerSeconds": 48.91489570797421,
+        "invocation": "run-5Zby4I",
+        "report": "invocations/run-5Zby4I/avatar-workflow.result.json",
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 7236,
+          "scenario": 40951,
+          "total": 48296
+        },
+        "port": 5274,
+        "slot": 1,
+        "caps": [],
+        "error": null,
+        "viewportPasses": [
+          "desktop",
+          "mobile"
+        ],
+        "attemptedViewports": [
+          "desktop",
+          "mobile"
+        ],
+        "receiptSHA256": "f3358105fb03b0a5dfa6d44d693312671b8b78498fa4b0944ea53d80ef0ca657",
+        "stdoutSHA256": "ca3217817e4ea7511d52238b90aa5cab440e13b02b22f7f679cc42844d1349b0",
+        "captures": [
+          "invocations/run-5Zby4I/avatar-94e7c651-desktop.png",
+          "invocations/run-5Zby4I/avatar-94e7c651-mobile.png"
+        ]
+      },
+      {
+        "epoch": "workflow-valdren-v1",
+        "callerVersion": 1,
+        "exit": 1,
+        "started": "2026-10-14T22:48:21.383075+00:00",
+        "ended": "2026-10-14T22:48:46.617664+00:00",
+        "outerSeconds": 25.23416474997066,
+        "invocation": "run-rOsk7T",
+        "report": "invocations/run-rOsk7T/avatar-workflow.result.json",
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 2271,
+          "scenario": 22411,
+          "total": 24739
+        },
+        "port": 5274,
+        "slot": 1,
+        "caps": [],
+        "error": "desktop#0: QaTimeoutError: waitVisible [data-card-zone-browser=\"viewer:void\"] [data-gallery-entry-id=\"i52\"] [role=\"button\"]: timed out after 15000 ms",
+        "viewportPasses": [],
+        "attemptedViewports": [
+          "desktop"
+        ],
+        "receiptSHA256": "7514296822b51f5871d66e31ace5822651338c2bf312d9ee3b5c474ed6ac2ef0",
+        "stdoutSHA256": "5dba3d888841941ce6f07a27f4623e560189cab640b7e9965330adcee45cfd36",
+        "captures": [
+          "invocations/run-rOsk7T/valdren-void-target-desktop.png"
+        ]
+      },
+      {
+        "epoch": "workflow-valdren-v2",
+        "callerVersion": 2,
+        "exit": 0,
+        "started": "2026-10-14T22:50:51.712708+00:00",
+        "ended": "2026-10-14T22:52:23.917517+00:00",
+        "outerSeconds": 92.20358508400386,
+        "invocation": "run-VBHoQT",
+        "report": "invocations/run-VBHoQT/avatar-workflow.result.json",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2559,
+          "scenario": 88733,
+          "total": 91363
+        },
+        "port": 5174,
+        "slot": 0,
+        "caps": [],
+        "error": null,
+        "viewportPasses": [
+          "desktop",
+          "mobile"
+        ],
+        "attemptedViewports": [
+          "desktop",
+          "mobile"
+        ],
+        "receiptSHA256": "15ac2f20b9cdd3ab86d639763148d149d18ae0e6a2c590dad4c98f68bc62cc10",
+        "stdoutSHA256": "9b621c7a4498de2d611f042a24ca9b183f537e1331fc65a83b264e46370cfc32",
+        "captures": [
+          "invocations/run-VBHoQT/valdren-void-target-desktop.png",
+          "invocations/run-VBHoQT/valdren-reclaim-affordance-desktop.png",
+          "invocations/run-VBHoQT/avatar-91d4c3b5-desktop.png",
+          "invocations/run-VBHoQT/valdren-void-target-mobile.png",
+          "invocations/run-VBHoQT/valdren-reclaim-affordance-mobile.png",
+          "invocations/run-VBHoQT/avatar-91d4c3b5-mobile.png"
+        ]
+      },
+      {
+        "epoch": "workflow-eldrik-v2",
+        "callerVersion": 2,
+        "exit": 0,
+        "started": "2026-10-14T22:52:30.022316+00:00",
+        "ended": "2026-10-14T22:53:16.862336+00:00",
+        "outerSeconds": 46.839360834041145,
+        "invocation": "run-H551ag",
+        "report": "invocations/run-H551ag/avatar-workflow.result.json",
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 4400,
+          "scenario": 41461,
+          "total": 45932
+        },
+        "port": 5274,
+        "slot": 1,
+        "caps": [],
+        "error": null,
+        "viewportPasses": [
+          "desktop",
+          "mobile"
+        ],
+        "attemptedViewports": [
+          "desktop",
+          "mobile"
+        ],
+        "receiptSHA256": "82c99c2d90ae783718df77b8dd361cc712b4a7ccd89a3da98edf88638511f2bb",
+        "stdoutSHA256": "d40c2eb18e9a9840854df6dd34add0bdad34f9e429a841cf23d5387c4620868c",
+        "captures": [
+          "invocations/run-H551ag/avatar-bfc40414-desktop.png",
+          "invocations/run-H551ag/avatar-bfc40414-mobile.png"
+        ]
+      }
+    ],
+    "totals": {
+      "effectivePasses": 8,
+      "actualViewportAttempts": 9,
+      "failedViewportAttempts": 1,
+      "customInvocations": 5,
+      "acceptedCaptures": 14,
+      "retainedFailedCaptures": 1
+    },
+    "observationsSHA256": "8c46a938c2dcb1404b3bfc30f2d8510ce59ccdc554b281edd8e3ae7f69bc4634",
+    "d21": {
+      "firstBytes": [
+        56,
+        174,
+        210,
+        222
+      ],
+      "sampled": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "newPromptStatusVisualKind": false,
+      "humanJudgedEntities": 0,
+      "qualification": "existing Foresee/target/Reclaim surfaces; functional automated workflow QA is not human judgment or enemy-activation evidence"
+    },
+    "failureDisposition": "Valdren-v1 failed desktop before Reclaim play; mobile unattempted. Wrong caller expected browser directly after playable void click; current source opens void action chooser first. Original caller/rawreport/41row JSONL/failure retained. Parent admitted v2 chooser\u2192browse option\u2192physical browser action, then fresh both-view pass; no product defect established; Rael/Grath passes not repeated.",
+    "callerSHA256": {
+      "v1": "b423fda355b207fda4f53c19f058b95d895fd98b6fe3fee64d80cc90d630c0e0",
+      "v2": "a4dee3d8c9b1552a620f7df3dfa15880be4c5996cdab4f9c853d95ce6bcded25",
+      "causeDiff": "15d6da91a775e77323c2b0aef30688d406ce08c16a4fbc157a268a523363debe"
+    },
+    "runtimeQualification": "actual native lease/server/port/group custody only; no foreign process control or global port-free assertion after release"
+  },
+  "cleanup": {
+    "at": "2026-10-14T22:53:40.138413+00:00",
+    "knownGroupsAbsent": [
+      8528,
+      8572,
+      22414,
+      31299,
+      39190,
+      44683,
+      46860,
+      57800,
+      59642,
+      59689,
+      72114,
+      72943,
+      72987,
+      78317,
+      79593,
+      91846,
+      93374,
+      93436,
+      97352,
+      97389
+    ],
+    "proofSHA256": "6fef4b39b52b4bb326865e4770044942207c81c9c7b1edaf37c989d8aae2ff74",
+    "scope": "post-QA observation, all known inner check/runtime/server groups absent, outer tool completions retained; finalizer/check groups appear only in external finalization receipt"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v1 actual outer start"
+      }
+    }
+  },
+  "validationQualification": "review pass7103 tests/253files, composition58, trigger19, content/index35, own scenario12. No full review required for source-only compositions, no D19 low-load full-suite budget claim. No production code changed after these checks or QA; only own evidence is finalized."
+}

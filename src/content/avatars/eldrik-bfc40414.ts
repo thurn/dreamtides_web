@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { costModifierNth } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { avatar } from "../define";
 
 export default avatar({
@@ -41,5 +44,6 @@ export default avatar({
     "8c117d3f-09af-4312-9897-694a76bd23c6",
     "57bb1572-6075-4efd-a592-102b134132fd",
   ],
-  pending: true,
+  abilities: () => [staticAbility(costModifierNth("you", { subtype: "Warrior" }, 1, { reduce: 1 }))],
+  verifiedText: expectedVerifiedText("The first warrior you play each turn costs 1● less."),
 });

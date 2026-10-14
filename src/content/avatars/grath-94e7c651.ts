@@ -1,3 +1,6 @@
+import { activated, characterYouControl, count, energy, exhaustSelf, ofSubtype } from "../../engine/dsl/builders";
+import { gainEnergy } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { avatar } from "../define";
 
 export default avatar({
@@ -42,5 +45,6 @@ export default avatar({
     "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a",
     "a36898f6-707e-4b28-89dc-ec896f484203",
   ],
-  pending: true,
+  abilities: () => [activated([energy(4), exhaustSelf()], gainEnergy(count(characterYouControl(ofSubtype("Spirit Animal")))))],
+  verifiedText: expectedVerifiedText("4●, ☾: Gain 1● for each spirit animal you control."),
 });

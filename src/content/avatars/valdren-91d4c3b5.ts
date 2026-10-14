@@ -1,3 +1,6 @@
+import { activated, energy, exhaustSelf, fromVoid } from "../../engine/dsl/builders";
+import { grantReclaim } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { avatar } from "../define";
 
 export default avatar({
@@ -44,5 +47,6 @@ export default avatar({
     "b64f0beb-6ba4-4559-b6ab-091c2f60a613",
     "66959155-9e79-459e-afdb-eb4c0fbdeb11",
   ],
-  pending: true,
+  abilities: () => [activated([energy(2), exhaustSelf()], grantReclaim(fromVoid({ subtype: "Warrior" }), { duration: "untilEndOfTurn" }))],
+  verifiedText: expectedVerifiedText("2●, ☾: A warrior in your void gains reclaim until end of turn."),
 });

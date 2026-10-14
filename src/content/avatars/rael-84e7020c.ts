@@ -1,3 +1,6 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { foresee } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { avatar } from "../define";
 
 export default avatar({
@@ -41,5 +44,6 @@ export default avatar({
     "b6d1df72-d989-4689-a599-4490a0c2568d",
     "027ae231-6569-49bb-866f-7c36ec794a11",
   ],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "event" }, 2), foresee(2))],
+  verifiedText: expectedVerifiedText("When you play your second event in a turn, foresee 2."),
 });
