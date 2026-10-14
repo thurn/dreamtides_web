@@ -1,3 +1,6 @@
+import { triggered, triggeringCard, untilEndOfTurn, whenDraw } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { changeCardCost } from "../../engine/effects/primitives/modify-card-cost";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -11,5 +14,7 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenDraw("you", undefined, { cardType: "character" }),
+    changeCardCost(triggeringCard(), { reduce: 1 }, { duration: untilEndOfTurn() }), { oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("Once per turn, when you draw a character, reduce its cost by 1● until end of turn."),
 });

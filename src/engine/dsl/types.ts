@@ -647,7 +647,7 @@ export type Trigger =
    * materializations; RD-hv-umm2.107-1, RD-hv-umm2.107-2).
    */
   | { readonly on: "materialize"; readonly subject: MaterializedSelector; readonly nth: MaterializeNth }
-  | { readonly on: "draw"; readonly player: PlayerRef; readonly nth?: number }
+  | { readonly on: "draw"; readonly player: PlayerRef; readonly nth?: number; readonly filter?: CardFilter }
   /** Each successful copy, matched by the copied card's copiable values. */
   | { readonly on: "copy"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "foresee"; readonly player: PlayerRef }

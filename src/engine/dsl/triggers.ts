@@ -112,9 +112,9 @@ export function whenMaterialize(subject: TriggerSubject = { controller: "you" },
   return { on: "materialize", subject, nth };
 }
 
-/** "When you draw a card", or "your `nth` card this turn". */
-export function whenDraw(player: PlayerRef = "you", nth?: number): Trigger {
-  return { on: "draw", player, ...(nth === undefined ? {} : { nth }) };
+/** "When you draw a card matching `filter`", optionally your `nth` draw among all cards this turn. */
+export function whenDraw(player: PlayerRef = "you", nth?: number, filter?: CardFilter): Trigger {
+  return { on: "draw", player, ...(nth === undefined ? {} : { nth }), ...(filter === undefined ? {} : { filter }) };
 }
 
 /** "When you copy a card matching `filter`, in a hand or on the stack. */

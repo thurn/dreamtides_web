@@ -34,6 +34,7 @@ import { cardMatchesFilter, copiableCostOf, matchesFilter, playedMatchesFilter }
 import { worksInZone } from "../dsl/abilities";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, Variant, MaterializedSelector, MaterializeNth, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
+import type { CardDrawnEvent } from "../events/kinds/card-drawn";
 import type { CardPlayedEvent } from "../events/kinds/card-played";
 import type { LeftPlayEvent } from "../events/kinds/left-play";
 import type { MaterializedEvent } from "../events/kinds/materialized";
@@ -295,6 +296,13 @@ function isNthMaterialized(state: BattleState, event: MaterializedEvent, selecto
   return typeof nth === "number" ? count === nth : count >= nth.atLeast;
 }
 
+/** A draw matches its player and all-draw ordinal, then its card as it arrives in hand. */
+function drawMatches(state: BattleState, catalog: EngineCatalog, trigger: Extract<Trigger, { readonly on: "draw" }>, event: CardDrawnEvent, you: Side): boolean {
+  return event.side === resolvePlayer(you, trigger.player) &&
+    (trigger.nth === undefined || state.turnLog.drawn[event.side] === trigger.nth) &&
+    (trigger.filter === undefined || (event.instance !== null && filterMatches(catalog, state, trigger.filter, event.instance)));
+}
+
 /** `matchTrigger` for one trigger kind; `TRIGGER_EVENTS` lists the events each case can match. */
 function matchKind(
   state: BattleState,
@@ -367,9 +375,7 @@ function matchKind(
         ? { subject: event.instance }
         : null;
     case "draw":
-      return event.kind === "cardDrawn" &&
-        event.side === resolvePlayer(you, trigger.player) &&
-        (trigger.nth === undefined || state.turnLog.drawn[event.side] === trigger.nth)
+      return event.kind === "cardDrawn" && drawMatches(state, catalog, trigger, event, you)
         ? { subject: event.instance }
         : null;
     case "foresee":

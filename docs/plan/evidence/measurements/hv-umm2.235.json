@@ -1,0 +1,2198 @@
+{
+  "bead": "hv-umm2.235",
+  "entityUuids": [
+    "49990864-1db0-4c08-91ae-40a1f04223e4"
+  ],
+  "base": "55ef226c4aca39748797287329ecc5cd249ef21a",
+  "hostDispatchAt": "2026-10-13T23:52:06.179Z",
+  "sourceWriteAckAt": "2026-10-13T23:54:38Z",
+  "actualGitEnd": "UNKNOWN for latest projection-integration replacement at this cutoff. Original069 and firstcombined888 actual endpoints remain historical and immutable in their receipt fields.",
+  "windowQualification": "Elapsed inclusive wall time from actual host dispatch; includes audit, coordination, local checks, capacity waits and QA. It is not CPU or pure editing time. Current cutoff is provisional until immediately before Git.",
+  "validation": {
+    "inventory-generate-1": {
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "exitCode": 0,
+      "wallS": 3.142448124999646
+    },
+    "focused-4": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawTriggerFilter"
+      ],
+      "startedAt": "2026-10-13T23:58:09.485518+00:00",
+      "endedAt": "2026-10-13T23:58:17.846611+00:00",
+      "wallS": 8.361027250008192,
+      "userS": 6.730388,
+      "sysS": 2.370134,
+      "exitCode": 0,
+      "pid": 12275,
+      "pgid": 12275,
+      "hostLoadAtEnd": 9.60205078125
+    },
+    "focused-3": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawTriggerFilter"
+      ],
+      "startedAt": "2026-10-13T23:57:43.125536+00:00",
+      "endedAt": "2026-10-13T23:57:51.007418+00:00",
+      "wallS": 7.881794584012823,
+      "userS": 6.641991,
+      "sysS": 2.335911,
+      "exitCode": 1,
+      "pid": 10626,
+      "pgid": 10626,
+      "hostLoadAtEnd": 10.99462890625
+    },
+    "mutation-forget-allowance": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawTriggerFilter"
+      ],
+      "startedAt": "2026-10-13T23:59:18.631444+00:00",
+      "endedAt": "2026-10-13T23:59:23.686217+00:00",
+      "wallS": 5.054749915987486,
+      "userS": 5.531378,
+      "sysS": 1.562826,
+      "exitCode": 1,
+      "pid": 16895,
+      "pgid": 16048,
+      "hostLoadAtEnd": 8.41455078125
+    },
+    "focused-2": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawTriggerFilter"
+      ],
+      "startedAt": "2026-10-13T23:57:17.289600+00:00",
+      "endedAt": "2026-10-13T23:57:24.317684+00:00",
+      "wallS": 7.027843457995914,
+      "userS": 6.7099969999999995,
+      "sysS": 2.350214,
+      "exitCode": 1,
+      "pid": 8859,
+      "pgid": 8859,
+      "hostLoadAtEnd": 12.33544921875
+    },
+    "coverage": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "startedAt": "2026-10-14T00:01:08.444214+00:00",
+      "endedAt": "2026-10-14T00:01:13.431730+00:00",
+      "wallS": 4.987502042000415,
+      "userS": 4.564248,
+      "sysS": 1.5747769999999999,
+      "exitCode": 0,
+      "pid": 24258,
+      "pgid": 24258,
+      "hostLoadAtEnd": 8.5478515625
+    },
+    "mutation-omit-filter": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawTriggerFilter"
+      ],
+      "startedAt": "2026-10-13T23:59:07.734985+00:00",
+      "endedAt": "2026-10-13T23:59:13.494283+00:00",
+      "wallS": 5.759269250003854,
+      "userS": 5.80826,
+      "sysS": 1.900174,
+      "exitCode": 1,
+      "pid": 16059,
+      "pgid": 16048,
+      "hostLoadAtEnd": 8.58544921875
+    },
+    "focused-1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawTriggerFilter"
+      ],
+      "startedAt": "2026-10-13T23:57:03.209395+00:00",
+      "endedAt": "2026-10-13T23:57:10.141465+00:00",
+      "wallS": 6.931550042005256,
+      "userS": 6.724419,
+      "sysS": 2.239856,
+      "exitCode": 1,
+      "pid": 7982,
+      "pgid": 7982,
+      "hostLoadAtEnd": 12.45361328125
+    },
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "49990864-1db0-4c08-91ae-40a1f04223e4",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "startedAt": "2026-10-14T00:00:39.430901+00:00",
+      "endedAt": "2026-10-14T00:00:40.854149+00:00",
+      "wallS": 1.42326325000613,
+      "userS": 1.160691,
+      "sysS": 0.46832399999999996,
+      "exitCode": 0,
+      "pid": 22317,
+      "pgid": 22317,
+      "hostLoadAtEnd": 9.2021484375
+    },
+    "review-1": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-13T23:59:28.792168+00:00",
+      "endedAt": "2026-10-14T00:00:30.923624+00:00",
+      "wallS": 62.13081970898202,
+      "userS": 179.666662,
+      "sysS": 17.224355,
+      "exitCode": 0,
+      "pid": 17537,
+      "pgid": 17537,
+      "hostLoadAtEnd": 8.51318359375
+    },
+    "inventory-tests": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts"
+      ],
+      "startedAt": "2026-10-13T23:58:36.641620+00:00",
+      "endedAt": "2026-10-13T23:58:45.717515+00:00",
+      "wallS": 9.075833042006707,
+      "userS": 10.987997,
+      "sysS": 2.208123,
+      "exitCode": 0,
+      "pid": 13983,
+      "pgid": 13983,
+      "hostLoadAtEnd": 9.31591796875
+    },
+    "mutation-first-draw-only": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawTriggerFilter"
+      ],
+      "startedAt": "2026-10-13T23:59:13.520632+00:00",
+      "endedAt": "2026-10-13T23:59:18.606324+00:00",
+      "wallS": 5.085671291017206,
+      "userS": 5.548347,
+      "sysS": 1.574718,
+      "exitCode": 1,
+      "pid": 16502,
+      "pgid": 16048,
+      "hostLoadAtEnd": 8.5380859375
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startedAt": "2026-10-14T00:00:39.430860+00:00",
+      "endedAt": "2026-10-14T00:00:43.762681+00:00",
+      "wallS": 4.331807916983962,
+      "userS": 3.778583,
+      "sysS": 1.16929,
+      "exitCode": 0,
+      "pid": 22316,
+      "pgid": 22316,
+      "hostLoadAtEnd": 9.2021484375
+    },
+    "fuzz300": {
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "49990864-1db0-4c08-91ae-40a1f04223e4",
+        "--seed",
+        "algae-235"
+      ],
+      "startedAt": "2026-10-14T00:00:44.469732+00:00",
+      "endedAt": "2026-10-14T00:05:10.924306+00:00",
+      "wallS": 266.4517536669737,
+      "userS": 283.729594,
+      "sysS": 2.560798,
+      "exitCode": 0,
+      "pid": 22842,
+      "pgid": 22842,
+      "hostLoadAtEnd": 14.6123046875
+    },
+    "sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.235",
+        "--dreamsigns",
+        "49990864-1db0-4c08-91ae-40a1f04223e4",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "startedAt": "2026-10-14T00:05:27.912908+00:00",
+      "endedAt": "2026-10-14T00:05:38.231606+00:00",
+      "wallS": 10.31862041700515,
+      "userS": 5.478141,
+      "sysS": 2.94767,
+      "exitCode": 0,
+      "pid": 92857,
+      "pgid": 92857,
+      "hostLoadAtEnd": 13.97021484375
+    },
+    "judged-1": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/algae-judged.mjs",
+        "--bead",
+        "hv-umm2.235",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "startedAt": "2026-10-14T00:05:46.505101+00:00",
+      "endedAt": "2026-10-14T00:06:40.616282+00:00",
+      "wallS": 54.11064020899357,
+      "userS": 4.948324,
+      "sysS": 2.464395,
+      "exitCode": 1,
+      "pid": 94084,
+      "pgid": 94084,
+      "hostLoadAtEnd": 9.697265625
+    },
+    "judged-3": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/algae-judged.mjs",
+        "--bead",
+        "hv-umm2.235",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "startedAt": "2026-10-14T00:08:29.565565+00:00",
+      "endedAt": "2026-10-14T00:08:45.402492+00:00",
+      "wallS": 15.836794167000335,
+      "userS": 5.203455,
+      "sysS": 2.496036,
+      "exitCode": 1,
+      "pid": 4305,
+      "pgid": 4305,
+      "hostLoadAtEnd": 9.10791015625
+    },
+    "judged-4": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/algae-judged.mjs",
+        "--bead",
+        "hv-umm2.235",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "startedAt": "2026-10-14T00:09:11.868179+00:00",
+      "endedAt": "2026-10-14T00:10:00.880463+00:00",
+      "wallS": 49.01178950001486,
+      "userS": 5.116293,
+      "sysS": 2.338146,
+      "exitCode": 0,
+      "pid": 6816,
+      "pgid": 6816,
+      "hostLoadAtEnd": 7.869140625
+    },
+    "judged-2": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/algae-judged.mjs",
+        "--bead",
+        "hv-umm2.235",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "startedAt": "2026-10-14T00:07:09.830090+00:00",
+      "endedAt": "2026-10-14T00:07:23.161683+00:00",
+      "wallS": 13.331495499995071,
+      "userS": 5.099038,
+      "sysS": 2.819555,
+      "exitCode": 1,
+      "pid": 99130,
+      "pgid": 99130,
+      "hostLoadAtEnd": 9.56591796875
+    }
+  },
+  "hostLoadSamples": {
+    "reviewStart": 8.46142578125
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting load at 2026-10-13T23:59:30.086Z",
+        "method": "review wrapper operating-system load sample",
+        "value": 8.46142578125
+      }
+    }
+  },
+  "testDelta": {
+    "plainContractModules": 1,
+    "plainContractLines": 197,
+    "publicCases": 15,
+    "jsdomFiles": 0
+  },
+  "localCorrectionWindows": [
+    {
+      "start": "2026-10-13T23:57:03.209395+00:00",
+      "end": "2026-10-13T23:58:17.846611+00:00",
+      "minutes": 1.2439536,
+      "cause": "Owned synthetic fixture errors: nonexistent event2 fixture; turn predicate already true; established converted-event spark is zero; nested partial matcher assertion. All fixes restricted to the new contract module.",
+      "raw": [
+        "focused-1.log",
+        "focused-2.log",
+        "focused-3.log",
+        "focused-4.log"
+      ],
+      "outcomes": [
+        "11 pass / 4 fail",
+        "13 pass / 2 fail",
+        "13 pass / 2 fail",
+        "15 pass"
+      ]
+    },
+    {
+      "start": "2026-10-14T00:05:46.505101+00:00",
+      "end": "2026-10-14T00:10:00.880463+00:00",
+      "inclusiveWallS": 254.375362,
+      "cause": "Ignored QA driver corrections: a single immediate second-card tap made no intent; immediate rendered-cost read was premature; geometry waiter returned a non-null box before its bounds/hit conditions. Bounded state-guarded taps and settled numeric/geometry waiters preserve all expected cost/payment/expiry assertions.",
+      "qualification": "Three incomplete desktop failures retained, then both viewports passed. Failed attempt2 exact DOM values were not recorded; attempt3 passing cost read/payment confirms the corrected settled condition, while its failing geometry values were not retained. No invented observations. This interval overlaps the coupled heavy-admission incident; do not add the windows as independent time.",
+      "raw": [
+        "judged-1.log",
+        "judged-2.log",
+        "judged-3.log",
+        "judged-4.log"
+      ]
+    }
+  ],
+  "mutations": {
+    "mutations": [
+      {
+        "name": "omit-filter",
+        "exitCode": 1,
+        "killed": true,
+        "runtime": {
+          "command": [
+            "npm",
+            "test",
+            "--",
+            "src/engine/effects/primitives/contracts.test.ts",
+            "-t",
+            "drawTriggerFilter"
+          ],
+          "startedAt": "2026-10-13T23:59:07.734985+00:00",
+          "endedAt": "2026-10-13T23:59:13.494283+00:00",
+          "wallS": 5.759269250003854,
+          "userS": 5.80826,
+          "sysS": 1.900174,
+          "exitCode": 1,
+          "pid": 16059,
+          "pgid": 16048,
+          "hostLoadAtEnd": 8.58544921875
+        }
+      },
+      {
+        "name": "first-draw-only",
+        "exitCode": 1,
+        "killed": true,
+        "runtime": {
+          "command": [
+            "npm",
+            "test",
+            "--",
+            "src/engine/effects/primitives/contracts.test.ts",
+            "-t",
+            "drawTriggerFilter"
+          ],
+          "startedAt": "2026-10-13T23:59:13.520632+00:00",
+          "endedAt": "2026-10-13T23:59:18.606324+00:00",
+          "wallS": 5.085671291017206,
+          "userS": 5.548347,
+          "sysS": 1.574718,
+          "exitCode": 1,
+          "pid": 16502,
+          "pgid": 16048,
+          "hostLoadAtEnd": 8.5380859375
+        }
+      },
+      {
+        "name": "forget-allowance",
+        "exitCode": 1,
+        "killed": true,
+        "runtime": {
+          "command": [
+            "npm",
+            "test",
+            "--",
+            "src/engine/effects/primitives/contracts.test.ts",
+            "-t",
+            "drawTriggerFilter"
+          ],
+          "startedAt": "2026-10-13T23:59:18.631444+00:00",
+          "endedAt": "2026-10-13T23:59:23.686217+00:00",
+          "wallS": 5.054749915987486,
+          "userS": 5.531378,
+          "sysS": 1.562826,
+          "exitCode": 1,
+          "pid": 16895,
+          "pgid": 16048,
+          "hostLoadAtEnd": 8.41455078125
+        }
+      }
+    ],
+    "restoredSha256": "29488768df749780d6d2ba9e4fcf5f040b1b7fd218694c2ca116ffdafe7b5843"
+  },
+  "fallout": {
+    "productionReadersReadOnly": [
+      "src/engine/loops/tracker.ts",
+      "src/engine/triggers/body.ts",
+      "src/engine/view/determinize.ts",
+      "src/engine/effects/primitives/floating-trigger.ts",
+      "src/engine/effects/primitives/trigger-ability.ts"
+    ],
+    "noNewDiscriminator": true,
+    "inventoryImporterFixtures": "Existing complete and minimal fixtures already declare optional draw filter. Read-only 96-case importer suite passed.",
+    "generatedInventory": "Mandated regeneration refreshes inherited stale derived planning projections as well as this capability. It does not assign native UUID ownership or alter native dependency edges."
+  },
+  "failurePaths": {
+    "midStepError": "rolls back a failed draw partial queue/counter/allowance; valid repaired-catalog retry creates exactly one reduction",
+    "reloadRestart": "serialize queued trigger and resolve identically; saved public prompt after draw resumes through fresh engine/fold",
+    "partialWrite": "failed runStep leaves committed hash, draw count, once-per-turn and queue unchanged",
+    "invalidStaleInput": "public saved-prompt contract rejects foreign actor, invalid value and stale answered prompt",
+    "concurrentActors": "No new intent, persistence writer or lock. Existing sequential fold owns writes; foreign-actor rejection is covered by the public prompt contract."
+  },
+  "scenarioSpecs": "None: filtered matching, existing once-per-turn and physical-subject temporary cost are primitive composition. No new prompt or content-specific state machine.",
+  "d21": {
+    "firstByte": 52,
+    "sampled": false,
+    "newPromptStatusOrVisual": false,
+    "judged": "Parent-admitted focused desktop/mobile actual draw, physical cost/payment and duration-expiry proof despite unsampled entity; no blanket browser reload requirement."
+  },
+  "loggingQualification": "Generic cardDrawn and cardCost effectStarted are observable engine events retained by the actual debug probe/report, not dedicated persisted generic log rows. Existing persisted debug staging, exact UUID initialization, actions, queued physical subject/source-specific resolved trigger and correlated effectEnded reconstruct the deterministic fold.",
+  "qa": {
+    "preflight": {
+      "pass": 2,
+      "skip": 18,
+      "fail": 0,
+      "qualification": "Normal first-turn initialization; the first turn skips draw, so no Algae-trigger exercise claimed."
+    },
+    "sweep": {
+      "invocation": "sweep-F65DLz",
+      "pass": 2,
+      "skip": 18,
+      "fail": 0,
+      "outerWallS": 10.31862041700515,
+      "leaseWaitS": 0.006,
+      "executionS": 10.120043792,
+      "qualification": "Both requested emblem controllers and all variants covered; initialization/progression proof distinct from actual judged trigger exercise."
+    },
+    "judged": {
+      "incompleteAttempts": [
+        "run-nBbbOb",
+        "run-ss6g2X",
+        "run-9GKHUS"
+      ],
+      "golden": "run-bMBQ7X",
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "caps": [],
+      "error": null,
+      "outerWallS": 49.01178950001486,
+      "gameLogRows": {
+        "desktop": 70,
+        "mobile": 76
+      },
+      "captures": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/invocations/run-bMBQ7X/algae-reduced-desktop.png",
+          "filename": "algae-reduced-desktop.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "b5cb21f0f26c43cbdadc9a490f612d70208f844512e2c65ca496d3b372d37300"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/invocations/run-bMBQ7X/algae-reduced-mobile.png",
+          "filename": "algae-reduced-mobile.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "a84977c027aa6c00367a4b58872cc9401a2e1cfd1a797008733878f06d05f192"
+        }
+      ],
+      "result": {
+        "desktop": {
+          "verdict": "pass",
+          "uuid": "49990864-1db0-4c08-91ae-40a1f04223e4",
+          "viewport": "desktop",
+          "stagedOrder": [
+            "i53",
+            "i52",
+            "i51"
+          ],
+          "spells": [
+            "i54",
+            "i55"
+          ],
+          "drawn1": [
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i53"
+            },
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i52"
+            }
+          ],
+          "drawn2": [
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i51"
+            },
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i21"
+            }
+          ],
+          "handCosts": {
+            "first": [
+              {
+                "value": "1",
+                "width": 137.74163818359375,
+                "height": 186.66986083984375,
+                "opacity": "1"
+              }
+            ],
+            "later": [
+              {
+                "value": "2",
+                "width": 141.18115234375,
+                "height": 189.02117919921875,
+                "opacity": "1"
+              }
+            ]
+          },
+          "first": "i52",
+          "later": "i51",
+          "effectStarted": {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "player",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "cardCost",
+              "instance": "i52",
+              "mode": "reduce",
+              "amount": 1
+            }
+          },
+          "queued": {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": "i52",
+            "subjectHiddenFrom": [
+              "enemy"
+            ]
+          },
+          "geometry": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "duration": "Costs 1 energy less until end of turn",
+            "controlHit": true
+          },
+          "paid": 1,
+          "badgeGone": true,
+          "expiryRun": {
+            "label": "the temporary cost expires",
+            "history": [
+              "near:day",
+              "near:night",
+              "far:dawn"
+            ],
+            "turns": 1,
+            "passes": 3,
+            "responds": 0,
+            "answers": 0,
+            "ms": 10596,
+            "state": {
+              "phase": "dawn",
+              "side": "far",
+              "at": "far:dawn",
+              "prompt": null,
+              "window": null,
+              "canPass": false,
+              "waiting": null,
+              "result": null,
+              "board": "enemy-deck-0@enemy-zones,enemy-deck-1@enemy-zones,enemy-deck-2@enemy-zones,enemy-hand-0@far-hand,enemy-hand-1@far-hand,enemy-hand-2@far-hand,enemy-hand-3@far-hand,enemy-hand-4@far-hand,i17@near-hand,i18@near-hand,i21@near-hand,i4@near-hand,i51@near-hand,i52@player-back,i53@near-hand,i54@player-zones,i55@player-zones,i6@near-hand,i7@near-hand,player-deck-0@player-zones,player-deck-1@player-zones,player-deck-2@player-zones",
+              "probe": {
+                "decision": {
+                  "kind": "main",
+                  "side": "enemy"
+                },
+                "pending": null,
+                "stack": 0,
+                "inFlight": false,
+                "ended": false,
+                "scores": {
+                  "player": 0,
+                  "enemy": 0
+                },
+                "scoreToWin": 10,
+                "events": 51
+              },
+              "caps": 0
+            }
+          },
+          "stored": {
+            "rows": 70,
+            "init": {
+              "gameId": "537uoj",
+              "card": "",
+              "dreamsign": "49990864-1db0-4c08-91ae-40a1f04223e4",
+              "variant": "base",
+              "side": "player",
+              "stage": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base"
+              ],
+              "entityKind": "dreamsign",
+              "cardStatus": "authored",
+              "cardType": "Dreamsign",
+              "timestamp": "2026-10-14T00:09:17.024Z",
+              "event": "debug_card_lab_loaded",
+              "seq": 21
+            },
+            "trigger": {
+              "gameId": "537uoj",
+              "version": 11,
+              "detail": {
+                "kind": "triggerResolved",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "player",
+                  "index": 0
+                },
+                "controller": "player",
+                "ability": 0,
+                "node": null,
+                "applied": true
+              },
+              "timestamp": "2026-10-14T00:09:19.398Z",
+              "event": "engine.trigger",
+              "seq": 34
+            },
+            "end": {
+              "gameId": "537uoj",
+              "version": 28,
+              "detail": {
+                "kind": "effectEnded",
+                "effect": "e1"
+              },
+              "timestamp": "2026-10-14T00:09:37.973Z",
+              "event": "engine.effectEnded",
+              "seq": 55
+            },
+            "plays": [
+              {
+                "gameId": "537uoj",
+                "version": 9,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i54",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:19.398Z",
+                "event": "engine.action",
+                "seq": 32
+              },
+              {
+                "gameId": "537uoj",
+                "version": 12,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i55",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:21.539Z",
+                "event": "engine.action",
+                "seq": 41
+              },
+              {
+                "gameId": "537uoj",
+                "version": 14,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i52",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:23.629Z",
+                "event": "engine.action",
+                "seq": 46
+              }
+            ]
+          },
+          "screens": [
+            "algae-reduced-desktop.png"
+          ],
+          "logQualification": "Raw cardDrawn order and generic cardCost starts are retained in the actual engine probe/report; persisted debug staging, initialization/actions, queued physical subject/source trigger and correlated effectEnded reconstruct the operation through the deterministic fold."
+        },
+        "mobile": {
+          "verdict": "pass",
+          "uuid": "49990864-1db0-4c08-91ae-40a1f04223e4",
+          "viewport": "mobile",
+          "stagedOrder": [
+            "i53",
+            "i52",
+            "i51"
+          ],
+          "spells": [
+            "i54",
+            "i55"
+          ],
+          "drawn1": [
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i53"
+            },
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i52"
+            }
+          ],
+          "drawn2": [
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i51"
+            },
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i21"
+            }
+          ],
+          "handCosts": {
+            "first": [
+              {
+                "value": "1",
+                "width": 164.98098754882812,
+                "height": 220.228515625,
+                "opacity": "1"
+              }
+            ],
+            "later": [
+              {
+                "value": "2",
+                "width": 170.82591247558594,
+                "height": 224.12811279296875,
+                "opacity": "1"
+              }
+            ]
+          },
+          "first": "i52",
+          "later": "i51",
+          "effectStarted": {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "player",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "cardCost",
+              "instance": "i52",
+              "mode": "reduce",
+              "amount": 1
+            }
+          },
+          "queued": {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": "i52",
+            "subjectHiddenFrom": [
+              "enemy"
+            ]
+          },
+          "geometry": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "duration": "Costs 1 energy less until end of turn",
+            "controlHit": true
+          },
+          "paid": 1,
+          "badgeGone": true,
+          "expiryRun": {
+            "label": "the temporary cost expires",
+            "history": [
+              "near:day",
+              "near:night",
+              "far:dawn"
+            ],
+            "turns": 1,
+            "passes": 3,
+            "responds": 0,
+            "answers": 0,
+            "ms": 10515,
+            "state": {
+              "phase": "dawn",
+              "side": "far",
+              "at": "far:dawn",
+              "prompt": null,
+              "window": null,
+              "canPass": false,
+              "waiting": null,
+              "result": null,
+              "board": "enemy-deck-0@enemy-zones,enemy-deck-1@enemy-zones,enemy-deck-2@enemy-zones,enemy-hand-0@far-hand,enemy-hand-1@far-hand,enemy-hand-2@far-hand,enemy-hand-3@far-hand,enemy-hand-4@far-hand,i17@near-hand,i18@near-hand,i21@near-hand,i4@near-hand,i51@near-hand,i52@player-back,i53@near-hand,i54@player-zones,i55@player-zones,i6@near-hand,i7@near-hand,player-deck-0@player-zones,player-deck-1@player-zones,player-deck-2@player-zones",
+              "probe": {
+                "decision": {
+                  "kind": "main",
+                  "side": "enemy"
+                },
+                "pending": null,
+                "stack": 0,
+                "inFlight": false,
+                "ended": false,
+                "scores": {
+                  "player": 0,
+                  "enemy": 0
+                },
+                "scoreToWin": 10,
+                "events": 51
+              },
+              "caps": 0
+            }
+          },
+          "stored": {
+            "rows": 76,
+            "init": {
+              "gameId": "59sgvb",
+              "card": "",
+              "dreamsign": "49990864-1db0-4c08-91ae-40a1f04223e4",
+              "variant": "base",
+              "side": "player",
+              "stage": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base"
+              ],
+              "entityKind": "dreamsign",
+              "cardStatus": "authored",
+              "cardType": "Dreamsign",
+              "timestamp": "2026-10-14T00:09:40.628Z",
+              "event": "debug_card_lab_loaded",
+              "seq": 21
+            },
+            "trigger": {
+              "gameId": "59sgvb",
+              "version": 11,
+              "detail": {
+                "kind": "triggerResolved",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "player",
+                  "index": 0
+                },
+                "controller": "player",
+                "ability": 0,
+                "node": null,
+                "applied": true
+              },
+              "timestamp": "2026-10-14T00:09:42.535Z",
+              "event": "engine.trigger",
+              "seq": 34
+            },
+            "end": {
+              "gameId": "59sgvb",
+              "version": 28,
+              "detail": {
+                "kind": "effectEnded",
+                "effect": "e1"
+              },
+              "timestamp": "2026-10-14T00:09:59.542Z",
+              "event": "engine.effectEnded",
+              "seq": 61
+            },
+            "plays": [
+              {
+                "gameId": "59sgvb",
+                "version": 9,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i54",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:42.534Z",
+                "event": "engine.action",
+                "seq": 32
+              },
+              {
+                "gameId": "59sgvb",
+                "version": 12,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i55",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:44.786Z",
+                "event": "engine.action",
+                "seq": 45
+              },
+              {
+                "gameId": "59sgvb",
+                "version": 14,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i52",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:46.893Z",
+                "event": "engine.action",
+                "seq": 50
+              }
+            ]
+          },
+          "screens": [
+            "algae-reduced-mobile.png"
+          ],
+          "logQualification": "Raw cardDrawn order and generic cardCost starts are retained in the actual engine probe/report; persisted debug staging, initialization/actions, queued physical subject/source trigger and correlated effectEnded reconstruct the operation through the deterministic fold."
+        }
+      },
+      "parentIndependentProof": "drawTrigger235-parent-qa-proof.json",
+      "visualJudgment": "Implementer and parent both inspected the two2x captures; played character/duration clock and phase control visible, later duplicate printing normal2 cost. Existing synthetic opening-hand blank art is lab material."
+    }
+  },
+  "runtime": {
+    "status": "All owned validation/fuzz/QA processes terminal; no server/provider/lease retained",
+    "browserSettlement": {
+      "at": "2026-10-14T00:10:16.695026+00:00",
+      "head": "55ef226c4aca39748797287329ecc5cd249ef21a",
+      "ordinarySourceTestEvidenceFreezeUnchanged": true,
+      "sourcePaths": {
+        "docs/plan/evidence/friction/hv-umm2.235.json": "1ea8ca7489b0f7e1bb40c312c347cc8bb333b45a75d06e617e74b34af5bc66a2",
+        "docs/plan/evidence/measurements/hv-umm2.235.json": "110f9765de825ba4219a8535048580757b44d623e0a37b36264c07487fd9bbd9",
+        "docs/plan/evidence/pre-existing/hv-umm2.235.md": "94303475848a48eaaa1a98dfa3ae640100f6b8a6a9193c9488fd319591bd3e74",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.235-1.md": "3d274a67a24add4502b8121353d80d32cf7a92b24766890dcb3eb4d2b2b01cf9",
+        "src/engine/effects/primitives/contracts/draw-trigger-filter.contracts.ts": "4ac5fd395e4050aec096d80d3e3cd92d05f48f61e0dfacebb8aab35a6e48354d",
+        "docs/plan/evidence/content-inventory.json": "9dbbee2cc7ddde073ea0ab290d8dfa8150f8693eb4023d185ecd69b5b8de43ba",
+        "docs/rules.md": "964aca2c0e101dcf791a27e834611b6dfe8a0a2dc76272b15c1d15e8b5c347f3",
+        "scripts/content-inventory.ts": "1aa1742bd1871ea8f9c5c36ac9407e5e1f0f9082164eb197d97a413bf3ca3c98",
+        "src/content/dreamsigns/algae-49990864.ts": "3c8ff28727b2c08bf2514185f986dd253cd14e1344ddb8a252974e97829dc255",
+        "src/engine/dsl/triggers.ts": "aa7b2fd778d5a81e734712b07ab2934784db3299842586098eeb76cb0ac7cedd",
+        "src/engine/dsl/types.ts": "301d210ed50fb9a2574b190a61c0d34bf2326047e8ecf2d7f4c06a0f220012f1",
+        "src/engine/triggers/matcher.ts": "29488768df749780d6d2ba9e4fcf5f040b1b7fd218694c2ca116ffdafe7b5843"
+      },
+      "driverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/algae-judged.mjs",
+      "driverSha256": "1070c729f0bacc16f53646e8e81558d6c76a8033f383d0f1fcdc91b189126774",
+      "ownRecordsAbsent": true,
+      "foreignRecords": [],
+      "allOwnedGroupsAbsent": [
+        92857,
+        92929,
+        94084,
+        94134,
+        99130,
+        99182,
+        4305,
+        4367,
+        6816,
+        6864
+      ],
+      "normalCleanup": "All five browser invocations terminal, normal trusted runner close/transport/record/lease/server cleanup, no uncertain RPC; final server PG6864 port5274 free.",
+      "goldenInvocation": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/invocations/run-bMBQ7X",
+      "goldenRuntime": {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/algae-judged.mjs",
+          "--bead",
+          "hv-umm2.235",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "180"
+        ],
+        "startedAt": "2026-10-14T00:09:11.868179+00:00",
+        "endedAt": "2026-10-14T00:10:00.880463+00:00",
+        "wallS": 49.01178950001486,
+        "userS": 5.116293,
+        "sysS": 2.338146,
+        "exitCode": 0,
+        "pid": 6816,
+        "pgid": 6816,
+        "hostLoadAtEnd": 7.869140625
+      },
+      "goldenResult": {
+        "desktop": {
+          "verdict": "pass",
+          "uuid": "49990864-1db0-4c08-91ae-40a1f04223e4",
+          "viewport": "desktop",
+          "stagedOrder": [
+            "i53",
+            "i52",
+            "i51"
+          ],
+          "spells": [
+            "i54",
+            "i55"
+          ],
+          "drawn1": [
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i53"
+            },
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i52"
+            }
+          ],
+          "drawn2": [
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i51"
+            },
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i21"
+            }
+          ],
+          "handCosts": {
+            "first": [
+              {
+                "value": "1",
+                "width": 137.74163818359375,
+                "height": 186.66986083984375,
+                "opacity": "1"
+              }
+            ],
+            "later": [
+              {
+                "value": "2",
+                "width": 141.18115234375,
+                "height": 189.02117919921875,
+                "opacity": "1"
+              }
+            ]
+          },
+          "first": "i52",
+          "later": "i51",
+          "effectStarted": {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "player",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "cardCost",
+              "instance": "i52",
+              "mode": "reduce",
+              "amount": 1
+            }
+          },
+          "queued": {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": "i52",
+            "subjectHiddenFrom": [
+              "enemy"
+            ]
+          },
+          "geometry": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "duration": "Costs 1 energy less until end of turn",
+            "controlHit": true
+          },
+          "paid": 1,
+          "badgeGone": true,
+          "expiryRun": {
+            "label": "the temporary cost expires",
+            "history": [
+              "near:day",
+              "near:night",
+              "far:dawn"
+            ],
+            "turns": 1,
+            "passes": 3,
+            "responds": 0,
+            "answers": 0,
+            "ms": 10596,
+            "state": {
+              "phase": "dawn",
+              "side": "far",
+              "at": "far:dawn",
+              "prompt": null,
+              "window": null,
+              "canPass": false,
+              "waiting": null,
+              "result": null,
+              "board": "enemy-deck-0@enemy-zones,enemy-deck-1@enemy-zones,enemy-deck-2@enemy-zones,enemy-hand-0@far-hand,enemy-hand-1@far-hand,enemy-hand-2@far-hand,enemy-hand-3@far-hand,enemy-hand-4@far-hand,i17@near-hand,i18@near-hand,i21@near-hand,i4@near-hand,i51@near-hand,i52@player-back,i53@near-hand,i54@player-zones,i55@player-zones,i6@near-hand,i7@near-hand,player-deck-0@player-zones,player-deck-1@player-zones,player-deck-2@player-zones",
+              "probe": {
+                "decision": {
+                  "kind": "main",
+                  "side": "enemy"
+                },
+                "pending": null,
+                "stack": 0,
+                "inFlight": false,
+                "ended": false,
+                "scores": {
+                  "player": 0,
+                  "enemy": 0
+                },
+                "scoreToWin": 10,
+                "events": 51
+              },
+              "caps": 0
+            }
+          },
+          "stored": {
+            "rows": 70,
+            "init": {
+              "gameId": "537uoj",
+              "card": "",
+              "dreamsign": "49990864-1db0-4c08-91ae-40a1f04223e4",
+              "variant": "base",
+              "side": "player",
+              "stage": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base"
+              ],
+              "entityKind": "dreamsign",
+              "cardStatus": "authored",
+              "cardType": "Dreamsign",
+              "timestamp": "2026-10-14T00:09:17.024Z",
+              "event": "debug_card_lab_loaded",
+              "seq": 21
+            },
+            "trigger": {
+              "gameId": "537uoj",
+              "version": 11,
+              "detail": {
+                "kind": "triggerResolved",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "player",
+                  "index": 0
+                },
+                "controller": "player",
+                "ability": 0,
+                "node": null,
+                "applied": true
+              },
+              "timestamp": "2026-10-14T00:09:19.398Z",
+              "event": "engine.trigger",
+              "seq": 34
+            },
+            "end": {
+              "gameId": "537uoj",
+              "version": 28,
+              "detail": {
+                "kind": "effectEnded",
+                "effect": "e1"
+              },
+              "timestamp": "2026-10-14T00:09:37.973Z",
+              "event": "engine.effectEnded",
+              "seq": 55
+            },
+            "plays": [
+              {
+                "gameId": "537uoj",
+                "version": 9,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i54",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:19.398Z",
+                "event": "engine.action",
+                "seq": 32
+              },
+              {
+                "gameId": "537uoj",
+                "version": 12,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i55",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:21.539Z",
+                "event": "engine.action",
+                "seq": 41
+              },
+              {
+                "gameId": "537uoj",
+                "version": 14,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i52",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:23.629Z",
+                "event": "engine.action",
+                "seq": 46
+              }
+            ]
+          },
+          "screens": [
+            "algae-reduced-desktop.png"
+          ],
+          "logQualification": "Raw cardDrawn order and generic cardCost starts are retained in the actual engine probe/report; persisted debug staging, initialization/actions, queued physical subject/source trigger and correlated effectEnded reconstruct the operation through the deterministic fold."
+        },
+        "mobile": {
+          "verdict": "pass",
+          "uuid": "49990864-1db0-4c08-91ae-40a1f04223e4",
+          "viewport": "mobile",
+          "stagedOrder": [
+            "i53",
+            "i52",
+            "i51"
+          ],
+          "spells": [
+            "i54",
+            "i55"
+          ],
+          "drawn1": [
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i53"
+            },
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i52"
+            }
+          ],
+          "drawn2": [
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i51"
+            },
+            {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i21"
+            }
+          ],
+          "handCosts": {
+            "first": [
+              {
+                "value": "1",
+                "width": 164.98098754882812,
+                "height": 220.228515625,
+                "opacity": "1"
+              }
+            ],
+            "later": [
+              {
+                "value": "2",
+                "width": 170.82591247558594,
+                "height": 224.12811279296875,
+                "opacity": "1"
+              }
+            ]
+          },
+          "first": "i52",
+          "later": "i51",
+          "effectStarted": {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "player",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "cardCost",
+              "instance": "i52",
+              "mode": "reduce",
+              "amount": 1
+            }
+          },
+          "queued": {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": "i52",
+            "subjectHiddenFrom": [
+              "enemy"
+            ]
+          },
+          "geometry": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "duration": "Costs 1 energy less until end of turn",
+            "controlHit": true
+          },
+          "paid": 1,
+          "badgeGone": true,
+          "expiryRun": {
+            "label": "the temporary cost expires",
+            "history": [
+              "near:day",
+              "near:night",
+              "far:dawn"
+            ],
+            "turns": 1,
+            "passes": 3,
+            "responds": 0,
+            "answers": 0,
+            "ms": 10515,
+            "state": {
+              "phase": "dawn",
+              "side": "far",
+              "at": "far:dawn",
+              "prompt": null,
+              "window": null,
+              "canPass": false,
+              "waiting": null,
+              "result": null,
+              "board": "enemy-deck-0@enemy-zones,enemy-deck-1@enemy-zones,enemy-deck-2@enemy-zones,enemy-hand-0@far-hand,enemy-hand-1@far-hand,enemy-hand-2@far-hand,enemy-hand-3@far-hand,enemy-hand-4@far-hand,i17@near-hand,i18@near-hand,i21@near-hand,i4@near-hand,i51@near-hand,i52@player-back,i53@near-hand,i54@player-zones,i55@player-zones,i6@near-hand,i7@near-hand,player-deck-0@player-zones,player-deck-1@player-zones,player-deck-2@player-zones",
+              "probe": {
+                "decision": {
+                  "kind": "main",
+                  "side": "enemy"
+                },
+                "pending": null,
+                "stack": 0,
+                "inFlight": false,
+                "ended": false,
+                "scores": {
+                  "player": 0,
+                  "enemy": 0
+                },
+                "scoreToWin": 10,
+                "events": 51
+              },
+              "caps": 0
+            }
+          },
+          "stored": {
+            "rows": 76,
+            "init": {
+              "gameId": "59sgvb",
+              "card": "",
+              "dreamsign": "49990864-1db0-4c08-91ae-40a1f04223e4",
+              "variant": "base",
+              "side": "player",
+              "stage": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base"
+              ],
+              "entityKind": "dreamsign",
+              "cardStatus": "authored",
+              "cardType": "Dreamsign",
+              "timestamp": "2026-10-14T00:09:40.628Z",
+              "event": "debug_card_lab_loaded",
+              "seq": 21
+            },
+            "trigger": {
+              "gameId": "59sgvb",
+              "version": 11,
+              "detail": {
+                "kind": "triggerResolved",
+                "source": {
+                  "kind": "dreamsign",
+                  "side": "player",
+                  "index": 0
+                },
+                "controller": "player",
+                "ability": 0,
+                "node": null,
+                "applied": true
+              },
+              "timestamp": "2026-10-14T00:09:42.535Z",
+              "event": "engine.trigger",
+              "seq": 34
+            },
+            "end": {
+              "gameId": "59sgvb",
+              "version": 28,
+              "detail": {
+                "kind": "effectEnded",
+                "effect": "e1"
+              },
+              "timestamp": "2026-10-14T00:09:59.542Z",
+              "event": "engine.effectEnded",
+              "seq": 61
+            },
+            "plays": [
+              {
+                "gameId": "59sgvb",
+                "version": 9,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i54",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:42.534Z",
+                "event": "engine.action",
+                "seq": 32
+              },
+              {
+                "gameId": "59sgvb",
+                "version": 12,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i55",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:44.786Z",
+                "event": "engine.action",
+                "seq": 45
+              },
+              {
+                "gameId": "59sgvb",
+                "version": 14,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i52",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T00:09:46.893Z",
+                "event": "engine.action",
+                "seq": 50
+              }
+            ]
+          },
+          "screens": [
+            "algae-reduced-mobile.png"
+          ],
+          "logQualification": "Raw cardDrawn order and generic cardCost starts are retained in the actual engine probe/report; persisted debug staging, initialization/actions, queued physical subject/source trigger and correlated effectEnded reconstruct the operation through the deterministic fold."
+        }
+      },
+      "captures": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/invocations/run-bMBQ7X/algae-reduced-desktop.png",
+          "filename": "algae-reduced-desktop.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "b5cb21f0f26c43cbdadc9a490f612d70208f844512e2c65ca496d3b372d37300"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/invocations/run-bMBQ7X/algae-reduced-mobile.png",
+          "filename": "algae-reduced-mobile.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "a84977c027aa6c00367a4b58872cc9401a2e1cfd1a797008733878f06d05f192"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/invocations/run-bMBQ7X/algae-judged-desktop.jsonl",
+          "gameId": "537uoj",
+          "selectedBy": "url",
+          "rows": 70,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.235/invocations/run-bMBQ7X/algae-judged-mobile.jsonl",
+          "gameId": "59sgvb",
+          "selectedBy": "url",
+          "rows": 76,
+          "reason": null
+        }
+      ],
+      "qaLedgerPath": "docs/plan/evidence/qa-ledger/hv-umm2.235.jsonl",
+      "qaLedgerRowsNow": 20,
+      "qaLedgerFinalization": "20 sweep lines currently; three failed incomplete judged attempts and two golden viewport entries will append after root admitted fuzz receipt.",
+      "frictionFinalization": "Paused as directed pending root admitted heavy fuzz; no ordinary evidence finalization or commit."
+    },
+    "rootAdmittedFuzzGroup": 38326,
+    "rootRepairPIDPGGone": true,
+    "rawCleanup": [
+      "sweep-cleanup-proof.json",
+      "judged-1-cleanup-proof.json",
+      "judged-2-cleanup-proof.json",
+      "judged-3-cleanup-proof.json",
+      "golden-qa-settlement-packet.json"
+    ],
+    "secondJudgedProviderSessionId": "UNKNOWN: owner sample happened after normal terminal cleanup; no invented SID. Normal trusted runner settlement is proven.",
+    "resourceAdmissionIncident": "Root invoked same-task justiciar and reran the exact300 under machine-wide heavy lock, preserving D17 without waiver."
+  },
+  "weightedFuzzOriginalUnadmitted": {
+    "games": 300,
+    "steps": 126497,
+    "prompts": 8173,
+    "interactiveReruns": 794,
+    "failures": 0,
+    "targetIncluded": 600,
+    "reportedTargetExercised": 3547,
+    "innerWallS": 265.3,
+    "innerCpuS": 284.9,
+    "outerWallS": 266.4517536669737,
+    "heavyQueueWait": "not admitted; no lockf invocation",
+    "admission": "The implementer omitted mandatory D17 lockf admission. Actual passing result retained, not accepted as workflow-compliant. No heavy lock wait or lease existed."
+  },
+  "weightedFuzz": {
+    "games": 300,
+    "steps": 126497,
+    "prompts": 8173,
+    "interactiveReruns": 794,
+    "failures": 0,
+    "included": 600,
+    "reportedExercised": 3547,
+    "outerCommand": [
+      "lockf",
+      "-k",
+      "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "python3",
+      "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/drawTrigger235-admitted-fuzz-child.py"
+    ],
+    "childCommand": [
+      "npm",
+      "run",
+      "fuzz:engine",
+      "--",
+      "--games",
+      "300",
+      "--weight-uuids",
+      "49990864-1db0-4c08-91ae-40a1f04223e4",
+      "--seed",
+      "algae-235"
+    ],
+    "outerWallS": 335.93123708301573,
+    "childWallS": 261.1847278329951,
+    "engineWallS": 259.6,
+    "engineCpuS": 278.8,
+    "childUserS": 277.028999,
+    "childSystemS": 3.235601,
+    "admissionAndChildStartupS": 74.742179,
+    "pureLockWaitS": "UNKNOWN",
+    "admissionQualification": "Parent lockf holds while its Python child and npm are awaited. No claim about lock file descriptor inheritance. Admission/startup delta is not pure lock wait.",
+    "rawReceipts": [
+      "drawTrigger235-admitted-fuzz-outer-receipt.json",
+      "drawTrigger235-admitted-fuzz-child-receipt.json",
+      "drawTrigger235-admitted-fuzz.stdout",
+      "drawTrigger235-admitted-fuzz.stderr"
+    ],
+    "rootRepair": {
+      "at": "2026-10-14T00:16:57.547918+00:00",
+      "bead": "hv-umm2.235",
+      "justiciar": "resolved without waiver; return executor",
+      "requiredD17Admission": "Exact outer lockf -k primary artifacts/heavy.lock command, lockf owns root PG38326 while child and npm are awaited. No assumption about lock FD inheritance needed.",
+      "passingResult": "300games126497steps8173prompts794reruns0failures; exactAlgae included600/reportedexercised3547",
+      "outerWallSeconds": 335.93123708301573,
+      "childWallSeconds": 261.1847278329951,
+      "engineWallSeconds": 259.6,
+      "engineCPUSeconds": 278.8,
+      "outerAdmissionAndChildStartupSeconds": 74.742179,
+      "pureLockWaitSeconds": "UNKNOWN",
+      "userCPUSeconds": 277.028999,
+      "systemCPUSeconds": 3.235601,
+      "firstUnadmittedResult": "real passing266.451754s, no lock admission/no heavy wait; retained honestly and not accepted as workflow-compliant",
+      "all12SourceTestEvidenceHashesStillFrozen": true,
+      "repairPIDPGGone": true,
+      "QAAlreadyGoldenAndSettled": "drawTrigger235-parent-qa-proof.json",
+      "incidentObservation": "2026-10-14T00:06:33.682Z",
+      "incidentEnd": "2026-10-14T00:16:57.547918+00:00",
+      "incidentInclusiveWallSeconds": 623.865918,
+      "incidentQualification": "Coupled diagnosis + waiting for existing QA normal settlement + parent QA proof + lock admission/startup + actual admitted rerun + collection; not CPU or pure lock wait. No source changes/QA repeats/full checks/cross-project tooling change.",
+      "next": "same helper finalizes own evidence and exact PRECOMMIT manifest; one commit/core review/certified promotion still owed"
+    }
+  },
+  "reviewAdmission": {
+    "command": [
+      "python3",
+      "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/drawTrigger235/run-command.py",
+      "review-1",
+      "npm",
+      "run",
+      "review"
+    ],
+    "isD17Heavy": false,
+    "timerStarts": "Python wrapper startup",
+    "outerAdmission": "No outer heavy lock, as appropriate for npm run review; shell/tool dispatch startup before Python is not measured separately.",
+    "measuredOuterWallS": 62.13081970898202
+  },
+  "evidenceCutoff": "2026-10-14T00:37:40.816385+00:00",
+  "baseQualification": "Top-level base is the original authored/validated source base55ef. Final combined-parent base is explicitly recorded in integration below.",
+  "originalSourceEvidence": {
+    "source": "06915273d17e327173a52d2bb48d2aca97bee310",
+    "base": "55ef226c4aca39748797287329ecc5cd249ef21a",
+    "actualGitReceipt": {
+      "bead": "hv-umm2.235",
+      "hostDispatchAt": "2026-10-13T23:52:06.179Z",
+      "preGitCutoff": "2026-10-14T00:19:53.885287+00:00",
+      "gitStart": "2026-10-14T00:19:53.896727+00:00",
+      "gitEnd": "2026-10-14T00:19:53.937416+00:00",
+      "gitWallS": 0.04071391699835658,
+      "exitCode": 0,
+      "cutoffToGitEndS": 0.052129,
+      "actualInclusiveWallS": 1667.758416,
+      "actualInclusiveMin": 27.7959736,
+      "qualification": "Inclusive elapsed wall includes audit, coordination, validation, QA, repair and waiting; not CPU or editing time. Committed endpoint is the immediate preGit cutoff; future actual endpoint was UNKNOWN there. No amend.",
+      "commit": "06915273d17e327173a52d2bb48d2aca97bee310",
+      "exactPaths": [
+        "docs/plan/evidence/content-inventory.json",
+        "docs/plan/evidence/friction/hv-umm2.235.json",
+        "docs/plan/evidence/measurements/hv-umm2.235.json",
+        "docs/plan/evidence/pre-existing/hv-umm2.235.md",
+        "docs/plan/evidence/qa-ledger/hv-umm2.235.jsonl",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.235-1.md",
+        "docs/rules.md",
+        "scripts/content-inventory.ts",
+        "src/content/dreamsigns/algae-49990864.ts",
+        "src/engine/dsl/triggers.ts",
+        "src/engine/dsl/types.ts",
+        "src/engine/effects/primitives/contracts/draw-trigger-filter.contracts.ts",
+        "src/engine/triggers/matcher.ts"
+      ],
+      "clean": true,
+      "ownedRuntimeGroupsAbsent": [
+        22842,
+        92857,
+        92929,
+        94084,
+        94134,
+        99130,
+        99182,
+        4305,
+        4367,
+        6816,
+        6864,
+        38326
+      ]
+    },
+    "checksFuzzQAQualification": "Original review, importer96, coverage20, weighted300 (including root admitted repair), three incomplete browser failures and two golden judgments are tied to original069 source. Historical receipts/captures/QAledger are unchanged; they are not represented as rerun on the combined source."
+  },
+  "integration": {
+    "updatedCheckpoint": "e029394701af3ce28dce39b5d9d1284b943753c1",
+    "combinedBase": "1c61a0a205d9289b8a9cf34302c2318b3cc7c131",
+    "originalCandidate": "01a137c7-ed99-7c42-bb53-9c7d68746cd8",
+    "originalCandidateOutcome": "terminal merge-conflict, never promoted",
+    "conflictingPaths": [
+      "docs/plan/evidence/content-inventory.json",
+      "src/engine/dsl/types.ts",
+      "src/engine/triggers/matcher.ts"
+    ],
+    "rootUpdate1": "exit5/restored clean original069; root verified healthy/no pending update block",
+    "temporaryParkedCheckpoint": "f7bc01fac5e6d784859dd54feb2dedb960aabab8; never submitted or approved",
+    "rootUpdate2": "succeeded onto latest parent1c61; clean updated checkpoint e029; no rebase left",
+    "rootReceipts": [
+      "drawTrigger235-update-1.json",
+      "drawTrigger235-update-2.json",
+      "drawTrigger235-update-2-proof.json",
+      "drawTrigger235-conflict-save/manifest.json",
+      "drawTrigger235-conflict-save/checkpoint-receipt.json"
+    ],
+    "reapplication": {
+      "at": "2026-10-14T00:24:20.642697+00:00",
+      "checkpoint": "e029394701af3ce28dce39b5d9d1284b943753c1",
+      "combinedBase": "1c61a0a205d9289b8a9cf34302c2318b3cc7c131",
+      "originalSource": "06915273d17e327173a52d2bb48d2aca97bee310",
+      "sharedFiles": {
+        "src/engine/dsl/types.ts": {
+          "peerParentSHA256": "0187342bbc12a894b4683c8e4975efb864ad9a2e6984d5e1bea2ea162d82bdb3",
+          "combinedSHA256": "99fdf45b378335f49da6240ee3a19532dac8a5fbf53fefe922c660344962cde0",
+          "reverseOnlyOwnedAdditionsEqualsPeerParentBytes": true
+        },
+        "src/engine/triggers/matcher.ts": {
+          "peerParentSHA256": "be1938d56c0cfe6e03ecc9d56664dadf9efd96cc9e650ddf3e7f0025446dd73c",
+          "combinedSHA256": "b838a7708883e0014d1409b77c089e1160dce9e02119300eab576fdafde99fa4",
+          "reverseOnlyOwnedAdditionsEqualsPeerParentBytes": true
+        }
+      },
+      "ownedHelperByteEquivalentToSavedSource": true,
+      "oldOmittedBuilderAndAllOtherTenOwnedPaths": "Preserved through root TGupdate, no edits here",
+      "peerPreservation": "Reversing only optional draw filter, CardDrawnEvent import, saved drawMatches helper and draw case replacement returns exact latest parent bytes, including copy/hand-context/ability-filter declarations and every other branch.",
+      "noWholeSharedFileReplacement": true,
+      "additionalPeerPreservation": {
+        "src/engine/dsl/triggers.ts": "Reversing exactly own whenDraw comment/signature/optional-filter spread equals latest parent bytes, preserving peer builders.",
+        "scripts/content-inventory.ts": "Reversing only own draw capability pending-marker retirement equals latest parent bytes.",
+        "docs/rules.md": "Removing only own additive normative draw-matching paragraph equals latest parent bytes."
+      },
+      "originalOwnedFullBlobsPreserved": [
+        "Algae leaf",
+        "197-line synthetic contract",
+        "own pre-existing evidence",
+        "RD235-1",
+        "25-row original QAledger"
+      ],
+      "atFinalCombinedProof": "2026-10-14T00:26:50.459852+00:00"
+    },
+    "combinedChecks": {
+      "combined-inventory-generate": {
+        "command": [
+          "npx",
+          "tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "startedAt": "2026-10-14T00:24:20.669053+00:00",
+        "endedAt": "2026-10-14T00:24:23.177857+00:00",
+        "wallS": 2.5088176659774035,
+        "userS": 2.946727,
+        "sysS": 0.5930719999999999,
+        "exitCode": 0,
+        "pid": 98730,
+        "pgid": 98730,
+        "hostLoadAtEnd": 9.14501953125
+      },
+      "combined-focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "drawTriggerFilter"
+        ],
+        "startedAt": "2026-10-14T00:24:30.246222+00:00",
+        "endedAt": "2026-10-14T00:24:37.720795+00:00",
+        "wallS": 7.474536666995846,
+        "userS": 7.286671,
+        "sysS": 2.179208,
+        "exitCode": 0,
+        "pid": 99364,
+        "pgid": 99364,
+        "hostLoadAtEnd": 10.2197265625
+      },
+      "combined-inventory-tests": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "scripts/content-inventory.test.ts"
+        ],
+        "startedAt": "2026-10-14T00:24:43.738912+00:00",
+        "endedAt": "2026-10-14T00:24:52.632919+00:00",
+        "wallS": 8.89395195900579,
+        "userS": 11.301997,
+        "sysS": 2.066914,
+        "exitCode": 0,
+        "pid": 492,
+        "pgid": 492,
+        "hostLoadAtEnd": 10.21337890625
+      },
+      "combined-review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "startedAt": "2026-10-14T00:24:53.249872+00:00",
+        "endedAt": "2026-10-14T00:26:08.324989+00:00",
+        "wallS": 75.07435854201321,
+        "userS": 201.888663,
+        "sysS": 19.295452,
+        "exitCode": 0,
+        "pid": 1549,
+        "pgid": 1549,
+        "hostLoadAtEnd": 13.28857421875
+      },
+      "combined-knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "startedAt": "2026-10-14T00:26:11.010932+00:00",
+        "endedAt": "2026-10-14T00:26:15.475214+00:00",
+        "wallS": 4.464278208004544,
+        "userS": 4.314858,
+        "sysS": 1.401797,
+        "exitCode": 0,
+        "pid": 6506,
+        "pgid": 6506,
+        "hostLoadAtEnd": 13.26513671875
+      }
+    },
+    "counts": {
+      "focused": 15,
+      "currentImporter": 95,
+      "reviewFiles": 299,
+      "reviewTests": 6454
+    },
+    "generatorQualification": "Full current generator refresh against peer combined source: own drawTriggerFilter exists and Algae authored; derived diff to latest parent includes two capability descriptors,32entity projections and regrouped beads. Generated planning changes do not transfer native UUID ownership or completion.",
+    "additionalFullFuzzBrowser": "Not run or required for these independent textual resolutions; exact owned behavior preserved, normal combined review/Knip and focused/importer contracts pass.",
+    "finalGitEnd": "UNKNOWN: actual final replacement Git endpoint will be retained externally in integration-final-git-receipt.json without a subsequent amend.",
+    "finalPreGitCutoff": "2026-10-14T00:28:58.955546+00:00"
+  },
+  "firstCombinedSourceEvidence": {
+    "source": "888102445e333f8813935449933b9f0fb3731c25",
+    "base": "1c61a0a205d9289b8a9cf34302c2318b3cc7c131",
+    "actualGitReceipt": {
+      "bead": "hv-umm2.235",
+      "role": "final integration replacement after root FINALCOMMIT ACK",
+      "originalSource": "06915273d17e327173a52d2bb48d2aca97bee310",
+      "updatedTemporaryCheckpoint": "e029394701af3ce28dce39b5d9d1284b943753c1",
+      "combinedBase": "1c61a0a205d9289b8a9cf34302c2318b3cc7c131",
+      "hostDispatchAt": "2026-10-13T23:52:06.179Z",
+      "preGitCutoff": "2026-10-14T00:28:58.955546+00:00",
+      "gitStart": "2026-10-14T00:28:58.965801+00:00",
+      "gitEnd": "2026-10-14T00:28:59.000128+00:00",
+      "gitWallS": 0.03436433299793862,
+      "exitCode": 0,
+      "cutoffToGitEndS": 0.044582,
+      "actualInclusiveWallS": 2212.821128,
+      "actualInclusiveMin": 36.88035213333333,
+      "qualification": "Inclusive original host dispatch through actual final integration Git end includes audit, coordination, validation, QA, heavy admission repair, native conflict recovery/update/reapplication, combined checks and waiting. Not CPU or editing time. Original069 historical receipt remains unchanged; committed final endpoint was UNKNOWN at preGit cutoff. No subsequent amend.",
+      "replacementCommit": "888102445e333f8813935449933b9f0fb3731c25",
+      "exactPaths": [
+        "docs/plan/evidence/content-inventory.json",
+        "docs/plan/evidence/friction/hv-umm2.235.json",
+        "docs/plan/evidence/measurements/hv-umm2.235.json",
+        "docs/plan/evidence/pre-existing/hv-umm2.235.md",
+        "docs/plan/evidence/qa-ledger/hv-umm2.235.jsonl",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.235-1.md",
+        "docs/rules.md",
+        "scripts/content-inventory.ts",
+        "src/content/dreamsigns/algae-49990864.ts",
+        "src/engine/dsl/triggers.ts",
+        "src/engine/dsl/types.ts",
+        "src/engine/effects/primitives/contracts/draw-trigger-filter.contracts.ts",
+        "src/engine/triggers/matcher.ts"
+      ],
+      "clean": true,
+      "combinedRuntimeGroupsAbsent": [
+        98730,
+        99364,
+        492,
+        1549,
+        6506
+      ],
+      "newBrowserHeavyRuntime": "none"
+    },
+    "qualification": "First combined review299/6454, focused15/importer95/Knip and its Git receipt are historical evidence for888. See integration for exact prior update/reapplication/check details; current latest combined checks are separate below."
+  },
+  "integration2": {
+    "currentCombinedBase": "c22d5c6fd86c9610f9a779d2eadd98e9214047e0",
+    "updatedTemporaryCheckpoint": "7f2ef6f2f9898d42b6b320d2dbd881816b180b33",
+    "secondCandidate": "01a137d0-3313-7eb1-8d2d-8b77b7b15640",
+    "outcome": "Terminal generated-inventory-only merge conflict after peer97 landed; no authored-code conflict",
+    "boundedCause": {
+      "at": "2026-10-14T00:30:21.063650+00:00",
+      "source": "888102445e333f8813935449933b9f0fb3731c25",
+      "sourceBase": "1c61a0a205d9289b8a9cf34302c2318b3cc7c131",
+      "stagingObserved": "c22d5c6fd86c9610f9a779d2eadd98e9214047e0",
+      "conflictingPaths": [
+        "docs/plan/evidence/content-inventory.json"
+      ],
+      "nativeUpdate3Exit": 5,
+      "originalCleanRestored": true,
+      "doctorHealthy": true,
+      "boundedCause": "Observed peer c22d5c6fd86c9610f9a779d2eadd98e9214047e0 feat(engine): implement bounded stack interrupts and ability repositioning (hv-umm2.97) landed after combinedbase. Its generator refresh changed628added/636deleted JSON lines and regrouped shared capability/entity/bead rows. Candidate2 reports only generated JSON conflict; authored draw code construction has no conflict. Prior inferred highestSpark label was corrected from actual Git log before native record/helper dispatch.",
+      "recovery": "Park only generated JSON to captured base, parentTGupdate, regenerate actualcombinedprojection, proportionatecombinedchecks; never submit checkpoint."
+    },
+    "rootUpdate3": "exit5/restored exact clean888; doctor healthy/no pending update block",
+    "parkedCheckpoint": "3f1c46fd0c46f7cf727a08c1ebdaaa2d480d736c, only generated JSON parked; never submitted or approved",
+    "rootUpdate4": {
+      "at": "2026-10-14T00:32:33.484619+00:00",
+      "checkpointBefore": "3f1c46fd0c46f7cf727a08c1ebdaaa2d480d736c",
+      "updatedCheckpoint": "7f2ef6f2f9898d42b6b320d2dbd881816b180b33",
+      "parentEqualsStaging": "c22d5c6fd86c9610f9a779d2eadd98e9214047e0",
+      "clean": true,
+      "doctorHealthy": true,
+      "noPendingWorktreeUpdateBlock": true,
+      "neverSubmitCheckpoint": true,
+      "scope": "Only generated projection parked; authored code auto-rebased without conflict."
+    },
+    "authoredSourceEditsForThisRecovery": false,
+    "peerPreservation": {
+      "at": "2026-10-14T00:33:33.635074+00:00",
+      "checkpoint": "7f2ef6f2f9898d42b6b320d2dbd881816b180b33",
+      "combinedBase": "c22d5c6fd86c9610f9a779d2eadd98e9214047e0",
+      "authoredEditsPerformed": false,
+      "peerPreservation": {
+        "src/engine/dsl/types.ts": "Reverse only optional draw filter equals exact latest parent bytes.",
+        "src/engine/triggers/matcher.ts": "Reverse only owned import/helper/draw-case replacement equals exact latest parent bytes; copy and other branches retained.",
+        "src/engine/dsl/triggers.ts": "Reverse only own whenDraw addition equals exact latest parent bytes.",
+        "scripts/content-inventory.ts": "Reverse only draw pending retirement equals exact latest parent bytes.",
+        "docs/rules.md": "Remove only own additive draw paragraph equals exact latest parent bytes."
+      },
+      "ownFiveFullBlobsMatchOriginal069": [
+        "src/content/dreamsigns/algae-49990864.ts",
+        "src/engine/effects/primitives/contracts/draw-trigger-filter.contracts.ts",
+        "docs/plan/evidence/pre-existing/hv-umm2.235.md",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.235-1.md",
+        "docs/plan/evidence/qa-ledger/hv-umm2.235.jsonl"
+      ],
+      "sharedHashes": {
+        "src/engine/dsl/types.ts": "2fbf502ddbca88056ade63ac0d4931aaed6666314c096da6d031f21ccfed9ef6",
+        "src/engine/triggers/matcher.ts": "b838a7708883e0014d1409b77c089e1160dce9e02119300eab576fdafde99fa4",
+        "src/engine/dsl/triggers.ts": "7bfff5c34788c7b43d95aba120221bc0f6740509d4993a8d76e82a86a225fc4b",
+        "scripts/content-inventory.ts": "dca7a8568698b26fd4a2939232adc77789961ccbbf3044d51c519b9d366b7af1",
+        "docs/rules.md": "c2020f71a6e0f4ae50c6c70ed952b96aac6926c075c62dd0cb31d565301fabee"
+      },
+      "inventoryPeerCapabilityDescriptorsPreservedExceptOwnDrawFilter": true,
+      "generatedProjectionQualification": "Full actual generator output: only own draw capability descriptor changes versus latest parent; seven derived entity records,57 regrouped bead projections and removal of one generated primitive-bead projection reflect current availability, without native reassignment/completion."
+    },
+    "latestCombinedChecks": {
+      "combined2-inventory-generate": {
+        "command": [
+          "npx",
+          "tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "startedAt": "2026-10-14T00:33:33.735611+00:00",
+        "endedAt": "2026-10-14T00:33:36.615918+00:00",
+        "wallS": 2.8804642080212943,
+        "userS": 3.041642,
+        "sysS": 0.762953,
+        "exitCode": 0,
+        "pid": 65662,
+        "pgid": 65662,
+        "hostLoadAtEnd": 17.96484375
+      },
+      "combined2-focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "drawTriggerFilter"
+        ],
+        "startedAt": "2026-10-14T00:33:46.477726+00:00",
+        "endedAt": "2026-10-14T00:33:54.565768+00:00",
+        "wallS": 8.088158166996436,
+        "userS": 6.781998,
+        "sysS": 2.344064,
+        "exitCode": 0,
+        "pid": 66806,
+        "pgid": 66794,
+        "hostLoadAtEnd": 16.5068359375
+      },
+      "combined2-inventory-tests": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "scripts/content-inventory.test.ts"
+        ],
+        "startedAt": "2026-10-14T00:33:54.599990+00:00",
+        "endedAt": "2026-10-14T00:34:03.942697+00:00",
+        "wallS": 9.34275991699542,
+        "userS": 11.226816,
+        "sysS": 2.4948799999999998,
+        "exitCode": 0,
+        "pid": 67569,
+        "pgid": 66794,
+        "hostLoadAtEnd": 15.185546875
+      },
+      "combined2-review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "startedAt": "2026-10-14T00:34:03.979422+00:00",
+        "endedAt": "2026-10-14T00:35:11.260163+00:00",
+        "wallS": 67.2803164999932,
+        "userS": 188.926722,
+        "sysS": 18.430171,
+        "exitCode": 0,
+        "pid": 68427,
+        "pgid": 66794,
+        "hostLoadAtEnd": 11.306640625
+      },
+      "combined2-knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "startedAt": "2026-10-14T00:35:11.285487+00:00",
+        "endedAt": "2026-10-14T00:35:14.618395+00:00",
+        "wallS": 3.3329131249920465,
+        "userS": 3.45458,
+        "sysS": 1.053282,
+        "exitCode": 0,
+        "pid": 73223,
+        "pgid": 66794,
+        "hostLoadAtEnd": 10.96142578125
+      }
+    },
+    "counts": {
+      "focused": 15,
+      "currentImporter": 94,
+      "reviewFiles": 299,
+      "reviewTests": 6472
+    },
+    "fullFuzzBrowserRerun": "None; independent generated-projection recovery preserves own authored behavior and all latest peer authored bytes. Current ordinary combined checks pass. Original069 weighted300/goldenQA and firstcombined888 checks remain explicitly historical.",
+    "finalGitEnd": "UNKNOWN: actual latest replacement Git endpoint retained externally in integration-2-final-git-receipt.json without a subsequent amend.",
+    "finalPreGitCutoff": "2026-10-14T00:37:40.816385+00:00"
+  }
+}

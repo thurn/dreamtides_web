@@ -1,0 +1,53 @@
+{
+  "bead": "hv-umm2.235",
+  "phase": 5,
+  "implementMin": 45.57728975,
+  "implementWindow": {
+    "start": "2026-10-13T23:52:06.179000+00:00",
+    "end": "2026-10-14T00:37:40.816385+00:00"
+  },
+  "localValidationS": {
+    "review": 62.13081970898202,
+    "knip": 4.331807916983962,
+    "focused": 8.361027250008192,
+    "inventory": 9.075833042006707,
+    "coverage": 4.987502042000415,
+    "preflight": 1.42326325000613,
+    "fuzzOriginalUnadmitted": 266.4517536669737,
+    "fuzzAdmittedOuter": 335.93123708301573,
+    "fuzzAdmittedChild": 261.1847278329951,
+    "sweep": 10.31862041700515,
+    "judgedFailed1": 54.11064020899357,
+    "judgedFailed2": 13.331495499995071,
+    "judgedFailed3": 15.836794167000335,
+    "judgedFinal": 49.01178950001486,
+    "combined-inventory-generate": 2.5088176659774035,
+    "combined-focused": 7.474536666995846,
+    "combined-inventory-tests": 8.89395195900579,
+    "combined-review": 75.07435854201321,
+    "combined-knip": 4.464278208004544,
+    "combined2-inventory-generate": 2.8804642080212943,
+    "combined2-focused": 8.088158166996436,
+    "combined2-inventory-tests": 9.34275991699542,
+    "combined2-review": 67.2803164999932,
+    "combined2-knip": 3.3329131249920465
+  },
+  "hostLoad": 8.46142578125,
+  "testDelta": {
+    "files": 1,
+    "lines": 197,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-admission",
+      "minutes": 10.3977653,
+      "note": "Implementer omitted mandatory outer lockf on the first actual passing weighted300. Root same-task justiciar preserved D17 and reran exact300 under machine-wide heavy lock successfully. Actual00:06:33.682Z\u219200:16:57.547918Z inclusive incident includes diagnosis, remaining normal QA settlement, parent proofs, admission/startup, admitted execution and collection; not pure queue or CPU. Details/unknown pure lock wait in measurements."
+    },
+    {
+      "tag": "generated-inventory-integration",
+      "minutes": 14.250843116666665,
+      "note": "Observed first conflict snapshot at 2026-10-14T00:21:30.464253+00:00 through latest combined-check/evidence cutoff 2026-10-14T00:35:45.514840+00:00. Includes two native candidate/update recoveries, coordination, temporary projection parking, regeneration and proportionate combined checks; not pure merge CPU or queue wait. First conflict included independent draw type/matcher additions; second collided only in generated inventory after peer97. Root-only TG updates and exact peer-byte preservation resolved both without semantic edges or scope widening. Original069/combined888 receipts remain historical."
+    }
+  ]
+}

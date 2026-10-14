@@ -2134,6 +2134,15 @@ matching materialization after the first. The count only grows during a
 turn, so a materialization that was not the first is still not the first
 as the ability resolves.
 
+**When you draw a matching card:** An ability such as "When you draw a
+character" matches the card by its characteristics as it arrives in hand.
+A nonmatching draw does not use that ability's once-per-turn allowance. A
+matching draw uses the allowance when the ability triggers, so another
+matching card drawn in the same instruction does not trigger it again.
+"It" refers to that same physical card as the ability resolves. A numbered
+draw is counted among all of that player's cards drawn this turn; a stated
+card restriction is an additional requirement on that draw.
+
 **Intervening conditions:** A triggered ability written "When X, if Y, …", or
 "▸Dawn: If Y, …", triggers only if Y is true when X happens, and when it
 resolves it does nothing unless Y is still true.
