@@ -1,0 +1,488 @@
+{
+  "bead": "hv-s5on",
+  "base": "1a45c0cc89a5725b5e99cd5c088a52450e4c30dd",
+  "dispatch": {
+    "dispatchEnvelopeUtc": "2026-10-14T11:35:08.128347+00:00",
+    "semantics": "Spawn occurred within these retained envelope/return bounds; inclusive timing uses earlier bound conservatively, not an invented precise tool timestamp",
+    "spawnReturnedUtc": "2026-10-14T11:35:44.995584+00:00",
+    "agent": "/root/candidate_context_s5on",
+    "actualToolCallId": "not exposed by tool result"
+  },
+  "boundary": {
+    "precommitBoundaryEnd": "2026-10-14T11:42:05.979178+00:00",
+    "inclusiveMinutes": 6.9641805166666675,
+    "qualification": "Conservative earlier dispatch-envelope bound includes at most 36.867237 s of parent brief/dispatch envelope before spawn return; exact tool-call timestamp unavailable. This boundary precedes final schema/whitespace/automatic Git. Parent retains actual Git start/end and external boundary delta; no postcommit timestamp rewrite.",
+    "cpuTime": "UNKNOWN",
+    "modelSamplingTime": "UNKNOWN",
+    "productiveEditingTime": "UNKNOWN",
+    "queueIdleAttribution": "UNKNOWN"
+  },
+  "parentPreparation": {
+    "npmInstallSeconds": 2.5932737500115763,
+    "prepareWorkspaceSeconds": 3.45912570800283,
+    "scope": "Post-claim parent worktree setup before dispatch envelope; separate from helper window"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-2 launch",
+        "value": 2.61279296875
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "knip-1",
+      "at": "2026-10-14T11:38:34.407684+00:00",
+      "load": [
+        2.59521484375,
+        4.1494140625,
+        4.59228515625
+      ]
+    },
+    {
+      "label": "review-1",
+      "at": "2026-10-14T11:38:29.676812+00:00",
+      "load": [
+        2.6474609375,
+        4.18603515625,
+        4.60791015625
+      ]
+    },
+    {
+      "label": "review-2",
+      "at": "2026-10-14T11:40:11.079113+00:00",
+      "load": [
+        2.61279296875,
+        3.7939453125,
+        4.4072265625
+      ]
+    },
+    {
+      "label": "schema-1",
+      "at": "2026-10-14T11:39:16.903919+00:00",
+      "load": [
+        3.01953125,
+        4.07177734375,
+        4.54150390625
+      ]
+    },
+    {
+      "label": "schema-2",
+      "at": "2026-10-14T11:40:11.671053+00:00",
+      "load": [
+        2.61279296875,
+        3.7939453125,
+        4.4072265625
+      ]
+    },
+    {
+      "label": "shell-syntax-1",
+      "at": "2026-10-14T11:38:42.748954+00:00",
+      "load": [
+        2.9775390625,
+        4.17724609375,
+        4.5966796875
+      ]
+    },
+    {
+      "label": "whitespace-1",
+      "at": "2026-10-14T11:39:17.302288+00:00",
+      "load": [
+        3.01953125,
+        4.07177734375,
+        4.54150390625
+      ]
+    },
+    {
+      "label": "whitespace-2",
+      "at": "2026-10-14T11:40:12.065629+00:00",
+      "load": [
+        2.61279296875,
+        3.7939453125,
+        4.4072265625
+      ]
+    }
+  ],
+  "scope": {
+    "source": [
+      "docs/plan/workflow.md: Collect a result candidate submission and authority context"
+    ],
+    "evidence": [
+      "docs/plan/evidence/friction/hv-s5on.json",
+      "docs/plan/evidence/measurements/hv-s5on.md",
+      "docs/plan/evidence/measurements/hv-s5on.json"
+    ],
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "fallout": [],
+    "runtimeChanged": false,
+    "preExistingIssues": []
+  },
+  "recurrence": [
+    {
+      "bead": "hv-umm2.614",
+      "candidate": "01a138e0-8484-7a20-9205-324926475f85",
+      "sourceOID": "f4bd62a97a2f7ab273def6740acc1a06d914cf37",
+      "testedOID": "3cf50d1fcc8dfaaca34300f33779c8367dd52dad",
+      "context": "master / primary checkout",
+      "outcome": "promoted; candidate cleanup not-eligible; source owner separately removed only its owned source worktree through Tollgate",
+      "classification": "Parent invocation error; not a source, CI or Tollgate product defect"
+    },
+    {
+      "bead": "hv-6yev",
+      "mistakenCandidate": "01a139c8-3601-7fe3-a3dc-c8eea623fee7",
+      "correctCandidate": "01a139c9-5290-7541-8759-197f025c07cb",
+      "sourceOID": "b01fb5a8efe8dbaeff9c1a2c7da7dc751a763f81",
+      "outcome": "Mistaken primary-context candidate canceled before authority; same immutable source resubmitted from owned source worktree and promoted with automatic cleanup completed",
+      "classification": "Parent invocation error; exact same source on both submissions"
+    }
+  ],
+  "provenance": {
+    "foundBy": "hv-quq1",
+    "retainedAudit": "docs/plan/evidence/measurements/hv-quq1.md and .json; native brief /tmp/root-s5on/brief.json",
+    "directNativeShapeCheck": [
+      "/tmp/root-q331/candidate.stdout",
+      "/tmp/root-q331/preapprove.stdout",
+      "/tmp/root-q331/promoted.stdout"
+    ],
+    "directNativeShapeSHA256": {
+      "candidate.stdout": "1fc1e6c669cee3ee2ee10c05ba87b8708bef048dabbfe388d8961d4d0b010af0",
+      "preapprove.stdout": "0ee77529383b7b90c044a4c65ce3e0ee37dc2327c7ae2b2bdd14d669bf8022ae",
+      "promoted.stdout": "6a1454b8d4891d312366281e173f2e5b574986ba01803be4f8440bd6fbbfd609"
+    },
+    "observedNativeFields": [
+      "Submission item_id/source_oid/tested_oid",
+      "Status item.id/item.metadata.worktree_path/item.metadata.branch/item.source_oid.bytes",
+      "Certificate tested_oid"
+    ],
+    "initialSourceManifestSHA256": "8343fa444f0144d11a2954ba3d01ea498314cd5ba3748a9a085c078eb80fb32a",
+    "initialSourcePaths": 4825,
+    "sourceCensusQualification": "Parent initial manifest covers git-listed paths. Collector additionally includes ignored src/scripts materializations: existing generated src/cumulus/primitives/tokens.ts is identical before and after every check, SHA256 9815136f280f2a6fe9f55e9da497e756e84afe7d03e99d45e1f21e91e5629640. Initial freeze assertion incorrectly compared these different domains, then corrected to preserve every initial path and separately freeze the additional generated materialization.",
+    "collectorSHA256": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+    "evidenceWriterSHA256": "e1531e2aefabce86af2999430c8e6b0e955344b89fb23708390dd43ce6975d02",
+    "workflowSHA256": "3ba4e8bec59f9053092da08a1d92be871304650e06f1c061f972842497b307b4",
+    "receiptDirectory": "/tmp/root-s5on/helper"
+  },
+  "checks": [
+    {
+      "afterSHA256": "0eb92152d1cb15ed867bd58f0e9396d9abce65bf1d82299a5dd5ba12fa7f0ed2",
+      "beforeSHA256": "0eb92152d1cb15ed867bd58f0e9396d9abce65bf1d82299a5dd5ba12fa7f0ed2",
+      "changedPaths": [],
+      "childReaped": true,
+      "collectorSHA256": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "collectorSHA256After": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/candidate-context-s5on",
+      "elapsedSeconds": 5.551318582991371,
+      "end": "2026-10-14T11:38:39.976266+00:00",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "exitCode": 0,
+      "head": "1a45c0cc89a5725b5e99cd5c088a52450e4c30dd",
+      "hostLoad": [
+        2.59521484375,
+        4.1494140625,
+        4.59228515625
+      ],
+      "label": "knip-1",
+      "manifestFiles": 4829,
+      "pgid": 39729,
+      "pid": 39729,
+      "remainingGroup": [],
+      "start": "2026-10-14T11:38:34.407684+00:00",
+      "status": "A  docs/plan/evidence/friction/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.md\nM  docs/plan/workflow.md",
+      "stderrSHA256": "37a7822b4d03b05443243ddfbf03d854677dd2e749624a7c66d08f0829120c30",
+      "stdoutSHA256": "5917cdf606797af4266ae8f028b305dbafded7fee1dc7883b19fa2b3b4b7c009",
+      "wrapperPid": 39709,
+      "receiptSHA256": "a9b63036abb434360141b5619051c51e7839b7ca83c0a210c6714640a59f7478"
+    },
+    {
+      "afterSHA256": "0eb92152d1cb15ed867bd58f0e9396d9abce65bf1d82299a5dd5ba12fa7f0ed2",
+      "beforeSHA256": "0eb92152d1cb15ed867bd58f0e9396d9abce65bf1d82299a5dd5ba12fa7f0ed2",
+      "changedPaths": [],
+      "childReaped": true,
+      "collectorSHA256": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "collectorSHA256After": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/candidate-context-s5on",
+      "elapsedSeconds": 0.293156416999409,
+      "end": "2026-10-14T11:38:29.992817+00:00",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "exitCode": 0,
+      "head": "1a45c0cc89a5725b5e99cd5c088a52450e4c30dd",
+      "hostLoad": [
+        2.6474609375,
+        4.18603515625,
+        4.60791015625
+      ],
+      "label": "review-1",
+      "manifestFiles": 4829,
+      "pgid": 39595,
+      "pid": 39595,
+      "remainingGroup": [],
+      "start": "2026-10-14T11:38:29.676812+00:00",
+      "status": "A  docs/plan/evidence/friction/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.md\nM  docs/plan/workflow.md",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSHA256": "ad0a171ece5d553e6f2cadf04b8cfd3f037c623451fc08cf1db2d1ada176d635",
+      "wrapperPid": 39569,
+      "receiptSHA256": "44a24a88d44246d70a04f13d2ca6258519321c1fecb4fb7daae6a57bc3b39369"
+    },
+    {
+      "afterSHA256": "a2454a877358bc46314658d275bb074fdac608572ff7f08f04df553d14dae31e",
+      "beforeSHA256": "a2454a877358bc46314658d275bb074fdac608572ff7f08f04df553d14dae31e",
+      "changedPaths": [],
+      "childReaped": true,
+      "collectorSHA256": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "collectorSHA256After": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/candidate-context-s5on",
+      "elapsedSeconds": 0.22377720798249356,
+      "end": "2026-10-14T11:40:11.319972+00:00",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "exitCode": 0,
+      "head": "1a45c0cc89a5725b5e99cd5c088a52450e4c30dd",
+      "hostLoad": [
+        2.61279296875,
+        3.7939453125,
+        4.4072265625
+      ],
+      "label": "review-2",
+      "manifestFiles": 4829,
+      "pgid": 41170,
+      "pid": 41170,
+      "remainingGroup": [],
+      "start": "2026-10-14T11:40:11.079113+00:00",
+      "status": "A  docs/plan/evidence/friction/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.md\nM  docs/plan/workflow.md",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSHA256": "77e909275f4457ff7dd5a265db738597521c4665bbef0619b282569c0e4a8bb5",
+      "wrapperPid": 41156,
+      "receiptSHA256": "fd91608b7a0535899ae44a715083e34a8e7304d9ced154ea7a7c13779416a68d"
+    },
+    {
+      "afterSHA256": "a2454a877358bc46314658d275bb074fdac608572ff7f08f04df553d14dae31e",
+      "beforeSHA256": "a2454a877358bc46314658d275bb074fdac608572ff7f08f04df553d14dae31e",
+      "changedPaths": [],
+      "childReaped": true,
+      "collectorSHA256": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "collectorSHA256After": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/candidate-context-s5on",
+      "elapsedSeconds": 0.05779983298270963,
+      "end": "2026-10-14T11:39:16.980006+00:00",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "exitCode": 0,
+      "head": "1a45c0cc89a5725b5e99cd5c088a52450e4c30dd",
+      "hostLoad": [
+        3.01953125,
+        4.07177734375,
+        4.54150390625
+      ],
+      "label": "schema-1",
+      "manifestFiles": 4829,
+      "pgid": 40411,
+      "pid": 40411,
+      "remainingGroup": [],
+      "start": "2026-10-14T11:39:16.903919+00:00",
+      "status": "A  docs/plan/evidence/friction/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.md\nM  docs/plan/workflow.md",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSHA256": "3d62f67cb5334b07df9396ae4d55f355452dff58b37356b259a1ec8f52224ea4",
+      "wrapperPid": 40407,
+      "receiptSHA256": "b0fa4241892568f1954e1df9231a71caf0abe2c745729019c770cb7fbb59ea53"
+    },
+    {
+      "afterSHA256": "adf4ae67f725ff8b1e55f9230f21e471c460a0cfdacf0668ce5427471d6cd391",
+      "beforeSHA256": "adf4ae67f725ff8b1e55f9230f21e471c460a0cfdacf0668ce5427471d6cd391",
+      "changedPaths": [],
+      "childReaped": true,
+      "collectorSHA256": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "collectorSHA256After": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/candidate-context-s5on",
+      "elapsedSeconds": 0.05725949999759905,
+      "end": "2026-10-14T11:40:11.745848+00:00",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "exitCode": 0,
+      "head": "1a45c0cc89a5725b5e99cd5c088a52450e4c30dd",
+      "hostLoad": [
+        2.61279296875,
+        3.7939453125,
+        4.4072265625
+      ],
+      "label": "schema-2",
+      "manifestFiles": 4829,
+      "pgid": 41252,
+      "pid": 41252,
+      "remainingGroup": [],
+      "start": "2026-10-14T11:40:11.671053+00:00",
+      "status": "A  docs/plan/evidence/friction/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.md\nM  docs/plan/workflow.md",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSHA256": "3d62f67cb5334b07df9396ae4d55f355452dff58b37356b259a1ec8f52224ea4",
+      "wrapperPid": 41248,
+      "receiptSHA256": "2b3f6aeaca648375c39aeb5a03354f74caef17528c0a9152ca13b55eb1619720"
+    },
+    {
+      "afterSHA256": "0eb92152d1cb15ed867bd58f0e9396d9abce65bf1d82299a5dd5ba12fa7f0ed2",
+      "beforeSHA256": "0eb92152d1cb15ed867bd58f0e9396d9abce65bf1d82299a5dd5ba12fa7f0ed2",
+      "changedPaths": [],
+      "childReaped": true,
+      "collectorSHA256": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "collectorSHA256After": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "command": [
+        "sh",
+        "-n",
+        "/tmp/root-s5on/helper/candidate-recipe.sh"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/candidate-context-s5on",
+      "elapsedSeconds": 0.0037444999907165766,
+      "end": "2026-10-14T11:38:42.770640+00:00",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "exitCode": 0,
+      "head": "1a45c0cc89a5725b5e99cd5c088a52450e4c30dd",
+      "hostLoad": [
+        2.9775390625,
+        4.17724609375,
+        4.5966796875
+      ],
+      "label": "shell-syntax-1",
+      "manifestFiles": 4829,
+      "pgid": 39971,
+      "pid": 39971,
+      "remainingGroup": [],
+      "start": "2026-10-14T11:38:42.748954+00:00",
+      "status": "A  docs/plan/evidence/friction/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.md\nM  docs/plan/workflow.md",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wrapperPid": 39955,
+      "receiptSHA256": "70a7a2185cf1c18629930f3cd57ed8812511aa99a842d6552c155d8fc70b2573"
+    },
+    {
+      "afterSHA256": "a2454a877358bc46314658d275bb074fdac608572ff7f08f04df553d14dae31e",
+      "beforeSHA256": "a2454a877358bc46314658d275bb074fdac608572ff7f08f04df553d14dae31e",
+      "changedPaths": [],
+      "childReaped": true,
+      "collectorSHA256": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "collectorSHA256After": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/candidate-context-s5on",
+      "elapsedSeconds": 0.005761959007941186,
+      "end": "2026-10-14T11:39:17.325847+00:00",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "exitCode": 0,
+      "head": "1a45c0cc89a5725b5e99cd5c088a52450e4c30dd",
+      "hostLoad": [
+        3.01953125,
+        4.07177734375,
+        4.54150390625
+      ],
+      "label": "whitespace-1",
+      "manifestFiles": 4829,
+      "pgid": 40434,
+      "pid": 40434,
+      "remainingGroup": [],
+      "start": "2026-10-14T11:39:17.302288+00:00",
+      "status": "A  docs/plan/evidence/friction/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.md\nM  docs/plan/workflow.md",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wrapperPid": 40416,
+      "receiptSHA256": "d3134b94ef03dc458c2651443cda8af147ad965f85b11d4ea531590a8aa3b642"
+    },
+    {
+      "afterSHA256": "adf4ae67f725ff8b1e55f9230f21e471c460a0cfdacf0668ce5427471d6cd391",
+      "beforeSHA256": "adf4ae67f725ff8b1e55f9230f21e471c460a0cfdacf0668ce5427471d6cd391",
+      "changedPaths": [],
+      "childReaped": true,
+      "collectorSHA256": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "collectorSHA256After": "e06490771e4c771e292281a136e2d9f86fbbfe6ce0a2a7a531348556a576f7aa",
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/candidate-context-s5on",
+      "elapsedSeconds": 0.005863791011506692,
+      "end": "2026-10-14T11:40:12.088975+00:00",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "exitCode": 0,
+      "head": "1a45c0cc89a5725b5e99cd5c088a52450e4c30dd",
+      "hostLoad": [
+        2.61279296875,
+        3.7939453125,
+        4.4072265625
+      ],
+      "label": "whitespace-2",
+      "manifestFiles": 4829,
+      "pgid": 41264,
+      "pid": 41264,
+      "remainingGroup": [],
+      "start": "2026-10-14T11:40:12.065629+00:00",
+      "status": "A  docs/plan/evidence/friction/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.json\nA  docs/plan/evidence/measurements/hv-s5on.md\nM  docs/plan/workflow.md",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wrapperPid": 41255,
+      "receiptSHA256": "91456d7bb05fa8f067174fce55089938a955e2fbf6d5bb892a1956977f1c359c"
+    }
+  ],
+  "verificationQualification": "Documentation-only: required diff-aware review and Knip, final schema/whitespace and shell syntax inspection. No tests added for prose; no candidate command executed by helper; no real submission/cancellation side effects fabricated. Parent owns exact-candidate delivery.",
+  "readOnlyInvocationSlips": [
+    "One broad scratch rg included large raw profile JSON and produced truncated output; narrowed to exact q331 retained native response files. No mutation or uncertain external effect.",
+    "Two guessed scratch artifact names were absent; explicit file inventory located actual .stdout files. Reads only.",
+    "First freeze assertion mixed git-listed and expanded ignored-source domains; diagnosed one stable generated tokens.ts extra. No forbidden source changed; corrected comparison without changing generated file."
+  ],
+  "resources": {
+    "persistentProcesses": [],
+    "browserContexts": [],
+    "ports": [],
+    "qaPort": "5186 UNUSED",
+    "qaCaptures": [],
+    "heavyCommands": [],
+    "reviewProvider": "None required: docs-only non-core bead; no code review debt created.",
+    "checkGroups": "Every retained check receipt proves actual child reaping and an empty observed process group; final Git receipt retained separately."
+  },
+  "rulesDecisions": [],
+  "cardIssues": []
+}

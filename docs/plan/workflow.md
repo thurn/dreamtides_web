@@ -802,22 +802,69 @@ When a subagent returns:
      submitting. Every path names a test that exists in the commit, or gives
      a reason no test applies. A missing or thin list goes back to the
      subagent, in the same worktree, before submission.
-2. **Submit and approve:**
+2. **Submit and verify the context.** Use the canonical absolute worktree
+   path and exact branch returned when this session created its Tollgate
+   worktree, and the implementer's full commit OID. Replace the placeholders
+   before running this subshell:
 
    ```sh
-   tg --no-launch --json candidate <oid>
-   tg --no-launch approve <candidate-id>
+   (
+     set -eu
+     WORKTREE='<owned worktree absolute path>'
+     BRANCH='<owned worktree branch>'
+     SOURCE_OID='<reported full commit OID>'
+     cd "$WORKTREE"
+     test "$(pwd -P)" = "$WORKTREE"
+     test "$(git rev-parse --show-toplevel)" = "$WORKTREE"
+     test "$(git branch --show-current)" = "$BRANCH"
+     SOURCE_STATUS="$(git status --porcelain)"
+     test -z "$SOURCE_STATUS"
+     test "$(git rev-parse HEAD)" = "$SOURCE_OID"
+     tg --no-launch --json candidate "$SOURCE_OID"
+   )
    ```
 
-   This plan grants promotion authority for in-scope work and in-scope CI
-   repairs.
+   The candidate command's actual process directory must be this owned source
+   worktree. An OID or `git -C` on a separate command does not select the
+   candidate's worktree context. Retain the response's `item_id` and
+   `source_oid`, then inspect that exact candidate from the durable primary
+   repository directory:
+
+   ```sh
+   cd /Users/dthurn/dreamtides_web
+   tg --no-launch --json status <candidate-id>
+   ```
+
+   Before granting authority, require an active candidate with
+   `item.promotion_authorized=false`, `item.id` to match the returned ID,
+   `item.metadata.worktree_path` and `item.metadata.branch` to match this
+   session's owned worktree and branch, and `item.source_oid.bytes` to equal
+   the submitted full OID. The submission response alone does not expose the
+   worktree metadata. Recheck that the owned worktree is clean and its branch
+   and `HEAD` still match. Keep the source OID distinct from the eventual
+   certificate's `tested_oid`: Tollgate may test an integrated queue prefix.
+
+   If the context differs, do not authorize that candidate. Retain its exact
+   ID, source and metadata. If it already has authority, is terminal, or an
+   effect's outcome is uncertain, inspect and diagnose retained native state
+   before proceeding. Only for this session's exact active, unauthorized
+   mistaken candidate, invoke `tg --no-launch cancel <candidate-id>` once.
+   Inspect its terminal status and require confirmed cancellation or another
+   diagnosed safe outcome before resubmitting the same immutable source from
+   the correct worktree. An uncertain cancellation result requires reading
+   native state before repeating an effect. Never cancel another session's
+   candidate or clean up the primary checkout to repair this invocation error.
 3. **Start the review** in the background if the bead is core-review
    ([Reviews](#reviews)), using the current review routing.
 4. **Record** the candidate in the bead notes.
-5. **Wait for the gate** (D43): run
+5. **Authorize and wait for the gate** (D43), after the context checks above.
+   This plan grants promotion authority for in-scope work and in-scope CI
+   repairs. From the durable primary repository directory, run
    `tg --no-launch approve <candidate-id> --wait` as a background command and
-   resume when it exits. Then read `tg --no-launch --json status
-   <candidate-id>` and handle the outcome below.
+   resume when it exits. Keep authorization, status and waits rooted there:
+   Tollgate can automatically remove the owned source worktree on promotion.
+   Then read `tg --no-launch --json status <candidate-id>` and handle the
+   outcome below.
 
 ### Candidate outcomes
 

@@ -1,0 +1,20 @@
+{
+  "bead": "hv-s5on",
+  "phase": 5,
+  "implementMin": 6.9641805166666675,
+  "implementWindow": {
+    "start": "2026-10-14T11:35:08.128347+00:00",
+    "end": "2026-10-14T11:42:05.979178+00:00"
+  },
+  "localValidationS": {
+    "knip": 5.551318582991371,
+    "review": 0.22377720798249356
+  },
+  "hostLoad": 2.61279296875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
