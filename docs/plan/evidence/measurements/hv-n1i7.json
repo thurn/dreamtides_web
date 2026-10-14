@@ -1,0 +1,578 @@
+{
+  "bead": "hv-n1i7",
+  "status": "Local implementation acceptance complete; normal cold cross-family review and Tollgate delivery pending.",
+  "base": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+  "originalProvenance": {
+    "bead": "hv-umm2.236",
+    "source": "ad39d0f812ad5f3996f22e2e896953e7cbf046f0",
+    "base": "fd70feb0b8872f600881446c50b778aa6e822271",
+    "review": "Normal independent Claude Opus 5.5 source review; temporary Sol override expired before this follow-up."
+  },
+  "implementationWindow": {
+    "start": "2026-10-14T07:13:31.471Z",
+    "end": "2026-10-14T07:44:15.166938+00:00",
+    "seconds": 1843.695938,
+    "basis": "Actual post-claim helper dispatch through the observed automatic precommit boundary, including research, admission, coordination, waits and verification. The external final-git receipt records actual Git start/end and the boundary difference. Model sampling start is unknown; pre-dispatch setup is excluded."
+  },
+  "windowEndpointStatus": "The recorded end is the observed automatic precommit boundary for this commit. Actual Git start/end and boundary differences are retained in the external final-git receipt. Normal cold cross-family review runs after Git, is measured separately, and is not added retroactively to implementation time.",
+  "sourceFiles": {
+    "src/engine/triggers/rule-reactions.ts": "22fe6791db4c9eff38268c4465e268dd980b06ff6b1f028f914432ddd516f274",
+    "src/engine/view/view.ts": "e54f1fc1cec2f5083545f0fab130f0a77c52c433654130d839e2892515a90980",
+    "src/engine/view/determinize.ts": "d0800e3b695264a244f54b60cdf9bdf2751728e46f9c574985995ef4cd95aef2",
+    "src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts": "fbb61fa7be11508093931e4b73698fb68afb2636fc7ac9237cd502fd0867af17",
+    "src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts": "a12dbf99a90be1a86a80ef4b5ca79e357abf9e7adbcfd385ddf4eaf8d8fd21d5"
+  },
+  "sourceDelta": {
+    "productionAndHeader": {
+      "files": 3,
+      "insertions": 36,
+      "deletions": 6
+    },
+    "newContracts": {
+      "files": 2,
+      "lines": 220,
+      "cases": 34
+    },
+    "falloutFiles": []
+  },
+  "commands": {
+    "old-focused-v1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "rule reaction observation containment|rule route projection privacy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:23:45.600096+00:00",
+      "ended": "2026-10-14T07:23:52.552040+00:00",
+      "elapsed_seconds": 6.951755582995247,
+      "pid": 21713,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": "?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "f40d3953a104c7debabcddff587049a47ca0ab92bf6df87191077b353fab888d",
+      "after_sha256": "f40d3953a104c7debabcddff587049a47ca0ab92bf6df87191077b353fab888d",
+      "stdout": "/tmp/root-n1i7/helper/old-focused-v1.stdout",
+      "stderr": "/tmp/root-n1i7/helper/old-focused-v1.stderr",
+      "receipt": "/tmp/root-n1i7/helper/old-focused-v1.receipt.json"
+    },
+    "old-focused-v2": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "rule reaction observation containment|rule route projection privacy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:24:26.766895+00:00",
+      "ended": "2026-10-14T07:24:31.737576+00:00",
+      "elapsed_seconds": 4.97050979200867,
+      "pid": 22420,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": "?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "4ccbfa8ad71f491e83d160ddd8e72865448dbbef689f1fd7c586013d32814304",
+      "after_sha256": "4ccbfa8ad71f491e83d160ddd8e72865448dbbef689f1fd7c586013d32814304",
+      "stdout": "/tmp/root-n1i7/helper/old-focused-v2.stdout",
+      "stderr": "/tmp/root-n1i7/helper/old-focused-v2.stderr",
+      "receipt": "/tmp/root-n1i7/helper/old-focused-v2.receipt.json"
+    },
+    "repaired-focused-v1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "rule reaction observation containment|rule route projection privacy|ruleModifier"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:25:14.188644+00:00",
+      "ended": "2026-10-14T07:25:19.259197+00:00",
+      "elapsed_seconds": 5.070381290977821,
+      "pid": 23145,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "c8789f2fedfb2f573da8045eda0fa760feafe48f236766febe23119772d93604",
+      "after_sha256": "c8789f2fedfb2f573da8045eda0fa760feafe48f236766febe23119772d93604",
+      "stdout": "/tmp/root-n1i7/helper/repaired-focused-v1.stdout",
+      "stderr": "/tmp/root-n1i7/helper/repaired-focused-v1.stderr",
+      "receipt": "/tmp/root-n1i7/helper/repaired-focused-v1.receipt.json"
+    },
+    "typecheck-v1": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:25:25.901410+00:00",
+      "ended": "2026-10-14T07:25:36.998748+00:00",
+      "elapsed_seconds": 11.09716775000561,
+      "pid": 23370,
+      "exit_code": 2,
+      "child_reaped": true,
+      "changed_paths": [],
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "c8789f2fedfb2f573da8045eda0fa760feafe48f236766febe23119772d93604",
+      "after_sha256": "c8789f2fedfb2f573da8045eda0fa760feafe48f236766febe23119772d93604",
+      "stdout": "/tmp/root-n1i7/helper/typecheck-v1.stdout",
+      "stderr": "/tmp/root-n1i7/helper/typecheck-v1.stderr",
+      "receipt": "/tmp/root-n1i7/helper/typecheck-v1.receipt.json"
+    },
+    "typecheck-v2": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:25:53.054042+00:00",
+      "ended": "2026-10-14T07:25:56.632712+00:00",
+      "elapsed_seconds": 3.5784906250191852,
+      "pid": 23866,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "767a96eaba06b1528babaa3fa6f09dde83f573be8eeadff82800d08236742db6",
+      "after_sha256": "767a96eaba06b1528babaa3fa6f09dde83f573be8eeadff82800d08236742db6",
+      "stdout": "/tmp/root-n1i7/helper/typecheck-v2.stdout",
+      "stderr": "/tmp/root-n1i7/helper/typecheck-v2.stderr",
+      "receipt": "/tmp/root-n1i7/helper/typecheck-v2.receipt.json"
+    },
+    "lint-v1": {
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:26:01.606687+00:00",
+      "ended": "2026-10-14T07:26:06.714476+00:00",
+      "elapsed_seconds": 5.107605041994248,
+      "pid": 24141,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "767a96eaba06b1528babaa3fa6f09dde83f573be8eeadff82800d08236742db6",
+      "after_sha256": "767a96eaba06b1528babaa3fa6f09dde83f573be8eeadff82800d08236742db6",
+      "stdout": "/tmp/root-n1i7/helper/lint-v1.stdout",
+      "stderr": "/tmp/root-n1i7/helper/lint-v1.stderr",
+      "receipt": "/tmp/root-n1i7/helper/lint-v1.receipt.json"
+    },
+    "lint-v2": {
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:26:19.381893+00:00",
+      "ended": "2026-10-14T07:26:23.823498+00:00",
+      "elapsed_seconds": 4.441431666025892,
+      "pid": 24424,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "fc031d9af2c7b3f6b23ef80c87817c19b38a20bd724322b97e237e9428d11995",
+      "after_sha256": "fc031d9af2c7b3f6b23ef80c87817c19b38a20bd724322b97e237e9428d11995",
+      "stdout": "/tmp/root-n1i7/helper/lint-v2.stdout",
+      "stderr": "/tmp/root-n1i7/helper/lint-v2.stderr",
+      "receipt": "/tmp/root-n1i7/helper/lint-v2.receipt.json"
+    },
+    "typecheck-v3": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:26:38.828602+00:00",
+      "ended": "2026-10-14T07:26:42.383434+00:00",
+      "elapsed_seconds": 3.554640083020786,
+      "pid": 24754,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "fc031d9af2c7b3f6b23ef80c87817c19b38a20bd724322b97e237e9428d11995",
+      "after_sha256": "fc031d9af2c7b3f6b23ef80c87817c19b38a20bd724322b97e237e9428d11995",
+      "stdout": "/tmp/root-n1i7/helper/typecheck-v3.stdout",
+      "stderr": "/tmp/root-n1i7/helper/typecheck-v3.stderr",
+      "receipt": "/tmp/root-n1i7/helper/typecheck-v3.receipt.json"
+    },
+    "repaired-focused-v2": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "rule reaction observation containment|rule route projection privacy|ruleModifier"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:26:46.668426+00:00",
+      "ended": "2026-10-14T07:26:51.736540+00:00",
+      "elapsed_seconds": 5.067928333010059,
+      "pid": 24976,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "fc031d9af2c7b3f6b23ef80c87817c19b38a20bd724322b97e237e9428d11995",
+      "after_sha256": "fc031d9af2c7b3f6b23ef80c87817c19b38a20bd724322b97e237e9428d11995",
+      "stdout": "/tmp/root-n1i7/helper/repaired-focused-v2.stdout",
+      "stderr": "/tmp/root-n1i7/helper/repaired-focused-v2.stderr",
+      "receipt": "/tmp/root-n1i7/helper/repaired-focused-v2.receipt.json"
+    },
+    "review-v1": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:30:54.416940+00:00",
+      "ended": "2026-10-14T07:31:55.830756+00:00",
+      "elapsed_seconds": 61.4108682499791,
+      "pid": 28207,
+      "pgid": 28207,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "254070cb9fa0e388209ceadd3f7cdc96092f54c86728b40ef021d79933f1fafe",
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "e658509ad87fc553a99c4e1ea8ad2c476b4f7e604155210d27cf2374c190b56c",
+      "after_sha256": "e658509ad87fc553a99c4e1ea8ad2c476b4f7e604155210d27cf2374c190b56c",
+      "stdout": "/tmp/root-n1i7/helper/review-v1.stdout",
+      "stderr": "/tmp/root-n1i7/helper/review-v1.stderr",
+      "receipt": "/tmp/root-n1i7/helper/review-v1.receipt.json"
+    },
+    "knip-v1": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:32:02.759760+00:00",
+      "ended": "2026-10-14T07:32:06.589476+00:00",
+      "elapsed_seconds": 3.829556250013411,
+      "pid": 29190,
+      "pgid": 29190,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "254070cb9fa0e388209ceadd3f7cdc96092f54c86728b40ef021d79933f1fafe",
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "e658509ad87fc553a99c4e1ea8ad2c476b4f7e604155210d27cf2374c190b56c",
+      "after_sha256": "e658509ad87fc553a99c4e1ea8ad2c476b4f7e604155210d27cf2374c190b56c",
+      "stdout": "/tmp/root-n1i7/helper/knip-v1.stdout",
+      "stderr": "/tmp/root-n1i7/helper/knip-v1.stderr",
+      "receipt": "/tmp/root-n1i7/helper/knip-v1.receipt.json"
+    },
+    "full-v1": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:32:13.219704+00:00",
+      "ended": "2026-10-14T07:34:03.222677+00:00",
+      "elapsed_seconds": 110.00241149999783,
+      "pid": 29397,
+      "pgid": 29397,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "254070cb9fa0e388209ceadd3f7cdc96092f54c86728b40ef021d79933f1fafe",
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "e658509ad87fc553a99c4e1ea8ad2c476b4f7e604155210d27cf2374c190b56c",
+      "after_sha256": "e658509ad87fc553a99c4e1ea8ad2c476b4f7e604155210d27cf2374c190b56c",
+      "stdout": "/tmp/root-n1i7/helper/full-v1.stdout",
+      "stderr": "/tmp/root-n1i7/helper/full-v1.stderr",
+      "receipt": "/tmp/root-n1i7/helper/full-v1.receipt.json"
+    },
+    "weighted300-v1": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "d2a916c1-321a-4ae3-9a50-0b7f13c5eff6,05f69d01-f8a3-4044-b7cd-0bfd9ed980cd,6f4e2d9f-38a4-4f6a-8fde-7d942977a6df"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:34:11.025000+00:00",
+      "ended": "2026-10-14T07:38:57.379131+00:00",
+      "elapsed_seconds": 286.35280666698236,
+      "pid": 59813,
+      "pgid": 59813,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "254070cb9fa0e388209ceadd3f7cdc96092f54c86728b40ef021d79933f1fafe",
+      "manifest_files": 4793,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "e658509ad87fc553a99c4e1ea8ad2c476b4f7e604155210d27cf2374c190b56c",
+      "after_sha256": "e658509ad87fc553a99c4e1ea8ad2c476b4f7e604155210d27cf2374c190b56c",
+      "stdout": "/tmp/root-n1i7/helper/weighted300-v1.stdout",
+      "stderr": "/tmp/root-n1i7/helper/weighted300-v1.stderr",
+      "receipt": "/tmp/root-n1i7/helper/weighted300-v1.receipt.json"
+    },
+    "final-friction-schema-v1": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/rule-observer-privacy-n1i7",
+      "started": "2026-10-14T07:43:00.922130+00:00",
+      "ended": "2026-10-14T07:43:00.988664+00:00",
+      "elapsed_seconds": 0.06629020898253657,
+      "pid": 67054,
+      "pgid": 67054,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "254070cb9fa0e388209ceadd3f7cdc96092f54c86728b40ef021d79933f1fafe",
+      "manifest_files": 4796,
+      "head": "4888b452f09dede78ee25c5c4e559f7dd40a986f",
+      "status": " M src/engine/triggers/rule-reactions.ts\n M src/engine/view/determinize.ts\n M src/engine/view/view.ts\n?? docs/plan/evidence/friction/hv-n1i7.json\n?? docs/plan/evidence/measurements/hv-n1i7.json\n?? docs/plan/evidence/pre-existing/hv-n1i7.md\n?? src/engine/effects/primitives/contracts/rule-reaction-observation.contracts.ts\n?? src/engine/effects/primitives/contracts/rule-route-privacy.contracts.ts\n",
+      "before_sha256": "3d8b965bcbe6d714248899df4710aaab2691f160802f5ff0e66482220d92ce72",
+      "after_sha256": "3d8b965bcbe6d714248899df4710aaab2691f160802f5ff0e66482220d92ce72",
+      "stdout": "/tmp/root-n1i7/helper/final-friction-schema-v1.stdout",
+      "stderr": "/tmp/root-n1i7/helper/final-friction-schema-v1.stderr"
+    }
+  },
+  "attemptQualifications": {
+    "old-focused-v1": "Ten genuine route-projection failures; observer cases stopped at invalid non-continuous static fixture setup. The observer failures in this attempt are test implementation errors, not product proof.",
+    "old-focused-v2": "28 genuine semantic failures and six passing controls with all production hashes at base. Sixteen malformed trailing descriptors poison an earlier valid callback; two corrupt saved inFlight cancellations escape recovery; ten hidden-route assertions expose route classification.",
+    "typecheck-v1": "Own contract attempted assignment to readonly inFlight. Fixed by constructing a new slice; no product finding.",
+    "lint-v1": "Own contract had a module-level mutable Error and an unnecessary type assertion. Error creation moved to throw time and assertion omitted; no product finding.",
+    "repaired-focused-v2": "This check was already running when the parent said an extra unchanged focused run was unnecessary. It settled normally and is retained."
+  },
+  "commandScope": {
+    "shortChecks": "Each outer command includes its actual wrapper/preparation/cleanup scope; no inference of model or exclusive CPU time.",
+    "heavyChecks": "full-v1 and weighted300-v1 run serially through lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock with JOURNEY_TEST_WORKERS=2. Outer elapsed includes lock acquisition, launch, child command and cleanup; it is distinct from engine wall/CPU.",
+    "sourceFreeze": "Every recorded command has matching complete 4,793-entry pre/post source/support manifests. Evidence files were authored only after all four final commands settled; final evidence schema verification is pending."
+  },
+  "validationEpochs": [
+    {
+      "labels": [
+        "old-focused-v1",
+        "old-focused-v2"
+      ],
+      "source": "Unchanged landed production, with contract-only fixture revisions; per-attempt manifests retained."
+    },
+    {
+      "labels": [
+        "repaired-focused-v1",
+        "typecheck-v1",
+        "typecheck-v2",
+        "lint-v1"
+      ],
+      "source": "Bounded repair; subsequent changes affect only the admitted contract construction/lint corrections."
+    },
+    {
+      "labels": [
+        "lint-v2",
+        "typecheck-v3",
+        "repaired-focused-v2"
+      ],
+      "manifestSHA256": "fc031d9af2c7b3f6b23ef80c87817c19b38a20bd724322b97e237e9428d11995",
+      "collector": "Earlier collector recorded PID/terminal/reaping, without a durable pre-wait live PGID record. Earlier receipts retain their actual collector."
+    },
+    {
+      "labels": [
+        "review-v1",
+        "knip-v1",
+        "full-v1",
+        "weighted300-v1"
+      ],
+      "manifestSHA256": "e658509ad87fc553a99c4e1ea8ad2c476b4f7e604155210d27cf2374c190b56c",
+      "collectorSHA256": "254070cb9fa0e388209ceadd3f7cdc96092f54c86728b40ef021d79933f1fafe",
+      "collector": "Refreshed collector writes live PID/PGID/start/command before waiting, uses isolated owned groups, and records group absence and postguard after actual terminal."
+    }
+  ],
+  "finalValidation": {
+    "focused": {
+      "cases": 141,
+      "originalRuleModifierCases": 107,
+      "newCases": 34
+    },
+    "review": {
+      "files": 299,
+      "cases": 6929
+    },
+    "full": {
+      "files": 380,
+      "cases": 7930,
+      "vitestWallSeconds": 82.84,
+      "outerSeconds": 110.00241149999783,
+      "bundle": "passed"
+    },
+    "weighted300": {
+      "games": 300,
+      "steps": 98660,
+      "prompts": 7722,
+      "interactiveReruns": 800,
+      "failures": 0,
+      "engineWallSeconds": 285.0,
+      "engineCpuSeconds": 304.1,
+      "outerSeconds": 286.35280666698236,
+      "summary": "fuzz:engine 300 games, 98660 steps, 285.0 s wall, 304.1 s CPU (1.1 games/s wall, 1.0 games/s CPU); prompts 7722; interactive re-runs 800 (4.435 ms each); feasibility bounded {\"legality\":0,\"prompts\":3}; results {\"player\":145,\"enemy\":154,\"draw\":1}; failures 0",
+      "targets": [
+        {
+          "kind": "dreamsign",
+          "uuid": "d2a916c1-321a-4ae3-9a50-0b7f13c5eff6",
+          "included": 600,
+          "exercised": 0
+        },
+        {
+          "kind": "dreamsign",
+          "uuid": "05f69d01-f8a3-4044-b7cd-0bfd9ed980cd",
+          "included": 600,
+          "exercised": 0
+        },
+        {
+          "kind": "dreamsign",
+          "uuid": "6f4e2d9f-38a4-4f6a-8fde-7d942977a6df",
+          "included": 600,
+          "exercised": 837
+        }
+      ],
+      "qualification": "Each target was included 600 times. Event-alternative and carry exercise counters are zero; those passive abilities rely on synthetic contracts and the original source-qualified browser evidence. Hourglass exercise counter is 837."
+    }
+  },
+  "testDelta": {
+    "files": 2,
+    "lines": 220,
+    "jsdomFiles": 0
+  },
+  "testDeltaBasis": "Two eagerly discovered plain contract modules, 144 and 76 lines; 34 deterministic public-consumer contracts. Existing transactional matrices are reused.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "value": 2.73095703125,
+        "measuredFor": "Actual review-v1 runner prepare-start one-minute load sample at 2026-10-14T07:30:54.643Z. The scratch collector did not sample host load; this value is not a current-load backfill."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "reviewPrepareStart": {
+      "timestamp": "2026-10-14T07:30:54.643Z",
+      "load": 2.73095703125,
+      "source": "review-v1.stdout"
+    },
+    "fuzz": "No collector load sample was recorded for fuzz; none inferred."
+  },
+  "coreFailurePathMap": [
+    {
+      "path": "error mid-step",
+      "proof": "Earlier ordinary callbacks complete despite each of eight saved-descriptor categories, in both orientations. Strict actual reaction resolution still returns structured engine_error, publishes no events, and preserves committed hash/queue. Authored ability factories still throw outside lookup catches."
+    },
+    {
+      "path": "reload/restart",
+      "proof": "Malformed descriptors enter through parseJourneyBattleFoldState. Route prompt reload retains prompt/fingerprint. Existing ruleModifier transactional recovery contracts passed and cover payment-prefix reload/replay."
+    },
+    {
+      "path": "partial write",
+      "proof": "Strict resolution failure retains the queued entry and committed hash after the work queue shifts. Existing rollback and private-disclosure recovery contracts passed; source changes are limited to observation/projection."
+    },
+    {
+      "path": "invalid/stale input",
+      "proof": "Eight malformed-descriptor categories are tested in both orientations. Existing route stale/illegal-answer contracts passed in the original ruleModifier suite."
+    },
+    {
+      "path": "concurrent actors",
+      "proof": "Existing competing-answer and step-in-flight contracts passed; this repair introduces no new concurrency state transition."
+    },
+    {
+      "path": "cancellation",
+      "proof": "Hidden-route cancellation keeps source hidden and state hash unchanged. A public-parser accepted inconsistent persisted inFlight play replays a cancellable route prompt and now cancels without an escaping observer error. That witness is corrupt-save-only; ordinary legal resolver/cancel reachability is unproven."
+    }
+  ],
+  "privacyAndResolutionContract": "Invalid observation descriptors establish no new known floor and do not alter authoritative total or queue. Visible valid thresholds retain observation; private/unidentified sources retain privacy. Strict ruleReactionBody at actual resolution remains unchanged, as do Context, fold, parser, catalog APIs, sampler behavior and UI.",
+  "qaQualification": {
+    "newBrowserRun": false,
+    "basis": "EngineBattleScreen.tsx199-205 constructs non-answering projection. buildPromptHost in prompt-host-view-model.ts261-275 returns waiting before mode rendering415-433. decide.ts88-100 projects its own owed prompt only. Owner routes and current rendered workflows/layout remain unchanged; parent accepted this source audit.",
+    "originalCaptures": "Prior twelve captures belong to hv-umm2.236 and retain their original source qualifications. They are not relabeled as runs of this follow-up source."
+  },
+  "runtime": {
+    "finalCommands": "All four final children reaped; each isolated process group absent at actual terminal and postguard. No cleanup signals needed. Earlier nine short-check PIDs were confirmed absent in owned-process-cleanup.json.",
+    "activeOwnedResources": [],
+    "browserServerProviderGit": "This helper starts no browser, server or review provider. Authorized local Git creates this commit; the parent owns subsequent independent review and delivery."
+  },
+  "preExistingEvidence": "docs/plan/evidence/pre-existing/hv-n1i7.md",
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "remaining": [
+    "Normal cold cross-family review of final repair plus original rule-modifier range with complete cost, permission, departed-source, visibility, workflow and phase-5 recipe reads.",
+    "Tollgate certified delivery and cleanup owned by parent."
+  ],
+  "finalSchemaValidation": {
+    "initial": "final-friction-schema-v1 passed with all 4,796 hashes unchanged. The automatic finalization runs the schema and staged diff checks again before Git; its actual receipt is external."
+  }
+}

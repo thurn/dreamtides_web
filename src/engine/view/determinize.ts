@@ -31,6 +31,8 @@
  * - queued triggers whose source the viewer cannot see, floating effects the
  *   view omits, the opponent's knowledge, loop history, and the
  *   automatic-step count start empty;
+ * - Dawn admission progress uses the viewer's known count as its total and
+ *   that viewer's lower bound, with the other side's lower bound starting at 0;
  * - the loop on offer, and the repetition in progress, are the ones the view
  *   shows (`restoreLoop`), so the viewer's legal actions include the offer
  *   its view shows; a repetition runs on as the battle would when the view

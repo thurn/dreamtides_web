@@ -1,0 +1,32 @@
+{
+  "bead": "hv-n1i7",
+  "phase": 5,
+  "implementMin": 30.728265633333333,
+  "implementWindow": {
+    "start": "2026-10-14T07:13:31.471Z",
+    "end": "2026-10-14T07:44:15.166938+00:00"
+  },
+  "localValidationS": {
+    "old-focused-v1": 6.951755582995247,
+    "old-focused-v2": 4.97050979200867,
+    "repaired-focused-v1": 5.070381290977821,
+    "typecheck-v1": 11.09716775000561,
+    "typecheck-v2": 3.5784906250191852,
+    "lint-v1": 5.107605041994248,
+    "lint-v2": 4.441431666025892,
+    "typecheck-v3": 3.554640083020786,
+    "repaired-focused-v2": 5.067928333010059,
+    "review-v1": 61.4108682499791,
+    "knip-v1": 3.829556250013411,
+    "full-v1": 110.00241149999783,
+    "weighted300-v1": 286.35280666698236,
+    "final-friction-schema-v1": 0.06629020898253657
+  },
+  "hostLoad": 2.73095703125,
+  "testDelta": {
+    "files": 2,
+    "lines": 220,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

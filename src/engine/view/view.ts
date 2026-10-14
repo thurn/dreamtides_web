@@ -690,7 +690,8 @@ export function promptView(prompt: Prompt, viewer: Side, display: BattleState): 
     case "chooseMode": {
       const { costOptions, ...rest } = copy(prompt);
       const seesCosts = purpose.source !== null && (prompt.privateTo === undefined || prompt.privateTo === viewer);
-      return { ...rest, purpose, ...(seesCosts && costOptions !== undefined ? { costOptions } : {}) };
+      const options = purpose.source === null ? rest.options.map(({ route: _route, ...option }) => option) : rest.options;
+      return { ...rest, purpose, options, ...(seesCosts && costOptions !== undefined ? { costOptions } : {}) };
     }
     case "chooseSlot":
     case "chooseNumber":

@@ -1,0 +1,4 @@
+# Observations retained by hv-n1i7
+
+- The catalog-free saved-state parser validates finite nonnegative Dawn progress and `known <= total` structurally (`src/rules/battle/fold.ts`). It does not establish semantic coherence between a queued threshold descriptor and that total. This is a source-level boundary observation only: this follow-up executed no additional counterexample and makes no claim about a broader parser or sampler defect. Generic saved-state validation and historical reconstruction remain outside this repair.
+- The parent-reported setup `npm install` result listed 17 audit findings: 9 moderate, 7 high and 1 critical. The advisories were not investigated. Dependency manifests and lockfiles are unchanged. This is a qualified setup observation, not a finding attributed to the observer or projection repair.
