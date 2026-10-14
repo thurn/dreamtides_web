@@ -1452,6 +1452,20 @@ Putting a character directly into play (for example "return to play" or
 "materialize from your void") is not "playing" it: it costs no energy, does not
 use the stack, cannot be Prevented, and does not fire "when you play" triggers.
 
+**Materialization keyword windows:** "When you abandon a character, characters
+you materialize this turn have awakened" grants Awakened through this turn's
+Ending to each physical character you successfully materialized earlier this
+turn and to each character you subsequently materialize under your control.
+A character already in play gains the keyword without becoming ready; a
+character that entered in an earlier turn is excluded until it materializes
+this turn. A subsequent true entry receives the keyword before its exhausted
+status is determined and its materialization is announced. Rematerializing
+adds the keyword without changing exhaustion. Both the enabling window and
+each individual grant end in step 3 of Ending. A resolved grant follows its
+physical card across zone and control changes until then, independent of its
+source; a failed entry and a card that ceased to exist receive nothing.
+Printed and static Awakened use their ordinary rules.
+
 **Choosing a character from hand** — "Materialize a ≤X● cost character from
 your hand" lets the effect's controller privately choose one matching card
 from the hand they currently hold as that instruction resolves. Compare each

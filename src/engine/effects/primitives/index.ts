@@ -52,6 +52,7 @@ export * from "./lose-all-abilities";
 export * from "./lose-energy";
 export * from "./lose-points";
 export * from "./materialize";
+export * from "./materialize-keyword-modifier";
 export * from "./materialize-chosen";
 export * from "./materialize-figment-copy";
 export * from "./materialize-figments";

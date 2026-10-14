@@ -164,6 +164,7 @@ export interface HiddenCardDescriptor {
 /** A captured card as a view shows it: its instance when the viewer can identify it, else a hidden one. */
 export type CapturedCardView = InstanceId | HiddenCapturedCardView;
 
+type MaterializeKeywordChange = Extract<FloatingChange, { readonly kind: "materializeKeyword" }>;
 type TriggerChange = Extract<FloatingChange, { readonly kind: "trigger" }>;
 
 /**
@@ -172,7 +173,8 @@ type TriggerChange = Extract<FloatingChange, { readonly kind: "trigger" }>;
  * out.
  */
 export type FloatingChangeView =
-  | Exclude<FloatingChange, TriggerChange>
+  | (Omit<MaterializeKeywordChange, "instance"> & { readonly instance: CapturedCardView | null })
+  | Exclude<FloatingChange, TriggerChange | MaterializeKeywordChange>
   | (Omit<TriggerChange, "captured"> & { readonly captured?: readonly CapturedCardView[] });
 
 /** A change with a duration (rules § Durations). */
@@ -460,6 +462,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     const sourceIndependent = keptWithoutSource(effect.change);
     const sourceSeen = visibleSource(effect.source);
     const expirySeen = effect.expiry.at !== "sourceLeavesPlay" || visible(effect.expiry.source);
+    if (effect.change.kind === "materializeKeyword" && changed !== null && state.instances[changed] !== undefined) return expirySeen;
     return (sourceSeen || sourceIndependent || observedFixedEffect(state, viewer, effect.id) !== undefined) && expirySeen && (changed === null || visible(changed));
   };
   const remembered = new Map((state.rememberedCards?.[viewer] ?? []).map((record) => [record.instance, record]));
@@ -482,6 +485,11 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     });
   // A trigger from a source the viewer cannot see shows none of its captured cards.
   const changeView = (change: FloatingChange, sourceSeen: boolean): FloatingChangeView => {
+    if (change.kind === "materializeKeyword") {
+      const instance = change.instance === null ? null : capturedView([change.instance])[0];
+      if (instance === undefined) throw new Error("Materialization keyword member is absent");
+      return { ...copy(change), instance };
+    }
     if (change.kind !== "trigger") return copy(change);
     const { captured, lastKnownSourceSpark, ...rest } = change;
     return { ...copy(rest),

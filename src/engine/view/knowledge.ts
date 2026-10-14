@@ -191,6 +191,7 @@ const FIXED_CHANGE_KINDS: Readonly<Record<FixedCardChange["kind"], boolean>> = {
   allTypes: true,
   subtype: true,
   keyword: true,
+  materializeKeyword: true,
   abilities: false,
   // It ends as its character leaves play, and a view keeps it without its source (rules/floating.ts `keptWithoutSource`).
   loseAbilities: false,

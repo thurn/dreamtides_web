@@ -1035,6 +1035,7 @@ function isEffectRef(value: unknown): boolean {
 const FLOATING_CHANGE_VALIDATORS: {
   readonly [K in FloatingChange["kind"]]: (value: Record<string, unknown>) => boolean;
 } = {
+  materializeKeyword: value => nullable(isInstanceId)(value.instance) && isSide(value.player) && value.keyword === "awakened",
   allTypes: (value) => isInstanceId(value.instance),
   temporary: (value) => isInstanceId(value.instance),
   keyword: (value) =>

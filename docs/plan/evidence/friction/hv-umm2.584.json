@@ -1,0 +1,42 @@
+{
+  "bead": "hv-umm2.584",
+  "phase": 5,
+  "implementWindow": {
+    "start": "2026-10-14T21:24:41.839Z",
+    "end": "2026-10-14T22:49:04.454805+00:00"
+  },
+  "implementMin": 84.37693008333333,
+  "localValidationS": {
+    "actual-source-v1": 4.718396,
+    "d21-v1": 1.277093,
+    "focused-v1": 8.522667,
+    "focused-v2": 8.595905,
+    "focused-v3": 7.129172,
+    "focused-v4": 6.563226,
+    "full-v1": 124.099771,
+    "knip-v1": 6.327619,
+    "live-enemy-v5": 28.914,
+    "live-enemy-v6": 121.54,
+    "live-player-v1": 11.234,
+    "live-player-v2": 18.991,
+    "live-player-v3": 53.669,
+    "live-player-v4": 61.497,
+    "live-player-v5": 75.852,
+    "mutation-current-only": 5.949455,
+    "mutation-never-expiry": 5.904326,
+    "mutation-post-entry": 5.978926,
+    "mutation-wrong-side": 6.028318,
+    "preflight-v1": 3.313446,
+    "review-v1": 61.549638,
+    "sweep-v1": 10.254,
+    "type-v1": 14.030281,
+    "weighted300-v1": 1298.55434
+  },
+  "hostLoad": 9.58935546875,
+  "testDelta": {
+    "files": 0,
+    "lines": 279,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

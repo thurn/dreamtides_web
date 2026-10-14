@@ -269,6 +269,15 @@ function restoreLoop(state: BattleState, view: BattleView): void {
 
 /** A floating change from its view, with each captured card resolved by `captured`. */
 function floatingChange(change: FloatingChangeView, captured: (cards: readonly CapturedCardView[]) => InstanceId[]): FloatingChange {
+  if (change.kind === "materializeKeyword") {
+    if (change.instance !== null && typeof change.instance !== "string" &&
+        (!Number.isSafeInteger(change.instance.member) || change.instance.member < 0 || !SIDES.includes(change.instance.owner))) {
+      throw new Error("Cannot determinize invalid materialization keyword member");
+    }
+    const instance = change.instance === null ? null : captured([change.instance])[0];
+    if (instance === undefined) throw new Error("Cannot determinize missing materialization keyword member");
+    return { ...copy(change), instance };
+  }
   if (change.kind !== "trigger") return copy(change);
   const { captured: cards, ...rest } = change;
   return cards === undefined ? copy(rest) : { ...copy(rest), captured: captured(cards) };
@@ -515,7 +524,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     instances[id] = { ...instances[id], ...(descriptor.journeyDeck === undefined ? {} : { journeyDeck: descriptor.journeyDeck }), printing: copy(descriptor.printing), variant: copy(descriptor.variant), status: copy(descriptor.status) };
     assigned.set(descriptor.member, id);
   }
-  const capturedFacts = [...view.floating.flatMap(({ change }) => change.kind === "trigger" ? change.captured ?? [] : []),
+  const capturedFacts = [...view.floating.flatMap(({ change }) => change.kind === "materializeKeyword" && change.instance !== null ? [change.instance] : change.kind === "trigger" ? change.captured ?? [] : []),
     ...shownOccurrences(view.triggerQueue).flatMap((trigger) => trigger.captured ?? [])].filter((card): card is HiddenCapturedCardView => typeof card !== "string" && "printing" in card && "variant" in card);
   const rememberedSource = (source: AbilitySource | { readonly member: number } | null, allowUnknown = false): AbilitySource => {
     if (source !== null && typeof source === "object" && "member" in source) {

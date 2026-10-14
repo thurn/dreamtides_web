@@ -463,6 +463,10 @@ export function engineStatuses(
   for (const { change, expiry, controller, source } of view.floating) {
     const lasting = expiry.at !== "never";
     switch (change.kind) {
+      case "materializeKeyword":
+        if (change.instance === null) sides[change.player].push(badge("duration", { kind: "materializeKeyword", expiry }));
+        else if (typeof change.instance === "string") mark(change.instance, badge("keyword", { kind: "keyword", keyword: change.keyword, gains: true, expiry }));
+        break;
       case "spark":
         if (lasting) mark(change.instance, badge("duration", { kind: "spark", amount: change.amount, expiry }));
         break;

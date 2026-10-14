@@ -211,7 +211,7 @@ export function carriesLegality(change: FloatingChange): boolean {
  * changed card and expiry identities must still be visible.
  */
 export function keptWithoutSource(change: FloatingChange): boolean {
-  return carriesLegality(change) || change.kind === "banishedToHandUntil" || change.kind === "loseAbilities" || change.kind === "baseSpark" || change.kind === "spark" || change.kind === "allTypes";
+  return change.kind === "materializeKeyword" || carriesLegality(change) || change.kind === "banishedToHandUntil" || change.kind === "loseAbilities" || change.kind === "baseSpark" || change.kind === "spark" || change.kind === "allTypes";
 }
 
 /** Ends the floating effects that change `id`, when it ceases to exist. */

@@ -92,6 +92,7 @@ function passiveFloating(state: BattleState, catalog: EngineCatalog): boolean {
           live?.zone === "play" && instanceCard(catalog, live).cardType === "character" &&
           banished?.zone === "banished" && banished.enteredZoneAt === change.banishedAt;
       }
+      case "materializeKeyword": return false;
       case "preserveEphemeralHand": return false;
       case "additionalDrawPhaseCards": return false;
       case "ruleModifier": return false; // Static-only rules carry no floating passivity proof.

@@ -12,6 +12,7 @@
  * 3. Veil: a dissolve by an effect the opponent controls removes Veil
  *    instead (RD-hv-7x4l.8-1).
  */
+import { applyMaterializeKeywordModifiers } from "../effects/primitives/materialize-keyword-modifier";
 import { recordLeftPlay, recordDissolved, recordAbandoned } from "./turn-log";
 import type { AbilitySource, InstanceId, Side, Slot, Zone } from "../state/ids";
 import { BACK_RANK_SIZE, sourceInstance } from "../state/ids";
@@ -347,6 +348,7 @@ export function enterPlay(
   instance.zone = "play";
   instance.enteredZoneAt = ++state.clock;
   setOccupant(state, side, slot, id);
+  applyMaterializeKeywordModifiers(ctx, id, side);
   instance.status.exhausted = !awakened && !hasKeyword(state, ctx.catalog, id, "awakened");
   announceEmptyHand(ctx, hand);
   ctx.emit({ kind: "materialized", instance: id, side, slot });
@@ -415,6 +417,7 @@ export function createInstance(
 export function createInPlay(ctx: StepContext, printing: Printing, side: Side, variant: Variant, slot: Slot, awakened = false): InstanceId {
   const instance = createInstance(ctx, printing, side, variant, "play");
   setOccupant(ctx.state, side, slot, instance.id);
+  applyMaterializeKeywordModifiers(ctx, instance.id, side);
   instance.status.exhausted = !awakened && !hasKeyword(ctx.state, ctx.catalog, instance.id, "awakened");
   ctx.emit({ kind: "materialized", instance: instance.id, side, slot });
   return instance.id;

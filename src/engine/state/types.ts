@@ -412,6 +412,8 @@ export type RuleModifierInstruction =
   | { readonly rule: "dawnThreshold"; readonly count: number };
 
 export type ContinuousChange =
+  /** Null enables the player's current-turn cohort; a physical member retains Awakened until the same expiry. */
+  | { readonly kind: "materializeKeyword"; readonly player: Side; readonly keyword: "awakened"; readonly instance: InstanceId | null }
   /** Static-only additional cards for the named player's Draw phase. */
   | { readonly kind: "additionalDrawPhaseCards"; readonly player: Side; readonly count: number }
   | ({ readonly kind: "ruleModifier"; readonly player: Side } & RuleModifierInstruction)

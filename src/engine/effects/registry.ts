@@ -74,6 +74,7 @@ import {
   loseEnergyPrimitive,
   losePointsPrimitive,
   materializePrimitive,
+  materializeKeywordModifierPrimitive,
   materializeChosenPrimitive,
   materializeFigmentCopyPrimitive,
   materializeFigmentsPrimitive,
@@ -288,6 +289,7 @@ const DEFINITIONS = {
     return losePointsPrimitive;
   },
   get materializeChosen() { return materializeChosenPrimitive; },
+  get materializeKeywordModifier() { return materializeKeywordModifierPrimitive; },
   get materialize() {
     return materializePrimitive;
   },

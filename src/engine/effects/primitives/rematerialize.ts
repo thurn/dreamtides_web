@@ -1,3 +1,4 @@
+import { applyMaterializeKeywordModifiers } from "./materialize-keyword-modifier";
 import type { CharacterRef } from "../../dsl/types";
 import { instanceOf, slotOf } from "../../rules/zones";
 import { resolveCharacters } from "../interpreter";
@@ -15,7 +16,11 @@ export const rematerializePrimitive = definePrimitive<RematerializeNode>({
   resolve(ctx, node, env) {
     for (const id of resolveCharacters(ctx, node.subject, env)) {
       const slot = slotOf(ctx.state, id);
-      if (slot !== null) ctx.emit({ kind: "materialized", instance: id, side: instanceOf(ctx.state, id).controller, slot, rematerialized: true });
+      if (slot !== null) {
+        const side = instanceOf(ctx.state, id).controller;
+        applyMaterializeKeywordModifiers(ctx, id, side);
+        ctx.emit({ kind: "materialized", instance: id, side, slot, rematerialized: true });
+      }
     }
   },
 });

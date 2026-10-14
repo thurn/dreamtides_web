@@ -515,6 +515,7 @@ function plural(count: number, one: string, many: string): string {
  * status display, with what it is and how long it lasts.
  */
 export type EngineStatusCopy =
+  | { readonly kind: "materializeKeyword"; readonly expiry: Expiry }
   | { readonly kind: "spark"; readonly amount: number; readonly expiry: Expiry }
   | { readonly kind: "baseSpark"; readonly value: number; readonly expiry: Expiry }
   | { readonly kind: "allTypes"; readonly expiry: Expiry }
@@ -609,6 +610,8 @@ const CARD_COST_PHRASES: { readonly [M in CardCostMode]: (amount: number) => str
 /** The accessible name of a status indicator: the status and its duration, from `human`'s side. */
 export function engineStatusLabel(status: EngineStatusCopy, human: Side): string {
   switch (status.kind) {
+    case "materializeKeyword":
+      return `Materializations have Awakened${expiryPhrase(status.expiry, human)}`;
     case "spark":
       return `${signed(status.amount, "spark")}${expiryPhrase(status.expiry, human)}`;
     case "baseSpark":
@@ -901,6 +904,10 @@ function effectStartedText(
   const { change, expiry } = event;
   const line = (subject: string, status: EngineStatusCopy) => `${subject}: ${engineStatusLabel(status, human)}.`;
   switch (change.kind) {
+    case "materializeKeyword":
+      return change.instance === null
+        ? `${change.player === human ? "Your" : "Your opponent’s"} materializations have Awakened${expiryPhrase(expiry, human)}.`
+        : line(card(change.instance), { kind: "keyword", keyword: change.keyword, gains: true, expiry });
     case "spark":
       return line(card(change.instance), { kind: "spark", amount: change.amount, expiry });
     case "baseSpark":
