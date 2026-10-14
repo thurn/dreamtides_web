@@ -1,0 +1,249 @@
+{
+  "bead": "hv-odqg",
+  "base": "ea99c699cc152574cc4923fe306dd88f97e7aa05",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-docs-odqg",
+  "branch": "wt/turn-history-docs-odqg",
+  "clock": {
+    "parentClaimEnvelopeStart": "2026-10-14T18:46:30.463805+00:00",
+    "actualHelperDispatch": "Unknown; parent post-claim envelope begins before setup and dispatch.",
+    "endAtEvidenceWrite": "2026-10-14T20:50:57.717684+00:00",
+    "inclusiveMinutes": 124.45423131666666,
+    "qualification": "Conservative setup-inclusive parent envelope; sampling/CPU/idle attribution unknown. Writer refreshes before final schema, staging and staged whitespace; external finalizer receipt covers actual automatic-commit tail. No date override, amend or postcommit tracked rewrite."
+  },
+  "source": {
+    "rules": "One Optional Loops sentence assigns physical occurrences/captured characteristics/figment provenance to per-side history and only known lower bounds to global Dawn admissions. Existing behavior unchanged.",
+    "module": "Only the initial turn-log.ts documentation comment; all following import/executable bytes equal base. Current scalar discarded counts are described without implying unlanded physical discard membership.",
+    "postReviewRecord": "New pre-existing/hv-umm2.692.md explicitly authored by followup hv-odqg after original692 independent review, not an original implementation-window artifact.",
+    "original692InitialPathsPreserved": [
+      "docs/plan/evidence/friction/hv-umm2.692.json",
+      "docs/plan/evidence/measurements/hv-umm2.692.json",
+      "docs/plan/evidence/measurements/hv-umm2.692.md",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.692-1.md"
+    ],
+    "original692InitialPathsByteIdentical": true,
+    "unmeasuredRisk": "Whole-history cycle hashing can require increasing work for growing history; no practical slowdown or runtime defect established and no algorithm/performance change claimed."
+  },
+  "sourceAdmission": {
+    "proposalSHA256": "d28972940d6249633650e874f777ff313fe18481881ef22e6da5cf750f4b8081",
+    "unchangedProofSHA256": "5a6746bb19d2b3c04fb398a3e8148cc60e52fb53c4e3372f8543b00ec7c79072",
+    "nativeACKSHA256": "3934c715c6cf1b61028f81696f1d19418c5c61becdb70edaa2beea8d8a2ebd88",
+    "initialPaths": 5034,
+    "initialManifestSHA256": "674d52d10ebde7bac510f12501ed138472d46b84020e63e8bc6e07b350a62e6d",
+    "collectorSHA256": "38bc9cc051f35a214c45bb22e0f536fafeaf7398739a3252b0e38014d8daf3bd"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v1 starting kernel one-minute host load",
+        "value": 9.02294921875,
+        "at": "2026-10-14T18:51:52.649621+00:00"
+      },
+      "implementWindow": {
+        "measuredFor": "Conservative setup-inclusive parent envelope; exact helper dispatch/sampling unknown."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "review-v1",
+      "at": "2026-10-14T18:51:52.649621+00:00",
+      "values": [
+        9.02294921875,
+        12.87451171875,
+        13.33251953125
+      ],
+      "scope": "Kernel one/five/fifteen minute load at actual command start."
+    },
+    {
+      "label": "knip-v1",
+      "at": "2026-10-14T18:53:39.736383+00:00",
+      "values": [
+        7.7451171875,
+        11.31689453125,
+        12.6669921875
+      ],
+      "scope": "Kernel one/five/fifteen minute load at actual command start."
+    },
+    {
+      "label": "schema-v1",
+      "at": "2026-10-14T18:54:07.315024+00:00",
+      "values": [
+        7.02197265625,
+        10.8701171875,
+        12.46630859375
+      ],
+      "scope": "Kernel one/five/fifteen minute load at actual command start."
+    },
+    {
+      "label": "whitespace-v1",
+      "at": "2026-10-14T18:54:10.907294+00:00",
+      "values": [
+        7.10009765625,
+        10.822265625,
+        12.43994140625
+      ],
+      "scope": "Kernel one/five/fifteen minute load at actual command start."
+    }
+  ],
+  "validation": {
+    "scope": "Required diff-aware review and Knip; no newly authored tests, unchanged loop reruns, probes, mutants, full suite, fuzz or browser. Actual diff-aware test selection is reported from output rather than inferred.",
+    "commands": [
+      {
+        "label": "review-v1",
+        "started": "2026-10-14T18:51:52.649621+00:00",
+        "pid": 14463,
+        "pgid": 14463,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-docs-odqg",
+        "hostLoad": [
+          9.02294921875,
+          12.87451171875,
+          13.33251953125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:52:53.518212+00:00",
+        "elapsedSeconds": 60.86832362500718,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5038,
+        "beforeSHA256": "795e172cd030fa720dd0ca3cd5082a653017be4ca9f5a794ce0e2c76ff23c8c3",
+        "afterSHA256": "795e172cd030fa720dd0ca3cd5082a653017be4ca9f5a794ce0e2c76ff23c8c3",
+        "collectorBeforeSHA256": "38bc9cc051f35a214c45bb22e0f536fafeaf7398739a3252b0e38014d8daf3bd",
+        "collectorAfterSHA256": "38bc9cc051f35a214c45bb22e0f536fafeaf7398739a3252b0e38014d8daf3bd",
+        "stdoutSHA256": "ae3fb84a5863f25c8ee4ffa156b5c60c5fbd5aa67de3231b512796693086d871",
+        "stderrSHA256": "db3aff6e3888c4500bb5425c8a035864ed6dbf0a41149081babb11200ad5585e",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "knip-v1",
+        "started": "2026-10-14T18:53:39.736383+00:00",
+        "pid": 21356,
+        "pgid": 21356,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-docs-odqg",
+        "hostLoad": [
+          7.7451171875,
+          11.31689453125,
+          12.6669921875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:53:46.149023+00:00",
+        "elapsedSeconds": 6.41242241699365,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5038,
+        "beforeSHA256": "795e172cd030fa720dd0ca3cd5082a653017be4ca9f5a794ce0e2c76ff23c8c3",
+        "afterSHA256": "795e172cd030fa720dd0ca3cd5082a653017be4ca9f5a794ce0e2c76ff23c8c3",
+        "collectorBeforeSHA256": "38bc9cc051f35a214c45bb22e0f536fafeaf7398739a3252b0e38014d8daf3bd",
+        "collectorAfterSHA256": "38bc9cc051f35a214c45bb22e0f536fafeaf7398739a3252b0e38014d8daf3bd",
+        "stdoutSHA256": "8c83db74cdcaf4e0bd82dd8ac875f07c96bd10bb1af52f9b31431d2431fcae1c",
+        "stderrSHA256": "db3aff6e3888c4500bb5425c8a035864ed6dbf0a41149081babb11200ad5585e",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "schema-v1",
+        "started": "2026-10-14T18:54:07.315024+00:00",
+        "pid": 23250,
+        "pgid": 23250,
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-docs-odqg",
+        "hostLoad": [
+          7.02197265625,
+          10.8701171875,
+          12.46630859375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:54:07.404353+00:00",
+        "elapsedSeconds": 0.08920962500269525,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5038,
+        "beforeSHA256": "425b1500863cdc41e345e223b9cc4b253c48fbb15fedb4eb8809a6c02269dff6",
+        "afterSHA256": "425b1500863cdc41e345e223b9cc4b253c48fbb15fedb4eb8809a6c02269dff6",
+        "collectorBeforeSHA256": "38bc9cc051f35a214c45bb22e0f536fafeaf7398739a3252b0e38014d8daf3bd",
+        "collectorAfterSHA256": "38bc9cc051f35a214c45bb22e0f536fafeaf7398739a3252b0e38014d8daf3bd",
+        "stdoutSHA256": "5f9c5ba6e8756406be146d71e4f161396452e10960684e91798c9227ebd56e57",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      },
+      {
+        "label": "whitespace-v1",
+        "started": "2026-10-14T18:54:10.907294+00:00",
+        "pid": 23467,
+        "pgid": 23467,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/turn-history-docs-odqg",
+        "hostLoad": [
+          7.10009765625,
+          10.822265625,
+          12.43994140625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:54:10.918271+00:00",
+        "elapsedSeconds": 0.010834541986696422,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5038,
+        "beforeSHA256": "425b1500863cdc41e345e223b9cc4b253c48fbb15fedb4eb8809a6c02269dff6",
+        "afterSHA256": "425b1500863cdc41e345e223b9cc4b253c48fbb15fedb4eb8809a6c02269dff6",
+        "collectorBeforeSHA256": "38bc9cc051f35a214c45bb22e0f536fafeaf7398739a3252b0e38014d8daf3bd",
+        "collectorAfterSHA256": "38bc9cc051f35a214c45bb22e0f536fafeaf7398739a3252b0e38014d8daf3bd",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "processGroupAbsentAtEvidenceWrite": true
+      }
+    ],
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "counts": {
+      "testsPassedReported": [
+        7616
+      ],
+      "testFilesPassedReported": [
+        306
+      ]
+    }
+  },
+  "resources": {
+    "browserOrServerStarted": false,
+    "independentProviderStarted": false,
+    "validationProcessGroupsAbsent": true,
+    "qualification": "Final external finalizer receipt checks writer/schema/stage/whitespace/commit groups after completion."
+  },
+  "preExistingSourceDefects": []
+}

@@ -2770,9 +2770,9 @@ that player's actions returns the battle to an equivalent position — the stack
 empty, no triggered abilities waiting, and everything the same except victory
 points, current and maximum ●, counters, gained spark, the cards in each deck
 and void, the current-turn history of each player's plays, draws, discards, departures
-from play, dissolutions, abandons and materializations, and the count of Dawn
-ability admissions (including recorded physical occurrences, characteristics,
-figment provenance and known lower bounds) — and those differences
+from play, dissolutions, abandons and materializations (including recorded physical
+occurrences, captured characteristics and figment provenance), and the count of Dawn
+ability admissions (including each observer's known lower bound) — and those differences
 gained something for that player and nothing for the opponent, the player is
 offered a shortcut:
 

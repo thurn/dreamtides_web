@@ -1,6 +1,9 @@
 /**
- * The current turn's counters (state `turnLog`): cards played, cards drawn,
- * and characters materialized, per side.
+ * The current turn's history (state `turnLog`): per-side play records with
+ * captured characteristics; draw and discard counts; departure, dissolution
+ * and abandon occurrences with captured types; and materialization records
+ * with captured types and figment provenance. Dawn ability admissions track
+ * a total and each observer's known lower bound.
  */
 import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristicsOf, copiableCostOf } from "../continuous/characteristics";
