@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.620",
+  "phase": 5,
+  "implementMin": 49.135476133333334,
+  "implementWindow": {
+    "start": "2026-10-14T13:35:18.647000+00:00",
+    "end": "2026-10-14T14:24:26.775568+00:00"
+  },
+  "localValidationS": {
+    "focused": 44.697600499988766,
+    "counterfactual": 27.261757916974602,
+    "review": 144.1426613330259,
+    "knip": 6.239888249983778
+  },
+  "hostLoad": 27.41,
+  "testDelta": {
+    "files": 1,
+    "lines": 297,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "source-admission-waits",
+      "minutes": 19.469837433333335,
+      "note": "Three bounded artifact-to-native-stage-admission intervals, including parent verification. Exact scopes/timestamps are in measurements; all intervals are included in the gross dispatch window."
+    }
+  ]
+}

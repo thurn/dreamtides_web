@@ -79,6 +79,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   cardCost: 6,
   playFrom: 6,
   revealDeckTop: 6,
+  preserveEphemeralHand: 6,
   cannotPlay: 6,
   playLimit: 6,
   reclaimNotBanished: 6,
@@ -267,6 +268,7 @@ function changed(change: ContinuousChange): InstanceId | null {
     case "cost":
     case "playFrom":
     case "revealDeckTop":
+    case "preserveEphemeralHand":
     case "cannotPlay":
     case "playLimit":
     case "reclaimNotBanished":
@@ -305,6 +307,12 @@ export class Layers {
     return this.statics.flatMap((entry) => entry.node.op === "revealDeckTop"
       ? this.expand(entry).flatMap((change) => change.kind === "revealDeckTop" ? [change.player] : [])
       : []);
+  }
+
+  /** Whether this controller's live statics preserve its held Ephemeral hand. */
+  preservesEphemeralHand(side: Side): boolean {
+    return this.statics.some((entry) => entry.controller === side && entry.node.op === "preserveEphemeralHand" &&
+      this.expand(entry).some((change) => change.kind === "preserveEphemeralHand" && change.player === side));
   }
 
   /** Every change of `layer`, in the order it applies. */

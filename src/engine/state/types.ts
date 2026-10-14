@@ -500,6 +500,8 @@ export type ContinuousChange =
    * (the turn log).
    */
   | { readonly kind: "playLimit"; readonly player: Side; readonly count: number }
+  /** Static-only Ephemeral cleanup exemption for the held hand at this player's own Ending. */
+  | { readonly kind: "preserveEphemeralHand"; readonly player: Side }
   /** Static-only public visibility of the current top card. */
   | { readonly kind: "revealDeckTop"; readonly player: Side }
   /**

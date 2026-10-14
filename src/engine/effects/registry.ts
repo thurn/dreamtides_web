@@ -86,6 +86,7 @@ import {
   putInDeckPrimitive,
   rematerializePrimitive,
   reclaimNotBanishedPrimitive,
+  preserveEphemeralHandPrimitive,
   repeatPrimitive,
   returnAllButOnePrimitive,
   returnFromVoidPrimitive,
@@ -322,6 +323,7 @@ const DEFINITIONS = {
   get rematerialize() {
     return rematerializePrimitive;
   },
+  get preserveEphemeralHand() { return preserveEphemeralHandPrimitive; },
   get reclaimNotBanished() {
     return reclaimNotBanishedPrimitive;
   },

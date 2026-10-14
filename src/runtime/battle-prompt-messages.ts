@@ -948,6 +948,7 @@ function effectStartedText(
     case "playLimit":
       return `${change.player === human ? "You" : "Your opponent"} may play only ${plural(change.count, "card", "cards")} each turn${expiryPhrase(expiry, human)}.`;
     case "revealDeckTop":
+    case "preserveEphemeralHand":
     case "reclaimNotBanished":
     case "ruleModifier":
       // Only a static ability makes this change, so no effect starts with it.

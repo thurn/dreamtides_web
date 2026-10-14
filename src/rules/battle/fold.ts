@@ -1048,6 +1048,7 @@ const FLOATING_CHANGE_VALIDATORS: {
   banishedUntil: (value) => isInstanceId(value.instance) && isSide(value.side),
   banishedToHandUntil: (value) => isInstanceId(value.instance) && isIndex(value.banishedAt) && value.banishedAt > 0,
   ruleModifier: () => false, // Player rules are static-only.
+  preserveEphemeralHand: () => false, // A static instruction never enters saved floating effects.
   revealDeckTop: () => false, // A static instruction never enters saved floating effects.
   playFrom: (value) =>
     isSide(value.player) &&
