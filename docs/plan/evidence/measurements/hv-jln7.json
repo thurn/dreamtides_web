@@ -1,0 +1,688 @@
+{
+  "bead": "hv-jln7",
+  "phase": 5,
+  "recordedUtc": "2026-10-14T00:41:41.226870+00:00",
+  "base": "c22d5c6fd86c9610f9a779d2eadd98e9214047e0",
+  "implementationWindow": {
+    "start": "2026-10-14T00:26:59.210272+00:00",
+    "prospectiveEvidenceEndpoint": "2026-10-14T00:41:41.226870+00:00",
+    "grossElapsedMinutes": 14.700276633333335,
+    "actualCommitEndUtc": null,
+    "meaning": "Inclusive post-claim parent marker immediately before helper dispatch through prospective precommit evidence endpoint, including research, coordination, validation, runtime QA and parent waits. Exact first helper tool and future Git end are not invented. Elapsed wall time, not CPU; final actual Git endpoint retained externally for subsequent own carry."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful normal review typecheck/node/cycles/lint/test-related start at 2026-10-14T00:31:00.117Z",
+        "value": 6.6787109375
+      },
+      "testDelta": {
+        "meaning": "Eight new cases in one existing eager plain contract module, 69 added lines; no added runner, support module or jsdom file."
+      },
+      "implementWindow.end": {
+        "measuredFor": "Prospective evidence marker before cheap schema/stage and subsequently authorized one local commit; parent audit and waits are included by refresh before Git."
+      }
+    }
+  },
+  "scope": {
+    "sourceChange": "Exhausted source to front-rank rejection precedes compatible-figment merge acceptance; exhausted other-half swap rejection follows merge because merging does not swap the destination. Public helper signature and both importers retain their contracts.",
+    "productionPaths": [
+      "src/engine/rules/reposition.ts"
+    ],
+    "contractPath": "src/engine/effects/primitives/contracts/reposition-effect.contracts.ts",
+    "sourceHashes": {
+      "src/engine/rules/reposition.ts": "f615c4b946ce10c007b7125502480b922da3526b85303a44cb9a52233dfa379b",
+      "src/engine/effects/primitives/contracts/reposition-effect.contracts.ts": "421bd348e1d51ef1a869d65ca9d0ed28499169c49e672564fe13e3f3f1b091b9"
+    },
+    "rulesAuthority": {
+      "normative": "docs/rules.md:379-383 and 2470-2472; repositioning by an ability also applies these exhaustion and merging rules",
+      "ladder": "not invoked: current normative rules settle the case",
+      "rulesOrPrintedTextChanged": false
+    },
+    "publicCases": {
+      "count": 8,
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "scenarios": [
+        "exhausted back-to-front compatible merge excluded",
+        "ready back-to-front compatible merge allowed",
+        "exhausted front-to-back compatible merge allowed",
+        "mixed exhaustion compatible merge excluded"
+      ],
+      "observations": "Public engine legal actions, ordinary fold intent acceptance or illegalAction bounce, Fast ability prompt candidates, serialized pending prompt replay, actual legal answer, physical merge event/current spark addition, exhaustion and energy payment. Synthetic branded identities, no private helper imports or UI-copy assertions."
+    }
+  },
+  "commands": {
+    "jln7-focused-red": {
+      "name": "jln7-focused-red",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "enforces .*merge through ordinary actions"
+      ],
+      "observerPid": 69992,
+      "pid": 70003,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+      "startUtc": "2026-10-14T00:29:43.497490+00:00",
+      "endUtc": "2026-10-14T00:29:51.219807+00:00",
+      "wallS": 7.722272625018377,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/jln7-focused-red.log"
+    },
+    "jln7-focused-red-r2": {
+      "name": "jln7-focused-red-r2",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "enforces"
+      ],
+      "observerPid": 71458,
+      "pid": 71468,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+      "startUtc": "2026-10-14T00:30:08.610751+00:00",
+      "endUtc": "2026-10-14T00:30:14.124585+00:00",
+      "wallS": 5.513807208015351,
+      "exit": 1,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/jln7-focused-red-r2.log"
+    },
+    "jln7-focused": {
+      "name": "jln7-focused",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/figments.test.ts",
+        "src/engine/steps/turn.test.ts",
+        "-t",
+        "reposition|merging figments"
+      ],
+      "observerPid": 72471,
+      "pid": 72484,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+      "startUtc": "2026-10-14T00:30:25.559025+00:00",
+      "endUtc": "2026-10-14T00:30:32.380283+00:00",
+      "wallS": 6.821222416998353,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/jln7-focused.log"
+    },
+    "jln7-focused-r2": {
+      "name": "jln7-focused-r2",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/figments.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "-t",
+        "reposition|merging figments"
+      ],
+      "observerPid": 73947,
+      "pid": 73956,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+      "startUtc": "2026-10-14T00:30:49.901663+00:00",
+      "endUtc": "2026-10-14T00:30:55.855215+00:00",
+      "wallS": 5.953532792016631,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/jln7-focused-r2.log"
+    },
+    "jln7-review": {
+      "name": "jln7-review",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 83123,
+      "pid": 83166,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+      "startUtc": "2026-10-14T00:30:58.889628+00:00",
+      "endUtc": "2026-10-14T00:32:08.069494+00:00",
+      "wallS": 69.17915675000404,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/jln7-review.log"
+    },
+    "jln7-knip": {
+      "name": "jln7-knip",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "observerPid": 8344,
+      "pid": 8354,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+      "startUtc": "2026-10-14T00:32:17.754432+00:00",
+      "endUtc": "2026-10-14T00:32:24.023882+00:00",
+      "wallS": 6.269428458006587,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/jln7-knip.log"
+    },
+    "jln7-schema": {
+      "name": "jln7-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs"
+      ],
+      "observerPid": 9546,
+      "pid": 9547,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+      "startUtc": "2026-10-14T00:32:29.870809+00:00",
+      "endUtc": "2026-10-14T00:32:29.989334+00:00",
+      "wallS": 0.11855933401966467,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/jln7-schema.log"
+    },
+    "jln7-targeted-qa": {
+      "name": "jln7-targeted-qa",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/jln7-forward-merge-qa.mjs",
+        "--bead",
+        "hv-jln7",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "observerPid": 76702,
+      "pid": 76713,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+      "startUtc": "2026-10-14T00:36:05.960075+00:00",
+      "endUtc": "2026-10-14T00:36:21.000417+00:00",
+      "wallS": 15.040241500013508,
+      "exit": 1,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/jln7-targeted-qa.log"
+    },
+    "jln7-targeted-qa-r2": {
+      "name": "jln7-targeted-qa-r2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/jln7-forward-merge-qa-r2.mjs",
+        "--bead",
+        "hv-jln7",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "observerPid": 20512,
+      "pid": 20625,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+      "startUtc": "2026-10-14T00:37:00.435891+00:00",
+      "endUtc": "2026-10-14T00:37:20.998047+00:00",
+      "wallS": 20.56200833400362,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/jln7-targeted-qa-r2.log"
+    },
+    "jln7-final-schema": {
+      "name": "jln7-final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs"
+      ],
+      "observerPid": 99102,
+      "pid": 99115,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+      "startUtc": "2026-10-14T00:40:07.874301+00:00",
+      "endUtc": "2026-10-14T00:40:08.004383+00:00",
+      "wallS": 0.13011558301514015,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/jln7-final-schema.log"
+    }
+  },
+  "observerCorrections": [
+    {
+      "receipt": "jln7-focused-red",
+      "scope": "Initial title regex selected zero tests (3065 skipped); exit zero is not a repro pass. Parameterized title values are quoted in the runner. Filter narrowed once to enforces."
+    },
+    {
+      "receipt": "jln7-focused-red-r2",
+      "scope": "Actual pre-repair repro: two exhausted-forward cases fail (both sides), eight other selected cases pass. Public ordinary legalActions wrongly admits the forbidden destination."
+    },
+    {
+      "receipt": "jln7-focused",
+      "scope": "First green ran 26 cases in two runners; guessed src/engine/steps/turn.test.ts did not exist and was ignored by Vitest. Corrected with rg-discovered src/engine/rules/turn.test.ts; final selected run covers 27 cases in three runners."
+    },
+    {
+      "receipt": "jln7-targeted-qa",
+      "scope": "Exact supported saved fixture, forbidden front exclusion, reload, payment, final movement and empty Caps passed before external observer used the cards[id] plain-card mirror for a figment copy. Existing prelude maps non-card printing to null. Corrected observer uses physical event identity, final figmentCopy.cardId and persisted promptOpened.cardId; no product change."
+    }
+  ],
+  "validation": {
+    "focused": {
+      "cases": 27,
+      "runnerFiles": 3
+    },
+    "review": {
+      "cases": 6466,
+      "files": 299,
+      "lint": true,
+      "typecheck": true,
+      "nodeTypecheck": true,
+      "cycles": {
+        "modules": 2271,
+        "lateBound": 6,
+        "evaluationTimeReads": false
+      }
+    },
+    "knip": true,
+    "schemaBeforeOwnEvidence": true,
+    "finalOwnEvidenceSchemaPending": false,
+    "fullOrSoakRepeated": false,
+    "proportion": "Five-line bounded destination-policy diff and synthetic contract addition; normal checks plus one targeted desktop player workflow. Original source-qualified 97 soak/sweep and desktop/mobile transport evidence are retained; this repair exercises the exact rare branch through public contracts and live saved-fixture UI without a whole matrix repeat.",
+    "finalOwnEvidenceSchema": true
+  },
+  "hostLoadSamples": {
+    "reviewPreflight": {
+      "utc": "2026-10-14T00:30:58.830008+00:00",
+      "loadRaw": "{ 6.68 9.98 10.95 }",
+      "limitsRaw": "core file size          (blocks, -c) 0\ndata seg size           (kbytes, -d) unlimited\nfile size               (blocks, -f) unlimited\nmax locked memory       (kbytes, -l) unlimited\nmax memory size         (kbytes, -m) unlimited\nopen files                      (-n) 1048575\npipe size            (512 bytes, -p) 1\nstack size              (kbytes, -s) 8176\ncpu time               (seconds, -t) unlimited\nmax user processes              (-u) 10666\nvirtual memory          (kbytes, -v) unlimited\n",
+      "processCount": 1337,
+      "scope": "before normal review; configured JOURNEY_TEST_WORKERS=2, actual worker count not observed"
+    },
+    "reviewStart": {
+      "utc": "2026-10-14T00:31:00.117Z",
+      "load1": 6.6787109375
+    },
+    "targetedQA": {
+      "load1": 14.4140625,
+      "measuredFor": "Managed runner successful targeted QA report"
+    }
+  },
+  "machineResources": {
+    "workersConfigured": {
+      "JOURNEY_TEST_WORKERS": 2
+    },
+    "actualVitestWorkerCount": "not independently observed",
+    "ownCheckChildren": "all terminal",
+    "heavySlot": "no heavy command run"
+  },
+  "runtime": {
+    "verdict": "pass",
+    "viewport": "desktop",
+    "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-jln7/invocations/run-m1hMOn/jln7-forward-merge-qa-r2.result.json",
+    "rawReportSha256": "e8a89514ac7cde5a5066116af100fa487a7065056772e3bb033e6b43c004b991",
+    "invocation": "run-m1hMOn",
+    "captures": [
+      {
+        "filename": "forward-merge-exclusion-desktop.png",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800,
+        "viewportWidth": 1440,
+        "viewportHeight": 900,
+        "dpr": 2,
+        "visualReview": "Capture inspected: legible exhausted physical copies and B1-B9 choices; compatible front destination omitted."
+      }
+    ],
+    "fixture": {
+      "gameId": "ao9p8r",
+      "sourceGameId": "dak63t",
+      "sourceCopy": "i7",
+      "destinationCopy": "i8",
+      "cardId": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+      "violations": [],
+      "outcomes": [
+        {
+          "seq": 1,
+          "type": "LOAD_STATE",
+          "outcome": "applied",
+          "reason": null
+        }
+      ],
+      "setup": {
+        "active": "player",
+        "phase": "day",
+        "source": {
+          "slot": {
+            "rank": "back",
+            "index": 0
+          },
+          "exhausted": true
+        },
+        "destination": {
+          "slot": {
+            "rank": "front",
+            "index": 0
+          },
+          "exhausted": true
+        },
+        "energy": 3
+      }
+    },
+    "prompt": {
+      "kind": "chooseSlot",
+      "side": "player",
+      "purpose": {
+        "source": "i7",
+        "cardId": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+        "ability": 1,
+        "role": "move"
+      },
+      "fieldSide": "player",
+      "slots": [
+        {
+          "rank": "back",
+          "index": 1
+        },
+        {
+          "rank": "back",
+          "index": 2
+        },
+        {
+          "rank": "back",
+          "index": 3
+        },
+        {
+          "rank": "back",
+          "index": 4
+        },
+        {
+          "rank": "back",
+          "index": 5
+        },
+        {
+          "rank": "back",
+          "index": 6
+        },
+        {
+          "rank": "back",
+          "index": 7
+        },
+        {
+          "rank": "back",
+          "index": 8
+        },
+        {
+          "rank": "back",
+          "index": 9
+        }
+      ],
+      "cancellable": false,
+      "id": "1:2:0"
+    },
+    "reloadedPromptId": "1:2:0",
+    "choiceGeometry": {
+      "enabled": true,
+      "hit": true,
+      "x": 1019,
+      "y": 610,
+      "width": 124,
+      "height": 42,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 2
+      }
+    },
+    "energy": {
+      "before": 3,
+      "after": 2,
+      "chargedOnceAcrossReload": true
+    },
+    "events": [
+      {
+        "seq": 3,
+        "index": 0,
+        "kind": "repositioned",
+        "instance": "i7",
+        "event": {
+          "kind": "repositioned",
+          "instance": "i7",
+          "side": "player",
+          "from": {
+            "rank": "back",
+            "index": 0
+          },
+          "to": {
+            "rank": "back",
+            "index": 1
+          },
+          "swappedWith": null
+        },
+        "cards": {
+          "i7": null
+        }
+      }
+    ],
+    "identityQualification": "Engine repositioned event carries physical instance i7. The helper cards[i7] mirror is null for figment-copy printing. The source state retains figmentCopy.cardId and persisted engine.promptOpened carries its card UUID correlated with activation source and answer prompt ID. No fictional UUID-bearing reposition JSONL row is asserted.",
+    "logs": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-jln7/invocations/run-m1hMOn/jln7-forward-merge-qa-r2-desktop.jsonl",
+        "sha256": "83155ae540bc77eb4ba831c063b4134061eb8c1f3d7ca96776086a16229ee49c",
+        "bytes": 4529,
+        "rows": 19,
+        "gameId": "ao9p8r"
+      }
+    ],
+    "correlatedRows": {
+      "gameId": "ao9p8r",
+      "action": {
+        "gameId": "ao9p8r",
+        "version": 0,
+        "side": "player",
+        "action": {
+          "kind": "activate",
+          "source": "i7",
+          "ability": 1
+        },
+        "answers": [],
+        "timestamp": "2026-10-14T00:37:12.114Z",
+        "event": "engine.action",
+        "seq": 8
+      },
+      "opened": {
+        "gameId": "ao9p8r",
+        "version": 1,
+        "promptId": "1:2:0",
+        "side": "player",
+        "kind": "chooseSlot",
+        "role": "move",
+        "source": "i7",
+        "cardId": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+        "privateTo": null,
+        "fingerprint": "u8jk5pqyue",
+        "timestamp": "2026-10-14T00:37:12.114Z",
+        "event": "engine.promptOpened",
+        "seq": 9
+      },
+      "answered": {
+        "gameId": "ao9p8r",
+        "version": 1,
+        "promptId": "1:2:0",
+        "side": "player",
+        "fingerprint": "u8jk5pqyue",
+        "value": 0,
+        "timestamp": "2026-10-14T00:37:19.524Z",
+        "event": "engine.promptAnswered",
+        "seq": 10
+      }
+    },
+    "compatibleFrontUntouched": true,
+    "sourceStatusPreserved": true,
+    "caps": [],
+    "setupBoundary": "Own managed browser creates a source lab game, reads its stored genesis/journey/display metadata without appending to it, builds an invariant-valid separate board through own-worktree boardState/placeFigment and actual production catalog, validates LOAD_STATE, creates a fresh QA-owned game, appends one public makeActions.loadState intent (applied seq1), flushes/closes fixture writer, navigates the saved game. Subsequent activation and destination answer use real UI; no live probe or direct IndexedDB mutation."
+  },
+  "resourceScope": {
+    "attempts": [
+      {
+        "utc": "2026-10-14T00:36:16.139029+00:00",
+        "records": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "4c578f07-3e12-40e7-bdad-2151ba71c9b8",
+              "pid": 76713,
+              "bead": "hv-jln7",
+              "label": "jln7-forward-merge-qa",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T00:36:08.167Z",
+              "providerState": "active",
+              "mcpSessionId": "247c3db4-8b76-457d-abc7-1c0cd7318037",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "record": {
+              "token": "88f7ffe0-9519-4af9-ba53-5049a0eb9810",
+              "runner": {
+                "pid": 76713,
+                "group": 76702,
+                "started": "Tue Oct 13 17:36:05 2026",
+                "state": "S",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-executor-01a12e91/jln7-forward-merge-qa.mjs --bead hv-jln7 --viewports desktop --timeout 180"
+              },
+              "server": {
+                "pid": 76749,
+                "group": 76749,
+                "started": "Tue Oct 13 17:36:06 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 88f7ffe0-9519-4af9-ba53-5049a0eb9810 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+              "port": 5274
+            }
+          }
+        ]
+      },
+      {
+        "utc": "2026-10-14T00:37:08.569099+00:00",
+        "records": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "18f154b2-be9f-4165-87cc-741e982ed57e",
+              "pid": 20625,
+              "bead": "hv-jln7",
+              "label": "jln7-forward-merge-qa-r2",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-14T00:37:02.246Z",
+              "providerState": "active",
+              "mcpSessionId": "e229c7f2-e51a-4b66-9759-c792d8aa5f42",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "record": {
+              "token": "a44ddc17-277e-4651-8459-55636455b8de",
+              "runner": {
+                "pid": 20625,
+                "group": 20512,
+                "started": "Tue Oct 13 17:37:00 2026",
+                "state": "S",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-executor-01a12e91/jln7-forward-merge-qa-r2.mjs --bead hv-jln7 --viewports desktop --timeout 180"
+              },
+              "server": {
+                "pid": 20759,
+                "group": 20759,
+                "started": "Tue Oct 13 17:37:00 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json a44ddc17-277e-4651-8459-55636455b8de /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/forward-figment-exhaustion-jln7",
+              "port": 5274
+            }
+          }
+        ]
+      }
+    ],
+    "ownedGroups": [
+      76702,
+      76749,
+      20512,
+      20759
+    ],
+    "terminalObservedUtc": "2026-10-14T00:37:43.262810+00:00",
+    "liveOwnedGroupMembers": [],
+    "port5274Free": true,
+    "ownOwnerAndServerTokensAbsent": true,
+    "authority": "normal managed runner completed browser close and server/transport cleanup before terminal return; own token records absent, no independent historic close payload invented",
+    "retainedRuntime": null
+  },
+  "historicalCarryOutsideThisWindow": {
+    "bead": "hv-umm2.97",
+    "phase": "checkpoint pending accepted P2 repair hv-jln7",
+    "source": "c22d5c6fd86c9610f9a779d2eadd98e9214047e0",
+    "base": "1c61a0a205d9289b8a9cf34302c2318b3cc7c131",
+    "originalSource": "b520a530c56083fcf7c67bff62d5b77b28256f94",
+    "candidate": "01a137c9-033e-7a33-a733-54190544249b",
+    "tested": "c22d5c6fd86c9610f9a779d2eadd98e9214047e0",
+    "certificate": "01a137ca-bc8e-7290-84fd-3d5e7d698f72",
+    "promotion": "promoted;cleanupcompleted, ownWT/branchremoved",
+    "review": {
+      "startUtc": "2026-10-14T00:21:31.749940+00:00",
+      "endUtc": "2026-10-14T00:23:36.737411+00:00",
+      "wallS": 124.98613283399027,
+      "pid": 35190,
+      "pgid": 35190,
+      "exit": 0,
+      "terminal": true,
+      "source": "c22d5c6fd86c9610f9a779d2eadd98e9214047e0",
+      "base": "1c61a0a205d9289b8a9cf34302c2318b3cc7c131",
+      "snapshot": "/tmp/dreamtides-executor-01a12e91/97-cold-snapshot",
+      "routing": "temporary human-authorized same-family Sol override"
+    },
+    "findingDisposition": "P2 accepted: inherited compatiblemerge shortcut bypasses source exhausted/front restriction under normative current rules. Exact new ability source path needs repair; no finding waiver. Ordinary pre97 policy same ordering. New bounded bead hv-jln7, native97 dependency checkpoint open/unassigned.",
+    "originalClaimUtc": "2026-10-13T23:10:37.284247+00:00",
+    "checkpointReleaseUtc": "2026-10-14T00:26:30.681574+00:00",
+    "inclusiveOwnershipMinutes": 75.88995544999999,
+    "implementationActualGitEndUtc": "2026-10-14T00:21:03.232423+00:00",
+    "implementationDispatchToActualGitMinutes": 68.91244998333333,
+    "prospectiveMarkerTailSeconds": 0.213695,
+    "initialProspectiveTailSeconds": 0.361999,
+    "releaseAtCheckpoint": {
+      "state": "pending then failing laterdispatch",
+      "lag": 4,
+      "holds": [],
+      "publicationClaim": false
+    },
+    "qualification": "All windows elapsed inclusivewall, notCPU. Remaining acceptance must join jln7 and final ownnativeclose. Sourcefriction/measurement immutable afterpromotion, actualoutcome/clock correction carry into subsequentownbead. Historical interval outside jln7 currentwindow.",
+    "newSharedDuty": "hv-wmtb release_step=fuzz, exact retained30mintimeout on67f4456b; no replayrequested, filed atjln7dispatch"
+  },
+  "pendingParentActions": [
+    "Fresh independent cold review under current human routing",
+    "Submit actual source commit, authorize exact actual candidate, await certified promotion and cleanup",
+    "Native final acceptance join and closure; original 97 remains a dependency checkpoint until repaired acceptance joins"
+  ]
+}

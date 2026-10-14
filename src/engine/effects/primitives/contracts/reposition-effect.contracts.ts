@@ -158,6 +158,75 @@ describe("reposition effect", () => {
     expect(slots(mismatch.prompts[1])).not.toContainEqual({ rank: "back", index: 2 });
   });
 
+  const mergeCases = [
+    { label: "exhausted forward merge", fromRank: "back", toRank: "front", sourceExhausted: true, destinationExhausted: true, allowed: false },
+    { label: "ready forward merge", fromRank: "back", toRank: "front", sourceExhausted: false, destinationExhausted: false, allowed: true },
+    { label: "exhausted backward merge", fromRank: "front", toRank: "back", sourceExhausted: true, destinationExhausted: true, allowed: true },
+    { label: "mixed exhaustion merge", fromRank: "front", toRank: "back", sourceExhausted: true, destinationExhausted: false, allowed: false },
+  ] as const;
+  it.each(mergeCases.flatMap((scenario) => (["player", "enemy"] as const).map((side) => ({ ...scenario, side }))))(
+    "$side enforces $label through ordinary actions and a reloaded ability choice",
+    ({ side, fromRank, toRank, sourceExhausted, destinationExhausted, allowed }) => {
+      const start = boardState(engine.catalog, { active: side, phase: "day", [side]: { energy: 3, deck }, [opponent(side)]: { deck } });
+      const from: Slot = { rank: fromRank, index: 0 };
+      const to: Slot = { rank: toRank, index: 0 };
+      const printing = { kind: "figmentCopy", cardId: mover.id, spark: 1 } as const;
+      const source = placeFigment(start.state, side, from, printing);
+      const destination = placeFigment(start.state, side, to, printing);
+      start.state.instances[source].status.exhausted = sourceExhausted;
+      start.state.instances[destination].status.exhausted = destinationExhausted;
+      start.state.instances[source].status.gainedSpark = 2;
+      start.state.instances[destination].status.gainedSpark = 4;
+      const before = stateHash(start.state);
+      const action = { kind: "reposition", card: source, to } as const;
+      expect(engine.legalActions(start.state, side).some((legal) => legal.kind === "reposition" && legal.card === source && legal.to.rank === to.rank && legal.to.index === to.index)).toBe(allowed);
+      const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+      const initial: BattleSlice = { committed: start.state, inFlight: null, publishedEvents: 0, attempt: 0 };
+      const ordinary = fold.reduce(initial, { kind: "battleAction", side, action });
+      if (allowed) {
+        const merged = applied(ordinary);
+        expect(merged.committed.instances[source]).toBeUndefined();
+        expect(merged.committed.instances[destination].status.gainedSpark).toBe(7);
+        if (ordinary.kind !== "applied") throw new Error("Expected applied merge");
+        expect(ordinary.published).toContainEqual({ kind: "figmentsMerged", side, source, destination, spark: 3 });
+      } else {
+        expect(ordinary.kind).toBe("bounced");
+        if (ordinary.kind !== "bounced") throw new Error("Expected illegal reposition bounce");
+        expect(ordinary.reason).toBe("illegalAction");
+      }
+      expect(stateHash(start.state)).toBe(before);
+
+      const suspended = applied(fold.reduce(initial, { kind: "battleAction", side, action: { kind: "activate", source, ability: 0 } }));
+      const reload = JSON.parse(JSON.stringify(suspended)) as BattleSlice;
+      const fresh = createFoldAdapter(engine, { checkEventPrefix: true });
+      const prompt = fresh.pending(reload)!.prompt;
+      const offered = slots(prompt);
+      expect(promptFingerprint(prompt)).toBe(promptFingerprint(fold.pending(suspended)!.prompt));
+      expect(offered.some((slot) => slot.rank === to.rank && slot.index === to.index)).toBe(allowed);
+      if (sourceExhausted) expect(offered.some((slot) => slot.rank === "front")).toBe(false);
+      const picked: Slot = allowed ? to : { rank: "back", index: 2 };
+      const value = offered.findIndex((slot) => slot.rank === picked.rank && slot.index === picked.index);
+      expect(value).toBeGreaterThanOrEqual(0);
+      const result = fresh.reduce(reload, { kind: "answer", side, promptId: prompt.id, value });
+      const done = applied(result);
+      expect(done.committed.sides[side].currentEnergy).toBe(2);
+      expect(slotOf(done.committed, destination)).toEqual(to);
+      expect(done.committed.instances[destination].status.exhausted).toBe(destinationExhausted);
+      if (result.kind !== "applied") throw new Error("Expected applied position choice");
+      if (allowed) {
+        expect(done.committed.instances[source]).toBeUndefined();
+        expect(done.committed.instances[destination].status.gainedSpark).toBe(7);
+        expect(result.published).toContainEqual({ kind: "figmentsMerged", side, source, destination, spark: 3 });
+      } else {
+        expect(slotOf(done.committed, source)).toEqual(picked);
+        expect(done.committed.instances[source].status.exhausted).toBe(sourceExhausted);
+        expect(done.committed.instances[destination].status.gainedSpark).toBe(4);
+        expect(result.published.some((entry) => entry.kind === "figmentsMerged")).toBe(false);
+      }
+      expect(invariantViolations(done.committed, engine.catalog)).toEqual([]);
+    },
+  );
+
   it("reloads an occupied destination choice; invalid, stale and postcommit cancel requests preserve payment and positions", () => {
     const start = setup("player");
     const id = start.ids.player.back[0]!;

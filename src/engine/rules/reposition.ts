@@ -15,12 +15,13 @@ export function legalRepositionSlots(state: BattleState, card: InstanceId): Slot
   ];
   return slots.filter((to) => {
     if (to.rank === from.rank && to.index === from.index) return false;
+    // Exhausted sources cannot move forward, including into a compatible figment.
+    if (instance.status.exhausted && to.rank === "front") return false;
     const other = occupant(state, instance.controller, to);
     if (other !== null && mergeable(state, card, other)) {
       return instance.status.exhausted === state.instances[other].status.exhausted;
     }
-    // Neither half of a swap may move an exhausted character into the front rank.
-    if (instance.status.exhausted && to.rank === "front") return false;
+    // The other half of a swap cannot move an exhausted character forward either.
     if (other !== null && from.rank === "front" && state.instances[other].status.exhausted) return false;
     return true;
   });

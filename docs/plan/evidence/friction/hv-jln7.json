@@ -1,0 +1,23 @@
+{
+  "bead": "hv-jln7",
+  "phase": 5,
+  "implementMin": 14.700276633333335,
+  "implementWindow": {
+    "start": "2026-10-14T00:26:59.210272+00:00",
+    "end": "2026-10-14T00:41:41.226870+00:00"
+  },
+  "localValidationS": {
+    "focused": 5.953532792016631,
+    "review": 69.17915675000404,
+    "knip": 6.269428458006587,
+    "schema": 0.13011558301514015,
+    "targetedQA": 20.56200833400362
+  },
+  "hostLoad": 6.6787109375,
+  "testDelta": {
+    "files": 0,
+    "lines": 69,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
