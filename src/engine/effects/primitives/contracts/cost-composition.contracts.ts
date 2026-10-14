@@ -23,6 +23,7 @@ import { SETTER_COST_ROWS, observeSetterCostRow } from "./cost-setter-compositio
  */
 import { revealToBoth } from "../../../view/knowledge";
 import { describe, expect, it } from "vitest";
+import { RECLAIM_COST_ROWS, observeReclaimCostRow } from "./cost-modifier-reclaim-composition-support";
 import { draw } from "../draw";
 import { dissolve } from "../dissolve";
 import { ruleModifier } from "../rule-modifier";
@@ -437,10 +438,6 @@ describe("cost composition anchors from the rulings", () => {
     expect(observed(anchor, extra, steps).energy).toBe(energy);
   });
 });
-
-
-
-
 /** The live physical-source primitive contributes the existing own reduction on every route. */
 describe("live physical-source cost composition", () => {
   const rows = Object.entries(ROUTES).flatMap(([routeName, variants]) => variants.map((route) => ({ routeName, route })));
@@ -479,3 +476,4 @@ it.each(SETTER_COST_ROWS)("$label preserves chosen-route and additional payments
   expect(observed).toMatchObject({ energy: row.expected, points: 1, otherEnergy: 30, played: 1, reclaimed: row.kind === "reclaim", offering: row.kind === "offering", violations: [],
     x: row.extra.name === "X" ? row.kind === "offering" || row.kind === "eventAlternative" || row.kind === "alternativeCost" ? 0 : 2 : null });
 });
+it.each(RECLAIM_COST_ROWS)("$label composes only the selected Reclaim payment", row => { expect(observeReclaimCostRow(row)).toEqual(row.expected); });

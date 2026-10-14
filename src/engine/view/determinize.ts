@@ -987,13 +987,15 @@ function difference(seen: CharacteristicsView, sampled: CharacteristicsView): nu
     sampled.keywords.filter((keyword) => !seen.keywords.includes(keyword)).length;
   const reordered = missing === 0 && seen.keywords.some((keyword, index) => sampled.keywords[index] !== keyword);
   const spark = seen.spark === null || sampled.spark === null ? Number(seen.spark !== sampled.spark) : Math.abs(seen.spark - sampled.spark);
+  const reclaim = seen.reclaimCost === undefined || sampled.reclaimCost === undefined
+    ? Number(seen.reclaimCost !== sampled.reclaimCost) : Math.abs(seen.reclaimCost - sampled.reclaimCost);
   return (
     Number(seen.cardType !== sampled.cardType) +
     Number(seen.subtype !== sampled.subtype) +
     Number(seen.allTypes !== sampled.allTypes) +
     (reordered ? 1 : missing) +
     spark +
-    Math.abs(seen.cost - sampled.cost)
+    Math.abs(seen.cost - sampled.cost) + reclaim
   );
 }
 
@@ -1031,6 +1033,7 @@ function distance(state: BattleState, view: BattleView, catalog: EngineCatalog):
  * draws nothing from `random` and reads only the view and the deal.
  */
 function reconcile(state: BattleState, view: BattleView, catalog: EngineCatalog): void {
+  const observedReclaim = Object.values(view.instances).some(instance => instance.characteristics.reclaimCost !== undefined);
   const memo = new Map<string, HiddenStatics | null>();
   const printedOnlyInPlay = !catalog.staticsOutsidePlay();
   const statics = (id: InstanceId): HiddenStatics | null => {
@@ -1080,7 +1083,7 @@ function reconcile(state: BattleState, view: BattleView, catalog: EngineCatalog)
       }
     }
     const times = new Set<number>([0]);
-    for (const layer of [3, 4] as const) {
+    for (const layer of observedReclaim ? [3, 4, 6] as const : [3, 4] as const) {
       for (const { timestamp } of layers.changes(layer)) times.add(timestamp).add(timestamp + 1);
     }
     const original = source.enteredZoneAt;

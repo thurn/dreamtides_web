@@ -80,6 +80,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   baseSpark: 4,
   spark: 5,
   cost: 6,
+  reclaimCost: 6,
   cardCost: 6,
   playFrom: 6,
   revealDeckTop: 6,
@@ -271,6 +272,7 @@ function byTimestamp(a: OrderedChange, b: OrderedChange): number {
 function changed(change: ContinuousChange): InstanceId | null {
   switch (change.kind) {
     case "cost":
+    case "reclaimCost":
     case "playFrom":
     case "revealDeckTop":
     case "preserveEphemeralHand":

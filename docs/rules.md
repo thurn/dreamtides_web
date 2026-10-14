@@ -1177,6 +1177,21 @@ ordinal even when it uses a replacement base. "The first … costs N● less"
 instead reduces the whole chosen energy payment by N● on every route, with
 the other cost adjustments.
 
+**Reclaim cost changes:** "Reclaim abilities cost you 0●" sets the fixed energy
+base of the Reclaim route you choose to 0●. With plain Reclaim, this base is
+the card's normal fixed energy cost; with printed, deck-entry or granted
+Reclaim costs, it is the fixed energy of those Reclaim costs. X and additional
+mandatory, optional and alternative-choice payments remain, as do all nonenergy
+costs. The latest applicable setter in continuous-effect order applies:
+normal card, matching-play and nth-play setters compete with Reclaim setters
+for plain Reclaim; explicit Reclaim uses only Reclaim setters. "Reclaim abilities
+cost you 1● less" instead reduces the whole chosen Reclaim energy payment,
+including X and paid additional energy. Reclaim reductions add together with
+other reductions. Increases apply first, then reductions, with a minimum of
+0●. These changes apply only when you choose Reclaim: they grant no Reclaim
+ability or permission and do not change a normal play, a play by a permission,
+Offering, an event alternative, an activated ability or a resolving payment.
+
 **Requirements** are written as "Play this event only if X." A card with a
 requirement cannot be played unless the requirement is met.
 

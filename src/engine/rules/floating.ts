@@ -164,6 +164,7 @@ export function changedInstance(change: FloatingChange): InstanceId | null {
   switch (change.kind) {
     case "trigger":
     case "cost":
+    case "reclaimCost":
     case "playLimit":
     case "revealDeckTop":
     case "preserveEphemeralHand":

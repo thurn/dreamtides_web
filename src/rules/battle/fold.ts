@@ -1079,6 +1079,7 @@ const FLOATING_CHANGE_VALIDATORS: {
   loseAbilities: (value) => isInstanceId(value.instance),
   // This continuous change is made only by static abilities, not saved floating effects.
   reclaimNotBanished: () => false,
+  reclaimCost: () => false, // Reclaim cost instructions are static-only.
 };
 
 function isFloatingChangeKind(value: unknown): value is FloatingChange["kind"] {

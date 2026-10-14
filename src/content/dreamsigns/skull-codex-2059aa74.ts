@@ -1,4 +1,7 @@
 import { dreamsign } from "../define";
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { costModifierReclaim } from "../../engine/effects/primitives";
 
 export default dreamsign({
   id: "2059aa74-8897-4c76-833f-ddef7d34346c",
@@ -13,5 +16,6 @@ export default dreamsign({
     "ab89d262-45d4-438d-8670-79d91f6e944f",
   ],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(costModifierReclaim("you", { set: 0 }))],
+  verifiedText: expectedVerifiedText("Reclaim abilities cost you 0●."),
 });

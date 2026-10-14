@@ -1,0 +1,477 @@
+{
+  "bead": "hv-umm2.234",
+  "phase": 5,
+  "base": "8eb2e0d1e5d27737375e9b6cf619be49c5b5dffd",
+  "dispatch": {
+    "path": "/tmp/root234-20261014/parent-dispatch-native-v01.json",
+    "sha256": "ed73818b142cf981d26325360ac9cfbafcddc8d22a0ecff0214799e435fb2a18"
+  },
+  "setupSeparate": {
+    "receipt": {
+      "path": "/tmp/root234-20261014/install-v01.receipt.json",
+      "sha256": "353deccf90f2c7b8efccdc60d6e2ef081e678809a47ef5476650d4884c346127"
+    },
+    "seconds": 3.0105537500348873,
+    "excludedFromImplementationWindow": true
+  },
+  "implementationWindow": {
+    "start": "2026-10-14T22:37:34.424Z",
+    "end": "2026-10-14T23:57:39.256306+00:00",
+    "minutes": 80.08053843333333,
+    "status": "Prospective final pre-Git cutoff captured immediately before cheap final checks and authorized local amendment",
+    "includes": "Continuous original postclaim dispatch through complete research/coordination/ACK waits including whole final ACK wait, checks/QA/recovery, candidate conflict/parking/native update/reapplication and evidence; no clock reset.",
+    "samplingSeconds": "UNKNOWN",
+    "gitTail": "Final actual amendment timestamps/terminal receipt retained externally; no backdating or postcommit tracked-clock rewrite."
+  },
+  "sourceEpoch": {
+    "manifest": {
+      "path": "/tmp/worker234-20261014/integration-source-checkpoint-v01/manifest.json",
+      "sha256": "b2868aeaac404e5cca541f2bfe1921662d6c8062f0c035f0be6455ecf2fe2e71"
+    },
+    "base": "8eb2e0d1e5d27737375e9b6cf619be49c5b5dffd",
+    "temporaryHead": "f081f64fcf0e1dcd7c5c02ec5500db899bbba16d",
+    "sourcePaths": 25,
+    "evidencePaths": 4,
+    "qualification": "Own Reclaim semantics reapplied over landed103 actual alternativeCost helper/branch/access/immediate route. Only timing, own composition support and canonical inventory changed from native-updated temporary head before metadata. Peer cost-setter-composition-support remains byte-identical current base.",
+    "historicalOriginalManifest": {
+      "path": "/tmp/worker234-20261014/source-checkpoint-v02/manifest.json",
+      "sha256": "8c151bf051aec1ff494e673bc88e88f353764f62f60a33237c9d71d98c15a22f"
+    },
+    "historicalRuntimeArchive": {
+      "directory": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.234/final-source-v01",
+      "files": 353,
+      "bytes": 60625611,
+      "manifestSHA256": "8aa05e619a09e493269fae659e7bc7e140617dde9135b57f2ab48a8e307fd753"
+    }
+  },
+  "entities": [
+    "2059aa74-8897-4c76-833f-ddef7d34346c",
+    "8778bf17-4e0a-4ce7-b23c-4daf49a782a7"
+  ],
+  "rulesAndContracts": {
+    "decision": "docs/plan/evidence/rules-decisions/RD-hv-umm2.234-1.md",
+    "D10": "Residual step5 fixed-base setter ruling. Surrounding payment/access/timestamp rules and distinct Rust text are evidence; exact matching prototype/Rust precedent is not claimed.",
+    "D22": "Optional signed unfloored current-void Reclaim quote preserves legal/payment behavior through determinization while hidden source identity stays omitted. Four selected-cost readers use supplied fresh Layers; exact shared Reclaim eligibility preserves explicit/granted/lost rules.",
+    "D20": "Each leaf is one tested static primitive composition; no journey text/effect or extra per-card scenario spec is required.",
+    "D19": {
+      "plainContractModulesAdded": 2,
+      "plainSupportModulesAdded": 2,
+      "testEntrypointsAdded": 0,
+      "jsdomFilesAdded": 0,
+      "netLines": 526,
+      "existingCompositionLines": {
+        "base": 481,
+        "current": 479
+      },
+      "audit": {
+        "path": "/tmp/worker234-20261014/integration-test-delta-v01.json",
+        "sha256": "4068e1dcb862a15ee9028e3b04d58d8f4f3ebef45d05b06f7da2310d2cb5e4f7"
+      }
+    },
+    "composition": "324 synthetic public-producer rows: both seats \u00d79 route shapes \u00d76 extras \u00d73 modes. Original288 rows retain all payment expectations plus opponentPoints0;36 actual alternativeCost rows replace fixedbase0/X0, give opponent5 points, ignore own Reclaim set/reduce and retain ordinary tax2/reduce1. Actual maps exhaust current PlayRoute and own mode union.",
+    "errorAndRecovery": "Observable contracts cover mandatory refusal, cancellation, persisted pending/full replay, stale/foreign/invalid/duplicate and sequential competing answers, genuine InterruptPrevent after committed payment, resolving misuse with original state unchanged, and rejecting saved static-only floating changes. Static producer performs no mid-step mutation; generic rollback/concurrent timing framework is N/A."
+  },
+  "validation": {
+    "sourceEpoch": {
+      "path": "/tmp/worker234-20261014/integration-source-checkpoint-v01/manifest.json",
+      "sha256": "b2868aeaac404e5cca541f2bfe1921662d6c8062f0c035f0be6455ecf2fe2e71"
+    },
+    "workers": 2,
+    "focused": {
+      "receipt": {
+        "path": "/tmp/worker234-20261014/integration-focused-v01.receipt.json",
+        "sha256": "8fe869036383979f4daa095bfed33fcef8b0bb503c8d6fc5f97549071916a406"
+      },
+      "files": 10,
+      "tests": 5129
+    },
+    "review": {
+      "receipt": {
+        "path": "/tmp/worker234-20261014/integration-review-v01.receipt.json",
+        "sha256": "5d00f2de80b4c320ed1c2877f911bd89c77e2bf902e11aaf4c26aff9ecbadcb7"
+      },
+      "files": 306,
+      "tests": 8686
+    },
+    "knip": {
+      "path": "/tmp/worker234-20261014/integration-knip-v01.receipt.json",
+      "sha256": "8ee85cc7a0c40d534ed7920b41b87935c92a50d6910a07b5360dedd57f5df8d3"
+    },
+    "inventory": {
+      "path": "/tmp/worker234-20261014/integration-inventory-v01.receipt.json",
+      "sha256": "783772ee7cf05ae18535c6eba813283a95682ed197ab5d7a04e62d67350d5204"
+    },
+    "qualification": "Combined source focused checks include full primitives and relevant continuous/view/fold/content/pricing/adapter/inventory contracts. Review/Knip green. Original fullreview/weighted300/browser evidence remains historical original-epoch; no duplicate heavy/runtime run authorized or relabeled. Final metadata uses only cheap schema/staged whitespace checks."
+  },
+  "weighted": {
+    "acceptance": {
+      "path": "/tmp/root234-20261014/final-fuzz-acceptance-v01.json",
+      "sha256": "7f52a1606c9b6faa0d19815031fead7178e8dc7515afb39fe12519907083766c"
+    },
+    "games": 300,
+    "steps": 101243,
+    "prompts": 7457,
+    "failures": 0,
+    "coverage": [
+      {
+        "kind": "dreamsign",
+        "uuid": "2059aa74-8897-4c76-833f-ddef7d34346c",
+        "included": 600,
+        "exercised": 0
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "8778bf17-4e0a-4ce7-b23c-4daf49a782a7",
+        "included": 600,
+        "exercised": 0
+      }
+    ],
+    "qualification": "Literal mandatory300 CLI executed once, all reached-state invariants/determinization/replay checks passed. Inclusion600 perUUID counts bothside emblem inclusions across300 games. Exercised0 is actual matching resolved-emblem-ability counter for static effects, not a payment-behavior witness. Actual production-consumer payments are evidenced in the browser section. Passing CLI writes no pergame logs; no claim of retained passing-game action materialization.",
+    "integrationQualification": "Historical runtime/aggregate evidence binds original source epoch8c151bf0, with genuine original reports/logs preserved. Combined-source focused/review/Knip evidence is recorded separately; no combined heavy/runtime execution claim."
+  },
+  "preflightAndSweep": {
+    "acceptance": {
+      "path": "/tmp/root234-20261014/preflight-sweep-acceptance-v01.json",
+      "sha256": "30c82a7260679004b1780a2771dafa81e3255eb44b7f7cf97f8542369a6c77fb"
+    },
+    "counts": {
+      "pass": 4,
+      "skip": 36,
+      "fail": 0,
+      "pending": 0
+    },
+    "domainFlag": "--dreamsigns",
+    "defaults": "all variants and both seats",
+    "staticExercise": "Actual exercised=false proves first-turn initialization, not changed payment behavior.",
+    "sweepPrefix": {
+      "rows": 40,
+      "bytes": 32762,
+      "sha256": "ec837a3095bd3f3f5aed077ca981241cc7c2583943bb7b65df2b3fd8e48078a0",
+      "preservedByteForByte": true
+    },
+    "integrationQualification": "Historical runtime/aggregate evidence binds original source epoch8c151bf0, with genuine original reports/logs preserved. Combined-source focused/review/Knip evidence is recorded separately; no combined heavy/runtime execution claim."
+  },
+  "browser": {
+    "acceptance": {
+      "path": "/tmp/root234-20261014/final-qa-acceptance-v01.json",
+      "sha256": "e80768c8c903e1c5f795fa9b300c2f7ef128e47b8397c63d2a3067ca3bf1a95e"
+    },
+    "zeroPaymentContinuity": {
+      "path": "/tmp/root234-20261014/zero-energy-continuity-v01.json",
+      "sha256": "e0f5dc7172ea4d545f7e2c7eb4139d902daae2f7e978d589ff690ad1acb3a422"
+    },
+    "visualAcceptance": {
+      "path": "/tmp/root234-20261014/final-visual-acceptance-v01.json",
+      "sha256": "9205fb9cf960dee6f735c2cab63570d09dc6d65cb2467ec296141e8192aad7f5"
+    },
+    "caller": {
+      "path": "/tmp/root234-20261014/qa-reclaim-cost-v03.mjs",
+      "sha256": "096f74b7557449826cf74f6ec10ae838d08f38d3ec622b83fcc9902a30de62c4"
+    },
+    "rawReport": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.234/invocations/run-xjnr44/qa-reclaim-cost-v03.result.json",
+      "sha256": "b4b0e5a4c3ec0979ecc6c639c4c1cbd0dfb294a8d2590b7ee0b90b21b1ba1fc2"
+    },
+    "cells": 8,
+    "payments": 16,
+    "fullReplays": 8,
+    "normalGreedyTargetChoices": 8,
+    "geometryWitnesses": 20,
+    "caps": [],
+    "acceptedReceipt": {
+      "path": "/tmp/root234-20261014/workflow-v02.receipt.json",
+      "sha256": "746e2d292c330d654f871f135e7f276a2d72bdfe33ca06c15d04f1a2a6a233ef"
+    },
+    "screens": [
+      {
+        "filename": "reclaim-void-action-desktop-2x.png",
+        "dimensions": [
+          2880,
+          1800
+        ],
+        "sha256": "56545660c4af5508666ec7f44c4e35bf52f53fbaaabe6413507daf62247b5ff4",
+        "rootViewed": true
+      },
+      {
+        "filename": "reclaim-settled-desktop-2x.png",
+        "dimensions": [
+          2880,
+          1800
+        ],
+        "sha256": "6383ad4bbf291bf7a2518d93e251cef6a0195488b3a7aed8be2a380bbbfdbca5",
+        "rootViewed": true
+      },
+      {
+        "filename": "reclaim-settled-mobile-2x.png",
+        "dimensions": [
+          780,
+          1688
+        ],
+        "sha256": "37e61a50a75f991665594d8b2ba8e50fe09f0c6a6ec92113d2e94804a39d0520",
+        "rootViewed": true
+      }
+    ],
+    "qualification": "Independent root derivation from full genuine published seq/index events and complete persisted JSONL, exact physical/UUID/source membership, normal Greedy worker target choices, full same-game committed/pending replay, actual images and settled native managed custody. Probe seq/index differs from persisted log seq; no false direct sequence equivalence. Zero payment correctly emits no energyChanged. Enemy hand control may later Reclaim; first hand batch pays4. Dev QA scene exercises authored production consumers, no prod-build scene claim. First workflow failed desktop0 beforepayment; mobile and remaining7UNRUN; immutable failed report/custody retained, changed scratch caller only. All required source25 unchanged. Persisted JSONL omits ordinary energy events; genuine probe seq/index events supply actual debit/continuity. All4 Skull zero intervals preserve current10\u219210. All8 target Greedy worker choices have no override; normal forced passes can still appear elsewhere. Screenshot attribution belongs only to matching player cells; other cells use actual log/replay/geometry evidence.",
+    "firstFailedAttempt": {
+      "receipt": {
+        "path": "/tmp/root234-20261014/workflow-v01.receipt.json",
+        "sha256": "7c8846d00c0dfbf4c1a6232b3afcd68b39a26db34062d600c8258bd6dc074eca"
+      },
+      "report": {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.234/invocations/run-jFLkES/qa-reclaim-cost-v02.result.json",
+        "sha256": "5c15686eb51e3978b6d36b936a550dcd78fbe682dfd130f7264814f787096024"
+      },
+      "completedAcceptedCells": 0,
+      "failedCell": "desktop/Serpent/player before payment",
+      "remainingCells": "7 UNRUN, including all mobile",
+      "caps": [],
+      "cause": "Existing actionable-void pile opens its action chooser; original scratch recipe incorrectly expected the gallery immediately. Root v03 uses existing chooser Browse option before exact gallery tap; repository source unchanged."
+    },
+    "friction": {
+      "path": "/tmp/root234-20261014/qa-justiciar-outcome-v01.json",
+      "sha256": "02cdd6284395fa6b4644f39c5b0641436b3efc30f253abf31c8ba0b231e866da"
+    },
+    "cleanup": [
+      {
+        "path": "/tmp/root234-20261014/sweep-v01-cleanup-v01.json",
+        "sha256": "f19c1838a44dc17d8cdd42e719fe8cc8b2bb725d997972110d3ec3c1c08cac6a"
+      },
+      {
+        "path": "/tmp/root234-20261014/workflow-v01-cleanup-v01.json",
+        "sha256": "b42d34e130766f5db5df863f0bd45696fd15bccbb653674c915bb5c3b6ef63e3"
+      },
+      {
+        "path": "/tmp/root234-20261014/workflow-v02-cleanup-v01.json",
+        "sha256": "0fcd2da134b8b08d43bbd791a1f27793793ed6751183a33fac3b8bd802eaaa60"
+      }
+    ],
+    "custody": "Root initial active provider identity/server/slot capture before first yield plus continuous observer retained for each invocation; exact own tokens cleared and all provider/server/runner/observer/wrapper groups settled. Shared service and foreign records untouched.",
+    "integrationQualification": "Historical runtime/aggregate evidence binds original source epoch8c151bf0, with genuine original reports/logs preserved. Combined-source focused/review/Knip evidence is recorded separately; no combined heavy/runtime execution claim."
+  },
+  "historicalSourceFailures": {
+    "index": {
+      "path": "/tmp/worker234-20261014/source-checkpoint-v01/checks-index.json",
+      "sha256": "9e2c39b8bb5ebab41b308409768be51dc4d056990d6ab598de843dea547f7ca3"
+    },
+    "hiddenLegality": {
+      "path": "/tmp/worker234-20261014/hidden-source-failure-v01.json",
+      "sha256": "901132caae3b38df5a55976e9f6f42b599a188578d0e6d836338f656083e0608"
+    },
+    "timestampBeforeDateRepair": {
+      "path": "/tmp/worker234-20261014/timestamp-failure-source-v01/manifest.json",
+      "sha256": "9bba12533ba0488819baadb06907c24022b2e2b8f699cc5b2558346b418fc9b0"
+    },
+    "sourceV01Superseded": "Own actual composition source made exhaustive; RD evidence premise names exact pre-authoring base. Only these2 source bytes differ from immutable v01; final25 frozen in v02.",
+    "fixtureRepairs": "Separate syntax pre-discovery failure, four fixture failures, and two granted-keyword fixture failures retained with actual streams/dispositions.",
+    "measuredFriction": {
+      "tag": "local-edit-correction",
+      "start": "2026-10-14T22:53:05.373907+00:00",
+      "end": "2026-10-14T23:04:22.479342+00:00",
+      "minutes": 11.285090583333334,
+      "scope": "Own new hidden Reclaim price projection/reconciliation, required layer6 timestamp witness and fixture-grant assertion repair through first full relevant green; excludes later checks/browser. Disjoint from browser scripting interval."
+    }
+  },
+  "canonicalInventory": {
+    "audit": {
+      "path": "/tmp/worker234-20261014/integration-inventory-audit-v01.json",
+      "sha256": "afb497262cc42af3b5bcdde8d301e29ddc3b570bb8426e6124733e2481995a82"
+    },
+    "fieldProof": {
+      "path": "/tmp/worker234-20261014/integration-inventory-fields-proof-v01.json",
+      "sha256": "fe91e3ac406502669390cc4e3eae9a9380554ba4de98ef1fe83ae093bcf915dd"
+    },
+    "entities": 1209,
+    "allUUIDsAndOtherEntityFieldsPreserved": true,
+    "ownStatusChanges": 2,
+    "alreadyLandedPeerStatusRefreshes": 4,
+    "qualification": "Actual new8eb comparison refreshes4 already-landed byte-identical Avatar module statuses plus own2, existing SharedRevelation RD reference and derived routing. Historical17 refreshes belong original07f epoch and are not current-base delta. No foreign source authored."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Combined-source integration-review-v01 process-start sysctl one-minute load4.67; original fullsuite load retained in historical validation."
+      },
+      "implementMin": {
+        "measuredFor": "Continuous original dispatch through prospective final pre-Git cutoff, including whole integration/final ACK wait; actual final Git tail external."
+      },
+      "testDelta": {
+        "measuredFor": "Current8eb comparison:2 plain contracts,2 support,0 entrypoints/jsdom; net526 lines including existing shared table481\u2192479."
+      }
+    }
+  },
+  "remaining": "At prospective final pre-Git cutoff: the authorized local amendment immediately follows cheap checks. Root canonical candidate/promotion and independent cold core review remain pending; no landing claim or original acceptance waiver.",
+  "historicalFirstCommit": {
+    "oid": "a1cf6471f121829d1c71527af3beb70e48242b02",
+    "implementationWindow": {
+      "start": "2026-10-14T22:37:34.424Z",
+      "end": "2026-10-14T23:41:35.469048+00:00",
+      "minutes": 64.01741746666667,
+      "status": "Prospective final pre-Git cutoff captured immediately before cheap final checks and authorized commit",
+      "includes": "All research, coordination/ACK/waits including whole COMMITACK wait, implementation, validation, QA recovery and evidence from actual postclaim dispatch through this cutoff.",
+      "samplingSeconds": "UNKNOWN",
+      "gitTail": "Actual historical first-commit tail retained in parent commit-tail-root-verification-v01.json; original tracked cutoff was not rewritten after that commit."
+    },
+    "sourceEpoch": {
+      "manifest": {
+        "path": "/tmp/worker234-20261014/source-checkpoint-v02/manifest.json",
+        "sha256": "8c151bf051aec1ff494e673bc88e88f353764f62f60a33237c9d71d98c15a22f"
+      },
+      "changedPaths": 25,
+      "archive": {
+        "directory": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.234/final-source-v01",
+        "files": 353,
+        "bytes": 60625611,
+        "manifestSHA256": "8aa05e619a09e493269fae659e7bc7e140617dde9135b57f2ab48a8e307fd753"
+      },
+      "archiveReceipt": {
+        "path": "/tmp/root234-20261014/archive-final-source-v01.json",
+        "sha256": "c07d570edaa84f5034c3510605e6bd76eb6da99d4be1fbd3dcfb5e61c666d3ca"
+      },
+      "scopeQualification": "Only admitted25 source paths plus own ledger/friction/measurementJSON/measurementMD. Other source bytes stay frozen; no pre-existing product defect established.",
+      "evidencePaths": 4
+    },
+    "validation": {
+      "focusedRelevant": {
+        "receipt": {
+          "path": "/tmp/worker234-20261014/focused-relevant-v01.receipt.json",
+          "sha256": "602bc8a8b62afa55c2869929f8b956a0a5d393549c1fa0d580469d2b3b949258"
+        },
+        "files": 7,
+        "tests": 4858,
+        "qualification": "Before final type-exhaustiveness-only support repair and late RD evidence wording."
+      },
+      "focusedFinalComposition": {
+        "receipt": {
+          "path": "/tmp/worker234-20261014/focused-composition-exhaustive-v01.receipt.json",
+          "sha256": "213f0108224ae7a8763eab51c73dc071ba64733ec2be6453ed04c686ac1c0b5a"
+        },
+        "selected": 290,
+        "ownRows": 288,
+        "skipped": 4390
+      },
+      "ordinaryReview": {
+        "receipt": {
+          "path": "/tmp/worker234-20261014/review-v02.receipt.json",
+          "sha256": "7cd1ccae2a819688df4d890e5643126214c3b2411b3858693da68f3b0587121a"
+        },
+        "relatedFiles": 306,
+        "relatedTests": 8428
+      },
+      "knip": {
+        "path": "/tmp/worker234-20261014/knip-v02.receipt.json",
+        "sha256": "04648d15d53e4a758bbfb945e36c9525e539c6a9e9fd211261a9afffe1b54f2d"
+      },
+      "fullReview": {
+        "path": "/tmp/root234-20261014/full-review-acceptance-v01.json",
+        "sha256": "ac216b1f91f55a270c982c581e2dba45bda73175b97987c14f601ded9bea8525"
+      },
+      "fullReviewObserved": {
+        "files": 387,
+        "passed": 9437,
+        "vitestSeconds": 81.56,
+        "stepSeconds": 82.3,
+        "startLoadOneMinute": 18.91650390625
+      },
+      "qualification": "Final RD evidence sentence was corrected after ordinary review terminal and before Knip; the locked fullreview includes final RD. Fullsuite81.56s at startload18.91650390625 is an observed scope, not a low-load CI performance threshold.",
+      "allFocusedAndHistoricalReceipts": {
+        "path": "/tmp/worker234-20261014/source-checkpoint-v01/checks-index.json",
+        "sha256": "9e2c39b8bb5ebab41b308409768be51dc4d056990d6ab598de843dea547f7ca3"
+      },
+      "finalCheckIndex": {
+        "path": "/tmp/worker234-20261014/source-checkpoint-v02/checks-index.json",
+        "sha256": "277d6c9f7c876b3f1e7dca02e158178deaa245052e5d960633232e6e3bbff24d"
+      },
+      "workers": 2
+    },
+    "canonicalInventory": {
+      "audit": {
+        "path": "/tmp/root234-20261014/inventory-provisional-audit-v02.json",
+        "sha256": "222e00f859df7eb9d33732316a10f906da96e8a126fe30c3846250ec0f44faab"
+      },
+      "entities": 1209,
+      "immutableUUIDsAndFieldsPreserved": true,
+      "qualification": "Canonical generation refreshes17 other pending\u2192authored statuses from byte-identical already-landed module bytes plus own2 statuses, old RD696 reference and routing projections. This bead authors no foreign product module."
+    },
+    "qualification": "Original candidate terminal merge-conflict and never approved. Original full/fuzz/browser evidence remains at original source epoch; none is relabeled as combined-source execution.",
+    "actualTail": {
+      "path": "/tmp/root234-20261014/commit-tail-root-verification-v01.json",
+      "sha256": "97b81d5748832fc01d22263977e9729146f7394d657a2e3ce1d0be1598a99294"
+    }
+  },
+  "originalBase": "07f842d01d1e43aeb0e57bac5c29671e7b81b2a1",
+  "integration": {
+    "admission": {
+      "path": "/tmp/root234-20261014/integration-reapply-ack-v01-native.stdout",
+      "sha256": "d45b191e8cdfa000f2fce99a4d235d5857e2932b73cdde69524dda6802857f4f"
+    },
+    "nativeUpdateProof": {
+      "path": "/tmp/root234-20261014/integration-native-update-verification-v02.json",
+      "sha256": "cfa869053d746c97a18afa97dabd96286387f4735346c6ded17f62735ce5a596"
+    },
+    "conflictCapture": {
+      "path": "/tmp/root234-20261014/integration-conflict-v01/manifest.json",
+      "sha256": "60d20d9223864aeb8afcefa8e0ca107caf212d2c1fb873b0e96a6425c3b59830"
+    },
+    "originalCandidate": "01a13ccb-48be-7122-a487-fb490933d31e",
+    "originalCandidateOutcome": "terminal merge-conflict; never approved",
+    "temporaryCheckpoints": [
+      "37e0aaca1c9a65ef813a60abb32b25708aa823e7",
+      "f081f64fcf0e1dcd7c5c02ec5500db899bbba16d"
+    ],
+    "temporaryCheckpointDisposition": "Never submit or approve either temporary checkpoint. Parent authorized the final local amendment; root owns canonical candidate/promotion and cold review.",
+    "currentSource": {
+      "path": "/tmp/worker234-20261014/integration-source-checkpoint-v01/manifest.json",
+      "sha256": "b2868aeaac404e5cca541f2bfe1921662d6c8062f0c035f0be6455ecf2fe2e71"
+    },
+    "checks": {
+      "integration-focused-v01": {
+        "path": "/tmp/worker234-20261014/integration-focused-v01.receipt.json",
+        "sha256": "8fe869036383979f4daa095bfed33fcef8b0bb503c8d6fc5f97549071916a406"
+      },
+      "integration-review-v01": {
+        "path": "/tmp/worker234-20261014/integration-review-v01.receipt.json",
+        "sha256": "5d00f2de80b4c320ed1c2877f911bd89c77e2bf902e11aaf4c26aff9ecbadcb7"
+      },
+      "integration-knip-v01": {
+        "path": "/tmp/worker234-20261014/integration-knip-v01.receipt.json",
+        "sha256": "8ee85cc7a0c40d534ed7920b41b87935c92a50d6910a07b5360dedd57f5df8d3"
+      },
+      "integration-inventory-v01": {
+        "path": "/tmp/worker234-20261014/integration-inventory-v01.receipt.json",
+        "sha256": "783772ee7cf05ae18535c6eba813283a95682ed197ab5d7a04e62d67350d5204"
+      }
+    },
+    "noRepeatedHeavyOrRuntime": true,
+    "measuredFriction": {
+      "tag": "integration-conflict",
+      "start": "2026-10-14T23:43:17.778121+00:00",
+      "end": "2026-10-14T23:53:33.411004+00:00",
+      "minutes": 10.26054805,
+      "qualification": "First actually observed terminal-conflict status receipt to combined Knip end; candidate terminal time itself is not inferred."
+    },
+    "parentAudits": [
+      {
+        "path": "/tmp/root234-20261014/integration-timing-semantic-inspection-v01.json",
+        "sha256": "033c657214aa0bd3a78a079e352bf2b84be96991a0c1237847a70fcc91049a14"
+      },
+      {
+        "path": "/tmp/root234-20261014/integration-freeze-checks-audit-v01.json",
+        "sha256": "63da3025b7b1671d3276cfd393c28c723900cfab8288d7852bf9ab1a4b4e16d4"
+      }
+    ],
+    "finalCommitACK": {
+      "path": "/tmp/root234-20261014/integration-final-commit-ack-v01-native.stdout",
+      "sha256": "d4f336eef0ae60484d919710ca8af5f826d4e89346615c5e7c7cd995f867c4ed"
+    },
+    "finalParentAudits": [
+      {
+        "path": "/tmp/root234-20261014/integration-freeze-checks-audit-v02.json",
+        "sha256": "d755d030b76b2102a04813e081945abfa72b6c44bd053294975b6ca6c1b029a8"
+      },
+      {
+        "path": "/tmp/root234-20261014/integration-root-source-audit-v02.json",
+        "sha256": "7ff76ffd7fc1dcecbd47ceea48b216d7bed40ce6031b6777e74e828556429199"
+      }
+    ]
+  }
+}

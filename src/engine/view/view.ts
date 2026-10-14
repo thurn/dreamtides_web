@@ -38,6 +38,7 @@ import { changedInstance, keptWithoutSource } from "../rules/floating";
 import { abilitiesDisabled } from "../rules/ability-disabling";
 import { banishedAsReclaimed } from "../rules/zones";
 import { playCosts } from "../rules/costs";
+import { reclaimEnergyQuote } from "../rules/timing";
 import { materializedThisTurn } from "../rules/turn-log";
 import { combinedSourceObservers, knows, observedFixedEffect, seesHandCopySubject, seesSubject } from "./knowledge";
 
@@ -57,6 +58,8 @@ export interface CharacteristicsView {
    * after cost modifications.
    */
   readonly cost: number;
+  /** Current void Reclaim's unfloored fixed energy quote; X and chosen nested energy add to it. */
+  readonly reclaimCost?: number;
 }
 
 /** One instance the viewer can see, with its identity: a card, a figment, or a figment copy of a card. */
@@ -407,6 +410,7 @@ function hiddenZone(ids: readonly InstanceId[], visible: (id: InstanceId) => boo
 export function characteristicsView(state: BattleState, catalog: EngineCatalog, layers: Layers, instance: CardInstance): CharacteristicsView {
   const card = layers.of(instance.id);
   const printed = fixedEnergy(playCosts(instanceCard(catalog, instance), instance.variant));
+  const reclaimCost = reclaimEnergyQuote(state, catalog, instance.id, layers);
   return {
     cardType: card.cardType,
     subtype: card.subtype,
@@ -414,6 +418,7 @@ export function characteristicsView(state: BattleState, catalog: EngineCatalog, 
     keywords: [...card.keywords],
     spark: card.spark,
     cost: adjustedEnergy(printed, costModifier(state, catalog, instance.id, instance.controller, layers)),
+    ...(reclaimCost === undefined ? {} : { reclaimCost }),
   };
 }
 

@@ -468,6 +468,8 @@ export type ContinuousChange =
   | ({ readonly kind: "cost"; readonly player: Side; readonly filter: CardFilter; readonly amount: number; readonly next: boolean } &
       ({ readonly nth?: never; readonly mode?: never } | { readonly nth: number; readonly mode?: "set" } |
        { readonly nth?: never; readonly mode: "set"; readonly next: false }))
+  /** Layer 6, static only: the selected Reclaim fixed base or whole-payment reduction. */
+  | { readonly kind: "reclaimCost"; readonly player: Side; readonly mode: "set" | "reduce"; readonly amount: number }
   /**
    * Layer 6: one card's energy cost, whoever plays it. `"set"` gives it
    * `amount`● in place of its ● cost (its copiable cost); `"increase"` makes

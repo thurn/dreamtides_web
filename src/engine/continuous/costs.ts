@@ -33,19 +33,25 @@ export function costModifier(
   card: InstanceId,
   player: Side,
   layers: Layers = characteristics(state, catalog),
-  options: { readonly applyOwnSet?: boolean } = {},
+  options: { readonly applyOwnSet?: boolean; readonly reclaimBase?: number } = {},
 ): CostModifier {
   let increase = 0;
   let reduction = 0;
-  let set: number | null = null;
+  let setDifference: number | null = null;
   const consumes: EffectId[] = [];
   const played = filterSubjectOf(state, catalog, card, layers.of(card));
   for (const { change, effect } of layers.changes(6)) {
+    if (change.kind === "reclaimCost") {
+      if (change.player !== player || options.reclaimBase === undefined) continue;
+      if (change.mode === "set") setDifference = change.amount - options.reclaimBase;
+      else reduction += change.amount;
+      continue;
+    }
     if (change.kind === "cardCost") {
       if (change.instance !== card) continue;
       // Changes come in layer order, so the latest set applies.
       if (change.mode === "set") {
-        if (options.applyOwnSet !== false) set = change.amount;
+        if (options.applyOwnSet !== false) setDifference = change.amount - copiableCostOf(state, catalog, card);
       } else if (change.mode === "reduce") reduction += change.amount;
       else increase += change.amount;
       continue;
@@ -56,20 +62,19 @@ export function costModifier(
       if (earlier !== change.nth - 1) continue;
     }
     if (change.mode === "set") {
-      if (options.applyOwnSet !== false) set = change.amount;
+      if (options.applyOwnSet !== false) setDifference = change.amount - copiableCostOf(state, catalog, card);
       continue;
     }
     if (change.amount > 0) increase += change.amount;
     else reduction -= change.amount;
     if (change.next && effect !== null) consumes.push(effect);
   }
-  if (set !== null) {
+  if (setDifference !== null) {
     // The set cost replaces the ● cost; X and other energy parts still add, and
     // every change applies to the total once, so the difference joins the
     // increases or the reductions with the same result.
-    const difference = set - copiableCostOf(state, catalog, card);
-    if (difference > 0) increase += difference;
-    else reduction -= difference;
+    if (setDifference > 0) increase += setDifference;
+    else reduction -= setDifference;
   }
   return { increase, reduction, consumes };
 }

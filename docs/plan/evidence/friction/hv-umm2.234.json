@@ -1,0 +1,44 @@
+{
+  "bead": "hv-umm2.234",
+  "phase": 5,
+  "implementMin": 80.08053843333333,
+  "implementWindow": {
+    "start": "2026-10-14T22:37:34.424Z",
+    "end": "2026-10-14T23:57:39.256306+00:00"
+  },
+  "localValidationS": {
+    "focused": 17.301029042049777,
+    "focusedComposition": 7.000078541983385,
+    "review": 62.4576489579631,
+    "knip": 5.343597458966542,
+    "reviewFull": 125.37239129195223,
+    "fuzz": 368.0512199579971,
+    "preflight": 3.133525459037628,
+    "sweep": 66.13199929200346,
+    "browser": 257.3181939170463,
+    "inventory": 2.973183457972482
+  },
+  "hostLoad": 4.67,
+  "testDelta": {
+    "files": 2,
+    "lines": 526,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 11.285090583333334,
+      "note": "Actual hidden-price contract failure22:53:05.373907Z through first full relevant green23:04:22.479342Z. Own new Reclaim behavior required public signed cost projection/reconciliation admission, mandatory pre-date layer6 timestamp witness/repair, and granted-keyword fixture assertion correction. Includes debugging/re-admission/focused validation; excludes later review/Knip/heavy/browser. Own feature correction, no pre-existing product defect."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 9.841863483333332,
+      "note": "Actual first workflow launch23:25:04.228359Z through root direct justiciar resolved23:34:54.740168Z. Desktop0 failed before payment at existing actionable-void chooser; Caps empty, mobile and other7 cells UNRUN. Scratch caller v03 follows chooser\u2192Browse\u2192exact physical gallery control; unchanged source then passed8 cells/16 payments/8 replays. Includes failed prefix and recovery/acceptance, excludes heavy checks and sweep."
+    },
+    {
+      "tag": "integration-conflict",
+      "minutes": 10.26054805,
+      "note": "Observed terminal-conflict status23:43:17.778121Z through combined-source Knip23:53:33.411004Z. Exact observed-status interval includes two-path parking, parent native update, finite Reclaim reapplication preserving landed alternativeCost routing, canonical generation, focused/review/Knip. No guessed candidate terminal timestamp or productive-time claim."
+    }
+  ]
+}

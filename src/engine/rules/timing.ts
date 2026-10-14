@@ -3,8 +3,10 @@ import { identifies } from "../view/knowledge";
 import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristics, characteristicsOf, filterSubjectOf, matchesFilter } from "../continuous/characteristics";
 import { costModifier, type CostModifier } from "../continuous/costs";
+import type { Layers } from "../continuous/layers";
 import { playPermission } from "../continuous/permissions";
 import type { AlternativeCostAbility, Cost, Speed } from "../dsl/types";
+import { fixedEnergy } from "../dsl/energy";
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
@@ -37,9 +39,9 @@ export type PlayRoute = "hand" | "offering" | "permission" | "reclaim" | "eventA
  * in timestamp order, since the card last lost Reclaim; `null` when none
  * applies. A plain gain of Reclaim adds the keyword and keeps the cost.
  */
-function grantedReclaimCosts(state: BattleState, catalog: EngineCatalog, id: InstanceId): readonly Cost[] | null {
+function grantedReclaimCosts(state: BattleState, catalog: EngineCatalog, id: InstanceId, layers: Layers = characteristics(state, catalog)): readonly Cost[] | null {
   let granted: readonly Cost[] | null = null;
-  for (const { change } of characteristics(state, catalog).changes(3)) {
+  for (const { change } of layers.changes(3)) {
     if (change.kind !== "keyword" || change.keyword !== "reclaim" || change.instance !== id) continue;
     if (!change.gains) granted = null;
     else if (change.reclaimCosts !== undefined) granted = change.reclaimCosts;
@@ -48,8 +50,8 @@ function grantedReclaimCosts(state: BattleState, catalog: EngineCatalog, id: Ins
 }
 
 /** Explicit Reclaim replaces the normal base; a plain keyword keeps it. */
-function explicitReclaimCosts(state: BattleState, catalog: EngineCatalog, id: InstanceId): readonly Cost[] | null {
-  const granted = grantedReclaimCosts(state, catalog, id);
+function explicitReclaimCosts(state: BattleState, catalog: EngineCatalog, id: InstanceId, layers: Layers = characteristics(state, catalog)): readonly Cost[] | null {
+  const granted = grantedReclaimCosts(state, catalog, id, layers);
   if (granted !== null) return granted;
   const instance = instanceOf(state, id);
   return instanceCard(catalog, instance).abilities(instance.variant).find((ability) => ability.kind === "reclaim")?.costs ?? null;
@@ -66,9 +68,11 @@ function ownAlternativeCost(state: BattleState, catalog: EngineCatalog, id: Inst
 }
 
 /** Cost changes for the selected route; explicit replacement routes exclude own base setters. */
-export function routeCostModifier(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId, route: PlayRoute): CostModifier {
-  const replaced = route === "offering" || route === "eventAlternative" || route === "alternativeCost" || (route === "reclaim" && explicitReclaimCosts(state, catalog, id) !== null);
-  return costModifier(state, catalog, id, side, undefined, { applyOwnSet: !replaced });
+export function routeCostModifier(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId, route: PlayRoute, layers: Layers = characteristics(state, catalog)): CostModifier {
+  const reclaim = route === "reclaim" ? explicitReclaimCosts(state, catalog, id, layers) : null;
+  const replaced = route === "offering" || route === "eventAlternative" || route === "alternativeCost" || (route === "reclaim" && reclaim !== null);
+  return costModifier(state, catalog, id, side, layers, { applyOwnSet: !replaced,
+    ...(route === "reclaim" ? { reclaimBase: fixedEnergy(reclaim ?? instanceCard(catalog, instanceOf(state, id)).costs) } : {}) });
 }
 
 /**
@@ -77,7 +81,7 @@ export function routeCostModifier(state: BattleState, catalog: EngineCatalog, si
  * one, then the card's normal costs for plain Reclaim; the card's additional
  * costs follow any Reclaim cost.
  */
-export function routeCosts(state: BattleState, catalog: EngineCatalog, id: InstanceId, route: PlayRoute): Cost[] {
+export function routeCosts(state: BattleState, catalog: EngineCatalog, id: InstanceId, route: PlayRoute, layers: Layers = characteristics(state, catalog)): Cost[] {
   const instance = instanceOf(state, id);
   const definition = instanceCard(catalog, instance);
   const { variant } = instance;
@@ -98,10 +102,27 @@ export function routeCosts(state: BattleState, catalog: EngineCatalog, id: Insta
     case "offering":
       return [{ cost: "banishFromHand", count: 1 }, ...additionalCosts(definition, variant)];
     case "reclaim": {
-      const costs = explicitReclaimCosts(state, catalog, id);
+      const costs = explicitReclaimCosts(state, catalog, id, layers);
       return costs === null ? playCosts(definition, variant) : [...costs, ...additionalCosts(definition, variant)];
     }
   }
+}
+
+/** The same Reclaim ability eligibility that the void route reads, against the caller's layers. */
+function hasReclaimAbility(state: BattleState, catalog: EngineCatalog, id: InstanceId, layers: Layers): boolean {
+  const instance = instanceOf(state, id);
+  const definition = instanceCard(catalog, instance);
+  return layers.of(id).keywords.includes("reclaim") ||
+    (definition.abilities(instance.variant).some(ability => ability.kind === "reclaim") &&
+      !layers.changes(3).some(({ change }) => change.kind === "keyword" && change.instance === id && change.keyword === "reclaim" && !change.gains));
+}
+
+/** Signed fixed Reclaim payment before the zero floor; X and chosen nested energy add to this quote. */
+export function reclaimEnergyQuote(state: BattleState, catalog: EngineCatalog, id: InstanceId, layers: Layers): number | undefined {
+  const instance = instanceOf(state, id);
+  if (instance.zone !== "void" || !hasReclaimAbility(state, catalog, id, layers)) return undefined;
+  const modifier = routeCostModifier(state, catalog, instance.controller, id, "reclaim", layers);
+  return fixedEnergy(routeCosts(state, catalog, id, "reclaim", layers)) + modifier.increase - modifier.reduction;
 }
 
 /**
@@ -132,11 +153,7 @@ export function playRoutes(state: BattleState, catalog: EngineCatalog, id: Insta
   if (from === "deck") return playPermission(state, catalog, id, instance.owner) === null ? [] : ["permission", ...alternative, ...own];
   if (from === "void") {
     const permitted = playPermission(state, catalog, id, instance.owner) !== null;
-    const reclaimable =
-      hasKeyword(state, catalog, id, "reclaim") ||
-      (definition.abilities(instance.variant).some((ability) => ability.kind === "reclaim") &&
-        !characteristics(state, catalog).changes(3).some(({ change }) =>
-          change.kind === "keyword" && change.instance === id && change.keyword === "reclaim" && !change.gains));
+    const reclaimable = hasReclaimAbility(state, catalog, id, characteristics(state, catalog));
     return [...(permitted ? (["permission"] as const) : []), ...(reclaimable ? (["reclaim"] as const) : []), ...(permitted ? [...alternative, ...own] : [])];
   }
   return [...(hasKeyword(state, catalog, id, "offering") ? ["hand", "offering"] as const : ["hand"] as const), ...alternative, ...own];

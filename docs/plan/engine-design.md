@@ -1526,6 +1526,22 @@ Other zone rules:
 - **Copies** (`rules/copies.ts`): stack copies (D15), figment copies (C5),
   and created copies in a hand, each announced by `cardCreated`.
 
+`costModifierReclaim(player, { set: N } | { reduce: N })` is static-only,
+layer 6. The selected Reclaim route supplies its fixed primary energy base,
+excluding X and additional costs. Its latest applicable setter shares normal
+setter order for plain Reclaim and replaces only the explicit Reclaim base
+for costed Reclaim. Reductions join the whole chosen energy payment's other
+reductions. Other routes and normal displayed card costs read no Reclaim
+modifier (RD-hv-umm2.234-1).
+Identifiable cards currently in a void with an available Reclaim route expose
+an optional signed `reclaimCost` quote in their characteristics view. It is
+the selected fixed energy, including mandatory fixed additions, plus its net
+cost modifier before the zero floor; X and chosen nested energy add to it.
+The quote names no modifier source. Hidden-source reconciliation compares it
+with the sampled quote and considers cost-layer timestamps when such an
+observation exists, preserving the payment response and setter order without
+identifying a hidden source. The quote is view data and enters no saved state.
+
 ## Costs
 
 Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
@@ -1902,6 +1918,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, count, optional })` (`count` cards, all when fewer match; an optional take of several asks its "you may" first, then takes exactly that many), `lookAtTop(n, { draw, ephemeral })`, `lookAtTopBanish(n)` / `putLinkedBanishedInHand(producerOffset = -1)` (paired source-object memory, RD-hv-umm2.486-1), `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs | capturedCards())` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, grouped by source zone in first-reference order, each in its original zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
 | Characters | `abandon(chooser, predicate)` (one own character chosen at resolution, not a target), `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materialize(from)` (zone-card references or the character a nested Discover moves into hand), `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `rematerialize`, `move(slotRule)`, `gainAbilities(banishCards(…))` (the source, while in play, gains every ability of each card the banish moved; layer 3 `abilities`), `loseAllAbilities(subject, { duration, sourceGains })` (each character loses all its abilities while in play, layer 3 `loseAbilities`; with `sourceGains`, the source, while in play, gains the abilities each had as it lost them) |
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`), `costModifierNth(player, filter, nth, { set: N } \| { reduce: N })` (static only; captured matching plays in the current turn qualify the ordinal; set replaces the normal fixed base, reduce adjusts the whole chosen energy payment; RD-hv-umm2.104-1) | |
+| Reclaim costs | `costModifierReclaim(player, { set: N } \| { reduce: N })` (static only; chosen Reclaim fixed base or whole energy payment, RD-hv-umm2.234-1) | |
 | Player rules | `ruleModifier(instruction, player)` | Static-only: optional Fast/Interrupt Event base, energy carry, or Dawn threshold with a deferred child. |
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15), `banishSelfOnResolve` ("Banish this card": the resolving event goes from the stack to its owner's Banished zone as the instruction resolves, so `resolveTop` does not put it into the void; RD-hv-umm2.475-1) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |

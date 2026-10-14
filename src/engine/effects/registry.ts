@@ -29,6 +29,7 @@ import {
   copyCardTimesPrimitive,
   costModifierPrimitive,
   costModifierNthPrimitive,
+  costModifierReclaimPrimitive,
   costSetterPrimitive,
   ruleModifierPrimitive,
   additionalDrawPhaseCardsPrimitive,
@@ -123,6 +124,7 @@ export type Effect = {
 const DEFINITIONS = {
   get costSetter() { return costSetterPrimitive; },
   get costModifierNth() { return costModifierNthPrimitive; },
+  get costModifierReclaim() { return costModifierReclaimPrimitive; },
   get ruleModifier() { return ruleModifierPrimitive; },
   get additionalDrawPhaseCards() { return additionalDrawPhaseCardsPrimitive; },
   get abandon() {

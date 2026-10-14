@@ -417,7 +417,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   prim("reclaimNotBanished", "reclaim-not-banished.ts", { note: `continuous: cards you reclaim are not banished (${GAP_38})` }),
   // Phase 5: cost modifiers.
   ext("costModifierNth", "cost-modifier.ts", /nthInTurn|nth:/, { note: "\"the first warrior you play each turn costs…\"" }),
-  ext("costModifierReclaim", "cost-modifier.ts", /reclaim/i, { note: "\"Reclaim abilities cost you 1● less\"" }),
+  prim("costModifierReclaim", "cost-modifier-reclaim.ts", { symbol: "costModifierReclaim", note: "static selected-Reclaim fixed base or whole-payment reduction" }),
   ext("costModifierActivated", "cost-modifier.ts", /activated/, { note: `cost modifiers on activated abilities (${GAP_37})` }),
   // Phase 5: DSL additions.
   dsl("selectorFigment", [registered(DSL_TYPES, "CharacterSelector", { option: "figment" })], ["CharacterSelector"], { note: "figment or not" }),
