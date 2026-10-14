@@ -127,7 +127,7 @@ describe("playFromZone recovery", () => {
     const outcome = fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action });
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
     expect(outcome.error.message).toMatch(/after its permission/);
-    expect(outcome.published.map((event) => event.kind)).toEqual(["cardPlayed"]);
+    expect(outcome.published.map((event) => event.kind)).toEqual(["handEmptied", "cardPlayed"]);
     expect(outcome.slice.committed.floating).toEqual([]);
     expect(voidPlays(outcome.slice.committed)).toEqual([]);
   });

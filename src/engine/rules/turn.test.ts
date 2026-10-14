@@ -263,7 +263,7 @@ describe("conditional victory (C15)", () => {
       { kind: "winConditionMet", side: "player", sources: [source] },
       { kind: "battleEnded", result: state.result },
     ]);
-    expect(eventLogRecords(events, passed.state.version).map((record) => record.event)).toEqual(["engine.winCondition", "engine.battleEnded"]);
+    expect(eventLogRecords(events, passed.state.version).map((record) => record.event)).toEqual(["engine.handEmptied", "engine.winCondition", "engine.battleEnded"]);
     expect(winEngine.decision(state)).toBeNull();
   });
 
@@ -385,7 +385,7 @@ describe("playing cards, the stack, and capacity", () => {
     });
     const card = ids.player.hand[0];
     const { state, events } = engine.apply(start, "player", { kind: "play", card, from: "hand" }, NO_PROMPTS);
-    expect(events.map((event) => event.kind)).toEqual(["energyChanged", "cardPlayed", "resolved", "materialized"]);
+    expect(events.map((event) => event.kind)).toEqual(["energyChanged", "handEmptied", "cardPlayed", "resolved", "materialized"]);
     expect(state.sides.player.currentEnergy).toBe(1);
     expect(state.sides.player.backRank[0]).toBe(card);
     expect(state.stack).toEqual([]);

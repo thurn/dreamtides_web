@@ -255,6 +255,6 @@ describe("static abilities from other zones", () => {
     const after = outcome.slice.committed;
     expect(zoneOf(after, source)).toBe("play");
     expect(spark(after, ally)).toBe(1);
-    expect(outcome.published.map((entry) => entry.kind)).toEqual(["cardPlayed"]);
+    expect(outcome.published.map((entry) => entry.kind)).toEqual(["handEmptied", "cardPlayed"]);
   });
 });

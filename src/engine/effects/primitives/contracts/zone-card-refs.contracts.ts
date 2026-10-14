@@ -451,7 +451,7 @@ describe("zone card references", () => {
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
     expect(outcome.error.message).toMatch(/after its zone references resolved/);
     // The play committed before resolution began; nothing the resolution did commits or publishes.
-    expect(outcome.published.map((event) => event.kind)).toEqual(["cardPlayed"]);
+    expect(outcome.published.map((event) => event.kind)).toEqual(["handEmptied", "cardPlayed"]);
     const committed = outcome.slice.committed;
     expect(committed.stack).toHaveLength(1);
     expect(committed.sides.player.hand).toEqual([]);

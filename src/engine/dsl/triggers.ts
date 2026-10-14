@@ -127,6 +127,11 @@ export function whenForesee(player: PlayerRef = "you"): Trigger {
   return { on: "foresee", player };
 }
 
+/** "When your hand becomes empty": each actual positive-to-zero transition of the hand you hold. */
+export function whenHandBecomesEmpty(player: PlayerRef = "you"): Trigger {
+  return { on: "handBecomesEmpty", player };
+}
+
 /** "When you discard one or more cards": one completed discard occasion. */
 export function whenDiscardBatch(player: PlayerRef = "you"): Trigger {
   return { on: "discardBatch", player };

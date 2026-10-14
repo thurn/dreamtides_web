@@ -72,7 +72,7 @@ describe("revealDeckTop", () => {
     const { state, ids } = placed({ player: { hand: [DECK_TOP.revealer.id], deck: [v.vanilla1.id, v.vanilla2.id] } });
     const ctx = new Context(state, engine.catalog, NO_PROMPTS);
     enterPlay(ctx, ids.player.hand[0], "player", { rank: "back", index: 0 });
-    expect(ctx.events.map((event) => event.kind)).toEqual(["materialized", "revealed"]);
+    expect(ctx.events.map((event) => event.kind)).toEqual(["handEmptied", "materialized", "revealed"]);
     moveToHand(ctx, ids.player.hand[0], "player");
     ctx.completeDeckTopReveals();
     expect(engine.view(cloneState(state), "enemy").sides.player.deck.known).toEqual([{ id: ids.player.deck[0], index: 0 }]);

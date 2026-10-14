@@ -292,7 +292,7 @@ describe("grantReclaim", () => {
     const outcome = fold.reduce(start, { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action });
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
     expect(outcome.error.message).toMatch(/after its grant/);
-    expect(outcome.published.map((event) => event.kind)).toEqual(["cardPlayed"]);
+    expect(outcome.published.map((event) => event.kind)).toEqual(["handEmptied", "cardPlayed"]);
     expect(outcome.slice.committed.floating).toEqual([]);
     expect(has(outcome.slice.committed, ids.player.void[0])).toBe(false);
   });

@@ -128,6 +128,18 @@ function detach(state: BattleState, instance: CardInstance): Side[] {
   return seers;
 }
 
+/** Captures the holder and positive count before a card leaves a hand. */
+function departingHand(state: BattleState, instance: CardInstance): { readonly side: Side; readonly count: number } | null {
+  return instance.zone === "hand" ? { side: instance.controller, count: state.sides[instance.controller].hand.length } : null;
+}
+
+/** Announces the settled move, so removing and reinserting into the same hand is not an occasion. */
+function announceEmptyHand(ctx: StepContext, before: ReturnType<typeof departingHand>): void {
+  if (before !== null && before.count > 0 && ctx.state.sides[before.side].hand.length === 0) {
+    ctx.emit({ kind: "handEmptied", side: before.side });
+  }
+}
+
 function removeFromZone(state: BattleState, instance: CardInstance): void {
   switch (instance.zone) {
     case "play": {
@@ -211,6 +223,7 @@ function relocate(
   const receiver = destination === "hand" ? holder : instance.owner;
   const from = instance.zone;
   const leavingPlay = from === "play";
+  const hand = departingHand(state, instance);
   depart(ctx, instance, destination);
   const seers = detach(state, instance);
   instance.controller = receiver;
@@ -228,6 +241,7 @@ function relocate(
     instance.status.counters = 0;
   }
   instance.status.x = null;
+  announceEmptyHand(ctx, hand);
   if (destination === "void") ctx.emit({ kind: "enteredVoid", instance: id, side: receiver, from });
   return destination;
 }
@@ -281,6 +295,7 @@ export function moveToStack(
   const { state } = ctx;
   const instance = instanceOf(state, id);
   const fromVoid = instance.zone === "void";
+  const hand = departingHand(state, instance);
   depart(ctx, instance, "stack");
   detach(state, instance);
   instance.controller = controller;
@@ -296,6 +311,7 @@ export function moveToStack(
     ...(played.slot === undefined ? {} : { slot: played.slot }),
     ...(fromVoid ? { playedFromVoid: true } : {}),
   });
+  announceEmptyHand(ctx, hand);
 }
 
 /**
@@ -316,6 +332,7 @@ export function enterPlay(
   if (occupant(state, side, slot) !== null) {
     throw new Error(`Slot ${slot.rank}${String(slot.index)} is occupied`);
   }
+  const hand = departingHand(state, instance);
   depart(ctx, instance, "play");
   detach(state, instance);
   instance.controller = side;
@@ -323,6 +340,7 @@ export function enterPlay(
   instance.enteredZoneAt = ++state.clock;
   setOccupant(state, side, slot, id);
   instance.status.exhausted = !awakened && !hasKeyword(state, ctx.catalog, id, "awakened");
+  announceEmptyHand(ctx, hand);
   ctx.emit({ kind: "materialized", instance: id, side, slot });
 }
 
@@ -411,6 +429,7 @@ export function ceaseToExist(
   const instance = instanceOf(state, id);
   const side = instance.controller;
   const from = instance.zone;
+  const hand = departingHand(state, instance);
   if (options.silent === true) {
     if (instance.zone === "play") {
       captureSourceSpark(ctx, instance);
@@ -427,6 +446,7 @@ export function ceaseToExist(
   );
   endChangesTo(ctx, id);
   forgetCeased(ctx, id);
+  announceEmptyHand(ctx, hand);
   ctx.emit({ kind: "ceasedToExist", instance: id, side, from, ...(options.banishedBy === undefined ? {} : { banishedBy: options.banishedBy }) });
 }
 

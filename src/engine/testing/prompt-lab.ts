@@ -1272,6 +1272,13 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     ],
   },
   {
+    name: "present-hand-empty",
+    description: "Presentation: play the last card held in hand",
+    setup: { active: "player", phase: "day", player: { hand: [SYNTHETIC.event0.id], deck: deck(8) }, enemy: { deck: deck(8) } },
+    script: [],
+    presents: [playHand(0)],
+  },
+  {
     name: "present-zones",
     description: "Presentation: dissolve (and a trigger with no legal target), banish, banish until end of turn, return, erode, figments, and gain control",
     setup: {

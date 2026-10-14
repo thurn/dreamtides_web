@@ -660,6 +660,8 @@ export type Trigger =
   /** Each successful copy, matched by the copied card's copiable values. */
   | { readonly on: "copy"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "foresee"; readonly player: PlayerRef }
+  /** Each settled positive-to-zero transition of the hand its player holds, without a card subject. */
+  | { readonly on: "handBecomesEmpty"; readonly player: PlayerRef }
   /** Once per completed positive discard instruction, payment descriptor, or hand-limit choice. */
   | { readonly on: "discardBatch"; readonly player: PlayerRef }
   /**

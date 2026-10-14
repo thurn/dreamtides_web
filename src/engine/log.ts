@@ -26,6 +26,7 @@
  * | a bounded chosen-hand banishment's `effectStarted` event | `engine.banishReturnStarted`, with its physical source, card, entry and expiry |
  * | a selective-disabling `effectStarted` event | `engine.abilitiesDisabled`, with its physical source, target, mode and expiry |
  * | an `effectEnded` event | `engine.effectEnded`, correlated with its start by effect id |
+ * | a `handEmptied` event | `engine.handEmptied`, with only the hand holder |
  * | a `returnedToHand` event | `engine.returnedToHand`, correlated by physical instance |
  * | a `battleEnded` event | `engine.battleEnded` |
  * | a `feasibilityBounded` event; a play or activation a decision leaves out because its legality search spent its budget (`ApplyResult.bounded`) | `engine.feasibility` |
@@ -105,6 +106,7 @@ export type EngineLogRecord =
   | (RecordBase & { readonly event: "engine.banishReturnStarted"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.effectEnded"; readonly detail: EventOf<"effectEnded"> })
   | (RecordBase & { readonly event: "engine.revealed"; readonly detail: EventOf<"revealed"> })
+  | (RecordBase & { readonly event: "engine.handEmptied"; readonly detail: EventOf<"handEmptied"> })
   | (RecordBase & { readonly event: "engine.returnedToHand"; readonly detail: EventOf<"returnedToHand"> })
   | (RecordBase & { readonly event: "engine.battleEnded"; readonly result: BattleResult })
   | (RecordBase & {
@@ -147,6 +149,8 @@ export function eventLogRecord(event: EngineEvent, version: number): EngineLogRe
       return { event: "engine.effectEnded", version, detail: event };
     case "revealed":
       return { event: "engine.revealed", version, detail: event };
+    case "handEmptied":
+      return { event: "engine.handEmptied", version, detail: event };
     case "returnedToHand":
       return { event: "engine.returnedToHand", version, detail: event };
     case "battleEnded":

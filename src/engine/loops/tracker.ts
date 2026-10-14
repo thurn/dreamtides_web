@@ -51,7 +51,7 @@ function namedRenewals(trigger: Trigger): readonly NamedTrigger[] {
     case "either": return trigger.triggers.flatMap(namedRenewals);
     // Copy occasions renew through the independently proved event-copy kernel below.
     case "copy": return [];
-    case "play": case "materialize": case "draw": case "foresee": case "discardBatch":
+    case "play": case "materialize": case "draw": case "foresee": case "handBecomesEmpty": case "discardBatch":
     case "discard": case "erode": case "reclaim": case "abandon": case "leavesPlay":
     case "returnToHand": case "dissolve": case "gainsSpark": case "scores": case "opponentScores":
     case "removesEnemy": case "leavesVoid": case "putIntoVoid": case "challengeWith":

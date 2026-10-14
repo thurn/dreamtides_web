@@ -264,7 +264,7 @@ export class Context implements StepContext {
     }
     // Movement bookkeeping precedes its substantive announcement. All causal
     // trigger siblings capture visibility before any new top is disclosed.
-    if (!(["leftPlay", "leftVoid", "enteredVoid", "triggerQueued"] as readonly EngineEvent["kind"][]).includes(event.kind)) {
+    if (!(["leftPlay", "leftVoid", "enteredVoid", "handEmptied", "triggerQueued"] as readonly EngineEvent["kind"][]).includes(event.kind)) {
       this.refreshDeckTopReveals();
     }
   }

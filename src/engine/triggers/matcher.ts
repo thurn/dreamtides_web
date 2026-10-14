@@ -76,6 +76,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   materialize: ["materialized"],
   draw: ["cardDrawn"],
   foresee: ["foresaw"],
+  handBecomesEmpty: ["handEmptied"],
   copy: ["cardCopied"],
   discard: ["discarded"],
   discardBatch: ["discardBatch"],
@@ -385,6 +386,8 @@ function matchKind(
         : null;
     case "foresee":
       return event.kind === "foresaw" && event.side === resolvePlayer(you, trigger.player) ? NO_SUBJECT : null;
+    case "handBecomesEmpty":
+      return event.kind === "handEmptied" && event.side === resolvePlayer(you, trigger.player) ? NO_SUBJECT : null;
     case "discardBatch":
       return event.kind === "discardBatch" && event.count > 0 && event.side === resolvePlayer(you, trigger.player)
         ? { subject: null, discardedCount: event.count } : null;

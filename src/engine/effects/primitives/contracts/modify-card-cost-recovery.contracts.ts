@@ -93,7 +93,7 @@ describe("modifyCardCost recovery", () => {
     const outcome = fold.reduce(sliceOf(state), { kind: "battleAction", side: "player", action: play(ids.player.hand[0]) });
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
     expect(outcome.error.message).toMatch(/after its cost change/);
-    expect(outcome.published.map((event) => event.kind)).toEqual(["cardPlayed"]);
+    expect(outcome.published.map((event) => event.kind)).toEqual(["handEmptied", "cardPlayed"]);
     expect(outcome.slice.committed.floating).toEqual([]);
     expect(outcome.slice.committed.instances[ids.enemy.back[0]!]?.zone).toBe("play");
     expect(costNow(outcome.slice.committed, ids.enemy.back[0], "enemy")).toBe(3);

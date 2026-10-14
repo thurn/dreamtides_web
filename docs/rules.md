@@ -1921,6 +1921,17 @@ abilities triggered, triggers at the end of the next turn instead, and a
 character that enters play then does not trigger "At the end of your turn"
 that turn.
 
+**When your hand becomes empty:** This triggers once when the hand you hold
+changes from one or more cards to zero cards. Playing, discarding, banishing,
+moving the last card elsewhere, and a created card ceasing to exist can each
+cause it. The hand belongs to its holder, even when another player owns its
+cards. Moving a card within the same hand does not cause it, and a hand that
+is already empty does not trigger it. The move or removal finishes before
+abilities check whether they work in their current zones. Drawing later in
+the same effect does not cancel the occasion. The occasion is public and
+names no card. Its abilities wait for the whole effect or action to finish,
+then resolve in the usual trigger order.
+
 **Counting ▸Dawn abilities:** "If 3 or more ▸Dawn abilities trigger during
 your Dawn phase, draw a card" counts actual successful admissions during
 that phase, including either player's abilities. A named-Dawn ability

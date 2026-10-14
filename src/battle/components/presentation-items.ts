@@ -87,6 +87,7 @@ export const EVENT_PRESENTATION = {
   feasibilityBounded: "none",
   figmentsMerged: "travel",
   foresaw: "travel",
+  handEmptied: "none",
   laneResolved: "score",
   leftPlay: "none",
   leftVoid: "none",
