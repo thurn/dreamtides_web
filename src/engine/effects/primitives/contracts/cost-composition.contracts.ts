@@ -1,3 +1,4 @@
+import { NTH_COST_ROWS, observeNthCostRow } from "./cost-modifier-nth-support";
 /**
  * The cost-composition table: every layer-6 cost change mode × every play
  * route × every additional energy shape, on synthetic cards. Expected
@@ -483,5 +484,13 @@ describe.each(SIDES)("counter-X composition payments by %s", side => {
     const done = paymentEngine.apply(paid.state, other, { kind: "pass" }, NO_PROMPTS);
     expect(done.state.sides[side].score).toBe(1);
     expect(invariantViolations(done.state, paymentEngine.catalog)).toEqual([]);
+  });
+});
+
+// The static nth modes use their real producer; these qualified changes never float.
+describe("nth static cost composition table", () => {
+  it.each(NTH_COST_ROWS)("$label pays the ruled chosen-route composition", row => {
+    expect(observeNthCostRow(row)).toMatchObject({ energy: row.expected, points: 1, otherEnergy: 30, played: 1,
+      reclaimed: row.route.route === "reclaim", offering: row.route.route === "offering", x: row.route.route === "offering" || row.route.route === "eventAlternative" ? 0 : 2 });
   });
 });

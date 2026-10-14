@@ -1,4 +1,6 @@
 import { card } from "../define";
+import { keyword, staticAbility } from "../../engine/dsl/builders";
+import { costModifierNth } from "../../engine/effects/primitives";
 
 export default card({
   name: "Heavenward Penitent",
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 270,
   art: { x: 0, y: 0, scale: 1.97 },
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("veil"), staticAbility(costModifierNth("you", { cardType: "character", costAtMost: 2 }, 1, { set: 0 }))],
+  verifiedText: "15frd2xcb6h",
 });

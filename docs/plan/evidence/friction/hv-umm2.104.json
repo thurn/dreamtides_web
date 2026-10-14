@@ -1,0 +1,54 @@
+{
+  "bead": "hv-umm2.104",
+  "phase": 5,
+  "implementMin": 63.57771133333333,
+  "implementWindow": {
+    "start": "2026-10-14T19:53:59.230000+00:00",
+    "end": "2026-10-14T20:57:33.892680+00:00"
+  },
+  "localValidationS": {
+    "focused": 17.471261500002583,
+    "review": 82.16861283400794,
+    "knip": 5.050651249999646,
+    "fuzz": 311.0750842919806,
+    "browser": 86.51707683302811
+  },
+  "hostLoad": 16.30712890625,
+  "testDelta": {
+    "files": 0,
+    "lines": 343,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "merge-conflict-recovery",
+      "minutes": 11.714878,
+      "note": "Gross first failed parent Tollgate update through canonical inventory regeneration and combined validation/evidence. Only generated inventory was parked; all other own behavior and peer content are preserved. Includes coordination and parent update/check waits, not productive CPU. Original candidate already terminal merge-conflict; cancellation call made no mutation. Original source/QA/fuzz/counterfactual epochs and51.02372043333333-minute through-Git window retained separately. Final endpoint includes parent final audit/COMMITACK wait."
+    }
+  ],
+  "originalImplementationEpoch": {
+    "frictionManifestSha": "4bc3c06eb9aa04485d50a8feaadc397195c81d5a0e7be36a3138a6bd0383323f",
+    "implementMin": 51.021941616666666,
+    "implementWindow": {
+      "start": "2026-10-14T19:53:59.230000+00:00",
+      "end": "2026-10-14T20:45:00.546497+00:00"
+    },
+    "throughGitMin": 51.02372043333333,
+    "gitEnd": "2026-10-14T20:45:00.653226+00:00",
+    "localValidationS": {
+      "focused": 14.803111124987481,
+      "review": 59.99650920799468,
+      "knip": 5.048470416979399,
+      "fuzz": 311.0750842919806,
+      "browser": 86.51707683302811
+    },
+    "hostLoad": 3.7626953125,
+    "friction": []
+  },
+  "integrationValidationS": {
+    "integration-inventory": 2.734655042004306,
+    "integration-focused": 17.471261500002583,
+    "integration-review": 82.16861283400794,
+    "integration-knip": 5.050651249999646
+  }
+}

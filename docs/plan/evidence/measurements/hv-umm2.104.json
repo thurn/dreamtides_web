@@ -1,0 +1,1912 @@
+{
+  "bead": "hv-umm2.104",
+  "status": "Final combined source cutoff after parent final integration COMMITACK; one normal-date final amend follows without tracked post-amend writes",
+  "dispatch": {
+    "dispatchAt": "2026-10-14T19:53:59.230Z",
+    "callId": "call_14f8b2cdd82f490aa7d613e8fe73ae85",
+    "agent": "/root/nth_cost104",
+    "samplingSeconds": "UNKNOWN",
+    "source": "own host trace"
+  },
+  "sampling": "UNKNOWN",
+  "sourceResearch": "/tmp/codex-104/research-source-manifest.json",
+  "counterfactuals": [
+    {
+      "label": "cf-ordinal",
+      "source": "src/engine/continuous/costs.ts",
+      "originalSHA256": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+      "mutatedSHA256": "0f6dcf9e8527f16524d11c9d4bb4746797e45849b84f448637a0807c89452c9e",
+      "test": "set applies to qualifying play",
+      "start": "2026-10-14T20:14:41.989862+00:00",
+      "exitCode": 1,
+      "namedFailures": [
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > set applies to qualifying play 1 before payment, once at cost zero too",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > set applies to qualifying play 2 before payment, once at cost zero too",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > set applies to qualifying play 3 before payment, once at cost zero too",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > set applies to qualifying play 1 before payment, once at cost zero too",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > set applies to qualifying play 2 before payment, once at cost zero too",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > set applies to qualifying play 3 before payment, once at cost zero too"
+      ],
+      "restoredSHA256": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+      "end": "2026-10-14T20:14:48.522776+00:00"
+    },
+    {
+      "label": "cf-route-set",
+      "source": "src/engine/continuous/costs.ts",
+      "originalSHA256": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+      "mutatedSHA256": "8a1f2071208cda02c96518fcdbc4e73bf6865ed70a2ef9e069c4fe1c6f11f4fd",
+      "test": "nth static cost composition table",
+      "start": "2026-10-14T20:14:48.523084+00:00",
+      "exitCode": 1,
+      "namedFailures": [
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > nth static cost composition table > 'player nth set by printed Reclaim' pays the ruled chosen-route composition",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > nth static cost composition table > 'enemy nth set by printed Reclaim' pays the ruled chosen-route composition",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > nth static cost composition table > 'player nth set by granted Reclaim' pays the ruled chosen-route composition",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > nth static cost composition table > 'enemy nth set by granted Reclaim' pays the ruled chosen-route composition",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > nth static cost composition table > 'player nth set by Offering' pays the ruled chosen-route composition",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > nth static cost composition table > 'enemy nth set by Offering' pays the ruled chosen-route composition",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > nth static cost composition table > 'player nth set by event alternative' pays the ruled chosen-route composition",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > nth static cost composition table > 'enemy nth set by event alternative' pays the ruled chosen-route composition"
+      ],
+      "restoredSHA256": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+      "end": "2026-10-14T20:14:55.092902+00:00"
+    },
+    {
+      "label": "cf-live-history",
+      "source": "src/engine/continuous/costs.ts",
+      "originalSHA256": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+      "mutatedSHA256": "f8e8fcd1adc85146c4b378ebd0fe8064c1c1ffbb2dcfbf9fd6083af45332436e",
+      "test": "captured all-types qualification",
+      "start": "2026-10-14T20:14:55.093199+00:00",
+      "exitCode": 1,
+      "namedFailures": [
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > captured all-types qualification survives return and loss of the granting source",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > captured all-types qualification survives return and loss of the granting source"
+      ],
+      "restoredSHA256": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+      "end": "2026-10-14T20:15:01.049121+00:00"
+    }
+  ],
+  "validationScope": "Final ordinary review306files/7798passed, Knip pass. Restored focused3files/4175passed plus added positive legacy-save-baseline pair; guessed nonexistent fourth selector is excluded from accepted guidance. Weighted300/101223steps/7273prompts/750interactive reruns, target613included180exercised, zero failures; preflight/sweep each8pass12ineligible skips0fail; two judged desktop/mobilePASS. No local review:full or D19 suite-budget claim. Runtime/source frozen through accepted browser; one current API documentation entry and own evidence updated after cleanup only.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Combined ordinary review start 2026-10-14T20:52:15.979138+00:00",
+        "value": 16.30712890625
+      }
+    }
+  },
+  "commands": {
+    "browser-sweep": {
+      "label": "browser-sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.104",
+        "--cards",
+        "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:26:17.501059+00:00",
+      "load": [
+        8.50146484375,
+        9.720703125,
+        9.35986328125
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 26102,
+      "pgid": 26102,
+      "end": "2026-10-14T20:27:11.939470+00:00",
+      "wallS": 54.437678000016604,
+      "cpuS": 9.628646999999999,
+      "exitCode": 0
+    },
+    "caller-final-syntax": {
+      "label": "caller-final-syntax",
+      "argv": [
+        "node",
+        "--check",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.104/nth-pricing.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:30:04.439235+00:00",
+      "load": [
+        4.00341796875,
+        7.2236328125,
+        8.3974609375
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 37287,
+      "pgid": 37287,
+      "end": "2026-10-14T20:30:04.480044+00:00",
+      "wallS": 0.04049808401032351,
+      "cpuS": 0.040073,
+      "exitCode": 0
+    },
+    "caller-syntax": {
+      "label": "caller-syntax",
+      "argv": [
+        "node",
+        "--check",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.104/nth-pricing.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:25:52.386215+00:00",
+      "load": [
+        10.06591796875,
+        10.09765625,
+        9.478515625
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 24595,
+      "pgid": 24595,
+      "end": "2026-10-14T20:25:52.427848+00:00",
+      "wallS": 0.04134029199485667,
+      "cpuS": 0.041548999999999996,
+      "exitCode": 0
+    },
+    "cf-live-history": {
+      "label": "cf-live-history",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "captured all-types qualification"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:14:55.130312+00:00",
+      "load": [
+        6.3056640625,
+        8.4658203125,
+        9.4453125
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "f8e8fcd1adc85146c4b378ebd0fe8064c1c1ffbb2dcfbf9fd6083af45332436e",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "1137d682c84ab615cb84515870e7d67fed3eebc6d66ad5d3d47a38b847d9466e",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "e1f240db7e1e143a075a46f5359a839922c90b2db244dd2aa4ff2476ff92558b",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 87532,
+      "pgid": 87532,
+      "end": "2026-10-14T20:15:01.044413+00:00",
+      "wallS": 5.913674834009726,
+      "cpuS": 8.102414,
+      "exitCode": 1
+    },
+    "cf-ordinal": {
+      "label": "cf-ordinal",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "set applies to qualifying play"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:14:42.026681+00:00",
+      "load": [
+        6.345703125,
+        8.578125,
+        9.501953125
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "0f6dcf9e8527f16524d11c9d4bb4746797e45849b84f448637a0807c89452c9e",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "1137d682c84ab615cb84515870e7d67fed3eebc6d66ad5d3d47a38b847d9466e",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "e1f240db7e1e143a075a46f5359a839922c90b2db244dd2aa4ff2476ff92558b",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 86571,
+      "pgid": 86571,
+      "end": "2026-10-14T20:14:48.518054+00:00",
+      "wallS": 6.490947584010428,
+      "cpuS": 9.003596,
+      "exitCode": 1
+    },
+    "cf-route-set": {
+      "label": "cf-route-set",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "nth static cost composition table"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:14:48.559431+00:00",
+      "load": [
+        6.5068359375,
+        8.54150390625,
+        9.4775390625
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "8a1f2071208cda02c96518fcdbc4e73bf6865ed70a2ef9e069c4fe1c6f11f4fd",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "1137d682c84ab615cb84515870e7d67fed3eebc6d66ad5d3d47a38b847d9466e",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "e1f240db7e1e143a075a46f5359a839922c90b2db244dd2aa4ff2476ff92558b",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 87058,
+      "pgid": 87058,
+      "end": "2026-10-14T20:14:55.088158+00:00",
+      "wallS": 6.528225249989191,
+      "cpuS": 9.084841,
+      "exitCode": 1
+    },
+    "first-focused": {
+      "label": "first-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "static nth costs|public nth builder|nth static cost composition table"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:11:11.461212+00:00",
+      "load": [
+        10.560546875,
+        11.44189453125,
+        10.57470703125
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "0249323fb6902813ffc1ae3a845b1f989ec1f9d9788e51b7b7b1f239d2b34ece",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "c777f6c6dc8d9319e55e58078d1a31e37998c5b96a9e2cc6e468dd16017943fd",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 72595,
+      "pgid": 72595,
+      "end": "2026-10-14T20:11:19.559418+00:00",
+      "wallS": 8.097556250024354,
+      "cpuS": 10.809612999999999,
+      "exitCode": 1
+    },
+    "focused-final": {
+      "label": "focused-final",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/continuous/continuous.test.ts",
+        "src/rules/battle/fold-engine.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:15:28.284784+00:00",
+      "load": [
+        4.9462890625,
+        7.86474609375,
+        9.1845703125
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "1137d682c84ab615cb84515870e7d67fed3eebc6d66ad5d3d47a38b847d9466e",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 88406,
+      "pgid": 88406,
+      "end": "2026-10-14T20:15:43.088389+00:00",
+      "wallS": 14.803111124987481,
+      "cpuS": 20.473979,
+      "exitCode": 0
+    },
+    "inventory": {
+      "label": "inventory",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:12:34.630918+00:00",
+      "load": [
+        6.6884765625,
+        9.89892578125,
+        10.06005859375
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "a1e380aac8ee376ce7525350fd68dfc54cdde1f9ec48b335b22d56c1921d3e45",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "ae25b4e4b4c9ec0b1f72cca59b2859945767557cc4da69cf3e49fec159664e1d",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 78010,
+      "pgid": 78010,
+      "end": "2026-10-14T20:12:38.790610+00:00",
+      "wallS": 4.158354291983414,
+      "cpuS": 3.9946479999999998,
+      "exitCode": 0
+    },
+    "judged-browser": {
+      "label": "judged-browser",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.104/nth-pricing.mjs",
+        "--bead",
+        "hv-umm2.104",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:27:38.859591+00:00",
+      "load": [
+        6.8212890625,
+        9.029296875,
+        9.13427734375
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 31160,
+      "pgid": 31160,
+      "end": "2026-10-14T20:27:47.959827+00:00",
+      "wallS": 9.099883042013971,
+      "cpuS": 8.445304,
+      "exitCode": 1
+    },
+    "judged-final": {
+      "label": "judged-final",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.104/nth-pricing.mjs",
+        "--bead",
+        "hv-umm2.104",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:30:35.801172+00:00",
+      "load": [
+        3.33203125,
+        6.75390625,
+        8.1865234375
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 37643,
+      "pgid": 37643,
+      "end": "2026-10-14T20:31:07.881072+00:00",
+      "wallS": 32.07939883301151,
+      "cpuS": 7.700057,
+      "exitCode": 0
+    },
+    "knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:20:33.614261+00:00",
+      "load": [
+        17.74072265625,
+        9.96923828125,
+        9.38330078125
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 55227,
+      "pgid": 55227,
+      "end": "2026-10-14T20:20:38.663612+00:00",
+      "wallS": 5.048470416979399,
+      "cpuS": 5.717673,
+      "exitCode": 0
+    },
+    "pre-qa-schema": {
+      "label": "pre-qa-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:25:25.059905+00:00",
+      "load": [
+        12.2080078125,
+        10.4580078125,
+        9.5830078125
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 22919,
+      "pgid": 22919,
+      "end": "2026-10-14T20:25:25.196943+00:00",
+      "wallS": 0.13598787499358878,
+      "cpuS": 0.093281,
+      "exitCode": 0
+    },
+    "pre-qa-whitespace": {
+      "label": "pre-qa-whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:25:52.322325+00:00",
+      "load": [
+        10.06591796875,
+        10.09765625,
+        9.478515625
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 24591,
+      "pgid": 24591,
+      "end": "2026-10-14T20:25:52.349435+00:00",
+      "wallS": 0.02674750000005588,
+      "cpuS": 0.05030899999999999,
+      "exitCode": 0
+    },
+    "preflight": {
+      "label": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:21:08.079282+00:00",
+      "load": [
+        12.7568359375,
+        9.5068359375,
+        9.2353515625
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 56438,
+      "pgid": 56438,
+      "end": "2026-10-14T20:21:09.470345+00:00",
+      "wallS": 1.390739541995572,
+      "cpuS": 1.72553,
+      "exitCode": 0
+    },
+    "review-final": {
+      "label": "review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:18:39.145870+00:00",
+      "load": [
+        3.7626953125,
+        6.115234375,
+        8.17724609375
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 92424,
+      "pgid": 92424,
+      "end": "2026-10-14T20:19:39.143992+00:00",
+      "wallS": 59.99650920799468,
+      "cpuS": 161.54807699999998,
+      "exitCode": 0
+    },
+    "review-first": {
+      "label": "review-first",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:17:10.225778+00:00",
+      "load": [
+        3.6240234375,
+        6.607421875,
+        8.54736328125
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "1669da958ad85fcea3f73c4bd0980c375367fb3628b6868d4e797233aea91e99",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 90896,
+      "pgid": 90896,
+      "end": "2026-10-14T20:18:06.201655+00:00",
+      "wallS": 55.97490712499712,
+      "cpuS": 171.93921999999998,
+      "exitCode": 2
+    },
+    "saved-field-baseline": {
+      "label": "saved-field-baseline",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "saved floating records reject"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:16:21.143794+00:00",
+      "load": [
+        4.16748046875,
+        7.21630859375,
+        8.8681640625
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "1669da958ad85fcea3f73c4bd0980c375367fb3628b6868d4e797233aea91e99",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 89789,
+      "pgid": 89789,
+      "end": "2026-10-14T20:16:26.853173+00:00",
+      "wallS": 5.709006541990675,
+      "cpuS": 7.87219,
+      "exitCode": 0
+    },
+    "second-focused": {
+      "label": "second-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "static nth costs|public nth builder|nth static cost composition table"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:11:43.930145+00:00",
+      "load": [
+        7.87744140625,
+        10.6787109375,
+        10.3310546875
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "a1e380aac8ee376ce7525350fd68dfc54cdde1f9ec48b335b22d56c1921d3e45",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "ae25b4e4b4c9ec0b1f72cca59b2859945767557cc4da69cf3e49fec159664e1d",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 74668,
+      "pgid": 74668,
+      "end": "2026-10-14T20:11:50.183132+00:00",
+      "wallS": 6.252593415993033,
+      "cpuS": 8.70219,
+      "exitCode": 1
+    },
+    "third-row-focus": {
+      "label": "third-row-focus",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "nth static cost composition table"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:13:31.602921+00:00",
+      "load": [
+        5.904296875,
+        9.15869140625,
+        9.7744140625
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "1137d682c84ab615cb84515870e7d67fed3eebc6d66ad5d3d47a38b847d9466e",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "e1f240db7e1e143a075a46f5359a839922c90b2db244dd2aa4ff2476ff92558b",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 81730,
+      "pgid": 81730,
+      "end": "2026-10-14T20:13:40.359159+00:00",
+      "wallS": 8.75512004099437,
+      "cpuS": 9.770137,
+      "exitCode": 0
+    },
+    "verified-text": {
+      "label": "verified-text",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "-e",
+        "import { expectedVerifiedText } from \"./src/engine/dsl/verified-text.ts\"; console.log(expectedVerifiedText(\"Veil\\n\\nThe first \u22642\u25cf cost character you play each turn costs you 0\u25cf.\"));"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:07:37.610952+00:00",
+      "load": [
+        5.64208984375,
+        9.4404296875,
+        9.60205078125
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "c777f6c6dc8d9319e55e58078d1a31e37998c5b96a9e2cc6e468dd16017943fd",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "ee844ed4a467b4c39a1e7da33f2032df2e868d7a41e957fe6da18fa831c55a1a"
+      },
+      "pid": 42660,
+      "pgid": 42660,
+      "end": "2026-10-14T20:07:38.919901+00:00",
+      "wallS": 1.308145582996076,
+      "cpuS": 1.4243759999999999,
+      "exitCode": 0
+    },
+    "weighted-300": {
+      "label": "weighted-300",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:19:29.866094+00:00",
+      "load": [
+        6.79150390625,
+        6.498046875,
+        8.1943359375
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 94318,
+      "pgid": 94318,
+      "end": "2026-10-14T20:24:40.935397+00:00",
+      "wallS": 311.0750842919806,
+      "cpuS": 333.096697,
+      "exitCode": 0
+    }
+  },
+  "counterfactualEpochs": {
+    "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": {
+      "counterfactualSHA256": "1137d682c84ab615cb84515870e7d67fed3eebc6d66ad5d3d47a38b847d9466e",
+      "postBaselineSHA256": "1669da958ad85fcea3f73c4bd0980c375367fb3628b6868d4e797233aea91e99",
+      "change": "Added accepted legacy floating save baseline only; earlier contracts retain their exact bytes.",
+      "finalSourceSHA256": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+      "finalDeltaQualification": "After the positive legacy-save baseline, the separate latest-own-setter case uses the actual supported randomIn(hand,1,filter) reference and import instead of unsupported everyIn. It has exactly one matching physical hand card. The ordinal, route table and captured-all-types named counterfactual witnesses retain exact tested bodies; ordinary review typechecks and passes this final epoch."
+    },
+    "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": {
+      "counterfactualSHA256": "e1f240db7e1e143a075a46f5359a839922c90b2db244dd2aa4ff2476ff92558b",
+      "currentSHA256": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+      "change": "Removed unused prompt collection only; answers and actual play observer unchanged."
+    }
+  },
+  "oldSourcePreservation": {
+    "oldCostModulePrefixSHA256": "2228010771bab3c2a997f366e9c7c823490ecd87d70a659c36d69d064972e986",
+    "oldCostTableBytes": 30608,
+    "oldCostTableSHA256": "135875ab0a9cdf981d06646096f8d02bfb4fc5f55ca8cf72e9fa5cec58da9239",
+    "newTableLines": 496,
+    "generatorSHA256": "aef8d9cd0544a6b7d84294c6a1b74142a34a3952296ac508c7d42f0fe5d7dba5"
+  },
+  "envOverrides": {
+    "JOURNEY_TEST_WORKERS": "2"
+  },
+  "envProvenance": "Actual /tmp/codex-104/run.py Popen sets this one explicit override; no other environment values are recorded.",
+  "D20": "Veil + static nth pricing composes the proven primitives; no bespoke interaction or extra scenario module.",
+  "failureBoundary": "Ordinal qualification is a pure derived reader. New both-side contracts exercise real cancellation, saved reload, invalid/foreign/stale/duplicate answer rejection and identical replay. No independent concurrent-action or fabricated postpayment failure claim. Unchanged canonical fold-intents.test.ts failed-attempt contract98-119 and fold.test.ts cancellation181-198 establish rollback; ordinary related suite passes.",
+  "hostLoadSamples": [
+    {
+      "command": "cf-live-history",
+      "step": "prepare",
+      "at": "2026-10-14T20:14:55.327Z",
+      "load": 6.3056640625
+    },
+    {
+      "command": "cf-live-history",
+      "step": "test",
+      "at": "2026-10-14T20:14:56.610Z",
+      "load": 6.3056640625
+    },
+    {
+      "command": "cf-live-history",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:14:59.905Z",
+      "load": 6.12060546875
+    },
+    {
+      "command": "cf-ordinal",
+      "step": "prepare",
+      "at": "2026-10-14T20:14:42.217Z",
+      "load": 6.345703125
+    },
+    {
+      "command": "cf-ordinal",
+      "step": "test",
+      "at": "2026-10-14T20:14:43.524Z",
+      "load": 6.63818359375
+    },
+    {
+      "command": "cf-ordinal",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:14:47.274Z",
+      "load": 6.63818359375
+    },
+    {
+      "command": "cf-route-set",
+      "step": "prepare",
+      "at": "2026-10-14T20:14:48.755Z",
+      "load": 6.5068359375
+    },
+    {
+      "command": "cf-route-set",
+      "step": "test",
+      "at": "2026-10-14T20:14:50.100Z",
+      "load": 6.5068359375
+    },
+    {
+      "command": "cf-route-set",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:14:53.842Z",
+      "load": 6.3056640625
+    },
+    {
+      "command": "first-focused",
+      "step": "prepare",
+      "at": "2026-10-14T20:11:11.661Z",
+      "load": 10.560546875
+    },
+    {
+      "command": "first-focused",
+      "step": "test",
+      "at": "2026-10-14T20:11:13.761Z",
+      "load": 10.1953125
+    },
+    {
+      "command": "first-focused",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:11:18.005Z",
+      "load": 10.1953125
+    },
+    {
+      "command": "focused-final",
+      "step": "prepare",
+      "at": "2026-10-14T20:15:28.460Z",
+      "load": 4.9462890625
+    },
+    {
+      "command": "focused-final",
+      "step": "test",
+      "at": "2026-10-14T20:15:29.653Z",
+      "load": 4.9462890625
+    },
+    {
+      "command": "focused-final",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:15:41.965Z",
+      "load": 4.88671875
+    },
+    {
+      "command": "knip",
+      "step": "prepare",
+      "at": "2026-10-14T20:20:33.817Z",
+      "load": 17.74072265625
+    },
+    {
+      "command": "knip",
+      "step": "knip",
+      "at": "2026-10-14T20:20:35.145Z",
+      "load": 17.74072265625
+    },
+    {
+      "command": "knip",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:20:37.406Z",
+      "load": 17.74072265625
+    },
+    {
+      "command": "review-final",
+      "step": "prepare",
+      "at": "2026-10-14T20:18:39.383Z",
+      "load": 3.7626953125
+    },
+    {
+      "command": "review-final",
+      "step": "typecheck",
+      "at": "2026-10-14T20:18:42.121Z",
+      "load": 3.7626953125
+    },
+    {
+      "command": "review-final",
+      "step": "typecheck-node",
+      "at": "2026-10-14T20:18:42.122Z",
+      "load": 3.7626953125
+    },
+    {
+      "command": "review-final",
+      "step": "import-cycles",
+      "at": "2026-10-14T20:18:42.122Z",
+      "load": 3.7626953125
+    },
+    {
+      "command": "review-final",
+      "step": "lint",
+      "at": "2026-10-14T20:18:42.122Z",
+      "load": 3.7626953125
+    },
+    {
+      "command": "review-final",
+      "step": "test-related",
+      "at": "2026-10-14T20:18:42.123Z",
+      "load": 3.7626953125
+    },
+    {
+      "command": "review-final",
+      "step": "friction-records",
+      "at": "2026-10-14T20:18:42.123Z",
+      "load": 3.7626953125
+    },
+    {
+      "command": "review-final",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:19:37.413Z",
+      "load": 7.44873046875
+    },
+    {
+      "command": "review-first",
+      "step": "prepare",
+      "at": "2026-10-14T20:17:10.402Z",
+      "load": 3.6240234375
+    },
+    {
+      "command": "review-first",
+      "step": "typecheck",
+      "at": "2026-10-14T20:17:11.574Z",
+      "load": 3.6240234375
+    },
+    {
+      "command": "review-first",
+      "step": "typecheck-node",
+      "at": "2026-10-14T20:17:11.575Z",
+      "load": 3.6240234375
+    },
+    {
+      "command": "review-first",
+      "step": "import-cycles",
+      "at": "2026-10-14T20:17:11.575Z",
+      "load": 3.6240234375
+    },
+    {
+      "command": "review-first",
+      "step": "lint",
+      "at": "2026-10-14T20:17:11.575Z",
+      "load": 3.6240234375
+    },
+    {
+      "command": "review-first",
+      "step": "test-related",
+      "at": "2026-10-14T20:17:11.576Z",
+      "load": 3.6240234375
+    },
+    {
+      "command": "review-first",
+      "step": "friction-records",
+      "at": "2026-10-14T20:17:11.576Z",
+      "load": 3.6240234375
+    },
+    {
+      "command": "review-first",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:18:03.427Z",
+      "load": 5.3291015625
+    },
+    {
+      "command": "saved-field-baseline",
+      "step": "prepare",
+      "at": "2026-10-14T20:16:21.320Z",
+      "load": 4.16748046875
+    },
+    {
+      "command": "saved-field-baseline",
+      "step": "test",
+      "at": "2026-10-14T20:16:22.481Z",
+      "load": 4.16748046875
+    },
+    {
+      "command": "saved-field-baseline",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:16:25.736Z",
+      "load": 4.15380859375
+    },
+    {
+      "command": "second-focused",
+      "step": "prepare",
+      "at": "2026-10-14T20:11:44.107Z",
+      "load": 7.87744140625
+    },
+    {
+      "command": "second-focused",
+      "step": "test",
+      "at": "2026-10-14T20:11:45.309Z",
+      "load": 7.87744140625
+    },
+    {
+      "command": "second-focused",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:11:48.890Z",
+      "load": 7.56689453125
+    },
+    {
+      "command": "third-row-focus",
+      "step": "prepare",
+      "at": "2026-10-14T20:13:31.877Z",
+      "load": 5.904296875
+    },
+    {
+      "command": "third-row-focus",
+      "step": "test",
+      "at": "2026-10-14T20:13:34.755Z",
+      "load": 5.83154296875
+    },
+    {
+      "command": "third-row-focus",
+      "step": "restore-local-assets",
+      "at": "2026-10-14T20:13:39.031Z",
+      "load": 5.7646484375
+    }
+  ],
+  "qa": {
+    "at": "2026-10-14T20:34:45.502882+00:00",
+    "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.104/invocations/run-ZikiHh/nth-pricing.result.json",
+    "rawReportSHA256": "5cf1b54e470aa5d9837c71e53e3682d3654b8bea6f1245ff5970baf3991ff19f",
+    "cases": {
+      "desktop": {
+        "gameId": "keok9n",
+        "rows": 41,
+        "gameLog": "nth-pricing-desktop.jsonl",
+        "gameLogSHA256": "43ff57b218b74776761e4236b86d030ed46875c4b7f17a1d0720455177821de0",
+        "captures": [
+          {
+            "file": "nth-prices-initial-desktop.png",
+            "sha256": "d314cc2069984a4ad9b66915bac86d807e7508c884a0f81cd7336047779c49e6",
+            "pixelSize": [
+              2880,
+              1800
+            ]
+          },
+          {
+            "file": "nth-first-free-desktop.png",
+            "sha256": "dccdbdf4f512c04080c3ca62d07e20bf4e40d3554bdef8fab095ef3616660acf",
+            "pixelSize": [
+              2880,
+              1800
+            ]
+          },
+          {
+            "file": "nth-second-paid-desktop.png",
+            "sha256": "f8d7bbb7ec36935a5e362314a7ba1481ec3a358012c4dd36bb4c5b521a893bcf",
+            "pixelSize": [
+              2880,
+              1800
+            ]
+          }
+        ],
+        "payments": [
+          3,
+          0,
+          2
+        ],
+        "energyAfter": [
+          4,
+          4,
+          2
+        ],
+        "playCounts": [
+          1,
+          2,
+          3
+        ],
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        },
+        "source": "i1",
+        "physicalPlayed": [
+          "i2",
+          "i3",
+          "i4"
+        ]
+      },
+      "mobile": {
+        "gameId": "8axyzs",
+        "rows": 41,
+        "gameLog": "nth-pricing-mobile.jsonl",
+        "gameLogSHA256": "d93ca1bfd76c43de0ab58b354fbc2b535752e8b9f66307223a5e05ce7872468a",
+        "captures": [
+          {
+            "file": "nth-prices-initial-mobile.png",
+            "sha256": "3152d00cd028d26d63d9c4fab3654ff2d4305f3821f0f265eaeaffcad3db931b",
+            "pixelSize": [
+              780,
+              1688
+            ]
+          },
+          {
+            "file": "nth-first-free-mobile.png",
+            "sha256": "e8591f0df224a9e39d03a94f6d3084bee0a0d4f6cdc8becc99a5bf564c834cdb",
+            "pixelSize": [
+              780,
+              1688
+            ]
+          },
+          {
+            "file": "nth-second-paid-mobile.png",
+            "sha256": "d3a6106c7283d38760dd14a75f81041f8eb65a752b2a97a88ba06c0ab8f9cdc9",
+            "pixelSize": [
+              780,
+              1688
+            ]
+          }
+        ],
+        "payments": [
+          3,
+          0,
+          2
+        ],
+        "energyAfter": [
+          4,
+          4,
+          2
+        ],
+        "playCounts": [
+          1,
+          2,
+          3
+        ],
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        },
+        "source": "i1",
+        "physicalPlayed": [
+          "i2",
+          "i3",
+          "i4"
+        ]
+      }
+    },
+    "sourceFreezeRechecked": true,
+    "callerSHA256": "b748c3481f7e45ec6ea0d98a027ef5b79dc7d29cf29bebeadabafeb7e3d0f24e",
+    "runnerServerGroupsAbsent": [
+      37643,
+      37671
+    ],
+    "geometryQualification": "Whole hand artwork can extend below viewport; actual actionable center and fully visible numeric cost are proven. No no-clipping claim.",
+    "priorJudgedDiagnostic": "run-UiRfbW failed before a play from fixture observation of accessible label/full artwork rectangle; retained, Caps empty; changed caller fixes only those observations."
+  },
+  "callerProvenance": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.104/nth-pricing.mjs",
+    "sha256": "b748c3481f7e45ec6ea0d98a027ef5b79dc7d29cf29bebeadabafeb7e3d0f24e",
+    "mtimeNs": 1792009804372364684,
+    "mtimeUtc": "2026-10-14T20:30:04.372365+00:00",
+    "syntax": {
+      "label": "caller-final-syntax",
+      "argv": [
+        "node",
+        "--check",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.104/nth-pricing.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:30:04.439235+00:00",
+      "load": [
+        4.00341796875,
+        7.2236328125,
+        8.3974609375
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 37287,
+      "pgid": 37287,
+      "end": "2026-10-14T20:30:04.480044+00:00",
+      "wallS": 0.04049808401032351,
+      "cpuS": 0.040073,
+      "exitCode": 0
+    },
+    "launch": {
+      "label": "judged-final",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.104/nth-pricing.mjs",
+        "--bead",
+        "hv-umm2.104",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+      "start": "2026-10-14T20:30:35.801172+00:00",
+      "load": [
+        3.33203125,
+        6.75390625,
+        8.1865234375
+      ],
+      "sourceSHA256": {
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+      },
+      "pid": 37643,
+      "pgid": 37643,
+      "end": "2026-10-14T20:31:07.881072+00:00",
+      "wallS": 32.07939883301151,
+      "cpuS": 7.700057,
+      "exitCode": 0
+    },
+    "prelaunchSHA256Print": "Original tool output from caller rewrite then caller-final-syntax at20:30:04 printed final b748c3481f7e45ec6ea0d98a027ef5b79dc7d29cf29bebeadabafeb7e3d0f24e; alias correction qualified separately, not used as prelaunch historical proof."
+  },
+  "postQaDocumentation": {
+    "path": "docs/plan/engine-design.md",
+    "at": "2026-10-14T20:34:45.503658+00:00",
+    "oldSHA256": "b4a1865264b30a03ec335024f00328d261c88ff8830373ca1fa17ed5acd0e8f7",
+    "newSHA256": "0b8bd5f028d12a85b1bd5bd8b836d807d2b81a316457643b18bbe03ec8568ba7",
+    "addition": ", `costModifierNth(player, filter, nth, { set: N } \\| { reduce: N })` (static only; captured matching plays in the current turn qualify the ordinal; set replaces the normal fixed base, reduce adjusts the whole chosen energy payment; RD-hv-umm2.104-1)",
+    "qualification": "One natively admitted additive current Costs table entry after all browser cleanup; old document bytes reconstruct exactly by removing this one addition. No runtime/QA changes."
+  },
+  "resourceSettlement": {
+    "at": "2026-10-14T20:36:55.846445+00:00",
+    "checkGroupsAbsent": [
+      {
+        "label": "browser-sweep",
+        "pid": 26102,
+        "pgid": 26102,
+        "exitCode": 0
+      },
+      {
+        "label": "caller-final-syntax",
+        "pid": 37287,
+        "pgid": 37287,
+        "exitCode": 0
+      },
+      {
+        "label": "caller-syntax",
+        "pid": 24595,
+        "pgid": 24595,
+        "exitCode": 0
+      },
+      {
+        "label": "cf-live-history",
+        "pid": 87532,
+        "pgid": 87532,
+        "exitCode": 1
+      },
+      {
+        "label": "cf-ordinal",
+        "pid": 86571,
+        "pgid": 86571,
+        "exitCode": 1
+      },
+      {
+        "label": "cf-route-set",
+        "pid": 87058,
+        "pgid": 87058,
+        "exitCode": 1
+      },
+      {
+        "label": "first-focused",
+        "pid": 72595,
+        "pgid": 72595,
+        "exitCode": 1
+      },
+      {
+        "label": "focused-final",
+        "pid": 88406,
+        "pgid": 88406,
+        "exitCode": 0
+      },
+      {
+        "label": "inventory",
+        "pid": 78010,
+        "pgid": 78010,
+        "exitCode": 0
+      },
+      {
+        "label": "judged-browser",
+        "pid": 31160,
+        "pgid": 31160,
+        "exitCode": 1
+      },
+      {
+        "label": "judged-final",
+        "pid": 37643,
+        "pgid": 37643,
+        "exitCode": 0
+      },
+      {
+        "label": "knip",
+        "pid": 55227,
+        "pgid": 55227,
+        "exitCode": 0
+      },
+      {
+        "label": "pre-qa-schema",
+        "pid": 22919,
+        "pgid": 22919,
+        "exitCode": 0
+      },
+      {
+        "label": "pre-qa-whitespace",
+        "pid": 24591,
+        "pgid": 24591,
+        "exitCode": 0
+      },
+      {
+        "label": "preflight",
+        "pid": 56438,
+        "pgid": 56438,
+        "exitCode": 0
+      },
+      {
+        "label": "review-final",
+        "pid": 92424,
+        "pgid": 92424,
+        "exitCode": 0
+      },
+      {
+        "label": "review-first",
+        "pid": 90896,
+        "pgid": 90896,
+        "exitCode": 2
+      },
+      {
+        "label": "saved-field-baseline",
+        "pid": 89789,
+        "pgid": 89789,
+        "exitCode": 0
+      },
+      {
+        "label": "second-focused",
+        "pid": 74668,
+        "pgid": 74668,
+        "exitCode": 1
+      },
+      {
+        "label": "third-row-focus",
+        "pid": 81730,
+        "pgid": 81730,
+        "exitCode": 0
+      },
+      {
+        "label": "verified-text",
+        "pid": 42660,
+        "pgid": 42660,
+        "exitCode": 0
+      },
+      {
+        "label": "weighted-300",
+        "pid": 94318,
+        "pgid": 94318,
+        "exitCode": 0
+      }
+    ],
+    "browserServerGroupsAbsent": [
+      26141,
+      31196,
+      37671
+    ]
+  },
+  "sourceEpochQualification": "Original counterfactual private source bytes are reconstructed/hash-verified; later positive legacy-save-baseline assertions, unused prompt collection deletion and supported latest-setter fixture reference are separately qualified. Runtime costs.ts SHA39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936 unchanged since accepted counterfactual restoration. Original accepted CF/fuzz/preflight/sweep/judged receipts remain bound to f484089eac22d1b4308feee9dee46cb2de399b31 and their exact source/caller hashes. The combined peer base adds only independent play requirements, chosen-hand support and current rules/API paragraphs; all own behavior is preserved and combined checks are fresh. No new browser or heavy fuzz verdict is claimed for the combined revision.",
+  "testDeltaQualification": {
+    "vitestEntryFiles": 0,
+    "newPlainContractModules": 1,
+    "newPrivateSupportModules": 1,
+    "newContractCases": 41,
+    "newCostTableCases": 28,
+    "newPlainContractLines": 238,
+    "newSupportLines": 96,
+    "costTableAddedLines": 9,
+    "oldTablePreservation": "All487oldlines/30608bytes identical; final496lines."
+  },
+  "qaDiagnosticQualification": "First run-UiRfbW failed before any actual play: whole artwork box and accessible-label observations were incorrect fixture requirements; no product finding/Caps error. Exact original caller/23-row game retained. Fresh caller uses actual numeric value node and measured visible intersection/center/actionable price. Its original final freeze receipt aliased previous/current caller metadata; separate corrected receipt plus prelaunch printed SHA/syntax/mtime and untouched current bytehash establish actual caller epoch. No unchanged browser rerun.",
+  "implementationClock": {
+    "dispatch": "2026-10-14T19:53:59.230Z",
+    "dispatchCall": "call_14f8b2cdd82f490aa7d613e8fe73ae85",
+    "sourceCutoff": "2026-10-14T20:57:33.892680+00:00",
+    "inclusiveToSourceCutoffMin": 63.57771133333333,
+    "includes": "Original research, native proposal/admission waits, implementation, diagnostics, CF/checks/fuzz/browser, evidence and original parent audit/ACK, original Git, actual integration conflict/parking/parent-only update/regeneration/combined validation/evidence and final parent READY audit/COMMITACK wait.",
+    "sampling": "UNKNOWN",
+    "gitTail": "Actual final normal-date amend endpoint is captured separately in /tmp/codex-104/integration/final-commit-receipt.json; final amend follows parent COMMITACK with no tracked post-amend writes."
+  },
+  "counterfactualReportQualification": "Three admitted faults produced16 named failed tests, grouped into6 AssertionError report blocks by Vitest. Original receipts and exact source restoration retained.",
+  "originalCommitEpoch": {
+    "bead": "hv-umm2.104",
+    "oid": "f484089eac22d1b4308feee9dee46cb2de399b31",
+    "parent": "c020df40e508f4873dcbcad91ad49060156ef3fd",
+    "files": {
+      "docs/plan/engine-design.md": "0b8bd5f028d12a85b1bd5bd8b836d807d2b81a316457643b18bbe03ec8568ba7",
+      "docs/plan/evidence/content-inventory.json": "4c451fcbd2c78262d90f525f5c547deabef274da0244ab3dc8ebe300f1ac4f28",
+      "docs/plan/evidence/friction/hv-umm2.104.json": "4bc3c06eb9aa04485d50a8feaadc397195c81d5a0e7be36a3138a6bd0383323f",
+      "docs/plan/evidence/measurements/hv-umm2.104.json": "2befd85098ce8bbb5fdf3938e53a849a1fcf272f2993101b6a124bc10cf88e37",
+      "docs/plan/evidence/pre-existing/hv-umm2.104.md": "f0372c944662b210e89ae3f482c79bdd6864adae08f859dc0a17bb3d08d016cb",
+      "docs/plan/evidence/qa-ledger/hv-umm2.104.jsonl": "1b41be9a44b43344e921d322f30f0c09b8596016e9069a06c24e5257f3dafb71",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.104-1.md": "b8f3508a04e5339719fc502a83bee0adf8606b599f04d36b5eeec4e8fd7288e5",
+      "docs/rules.md": "9b3f77f48d41ea36de8f03c4359e78376fa43dc55372f76aa62535c6ce997af2",
+      "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc",
+      "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+      "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "caf77627717593a080c83eaf84f48e50e14ba674a0d11dd2c8eb5917b57cdd92",
+      "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+      "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+      "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+      "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+      "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+      "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606"
+    },
+    "sourceCutoff": "2026-10-14T20:45:00.546497+00:00",
+    "inclusiveToSourceCutoffMin": 51.021941616666666,
+    "gitStart": "2026-10-14T20:45:00.581351+00:00",
+    "gitEnd": "2026-10-14T20:45:00.653226+00:00",
+    "gitWallS": 0.18854829200427048,
+    "tailFromSourceCutoffS": 0.106729,
+    "inclusiveThroughGitMin": 51.02372043333333,
+    "exitCode": 0,
+    "clean": true,
+    "commitStdout": "/tmp/codex-104/commit.stdout",
+    "commitStderr": "/tmp/codex-104/commit.stderr",
+    "normalDates": true,
+    "postcommitTrackedWrites": false
+  },
+  "originalImplementationClock": {
+    "dispatch": "2026-10-14T19:53:59.230Z",
+    "dispatchCall": "call_14f8b2cdd82f490aa7d613e8fe73ae85",
+    "sourceCutoff": "2026-10-14T20:45:00.546497+00:00",
+    "inclusiveToSourceCutoffMin": 51.021941616666666,
+    "includes": "Source-free research, native proposal/admission waits, implementation, fixture diagnostics, counterfactuals, checks, weighted fuzz, browser runs, evidence and parent READY audit/COMMITACK wait.",
+    "sampling": "UNKNOWN",
+    "gitTail": "Actual short normal Git tail and inclusive-through-Git endpoint captured in /tmp/codex-104/commit-receipt.json; no tracked amend/postcommit writes."
+  },
+  "integration": {
+    "originalCommitManifest": {
+      "bead": "hv-umm2.104",
+      "oid": "f484089eac22d1b4308feee9dee46cb2de399b31",
+      "parent": "c020df40e508f4873dcbcad91ad49060156ef3fd",
+      "files": {
+        "docs/plan/engine-design.md": "0b8bd5f028d12a85b1bd5bd8b836d807d2b81a316457643b18bbe03ec8568ba7",
+        "docs/plan/evidence/content-inventory.json": "4c451fcbd2c78262d90f525f5c547deabef274da0244ab3dc8ebe300f1ac4f28",
+        "docs/plan/evidence/friction/hv-umm2.104.json": "4bc3c06eb9aa04485d50a8feaadc397195c81d5a0e7be36a3138a6bd0383323f",
+        "docs/plan/evidence/measurements/hv-umm2.104.json": "2befd85098ce8bbb5fdf3938e53a849a1fcf272f2993101b6a124bc10cf88e37",
+        "docs/plan/evidence/pre-existing/hv-umm2.104.md": "f0372c944662b210e89ae3f482c79bdd6864adae08f859dc0a17bb3d08d016cb",
+        "docs/plan/evidence/qa-ledger/hv-umm2.104.jsonl": "1b41be9a44b43344e921d322f30f0c09b8596016e9069a06c24e5257f3dafb71",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.104-1.md": "b8f3508a04e5339719fc502a83bee0adf8606b599f04d36b5eeec4e8fd7288e5",
+        "docs/rules.md": "9b3f77f48d41ea36de8f03c4359e78376fa43dc55372f76aa62535c6ce997af2",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "caf77627717593a080c83eaf84f48e50e14ba674a0d11dd2c8eb5917b57cdd92",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606"
+      },
+      "sourceCutoff": "2026-10-14T20:45:00.546497+00:00",
+      "inclusiveToSourceCutoffMin": 51.021941616666666,
+      "gitStart": "2026-10-14T20:45:00.581351+00:00",
+      "gitEnd": "2026-10-14T20:45:00.653226+00:00",
+      "gitWallS": 0.18854829200427048,
+      "tailFromSourceCutoffS": 0.106729,
+      "inclusiveThroughGitMin": 51.02372043333333,
+      "exitCode": 0,
+      "clean": true,
+      "commitStdout": "/tmp/codex-104/commit.stdout",
+      "commitStderr": "/tmp/codex-104/commit.stderr",
+      "normalDates": true,
+      "postcommitTrackedWrites": false
+    },
+    "parkedCheckpoint": {
+      "status": "UNVALIDATED PARKED; never candidate",
+      "checkpointOid": "45ca51d12cbcb8a122ab2fe3b10e6eed67253634",
+      "parent": "c020df40e508f4873dcbcad91ad49060156ef3fd",
+      "originalOid": "f484089eac22d1b4308feee9dee46cb2de399b31",
+      "gitStart": "2026-10-14T20:50:30.356943+00:00",
+      "gitEnd": "2026-10-14T20:50:30.384212+00:00",
+      "gitWallS": 0.027154082985362038,
+      "normalDates": true,
+      "clean": true,
+      "files": {
+        "docs/plan/engine-design.md": "0b8bd5f028d12a85b1bd5bd8b836d807d2b81a316457643b18bbe03ec8568ba7",
+        "docs/plan/evidence/content-inventory.json": "fce77568f4c92428d9828c38c5fef6e83945743ccb3382632da4425dfb11ee86",
+        "docs/plan/evidence/friction/hv-umm2.104.json": "4bc3c06eb9aa04485d50a8feaadc397195c81d5a0e7be36a3138a6bd0383323f",
+        "docs/plan/evidence/measurements/hv-umm2.104.json": "2befd85098ce8bbb5fdf3938e53a849a1fcf272f2993101b6a124bc10cf88e37",
+        "docs/plan/evidence/pre-existing/hv-umm2.104.md": "f0372c944662b210e89ae3f482c79bdd6864adae08f859dc0a17bb3d08d016cb",
+        "docs/plan/evidence/qa-ledger/hv-umm2.104.jsonl": "1b41be9a44b43344e921d322f30f0c09b8596016e9069a06c24e5257f3dafb71",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.104-1.md": "b8f3508a04e5339719fc502a83bee0adf8606b599f04d36b5eeec4e8fd7288e5",
+        "docs/rules.md": "9b3f77f48d41ea36de8f03c4359e78376fa43dc55372f76aa62535c6ce997af2",
+        "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc",
+        "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+        "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "caf77627717593a080c83eaf84f48e50e14ba674a0d11dd2c8eb5917b57cdd92",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+        "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+        "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+        "src/engine/effects/registry.ts": "38d2bc8bc864e115d431f39d8769a11aa4e923e2849856d7653fc55b041fe192",
+        "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+        "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606"
+      },
+      "other16ByteIdentical": true,
+      "onlyParkedPath": "docs/plan/evidence/content-inventory.json",
+      "savedOriginalBytes": "/tmp/codex-104/integration/inventory-original.json",
+      "savedBaseBytes": "/tmp/codex-104/integration/inventory-base.json",
+      "savedDelta": "/tmp/codex-104/integration/inventory-original.delta",
+      "nextAction": "WAIT parent-only Tollgate update acknowledgement"
+    },
+    "updatedCheckpoint": "dc2fabb4b5792e486faf2f6a258646f382dad045",
+    "combinedParent": "9e67085f9ff09083b87c054bb9c997a3ee194518",
+    "parentNativeOperations": {
+      "firstUpdate": {
+        "start": "2026-10-14T20:45:51Z",
+        "wallS": 0.493567,
+        "exitCode": 5,
+        "outcome": "only inventory merge conflict; original clean HEAD/base restored and Doctor healthy"
+      },
+      "candidate": {
+        "wallS": 3.154729,
+        "exitCode": 0,
+        "outcome": "terminal merge-conflict before validation"
+      },
+      "cancel": {
+        "wallS": 0.229532,
+        "exitCode": 0,
+        "outcome": "already terminal; no cancellation mutation"
+      },
+      "parkedUpdate": {
+        "wallS": 1.609171,
+        "exitCode": 0,
+        "outcome": "clean updated checkpoint on staging9e67085; no pending update and Doctor healthy"
+      },
+      "qualification": "Actual parent receipts summarized from root messages; root alone ran all native/Tollgate operations."
+    },
+    "commands": {
+      "integration-inventory": {
+        "label": "integration-inventory",
+        "argv": [
+          "node_modules/.bin/tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+        "start": "2026-10-14T20:51:35.016679+00:00",
+        "load": [
+          15.44140625,
+          8.013671875,
+          6.7314453125
+        ],
+        "sourceSHA256": {
+          "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+          "src/engine/effects/registry.ts": "9da7fe76038c6c4e4bd8c5e5e4a16bf89e4aff527176ad8e446e15022d494133",
+          "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+          "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+          "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+          "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+        },
+        "pid": 23527,
+        "pgid": 23527,
+        "end": "2026-10-14T20:51:37.751737+00:00",
+        "wallS": 2.734655042004306,
+        "cpuS": 3.767847,
+        "exitCode": 0
+      },
+      "integration-focused": {
+        "label": "integration-focused",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/content-gates.test.ts",
+          "src/engine/continuous/continuous.test.ts",
+          "src/engine/continuous/continuous-costs.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+        "start": "2026-10-14T20:51:47.012314+00:00",
+        "load": [
+          16.50146484375,
+          8.576171875,
+          6.9521484375
+        ],
+        "sourceSHA256": {
+          "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+          "src/engine/effects/registry.ts": "9da7fe76038c6c4e4bd8c5e5e4a16bf89e4aff527176ad8e446e15022d494133",
+          "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+          "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+          "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+          "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+        },
+        "pid": 24477,
+        "pgid": 24477,
+        "end": "2026-10-14T20:52:04.484102+00:00",
+        "wallS": 17.471261500002583,
+        "cpuS": 23.846617,
+        "exitCode": 0
+      },
+      "integration-review": {
+        "label": "integration-review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+        "start": "2026-10-14T20:52:15.979138+00:00",
+        "load": [
+          16.30712890625,
+          9.32177734375,
+          7.2802734375
+        ],
+        "sourceSHA256": {
+          "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+          "src/engine/effects/registry.ts": "9da7fe76038c6c4e4bd8c5e5e4a16bf89e4aff527176ad8e446e15022d494133",
+          "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+          "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+          "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+          "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+        },
+        "pid": 26764,
+        "pgid": 26764,
+        "end": "2026-10-14T20:53:38.149667+00:00",
+        "wallS": 82.16861283400794,
+        "cpuS": 226.969148,
+        "exitCode": 0
+      },
+      "integration-knip": {
+        "label": "integration-knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+        "start": "2026-10-14T20:53:43.102200+00:00",
+        "load": [
+          21.19775390625,
+          12.88818359375,
+          8.86767578125
+        ],
+        "sourceSHA256": {
+          "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+          "src/engine/effects/registry.ts": "9da7fe76038c6c4e4bd8c5e5e4a16bf89e4aff527176ad8e446e15022d494133",
+          "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+          "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+          "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+          "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+        },
+        "pid": 46599,
+        "pgid": 46599,
+        "end": "2026-10-14T20:53:48.153654+00:00",
+        "wallS": 5.050651249999646,
+        "cpuS": 6.388757,
+        "exitCode": 0
+      },
+      "integration-schema": {
+        "label": "integration-schema",
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+        "start": "2026-10-14T20:55:27.257370+00:00",
+        "load": [
+          15.34765625,
+          13.83984375,
+          9.7421875
+        ],
+        "sourceSHA256": {
+          "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+          "src/engine/effects/registry.ts": "9da7fe76038c6c4e4bd8c5e5e4a16bf89e4aff527176ad8e446e15022d494133",
+          "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+          "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+          "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+          "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+        },
+        "pid": 60337,
+        "pgid": 60337,
+        "end": "2026-10-14T20:55:27.388672+00:00",
+        "wallS": 0.1303323750034906,
+        "cpuS": 0.08668799999999999,
+        "exitCode": 0
+      },
+      "integration-whitespace": {
+        "label": "integration-whitespace",
+        "argv": [
+          "git",
+          "diff",
+          "--check",
+          "HEAD^"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-nth-play-cost104",
+        "start": "2026-10-14T20:55:27.447506+00:00",
+        "load": [
+          15.34765625,
+          13.83984375,
+          9.7421875
+        ],
+        "sourceSHA256": {
+          "src/engine/state/types.ts": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+          "src/engine/effects/registry.ts": "9da7fe76038c6c4e4bd8c5e5e4a16bf89e4aff527176ad8e446e15022d494133",
+          "src/engine/continuous/costs.ts": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+          "src/engine/effects/primitives/cost-modifier.ts": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+          "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+          "src/rules/battle/fold.ts": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+          "src/content/cards/heavenward-penitent-f9c66b3e.ts": "16774f5a1c0527e4a82facd6f9db38a187fa1c92ca0603f45fa2a1ef5472ffbc"
+        },
+        "pid": 60385,
+        "pgid": 60385,
+        "end": "2026-10-14T20:55:27.478271+00:00",
+        "wallS": 0.030456165986834094,
+        "cpuS": 0.053688999999999994,
+        "exitCode": 0
+      }
+    },
+    "envOverrides": {
+      "JOURNEY_TEST_WORKERS": "2"
+    },
+    "combinedSourceAudit": "/tmp/codex-104/integration/combined-source-audit.json",
+    "parentInversePeerProof": "/tmp/codex-104/integration/parent-inverse-peer-proof.json",
+    "canonicalInventory": {
+      "generatorSourceSha": "b9f7cedecf437c8b27b72977174c848aabf54688f80fba576ca1192ea91f2e17",
+      "generatorSourceUnchangedAgainstPeerBase": true,
+      "inventorySha": "1852f3c38d7c5429ad0f6846201fa907b3b0bf45099ad353945ac010872f9c52",
+      "keyedAudit": "/tmp/codex-104/integration/inventory-keyed-audit.json",
+      "entityProjectionsChanged": 21,
+      "entityFields": [
+        "requiredPrimitives",
+        "routing",
+        "rulesDecisions",
+        "status"
+      ],
+      "all1209UUIDsAndPrintedFieldsPreserved": true,
+      "peerPlayConditionCapabilityPreserved": true,
+      "ownCostModifierNthCapabilityExists": true,
+      "planningBeadsChanged": 201,
+      "planningRowRemoved": "prim-cost-modifier-nth",
+      "positionalDiffQualification": "The initial raw positional comparison includes array index shifts; identity-keyed comparison gives actual projection counts."
+    },
+    "behaviorResolution": "No behavior edit was required. At the completed parent update, before this integration evidence was appended, thirteen owned files were exact f484; registry, rules and engine-design differ only by independent peer additions; inverse removal of the original 104 additions restores exact peer-base files. All other peer paths stay untouched. Generator source is read-only and remains exact peer base.",
+    "checksScope": "Focused four actual files/4269 tests; ordinary review306 files/7900 tests; Knip. No review:full infrastructure/cross-cutting claim. Original heavy/browser evidence retained under historical source epoch.",
+    "resourceSettlement": {
+      "time": "2026-10-14T20:56:00.219457+00:00",
+      "allSixCheckGroupsAbsent": true,
+      "pgids": [
+        23527,
+        24477,
+        26764,
+        46599,
+        60337,
+        60385
+      ]
+    },
+    "historicalColdReview": {
+      "source": "/tmp/codex-104/cold-review/terminal.json",
+      "receipt": {
+        "start": "2026-10-14T20:45:29.424976+00:00",
+        "pid": 54578,
+        "pgid": 54578,
+        "argv": [
+          "/Users/dthurn/.local/bin/claude",
+          "-p",
+          "--model",
+          "claude-opus-5-5",
+          "--tools",
+          "Read,Grep,Glob,Bash",
+          "--permission-mode",
+          "dontAsk",
+          "--add-dir",
+          "/tmp/codex-104/cold-review/snapshot",
+          "/tmp/codex-104/cold-review",
+          "/Users/dthurn/.llms/skills/warden",
+          "/Users/dthurn/.llms/skills/shared",
+          "--allowedTools",
+          "Read",
+          "Grep",
+          "Glob",
+          "Bash(git diff:*)",
+          "Bash(git log:*)",
+          "Bash(git show:*)",
+          "--output-format",
+          "stream-json",
+          "--verbose"
+        ],
+        "base": "c020df40e508f4873dcbcad91ad49060156ef3fd",
+        "head": "f484089eac22d1b4308feee9dee46cb2de399b31",
+        "scopePacketSha256": "c1b74f93a486005bd7c78580bf8ee451544744918b233a48c92edb6b4b320de7",
+        "mode": "fresh normal cross-family Claude Opus5.5 core review",
+        "end": "2026-10-14T20:45:32.879981+00:00",
+        "wallSeconds": 3.454872250003973,
+        "exitCode": 1
+      },
+      "outcome": "API429 session usage_limit before any source read; parent recorded native review debt, continued under explicit workflow policy, closed collector and cleaned snapshot. Not a code-review verdict. Final-range review/debt disposition belongs to parent."
+    },
+    "diagnosticReads": [
+      "One scratch receipt read used absent restored-focused.json; exact existing receipt paths were then discovered. No check or source mutation depended on that read."
+    ],
+    "incidentWindow": {
+      "start": "2026-10-14T20:45:51+00:00",
+      "end": "2026-10-14T20:57:33.892680+00:00",
+      "wallMin": 11.714878,
+      "qualification": "Gross first failed parent update through current validated-evidence endpoint; includes parking, parent update, checks, evidence and coordination, not productive CPU. Final endpoint includes subsequent parent audit/ACK wait."
+    },
+    "localValidationQualification": "Final friction localValidationS focused/review/Knip refer to combined checks; fuzz/browser values retain the original f484 window and exact immutable source hashes. No combined browser/fuzz run claimed.",
+    "finalParentCOMMITACK": {
+      "observedBeforeCutoff": "2026-10-14T20:57:33.892680+00:00",
+      "qualification": "Parent directly approved the final17-path bounded amend after full READY/source/QA/epoch audit. This host cutoff is recorded after receipt; it is not an invented parent tool timestamp."
+    }
+  }
+}

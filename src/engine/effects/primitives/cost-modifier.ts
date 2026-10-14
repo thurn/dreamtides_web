@@ -44,3 +44,44 @@ export function costModifier(
 ): CostModifierNode {
   return { op: "costModifier", player, filter, amount, next: options.next === true, duration: options.duration ?? null };
 }
+
+/** A static change to the nth matching play's normal base or whole energy payment. */
+export interface CostModifierNthNode {
+  readonly op: "costModifierNth";
+  readonly player: PlayerRef;
+  readonly filter: CardFilter;
+  readonly nth: number;
+  readonly mode: "set" | "reduce";
+  readonly amount: number;
+}
+
+export const costModifierNthPrimitive = definePrimitive<CostModifierNthNode>({
+  op: "costModifierNth",
+  staticOnly: true,
+  resolve() {
+    throw new Error("costModifierNth is a static ability and never resolves");
+  },
+  continuous: {
+    layer: 6,
+    changes(node, env) {
+      return [{ kind: "cost", player: resolvePlayer(env.controller, node.player), filter: node.filter,
+        amount: node.mode === "reduce" ? -node.amount : node.amount, next: false, nth: node.nth,
+        ...(node.mode === "set" ? { mode: "set" as const } : {}) }];
+    },
+  },
+});
+
+/** Earlier committed matching plays determine the ordinal before paying (RD-hv-umm2.104-1). */
+export function costModifierNth(
+  player: PlayerRef,
+  filter: CardFilter,
+  nth: number,
+  change: { readonly set: number } | { readonly reduce: number },
+): CostModifierNthNode {
+  const mode = "set" in change ? "set" : "reduce";
+  const amount = "set" in change ? change.set : change.reduce;
+  if (!Number.isSafeInteger(nth) || nth < 1 || !Number.isSafeInteger(amount) || amount < 0) {
+    throw new Error("costModifierNth requires a positive whole ordinal and nonnegative whole energy amount");
+  }
+  return { op: "costModifierNth", player, filter, nth, mode, amount };
+}

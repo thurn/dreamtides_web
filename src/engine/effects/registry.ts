@@ -28,6 +28,7 @@ import {
   copyCardPrimitive,
   copyCardTimesPrimitive,
   costModifierPrimitive,
+  costModifierNthPrimitive,
   ruleModifierPrimitive,
   additionalDrawPhaseCardsPrimitive,
   selfCostReductionPrimitive,
@@ -117,6 +118,7 @@ export type Effect = {
 }[keyof Exports];
 
 const DEFINITIONS = {
+  get costModifierNth() { return costModifierNthPrimitive; },
   get ruleModifier() { return ruleModifierPrimitive; },
   get additionalDrawPhaseCards() { return additionalDrawPhaseCardsPrimitive; },
   get abandon() {

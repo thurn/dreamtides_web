@@ -1108,6 +1108,30 @@ void or deck. An independent permission can supply that access and is used
 up normally when its player chooses this alternative; a card with only
 Reclaim uses its Reclaim route. Cancelling before commitment pays nothing.
 
+**First and nth play costs:** "The first ≤2● cost character you play each
+turn costs you 0●" counts earlier matching committed plays by that player
+in the current turn, before paying for the proposed play. First, second and
+third mean zero, one and two earlier matching plays. Match those plays by
+their captured effective type, subtype (including all character types), and
+copiable speed and cost at play time. Matching plays count even when the
+source had not entered play or its board condition was false. Every route,
+including Reclaim, counts. Copies, previews, failed plays and cancelled
+choices do not count. Each ordinary or extra turn resets both players'
+counts. A source's static ability applies only in its functional zone; an
+ordinary in-play source held in hand does not discount its own play.
+
+"The first … costs you N●" sets the matching play's normal fixed ● base.
+Normal hand plays, normal-cost play permissions and plain Reclaim use that
+base; explicit Reclaim, Offering and event alternatives choose their
+replacement bases. X and additional mandatory, optional and alternative-choice
+payments add to the chosen base. The latest applicable normal-base setter
+applies in continuous-effect order, whether it names one card or its player's
+nth matching play. Increases and reductions then apply, followed by the zero
+floor; nonenergy costs are unchanged. A committed matching play occupies its
+ordinal even when it uses a replacement base. "The first … costs N● less"
+instead reduces the whole chosen energy payment by N● on every route, with
+the other cost adjustments.
+
 **Requirements** are written as "Play this event only if X." A card with a
 requirement cannot be played unless the requirement is met.
 

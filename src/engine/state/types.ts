@@ -460,7 +460,8 @@ export type ContinuousChange =
    * (less when negative). A `next` modifier applies to one card: it ends as
    * that card is played.
    */
-  | { readonly kind: "cost"; readonly player: Side; readonly filter: CardFilter; readonly amount: number; readonly next: boolean }
+  | ({ readonly kind: "cost"; readonly player: Side; readonly filter: CardFilter; readonly amount: number; readonly next: boolean } &
+      ({ readonly nth?: never; readonly mode?: never } | { readonly nth: number; readonly mode?: "set" }))
   /**
    * Layer 6: one card's energy cost, whoever plays it. `"set"` gives it
    * `amount`● in place of its ● cost (its copiable cost); `"increase"` makes

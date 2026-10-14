@@ -10,7 +10,7 @@
 import type { EngineCatalog } from "../catalog";
 import type { EffectId, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { characteristics, copiableCostOf, filterSubjectOf, matchesFilter } from "./characteristics";
+import { characteristics, copiableCostOf, filterSubjectOf, matchesFilter, playedMatchesFilter } from "./characteristics";
 import type { Layers } from "./layers";
 
 /** The cost modifications that apply to one play of one card. */
@@ -51,6 +51,14 @@ export function costModifier(
       continue;
     }
     if (change.kind !== "cost" || change.player !== player || !matchesFilter(played, change.filter)) continue;
+    if (change.nth !== undefined) {
+      const earlier = state.turnLog.played[player].filter(record => playedMatchesFilter(state, catalog, record, change.filter)).length;
+      if (earlier !== change.nth - 1) continue;
+      if (change.mode === "set") {
+        if (options.applyOwnSet !== false) set = change.amount;
+        continue;
+      }
+    }
     if (change.amount > 0) increase += change.amount;
     else reduction -= change.amount;
     if (change.next && effect !== null) consumes.push(effect);
