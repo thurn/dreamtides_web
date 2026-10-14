@@ -1,3 +1,6 @@
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materializeChosen, optional } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,6 @@ export default card({
   cardNumber: 274,
   art: { x: 0, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onMaterialized(), optional(materializeChosen(variant.amplified ? 3 : 2)))],
+  verifiedText: expectedVerifiedText("▸Materialized: You may materialize a ≤2● cost character from your hand.", "▸Materialized: You may materialize a ≤3● cost character from your hand."),
 });

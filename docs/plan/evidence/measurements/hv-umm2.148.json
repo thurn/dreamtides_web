@@ -1,0 +1,1329 @@
+{
+  "bead": "hv-umm2.148",
+  "base": "9e67085f9ff09083b87c054bb9c997a3ee194518",
+  "filedUUIDs": [
+    "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+    "409147ec-d959-4f66-b126-564702e2cd4a",
+    "87f075b1-b058-4570-a75f-c4f8f544e192"
+  ],
+  "scope": {
+    "authoredUUIDs": [
+      "87f075b1-b058-4570-a75f-c4f8f544e192"
+    ],
+    "readOnlyChild": "hv-umm2.680 supplies exact other two leaves/private cards-ready-148 scenario; original retains full three-card recipe",
+    "leafChangedLines": 6,
+    "newPrivateScenarioCases": 4,
+    "newPrimitives": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "preExistingProductIssues": []
+  },
+  "printedClauseAudit": {
+    "rows": [
+      {
+        "uuid": "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+        "pending": false,
+        "verifiedText": "1ivjx8m176e",
+        "text": "When you materialize a character with 1\u2726, materialize this character from your void.",
+        "amplifiedText": "When you materialize a \u22641\u2726 character, materialize this character from your void.",
+        "variants": [
+          {
+            "amplified": false,
+            "abilities": [
+              {
+                "kind": "triggered",
+                "trigger": {
+                  "on": "materialize",
+                  "subject": {
+                    "sparkAtMost": 1,
+                    "sparkAtLeast": 1,
+                    "controller": "you"
+                  }
+                },
+                "effect": {
+                  "op": "materialize",
+                  "from": {
+                    "kind": "inZone",
+                    "pick": "self",
+                    "zone": "void"
+                  }
+                },
+                "zone": "void"
+              }
+            ]
+          },
+          {
+            "amplified": true,
+            "abilities": [
+              {
+                "kind": "triggered",
+                "trigger": {
+                  "on": "materialize",
+                  "subject": {
+                    "sparkAtMost": 1,
+                    "controller": "you"
+                  }
+                },
+                "effect": {
+                  "op": "materialize",
+                  "from": {
+                    "kind": "inZone",
+                    "pick": "self",
+                    "zone": "void"
+                  }
+                },
+                "zone": "void"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "409147ec-d959-4f66-b126-564702e2cd4a",
+        "pending": false,
+        "verifiedText": "1g7iv5m02ql",
+        "text": "When you materialize a \u22642\u25cf cost character, return this card from your void to play.",
+        "amplifiedText": null,
+        "variants": [
+          {
+            "amplified": false,
+            "abilities": [
+              {
+                "kind": "triggered",
+                "trigger": {
+                  "on": "materialize",
+                  "subject": {
+                    "costAtMost": 2,
+                    "controller": "you"
+                  }
+                },
+                "effect": {
+                  "op": "materialize",
+                  "from": {
+                    "kind": "inZone",
+                    "pick": "self",
+                    "zone": "void"
+                  }
+                },
+                "zone": "void"
+              }
+            ]
+          },
+          {
+            "amplified": true,
+            "abilities": [
+              {
+                "kind": "triggered",
+                "trigger": {
+                  "on": "materialize",
+                  "subject": {
+                    "costAtMost": 2,
+                    "controller": "you"
+                  }
+                },
+                "effect": {
+                  "op": "materialize",
+                  "from": {
+                    "kind": "inZone",
+                    "pick": "self",
+                    "zone": "void"
+                  }
+                },
+                "zone": "void"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "87f075b1-b058-4570-a75f-c4f8f544e192",
+        "pending": false,
+        "verifiedText": "1xtk4bl3gyg",
+        "text": "\u25b8Materialized: You may materialize a \u22642\u25cf cost character from your hand.",
+        "amplifiedText": "\u25b8Materialized: You may materialize a \u22643\u25cf cost character from your hand.",
+        "variants": [
+          {
+            "amplified": false,
+            "abilities": [
+              {
+                "kind": "triggered",
+                "trigger": {
+                  "on": "materialized"
+                },
+                "effect": {
+                  "op": "optional",
+                  "effect": {
+                    "op": "materializeChosen",
+                    "costAtMost": 2
+                  }
+                },
+                "zone": "play"
+              }
+            ]
+          },
+          {
+            "amplified": true,
+            "abilities": [
+              {
+                "kind": "triggered",
+                "trigger": {
+                  "on": "materialized"
+                },
+                "effect": {
+                  "op": "optional",
+                  "effect": {
+                    "op": "materializeChosen",
+                    "costAtMost": 3
+                  }
+                },
+                "zone": "play"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "catalogCards": 522,
+    "remainingPendingCards": 20,
+    "qualification": "Sanctioned full content gate passed; all three scoped cards authored and text verified. Overall Phase5 pending cards remain for peer assignments."
+  },
+  "rules": {
+    "materialized": "Own arrival fires onMaterialized; optional is independent confirm; materializeChosen compares current hand character/copiable cost with fixed base2/amplified3 maximum; selected physical card enters through canonical materialization without play/payment",
+    "normative": "docs/rules.md Materialize/Choosing a character from hand/Battlefield Capacity; printed clauses settled, ambiguity ladder not invoked"
+  },
+  "validation": {
+    "focused": {
+      "tests": 465,
+      "files": 2,
+      "receipt": "/tmp/worker148-20261014/focused-v01.receipt.json"
+    },
+    "review": {
+      "tests": 6954,
+      "files": 253,
+      "receipt": "/tmp/worker148-20261014/review-v01.receipt.json"
+    },
+    "knip": {
+      "receipt": "/tmp/worker148-20261014/knip-v01.receipt.json"
+    },
+    "coverage": "All sanctioned content-gate cases pass; all three scoped cards authored and text verified; global pending cards20 remain for other Phase5 work",
+    "localReviewFull": "Not required: bounded production content composition/private original scenario; engine, test infrastructure, repository config and cross-cutting architecture unchanged",
+    "preflight": {
+      "pass": 30,
+      "skip": 30,
+      "fail": 0,
+      "variants": "all10 perUUID, bothcontrollers; skips ineligible variants",
+      "enemyMode": "scripted-lab-play-first-legal-prompts"
+    },
+    "weighted300": {
+      "games": 300,
+      "steps": 104762,
+      "prompts": 7826,
+      "interactiveGames": 30,
+      "interactiveReruns": 787,
+      "failures": 0,
+      "results": {
+        "player": 151,
+        "enemy": 148,
+        "draw": 1
+      },
+      "targets": [
+        {
+          "uuid": "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+          "included": 615,
+          "exercised": 137
+        },
+        {
+          "uuid": "409147ec-d959-4f66-b126-564702e2cd4a",
+          "included": 613,
+          "exercised": 100
+        },
+        {
+          "uuid": "87f075b1-b058-4570-a75f-c4f8f544e192",
+          "included": 619,
+          "exercised": 187
+        }
+      ],
+      "targetQualification": "Exercised/played source counts are not proof of accepted private chooser instruction; actual paired prompt/answer/public arrivals are proved by judged cells",
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 5
+      },
+      "innerSeconds": 312.29564191700774,
+      "outerSeconds": 312.3612492500106,
+      "outerToInnerStartSeconds": 0.025577,
+      "intervalQualification": "Includes command startup and heavy-lock wait, not pure queue latency",
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "caller": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/worker148-20261014/record.py",
+        "weighted300-inner-v01",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-148-aether-final",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "1ce0f0f2-4b1a-483d-b93b-74c36e946a08,409147ec-d959-4f66-b126-564702e2cd4a,87f075b1-b058-4570-a75f-c4f8f544e192",
+        "--interactive-every",
+        "10"
+      ]
+    },
+    "fullOriginalSweep": {
+      "rows": 60,
+      "pass": 30,
+      "skip": 30,
+      "fail": 0,
+      "variants": "all eligible forms, base/amplified bothcontrollers",
+      "invocation": "invocations/sweep-3eBFNP",
+      "outerSeconds": 207.61068620800506,
+      "browserLeaseWaitMs": 6,
+      "executionMs": 207425.92887499998,
+      "qualification": "Preflight and original sweep enemy actions are scripted-lab fixture play; judged enemy base uses actual public Greedy"
+    }
+  },
+  "browserQA": {
+    "sourceFreeze": {
+      "at": "2026-10-14T20:41:57.672416+00:00",
+      "base": "9e67085f9ff09083b87c054bb9c997a3ee194518",
+      "trackedBaselineFiles": 5083,
+      "changedBaselinePaths": [
+        "src/content/cards/aether-diver-87f075b1.ts"
+      ],
+      "paths": {
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-148-aether-final/src/content/cards/aether-diver-87f075b1.ts": "147df41126b822ae5e480eeb2026b5fee4168c54f15e023261437d444d799eb9",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-148-aether-final/src/content/specs/cards-36.scenarios.ts": "3f052f617dde30b9f956154a74b6e4f0cbe76eec5ac2f6e927fd8acaa342e7cf"
+      },
+      "gitBlobHashes": {
+        "src/content/cards/aether-diver-87f075b1.ts": "7d0c7948bad9df4d7f788f0231f0c099c9084d5c",
+        "src/content/specs/cards-36.scenarios.ts": "88eaaefb28738976a185f5464d9dfa8bb8abfcd1"
+      },
+      "scope": "All baseline unchanged except own admitted Aether leaf; one new admitted original coupled scenario. Engine, child leaves/scenario, UI and infrastructure unchanged."
+    },
+    "acceptanceProof": {
+      "path": "/tmp/root148-20261014/final-qa-acceptance-v01.json",
+      "sha256": "c38941ad421285ad49c9f9b29950a89809e1ac0281f2d7976d27bd31fb30297e"
+    },
+    "acceptedCells": [
+      {
+        "viewport": "desktop",
+        "scene": {
+          "actor": "player",
+          "variant": "base",
+          "mode": "accept"
+        },
+        "proof": "v03 actual complete prefix; overall FAIL",
+        "game": "iuqgh9",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "source": "i1",
+        "selected": "i3",
+        "logRows": 55,
+        "fullReplayEqual": true,
+        "capsEmpty": true
+      },
+      {
+        "viewport": "desktop",
+        "scene": {
+          "actor": "player",
+          "variant": "amplified",
+          "mode": "accept"
+        },
+        "proof": "v03 actual complete prefix; overall FAIL",
+        "game": "r9vyp3",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "source": "i1",
+        "selected": "i24",
+        "logRows": 63,
+        "fullReplayEqual": true,
+        "capsEmpty": true
+      },
+      {
+        "viewport": "desktop",
+        "scene": {
+          "actor": "player",
+          "variant": "base",
+          "mode": "decline"
+        },
+        "proof": "v03 actual complete prefix; overall FAIL",
+        "game": "by7ta5",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "source": "i1",
+        "selected": null,
+        "logRows": 42,
+        "fullReplayEqual": true,
+        "capsEmpty": true
+      },
+      {
+        "viewport": "desktop",
+        "scene": {
+          "actor": "player",
+          "variant": "base",
+          "mode": "empty"
+        },
+        "proof": "v03 actual complete prefix; overall FAIL",
+        "game": "as9suu",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "source": "i1",
+        "selected": null,
+        "logRows": 43,
+        "fullReplayEqual": true,
+        "capsEmpty": true
+      },
+      {
+        "viewport": "desktop",
+        "scene": {
+          "actor": "enemy",
+          "variant": "base",
+          "mode": "accept"
+        },
+        "proof": "v04 overall PASS",
+        "game": "ca5ogh",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "source": "i12",
+        "selected": "i14",
+        "logRows": 54,
+        "fullReplayEqual": true,
+        "capsEmpty": true
+      },
+      {
+        "viewport": "mobile",
+        "scene": {
+          "actor": "player",
+          "variant": "base",
+          "mode": "accept"
+        },
+        "proof": "v04 overall PASS",
+        "game": "dm3i65",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "source": "i1",
+        "selected": "i3",
+        "logRows": 55,
+        "fullReplayEqual": true,
+        "capsEmpty": true
+      },
+      {
+        "viewport": "mobile",
+        "scene": {
+          "actor": "player",
+          "variant": "amplified",
+          "mode": "accept"
+        },
+        "proof": "v04 overall PASS",
+        "game": "kci8tm",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "source": "i1",
+        "selected": "i24",
+        "logRows": 63,
+        "fullReplayEqual": true,
+        "capsEmpty": true
+      },
+      {
+        "viewport": "mobile",
+        "scene": {
+          "actor": "player",
+          "variant": "base",
+          "mode": "decline"
+        },
+        "proof": "v04 overall PASS",
+        "game": "iqp5o9",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "source": "i1",
+        "selected": null,
+        "logRows": 42,
+        "fullReplayEqual": true,
+        "capsEmpty": true
+      },
+      {
+        "viewport": "mobile",
+        "scene": {
+          "actor": "player",
+          "variant": "base",
+          "mode": "empty"
+        },
+        "proof": "v04 overall PASS",
+        "game": "ewx32c",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "source": "i1",
+        "selected": null,
+        "logRows": 43,
+        "fullReplayEqual": true,
+        "capsEmpty": true
+      },
+      {
+        "viewport": "mobile",
+        "scene": {
+          "actor": "enemy",
+          "variant": "base",
+          "mode": "accept"
+        },
+        "proof": "v04 overall PASS",
+        "game": "t4i74o",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "source": "i12",
+        "selected": "i14",
+        "logRows": 54,
+        "fullReplayEqual": true,
+        "capsEmpty": true
+      }
+    ],
+    "qualifications": [
+      "v01/v02/v03 historical overall FAIL retained; no full v03 result/pass claim",
+      "4 actual complete v03 desktop player cells +6 complete v04 cells; all10 same final source",
+      "Persisted prompts/answers and observed public arrival events distinguished",
+      "Normal public Greedy enemy base; amplified both-controller original sweep scripted-lab mode"
+    ],
+    "ledger": {
+      "rows": 73,
+      "sweepPass": 30,
+      "sweepSkip": 30,
+      "judgedAccepted": 10,
+      "historicalOverallFail": 3
+    },
+    "captures": [
+      {
+        "filename": "aether-private-picker-desktop.png",
+        "sha256": "06a981027b40ed3fa33078f4a551b929e695186ea74d9809f61e1081eeafc9f4",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "viewport": [
+          1440,
+          900
+        ],
+        "source": "v03 four actual completed desktop player cells on final source; overall run FAIL qualified"
+      },
+      {
+        "filename": "aether-amplified-arrival-desktop.png",
+        "sha256": "24833190d58f69adfc4f086ee7f72afe4292bab0399e1d7ea6c00d39fd449ab7",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "viewport": [
+          1440,
+          900
+        ],
+        "source": "v03 four actual completed desktop player cells on final source; overall run FAIL qualified"
+      },
+      {
+        "filename": "aether-private-picker-mobile.png",
+        "sha256": "fdff98cb3e3e8d8bce13300b01d189acac20ad9fdbf54d86d0243ff5a267b87c",
+        "pixels": [
+          780,
+          1688
+        ],
+        "viewport": [
+          390,
+          844
+        ],
+        "source": "v04 actual complete final-source mobile base accept cell; overall PASS"
+      }
+    ],
+    "actualAssertions": [
+      "base excludes cost3 and privately chooses nonfirst physical duplicate cost2",
+      "amplified includes cost3 and restores exact pending confirm/chooser on reload",
+      "decline and empty acceptance create no chooser/hand arrival",
+      "source and selected/void arrivals have exact UUID/physical IDs, canonical owner/controller/exhaustion/leftmost slots, no selected play/payment",
+      "production selected Monarch draws one actual fresh card; exact remaining hand plus actual draw",
+      "only own physical void sources return; opposing sources stay in void",
+      "same-game full committed replay equal; complete persisted source-bound UUID prompt/answer pairs",
+      "normal public Greedy enemy base, no synthetic prompt or scripted policy action",
+      "private far hand count/faces, actionable role controls, picker submit and DOM geometry, Caps[]"
+    ],
+    "historicalFailures": [
+      {
+        "run": "invocations/run-zebdkX",
+        "notes": "Historical overall FAIL workflow-v01: desktop#0: Error: exact retained private hand cohort; 0 actual complete desktop player cells, desktop result null and mobile unrun. Caller assumptions repaired directly by root; final acceptance uses only four v03 completed desktop player cells plus six v04 cells. Source unchanged; no full v03 PASS claim."
+      },
+      {
+        "run": "invocations/run-Dbmeiy",
+        "notes": "Historical overall FAIL workflow-v02: desktop#0: Error: leftmost available chosen arrival on otherwise empty ranks; 1 actual complete desktop player cells, desktop result null and mobile unrun. Caller assumptions repaired directly by root; final acceptance uses only four v03 completed desktop player cells plus six v04 cells. Source unchanged; no full v03 PASS claim."
+      },
+      {
+        "run": "invocations/run-7amL5e",
+        "notes": "Historical overall FAIL workflow-v03: desktop#0: Error: immutable declared initial history board; 4 actual complete desktop player cells, desktop result null and mobile unrun. Caller assumptions repaired directly by root; final acceptance uses only four v03 completed desktop player cells plus six v04 cells. Source unchanged; no full v03 PASS claim."
+      }
+    ],
+    "rootDirectRecovery": "Native outcome01a13c36-a607-7422-acdc-933d612f4919; caller contracts corrected within existing authority, original AC preserved; no source change"
+  },
+  "resources": {
+    "custody": [
+      {
+        "name": "sweep-v01",
+        "exit": 0,
+        "wallSeconds": 207.61068620800506,
+        "sessions": [
+          {
+            "provider": "c632b896-c8d4-4ea2-8c5d-8affb9f7fc0f",
+            "token": "ad7c1ee4-d6ce-4a65-a942-9f1909553a8a",
+            "serverTokens": [
+              "9011aec9-1002-4783-a818-01d821d8d43b"
+            ],
+            "port": 5274,
+            "slot": 1
+          }
+        ]
+      },
+      {
+        "name": "workflow-v01",
+        "exit": 1,
+        "wallSeconds": 14.336345499992603,
+        "sessions": [
+          {
+            "provider": "216201ee-8dc9-45e0-b5df-9c652f924af8",
+            "token": "3dfd628f-36c4-422e-9697-7bedf75e0dce",
+            "serverTokens": [
+              "2a9f026f-facc-4864-91f3-858a4c3607cb"
+            ],
+            "port": 5274,
+            "slot": 1
+          }
+        ]
+      },
+      {
+        "name": "workflow-v02",
+        "exit": 1,
+        "wallSeconds": 43.531466707994696,
+        "sessions": [
+          {
+            "provider": "54d947dd-15f7-4f82-a236-a5d1a8ed26c3",
+            "token": "aa2fe79e-a42f-4c1e-abbd-2adb18b2a14a",
+            "serverTokens": [
+              "dd3ace77-0460-4720-8ec5-e95c58db8155"
+            ],
+            "port": 5274,
+            "slot": 1
+          }
+        ]
+      },
+      {
+        "name": "workflow-v03",
+        "exit": 1,
+        "wallSeconds": 61.56375487500918,
+        "sessions": [
+          {
+            "provider": "8068b41b-a13d-4e68-b7fa-f5bdf0f4db34",
+            "token": "394934d2-b360-4133-9f69-79a570ba3977",
+            "serverTokens": [
+              "47471013-1123-4edb-8a2b-cba55b1b8a63"
+            ],
+            "port": 5174,
+            "slot": 0
+          }
+        ]
+      },
+      {
+        "name": "workflow-v04",
+        "exit": 0,
+        "wallSeconds": 60.50793854199583,
+        "sessions": [
+          {
+            "provider": "084a59b5-5f84-4ecb-b4d1-19c98316d68b",
+            "token": "4057b072-6811-40b3-903d-84356d31aa74",
+            "serverTokens": [
+              "8da33bdb-856b-412f-ad18-f6c28a5d0214"
+            ],
+            "port": 5274,
+            "slot": 1
+          }
+        ]
+      }
+    ],
+    "recordedGroupsFreshlyAbsent": [
+      21651,
+      21657,
+      21658,
+      21739,
+      40643,
+      40811,
+      41118,
+      41472,
+      45226,
+      45669,
+      45769,
+      47245,
+      47610,
+      47613,
+      49704,
+      49705,
+      51254,
+      51258,
+      51863,
+      51872,
+      51873,
+      51967,
+      52107,
+      53200,
+      53279,
+      53324,
+      53352,
+      57306,
+      57382,
+      57433,
+      57454,
+      63655,
+      65059,
+      65060,
+      65077,
+      65083,
+      65084,
+      65163,
+      81459
+    ],
+    "qualification": "Independent provider/client/session/protocol/token and server ownership captured before/through execution; managed browser_close confirmed, active RPCs drained, transport closed, exact own tokens cleared, own server groups/descendants stopped and lease released. Other sessions untouched."
+  },
+  "receipts": [
+    {
+      "path": "/tmp/worker148-20261014/workflow-v01.receipt.json",
+      "sha256": "4bd99e1f7e93396d2f75dcf32293caa957ebc119c76b796494cd7e3c4fe19026",
+      "stdoutSHA256": "e1bad74da5bec20d5ef99d75b681eb0e4ef3a0efc74999ab8289a0579cfd8b68",
+      "stderrSHA256": "91abf76479e4af54be2f84a3b40b16a8d9699abffd454d1b7b5d1632e657c705",
+      "exit": 1,
+      "wallSeconds": 14.336345499992603,
+      "pid": 57306,
+      "pgid": 57306,
+      "start": "2026-10-14T20:48:12.545833+00:00",
+      "end": "2026-10-14T20:48:26.882369+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/knip-v01.receipt.json",
+      "sha256": "45bd1e059a51ecfdaa7e367ee8a79b577bc0619ca9889b4be9fb88f0baca15ec",
+      "stdoutSHA256": "90b2f3c710f97b2b00b97879039c634dac7ac1703b2662499768fe73cb258d3c",
+      "stderrSHA256": "4b2bbf15e6d19b7db102021457e0195ff74e8aec8a85e876354777c951e33eec",
+      "exit": 0,
+      "wallSeconds": 6.286255834012991,
+      "pid": 47245,
+      "pgid": 47245,
+      "start": "2026-10-14T20:38:41.348888+00:00",
+      "end": "2026-10-14T20:38:47.635255+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/sweep-v01.receipt.json",
+      "sha256": "b7651c311bf34f79cbf67ffdf483003699771d284738daa20ff23bcf67be1624",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "75f7f7a4a1847c86875fdcf31d94b165140c2ae1b3275c736e991b36c5e46cbe",
+      "exit": 0,
+      "wallSeconds": 207.61068620800506,
+      "pid": 53200,
+      "pgid": 53200,
+      "start": "2026-10-14T20:44:17.783186+00:00",
+      "end": "2026-10-14T20:47:45.395490+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/weighted300-outer-v01.receipt.json",
+      "sha256": "f5b6df469219e91827ef10983ad0d34bae708bf5fd9fcbdadaabf841bc4c5dda",
+      "stdoutSHA256": "7ab4ff5c1d7076d7a9c5f4440792fd0dc86f034daf43a0a9848102fe5a3927de",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 312.3612492500106,
+      "pid": 47610,
+      "pgid": 47610,
+      "start": "2026-10-14T20:38:50.072836+00:00",
+      "end": "2026-10-14T20:44:02.436526+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/content-audit-v01.receipt.json",
+      "sha256": "4f0dbf32bb06797af6260c917695b7e644415c06106279a0d0d2e780170fb83f",
+      "stdoutSHA256": "0d6cd47fdbd18899c22387a721ebfcbb3cd73d2632e8ddd0dc5dbb561a297edc",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 2.872773999988567,
+      "pid": 52107,
+      "pgid": 52107,
+      "start": "2026-10-14T20:43:05.726069+00:00",
+      "end": "2026-10-14T20:43:08.598972+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/sweep-observer-v01.receipt.json",
+      "sha256": "370ffd8d0ee5a16d7000e6f46472b9f359e0859aa1b996348c5812efef6215a1",
+      "stdoutSHA256": "1ddd9bd660c178869ec8d51ac3fdfb0688da7897e8585294c947ebd6e46002fa",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 206.63695658301003,
+      "pid": 53324,
+      "pgid": 53324,
+      "start": "2026-10-14T20:44:18.939276+00:00",
+      "end": "2026-10-14T20:47:45.577867+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/review-v01.receipt.json",
+      "sha256": "5bfca2f02ce34e5724a605b203e914662f16c264a9aa0ce57922170bd938700e",
+      "stdoutSHA256": "c187eceff30e0c0de4ff3a0985549e455a2daea6eb9073eba388965c1f940300",
+      "stderrSHA256": "4b2bbf15e6d19b7db102021457e0195ff74e8aec8a85e876354777c951e33eec",
+      "exit": 0,
+      "wallSeconds": 52.94343791602296,
+      "pid": 45769,
+      "pgid": 45769,
+      "start": "2026-10-14T20:37:26.244668+00:00",
+      "end": "2026-10-14T20:38:19.188586+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/recipe-syntax-v01.receipt.json",
+      "sha256": "c99429a9b127a8428eb47cbf00d0150a38eb29040171da540f545cbf77625537",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 0.04241275001550093,
+      "pid": 51254,
+      "pgid": 51254,
+      "start": "2026-10-14T20:42:15.380029+00:00",
+      "end": "2026-10-14T20:42:15.422506+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/preflight-v01.receipt.json",
+      "sha256": "f4f5407e4e91af8c0a07d6e3fd06eff54af117295fea568068a9b0f0bbb9c5b3",
+      "stdoutSHA256": "aedbae588deb5ed9d802f07c1d621b802d4782da8cdab27fe04ff829f1ad8a2a",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 1.2348067080019973,
+      "pid": 45669,
+      "pgid": 45669,
+      "start": "2026-10-14T20:37:19.579181+00:00",
+      "end": "2026-10-14T20:37:20.814010+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/focused-v01.receipt.json",
+      "sha256": "4b5e0c5496ae825a19259b44c94ca871ea970462ec2973e48a02d8cc3b5be67a",
+      "stdoutSHA256": "f126381adcf195a868403937816f3c636a5f593db4d44de7976052dd20bf8e57",
+      "stderrSHA256": "4b2bbf15e6d19b7db102021457e0195ff74e8aec8a85e876354777c951e33eec",
+      "exit": 0,
+      "wallSeconds": 5.010846082994249,
+      "pid": 45226,
+      "pgid": 45226,
+      "start": "2026-10-14T20:37:05.149640+00:00",
+      "end": "2026-10-14T20:37:10.160591+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/workflow-initial-v01.receipt.json",
+      "sha256": "b80707535f90d4109cee55d6af3ec5701450c04905fafe66e20db240f037e9ac",
+      "stdoutSHA256": "52f7cdf4d4b8cdca6b0817fa1a164ea243c14bb47cd1d5f44a7c90d1c4a2465c",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 1.528714249987388,
+      "pid": 57454,
+      "pgid": 57454,
+      "start": "2026-10-14T20:48:14.861212+00:00",
+      "end": "2026-10-14T20:48:16.390030+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/sweep-initial-v01.receipt.json",
+      "sha256": "80521c300ecc7d8b74e882327d12aa583a21a6e9acc69cd2fe30c7a6d2c251e9",
+      "stdoutSHA256": "b3a106e52c7a696995f69af337cc3d68af7b6f1ebccade7a8416bda6a88994a2",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 0.2827995830157306,
+      "pid": 53352,
+      "pgid": 53352,
+      "start": "2026-10-14T20:44:20.100620+00:00",
+      "end": "2026-10-14T20:44:20.383545+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/workflow-observer-v01.receipt.json",
+      "sha256": "001b236933e48654f5523a7ede3eb8e0847d34fffb28ef7e38edb6b761271312",
+      "stdoutSHA256": "d048ce27d059ef25dd7b1ce7f2598034aa005d4345a6c2698a001b1b506c0cb6",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 13.350816499994835,
+      "pid": 57433,
+      "pgid": 57433,
+      "start": "2026-10-14T20:48:13.701250+00:00",
+      "end": "2026-10-14T20:48:27.052237+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/serialization-smoke-v01.receipt.json",
+      "sha256": "8b610e4a2bae9a4b96903df94b387e18a00706dd712086e590b4c8b2246ea8a5",
+      "stdoutSHA256": "b72b38e8d7c509d49eefac9086679f48cfade1c69382d77c8ec7d63698ded6da",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 0.053688625019276515,
+      "pid": 51258,
+      "pgid": 51258,
+      "start": "2026-10-14T20:42:15.519230+00:00",
+      "end": "2026-10-14T20:42:15.572991+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/worker148-20261014/weighted300-inner-v01.receipt.json",
+      "sha256": "2e2207df831257a4f4ed18edaeb47d6e8ec2e5ed240be44513aa6b34eafc1c2e",
+      "stdoutSHA256": "062ecea84296f4c2bc094ec82453868bfb98ffa86e522e3716b17fbe7a10b3f5",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 312.29564191700774,
+      "pid": 47613,
+      "pgid": 47613,
+      "start": "2026-10-14T20:38:50.098413+00:00",
+      "end": "2026-10-14T20:44:02.396473+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/workflow-initial-v02.receipt.json",
+      "sha256": "0757b19829b2a77e0df7f9a1a588b13b09d3a745673d6f9856c3ee9a351f7f6b",
+      "stdoutSHA256": "9715483fc051c0bb8b356cb3c17de104aab1907166dfd4d63438ee92c5862393",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 2.546029749995796,
+      "pid": 21658,
+      "pgid": 21658,
+      "start": "2026-10-14T20:51:22.155143+00:00",
+      "end": "2026-10-14T20:51:24.701289+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/recovery-serialization-v02.receipt.json",
+      "sha256": "a9caceccbd4f723b9510503216047fbdff70e8c5cd3d37db9c6e8b1e585c7145",
+      "stdoutSHA256": "003c8cae0a6c45bf7c8d2fbcf31f49b242707077df53c9592b5c52b6f728bf82",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 0.05491791700478643,
+      "pid": 81459,
+      "pgid": 81459,
+      "start": "2026-10-14T20:51:07.878069+00:00",
+      "end": "2026-10-14T20:51:07.933052+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/install-v01.receipt.json",
+      "sha256": "082feba7c8a109c3a099fbf74fda431840f2c8e3f896f702fd6ab2f91425f98b",
+      "stdoutSHA256": "c52e4d018ce31ebeeed8f8e50ecc98705da1552b5f9f03a17813073b3272b789",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 2.551896000019042,
+      "pid": 40643,
+      "pgid": 40643,
+      "start": "2026-10-14T20:33:14.072329+00:00",
+      "end": "2026-10-14T20:33:16.624318+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/workflow-observer-v04.receipt.json",
+      "sha256": "fde25ebaa89e60a0e27756012505401ebff8ab3f81e0d1ae72056eb5987489f2",
+      "stdoutSHA256": "083e7c1dfb03979db3c3964c73a2ac3d7098774744dab9c4de6df2e2718200e1",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 60.57079858300858,
+      "pid": 65083,
+      "pgid": 65083,
+      "start": "2026-10-14T20:56:29.328535+00:00",
+      "end": "2026-10-14T20:57:29.899902+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/workflow-observer-v03.receipt.json",
+      "sha256": "266899b5a975c9430d9e9a5a876dfb2d107217c4db5acadf44e3b0eae74da998",
+      "stdoutSHA256": "2c67e0e016d9018b9db7bceabf198336bb8c3c822602205078587d3c6d78baa8",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 61.692549041996244,
+      "pid": 51872,
+      "pgid": 51872,
+      "start": "2026-10-14T20:54:28.071218+00:00",
+      "end": "2026-10-14T20:55:29.764335+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/workflow-observer-v02.receipt.json",
+      "sha256": "73154487da30a44407accb8103050ab4d58156d4a7076cf4848d86675cac3ed8",
+      "stdoutSHA256": "0687c6237df968ee22a3ef979308299b8c93fd5f761edca3132f45cfdb65b566",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 43.63772924998193,
+      "pid": 21657,
+      "pgid": 21657,
+      "start": "2026-10-14T20:51:22.153938+00:00",
+      "end": "2026-10-14T20:52:05.792091+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/workflow-initial-v03.receipt.json",
+      "sha256": "369c49a9d652e229dc6d8a8b1865900fdf02e1edad089e7dfb50463da578559e",
+      "stdoutSHA256": "1229e202dde7e6a0e5c8182230ee94c829264df6a39fc0ed19bcdebec6968bfb",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 4.454046750004636,
+      "pid": 51873,
+      "pgid": 51873,
+      "start": "2026-10-14T20:54:28.071848+00:00",
+      "end": "2026-10-14T20:54:32.526024+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/workflow-initial-v04.receipt.json",
+      "sha256": "5046efa3244cf0b6895a06a1aa5bc60bb7b566c50912170f532ec0bf995f86b2",
+      "stdoutSHA256": "8cbfd31d8530653de904aa277e49568d35eca8caeff5347b304d5ae4693ec4c7",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 2.3465092499973252,
+      "pid": 65084,
+      "pgid": 65084,
+      "start": "2026-10-14T20:56:29.328966+00:00",
+      "end": "2026-10-14T20:56:31.675647+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/recovery-serialization-v04.receipt.json",
+      "sha256": "4de1c75a6e7517360b210f6b2892db658a3320dd4e70c42f9f70f1fe4e85891b",
+      "stdoutSHA256": "54c96a3b5bfb68419842862704d9fef811d0fe06034de50a25467ce99a6ab307",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 0.055922458006534725,
+      "pid": 65059,
+      "pgid": 65059,
+      "start": "2026-10-14T20:56:29.066691+00:00",
+      "end": "2026-10-14T20:56:29.122702+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/recovery-serialization-v03.receipt.json",
+      "sha256": "45a2b575d4704bdb73cf93539c955d1ff6a2aafe6a0306397d05e4b8a768b1dc",
+      "stdoutSHA256": "307e6056e13cace5215678327534a5c0e20e82cbf3c1d47f2bdeffe1ad2be9dd",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 0.06271225001546554,
+      "pid": 49704,
+      "pgid": 49704,
+      "start": "2026-10-14T20:54:10.455318+00:00",
+      "end": "2026-10-14T20:54:10.518120+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/entities-v01.receipt.json",
+      "sha256": "dec1edf62279dfcba89f3c287917ee4bdd7d93ef93a3be7d5ddfafce254d79ea",
+      "stdoutSHA256": "692190bb26bbaa28feb290ff284c76722d7f1a69487ed0fb8cdc037c0c511aeb",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 1.1880055829824414,
+      "pid": 41472,
+      "pgid": 41472,
+      "start": "2026-10-14T20:33:56.582127+00:00",
+      "end": "2026-10-14T20:33:57.770209+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/prepare-v01.receipt.json",
+      "sha256": "1c77d567d31c14e3205ba4e10cf27de37502fed3570fbcef0517bb88b65dcf73",
+      "stdoutSHA256": "0556fc3308ddcdb86b9408eae5a78859ab4a23e775dd2bde5b44446ae4107104",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 3.8010585409938358,
+      "pid": 41118,
+      "pgid": 41118,
+      "start": "2026-10-14T20:33:38.955569+00:00",
+      "end": "2026-10-14T20:33:42.756732+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/workflow-v02.receipt.json",
+      "sha256": "dfda564ccd10db8488b2651461980aae83da80b7e30894be5f4e871a5f195f49",
+      "stdoutSHA256": "ef0a2c3d3f2c5011c4532ed6e82e46964b7be7aad69b662eb5454c2c64296b08",
+      "stderrSHA256": "b2c46c1372bbd399bc5215a00bd67fea6bef424a8a98396bc518d780df751878",
+      "exit": 1,
+      "wallSeconds": 43.531466707994696,
+      "pid": 21651,
+      "pgid": 21651,
+      "start": "2026-10-14T20:51:22.122139+00:00",
+      "end": "2026-10-14T20:52:05.653975+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/recovery-syntax-v03.receipt.json",
+      "sha256": "60c2ee1e75c14e3454e47816689bba7ba896d463034e6abcac73540245686110",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 0.04915295899263583,
+      "pid": 49705,
+      "pgid": 49705,
+      "start": "2026-10-14T20:54:10.455477+00:00",
+      "end": "2026-10-14T20:54:10.504769+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/recovery-syntax-v04.receipt.json",
+      "sha256": "ab360ac6b94561d533eb261700735d0acb6381bbfdd9080e8be52fbe259f66df",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 0.04383741598576307,
+      "pid": 65060,
+      "pgid": 65060,
+      "start": "2026-10-14T20:56:29.066777+00:00",
+      "end": "2026-10-14T20:56:29.110777+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/doctor-v01.receipt.json",
+      "sha256": "479ac7bcae75e14bff7622d70c4615866a617726e5743b4e03b46f0e65336608",
+      "stdoutSHA256": "32d761c831f31506888661a4a3d1313f8fd09b93156eb2d059e805b18375e06d",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 1.5549054160073865,
+      "pid": 40811,
+      "pgid": 40811,
+      "start": "2026-10-14T20:33:26.890739+00:00",
+      "end": "2026-10-14T20:33:28.445762+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/recovery-syntax-v02.receipt.json",
+      "sha256": "5d030f2e7a80b5710e5da0388962188777c5590d0610aa38f6722227468f73e8",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit": 0,
+      "wallSeconds": 0.05604525000671856,
+      "pid": 63655,
+      "pgid": 63655,
+      "start": "2026-10-14T20:50:49.853915+00:00",
+      "end": "2026-10-14T20:50:49.910045+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/workflow-v03.receipt.json",
+      "sha256": "806d388f0db2aaa34059e33855086013cad4a413da4ff0e57d1e3449ca1a040b",
+      "stdoutSHA256": "eea78a60be0d5c40fb09790d53c0bd5bd07f7145df9cf994382dd5134289acb8",
+      "stderrSHA256": "5882ae76406fed3b1bd085b2ae28618617a3f55bf54856139909af0bd6144ddf",
+      "exit": 1,
+      "wallSeconds": 61.56375487500918,
+      "pid": 51863,
+      "pgid": 51863,
+      "start": "2026-10-14T20:54:28.037696+00:00",
+      "end": "2026-10-14T20:55:29.601990+00:00",
+      "groupRemainingAtExit": []
+    },
+    {
+      "path": "/tmp/root148-20261014/workflow-v04.receipt.json",
+      "sha256": "9b85760f17528233f496361f51164e5299973ab032cafc4d175384f52ea54e2a",
+      "stdoutSHA256": "1f3d23803b13e36bf1951b46a78629ef64362d5d26b3fcc30511e011e69d26a5",
+      "stderrSHA256": "722fef7195cdc4a819ae2a7f88dcac83dc3415d1e687425fbb600503a56fc1b5",
+      "exit": 0,
+      "wallSeconds": 60.50793854199583,
+      "pid": 65077,
+      "pgid": 65077,
+      "start": "2026-10-14T20:56:29.299751+00:00",
+      "end": "2026-10-14T20:57:29.808208+00:00",
+      "groupRemainingAtExit": []
+    }
+  ],
+  "measurementClock": {
+    "actualDispatch": {
+      "ordinal": 62994,
+      "timestamp": "2026-10-14T20:35:36.192Z",
+      "function": "spawn_agent",
+      "namespace": "collaboration",
+      "call_id": "call_2177e311a1a14c368a8fad882bc409ab",
+      "hostFile": "/Users/dthurn/.codex/sessions/2026/10/10/rollout-2026-10-10T20-08-54-01a128ef-4fc7-7a52-8a19-816921410323.jsonl",
+      "rawEventSHA256": "cf10e264b7565298d1b7c9fe3f3c91a59a42ee4654bed4d1081a9217c00166e2",
+      "task": "/root/aether_final148",
+      "argumentsRetainedInNativeHost": true
+    },
+    "prospectiveCutoff": "2026-10-14T21:05:07.545048+00:00",
+    "grossDispatchToCutoffMin": 29.522550799999998,
+    "scope": "Gross elapsed wall includes all root/helper research, validation, heavy/runtime waits, direct recovery, evidence and ACK wait; setup before actual dispatch separate",
+    "modelSampling": "UNKNOWN; wall time is not model sampling time",
+    "commitTail": "Final prospective cutoff updated just before schema/stage/Git; actual Git UTC/tail retained externally without postcommit rewrite solely for clock"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "actual npm run review start",
+        "loadRaw": "{ 4.10 4.75 6.62 }"
+      },
+      "localValidationS": {
+        "fuzz": "Actual inner npm300 process elapsed, excludes separate outerstartup/lock interval"
+      },
+      "testDelta": {
+        "files": "One plain auto-discovered D20 coupled scenario module",
+        "lines": "Private scenario lines, node; no jsdom test file"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "workflow-v01.receipt.json",
+      "start": "2026-10-14T20:48:12.545833+00:00",
+      "load": "{ 4.99 5.07 5.80 }"
+    },
+    {
+      "command": "knip-v01.receipt.json",
+      "start": "2026-10-14T20:38:41.348888+00:00",
+      "load": "{ 6.23 5.48 6.75 }"
+    },
+    {
+      "command": "sweep-v01.receipt.json",
+      "start": "2026-10-14T20:44:17.783186+00:00",
+      "load": "{ 4.21 4.63 5.90 }"
+    },
+    {
+      "command": "weighted300-outer-v01.receipt.json",
+      "start": "2026-10-14T20:38:50.072836+00:00",
+      "load": "{ 5.50 5.34 6.69 }"
+    },
+    {
+      "command": "content-audit-v01.receipt.json",
+      "start": "2026-10-14T20:43:05.726069+00:00",
+      "load": "{ 5.53 4.82 6.06 }"
+    },
+    {
+      "command": "sweep-observer-v01.receipt.json",
+      "start": "2026-10-14T20:44:18.939276+00:00",
+      "load": "{ 4.21 4.63 5.90 }"
+    },
+    {
+      "command": "review-v01.receipt.json",
+      "start": "2026-10-14T20:37:26.244668+00:00",
+      "load": "{ 4.10 4.75 6.62 }"
+    },
+    {
+      "command": "recipe-syntax-v01.receipt.json",
+      "start": "2026-10-14T20:42:15.380029+00:00",
+      "load": "{ 2.98 4.39 6.00 }"
+    },
+    {
+      "command": "preflight-v01.receipt.json",
+      "start": "2026-10-14T20:37:19.579181+00:00",
+      "load": "{ 4.02 4.76 6.64 }"
+    },
+    {
+      "command": "focused-v01.receipt.json",
+      "start": "2026-10-14T20:37:05.149640+00:00",
+      "load": "{ 4.11 4.80 6.68 }"
+    },
+    {
+      "command": "workflow-initial-v01.receipt.json",
+      "start": "2026-10-14T20:48:14.861212+00:00",
+      "load": "{ 4.99 5.07 5.80 }"
+    },
+    {
+      "command": "sweep-initial-v01.receipt.json",
+      "start": "2026-10-14T20:44:20.100620+00:00",
+      "load": "{ 4.21 4.63 5.90 }"
+    },
+    {
+      "command": "workflow-observer-v01.receipt.json",
+      "start": "2026-10-14T20:48:13.701250+00:00",
+      "load": "{ 4.99 5.07 5.80 }"
+    },
+    {
+      "command": "serialization-smoke-v01.receipt.json",
+      "start": "2026-10-14T20:42:15.519230+00:00",
+      "load": "{ 2.98 4.39 6.00 }"
+    },
+    {
+      "command": "weighted300-inner-v01.receipt.json",
+      "start": "2026-10-14T20:38:50.098413+00:00",
+      "load": "{ 5.50 5.34 6.69 }"
+    },
+    {
+      "command": "workflow-initial-v02.receipt.json",
+      "start": "2026-10-14T20:51:22.155143+00:00",
+      "load": "{ 13.63 7.42 6.51 }"
+    },
+    {
+      "command": "recovery-serialization-v02.receipt.json",
+      "start": "2026-10-14T20:51:07.878069+00:00",
+      "load": "{ 14.73 7.28 6.44 }"
+    },
+    {
+      "command": "install-v01.receipt.json",
+      "start": "2026-10-14T20:33:14.072329+00:00",
+      "load": "{ 4.66 5.90 7.59 }"
+    },
+    {
+      "command": "workflow-observer-v04.receipt.json",
+      "start": "2026-10-14T20:56:29.328535+00:00",
+      "load": "{ 9.03 12.35 9.47 }"
+    },
+    {
+      "command": "workflow-observer-v03.receipt.json",
+      "start": "2026-10-14T20:54:28.071218+00:00",
+      "load": "{ 21.00 14.00 9.48 }"
+    },
+    {
+      "command": "workflow-observer-v02.receipt.json",
+      "start": "2026-10-14T20:51:22.153938+00:00",
+      "load": "{ 13.63 7.42 6.51 }"
+    },
+    {
+      "command": "workflow-initial-v03.receipt.json",
+      "start": "2026-10-14T20:54:28.071848+00:00",
+      "load": "{ 21.00 14.00 9.48 }"
+    },
+    {
+      "command": "workflow-initial-v04.receipt.json",
+      "start": "2026-10-14T20:56:29.328966+00:00",
+      "load": "{ 9.03 12.35 9.47 }"
+    },
+    {
+      "command": "recovery-serialization-v04.receipt.json",
+      "start": "2026-10-14T20:56:29.066691+00:00",
+      "load": "{ 9.03 12.35 9.47 }"
+    },
+    {
+      "command": "recovery-serialization-v03.receipt.json",
+      "start": "2026-10-14T20:54:10.455318+00:00",
+      "load": "{ 20.52 13.43 9.18 }"
+    },
+    {
+      "command": "entities-v01.receipt.json",
+      "start": "2026-10-14T20:33:56.582127+00:00",
+      "load": "{ 4.53 5.71 7.43 }"
+    },
+    {
+      "command": "prepare-v01.receipt.json",
+      "start": "2026-10-14T20:33:38.955569+00:00",
+      "load": "{ 4.91 5.86 7.53 }"
+    },
+    {
+      "command": "workflow-v02.receipt.json",
+      "start": "2026-10-14T20:51:22.122139+00:00",
+      "load": "{ 13.63 7.42 6.51 }"
+    },
+    {
+      "command": "recovery-syntax-v03.receipt.json",
+      "start": "2026-10-14T20:54:10.455477+00:00",
+      "load": "{ 20.52 13.43 9.18 }"
+    },
+    {
+      "command": "recovery-syntax-v04.receipt.json",
+      "start": "2026-10-14T20:56:29.066777+00:00",
+      "load": "{ 9.03 12.35 9.47 }"
+    },
+    {
+      "command": "doctor-v01.receipt.json",
+      "start": "2026-10-14T20:33:26.890739+00:00",
+      "load": "{ 5.26 5.96 7.58 }"
+    },
+    {
+      "command": "recovery-syntax-v02.receipt.json",
+      "start": "2026-10-14T20:50:49.853915+00:00",
+      "load": "{ 8.55 5.63 5.86 }"
+    },
+    {
+      "command": "workflow-v03.receipt.json",
+      "start": "2026-10-14T20:54:28.037696+00:00",
+      "load": "{ 21.00 14.00 9.48 }"
+    },
+    {
+      "command": "workflow-v04.receipt.json",
+      "start": "2026-10-14T20:56:29.299751+00:00",
+      "load": "{ 9.03 12.35 9.47 }"
+    }
+  ]
+}
