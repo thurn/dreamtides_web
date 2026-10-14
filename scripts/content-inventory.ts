@@ -432,7 +432,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("randomSelection", [callable(DSL_BUILDERS, "randomIn")], ["CardRef"], { note: "\"a random …\" selections" }),
   dsl("valueZoneCounts", [callable(DSL_BUILDERS, "countCards")], ["ValueExpr"], { note: "counts of cards in a zone" }),
   dsl("valueCardStats", [callable(DSL_BUILDERS, "costOf")], ["ValueExpr"], { note: "\"this character's ✦\", \"that card's cost\"" }),
-  dsl("storedCounters", [registered(DSL_TYPES, "ValueExpr", { member: "storedCounters", pending: "member" })], ["ValueExpr", "PaymentCost"], { note: "stored ⧗ values and X⧗ costs" }),
+  dsl("storedCounters", [registered(DSL_TYPES, "ValueExpr", { member: "storedCounters" })], ["ValueExpr", "PaymentCost"], { note: "stored ⧗ values and X⧗ costs" }),
   dsl("conditionCardCounts", [callable(DSL_BUILDERS, "conditionCardCounts")], ["Condition"], { note: "\"if there are 3 or more events in your void\"" }),
   dsl("turnHistory", [registered(DSL_TYPES, "ValueExpr", { member: "playedThisTurn" }), registered(DSL_TYPES, "Condition", { member: "thisTurn" })], ["ValueExpr", "Condition"], { note: "turn counters: cards played, discarded, dissolved this turn" }),
   dsl("historyRefs", [registered("src/engine/effects/types.ts", "CardRef", { member: "lastPlayed", pending: "member" })], ["CardRef"], { note: `"the last warrior you played" (${GAP_38})` }),

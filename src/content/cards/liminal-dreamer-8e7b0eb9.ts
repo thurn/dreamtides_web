@@ -1,4 +1,7 @@
 import { card } from "../define";
+import { activated, discardHandCost, storedCounters } from "../../engine/dsl/builders";
+import { draw, storeCounters } from "../../engine/effects/primitives";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
 
 export default card({
   name: "Liminal Dreamer",
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 300,
   art: { x: 0, y: -0.142, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onDawn(), storeCounters(1)), activated([discardHandCost()], draw(storedCounters()))],
+  verifiedText: "1k4w8p9xwea",
 });

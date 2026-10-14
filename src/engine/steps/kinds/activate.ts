@@ -7,6 +7,7 @@ import type { AbilitySource } from "../../state/ids";
 import { opponent, sourceInstance } from "../../state/ids";
 import type { StepDefinition } from "../types";
 import { targetsNeedX } from "../immediate-x";
+import { readsStoredCounters } from "../../dsl/values";
 
 /**
  * Activates an ability of a card in play, of a card in its owner's void
@@ -55,13 +56,13 @@ export const activate: StepDefinition<ActivateStep> = {
     const position = abandoned === undefined ? null : slotOf(state, abandoned);
     const captured = position === null ? choices : { ...choices, abandonedPosition: { side, slot: { ...position } } };
     ctx.commitPoint();
-    payCosts(ctx, side, step.source, plan);
+    const paymentSourceCounters = payCosts(ctx, side, step.source, plan, readsStoredCounters(ability.effect) ? { retainSourceCounters: true } : {});
     if (ability.oncePerTurn === true) {
       state.oncePerTurn.push(oncePerTurnKey(step.source, step.ability));
     }
     const self = sourceInstance(step.source);
     const lastKnownSourceSpark = self === null ? undefined : ctx.departedSourceSpark.get(self);
-    state.stack.push({ ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }), kind: "ability", source: step.source, ability: step.ability, origin, controller: side, choices: captured, x: plan.x, optionalPaid: plan.optionalPaid });
+    state.stack.push({ ...(paymentSourceCounters === null ? {} : { paymentSourceCounters }), ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }), kind: "ability", source: step.source, ability: step.ability, origin, controller: side, choices: captured, x: plan.x, optionalPaid: plan.optionalPaid });
     ctx.emit({ kind: "abilityActivated", side, source: step.source, ability: step.ability });
     state.priority = opponent(side);
   },

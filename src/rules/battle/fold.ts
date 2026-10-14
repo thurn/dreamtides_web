@@ -985,7 +985,8 @@ function isStackItem(value: unknown): boolean {
     isIndex(value.ability) &&
     isAbilityOrigin(value.origin) &&
     isEffectChoices(value.choices) &&
-    optional((spark) => isFiniteNumber(spark) && spark >= 0)(value.lastKnownSourceSpark)
+    optional((spark) => isFiniteNumber(spark) && spark >= 0)(value.lastKnownSourceSpark) &&
+    optional((count) => typeof count === "number" && Number.isSafeInteger(count) && count >= 0)(value.paymentSourceCounters)
   );
 }
 

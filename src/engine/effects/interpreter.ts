@@ -617,6 +617,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     movedCosts: (ref) => env.moved.costs(ref.node),
     discardCount: (value) => env.moved.discardedCount(value.of.node, value.cardType),
     sourceSpark: resolvingSourceSpark(ctx, env),
+    ...(env.paymentSourceCounters === undefined ? {} : { paymentSourceCounters: env.paymentSourceCounters }),
   });
 }
 
@@ -825,6 +826,7 @@ export function effectEntersPlay(effect: EffectNode): boolean {
 }
 
 export interface ResolveOptions {
+  readonly paymentSourceCounters?: number;
   readonly triggeringAbility?: import("../state/types").QueuedTrigger["triggeringAbility"];
   /** Choices prepared during this resolution, with conditional subtrees reached at their instructions. Transient, never saved. */
   readonly resolutionChoices?: true;
@@ -1043,6 +1045,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     linkedSource: options.linkedSource ?? (everyNode(effect).some((node) => node.op === "linkedBanish") ? linkedSourceContext(ctx, options.source, options.origin, options.ability) : null),
     source: options.source,
     lastKnownSourceSpark: options.lastKnownSourceSpark ?? null,
+    ...(options.paymentSourceCounters === undefined ? {} : { paymentSourceCounters: options.paymentSourceCounters }),
     origin: options.origin,
     ability: options.ability,
     root: options.root ?? effect,

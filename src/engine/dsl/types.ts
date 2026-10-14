@@ -351,6 +351,8 @@ export type ValueExpr =
   | CurrentTurnCountValue
   | number
   | XValue
+  /** Counters currently stored on the source; payment departure may retain its scalar. */
+  | { readonly value: "storedCounters" }
   /** The positive points awarded by the challenge that triggered this ability; 0 outside a scoring trigger. */
   | { readonly value: "scored" }
   /** The positive discard occasion captured by this trigger; 0 outside a batch trigger. */
@@ -547,6 +549,8 @@ export type PaymentCost =
   | { readonly cost: "discard"; readonly count: "hand"; readonly filter?: never; readonly captureCost?: never; readonly min?: never }
   /** N⧗: spend counters stored on the source (rules § Counters). */
   | { readonly cost: "counters"; readonly amount: number }
+  /** X⧗: choose and spend X counters on the source, sharing every other paid X. */
+  | { readonly cost: "countersX"; readonly min: number }
   /**
    * "Pay N⍟": the payer's victory points drop by N. Payable only with at
    * least N⍟ (rules § Costs, Requirements, and X → Paying ⍟).

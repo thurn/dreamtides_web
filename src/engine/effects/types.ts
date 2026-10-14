@@ -92,6 +92,7 @@ export interface EffectEnv {
   readonly linkedSource: LinkedSourceContext | null;
   /** The pending ability's retained departure spark; live in-play spark takes precedence. */
   readonly lastKnownSourceSpark: number | null;
+  readonly paymentSourceCounters?: number;
   /** The card or emblem whose ability this is. */
   readonly source: AbilitySource;
   /** Where the ability's definition comes from. */

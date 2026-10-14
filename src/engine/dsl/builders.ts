@@ -172,6 +172,17 @@ export function discardHandCost(): PaymentCost {
   return { cost: "discard", count: "hand" };
 }
 
+/** Counters currently stored on this ability's source. */
+export function storedCounters(): ValueExpr {
+  return { value: "storedCounters" };
+}
+
+/** "X⧗": spend X source counters; zero requires a meaningful authored effect. */
+export function countersXCost(min = 1): PaymentCost {
+  if (!Number.isSafeInteger(min) || min < 0) throw new Error("A counter-X minimum must be a nonnegative integer");
+  return { cost: "countersX", min };
+}
+
 /** "N⧗": spend counters stored on the source. */
 export function countersCost(amount: number): PaymentCost {
   return { cost: "counters", amount };

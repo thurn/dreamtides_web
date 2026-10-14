@@ -2506,6 +2506,28 @@ Cards use counters (⧗) to track internal state.
   character: Store 1⧗." paid by abandoning the card itself stores nothing, and
   neither does a store whose card an opponent's response removed from play.
 
+**Variable counter costs:** An X⧗ cost chooses X before targets and spends
+that many counters from the ability's own source. The default minimum is 1;
+X may be 0 when the card has a meaningful zero effect, such as dissolving an
+enemy with 0✦. Every X payment in the same activation uses that same value,
+including energy and card counts. Fixed and variable counter costs add
+together; energy modifications do not change counter payments. Positive
+counter payments require a source still in play when that payment is made.
+The counter-X form is a mandatory top-level cost. Alternative and optional
+payment lists accept fixed counter payments; a counter-X placed in those
+lists is unplayable and raises no player choices.
+
+**Reading stored counters:** A value referring to stored ⧗ reads the source's
+current count as its instruction resolves. Different physical cards keep
+independent counts. A source outside play reads 0. If paying for an activated
+ability itself removes its source, that ability retains the source's count
+immediately before the removal payment, after any earlier counter payments.
+This retained number survives a created source ceasing to exist. A source
+that is in play again supplies its current count. An activation without a payment-departure snapshot reads 0 after a later
+response removes its source. A paid X is a separate
+binding and continues to mean the amount paid, regardless of the source's
+remaining counters or zone.
+
 ## Zone Changes
 
 In general, a card preserves its properties — cost, spark, status, and so on —

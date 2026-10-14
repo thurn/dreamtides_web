@@ -1,4 +1,6 @@
 import { card } from "../define";
+import { abandonCost, activated, countersXCost, enemyCharacter, target, x } from "../../engine/dsl/builders";
+import { dissolve, storeCounters } from "../../engine/effects/primitives";
 
 export default card({
   name: "Eviscerator of Hope",
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 79,
   art: { x: 0.462, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([abandonCost()], storeCounters(1)), activated([countersXCost(0)], dissolve(target(enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() }))))],
+  verifiedText: "lcn53gf5lm",
 });

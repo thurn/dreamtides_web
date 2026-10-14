@@ -1,0 +1,1313 @@
+{
+  "bead": "hv-umm2.95",
+  "base": "b8afed590c7f64f47f7d61511335f9985dff443f",
+  "dispatch": {
+    "timestamp": "2026-10-14T16:59:15.811Z",
+    "callId": "call_6d8dc3abef5f401a82a763ceeb8dbd24",
+    "task": "/root/counters95",
+    "samplingStart": "UNKNOWN"
+  },
+  "cutoff": "2026-10-14T18:27:00.272006+00:00",
+  "inclusiveImplementationMin": 87.74101676666668,
+  "commitStatus": "Parent accepted exact23-path integration READY and authorized the final normal-dated amendment. Final cutoff recorded immediately before schema/Git; source/parent/OID/begin/end/tail/clean status retained in ignored integration/commit-receipt.json. No tracked postcommit writes.",
+  "firstActualOrdinaryReviewStep": {
+    "step": "prepare",
+    "timestamp": "2026-10-14T17:14:24.298Z",
+    "load": 12.5810546875,
+    "receipt": "ordinary-review.stdout",
+    "result": "own draft verifiedText mismatch, later corrected"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "first actual ordinary review prepare, including its own draft failure"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "abandon-coupling-focused": {
+      "start": "2026-10-14T17:25:43.622957+00:00",
+      "load": 8.06884765625,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "types-current": {
+      "start": "2026-10-14T17:13:50.969656+00:00",
+      "load": 14.53955078125,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "judged-matrix": {
+      "start": "2026-10-14T17:52:38.842737+00:00",
+      "load": 20.89404296875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "knip-final": {
+      "start": "2026-10-14T17:18:34.195954+00:00",
+      "load": 13.15185546875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "full-authoritative": {
+      "start": "2026-10-14T17:28:13.956242+00:00",
+      "load": 17.21923828125,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "abandon-coupling-pass": {
+      "start": "2026-10-14T17:27:30.547225+00:00",
+      "load": 18.24560546875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "focused-corrected": {
+      "start": "2026-10-14T17:11:37.008300+00:00",
+      "load": 6.71337890625,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "focused-initial": {
+      "start": "2026-10-14T17:09:36.922828+00:00",
+      "load": 8.2841796875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "focused-final": {
+      "start": "2026-10-14T17:13:49.833724+00:00",
+      "load": 14.53955078125,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "weighted300": {
+      "start": "2026-10-14T17:34:56.306213+00:00",
+      "load": 5.3896484375,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "reentry-focused": {
+      "start": "2026-10-14T17:12:49.358255+00:00",
+      "load": 13.6982421875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "ordinary-final": {
+      "start": "2026-10-14T17:18:34.195965+00:00",
+      "load": 13.15185546875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "full-final": {
+      "start": "2026-10-14T17:22:00.550326+00:00",
+      "load": 7.72412109375,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "ordinary-review": {
+      "start": "2026-10-14T17:14:24.092824+00:00",
+      "load": 12.5810546875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "focused-draft": {
+      "start": "2026-10-14T17:10:21.451894+00:00",
+      "load": 6.8212890625,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "judged": {
+      "start": "2026-10-14T17:48:50.519718+00:00",
+      "load": 17.5341796875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "judged-focused": {
+      "start": "2026-10-14T17:50:50.372491+00:00",
+      "load": 14.8994140625,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "sweep": {
+      "start": "2026-10-14T17:42:34.936081+00:00",
+      "load": 14.83544921875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "preflight": {
+      "start": "2026-10-14T17:18:34.198641+00:00",
+      "load": 13.15185546875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "focused-fixed": {
+      "start": "2026-10-14T17:12:09.438341+00:00",
+      "load": 7.61572265625,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "focused-source-final": {
+      "start": "2026-10-14T17:16:09.541618+00:00",
+      "load": 14.07568359375,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    },
+    "abandon-coupling-fixed": {
+      "start": "2026-10-14T17:26:34.576980+00:00",
+      "load": 14.88232421875,
+      "scope": "whole command group; native internal step samples retained in raw stdout"
+    }
+  },
+  "sourceBudget": {
+    "runtimeAdded": 107,
+    "runtimeDeleted": 20,
+    "grossRuntime": 127,
+    "productionUUIDs": [
+      "f3f97e2c-3bb6-4a20-9880-f59c50e5af93",
+      "8e7b0eb9-4933-420b-abee-413bf5b3d2fc",
+      "a6866438-3632-408d-b464-c10f8a43a5c2"
+    ],
+    "newValueExpr": [
+      "storedCounters"
+    ],
+    "newPaymentCost": [
+      "countersX"
+    ],
+    "newSavedFields": [
+      "AbilityStackItem.paymentSourceCounters optional safe nonnegative integer"
+    ],
+    "newPrompts": [],
+    "newEvents": [],
+    "newFloatingKinds": [],
+    "testDelta": {
+      "files": 1,
+      "lines": 345,
+      "jsdomFiles": 0
+    },
+    "publicContractCases": 32,
+    "sharedFixtureOrDiscoveryWrites": 0,
+    "costComposition": "No CardCostMode or PlayRoute shape changes; shared table read-only. Own coupling contracts cover fixed counters, repeated counter-X, energy-X, discard-X, mandatory abandon-X and source-departure order. Nested counter-X intentionally unplayable before targets, matching existing mandatory abandon-X protocol."
+  },
+  "actualCheckReceipts": {
+    "abandon-coupling-focused": {
+      "name": "abandon-coupling-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--maxWorkers=2",
+        "-t",
+        "shares counter-X with mandatory abandon"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 88228,
+      "pgid": 88228,
+      "start": "2026-10-14T17:25:43.622957+00:00",
+      "load": [
+        8.06884765625,
+        8.8935546875,
+        10.85107421875
+      ],
+      "exit": 1,
+      "end": "2026-10-14T17:25:49.766260+00:00",
+      "wall": 6.1431470419920515,
+      "cpu": 7.9984470000000005
+    },
+    "types-current": {
+      "name": "types-current",
+      "argv": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 84600,
+      "pgid": 84600,
+      "start": "2026-10-14T17:13:50.969656+00:00",
+      "load": [
+        14.53955078125,
+        11.7099609375,
+        12.22900390625
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:14:03.481809+00:00",
+      "wall": 12.511796833015978,
+      "cpu": 18.541107999999998
+    },
+    "judged-matrix": {
+      "name": "judged-matrix",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.95/stored-counters.mjs",
+        "--bead",
+        "hv-umm2.95",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 22511,
+      "pgid": 22511,
+      "start": "2026-10-14T17:52:38.842737+00:00",
+      "load": [
+        20.89404296875,
+        17.037109375,
+        14.3515625
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:55:34.605895+00:00",
+      "wall": 175.77082137501566,
+      "cpu": 10.506798999999999
+    },
+    "knip-final": {
+      "name": "knip-final",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 59256,
+      "pgid": 59256,
+      "start": "2026-10-14T17:18:34.195954+00:00",
+      "load": [
+        13.15185546875,
+        12.9892578125,
+        12.771484375
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:18:42.315443+00:00",
+      "wall": 8.119272250012727,
+      "cpu": 7.456654
+    },
+    "full-authoritative": {
+      "name": "full-authoritative",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 63563,
+      "pgid": 63563,
+      "start": "2026-10-14T17:28:13.956242+00:00",
+      "load": [
+        17.21923828125,
+        13.12548828125,
+        12.302734375
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:34:56.257132+00:00",
+      "wall": 402.2950422090071,
+      "cpu": 259.374602
+    },
+    "abandon-coupling-pass": {
+      "name": "abandon-coupling-pass",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--maxWorkers=2",
+        "-t",
+        "shares counter-X with mandatory abandon"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 56135,
+      "pgid": 56135,
+      "start": "2026-10-14T17:27:30.547225+00:00",
+      "load": [
+        18.24560546875,
+        12.8837890625,
+        12.193359375
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:27:39.529828+00:00",
+      "wall": 8.982353957981104,
+      "cpu": 9.862537
+    },
+    "focused-corrected": {
+      "name": "focused-corrected",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 21666,
+      "pgid": 21666,
+      "start": "2026-10-14T17:11:37.008300+00:00",
+      "load": [
+        6.71337890625,
+        9.2666015625,
+        11.59814453125
+      ],
+      "exit": 1,
+      "end": "2026-10-14T17:11:54.187475+00:00",
+      "wall": 17.178741917014122,
+      "cpu": 23.887261
+    },
+    "focused-initial": {
+      "name": "focused-initial",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--maxWorkers=2",
+        "--minWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 17131,
+      "pgid": 17131,
+      "start": "2026-10-14T17:09:36.922828+00:00",
+      "load": [
+        8.2841796875,
+        10.8818359375,
+        12.4599609375
+      ],
+      "exit": 1,
+      "end": "2026-10-14T17:09:39.808556+00:00",
+      "wall": 2.8856118750118185,
+      "cpu": 3.2461789999999997
+    },
+    "focused-final": {
+      "name": "focused-final",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 84451,
+      "pgid": 84451,
+      "start": "2026-10-14T17:13:49.833724+00:00",
+      "load": [
+        14.53955078125,
+        11.7099609375,
+        12.22900390625
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:14:09.437495+00:00",
+      "wall": 19.60327266700915,
+      "cpu": 23.59469
+    },
+    "weighted300": {
+      "name": "weighted300",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "f3f97e2c-3bb6-4a20-9880-f59c50e5af93,8e7b0eb9-4933-420b-abee-413bf5b3d2fc,a6866438-3632-408d-b464-c10f8a43a5c2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 94881,
+      "pgid": 94881,
+      "start": "2026-10-14T17:34:56.306213+00:00",
+      "load": [
+        5.3896484375,
+        8.96923828125,
+        10.775390625
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:41:39.239692+00:00",
+      "wall": 402.92752554200706,
+      "cpu": 333.413883
+    },
+    "reentry-focused": {
+      "name": "reentry-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--maxWorkers=2",
+        "-t",
+        "keeps unrelated hidden"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 24354,
+      "pgid": 24354,
+      "start": "2026-10-14T17:12:49.358255+00:00",
+      "load": [
+        13.6982421875,
+        10.427734375,
+        11.826171875
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:12:58.162980+00:00",
+      "wall": 8.804439625004306,
+      "cpu": 11.013473000000001
+    },
+    "ordinary-final": {
+      "name": "ordinary-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 59255,
+      "pgid": 59255,
+      "start": "2026-10-14T17:18:34.195965+00:00",
+      "load": [
+        13.15185546875,
+        12.9892578125,
+        12.771484375
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:19:37.883037+00:00",
+      "wall": 63.68606462498428,
+      "cpu": 182.766624
+    },
+    "full-final": {
+      "name": "full-final",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 72921,
+      "pgid": 72921,
+      "start": "2026-10-14T17:22:00.550326+00:00",
+      "load": [
+        7.72412109375,
+        11.15087890625,
+        12.109375
+      ],
+      "exit": -15,
+      "end": "2026-10-14T17:26:05.884383+00:00",
+      "wall": 245.3304706250201,
+      "cpu": 0.00233
+    },
+    "ordinary-review": {
+      "name": "ordinary-review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 86711,
+      "pgid": 86711,
+      "start": "2026-10-14T17:14:24.092824+00:00",
+      "load": [
+        12.5810546875,
+        11.5107421875,
+        12.13818359375
+      ],
+      "exit": 1,
+      "end": "2026-10-14T17:15:28.235792+00:00",
+      "wall": 64.1416004159837,
+      "cpu": 202.521249
+    },
+    "focused-draft": {
+      "name": "focused-draft",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 19870,
+      "pgid": 19870,
+      "start": "2026-10-14T17:10:21.451894+00:00",
+      "load": [
+        6.8212890625,
+        10.14599609375,
+        12.107421875
+      ],
+      "exit": 1,
+      "end": "2026-10-14T17:10:35.893364+00:00",
+      "wall": 14.441099000017857,
+      "cpu": 19.777239
+    },
+    "judged": {
+      "name": "judged",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.95/stored-counters.mjs",
+        "--bead",
+        "hv-umm2.95",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 72294,
+      "pgid": 72294,
+      "start": "2026-10-14T17:48:50.519718+00:00",
+      "load": [
+        17.5341796875,
+        17.30712890625,
+        13.83447265625
+      ],
+      "exit": 1,
+      "end": "2026-10-14T17:49:01.610894+00:00",
+      "wall": 11.090899000002537,
+      "cpu": 8.286349
+    },
+    "judged-focused": {
+      "name": "judged-focused",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.95/stored-counters.mjs",
+        "--bead",
+        "hv-umm2.95",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "only=eviscerator",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 56619,
+      "pgid": 56619,
+      "start": "2026-10-14T17:50:50.372491+00:00",
+      "load": [
+        14.8994140625,
+        15.9267578125,
+        13.6982421875
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:51:12.328090+00:00",
+      "wall": 21.95517391699832,
+      "cpu": 8.49404
+    },
+    "sweep": {
+      "name": "sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.95",
+        "--cards",
+        "f3f97e2c-3bb6-4a20-9880-f59c50e5af93,8e7b0eb9-4933-420b-abee-413bf5b3d2fc,a6866438-3632-408d-b464-c10f8a43a5c2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 16712,
+      "pgid": 16712,
+      "start": "2026-10-14T17:42:34.936081+00:00",
+      "load": [
+        14.83544921875,
+        9.19091796875,
+        9.64453125
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:47:11.829888+00:00",
+      "wall": 276.88980191698647,
+      "cpu": 15.605647999999999
+    },
+    "preflight": {
+      "name": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "f3f97e2c-3bb6-4a20-9880-f59c50e5af93,8e7b0eb9-4933-420b-abee-413bf5b3d2fc,a6866438-3632-408d-b464-c10f8a43a5c2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 59257,
+      "pgid": 59257,
+      "start": "2026-10-14T17:18:34.198641+00:00",
+      "load": [
+        13.15185546875,
+        12.9892578125,
+        12.771484375
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:18:37.228073+00:00",
+      "wall": 3.0292639170074835,
+      "cpu": 2.624767
+    },
+    "focused-fixed": {
+      "name": "focused-fixed",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 22904,
+      "pgid": 22904,
+      "start": "2026-10-14T17:12:09.438341+00:00",
+      "load": [
+        7.61572265625,
+        9.2265625,
+        11.5009765625
+      ],
+      "exit": 1,
+      "end": "2026-10-14T17:12:27.339513+00:00",
+      "wall": 17.90066200000001,
+      "cpu": 23.751784999999998
+    },
+    "focused-source-final": {
+      "name": "focused-source-final",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 50417,
+      "pgid": 50417,
+      "start": "2026-10-14T17:16:09.541618+00:00",
+      "load": [
+        14.07568359375,
+        13.568359375,
+        12.95068359375
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:16:25.081294+00:00",
+      "wall": 15.546783458994469,
+      "cpu": 21.697323
+    },
+    "abandon-coupling-fixed": {
+      "name": "abandon-coupling-fixed",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--maxWorkers=2",
+        "-t",
+        "shares counter-X with mandatory abandon"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 90005,
+      "pgid": 90005,
+      "start": "2026-10-14T17:26:34.576980+00:00",
+      "load": [
+        14.88232421875,
+        10.31640625,
+        11.248046875
+      ],
+      "exit": 1,
+      "end": "2026-10-14T17:26:42.111893+00:00",
+      "wall": 7.5347081660002,
+      "cpu": 9.63757
+    }
+  },
+  "timingQualification": {
+    "fullGroup": 402.2950422090071,
+    "fullLaunchToFirstStep": 308.576758,
+    "fullTestStep": {
+      "at": "2026-10-14T17:33:49.392Z",
+      "load": 7.16650390625,
+      "wall": 62.8,
+      "files": 387,
+      "tests": 8537
+    },
+    "fullPreparation": {
+      "at": "2026-10-14T17:33:22.533Z",
+      "load": 7.017578125
+    },
+    "weightedClient": {
+      "name": "weighted300",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "f3f97e2c-3bb6-4a20-9880-f59c50e5af93,8e7b0eb9-4933-420b-abee-413bf5b3d2fc,a6866438-3632-408d-b464-c10f8a43a5c2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 94881,
+      "pgid": 94881,
+      "start": "2026-10-14T17:34:56.306213+00:00",
+      "load": [
+        5.3896484375,
+        8.96923828125,
+        10.775390625
+      ],
+      "exit": 0,
+      "end": "2026-10-14T17:41:39.239692+00:00",
+      "wall": 402.92752554200706,
+      "cpu": 333.413883
+    },
+    "weightedNative": {
+      "games": 300,
+      "steps": 104749,
+      "wallS": 310.6,
+      "cpuS": 331.9,
+      "prompts": 7328,
+      "interactiveReruns": 731,
+      "failures": 0,
+      "includedAndExercised": {
+        "f3f97e2c-3bb6-4a20-9880-f59c50e5af93": [
+          608,
+          121
+        ],
+        "8e7b0eb9-4933-420b-abee-413bf5b3d2fc": [
+          614,
+          134
+        ],
+        "a6866438-3632-408d-b464-c10f8a43a5c2": [
+          621,
+          92
+        ]
+      },
+      "qualification": "Aggregate inclusion/exercise counters do not prove a particular ability payment; judged cases supply the specific actions."
+    },
+    "noLowLoadPerformanceClaim": true,
+    "cancelledQueuedFull": "full-queued-cancel.json is a settled wait cancellation, no full checks ran and no test failure is claimed."
+  },
+  "scope": "Only admitted own source-count/payment form, three immutable-data leaf authors, own generated inventory retirement, scalar env/stack guards, own costPhrase kind and evidence. No zone, history, queued/floating, broad private identity, policy, renderer, lab/shared harness or registration-discovery body edits. Existing stack view/determinize copies preserve this public scalar, proved by both-view contracts; no gratuitous projection edits. Detector traverses authored nested arrays/records for own ValueExpr; only activate attaches an own-payment snapshot; resolveTop forwards it only to that original ability; fresh triggered/copied contexts do not inherit it. Deferred-trigger contract verifies fresh context.",
+  "d10": {
+    "RD": "RD-hv-umm2.95-1",
+    "officialFetch": "official-fetch-receipt.json",
+    "officialTextSha256": "8d860e451f20f38865b725b42d82feb714c725373dd8f3b32b8652b3eeb070ca",
+    "officialDate": "2026-09-25",
+    "adaptedParagraphs": [
+      "113.7a",
+      "608.2h"
+    ],
+    "ladderReadOnly": "ladder-readonly-receipt.json plus parent-rust-rule-read.stdout, original base prototype-readonly.stdout; only counterspell matches, no stored-counter Rust behavior supplies the missing rule",
+    "qualification": "Payment-departure-only count retention is a narrow Dreamtides adaptation with current clearing rules and native scalar admission; no general Magic object/zone lifecycle adoption."
+  },
+  "inventoryProjection": {
+    "receipt": "parent-inventory-projection-audit.json",
+    "entities": 1209,
+    "sameUUIDSetAndImmutableFields": true,
+    "recordsChanged": 180,
+    "routing": 131,
+    "requiredPrimitives": 18,
+    "status": 43,
+    "RDs": 12,
+    "cardIssues": 1,
+    "ownStatus": 3,
+    "previouslyAuthoredSourceLag": 40,
+    "otherActualDeliveredPrimitive": "ruleModifier",
+    "subtypePromptProjectionShift": "firstBead108→109; canonical positional projection only",
+    "nativeMembershipAndGraph": "Original exact3 UUIDs, full recipe, semantic joins and claims unchanged; generated current partition is not native authority."
+  },
+  "frozenQASource": {
+    "receipt": "qa-freeze-v2.json",
+    "observedChangedPaths": 19,
+    "base": "8dbcf0cdfc949b2c53cca1f67da1587c244340f5",
+    "mapScope": "19 actual changed/untracked admitted paths measured, baseline unmodified source not given invented file hashes; metadata/ledger and this RD provenance qualification added only after browser cleanup. Code bytes preserve checked/fuzzed/QA source.",
+    "sourceCommit": "91cd73cc112112000bfd0e222f5946008033c58f"
+  },
+  "counterfactuals": [
+    {
+      "name": "live-read",
+      "path": "src/engine/dsl/values.ts",
+      "originalHash": "9e38b16330dda7daab6efe394dcc030d80269274bba21d124519b305fe1cef3a",
+      "mutantHash": "c11e4a1fa8e70443d4b59c6e71341e908f6d77a5bfbb78e5e37996407f4c80d6",
+      "exactMutation": {
+        "before": "return instance?.zone === \"play\" ? instance.status.counters : (scope.paymentSourceCounters ?? 0);",
+        "after": "return 0;"
+      },
+      "filter": "reads live source counters",
+      "exit": 1,
+      "observedNamedFailure": true,
+      "start": "2026-10-14T17:17:30.572137+00:00",
+      "wall": 9.086506916995859,
+      "restoredHash": "9e38b16330dda7daab6efe394dcc030d80269274bba21d124519b305fe1cef3a"
+    },
+    {
+      "name": "payment-snapshot",
+      "path": "src/engine/steps/kinds/activate.ts",
+      "originalHash": "9d60039f0cf528ad0630f28b0894e699964b3bfb9186f50e30a52785fdc344f2",
+      "mutantHash": "78653248b5db7d5372acc273e20e1650cb142126980fb563c6cd8026baebc33d",
+      "exactMutation": {
+        "before": "...(paymentSourceCounters === null ? {} : { paymentSourceCounters })",
+        "after": "...(paymentSourceCounters === null ? {} : {})"
+      },
+      "filter": "retains only this value",
+      "exit": 1,
+      "observedNamedFailure": true,
+      "start": "2026-10-14T17:17:39.659450+00:00",
+      "wall": 6.904636291990755,
+      "restoredHash": "9d60039f0cf528ad0630f28b0894e699964b3bfb9186f50e30a52785fdc344f2"
+    },
+    {
+      "name": "paid-x",
+      "path": "src/engine/rules/costs.ts",
+      "originalHash": "5f27a63077118c8812c68941018d4daa25e41794e4ff58a3c00cfce802d237b1",
+      "mutantHash": "5898564ab1b6c58778bf1635ec20368ef9a731697a73efcd72f182a9fb569c1c",
+      "exactMutation": {
+        "before": "spendCounters(ctx, source, plan.x);",
+        "after": "spendCounters(ctx, source, 0);"
+      },
+      "filter": "adds fixed counters",
+      "exit": 1,
+      "observedNamedFailure": true,
+      "start": "2026-10-14T17:17:46.564479+00:00",
+      "wall": 7.0876297499926295,
+      "restoredHash": "5f27a63077118c8812c68941018d4daa25e41794e4ff58a3c00cfce802d237b1"
+    },
+    {
+      "name": "actual-payment-prefix",
+      "path": "src/engine/rules/costs.ts",
+      "originalHash": "5f27a63077118c8812c68941018d4daa25e41794e4ff58a3c00cfce802d237b1",
+      "mutantHash": "5898564ab1b6c58778bf1635ec20368ef9a731697a73efcd72f182a9fb569c1c",
+      "exactMutation": {
+        "before": "spendCounters(ctx, source, plan.x);",
+        "after": "spendCounters(ctx, source, 0);"
+      },
+      "filter": "actual successful counter-X payment prefix",
+      "exit": 1,
+      "observedNamedFailure": true,
+      "start": "2026-10-14T17:17:53.652736+00:00",
+      "wall": 9.615061916993,
+      "restoredHash": "5f27a63077118c8812c68941018d4daa25e41794e4ff58a3c00cfce802d237b1"
+    }
+  ],
+  "failureRecoveryPaths": {
+    "midStepErrorAndPartialWrite": [
+      "rolls back an actual successful counter-X payment prefix when the paying step then fails",
+      "rolls back a successful resolution prefix using the new live read when a later primitive fails"
+    ],
+    "reloadRestart": [
+      "restores counter-X and target choices with stale, invalid, foreign and concurrent answers refused before payment",
+      "reloads a postcommit optional value read without permitting cancellation or replaying payment",
+      "retains only this value's count immediately before its own payment departure (ordinary/created/return; serialize and both-view determinize)"
+    ],
+    "invalidStaleForeignConcurrent": [
+      "restores counter-X and target choices with stale, invalid, foreign and concurrent answers refused before payment"
+    ],
+    "beforeCommitCancel": "Explicit numeric fold cancellation preserves committed state; reopening creates a new prompt id and old answers bounce as stale. The target-choice path proves uncommitted state, invalid-target refusal and reload equivalence, with no separately claimed explicit target cancellation.",
+    "afterCommitCancel": "optional read resolution is noncancellable, paid counters retained; postcompletion answer bounces",
+    "retargetedContext": "Deferred-trigger read gets fresh env without payment scalar; copied card/trigger resolveEffect callers omit this own field. Controller change retains physical source-local current read."
+  },
+  "retainedFailures": {
+    "typesInitial": "own unused draft imports plus missing fresh materializations and exact admitted costPhrase TS2366; prepare and finite branch repaired",
+    "focusedInitial": "unsupported --minWorkers CLI option; actual --maxWorkers=2 used",
+    "focusedDraft": "synthetic default deck shortfall, forced-abandon answer omissions, bad decklist shape and own counter-X min/ceiling malformed prompt; source guard and public fixtures repaired, named receipts retained",
+    "ordinaryInitial": "verifiedText literal rather than existing public hash helper; all3 correct expectedVerifiedText hashes derived without changing immutable texts",
+    "abandonCoupling": "Targeted no-response legal ability auto-resolved; then duplicate built-in fixture UUID; actual independent no-target Interrupt fixed before passing named witness",
+    "judgedInitial": "Missing mandatory promptOrAutoAnswer since cursor in own caller; no completed ability claims, explicit response/caps[] and normal cleanup, not uncertain RPC or product failure",
+    "orchestration": "Empty sweep stdout parsing failed, shell continued to authorized judged run; afterlaunch source/custody proof and honest qualification in sweep-settled.json. Subsequent launches use one Python assertion child and explicit exit guard. Earlier queued-full edit/acquire race qualified in full-queued-cancel.json; own queued group verified and settled."
+  },
+  "qa": {
+    "preflight": {
+      "pass": 26,
+      "skip": 34,
+      "fail": 0
+    },
+    "sweep": {
+      "pass": 26,
+      "skip": 34,
+      "fail": 0,
+      "invocation": "invocations/sweep-siuKmm",
+      "sessions": 1,
+      "leaseYields": 0,
+      "qualification": "Full applicable variants, both controllers; initialization/play-resolution baseline is not ability exercise."
+    },
+    "judged": {
+      "cases": [
+        {
+          "viewport": "desktop",
+          "mode": "eviscerator",
+          "uuid": "f3f97e2c-3bb6-4a20-9880-f59c50e5af93",
+          "game": "jimvuo",
+          "rows": 73,
+          "source": "i1",
+          "actionRows": 3,
+          "logFile": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.95/invocations/run-TxYdnq/desktop-eviscerator-jimvuo.jsonl",
+          "logSha256": "395e90d9a11f31cb0150223ed7b320b76e658f297c3a9542a3a331f7e51edaa0"
+        },
+        {
+          "viewport": "desktop",
+          "mode": "blight",
+          "uuid": "a6866438-3632-408d-b464-c10f8a43a5c2",
+          "game": "6ki8uy",
+          "rows": 77,
+          "source": "i1",
+          "actionRows": 1,
+          "logFile": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.95/invocations/run-TxYdnq/desktop-blight-6ki8uy.jsonl",
+          "logSha256": "ddb0a1a5eaab8bde12465ab402190ab31c1cb85b007296c8567e0c765f6192d8"
+        },
+        {
+          "viewport": "desktop",
+          "mode": "liminal",
+          "uuid": "8e7b0eb9-4933-420b-abee-413bf5b3d2fc",
+          "game": "prd8va",
+          "rows": 56,
+          "source": "i1",
+          "actionRows": 1,
+          "logFile": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.95/invocations/run-TxYdnq/desktop-liminal-prd8va.jsonl",
+          "logSha256": "2e896d0d8b7d37f0197c7fad1c64e272fd0ebf4581ab1f99439f416346e35866"
+        },
+        {
+          "viewport": "mobile",
+          "mode": "eviscerator",
+          "uuid": "f3f97e2c-3bb6-4a20-9880-f59c50e5af93",
+          "game": "epfa8h",
+          "rows": 77,
+          "source": "i1",
+          "actionRows": 3,
+          "logFile": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.95/invocations/run-TxYdnq/mobile-eviscerator-epfa8h.jsonl",
+          "logSha256": "9cd9386b341688cdd9cdeefd7a736bd1ef244849af609c6499d5411a409df476"
+        },
+        {
+          "viewport": "mobile",
+          "mode": "blight",
+          "uuid": "a6866438-3632-408d-b464-c10f8a43a5c2",
+          "game": "9ncjqq",
+          "rows": 83,
+          "source": "i1",
+          "actionRows": 1,
+          "logFile": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.95/invocations/run-TxYdnq/mobile-blight-9ncjqq.jsonl",
+          "logSha256": "7bf606d4e73c5e08d9a956a63af70e54e59e16a131106af4403c2c0ba59f93f9"
+        },
+        {
+          "viewport": "mobile",
+          "mode": "liminal",
+          "uuid": "8e7b0eb9-4933-420b-abee-413bf5b3d2fc",
+          "game": "xfjq64",
+          "rows": 57,
+          "source": "i1",
+          "actionRows": 1,
+          "logFile": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.95/invocations/run-TxYdnq/mobile-liminal-xfjq64.jsonl",
+          "logSha256": "ec501736b336bc9248b888338a22fd86937ac07b16da6f3473480b3f0a49f548"
+        }
+      ],
+      "invocation": "invocations/run-TxYdnq",
+      "gameRows": 423,
+      "screens": 16,
+      "viewports": {
+        "desktop": [
+          1440,
+          900
+        ],
+        "mobile": [
+          390,
+          844
+        ]
+      },
+      "dpr": 2,
+      "driverSha256": "e69bdce8e7b7627eaf7f93f66195e4573b72d92498b5f76cc4a11fa93f53b944",
+      "rawCaps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "nativeCaps": [],
+      "geometry": "Actual positive centre-hit/in-viewport boxes, rendered memory attribute matches committed counters, numeric/cancel/target controls and changed states",
+      "mechanicalClaims": "Each gameplay claim has its own physical source/printing, actual action/event/counter/payment/hand/draw/target result and independent persisted per-game JSONL. No enemy policy-selected ability, invalid forged browser intent or reload browser claim. Logs may include metadata/display names; no blanket all-rows-nameless claim.",
+      "captureDimensions": "capture-dimensions.json reads every PNG IHDR and verifies exact2x fullviewport pixel dimensions. Changed-control fit/centre-hit is the separately measured DOM geometry; visual review is separately recorded. The hand fan intentionally extends below the viewport.",
+      "visualReview": "Implementer viewed desktop EV numeric, mobile BW numeric, mobile LD Dawn and desktop LD draw; counts and control surfaces fit; no changed-workflow visual finding",
+      "proof": "matrix-proof.json plus full stored-counters.result.json, each game JSONL and native custody records"
+    },
+    "sourceCommit": "91cd73cc112112000bfd0e222f5946008033c58f"
+  },
+  "resources": {
+    "checks": "Every terminal check runner/group collected, actual source epochs in receipts; no checks during browser lease",
+    "sweep": {
+      "runner": 16712,
+      "server": 17563,
+      "port": 5174,
+      "slot": 0,
+      "status": "normal SDK cleanup, own original record/group absent",
+      "proof": "sweep-live-custody.json/sweep-settled.json and raw sweep stderr"
+    },
+    "judgedInitial": {
+      "runner": 72294,
+      "server": 72511,
+      "port": 5274,
+      "status": "ordinary caller failure with terminal response and normal cleanup"
+    },
+    "judgedFocused": {
+      "runner": 56619,
+      "server": 56662,
+      "port": 5274,
+      "status": "passed and normal cleanup, at-time prelaunch proof matrix-prelaunch.json"
+    },
+    "judgedFinal": {
+      "runner": 22511,
+      "server": 22566,
+      "port": 5274,
+      "slot": 1,
+      "status": "passed; exact native record/group absent",
+      "proof": "matrix-live-custody.json/matrix-proof.json"
+    },
+    "sharedBrowserService": "No restart or shared process termination; only native own SDK context/server cleanup",
+    "remaining": "None owned"
+  },
+  "samplingStart": "UNKNOWN",
+  "originalImplementation": {
+    "source": "91cd73cc112112000bfd0e222f5946008033c58f",
+    "base": "8dbcf0cdfc949b2c53cca1f67da1587c244340f5",
+    "cutoff": "2026-10-14T18:07:32.740804+00:00",
+    "inclusiveImplementationMin": 68.2821634,
+    "commitStatus": "Parent audited exact23-path READY and authorized the single normal-date task commit. Final cutoff recorded immediately before schema/Git; exact commit begin/end/OID/tail/clean status are retained in ignored commit-receipt.json. No tracked postcommit writes.",
+    "commitReceipt": "commit-receipt.json",
+    "originalFriction": {
+      "bead": "hv-umm2.95",
+      "phase": 5,
+      "implementMin": 68.2821634,
+      "implementWindow": {
+        "start": "2026-10-14T16:59:15.811Z",
+        "end": "2026-10-14T18:07:32.740804+00:00"
+      },
+      "localValidationS": {
+        "focused": 15.546783458994469,
+        "review": 63.68606462498428,
+        "knip": 8.119272250012727,
+        "full": 402.2950422090071,
+        "fuzz": 402.92752554200706,
+        "sweep": 276.88980191698647,
+        "judged": 175.77082137501566
+      },
+      "hostLoad": 12.5810546875,
+      "testDelta": {
+        "files": 1,
+        "lines": 345,
+        "jsdomFiles": 0
+      },
+      "friction": [
+        {
+          "tag": "heavy-slot-wait",
+          "minutes": 10.770579236117118,
+          "note": "Retained native heavy capacity and startup offsets; 245.330s known queued cancellation, 308.577s next launch-to-first-full-step, 92.328s client-minus-native fuzz wall. Offsets include startup/overhead and are not claimed as pure lock wait; detailed scope in measurements."
+        }
+      ]
+    }
+  },
+  "integration": {
+    "resumeDispatch": "UNKNOWN",
+    "resumeCallId": "UNKNOWN",
+    "resumeSamplingStart": "UNKNOWN",
+    "firstObservedHelperOperation": {
+      "at": "2026-10-14T18:13:32.474125+00:00",
+      "kind": "parking commit begin; earlier read operations lack a durable timestamp receipt"
+    },
+    "parentUpdateBegin": "2026-10-14T18:14:05.946813+00:00",
+    "originalSource": "91cd73cc112112000bfd0e222f5946008033c58f",
+    "originalBase": "8dbcf0cdfc949b2c53cca1f67da1587c244340f5",
+    "parkedCheckpoint": "e19fe2b7dccb60847ef25f3e1dcd1015e2680f05",
+    "updatedCheckpoint": "b59a059c2806e1be531fe02cc8e54445bb4de14c",
+    "combinedBase": "b8afed590c7f64f47f7d61511335f9985dff443f",
+    "conflictingPaths": [
+      "docs/plan/evidence/content-inventory.json",
+      "src/engine/dsl/values.ts"
+    ],
+    "resolution": "Exact original ValueScope scalar, storedCounters evaluate case and recursive detector added to the full landed values module; all peer imports/current-turn history cases/fields/exports preserved. Seven peer-merged files retain every original own delta line exactly; fourteen other owned whole blobs equal original bytes. Canonical current-source inventory regenerated with both storedCounters and turnHistory delivered. No own semantic rewrite or additional admitted behavior.",
+    "savedInputs": "integration/saved-inputs.json",
+    "reapplyProof": "integration/reapply-proof.json",
+    "inventoryProof": {
+      "original": {
+        "oid": "91cd73cc112112000bfd0e222f5946008033c58f",
+        "same1209UUIDSetAndImmutableFields": true,
+        "changedRecords": 68,
+        "changedFields": {
+          "routing": 37,
+          "status": 18,
+          "requiredPrimitives": 25,
+          "rulesDecisions": 4
+        }
+      },
+      "landed": {
+        "oid": "b8afed590c7f64f47f7d61511335f9985dff443f",
+        "same1209UUIDSetAndImmutableFields": true,
+        "changedRecords": 141,
+        "changedFields": {
+          "routing": 129,
+          "status": 18,
+          "requiredPrimitives": 10,
+          "rulesDecisions": 3
+        }
+      },
+      "at": "2026-10-14T18:17:23.832011+00:00",
+      "sha256": "fce77568f4c92428d9828c38c5fef6e83945743ccb3382632da4425dfb11ee86",
+      "primitivesBothDelivered": true,
+      "ownThreeAuthored": true,
+      "nativeMembershipAndGraph": "unchanged; regenerated projection only"
+    },
+    "actualCombinedCheckReceipts": {
+      "integration-inventory": {
+        "name": "integration-inventory",
+        "argv": [
+          "npx",
+          "tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+        "pid": 96225,
+        "pgid": 96225,
+        "start": "2026-10-14T18:15:55.225381+00:00",
+        "load": [
+          6.240234375,
+          11.9072265625,
+          13.42822265625
+        ],
+        "exit": 0,
+        "end": "2026-10-14T18:15:58.339839+00:00",
+        "wall": 3.114375667006243,
+        "cpu": 4.141455
+      },
+      "integration-focused": {
+        "name": "integration-focused",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/rules/costs.test.ts",
+          "src/engine/rules/costs-discard-hand.test.ts",
+          "src/engine/fold/fold.test.ts",
+          "src/engine/view/view.test.ts",
+          "src/engine/view/determinize.test.ts",
+          "src/engine/rules/turn-log.test.ts",
+          "--maxWorkers=2"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+        "pid": 97884,
+        "pgid": 97884,
+        "start": "2026-10-14T18:16:22.392709+00:00",
+        "load": [
+          6.41796875,
+          11.41796875,
+          13.1982421875
+        ],
+        "exit": 0,
+        "end": "2026-10-14T18:17:29.765828+00:00",
+        "wall": 67.3723799159925,
+        "cpu": 27.689470999999998
+      },
+      "integration-review": {
+        "name": "integration-review",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+        "pid": 59975,
+        "pgid": 59975,
+        "start": "2026-10-14T18:17:50.730228+00:00",
+        "load": [
+          17.4677734375,
+          13.81005859375,
+          13.93994140625
+        ],
+        "exit": 0,
+        "end": "2026-10-14T18:19:03.776693+00:00",
+        "wall": 73.0456462079892,
+        "cpu": 214.512758
+      },
+      "integration-knip": {
+        "name": "integration-knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+        "pid": 60577,
+        "pgid": 60577,
+        "start": "2026-10-14T18:17:51.885823+00:00",
+        "load": [
+          17.4677734375,
+          13.81005859375,
+          13.93994140625
+        ],
+        "exit": 0,
+        "end": "2026-10-14T18:18:01.226688+00:00",
+        "wall": 9.340687875024742,
+        "cpu": 7.956554000000001
+      }
+    },
+    "focusedResult": {
+      "files": 7,
+      "tests": 4089,
+      "testStepWallS": 15.2,
+      "testStepStart": "2026-10-14T18:17:12.978Z",
+      "testStepLoad": 17.63623046875,
+      "groupWallIncludesQueueAndPreparation": true
+    },
+    "ordinaryResult": {
+      "files": 306,
+      "tests": 7612,
+      "relatedTestStepWallS": 65.5,
+      "groupWallS": 73.0456462079892
+    },
+    "sourceFreeze": "integration/combined-source-freeze.json",
+    "sourceHashScope": "18 actual owned code/content/generator/contract/rules/inventory paths; five evidence-only paths excluded. Frozen bytes checked after all combined check groups. Unmodified base source bound by exact combinedBase, no invented observed hash map.",
+    "resourceStatus": "All four owned integration check groups collected exit0; their exact process groups absent at 18:19 observation. No helper native/TG/reviewer/browser action.",
+    "retainedReceiptFailure": "Parent renamed ACK key while helper audited; initial exact21OwnedBlobs lookup KeyError occurred after values reapplication and seven own delta assertions. Current unchangedOwnedWholeBlobs key reread; full14+7 and exactvalues proof passed. No source reconstruction failure.",
+    "proportionalValidation": "Preservation-only additive integration per workflow Updating a worktree; current public contracts and ordinary related suite exercise combined behavior. Original full, weighted300, sweep and six judged browser cases remain original source evidence, not new-base executions.",
+    "finalSource": "Exact final amended source is bound by integration/commit-receipt.json; this record is included in that commit.",
+    "review": "Parent will obtain cold review of final combinedBase..finalSource; old-source review is not used for this final range.",
+    "schemaReady": {
+      "name": "integration-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-stored-counters95",
+      "pid": 24567,
+      "pgid": 24567,
+      "start": "2026-10-14T18:20:01.775884+00:00",
+      "load": [
+        16.56298828125,
+        15.9892578125,
+        14.876953125
+      ],
+      "exit": 0,
+      "end": "2026-10-14T18:20:01.912790+00:00",
+      "wall": 0.1367900000186637,
+      "cpu": 0.09601299999999999
+    },
+    "parentUpdateEnd": "2026-10-14T18:14:06.445267Z",
+    "ordinaryCheckWrapperQualification": "The focused and ordinary review groups were unnecessarily wrapped in the literal heavy lock despite D17 allowing ordinary checks freely. Their actual argv and measured group wall remain recorded, including queued wait/start overhead; this was an own orchestration overconstraint, not a product defect. Passing checks are retained without redundant reruns. Further ordinary checks run without that wrapper.",
+    "evidenceCorrections": "Original friction copied from immutable original commit rather than the shared mutable draft; original68.2821634 minute window/end18:07:32.740804 is preserved. Parent update start and end have separate labels from actual launch/terminal receipts.",
+    "finalCutoff": "2026-10-14T18:27:00.272006+00:00",
+    "observedParkingBeginToFinalCutoffMin": 13.463298016666666,
+    "finalParentAudit": "integration/parent-ready-audit.json",
+    "schemaFinal": "Actual final source/schema/Git tail is retained in integration/commit-receipt.json."
+  },
+  "originalCheckSource": "91cd73cc112112000bfd0e222f5946008033c58f",
+  "counterfactualSourceEpoch": {
+    "costsCounterfactuals": [
+      "paid-x",
+      "actual-payment-prefix"
+    ],
+    "executedFileSha256": "5f27a63077118c8812c68941018d4daa25e41794e4ff58a3c00cfce802d237b1",
+    "finalOriginalAndCombinedFileSha256": "cc723721db2f2896413a9baf6bcb284fa5d1393a3bf58901051b9ceaae490eaf",
+    "qualification": "The two costs counterfactuals executed at the retained 5f27 source epoch. Three subsequent JSDoc clarifications produce the final cc72 file hash; there are zero executable differences between these epochs. Exact epoch reconstruction and the complete diff are retained in integration/costs-counterfactual-epoch.ts and integration/costs-cf-to-original-commit.diff. The final original full-suite, weighted300 and browser receipts bind the cc72 code; current combined focused and ordinary checks bind that same costs file. No post-counterfactual executable change or behavior repair."
+  }
+}

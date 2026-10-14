@@ -16,6 +16,8 @@ export function costPhrase(cost: Cost): string {
     case "discard":
       if (cost.count === "hand") return "discard your hand";
       return cost.count === "x" ? "discard X cards" : `discard ${plural(cost.count, "card", "cards")}`;
+    case "countersX":
+      return "remove X memory counters";
     case "counters":
       return `remove ${plural(cost.amount, "memory counter", "memory counters")}`;
     case "points":

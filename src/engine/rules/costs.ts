@@ -39,7 +39,7 @@ export interface PlannedCost {
 
 /** How a list of costs will be paid, settled by play-time prompts before the commit point. */
 export interface CostPlan {
-  /** Shared X chosen for energy or abandonment, or captured from a payment count, a card's copiable cost, or an abandoned character's effective spark. */
+  /** Shared X chosen for energy, counters or abandonment, or captured from a payment count, a card's copiable cost, or an abandoned character's effective spark. */
   readonly x: number | null;
   /**
    * The whole energy cost — the fixed energy (top-level, and each chosen
@@ -80,12 +80,23 @@ function hasNestedAbandonX(costs: readonly Cost[]): boolean {
     cost.cost === "optional" && cost.costs.some(isAbandonX));
 }
 
+/** Counter-X is mandatory and top-level, so its binding precedes all immediate targets. */
+function hasNestedCounterX(costs: readonly Cost[]): boolean {
+  return costs.some(cost => cost.cost === "choice" ? cost.options.some(option => option.some(part => part.cost === "countersX")) :
+    cost.cost === "optional" && cost.costs.some(part => part.cost === "countersX"));
+}
+
+function invalidCounterMinimum(costs: readonly Cost[]): boolean {
+  return costs.some(cost => cost.cost === "countersX" && (!Number.isSafeInteger(cost.min) || cost.min < 0));
+}
+
 /**
- * Chooses X before targets for an energy-X or abandon-X cost. Energy-X is
+ * Chooses X before targets for energy-X, counter-X or abandon-X costs. Energy-X is
  * bounded by payable energy after fixed costs and modifications; abandon-X
- * by controlled matching characters and its declared minimum. The feasibility
+ * by controlled matching characters and its declared minimum; counter-X by
+ * the source budget after fixed counter payments. The feasibility
  * guard further limits answers to jointly payable target and cost choices.
- * Returns null when neither form needs numeric preparation.
+ * Returns null when none of these forms needs numeric preparation.
  */
 export function chooseX(
   ctx: StepContext,
@@ -95,16 +106,20 @@ export function chooseX(
   modifier: CostModifier = NO_COST_MODIFIER,
 ): number | null {
   if (hasNestedAbandonX(costs)) throw new Infeasible("Abandon X must be a top-level mandatory cost");
+  if (hasNestedCounterX(costs) || invalidCounterMinimum(costs)) throw new Infeasible("Counter X requires a valid top-level mandatory cost");
   const variable = xCost(costs);
   const counts = costs.filter(isAbandonX);
-  if (variable === null && counts.length === 0) return null;
+  const counterCosts = costs.filter((cost) => cost.cost === "countersX");
+  if (variable === null && counts.length === 0 && counterCosts.length === 0) return null;
   const energyMax = variable === null ? Infinity : ctx.state.sides[side].currentEnergy - fixedEnergy(costs) - modifier.increase + modifier.reduction;
   const source = purpose.source;
   if (counts.length > 0 && source === null) throw new Error("An abandon-X choice requires its source");
-  const min = Math.max(variable?.min ?? 0, ...counts.map((cost) => cost.min));
-  let max = energyMax;
+  const min = Math.max(variable?.min ?? 0, ...counts.map((cost) => cost.min), ...counterCosts.map((cost) => cost.min));
+  const counterMax = counterCosts.length === 0 ? Infinity : source === null ? 0 :
+    Math.floor((storedCounters(ctx.state, source) - spent(costs, "counters")) / counterCosts.length);
+  let max = Math.min(energyMax, counterMax);
   if (counts.length > 0) {
-    const ceiling = Math.min(energyMax, charactersInPlay(ctx.state, side).length);
+    const ceiling = Math.min(energyMax, counterMax, charactersInPlay(ctx.state, side).length);
     max = -1;
     // Eligibility may vary with X, including holes: the feasibility guard
     // proves each offered number against targets and every payment.
@@ -113,6 +128,7 @@ export function chooseX(
     }
     if (max < min) throw new Infeasible("Too few matching characters for abandon X");
   }
+  if (counterCosts.length > 0 && max < min) throw new Infeasible("Too few stored counters for the shared X");
   return ctx.choose<ChooseNumberPrompt>({
     kind: "chooseNumber",
     side,
@@ -166,8 +182,9 @@ export function costsPayable(
   modifier: CostModifier = NO_COST_MODIFIER,
 ): boolean {
   if (hasNestedAbandonX(costs)) return false;
+  if (hasNestedCounterX(costs) || invalidCounterMinimum(costs)) return false;
   if (adjustedEnergy(minimumEnergy(costs), modifier) > state.sides[side].currentEnergy) return false;
-  if (spent(costs, "counters") > storedCounters(state, source)) return false;
+  if (spent(costs, "counters") + sum(costs.map(cost => cost.cost === "countersX" ? cost.min : 0)) > storedCounters(state, source)) return false;
   if (spent(costs, "points") > state.sides[side].score) return false;
   return costs.every((cost) => cost.cost !== "exhaustSelf" || canPayExhaust(state, source));
 }
@@ -251,7 +268,7 @@ export interface PreparedCostX {
  * copiable-cost and effective-spark captures choose their actual payment card. These selections
  * are replay-local and planCosts validates them against every other payment
  * and target before the commit point. Targetless protocols retain
- * their printed-order card choices. Energy-X and abandon-X preparation use
+ * their printed-order card choices. Energy-X, counter-X and abandon-X preparation use
  * chooseX in either case. Nested choices keep their own planning protocol.
  */
 export function prepareCostX(
@@ -333,13 +350,15 @@ export function planCosts(
   options: { readonly endsPlayTime?: true; readonly selectorX?: number; readonly preparedPayments?: readonly PlannedCost[] } = {},
 ): CostPlan {
   if (hasNestedAbandonX(costs)) throw new Infeasible("Abandon X must be a top-level mandatory cost");
+  if (hasNestedCounterX(costs) || invalidCounterMinimum(costs)) throw new Infeasible("Counter X requires a valid top-level mandatory cost");
   const { state, catalog } = ctx;
   const used = [...excluded];
   const available = state.sides[side].currentEnergy;
   /** The energy committed so far before cost modifications: the top-level parts and X, then each chosen nested part. */
   const energyX = xCost(costs) === null ? 0 : (x ?? 0);
   let baseEnergy = fixedEnergy(costs) + energyX;
-  let countersLeft = storedCounters(state, source) - spent(costs, "counters");
+  let countersLeft = storedCounters(state, source) - spent(costs, "counters") -
+    sum(costs.map(cost => cost.cost === "countersX" ? (x ?? cost.min) : 0));
   /** The payer's ⍟ left once the top-level and chosen nested ⍟ costs are paid; never below 0 for a payable plan. */
   let pointsLeft = state.sides[side].score - spent(costs, "points");
   let exhaustCount = costs.filter((cost) => cost.cost === "exhaustSelf").length;
@@ -354,7 +373,7 @@ export function planCosts(
   // Returning or abandoning leaves play and clears counters; zero payments need no source.
   const leavesPlay = (cost: PaymentCost | AbandonXCost): boolean => cost.cost === "return" || cost.cost === "abandon";
   const cannotFollowDeparture = (cost: PaymentCost | AbandonXCost): boolean => cost.cost === "exhaustSelf" ||
-    (cost.cost === "counters" && cost.amount > 0);
+    (cost.cost === "counters" && cost.amount > 0) || (cost.cost === "countersX" && (capturedX ?? cost.min) > 0);
 
   /**
    * Whether every cost in a nested list could be paid on top of what is
@@ -388,6 +407,11 @@ export function planCosts(
   /** Plans one payment cost; `nested` costs are budgeted here, top-level parts were budgeted up front. */
   const plan = (cost: PaymentCost | AbandonXCost, nested: boolean, isLast = false): void => {
     if (sourceDeparted && cannotFollowDeparture(cost)) throw new Infeasible("A departed source cannot pay a later source cost");
+    if (cost.cost === "countersX") {
+      if (capturedX === null || !Number.isSafeInteger(capturedX) || capturedX < cost.min) throw new Infeasible("Counter X needs its prepared binding");
+      payments.push({ cost, cards: [] });
+      return;
+    }
     if (cost.cost === "energy") {
       if (nested) baseEnergy += cost.amount;
       return;
@@ -566,16 +590,27 @@ function payPoints(ctx: StepContext, side: Side, amount: number): void {
 }
 
 /** Pays every planned cost after the commit point: the whole energy cost first (the fixed part, then X), then the rest in order. */
-export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, plan: CostPlan): void {
+export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, plan: CostPlan,
+  options: { readonly retainSourceCounters?: true } = {},
+): number | null {
+  let paymentSourceCounters: number | null = null;
   spendEnergy(ctx, side, plan.energy.fixed);
   spendEnergy(ctx, side, plan.energy.x);
   for (const { cost, cards } of plan.payments) {
+    if (options.retainSourceCounters === true && typeof source === "string" && cards.includes(source) &&
+      (cost.cost === "abandon" || cost.cost === "return") && ctx.state.instances[source]?.zone === "play") {
+      paymentSourceCounters = storedCounters(ctx.state, source);
+    }
     switch (cost.cost) {
       case "exhaustSelf":
         exhaustForCost(ctx, source);
         break;
       case "counters":
         spendCounters(ctx, source, cost.amount);
+        break;
+      case "countersX":
+        if (plan.x === null || !Number.isSafeInteger(plan.x) || plan.x < cost.min) throw new Error("A counter-X payment needs its chosen X");
+        spendCounters(ctx, source, plan.x);
         break;
       case "points":
         payPoints(ctx, side, cost.amount);
@@ -603,4 +638,5 @@ export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, pl
         break;
     }
   }
+  return paymentSourceCounters;
 }

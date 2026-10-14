@@ -33,6 +33,8 @@ export interface ValueScope {
   discardCount?(value: DiscardCountValue): number;
   /** "This character's ✦" (`SourceSparkReader`); absent outside a resolving effect. */
   readonly sourceSpark?: SourceSparkReader;
+  /** Count retained only when this activation removed its source during payment. */
+  readonly paymentSourceCounters?: number | null;
 }
 
 /**
@@ -47,6 +49,11 @@ export function thisCharacterSpark(): SourceSparkValue {
 export function evaluateValue(state: BattleState, value: ValueExpr, scope: ValueScope): number {
   if (typeof value === "number") return value;
   switch (value.value) {
+    case "storedCounters": {
+      const self = sourceInstance(scope.source);
+      const instance = self === null ? undefined : state.instances[self];
+      return instance?.zone === "play" ? instance.status.counters : (scope.paymentSourceCounters ?? 0);
+    }
     case "playedThisTurn": return playedThisTurn(state, resolvePlayer(scope.controller, value.player));
     case "charactersPlayedThisTurn": return charactersPlayedCountThisTurn(state, resolvePlayer(scope.controller, value.player));
     case "discardedThisTurn": return discardedCountThisTurn(state, resolvePlayer(scope.controller, value.player));
@@ -90,4 +97,11 @@ export function evaluateValue(state: BattleState, value: ValueExpr, scope: Value
     case "locked":
       return evaluateValue(state, value.of, scope);
   }
+}
+
+/** Whether an authored value/effect record contains this source-counter expression. */
+export function readsStoredCounters(value: unknown): boolean {
+  if (value === null || typeof value !== "object") return false;
+  if ("value" in value && value.value === "storedCounters") return true;
+  return Object.values(value).some(readsStoredCounters);
 }

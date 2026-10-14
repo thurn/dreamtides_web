@@ -323,6 +323,8 @@ export type AbilityOrigin =
 
 /** An activated ability on the stack. */
 export interface AbilityStackItem extends StackItemBase {
+  /** Public source count immediately before this activation's own removal payment. */
+  readonly paymentSourceCounters?: number;
   /** Effective spark just before the source last left play, while this ability waited. */
   readonly lastKnownSourceSpark?: number;
   readonly kind: "ability";
