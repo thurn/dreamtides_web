@@ -1111,6 +1111,13 @@ Reclaim uses its Reclaim route. Cancelling before commitment pays nothing.
 **Requirements** are written as "Play this event only if X." A card with a
 requirement cannot be played unless the requirement is met.
 
+Check the requirement as the card would begin to be played, before paying costs
+or moving it to the stack, by every method of playing it, including a play during
+a resolving effect. A requirement counts cards by their current characteristics
+in the specified player's zone. A card being played from that zone counts itself
+while it is there. A requirement that allowed a play is not checked again as the
+card resolves.
+
 **When costs are paid:** All costs are paid before the card is put on the stack,
 so they are paid even if the card is later prevented. Costs are paid by the act
 of playing the card; if a card is copied, the copy does not require the cost to

@@ -439,7 +439,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("staticZones", [registered(DSL_TYPES, "StaticAbility", { option: "zone" })], ["StaticAbility"], { note: `statics that work from hand, void, or deck (C4; ${GAP_37})` }),
   dsl("activatedFromVoid", [registered(DSL_TYPES, "ActivatedAbility", { option: "zone" })], ["Ability"], { note: "activated abilities that work from the void (\"…: Materialize this character from your void\")" }),
   dsl("grantReclaimTriggeringCard", [registered(`${P}grant-reclaim.ts`, "ReclaimCards", { member: "subject" })], ["CardRef"], { note: "Reclaim granted to the card a trigger concerns (\"When you discard a card, it gains reclaim\")" }),
-  dsl("playCondition", [registered(DSL_TYPES, "Ability", { member: "playCondition", pending: "member" })], ["Ability"], { note: "\"Play this event only if …\"" }),
+  dsl("playCondition", [registered(DSL_TYPES, "Ability", { member: "playCondition" })], ["Ability"], { note: "\"Play this event only if …\"" }),
   dsl("alternativeCost", [registered(DSL_TYPES, "Ability", { member: "alternativeCost", pending: "member" })], ["Ability"], { note: "\"you may play this card for …\"" }),
   dsl("pointsCost", [callable(DSL_BUILDERS, "pointsCost")], ["PaymentCost"], { note: "pay ⍟ as a cost" }),
   dsl("returnCost", [callable(DSL_BUILDERS, "returnCost")], ["PaymentCost"], { note: "\"Return a character you control to hand:\" as a cost" }),

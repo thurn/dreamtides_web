@@ -1686,9 +1686,17 @@ can't use `import.meta.glob`.
 // The same text on a character, checked while it is in play:
 () => [winCondition(noCardsIn("deck"))]
 
+// A play requirement, with its event effect authored separately:
+(v) => [playCondition(conditionCardCounts("void", v.amplified ? 2 : 3, { filter: { cardType: "event" } })), event(p.gainEnergy(5))]
+
 // Spirit Bond 3cda9dd7-cb81-43c1-9db5-1444d7363e13: "Until end of turn, characters you control have +X✦ where X is the number of characters you control."
 () => [event(p.forDuration("untilEndOfTurn", p.sparkModifier(all(characterYouControl()), lockedAtResolution(count(characterYouControl())))))]
 ```
+
+`playCondition(condition)` is a declaration-only ability. Every own requirement
+must hold before payment for an ordinary play or a play during a resolving
+effect. It reads the acting controller's current state and effective card
+characteristics, resolves no effect, and stores no independent battle record.
 
 **Primitive registry.** Each primitive lives in its own module under
 `src/engine/effects/primitives/`, exporting its node type, its

@@ -202,6 +202,16 @@ function cardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDe
   return found.id;
 }
 
+/** Matching staged base printings that a play requirement still needs in its void. */
+function playConditionVoidDeficit(engine: Engine, cards: readonly CardId[], filter: CardFilter, atLeast: number): number {
+  const matching = cards.filter((id) => {
+    const card = engine.catalog.card(id);
+    return matchesFilter({ ...card, allTypes: false, namedTriggers: namedTriggersOf(card.abilities(BASE_VARIANT)),
+      cost: fixedEnergy(card.costs), spark: card.spark === null ? null : sparkOf(card) }, filter);
+  }).length;
+  return Math.max(0, atLeast - matching);
+}
+
 /** Whether an ability is a ▸Materialized trigger, which fires as the lab's play of a character enters play. */
 function isMaterializedTrigger(ability: Ability): ability is TriggeredAbility {
   return ability.kind === "triggered" && "on" in ability.trigger && ability.trigger.on === "materialized";
@@ -522,6 +532,15 @@ export function labBoard(
         zones[count.zone][countSide].push(count.zone === "void" ? cardFor(engine, count.filter, pool) : SYNTHETIC.vanilla1.id);
       }
     }
+  }
+  for (const ability of abilities) {
+    if (ability.kind !== "playCondition" || ability.condition.cond !== "cardsIn") continue;
+    const condition = ability.condition;
+    if (condition.zone !== "void" || condition.atLeast === undefined) continue;
+    const of = condition.player === "you" ? side : opponent(side);
+    const filter = condition.filter ?? {};
+    const missing = playConditionVoidDeficit(engine, voids[of], filter, condition.atLeast);
+    for (let index = 0; index < missing; index++) voids[of].push(cardFor(engine, filter, pool));
   }
   const deck = (of: Side): CardId[] => [...Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id), ...decks[of]];
   const sides: Record<Side, SideSetup> = {

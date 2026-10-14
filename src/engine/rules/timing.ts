@@ -9,7 +9,7 @@ import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { eventAbilities } from "../effects/abilities";
-import { effectEntersPlay } from "../effects/interpreter";
+import { conditionHolds, effectEntersPlay } from "../effects/interpreter";
 import { additionalCosts, costsPayable, playCosts } from "./costs";
 import { hasKeyword } from "./keywords";
 import { playedThisTurn } from "./turn-log";
@@ -219,6 +219,7 @@ export function canPlay(
   if (!timingAllows(state, side, definition.speed) || playRestricted(state, catalog, side, id)) {
     return false;
   }
+  if (!playRequirementsHold(state, catalog, side, id)) return false;
   // An X cost needs its minimum X, after cost modifications; the play's prompts check the cost choices.
   if (!playRoutes(state, catalog, id, from).some((route) => routePayable(state, catalog, side, id, route))) {
     return false;
@@ -227,6 +228,15 @@ export function canPlay(
     characteristicsOf(state, catalog, id).cardType === "character" ||
     eventAbilities(definition, instance.variant).some((ability) => effectEntersPlay(ability.effect));
   return !entersPlay || freeBackSlotsAfterStack(state, catalog, side) > 0;
+}
+
+/** Own requirements read the acting controller's current state before any route pays. */
+function playRequirementsHold(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId): boolean {
+  const instance = instanceOf(state, id);
+  return instanceCard(catalog, instance).abilities(instance.variant).every((ability) =>
+    ability.kind !== "playCondition" || conditionHolds(state, catalog, ability.condition, {
+      controller: side, source: id, optionalPaid: [],
+    }));
 }
 
 /** The instruction itself supplies a normal-cost void route; an existing Reclaim remains optional. */
@@ -239,6 +249,7 @@ export function canPlayImmediately(state: BattleState, catalog: EngineCatalog, s
   const instance = instanceOf(state, id);
   return instance.zone === "void" && instance.owner === side && instance.controller === side &&
     characteristicsOf(state, catalog, id).cardType === "character" && !playRestricted(state, catalog, side, id) &&
+    playRequirementsHold(state, catalog, side, id) &&
     immediatePlayRoutes(state, catalog, id).some((route) => routePayable(state, catalog, side, id, route)) &&
     freeBackSlotsAfterStack(state, catalog, side) > 0;
 }

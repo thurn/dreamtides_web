@@ -1,4 +1,7 @@
 import { card } from "../define";
+import { conditionCardCounts, event, playCondition } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainEnergy } from "../../engine/effects/primitives/gain-energy";
 
 export default card({
   name: "Nebula's Wake",
@@ -20,5 +23,12 @@ export default card({
   artOwned: false,
   cardNumber: 126,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    playCondition(conditionCardCounts("void", variant.amplified ? 2 : 3, { filter: { cardType: "event" } })),
+    event(gainEnergy(5)),
+  ],
+  verifiedText: expectedVerifiedText(
+    "Play this event only if there are 3 or more events in your void. Gain 5●.",
+    "Play this event only if there are 2 or more events in your void. Gain 5●.",
+  ),
 });

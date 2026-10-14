@@ -31,7 +31,7 @@ export function worksInZone(zone: FunctionalZone, current: Zone): boolean {
 /**
  * The effect an ability resolves or applies: an event's, an activated or
  * triggered ability's, or a static ability's continuous primitive. Keywords,
- * additional costs, reclaim, win conditions, and event-copy modifiers carry no effect.
+ * additional costs, reclaim, win conditions, play requirements, and event-copy modifiers carry no effect.
  */
 export function abilityEffect(ability: Ability): Effect | null {
   switch (ability.kind) {
@@ -45,6 +45,7 @@ export function abilityEffect(ability: Ability): Effect | null {
     case "reclaim":
     case "winCondition":
     case "eventCopyModifier":
+    case "playCondition":
       return null;
   }
 }

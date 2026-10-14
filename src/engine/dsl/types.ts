@@ -833,11 +833,18 @@ export interface EventCopyModifierAbility {
   readonly kind: "eventCopyModifier";
 }
 
+/** A requirement checked before playing this card, by every play method. */
+export interface PlayConditionAbility {
+  readonly kind: "playCondition";
+  readonly condition: Condition;
+}
+
 export type Ability =
   | { readonly kind: "event"; readonly effect: Effect }
   | StaticAbility
   | WinConditionAbility
   | EventCopyModifierAbility
+  | PlayConditionAbility
   | AdditionalCostAbility
   | ReclaimAbility
   | { readonly kind: "keyword"; readonly keyword: Keyword }

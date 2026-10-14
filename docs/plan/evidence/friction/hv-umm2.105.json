@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.105",
+  "phase": 5,
+  "implementMin": 46.88907978333334,
+  "implementWindow": {
+    "start": "2026-10-14T19:19:15.014368+00:00",
+    "end": "2026-10-14T20:06:08.359155+00:00"
+  },
+  "localValidationS": {
+    "focused": 14.821132334007416,
+    "review": 57.95785120801884,
+    "knip": 6.982500707992585,
+    "fuzz": 304.4765924169915,
+    "preflight": 3.132524042011937,
+    "sweep": 95.2669319580018,
+    "judged": 99.42759308300447
+  },
+  "hostLoad": 6.22998046875,
+  "testDelta": {
+    "files": 1,
+    "lines": 256,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "qa-provider-metadata-retention",
+      "minutes": 1.4848001166666667,
+      "note": "Missed live negotiated session/protocol literal retention. Measured post-initial-schema audit/coordination window; read-only invocation/service diagnostics cannot recover literals. Metadata UNKNOWN, source-contract cleanup inference distinguished from actual successful reports/PG/port/owner observations; no extra QA execution."
+    }
+  ]
+}

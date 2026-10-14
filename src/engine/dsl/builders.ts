@@ -35,6 +35,7 @@ import type {
   OptionalCost,
   PaymentCost,
   PlayerRef,
+  PlayConditionAbility,
   ReclaimAbility,
   RandomCharacterSpec,
   SelfSpec,
@@ -61,6 +62,11 @@ export function additionalEventCopy(): EventCopyModifierAbility {
 
 export function event(effect: Effect): Ability {
   return { kind: "event", effect };
+}
+
+/** "Play this card only if …": checked before costs, rather than on resolution. */
+export function playCondition(condition: Condition): PlayConditionAbility {
+  return { kind: "playCondition", condition };
 }
 
 /**
