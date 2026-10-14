@@ -390,6 +390,56 @@ describe("actual prepared Exploration additions and public reward models", () =>
     const purged = accepted(lost, "REMOVE_DECK_ENTRY", { entryId: "companion" });
     expect(apply(purged, "LOAD_STATE", { snapshot: clone(purged.journey) }).outcome).toBe("applied");
   });
+  it.each(["selected", "random", "compound", "single"] as const)("binds declared physical copy occurrences for %s", (kind) => {
+    const bane = makeAuguryTestCard({ id: NIGHTMARE_CARD_ID, cardNumber: 3, cardType: "Event", subtype: "", energyCost: 2, isFast: false });
+    const ordinary = makeAuguryTestCard({ id: OTHER, cardNumber: 2, cardType: "Event", subtype: "", energyCost: 2, isFast: false });
+    const action = { id: testExplorationActionId(`occurrences-${kind}`), label: "Synthetic", effectText: "Synthetic effect",
+      effectKind: kind === "selected" ? "copy-selected-cards" as const : kind === "random" ? "copy-random-cards" as const : kind === "compound" ? "purge-one-transfigure-and-copy-others" as const : "copy-selected-card" as const,
+      ...(kind === "compound" ? { offerCount: 4, transfiguration: "Enduring" as const } : { count: kind === "single" ? 3 : 2 }),
+      ...(kind === "random" ? { predicate: "event" as const } : {}) };
+    const base = makeAuguryTestContent({ cards: [bane, ordinary] });
+    const content = { ...base, exploration: { ...base.exploration, encounters: [{ cardId: OTHER, prose: "Synthetic", actions: [action] }] } };
+    const before = initial([RAVEN]); before.journey.deck.push(entry("a", 3, { isBane: true }));
+    if (kind !== "single") before.journey.deck.push(entry("b", 3, { isBane: true }));
+    if (kind === "compound") before.journey.deck.push(entry("c", 3, { isBane: true }), entry("purged", 2));
+    before.journey.siteRuntime[SITE_ID] = buildExplorationRuntime(before.journey, makeSite("Exploration"), content, () => 0, OTHER)!;
+    registerSiteContentProvider(createSiteContentProvider(content)); registerJourneyTransfigurationProvider(createJourneyTransfigurationProvider(content));
+    const selection = kind === "random" ? {} : { entryIds: (kind === "compound" ? ["purged"] : kind === "single" ? ["a"] : ["a", "b"]).map(parseDeckEntryId) };
+    const intent = { siteId: SITE_ID, actionId: action.id, selectionRulesVersion: SELECTION_RULES_VERSION, selection };
+    const out = apply(before, "RESOLVE_EXPLORATION_CHOICE", intent); expect(out.outcome).toBe("applied");
+    const resolved = out.state.journey.siteRuntime[SITE_ID] as ExplorationSiteRuntime, rows = resolved.resolution!.preventedNightmareGains!;
+    expect(rows).toHaveLength(kind === "compound" || kind === "single" ? 3 : 2);
+    expect(apply(out.state, "LOAD_STATE", { snapshot: clone(out.state.journey) }).outcome).toBe("applied");
+    expect(apply(before, "RESOLVE_EXPLORATION_CHOICE", intent).state).toEqual(out.state);
+    const model = rewardForResolution(resolved, SITE_ID, out.state.journey, content, null, [action], [], (id) => registry.lookup(id));
+    expect(model).toMatchObject({ kind: kind === "compound" ? "compound-card-mutation" : kind === "single" ? "card-copies" : "card-copies-multiple" });
+    if (kind !== "single") {
+      const faults = kind === "selected" ? ["selection"] : ["target", "target-id", "targets", ...(kind === "compound" ? ["victim", "two-victims"] : [])];
+      for (const fault of faults) {
+        const metadata = JSON.parse(JSON.stringify(resolved)) as { resolution: { selection: { entryIds: unknown[] } }; actionOffers: { preparation: { plan: { targets?: unknown[] } } }[] };
+        if (fault === "selection") metadata.resolution.selection.entryIds.push(17);
+        else if (fault === "victim") metadata.resolution.selection.entryIds = [17];
+        else if (fault === "two-victims") metadata.resolution.selection.entryIds.push(parseDeckEntryId("other-victim"));
+        else if (fault === "targets") delete metadata.actionOffers[0].preparation.plan.targets;
+        else metadata.actionOffers[0].preparation.plan.targets!.push(fault === "target" ? null : { entryId: 17, cardId: NIGHTMARE_CARD_ID });
+        const snapshot = { ...clone(out.state.journey), siteRuntime: { ...out.state.journey.siteRuntime, [SITE_ID]: metadata } };
+        const rng = vi.fn(() => 0), rejected = apply(out.state, "LOAD_STATE", { snapshot }, { rng });
+        expect(rejected.state).toBe(out.state); expect(rejected.logRecords).toBeUndefined(); expect(rng).not.toHaveBeenCalled();
+      }
+      const forged = clone(out.state.journey), runtime = forged.siteRuntime[SITE_ID] as ExplorationSiteRuntime;
+      runtime.resolution!.preventedNightmareGains = rows.map((row, index) => index === 1 ? { ...row, sourceEntryId: rows[0].sourceEntryId } : row);
+      const rng = vi.fn(() => 0), rejected = apply(out.state, "LOAD_STATE", { snapshot: forged }, { rng });
+      expect(rejected.state).toBe(out.state); expect(rejected.logRecords).toBeUndefined(); expect(rng).not.toHaveBeenCalled();
+      expect(rewardForResolution(runtime, SITE_ID, forged, content, null, [action], [], (id) => registry.lookup(id))).toBeNull();
+    }
+    if (kind === "selected") {
+      const rejected = apply(before, "RESOLVE_EXPLORATION_CHOICE", { ...intent, selection: { entryIds: [parseDeckEntryId("a"), parseDeckEntryId("a")] } });
+      expect(rejected.state).toBe(before); expect(rejected.logRecords).toBeUndefined();
+    }
+    let gone = accepted(out.state, "REMOVE_DREAMSIGN", { dreamsignId: RAVEN });
+    for (const source of new Set(rows.flatMap((row) => row.sourceEntryId === undefined ? [] : [row.sourceEntryId]))) gone = accepted(gone, "REMOVE_DECK_ENTRY", { entryId: source });
+    expect(apply(gone, "LOAD_STATE", { snapshot: clone(gone.journey) }).outcome).toBe("applied");
+  });
   it("keeps a real prepared compound benefit and zero actual Nightmare cards in its reward model", () => {
     const warrior = makeAuguryTestCard({ id: WARRIOR, cardNumber: 1, cardType: "Character", subtype: "Warrior" });
     const bane = makeAuguryTestCard({ id: NIGHTMARE_CARD_ID, cardNumber: 3, cardType: "Event", subtype: "", renderedText: "Bane." });

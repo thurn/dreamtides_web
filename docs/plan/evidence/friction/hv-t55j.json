@@ -1,0 +1,27 @@
+{
+  "bead": "hv-t55j",
+  "phase": 5,
+  "implementMin": 112.74865675,
+  "implementWindow": {
+    "start": "2026-10-14T00:47:45.775Z",
+    "end": "2026-10-14T02:40:30.694405+00:00"
+  },
+  "localValidationS": {
+    "focused": 4.306107416981831,
+    "review": 18.839857584011042,
+    "knip": 3.885677583020879
+  },
+  "hostLoad": 5.18017578125,
+  "testDelta": {
+    "files": 0,
+    "lines": 50,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "release-lag",
+      "minutes": 51.401666666666664,
+      "note": "Actual isolated parent native-await release lag3084.1s; ordinary approve3750.208s overlaps and is not summed. Canonical shared fuzz cause hv-umm2.654 remains peer-owned; hv-wmtb OPEN verification join after654. Existing duty/disposition reused, no duplicate/probe/foreignwrite/CPU claim. Original dispatch retained through canceled unlanded candidate/reviews/recovery."
+    }
+  ]
+}

@@ -1,0 +1,387 @@
+{
+  "bead": "hv-t55j",
+  "phase": 5,
+  "implementationProvenance": {
+    "base": "cd436a759bffb5d17e955de0bd2dba80314c4e8b",
+    "dispatchUTC": "2026-10-14T00:47:45.775Z",
+    "claimUTC": "2026-10-14T00:45:17.842466Z",
+    "claimPrefixMin": 2.465542233333333,
+    "dispatchScope": "Original canonical postclaim followup_task ordinal23080. Never reset at admission or review-route restoration.",
+    "modelStart": "unobserved",
+    "productiveEditsCPU": "unobserved",
+    "endpointUTC": "2026-10-14T02:40:30.694405+00:00",
+    "implementMin": 112.74865675,
+    "claimGrossMin": 115.21419898333333,
+    "status": "Local public source/test coverage/checks complete; final unlanded amended source prepared. Parent fresh final literal-warden review and exact delivery pending.",
+    "endpointScope": "Fresh observed UTC immediately before two authorized timing records/light schema/index/ONE unlanded amendment. Original actual dispatch never reset; initial historical cutoff/Git preserved. Inclusive actual amended commit-end and cutoff tail, UTC invocation bracket/second clocks/author preservation outside t55j-coverage-final-commit-receipt.json. No later write/amend authorized."
+  },
+  "functionalScope": [
+    "src/rules/journey/journey-deck-entry.test.ts",
+    "src/rules/journey/journey-deck-entry.ts"
+  ],
+  "sourceDiff": {
+    "files": 2,
+    "added": 81,
+    "deleted": 2,
+    "net": 79,
+    "scope": "Entire feature against original cd436 base, only functional paths. Coverage repair adds12test lines relative1f10; production parser exact1f10."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 50,
+    "jsdomFiles": 0
+  },
+  "testSupportScope": {
+    "touchedExistingFiles": 1,
+    "added": 50,
+    "deleted": 0,
+    "net": 50,
+    "entrypointLines": 489,
+    "readonlyOuterControlLines": 206,
+    "newFiles": 0,
+    "newJsdomFiles": 0,
+    "originalAddition": 38,
+    "coverageRepairAddition": 12,
+    "scope": "All plain support added-minus-deleted from original cd436. Existing four-kind table gains9malformed snapshot iterations, not new test cases/files."
+  },
+  "sourceContract": {
+    "api": "Existing validator body only; all exported signatures, importers, six arguments, provider/model/builder/state/schema untouched.",
+    "policy": "Branded physical-source multiset capacities from selected-copy lists longer than one, random prepared targets, and compound companion targets excluding the purge victim. Each paired blocked source use is bounded by its declared occurrence capacity after current role checks. Single-source authored countN is preserved. Malformed known grouped metadata fails closed.",
+    "compatibility": "Existing canonical UUID authority, minted-ID uniqueness, empty/whole-omitted/scalar, held-source loss, source-later-purge and effective base-printing contracts remain. Bounded receipt coherence, not full history authentication."
+  },
+  "negative": {
+    "external": "Final immutable public provider/reducer/LOAD/model diagnostic1.516997s0 confirms source-only alias accepted in selected/random/compound; narrow v1 3.260773s0 retained. Actual selected alias produces generic empty card-acquisition fallback, not cold-report null; random/compound null. Restoring only second sourceEntryId equals original input.",
+    "owningOld": "3 genuine old-behavior failures/53controls on56cases; the same source-only aliases LOAD-applied. No fixture/import/type failure claimed.",
+    "producerAudit": "Repeated selected input [A,A] already bounces without state/log change. Actual single-source count3 produces three valid same-source rows; no provider change/global uniqueness imposed."
+  },
+  "validationSummary": {
+    "focus": "Final59cases/2files0, owning489line entrypoint/read-only206line outer control.",
+    "review": "Final885cases/77files/type/lint/cycles0; initial coverage-repair review885cases passed but lint-only exit1 retained.",
+    "knip": "0",
+    "content": "20cases/1file0",
+    "full": "Not invoked: bounded parser body and synthetic public tests, no cross-cutting architecture/config/infrastructure.",
+    "browser": "Not invoked: no production UI/player workflow change; no new native Raven or TurnFourKeys Nightmare claim.",
+    "battleLabFuzz": "No generic battle300/card-lab/sweep substitution and no shared peer CI probe.",
+    "schema": "Pre-amend764records/41historicalUnknowns0; endpoint two-file light validation retained externally."
+  },
+  "failurePaths": {
+    "errorMidStep": "Public canonical authority missing/null/throw and malformed receipt controls refuse atomically; upstream repair not claimed.",
+    "reloadRestart": "Public LOAD/replay for valid distinct/single countN; source-held loss and all sources later purged reload successfully.",
+    "partialWrite": "Rejected alias LOAD returns exact prior object, no modifier logs and no RNG calls. Parser introduces no persistent partial write.",
+    "invalidStale": "Selected/random/compound alias cases; current legacy/scalar/empty and canonical controls retained. New malformed selected/prepared group JSON metadata publicLOAD refusals with exact state/no RNG/logs.",
+    "concurrent": "No new arbitration or application writes; atomic rejected snapshot and deterministic replay bound this parser contract, no multi-client CAS change claimed."
+  },
+  "timingScopes": {
+    "stage1AdmissionCompositeMin": 17.54523538333333,
+    "stage1Scope": "Finite source-first audit, parent admission/serialization and review-routing restoration coordination; composite wall elapsed, not one isolated friction cause, CPU or productive editing.",
+    "remainingWindow": "All research/checks/evidence/waits through actual eventual commit remain inclusive. Endpoint and Git tail unobserved until authorized finalizer.",
+    "isolatedFriction": "Observed native release lag3084.1s51.4017m; approval62.5035m overlaps, not summed. Existing canonical654/wmtb cause/duty reused. Other composite work/reviews/admission remain gross wall, not isolated friction.",
+    "completionHostLoad": {
+      "value": 5.18017578125,
+      "measuredFor": "One-minute host load at final coverage-repair review wrapper completion, not start/loadcontrol/CPU."
+    }
+  },
+  "receipts": [
+    {
+      "receipt": "t55j-coverage-receipt.json",
+      "startUTC": "2026-10-14T01:15:32.525038+00:00",
+      "endUTC": "2026-10-14T01:15:36.516845+00:00",
+      "wallSeconds": 3.991642666980624,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 4.1708984375
+    },
+    {
+      "receipt": "t55j-doctor-receipt.json",
+      "startUTC": "2026-10-14T00:46:20.167283+00:00",
+      "endUTC": "2026-10-14T00:46:22.602940+00:00",
+      "wallSeconds": 2.4356865829904564,
+      "exitCode": 0,
+      "load1AtCompletion": null
+    },
+    {
+      "receipt": "t55j-focused-final-receipt.json",
+      "startUTC": "2026-10-14T01:11:20.236317+00:00",
+      "endUTC": "2026-10-14T01:11:24.730746+00:00",
+      "wallSeconds": 4.494041958998423,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 5.44970703125
+    },
+    {
+      "receipt": "t55j-focused-receipt.json",
+      "startUTC": "2026-10-14T01:10:38.391180+00:00",
+      "endUTC": "2026-10-14T01:10:42.825390+00:00",
+      "wallSeconds": 4.430704708996927,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 6.24072265625
+    },
+    {
+      "receipt": "t55j-install-receipt.json",
+      "startUTC": "2026-10-14T00:46:22.603409+00:00",
+      "endUTC": "2026-10-14T00:46:25.926956+00:00",
+      "wallSeconds": 3.323555332986871,
+      "exitCode": 0,
+      "load1AtCompletion": null
+    },
+    {
+      "receipt": "t55j-knip-receipt.json",
+      "startUTC": "2026-10-14T01:14:01.259062+00:00",
+      "endUTC": "2026-10-14T01:14:06.732703+00:00",
+      "wallSeconds": 5.473483124980703,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 5.4443359375
+    },
+    {
+      "receipt": "t55j-old-behavior-receipt.json",
+      "startUTC": "2026-10-14T01:08:34.642394+00:00",
+      "endUTC": "2026-10-14T01:08:41.110213+00:00",
+      "wallSeconds": 6.467662000010023,
+      "exitCode": 1,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 6.34326171875
+    },
+    {
+      "receipt": "t55j-old-public-baseline-receipt.json",
+      "startUTC": "2026-10-14T00:54:41.659283+00:00",
+      "endUTC": "2026-10-14T00:54:43.176360+00:00",
+      "wallSeconds": 1.5169973330048379,
+      "exitCode": 0,
+      "scope": "Readonly actual selected/random/compound sourcealias LOAD AND publicmodels, same immutablefieldaudit; singlecountN/duplicatesselection control, providers clearedfinally",
+      "load1AtCompletion": 7.79150390625
+    },
+    {
+      "receipt": "t55j-old-public-baseline-v1-receipt.json",
+      "startUTC": "2026-10-14T00:51:37.697481+00:00",
+      "endUTC": "2026-10-14T00:51:40.958692+00:00",
+      "wallSeconds": 3.26077304102364,
+      "exitCode": 0,
+      "scope": "Read-only finite public selected/random/compound sourcealias LOAD +singlecountN andduplicatedselection producer diagnostic; immutable rows/inputaudit, providers clearedfinally, no persistentwrite",
+      "load1AtCompletion": 5.63671875
+    },
+    {
+      "receipt": "t55j-parent-friction-triggers-receipt.json",
+      "startUTC": "2026-10-14T00:48:22.944459+00:00",
+      "endUTC": "2026-10-14T00:48:23.229884+00:00",
+      "wallSeconds": 0.2854618749988731,
+      "exitCode": 0,
+      "load1AtCompletion": null
+    },
+    {
+      "receipt": "t55j-prepare-receipt.json",
+      "startUTC": "2026-10-14T00:46:25.927330+00:00",
+      "endUTC": "2026-10-14T00:46:29.625181+00:00",
+      "wallSeconds": 3.697843083005864,
+      "exitCode": 0,
+      "load1AtCompletion": null
+    },
+    {
+      "receipt": "t55j-review-receipt.json",
+      "startUTC": "2026-10-14T01:12:39.229185+00:00",
+      "endUTC": "2026-10-14T01:13:04.356080+00:00",
+      "wallSeconds": 25.126296832982916,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 7.48388671875
+    },
+    {
+      "receipt": "t55j-schema-receipt.json",
+      "startUTC": "2026-10-14T01:19:24.913739+00:00",
+      "endUTC": "2026-10-14T01:19:25.026097+00:00",
+      "wallSeconds": 0.11226574997999705,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 5.29736328125
+    },
+    {
+      "receipt": "t55j-coverage-content-final-receipt.json",
+      "startUTC": "2026-10-14T02:36:11.157346+00:00",
+      "endUTC": "2026-10-14T02:36:15.471589+00:00",
+      "wallSeconds": 4.314171540987445,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 4.37939453125
+    },
+    {
+      "receipt": "t55j-coverage-counterfactual-receipt.json",
+      "startUTC": "2026-10-14T02:31:42.435039+00:00",
+      "endUTC": "2026-10-14T02:31:46.755866+00:00",
+      "wallSeconds": 4.320727250014897,
+      "exitCode": 1,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 4.1240234375
+    },
+    {
+      "receipt": "t55j-coverage-focused-final-receipt.json",
+      "startUTC": "2026-10-14T02:32:09.925610+00:00",
+      "endUTC": "2026-10-14T02:32:14.705989+00:00",
+      "wallSeconds": 4.780264417000581,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 4.76171875
+    },
+    {
+      "receipt": "t55j-coverage-focused-resolved-receipt.json",
+      "startUTC": "2026-10-14T02:33:37.400742+00:00",
+      "endUTC": "2026-10-14T02:33:41.706958+00:00",
+      "wallSeconds": 4.306107416981831,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 4.79150390625
+    },
+    {
+      "receipt": "t55j-coverage-knip-final-receipt.json",
+      "startUTC": "2026-10-14T02:35:52.878429+00:00",
+      "endUTC": "2026-10-14T02:35:56.764191+00:00",
+      "wallSeconds": 3.885677583020879,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 4.0498046875
+    },
+    {
+      "receipt": "t55j-coverage-public-baseline-receipt.json",
+      "startUTC": "2026-10-14T02:27:55.526531+00:00",
+      "endUTC": "2026-10-14T02:27:58.053937+00:00",
+      "wallSeconds": 2.527206041995669,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 5.8076171875
+    },
+    {
+      "receipt": "t55j-coverage-review-final-receipt.json",
+      "startUTC": "2026-10-14T02:32:39.493557+00:00",
+      "endUTC": "2026-10-14T02:33:04.956407+00:00",
+      "wallSeconds": 25.46251462501823,
+      "exitCode": 1,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 5.84326171875
+    },
+    {
+      "receipt": "t55j-coverage-review-resolved-receipt.json",
+      "startUTC": "2026-10-14T02:33:56.449113+00:00",
+      "endUTC": "2026-10-14T02:34:15.289123+00:00",
+      "wallSeconds": 18.839857584011042,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 5.18017578125
+    },
+    {
+      "receipt": "t55j-coverage-schema-final-receipt.json",
+      "startUTC": "2026-10-14T02:36:25.180767+00:00",
+      "endUTC": "2026-10-14T02:36:25.327300+00:00",
+      "wallSeconds": 0.14627433300483972,
+      "exitCode": 0,
+      "scope": "Actual wrapper elapsed/load at completion, not CPU/editing/performance control",
+      "load1AtCompletion": 4.48046875
+    }
+  ],
+  "sourceProof": {
+    "base": "cd436a759bffb5d17e955de0bd2dba80314c4e8b",
+    "regularCount": 2454,
+    "bindingCount": 1572,
+    "changed": [
+      "src/rules/journey/journey-deck-entry.test.ts",
+      "src/rules/journey/journey-deck-entry.ts"
+    ],
+    "functionalSHA": "74560f048ae00e6007088757701ef0e09d8605e2be5160223a3f038ff0d555fe",
+    "bindingSHA": "e7abd99e532e7605e970c59dec3e141eabfb0c4ce341bbd94f6ad482bc156464",
+    "qaScenesSHA": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+    "otherRegularAndAllTargetsExact": true,
+    "initial": "t55j-stage1-initial-manifest.json",
+    "final": "t55j-coverage-source-final-manifest.json",
+    "unchangedProductionTo1f10": true,
+    "coverageRepairChangedOnly": [
+      "src/rules/journey/journey-deck-entry.test.ts"
+    ]
+  },
+  "resources": {
+    "runtime": "No browser/server/managed provider/client/lease started. External diagnostic providers process-local and cleared finally; all wrappers terminal.",
+    "qaScenes": "Never temporarily changed; full bytes unchanged."
+  },
+  "provenanceCorrections": {
+    "cold96xy": "Overall source-occurrence P2 accepted, selected-specific null rejected in favor of actual generic fallback.",
+    "peer653": "Already CLOSED/completed peer223eafa/cert33affa; run-WT3f4G Augury duplicate desktop/mobile/reloadCaps[] included base. Qualified peer proof, not our new QA; older failed captures retained.",
+    "sharedCI": "At original dispatch hv-wmtb was peer-owned. Fresh parent endpoint observation: hv-wmtb OPEN/unassigned with semantic prerequisite hv-umm2.654, which remains peer-owned/in_progress by01a1305a. No duplicate filing/probe/foreign source or ownership effect; existing CI verification join retained."
+  },
+  "reviewRouting": {
+    "current": "Normal cross-family fresh read-only Claude CLI claude-opus-5-5, parent-owned pending.",
+    "historical": "Predeadline96xy Sol review valid historical source-qualified finding. Temporary Sol override expired2026-10-14T01:00Z; parent notification restoration acknowledged."
+  },
+  "rawEvidenceDirectory": "artifacts/qa/hv-t55j/validation/",
+  "endpointPlan": "After parent endpointACK, observe fresh cutoff; update ONLY exact hv-t55j friction and measurement timing records/light schema/index then ONE amendment of this UNLANDED Conventional Commit. Original Git/review/cancel receipts retained; author date default-preserved, actual new committer UTC bracket/second clocks/tail outside. No date override, landed-source amendment or postcommit repository write.",
+  "initialImmutableCommit": {
+    "base": "cd436a759bffb5d17e955de0bd2dba80314c4e8b",
+    "dispatchUTC": "2026-10-14T00:47:45.775Z",
+    "claimUTC": "2026-10-14T00:45:17.842466Z",
+    "claimPrefixMin": 2.465542233333333,
+    "dispatchScope": "Original canonical postclaim followup_task ordinal23080. Never reset at admission or review-route restoration.",
+    "modelStart": "unobserved",
+    "productiveEditsCPU": "unobserved",
+    "endpointUTC": "2026-10-14T01:20:58.603438+00:00",
+    "implementMin": 33.2138073,
+    "claimGrossMin": 35.67934953333334,
+    "status": "Local source/public contracts/checks complete; final immutable commit prepared. Parent fresh cold Claude core review and exact delivery pending.",
+    "endpointScope": "Observed UTC immediately before the authorized two timing records/light schema/index/single commit. Original actual dispatch never reset. Inclusive actual commit-end and cutoff tail, Git UTC bracket/second clocks are retained externally in t55j-final-commit-receipt.json; no amendment.",
+    "source": "1f10abebf77e513214b69750856e427154af883f",
+    "scope": "Historical unlanded first source commit and cutoff. Candidate canceled for accepted LOW coverage repair; not the final implementation endpoint."
+  },
+  "coverageRepair": {
+    "stage1DispatchUTC": "2026-10-14T02:26:55.868Z",
+    "writeACKUTC": "2026-10-14T02:30:38.570433Z",
+    "proposalSHA": "1e5e2e3f2cfb8f02556f1837057cbd8ce19de49d6146af92f4b8a663952ddd49",
+    "publicDiagnostic": "2.527206s0 actualproper4mode producer/LOAD controls and9malformed iterations atomicrefusal; no malformed model invocation/verdict.",
+    "counterfactual": "Exactcd436 parser temporarily restored ONLYunder newACK; focused4cases has3 genuine malformed assertion failures and1singlecount3pass (52skipped). Selected numeric straysource and random/compound nonrecord straytarget fail BEFORE inherited alias checks. Not9newtestcases or allmutationsnovel. Finallyrestored exact1f10/full2454+1572guard beforechecks; receipt t55j-coverage-counterfactual-restore.json.",
+    "controls": "Missing targets/two compoundvictims are earlierrole-equivalent refusals, qualified rather than new production behavior.",
+    "authoringFailure": "First review final has885testpasses but lint unsafe any assignment at JSONboundary; explicit typedJSONassertion correction only, final review rechecked.",
+    "production": "No permanent productionbody/API/caller/provider/schema/renderer change from1f10."
+  },
+  "reviewAndDeliveryPhases": {
+    "firstAdvisory": {
+      "receipt": "t55j-cold-review-receipt.json",
+      "wallSeconds": 72.94853387499461,
+      "exitCode": 0,
+      "qualification": "Prompt omitted literal warden; advisory not required review completion."
+    },
+    "literalWarden": {
+      "receipt": "t55j-warden-dispositions.json",
+      "startUTC": "2026-10-14T02:20:42.692076+00:00",
+      "endUTC": "2026-10-14T02:22:40.498023+00:00",
+      "wallSeconds": 117.80504149998887,
+      "exitCode": 0,
+      "pid": 43718,
+      "disposition": "One LOW malformed-group test gap accepted; repaired publicly; fresh final literal-warden review pending parent."
+    },
+    "approve": {
+      "receipt": "t55j-approve-receipt.json",
+      "startUTC": "2026-10-14T01:22:39.311838+00:00",
+      "endUTC": "2026-10-14T02:25:09.529169+00:00",
+      "wallSeconds": 3750.208483124996,
+      "exitCode": 3,
+      "pid": 39920,
+      "qualification": "Canceled unlanded candidate; waiter terminal3/PG39920gone."
+    },
+    "nativeIdle": {
+      "seconds": 3084.1,
+      "minutes": 51.401666666666664,
+      "scope": "Actual parent native await roughly01:27\u219202:18 isolated release lag; overlaps approval elapsed, NEVER summed. Canonical shared CI cause wmtb/654 already owned/dispositioned."
+    },
+    "cancel": {
+      "receipt": "t55j-cancel-receipt.json",
+      "startUTC": "2026-10-14T02:25:08.914916+00:00",
+      "endUTC": "2026-10-14T02:25:16.608985+00:00",
+      "wallSeconds": 7.694334749976406,
+      "exitCode": 0,
+      "candidate": "01a13800-49c9-7e70-9a7d-f2a9c180014a",
+      "qualification": "Exactly once canceled by parent; source never promoted."
+    },
+    "newReview": "Parent fresh final normal Claude CLI literal warden PENDING; helper does not invoke review."
+  },
+  "parentWorkflowRecovery": {
+    "candidateContext": "Original parent wrapper defaultedcwd primary despite source commit from ownWT, recording metadata master/primary. Exactsource/certificate stayed correct; no primary source/deletion effect.",
+    "repair": "External wrapper corrected to actual executioncwd. Old candidate subsequently canceled for verified coveragefinding (separate justified source repair); replacement willbe submittedfromactualownWT with exactmetadata proof beforeapprove and nativecleanup verified afterpromotion.",
+    "reviewProtocol": "First advisory review omittedliteralwarden; required full fresh literalwarden acceptedLOWcoveragegap nowfixed, final fresh cold review stillpending.",
+    "source": "Ownsource/evidence repair within same unlandedbead/WT, no alreadylanded sourceamend or futurebranch/foreignownership effects."
+  }
+}

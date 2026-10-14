@@ -31,6 +31,29 @@ export function validPreventedNightmareGains(value: unknown, deck: readonly unkn
     : preparation?.kind === "random-deck-target" && plan?.effectKind === "copy-random-cards" ? "random-copy"
       : offer?.canonicalMechanicId === "purge-and-duplicate" ? "purge-and-copy"
         : offer?.canonicalMechanicId === "duplicate-deck-entry" ? "selected-copy" : "non-copy";
+  if (value.length === 0) return true;
+  const selection = record(resolution.selection) ? resolution.selection : undefined;
+  let occurrenceIds: unknown[] | null = producer === "selected-copy" && Array.isArray(selection?.entryIds) && selection.entryIds.length > 1 ? selection.entryIds : null;
+  if (producer === "random-copy" || producer === "compound-copy") {
+    if (!Array.isArray(plan?.targets)) return false;
+    if (producer === "compound-copy" && (!Array.isArray(selection?.entryIds) || selection.entryIds.length !== 1)) return false;
+    const excludedSource = producer === "compound-copy" && Array.isArray(selection?.entryIds) ? deckEntryIdFromUnknown(selection.entryIds[0]) : null;
+    if (producer === "compound-copy" && excludedSource === null) return false;
+    occurrenceIds = [];
+    for (const target of plan.targets) {
+      if (!record(target)) return false;
+      const source = deckEntryIdFromUnknown(target.entryId);
+      if (source === null) return false;
+      if (source !== excludedSource) occurrenceIds.push(source);
+    }
+  }
+  const capacities = occurrenceIds === null ? null : new Map<DeckEntryId, number>();
+  for (const value of occurrenceIds ?? []) {
+    const source = deckEntryIdFromUnknown(value);
+    if (source === null) return false;
+    capacities!.set(source, (capacities!.get(source) ?? 0) + 1);
+  }
+  const usage = new Map<DeckEntryId, number>();
   const ids = new Set<DeckEntryId>();
   for (const item of value) {
     if (!record(item)) return false;
@@ -44,8 +67,8 @@ export function validPreventedNightmareGains(value: unknown, deck: readonly unkn
       (Array.isArray(resolution.nightmareGains) && resolution.nightmareGains.some((gain) => record(gain) && gain.entryId === id))) return false;
     const paired = item.sourceEntryId !== undefined || item.sourceCardId !== undefined;
     if (producer !== "non-copy" || paired) {
-      if (deckEntryIdFromUnknown(item.sourceEntryId) === null || item.sourceEntryId === id || cardIdFromUnknown(item.sourceCardId) !== NIGHTMARE_CARD_ID) return false;
-      const selection = record(resolution.selection) ? resolution.selection : undefined;
+      const sourceId = deckEntryIdFromUnknown(item.sourceEntryId);
+      if (sourceId === null || sourceId === id || cardIdFromUnknown(item.sourceCardId) !== NIGHTMARE_CARD_ID) return false;
       let related = false;
       switch (producer) {
         case "compound-copy":
@@ -69,6 +92,12 @@ export function validPreventedNightmareGains(value: unknown, deck: readonly unkn
           break;
       }
       if (!related) return false;
+      if (capacities !== null) {
+        const nextUsage = (usage.get(sourceId) ?? 0) + 1;
+        const capacity = capacities.get(sourceId);
+        if (capacity === undefined || nextUsage > capacity) return false;
+        usage.set(sourceId, nextUsage);
+      }
       const sources = deck.filter((source) => record(source) && source.entryId === item.sourceEntryId);
       if (sources.length > 0) {
         let canonicalNumber: number | null;
