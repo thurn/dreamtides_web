@@ -975,7 +975,7 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   save validation checks it, nested captures and repetition preserve it, and
   public views withhold the historical origin and its bound context from those
   viewers independently of the source's current visibility. This private marker
-  is absent from public DTOs and trigger events. An immediate repeat reader with
+  is absent from public DTOs and public trigger events. An immediate repeat reader with
   unknown history receives one sampled compatible direct named ordinary cause,
   without claiming recovered authoritative history or recursive causal ancestry.
   Private subject costs and copy actions

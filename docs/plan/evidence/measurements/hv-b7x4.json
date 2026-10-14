@@ -565,7 +565,7 @@
         "receiptSHA256": "067e5164f12e6a682d85ba5ee4bf36c48f4bec10bf487d90b079a05cbbd0ff41"
       }
     ],
-    "schemaWhitespace": "Separate receipt-backed checks follow own evidence draft/final refresh.",
+    "schemaWhitespace": "Historical final schema read own evidence from disk. The separate final-whitespace command was plain git diff --check before git add: it checked tracked unstaged differences and excluded the three newly untracked own evidence files (friction/hv-b7x4.json and measurements/hv-b7x4.json/.md). The original receipt does not prove their whitespace coverage. Qualification authored by hv-1glz after normal review; raw command receipts remain unchanged.",
     "performance": "Elapsed values include measured host load. No D19 low-load timing/budget claim."
   },
   "counterfactual": {
@@ -685,7 +685,7 @@
     },
     {
       "path": "midstep/partial write",
-      "coverage": "Actual fold activation/normal priority pass reaches an existing optional confirm; reload preserves prompt. Public runStep event-time snapshots prove watcher resolution, one real repeated admission, then gain3 with energy13 and queued root before genuine missing-figment error. Input energy10/hash remains fixed. Answering the real prompt commits energy15/publications on valid path, while actual failure returns engine_error/exact committed hash/null inFlight/empty publications. Exact missing-UUID no-op yields two intended direct-refusal failures; restored paths pass."
+      "coverage": "Actual public fold activation reaches an existing optional confirm; reload preserves prompt. Execution of the conditional fallback priority-pass branch was not recorded and is not claimed as covered. Public runStep event-time snapshots prove watcher resolution, one real repeated admission, then gain3 with energy13 and queued root before genuine missing-figment error. Input energy10/hash remains fixed. Answering the real prompt commits energy15/publications on valid path, while actual failure returns engine_error/exact committed hash/null inFlight/empty publications. Exact missing-UUID no-op yields two intended direct-refusal failures; restored paths pass."
     },
     {
       "path": "catalog mismatch",
@@ -711,7 +711,18 @@
     "coreReview": "Parent-owned fresh normal cold review at final immutable commit; not yet claimed complete.",
     "native": "Parent owns Beads/Tollgate/admission/delivery/dispositions and cleanup.",
     "fullFuzzBrowser": "Bounded tests/docs/evidence; no production/runner/config/UI change. No full/fuzz/browser/server/captures needed or started.",
-    "preExisting": "No new out-of-scope issue found. Required prepared checks issue optional missing-art-cache warnings and successfully restore local asset links.",
+    "preExisting": "The completed normal independent review identified original689 Markdown proof claims inconsistent with its corrected JSON, outside the original b7 writer scope. The post-review pre-existing/hv-b7x4.md record and Markdown qualification are authored by hv-1glz on 2026-10-14, not part of the original b7 commit. Required prepared checks issue optional missing-art-cache warnings and successfully restore local asset links.",
     "runtime": "Only receipt-owned validation groups; all completed groups independently checked absent. No server/browser/provider/heavy/foreign process control."
+  },
+  "evidenceCorrection": {
+    "bead": "hv-1glz",
+    "authoredOn": "2026-10-14",
+    "provenance": "Completed normal independent Claude Opus 5.5 cold review and same-context scope completion of hv-b7x4 source61f2b46004877badf7e0da15a887153712559607; accepted F1/F2/F3 and F4 evidence-only. No runtime/test correctness defect is asserted.",
+    "correctedExistingJSONPointers": [
+      "/validation/schemaWhitespace",
+      "/failurePaths/1/coverage",
+      "/delivery/preExisting"
+    ],
+    "historicalPreservation": "All other existing deep values, including raw commands, arrays, counts, clocks, outcomes, receipt/manifests/hashes and source epochs, remain unchanged. Original review reports/dispositions are immutable. This qualification supplies no newly executed historical validation."
   }
 }

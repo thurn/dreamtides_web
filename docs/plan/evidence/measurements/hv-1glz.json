@@ -1,0 +1,236 @@
+{
+  "bead": "hv-1glz",
+  "base": "4c9be8b23da1f29f2fdefd125f001251e22f1d26",
+  "recordedAt": "2026-10-14T18:03:33.175362+00:00",
+  "clock": {
+    "parentClaimEnvelopeStart": "2026-10-14T17:55:09.692947+00:00",
+    "evidenceRefresh": "2026-10-14T18:03:33.175362+00:00",
+    "inclusiveConservativeEnvelopeMinutes": 8.391373583333333,
+    "exactHelperDispatchAndSamplingStart": "unknown",
+    "qualification": "Parent post-claim observation includes setup before helper dispatch; productive editing time unknown. Automatic commit follows final refresh; external finalizer receipt records the tail without postcommit tracked rewrite."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v1 starting one-minute load",
+        "source": "os.getloadavg()[0]"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "knip-v1",
+      "at": "2026-10-14T18:00:50.700358+00:00",
+      "load": [
+        3.7294921875,
+        9.81201171875,
+        12.5888671875
+      ]
+    },
+    {
+      "label": "review-v1",
+      "at": "2026-10-14T18:00:43.195314+00:00",
+      "load": [
+        3.79345703125,
+        9.92724609375,
+        12.6455078125
+      ]
+    },
+    {
+      "label": "schema-v1",
+      "at": "2026-10-14T18:01:02.760642+00:00",
+      "load": [
+        4.052734375,
+        9.59033203125,
+        12.4609375
+      ]
+    },
+    {
+      "label": "whitespace-v1",
+      "at": "2026-10-14T18:01:03.151917+00:00",
+      "load": [
+        4.052734375,
+        9.59033203125,
+        12.4609375
+      ]
+    }
+  ],
+  "scope": "Documentation and evidence only: public trigger-event marker sentence, historical689 Markdown proof limits, b7 proof claims at three existing JSON Pointers plus additive provenance, explicitly post-review b7 pre-existing record, and own evidence. No executable/test/runtime/DSL/UI/rules/catalog/config/workflow/sharedQA change.",
+  "correction": {
+    "reviewOf": "hv-b7x4",
+    "reviewSource": "61f2b46004877badf7e0da15a887153712559607",
+    "accepted": "F1/F2/F3 and F4 evidence-only; test-style and naming preferences excluded.",
+    "proofLimits": "Historical nonsuspending replay recovery was nondiscriminating; original16-case red excluded six later cases/subjectHiddenFrom; nested captured audiences empty; conditional fallback priority-pass execution unrecorded; old plain whitespace ran before stage and excluded new evidence.",
+    "newPreExistingRecord": "pre-existing/hv-b7x4.md explicitly authored by this followup after completed normal cold review; absent from original b7 commit."
+  },
+  "preservation": {
+    "at": "2026-10-14T18:00:05.184700+00:00",
+    "base": "4c9be8b23da1f29f2fdefd125f001251e22f1d26",
+    "actualChangedExistingOrAddedJSONPointers": [
+      "/delivery/preExisting",
+      "/evidenceCorrection",
+      "/failurePaths/1/coverage",
+      "/validation/schemaWhitespace"
+    ],
+    "allOtherExistingB7DeepValuesEqual": true,
+    "entire689JSONByteEqual": true,
+    "immutableReviewReports": {
+      "/tmp/root-b7x4-review/retry-2/review.md": "e0d16e76942edc218fdb60af537a9c222f7f04262c29fbf65025eae715207343",
+      "/tmp/root-b7x4-review/retry-2/completion.md": "d61512c862c0851d2d913867dc29bd81a8eb8e020daaa0b3871465e8c2962edd",
+      "/tmp/root-b7x4-review/final-dispositions.json": "10d29aa71a5b2d5a05ca1b7bf85c30b8060c52154372771c511d8c09f7ea6f69"
+    },
+    "oldReceiptHashes": {
+      "whitespace-final.receipt.json": "883093534ade23a0ac36134774c2d8cd58c131e73faa895e024ae3baf857e481",
+      "finalizer.receipt.json": "db509a022ffba2e7302ceab5c0fa342054de290857bb33eee7d6f3cdb042cb5c",
+      "schema-final.receipt.json": "9535c629ecb06ba0ea60db60291bf0d6733f17598ed776c0a9c8ad2e2c6823f6"
+    }
+  },
+  "validation": {
+    "commands": [
+      {
+        "label": "knip-v1",
+        "started": "2026-10-14T18:00:50.700358+00:00",
+        "pid": 68251,
+        "pgid": 68251,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-review-evidence-1glz",
+        "hostLoad": [
+          3.7294921875,
+          9.81201171875,
+          12.5888671875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:00:55.550038+00:00",
+        "elapsedSeconds": 4.849491874978412,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5002,
+        "beforeSHA256": "3935049fe98454b0c3c4314c36519094e878c0d19cbdb763b9c7209c2859b748",
+        "afterSHA256": "3935049fe98454b0c3c4314c36519094e878c0d19cbdb763b9c7209c2859b748",
+        "collectorBeforeSHA256": "dd725dcd59c4e406cfac131d7d4c3053aa498e18f7f1522cc7ba8cbca8da701a",
+        "collectorAfterSHA256": "dd725dcd59c4e406cfac131d7d4c3053aa498e18f7f1522cc7ba8cbca8da701a",
+        "stdoutSHA256": "14bfeabdad271f057fa322393df2a41d62a8c7f4af5c1d27cafd7cd7c08c5ff1",
+        "stderrSHA256": "8340c0c6f2a2a4c94ad8767a8bc2bcc928dc2c458c0ac4968c7b538edcdc4bae",
+        "receiptSHA256": "46eeca30e8258c9584fe5a2fddedb8926f93f2ed020907ce1534137b90b5592f"
+      },
+      {
+        "label": "review-v1",
+        "started": "2026-10-14T18:00:43.195314+00:00",
+        "pid": 67988,
+        "pgid": 67988,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-review-evidence-1glz",
+        "hostLoad": [
+          3.79345703125,
+          9.92724609375,
+          12.6455078125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:00:43.466010+00:00",
+        "elapsedSeconds": 0.27057445800164714,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5002,
+        "beforeSHA256": "3935049fe98454b0c3c4314c36519094e878c0d19cbdb763b9c7209c2859b748",
+        "afterSHA256": "3935049fe98454b0c3c4314c36519094e878c0d19cbdb763b9c7209c2859b748",
+        "collectorBeforeSHA256": "dd725dcd59c4e406cfac131d7d4c3053aa498e18f7f1522cc7ba8cbca8da701a",
+        "collectorAfterSHA256": "dd725dcd59c4e406cfac131d7d4c3053aa498e18f7f1522cc7ba8cbca8da701a",
+        "stdoutSHA256": "96ba624faf7437ce9534cf92639159e2d05de3fc3c7bd198266e8209501a415b",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receiptSHA256": "d6d77cc9d12ef70812b6ac6c5ad3c988d883f262b86dc0008ad7da898e51448d"
+      },
+      {
+        "label": "schema-v1",
+        "started": "2026-10-14T18:01:02.760642+00:00",
+        "pid": 68707,
+        "pgid": 68707,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-review-evidence-1glz",
+        "hostLoad": [
+          4.052734375,
+          9.59033203125,
+          12.4609375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:01:02.848161+00:00",
+        "elapsedSeconds": 0.08724137500394136,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5002,
+        "beforeSHA256": "a8928bbd5563c061999f6821dade93867f3c5281d9a433ec574c761c2a50a156",
+        "afterSHA256": "a8928bbd5563c061999f6821dade93867f3c5281d9a433ec574c761c2a50a156",
+        "collectorBeforeSHA256": "dd725dcd59c4e406cfac131d7d4c3053aa498e18f7f1522cc7ba8cbca8da701a",
+        "collectorAfterSHA256": "dd725dcd59c4e406cfac131d7d4c3053aa498e18f7f1522cc7ba8cbca8da701a",
+        "stdoutSHA256": "6de5edc94c4d35ff47e54180f31d8e8bfcae3bf178828095acb09c295039f425",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receiptSHA256": "2c996767a5071b6f74975668bd7142ab1b12d92fd9460fc2795fdbd6c9947a29"
+      },
+      {
+        "label": "whitespace-v1",
+        "started": "2026-10-14T18:01:03.151917+00:00",
+        "pid": 68755,
+        "pgid": 68755,
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/repeat-review-evidence-1glz",
+        "hostLoad": [
+          4.052734375,
+          9.59033203125,
+          12.4609375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-14T18:01:03.164713+00:00",
+        "elapsedSeconds": 0.012645582988625392,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5002,
+        "beforeSHA256": "a8928bbd5563c061999f6821dade93867f3c5281d9a433ec574c761c2a50a156",
+        "afterSHA256": "a8928bbd5563c061999f6821dade93867f3c5281d9a433ec574c761c2a50a156",
+        "collectorBeforeSHA256": "dd725dcd59c4e406cfac131d7d4c3053aa498e18f7f1522cc7ba8cbca8da701a",
+        "collectorAfterSHA256": "dd725dcd59c4e406cfac131d7d4c3053aa498e18f7f1522cc7ba8cbca8da701a",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receiptSHA256": "3442ea868d01cb53400302a7460547472f1d4054e9b8882718308ae6b27b2eaa"
+      }
+    ],
+    "scope": "Required review/Knip and schema/plain whitespace at recorded source epochs. Finalizer stages every final admitted file then checks staged whitespace; actual outcome is recorded externally. No full/fuzz/browser or new contracts for docs/metadata only.",
+    "failedChecks": []
+  },
+  "preparedAssetWarnings": "Knip prepared asset-cache warnings are retained in raw stderr; restore-local-assets completed. No new out-of-scope defect identified beyond the admitted historical documentation discrepancy.",
+  "resources": {
+    "started": "Only strict-collector validation child process groups listed in command receipts; no server/browser/provider/heavy runtime.",
+    "allCollectedGroupsAbsent": true
+  },
+  "delivery": "Parent owns final freeze ACK, exact candidate/certification/promotion and cleanup; no delivery outcome claimed in helper evidence."
+}
