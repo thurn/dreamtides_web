@@ -1,3 +1,5 @@
+import { activated, characterYouControl, count, exhaustSelf, ofSubtype } from "../../engine/dsl/builders";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,8 @@ export default card({
   cardNumber: 148,
   art: { x: 0, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated([exhaustSelf()], gainEnergy(count(characterYouControl(ofSubtype("Spirit Animal"))))),
+  ],
+  verifiedText: "8smd9f275y",
 });

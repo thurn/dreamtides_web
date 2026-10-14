@@ -1,0 +1,753 @@
+{
+  "bead": "hv-umm2.687",
+  "phase": 5,
+  "base": "007b4e3c1be8a5ecc8c913537e8b91b15e5af4d7",
+  "scope": {
+    "UUIDs": [
+      "eed92573-8052-494c-adae-9838de5375a1",
+      "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
+      "6497d8b1-85b8-486d-99e2-5c141486d508"
+    ],
+    "authored": 3,
+    "newPrimitives": 0,
+    "RD": [],
+    "cardIssues": [],
+    "leaves": {
+      "src/content/cards/blood-moon-triad-eed92573.ts": "66d4d31761c2607776b87a2a946a022e5f1d6b8fac439b0567c2473571450203",
+      "src/content/cards/ghostlight-wolves-c8579b20.ts": "2c52d30a8317386b281c5340ced19ab8a8b829c079f7948c1af39ca6205f59a0",
+      "src/content/cards/dragonward-6497d8b1.ts": "21a641224b3c4a758fee1dc38300867d4b9ec5cc7c2fd9935c46209ea3ac3e7c"
+    },
+    "immutableFields": "All UUIDs, texts, printed statistics, art, tags and other original catalog fields preserved."
+  },
+  "clauseAudit": {
+    "activation": "Ready back-rank self exhausts, then gains current controlled in-play Spirit Animal count; source counts itself when currently of that effective type. Counts exclude opposing, wrong-type, hand and void characters.",
+    "support": "Ghostlight Wolves +2 and Dragonward +3 to matching effective Spirit Animal or Warrior characters in front positions supported by the physical source from its controller's back rank. Source/front/opposing/wrong-type/out-of-reach negatives preserve printed spark. Exhaustion leaves independent Support active.",
+    "cost": "Dragonward uses selfCostReduction(count(characterYouControl(ofSubtype(\"Warrior\")))), static zone any. Current in-play controlled Warriors reduce only that physical source cost with zero floor; hand source is not counted before play."
+  },
+  "D20": {
+    "scenarioModulesAdded": 0,
+    "newTests": 0,
+    "decision": "Ordinary independent public primitive composition. Exhaustion does not disable Support; Support spark does not change the counted character type. Existing synthetic observable contracts cover these public forms; no duplicate card scenario or CI case."
+  },
+  "D21": {
+    "samples": [
+      {
+        "uuid": "eed92573-8052-494c-adae-9838de5375a1",
+        "firstByte": 223,
+        "sampled": false
+      },
+      {
+        "uuid": "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
+        "firstByte": 62,
+        "sampled": false
+      },
+      {
+        "uuid": "6497d8b1-85b8-486d-99e2-5c141486d508",
+        "firstByte": 73,
+        "sampled": false
+      }
+    ],
+    "newPromptStatusVisualKinds": 0,
+    "judged": 0,
+    "qualification": "Supplementary real browser workflows are runtime proof, with no D21 judged verdict fabricated."
+  },
+  "checks": {
+    "focused": "55 pass, 3866 unrelated cases unselected, five files",
+    "coverage": "20 pass, actual src/engine/content-gates.test.ts",
+    "preflight": "6 pass, three cards/base/both controllers; actual standard play/payment/materialization paths",
+    "actualNode": "18 pass using actual authored contentCardDefinitions and public testCatalog/board/fold/actions, both actors, full clauses, event payment/exhaustion/count, negative ownership/type/zone/rank/range, reposition removal, view/legal and serialized state round trips",
+    "knip": "pass",
+    "sweep": {
+      "pass": 6,
+      "attempts": 6,
+      "invocation": "invocations/sweep-cZMvZu",
+      "qualification": "Existing card-lab real play/resolution checks do not alone exercise all authored clauses."
+    },
+    "weightedFuzz": {
+      "games": 300,
+      "steps": 104139,
+      "failures": 0,
+      "engineWallS": 378.0,
+      "engineCpuS": 400.2,
+      "outerWallS": 380.79117695899913,
+      "interactiveReruns": 718,
+      "targets": [
+        {
+          "kind": "card",
+          "uuid": "eed92573-8052-494c-adae-9838de5375a1",
+          "included": 614,
+          "exercised": 129
+        },
+        {
+          "kind": "card",
+          "uuid": "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
+          "included": 613,
+          "exercised": 104
+        },
+        {
+          "kind": "card",
+          "uuid": "6497d8b1-85b8-486d-99e2-5c141486d508",
+          "included": 619,
+          "exercised": 91
+        }
+      ],
+      "qualification": "Included/exercised are fuzzer-owned counters, not per-clause coverage. Actual Node/browser prove the full authored clauses separately."
+    },
+    "review": "pass: diff-aware lint/typechecks and 6616 related cases across253files in66.298015125s"
+  },
+  "browser": {
+    "invocation": "invocations/run-Ofkcve",
+    "rawReport": "tribe-live.result.json",
+    "sha256": "7f9ad8d80d781a3d08d821de5a121a63be8958d7d7c109814f72691bb2ea7ff9",
+    "pass": true,
+    "viewports": [
+      "desktop",
+      "mobile"
+    ],
+    "workflows": 3,
+    "sourceControllers": "player; both actors additionally proved by Node and standard sweep",
+    "proof": "Both pointer activations gain exactly 2 and exhaust their exact physical source while Support persists. Dragonward hand cost and exact payment are 2, then its B0 position boosts the supported Warrior to 4 while Spirit Animal remains 1. UUID/physical-instance events and persisted engine.action intent logs bind every operation; actual payment/gain events are raw engine observations, not invented persisted kinds. Reload preserves battle/game IDs, energy, exact instances, empty queue and log prefix, plus rendered Support numeric spark.",
+    "caps": "empty across documents",
+    "geometry": "Positive DOM sizes, viewport intersection and pointer action success; rendered numeric spark and hand cost checked.",
+    "captures": [
+      "tribe-support-desktop.png",
+      "tribe-support-exhausted-desktop.png",
+      "tribe-support-mobile.png"
+    ],
+    "capturePixels": [
+      "2880x1800",
+      "2880x1800",
+      "780x1688"
+    ],
+    "failureArtifacts": "Retained prior run-HV89zd render-readiness failure with two desktop PNGs; final invocation contains the completed three-capture matrix."
+  },
+  "callers": {
+    "guard": {
+      "filename": "run.py",
+      "sha256": "dbc5818ad9fdfe8bdf0b3008e1c4bbce0a1c680f735f9350d08bf1b3e082ad0b"
+    },
+    "node": {
+      "filename": "tribe-runtime.ts",
+      "sha256": "0123b65dea1b5d6a204b931ad86f64a7c93c5b20bd23bd3ab0c04f8861f51035"
+    },
+    "browser": {
+      "filename": "tribe-live.mjs",
+      "sha256": "29bf7b32ab24315e4c43e46962b2916348cb5622294f33504478f6802f122e5c"
+    },
+    "scope": "Ignored own worktree callers, not committed CI tests or shared infrastructure."
+  },
+  "retainedFailures": [
+    {
+      "label": "actual-node",
+      "cause": "Caller used events instead of public IntentOutcome.published. Changed caller only after reaping.",
+      "callerSHA256": "9bcfb95ca109c874b06741ea720f3a3175ae6a84b18a7e6cefc002474ed93e37"
+    },
+    {
+      "label": "actual-node-corrected",
+      "cause": "Node strictEqual distinguishes zero from negative zero; normalized expected zero payment with 0 - expected.",
+      "callerSHA256": "159f0c1d74fe12f8e084dd7ff2ed34eff247e186d51bdcd249ca36212b7e5c24"
+    },
+    {
+      "label": "coverage",
+      "cause": "Guessed nonexistent content-catalog.test.ts selected no cases; discovered actual content-gates.test.ts and changed command."
+    },
+    {
+      "label": "browser-live",
+      "cause": "Committed materialization preceded source DOM rendering; geometry reader now waits each exact physical source visible. No source/UI/shared repair.",
+      "callerSHA256": "3ae3d66332832375b5f4aa3158ff1307c795c5edc0269be3088239fd4da912ab"
+    }
+  ],
+  "failurePaths": [
+    {
+      "path": "error mid-step/partial write",
+      "module": "src/engine/effects/primitives/contracts/self-cost-reduction.contracts.ts",
+      "test": "rejects resolving misuse (nested=$nested) and recovers without static records",
+      "reason": "Existing fold atomic recovery; this cohort introduces no state representation or transition implementation."
+    },
+    {
+      "path": "reload/restart",
+      "module": "src/engine/effects/primitives/contracts/self-cost-reduction.contracts.ts",
+      "test": "stores no live reduction and reconstructs it after a saved-state round trip"
+    },
+    {
+      "path": "invalid/stale/foreign/concurrent input",
+      "module": "src/engine/effects/primitives/contracts/self-cost-reduction.contracts.ts",
+      "test": "replays a suspended play route after reload, rejects foreign/stale/concurrent answers and charges once"
+    },
+    {
+      "path": "activation interruption",
+      "module": "src/engine/rules/activation.test.ts",
+      "test": "pays costs, puts the ability on the stack for the opponent to answer, then resolves it"
+    },
+    {
+      "path": "source leaves while activation queued",
+      "module": "src/engine/rules/activation.test.ts",
+      "test": "resolves an ability whose source left play before it resolved"
+    },
+    {
+      "path": "activation cancellation",
+      "module": "src/engine/rules/activation.test.ts",
+      "test": "can be cancelled before the commit point, restoring the committed state"
+    },
+    {
+      "path": "stale/exhausted/front activation",
+      "module": "src/engine/rules/activation.test.ts",
+      "test": "allows \u263e only for a ready back-rank character"
+    }
+  ],
+  "runtime": {
+    "commands": [
+      {
+        "label": "coverage-corrected",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts"
+        ],
+        "start": "2026-10-14T16:48:11.895065+00:00",
+        "end": "2026-10-14T16:48:17.627607+00:00",
+        "wallS": 5.732449374976568,
+        "exit": 0,
+        "pid": 93114,
+        "pgid": 93114,
+        "load": [
+          7.27978515625,
+          11.36865234375,
+          13.87060546875
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "browser-live-render-ready",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "artifacts/qa/hv-umm2.687/tribe-live.mjs",
+          "--bead",
+          "hv-umm2.687",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "300"
+        ],
+        "start": "2026-10-14T16:50:39.264179+00:00",
+        "end": "2026-10-14T16:51:18.609037+00:00",
+        "wallS": 39.344079833012074,
+        "exit": 0,
+        "pid": 1428,
+        "pgid": 1428,
+        "load": [
+          5.876953125,
+          9.13671875,
+          12.544921875
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "start": "2026-10-14T16:48:13.051507+00:00",
+        "end": "2026-10-14T16:48:18.122539+00:00",
+        "wallS": 5.070947542000795,
+        "exit": 0,
+        "pid": 93252,
+        "pgid": 93252,
+        "load": [
+          7.27978515625,
+          11.36865234375,
+          13.87060546875
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "focused",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/continuous/support.test.ts",
+          "src/engine/rules/activation.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/fold/fold.test.ts",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "Support|activated abilities on the stack|selfCostReduction public contracts|intent bounces and the hand limit|reproduces the events|reloads mid-prompt|detects a nondeterministic"
+        ],
+        "start": "2026-10-14T16:46:54.093878+00:00",
+        "end": "2026-10-14T16:47:03.124288+00:00",
+        "wallS": 9.03025270899525,
+        "exit": 0,
+        "pid": 88030,
+        "pgid": 88030,
+        "load": [
+          8.19287109375,
+          12.8388671875,
+          14.58837890625
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "start": "2026-10-14T16:53:08.055021+00:00",
+        "end": "2026-10-14T16:54:14.354330+00:00",
+        "wallS": 66.29801512500853,
+        "exit": 0,
+        "pid": 63848,
+        "pgid": 63848,
+        "load": [
+          15.83349609375,
+          11.26513671875,
+          12.7919921875
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "weighted-fuzz",
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "eed92573-8052-494c-adae-9838de5375a1,c8579b20-95ff-4b1d-b4c6-6bd049fc4760,6497d8b1-85b8-486d-99e2-5c141486d508"
+        ],
+        "start": "2026-10-14T16:48:37.845605+00:00",
+        "end": "2026-10-14T16:54:58.644472+00:00",
+        "wallS": 380.79117695899913,
+        "exit": 0,
+        "pid": 94796,
+        "pgid": 94796,
+        "load": [
+          6.60400390625,
+          10.88671875,
+          13.6240234375
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "whitespace",
+        "argv": [
+          "git",
+          "diff",
+          "--cached",
+          "--check"
+        ],
+        "start": "2026-10-14T16:54:39.457756+00:00",
+        "end": "2026-10-14T16:54:39.493037+00:00",
+        "wallS": 0.03530495899030939,
+        "exit": 0,
+        "pid": 5645,
+        "pgid": 5645,
+        "load": [
+          18.93115234375,
+          13.21533203125,
+          13.36181640625
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "preflight",
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "eed92573-8052-494c-adae-9838de5375a1,c8579b20-95ff-4b1d-b4c6-6bd049fc4760,6497d8b1-85b8-486d-99e2-5c141486d508",
+          "--variants",
+          "base",
+          "--as",
+          "both"
+        ],
+        "start": "2026-10-14T16:47:38.672741+00:00",
+        "end": "2026-10-14T16:47:40.327308+00:00",
+        "wallS": 1.6545543329848442,
+        "exit": 0,
+        "pid": 90904,
+        "pgid": 90904,
+        "load": [
+          6.16943359375,
+          11.72998046875,
+          14.10009765625
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "schema",
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "start": "2026-10-14T16:54:39.155480+00:00",
+        "end": "2026-10-14T16:54:39.329562+00:00",
+        "wallS": 0.1741229590261355,
+        "exit": 0,
+        "pid": 5150,
+        "pgid": 5150,
+        "load": [
+          18.93115234375,
+          13.21533203125,
+          13.36181640625
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "actual-node-corrected",
+        "argv": [
+          "npx",
+          "tsx",
+          "artifacts/qa/hv-umm2.687/tribe-runtime.ts"
+        ],
+        "start": "2026-10-14T16:47:36.402381+00:00",
+        "end": "2026-10-14T16:47:39.738025+00:00",
+        "wallS": 3.3356035409960896,
+        "exit": 1,
+        "pid": 90610,
+        "pgid": 90610,
+        "load": [
+          6.16943359375,
+          11.72998046875,
+          14.10009765625
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "coverage",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/content-catalog.test.ts"
+        ],
+        "start": "2026-10-14T16:47:37.516979+00:00",
+        "end": "2026-10-14T16:47:41.734538+00:00",
+        "wallS": 4.21749770900351,
+        "exit": 1,
+        "pid": 90732,
+        "pgid": 90732,
+        "load": [
+          6.16943359375,
+          11.72998046875,
+          14.10009765625
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "browser-live",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "artifacts/qa/hv-umm2.687/tribe-live.mjs",
+          "--bead",
+          "hv-umm2.687",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "300"
+        ],
+        "start": "2026-10-14T16:49:55.949611+00:00",
+        "end": "2026-10-14T16:50:17.398404+00:00",
+        "wallS": 21.448381166992476,
+        "exit": 1,
+        "pid": 99397,
+        "pgid": 99397,
+        "load": [
+          5.89404296875,
+          9.638671875,
+          12.8974609375
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "sweep",
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.687",
+          "--cards",
+          "eed92573-8052-494c-adae-9838de5375a1,c8579b20-95ff-4b1d-b4c6-6bd049fc4760,6497d8b1-85b8-486d-99e2-5c141486d508",
+          "--variants",
+          "base",
+          "--as",
+          "both",
+          "--timeout",
+          "60"
+        ],
+        "start": "2026-10-14T16:48:57.874251+00:00",
+        "end": "2026-10-14T16:49:40.116436+00:00",
+        "wallS": 42.24134862498613,
+        "exit": 0,
+        "pid": 95988,
+        "pgid": 95988,
+        "load": [
+          6.03515625,
+          10.4736328125,
+          13.4111328125
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "actual-node-zero-normalized",
+        "argv": [
+          "npx",
+          "tsx",
+          "artifacts/qa/hv-umm2.687/tribe-runtime.ts"
+        ],
+        "start": "2026-10-14T16:48:10.776404+00:00",
+        "end": "2026-10-14T16:48:14.012976+00:00",
+        "wallS": 3.236530207999749,
+        "exit": 0,
+        "pid": 93022,
+        "pgid": 93022,
+        "load": [
+          7.27978515625,
+          11.36865234375,
+          13.87060546875
+        ],
+        "groupAfterReap": []
+      },
+      {
+        "label": "actual-node",
+        "argv": [
+          "npx",
+          "tsx",
+          "artifacts/qa/hv-umm2.687/tribe-runtime.ts"
+        ],
+        "start": "2026-10-14T16:46:52.941814+00:00",
+        "end": "2026-10-14T16:46:55.133995+00:00",
+        "wallS": 2.192159458005335,
+        "exit": 1,
+        "pid": 87934,
+        "pgid": 87934,
+        "load": [
+          8.38427734375,
+          12.95458984375,
+          14.63916015625
+        ],
+        "groupAfterReap": []
+      }
+    ],
+    "browserIdentities": [
+      {
+        "at": "2026-10-14T16:48:59.020583+00:00",
+        "owned": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+            "token": "857d2321-b06d-41aa-8441-7ffd4e331157",
+            "runner": {
+              "pid": 95988,
+              "group": 95988,
+              "started": "Wed Oct 14 09:48:57 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.687 --cards eed92573-8052-494c-adae-9838de5375a1,c8579b20-95ff-4b1d-b4c6-6bd049fc4760,6497d8b1-85b8-486d-99e2-5c141486d508 --variants base --as both --timeout 60"
+            },
+            "server": {
+              "pid": 96035,
+              "group": 96035,
+              "started": "Wed Oct 14 09:48:58 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 857d2321-b06d-41aa-8441-7ffd4e331157 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687",
+            "port": 5274
+          }
+        }
+      },
+      {
+        "at": "2026-10-14T16:49:10.060264+00:00",
+        "owned": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+            "token": "156e075e-0296-4254-9f74-d2e4fbf07917",
+            "pid": 95988,
+            "bead": "hv-umm2.687",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T16:49:00.131Z",
+            "providerState": "active",
+            "mcpSessionId": "1f92d24e-a2a1-4ab5-b85a-707252f12b64",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+            "token": "857d2321-b06d-41aa-8441-7ffd4e331157",
+            "runner": {
+              "pid": 95988,
+              "group": 95988,
+              "started": "Wed Oct 14 09:48:57 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.687 --cards eed92573-8052-494c-adae-9838de5375a1,c8579b20-95ff-4b1d-b4c6-6bd049fc4760,6497d8b1-85b8-486d-99e2-5c141486d508 --variants base --as both --timeout 60"
+            },
+            "server": {
+              "pid": 96035,
+              "group": 96035,
+              "started": "Wed Oct 14 09:48:58 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 857d2321-b06d-41aa-8441-7ffd4e331157 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687",
+            "port": 5274
+          }
+        }
+      },
+      {
+        "at": "2026-10-14T16:50:12.575225+00:00",
+        "owned": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+            "token": "096ce7e8-e061-44c3-9a0d-3474567953b3",
+            "pid": 99397,
+            "bead": "hv-umm2.687",
+            "label": "tribe-live",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T16:49:57.772Z",
+            "providerState": "active",
+            "mcpSessionId": "04dc7dad-74b9-41cf-9b8c-984b06685dfd",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+            "token": "f15e5c48-290e-4a52-90e4-8adcdc66acc7",
+            "runner": {
+              "pid": 99397,
+              "group": 99397,
+              "started": "Wed Oct 14 09:49:55 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.687/tribe-live.mjs --bead hv-umm2.687 --viewports desktop,mobile --timeout 300"
+            },
+            "server": {
+              "pid": 99432,
+              "group": 99432,
+              "started": "Wed Oct 14 09:49:56 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json f15e5c48-290e-4a52-90e4-8adcdc66acc7 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687",
+            "port": 5274
+          }
+        }
+      },
+      {
+        "at": "2026-10-14T16:51:00.976271+00:00",
+        "owned": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+            "token": "c1e2ea9c-0191-41d0-8eba-6477221ba2c4",
+            "pid": 1428,
+            "bead": "hv-umm2.687",
+            "label": "tribe-live",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T16:50:41.060Z",
+            "providerState": "active",
+            "mcpSessionId": "2ad3e780-9aca-4025-a78a-8ad089c115c0",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+            "token": "e838db86-7d2c-44e5-8e14-374993b7a96f",
+            "runner": {
+              "pid": 1428,
+              "group": 1428,
+              "started": "Wed Oct 14 09:50:39 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.687/tribe-live.mjs --bead hv-umm2.687 --viewports desktop,mobile --timeout 300"
+            },
+            "server": {
+              "pid": 1464,
+              "group": 1464,
+              "started": "Wed Oct 14 09:50:39 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json e838db86-7d2c-44e5-8e14-374993b7a96f /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tribe-cards-687",
+            "port": 5274
+          }
+        }
+      }
+    ],
+    "cleanup": {
+      "at": "2026-10-14T16:51:33.647461+00:00",
+      "groups": [
+        95988,
+        96035,
+        99397,
+        99432,
+        1428,
+        1464
+      ],
+      "members": [],
+      "port5274": ""
+    },
+    "heavy": "Only exact weighted300 uses artifacts/heavy.lock and JOURNEY_TEST_WORKERS=2; browser/focused/coverage/preflight/review/Knip are light. Shared MCP service untouched.",
+    "finalOwnedResources": {
+      "at": "2026-10-14T16:55:41.210240+00:00",
+      "groups": [
+        1428,
+        1464,
+        5150,
+        5645,
+        63848,
+        87934,
+        88030,
+        90610,
+        90732,
+        90904,
+        93022,
+        93114,
+        93252,
+        94796,
+        95988,
+        96035,
+        99397,
+        99432
+      ],
+      "members": [],
+      "browserOwnerServerRecords": {},
+      "port5274": ""
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "sysctl one-minute sample saved immediately before required final review launch; per-command guarded start load also retained."
+      },
+      "implementMin": {
+        "measuredFor": "Inclusive actual native dispatch through pre-commit boundary, includes all research, coordination, attempts, queue waits and checks. Owning session records actual Git endpoint and sub-minute delta."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "implementationWindow": {
+    "start": "2026-10-14T16:41:40.766Z",
+    "preCommitEnd": "2026-10-14T16:57:43.727476+00:00",
+    "implementMin": 16.049357933333333
+  },
+  "timingQualification": "Outer guarded wall includes launch and resource acquisition; fuzzer-owned engine wall/CPU remain distinct. No productive-editing, performance or A/B claim.",
+  "independentReview": {
+    "required": true,
+    "route": "normal fresh read-only Claude Opus5.5 CLI after exact commit; owning session dispatches and dispositions it"
+  }
+}

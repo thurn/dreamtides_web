@@ -1,3 +1,5 @@
+import { activated, characterYouControl, count, exhaustSelf, ofSubtype, staticAbility, supported } from "../../engine/dsl/builders";
+import { gainEnergy, sparkModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 48,
   art: { x: 0.084, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    staticAbility(sparkModifier(supported(ofSubtype("Spirit Animal")), 2)),
+    activated([exhaustSelf()], gainEnergy(count(characterYouControl(ofSubtype("Spirit Animal"))))),
+  ],
+  verifiedText: "1iv18luhkdh",
 });

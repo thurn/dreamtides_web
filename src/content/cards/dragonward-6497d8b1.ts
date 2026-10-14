@@ -1,3 +1,5 @@
+import { characterYouControl, count, ofSubtype, staticAbility, supported } from "../../engine/dsl/builders";
+import { selfCostReduction, sparkModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 498,
   art: { x: -0.064, y: 0.64, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    staticAbility(selfCostReduction(count(characterYouControl(ofSubtype("Warrior")))), { zone: "any" }),
+    staticAbility(sparkModifier(supported(ofSubtype("Warrior")), 3)),
+  ],
+  verifiedText: "1rozq2dxtg7",
 });
