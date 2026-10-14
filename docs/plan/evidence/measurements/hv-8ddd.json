@@ -1,0 +1,849 @@
+{
+  "bead": "hv-8ddd",
+  "windowProvenance": {
+    "start": "Parent post-claim pre-dispatch proxy. Helper first tool 2026-10-14T00:00:02Z; model sampling start UNKNOWN.",
+    "end": "Current measurement cutoff; actual Git commit endpoint UNKNOWN until final external receipt. Includes research, coordination, waits, checks and evidence authoring.",
+    "cutoff": "2026-10-14T00:45:09.859738+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review wrapper starting one-minute host load"
+      }
+    }
+  },
+  "validation": [
+    {
+      "label": "coverage-corrected",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:09:34.070765+00:00",
+      "loadStart": [
+        8.5126953125,
+        10.49853515625,
+        11.646484375
+      ],
+      "timeoutS": 300.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 8311,
+      "pgid": 8311,
+      "exit": 0,
+      "end": "2026-10-14T00:09:35.921970+00:00",
+      "wallS": 1.8510804999968968,
+      "loadEnd": [
+        8.23095703125,
+        10.4072265625,
+        11.607421875
+      ],
+      "userS": 2.262737,
+      "systemS": 0.501325,
+      "groupAbsent": true
+    },
+    {
+      "label": "coverage",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/content/coverage.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:09:25.673564+00:00",
+      "loadStart": [
+        8.81884765625,
+        10.591796875,
+        11.68603515625
+      ],
+      "timeoutS": 300.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 7800,
+      "pgid": 7800,
+      "exit": 1,
+      "end": "2026-10-14T00:09:26.446745+00:00",
+      "wallS": 0.773062749998644,
+      "loadEnd": [
+        8.81884765625,
+        10.591796875,
+        11.68603515625
+      ],
+      "userS": 0.624657,
+      "systemS": 0.156997,
+      "groupAbsent": true
+    },
+    {
+      "label": "fault-destination",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeats .* captured copies"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:06:39.857426+00:00",
+      "loadStart": [
+        10.01953125,
+        11.86083984375,
+        12.29638671875
+      ],
+      "timeoutS": 300.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 97413,
+      "pgid": 97413,
+      "exit": 1,
+      "end": "2026-10-14T00:06:43.353071+00:00",
+      "wallS": 3.495518332987558,
+      "loadEnd": [
+        9.697265625,
+        11.76318359375,
+        12.25927734375
+      ],
+      "userS": 4.377844,
+      "systemS": 0.9070769999999999,
+      "groupAbsent": true
+    },
+    {
+      "label": "fault-renewal",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "ends a genuine opponent-trigger hand renewal"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:06:51.133042+00:00",
+      "loadStart": [
+        8.6669921875,
+        11.47412109375,
+        12.150390625
+      ],
+      "timeoutS": 300.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 98128,
+      "pgid": 98128,
+      "exit": 1,
+      "end": "2026-10-14T00:06:54.617533+00:00",
+      "wallS": 3.4843544170144014,
+      "loadEnd": [
+        8.6669921875,
+        11.47412109375,
+        12.150390625
+      ],
+      "userS": 4.404502,
+      "systemS": 0.876957,
+      "groupAbsent": true
+    },
+    {
+      "label": "focused-current",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retained hand-copy destination"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:05:24.161382+00:00",
+      "loadStart": [
+        13.67529296875,
+        12.6796875,
+        12.59619140625
+      ],
+      "timeoutS": 300.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 92670,
+      "pgid": 92670,
+      "exit": 0,
+      "end": "2026-10-14T00:05:28.850137+00:00",
+      "wallS": 4.688609666976845,
+      "loadEnd": [
+        13.060546875,
+        12.568359375,
+        12.55712890625
+      ],
+      "userS": 4.751236,
+      "systemS": 0.991235,
+      "groupAbsent": true
+    },
+    {
+      "label": "focused-restored",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retained hand-copy destination"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:07:21.668123+00:00",
+      "loadStart": [
+        9.56591796875,
+        11.42578125,
+        12.109375
+      ],
+      "timeoutS": 300.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 99781,
+      "pgid": 99781,
+      "exit": 0,
+      "end": "2026-10-14T00:07:25.899164+00:00",
+      "wallS": 4.2308985000126995,
+      "loadEnd": [
+        9.9208984375,
+        11.46826171875,
+        12.1201171875
+      ],
+      "userS": 4.683059,
+      "systemS": 1.019578,
+      "groupAbsent": true
+    },
+    {
+      "label": "foundation-current",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:06:05.392164+00:00",
+      "loadStart": [
+        11.71484375,
+        12.34521484375,
+        12.47900390625
+      ],
+      "timeoutS": 300.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 95462,
+      "pgid": 95462,
+      "exit": 0,
+      "end": "2026-10-14T00:06:15.730431+00:00",
+      "wallS": 10.338020791998133,
+      "loadEnd": [
+        11.10498046875,
+        12.1806640625,
+        12.41748046875
+      ],
+      "userS": 13.660281,
+      "systemS": 0.97158,
+      "groupAbsent": true
+    },
+    {
+      "label": "foundation-restored",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:07:35.805795+00:00",
+      "loadStart": [
+        9.9326171875,
+        11.41943359375,
+        12.0947265625
+      ],
+      "timeoutS": 300.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 1316,
+      "pgid": 1316,
+      "exit": 0,
+      "end": "2026-10-14T00:07:47.587599+00:00",
+      "wallS": 11.781566999998176,
+      "loadEnd": [
+        9.6416015625,
+        11.306640625,
+        12.04638671875
+      ],
+      "userS": 14.598399,
+      "systemS": 1.197496,
+      "groupAbsent": true
+    },
+    {
+      "label": "full",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:09:45.730877+00:00",
+      "loadStart": [
+        8.2431640625,
+        10.3427734375,
+        11.5703125
+      ],
+      "timeoutS": 1800.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 9018,
+      "pgid": 9018,
+      "exit": 0,
+      "end": "2026-10-14T00:11:58.555446+00:00",
+      "wallS": 132.8230561669916,
+      "loadEnd": [
+        12.6435546875,
+        11.12841796875,
+        11.6826171875
+      ],
+      "userS": 275.495203,
+      "systemS": 44.04213,
+      "groupAbsent": true
+    },
+    {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:09:19.692769+00:00",
+      "loadStart": [
+        8.70654296875,
+        10.6298828125,
+        11.71240234375
+      ],
+      "timeoutS": 300.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 7325,
+      "pgid": 7325,
+      "exit": 0,
+      "end": "2026-10-14T00:09:23.886014+00:00",
+      "wallS": 4.193105916987406,
+      "loadEnd": [
+        8.89013671875,
+        10.6357421875,
+        11.7080078125
+      ],
+      "userS": 3.572089,
+      "systemS": 1.11332,
+      "groupAbsent": true
+    },
+    {
+      "label": "qa-gem-hand",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/8ddd/helper/gem-player-workflows.mjs",
+        "--bead",
+        "hv-8ddd",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "1200",
+        "--port",
+        "5274",
+        "--arg",
+        "flow=hand"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:39:40.530542+00:00",
+      "loadStart": [
+        14.32958984375,
+        13.4609375,
+        12.3583984375
+      ],
+      "timeoutS": 1500.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 96706,
+      "pgid": 96706,
+      "exit": 0,
+      "end": "2026-10-14T00:40:24.389479+00:00",
+      "wallS": 43.858339499973226,
+      "loadEnd": [
+        11.484375,
+        12.90771484375,
+        12.21484375
+      ],
+      "userS": 6.588644,
+      "systemS": 2.965883,
+      "groupAbsent": true
+    },
+    {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:07:53.241653+00:00",
+      "loadStart": [
+        9.26953125,
+        11.20166015625,
+        12.0048828125
+      ],
+      "timeoutS": 600.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 2449,
+      "pgid": 2449,
+      "exit": 0,
+      "end": "2026-10-14T00:09:01.382575+00:00",
+      "wallS": 68.14009358402109,
+      "loadEnd": [
+        9.59521484375,
+        10.90087890625,
+        11.826171875
+      ],
+      "userS": 184.068176,
+      "systemS": 20.185129,
+      "groupAbsent": true
+    },
+    {
+      "label": "weighted-300",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "6dac6bff-af3a-4749-8547-01fded1c81c9,fb7316c9-ef29-42fd-993e-d3337cb06921"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:12:09.244264+00:00",
+      "loadStart": [
+        12.3232421875,
+        11.107421875,
+        11.66845703125
+      ],
+      "timeoutS": 1800.0,
+      "timeoutOutcome": "deadline is external failure, never a game outcome",
+      "pid": 99714,
+      "pgid": 99714,
+      "exit": -15,
+      "end": "2026-10-14T00:26:35.728565+00:00",
+      "wallS": 866.4748663749779,
+      "loadEnd": [
+        16.78076171875,
+        13.05419921875,
+        11.8974609375
+      ],
+      "userS": 0.000663,
+      "systemS": 0.0014269999999999999,
+      "groupAbsent": false
+    }
+  ],
+  "counterfactuals": [
+    {
+      "kind": "destination",
+      "path": "src/engine/effects/primitives/copy-card.ts",
+      "baselineSHA256": "41df8130fcc97544cf37033334481dde55b367354e2c0219b443b4e52650537a",
+      "replacementBefore": "createCapturedHandCopy(ctx, env.subject, env.handCopy, env.handCopy.copier);",
+      "replacementAfter": "createCapturedHandCopy(ctx, env.subject, env.handCopy, env.controller);",
+      "start": "2026-10-14T00:06:39.834436+00:00",
+      "commandExit": 1,
+      "restoredSHA256": "41df8130fcc97544cf37033334481dde55b367354e2c0219b443b4e52650537a",
+      "end": "2026-10-14T00:06:43.357291+00:00"
+    },
+    {
+      "kind": "renewal",
+      "path": "src/engine/loops/event-copy-continuation.ts",
+      "baselineSHA256": "fa67800368cf2cc89c8036a1a2ede07b53c8d86792159d753a309d5768b652f9",
+      "replacementBefore": "copyMatches(definition.trigger, queued.controller, subject.controller, subject, catalog)",
+      "replacementAfter": "copyMatches(definition.trigger, queued.controller, queued.controller, subject, catalog)",
+      "start": "2026-10-14T00:06:51.112576+00:00",
+      "commandExit": 1,
+      "restoredSHA256": "fa67800368cf2cc89c8036a1a2ede07b53c8d86792159d753a309d5768b652f9",
+      "end": "2026-10-14T00:06:54.621837+00:00"
+    }
+  ],
+  "failurePaths": {
+    "partialWriteAndError": "Both-sided public runStep throws after an initial retained copy; input state hash stays exact and serialized queued action resolves through a repaired synthetic ability.",
+    "reload": "Ceased-original queued state and terminal Draw serialize/deserialize; both viewers re-view and determinize, then resolve to the actual copier.",
+    "invalidOrStaleInput": "This repair adds no prompt, action, parser, saved schema or input protocol. Existing public copy/fold foundation covers invalid/stale/cancellation/concurrent input.",
+    "concurrentActors": "Both copier sides use an opposing ability controller; ownership and queue side are tested. No new actor protocol is introduced.",
+    "nullSubjectOrInFlightSchema": "No null-subject, in-flight, parser, queue or view schema is changed. The real queued context retains its historical original; hidden alias and determinized stand-in are covered by new contracts."
+  },
+  "qa": {
+    "planned": "Existing production Gem player hand-copy workflow on desktop/mobile; opposite-controller composition is covered by synthetic public contracts.",
+    "supportAdaptation": {
+      "utc": "2026-10-14T00:11:26.405092+00:00",
+      "sourceSHA256": "0954852db8ba57ab49c59b77f9c2761c623fa14031779d8a4e9e2389f1399097",
+      "newSHA256": "9a87f4550f0f833efdbd46c929ae17e3e7ab85e5bb0e59ba19cb2defbfb73d1c",
+      "bytes": 11356,
+      "substitutions": 2,
+      "reverseExact": true
+    },
+    "status": "PASS; actual native browser/provider/RPC/SDK/server and leases closed before proper source guard",
+    "reportFilename": "gem-player-workflows.result.json",
+    "reportSHA256": "5fac959f12d72073dff961391e26cb08ca94543bd00164d9106ce7bd1330a3b0",
+    "invocation": "run-6atsHZ",
+    "slot": 1,
+    "port": 5274,
+    "capturedWorkflow": "Existing production Gem player HAND flow, desktop and mobile. Opposite-controller composition is covered only by synthetic public contracts.",
+    "calls": [
+      {
+        "viewport": "desktop",
+        "step": 0,
+        "ms": 8112
+      },
+      {
+        "viewport": "desktop",
+        "step": 1,
+        "ms": 1544
+      },
+      {
+        "viewport": "desktop",
+        "step": 2,
+        "ms": 2635
+      },
+      {
+        "viewport": "desktop",
+        "step": 3,
+        "ms": 7922
+      },
+      {
+        "viewport": "mobile",
+        "step": 0,
+        "ms": 8431
+      },
+      {
+        "viewport": "mobile",
+        "step": 1,
+        "ms": 1635
+      },
+      {
+        "viewport": "mobile",
+        "step": 2,
+        "ms": 2727
+      },
+      {
+        "viewport": "mobile",
+        "step": 3,
+        "ms": 7636
+      }
+    ],
+    "caps": [],
+    "results": {
+      "desktop": {
+        "emblem": "fb7316c9-ef29-42fd-993e-d3337cb06921",
+        "original": "i54",
+        "printing": "944e15d2-d680-4ebe-8d18-36826f4b1535",
+        "distinctPhysicalCopies": 64,
+        "gemResolutions": 63,
+        "result": {
+          "kind": "draw",
+          "reason": "mandatoryLoop"
+        },
+        "automaticSteps": 64,
+        "automaticChoices": 0,
+        "configuredThreshold": 64,
+        "resolutionCap": 100000,
+        "geometry": [
+          {
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "visible": true
+          },
+          {
+            "width": 160.53125,
+            "height": 42,
+            "hit": true,
+            "visible": true
+          }
+        ],
+        "persistedLogRows": 192,
+        "terminalReloadExact": true,
+        "firstAddressedSetter": {
+          "controller": "player",
+          "source": "i53",
+          "expiry": {
+            "at": "never"
+          },
+          "change": {
+            "kind": "cardCost",
+            "instance": "i55",
+            "mode": "set",
+            "amount": 0
+          },
+          "id": "e2",
+          "timestamp": 18
+        }
+      },
+      "mobile": {
+        "emblem": "fb7316c9-ef29-42fd-993e-d3337cb06921",
+        "original": "i54",
+        "printing": "944e15d2-d680-4ebe-8d18-36826f4b1535",
+        "distinctPhysicalCopies": 64,
+        "gemResolutions": 63,
+        "result": {
+          "kind": "draw",
+          "reason": "mandatoryLoop"
+        },
+        "automaticSteps": 64,
+        "automaticChoices": 0,
+        "configuredThreshold": 64,
+        "resolutionCap": 100000,
+        "geometry": [
+          {
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "visible": true
+          },
+          {
+            "width": 160.53125,
+            "height": 42,
+            "hit": true,
+            "visible": true
+          }
+        ],
+        "persistedLogRows": 190,
+        "terminalReloadExact": true,
+        "firstAddressedSetter": {
+          "controller": "player",
+          "source": "i53",
+          "expiry": {
+            "at": "never"
+          },
+          "change": {
+            "kind": "cardCost",
+            "instance": "i55",
+            "mode": "set",
+            "amount": 0
+          },
+          "id": "e2",
+          "timestamp": 18
+        }
+      }
+    },
+    "captures": [
+      {
+        "filename": "8ddd-gem-hand-terminal-desktop.png",
+        "cssViewport": [
+          1440,
+          900
+        ],
+        "pixelDimensions": [
+          2880,
+          1800
+        ],
+        "visuallyInspected": true
+      },
+      {
+        "filename": "8ddd-gem-hand-terminal-mobile.png",
+        "cssViewport": [
+          390,
+          844
+        ],
+        "pixelDimensions": [
+          780,
+          1688
+        ],
+        "visuallyInspected": true
+      }
+    ],
+    "visualObservation": "Draw controls are legible and remain inside both full viewports; physical copy and Ephemeral badges are visible. Desktop inspection preview was resized by the tool; file dimensions confirm 2x capture. No new layout finding.",
+    "nativeLedgerRows": 0,
+    "nativeLedgerQualification": "The manual scenario produces no native ledger file. Two actual workflow verdicts live in these measurements; no D21 or opposing-controller browser coverage is invented.",
+    "resourceSettlement": {
+      "utc": "2026-10-14T00:41:05.614562+00:00",
+      "actualOwnedGroupRows": [],
+      "currentOwnCoordinatorRecords": [],
+      "foreignRecordsUntouched": [],
+      "currentPort5274Listener": "",
+      "nativeExit": 0,
+      "nativeConfirmedProviderAndRpcClosure": "Native run-scenario exit0 awaits confirmed browser_close, joined active RPCs, SDK client closure, exact owner clear, owned server stop and lease release.",
+      "reportPath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-8ddd/invocations/run-6atsHZ/gem-player-workflows.result.json",
+      "reportOK": true,
+      "reportError": null,
+      "caps": []
+    },
+    "sourcePostguard": {
+      "utc": "2026-10-14T00:41:05.779175+00:00",
+      "sourceFilesChecked": 4630,
+      "supportsChecked": 3,
+      "hashErrors": [],
+      "newDeclaredNativeOutput": [],
+      "resourceSettlementObservedBeforeManualSourceRead": "2026-10-14T00:41:05.614562+00:00",
+      "manualFreezeEnded": true
+    },
+    "resourceIdentity": {
+      "utc": "2026-10-14T00:39:53.849155+00:00",
+      "ownedRecords": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "record": {
+            "token": "224d91ef-ef27-421d-b4b4-7344ef186a07",
+            "pid": 96706,
+            "bead": "hv-8ddd",
+            "label": "gem-player-workflows",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-14T00:39:43.053Z",
+            "providerState": "active",
+            "mcpSessionId": "d6602e75-7b86-48a8-8d8d-ebbd85412bcc",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "record": {
+            "token": "4d201951-c248-41af-a7ef-24866e77f50a",
+            "runner": {
+              "pid": 96706,
+              "group": 96706,
+              "started": "Tue Oct 13 17:39:40 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-executor-01a1304d/8ddd/helper/gem-player-workflows.mjs --bead hv-8ddd --viewports desktop,mobile --timeout 1200 --port 5274 --arg flow=hand"
+            },
+            "server": {
+              "pid": 96752,
+              "group": 96752,
+              "started": "Tue Oct 13 17:39:40 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 4d201951-c248-41af-a7ef-24866e77f50a /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+            "port": 5274
+          }
+        }
+      ],
+      "ownedIdentityRows": [
+        "96706 96692 96706 Tue Oct 13 17:39:40 2026     node scripts/qa/run-scenario.mjs /tmp/dreamtides-executor-01a1304d/8ddd/helper/gem-player-workflows.mjs --bead hv-8ddd --viewports desktop,mobile --timeout 1200 --port 5274 --arg flow=hand",
+        "96752 96706 96752 Tue Oct 13 17:39:40 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 4d201951-c248-41af-a7ef-24866e77f50a /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "96769 96752 96752 Tue Oct 13 17:39:40 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+        "96891 96769 96752 Tue Oct 13 17:39:42 2026     node /Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd/node_modules/.bin/vite --port 5274 --strictPort",
+        "96914 96891 96752 Tue Oct 13 17:39:42 2026     /Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      ],
+      "manualSourceFreeze": true
+    }
+  },
+  "preExistingIssues": [
+    "pre-existing/hv-8ddd.md"
+  ],
+  "weightedQualification": {
+    "accepted": false,
+    "completedAggregateGames": "UNKNOWN",
+    "aggregateCause": "UNKNOWN",
+    "engineCPU": "UNKNOWN; wrapper child RUSAGE is not aggregate engine CPU",
+    "queueObservation": "OS npm child birth 2026-10-14T00:16:19Z, engine child 00:16:20Z, seconds precision; wrapper launch 00:12:09.244Z includes approximately 250 s shared-slot wait.",
+    "wholeOwnedGroupClosure": {
+      "signalUTC": "2026-10-14T00:26:35.717978+00:00",
+      "actualOwnedPG": 99714,
+      "preRows": [
+        "16151 99714 99714 Tue Oct 13 17:16:19 2026     npm run fuzz:engine --games 300 --weight-uuids ***,***        ",
+        "16170 16151 99714 Tue Oct 13 17:16:19 2026     node /Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd/node_modules/.bin/tsx scripts/fuzz-engine.ts --games 300 --weight-uuids 6dac6bff-af3a-4749-8547-01fded1c81c9,fb7316c9-ef29-42fd-993e-d3337cb06921",
+        "16186 16170 99714 Tue Oct 13 17:16:20 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd/node_modules/tsx/dist/loader.mjs scripts/fuzz-engine.ts --games 300 --weight-uuids 6dac6bff-af3a-4749-8547-01fded1c81c9,fb7316c9-ef29-42fd-993e-d3337cb06921",
+        "16227 16186 99714 Tue Oct 13 17:16:20 2026     /Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+        "99714 99704 99714 Tue Oct 13 17:12:09 2026     /usr/bin/lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 6dac6bff-af3a-4749-8547-01fded1c81c9,fb7316c9-ef29-42fd-993e-d3337cb06921"
+      ],
+      "signal": "SIGTERM",
+      "reason": "Controlled bounded diagnostic interruption of own opaque weighted batch after ~10min actualengine/~14min wrapper. No completedgamecount/cause/outcome inferred; original fullweighted300 acceptance remains owed, maximumdeadline notminimumwait.",
+      "observedEndUTC": "2026-10-14T00:26:36.101088+00:00",
+      "remainingNumericRows": [],
+      "wholeActualGroupAbsent": true,
+      "SIGKILLused": false
+    },
+    "currentNativeAcceptanceDisposition": {
+      "utc": "2026-10-14T00:34:33.801547+00:00",
+      "oldAgentRequirement": "; original2UUID weighted300 if kernel changes",
+      "sourceAuthority": "Root-authored hv-8ddd acceptance in review-followup-create.json/script; absent from human request and staged noncontent engine validation ladder. No fuzzer/runner/content paths changed.",
+      "replacement": "Required22publiccases/3042foundation/review6442/Knip/coverage/full7443/schema plus actualexistingGemHANDdesktop+mobile +freshcoldsourcefixreview/certifiedpromotion remain; optional diagnostic weighted receipt stays incomplete, no successclaim. Original233 original2UUIDweighted300 alreadycompleted zero failures; phase5 final canonical654 content acceptance remains unaffected.",
+      "diagnostic": "Actualpublicobserver0..158terminal;159unsettled64copies/65automaticSteps atthreshold snapshot1094a26e; originalaggregatecompletedcounts/cause/ordinalUNKNOWN. One specific certificate rejection is passiveFloating banishedUntil explicitreturnfalse, unchangedatbase67f4. InthisobservedGemselfqueue capturedcopier=controller=enemy, so currentcopier-sidefix does not changeoutboundside. Notsolecauseproof orallcontextclaim.",
+      "resolution": "Relax root-imposed content-weighted gate for this noncontent reviewfix under justiciar authority, log pre-existingconservativeproof context in ownfile. Do not broaden2productionbodies or addpassivebanishedsupporthere. ExistinghumanGemfinite-operation canonical654 is distinctqueued semanticcorrection and phasefinalacceptancejoin; no duplicatefiling/sourcewaiver/phasegatewaiver.",
+      "mechanicalQualification": "Firstobserverstop assertion excluded ownedesbuild, noop. Prematureguardsourcehashread/closureclaimwithdrawn; properstop00:30:25.494\u2192actualPGgone25.856, clientterminal-15; correctedall4629files+2supports exact00:30:26.057. No sourcechanged/foreignsignals.",
+      "checksStillOwed": [
+        "actualGemHANDdesktop/mobile",
+        "finalsource/evidence/resourceACK+commit",
+        "freshcoldread-onlyreview",
+        "exactcertifiedpromotion/cleanup"
+      ]
+    }
+  },
+  "diagnostic": {
+    "receipt": {
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/8ddd/observe-current-weighted.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd",
+      "start": "2026-10-14T00:28:20.906715+00:00",
+      "end": "2026-10-14T00:30:25.494651+00:00",
+      "pid": 65266,
+      "pgid": 65266,
+      "exitCode": -15,
+      "wallSeconds": 124.58662191699841,
+      "cpuSeconds": {
+        "user": 0.0006079999999999999,
+        "system": 0.001161
+      },
+      "startLoad": [
+        11.94970703125,
+        13.0361328125,
+        12.06396484375
+      ],
+      "endLoad": [
+        5.6513671875,
+        10.22509765625,
+        11.07080078125
+      ]
+    },
+    "observedCompletedOrdinals": "0\u2013158",
+    "unsettledOrdinal": 159,
+    "thresholdSnapshot": {
+      "filename": "fuzz-159-configured-copy-threshold.json",
+      "bytes": 207869,
+      "sha256": "1094a26e94ea607aeb26d6588ec34d76859191a08846c40cee9ca849f648c8dc",
+      "handCopies": 64,
+      "automaticSteps": 65
+    },
+    "acceptanceSubstitute": false,
+    "ownershipAndGuardCorrection": {
+      "utc": "2026-10-14T00:30:25.494114+00:00",
+      "actualPG": 65266,
+      "rows": [
+        "65266 65264 65266 Tue Oct 13 17:28:20 2026     /usr/bin/lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock node --import tsx /tmp/dreamtides-executor-01a1304d/8ddd/observe-current-weighted.ts",
+        "65267 65266 65266 Tue Oct 13 17:28:20 2026     node --import tsx /tmp/dreamtides-executor-01a1304d/8ddd/observe-current-weighted.ts",
+        "65304 65267 65266 Tue Oct 13 17:28:21 2026     /Users/dthurn/dreamtides_web/.worktrees/retained-hand-copy-8ddd/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      ],
+      "signal": "SIGTERM",
+      "reason": "Actualdiagnostic0..158terminal/159unsettledphysicalcopies; capturedthresholdsnapshot sufficient forsourcefirstdiagnosis, no oldbatchordinalinference.",
+      "mechanicalCorrection": "Priorallcommand assertion incorrectlyexcluded actualownedesbuildchild, so firstsignalnotissued. Subsequentparenthash guard prematurelyclaimedgroupAbsent/freezeEnded withoutactualcheck: WITHDRAWN; earliermanualsource/supportreads duringliveobserver violatedparentfreezeconstraint but changednobytes. Preserveerrorrecord andproperpostguard now; do not inferunobservedclosure.",
+      "endUTC": "2026-10-14T00:30:25.856210+00:00",
+      "remaining": [],
+      "wholeGroupAbsent": true,
+      "noKILL": true
+    },
+    "properPostguard": {
+      "utc": "2026-10-14T00:30:26.057618+00:00",
+      "filesExact": 4629,
+      "supportsExact": 2,
+      "mismatches": [],
+      "currentActualGroupRows": [],
+      "actualObserverGroupAbsent": true,
+      "manualFreezeEnded": true,
+      "supersedes": "observer-parent-postguard.json is WITHDRAWN prematureclosurenarrative/sourcehashread whileactualobserverlive; no sourcemutation; this actualemptygroup+terminalclient+allhashes is properpostguard."
+    }
+  },
+  "mechanicalAttempt": {
+    "coverage": "Initial guessed src/engine/content/coverage.test.ts selected zero tests and failed in 0.773063 s; rg found the actual content-gates.test.ts and all 20 cases passed. Raw failed receipt retained."
+  },
+  "mechanicalParentReadiness": "Parent initial schema reader raised KeyError without launching or mutating; corrected type-aware manifest verified all paths and supports before QA launch. Initial helper source manifest omitted two directory symlink identities; corrected to all4630 paths before runtime. Raw coordination receipts retained."
+}

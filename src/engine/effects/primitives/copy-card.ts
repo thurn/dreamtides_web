@@ -7,7 +7,7 @@ import type { StepContext } from "../../steps/types";
 
 function copyReference(ctx: StepContext, card: CopyCardNode["card"], env: EffectEnv): void {
   if (card.kind === "subject" && env.handCopy !== undefined && env.subject !== null) {
-    createCapturedHandCopy(ctx, env.subject, env.handCopy, env.controller);
+    createCapturedHandCopy(ctx, env.subject, env.handCopy, env.handCopy.copier);
     return;
   }
   for (const id of resolveCards(ctx, card, env)) copyOnStack(ctx, id, env.controller);

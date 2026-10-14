@@ -1,0 +1,32 @@
+{
+  "bead": "hv-8ddd",
+  "phase": 5,
+  "implementMin": 45.64310316666667,
+  "implementWindow": {
+    "start": "2026-10-13T23:59:31.273548Z",
+    "end": "2026-10-14T00:45:09.859738+00:00"
+  },
+  "localValidationS": {
+    "focused": 4.2308985000126995,
+    "foundation": 11.781566999998176,
+    "review": 68.14009358402109,
+    "knip": 4.193105916987406,
+    "coverage": 1.8510804999968968,
+    "full": 132.8230561669916,
+    "weightedIncomplete": 866.4748663749779,
+    "qa": 43.858339499973226
+  },
+  "hostLoad": 9.26953125,
+  "testDelta": {
+    "files": 1,
+    "lines": 216,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "plan-brief-mismatch",
+      "minutes": 22.40928805,
+      "note": "Parent-authored content-weighted gate for this noncontent review fix led to an incomplete 866.475 s batch and 124.587 s public diagnostic. Justiciar removed this agent-imposed gate under the staged validation ladder, preserving original content/phase acceptance, default semantics and the two production areas. This measured wall window includes shared-slot wait, diagnostic coordination and recovery; completed aggregate counts and total engine CPU are UNKNOWN."
+    }
+  ]
+}

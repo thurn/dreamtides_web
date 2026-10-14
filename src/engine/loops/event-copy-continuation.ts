@@ -24,6 +24,7 @@ import { triggerBody } from "../triggers/body";
 interface CopySubject {
   readonly printing: Printing;
   readonly variant: HandCopyContext["variant"];
+  readonly controller: Side;
   readonly x: number;
   readonly destination: "stack" | "hand";
 }
@@ -129,14 +130,14 @@ function listenerCensus(state: BattleState, catalog: EngineCatalog): Listener[] 
 function copySubject(state: BattleState, catalog: EngineCatalog, queued: QueuedTrigger): CopySubject | null {
   if (queued.subject === null) return null;
   if (queued.handCopy !== undefined) {
-    const { printing, variant } = queued.handCopy;
+    const { printing, variant, copier } = queued.handCopy;
     return instanceCard(catalog, { printing, variant }).cardType === "event"
-      ? { printing, variant, x: 0, destination: "hand" } : null;
+      ? { printing, variant, controller: copier, x: 0, destination: "hand" } : null;
   }
   const item = state.stack.find(item => item.kind === "card" && item.instance === queued.subject);
   const card = state.instances[queued.subject];
   return item?.kind === "card" && card !== undefined && instanceCard(catalog, card).cardType === "event"
-    ? { printing: card.printing, variant: card.variant, x: item.x ?? 0, destination: "stack" } : null;
+    ? { printing: card.printing, variant: card.variant, controller: queued.controller, x: item.x ?? 0, destination: "stack" } : null;
 }
 
 /** Universal syntax proof; supported instructions cannot remove a subject or a listener. */
@@ -218,7 +219,7 @@ export function isClosedCopyEventContinuation(state: BattleState, catalog: Engin
     if (current?.emblem === true && typeof current.source !== "string" && (current.source.kind === "avatar" || current.source.kind === "dreamsign") &&
       current.controller === queued.controller && sameOrigin(current.origin, queued.origin) &&
       definition.condition === undefined && definition.oncePerTurn !== true && body.renews &&
-      copyMatches(definition.trigger, queued.controller, queued.controller, subject, catalog)) kernel = true;
+      copyMatches(definition.trigger, queued.controller, subject.controller, subject, catalog)) kernel = true;
   }
   if (!kernel) return false;
   // Prospective copies carry only their printing/variant's own functional
@@ -228,7 +229,7 @@ export function isClosedCopyEventContinuation(state: BattleState, catalog: Engin
     const origin: AbilityOrigin = subject.printing.kind === "figment"
       ? { kind: "figment", id: subject.printing.figment }
       : { kind: "card", cardId: subject.printing.cardId, variant: subject.variant };
-    const prospective: Listener = { source: state.triggerQueue[0].source, controller: state.triggerQueue[0].controller,
+    const prospective: Listener = { source: state.triggerQueue[0].source, controller: subject.controller,
       origin, zone: subject.destination, emblem: false, abilities: originAbilities(catalog, origin) };
     if (!safeAbilities(state, prospective, subject)) return false;
   }
