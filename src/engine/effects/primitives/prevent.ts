@@ -6,7 +6,7 @@ import { spendEnergy } from "../../rules/resources";
 import { preventCard, type PreventDestination } from "../../rules/stack";
 import { opponent, type InstanceId, type Side } from "../../state/ids";
 import type { StepContext } from "../../steps/types";
-import { resolveStackTargets, resolvingSourceSpark } from "../interpreter";
+import { resolveStackTargets, resolvingSourceSpark, resolvingSourceCounters } from "../interpreter";
 import { cardTarget, definePrimitive, type EffectEnv } from "../types";
 
 /** The characters an "unless the opponent abandons" cost accepts, relative to the opponent who pays it. */
@@ -51,7 +51,7 @@ function paysEnergy(ctx: StepContext, env: EffectEnv, payer: Side, energy: numbe
  * they control none.
  */
 function abandons(ctx: StepContext, env: EffectEnv, payer: Side, predicate: UnlessAbandonsPredicate): boolean {
-  const candidates: InstanceId[] = matchingCharacters(ctx.state, ctx.catalog, { ...predicate, controller: "you" }, payer, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env));
+  const candidates: InstanceId[] = matchingCharacters(ctx.state, ctx.catalog, { ...predicate, controller: "you" }, payer, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env), resolvingSourceCounters(ctx, env));
   if (candidates.length === 0) return false;
   const accepts = ctx.choose<ConfirmPrompt>({ kind: "confirm", side: payer, purpose: env.purpose("preventUnlessAbandons") });
   if (!accepts) return false;

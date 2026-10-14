@@ -11,6 +11,8 @@ import {
   matchingStackItems,
   resolvePlayer,
   sourceX,
+  storedCounterCount,
+  type SourceCountersReader,
   zoneCount,
   type SourceSparkReader,
 } from "../dsl/selectors";
@@ -222,10 +224,11 @@ function voidTargetMatching(
   selectorX?: number,
   sourceSpark?: SourceSparkReader,
   subjectCost: number | null = null,
+  sourceCounters?: SourceCountersReader,
 ): boolean {
   if (!inZoneMatching(state, catalog, spec, resolvePlayer(controller, spec.player), source, id)) return false;
   const cost = copiableCostOf(state, catalog, id);
-  const bound = (value: NonNullable<ZoneTargetSpec["costAtMost"]>) => boundNow(state, catalog, value, controller, source, selectorX, sourceSpark, subjectCost);
+  const bound = (value: NonNullable<ZoneTargetSpec["costAtMost"]>) => boundNow(state, catalog, value, controller, source, selectorX, sourceSpark, subjectCost, sourceCounters);
   return (spec.costAtMost === undefined || cost <= bound(spec.costAtMost)) &&
     (spec.costLessThan === undefined || cost < bound(spec.costLessThan));
 }
@@ -240,9 +243,10 @@ function matchingVoidCards(
   selectorX?: number,
   sourceSpark?: SourceSparkReader,
   subjectCost: number | null = null,
+  sourceCounters?: SourceCountersReader,
 ): InstanceId[] {
   return state.sides[resolvePlayer(controller, spec.player)].void
-    .filter((id) => voidTargetMatching(state, catalog, spec, controller, source, id, selectorX, sourceSpark, subjectCost));
+    .filter((id) => voidTargetMatching(state, catalog, spec, controller, source, id, selectorX, sourceSpark, subjectCost, sourceCounters));
 }
 
 /**
@@ -260,23 +264,24 @@ export function targetCandidates(
   sourceSpark?: SourceSparkReader,
   subjectCost: number | null = null,
   choices: TargetChoiceContext = {},
+  sourceCounters?: SourceCountersReader,
 ): InstanceId[] {
   const available = (ids: InstanceId[]) => targetable(state, catalog, ids).filter(id => !choices.excluded?.includes(id));
   switch (spec.kind) {
     case "stackTarget":
       return available(matchingStackItems(state, catalog, spec.selector, controller, source));
     case "inZone":
-      return available(matchingVoidCards(state, catalog, spec, controller, source, selectorX, sourceSpark, subjectCost));
+      return available(matchingVoidCards(state, catalog, spec, controller, source, selectorX, sourceSpark, subjectCost, sourceCounters));
     case "target":
-      return available(matchingCharacters(state, catalog, targetSelector(state, catalog, spec, controller, source, selectorX, sourceSpark, choices), controller, source, selectorX, sourceSpark));
+      return available(matchingCharacters(state, catalog, targetSelector(state, catalog, spec, controller, source, selectorX, sourceSpark, choices, sourceCounters), controller, source, selectorX, sourceSpark, sourceCounters));
   }
 }
 
 /** A target’s live predicate, with payment conditions bound to the item’s exact optional-cost decisions. */
-function targetSelector(state: BattleState, catalog: EngineCatalog, spec: TargetSpec, controller: Side, source: AbilitySource, x?: number, sourceSpark?: SourceSparkReader, choices: TargetChoiceContext = {}) {
+function targetSelector(state: BattleState, catalog: EngineCatalog, spec: TargetSpec, controller: Side, source: AbilitySource, x?: number, sourceSpark?: SourceSparkReader, choices: TargetChoiceContext = {}, sourceCounters?: SourceCountersReader) {
   const alternate = spec.when;
   return alternate === undefined || conditionHoldsWith(state, catalog, (id) => characteristics(state, catalog).of(id), alternate.condition,
-    { controller, source, optionalPaid: choices.optionalPaid ?? [], ...(x === undefined ? {} : { x }), ...(sourceSpark === undefined ? {} : { sourceSpark }) })
+    { controller, source, optionalPaid: choices.optionalPaid ?? [], ...(x === undefined ? {} : { x }), ...(sourceSpark === undefined ? {} : { sourceSpark }), ...(sourceCounters === undefined ? {} : { sourceCounters }) })
     ? spec.selector : alternate.otherwise;
 }
 
@@ -303,6 +308,11 @@ export function resolvingSourceSpark(ctx: StepContext, env: EffectEnv): SourceSp
   return sourceSparkReader(ctx, env.source, env.lastKnownSourceSpark);
 }
 
+/** Source counters for this resolution: live first, else its own removal-payment scalar, else zero. */
+export function resolvingSourceCounters(ctx: StepContext, env: EffectEnv): SourceCountersReader {
+  return () => storedCounterCount(ctx.state, env.source, env.paymentSourceCounters);
+}
+
 /** How many targets a spec takes: "up to N" allows none. */
 function targetBounds(spec: PlayTimeTarget): { readonly min: number; readonly max: number } {
   const count = spec.kind === "stackTarget" ? 1 : (spec.count ?? 1);
@@ -327,25 +337,26 @@ function modeLegal(
   deferConditionals = false,
   subjectCost: number | null = null,
   choices: TargetChoiceContext = {},
+  sourceCounters?: SourceCountersReader,
 ): boolean {
   const definition = primitiveDefinition(node.op);
   const targetsAvailable = (definition.targets?.(node) ?? []).every(
     (spec) => {
       const bound = inherited?.targetsOf(spec) ?? null;
       return bound !== null ||
-        targetCandidates(state, catalog, spec, controller, source, selectorX, sourceSpark, subjectCost, choices).length >= targetBounds(spec).min;
+        targetCandidates(state, catalog, spec, controller, source, selectorX, sourceSpark, subjectCost, choices, sourceCounters).length >= targetBounds(spec).min;
     },
   );
   if (!targetsAvailable) return false;
   if (deferConditionals && definition.deferConditionalChoices === true) return true;
   const modes = definition.modes?.(node);
   if (modes === undefined) {
-    return (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost, choices));
+    return (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost, choices, sourceCounters));
   }
   const bound = inherited?.modeOf(node) ?? null;
-  if (bound === null) return modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost, choices));
+  if (bound === null) return modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost, choices, sourceCounters));
   const chosen = modes[bound];
-  return chosen !== undefined && modeLegal(state, catalog, chosen, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost, choices);
+  return chosen !== undefined && modeLegal(state, catalog, chosen, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost, choices, sourceCounters);
 }
 
 /**
@@ -502,6 +513,7 @@ export function chooseOnResolution(
   selectorX?: number,
   subjectCost: number | null = null,
   choices: TargetChoiceContext = {},
+  sourceCounters?: SourceCountersReader,
 ): EffectChoices | null {
   const sourceSpark = sourceSparkReader(ctx, source, lastKnownSourceSpark ?? null);
   const modes: number[] = [];
@@ -514,7 +526,7 @@ export function chooseOnResolution(
         modes.push(bound);
         return bound;
       }
-      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, inherited, true, subjectCost, choices));
+      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, inherited, true, subjectCost, choices, sourceCounters));
       if (blocked || !legal.includes(true)) {
         blocked = true;
         return 0;
@@ -533,7 +545,7 @@ export function chooseOnResolution(
   const targets = collectTargets(effect, chosenModes(effect, modes, true), true).map((spec) => {
     const bound = inherited?.targetsOf(spec) ?? null;
     if (bound !== null) return [...bound];
-    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark, subjectCost, choices);
+    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark, subjectCost, choices, sourceCounters);
     const bounds = targetBounds(spec);
     if (candidates.length < bounds.min) {
       ctx.emit({ kind: "noLegalTarget", source });
@@ -612,7 +624,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     discardedCount: env.discardedCount,
     subjectCost: env.lastKnownSubjectCost,
     subjectSpark: env.lastKnownSubjectSpark,
-    count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)).length,
+    count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env), resolvingSourceCounters(ctx, env)).length,
     countCards: (count) => zoneCount(ctx.state, ctx.catalog, count, env.controller),
     movedCosts: (ref) => env.moved.costs(ref.node),
     discardCount: (value) => env.moved.discardedCount(value.of.node, value.cardType),
@@ -636,7 +648,7 @@ export function conditionHolds(
 }
 
 export function checkCondition(ctx: StepContext, condition: Condition, env: EffectEnv): boolean {
-  return conditionHolds(ctx.state, ctx.catalog, condition, { ...env, sourceSpark: resolvingSourceSpark(ctx, env) });
+  return conditionHolds(ctx.state, ctx.catalog, condition, { ...env, sourceSpark: resolvingSourceSpark(ctx, env), sourceCounters: resolvingSourceCounters(ctx, env) });
 }
 
 /**
@@ -654,7 +666,7 @@ function namesCharacter(ctx: StepContext, id: InstanceId, env: EffectEnv): boole
 
 /** Picks once from the live matching battlefield pool; an empty pool consumes no draw. */
 function resolveRandomCharacters(ctx: StepContext, ref: RandomCharacterSpec, env: EffectEnv): InstanceId[] {
-  const pool = matchingCharacters(ctx.state, ctx.catalog, ref.selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env));
+  const pool = matchingCharacters(ctx.state, ctx.catalog, ref.selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env), resolvingSourceCounters(ctx, env));
   return pool.length === 0 ? [] : [pool[Math.floor(ctx.random(RANDOM_SELECTION_STREAM) * pool.length)]];
 }
 
@@ -676,7 +688,7 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
       return self !== null && namesCharacter(ctx, self, env) ? [self] : [];
     }
     case "all":
-      return matchingCharacters(ctx.state, ctx.catalog, ref.selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env));
+      return matchingCharacters(ctx.state, ctx.catalog, ref.selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env), resolvingSourceCounters(ctx, env));
     case "subject": {
       const subject = env.subject;
       return subject !== null && namesCharacter(ctx, subject, env) ? [subject] : [];
@@ -686,14 +698,14 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
       const selector = { controller: "you" as const, ...ref.selector };
       return self === null
         ? []
-        : supportedBy(ctx.state, self).filter((id) => matchesCharacter(ctx.state, ctx.catalog, selector, id, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)));
+        : supportedBy(ctx.state, self).filter((id) => matchesCharacter(ctx.state, ctx.catalog, selector, id, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env), resolvingSourceCounters(ctx, env)));
     }
     case "target": {
       const chosen = env.targetsOf(ref) ?? [];
       const legal = targetable(
         ctx.state,
         ctx.catalog,
-        chosen.filter((id) => matchesCharacter(ctx.state, ctx.catalog, targetSelector(ctx.state, ctx.catalog, ref, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env), { optionalPaid: env.optionalPaid }), id, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env))),
+        chosen.filter((id) => matchesCharacter(ctx.state, ctx.catalog, targetSelector(ctx.state, ctx.catalog, ref, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env), { optionalPaid: env.optionalPaid }, resolvingSourceCounters(ctx, env)), id, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env), resolvingSourceCounters(ctx, env))),
       );
       if (legal.length === 0 && chosen.length > 0) {
         ctx.emit({ kind: "noLegalTarget", source: env.source });
@@ -783,7 +795,7 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
     }
     case "target": {
       const chosen = env.targetsOf(ref) ?? [];
-      const legal = targetable(state, catalog, chosen.filter((id) => voidTargetMatching(state, catalog, ref, env.controller, env.source, id, env.x ?? undefined, resolvingSourceSpark(ctx, env), env.lastKnownSubjectCost)));
+      const legal = targetable(state, catalog, chosen.filter((id) => voidTargetMatching(state, catalog, ref, env.controller, env.source, id, env.x ?? undefined, resolvingSourceSpark(ctx, env), env.lastKnownSubjectCost, resolvingSourceCounters(ctx, env))));
       if (legal.length === 0 && chosen.length > 0) {
         ctx.emit({ kind: "noLegalTarget", source: env.source });
       }
@@ -1088,7 +1100,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
  * nearest enclosing choices.
  */
 export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv, retainConditionalBindings = false): void {
-  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env, env.x ?? undefined, env.lastKnownSubjectCost, { optionalPaid: env.optionalPaid });
+  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env, env.x ?? undefined, env.lastKnownSubjectCost, { optionalPaid: env.optionalPaid }, resolvingSourceCounters(ctx, env));
   if (choices === null) return;
   const chosen = chosenModes(effect, choices.modes, true);
   const specs = collectTargets(effect, chosen, true);

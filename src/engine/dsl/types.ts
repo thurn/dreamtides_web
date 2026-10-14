@@ -82,13 +82,17 @@ export interface SourceSparkValue {
   readonly value: "sourceSpark";
 }
 
+/** Source-local counters, live in play or retained by this activation's own removal payment. */
+export interface StoredCountersValue { readonly value: "storedCounters" }
+
 /**
  * A number a character selector's cost or ✦ bound, or a void target's cost
  * bound, compares with: a constant, the source's X, a count of cards in a
- * zone, or the source's ✦, read each time the selector is checked
- * (RD-hv-umm2.501-1).
+ * zone, the source's ✦, or its stored counters, read each time the selector
+ * is checked (RD-hv-umm2.501-1, rules § Counters). A counter bound reads the
+ * live source count, else this activation's own removal-payment count, else 0.
  */
-export type BoundValue = number | XValue | CardCountValue | SourceSparkValue;
+export type BoundValue = number | XValue | CardCountValue | SourceSparkValue | StoredCountersValue;
 
 /** The triggering subject's captured copiable cost, before departure for look-back triggers; resolving effects only. */
 export interface TriggerSubjectCostValue { readonly value: "subjectCost" }
@@ -352,7 +356,7 @@ export type ValueExpr =
   | number
   | XValue
   /** Counters currently stored on the source; payment departure may retain its scalar. */
-  | { readonly value: "storedCounters" }
+  | StoredCountersValue
   /** The positive points awarded by the challenge that triggered this ability; 0 outside a scoring trigger. */
   | { readonly value: "scored" }
   /** The positive discard occasion captured by this trigger; 0 outside a batch trigger. */

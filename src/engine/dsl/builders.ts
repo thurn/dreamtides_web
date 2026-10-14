@@ -13,6 +13,7 @@ import type {
   AdditionalCostAbility,
   AllSpec,
   BoundValue,
+  StoredCountersValue,
   TriggerSubjectCostValue,
   TriggerSubjectSparkValue,
   CardCountValue,
@@ -173,7 +174,7 @@ export function discardHandCost(): PaymentCost {
 }
 
 /** Counters currently stored on this ability's source. */
-export function storedCounters(): ValueExpr {
+export function storedCounters(): StoredCountersValue {
   return { value: "storedCounters" };
 }
 

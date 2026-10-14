@@ -4,7 +4,7 @@ import { filterSubjectOf, matchesFilter } from "../continuous/characteristics";
 import type { AbilitySource, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { matchingCharactersWith, resolvePlayer, zoneCountWith, type CharacteristicsReader, type SourceSparkReader } from "./selectors";
+import { matchingCharactersWith, resolvePlayer, zoneCountWith, type CharacteristicsReader, type SourceSparkReader, type SourceCountersReader } from "./selectors";
 import { evaluateValue } from "./values";
 import type { Condition } from "./types";
 
@@ -17,6 +17,8 @@ export interface ConditionScope {
   readonly x?: number | null;
   /** Resolving source spark; omitted by static and other non-resolving scopes. */
   readonly sourceSpark?: SourceSparkReader;
+  /** Only this resolving activation may supply its own payment-departure count. */
+  readonly sourceCounters?: SourceCountersReader;
 }
 
 /** Resolving conditions read effective characteristics; static conditions read the layers before their effect. */
@@ -33,7 +35,7 @@ export function conditionHoldsWith(
       return count >= condition.atLeast && (condition.atMost === undefined || count <= condition.atMost);
     }
     case "controls": {
-      const count = matchingCharactersWith(state, catalog, read, condition.selector, scope.controller, scope.source, scope.x ?? undefined, scope.sourceSpark).length;
+      const count = matchingCharactersWith(state, catalog, read, condition.selector, scope.controller, scope.source, scope.x ?? undefined, scope.sourceSpark, scope.sourceCounters).length;
       return count >= condition.atLeast && (condition.atMost === undefined || count <= condition.atMost);
     }
     case "energyAtLeast":

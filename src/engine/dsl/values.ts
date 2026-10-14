@@ -4,7 +4,7 @@ import { supportersOf } from "../continuous/support";
 import type { AbilitySource, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { resolvePlayer, type SourceSparkReader } from "./selectors";
+import { resolvePlayer, storedCounterCount, type SourceSparkReader } from "./selectors";
 import type { CardCountValue, CharacterSelector, DiscardCountValue, MovedCardRef, SourceSparkValue, ValueExpr } from "./types";
 
 /**
@@ -49,11 +49,7 @@ export function thisCharacterSpark(): SourceSparkValue {
 export function evaluateValue(state: BattleState, value: ValueExpr, scope: ValueScope): number {
   if (typeof value === "number") return value;
   switch (value.value) {
-    case "storedCounters": {
-      const self = sourceInstance(scope.source);
-      const instance = self === null ? undefined : state.instances[self];
-      return instance?.zone === "play" ? instance.status.counters : (scope.paymentSourceCounters ?? 0);
-    }
+    case "storedCounters": return storedCounterCount(state, scope.source, scope.paymentSourceCounters);
     case "playedThisTurn": return playedThisTurn(state, resolvePlayer(scope.controller, value.player));
     case "charactersPlayedThisTurn": return charactersPlayedCountThisTurn(state, resolvePlayer(scope.controller, value.player));
     case "discardedThisTurn": return discardedCountThisTurn(state, resolvePlayer(scope.controller, value.player));

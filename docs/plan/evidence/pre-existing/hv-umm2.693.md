@@ -1,0 +1,4 @@
+# Pre-existing observations for hv-umm2.693
+
+- At base `ea99c699cc152574cc4923fe306dd88f97e7aa05`, the engine-design Values table lists turn counters in its Phase 5 column while current-turn numeric forms already exist. This bead edits only stored-counter entries and their scoped payment description; the separate current-turn documentation work retains its own scope.
+- The new stored-counter selector form has no authored production or prompt-lab browser consumer at this base. Desolation UUID `8855e20c-e23f-4499-a5e8-a7a46ff81d2b` is pending under its original content acceptance owner. The existing development SDK stages catalog identities and zones, and the debug protocol offers no ability-definition injection. The new bound is exercised by synthetic public-engine contracts; browser evidence exercises the existing Eviscerator paid-X workflow separately.

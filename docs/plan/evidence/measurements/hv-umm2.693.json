@@ -1,0 +1,422 @@
+{
+  "bead": "hv-umm2.693",
+  "base": "ea99c699cc152574cc4923fe306dd88f97e7aa05",
+  "dispatch": {
+    "dispatchAt": "2026-10-14T18:48:03.435Z",
+    "callId": "call_f509d44ec99a4e6aba639169a7c29724",
+    "agent": "/root/counter_bounds693",
+    "source": "own host tool dispatch trace",
+    "samplingSeconds": "UNKNOWN"
+  },
+  "scope": "Named StoredCountersValue/BoundValue + precise builder + directed shared source-local count + optional resolving selector/condition/abandon/prevent reader transport; no persistent field, lifetime/history, payment, route, policy, catalog, shared QA or runner change. One forced formatter case; current stored-counter documentation.",
+  "architectureProportion": "Bounded form and reader arguments within the existing interpreter; focused contracts/affected consumers, ordinary review and knip. No test infrastructure/repository-wide configuration/cross-cutting architecture change. Zero authored content UUIDs, so no local weighted300 or entity sweep. Tollgate release retains its normal full validation.",
+  "sourceEpochs": {
+    "qaFreeze": "/tmp/codex-693/qa-freeze.json",
+    "frozenHashes": {
+      "docs/plan/engine-design.md": "b4a1865264b30a03ec335024f00328d261c88ff8830373ca1fa17ed5acd0e8f7",
+      "src/engine/dsl/builders.ts": "32dd5d6a593d9fb33d9987f2d73022c7bf9cd136d192317184508b705ae12b05",
+      "src/engine/dsl/conditions.ts": "0e40f609c5f4bc0dce3a23c3bb5dba431b6a56ea9505d041139210feef8c93b1",
+      "src/engine/dsl/selectors.ts": "eb12b30cd4aee0378c95438ac05fa61e59881aa9a2ea98fa7eb3261db052e281",
+      "src/engine/dsl/types.ts": "8f559b57cd28ec4c0f6ba28360ba26be125e819b73263c62f880275bcf2939bc",
+      "src/engine/dsl/values.ts": "e9afa6c9cacc29b971d8cdcf3fbd28e221170d91cb004fc98b357c103c5fbd3d",
+      "src/engine/effects/interpreter.ts": "65fccb147f3bd64c7fa614fa34cb10d089a0c22ff60dfd2b96c0ffb538175d2d",
+      "src/engine/effects/primitives/abandon.ts": "e59329028df7456fb7d6a274e3035a444c7868956ad666e4fa069f7a8d49b5db",
+      "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "135875ab0a9cdf981d06646096f8d02bfb4fc5f55ca8cf72e9fa5cec58da9239",
+      "src/engine/effects/primitives/prevent.ts": "a93ddfc45cab75e2f5ee38bd915474497b382f97964dd10496a0b77255de2322",
+      "src/runtime/battle-cost-messages.ts": "65e5cfdf3439e4e98a366f7ec364bacb91a58bc3269d5a62f9acad1f602ec18d",
+      "src/engine/effects/primitives/contracts/stored-counter-bounds.contracts.ts": "e6481be513be986c82001c1d7b59c4da07305d218b46acbb663eb6a20aa5d571"
+    },
+    "postQaCommentOnly": {
+      "src/engine/dsl/types.ts": {
+        "before": "8f559b57cd28ec4c0f6ba28360ba26be125e819b73263c62f880275bcf2939bc",
+        "after": "576c96331a3558d272fb854d68cb38067f8524a3b09480eef447414b58f04c45",
+        "delta": "Exactly one own-bound JSDoc replacement; all executable bytes preserved."
+      },
+      "src/engine/dsl/selectors.ts": {
+        "before": "eb12b30cd4aee0378c95438ac05fa61e59881aa9a2ea98fa7eb3261db052e281",
+        "after": "1f3ce2d00a532db54fc03d949ec253eace906ebcf7b2a34f1e65437e48c14eaf",
+        "delta": "Exactly one own-bound JSDoc replacement; all executable bytes preserved."
+      }
+    },
+    "reviewDocQualification": "After ordinary review, only the fromVoid documentation sentence was tightened to state BoundValue/storedCounters explicitly; all runtime and contract bytes stayed exact until the two proved post-QA JSDoc edits.",
+    "counterfactualTestAddition": {
+      "firstSixContractSHA256": "e08fe98204d22a2fa59a8bfd9720ffc8b63ac9cdf26df977cf49a01927cf9516",
+      "reconstructedExactBytes": "/tmp/codex-693/counterfactual-initial-contract.ts",
+      "finalContractSHA256": "e6481be513be986c82001c1d7b59c4da07305d218b46acbb663eb6a20aa5d571",
+      "delta": "Two-side delayed fresh-context negative witness plus its two imports; every earlier named contract byte preserved."
+    }
+  },
+  "contracts": {
+    "moduleLines": 271,
+    "newBoundCases": 41,
+    "counterPaymentRows": 3,
+    "counterPaymentCases": 6,
+    "costCompositionLines": 487,
+    "existingMatrix": "Byte-exact after removing only own imports and appended sibling payment table.",
+    "focused": "6 files / 4125 passing tests, including the eager primitive contracts; ordinary review 306 files / 7663 passing tests. These are scoped checks, not a low-load review:full/D19 budget measurement."
+  },
+  "counterfactuals": [
+    {
+      "label": "bound-zero",
+      "file": "src/engine/dsl/selectors.ts",
+      "testPattern": "compares the typed inclusive",
+      "originalSHA256": "eb12b30cd4aee0378c95438ac05fa61e59881aa9a2ea98fa7eb3261db052e281",
+      "mutatedSHA256": "e63e1bbf4ffe7a079a1bd21130d209144f10313e8fe12b50a545a9a47de1aa07",
+      "exitCode": 1,
+      "receipt": "cf-bound-zero.json",
+      "restoredSHA256": "eb12b30cd4aee0378c95438ac05fa61e59881aa9a2ea98fa7eb3261db052e281",
+      "wallSeconds": 4.018204209016403,
+      "qualification": "Original/restored SHA binds the actual counterfactual epoch; final types/selectors differ only by the proved own JSDoc edits. First six used the unchanged named contracts before the additive two-side delayed negative witness; the seventh used that added witness."
+    },
+    {
+      "label": "snapshot-omitted",
+      "file": "src/engine/effects/interpreter.ts",
+      "testPattern": "retains the count after earlier payment",
+      "originalSHA256": "65fccb147f3bd64c7fa614fa34cb10d089a0c22ff60dfd2b96c0ffb538175d2d",
+      "mutatedSHA256": "c11a6cc4a6003e0efe05ef23fd0cae3f06e8157282a49a1d8315c7fc4d90d4d2",
+      "exitCode": 1,
+      "receipt": "cf-snapshot-omitted.json",
+      "restoredSHA256": "65fccb147f3bd64c7fa614fa34cb10d089a0c22ff60dfd2b96c0ffb538175d2d",
+      "wallSeconds": 3.407308458001353,
+      "qualification": "Original/restored SHA binds the actual counterfactual epoch; final types/selectors differ only by the proved own JSDoc edits. First six used the unchanged named contracts before the additive two-side delayed negative witness; the seventh used that added witness."
+    },
+    {
+      "label": "snapshot-over-live",
+      "file": "src/engine/dsl/selectors.ts",
+      "testPattern": "uses a reentered source's live zero",
+      "originalSHA256": "eb12b30cd4aee0378c95438ac05fa61e59881aa9a2ea98fa7eb3261db052e281",
+      "mutatedSHA256": "b69dfbd051646eb36b45a5b2d4759aee1a9d06b1eca6b140552965f802e97dff",
+      "exitCode": 1,
+      "receipt": "cf-snapshot-over-live.json",
+      "restoredSHA256": "eb12b30cd4aee0378c95438ac05fa61e59881aa9a2ea98fa7eb3261db052e281",
+      "wallSeconds": 3.414116917003412,
+      "qualification": "Original/restored SHA binds the actual counterfactual epoch; final types/selectors differ only by the proved own JSDoc edits. First six used the unchanged named contracts before the additive two-side delayed negative witness; the seventh used that added witness."
+    },
+    {
+      "label": "condition-snapshot-omitted",
+      "file": "src/engine/dsl/conditions.ts",
+      "testPattern": "forwards the same snapshot through condition",
+      "originalSHA256": "0e40f609c5f4bc0dce3a23c3bb5dba431b6a56ea9505d041139210feef8c93b1",
+      "mutatedSHA256": "b694d54b17f311ac6d2cb920154e675b4f79953abfc52c6eb87f51d61a4d75fb",
+      "exitCode": 1,
+      "receipt": "cf-condition-snapshot-omitted.json",
+      "restoredSHA256": "0e40f609c5f4bc0dce3a23c3bb5dba431b6a56ea9505d041139210feef8c93b1",
+      "wallSeconds": 3.470513500011293,
+      "qualification": "Original/restored SHA binds the actual counterfactual epoch; final types/selectors differ only by the proved own JSDoc edits. First six used the unchanged named contracts before the additive two-side delayed negative witness; the seventh used that added witness."
+    },
+    {
+      "label": "deferred-snapshot-omitted",
+      "file": "src/engine/effects/interpreter.ts",
+      "testPattern": "offers deferred modes and targets",
+      "originalSHA256": "65fccb147f3bd64c7fa614fa34cb10d089a0c22ff60dfd2b96c0ffb538175d2d",
+      "mutatedSHA256": "978262c1e8c823fa5eeba894c0fa1f538f85df1e35edb37438c2d01688cb6522",
+      "exitCode": 1,
+      "receipt": "cf-deferred-snapshot-omitted.json",
+      "failure": "Actual wrongly bounded target rejects the previously legal exact target; report collector initially overrestricted failures to AssertionError. No rerun.",
+      "restoredSHA256": "65fccb147f3bd64c7fa614fa34cb10d089a0c22ff60dfd2b96c0ffb538175d2d",
+      "wallSeconds": 3.415367666981183,
+      "qualification": "Original/restored SHA binds the actual counterfactual epoch; final types/selectors differ only by the proved own JSDoc edits. First six used the unchanged named contracts before the additive two-side delayed negative witness; the seventh used that added witness."
+    },
+    {
+      "label": "prevent-snapshot-omitted",
+      "file": "src/engine/effects/primitives/prevent.ts",
+      "testPattern": "forwards the snapshot into the opponent's",
+      "originalSHA256": "a93ddfc45cab75e2f5ee38bd915474497b382f97964dd10496a0b77255de2322",
+      "mutatedSHA256": "e6c509a0f35c8f37d33c29c88edd74ecb5c83734850a2dcd766720f5baa3e9d0",
+      "exitCode": 1,
+      "receipt": "cf-prevent-snapshot-omitted.json",
+      "restoredSHA256": "a93ddfc45cab75e2f5ee38bd915474497b382f97964dd10496a0b77255de2322",
+      "wallSeconds": 3.4264736250042915,
+      "qualification": "Original/restored SHA binds the actual counterfactual epoch; final types/selectors differ only by the proved own JSDoc edits. First six used the unchanged named contracts before the additive two-side delayed negative witness; the seventh used that added witness."
+    },
+    {
+      "label": "fresh-context-zero",
+      "file": "src/engine/dsl/selectors.ts",
+      "testPattern": "starts a newly scheduled delayed trigger",
+      "originalSHA256": "eb12b30cd4aee0378c95438ac05fa61e59881aa9a2ea98fa7eb3261db052e281",
+      "mutatedSHA256": "0a681f843f8c4ce0de74f3f0033b62cf4822f3e2fe154396802fb3e001de470e",
+      "restoredSHA256": "eb12b30cd4aee0378c95438ac05fa61e59881aa9a2ea98fa7eb3261db052e281",
+      "exitCode": 1,
+      "receipt": "cf-fresh-context-zero.json",
+      "wallSeconds": 4.117797124985373,
+      "qualification": "Original/restored SHA binds the actual counterfactual epoch; final types/selectors differ only by the proved own JSDoc edits. First six used the unchanged named contracts before the additive two-side delayed negative witness; the seventh used that added witness."
+    }
+  ],
+  "checks": {
+    "focused-final": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/continuous/continuous-costs.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts"
+      ],
+      "begin": "2026-10-14T19:00:11.673295+00:00",
+      "end": "2026-10-14T19:00:25.769968+00:00",
+      "wallSeconds": 14.096031541994307,
+      "cpuSeconds": 20.854687000000002,
+      "exitCode": 0,
+      "hostLoad": 5.20458984375,
+      "pid": 3566,
+      "pgid": 3566,
+      "receipt": "/tmp/codex-693/focused-final.json"
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "begin": "2026-10-14T19:00:59.339467+00:00",
+      "end": "2026-10-14T19:01:51.219362+00:00",
+      "wallSeconds": 51.87915150000481,
+      "cpuSeconds": 168.516764,
+      "exitCode": 0,
+      "hostLoad": 2.99658203125,
+      "pid": 4377,
+      "pgid": 4377,
+      "receipt": "/tmp/codex-693/review.json"
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "begin": "2026-10-14T19:02:21.191874+00:00",
+      "end": "2026-10-14T19:02:25.577297+00:00",
+      "wallSeconds": 4.384931915992638,
+      "cpuSeconds": 4.964244,
+      "exitCode": 0,
+      "hostLoad": 3.15283203125,
+      "pid": 5929,
+      "pgid": 5929,
+      "receipt": "/tmp/codex-693/knip.json"
+    },
+    "preflight": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "f3f97e2c-3bb6-4a20-9880-f59c50e5af93",
+        "--variants",
+        "base",
+        "--as",
+        "player"
+      ],
+      "begin": "2026-10-14T19:02:58.396686+00:00",
+      "end": "2026-10-14T19:03:01.390578+00:00",
+      "wallSeconds": 2.991950875002658,
+      "cpuSeconds": 1.816492,
+      "exitCode": 0,
+      "hostLoad": 3.61279296875,
+      "pid": 6707,
+      "pgid": 6707,
+      "receipt": "/tmp/codex-693/preflight.json"
+    },
+    "schema-before-qa": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "begin": "2026-10-14T19:03:52.013859+00:00",
+      "end": "2026-10-14T19:03:52.143580+00:00",
+      "wallSeconds": 0.12742149998666719,
+      "cpuSeconds": 0.09116499999999998,
+      "exitCode": 0,
+      "hostLoad": 11.4814453125,
+      "pid": 65320,
+      "pgid": 65320,
+      "receipt": "/tmp/codex-693/schema-before-qa.json"
+    },
+    "whitespace-before-qa": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "begin": "2026-10-14T19:03:52.206315+00:00",
+      "end": "2026-10-14T19:03:52.218687+00:00",
+      "wallSeconds": 0.011803833011072129,
+      "cpuSeconds": 0.03599499999999999,
+      "exitCode": 0,
+      "hostLoad": 11.4814453125,
+      "pid": 65347,
+      "pgid": 65347,
+      "receipt": "/tmp/codex-693/whitespace-before-qa.json"
+    },
+    "qa-regression": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "counter-bound-regression",
+        "--bead",
+        "hv-umm2.693",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "begin": "2026-10-14T19:03:56.760816+00:00",
+      "end": "2026-10-14T19:04:33.522243+00:00",
+      "wallSeconds": 36.76070462501957,
+      "cpuSeconds": 9.712742,
+      "exitCode": 0,
+      "hostLoad": 11.60302734375,
+      "pid": 65766,
+      "pgid": 65766,
+      "receipt": "/tmp/codex-693/qa-regression.json"
+    }
+  },
+  "initialDiagnostics": [
+    "Direct tsc ran before workspace preparation and reported only missing generated Cumulus token mirrors; wall/CPU/start were not recorded. npm test prepared the workspace; accepted review typechecks passed. No tracked mirror edits.",
+    "Initial selected run8.087962s:40passed/3failed synthetic fixtures. Void reference mistakenly used character-only return; support fixture reversed support direction. Corrected to materialize(fromVoid) and actual back-source/front-supported geometry.",
+    "Second selected run6.096270s:43passed/2failed new prevent fixture used Fast timing on a nonempty stack. Third8.184464s:43passed/2failed fixture placed the resolution answers after Engine automatically resolved its no-response window. Corrected the synthetic interrupt timing and supplied actual current-step answers; fourth8.101342s45passed.",
+    "Counterfactual collector initially required AssertionError; actual deferred-reader removal correctly failed by rejecting the newly wrong target prompt with IllegalAnswer. Actual run retained and collector account repaired without rerunning it.",
+    "One guarded documentation replacement lookup missed its exact existing line; assertion prevented the edit. Subsequent exact replacement succeeded. Knip was an independent authorized check launched by that same shell invocation."
+  ],
+  "hostLoadSamples": {
+    "focusedFirstPrepare": {
+      "at": "2026-10-14T18:55:56.902Z",
+      "load": 15.24267578125
+    },
+    "focusedFirstTest": {
+      "at": "2026-10-14T18:55:59.223Z",
+      "load": 14.82275390625
+    },
+    "acceptedFocusedTest": {
+      "at": "2026-10-14T19:00:13.098Z",
+      "load": 5.20458984375
+    },
+    "reviewFirstPrepare": {
+      "at": "2026-10-14T19:00:59.511Z",
+      "load": 2.99658203125
+    },
+    "reviewRelatedTest": {
+      "at": "2026-10-14T19:01:00.681Z",
+      "load": 2.99658203125
+    }
+  },
+  "qa": {
+    "proofBoundary": "New bound: synthetic public engine. Browser: existing Eviscerator paid-X player controls only; pending Desolation belongs to original183 and no current production/prompt-lab definition authors the new bound. SDK stages existing identities/zones/energy and DebugOp supplies no ability injection.",
+    "invocation": "run-5DkROU",
+    "port": 5274,
+    "preferredPort": 5174,
+    "slot": 1,
+    "runnerPID": 65766,
+    "serverPIDPG": 65814,
+    "wallMs": {
+      "browserLeaseWait": 6,
+      "serve": 4112,
+      "scenario": 31874,
+      "total": 36059
+    },
+    "driverSHA256": "c008d0d62464ab6cc606b49f38124cb99f57c6ccacb6b607dd23ab6d113c1d26",
+    "caseCount": 2,
+    "persistedLogRows": 148,
+    "cases": [
+      {
+        "viewport": "desktop",
+        "gameId": "ynfdae",
+        "log": "desktop-eviscerator-ynfdae.jsonl",
+        "rows": 75,
+        "sha256": "f5352b9ecb98a347f8ff0b7e143342e96f427ab8d707a59fad674c52fd9ce319",
+        "source": "i1",
+        "target": "i15",
+        "paidX": 2,
+        "remaining": 0,
+        "rawCaps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        }
+      },
+      {
+        "viewport": "mobile",
+        "gameId": "bxt7s3",
+        "log": "mobile-eviscerator-bxt7s3.jsonl",
+        "rows": 73,
+        "sha256": "4ec37c5406d3076c453cb75f0dbe483c60cc647647db71e9c8fb68e3005d58f1",
+        "source": "i1",
+        "target": "i15",
+        "paidX": 2,
+        "remaining": 0,
+        "rawCaps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        }
+      }
+    ],
+    "captureCount": 6,
+    "captures": [
+      "eviscerator-stored-desktop.png",
+      "eviscerator-numeric-desktop.png",
+      "eviscerator-spent-desktop.png",
+      "eviscerator-stored-mobile.png",
+      "eviscerator-numeric-mobile.png",
+      "eviscerator-spent-mobile.png"
+    ],
+    "visualInspection": "Desktop and mobile numeric captures inspected: presented controls and memory badge legible; no changed visual finding. PNG IHDR dimensions prove full viewport pixel size only; measured control geometry supplies the viewport/hit claims.",
+    "nativeCaps": [],
+    "custody": "Runner/server groups65766/65814 absent; exact slot1 browser/server owner records cleared by normal SDK cleanup. Other sessions resources untouched.",
+    "rawProof": "/tmp/codex-693/qa-proof.json",
+    "rawReport": "invocations/run-5DkROU/counter-bound-regression.result.json"
+  },
+  "failurePaths": {
+    "midStepErrorAndPartialMutation": "Successful bound-selected dissolve prefix emitted three actual removals before deliberate invalid store; runStep private source and fold committed state unchanged, published events empty.",
+    "restartReload": "Own-payment source removal snapshot survives saved state; deferred same-activation target reconstructed by cold fold adapter after JSON reload.",
+    "invalidStaleForeignConcurrent": "Deferred target rejects illegal physical target, old prompt ID, wrong actor and concurrent action; accepted target completes once, replay answer has no pending prompt.",
+    "cancel": "Postcommit deferred target cannot cancel; existing paid-X browser numeric precommit cancellation publishes no cost/removal and reopens with a new ID.",
+    "responseAndSourceLifetime": "Opponent response removal reads0, own ordinary/created/return payment departure reads count after prior fixed payment, reentry live0 overrides retained2; fresh delayed context gets no snapshot.",
+    "newPersistentWrite": "None: the repair uses the existing strictly guarded paymentSourceCounters field and current fold/stack/view protocols."
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "resources": "All helper-owned check/CF/browser process groups settled before READY. Parent owns native records, independent cold review, commit ACK, candidate/certification/cleanup.",
+  "implementationClock": {
+    "start": "2026-10-14T18:48:03.435Z",
+    "finalCutoff": "2026-10-14T19:16:45.916579+00:00",
+    "inclusiveMinutes": 28.70802631666667,
+    "samplingSeconds": "UNKNOWN",
+    "qualification": "Inclusive dispatch-to-final-evidence cutoff includes read-only source audit, parent source-admission/ACK coordination, all failed and passing checks/counterfactuals/QA and READY audit waits. The following normal automatic-date Git tail is retained in the untracked receipt; no postcommit tracked writes."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Ordinary review command group launch2026-10-14T19:00:59.339467+00:00; first prepare load identical2.99658203125. Detailed actual prepare/related-test starts retained above."
+      }
+    }
+  },
+  "parentReadyAckWindow": {
+    "readyAt": "2026-10-14T19:11:58.565698+00:00",
+    "ackObservedAt": "2026-10-14T19:16:45.916453+00:00",
+    "elapsedSeconds": 287.350755,
+    "qualification": "READY-to-COMMITACK-observation interval includes parent source/evidence audit and helper wait; not a human approval, pure idle, CPU or provider queue claim."
+  },
+  "finalSchemaAndWhitespace": {
+    "commands": [
+      [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      [
+        "git",
+        "diff",
+        "--check"
+      ]
+    ],
+    "receipt": "/tmp/codex-693/commit-checks.json",
+    "qualification": "Executed after this final clock record and before staging/commit; actual results outside the immutable tracked source."
+  }
+}
