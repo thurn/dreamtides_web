@@ -1,0 +1,30 @@
+{
+  "bead": "hv-ndka",
+  "phase": 5,
+  "implementMin": 272.5720908166667,
+  "implementWindow": {
+    "start": "2026-10-14T08:16:28.723Z",
+    "end": "2026-10-14T12:49:03.048449+00:00"
+  },
+  "localValidationS": {
+    "focused-fixed-v01": 10.672643167024944,
+    "review-fixed-v01": 23.519166374986526,
+    "knip-fixed-v01": 7.499595542001771,
+    "baseline-runtime-v01": 23.98173529197811,
+    "fixed-runtime-v01": 25.460043708997546,
+    "workspace-prepare": 1.9206530000000002
+  },
+  "hostLoad": 15.0,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "coordination-wait",
+      "minutes": 230.02894513333334,
+      "note": "Observed baseline-terminal to parent SOURCEACK interval. Cause is unobserved; this is not an explicit user pause or model CPU measurement. Full interval stays in dispatch-to-commit gross time."
+    }
+  ]
+}

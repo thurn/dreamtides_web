@@ -749,7 +749,10 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
             engine={engine}
             battle={battle}
             battleId={battleId}
-            openerVisible={!(model.view.prompt.surface.kind === "picker" && model.view.prompt.surface.picker.presentation === "gallery")}
+            openerVisible={
+              model.view.prompt.host?.cancellable !== true &&
+              !(model.view.prompt.surface.kind === "picker" && model.view.prompt.surface.picker.presentation === "gallery")
+            }
             events={probeHistory?.events ?? []}
           />
         </Suspense>
