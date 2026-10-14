@@ -1,3 +1,7 @@
+import { additionalCost } from "../../engine/dsl/builders";
+import { either, onDawn, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +22,9 @@ export default card({
   artOwned: false,
   cardNumber: 121,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    additionalCost({ cost: "banishFromHand", count: 1 }),
+    triggered(either(onMaterialized(), onDawn()), gainEnergy(1)),
+  ],
+  verifiedText: expectedVerifiedText("To play this card, banish a card from hand.\n\n▸Materialized, ▸Dawn: Gain 1●."),
 });

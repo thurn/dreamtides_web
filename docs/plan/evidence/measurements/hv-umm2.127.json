@@ -1,0 +1,1286 @@
+{
+  "bead": "hv-umm2.127",
+  "base": "e3d899fbd732319980b8f279665edefbdddbe9fd",
+  "assignmentClock": {
+    "nativeDispatch": "2026-10-14T17:06:09.129Z",
+    "nativeCallId": "call_a388a76a13cb4a638b5759ea053458c2",
+    "modelSampling": "UNKNOWN",
+    "currentEndpoint": "2026-10-14T17:41:23.645772+00:00",
+    "endpointQualification": "Final prospective precommit marker. Gross window includes native dispatch through research, source, all checks, heavy-lock wait, browser waiting/sweep, actual root recovery and review, purposeful QA, evidence finalization. Final schema/diff/source guard/Git execution tail recorded externally after immutable commit; no tracked postcommit rewrite.",
+    "priorAssignments": "Previous original-127 partial windows and archived source evidence are historical only; this fresh assignment audits staging and reruns full-five acceptance. This window neither resets historical work nor adds guessed historical time.",
+    "grossMinutesToMarker": 35.2419462
+  },
+  "setupSeparate": {
+    "worktreeCreateS": 1.037718583,
+    "installS": 2.955715709,
+    "prepareS": 3.388165833,
+    "doctorS": 1.697860458
+  },
+  "source": {
+    "onlyProductionWrite": "src/content/cards/fangbound-c750af2e.ts",
+    "sha256": "e3afa096e3a24af59b22eadc2cc9410bc81b18b7f9368bf6268407e7404824f2",
+    "child679LeavesAndScenario": "Four delivered child679 leaves READONLY and unchanged from current base. Child private cards-ready-127 scenario absent by its documented D20 no-spec decision; original cards-15 scenario absent for ordinary Fangbound composition.",
+    "d20": "Independent ordinary required hand-banish cost and either named Materialized/Dawn energy trigger; no additional scenario module.",
+    "rules": "Printed required cost settled by Costs, Requirements, and X; combined named triggers settled by Triggered abilities. No new interpretation or card-data change.",
+    "review": "D18 ordinary existing-form content composition; no per-bead cold review or local full architecture check required."
+  },
+  "ordinaryValidation": [
+    {
+      "name": "focused-v01",
+      "receipt": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/content/content-index.test.ts",
+          "src/content/specs/specs.test.ts",
+          "src/engine/testing/lab-cost-staging.test.ts",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/triggers/triggers.test.ts",
+          "src/engine/triggers/triggers-patterns.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:07:39.198789+00:00",
+        "end": "2026-10-14T17:07:59.111437+00:00",
+        "exit": 0,
+        "wallSeconds": 19.912166416004766,
+        "pid": 9580,
+        "pgid": 9580,
+        "load": "{ 9.12 11.89 13.00 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "375b9cbc7d7e4b9afbe4cecfdadaaac18ad611a38ab8371c8c43e5692ce0b483",
+      "stderrSha256": "68f8680d588f59f50e993bcaa37a180714919df7c3cdee4f2ca808819146497c"
+    },
+    {
+      "name": "preflight-v01",
+      "receipt": {
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "965ce3b2-a722-475c-99c5-5b35685d2404,bbf83d18-81b6-48c8-886f-4b9f0feb599f,1d92e103-8415-433d-97d6-ac8a83660b34,e455225f-c444-44a2-8796-805cae2b755f,c750af2e-8185-4af0-bb38-4a41430c71b3",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:08:05.726963+00:00",
+        "end": "2026-10-14T17:08:08.680352+00:00",
+        "exit": 0,
+        "wallSeconds": 2.9529122080130037,
+        "pid": 11252,
+        "pgid": 11252,
+        "load": "{ 8.40 11.45 12.80 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "77fc90cea1a105fc4e2444c478384b69f0c23d6ad87727bbbc6f28d183d1a5ce",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "review-v01",
+      "receipt": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:08:15.675575+00:00",
+        "end": "2026-10-14T17:09:14.173665+00:00",
+        "exit": 0,
+        "wallSeconds": 58.496760333975544,
+        "pid": 11802,
+        "pgid": 11802,
+        "load": "{ 8.48 11.37 12.75 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "b0e8ab71f1932e07f30f72b111fd4cc2971630d9929e187a93d79537c3079ed6",
+      "stderrSha256": "68f8680d588f59f50e993bcaa37a180714919df7c3cdee4f2ca808819146497c"
+    },
+    {
+      "name": "knip-v01",
+      "receipt": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:09:15.372450+00:00",
+        "end": "2026-10-14T17:09:20.014844+00:00",
+        "exit": 0,
+        "wallSeconds": 4.64220704199397,
+        "pid": 15599,
+        "pgid": 15599,
+        "load": "{ 9.32 11.24 12.62 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "1bdf56b33b5c38b9760154795271bad599298dc44a61b7999a6546ca126264fa",
+      "stderrSha256": "68f8680d588f59f50e993bcaa37a180714919df7c3cdee4f2ca808819146497c"
+    },
+    {
+      "name": "coverage-v01",
+      "receipt": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:11:54.280438+00:00",
+        "end": "2026-10-14T17:12:00.689931+00:00",
+        "exit": 0,
+        "wallSeconds": 6.4092634999833535,
+        "pid": 22348,
+        "pgid": 22348,
+        "load": "{ 6.82 9.17 11.52 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "739d332fc987e32a532ea81f750bdfa07cdca62953b2fe30cbc77c264b3f2601",
+      "stderrSha256": "68f8680d588f59f50e993bcaa37a180714919df7c3cdee4f2ca808819146497c"
+    },
+    {
+      "name": "schema-v01",
+      "receipt": {
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:13:54.557983+00:00",
+        "end": "2026-10-14T17:13:54.711885+00:00",
+        "exit": 0,
+        "wallSeconds": 0.15377074998104945,
+        "pid": 84815,
+        "pgid": 84815,
+        "load": "{ 14.54 11.71 12.23 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "9aa8f063aa10a068b76c84c9248c586033b91b055e7766be4f9db9e4b0eceabf",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "diff-v01",
+      "receipt": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:13:54.812237+00:00",
+        "end": "2026-10-14T17:13:54.842210+00:00",
+        "exit": 0,
+        "wallSeconds": 0.029810417006956413,
+        "pid": 84833,
+        "pgid": 84833,
+        "load": "{ 14.74 11.80 12.26 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "fuzz-run-v01",
+      "receipt": {
+        "argv": [
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "965ce3b2-a722-475c-99c5-5b35685d2404,bbf83d18-81b6-48c8-886f-4b9f0feb599f,1d92e103-8415-433d-97d6-ac8a83660b34,e455225f-c444-44a2-8796-805cae2b755f,c750af2e-8185-4af0-bb38-4a41430c71b3"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:11:54.762600+00:00",
+        "end": "2026-10-14T17:17:11.973488+00:00",
+        "exit": 0,
+        "wallSeconds": 317.2184511660016,
+        "pid": 22493,
+        "pgid": 22493,
+        "load": "{ 6.99 9.17 11.51 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "c81e88f3a9cab48e256b03b84c1fc00b0d52ee82ce6a16364a32bce5c40304df",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "fuzz-lock-v01",
+      "receipt": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/worker127-final-20261014/record.py",
+          "fuzz-run-v01",
+          "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "965ce3b2-a722-475c-99c5-5b35685d2404,bbf83d18-81b6-48c8-886f-4b9f0feb599f,1d92e103-8415-433d-97d6-ac8a83660b34,e455225f-c444-44a2-8796-805cae2b755f,c750af2e-8185-4af0-bb38-4a41430c71b3"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:09:26.748250+00:00",
+        "end": "2026-10-14T17:17:12.024013+00:00",
+        "exit": 0,
+        "wallSeconds": 465.28034712499357,
+        "pid": 16375,
+        "pgid": 16375,
+        "load": "{ 8.88 11.08 12.55 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "5f6173fd9e91723980eaa83eac37431fb39c87a4f5f5b40b78b387abb8db892b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "schema-freeze-v01",
+      "receipt": {
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:19:03.898396+00:00",
+        "end": "2026-10-14T17:19:04.044990+00:00",
+        "exit": 0,
+        "wallSeconds": 0.14649199999985285,
+        "pid": 60946,
+        "pgid": 60946,
+        "load": "{ 15.08 13.48 12.96 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "9aa8f063aa10a068b76c84c9248c586033b91b055e7766be4f9db9e4b0eceabf",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "diff-freeze-v01",
+      "receipt": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:19:04.139479+00:00",
+        "end": "2026-10-14T17:19:04.169902+00:00",
+        "exit": 0,
+        "wallSeconds": 0.030327957996632904,
+        "pid": 60962,
+        "pgid": 60962,
+        "load": "{ 15.08 13.48 12.96 }",
+        "groupRemainingAtExit": []
+      },
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "preflight": {
+    "requestedCells": 100,
+    "pass": 48,
+    "skip": 52,
+    "pending": 0,
+    "fail": 0,
+    "variants": "all10",
+    "actors": [
+      "player",
+      "enemy"
+    ],
+    "qualification": "Enemy mode scripted-lab-play-first-legal-prompts, not policy-selected AI play."
+  },
+  "weighted300": {
+    "inner": {
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "965ce3b2-a722-475c-99c5-5b35685d2404,bbf83d18-81b6-48c8-886f-4b9f0feb599f,1d92e103-8415-433d-97d6-ac8a83660b34,e455225f-c444-44a2-8796-805cae2b755f,c750af2e-8185-4af0-bb38-4a41430c71b3"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+      "start": "2026-10-14T17:11:54.762600+00:00",
+      "end": "2026-10-14T17:17:11.973488+00:00",
+      "exit": 0,
+      "wallSeconds": 317.2184511660016,
+      "pid": 22493,
+      "pgid": 22493,
+      "load": "{ 6.99 9.17 11.51 }",
+      "groupRemainingAtExit": []
+    },
+    "outerLock": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/worker127-final-20261014/record.py",
+        "fuzz-run-v01",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "965ce3b2-a722-475c-99c5-5b35685d2404,bbf83d18-81b6-48c8-886f-4b9f0feb599f,1d92e103-8415-433d-97d6-ac8a83660b34,e455225f-c444-44a2-8796-805cae2b755f,c750af2e-8185-4af0-bb38-4a41430c71b3"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+      "start": "2026-10-14T17:09:26.748250+00:00",
+      "end": "2026-10-14T17:17:12.024013+00:00",
+      "exit": 0,
+      "wallSeconds": 465.28034712499357,
+      "pid": 16375,
+      "pgid": 16375,
+      "load": "{ 8.88 11.08 12.55 }",
+      "groupRemainingAtExit": []
+    },
+    "slotWaitStartToExecutionS": 148.01435,
+    "outerMinusInnerS": 148.06189595899195,
+    "stdoutSha256": "c81e88f3a9cab48e256b03b84c1fc00b0d52ee82ce6a16364a32bce5c40304df",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "result": {
+      "games": 300,
+      "steps": 94519,
+      "wallReportedS": 315.7,
+      "cpuReportedS": 335.7,
+      "prompts": 6740,
+      "interactiveReruns": 675,
+      "interactiveMsEach": 5.34,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 5
+      },
+      "wins": {
+        "player": 153,
+        "enemy": 147,
+        "draw": 0
+      },
+      "failures": 0,
+      "targets": [
+        {
+          "kind": "card",
+          "uuid": "965ce3b2-a722-475c-99c5-5b35685d2404",
+          "included": 609,
+          "exercised": 131
+        },
+        {
+          "kind": "card",
+          "uuid": "bbf83d18-81b6-48c8-886f-4b9f0feb599f",
+          "included": 617,
+          "exercised": 144
+        },
+        {
+          "kind": "card",
+          "uuid": "1d92e103-8415-433d-97d6-ac8a83660b34",
+          "included": 611,
+          "exercised": 199
+        },
+        {
+          "kind": "card",
+          "uuid": "e455225f-c444-44a2-8796-805cae2b755f",
+          "included": 615,
+          "exercised": 153
+        },
+        {
+          "kind": "card",
+          "uuid": "c750af2e-8185-4af0-bb38-4a41430c71b3",
+          "included": 620,
+          "exercised": 231
+        }
+      ],
+      "seed": "fuzz",
+      "first": 0,
+      "interactiveEvery": 10
+    }
+  },
+  "qa": {
+    "wholeBatchMap": {
+      "entities": [
+        {
+          "uuid": "965ce3b2-a722-475c-99c5-5b35685d2404",
+          "source": "src/content/cards/dreamvale-monarch-965ce3b2.ts",
+          "sha256": "e2199f8f1c5498eeccf3d97b8fb8216e814f5539eedcecd3b54310783cecd029",
+          "sourceAuthority": "child679 delivered leaf READONLY unchanged from base",
+          "wholePrinted": "Materialized draw1; base text only",
+          "ownOriginalSweepCounts": {
+            "pass": 10,
+            "skip": 10
+          },
+          "preflight": "All10variants/bothcontrollers actual100cell48pass52skip0fail",
+          "weighted300": {
+            "kind": "card",
+            "uuid": "965ce3b2-a722-475c-99c5-5b35685d2404",
+            "included": 609,
+            "exercised": 131
+          },
+          "d21": {
+            "firstByte": 251,
+            "sampled": false,
+            "newPromptStatusVisual": false
+          },
+          "scenario": "D20 ordinary composition; private child cards-ready-127 absent by documented no-spec decision; original cards-15 absent, no new spec needed.",
+          "latestSweepCounts": {
+            "pass": 10,
+            "skip": 10
+          }
+        },
+        {
+          "uuid": "bbf83d18-81b6-48c8-886f-4b9f0feb599f",
+          "source": "src/content/cards/frost-visionary-bbf83d18.ts",
+          "sha256": "02d367896c0043c42cdfc330d2a056596b83c54e5c1b4c4f2f2745459633d0e5",
+          "sourceAuthority": "child679 delivered leaf READONLY unchanged from base",
+          "wholePrinted": "Materialized draw1; base text only",
+          "ownOriginalSweepCounts": {
+            "pass": 10,
+            "skip": 10
+          },
+          "preflight": "All10variants/bothcontrollers actual100cell48pass52skip0fail",
+          "weighted300": {
+            "kind": "card",
+            "uuid": "bbf83d18-81b6-48c8-886f-4b9f0feb599f",
+            "included": 617,
+            "exercised": 144
+          },
+          "d21": {
+            "firstByte": 157,
+            "sampled": false,
+            "newPromptStatusVisual": false
+          },
+          "scenario": "D20 ordinary composition; private child cards-ready-127 absent by documented no-spec decision; original cards-15 absent, no new spec needed.",
+          "latestSweepCounts": {
+            "pass": 10,
+            "skip": 10
+          }
+        },
+        {
+          "uuid": "1d92e103-8415-433d-97d6-ac8a83660b34",
+          "source": "src/content/cards/searcher-in-the-mists-1d92e103.ts",
+          "sha256": "86d7e8f26e9dd373ec01000f3da733be2f5092d2501de117053b93ec907306b3",
+          "sourceAuthority": "child679 delivered leaf READONLY unchanged from base",
+          "wholePrinted": "Materialized and Dissolved erode4 base /5 amplified; child679 actual clause workflow on both viewports",
+          "ownOriginalSweepCounts": {
+            "pass": 10,
+            "skip": 10
+          },
+          "preflight": "All10variants/bothcontrollers actual100cell48pass52skip0fail",
+          "weighted300": {
+            "kind": "card",
+            "uuid": "1d92e103-8415-433d-97d6-ac8a83660b34",
+            "included": 611,
+            "exercised": 199
+          },
+          "d21": {
+            "firstByte": 130,
+            "sampled": false,
+            "newPromptStatusVisual": false
+          },
+          "scenario": "D20 ordinary composition; private child cards-ready-127 absent by documented no-spec decision; original cards-15 absent, no new spec needed.",
+          "latestSweepCounts": {
+            "pass": 10,
+            "skip": 10
+          }
+        },
+        {
+          "uuid": "e455225f-c444-44a2-8796-805cae2b755f",
+          "source": "src/content/cards/oracle-of-shifting-skies-e455225f.ts",
+          "sha256": "5d906fa0fe95ac01ccd4a410552add02f7dc622b31fffe05e08a64eb09198982",
+          "sourceAuthority": "child679 delivered leaf READONLY unchanged from base",
+          "wholePrinted": "Actual event-play Foresee1 base /2 amplified; child679 actual clause workflow on both viewports",
+          "ownOriginalSweepCounts": {
+            "pass": 9,
+            "skip": 10,
+            "fail": 1
+          },
+          "preflight": "All10variants/bothcontrollers actual100cell48pass52skip0fail",
+          "weighted300": {
+            "kind": "card",
+            "uuid": "e455225f-c444-44a2-8796-805cae2b755f",
+            "included": 615,
+            "exercised": 153
+          },
+          "d21": {
+            "firstByte": 120,
+            "sampled": false,
+            "newPromptStatusVisual": false
+          },
+          "scenario": "D20 ordinary composition; private child cards-ready-127 absent by documented no-spec decision; original cards-15 absent, no new spec needed.",
+          "latestSweepCounts": {
+            "pass": 10,
+            "skip": 10
+          }
+        },
+        {
+          "uuid": "c750af2e-8185-4af0-bb38-4a41430c71b3",
+          "source": "src/content/cards/fangbound-c750af2e.ts",
+          "sha256": "e3afa096e3a24af59b22eadc2cc9410bc81b18b7f9368bf6268407e7404824f2",
+          "sourceAuthority": "remaining original leaf",
+          "wholePrinted": "Mandatory banish1 OTHER physical hand payer + independent Materialized/Dawn gain1; base only. Actual desktop/mobile workflow passed no-payer refusal/fullstateunchanged,2payer choice/cancel/rollback, actual payerbanish and0costnormalentry/Materialized+1,nextownDawn+1,cancel+answer+completed-action source UUID logs/fullsamegame reload/emptyCaps/realgeometry.",
+          "ownOriginalSweepCounts": {
+            "pass": 7,
+            "skip": 12,
+            "fail": 1
+          },
+          "preflight": "All10variants/bothcontrollers actual100cell48pass52skip0fail",
+          "weighted300": {
+            "kind": "card",
+            "uuid": "c750af2e-8185-4af0-bb38-4a41430c71b3",
+            "included": 620,
+            "exercised": 231
+          },
+          "d21": {
+            "firstByte": 172,
+            "sampled": false,
+            "newPromptStatusVisual": false
+          },
+          "scenario": "D20 ordinary composition; private child cards-ready-127 absent by documented no-spec decision; original cards-15 absent, no new spec needed.",
+          "latestSweepCounts": {
+            "pass": 8,
+            "skip": 12
+          },
+          "workflowPacket": "/tmp/worker127-final-20261014/workflow-outcomes-v01.json"
+        }
+      ],
+      "d20": "No new module or tests; public synthetic primitive/trigger/payment tests passed.",
+      "d21": "Allfive sampled false, no newforms/status/visual. Purposeful Fangbound workflow remains owed despite no required random judgment.",
+      "newPrimitives": [],
+      "newPromptKinds": [],
+      "rulesDecisions": [],
+      "cardIssues": [],
+      "preExisting": "Existing navigation deviations retain exact failure traces and root same-task justiciar native recovery; exact root cause UNKNOWN, no cause-fix claim. Root finalizationACK needed before tracked own pre-existing record.",
+      "acceptance": "All original whole-batch acceptance checks verified:100distinct latest48pass52ineligibleSkip; actual failed navigation observations and changed-context corrections retained; Fangbound desktop/mobile workflow passes.",
+      "at": "2026-10-14T17:37:42.375516+00:00",
+      "parentRecoveryManifest": "/tmp/worker127-final-20261014/root-recovery-raw-manifest-v01.json"
+    },
+    "originalSweep": {
+      "receipt": {
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.127",
+          "--cards",
+          "965ce3b2-a722-475c-99c5-5b35685d2404,bbf83d18-81b6-48c8-886f-4b9f0feb599f,1d92e103-8415-433d-97d6-ac8a83660b34,e455225f-c444-44a2-8796-805cae2b755f,c750af2e-8185-4af0-bb38-4a41430c71b3",
+          "--variants",
+          "all",
+          "--as",
+          "both",
+          "--timeout",
+          "60"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:20:25.657178+00:00",
+        "end": "2026-10-14T17:30:25.733231+00:00",
+        "exit": 1,
+        "wallSeconds": 600.0674186249962,
+        "pid": 64976,
+        "pgid": 64976,
+        "load": "{ 10.30 12.54 12.66 }",
+        "groupRemainingAtExit": []
+      },
+      "summary": {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-bPFEyZ",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.127/invocations/sweep-bPFEyZ",
+        "counts": {
+          "pass": 46,
+          "skip": 52,
+          "fail": 2
+        },
+        "attemptCounts": {
+          "pass": 46,
+          "skip": 52,
+          "fail": 3
+        },
+        "hostLoad": 10.2998046875,
+        "sessions": 3,
+        "leaseYields": 2,
+        "wallMs": {
+          "browserLeaseWait": 100435,
+          "serve": 6803,
+          "scenario": 491383.666499,
+          "cleanup": 1109.2255839999416,
+          "execution": 499450.73583300004,
+          "total": 599885.735833
+        }
+      },
+      "initialLogicalCounts": {
+        "pass": 46,
+        "skip": 52,
+        "fail": 2
+      },
+      "rawAttempts": 101,
+      "qualification": "Three historical raw fail attempts retained, including kindled actual automatic corrective pass."
+    },
+    "rootRecovery": {
+      "oracle": {
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.127",
+          "--cards",
+          "e455225f-c444-44a2-8796-805cae2b755f",
+          "--variants",
+          "perfected",
+          "--as",
+          "enemy",
+          "--timeout",
+          "60"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:31:49.952508+00:00",
+        "end": "2026-10-14T17:32:06.751436+00:00",
+        "exit": 0,
+        "wallSeconds": 16.798594583000522,
+        "pid": 51968,
+        "pgid": 51968,
+        "load": "{ 7.73 11.57 11.94 }",
+        "groupRemainingAtExit": []
+      },
+      "fangbound": {
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.127",
+          "--cards",
+          "c750af2e-8185-4af0-bb38-4a41430c71b3",
+          "--variants",
+          "resonant",
+          "--as",
+          "player",
+          "--timeout",
+          "60"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:32:27.694096+00:00",
+        "end": "2026-10-14T17:32:48.602133+00:00",
+        "exit": 0,
+        "wallSeconds": 20.90765345800901,
+        "pid": 54228,
+        "pgid": 54228,
+        "load": "{ 7.08 10.93 11.68 }",
+        "groupRemainingAtExit": []
+      },
+      "conditionChanged": "Fresh managed contexts/documents/strict servers; base control plus exact failed cell; source/timeout/acceptance unchanged. Exact navigation root cause UNKNOWN.",
+      "nativeOutcome": "2026-10-14T17:33:15.380Z, 01a13b79-b8f5; root recovery artifacts independently verified and retained outside repository.",
+      "rawManifestSha256": "d88956eea2f2f28ed4f971a401969a488db529ed1c519a8d019e3b13a6f6daa3"
+    },
+    "latestRequiredSweep": {
+      "distinctCells": 100,
+      "pass": 48,
+      "skip": 52,
+      "fail": 0,
+      "rawRowsBeforeWorkflow": 105,
+      "rawRowsWithWorkflow": 107,
+      "historicalRawFailures": 3
+    },
+    "purposefulWorkflow": {
+      "receipt": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/worker127-final-20261014/qa-fangbound-v02.mjs",
+          "--bead",
+          "hv-umm2.127",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "300"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:34:23.059082+00:00",
+        "end": "2026-10-14T17:35:27.133525+00:00",
+        "exit": 0,
+        "wallSeconds": 64.07337100000586,
+        "pid": 90294,
+        "pgid": 90294,
+        "load": "{ 6.30 9.54 11.04 }",
+        "groupRemainingAtExit": []
+      },
+      "rawReportSha256": "c5f2f883acf0763f8cd1ef1f8de5b2b0624334432e96674d42c0a417bda1aaa8",
+      "fullResults": {
+        "desktop": {
+          "uuid": "c750af2e-8185-4af0-bb38-4a41430c71b3",
+          "viewport": "desktop",
+          "source": "i1",
+          "payer": "i2",
+          "untouched": "i3",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "refusedSource": "i1",
+          "unavailable": {
+            "playable": false,
+            "role": "button",
+            "printing": null
+          },
+          "refusedUnchanged": true,
+          "cancelledUnchanged": true,
+          "materializedEnergy": 1,
+          "dawnTrigger": {
+            "kind": "triggerResolved",
+            "source": "i1",
+            "controller": "player",
+            "ability": 1,
+            "node": null,
+            "applied": true
+          },
+          "dawnEnergy": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 1,
+            "max": 0,
+            "change": 1,
+            "maxChange": 0,
+            "cause": "effect"
+          },
+          "fullReloadEqual": true,
+          "gameId": "6iptq9",
+          "logRows": 69,
+          "acceptedAttemptCount": 2,
+          "completedPlayCount": 1,
+          "paymentAnswer": [
+            "i2"
+          ],
+          "geometry": {
+            "handGeometry": {
+              "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i1\"]",
+              "handTrack": true,
+              "cardRect": {
+                "x": 560.146240234375,
+                "y": 731.552978515625,
+                "width": 141.18115234375,
+                "height": 189.02117919921875
+              },
+              "trackRect": {
+                "x": 0,
+                "y": 684,
+                "width": 1440,
+                "height": 216
+              },
+              "visibleRect": {
+                "left": 560.146240234375,
+                "top": 731.552978515625,
+                "right": 701.327392578125,
+                "bottom": 900
+              },
+              "point": {
+                "x": 568.146240234375,
+                "y": 815.7764892578125
+              },
+              "enabled": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            },
+            "payerGeometry": {
+              "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i2\"]",
+              "handTrack": true,
+              "cardRect": {
+                "x": 626.599365234375,
+                "y": 731.552978515625,
+                "width": 141.18115234375,
+                "height": 189.02117919921875
+              },
+              "trackRect": {
+                "x": 0,
+                "y": 684,
+                "width": 1440,
+                "height": 216
+              },
+              "visibleRect": {
+                "left": 626.599365234375,
+                "top": 731.552978515625,
+                "right": 767.780517578125,
+                "bottom": 900
+              },
+              "point": {
+                "x": 634.599365234375,
+                "y": 815.7764892578125
+              },
+              "enabled": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            },
+            "cancelGeometry": {
+              "selector": "[data-testid=battle-prompt-cancel]",
+              "handTrack": false,
+              "cardRect": {
+                "x": 826.625,
+                "y": 20.75,
+                "width": 88.375,
+                "height": 42
+              },
+              "trackRect": null,
+              "visibleRect": {
+                "left": 826.625,
+                "top": 20.75,
+                "right": 915,
+                "bottom": 62.75
+              },
+              "point": {
+                "x": 830.625,
+                "y": 41.75
+              },
+              "enabled": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            },
+            "confirmGeometry": {
+              "selector": "[data-testid=battle-card-picker-submit]",
+              "handTrack": false,
+              "cardRect": {
+                "x": 1151.171875,
+                "y": 597,
+                "width": 89.328125,
+                "height": 42
+              },
+              "trackRect": null,
+              "visibleRect": {
+                "left": 1151.171875,
+                "top": 597,
+                "right": 1240.5,
+                "bottom": 639
+              },
+              "point": {
+                "x": 1155.171875,
+                "y": 618
+              },
+              "enabled": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            }
+          }
+        },
+        "mobile": {
+          "uuid": "c750af2e-8185-4af0-bb38-4a41430c71b3",
+          "viewport": "mobile",
+          "source": "i1",
+          "payer": "i2",
+          "untouched": "i3",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "refusedSource": "i1",
+          "unavailable": {
+            "playable": false,
+            "role": "button",
+            "printing": null
+          },
+          "refusedUnchanged": true,
+          "cancelledUnchanged": true,
+          "materializedEnergy": 1,
+          "dawnTrigger": {
+            "kind": "triggerResolved",
+            "source": "i1",
+            "controller": "player",
+            "ability": 1,
+            "node": null,
+            "applied": true
+          },
+          "dawnEnergy": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 1,
+            "max": 0,
+            "change": 1,
+            "maxChange": 0,
+            "cause": "effect"
+          },
+          "fullReloadEqual": true,
+          "gameId": "vsx3p8",
+          "logRows": 69,
+          "acceptedAttemptCount": 2,
+          "completedPlayCount": 1,
+          "paymentAnswer": [
+            "i2"
+          ],
+          "geometry": {
+            "handGeometry": {
+              "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i1\"]",
+              "handTrack": true,
+              "cardRect": {
+                "x": 28.42640495300293,
+                "y": 666.8659057617188,
+                "width": 170.82589721679688,
+                "height": 224.12811279296875
+              },
+              "trackRect": {
+                "x": 0,
+                "y": 616.109375,
+                "width": 390,
+                "height": 227.875
+              },
+              "visibleRect": {
+                "left": 28.42640495300293,
+                "top": 666.8659057617188,
+                "right": 199.2523021697998,
+                "bottom": 843.984375
+              },
+              "point": {
+                "x": 36.42640495300293,
+                "y": 755.4251403808594
+              },
+              "enabled": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            },
+            "payerGeometry": {
+              "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i2\"]",
+              "handTrack": true,
+              "cardRect": {
+                "x": 63.52015686035156,
+                "y": 666.8659057617188,
+                "width": 170.82589721679688,
+                "height": 224.12811279296875
+              },
+              "trackRect": {
+                "x": 0,
+                "y": 616.109375,
+                "width": 390,
+                "height": 227.875
+              },
+              "visibleRect": {
+                "left": 63.52015686035156,
+                "top": 666.8659057617188,
+                "right": 234.34605407714844,
+                "bottom": 843.984375
+              },
+              "point": {
+                "x": 71.52015686035156,
+                "y": 755.4251403808594
+              },
+              "enabled": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            },
+            "cancelGeometry": {
+              "selector": "[data-testid=battle-prompt-cancel]",
+              "handTrack": false,
+              "cardRect": {
+                "x": 269.125,
+                "y": 20.75,
+                "width": 88.375,
+                "height": 42
+              },
+              "trackRect": null,
+              "visibleRect": {
+                "left": 269.125,
+                "top": 20.75,
+                "right": 357.5,
+                "bottom": 62.75
+              },
+              "point": {
+                "x": 273.125,
+                "y": 41.75
+              },
+              "enabled": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            },
+            "confirmGeometry": {
+              "selector": "[data-testid=battle-card-picker-submit]",
+              "handTrack": false,
+              "cardRect": {
+                "x": 292.671875,
+                "y": 522.828125,
+                "width": 89.328125,
+                "height": 42
+              },
+              "trackRect": null,
+              "visibleRect": {
+                "left": 292.671875,
+                "top": 522.828125,
+                "right": 382,
+                "bottom": 564.828125
+              },
+              "point": {
+                "x": 296.671875,
+                "y": 543.828125
+              },
+              "enabled": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            }
+          }
+        }
+      },
+      "artifactManifest": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.127/invocations/run-YMKjAf/qa-fangbound-v02-desktop.jsonl",
+          "sha256": "3e96f7e230e794846a5f7d00c285e4211710ed5d33cecf73a7e5d418027c85f9",
+          "kind": "persisted-game-log",
+          "gameId": "6iptq9",
+          "rows": 69
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.127/invocations/run-YMKjAf/qa-fangbound-v02-mobile.jsonl",
+          "sha256": "8b56073e68cb206eb58c51467355063f65e3a65d67684fd57ea6ec62bde7ba13",
+          "kind": "persisted-game-log",
+          "gameId": "vsx3p8",
+          "rows": 69
+        },
+        {
+          "path": "fangbound-hand-payment-desktop.png",
+          "sha256": "58124be9370033d72325a0daf3d99bb58084b5623e50450246e519af5f4097bd",
+          "kind": "capture",
+          "cssViewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "pixelDimensions": {
+            "width": 2880,
+            "height": 1800
+          },
+          "visualInspection": "Prompt Cancel/Submit and source heading legible with no control overlap. Hand fan uses intentional track clipping and actual enabled/unoccluded visible hit points; next-Dawn desktop shows source in play and live phase controls."
+        },
+        {
+          "path": "fangbound-next-own-dawn-desktop.png",
+          "sha256": "3b121906655a3ee1c1c28a4e729c457805bd8599a1bf82de6e64dee3516a258a",
+          "kind": "capture",
+          "cssViewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "pixelDimensions": {
+            "width": 2880,
+            "height": 1800
+          },
+          "visualInspection": "Prompt Cancel/Submit and source heading legible with no control overlap. Hand fan uses intentional track clipping and actual enabled/unoccluded visible hit points; next-Dawn desktop shows source in play and live phase controls."
+        },
+        {
+          "path": "fangbound-hand-payment-mobile.png",
+          "sha256": "f62b75dba8a2a4ef17acab43da9a63802c130be0bc88152314888a478c1bfaa6",
+          "kind": "capture",
+          "cssViewport": {
+            "width": 390,
+            "height": 844
+          },
+          "pixelDimensions": {
+            "width": 780,
+            "height": 1688
+          },
+          "visualInspection": "Prompt Cancel/Submit and source heading legible with no control overlap. Hand fan uses intentional track clipping and actual enabled/unoccluded visible hit points; next-Dawn desktop shows source in play and live phase controls."
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.127/invocations/run-YMKjAf/qa-fangbound-v02.result.json",
+          "sha256": "c5f2f883acf0763f8cd1ef1f8de5b2b0624334432e96674d42c0a417bda1aaa8",
+          "kind": "raw-runtime"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.127/invocations/run-YMKjAf/qa-fangbound-v02.server.log",
+          "sha256": "1c4f4c3221810354c108b6fadc6f4c6d1d035eb859405e085e6214830337dda8",
+          "kind": "raw-runtime"
+        }
+      ],
+      "caps": [],
+      "engineErrors": []
+    },
+    "resources": {
+      "originalSweep": {
+        "at": "2026-10-14T17:30:48.657208+00:00",
+        "runnerReceipt": {
+          "argv": [
+            "node",
+            "scripts/qa/card-sweep.mjs",
+            "--bead",
+            "hv-umm2.127",
+            "--cards",
+            "965ce3b2-a722-475c-99c5-5b35685d2404,bbf83d18-81b6-48c8-886f-4b9f0feb599f,1d92e103-8415-433d-97d6-ac8a83660b34,e455225f-c444-44a2-8796-805cae2b755f,c750af2e-8185-4af0-bb38-4a41430c71b3",
+            "--variants",
+            "all",
+            "--as",
+            "both",
+            "--timeout",
+            "60"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+          "start": "2026-10-14T17:20:25.657178+00:00",
+          "end": "2026-10-14T17:30:25.733231+00:00",
+          "exit": 1,
+          "wallSeconds": 600.0674186249962,
+          "pid": 64976,
+          "pgid": 64976,
+          "load": "{ 10.30 12.54 12.66 }",
+          "groupRemainingAtExit": []
+        },
+        "sourceFilesUnchanged": true,
+        "sessionsCaptured": 3,
+        "records": [
+          {
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "originalTokenGone": true,
+            "currentRecordAbsent": false,
+            "activeProviderRetained": true,
+            "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "originalServerTokensGone": true,
+            "serverRecordAbsent": false,
+            "ownServerGroups": [
+              65060
+            ]
+          },
+          {
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "originalTokenGone": true,
+            "currentRecordAbsent": false,
+            "activeProviderRetained": true,
+            "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "originalServerTokensGone": true,
+            "serverRecordAbsent": false,
+            "ownServerGroups": [
+              87899
+            ]
+          },
+          {
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "originalTokenGone": true,
+            "currentRecordAbsent": false,
+            "activeProviderRetained": true,
+            "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "originalServerTokensGone": true,
+            "serverRecordAbsent": false,
+            "ownServerGroups": [
+              42439
+            ]
+          }
+        ],
+        "ownGroups": [
+          42439,
+          64976,
+          65060,
+          87899
+        ],
+        "ownGroupsRemaining": [],
+        "providerCompletion": "Native runner terminal result and exact own owner/server tokens cleared; audited managedclose clears owner only after confirmed browser_close, active RPC drain and no uncertain call, closes own transport, stops own server PG and releases lease. Shared service/other records untouched."
+      },
+      "purposeful": {
+        "at": "2026-10-14T17:35:51.528081+00:00",
+        "runnerReceipt": {
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/worker127-final-20261014/qa-fangbound-v02.mjs",
+            "--bead",
+            "hv-umm2.127",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "300"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+          "start": "2026-10-14T17:34:23.059082+00:00",
+          "end": "2026-10-14T17:35:27.133525+00:00",
+          "exit": 0,
+          "wallSeconds": 64.07337100000586,
+          "pid": 90294,
+          "pgid": 90294,
+          "load": "{ 6.30 9.54 11.04 }",
+          "groupRemainingAtExit": []
+        },
+        "sourceFilesUnchanged": true,
+        "sessionsCaptured": 1,
+        "records": [
+          {
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "originalTokenGone": true,
+            "currentRecordAbsent": false,
+            "activeProviderRetained": true,
+            "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "originalServerTokensGone": true,
+            "serverRecordAbsent": false,
+            "ownServerGroups": [
+              90366
+            ]
+          }
+        ],
+        "ownGroups": [
+          90294,
+          90366
+        ],
+        "ownGroupsRemaining": [],
+        "providerCompletion": "Native runner terminal result and exact own owner/server tokens cleared; audited managedclose clears owner only after confirmed browser_close, active RPC drain and no uncertain call, closes own transport, stops own server PG and releases lease. Shared service/other records untouched."
+      },
+      "totalSessions": 6,
+      "allHelperGroupsGone": true,
+      "parentRecoveryGroupsGone": "Root exact cleanup/live-provider identity receipts retained; provider metadata includes original session/protocol/token and confirmed managed close/RPC drain/own transport/server/lease.",
+      "sweepObserverClockQualification": "Native OS start observed at second resolution, monotonic start/duration UNKNOWN; actual tool exit0 and exact observer PG67180 gone verified.",
+      "workflowObserverActualReceipt": {
+        "argv": [
+          "python3",
+          "/tmp/worker127-final-20261014/capture-all-live-owners.py",
+          "workflow-v01"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-127-final-card-flow",
+        "start": "2026-10-14T17:34:25.372456+00:00",
+        "end": "2026-10-14T17:35:27.249853+00:00",
+        "exit": 0,
+        "wallSeconds": 61.876422540983185,
+        "pid": 90487,
+        "pgid": 90487,
+        "load": "{ 6.30 9.54 11.04 }",
+        "groupRemainingAtExit": []
+      }
+    }
+  },
+  "status": "Final precommit evidence; native delivery owned by parent.",
+  "decisions": {
+    "D20": "All five ordinary existing-form compositions; no new scenario module or test.",
+    "D21": {
+      "sha256FirstBytes": [
+        251,
+        157,
+        130,
+        120,
+        172
+      ],
+      "sampled": [],
+      "newPromptStatusVisual": [],
+      "judgedRequired": 0
+    },
+    "D18": "Non-core existing-form composition without new primitive/DSL/prompt; no per-bead cold review or local full architecture check required.",
+    "newPrimitives": [],
+    "newPromptKinds": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    }
+  },
+  "rawEvidence": {
+    "preqaManifestSha256": "2eeed9d0b700e8fd5394a366dade80dce7738b11227bbc8753622876f4ce37dc",
+    "sweepReportsManifestSha256": "44333c116c5370ae386d3dd5b6150bb561dc2a9901105d4bc3ca98c6b8efc8e1",
+    "qaTerminalPacketV02Sha256": "5118f19ca203bfb16fdf7ece8d4843c7484f173e35697f022b0079a465651f0f",
+    "location": "Raw command receipts/stdout/stderr/owner/provider/protocol/tokens and result JSON remain in session scratch and gitignored QA invocation directories. Tracked evidence contains outcome numbers/hashes and capture filenames; no images are committed."
+  }
+}

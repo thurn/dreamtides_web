@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.127",
+  "phase": 5,
+  "implementMin": 35.2419462,
+  "implementWindow": {
+    "start": "2026-10-14T17:06:09.129Z",
+    "end": "2026-10-14T17:41:23.645772+00:00"
+  },
+  "localValidationS": {
+    "focused": 19.912166416004766,
+    "preflight": 2.9529122080130037,
+    "review": 58.496760333975544,
+    "knip": 4.64220704199397,
+    "coverage": 6.4092634999833535,
+    "fuzz": 317.2184511660016,
+    "fuzzLockOuter": 465.28034712499357,
+    "sweep": 600.0674186249962,
+    "rootOracleRecovery": 16.798594583000522,
+    "rootFangboundRecovery": 20.90765345800901,
+    "purposefulWorkflow": 64.07337100000586
+  },
+  "hostLoad": 14.54,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-navigation",
+      "minutes": 0.6284374673501588,
+      "note": "Actual parent changed-context recovery execution for two aborted sweep cells, measured outside main sweep. Kindled report timeout and automatic corrective pass retained in original sweep wall. Exact cause UNKNOWN; no source/timeout/acceptance relaxation or cause-fix claim."
+    }
+  ]
+}
