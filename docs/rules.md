@@ -1108,6 +1108,18 @@ void or deck. An independent permission can supply that access and is used
 up normally when its player chooses this alternative; a card with only
 Reclaim uses its Reclaim route. Cancelling before commitment pays nothing.
 
+**Continuous matching play bases:** "≤2● cost characters cost you 0●" sets
+the normal fixed ● base of every currently matching card that player plays
+while the static ability applies. Match current type and copiable cost;
+0●, 1● and 2● qualify inclusively. No ordinal or allowance is used. Normal
+hand plays, normal-cost permissions and plain Reclaim use this base.
+Explicit Reclaim, Offering and event alternatives choose replacement bases;
+X and additional mandatory, optional and alternative-choice payments add to
+the chosen base. The latest applicable normal-base setter applies in
+continuous-effect order, whether it names a card, every matching play, or an
+nth matching play. Increases, reductions and the zero floor then apply.
+Nonenergy payments and copiable cost are unchanged.
+
 **First and nth play costs:** "The first ≤2● cost character you play each
 turn costs you 0●" counts earlier matching committed plays by that player
 in the current turn, before paying for the proposed play. First, second and

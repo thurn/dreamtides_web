@@ -1,4 +1,5 @@
 import { NTH_COST_ROWS, observeNthCostRow } from "./cost-modifier-nth-support";
+import { SETTER_COST_ROWS, observeSetterCostRow } from "./cost-setter-composition-support";
 /**
  * The cost-composition table: every layer-6 cost change mode × every play
  * route × every additional energy shape, on synthetic cards. Expected
@@ -493,4 +494,7 @@ describe("nth static cost composition table", () => {
     expect(observeNthCostRow(row)).toMatchObject({ energy: row.expected, points: 1, otherEnergy: 30, played: 1,
       reclaimed: row.route.route === "reclaim", offering: row.route.route === "offering", x: row.route.route === "offering" || row.route.route === "eventAlternative" ? 0 : 2 });
   });
+});
+it.each(SETTER_COST_ROWS)("$label preserves chosen-route and additional payments", row => { expect(observeSetterCostRow(row)).toMatchObject({ energy: row.expected, points: 1, otherEnergy: 30, played: 1, reclaimed: row.kind === "reclaim", offering: row.kind === "offering", violations: [],
+    x: row.extra.name === "X" ? row.kind === "offering" || row.kind === "eventAlternative" ? 0 : 2 : null });
 });

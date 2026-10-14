@@ -74,6 +74,17 @@ function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHook
 
 /** The lab's own cards. */
 export const LAB = {
+  /** Every current matching play has a zero normal base while this source applies. */
+  qualifyingCostSetter: {
+    ...SYNTHETIC.vanilla1, id: syntheticId(0x69600), status: "authored",
+    abilities: () => [staticAbility(p.costSetter("you", { cardType: "character", costAtMost: 2 }, 0)),
+      activated([], p.returnToHand(self()))],
+  },
+  /** An optional payment remains separate from the continuously set normal base. */
+  qualifyingCostPayment: {
+    ...SYNTHETIC.vanilla2, id: syntheticId(0x69601), status: "authored",
+    abilities: () => [additionalCost(optionalCost(energy(1)))],
+  },
   /** One current hand character chosen privately as this event resolves. */
   materializeChosen: labEvent(0x48100, 0, p.materializeChosen(2)),
   /** Optionality is a separate confirmation before the private hand choice. */
@@ -358,6 +369,8 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.opponentPayment.id]: { name: "Lab Toll", text: "Draw a card unless the opponent pays 1●." },
   [LAB.routeCharacter.id]: { name: "Lab Wayfarer", text: "As an additional cost to play this character, you may pay 1●. Reclaim 0●" },
   [LAB.routeSetter.id]: { name: "Lab Summons", text: "Draw a ≤2● cost character from your deck. It costs 0●." },
+  [LAB.qualifyingCostSetter.id]: { name: "Lab Guide", text: "≤2● cost characters cost you 0●. 0●: Return this character to hand." },
+  [LAB.qualifyingCostPayment.id]: { name: "Lab Traveler", text: "You may pay an additional 1● to play this character." },
   [LAB.routeDiscarder.id]: { name: "Lab Sacrifice", text: "To play this card, discard a character. Gain 1⍟." },
   [LAB.returnPayer.id]: { name: "Lab Recaller", text: "Return a character you control to hand: Gain 1⍟." },
   [LAB.anyVoidPayer.id]: { name: "Lab Grave Robber", text: "Banish a card from the opponent's void: Gain 1⍟." },
@@ -674,6 +687,14 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       enemy: { hand: [], energy: 0, deck: deck(6) } },
     script: [],
   },
+  ...SIDES.map((side): PromptLabFixture => ({
+    name: side === "player" ? "qualifying-cost-setter" : "qualifying-cost-setter-enemy",
+    description: "Every qualifying normal play stays affordable while its static source applies",
+    setup: { active: side, phase: "day",
+      [side]: { back: [LAB.qualifyingCostSetter.id], hand: [SYNTHETIC.vanilla0.id, SYNTHETIC.vanilla1.id, LAB.qualifyingCostPayment.id, SYNTHETIC.vanilla3.id], energy: 1, deck: deck(6) },
+      [side === "player" ? "enemy" : "player"]: { deck: deck(6) } },
+    script: [],
+  })),
   {
     name: "move", description: "Choose an empty battlefield position during a Fast activation",
     setup: { active: "player", phase: "night",

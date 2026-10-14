@@ -54,10 +54,10 @@ export function costModifier(
     if (change.nth !== undefined) {
       const earlier = state.turnLog.played[player].filter(record => playedMatchesFilter(state, catalog, record, change.filter)).length;
       if (earlier !== change.nth - 1) continue;
-      if (change.mode === "set") {
-        if (options.applyOwnSet !== false) set = change.amount;
-        continue;
-      }
+    }
+    if (change.mode === "set") {
+      if (options.applyOwnSet !== false) set = change.amount;
+      continue;
     }
     if (change.amount > 0) increase += change.amount;
     else reduction -= change.amount;

@@ -458,10 +458,12 @@ export type ContinuousChange =
   /**
    * Layer 6: cards `player` plays that match `filter` cost `amount` more
    * (less when negative). A `next` modifier applies to one card: it ends as
-   * that card is played.
+   * that card is played. `mode: "set"` instead sets its normal fixed energy
+   * base; an optional `nth` limits the change to that matching play ordinal.
    */
   | ({ readonly kind: "cost"; readonly player: Side; readonly filter: CardFilter; readonly amount: number; readonly next: boolean } &
-      ({ readonly nth?: never; readonly mode?: never } | { readonly nth: number; readonly mode?: "set" }))
+      ({ readonly nth?: never; readonly mode?: never } | { readonly nth: number; readonly mode?: "set" } |
+       { readonly nth?: never; readonly mode: "set"; readonly next: false }))
   /**
    * Layer 6: one card's energy cost, whoever plays it. `"set"` gives it
    * `amount`● in place of its ● cost (its copiable cost); `"increase"` makes

@@ -1,0 +1,1079 @@
+{
+  "bead": "hv-umm2.696",
+  "base": "391f30ef8de3130441209688d3e85cbdfd2be96e",
+  "dispatch": {
+    "dispatchAt": "2026-10-14T21:29:29.771Z",
+    "callId": "call_8c4a833f5aa34070a65642b3e84f32c5",
+    "hostOrdinal": 64039,
+    "rawEventSHA256": "53281392c43b491192d6fb982db325752e001ef28a0a62f61dcefa283e1f000f",
+    "parentActor": "01a128ef-4fc7-7a52-8a19-816921410323",
+    "samplingSeconds": "UNKNOWN",
+    "source": "/tmp/root696-20261014/parent-dispatch-native-v01.json"
+  },
+  "authority": {
+    "stage1": "21:36:36Z / native comment01a13c58-8356-7ba8-8072-c4043fd62915",
+    "runtime": "21:55:37Z / native comment01a13c69-ebad-72af-8742-f9f7f3ea29bf",
+    "rootDirectJusticiar": "22:13:06Z / native comment01a13c79-ee3d-7612-98d5-69593537ce73; scratch pointer admission repair only",
+    "executorRestored": "22:18:01Z / native outcome01a13c7e-6da0-711d-941b-66508359e113",
+    "commit": "Root conditional COMMITACK: evidence-only testDelta/friction/errorMidStep corrections, final clock/schema/scope, stage exact15 and one local ConventionalCommit."
+  },
+  "sourceEpoch": {
+    "freezeSHA256": "dfff190b2ee470bb93c2243f107c4a30545d4db1d76660277954af001569b1de",
+    "freeze": {
+      "base": "391f30ef8de3130441209688d3e85cbdfd2be96e",
+      "createdAt": "2026-10-14T21:49:22.688099+00:00",
+      "paths": {
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/docs/rules.md": "23705f1f15fc72893165c89f74d352b718febd68e59e7fa36b13367876bec39a",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/src/engine/continuous/costs.ts": "e1fb444bc868b810af472b9e1455e9938c21f23a4ae39dea7280eb10bc90a644",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "3485628dbf0d0ae4831a668d74b3a70f71f127d203518950199901bd133b2ce7",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/src/engine/effects/primitives/index.ts": "1a0aceb5be4307772223a3d23eed132b300c0de194de05e3f9d43eb4e5292db2",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/src/engine/effects/registry.ts": "123eacd3c09b4d9f805182e931693f41c8e9ad1d4da36126eb3bddc54c4f9687",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/src/engine/state/types.ts": "c5e40cd6c12b52b6fc0a48e96a19829834e3799732fc8f8a50c2be7e4c6596c8",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/src/engine/testing/prompt-lab.ts": "9fbe78259888ab747cf3b0a65135f41c84f543e0709557b2c37b8396ae878e54",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/docs/plan/evidence/rules-decisions/RD-hv-umm2.696-1.md": "955d45ff648b4bf0d4230e7007927c3687a2b9784d84c737e4afeae645701737",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/src/engine/effects/primitives/contracts/cost-setter-composition-support.ts": "0e0ff092ce5752432cfbc1cec2d47baec87ac58459d689c4cbcfb1d013a4f482",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/src/engine/effects/primitives/contracts/cost-setter.contracts.ts": "413914d8b19ce60e20857f71a5253c0cb911d4b6f3b4e57b695566ca78e7a6c4",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter/src/engine/effects/primitives/cost-setter.ts": "ff97ea843a9687197ca012859423fc7ca26eb4ad2a3fac6c31a269225d04a858"
+      }
+    },
+    "sourceFirstReadReceipts": {
+      "bead": "hv-umm2.696",
+      "base": "391f30ef8de3130441209688d3e85cbdfd2be96e",
+      "createdAt": "2026-10-14T21:33:26.753746+00:00",
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "b646d6232b333c4a19738970f5aad05e0f52075bce9082d6b10d79a30dbd3fd6",
+          "gitBlob": "ce7ddd0637787d4e329a7f9ea49101ec86e4df4c",
+          "read": "full"
+        },
+        {
+          "path": "docs/plan/README.md",
+          "sha256": "5b3aa340429d5c9df8c054a33bbd4bb49fa79f9da42d0f9c0a118a766cd23dd6",
+          "gitBlob": "acd2471ace7f0df5e03efdd212ca7647daf397ca",
+          "read": "full"
+        },
+        {
+          "path": "docs/plan/workflow.md",
+          "sha256": "a704b90d25f8bdfa81c392d4379485edaafc08f25ae3e8bcfeb231a749c6581f",
+          "gitBlob": "3327d122ede4b28a7cc09ece057f6c72314e5267",
+          "read": "1-1948 (successive outputs; small middle excerpt repeated in earlier full output)"
+        },
+        {
+          "path": "docs/plan/decisions.md",
+          "sha256": "c2282236ad6c119de48679fba67a7a6882d183e781e3d72a4dfdc3b0fae4e757",
+          "gitBlob": "4cf3c44a1ad28d3d56a87a9708cb9026e989307d",
+          "read": "86-101,323-360,662-694,778-843"
+        },
+        {
+          "path": "docs/plan/phase-5-content.md",
+          "sha256": "dd795dc77fb0a98456443a546c9f84d48ecbb163ef45f0f2c55e8fdb9cc5c2ec",
+          "gitBlob": "601fd57c533953db1abc3f5e286cf54a5ac7bf81",
+          "read": "1-322"
+        },
+        {
+          "path": "docs/plan/engine-design.md",
+          "sha256": "b969d1cb65de4b6fabcaeaf59d0a0417dcd4edd68c68c7477597fd8ac98bbcfa",
+          "gitBlob": "f26f222df38cac7604a37767c05fcfd3acb0354c",
+          "read": "1185-1426,1514-2052,2053-2186"
+        },
+        {
+          "path": "docs/rules.md",
+          "sha256": "c2b8fdab471d6f2412ffef44c088eb6cba91b2a6606af01307261430539ad620",
+          "gitBlob": "6cc764719ea981bfc1d01bec6131ed3e5493b283",
+          "read": "773-1273,1555-1655,2029-2110,2440-2692"
+        },
+        {
+          "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.104-1.md",
+          "sha256": "b8f3508a04e5339719fc502a83bee0adf8606b599f04d36b5eeec4e8fd7288e5",
+          "gitBlob": "001d2923101383be700e54deecddd4db1ad99075",
+          "read": "full"
+        },
+        {
+          "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.422-1.md",
+          "sha256": "8d3cb4e6049b90a592240fa4fa6b5106fb1ccf3a8d82e6fc7a73f33b9addf554",
+          "gitBlob": "86ab3a155574fa10b47a22787bc2f08eded11c62",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/effects/primitives/cost-modifier.ts",
+          "sha256": "29ef4693199438aab5e16c3763b66cf9f70cfe43a191c2d8c1221f75a16a9df9",
+          "gitBlob": "182a79393ded2b79b40e42b48fd3ecc13142e59e",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/effects/registry.ts",
+          "sha256": "9da7fe76038c6c4e4bd8c5e5e4a16bf89e4aff527176ad8e446e15022d494133",
+          "gitBlob": "7afa90b64cd92dbc9ca6e947cb74fb6a1b79e4df",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/effects/primitives/index.ts",
+          "sha256": "93bfea7caccc6f3898e8f9981967d3d34b90cbe1643e9ddb7c4b24da8bba8f1c",
+          "gitBlob": "09027a9cdc3898fc0e776a668dc4f7d06a297ad8",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/continuous/costs.ts",
+          "sha256": "39fb6ac18cbe843ca28bc2eeff01aeb425e1f6aebe14299cfb93d368e1161936",
+          "gitBlob": "a453681f1377bf3e6185aa4fc4f30a4a9dd9a9c6",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/state/types.ts",
+          "sha256": "44f6336dc762e067754062792c275ec8a763ad839ff29c27ce748c1df0ec0bab",
+          "gitBlob": "ebe53fe4b042e708ec546d7a6f2f67661127dcc8",
+          "read": "350-480"
+        },
+        {
+          "path": "src/engine/continuous/layers.ts",
+          "sha256": "5c6363392cc3699d4d8fdcaf6c17b4f23f74e4957a581680983d8718259a7c93",
+          "gitBlob": "32834ea238469dc7230611f785897bba09d266b6",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/rules/floating.ts",
+          "sha256": "946695bc4c3b5eb5ca4667f31b5008cba13bf434c73633de6facd9c3ae53718c",
+          "gitBlob": "1d0c9af20fdd5953e31bbb3d2e38c72a34d492ce",
+          "read": "135-225"
+        },
+        {
+          "path": "src/rules/battle/fold.ts",
+          "sha256": "d0cae2c374c8998cfe253df37e1ab9275a91b1eb75cb624c67ab6d4f3e114606",
+          "gitBlob": "4d3cbbcb8ff4916d2133755bac182d9656d8246a",
+          "read": "1020-1080"
+        },
+        {
+          "path": "src/engine/testing/prompt-lab.ts",
+          "sha256": "8d4119ef3ca9275ae24cb271c8c35f4a16f271c4fc4fdd9d81312226c84ef263",
+          "gitBlob": "fe210f6c4c6783da45012b1204d7c844b007b4c6",
+          "read": "1-200,285-310,350-370,630-712,1510-1585"
+        },
+        {
+          "path": "src/engine/testing/lab-solver.ts",
+          "sha256": "3cc3cd81e02678d17c858f2db1afa437e1d038b413ec80d6483b9006c2334858",
+          "gitBlob": "645c599608029eff89a85d28b0594932eeb49828",
+          "read": "1-596 (split output)"
+        },
+        {
+          "path": "src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+          "sha256": "caf77627717593a080c83eaf84f48e50e14ba674a0d11dd2c8eb5917b57cdd92",
+          "gitBlob": "5074260e86aab10b3bc65e5c67e69d30ef496b45",
+          "read": "full (1-360 and 360-EOF split)"
+        },
+        {
+          "path": "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts",
+          "sha256": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+          "gitBlob": "15cfb212cc6cd356e737498087e71afde63ddc5f",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts",
+          "sha256": "9c6fb61d93d55fe73e12b6ddb1ad848af372ba61ec4d3a268be49deb7f31b0ca",
+          "gitBlob": "4a739685f3df4ef02127e4bb6bf45065ca6e0eed",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/continuous/characteristics.ts",
+          "sha256": "82f815ea24ff357775b522d625f3aed2d9b8cff415507d3264948a6b9f3876b9",
+          "gitBlob": "222b10c809b16bf5b8e79f8dbf89d43b6dfbc111",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/rules/timing.ts",
+          "sha256": "5b0e026e8207b62d98bc1e0850ddded2d2dc107aeb998547ec3cb2d13a0a9ef3",
+          "gitBlob": "e0e5cdd63ec52e626116e2b10489311295aabf7b",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/testing/board.ts",
+          "sha256": "8ab478503d468dfe510138fd7dc86c497f779042fc00eed241b4d59ae46ac246",
+          "gitBlob": "5b712c07f93e877f6a9d3f0b2e61b56943df5ce3",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/effects/primitives/create-copy-in-hand.ts",
+          "sha256": "0a8c862f04d91db052c576f98f5805235f4b590924587cba821a687f1576716a",
+          "gitBlob": "d859ac190ad53b75f8acfef503ed5524acc9fc37",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/view/view.ts",
+          "sha256": "bec8ded0925f67cce2818f8f31004f5f0d7de8cedbd5cb0f874c34e8e0b3a1e8",
+          "gitBlob": "8de2883de232cb26d72b5ad3f5491404e625cf1a",
+          "read": "320-420,500-548,775-805"
+        },
+        {
+          "path": "src/engine/view/determinize.ts",
+          "sha256": "6d3304e79065257a393f82aa6853494c5eb024ee018d2c0dd1124b832ec0c265",
+          "gitBlob": "ee2b0467058613cc6c93e58a0198d7186a958949",
+          "read": "1-160,900-1055"
+        },
+        {
+          "path": "scripts/fuzz-engine.ts",
+          "sha256": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+          "gitBlob": "09d93a4ec71aa550d9e509d129878feddf53733c",
+          "read": "full"
+        },
+        {
+          "path": "src/engine/testing/fuzz.ts",
+          "sha256": "c30cc9d8a01c3a1f66d9bd24cbdf84f713a02a0d01f624496926ec9f59da4f6f",
+          "gitBlob": "a63380f8d7b62dae4b8fc9be5f520ec7b0be07d9",
+          "read": "145-230,280-322"
+        }
+      ]
+    },
+    "sourceFirstProposal": "/tmp/worker696-20261014/proposal-v01.md",
+    "reviewedSourceFirstManifestSHA256": "47b3ea9e18fb67136411399bc584e7e803703b41c1a8da12c6d6fd68711abab6",
+    "readerAudit": "Generic registry/static collection/copy/filter/target inspection handle the new node; existing cost kind layer6 reaches costsOf/view/legal actions/AI/payment. Saved floating mode/nth rejection remains deliberate for static-only forms. No new state field, persistent kind, compiler, importer, runner or exhaustive new-kind branch. Old costModifier/nth/route and all production bodies stay unchanged."
+  },
+  "consumer": {
+    "publicAPI": "staticAbility(p.costSetter(\"you\", { cardType: \"character\", costAtMost: 2 }, 0))",
+    "runtime": "Reachable own LAB.qualifyingCostSetter UUID5e5e5e5e-0000-4000-8000-000000069600 and optional-payment UUID5e5e5e5e-0000-4000-8000-000000069601, both actor fixtures",
+    "ultimateConsumer": "Original192 Nexus Wayfinder UUIDfd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277; this prerequisite authors no production catalog entity. Original192 all-five acceptance, child684 partition and gate46 joins remain binding."
+  },
+  "rulesDecision": "RD-hv-umm2.696-1 records D10 current-state normal-base scope and bounded RD104/422 precedents. Normal X/additional and explicit replacement route boundaries are normative; no waiver or new general framework.",
+  "contract": {
+    "paths": [
+      "src/engine/effects/primitives/contracts/cost-setter.contracts.ts",
+      "src/engine/effects/primitives/contracts/cost-setter-composition-support.ts"
+    ],
+    "lineCounts": [
+      258,
+      95
+    ],
+    "existingCompositionLines": 500,
+    "testDelta": {
+      "testFiles": 1,
+      "plainContractModules": 1,
+      "plainSupportModules": 1,
+      "jsdomFiles": 0,
+      "lineDelta": 357,
+      "records": [
+        {
+          "path": "src/engine/effects/primitives/contracts/cost-setter.contracts.ts",
+          "baseLines": 0,
+          "lines": 258
+        },
+        {
+          "path": "src/engine/effects/primitives/contracts/cost-setter-composition-support.ts",
+          "baseLines": 0,
+          "lines": 95
+        },
+        {
+          "path": "src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+          "baseLines": 496,
+          "lines": 500
+        }
+      ],
+      "entrypoints": 0,
+      "normalization": "D19 counts the new observable contract module as one test file regardless suffix. One new bounded support module and zero new test entrypoints are recorded separately;357testlines."
+    },
+    "observables": [
+      "both actors successive matching copiable0/1/2 versus3 and current non-character exclusion",
+      "duplicate UUID distinct physical identity; created hand copy; variant and deck-modified copiable values",
+      "source zone/controller/live condition/departure and public affordability",
+      "latest individual/player setter displayed1 to0; existing nth tax/reduction/clamp",
+      "normal fixed/X mandatory/optional actual payments; explicit Reclaim/Offering/event replacement chosen-route boundaries",
+      "refused mandatory and cancelled optional choices leave payment/count unchanged; pending save/reload and full intent replay",
+      "illegal stale foreign and repeated competing answers and UUID prompt chronology; hidden source privacy/sample; static-only floating refusal"
+    ],
+    "quality": "Synthetic deterministic public producers/observables; no mocks, production default assertions, UI string assertions or timing/statistical CI gates. Existing runner eager-discovers plain contracts."
+  },
+  "validation": {
+    "receipts": {
+      "focused-v02": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "continuous matching|continuous set by|continuous setter"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:40:52.211562+00:00",
+        "end": "2026-10-14T21:40:59.115829+00:00",
+        "wallS": 6.90408337500412,
+        "exit": 1,
+        "pid": 45443,
+        "pgid": 45432,
+        "hostLoad": "{ 6.85 10.50 11.18 }"
+      },
+      "focused-v03": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "continuous matching|continuous set by|continuous setter|static nth costs|nth static cost composition|cost composition"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:41:55.812844+00:00",
+        "end": "2026-10-14T21:42:04.545042+00:00",
+        "wallS": 8.73200370898121,
+        "exit": 0,
+        "pid": 49315,
+        "pgid": 49304,
+        "hostLoad": "{ 6.75 9.70 10.82 }"
+      },
+      "knip-v01": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:45:12.108446+00:00",
+        "end": "2026-10-14T21:45:16.931312+00:00",
+        "exit": 0,
+        "wallSeconds": 4.822718292009085,
+        "pid": 56487,
+        "pgid": 56487,
+        "load": "{ 8.03 8.66 10.14 }",
+        "groupRemainingAtExit": []
+      },
+      "review-v01": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:42:21.506257+00:00",
+        "end": "2026-10-14T21:43:23.937210+00:00",
+        "wallS": 62.43011145800119,
+        "exit": 2,
+        "pid": 50865,
+        "pgid": 50853,
+        "hostLoad": "{ 7.06 9.53 10.73 }"
+      },
+      "review-v02": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:43:50.279047+00:00",
+        "end": "2026-10-14T21:44:52.899884+00:00",
+        "exit": 0,
+        "wallSeconds": 62.61977933300659,
+        "pid": 54111,
+        "pgid": 54111,
+        "load": "{ 5.99 8.75 10.32 }",
+        "groupRemainingAtExit": []
+      },
+      "syntax-smoke-v01": {
+        "argv": [
+          "node",
+          "/tmp/worker696-20261014/syntax-smoke-v01.mjs"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:51:02.112495+00:00",
+        "end": "2026-10-14T21:51:02.281766+00:00",
+        "exit": 0,
+        "wallSeconds": 0.16918183301459067,
+        "pid": 96580,
+        "pgid": 96580,
+        "load": "{ 5.53 6.80 8.73 }",
+        "groupRemainingAtExit": []
+      },
+      "syntax-smoke-v02": {
+        "argv": [
+          "node",
+          "/tmp/worker696-20261014/syntax-smoke-v01.mjs"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:51:30.395084+00:00",
+        "end": "2026-10-14T21:51:30.550445+00:00",
+        "exit": 0,
+        "wallSeconds": 0.15528983299736865,
+        "pid": 97081,
+        "pgid": 97081,
+        "load": "{ 4.34 6.39 8.51 }",
+        "groupRemainingAtExit": []
+      },
+      "syntax-smoke-v03": {
+        "argv": [
+          "node",
+          "/tmp/worker696-20261014/syntax-smoke-v01.mjs"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:53:19.146610+00:00",
+        "end": "2026-10-14T21:53:19.336221+00:00",
+        "exit": 0,
+        "wallSeconds": 0.18951666698558256,
+        "pid": 99112,
+        "pgid": 99112,
+        "load": "{ 5.52 6.25 8.20 }",
+        "groupRemainingAtExit": []
+      },
+      "syntax-smoke-v04": {
+        "argv": [
+          "node",
+          "/tmp/worker696-20261014/syntax-smoke-v01.mjs"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:53:57.622987+00:00",
+        "end": "2026-10-14T21:53:57.819922+00:00",
+        "exit": 0,
+        "wallSeconds": 0.19684929100912996,
+        "pid": 117,
+        "pgid": 117,
+        "load": "{ 7.85 6.74 8.30 }",
+        "groupRemainingAtExit": []
+      },
+      "weighted300-inner-v01": {
+        "argv": [
+          "node",
+          "node_modules/tsx/dist/cli.mjs",
+          "/tmp/worker696-20261014/weighted300-v01.mts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:57:50.019898+00:00",
+        "end": "2026-10-14T22:06:25.435610+00:00",
+        "exit": 0,
+        "wallSeconds": 515.4091416670126,
+        "pid": 37058,
+        "pgid": 37058,
+        "load": "{ 4.37 5.96 7.62 }",
+        "groupRemainingAtExit": []
+      },
+      "weighted300-outer-v01": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/worker696-20261014/record.py",
+          "weighted300-inner-v01",
+          "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+          "node",
+          "node_modules/tsx/dist/cli.mjs",
+          "/tmp/worker696-20261014/weighted300-v01.mts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:55:58.231477+00:00",
+        "end": "2026-10-14T22:06:25.481831+00:00",
+        "exit": 0,
+        "wallSeconds": 627.2425833749876,
+        "pid": 2709,
+        "pgid": 2709,
+        "load": "{ 6.38 6.69 8.08 }",
+        "groupRemainingAtExit": []
+      },
+      "workflow-initial-v01": {
+        "argv": [
+          "python3",
+          "/tmp/worker696-20261014/capture-live-owner.py",
+          "workflow-v01"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T22:07:31.602651+00:00",
+        "end": "2026-10-14T22:07:35.847827+00:00",
+        "exit": 0,
+        "wallSeconds": 4.245015749998856,
+        "pid": 14646,
+        "pgid": 14646,
+        "load": "{ 9.94 10.09 8.72 }",
+        "groupRemainingAtExit": []
+      },
+      "workflow-observer-v01": {
+        "argv": [
+          "python3",
+          "/tmp/worker696-20261014/capture-all-live-owners.py",
+          "workflow-v01"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T22:07:31.601981+00:00",
+        "end": "2026-10-14T22:08:14.427104+00:00",
+        "exit": 0,
+        "wallSeconds": 42.824467375001404,
+        "pid": 14645,
+        "pgid": 14645,
+        "load": "{ 9.94 10.09 8.72 }",
+        "groupRemainingAtExit": []
+      },
+      "workflow-v01": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/worker696-20261014/qa-cost-setter-v01.mjs",
+          "--bead",
+          "hv-umm2.696",
+          "--port",
+          "5174",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T22:07:31.569574+00:00",
+        "end": "2026-10-14T22:08:14.283230+00:00",
+        "exit": 1,
+        "wallSeconds": 42.71305708400905,
+        "pid": 14639,
+        "pgid": 14639,
+        "load": "{ 9.94 10.09 8.72 }",
+        "groupRemainingAtExit": []
+      },
+      "wrapper-syntax-v01": {
+        "argv": [
+          "python3",
+          "-c",
+          "import ast,pathlib; names=[\"run-managed-v01.py\",\"capture-live-owner.py\",\"capture-all-live-owners.py\",\"verify-runtime-cleanup.py\",\"record.py\"]; [(ast.parse(pathlib.Path(\"/tmp/worker696-20261014\",name).read_text()),print(name,\"syntax pass\")) for name in names]"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T21:54:32.336354+00:00",
+        "end": "2026-10-14T21:54:32.362724+00:00",
+        "exit": 0,
+        "wallSeconds": 0.026286292006261647,
+        "pid": 849,
+        "pgid": 849,
+        "load": "{ 7.10 6.66 8.21 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    "rootRuntimeReceipts": {
+      "browser-wrapper-v02": {
+        "argv": [
+          "python3",
+          "/tmp/root696-20261014/run-managed-v02.py"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T22:13:44.510434+00:00",
+        "end": "2026-10-14T22:15:02.219131+00:00",
+        "exit": 0,
+        "wallSeconds": 77.7076356250036,
+        "pid": 51847,
+        "pgid": 51847,
+        "load": "{ 7.99 10.05 9.22 }",
+        "groupRemainingAtExit": []
+      },
+      "syntax-smoke-v02": {
+        "argv": [
+          "node",
+          "/tmp/root696-20261014/syntax-smoke-v02.mjs"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T22:12:34.698616+00:00",
+        "end": "2026-10-14T22:12:34.808298+00:00",
+        "exit": 0,
+        "wallSeconds": 0.10959666699636728,
+        "pid": 47032,
+        "pgid": 47032,
+        "load": "{ 11.77 10.98 9.45 }",
+        "groupRemainingAtExit": []
+      },
+      "workflow-initial-v02": {
+        "argv": [
+          "python3",
+          "/tmp/root696-20261014/capture-live-owner.py",
+          "workflow-v02"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T22:13:44.599717+00:00",
+        "end": "2026-10-14T22:13:48.421333+00:00",
+        "exit": 0,
+        "wallSeconds": 3.821463958011009,
+        "pid": 51860,
+        "pgid": 51860,
+        "load": "{ 7.99 10.05 9.22 }",
+        "groupRemainingAtExit": []
+      },
+      "workflow-observer-v02": {
+        "argv": [
+          "python3",
+          "/tmp/root696-20261014/capture-all-live-owners.py",
+          "workflow-v02"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T22:13:44.599837+00:00",
+        "end": "2026-10-14T22:15:02.094781+00:00",
+        "exit": 0,
+        "wallSeconds": 77.4938474590017,
+        "pid": 51861,
+        "pgid": 51861,
+        "load": "{ 7.99 10.05 9.22 }",
+        "groupRemainingAtExit": []
+      },
+      "workflow-v02": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root696-20261014/qa-cost-setter-v02.mjs",
+          "--bead",
+          "hv-umm2.696",
+          "--port",
+          "5174",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+        "start": "2026-10-14T22:13:44.565460+00:00",
+        "end": "2026-10-14T22:15:02.028187+00:00",
+        "exit": 0,
+        "wallSeconds": 77.46169708299567,
+        "pid": 51852,
+        "pgid": 51852,
+        "load": "{ 7.99 10.05 9.22 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    "focusedFinal": {
+      "passed": 707,
+      "skipped": 3628,
+      "total": 4335,
+      "scope": "new own contracts and rows, existing nth and complete cost composition"
+    },
+    "reviewFinal": {
+      "exit": 0,
+      "relatedTestsPassed": 8033,
+      "scope": "ordinary npm run review: typecheck, Node types, cycles, lint, related tests, friction schema and asset restore"
+    },
+    "knipFinal": {
+      "exit": 0
+    },
+    "reviewFull": "Not indicated: bounded existing cost union/static producer, no new state fields/private schema/config/test infrastructure/cross-cutting architecture. Parent reviewed scope.",
+    "firstAttempt": {
+      "toolSession": 69153,
+      "exit": 1,
+      "startObservedPrepare": "2026-10-14T21:40:11.494Z",
+      "end": "UNKNOWN in local receipt; parent native terminal tool output retained",
+      "pgid": "UNKNOWN",
+      "failure": "Own support missing closing parenthesis; pre-discovery, not feature test pass/failure."
+    },
+    "historicalFailures": [
+      "focused-v02 exit1:111pass/2fail; synthetic Empowered flag assumption did not transform printedcost3. Corrected actual variant/static provider plus deckMods fixture; no engine defect.",
+      "review-v01 exit2: own unsupported Array.at and widened DeckEntry type; fixed own contracts. Related tests passed.",
+      "Initial scratch smoke invoked native esbuild as Node (exit1), then checked missing generated file (exit1). No game/provider/server ran; later source-only transform/check/serialized-function smoke v01-v04 passed.",
+      "Initial copied managed wrapper referred to foreign148 receipt directory. Parent found before launch; corrected own696 receipt/caller/cwd/hash checks. No foreign operation executed."
+    ],
+    "receiptQualification": "Early focused-v02/v03 and review-v01 record-check inherited wrapper groups, not independently owned child groups. Historical groups45432/49304/50853 absent on final observation; initial session69153 group remains UNKNOWN. Later record.py start_new_session captures actual independent PG and empty groupRemainingAtExit. All argv/raw streams retained.",
+    "hostLoadSamples": {
+      "focused-v02": [
+        {
+          "step": "prepare",
+          "time": "2026-10-14T21:40:52.399Z",
+          "load": 6.8466796875
+        },
+        {
+          "step": "test",
+          "time": "2026-10-14T21:40:53.703Z",
+          "load": 6.77880859375
+        },
+        {
+          "step": "restore-local-assets",
+          "time": "2026-10-14T21:40:57.777Z",
+          "load": 7.19677734375
+        }
+      ],
+      "focused-v03": [
+        {
+          "step": "prepare",
+          "time": "2026-10-14T21:41:55.999Z",
+          "load": 6.74755859375
+        },
+        {
+          "step": "test",
+          "time": "2026-10-14T21:41:57.284Z",
+          "load": 6.74755859375
+        },
+        {
+          "step": "restore-local-assets",
+          "time": "2026-10-14T21:42:03.306Z",
+          "load": 6.69287109375
+        }
+      ],
+      "review-v01": [
+        {
+          "step": "prepare",
+          "time": "2026-10-14T21:42:21.695Z",
+          "load": 7.06201171875
+        },
+        {
+          "step": "typecheck",
+          "time": "2026-10-14T21:42:23.044Z",
+          "load": 7.216796875
+        },
+        {
+          "step": "typecheck-node",
+          "time": "2026-10-14T21:42:23.045Z",
+          "load": 7.216796875
+        },
+        {
+          "step": "import-cycles",
+          "time": "2026-10-14T21:42:23.045Z",
+          "load": 7.216796875
+        },
+        {
+          "step": "lint",
+          "time": "2026-10-14T21:42:23.045Z",
+          "load": 7.216796875
+        },
+        {
+          "step": "test-related",
+          "time": "2026-10-14T21:42:23.046Z",
+          "load": 7.216796875
+        },
+        {
+          "step": "restore-local-assets",
+          "time": "2026-10-14T21:43:22.325Z",
+          "load": 7.6484375
+        }
+      ],
+      "review-v02": [
+        {
+          "step": "prepare",
+          "time": "2026-10-14T21:43:50.541Z",
+          "load": 5.9892578125
+        },
+        {
+          "step": "typecheck",
+          "time": "2026-10-14T21:43:53.342Z",
+          "load": 5.98974609375
+        },
+        {
+          "step": "typecheck-node",
+          "time": "2026-10-14T21:43:53.343Z",
+          "load": 5.98974609375
+        },
+        {
+          "step": "import-cycles",
+          "time": "2026-10-14T21:43:53.344Z",
+          "load": 5.98974609375
+        },
+        {
+          "step": "lint",
+          "time": "2026-10-14T21:43:53.344Z",
+          "load": 5.98974609375
+        },
+        {
+          "step": "test-related",
+          "time": "2026-10-14T21:43:53.344Z",
+          "load": 5.98974609375
+        },
+        {
+          "step": "restore-local-assets",
+          "time": "2026-10-14T21:44:51.362Z",
+          "load": 7.10498046875
+        }
+      ],
+      "knip-v01": [
+        {
+          "step": "prepare",
+          "time": "2026-10-14T21:45:12.313Z",
+          "load": 8.02978515625
+        },
+        {
+          "step": "knip",
+          "time": "2026-10-14T21:45:13.582Z",
+          "load": 7.8671875
+        },
+        {
+          "step": "restore-local-assets",
+          "time": "2026-10-14T21:45:15.720Z",
+          "load": 7.8671875
+        }
+      ],
+      "evidence-schema-v01": [
+        {
+          "scope": "independent command launch",
+          "time": "2026-10-14T22:20:40.848941+00:00",
+          "load": 4.35
+        }
+      ]
+    },
+    "evidenceSchema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+      "start": "2026-10-14T22:20:40.848941+00:00",
+      "end": "2026-10-14T22:20:40.963015+00:00",
+      "exit": 0,
+      "wallSeconds": 0.11401250000926666,
+      "pid": 67972,
+      "pgid": 67972,
+      "load": "{ 4.35 6.27 7.75 }",
+      "groupRemainingAtExit": []
+    },
+    "finalEvidenceSchema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-696-cost-setter",
+      "start": "2026-10-14T22:30:39.495075+00:00",
+      "end": "2026-10-14T22:30:39.564669+00:00",
+      "exit": 0,
+      "wallSeconds": 0.06953924999106675,
+      "pid": 44475,
+      "pgid": 44475,
+      "load": "{ 6.40 9.90 9.21 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "weighted": {
+    "caller": "/tmp/worker696-20261014/weighted300-v01.mts",
+    "callerSHA256": "6d5728afdac7621ef5e998551ee2f9208155fdab6eb2df57483f4ab9d1cf812b",
+    "fullGames": "/tmp/worker696-20261014/weighted300-v01.games.jsonl",
+    "fullGamesSHA256": "42f70b825ca438a13ce90ccf215f4bf7a9d965e41345a92a80c335efd0cf023c",
+    "summary": {
+      "games": 300,
+      "failures": 0,
+      "steps": 101789,
+      "prompts": 7389,
+      "interactiveGames": 30,
+      "interactiveReruns": 744,
+      "qualifyingPayments": 238,
+      "laterQualifyingPayments": 81,
+      "targetPayments": 14,
+      "sourcePlays": 228,
+      "positiveNormalPayments": 208,
+      "sameTurnLaterPositiveNormalPayments": 69,
+      "callerSHA256": "6d5728afdac7621ef5e998551ee2f9208155fdab6eb2df57483f4ab9d1cf812b",
+      "sourceFreezeSHA256": "dfff190b2ee470bb93c2243f107c4a30545d4db1d76660277954af001569b1de",
+      "wallS": 513.799515291,
+      "cpuS": 546.241939
+    },
+    "independentRootAcceptance": "/tmp/root696-20261014/final-fuzz-acceptance-v01.json",
+    "actors": {
+      "enemy": 129,
+      "player": 109
+    },
+    "definitions": {
+      "rawLaterQualifying": 81,
+      "strictSamePayerPositiveAfterAnyQualifying": 69,
+      "ownSamePayerPositiveAfterPositive": 62,
+      "strictOwnLABNormalLater": 4,
+      "qualification": "69 and62 use exact payer/source physical/source visit/global turn but different qualifying predecessor definitions; broad positive non-Offering hand cohorts do not exclude all replacement routes. Strict4 requires own optional-energy LAB UUID, hand route, no Offering/Reclaim at captured play commit and boolean-only optional answers (no numeric route choice). Raw caller earlier-counter omits payer; qualified by retained complete actions and independent postrun derivation."
+    },
+    "provenance": "Readonly measurement replay inspects exact own OrderedChange staticSource/staticAbility0 mode:set/player/nextfalse/noNth contribution; never policy input or game-flow mutation. Complete original game.actions/startAnswers, seed/init/finalhash/log and source/subject/payment chronology retained. Full inline and measurement replay hashes match for300. Actual sourcePlayed228 alone is not printed-behavior proof.",
+    "timing": {
+      "loopSeconds": 513.799515291,
+      "cpuSeconds": 546.241939,
+      "innerSeconds": 515.4091416670126,
+      "outerSeconds": 627.2425833749876,
+      "qualification": "Outer includes lock acquisition, startup and wrappers; inner includes process startup plus loop. Outer-minus-inner is startup plus lock wait, not a pure lock measurement. Existing primary heavy.lock with lockf -k, two workers; no browser under own heavy."
+    }
+  },
+  "browser": {
+    "historicalFailure": {
+      "report": "/tmp/worker696-20261014/workflow-v01.stdout",
+      "sha256": "25fd34132984a9fa9451932155ec1061fc0aa6316dc48eace9880d5d2c3b3f21",
+      "overall": "FAIL",
+      "completeAcceptedCells": 0,
+      "mobile": "UNRUN",
+      "disposition": "Root direct justiciar repaired weak pointer admission and edge point; first zero play succeeded, second tap had no intent. All six cells revalidated in v02 with unchanged source."
+    },
+    "acceptedCells": [
+      {
+        "viewport": "desktop",
+        "mode": "cancel-decline-pay",
+        "rawReport": "/tmp/root696-20261014/workflow-v02.stdout",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.696/invocations/run-bmQtEJ",
+        "sourceFreezeSHA": "dfff190b2ee470bb93c2243f107c4a30545d4db1d76660277954af001569b1de",
+        "details": {
+          "fourPlays": [
+            "i2",
+            "i3",
+            "i4",
+            "i18"
+          ],
+          "additionalEnergy": 1,
+          "pendingReplay": true,
+          "committedReplay": true,
+          "duplicatePrinting": "5e5e5e5e-0000-4000-8000-000000069601"
+        },
+        "verdict": "pass"
+      },
+      {
+        "viewport": "desktop",
+        "mode": "source-departure",
+        "rawReport": "/tmp/root696-20261014/workflow-v02.stdout",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.696/invocations/run-bmQtEJ",
+        "sourceFreezeSHA": "dfff190b2ee470bb93c2243f107c4a30545d4db1d76660277954af001569b1de",
+        "details": {
+          "restoredCost": 2,
+          "heldDisabled": true,
+          "cheapCost1Playable": true,
+          "qualification": "Affordability witness uses stable interactive replay frame; pre-reload departure frame was presentation-locked."
+        },
+        "verdict": "pass"
+      },
+      {
+        "viewport": "desktop",
+        "mode": "normal-ai",
+        "rawReport": "/tmp/root696-20261014/workflow-v02.stdout",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.696/invocations/run-bmQtEJ",
+        "sourceFreezeSHA": "dfff190b2ee470bb93c2243f107c4a30545d4db1d76660277954af001569b1de",
+        "details": {
+          "normalGreedyPlays": 2,
+          "copiableCosts": [
+            2,
+            1
+          ],
+          "initialEnergy": 1,
+          "finalEnergy": 0,
+          "sourceInPlay": true,
+          "policyOverrides": false,
+          "fullReplay": true
+        },
+        "verdict": "pass"
+      },
+      {
+        "viewport": "mobile",
+        "mode": "cancel-decline-pay",
+        "rawReport": "/tmp/root696-20261014/workflow-v02.stdout",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.696/invocations/run-bmQtEJ",
+        "sourceFreezeSHA": "dfff190b2ee470bb93c2243f107c4a30545d4db1d76660277954af001569b1de",
+        "details": {
+          "fourPlays": [
+            "i2",
+            "i3",
+            "i4",
+            "i18"
+          ],
+          "additionalEnergy": 1,
+          "pendingReplay": true,
+          "committedReplay": true,
+          "duplicatePrinting": "5e5e5e5e-0000-4000-8000-000000069601"
+        },
+        "verdict": "pass"
+      },
+      {
+        "viewport": "mobile",
+        "mode": "source-departure",
+        "rawReport": "/tmp/root696-20261014/workflow-v02.stdout",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.696/invocations/run-bmQtEJ",
+        "sourceFreezeSHA": "dfff190b2ee470bb93c2243f107c4a30545d4db1d76660277954af001569b1de",
+        "details": {
+          "restoredCost": 2,
+          "heldDisabled": true,
+          "cheapCost1Playable": true,
+          "qualification": "Affordability witness uses stable interactive replay frame; pre-reload departure frame was presentation-locked."
+        },
+        "verdict": "pass"
+      },
+      {
+        "viewport": "mobile",
+        "mode": "normal-ai",
+        "rawReport": "/tmp/root696-20261014/workflow-v02.stdout",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.696/invocations/run-bmQtEJ",
+        "sourceFreezeSHA": "dfff190b2ee470bb93c2243f107c4a30545d4db1d76660277954af001569b1de",
+        "details": {
+          "normalGreedyPlays": 2,
+          "copiableCosts": [
+            2,
+            1
+          ],
+          "initialEnergy": 1,
+          "finalEnergy": 0,
+          "sourceInPlay": true,
+          "policyOverrides": false,
+          "fullReplay": true
+        },
+        "verdict": "pass"
+      }
+    ],
+    "finalScreens": [
+      {
+        "filename": "cost-setter-initial-desktop.png",
+        "dimensions": [
+          2880,
+          1800
+        ],
+        "sha256": "e832df4ea1066a69beb001ed7debf28b41cab2c09c84b333cf30733ce22fe015",
+        "rootViewed": true,
+        "judgment": "Existing Cumulus costs/green affordability and contained optional payment controls are legible. Intentional hand fan clipping has actual admitted pointer witnesses; synthetic LAB art placeholders are expected."
+      },
+      {
+        "filename": "cost-setter-payment-desktop.png",
+        "dimensions": [
+          2880,
+          1800
+        ],
+        "sha256": "fb7cb7ca93d9eb5f07798dc96709259e3b629e66fa61b5e94c5baee7e22afafd",
+        "rootViewed": true,
+        "judgment": "Existing Cumulus costs/green affordability and contained optional payment controls are legible. Intentional hand fan clipping has actual admitted pointer witnesses; synthetic LAB art placeholders are expected."
+      },
+      {
+        "filename": "cost-setter-initial-mobile.png",
+        "dimensions": [
+          780,
+          1688
+        ],
+        "sha256": "5722228a318a8d172692b4dfbc2e89ad0463eb0087cc798ecff6d7cbed002879",
+        "rootViewed": true,
+        "judgment": "Existing Cumulus costs/green affordability and contained optional payment controls are legible. Intentional hand fan clipping has actual admitted pointer witnesses; synthetic LAB art placeholders are expected."
+      }
+    ],
+    "finalResult": "invocations/run-bmQtEJ/qa-cost-setter-v02.result.json",
+    "finalResultSHA256": "ab51349d7a4d367d93dd9755eb48d7ec1692f3a28acc929eee03fa778b6b49c3",
+    "rootAcceptance": "/tmp/root696-20261014/final-qa-acceptance-v01.json",
+    "caps": [],
+    "normalAI": "Actual normal Greedy browser actions under ?ai=greedy, no enemyScript or policy override. Both viewports played copiable2 then1 with source still in play and energy1 to0; optional additional1 accounts for energy. Full stable human-window replay is distinct from readonly weighted replay.",
+    "departureQualification": "Pre-reload departure presentation frame was locked. Actual affordability comes from interactive replay: source1 playable, cheap1 playable, held2 disabled at energy1.",
+    "geometry": "Real enabled/unoccluded inside-point admission and pointer receipt; root repaired weak admission/edge clearance in scratch v02. Intentional handfan clipping accepted only with actual enabled hit witness. Three final 2x captures viewed by root.",
+    "custody": "Initial active independent provider session/token/MCP URL/protocol and separate own server PID/PG/token captured in the same retained tool operation before yielding, alongside continuous observer records. Exact tokens/leases clear after native managed browser close/RPC drain/transport close; only own server descendants stopped, shared service and foreign owners untouched.",
+    "cleanupFiles": [
+      "/tmp/worker696-20261014/workflow-v01-cleanup-v01.json",
+      "/tmp/root696-20261014/workflow-v02-cleanup-v01.json"
+    ],
+    "allNineBrowserGroupsGone": [
+      14639,
+      14645,
+      14646,
+      14682,
+      51847,
+      51852,
+      51860,
+      51861,
+      51961
+    ],
+    "scriptingRecovery": {
+      "tag": "browser-qa-scripting",
+      "start": "2026-10-14T22:07:31.569574+00:00",
+      "end": "2026-10-14T22:18:00.990981+00:00",
+      "minutes": 10.490356783333334,
+      "scope": "Actual first browser launch through root justiciar resolved outcome. Includes failed42.713057s prefix, bounded scratch pointer admission/clearance repair, new-authority revalidation and acceptance; excludes heavy wait and unrelated QA."
+    }
+  },
+  "failurePaths": {
+    "newPersistentTransition": "None: stateless staticOnly producer derives existing cost changes. It adds no event/history field or payment/intent writer. Existing single public payment pipeline retains atomic apply semantics.",
+    "partialWrite": "No new write boundary; proportionate own mandatory refusal and cancelled optional public choices prove payment/count unchanged. New producer is evaluated by the real normal payment pipeline rather than a test-only helper.",
+    "reloadRestart": "Public pending optional saved game and complete committed full replay; browser reload restores same game, pending prompt and final committed state across both viewports.",
+    "invalidStaleForeignConcurrent": "Own synthetic full intent replay refuses wrong actor, cancelled old prompt ID, illegal discard selection, and a repeated competing answer after commit. This is sequential canonical event admission, not a threaded concurrency/race test. Existing protocols/validators unchanged.",
+    "privacy": "Hidden source/card public view and determinization witness; UUID gameplay/prompt JSONL reconstructs source/controller/play/payment chronology.",
+    "errorMidStep": "No new transition or write boundary: costSetter is a stateless staticOnly derivation of existing cost changes. The mandatory-refusal contract and cancelled optional-payment contract exercise the existing public atomic payment boundary and prove unchanged payment/count. No additional general rollback test is justified."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Ordinary review-v02 command group start at21:43:50.279047Z, sysctl1-minute5.99; detailed actual scopes retained per raw review step."
+      }
+    }
+  },
+  "preExisting": "No verified pre-existing product defect; no pre-existing file authored. Own fixture/type/syntax/interaction issues are validation history.",
+  "implementationWindow": {
+    "start": "2026-10-14T21:29:29.771Z",
+    "finalEvidenceCutoff": "2026-10-14T22:30:39.472510+00:00",
+    "implementMin": 61.16169183333333,
+    "includes": "All research, source-first waits, source/contract work, review/Knip, heavy/startup wait, weighted games, failed browser prefix, root direct justiciar recovery, root acceptance/visual audit, evidence and parent COMMITACK wait.",
+    "samplingSeconds": "UNKNOWN",
+    "commitTail": "Actual final Git tail is retained externally by parent after normal-timestamp commit; no postcommit tracked clock rewrite."
+  },
+  "rawArchive": {
+    "directory": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.696/final-source-v01",
+    "manifestSHA256": "517a327b6c1ee3c316826d0401977e60c0d92ad9f44d6709015dc5366770bfba",
+    "files": 215,
+    "bytes": 81332291,
+    "owner": "parent",
+    "qualification": "Root independently verified copies of frozen11 source epoch, all native/check/caller/custody raw, complete300game actions/logs and both actual browser invocations. Excludes future final tracked evidence and Git; parent supplements after exact hashes are known."
+  }
+}
