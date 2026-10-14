@@ -1,0 +1,18 @@
+# RD-hv-umm2.628-1: A played card returned to the opponent’s hand reaches that named hand
+
+- Ladder: 5 (the simplest reading consistent with the printed text and the existing named-hand rules).
+- rules.md: § Zones → Hand; § Costs, Requirements, and X → Returning a character as a cost; § Keywords and Effects → Return to hand → Returning a played card.
+- Affects: `95d37f76-eb3d-4bcd-a8af-0ae37feabd4d`, base and amplified.
+- Why: “the opponent’s hand” names the opponent of the resolving instruction’s controller. It does not identify the card’s owner or restrict who played the targeted card. A foreign-owned card may be held and played by another player under § Zones → Hand, so the named hand receives the returned card while ownership stays unchanged. Unnamed returns retain the owner-hand rule. Returning a played card moves a physical card from the stack without resolving it; it is not Prevent. Ordinary created-card and Reclaim replacements still determine whether it reaches a hand, and the existing cost-change rule applies “It costs 2● more” only to a successful hand arrival.
+
+## Ladder evidence
+
+1. The binding decisions contain no explicit opponent-hand stack-return recipient decision. Existing normative Hand rules expressly permit a card in a hand other than its owner’s; the named “your hand” return precedent establishes that an explicit recipient can differ from the default owner.
+2. The immutable prototype source at `8b1d9e8243b0ed114d47872dc03c6d97b0e1f7c6`, `src/rules/battle/battle-card-effects-table.ts`, has no registration for the affected UUID. `docs/plan/evidence/legacy-behavior.md` has no implemented rule for this stack return. Sandbox relocation shortcuts do not decide its recipient.
+3. Read-only Rust source at `0d6afa7dc2eef6048264ffd634da1c2b97886b12` supplies `StandardEffect::ReturnToHand { target }` in `rules_engine/src/ability_data/src/standard_effect.rs:249`; `rules_engine/src/parser/src/parser/effect/card_effect_parsers.rs:113` accepts “to hand” and “to your hand”; `rules_engine/src/battle_mutations/src/effects/apply_standard_effect.rs:275` returns a battlefield character to its controller. That implementation has no played-card/opponent-hand form. Its `docs/battle_rules/battle_rules.md:73` supplies no unchanged named-recipient rule to apply here.
+4. The [official Magic Comprehensive Rules effective September 25, 2026](https://media.wizards.com/2026/downloads/MagicCompRules%2020260925.txt), §400.3, routes a card to its owner’s corresponding private zone. Dreamtides’ existing Hand rules permit an explicitly named foreign hand, so the Magic owner-only restriction does not settle this instruction consistently with Dreamtides.
+5. Reading the explicitly named opponent’s hand literally satisfies the printed instruction and existing named-hand behavior. The caller supplies the stack selector; this recipient rule adds no opponent-controller target restriction.
+
+## Encoding and public proof
+
+The existing `returnToHand` form accepts a typed `StackTargetSpec`, with `{ toOpponentHand: true }` for the explicit recipient. `cardTarget` and `resolveStackTargets` retain the canonical stack target eligibility and live-bound recheck. The existing `moveToHand` applies zone replacements and removes only the chosen physical stack card. The existing `modifyCardCost` wrapper captures only successful hand arrivals. Ordinary `CharacterRef` returns retain their existing resolver and owner-hand relocation. Synthetic public action/fold contracts exercise both actors, differing ownership, activated-item exclusion, replacements, bounds, replay and refusal.

@@ -1,0 +1,923 @@
+{
+  "bead": "hv-umm2.628",
+  "base": "c38acab2946ec7b1eb7bdea7aaf6487ab706aba9",
+  "windowProvenance": {
+    "start": "Parent post-claim, pre-helper-dispatch gross proxy; actual model start UNKNOWN.",
+    "end": "Prospective evidence cutoff; actual Git commit endpoint UNKNOWN until external receipt. Includes read-only research, all waits, corrections, counterfactuals, checks and evidence writes.",
+    "cutoff": "2026-10-14T04:09:18.147762+00:00"
+  },
+  "sourceFirst": {
+    "firstWrites": [
+      "own RD-hv-umm2.628-1.md",
+      "admitted additive Returning a played card paragraph"
+    ],
+    "nativeAdmission": "Parent fresh rules-admission-native.json acknowledged before writes",
+    "scope": "Only existing return-to-hand primitive and private contracts; existing rules paragraphs and all relocation/stack/registry/interpreter/cost/fold bodies read-only"
+  },
+  "functionalSha256": {
+    "docs/rules.md": "9751ec3b8b1d63a0152a3499414bad4abaef8c7520968807c9318b4fc8b889e4",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.628-1.md": "b7d6162ff47fe4858a24142a575dee03ada33d2969839dd9126680b1e5bb8929",
+    "src/engine/effects/primitives/return-to-hand.ts": "94fe6abc565bf29e1d7dab7a98a40c50df2022df930ee9cf0f3f60c6d1ef4a06",
+    "src/engine/effects/primitives/contracts/return-stack-card.contracts.ts": "2ca3f97f81d0cf78b24e151d518fd24eb77250a3f2f46f640eaeb8bb7676c03f"
+  },
+  "validation": [
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T04:04:53.698989+00:00",
+      "end": "2026-10-14T04:04:56.456633+00:00",
+      "pid": 17779,
+      "pgid": 17779,
+      "exitCode": 0,
+      "wallSeconds": 2.7576473749941215,
+      "cpuSeconds": {
+        "user": 2.8634589999999998,
+        "system": 0.889841
+      },
+      "startLoad": [
+        8.359375,
+        12.88720703125,
+        13.48193359375
+      ],
+      "endLoad": [
+        10.65283203125,
+        13.287109375,
+        13.61962890625
+      ],
+      "label": "coverage"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:56:59.061687+00:00",
+      "end": "2026-10-14T03:57:02.540743+00:00",
+      "pid": 31272,
+      "pgid": 31272,
+      "exitCode": 1,
+      "wallSeconds": 3.479045291984221,
+      "cpuSeconds": {
+        "user": 4.351676,
+        "system": 0.892127
+      },
+      "startLoad": [
+        14.74609375,
+        15.37158203125,
+        13.90869140625
+      ],
+      "endLoad": [
+        13.96533203125,
+        15.19921875,
+        13.8564453125
+      ],
+      "label": "fault-activated"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T04:02:16.459993+00:00",
+      "end": "2026-10-14T04:02:20.322595+00:00",
+      "pid": 7055,
+      "pgid": 7055,
+      "exitCode": 1,
+      "wallSeconds": 3.8626005409751087,
+      "cpuSeconds": {
+        "user": 4.694708,
+        "system": 1.04421
+      },
+      "startLoad": [
+        15.2099609375,
+        16.22509765625,
+        14.5908203125
+      ],
+      "endLoad": [
+        15.2099609375,
+        16.22509765625,
+        14.5908203125
+      ],
+      "label": "fault-activated-v2"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:57:02.565735+00:00",
+      "end": "2026-10-14T03:57:06.145911+00:00",
+      "pid": 31531,
+      "pgid": 31531,
+      "exitCode": 1,
+      "wallSeconds": 3.580166208004812,
+      "cpuSeconds": {
+        "user": 4.4998759999999995,
+        "system": 0.9031859999999999
+      },
+      "startLoad": [
+        13.96533203125,
+        15.19921875,
+        13.8564453125
+      ],
+      "endLoad": [
+        13.4072265625,
+        15.06298828125,
+        13.81591796875
+      ],
+      "label": "fault-live-bound"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T04:02:20.348311+00:00",
+      "end": "2026-10-14T04:02:23.897335+00:00",
+      "pid": 7280,
+      "pgid": 7280,
+      "exitCode": 1,
+      "wallSeconds": 3.549024875013856,
+      "cpuSeconds": {
+        "user": 4.384987,
+        "system": 0.925237
+      },
+      "startLoad": [
+        15.2099609375,
+        16.22509765625,
+        14.5908203125
+      ],
+      "endLoad": [
+        14.31201171875,
+        16.02197265625,
+        14.5283203125
+      ],
+      "label": "fault-live-bound-v2"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:56:55.175675+00:00",
+      "end": "2026-10-14T03:56:59.034554+00:00",
+      "pid": 30922,
+      "pgid": 30922,
+      "exitCode": 1,
+      "wallSeconds": 3.8588636250060517,
+      "cpuSeconds": {
+        "user": 4.414053,
+        "system": 0.9393309999999999
+      },
+      "startLoad": [
+        15.33349609375,
+        15.49609375,
+        13.94384765625
+      ],
+      "endLoad": [
+        14.74609375,
+        15.37158203125,
+        13.90869140625
+      ],
+      "label": "fault-recipient"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T04:02:12.332799+00:00",
+      "end": "2026-10-14T04:02:16.431916+00:00",
+      "pid": 6656,
+      "pgid": 6656,
+      "exitCode": 1,
+      "wallSeconds": 4.099101499974495,
+      "cpuSeconds": {
+        "user": 4.770124,
+        "system": 1.053903
+      },
+      "startLoad": [
+        14.5322265625,
+        16.11083984375,
+        14.54150390625
+      ],
+      "endLoad": [
+        15.2099609375,
+        16.22509765625,
+        14.5908203125
+      ],
+      "label": "fault-recipient-v2"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:57:06.173104+00:00",
+      "end": "2026-10-14T03:57:09.747843+00:00",
+      "pid": 31765,
+      "pgid": 31765,
+      "exitCode": 1,
+      "wallSeconds": 3.574727041006554,
+      "cpuSeconds": {
+        "user": 4.463882,
+        "system": 0.9124009999999999
+      },
+      "startLoad": [
+        13.4072265625,
+        15.06298828125,
+        13.81591796875
+      ],
+      "endLoad": [
+        13.4072265625,
+        15.06298828125,
+        13.81591796875
+      ],
+      "label": "fault-replacement"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T04:02:23.925089+00:00",
+      "end": "2026-10-14T04:02:27.515196+00:00",
+      "pid": 7569,
+      "pgid": 7569,
+      "exitCode": 1,
+      "wallSeconds": 3.5901105829980224,
+      "cpuSeconds": {
+        "user": 4.374055,
+        "system": 0.972893
+      },
+      "startLoad": [
+        14.31201171875,
+        16.02197265625,
+        14.5283203125
+      ],
+      "endLoad": [
+        13.64599609375,
+        15.85546875,
+        14.47802734375
+      ],
+      "label": "fault-replacement-v2"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:57:09.773439+00:00",
+      "end": "2026-10-14T03:57:13.339884+00:00",
+      "pid": 31984,
+      "pgid": 31984,
+      "exitCode": 1,
+      "wallSeconds": 3.566434209002182,
+      "cpuSeconds": {
+        "user": 4.510267,
+        "system": 0.911708
+      },
+      "startLoad": [
+        13.4072265625,
+        15.06298828125,
+        13.81591796875
+      ],
+      "endLoad": [
+        12.81396484375,
+        14.912109375,
+        13.77001953125
+      ],
+      "label": "fault-unrelated"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T04:02:27.545904+00:00",
+      "end": "2026-10-14T04:02:31.286752+00:00",
+      "pid": 7831,
+      "pgid": 7831,
+      "exitCode": 1,
+      "wallSeconds": 3.7408710830204654,
+      "cpuSeconds": {
+        "user": 4.350125,
+        "system": 0.9710489999999999
+      },
+      "startLoad": [
+        13.64599609375,
+        15.85546875,
+        14.47802734375
+      ],
+      "endLoad": [
+        13.19384765625,
+        15.724609375,
+        14.43994140625
+      ],
+      "label": "fault-unrelated-v2"
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/return-stack-card.contracts.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:52:28.952072+00:00",
+      "end": "2026-10-14T03:52:35.615258+00:00",
+      "pid": 6537,
+      "pgid": 6537,
+      "exitCode": 1,
+      "wallSeconds": 6.663136083021527,
+      "cpuSeconds": {
+        "user": 3.254118,
+        "system": 1.892625
+      },
+      "startLoad": [
+        12.00341796875,
+        13.6826171875,
+        12.96435546875
+      ],
+      "endLoad": [
+        11.3623046875,
+        13.521484375,
+        12.91162109375
+      ],
+      "label": "focused-r1"
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:52:52.478433+00:00",
+      "end": "2026-10-14T03:52:59.771611+00:00",
+      "pid": 8163,
+      "pgid": 8163,
+      "exitCode": 1,
+      "wallSeconds": 7.293124749994604,
+      "cpuSeconds": {
+        "user": 6.019684,
+        "system": 2.068732
+      },
+      "startLoad": [
+        10.83544921875,
+        13.2607421875,
+        12.83154296875
+      ],
+      "endLoad": [
+        11.48876953125,
+        13.35595703125,
+        12.86767578125
+      ],
+      "label": "focused-r2"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:53:24.337360+00:00",
+      "end": "2026-10-14T03:53:28.005876+00:00",
+      "pid": 10621,
+      "pgid": 10621,
+      "exitCode": 1,
+      "wallSeconds": 3.6685081670002546,
+      "cpuSeconds": {
+        "user": 4.333934,
+        "system": 0.904373
+      },
+      "startLoad": [
+        9.76513671875,
+        12.80908203125,
+        12.6845703125
+      ],
+      "endLoad": [
+        9.46337890625,
+        12.69580078125,
+        12.64501953125
+      ],
+      "label": "focused-r3"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:53:59.479085+00:00",
+      "end": "2026-10-14T03:54:04.436524+00:00",
+      "pid": 13390,
+      "pgid": 13390,
+      "exitCode": 1,
+      "wallSeconds": 4.957419333019061,
+      "cpuSeconds": {
+        "user": 5.669799,
+        "system": 1.167656
+      },
+      "startLoad": [
+        11.09326171875,
+        12.69677734375,
+        12.64111328125
+      ],
+      "endLoad": [
+        13.88818359375,
+        13.24951171875,
+        12.83642578125
+      ],
+      "label": "focused-r4"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:54:19.821037+00:00",
+      "end": "2026-10-14T03:54:23.751579+00:00",
+      "pid": 14669,
+      "pgid": 14669,
+      "exitCode": 1,
+      "wallSeconds": 3.930540834000567,
+      "cpuSeconds": {
+        "user": 4.819184,
+        "system": 1.010719
+      },
+      "startLoad": [
+        18.8642578125,
+        14.39306640625,
+        13.251953125
+      ],
+      "endLoad": [
+        18.234375,
+        14.33642578125,
+        13.23828125
+      ],
+      "label": "focused-r5"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:55:03.842496+00:00",
+      "end": "2026-10-14T03:55:08.513868+00:00",
+      "pid": 68333,
+      "pgid": 68333,
+      "exitCode": 0,
+      "wallSeconds": 4.671357499988517,
+      "cpuSeconds": {
+        "user": 5.467865,
+        "system": 1.249564
+      },
+      "startLoad": [
+        19.4482421875,
+        15.15234375,
+        13.5869140625
+      ],
+      "endLoad": [
+        18.8515625,
+        15.099609375,
+        13.5771484375
+      ],
+      "label": "focused-r6"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "return a stack card"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:55:49.018340+00:00",
+      "end": "2026-10-14T03:55:54.299947+00:00",
+      "pid": 23181,
+      "pgid": 23181,
+      "exitCode": 0,
+      "wallSeconds": 5.281615167012205,
+      "cpuSeconds": {
+        "user": 5.491508,
+        "system": 1.366296
+      },
+      "startLoad": [
+        22.13720703125,
+        16.35498046875,
+        14.10205078125
+      ],
+      "endLoad": [
+        21.3251953125,
+        16.2822265625,
+        14.08935546875
+      ],
+      "label": "focused-r7"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/zones.test.ts",
+        "src/engine/fold/fold-intents.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:57:54.569328+00:00",
+      "end": "2026-10-14T03:58:05.648065+00:00",
+      "pid": 35047,
+      "pgid": 35047,
+      "exitCode": 0,
+      "wallSeconds": 11.078637625003466,
+      "cpuSeconds": {
+        "user": 14.205875,
+        "system": 1.100118
+      },
+      "startLoad": [
+        9.8388671875,
+        13.8740234375,
+        13.439453125
+      ],
+      "endLoad": [
+        9.4150390625,
+        13.64794921875,
+        13.36376953125
+      ],
+      "label": "foundation"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T04:04:24.079357+00:00",
+      "end": "2026-10-14T04:04:28.630504+00:00",
+      "pid": 15640,
+      "pgid": 15640,
+      "exitCode": 0,
+      "wallSeconds": 4.55112566598109,
+      "cpuSeconds": {
+        "user": 3.956749,
+        "system": 1.231527
+      },
+      "startLoad": [
+        9.6787109375,
+        13.5810546875,
+        13.740234375
+      ],
+      "endLoad": [
+        9.4638671875,
+        13.4716796875,
+        13.70068359375
+      ],
+      "label": "knip"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T04:02:59.248370+00:00",
+      "end": "2026-10-14T04:04:15.455073+00:00",
+      "pid": 10058,
+      "pgid": 10058,
+      "exitCode": 0,
+      "wallSeconds": 76.20583891699789,
+      "cpuSeconds": {
+        "user": 184.592843,
+        "system": 19.751108
+      },
+      "startLoad": [
+        10.49609375,
+        14.892578125,
+        14.1767578125
+      ],
+      "endLoad": [
+        9.88916015625,
+        13.75439453125,
+        13.802734375
+      ],
+      "label": "review-corrected"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T03:59:10.825613+00:00",
+      "end": "2026-10-14T04:00:34.942951+00:00",
+      "pid": 40197,
+      "pgid": 40197,
+      "exitCode": 2,
+      "wallSeconds": 84.11639250000007,
+      "cpuSeconds": {
+        "user": 216.796794,
+        "system": 24.956324
+      },
+      "startLoad": [
+        7.31201171875,
+        12.2421875,
+        12.857421875
+      ],
+      "endLoad": [
+        24.24365234375,
+        16.2060546875,
+        14.2978515625
+      ],
+      "label": "review"
+    },
+    {
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T04:01:23.430372+00:00",
+      "end": "2026-10-14T04:01:34.542495+00:00",
+      "pid": 3022,
+      "pgid": 3022,
+      "exitCode": 0,
+      "wallSeconds": 11.11202483298257,
+      "cpuSeconds": {
+        "user": 16.158999,
+        "system": 0.593573
+      },
+      "startLoad": [
+        25.11474609375,
+        17.85498046875,
+        15.0263671875
+      ],
+      "endLoad": [
+        22.72998046875,
+        17.580078125,
+        14.96142578125
+      ],
+      "label": "typecheck-corrected"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/return-stack-card-628",
+      "start": "2026-10-14T04:06:25.406793+00:00",
+      "end": "2026-10-14T04:06:25.547270+00:00",
+      "pid": 74005,
+      "pgid": 74005,
+      "exitCode": 0,
+      "wallSeconds": 0.14051516700419597,
+      "cpuSeconds": {
+        "user": 0.063933,
+        "system": 0.03374
+      },
+      "startLoad": [
+        10.65576171875,
+        12.83642578125,
+        13.42626953125
+      ],
+      "endLoad": [
+        10.65576171875,
+        12.83642578125,
+        13.42626953125
+      ],
+      "label": "schema-final"
+    }
+  ],
+  "counterfactuals": {
+    "restoredSha256": "94fe6abc565bf29e1d7dab7a98a40c50df2022df930ee9cf0f3f60c6d1ef4a06",
+    "restoredUTC": "2026-10-14T04:02:31.291847+00:00",
+    "records": [
+      {
+        "label": "fault-recipient-v2",
+        "exit": 1,
+        "assertionErrors": 2,
+        "actualFailureSummary": [
+          "Tests  4 failed | 32 passed | 3159 skipped (3195)"
+        ],
+        "mutantSha256": "99fcad8116147426f8cca4579dcdad6527c68cb5660d2497108ebce76e128e9d"
+      },
+      {
+        "label": "fault-activated-v2",
+        "exit": 1,
+        "assertionErrors": 1,
+        "actualFailureSummary": [
+          "Tests  2 failed | 34 passed | 3159 skipped (3195)"
+        ],
+        "mutantSha256": "1f9f02f129ec7e94c80bd1d047d657c1b2aa7c2317b18c262e0162383eebfcbd"
+      },
+      {
+        "label": "fault-live-bound-v2",
+        "exit": 1,
+        "assertionErrors": 1,
+        "actualFailureSummary": [
+          "Tests  4 failed | 32 passed | 3159 skipped (3195)"
+        ],
+        "mutantSha256": "bca499be62b38edcc555199449712e37dece22bcd5e8ce745b76bc0f75b79ce6"
+      },
+      {
+        "label": "fault-replacement-v2",
+        "exit": 1,
+        "assertionErrors": 2,
+        "actualFailureSummary": [
+          "Tests  4 failed | 32 passed | 3159 skipped (3195)"
+        ],
+        "mutantSha256": "294da1e13b02f8e85e77aac360932e5a4323af70eff68b36a3b118ee519f034d"
+      },
+      {
+        "label": "fault-unrelated-v2",
+        "exit": 1,
+        "assertionErrors": 10,
+        "actualFailureSummary": [
+          "Tests  12 failed | 24 passed | 3159 skipped (3195)"
+        ],
+        "mutantSha256": "9be96ee004f45a204a22207e499c24129e82173bebcf8f456c722869074ee332"
+      }
+    ]
+  },
+  "focusedResult": "36 meaningful public cases, both actors; all passed",
+  "foundationResult": "3220 tests in 3 existing entrypoints passed on exact restored primitive",
+  "failureRecovery": {
+    "cancel": "Public fold target cancellation before payment; no movement or cost",
+    "suspend": "Public materialized trigger target prompt; preceding materialization committed and preserved",
+    "reloadReplay": "JSON roundtrip to a fresh fold adapter; stable pending fingerprint and resulting state hash",
+    "refusal": "Foreign actor, stale prompt, illegal answer, concurrent action atomic bounces",
+    "partialWriteError": "Synthetic public resolver verifies actual hand arrival and optional cost layer before throwing; isolated current step rolls back with no published events; JSON reload/retry remains atomic",
+    "staleTarget": "Resolution rechecks physical stack-card eligibility, current copiable bound, targeting immunity; a matching same-identity reentry remains legal"
+  },
+  "qaDisposition": "Parent explicitly accepted internal unbound API-extension public action/fold/replay QA. No authored production UUID or UI workflow here, no browser or provider resources launched. Original hv-umm2.190 retains complete content, weighted300 and player-flow acceptance.",
+  "validationBoundary": "Normal focused/review/Knip/coverage/schema; no fuzzer/step runner/cross-cutting architecture/state/privacy/infrastructure body changes, so no invented local weighted/full gate.",
+  "requiredReview": "Core-review: parent owns fresh read-only Claude Opus5.5 on final exact diff after helper terminal; temporary Sol routing expired01:00UTC. Review has not run.",
+  "resourceScope": "Only short-lived check processes, all command UTC/PID/PG/CPU receipts outside worktree; no QA/server/browser/provider lease/runtime. Final actual owned-resource observation required before commit.",
+  "gitEndpoint": "UNKNOWN",
+  "counterfactualsInitial": {
+    "restoredSha256": "94fe6abc565bf29e1d7dab7a98a40c50df2022df930ee9cf0f3f60c6d1ef4a06",
+    "restoredUTC": "2026-10-14T03:57:13.344163+00:00",
+    "records": [
+      {
+        "label": "fault-recipient",
+        "exit": 1,
+        "assertionErrors": 2,
+        "actualFailureSummary": [
+          "Tests  4 failed | 32 passed | 3159 skipped (3195)"
+        ],
+        "mutantSha256": "99fcad8116147426f8cca4579dcdad6527c68cb5660d2497108ebce76e128e9d"
+      },
+      {
+        "label": "fault-activated",
+        "exit": 1,
+        "assertionErrors": 1,
+        "actualFailureSummary": [
+          "Tests  2 failed | 34 passed | 3159 skipped (3195)"
+        ],
+        "mutantSha256": "1f9f02f129ec7e94c80bd1d047d657c1b2aa7c2317b18c262e0162383eebfcbd"
+      },
+      {
+        "label": "fault-live-bound",
+        "exit": 1,
+        "assertionErrors": 1,
+        "actualFailureSummary": [
+          "Tests  4 failed | 32 passed | 3159 skipped (3195)"
+        ],
+        "mutantSha256": "bca499be62b38edcc555199449712e37dece22bcd5e8ce745b76bc0f75b79ce6"
+      },
+      {
+        "label": "fault-replacement",
+        "exit": 1,
+        "assertionErrors": 2,
+        "actualFailureSummary": [
+          "Tests  4 failed | 32 passed | 3159 skipped (3195)"
+        ],
+        "mutantSha256": "294da1e13b02f8e85e77aac360932e5a4323af70eff68b36a3b118ee519f034d"
+      },
+      {
+        "label": "fault-unrelated",
+        "exit": 1,
+        "assertionErrors": 10,
+        "actualFailureSummary": [
+          "Tests  12 failed | 24 passed | 3159 skipped (3195)"
+        ],
+        "mutantSha256": "9be96ee004f45a204a22207e499c24129e82173bebcf8f456c722869074ee332"
+      }
+    ]
+  },
+  "finalPositive": "Corrected normal review6632 tests/299 files, typechecks/lint/import cycles/schema all pass; includes all36 new cases. Knip pass; content coverage20 pass. Foundation3220/3 before immutable fixture type corrections remains tied to original artifact; normal review validates final artifact.",
+  "authoringCorrections": [
+    "focused-r1 ran zero tests: auto-discovered contract module needed existing contracts.test.ts entrypoint",
+    "focused-r2 through r5 corrected own test cost-query signature, response priority and cap fixtures; no product defect inferred",
+    "review exited2 with6632 behavioral tests passed, unused test import/readonly fixture assignment lint/type failures",
+    "corrected immutable fixture replacements pass focused TypeScript; five separate -v2 assertion counterfactuals reconfirmed and restored; final normal review passes"
+  ],
+  "rulesSourceProof": {
+    "url": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260925.txt",
+    "inspectedVia": "Official Wizards rules page TXT link, then exact official source retained; native web page returned effective date at line2 and400.3 atline1572",
+    "retainedUTC": "2026-10-14T04:03:36.003126+00:00",
+    "bytes": 977752,
+    "sha256": "8d860e451f20f38865b725b42d82feb714c725373dd8f3b32b8652b3eeb070ca",
+    "exactFullText": "official-mtg-cr-20260925.txt, unchanged source bytes"
+  },
+  "resourceObservation": {
+    "observedUTC": "2026-10-14T04:05:41.205474+00:00",
+    "checkGroups": 23,
+    "groupRows": [],
+    "qaResources": "None launched: no runner, provider, browser, SDK, RPC, server or lease",
+    "scope": "Recorded short-lived child groups only; any numeric reuse requires command and birth inspection, never a blind kill"
+  },
+  "schemaNormalization": {
+    "hostLoad": "Corrected review wrapper start one-minute load observation; not a performance comparison",
+    "testDelta": "One private contract module,285 source lines, zero test runner/infrastructure/jsdom additions",
+    "wallScope": "Wrapper-inclusive command elapsed and waited child CPU, not whole-host CPU or pure coding time"
+  },
+  "finalSchema": "775 records valid,41 historical unknowns; own record known measurements"
+}

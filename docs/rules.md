@@ -1317,6 +1317,13 @@ same effect: a character you control that the opponent owns (see [Gain
 control](#keywords-and-effects)) goes to the opponent's hand. Only an
 instruction that names "your hand" puts the card into yours.
 
+**Returning a played card** — An instruction to return a played card to the
+opponent's hand targets a card on the stack and puts it into the hand of the
+opponent of the instruction's controller, even if that player does not own it.
+The card's owner stays the same. It leaves the stack without resolving. This
+is not Prevent, so a card that cannot be prevented may be returned. The
+ordinary created-card and Reclaim replacements apply.
+
 "Return all but one character you control to hand" does not target. As it
 resolves, you choose one character you control to keep, which may be one that
 cannot be targeted by effects. Every other character you controlled as you
