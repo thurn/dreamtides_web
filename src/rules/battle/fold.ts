@@ -1100,6 +1100,8 @@ function isFloatingEffect(value: unknown): boolean {
     isIndex(value.timestamp) &&
     isExpiry(value.expiry) &&
     isFloatingChange(value.change) &&
+    (!(isPlainRecord(value.change) && value.change.kind === "materializeKeyword") ||
+      (isPlainRecord(value.expiry) && value.expiry.at === "endOfTurn")) &&
     (value.sourceObservedBy === undefined || (isPlainRecord(value.change) && value.change.kind === "disableTriggers" && value.change.mode === "triggeredAndActivated" &&
       isArrayOf(value.sourceObservedBy, isSide) && new Set(value.sourceObservedBy).size === value.sourceObservedBy.length))
   );

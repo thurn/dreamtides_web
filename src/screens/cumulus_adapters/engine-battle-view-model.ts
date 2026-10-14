@@ -445,6 +445,8 @@ export function engineStatuses(
 ): EngineStatuses {
   const cards = new Map<InstanceId, BattleStatusBadgeView[]>();
   const sides: Record<Side, BattleStatusBadgeView[]> = { player: [], enemy: [] };
+  const materializeWindows = new Map<Side, Set<Expiry["at"]>>();
+  const materializeMembers = new Map<InstanceId, Set<Expiry["at"]>>();
   const badge = (kind: BattleStatusBadgeView["kind"], status: EngineStatusCopy): BattleStatusBadgeView => ({
     kind,
     label: engineStatusLabel(status, human),
@@ -463,10 +465,19 @@ export function engineStatuses(
   for (const { change, expiry, controller, source } of view.floating) {
     const lasting = expiry.at !== "never";
     switch (change.kind) {
-      case "materializeKeyword":
-        if (change.instance === null) sides[change.player].push(badge("duration", { kind: "materializeKeyword", expiry }));
-        else if (typeof change.instance === "string") mark(change.instance, badge("keyword", { kind: "keyword", keyword: change.keyword, gains: true, expiry }));
+      case "materializeKeyword": {
+        // This kind grants Awakened through the current turn's Ending.
+        if (change.instance === null) {
+          const horizons = materializeWindows.get(change.player) ?? new Set();
+          if (!horizons.has(expiry.at)) sides[change.player].push(badge("duration", { kind: "materializeKeyword", expiry }));
+          materializeWindows.set(change.player, horizons.add(expiry.at));
+        } else if (typeof change.instance === "string") {
+          const horizons = materializeMembers.get(change.instance) ?? new Set();
+          if (!horizons.has(expiry.at)) mark(change.instance, badge("keyword", { kind: "keyword", keyword: change.keyword, gains: true, expiry }));
+          materializeMembers.set(change.instance, horizons.add(expiry.at));
+        }
         break;
+      }
       case "spark":
         if (lasting) mark(change.instance, badge("duration", { kind: "spark", amount: change.amount, expiry }));
         break;
@@ -569,6 +580,8 @@ export function engineStatuses(
   const floatingGains = new Map<InstanceId, Set<Keyword>>();
   for (const { change } of view.floating) {
     if (change.kind === "keyword" && change.gains) {
+      floatingGains.set(change.instance, (floatingGains.get(change.instance) ?? new Set()).add(change.keyword));
+    } else if (change.kind === "materializeKeyword" && typeof change.instance === "string") {
       floatingGains.set(change.instance, (floatingGains.get(change.instance) ?? new Set()).add(change.keyword));
     }
   }

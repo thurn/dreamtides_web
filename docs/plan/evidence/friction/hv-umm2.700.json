@@ -1,0 +1,41 @@
+{
+  "bead": "hv-umm2.700",
+  "phase": 5,
+  "implementWindow": {
+    "start": "2026-10-14T23:33:52.207Z",
+    "end": "2026-10-14T23:55:11.167288+00:00"
+  },
+  "implementMin": 21.316004799999998,
+  "localValidationS": {
+    "review-v1": 33.024107665987685,
+    "focused-v2": 7.310807208996266,
+    "full-v1": 102.2465157090337,
+    "knip-v1": 4.521297500003129,
+    "cf-dropped-entry-side-filter-original40": 7.433317792019807,
+    "focused-v1": 8.360568667005282,
+    "cf-dropped-entry-side-filter-new-negatives": 6.580265666998457,
+    "cf-both-sides-historical-cohort-original40": 6.918087458005175,
+    "cf-both-sides-historical-cohort-new-negatives": 6.72657875000732,
+    "live-two-window-v1": 48.726,
+    "live-two-window-v2": 77.017,
+    "schema-v1": 0.30170091695617884
+  },
+  "hostLoad": 17.4990234375,
+  "testDelta": {
+    "files": 0,
+    "lines": 111,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "test-fixture",
+      "minutes": 0.1393428111167547,
+      "note": "Four new event assertions used controller where materialized uses side. First48pass/4fail; corrected new observable field, next52pass. Raw original result/resources retained."
+    },
+    {
+      "tag": "qa-caller",
+      "minutes": 0.8120999999999999,
+      "note": "Known returned desktop fifth-step log timeout: caller expected nonexistent Dreamsign AbilitySource.id. Actual source uses kind/side/index bound to committed UUID slot; first4steps plus active reload/counts/geometry passed. Original48.726s CLI1/report84logs/captures/SDKserver/PID records retained; all15identities absent. Only exact log predicate corrected in separately admitted v2; no source change or semantic waiver."
+    }
+  ]
+}

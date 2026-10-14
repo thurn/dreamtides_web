@@ -2,6 +2,8 @@
 import { describe, expect, it } from "vitest";
 import { parseDreamsignId } from "../../../../types/identifiers";
 import { parseEngineBattleFold } from "../../../../rules/battle/fold";
+import { enginePrintedKeywords, engineStatuses } from "../../../../screens/cumulus_adapters/engine-battle-view-model";
+import { withHistory } from "../../../debug/debug-actions";
 import type { EngineCardDefinition } from "../../../catalog";
 import { abandonCost, additionalCost, all, characterYouControl, energy, event, everyIn, randomIn, self, staticAbility } from "../../../dsl/builders";
 import { triggered, whenAbandon, whenMaterialize } from "../../../dsl/triggers";
@@ -12,7 +14,7 @@ import { hasKeyword } from "../../../rules/keywords";
 import { SIDES, opponent, type CardId, type InstanceId, type Side } from "../../../state/ids";
 import { stateHash, serializeState, deserializeState } from "../../../state/hash";
 import { cloneState } from "../../../state/clone";
-import type { BattleState, DeckEntry } from "../../../state/types";
+import type { BattleState, DeckEntry, Expiry } from "../../../state/types";
 import { InlineSource } from "../../../steps/sources";
 import { boardState, type SideSetup } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
@@ -46,6 +48,8 @@ const payAbandon: EngineCardDefinition = { ...v.event0, id: syntheticId(0x58435)
 const manyFigments = make(12, p.materializeFigments(ZONE_FIGMENT.warrior.id, 5));
 const hideSource = make(13, p.shuffleInto([everyIn("void")]));
 const otherDeck: EngineCardDefinition = { ...make(14, p.materialize(randomIn("deck", 1, { cardType: "character" }, { player: "opponent", costExactly: 0 }))), speed: "fast" };
+const enableFast: EngineCardDefinition = { ...enable, id: syntheticId(0x70001), speed: "fast" };
+const legacyGrant = make(0x70002, p.grant(all(characterYouControl()), "vengeful", "permanent"));
 const staticReady: EngineCardDefinition = { ...v.vanilla0, id: syntheticId(0x58430), status: "authored",
   abilities: () => [staticAbility(p.grant(self(), "awakened"))] };
 const watcher: EngineCardDefinition = { ...v.vanilla0, id: syntheticId(0x58431), status: "authored", abilities: () => [
@@ -53,7 +57,7 @@ const watcher: EngineCardDefinition = { ...v.vanilla0, id: syntheticId(0x58431),
   triggered(whenMaterialize(characterYouControl({ exhausted: false })), p.gainPoints(10)),
 ] };
 const engine = createEngine(testCatalog([...Object.values(H), enable, sleep, loss, hand, fromDeck, fromVoid, created, failure,
-  loseThenRepeat, repeatThenLose, otherReturn, conceal, gainFast, killFast, returnFast, payAbandon, manyFigments, hideSource, otherDeck, staticReady, watcher], { dreamsigns: [sign] }, ZONE_FIGMENTS));
+  loseThenRepeat, repeatThenLose, otherReturn, conceal, gainFast, killFast, returnFast, payAbandon, manyFigments, hideSource, otherDeck, enableFast, legacyGrant, staticReady, watcher], { dreamsigns: [sign] }, ZONE_FIGMENTS));
 const chooser = (pick: (prompt: Prompt) => Answer = prompt => {
   if (prompt.kind === "chooseCards" || prompt.kind === "chooseTargets") return prompt.candidates.slice(0, prompt.min);
   if (prompt.kind === "confirm") return true;
@@ -62,6 +66,113 @@ const chooser = (pick: (prompt: Prompt) => Answer = prompt => {
 const setup = (side: Side, handCards: readonly CardId[], mine: SideSetup = {}, theirs: SideSetup = {}) => boardState(engine.catalog, {
   active: side, phase: "day", scoreToWin: 10000, [side]: { deck, energy: 50, hand: handCards, dreamsigns: [sign.id], ...mine },
   [opponent(side)]: { deck, energy: 50, ...theirs },
+});
+
+describe.each(SIDES)("materialization boundary repairs for %s", side => {
+  const badges = (state: BattleState, viewer: Side) => engineStatuses(engine.view(state, viewer), viewer, enginePrintedKeywords(engine.catalog));
+  const kinds = (state: BattleState, viewer: Side, id: InstanceId) => badges(state, viewer).cards.get(id)?.map(badge => badge.kind) ?? [];
+
+  it("excludes a fresh opponent entry earlier in the same turn from the historical cohort", () => {
+    const other = opponent(side), b = setup(side, [enableFast.id, v.fastCharacter.id], {}, { hand: [v.fastCharacter.id] });
+    const turn = b.state.turn.turnNumber;
+    let state = passUntil(engine, b.state, next => next.turn.active === side && next.turn.phase === "dusk").state;
+    const earlier = play(state, other, b.ids[other].hand[0]);
+    expect(earlier.events).toContainEqual(expect.objectContaining({ kind: "materialized", instance: b.ids[other].hand[0], side: other }));
+    state = passUntil(engine, earlier.state, next => next.turn.active === side && next.turn.phase === "night").state;
+    state = play(state, side, b.ids[side].hand[0]).state;
+    expect(state.turn.turnNumber).toBe(turn);
+    expect(keyword(state, b.ids[other].hand[0])).toBe(false);
+    expect(state.instances[b.ids[other].hand[0]].status.exhausted).toBe(true);
+    expect(kinds(state, side, b.ids[other].hand[0])).toEqual([]);
+    const own = play(state, side, b.ids[side].hand[1]).state;
+    expect(keyword(own, b.ids[side].hand[1])).toBe(true);
+    expect(own.instances[b.ids[side].hand[1]].status.exhausted).toBe(false);
+  });
+
+  it("excludes a fresh opponent entry made under the active controller's window", () => {
+    const other = opponent(side), b = setup(side, [enable.id], {}, { hand: [v.fastCharacter.id] });
+    let state = play(b.state, side, b.ids[side].hand[0]).state;
+    const turn = state.turn.turnNumber;
+    state = passUntil(engine, state, next => next.turn.active === side && next.turn.phase === "dusk").state;
+    const entered = play(state, other, b.ids[other].hand[0]);
+    expect(entered.events).toContainEqual(expect.objectContaining({ kind: "materialized", instance: b.ids[other].hand[0], side: other }));
+    expect(entered.state.turn.turnNumber).toBe(turn);
+    expect(keyword(entered.state, b.ids[other].hand[0])).toBe(false);
+    expect(entered.state.instances[b.ids[other].hand[0]].status.exhausted).toBe(true);
+    expect(kinds(entered.state, side, b.ids[other].hand[0])).toEqual([]);
+  });
+
+  it("shows one physical and side badge across historical, later and repeated same-turn grants", () => {
+    const b = setup(side, [v.vanilla0.id, enable.id, v.vanilla0.id, enable.id, v.vanilla0.id]);
+    let state = play(b.state, side, b.ids[side].hand[0]).state;
+    for (const index of [1, 2, 3, 4]) {
+      state = play(state, side, b.ids[side].hand[index]).state;
+      for (const viewer of SIDES) {
+        const shown = badges(state, viewer);
+        expect(shown.sides[side].map(badge => badge.kind)).toEqual(["duration"]);
+        expect(shown.sides[opponent(side)]).toEqual([]);
+        for (const id of b.ids[side].hand.filter(id => state.instances[id].zone === "play")) expect(kinds(state, viewer, id)).toEqual(["keyword"]);
+      }
+    }
+  });
+
+  it("preserves printed, static and legacy keyword indicators when own grants overlap", () => {
+    const b = setup(side, [v.awakened2.id, staticReady.id, v.vanilla0.id, legacyGrant.id, enable.id, enable.id]);
+    let state = b.state;
+    for (const index of [0, 1, 2]) state = play(state, side, b.ids[side].hand[index]).state;
+    for (const viewer of SIDES) {
+      expect(kinds(state, viewer, b.ids[side].hand[0])).toEqual([]);
+      expect(kinds(state, viewer, b.ids[side].hand[1])).toEqual(["keyword"]);
+      expect(kinds(state, viewer, b.ids[side].hand[2])).toEqual([]);
+    }
+    state = play(state, side, b.ids[side].hand[3]).state;
+    for (const viewer of SIDES) {
+      expect(kinds(state, viewer, b.ids[side].hand[0])).toEqual(["keyword"]);
+      expect(kinds(state, viewer, b.ids[side].hand[1])).toEqual(["keyword", "keyword"]);
+      expect(kinds(state, viewer, b.ids[side].hand[2])).toEqual(["keyword"]);
+    }
+    for (const index of [4, 5]) {
+      state = play(state, side, b.ids[side].hand[index]).state;
+      for (const viewer of SIDES) for (const id of b.ids[side].hand.slice(0, 3)) expect(kinds(state, viewer, id)).toEqual(["keyword", "keyword"]);
+    }
+  });
+
+  it("keeps concealed repeated members anonymous in the status builder", () => {
+    const b = setup(side, [enable.id, v.vanilla0.id, enable.id, H.leave.id, conceal.id]);
+    let state = b.state;
+    for (const id of b.ids[side].hand) state = play(state, side, id).state;
+    const hidden = b.ids[side].hand[1], viewer = opponent(side), view = engine.view(state, viewer);
+    expect(JSON.stringify(view)).not.toContain(`"${hidden}"`);
+    expect(badges(state, viewer).cards.has(hidden)).toBe(false);
+    expect(badges(state, viewer).sides[side].map(badge => badge.kind)).toEqual(["duration"]);
+  });
+
+  it("restricts own window and member expiries in settled, pending and history-base saves", () => {
+    const b = setup(side, [enable.id, v.vanilla0.id, payAbandon.id, legacyGrant.id], { back: [v.vanilla0.id] });
+    let state = play(b.state, side, b.ids[side].hand[0]).state;
+    state = play(state, side, b.ids[side].hand[1]).state;
+    state = play(state, side, b.ids[side].hand[3]).state;
+    const settled = slice(state), history = withHistory(settled), fold = createFoldAdapter(engine);
+    const pending = applied(fold.reduce(history, { kind: "battleAction", side, action: { kind: "play", card: b.ids[side].hand[2], from: "hand" } }));
+    expect(fold.pending(pending)?.prompt.cancellable).toBe(true);
+    const lifetimes: readonly Expiry[] = [{ at: "never" }, { at: "turnStart", side }, { at: "sourceLeavesPlay", source: b.ids[side].hand[1] }, { at: "nextDay" }, { at: "paid", effect: state.floating[0].id }];
+    for (const current of [settled, pending, history]) {
+      expect(parseEngineBattleFold(saved(current))).not.toBeNull();
+      const locations = current.history === undefined ? ["committed" as const] : ["committed", "base"] as const;
+      for (const location of locations) for (const member of [false, true]) for (const expiry of lifetimes) {
+        const bad = structuredClone(saved(current));
+        const target = location === "committed" ? bad.slice.committed : bad.slice.history!.base.committed;
+        const record = target.floating.find(e => e.change.kind === "materializeKeyword" && (e.change.instance !== null) === member)!;
+        Object.assign(record, { expiry });
+        expect(parseEngineBattleFold(bad)).toBeNull();
+      }
+      for (const expiry of lifetimes) {
+        const old = structuredClone(saved(current));
+        Object.assign(old.slice.committed.floating.find(e => e.change.kind === "keyword")!, { expiry });
+        expect(parseEngineBattleFold(old)).not.toBeNull();
+      }
+    }
+  });
 });
 function play(state: BattleState, side: Side, card: InstanceId, source = chooser()) {
   const first = engine.apply(state, side, { kind: "play", card, from: "hand" }, source);
