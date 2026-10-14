@@ -1,3 +1,6 @@
+import { activated, exhaustSelf, storedCounters } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { materializeChosen, storeCounters } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 454,
   art: { x: 0, y: 0, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onDawn(), storeCounters(variant.amplified ? 2 : 1)),
+    activated([exhaustSelf()], materializeChosen(storedCounters()), { speed: "fast" }),
+  ],
+  verifiedText: "1u6990sb33l",
 });

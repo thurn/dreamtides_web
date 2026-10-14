@@ -1,0 +1,832 @@
+{
+  "bead": "hv-umm2.182",
+  "base": "84c588853856ad1da50ab660b380e84949daaec8",
+  "branch": "wt/cards-70-root",
+  "entities": [
+    "ccbefadc-aab8-4f8c-a705-07bd70c91731",
+    "d89f4c33-ffd3-4313-8106-0a9f7013cad8",
+    "cf173b05-7bf2-465b-91e2-41f213c536d1"
+  ],
+  "recordedAt": "2026-10-14T21:27:46+00:00",
+  "clock": {
+    "start": "2026-10-14T20:57:52.674Z",
+    "end": "2026-10-14T21:27:46+00:00",
+    "elapsedMinutes": 29.888766666666665,
+    "dispatchReceipt": "/tmp/182-dispatch-receipt.json",
+    "qualification": "Actual native audit dispatch through packaging/normal automatic-date Git second; includes research, source admission, coordination, heavy/browser waits, failed fixtures and validation. Productive editing/CPU time not inferred. Final external commit bracket verifies committer-second equality; no date override or postcommit tracked edits."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v1 starting kernel one-minute load",
+        "value": 4.89
+      },
+      "testDelta": {
+        "measuredFor": "One new 179-line plain consumed scenario module/12 cases; no new test runner entrypoints, jsdom or duplicated child cases."
+      },
+      "localValidationS": {
+        "measuredFor": "Whole collector command bracket; focused is accepted v4; failedFocused sums actual v1/v2/v3. Fuzz includes heavy lock wait and execution; no measured execution-only estimate."
+      }
+    }
+  },
+  "source": {
+    "frozenAt": "2026-10-14T21:08:15.681720+00:00",
+    "frozenPaths": 5095,
+    "initialTrackedTreeSHA256": "c5b6e9a3eeb4662d266198d384aa5341553b1562fee17dd225f05b0ae154b428",
+    "authoredHashes": {
+      "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+      "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+      "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2"
+    },
+    "childReadOnlySHA256": {
+      "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+      "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+      "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+    },
+    "allMetadataImmutable": true,
+    "grossNonTestLeafLines": 17,
+    "privateScenarioLines": 179,
+    "privateScenarioCases": 12,
+    "newTestEntrypoints": 0,
+    "scope": "Two leaves abilities/verifiedText; one private auto-discovered cards-70 module; own evidence. Engine/DSL/runtime/UI/shared QA/config/generators/index/child3 remain read-only."
+  },
+  "rules": {
+    "D10": "Not invoked: normative Counters/Costs/Activated/Fast/Materialize clauses and existing RD94/RD95/hv-umm2.484-1 settle every clause.",
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "newPrimitives": 0,
+    "newPromptKinds": 0,
+    "newStatusKinds": 0,
+    "newVisualKinds": 0
+  },
+  "D20": {
+    "ownCases": 12,
+    "unchangedChildCases": 4,
+    "join": "Mirrorlight explicit base/amplified Dawn store then FAST exhausted bounded current-hand choice, physical duplicate identity, private prompt, invalid/foreign/postpayment cancellation refusal and reload; zero Night; actual positive Dawn count cleared by Interrupt removal before resolving maximum. Steel other-character cancellable payment/reload/invalid+stale refusal, two paid stores then self-abandon, saved response window and exactly two points; independent zero self-abandon. Public actions/state/events only; no retained stack binding assertions.",
+    "primitiveFailurePaths": "No new engine transition introduced. Landed primitive contracts own late-error rollback, private replay/redaction, partial writes and capacity. Card-specific response departure, canceled payment, pending reload and invalid/foreign/stale input are covered in this private module."
+  },
+  "D21": [
+    {
+      "uuid": "ccbefadc-aab8-4f8c-a705-07bd70c91731",
+      "sha256FirstByte": 128,
+      "sampled": false,
+      "newPromptStatusVisual": false,
+      "judgedRequired": false
+    },
+    {
+      "uuid": "d89f4c33-ffd3-4313-8106-0a9f7013cad8",
+      "sha256FirstByte": 93,
+      "sampled": false,
+      "newPromptStatusVisual": false,
+      "judgedRequired": false
+    },
+    {
+      "uuid": "cf173b05-7bf2-465b-91e2-41f213c536d1",
+      "sha256FirstByte": 29,
+      "sampled": false,
+      "newPromptStatusVisual": false,
+      "judgedRequired": false
+    }
+  ],
+  "QAQualification": "Full original all-three all-recognized-variant BOTH-controller standard sweep/preflight. Empty D21 sample and no new kinds require no judged games or supplemental exports. Canonical sweep per-cell raw events/UUID provenance/Caps/navigation/skip reasons retained; sweep establishes play/resolution, not complete activated-ability text. Private scenarios establish full card joins. Standard caller hashes bound by root admission.",
+  "collectorRevisions": {
+    "at": "2026-10-14T21:16:59.131959+00:00",
+    "versions": {
+      "/tmp/182-command-initial.py": "2cf9941e798120c07f6595db52a69c19f684f923d055045b6df545fb1f8e6981",
+      "/tmp/182-command-owner-v1.py": "86d772f662d0563fa772f087c738861e7f5844c1c2af0b493c69b5a81f38ef05",
+      "/tmp/182-command-owner-v2.py": "f50e662dd936a6bc52c67a33640ac20713af838a583448bce149d4dddf4acccd",
+      "/tmp/182-command.py": "9ed904eb6997832d8aa1e72c0a4a8083e9c070013ec5d50d3551a5436bf770fa"
+    },
+    "causes": [
+      "Add read-only own browser owner/server observations to scratch collector before first browser run; standard scripts unchanged.",
+      "Correct own server filter to actual cwd key based on server-ownership.mjs schema; previous collector preserved.",
+      "Read each ownership image once then parse/hash identical bytes; previous bytes preserved."
+    ],
+    "executedBrowserBeforeCorrections": false
+  },
+  "orchestrationQualification": "One functions wrapper had a JavaScript composition syntax error before any command or file effect; corrected wrapper then created the guard. No failing validation or runtime effect is implied.",
+  "browserOwnershipObservations": [
+    {
+      "at": "2026-10-14T21:19:53.845764+00:00",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+      "sha256": "e60fd21b00baf6e85999fa090dda18432fede74619c069ae7ab8bc84ecbcc78f",
+      "value": {
+        "token": "b011aaaf-d7e1-49e3-ac12-1952f332399b",
+        "runner": {
+          "pid": 24949,
+          "group": 24949,
+          "started": "Wed Oct 14 14:19:53 2026",
+          "state": "Ss",
+          "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.182 --cards ccbefadc-aab8-4f8c-a705-07bd70c91731,d89f4c33-ffd3-4313-8106-0a9f7013cad8,cf173b05-7bf2-465b-91e2-41f213c536d1"
+        },
+        "server": {
+          "pid": 25001,
+          "group": 25001,
+          "started": "Wed Oct 14 14:19:53 2026",
+          "state": "Rs",
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-70-root/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json b011aaaf-d7e1-49e3-ac12-1952f332399b /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+        },
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-70-root",
+        "port": 5174
+      }
+    },
+    {
+      "at": "2026-10-14T21:19:56.322958+00:00",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+      "sha256": "8296e245eed00c3990f4d1c2f78a31d627f049564b2d9d4d0473c3714940426d",
+      "value": {
+        "token": "324eb8e5-8ead-4e0f-9849-a8dd1b6ce7f9",
+        "pid": 24949,
+        "bead": "hv-umm2.182",
+        "label": "card-sweep",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-70-root",
+        "slot": 0,
+        "port": 5174,
+        "startedAt": "2026-10-14T21:19:56.262Z",
+        "providerState": "active",
+        "mcpSessionId": "aa10b413-ead3-4692-8f4d-538147df60d1",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      }
+    },
+    {
+      "at": "2026-10-14T21:24:16.675965+00:00",
+      "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+      "sha256": "cbfda22a82705e13c5bc4528ccfe017fcd380b6089fca37934f27e76586ff378",
+      "value": {
+        "token": "b011aaaf-d7e1-49e3-ac12-1952f332399b",
+        "runner": {
+          "pid": 24949,
+          "group": 24949,
+          "started": "Wed Oct 14 14:19:53 2026",
+          "state": "Ss",
+          "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.182 --cards ccbefadc-aab8-4f8c-a705-07bd70c91731,d89f4c33-ffd3-4313-8106-0a9f7013cad8,cf173b05-7bf2-465b-91e2-41f213c536d1"
+        },
+        "server": {
+          "pid": 25001,
+          "group": 25001,
+          "started": "Wed Oct 14 14:19:53 2026",
+          "state": "Rs",
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-70-root/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json b011aaaf-d7e1-49e3-ac12-1952f332399b /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+        },
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-70-root",
+        "port": 5174,
+        "members": [
+          {
+            "pid": 25001,
+            "group": 25001,
+            "started": "Wed Oct 14 14:19:53 2026",
+            "state": "Ss",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-70-root/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json b011aaaf-d7e1-49e3-ac12-1952f332399b /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+          },
+          {
+            "pid": 25018,
+            "group": 25001,
+            "started": "Wed Oct 14 14:19:53 2026",
+            "state": "S",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+          },
+          {
+            "pid": 25114,
+            "group": 25001,
+            "started": "Wed Oct 14 14:19:55 2026",
+            "state": "S",
+            "command": "node /Users/dthurn/dreamtides_web/.worktrees/cards-70-root/node_modules/.bin/vite --port 5174 --strictPort"
+          },
+          {
+            "pid": 25136,
+            "group": 25001,
+            "started": "Wed Oct 14 14:19:55 2026",
+            "state": "S",
+            "command": "/Users/dthurn/dreamtides_web/.worktrees/cards-70-root/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+          }
+        ]
+      }
+    }
+  ],
+  "standardCallerHashes": {
+    "scripts/qa/card-sweep.mjs": "83f2d5e65a8e45dcbae1016531fc4e048d93c2749459410f710b13213b904e00",
+    "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+    "scripts/qa/prelude.mjs": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+    "scripts/qa/scenarios/card-lab-play.mjs": "2b0de8945ac6414bd98f11783376cbcfc01dfc302f22d5dd235ac2cc386368e6",
+    "scripts/qa/scenarios/card-lab-enemy-activate.mjs": "413d22c36b512c7e46ceee9ced498964467331d79643f8f466154db504f97865"
+  },
+  "validation": {
+    "commands": [
+      {
+        "label": "coverage-v1",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts"
+        ],
+        "start": "2026-10-14T21:07:42.359361+00:00",
+        "end": "2026-10-14T21:07:48.733395+00:00",
+        "wallS": 6.374057042005006,
+        "exitCode": 0,
+        "hostLoadRaw": "{ 19.60 13.78 11.85 }",
+        "collectorPID": 43089,
+        "collectorPGID": 43089,
+        "commandPID": 43104,
+        "commandPGID": 43104,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/coverage-v1.log"
+      },
+      {
+        "label": "focused-v1",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "-t",
+          "cards-70|cards-ready-182"
+        ],
+        "start": "2026-10-14T21:05:34.839580+00:00",
+        "end": "2026-10-14T21:05:40.205425+00:00",
+        "wallS": 5.365857875003712,
+        "exitCode": 1,
+        "hostLoadRaw": "{ 10.66 12.46 11.27 }",
+        "collectorPID": 76639,
+        "collectorPGID": 76639,
+        "commandPID": 76652,
+        "commandPGID": 76652,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "10b3a3599908b44181544166c7ddc2ec0777e3b296237e3ed48a34f4da653a48",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "10b3a3599908b44181544166c7ddc2ec0777e3b296237e3ed48a34f4da653a48",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/focused-v1.log"
+      },
+      {
+        "label": "focused-v2",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "-t",
+          "cards-70|cards-ready-182"
+        ],
+        "start": "2026-10-14T21:05:51.992788+00:00",
+        "end": "2026-10-14T21:05:56.578689+00:00",
+        "wallS": 4.585925499995938,
+        "exitCode": 1,
+        "hostLoadRaw": "{ 8.89 11.94 11.12 }",
+        "collectorPID": 77966,
+        "collectorPGID": 77966,
+        "commandPID": 77979,
+        "commandPGID": 77979,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "01dcabcc823d46105ecf4c2efb50e04127aef13e52a137ce821418eed4ee0333",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "01dcabcc823d46105ecf4c2efb50e04127aef13e52a137ce821418eed4ee0333",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/focused-v2.log"
+      },
+      {
+        "label": "focused-v3",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "-t",
+          "cards-70|cards-ready-182"
+        ],
+        "start": "2026-10-14T21:06:24.001128+00:00",
+        "end": "2026-10-14T21:06:28.590492+00:00",
+        "wallS": 4.589391583984252,
+        "exitCode": 1,
+        "hostLoadRaw": "{ 7.25 11.27 10.90 }",
+        "collectorPID": 79976,
+        "collectorPGID": 79976,
+        "commandPID": 79989,
+        "commandPGID": 79989,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ecaca7cd76fe3f8fceace1f2caaf0ea1573b8ccc954cf543d1fe6eb5f28c863e",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ecaca7cd76fe3f8fceace1f2caaf0ea1573b8ccc954cf543d1fe6eb5f28c863e",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/focused-v3.log"
+      },
+      {
+        "label": "focused-v4",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "-t",
+          "cards-70|cards-ready-182"
+        ],
+        "start": "2026-10-14T21:07:30.612222+00:00",
+        "end": "2026-10-14T21:07:36.912651+00:00",
+        "wallS": 6.300466707994929,
+        "exitCode": 0,
+        "hostLoadRaw": "{ 19.52 13.44 11.70 }",
+        "collectorPID": 29858,
+        "collectorPGID": 29858,
+        "commandPID": 30180,
+        "commandPGID": 30180,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/focused-v4.log"
+      },
+      {
+        "label": "guard-v1",
+        "argv": [
+          "python3",
+          "/tmp/182-guard.py"
+        ],
+        "start": "2026-10-14T21:27:05.909835+00:00",
+        "end": "2026-10-14T21:27:06.263696+00:00",
+        "wallS": 0.3539171250013169,
+        "exitCode": 0,
+        "hostLoadRaw": "{ 6.46 7.70 10.23 }",
+        "collectorPID": 36901,
+        "collectorPGID": 36901,
+        "commandPID": 36915,
+        "commandPGID": 36915,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/guard-v1.log"
+      },
+      {
+        "label": "knip-v1",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "start": "2026-10-14T21:26:16.472375+00:00",
+        "end": "2026-10-14T21:26:20.561639+00:00",
+        "wallS": 4.089288417017087,
+        "exitCode": 0,
+        "hostLoadRaw": "{ 7.56 8.07 10.51 }",
+        "collectorPID": 35584,
+        "collectorPGID": 35584,
+        "commandPID": 35593,
+        "commandPGID": 35593,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/knip-v1.log"
+      },
+      {
+        "label": "preflight-v1",
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "ccbefadc-aab8-4f8c-a705-07bd70c91731,d89f4c33-ffd3-4313-8106-0a9f7013cad8,cf173b05-7bf2-465b-91e2-41f213c536d1"
+        ],
+        "start": "2026-10-14T21:10:57.685674+00:00",
+        "end": "2026-10-14T21:10:59.819287+00:00",
+        "wallS": 2.1336920419998933,
+        "exitCode": 0,
+        "hostLoadRaw": "{ 22.12 16.19 13.14 }",
+        "collectorPID": 73789,
+        "collectorPGID": 73789,
+        "commandPID": 73834,
+        "commandPGID": 73834,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/preflight-v1.log"
+      },
+      {
+        "label": "review-v1",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "start": "2026-10-14T21:25:06.054881+00:00",
+        "end": "2026-10-14T21:26:04.170073+00:00",
+        "wallS": 58.114834915992105,
+        "exitCode": 0,
+        "hostLoadRaw": "{ 4.89 7.83 10.64 }",
+        "collectorPID": 33929,
+        "collectorPGID": 33929,
+        "commandPID": 33940,
+        "commandPGID": 33940,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/review-v1.log"
+      },
+      {
+        "label": "schema-v1",
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "start": "2026-10-14T21:27:05.719389+00:00",
+        "end": "2026-10-14T21:27:05.839280+00:00",
+        "wallS": 0.12001299997791648,
+        "exitCode": 0,
+        "hostLoadRaw": "{ 6.46 7.70 10.23 }",
+        "collectorPID": 36910,
+        "collectorPGID": 36901,
+        "commandPID": 36912,
+        "commandPGID": 36912,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/schema-v1.log"
+      },
+      {
+        "label": "sweep-v1",
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.182",
+          "--cards",
+          "ccbefadc-aab8-4f8c-a705-07bd70c91731,d89f4c33-ffd3-4313-8106-0a9f7013cad8,cf173b05-7bf2-465b-91e2-41f213c536d1"
+        ],
+        "start": "2026-10-14T21:19:53.427561+00:00",
+        "end": "2026-10-14T21:24:16.886237+00:00",
+        "wallS": 263.45661299998756,
+        "exitCode": 0,
+        "hostLoadRaw": "{ 6.75 12.14 12.82 }",
+        "collectorPID": 24937,
+        "collectorPGID": 24937,
+        "commandPID": 24949,
+        "commandPGID": 24949,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/sweep-v1.log"
+      },
+      {
+        "label": "weighted300-v1",
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "ccbefadc-aab8-4f8c-a705-07bd70c91731,d89f4c33-ffd3-4313-8106-0a9f7013cad8,cf173b05-7bf2-465b-91e2-41f213c536d1"
+        ],
+        "start": "2026-10-14T21:08:14.000163+00:00",
+        "end": "2026-10-14T21:19:27.951047+00:00",
+        "wallS": 673.9456108750019,
+        "exitCode": 0,
+        "hostLoadRaw": "{ 16.36 13.55 11.83 }",
+        "collectorPID": 46975,
+        "collectorPGID": 46975,
+        "commandPID": 46988,
+        "commandPGID": 46988,
+        "sourceStart": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceEnd": {
+          "src/content/cards/mirrorlight-architect-ccbefadc.ts": "32b888a6d7b6a6b2c3ab0f5c207df2f23c4e65827bfef821f9a47611d5908464",
+          "src/content/cards/steel-abomination-d89f4c33.ts": "98eae988812f36f43425e6bc324a76a0af77c3b5a8053f66e5564f5355ece8ed",
+          "src/content/specs/cards-70.scenarios.ts": "ec02de9e0c162850a372b1d8c31401168487fbbb4c4e60f684a6e9e3f7040db2",
+          "src/content/cards/grim-recruiter-cf173b05.ts": "a8a08ff13e0d5c33af21548d2073ccecbdad6e3f4dd6718d842b0ad094343a5b",
+          "src/content/specs/cards-ready-182.scenarios.ts": "e2f1a63a9ea099f9620b7f65008cb39ace837e5e2bb61e8b30f52855c7e1c3ad",
+          "docs/plan/evidence/qa-ledger/hv-umm2.681.jsonl": "e05627a5a787dd63f05ae5256e9fce9c03ead85122cd3eee9339c5a215096ef1"
+        },
+        "sourceUnchanged": true,
+        "groupRemaining": [],
+        "log": "/tmp/182-checks/weighted300-v1.log"
+      }
+    ],
+    "counts": {
+      "coverage-v1": {
+        "reportedTests": [
+          "Test Files  1 passed (1)",
+          "Tests  20 passed (20)"
+        ]
+      },
+      "focused-v1": {
+        "reportedTests": [
+          "Test Files  1 failed (1)",
+          "Tests  8 failed | 8 passed | 443 skipped (459)"
+        ]
+      },
+      "focused-v2": {
+        "reportedTests": [
+          "Test Files  1 failed (1)",
+          "Tests  2 failed | 14 passed | 443 skipped (459)"
+        ]
+      },
+      "focused-v3": {
+        "reportedTests": [
+          "Test Files  1 failed (1)",
+          "Tests  2 failed | 14 passed | 443 skipped (459)"
+        ]
+      },
+      "focused-v4": {
+        "reportedTests": [
+          "Test Files  1 passed (1)",
+          "Tests  16 passed | 443 skipped (459)"
+        ]
+      },
+      "guard-v1": {
+        "reportedTests": []
+      },
+      "knip-v1": {
+        "reportedTests": []
+      },
+      "preflight-v1": {
+        "reportedTests": [],
+        "summary": {
+          "event": "labPreflightSummary",
+          "cards": [
+            "ccbefadc-aab8-4f8c-a705-07bd70c91731",
+            "d89f4c33-ffd3-4313-8106-0a9f7013cad8",
+            "cf173b05-7bf2-465b-91e2-41f213c536d1"
+          ],
+          "avatars": [],
+          "dreamsigns": [],
+          "variants": [
+            "base",
+            "amplified",
+            "empowered",
+            "kindled",
+            "resonant",
+            "inspired",
+            "enduring",
+            "hastened",
+            "attuned",
+            "perfected"
+          ],
+          "sides": [
+            "player",
+            "enemy"
+          ],
+          "counts": {
+            "pass": 32,
+            "pending": 0,
+            "skip": 28,
+            "fail": 0
+          },
+          "elapsedMs": 33.68999999999983,
+          "hostLoad": 22.115234375,
+          "enemyMode": "scripted-lab-play-first-legal-prompts"
+        }
+      },
+      "review-v1": {
+        "reportedTests": [
+          "Test Files  253 passed (253)",
+          "Tests  6968 passed (6968)"
+        ]
+      },
+      "schema-v1": {
+        "reportedTests": []
+      },
+      "sweep-v1": {
+        "reportedTests": [],
+        "summary": {
+          "event": "cardSweepSummary",
+          "invocation": "invocations/sweep-5VLl5O",
+          "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.182/invocations/sweep-5VLl5O",
+          "counts": {
+            "pass": 32,
+            "skip": 28
+          },
+          "attemptCounts": {
+            "pass": 32,
+            "skip": 28
+          },
+          "hostLoad": 6.74755859375,
+          "sessions": 1,
+          "leaseYields": 0,
+          "wallMs": {
+            "browserLeaseWait": 7,
+            "serve": 2624,
+            "scenario": 260134.84887500003,
+            "cleanup": 286.99279200000456,
+            "execution": 263106.61537500005,
+            "total": 263113.61537500005
+          }
+        }
+      },
+      "weighted300-v1": {
+        "reportedTests": [],
+        "reportedFuzz": "fuzz:engine 300 games, 107328 steps, 356.8 s wall, 381.3 s CPU (0.8 games/s wall, 0.8 games/s CPU); prompts 7773; interactive re-runs 774 (5.254 ms each); feasibility bounded {\"legality\":0,\"prompts\":3}; results {\"player\":154,\"enemy\":146,\"draw\":0}; failures 0",
+        "targets": [
+          {
+            "kind": "card",
+            "uuid": "ccbefadc-aab8-4f8c-a705-07bd70c91731",
+            "included": 613,
+            "exercised": 183
+          },
+          {
+            "kind": "card",
+            "uuid": "d89f4c33-ffd3-4313-8106-0a9f7013cad8",
+            "included": 620,
+            "exercised": 142
+          },
+          {
+            "kind": "card",
+            "uuid": "cf173b05-7bf2-465b-91e2-41f213c536d1",
+            "included": 611,
+            "exercised": 112
+          }
+        ]
+      }
+    },
+    "ordering": "Focused v1\u2192v2\u2192v3\u2192v4, coverage, weighted dispatch waits heavy slot; default preflight once while weighted pending, browser only after weighted green; browser cleanup then ordinary review\u2192Knip, final schema/whitespace/source/resource guards."
+  },
+  "failedChecks": [
+    {
+      "label": "focused-v1",
+      "cause": "Six arrival expectations omitted existing materialized.slot; both departure cases passed after already auto-resolved initial play.",
+      "verdict": "failed own expectation/fixture, preserved and corrected; not claimed accepted"
+    },
+    {
+      "label": "focused-v2",
+      "cause": "Two departure cases supplied inline target answer to automatic target/removal sequence, then reached mandatory private choice without a suitable answer.",
+      "verdict": "failed own expectation/fixture, preserved and corrected; not claimed accepted"
+    },
+    {
+      "label": "focused-v3",
+      "cause": "Intermediate pass moved to fold but response play itself auto-drained stack; v4 submits response through public fold, suspending private choice correctly.",
+      "verdict": "failed own expectation/fixture, preserved and corrected; not claimed accepted"
+    }
+  ],
+  "preExistingIssues": [],
+  "reviewQualification": "Composition; no new primitive/prompt/status/state transition. Two leaves17 gross non-test lines, private179-line scenario is consumed test code. Parent owns normal other-family review classification/routing. Temporary Sol override expired."
+}

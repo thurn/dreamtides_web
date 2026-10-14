@@ -1,3 +1,5 @@
+import { abandonCost, abandonSelfCost, activated, energy, storedCounters } from "../../engine/dsl/builders";
+import { gainPoints, storeCounters } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 211,
   art: { x: -0.037, y: 1, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated([energy(1), abandonCost({ another: true })], storeCounters(1)),
+    activated([abandonSelfCost()], gainPoints(storedCounters())),
+  ],
+  verifiedText: "fb17cgx0d7",
 });
