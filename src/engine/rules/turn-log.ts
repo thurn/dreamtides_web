@@ -57,6 +57,16 @@ export function recordDiscarded(state: BattleState, side: Side, count: number): 
   state.turnLog.discarded ??= { player: 0, enemy: 0 };
   state.turnLog.discarded[side] += count;
 }
+/** Records a validated physical cohort only after every discard completed. */
+export function recordDiscardedCards(state: BattleState, side: Side, cards: readonly InstanceId[]): void {
+  state.turnLog.discardedCards ??= { player: [], enemy: [] };
+  state.turnLog.discardedCards[side].push(...cards);
+}
+/** Physical cards actually discarded from this side's hand; legacy absence is empty. */
+export function discardedCardsThisTurn(state: BattleState, side: Side): readonly InstanceId[] {
+  return state.turnLog.discardedCards?.[side] ?? [];
+}
+
 /** Records one announced character departure before controller or type can change. */
 export function recordLeftPlay(state: BattleState, catalog: EngineCatalog, side: Side, card: InstanceId): void {
   state.turnLog.leftPlay ??= { player: [], enemy: [] };

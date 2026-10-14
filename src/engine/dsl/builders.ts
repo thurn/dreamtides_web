@@ -602,6 +602,10 @@ export function thisTurn(count: CurrentTurnCountValue, atLeast = 1, atMost?: num
 export function dissolvedIn(zone: CountedZone, filter: CardFilter = {}, player: PlayerRef = "you"): ZoneEverySpec {
   return { ...everyIn(zone, filter, { player }), thisTurn: "dissolved" };
 }
+/** Current-zone physical cards discarded by either player this turn, once each in zone order. */
+export function discardedIn(zone: CountedZone, filter: CardFilter = {}, player: PlayerRef = "you"): ZoneEverySpec {
+  return { ...everyIn(zone, filter, { player }), thisTurn: "discarded" };
+}
 /** Current-zone physical cards the selected player abandoned this turn, once each in zone order. */
 export function abandonedIn(zone: CountedZone, filter: CardFilter = {}, player: PlayerRef = "you"): ZoneEverySpec {
   return { ...everyIn(zone, filter, { player }), thisTurn: "abandoned" };

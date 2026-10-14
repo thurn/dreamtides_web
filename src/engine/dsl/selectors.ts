@@ -1,6 +1,7 @@
 import { BATTLE } from "../../content/battle";
 import type { EngineCatalog } from "../catalog";
 import { characteristics, copiableCostOf, filterSubjectOf, matchesEveryCard, matchesFilter, type Characteristics } from "../continuous/characteristics";
+import { discardedCardsThisTurn } from "../rules/turn-log";
 import { challengeRoleOf } from "../rules/challenge";
 import { hasKeyword } from "../rules/keywords";
 import { charactersInPlay, slotOf } from "../rules/zones";
@@ -271,6 +272,7 @@ export function matchingStackItems(
 
 /** Dissolved membership accepts either departing controller; abandoned membership requires the named abandoning side. */
 export function matchesCurrentTurnMembership(state: BattleState, id: InstanceId, kind: NonNullable<ZoneEverySpec["thisTurn"]>, side: Side): boolean {
+  if (kind === "discarded") return SIDES.some(actor => discardedCardsThisTurn(state, actor).includes(id));
   const records = kind === "dissolved" ? state.turnLog.dissolved : state.turnLog.abandoned;
   return (kind === "abandoned" ? [side] : SIDES).some(controller => records?.[controller].some(card => card.instance === id) === true);
 }

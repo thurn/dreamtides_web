@@ -273,7 +273,7 @@ export interface ZoneTargetSpec extends ZoneCardsBase {
  */
 export interface ZoneEverySpec extends ZoneCardsBase {
   /** Intersects current-zone physical members with successful occurrences this turn. */
-  readonly thisTurn?: "dissolved" | "abandoned";
+  readonly thisTurn?: "dissolved" | "abandoned" | "discarded";
   readonly pick: "every";
   readonly zone: CountedZone;
   /** Excludes the effect's source. */

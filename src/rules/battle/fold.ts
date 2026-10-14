@@ -1214,6 +1214,7 @@ function isTurnLog(value: unknown): boolean {
   const departures = optional(sideRecord(arrayOf(card => isPlainRecord(card) && isInstanceId(card.instance) && isCardKind(card.cardType))));
   return (
     isPlainRecord(value) &&
+    optional(sideRecord(arrayOf(isInstanceId)))(value.discardedCards) &&
     optional(sideRecord(isIndex))(value.discarded) && departures(value.leftPlay) && departures(value.dissolved) && departures(value.abandoned) &&
     sideRecord(
       arrayOf(

@@ -1962,6 +1962,24 @@ Historical counts are public. A historical physical identity is shown only
 while that observer can identify its current card; hidden historical identities
 do not identify sampled hidden cards.
 
+### Current-zone discarded membership
+
+"Cards in your void which were discarded this turn" names each physical card
+currently in that void which belonged to a completed discard occasion during
+the active turn. Either player may have discarded it; the hand it left does
+not change its owner's void. Each selected card appears once, in the zone's
+current order, with its current effective characteristics and copiable cost.
+Repeated discards of one physical card do not duplicate the current member.
+Distinct physical copies of the same printing remain distinct members.
+
+The same current-zone restriction applies when an instruction names discarded
+cards now in a hand or deck. A card that ceased to exist, moved elsewhere, or
+was banished instead of entering the void is not a current void member. A card
+put into the void without being discarded is not a discarded member. Missing
+legacy discarded-card history names no physical cards while its saved discard
+count retains its value. Each ordinary or extra turn starts with empty
+physical discard membership.
+
 ## Ability Types
 
 **Event abilities** — Effects printed on event cards. They resolve when the event

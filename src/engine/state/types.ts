@@ -700,6 +700,8 @@ export interface TurnDeparture {
 export interface TurnLog {
   /** Completed discard occurrence counts, including cards that cease to exist. */
   discarded?: Record<Side, number>;
+  /** Physical completed discards, grouped by the hand they left; repeated occurrences are retained. */
+  discardedCards?: Record<Side, InstanceId[]>;
   /** Predeparture controller groups; repeated physical occurrences remain separate. */
   leftPlay?: Record<Side, TurnDeparture[]>;
   dissolved?: Record<Side, TurnDeparture[]>;

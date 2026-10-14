@@ -287,6 +287,7 @@ export interface TurnDepartureView extends Omit<TurnDeparture, "instance"> { rea
 
 export interface TurnLogView {
   readonly discarded?: Readonly<Record<Side, number>>;
+  readonly discardedCards?: Readonly<Record<Side, readonly (InstanceId | null)[]>>;
   readonly leftPlay?: Readonly<Record<Side, readonly TurnDepartureView[]>>;
   readonly dissolved?: Readonly<Record<Side, readonly TurnDepartureView[]>>;
   readonly abandoned?: Readonly<Record<Side, readonly TurnDepartureView[]>>;
@@ -670,6 +671,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     triggerQueue,
     turnLog: {
       discarded: { player: state.turnLog.discarded?.player ?? 0, enemy: state.turnLog.discarded?.enemy ?? 0 },
+      discardedCards: { player: (state.turnLog.discardedCards?.player ?? []).map(id => visible(id) ? id : null),
+        enemy: (state.turnLog.discardedCards?.enemy ?? []).map(id => visible(id) ? id : null) },
       leftPlay: { player: departureView(state.turnLog.leftPlay?.player), enemy: departureView(state.turnLog.leftPlay?.enemy) },
       dissolved: { player: departureView(state.turnLog.dissolved?.player), enemy: departureView(state.turnLog.dissolved?.enemy) },
       abandoned: { player: departureView(state.turnLog.abandoned?.player), enemy: departureView(state.turnLog.abandoned?.enemy) },

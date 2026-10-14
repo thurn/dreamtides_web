@@ -379,6 +379,10 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     player: anonymous(view.turnLog[kind]?.player ?? []), enemy: anonymous(view.turnLog[kind]?.enemy ?? []),
   });
   const leftPlayCards = departures("leftPlay"), dissolvedCards = departures("dissolved"), abandonedCards = departures("abandoned");
+  const discardedCards = {
+    player: (view.turnLog.discardedCards?.player ?? []).map((id): InstanceId => id ?? `i${next++}`),
+    enemy: (view.turnLog.discardedCards?.enemy ?? []).map((id): InstanceId => id ?? `i${next++}`),
+  };
   const mint = (owner: Side, holder: Side, zone: "deck" | "hand", entry: DeckEntry, created: boolean, poolCandidates?: CardInstance["poolCandidates"]): InstanceId => {
     const id: InstanceId = `i${next}`;
     next += 1;
@@ -818,6 +822,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     })].sort((a, b) => a.timestamp - b.timestamp || Number(a.id.slice(1)) - Number(b.id.slice(1))),
     turnLog: {
       discarded: { player: view.turnLog.discarded?.player ?? 0, enemy: view.turnLog.discarded?.enemy ?? 0 },
+      discardedCards,
       leftPlay: leftPlayCards, dissolved: dissolvedCards, abandoned: abandonedCards,
       // Unobserved historical admissions are omitted, as unknown queued bodies are.
       // This is a conservative reconstruction, not the authoritative count.
