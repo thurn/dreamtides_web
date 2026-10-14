@@ -53,10 +53,8 @@ import { abilityEffect, namedTriggersOf, worksInZone } from "../dsl/abilities";
 import { fixedEnergy } from "../dsl/energy";
 import { resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, Trigger, Variant } from "../dsl/types";
-import { hasImmutableRepeatAllowance, hasNamedTrigger, triggerBody } from "../triggers/body";
+import { hasImmutableRepeatAllowance, hasNamedTrigger, readsImmediateRepeat, triggerBody } from "../triggers/body";
 import { everyNode } from "../effects/interpreter";
-import { primitiveDefinition } from "../effects/registry";
-import type { EffectNode } from "../effects/types";
 import { loopSignature } from "../loops/signature";
 import { emptyLoopTracker } from "../loops/types";
 import { instanceOrigin, originAbilities } from "../rules/activation";
@@ -628,19 +626,13 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     if (selected === undefined) throw new Error("Cannot determinize a cause without a compatible named occurrence");
     return selected;
   };
-  const readsRepeat = (effect: EffectNode, seen = new Set<EffectNode>()): boolean => {
-    if (effect.op === "floatingTrigger" || seen.has(effect)) return false;
-    seen.add(effect);
-    const definition = primitiveDefinition(effect.op);
-    return effect.op === "repeatTriggeringAbility" || [...definition.children?.(effect) ?? [], ...definition.deferred?.(effect) ?? []].some(child => readsRepeat(child, seen));
-  };
   // Withheld bindings are sampled from direct named occasions. Such a cause
   // has no invented predecessor, even when its body also watches admissions.
   const sampledBinding = (shown: QueuedTriggerView, origin: QueuedTrigger["origin"]): QueuedTrigger["triggeringAbility"] => {
     const body = triggerBody(catalog, origin, shown.ability, shown.node);
     const branches = (trigger: Trigger): Extract<Trigger, { on: "namedAbilityTriggered" }>[] => trigger.on === "either"
       ? trigger.triggers.flatMap(branches) : trigger.on === "namedAbilityTriggered" ? [trigger] : [];
-    const observers = readsRepeat(body.effect) ? branches(body.trigger) : [];
+    const observers = readsImmediateRepeat(body.effect) ? branches(body.trigger) : [];
     if (observers.length === 0) return undefined;
     const observer = observers[Math.floor(random() * observers.length)];
     const controller = resolvePlayer(shown.controller, observer.player);

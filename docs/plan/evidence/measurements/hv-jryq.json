@@ -1,0 +1,336 @@
+{
+  "bead": "hv-jryq",
+  "base": "698e19d506bd49034a4feb9ac829f5502c3d3d0f",
+  "dispatch": "2026-10-14T17:31:42.170677+00:00",
+  "evidenceCutoff": "2026-10-14T17:49:23.685230+00:00",
+  "elapsedThroughCutoffS": 1061.514553,
+  "futureGit": "UNKNOWN at actual pre-Git cutoff; independent external actual receipt supplies OID/blobs/endpoint and full dispatch-inclusive interval within60seconds.",
+  "admission": {
+    "proposalSHA256": "55108e865338f8b101a3c428d90a08c50f444e64bbca8e1fd27b15b26c2f727e",
+    "nativeACK": "source-write-full-native-ack.json",
+    "collectorSHA256": "c9fa2ed10304cdd9500ed75944737e56f8bd6d2d740ab26b4560da1eb0025b9d",
+    "peerAudit": "Fresh8 fullnative scopes read by root;95/100 additive scalar/historyfields separate; no predicate body overlap."
+  },
+  "implementation": "Authoritative readsImmediateRepeat in body.ts is exact matcher predicate renamed: per-call cycleSet, seen/floating stop, terminal repeat then registry children-before-deferred traversal. Matcher private predicate removed andenqueuecall/import replaced. Sampler local predicate andits newlyunused registry/EffectNode imports removed, eligibilitycall/import replaced. All jzoy context construction/690checks/other source bytes and contracts preserved.",
+  "domainQualification": "Copies differ textually in terminal registry lookup and pure early-guard order. Registered plain-data actual consumers are equivalent: repeat is permanently registered, no initialization calls. Helper preserves matcher order exactly; unknown other primitive errors remain. No arbitrary accessor/module-init equivalence or performance claim.",
+  "tests": {
+    "delta": 0,
+    "existingImporter": "src/engine/effects/primitives/contracts.test.ts eager glob",
+    "proof": "Existing163 actual repeat/cohort/named/floating/delayed contracts, including b7x4 refusal andjzoy20normalfold privacy contexts. Existing six view/determinize/knowledge/fold/prompt/trigger files. No new helper/mirror tests, rawstate probe or counterfactual."
+  },
+  "validation": {
+    "repeat-context-focus": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "repeatTriggeringAbility|withMaterialized|floating|delayed"
+      ],
+      "pid": 37871,
+      "pgid": 37871,
+      "start": "2026-10-14T17:40:34.808753+00:00",
+      "end": "2026-10-14T17:40:40.779542+00:00",
+      "wallS": 5.970624792011222,
+      "exit": 0,
+      "stdoutSHA256": "990f3d808047d5299496e32b1a0af4614cc1bfb0c18e702c5e123178ba3f0772",
+      "settled": true
+    },
+    "view-fold-trigger-focus": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/triggers/triggers.test.ts"
+      ],
+      "pid": 51043,
+      "pgid": 51043,
+      "start": "2026-10-14T17:40:53.016274+00:00",
+      "end": "2026-10-14T17:40:58.578883+00:00",
+      "wallS": 5.562436957989121,
+      "exit": 0,
+      "stdoutSHA256": "8385b9d19b91d9a4f24fd1d790f1c9a054391feb94d1b1fd96a364b983b6f718",
+      "settled": true
+    },
+    "normal-review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 21872,
+      "pgid": 21872,
+      "start": "2026-10-14T17:42:36.347325+00:00",
+      "end": "2026-10-14T17:43:51.183393+00:00",
+      "wallS": 74.83498295798199,
+      "exit": 0,
+      "stdoutSHA256": "182410bf0cdc2b08294191ebfc9d7f1f2ed4dd3ab0cbce6345ce2acac197cccd",
+      "settled": true
+    },
+    "light-knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 82148,
+      "pgid": 82148,
+      "start": "2026-10-14T17:43:55.250522+00:00",
+      "end": "2026-10-14T17:44:00.817905+00:00",
+      "wallS": 5.567209457978606,
+      "exit": 0,
+      "stdoutSHA256": "bd25e2d249f05110de46e4a840d0d821c8c4b2967461a8e8d0369ad81b90cb4b",
+      "settled": true
+    },
+    "light-schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 24035,
+      "pgid": 24035,
+      "start": "2026-10-14T17:44:32.541233+00:00",
+      "end": "2026-10-14T17:44:32.683766+00:00",
+      "wallS": 0.14245345801464282,
+      "exit": 0,
+      "stdoutSHA256": "e7132a7b14cbd0cdeef75fa3c1d683447ddfc18b2e8fef9b9793d44a177abb1b",
+      "settled": true
+    },
+    "full-review": {
+      "argv": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 24063,
+      "pgid": 24063,
+      "start": "2026-10-14T17:44:32.751419+00:00",
+      "end": "2026-10-14T17:46:33.694549+00:00",
+      "wallS": 120.94137516600313,
+      "exit": 0,
+      "stdoutSHA256": "8f638df5ad57fa0437f8e2781d151b0d441f15c3a59b643edbd1f5e25558c335",
+      "settled": true
+    }
+  },
+  "validationSummary": {
+    "repeatContext": "163PASS3750skip",
+    "viewFoldTrigger": "See actual receipt/stdout",
+    "review": "PASS",
+    "knip": "PASS",
+    "schema": "Light receipt if present; final post-evidence schema remains future UNKNOWN at cutoff and is externally receipted before Git.",
+    "full": "PASS",
+    "workers": 2
+  },
+  "failurePaths": {
+    "errorMidStep": "Pure extraction introduces no new transition. Existing rolls back genuine repeated mutation prefix on exact later primitive error and malformed/catalog mismatch tests retain successful-prefix discrimination; unknown nonterminal registry errors unchanged.",
+    "reload": "Existing reloads optional observer and refuses wrong-side/stale/duplicate continuations plus actual jzoy savedconfirm/directJSON contracts unchanged; no persisted schema change.",
+    "partialWrite": "Only fresh traversal Set is mutated, no source/view/persistent state. Existing hash/bytes purity and atomicrollback contracts apply; no new persistence test necessary.",
+    "invalidStaleInput": "Existing registry/catalog/save validation and staleprompt/immutable allowance guards unchanged. No new identity/input representation, no arbitrary malformed helper objects admitted.",
+    "concurrentActors": "Each root call owns a fresh Set; no shared cache/IO/writer. Existing controller/viewer and original-controller matrices apply, no race-stress claim or new state machine."
+  },
+  "heavy": {
+    "required": "One central cross-consumer extraction full under exactnativeheavyACK, two workers",
+    "argv": [
+      "/usr/bin/lockf",
+      "-k",
+      "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "/opt/homebrew/bin/npm",
+      "run",
+      "review:full"
+    ],
+    "receipt": "full-review.receipt.json if terminal",
+    "manifest": "full-source-manifest.json all10before/afterSHA identical; actual load/slot interval qualified by full-resource-qualification.json",
+    "defaultFuzzRun": false,
+    "browserRun": false,
+    "actualResourceQualification": {
+      "receipt": "full-review.receipt.json",
+      "exactOuterArgv": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review:full"
+      ],
+      "attempts": 1,
+      "wallS": 120.94137516600313,
+      "fullGroupAbsent": 24063,
+      "firstReviewStep": {
+        "step": "prepare",
+        "at": "2026-10-14T17:44:32.975Z",
+        "load1m": 26.11328125
+      },
+      "launchToFirstReviewStepS": 0.223581,
+      "lockWaitQualification": "This interval includes native lock acquisition/wait and npm bootstrap/prepare; exact exclusive lock wait was not separately instrumented. At first own-group observation lockf had npm/review/lint children; no waiting was observed. No zero-wait or separateCPU inference.",
+      "loadSamples": [
+        {
+          "step": "prepare",
+          "at": "2026-10-14T17:44:32.975Z",
+          "load1m": 26.11328125
+        },
+        {
+          "step": "lint",
+          "at": "2026-10-14T17:44:34.401Z",
+          "load1m": 26.11328125
+        },
+        {
+          "step": "typecheck",
+          "at": "2026-10-14T17:44:34.402Z",
+          "load1m": 26.11328125
+        },
+        {
+          "step": "typecheck-node",
+          "at": "2026-10-14T17:44:34.403Z",
+          "load1m": 26.11328125
+        },
+        {
+          "step": "import-cycles",
+          "at": "2026-10-14T17:44:34.404Z",
+          "load1m": 26.11328125
+        },
+        {
+          "step": "knip",
+          "at": "2026-10-14T17:44:34.404Z",
+          "load1m": 26.11328125
+        },
+        {
+          "step": "friction-records",
+          "at": "2026-10-14T17:44:34.405Z",
+          "load1m": 26.11328125
+        },
+        {
+          "step": "test",
+          "at": "2026-10-14T17:45:05.756Z",
+          "load1m": 24.74951171875
+        },
+        {
+          "step": "bundle",
+          "at": "2026-10-14T17:46:27.236Z",
+          "load1m": 24.70654296875
+        },
+        {
+          "step": "restore-local-assets",
+          "at": "2026-10-14T17:46:31.903Z",
+          "load1m": 24.64990234375
+        }
+      ],
+      "testSummary": "387files8538PASS",
+      "bundle": "PASS development-onlymodule exclusion",
+      "allTenSourceHashesUnchanged": true,
+      "fullSuiteFixtureQualification": "QA ownership tests emit synthetic fixture lease/server/failure logs under temporary directories. They are suitefixtures, not liveapp/browser QA; normalfixturecleanup passes. No manual foreign/provider/service cleanup performed.",
+      "fixtureLoggedServerGroupsAbsent": [
+        27592,
+        27746,
+        28144,
+        28280,
+        28939,
+        28985,
+        29664,
+        29738,
+        29858,
+        30462,
+        30672,
+        31206,
+        31877,
+        32042,
+        32129,
+        32765,
+        32853,
+        33431,
+        33938,
+        34127,
+        34241,
+        34902,
+        34994,
+        36068,
+        36249,
+        37020,
+        38124,
+        38611,
+        39214,
+        39372,
+        39901,
+        40526,
+        40708,
+        41056,
+        41206,
+        41812,
+        41938,
+        42727,
+        42906,
+        43135,
+        43511,
+        44012,
+        44242,
+        44694,
+        44906,
+        45040,
+        45821,
+        46313,
+        47840,
+        48519,
+        51731,
+        52252,
+        53752,
+        54406,
+        54976,
+        57986,
+        58435
+      ],
+      "fixturePorts": "Synthetic fixture port5274; test output reports portfree cleanup. No liveapp port/server assigned to this bead.",
+      "remaining": []
+    }
+  },
+  "resources": {
+    "ownGroupsAbsent": [
+      21872,
+      24035,
+      24063,
+      37871,
+      51043,
+      53985,
+      82148
+    ],
+    "probeRun": false,
+    "standaloneBrowserQAStarted": false,
+    "standaloneProviderStarted": false,
+    "standaloneLiveAppServerStarted": false,
+    "standaloneLeasesStarted": false,
+    "fullSuiteFixtureProcessesStarted": true,
+    "fullRun": true
+  },
+  "sourceManifestSHA256": {
+    "src/engine/triggers/body.ts": "0304002782eeb7499500002295eb747b73fd8ee514de271797be41935cf83d99",
+    "src/engine/triggers/matcher.ts": "2ce911d248cc95b5dfa86417ce0c5a046201cd7b65d327b6f8f1119f59489924",
+    "src/engine/view/determinize.ts": "1f5750d0abd44d313afa6b7cf03a6d49b7ba39f7f9717916475ada24dac1de27",
+    "src/engine/effects/interpreter.ts": "16841dce52b27eb7c546a8e535344ad586d38eebadb251ffde43940ec1f9f6bd",
+    "src/engine/effects/registry.ts": "3efd70c237c170889e635e65fd3e1e0320c336ec5d36b17098a7536c732ad190",
+    "src/engine/effects/types.ts": "ec0e2189803ec90a8ecdb4141e79ae11387f4a5162108fa8fb1ac24e18eaf76c",
+    "src/engine/triggers/resolve.ts": "9eaf1247a9ba48c99a488b84b10f2b0db1614852e5205a9e247201f2322fbadc",
+    "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts": "392ec7ac4f99a69f58ea4ccd3f64a3f361d0985760b44b1fb6af5c8fc2ed80ca",
+    "src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts": "6672448b93c72d0ec3d0e7b21acdfdbcc29fb5592168aa9f2f40753c2c94abab",
+    "src/engine/effects/primitives/contracts/repeat-triggering-ability-fixtures.ts": "9a4cd3515a6667c76871839f4aaad7df933c3cef2b89fdbae287235ea6c41626"
+  },
+  "setup": "npm2.864936s/PG53985 settled; dispatch starts beforefreshTG/npm.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "normal-review starting1-minute hostload",
+        "at": "2026-10-14T17:42:39.083Z"
+      },
+      "implementWindow": {
+        "measuredFor": "Original dispatch through pre-Git cutoff including setup/sourcefirst/admission/lightchecks/heavyslot+full/waits, endpoint externally receipted."
+      }
+    }
+  },
+  "coldReview": "Root alone normal freshcore afteractual final. Priorjzoy debt remains separatelyroot-owned; no provider or completedreview claim by helper."
+}

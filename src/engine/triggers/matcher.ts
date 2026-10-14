@@ -54,7 +54,7 @@ import { opponent, SIDES, sourceInstance, sourceKey } from "../state/ids";
 import type { BattleState, FloatingEffect, GainedAbilities, HandCopyContext, MaterializedCard, Printing, QueuedTrigger, SparkGain } from "../state/types";
 import type { ArmedAbility, ArmedTriggers, LookbackEventKind, StepContext, TriggerBlocks, TriggerListener } from "../steps/types";
 import { sidesBlindTo } from "../view/knowledge";
-import { hasImmutableRepeatAllowance, hasNamedTrigger, ruleReactionBody, triggerBody } from "./body";
+import { hasImmutableRepeatAllowance, hasNamedTrigger, readsImmediateRepeat, ruleReactionBody, triggerBody } from "./body";
 import { observeRuleReactions, sourceObserved } from "./rule-reactions";
 import { observeNamedAdmissions, type NamedAdmission } from "./named-admissions";
 
@@ -589,14 +589,6 @@ function readsSubjectValue(value: unknown, kind: "subjectCost" | "subjectSpark",
  * it triggers (a card drawn into or discarded from a hidden hand), which
  * never see it as this trigger's subject.
  */
-function readsRepeat(node: EffectNode, seen = new Set<EffectNode>()): boolean {
-  if (seen.has(node) || node.op === "floatingTrigger") return false;
-  seen.add(node);
-  if (node.op === "repeatTriggeringAbility") return true;
-  const definition = primitiveDefinition(node.op);
-  return [...definition.children?.(node) ?? [], ...definition.deferred?.(node) ?? []].some(child => readsRepeat(child, seen));
-}
-
 function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger): NamedAdmission {
   const self = sourceInstance(matched.source);
   const lastKnownSourceSpark = self === null ? matched.lastKnownSourceSpark : (ctx.departedSourceSpark.get(self) ?? matched.lastKnownSourceSpark);
@@ -609,7 +601,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
     ? copiableCostOf(ctx.state, ctx.catalog, matched.subject) : undefined) : undefined;
   const subjectSpark = readsSubjectValue(effect, "subjectSpark") ? armedSpark : undefined;
   const retained = { ...record,
-    ...(triggeringAbility === undefined || !readsRepeat(effect) ? {} : { triggeringAbility: JSON.parse(JSON.stringify({ ...triggeringAbility,
+    ...(triggeringAbility === undefined || !readsImmediateRepeat(effect) ? {} : { triggeringAbility: JSON.parse(JSON.stringify({ ...triggeringAbility,
       readerObservedBy: triggeringAbility.readerObservedBy ?? matched.repeated?.observedBy ?? SIDES.filter(viewer => sourceObserved(ctx, matched.source, viewer)),
     })) as NonNullable<QueuedTrigger["triggeringAbility"]> }),
     ...(handCopy === undefined || !readsCopy ? {} : { handCopy }),

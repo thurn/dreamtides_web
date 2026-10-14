@@ -1,0 +1,24 @@
+{
+  "bead": "hv-jryq",
+  "phase": 5,
+  "implementMin": 17.691909216666666,
+  "implementWindow": {
+    "start": "2026-10-14T17:31:42.170677+00:00",
+    "end": "2026-10-14T17:49:23.685230+00:00"
+  },
+  "localValidationS": {
+    "repeat-context-focus": 5.970624792011222,
+    "view-fold-trigger-focus": 5.562436957989121,
+    "normal-review": 74.83498295798199,
+    "light-knip": 5.567209457978606,
+    "light-schema": 0.14245345801464282,
+    "full-review": 120.94137516600313
+  },
+  "hostLoad": 14.12744140625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

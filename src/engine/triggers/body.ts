@@ -3,6 +3,7 @@ import type { EngineCatalog } from "../catalog";
 import { abilityEffect } from "../dsl/abilities";
 import type { Condition, NamedTrigger, Trigger } from "../dsl/types";
 import { everyNode } from "../effects/interpreter";
+import { primitiveDefinition } from "../effects/registry";
 import type { FloatingTriggerNode } from "../effects/primitives/floating-trigger";
 import type { EffectNode } from "../effects/types";
 import { originAbilities } from "../rules/activation";
@@ -38,6 +39,15 @@ export function triggerBody(
   if (found?.op !== "floatingTrigger") throw new Error(`Node ${String(node)} of ability ${String(ability)} is not a floating trigger`);
   const floating = found as FloatingTriggerNode;
   return { trigger: floating.trigger, effect: floating.effect, root, condition: null };
+}
+
+/** Whether this resolving body reads its causing occurrence; a floating body belongs to its future occasion. */
+export function readsImmediateRepeat(node: EffectNode, seen = new Set<EffectNode>()): boolean {
+  if (seen.has(node) || node.op === "floatingTrigger") return false;
+  seen.add(node);
+  if (node.op === "repeatTriggeringAbility") return true;
+  const definition = primitiveDefinition(node.op);
+  return [...definition.children?.(node) ?? [], ...definition.deferred?.(node) ?? []].some(child => readsImmediateRepeat(child, seen));
 }
 
 /** Whether any branch of a trigger describes this named occasion. */

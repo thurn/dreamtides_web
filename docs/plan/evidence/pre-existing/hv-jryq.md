@@ -1,0 +1,5 @@
+# hv-jryq review provenance
+
+The completed normal cold Claude Opus5.5 review of hv-umm2.689 (`be28c1524e17f25cf25cab220a8157859809745a` against `e14c04cf76a1c5cc0533ec498ceaa42e9878948b`, integration `60d9a9f344797841b88817db6dce98e85d604d9e`) accepted F5: immediate repeat-reader detection is duplicated between matcher binding retention and sampler eligibility. hv-umm2.690 centralizes named classification and immutable allowance; hv-jzoy supplies sampled floating context. This followup shares the distinct immediate-reader boundary while preserving both prerequisites.
+
+Current base `698e19d506bd49034a4feb9ac829f5502c3d3d0f` contains the two structurally equivalent predicates. The extraction uses the matcher form, preserving registered plain-data consumer semantics, fresh cycle sets, children/deferred order and the floating-body boundary. Own measurements document the minor existing registry-lookup-order difference and actual unchanged public contract validation. Original static reports/provenance remain root-owned and immutable; no new runtime defect or resolved prior review debt is claimed.
