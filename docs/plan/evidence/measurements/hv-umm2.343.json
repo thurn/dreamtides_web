@@ -1,0 +1,1051 @@
+{
+  "bead": "hv-umm2.343",
+  "baseOID": "14e1625fd28436b6ffb07a7260e616eb1ea899bf",
+  "dispatch": {
+    "at": "2026-10-14T21:42:42.516Z",
+    "ordinal": 34116,
+    "callId": "call_27ef0e09b6fe4ee6995cec107a6ba6bf"
+  },
+  "implementationWindow": {
+    "start": "2026-10-14T21:42:42.516Z",
+    "end": "2026-10-14T22:03:12Z",
+    "scope": "Original audit dispatch through research, parent review/admission waits, caller preparation/corrections, actual QA, evidence, checks and automatic-date Git; final endpoint equals real commit second.",
+    "elapsedS": 1229.484
+  },
+  "nativeAdmission": {
+    "file": "receipts/parent/343-concrete-browser-admission-native.json",
+    "sha256": "08ad4934ce8aa1ff8a38aa9c34dda954b6e130a7a6723b61804b4bb8055a79db"
+  },
+  "resourcePolicy": {
+    "decision": "D17",
+    "nativeClarification": "/tmp/343-resource-clarification-native.json",
+    "heavySlot": false,
+    "reason": "Evidence-only browser acceptance uses standard native browser lease; heavy commands are outside this scope."
+  },
+  "caller": {
+    "file": "judged.mjs",
+    "sha256": "74ca640c13c3f0f94900fe8e30221e62c206a2dd8dd7015c416751a32f562a0e",
+    "lines": 170,
+    "preAdmissionRevisions": [
+      {
+        "at": "2026-10-14T21:48:55.261660+00:00",
+        "browserEffects": false,
+        "oldHash": "4643aff8ee0c853fb4578c87315038c3b8142e54e3f157be7fe60d8e51e6a9dc",
+        "newHash": "f1342c581af7f65a7deecbefe2f1536e22bb01738d68cbb6f5c6b50cedda468e",
+        "cause": "Read-only source resolve-top resolves effect before event card moves off stack; inverse own void top is Molten Duel, while Witness remains below it. Check DOM top against actual state order and open owner void gallery for exact physical Witness display proof."
+      },
+      {
+        "at": "2026-10-14T21:50:47.086635+00:00",
+        "browserEffects": false,
+        "oldHash": "f1342c581af7f65a7deecbefe2f1536e22bb01738d68cbb6f5c6b50cedda468e",
+        "newHash": "74ca640c13c3f0f94900fe8e30221e62c206a2dd8dd7015c416751a32f562a0e",
+        "cause": "Parent source audit: near-hand zone is ancestor of physical card element. Inverse retains second distinct affordable Molten copy to hold normal Dusk after first removal; no ordinary phase draw contaminates trigger-only observation. Add viewport bounds to existing geometry proof."
+      }
+    ],
+    "actualFailedAttempts": 0
+  },
+  "collector": {
+    "file": "collect-run.mjs",
+    "sha256": "e2a26211d8a2590e45e66a5557828f41b8efd5540bc578f5233b472e665d0162",
+    "terminal": {
+      "bead": "hv-umm2.343",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/stolen-dissolved-343-root",
+      "started": "2026-10-14T21:54:21.918Z",
+      "collectorPid": 509,
+      "runnerPid": 521,
+      "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node",
+      "argv": [
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.343/judged.mjs",
+        "--bead",
+        "hv-umm2.343",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "callerSha256": "74ca640c13c3f0f94900fe8e30221e62c206a2dd8dd7015c416751a32f562a0e",
+      "finished": "2026-10-14T21:55:43.613Z",
+      "code": 0,
+      "signal": null,
+      "observationError": null,
+      "observations": 4,
+      "ownedRecords": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+          "exists": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+          "exists": false
+        }
+      ]
+    },
+    "ownershipFile": "collector-2026-10-14T21-54-21.917Z-509/ownership.jsonl",
+    "postCleanup": {
+      "psExit": 1,
+      "psOutput": "",
+      "psErrors": "",
+      "port5174Free": true
+    }
+  },
+  "browser": {
+    "invocation": "run-w1N2xX",
+    "rawReport": "invocations/run-w1N2xX/judged.result.json",
+    "rawReportSha256": "71992545694bdc4fe5fae9e1c5168dcfb7c83f26e1211434c1fa6373554db086",
+    "wallMs": {
+      "browserLeaseWait": 7,
+      "serve": 3185,
+      "scenario": 77979,
+      "total": 81228
+    },
+    "calls": [
+      {
+        "viewport": "desktop",
+        "step": 0,
+        "ms": 24923
+      },
+      {
+        "viewport": "desktop",
+        "step": 1,
+        "ms": 20590
+      },
+      {
+        "viewport": "mobile",
+        "step": 0,
+        "ms": 16613
+      },
+      {
+        "viewport": "mobile",
+        "step": 1,
+        "ms": 15852
+      }
+    ],
+    "acceptedGames": [
+      {
+        "viewport": "desktop",
+        "orientation": "forward",
+        "gameId": "qkmxce",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "controller": "player",
+        "owner": "enemy",
+        "witness": "i11",
+        "puppet": "i1",
+        "removal": "i2",
+        "drawn": "i3",
+        "uuid": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+        "rows": 54,
+        "fullExport": "accepted-desktop-forward.jsonl",
+        "sha256": "62fa2403a38f01ed0b68cb27ed6dbff4df2171c751fcaa6fb3872136207a3c8c",
+        "actions": [
+          {
+            "gameId": "qkmxce",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i1",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "qrqwoi7h91",
+                "value": 3
+              }
+            ],
+            "timestamp": "2026-10-14T21:54:33.869Z",
+            "event": "engine.action",
+            "seq": 31
+          },
+          {
+            "gameId": "qkmxce",
+            "version": 3,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i2",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "1ir2lj0uo0t",
+                "value": [
+                  "i11"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-14T21:54:39.232Z",
+            "event": "engine.action",
+            "seq": 45
+          }
+        ],
+        "events": [
+          {
+            "seq": 5,
+            "index": 6,
+            "kind": "dissolved",
+            "instance": "i11",
+            "event": {
+              "kind": "dissolved",
+              "instance": "i11",
+              "side": "player"
+            },
+            "cards": {
+              "i11": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 5,
+            "index": 7,
+            "kind": "triggerQueued",
+            "instance": null,
+            "event": {
+              "kind": "triggerQueued",
+              "source": "i11",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "subject": "i11",
+              "lastKnownSourceSpark": 2
+            },
+            "cards": {
+              "i11": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 5,
+            "index": 9,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": "i11",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            },
+            "cards": {
+              "i11": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 5,
+            "index": 10,
+            "kind": "cardDrawn",
+            "instance": "i3",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i3"
+            },
+            "cards": {
+              "i3": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "dom": {
+          "voidCount": 1,
+          "voidTop": "i11",
+          "handCount": 1,
+          "drawnDisplayed": true,
+          "witnessInPlay": false,
+          "counts": {
+            "void": 1,
+            "hand": 1,
+            "top": "i11"
+          }
+        },
+        "stolenGeometry": {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i11\"]",
+          "x": 348,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "hit": true,
+          "rank": "player-back"
+        },
+        "plainLog": [
+          "You played Cosmic Puppeteer.",
+          "Cosmic Puppeteer entered play.",
+          "Cosmic Puppeteer's triggered ability resolved.",
+          "You gained control of Final Witness.",
+          "You played Molten Duel.",
+          "Final Witness was dissolved.",
+          "Final Witness's triggered ability resolved.",
+          "You drew Lab Recruit."
+        ],
+        "reloadVersion": 6,
+        "reloadHistoryEntries": 4,
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        }
+      },
+      {
+        "viewport": "desktop",
+        "orientation": "inverse",
+        "gameId": "b9cssx",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "controller": "enemy",
+        "owner": "player",
+        "witness": "i1",
+        "puppet": "i12",
+        "removal": "i2",
+        "drawn": "i13",
+        "uuid": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+        "rows": 57,
+        "fullExport": "accepted-desktop-inverse.jsonl",
+        "sha256": "f21765e6d3fba390c405efd429eb81e40d00d3c7da3240abf6d3d12793cb8e73",
+        "actions": [
+          {
+            "gameId": "b9cssx",
+            "version": 0,
+            "side": "enemy",
+            "action": {
+              "kind": "play",
+              "card": "i12",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "1f6kndrax1t",
+                "value": 3
+              }
+            ],
+            "timestamp": "2026-10-14T21:54:53.364Z",
+            "event": "engine.action",
+            "seq": 31
+          },
+          {
+            "gameId": "b9cssx",
+            "version": 4,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i2",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "2d9a9pruj61",
+                "value": [
+                  "i1"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-14T21:55:00.309Z",
+            "event": "engine.action",
+            "seq": 46
+          }
+        ],
+        "events": [
+          {
+            "seq": 7,
+            "index": 5,
+            "kind": "dissolved",
+            "instance": "i1",
+            "event": {
+              "kind": "dissolved",
+              "instance": "i1",
+              "side": "enemy",
+              "removal": {
+                "kind": "effect",
+                "controller": "player",
+                "victimCost": 3
+              }
+            },
+            "cards": {
+              "i1": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 7,
+            "index": 6,
+            "kind": "triggerQueued",
+            "instance": null,
+            "event": {
+              "kind": "triggerQueued",
+              "source": "i1",
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "subject": "i1",
+              "lastKnownSourceSpark": 2
+            },
+            "cards": {
+              "i1": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 7,
+            "index": 8,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": "i1",
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            },
+            "cards": {
+              "i1": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 7,
+            "index": 9,
+            "kind": "cardDrawn",
+            "instance": "i13",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i13"
+            },
+            "cards": {
+              "i13": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "dom": {
+          "voidCount": 2,
+          "voidTop": "i1",
+          "handCount": 1,
+          "drawnDisplayed": false,
+          "witnessInPlay": false,
+          "counts": {
+            "void": 2,
+            "hand": 1,
+            "top": "i1"
+          }
+        },
+        "stolenGeometry": {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "x": 348,
+          "y": 183,
+          "width": 89.5,
+          "height": 89.5,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "hit": true,
+          "rank": "enemy-back"
+        },
+        "plainLog": [
+          "Your opponent played Cosmic Puppeteer.",
+          "Cosmic Puppeteer entered play.",
+          "Cosmic Puppeteer's triggered ability resolved.",
+          "Your opponent gained control of Final Witness.",
+          "You played Molten Duel.",
+          "Final Witness was dissolved.",
+          "Final Witness's triggered ability resolved.",
+          "Your opponent drew a card."
+        ],
+        "reloadVersion": 7,
+        "reloadHistoryEntries": 6,
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        }
+      },
+      {
+        "viewport": "mobile",
+        "orientation": "forward",
+        "gameId": "w4e5xx",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "controller": "player",
+        "owner": "enemy",
+        "witness": "i11",
+        "puppet": "i1",
+        "removal": "i2",
+        "drawn": "i3",
+        "uuid": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+        "rows": 54,
+        "fullExport": "accepted-mobile-forward.jsonl",
+        "sha256": "c657b7a46a483d091b2656909aaa5c9abe8f3790742aa86385e6d1c70c1e10b1",
+        "actions": [
+          {
+            "gameId": "w4e5xx",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i1",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "qrqwoi7h91",
+                "value": 3
+              }
+            ],
+            "timestamp": "2026-10-14T21:55:15.254Z",
+            "event": "engine.action",
+            "seq": 31
+          },
+          {
+            "gameId": "w4e5xx",
+            "version": 3,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i2",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "1ir2lj0uo0t",
+                "value": [
+                  "i11"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-14T21:55:19.214Z",
+            "event": "engine.action",
+            "seq": 45
+          }
+        ],
+        "events": [
+          {
+            "seq": 5,
+            "index": 6,
+            "kind": "dissolved",
+            "instance": "i11",
+            "event": {
+              "kind": "dissolved",
+              "instance": "i11",
+              "side": "player"
+            },
+            "cards": {
+              "i11": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 5,
+            "index": 7,
+            "kind": "triggerQueued",
+            "instance": null,
+            "event": {
+              "kind": "triggerQueued",
+              "source": "i11",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "subject": "i11",
+              "lastKnownSourceSpark": 2
+            },
+            "cards": {
+              "i11": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 5,
+            "index": 9,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": "i11",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            },
+            "cards": {
+              "i11": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 5,
+            "index": 10,
+            "kind": "cardDrawn",
+            "instance": "i3",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i3"
+            },
+            "cards": {
+              "i3": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "dom": {
+          "voidCount": 1,
+          "voidTop": "i11",
+          "handCount": 1,
+          "drawnDisplayed": true,
+          "witnessInPlay": false,
+          "counts": {
+            "void": 1,
+            "hand": 1,
+            "top": "i11"
+          }
+        },
+        "stolenGeometry": {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i11\"]",
+          "x": 81.265625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "hit": true,
+          "rank": "player-back"
+        },
+        "plainLog": [
+          "You played Cosmic Puppeteer.",
+          "Cosmic Puppeteer entered play.",
+          "Cosmic Puppeteer's triggered ability resolved.",
+          "You gained control of Final Witness.",
+          "You played Molten Duel.",
+          "Final Witness was dissolved.",
+          "Final Witness's triggered ability resolved.",
+          "You drew Lab Recruit."
+        ],
+        "reloadVersion": 6,
+        "reloadHistoryEntries": 4,
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        }
+      },
+      {
+        "viewport": "mobile",
+        "orientation": "inverse",
+        "gameId": "m6j6vo",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "controller": "enemy",
+        "owner": "player",
+        "witness": "i1",
+        "puppet": "i12",
+        "removal": "i2",
+        "drawn": "i13",
+        "uuid": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+        "rows": 57,
+        "fullExport": "accepted-mobile-inverse.jsonl",
+        "sha256": "22ffd31497f26e81d93d1487b576e32e3180015785c2ba1354301e1a015d5382",
+        "actions": [
+          {
+            "gameId": "m6j6vo",
+            "version": 0,
+            "side": "enemy",
+            "action": {
+              "kind": "play",
+              "card": "i12",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "1f6kndrax1t",
+                "value": 3
+              }
+            ],
+            "timestamp": "2026-10-14T21:55:30.335Z",
+            "event": "engine.action",
+            "seq": 31
+          },
+          {
+            "gameId": "m6j6vo",
+            "version": 4,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i2",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "2d9a9pruj61",
+                "value": [
+                  "i1"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-14T21:55:35.842Z",
+            "event": "engine.action",
+            "seq": 46
+          }
+        ],
+        "events": [
+          {
+            "seq": 7,
+            "index": 5,
+            "kind": "dissolved",
+            "instance": "i1",
+            "event": {
+              "kind": "dissolved",
+              "instance": "i1",
+              "side": "enemy",
+              "removal": {
+                "kind": "effect",
+                "controller": "player",
+                "victimCost": 3
+              }
+            },
+            "cards": {
+              "i1": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 7,
+            "index": 6,
+            "kind": "triggerQueued",
+            "instance": null,
+            "event": {
+              "kind": "triggerQueued",
+              "source": "i1",
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "subject": "i1",
+              "lastKnownSourceSpark": 2
+            },
+            "cards": {
+              "i1": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 7,
+            "index": 8,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": "i1",
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            },
+            "cards": {
+              "i1": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+            }
+          },
+          {
+            "seq": 7,
+            "index": 9,
+            "kind": "cardDrawn",
+            "instance": "i13",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i13"
+            },
+            "cards": {
+              "i13": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "dom": {
+          "voidCount": 2,
+          "voidTop": "i1",
+          "handCount": 1,
+          "drawnDisplayed": false,
+          "witnessInPlay": false,
+          "counts": {
+            "void": 2,
+            "hand": 1,
+            "top": "i1"
+          }
+        },
+        "stolenGeometry": {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "x": 81.265625,
+          "y": 222.3125,
+          "width": 53.859375,
+          "height": 53.859375,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "hit": true,
+          "rank": "enemy-back"
+        },
+        "plainLog": [
+          "Your opponent played Cosmic Puppeteer.",
+          "Cosmic Puppeteer entered play.",
+          "Cosmic Puppeteer's triggered ability resolved.",
+          "Your opponent gained control of Final Witness.",
+          "You played Molten Duel.",
+          "Final Witness was dissolved.",
+          "Final Witness's triggered ability resolved.",
+          "Your opponent drew a card."
+        ],
+        "reloadVersion": 7,
+        "reloadHistoryEntries": 6,
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        }
+      }
+    ],
+    "imageManifest": [
+      {
+        "file": "desktop-player-x3.png",
+        "sha256": "259d47ba8e6c7523d15cc285c678ad368c1b900f3d78fa2798eac0880c622433",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "css": [
+          1440,
+          900
+        ]
+      },
+      {
+        "file": "desktop-player-stolen.png",
+        "sha256": "fc741589a5379b0c3696a1210c7d435de186c45bbe9cf60e6b387bd1435f0ba4",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "css": [
+          1440,
+          900
+        ]
+      },
+      {
+        "file": "desktop-player-final.png",
+        "sha256": "c8217920855e07897227bbe631d9d951fb4847277914f4f65ea9f7cb99616d27",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "css": [
+          1440,
+          900
+        ]
+      },
+      {
+        "file": "desktop-player-plain-log.png",
+        "sha256": "355cefc087d708b208a1d01274718638f91b0fa1232453254066451c03bcceca",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "css": [
+          1440,
+          900
+        ]
+      },
+      {
+        "file": "desktop-enemy-stolen.png",
+        "sha256": "0ca139c7d61dcebd79e3e5efb4522e1b707d56a43952b4bddf0229adbf955c51",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "css": [
+          1440,
+          900
+        ]
+      },
+      {
+        "file": "desktop-enemy-final.png",
+        "sha256": "bbcf00dc0aa434bef6a49289359d185f7e6d2719a3260e6ea7ac83c367624613",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "css": [
+          1440,
+          900
+        ]
+      },
+      {
+        "file": "desktop-enemy-plain-log.png",
+        "sha256": "3443294f49095502d559f421cf9bc8a958d064705f5de44a5ed72d91bc0007d7",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "css": [
+          1440,
+          900
+        ]
+      },
+      {
+        "file": "mobile-player-x3.png",
+        "sha256": "d2b9ba1fa33c4e3d9db7212658a6c7fc6cf4120a9a56cb4453bc08bdd3dacc92",
+        "pixels": [
+          780,
+          1688
+        ],
+        "css": [
+          390,
+          844
+        ]
+      },
+      {
+        "file": "mobile-player-stolen.png",
+        "sha256": "c42d99e995e58ac87479f5597da6bcf350130880616289ebc2b227dbd5cef419",
+        "pixels": [
+          780,
+          1688
+        ],
+        "css": [
+          390,
+          844
+        ]
+      },
+      {
+        "file": "mobile-player-final.png",
+        "sha256": "af495f164a3f3a5442aca8498eaa59d870315f5a7e21086bf97c516b11a881ee",
+        "pixels": [
+          780,
+          1688
+        ],
+        "css": [
+          390,
+          844
+        ]
+      },
+      {
+        "file": "mobile-player-plain-log.png",
+        "sha256": "a4fcbeb689ee8a98826d9fa2cab08e27adef86b32812cf1bd56bbd359fa9f91d",
+        "pixels": [
+          780,
+          1688
+        ],
+        "css": [
+          390,
+          844
+        ]
+      },
+      {
+        "file": "mobile-enemy-stolen.png",
+        "sha256": "834eca6c5261eb0690536642d7fa439a65da214cddc018226f946a1a409e312e",
+        "pixels": [
+          780,
+          1688
+        ],
+        "css": [
+          390,
+          844
+        ]
+      },
+      {
+        "file": "mobile-enemy-final.png",
+        "sha256": "4eb7ea7593549d297c576e109151c79e6e35b8cc4cc54162e22f49a761d78c13",
+        "pixels": [
+          780,
+          1688
+        ],
+        "css": [
+          390,
+          844
+        ]
+      },
+      {
+        "file": "mobile-enemy-plain-log.png",
+        "sha256": "a46e272aaeed2d093018d50b96029bbc755973ff1504694d774f12854446b8f7",
+        "pixels": [
+          780,
+          1688
+        ],
+        "css": [
+          390,
+          844
+        ]
+      }
+    ],
+    "caps": [],
+    "replay": "All four settled reloads preserve exact game URL, battle id, version, history entries, physical source/draw records and complete side zones."
+  },
+  "parentIndependentAudit": {
+    "file": "receipts/parent/343-parent-browser-proof.json",
+    "sha256": "db36fb83ed2acb51e09438f745d6a1e78e9bd3d2887f1f340dccf9b8e306a8cf",
+    "result": "pass",
+    "coverage": "Four actual games,222 full inline persisted rows,14 PNGs, exact source/provenance/reload and raw resource identity images; parent views desktop stolen/final,mobile final,inverse plain log."
+  },
+  "validation": {
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-14T22:01:25.685285+00:00",
+      "end": "2026-10-14T22:01:25.939432+00:00",
+      "elapsedS": 0.25407145801000297,
+      "hostLoad": 5.748046875,
+      "exitCode": 0,
+      "log": "review.log"
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-14T22:01:25.939729+00:00",
+      "end": "2026-10-14T22:01:30.185972+00:00",
+      "elapsedS": 4.246227374998853,
+      "hostLoad": 5.748046875,
+      "exitCode": 0,
+      "log": "knip.log"
+    }
+  },
+  "reviewPolicy": {
+    "coreReview": false,
+    "phaseGate": false,
+    "codeDelta": 0,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "routing": "Normal D18; expired temporary Sol override is not used. Evidence-only followup introduces no form, prompt or status."
+  },
+  "sourceFreeze": {
+    "file": "source-freeze-after-browser.json",
+    "sha256": "afda0191670219f3ec222c37aa5a2c39458dc409f2630ced0a8f2e6932996114",
+    "baseTrackedPaths": 5125,
+    "allBaseTrackedBlobsUnchanged": true,
+    "verifiedAgainBeforeCommit": true
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "ordinary review starting sample"
+      }
+    }
+  },
+  "ownedResourcesClosed": true,
+  "scopeGuard": {
+    "allowedPaths": [
+      "docs/plan/evidence/friction/hv-umm2.343.json",
+      "docs/plan/evidence/measurements/hv-umm2.343.json",
+      "docs/plan/evidence/measurements/hv-umm2.343.md",
+      "docs/plan/evidence/qa-ledger/hv-umm2.343.jsonl"
+    ],
+    "nonTestCodeLinesChanged": 0,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "sourceBodiesImmutable": true
+  },
+  "automaticCommitClock": {
+    "endpointUtc": "2026-10-14T22:03:12Z",
+    "endpointEpoch": 1792015392,
+    "dateOverride": false,
+    "clockPrecision": "seconds",
+    "sameSecondRequired": true
+  }
+}
