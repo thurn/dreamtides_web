@@ -1,0 +1,21 @@
+{
+  "bead": "hv-wmtb",
+  "phase": 5,
+  "implementMin": 9.95542445,
+  "implementWindow": {
+    "start": "2026-10-14T02:53:27.955120+00:00",
+    "end": "2026-10-14T03:03:25.280587+00:00"
+  },
+  "localValidationS": {
+    "review": 0.3377036669990048,
+    "knip": 5.650369709008373,
+    "friction-triggers": 0.17382633400848135
+  },
+  "hostLoad": 13.76806640625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

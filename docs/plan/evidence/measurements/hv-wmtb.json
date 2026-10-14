@@ -1,0 +1,332 @@
+{
+  "bead": "hv-wmtb",
+  "phase": 5,
+  "status": "recovery evidence recorded; own evidence candidate delivery follows",
+  "scope": {
+    "kind": "documentation only",
+    "paths": [
+      "docs/plan/evidence/friction/hv-wmtb.json",
+      "docs/plan/evidence/measurements/hv-wmtb.json",
+      "docs/plan/evidence/pre-existing/hv-wmtb.md"
+    ],
+    "productionChanges": 0,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "implementation": "session itself; no implementation helper",
+    "base": "d0853ad4b41f589dc465fe6bab866b6ed3963938",
+    "branch": "release-fuzz-recovery-wmtb-root"
+  },
+  "dispatch": {
+    "currentOwner": "01a1305a-56c7-7f63-bcb4-bfed10880d6d",
+    "start": "2026-10-14T02:53:27.955120+00:00",
+    "includes": "All current claim/setup, research, evidence verification, checks and waits through automatic Git",
+    "historicalOwnerDispatch": "2026-10-14T00:41:05.898Z / call_b04e4099090041c79aabb7c14645bb6f",
+    "historicalOwnerWindow": "Retained diagnostic window below is distinct; current ownership does not overwrite it."
+  },
+  "timing": {
+    "nearGitEvidenceEnd": "2026-10-14T03:03:25.280587+00:00",
+    "automaticGit": "Actual process clock/OID/clean receipt retained by owner outside immutable tracked source; no timestamp override.",
+    "originalOwnerDiagnostic": {
+      "start": "2026-10-14T00:47:31.546643+00:00",
+      "end": "2026-10-14T00:49:56.586817+00:00",
+      "wallS": 145.03865237499122,
+      "cpuUserS": 154.341294,
+      "cpuSystemS": 3.040476,
+      "loadStart": "{ 12.25 11.05 11.43 }",
+      "loadEnd": "{ 9.57 10.85 11.33 }",
+      "exitCode": 2,
+      "executionCutoff": false,
+      "pid": 33436,
+      "pgid": 33436,
+      "remainingProcessGroup": [],
+      "qualification": "Observed diagnostic, not fuzz acceptance; no performance claim"
+    }
+  },
+  "failedRelease": {
+    "greenBase": "55ef226c4aca39748797287329ecc5cd249ef21a",
+    "diagnosedSnapshot": "67f4456be1caa7d6ad7da0551adab9904382b947",
+    "originalRun": "01a137af-8ee6-75b1-bed7-673548d83bdd",
+    "originalFuzzTimeoutMs": 1800783,
+    "laterConclusiveRun": "01a137d8-81ac-7811-993f-05344fe797f5",
+    "laterTarget": "cd436a759bffb5d17e955de0bd2dba80314c4e8b",
+    "laterSteps": {
+      "dependenciesMs": 5139,
+      "fullMs": 120102,
+      "fuzzTimeoutMs": 1800747
+    },
+    "frozenCommand": "npm run fuzz:engine -- --games 200",
+    "fuzzTimeoutNs": 1800000000000,
+    "configurationDigest": "407f184944ead805d0a1996f0717d4ded28c7cf32f7551f6f527ab3ea5bc4cde",
+    "retainedOldLog": "npm startup only; no original release game ordinal or failure specimen can be inferred",
+    "latestConfigurationDigest": "407f184944ead805d0a1996f0717d4ded28c7cf32f7551f6f527ab3ea5bc4cde",
+    "originalFrozenFuzz": {
+      "command": {
+        "kind": "shell",
+        "runner": [
+          "/bin/sh",
+          "-c"
+        ],
+        "script": "npm run fuzz:engine -- --games 200"
+      },
+      "cpu_tokens": 0,
+      "final_step": false,
+      "id": "67d44dd5-e45d-7863-b92e-90b01966148a",
+      "memory_bytes": 0,
+      "name": "fuzz",
+      "needs": [
+        "65c447ca-8a39-1d0d-da47-f5c31966148a"
+      ],
+      "reuse_on_retry": false,
+      "rss_limit_bytes": null,
+      "semaphores": [],
+      "soft_needs": [],
+      "stage": "release",
+      "timeout_ns": 1800000000000,
+      "voting": true,
+      "working_directory": "."
+    },
+    "latestFrozenFuzz": {
+      "command": {
+        "kind": "shell",
+        "runner": [
+          "/bin/sh",
+          "-c"
+        ],
+        "script": "npm run fuzz:engine -- --games 200"
+      },
+      "cpu_tokens": 0,
+      "final_step": false,
+      "id": "67d44d90-d4f3-7f61-9876-ffad317466de",
+      "memory_bytes": 0,
+      "name": "fuzz",
+      "needs": [
+        "65c4478f-ba97-1a0f-fb1f-9ade317466de"
+      ],
+      "reuse_on_retry": false,
+      "rss_limit_bytes": null,
+      "semaphores": [],
+      "soft_needs": [],
+      "stage": "release",
+      "timeout_ns": 1800000000000,
+      "voting": true,
+      "working_directory": "."
+    }
+  },
+  "boundedDiagnosis": {
+    "publicCheckpoint": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-wmtb/checkpoint-v01/diagnostic",
+    "nineArtifactHashesVerified": {
+      "observe.ts": true,
+      "supervise.py": true,
+      "specimen-v01.json": true,
+      "diagnostic-v01.stdout": true,
+      "diagnostic-v01.stderr": true,
+      "diagnostic-v01.started.json": true,
+      "diagnostic-v01.receipt.json": true,
+      "freeze-before-v01.json": true,
+      "freeze-after-v01.json": true
+    },
+    "sourceOID": "67f4456be1caa7d6ad7da0551adab9904382b947",
+    "seed": "fuzz-164",
+    "stage": "inline",
+    "observedCopiesInOneCall": 128,
+    "stepsInCall": 130,
+    "automaticSteps": 0,
+    "automaticChoices": 128,
+    "stackLength": 129,
+    "gemUUID": "fb7316c9-ef29-42fd-993e-d3337cb06921",
+    "eventUUID": "944e15d2-d680-4ebe-8d18-36826f4b1535",
+    "floatingBackground": [
+      "loseAbilities e15",
+      "abilities e16"
+    ],
+    "completedStages": {
+      "inline": 164,
+      "hash": 164,
+      "interactive": 17
+    },
+    "cause": "Actual unconditional Gem Codex event-copy trigger renews itself on every bonus stack copy. Independent target answers reset automaticSteps because certificate rejects current abilities/loseAbilities floating background; stack grows. Human finite-operation correction hv-umm2.654 owns direct product semantic cause. Exact128-copy witness is bounded diagnostic, not an unbounded-runtime proof or acceptance failure.",
+    "qualification": "Composed original inline invariant observer; diagnostic sentinel caught by playFuzzGame failure field and explicitly separated by flag. No hash/interactive/fuzzGameLog replay of aborted164. Fold interactive bypasses publicEngine observers; only17 stage completions are claimed. Ring retains last12 steps, not all130 events. Prior0..163 passes are observed stages, not entire200 acceptance.",
+    "notSupported": [
+      "retained original release run ordinal from startup-only log",
+      "banishedUntil in exact164 context",
+      "weighted159 as exact release repro",
+      "globaltimeout/cap/suppression remedy",
+      "passiveFloating abilities/loseAbilities change without source proof/admission",
+      "generic loop outcomes waived"
+    ],
+    "freeze": {
+      "utc": "2026-10-14T00:50:06.379799+00:00",
+      "count": 7049,
+      "mismatches": []
+    },
+    "resources": {
+      "processGroup": [],
+      "toolSession": 72236,
+      "toolOuterExit": 0,
+      "diagnosticExit": 2,
+      "browserServerProviderLeases": []
+    },
+    "diagnosticIsAcceptanceRun": false
+  },
+  "certifiedRepair": {
+    "bead": "hv-umm2.654",
+    "candidate": "01a1384e-14c8-73f2-b2d5-ee31de59d17a",
+    "sourceAndTestedOID": "d0853ad4b41f589dc465fe6bab866b6ed3963938",
+    "parent": "cd436a759bffb5d17e955de0bd2dba80314c4e8b",
+    "certificate": "01a13851-f0cf-70c1-9f2f-f07b0c71cbbd",
+    "promoted": true,
+    "cleanup": "completed; source worktree/branch absent",
+    "mechanism": "Current effective per-attempt event-copy modifier; one additional physical copy per modifier occurrence, additive once, bonuses emitted as real copy occasions without reapplying the modifier. Ordinary observing triggers and general mandatory loop handling retain their behavior.",
+    "sourceEquivalence": "Failed snapshot67f445 to repair parentcd436 has no diff in Gem leaf/copies/copy-card/loops/fuzz kernel/driver; diagnostic cause applies to repair parent.",
+    "regressions": "35 stable public synthetic cases in one410-line plain contract, including both controllers/routes/repetition/choices/effective type/visibility/logs/fold recovery/genuine external mandatoryLoop/optional stop/telemetry/suppression.",
+    "review": "Complete normal cross-family Claude full review on907ea plus cold immutable version-delta reviews through d085; final55.832794s review no actionable issues. Reports/dispositions retained on654.",
+    "localNative164": {
+      "first": 164,
+      "games": 1,
+      "seedPrefix": "fuzz",
+      "weighted": false,
+      "elapsedS": 2.2126826659950893,
+      "steps": 655,
+      "prompts": 62,
+      "interactiveReruns": 0,
+      "failures": 0,
+      "qualification": "Default interactiveEvery10 skips ordinal164; invariants and final hash replay passed."
+    },
+    "localNative200": {
+      "elapsedS": 151.5080828340142,
+      "games": 200,
+      "steps": 83775,
+      "prompts": 5662,
+      "interactiveReruns": 559,
+      "failures": 0
+    },
+    "weightedRecipe": {
+      "games": 300,
+      "includedGem": 600,
+      "actualAttributedBonusExercise": 104,
+      "failures": 0,
+      "qualification": "Separate weighted acceptance, not the release command or retained old-source repro."
+    },
+    "reusedEvidence": "Existing source654 tracked measurements, reports and immutable receipts; final410-line tests differ from earlier7516-test localfull only in test/docs,2420 production inputs equal; native release below validates exact final source."
+  },
+  "nativeRecoveryRelease": {
+    "run": "01a13851-ffab-7b70-bc09-0589e6eadd26",
+    "buildset": "01a13852-0001-7b30-b301-89717108b9bb",
+    "testedOID": "d0853ad4b41f589dc465fe6bab866b6ed3963938",
+    "state": "check-passed",
+    "attempts": 1,
+    "retryOf": null,
+    "steps": [
+      {
+        "name": "dependencies",
+        "result": "success",
+        "exitCode": 0,
+        "elapsedMs": 6469,
+        "logHash": "9350369a121fdf2597512de0a76bbd708bb5087c71b2fe9a3f57faa9577c647a"
+      },
+      {
+        "name": "review-full",
+        "result": "success",
+        "exitCode": 0,
+        "elapsedMs": 151552,
+        "logHash": "b55aa5a24b5173a1f5dacb0d333f2088adcb49573d3d17f8666da7587604fc8d"
+      },
+      {
+        "name": "fuzz",
+        "result": "success",
+        "exitCode": 0,
+        "elapsedMs": 186415,
+        "logHash": "9db67a5e5522739fd04028faae31208b2e3fb53307b66c57a9badd75dba1280d"
+      }
+    ],
+    "frozenFuzzCommand": "npm run fuzz:engine -- --games 200",
+    "fuzzSummary": "> dreamtides-web@0.1.0 fuzz:engine\n> tsx scripts/fuzz-engine.ts --games 200\n\nfuzz:engine 200 games, 83775 steps, 184.1 s wall, 197.7 s CPU (1.1 games/s wall, 1.0 games/s CPU); prompts 5662; interactive re-runs 559 (2.919 ms each); feasibility bounded {\"legality\":0,\"prompts\":2}; results {\"player\":89,\"enemy\":110,\"draw\":1}; failures 0",
+    "games": 200,
+    "stepsObserved": 83775,
+    "prompts": 5662,
+    "interactiveReruns": 559,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 2
+    },
+    "results": {
+      "player": 89,
+      "enemy": 110,
+      "draw": 1
+    },
+    "failures": 0,
+    "qualifications": [
+      "Native unweighted full-pool default seed prefixfuzz, first0, interactiveEvery10, retained invariant/finalhash/interactive checks.",
+      "No original red run was retried; this new run followed the certified source repair.",
+      "Native CLI wall/CPU is reported for this run only; broker host load unknown and no normalized performance claim is made.",
+      "Full200 includes ordinal164; its individual release steps/progress are not retained by this summary. Isolated164 completion is separately observed above."
+    ]
+  },
+  "releaseObservation": {
+    "at": "2026-10-14T02:57:40.671791+00:00",
+    "releasedOID": "d0853ad4b41f589dc465fe6bab866b6ed3963938",
+    "stagingOID": "faa76629e9cf722fe2a79addcf5f0b739823f74c",
+    "lagCommits": 3,
+    "state": "pending",
+    "promotionPause": null,
+    "blockReasons": [],
+    "remoteExact": "observed d0853ad4b4",
+    "qualification": "The finite-copy repair is released and observed on remote. Later peer commits account for pending release lag; current source equality is not inferred from latest staging."
+  },
+  "validation": {
+    "setupInstallS": 3.418363667005906,
+    "requiredOwnReview": {
+      "exitCode": 0,
+      "elapsedS": 0.3377036669990048,
+      "scope": "Three evidence files; only friction schema applies to diff-aware review."
+    },
+    "requiredOwnKnip": {
+      "exitCode": 0,
+      "elapsedS": 5.650369709008373
+    },
+    "schema": "Final explicit friction schema immediately before automatic Git; receipt retained by owner.",
+    "browser": "Not applicable to documentation-only recovery evidence. Real Gem QA is retained by654.",
+    "fullOrExtraSoak": "Not repeated; the native exact-source release supplied full and200-game acceptance.",
+    "independentReview": "Not required: no production code/non-test LOC, no core-review label; certified source fix already has independent normalClaude review.",
+    "frictionTriggers": {
+      "exitCode": 0,
+      "elapsedS": 0.17382633400848135,
+      "qualification": "Existing41historicalunknowns retained; no undispositioned trigger."
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Own diff-aware review friction-records start2026-10-14T03:01:09.615Z",
+        "value": 13.76806640625
+      }
+    }
+  },
+  "delivery": "Own evidence commit/candidate/promotion/cleanup pending; source fix delivery above is already certified.",
+  "resources": {
+    "allSetupAndValidationGroupsTerminal": true,
+    "actualCheckedGroups": [
+      "12333",
+      "7130",
+      "11337",
+      "66144",
+      "26798",
+      "60882",
+      "7129",
+      "29597",
+      "24146",
+      "29596",
+      "71826",
+      "12950",
+      "24145",
+      "29599",
+      "71825",
+      "93779"
+    ],
+    "browserServerProvider": "None launched by this owner; native Tollgate service is independent. Prior owner diagnostic retained terminal/drained proof.",
+    "sourceWriter": "This session only, three evidence paths; no helper."
+  }
+}
