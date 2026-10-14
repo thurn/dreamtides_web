@@ -55,6 +55,7 @@ const EMITTED: readonly EngineEventKind[] = [
  */
 const PASSIVE_STATICS: readonly string[] = [
   "additionalDrawPhaseCards", // Phase-only draw counts cannot act in this copy-only FIFO.
+  "journeyDeckSparkModifier", // Static copiable-cost eligibility cannot act in this FIFO.
   "costModifier", "sparkModifier", "grant", "grantCardKeyword", "giveAllTypes", "setBaseSpark",
   "playFromZone", "playRestriction", "selfCostReduction", "revealDeckTop", "reclaimNotBanished",
   "preserveEphemeralHand", // Own-Ending cleanup is inert while this FIFO keeps phases fixed.

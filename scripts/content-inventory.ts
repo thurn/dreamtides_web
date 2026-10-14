@@ -344,6 +344,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   prim("sequence", "sequence.ts"),
   prim("setBaseSpark", "set-base-spark.ts"),
   prim("sparkModifier", "spark-modifier.ts"),
+  prim("journeyDeckSparkModifier", "journey-deck-spark-modifier.ts", { note: "C4 original physical journey-deck spark in all zones" }),
   prim("triggerAbility", "trigger-ability.ts"),
   prim("winTheGame", "win-the-game.ts"),
   // Registered DSL builders.
@@ -799,6 +800,7 @@ const CORRECTIONS: Readonly<Record<string, Correction>> = {
   "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a": { remove: ["return-from-void"], note: "returns itself from play to hand" },
   "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad": { remove: ["put-in-deck"], note: "prevent with the deckTop destination" },
   // Dreamsigns.
+  "00cc7e7f-4245-4447-b9dc-f647dc6241a2": { add: ["original-deck-spark"], remove: ["spark-static", "zone-cards", "static-zone"], note: "C4 original physical membership and all-zone static spark; no selection prompt" },
   "3d86f8ce-42ac-43dc-96d5-121e6d1a6167": { add: ["type-remap"], remove: ["choose-subtype", "subtype-reference"], note: "C12: a journey-level remap stored with the run (5.6), applied to battle selectors and figment types through the deck-entry variant" },
   "427c71e3-178f-4352-8d6f-f0789cb13c2d": { note: "journey essence paid from a battle event (removing an enemy outside a challenge); 5.6 builds the battle-result hook" },
   "eb55b141-82f8-4ba4-b319-420f762e9ee4": { note: "journey essence paid from a battle event (dissolving an enemy in a challenge); 5.6 builds the battle-result hook" },
@@ -972,6 +974,7 @@ function primitive(name: string): ProbedPrimitive {
 const PROMPT_EXISTS = new Map<string, boolean>(Object.values(PROMPTS).map((spec) => [spec, promptExists(spec)]));
 
 const TAGS = new Map<string, TagInfo>([...RULES, ...JOURNEY_RULES].map((rule) => [rule.tag, rule]));
+TAGS.set("original-deck-spark", { family: 8, needs: ["journeyDeckSparkModifier"] });
 for (const [tag, info] of Object.entries(EXTRA_TAGS)) TAGS.set(tag, info);
 for (const info of TAGS.values()) for (const need of info.needs) primitive(need);
 for (const needs of Object.values(TRANSFIGURATION_NEEDS)) for (const need of needs) primitive(need);

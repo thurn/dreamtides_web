@@ -12,6 +12,7 @@
 // no live clock/rng. It is pure — replaying the same `{ genesis, events }`
 // always yields the same final state, hash, and per-event outcomes.
 
+import { assertJourneyDeckSparkCheckpoint } from "../battle/journey-deck-spark-state";
 import { foldEvents, type FoldOutcome } from "../../eventlog/fold";
 import { hashState } from "../../eventlog/hash";
 import type {
@@ -42,7 +43,11 @@ export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
   reducer: reduceGameEvent,
   genesisState: genesisFoldState,
   encode: (state) => JSON.stringify(state),
-  decode: (raw) => JSON.parse(raw) as FoldState,
+  decode: (raw) => {
+    const state: unknown = JSON.parse(raw);
+    assertJourneyDeckSparkCheckpoint(state);
+    return state as FoldState;
+  },
   hash: hashState,
 };
 

@@ -41,6 +41,7 @@ import type { CommittedEvent } from "../../eventlog/local-log";
 import type { EventContext, StateHash } from "../../eventlog/types";
 import type { FoldState } from "../fold-state";
 import {
+  parseEngineBattleFold,
   actionFromUnknown,
   answerFromUnknown,
   engineBattleOf,
@@ -385,8 +386,8 @@ function startSlice(engine: Engine, battle: BattleFoldState, event: CommittedEve
   if (event.type === "LOAD_STATE") {
     const loaded = payload.battle;
     if (!isRecord(loaded) || !isRecord(loaded.init) || loaded.init.siteId !== battle.init.siteId || tutorial !== null && loaded.init.battleId !== battle.init.battleId) return null;
-    const fold = loaded.engine;
-    return isRecord(fold) && isRecord(fold.slice) ? (fold.slice as unknown as BattleSlice) : null;
+    const fold = parseEngineBattleFold(loaded.engine, engine.catalog);
+    return fold?.slice ?? null;
   }
   return null;
 }

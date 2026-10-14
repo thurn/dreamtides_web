@@ -233,6 +233,8 @@ export interface CardInstance {
   readonly id: InstanceId;
   readonly printing: Printing;
   readonly owner: Side;
+  /** Immutable original input-deck membership; omitted when legacy provenance is unknown. */
+  readonly journeyDeck?: boolean;
   /**
    * The side controlling the card: in play or on the stack, its controller;
    * in a hand, the side whose hand holds it, which may differ from its owner;
@@ -824,6 +826,7 @@ export type RememberedEffect = Omit<FloatingEffect, "change" | "expiry"> & {
 export interface RememberedCard {
   readonly instance: InstanceId;
   readonly owner: Side;
+  readonly journeyDeck?: boolean;
   readonly printing: Printing;
   readonly variant: Variant;
   readonly status: CardStatus;

@@ -1,3 +1,6 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { staticAbility } from "../../engine/dsl/builders";
+import { journeyDeckSparkModifier } from "../../engine/effects/primitives/journey-deck-spark-modifier";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,6 @@ export default dreamsign({
     "4b01b6c1-ccca-4e19-848a-d799d46088b2",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  verifiedText: expectedVerifiedText("Characters in your deck with cost ≤2● have +1✦."),
+  abilities: () => [staticAbility(journeyDeckSparkModifier(2, 1))],
 });

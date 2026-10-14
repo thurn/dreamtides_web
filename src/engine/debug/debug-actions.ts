@@ -104,6 +104,7 @@ function mint(state: BattleState, side: Side, card: CardId, zone: Zone): Instanc
     id,
     printing: { kind: "card", cardId: card },
     owner: side,
+    journeyDeck: false,
     controller: side,
     zone,
     variant: { amplified: false },

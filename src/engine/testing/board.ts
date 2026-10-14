@@ -12,7 +12,7 @@ import type { BattleState, CardInstance, DeckEntry, Printing } from "../state/ty
 export function placeFigment(state: BattleState, side: Side, slot: Slot, printing: Printing, amplified = false): InstanceId {
   const id: InstanceId = `i${state.nextInstance}`;
   state.nextInstance += 1;
-  state.instances[id] = { id, printing, owner: side, controller: side, zone: "play", variant: { amplified }, status: freshStatus(true), enteredZoneAt: 0 };
+  state.instances[id] = { id, printing, owner: side, journeyDeck: false, controller: side, zone: "play", variant: { amplified }, status: freshStatus(true), enteredZoneAt: 0 };
   const rank = slot.rank === "front" ? state.sides[side].frontRank : state.sides[side].backRank;
   if (rank[slot.index] !== null) throw new Error(`slot ${slot.rank}${String(slot.index)} is occupied`);
   rank[slot.index] = id;
@@ -91,6 +91,7 @@ export function boardState(
       id,
       printing: { kind: "card", cardId },
       owner: side,
+      journeyDeck: true,
       controller: side,
       zone,
       variant,

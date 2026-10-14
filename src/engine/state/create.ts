@@ -313,6 +313,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
         id,
         printing: { kind: "card", cardId: entry.cardId },
         owner: side,
+        journeyDeck: true,
         controller: side,
         zone: "deck",
         variant: variantOf(entry),

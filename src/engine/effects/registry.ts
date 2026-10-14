@@ -101,6 +101,7 @@ import {
   setBaseSparkPrimitive,
   shuffleIntoPrimitive,
   sparkModifierPrimitive,
+  journeyDeckSparkModifierPrimitive,
   storeCountersPrimitive,
   takeExtraTurnPrimitive,
   takeFromAmongPrimitive,
@@ -361,6 +362,7 @@ const DEFINITIONS = {
   get shuffleInto() {
     return shuffleIntoPrimitive;
   },
+  get journeyDeckSparkModifier() { return journeyDeckSparkModifierPrimitive; },
   get sparkModifier() {
     return sparkModifierPrimitive;
   },

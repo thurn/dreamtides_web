@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.589",
+  "phase": 5,
+  "implementMin": 232.36775243333335,
+  "implementWindow": {
+    "start": "2026-10-14T18:50:42Z",
+    "end": "2026-10-14T22:43:04.065146+00:00"
+  },
+  "localValidationS": {
+    "review": 56.25392424996244,
+    "focused": 92.26207941808389,
+    "fuzz": 568.6657660839846,
+    "browserQA": 97.78874487499706,
+    "integrationFocused": 13.391352416016161,
+    "integrationReview": 56.25392424996244
+  },
+  "hostLoad": 5.49267578125,
+  "testDelta": {
+    "files": 1,
+    "lines": 307,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "workflow-admission-hold",
+      "minutes": 127.495582,
+      "note": "Gross READ ONLY audit/proof/coordination/admission interval from pre-dispatch observation18:50:42Z through native WRITEACK20:58:11.734920Z. Includes useful research and prolonged parent-created exhaustive pre-write proof gate; exact productive work versus hold split UNKNOWN. Same-task justiciar removed that agent-created gate while retaining C4/privacy/legacy/review acceptance. This elapsed interval is not assigned to productive coding."
+    },
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 16.483851616666666,
+      "note": "Combined observed heavy admission/startup intervals, including retained canceled queued client and current/final native queue. Includes launcher overhead; not a pure kernel-lock duration or productive coding measure. Exact per-attempt scopes and endpoints are in measurements.heavyAdmissionStartupIntervals."
+    }
+  ]
+}

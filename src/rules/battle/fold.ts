@@ -1,4 +1,6 @@
 // Immutable battle display metadata and engine slices, plus load validation.
+import type { EngineCatalog } from "../../engine/catalog";
+import { hasUnknownJourneyDeckSparkOrigins } from "./journey-deck-spark-state";
 import { isNamedTrigger } from "../../engine/dsl/abilities";
 import { isFixedChange } from "../../engine/view/knowledge";
 import { BATTLE } from "../../content/battle";
@@ -106,10 +108,10 @@ export function battleModeOf(battle: BattleFoldState): BattleMode { return battl
 export type TutorialBattlePresentation = OpponentPlayPresentation | DreamwellRevealPresentation | OpponentBlockPresentation | ChallengeResolvedPresentation | TutorialGuidancePresentation;
 
 /** Validates engine snapshots and their immutable declared source pools. */
-export function parseEngineBattleFold(value: unknown): EngineBattleFold | null {
+export function parseEngineBattleFold(value: unknown, catalog?: EngineCatalog): EngineBattleFold | null {
   if (!isPlainRecord(value) || !isEngineBattleInit(value.init) || !isBattleSlice(value.slice, true)) return null;
   const fold = value as unknown as EngineBattleFold;
-  return hasConsistentDraftPools(fold) ? fold : null;
+  return hasConsistentDraftPools(fold) && !hasUnknownJourneyDeckSparkOrigins(fold, catalog) ? fold : null;
 }
 
 function hasConsistentDraftPools(fold: EngineBattleFold): boolean {
@@ -751,7 +753,7 @@ function isBattleState(value: unknown): boolean {
 /** An observed snapshot may be stale; only its physical ownership and fixed-effect targets remain structural references. */
 function isRememberedCard(value: unknown): boolean {
   return isPlainRecord(value) && isInstanceId(value.instance) && isSide(value.owner) &&
-    isPrinting(value.printing) && isVariant(value.variant) && isCardStatus(value.status) &&
+    isPrinting(value.printing) && isVariant(value.variant) && optional(isBoolean)(value.journeyDeck) && isCardStatus(value.status) &&
     isArrayOf(value.effects, (effect) => isFloatingEffect(effect) && isPlainRecord(effect) &&
       isPlainRecord(effect.expiry) && effect.expiry.at === "never" && isPlainRecord(effect.change) &&
       effect.change.instance === value.instance && isString(effect.change.kind) && isFixedChange(effect.change.kind));
@@ -847,6 +849,7 @@ function isCardInstance(value: unknown): boolean {
     isInstanceId(value.id) &&
     isPrinting(value.printing) &&
     isSide(value.owner) &&
+    optional(isBoolean)(value.journeyDeck) &&
     isSide(value.controller) &&
     oneOf(ZONES)(value.zone) &&
     isVariant(value.variant) &&

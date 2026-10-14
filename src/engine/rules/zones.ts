@@ -399,6 +399,7 @@ export function createInstance(
     id,
     printing,
     owner,
+    journeyDeck: false,
     controller: owner,
     zone,
     variant: { ...variant },

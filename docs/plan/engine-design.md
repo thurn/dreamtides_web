@@ -1192,8 +1192,9 @@ code, and the view. Changes come from two sources:
 - **Static abilities** (`staticAbility(effect, { zone, while })`), on emblems and
   on cards in the zones they work from, read live. An optional `while`
   condition gates their changes and reads the layers before their effect.
-  They change characters in play and, through `grantCardKeyword`, cards in a
-  hand, deck, or void.
+  They change characters in play, through `grantCardKeyword` cards in a
+  hand, deck, or void, and through `journeyDeckSparkModifier` matching original
+  journey-deck characters in every battle zone (C4).
 - **Floating records** in `state.floating`, made by resolving effects. Their
   characters and values are fixed as they resolve, and each carries its
   `timestamp`.
@@ -1330,11 +1331,12 @@ Ordering within a layer:
   characteristics of the layers before its own, so no layer depends on itself.
   The exception is the
   base spark and spark of a card outside play, which its reader
-  (`staticReader`) gives final (RD-hv-umm2.464-1): static abilities change
-  those only for characters in play (`changes` throws on a static layer-4 or
-  layer-5 change naming any other card), so that spark comes from the card's
-  copiable values, floating changes, and gained spark alone, and reading it
-  expands no static ability, its own included.
+  (`staticReader`) gives final (RD-hv-umm2.464-1), including C4's original
+  journey-deck bonus. Ordinary static layer-4/5 forms name characters in play.
+  C4 uses a separate type/copiable-cost reader and literal amount, so expanding
+  it reads neither spark nor a keyword layer that can depend on final spark.
+  Direct public-state conditions are supported; characteristic-dependent
+  conditions on this bounded form are rejected.
 - Cost selectors (`costAtMost`) read the copiable cost (C4, C13).
 
 Dynamic values such as "+X✦ where X is…" are **locked at resolution** unless
@@ -1397,7 +1399,18 @@ memoized one. It is static only (`staticOnly`): its `resolve` throws, since a
 floating record naming a card in a hidden zone would name it in the public
 `effectStarted` event, and the content gate rejects it anywhere but as a
 static ability's whole effect. A dreamsign's "your deck" (C4) is a separate
-reference that `cardsIn` does not express.
+reference that `cardsIn` does not express. `journeyDeckSparkModifier(costAtMost,
+amount)` is its static-only numeric spark form. Immutable optional
+`CardInstance.journeyDeck` records true for declared physical originals, false
+for creations and debug additions, and omits unknown legacy origin. It changes
+only effective ordinary characters of the source controller's original cohort,
+with eligibility evaluated after copiable variant/deck-entry changes. It emits
+no floating record and changes neither gained spark nor deck entries. Views
+preserve observed origin bits and only public global additional ordinary-card
+counts; hidden origin locations and printings are sampled without publishing
+private draw partitions. C4-required legacy checkpoints are rejected for normal
+genesis/event replay; raw imports with unknown required origin are refused.
+Other legacy battles retain their existing checkpoint/import behavior.
 
 **Memoization:** the layer evaluation of a state is cached lazily, per card
 and layer, inside a `Layers` object. A step mutates its work copy in place

@@ -109,6 +109,7 @@ function copyInstance(instance: CardInstance): CardInstance {
     id: instance.id,
     printing: copyPrinting(instance.printing),
     owner: instance.owner,
+    ...(instance.journeyDeck === undefined ? {} : { journeyDeck: instance.journeyDeck }),
     controller: instance.controller,
     zone: instance.zone,
     variant: copyVariant(instance.variant),

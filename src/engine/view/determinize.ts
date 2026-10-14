@@ -120,7 +120,7 @@ function remaining(entries: readonly DeckEntry[], visible: readonly InstanceView
   };
   for (const instance of visible) {
     const { printing } = instance;
-    if (printing.kind !== "card" || instance.status.created) continue;
+    if (printing.kind !== "card" || instance.status.created || instance.journeyDeck === false) continue;
     const variant = canonicalHash(instance.variant);
     if (!take((entry) => entry.cardId === printing.cardId && canonicalHash(variantOf(entry)) === variant)) {
       take((entry) => entry.cardId === printing.cardId);
@@ -366,6 +366,32 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       }
     }
   }
+  // Public additional ordinary-card totals constrain origins without disclosing a private draw or slot.
+  const additionalSlots = new Map<string, { readonly owner: Side; readonly descriptor?: HiddenCardDescriptor }>();
+  if (view.additionalNonCreatedByOwner !== undefined) {
+    const available = SIDES.flatMap(holder => (["deck", "hand"] as const).flatMap(zone =>
+      slots(view.sides[holder][zone]).flatMap((known, index) => known !== null || (zone === "hand" && domainSlots[holder].has(index))
+        ? [] : [{ holder, zone, index, key: `${holder}:${zone}:${String(index)}` }])));
+    for (const owner of SIDES) {
+      const total = view.additionalNonCreatedByOwner[owner];
+      const known = visible.filter(card => card.owner === owner && card.journeyDeck === false && !card.status.created).length;
+      let count = total - known;
+      if (!Number.isSafeInteger(total) || count < 0) throw new Error("Cannot determinize invalid journey origin totals");
+      const observed = shuffled(descriptors.filter(card => card.owner === owner && card.journeyDeck === false && !card.status.created), random);
+      if (observed.length > count) throw new Error("Cannot determinize excess observed additional cards");
+      if (count === 0) continue;
+      const choose = (options: typeof available): void => {
+        if (count <= 0) throw new Error("Cannot determinize inconsistent journey origin totals");
+        const slot = shuffled(options, random)[0];
+        if (slot === undefined) throw new Error("Cannot determinize additional ordinary origins");
+        additionalSlots.set(slot.key, { owner, ...(observed.length === 0 ? {} : { descriptor: observed.pop()! }) });
+        count -= 1;
+      };
+      const deckSlots = () => available.filter(slot => slot.holder === owner && slot.zone === "deck" && !additionalSlots.has(slot.key));
+      while (deckSlots().length > pools[owner].length) choose(deckSlots());
+      while (count > 0) choose(available.filter(slot => !additionalSlots.has(slot.key) && (slot.zone === "hand" || slot.holder === owner)));
+    }
+  }
   let next = highest(view, "i") + 1;
   // Reserve anonymous history identities before minting hidden instances.
   // These facts name no current card and remain anonymous when viewed again.
@@ -383,13 +409,14 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     player: (view.turnLog.discardedCards?.player ?? []).map((id): InstanceId => id ?? `i${next++}`),
     enemy: (view.turnLog.discardedCards?.enemy ?? []).map((id): InstanceId => id ?? `i${next++}`),
   };
-  const mint = (owner: Side, holder: Side, zone: "deck" | "hand", entry: DeckEntry, created: boolean, poolCandidates?: CardInstance["poolCandidates"]): InstanceId => {
+  const mint = (owner: Side, holder: Side, zone: "deck" | "hand", entry: DeckEntry, created: boolean, poolCandidates?: CardInstance["poolCandidates"], journeyDeck = !created): InstanceId => {
     const id: InstanceId = `i${next}`;
     next += 1;
     instances[id] = {
       id,
       printing: { kind: "card", cardId: entry.cardId },
       owner,
+      ...(view.additionalNonCreatedByOwner === undefined ? {} : { journeyDeck }),
       controller: holder,
       zone,
       variant: variantOf(entry),
@@ -417,8 +444,21 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
         if (cardId === undefined) throw new Error("Cannot determinize invalid pool-created selection");
         const id = mint(domain.owner, side, "hand", { cardId }, true, domain.candidates);
         if (observed !== undefined) {
-          instances[id] = { ...instances[id], variant: copy(observed.variant), status: copy(observed.status) };
+          instances[id] = { ...instances[id], ...(observed.journeyDeck === undefined ? {} : { journeyDeck: observed.journeyDeck }), variant: copy(observed.variant), status: copy(observed.status) };
           assigned.set(observed.member, id);
+        }
+        return id;
+      }
+      const additional = additionalSlots.get(`${side}:${zone}:${String(index)}`);
+      if (additional !== undefined) {
+        const known = additional.descriptor;
+        const definition = known?.printing.kind === "card" ? catalog.card(known.printing.cardId)
+          : catalog.cardDefinitions[Math.floor(random() * catalog.cardDefinitions.length)];
+        if (definition === undefined) throw new Error("Cannot determinize additional ordinary printing");
+        const id = mint(additional.owner, side, zone, { cardId: definition.id }, false, undefined, false);
+        if (known !== undefined) {
+          instances[id] = { ...instances[id], variant: copy(known.variant), status: copy(known.status) };
+          assigned.set(known.member, id);
         }
         return id;
       }
@@ -466,13 +506,13 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     if (assigned.has(descriptor.member)) continue;
     const fromPool = descriptor.status.created && descriptor.printing.kind === "card" && view.draftPools?.[descriptor.owner].includes(descriptor.printing.cardId) === true;
     const available = hidden.filter((id) => ![...assigned.values()].includes(id) && instances[id].poolCandidates === undefined && instances[id].owner === descriptor.owner);
-    const exact = available.filter((id) => (!fromPool || instances[id].status.created) &&
+    const exact = available.filter((id) => (descriptor.journeyDeck === undefined || instances[id].journeyDeck === descriptor.journeyDeck) && (!fromPool || instances[id].status.created) &&
       canonicalHash(instances[id].printing) === canonicalHash(descriptor.printing) &&
       canonicalHash(instances[id].variant) === canonicalHash(descriptor.variant));
     const pool = fromPool && exact.length === 0 ? available.filter((id) => instances[id].status.created) : exact;
     const id = pool[Math.floor(random() * pool.length)];
     if (id === undefined) throw new Error(`Cannot determinize anonymous member ${String(descriptor.member)}: no matching decklist card`);
-    instances[id] = { ...instances[id], printing: copy(descriptor.printing), variant: copy(descriptor.variant), status: copy(descriptor.status) };
+    instances[id] = { ...instances[id], ...(descriptor.journeyDeck === undefined ? {} : { journeyDeck: descriptor.journeyDeck }), printing: copy(descriptor.printing), variant: copy(descriptor.variant), status: copy(descriptor.status) };
     assigned.set(descriptor.member, id);
   }
   const capturedFacts = [...view.floating.flatMap(({ change }) => change.kind === "trigger" ? change.captured ?? [] : []),
@@ -878,7 +918,8 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     state.rememberedCards[viewer] = descriptors.map((descriptor: HiddenCardDescriptor) => {
       const id = assigned.get(descriptor.member);
       if (id === undefined) throw new Error("Missing anonymous card");
-      return { instance: id, owner: descriptor.owner, printing: copy(descriptor.printing), variant: copy(descriptor.variant),
+      return { instance: id, owner: descriptor.owner,
+        ...(descriptor.journeyDeck === undefined ? {} : { journeyDeck: descriptor.journeyDeck }), printing: copy(descriptor.printing), variant: copy(descriptor.variant),
         status: copy(descriptor.status), effects: copy(state.floating.filter((effect): effect is RememberedEffect => isFixedEffect(effect) && effect.change.instance === id)) };
     });
   }
@@ -894,7 +935,8 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     const records = state.rememberedCards[viewer];
     const previous = records.find((record) => record.instance === instance.id);
     const effects = [...(previous?.effects ?? []), copy(effect)];
-    const record = { instance: instance.id, owner: instance.owner, printing: copy(instance.printing), variant: copy(instance.variant),
+    const record = { instance: instance.id, owner: instance.owner,
+      ...(instance.journeyDeck === undefined ? {} : { journeyDeck: instance.journeyDeck }), printing: copy(instance.printing), variant: copy(instance.variant),
       status: copy(instance.status), effects };
     if (previous === undefined) records.push(record);
     else records[records.indexOf(previous)] = record;

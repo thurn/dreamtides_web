@@ -29,10 +29,13 @@
  * ability's selectors and values read the characteristics the layers before
  * its own produced, so no layer depends on itself. The one exception is the
  * spark of a card outside play, which they read final (RD-hv-umm2.464-1):
- * static abilities change the base spark and spark of characters in play
- * only, so that spark comes from the card's copiable values, its gained
- * spark and floating changes alone, and reading it expands no static ability.
+ * ordinary static spark forms affect characters in play. The bounded C4
+ * journey-deck form also affects originals outside play, reading only effective
+ * type and copiable cost, never spark. Its contribution joins gained and
+ * floating spark without consulting the keyword or spark layers for eligibility.
  */
+import { fixedEnergy } from "../dsl/energy";
+import { assertJourneyDeckSparkCondition } from "../effects/primitives/journey-deck-spark-modifier";
 import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
 import { namedTriggersOf, worksInZone } from "../dsl/abilities";
@@ -333,7 +336,7 @@ export class Layers {
     for (const entry of this.statics) {
       if (entry.layer !== layer) continue;
       for (const change of this.expand(entry)) {
-        if (layer === 4 || layer === 5) this.assertInPlay(change);
+        if ((layer === 4 || layer === 5) && entry.node.op !== "journeyDeckSparkModifier") this.assertInPlay(change);
         ordered.push({ change, timestamp: entry.timestamp, effect: null, staticSource: entry.source, staticAbility: entry.ability, order: entry.order,
           ...(entry.gained === undefined ? {} : { gained: entry.gained }) });
       }
@@ -363,18 +366,19 @@ export class Layers {
   }
 
   /**
-   * The final base spark and spark of a character card outside play. Static
-   * abilities change those of characters in play only (`assertInPlay`), so
-   * the card's copiable spark, its floating base-spark settings, its gained
-   * spark, and its floating spark modifications give them, and reading them
-   * expands no static ability: a static ability that changes spark never
-   * reads its own change.
+   * Final outside-play spark: copiable values, floating base/spark, gained
+   * spark and C4's bounded original-deck contribution. C4 eligibility reads
+   * type and copiable cost only, so ordinary full-spark card filters can read
+   * this contribution without a keyword/spark dependency cycle.
    */
   private sparkOutsidePlay(id: InstanceId): Pick<Characteristics, "baseSpark" | "spark"> {
     const cached = this.outsidePlay.get(id);
     if (cached !== undefined) return cached;
     const based = this.apply(this.through(id, 1), id, 4, this.floatingChanges(4, id));
-    const { baseSpark, spark } = this.apply(based, id, 5, this.floatingChanges(5, id));
+    const journey = this.statics.flatMap(entry => entry.node.op === "journeyDeckSparkModifier"
+      ? this.expand(entry).filter(change => changed(change) === id).map(change => ({ change, timestamp: entry.timestamp, effect: null, staticSource: entry.source, staticAbility: entry.ability, order: entry.order }))
+      : []);
+    const { baseSpark, spark } = this.apply(based, id, 5, [...this.floatingChanges(5, id), ...journey]);
     const result = { baseSpark, spark };
     this.outsidePlay.set(id, result);
     return result;
@@ -391,7 +395,7 @@ export class Layers {
     return ordered.sort(byTimestamp);
   }
 
-  /** Static abilities set base spark and modify spark only of characters in play, which `sparkOutsidePlay` relies on. */
+  /** Ordinary static base/spark forms name play; only the separately expanded C4 form has an all-zone exception. */
   private assertInPlay(change: ContinuousChange): void {
     const target = changed(change);
     if (target !== null && this.state.instances[target]?.zone !== "play") {
@@ -407,7 +411,8 @@ export class Layers {
    */
   private expand(entry: StaticEntry): readonly ContinuousChange[] {
     const { state, catalog } = this;
-    const read = this.staticReader(entry.layer - 1);
+    if (entry.node.op === "journeyDeckSparkModifier") assertJourneyDeckSparkCondition(entry.while);
+    const read = entry.node.op === "journeyDeckSparkModifier" ? this.reader(1) : this.staticReader(entry.layer - 1);
     if (entry.while !== undefined && !conditionHoldsWith(state, catalog, read, entry.while, {
       controller: entry.controller, source: entry.source, optionalPaid: [],
     })) return [];
@@ -447,6 +452,7 @@ export class Layers {
       source: entry.source,
       controller: entry.controller,
       characters,
+      journeyDeckCharacters: (costAtMost) => this.journeyDeckCharacters(entry.controller, costAtMost),
       read,
       value: (expr) =>
         evaluateValue(state, expr, {
@@ -459,6 +465,16 @@ export class Layers {
     };
     const continuous = primitiveDefinition(node.op).continuous;
     return continuous === undefined ? [] : continuous.changes(node, env);
+  }
+
+  /** C4 reads copiable card type; subtype/allTypes and later layers may themselves read final outside-play spark. */
+  private journeyDeckCharacters(controller: Side, costAtMost: number): InstanceId[] {
+    return Object.values(this.state.instances).flatMap(instance => {
+      if (instance.owner !== controller || instance.status.created || instance.printing.kind !== "card" ||
+          this.through(instance.id, 1).cardType !== "character" || fixedEnergy(instanceCard(this.catalog, instance).costs) > costAtMost) return [];
+      if (instance.journeyDeck === undefined) throw new Error("Unknown original journey-deck provenance");
+      return instance.journeyDeck ? [instance.id] : [];
+    });
   }
 
   private changesTo(id: InstanceId, layer: Layer): readonly OrderedChange[] {

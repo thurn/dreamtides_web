@@ -79,12 +79,14 @@ const NO_EFFECTS: readonly RememberedEffect[] = [];
 
 /** What a viewer that identifies `instance` observes of it, with the fixed effects it has seen on it. */
 function observation(instance: CardInstance, effects: readonly RememberedEffect[]): RememberedCard {
-  return { instance: instance.id, owner: instance.owner, printing: instance.printing,
+  return { instance: instance.id, owner: instance.owner,
+    ...(instance.journeyDeck === undefined ? {} : { journeyDeck: instance.journeyDeck }), printing: instance.printing,
     variant: instance.variant, status: instance.status, effects };
 }
 
 /** A remembered record's fields, in the order `observation` writes them. */
 const RECORD_FIELDS = ["instance", "owner", "printing", "variant", "status", "effects"] as const;
+const ORIGIN_RECORD_FIELDS = ["instance", "owner", "journeyDeck", "printing", "variant", "status", "effects"] as const;
 /** Each printing kind's fields, in the order the engine writes them. */
 const PRINTING_FIELDS: Readonly<Record<Printing["kind"], readonly string[]>> = {
   card: ["kind", "cardId"],
@@ -103,8 +105,9 @@ const GAINED_STATUS_FIELDS = [...STATUS_FIELDS, "gainedAbilities"] as const;
  * keys of objects that have their usual fields in their usual order.
  */
 function sameObservation(previous: RememberedCard, instance: CardInstance, effects: readonly RememberedEffect[]): boolean {
-  if (!inOrder(previous, RECORD_FIELDS)) return sameJson(previous, observation(instance, effects));
-  return previous.instance === instance.id && previous.owner === instance.owner &&
+  const fields = instance.journeyDeck === undefined ? RECORD_FIELDS : ORIGIN_RECORD_FIELDS;
+  if (!inOrder(previous, fields)) return sameJson(previous, observation(instance, effects));
+  return previous.instance === instance.id && previous.owner === instance.owner && previous.journeyDeck === instance.journeyDeck &&
     sameFields(previous.printing, instance.printing, PRINTING_FIELDS[previous.printing.kind] ?? []) &&
     sameFields(previous.variant, instance.variant, VARIANT_FIELDS) &&
     sameFields(previous.status, instance.status, "gainedAbilities" in previous.status ? GAINED_STATUS_FIELDS : STATUS_FIELDS) &&

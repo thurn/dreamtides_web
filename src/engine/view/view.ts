@@ -4,7 +4,7 @@ import type { LinkedBanishedCards, LinkedSourceContext } from "../state/types";
 import type { LoopAction, LoopCandidate, LoopId } from "../loops/types";
 import type { Prompt, PromptPurpose } from "../prompts/types";
 import type { AbilitySource, AvatarId, DreamsignId, DreamwellCardId, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
-import { opponent } from "../state/ids";
+import { opponent, SIDES } from "../state/ids";
 import type {
   AbilityOrigin,
   BattleConfig,
@@ -64,6 +64,7 @@ export interface InstanceView {
   readonly id: InstanceId;
   readonly printing: Printing;
   readonly owner: Side;
+  readonly journeyDeck?: boolean;
   readonly controller: Side;
   readonly zone: Zone;
   readonly variant: Readonly<Variant>;
@@ -153,6 +154,7 @@ export interface HiddenCardEffectView {
 export interface HiddenCardDescriptor {
   readonly member: number;
   readonly owner: Side;
+  readonly journeyDeck?: boolean;
   readonly printing: Printing;
   readonly variant: Variant;
   readonly status: Readonly<CardStatus>;
@@ -340,6 +342,8 @@ export interface BattleView {
   readonly hiddenCards?: Readonly<Record<Side, readonly HiddenCardDescriptor[]>>;
   /** Anonymous immutable creation choices for unknown hand cards, grouped by holder. */
   readonly poolCreatedHands?: Readonly<Record<Side, readonly PoolCreatedHandView[]>>;
+  /** Public debug additions by original owner, without their hidden locations or identities; absent for unknown legacy origin. */
+  readonly additionalNonCreatedByOwner?: Readonly<Record<Side, number>>;
   /** The last element is the top. Targets the viewer cannot see are omitted. */
   readonly stack: readonly StackItem[];
   readonly priority: Side | null;
@@ -420,6 +424,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         id: instance.id,
         printing: copy(instance.printing),
         owner: instance.owner,
+        ...(instance.journeyDeck === undefined ? {} : { journeyDeck: instance.journeyDeck }),
         controller: instance.controller,
         zone: instance.zone,
         variant: copy(instance.variant),
@@ -559,7 +564,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     return (holder === null || holder === viewer) && visibleSource(trigger.source);
   }).map(trigger => queuedView(trigger));
   const descriptor = (record: RememberedCard): HiddenCardDescriptor => ({
-    member: memberFor(record.instance), owner: record.owner, printing: copy(record.printing),
+    member: memberFor(record.instance), owner: record.owner,
+    ...(record.journeyDeck === undefined ? {} : { journeyDeck: record.journeyDeck }), printing: copy(record.printing),
     variant: copy(record.variant), status: copy(record.status),
     effects: record.effects.map((effect): HiddenCardEffectView => {
       const { instance: _instance, ...change } = effect.change;
@@ -633,8 +639,12 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       dreamsigns: source.dreamsigns.map((dreamsign) => ({ id: dreamsign.id })),
     };
   };
+  const originsKnown = Object.values(state.instances).every(card => card.status.created || card.journeyDeck !== undefined);
+  const additionalNonCreatedByOwner = Object.fromEntries(SIDES.map(owner => [owner, Object.values(state.instances)
+    .filter(card => card.owner === owner && card.journeyDeck === false && !card.status.created).length])) as Record<Side, number>;
   return {
     viewer,
+    ...(originsKnown ? { additionalNonCreatedByOwner } : {}),
     version: state.version,
     config: copy(state.config),
     ...(state.draftPools === undefined ? {} : { draftPools: copy(state.draftPools) }),

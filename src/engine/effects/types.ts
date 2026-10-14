@@ -201,6 +201,8 @@ export interface StaticEnv {
   readonly controller: Side;
   /** The characters a reference covers now; a target or the triggering card covers none. */
   characters(ref: CharacterRef): InstanceId[];
+  /** Original physical journey characters, by effective type and copiable cost, in every zone. */
+  journeyDeckCharacters(costAtMost: number): InstanceId[];
   value(expr: ValueExpr): number;
   /**
    * Any card's characteristics after the layers before this primitive's own,

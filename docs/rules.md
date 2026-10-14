@@ -2537,8 +2537,18 @@ changes, and by how much, from what the earlier steps produced: an ability that 
 spark, but not other spark changes. A ✦ criterion on a card outside play is
 the exception: it reads that card's spark with every change applied, even in
 an ability of an earlier step, as "Cards in your hand with ≤2✦ have Offering"
-reads the spark a hand card gained. Static abilities never change the spark of
-a card outside play, so no ability reads a spark it changes itself.
+reads the spark a hand card gained. A dreamsign's cost-qualified journey-deck
+spark bonus also changes its matching original cards outside play. It checks
+effective character type and cost after variant and deck-entry modifications,
+without reading spark; ✦ criteria outside play include that bonus.
+
+Original journey-deck membership belongs to the physical card throughout the
+battle, independent of its current controller, holder, zone or appearance.
+Created cards, figments and additional debug cards do not receive this bonus.
+A saved battle that requires this rule needs exact original physical provenance:
+a checkpoint without it is rebuilt from its preserved genesis and events. An
+import without a sufficient original declaration is refused; unknown origin is
+not treated as an exact non-matching card.
 
 **Modal abilities** — Abilities that present multiple options, written as "Choose
 one:" followed by the available effects (each with its own cost where relevant). A card or activated ability's mode is chosen as it is played, before its

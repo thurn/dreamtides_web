@@ -1,0 +1,3444 @@
+{
+  "bead": "hv-umm2.589",
+  "sourceBase": "07f842d01d1e43aeb0e57bac5c29671e7b81b2a1",
+  "originalValidatedSource": "ed4d0743e1315976c14c2986f756d26ba107a41d",
+  "originalSourceBase": "ea99c699cc152574cc4923fe306dd88f97e7aa05",
+  "stage": "Combined-base integration validation complete; parent cold review, final amendment and certified delivery remain pending",
+  "timing": {
+    "rootGross": {
+      "start": "2026-10-14T18:43:17.770017+00:00",
+      "end": "2026-10-14T22:43:04.065146+00:00",
+      "elapsedMinutes": 239.77158548333333,
+      "scope": "ALL root claim/setup/brief/research/coordination/public proofs, prolonged parent planning/admission, helper implementation/checks/heavy waits/evidence through this proxy; actual Git still UNKNOWN"
+    },
+    "helperDispatch": {
+      "helper": "/root/journey_deck_spark589",
+      "beforeToolClock": "2026-10-14T18:50:42Z",
+      "afterAckObservedAt": "2026-10-14T18:51:20.407082+00:00",
+      "exactDispatchInstant": "UNKNOWN; bounded by pre-call clock and post-ack observation",
+      "actualModelSamplingStart": "UNKNOWN",
+      "knownClaimCall": "2026-10-14T18:43:17.770017+00:00",
+      "claimAck": "2026-10-14T18:43:17.875350+00:00",
+      "grossScope": "All root claim/setup/source and native scope audit/brief/coordination, then helper work/proofs/checks/queues/QA/evidence through actual Git; no productive-only shortening"
+    },
+    "actualModelSamplingStart": "UNKNOWN",
+    "actualGitStart": "UNKNOWN at this pre-Git proxy",
+    "actualGitEnd": "UNKNOWN at this pre-Git proxy",
+    "externalFinalGitReceipt": "/tmp/dreamtides-executor-01a1304d/589/integration-final-commit-receipt.json",
+    "preGitCutoffProxy": "2026-10-14T22:43:04.065146+00:00",
+    "externalGitReceipt": "/tmp/dreamtides-executor-01a1304d/589/git-commit-receipt.json"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "startScope": "Independent clock before helper dispatch; exact dispatch/model start UNKNOWN, upper acknowledgement bound retained",
+        "endScope": "Current pre-Git cutoff proxy; will refresh only after parent RELEASE and final COMMITACK; external actual Git receipt remains parent-owned"
+      },
+      "hostLoad": {
+        "measuredFor": "Successful final successful review command start",
+        "source": "Latest successful stage1-review receipt startLoad[0]"
+      }
+    }
+  },
+  "commands": {
+    "stage0-reload-witness": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/reload-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T19:10:48.667970+00:00",
+      "end": "2026-10-14T19:10:50.297613+00:00",
+      "pid": 47225,
+      "pgid": 47225,
+      "exitCode": 0,
+      "wallSeconds": 1.6296604999806732,
+      "cpuSeconds": {
+        "user": 1.579213,
+        "system": 0.7271679999999999
+      },
+      "startLoad": [
+        4.22607421875,
+        6.4208984375,
+        8.625
+      ],
+      "endLoad": [
+        4.28759765625,
+        6.39697265625,
+        8.603515625
+      ]
+    },
+    "stage0-foreign-origin-final": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/foreign-origin-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T19:18:57.853128+00:00",
+      "end": "2026-10-14T19:19:01.253534+00:00",
+      "pid": 76790,
+      "pgid": 76790,
+      "exitCode": 0,
+      "wallSeconds": 3.400430832989514,
+      "cpuSeconds": {
+        "user": 1.026179,
+        "system": 0.8205169999999999
+      },
+      "startLoad": [
+        27.50048828125,
+        14.28955078125,
+        10.48779296875
+      ],
+      "endLoad": [
+        27.0595703125,
+        14.41748046875,
+        10.55517578125
+      ]
+    },
+    "stage1-full": {
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:30:34.727437+00:00",
+      "end": "2026-10-14T21:32:38.798826+00:00",
+      "pid": 98544,
+      "pgid": 98544,
+      "exitCode": 0,
+      "wallSeconds": 124.07048608298646,
+      "cpuSeconds": {
+        "user": 268.869497,
+        "system": 33.079489
+      },
+      "startLoad": [
+        15.84619140625,
+        9.0498046875,
+        10.06298828125
+      ],
+      "endLoad": [
+        23.0419921875,
+        13.57666015625,
+        11.6962890625
+      ]
+    },
+    "caller-scope-final": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/caller-scope.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:36:48.369083+00:00",
+      "end": "2026-10-14T21:36:48.422200+00:00",
+      "pid": 73577,
+      "pgid": 73577,
+      "exitCode": 0,
+      "wallSeconds": 0.05315166700165719,
+      "cpuSeconds": {
+        "user": 0.045406999999999996,
+        "system": 0.007342
+      },
+      "startLoad": [
+        6.8466796875,
+        11.47216796875,
+        11.4541015625
+      ],
+      "endLoad": [
+        6.8466796875,
+        11.47216796875,
+        11.4541015625
+      ]
+    },
+    "integration-inventory-check": {
+      "command": [
+        "node_modules/.bin/tsx",
+        "scripts/content-inventory.ts",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:41:18.104941+00:00",
+      "end": "2026-10-14T22:41:20.824390+00:00",
+      "pid": 55544,
+      "pgid": 55544,
+      "exitCode": 0,
+      "wallSeconds": 2.7194622500101104,
+      "cpuSeconds": {
+        "user": 2.973191,
+        "system": 0.749749
+      },
+      "startLoad": [
+        5.49267578125,
+        10.95166015625,
+        11.1328125
+      ],
+      "endLoad": [
+        5.93359375,
+        10.9521484375,
+        11.1318359375
+      ]
+    },
+    "stage1-focused7": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:15:16.855977+00:00",
+      "end": "2026-10-14T21:15:23.972168+00:00",
+      "pid": 50988,
+      "pgid": 50988,
+      "exitCode": 0,
+      "wallSeconds": 7.116190542001277,
+      "cpuSeconds": {
+        "user": 6.920961,
+        "system": 2.396072
+      },
+      "startLoad": [
+        10.16943359375,
+        14.5517578125,
+        13.28759765625
+      ],
+      "endLoad": [
+        9.67529296875,
+        14.37646484375,
+        13.23291015625
+      ]
+    },
+    "stage1-review5": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:59:22.491713+00:00",
+      "end": "2026-10-14T22:00:17.503604+00:00",
+      "pid": 39065,
+      "pgid": 39065,
+      "exitCode": 0,
+      "wallSeconds": 55.011258999991696,
+      "cpuSeconds": {
+        "user": 145.755006,
+        "system": 14.200775
+      },
+      "startLoad": [
+        3.88916015625,
+        5.501953125,
+        7.28173828125
+      ],
+      "endLoad": [
+        6.1572265625,
+        5.97900390625,
+        7.35498046875
+      ]
+    },
+    "stage1-fuzz-total": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+        "stage1-fuzz",
+        "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+        "--seed",
+        "hv-umm2.589-c4"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:33:05.880654+00:00",
+      "end": "2026-10-14T21:43:16.545226+00:00",
+      "pid": 57129,
+      "pgid": 57129,
+      "exitCode": 0,
+      "wallSeconds": 610.6484827090171,
+      "cpuSeconds": {
+        "user": 635.347855,
+        "system": 5.862578
+      },
+      "startLoad": [
+        23.59228515625,
+        14.3974609375,
+        12.04150390625
+      ],
+      "endLoad": [
+        7.87939453125,
+        9.3828125,
+        10.60009765625
+      ]
+    },
+    "caller-scope": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/caller-scope.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:31:09.823021+00:00",
+      "end": "2026-10-14T21:31:09.873666+00:00",
+      "pid": 8262,
+      "pgid": 8262,
+      "exitCode": 0,
+      "wallSeconds": 0.05067966700880788,
+      "cpuSeconds": {
+        "user": 0.043356,
+        "system": 0.007009
+      },
+      "startLoad": [
+        17.0400390625,
+        10.212890625,
+        10.45263671875
+      ],
+      "endLoad": [
+        17.0400390625,
+        10.212890625,
+        10.45263671875
+      ]
+    },
+    "stage1-review2": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:24:45.154747+00:00",
+      "end": "2026-10-14T21:25:46.166122+00:00",
+      "pid": 33392,
+      "pgid": 33392,
+      "exitCode": 1,
+      "wallSeconds": 61.01099379098741,
+      "cpuSeconds": {
+        "user": 161.182747,
+        "system": 15.80954
+      },
+      "startLoad": [
+        4.48583984375,
+        7.978515625,
+        10.75634765625
+      ],
+      "endLoad": [
+        7.39208984375,
+        8.06884765625,
+        10.591796875
+      ]
+    },
+    "qa-sweep": {
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/run-qa-observed.py",
+        "qa-sweep",
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.589",
+        "--dreamsigns",
+        "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+        "--variants",
+        "base",
+        "--as",
+        "both",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:23:22.550176+00:00",
+      "end": "2026-10-14T22:23:40.472312+00:00",
+      "pid": 71589,
+      "pgid": 71589,
+      "exitCode": 0,
+      "wallSeconds": 17.92195891699521,
+      "cpuSeconds": {
+        "user": 5.874771,
+        "system": 3.302622
+      },
+      "startLoad": [
+        3.68994140625,
+        5.2822265625,
+        7.08349609375
+      ],
+      "endLoad": [
+        5.4208984375,
+        5.55859375,
+        7.138671875
+      ]
+    },
+    "stage1-review3": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:28:17.746133+00:00",
+      "end": "2026-10-14T21:29:13.201374+00:00",
+      "pid": 38374,
+      "pgid": 38374,
+      "exitCode": 0,
+      "wallSeconds": 55.45482854198781,
+      "cpuSeconds": {
+        "user": 138.665105,
+        "system": 14.903133
+      },
+      "startLoad": [
+        4.6123046875,
+        6.9296875,
+        9.72509765625
+      ],
+      "endLoad": [
+        4.806640625,
+        6.63623046875,
+        9.44189453125
+      ]
+    },
+    "stage1-focused1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:07:34.516605+00:00",
+      "end": "2026-10-14T21:07:43.539570+00:00",
+      "pid": 41518,
+      "pgid": 41518,
+      "exitCode": 1,
+      "wallSeconds": 9.022936541005038,
+      "cpuSeconds": {
+        "user": 8.316064,
+        "system": 2.873659
+      },
+      "startLoad": [
+        21.083984375,
+        13.86083984375,
+        11.85791015625
+      ],
+      "endLoad": [
+        19.6005859375,
+        13.7822265625,
+        11.85302734375
+      ]
+    },
+    "stage1-review4": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:47:20.897618+00:00",
+      "end": "2026-10-14T21:48:25.903832+00:00",
+      "pid": 59842,
+      "pgid": 59842,
+      "exitCode": 0,
+      "wallSeconds": 65.00547383300727,
+      "cpuSeconds": {
+        "user": 178.472487,
+        "system": 19.005013
+      },
+      "startLoad": [
+        5.005859375,
+        7.41455078125,
+        9.43701171875
+      ],
+      "endLoad": [
+        6.9951171875,
+        7.537109375,
+        9.33203125
+      ]
+    },
+    "stage1-focused6": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:13:56.276446+00:00",
+      "end": "2026-10-14T21:14:07.291425+00:00",
+      "pid": 44913,
+      "pgid": 44913,
+      "exitCode": 1,
+      "wallSeconds": 11.0149427090073,
+      "cpuSeconds": {
+        "user": 8.205125,
+        "system": 2.9979329999999997
+      },
+      "startLoad": [
+        20.3427734375,
+        16.71875,
+        13.82763671875
+      ],
+      "endLoad": [
+        19.26953125,
+        16.677734375,
+        13.86474609375
+      ]
+    },
+    "stage0-foreign-origin-witness3": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/foreign-origin-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T19:18:38.884192+00:00",
+      "end": "2026-10-14T19:18:40.795583+00:00",
+      "pid": 49620,
+      "pgid": 49620,
+      "exitCode": 1,
+      "wallSeconds": 1.9114111659873743,
+      "cpuSeconds": {
+        "user": 0.7368469999999999,
+        "system": 0.613312
+      },
+      "startLoad": [
+        30.8125,
+        13.90673828125,
+        10.263671875
+      ],
+      "endLoad": [
+        30.7470703125,
+        14.173828125,
+        10.37890625
+      ]
+    },
+    "stage1-inventory2": {
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:24:44.001581+00:00",
+      "end": "2026-10-14T21:24:47.928737+00:00",
+      "pid": 33354,
+      "pgid": 33354,
+      "exitCode": 0,
+      "wallSeconds": 3.9271581249777228,
+      "cpuSeconds": {
+        "user": 3.043276,
+        "system": 0.849734
+      },
+      "startLoad": [
+        4.48583984375,
+        7.978515625,
+        10.75634765625
+      ],
+      "endLoad": [
+        4.44677734375,
+        7.912109375,
+        10.71630859375
+      ]
+    },
+    "integration-knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:41:18.104885+00:00",
+      "end": "2026-10-14T22:41:23.345404+00:00",
+      "pid": 55543,
+      "pgid": 55543,
+      "exitCode": 0,
+      "wallSeconds": 5.240512291959021,
+      "cpuSeconds": {
+        "user": 4.602628,
+        "system": 1.7272699999999999
+      },
+      "startLoad": [
+        5.49267578125,
+        10.95166015625,
+        11.1328125
+      ],
+      "endLoad": [
+        5.93359375,
+        10.9521484375,
+        11.1318359375
+      ]
+    },
+    "stage1-fuzz2-total": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+        "stage1-fuzz2",
+        "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+        "--seed",
+        "hv-umm2.589-c4"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:51:23.945014+00:00",
+      "end": "2026-10-14T21:54:55.782767+00:00",
+      "pid": 96960,
+      "pgid": 96960,
+      "exitCode": -15,
+      "wallSeconds": 211.8352018329897,
+      "cpuSeconds": {
+        "user": 0.000498,
+        "system": 0.00086
+      },
+      "startLoad": [
+        4.4580078125,
+        6.44580078125,
+        8.54638671875
+      ],
+      "endLoad": [
+        7.73193359375,
+        6.82177734375,
+        8.21728515625
+      ]
+    },
+    "integration-checkpoint": {
+      "command": [
+        "git",
+        "commit",
+        "--amend",
+        "--no-edit"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:38:45.982505+00:00",
+      "end": "2026-10-14T22:38:46.019882+00:00",
+      "pid": 50560,
+      "pgid": 50560,
+      "exitCode": 0,
+      "wallSeconds": 0.03740683296928182,
+      "cpuSeconds": {
+        "user": 0.012647,
+        "system": 0.043067
+      },
+      "startLoad": [
+        12.4140625,
+        14.9228515625,
+        12.34716796875
+      ],
+      "endLoad": [
+        12.4140625,
+        14.9228515625,
+        12.34716796875
+      ]
+    },
+    "stage1-lower-layer-witness2": {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/lower-layer-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:44:30.940277+00:00",
+      "end": "2026-10-14T21:44:32.494818+00:00",
+      "pid": 55099,
+      "pgid": 55099,
+      "exitCode": 0,
+      "wallSeconds": 1.5545602499914821,
+      "cpuSeconds": {
+        "user": 1.129583,
+        "system": 0.559237
+      },
+      "startLoad": [
+        6.43896484375,
+        8.515625,
+        10.16064453125
+      ],
+      "endLoad": [
+        6.43896484375,
+        8.515625,
+        10.16064453125
+      ]
+    },
+    "stage1-full2": {
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:49:16.705373+00:00",
+      "end": "2026-10-14T21:50:55.182295+00:00",
+      "pid": 62518,
+      "pgid": 62518,
+      "exitCode": 0,
+      "wallSeconds": 98.47578416697797,
+      "cpuSeconds": {
+        "user": 228.228842,
+        "system": 26.17871
+      },
+      "startLoad": [
+        5.8984375,
+        7.1455078125,
+        9.0830078125
+      ],
+      "endLoad": [
+        5.83349609375,
+        6.88134765625,
+        8.77099609375
+      ]
+    },
+    "qa-judged": {
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/run-qa-observed.py",
+        "qa-judged",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.589/judged.mjs",
+        "--bead",
+        "hv-umm2.589",
+        "--cwd",
+        "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:26:36.807089+00:00",
+      "end": "2026-10-14T22:27:56.674741+00:00",
+      "pid": 90158,
+      "pgid": 90158,
+      "exitCode": 0,
+      "wallSeconds": 79.86678595800186,
+      "cpuSeconds": {
+        "user": 6.657866,
+        "system": 3.204146
+      },
+      "startLoad": [
+        16.42529296875,
+        10.662109375,
+        8.9658203125
+      ],
+      "endLoad": [
+        16.7255859375,
+        12.212890625,
+        9.71435546875
+      ]
+    },
+    "stage1-knip1": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:16:43.102303+00:00",
+      "end": "2026-10-14T21:16:48.277253+00:00",
+      "pid": 12754,
+      "pgid": 12754,
+      "exitCode": 0,
+      "wallSeconds": 5.174954750022152,
+      "cpuSeconds": {
+        "user": 4.507656,
+        "system": 1.480637
+      },
+      "startLoad": [
+        17.64794921875,
+        16.39453125,
+        14.14453125
+      ],
+      "endLoad": [
+        17.595703125,
+        16.404296875,
+        14.1611328125
+      ]
+    },
+    "stage1-unknown-marker-before": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "preserves observed unknown legacy creation"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:55:48.162648+00:00",
+      "end": "2026-10-14T21:55:52.169356+00:00",
+      "pid": 2486,
+      "pgid": 2486,
+      "exitCode": 1,
+      "wallSeconds": 4.006700083002215,
+      "cpuSeconds": {
+        "user": 4.32818,
+        "system": 1.015183
+      },
+      "startLoad": [
+        6.998046875,
+        6.8193359375,
+        8.13720703125
+      ],
+      "endLoad": [
+        6.677734375,
+        6.755859375,
+        8.10693359375
+      ]
+    },
+    "stage1-lower-layer-witness": {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/lower-layer-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:44:08.888643+00:00",
+      "end": "2026-10-14T21:44:10.279824+00:00",
+      "pid": 54551,
+      "pgid": 54551,
+      "exitCode": 0,
+      "wallSeconds": 1.3912141250038985,
+      "cpuSeconds": {
+        "user": 1.0420719999999999,
+        "system": 0.518459
+      },
+      "startLoad": [
+        6.13330078125,
+        8.60498046875,
+        10.23095703125
+      ],
+      "endLoad": [
+        6.13330078125,
+        8.60498046875,
+        10.23095703125
+      ]
+    },
+    "stage0-foreign-origin-witness2": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/foreign-origin-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T19:17:21.131334+00:00",
+      "end": "2026-10-14T19:17:22.311781+00:00",
+      "pid": 56478,
+      "pgid": 56478,
+      "exitCode": 1,
+      "wallSeconds": 1.1804767500143498,
+      "cpuSeconds": {
+        "user": 0.768875,
+        "system": 0.451235
+      },
+      "startLoad": [
+        19.1044921875,
+        8.31787109375,
+        8.15576171875
+      ],
+      "endLoad": [
+        19.1044921875,
+        8.31787109375,
+        8.15576171875
+      ]
+    },
+    "stage0-parent-replay": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/stage0-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T18:58:41.221268+00:00",
+      "end": "2026-10-14T18:58:43.484249+00:00",
+      "pid": 97618,
+      "pgid": 97618,
+      "exitCode": 0,
+      "wallSeconds": 2.2630074589978904,
+      "cpuSeconds": {
+        "user": 0.7037789999999999,
+        "system": 0.551511
+      },
+      "startLoad": [
+        5.45166015625,
+        8.9677734375,
+        11.28466796875
+      ],
+      "endLoad": [
+        5.45166015625,
+        8.9677734375,
+        11.28466796875
+      ]
+    },
+    "stage0-foreign-origin-diagnostic": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/foreign-origin-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T19:17:45.283020+00:00",
+      "end": "2026-10-14T19:17:48.371301+00:00",
+      "pid": 61030,
+      "pgid": 61030,
+      "exitCode": 1,
+      "wallSeconds": 3.0882932909880765,
+      "cpuSeconds": {
+        "user": 0.7147439999999999,
+        "system": 0.69538
+      },
+      "startLoad": [
+        21.76806640625,
+        9.81591796875,
+        8.7001953125
+      ],
+      "endLoad": [
+        21.76806640625,
+        9.81591796875,
+        8.7001953125
+      ]
+    },
+    "stage0-foreign-origin-witness": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/foreign-origin-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T19:17:03.128367+00:00",
+      "end": "2026-10-14T19:17:04.320084+00:00",
+      "pid": 55281,
+      "pgid": 55281,
+      "exitCode": 1,
+      "wallSeconds": 1.191735999978846,
+      "cpuSeconds": {
+        "user": 0.6336189999999999,
+        "system": 0.540959
+      },
+      "startLoad": [
+        15.45703125,
+        6.9921875,
+        7.70068359375
+      ],
+      "endLoad": [
+        15.45703125,
+        6.9921875,
+        7.70068359375
+      ]
+    },
+    "caller-preflight2": {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/caller-preflight.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:32:28.739751+00:00",
+      "end": "2026-10-14T21:32:32.586669+00:00",
+      "pid": 33630,
+      "pgid": 33630,
+      "exitCode": 0,
+      "wallSeconds": 3.846928457991453,
+      "cpuSeconds": {
+        "user": 1.461037,
+        "system": 0.925581
+      },
+      "startLoad": [
+        21.025390625,
+        12.89453125,
+        11.4384765625
+      ],
+      "endLoad": [
+        20.78271484375,
+        12.97900390625,
+        11.4765625
+      ]
+    },
+    "counterfactual-controller-only": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps origin under stolen control"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:25:59.380830+00:00",
+      "end": "2026-10-14T21:26:03.693622+00:00",
+      "pid": 35316,
+      "pgid": 35316,
+      "exitCode": 1,
+      "wallSeconds": 4.312794458004646,
+      "cpuSeconds": {
+        "user": 5.211115,
+        "system": 1.142076
+      },
+      "startLoad": [
+        7.94384765625,
+        8.16162109375,
+        10.580078125
+      ],
+      "endLoad": [
+        8.0283203125,
+        8.17529296875,
+        10.57080078125
+      ]
+    },
+    "stage1-fuzz": {
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+        "--seed",
+        "hv-umm2.589-c4"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:33:05.907398+00:00",
+      "end": "2026-10-14T21:43:16.539595+00:00",
+      "pid": 57135,
+      "pgid": 57135,
+      "exitCode": 0,
+      "wallSeconds": 610.6161227500124,
+      "cpuSeconds": {
+        "user": 635.32828,
+        "system": 5.851815
+      },
+      "startLoad": [
+        23.59228515625,
+        14.3974609375,
+        12.04150390625
+      ],
+      "endLoad": [
+        7.87939453125,
+        9.3828125,
+        10.60009765625
+      ]
+    },
+    "stage1-knip3": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:48:47.249231+00:00",
+      "end": "2026-10-14T21:48:52.908150+00:00",
+      "pid": 61841,
+      "pgid": 61841,
+      "exitCode": 0,
+      "wallSeconds": 5.658884292002767,
+      "cpuSeconds": {
+        "user": 4.376582,
+        "system": 2.072689
+      },
+      "startLoad": [
+        6.21875,
+        7.3232421875,
+        9.21337890625
+      ],
+      "endLoad": [
+        6.361328125,
+        7.33447265625,
+        9.2060546875
+      ]
+    },
+    "stage1-regenerate-replays": {
+      "command": [
+        "npm",
+        "run",
+        "regenerate-replay-fixtures"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:18:53.041533+00:00",
+      "end": "2026-10-14T21:18:56.132558+00:00",
+      "pid": 21360,
+      "pgid": 21360,
+      "exitCode": 0,
+      "wallSeconds": 3.0910492920083925,
+      "cpuSeconds": {
+        "user": 1.25242,
+        "system": 0.725981
+      },
+      "startLoad": [
+        8.75390625,
+        13.56103515625,
+        13.33984375
+      ],
+      "endLoad": [
+        8.75390625,
+        13.56103515625,
+        13.33984375
+      ]
+    },
+    "stage1-type-cycle-before2": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "avoids recursion through ordinary type-layer"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:45:49.497689+00:00",
+      "end": "2026-10-14T21:45:52.947033+00:00",
+      "pid": 57210,
+      "pgid": 57210,
+      "exitCode": 1,
+      "wallSeconds": 3.449334834003821,
+      "cpuSeconds": {
+        "user": 4.301008,
+        "system": 0.868093
+      },
+      "startLoad": [
+        7.71875,
+        8.49462890625,
+        10.0068359375
+      ],
+      "endLoad": [
+        7.6611328125,
+        8.4697265625,
+        9.98876953125
+      ]
+    },
+    "stage1-focused8": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/rules/replay/replay.test.ts",
+        "src/content/content-coverage.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:22:35.138318+00:00",
+      "end": "2026-10-14T21:22:41.949261+00:00",
+      "pid": 30222,
+      "pgid": 30222,
+      "exitCode": 0,
+      "wallSeconds": 6.810927125014132,
+      "cpuSeconds": {
+        "user": 6.638839,
+        "system": 2.316101
+      },
+      "startLoad": [
+        5.2890625,
+        9.6552734375,
+        11.70849609375
+      ],
+      "endLoad": [
+        5.4970703125,
+        9.5517578125,
+        11.6474609375
+      ]
+    },
+    "stage0-witness": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/stage0-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T18:54:55.399170+00:00",
+      "end": "2026-10-14T18:54:56.784180+00:00",
+      "pid": 26311,
+      "pgid": 26311,
+      "exitCode": 0,
+      "wallSeconds": 1.385042165988125,
+      "cpuSeconds": {
+        "user": 0.9304979999999999,
+        "system": 0.514309
+      },
+      "startLoad": [
+        5.65478515625,
+        9.9140625,
+        12.02099609375
+      ],
+      "endLoad": [
+        5.65478515625,
+        9.9140625,
+        12.02099609375
+      ]
+    },
+    "stage1-focused10": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:27:38.461138+00:00",
+      "end": "2026-10-14T21:27:45.017756+00:00",
+      "pid": 37615,
+      "pgid": 37615,
+      "exitCode": 0,
+      "wallSeconds": 6.55661025000154,
+      "cpuSeconds": {
+        "user": 5.96446,
+        "system": 2.473068
+      },
+      "startLoad": [
+        6.2783203125,
+        7.4990234375,
+        10.05126953125
+      ],
+      "endLoad": [
+        6.255859375,
+        7.47412109375,
+        10.02734375
+      ]
+    },
+    "integration-focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck|current-zone discarded physical membership"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:40:39.537831+00:00",
+      "end": "2026-10-14T22:40:46.936931+00:00",
+      "pid": 54356,
+      "pgid": 54356,
+      "exitCode": 0,
+      "wallSeconds": 7.399050874984823,
+      "cpuSeconds": {
+        "user": 7.279384,
+        "system": 2.278232
+      },
+      "startLoad": [
+        5.97802734375,
+        11.763671875,
+        11.4130859375
+      ],
+      "endLoad": [
+        6.07373046875,
+        11.5908203125,
+        11.35546875
+      ]
+    },
+    "stage1-inventory": {
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:23:35.837297+00:00",
+      "end": "2026-10-14T21:23:39.864807+00:00",
+      "pid": 31848,
+      "pgid": 31848,
+      "exitCode": 0,
+      "wallSeconds": 4.027516916015884,
+      "cpuSeconds": {
+        "user": 2.698529,
+        "system": 0.8602449999999999
+      },
+      "startLoad": [
+        5.458984375,
+        8.97314453125,
+        11.31591796875
+      ],
+      "endLoad": [
+        5.7421875,
+        8.97314453125,
+        11.30224609375
+      ]
+    },
+    "counterfactual-outside-omitted-filter": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "includes C4 in ordinary final hand spark filters"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:26:40.075263+00:00",
+      "end": "2026-10-14T21:26:44.410056+00:00",
+      "pid": 36254,
+      "pgid": 36254,
+      "exitCode": 1,
+      "wallSeconds": 4.334791624976788,
+      "cpuSeconds": {
+        "user": 5.051164,
+        "system": 1.077167
+      },
+      "startLoad": [
+        6.37255859375,
+        7.76904296875,
+        10.326171875
+      ],
+      "endLoad": [
+        7.30322265625,
+        7.9384765625,
+        10.37109375
+      ]
+    },
+    "integration-inventory": {
+      "command": [
+        "node_modules/.bin/tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:40:18.630978+00:00",
+      "end": "2026-10-14T22:40:22.369990+00:00",
+      "pid": 53801,
+      "pgid": 53801,
+      "exitCode": 0,
+      "wallSeconds": 3.7390124169760384,
+      "cpuSeconds": {
+        "user": 2.772461,
+        "system": 0.795952
+      },
+      "startLoad": [
+        6.033203125,
+        12.1796875,
+        11.54833984375
+      ],
+      "endLoad": [
+        5.7900390625,
+        12.02685546875,
+        11.498046875
+      ]
+    },
+    "stage1-unknown-marker-supported": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "unknown legacy creation marker"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:58:22.303156+00:00",
+      "end": "2026-10-14T21:58:26.407421+00:00",
+      "pid": 37755,
+      "pgid": 37755,
+      "exitCode": 0,
+      "wallSeconds": 4.104251000011573,
+      "cpuSeconds": {
+        "user": 4.39444,
+        "system": 1.038592
+      },
+      "startLoad": [
+        5.38818359375,
+        6.060546875,
+        7.59765625
+      ],
+      "endLoad": [
+        5.27685546875,
+        6.02587890625,
+        7.576171875
+      ]
+    },
+    "stage1-knip2": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:30:34.699674+00:00",
+      "end": "2026-10-14T21:30:40.151993+00:00",
+      "pid": 98539,
+      "pgid": 98539,
+      "exitCode": 0,
+      "wallSeconds": 5.452315790986177,
+      "cpuSeconds": {
+        "user": 4.67824,
+        "system": 1.882539
+      },
+      "startLoad": [
+        15.84619140625,
+        9.0498046875,
+        10.06298828125
+      ],
+      "endLoad": [
+        18.6611328125,
+        9.74609375,
+        10.302734375
+      ]
+    },
+    "caller-preflight3": {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/caller-preflight.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:48:47.248943+00:00",
+      "end": "2026-10-14T21:48:49.624778+00:00",
+      "pid": 61840,
+      "pgid": 61840,
+      "exitCode": 0,
+      "wallSeconds": 2.3758409999718424,
+      "cpuSeconds": {
+        "user": 1.309753,
+        "system": 0.844704
+      },
+      "startLoad": [
+        6.21875,
+        7.3232421875,
+        9.21337890625
+      ],
+      "endLoad": [
+        6.361328125,
+        7.33447265625,
+        9.2060546875
+      ]
+    },
+    "stage1-focused9": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/determinization-fidelity.test.ts",
+        "src/engine/view/determinize-loops.test.ts",
+        "-t",
+        "journey-deck|cessation|removes|disappear|copied source|concealed"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:23:24.196702+00:00",
+      "end": "2026-10-14T21:23:32.240956+00:00",
+      "pid": 31611,
+      "pgid": 31611,
+      "exitCode": 0,
+      "wallSeconds": 8.044223750010133,
+      "cpuSeconds": {
+        "user": 6.411802,
+        "system": 2.511799
+      },
+      "startLoad": [
+        5.89892578125,
+        9.17626953125,
+        11.41455078125
+      ],
+      "endLoad": [
+        5.458984375,
+        8.97314453125,
+        11.31591796875
+      ]
+    },
+    "counterfactual-outside-omitted": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps distinct originals"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:26:07.558171+00:00",
+      "end": "2026-10-14T21:26:11.277699+00:00",
+      "pid": 35452,
+      "pgid": 35452,
+      "exitCode": 0,
+      "wallSeconds": 3.719527790992288,
+      "cpuSeconds": {
+        "user": 4.591373,
+        "system": 0.9508249999999999
+      },
+      "startLoad": [
+        7.86572265625,
+        8.13916015625,
+        10.5439453125
+      ],
+      "endLoad": [
+        7.86572265625,
+        8.13916015625,
+        10.5439453125
+      ]
+    },
+    "caller-preflight": {
+      "command": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/caller-preflight.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:31:08.678859+00:00",
+      "end": "2026-10-14T21:31:10.412417+00:00",
+      "pid": 5644,
+      "pgid": 5644,
+      "exitCode": 1,
+      "wallSeconds": 1.7335755419917405,
+      "cpuSeconds": {
+        "user": 1.136628,
+        "system": 0.562273
+      },
+      "startLoad": [
+        17.0400390625,
+        10.212890625,
+        10.45263671875
+      ],
+      "endLoad": [
+        17.0400390625,
+        10.212890625,
+        10.45263671875
+      ]
+    },
+    "stage1-focused11": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:46:27.761206+00:00",
+      "end": "2026-10-14T21:46:33.880518+00:00",
+      "pid": 58381,
+      "pgid": 58381,
+      "exitCode": 0,
+      "wallSeconds": 6.1192708750022575,
+      "cpuSeconds": {
+        "user": 6.314907,
+        "system": 1.998222
+      },
+      "startLoad": [
+        6.27880859375,
+        8.05712890625,
+        9.78564453125
+      ],
+      "endLoad": [
+        6.001953125,
+        7.939453125,
+        9.72314453125
+      ]
+    },
+    "stage1-import-cycles": {
+      "command": [
+        "npm",
+        "run",
+        "import-cycles"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:03:50.010636+00:00",
+      "end": "2026-10-14T21:03:52.035001+00:00",
+      "pid": 13235,
+      "pgid": 13235,
+      "exitCode": 0,
+      "wallSeconds": 2.024405582982581,
+      "cpuSeconds": {
+        "user": 2.58162,
+        "system": 0.259086
+      },
+      "startLoad": [
+        10.66552734375,
+        12.60546875,
+        11.1298828125
+      ],
+      "endLoad": [
+        10.85205078125,
+        12.61181640625,
+        11.140625
+      ]
+    },
+    "stage1-fuzz3-total": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+        "stage1-fuzz3",
+        "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+        "--seed",
+        "hv-umm2.589-c4"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:59:23.634125+00:00",
+      "end": "2026-10-14T22:21:19.996984+00:00",
+      "pid": 39156,
+      "pgid": 39156,
+      "exitCode": 0,
+      "wallSeconds": 1316.3481457910093,
+      "cpuSeconds": {
+        "user": 592.676488,
+        "system": 4.953599
+      },
+      "startLoad": [
+        5.57958984375,
+        5.8251953125,
+        7.38525390625
+      ],
+      "endLoad": [
+        4.06884765625,
+        5.95361328125,
+        7.56005859375
+      ]
+    },
+    "stage1-type-cycle-before": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "avoids recursion through ordinary type-layer"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:45:17.505844+00:00",
+      "end": "2026-10-14T21:45:21.571095+00:00",
+      "pid": 56649,
+      "pgid": 56649,
+      "exitCode": 1,
+      "wallSeconds": 4.065233915986028,
+      "cpuSeconds": {
+        "user": 4.429788,
+        "system": 1.024057
+      },
+      "startLoad": [
+        7.8671875,
+        8.61083984375,
+        10.11083984375
+      ],
+      "endLoad": [
+        7.55712890625,
+        8.5341796875,
+        10.07470703125
+      ]
+    },
+    "stage1-full-total": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+        "stage1-full",
+        "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:30:34.704127+00:00",
+      "end": "2026-10-14T21:32:38.805009+00:00",
+      "pid": 98540,
+      "pgid": 98540,
+      "exitCode": 0,
+      "wallSeconds": 124.09996958301053,
+      "cpuSeconds": {
+        "user": 268.887298,
+        "system": 33.089126
+      },
+      "startLoad": [
+        15.84619140625,
+        9.0498046875,
+        10.06298828125
+      ],
+      "endLoad": [
+        23.0419921875,
+        13.57666015625,
+        11.6962890625
+      ]
+    },
+    "counterfactual-created-included": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "excludes same-printing"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:26:03.719124+00:00",
+      "end": "2026-10-14T21:26:07.532493+00:00",
+      "pid": 35393,
+      "pgid": 35393,
+      "exitCode": 1,
+      "wallSeconds": 3.8133728750108276,
+      "cpuSeconds": {
+        "user": 4.75631,
+        "system": 0.984765
+      },
+      "startLoad": [
+        8.0283203125,
+        8.17529296875,
+        10.57080078125
+      ],
+      "endLoad": [
+        7.86572265625,
+        8.13916015625,
+        10.5439453125
+      ]
+    },
+    "stage1-focused4": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:11:00.311308+00:00",
+      "end": "2026-10-14T21:11:08.074119+00:00",
+      "pid": 74164,
+      "pgid": 74164,
+      "exitCode": 1,
+      "wallSeconds": 7.762783875019522,
+      "cpuSeconds": {
+        "user": 7.821388,
+        "system": 2.443403
+      },
+      "startLoad": [
+        22.115234375,
+        16.1904296875,
+        13.13818359375
+      ],
+      "endLoad": [
+        23.5546875,
+        16.69384765625,
+        13.3525390625
+      ]
+    },
+    "stage1-focused3": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:10:49.681686+00:00",
+      "end": "2026-10-14T21:10:57.591124+00:00",
+      "pid": 72832,
+      "pgid": 72832,
+      "exitCode": 1,
+      "wallSeconds": 7.909460082999431,
+      "cpuSeconds": {
+        "user": 7.123781,
+        "system": 2.636363
+      },
+      "startLoad": [
+        23.5107421875,
+        16.2490234375,
+        13.12255859375
+      ],
+      "endLoad": [
+        22.115234375,
+        16.1904296875,
+        13.13818359375
+      ]
+    },
+    "stage1-review1": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:15:53.098564+00:00",
+      "end": "2026-10-14T21:16:57.391170+00:00",
+      "pid": 53593,
+      "pgid": 53593,
+      "exitCode": 2,
+      "wallSeconds": 64.29216816701228,
+      "cpuSeconds": {
+        "user": 187.671935,
+        "system": 18.040964
+      },
+      "startLoad": [
+        19.84423828125,
+        16.49658203125,
+        14.04638671875
+      ],
+      "endLoad": [
+        16.7412109375,
+        16.25927734375,
+        14.1357421875
+      ]
+    },
+    "stage1-fuzz3": {
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+        "--seed",
+        "hv-umm2.589-c4"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:11:51.320793+00:00",
+      "end": "2026-10-14T22:21:19.992084+00:00",
+      "pid": 88135,
+      "pgid": 88135,
+      "exitCode": 0,
+      "wallSeconds": 568.6657660839846,
+      "cpuSeconds": {
+        "user": 592.658364,
+        "system": 4.942775
+      },
+      "startLoad": [
+        13.70751953125,
+        11.06787109375,
+        9.39208984375
+      ],
+      "endLoad": [
+        4.06884765625,
+        5.95361328125,
+        7.56005859375
+      ]
+    },
+    "counterfactual-deck-only": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps distinct originals"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:25:54.388869+00:00",
+      "end": "2026-10-14T21:25:59.349679+00:00",
+      "pid": 35202,
+      "pgid": 35202,
+      "exitCode": 1,
+      "wallSeconds": 4.960815250000451,
+      "cpuSeconds": {
+        "user": 5.465855,
+        "system": 1.184327
+      },
+      "startLoad": [
+        8.0263671875,
+        8.181640625,
+        10.6015625
+      ],
+      "endLoad": [
+        7.94384765625,
+        8.16162109375,
+        10.580078125
+      ]
+    },
+    "stage1-typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:03:26.313674+00:00",
+      "end": "2026-10-14T21:03:42.999684+00:00",
+      "pid": 11416,
+      "pgid": 11416,
+      "exitCode": 2,
+      "wallSeconds": 16.685912124987226,
+      "cpuSeconds": {
+        "user": 26.363443,
+        "system": 2.469052
+      },
+      "startLoad": [
+        8.15869140625,
+        12.33056640625,
+        11.0029296875
+      ],
+      "endLoad": [
+        8.98291015625,
+        12.31201171875,
+        11.01904296875
+      ]
+    },
+    "stage1-full2-total": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/589/run-command.py",
+        "stage1-full2",
+        "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:48:47.248751+00:00",
+      "end": "2026-10-14T21:50:55.186817+00:00",
+      "pid": 61839,
+      "pgid": 61839,
+      "exitCode": 0,
+      "wallSeconds": 127.93654662498739,
+      "cpuSeconds": {
+        "user": 228.246704,
+        "system": 26.189557
+      },
+      "startLoad": [
+        6.21875,
+        7.3232421875,
+        9.21337890625
+      ],
+      "endLoad": [
+        5.83349609375,
+        6.88134765625,
+        8.77099609375
+      ]
+    },
+    "stage1-preflight": {
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/qa/lab-preflight.ts",
+        "--dreamsigns",
+        "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:24:59.854999+00:00",
+      "end": "2026-10-14T21:25:01.262767+00:00",
+      "pid": 33754,
+      "pgid": 33754,
+      "exitCode": 0,
+      "wallSeconds": 1.407792916026665,
+      "cpuSeconds": {
+        "user": 1.203293,
+        "system": 0.5124
+      },
+      "startLoad": [
+        4.6240234375,
+        7.83251953125,
+        10.65478515625
+      ],
+      "endLoad": [
+        4.6240234375,
+        7.83251953125,
+        10.65478515625
+      ]
+    },
+    "integration-review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:41:18.104920+00:00",
+      "end": "2026-10-14T22:42:14.359474+00:00",
+      "pid": 55545,
+      "pgid": 55545,
+      "exitCode": 0,
+      "wallSeconds": 56.25392424996244,
+      "cpuSeconds": {
+        "user": 169.9696,
+        "system": 14.309754
+      },
+      "startLoad": [
+        5.49267578125,
+        10.95166015625,
+        11.1328125
+      ],
+      "endLoad": [
+        6.10888671875,
+        10.27978515625,
+        10.875
+      ]
+    },
+    "integration-views": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/determinize-loops.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/view/challenge-privacy.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:40:39.537965+00:00",
+      "end": "2026-10-14T22:40:45.530302+00:00",
+      "pid": 54357,
+      "pgid": 54357,
+      "exitCode": 0,
+      "wallSeconds": 5.992301541031338,
+      "cpuSeconds": {
+        "user": 7.833667,
+        "system": 2.121517
+      },
+      "startLoad": [
+        5.97802734375,
+        11.763671875,
+        11.4130859375
+      ],
+      "endLoad": [
+        6.07373046875,
+        11.5908203125,
+        11.35546875
+      ]
+    },
+    "stage0-privacy-global-witness": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/privacy-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T19:11:52.035812+00:00",
+      "end": "2026-10-14T19:11:52.930753+00:00",
+      "pid": 48287,
+      "pgid": 48287,
+      "exitCode": 0,
+      "wallSeconds": 0.8949660419893917,
+      "cpuSeconds": {
+        "user": 0.7207009999999999,
+        "system": 0.37707599999999997
+      },
+      "startLoad": [
+        2.40869140625,
+        5.4716796875,
+        8.10546875
+      ],
+      "endLoad": [
+        2.40869140625,
+        5.4716796875,
+        8.10546875
+      ]
+    },
+    "stage0-privacy-witness": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/privacy-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T19:09:31.156889+00:00",
+      "end": "2026-10-14T19:09:33.454439+00:00",
+      "pid": 45396,
+      "pgid": 45396,
+      "exitCode": 0,
+      "wallSeconds": 2.297220833017491,
+      "cpuSeconds": {
+        "user": 0.7123079999999999,
+        "system": 0.56562
+      },
+      "startLoad": [
+        4.98779296875,
+        7.2451171875,
+        9.1015625
+      ],
+      "endLoad": [
+        4.98779296875,
+        7.2451171875,
+        9.1015625
+      ]
+    },
+    "stage1-focused2": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:08:55.645125+00:00",
+      "end": "2026-10-14T21:09:07.082513+00:00",
+      "pid": 50322,
+      "pgid": 50322,
+      "exitCode": 1,
+      "wallSeconds": 11.437346584018087,
+      "cpuSeconds": {
+        "user": 7.983947,
+        "system": 3.203616
+      },
+      "startLoad": [
+        14.587890625,
+        13.43310546875,
+        11.86865234375
+      ],
+      "endLoad": [
+        14.07470703125,
+        13.37841796875,
+        11.8759765625
+      ]
+    },
+    "stage1-focused5": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T21:12:25.245530+00:00",
+      "end": "2026-10-14T21:12:35.712954+00:00",
+      "pid": 80489,
+      "pgid": 80489,
+      "exitCode": 1,
+      "wallSeconds": 10.467387084005168,
+      "cpuSeconds": {
+        "user": 7.448838,
+        "system": 2.82308
+      },
+      "startLoad": [
+        11.85888671875,
+        14.72021484375,
+        12.89208984375
+      ],
+      "endLoad": [
+        11.66552734375,
+        14.58154296875,
+        12.86376953125
+      ]
+    }
+  },
+  "heavyAdmissionStartupIntervals": [
+    {
+      "label": "stage1-full",
+      "start": "2026-10-14T21:30:34.704127+00:00",
+      "end": "2026-10-14T21:30:34.727437+00:00",
+      "seconds": 0.02331,
+      "scope": "Observed heavy admission and launcher interval ending at inner command start"
+    },
+    {
+      "label": "stage1-full2",
+      "start": "2026-10-14T21:48:47.248751+00:00",
+      "end": "2026-10-14T21:49:16.705373+00:00",
+      "seconds": 29.456622,
+      "scope": "Observed heavy admission and launcher interval ending at inner command start"
+    },
+    {
+      "label": "stage1-fuzz",
+      "start": "2026-10-14T21:33:05.880654+00:00",
+      "end": "2026-10-14T21:33:05.907398+00:00",
+      "seconds": 0.026744,
+      "scope": "Observed heavy admission and launcher interval ending at inner command start"
+    },
+    {
+      "label": "stage1-fuzz2",
+      "start": "2026-10-14T21:51:23.945014+00:00",
+      "end": "2026-10-14T21:54:55.782767+00:00",
+      "seconds": 211.837753,
+      "scope": "Queued outer client without inner launch; terminal cancellation"
+    },
+    {
+      "label": "stage1-fuzz3",
+      "start": "2026-10-14T21:59:23.634125+00:00",
+      "end": "2026-10-14T22:11:51.320793+00:00",
+      "seconds": 747.686668,
+      "scope": "Observed heavy admission and launcher interval ending at inner command start"
+    }
+  ],
+  "acceptance": {
+    "primitiveContracts": 35,
+    "contractLines": 307,
+    "focusedRegression": 64,
+    "reviewRelatedTests": 8137,
+    "originalReviewRelatedTests": 7666,
+    "fullTestFiles": 387,
+    "fullTests": 8658,
+    "fullProductionBundle": "pass",
+    "coreReview": "MANDATORY parent-owned cold Claude Opus5.5 after candidate; expired Sol override unused",
+    "D21": {
+      "firstByte": 35,
+      "sampled": false
+    },
+    "counterfactuals": {
+      "deckOnly": "2 assertion failures",
+      "currentControllerOnly": "2 assertion failures",
+      "createdCopiesIncluded": "2 assertion failures",
+      "outsidePlayReaderOmission": "Initial direct characteristics negative passed and is NOT proof; corrected ordinary final hand filter negative fails2 assertions",
+      "restorationScope": "First layer2 implementation counterfactuals, then separately source-backed layer1 reader repair and current final checks",
+      "restorationSHA256": "6fe3117130b7012e8a352fb2f057c829abf4736d7112db190d6952ad94265bc2"
+    },
+    "legacy": "Unknown C4 reader refusal; only C4-required decoder/import rejection; unrelated legacy acceptance; actual hash-valid legacy checkpoint fallback replays preserved genesis; direct raw LOAD_STATE reducer refusal and public replay start refusal/new-origin acceptance",
+    "privacy": "Partial legacy visible created unknown marker preserved with both-viewer sample equality; proposed foreign-created-hand negative was invalid because created card ceases, and no speculative production overlay repair was made. Both viewers, indistinguishable private origin draws, global origin conservation, known additional records hidden again, foreign holder/owner twins, sampled projection equality",
+    "logging": "Declared UUID genesis/deck input and deterministic original mint, created/debug UUID intents and physical IDs reconstruct immutable origins; all spark is derived from these sources, no permanent mutation or extra widget"
+  },
+  "failurePaths": [
+    {
+      "path": "Error mid-step / resolving a static-only primitive / partial effect mutation",
+      "tests": [
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "keeps provenance through refusal, pending reload, cancel and partial resolution failure for %s"
+        }
+      ],
+      "coverage": "Both controllers: createCard followed by invalid resolving C4 throws at actual response/pass resolution; committed instances, nextInstance and floating match the committed pre-resolution checkpoint. Legitimate prior play/payment/publication remain committed."
+    },
+    {
+      "path": "Reload or restart mid-operation / cancellation",
+      "tests": [
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "keeps provenance through refusal, pending reload, cancel and partial resolution failure for %s"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "rejects only C4 legacy checkpoints and uses the normal persisted-genesis fallback"
+        }
+      ],
+      "coverage": "Reload a pending target slice, compare pending prompt and committed physical cohort, reject foreign/stale inputs and cancel; actual hash-valid stored legacy C4 checkpoint falls back through openLocalGame to preserved genesis and exact current encoded fold. Browser4recipes also verify same-game full committed JSON reload."
+    },
+    {
+      "path": "Partial persistent write / retry",
+      "tests": [
+        {
+          "file": "src/session/local-game.test.ts",
+          "name": "retries a failed write in order with the next batch"
+        },
+        {
+          "file": "src/session/local-game.test.ts",
+          "name": "retries a failed final write on its own, so a reload recovers every event"
+        }
+      ],
+      "reason": "This feature adds an optional field to existing atomic snapshots/events and no asynchronous writer, storage transaction or retry boundary. Existing full-suite tests cover the unchanged host persistence mechanism. New C4 coverage proves recoverable checkpoint decode rejection, rather than introducing a second partial-write mechanism."
+    },
+    {
+      "path": "Invalid or stale input / wrong actor / cancelled operation",
+      "tests": [
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "keeps provenance through refusal, pending reload, cancel and partial resolution failure for %s"
+        },
+        {
+          "file": "src/engine/fold/fold-intents.test.ts",
+          "name": "bounces stale, foreign, illegal, and out-of-turn intents"
+        }
+      ],
+      "coverage": "Own contract bounces opponent answer and stale prompt cancellation while preserving exact committed origin state; existing full-suite fold tests cover general intent gating."
+    },
+    {
+      "path": "Concurrent actors / competing tabs",
+      "tests": [
+        {
+          "file": "src/session/game-lock.test.ts",
+          "name": "lets one holder write a game until it releases"
+        },
+        {
+          "file": "src/session/use-local-game.test.tsx",
+          "name": "opens a game in one tab at a time"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "keeps provenance through refusal, pending reload, cancel and partial resolution failure for %s"
+        }
+      ],
+      "reason": "No new concurrent actor, lock or asynchronous origin assignment is introduced: origin is minted inside the existing synchronous fold/creation transaction and copied with the state. Existing full-suite lock/tab tests cover the unchanged single-writer host; own both-controller wrong-side bounce proves origin-bearing state respects the existing actor gate. No new C4-specific competing-writer mechanism requires a separate concurrency test."
+    },
+    {
+      "path": "Invalid literal / unsupported characteristic-dependent condition",
+      "tests": [
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "rejects invalid literal bounds %s"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "admits only direct public state conditions for %s"
+        }
+      ],
+      "coverage": "Reject negative/fractional/nonfinite bounds and characteristic-dependent gates rather than approximate or recurse."
+    },
+    {
+      "path": "Unknown required legacy provenance / malformed optional marker / raw import",
+      "tests": [
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "rejects unknown required provenance and accepts unrelated legacy states for %s"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "rejects only C4 legacy checkpoints and uses the normal persisted-genesis fallback"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "preserves an unknown legacy creation marker while sampling both viewers for %s"
+        }
+      ],
+      "coverage": "C4-required unknown reader/parser/decoder and raw LOAD_STATE/replay start refuse; unrelated legacy and exempt unknown created markers remain accepted. No absent marker is treated as an exact false result."
+    },
+    {
+      "path": "Type-layer/final-spark dependency cycle",
+      "tests": [
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "avoids recursion through ordinary type-layer final-spark conditions for %s"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "includes C4 in ordinary final hand spark filters without recursive reads for %s"
+        }
+      ],
+      "coverage": "Public type-layer witness and before/after2failed stack-overflow assertions prove the copiable-layer1 repair; corrected outside-play reader counterfactual fails the ordinary hand-filter assertions."
+    },
+    {
+      "path": "Source cessation/reclaim / stolen control / foreign holder / ordinary spark composition",
+      "tests": [
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "composes ordinary in-play anthems, gained/base spark and source lifecycle for %s"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "keeps origin under stolen control and a foreign held hand for %s"
+        }
+      ],
+      "coverage": "Source departure/reclaim, owner/controller separation, base4+gained2+C4, ordinary anthem and sampled projections are earned through public actions."
+    },
+    {
+      "path": "Hidden origin transport / private draws / observed extra hidden again",
+      "tests": [
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "keeps private draw permutations equal and conserves sampled global origin for %s"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "preserves an observed $extra origin through a foreign hand and hidden return: $side"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "preserves an unknown legacy creation marker while sampling both viewers for %s"
+        }
+      ],
+      "coverage": "Indistinguishable private draws yield equal views; both-viewer deterministic samples reproduce projection and conserve global original/additional counts across foreign holders and rehidden observed physical cards. Invalid foreign-created-hand prototype retained and withdrawn because the created card ceases."
+    },
+    {
+      "path": "Wrong eligible physical cohort / zone / cost / type",
+      "tests": [
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "keeps distinct originals in every initial zone and reads copiable boundary for %s"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "uses deck-entry cost/type changes and preserves variants for %s"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "keeps the bonus on the real stack and Banished visit for %s"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "name": "excludes same-printing created hand/card/figment copies and debug additions for %s"
+        }
+      ],
+      "coverage": "Public both-controller original/copy/figment/debug distinctions, initial/earned zones and copiable variant/D39 below/exact/above cost and effective character/event type."
+    }
+  ],
+  "validationEpochs": {
+    "originalLayer2": "stage1-full/stage1-fuzz pass, followed by an independently witnessed type-layer recursion gap; original four counterfactuals retained",
+    "finalLayer1": "Production source is exactly full2/Knip3 epoch; later supported legacy-only controls pass2 without a speculative overlay repair. Final review5 and final weighted300 stage1-fuzz3 pass for this source epoch; queued fuzz2 was SIGTERM canceled before any inner launch and is not validation."
+  },
+  "inventoryAudit": {
+    "entityCount": 1209,
+    "unrelatedEntityRecordsEqual": 1204,
+    "ownRouting": [
+      "5.5",
+      "dreamsigns-battle-10"
+    ],
+    "changedEntities": [
+      {
+        "id": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+        "changedFields": [
+          "status"
+        ]
+      },
+      {
+        "id": "6da831c8-6fda-4078-9f2b-873db2416aad",
+        "changedFields": [
+          "status"
+        ]
+      },
+      {
+        "id": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+        "changedFields": [
+          "status"
+        ]
+      },
+      {
+        "id": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+        "changedFields": [
+          "status"
+        ]
+      },
+      {
+        "id": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+        "changedFields": [
+          "correction",
+          "promptKinds",
+          "requiredPrimitives",
+          "rulesDecisions",
+          "status",
+          "tags"
+        ]
+      }
+    ],
+    "fourStatusOnlyRefreshes": true,
+    "generator": "npx tsx scripts/content-inventory.ts"
+  },
+  "resources": {
+    "qaLease": "NOT HELD",
+    "qaRuntime": "CLOSED via both normal native cleanups; independent parent QA1/QA2 RELEASE recorded",
+    "heavyFuzz": "Final weighted300 terminal; no heavy/QA overlap",
+    "grossProductiveSplit": "UNKNOWN; full gross retained"
+  },
+  "browserQA": {
+    "nativeSweep": {
+      "summary": "invocations/sweep-NLt7ZD/summary.json",
+      "passCells": 2,
+      "passAttempts": 2
+    },
+    "judged": {
+      "report": "invocations/run-nbBREr/judged.result.json",
+      "ok": true,
+      "error": null,
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 2271,
+        "scenario": 76881,
+        "total": 79210
+      },
+      "completedRecipes": [
+        {
+          "viewport": "desktop",
+          "uuid": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+          "controller": "player",
+          "cardUuid": "5e5e5e5e-0000-4000-8000-000000000002",
+          "original": "i8",
+          "extra": "i51",
+          "originalSpark": 2,
+          "additionalSpark": 1,
+          "originalZone": "play",
+          "extraZone": "hand",
+          "handGeometry": {
+            "id": "i8",
+            "x": 469.6242980957031,
+            "y": 730.7586669921875,
+            "width": 136.35043334960938,
+            "height": 185.70849609375,
+            "right": 605.9747314453125,
+            "bottom": 916.4671630859375,
+            "point": {
+              "x": 537.7995147705078,
+              "y": 823.6129150390625
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "spark": 2,
+            "cost": 1
+          },
+          "extraGeometry": {
+            "id": "i51",
+            "x": 331.7868957519531,
+            "y": 731.552978515625,
+            "width": 141.18112182617188,
+            "height": 189.02117919921875,
+            "right": 472.968017578125,
+            "bottom": 920.5741577148438,
+            "point": {
+              "x": 402.37745666503906,
+              "y": 826.0635681152344
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "spark": 1,
+            "cost": 1
+          },
+          "boardGeometry": {
+            "id": "i8",
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "right": 344,
+            "bottom": 573,
+            "point": {
+              "x": 299.25,
+              "y": 528.25
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "spark": 2,
+            "cost": null
+          },
+          "played": [
+            {
+              "seq": 3,
+              "index": 1,
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i8"
+              }
+            }
+          ],
+          "logs": {
+            "gameId": "befz64",
+            "observedRows": 30
+          },
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=00cc7e7f-4245-4447-b9dc-f647dc6241a2&variant=base&as=player&seed=1&debug=1&game=befz64",
+          "sameSavedGame": true,
+          "exactCommittedReload": true,
+          "browserCosts": [
+            1
+          ],
+          "contractOnly": [
+            "copiable cost below/exact/above bound",
+            "void/deck/Banished/stack",
+            "created/figment",
+            "control/holder",
+            "privacy sampler",
+            "legacy recovery"
+          ]
+        },
+        {
+          "viewport": "desktop",
+          "uuid": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+          "controller": "enemy",
+          "cardUuid": "5e5e5e5e-0000-4000-8000-000000000002",
+          "original": "i35",
+          "extra": "i51",
+          "originalSpark": 2,
+          "additionalSpark": 1,
+          "originalZone": "play",
+          "extraZone": "hand",
+          "handGeometry": null,
+          "extraGeometry": null,
+          "boardGeometry": {
+            "id": "i35",
+            "x": 254.5,
+            "y": 183,
+            "width": 89.5,
+            "height": 89.5,
+            "right": 344,
+            "bottom": 272.5,
+            "point": {
+              "x": 299.25,
+              "y": 227.75
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "spark": 2,
+            "cost": null
+          },
+          "played": [
+            {
+              "seq": 2,
+              "index": 1,
+              "event": {
+                "kind": "cardPlayed",
+                "side": "enemy",
+                "instance": "i35"
+              }
+            }
+          ],
+          "logs": {
+            "gameId": "7oxpqx",
+            "observedRows": 57
+          },
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=00cc7e7f-4245-4447-b9dc-f647dc6241a2&variant=base&as=enemy&seed=1&debug=1&game=7oxpqx",
+          "sameSavedGame": true,
+          "exactCommittedReload": true,
+          "browserCosts": [
+            1
+          ],
+          "contractOnly": [
+            "copiable cost below/exact/above bound",
+            "void/deck/Banished/stack",
+            "created/figment",
+            "control/holder",
+            "privacy sampler",
+            "legacy recovery"
+          ]
+        },
+        {
+          "viewport": "mobile",
+          "uuid": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+          "controller": "player",
+          "cardUuid": "5e5e5e5e-0000-4000-8000-000000000002",
+          "original": "i8",
+          "extra": "i51",
+          "originalSpark": 2,
+          "additionalSpark": 1,
+          "originalZone": "play",
+          "extraZone": "hand",
+          "handGeometry": {
+            "id": "i8",
+            "x": 48.617103576660156,
+            "y": 663.21826171875,
+            "width": 162.60137939453125,
+            "height": 218.61328125,
+            "right": 211.2184829711914,
+            "bottom": 881.83154296875,
+            "point": {
+              "x": 89.26744842529297,
+              "y": 772.52490234375
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "spark": 2,
+            "cost": 1
+          },
+          "extraGeometry": {
+            "id": "i51",
+            "x": 1.129530429840088,
+            "y": 666.8659057617188,
+            "width": 170.82589721679688,
+            "height": 224.12811279296875,
+            "right": 171.95542764663696,
+            "bottom": 890.9940185546875,
+            "point": {
+              "x": 43.83600473403931,
+              "y": 834.9619903564453
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "spark": 1,
+            "cost": 1
+          },
+          "boardGeometry": {
+            "id": "i8",
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375,
+            "right": 77.265625,
+            "bottom": 469.75,
+            "point": {
+              "x": 50.3359375,
+              "y": 442.8203125
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "spark": 2,
+            "cost": null
+          },
+          "played": [
+            {
+              "seq": 3,
+              "index": 1,
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i8"
+              }
+            }
+          ],
+          "logs": {
+            "gameId": "y4sfuu",
+            "observedRows": 30
+          },
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=00cc7e7f-4245-4447-b9dc-f647dc6241a2&variant=base&as=player&seed=1&debug=1&game=y4sfuu",
+          "sameSavedGame": true,
+          "exactCommittedReload": true,
+          "browserCosts": [
+            1
+          ],
+          "contractOnly": [
+            "copiable cost below/exact/above bound",
+            "void/deck/Banished/stack",
+            "created/figment",
+            "control/holder",
+            "privacy sampler",
+            "legacy recovery"
+          ]
+        },
+        {
+          "viewport": "mobile",
+          "uuid": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+          "controller": "enemy",
+          "cardUuid": "5e5e5e5e-0000-4000-8000-000000000002",
+          "original": "i35",
+          "extra": "i51",
+          "originalSpark": 2,
+          "additionalSpark": 1,
+          "originalZone": "play",
+          "extraZone": "hand",
+          "handGeometry": null,
+          "extraGeometry": null,
+          "boardGeometry": {
+            "id": "i35",
+            "x": 23.40625,
+            "y": 222.3125,
+            "width": 53.859375,
+            "height": 53.859375,
+            "right": 77.265625,
+            "bottom": 276.171875,
+            "point": {
+              "x": 50.3359375,
+              "y": 249.2421875
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "spark": 2,
+            "cost": null
+          },
+          "played": [
+            {
+              "seq": 2,
+              "index": 1,
+              "event": {
+                "kind": "cardPlayed",
+                "side": "enemy",
+                "instance": "i35"
+              }
+            }
+          ],
+          "logs": {
+            "gameId": "pbyif4",
+            "observedRows": 57
+          },
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&dreamsign=00cc7e7f-4245-4447-b9dc-f647dc6241a2&variant=base&as=enemy&seed=1&debug=1&game=pbyif4",
+          "sameSavedGame": true,
+          "exactCommittedReload": true,
+          "browserCosts": [
+            1
+          ],
+          "contractOnly": [
+            "copiable cost below/exact/above bound",
+            "void/deck/Banished/stack",
+            "created/figment",
+            "control/holder",
+            "privacy sampler",
+            "legacy recovery"
+          ]
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/judged-desktop.jsonl",
+          "gameId": "7oxpqx",
+          "selectedBy": "url",
+          "rows": 60,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/judged-mobile.jsonl",
+          "gameId": "pbyif4",
+          "selectedBy": "url",
+          "rows": 60,
+          "reason": null
+        }
+      ],
+      "logScope": "Native exports retain only final enemy game each viewport,60 rows each; prior player30-row observations remain in completed notes and are not archived JSONL exports. Hidden enemy hand numeric values are owner-view engine inspection; actual player hand and both boards use rendered numeric geometry/hit evidence. Browser cost1 only; complete cost/type/all-zone boundary/privacy/legacy matrix is deterministic contracts."
+    },
+    "resources": {
+      "sweep": {
+        "observedAt": "2026-10-14T22:24:15.660108+00:00",
+        "normalTerminalExit": 0,
+        "terminalRunnerIdentity": null,
+        "terminalKnownServerIdentities": {
+          "71633": null
+        },
+        "ownedGroups": {
+          "71589": {
+            "exit": 1,
+            "rows": ""
+          },
+          "71596": {
+            "exit": 1,
+            "rows": ""
+          },
+          "71633": {
+            "exit": 1,
+            "rows": ""
+          }
+        },
+        "remainingOwnedRecords": [],
+        "nativeInvocationDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/sweep-NLt7ZD",
+        "nativeFiles": [
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/sweep-NLt7ZD/run-JUtkpB/card-sweep.server.log",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/sweep-NLt7ZD/run-JUtkpB/sweep-00cc7e7f-4245-4447-b9dc-f647dc6241a2-base-enemy-attempt-1.result.json",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/sweep-NLt7ZD/run-JUtkpB/sweep-00cc7e7f-4245-4447-b9dc-f647dc6241a2-base-player-attempt-1.result.json",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/sweep-NLt7ZD/run-JUtkpB/sweep-00cc7e7f-base-enemy-attempt-1.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/sweep-NLt7ZD/run-JUtkpB/sweep-00cc7e7f-base-player-attempt-1.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/sweep-NLt7ZD/summary.json"
+        ],
+        "manualFreezeStillHeld": true
+      },
+      "judged": {
+        "observedAt": "2026-10-14T22:28:06.544290+00:00",
+        "normalTerminalExit": 0,
+        "terminalRunnerIdentity": null,
+        "terminalKnownServerIdentities": {
+          "90462": null
+        },
+        "ownedGroups": {
+          "90158": {
+            "exit": 1,
+            "rows": ""
+          },
+          "90161": {
+            "exit": 1,
+            "rows": ""
+          },
+          "90462": {
+            "exit": 1,
+            "rows": ""
+          }
+        },
+        "remainingOwnedRecords": [],
+        "nativeInvocationDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr",
+        "reportSummary": {
+          "ok": true,
+          "error": null,
+          "caps": [],
+          "wallMs": {
+            "browserLeaseWait": 5,
+            "serve": 2271,
+            "scenario": 76881,
+            "total": 79210
+          },
+          "gameLogs": [
+            {
+              "viewport": "desktop",
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/judged-desktop.jsonl",
+              "gameId": "7oxpqx",
+              "selectedBy": "url",
+              "rows": 60,
+              "reason": null
+            },
+            {
+              "viewport": "mobile",
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/judged-mobile.jsonl",
+              "gameId": "pbyif4",
+              "selectedBy": "url",
+              "rows": 60,
+              "reason": null
+            }
+          ]
+        },
+        "nativeFiles": [
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/berries-enemy-played-desktop.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/berries-enemy-played-mobile.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/berries-player-hand-desktop.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/berries-player-hand-mobile.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/berries-player-played-desktop.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/berries-player-played-mobile.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/judged-desktop.jsonl",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/judged-mobile.jsonl",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/judged.result.json",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.589/invocations/run-nbBREr/judged.server.log"
+        ],
+        "manualFreezeStillHeld": true
+      }
+    },
+    "parentReleases": {
+      "qa1": {
+        "releasedAt": "2026-10-14T22:24:57.697387+00:00",
+        "manifestSha256": "73cac8ac413587520b16aef7d9de47a1947c9be1654a7ce2c2103bbdd5c9b0a9",
+        "fullFreezeMatches": true,
+        "fileCount": 5062,
+        "supportCount": 21,
+        "nativeAppendRows": 2,
+        "groupsGone": [
+          71589,
+          71596,
+          71633
+        ],
+        "normalTerminalExit": 0,
+        "ownRecordsGone": true,
+        "mcpSession": "b25f6620-0e67-4963-b818-622f30c6c269",
+        "nativeInvocation": "sweep-NLt7ZD/run-JUtkpB"
+      },
+      "qa2": {
+        "releasedAt": "2026-10-14T22:28:42.114312+00:00",
+        "manifestSha256": "ba364acb5abcbeaacc036ff46339ad75dd2df5e81e3c75332437c5bb3d9d2f63",
+        "allFrozenRowsPathsetsBaseBranchStatusCallerSupportMatch": true,
+        "wholeLedgerUnchanged": true,
+        "fileCount": 5063,
+        "supportCount": 21,
+        "groupsGone": [
+          90158,
+          90161,
+          90462
+        ],
+        "normalTerminalExit": 0,
+        "ownRecordsGone": true,
+        "mcpSession": "33d294df-5889-4c3e-bfbb-926548babf53",
+        "nativeInvocation": "run-nbBREr",
+        "reportSha256": "53dc1876fd4167e8a6b92b16f511659e39fbcf577b9e35c289d8998efdcd762b"
+      }
+    },
+    "visualInspection": "All6 native desktop/mobile captures inspected: unchanged numeric spark, original2/additional1, normal board states and intentional hand fan clipping; every required physical card has a visible tested hit point. Synthetic lab uses existing placeholder card art."
+  },
+  "integrationRecovery": {
+    "originalSource": "ed4d0743e1315976c14c2986f756d26ba107a41d",
+    "originalGitReceipt": {
+      "command": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/dreamtides-executor-01a1304d/589/helper/commit-message.txt"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+      "start": "2026-10-14T22:33:52.275073+00:00",
+      "end": "2026-10-14T22:33:52.330872+00:00",
+      "pid": 13433,
+      "pgid": 13433,
+      "exitCode": 0,
+      "wallSeconds": 0.05583208397729322,
+      "cpuSeconds": {
+        "user": 0.017096,
+        "system": 0.049831999999999994
+      },
+      "startLoad": [
+        21.169921875,
+        13.76123046875,
+        10.85009765625
+      ],
+      "endLoad": [
+        21.169921875,
+        13.76123046875,
+        10.85009765625
+      ]
+    },
+    "originalBase": "ea99c699cc152574cc4923fe306dd88f97e7aa05",
+    "parkedCheckpoint": "97d5a7fe7a6e67c1688f162f6312a4dc094fd9eb",
+    "updatedCheckpoint": "fe7efd446e85fa0f0925e34d10df4e61a8e8ba98",
+    "updatedBase": "07f842d01d1e43aeb0e57bac5c29671e7b81b2a1",
+    "sourceProof": {
+      "observedAt": "2026-10-14T22:40:18.566317+00:00",
+      "actualUpdatedBase": "07f842d01d1e43aeb0e57bac5c29671e7b81b2a1",
+      "determinizeCombination": "Combined is byte-exact saved complete own source plus both exact peer discardedCards insertions; updated peer file is byte-exact saved base plus same insertions. No branch semantics rewritten.",
+      "combinedSHA256": "085329d5ef638c15d586636d1c443ca758ead1b6b7e2bc853806e8bf449f49c5",
+      "originalOwnSourceSHA256": "338b7760a6f875a1d6da56a7c77e4b911099f9c67eac0f58afab51d997ed8334",
+      "peerUpdatedSHA256": "6d3304e79065257a393f82aa6853494c5eb024ee018d2c0dd1124b832ec0c265"
+    },
+    "inventoryAudit": {
+      "entityTotal": 1209,
+      "sameUUIDSet": true,
+      "changedEntities": [
+        {
+          "id": "29d25251-8b42-4d3d-97e6-6c3abaabd9a2",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "374ec185-b0f7-40e6-9988-09e96abccebe",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "54471b31-4449-453d-9a6e-814d6225520a",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "78673e2b-a6d1-43de-8850-3d3327de5cc6",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "874d5e8f-4e12-4426-a2e7-1ab761d2ca12",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "87f075b1-b058-4570-a75f-c4f8f544e192",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "8855e20c-e23f-4499-a5e8-a7a46ff81d2b",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "ccbefadc-aab8-4f8c-a705-07bd70c91731",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "d89f4c33-ffd3-4313-8106-0a9f7013cad8",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "d95533f4-7809-44a8-a882-7675c61cee1c",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277",
+          "fields": [
+            "rulesDecisions"
+          ]
+        },
+        {
+          "id": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "3ebaba62-9000-429d-b203-2a5a9724389a",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "9e19b3d1-12f2-43c1-9cb1-08de7cd32e32",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "f6208407-c4e9-42ac-b533-346704f5e39e",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+          "fields": [
+            "correction",
+            "promptKinds",
+            "requiredPrimitives",
+            "rulesDecisions",
+            "status",
+            "tags"
+          ]
+        }
+      ]
+    },
+    "currentEpoch": {
+      "observedAt": "2026-10-14T22:41:55.736095+00:00",
+      "originalValidatedSource": "ed4d0743e1315976c14c2986f756d26ba107a41d",
+      "originalBase": "ea99c699cc152574cc4923fe306dd88f97e7aa05",
+      "updatedBase": "07f842d01d1e43aeb0e57bac5c29671e7b81b2a1",
+      "updatedCheckpoint": "fe7efd446e85fa0f0925e34d10df4e61a8e8ba98",
+      "productionSources": [
+        {
+          "path": "scripts/content-inventory.ts",
+          "bytes": 118334,
+          "sha256": "fb454ed37113d365693152f04eac286c2a77eb1274e93a8f3dba5b6e9b122ba9"
+        },
+        {
+          "path": "src/content/dreamsigns/berries-00cc7e7f.ts",
+          "bytes": 949,
+          "sha256": "5f4e661d027d264724d35c2bd6b95f23f46642f95ad5a888b28517b03b06b057"
+        },
+        {
+          "path": "src/engine/continuous/layers.ts",
+          "bytes": 26910,
+          "sha256": "3d8841413fbe189c8624bb2146ab4a9bfdb2740290744bb5895af126292f9789"
+        },
+        {
+          "path": "src/engine/debug/debug-actions.ts",
+          "bytes": 11091,
+          "sha256": "ac286b07ad172dab10e0aaf74a235570e68383dd161134fe75959dff7dd88dce"
+        },
+        {
+          "path": "src/engine/effects/primitives/index.ts",
+          "bytes": 3187,
+          "sha256": "b37ca8d710ab9003949e1c6faa18563d0845e2f0a807b5c5d285064639d82d5a"
+        },
+        {
+          "path": "src/engine/effects/primitives/journey-deck-spark-modifier.ts",
+          "bytes": 1677,
+          "sha256": "285d839ff08b0da5ae58e0bf11dc4239cb0950129cafdd26cca1a353edab384a"
+        },
+        {
+          "path": "src/engine/effects/registry.ts",
+          "bytes": 10210,
+          "sha256": "ee0f919bb2b1bf51e20c3547e863e2d8a6e7e5765f7ab1f9086657b7cb6fff84"
+        },
+        {
+          "path": "src/engine/effects/types.ts",
+          "bytes": 11206,
+          "sha256": "8894facb73979c3896472bba6ce1eac05c32eb57d15d6c1b1e9f2319794b22d2"
+        },
+        {
+          "path": "src/engine/loops/event-copy-continuation.ts",
+          "bytes": 13874,
+          "sha256": "49c3edbb9ee2a7cc69279267cd1982952fe25b96732302f8a52782fd86aa63f3"
+        },
+        {
+          "path": "src/engine/rules/zones.ts",
+          "bytes": 25406,
+          "sha256": "e063598c4eccc6135b73d6ec12a4df030fb2f4fdc4a9204b6814940c1a8304bc"
+        },
+        {
+          "path": "src/engine/state/clone.ts",
+          "bytes": 7187,
+          "sha256": "426589bf8e3a28c12629f02632fdec8da562b759f945c84d82d3f8c741e64be7"
+        },
+        {
+          "path": "src/engine/state/create.ts",
+          "bytes": 15053,
+          "sha256": "915e50d79254f4046218a9f3cfc4fc28ea361e956a3a76ee3506ccf7867d1920"
+        },
+        {
+          "path": "src/engine/state/hash.ts",
+          "bytes": 10859,
+          "sha256": "b7726c5b922abfc9f79126250ce6ead8e2c5d5993a3b72bc69fb2e7db37358e9"
+        },
+        {
+          "path": "src/engine/state/types.ts",
+          "bytes": 38973,
+          "sha256": "2539ae173f226ddb9399f1338fa28629840b1bef36d933073ba85c1aadf81562"
+        },
+        {
+          "path": "src/engine/testing/board.ts",
+          "bytes": 6417,
+          "sha256": "e413fa76285203d1e25697e175307ede6fee09c1a9ea472e8f07e1b96d24e0d7"
+        },
+        {
+          "path": "src/engine/view/determinize.ts",
+          "bytes": 77335,
+          "sha256": "085329d5ef638c15d586636d1c443ca758ead1b6b7e2bc853806e8bf449f49c5"
+        },
+        {
+          "path": "src/engine/view/knowledge.ts",
+          "bytes": 32582,
+          "sha256": "7c672d9ed0f6183212b644d2f7ab92e146d4ad089f33f36d78478d05c65c3273"
+        },
+        {
+          "path": "src/engine/view/view.ts",
+          "bytes": 41886,
+          "sha256": "c2bbdfef549c913aafded8ae8abb241f6ae4dfd7be1695951aead346456736e5"
+        },
+        {
+          "path": "src/rules/battle/engine-battle.ts",
+          "bytes": 24711,
+          "sha256": "bfcef4b82ba2a774df6e81fab9b1fe7f0f944b28c4a0e37b2597f5fec4795db6"
+        },
+        {
+          "path": "src/rules/battle/fold.ts",
+          "bytes": 62527,
+          "sha256": "fc463c085d76b5932a09ea684ccd8af78c8ce394a9cb1566b8260a4afc0764b5"
+        },
+        {
+          "path": "src/rules/battle/journey-deck-spark-state.ts",
+          "bytes": 3607,
+          "sha256": "7d7cfcb1876e7554ed56e260478d24be43b07ed31ceb842a850dd8d977a3dc0a"
+        },
+        {
+          "path": "src/rules/replay/fixtures/adversarial.json",
+          "bytes": 3752,
+          "sha256": "952eb5bed1ebbc5fa0f3bef44c86a162868c90280a7eaae9ec4738a57b443218"
+        },
+        {
+          "path": "src/rules/replay/replay.ts",
+          "bytes": 3626,
+          "sha256": "962514eea19e944d53045ab789511ca541cdd769e7b664867f7caae7b1827ab6"
+        }
+      ],
+      "scope": "Combined source with exact peer discardedCards insertions and original own C4 changes; inventory regenerated from all current landed catalog/decision inputs. Full2/Knip3/review5/fuzz3/QA1/QA2 retain original source OID; integration focused/review/Knip/generator checks validate current combined epoch."
+    },
+    "originalValidationBinding": "Full2/Knip3/review5/final weighted300 and both complete browser runs were validated before integration at original source ed4d0743e1315976c14c2986f756d26ba107a41d. They are not relabeled as executions on the combined base.",
+    "combinedValidation": {
+      "integration-inventory-check": {
+        "command": [
+          "node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "start": "2026-10-14T22:41:18.104941+00:00",
+        "end": "2026-10-14T22:41:20.824390+00:00",
+        "pid": 55544,
+        "pgid": 55544,
+        "exitCode": 0,
+        "wallSeconds": 2.7194622500101104,
+        "cpuSeconds": {
+          "user": 2.973191,
+          "system": 0.749749
+        },
+        "startLoad": [
+          5.49267578125,
+          10.95166015625,
+          11.1328125
+        ],
+        "endLoad": [
+          5.93359375,
+          10.9521484375,
+          11.1318359375
+        ]
+      },
+      "integration-knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "start": "2026-10-14T22:41:18.104885+00:00",
+        "end": "2026-10-14T22:41:23.345404+00:00",
+        "pid": 55543,
+        "pgid": 55543,
+        "exitCode": 0,
+        "wallSeconds": 5.240512291959021,
+        "cpuSeconds": {
+          "user": 4.602628,
+          "system": 1.7272699999999999
+        },
+        "startLoad": [
+          5.49267578125,
+          10.95166015625,
+          11.1328125
+        ],
+        "endLoad": [
+          5.93359375,
+          10.9521484375,
+          11.1318359375
+        ]
+      },
+      "integration-checkpoint": {
+        "command": [
+          "git",
+          "commit",
+          "--amend",
+          "--no-edit"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "start": "2026-10-14T22:38:45.982505+00:00",
+        "end": "2026-10-14T22:38:46.019882+00:00",
+        "pid": 50560,
+        "pgid": 50560,
+        "exitCode": 0,
+        "wallSeconds": 0.03740683296928182,
+        "cpuSeconds": {
+          "user": 0.012647,
+          "system": 0.043067
+        },
+        "startLoad": [
+          12.4140625,
+          14.9228515625,
+          12.34716796875
+        ],
+        "endLoad": [
+          12.4140625,
+          14.9228515625,
+          12.34716796875
+        ]
+      },
+      "integration-focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "journey-deck|current-zone discarded physical membership"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "start": "2026-10-14T22:40:39.537831+00:00",
+        "end": "2026-10-14T22:40:46.936931+00:00",
+        "pid": 54356,
+        "pgid": 54356,
+        "exitCode": 0,
+        "wallSeconds": 7.399050874984823,
+        "cpuSeconds": {
+          "user": 7.279384,
+          "system": 2.278232
+        },
+        "startLoad": [
+          5.97802734375,
+          11.763671875,
+          11.4130859375
+        ],
+        "endLoad": [
+          6.07373046875,
+          11.5908203125,
+          11.35546875
+        ]
+      },
+      "integration-inventory": {
+        "command": [
+          "node_modules/.bin/tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "start": "2026-10-14T22:40:18.630978+00:00",
+        "end": "2026-10-14T22:40:22.369990+00:00",
+        "pid": 53801,
+        "pgid": 53801,
+        "exitCode": 0,
+        "wallSeconds": 3.7390124169760384,
+        "cpuSeconds": {
+          "user": 2.772461,
+          "system": 0.795952
+        },
+        "startLoad": [
+          6.033203125,
+          12.1796875,
+          11.54833984375
+        ],
+        "endLoad": [
+          5.7900390625,
+          12.02685546875,
+          11.498046875
+        ]
+      },
+      "integration-review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "start": "2026-10-14T22:41:18.104920+00:00",
+        "end": "2026-10-14T22:42:14.359474+00:00",
+        "pid": 55545,
+        "pgid": 55545,
+        "exitCode": 0,
+        "wallSeconds": 56.25392424996244,
+        "cpuSeconds": {
+          "user": 169.9696,
+          "system": 14.309754
+        },
+        "startLoad": [
+          5.49267578125,
+          10.95166015625,
+          11.1328125
+        ],
+        "endLoad": [
+          6.10888671875,
+          10.27978515625,
+          10.875
+        ]
+      },
+      "integration-views": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/view/determinize.test.ts",
+          "src/engine/view/determinize-loops.test.ts",
+          "src/engine/view/view-knowledge.test.ts",
+          "src/engine/view/challenge-privacy.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-spark-589",
+        "start": "2026-10-14T22:40:39.537965+00:00",
+        "end": "2026-10-14T22:40:45.530302+00:00",
+        "pid": 54357,
+        "pgid": 54357,
+        "exitCode": 0,
+        "wallSeconds": 5.992301541031338,
+        "cpuSeconds": {
+          "user": 7.833667,
+          "system": 2.121517
+        },
+        "startLoad": [
+          5.97802734375,
+          11.763671875,
+          11.4130859375
+        ],
+        "endLoad": [
+          6.07373046875,
+          11.5908203125,
+          11.35546875
+        ]
+      }
+    },
+    "noHeavyOrBrowserRepeatReason": "Conflict resolution preserves byte-exact independent peer discardedCards allocations/turnLog field and byte-exact original own determinize changes; sanctioned inventory regeneration changes only admitted derived projections. Combined C4 and discarded-history contracts, view/knowledge/privacy tests, current review, Knip and generator check validate composition; no new runtime behavior is introduced by resolution.",
+    "grossScope": "Full root/helper gross continues across original implementation, candidate conflict, clean rollback, checkpoint, native parent update, reapplication, current checks, evidence and actual final Git. Prior failed attempts and original source epochs remain retained."
+  }
+}
