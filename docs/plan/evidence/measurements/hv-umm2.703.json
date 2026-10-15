@@ -1,0 +1,1589 @@
+{
+  "bead": "hv-umm2.703",
+  "base": "8eb2e0d1e5d27737375e9b6cf619be49c5b5dffd",
+  "dispatch": {
+    "timestamp": "2026-10-14T23:53:44.089Z",
+    "ordinal": 36577,
+    "callId": "call_097129c11c414846b65812e7702bb908",
+    "name": "spawn_agent",
+    "taskName": "hidden_grant_fidelity703",
+    "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-53-29-01a13063-cf1f-7e21-8cfa-6027541a59e2.jsonl"
+  },
+  "scopeAdmission": {
+    "path": "/tmp/703-finite-admission-native.json",
+    "sha256": "7e825d3ccbbac4f81475ec046144d8e1195679ab87278a645954828ff72adcda"
+  },
+  "sourceScope": {
+    "checker": "src/engine/testing/determinization-fidelity.ts",
+    "functions": [
+      "owedFloating",
+      "hiddenMembers",
+      "effectRecord"
+    ],
+    "privateContractModule": "src/engine/effects/primitives/contracts/materialize-keyword-fidelity.contracts.ts",
+    "contractModuleLines": 205,
+    "parameterizedCases": 44,
+    "testEntrypointDelta": 0,
+    "jsdomDelta": 0,
+    "oldTestBodiesEdited": false,
+    "producerViewSamplerChanged": false,
+    "checkerSha256": "cf41a483e61b5d56cf12b5a20f6bc4e8f1f5689d15d87410affc360cce096878",
+    "contractSha256": "e45d22c9f477f88608d37a8f25ebb664ff048e4c0e3e878c852b58997e65f95c"
+  },
+  "contracts": {
+    "positive": {
+      "cases": 14,
+      "scope": "Both controllers, both viewers; visible play, tracked returned hand, anonymous deck, opponent-hidden ordinary drawn hand; amplified variants; repeated physical grants; two distinct same-UUID cards sharing grant/trigger bindings; null windows, genuine created-card cessation and Ending expiry."
+    },
+    "counterfactual": {
+      "cases": 30,
+      "scope": "Both controllers/viewers: missing physical grant, changed timestamp/expiry/controller/player/keyword/identifiable source/owner/printing/variant, null target binding, missing player field, split repeated grants, collapsed distinct same-UUID members and split trigger/grant aliases. Corruptions apply only to cloned standard determinizations; every case requires a floating-effect divergence."
+    }
+  },
+  "baseline": {
+    "label": "baseline",
+    "status": "expected regression reproduced",
+    "cases": 2,
+    "syndrome": "extra floating effect e2 and e3 for both viewers from two extant anonymous physical grants"
+  },
+  "fixtureCorrection": {
+    "label": "focused",
+    "status": "2 failed,87 passed",
+    "cause": "Deleting the derived target instance invalidated its zone list and legalActions rejected Unknown instance before effect comparison. The admitted missing-binding counterfactual assigns null to one grant target while preserving sampled cards/zones; corrected focused run passes."
+  },
+  "receipts": [
+    {
+      "label": "baseline",
+      "requestedAt": "2026-10-14T23:57:52.274+00:00",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialization member fidelity.*preserves public grants in anonymous deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": false,
+      "sourceEpoch": "/tmp/703-validation/baseline.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          15.31201171875,
+          12.05078125,
+          10.12841796875
+        ],
+        "sysctl": "{ 15.31 12.05 10.13 }"
+      },
+      "wrapperPid": 43069,
+      "wrapperProcessGroup": 43069,
+      "executionStart": "2026-10-14T23:57:52.921+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          15.31201171875,
+          12.05078125,
+          10.12841796875
+        ],
+        "sysctl": "{ 15.31 12.05 10.13 }"
+      },
+      "commandPid": 43073,
+      "commandProcessGroup": 43069,
+      "executionEnd": "2026-10-14T23:58:04.627+00:00",
+      "executionS": 11.702887875027955,
+      "exit": 1,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          15.025390625,
+          12.1455078125,
+          10.1953125
+        ],
+        "sysctl": "{ 15.03 12.15 10.20 }"
+      },
+      "wrapperExit": 1,
+      "settledAt": "2026-10-14T23:58:04.636+00:00",
+      "totalS": 12.361971250036731,
+      "preExecutionS": 0.647,
+      "stdout": {
+        "path": "/tmp/703-validation/baseline.stdout.txt",
+        "sha256": "94a4d7a4540babf0e04f709adb17cdb59310a553cd84c98da78448ff393d4649"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/baseline.stderr.txt",
+        "sha256": "ead69309f7c6e1ceaf0d3051a918f83d62f5ac6948911f011b502215433d4f12"
+      },
+      "sourceEpochSha256": "3c051d3e01dc411078aef5c4dfaaf4bb813a955dc4cd527b24f1c02dab5a7cf9",
+      "phases": [
+        {
+          "phase": "prepare",
+          "elapsedS": 2.3,
+          "exit": 0
+        },
+        {
+          "phase": "test",
+          "elapsedS": 5.5,
+          "exit": 1
+        },
+        {
+          "phase": "restore-local-assets",
+          "elapsedS": 3.6,
+          "exit": 0
+        }
+      ],
+      "phaseStarts": [
+        {
+          "phase": "prepare",
+          "at": "2026-10-14T23:57:53.197Z",
+          "load": 15.31201171875
+        },
+        {
+          "phase": "test",
+          "at": "2026-10-14T23:57:55.484Z",
+          "load": 14.96630859375
+        },
+        {
+          "phase": "restore-local-assets",
+          "at": "2026-10-14T23:58:01.000Z",
+          "load": 15.2890625
+        }
+      ],
+      "testSummaries": [
+        "\n Test Files  1 failed (1)",
+        "      Tests  2 failed | 4585 skipped (4587)",
+        "   Duration  4.67s (transform 3.42s, setup 24ms, import 4.52s, tests 38ms, environment 0ms)"
+      ]
+    },
+    {
+      "label": "focused-corrected",
+      "requestedAt": "2026-10-14T23:58:39.643+00:00",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "-t",
+        "materialization member fidelity|current-turn materialization keywords|withMaterialized views|floating-effect record fidelity|finite targeting protection fidelity"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": false,
+      "sourceEpoch": "/tmp/703-validation/focused-corrected.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          15.92333984375,
+          12.55517578125,
+          10.41455078125
+        ],
+        "sysctl": "{ 15.92 12.56 10.41 }"
+      },
+      "wrapperPid": 88784,
+      "wrapperProcessGroup": 88784,
+      "executionStart": "2026-10-14T23:58:39.830+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          15.92333984375,
+          12.55517578125,
+          10.41455078125
+        ],
+        "sysctl": "{ 15.92 12.56 10.41 }"
+      },
+      "commandPid": 88787,
+      "commandProcessGroup": 88784,
+      "executionEnd": "2026-10-14T23:58:51.241+00:00",
+      "executionS": 11.40754891600227,
+      "exit": 0,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          15.36767578125,
+          12.5517578125,
+          10.4384765625
+        ],
+        "sysctl": "{ 15.37 12.55 10.44 }"
+      },
+      "wrapperExit": 0,
+      "settledAt": "2026-10-14T23:58:51.250+00:00",
+      "totalS": 11.606583415996283,
+      "preExecutionS": 0.187,
+      "stdout": {
+        "path": "/tmp/703-validation/focused-corrected.stdout.txt",
+        "sha256": "d1f0aa230777e4c0a9bba6fec85bf61aed53aceb2d3461fda6e54c9af47e9e89"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/focused-corrected.stderr.txt",
+        "sha256": "16a660ce87d41ba22458056aae4518d095bf578996bcfb52e0626cd0426d0490"
+      },
+      "sourceEpochSha256": "5f250555faa4784954ec01888097fc217c6b0e361b3487e79df1263f31bb4b11",
+      "phases": [
+        {
+          "phase": "prepare",
+          "elapsedS": 1.5,
+          "exit": 0
+        },
+        {
+          "phase": "test",
+          "elapsedS": 6.1,
+          "exit": 0
+        },
+        {
+          "phase": "restore-local-assets",
+          "elapsedS": 3.6,
+          "exit": 0
+        }
+      ],
+      "phaseStarts": [
+        {
+          "phase": "prepare",
+          "at": "2026-10-14T23:58:40.068Z",
+          "load": 15.92333984375
+        },
+        {
+          "phase": "test",
+          "at": "2026-10-14T23:58:41.535Z",
+          "load": 15.92333984375
+        },
+        {
+          "phase": "restore-local-assets",
+          "at": "2026-10-14T23:58:47.601Z",
+          "load": 16.00927734375
+        }
+      ],
+      "testSummaries": [
+        "\n\n Test Files  2 passed (2)",
+        "      Tests  97 passed | 4532 skipped (4629)",
+        "   Duration  5.53s (transform 4.17s, setup 45ms, import 6.12s, tests 532ms, environment 0ms)"
+      ]
+    },
+    {
+      "label": "focused-final",
+      "requestedAt": "2026-10-15T00:03:17.486+00:00",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "-t",
+        "materialization member fidelity|current-turn materialization keywords|withMaterialized views|floating-effect record fidelity|finite targeting protection fidelity"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": false,
+      "sourceEpoch": "/tmp/703-validation/focused-final.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          26.396484375,
+          19.61767578125,
+          14.220703125
+        ],
+        "sysctl": "{ 26.40 19.62 14.22 }"
+      },
+      "wrapperPid": 16930,
+      "wrapperProcessGroup": 16930,
+      "executionStart": "2026-10-15T00:03:18.229+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          26.396484375,
+          19.61767578125,
+          14.220703125
+        ],
+        "sysctl": "{ 26.40 19.62 14.22 }"
+      },
+      "commandPid": 16934,
+      "commandProcessGroup": 16930,
+      "executionEnd": "2026-10-15T00:03:29.184+00:00",
+      "executionS": 10.95161145797465,
+      "exit": 0,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          25.96484375,
+          19.8623046875,
+          14.40234375
+        ],
+        "sysctl": "{ 25.96 19.86 14.40 }"
+      },
+      "wrapperExit": 0,
+      "settledAt": "2026-10-15T00:03:29.193+00:00",
+      "totalS": 11.706821375002619,
+      "preExecutionS": 0.743,
+      "stdout": {
+        "path": "/tmp/703-validation/focused-final.stdout.txt",
+        "sha256": "24e694d3160358b9fd69c48153acd6af93652448d835ed30d226ef900a71d337"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/focused-final.stderr.txt",
+        "sha256": "16a660ce87d41ba22458056aae4518d095bf578996bcfb52e0626cd0426d0490"
+      },
+      "sourceEpochSha256": "1bee1706c7edb67e90e4dbe597f1cbd4258fa44328895872dc18bf63f7f762f7",
+      "phases": [
+        {
+          "phase": "prepare",
+          "elapsedS": 3.7,
+          "exit": 0
+        },
+        {
+          "phase": "test",
+          "elapsedS": 5.2,
+          "exit": 0
+        },
+        {
+          "phase": "restore-local-assets",
+          "elapsedS": 1.8,
+          "exit": 0
+        }
+      ],
+      "phaseStarts": [
+        {
+          "phase": "prepare",
+          "at": "2026-10-15T00:03:18.527Z",
+          "load": 25.8037109375
+        },
+        {
+          "phase": "test",
+          "at": "2026-10-15T00:03:22.248Z",
+          "load": 25.8037109375
+        },
+        {
+          "phase": "restore-local-assets",
+          "at": "2026-10-15T00:03:27.422Z",
+          "load": 27.1806640625
+        }
+      ],
+      "testSummaries": [
+        "\n\n Test Files  2 passed (2)",
+        "      Tests  97 passed | 4532 skipped (4629)",
+        "   Duration  4.57s (transform 3.42s, setup 52ms, import 5.06s, tests 490ms, environment 0ms)"
+      ]
+    },
+    {
+      "label": "focused",
+      "requestedAt": "2026-10-14T23:58:19.518+00:00",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialization member fidelity|current-turn materialization keywords|withMaterialized views"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": false,
+      "sourceEpoch": "/tmp/703-validation/focused.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          13.89306640625,
+          12.0263671875,
+          10.18603515625
+        ],
+        "sysctl": "{ 13.89 12.03 10.19 }"
+      },
+      "wrapperPid": 52388,
+      "wrapperProcessGroup": 52388,
+      "executionStart": "2026-10-14T23:58:20.185+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          13.89306640625,
+          12.0263671875,
+          10.18603515625
+        ],
+        "sysctl": "{ 13.89 12.03 10.19 }"
+      },
+      "commandPid": 52393,
+      "commandProcessGroup": 52388,
+      "executionEnd": "2026-10-14T23:58:33.500+00:00",
+      "executionS": 13.311562791990582,
+      "exit": 1,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          13.56640625,
+          12.04150390625,
+          10.22265625
+        ],
+        "sysctl": "{ 13.57 12.04 10.22 }"
+      },
+      "wrapperExit": 1,
+      "settledAt": "2026-10-14T23:58:33.510+00:00",
+      "totalS": 13.991404875006992,
+      "preExecutionS": 0.667,
+      "stdout": {
+        "path": "/tmp/703-validation/focused.stdout.txt",
+        "sha256": "389ea665a61ec4199958f29d1d623b0c0c736016124e4f496ca3d7e5dc6e9ad0"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/focused.stderr.txt",
+        "sha256": "c8b94e1fc596c57484b328b1757cba0d933e1e2c6aa01f2c82fa1e657a08492d"
+      },
+      "sourceEpochSha256": "4492e24cfadbe9e54cb9712876db2be561c91068753d60c8763af8b985f8a394",
+      "phases": [
+        {
+          "phase": "prepare",
+          "elapsedS": 3.5,
+          "exit": 0
+        },
+        {
+          "phase": "test",
+          "elapsedS": 5.6,
+          "exit": 1
+        },
+        {
+          "phase": "restore-local-assets",
+          "elapsedS": 3.9,
+          "exit": 0
+        }
+      ],
+      "phaseStarts": [
+        {
+          "phase": "prepare",
+          "at": "2026-10-14T23:58:20.460Z",
+          "load": 13.89306640625
+        },
+        {
+          "phase": "test",
+          "at": "2026-10-14T23:58:23.995Z",
+          "load": 13.8212890625
+        },
+        {
+          "phase": "restore-local-assets",
+          "at": "2026-10-14T23:58:29.559Z",
+          "load": 13.35498046875
+        }
+      ],
+      "testSummaries": [
+        "\n Test Files  1 failed (1)",
+        "      Tests  2 failed | 87 passed | 4498 skipped (4587)",
+        "   Duration  4.97s (transform 3.32s, setup 25ms, import 4.36s, tests 497ms, environment 0ms)"
+      ]
+    },
+    {
+      "label": "full-final",
+      "requestedAt": "2026-10-15T00:04:26.574+00:00",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": true,
+      "sourceEpoch": "/tmp/703-validation/full-final.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          23.76806640625,
+          19.80810546875,
+          14.6962890625
+        ],
+        "sysctl": "{ 23.77 19.81 14.70 }"
+      },
+      "lockRequestedAt": "2026-10-15T00:04:27.277+00:00",
+      "wrapperPid": 23988,
+      "wrapperProcessGroup": 23988,
+      "executionStart": "2026-10-15T00:04:27.317+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          23.76806640625,
+          19.80810546875,
+          14.6962890625
+        ],
+        "sysctl": "{ 23.77 19.81 14.70 }"
+      },
+      "commandPid": 24000,
+      "commandProcessGroup": 23988,
+      "executionEnd": "2026-10-15T00:06:35.583+00:00",
+      "executionS": 128.26177866698708,
+      "exit": 0,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          21.10888671875,
+          20.92138671875,
+          15.89892578125
+        ],
+        "sysctl": "{ 21.11 20.92 15.90 }"
+      },
+      "wrapperExit": 0,
+      "settledAt": "2026-10-15T00:06:35.593+00:00",
+      "totalS": 129.01812708302168,
+      "preExecutionS": 0.743,
+      "lockRequestToExecutionS": 0.04,
+      "lockWaitQualification": "Separately bracketed lock acquisition plus wrapper/inner startup, excluding command execution; pure lock wait is no greater than this interval.",
+      "stdout": {
+        "path": "/tmp/703-validation/full-final.stdout.txt",
+        "sha256": "ffb3a3320ab090be0a33ef5565a2a7ff11ccfdfad52e5f9b270446bb4a3b069d"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/full-final.stderr.txt",
+        "sha256": "b6175c9f1cd5940cb70231916f51144fec0b00cbaa82558236d9fd6e090875fb"
+      },
+      "sourceEpochSha256": "1bee1706c7edb67e90e4dbe597f1cbd4258fa44328895872dc18bf63f7f762f7",
+      "phases": [
+        {
+          "phase": "prepare",
+          "elapsedS": 1.9,
+          "exit": 0
+        },
+        {
+          "phase": "friction-records",
+          "elapsedS": 0.1,
+          "exit": 0
+        },
+        {
+          "phase": "typecheck-node",
+          "elapsedS": 1.6,
+          "exit": 0
+        },
+        {
+          "phase": "knip",
+          "elapsedS": 2.4,
+          "exit": 0
+        },
+        {
+          "phase": "import-cycles",
+          "elapsedS": 2.5,
+          "exit": 0
+        },
+        {
+          "phase": "typecheck",
+          "elapsedS": 2.8,
+          "exit": 0
+        },
+        {
+          "phase": "lint",
+          "elapsedS": 36.6,
+          "exit": 0
+        },
+        {
+          "phase": "test",
+          "elapsedS": 84.9,
+          "exit": 0
+        },
+        {
+          "phase": "bundle",
+          "elapsedS": 3.3,
+          "exit": 0
+        },
+        {
+          "phase": "restore-local-assets",
+          "elapsedS": 1.3,
+          "exit": 0
+        }
+      ],
+      "phaseStarts": [
+        {
+          "phase": "prepare",
+          "at": "2026-10-15T00:04:27.572Z",
+          "load": 23.76806640625
+        },
+        {
+          "phase": "lint",
+          "at": "2026-10-15T00:04:29.422Z",
+          "load": 24.02685546875
+        },
+        {
+          "phase": "typecheck",
+          "at": "2026-10-15T00:04:29.424Z",
+          "load": 24.02685546875
+        },
+        {
+          "phase": "typecheck-node",
+          "at": "2026-10-15T00:04:29.424Z",
+          "load": 24.02685546875
+        },
+        {
+          "phase": "import-cycles",
+          "at": "2026-10-15T00:04:29.425Z",
+          "load": 24.02685546875
+        },
+        {
+          "phase": "knip",
+          "at": "2026-10-15T00:04:29.426Z",
+          "load": 24.02685546875
+        },
+        {
+          "phase": "friction-records",
+          "at": "2026-10-15T00:04:29.427Z",
+          "load": 24.02685546875
+        },
+        {
+          "phase": "test",
+          "at": "2026-10-15T00:05:06.002Z",
+          "load": 22.6572265625
+        },
+        {
+          "phase": "bundle",
+          "at": "2026-10-15T00:06:30.927Z",
+          "load": 22.25
+        },
+        {
+          "phase": "restore-local-assets",
+          "at": "2026-10-15T00:06:34.255Z",
+          "load": 21.10888671875
+        }
+      ],
+      "testSummaries": [
+        "\n\n Test Files  387 passed (387)",
+        "      Tests  9362 passed (9362)",
+        "   Duration  84.13s (transform 15.18s, setup 680ms, import 58.82s, tests 95.60s, environment 10.09s)"
+      ]
+    },
+    {
+      "label": "full",
+      "requestedAt": "2026-10-15T00:00:34.366+00:00",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": true,
+      "sourceEpoch": "/tmp/703-validation/full.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          19.66796875,
+          16.1025390625,
+          12.15185546875
+        ],
+        "sysctl": "{ 19.67 16.10 12.15 }"
+      },
+      "wrapperPid": 56671,
+      "wrapperProcessGroup": 56671,
+      "executionStart": "2026-10-15T00:00:34.573+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          19.66796875,
+          16.1025390625,
+          12.15185546875
+        ],
+        "sysctl": "{ 19.67 16.10 12.15 }"
+      },
+      "commandPid": 56680,
+      "commandProcessGroup": 56671,
+      "executionEnd": "2026-10-15T00:02:37.644+00:00",
+      "executionS": 123.06703054200625,
+      "exit": 0,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          22.52685546875,
+          17.99169921875,
+          13.41162109375
+        ],
+        "sysctl": "{ 22.53 17.99 13.41 }"
+      },
+      "wrapperExit": 0,
+      "settledAt": "2026-10-15T00:02:37.655+00:00",
+      "totalS": 123.28819704096531,
+      "preExecutionS": 0.207,
+      "stdout": {
+        "path": "/tmp/703-validation/full.stdout.txt",
+        "sha256": "6b647672caad606d93de71e38f7f7662e8bb9f51d94c31f9da38ec6a9acb2207"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/full.stderr.txt",
+        "sha256": "5f31e807df6e127cba0f3966282391bb92b80b4ce56db5890eda314a222e6d93"
+      },
+      "sourceEpochSha256": "5f250555faa4784954ec01888097fc217c6b0e361b3487e79df1263f31bb4b11",
+      "phases": [
+        {
+          "phase": "prepare",
+          "elapsedS": 3.2,
+          "exit": 0
+        },
+        {
+          "phase": "friction-records",
+          "elapsedS": 0.1,
+          "exit": 0
+        },
+        {
+          "phase": "typecheck-node",
+          "elapsedS": 1.3,
+          "exit": 0
+        },
+        {
+          "phase": "knip",
+          "elapsedS": 1.5,
+          "exit": 0
+        },
+        {
+          "phase": "import-cycles",
+          "elapsedS": 2.1,
+          "exit": 0
+        },
+        {
+          "phase": "typecheck",
+          "elapsedS": 2.2,
+          "exit": 0
+        },
+        {
+          "phase": "lint",
+          "elapsedS": 32.5,
+          "exit": 0
+        },
+        {
+          "phase": "test",
+          "elapsedS": 80.4,
+          "exit": 0
+        },
+        {
+          "phase": "bundle",
+          "elapsedS": 5.1,
+          "exit": 0
+        },
+        {
+          "phase": "restore-local-assets",
+          "elapsedS": 1.6,
+          "exit": 0
+        }
+      ],
+      "phaseStarts": [
+        {
+          "phase": "prepare",
+          "at": "2026-10-15T00:00:34.840Z",
+          "load": 19.66796875
+        },
+        {
+          "phase": "lint",
+          "at": "2026-10-15T00:00:38.066Z",
+          "load": 19.66796875
+        },
+        {
+          "phase": "typecheck",
+          "at": "2026-10-15T00:00:38.068Z",
+          "load": 19.66796875
+        },
+        {
+          "phase": "typecheck-node",
+          "at": "2026-10-15T00:00:38.069Z",
+          "load": 19.66796875
+        },
+        {
+          "phase": "import-cycles",
+          "at": "2026-10-15T00:00:38.069Z",
+          "load": 19.66796875
+        },
+        {
+          "phase": "knip",
+          "at": "2026-10-15T00:00:38.070Z",
+          "load": 19.66796875
+        },
+        {
+          "phase": "friction-records",
+          "at": "2026-10-15T00:00:38.071Z",
+          "load": 19.66796875
+        },
+        {
+          "phase": "test",
+          "at": "2026-10-15T00:01:10.543Z",
+          "load": 22.1044921875
+        },
+        {
+          "phase": "bundle",
+          "at": "2026-10-15T00:02:30.898Z",
+          "load": 20.65771484375
+        },
+        {
+          "phase": "restore-local-assets",
+          "at": "2026-10-15T00:02:36.029Z",
+          "load": 22.52685546875
+        }
+      ],
+      "testSummaries": [
+        "\n\n Test Files  387 passed (387)",
+        "      Tests  9362 passed (9362)",
+        "   Duration  79.56s (transform 12.88s, setup 663ms, import 53.50s, tests 91.55s, environment 9.43s)"
+      ]
+    },
+    {
+      "label": "knip",
+      "requestedAt": "2026-10-15T00:00:21.583+00:00",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": false,
+      "sourceEpoch": "/tmp/703-validation/knip.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          23.13134765625,
+          16.55322265625,
+          12.23779296875
+        ],
+        "sysctl": "{ 23.13 16.55 12.24 }"
+      },
+      "wrapperPid": 55477,
+      "wrapperProcessGroup": 55477,
+      "executionStart": "2026-10-15T00:00:22.073+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          23.13134765625,
+          16.55322265625,
+          12.23779296875
+        ],
+        "sysctl": "{ 23.13 16.55 12.24 }"
+      },
+      "commandPid": 55480,
+      "commandProcessGroup": 55477,
+      "executionEnd": "2026-10-15T00:00:30.503+00:00",
+      "executionS": 8.427086250041611,
+      "exit": 0,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          20.509765625,
+          16.2060546875,
+          12.16455078125
+        ],
+        "sysctl": "{ 20.51 16.21 12.16 }"
+      },
+      "wrapperExit": 0,
+      "settledAt": "2026-10-15T00:00:30.511+00:00",
+      "totalS": 8.927860708034132,
+      "preExecutionS": 0.49,
+      "stdout": {
+        "path": "/tmp/703-validation/knip.stdout.txt",
+        "sha256": "40d0500310f3da71c4760a22fe523692f84e73eebfeea7a02ba0ad17152896f6"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/knip.stderr.txt",
+        "sha256": "16a660ce87d41ba22458056aae4518d095bf578996bcfb52e0626cd0426d0490"
+      },
+      "sourceEpochSha256": "5f250555faa4784954ec01888097fc217c6b0e361b3487e79df1263f31bb4b11",
+      "phases": [
+        {
+          "phase": "prepare",
+          "elapsedS": 3.0,
+          "exit": 0
+        },
+        {
+          "phase": "knip",
+          "elapsedS": 2.3,
+          "exit": 0
+        },
+        {
+          "phase": "restore-local-assets",
+          "elapsedS": 2.9,
+          "exit": 0
+        }
+      ],
+      "phaseStarts": [
+        {
+          "phase": "prepare",
+          "at": "2026-10-15T00:00:22.322Z",
+          "load": 23.13134765625
+        },
+        {
+          "phase": "knip",
+          "at": "2026-10-15T00:00:25.333Z",
+          "load": 21.59912109375
+        },
+        {
+          "phase": "restore-local-assets",
+          "at": "2026-10-15T00:00:27.585Z",
+          "load": 21.59912109375
+        }
+      ],
+      "testSummaries": []
+    },
+    {
+      "label": "review-final",
+      "requestedAt": "2026-10-15T00:03:41.150+00:00",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": false,
+      "sourceEpoch": "/tmp/703-validation/review-final.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          23.27587890625,
+          19.4873046875,
+          14.3330078125
+        ],
+        "sysctl": "{ 23.28 19.49 14.33 }"
+      },
+      "wrapperPid": 19875,
+      "wrapperProcessGroup": 19875,
+      "executionStart": "2026-10-15T00:03:41.799+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          23.27587890625,
+          19.4873046875,
+          14.3330078125
+        ],
+        "sysctl": "{ 23.28 19.49 14.33 }"
+      },
+      "commandPid": 19881,
+      "commandProcessGroup": 19875,
+      "executionEnd": "2026-10-15T00:04:12.962+00:00",
+      "executionS": 31.15948166704038,
+      "exit": 0,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          18.17822265625,
+          18.6240234375,
+          14.19873046875
+        ],
+        "sysctl": "{ 18.18 18.62 14.20 }"
+      },
+      "wrapperExit": 0,
+      "settledAt": "2026-10-15T00:04:12.972+00:00",
+      "totalS": 31.821246500010602,
+      "preExecutionS": 0.649,
+      "stdout": {
+        "path": "/tmp/703-validation/review-final.stdout.txt",
+        "sha256": "acd861d3f1debd81c7c1113504371760b66a1bab6fb4fb1c7fa0260f35815236"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/review-final.stderr.txt",
+        "sha256": "16a660ce87d41ba22458056aae4518d095bf578996bcfb52e0626cd0426d0490"
+      },
+      "sourceEpochSha256": "1bee1706c7edb67e90e4dbe597f1cbd4258fa44328895872dc18bf63f7f762f7",
+      "phases": [
+        {
+          "phase": "prepare",
+          "elapsedS": 1.8,
+          "exit": 0
+        },
+        {
+          "phase": "friction-records",
+          "elapsedS": 0.1,
+          "exit": 0
+        },
+        {
+          "phase": "typecheck-node",
+          "elapsedS": 1.5,
+          "exit": 0
+        },
+        {
+          "phase": "import-cycles",
+          "elapsedS": 2.4,
+          "exit": 0
+        },
+        {
+          "phase": "typecheck",
+          "elapsedS": 2.8,
+          "exit": 0
+        },
+        {
+          "phase": "lint",
+          "elapsedS": 4.4,
+          "exit": 0
+        },
+        {
+          "phase": "test-related",
+          "elapsedS": 25.9,
+          "exit": 0
+        },
+        {
+          "phase": "restore-local-assets",
+          "elapsedS": 3.1,
+          "exit": 0
+        }
+      ],
+      "phaseStarts": [
+        {
+          "phase": "prepare",
+          "at": "2026-10-15T00:03:42.081Z",
+          "load": 23.27587890625
+        },
+        {
+          "phase": "typecheck",
+          "at": "2026-10-15T00:03:43.907Z",
+          "load": 22.21240234375
+        },
+        {
+          "phase": "typecheck-node",
+          "at": "2026-10-15T00:03:43.909Z",
+          "load": 22.21240234375
+        },
+        {
+          "phase": "import-cycles",
+          "at": "2026-10-15T00:03:43.910Z",
+          "load": 22.21240234375
+        },
+        {
+          "phase": "lint",
+          "at": "2026-10-15T00:03:43.910Z",
+          "load": 22.21240234375
+        },
+        {
+          "phase": "test-related",
+          "at": "2026-10-15T00:03:43.911Z",
+          "load": 22.21240234375
+        },
+        {
+          "phase": "friction-records",
+          "at": "2026-10-15T00:03:43.911Z",
+          "load": 22.21240234375
+        },
+        {
+          "phase": "restore-local-assets",
+          "at": "2026-10-15T00:04:09.811Z",
+          "load": 18.17822265625
+        }
+      ],
+      "testSummaries": [
+        "\n\n Test Files  17 passed (17)",
+        "      Tests  4815 passed (4815)",
+        "   Duration  15.78s (transform 122ms, setup 34ms, import 3.12s, tests 19.74s, environment 1ms)"
+      ]
+    },
+    {
+      "label": "review",
+      "requestedAt": "2026-10-14T23:59:35.482+00:00",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": false,
+      "sourceEpoch": "/tmp/703-validation/review.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          25.32861328125,
+          15.73828125,
+          11.72998046875
+        ],
+        "sysctl": "{ 25.33 15.74 11.73 }"
+      },
+      "wrapperPid": 50006,
+      "wrapperProcessGroup": 50006,
+      "executionStart": "2026-10-14T23:59:36.089+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          25.32861328125,
+          15.73828125,
+          11.72998046875
+        ],
+        "sysctl": "{ 25.33 15.74 11.73 }"
+      },
+      "commandPid": 50011,
+      "commandProcessGroup": 50006,
+      "executionEnd": "2026-10-15T00:00:12.155+00:00",
+      "executionS": 36.06296533398563,
+      "exit": 0,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          25.880859375,
+          16.8447265625,
+          12.28857421875
+        ],
+        "sysctl": "{ 25.88 16.84 12.29 }"
+      },
+      "wrapperExit": 0,
+      "settledAt": "2026-10-15T00:00:12.167+00:00",
+      "totalS": 36.68447974999435,
+      "preExecutionS": 0.607,
+      "stdout": {
+        "path": "/tmp/703-validation/review.stdout.txt",
+        "sha256": "f65a192b377775d0ead0255c790d7822b717ddb0ff5ad3bb915006debcce2828"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/review.stderr.txt",
+        "sha256": "16a660ce87d41ba22458056aae4518d095bf578996bcfb52e0626cd0426d0490"
+      },
+      "sourceEpochSha256": "5f250555faa4784954ec01888097fc217c6b0e361b3487e79df1263f31bb4b11",
+      "phases": [
+        {
+          "phase": "prepare",
+          "elapsedS": 3.4,
+          "exit": 0
+        },
+        {
+          "phase": "friction-records",
+          "elapsedS": 0.1,
+          "exit": 0
+        },
+        {
+          "phase": "import-cycles",
+          "elapsedS": 2.2,
+          "exit": 0
+        },
+        {
+          "phase": "lint",
+          "elapsedS": 4.7,
+          "exit": 0
+        },
+        {
+          "phase": "typecheck-node",
+          "elapsedS": 5.8,
+          "exit": 0
+        },
+        {
+          "phase": "typecheck",
+          "elapsedS": 15.9,
+          "exit": 0
+        },
+        {
+          "phase": "test-related",
+          "elapsedS": 28.9,
+          "exit": 0
+        },
+        {
+          "phase": "restore-local-assets",
+          "elapsedS": 3.4,
+          "exit": 0
+        }
+      ],
+      "phaseStarts": [
+        {
+          "phase": "prepare",
+          "at": "2026-10-14T23:59:36.367Z",
+          "load": 25.32861328125
+        },
+        {
+          "phase": "typecheck",
+          "at": "2026-10-14T23:59:39.770Z",
+          "load": 25.22216796875
+        },
+        {
+          "phase": "typecheck-node",
+          "at": "2026-10-14T23:59:39.771Z",
+          "load": 25.22216796875
+        },
+        {
+          "phase": "import-cycles",
+          "at": "2026-10-14T23:59:39.772Z",
+          "load": 25.22216796875
+        },
+        {
+          "phase": "lint",
+          "at": "2026-10-14T23:59:39.772Z",
+          "load": 25.22216796875
+        },
+        {
+          "phase": "test-related",
+          "at": "2026-10-14T23:59:39.773Z",
+          "load": 25.22216796875
+        },
+        {
+          "phase": "friction-records",
+          "at": "2026-10-14T23:59:39.774Z",
+          "load": 25.22216796875
+        },
+        {
+          "phase": "restore-local-assets",
+          "at": "2026-10-15T00:00:08.702Z",
+          "load": 25.880859375
+        }
+      ],
+      "testSummaries": [
+        "\n\n Test Files  17 passed (17)",
+        "      Tests  4815 passed (4815)",
+        "   Duration  19.15s (transform 115ms, setup 439ms, import 3.08s, tests 20.96s, environment 1ms)"
+      ]
+    },
+    {
+      "label": "schema",
+      "requestedAt": "2026-10-15T00:07:36.211+00:00",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": false,
+      "sourceEpoch": "/tmp/703-validation/schema.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          12.0478515625,
+          18.265625,
+          15.24169921875
+        ],
+        "sysctl": "{ 12.05 18.27 15.24 }"
+      },
+      "wrapperPid": 85253,
+      "wrapperProcessGroup": 85253,
+      "executionStart": "2026-10-15T00:07:36.502+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          12.0478515625,
+          18.265625,
+          15.24169921875
+        ],
+        "sysctl": "{ 12.05 18.27 15.24 }"
+      },
+      "commandPid": 85257,
+      "commandProcessGroup": 85253,
+      "executionEnd": "2026-10-15T00:07:36.598+00:00",
+      "executionS": 0.09230129100615159,
+      "exit": 0,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          12.0478515625,
+          18.265625,
+          15.24169921875
+        ],
+        "sysctl": "{ 12.05 18.27 15.24 }"
+      },
+      "wrapperExit": 0,
+      "settledAt": "2026-10-15T00:07:36.608+00:00",
+      "totalS": 0.3967265000101179,
+      "preExecutionS": 0.291,
+      "stdout": {
+        "path": "/tmp/703-validation/schema.stdout.txt",
+        "sha256": "b9df44bd0f70c9fd4ce8d12ffb965fe5abea02f6f9fd674e09b1832de7e9cef0"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/schema.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sourceEpochSha256": "1bee1706c7edb67e90e4dbe597f1cbd4258fa44328895872dc18bf63f7f762f7",
+      "phases": [],
+      "phaseStarts": [],
+      "testSummaries": []
+    },
+    {
+      "label": "whitespace",
+      "requestedAt": "2026-10-15T00:07:36.211+00:00",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hidden-grant-fidelity-703-root",
+      "workers": 2,
+      "heavy": false,
+      "sourceEpoch": "/tmp/703-validation/whitespace.source.json",
+      "loadAtRequest": {
+        "osLoadavg": [
+          12.0478515625,
+          18.265625,
+          15.24169921875
+        ],
+        "sysctl": "{ 12.05 18.27 15.24 }"
+      },
+      "wrapperPid": 85252,
+      "wrapperProcessGroup": 85252,
+      "executionStart": "2026-10-15T00:07:36.503+00:00",
+      "loadAtExecutionStart": {
+        "osLoadavg": [
+          12.0478515625,
+          18.265625,
+          15.24169921875
+        ],
+        "sysctl": "{ 12.05 18.27 15.24 }"
+      },
+      "commandPid": 85258,
+      "commandProcessGroup": 85252,
+      "executionEnd": "2026-10-15T00:07:36.518+00:00",
+      "executionS": 0.012561916024424136,
+      "exit": 0,
+      "loadAtExecutionEnd": {
+        "osLoadavg": [
+          12.0478515625,
+          18.265625,
+          15.24169921875
+        ],
+        "sysctl": "{ 12.05 18.27 15.24 }"
+      },
+      "wrapperExit": 0,
+      "settledAt": "2026-10-15T00:07:36.527+00:00",
+      "totalS": 0.3156242090044543,
+      "preExecutionS": 0.292,
+      "stdout": {
+        "path": "/tmp/703-validation/whitespace.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/tmp/703-validation/whitespace.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sourceEpochSha256": "1bee1706c7edb67e90e4dbe597f1cbd4258fa44328895872dc18bf63f7f762f7",
+      "phases": [],
+      "phaseStarts": [],
+      "testSummaries": []
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "ordinary review execution start"
+      }
+    }
+  },
+  "stateTransitionApplicability": {
+    "newStateTransitions": false,
+    "reason": "Pure comparator/testing changes; production state, captures, prompts and writes stay unchanged. Existing public contracts supply ordinary source/zone/Ending lifetimes; derived invalid samples test missing and wrong fields. No fabricated recovery/reload/stale/concurrent runtime coverage."
+  },
+  "limitations": [
+    "No browser/runtime presentation change; browser QA is inapplicable.",
+    "Original production failure detected before action26/after step105; retained parent diagnostic is version106/actions26 after the following applied step. These synthetic contracts do not reproduce that catalog game or claim its acceptance.",
+    "Parent retains original192 full five-UUID weighted300, integration, sweep and D21 obligations after certified prerequisite promotion.",
+    "Parent owns fresh normal Claude Opus5.5 cold core review, candidate, certification, cleanup and release observation."
+  ],
+  "timing": {
+    "start": "2026-10-14T23:53:44.089Z",
+    "evidenceAsOf": "2026-10-15T00:07:57.867318+00:00",
+    "includes": "Read-only audit, native admission wait, failed baseline/counterfactual attempt, all validation, corrections, packaging and Git; ordinary committer clock with external bracket; no performance/budget claim.",
+    "endpointQualification": "Final precommit UTC observation, followed immediately by schema, staging and ordinary automatic-clock Git commit. The exact committer second and external subsecond before/after bracket are retained in /tmp/703-validation/commit.receipt.json; no date override."
+  },
+  "auditCorrection": {
+    "status": "approved finite fixture refinement",
+    "detail": "Split-repeated and collapse-distinct counterfactuals use pure grant states so existing trigger captures cannot supply the hidden-member map. Split-trigger counterfactual retains mixed captures. Case count stays 44. Earlier successful full run remains its exact earlier source epoch; final focused/review/full validate the refined bytes."
+  },
+  "resources": {
+    "checkedAt": "2026-10-15T00:07:57.172+00:00",
+    "recordedProcessGroups": [
+      6293,
+      6673,
+      7914,
+      8051,
+      9837,
+      9882,
+      11792,
+      12039,
+      12277,
+      13926,
+      14434,
+      15630,
+      16930,
+      17241,
+      17498,
+      17806,
+      19184,
+      19447,
+      19875,
+      20300,
+      20527,
+      20755,
+      21030,
+      21205,
+      21390,
+      21689,
+      21822,
+      22377,
+      22424,
+      22768,
+      22997,
+      23442,
+      23569,
+      23988,
+      24157,
+      24218,
+      24522,
+      24872,
+      24967,
+      25256,
+      25697,
+      25971,
+      26122,
+      26427,
+      26651,
+      26953,
+      27063,
+      27346,
+      27457,
+      27835,
+      28009,
+      28095,
+      28726,
+      28774,
+      28866,
+      29198,
+      29348,
+      29496,
+      29588,
+      30079,
+      30226,
+      30575,
+      31059,
+      31251,
+      31701,
+      31809,
+      32061,
+      32295,
+      32759,
+      32805,
+      33026,
+      33473,
+      33658,
+      33689,
+      33829,
+      34272,
+      34566,
+      34791,
+      35209,
+      35362,
+      35888,
+      36022,
+      36779,
+      36812,
+      36955,
+      37401,
+      37981,
+      38242,
+      38822,
+      38962,
+      39690,
+      39918,
+      40614,
+      41409,
+      41789,
+      42182,
+      42721,
+      43069,
+      43159,
+      43576,
+      44257,
+      44675,
+      44889,
+      45321,
+      45621,
+      45713,
+      46003,
+      46070,
+      46470,
+      47444,
+      47885,
+      49507,
+      50006,
+      51112,
+      52388,
+      55477,
+      56671,
+      63576,
+      64427,
+      67421,
+      68809,
+      69710,
+      85252,
+      85253,
+      88784
+    ],
+    "syntheticSuiteServerGroups": [
+      6293,
+      6673,
+      7914,
+      8051,
+      9837,
+      9882,
+      11792,
+      12039,
+      12277,
+      13926,
+      14434,
+      15630,
+      17241,
+      17498,
+      17806,
+      19184,
+      19447,
+      20300,
+      20527,
+      20755,
+      21030,
+      21205,
+      21390,
+      21689,
+      21822,
+      22377,
+      22424,
+      22768,
+      22997,
+      23442,
+      23569,
+      24157,
+      24218,
+      24522,
+      24872,
+      24967,
+      25256,
+      25697,
+      25971,
+      26122,
+      26427,
+      26651,
+      26953,
+      27063,
+      27346,
+      27457,
+      27835,
+      28009,
+      28095,
+      28726,
+      28774,
+      28866,
+      29198,
+      29348,
+      29496,
+      29588,
+      30079,
+      30226,
+      30575,
+      31059,
+      31251,
+      31701,
+      31809,
+      32061,
+      32295,
+      32759,
+      32805,
+      33026,
+      33473,
+      33658,
+      33689,
+      33829,
+      34272,
+      34566,
+      34791,
+      35209,
+      35362,
+      35888,
+      36022,
+      36779,
+      36812,
+      36955,
+      37401,
+      37981,
+      38242,
+      38822,
+      38962,
+      39690,
+      39918,
+      40614,
+      41409,
+      41789,
+      42182,
+      42721,
+      43159,
+      43576,
+      44257,
+      44675,
+      44889,
+      45321,
+      45621,
+      45713,
+      46003,
+      46070,
+      46470,
+      47444,
+      47885,
+      49507,
+      51112,
+      63576,
+      64427,
+      67421,
+      68809,
+      69710
+    ],
+    "liveRecordedProcesses": [],
+    "taskBrowserOrAppServerStarted": false,
+    "suiteQualification": "Existing full-suite synthetic QA-runner process fixtures emit their own server/cleanup diagnostics; no task provider/browser/app-server invocation."
+  },
+  "protectedBaselineAudit": {
+    "baselineTrackedEntries": 5194,
+    "unchangedBaselinePaths": 5193,
+    "changedBaselinePaths": [
+      "src/engine/testing/determinization-fidelity.ts"
+    ],
+    "newPrivateModule": "src/engine/effects/primitives/contracts/materialize-keyword-fidelity.contracts.ts",
+    "scope": "All existing files apart from the three comparator-function branches remain byte-identical to the initial source epoch."
+  }
+}

@@ -111,21 +111,25 @@ function effectSourceSeen(state: BattleState, effect: FloatingEffect | PayableEf
 /** Whether `side` is owed `effect` in a determinization of its view. */
 function owedFloating(state: BattleState, effect: FloatingEffect, side: Side): boolean {
   const changed = changedInstance(effect.change);
-  if (changed !== null && !identifies(state, changed, side)) return false;
+  // Extant materialization grants publish an anonymous physical member even in hidden zones.
+  if (changed !== null && !identifies(state, changed, side) &&
+      !(effect.change.kind === "materializeKeyword" && state.instances[changed] !== undefined)) return false;
   if (effect.expiry.at === "sourceLeavesPlay" && !identifies(state, effect.expiry.source, side)) return false;
   return keptWithoutSource(effect.change) || seesSource(state, effect.source, side) || observedFixedEffect(state, side, effect.id) !== undefined;
 }
 
 /**
- * Numbers the captured cards `side` cannot identify in `effects`, in order
+ * Numbers captured cards and materialization-grant members `side` cannot identify, in order
  * of first appearance, as a view numbers its hidden members, so two records
  * compare equal only when they name the same hidden cards as each other.
  */
 function hiddenMembers(state: BattleState, effects: readonly (FloatingEffect | PayableEffect)[], side: Side): Map<InstanceId, number> {
   const members = new Map<InstanceId, number>();
   for (const effect of effects) {
-    if (!("change" in effect) || effect.change.kind !== "trigger") continue;
-    for (const id of effect.change.captured ?? []) {
+    if (!("change" in effect)) continue;
+    const captured = effect.change.kind === "materializeKeyword" && effect.change.instance !== null
+      ? [effect.change.instance] : effect.change.kind === "trigger" ? effect.change.captured ?? [] : [];
+    for (const id of captured) {
       if (state.instances[id] !== undefined && !identifies(state, id, side) && !members.has(id)) members.set(id, members.size);
     }
   }
@@ -155,7 +159,7 @@ interface CapturedScope {
 /**
  * An effect record without its source, and with the source when `side` sees
  * it; a payable effect's affected cards list only those `side` can
- * identify, and a trigger's captured cards are read in `scope`
+ * identify, and trigger captures and materialization-grant members are read in `scope`
  * (`capturedRecord`).
  */
 function effectRecord(state: BattleState, effect: FloatingEffect | PayableEffect, side: Side, scope: CapturedScope): string {
@@ -165,7 +169,9 @@ function effectRecord(state: BattleState, effect: FloatingEffect | PayableEffect
   const affects = "affects" in effect ? { affects: effect.affects.filter((id) => identifies(state, id, side)) } : {};
   const change = "change" in effect && effect.change.kind === "trigger" && effect.change.captured !== undefined
     ? { change: { ...effect.change, captured: capturedRecord(scope.state, effect.change.captured, side, scope.members) } }
-    : {};
+    : "change" in effect && effect.change.kind === "materializeKeyword" && effect.change.instance !== null
+      ? { change: { ...effect.change, instance: capturedRecord(scope.state, [effect.change.instance], side, scope.members)[0] } }
+      : {};
   return JSON.stringify({ ...rest, ...affects, ...change, source: effectSourceSeen(state, effect, side) ? source : null });
 }
 
