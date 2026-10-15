@@ -281,6 +281,9 @@ export function whenYouChallengeWith(count: number, selector: CharacterSelector 
   return { on: "challengeWith", count, selector };
 }
 
+/** After the controller's complete ordinary and extra opening hand, before the first turn. */
+export const afterOpeningHand = (): Trigger => ({ on: "openingHandCompleted" });
+
 export const atStartOfTurn = (): Trigger => ({ on: "startOfTurn" });
 export const atStartOfFirstTurn = (): Trigger => ({ on: "startOfFirstTurn" });
 

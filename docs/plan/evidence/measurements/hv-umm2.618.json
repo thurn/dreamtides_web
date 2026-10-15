@@ -1,0 +1,1404 @@
+{
+  "bead": "hv-umm2.618",
+  "sourceBase": "0e30f21281994cfff203e00596b72d075c71cafa",
+  "dispatch": {
+    "at": "2026-10-15T03:59:23.439Z",
+    "journalOrdinal": 39683,
+    "callId": "call_e50bb85e53924d0d8676e697825b512f",
+    "tool": "spawn_agent",
+    "samplingStart": "UNKNOWN"
+  },
+  "timingCutoff": {
+    "at": "2026-10-15T04:39:14.298191+00:00",
+    "inclusiveMinutes": 39.847653183333335,
+    "qualification": "Precommit evidence cutoff; refreshed immediately before the one normal automatic-date commit after parent package ACK. Exact automatic committer and external final Git bracket remain in ignored receipts; no postcommit tracked rewrite."
+  },
+  "windowPolicy": "Inclusive original dispatch through Stage1 research, grants, waits, all attempts, implementation, checks, evidence and final automatic Git. Elapsed wall time, no benchmark or performance comparison.",
+  "scope": {
+    "publicForm": "afterOpeningHand()",
+    "event": "openingHandCompleted, side only",
+    "rulesDecision": "RD-hv-umm2.618-1",
+    "lifecycle": "Both ordinary and D39 groups plus energies settle; starting side then opponent completion events queue at turn zero. Existing beginning/advancePhase continuation runs existing beginFirstTurn after completion FIFO.",
+    "newStateFields": 0,
+    "newSteps": 0,
+    "driverChanges": 0,
+    "newDTOFields": 0,
+    "productionUUIDsTransferred": 0,
+    "finalAcceptanceOwner": "hv-umm2.257",
+    "retainedConsumerUUID": "d78864da-eb31-4f25-9d51-94fca7ecf810",
+    "hairLock4e51f321": "UNRESOLVED; no generalized battle-start API",
+    "coreReviewRequired": true,
+    "coreReviewOwner": "Parent fresh read-only Codex subagent, fork_turns none, exact committed base/head; review is a separate required gate."
+  },
+  "sourceGuard": {
+    "initialTrackedCount": 5359,
+    "initialOutsideAdmittedPathsByteExact": 5344,
+    "frozenFunctionalRulesRDTestPaths": 5362,
+    "freezeSHA256": "3a122e93b53bd87c8dee36c1bc5848d8e7f2cd100c5d5b2662cba97b52d252a3",
+    "changedInitialPaths": 15,
+    "newFunctionalRulesRDTestPaths": 3,
+    "ownEvidencePaths": 3,
+    "admittedFinalPathCount": 21,
+    "testDelta": {
+      "files": 1,
+      "lines": 322,
+      "jsdomFiles": 0
+    },
+    "testGrossAddedDeletedLines": 324,
+    "privateContractModuleLines": 317,
+    "newContractCases": 32,
+    "configuredEntrypoints": 0,
+    "nonTestTypeScriptAdded": 47,
+    "nonTestTypeScriptDeleted": 9,
+    "nonTestTypeScriptGross": 56,
+    "nonTestTypeScriptFiles": 12,
+    "parentNumstatReceipt": "618-parent-numstat-proof.json",
+    "allSevenFaultsFinallyRestored": true,
+    "fullBeforeAfterMismatches": []
+  },
+  "checks": {
+    "affected-01": {
+      "label": "affected-01",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/fold/fold-observation.test.ts",
+        "src/rules/battle/engine-battle-replay.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts",
+        "src/engine/log.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:20:43.957130+00:00",
+      "pid": 25589,
+      "pgid": 25589,
+      "loadStart": [
+        18.52197265625,
+        10.3359375,
+        10.486328125
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:20:50.257086+00:00",
+      "wallSeconds": 6.299649625027087,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 8.5253,
+        "system": 1.204618
+      },
+      "loadEnd": [
+        18.96044921875,
+        10.5625,
+        10.5654296875
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "ab9c28a6c78118a8473cc1368905836aa1a852b63016388a5acac63a959a3dde",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "cf-f1": {
+      "label": "cf-f1",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "settles both hands and energies before starter-first occasions"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:28:29.185094+00:00",
+      "pid": 16824,
+      "pgid": 16824,
+      "loadStart": [
+        9.29296875,
+        10.32958984375,
+        10.7138671875
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:28:34.682475+00:00",
+      "wallSeconds": 5.497267417027615,
+      "exitCode": 1,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 6.02371,
+        "system": 1.28312
+      },
+      "loadEnd": [
+        9.18896484375,
+        10.29052734375,
+        10.69775390625
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "8475e3aaca82c1b44b78839a1cc59c420685a537dd01ee46bbfdafc7711ca446",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "cf-f2": {
+      "label": "cf-f2",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "settles both hands and energies before starter-first occasions"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:28:36.665915+00:00",
+      "pid": 17654,
+      "pgid": 17654,
+      "loadStart": [
+        9.18896484375,
+        10.29052734375,
+        10.69775390625
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:28:42.685945+00:00",
+      "wallSeconds": 6.019822957983706,
+      "exitCode": 1,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 6.588623,
+        "system": 1.438563
+      },
+      "loadEnd": [
+        9.654296875,
+        10.36865234375,
+        10.72265625
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "20de789cf5087f7a4aafd1b609b328f837e8b727f79695e477b1b104e162e735",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "cf-f3": {
+      "label": "cf-f3",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps completion before every opening prompt"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:28:44.499617+00:00",
+      "pid": 18440,
+      "pgid": 18440,
+      "loadStart": [
+        9.76171875,
+        10.37890625,
+        10.72412109375
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:28:49.940418+00:00",
+      "wallSeconds": 5.440620250010397,
+      "exitCode": 1,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 6.282188,
+        "system": 1.369235
+      },
+      "loadEnd": [
+        9.94091796875,
+        10.40576171875,
+        10.7314453125
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "748dd6ceee68897bb12fdfc6c136ced0bf15da1b838178c12edd958ca8653b5e",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "cf-f4duplicate": {
+      "label": "cf-f4duplicate",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "settles both hands and energies before starter-first occasions"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:28:55.050366+00:00",
+      "pid": 29522,
+      "pgid": 29522,
+      "loadStart": [
+        9.46484375,
+        10.29931640625,
+        10.69189453125
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:28:59.798142+00:00",
+      "wallSeconds": 4.747642292000819,
+      "exitCode": 1,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 5.677147,
+        "system": 1.213339
+      },
+      "loadEnd": [
+        9.50732421875,
+        10.2939453125,
+        10.6875
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "ec812651209433c7ce0eb8cff4f71deba3327f3628824886dda2343ce14c3c75",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "cf-f4privacy": {
+      "label": "cf-f4privacy",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "publishes and logs only the side"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:29:02.033697+00:00",
+      "pid": 47402,
+      "pgid": 47402,
+      "loadStart": [
+        9.50732421875,
+        10.2939453125,
+        10.6875
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:29:06.460765+00:00",
+      "wallSeconds": 4.426943292026408,
+      "exitCode": 1,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 5.34387,
+        "system": 1.104925
+      },
+      "loadEnd": [
+        9.94677734375,
+        10.3720703125,
+        10.71240234375
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "9c4878c40e8191d5d1aab19dda5745a727f3de52fc2c5d2df5424c32cdc4168a",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "cf-f5early": {
+      "label": "cf-f5early",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps completion before every opening prompt"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:29:16.496806+00:00",
+      "pid": 76701,
+      "pgid": 76701,
+      "loadStart": [
+        12.7890625,
+        10.96826171875,
+        10.919921875
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:29:21.235587+00:00",
+      "wallSeconds": 4.738645750039723,
+      "exitCode": 1,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 5.7167769999999996,
+        "system": 1.170751
+      },
+      "loadEnd": [
+        12.2451171875,
+        10.8857421875,
+        10.890625
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "1c1380613de90d62b6be801b7e62a7c819645b17a519a5f4d142444de0bfe483",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "cf-f5fifo": {
+      "label": "cf-f5fifo",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps completion before every opening prompt"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:29:09.873916+00:00",
+      "pid": 75015,
+      "pgid": 75015,
+      "loadStart": [
+        11.55224609375,
+        10.69775390625,
+        10.8251953125
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:29:14.541176+00:00",
+      "wallSeconds": 4.667139499972109,
+      "exitCode": 1,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 5.599627,
+        "system": 1.170101
+      },
+      "loadEnd": [
+        12.7890625,
+        10.96826171875,
+        10.919921875
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "36910c7cc0272a5f7c8aa085333c661c181c716a6c60b4d25923395d10cd3215",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "focused-01": {
+      "label": "focused-01",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "completed opening hand"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:18:45.053229+00:00",
+      "pid": 19313,
+      "pgid": 19313,
+      "loadStart": [
+        5.42724609375,
+        6.53173828125,
+        9.42138671875
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:18:50.299226+00:00",
+      "wallSeconds": 5.245838375005405,
+      "exitCode": 1,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 5.206957,
+        "system": 1.148591
+      },
+      "loadEnd": [
+        5.392578125,
+        6.505859375,
+        9.39501953125
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "3cefac7e49b521090ad16bdcf0dad41bfa7efeee57ab7e384644b88d318793ba",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "focused-02": {
+      "label": "focused-02",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "completed opening hand"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:19:00.030591+00:00",
+      "pid": 19861,
+      "pgid": 19861,
+      "loadStart": [
+        5.2578125,
+        6.439453125,
+        9.33740234375
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:19:05.460399+00:00",
+      "wallSeconds": 5.429671624966431,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 5.887698,
+        "system": 1.185006
+      },
+      "loadEnd": [
+        6.99853515625,
+        6.78076171875,
+        9.4404296875
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "485bf332407e7c461f97d3ff03455aca73ec7fea89c7cc0e29d50e15456e2be7",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "focused-03": {
+      "label": "focused-03",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "completed opening hand"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:20:08.211836+00:00",
+      "pid": 23103,
+      "pgid": 23103,
+      "loadStart": [
+        14.8193359375,
+        8.70263671875,
+        9.93994140625
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:20:17.425757+00:00",
+      "wallSeconds": 9.213715250021778,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 7.088867,
+        "system": 1.582354
+      },
+      "loadEnd": [
+        17.55615234375,
+        9.37158203125,
+        10.16845703125
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "ad6ff418d1c66eea99ddcce5a44e6dc0ba1731214f747625da2a60853eae106b",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "focused-restored": {
+      "label": "focused-restored",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "completed opening hand"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:29:23.350551+00:00",
+      "pid": 77368,
+      "pgid": 77368,
+      "loadStart": [
+        11.58447265625,
+        10.77099609375,
+        10.85009765625
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:29:28.171191+00:00",
+      "wallSeconds": 4.820512125035748,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 5.825095,
+        "system": 1.238409
+      },
+      "loadEnd": [
+        11.13720703125,
+        10.69140625,
+        10.8212890625
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "b169266c20ff6636e0605e2947e8fed14e7964e1bf9bb97335e208a84ecf597e",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "full-01": {
+      "label": "full-01",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:30:39.638512+00:00",
+      "pid": 8610,
+      "pgid": 8610,
+      "loadStart": [
+        17.5595703125,
+        12.1220703125,
+        11.314453125
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:33:49.245146+00:00",
+      "wallSeconds": 189.60545166698284,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 270.728147,
+        "system": 33.463313
+      },
+      "loadEnd": [
+        10.8193359375,
+        12.00439453125,
+        11.4677734375
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "eef899e5867dbb5f9fdd3c22e18639dc99ae0887cb573822f846aac737c9126e",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "knip-01": {
+      "label": "knip-01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:23:34.134716+00:00",
+      "pid": 94689,
+      "pgid": 94689,
+      "loadStart": [
+        10.78369140625,
+        11.578125,
+        11.068359375
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:23:39.976428+00:00",
+      "wallSeconds": 5.841568999981973,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 4.555779,
+        "system": 1.731627
+      },
+      "loadEnd": [
+        10.720703125,
+        11.5517578125,
+        11.06201171875
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "e15700d085de63a7b63c481c1f70e052b604898faa01311399768481074f0b27",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "knip-02": {
+      "label": "knip-02",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:26:19.277337+00:00",
+      "pid": 7074,
+      "pgid": 7074,
+      "loadStart": [
+        10.81494140625,
+        11.580078125,
+        11.1826171875
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:26:24.081086+00:00",
+      "wallSeconds": 4.803587250004057,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 4.618791,
+        "system": 1.578647
+      },
+      "loadEnd": [
+        11.06982421875,
+        11.6201171875,
+        11.19873046875
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "2d811d9ae6ed6ad76e188edcdf0d8bc362939f8d17011f111a9dd87bad424e51",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "review-01": {
+      "label": "review-01",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:21:18.526275+00:00",
+      "pid": 28346,
+      "pgid": 28346,
+      "loadStart": [
+        17.98486328125,
+        11.11572265625,
+        10.7646484375
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:22:39.426680+00:00",
+      "wallSeconds": 80.89968241698807,
+      "exitCode": 1,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 191.307047,
+        "system": 19.265214
+      },
+      "loadEnd": [
+        15.43310546875,
+        12.2880859375,
+        11.2666015625
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "2e18688df1588fb37da1c8e5a5d6fa9a48ca921575f4a04cc225c7cc3d9b0b08",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "review-02": {
+      "label": "review-02",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:25:01.167110+00:00",
+      "pid": 1785,
+      "pgid": 1785,
+      "loadStart": [
+        11.54638671875,
+        11.845703125,
+        11.2294921875
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:26:16.315396+00:00",
+      "wallSeconds": 75.14761579199694,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 185.076283,
+        "system": 17.825058
+      },
+      "loadEnd": [
+        11.1474609375,
+        11.65771484375,
+        11.20751953125
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "cec9c7178d85162c83fa375971a365f933b625bb23e0c1715d3b63727c4132be",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "tooling-01": {
+      "label": "tooling-01",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:24:27.937403+00:00",
+      "pid": 98792,
+      "pgid": 98792,
+      "loadStart": [
+        13.06103515625,
+        12.1142578125,
+        11.29931640625
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:24:29.925214+00:00",
+      "wallSeconds": 1.9876588329789229,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 2.208347,
+        "system": 0.43329599999999996
+      },
+      "loadEnd": [
+        13.06103515625,
+        12.1142578125,
+        11.29931640625
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "518506ec1cfe35bfb562b064bb31c3acadfc0e35b66f001583e45dd141580e7a",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "typecheck-01": {
+      "label": "typecheck-01",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:19:18.579539+00:00",
+      "pid": 20426,
+      "pgid": 20426,
+      "loadStart": [
+        7.14013671875,
+        6.8232421875,
+        9.408203125
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:19:37.342937+00:00",
+      "wallSeconds": 18.76314104202902,
+      "exitCode": 1,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 30.507688,
+        "system": 3.057866
+      },
+      "loadEnd": [
+        7.52099609375,
+        6.9150390625,
+        9.39501953125
+      ],
+      "groupAbsent": true,
+      "outputSHA256": "9bd46f8d55589b5c8d6f793069638b857d752554ab640b8f07be856077e090d3",
+      "actualChildWait": true,
+      "admittedEpochUnchanged": true,
+      "port": null
+    },
+    "schema-01": {
+      "label": "schema-01",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/opening-hand-complete-618-root",
+      "start": "2026-10-15T04:36:21.672357+00:00",
+      "pid": 21445,
+      "pgid": 21445,
+      "loadStart": [
+        24.7109375,
+        17.10107421875,
+        13.595703125
+      ],
+      "workers": 2,
+      "end": "2026-10-15T04:36:21.796507+00:00",
+      "wallSeconds": 0.12405050004599616,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": {
+        "user": 0.064995,
+        "system": 0.029108
+      },
+      "loadEnd": [
+        24.7109375,
+        17.10107421875,
+        13.595703125
+      ],
+      "groupAbsent": true,
+      "admittedEpochUnchanged": true,
+      "outputSHA256": "f62e3ca01d9da6e3cf4006392618606f6060cacd71cc6ec7941155690a8b08c5",
+      "actualChildWait": true
+    }
+  },
+  "failedAttempts": [
+    {
+      "label": "focused-01",
+      "exitCode": 1,
+      "observed": "30 passed, two fixture assertions failed by comparing serialized object property order. Corrected to data equality plus hash; runtime unchanged."
+    },
+    {
+      "label": "typecheck-01",
+      "exitCode": 1,
+      "observed": "Five own fixture typing errors: unbranded custom subtype and insufficient union narrowing. Corrected with parseCardSubtype and discriminated projections; runtime unchanged."
+    },
+    {
+      "label": "review-01",
+      "exitCode": 1,
+      "observed": "9195 passed, one existing event-kind completeness assertion failed because prepared prompt-lab cannot publish ordinary setup event. Exact finite native addition supplies public ordinary empty-deck createBattle events to the existing Set; both old exceptions and other callbacks preserved."
+    }
+  ],
+  "counterfactuals": [
+    {
+      "fault": "f1",
+      "callerPid": 16777,
+      "callerPgid": 16777,
+      "start": "2026-10-15T04:28:29.149146+00:00",
+      "before": {
+        "src/engine/dsl/triggers.ts": "eddd7fa4f64ed4d45cd4358dac10ba7d759d164bd89ac28b0ac67e3d87c30b27"
+      },
+      "freezeSha256": "3a122e93b53bd87c8dee36c1bc5848d8e7f2cd100c5d5b2662cba97b52d252a3",
+      "mutated": {
+        "src/engine/dsl/triggers.ts": "4488836e120cde0891d4c49329aebda8a2c380406d152066d80f6388e7f419f1"
+      },
+      "selector": "settles both hands and energies before starter-first occasions",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/tmp/618-run-check.py",
+        "cf-f1",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "settles both hands and energies before starter-first occasions"
+      ],
+      "exitCode": 1,
+      "rawLogSha256": "8475e3aaca82c1b44b78839a1cc59c420685a537dd01ee46bbfdafc7711ca446",
+      "assertionFailure": true,
+      "restored": {
+        "src/engine/dsl/triggers.ts": true
+      },
+      "end": "2026-10-15T04:28:34.692681+00:00",
+      "publicAssertionLine": 98,
+      "verifiedObservedFailure": "First-own-turn alias omits the other side opening listeners for both starting sides.",
+      "bothActorsFailed": true,
+      "frozenPathsVerifiedAfter": 5362
+    },
+    {
+      "fault": "f2",
+      "callerPid": 17635,
+      "callerPgid": 17635,
+      "start": "2026-10-15T04:28:36.622313+00:00",
+      "before": {
+        "src/engine/steps/kinds/begin-battle.ts": "6157db9860387ed50164d73d3d66982a0739a3e129897a3b30b9ddc3bf89e23c"
+      },
+      "freezeSha256": "3a122e93b53bd87c8dee36c1bc5848d8e7f2cd100c5d5b2662cba97b52d252a3",
+      "mutated": {
+        "src/engine/steps/kinds/begin-battle.ts": "3be532c1f5ca97f9e036fabc26b3599b0e81136483106619302aefa8d92cc3f0"
+      },
+      "selector": "settles both hands and energies before starter-first occasions",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/tmp/618-run-check.py",
+        "cf-f2",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "settles both hands and energies before starter-first occasions"
+      ],
+      "exitCode": 1,
+      "rawLogSha256": "20de789cf5087f7a4aafd1b609b328f837e8b727f79695e477b1b104e162e735",
+      "assertionFailure": true,
+      "restored": {
+        "src/engine/steps/kinds/begin-battle.ts": true
+      },
+      "end": "2026-10-15T04:28:42.693941+00:00",
+      "publicAssertionLine": 95,
+      "verifiedObservedFailure": "Completion occurs before any of the four explicitly configured opening draws.",
+      "bothActorsFailed": true,
+      "frozenPathsVerifiedAfter": 5362
+    },
+    {
+      "fault": "f3",
+      "callerPid": 18421,
+      "callerPgid": 18421,
+      "start": "2026-10-15T04:28:44.465073+00:00",
+      "before": {
+        "src/engine/triggers/matcher.ts": "83dd8b7b5dc804c50d2a205b8c45545102c175c8cdba8741e40cf268ba1b7e20"
+      },
+      "freezeSha256": "3a122e93b53bd87c8dee36c1bc5848d8e7f2cd100c5d5b2662cba97b52d252a3",
+      "mutated": {
+        "src/engine/triggers/matcher.ts": "eef33d06c42c5df71c1b5032123a61f7527695c21b8f59be5f9823ed6e8bdec7"
+      },
+      "selector": "keeps completion before every opening prompt",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/tmp/618-run-check.py",
+        "cf-f3",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps completion before every opening prompt"
+      ],
+      "exitCode": 1,
+      "rawLogSha256": "748dd6ceee68897bb12fdfc6c136ced0bf15da1b838178c12edd958ca8653b5e",
+      "assertionFailure": true,
+      "restored": {
+        "src/engine/triggers/matcher.ts": true
+      },
+      "end": "2026-10-15T04:28:49.948122+00:00",
+      "publicAssertionLine": 152,
+      "verifiedObservedFailure": "Normal discard/draw listeners queue during explicit opening redraw; the public expected empty queue has four entries.",
+      "bothActorsFailed": true,
+      "frozenPathsVerifiedAfter": 5362
+    },
+    {
+      "fault": "f4duplicate",
+      "callerPid": 29060,
+      "callerPgid": 29060,
+      "start": "2026-10-15T04:28:55.017955+00:00",
+      "before": {
+        "src/engine/steps/kinds/begin-battle.ts": "6157db9860387ed50164d73d3d66982a0739a3e129897a3b30b9ddc3bf89e23c"
+      },
+      "freezeSha256": "3a122e93b53bd87c8dee36c1bc5848d8e7f2cd100c5d5b2662cba97b52d252a3",
+      "mutated": {
+        "src/engine/steps/kinds/begin-battle.ts": "551253d8d5d7831925eb9aab9224e3d2824ab6d2668a6c27d6a0379f0c9cb8b6"
+      },
+      "selector": "settles both hands and energies before starter-first occasions",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/tmp/618-run-check.py",
+        "cf-f4duplicate",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "settles both hands and energies before starter-first occasions"
+      ],
+      "exitCode": 1,
+      "rawLogSha256": "ec812651209433c7ce0eb8cff4f71deba3327f3628824886dda2343ce14c3c75",
+      "assertionFailure": true,
+      "restored": {
+        "src/engine/steps/kinds/begin-battle.ts": true
+      },
+      "end": "2026-10-15T04:28:59.806161+00:00",
+      "publicAssertionLine": 93,
+      "verifiedObservedFailure": "Four completion events are published instead of exactly two.",
+      "bothActorsFailed": true,
+      "frozenPathsVerifiedAfter": 5362
+    },
+    {
+      "fault": "f4privacy",
+      "callerPid": 46497,
+      "callerPgid": 46497,
+      "start": "2026-10-15T04:29:02.005332+00:00",
+      "before": {
+        "src/engine/steps/kinds/begin-battle.ts": "6157db9860387ed50164d73d3d66982a0739a3e129897a3b30b9ddc3bf89e23c"
+      },
+      "freezeSha256": "3a122e93b53bd87c8dee36c1bc5848d8e7f2cd100c5d5b2662cba97b52d252a3",
+      "mutated": {
+        "src/engine/steps/kinds/begin-battle.ts": "5632e44a865de9553e8a3f6f5bba6178286fac56d4cdc680a227f51f422781e9"
+      },
+      "selector": "publishes and logs only the side",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/tmp/618-run-check.py",
+        "cf-f4privacy",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "publishes and logs only the side"
+      ],
+      "exitCode": 1,
+      "rawLogSha256": "9c4878c40e8191d5d1aab19dda5745a727f3de52fc2c5d2df5424c32cdc4168a",
+      "assertionFailure": true,
+      "restored": {
+        "src/engine/steps/kinds/begin-battle.ts": true
+      },
+      "end": "2026-10-15T04:29:06.466860+00:00",
+      "publicAssertionLine": 208,
+      "verifiedObservedFailure": "Opponent-visible public completion event contains hidden physical hand IDs.",
+      "bothActorsFailed": true,
+      "frozenPathsVerifiedAfter": 5362
+    },
+    {
+      "fault": "f5fifo",
+      "callerPid": 74862,
+      "callerPgid": 74862,
+      "start": "2026-10-15T04:29:09.844404+00:00",
+      "before": {
+        "src/engine/steps/kinds/resolve-trigger.ts": "ac7639c2eb46428edac3ddd6172d554fab73bc97b8ac00929743a86901693962"
+      },
+      "freezeSha256": "3a122e93b53bd87c8dee36c1bc5848d8e7f2cd100c5d5b2662cba97b52d252a3",
+      "mutated": {
+        "src/engine/steps/kinds/resolve-trigger.ts": "99d08e8cc17e857bc18d45fe832064e0df97e8cb6b978e2649e4af0bcd25f0c5"
+      },
+      "selector": "keeps completion before every opening prompt",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/tmp/618-run-check.py",
+        "cf-f5fifo",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps completion before every opening prompt"
+      ],
+      "exitCode": 1,
+      "rawLogSha256": "36910c7cc0272a5f7c8aa085333c661c181c716a6c60b4d25923395d10cd3215",
+      "assertionFailure": true,
+      "restored": {
+        "src/engine/steps/kinds/resolve-trigger.ts": true
+      },
+      "end": "2026-10-15T04:29:14.547063+00:00",
+      "publicAssertionLine": 143,
+      "verifiedObservedFailure": "The other side receives the first opening prompt.",
+      "bothActorsFailed": true,
+      "frozenPathsVerifiedAfter": 5362
+    },
+    {
+      "fault": "f5early",
+      "callerPid": 76679,
+      "callerPgid": 76679,
+      "start": "2026-10-15T04:29:16.468026+00:00",
+      "before": {
+        "src/engine/steps/kinds/begin-battle.ts": "6157db9860387ed50164d73d3d66982a0739a3e129897a3b30b9ddc3bf89e23c"
+      },
+      "freezeSha256": "3a122e93b53bd87c8dee36c1bc5848d8e7f2cd100c5d5b2662cba97b52d252a3",
+      "mutated": {
+        "src/engine/steps/kinds/begin-battle.ts": "96170eb4142e3047766b1df2cde3ccb43dba09cf53fa262423d160ae1c4e4707"
+      },
+      "selector": "keeps completion before every opening prompt",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/tmp/618-run-check.py",
+        "cf-f5early",
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps completion before every opening prompt"
+      ],
+      "exitCode": 1,
+      "rawLogSha256": "1c1380613de90d62b6be801b7e62a7c819645b17a519a5f4d142444de0bfe483",
+      "assertionFailure": true,
+      "restored": {
+        "src/engine/steps/kinds/begin-battle.ts": true
+      },
+      "end": "2026-10-15T04:29:21.241472+00:00",
+      "publicAssertionLine": 144,
+      "verifiedObservedFailure": "The first turn and side-turn count advance to one while an opening prompt is pending.",
+      "bothActorsFailed": true,
+      "frozenPathsVerifiedAfter": 5362
+    }
+  ],
+  "fullTiming": {
+    "callerPid": 8540,
+    "callerPgid": 8540,
+    "callerSha256": "ae4282f8f265839414b6d57b1b3673c74f43003c749461382d368d8094289426",
+    "start": "2026-10-15T04:30:39.602026+00:00",
+    "command": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "/tmp/618-run-check.py",
+      "full-01",
+      "lockf",
+      "-k",
+      "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "npm",
+      "run",
+      "review:full"
+    ],
+    "freezeSha256": "3a122e93b53bd87c8dee36c1bc5848d8e7f2cd100c5d5b2662cba97b52d252a3",
+    "runnerSha256": "1e2f93a746a86b5c1209d6c2ef6bae9b43553cad22d1c052a5d9798215887d9b",
+    "frozenPathsBefore": 5362,
+    "workers": 2,
+    "sourceMismatchesBefore": [],
+    "exitCode": 0,
+    "end": "2026-10-15T04:33:49.251516+00:00",
+    "callerWallSeconds": 189.64797795796767,
+    "sourceMismatchesAfter": [],
+    "rawLogSha256": "eef899e5867dbb5f9fdd3c22e18639dc99ae0887cb573822f846aac737c9126e",
+    "reviewPrepareStartedAt": "2026-10-15T04:31:46.875Z",
+    "reviewPrepareLoad": 15.66357421875,
+    "actualChildReceipt": "full-01.json",
+    "lockInclusiveWallSeconds": 189.60545166698284,
+    "runnerStartToPrepareSeconds": 67.236488,
+    "prepareToChildTerminalSeconds": 122.370146,
+    "timingQualification": "Runner wall includes lock wait and process startup; start-to-prepare combines lock wait and startup, not isolated lock duration. Prepare-to-terminal includes checks and process teardown; no benchmark claim."
+  },
+  "hostLoadSamples": {
+    "affected-01": {
+      "start": [
+        18.52197265625,
+        10.3359375,
+        10.486328125
+      ],
+      "end": [
+        18.96044921875,
+        10.5625,
+        10.5654296875
+      ]
+    },
+    "cf-f1": {
+      "start": [
+        9.29296875,
+        10.32958984375,
+        10.7138671875
+      ],
+      "end": [
+        9.18896484375,
+        10.29052734375,
+        10.69775390625
+      ]
+    },
+    "cf-f2": {
+      "start": [
+        9.18896484375,
+        10.29052734375,
+        10.69775390625
+      ],
+      "end": [
+        9.654296875,
+        10.36865234375,
+        10.72265625
+      ]
+    },
+    "cf-f3": {
+      "start": [
+        9.76171875,
+        10.37890625,
+        10.72412109375
+      ],
+      "end": [
+        9.94091796875,
+        10.40576171875,
+        10.7314453125
+      ]
+    },
+    "cf-f4duplicate": {
+      "start": [
+        9.46484375,
+        10.29931640625,
+        10.69189453125
+      ],
+      "end": [
+        9.50732421875,
+        10.2939453125,
+        10.6875
+      ]
+    },
+    "cf-f4privacy": {
+      "start": [
+        9.50732421875,
+        10.2939453125,
+        10.6875
+      ],
+      "end": [
+        9.94677734375,
+        10.3720703125,
+        10.71240234375
+      ]
+    },
+    "cf-f5early": {
+      "start": [
+        12.7890625,
+        10.96826171875,
+        10.919921875
+      ],
+      "end": [
+        12.2451171875,
+        10.8857421875,
+        10.890625
+      ]
+    },
+    "cf-f5fifo": {
+      "start": [
+        11.55224609375,
+        10.69775390625,
+        10.8251953125
+      ],
+      "end": [
+        12.7890625,
+        10.96826171875,
+        10.919921875
+      ]
+    },
+    "focused-01": {
+      "start": [
+        5.42724609375,
+        6.53173828125,
+        9.42138671875
+      ],
+      "end": [
+        5.392578125,
+        6.505859375,
+        9.39501953125
+      ]
+    },
+    "focused-02": {
+      "start": [
+        5.2578125,
+        6.439453125,
+        9.33740234375
+      ],
+      "end": [
+        6.99853515625,
+        6.78076171875,
+        9.4404296875
+      ]
+    },
+    "focused-03": {
+      "start": [
+        14.8193359375,
+        8.70263671875,
+        9.93994140625
+      ],
+      "end": [
+        17.55615234375,
+        9.37158203125,
+        10.16845703125
+      ]
+    },
+    "focused-restored": {
+      "start": [
+        11.58447265625,
+        10.77099609375,
+        10.85009765625
+      ],
+      "end": [
+        11.13720703125,
+        10.69140625,
+        10.8212890625
+      ]
+    },
+    "full-01": {
+      "start": [
+        17.5595703125,
+        12.1220703125,
+        11.314453125
+      ],
+      "end": [
+        10.8193359375,
+        12.00439453125,
+        11.4677734375
+      ]
+    },
+    "knip-01": {
+      "start": [
+        10.78369140625,
+        11.578125,
+        11.068359375
+      ],
+      "end": [
+        10.720703125,
+        11.5517578125,
+        11.06201171875
+      ]
+    },
+    "knip-02": {
+      "start": [
+        10.81494140625,
+        11.580078125,
+        11.1826171875
+      ],
+      "end": [
+        11.06982421875,
+        11.6201171875,
+        11.19873046875
+      ]
+    },
+    "review-01": {
+      "start": [
+        17.98486328125,
+        11.11572265625,
+        10.7646484375
+      ],
+      "end": [
+        15.43310546875,
+        12.2880859375,
+        11.2666015625
+      ]
+    },
+    "review-02": {
+      "start": [
+        11.54638671875,
+        11.845703125,
+        11.2294921875
+      ],
+      "end": [
+        11.1474609375,
+        11.65771484375,
+        11.20751953125
+      ]
+    },
+    "tooling-01": {
+      "start": [
+        13.06103515625,
+        12.1142578125,
+        11.29931640625
+      ],
+      "end": [
+        13.06103515625,
+        12.1142578125,
+        11.29931640625
+      ]
+    },
+    "typecheck-01": {
+      "start": [
+        7.14013671875,
+        6.8232421875,
+        9.408203125
+      ],
+      "end": [
+        7.52099609375,
+        6.9150390625,
+        9.39501953125
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Ordinary review-02 typecheck step starting 2026-10-15T04:25:02.891Z, actual recorded one-minute host load; wrapper start sample separately retained."
+      }
+    }
+  },
+  "failurePaths": {
+    "errorMidStep": "Both actors: real definition failures preserve committed hands, decks, turn and trigger queue, publish no draw/discard/turn-start suffix and clear inFlight. Inline source throw preserves the input data; two independent healthy starts with equivalent input and answers are deterministic.",
+    "reloadRestart": "Both actors: JSON cold load, current and history checkpoints, pending and partial answer prefixes, replay to the same committed data/hash.",
+    "partialWrite": "Rejected intent leaves slice/hash unchanged; malformed current or history beginning is rejected; partial replay suffix resumes deterministically.",
+    "invalidStaleInput": "Both actors: wrong-side, stale, illegal, foreign, duplicate, too-many and cancellation answers refuse without committing changes; conflicting answer branches stay deterministic.",
+    "concurrentActors": "Both starting sides and actors, FIFO across duplicate and held sources; already queued physical sources both depart and the second captured source still resolves from void.",
+    "onceCompletion": "Completion is once per side including zero/missing/nonmatching/exhausted groups; replacement draws do not emit it, and first-turn reset precedes actual first-turn reactions."
+  },
+  "privacy": "Public event and logs contain only side, both viewers checked; normal opening/replacement draw and discard trigger suppression retained.",
+  "qaApplicability": {
+    "workflowBrowserRun": false,
+    "reason": "No authored production consumer of the new form is available; current prepared lab correctly bypasses ordinary opening. The three own UI bookkeeping rows are none/null/unlogged and add no visible interaction. Public synthetic fold contracts and full suite validate this capability.",
+    "retainedActualConsumerAcceptance": "Original hv-umm2.257 retains full immutable UUID authoring, recipe, weighted 300/preflight/sweep/D20/D21 and coverage/final joins, including actual pre-first-turn pending prompt/header, reload/log/Caps and desktop/mobile workflow QA. No fake consumer, lab driver or browser pass is claimed.",
+    "fullHarnessTests": "Full suite runs its existing synthetic temporary QA server/provider-transport tests. All 58 named synthetic server groups plus the full child group are absent; these are not actual player-workflow browser QA.",
+    "directServersBrowsersProviders": [],
+    "localProductionFuzzQuota": null,
+    "fuzzQualification": "No local 200/300 capability quota; certified release fuzz and original consumer acceptance remain required."
+  },
+  "resourcePolicy": {
+    "workers": 2,
+    "primaryHeavyLock": "artifacts/heavy.lock",
+    "fullTimeoutSecondsIncludingWait": 900,
+    "fullActualTimeout": false,
+    "allChecksActualWaitAndTerminal": true,
+    "allOwnedCheckGroupsAbsent": true,
+    "syntheticHarnessGroupsAbsent": 58,
+    "finalResourceAudit": "full-01-resource-audit.json",
+    "noBlindRetries": true
+  },
+  "receipts": {
+    "ignoredDirectory": "artifacts/qa/hv-umm2.618/receipts/helper/",
+    "rawLogsRetained": true,
+    "allFailuresRetained": true,
+    "callersAndStage1FreezeCopied": true
+  },
+  "newPreExistingIssues": []
+}

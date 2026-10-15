@@ -28,6 +28,7 @@
  * | a selective-disabling `effectStarted` event | `engine.abilitiesDisabled`, with its physical source, target, mode and expiry |
  * | a first-materialization keyword `effectStarted` event | `engine.firstMaterializationKeyword`, with its physical member, source, player, keyword and permanent expiry |
  * | an `effectEnded` event | `engine.effectEnded`, correlated with its start by effect id |
+ * | an `openingHandCompleted` event | `engine.openingHandCompleted`, with only its side |
  * | a `handEmptied` event | `engine.handEmptied`, with only the hand holder |
  * | a `returnedToHand` event | `engine.returnedToHand`, correlated by physical instance |
  * | a `battleEnded` event | `engine.battleEnded` |
@@ -54,6 +55,7 @@ interface RecordBase {
 }
 
 export type EngineLogRecord =
+  | (RecordBase & { readonly event: "engine.openingHandCompleted"; readonly detail: EventOf<"openingHandCompleted"> })
   | (RecordBase & { readonly event: "engine.scoreGroup"; readonly detail: EventOf<"scoreGroup"> })
   | (RecordBase & {
       readonly event: "engine.battleStarted";
@@ -130,6 +132,8 @@ export function engineLogLine(record: EngineLogRecord, gameId: GameId, timestamp
 /** The record an engine event maps to, or `null` for an event the log leaves to replay. */
 export function eventLogRecord(event: EngineEvent, version: number): EngineLogRecord | null {
   switch (event.kind) {
+    case "openingHandCompleted":
+      return { event: "engine.openingHandCompleted", version, detail: event };
     case "scoreGroup":
       return { event: "engine.scoreGroup", version, detail: event };
     case "cardCopied":

@@ -13,6 +13,7 @@ import { cardLabBattle } from "./card-lab";
 import { applyDebugOp, debugOpFromUnknown, withHistory, type DebugOp } from "../debug/debug-actions";
 import type { BattleSlice } from "../fold/slice";
 import { EVENT_DEFINITIONS } from "../events";
+import { battleSeed } from "../state/ids";
 import { LAB, PROMPT_LAB_CARD_TEXT, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture, promptLabPresentation } from "./prompt-lab";
 import { runNamedScenario, scenarioRegistryProblems } from "../../content/specs/runner";
 import { playFromHand, runScenario, type NamedScenario, type ScenarioSpec } from "./scenario";
@@ -142,12 +143,15 @@ describe("prompt lab", () => {
     expect(stop("reclaim").legal).toEqual(expect.arrayContaining(["play", "activate"]));
   });
 
-  it("publishes every event kind through the presentation steps but the Dreamwell draw and a bounded search", () => {
+  it("publishes every event kind through lab presentation and opening setup except Dreamwell and bounded search", () => {
     const published = new Set(
       PROMPT_LAB_FIXTURES.flatMap((fixture) =>
         promptLabPresentation(labEngine, fixture).flatMap((step) => step.published.map((event) => event.kind)),
       ),
     );
+    const opening = engine.createBattle({ seed: battleSeed("presentation-opening"), scoreToWin: 1000,
+      decks: { player: [], enemy: [] }, dreamwell: [] }, NO_PROMPTS);
+    for (const event of opening.events) published.add(event.kind);
     const missing = Object.keys(EVENT_DEFINITIONS).filter((kind) => !published.has(kind as keyof typeof EVENT_DEFINITIONS));
     expect(missing.sort()).toEqual(["dreamwellDrawn", "feasibilityBounded"]);
   });

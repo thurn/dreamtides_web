@@ -237,7 +237,8 @@ export function advancePhase(ctx: StepContext): void {
   const { state } = ctx;
   if (state.turn.beginning) {
     state.turn.beginning = false;
-    enterPhase(ctx, "dreamwell");
+    if (state.turn.turnNumber === 0) beginFirstTurn(ctx);
+    else enterPhase(ctx, "dreamwell");
     return;
   }
   if (state.turn.endingCleanup === true) {

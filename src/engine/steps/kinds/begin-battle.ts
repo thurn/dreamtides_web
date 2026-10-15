@@ -2,15 +2,15 @@ import { cardMatchesFilter } from "../../continuous/characteristics";
 import { buildDreamwellDeck } from "../../rules/dreamwell";
 import { drawCard, setEnergy } from "../../rules/resources";
 import { beginFirstTurn, beginPreparedPhase } from "../../rules/turn";
-import { SIDES } from "../../state/ids";
+import { opponent, SIDES } from "../../state/ids";
 import type { DreamwellCardId, Side } from "../../state/ids";
 import { shuffleInPlace } from "../../state/rng";
 import type { BattleInit, BattleSetup, OpeningHandDraw } from "../../state/types";
 import type { StepContext, StepDefinition } from "../types";
 
 /**
- * Shuffles both decks, builds the Dreamwell, deals opening hands, and starts
- * turn 1. It consumes the battle's next-battle opening-hand draws and
+ * Shuffles both decks, builds the Dreamwell, and completes opening hands
+ * before their abilities resolve and turn 1 begins. It consumes the battle's next-battle opening-hand draws and
  * starting energy (D39).
  */
 export interface BeginBattleStep {
@@ -80,6 +80,13 @@ export const beginBattle: StepDefinition<BeginBattleStep> = {
       for (const draw of step.openingHand?.[side] ?? []) drawOpeningGroup(ctx, side, draw);
       const energy = step.startingEnergy?.[side] ?? 0;
       if (energy > 0) setEnergy(ctx, side, energy, energy);
+    }
+    for (const side of [state.turn.active, opponent(state.turn.active)]) {
+      ctx.emit({ kind: "openingHandCompleted", side });
+    }
+    if (state.triggerQueue.length > 0) {
+      state.turn.beginning = true;
+      return;
     }
     beginFirstTurn(ctx);
   },

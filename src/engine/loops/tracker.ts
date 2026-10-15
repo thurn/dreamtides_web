@@ -56,6 +56,7 @@ function namedRenewals(trigger: Trigger): readonly NamedTrigger[] {
     case "discard": case "erode": case "reclaim": case "abandon": case "leavesPlay":
     case "returnToHand": case "dissolve": case "gainsSpark": case "scores": case "opponentScores":
     case "removesEnemy": case "leavesVoid": case "putIntoVoid": case "challengeWith":
+    case "openingHandCompleted":
     case "startOfTurn": case "startOfFirstTurn": case "endOfTurn": return [];
   }
   const exhaustive: never = trigger;

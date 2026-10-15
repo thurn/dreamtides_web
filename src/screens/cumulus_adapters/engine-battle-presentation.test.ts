@@ -161,6 +161,7 @@ describe("presentation completeness", () => {
     exhaustionChanged: "the card's exhausted pose changes",
     feasibilityBounded: "bookkeeping of the AI's search",
     handEmptied: "the hand count is shown and its causing movement is logged",
+    openingHandCompleted: "setup bookkeeping; opening abilities and their effects are logged",
     leftPlay: "the move it pairs with is logged",
     leftVoid: "the move it pairs with is logged",
     pendingAbility: "bookkeeping of a text-less card",

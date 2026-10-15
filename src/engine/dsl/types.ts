@@ -799,6 +799,8 @@ export type Trigger =
   | { readonly on: "putIntoVoid"; readonly player: PlayerRef; readonly filter: CardFilter }
   /** "When you challenge with N or more …": once, as challengers are designated (C10). */
   | { readonly on: "challengeWith"; readonly count: number; readonly selector: CharacterSelector }
+  /** The controller's completed ordinary and extra opening-hand setup, before turn 1. */
+  | { readonly on: "openingHandCompleted" }
   | { readonly on: "startOfTurn" }
   | { readonly on: "startOfFirstTurn" }
   /**

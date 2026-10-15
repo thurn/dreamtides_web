@@ -47,6 +47,7 @@ import { loopEnded, type LoopEndedEvent } from "./kinds/loop-ended";
 import { loopStarted, type LoopStartedEvent } from "./kinds/loop-started";
 import { materialized, type MaterializedEvent } from "./kinds/materialized";
 import { noLegalTarget, type NoLegalTargetEvent } from "./kinds/no-legal-target";
+import { openingHandCompleted, type OpeningHandCompletedEvent } from "./kinds/opening-hand-completed";
 import { payableEffectEnded, type PayableEffectEndedEvent } from "./kinds/payable-effect-ended";
 import { payableEffectRegistered, type PayableEffectRegisteredEvent } from "./kinds/payable-effect-registered";
 import { pendingAbility, type PendingAbilityEvent } from "./kinds/pending-ability";
@@ -114,6 +115,7 @@ export type EngineEvent =
   | LoopStartedEvent
   | MaterializedEvent
   | NoLegalTargetEvent
+  | OpeningHandCompletedEvent
   | PayableEffectEndedEvent
   | PayableEffectRegisteredEvent
   | PendingAbilityEvent
@@ -184,6 +186,7 @@ export const EVENT_DEFINITIONS = {
   loopStarted,
   materialized,
   noLegalTarget,
+  openingHandCompleted,
   payableEffectEnded,
   payableEffectRegistered,
   pendingAbility,

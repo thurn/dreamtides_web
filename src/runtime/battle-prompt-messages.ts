@@ -875,6 +875,7 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
     case "exhaustionChanged":
     case "feasibilityBounded":
     case "handEmptied":
+    case "openingHandCompleted":
     case "leftPlay":
     case "leftVoid":
     case "pendingAbility":

@@ -822,8 +822,9 @@ export interface TurnState {
   /** The next front-rank lane to resolve during the Challenge phase. */
   challengeLane: number | null;
   /**
-   * The turn has begun and its Dreamwell phase has not: the abilities that
-   * triggered as it began resolve first. `phase` is `"dreamwell"` meanwhile.
+   * At turn zero, opening-hand abilities resolve before the first turn.
+   * Otherwise the turn has begun and its start-of-turn abilities resolve
+   * before Dreamwell. `phase` is `"dreamwell"` in both waits.
    */
   beginning: boolean;
   /**

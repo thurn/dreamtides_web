@@ -97,6 +97,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   leavesVoid: ["leftVoid"],
   putIntoVoid: ["enteredVoid"],
   challengeWith: ["challengersDesignated"],
+  openingHandCompleted: ["openingHandCompleted"],
   startOfTurn: ["turnStarted"],
   startOfFirstTurn: ["turnStarted"],
   endOfTurn: ["phaseChanged"],
@@ -490,6 +491,8 @@ function matchKind(
           .length >= trigger.count
         ? NO_SUBJECT
         : null;
+    case "openingHandCompleted":
+      return event.kind === "openingHandCompleted" && event.side === you ? NO_SUBJECT : null;
     case "startOfTurn":
       return event.kind === "turnStarted" && event.side === you ? NO_SUBJECT : null;
     case "startOfFirstTurn":
@@ -885,12 +888,13 @@ function departure(state: BattleState, event: EngineEvent): Departure | null {
  * the active side first, then the other; within a side, its listeners, then
  * its floating and delayed triggers in creation order. A `materialized`
  * event first joins its side's turn log, so every match sees it counted.
- * Nothing triggers, and nothing is recorded, before the first turn begins or
- * after the battle ends.
+ * Before the first turn, only the explicit completed-opening occasion is
+ * matched; individual dealing and replacement-draw events remain suppressed.
+ * Nothing triggers after the battle ends.
  */
 export function matchEvent(ctx: StepContext, event: EngineEvent): void {
   const { state } = ctx;
-  if (state.turn.turnNumber === 0 || state.result !== null || event.kind === "triggerQueued" || !TRIGGERING.includes(event.kind)) return;
+  if ((state.turn.turnNumber === 0 && event.kind !== "openingHandCompleted") || state.result !== null || event.kind === "triggerQueued" || !TRIGGERING.includes(event.kind)) return;
   if (event.kind === "leftPlay") {
     const instance = state.instances[event.instance];
     if (instance !== undefined) ctx.departedSourceObjects.set(event.instance, {

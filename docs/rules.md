@@ -509,6 +509,25 @@ and Ending run as automatic bookends.
 skip the Dreamwell draw in round 1. The first player's first turn skips the Draw
 phase.
 
+**Completed opening hands:** Opening setup finishes both players' ordinary
+opening hands, all extra opening-hand groups, and starting energy before any
+"after you draw your opening hand" ability triggers. Each player has one such
+occasion, even when their opening hand or an extra group draws no cards. The
+starting player's occasion comes first, then the other player's; abilities
+within each occasion use the usual source order and resolve FIFO. Each
+ability's conditions see both completed hands and starting energies.
+
+These abilities and their choices resolve before the first turn begins.
+Individual draws, discards, and other ordinary events during opening setup,
+including replacement draws from an opening-hand ability, do not trigger
+abilities. A replacement draw does not complete another opening hand. Explicit
+instructions to trigger a named ability use their ordinary rules. Once all
+opening abilities finish, start-of-turn abilities resolve before the first
+Dreamwell phase; the first-turn Draw and round-1 Dreamwell skips still apply.
+The usual victory checks apply after each completed rules step. A battle
+prepared at a declared Draw, Dawn, or Day boundary enters that phase directly
+and has no opening-hand occasion.
+
 **Additional Draw-phase cards:** “Draw N additional cards during your Draw
 phase” adds N cards to the active player's ordinary one-card draw. As that Draw
 phase begins, determine the total additional count from every applicable static

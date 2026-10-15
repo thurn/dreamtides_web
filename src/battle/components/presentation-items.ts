@@ -97,6 +97,7 @@ export const EVENT_PRESENTATION = {
   loopStarted: "status",
   materialized: "travel",
   noLegalTarget: "notice",
+  openingHandCompleted: "none",
   payableEffectEnded: "status",
   payableEffectRegistered: "status",
   pendingAbility: "none",

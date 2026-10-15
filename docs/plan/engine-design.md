@@ -301,11 +301,11 @@ point (`null` for every kind but `play` and `activate`).
 
 | Step | Runs |
 | --- | --- |
-| `beginBattle` | Shuffle both decks, build the Dreamwell, deal opening hands, start turn 1 |
+| `beginBattle` | Shuffle both decks, build the Dreamwell, deal complete opening hands, queue their completion abilities, and start turn 1 when none wait |
 | `play` / `activate` | Play-time prompts (the Offering route, X, modes, targets, cost alternatives, optional costs, cost cards) → `ctx.commitPoint()` → pay costs → push to stack ("when you play" triggers queue) → priority to the opponent |
 | `resolveTop` | Resolve the top stack item, then priority to its controller if the stack is still non-empty |
 | `resolveTrigger` | Resolve exactly the first queued trigger; one step per trigger |
-| `advancePhase` | One phase transition and its rules actions (Dreamwell draw, Draw, designations, Ending cleanup), or the next turn after Ending |
+| `advancePhase` | One phase transition and its rules actions (Dreamwell draw, Draw, designations, Ending cleanup), the first turn after opening abilities, or the next turn after Ending |
 | `challengeLane` | Resolve one lane; `▸Dissolved` triggers are queued |
 | `reposition` | One reposition, swap, or figment merge |
 | `payToEnd` | Pay to end a payable effect (C7); no stack, no response, priority and phase unchanged |
@@ -810,6 +810,19 @@ See [D31](decisions.md#d31-prompt-architecture-replay-suspended-steps).
 
 ## Turn structure and timing
 
+Opening setup settles both ordinary hands, every extra opening-hand group and
+starting energies, then emits a side-only `openingHandCompleted` occasion for
+the starting side followed by its opponent (RD-hv-umm2.618-1).
+`afterOpeningHand()` matches its controller's occasion. Existing listener order,
+conditions and FIFO apply. With queued abilities, `beginBattle` leaves turn zero
+at `phase: "dreamwell"`, `beginning: true`; existing `resolveTrigger` steps replay
+their prompts. Once the queue drains, `advancePhase` clears that wait and calls
+`beginFirstTurn`, whose ordinary reset and start-of-turn sequence precede
+Dreamwell. With no queued opening abilities, `beginBattle` starts the first turn
+directly. Individual pre-turn event matching stays suppressed during dealing
+and replacement draws. Prepared positive-turn phase entry has no opening deal
+or completion occasion.
+
 The phase machine follows rules § Turn Structure, encoded once:
 
 1. **Dreamwell.** Current energy resets to maximum; the Dreamwell draw
@@ -939,8 +952,9 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   zone, or nowhere the "when you abandon …" abilities, and records its
   ability origin, gained abilities included; its `dissolved` or `abandoned`
   event reads the departed card's abilities from that origin
-  (`ArmedTriggers`). Nothing triggers before the first turn begins or after
-  the battle ends.
+  (`ArmedTriggers`). Before the first turn begins, ordinary event matching
+  admits only the explicit completed-opening occasion; individual dealing and
+  replacement-draw events stay suppressed. Nothing triggers after the battle ends.
 - **Trigger events.** `TRIGGER_EVENTS` lists the engine event kinds each
   trigger kind can match. A new `Trigger` member fails to type-check until
   it has an entry, the matcher refuses a match on an unlisted event, and
