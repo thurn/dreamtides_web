@@ -1,3 +1,4 @@
+import { validCommittedPurgePrevention } from "./journey-committed-purge-state";
 import { validStarterPurgeScreen, validStarterBattleBinding } from "./journey-starter-acquisition";
 import { validJourneyDuplicationScreen } from "./journey-duplication";
 import { validJourneyDreamsignScreen, validDreamsignBattleBinding } from "./journey-on-gain";
@@ -565,6 +566,7 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
   if (!isRecord(value.screen)) return false;
   if (!isRecord(value.siteRuntime)) return false;
   for (const [rawSiteId, runtime] of Object.entries(value.siteRuntime)) {
+    if (!validCommittedPurgePrevention(runtime, id => registry.lookup(id))) return false;
     if (isRecord(runtime) && "enhancedDreamsignOffer" in runtime &&
       (siteIdFromUnknown(rawSiteId) === null || !isEnhancedDreamsignReward(runtime))) return false;
     if (isRecord(runtime) && runtime.journeyEssenceSource !== undefined &&

@@ -1,3 +1,5 @@
+import { journeyPurgePreventionSource } from "../journey-purge-prohibition";
+import type { JourneyModifierRegistry } from "../modifier-registry";
 import type { JourneyPurgeTransition } from "../../../types/journey";
 // Pure reducer cases for Four-Suit Reprise.
 
@@ -116,6 +118,7 @@ export function settleFourSuitReprise(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  registry: Pick<JourneyModifierRegistry, "lookup">,
 ): JourneyPurgeTransition | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   const shuffleCommitment = shuffleCommitmentFromUnknown(
@@ -178,13 +181,17 @@ export function settleFourSuitReprise(
       duplicatedEntryId: duplicatedEntryId,
     };
   } else if (round.outcome === "purge") {
-    nextJourney = {
-      ...journey,
-      deck: journey.deck.filter(
-        (candidate) => candidate.entryId !== round.targetEntryId,
-      ),
-    };
-    nextRound = { ...nextRound, resultSettled: true };
+    const source = journeyPurgePreventionSource(journey, registry);
+    if (source === null) {
+      nextJourney = {
+        ...journey,
+        deck: journey.deck.filter(
+          (candidate) => candidate.entryId !== round.targetEntryId,
+        ),
+      };
+    }
+    nextRound = { ...nextRound, resultSettled: true,
+      ...(source === null ? {} : { purgePreventedBy: source }) };
   }
 
   return { journey: withRuntime(nextJourney, siteId, {
@@ -192,8 +199,12 @@ export function settleFourSuitReprise(
     rounds: runtime.rounds.map((candidate, index) =>
       index === runtime.rounds.length - 1 ? nextRound : candidate,
     ),
-  }), purges: round.outcome === "purge"
-    ? [{ entryId: round.targetEntryId, cardId: round.targetCardId }] : [] };
+  }), purges: round.outcome === "purge" && nextRound.purgePreventedBy === undefined
+    ? [{ entryId: round.targetEntryId, cardId: round.targetCardId }] : [],
+    ...(nextRound.purgePreventedBy === undefined ? {} : { preventedPurges: [{
+      ...nextRound.purgePreventedBy, entryId: round.targetEntryId, cardId: round.targetCardId,
+      siteId, shuffleCommitment,
+    }] }) };
 }
 
 /** Apply the player's free chosen form after a Spades reveal. */

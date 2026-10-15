@@ -597,7 +597,7 @@ export function routeDomain(
     case "SETTLE_FOUR_SUIT_REPRISE":
       return journeyPurgeCase(
         state,
-        gamble.settleFourSuitReprise(journey, payload, ctx),
+        gamble.settleFourSuitReprise(journey, payload, ctx, modifiers),
       );
     case "CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION":
       return journeyCase(
@@ -750,7 +750,15 @@ function journeyCase(
 function journeyPurgeCase(state: FoldState, transition: JourneyPurgeTransition | null): ReduceResult {
   if (transition === null) return bounce(state);
   const result = journeyCase(state, transition.journey);
-  return { ...result, ...(result.outcome === "applied" ? { purges: transition.purges } : {}) };
+  if (result.outcome !== "applied") return result;
+  const prevented = transition.preventedPurges ?? [];
+  return { ...result, purges: transition.purges,
+    ...(prevented.length === 0 ? {} : { logRecords: [
+      ...(result.logRecords ?? []),
+      ...prevented.map((occurrence) => ({ event: "journey_purge_prevented",
+        fields: { eventType: "SETTLE_FOUR_SUIT_REPRISE", ...occurrence } })),
+    ] }),
+  };
 }
 
 function frontDoorCase(

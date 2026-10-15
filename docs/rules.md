@@ -3282,6 +3282,14 @@ optional zero-entry decline is valid. Multiple prohibition sources are redundant
 The concrete purge definition above distinguishes this prohibition from card
 replacement, administrative removal, temporary expiry, and Dreamsign replacement.
 
+For a Four-Suit Reprise round whose draw payment and random result are already
+committed, a prohibited mandatory purge leaves the selected deck entry unchanged.
+The original purge result (currently Clubs) is revealed and settled, retaining
+its payment, playing card, shuffle commitment, and target identities. It supplies no actual
+purge occurrence or purge reward. The ordinary settled-round continuation
+applies. Registered sources held at settlement determine protection; multiple
+sources are redundant and the first held source attributes the prevention.
+
 A gain of Essence when a card is purged applies after the validated purge and
 its costs, once per purged entry for each source copy held after that change.
 The prospective gain cannot pay the purge's upfront cost. A rejected intent

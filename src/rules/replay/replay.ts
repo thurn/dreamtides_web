@@ -1,3 +1,5 @@
+import { assertCommittedPurgePreventionCheckpoint } from "../journey/journey-committed-purge-state";
+import { journeyModifierRegistry } from "../journey/modifier-registry";
 import { assertScoreGroupCheckpoint } from "../battle/score-group-state";
 import { assertFirstEventHistoryCheckpoint } from "../battle/first-event-last-turn-state";
 import { assertLastTurnScoringCheckpoint } from "../battle/last-turn-scoring-state";
@@ -52,6 +54,7 @@ export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
     assertScoreGroupCheckpoint(state);
     assertLastTurnScoringCheckpoint(state);
     assertFirstEventHistoryCheckpoint(state);
+    assertCommittedPurgePreventionCheckpoint(state, id => journeyModifierRegistry.lookup(id));
     return state as FoldState;
   },
   hash: hashState,

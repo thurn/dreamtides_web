@@ -1,0 +1,399 @@
+{
+  "bead": "hv-umm2.732",
+  "base": "443cd6806bbe3b9f60af67acaca26a12b3bacf1e",
+  "clock": {
+    "originalRootStart": "2026-10-15T07:32:10.184295+00:00",
+    "evidenceCutoff": "2026-10-15T07:59:08.824447+00:00",
+    "endpointQualification": "Final evidence cutoff immediately before schema/whitespace/staging/commit; exact Git return and cutoff tail are external terminal receipts.",
+    "inclusiveElapsedMinToCutoff": 26.977335866666667
+  },
+  "checks": {
+    "red-before": {
+      "startUtc": "2026-10-15T07:43:15.744101+00:00",
+      "endUtc": "2026-10-15T07:43:24.461702+00:00",
+      "wallS": 8.717381790978834,
+      "pid": 12552,
+      "pgid": 12552,
+      "exit": 1,
+      "source": "443cd6806bbe3b9f60af67acaca26a12b3bacf1e plus normative/RD and new public regression only",
+      "log": "/tmp/dreamtides-732-01a13a7a/red-before.log"
+    },
+    "focused-first": {
+      "startUtc": "2026-10-15T07:46:22.180765+00:00",
+      "endUtc": "2026-10-15T07:46:29.534649+00:00",
+      "wallS": 7.353797041985672,
+      "pid": 84540,
+      "pgid": 84540,
+      "exit": 1
+    },
+    "focused-owning": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts",
+        "src/rules/journey/gamble/four-suit-reprise.test.ts",
+        "src/rules/journey/journey-purge.test.ts",
+        "src/rules/journey/journey-purge-prohibition.test.ts",
+        "src/rules/journey/lifecycle.test.ts",
+        "src/rules/replay/replay.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "startUtc": "2026-10-15T07:46:55.373612+00:00",
+      "endUtc": "2026-10-15T07:47:03.266754+00:00",
+      "wallS": 7.893050624988973,
+      "pid": 86803,
+      "pgid": 86803,
+      "exit": 0,
+      "loadEnd": [
+        6.41357421875,
+        9.90966796875,
+        11.6005859375
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-15T07:47:32.082539+00:00",
+      "endUtc": "2026-10-15T07:48:17.430724+00:00",
+      "wallS": 45.347491915978026,
+      "pid": 89008,
+      "pgid": 89008,
+      "exit": 1,
+      "hostLoadStart": [
+        5.2568359375,
+        9.29541015625,
+        11.31787109375
+      ],
+      "hostLoadEnd": [
+        14.138671875,
+        10.95068359375,
+        11.8134765625
+      ]
+    },
+    "focused-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts",
+        "src/rules/journey/gamble/four-suit-reprise.test.ts",
+        "src/rules/journey/journey-purge.test.ts",
+        "src/rules/journey/journey-purge-prohibition.test.ts",
+        "src/rules/journey/lifecycle.test.ts",
+        "src/rules/replay/replay.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "startUtc": "2026-10-15T07:48:44.828400+00:00",
+      "hostLoadStart": [
+        14.162109375,
+        11.39697265625,
+        11.953125
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "b8c6567e466721a2cc09f2b4b817203bf98db8284a768da9285c0b74e5600298",
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c9d3e59dba648b70535aaf34de1e6bd7be6758822f9fc45ade6690ac3732acad",
+        "src/rules/journey/journey-purge-prohibition.ts": "ee5aa84094919beb59196b90d20c21fdacfe5e4a0329e98dc6c0753b56d8c877",
+        "src/rules/journey/lifecycle.ts": "09477dc3eccb407bb3a38c1c3482c74d14c9a9117288c7b7ebdd4d0d5bbb69e8",
+        "src/rules/reducer.ts": "15f4786beffaa448dd69558ab167464143e4e250cd13ba296dafca33bac9d586",
+        "src/rules/replay/replay.ts": "8d5ee523ef5fb1f6b7800a73a6468d0711defbba036607422737eb3e7c448398",
+        "src/types/journey.ts": "bc61fdbd111ad0df6e9dbb60571f05839f3dc18c15378914de5d1f415ac55f24",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.732-1.md": "ba81e7a5d9eb773271d730d9df31261a2ddff5bee3f6a02794cdc60882941841",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts": "0bc58a45baadfb134416f35a0a9d49bd964afb52ed93f695f30e581d33367356",
+        "src/rules/journey/journey-committed-purge-state.ts": "6ca6395779a1f8745296c04b34a35c402813d4c3cbc24ad9d7c4f346fa2d31a2"
+      },
+      "localQueue": "No lock or native gate queue; measured wrapper includes prepare/check/asset restoration.",
+      "pid": 36127,
+      "pgid": 36127,
+      "exit": 0,
+      "endUtc": "2026-10-15T07:48:55.197451+00:00",
+      "wallS": 10.368744958017487,
+      "cpuUserS": 9.837927,
+      "cpuSystemS": 3.793302,
+      "maxRss": 869564416,
+      "hostLoadEnd": [
+        13.4482421875,
+        11.333984375,
+        11.923828125
+      ]
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-15T07:49:10.306577+00:00",
+      "hostLoadStart": [
+        11.7421875,
+        11.05615234375,
+        11.8134765625
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "b8c6567e466721a2cc09f2b4b817203bf98db8284a768da9285c0b74e5600298",
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c9d3e59dba648b70535aaf34de1e6bd7be6758822f9fc45ade6690ac3732acad",
+        "src/rules/journey/journey-purge-prohibition.ts": "ee5aa84094919beb59196b90d20c21fdacfe5e4a0329e98dc6c0753b56d8c877",
+        "src/rules/journey/lifecycle.ts": "09477dc3eccb407bb3a38c1c3482c74d14c9a9117288c7b7ebdd4d0d5bbb69e8",
+        "src/rules/reducer.ts": "15f4786beffaa448dd69558ab167464143e4e250cd13ba296dafca33bac9d586",
+        "src/rules/replay/replay.ts": "8d5ee523ef5fb1f6b7800a73a6468d0711defbba036607422737eb3e7c448398",
+        "src/types/journey.ts": "bc61fdbd111ad0df6e9dbb60571f05839f3dc18c15378914de5d1f415ac55f24",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.732-1.md": "ba81e7a5d9eb773271d730d9df31261a2ddff5bee3f6a02794cdc60882941841",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts": "0bc58a45baadfb134416f35a0a9d49bd964afb52ed93f695f30e581d33367356",
+        "src/rules/journey/journey-committed-purge-state.ts": "6ca6395779a1f8745296c04b34a35c402813d4c3cbc24ad9d7c4f346fa2d31a2"
+      },
+      "localQueue": "No lock or native gate queue; measured wrapper includes prepare/check/asset restoration.",
+      "pid": 51994,
+      "pgid": 51994,
+      "exit": 0,
+      "endUtc": "2026-10-15T07:49:48.444477+00:00",
+      "wallS": 38.13700791698648,
+      "cpuUserS": 84.848957,
+      "cpuSystemS": 11.020102,
+      "maxRss": 2602844160,
+      "hostLoadEnd": [
+        9.732421875,
+        10.66064453125,
+        11.64013671875
+      ]
+    },
+    "focused-final2": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts",
+        "src/rules/journey/gamble/four-suit-reprise.test.ts",
+        "src/rules/journey/journey-purge.test.ts",
+        "src/rules/journey/journey-purge-prohibition.test.ts",
+        "src/rules/journey/lifecycle.test.ts",
+        "src/rules/replay/replay.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "startUtc": "2026-10-15T07:50:18.687089+00:00",
+      "hostLoadStart": [
+        8.697265625,
+        10.298828125,
+        11.47314453125
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "b8c6567e466721a2cc09f2b4b817203bf98db8284a768da9285c0b74e5600298",
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c9d3e59dba648b70535aaf34de1e6bd7be6758822f9fc45ade6690ac3732acad",
+        "src/rules/journey/journey-purge-prohibition.ts": "ee5aa84094919beb59196b90d20c21fdacfe5e4a0329e98dc6c0753b56d8c877",
+        "src/rules/journey/lifecycle.ts": "09477dc3eccb407bb3a38c1c3482c74d14c9a9117288c7b7ebdd4d0d5bbb69e8",
+        "src/rules/reducer.ts": "15f4786beffaa448dd69558ab167464143e4e250cd13ba296dafca33bac9d586",
+        "src/rules/replay/replay.ts": "8d5ee523ef5fb1f6b7800a73a6468d0711defbba036607422737eb3e7c448398",
+        "src/types/journey.ts": "bc61fdbd111ad0df6e9dbb60571f05839f3dc18c15378914de5d1f415ac55f24",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.732-1.md": "ba81e7a5d9eb773271d730d9df31261a2ddff5bee3f6a02794cdc60882941841",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts": "21683550bf2f3f60058312dadae83ba76b6093ec3f637c79a90d3de76ce3c775",
+        "src/rules/journey/journey-committed-purge-state.ts": "6ca6395779a1f8745296c04b34a35c402813d4c3cbc24ad9d7c4f346fa2d31a2"
+      },
+      "localQueue": "No lock or native gate queue; measured wrapper includes prepare/check/asset restoration.",
+      "pid": 56998,
+      "pgid": 56998,
+      "exit": 0,
+      "endUtc": "2026-10-15T07:50:25.044701+00:00",
+      "wallS": 6.357383958005812,
+      "cpuUserS": 8.816011,
+      "cpuSystemS": 2.648494,
+      "maxRss": 883425280,
+      "hostLoadEnd": [
+        8.41650390625,
+        10.18896484375,
+        11.42041015625
+      ]
+    },
+    "review-final2": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-15T07:51:28.463618+00:00",
+      "hostLoadStart": [
+        5.76123046875,
+        9.11669921875,
+        10.9345703125
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "b8c6567e466721a2cc09f2b4b817203bf98db8284a768da9285c0b74e5600298",
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c9d3e59dba648b70535aaf34de1e6bd7be6758822f9fc45ade6690ac3732acad",
+        "src/rules/journey/journey-purge-prohibition.ts": "ee5aa84094919beb59196b90d20c21fdacfe5e4a0329e98dc6c0753b56d8c877",
+        "src/rules/journey/lifecycle.ts": "09477dc3eccb407bb3a38c1c3482c74d14c9a9117288c7b7ebdd4d0d5bbb69e8",
+        "src/rules/reducer.ts": "15f4786beffaa448dd69558ab167464143e4e250cd13ba296dafca33bac9d586",
+        "src/rules/replay/replay.ts": "8d5ee523ef5fb1f6b7800a73a6468d0711defbba036607422737eb3e7c448398",
+        "src/types/journey.ts": "bc61fdbd111ad0df6e9dbb60571f05839f3dc18c15378914de5d1f415ac55f24",
+        "docs/plan/evidence/friction/hv-umm2.732.json": "bcc63f1582e5ac96405cb824ec31c80e6dba0b44c9e94a0044ea327cdb7a3c88",
+        "docs/plan/evidence/measurements/hv-umm2.732.json": "b8873507bde8d34d271d918b079906b9f7cfdc4c301725eee566056e4729f49a",
+        "docs/plan/evidence/measurements/hv-umm2.732.md": "1303d254049d7d878f2996f747a691fcb2dde8c623c4c3aff58ed31da24b7f55",
+        "docs/plan/evidence/pre-existing/hv-umm2.732.md": "6189cec6c6036862402b1002c062e180a5569210d3d65e55c1519e8ee3f5ced8",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.732-1.md": "ba81e7a5d9eb773271d730d9df31261a2ddff5bee3f6a02794cdc60882941841",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts": "21683550bf2f3f60058312dadae83ba76b6093ec3f637c79a90d3de76ce3c775",
+        "src/rules/journey/journey-committed-purge-state.ts": "6ca6395779a1f8745296c04b34a35c402813d4c3cbc24ad9d7c4f346fa2d31a2"
+      },
+      "localQueue": "No lock or native gate queue; measured wrapper includes prepare/check/asset restoration.",
+      "pid": 61788,
+      "pgid": 61788,
+      "exit": 1,
+      "endUtc": "2026-10-15T07:51:59.756026+00:00",
+      "wallS": 31.29177712503588,
+      "cpuUserS": 80.666133,
+      "cpuSystemS": 8.745509,
+      "maxRss": 2638233600,
+      "hostLoadEnd": [
+        6.271484375,
+        8.86669921875,
+        10.7685546875
+      ]
+    },
+    "review-final3": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-15T07:52:39.377533+00:00",
+      "hostLoadStart": [
+        6.04833984375,
+        8.54296875,
+        10.57373046875
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "b8c6567e466721a2cc09f2b4b817203bf98db8284a768da9285c0b74e5600298",
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c9d3e59dba648b70535aaf34de1e6bd7be6758822f9fc45ade6690ac3732acad",
+        "src/rules/journey/journey-purge-prohibition.ts": "ee5aa84094919beb59196b90d20c21fdacfe5e4a0329e98dc6c0753b56d8c877",
+        "src/rules/journey/lifecycle.ts": "09477dc3eccb407bb3a38c1c3482c74d14c9a9117288c7b7ebdd4d0d5bbb69e8",
+        "src/rules/reducer.ts": "15f4786beffaa448dd69558ab167464143e4e250cd13ba296dafca33bac9d586",
+        "src/rules/replay/replay.ts": "8d5ee523ef5fb1f6b7800a73a6468d0711defbba036607422737eb3e7c448398",
+        "src/types/journey.ts": "bc61fdbd111ad0df6e9dbb60571f05839f3dc18c15378914de5d1f415ac55f24",
+        "docs/plan/evidence/friction/hv-umm2.732.json": "bcc63f1582e5ac96405cb824ec31c80e6dba0b44c9e94a0044ea327cdb7a3c88",
+        "docs/plan/evidence/measurements/hv-umm2.732.json": "b8873507bde8d34d271d918b079906b9f7cfdc4c301725eee566056e4729f49a",
+        "docs/plan/evidence/measurements/hv-umm2.732.md": "1303d254049d7d878f2996f747a691fcb2dde8c623c4c3aff58ed31da24b7f55",
+        "docs/plan/evidence/pre-existing/hv-umm2.732.md": "267436ffec79f4382c6e19747c1e8eea161e1a993473b7dcb0f12167efe832a1",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.732-1.md": "ba81e7a5d9eb773271d730d9df31261a2ddff5bee3f6a02794cdc60882941841",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05",
+        "src/rules/journey/journey-committed-purge-state.ts": "6ca6395779a1f8745296c04b34a35c402813d4c3cbc24ad9d7c4f346fa2d31a2"
+      },
+      "localQueue": "No lock or native gate queue; measured wrapper includes prepare/check/asset restoration.",
+      "pid": 66475,
+      "pgid": 66475,
+      "exit": 0,
+      "endUtc": "2026-10-15T07:53:17.166826+00:00",
+      "wallS": 37.78856508404715,
+      "cpuUserS": 83.798589,
+      "cpuSystemS": 10.939068,
+      "maxRss": 2599059456,
+      "hostLoadEnd": [
+        7.146484375,
+        8.53076171875,
+        10.47607421875
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUtc": "2026-10-15T07:53:29.717775+00:00",
+      "hostLoadStart": [
+        6.85498046875,
+        8.404296875,
+        10.39697265625
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "b8c6567e466721a2cc09f2b4b817203bf98db8284a768da9285c0b74e5600298",
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c9d3e59dba648b70535aaf34de1e6bd7be6758822f9fc45ade6690ac3732acad",
+        "src/rules/journey/journey-purge-prohibition.ts": "ee5aa84094919beb59196b90d20c21fdacfe5e4a0329e98dc6c0753b56d8c877",
+        "src/rules/journey/lifecycle.ts": "09477dc3eccb407bb3a38c1c3482c74d14c9a9117288c7b7ebdd4d0d5bbb69e8",
+        "src/rules/reducer.ts": "15f4786beffaa448dd69558ab167464143e4e250cd13ba296dafca33bac9d586",
+        "src/rules/replay/replay.ts": "8d5ee523ef5fb1f6b7800a73a6468d0711defbba036607422737eb3e7c448398",
+        "src/types/journey.ts": "bc61fdbd111ad0df6e9dbb60571f05839f3dc18c15378914de5d1f415ac55f24",
+        "docs/plan/evidence/friction/hv-umm2.732.json": "bcc63f1582e5ac96405cb824ec31c80e6dba0b44c9e94a0044ea327cdb7a3c88",
+        "docs/plan/evidence/measurements/hv-umm2.732.json": "b8873507bde8d34d271d918b079906b9f7cfdc4c301725eee566056e4729f49a",
+        "docs/plan/evidence/measurements/hv-umm2.732.md": "1303d254049d7d878f2996f747a691fcb2dde8c623c4c3aff58ed31da24b7f55",
+        "docs/plan/evidence/pre-existing/hv-umm2.732.md": "267436ffec79f4382c6e19747c1e8eea161e1a993473b7dcb0f12167efe832a1",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.732-1.md": "ba81e7a5d9eb773271d730d9df31261a2ddff5bee3f6a02794cdc60882941841",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05",
+        "src/rules/journey/journey-committed-purge-state.ts": "6ca6395779a1f8745296c04b34a35c402813d4c3cbc24ad9d7c4f346fa2d31a2"
+      },
+      "localQueue": "No lock or native gate queue; measured wrapper includes prepare/check/asset restoration.",
+      "pid": 69734,
+      "pgid": 69734,
+      "exit": 0,
+      "endUtc": "2026-10-15T07:53:37.147242+00:00",
+      "wallS": 7.429089082987048,
+      "cpuUserS": 4.302067,
+      "cpuSystemS": 2.2494,
+      "maxRss": 574537728,
+      "hostLoadEnd": [
+        7.0263671875,
+        8.4140625,
+        10.388671875
+      ]
+    }
+  },
+  "sourcePreservation": {
+    "base": "443cd6806bbe3b9f60af67acaca26a12b3bacf1e",
+    "finishTransitionByteIdentical": true,
+    "finishTransitionSha256": "a4460fdab16743f852f80923891c902bea7c7886dbaf65b2e3527fb80624148d",
+    "readOnlyBodiesFullFilesUnchanged": {
+      "src/rules/invariants.ts": true,
+      "src/session/game-log.ts": true,
+      "src/session/local-game.ts": true,
+      "src/session/actions.ts": true,
+      "src/rules/events.ts": true,
+      "src/session/providers/site-provider.ts": true,
+      "src/content/dreamsigns/tortoise-shell-e377c3ed.ts": true,
+      "src/rules/journey/journey-purge-prohibition.test.ts": true,
+      "src/rules/journey/gamble/four-suit-reprise.test.ts": true,
+      "src/rules/journey/journey-purge.test.ts": true,
+      "src/rules/journey/sites.ts": true,
+      "src/rules/journey/modifier-registry.ts": true
+    },
+    "markerTunables": "No fixed suit or round cap in new guard; canonical playing deck supplies allowed card values."
+  },
+  "scope": "Pure registered-source committed Four-Suit settlement capability; no production source, UI, provider or browser changes.",
+  "resources": {
+    "at": "2026-10-15T07:54:50.911585+00:00",
+    "ownedCheckPgids": [
+      12552,
+      36127,
+      51994,
+      56998,
+      61788,
+      66475,
+      69734,
+      84540,
+      86803,
+      89008
+    ],
+    "matchingLiveProcesses": [],
+    "noServerBrowserOrProviderProcessLaunched": true,
+    "qualification": "Check wrappers terminal; all observed owned child groups absent. No native/heavy lock acquired."
+  },
+  "qualifications": [
+    "The public red-before regression fails at expected applied versus actual bounced on delivered source, before API edits.",
+    "First expanded test failure is a local parameterized-array caller mistake, corrected before owning99pass.",
+    "First ordinary review reported four local lint errors; its typechecks/cycles/tests passed. Later review fixes them.",
+    "Last source epoch strengthens gain/loss to public intents and adds contained later-observer failure/retry; rerun aggregate records follow.",
+    "Early wrappers did not capture child CPU; later run-check receipts capture resource.getrusage children. No CPU is fabricated for early checks.",
+    "No performance comparison; wrapper includes prepare/check/asset restoration and host load.",
+    "Canonical codec body is tested with an explicitly mocked synthetic journey registry export; production codec API is unchanged.",
+    "Optional historical marker guard is a bounded addition within existing architecture; local review:full is not planned under AGENTS.",
+    "Original271 retains actual source authoring and truthful Gamble presentation and browser acceptance.",
+    "Final ordinary-review test epoch passed6769 tests but initially failed identity lint on the synthetic error callback annotation; using the actual JourneyModifierDefinition callback type settled it in review-final3. No production behavior changed in that correction."
+  ],
+  "finalChecks": {
+    "focused": "101 tests /7 files pass;6.357383958s wrapper before final callback-type-only correction",
+    "ordinaryReview": "6769 tests /81 files plus types/lint/cycles/schema pass on final source;37.788565084s wrapper",
+    "knip": "pass;7.429089083s wrapper",
+    "additionalRawReceipts": [
+      "/tmp/dreamtides-732-01a13a7a/schema.json",
+      "/tmp/dreamtides-732-01a13a7a/whitespace.json"
+    ]
+  },
+  "parentPrecommitVerificationSha256": "cafae52a9e1a3de679fa62c3f45665e701b49e30f9b6013440eef5be72f8354d"
+}

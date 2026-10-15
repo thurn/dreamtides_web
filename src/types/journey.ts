@@ -192,9 +192,24 @@ export interface JourneyPurgeOccurrence {
   readonly cardId?: CardId;
 }
 
+/** Historical physical source responsible for one prohibited instruction. */
+export interface JourneyPurgePreventionSource {
+  readonly dreamsignId: DreamsignId;
+  readonly heldIndex: number;
+}
+
+/** A committed instruction prevented without producing an actual purge. */
+export interface JourneyPreventedPurge extends JourneyPurgePreventionSource {
+  readonly entryId: DeckEntryId;
+  readonly cardId: CardId;
+  readonly siteId: SiteId;
+  readonly shuffleCommitment: ShuffleCommitment;
+}
+
 export interface JourneyPurgeTransition {
   readonly journey: JourneyState;
   readonly purges: readonly JourneyPurgeOccurrence[];
+  readonly preventedPurges?: readonly JourneyPreventedPurge[];
 }
 
 /** Printed clauses applied to newly gained physical journey entries. */
@@ -1258,6 +1273,8 @@ export interface FourSuitRepriseRound {
   essenceGained: number;
   duplicatedEntryId?: DeckEntryId;
   chosenTransfiguration?: TransfigurationType;
+  /** Historical settlement attribution, independent of later holdings/deck changes. */
+  purgePreventedBy?: JourneyPurgePreventionSource;
 }
 
 /** Shared, replayable runtime for one Four-Suit Reprise visit. */
