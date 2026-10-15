@@ -1,0 +1,1168 @@
+{
+  "bead": "hv-umm2.736",
+  "phase": 5,
+  "base": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+  "source": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+  "previousRetrospective": "hv-umm2.720",
+  "cohort": [
+    "hv-umm2.248",
+    "hv-umm2.251",
+    "hv-umm2.253",
+    "hv-umm2.255",
+    "hv-umm2.257",
+    "hv-umm2.258",
+    "hv-umm2.272",
+    "hv-umm2.621",
+    "hv-umm2.624",
+    "hv-umm2.625",
+    "hv-umm2.629",
+    "hv-umm2.718",
+    "hv-umm2.720",
+    "hv-umm2.721",
+    "hv-umm2.722",
+    "hv-umm2.723",
+    "hv-umm2.724",
+    "hv-umm2.725",
+    "hv-umm2.726",
+    "hv-umm2.727",
+    "hv-umm2.728",
+    "hv-umm2.729",
+    "hv-umm2.731",
+    "hv-umm2.732",
+    "hv-umm2.733",
+    "hv-umm2.734",
+    "hv-umm2.735"
+  ],
+  "inputManifest": {
+    "path": "artifacts/qa/hv-umm2.736/receipts/audit/input-manifest.json",
+    "sha256": "1ae6912d00623aa82b56331d8008c585c87e0944bb84526e49fd47933d0fddc0",
+    "inputs": 239,
+    "sourceInputs": 110
+  },
+  "auditResult": {
+    "path": "artifacts/qa/hv-umm2.736/receipts/audit/audit-result.json",
+    "sha256": "4b5e7b080ba55028bb43bf47fcc7e9ccf3bdd2348aafe42492919ba36eff2e67"
+  },
+  "clock": {
+    "start": "2026-10-15T09:23:43.694019+00:00",
+    "actualSageDispatch": "2026-10-15T09:26:11.213Z",
+    "sampling": "UNKNOWN; conservative gross elapsed includes preparation, waits, checks and packaging; not productive CPU.",
+    "end": "2026-10-15T09:38:14.380582+00:00",
+    "implementMin": 14.511442716666666
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "outcomes": {
+    "nativeClosedCompleted": 26,
+    "nativeInProgress": 1,
+    "finalPromotedCleaned": 27,
+    "exactBeadTrailers": 26,
+    "qualifiedOwnFrictionNativeFallback": 1,
+    "passingFreshVotingSteps": 54,
+    "allOwnCandidates": 34,
+    "historicalMergeConflict": 6,
+    "historicalCanceled": 1,
+    "coreReviewRequired": 17,
+    "coreReviewCompleteNativeAccounts": 16,
+    "coreReviewPending": [
+      "hv-umm2.629"
+    ]
+  },
+  "costs": {
+    "gate": {
+      "n": 27,
+      "medianS": 102.5,
+      "minS": 22.918,
+      "maxS": 117.034,
+      "over90S": 23,
+      "componentMedianS": {
+        "dependencies": 4.877,
+        "review-gate": 97.296
+      },
+      "targetS": 60,
+      "selection": "Final certified fresh gate step sums only; excludes queues, authorization, promotion, release; mixed source/load/related-test selections."
+    },
+    "release": {
+      "n": 14,
+      "itemIDs": [
+        "01a13e43-a8b6-7d62-bc04-b84d608f0204",
+        "01a13e49-94f6-7793-96a3-a510828d01b4",
+        "01a13e5a-9932-7852-bd5d-858b544e9c16",
+        "01a13e63-a574-7df1-8bc3-8887d8e9084b",
+        "01a13e69-4c71-7211-9ccc-a4cb3d4ddfb2",
+        "01a13e71-1d65-7462-9d7a-0b7c42ff04b8",
+        "01a13e73-ec7c-7781-94f1-87e0359b1ef2",
+        "01a13e7f-fb41-7b02-b53c-3a1091a892d8",
+        "01a13e85-eb6d-70b2-aed5-10a7e755c83f",
+        "01a13e9a-3763-7580-bfe2-ea05b2b7aeff",
+        "01a13ebd-7ef2-78d1-938e-44c4e97e1aa2",
+        "01a13ec5-d69f-77a2-a6bb-e57424f31b87",
+        "01a13eca-0b14-7672-bd3a-81b395cdb692",
+        "01a13ed0-efd9-7482-a0f0-02e9d604a243"
+      ],
+      "medianS": 466.4015,
+      "minS": 434.879,
+      "maxS": 664.955,
+      "over450S": 10,
+      "componentMedianS": {
+        "dependencies": 4.692,
+        "review-full": 123.2225,
+        "fuzz": 337.199
+      },
+      "targetS": 300,
+      "selection": "Exact14passed event item IDs matched frozen release-status run rows; not entire since720 interval. Fuzz is200games; host/CPU comparable-load evidence unknown."
+    },
+    "literalStoredLocalKeys": {
+      "review": {
+        "n": 21,
+        "medianS": 64.07451474998379,
+        "minS": 0.3136733749997802,
+        "maxS": 90.7004951669951
+      },
+      "focused": {
+        "n": 15,
+        "medianS": 10.40528520900989,
+        "minS": 5.148922041989863,
+        "maxS": 83.58604979194934
+      },
+      "knip": {
+        "n": 20,
+        "medianS": 6.953454416507157,
+        "minS": 3.934616875019856,
+        "maxS": 8.95976995798992
+      }
+    },
+    "localSelectionQualification": "Literal key-name sample; excludes suffix-named final/repaired attempts, includes aggregates/mixed epochs and possibly failed attempts. These are descriptive stored walls, not final single-file or comparable-load benchmarks.",
+    "grossImplementationMinutesSum": 1002.1898403499999,
+    "recordHostLoadRange": [
+      3.84,
+      19.92138671875
+    ],
+    "grossScope": "Overlapping peers/prerequisites; not additive project elapsed, isolated idle, model time or CPU. Per-command samples reach higher load than record-level scalar range.",
+    "D19": {
+      "targetSuiteS": 60,
+      "workers": 2,
+      "lowLoadCurrentCompliance": "unestablished in this bounded audit",
+      "observedMisses": [
+        "624 original native teststage78.1s",
+        "722 Vitest77.51s/native teststage78.2s at observed shared load"
+      ],
+      "canonicalGate": "hv-umm2.46 open/unassigned captured during736 filing; description requires metrics inclD19 and release==staging; existing526 fuzz-budget examination note retained.",
+      "fileCountBudget": "Configured entrypoint counts are observational; wall-time and jsdom budgets follow the binding metrics revision.",
+      "budgetRevision": null
+    },
+    "comparison": "720 gate101.973s/release469.855s versus current102.5/466.4015. Different source, selections, loads/caches and incomplete history prevent causal performance inference. Existing gate60/release300/defaultfuzz60/review per-class/focused10 targets remain binding."
+  },
+  "boundedHistory": {
+    "events": 500,
+    "firstSequence": 31376,
+    "lastSequence": 31875,
+    "firstAt": "2026-10-15T06:34:41.144298Z",
+    "lastAt": "2026-10-15T09:23:37.754310Z",
+    "promotions": 18,
+    "releasePasses": 14,
+    "releaseSupersessions": 4,
+    "observedReleaseFailures": 0,
+    "qualification": "Starts after predecessor720 closed; does not span all cohort delivery or full since720 interval."
+  },
+  "frozenRelease": {
+    "stagingOID": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+    "releaseOID": "89d1b0d9bca4d3177e8a8256e7fd05712e57be16",
+    "state": "pending",
+    "lagCommits": 2,
+    "holds": [],
+    "promotionPause": null,
+    "activeTargetOID": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+    "doctorHealthy": true,
+    "publicationClaim": false
+  },
+  "reviewQualification": "Native owner completion/scope/finding dispositions attributed as evidence. No fresh review of implementation and no audit/replay of every raw reviewer tool transcript. Pending629 remains owed, not waived.",
+  "pendingReview": [
+    "hv-umm2.629"
+  ],
+  "recurringCauseDispositions": [
+    {
+      "cause": "ordinary additive integration collisions",
+      "evidence": [
+        "718 two cycles",
+        "624 static message arm",
+        "723 initialization guard",
+        "728/729 lifecycle+replay guards"
+      ],
+      "existingHome": "hv-umm2.713/introspection integration-conflict, existing rollback/park/update/reapply policy",
+      "disposition": "Six historical conflict candidates are terminal/unapproved; all final replacements certified. Distinct composable bodies, no proved shared unresolved defect or filename-only edge."
+    },
+    {
+      "cause": "heavy/gate waits and mixed host load",
+      "evidence": [
+        "251 launch-to-acquisition354.027718s",
+        "272 full pre-execution509.638989s, unsupportedweighted outer515.561479s",
+        "718 combined full queue+launch461.191089s",
+        "724 queue152.889827s/execution126.046073s",
+        "255 canceledwaiter170.345403s"
+      ],
+      "existingHome": "D17, hv-lf7t heavy-slot-wait, host-load-noise/hv-umm2.522, gate46",
+      "disposition": "Preserve nested scopes and intentional serialization; no same-load scheduler/throughput defect established; no budget waiver."
+    },
+    {
+      "cause": "browser callers/readiness and provider incident",
+      "evidence": [
+        "253 readiness/rail/actor/Ending corrections + unknownERR_ABORTED",
+        "625 selector/label/reload caller corrections",
+        "718 disabled control",
+        "728 zeroheight wait",
+        "733 own Buffer ReferenceError provider death"
+      ],
+      "existingHome": "hv-umm2.308/332/391/428 and bounded incident workflow",
+      "disposition": "Distinct corrected caller causes and one settled own callback incident; no established common unresolved runner/provider defect. Actual product restored-runtime loop separately repaired734."
+    },
+    {
+      "cause": "semantic gaps and preexisting product issues",
+      "evidence": [
+        "251 Flash prerequisite718",
+        "718 hidden continuation/passive loop classification",
+        "723 reference identity repaired731",
+        "724 audit discovery protected mandatory result repaired732",
+        "732 copying repaired733;733 adapter repaired734 and log attribution repaired735"
+      ],
+      "existingHome": "hv-umm2.558 missing-primitive/manual clause audit and exact delivered repairs",
+      "disposition": "Distinct source-backed capabilities/repairs. Original269/270/271/273/279 final acceptance remains assigned. No duplicate issue or activation waiver."
+    },
+    {
+      "cause": "local authored check failures",
+      "evidence": [
+        "fixture/type/lint corrections across cohort",
+        "621 unchanged tournament timeout with unknown cause"
+      ],
+      "existingHome": "local-edit-correction existing disposition,621 own preexisting note",
+      "disposition": "Failed attempts/source epochs remain; one tournament timeout does not establish recurring runtime/load cause."
+    },
+    {
+      "cause": "measurement provenance corrections",
+      "evidence": [
+        "722 dispatch substring ambiguity corrected726",
+        "253 module-vs-entrypoint corrected in629",
+        "728 finalfocused copied prior count native correction"
+      ],
+      "existingHome": "existing next-genuine-bead/retrospective correction protocol",
+      "disposition": "Different source mechanisms, bounded corrections retained; no shared unhandled generator defect proven. Propose only exact728 evidence correction below."
+    },
+    {
+      "cause": "review ordering and truncation",
+      "evidence": [
+        "272 added prepromotion hold repaired same-task;17.621433min gross",
+        "624/723/729 interrupted oldsource reviews unaccepted",
+        "final review truncated inputs reread and native dispositions retained"
+      ],
+      "existingHome": "current asynchronous fresh fork-none review and required source/range completion procedure",
+      "disposition": "One owner-created hold already repaired; native scope repair accounts retained.629 active review debt stays with owner; no second canonical review duty."
+    }
+  ],
+  "filedImprovementIDs": [],
+  "triggerDispositionLines": [],
+  "budgetRevision": null,
+  "acceptanceWaiver": false,
+  "historicalCorrections": [
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.728.json",
+      "jsonPointer": "/integration/validation",
+      "before": "Focused6 passes53tests4files; integrated review8/Knip4 terminal green. Actual counts and raw epochs in receipts. package.json/package-lock identical between old/newbases; noinstall.",
+      "after": "Focused6 passes54tests4files; integrated review8/Knip4 terminal green. Actual counts and raw epochs in receipts. package.json/package-lock identical between old/newbases; noinstall."
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.728.md",
+      "locator": "Final integration paragraph beginning Integration uses fresh observed staging base d0710c77",
+      "before": "Focused6 passes53;",
+      "after": "Focused6 passes54;"
+    }
+  ],
+  "gate732Supplement": {
+    "source": {
+      "candidate": "01a13e95-18f7-7623-b895-057706128542",
+      "sourceOID": "e47194c82c8851d096389ccf3665a18992c94e50",
+      "exactBeadTrailer": false,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": true,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e96-9ff0-7ea0-9887-c163f8f81ad8",
+      "testedOID": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4951,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 92753,
+          "reusedFrom": null
+        }
+      ]
+    },
+    "base": "443cd6806bbe3b9f60af67acaca26a12b3bacf1e",
+    "nativeNoteAcknowledged": true,
+    "gate": "hv-umm2.46",
+    "disposition": "Exactsource supplement preserves completephasegate review inventory; one observation, no recurringcause inferred."
+  },
+  "cohortDelivery": [
+    {
+      "bead": "hv-umm2.248",
+      "candidate": "01a13e27-0993-7a80-8a64-00482db55c24",
+      "sourceOID": "995dbf7b18f7130a20177d2619875ca17f4a40a3",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e28-a05d-79d3-b970-be770b32154b",
+      "testedOID": "4c81581482ddd992a346f145d2073771fcc10626",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4877,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 97123,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.251",
+      "candidate": "01a13e45-edb5-7d90-b17c-b8a87ae0cf43",
+      "sourceOID": "08430e811e0b9f8cff9af8ba23908da46f1ff0ff",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e47-d99a-7582-91f6-29a0d2eb7f72",
+      "testedOID": "0413252fa709666342810f58ffd5f30d987848ed",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4729,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 96005,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.253",
+      "candidate": "01a13e7c-d127-7ab1-aa8d-0cbd32a60b3e",
+      "sourceOID": "a69ea8afb35a820a34d0ed565af0e1c68ec1ee26",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e7e-57d6-7761-adbc-10003af02d67",
+      "testedOID": "9f07b24c712e25a3de74ba37886c8291304021eb",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4624,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 93371,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.255",
+      "candidate": "01a13e45-d795-7172-ba81-73b6f1775153",
+      "sourceOID": "0cdf7a1b33c0a353250cabeb5f0246ca4e2d93aa",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e49-7fe1-7040-9ccb-05b05d6bf5e1",
+      "testedOID": "b9439235000e80c0db27a5f854b1f3daeb990b15",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 5088,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 97296,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.257",
+      "candidate": "01a13e2c-f9a5-7862-8036-e1d100a33f69",
+      "sourceOID": "5222d1e42003c60dc1bc2993d0adc1599fcafd7a",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e2e-bf50-70c3-a463-d1e1d6af80a4",
+      "testedOID": "544f35625b37e3ec21092f7e1c45cc2ee494ec8d",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 5813,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 104066,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.258",
+      "candidate": "01a13e35-db56-7a12-9fd7-d804ff6f3127",
+      "sourceOID": "12054e23c8b7a9edf5409145ffd7cab208585a11",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e37-b026-7fa3-8ff1-1782eec27136",
+      "testedOID": "ffa3ee749ce61bc305385f8511d4f4def256d906",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 5870,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 107834,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.272",
+      "candidate": "01a13e62-0370-7af2-97ed-dc32d5d401a9",
+      "sourceOID": "61a0ab0ce9f4faccd3dbcb8b6237bfb1be6fdb2e",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e63-8a3a-7e31-a651-40269cccf6ec",
+      "testedOID": "0efc1dbc74ce12cfed73a4cbfc1a6a1feca66227",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 5080,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 92505,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.621",
+      "candidate": "01a13e00-bcff-7580-a050-364f8f4486fb",
+      "sourceOID": "0138fe7c0508a55bbb6c3490d1a156f7bdc2f09d",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e02-765e-7580-89e8-7e1b60371b14",
+      "testedOID": "2685642bc00b88fa0f78a30e48766820e4b53bea",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 5086,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 105468,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.624",
+      "candidate": "01a13e1e-2cfb-7f50-91ae-5f8a9956fe6e",
+      "sourceOID": "ee6725e9a523b879d7704903a5d4d059427a0e71",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e1f-fec4-7590-aa5b-66e6152f4e07",
+      "testedOID": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4735,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 112299,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.625",
+      "candidate": "01a13e3e-b6e9-7c30-8466-e180b0fe17b8",
+      "sourceOID": "0aad0f5b9741c8e965363aeff8458f19ace323e6",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e43-925b-7dd3-a22d-51cfd375db22",
+      "testedOID": "86d87f649b3f4b61b0743c81be9ba13cd3f44340",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4698,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 98959,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.629",
+      "candidate": "01a13ecf-23a1-7ad2-ab3c-317528a5db20",
+      "sourceOID": "3659b61aabb692cf51401ae259d19b59a472d34b",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13ed0-d63b-76b2-997d-6894b9a4fb7c",
+      "testedOID": "89d1b0d9bca4d3177e8a8256e7fd05712e57be16",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4829,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 104391,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.718",
+      "candidate": "01a13e2d-cea2-76b0-874e-a293394fe8d5",
+      "sourceOID": "b83775c2256d03b0076258fa5159e796dac47ffb",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e30-8f6d-7b40-b092-317df9b471d1",
+      "testedOID": "657af2411da4a1cf685955ed2ae0033ea3de5a6d",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4657,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 107683,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.720",
+      "candidate": "01a13e0c-aa3a-7133-8f5c-86c89ca89171",
+      "sourceOID": "1ba2f2a0d13700394c794a2f72354fc548024b59",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e0d-14f2-7b92-9fd5-6d0e2d0b2217",
+      "testedOID": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4961,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 20508,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.721",
+      "candidate": "01a13e16-2c2a-7a61-aa75-3503ebdf33a6",
+      "sourceOID": "f16b1e0b439b8a302ae24fd46d7c9840b53bc053",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e17-ed82-7f40-a3ef-5f472813d9d9",
+      "testedOID": "97e0dd92e632615b042403b81a3de39d8e64c4df",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4686,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 108697,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.722",
+      "candidate": "01a13e59-0bfc-77b3-b12f-97601f785ef7",
+      "sourceOID": "341665a62958e22ad8dce7bb79648bced1f66d78",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e5a-820e-7a72-8042-d06243bee700",
+      "testedOID": "a0b763956d914cfa72ae1c6281a943d671c20a2d",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4845,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 88906,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.723",
+      "candidate": "01a13e6c-f532-7dd0-a484-a49ae0f4e302",
+      "sourceOID": "e37d8b14139c70a2f288cfde2e10237f27551ab6",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e6e-954a-7451-b1c1-bb4364b1fcb6",
+      "testedOID": "f8bc1808990cdee46c489d53064a32c06cab8c90",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4877,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 98764,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.724",
+      "candidate": "01a13e6e-5281-7d33-9c8c-b87cbdf1536f",
+      "sourceOID": "db7660b7c7fcb1a81eae832692ef8e5938adf52e",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e70-3cbb-71d3-ad5f-bcde4cbc3233",
+      "testedOID": "b20556202d70b402c0d8241c531bab7c2ad4d74c",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 7240,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 95260,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.725",
+      "candidate": "01a13e72-0c7e-7cf3-9a6e-97b09bdc164b",
+      "sourceOID": "33ef44cf470c7f42ef4df0406a6429fbcf2da479",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e73-cecf-7ef0-aa50-ad71b39c25be",
+      "testedOID": "443cd6806bbe3b9f60af67acaca26a12b3bacf1e",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 5631,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 103749,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.726",
+      "candidate": "01a13e68-94d6-7560-8b3a-2e95e45748cb",
+      "sourceOID": "8b3a7de6cea30056b69facd269aba2665110e8a1",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e69-1727-7553-8f61-5e2db53bf99a",
+      "testedOID": "258e4aef339388a3ffd49fb21340c27ac9aab703",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 5404,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 19411,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.727",
+      "candidate": "01a13e7a-e7a2-79a0-87a6-e18d5174eff9",
+      "sourceOID": "6c89c26bd5680ae116572a04cb40208f3d8d9510",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e7c-8eee-7322-81e3-6a72b2f64624",
+      "testedOID": "0d3b3efb4cd7f92ce0ccac0dc238d9a94f93b0fc",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 5161,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 100751,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.728",
+      "candidate": "01a13ed8-0611-7b22-a641-b0f58a6b470e",
+      "sourceOID": "c79f06ff4c3729e515e6d7881222f105fec48baf",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13edc-9ae8-7ca0-bfe6-d82a9a0f9004",
+      "testedOID": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 5105,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 105088,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.729",
+      "candidate": "01a13ec4-1fe4-7682-b0a3-cef3e0533a16",
+      "sourceOID": "c473b087c652b8a3632adad77012af945bffc506",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13ec5-bab7-7900-ab65-b1d122e60551",
+      "testedOID": "f149da85cd83b311fd8f1ab9cfac6567e985711b",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 5633,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 96855,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.731",
+      "candidate": "01a13e84-4a23-7c92-a998-db8b015dcd54",
+      "sourceOID": "2d20e4ba414af2a3f03291f44d3076dfdb96ed9f",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e85-d4ad-7632-9941-3e1ae06c3aaa",
+      "testedOID": "70961cea27a860f1b901994ac6dc6a354a2d6e48",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4733,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 94299,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.732",
+      "candidate": "01a13e95-18f7-7623-b895-057706128542",
+      "sourceOID": "e47194c82c8851d096389ccf3665a18992c94e50",
+      "exactBeadTrailer": false,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": true,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13e96-9ff0-7ea0-9887-c163f8f81ad8",
+      "testedOID": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4951,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 92753,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.733",
+      "candidate": "01a13ec8-4243-7990-a4f3-1fa2e94c2c44",
+      "sourceOID": "772522d573cbd9a358b68335dd506259bba1c66e",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13ec9-f549-75a0-9ca8-f2d5535b5533",
+      "testedOID": "d0710c77c428f7e81665605ed543d047bf5131c4",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4851,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 101896,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.734",
+      "candidate": "01a13ebc-eaa8-76e0-aee7-bf141bca05ee",
+      "sourceOID": "7b81984ba2061e812f41b8a2a13039bd0adc4640",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13ebd-4c56-7661-81aa-cec03f62b910",
+      "testedOID": "7b81984ba2061e812f41b8a2a13039bd0adc4640",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4759,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 18159,
+          "reusedFrom": null
+        }
+      ]
+    },
+    {
+      "bead": "hv-umm2.735",
+      "candidate": "01a13ed9-ec03-74d3-80f2-f89460f98054",
+      "sourceOID": "009d3cdb20d9bad1ab8a6a9ccd5aaa2faa2739cd",
+      "exactBeadTrailer": true,
+      "fallbackOwnChangedFrictionAndExplicitNativeSourceCandidate": false,
+      "state": "promoted",
+      "cleanup": "completed",
+      "certificate": "01a13edc-feee-7fc1-bdb6-53c8953ff9a1",
+      "testedOID": "0348af6ecaea00888608025137ff6812345c721f",
+      "checkoutVerified": true,
+      "votingSteps": [
+        {
+          "name": "dependencies",
+          "exit": 0,
+          "elapsedMS": 4592,
+          "reusedFrom": null
+        },
+        {
+          "name": "review-gate",
+          "exit": 0,
+          "elapsedMS": 20086,
+          "reusedFrom": null
+        }
+      ]
+    }
+  ],
+  "parentVerification": "parent-source-evidence-verification.json",
+  "preparationDiagnostics": [
+    "Native status captures occurred once for34IDs; read parser first assumed nonnull buildset on conflict then required Bead trailer on732. Both read-only assumptions corrected from retained statuses; no mutation retry or foreign candidate attribution."
+  ],
+  "validation": {
+    "install": {
+      "label": "install",
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "start": "2026-10-15T09:22:51.187421+00:00",
+      "hostLoad": [
+        12.18505859375,
+        16.46044921875,
+        14.59423828125
+      ],
+      "pid": 15208,
+      "pgid": 15208,
+      "exit": 0,
+      "end": "2026-10-15T09:22:54.168186+00:00",
+      "wallS": 2.9805991660105065,
+      "actualWait": true,
+      "logSHA256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c",
+      "groupAbsent": true
+    },
+    "knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T09:36:13.779636+00:00",
+      "hostLoad": [
+        6.2080078125,
+        5.74365234375,
+        8.64111328125
+      ],
+      "pid": 56233,
+      "pgid": 56233,
+      "exit": 0,
+      "end": "2026-10-15T09:36:19.445242+00:00",
+      "wallS": 5.66550574998837,
+      "actualWait": true,
+      "logSHA256": "4bb8d08187a67f21a9d62fc43833a8333f6fd4e8659bb32b0be7b712fc131716",
+      "groupAbsent": true
+    },
+    "review": {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T09:36:10.215217+00:00",
+      "hostLoad": [
+        6.4873046875,
+        5.7900390625,
+        8.6748046875
+      ],
+      "pid": 56061,
+      "pgid": 56061,
+      "exit": 0,
+      "end": "2026-10-15T09:36:10.459324+00:00",
+      "wallS": 0.2440375000005588,
+      "actualWait": true,
+      "logSHA256": "77cdd903f63be8ea5e80928e52c896a9ccac332e21d933649894009084f9d623",
+      "groupAbsent": true
+    },
+    "schema": {
+      "label": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T09:36:22.170676+00:00",
+      "hostLoad": [
+        5.78759765625,
+        5.6689453125,
+        8.58056640625
+      ],
+      "pid": 56467,
+      "pgid": 56467,
+      "exit": 0,
+      "end": "2026-10-15T09:36:22.237814+00:00",
+      "wallS": 0.06703575002029538,
+      "actualWait": true,
+      "logSHA256": "0ff3433ad2227b589f25cf0f998869993b5da6d701ca26fdef8a12763cd6cfaa",
+      "groupAbsent": true
+    },
+    "triggers": {
+      "label": "triggers",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-15T09:36:22.263991+00:00",
+      "hostLoad": [
+        5.78759765625,
+        5.6689453125,
+        8.58056640625
+      ],
+      "pid": 56469,
+      "pgid": 56469,
+      "exit": 0,
+      "end": "2026-10-15T09:36:22.418484+00:00",
+      "wallS": 0.1544161660131067,
+      "actualWait": true,
+      "logSHA256": "1c7e3f2d838a763ae650fe0d61cc08513953cc19b015686bc301fbdcbb57d3f0",
+      "groupAbsent": true
+    },
+    "whitespace": {
+      "label": "whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "start": "2026-10-15T09:36:22.444683+00:00",
+      "hostLoad": [
+        5.78759765625,
+        5.6689453125,
+        8.58056640625
+      ],
+      "pid": 56491,
+      "pgid": 56491,
+      "exit": 0,
+      "end": "2026-10-15T09:36:22.454683+00:00",
+      "wallS": 0.009914875030517578,
+      "actualWait": true,
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "groupAbsent": true
+    }
+  },
+  "resources": {
+    "allRecordedGroupsAbsent": [
+      15208,
+      56233,
+      56061,
+      56467,
+      56469,
+      56491
+    ],
+    "sageTerminal": true,
+    "sageToolCalls": 37,
+    "sourceTestsMetricsDelta": 0,
+    "noBrowserServerHeavyProvider": true
+  }
+}
