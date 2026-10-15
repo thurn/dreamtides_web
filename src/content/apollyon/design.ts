@@ -1,7 +1,9 @@
 /** Provisional D6 specifications. Pair-authoring beads adopt and verify the live abilities. */
-import { activated, all, characterYouControl, conditionCardCounts, enemyCharacter, energy, exhaustSelf, randomIn, staticAbility, target } from "../../engine/dsl/builders";
-import { onDawn, triggered, triggeringCard, whenAbandon, whenDiscard, whenReclaim, whenYouPlay } from "../../engine/dsl/triggers";
+import { all, characterYouControl, conditionCardCounts, randomIn, staticAbility } from "../../engine/dsl/builders";
+import { onDawn, triggered, triggeringCard, whenAbandon, whenDiscard, whenYouPlay } from "../../engine/dsl/triggers";
 import * as p from "../../engine/effects/primitives";
+import { smallEnemyDissolveAspectAbilities } from "./aspects/aspect-ccc0385e-ff00-4be3-a807-99e4def47d2d";
+import { reclaimedCharacterSparkAspectAbilities } from "./aspects/aspect-e70d2d02-9ba6-434b-94d3-73ad29d3e9f4";
 import { parseFigmentId } from "../../engine/state/ids";
 import { parseApollyonIncarnationId } from "../../types/identifiers";
 import type { ApollyonIncarnationId } from "../../types/identifiers";
@@ -64,7 +66,7 @@ export const APOLLYON_DESIGNS: ReadonlyMap<ApollyonIncarnationId, ApollyonDesign
     dreamsignIds: ["293a610d-ea75-4974-88da-13e4c86f248f"],
   }],
   [parseApollyonIncarnationId("e70d2d02-9ba6-434b-94d3-73ad29d3e9f4"), {
-    aspect: { id: "649a0d89-a07d-4bc0-ade6-ea9eb5805c80", renderedText: "Once per turn, when you reclaim a character, it gains +1✦.", proposedAbilities: () => [triggered(whenReclaim("you", { cardType: "character" }), p.gainSpark(triggeringCard(), 1, "permanent"), { oncePerTurn: true })], pending: true },
+    aspect: { id: "649a0d89-a07d-4bc0-ade6-ea9eb5805c80", renderedText: "Once per turn, when you reclaim a character, it gains +1✦.", proposedAbilities: reclaimedCharacterSparkAspectAbilities, abilities: reclaimedCharacterSparkAspectAbilities, verifiedText: expectedVerifiedText("Once per turn, when you reclaim a character, it gains +1✦.") },
     deckRecipe: {
       poolAvatarId: "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
       archetypeTideIds: ["9ca5a839-cdcb-497d-9b76-2de4c6874cf0", "7dfa6a52-04ce-42fc-9ef6-4e6571435510"],
@@ -91,7 +93,7 @@ export const APOLLYON_DESIGNS: ReadonlyMap<ApollyonIncarnationId, ApollyonDesign
     dreamsignIds: ["b2626645-827c-46ec-8204-017862d1a398"],
   }],
   [parseApollyonIncarnationId("ccc0385e-ff00-4be3-a807-99e4def47d2d"), {
-    aspect: { id: "9bcfcec6-873a-4d2b-992d-91fecdd96208", renderedText: "2●, ☾: Dissolve an enemy with ≤2✦.", proposedAbilities: () => [activated([energy(2), exhaustSelf()], p.dissolve(target(enemyCharacter({ sparkAtMost: 2 }))))], pending: true },
+    aspect: { id: "9bcfcec6-873a-4d2b-992d-91fecdd96208", renderedText: "2●, ☾: Dissolve an enemy with ≤2✦.", proposedAbilities: smallEnemyDissolveAspectAbilities, abilities: smallEnemyDissolveAspectAbilities, verifiedText: expectedVerifiedText("2●, ☾: Dissolve an enemy with ≤2✦.") },
     deckRecipe: {
       poolAvatarId: "5e28154d-770a-4b84-8aac-9de44f5d7d02",
       archetypeTideIds: ["4fcd40ac-b03f-405f-9236-a00139cbdcc8", "f3f6da0b-f83f-4e66-a4e1-8e35a8d27488"],

@@ -1,0 +1,53 @@
+{
+  "bead": "hv-umm2.294",
+  "phase": 5,
+  "implementMin": 148.16600501666665,
+  "implementWindow": {
+    "start": "2026-10-15T12:55:40.073Z",
+    "end": "2026-10-15T15:23:50.033301+00:00"
+  },
+  "localValidationS": {
+    "focusedPrior": 8.491176709008869,
+    "fuzzPrior": 1362.1983020000043,
+    "preflightPrior": 3.0314532089978456,
+    "sweepPrior": 32.200712833029684,
+    "judgedPrior": 18.610904457978904,
+    "productionQAPrior": 30.926951540983282,
+    "reviewPrior": 83.65545575000579,
+    "knipPrior": 5.623429625004064,
+    "focusedCombined": 5.627755250025075,
+    "greedy": 383.9173334170482,
+    "fuzzCombined": 1439.9829176250496,
+    "productionQACombined": 56.65789566701278,
+    "reviewCombined": 65.71203595795669,
+    "knipCombined": 3.8293155420105904
+  },
+  "hostLoad": 4.21630859375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "greedy-nonprogress",
+      "minutes": 10.910697463200389,
+      "note": "Two same-natural-seed3 opaque/live-observer Greedy attempts cancelled with zero completedgames under same-task justiciar; native746 prerequisite owns policyrepair. Both actualepochs/receipts preserved in measurements; no timeout/success/rules change."
+    },
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 19.54404655,
+      "note": "Known external heavy-lock queue wait1172.642793s before actual literal300execution; exact wait separate from inner1362.198302s."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 0.9687253423675429,
+      "note": "Both failed production caller epochs retained: OpponentId-versus-Aspect previewselector and lazy-probereadiness. Corrected publiccaller run-Jzv0oA passes bothviewports; priorV2 image contributes positivepreviewonly."
+    },
+    {
+      "tag": "weighted-fuzz-duration",
+      "minutes": 46.70302032708423,
+      "note": "Two distinct source/workload epochs executed literal300 for22.70 and24.00 minutes; external oldlockwait19.54min and currentouter-to-inner0.189065s are separate. Source-qualified742 audit disposition retains attribution UNKNOWN and all performance budgets; no unavoidable-cost claim, matched A/B or waiver."
+    }
+  ]
+}

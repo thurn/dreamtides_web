@@ -1,0 +1,518 @@
+{
+  "bead": "hv-umm2.294",
+  "state": "LOCAL ACCEPTANCE PASSED; final amendment and native delivery pending",
+  "base": "8f01840395559a0b83cde95a3af9ab2cc43958ae",
+  "headBeforeFinalAmend": "ad5241325331e5189641c6f6c7eb3fa244a97689",
+  "dispatch": {
+    "actualUTC": "2026-10-15T12:55:40.073Z",
+    "call": "call_66f7ec63f46c4773a6d3c6d9afc24f46",
+    "ordinal": 68112,
+    "rawJournalSHA256": "34bc10db92d58971c16dcb0945826ad7472a5fd3ad706e37db31cee871fa3274",
+    "modelStart": "unknown"
+  },
+  "implementationClock": {
+    "state": "OPEN",
+    "start": "2026-10-15T12:55:40.073Z",
+    "observedEvidenceCutoff": "2026-10-15T15:23:50.033301+00:00",
+    "finalGitEndpoint": null,
+    "qualification": "Gross original dispatch-to-final-Git includes all inspections, helper continuation, both cancelled attempts, prerequisite coordination, native update and park recovery, all lock waits, acceptance, QA, checks, evidence and commit. This observed cutoff is not a predicted commit timestamp. The actual final Git receipt and cutoff gap are retained externally after the parent finite-packet ACK."
+  },
+  "sourceScope": {
+    "incarnations": [
+      "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+      "e70d2d02-9ba6-434b-94d3-73ad29d3e9f4"
+    ],
+    "aspects": [
+      "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+      "649a0d89-a07d-4bc0-ade6-ea9eb5805c80"
+    ],
+    "primarySHA256": {
+      "src/content/apollyon/design.ts": "2cfeabdce99189226eb325092800bfb7af8040d79f0f90f5d625f43cfea92378",
+      "docs/design.md": "1e3a7498b013a4cbfc8ce7109f0ec145bfc1d530e05d9070fb0f6172b6f8ec8e"
+    },
+    "edits": "Exact two Aspect values adopt delivered644 named AbilityLists for proposed/live abilities and unchanged-text verifiedText; six unused import specifiers removed, two module imports added, inherited290 verifiedText import reused after ordinary integration duplicate cleanup. Exact two provisional/live doc rows only.",
+    "preserved": "All other eight map values, every curated recipe/signature/Tide/pool-source/Dreamsign entry, printed texts, types/loaders/engine/UI/scripts/config/child modules and tests. Common status paragraph consumed certified290 unchanged.",
+    "D6": "Provisional documented design; no balance/layer6/champion strength conclusion.",
+    "D10": "Not invoked; current rules and RD-hv-umm2.644-1 settle actual physical Reclaim stack gain, once, permanent travel, effective spark, costs/Veil/exhaust.",
+    "D20": "Existing24 synthetic genuine permanent-emblem BOTH-controller child contracts cover pure composition, so no duplicate scenario module/test entries."
+  },
+  "integration": {
+    "oldSource": "eb03cd2c22b83c7cbdb46f2decfaea57e0aae6f3",
+    "oldBase": "d915564ce6cde52370d593e4a9ea354be58cc12c",
+    "temporaryPark": "ca1fb162b1ce2e52a0fbcb37f97639bd6c6e56f3",
+    "updatedCheckpoint": "ad5241325331e5189641c6f6c7eb3fa244a97689",
+    "currentBase": "8f01840395559a0b83cde95a3af9ab2cc43958ae",
+    "parentUpdateProof": {
+      "path": "/tmp/root-294/update746-success-verified.json",
+      "sha256": "353cb1296caf214fffa1a4eedb6ab3cc15044869b92c20905be9e97538e99390"
+    },
+    "resolution": "Parent native update restored clean rollback after textual conflicts. Exact two owned paths parked, updated by parent, then finite saved-input reapplication retained all current 290/291 imports, other eight entry values and all ten recipes/Dreamsigns. No engine, policy, helper, test, UI or capability edits.",
+    "review": "14 gross non-test lines across two source/doc paths; no native core-review label or new state/API/architecture. Existing D20 contracts reused; no separate cold review required."
+  },
+  "checks": {
+    "focused-combined746": {
+      "receipt": "/tmp/root-294/resume/focused-combined746.receipt.json",
+      "sha256": "127e23fa950dfd9252e2bb25a7aba7719def1558b39592d977fd22d84e24d11f",
+      "pid": 58962,
+      "pgid": 58962,
+      "startedAt": "2026-10-15T14:35:13.075952+00:00",
+      "endedAt": "2026-10-15T14:35:18.674619+00:00",
+      "wallSeconds": 5.627755250025075,
+      "cpuSeconds": 8.202932,
+      "exitCode": 0,
+      "timedOut": false,
+      "stdoutSha256": "ea4c7516c675982654bfac0cc4b8316782f187d5ce1a819f849dfeee5753fcab"
+    },
+    "greedy-combined746-preflight": {
+      "receipt": "/tmp/root-294/resume/greedy-combined746-preflight.receipt.json",
+      "sha256": "0c4966023307951358661d0f191517fdf18afb4716cf27650f786f95b0754b51",
+      "pid": 69699,
+      "pgid": 69699,
+      "startedAt": "2026-10-15T14:37:42.932084+00:00",
+      "endedAt": "2026-10-15T14:37:46.429941+00:00",
+      "wallSeconds": 3.5277453750022687,
+      "cpuSeconds": 2.325806,
+      "exitCode": 0,
+      "timedOut": false,
+      "stdoutSha256": "f5c49cf4172b65265721cc6342a3be3c43f3ddf069c3c9cea087d70714e8a873"
+    },
+    "greedy-combined746-40": {
+      "receipt": "/tmp/root-294/resume/greedy-combined746-40.receipt.json",
+      "sha256": "dad7545ce3ad8f67280d5ca04c8e88b97fcf864c7471e3af393d7193767b0f8c",
+      "pid": 70272,
+      "pgid": 70272,
+      "startedAt": "2026-10-15T14:37:51.467769+00:00",
+      "endedAt": "2026-10-15T14:44:15.357699+00:00",
+      "wallSeconds": 383.9173334170482,
+      "cpuSeconds": 420.266433,
+      "exitCode": 0,
+      "timedOut": false,
+      "stdoutSha256": "1702c5c6d57c27047171a939f6270c49b857649a384ecd17ccfa74e8958a2030"
+    },
+    "weighted300": {
+      "receipt": "/tmp/root-294/resume/weighted300.receipt.json",
+      "sha256": "78a7dc0815bdfd57db379cc847bb2e4c18c54926ef152436f4820a932dc808f5",
+      "pid": 95319,
+      "pgid": 95319,
+      "startedAt": "2026-10-15T14:47:37.794000+00:00",
+      "endedAt": "2026-10-15T15:11:37.759427+00:00",
+      "wallSeconds": 1439.9829176250496,
+      "cpuSeconds": 1520.234065,
+      "exitCode": 0,
+      "timedOut": false,
+      "stdoutSha256": "0a4b2c18e5be44eefa1a7957d695351d2818b5501a0e030f01ebf04b0702e183"
+    },
+    "production-combined746": {
+      "receipt": "/tmp/root-294/resume/production-combined746.receipt.json",
+      "sha256": "5e6ad1ff7bfb888b98bb6a55117f267f989eaab419d7d657082322554fb6b1e0",
+      "pid": 17913,
+      "pgid": 17913,
+      "startedAt": "2026-10-15T15:14:10.805240+00:00",
+      "endedAt": "2026-10-15T15:15:07.436046+00:00",
+      "wallSeconds": 56.65789566701278,
+      "cpuSeconds": 9.309215,
+      "exitCode": 0,
+      "timedOut": false,
+      "stdoutSha256": "d21e5fd2de7c6a64eece029ef600b9e06362fbaf552326facc34b461595dc75e"
+    },
+    "review-final-combined": {
+      "receipt": "/tmp/root-294/resume/review-final-combined.receipt.json",
+      "sha256": "c31b2bc4466edf9c33c1479a397c34563ed31cf3c43415f440b0a975090b5fb8",
+      "pid": 27649,
+      "pgid": 27649,
+      "startedAt": "2026-10-15T15:15:53.551071+00:00",
+      "endedAt": "2026-10-15T15:16:59.236106+00:00",
+      "wallSeconds": 65.71203595795669,
+      "cpuSeconds": 196.31516299999998,
+      "exitCode": 0,
+      "timedOut": false,
+      "stdoutSha256": "c7e866833488a7cadb29735adaaf8d0b59f8f3b897d05dbc2c32e2869bbf8f15"
+    },
+    "knip-final-combined": {
+      "receipt": "/tmp/root-294/resume/knip-final-combined.receipt.json",
+      "sha256": "4041692ddfec0c612e1e69f6ef427a69810e0bd202eb0cda8c84c1ee6c97b27a",
+      "pid": 32523,
+      "pgid": 32523,
+      "startedAt": "2026-10-15T15:17:06.078805+00:00",
+      "endedAt": "2026-10-15T15:17:09.882324+00:00",
+      "wallSeconds": 3.8293155420105904,
+      "cpuSeconds": 5.193093,
+      "exitCode": 0,
+      "timedOut": false,
+      "stdoutSha256": "ef3ca290259365b4d5dc99fe4482b2650b6a918f47799ba62899a34f2d61dc75"
+    }
+  },
+  "currentEpochReview": {
+    "files": 286,
+    "tests": 9219,
+    "vitestWallSeconds": 53.07,
+    "qualification": "Ordinary npm run review on actual combined source, with JOURNEY_TEST_WORKERS=2; not a controlled low-load D19 performance measurement."
+  },
+  "greedy": {
+    "completed": 40,
+    "requiredPerIncarnation": 20,
+    "counts": {
+      "ccc0385e-ff00-4be3-a807-99e4def47d2d": 20,
+      "e70d2d02-9ba6-434b-94d3-73ad29d3e9f4": 20
+    },
+    "matchingPublicReplay": 40,
+    "actualPolicyDecisions": 3474,
+    "budgets": {
+      "turnPlanning": {
+        "iterations": 256
+      },
+      "response": {
+        "iterations": 64
+      }
+    },
+    "fullRecipeInput": "Each actual production init has full 30-card boss and actual 30-card Starter player deck, generated pool150, all three signatures once, exact Aspect and authored Dreamsign. Natural numeric seeds1..1000; both policies Greedy scale1. No signature-only or policy/budget/deck/seed reduction.",
+    "seed3": {
+      "firstCompleted": true,
+      "fullSpecAndProductionInitExactPrior": true,
+      "reconstruction83RowsEqualExceptTimestampOnly": true,
+      "finalStateHash": "cd74bdb0e805e3b49a8a83de00e07403f91e9fb33830009e85f69eb8ab08177d",
+      "wallMs": 4755.495666
+    },
+    "qualifiedResult": "Original 20 games per incarnation acceptance only; no layer6 balance or champion-strength conclusion. Full 40 inputs/outcomes/replay hashes are external audit-bound, not duplicated here.",
+    "priorAttempts": [
+      {
+        "caller": "greedy-smoke-original.mts",
+        "wallSeconds": 366.11567770899273,
+        "cpuSeconds": 397.513022,
+        "timedOut": false,
+        "exit": -15,
+        "qualifier": "Same-task justiciar parent-authorized one exact livePG SIGTERM after native sample gave anonymous V8 frames; seed3 unknown,0credit."
+      },
+      {
+        "caller": "greedy-smoke-v2.mts",
+        "wallSeconds": 288.5261700830306,
+        "cpuSeconds": 312.726319,
+        "timedOut": false,
+        "exit": -15,
+        "qualifier": "Same exact natural seed3/live observer-only logging.2968records,lastversion5966,enemyNight turn10; repeated physicali45/i48, UUID071bcab4-ed02-48a0-93dc-8fd0f36611c8/87aba308-00b4-40d8-a46f-4e6f58a664a8. One verified ownPG SIGTERM under second same-task justiciar;0credit. Native746 prerequisite owns policy repair after745; no legal-loop rules or policy changes here."
+      }
+    ]
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 82603,
+    "failures": 0,
+    "prompts": 6928,
+    "interactiveReruns": 631,
+    "nativeWallSeconds": 1438.2,
+    "nativeCPUSeconds": 1518.6,
+    "recordedExecutionSeconds": 1439.9829176250496,
+    "outerToInnerStartSeconds": 0.189065,
+    "waitQualification": "Actual outerlaunch toinnerPopenstart0.189065s includespostlockguard/startup; exactlockacquisitioninstantnotobserved.",
+    "outerWallSeconds": 1440.3291947080288,
+    "targets": [
+      {
+        "uuid": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+        "included": 300,
+        "exercised": 42
+      },
+      {
+        "uuid": "649a0d89-a07d-4bc0-ade6-ea9eb5805c80",
+        "included": 300,
+        "exercised": 391
+      }
+    ],
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 2
+    },
+    "readClosureFiles": 1179,
+    "allTrackedRegularBindingsUnchanged": 5740,
+    "epochQualification": "Fresh literal weighted300 at combined base8f018 and own2cfe/1e3 bytes. Registered Kindled, current X spark bonus and peer291 entries are consumed. Full invariant/redaction/announced-change/fidelity/final-hash replay/every10 interactive defaults retained.",
+    "outerReceipt": {
+      "path": "/tmp/root-294/resume/weighted300-lock.receipt.json",
+      "sha256": "f03181531df08d78abc63207185df42fa3bfae0533e873b443a9b9b7f7cd825b"
+    },
+    "priorEpoch": {
+      "base": "d915564ce6cde52370d593e4a9ea354be58cc12c",
+      "sourceSHA": "4691cdfff60f304579322ee0a5bc2d149b2e190853da848a067f29e28654603d",
+      "games": 300,
+      "steps": 80568,
+      "failures": 0,
+      "prompts": 6523,
+      "interactiveReruns": 704,
+      "includedEach": 300,
+      "exercised": [
+        35,
+        379
+      ],
+      "recordedExecutionSeconds": 1362.1983020000043,
+      "lockWaitSeconds": 1172.642793,
+      "readClosureFiles": 1176,
+      "qualification": "Genuine old epoch only; actual Kindled generator expansion required the separate fresh combined run. Both full receipts and closure remain in prior checkpoint/raw bindings."
+    },
+    "durationDisposition": {
+      "tag": "weighted-fuzz-duration",
+      "audit": "hv-umm2.742",
+      "measurementPath": "docs/plan/evidence/measurements/hv-umm2.742.json",
+      "qualification": "Measured executions22.70 and24.00 minutes are different source/workload epochs, not a matched performance A/B. Attribution remains unknown; no additional bounded common defect, unavoidable duration, acceptable budget or performance waiver is inferred. Existing742 trigger disposition and controlled Gate46 budgets remain binding."
+    }
+  },
+  "qa": {
+    "preflight": {
+      "pass": 4,
+      "skip": 36,
+      "pending": 0,
+      "fail": 0
+    },
+    "canonicalSweep": {
+      "invocation": "sweep-1e8RgT",
+      "pass": 4,
+      "skip": 36,
+      "fail": 0,
+      "exercised": false,
+      "qualification": "Initialization/firstturn only, bothcontrollers exactAspectID authored/ready/Caps[]"
+    },
+    "judged": {
+      "originalUUID": "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+      "firstByte": 17,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "pass": true,
+      "invocation": "run-TTwt55",
+      "exactPhysicalTarget": "i51",
+      "otherSameUUID": "i52",
+      "ineligibleFourSpark": "i53",
+      "energy": [
+        10,
+        8
+      ],
+      "cancelPreservedResources": true,
+      "exhausted": true,
+      "reload": true,
+      "Caps": [],
+      "providerSession": "UNKNOWN; producer completed/cleared before manual snapshot. No borrowed session metadata."
+    },
+    "notSampled": {
+      "uuid": "e70d2d02-9ba6-434b-94d3-73ad29d3e9f4",
+      "firstByte": 86,
+      "newPromptStatusVisualKind": false
+    },
+    "production": {
+      "pass": true,
+      "invocation": "run-Jzv0oA",
+      "seed": 3,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "bossCards": 30,
+      "draftPoolCards": 150,
+      "allThreeSignaturesExactlyOnce": true,
+      "dreamsignCount": 1,
+      "normalEnemyPlayedCardUUID": "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+      "reload": true,
+      "Caps": [],
+      "session": "50de9e6c-aff0-4dfe-a973-5551021c6618",
+      "serverPG": 25028,
+      "port": 5274
+    },
+    "failedCallerAttempts": [
+      "run-azattL expected wrong previewidentity, no interaction",
+      "run-qDR4I1 missinglazyprobereadiness after positive actualinit; previewcapture only"
+    ],
+    "manualCaptures": [
+      {
+        "filename": "unplaceable-targets-desktop.png",
+        "invocation": "run-TTwt55",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "sha256": "12e824bd0554a5579d35ad89d57d19d0f6dada0c97c6555e1b0137524718f17e"
+      },
+      {
+        "filename": "unplaceable-dissolved-mobile.png",
+        "invocation": "run-TTwt55",
+        "pixels": [
+          780,
+          1688
+        ],
+        "sha256": "af1e8c84870330d74a7d2d799992c582a3b4fae98549f10a4f9fed069a836ad9"
+      },
+      {
+        "filename": "unplaceable-production-preview-desktop.png",
+        "invocation": "run-qDR4I1",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "qualification": "same-source positive preview from otherwise failedcaller; not finalworkflowpass",
+        "sha256": "20455d34c504fb43dc3f21713797b7f12733b25d07bad0db9ab19da907d1e517"
+      }
+    ],
+    "visualInspection": "Allthree actualPNGpixels inspected. Twoeligible2spark targets highlighted/ineligible4spark unhighlighted, chosen card absent and exhaustion/pay2 visible on mobile, preview ability/signatures/BeginBattle readable. Existing A portrait fallback retained; no newart claim.",
+    "sourceEpoch": {
+      "base": "d915564ce6cde52370d593e4a9ea354be58cc12c",
+      "sourceSHA256": "4691cdfff60f304579322ee0a5bc2d149b2e190853da848a067f29e28654603d",
+      "qualification": "Every result in this qa object is retained prior-epoch evidence; current production recheck is qaCombinedQualification.currentProduction."
+    }
+  },
+  "qaCombinedQualification": {
+    "priorPreflightSweep": "Prior4pass36skip remains initialization-only/exercisedfalse, not full mechanics coverage. Exact lab/runner/UI source retained by narrow byte audit.",
+    "priorJudged": "Prior sampled physical fixed2/4 spark target/cancel/payment/exhaustion/dissolve/reload workflow retained with exact pair functions and relevant unchanged UI/lab bytes. Current X-base bonus branch and absent optional typeRemap do not alter that fixture. No replayed D21 judgement or new image claim. Exact prior judged provider session remains UNKNOWN.",
+    "currentProduction": {
+      "pass": true,
+      "invocation": "run-4YKFwV",
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "seed": 3,
+      "bossCards": 30,
+      "poolCards": 150,
+      "threePinsOnce": true,
+      "dreamsignCount": 1,
+      "normalEnemyPlayedCardUUID": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+      "reload": true,
+      "Caps": [],
+      "captures": 0,
+      "providerSession": "9f11b44b-4a67-4da6-ac04-b7387c9cf623",
+      "runnerPID": 17913,
+      "serverPG": 17955,
+      "port": 5274,
+      "normalCleanup": true,
+      "report": {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-4YKFwV/production-boss.result.json",
+        "sha256": "860f00cce32f0c1123610d893a2b81fe380b98ddce65aa3999b812f33679a3f9"
+      }
+    },
+    "unchangedOtherPair": "Broken Cycle originalUUID firstbyte86, no new prompt/status/visualkind. Existing24 public permanent BOTH-controller contracts plus actual20Greedy and fresh300; no fabricated sampled judgement."
+  },
+  "priorCheckpointEvidence": {
+    "friction": {
+      "path": "/tmp/root-294/resume/prior-checkpoint-evidence/docs/plan/evidence/friction/hv-umm2.294.json",
+      "sha256": "6b5e94e6c48af6a2e0fbefc55c3c41f4d419c1e64d786439731394f42ddddd06"
+    },
+    "measurements": {
+      "path": "/tmp/root-294/resume/prior-checkpoint-evidence/docs/plan/evidence/measurements/hv-umm2.294.json",
+      "sha256": "396722cc07fc15b21c97b31cea996919cc3657865587bdfaeeff3bc43c738b4d"
+    },
+    "preexisting": {
+      "path": "/tmp/root-294/resume/prior-checkpoint-evidence/docs/plan/evidence/pre-existing/hv-umm2.294.md",
+      "sha256": "74cbd3c55d58e3499d158c8f111bf208801ac75fcdd94ae33b852de870d561a8"
+    },
+    "qa": {
+      "path": "/tmp/root-294/resume/prior-checkpoint-evidence/docs/plan/evidence/qa-ledger/hv-umm2.294.jsonl",
+      "sha256": "6b0d76d29d699199caa090ae8597c3b8358252214500366edc6bf8e6928f16c1"
+    }
+  },
+  "priorRawScratchBindings": {
+    "/tmp/root-294/helper/source-proposal.json": "9d1970c8a847ee3409c4c69c469a5f768677b9121844f5ff0b4578e648c2835c",
+    "/tmp/root-294/helper/runtime-proposal.json": "92f24494e332cff6f0b3044dc50c4a17942c725b400c3e2062a34b3f2b340a5f",
+    "/tmp/root-294/helper/greedy-v2-proposal.json": "3cc073ea99e0149b383e55d4827eb6b8074763f2eb76bfc4ebba3f679d4057fb",
+    "/tmp/root-294/helper/seed3-live-cycle-observation.json": "fae4623cad0e9604a13ebedc6dec0f06404d2e95d66359717a4522118bf0182c",
+    "/tmp/root-294/helper/opaque-cancel-intent.json": "5ff2e9f0e4a65b393661063c5eefe4e770937bb09f6112bc8b6690dc3ec39de6",
+    "/tmp/root-294/helper/opaque-cancel-sent.json": "314b0b5c7ef76c565f72972f2b29fab423bdb266f6bf871d9364bc39680eaea3",
+    "/tmp/root-294/helper/opaque-cancel-settlement.json": "ff9c7dccba64ccc47a40f2cae03b9ec6a9dd69df54910b2bec68b717482065c4",
+    "/tmp/root-294/helper/v2-cancel-intent.json": "4593b7dd19cbdfa494cffa55d87d9b8e561686dde6057376f2c0463a9658bdda",
+    "/tmp/root-294/helper/v2-cancel-sent.json": "2a8b364f67db4ca67b6348b384c95150766e2ae00e4b67dc8e3b9486c777ed5c",
+    "/tmp/root-294/helper/v2-cancel-settlement.json": "2b88a3ffc5bff0ed868473db5b9752fd85558b6329f50194eb0c631398aedd49",
+    "/tmp/root-294/helper/greedy-seed3-native-sample.txt": "53e145930d9d4745c84d28eb25fdab57030826027178def991a97689aac41824",
+    "/tmp/root-294/helper/greedy-sample-custody.json": "eb9c9068279cd3832d95a051f0c78741fc87fda0529d08bd6b6092e6c1f3c381",
+    "/tmp/root-294/helper/weighted-proposal.json": "51275f0f80885d949acbebec5cc5471c134ac2c9e9fe2f13279b8fec623aedba",
+    "/tmp/root-294/helper/fuzz-read-closure.json": "622cf56a33185748098cef152dcb1e9e7107f9ddbc26db130f9b57a00e9f6c1a",
+    "/tmp/root-294/helper/weighted300-lock.receipt.json": "a97dfb7f4ada79ff512cb5934582f7eebd4ad57ce2e89a5d523e3b7b5da9d24f",
+    "/tmp/root-294/helper/sweep-owned-custody.json": "eef5502b62f4ac905e61c98a877ca5fbe36359ce5eb95e171697c571993e0e33",
+    "/tmp/root-294/helper/sweep-cleanup.json": "8dbd99fa24a3ba4fe2d122a95bdeb485ff2eb905b05938ea6a48708ba37253af",
+    "/tmp/root-294/helper/production-owned-custody.json": "7b5cd2cb8b5425ac381e89ac7be7b4a190319766f7c549335225c92cf23c9895",
+    "/tmp/root-294/helper/production-cleanup.json": "fb4b4cf28bd3dcbfc8f6348053a7353a3b2069762f3e51ea861d149dcc713101",
+    "/tmp/root-294/helper/production-v2-owned-custody.json": "76b08a4f8ae08e215d32565f2281799fb64735bed5c78c4300efc815f732ca5c",
+    "/tmp/root-294/helper/production-v2-cleanup.json": "02a18cf6d2bf8ce87068dc399c94ebf30782ece37e29574e48ea32508aadaef2",
+    "/tmp/root-294/helper/production-v3-owned-custody.json": "058b7625e0ac95281e4cd1b7a36176baa41110eca3310d6d7b4e1508f192f162",
+    "/tmp/root-294/helper/production-v3-cleanup.json": "9884a4351e89ab7cf3b6b3421b5fd13cc4e9746357a8ce47632e76105786c0c2",
+    "/tmp/root-294/helper/judged-owned-custody.json": "46550f9afc0f81be7c4a5d6496560a1e1442a13872d6ec61cf5eb54b0c25b5b4",
+    "/tmp/root-294/helper/judged-cleanup.json": "9e571bc279864aa10ea470dfc1f931016a68e034dd2eda7fd15de0cf1a4c8ad4",
+    "/tmp/root-294/helper/qa-proposal.json": "5155d3406ac413c06981f587510a4cacee0aaded07f12639561cdb6580bace00",
+    "/tmp/root-294/helper/qa-proposal-v2.json": "c941fa01049bb30157b90a19221d45a17ced33e970474c5a4606a1c22d109b2c",
+    "/tmp/root-294/helper/production-selector-proposal.json": "672d16842f7a3d3080eca57e6ee3cd4f46320dd9458fa8e709b892fe3d2a34f5",
+    "/tmp/root-294/helper/production-probe-proposal.json": "18190acb486ebfdc8ebc9ea28af7917f5b73c582860adc757f19666b9b61c400",
+    "/tmp/root-294/helper/greedy-smoke-original.mts": "fcb6d7c4b5ef9f02181fc343beddfe47b483913217503a58a006f7cf9ab1e92a",
+    "/tmp/root-294/helper/greedy-smoke-v2.mts": "ed738ff8a156d1777161fdbef6298e94cb0b7e647972d632fe825353aa61b167",
+    "/tmp/root-294/helper/run-recorded.py": "331dc47eac6871677d9078ccbc78023eddbcc0fe3840d05336b440de092a84ad"
+  },
+  "priorRawQABindings": {
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/sweep-1e8RgT/summary.json": "6356810454806f654c01b5166b5ca98254948324483bca2315e4ecd3f3e346ce",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/sweep-1e8RgT/run-N3Ujdu/sweep-9bcfcec6-873a-4d2b-992d-91fecdd96208-base-player-attempt-1.result.json": "50a6ff1576e5721b5a01d8cbaf1be1bcbb17a2a3fdbde93c717fd408373a4912",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/sweep-1e8RgT/run-N3Ujdu/sweep-649a0d89-a07d-4bc0-ade6-ea9eb5805c80-base-player-attempt-1.result.json": "f7cc9f7eeee1abd73a78df79fa669191e209b570461ad8f05e31f60732f74b9b",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/sweep-1e8RgT/run-N3Ujdu/sweep-9bcfcec6-873a-4d2b-992d-91fecdd96208-base-enemy-attempt-1.result.json": "2699c7c731b8eb635ff342a911b81afb92baa3f0e9b7431877351b9d5cba1ab0",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/sweep-1e8RgT/run-N3Ujdu/sweep-649a0d89-a07d-4bc0-ade6-ea9eb5805c80-base-enemy-attempt-1.result.json": "1579032b9ee9eb27a9ea764fb22e0e4f53fc7574d5f7e98509b73e7a42f7a531",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-azattL/production-boss-desktop.jsonl": "287ce6f58ef1d97391da3143bc5ce07475927a1b58bf741893c8eea06a84b9a8",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-azattL/production-boss.result.json": "7379904891e29ce5a714ac0644c92d2b858b538248d2071702521608f3f99509",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-qDR4I1/production-boss-desktop.jsonl": "843b74885707a0996c22e55443adc93c02da3e245c09f1603bf58c4d4512d5a5",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-qDR4I1/production-boss.result.json": "d4ec86b8f8d5ea7e71966cd37bf7b19e95e571e2c3e75a2682b44a7b84882aa6",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-TTwt55/judged-unplaceable.result.json": "8d297391a5ff5a45079d2abc3ae24f1493b7c52641ac4dd2c7d421764cfa2af1",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-TTwt55/judged-unplaceable-mobile.jsonl": "5a58b43cc9e5902c9ea34bc156d72b7b524ff4a32f5ecc8c6e431386e6c0e468",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-TTwt55/judged-unplaceable-desktop.jsonl": "d925e5d86d79d364c300da47b1ef39c5499a123267eeef6ef017a4f7d1fbeea5",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-Jzv0oA/production-boss-desktop.jsonl": "e7d19e20b909d94d95e01613c0d5c19220bc5ecaf7b99610689cf87850ba8d3f",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-Jzv0oA/production-boss.result.json": "248e5d98c0a09307cf363aef4d698e641df966a7deec29670c64d81fcf99d50e",
+    "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.294/invocations/run-Jzv0oA/production-boss-mobile.jsonl": "2537b7fcd7a7b84b1307ba6324a14b65fa05525ce344be188898b2dc7300907f"
+  },
+  "currentProofBindings": {
+    "/tmp/root-294/resume/reapply-applied.json": "067a7e9d5636c17e82d183a5ac4cb8ed28509e7e93999dd430d3325911ccad60",
+    "/tmp/root-294/resume/reapply-proposal.json": "d76e2d203539bda83164b37e231e5a24a9cd0cdbd58df13acd595b7650888899",
+    "/tmp/root-294/resume/reapply-parent-ack.json": "a58bd7d9654a9be18ff7abd4e2bfce255935f38fa5e3bdec860fd51ed6a3aa4b",
+    "/tmp/root-294/resume/greedy-runtime-proposal.json": "a2d6001fef3309aac583e1995941530dfb118de0f82f918fce5b50ff889939e9",
+    "/tmp/root-294/resume/greedy-parent-ack.json": "296c9054495ebe07924bb46d144ce965afd82b471d1393271af7b53092675b71",
+    "/tmp/root-294/resume/greedy40-acceptance-audit.json": "59439762a585a19c336996f42e60e492515c766f6f62b543569127631ccc6476",
+    "/tmp/root-294/resume/parent-greedy40-audit.json": "4db73dc8a850bf2d2f1a917187c92c73d627dfa949762cbea9582d1d0e41f9f2",
+    "/tmp/root-294/resume/weighted-proposal.json": "0521336355acd3b48262213e40ecfa83e8bb09a9d87205104c73ce53eaf35fb9",
+    "/tmp/root-294/resume/weighted-parent-ack.json": "59cfacdd8b09405558cde28b7045ba042b3ea362697c5177aa5c59cd266f26f2",
+    "/tmp/root-294/resume/weighted300-acceptance-audit.json": "46e9801097d1aecf61eade2f3fc55fb288042086b93b4b36cc6006e5dfd27f23",
+    "/tmp/root-294/resume/parent-weighted300-final-audit.json": "6b2f3c2988a36a17c5d3e43ac326a2c2ec5266cddaaa6d84ad7d957d40cd6523",
+    "/tmp/root-294/resume/production-qa-proposal.json": "b98f03d34b01a25c02fd4efd58f08d37296985d4646dc8b98857afe8256d769e",
+    "/tmp/root-294/resume/production-parent-ack.json": "d2cdaa2c8835ab079567a4aca6f8a2f3e5776c6df92e8d11ef6d0fdbdc869d0a",
+    "/tmp/root-294/resume/production-combined-owned-custody.json": "2c7c4c5fa66b7c9b946defccbe599ca8868fb11e8e31c98da27b84dff3f058a9",
+    "/tmp/root-294/resume/production-combined-acceptance-audit.json": "b7e8aefc631117755350f314049f03f6fcede0c934649186de71d824cf4229b4",
+    "/tmp/root-294/resume/parent-production-combined-audit.json": "91115e7cd809dd3d7878e9440056bc819310d6b6657742a7677361db7f07a3d2",
+    "/tmp/root-294/resume/temporary-park-handoff.json": "b5646b7cf491504f256b35dedb9f734b39fedefd2a8a694344024e9b49367731"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review combined-source start2026-10-15T15:15:53.551071+00:00",
+        "value": 4.21630859375
+      }
+    }
+  },
+  "validationPending": [
+    "parent finite packet ACK and one final local commit amendment",
+    "parent native candidate/authorization/certified promotion/cleanup"
+  ],
+  "resources": "All Greedy/heavy/QA/check processes terminal and own groups empty; managed QA records absent and port5274 free. Shared MCP service left running. No candidate, push or deploy by helper.",
+  "ownCallerFriction": "First scratch reapply post-copy assertion compared Git metadata headers against difflib headers. It stopped before tests, without source-byte mismatch; normalized finite preview and all other tracked bytes verified before focused checks. Retained reapply-applied.json records exact caller failure. No runtime acceptance credit from that invocation. The first custom packet validator expected an empty runtime ledger while its own recorded process was registered. It failed only at that self-observation assertion after all JSON/raw/source checks passed; a fresh named retry excludes only its exact own PID and label, passes, and both receipts are retained. No production source or runtime acceptance changed.",
+  "finalEvidenceChecks": {
+    "schema-final-combined": {
+      "receipt": "/tmp/root-294/resume/schema-final-combined.receipt.json",
+      "sha256": "e81c738eadba5da972cec918bbb8d36b3ab9864ea30a8b7cbee04ff7f3279fe3",
+      "exitCode": 0
+    },
+    "packet-json-whitespace-final": {
+      "receipt": "/tmp/root-294/resume/packet-json-whitespace-final.receipt.json",
+      "sha256": "7ffcbd1e3054307ead9863917d927a34713bc85a90cda2a7727678e5b5cdae4f",
+      "exitCode": 1
+    },
+    "packet-json-whitespace-final-v2": {
+      "receipt": "/tmp/root-294/resume/packet-json-whitespace-final-v2.receipt.json",
+      "sha256": "c84646ff453449f89ed0333143597526023720bbe880d3748756950a7b28315c",
+      "exitCode": 0
+    },
+    "triggers-final-combined": {
+      "receipt": "/tmp/root-294/resume/triggers-final-combined.receipt.json",
+      "sha256": "93a7f4befa630073be546a5288c7605709fdb3b3eb7eef42db3c7dba544f4e2e",
+      "exitCode": 0
+    }
+  }
+}
