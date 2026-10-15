@@ -1,0 +1,101 @@
+{
+  "bead": "hv-umm2.287",
+  "scope": "Evidence-only original starting-energy acceptance",
+  "sourceBase": "7fbaab35c0bfaa869848225e4ca4ceb499bf34b9",
+  "implementDispatch": "2026-10-15T19:05:34.858Z",
+  "evidenceCutoff": "2026-10-15T20:16:07.202075+00:00",
+  "status": "runtime_and_review_verified_ready_for_author_admission",
+  "clockQualification": "Dispatch through this actual pre-commit evidence cutoff includes all research, admission, failed epochs, coordination, checks and waits. Author normal Git receipt supplies true completion and remaining tail; no future end/CPU fabricated.",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.287",
+  "acceptanceJoin": "final-v01/acceptance-join.json",
+  "sourceProof": "final-v01/source-proof.json",
+  "resourceProof": "final-v01/resource-absence-proof.json",
+  "actualCommandReceipts": "final-v01/command-receipts.json",
+  "artifactManifest": "final-v01/artifact-manifest.json",
+  "coverage": {
+    "authoredActions": 66,
+    "publicDTOComparisons": 132,
+    "controlledDesktop": 40,
+    "eligibleBaseUUIDEachController": 20,
+    "mobileExtra": 1,
+    "genuineWorkflows": 1,
+    "nativeGames": 42,
+    "nativeLogRows": 2062
+  },
+  "qualifications": [
+    "All controlled physical cards are base variants; child638 retains synthetic Amplified coverage. Original five UI passes join37 later immutable-epoch passes; no single fullmatrix invocation claimed.",
+    "All sampled first payments use earned startup energy2, no energy override/source injection; real postpayment effect gains retained.",
+    "Controlled fixture enemy seat and native LOAD_STATE are administrative. Remaining enemy policy declares actual source play then challenge/pass, rather than measuring natural Greedy follow-up strategy.",
+    "Genuine UI encounter uses original scene deck, optional explicit prechoice sibling visitation; no postreward LOAD_STATE.",
+    "Explicit DEBUG terminal victory verifies ordinary completion/consumption only; no natural victory/fulljourney claim.",
+    "Prepared stocklab230pass170ineligibleSkip is control only; weighted300 has random deckMods and no nextBattle DTO, so neither supplies starting-energy credit."
+  ],
+  "negativeEpochs": [
+    {
+      "epoch": "harness-v01/node-public",
+      "exit": 1,
+      "wallS": 2.366701874998398,
+      "error": "actual encounter unavailable",
+      "qualification": "Original exact action unobserved. v02 diagnostic sourceidentical baseline availability reproduces firstunavailable actiona56f8765-f859-445a-896f-e9377526ab03 encounter7def28c4-d75a-47e1-ae86-5b7093cc0419;11baselineencounters unavailable. v02 broader fixedpool8+starter20sampledeck retains all publicoffers and passes66; no source repair inference."
+    }
+  ],
+  "browserNegativeEpoch": {
+    "epoch": "harness-v01/browser",
+    "wallS": 194.54386537498794,
+    "positiveComplete": 5,
+    "negativeCell": "06-enemy",
+    "nativeGameId": "9y8dbv",
+    "error": "Actual played source is in the wrong zone",
+    "sourceFinding": "Native play i41 then legal activate i41 ability1 with automatic target[i41], thenpass; source7ffb1179 abandon-cost ability. Late settled-zone sample observed legitimate later void. New declared-policy next challenge/pass keeps strict resolved zone assertion and unchanged startup/payment; no production repair."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual ordinary review friction-records start at2026-10-15T20:15:34.860Z; reported load1m15.583984375. Heavy prelaunch8.03 retained separately, not comparable-load timing."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-15T19:21:28.002036+00:00",
+      "qualification": "Pre-tool launch observation. Interval to inner start includes dispatch/tool launch, lock queue and source validation; exact pure lock wait is uninstrumented.",
+      "ownBrowserStarted": false,
+      "callerPid": 81710,
+      "hostLoad": "{ 8.03 9.54 9.21 }"
+    },
+    {
+      "at": "2026-10-15T20:15:34.239140+00:00",
+      "load1m": 15.583984375,
+      "scope": "Observed immediately before ordinary review wrapper launch, not isolated pure-engine/comparable-load timing."
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "rulesDecisions": [],
+  "sourceRepairs": [],
+  "reviewDisposition": "Parent assessed actual fourevidence-only scope as noncore/no primitive/prompt/gate; no formal cold review required.",
+  "parentProofs": "final-v01/parent-proof-index.json",
+  "delivery": "Parent verifies READY and grants exact author ACK before helper authors one normal detailed Conventional Commit with Bead trailer; parent alone submits, approves and delivers.",
+  "finalValidationIndex": "final-v01/validation/final-validation-index.json",
+  "normalValidation": {
+    "review": {
+      "exit": 0,
+      "wallS": 0.570216000021901,
+      "scope": "Docs-aware quick review: four evidence files; friction-records only."
+    },
+    "knip": {
+      "exit": 0,
+      "wallS": 5.602260624989867
+    },
+    "schemaAndOwnedEvidence": "Actual settled receipts are indexed separately after this pre-commit metadata cutoff."
+  },
+  "inclusiveClock": {
+    "throughEvidenceCutoffS": 4232.344075,
+    "start": "2026-10-15T19:05:34.858Z",
+    "cutoff": "2026-10-15T20:16:07.202075+00:00",
+    "tail": "Author admission, normal Git and final settlement remain measured in external delivery-tail receipt, preserving the original dispatch origin."
+  }
+}
