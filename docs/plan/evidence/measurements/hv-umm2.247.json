@@ -1,0 +1,1093 @@
+{
+  "bead": "hv-umm2.247",
+  "sourceBase": "c1b13bdd8466755978c6993727a3db8340969567",
+  "stage": "All scoped acceptance/checks passed; exact evidence freeze for parent finalization ACK",
+  "firstDispatch": "2026-10-15T00:18:45.998Z",
+  "dispatchAcknowledged": "2026-10-15T00:18:47.128Z",
+  "dispatchProofSHA256": "3d2210487258872aadee14ecd9e829643028d70f634ff5d5f26c1a767cfd1997",
+  "modelSampling": "UNKNOWN",
+  "claimAndSetup": "Separate before-dispatch intervals, not helper first dispatch. Parent npm install3.008473s, mistaken prepare:workspace missing-script exit1 with no source effects; actual prepare-workspace2.024609s0. Doctor healthy. Full raw native receipts retained in parent scratch.",
+  "proposalSHA256": "3042b1d3db47236642750f63219fbdb0cacc28fdcc2e9ffbd62669ddf6920f5b",
+  "sourceAuditSHA256": "bcdc1b43310487eef218ba1c104e0803c084770055b8e185f8d3f19c767492aa",
+  "wholeScope": {
+    "entities": [
+      {
+        "uuid": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+        "module": "src/content/dreamsigns/trinket-necklace-989b55bd.ts",
+        "sha256": "e56f1631c8fd721224f5382c27eadcc1405a1e052f08160360e640a2e78adbfc",
+        "printed": "Challengers you control have +1\u2726.",
+        "d21": {
+          "firstByte": 223,
+          "sampled": false
+        }
+      },
+      {
+        "uuid": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+        "module": "src/content/dreamsigns/eye-amulet-eb6a5c19.ts",
+        "sha256": "058c70bdfaf0c21f3eababdc22d3170b1485c309aa55c0607a1ea90833ede8b8",
+        "printed": "When all characters you control are challengers, they have +2\u2726.",
+        "d21": {
+          "firstByte": 214,
+          "sampled": false
+        }
+      },
+      {
+        "uuid": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+        "module": "src/content/dreamsigns/berries-00cc7e7f.ts",
+        "sha256": "5f4e661d027d264724d35c2bd6b95f23f46642f95ad5a888b28517b03b06b057",
+        "printed": "Characters in your deck with cost \u22642\u25cf have +1\u2726.",
+        "d21": {
+          "firstByte": 35,
+          "sampled": false
+        }
+      },
+      {
+        "uuid": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+        "module": "src/content/dreamsigns/storm-tome-49f216a2.ts",
+        "sha256": "27e7bd46fcdb94623f72023bf609c445b964fe2d6eed5335a91e854ca6a637ce",
+        "printed": "Once per turn, when you play a \u22642\u25cf cost event, copy it.",
+        "d21": {
+          "firstByte": 162,
+          "sampled": false
+        }
+      },
+      {
+        "uuid": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+        "module": "src/content/dreamsigns/clover-56523397.ts",
+        "sha256": "b6c4d7f4400ed489db846074f9b8a0718e17810e1ed4efd05edab17a9b7d7047",
+        "printed": "Once per turn, when you play an event while you control no characters, copy it.",
+        "d21": {
+          "firstByte": 199,
+          "sampled": false
+        }
+      }
+    ],
+    "closedCompletedBlockers": [
+      "hv-6nkw",
+      "hv-n913",
+      "hv-pj9p",
+      "hv-umm2.228",
+      "hv-umm2.53",
+      "hv-umm2.573",
+      "hv-umm2.589",
+      "hv-umm2.59",
+      "hv-umm2.66",
+      "hv-umm2.664",
+      "hv-umm2.70"
+    ],
+    "parentEpicNotBlocker": "hv-umm2",
+    "originalAcceptance": "All five native UUIDs and full original recipe retained; child664 four-leaf certified delivery consumed read-only.",
+    "productionDiff": {
+      "grossNonTest": 0,
+      "sourceFiles": 0,
+      "testFiles": 0,
+      "testLines": 0,
+      "plainScenarioModules": 0,
+      "configuredTestEntrypoints": 0,
+      "jsdomFiles": 0
+    },
+    "childEvidenceSHA256": {
+      "docs/plan/evidence/friction/hv-umm2.664.json": "cc47aea9f1a84d147e4d22e7726d046bc9b7bbc5068ff74b53076d0790975e79",
+      "docs/plan/evidence/measurements/hv-umm2.664.json": "9ce965272d0d9e5284c8c14ec4ce248ce7d16e8e42c92f2f351a1fa7b6093baf",
+      "docs/plan/evidence/qa-ledger/hv-umm2.664.jsonl": "7366fd4cf3728420920205089836be1ed2596d748034f121f5dfa61f9b4a4482"
+    }
+  },
+  "D10": {
+    "newRulesDecisions": [],
+    "newCardIssues": [],
+    "existingNorms": [
+      "C4 journey-deck origin in every zone/postvariant cost/created excluded",
+      "rules Holding a role/RD-hv-umm2.70-1",
+      "rules Intervening conditions",
+      "rules Once per turn",
+      "D15/C6 copies not played/can retarget/carry X and costs/cease",
+      "C17 static has-spark is not gain"
+    ]
+  },
+  "D20": {
+    "scenarioModule": null,
+    "reason": "All five source clauses already authored, each one existing primitive composition. Child664 explicitly delivered no optional scenario, with eight public synthetic consumer witnesses/counterfactuals retained in its own evidence. Current owning C4 contracts cover the bounded journeyDeck form across zones/costs/created/privacy/checkpoint and remembered origins. No new implementation mirror/private helper test needed. Auto-discovery in specs/index.ts requires no shared registration edit."
+  },
+  "D21": {
+    "requiredJudged": 0,
+    "notApplicable": 5,
+    "sampleFirstBytes": [
+      223,
+      214,
+      35,
+      162,
+      199
+    ],
+    "newPromptKinds": [],
+    "newStatusIndicators": [],
+    "newVisualKinds": [],
+    "screens": [],
+    "qualification": "Five explicit reasoned not-applicable judgments. Mandatory fresh automated sweep actuals retained separately. No new visual surface/capture obligation."
+  },
+  "fiveFailurePaths": {
+    "errorMidStep": "No new transition or IO; existing C4 refusal/pending/cancel/partial resolution failure contract covers provenance under contained engine errors. No new rollback claim.",
+    "reloadOrRestart": "No state shape change. Existing owning C4 contracts exercise public parse, independent history, real hash-valid checkpoint rejection and canonical persisted-genesis fallback; triggered once-per-turn/copy consumers remain unchanged.",
+    "partialWrite": "No writer or persistence change. Existing fold transaction contracts own speculative and partial failures.",
+    "invalidOrStaleInput": "No intent routing/prompt input edit. Existing C4 public invalid-origin and foreign/stale prompt refusal controls remain, fresh focused run passed.",
+    "concurrentActors": "No new concurrency mechanism; both-seat existing contracts and native isolated browser slot run observed. No network/thread-race guarantee."
+  },
+  "checks": {
+    "focused-c4-v1": {
+      "started": "2026-10-15T00:23:02.549626+00:00",
+      "pid": 73461,
+      "pgid": 73461,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck spark"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+      "hostLoad": [
+        28.70947265625,
+        20.78857421875,
+        17.08642578125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:23:14.965463+00:00",
+      "elapsedSeconds": 12.415364124986809,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5235,
+      "beforeSHA256": "67bec49c8377bd084ee22b4c4a4117882c987d41a81dd5621a1c6194a99b759d",
+      "afterSHA256": "67bec49c8377bd084ee22b4c4a4117882c987d41a81dd5621a1c6194a99b759d",
+      "collectorBeforeSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "collectorAfterSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "stdoutSHA256": "0c97319017b9ed59caf7cffcb01a5c4ea7a8a154988b01e0f1f86297867b6e99",
+      "stderrSHA256": "f7d0269bd2ce4e55a03cbd34b4faeda3afa2bbe6c7d9975ad3895720e8e9e102"
+    },
+    "focused-public-v1": {
+      "started": "2026-10-15T00:23:19.117065+00:00",
+      "pid": 75824,
+      "pgid": 75824,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+      "hostLoad": [
+        24.267578125,
+        20.2841796875,
+        16.990234375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:23:27.115292+00:00",
+      "elapsedSeconds": 7.997954791004304,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5235,
+      "beforeSHA256": "67bec49c8377bd084ee22b4c4a4117882c987d41a81dd5621a1c6194a99b759d",
+      "afterSHA256": "67bec49c8377bd084ee22b4c4a4117882c987d41a81dd5621a1c6194a99b759d",
+      "collectorBeforeSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "collectorAfterSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "stdoutSHA256": "7c1012559f74af7ff94001187934257be3fcbbb7d5b5ef205731bd4647a82bd0",
+      "stderrSHA256": "f7d0269bd2ce4e55a03cbd34b4faeda3afa2bbe6c7d9975ad3895720e8e9e102"
+    },
+    "weighted300-v1": {
+      "started": "2026-10-15T00:23:32.548291+00:00",
+      "pid": 76979,
+      "pgid": 76979,
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "989b55bd-139f-40dc-b1fd-eb2f7b1c091a,eb6a5c19-26a6-41ef-ac7a-ce1152557b5c,00cc7e7f-4245-4447-b9dc-f647dc6241a2,49f216a2-0596-4124-bb40-60ac9afe6e0b,56523397-6c48-4df6-846b-9e4f15d7fdee"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+      "hostLoad": [
+        21.84619140625,
+        19.89599609375,
+        16.890625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:35:40.671176+00:00",
+      "elapsedSeconds": 728.1176587920054,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5235,
+      "beforeSHA256": "67bec49c8377bd084ee22b4c4a4117882c987d41a81dd5621a1c6194a99b759d",
+      "afterSHA256": "67bec49c8377bd084ee22b4c4a4117882c987d41a81dd5621a1c6194a99b759d",
+      "collectorBeforeSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "collectorAfterSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "stdoutSHA256": "cf3827b505c29abce06607bc919a4a6b05372ae4742098ad0bfc079758f428ea",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "preflight-v1": {
+      "started": "2026-10-15T00:25:32.154962+00:00",
+      "pid": 84908,
+      "pgid": 84908,
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "989b55bd-139f-40dc-b1fd-eb2f7b1c091a,eb6a5c19-26a6-41ef-ac7a-ce1152557b5c,00cc7e7f-4245-4447-b9dc-f647dc6241a2,49f216a2-0596-4124-bb40-60ac9afe6e0b,56523397-6c48-4df6-846b-9e4f15d7fdee",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+      "hostLoad": [
+        9.384765625,
+        15.95849609375,
+        15.73046875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:25:33.907977+00:00",
+      "elapsedSeconds": 1.7528850419912487,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5235,
+      "beforeSHA256": "67bec49c8377bd084ee22b4c4a4117882c987d41a81dd5621a1c6194a99b759d",
+      "afterSHA256": "67bec49c8377bd084ee22b4c4a4117882c987d41a81dd5621a1c6194a99b759d",
+      "collectorBeforeSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "collectorAfterSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "stdoutSHA256": "9a55b6e14f85a96027b22fd1761d79b704507dfff8d18abc79da22fe806eb7b4",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sweep-v1": {
+      "started": "2026-10-15T00:36:15.593768+00:00",
+      "pid": 61182,
+      "pgid": 61182,
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.247",
+        "--dreamsigns",
+        "989b55bd-139f-40dc-b1fd-eb2f7b1c091a,eb6a5c19-26a6-41ef-ac7a-ce1152557b5c,00cc7e7f-4245-4447-b9dc-f647dc6241a2,49f216a2-0596-4124-bb40-60ac9afe6e0b,56523397-6c48-4df6-846b-9e4f15d7fdee",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+      "hostLoad": [
+        17.720703125,
+        16.08447265625,
+        15.7392578125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:38:55.987713+00:00",
+      "elapsedSeconds": 160.39265858300496,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [
+        "docs/plan/evidence/qa-ledger/hv-umm2.247.jsonl"
+      ],
+      "manifestFiles": 5236,
+      "beforeSHA256": "cd6d8d981cb002fff5653648ed854e5002f57f614eb6f6d4fffd2b6b5180ab48",
+      "afterSHA256": "cc820b92cf9705e14577251bc3a93fc810b882fe1e34235e1b7b3059d057fac5",
+      "collectorBeforeSHA256": "fa58350b41b1b788bc9bda06d99da17f03da9228311d2531e9dcdffa3f0f0821",
+      "collectorAfterSHA256": "fa58350b41b1b788bc9bda06d99da17f03da9228311d2531e9dcdffa3f0f0821",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "c8bdeaa9df1e54d0a9d0f842f5a52066eb645a065708229ce1b40d6929c64d2b",
+      "ownLedgerAppend": {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.247.jsonl",
+        "oldPrefixExact": true,
+        "oldBytes": 2109,
+        "appendBytes": 99429,
+        "newRows": 102,
+        "accepted": true
+      }
+    },
+    "review-v1": {
+      "started": "2026-10-15T00:41:05.390913+00:00",
+      "pid": 12427,
+      "pgid": 12427,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+      "hostLoad": [
+        6.84326171875,
+        12.40380859375,
+        14.43115234375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:41:05.706026+00:00",
+      "elapsedSeconds": 0.3149742499808781,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5240,
+      "beforeSHA256": "52953178ba34bc1642639926a8f2192aba1e8fe00bcd8f724b917c75d811a55e",
+      "afterSHA256": "52953178ba34bc1642639926a8f2192aba1e8fe00bcd8f724b917c75d811a55e",
+      "collectorBeforeSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "collectorAfterSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "stdoutSHA256": "8c6f6402d981478aa7d0e5573b2aa85d0a96b271c1addaa3a32bde7719655e14",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "knip-v1": {
+      "started": "2026-10-15T00:41:09.241454+00:00",
+      "pid": 12727,
+      "pgid": 12727,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+      "hostLoad": [
+        6.84326171875,
+        12.40380859375,
+        14.43115234375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:41:13.921466+00:00",
+      "elapsedSeconds": 4.6798616670421325,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5240,
+      "beforeSHA256": "52953178ba34bc1642639926a8f2192aba1e8fe00bcd8f724b917c75d811a55e",
+      "afterSHA256": "52953178ba34bc1642639926a8f2192aba1e8fe00bcd8f724b917c75d811a55e",
+      "collectorBeforeSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "collectorAfterSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "stdoutSHA256": "ccdd20f9fa6eb1e0c8d3c2cb1fd8092596485a1712533ddb5004656bea0553ca",
+      "stderrSHA256": "f7d0269bd2ce4e55a03cbd34b4faeda3afa2bbe6c7d9975ad3895720e8e9e102"
+    },
+    "schema-v1": {
+      "started": "2026-10-15T00:41:53.257331+00:00",
+      "pid": 15810,
+      "pgid": 15810,
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+      "hostLoad": [
+        11.25048828125,
+        12.5693359375,
+        14.37353515625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:41:53.410147+00:00",
+      "elapsedSeconds": 0.15260970895178616,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5240,
+      "beforeSHA256": "12c34b9a4c8bea2df0fc3db19726c953e19645c2cb42b4dfc4a40f62dc3e5182",
+      "afterSHA256": "12c34b9a4c8bea2df0fc3db19726c953e19645c2cb42b4dfc4a40f62dc3e5182",
+      "collectorBeforeSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "collectorAfterSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "stdoutSHA256": "d05584a1443b82faa5c17f2ffbaf56da85566008fd4b3e6b6e152bef57983310",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "triggers-v1": {
+      "started": "2026-10-15T00:41:53.254632+00:00",
+      "pid": 15808,
+      "pgid": 15808,
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+      "hostLoad": [
+        11.25048828125,
+        12.5693359375,
+        14.37353515625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:41:53.526621+00:00",
+      "elapsedSeconds": 0.27183820796199143,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5240,
+      "beforeSHA256": "12c34b9a4c8bea2df0fc3db19726c953e19645c2cb42b4dfc4a40f62dc3e5182",
+      "afterSHA256": "12c34b9a4c8bea2df0fc3db19726c953e19645c2cb42b4dfc4a40f62dc3e5182",
+      "collectorBeforeSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "collectorAfterSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "stdoutSHA256": "69b3459b93cbe3dcedef1cb1ff6758bde8c7dd2280dd8f0bb20784b88f866ee3",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "whitespace-v1": {
+      "started": "2026-10-15T00:41:53.257185+00:00",
+      "pid": 15809,
+      "pgid": 15809,
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+      "hostLoad": [
+        11.25048828125,
+        12.5693359375,
+        14.37353515625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:41:53.272075+00:00",
+      "elapsedSeconds": 0.014706042013131082,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5240,
+      "beforeSHA256": "12c34b9a4c8bea2df0fc3db19726c953e19645c2cb42b4dfc4a40f62dc3e5182",
+      "afterSHA256": "12c34b9a4c8bea2df0fc3db19726c953e19645c2cb42b4dfc4a40f62dc3e5182",
+      "collectorBeforeSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "collectorAfterSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "hostLoadSamples": {
+    "focused-c4-v1": {
+      "at": "2026-10-15T00:23:02.549626+00:00",
+      "load": [
+        28.70947265625,
+        20.78857421875,
+        17.08642578125
+      ],
+      "scope": "Outer command launch, not exact inner step start"
+    },
+    "focused-public-v1": {
+      "at": "2026-10-15T00:23:19.117065+00:00",
+      "load": [
+        24.267578125,
+        20.2841796875,
+        16.990234375
+      ],
+      "scope": "Outer command launch, not exact inner step start"
+    },
+    "weighted300-v1": {
+      "at": "2026-10-15T00:23:32.548291+00:00",
+      "load": [
+        21.84619140625,
+        19.89599609375,
+        16.890625
+      ],
+      "scope": "Outer command launch, not exact inner step start"
+    },
+    "preflight-v1": {
+      "at": "2026-10-15T00:25:32.154962+00:00",
+      "load": [
+        9.384765625,
+        15.95849609375,
+        15.73046875
+      ],
+      "scope": "Outer command launch, not exact inner step start"
+    },
+    "sweep-v1": {
+      "at": "2026-10-15T00:36:15.593768+00:00",
+      "load": [
+        17.720703125,
+        16.08447265625,
+        15.7392578125
+      ],
+      "scope": "Outer command launch, not exact inner step start"
+    },
+    "review-v1": {
+      "at": "2026-10-15T00:41:05.390913+00:00",
+      "load": [
+        6.84326171875,
+        12.40380859375,
+        14.43115234375
+      ],
+      "scope": "Outer command start; actual quick review docs/friction-only and Knip consumer graph respectively"
+    },
+    "knip-v1": {
+      "at": "2026-10-15T00:41:09.241454+00:00",
+      "load": [
+        6.84326171875,
+        12.40380859375,
+        14.43115234375
+      ],
+      "scope": "Outer command start; actual quick review docs/friction-only and Knip consumer graph respectively"
+    },
+    "schema-v1": {
+      "at": "2026-10-15T00:41:53.257331+00:00",
+      "load": [
+        11.25048828125,
+        12.5693359375,
+        14.37353515625
+      ],
+      "scope": "Independent cheap source-fixed evidence checks, three calls overlapped; no runtime workload active"
+    },
+    "triggers-v1": {
+      "at": "2026-10-15T00:41:53.254632+00:00",
+      "load": [
+        11.25048828125,
+        12.5693359375,
+        14.37353515625
+      ],
+      "scope": "Independent cheap source-fixed evidence checks, three calls overlapped; no runtime workload active"
+    },
+    "whitespace-v1": {
+      "at": "2026-10-15T00:41:53.257185+00:00",
+      "load": [
+        11.25048828125,
+        12.5693359375,
+        14.37353515625
+      ],
+      "scope": "Independent cheap source-fixed evidence checks, three calls overlapped; no runtime workload active"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Outer npm run review start2026-10-15T00:41:05.390913Z, quick review five evidence files/friction-schema only; not runtime suite wall comparison"
+      }
+    }
+  },
+  "focused": {
+    "C4": {
+      "passed": 74,
+      "skipped": 4977,
+      "totalRegistered": 5051,
+      "files": 1
+    },
+    "publicConsumers": {
+      "passed": 68,
+      "files": 4,
+      "scope": [
+        "triggers-patterns",
+        "copies",
+        "continuous",
+        "content-gates"
+      ]
+    }
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 95621,
+    "wallSeconds": 663.8,
+    "cpuSeconds": 691.9,
+    "prompts": 8049,
+    "interactiveReruns": 699,
+    "interactiveMeanMs": 12.481,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 4
+    },
+    "results": {
+      "player": 151,
+      "enemy": 149,
+      "draw": 0
+    },
+    "failures": 0,
+    "targets": [
+      {
+        "uuid": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+        "included": 600,
+        "exercised": 0
+      },
+      {
+        "uuid": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+        "included": 600,
+        "exercised": 0
+      },
+      {
+        "uuid": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+        "included": 600,
+        "exercised": 0
+      },
+      {
+        "uuid": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+        "included": 600,
+        "exercised": 1705
+      },
+      {
+        "uuid": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+        "included": 600,
+        "exercised": 559
+      }
+    ],
+    "outerSeconds": 728.1176587920054,
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "exactLockWait": "UNKNOWN",
+    "qualification": "One literal300 invocation, no retry. Outer includes admission/startup/exit; native inner wall and CPU are separate. Static exercised0 does not prove missing or exercised static semantics. No A/B performance or canonical708 fix claim.",
+    "preflightOverlap": "Independent nonheavy read-only preflight00:25:32.154962Z\u201300:25:33.907977Z may overlap inner fuzz. Native process observed live by00:25:41.796Z; no exact lock acquisition or unoverlapped execution claim."
+  },
+  "preflight": {
+    "cells": 100,
+    "counts": {
+      "pass": 10,
+      "skip": 90,
+      "pending": 0,
+      "fail": 0
+    },
+    "baseExercised": false,
+    "qualification": "Exact Dreamsign/side membership and settled normal first turn, no content-specific trigger exercise claim."
+  },
+  "browser": {
+    "at": "2026-10-15T00:39:41.391473+00:00",
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-ZRcI9B",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B",
+      "counts": {
+        "pass": 10,
+        "skip": 90
+      },
+      "attemptCounts": {
+        "pass": 10,
+        "skip": 90,
+        "fail": 2
+      },
+      "hostLoad": 17.720703125,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 4723,
+        "scenario": 154983.69787499995,
+        "cleanup": 343.19791700001224,
+        "execution": 160127.90458300003,
+        "total": 160133.90458300003
+      }
+    },
+    "summarySHA256": "03579d3ff66efddd7a5fbd4c5f6249fa69415143f8ad151d7d4f350f7ff989bd",
+    "reports": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-00cc7e7f-4245-4447-b9dc-f647dc6241a2-base-enemy-attempt-1.result.json",
+        "sha256": "b6f134c1833cb0ab7e19eb0aade11deea7d59e0d48abdd4f4f84f97f52dd9aeb",
+        "verdict": "pass",
+        "failureKinds": [],
+        "error": null,
+        "caps": [],
+        "lab": {
+          "card": "",
+          "dreamsign": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "dreamsign",
+          "cardStatus": "authored",
+          "cardType": "Dreamsign"
+        },
+        "exercised": false,
+        "notes": "",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-00cc7e7f-4245-4447-b9dc-f647dc6241a2-base-player-attempt-1.result.json",
+        "sha256": "5f58e53efbbc61de2e1810019ffccb028fdecc880255f45aadae1e68c8bafdc3",
+        "verdict": "fail",
+        "failureKinds": [
+          "timeout"
+        ],
+        "error": null,
+        "caps": [],
+        "lab": null,
+        "exercised": null,
+        "notes": "TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"http://localhost:5274/?goto=card-lab&dreamsign=00cc7e7f-4245-4447-b9dc-f647dc6241a2&variant=base&as=player&seed=1&debug=1\", waiting until \"domcontentloaded\"\n",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-00cc7e7f-4245-4447-b9dc-f647dc6241a2-base-player-attempt-2.result.json",
+        "sha256": "e54c230c4f6072ef084a58bd491dc302953dff8e58078f5baa6992601af0cc40",
+        "verdict": "pass",
+        "failureKinds": [],
+        "error": null,
+        "caps": [],
+        "lab": {
+          "card": "",
+          "dreamsign": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "dreamsign",
+          "cardStatus": "authored",
+          "cardType": "Dreamsign"
+        },
+        "exercised": false,
+        "notes": "",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-49f216a2-0596-4124-bb40-60ac9afe6e0b-base-enemy-attempt-1.result.json",
+        "sha256": "06bd919c80f9f717781afcc37d8e9d5095f92558c210411b31f00137c9813b49",
+        "verdict": "fail",
+        "failureKinds": [
+          "timeout"
+        ],
+        "error": null,
+        "caps": [],
+        "lab": null,
+        "exercised": null,
+        "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 57977ms exceeded.",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-49f216a2-0596-4124-bb40-60ac9afe6e0b-base-enemy-attempt-2.result.json",
+        "sha256": "dccf8982fb9fd53d6626b74ad8b5b5e706d09ece69e80d4dd847d5d966b7fdbf",
+        "verdict": "pass",
+        "failureKinds": [],
+        "error": null,
+        "caps": [],
+        "lab": {
+          "card": "",
+          "dreamsign": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "dreamsign",
+          "cardStatus": "authored",
+          "cardType": "Dreamsign"
+        },
+        "exercised": false,
+        "notes": "",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-49f216a2-0596-4124-bb40-60ac9afe6e0b-base-player-attempt-1.result.json",
+        "sha256": "a53c69fcf8bcce2d6ae084a6584a8cdf8cc9fa2b05a31f54e949e77ebbcff47a",
+        "verdict": "pass",
+        "failureKinds": [],
+        "error": null,
+        "caps": [],
+        "lab": {
+          "card": "",
+          "dreamsign": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "dreamsign",
+          "cardStatus": "authored",
+          "cardType": "Dreamsign"
+        },
+        "exercised": false,
+        "notes": "",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-56523397-6c48-4df6-846b-9e4f15d7fdee-base-enemy-attempt-1.result.json",
+        "sha256": "ac9d0a69cc05c6f063e79a3c37423f16260ea80725a25788b52a63b91700e442",
+        "verdict": "pass",
+        "failureKinds": [],
+        "error": null,
+        "caps": [],
+        "lab": {
+          "card": "",
+          "dreamsign": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "dreamsign",
+          "cardStatus": "authored",
+          "cardType": "Dreamsign"
+        },
+        "exercised": false,
+        "notes": "",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-56523397-6c48-4df6-846b-9e4f15d7fdee-base-player-attempt-1.result.json",
+        "sha256": "630ada1ffd3f143633a47be335b17b582c61c696ef43f78ed18d413e719d38d2",
+        "verdict": "pass",
+        "failureKinds": [],
+        "error": null,
+        "caps": [],
+        "lab": {
+          "card": "",
+          "dreamsign": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "dreamsign",
+          "cardStatus": "authored",
+          "cardType": "Dreamsign"
+        },
+        "exercised": false,
+        "notes": "",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-989b55bd-139f-40dc-b1fd-eb2f7b1c091a-base-enemy-attempt-1.result.json",
+        "sha256": "2cb578272d2021065297e17b6cb1706ae2ff2ca94db6f13817b998bc5493cc3a",
+        "verdict": "pass",
+        "failureKinds": [],
+        "error": null,
+        "caps": [],
+        "lab": {
+          "card": "",
+          "dreamsign": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "dreamsign",
+          "cardStatus": "authored",
+          "cardType": "Dreamsign"
+        },
+        "exercised": false,
+        "notes": "",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-989b55bd-139f-40dc-b1fd-eb2f7b1c091a-base-player-attempt-1.result.json",
+        "sha256": "0c4b64c1d54266e2890f028106eabb3fd95eb26e62bede68fc2a68223d1208b4",
+        "verdict": "pass",
+        "failureKinds": [],
+        "error": null,
+        "caps": [],
+        "lab": {
+          "card": "",
+          "dreamsign": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "dreamsign",
+          "cardStatus": "authored",
+          "cardType": "Dreamsign"
+        },
+        "exercised": false,
+        "notes": "",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-eb6a5c19-26a6-41ef-ac7a-ce1152557b5c-base-enemy-attempt-1.result.json",
+        "sha256": "0886edc794b52bfbc068c3b44307e39b907dfbda94d5dd53d1d042fa00734c1b",
+        "verdict": "pass",
+        "failureKinds": [],
+        "error": null,
+        "caps": [],
+        "lab": {
+          "card": "",
+          "dreamsign": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "dreamsign",
+          "cardStatus": "authored",
+          "cardType": "Dreamsign"
+        },
+        "exercised": false,
+        "notes": "",
+        "captureCount": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.247/invocations/sweep-ZRcI9B/run-MzgkY8/sweep-eb6a5c19-26a6-41ef-ac7a-ce1152557b5c-base-player-attempt-1.result.json",
+        "sha256": "8dedc68eb0cde80ca2c4ed7ff579e7f76651c3d3b821e76cd881f8be44d03d22",
+        "verdict": "pass",
+        "failureKinds": [],
+        "error": null,
+        "caps": [],
+        "lab": {
+          "card": "",
+          "dreamsign": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base"
+          ],
+          "entityKind": "dreamsign",
+          "cardStatus": "authored",
+          "cardType": "Dreamsign"
+        },
+        "exercised": false,
+        "notes": "",
+        "captureCount": 0
+      }
+    ],
+    "ledgerRows": 107,
+    "ledgerSHA256": "5142c8bca78d5b5883b1348622c541dc161733985e296c2d36f9de0e52e16349",
+    "ledgerCounts": {
+      "judged:not-applicable": 5,
+      "sweep:pass": 10,
+      "sweep:skip": 90,
+      "sweep:fail": 2
+    },
+    "ledgerOld5PrefixExact": true,
+    "effectiveSuccesses": 10,
+    "rawTimeoutOnlyFailures": 2,
+    "timeoutRetryQualification": "Native one fresh retry per timeout-only cell, no manual retry. Berries-player first attempt page.goto timeout30000ms; Storm-enemy first attempt card-lab report waitForFunction timeout57977ms. Failed initialization is not successful surface readiness. Every actual successful report has error null and empty caps, authored exact UUID/side and settled first Day; all exercised=false.",
+    "runtime": {
+      "runnerPG": 61182,
+      "serverPG": 61231,
+      "actualPort": 5274,
+      "ownedSlot": 1,
+      "allRecordedPGs": [
+        75824,
+        76979,
+        84908,
+        73461,
+        42471,
+        43211,
+        39836,
+        40231,
+        43212,
+        61182,
+        41875,
+        40779,
+        30378,
+        61231
+      ],
+      "remainingOwnMembers": [],
+      "nativeOwnerRecords": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+          "exists": false
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+          "exists": false
+        }
+      },
+      "cleanupQualification": "Native terminal0 and summary await session close+owned server settlement; stderr reports port free. Isolated MCP browser context closed by native runner; no standalone RPC receipt fabricated. Shared service and peer contexts untouched."
+    }
+  },
+  "resourcePolicy": {
+    "workers": 2,
+    "heavyCommands": 1,
+    "reviewFull": false,
+    "noSourceOrEvidenceWritesDuringRuntime": true,
+    "nativeSweepException": "Only own exact ledger append, initial five judged rows prefix byte exact; all other5235 initial bytes fixed, distinct bounded collectorfa58350b41b1b788bc9bda06d99da17f03da9228311d2531e9dcdffa3f0f0821; strict collector55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48 unchanged.",
+    "memoryObservation": "memory_pressure -Q at early validation reported51% free; no sustained pressure outcome inferred.",
+    "noExtraProvider": true,
+    "sourceQualification": "All5235 initial keys unchanged throughout source-free implementation; only five new own evidence files. Metadata added after review/Knip is reviewed by exact final schema/whitespace; no runtime source changed."
+  },
+  "externalPreExisting": {
+    "canonicalBead": "hv-umm2.708",
+    "releaseRun": "01a13cdd-ef8b-7421-b5dd-4c5c22ae5c1f",
+    "buildset": "01a13cdf-83b0-7132-b165-03543cde2e8a",
+    "testedOID": "8fee862c17ada458e7e14346b95c612d1583193d",
+    "exactFailure": "fuzz-46 beforeaction42/afterstep124: extra floating effect e14 bothviewers",
+    "source": "Parent native release-log inspection; no own reproduction/cause attribution or current weighted300 resolution inferred.",
+    "native708SHA256": "89383df2efd11f70d2aa434f89ed7a20be1f26ceec922565555c4427da48b12e",
+    "rawParentLogSHA256": "9e7060af2a9fb0fecf4334d3225791fb86709bd9b73349cad4ab59f4c447aa42"
+  },
+  "readOnlyAttemptQualifications": [
+    "Stage1 rg included two nonexistent guessed filenames, exited2; actual paths subsequently resolved by rg --files, no source/runtime effects.",
+    "Late own-process ps read raced actual weighted exit and returned1; no command/resource mutation and no fuzzer failure."
+  ],
+  "coreReview": {
+    "perBeadRequired": false,
+    "reason": "Existing content compositions; this original writes five evidence files and zero production/test lines. Parent owns prior6nkw exact-range normal-Claude review debt asynchronously under D18. Phase gate review remains."
+  },
+  "timingCutoff": {
+    "at": "2026-10-15T00:44:47.484508+00:00",
+    "inclusiveMinutes": 26.024775133333332,
+    "firstDispatch": "2026-10-15T00:18:45.998Z",
+    "actualGitEnd": "UNKNOWN until future external receipt",
+    "modelSampling": "UNKNOWN",
+    "qualification": "Inclusive elapsed audit, coordination, waits, validation and finalization, not productive editing or model CPU. Automatic Git endpoint and tail only known externally after commit."
+  },
+  "remaining": "Parent internal exact finalization ACK before staging/one automatic-date commit. Final schema and staged whitespace receipts and actual Git/tail will be external to immutable source. Parent owns native certified delivery.",
+  "review": {
+    "filesChanged": 5,
+    "scope": "Evidence-only quick review/friction-record schema; 894records/41accepted historicalunknowns",
+    "outerSeconds": 0.3149742499808781,
+    "runtimeContractCoverage": "Separate fresh focused142checks and300fuzz/sweep receipts; quick review does not claim runtime test selection."
+  },
+  "finalization": "Finalizer may refresh ONLY own friction implementWindow.end/implementMin and measurement timingCutoff.at/inclusiveMinutes after parent ACK, then final schema, exact five-path staging, cached whitespace and one automatic-date Conventional Commit. No source or other evidence write, forced dates or postcommit tracked refresh. Future receipts stay external."
+}
