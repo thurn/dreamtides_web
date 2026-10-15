@@ -1,0 +1,48 @@
+{
+  "bead": "hv-umm2.283",
+  "phase": 5,
+  "implementMin": 134.32085253333332,
+  "implementWindow": {
+    "start": "2026-10-15T20:17:33.468156+00:00",
+    "end": "2026-10-15T22:31:52.719308+00:00"
+  },
+  "localValidationS": {
+    "producer-current-v02": 6.208749833051115,
+    "heavy-queue-first0": 729.9122123749694,
+    "producer-supplement-v02": 2.3881109160138294,
+    "browser-v02": 41.18933966697659,
+    "matrix-current-v03": 2.8993698750273325,
+    "review-current-v01": 0.29139412502991036,
+    "judged-native-current-v01": 2.5031092920107767,
+    "heavy-queue-first150": 734.8275916250423,
+    "browser-v03": 16.79991879197769,
+    "canonical-sweep-v02": 1458.5192177079734,
+    "matrix-current-v02": 2.942064874980133,
+    "fuzz-first0": 729.8860366669833,
+    "evidence-draft-current-v01": 0.24773954204283655,
+    "judged-current-v01": 95.39747991599143,
+    "native-v01": 2.5364847499877214,
+    "knip-current-v01": 4.6872682080138475,
+    "public-v01": 2.8855975420447066,
+    "gloom-competing-route-v01": 2.901814957964234,
+    "browser-v01": 64.08620241697645,
+    "producer-supplement-v01": 2.3029982919688337,
+    "producer-current-v01": 2.20333104202291,
+    "canonical-sweep-v01": 542.9095458340016,
+    "zero-chronology-v01": 2.3019673749804497,
+    "fuzz-first150": 734.8010880840011
+  },
+  "hostLoad": 5.28466796875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "card-model-deck-mods",
+      "minutes": 37.89776481666667,
+      "note": "Measured public diagnostic completion through current-base full payload binding: old53518 displayed duplicate Reclaim; separate bounded758 repair, dependency/coordination and native checkpoint/update recovery all lie inside this overlapping wall window. It is not exclusive waiting or discarded productive time; original claim clock remains continuous."
+    }
+  ]
+}
