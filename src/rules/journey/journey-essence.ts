@@ -42,7 +42,8 @@ export function essencePurgeSource(journey: Pick<JourneyState, "dreamsigns">, re
 /** Register one validated catalog clause as a deterministic post-event hook. */
 export function journeyEssence(dreamsignId: DreamsignId, descriptor: JourneyEssenceEffect): JourneyModifierDefinition {
   const effect = Object.freeze({ ...descriptor });
-  if (effect.kind === "purgedCardEssence" && (!Number.isFinite(effect.amount) || effect.amount <= 0) ||
+  if ((effect.kind === "enemyRemovalOutsideChallengeEssence" || effect.kind === "challengeDissolveEssence") && (!Number.isFinite(effect.amount) || effect.amount <= 0) ||
+    effect.kind === "purgedCardEssence" && (!Number.isFinite(effect.amount) || effect.amount <= 0) ||
     effect.kind === "multiplyEssenceSiteGain" && (!Number.isFinite(effect.factor) || effect.factor <= 0) ||
     effect.kind === "replaceEssenceSiteReward" && effect.offerCount !== 1 ||
     effect.kind === "newDreamscapeEssence" && (!Number.isFinite(effect.numerator) || effect.numerator < 0 ||
@@ -53,6 +54,7 @@ export function journeyEssence(dreamsignId: DreamsignId, descriptor: JourneyEsse
     dreamsignId,
     journeyEssence: effect,
     afterJourneyEvent({ before, journey, eventType, siteId, heldIndex, purges }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+      if (effect.kind === "enemyRemovalOutsideChallengeEssence" || effect.kind === "challengeDissolveEssence") return null;
       if (effect.kind === "purgedCardEssence") {
         if (purges === undefined || purges.length === 0) return null;
         const gained = purges.length * effect.amount;

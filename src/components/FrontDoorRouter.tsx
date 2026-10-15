@@ -1,4 +1,5 @@
 import { useGameState } from "../session/hooks";
+import { JourneyStarterPurgeScreenAdapter } from "../screens/cumulus_adapters/JourneyStarterPurgeScreenAdapter";
 import { JourneyDreamsignScreenAdapter } from "../screens/cumulus_adapters/JourneyDreamsignScreenAdapter";
 import { CumulusJourneyChrome } from "./CumulusJourneyChrome";
 import { useEffect, type ReactNode } from "react";
@@ -56,9 +57,12 @@ export function FrontDoorRouter({
   }
 
   const copyChoice = screen.type === "journeyDreamsign" && screen.choice.kind === "copy" && state.phase === "tutorial" ? screen.choice : null;
+  const starterChoice = screen.type === "journeyStarterPurge" && state.phase === "tutorial" ? screen.choice : null;
   const content =
     copyChoice !== null ? (
       <CumulusJourneyChrome><JourneyDreamsignScreenAdapter /></CumulusJourneyChrome>
+    ) : starterChoice !== null ? (
+      <CumulusJourneyChrome><JourneyStarterPurgeScreenAdapter /></CumulusJourneyChrome>
     ) : state.phase === "loading" ? (
       <LoadingScreenAdapter playbackSpeed={tutorialPlaybackSpeed} />
     ) : state.phase === "tutorial" &&
@@ -79,7 +83,7 @@ export function FrontDoorRouter({
   return (
     <ErrorBoundary
       scope={`screen:front-door:${state.phase}`}
-      resetKey={`${state.phase}:${state.journeyId ?? "none"}${copyChoice === null ? "" : `:copy:${String(copyChoice.permissionSeq)}:${String(copyChoice.index)}`}`}
+      resetKey={`${state.phase}:${state.journeyId ?? "none"}${copyChoice === null ? "" : `:copy:${String(copyChoice.permissionSeq)}:${String(copyChoice.index)}`}${starterChoice === null ? "" : `:starter:${String(starterChoice.permissionSeq)}:${String(starterChoice.index)}`}`}
     >
       {content}
     </ErrorBoundary>

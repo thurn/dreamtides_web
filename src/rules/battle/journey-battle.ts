@@ -43,7 +43,7 @@ import type { FoldState } from "../fold-state";
 import type { DeckEntryId, SiteId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { journeyBattleOf, type JourneyBattleFoldState, type JourneyBattleInit } from "./fold";
-import { engineBattleResult, startEngineBattle } from "./engine-battle";
+import { engineBattleResult, startEngineBattleWithCommits } from "./engine-battle";
 import type { Engine } from "../../engine";
 import type {
   BattleInit as EngineBattleInit,
@@ -169,6 +169,13 @@ export function beginBattle(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): FoldState | null {
+  return beginBattleWithCommits(state, payload, ctx)?.state ?? null;
+}
+
+/** Beginning a battle also returns its successful opening steps to the journey host. */
+export function beginBattleWithCommits(
+  state: FoldState, payload: Record<string, unknown>, ctx: EventContext,
+): { readonly state: FoldState; readonly committedSteps: readonly import("../../engine/fold/slice").CommittedBattleStep[] } | null {
   if (state.battle !== null) {
     return null;
   }
@@ -204,7 +211,7 @@ export function beginBattle(
   if (provider === null) {
     return null;
   }
-  const battle = startJourneyBattle(provider, {
+  const started = startJourneyBattleWithCommits(provider, {
     journey: state.journey,
     siteId: parseSiteId(siteId),
     seedOverride,
@@ -212,7 +219,7 @@ export function beginBattle(
     rng: ctx.rng,
     timestamp: ctx.timestamp,
   });
-  return battle === null ? null : { ...state, battle };
+  return started === null ? null : { state: { ...state, battle: started.battle }, committedSteps: started.committedSteps };
 }
 
 /**
@@ -225,18 +232,23 @@ export function startJourneyBattle(
   provider: BattleInitProvider,
   input: Parameters<BattleInitProvider["beginBattle"]>[0],
 ): JourneyBattleFoldState | null {
+  return startJourneyBattleWithCommits(provider, input)?.battle ?? null;
+}
+
+/** The transient opening receipt is kept separate from the persisted battle. */
+function startJourneyBattleWithCommits(
+  provider: BattleInitProvider, input: Parameters<BattleInitProvider["beginBattle"]>[0],
+): { readonly battle: JourneyBattleFoldState; readonly committedSteps: readonly import("../../engine/fold/slice").CommittedBattleStep[] } | null {
   const start = provider.beginBattle(input);
   if (start === null) {
     return null;
   }
-  const engine = startEngineBattle(
+  const started = startEngineBattleWithCommits(
     start.engineInit,
     provider.engine,
     input.seq,
   );
-  return engine === null
-    ? null
-    : { mode: { kind: "journey" }, init: start.init, engine };
+  return started === null ? null : { battle: { mode: { kind: "journey" }, init: start.init, engine: started.fold }, committedSteps: started.committedSteps };
 }
 
 // ---------------------------------------------------------------------------

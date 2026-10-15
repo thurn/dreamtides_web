@@ -1,0 +1,4102 @@
+{
+  "bead": "hv-umm2.272",
+  "sourceBase": "2685642bc00b88fa0f78a30e48766820e4b53bea",
+  "checkpointUTC": "2026-10-15T07:05:10.848274+00:00",
+  "clockStatus": "Uncommitted measured checkpoint; refresh immediately before actual Git invocation. Actual Git end and the measured final gap are retained by the parent after Git, with no forced dates.",
+  "dispatch": {
+    "utc": "2026-10-15T05:25:23.271000+00:00",
+    "hostOrdinal": 77236,
+    "rawSHA256": "4d7c1da28f249583c040df75bb1498efb2069255e6d9bb8049fd903fef94533f"
+  },
+  "sampling": "UNKNOWN",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "tutorial-review-v01 starting load"
+      },
+      "localValidationS.review": {
+        "measuredFor": "tutorial-review-v01",
+        "exit": 0
+      },
+      "localValidationS.focused": {
+        "measuredFor": "tutorial-focused-v03",
+        "exit": 0
+      },
+      "localValidationS.knip": {
+        "measuredFor": "tutorial-knip-v01",
+        "exit": 0
+      },
+      "localValidationS.full": {
+        "measuredFor": "tutorial-full-v01",
+        "exit": 0
+      },
+      "localValidationS.journey300": {
+        "measuredFor": "tutorial-journey300-v01",
+        "exit": 0
+      }
+    }
+  },
+  "testDelta": {
+    "files": 5,
+    "lines": 367,
+    "jsdomFiles": 1
+  },
+  "commandReceipts": [
+    {
+      "label": "beta-starter-browser-v01",
+      "receiptSHA256": "188bd4e4587fd35aeeb192ce4ffebeefdba7e14a7b2208927185d4e07f446f89",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v01.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=select",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:40:57.261507+00:00",
+      "end": "2026-10-15T05:41:07.515460+00:00",
+      "exit": 1,
+      "wallSeconds": 10.253767999995034,
+      "pid": 70531,
+      "pgid": 70531,
+      "load": "{ 5.54 8.87 10.91 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "d9d8f54ea23254c255f6980ce4d3922f34deacc44ed07f976c4f1446cfa41efc",
+      "stderrSHA256": "c5a33ba1115319c950094d8da69352cab6101def4c77e3b03f3d1070e4108d54"
+    },
+    {
+      "label": "beta-starter-browser-v02",
+      "receiptSHA256": "f882d90f1822acc0d9df89ed690b6590f3e47b1e3ad5d914eaf2657ade74efd8",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v02.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=select",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:41:51.916131+00:00",
+      "end": "2026-10-15T05:42:24.500555+00:00",
+      "exit": 0,
+      "wallSeconds": 32.58280370797729,
+      "pid": 73834,
+      "pgid": 73834,
+      "load": "{ 7.50 8.98 10.83 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "9d866447635390507f357a53bc240b3eb863bc0ade62172f0bd711b68b289ae7",
+      "stderrSHA256": "24661cc5687dcf581877d39918845002d83f19844dbef31e82fa5ef63d9d1e24"
+    },
+    {
+      "label": "cancel-for-review-fix-v01",
+      "receiptSHA256": "657909cf133f5f8dadb9c470574a785c938e352e74374811355e5c20054e9eb0",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "cancel",
+        "01a13e39-321f-7901-b9c8-6d3416e53005",
+        "--json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-15T06:38:49.058659+00:00",
+      "end": "2026-10-15T06:38:49.291886+00:00",
+      "exit": 0,
+      "wallSeconds": 0.23315774998627603,
+      "pid": 73532,
+      "pgid": 73532,
+      "load": "{ 20.48 19.16 17.15 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "444cceec4bd03058f8dee8823fab58adfc0a585d4098a77db0f0760c22f48829",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "canceled-status-v01",
+      "receiptSHA256": "c473f19d38ef059cc3a1cb91d8feef43274feffc8b00a4b53e0cdafaddd0cef9",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "status",
+        "01a13e39-321f-7901-b9c8-6d3416e53005",
+        "--json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-15T06:39:22.180457+00:00",
+      "end": "2026-10-15T06:39:22.189952+00:00",
+      "exit": 0,
+      "wallSeconds": 0.009378124959766865,
+      "pid": 77438,
+      "pgid": 77438,
+      "load": "{ 15.98 18.15 16.86 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "663b2a517e7fd28d9fb294da5f14e5df41ae11def56e79a155b2c0a66737af00",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "candidate-status-v01",
+      "receiptSHA256": "6180a942a85d1e70ecf22e83d2a44f77ac3eeeeed5008f31d5d81064a0b69952",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "status",
+        "01a13e39-321f-7901-b9c8-6d3416e53005",
+        "--json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-15T06:23:29.730460+00:00",
+      "end": "2026-10-15T06:23:30.281049+00:00",
+      "exit": 0,
+      "wallSeconds": 0.550465542008169,
+      "pid": 2395,
+      "pgid": 2395,
+      "load": "{ 16.68 17.87 16.20 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "3362f992c93f3ee666897d0c723cae6e9a2e71a26dffad94b28fb563e6219254",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "candidate-status-v02",
+      "receiptSHA256": "0ed2ed232444fa7f2f25cf1b731fb8a7ee7ea10c709cd7ace19101c0405b9d5f",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "status",
+        "01a13e39-321f-7901-b9c8-6d3416e53005",
+        "--json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-15T06:28:28.048012+00:00",
+      "end": "2026-10-15T06:28:29.258363+00:00",
+      "exit": 0,
+      "wallSeconds": 1.2102226249990053,
+      "pid": 28334,
+      "pgid": 28334,
+      "load": "{ 24.88 16.24 15.45 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "032ad0826a230f5add7a2cedaf0d52c82a292201b4aebe64dc0f152cca504c50",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "candidate-v01",
+      "receiptSHA256": "e5374ede5a66a5d7c6e157c64ce4d2829b52d1229b3773916f5ed135a914f294",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "candidate",
+        "b044d330af54766372611403f83708375c2fd732",
+        "--json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:21:37.851043+00:00",
+      "end": "2026-10-15T06:21:40.950599+00:00",
+      "exit": 0,
+      "wallSeconds": 3.099426125001628,
+      "pid": 35438,
+      "pgid": 35438,
+      "load": "{ 13.52 16.06 15.30 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "845ff1c4c5c120a843c1d349459452ef566bdbe6dfcb5ac77ab222001719a77a",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "compile-v01",
+      "receiptSHA256": "12a84df05136401edb5c84b8c6c93ed35996906c6ea915c1ee6021f735303edb",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:34:43.813006+00:00",
+      "end": "2026-10-15T05:34:55.855539+00:00",
+      "exit": 2,
+      "wallSeconds": 12.04231616697507,
+      "pid": 97796,
+      "pgid": 97796,
+      "load": "{ 19.84 13.58 12.88 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "2c0214f48eea0d9ea5acb802bea187c5bcaae6b1ed485026e5352cfc19456378",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "compile-v02",
+      "receiptSHA256": "f52ac80b2411f0496e023bc031dbbbcb177c9ce4fd0899565cecfa420c86151c",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:36:01.900640+00:00",
+      "end": "2026-10-15T05:36:13.728839+00:00",
+      "exit": 0,
+      "wallSeconds": 11.827959374990314,
+      "pid": 17497,
+      "pgid": 17497,
+      "load": "{ 11.36 12.38 12.49 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "compile-v03",
+      "receiptSHA256": "db32d7f7f629f474d097be301996298927a05956c9638bfe8535e7f5264e87c4",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:36:52.551190+00:00",
+      "end": "2026-10-15T05:37:04.909469+00:00",
+      "exit": 2,
+      "wallSeconds": 12.358043000043835,
+      "pid": 21229,
+      "pgid": 21229,
+      "load": "{ 10.65 12.04 12.36 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "7a9a9650f828f5594c5ecab60a0260ba7b3e57e6fbd80fcbf83a8b33802b4371",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "compile-v04",
+      "receiptSHA256": "a6cbcc86779637f76ea2fc7ce5f3733a7152a551f530cdf00e453eb1ba863d5d",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:39:20.365130+00:00",
+      "end": "2026-10-15T05:39:31.874376+00:00",
+      "exit": 2,
+      "wallSeconds": 11.509047082974575,
+      "pid": 63599,
+      "pgid": 63599,
+      "load": "{ 6.42 10.06 11.52 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "c0522af2aed2b87fb65ae7a7534fac6f6768373a9ba30ff32381162b6b465878",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "compile-v05",
+      "receiptSHA256": "e48fbe53a36546eaf2e6bee0a37f557ec29db04d6f535750d29175b829abcc1a",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:39:46.580157+00:00",
+      "end": "2026-10-15T05:39:57.547707+00:00",
+      "exit": 0,
+      "wallSeconds": 10.967385209049098,
+      "pid": 65565,
+      "pgid": 65565,
+      "load": "{ 6.18 9.72 11.35 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "compile-v06",
+      "receiptSHA256": "bc83dc306f7646436bf011ec41a3b19b0dea0f28441a544618c283728282e849",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:49:20.032674+00:00",
+      "end": "2026-10-15T05:49:31.765616+00:00",
+      "exit": 0,
+      "wallSeconds": 11.732663874980062,
+      "pid": 15210,
+      "pgid": 15210,
+      "load": "{ 10.51 14.05 12.88 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "counterfactuals-v01",
+      "receiptSHA256": "2e7c0846c003ce9199056a0083377b71715ff87ff65c85c0211de01323e3f227",
+      "argv": [
+        "python3",
+        "/tmp/worker272-20261015/counterfactuals-v01.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:50:53.477428+00:00",
+      "end": "2026-10-15T05:51:06.711548+00:00",
+      "exit": 0,
+      "wallSeconds": 13.233866624999791,
+      "pid": 21513,
+      "pgid": 21513,
+      "load": "{ 8.48 12.48 12.39 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "2dc68e53bc33baa90dc5c6acc39c6f7e2e849cddaf18aeab42d49e5643464488",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "coverage-gate-v01",
+      "receiptSHA256": "2b42b62662357e628489c3a8e94c6fdb148fc6624cc1512a02cac0e003c4e5d5",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:56:31.221575+00:00",
+      "end": "2026-10-15T05:56:33.254350+00:00",
+      "exit": 0,
+      "wallSeconds": 2.0326647919719107,
+      "pid": 93289,
+      "pgid": 93289,
+      "load": "{ 10.40 13.18 12.90 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "17fd8dc121c143a86e8bdae0fd8af24cbfd2b332113fc6c1a5348272ee5f3068",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "dispatch-triggers-v01",
+      "receiptSHA256": "21a184a46a86c4030edb603e07e450f06d6bf29ec758558dc82d7388ebabdb7f",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:25:34.054177+00:00",
+      "end": "2026-10-15T05:25:34.287100+00:00",
+      "exit": 0,
+      "wallSeconds": 0.2328354999772273,
+      "pid": 93361,
+      "pgid": 93361,
+      "load": "{ 7.60 10.87 12.78 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "2a4733b1371ddce218a51a9001039aad516b27986e1eab8335e780d40b234bd1",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "entity-report-v01",
+      "receiptSHA256": "06448aba6fdbd33c7e0852f0ba922cc43313b4a294b5c4e55c5cf9f6c338e0cb",
+      "argv": [
+        "npm",
+        "run",
+        "bead:entities",
+        "--",
+        "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+        "eb55b141-82f8-4ba4-b319-420f762e9ee4",
+        "1328e611-fa2f-426f-87e2-97f26c061866",
+        "e7d23bf7-4d60-4b43-94c4-14a06c0f9116"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:24:34.441488+00:00",
+      "end": "2026-10-15T05:24:35.953770+00:00",
+      "exit": 0,
+      "wallSeconds": 1.5121621660073288,
+      "pid": 88115,
+      "pgid": 88115,
+      "load": "{ 6.51 11.56 13.14 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "df7d200ee4cfaaf89f346da55bc97cafc29632b9bec9a3fedf19d0d0ad65d862",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "fault-challenge-phase-credit-v01",
+      "receiptSHA256": "d2d804dad8c559fc9260822dacfc11fa30da76853c017c9bd565bd049ba23f9e",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "-t",
+        "excludes a causal effect removal"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:50:56.995759+00:00",
+      "end": "2026-10-15T05:50:59.754670+00:00",
+      "exit": 1,
+      "wallSeconds": 2.758798166003544,
+      "pid": 21756,
+      "pgid": 21756,
+      "load": "{ 8.52 12.42 12.37 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "f6c305233cd35b8644f0701fcc1fbd6d5f565fb121543a9d033b1159b8e18c22",
+      "stderrSHA256": "a424a1e953f174c4282de2fb0b5397eefc2b0e3a4283e88488f7a1db8e98333b"
+    },
+    {
+      "label": "fault-lost-earlier-prefix-v01",
+      "receiptSHA256": "573fc6175373fb1aecdb443ff7752e7575b96865cc3e08d72f16cd016cfc3f31",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/fold/committed-events.test.ts",
+        "-t",
+        "excludes a real cancellable"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:50:55.563392+00:00",
+      "end": "2026-10-15T05:50:56.573499+00:00",
+      "exit": 1,
+      "wallSeconds": 1.0100085419835523,
+      "pid": 21664,
+      "pgid": 21664,
+      "load": "{ 8.52 12.42 12.37 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "278b93aca9c980a5751c6562d389915a9424404424d655aaa77122d97c1fc79c",
+      "stderrSHA256": "5c6f8ba23f3efa83a5f61bd5b8f1f1509856325cf40af0ecf43639b36168d42f"
+    },
+    {
+      "label": "fault-overwrite-formed-starter-v01",
+      "receiptSHA256": "14d721c5bbca6dcee87d6b281dc49bb601d8801b1e2a899e7e645732ebe21ff2",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "-t",
+        "perfects every eligible unformed starter"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:51:03.751683+00:00",
+      "end": "2026-10-15T05:51:06.537509+00:00",
+      "exit": 1,
+      "wallSeconds": 2.78573475003941,
+      "pid": 22325,
+      "pgid": 22325,
+      "load": "{ 8.80 12.42 12.37 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "dcb6322000da07d6b6c58b65bf1f00e1aa7a3978ee997770da06d371f3a4046e",
+      "stderrSHA256": "ed4c0785794b6f2c498fa09bb8949f3843dc102ab7ae8a056a042d86d2fcf5ed"
+    },
+    {
+      "label": "fault-uncommitted-prefix-v01",
+      "receiptSHA256": "57fa8d9ae15d42988fc218d13a1b675dce54de32dbbc3045debe4d4589390e1b",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/fold/committed-events.test.ts",
+        "-t",
+        "excludes a real cancellable"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:50:54.102822+00:00",
+      "end": "2026-10-15T05:50:55.136357+00:00",
+      "exit": 1,
+      "wallSeconds": 1.0334505419596098,
+      "pid": 21568,
+      "pgid": 21568,
+      "load": "{ 8.48 12.48 12.39 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "eb09a3a37ef44134b00f37282540d0e84fc4dbcc5b7825ea99ef10134f950ddc",
+      "stderrSHA256": "155ff9783622864429d3c8478fd49b6450a4f5b8f093fc56e869afa1bc467c56"
+    },
+    {
+      "label": "fault-unearned-starter-purge-v01",
+      "receiptSHA256": "c2bdd6c3740dfb1cd0fec2675f6cf6a929365eb580453872faac6f83bdc3591b",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "-t",
+        "offers zero through the catalog limit"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:51:00.250085+00:00",
+      "end": "2026-10-15T05:51:03.301106+00:00",
+      "exit": 1,
+      "wallSeconds": 3.0507722920156084,
+      "pid": 22054,
+      "pgid": 22054,
+      "load": "{ 8.80 12.42 12.37 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "f6645004bcac8caeb71d20bca1976ea693781b5a76e329bdc4bd3a49d2fa1fc3",
+      "stderrSHA256": "a2248869abd0f455dc666cba22e4f4019a0287850261d3e2212ea50ffb775a02"
+    },
+    {
+      "label": "final-battle-banish-v01",
+      "receiptSHA256": "c8182aa18c1bca8ae3849648bd0fa41ea9725f399225a5ede6cd8715f26a7b4e",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/battle-essence-workflow-v05.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=banish",
+        "--arg",
+        "copies=1",
+        "--arg",
+        "capture=0",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:11:55.136687+00:00",
+      "end": "2026-10-15T06:12:58.079271+00:00",
+      "exit": 0,
+      "wallSeconds": 62.941072165966034,
+      "pid": 22676,
+      "pgid": 22676,
+      "load": "{ 21.34 18.50 15.49 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "474ca5051ca19025ef9fda26da8099bd79e9ba9497cd14322ebbddcfa0ffc7a3",
+      "stderrSHA256": "d7a11ce8835aa4207bfbee29364ae3a0a8b102f673ffba5204c1aa88189ecbd5"
+    },
+    {
+      "label": "final-battle-challenge-v01",
+      "receiptSHA256": "7661e07e8108c8267e2cd2d12475cbcc58511ca1603ce5bb55ac5895cb7422e4",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/battle-essence-workflow-v05.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=challenge",
+        "--arg",
+        "copies=1",
+        "--arg",
+        "capture=1",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:13:28.434138+00:00",
+      "end": "2026-10-15T06:14:22.847195+00:00",
+      "exit": 0,
+      "wallSeconds": 54.41225100000156,
+      "pid": 85358,
+      "pgid": 85358,
+      "load": "{ 16.68 18.39 15.81 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "6c8a124850d85efc563f7fe996f3536b269bee2443133280728c7372fe9a5208",
+      "stderrSHA256": "77fca7004553d4b8813618b523b3de706c2423c5b72d282e91b5f54325d4787c"
+    },
+    {
+      "label": "final-battle-dissolve-v01",
+      "receiptSHA256": "0b19123183ddaabba04d51ab7136a71dbf29787ae409b19e9754faf71852e12c",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/battle-essence-workflow-v02.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=dissolve",
+        "--arg",
+        "copies=2",
+        "--arg",
+        "capture=0",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:05:52.185873+00:00",
+      "end": "2026-10-15T06:06:34.149064+00:00",
+      "exit": 1,
+      "wallSeconds": 41.962580666993745,
+      "pid": 76988,
+      "pgid": 76988,
+      "load": "{ 14.95 15.10 13.56 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "c30731c5f137cb833dd223123b8500e984583a08c8efd9068eac7952052d100a",
+      "stderrSHA256": "bd0a1ff78062745afd1bd065a448b3fd08422fd15ce5d0c7f84876c2146a799d"
+    },
+    {
+      "label": "final-battle-dissolve-v02",
+      "receiptSHA256": "f33f0fde39efb1a4c4e30acc8084a422f0c8436e6599ef9e0545faa1efe32051",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/battle-essence-workflow-v03.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=dissolve",
+        "--arg",
+        "copies=2",
+        "--arg",
+        "capture=0",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:07:24.144015+00:00",
+      "end": "2026-10-15T06:07:51.872435+00:00",
+      "exit": 1,
+      "wallSeconds": 27.727983624965418,
+      "pid": 83265,
+      "pgid": 83265,
+      "load": "{ 11.03 14.07 13.33 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "cad3821e868dd7010303173e374836f912ac2aecd593106a2a573a8088d067be",
+      "stderrSHA256": "b65bb4fa2f84ee6af9a8a58b2d1bb9c6195d69f08b26dc13fe716f85e12909cb"
+    },
+    {
+      "label": "final-battle-dissolve-v03",
+      "receiptSHA256": "8c67c7b65a85f94f849d3a49fc730347da891bbf6f79ebed9e3010cb30a96f28",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/battle-essence-workflow-v04.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=dissolve",
+        "--arg",
+        "copies=2",
+        "--arg",
+        "capture=0",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:08:49.948872+00:00",
+      "end": "2026-10-15T06:09:43.994031+00:00",
+      "exit": 1,
+      "wallSeconds": 54.04434995900374,
+      "pid": 90167,
+      "pgid": 90167,
+      "load": "{ 17.70 14.96 13.71 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "c61033f2aa688309034bff415cdb6ea7a06b5f1ed117d584ec544af4758c5a1f",
+      "stderrSHA256": "b58d47fa159876d5b35eac3060399cef752f9302800175bba2ceca801e88ae44"
+    },
+    {
+      "label": "final-battle-dissolve-v04",
+      "receiptSHA256": "c668ab97bdf9f4a38d2be444742c7f59a4c63f3c2838cfdb33ca40fd26e8b366",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/battle-essence-workflow-v05.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=dissolve",
+        "--arg",
+        "copies=2",
+        "--arg",
+        "capture=0",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:10:31.175439+00:00",
+      "end": "2026-10-15T06:11:37.581849+00:00",
+      "exit": 0,
+      "wallSeconds": 66.40547699999297,
+      "pid": 57240,
+      "pgid": 57240,
+      "load": "{ 19.14 16.91 14.66 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "aeed66c75dff945fcd8d50b0cd5357f1c9f9fae9d6f1971197595ec98e1e8017",
+      "stderrSHA256": "b268b99b67c9ba75b9b6a9aa8426b1240f7ff23609b30554845bb351c80aaad1"
+    },
+    {
+      "label": "final-browser-audit-v01",
+      "receiptSHA256": "56809382e5eecab955eb17314bf1383f0717921e0d49e4e10826acbc50b36cd7",
+      "argv": [
+        "python3",
+        "/tmp/root272-20261015/audit-final-browser-v01.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:14:44.032710+00:00",
+      "end": "2026-10-15T06:14:44.161639+00:00",
+      "exit": 0,
+      "wallSeconds": 0.1288545829593204,
+      "pid": 91866,
+      "pgid": 91866,
+      "load": "{ 13.68 17.03 15.51 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "3f3186653dbc6953f99ca1f3b32970d8cbcbbe7f88ce26a0e2efbf8bb970f127",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "final-schema-v01",
+      "receiptSHA256": "19135d33ff20bb1a2b4f8353cd55a5d764474a8a115bc02f84a6df4fb52f455e",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:19:43.254273+00:00",
+      "end": "2026-10-15T06:19:43.355120+00:00",
+      "exit": 0,
+      "wallSeconds": 0.10077054100111127,
+      "pid": 70211,
+      "pgid": 70211,
+      "load": "{ 22.30 16.46 15.23 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "d6dcccbb5163983ff710efe4b86d20e59a16c163bedccef0bd066a603d7b6f40",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "final-starter-decline-reward-v01",
+      "receiptSHA256": "310bb3ba0fcbdbe2124a33abb312ac53d09225167c9b524cf9383135d6d795ed",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v03.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=decline",
+        "--arg",
+        "gain=reward",
+        "--arg",
+        "capture=0",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:06:42.243659+00:00",
+      "end": "2026-10-15T06:07:08.226566+00:00",
+      "exit": 0,
+      "wallSeconds": 25.9824627499911,
+      "pid": 80551,
+      "pgid": 80551,
+      "load": "{ 13.47 14.80 13.54 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "aec5e03c27d24cf843863eba3457e2674544a4efbcc0fd7b81950bd4573ec9f9",
+      "stderrSHA256": "414e4017b158163701fbc0c067e0e376a13aa937cd03d6553e733d964b76c93c"
+    },
+    {
+      "label": "final-starter-empty-reward-v01",
+      "receiptSHA256": "1dfa91352e66d2a05e29d67c16d299e0701648bdbcf3c2b1aac025b19743393d",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v03.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=empty",
+        "--arg",
+        "gain=reward",
+        "--arg",
+        "capture=1",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:07:38.725806+00:00",
+      "end": "2026-10-15T06:08:05.868151+00:00",
+      "exit": 0,
+      "wallSeconds": 27.14168962504482,
+      "pid": 84275,
+      "pgid": 84275,
+      "load": "{ 10.28 13.76 13.23 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "2091af9c7670e7c0808a760e85eaaa9f1914586b631a310ef3ca0ce2803656d3",
+      "stderrSHA256": "abe71cb12dcbbdd5cb991636d1d1389bdc30134499d237331165d211055f1c3b"
+    },
+    {
+      "label": "final-starter-jellyfish-debug-v01",
+      "receiptSHA256": "a18591e0de0cfd85f56db4f15d86f828a2a545b30079970c7abe9f8c24bcd6e8",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v03.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=jellyfish",
+        "--arg",
+        "gain=debug",
+        "--arg",
+        "capture=0",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:13:27.289769+00:00",
+      "end": "2026-10-15T06:13:47.245702+00:00",
+      "exit": 0,
+      "wallSeconds": 19.95554933301173,
+      "pid": 85204,
+      "pgid": 85204,
+      "load": "{ 16.68 18.39 15.81 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "d6e6d1ece461ba0c549c862cc3c5fd5e11dc6e818f7914550406141ed6850e1f",
+      "stderrSHA256": "2c2b230b6ab64747ca855b0d686c809893c7d3a9497c0952adf270eafd4f19db"
+    },
+    {
+      "label": "final-starter-jellyfish-reward-v01",
+      "receiptSHA256": "ade746b0b3240cc575fd5c82853c4ab8ea5a17de052c35271ec0f42cf8bcd26c",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v03.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=jellyfish",
+        "--arg",
+        "gain=reward",
+        "--arg",
+        "capture=1",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:11:53.963145+00:00",
+      "end": "2026-10-15T06:12:52.699589+00:00",
+      "exit": 0,
+      "wallSeconds": 58.7356333329808,
+      "pid": 22452,
+      "pgid": 22452,
+      "load": "{ 21.34 18.50 15.49 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "493fb9c184b0f29329b12c99e97cad68d7b37d14410c18b1c6bdaf366bfce433",
+      "stderrSHA256": "d2a1b67fb69b14cffd8b95463175c969df6cefbf3e7f3f8d00deea21f621a8c4"
+    },
+    {
+      "label": "final-starter-large-reward-v01",
+      "receiptSHA256": "fc66d4240f0b8483412ccf81e1d0ff4a78519a29518c966a90472aefd4a768d1",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v03.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=large",
+        "--arg",
+        "gain=reward",
+        "--arg",
+        "capture=1",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:08:58.341128+00:00",
+      "end": "2026-10-15T06:10:21.961902+00:00",
+      "exit": 0,
+      "wallSeconds": 83.61959129199386,
+      "pid": 4592,
+      "pgid": 4592,
+      "load": "{ 20.92 15.73 13.99 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "d856bc27ffbc5c29dccb760ab7f6d065919c3e9b566a46243f9d6f8ed067dca2",
+      "stderrSHA256": "cce88f7742931e7c5ca1118ebc675f6f9fcdf68dc4ed31489850f13917501532"
+    },
+    {
+      "label": "final-starter-select-debug-v01",
+      "receiptSHA256": "3e1f9ce3cfefab186c3261cdb138b4c0c974c7357fbe5b399878c8e04f3d653b",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v03.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=select",
+        "--arg",
+        "gain=debug",
+        "--arg",
+        "capture=0",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:10:39.406923+00:00",
+      "end": "2026-10-15T06:11:36.754057+00:00",
+      "exit": 0,
+      "wallSeconds": 57.346193584031425,
+      "pid": 58154,
+      "pgid": 58154,
+      "load": "{ 18.49 16.81 14.64 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "0d9c479dfc955463ad398f042c534266d4111bbd31ffc6c75ab5451f2505dbab",
+      "stderrSHA256": "636e1d7f550c091414a0bcd8b73750fbf1f7b8eea4431e04e59b66fdbba75bd0"
+    },
+    {
+      "label": "final-starter-select-reward-v01",
+      "receiptSHA256": "05e1291cdcddf86959c7cb02421f7dc9d37295c2eff7711b884cfecdf0ded25c",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v03.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=select",
+        "--arg",
+        "gain=reward",
+        "--arg",
+        "capture=1",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:05:51.024875+00:00",
+      "end": "2026-10-15T06:06:27.917661+00:00",
+      "exit": 0,
+      "wallSeconds": 36.89222074998543,
+      "pid": 76823,
+      "pgid": 76823,
+      "load": "{ 14.95 15.10 13.56 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "8d1d8a157c8937a962ec17d5a70ecbab04b97acafc272f1e79465ce421a6a126",
+      "stderrSHA256": "7c3ecfc3631df8ff22f874daa48e220bf049b186a4d796cf561a23fda646ffcf"
+    },
+    {
+      "label": "focused-v01",
+      "receiptSHA256": "89bc95b01964716e1700102b4468a546f14ac62bd416682a32a38deb0edd5372",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:37:51.745994+00:00",
+      "end": "2026-10-15T05:38:03.024148+00:00",
+      "exit": 1,
+      "wallSeconds": 11.277917166007683,
+      "pid": 56891,
+      "pgid": 56891,
+      "load": "{ 9.34 11.42 12.10 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "8f98bcbd563f21700656b17dca9d56ddf8dcaf4d4cd7deb0cfd1fd4b59ce32f6",
+      "stderrSHA256": "a4f9b575c069322204243fcf93697545de8a6929cbbbef912aa60f094c3f95a6"
+    },
+    {
+      "label": "focused-v02",
+      "receiptSHA256": "41fdf58c05fd964635e5dc851b0e3336bbad26367a64335d167e8e4958730f49",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:38:16.854661+00:00",
+      "end": "2026-10-15T05:38:23.216937+00:00",
+      "exit": 1,
+      "wallSeconds": 6.3621211249846965,
+      "pid": 58939,
+      "pgid": 58939,
+      "load": "{ 9.07 11.19 12.00 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e79804051c518008beb240e74862b0878a9f087b438dd09c29e17737c5b7b05b",
+      "stderrSHA256": "ce4d55733e302817e85e6dcaee15fce5159be8e680627945e11dec1fa88f29fb"
+    },
+    {
+      "label": "focused-v03",
+      "receiptSHA256": "29c010559cf61a93604b15785a096e12cb1a119aa54b6bfd403ca61b79b2099b",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "src/cumulus/screens/JourneyStarterPurgeScreen.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:39:15.177918+00:00",
+      "end": "2026-10-15T05:39:23.264097+00:00",
+      "exit": 0,
+      "wallSeconds": 8.086010208993685,
+      "pid": 63190,
+      "pgid": 63190,
+      "load": "{ 6.55 10.15 11.56 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e66a4788897c0e224e8737fd70493c7649a7898ae985b68b089ec708112a030f",
+      "stderrSHA256": "782d458e56eacf00bcfb0746aaf33484849182d83a80c1bbdfcc17b37b8b36f8"
+    },
+    {
+      "label": "focused-v04",
+      "receiptSHA256": "b977b526b97f6bcce921e415732da9120416de5e552b6df4f6d297b3acbfbc19",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/fold/committed-events.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/cumulus/screens/JourneyStarterPurgeScreen.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:43:26.343410+00:00",
+      "end": "2026-10-15T05:43:39.289255+00:00",
+      "exit": 1,
+      "wallSeconds": 12.945544666959904,
+      "pid": 77101,
+      "pgid": 77101,
+      "load": "{ 5.78 7.81 10.17 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "eedb87732e1a406a0db45756ffb464ec73b7b7eac63e53768d36dc1730519f91",
+      "stderrSHA256": "0ccc209aa019263f3774e7b5cb85105924a587563f833ae7fab8ffbb3b5108d3"
+    },
+    {
+      "label": "focused-v05",
+      "receiptSHA256": "40dda069d0607f174ccb7f261898f626191743fbc54aed03355f6aeb914e62cf",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/fold/committed-events.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/cumulus/screens/JourneyStarterPurgeScreen.test.tsx",
+        "src/screens/cumulus_adapters/journey-starter-purge-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:44:18.285835+00:00",
+      "end": "2026-10-15T05:44:28.147128+00:00",
+      "exit": 0,
+      "wallSeconds": 9.861055375018623,
+      "pid": 37164,
+      "pgid": 37164,
+      "load": "{ 15.83 10.11 10.87 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "227cfa9dbfb990d273b9ee7e7a7ee2b0af7e02d457237d02b18d6d5e87289885",
+      "stderrSHA256": "782d458e56eacf00bcfb0746aaf33484849182d83a80c1bbdfcc17b37b8b36f8"
+    },
+    {
+      "label": "focused-v06",
+      "receiptSHA256": "805ee37591f4ab9eed18b06ae4b6ad0d73176d45ca73f255d7348090e465f272",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/fold/committed-events.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/cumulus/screens/JourneyStarterPurgeScreen.test.tsx",
+        "src/screens/cumulus_adapters/journey-starter-purge-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:50:23.315028+00:00",
+      "end": "2026-10-15T05:50:32.531508+00:00",
+      "exit": 0,
+      "wallSeconds": 9.216260125045665,
+      "pid": 19450,
+      "pgid": 19450,
+      "load": "{ 9.11 13.01 12.57 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "f236ebbc12b64607c0c966aeb09549a9305269f6df81cb7d19acb0bc4959cf04",
+      "stderrSHA256": "782d458e56eacf00bcfb0746aaf33484849182d83a80c1bbdfcc17b37b8b36f8"
+    },
+    {
+      "label": "full-queue-v01",
+      "receiptSHA256": "cbab079822c24848a5bff5e0e427082d11cfcfa23766b9f5cff6f02100c3712e",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root272-20261015/record.py",
+        "full-v01",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:54:38.992736+00:00",
+      "end": "2026-10-15T06:05:18.788782+00:00",
+      "exit": 0,
+      "wallSeconds": 639.7877568749827,
+      "pid": 96773,
+      "pgid": 96773,
+      "load": "{ 14.40 14.02 13.07 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "f3382390bbd7fa5e117f85c045bf0eb4f3bc0fb3e43becd7bd55ff30e6730b61",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "full-v01",
+      "receiptSHA256": "1d43ef2beb328b8ba7813eede393843902b84b7d437ed34cde739e50ba88d13d",
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:03:08.631725+00:00",
+      "end": "2026-10-15T06:05:18.738035+00:00",
+      "exit": 0,
+      "wallSeconds": 130.10458525002468,
+      "pid": 77589,
+      "pgid": 77589,
+      "load": "{ 22.66 14.15 12.92 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "c3b509634bf375d086c0355724f42252bbc9dbbb3db79fcf2559813350d1a4a7",
+      "stderrSHA256": "b3f2807a010f009852578e7c58819ed080c8fba326082dc5730d693a44fc3f18"
+    },
+    {
+      "label": "git-commit-v01",
+      "receiptSHA256": "7072b3f4370d6f78d74fa47077a4a61e535884d9dc34ad1fd86da7b4c17a0732",
+      "argv": [
+        "git",
+        "commit",
+        "--file",
+        "/tmp/worker272-20261015/commit-message-v01.txt"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:19:43.550135+00:00",
+      "end": "2026-10-15T06:19:43.609871+00:00",
+      "exit": 0,
+      "wallSeconds": 0.05960129201412201,
+      "pid": 70254,
+      "pgid": 70254,
+      "load": "{ 22.30 16.46 15.23 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "782d694c9349296f0d2847b7e37a0cca6f0d77ae3dedf7f4e06d2e415a9e9a4d",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "journey300-preflight-v01",
+      "receiptSHA256": "da54e610bc91c14e991ff98893c346eaae257e5764f14e9f6b79e8404fe6bd56",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/worker272-20261015/journey300-v01.mts",
+        "--cases",
+        "1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:58:26.512949+00:00",
+      "end": "2026-10-15T05:58:30.264951+00:00",
+      "exit": 0,
+      "wallSeconds": 3.7518664589733817,
+      "pid": 1693,
+      "pgid": 1693,
+      "load": "{ 10.52 11.84 12.37 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "a76b5cffad04f4afa3bb23e98d177c014064e809e2b30ad78268a80d1be651de",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "journey300-v01",
+      "receiptSHA256": "692f769a03b6508156b5867609d954156a48214ecf66095c3b4bd61b06ec4644",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/worker272-20261015/journey300-v01.mts",
+        "--cases",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:00:45.839093+00:00",
+      "end": "2026-10-15T06:00:50.550987+00:00",
+      "exit": 0,
+      "wallSeconds": 4.711741125036497,
+      "pid": 10929,
+      "pgid": 10929,
+      "load": "{ 7.29 10.21 11.65 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "622ced2af5d02b9c0ad4147abb7300b0f60d01da3d727c756545c2b0e8dbea93",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "knip-command-v01",
+      "receiptSHA256": "a121a2d345548be2c44b83fc89782d3d1eb2db5a79e4110bd13047fcbad4bdfc",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:54:25.294590+00:00",
+      "end": "2026-10-15T05:54:30.985219+00:00",
+      "exit": 0,
+      "wallSeconds": 5.690437333949376,
+      "pid": 95680,
+      "pgid": 95680,
+      "load": "{ 14.32 13.98 13.05 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "b5e7c9eb8ebee6138b37bd795543fc69e60c869cbccc2305c7659549bc6708dc",
+      "stderrSHA256": "782d458e56eacf00bcfb0746aaf33484849182d83a80c1bbdfcc17b37b8b36f8"
+    },
+    {
+      "label": "knip-v01",
+      "receiptSHA256": "b794ef47faf1523e32f68c9c9eb107116f511a61c55304165de2f28da7142652",
+      "argv": [
+        "node",
+        "node_modules/knip/bin/knip.js",
+        "--no-progress"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:53:52.985032+00:00",
+      "end": "2026-10-15T05:53:55.241985+00:00",
+      "exit": 0,
+      "wallSeconds": 2.25684549997095,
+      "pid": 92689,
+      "pgid": 92689,
+      "load": "{ 15.90 14.24 13.10 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "lint-focused-v01",
+      "receiptSHA256": "e199ad5e864aa22115954f81eeea23e297bf8eeb135aabd588bbb893464c83b3",
+      "argv": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "--max-warnings",
+        "0",
+        "src/content/dreamsigns/carved-bone-427c71e3.ts",
+        "src/content/dreamsigns/mortal-skull-eb55b141.ts",
+        "src/content/dreamsigns/paired-teeth-1328e611.ts",
+        "src/content/dreamsigns/rainbow-jellyfish-e7d23bf7.ts",
+        "src/cumulus/screens/JourneyStarterPurgeScreen.test.tsx",
+        "src/cumulus/screens/JourneyStarterPurgeScreen.tsx",
+        "src/engine/fold/committed-events.test.ts",
+        "src/engine/fold/slice.ts",
+        "src/rules/battle/engine-battle.ts",
+        "src/rules/battle/journey-battle.ts",
+        "src/rules/events.ts",
+        "src/rules/invariants.ts",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "src/rules/journey/journey-battle-essence.ts",
+        "src/rules/journey/journey-essence.ts",
+        "src/rules/journey/journey-on-gain.ts",
+        "src/rules/journey/journey-rewards272-fixtures.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-starter-acquisition.ts",
+        "src/rules/journey/journey-transfiguration.ts",
+        "src/rules/journey/lifecycle.ts",
+        "src/rules/journey/modifier-registry.ts",
+        "src/rules/reducer.ts",
+        "src/runtime/journey-site-messages.ts",
+        "src/runtime/screen-url.ts",
+        "src/screens/cumulus_adapters/JourneyStarterPurgeScreenAdapter.tsx",
+        "src/screens/cumulus_adapters/journey-starter-purge-view-model.test.ts",
+        "src/screens/cumulus_adapters/journey-starter-purge-view-model.ts",
+        "src/screens/cumulus_adapters/registry.test.tsx",
+        "src/screens/cumulus_adapters/registry.tsx",
+        "src/session/actions.test.ts",
+        "src/session/actions.ts",
+        "src/session/providers/journey-transfiguration-provider.ts",
+        "src/state/game-journey-context.tsx",
+        "src/state/journey-context.tsx",
+        "src/types/journey.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:49:20.090916+00:00",
+      "end": "2026-10-15T05:49:23.773536+00:00",
+      "exit": 0,
+      "wallSeconds": 3.6825032500200905,
+      "pid": 15244,
+      "pgid": 15244,
+      "load": "{ 10.51 14.05 12.88 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "preflight-v01",
+      "receiptSHA256": "4d527cf6f103be75f4538dce56735609bb50ac185f1a2df5e9f34f4c7928626c",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "427c71e3-178f-4352-8d6f-f0789cb13c2d,eb55b141-82f8-4ba4-b319-420f762e9ee4,1328e611-fa2f-426f-87e2-97f26c061866,e7d23bf7-4d60-4b43-94c4-14a06c0f9116"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:52:32.787162+00:00",
+      "end": "2026-10-15T05:52:38.373562+00:00",
+      "exit": 0,
+      "wallSeconds": 5.586293458996806,
+      "pid": 28931,
+      "pgid": 28931,
+      "load": "{ 17.60 13.44 12.70 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "0093f61141966d2108c7b690c46aff3acc69aedf0f505f1c111cdc89e323f658",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "prepare-v01",
+      "receiptSHA256": "788908736475452cca1db3565b1e006fea0e829afbea5cd107792b0a60dea448",
+      "argv": [
+        "npm",
+        "run",
+        "prepare-workspace"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:35:06.390159+00:00",
+      "end": "2026-10-15T05:35:09.006363+00:00",
+      "exit": 0,
+      "wallSeconds": 2.616105333028827,
+      "pid": 12874,
+      "pgid": 12874,
+      "load": "{ 16.40 13.29 12.80 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "0556fc3308ddcdb86b9408eae5a78859ab4a23e775dd2bde5b44446ae4107104",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "release-before-approval-v01",
+      "receiptSHA256": "bbd9478d3b093f037439bf4d2e5d63b7d118083b095b85840662c5dcebc8a407",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "release",
+        "status",
+        "--json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-15T06:24:43.800374+00:00",
+      "end": "2026-10-15T06:24:44.059346+00:00",
+      "exit": 0,
+      "wallSeconds": 0.25865679199341685,
+      "pid": 7398,
+      "pgid": 7398,
+      "load": "{ 9.75 15.50 15.44 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b54718e3745c6364338dad6a29e8f4a6ef67286e672546b015d113a5935afc",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "release-check-cleanup-v01",
+      "receiptSHA256": "5e7be7fda1dc57fb810ffc02d5a50411c470f42b4094c1b4e44a9f759771fdd0",
+      "argv": [
+        "tg",
+        "--repository",
+        "01a1051d-f53b-7b51-83f8-cd4d1663ccf4",
+        "--no-launch",
+        "--json",
+        "release",
+        "status"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-15T05:25:50.768577+00:00",
+      "end": "2026-10-15T05:25:50.983714+00:00",
+      "exit": 0,
+      "wallSeconds": 0.21500962501158938,
+      "pid": 94756,
+      "pgid": 94756,
+      "load": "{ 9.72 11.14 12.83 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e47e6bbbb6ae5a4f1a9663d54daea94057567d5ce263f4d56d32b0aa9090b548",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "restored-positive-v01",
+      "receiptSHA256": "6106d5e0da60860e0f6652fff62cf56fca66f44b0f7f608da91e3d2e28843c74",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/fold/committed-events.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/cumulus/screens/JourneyStarterPurgeScreen.test.tsx",
+        "src/screens/cumulus_adapters/journey-starter-purge-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:51:39.717014+00:00",
+      "end": "2026-10-15T05:51:44.272541+00:00",
+      "exit": 0,
+      "wallSeconds": 4.555354374984745,
+      "pid": 24722,
+      "pgid": 24722,
+      "load": "{ 7.96 11.83 12.15 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "c9c383a3bac83cbc3ad8d270bd57752214c1fdf03effe7175c5af1e713f0240d",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "review-v01",
+      "receiptSHA256": "920fe3de25dabd2b91852364f46601edcf8a7f56e06329dc8d2bdfb57c4e8874",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:45:06.019869+00:00",
+      "end": "2026-10-15T05:46:43.107080+00:00",
+      "exit": 2,
+      "wallSeconds": 97.08590441697743,
+      "pid": 41248,
+      "pgid": 41248,
+      "load": "{ 17.81 11.77 11.46 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "17db185f1a9854686b19eb396983eef0afd163f5232333df186c747303536d81",
+      "stderrSHA256": "782d458e56eacf00bcfb0746aaf33484849182d83a80c1bbdfcc17b37b8b36f8"
+    },
+    {
+      "label": "review-v02",
+      "receiptSHA256": "5b414464d2874bfdcc0cc784d7fd7e85d0a96147c61d5a3fc2b16957c6a8561c",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:47:31.170927+00:00",
+      "end": "2026-10-15T05:48:50.000585+00:00",
+      "exit": 2,
+      "wallSeconds": 78.8285586250131,
+      "pid": 7597,
+      "pgid": 7597,
+      "load": "{ 18.91 15.99 13.30 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "f8c37cff723efa58bacb47e57d148135829541b548719acdec7487dbbc183d0b",
+      "stderrSHA256": "782d458e56eacf00bcfb0746aaf33484849182d83a80c1bbdfcc17b37b8b36f8"
+    },
+    {
+      "label": "review-v03",
+      "receiptSHA256": "4508b60060b33751829e764c620918e69ed5515f7f7509f4d462c4ef40888638",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:52:32.786269+00:00",
+      "end": "2026-10-15T05:54:00.947149+00:00",
+      "exit": 0,
+      "wallSeconds": 88.15965112502454,
+      "pid": 28930,
+      "pgid": 28930,
+      "load": "{ 17.60 13.44 12.70 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "b8b3b6c399fe76852c7282d1162147f45c73007808bc3cb505c296eff2b7b022",
+      "stderrSHA256": "782d458e56eacf00bcfb0746aaf33484849182d83a80c1bbdfcc17b37b8b36f8"
+    },
+    {
+      "label": "staged-whitespace-v01",
+      "receiptSHA256": "21ac47e295485b89febed5125c4fc71fb07e54797f351f1f9c69166232181b74",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:19:43.445841+00:00",
+      "end": "2026-10-15T06:19:43.463620+00:00",
+      "exit": 0,
+      "wallSeconds": 0.017669291992206126,
+      "pid": 70243,
+      "pgid": 70243,
+      "load": "{ 22.30 16.46 15.23 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "sweep-v01",
+      "receiptSHA256": "47ec9a560d7bb2efaad61f510855d8f341ac8307b294ceeaa43c4d258702ced4",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--dreamsigns",
+        "427c71e3-178f-4352-8d6f-f0789cb13c2d,eb55b141-82f8-4ba4-b319-420f762e9ee4,1328e611-fa2f-426f-87e2-97f26c061866,e7d23bf7-4d60-4b43-94c4-14a06c0f9116"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:14:11.630319+00:00",
+      "end": "2026-10-15T06:14:41.417664+00:00",
+      "exit": 0,
+      "wallSeconds": 29.786894500022754,
+      "pid": 89411,
+      "pgid": 89411,
+      "load": "{ 13.71 17.42 15.58 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "b3895c7ce26839e5d3e82d12a30c92ad945014503a53bdc8a95617f9d06966da"
+    },
+    {
+      "label": "tutorial-empty-browser-v01",
+      "receiptSHA256": "a83254c41574f1dee5858df21d9cf2815b57ac10318566a5b93ff0e4a2b951df",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/tutorial-starter-workflow-v01.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=empty",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:51:37.986728+00:00",
+      "end": "2026-10-15T06:52:45.062922+00:00",
+      "exit": 1,
+      "wallSeconds": 67.07518408296164,
+      "pid": 11615,
+      "pgid": 11615,
+      "load": "{ 5.18 7.82 11.18 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e2e111f66c7aeac5498e00237bbda863823e8572ea90074c98010c23a93564ef",
+      "stderrSHA256": "558d8fc3fc1537a095d5abaa15a0cc6d04fb09415dbe406a0c0c3f9d570f6bf0"
+    },
+    {
+      "label": "tutorial-empty-browser-v02",
+      "receiptSHA256": "29fc2dc21da6b778f049bca33c681d8f39e4c937d0ef6ec60346bfe63edad683",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/tutorial-starter-workflow-v02.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=empty",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:54:02.935647+00:00",
+      "end": "2026-10-15T06:55:38.263494+00:00",
+      "exit": 0,
+      "wallSeconds": 95.32642179197865,
+      "pid": 15191,
+      "pgid": 15191,
+      "load": "{ 3.87 6.40 10.08 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "c45da41fd63cce55e0d9759087a9ecbe1882dc7d15009620ec531c8df655c5c1",
+      "stderrSHA256": "c5ae4e696d199bc84df9f4fec506da29a80fc84968ce25f8ddc5b12297069b4e"
+    },
+    {
+      "label": "tutorial-focused-v01",
+      "receiptSHA256": "07a1b8a69fc33973df93beec9e5220b24dc5cac531d01452e9a795fd8d077cfa",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/components/app-shell.test.tsx",
+        "src/battle/engine-ai/use-engine-ai.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:46:27.220773+00:00",
+      "end": "2026-10-15T06:46:32.877784+00:00",
+      "exit": 1,
+      "wallSeconds": 5.656863832962699,
+      "pid": 63680,
+      "pgid": 63680,
+      "load": "{ 6.66 9.79 13.06 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "63f4265a008b2493f97706a25b836fc27eca755ab21edc4f5c006965aa8c7774",
+      "stderrSHA256": "722eb7e7d1006b251f9a6c8ebb0fc4a5ce6dad6a17cb4b8cb057381c8b2a2a24"
+    },
+    {
+      "label": "tutorial-focused-v02",
+      "receiptSHA256": "d9670122a7dc14941af6461434f9422b0087135a0ccaec0929f2207ac12a4be1",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/components/app-shell.test.tsx",
+        "src/battle/engine-ai/use-engine-ai.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:47:02.614156+00:00",
+      "end": "2026-10-15T06:47:07.910015+00:00",
+      "exit": 1,
+      "wallSeconds": 5.295659290975891,
+      "pid": 66020,
+      "pgid": 66020,
+      "load": "{ 6.88 9.47 12.81 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "6a6448ef81e75ce3afadcbfb7142ba2368dc4527913ef6d6aadcccb9ddc842cb",
+      "stderrSHA256": "28abda1b43fd56fa8e319916a5b89d5562e574144dca08ea3d655b991a3abb49"
+    },
+    {
+      "label": "tutorial-focused-v03",
+      "receiptSHA256": "1bfae33c30e10d17f835d9282ee2b71b3e482b8d0f46efb3df7551461e970659",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/components/app-shell.test.tsx",
+        "src/battle/engine-ai/use-engine-ai.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:47:59.617450+00:00",
+      "end": "2026-10-15T06:48:06.643804+00:00",
+      "exit": 0,
+      "wallSeconds": 7.0261689579929225,
+      "pid": 69905,
+      "pgid": 69905,
+      "load": "{ 6.72 9.01 12.42 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "451050b340ca3a81ad8362106749ff82635bdb9b77ef79bae319a44d05f97d5f",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "tutorial-full-queue-v01",
+      "receiptSHA256": "c12343ee51bc77183ab2fddca3682a4d7af36b02a0e8c83c6a9bc2f009423b83",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root272-20261015/record.py",
+        "tutorial-full-v01",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T07:01:29.307857+00:00",
+      "end": "2026-10-15T07:03:32.836763+00:00",
+      "exit": 0,
+      "wallSeconds": 123.52777504205005,
+      "pid": 84996,
+      "pgid": 84996,
+      "load": "{ 7.55 10.20 10.68 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "cabc8e8ad25c32ba0d28fb806b28196735c7b3e5c2360477921c0308102ef37b",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "tutorial-full-v01",
+      "receiptSHA256": "b63111518719500d0197d739d4ab307280dd5bc6e839cda3bc956e61ab6b9061",
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T07:01:29.332013+00:00",
+      "end": "2026-10-15T07:03:32.790889+00:00",
+      "exit": 0,
+      "wallSeconds": 123.45773949997965,
+      "pid": 85000,
+      "pgid": 85000,
+      "load": "{ 7.55 10.20 10.68 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "665fa6b938408a8e7e0cff0e5c958807d9ca843f24089a33fbba147728cf4b19",
+      "stderrSHA256": "28738a7e21595654ed7784f36397fb134084b729945ff34c37941740907ff026"
+    },
+    {
+      "label": "tutorial-journey300-v01",
+      "receiptSHA256": "8a8ca9806df51a776f6656bb178391b2f9fbe92e972bd86aff5e69bd236d5e20",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/worker272-20261015/journey300-v01.mts",
+        "--cases",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:51:25.416966+00:00",
+      "end": "2026-10-15T06:51:28.530316+00:00",
+      "exit": 0,
+      "wallSeconds": 3.1132237499696203,
+      "pid": 11416,
+      "pgid": 11416,
+      "load": "{ 5.88 8.08 11.33 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "622ced2af5d02b9c0ad4147abb7300b0f60d01da3d727c756545c2b0e8dbea93",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "tutorial-knip-v01",
+      "receiptSHA256": "6c2ada5caf0f71ef14200fc8b8211afa5110562f5ceb033f87ff639adc6101f8",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:50:52.772142+00:00",
+      "end": "2026-10-15T06:50:56.706904+00:00",
+      "exit": 0,
+      "wallSeconds": 3.934616875019856,
+      "pid": 10670,
+      "pgid": 10670,
+      "load": "{ 7.37 8.57 11.61 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "c968b23d2b29b23497b03564a0f6e19543c7874d6da15d916fdc024faa2a6b7a",
+      "stderrSHA256": "782d458e56eacf00bcfb0746aaf33484849182d83a80c1bbdfcc17b37b8b36f8"
+    },
+    {
+      "label": "tutorial-lint-v01",
+      "receiptSHA256": "2ace593812754087b9d012e89e5c744f1b4850397005f417ab55c02a95761693",
+      "argv": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/rules/journey/journey-starter-acquisition.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-rewards272-fixtures.ts",
+        "src/components/FrontDoorRouter.tsx",
+        "src/components/app-shell.test.tsx",
+        "src/battle/engine-ai/use-engine-ai.ts",
+        "src/battle/engine-ai/use-engine-ai.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:47:02.614154+00:00",
+      "end": "2026-10-15T06:47:05.473374+00:00",
+      "exit": 1,
+      "wallSeconds": 2.8590770419687033,
+      "pid": 66019,
+      "pgid": 66019,
+      "load": "{ 6.88 9.47 12.81 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "c18d66dfe6906c3e1c4b83db74706a2703cd6f44a014d35ab1d9e3f84722c007",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "tutorial-lint-v02",
+      "receiptSHA256": "adef3550b968324f09df0160ceb08b32f0704ffd5b888f29b89cfe83f21e2c02",
+      "argv": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/rules/journey/journey-starter-acquisition.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-rewards272-fixtures.ts",
+        "src/components/FrontDoorRouter.tsx",
+        "src/components/app-shell.test.tsx",
+        "src/battle/engine-ai/use-engine-ai.ts",
+        "src/battle/engine-ai/use-engine-ai.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:47:59.617585+00:00",
+      "end": "2026-10-15T06:48:03.038917+00:00",
+      "exit": 0,
+      "wallSeconds": 3.4211307910154574,
+      "pid": 69906,
+      "pgid": 69906,
+      "load": "{ 6.72 9.01 12.42 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "tutorial-regression-red-v01",
+      "receiptSHA256": "a2b482e3263b3e9240de67b03aff37cb206eb861f24ea81bb8eb55a156dcba2c",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/components/app-shell.test.tsx",
+        "src/battle/engine-ai/use-engine-ai.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:46:05.226572+00:00",
+      "end": "2026-10-15T06:46:11.302403+00:00",
+      "exit": 1,
+      "wallSeconds": 6.0756476250244305,
+      "pid": 62141,
+      "pgid": 62141,
+      "load": "{ 6.62 10.04 13.24 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "81c3e528790a3cbc7ff37a58a17838637252fdb3fa0909e1ce8a347fde70908e",
+      "stderrSHA256": "f9885a8b888978ef289fdc4a7adb7986236b00d551c5e7c8ac205808e24e74c4"
+    },
+    {
+      "label": "tutorial-review-v01",
+      "receiptSHA256": "6f3079103aa1c94bb55975f6e2601a3764f4f7f9d8dcc5aa73999a48e76a3a5e",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:49:39.231501+00:00",
+      "end": "2026-10-15T06:50:41.094124+00:00",
+      "exit": 0,
+      "wallSeconds": 61.86170345899882,
+      "pid": 8418,
+      "pgid": 8418,
+      "load": "{ 9.27 9.01 12.03 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "45ad271b3e202cd44356cc964f91a0e002381b4476993097d3c0fa70d799bfa5",
+      "stderrSHA256": "782d458e56eacf00bcfb0746aaf33484849182d83a80c1bbdfcc17b37b8b36f8"
+    },
+    {
+      "label": "tutorial-reward-compat-browser-v01",
+      "receiptSHA256": "927e22346ffa70a01c12361f4943704fb3c6e92a13a0b9efe360bb9dbc25170a",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v03.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=select",
+        "--arg",
+        "gain=reward",
+        "--arg",
+        "capture=0",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:56:31.754227+00:00",
+      "end": "2026-10-15T06:57:02.284839+00:00",
+      "exit": 1,
+      "wallSeconds": 30.53204179200111,
+      "pid": 19176,
+      "pgid": 19176,
+      "load": "{ 7.90 6.79 9.63 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "72a7f77843150660bc3750fae0af602e79828caf6cb3e7e5f81bb8f72cbbfe8a",
+      "stderrSHA256": "957edd2a90fc0d83ec4b99421380765002903aa4b0f3a0d388b694f954ccd9a4"
+    },
+    {
+      "label": "tutorial-reward-compat-browser-v02",
+      "receiptSHA256": "ad6fd1be2844886e567c2edb44c05b12b5ec79e0267834beb2e4c84f33c89fe6",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/starter-workflow-v04.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=select",
+        "--arg",
+        "gain=reward",
+        "--arg",
+        "capture=0",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T07:00:44.918739+00:00",
+      "end": "2026-10-15T07:01:13.208710+00:00",
+      "exit": 0,
+      "wallSeconds": 28.2896499169874,
+      "pid": 81850,
+      "pgid": 81850,
+      "load": "{ 10.33 10.99 10.96 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "b13e8fa8c63622bee39cb89eb27fa5abad240a186335d171379113507014697b",
+      "stderrSHA256": "655d51fc2d7898f337ac4178547bf609e20900abf2d881275bbb3ba6ca64c728"
+    },
+    {
+      "label": "tutorial-select-browser-v01",
+      "receiptSHA256": "14bcd11b7dc6b52eb72a2a79750692c48c04c4f1e246dfb5bbc1d9c453098f34",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/tutorial-starter-workflow-v01.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=select",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:51:39.142426+00:00",
+      "end": "2026-10-15T06:52:47.626668+00:00",
+      "exit": 1,
+      "wallSeconds": 68.48320599994622,
+      "pid": 11732,
+      "pgid": 11732,
+      "load": "{ 5.18 7.82 11.18 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "f92f64fa8e80e60290df726620775f18740a92dbf4affda513646ae7c0951bc0",
+      "stderrSHA256": "43379f9fbaf3a5c7719c2cad8f300da56a17b4897f09db093064b37cbdde16ac"
+    },
+    {
+      "label": "tutorial-select-browser-v02",
+      "receiptSHA256": "389185e4982de31eaf07b044b1f91e2e6ce2855eccf01b83c3e09cff9f268ca6",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root272-20261015/tutorial-starter-workflow-v02.mjs",
+        "--bead",
+        "hv-umm2.272",
+        "--arg",
+        "mode=select",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:54:04.090803+00:00",
+      "end": "2026-10-15T06:55:41.002508+00:00",
+      "exit": 0,
+      "wallSeconds": 96.91025029099546,
+      "pid": 15318,
+      "pgid": 15318,
+      "load": "{ 3.87 6.40 10.08 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "b24922436a2faab3a3863e47655aedffd58eebf5bc7071a0238e9fe6f3be0c7b",
+      "stderrSHA256": "cbeca603650ba67c11a65d25b5ee0c29b3d8c9d17f8f537d71ad9ac2916a4898"
+    },
+    {
+      "label": "tutorial-types-v01",
+      "receiptSHA256": "ca0269bb3d4b3dc08a0d25db0bd9c56191390f05785bca340276dacf0655d9ed",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:47:02.614210+00:00",
+      "end": "2026-10-15T06:47:13.417246+00:00",
+      "exit": 0,
+      "wallSeconds": 10.802799666009378,
+      "pid": 66018,
+      "pgid": 66018,
+      "load": "{ 6.88 9.47 12.81 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "tutorial-types-v02",
+      "receiptSHA256": "0a39941b6f22258f661b2b741768883275d84163417ebeb59d2949b308c9d167",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:47:59.617707+00:00",
+      "end": "2026-10-15T06:48:13.370832+00:00",
+      "exit": 2,
+      "wallSeconds": 13.752615500008687,
+      "pid": 69907,
+      "pgid": 69907,
+      "load": "{ 6.72 9.01 12.42 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "8ac1700f41f0a7d3d49ae36221c91d35ba9ac91a57bdbb5f7c5d7fa0ea4d6744",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "tutorial-types-v03",
+      "receiptSHA256": "31ea5ed139506344147c93ba479e51e12f6c121e3720a0b998e221972889bb95",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:48:56.076287+00:00",
+      "end": "2026-10-15T06:49:07.680512+00:00",
+      "exit": 0,
+      "wallSeconds": 11.603970624972135,
+      "pid": 1622,
+      "pgid": 1622,
+      "load": "{ 7.42 8.85 12.15 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "weighted300-v01",
+      "receiptSHA256": "50b40672e2a033a9bb8562891d9b70cf344c0a44e9b97f8de5a1cfc74126f78e",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "427c71e3-178f-4352-8d6f-f0789cb13c2d,eb55b141-82f8-4ba4-b319-420f762e9ee4,1328e611-fa2f-426f-87e2-97f26c061866,e7d23bf7-4d60-4b43-94c4-14a06c0f9116"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T05:47:46.545042+00:00",
+      "end": "2026-10-15T05:56:22.113259+00:00",
+      "exit": 1,
+      "wallSeconds": 515.5614792089909,
+      "pid": 8842,
+      "pgid": 8842,
+      "load": "{ 18.49 16.02 13.36 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "05c21791a54fe230b986bf70659a7d215a45fc0753e2ea64f6702bf96fc2b3b3",
+      "stderrSHA256": "7c8e234ae2cf0920d1bee599eae378eac911406d601ea584c57deb84ebfb3598"
+    }
+  ],
+  "scope": {
+    "journeyEntities": [
+      "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+      "eb55b141-82f8-4ba4-b319-420f762e9ee4",
+      "1328e611-fa2f-426f-87e2-97f26c061866",
+      "e7d23bf7-4d60-4b43-94c4-14a06c0f9116"
+    ],
+    "tests": "Synthetic public fold/real engine and production provider contracts, no per-card scenario copies.",
+    "qa": "Parent owns original and tutorial repair judged workflows/captures/sweep/QA-ledger joins. Source epochs and inert lab presence are qualified separately.",
+    "counterfactuals": "Five semantic faults each caused an actual assertion failure; original tracked and owned new files restored under full SHA256 guard. Parent retains raw faults and /tmp/worker272-20261015/counterfactual-results-v01.json.",
+    "fuzz": "One literal weighted300 all-four attempt is retained separately. No general engine-fuzz success is implied by public journey workflows."
+  },
+  "heavyQueue": {
+    "fullWaitS": 509.638989,
+    "weightedOuterS": 515.5614792089909,
+    "weightedInnerExecutionS": "UNKNOWN",
+    "weightedQueueS": "UNKNOWN",
+    "qualification": "The full queue interval has independently recorded outer and inner starts. The weighted outer duration includes queue and execution; its split was not sampled."
+  },
+  "supplementalJourneyExercise": {
+    "authority": "Parent same-task justiciar-applicability-v01 native acknowledgement at 2026-10-15T05:58:08Z; no source mutation",
+    "driverSHA256": "cf7e2d4b4d3aa160396f5d3278b1d7369518f5ae610a648d81f2da2beeeec4f9",
+    "guard": {
+      "files": 5456,
+      "changed": [],
+      "beforeSHA256": "2b98eb2224592f3fa99f8e0dfa3012eced1191f73e370c7d79fa8b4b8139ec86",
+      "stdoutSHA256": "622ced2af5d02b9c0ad4147abb7300b0f60d01da3d727c756545c2b0e8dbea93",
+      "receiptSHA256": "692f769a03b6508156b5867609d954156a48214ecf66095c3b4bd61b06ec4644"
+    },
+    "result": {
+      "kind": "summary",
+      "cases": 300,
+      "workflows": 900,
+      "codecs": 3000,
+      "purged": 464,
+      "perfected": 443,
+      "carvedGains": 4500,
+      "mortalGains": 3000,
+      "bounces": 600,
+      "uuids": [
+        "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+        "eb55b141-82f8-4ba4-b319-420f762e9ee4",
+        "1328e611-fa2f-426f-87e2-97f26c061866",
+        "e7d23bf7-4d60-4b43-94c4-14a06c0f9116"
+      ],
+      "scope": "Production registry and catalog descriptors; synthetic card/engine/atlas/economy fixtures; logged public fold intents and complete prefix codec replay; not full journeys or general weighted battle fuzz."
+    }
+  },
+  "literalWeightedAttempt": {
+    "attempts": 1,
+    "games": 0,
+    "exit": 1,
+    "outerWallS": 515.5614792089909,
+    "innerExecutionS": "UNKNOWN",
+    "queueS": "UNKNOWN",
+    "failure": "Dreamsign fuzz target requires non-empty authored battle abilities (journey-only, pending and vanilla targets are unsupported): 427c71e3-178f-4352-8d6f-f0789cb13c2d",
+    "qualification": "No engine game executed; the supplemental exercise is separate public fold/replay coverage of three synthetic workflows per seed, not weighted engine games or full journeys."
+  },
+  "completedCommandProcessCensus": {
+    "utc": "2026-10-15T06:08:39.134198+00:00",
+    "recordedGroups": [
+      1693,
+      7597,
+      8842,
+      10929,
+      12874,
+      15210,
+      15244,
+      17497,
+      19450,
+      21229,
+      21513,
+      21568,
+      21664,
+      21756,
+      22054,
+      22325,
+      24722,
+      28930,
+      28931,
+      37164,
+      41248,
+      56891,
+      58939,
+      63190,
+      63599,
+      65565,
+      70531,
+      73834,
+      76823,
+      76988,
+      77101,
+      77589,
+      80551,
+      83265,
+      84275,
+      86018,
+      86512,
+      88115,
+      92689,
+      93289,
+      93361,
+      94756,
+      95680,
+      96773,
+      97796
+    ],
+    "liveGroupMembers": [],
+    "browserOwnership": "No helper-managed browser scenario or Vite server was launched; parent owns judged browser and sweep. Unit review runner owns its synthetic fixture processes.",
+    "qualification": "Read-only census restricted to completed recorder command groups. In-flight parent runner/server groups are outside this census; the parent final runtime ledger is required before commit. No process termination."
+  },
+  "runtimeRestoration": {
+    "utc": "2026-10-15T06:05:35.682721+00:00",
+    "sourceFreezeSHA256": "ad3e70db31f0f7b6c01e8fa5854c6ee2cc622d11ece68c9a005d036899cd5503",
+    "sourceFiles": 41,
+    "sourceChanged": [],
+    "full": {
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+      "start": "2026-10-15T06:03:08.631725+00:00",
+      "end": "2026-10-15T06:05:18.738035+00:00",
+      "exit": 0,
+      "wallSeconds": 130.10458525002468,
+      "pid": 77589,
+      "pgid": 77589,
+      "load": "{ 22.66 14.15 12.92 }",
+      "groupRemainingAtExit": []
+    },
+    "artSymlinks": 1570,
+    "artLinkManifestSHA256": "bc9fd2caae1faaec28237e188177acf6e544eeea66611471f7ad58fb132aa328",
+    "artLinkSamples": [
+      {
+        "path": "public/atlas/Round_frame.png",
+        "target": "/Users/dthurn/Documents/UI/ClassicFantasyRPG_UI/ARTWORKS/UIelements/Round_frame.png",
+        "exists": true
+      },
+      {
+        "path": "public/atlas/Round_frame_main.png",
+        "target": "/Users/dthurn/Documents/synty/dreamscape_icons/Round_frame_main.png",
+        "exists": true
+      },
+      {
+        "path": "public/avatars/0003.png",
+        "target": "/Users/dthurn/Documents/synty/dreamcallers/0003.png",
+        "exists": true
+      }
+    ],
+    "qualification": "Read-only link audit after successful restore-local-assets. No further workspace materialization commands before parent browser matrix."
+  },
+  "sourceAudit": {
+    "unchangedTracked": 5414,
+    "protectedDeclarations": 89,
+    "changedNonTestSourceLines": 523,
+    "immutablePrintedFieldsPerEntity": 8,
+    "sourceFreezeSHA256": "ad3e70db31f0f7b6c01e8fa5854c6ee2cc622d11ece68c9a005d036899cd5503",
+    "parentIndependentProof": "/tmp/root272-20261015/source-independent-audit-v01.json"
+  },
+  "parentAcceptanceJoin": {
+    "nativeAcknowledgedUTC": "2026-10-15T06:17:26Z",
+    "nativeReceiptSHA256": "94cf66a7ca7f19d626813982da5056adad1d9e6f322c4abc48b4edb391b1f9a1",
+    "proofs": {
+      "qa-ledger-join-v01.json": {
+        "path": "/tmp/root272-20261015/qa-ledger-join-v01.json",
+        "sha256": "b18ebd09eff050006a1fb5583910ca833a192df9eb2e72f34afb4062ce9fefe7",
+        "result": {
+          "at": "2026-10-15T06:16:02.353402+00:00",
+          "machineRows": 80,
+          "machineCounts": {
+            "pass": 8,
+            "skip": 72
+          },
+          "machineQualifiedInertReports": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.272/invocations/sweep-qhQMWj/run-7AQVJ9/sweep-427c71e3-178f-4352-8d6f-f0789cb13c2d-base-player-attempt-1.result.json",
+              "sha256": "440094e7825c27a836ed07b5a0c913682f4f14076e4f3307d5d3963ade7e12be",
+              "uuid": "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+              "side": "player",
+              "exercised": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.272/invocations/sweep-qhQMWj/run-7AQVJ9/sweep-427c71e3-178f-4352-8d6f-f0789cb13c2d-base-enemy-attempt-1.result.json",
+              "sha256": "0ce254ebcfc94f460d2dc86c8717a06420889c06bb1912e7916e1c12941ffbab",
+              "uuid": "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+              "side": "enemy",
+              "exercised": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.272/invocations/sweep-qhQMWj/run-7AQVJ9/sweep-eb55b141-82f8-4ba4-b319-420f762e9ee4-base-player-attempt-1.result.json",
+              "sha256": "6a779993d58bb2d6d13ce39dbe2eaeb7d08fdced67b1940e6cf6273e4e72593d",
+              "uuid": "eb55b141-82f8-4ba4-b319-420f762e9ee4",
+              "side": "player",
+              "exercised": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.272/invocations/sweep-qhQMWj/run-7AQVJ9/sweep-eb55b141-82f8-4ba4-b319-420f762e9ee4-base-enemy-attempt-1.result.json",
+              "sha256": "46cd5086bbdbf8e3bf994174c631ea9d1bfe258f3bd75c72176b3794b2af2d9c",
+              "uuid": "eb55b141-82f8-4ba4-b319-420f762e9ee4",
+              "side": "enemy",
+              "exercised": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.272/invocations/sweep-qhQMWj/run-7AQVJ9/sweep-1328e611-fa2f-426f-87e2-97f26c061866-base-player-attempt-1.result.json",
+              "sha256": "e5511ed09c24102a2916c383d4aec1705c970149b69c4abc96c2000af230b7da",
+              "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+              "side": "player",
+              "exercised": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.272/invocations/sweep-qhQMWj/run-7AQVJ9/sweep-1328e611-fa2f-426f-87e2-97f26c061866-base-enemy-attempt-1.result.json",
+              "sha256": "f86ad90e842f791d514e9c0fb0925961fae4677b92596b589f3bd206bdab3ed0",
+              "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+              "side": "enemy",
+              "exercised": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.272/invocations/sweep-qhQMWj/run-7AQVJ9/sweep-e7d23bf7-4d60-4b43-94c4-14a06c0f9116-base-player-attempt-1.result.json",
+              "sha256": "ad604d001cfbdde758acee11e7eeaca32448f032720656772fd0eb47b44966c2",
+              "uuid": "e7d23bf7-4d60-4b43-94c4-14a06c0f9116",
+              "side": "player",
+              "exercised": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.272/invocations/sweep-qhQMWj/run-7AQVJ9/sweep-e7d23bf7-4d60-4b43-94c4-14a06c0f9116-base-enemy-attempt-1.result.json",
+              "sha256": "7d8c659f99241c91b03f181cb84c20415d38ee498dc01cce2535a85f6be669f0",
+              "uuid": "e7d23bf7-4d60-4b43-94c4-14a06c0f9116",
+              "side": "enemy",
+              "exercised": false
+            }
+          ],
+          "judgedRows": 20,
+          "contexts": 20,
+          "wholeCardReachabilityChecks": 104,
+          "viewedImages": 14,
+          "ledgerSHA256": "88c25971a000496b7cb3b34d2aa33aa37f69f18408c4fb1e76ad9a14388d06fc",
+          "sourceFreezeSHA256": "ad3e70db31f0f7b6c01e8fa5854c6ee2cc622d11ece68c9a005d036899cd5503",
+          "qualification": "80 exact machine records retained byte-for-byte;8base presence reports exercised:false.20 separate actual playerworkflow verdicts appended after all judgedrunners settled. Final independent coldreview+certification pending."
+        }
+      },
+      "final-runtime-settlement-v01.json": {
+        "path": "/tmp/root272-20261015/final-runtime-settlement-v01.json",
+        "sha256": "066b92c6b7aa9e8fb0b172f9e1be5fa19356147fd6a36f8506f976904d8fccb3",
+        "result": {
+          "at": "2026-10-15T06:16:34.198753+00:00",
+          "sourceFilesExact": 41,
+          "recordedGroups": [
+            {
+              "started": "beta-starter-browser-v01.started.json",
+              "pgid": 70531,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "beta-starter-browser-v02.started.json",
+              "pgid": 73834,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "compile-v01.started.json",
+              "pgid": 97796,
+              "exit": 2,
+              "settled": true
+            },
+            {
+              "started": "compile-v02.started.json",
+              "pgid": 17497,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "compile-v03.started.json",
+              "pgid": 21229,
+              "exit": 2,
+              "settled": true
+            },
+            {
+              "started": "compile-v04.started.json",
+              "pgid": 63599,
+              "exit": 2,
+              "settled": true
+            },
+            {
+              "started": "compile-v05.started.json",
+              "pgid": 65565,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "compile-v06.started.json",
+              "pgid": 15210,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "counterfactuals-v01.started.json",
+              "pgid": 21513,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "coverage-gate-v01.started.json",
+              "pgid": 93289,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "dispatch-triggers-v01.started.json",
+              "pgid": 93361,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "entity-report-v01.started.json",
+              "pgid": 88115,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "fault-challenge-phase-credit-v01.started.json",
+              "pgid": 21756,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "fault-lost-earlier-prefix-v01.started.json",
+              "pgid": 21664,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "fault-overwrite-formed-starter-v01.started.json",
+              "pgid": 22325,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "fault-uncommitted-prefix-v01.started.json",
+              "pgid": 21568,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "fault-unearned-starter-purge-v01.started.json",
+              "pgid": 22054,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "final-battle-banish-v01.started.json",
+              "pgid": 22676,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "final-battle-challenge-v01.started.json",
+              "pgid": 85358,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "final-battle-dissolve-v01.started.json",
+              "pgid": 76988,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "final-battle-dissolve-v02.started.json",
+              "pgid": 83265,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "final-battle-dissolve-v03.started.json",
+              "pgid": 90167,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "final-battle-dissolve-v04.started.json",
+              "pgid": 57240,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "final-browser-audit-v01.started.json",
+              "pgid": 91866,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "final-starter-decline-reward-v01.started.json",
+              "pgid": 80551,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "final-starter-empty-reward-v01.started.json",
+              "pgid": 84275,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "final-starter-jellyfish-debug-v01.started.json",
+              "pgid": 85204,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "final-starter-jellyfish-reward-v01.started.json",
+              "pgid": 22452,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "final-starter-large-reward-v01.started.json",
+              "pgid": 4592,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "final-starter-select-debug-v01.started.json",
+              "pgid": 58154,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "final-starter-select-reward-v01.started.json",
+              "pgid": 76823,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "focused-v01.started.json",
+              "pgid": 56891,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "focused-v02.started.json",
+              "pgid": 58939,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "focused-v03.started.json",
+              "pgid": 63190,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "focused-v04.started.json",
+              "pgid": 77101,
+              "exit": 1,
+              "settled": true
+            },
+            {
+              "started": "focused-v05.started.json",
+              "pgid": 37164,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "focused-v06.started.json",
+              "pgid": 19450,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "full-queue-v01.started.json",
+              "pgid": 96773,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "full-v01.started.json",
+              "pgid": 77589,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "journey300-preflight-v01.started.json",
+              "pgid": 1693,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "journey300-v01.started.json",
+              "pgid": 10929,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "knip-command-v01.started.json",
+              "pgid": 95680,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "knip-v01.started.json",
+              "pgid": 92689,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "lint-focused-v01.started.json",
+              "pgid": 15244,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "preflight-v01.started.json",
+              "pgid": 28931,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "prepare-v01.started.json",
+              "pgid": 12874,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "release-check-cleanup-v01.started.json",
+              "pgid": 94756,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "restored-positive-v01.started.json",
+              "pgid": 24722,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "review-v01.started.json",
+              "pgid": 41248,
+              "exit": 2,
+              "settled": true
+            },
+            {
+              "started": "review-v02.started.json",
+              "pgid": 7597,
+              "exit": 2,
+              "settled": true
+            },
+            {
+              "started": "review-v03.started.json",
+              "pgid": 28930,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "setup-install-v01.started.json",
+              "pgid": 86512,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "setup-worktree-v01.started.json",
+              "pgid": 86018,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "sweep-v01.started.json",
+              "pgid": 89411,
+              "exit": 0,
+              "settled": true
+            },
+            {
+              "started": "weighted300-v01.started.json",
+              "pgid": 8842,
+              "exit": 1,
+              "settled": true
+            }
+          ],
+          "knownServerProcessGroups": [
+            5166,
+            22540,
+            23127,
+            57328,
+            58255,
+            70623,
+            73904,
+            76903,
+            77248,
+            80628,
+            83342,
+            84368,
+            85285,
+            86127,
+            89499,
+            90272
+          ],
+          "allRecordedGroupsAndKnownServersAbsent": true,
+          "sourceFreezeSHA256": "ad3e70db31f0f7b6c01e8fa5854c6ee2cc622d11ece68c9a005d036899cd5503",
+          "qualification": "Actual current process-table census of exact owned recorder and server PGs; browser runner durable cleanup receipts establish provider/context/slot closure. No foreign process killed."
+        }
+      },
+      "final-browser-caller-dispositions-v01.json": {
+        "path": "/tmp/root272-20261015/final-browser-caller-dispositions-v01.json",
+        "sha256": "8db9dd25b4534ceb0f0a8da9be30b5af772032d54fe34e3e8b500cbbfe4b937d",
+        "result": {
+          "at": "2026-10-15T06:17:26.712911+00:00",
+          "failedPreparations": [
+            {
+              "label": "final-battle-dissolve-v01",
+              "receipt": {
+                "argv": [
+                  "node",
+                  "scripts/qa/run-scenario.mjs",
+                  "/tmp/root272-20261015/battle-essence-workflow-v02.mjs",
+                  "--bead",
+                  "hv-umm2.272",
+                  "--arg",
+                  "mode=dissolve",
+                  "--arg",
+                  "copies=2",
+                  "--arg",
+                  "capture=0",
+                  "--viewports",
+                  "desktop,mobile"
+                ],
+                "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+                "start": "2026-10-15T06:05:52.185873+00:00",
+                "end": "2026-10-15T06:06:34.149064+00:00",
+                "exit": 1,
+                "wallSeconds": 41.962580666993745,
+                "pid": 76988,
+                "pgid": 76988,
+                "load": "{ 14.95 15.10 13.56 }",
+                "groupRemainingAtExit": []
+              },
+              "reason": "Caller opened Journey Editor while initial goto scene was still making canonical full navigation; no grant/gameplay observed.",
+              "fix": "v03 waits for canonical /battle and complete document.",
+              "receiptSHA256": "0b19123183ddaabba04d51ab7136a71dbf29787ae409b19e9754faf71852e12c",
+              "qualification": "Test caller preparation failure before judged mechanic; preserved raw stdout/stderr/result/logs. Product source and tests unchanged."
+            },
+            {
+              "label": "final-battle-dissolve-v02",
+              "receipt": {
+                "argv": [
+                  "node",
+                  "scripts/qa/run-scenario.mjs",
+                  "/tmp/root272-20261015/battle-essence-workflow-v03.mjs",
+                  "--bead",
+                  "hv-umm2.272",
+                  "--arg",
+                  "mode=dissolve",
+                  "--arg",
+                  "copies=2",
+                  "--arg",
+                  "capture=0",
+                  "--viewports",
+                  "desktop,mobile"
+                ],
+                "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+                "start": "2026-10-15T06:07:24.144015+00:00",
+                "end": "2026-10-15T06:07:51.872435+00:00",
+                "exit": 1,
+                "wallSeconds": 27.727983624965418,
+                "pid": 83265,
+                "pgid": 83265,
+                "load": "{ 11.03 14.07 13.33 }",
+                "groupRemainingAtExit": []
+              },
+              "reason": "Fixture used generic branded UUID GameId; actual runtime URL normalization requires lowercase alphanumeric4\u201324 and created another game.",
+              "fix": "v04 uses actual generateGameId/mintClientId factories.",
+              "receiptSHA256": "f33f0fde39efb1a4c4e30acc8084a422f0c8436e6599ef9e0545faa1efe32051",
+              "qualification": "Test caller preparation failure before judged mechanic; preserved raw stdout/stderr/result/logs. Product source and tests unchanged."
+            },
+            {
+              "label": "final-battle-dissolve-v03",
+              "receipt": {
+                "argv": [
+                  "node",
+                  "scripts/qa/run-scenario.mjs",
+                  "/tmp/root272-20261015/battle-essence-workflow-v04.mjs",
+                  "--bead",
+                  "hv-umm2.272",
+                  "--arg",
+                  "mode=dissolve",
+                  "--arg",
+                  "copies=2",
+                  "--arg",
+                  "capture=0",
+                  "--viewports",
+                  "desktop,mobile"
+                ],
+                "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+                "start": "2026-10-15T06:08:49.948872+00:00",
+                "end": "2026-10-15T06:09:43.994031+00:00",
+                "exit": 1,
+                "wallSeconds": 54.04434995900374,
+                "pid": 90167,
+                "pgid": 90167,
+                "load": "{ 17.70 14.96 13.71 }",
+                "groupRemainingAtExit": []
+              },
+              "reason": "Fixture supplied frontDoorEntry journey, excluded from current Genesis wire union; saved game could not open.",
+              "fix": "v05 omits frontDoorEntry for journey, as current public constructor contract documents.",
+              "receiptSHA256": "8c67c7b65a85f94f849d3a49fc730347da891bbf6f79ebed9e3010cb30a96f28",
+              "qualification": "Test caller preparation failure before judged mechanic; preserved raw stdout/stderr/result/logs. Product source and tests unchanged."
+            }
+          ],
+          "passingReplacement": "final-battle-dissolve-v04; v05 caller; all2viewports actualpublicfixture/action/removal/payout/replaypass",
+          "timingQualification": "Three distinct failed command durations are retained individually; they overlap useful concurrent starter QA and are not summed as exclusive friction. Firstfailedstart06:05:52.185873Z through eventualsuccess06:11:37.581849Z is gross5.7566min, including concurrent work and useful diagnostics. No >=10min independent cause claimed."
+        }
+      },
+      "final-browser-independent-audit-v01.json": {
+        "path": "/tmp/root272-20261015/final-browser-independent-audit-v01.json",
+        "sha256": "9a52d63f47815023f954e312aba2935a7857e7f0e0d7355a3afef309fc3bdbad",
+        "summary": {
+          "at": "2026-10-15T06:14:44.155795+00:00",
+          "contexts": 20,
+          "reachabilityChecks": 104,
+          "captureCount": 14,
+          "qualification": "Subsequent player interactions judged through real UI; prepared public reward/deck/battle fixtures explicit. No fulljourney/defaultpolicy/nativepicker or journey-hook evidence from inert sweep.",
+          "allOwnRunnerAndServerGroupsAbsent": true
+        },
+        "cases": [
+          {
+            "label": "final-starter-select-reward-v01",
+            "viewport": "desktop",
+            "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+            "mode": "select",
+            "gain": "reward",
+            "selected": [
+              "deck-1",
+              "deck-2",
+              "deck-3",
+              "deck-4"
+            ],
+            "deckBefore": 10,
+            "deckAfter": 6,
+            "reachabilityCount": 4,
+            "capsEmpty": true,
+            "finalHash": "a6bd96a9b4e55b6f5c65ad696741722ddffefec129c9c5718af09d4e07125ac6",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-select-reward-v01",
+            "viewport": "mobile",
+            "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+            "mode": "select",
+            "gain": "reward",
+            "selected": [
+              "deck-1",
+              "deck-2",
+              "deck-3",
+              "deck-4"
+            ],
+            "deckBefore": 10,
+            "deckAfter": 6,
+            "reachabilityCount": 4,
+            "capsEmpty": true,
+            "finalHash": "a6bd96a9b4e55b6f5c65ad696741722ddffefec129c9c5718af09d4e07125ac6",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-decline-reward-v01",
+            "viewport": "desktop",
+            "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+            "mode": "decline",
+            "gain": "reward",
+            "selected": [],
+            "deckBefore": 10,
+            "deckAfter": 10,
+            "reachabilityCount": 4,
+            "capsEmpty": true,
+            "finalHash": "50320849086c7c0868a2c1ec8e832e6649be97a2c2de3917471170b664d3f0d2",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-decline-reward-v01",
+            "viewport": "mobile",
+            "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+            "mode": "decline",
+            "gain": "reward",
+            "selected": [],
+            "deckBefore": 10,
+            "deckAfter": 10,
+            "reachabilityCount": 4,
+            "capsEmpty": true,
+            "finalHash": "50320849086c7c0868a2c1ec8e832e6649be97a2c2de3917471170b664d3f0d2",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-empty-reward-v01",
+            "viewport": "desktop",
+            "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+            "mode": "empty",
+            "gain": "reward",
+            "selected": [],
+            "deckBefore": 0,
+            "deckAfter": 0,
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "3fc439cbd1590c8634817ea02381e85fce93c65076eeeec7296a469688b4b439",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-empty-reward-v01",
+            "viewport": "mobile",
+            "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+            "mode": "empty",
+            "gain": "reward",
+            "selected": [],
+            "deckBefore": 0,
+            "deckAfter": 0,
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "3fc439cbd1590c8634817ea02381e85fce93c65076eeeec7296a469688b4b439",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-large-reward-v01",
+            "viewport": "desktop",
+            "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+            "mode": "large",
+            "gain": "reward",
+            "selected": [
+              "qa272-large-0",
+              "qa272-large-1",
+              "qa272-large-2",
+              "qa272-large-3"
+            ],
+            "deckBefore": 40,
+            "deckAfter": 36,
+            "reachabilityCount": 40,
+            "capsEmpty": true,
+            "finalHash": "b8bb93e3e733f882e2cbe2f8fbea8f0bd1e09dfb27db8f574f1fedca75db4d60",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-large-reward-v01",
+            "viewport": "mobile",
+            "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+            "mode": "large",
+            "gain": "reward",
+            "selected": [
+              "qa272-large-0",
+              "qa272-large-1",
+              "qa272-large-2",
+              "qa272-large-3"
+            ],
+            "deckBefore": 40,
+            "deckAfter": 36,
+            "reachabilityCount": 40,
+            "capsEmpty": true,
+            "finalHash": "b8bb93e3e733f882e2cbe2f8fbea8f0bd1e09dfb27db8f574f1fedca75db4d60",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-select-debug-v01",
+            "viewport": "desktop",
+            "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+            "mode": "select",
+            "gain": "debug",
+            "selected": [
+              "deck-1",
+              "deck-2",
+              "deck-3",
+              "deck-4"
+            ],
+            "deckBefore": 10,
+            "deckAfter": 6,
+            "reachabilityCount": 4,
+            "capsEmpty": true,
+            "finalHash": "110ac8d52d078966875c2f43e51097946816600d14253466c04f82e413faff4f",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-select-debug-v01",
+            "viewport": "mobile",
+            "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+            "mode": "select",
+            "gain": "debug",
+            "selected": [
+              "deck-1",
+              "deck-2",
+              "deck-3",
+              "deck-4"
+            ],
+            "deckBefore": 10,
+            "deckAfter": 6,
+            "reachabilityCount": 4,
+            "capsEmpty": true,
+            "finalHash": "110ac8d52d078966875c2f43e51097946816600d14253466c04f82e413faff4f",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-jellyfish-reward-v01",
+            "viewport": "desktop",
+            "uuid": "e7d23bf7-4d60-4b43-94c4-14a06c0f9116",
+            "mode": "jellyfish",
+            "gain": "reward",
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "04d9d7d8856007997d502f8234adaf8a3b0a8302ca50c6796bef8347c08289e0",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import creates exact UUID prepared reward fixture; actual pointer site collection submits ACCEPT_REWARD and production on-gain registry; persisted replay and UUID logs. No complete journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-jellyfish-reward-v01",
+            "viewport": "mobile",
+            "uuid": "e7d23bf7-4d60-4b43-94c4-14a06c0f9116",
+            "mode": "jellyfish",
+            "gain": "reward",
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "04d9d7d8856007997d502f8234adaf8a3b0a8302ca50c6796bef8347c08289e0",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import creates exact UUID prepared reward fixture; actual pointer site collection submits ACCEPT_REWARD and production on-gain registry; persisted replay and UUID logs. No complete journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-jellyfish-debug-v01",
+            "viewport": "desktop",
+            "uuid": "e7d23bf7-4d60-4b43-94c4-14a06c0f9116",
+            "mode": "jellyfish",
+            "gain": "debug",
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "b56421171580127efe4283058e324ec6f991bb093e2ec7014f1ced8917c81d86",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import creates exact UUID prepared reward fixture; actual pointer site collection submits ACCEPT_REWARD and production on-gain registry; persisted replay and UUID logs. No complete journey or native OS picker claim."
+          },
+          {
+            "label": "final-starter-jellyfish-debug-v01",
+            "viewport": "mobile",
+            "uuid": "e7d23bf7-4d60-4b43-94c4-14a06c0f9116",
+            "mode": "jellyfish",
+            "gain": "debug",
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "b56421171580127efe4283058e324ec6f991bb093e2ec7014f1ced8917c81d86",
+            "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import creates exact UUID prepared reward fixture; actual pointer site collection submits ACCEPT_REWARD and production on-gain registry; persisted replay and UUID logs. No complete journey or native OS picker claim."
+          },
+          {
+            "label": "final-battle-dissolve-v04",
+            "viewport": "desktop",
+            "uuid": "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+            "mode": "dissolve",
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "fa5f0fef9b4449512883d59d8b09115178113b1e63d1499a61a861834fc747ba",
+            "qualification": "Origin real battle1 preview with actual UI debug grants and BEGIN_BATTLE; separate same-seed public createLocalGame plus validated logged LOAD_STATE builds explicit prepared BattleInit.setup board/resources/decks/score target using current production UUIDs. Judged removal/challenge uses normal pointer battle intents and current production engine/reducer, with persisted replay and UUID logs. No full default journey, policy-selected complete battle, opening-trigger or native save-picker claim."
+          },
+          {
+            "label": "final-battle-dissolve-v04",
+            "viewport": "mobile",
+            "uuid": "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+            "mode": "dissolve",
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "fa5f0fef9b4449512883d59d8b09115178113b1e63d1499a61a861834fc747ba",
+            "qualification": "Origin real battle1 preview with actual UI debug grants and BEGIN_BATTLE; separate same-seed public createLocalGame plus validated logged LOAD_STATE builds explicit prepared BattleInit.setup board/resources/decks/score target using current production UUIDs. Judged removal/challenge uses normal pointer battle intents and current production engine/reducer, with persisted replay and UUID logs. No full default journey, policy-selected complete battle, opening-trigger or native save-picker claim."
+          },
+          {
+            "label": "final-battle-banish-v01",
+            "viewport": "desktop",
+            "uuid": "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+            "mode": "banish",
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "da56c8328768bd57d69ecd879bb6c402806c534925fdf87159be8622340a4174",
+            "qualification": "Origin real battle1 preview with actual UI debug grants and BEGIN_BATTLE; separate same-seed public createLocalGame plus validated logged LOAD_STATE builds explicit prepared BattleInit.setup board/resources/decks/score target using current production UUIDs. Judged removal/challenge uses normal pointer battle intents and current production engine/reducer, with persisted replay and UUID logs. No full default journey, policy-selected complete battle, opening-trigger or native save-picker claim."
+          },
+          {
+            "label": "final-battle-banish-v01",
+            "viewport": "mobile",
+            "uuid": "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+            "mode": "banish",
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "da56c8328768bd57d69ecd879bb6c402806c534925fdf87159be8622340a4174",
+            "qualification": "Origin real battle1 preview with actual UI debug grants and BEGIN_BATTLE; separate same-seed public createLocalGame plus validated logged LOAD_STATE builds explicit prepared BattleInit.setup board/resources/decks/score target using current production UUIDs. Judged removal/challenge uses normal pointer battle intents and current production engine/reducer, with persisted replay and UUID logs. No full default journey, policy-selected complete battle, opening-trigger or native save-picker claim."
+          },
+          {
+            "label": "final-battle-challenge-v01",
+            "viewport": "desktop",
+            "uuid": "eb55b141-82f8-4ba4-b319-420f762e9ee4",
+            "mode": "challenge",
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "33082d7fbcee48a7ec57869fb241d9eb07cf4096a5776749650c9a2369976fc1",
+            "qualification": "Origin real battle1 preview with actual UI debug grants and BEGIN_BATTLE; separate same-seed public createLocalGame plus validated logged LOAD_STATE builds explicit prepared BattleInit.setup board/resources/decks/score target using current production UUIDs. Judged removal/challenge uses normal pointer battle intents and current production engine/reducer, with persisted replay and UUID logs. No full default journey, policy-selected complete battle, opening-trigger or native save-picker claim."
+          },
+          {
+            "label": "final-battle-challenge-v01",
+            "viewport": "mobile",
+            "uuid": "eb55b141-82f8-4ba4-b319-420f762e9ee4",
+            "mode": "challenge",
+            "reachabilityCount": 0,
+            "capsEmpty": true,
+            "finalHash": "33082d7fbcee48a7ec57869fb241d9eb07cf4096a5776749650c9a2369976fc1",
+            "qualification": "Origin real battle1 preview with actual UI debug grants and BEGIN_BATTLE; separate same-seed public createLocalGame plus validated logged LOAD_STATE builds explicit prepared BattleInit.setup board/resources/decks/score target using current production UUIDs. Judged removal/challenge uses normal pointer battle intents and current production engine/reducer, with persisted replay and UUID logs. No full default journey, policy-selected complete battle, opening-trigger or native save-picker claim."
+          }
+        ]
+      },
+      "parent-visual-audit-v02.json": {
+        "path": "/tmp/root272-20261015/parent-visual-audit-v02.json",
+        "sha256": "3cf9010853a721eb4b613f5c42301b8be4d29e8cf0e433f1abfa071c1ea972a8",
+        "all14ViewedByRoot": true,
+        "qualification": "All14 original PNG files viewed through view_image; desktop previews resized by tool. Runner width/height describe CSS viewport; pngWidth/pngHeight independently read from IHDR describe original2x raster. Source hash and file SHA256 exact; final independent cold visual review pending.",
+        "captures": [
+          {
+            "sha256": "0325c833985f654e9dc96132b351953ed5840ae7f501d3950088013b301b305f",
+            "width": 1440,
+            "height": 900,
+            "pngWidth": 2880,
+            "pngHeight": 1800,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-select-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "starter-select-unselected-desktop.png",
+            "invocation": "run-4uSZpv"
+          },
+          {
+            "sha256": "527b052078297984ff5ea12f24c78f9fdb274b4ee3fb3caae25a088f5c7d08da",
+            "width": 1440,
+            "height": 900,
+            "pngWidth": 2880,
+            "pngHeight": 1800,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-select-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "starter-select-selected-desktop.png",
+            "invocation": "run-4uSZpv"
+          },
+          {
+            "sha256": "4284087e76e4a7130131acaaf0292ee8c696f1182ec3d3a443ae6bd9f115f677",
+            "width": 390,
+            "height": 844,
+            "pngWidth": 780,
+            "pngHeight": 1688,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-select-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "starter-select-unselected-mobile.png",
+            "invocation": "run-4uSZpv"
+          },
+          {
+            "sha256": "4456a024c4a68defd400a4d53af2427197e9d79d949a9ceb1a7e6c9091922676",
+            "width": 390,
+            "height": 844,
+            "pngWidth": 780,
+            "pngHeight": 1688,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-select-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "starter-select-selected-mobile.png",
+            "invocation": "run-4uSZpv"
+          },
+          {
+            "sha256": "29c4055c281a1240a5d9df4fa19dc6cbe03901a09594d6e0360a433b496d96c4",
+            "width": 1440,
+            "height": 900,
+            "pngWidth": 2880,
+            "pngHeight": 1800,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-empty-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "starter-empty-unselected-desktop.png",
+            "invocation": "run-dm6BlE"
+          },
+          {
+            "sha256": "c0177bcc76b4545f54642fe1b20038d2c0192a0ffdcc65274af63e19410caf2e",
+            "width": 390,
+            "height": 844,
+            "pngWidth": 780,
+            "pngHeight": 1688,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-empty-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "starter-empty-unselected-mobile.png",
+            "invocation": "run-dm6BlE"
+          },
+          {
+            "sha256": "836eef3a7fabac767beadb79d3271e8695892a6f29dc623a0839db87db38f9ae",
+            "width": 1440,
+            "height": 900,
+            "pngWidth": 2880,
+            "pngHeight": 1800,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-large-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "starter-large-unselected-desktop.png",
+            "invocation": "run-IpfgyK"
+          },
+          {
+            "sha256": "bfae0e93a45ab7473b5816f568e6a1c2e481abb07710100449b485e88c3daef3",
+            "width": 1440,
+            "height": 900,
+            "pngWidth": 2880,
+            "pngHeight": 1800,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-large-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "starter-large-selected-desktop.png",
+            "invocation": "run-IpfgyK"
+          },
+          {
+            "sha256": "4284087e76e4a7130131acaaf0292ee8c696f1182ec3d3a443ae6bd9f115f677",
+            "width": 390,
+            "height": 844,
+            "pngWidth": 780,
+            "pngHeight": 1688,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-large-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "starter-large-unselected-mobile.png",
+            "invocation": "run-IpfgyK"
+          },
+          {
+            "sha256": "4456a024c4a68defd400a4d53af2427197e9d79d949a9ceb1a7e6c9091922676",
+            "width": 390,
+            "height": 844,
+            "pngWidth": 780,
+            "pngHeight": 1688,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-large-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "starter-large-selected-mobile.png",
+            "invocation": "run-IpfgyK"
+          },
+          {
+            "sha256": "e1f44d9ad6e290711d178261337fa197d81620e0b79850b90cce5fb88728b5f6",
+            "width": 1440,
+            "height": 900,
+            "pngWidth": 2880,
+            "pngHeight": 1800,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-jellyfish-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "jellyfish-acquired-desktop.png",
+            "invocation": "run-FXCvB6"
+          },
+          {
+            "sha256": "068f2a72805bfcbb20cb15179389fd96dfc92ffc4f61e184f5da3ce1cdfda762",
+            "width": 390,
+            "height": 844,
+            "pngWidth": 780,
+            "pngHeight": 1688,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-starter-jellyfish-reward-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "jellyfish-acquired-mobile.png",
+            "invocation": "run-FXCvB6"
+          },
+          {
+            "sha256": "ea02bd70a1f887b362eaf346a13409ee7a1d734a376dc29d7eac6b6cb51bf4b5",
+            "width": 1440,
+            "height": 900,
+            "pngWidth": 2880,
+            "pngHeight": 1800,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-battle-challenge-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "battle-essence-challenge-1-desktop.png",
+            "invocation": "run-jDAgMw"
+          },
+          {
+            "sha256": "68e381f1a8d0ec8f9ce9ca2b709d29a23f40caaf2134a3a1d969dca1b3789667",
+            "width": 390,
+            "height": 844,
+            "pngWidth": 780,
+            "pngHeight": 1688,
+            "widthUnit": "CSS viewport pixels",
+            "fileDimensionsUnit": "PNG raster pixels",
+            "label": "final-battle-challenge-v01",
+            "viewed": true,
+            "assessment": "No actionable introduced clipping, overlap, unreadable control or responsive defect observed. Existing scroll boundaries/cards supported by actual geometry checks; battle capture shows prepared scoretarget100 and post-challenge state.",
+            "filename": "battle-essence-challenge-1-mobile.png",
+            "invocation": "run-jDAgMw"
+          }
+        ]
+      }
+    },
+    "qualification": "Parent owns the judged browser/sweep/ledger/capture observations and independently verified them. Fresh Codex code review, final cold visual review and Tollgate certification/delivery remain parent responsibilities after this helper commit. No overlapping runner durations are summed."
+  },
+  "failurePaths": {
+    "committedSteps": "Actual public engine contracts assert no reward for canceled or errored prefix, cold completed prefix once, retained successful automatic step on later failure, opening steps and within-row Challenge phase changes.",
+    "starterPermissions": "Public fold intent contracts reject malformed/stale/unknown/competing actor, duplicate/out-of-limit/unearned/nonstarter selections; preserve empty-deck and zero choice, physical repeats, source loss, late gains, terminal continuation and suspended real battle prompt; cold JSON reload and complete replay are compared.",
+    "transformations": "Current canonical starter metadata and actual composite eligibility govern unformed entries; formed and nonstarter entries retain values; provider failure leaves state unchanged and retry succeeds through real local log.",
+    "counterfactuals": "Five separately injected semantic faults each failed actual assertions, guarded all tracked and owned-new files, restored in finally, and then passed the positive contract suite.",
+    "qaCallerFailures": "Three distinct public-fixture preparation failures and one early caller acquisition premise failure are retained with replacements and no product change; parent proof distinguishes them from judged mechanic outcomes."
+  },
+  "originalSourceEpoch": {
+    "head": "b044d330af54766372611403f83708375c2fd732",
+    "commitTerminal": {
+      "path": "/tmp/worker272-20261015/commit-terminal-v01.json",
+      "sha256": "b38d6ac4b1538d37690294d7ace324a62f2f12fdc3a99365a21eaa1a998f22f2"
+    },
+    "acceptedCompleteColdReview": {
+      "path": "/tmp/root272-20261015/fresh-codex-review-acceptance-v02.json",
+      "sha256": "685bb945b9b746a3679cd6a8081afd1ee4d89332d0782c0f5c58ff7cd9739c5f"
+    },
+    "requiredTexts": 83,
+    "requiredImages": 14,
+    "allRequiredComplete": true,
+    "verifiedFinding": [
+      {
+        "priority": "P2",
+        "title": "Complete the tutorial integration for starter-purge permissions",
+        "disposition": "accepted, verified independently by parent source trace; unlanded candidate canceled, same-worktree repair pending; not complete"
+      }
+    ],
+    "originalValidationQualification": "The first53 check receipts,300seed exercise,100QA ledger rows and20browser contexts describe the original source epoch. Bounded compatibility and newly executed repaired-source evidence are distinct below.",
+    "canceledCandidate": "01a13e39-321f-7901-b9c8-6d3416e53005",
+    "candidateStatusProof": {
+      "path": "/tmp/root272-20261015/canceled-status-v01.stdout",
+      "sha256": "663b2a517e7fd28d9fb294da5f14e5df41ae11def56e79a155b2c0a66737af00"
+    }
+  },
+  "reviewOrderingRecovery": {
+    "start": "2026-10-15T06:23:13.240+00:00",
+    "end": "2026-10-15T06:40:50.526+00:00",
+    "grossMinutes": 17.621433333333336,
+    "dispatch": {
+      "path": "/tmp/root272-20261015/review-dispatch-v01.json",
+      "sha256": "3b67862286b8bcb1e7cbda36211139ba4df398831e7ba939b56b8213c853fb26"
+    },
+    "terminalEvent": {
+      "hostFile": "/Users/dthurn/.codex/sessions/2026/10/10/rollout-2026-10-10T20-08-54-01a128ef-4fc7-7a52-8a19-816921410323.jsonl",
+      "ordinal": 79199,
+      "timestamp": "2026-10-15T06:40:50.526Z",
+      "rawEventSHA256": "d31ffb2c896c0f5e98465b81e17b528873489d8df7acce3cdc2bbf373dcf7d5f"
+    },
+    "sameTaskJusticiar": {
+      "path": "/tmp/root272-20261015/approval-order-recovery-v01-native.stdout",
+      "sha256": "96390a11ae36026f5dcec19000c96ccf1a1cdd4d2af82e751f4b76321edf06de"
+    },
+    "qualification": "Only the agent-imposed pre-promotion hold was relaxed. The accepted P2 remains required and is repaired in the same unlanded worktree; no acceptance waiver."
+  },
+  "tutorialRepair": {
+    "nativeAdmission": {
+      "path": "/tmp/root272-20261015/tutorial-repair-admission-v01.stdout",
+      "sha256": "5ff145909990a6a415267c6dae9c32a1f0f988e17f51c58ceae4d04d51584a8e"
+    },
+    "existingTestAdmission": {
+      "path": "/tmp/root272-20261015/tutorial-repair-test-admission-v01-native.stdout",
+      "sha256": "09b2f785891372a8377e3095c73af1f7ae099277ae67a39d28a77e4aa6a97972"
+    },
+    "redRegression": {
+      "at": "2026-10-15T06:46:27.159615+00:00",
+      "productRowsUnchanged": [
+        {
+          "path": "src/rules/journey/journey-starter-acquisition.ts",
+          "sha256": "60817f1020c61672b873449b95980e94af60e922d2a49675c6d0d875e19f4cd4",
+          "lines": 100
+        },
+        {
+          "path": "src/components/FrontDoorRouter.tsx",
+          "sha256": "62fc0b872d2081e26aaa37971a927be0c6cf44da3240aec2b6523c850b825141",
+          "lines": 87
+        },
+        {
+          "path": "src/battle/engine-ai/use-engine-ai.ts",
+          "sha256": "b43e53d7626eebd9f93ac2d9e2f429c80425203248983c9abcf5eb0ab9dcd5fb",
+          "lines": 71
+        }
+      ],
+      "receipt": {
+        "argv": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/rules/journey/journey-starter-acquisition.test.ts",
+          "src/components/app-shell.test.tsx",
+          "src/battle/engine-ai/use-engine-ai.test.tsx"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+        "start": "2026-10-15T06:46:05.226572+00:00",
+        "end": "2026-10-15T06:46:11.302403+00:00",
+        "exit": 1,
+        "wallSeconds": 6.0756476250244305,
+        "pid": 62141,
+        "pgid": 62141,
+        "load": "{ 6.62 10.04 13.24 }",
+        "groupRemainingAtExit": []
+      },
+      "actualAssertionFailures": [
+        "public tutorial acquisition bounced instead of applied",
+        "router starter permission marker absent",
+        "in-flight AI host not disposed",
+        "restored permission started a policy host"
+      ],
+      "stdoutSHA256": "81c3e528790a3cbc7ff37a58a17838637252fdb3fa0909e1ce8a347fde70908e",
+      "stderrSHA256": "f9885a8b888978ef289fdc4a7adb7986236b00d551c5e7c8ac205808e24e74c4"
+    },
+    "sourceAudit": {
+      "at": "2026-10-15T06:49:26.048097+00:00",
+      "source": "b044d330af54766372611403f83708375c2fd732",
+      "changedPaths": [
+        "src/battle/engine-ai/use-engine-ai.test.tsx",
+        "src/battle/engine-ai/use-engine-ai.ts",
+        "src/components/FrontDoorRouter.tsx",
+        "src/components/app-shell.test.tsx",
+        "src/rules/journey/journey-rewards272-fixtures.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-starter-acquisition.ts"
+      ],
+      "exactAllowedProductTransforms": [
+        "src/rules/journey/journey-starter-acquisition.ts",
+        "src/battle/engine-ai/use-engine-ai.ts",
+        "src/components/FrontDoorRouter.tsx"
+      ],
+      "untouchedOriginalFreezeFiles": 38,
+      "untouchedBaselineAndOwnedHashedFiles": 5451,
+      "diffSHA256": "c570312d583295229f6118b3213eb8b0b96704a3c9544f3557a2faed96801d2b",
+      "rows": [
+        {
+          "path": "src/battle/engine-ai/use-engine-ai.test.tsx",
+          "sha256": "aa8dc15935e9179a15f8dfdc9921cf33a0953579652c58bccd8b4689a5c09336",
+          "lines": 65
+        },
+        {
+          "path": "src/battle/engine-ai/use-engine-ai.ts",
+          "sha256": "eacf176dbd7033aa8e2034e7c810bcd531efe9282dafbefd721ebc956353fa93",
+          "lines": 71
+        },
+        {
+          "path": "src/components/FrontDoorRouter.tsx",
+          "sha256": "cbaf6785f8aa2d9efd08d7748556aea697c69d36280a1853452a55d74461d8d0",
+          "lines": 91
+        },
+        {
+          "path": "src/components/app-shell.test.tsx",
+          "sha256": "e4a1ad91391d208c4122d4cbc036938ad979fa520b9d1b17b704fcb2cbe89762",
+          "lines": 339
+        },
+        {
+          "path": "src/rules/journey/journey-rewards272-fixtures.ts",
+          "sha256": "8f9f901662e169d5640e1bbc4d61374f797cd0d5f800c6ce40aa665644f35b92",
+          "lines": 89
+        },
+        {
+          "path": "src/rules/journey/journey-starter-acquisition.test.ts",
+          "sha256": "1314ad5319e785c549832f983dbd1ac76c0ea63a68f7dbfb7834981391883991",
+          "lines": 148
+        },
+        {
+          "path": "src/rules/journey/journey-starter-acquisition.ts",
+          "sha256": "24a94bee541006debd80504ce27da29153ee9063837a33aee3547e7b8b7de932",
+          "lines": 100
+        }
+      ]
+    },
+    "sourceFreeze": {
+      "path": "/tmp/worker272-20261015/tutorial-runtime-freeze-v01.json",
+      "sha256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9"
+    },
+    "postRepairSeededCompatibility": {
+      "at": "2026-10-15T06:51:48.782163+00:00",
+      "sourceFreezeSHA256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9",
+      "guardedSourceFiles": 45,
+      "changed": [],
+      "receipt": {
+        "argv": [
+          "node",
+          "node_modules/tsx/dist/cli.mjs",
+          "/tmp/worker272-20261015/journey300-v01.mts",
+          "--cases",
+          "300"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+        "start": "2026-10-15T06:51:25.416966+00:00",
+        "end": "2026-10-15T06:51:28.530316+00:00",
+        "exit": 0,
+        "wallSeconds": 3.1132237499696203,
+        "pid": 11416,
+        "pgid": 11416,
+        "load": "{ 5.88 8.08 11.33 }",
+        "groupRemainingAtExit": []
+      },
+      "summary": {
+        "kind": "summary",
+        "cases": 300,
+        "workflows": 900,
+        "codecs": 3000,
+        "purged": 464,
+        "perfected": 443,
+        "carvedGains": 4500,
+        "mortalGains": 3000,
+        "bounces": 600,
+        "uuids": [
+          "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+          "eb55b141-82f8-4ba4-b319-420f762e9ee4",
+          "1328e611-fa2f-426f-87e2-97f26c061866",
+          "e7d23bf7-4d60-4b43-94c4-14a06c0f9116"
+        ],
+        "scope": "Production registry and catalog descriptors; synthetic card/engine/atlas/economy fixtures; logged public fold intents and complete prefix codec replay; not full journeys or general weighted battle fuzz."
+      },
+      "stdoutSHA256": "622ced2af5d02b9c0ad4147abb7300b0f60d01da3d727c756545c2b0e8dbea93",
+      "qualification": "New compatibility exercise against repaired source; identical raw supported driver, no weighted engine retry, no source mutation. Parent QA ledger and own clock evidence intentionally remain open."
+    },
+    "changedNonTestSourceLines": 546,
+    "testEntryDeltaForRepair": 0,
+    "newJsdomEntryDeltaForRepair": 0,
+    "fixtureCorrections": [
+      {
+        "label": "tutorial-focused-v01",
+        "detail": "Loaded journey assigns its existing runId normalization; asserted exact tutorial/front-door/battle/permission identities instead of a whole-state equality that ignored normalization."
+      },
+      {
+        "label": "tutorial-focused-v02",
+        "detail": "Resumed battle intent requires the actual shared battle-provider engine; registered the same synthetic engine used by the real tutorial provider."
+      },
+      {
+        "label": "tutorial-lint-v01",
+        "detail": "Decoded fixture values use explicit stable contracts rather than unsafe implicit any."
+      },
+      {
+        "label": "tutorial-types-v02",
+        "detail": "Copied the decoded readonly event list for foldEvents mutable input contract; runtime trace unchanged."
+      }
+    ],
+    "checks": {
+      "tutorial-focused-v03": {
+        "argv": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/rules/journey/journey-starter-acquisition.test.ts",
+          "src/components/app-shell.test.tsx",
+          "src/battle/engine-ai/use-engine-ai.test.tsx"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+        "start": "2026-10-15T06:47:59.617450+00:00",
+        "end": "2026-10-15T06:48:06.643804+00:00",
+        "exit": 0,
+        "wallSeconds": 7.0261689579929225,
+        "pid": 69905,
+        "pgid": 69905,
+        "load": "{ 6.72 9.01 12.42 }",
+        "groupRemainingAtExit": []
+      },
+      "tutorial-review-v01": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+        "start": "2026-10-15T06:49:39.231501+00:00",
+        "end": "2026-10-15T06:50:41.094124+00:00",
+        "exit": 0,
+        "wallSeconds": 61.86170345899882,
+        "pid": 8418,
+        "pgid": 8418,
+        "load": "{ 9.27 9.01 12.03 }",
+        "groupRemainingAtExit": []
+      },
+      "tutorial-knip-v01": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+        "start": "2026-10-15T06:50:52.772142+00:00",
+        "end": "2026-10-15T06:50:56.706904+00:00",
+        "exit": 0,
+        "wallSeconds": 3.934616875019856,
+        "pid": 10670,
+        "pgid": 10670,
+        "load": "{ 7.37 8.57 11.61 }",
+        "groupRemainingAtExit": []
+      },
+      "tutorial-full-v01": {
+        "argv": [
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+        "start": "2026-10-15T07:01:29.332013+00:00",
+        "end": "2026-10-15T07:03:32.790889+00:00",
+        "exit": 0,
+        "wallSeconds": 123.45773949997965,
+        "pid": 85000,
+        "pgid": 85000,
+        "load": "{ 7.55 10.20 10.68 }",
+        "groupRemainingAtExit": []
+      },
+      "tutorial-journey300-v01": {
+        "argv": [
+          "node",
+          "node_modules/tsx/dist/cli.mjs",
+          "/tmp/worker272-20261015/journey300-v01.mts",
+          "--cases",
+          "300"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+        "start": "2026-10-15T06:51:25.416966+00:00",
+        "end": "2026-10-15T06:51:28.530316+00:00",
+        "exit": 0,
+        "wallSeconds": 3.1132237499696203,
+        "pid": 11416,
+        "pgid": 11416,
+        "load": "{ 5.88 8.08 11.33 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    "qualification": "Only three admitted product seams changed: direct tutorial continuation validation, front-door starter adapter priority/reset identity, and AI runnable hold. Existing journey/nested-copy/battle/run/CAS protections and all other source remain exact; four actual original-source regression assertions preceded fixes.",
+    "fullQueueS": 0.024156,
+    "parentProofs": {
+      "qa-ledger-join-v02.json": {
+        "proof": {
+          "path": "/tmp/root272-20261015/qa-ledger-join-v02.json",
+          "sha256": "7e54ee810e6a9c468e4695e673a88d0049959a37c64b04db60811e6c53403d76"
+        },
+        "result": {
+          "at": "2026-10-15T07:02:25.412330+00:00",
+          "old100RowsSHA256": "88c25971a000496b7cb3b34d2aa33aa37f69f18408c4fb1e76ad9a14388d06fc",
+          "old100ByteExact": true,
+          "machineRows": 80,
+          "machineCounts": {
+            "pass": 8,
+            "skip": 72
+          },
+          "judgedRows": 26,
+          "wholeCardReachabilityChecks": 118,
+          "rootViewedImages": 18,
+          "newContexts": 6,
+          "newImages": 4,
+          "ledgerSHA256": "f00a59fb9874f47ca93043cc0920f59b1c27e1e02e8dd77166963f08e3f409c7",
+          "sourceFreezeSHA256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9",
+          "qualification": "Original100 rows preserved byte-for-byte, six postrepair judged rows appended. Original20 contexts/source41 epoch and new6/source45 epoch distinct; unchanged source runtime checks retained, fresh changed-range review and full pending."
+        }
+      },
+      "tutorial-browser-independent-audit-v01.json": {
+        "proof": {
+          "path": "/tmp/root272-20261015/tutorial-browser-independent-audit-v01.json",
+          "sha256": "f99f6268c9d1aefa47ae8f16d85c15a25b0b27df08483c0d8e5100c6c2bda419"
+        },
+        "result": {
+          "at": "2026-10-15T07:02:25.410744+00:00",
+          "cases": [
+            {
+              "label": "tutorial-empty-browser-v02",
+              "viewport": "desktop",
+              "mode": "empty",
+              "route": "tutorial",
+              "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+              "invocation": "run-dCbYsv",
+              "rawSHA256": "c45da41fd63cce55e0d9759087a9ecbe1882dc7d15009620ec531c8df655c5c1",
+              "sourceFreezeSHA256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9",
+              "eventTypes": [
+                "BEGIN_TUTORIAL",
+                "BEGIN_TUTORIAL_BATTLE",
+                "ADD_DREAMSIGN",
+                "RESOLVE_STARTER_PURGE"
+              ],
+              "foldOutcomes": "all applied",
+              "selected": [],
+              "sourceEntries": 0,
+              "wholeCardCenterHits": 0,
+              "finalHash": "8ffa1bf711a00b3a804ef75741376e905b76ee6682c65c0b904ea00ed6a111f9",
+              "resolutionLog": {
+                "dreamsignId": "1328e611-fa2f-426f-87e2-97f26c061866",
+                "heldIndex": 0,
+                "choiceIndex": 0,
+                "permissionSeq": 3,
+                "purges": [],
+                "event": "journey_starter_purge_resolved",
+                "timestamp": "2026-10-15T06:54:40.616Z",
+                "gameId": "rzm9xc",
+                "seq": 4
+              },
+              "qualification": "Actual direct tutorial scene supplies production public prefix/actions; separate valid same-genesis public createLocalGame repeats BEGIN_TUTORIAL and BEGIN_TUTORIAL_BATTLE, then public ADD_DREAMSIGN. Default empty journey deck preserved; selected case public LOAD_STATE explicitly prepares three canonical physical starters before acquisition. Judged normal UI choice/reload/confirm/resumed tutorial uses real reducer and persisted replay. No complete tutorial/defaultpolicy/nativepicker claim."
+            },
+            {
+              "label": "tutorial-empty-browser-v02",
+              "viewport": "mobile",
+              "mode": "empty",
+              "route": "tutorial",
+              "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+              "invocation": "run-dCbYsv",
+              "rawSHA256": "c45da41fd63cce55e0d9759087a9ecbe1882dc7d15009620ec531c8df655c5c1",
+              "sourceFreezeSHA256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9",
+              "eventTypes": [
+                "BEGIN_TUTORIAL",
+                "BEGIN_TUTORIAL_BATTLE",
+                "ADD_DREAMSIGN",
+                "RESOLVE_STARTER_PURGE"
+              ],
+              "foldOutcomes": "all applied",
+              "selected": [],
+              "sourceEntries": 0,
+              "wholeCardCenterHits": 0,
+              "finalHash": "8ffa1bf711a00b3a804ef75741376e905b76ee6682c65c0b904ea00ed6a111f9",
+              "resolutionLog": {
+                "dreamsignId": "1328e611-fa2f-426f-87e2-97f26c061866",
+                "heldIndex": 0,
+                "choiceIndex": 0,
+                "permissionSeq": 3,
+                "purges": [],
+                "event": "journey_starter_purge_resolved",
+                "timestamp": "2026-10-15T06:55:26.175Z",
+                "gameId": "cbpxhk",
+                "seq": 4
+              },
+              "qualification": "Actual direct tutorial scene supplies production public prefix/actions; separate valid same-genesis public createLocalGame repeats BEGIN_TUTORIAL and BEGIN_TUTORIAL_BATTLE, then public ADD_DREAMSIGN. Default empty journey deck preserved; selected case public LOAD_STATE explicitly prepares three canonical physical starters before acquisition. Judged normal UI choice/reload/confirm/resumed tutorial uses real reducer and persisted replay. No complete tutorial/defaultpolicy/nativepicker claim."
+            },
+            {
+              "label": "tutorial-select-browser-v02",
+              "viewport": "desktop",
+              "mode": "select",
+              "route": "tutorial",
+              "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+              "invocation": "run-jFjHNd",
+              "rawSHA256": "b24922436a2faab3a3863e47655aedffd58eebf5bc7071a0238e9fe6f3be0c7b",
+              "sourceFreezeSHA256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9",
+              "eventTypes": [
+                "BEGIN_TUTORIAL",
+                "BEGIN_TUTORIAL_BATTLE",
+                "LOAD_STATE",
+                "ADD_DREAMSIGN",
+                "RESOLVE_STARTER_PURGE"
+              ],
+              "foldOutcomes": "all applied",
+              "selected": [
+                "qa272-tutorial-entry-0",
+                "qa272-tutorial-entry-1"
+              ],
+              "sourceEntries": 3,
+              "wholeCardCenterHits": 3,
+              "finalHash": "731cff047f572af9f82fb900576d238de25eff9e42ef02dd7adc7e319a772000",
+              "resolutionLog": {
+                "dreamsignId": "1328e611-fa2f-426f-87e2-97f26c061866",
+                "heldIndex": 0,
+                "choiceIndex": 0,
+                "permissionSeq": 4,
+                "purges": [
+                  {
+                    "entryId": "qa272-tutorial-entry-0",
+                    "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc"
+                  },
+                  {
+                    "entryId": "qa272-tutorial-entry-1",
+                    "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5"
+                  }
+                ],
+                "event": "journey_starter_purge_resolved",
+                "timestamp": "2026-10-15T06:54:45.693Z",
+                "gameId": "bxpv3y",
+                "seq": 5
+              },
+              "qualification": "Actual direct tutorial scene supplies production public prefix/actions; separate valid same-genesis public createLocalGame repeats BEGIN_TUTORIAL and BEGIN_TUTORIAL_BATTLE, then public ADD_DREAMSIGN. Default empty journey deck preserved; selected case public LOAD_STATE explicitly prepares three canonical physical starters before acquisition. Judged normal UI choice/reload/confirm/resumed tutorial uses real reducer and persisted replay. No complete tutorial/defaultpolicy/nativepicker claim."
+            },
+            {
+              "label": "tutorial-select-browser-v02",
+              "viewport": "mobile",
+              "mode": "select",
+              "route": "tutorial",
+              "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+              "invocation": "run-jFjHNd",
+              "rawSHA256": "b24922436a2faab3a3863e47655aedffd58eebf5bc7071a0238e9fe6f3be0c7b",
+              "sourceFreezeSHA256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9",
+              "eventTypes": [
+                "BEGIN_TUTORIAL",
+                "BEGIN_TUTORIAL_BATTLE",
+                "LOAD_STATE",
+                "ADD_DREAMSIGN",
+                "RESOLVE_STARTER_PURGE"
+              ],
+              "foldOutcomes": "all applied",
+              "selected": [
+                "qa272-tutorial-entry-0",
+                "qa272-tutorial-entry-1"
+              ],
+              "sourceEntries": 3,
+              "wholeCardCenterHits": 3,
+              "finalHash": "731cff047f572af9f82fb900576d238de25eff9e42ef02dd7adc7e319a772000",
+              "resolutionLog": {
+                "dreamsignId": "1328e611-fa2f-426f-87e2-97f26c061866",
+                "heldIndex": 0,
+                "choiceIndex": 0,
+                "permissionSeq": 4,
+                "purges": [
+                  {
+                    "entryId": "qa272-tutorial-entry-0",
+                    "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc"
+                  },
+                  {
+                    "entryId": "qa272-tutorial-entry-1",
+                    "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5"
+                  }
+                ],
+                "event": "journey_starter_purge_resolved",
+                "timestamp": "2026-10-15T06:55:31.231Z",
+                "gameId": "a6n6pg",
+                "seq": 5
+              },
+              "qualification": "Actual direct tutorial scene supplies production public prefix/actions; separate valid same-genesis public createLocalGame repeats BEGIN_TUTORIAL and BEGIN_TUTORIAL_BATTLE, then public ADD_DREAMSIGN. Default empty journey deck preserved; selected case public LOAD_STATE explicitly prepares three canonical physical starters before acquisition. Judged normal UI choice/reload/confirm/resumed tutorial uses real reducer and persisted replay. No complete tutorial/defaultpolicy/nativepicker claim."
+            },
+            {
+              "label": "tutorial-reward-compat-browser-v02",
+              "viewport": "desktop",
+              "mode": "select",
+              "route": "Reward compatibility",
+              "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+              "invocation": "run-xJJB6c",
+              "rawSHA256": "b13e8fa8c63622bee39cb89eb27fa5abad240a186335d171379113507014697b",
+              "sourceFreezeSHA256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9",
+              "eventTypes": [
+                "LOAD_STATE",
+                "LOAD_STATE",
+                "ACCEPT_REWARD",
+                "RESOLVE_STARTER_PURGE"
+              ],
+              "foldOutcomes": "all applied",
+              "selected": [
+                "deck-1",
+                "deck-2",
+                "deck-3",
+                "deck-4"
+              ],
+              "sourceEntries": 10,
+              "wholeCardCenterHits": 4,
+              "finalHash": "a6bd96a9b4e55b6f5c65ad696741722ddffefec129c9c5718af09d4e07125ac6",
+              "resolutionLog": {
+                "dreamsignId": "1328e611-fa2f-426f-87e2-97f26c061866",
+                "heldIndex": 0,
+                "choiceIndex": 0,
+                "permissionSeq": 3,
+                "purges": [
+                  {
+                    "entryId": "deck-1",
+                    "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+                  },
+                  {
+                    "entryId": "deck-2",
+                    "cardId": "647f5150-b2e0-424b-9480-27557642524e"
+                  },
+                  {
+                    "entryId": "deck-3",
+                    "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
+                  },
+                  {
+                    "entryId": "deck-4",
+                    "cardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0"
+                  }
+                ],
+                "event": "journey_starter_purge_resolved",
+                "timestamp": "2026-10-15T07:00:58.335Z",
+                "gameId": "4t8fxb",
+                "seq": 4
+              },
+              "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+            },
+            {
+              "label": "tutorial-reward-compat-browser-v02",
+              "viewport": "mobile",
+              "mode": "select",
+              "route": "Reward compatibility",
+              "uuid": "1328e611-fa2f-426f-87e2-97f26c061866",
+              "invocation": "run-xJJB6c",
+              "rawSHA256": "b13e8fa8c63622bee39cb89eb27fa5abad240a186335d171379113507014697b",
+              "sourceFreezeSHA256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9",
+              "eventTypes": [
+                "LOAD_STATE",
+                "LOAD_STATE",
+                "ACCEPT_REWARD",
+                "RESOLVE_STARTER_PURGE"
+              ],
+              "foldOutcomes": "all applied",
+              "selected": [
+                "deck-1",
+                "deck-2",
+                "deck-3",
+                "deck-4"
+              ],
+              "sourceEntries": 10,
+              "wholeCardCenterHits": 4,
+              "finalHash": "a6bd96a9b4e55b6f5c65ad696741722ddffefec129c9c5718af09d4e07125ac6",
+              "resolutionLog": {
+                "dreamsignId": "1328e611-fa2f-426f-87e2-97f26c061866",
+                "heldIndex": 0,
+                "choiceIndex": 0,
+                "permissionSeq": 3,
+                "purges": [
+                  {
+                    "entryId": "deck-1",
+                    "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+                  },
+                  {
+                    "entryId": "deck-2",
+                    "cardId": "647f5150-b2e0-424b-9480-27557642524e"
+                  },
+                  {
+                    "entryId": "deck-3",
+                    "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
+                  },
+                  {
+                    "entryId": "deck-4",
+                    "cardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0"
+                  }
+                ],
+                "event": "journey_starter_purge_resolved",
+                "timestamp": "2026-10-15T07:01:10.481Z",
+                "gameId": "t85uw4",
+                "seq": 4
+              },
+              "qualification": "Existing Reward scene; actual UI debug grant positive acquisition when requested; otherwise public File import prepares exact UUID Reward and optional empty/40-entry synthetic physical deck fixture; real pointer Reward acquisition and folded permission selection/confirmation; persisted reload/replay/UUID logs. Captures cover new screen and selected state; no full default journey or native OS picker claim."
+            }
+          ],
+          "captures": [
+            {
+              "href": "http://localhost:5274/tutorial?game=rzm9xc&debug=1",
+              "width": 1440,
+              "height": 900,
+              "sha256": "fe72f39fb2c0f6a4a964395848c531e93944e6e90bc1d2a85c8be6e320ed7501",
+              "rasterWidth": 2880,
+              "rasterHeight": 1800,
+              "rootViewed": true,
+              "rootVerdict": "No actionable clipping, overlap or unreadable controls in the new starter permission; all four actual images viewed.",
+              "coldVisualReview": "pending fresh changed-range reviewer",
+              "filename": "tutorial-starter-empty-desktop.png",
+              "invocation": "run-dCbYsv"
+            },
+            {
+              "href": "http://localhost:5274/tutorial?game=cbpxhk&debug=1",
+              "width": 390,
+              "height": 844,
+              "sha256": "b53145d3d6b7031f7480007cbaf4a1e179ab9745294c27cbb9cd97e81ec3c0a1",
+              "rasterWidth": 780,
+              "rasterHeight": 1688,
+              "rootViewed": true,
+              "rootVerdict": "No actionable clipping, overlap or unreadable controls in the new starter permission; all four actual images viewed.",
+              "coldVisualReview": "pending fresh changed-range reviewer",
+              "filename": "tutorial-starter-empty-mobile.png",
+              "invocation": "run-dCbYsv"
+            },
+            {
+              "href": "http://localhost:5174/tutorial?game=bxpv3y&debug=1",
+              "width": 1440,
+              "height": 900,
+              "sha256": "8be7665f5375a9a211372b99d32aa52f4564bac0fe81754748e061867170052a",
+              "rasterWidth": 2880,
+              "rasterHeight": 1800,
+              "rootViewed": true,
+              "rootVerdict": "No actionable clipping, overlap or unreadable controls in the new starter permission; all four actual images viewed.",
+              "coldVisualReview": "pending fresh changed-range reviewer",
+              "filename": "tutorial-starter-select-desktop.png",
+              "invocation": "run-jFjHNd"
+            },
+            {
+              "href": "http://localhost:5174/tutorial?game=a6n6pg&debug=1",
+              "width": 390,
+              "height": 844,
+              "sha256": "cf61d23962fa3ad535395c3d8f1591cc737149d45db67f3186b1b2ce7d325ffb",
+              "rasterWidth": 780,
+              "rasterHeight": 1688,
+              "rootViewed": true,
+              "rootVerdict": "No actionable clipping, overlap or unreadable controls in the new starter permission; all four actual images viewed.",
+              "coldVisualReview": "pending fresh changed-range reviewer",
+              "filename": "tutorial-starter-select-mobile.png",
+              "invocation": "run-jFjHNd"
+            }
+          ],
+          "contexts": 6,
+          "wholeCardCenterHits": 14,
+          "sourceFilesVerified": 45,
+          "sourceFreezeSHA256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9",
+          "rootBrowserProcessGroupsAbsent": [
+            15191,
+            15272,
+            15318,
+            15524,
+            81850,
+            81938
+          ],
+          "qualification": "Four actual tutorial contexts and two Reward compatibility contexts; exact caller assertions preserve battle/frontDoor and restored continuation/reload hash. Tutorial acquisition is public prepared fixture before App attachment; typed fold outcomes and runtime resolution UUID logs verified, no runtime acquisition-log claim for that preparation. Prior 20 contexts/14 images remain qualified by original source epoch."
+        }
+      },
+      "tutorial-browser-caller-dispositions-v01.json": {
+        "proof": {
+          "path": "/tmp/root272-20261015/tutorial-browser-caller-dispositions-v01.json",
+          "sha256": "2234c9e7dce42750814f3fb55a1e62802000be1bdb7e18fb2856fda43ddad57c"
+        },
+        "result": {
+          "at": "2026-10-15T07:03:10.183418+00:00",
+          "attempts": [
+            {
+              "label": "tutorial-empty-browser-v01",
+              "invocation": "run-XZNRFK",
+              "rawSHA256": "e2e111f66c7aeac5498e00237bbda863823e8572ea90074c98010c23a93564ef",
+              "receipt": {
+                "argv": [
+                  "node",
+                  "scripts/qa/run-scenario.mjs",
+                  "/tmp/root272-20261015/tutorial-starter-workflow-v01.mjs",
+                  "--bead",
+                  "hv-umm2.272",
+                  "--arg",
+                  "mode=empty",
+                  "--viewports",
+                  "desktop,mobile"
+                ],
+                "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+                "start": "2026-10-15T06:51:37.986728+00:00",
+                "end": "2026-10-15T06:52:45.062922+00:00",
+                "exit": 1,
+                "wallSeconds": 67.07518408296164,
+                "pid": 11615,
+                "pgid": 11615,
+                "load": "{ 5.18 7.82 11.18 }",
+                "groupRemainingAtExit": []
+              },
+              "failure": "desktop#0: QaTimeoutError: qa.battle real direct tutorial human decision: timed out after 60000 ms; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":null}\n    at Object.timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:1410:43)\n    at async tutorialStarter272 (evalmachine.<anonymous>:1743:2)\n    at async evalmachine.<anonymous>:1813:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+              "disposition": "Caller expected debug __engineProbe absent from TutorialBattleScreenAdapter; failure before acquisition, v02 derives actual human decision from public fold/provider."
+            },
+            {
+              "label": "tutorial-select-browser-v01",
+              "invocation": "run-cWtgkC",
+              "rawSHA256": "f92f64fa8e80e60290df726620775f18740a92dbf4affda513646ae7c0951bc0",
+              "receipt": {
+                "argv": [
+                  "node",
+                  "scripts/qa/run-scenario.mjs",
+                  "/tmp/root272-20261015/tutorial-starter-workflow-v01.mjs",
+                  "--bead",
+                  "hv-umm2.272",
+                  "--arg",
+                  "mode=select",
+                  "--viewports",
+                  "desktop,mobile"
+                ],
+                "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+                "start": "2026-10-15T06:51:39.142426+00:00",
+                "end": "2026-10-15T06:52:47.626668+00:00",
+                "exit": 1,
+                "wallSeconds": 68.48320599994622,
+                "pid": 11732,
+                "pgid": 11732,
+                "load": "{ 5.18 7.82 11.18 }",
+                "groupRemainingAtExit": []
+              },
+              "failure": "desktop#0: QaTimeoutError: qa.battle real direct tutorial human decision: timed out after 60000 ms; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":null}\n    at Object.timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:1410:43)\n    at async tutorialStarter272 (evalmachine.<anonymous>:1743:2)\n    at async evalmachine.<anonymous>:1813:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+              "disposition": "Caller expected debug __engineProbe absent from TutorialBattleScreenAdapter; failure before acquisition, v02 derives actual human decision from public fold/provider."
+            },
+            {
+              "label": "tutorial-reward-compat-browser-v01",
+              "invocation": "run-7U1xBp",
+              "rawSHA256": "72a7f77843150660bc3750fae0af602e79828caf6cb3e7e5f81bb8f72cbbfe8a",
+              "receipt": {
+                "argv": [
+                  "node",
+                  "scripts/qa/run-scenario.mjs",
+                  "/tmp/root272-20261015/starter-workflow-v03.mjs",
+                  "--bead",
+                  "hv-umm2.272",
+                  "--arg",
+                  "mode=select",
+                  "--arg",
+                  "gain=reward",
+                  "--arg",
+                  "capture=0",
+                  "--viewports",
+                  "desktop,mobile"
+                ],
+                "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+                "start": "2026-10-15T06:56:31.754227+00:00",
+                "end": "2026-10-15T06:57:02.284839+00:00",
+                "exit": 1,
+                "wallSeconds": 30.53204179200111,
+                "pid": 19176,
+                "pgid": 19176,
+                "load": "{ 7.90 6.79 9.63 }",
+                "groupRemainingAtExit": []
+              },
+              "failure": "desktop#0: Error: real Reward scene: TimeoutError: page.waitForFunction: Timeout 14653ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at async waitState (evalmachine.<anonymous>:1675:5)\n    at async starterAcquisition272 (evalmachine.<anonymous>:1742:16)\n    at async evalmachine.<anonymous>:1810:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+              "disposition": "Initial public repository wait timed out before local games DB/acquisition. One changed caller adds canonical non-root document-ready wait and diagnostic DOM/URL; v02 passed two contexts. No application change, no erased failure or product mechanic exercised by this attempt."
+            }
+          ],
+          "qualification": "All failed caller receipts retained distinctly; no failed pre-acquisition setup counted as mechanic pass, source code unchanged by caller corrections."
+        }
+      }
+    },
+    "nativeRepairAcceptance": {
+      "path": "/tmp/root272-20261015/repair-browser-acceptance-v01-native.stdout",
+      "sha256": "ec62b7aed6c0c78436c1d56f23f618ab0d2904f9b539d22be0bba831450a21c6"
+    },
+    "finalFullArtSourceAudit": {
+      "at": "2026-10-15T07:04:00.314123+00:00",
+      "sourceFreezeSHA256": "ddc2135c76df70b23049ddf391cacb7b03faa3e7518fb666920a0fc9b3cd35f9",
+      "sourceFiles": 45,
+      "changed": [],
+      "realArt": {
+        "symlinks": 1570,
+        "manifestSHA256": "bc9fd2caae1faaec28237e188177acf6e544eeea66611471f7ad58fb132aa328",
+        "exactOriginalRestoredManifest": true
+      },
+      "receipt": {
+        "argv": [
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-rewards272",
+        "start": "2026-10-15T07:01:29.332013+00:00",
+        "end": "2026-10-15T07:03:32.790889+00:00",
+        "exit": 0,
+        "wallSeconds": 123.45773949997965,
+        "pid": 85000,
+        "pgid": 85000,
+        "load": "{ 7.55 10.20 10.68 }",
+        "groupRemainingAtExit": []
+      },
+      "qualification": "One final required cross-cutting full review; no additional aggregate, source mutation or literal unsupported weighted retry."
+    },
+    "rootCallerCorrections": {
+      "tutorial-empty-browser-v01": "Preparation assumed journey-only EngineDebugPanel/__engineProbe on the tutorial renderer; corrected caller reads persisted public fold and public engine decision, with no product/QA-infrastructure change.",
+      "tutorial-select-browser-v01": "Same tutorial caller preparation assumption, independent retained actual invocation.",
+      "tutorial-reward-compat-browser-v01": "Initial remote wait timed out before local DB or acquisition; corrected caller waits canonical document and records setup DOM/URL.",
+      "qualification": "Actual root receipts retain separate starts/ends and failures. No overlapping runner durations summed; successful tutorial acquisition prepared through public constructors/intents before App attachment is evidenced by typed fold outcomes, while runtime UUID logs establish resolution."
+    }
+  }
+}

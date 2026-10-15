@@ -111,12 +111,21 @@ export type BounceReason =
   | "illegalAnswer"
   | "notCancellable";
 
+/** Transient successful step results for authoritative host-domain reactions. */
+export interface CommittedBattleStep {
+  readonly version: number;
+  readonly phase: BattleState["turn"]["phase"];
+  readonly dreamsigns: readonly import("../state/ids").DreamsignId[];
+  readonly events: readonly EngineEvent[];
+}
+
 export type IntentOutcome =
   | {
       readonly kind: "applied";
       readonly slice: BattleSlice;
       /** Events newly handed to presentation, in order. */
       readonly published: readonly EngineEvent[];
+      readonly committedSteps: readonly CommittedBattleStep[];
       readonly error: EngineErrorRecord | null;
     }
   | { readonly kind: "bounced"; readonly reason: BounceReason };
@@ -558,7 +567,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
 
   function failed(slice: BattleSlice, error: EngineErrorRecord): IntentOutcome {
     logError(slice, error);
-    return { kind: "applied", slice: recovered(slice), published: [], error };
+    return { kind: "applied", slice: recovered(slice), published: [], committedSteps: [], error };
   }
 
   /**
@@ -573,13 +582,14 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
     let showing = shown;
     let checked = answered;
     const published: EngineEvent[] = [];
+    const committedSteps: CommittedBattleStep[] = [];
     for (;;) {
       let inFlight = slice.inFlight;
       if (inFlight === null) {
         const next = nextAutomaticStep(slice.committed, engine.catalog, engine.memo);
         logBoundedLegality(slice.committed, next === null);
         if (next === null) {
-          return { kind: "applied", slice, published, error: null };
+          return { kind: "applied", slice, published, committedSteps, error: null };
         }
         inFlight = { step: next, automatic: true, answers: [] };
         slice = { ...slice, inFlight, publishedEvents: 0, attempt: slice.attempt + 1 };
@@ -588,7 +598,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       checked = false;
       if (evaluation.kind === "error") {
         logError(slice, evaluation.error);
-        return { kind: "applied", slice: recovered(slice, showing), published, error: evaluation.error };
+        return { kind: "applied", slice: recovered(slice, showing), published, committedSteps, error: evaluation.error };
       }
       const { result } = evaluation;
       const fresh = result.events.slice(slice.publishedEvents);
@@ -605,6 +615,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
             publishedEvents: result.events.length,
           },
           published,
+          committedSteps,
           error: null,
         };
       }
@@ -613,6 +624,8 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       if (action !== null && actor !== undefined && actor !== null) {
         log([{ event: "engine.action", version, side: actor, action, answers: result.answers }]);
       }
+      committedSteps.push({ version: slice.committed.version, phase: slice.committed.turn.phase,
+        dreamsigns: slice.committed.sides.player.dreamsigns.map(({ id }) => id), events: result.events });
       log(stepLogRecords(slice.committed, result.state));
       slice = { committed: result.state, inFlight: null, publishedEvents: 0, attempt: slice.attempt };
       showing = null;
@@ -700,6 +713,7 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
           kind: "applied",
           slice: { ...recovered(slice, current.shown), attempt: slice.attempt + 1 },
           published: [],
+          committedSteps: [],
           error: null,
         };
       }

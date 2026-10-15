@@ -3274,6 +3274,19 @@ an independent gain.
 
 ## Journey Essence Effects
 
+Battle Essence from a Dreamsign is awarded when its successful engine step
+commits. A suspended step's removal prefix awards nothing until that step
+completes; cancellation or failure awards nothing for that step. Successfully
+completed earlier steps retain their awards when a later step waits or fails.
+Each physical player Dreamsign emblem present for the step earns its own award.
+The battle's emblems are fixed by its initialization; changing the journey's
+Dreamsign holdings does not change them. Loading or replaying a saved battle,
+developer edits, and continuing from the battle result award no additional
+Essence. "Outside of a challenge" excludes removals during the Challenge phase,
+including effects resolving there. A character dissolving an enemy during a
+challenge uses the opposing lane character as the cause, as defined under
+Causing an enemy's removal.
+
 An Essence-site multiplier applies to the positive Essence collected from that
 site, once for each copy held when collection succeeds. The prepared base amount
 is immutable; the displayed collection amount derives from the current holdings.
@@ -3326,6 +3339,22 @@ random draws keep their indices; modifier draws continue after the last index th
 domain consumed.
 
 ## Journey Dreamsign Acquisition Effects
+
+A starter card is identified by its canonical card identity's starter metadata,
+including the starter-deck role. Permanent entry changes and transfigurations do
+not change that identity. An acquisition that applies Perfected applies it to
+each eligible unformed starter entry and preserves that entry's permanent
+changes. A formed starter retains its form. The original applications provide
+transfiguration occurrences to other journey effects.
+
+An optional acquisition purge earns zero through its printed maximum of distinct
+physical starter entries present when the Dreamsign is gained. Each acquired
+copy earns a permission. The permissions survive source loss and reload; later
+acquisitions cannot enlarge an earned permission. Finishing a permission with
+zero entries declines it. Starter acquisition choices resolve before mandatory
+Dreamsign copy choices, preserving their exact continuation and any suspended
+battle. Purging these entries is an authored journey purge and supplies the
+ordinary per-purged-card occurrences. Invalid or stale choices change nothing.
 
 A successful gameplay acquisition belongs to the concrete held slot it fills,
 including a replacement with the same Dreamsign identity. Preparing an offer,

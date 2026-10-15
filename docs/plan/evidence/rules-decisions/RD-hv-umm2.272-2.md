@@ -1,0 +1,5 @@
+# RD-hv-umm2.272-2: Starter acquisition permissions preserve their continuation
+- Ladder: 5 for ordering acquisition purge choices before mandatory copy choices: complete the newly earned starter operation first, preserving the existing copy continuation. Not invoked for canonical starter identity, applicable unformed transfiguration or physical purge occurrences; current rules settle them.
+- rules.md: § Journey Dreamsign Acquisition Effects; § Journey Transfiguration Effects; § Journey Purge Effects.
+- Affects: 1328e611-fa2f-426f-87e2-97f26c061866, e7d23bf7-4d60-4b43-94c4-14a06c0f9116.
+- Why: Each acquired physical source earns an optional zero-through-four purge of the starter entries present then. The permission records exact entry and card identity, survives source loss and reload, and restores its earned continuation or suspended battle. Later gains do not alter it. Starter membership is canonical metadata, independent of permanent entry changes. Perfected applies once to each eligible unformed starter and provides ordinary original transfiguration occurrences; formed entries retain their form. Copy conversion supplies no acquisition occurrence.

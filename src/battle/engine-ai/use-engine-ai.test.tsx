@@ -3,6 +3,7 @@ import { act } from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import { renderInCumulus } from "../../cumulus/testing/render";
 import { beginBattle, apply, DOLL, RED, clear } from "../../rules/journey/journey-on-gain-fixtures";
+import { apply as starterApply, installStarter, TEETH, purgePayload } from "../../rules/journey/journey-rewards272-fixtures";
 import type { FoldState } from "../../rules/fold-state";
 import { parseClientId } from "../../types/identifiers";
 import { makeActions } from "../../session/actions";
@@ -30,26 +31,35 @@ function enemyTurn() {
     } });
   });
 }
-it("discards a late host answer while copy owns the fold and submits only after the preserved battle resumes", async () => {
+it.each(["copy", "starter"] as const)("discards a late host answer while %s owns the fold and submits only after the preserved battle resumes", async (kind) => {
   vi.useFakeTimers();
   const submitted: EventDraft[] = []; calls.actions = makeActions((draft) => { submitted.push(draft); return Promise.resolve(submitted.length); });
   const battle = enemyTurn(); calls.state = battle;
   const rendered = renderInCumulus(<Actor />), first = calls.hosts[0];
   expect(first.request).not.toBeNull(); expect(first.answer).not.toBeNull();
-  const pending = apply(battle, "ADD_DREAMSIGN", { dreamsignId: DOLL }).state; calls.state = pending;
+  const pending = acquire(battle, kind); calls.state = pending;
   rendered.rerender(<Actor />); expect(first.dispose).toHaveBeenCalledTimes(1);
   await act(async () => { first.answer!(runPolicy(FIXTURE_ENGINE, first.request!)); await Promise.resolve(); vi.runOnlyPendingTimers(); });
   expect(submitted).toEqual([]); expect(calls.hosts).toHaveLength(1);
-  if (pending.journey.screen.type !== "journeyDreamsign" || pending.journey.screen.choice.kind !== "copy") throw new Error("missing permission");
-  calls.state = apply(pending, "RESOLVE_DREAMSIGN_COPY", { sourceDreamsignId: DOLL, heldIndex: 1, choiceIndex: 0, permissionSeq: pending.journey.screen.choice.permissionSeq, targetHeldIndex: 0, expectedTargetDreamsignId: RED }).state;
+  calls.state = resolve(pending);
   rendered.rerender(<Actor />); const resumed = calls.hosts[1]; expect(resumed.request).not.toBeNull();
   await act(async () => { resumed.answer!(runPolicy(FIXTURE_ENGINE, resumed.request!)); await Promise.resolve(); vi.runOnlyPendingTimers(); });
   expect(submitted).toHaveLength(1); expect(submitted[0]).toMatchObject({ type: "BATTLE_ACTION", payload: { side: "enemy" } });
   rendered.unmount(); expect(resumed.dispose).toHaveBeenCalledTimes(1);
 });
-it("creates no policy host when a copy with a real battle is restored before the actor mounts", () => {
+it.each(["copy", "starter"] as const)("creates no policy host when a %s with a real battle is restored before the actor mounts", (kind) => {
   calls.actions = makeActions(() => Promise.resolve(1));
-  calls.state = apply(beginBattle([RED]), "ADD_DREAMSIGN", { dreamsignId: DOLL }).state;
+  calls.state = acquire(beginBattle([RED]), kind);
   expect(calls.state.battle).not.toBeNull();
   renderInCumulus(<Actor />); expect(calls.hosts).toHaveLength(0);
 });
+
+function acquire(battle: FoldState, kind: "copy" | "starter"): FoldState {
+  if (kind === "copy") return apply(battle, "ADD_DREAMSIGN", { dreamsignId: DOLL }).state;
+  installStarter(); return starterApply(battle, "ADD_DREAMSIGN", { dreamsignId: TEETH }).state;
+}
+function resolve(pending: FoldState): FoldState {
+  if (pending.journey.screen.type === "journeyStarterPurge") return starterApply(pending, "RESOLVE_STARTER_PURGE", purgePayload(pending.journey)).state;
+  if (pending.journey.screen.type !== "journeyDreamsign" || pending.journey.screen.choice.kind !== "copy") throw new Error("missing permission");
+  return apply(pending, "RESOLVE_DREAMSIGN_COPY", { sourceDreamsignId: DOLL, heldIndex: 1, choiceIndex: 0, permissionSeq: pending.journey.screen.choice.permissionSeq, targetHeldIndex: 0, expectedTargetDreamsignId: RED }).state;
+}

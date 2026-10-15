@@ -29,6 +29,7 @@ import type { DebugOp } from "../../engine/debug/debug-actions";
 import { engineDebugActions } from "../../engine/development";
 import {
   createFoldAdapter,
+  type CommittedBattleStep,
   type BattleIntent,
   type BattleSlice,
   type FoldAdapter,
@@ -181,9 +182,14 @@ export function takeEngineLogRecords(seq: number): readonly EngineLogRecord[] {
  * reports an error, which bounces the `BEGIN_BATTLE`.
  */
 export function startEngineBattle(init: EngineBattleInit, engine: Engine, seq: number): EngineBattleFold | null {
+  return startEngineBattleWithCommits(init, engine, seq)?.fold ?? null;
+}
+
+/** Complete committed steps accompany a newly started battle without entering saved state. */
+export function startEngineBattleWithCommits(init: EngineBattleInit, engine: Engine, seq: number): { readonly fold: EngineBattleFold; readonly committedSteps: readonly CommittedBattleStep[] } | null {
   const outcome = collectEngineWork(seq, () => foldAdapterFor(engine).start(init));
   if (outcome.kind !== "applied" || outcome.error !== null) return null;
-  return { init, slice: outcome.slice };
+  return { fold: { init, slice: outcome.slice }, committedSteps: outcome.committedSteps };
 }
 
 /** Apply one ordinary intent while retaining its real engine log records. */
@@ -221,7 +227,7 @@ export function engineIntentOfEvent(type: string, payload: Record<string, unknow
 
 /** One engine intent folded over a slice: the next slice, or why it bounced or threw. */
 type IntentFold =
-  | { readonly kind: "applied"; readonly slice: BattleSlice; readonly published: readonly EngineEvent[] }
+  | { readonly kind: "applied"; readonly slice: BattleSlice; readonly published: readonly EngineEvent[]; readonly committedSteps: readonly CommittedBattleStep[] }
   | { readonly kind: "bounced" }
   | { readonly kind: "threw"; readonly slice: BattleSlice; readonly error: unknown };
 
@@ -242,7 +248,7 @@ export function foldEngineIntent(
   if (intent === null) return { kind: "bounced" };
   try {
     const outcome = adapter.reduce(slice, intent, observation);
-    return outcome.kind === "bounced" ? outcome : { kind: "applied", slice: outcome.slice, published: outcome.published };
+    return outcome.kind === "bounced" ? outcome : { kind: "applied", slice: outcome.slice, published: outcome.published, committedSteps: outcome.committedSteps };
   } catch (error) {
     if (slice.inFlight === null) return { kind: "bounced" };
     return { kind: "threw", slice: { ...slice, inFlight: null, publishedEvents: 0 }, error };
@@ -274,6 +280,14 @@ export function reduceEngineIntent(
   ctx: EventContext,
   engine: Engine | null,
 ): FoldState | null {
+  return reduceEngineIntentWithCommits(state, type, payload, ctx, engine)?.state ?? null;
+}
+
+/** The pure host result retains completed steps even when a later step suspends or fails. */
+export function reduceEngineIntentWithCommits(
+  state: FoldState, type: EngineIntentEventType, payload: Record<string, unknown>,
+  ctx: EventContext, engine: Engine | null,
+): { readonly state: FoldState; readonly committedSteps: readonly CommittedBattleStep[] } | null {
   const battle = engineBattleOf(state.battle);
   if (battle === null || engine === null) return null;
   const fold = battle.engine;
@@ -293,8 +307,9 @@ export function reduceEngineIntent(
       },
     ]);
   }
-  return tutorial === null ? { ...state, battle: { ...battle, engine: { ...fold, slice: folded.slice } } }
+  const next = tutorial === null ? { ...state, battle: { ...battle, engine: { ...fold, slice: folded.slice } } }
     : tutorialEngineTransition(state,tutorial,engine,folded.slice,folded.kind === "applied" ? folded.published : [],ctx.seq,selected ?? tutorial.pendingOverride,type === "BATTLE_CANCEL");
+  return { state: next, committedSteps: tutorial === null && folded.kind === "applied" ? folded.committedSteps : [] };
 }
 
 /**

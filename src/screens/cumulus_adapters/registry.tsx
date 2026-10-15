@@ -1,3 +1,4 @@
+import { JourneyStarterPurgeScreenAdapter } from "./JourneyStarterPurgeScreenAdapter";
 import { JourneyDuplicationScreenAdapter } from "./JourneyDuplicationScreenAdapter";
 import { JourneyDreamsignScreenAdapter } from "./JourneyDreamsignScreenAdapter";
 // The exhaustive production registry. Each screen entry renders an adapter
@@ -36,6 +37,8 @@ export type SiteDisposition =
 /** Resolves every top-level, non-site gameplay screen to its Cumulus adapter. */
 export function screenFor(screen: NonSiteScreen): ReactNode {
   switch (screen.type) {
+    case "journeyStarterPurge":
+      return <JourneyStarterPurgeScreenAdapter />;
     case "journeyDreamsign":
       return <JourneyDreamsignScreenAdapter />;
     case "journeyDuplication":

@@ -252,7 +252,23 @@ export interface AfterBattleTransfigurationSource {
 export type JourneyOnGainEffect =
   | { readonly kind: "afterBattleDreamsignChoice"; readonly offerCount: number }
   | { readonly kind: "randomTransfigurationOnGain"; readonly numerator: number; readonly denominator: number }
-  | { readonly kind: "copyOwnedDreamsignOnGain" };
+  | { readonly kind: "copyOwnedDreamsignOnGain" }
+  | { readonly kind: "purgeStarterOnGain"; readonly maxCount: number }
+  | { readonly kind: "perfectStarterOnGain"; readonly transfiguration: "Perfected" };
+export interface JourneyStarterPurgeSource {
+  readonly dreamsignId: DreamsignId;
+  readonly heldIndex: number;
+  readonly maxCount: number;
+  readonly entries: readonly { readonly entryId: DeckEntryId; readonly cardId: CardId }[];
+}
+export interface JourneyStarterPurgeChoice {
+  readonly kind: "starterPurge";
+  readonly sources: readonly JourneyStarterPurgeSource[];
+  readonly index: number;
+  readonly permissionSeq: number;
+  readonly continuation: Exclude<Screen, { type: "journeyStarterPurge" }>;
+  readonly suspendedBattle: JourneySuspendedBattle | null;
+}
 export interface JourneyDreamsignGain { readonly dreamsignId: DreamsignId; readonly heldIndex: number }
 export interface JourneySuspendedBattle { readonly battleId: import("./identifiers").BattleId; readonly mode: "journey" | "tutorial" }
 export interface AfterBattleDreamsignSource {
@@ -322,6 +338,8 @@ export type JourneySitesEffect =
 
 /** Catalog clauses implemented by journeyEssence. */
 export type JourneyEssenceEffect =
+  | { readonly kind: "enemyRemovalOutsideChallengeEssence"; readonly amount: number }
+  | { readonly kind: "challengeDissolveEssence"; readonly amount: number }
   | { readonly kind: "purgedCardEssence"; readonly amount: number }
   | { readonly kind: "multiplyEssenceSiteGain"; readonly factor: number }
   | { readonly kind: "replaceEssenceSiteReward"; readonly offerCount: 1 }
@@ -1313,6 +1331,7 @@ export type Screen =
        */
       tutorialAvatarId?: AvatarId;
     }
+  | { type: "journeyStarterPurge"; readonly choice: JourneyStarterPurgeChoice }
   | { type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice | JourneyDreamsignCopyChoice }
   | { type: "journeyPurge"; readonly choice: JourneyPurgeChoice }
   | { type: "journeyTransfiguration"; readonly choice: AfterBattleJourneyChoice }

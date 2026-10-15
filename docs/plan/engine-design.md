@@ -470,6 +470,15 @@ supporting the two legacy cost-choice representations.
 
 ### Fold integration
 
+Successful fold outcomes also carry transient `committedSteps`: each complete
+step's starting version, phase and ordered player Dreamsign identities, with its
+full event sequence. Suspended presentation prefixes contribute no row. A later
+completion supplies its whole successful prefix once; cancellation or failure
+contributes none for that step. Earlier completed rows survive a later step's
+suspension or failure. Journey Essence hooks consume these rows within the same
+pure host transition, including battle initialization. The rows are separate
+from saved battle state, debug history and presentation observers.
+
 The battle slice (`fold/slice.ts`) holds only plain data:
 
 ```ts

@@ -1,3 +1,4 @@
+import { prepareStarterAcquisition, finishStarterAcquisition } from "./journey-starter-acquisition";
 import { validJourneyDuplicationScreen } from "./journey-duplication";
 import type { ReducerLogRecord } from "../../eventlog/types";
 import { parseBattleId, dreamsignIdFromUnknown, siteIdFromUnknown, type DreamsignId, type SiteId } from "../../types/identifiers";
@@ -18,10 +19,18 @@ const effectLog = (source: JourneyDreamsignGain, fields: Record<string, unknown>
 /** The concrete acquisition stage precedes the existing card-observer waves. */
 export function prepareJourneyOnGain(input: { before: JourneyState; journey: JourneyState; gains: readonly JourneyDreamsignGain[]; lookup: JourneyModifierRegistry["lookup"]; seq: number; random: () => { value: number; drawIndex: number }; siteId: SiteId | null }) {
   let journey = input.journey;
+  const starterSources: import("../../types/journey").JourneyStarterPurgeSource[] = [];
   const transfigurations: JourneyTransfigurationOccurrence[] = [], copySources: JourneyDreamsignGain[] = [], logRecords: ReducerLogRecord[] = [];
   for (const source of input.gains) {
     if (journey.dreamsigns[source.heldIndex]?.id !== source.dreamsignId) throw new Error("Acquired Dreamsign physical slot changed.");
     const effect = input.lookup(source.dreamsignId)?.journeyOnGain;
+    if (effect?.kind === "purgeStarterOnGain" || effect?.kind === "perfectStarterOnGain") {
+      const previous = journey, prepared = prepareStarterAcquisition(journey, source, effect, input.seq, input.siteId);
+      journey = prepared.journey;
+      if (prepared.permission !== null) starterSources.push(prepared.permission);
+      transfigurations.push(...journeyTransfigurationOccurrences(previous, journey));
+      logRecords.push(prepared.log);
+    }
     if (effect?.kind === "copyOwnedDreamsignOnGain") {
       if (journey.dreamsigns.length > 1) copySources.push(source);
       logRecords.push(effectLog(source, { permissionSeq: input.seq, targetCount: journey.dreamsigns.length - 1, choicePrepared: journey.dreamsigns.length > 1 }));
@@ -45,7 +54,7 @@ export function prepareJourneyOnGain(input: { before: JourneyState; journey: Jou
     transfigurations.push(...journeyTransfigurationOccurrences(previous, journey));
     logRecords.push(effectLog(source, { siteId: input.siteId, permissionSeq: input.seq, before: { deckSize: previous.deck.length, eligible: eligible.length }, after: { requested, transformed: count }, eligibleEntryIds: eligible.map(({ entry }) => entry.entryId), transformations: selections }));
   }
-  return { journey, transfigurations, copySources, logRecords };
+  return { journey, transfigurations, copySources, starterSources, logRecords };
 }
 
 /** Delay the copy screen until every ordinary observer has earned its continuation. */
@@ -60,8 +69,12 @@ export function finishJourneyOnGain(journey: JourneyState, sources: readonly Jou
   return { ...journey, screen: { type: "journeyDreamsign", choice } };
 }
 
+export function finishJourneyAcquisition(journey: JourneyState, copySources: readonly JourneyDreamsignGain[], starterSources: readonly import("../../types/journey").JourneyStarterPurgeSource[], seq: number, binding: JourneySuspendedBattle | null): JourneyState {
+  return finishStarterAcquisition(finishJourneyOnGain(journey, copySources, seq, binding), starterSources, seq, binding);
+}
+
 export function journeyOnGain(dreamsignId: DreamsignId, descriptor: JourneyOnGainEffect): JourneyModifierDefinition {
-  if (descriptor.kind === "afterBattleDreamsignChoice" ? !index(descriptor.offerCount) || descriptor.offerCount < 1 : descriptor.kind === "randomTransfigurationOnGain" ? !index(descriptor.numerator) || !index(descriptor.denominator) || descriptor.denominator < 1 || descriptor.numerator > descriptor.denominator : descriptor.kind !== "copyOwnedDreamsignOnGain") throw new RangeError("Invalid journeyOnGain descriptor.");
+  if (descriptor.kind === "afterBattleDreamsignChoice" ? !index(descriptor.offerCount) || descriptor.offerCount < 1 : descriptor.kind === "randomTransfigurationOnGain" ? !index(descriptor.numerator) || !index(descriptor.denominator) || descriptor.denominator < 1 || descriptor.numerator > descriptor.denominator : descriptor.kind === "purgeStarterOnGain" ? !index(descriptor.maxCount) || descriptor.maxCount < 1 : descriptor.kind === "perfectStarterOnGain" ? descriptor.transfiguration !== "Perfected" : descriptor.kind !== "copyOwnedDreamsignOnGain") throw new RangeError("Invalid journeyOnGain descriptor.");
   const effect = Object.freeze({ ...descriptor });
   return { dreamsignId, journeyOnGain: effect, afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, seq, random }) {
     if (effect.kind !== "afterBattleDreamsignChoice" || eventType !== "END_BATTLE" || siteId === null || before.screen.type !== "site" || before.screen.siteId !== siteId || findSite(before, siteId)?.type !== "Battle") return null;

@@ -42,7 +42,7 @@ import * as journeyBattle from "./battle/journey-battle";
 import {
   applyEngineDebug,
   pendingEnginePrompt,
-  reduceEngineIntent,
+  reduceEngineIntentWithCommits,
 } from "./battle/engine-battle";
 import type { Engine } from "../engine";
 import { journeyBattleOf, tutorialBattleOf } from "./battle/fold";
@@ -53,6 +53,7 @@ import * as gamble from "./journey/gamble";
 import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
 import { journeyTransfigurationCard, journeyTransfigurationOccurrences, resolveJourneyTransfiguration } from "./journey/journey-transfiguration";
+import { resolveStarterPurge, validStarterPurgeIntent } from "./journey/journey-starter-acquisition";
 import { resolveJourneyPurge } from "./journey/journey-purge";
 import * as journeySites from "./journey/journey-sites";
 import * as cardTutorial from "./card-tutorial-guidance";
@@ -108,7 +109,7 @@ export function reduceGameEvent(
     }
     // rule 4 — prompt gate
     if (
-      pendingEnginePrompt(state.battle, battleEngine()) !== null && !(event.type === "RESOLVE_DREAMSIGN_COPY" && validDreamsignCopyIntent(state.journey, event.payload ?? {}, state.battle, modifiers))
+      pendingEnginePrompt(state.battle, battleEngine()) !== null && !(event.type === "RESOLVE_DREAMSIGN_COPY" && validDreamsignCopyIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_STARTER_PURGE" && validStarterPurgeIntent(state.journey, event.payload ?? {}, state.battle, modifiers))
     ) {
       return bounce(state, "prompt_pending");
     }
@@ -317,6 +318,7 @@ export function routeDomain(
   const payload = event.payload ?? {};
   const journey = state.journey;
   const type: GameEventType = event.type;
+  if (journey.screen.type === "journeyStarterPurge" && (isGameplayEventType(type) || type === "BATTLE_DEBUG") && type !== "RESOLVE_STARTER_PURGE" && type !== "REMOVE_DREAMSIGN") return bounce(state);
   if (journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "copy" &&
     (isGameplayEventType(type) || type === "BATTLE_DEBUG") && type !== "RESOLVE_DREAMSIGN_COPY") return bounce(state);
   if (journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "afterBattle" && isGameplayEventType(type) &&
@@ -669,8 +671,17 @@ export function routeDomain(
     case "SET_DREAMSIGN_POOL":
       return journeyCase(state, deck.setDreamsignPool(journey, payload));
     // --- battle lifecycle (create / tear down the battle slice) ---
-    case "BEGIN_BATTLE":
-      return foldCase(state, journeyBattle.beginBattle(state, payload, ctx));
+    case "BEGIN_BATTLE": {
+      const transition = journeyBattle.beginBattleWithCommits(state, payload, ctx);
+      if (transition === null || transition.state.battle === null) return bounce(state);
+      const applied = modifiers.applyBattleCommits({ journey: transition.state.journey, battleId: transition.state.battle.init.battleId, siteId: transition.state.battle.init.siteId, seq: ctx.seq, steps: transition.committedSteps });
+      return { state: { ...transition.state, journey: applied.journey }, outcome: "applied", logRecords: applied.logRecords };
+    }
+    case "RESOLVE_STARTER_PURGE": {
+      const transition = resolveStarterPurge(journey, payload, state.battle, modifiers);
+      const result = journeyPurgeCase(state, transition);
+      return result.outcome !== "applied" ? result : { ...result, logRecords: [{ event: "journey_starter_purge_resolved", fields: { dreamsignId: payload.dreamsignId, heldIndex: payload.heldIndex, choiceIndex: payload.choiceIndex, permissionSeq: payload.permissionSeq, purges: transition!.purges } }] };
+    }
     case "END_BATTLE":
       return foldCase(state, journeyBattle.endBattle(state, payload, ctx));
     case "COMPLETE_TUTORIAL_BATTLE_PRESENTATION":
@@ -682,8 +693,13 @@ export function routeDomain(
     case "BATTLE_ACTION":
     case "BATTLE_ANSWER":
     case "BATTLE_CANCEL": {
-      const next = reduceEngineIntent(state,type,payload,ctx,battleEngine());
-      const result = foldCase(state,next);
+      const transition = reduceEngineIntentWithCommits(state,type,payload,ctx,battleEngine());
+      let next = transition?.state ?? null;
+      const applied = next?.battle?.mode.kind === "journey" && transition !== null
+        ? modifiers.applyBattleCommits({ journey: next.journey, battleId: next.battle.init.battleId, siteId: next.battle.init.siteId, seq: ctx.seq, steps: transition.committedSteps }) : null;
+      if (next !== null && applied !== null) next = { ...next, journey: applied.journey };
+      const base = foldCase(state,next);
+      const result = base.outcome === "applied" && applied !== null ? { ...base, logRecords: applied.logRecords } : base;
       const before = tutorialBattleOf(state.battle), after = tutorialBattleOf(next?.battle ?? null);
       const committed = after !== null ? after.overrideCommits.slice(before?.overrideCommits.length ?? 0) : [];
       return result.outcome !== "applied" || committed.length === 0 ? result : {...result,logRecords:committed.map(override=>({event:"tutorial_ai_override_committed",fields:{battleId:after!.init.battleId,...override}}))};

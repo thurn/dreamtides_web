@@ -9,7 +9,7 @@ import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modif
 import { findSite } from "./sites";
 
 export interface JourneyTransfigurationProvider {
-  resolve(entry: Readonly<DeckEntry>): { readonly cardId: CardId; readonly cardType: CardType; readonly subtype: import("../../types/card-identity").CardSubtype; readonly forms: readonly TransfigurationType[] } | null;
+  resolve(entry: Readonly<DeckEntry>): { readonly cardId: CardId; readonly cardType: CardType; readonly subtype: import("../../types/card-identity").CardSubtype; readonly forms: readonly TransfigurationType[]; readonly starter?: boolean; readonly perfectedEligible?: boolean } | null;
 }
 let provider: JourneyTransfigurationProvider | null = null;
 export function registerJourneyTransfigurationProvider(value: JourneyTransfigurationProvider | null): void { provider = value; }

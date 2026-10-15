@@ -1,3 +1,8 @@
+import bone, { journeyEssenceEffect as boneEffect } from "../../content/dreamsigns/carved-bone-427c71e3";
+import skull, { journeyEssenceEffect as skullEffect } from "../../content/dreamsigns/mortal-skull-eb55b141";
+import teeth, { journeyOnGainEffect as teethEffect } from "../../content/dreamsigns/paired-teeth-1328e611";
+import jellyfish, { journeyOnGainEffect as jellyfishEffect } from "../../content/dreamsigns/rainbow-jellyfish-e7d23bf7";
+import { applyJourneyBattleEssence } from "./journey-battle-essence";
 import spider, { journeyDuplicationEffect as spiderEffect } from "../../content/dreamsigns/spider-025ce7f1";
 import mirror, { journeyDuplicationEffect as mirrorEffect } from "../../content/dreamsigns/cracked-mirror-1cf06f9b";
 import shell, { journeyDuplicationEffect as shellEffect } from "../../content/dreamsigns/spiral-shell-da7e4b45";
@@ -9,7 +14,7 @@ import { journeyShop } from "./journey-shop";
 import red, { journeyOnGainEffect as redEffect } from "../../content/dreamsigns/red-cheese-7e8c86cc";
 import rat, { journeyOnGainEffect as ratEffect } from "../../content/dreamsigns/white-rat-ab1da9d3";
 import doll, { journeyOnGainEffect as dollEffect } from "../../content/dreamsigns/voodoo-doll-0df9d72c";
-import { journeyOnGain, prepareJourneyOnGain, finishJourneyOnGain } from "./journey-on-gain";
+import { journeyOnGain, prepareJourneyOnGain, finishJourneyAcquisition } from "./journey-on-gain";
 import raven, { journeyDeckEntryEffect as ravenEffect } from "../../content/dreamsigns/raven-skull-31df4c62";
 import acorn, { journeyDeckEntryEffect as acornEffect } from "../../content/dreamsigns/brown-acorn-9f34b5f6";
 import crystal, { journeyDeckEntryEffect as crystalEffect } from "../../content/dreamsigns/blue-crystal-c2af5460";
@@ -97,6 +102,7 @@ export interface JourneyModifierDefinition {
 }
 
 export interface JourneyModifierRegistry {
+  applyBattleCommits(input: Omit<Parameters<typeof applyJourneyBattleEssence>[0], "lookup">): ReturnType<typeof applyJourneyBattleEssence>;
   lookup(dreamsignId: DreamsignId): JourneyModifierDefinition | undefined;
   apply(input: {
     dreamsignGains?: readonly import("../../types/journey").JourneyDreamsignGain[];
@@ -137,6 +143,7 @@ export function createJourneyModifierRegistry(
   const lookup = (dreamsignId: DreamsignId) => byId.get(dreamsignId);
   return Object.freeze({
     lookup,
+    applyBattleCommits: (input) => applyJourneyBattleEssence({ ...input, lookup }),
     apply({ before, journey, eventType, seq, random, transfigurations, siteId, purges, dreamsignGains = [], battleBinding = null }) {
       const logRecords: ReducerLogRecord[] = [];
       let next = journey;
@@ -205,13 +212,17 @@ export function createJourneyModifierRegistry(
         copied = false;
         for (const source of held.filter((item) => item.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent")) copied = reactCopy(source) || copied;
       } while (copied);
-      return { journey: finishJourneyOnGain(next, acquisition.copySources, seq, battleBinding), logRecords };
+      return { journey: finishJourneyAcquisition(next, acquisition.copySources, acquisition.starterSources, seq, battleBinding), logRecords };
     },
   } satisfies JourneyModifierRegistry);
 }
 
 /** The production registry's fixed catalog registrations. */
 export const journeyModifierRegistry = createJourneyModifierRegistry([
+  journeyEssence(parseDreamsignId(bone.id), boneEffect),
+  journeyEssence(parseDreamsignId(skull.id), skullEffect),
+  journeyOnGain(parseDreamsignId(teeth.id), teethEffect),
+  journeyOnGain(parseDreamsignId(jellyfish.id), jellyfishEffect),
   journeyDuplication(parseDreamsignId(spider.id), spiderEffect),
   journeyDuplication(parseDreamsignId(mirror.id), mirrorEffect),
   journeyDuplication(parseDreamsignId(shell.id), shellEffect),

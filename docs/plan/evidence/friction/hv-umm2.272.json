@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.272",
+  "phase": 5,
+  "implementMin": 99.79295456666667,
+  "implementWindow": {
+    "start": "2026-10-15T05:25:23.271000+00:00",
+    "end": "2026-10-15T07:05:10.848274+00:00"
+  },
+  "localValidationS": {
+    "focused": 7.0261689579929225,
+    "review": 61.86170345899882,
+    "knip": 3.934616875019856,
+    "full": 123.45773949997965,
+    "fuzz": 515.5614792089909,
+    "journey300": 3.1132237499696203,
+    "preflight": 5.586293458996806,
+    "coverage": 2.0326647919719107,
+    "sweep": 29.786894500022754
+  },
+  "hostLoad": 9.27,
+  "testDelta": {
+    "files": 5,
+    "lines": 367,
+    "jsdomFiles": 1
+  },
+  "friction": [
+    {
+      "tag": "workflow-admission-hold",
+      "minutes": 17.621433333333336,
+      "note": "Gross actual fresh Codex review interval under a parent-imposed pre-promotion review hold. Same-task justiciar repaired the added ordering constraint while preserving full review and finding dispositions. Includes source/evidence inspection and coordination, not exclusive idle or CPU time; retained inside the original dispatch-to-amended-commit window."
+    }
+  ]
+}

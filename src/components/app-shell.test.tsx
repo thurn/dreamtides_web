@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import type { Screen, JourneyDreamsignCopyChoice } from "../types/journey";
+import type { Screen, JourneyDreamsignCopyChoice, JourneyStarterPurgeChoice } from "../types/journey";
 import { testDreamsignId } from "../types/test-identities";
 import { act, type ReactElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -34,10 +34,12 @@ const adapterMocks = vi.hoisted(() => ({
   tutorialDirectLive: null as boolean | null,
   tutorialVictoryPreview: null as boolean | null,
   copyFails: null as boolean | null,
+  starterFails: null as boolean | null,
 }));
 
 vi.mock("../session/hooks", () => ({ useGameState: () => ({ journey: { screen: stateMocks.screen } }) }));
 vi.mock("../screens/cumulus_adapters/JourneyDreamsignScreenAdapter", () => ({ JourneyDreamsignScreenAdapter: () => { if (adapterMocks.copyFails) throw new Error("copy-render-failure"); return <main data-copy-permission />; } }));
+vi.mock("../screens/cumulus_adapters/JourneyStarterPurgeScreenAdapter", () => ({ JourneyStarterPurgeScreenAdapter: () => { if (adapterMocks.starterFails) throw new Error("starter-render-failure"); return <main data-starter-permission />; } }));
 vi.mock("./CumulusJourneyChrome", () => ({ CumulusJourneyChrome: ({ children }: { children: ReactElement }) => children }));
 vi.mock("../state/front-door-context", () => ({
   useFrontDoor: () => ({ state: stateMocks.frontDoor, battle: stateMocks.battle }),
@@ -313,6 +315,25 @@ describe("FrontDoorRouter", () => {
     expect(rendered.container.querySelector('[data-testid="error-boundary-fallback"]')).toBeNull();
     stateMocks.screen = { type: "journeyStart" }; rendered.rerender(<FrontDoorRouter avatars={AVATARS} />);
     expect(rendered.container.querySelector("[data-copy-permission]")).toBeNull(); expect(rendered.container.querySelector("[data-tutorial-live-battle]")).not.toBeNull();
+  });
+
+  it("prioritizes a restored starter permission and recovers its own changed permission before resuming tutorial", () => {
+    stateMocks.frontDoor = { phase: "tutorial", journeyId }; stateMocks.battle = { mode: { kind: "tutorial" } };
+    const source = testDreamsignId("starter-route-source");
+    const choice: JourneyStarterPurgeChoice = { kind: "starterPurge", sources: [{ dreamsignId: source, heldIndex: 0, maxCount: 4, entries: [] }, { dreamsignId: source, heldIndex: 1, maxCount: 4, entries: [] }], index: 0, permissionSeq: 9, continuation: { type: "journeyStart" }, suspendedBattle: null };
+    stateMocks.screen = structuredClone({ type: "journeyStarterPurge", choice });
+    const rendered = renderInCumulus(<FrontDoorRouter avatars={AVATARS} />);
+    expect(rendered.container.querySelector("[data-starter-permission]")).not.toBeNull(); expect(rendered.container.querySelector("[data-tutorial-live-battle]")).toBeNull();
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    for (const next of [{ ...choice, index: 1 }, { ...choice, index: 1, permissionSeq: 10 }]) {
+      adapterMocks.starterFails = true; rendered.rerender(<FrontDoorRouter avatars={AVATARS} />);
+      expect(rendered.container.querySelector('[data-testid="error-boundary-fallback"]')).not.toBeNull();
+      adapterMocks.starterFails = false;
+      stateMocks.screen = { type: "journeyStarterPurge", choice: next }; rendered.rerender(<FrontDoorRouter avatars={AVATARS} />);
+      expect(rendered.container.querySelector("[data-starter-permission]")).not.toBeNull(); expect(rendered.container.querySelector('[data-testid="error-boundary-fallback"]')).toBeNull();
+    }
+    stateMocks.screen = { type: "journeyStart" }; rendered.rerender(<FrontDoorRouter avatars={AVATARS} />);
+    expect(rendered.container.querySelector("[data-starter-permission]")).toBeNull(); expect(rendered.container.querySelector("[data-tutorial-live-battle]")).not.toBeNull();
   });
 
 });

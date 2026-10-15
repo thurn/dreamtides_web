@@ -40,6 +40,8 @@ export function screenToJourneyPath(
   switch (screen.type) {
     case "journeyStart":
       return "/";
+    case "journeyStarterPurge":
+      return screenToJourneyPath({ ...state, screen: screen.choice.continuation }, artCatalog);
     case "journeyDreamsign":
       return screen.choice.kind === "copy" ? screenToJourneyPath({ ...state, screen: screen.choice.continuation }, artCatalog) : `/dreamsign/${screen.choice.siteId}`;
     case "journeyDuplication":

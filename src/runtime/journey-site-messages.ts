@@ -1,5 +1,8 @@
 /** Player-facing journey copy shared by screen builders and Cumulus controls. */
 export const JOURNEY_SITE_MESSAGES = {
+  starterPurgeTitle: "Purge Starter Cards",
+  starterPurgeInstruction: (count: number) => `You may purge up to ${String(count)} starter cards from your deck.`,
+  purgeCount: (count: number) => `Purge ${String(count)}`,
   duplicationTitle: "Duplicate a Card",
   duplicationInstruction: "You may duplicate one card after this battle.",
   duplicateCard: "Duplicate",

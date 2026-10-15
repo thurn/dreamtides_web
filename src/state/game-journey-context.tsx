@@ -225,6 +225,8 @@ export function GameJourneyProvider({
         dispatch(actions.resolveJourneyDuplication(siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, entryId)),
       resolveJourneyTransfiguration: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>
         dispatch(actions.resolveJourneyTransfiguration(siteId, dreamsignId, heldIndex, choiceIndex, entryIds)),
+      resolveStarterPurge: (dreamsignId, heldIndex, choiceIndex, permissionSeq, entryIds) =>
+        dispatch(actions.resolveStarterPurge(dreamsignId, heldIndex, choiceIndex, permissionSeq, entryIds)),
       resolveJourneyPurge: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>
         dispatch(actions.resolveJourneyPurge(siteId, dreamsignId, heldIndex, choiceIndex, entryIds)),
       purgeDeckCards: (siteId, entryIds) =>

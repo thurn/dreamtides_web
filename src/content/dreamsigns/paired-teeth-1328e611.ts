@@ -1,4 +1,8 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import type { JourneyOnGainEffect } from "../../types/journey";
 import { dreamsign } from "../define";
+
+export const journeyOnGainEffect = { kind: "purgeStarterOnGain", maxCount: 4 } as const satisfies JourneyOnGainEffect;
 
 export default dreamsign({
   id: "1328e611-fa2f-426f-87e2-97f26c061866",
@@ -11,5 +15,7 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["7dfa6a52-04ce-42fc-9ef6-4e6571435510"],
   tags: ["J16", "Tag OK"],
-  pending: true,
+  abilities: () => [],
+  journeyOnGain: journeyOnGainEffect,
+  verifiedText: expectedVerifiedText("When you gain this dreamsign, you may purge up to 4 starter cards from your deck."),
 });
