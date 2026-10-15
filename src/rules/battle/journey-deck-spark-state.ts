@@ -38,21 +38,20 @@ function requiresJourneyDeckSparkOrigins(fold: EngineBattleFold, catalog: Engine
   return declared || retained;
 }
 
-export function hasUnknownJourneyDeckSparkOrigins(fold: EngineBattleFold, catalog = currentCatalog()): boolean {
-  const states = [fold.slice.committed, ...(fold.slice.history === undefined ? [] : [fold.slice.history.base.committed])];
-  return requiresJourneyDeckSparkOrigins(fold, catalog) && states.some(state => Object.values(state.instances)
-    .some(card => !card.status.created && card.journeyDeck === undefined));
-}
-
 /** Check the declared cohort, never infer individual membership from printing, zone, holder, or instance id. */
 export function hasInvalidJourneyDeckSparkOrigins(fold: EngineBattleFold, catalog = currentCatalog()): boolean {
   if (!requiresJourneyDeckSparkOrigins(fold, catalog)) return false;
   const states = [fold.slice.committed, ...(fold.slice.history === undefined ? [] : [fold.slice.history.base.committed])];
   return states.some(state => {
     const cards = Object.values(state.instances);
-    const known = [...cards, ...Object.values(state.rememberedCards ?? {}).flat()];
+    const remembered = Object.values(state.rememberedCards ?? {}).flat();
+    const known = [...cards, ...remembered];
     return cards.some(card => !card.status.created && card.journeyDeck === undefined) ||
       known.some(card => card.journeyDeck === true && (card.status.created || card.printing.kind !== "card")) ||
+      remembered.some(record => {
+        const live = state.instances[record.instance];
+        return record.journeyDeck !== undefined && live?.journeyDeck !== undefined && record.journeyDeck !== live.journeyDeck;
+      }) ||
       SIDES.some(side => cards.filter(card => card.owner === side && card.journeyDeck === true).length !== fold.init.decks[side].length);
   });
 }

@@ -1,0 +1,21 @@
+{
+  "bead": "hv-6nkw",
+  "phase": 5,
+  "implementMin": 11.79153455,
+  "implementWindow": {
+    "start": "2026-10-14T23:59:53.955Z",
+    "end": "2026-10-15T00:11:41.447073+00:00"
+  },
+  "localValidationS": {
+    "review": 39.89842541603139,
+    "focused": 81.06354825093877,
+    "knip": 6.713548084022477
+  },
+  "hostLoad": 11.44287109375,
+  "testDelta": {
+    "files": 0,
+    "lines": 47,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

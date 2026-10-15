@@ -1,0 +1,516 @@
+{
+  "bead": "hv-6nkw",
+  "base": "5e0d191920dd366ffa6ad059ed461f6880a33aee",
+  "sourceFiles": {
+    "src/rules/battle/journey-deck-spark-state.ts": {
+      "sha256": "32f5049914a8679b2e886061e49a35128b2c087a49924642c92715c5d6f67a8e",
+      "baseSHA256": "35ec54cb44d352f7d90e3f2e8bf7c94780a65d146ec24469c64bca0a47ed8dfa"
+    },
+    "src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts": {
+      "sha256": "2eafb451f800715cc11b9e6b38aa5461a607ee9a4da38398fe111c289e0151c2",
+      "baseSHA256": "b1ec3139587d13c40ac8b15bde54bae12e0be4ee00541664abf5463d5b8164bc"
+    }
+  },
+  "evidenceCutoff": "2026-10-15T00:11:41.447073+00:00",
+  "implementWindow": {
+    "dispatch": "2026-10-14T23:59:53.955Z",
+    "scope": "Gross dispatch-through-finalization wall time; includes source-free proposal, coordination and all validation. Claim/setup separate. Canonical endpoint in own friction JSON; automatic commit and clock tail retained externally."
+  },
+  "dispatchProof": {
+    "path": "/tmp/root-6nkw/actual-dispatch-native-log-proof.json",
+    "sha256": "977fc5878d4b9686d4375d4f44b1768b86fa451e0013a6ab8f7b1a9796312240"
+  },
+  "checks": {
+    "before-parse-v1": {
+      "started": "2026-10-15T00:03:32.545964+00:00",
+      "pid": 18979,
+      "pgid": 18979,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "contradictory"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        25.96484375,
+        19.8623046875,
+        14.40234375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:03:42.908273+00:00",
+      "elapsedSeconds": 10.36190783395432,
+      "exitCode": 1,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5200,
+      "beforeSHA256": "1f9d454d6c945f9398bff32abf19dccee82d24ad3d3bf212a62a803f87b63d13",
+      "afterSHA256": "1f9d454d6c945f9398bff32abf19dccee82d24ad3d3bf212a62a803f87b63d13",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "82e5adfb739dc8c1cf027a3b95c70361cc730f96cd76eb8fc89a0b6cf5b7873a",
+      "stderrSHA256": "061d81501f1546a371c9f1a9071b8414268e3cecd988446a6cc5d65dd91bef75"
+    },
+    "before-checkpoint-v1": {
+      "started": "2026-10-15T00:03:45.696128+00:00",
+      "pid": 20277,
+      "pgid": 20277,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "C4 origin checkpoints"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        22.21240234375,
+        19.32958984375,
+        14.3076171875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:03:56.586802+00:00",
+      "elapsedSeconds": 10.890345874999184,
+      "exitCode": 1,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5200,
+      "beforeSHA256": "1f9d454d6c945f9398bff32abf19dccee82d24ad3d3bf212a62a803f87b63d13",
+      "afterSHA256": "1f9d454d6c945f9398bff32abf19dccee82d24ad3d3bf212a62a803f87b63d13",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "54d9c88e2bb7e80d21152a994bdb81466e9303da6d1123cf212d07c7d35ab309",
+      "stderrSHA256": "ca0ac34eb703f7efe7bf2f8428b6b6d38d9868440c87de94da739ef3175ca6a3"
+    },
+    "before-checkpoint-v2": {
+      "started": "2026-10-15T00:04:08.334086+00:00",
+      "pid": 22321,
+      "pgid": 22321,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "C4 origin checkpoints"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        18.9775390625,
+        18.78662109375,
+        14.2294921875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:04:20.116347+00:00",
+      "elapsedSeconds": 11.782085291983094,
+      "exitCode": 1,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5200,
+      "beforeSHA256": "0f44e1ca7dfeaf707cbab65c21eb54debf8a663aa4c5defd867ebd5a84d5bb13",
+      "afterSHA256": "0f44e1ca7dfeaf707cbab65c21eb54debf8a663aa4c5defd867ebd5a84d5bb13",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "ed77bb066335c807bffb28d47212480049a5883f37c9558e37667801d43a465c",
+      "stderrSHA256": "eaeeab33136e5bd4a0c6a7294bf8a147bc120f0a09aeabc4e22d415e7fba1717"
+    },
+    "before-checkpoint-v3": {
+      "started": "2026-10-15T00:04:36.722397+00:00",
+      "pid": 25534,
+      "pgid": 25534,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "C4 origin checkpoints"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        25.3056640625,
+        20.26025390625,
+        14.91552734375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:04:49.240496+00:00",
+      "elapsedSeconds": 12.517835374979768,
+      "exitCode": 1,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5200,
+      "beforeSHA256": "1b1c135ca26672af0e6a3b9ec2ef1ebbc8337b385c6e3a28665ce7a976af0a0a",
+      "afterSHA256": "1b1c135ca26672af0e6a3b9ec2ef1ebbc8337b385c6e3a28665ce7a976af0a0a",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "0c39c5feeb3ffb8810373d4bfafb73662b9b0bfa4b517f7d0ac6b7831ff12f27",
+      "stderrSHA256": "d383de023a60375a94ffdae5c700cf5e417058e53c4fb135ab0863583379e483"
+    },
+    "focused-c4-v1": {
+      "started": "2026-10-15T00:05:09.832939+00:00",
+      "pid": 26726,
+      "pgid": 26726,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "journey-deck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        21.7236328125,
+        19.916015625,
+        15.00439453125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:05:21.612549+00:00",
+      "elapsedSeconds": 11.779188583022915,
+      "exitCode": 1,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5200,
+      "beforeSHA256": "aae62359708458dcb8907c43db46536994ddf818f62ddd7bfc33ebc078832ae1",
+      "afterSHA256": "aae62359708458dcb8907c43db46536994ddf818f62ddd7bfc33ebc078832ae1",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "9fad72ea8c7245564478b438dcd1c58ed848fce2728803b21bab0805d4e661df",
+      "stderrSHA256": "1f4b3eca97972eea072343c2ed2c0e875fc421289bae120fbc49505906d7c9b6"
+    },
+    "focused-public-v1": {
+      "started": "2026-10-15T00:06:41.473646+00:00",
+      "pid": 81424,
+      "pgid": 81424,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "src/rules/battle/engine-battle-replay.test.ts",
+        "src/rules/replay/replay.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/hidden-card-status.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        19.89892578125,
+        20.67333984375,
+        15.8408203125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:06:58.818288+00:00",
+      "elapsedSeconds": 17.344388584024273,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5200,
+      "beforeSHA256": "41358e077e2bbb037df5ba73e3842a8e085934307717b09ab309e6f562810213",
+      "afterSHA256": "41358e077e2bbb037df5ba73e3842a8e085934307717b09ab309e6f562810213",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "33784a4cddd813e28f23ad81523d6f52c9040d6bdcb31586ed9516c2c26df89a",
+      "stderrSHA256": "86483f882ae70295abd264e403edc2efb2acc495b6efad38a9426edc95c6900a"
+    },
+    "counterfactual-parse-v1": {
+      "started": "2026-10-15T00:07:13.260025+00:00",
+      "pid": 83536,
+      "pgid": 83536,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "rejects a contradictory.*remembered (original false|debug true)"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        14.3603515625,
+        19.24072265625,
+        15.4873046875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:07:19.647983+00:00",
+      "elapsedSeconds": 6.3877967079752125,
+      "exitCode": 1,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5200,
+      "beforeSHA256": "9c52449408826f5b03f99df4c5644d979612a6f6fae7e62e3c44652a7d4c3761",
+      "afterSHA256": "9c52449408826f5b03f99df4c5644d979612a6f6fae7e62e3c44652a7d4c3761",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "657b294e45872fee7a1108e0dc14c752967a96abb49bf1ee92d91cb1047337bb",
+      "stderrSHA256": "2c20067a3dc684afb1aa783b927f2723386297a3a97ad998fefd1427858c5d31"
+    },
+    "review-v1": {
+      "started": "2026-10-15T00:07:30.056899+00:00",
+      "pid": 84728,
+      "pgid": 84728,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        11.44287109375,
+        18.25341796875,
+        15.2197265625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:08:09.955600+00:00",
+      "elapsedSeconds": 39.89842541603139,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5200,
+      "beforeSHA256": "41358e077e2bbb037df5ba73e3842a8e085934307717b09ab309e6f562810213",
+      "afterSHA256": "41358e077e2bbb037df5ba73e3842a8e085934307717b09ab309e6f562810213",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "39561e9f9bb7bbb56ee4637b9806fda4f1c54dc1dbbff3d3e9b0b4cc8459899b",
+      "stderrSHA256": "86483f882ae70295abd264e403edc2efb2acc495b6efad38a9426edc95c6900a"
+    },
+    "knip-v1": {
+      "started": "2026-10-15T00:08:21.549270+00:00",
+      "pid": 88204,
+      "pgid": 88204,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        9.16845703125,
+        16.65087890625,
+        14.802734375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:08:28.263037+00:00",
+      "elapsedSeconds": 6.713548084022477,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5200,
+      "beforeSHA256": "41358e077e2bbb037df5ba73e3842a8e085934307717b09ab309e6f562810213",
+      "afterSHA256": "41358e077e2bbb037df5ba73e3842a8e085934307717b09ab309e6f562810213",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "61cc711764ea91536c3bd9d7d54c6a085bba34f2fba89d449aad42d456014694",
+      "stderrSHA256": "86483f882ae70295abd264e403edc2efb2acc495b6efad38a9426edc95c6900a"
+    },
+    "schema-v1": {
+      "started": "2026-10-15T00:09:22.412429+00:00",
+      "pid": 93090,
+      "pgid": 93090,
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        13.9169921875,
+        16.34033203125,
+        14.791015625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:09:22.497774+00:00",
+      "elapsedSeconds": 0.08520683302776888,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5203,
+      "beforeSHA256": "8365c45d9d5bfb19226cb510f34ff1c8ef8d65ffc9cffc3910b8bc743cd4646f",
+      "afterSHA256": "8365c45d9d5bfb19226cb510f34ff1c8ef8d65ffc9cffc3910b8bc743cd4646f",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "0bc6815bef4a77f97fe9da3e697f1f589e69924f311143ed1f5683bf0df254f7",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "triggers-v1": {
+      "started": "2026-10-15T00:09:30.096750+00:00",
+      "pid": 93751,
+      "pgid": 93751,
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        16.03369140625,
+        16.70849609375,
+        14.93896484375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:09:30.297027+00:00",
+      "elapsedSeconds": 0.200162332970649,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5203,
+      "beforeSHA256": "8365c45d9d5bfb19226cb510f34ff1c8ef8d65ffc9cffc3910b8bc743cd4646f",
+      "afterSHA256": "8365c45d9d5bfb19226cb510f34ff1c8ef8d65ffc9cffc3910b8bc743cd4646f",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "6e2af45922f4361a26bae365adefce98a1c4292cb7e43dbc39a9d5a3f83034e0",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "whitespace-v1": {
+      "started": "2026-10-15T00:09:30.648949+00:00",
+      "pid": 93814,
+      "pgid": 93814,
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/remembered-origin-6nkw",
+      "hostLoad": [
+        16.03369140625,
+        16.70849609375,
+        14.93896484375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:09:30.661772+00:00",
+      "elapsedSeconds": 0.012703333981335163,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5203,
+      "beforeSHA256": "8365c45d9d5bfb19226cb510f34ff1c8ef8d65ffc9cffc3910b8bc743cd4646f",
+      "afterSHA256": "8365c45d9d5bfb19226cb510f34ff1c8ef8d65ffc9cffc3910b8bc743cd4646f",
+      "collectorBeforeSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "collectorAfterSHA256": "b96fd5653d03885a2dcd248215ab8eeab11b4df84a82e483029cb4152cda35b4",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "checkDispositions": {
+    "before-parse-v1": "Mixed: four remembered-original-false public parse acceptance regressions; four remembered-debug-true setup TypeErrors because debug hand addition had not reached an observation boundary. 25 matching controls passed. Not eight proven regressions.",
+    "before-checkpoint-v1": "Fixture setup TypeError: selected first live original could be hidden and have no remembered observation. No checkpoint regression claim.",
+    "before-checkpoint-v2": "Fixture setup TypeError: debug hand addition not yet observed; corrected by one legal public pass and producer-observed original selection. No checkpoint regression claim.",
+    "before-checkpoint-v3": "Expected missing-rejection failures for both actors at assertJourneyDeckSparkCheckpoint after earlier legacy/current-original-false cases. All fixture construction and independence assertions passed. Loop stops at first remembered-original-false current case; not all mismatch checkpoint cases are before-run claimed.",
+    "focused-c4-v1": "4 parse debug-record fixture TypeErrors; other70selected C4 controls passed, including actual checkpoint recovery/public original mismatch, partial legacy/view/determinize cases. No production change prompted; fixed parse fixture by one public pass, same as checkpoint.",
+    "counterfactual-parse-v1": "All eight exact expected public parse-null assertion failures, no setup errors, both actors/current+independenthistory/both remembered contradictions. Only new mismatch OR absent; exact repaired runtime and all5200source keys restored. Existing focused-public-v1 green same exact epoch retained."
+  },
+  "validationScope": {
+    "focused": "Eight existing primitive/fold/replay/host/privacy public suites, 4667 tests including 74 C4 cases, pass. No browser/content/fuzz/full repetition for bounded validator/test repair.",
+    "review": "92 related files, 5614 tests; lint/types/import cycles pass.",
+    "focusedField": "Sum of all seven retained focused/red/setup/counterfactual epochs; final successful eight-suite epoch alone 17.344388584024273 seconds.",
+    "beforeProof": "Initial public epoch mixed four meaningful original-record parse failures/four setup errors. Corrected isolated mismatch-OR counterfactual proves eight exact parse-null failures with zero setup errors; all5200source keys restored to same successful source epoch.",
+    "checkpointBefore": "First two runs were setup errors. Third before run passed fixture/independence and earlier legacy/current-original controls before missing rejection of first remembered-original false; no before execution claim for later loop cases. Final full green executes all seven invalid states per actor (unknown legacy plus current/history x original false/remembered original false/remembered debug true)."
+  },
+  "contract": {
+    "lines": 407,
+    "netLineDelta": 47,
+    "plainModuleDelta": 0,
+    "configuredEntrypointDelta": 0,
+    "jsdomDelta": 0,
+    "caseDelta": 14
+  },
+  "invariants": [
+    "Both-known remembered/live journeyDeck contradict only by branded physical record.instance. Unknown is never false.",
+    "Existing unknown ordinary requirement, true ordinary/noncreated shape and exact owner cohort counts unchanged.",
+    "Producer-created originals/debug/created/figment contracts and private-view/determinization coverage retained.",
+    "Checkpoint templates install history on fresh produced debug+public-pass committed state before final JSON clone. Both mutation boundaries assert reference independence, unchanged opposite bytes and unchanged source template.",
+    "Hash-valid malformed checkpoint reopens from canonical persisted genesis/events to exact current fold. Invalid raw append advances retained count, preserving prefix/genesis and current fold. Parser/template validity is not historical authentication."
+  ],
+  "failurePaths": {
+    "errorMidStep": "Existing keeps provenance through refusal, pending reload, cancel and partial resolution failure for %s asserts speculative instances/nextInstance/floating never commit; pure validator introduces no step.",
+    "reloadRestart": "Actual hash-valid checkpoint rejection/reopen/genesis fallback contract for both actors/current/history/both remembered mismatch directions; existing pending cold reload/cancel retained.",
+    "partialWrite": "No new writer. Internally inconsistent valid-hash snapshots rejected and canonical stored genesis/events preserved/rebuilt; existing partial-effect containment asserts no speculative commit.",
+    "invalidStaleInput": "Public contradiction matrix and raw LOAD_STATE refusal, required-unknown and malformed scalar controls; fold-intents bounces stale/foreign/illegal/out-of-turn intents.",
+    "concurrentActors": "No new writer/concurrency transition. Both SIDES tested; engine-battle-intents bounces an action based before a partner event and applies a matching answer through it."
+  },
+  "counterfactualRestoration": {
+    "guardSHA256": "32f5049914a8679b2e886061e49a35128b2c087a49924642c92715c5d6f67a8e",
+    "all5200KeysRestored": true,
+    "manifestSHA256": "41358e077e2bbb037df5ba73e3842a8e085934307717b09ab309e6f562810213",
+    "proofPath": "/tmp/root-6nkw/counterfactual-restoration-proof.json"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting 1-minute load"
+      },
+      "implementWindow": {
+        "clockTail": "End refreshed once immediately before final schema/stage/commit; exact automatic Git bracket/tail retained externally, no postcommit tracked rewrite."
+      }
+    }
+  },
+  "resources": {
+    "workers": 2,
+    "heavy": false,
+    "browser": false,
+    "server": false,
+    "providerReview": "Parent-owned fresh normal Claude Opus5.5 final range review; temporary Sol override expired.",
+    "recordedGroups": [
+      18979,
+      20277,
+      22321,
+      25534,
+      26726,
+      81424,
+      83536,
+      84728,
+      88204,
+      93090,
+      93751,
+      93814
+    ],
+    "allRecordedGroupsAbsentAtPackaging": true
+  },
+  "fallout": [],
+  "preExistingIssues": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "retainedAcceptance": "Original247 fiveUUID and Gate46 exact6nkw prerequisites remain; original589/pj9p evidence qualifies their sources. This repair makes no new content/browser/fuzz or performance claim.",
+  "parentAccountingQualification": "Parent scratch aggregation initially guessed assertion output text and failed without source/runtime effects; parent then inspected actual raw pattern and independently verified eight exact assertions. Scope /tmp/root-6nkw/parent-check-audit-pre-final.json; no over10minute friction."
+}

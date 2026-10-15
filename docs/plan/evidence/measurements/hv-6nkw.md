@@ -1,0 +1,23 @@
+# hv-6nkw: remembered C4 origin consistency
+
+A C4-required saved fold validates both known origin declarations for the same branded physical instance. The existing ordinary required-origin, ordinary/noncreated true-shape and exact owner cohort rules remain authoritative. Unknown remembered/live origin retains its optional semantics. This is a consistency check, not authenticated history or cryptographic provenance.
+
+The owning 407-line synthetic public contract covers both actors and independently cloned current/history boundaries. The checkpoint template comes from a real debug addition and one legal public pass (which records the observation), then installs history on a fresh committed slice before its final deep clone. Each negative case preserves the opposite whole boundary and source template. Each remembered contradiction leaves all live instances unchanged. Actual hash-valid malformed checkpoints reopen through normal genesis/event fallback to the byte-exact canonical fold. Invalid raw imports are refused while their appended log records, original event prefix and stored genesis remain retained. A valid debug-generated parser/raw template is separate from the canonical persisted history.
+
+Partial legacy controls retain an exempt created live-unknown marker with remembered known-false, remembered-unknown/live-known and both-unknown cases; both viewer/sample projections remain equal and source serialization unchanged. Existing ordinary required-unknown and unrelated legacy public controls, produced/cohort/privacy/zone/lifecycle and partial-failure coverage remain.
+
+## Validation and retained failures
+
+The initial before-parse epoch produced four intended original-record public parse failures and four debug-record fixture TypeErrors; it does not establish eight regressions. Two checkpoint setup epochs selected an unobserved original/debug record; those are fixture errors. The third before-checkpoint epoch reaches the intended missing-rejection assertion for both actors after earlier unknown/current-original controls. Its loop stops at the first remembered-original case, so later before cases are not claimed. The initial after-C4 run passed 70 controls and failed four parse debug-record setups; a public pass repairs that fixture without a production change.
+
+The corrected exact source passes all eight focused public suites (4,667 tests, including 74 C4 cases). With only the new remembered mismatch OR temporarily absent, all eight selected public parse cases fail exactly at the intended null assertion with zero setup errors; exact guard bytes and the entire 5,200-key source epoch were then restored. The existing green epoch remains valid. Review passes 92 related files/5,614 tests plus lint, types and import-cycle checks; Knip passes. All command attempts, exact source manifests and process outcomes remain in the structured measurement and scratch receipts. Optional local art-cache warnings accompany preparation; actual art restoration completes and validations pass.
+
+The compact friction `focused` field sums all seven retained focused/setup/red/counterfactual commands; its scope differs from the final successful eight-suite command alone. Timings and starting host load retain their measured scope. No engine speed, matched-load budget, fresh content/fuzz/browser or full-suite claim is made. Original 247 five-UUID acceptance and Gate46 joins remain authoritative.
+
+## Failure paths and clocks
+
+The five core paths are mapped by exact public contracts in the measurement JSON: existing mid-step/partial-effect containment and pending cold reload/cancel, actual checkpoint/genesis recovery and raw refusal, stale/foreign/illegal/out-of-turn intents, and partner-event concurrent actor CAS behavior. The pure validator adds no writer or state transition. No extra timing/concurrency test is needed.
+
+Net test delta is zero modules, +47 lines, zero configured entrypoints/jsdom files and +14 cases. No fallout, rules decision, card issue or pre-existing issue was encountered. No browser, server, heavy command or reviewer provider was started by this helper. Parent owns the normal cold Claude final-range review, findings and certified delivery.
+
+Canonical gross implementation timing is in `../friction/hv-6nkw.json`: start is the actual first helper dispatch, including the source-free proposal and coordination; claim/setup are separate. The finalizer refreshes only that endpoint/minutes and the structured evidence cutoff once before final schema/staging/automatic commit. Exact commit bracket/tail and terminal source/process proof remain outside the commit; no postcommit tracked rewrite is permitted.
