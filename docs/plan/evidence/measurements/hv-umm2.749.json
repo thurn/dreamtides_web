@@ -1,0 +1,442 @@
+{
+  "bead": "hv-umm2.749",
+  "base": "8f01840395559a0b83cde95a3af9ab2cc43958ae",
+  "status": "Local validation and original saved production completion/public replay passed; source commit, cold review and certified promotion pending",
+  "implementer": "root session itself",
+  "actualSelfDispatch": "2026-10-15T14:28:06.017073Z",
+  "implementation": {
+    "mainWindowPlateauGuard": "src/engine/policy/greedy.ts",
+    "sourceSHA256": {
+      "src/engine/policy/greedy.ts": "8e6261d7c4afc8340e560ccfbf7f63fd9a8aee6cedbaf5f0b57c8294e5d5583b",
+      "src/engine/policy/productive-activation.contracts.ts": "601a039ac9fe262294e34c2d9874628a486ff657f2acf3bc12f14a372872ffd9"
+    },
+    "testModuleLines": 167,
+    "testEntryLines": 481,
+    "newBothActorCases": 2,
+    "existingProductiveCases": 20,
+    "existingPhasingCases": 14,
+    "testSourceNetLines": 33,
+    "testFilesNet": 0,
+    "newTestEntrypoints": 0,
+    "protectedPhasingSHA256": "8542e3603ae1ef83477131e4ad80ac94d54bafa46e08a55c95819ccf4a44d093",
+    "protectedEntrySHA256": "4edde97feedd6ce5c35f8a2dc10125aa390a0a8d70f001a342ce973d86d99417"
+  },
+  "sourceFirst": {
+    "proposal": "/tmp/root749-20261015/proposal-v01.md",
+    "coverage": "/tmp/root749-20261015/sourcefirst-coverage-v01.json",
+    "nativeAdmission": "/tmp/root749-20261015/stage2-admission-v01-native.stdout",
+    "proposalSHA256": "5265a7a5842ded10180484cd1eb89c531a4a016157ca18b03c5385e35f09e02d",
+    "coverageSHA256": "490af1e895826ccc115da6d7d342ed5f7a0570a2e735cb2a33529d0586086dde"
+  },
+  "baselineRed": {
+    "source": {
+      "at": "2026-10-15T14:34:42.210985+00:00",
+      "baseline": "8f01840395559a0b83cde95a3af9ab2cc43958ae",
+      "greedySHA256": "bf5231d121871a9732dc13eec8369669d63debfbc85af4b31b71b5de2c71e3c7",
+      "testSHA256": "601a039ac9fe262294e34c2d9874628a486ff657f2acf3bc12f14a372872ffd9",
+      "testLines": 167,
+      "onlyNewFixtureAndBudgetAssertionBeforeRed": true
+    },
+    "receipt": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "finite defensive spark activation"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-defense749",
+      "start": "2026-10-15T14:34:42.234927+00:00",
+      "end": "2026-10-15T14:34:49.082031+00:00",
+      "exit": 1,
+      "wallSeconds": 6.846945917000994,
+      "pid": 52569,
+      "pgid": 52569,
+      "load": "{ 9.00 9.27 10.22 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 320418157787916,
+      "endedMonotonicNs": 320425004695166,
+      "cpuUserSeconds": 6.432277,
+      "cpuSystemSeconds": 2.3436
+    },
+    "outcome": "Both synthetic actor cases fail on actual chosen pass versus saving activation; explicit pass branch destroys source and preserves figment, before choice assertion. Raw failures retained."
+  },
+  "focusedChecks": {
+    "focused": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "src/engine/policy/policy-worker.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts",
+        "src/battle/engine-ai/engine-ai-driver.test.ts",
+        "src/battle/engine-ai/use-engine-ai.test.tsx",
+        "scripts/tournament/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-defense749",
+      "start": "2026-10-15T14:35:43.671223+00:00",
+      "end": "2026-10-15T14:36:00.780017+00:00",
+      "exit": 0,
+      "wallSeconds": 17.108577459002845,
+      "pid": 61061,
+      "pgid": 61061,
+      "load": "{ 9.37 9.30 10.17 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 320479593606333,
+      "endedMonotonicNs": 320496702139458,
+      "cpuUserSeconds": 30.607015,
+      "cpuSystemSeconds": 5.603632
+    },
+    "primitive": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "playFromZone view"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-defense749",
+      "start": "2026-10-15T14:36:43.293407+00:00",
+      "end": "2026-10-15T14:36:52.509774+00:00",
+      "exit": 0,
+      "wallSeconds": 9.21614920796128,
+      "pid": 65269,
+      "pgid": 65269,
+      "load": "{ 9.48 9.36 10.13 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 320539215406500,
+      "endedMonotonicNs": 320548431499833,
+      "cpuUserSeconds": 9.045712,
+      "cpuSystemSeconds": 2.632091
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "ordinary review-v01 start 1minute load8.45"
+      },
+      "localValidationS.focused": {
+        "measuredFor": "sum successful focused-green-v01 and selected direct primitive-green-v01 command walls; baseline failure separate"
+      }
+    }
+  },
+  "runtime": {
+    "status": "completed and public replay identical",
+    "originalInputSHA256": "5449dd16b58ffb881df1661b9c412b961a34bcf781a298218ff59065750f48bf",
+    "seed": 651610971,
+    "ordinal": 18,
+    "policies": {
+      "player": "greedy",
+      "enemy": "greedy"
+    },
+    "budgets": {
+      "turnPlanning": {
+        "iterations": 256
+      },
+      "response": {
+        "iterations": 64
+      }
+    },
+    "result": {
+      "at": "2026-10-15T14:46:11.033Z",
+      "status": "completed",
+      "result": {
+        "kind": "victory",
+        "winner": "enemy",
+        "reason": "score"
+      },
+      "actions": 282,
+      "decisions": 472,
+      "wallMs": 116028.461583,
+      "replayHash": "58711cfec676a6cfb5ba48a0c3962dcfed02407c3b0865039c8c75f2328d5832",
+      "observations": 1197,
+      "requests": 472,
+      "variants": [
+        [
+          "{\"amplified\":false}",
+          73135
+        ]
+      ]
+    },
+    "terminalAudit": {
+      "at": "2026-10-15T14:46:14.121553+00:00",
+      "inputSHA256": "5449dd16b58ffb881df1661b9c412b961a34bcf781a298218ff59065750f48bf",
+      "sourceAdmissionAuditSHA256": "f5fdad8340c50a06335b2891903c85e01b24aa18fc9c51651fc7b8a164ce886e",
+      "status": "completed",
+      "result": {
+        "kind": "victory",
+        "winner": "enemy",
+        "reason": "score"
+      },
+      "actionsExactlyEqualActualAnswerRows": 282,
+      "canonicalRequestsExactlyEqualActualObservedRequestFacts": 472,
+      "allRequestKeysSeedsBudgetsIterationsChecked": true,
+      "fullFrozenInputsReverified": 1173,
+      "publicReplayEqualsFinalStateHash": "58711cfec676a6cfb5ba48a0c3962dcfed02407c3b0865039c8c75f2328d5832",
+      "processGroupCurrentlyEmpty": true,
+      "receipt": {
+        "argv": [
+          "node",
+          "/tmp/root749-20261015/runtime-repro-v01.mjs",
+          "--play"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-defense749",
+        "startedAt": "2026-10-15T14:44:14.907384+00:00",
+        "startedMonotonicNs": 320990825911583,
+        "workerCount": 1,
+        "timeoutSeconds": 1790,
+        "cleanupAllowanceSeconds": 6,
+        "hostLoadStart": [
+          6.5927734375,
+          7.19580078125,
+          8.71142578125
+        ],
+        "freezeSHA256": "daffea6830e80b4c4a6155cf1bac4f35784c8678b87ef4b525ea2b1b2e59bae5",
+        "cutoff": false,
+        "pid": 85077,
+        "pgid": 85077,
+        "endedAt": "2026-10-15T14:46:11.058305+00:00",
+        "endedMonotonicNs": 321106975811000,
+        "wallSeconds": 116.149899417,
+        "exitCode": 0,
+        "cpuUserSeconds": 125.104249,
+        "cpuSystemSeconds": 0.8794289999999999,
+        "hostLoadEnd": [
+          6.35205078125,
+          6.8671875,
+          8.3828125
+        ],
+        "groupRemainingAtExit": [],
+        "stdoutSHA256": "391bfa4d28d1813625449b3e96b45a9f0e04374a1df1e63ab4c155517cbe7610",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "allFrozenInputsStillMatch": true
+      },
+      "raw": {
+        "runtime-v01.definitions.json": {
+          "bytes": 528860,
+          "sha256": "b0a28003420db5ad596ac6a4f42c3d92b6e98ffbd4fb326f868e67c799919fc8"
+        },
+        "runtime-v01.events.jsonl": {
+          "bytes": 22720261,
+          "sha256": "c013e1cdc9184bfa4e0d2d02a399eee0dc9bb768c0ef88601987910be2e26544"
+        },
+        "runtime-v01.input.json": {
+          "bytes": 202536,
+          "sha256": "5449dd16b58ffb881df1661b9c412b961a34bcf781a298218ff59065750f48bf"
+        },
+        "runtime-v01.inspection.json": {
+          "bytes": 739,
+          "sha256": "60cc03eb648ae1331ef84f8dad378bce927c2de9d476371dc4826542acede611"
+        },
+        "runtime-v01.outcome.json": {
+          "bytes": 2780240,
+          "sha256": "859a23617d75ddb358aca32ee58f883223d894f6357b8b291af05b68950f7192"
+        },
+        "runtime-v01.progress.json": {
+          "bytes": 48197,
+          "sha256": "3f6030b2ba58bb9d500209f4fc0e3b19c236a0b0e453cd38ae1468573700e71f"
+        },
+        "runtime-v01.request-boundary.json": {
+          "bytes": 47514,
+          "sha256": "5b877cff54c88c7e8345e3e26d12dc382d9df066f7decf375223e0ccaf91c832"
+        },
+        "runtime-v01.result.json": {
+          "bytes": 418,
+          "sha256": "c21aaab714c9b83c819735c805dfaee1847011acf2b8423719eaac3b83027a1f"
+        },
+        "runtime-v01.state.json": {
+          "bytes": 136578,
+          "sha256": "9cd0b06ee5a3107084aa6a1918640b402c2d1caa1715b7bae4218d2dc479d383"
+        }
+      },
+      "observedVariantCounts": [
+        [
+          "{\"amplified\":false}",
+          73135
+        ]
+      ],
+      "sourceDifferencesQualification": "catalog-source-comparison-v01.json; wholehistorical source/catalog identity not claimed; exact original spec+bounds asserted in source-bound caller",
+      "broaderAcceptance": "Original293/294/295 retain remaining wider matrices; this single reproduction credits749 only."
+    },
+    "freezeSHA256": "daffea6830e80b4c4a6155cf1bac4f35784c8678b87ef4b525ea2b1b2e59bae5",
+    "actualMetafileSources": 1161,
+    "totalGuardInputs": 1173,
+    "sourceQualification": {
+      "originalCheckpoint": "abcd255040edc9914532a0921c634be059777655",
+      "currentBase": "8f01840395559a0b83cde95a3af9ab2cc43958ae",
+      "roots": [
+        "src/engine",
+        "src/content",
+        "src/data",
+        "src/session/providers/battle-init-provider.ts",
+        "scripts/tournament"
+      ],
+      "originalPaths": 1616,
+      "currentPaths": 1620,
+      "identicalTuples": 1605,
+      "changes": [
+        {
+          "path": "src/content/ai.ts",
+          "original": "100644 blob 914883c1ccc0fccc0898206896b083bedb79c3b6",
+          "current": "100644 blob b1444c1afa818468c61a79a54203544784ed0ad4"
+        },
+        {
+          "path": "src/content/apollyon/design.ts",
+          "original": "100644 blob ea6afc7f8c4e37b398c364cc9c6feb7a481f43b8",
+          "current": "100644 blob 267396446e48e59e5a3fae82164b3f76aa81e00d"
+        },
+        {
+          "path": "src/content/dreamsigns/theater-mask-3d86f8ce.ts",
+          "original": "100644 blob eb67a8770da3e0f082944cadabe5420d05542605",
+          "current": "100644 blob 04b13d6cae5e58ec1f23b848a1bc6a778b5463be"
+        },
+        {
+          "path": "src/engine/continuous/continuous.test.ts",
+          "original": "100644 blob 143b14deac67d8880f76cbbe3b4c6414af328de8",
+          "current": "100644 blob 94ef89c83545586a712abe464c5bfec4bf63e311"
+        },
+        {
+          "path": "src/engine/continuous/layers.ts",
+          "original": "100644 blob 7c512f85a43a4fcac99351bb0c133f68eb788eca",
+          "current": "100644 blob d0ae5376f846c3b6061247cea8a5fd5bdd4a47e9"
+        },
+        {
+          "path": "src/engine/policy/greedy.ts",
+          "original": "100644 blob 1607c1b1b5f1cfe8c034129fb7de40d354b96f3f",
+          "current": "100644 blob d9475cbfc94095a7780074ca89e5a6cbac859316"
+        },
+        {
+          "path": "src/engine/policy/phasing-cycle.contracts.ts",
+          "original": null,
+          "current": "100644 blob 8a96ca20cea69d807e63304481f40b3ac298c5fc"
+        },
+        {
+          "path": "src/engine/policy/policy.test.ts",
+          "original": "100644 blob 272d449f13f86aa9989af6a559004156f001b188",
+          "current": "100644 blob 22af7ddb039505c8c3f57d6aa84d9df8ca6847e5"
+        },
+        {
+          "path": "src/engine/policy/productive-activation.contracts.ts",
+          "original": null,
+          "current": "100644 blob 6902a7e4dac1cdb96d439c448ebc70b6545f65b6"
+        },
+        {
+          "path": "src/engine/testing/lab-solver.ts",
+          "original": "100644 blob 9903fa763db9c0db39862b5ba2b8b53112790841",
+          "current": "100644 blob f78695254cf9f4fc7789c3e3cb53d7483e825a89"
+        },
+        {
+          "path": "src/engine/transfigurations.test.ts",
+          "original": "100644 blob 9fbe2bdec69065dea47f2929e60b93e55ac1dc10",
+          "current": "100644 blob 5abce3e402fff4029ef2b6c76e9ad5805d52f598"
+        },
+        {
+          "path": "src/engine/transfigurations.ts",
+          "original": "100644 blob c427ec86b81f9d688da3f4a293069c4d791e6999",
+          "current": "100644 blob 079e7e578f2c0098beca8fd46a5f470ae0e68c6f"
+        },
+        {
+          "path": "src/engine/transfigurations/contracts/kindled.contracts.ts",
+          "original": null,
+          "current": "100644 blob f06e826dd839fdf74fb249843ae03e2700a83d98"
+        },
+        {
+          "path": "src/engine/transfigurations/contracts/transfigurations-01.contracts.ts",
+          "original": "100644 blob 789f97e0d77a2c4fd47024b0ae7015540f0a0af1",
+          "current": "100644 blob a06d0c1aded8225ce8f7cfe2bfbce4f0f99d44e3"
+        },
+        {
+          "path": "src/engine/transfigurations/kindled.ts",
+          "original": null,
+          "current": "100644 blob 5cce1b4fc804fc35f0317757fc702ebc206114e9"
+        }
+      ],
+      "qualification": "Current canonical source is used; whole catalog/source identity with original checkpoint is not claimed. Own greedy change additionally guarded by freeze. Only runtime adoption is own canonical Keeper outer avatar getter; recipe unchanged."
+    },
+    "admissionSHA256": "f376e5306c58dd00a0c3ddc05fa7a20757f7d9d2fb44f5536f398e35f1e00899",
+    "keeperAdoption": "Only outer avatar getter adopts own canonical default10line Keeper list for saved enemy avatar00974abd; all other canonical getters preserve identity; no repository content change.",
+    "sourceBoundCaller": {
+      "path": "/tmp/root749-20261015/runtime-repro-v01.mts",
+      "sha256": "e7aeb656ba59834dc0a21b9b3b0713e4ae277f1aed2833c9d93af3ee500124aa",
+      "lines": 135
+    },
+    "boundedLauncher": {
+      "path": "/tmp/root749-20261015/run-runtime-v01.py",
+      "sha256": "8b9b8f79b2ae71af88e1cfff67eb1fe326fc9ad260be1b3baa8f897e368c8c3d",
+      "lines": 36
+    },
+    "scope": "One production game+publicreplay,not universal termination or performance/balance guarantee. No forceddraw/partialcredit/input or budget changes; original293/294/295 retain wider acceptance."
+  },
+  "failurePaths": {
+    "simulationException": "Existing catch/null candidate and legal fallback unchanged; existing Phasing error and unfinished boundary contracts covered by full policy run.",
+    "invalidSample": "Public Engine legality validation remains authoritative.",
+    "restart": "New bothactor explicit saved threat/defense/pass action+answer replay and fresh-engine identical immutable requests.",
+    "partialWrite": "Pure sampled search has no persistence write; observed original inputs stay unchanged.",
+    "concurrency": "Only root writes this owned bead; no implementation helper. Engine/domain/worker contracts preserved."
+  },
+  "acceptanceOwnership": {
+    "original745Finding": "Required749 closes accepted finite-defense review finding only after certified delivery.",
+    "original293_294_295": "All broader content/game/full300/recipe/browser/champion matrices remain with original owners.",
+    "phasing746": "Existing entire134line contract module and complete settled horizon byte-identical."
+  },
+  "qa": "Policy-only bounded repair; no UI/runtime presentation edits, no browser/full/fuzz/heavy or new runtime framework.",
+  "preExistingIssues": [],
+  "commandsRawRoot": "/tmp/root749-20261015",
+  "ordinaryReview": {
+    "receipt": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-defense749",
+      "start": "2026-10-15T14:38:22.225589+00:00",
+      "end": "2026-10-15T14:39:06.274941+00:00",
+      "exit": 0,
+      "wallSeconds": 44.04892450000625,
+      "pid": 70877,
+      "pgid": 70877,
+      "load": "{ 8.45 9.11 9.95 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 320638146778083,
+      "endedMonotonicNs": 320682195661083,
+      "cpuUserSeconds": 109.369557,
+      "cpuSystemSeconds": 14.030043
+    },
+    "outcome": "5974 tests in14 related files plus typecheck/typecheck-node/lint/import-cycles/friction-records PASS"
+  },
+  "knip": {
+    "receipt": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-defense749",
+      "start": "2026-10-15T14:42:45.746904+00:00",
+      "end": "2026-10-15T14:42:51.651371+00:00",
+      "exit": 0,
+      "wallSeconds": 5.904322083981242,
+      "pid": 83136,
+      "pgid": 83136,
+      "load": "{ 5.78 7.22 8.89 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 320901666107875,
+      "endedMonotonicNs": 320907570382583,
+      "cpuUserSeconds": 4.41483,
+      "cpuSystemSeconds": 2.030237
+    },
+    "priorMalformedRecorderInvocation": "knip-v01 passed npm as cwd and omitted cwd position; recorder failed before any npm child, empty raw logs retained. Corrected actual command v02 passes; no unchanged aggregate rerun."
+  },
+  "inclusiveClock": {
+    "actualDispatch": "2026-10-15T14:28:06.017073Z",
+    "evidenceCutoff": "2026-10-15T14:47:07.816257+00:00",
+    "cutoffMonotonicNs": 321163734490500,
+    "meaning": "Entire elapsed root selfimplementation/source-first/coordination/verification/production/evidence interval, no subtraction/reset/backdate. Final record written immediately before ordinary Git. Actual Git return and cutoff tail retained separately; schema allows1minute tolerance.",
+    "commitPending": true
+  },
+  "durableCustodyPlanned": "artifacts/qa/hv-umm2.749/final-delivery-v01 after terminal cold review/certification; scratch raw root retained, no symlinks followed."
+}

@@ -123,11 +123,11 @@ function simulate(
     if (settleWindow && (!endedWindow || current.stack.length > 0) && current.result === null) return null;
     const after = engine.view(current, side);
     const score = evaluatePosition(after, side);
-    if (action.kind === "activate" && typeof action.source === "string") {
+    if (state.stack.length === 0 && action.kind === "activate" && typeof action.source === "string") {
       const before = engine.view(state, side);
       const priorSpark = before.instances[action.source]?.characteristics.spark;
       const nextSpark = after.instances[action.source]?.characteristics.spark;
-      // A renewable pump must improve utility, even when passing has a worse horizon.
+      // A main-window renewable pump must improve utility, even when passing has a worse horizon.
       if (priorSpark != null && nextSpark != null && nextSpark > priorSpark && score <= evaluatePosition(before, side)) return null;
     }
     return score;

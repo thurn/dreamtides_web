@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 import { parseAvatarId } from "../../types/identifiers";
 import { AI } from "../../content/ai";
 import { type EngineCardDefinition, type EngineFigmentDefinition } from "../catalog";
-import { abandonCost, abandonSelfCost, activated, characterYouControl, event, exhaustSelf, self, stackItem } from "../dsl/builders";
+import { abandonCost, abandonSelfCost, activated, characterYouControl, enemyCharacter, event, exhaustSelf, self, stackItem, target } from "../dsl/builders";
 import { onDusk, triggered, whenDissolved } from "../dsl/triggers";
-import { draw, gainEnergy, gainPoints, gainSpark, materializeFigments, prevent, sequence } from "../effects/primitives";
+import { dissolve, draw, gainEnergy, gainPoints, gainSpark, materializeFigments, prevent, sequence } from "../effects/primitives";
 import { createEngine, type Engine } from "../engine";
 import type { Action } from "../rules/actions";
 import { cloneState } from "../state/clone";
@@ -40,6 +40,7 @@ function deterministic(engine: Engine, state: BattleState, side: Side, decklists
   const chosen = runPolicy(engine, input);
   expect(runPolicy(createEngine(engine.catalog), structuredClone(input))).toEqual(chosen);
   expect(JSON.stringify({ state, input })).toBe(before);
+  expect(chosen.trace.used.iterations).toBeLessThanOrEqual(input.budget.iterations);
   if (chosen.choice.kind !== "action") throw new Error("not an action");
   expect(engine.legalActions(state, side)).toContainEqual(chosen.choice.action);
   return chosen.choice.action;
@@ -114,6 +115,38 @@ describe("productive activation selection", () => {
         if (emblem) expect(after.sides[side].avatar?.exhausted).toBe(true);
         else expect(after.instances[ids[side].back[0]!].zone).toBe("void");
       }
+    });
+
+    it(`keeps ${side}'s finite defensive spark activation against pending removal`, () => {
+      const counter: EngineCardDefinition = { ...pump, id: syntheticId(0x7491), spark: 2, abilities: () => [activated([abandonCost({ another: true })], gainSpark(self(), 1), { speed: "interrupt" })] };
+      const threat: EngineCardDefinition = { ...SYNTHETIC.event0, id: syntheticId(0x7492), status: "authored", abilities: () => [event(dissolve(target(enemyCharacter({ sparkAtMost: 2 }))))] };
+      const engine = createEngine(testCatalog([counter, threat], {}, [figment])), other = opponent(side);
+      const { state, ids } = boardState(engine.catalog, { active: other, phase: "day", [side]: { back: [counter.id], figments: [{ slot: { rank: "back", index: 1 }, printing: { kind: "figment", figment: figment.id, spark: 1 } }], deck }, [other]: { hand: [threat.id], deck } });
+      const ownDeck = entries([counter.id, ...deck]), otherDeck = entries([threat.id, ...deck]);
+      const decklists = side === "player" ? { player: ownDeck, enemy: otherDeck } : { player: otherDeck, enemy: ownDeck };
+      const sourceId = ids[side].back[0]!, figmentId = ids[side].back[1]!;
+      const records: { side: Side; action: Action; answers: readonly RecordedAnswer[] }[] = [];
+      const source = new InlineSource({ player: () => [sourceId], enemy: () => [sourceId] });
+      let current = state;
+      const apply = (actor: Side, action: Action) => { const next = engine.apply(current, actor, action, source); records.push({ side: actor, action, answers: next.answers }); current = next.state; };
+      apply(other, { kind: "play", card: ids[other].hand[0], from: "hand" });
+      const pending = current;
+      let passed = engine.apply(pending, side, { kind: "pass" }, NO_PROMPTS).state;
+      while (engine.decision(passed)?.kind === "respond") passed = engine.apply(passed, engine.decision(passed)!.side, { kind: "pass" }, NO_PROMPTS).state;
+      expect(passed.instances[sourceId].zone).toBe("void");
+      expect(passed.instances[figmentId].zone).toBe("play");
+      const action = deterministic(engine, pending, side, decklists);
+      expect(action).toEqual({ kind: "activate", source: sourceId, ability: 0 });
+      apply(side, action);
+      while (engine.decision(current)?.kind === "respond") apply(engine.decision(current)!.side, { kind: "pass" });
+      expect(current.instances[figmentId]).toBeUndefined();
+      expect(current.instances[sourceId].zone).toBe("play");
+      expect(engine.view(current, side).instances[sourceId]?.characteristics.spark).toBe(3);
+      expect(current.turn.phase).toBe(pending.turn.phase);
+      expect(records.some(record => record.answers.some(answer => !answer.auto))).toBe(true);
+      let replay = cloneState(state);
+      for (const record of records) { const answers = new ScriptedSource(record.answers.filter(answer => !answer.auto).map(answer => answer.value)); replay = engine.apply(replay, record.side, record.action, answers).state; answers.assertExhausted(); }
+      expect(stateHash(replay)).toBe(stateHash(current));
     });
 
     it(`keeps ${side}'s finite neutral counter against a damaging response horizon`, () => {
