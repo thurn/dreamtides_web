@@ -1,4 +1,8 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import type { JourneyOnGainEffect } from "../../types/journey";
 import { dreamsign } from "../define";
+
+export const journeyOnGainEffect: JourneyOnGainEffect = { kind: "deckSubtypeOnGain" };
 
 export default dreamsign({
   id: "8e2d26a8-ff39-48a4-a30e-434479c4675f",
@@ -13,5 +17,7 @@ export default dreamsign({
     "14f8ed05-e684-407c-be32-1dc970d69f36",
   ],
   tags: ["J16", "Tag OK"],
-  pending: true,
+  journeyOnGain: journeyOnGainEffect,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("When you gain this dreamsign, pick a character type.\n\nCharacter cards in your deck are that character type."),
 });

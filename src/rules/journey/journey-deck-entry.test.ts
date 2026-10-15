@@ -1,3 +1,5 @@
+import "./journey-character-transfiguration.contracts";
+
 import { makeAuguryTestCard, makeAuguryTestContent } from "../../journey_v2/testing/fixtures";
 import { createSiteContentProvider } from "../../session/providers/site-provider";
 import { buildExplorationRuntime } from "../../session/providers/exploration-provider";

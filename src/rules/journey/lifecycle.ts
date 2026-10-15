@@ -3,6 +3,7 @@ import { validCommittedPurgePrevention } from "./journey-committed-purge-state";
 import { assertBeforeBattlePurgeCheckpoint } from "./journey-before-battle-purge";
 import { validStarterPurgeScreen, validStarterBattleBinding } from "./journey-starter-acquisition";
 import { validJourneyDuplicationScreen } from "./journey-duplication";
+import { validJourneySubtypeBattleBinding } from "./journey-subtype";
 import { validJourneyTypeRemap, validTypeRemapBattleBinding } from "./journey-type-remap";
 import { validJourneyDreamsignScreen, validDreamsignBattleBinding } from "./journey-on-gain";
 import { getDeckContentProvider } from "./deck";
@@ -479,6 +480,7 @@ export function validateLoadedState(
     if (battle === null) return null;
   }
 
+  if (snapshot.screen.type === "journeyDreamsign" && snapshot.screen.choice.kind === "subtype" && (!validJourneySubtypeBattleBinding(snapshot, battle) || snapshot.screen.choice.suspendedBattle?.mode === "tutorial" && (battle?.mode.kind !== "tutorial" || state.frontDoor.phase !== "tutorial" || state.frontDoor.tutorial?.runId !== battle.mode.tutorialRunId))) return null;
   if (snapshot.screen.type === "journeyDreamsign" && snapshot.screen.choice.kind === "typeRemap" && (!validTypeRemapBattleBinding(snapshot, battle) || snapshot.screen.choice.suspendedBattle?.mode === "tutorial" && (battle?.mode.kind !== "tutorial" || state.frontDoor.phase !== "tutorial" || state.frontDoor.tutorial?.runId !== battle.mode.tutorialRunId))) return null;
   if (snapshot.screen.type === "journeyStarterPurge" && !validStarterBattleBinding(snapshot, battle)) return null;
   if (snapshot.screen.type === "journeyStarterPurge" && snapshot.screen.choice.suspendedBattle?.mode === "tutorial" && (battle?.mode.kind !== "tutorial" || state.frontDoor.phase !== "tutorial" || state.frontDoor.tutorial?.runId !== battle.mode.tutorialRunId)) return null;

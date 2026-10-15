@@ -217,7 +217,8 @@ export interface JourneyPurgeTransition {
 export type JourneyDeckEntryEffect =
   | { readonly kind: "preventNightmare" }
   | { readonly kind: "warriorSpark"; readonly amount: number }
-  | { readonly kind: "randomTransfiguration"; readonly minimumDeckSize: number };
+  | { readonly kind: "randomTransfiguration"; readonly minimumDeckSize: number }
+  | { readonly kind: "randomCharacterTransfiguration"; readonly numerator: number; readonly denominator: number };
 
 export interface JourneyDeckEntryGain {
   readonly entry: Readonly<DeckEntry>;
@@ -267,6 +268,7 @@ export interface AfterBattleTransfigurationSource {
 }
 
 export type JourneyOnGainEffect =
+  | { readonly kind: "deckSubtypeOnGain" }
   | { readonly kind: "typeRemapOnGain" }
   | { readonly kind: "addNightmaresOnGain"; readonly count: number }
   | { readonly kind: "afterBattleDreamsignChoice"; readonly offerCount: number }
@@ -296,6 +298,32 @@ export interface JourneyDreamsignTypeRemapChoice {
   readonly permissionSeq: number;
   readonly continuation: Exclude<Screen, { type: "journeyDreamsign" }> | { readonly type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice | JourneyDreamsignCopyChoice };
   readonly suspendedBattle: JourneySuspendedBattle | null;
+}
+/** Historical fields actually consumed by the shared journey hooks. */
+export type JourneyModifierBefore = Readonly<Pick<JourneyState,
+  "deck" | "screen" | "siteRuntime" | "dreamsigns" | "essence" |
+  "currentDreamscape" | "shopModifiers" | "draftState" | "atlas"
+>>;
+export interface JourneySubtypeResume {
+  readonly before: JourneyModifierBefore;
+  readonly eventType: import("../rules/events").GameplayEventType;
+  readonly siteId: SiteId | null;
+  readonly sources: readonly JourneyDreamsignGain[];
+  readonly sourceIndex: number;
+  readonly observerSources: readonly JourneyDreamsignGain[];
+  readonly copySources: readonly JourneyDreamsignGain[];
+  readonly starterSources: readonly JourneyStarterPurgeSource[];
+  readonly transfigurations: readonly JourneyTransfigurationOccurrence[];
+  readonly attemptedEntries: readonly DeckEntry[];
+  readonly purges: readonly JourneyPurgeOccurrence[];
+}
+export interface JourneyDreamsignSubtypeChoice {
+  readonly kind: "subtype";
+  readonly permissionSeq: number;
+  readonly current: { readonly kind: "deckSubtype"; readonly entries: readonly { readonly entryId: DeckEntryId; readonly cardId: CardId }[] } | { readonly kind: "typeRemap" };
+  readonly continuation: JourneyDreamsignTypeRemapChoice["continuation"];
+  readonly suspendedBattle: JourneySuspendedBattle | null;
+  readonly resume: JourneySubtypeResume;
 }
 export interface JourneySuspendedBattle { readonly battleId: import("./identifiers").BattleId; readonly mode: "journey" | "tutorial" }
 export interface AfterBattleDreamsignSource {
@@ -1418,7 +1446,7 @@ export type Screen =
       tutorialAvatarId?: AvatarId;
     }
   | { type: "journeyStarterPurge"; readonly choice: JourneyStarterPurgeChoice }
-  | { type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice | JourneyDreamsignCopyChoice | JourneyDreamsignTypeRemapChoice }
+  | { type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice | JourneyDreamsignCopyChoice | JourneyDreamsignTypeRemapChoice | JourneyDreamsignSubtypeChoice }
   | { type: "journeyPurge"; readonly choice: JourneyPurgeChoice }
   | { type: "journeyTransfiguration"; readonly choice: AfterBattleJourneyChoice }
   | { type: "journeyDuplication"; readonly choice: AfterBattleJourneyChoice }

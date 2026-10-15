@@ -1,4 +1,8 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import type { JourneyDraftEffect } from "../../types/journey";
 import { dreamsign } from "../define";
+
+export const journeyDraftEffect: JourneyDraftEffect = { kind: "firstDraftEventTransfiguration", type: "Amplified" };
 
 export default dreamsign({
   id: "4f21a4ab-e4aa-4718-8563-9afb72d140c0",
@@ -10,5 +14,7 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
   tags: ["J15", "Tag OK"],
-  pending: true,
+  journeyDraft: journeyDraftEffect,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("At each draft site, the first event card you add to your deck gains the Amplified Transfiguration."),
 });

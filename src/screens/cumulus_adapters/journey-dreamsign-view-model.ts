@@ -9,7 +9,7 @@ import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 export function buildJourneyDreamsignView(journey: JourneyState, content: JourneyContent): JourneyDreamsignScreenView | null {
   if (journey.screen.type !== "journeyDreamsign") return null;
   const choice = journey.screen.choice;
-  let continuation = choice.kind === "copy" || choice.kind === "typeRemap" ? choice.continuation : journey.screen;
+  let continuation = choice.kind === "copy" || choice.kind === "typeRemap" || choice.kind === "subtype" ? choice.continuation : journey.screen;
   if (continuation.type === "journeyStarterPurge") continuation = continuation.choice.continuation;
   if (continuation.type === "journeyDreamsign" && continuation.choice.kind === "copy") continuation = continuation.choice.continuation;
   const siteId = continuation.type === "site" ? continuation.siteId : choice.kind === "afterBattle" ? choice.siteId : continuation.type === "journeyPurge" || continuation.type === "journeyTransfiguration" || continuation.type === "journeyDuplication" ? continuation.choice.siteId : continuation.type === "journeyDreamsign" && continuation.choice.kind === "afterBattle" ? continuation.choice.siteId : null;
@@ -17,6 +17,11 @@ export function buildJourneyDreamsignView(journey: JourneyState, content: Journe
   // Standalone tutorial/genesis choices use existing catalog atmosphere, never a fabricated gameplay site.
   const scene = dreamscapeSceneRef(node ?? { dreamscapeId: content.dreamscapes[0]?.id ?? null }, content);
   const held = journey.dreamsigns.map((sign, heldIndex) => ({ heldIndex, dreamsign: toDreamsignView(sign) }));
+  if (choice.kind === "subtype") {
+    const source = choice.resume.sources[choice.resume.sourceIndex];
+    return { mode: "subtype", purpose: choice.current.kind, scene, sourceDreamsignId: source.dreamsignId, heldIndex: source.heldIndex, choiceIndex: choice.resume.sourceIndex, permissionSeq: choice.permissionSeq, siteId,
+      title: JOURNEY_SITE_MESSAGES.typeRemapTitle, instruction: choice.current.kind === "deckSubtype" ? JOURNEY_SITE_MESSAGES.subtypeInstruction : JOURNEY_SITE_MESSAGES.typeRemapInstruction, typeOptions: journeyTypeRemapTypes(), options: [], held, atCap: false, canContinue: false };
+  }
   if (choice.kind === "typeRemap") {
     const source = choice.sources[choice.index];
     return { mode: "typeRemap", scene, sourceDreamsignId: source.dreamsignId, heldIndex: source.heldIndex, choiceIndex: choice.index, permissionSeq: choice.permissionSeq, siteId,

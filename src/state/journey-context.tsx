@@ -371,6 +371,7 @@ export interface JourneyMutations {
    */
   resolveAfterBattleDreamsign: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, earnedSeq: number, offeredDreamsignId: DreamsignId | null, purgeIndex?: number) => void;
   resolveTypeRemap: (sourceDreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, chosenSubtype: CardSubtype) => void;
+  resolveJourneySubtype: (sourceDreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, chosenSubtype: CardSubtype) => void;
   resolveDreamsignCopy: (sourceDreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, targetHeldIndex: number, expectedTargetDreamsignId: DreamsignId) => void;
   resolveJourneyDuplication: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, earnedSeq: number, entryId: DeckEntryId | null) => void;
   resolveJourneyTransfiguration: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => void;

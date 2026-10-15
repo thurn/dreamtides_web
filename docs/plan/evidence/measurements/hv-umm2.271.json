@@ -1,0 +1,2224 @@
+{
+  "bead": "hv-umm2.271",
+  "certifiedBase": "266472b116189275b84f0b19d1d9b5a215f8c0af",
+  "documentaryCheckpointAmended": "3132de88598f7214231f1260db90f45d377bad95",
+  "evidenceFreezeAt": "2026-10-15T15:13:52.254269+00:00",
+  "originalClaimAt": "2026-10-15T06:39:12.205426+00:00",
+  "clockQualification": "Original root claim clock is inclusive of audits, prerequisite/setup/documentary checkpoint recovery, peer coordination and other owned-assignment overlap. End is this actual evidence-freeze observation immediately before local commit; exact command start/return and inclusive end are external Git receipt, never predicted.",
+  "sourceEpoch": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+  "scope": {
+    "admittedPaths": 50,
+    "changedPathsExpected": 48,
+    "outsideAdmission": [],
+    "productionBodies": "finite source admission and two conditional native acknowledgements; no production scope expansion",
+    "fallout": "Only admitted type/route/host consumers; no package, generated, shared QA infrastructure or foreign worktree changes"
+  },
+  "sourceBindings": {
+    "existing": 72,
+    "absentNewModule": 1,
+    "authorVerification": "author-binding-verification.json",
+    "semanticReadQualification": "Full-byte hashes bind source bytes; separate recorded ranges establish semantic reading."
+  },
+  "commands": [
+    {
+      "sourceEpochBefore": "ea4847fd1f0c8e4e31c3d5ec1ea54fe1ccfe903fc080199a43d0db5e821418ed",
+      "sourceEpochAfter": "ea4847fd1f0c8e4e31c3d5ec1ea54fe1ccfe903fc080199a43d0db5e821418ed",
+      "name": "browser-anise-visual",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-anise-visual",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:48:58.404668+00:00",
+      "return": "2026-10-15T14:49:27.640860+00:00",
+      "wallSeconds": 29.595689375011716,
+      "userSeconds": 6.252896000000001,
+      "systemSeconds": 2.847541,
+      "exit": 1,
+      "sha256": "c124d490b275b6e4595359cc3479a1187a337afdb9c12df51393e6c90625214f"
+    },
+    {
+      "sourceEpochBefore": "ea4847fd1f0c8e4e31c3d5ec1ea54fe1ccfe903fc080199a43d0db5e821418ed",
+      "sourceEpochAfter": "ea4847fd1f0c8e4e31c3d5ec1ea54fe1ccfe903fc080199a43d0db5e821418ed",
+      "name": "browser-anise-visual2",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-anise-visual",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:50:14.619353+00:00",
+      "return": "2026-10-15T14:50:31.158268+00:00",
+      "wallSeconds": 16.62540679203812,
+      "userSeconds": 5.76307,
+      "systemSeconds": 2.568543,
+      "exit": 0,
+      "sha256": "f75da5e64ec7eb7064b3e33bccfd78a7654220b53916e9b8feb705a092fab707"
+    },
+    {
+      "name": "browser-p8-draft-final",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-draft",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:46:13.122730+00:00",
+      "return": "2026-10-15T14:46:42.739809+00:00",
+      "wallSeconds": 29.616848125006072,
+      "userSeconds": 5.561103,
+      "systemSeconds": 2.7396599999999998,
+      "exit": 0,
+      "sha256": "2aba10bf787bcaeb1d3fa83952a45714b97006909ff433af305d177d59c4dd17"
+    },
+    {
+      "name": "browser-p8-draft",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-draft",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:38:59.981669+00:00",
+      "return": "2026-10-15T14:39:25.399919+00:00",
+      "wallSeconds": 25.41782020800747,
+      "userSeconds": 5.732906,
+      "systemSeconds": 2.91572,
+      "exit": 1,
+      "sha256": "707ba102f30de2272024c58fce4848d1a813b74c7fdfbfabf813ad51cbbe3eb0"
+    },
+    {
+      "name": "browser-p8-draft2",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-draft",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:40:08.336007+00:00",
+      "return": "2026-10-15T14:40:31.106211+00:00",
+      "wallSeconds": 22.770021874981467,
+      "userSeconds": 5.463586,
+      "systemSeconds": 2.577629,
+      "exit": 1,
+      "sha256": "fef48de8796bd3d434685f10ee8fb2f13f5a50ab0b00f92d296f82d9d0a93887"
+    },
+    {
+      "name": "browser-p8-draft3",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-draft",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:41:39.969151+00:00",
+      "return": "2026-10-15T14:42:05.182857+00:00",
+      "wallSeconds": 25.213516415969934,
+      "userSeconds": 5.221988,
+      "systemSeconds": 2.44399,
+      "exit": 1,
+      "sha256": "befc4842c7ea1d50816822b02ac9c0b7aff4d8b626cb0bbddc03d777a56d706b"
+    },
+    {
+      "name": "browser-p8-draft4",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-draft",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:42:37.850571+00:00",
+      "return": "2026-10-15T14:43:06.074725+00:00",
+      "wallSeconds": 28.223935541987885,
+      "userSeconds": 5.935435,
+      "systemSeconds": 2.420761,
+      "exit": 1,
+      "sha256": "103d766f6d0e548d3f72ca0054edaf01ab0bc81a17098a4cf4f163e4f0bbddcf"
+    },
+    {
+      "name": "browser-p8-draft5",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-draft",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:43:36.744895+00:00",
+      "return": "2026-10-15T14:44:06.374881+00:00",
+      "wallSeconds": 29.629650666960515,
+      "userSeconds": 5.658848,
+      "systemSeconds": 2.9417269999999998,
+      "exit": 1,
+      "sha256": "fc566981526aa471df7374b447364791a8027ab7c855023930c04cf770adae0a"
+    },
+    {
+      "name": "browser-p8-draft6",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-draft",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:44:36.011754+00:00",
+      "return": "2026-10-15T14:45:03.651208+00:00",
+      "wallSeconds": 27.639293541025836,
+      "userSeconds": 5.332796,
+      "systemSeconds": 2.502021,
+      "exit": 1,
+      "sha256": "787c70ae40f6c3be2d8266130a2be3de7a84dbd41a35022c407ed3d02994ef1f"
+    },
+    {
+      "name": "browser-p8-gamble",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-gamble",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:41:38.836489+00:00",
+      "return": "2026-10-15T14:42:18.976942+00:00",
+      "wallSeconds": 40.1401390840183,
+      "userSeconds": 5.336189,
+      "systemSeconds": 2.575153,
+      "exit": 0,
+      "sha256": "837212af94557e3cd0346880c64747cbd342aff65e8e4ae94f914b704d246f98"
+    },
+    {
+      "name": "browser-p8-glowing",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-glowing",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:46:11.981136+00:00",
+      "return": "2026-10-15T14:46:28.432946+00:00",
+      "wallSeconds": 16.45175950002158,
+      "userSeconds": 5.38173,
+      "systemSeconds": 2.636875,
+      "exit": 0,
+      "sha256": "a6431187e0be5863595e43014e07ef670d62a33debc54e40694d2c62e9b2165a"
+    },
+    {
+      "sourceEpochBefore": "ea4847fd1f0c8e4e31c3d5ec1ea54fe1ccfe903fc080199a43d0db5e821418ed",
+      "sourceEpochAfter": "ea4847fd1f0c8e4e31c3d5ec1ea54fe1ccfe903fc080199a43d0db5e821418ed",
+      "name": "browser-p8-reward",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-reward",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:48:14.990821+00:00",
+      "return": "2026-10-15T14:48:47.708356+00:00",
+      "wallSeconds": 33.08388412499335,
+      "userSeconds": 6.190622,
+      "systemSeconds": 2.7636079999999996,
+      "exit": 0,
+      "sha256": "db7b5cda78d475957c65218abef5b5252bd3e5360f9c8994a141d0d6b658d322"
+    },
+    {
+      "name": "browser-p8-sites",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-sites",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:39:01.131986+00:00",
+      "return": "2026-10-15T14:39:26.079650+00:00",
+      "wallSeconds": 24.947513749997597,
+      "userSeconds": 5.657329,
+      "systemSeconds": 2.658329,
+      "exit": 1,
+      "sha256": "aec40d3934816bfe43675f7d45c9630e3c6b4e762e2b2fb91ec20d6ed7d69a2b"
+    },
+    {
+      "name": "browser-p8-sites2",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-sites",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:40:09.499224+00:00",
+      "return": "2026-10-15T14:41:17.422985+00:00",
+      "wallSeconds": 67.92322587501258,
+      "userSeconds": 6.893084,
+      "systemSeconds": 3.884581,
+      "exit": 1,
+      "sha256": "2625949363566f9690f6ea6d3faaed66d59a235fb64974cbd15512faf6ec23be"
+    },
+    {
+      "name": "browser-p8-sites3",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-sites",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:42:38.982755+00:00",
+      "return": "2026-10-15T14:43:18.529978+00:00",
+      "wallSeconds": 39.54695837502368,
+      "userSeconds": 6.45783,
+      "systemSeconds": 3.036722,
+      "exit": 1,
+      "sha256": "f18b9e1e2d107689e0039e5518c98b8678af07353e6aa98521d066342d50e0fa"
+    },
+    {
+      "name": "browser-p8-sites4",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "p8-sites",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:44:37.152740+00:00",
+      "return": "2026-10-15T14:45:04.064254+00:00",
+      "wallSeconds": 26.911308792012278,
+      "userSeconds": 5.682065,
+      "systemSeconds": 2.613099,
+      "exit": 0,
+      "sha256": "d0414bfd8fd722c9eee86041c2cce6625c9c7b9b1aaac04a283b9bb4fc89337c"
+    },
+    {
+      "name": "browser-probe",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "probe",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:27:36.151682+00:00",
+      "return": "2026-10-15T14:27:44.582505+00:00",
+      "wallSeconds": 8.43077712500235,
+      "userSeconds": 5.912905,
+      "systemSeconds": 3.18691,
+      "exit": 0,
+      "sha256": "1639968878f5a7afdb7ee38f162aecd5d50b41e2e480d6835688d5433e3d6e9a"
+    },
+    {
+      "name": "browser-probe2",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "probe2",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:28:44.870171+00:00",
+      "return": "2026-10-15T14:28:53.197951+00:00",
+      "wallSeconds": 8.327675959037151,
+      "userSeconds": 6.764149,
+      "systemSeconds": 3.155759,
+      "exit": 0,
+      "sha256": "28736b4680fbae1a8ae33154d690657a6ec448fb35c6e886d0bc22e4724186ef"
+    },
+    {
+      "name": "browser-sites-probe",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "sites-probe",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:36:24.409358+00:00",
+      "return": "2026-10-15T14:36:53.631660+00:00",
+      "wallSeconds": 29.2219987079734,
+      "userSeconds": 8.187478,
+      "systemSeconds": 3.70599,
+      "exit": 0,
+      "sha256": "2fb0ce77b271bf8715ec219be5b512451fad1c784fe54ac187e42fd7bd4875f5"
+    },
+    {
+      "name": "browser-toad-complete",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "toad-picker-complete",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:32:14.507550+00:00",
+      "return": "2026-10-15T14:32:42.554565+00:00",
+      "wallSeconds": 28.04684558295412,
+      "userSeconds": 5.503169,
+      "systemSeconds": 2.5288,
+      "exit": 1,
+      "sha256": "9ec0023547ac89d2d61d7be609bdaa913fe47dc0c09efcc8710bd8e5d4a728b9"
+    },
+    {
+      "name": "browser-toad-complete2",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "toad-picker-complete",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:33:33.252455+00:00",
+      "return": "2026-10-15T14:33:49.833956+00:00",
+      "wallSeconds": 16.581256165984087,
+      "userSeconds": 5.707009,
+      "systemSeconds": 3.042866,
+      "exit": 1,
+      "sha256": "ba78fc06cec32a4fb0a233fbbf0751e97af95795040652ff46d26669375e883e"
+    },
+    {
+      "name": "browser-toad-complete3",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "toad-picker-complete",
+        "--bead",
+        "hv-umm2.271",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:34:28.734056+00:00",
+      "return": "2026-10-15T14:35:01.437538+00:00",
+      "wallSeconds": 32.70317774999421,
+      "userSeconds": 6.188327,
+      "systemSeconds": 2.5582949999999998,
+      "exit": 0,
+      "sha256": "002b508a631bfa345cb0b7d61454275d34c0bb5593c7a757eb5707203bde12fb"
+    },
+    {
+      "name": "browser-toad-probe",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "toad-picker",
+        "--bead",
+        "hv-umm2.271",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:29:38.535348+00:00",
+      "return": "2026-10-15T14:30:16.064502+00:00",
+      "wallSeconds": 37.52883329195902,
+      "userSeconds": 5.701199,
+      "systemSeconds": 2.577752,
+      "exit": 1,
+      "sha256": "5481205a01d21a79289556e838d3fcf04b62f4ca2b64a77dd78142ef14710da4"
+    },
+    {
+      "name": "browser-toad-probe2",
+      "cmd": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "toad-picker",
+        "--bead",
+        "hv-umm2.271",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:30:37.459749+00:00",
+      "return": "2026-10-15T14:30:45.129841+00:00",
+      "wallSeconds": 7.670037999982014,
+      "userSeconds": 5.285775,
+      "systemSeconds": 2.325594,
+      "exit": 0,
+      "sha256": "cb1e8b1566e3b65958d3a638dfd9d95b0ed6c12d112e07c12ed36ac11b9eb28f"
+    },
+    {
+      "sourceEpochBefore": "ea4847fd1f0c8e4e31c3d5ec1ea54fe1ccfe903fc080199a43d0db5e821418ed",
+      "sourceEpochAfter": "ea4847fd1f0c8e4e31c3d5ec1ea54fe1ccfe903fc080199a43d0db5e821418ed",
+      "name": "catalog-sanity",
+      "cmd": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-271-01a13a7a/catalog-sanity.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:54:48.820761+00:00",
+      "return": "2026-10-15T14:54:51.648677+00:00",
+      "wallSeconds": 2.9018403330119327,
+      "userSeconds": 1.054627,
+      "systemSeconds": 0.665994,
+      "exit": 0,
+      "sha256": "d161db2e6419f44eda8e3e0154dda4bc57784c462d8e35c9a78e7d9ddcb29e82"
+    },
+    {
+      "name": "domain300-2",
+      "cmd": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-271-01a13a7a/domain300.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:33:34.373169+00:00",
+      "return": "2026-10-15T14:33:37.074950+00:00",
+      "wallSeconds": 2.701802041963674,
+      "userSeconds": 1.139453,
+      "systemSeconds": 0.602135,
+      "exit": 1,
+      "sha256": "34a0ccc063283939aa4bee0bec49a709e4a4f17a083bed5e93c3fca8c55a390a"
+    },
+    {
+      "name": "domain300-3",
+      "cmd": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-271-01a13a7a/domain300.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:34:29.870771+00:00",
+      "return": "2026-10-15T14:34:31.454206+00:00",
+      "wallSeconds": 1.583408500009682,
+      "userSeconds": 1.198431,
+      "systemSeconds": 0.524717,
+      "exit": 1,
+      "sha256": "0f73d0615539467f746087bd44a8a8e4b5b1d93d22e918221a21d61150eeba5f"
+    },
+    {
+      "name": "domain300-4",
+      "cmd": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-271-01a13a7a/domain300.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:35:05.494167+00:00",
+      "return": "2026-10-15T14:35:07.300324+00:00",
+      "wallSeconds": 1.8061042920453474,
+      "userSeconds": 1.159094,
+      "systemSeconds": 0.59444,
+      "exit": 1,
+      "sha256": "078860eb44e3b20596ee156a1e598bbfe8ea91d8b316f485cdb89bdf97450539"
+    },
+    {
+      "name": "domain300-5",
+      "cmd": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-271-01a13a7a/domain300.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:35:46.584231+00:00",
+      "return": "2026-10-15T14:35:48.867965+00:00",
+      "wallSeconds": 2.283735166012775,
+      "userSeconds": 2.249935,
+      "systemSeconds": 0.5167039999999999,
+      "exit": 0,
+      "sha256": "d7258311502be92d5453a14840a841005413729f8e6ad7c9148d240b5270a16c"
+    },
+    {
+      "sourceEpochBefore": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+      "sourceEpochAfter": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+      "name": "domain300-frozen",
+      "cmd": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-271-01a13a7a/domain300.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T15:12:39.348554+00:00",
+      "return": "2026-10-15T15:12:43.272635+00:00",
+      "wallSeconds": 4.0134702079813,
+      "userSeconds": 2.123313,
+      "systemSeconds": 0.7827559999999999,
+      "exit": 0,
+      "sha256": "7d440a23e66b1e3f431a6a0ed93b322356917614e9848a577b5bfc3efecbff3a"
+    },
+    {
+      "name": "domain300",
+      "cmd": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-271-01a13a7a/domain300.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:32:55.688747+00:00",
+      "return": "2026-10-15T14:32:58.706969+00:00",
+      "wallSeconds": 3.018185833003372,
+      "userSeconds": 0.921782,
+      "systemSeconds": 0.69373,
+      "exit": 1,
+      "sha256": "de86e5c3ba5185f8d8b1115ba1ada76c754a71510658d80085779439849311a4"
+    },
+    {
+      "name": "focused-1",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-deck-entry.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:25:13.877648+00:00",
+      "return": "2026-10-15T14:25:20.925448+00:00",
+      "wallSeconds": 7.0477457090164535,
+      "userSeconds": 6.425451,
+      "systemSeconds": 2.137286,
+      "exit": 1,
+      "sha256": "901baa2d0d3b339ce148cc20c2524041d9e17834a3620852c3a99fe79495fed7"
+    },
+    {
+      "name": "focused-2",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-deck-entry.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:25:46.019366+00:00",
+      "return": "2026-10-15T14:25:52.063706+00:00",
+      "wallSeconds": 6.044310000026599,
+      "userSeconds": 6.780745,
+      "systemSeconds": 2.217128,
+      "exit": 0,
+      "sha256": "3d9f2a1145470f12a66b562bd441a508bf2221386e7e1cb2c876e872e4a7f33d"
+    },
+    {
+      "name": "focused-3",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/cumulus/screens/JourneyDreamsignScreen.test.tsx",
+        "src/screens/cumulus_adapters/journey-dreamsign-view-model.test.ts",
+        "src/session/actions.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:27:16.554670+00:00",
+      "return": "2026-10-15T14:27:23.783464+00:00",
+      "wallSeconds": 7.228777999989688,
+      "userSeconds": 8.869654,
+      "systemSeconds": 2.398186,
+      "exit": 0,
+      "sha256": "f032e3cd051bc0bddac6d60349793504d480cf43787d97da33392b2b3e74a9bd"
+    },
+    {
+      "name": "focused-4",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-deck-entry.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:28:58.723952+00:00",
+      "return": "2026-10-15T14:29:07.751502+00:00",
+      "wallSeconds": 9.027468749962281,
+      "userSeconds": 7.83974,
+      "systemSeconds": 2.59554,
+      "exit": 0,
+      "sha256": "352b7b6bc350abd13612361a4ca53d9b89dd6ce2e444f62d9060b7e9d4699cde"
+    },
+    {
+      "name": "focused-afterbattle",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:46:10.821552+00:00",
+      "return": "2026-10-15T14:46:16.837946+00:00",
+      "wallSeconds": 6.016353917017113,
+      "userSeconds": 5.771777,
+      "systemSeconds": 2.036515,
+      "exit": 0,
+      "sha256": "377183eaeaf086eac8db44489bd0603ad60b663285ffe2fc29ba3249fefc5767"
+    },
+    {
+      "name": "focused-final",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/cumulus/screens/JourneyDreamsignScreen.test.tsx",
+        "src/screens/cumulus_adapters/journey-dreamsign-view-model.test.ts",
+        "src/cumulus/screens/GambleSiteScreen.four-suit-reprise.test.tsx",
+        "src/screens/cumulus_adapters/gamble-site-view-model-four-suit-reprise.test.ts",
+        "src/screens/cumulus_adapters/gamble-site-logging-view-model.test.ts",
+        "src/session/actions.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:37:22.088243+00:00",
+      "return": "2026-10-15T14:37:29.965105+00:00",
+      "wallSeconds": 7.876817583979573,
+      "userSeconds": 10.587162,
+      "systemSeconds": 2.560483,
+      "exit": 1,
+      "sha256": "321fb5caefbabb30606eb89262b18c5350f82e4fddb9651df712e3a1d7a94f08"
+    },
+    {
+      "name": "focused-gamble",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/GambleSiteScreen.four-suit-reprise.test.tsx",
+        "src/screens/cumulus_adapters/gamble-site-view-model-four-suit-reprise.test.ts",
+        "src/screens/cumulus_adapters/gamble-site-logging-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:33:57.622669+00:00",
+      "return": "2026-10-15T14:34:06.701517+00:00",
+      "wallSeconds": 9.078789666004013,
+      "userSeconds": 8.550495,
+      "systemSeconds": 2.638052,
+      "exit": 1,
+      "sha256": "f3877a745616d60a4b4ffa4dd658000943a95b2fc911742ef1e6892e6f487109"
+    },
+    {
+      "name": "focused-gamble2",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/GambleSiteScreen.four-suit-reprise.test.tsx",
+        "src/screens/cumulus_adapters/gamble-site-view-model-four-suit-reprise.test.ts",
+        "src/screens/cumulus_adapters/gamble-site-logging-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:35:06.629101+00:00",
+      "return": "2026-10-15T14:35:14.209669+00:00",
+      "wallSeconds": 7.580475708004087,
+      "userSeconds": 8.796331,
+      "systemSeconds": 2.461329,
+      "exit": 1,
+      "sha256": "3432c41d1e0171b37dc4f72df9850852d8c29679e0c5bdfed89cfc49d4389eb0"
+    },
+    {
+      "name": "focused-gamble3",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/GambleSiteScreen.four-suit-reprise.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:38:03.547329+00:00",
+      "return": "2026-10-15T14:38:11.464161+00:00",
+      "wallSeconds": 7.916608958039433,
+      "userSeconds": 5.6574539999999995,
+      "systemSeconds": 2.437923,
+      "exit": 1,
+      "sha256": "46e49dc40d30d6cc790f464d58b0cf6bbda4b4eb90c4f962d00e978ea82d3385"
+    },
+    {
+      "name": "focused-gamble4",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/GambleSiteScreen.four-suit-reprise.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:39:10.161964+00:00",
+      "return": "2026-10-15T14:39:15.798502+00:00",
+      "wallSeconds": 5.636480749992188,
+      "userSeconds": 5.554107,
+      "systemSeconds": 1.803653,
+      "exit": 1,
+      "sha256": "fc90360795459b0dc98c97ee919d40618aecf24007bec7aafff47e9d0393aa91"
+    },
+    {
+      "name": "focused-gamble5",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/GambleSiteScreen.four-suit-reprise.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:40:07.202185+00:00",
+      "return": "2026-10-15T14:40:13.111913+00:00",
+      "wallSeconds": 5.909689040970989,
+      "userSeconds": 6.04454,
+      "systemSeconds": 1.900305,
+      "exit": 0,
+      "sha256": "c2345f932733c8bbfc51271d6afa8e623fbf4d1ecc56db833b0f0d3fe97379bb"
+    },
+    {
+      "sourceEpochBefore": "c98587fefe6673778d0d6fd865a0658f056e47e376af3b8f88b4a86ffac8328d",
+      "sourceEpochAfter": "c98587fefe6673778d0d6fd865a0658f056e47e376af3b8f88b4a86ffac8328d",
+      "name": "focused-intake-final",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:59:14.538032+00:00",
+      "return": "2026-10-15T14:59:20.335618+00:00",
+      "wallSeconds": 5.884672790998593,
+      "userSeconds": 5.806684,
+      "systemSeconds": 1.924862,
+      "exit": 0,
+      "sha256": "42b06f0e457eb7d431e66b428f66e3745f59513475e3730325d30fa6a3b3249d"
+    },
+    {
+      "name": "focused-subtype-final",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:40:46.505003+00:00",
+      "return": "2026-10-15T14:40:51.627245+00:00",
+      "wallSeconds": 5.122259208001196,
+      "userSeconds": 5.250944,
+      "systemSeconds": 1.749599,
+      "exit": 0,
+      "sha256": "fcc36d1855021ddbf2f98f3099c381d75a035b168e29795ca815e2fa28ef958d"
+    },
+    {
+      "sourceEpochBefore": "c98587fefe6673778d0d6fd865a0658f056e47e376af3b8f88b4a86ffac8328d",
+      "sourceEpochAfter": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+      "name": "full-final-with-queue",
+      "cmd": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-271-01a13a7a/measure.py",
+        "full-final-execution",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:59:40.819093+00:00",
+      "return": "2026-10-15T15:02:15.473583+00:00",
+      "wallSeconds": 154.76284616696648,
+      "userSeconds": 0.000549,
+      "systemSeconds": 0.0011079999999999996,
+      "exit": -15,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "sourceEpochBefore": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+      "sourceEpochAfter": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+      "name": "full-frozen-execution",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T15:11:38.164971+00:00",
+      "return": "2026-10-15T15:13:41.241481+00:00",
+      "wallSeconds": 123.18841316603357,
+      "userSeconds": 282.884542,
+      "systemSeconds": 28.27563,
+      "exit": 0,
+      "sha256": "804e14d25c664ca4292abef253ec81f0eea88f4e8387cad2faa2de0449f8648e"
+    },
+    {
+      "sourceEpochBefore": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+      "sourceEpochAfter": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+      "name": "full-frozen-with-queue",
+      "cmd": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-271-01a13a7a/measure.py",
+        "full-frozen-execution",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T15:02:41.239190+00:00",
+      "return": "2026-10-15T15:13:41.359063+00:00",
+      "wallSeconds": 660.2110746249673,
+      "userSeconds": 282.975079,
+      "systemSeconds": 28.453974,
+      "exit": 0,
+      "sha256": "704d5ef0ff61f6734d0d6c0d4c0f91eedc48e1817d09a493836145d48f57ab35"
+    },
+    {
+      "sourceEpochBefore": "ea4847fd1f0c8e4e31c3d5ec1ea54fe1ccfe903fc080199a43d0db5e821418ed",
+      "sourceEpochAfter": "ea4847fd1f0c8e4e31c3d5ec1ea54fe1ccfe903fc080199a43d0db5e821418ed",
+      "name": "full-with-queue",
+      "cmd": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-271-01a13a7a/measure.py",
+        "full-execution",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:51:01.150106+00:00",
+      "return": "2026-10-15T14:58:27.294880+00:00",
+      "wallSeconds": 446.4115224580164,
+      "userSeconds": 0.0005549999999999999,
+      "systemSeconds": 0.0010039999999999997,
+      "exit": -15,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "knip-1",
+      "cmd": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:36:50.118218+00:00",
+      "return": "2026-10-15T14:36:55.330559+00:00",
+      "wallSeconds": 5.212338957993779,
+      "userSeconds": 4.675389,
+      "systemSeconds": 1.5951819999999999,
+      "exit": 0,
+      "sha256": "ee975ef90c6ffa77b7b47c55bbee1153fd4f0becc109ba8a0c594a3cc4011823"
+    },
+    {
+      "name": "preflight",
+      "cmd": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "e377c3ed-16f5-4424-a9f1-73f9750ace9f,8e2d26a8-ff39-48a4-a30e-434479c4675f,8b69de8a-835d-4f0c-ac25-dc0e700e2983,4f21a4ab-e4aa-4718-8563-9afb72d140c0",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:29:25.478691+00:00",
+      "return": "2026-10-15T14:29:26.948239+00:00",
+      "wallSeconds": 1.4695396660245024,
+      "userSeconds": 1.3154569999999999,
+      "systemSeconds": 0.524469,
+      "exit": 0,
+      "sha256": "3bd8363fe27275308db4b750d1b1522e76926c1a3aa58331fdc94b5882c65e44"
+    },
+    {
+      "name": "review-1",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:26:06.529323+00:00",
+      "return": "2026-10-15T14:27:15.952610+00:00",
+      "wallSeconds": 69.42279183398932,
+      "userSeconds": 188.426245,
+      "systemSeconds": 15.679522,
+      "exit": 2,
+      "sha256": "340e6c39c8f3997d42fa0768ec01b4711cccae80dca107a4aed870715fa8437c"
+    },
+    {
+      "name": "review-2",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:28:17.118706+00:00",
+      "return": "2026-10-15T14:29:37.450489+00:00",
+      "wallSeconds": 80.33114179200493,
+      "userSeconds": 196.648608,
+      "systemSeconds": 19.194236,
+      "exit": 2,
+      "sha256": "f2a9996fb56750fd4a42460be8a58e365e816b976f3e26a837d4c2ac0c4f3bbb"
+    },
+    {
+      "name": "review-3",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:35:47.715480+00:00",
+      "return": "2026-10-15T14:37:00.400800+00:00",
+      "wallSeconds": 72.6847625420196,
+      "userSeconds": 195.336219,
+      "systemSeconds": 15.773047,
+      "exit": 2,
+      "sha256": "9069d762626228f51f4756590bd5fbc4990fe630701aa6a95cb4aae220131b8d"
+    },
+    {
+      "name": "review-final",
+      "cmd": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:42:40.158239+00:00",
+      "return": "2026-10-15T14:43:50.839430+00:00",
+      "wallSeconds": 70.68063620798057,
+      "userSeconds": 172.535777,
+      "systemSeconds": 18.352684,
+      "exit": 0,
+      "sha256": "aeb7d18c2aff39661c4433b8b6c36540305dd5603a94f0e7ea1751d810456561"
+    },
+    {
+      "name": "sweep",
+      "cmd": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.271",
+        "--dreamsigns",
+        "e377c3ed-16f5-4424-a9f1-73f9750ace9f,8e2d26a8-ff39-48a4-a30e-434479c4675f,8b69de8a-835d-4f0c-ac25-dc0e700e2983,4f21a4ab-e4aa-4718-8563-9afb72d140c0"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T14:44:48.288228+00:00",
+      "return": "2026-10-15T14:45:30.762021+00:00",
+      "wallSeconds": 42.473473333986476,
+      "userSeconds": 5.928401,
+      "systemSeconds": 3.097901,
+      "exit": 0,
+      "sha256": "c7c057c8dd4d8e765b3dd7bd6bc2fb05a259e12a6eabe3ad9bcd44e3f918347d"
+    },
+    {
+      "sourceEpochBefore": "c98587fefe6673778d0d6fd865a0658f056e47e376af3b8f88b4a86ffac8328d",
+      "sourceEpochAfter": "c98587fefe6673778d0d6fd865a0658f056e47e376af3b8f88b4a86ffac8328d",
+      "name": "typecheck-intake-final",
+      "cmd": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T15:01:11.810118+00:00",
+      "return": "2026-10-15T15:01:16.587804+00:00",
+      "wallSeconds": 4.869815708021633,
+      "userSeconds": 8.336188,
+      "systemSeconds": 1.5874899999999998,
+      "exit": 2,
+      "sha256": "fb33d6e66f64f3de5f7e183691526aab335f7b8be80f774d259901141632500f"
+    },
+    {
+      "sourceEpochBefore": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+      "sourceEpochAfter": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+      "name": "typecheck-intake-final2",
+      "cmd": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+      "start": "2026-10-15T15:02:15.676032+00:00",
+      "return": "2026-10-15T15:02:20.724254+00:00",
+      "wallSeconds": 5.151469125004951,
+      "userSeconds": 8.600272,
+      "systemSeconds": 1.6723279999999998,
+      "exit": 0,
+      "sha256": "f2ee628e4e00e16e10fe6b2b7b4f6f79a75e3db6d709bb123481fe47fb42ea0f"
+    }
+  ],
+  "parentSetupReceipt": {
+    "start": "2026-10-15T13:49:11.228417+00:00",
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271",
+    "wrapperPid": 95806,
+    "argv": [
+      "npm",
+      "install"
+    ],
+    "state": "terminal",
+    "exit": 0,
+    "end": "2026-10-15T13:49:11.711804+00:00",
+    "wallS": 0.4834268093109131,
+    "childUserS": 0.46760799999999997,
+    "childSystemS": 0.0829,
+    "rawSha256": "876a2c3fc1af1827c3f5381ca60ae14c36afdb3861fd22887c24b97151753b59"
+  },
+  "rawReceiptDirectory": "artifacts/qa/hv-umm2.271/author/",
+  "rawCommandLogConvention": "<command name>.log and <command name>.receipt.json; receipt SHA256 binds complete raw log",
+  "heavyRuntime": {
+    "at": "2026-10-15T15:05:26.578480+00:00",
+    "earlierWaiters": [
+      {
+        "outerPid": 68899,
+        "lockfPid": 68918,
+        "pgid": 68899,
+        "receipt": "full-with-queue.receipt.json",
+        "innerStarted": false,
+        "settled": true,
+        "measurementWrapperExit": 241,
+        "measuredLockfChildExit": -15,
+        "unifiedExecSessionDrained": true
+      },
+      {
+        "outerPid": 6306,
+        "lockfPid": 6341,
+        "pgid": 6306,
+        "receipt": "full-final-with-queue.receipt.json",
+        "innerStarted": false,
+        "settled": true,
+        "measurementWrapperExit": 241,
+        "measuredLockfChildExit": -15,
+        "unifiedExecSessionDrained": true
+      }
+    ],
+    "currentRows": [
+      "18751  6231 18751       02:46 /opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-271-01a13a7a/measure.py full-frozen-with-queue lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock python3 /tmp/dreamtides-271-01a13a7a/measure.py full-frozen-execution env JOURNEY_TEST_WORKERS=2 npm run review:full",
+      "18788 18751 18751       02:45 lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock python3 /tmp/dreamtides-271-01a13a7a/measure.py full-frozen-execution env JOURNEY_TEST_WORKERS=2 npm run review:full"
+    ],
+    "currentExecSession": 31041,
+    "sourceFrozen": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88",
+    "foreignProcesses": "untouched",
+    "finalWaiter": {
+      "outerPid": 18751,
+      "lockfPid": 18788,
+      "pgid": 18751,
+      "execSession": 31041,
+      "sourceEpoch": "8d468e7b391d45adb4085a86e67c3aefacf09bc912ef319b98c169afe5ea6c88"
+    },
+    "executionObservedAt": "2026-10-15T15:13:31.607161+00:00",
+    "executionProcessGroupRows": [
+      "18751  6231 18751       10:51 /opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-271-01a13a7a/measure.py full-frozen-with-queue lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock python3 /tmp/dreamtides-271-01a13a7a/measure.py full-frozen-execution env JOURNEY_TEST_WORKERS=2 npm run review:full",
+      "18788 18751 18751       10:50 lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock python3 /tmp/dreamtides-271-01a13a7a/measure.py full-frozen-execution env JOURNEY_TEST_WORKERS=2 npm run review:full",
+      "74629 18788 18751       01:54 /opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-271-01a13a7a/measure.py full-frozen-execution env JOURNEY_TEST_WORKERS=2 npm run review:full",
+      "74685 74629 18751       01:53 npm run review:full   ",
+      "74706 74685 18751       01:53 node scripts/review.mjs full",
+      "76985 74706 18751       01:22 /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271/node_modules/vitest/vitest.mjs run",
+      "76995 76985 18751       01:22 /Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns-271/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+    ],
+    "terminalSettlement": {
+      "at": "2026-10-15T15:13:52.228640+00:00",
+      "remainingOwnGroup18751": [],
+      "finalMeasuredExit": 0,
+      "terminalSessionDrained": true
+    }
+  },
+  "heavyQueue": {
+    "finalOuterToInnerStartS": 536.925781,
+    "settledPriorWaiterEnvelopeS": 601.1743686249829,
+    "executionWallS": 123.18841316603357,
+    "qualification": "Admission gaps include wrapper overhead; CPU and actual inner command measured separately."
+  },
+  "unknownMeasurements": [
+    "Earliest direct compiler diagnostics and first unwrapped focused command whole-command wall/CPU unavailable; retained raw diagnostics provide no invented timing credit."
+  ],
+  "domain300": {
+    "finalFrozenReceipt": "domain300-frozen.receipt.json",
+    "originalRetainedArtifact": "domain300-original-attempt5.jsonl",
+    "originalAndFinalBytesEqual": true,
+    "kind": "seeded public fold/replay supplement, not battle-weighted engine games/full journeys/all normal routes",
+    "seedFirst": 271000,
+    "seedLast": 271299,
+    "cases": 300,
+    "perUuid": 75,
+    "steps": 1725,
+    "applied": 1650,
+    "intentionalProtectedPurgeRefusals": 75,
+    "subtypeResolutions": 75,
+    "glowingHits": 143,
+    "glowingMisses": 118,
+    "aniseAssignments": 74,
+    "draftEntries": 300,
+    "successfulCodecRoundtrips": 375,
+    "finalCodecHashComparisons": 300,
+    "replayHashComparisons": 300,
+    "recipe": "START_JOURNEY, debug ADD_DREAMSIGN/ADD_CARD, real Draft/pick, 75 Toad LOAD/resolve",
+    "artifact": "domain300.jsonl",
+    "sha256": "0affe685df5bcd21d916f427a64ea46d104f6768d8468b8ee938461a1a4a9406",
+    "unsupportedBattleRecipe": "All four journey-only records have empty battle abilities and fuzz.ts:195\u2013198 rejects them."
+  },
+  "canonicalSweep": {
+    "preflightInitializationPasses": 8,
+    "browserInitializationPasses": 8,
+    "unsupportedVariantSkipsEach": 72,
+    "journeyEffectsExercised": false
+  },
+  "browser": {
+    "at": "2026-10-15T14:52:06.216581+00:00",
+    "runs": [
+      {
+        "scenario": "p8-draft",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-18UPtZ/p8-draft.result.json",
+        "ok": false,
+        "port": 5274,
+        "serverPid": 76027,
+        "invocation": "run-18UPtZ",
+        "error": "Error: click [role=button][aria-label=\"Draft 5x\"]: timed out after 15000 ms; last probe: no rendered element\n    at Object.click (evalmachine.<anonymous>:748:15)\n    at async draft (evalmachine.<anonymous>:1657:2)\n    at async evalmachine.<anonymous>:1677:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1953,
+          "scenario": 20363,
+          "total": 22391
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-18UPtZ/p8-draft-desktop.jsonl",
+            "gameId": "dukw7m",
+            "selectedBy": "url",
+            "rows": 21,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "a8cbf3b827ac2868491f118a2d1d724a1a1c5c4c3a06b94dea414e44b9ccc7a8"
+      },
+      {
+        "scenario": "p8-sites",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-1QNIS9/p8-sites.result.json",
+        "ok": false,
+        "port": 5274,
+        "serverPid": 72609,
+        "invocation": "run-1QNIS9",
+        "error": "QaTimeoutError: waitVisible [data-testid=cumulus-card-shop-site-screen]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async sites (evalmachine.<anonymous>:1654:53)\n    at async evalmachine.<anonymous>:1667:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "wallMs": {
+          "browserLeaseWait": 6048,
+          "serve": 1640,
+          "scenario": 16722,
+          "total": 24468
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-1QNIS9/p8-sites-desktop.jsonl",
+            "gameId": "vo3hek",
+            "selectedBy": "url",
+            "rows": 20,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "4bbb7a4c95e4cafbb068cd5842f33ab57ea38a14f05ba8a76502f530dbe5c364"
+      },
+      {
+        "scenario": "p8-reward",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-3EUTzg/p8-reward.result.json",
+        "ok": true,
+        "port": 5174,
+        "serverPid": 98680,
+        "invocation": "run-3EUTzg",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 3504,
+          "scenario": 27775,
+          "total": 32198
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-3EUTzg/p8-reward-desktop.jsonl",
+            "gameId": "e3cwse",
+            "selectedBy": "url",
+            "rows": 31,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "b3fda45bc568b235cc37861f5b8db5c7a2887d560d47b3183a89660db4597b50"
+      },
+      {
+        "scenario": "p8-anise-visual",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-3KbLVL/p8-anise-visual.result.json",
+        "ok": false,
+        "port": 5174,
+        "serverPid": 29843,
+        "invocation": "run-3KbLVL",
+        "error": "QaTimeoutError: Amplified first Event: the persisted log of game 3h3694 (29 lines) did not satisfy the predicate within 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:695:17)\n    at async anise (evalmachine.<anonymous>:1662:2)\n    at async evalmachine.<anonymous>:1672:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "wallMs": {
+          "browserLeaseWait": 9,
+          "serve": 2329,
+          "scenario": 26258,
+          "total": 28660
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-3KbLVL/p8-anise-visual-desktop.jsonl",
+            "gameId": "3h3694",
+            "selectedBy": "url",
+            "rows": 29,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "5946831302c9f80d73535c98c3211f4e0f1909e2b5d57f95af4d4c6b2f7a762b"
+      },
+      {
+        "scenario": "p8-glowing",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-567i1V/p8-glowing.result.json",
+        "ok": true,
+        "port": 5174,
+        "serverPid": 89786,
+        "invocation": "run-567i1V",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 1967,
+          "scenario": 13973,
+          "total": 16009
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-567i1V/p8-glowing-desktop.jsonl",
+            "gameId": "thpxux",
+            "selectedBy": "url",
+            "rows": 53,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "2699b62929bd66d3116577cc6b369c452e7542772b6ea2bb03c81a9f1839c433"
+      },
+      {
+        "scenario": "p8-draft",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-CSHxME/p8-draft.result.json",
+        "ok": false,
+        "port": 5174,
+        "serverPid": 80502,
+        "invocation": "run-CSHxME",
+        "error": "Error: click [data-draft-offer-card] [role=button][data-card-id=\"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a\"]: timed out after 15000 ms; last probe: no rendered element\n    at Object.click (evalmachine.<anonymous>:748:15)\n    at async draft (evalmachine.<anonymous>:1662:2)\n    at async evalmachine.<anonymous>:1677:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serveWait": 306,
+          "serve": 2327,
+          "scenario": 22458,
+          "total": 24842
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-CSHxME/p8-draft-desktop.jsonl",
+            "gameId": "gevdp7",
+            "selectedBy": "url",
+            "rows": 68,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "f4a3cd94fbad985cdaeb154443c617601ac1f4c6554fd312d795f9e420c868e4"
+      },
+      {
+        "scenario": "sites-probe",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-DLURBH/sites-probe.result.json",
+        "ok": true,
+        "port": 5174,
+        "serverPid": 63949,
+        "invocation": "run-DLURBH",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 1983,
+          "scenario": 26706,
+          "total": 28764
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-DLURBH/sites-probe-desktop.jsonl",
+            "gameId": "y8yjik",
+            "selectedBy": "url",
+            "rows": 20,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "ed87de68eb3fbf877883396bc6f503b5f8a37c9f7f07cf4b5857925119a0e1f6"
+      },
+      {
+        "scenario": "toad-picker",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-Dg2uK8/toad-picker.result.json",
+        "ok": false,
+        "port": 5174,
+        "serverPid": 28607,
+        "invocation": "run-Dg2uK8",
+        "error": "TimeoutError: locator.fill: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=journey-debug-dreamsign-search] input')\n",
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 1955,
+          "scenario": 35051,
+          "total": 37068
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-Dg2uK8/toad-picker-desktop.jsonl",
+            "gameId": "7hxq4m",
+            "selectedBy": "url",
+            "rows": 21,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "92adc6729bec74bd9d4546a46337a58e8b3d10a98da9db97214b259b50abe1b7"
+      },
+      {
+        "scenario": "toad-picker",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-EbHCL0/toad-picker.result.json",
+        "ok": true,
+        "port": 5174,
+        "serverPid": 33088,
+        "invocation": "run-EbHCL0",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1639,
+          "scenario": 5580,
+          "total": 7289
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-EbHCL0/toad-picker-desktop.jsonl",
+            "gameId": "myeyfa",
+            "selectedBy": "url",
+            "rows": 23,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "a54919bd98df7ce1bf79c94b356619daa2b227c53540004f9dfbc6137bcf59b3"
+      },
+      {
+        "scenario": "toad-picker-complete",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-FQqPXk/toad-picker-complete.result.json",
+        "ok": true,
+        "port": 5174,
+        "serverPid": 49834,
+        "invocation": "run-FQqPXk",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1963,
+          "scenario": 30203,
+          "total": 32237
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-FQqPXk/toad-picker-complete-desktop.jsonl",
+            "gameId": "7d99ye",
+            "selectedBy": "url",
+            "rows": 29,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-FQqPXk/toad-picker-complete-mobile.jsonl",
+            "gameId": "u4ttoq",
+            "selectedBy": "url",
+            "rows": 29,
+            "reason": null
+          }
+        ],
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-FQqPXk/toad-desktop-picker.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=271&debug=1&game=7d99ye",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-FQqPXk/toad-desktop-open-select.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=271&debug=1&game=7d99ye",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-FQqPXk/toad-desktop-confirmed.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?seed=271&debug=1&game=7d99ye",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-FQqPXk/toad-mobile-picker.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=271&debug=1&game=u4ttoq",
+            "width": 390,
+            "height": 844
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-FQqPXk/toad-mobile-open-select.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=271&debug=1&game=u4ttoq",
+            "width": 390,
+            "height": 844
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-FQqPXk/toad-mobile-confirmed.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?seed=271&debug=1&game=u4ttoq",
+            "width": 390,
+            "height": 844
+          }
+        ],
+        "sha256": "0d91bb64b80d338570c5e0e88cfdebcd2ceb7f95916fe94a817c254cb52240b4"
+      },
+      {
+        "scenario": "p8-draft",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-HQFyBL/p8-draft.result.json",
+        "ok": false,
+        "port": 5174,
+        "serverPid": 71678,
+        "invocation": "run-HQFyBL",
+        "error": "Error: five-card Tortoise draft: TimeoutError: page.waitForFunction: Timeout 14993ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async draft (evalmachine.<anonymous>:1658:2)\n    at async evalmachine.<anonymous>:1677:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 3789,
+          "scenario": 21105,
+          "total": 24963
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-HQFyBL/p8-draft-desktop.jsonl",
+            "gameId": "tkad66",
+            "selectedBy": "url",
+            "rows": 27,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "e905efe308560dfff7fceffefac89a5e104158827f5c4285e04258d487348b0a"
+      },
+      {
+        "scenario": "p8-sites",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-JYf5IM/p8-sites.result.json",
+        "ok": true,
+        "port": 5174,
+        "serverPid": 85708,
+        "invocation": "run-JYf5IM",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serveWait": 611,
+          "serve": 2881,
+          "scenario": 23537,
+          "total": 26482
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-JYf5IM/p8-sites-desktop.jsonl",
+            "gameId": "hd3ad5",
+            "selectedBy": "url",
+            "rows": 26,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "6f1dc0c51e705c3187fcac9606f6faaca81ab2f5034c114df4e6d84a25fef16e"
+      },
+      {
+        "scenario": "p8-draft",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-KZbMzz/p8-draft.result.json",
+        "ok": true,
+        "port": 5174,
+        "serverPid": 92154,
+        "invocation": "run-KZbMzz",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 15286,
+          "serve": 1640,
+          "scenario": 12241,
+          "total": 29228
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-KZbMzz/p8-draft-desktop.jsonl",
+            "gameId": "j23vvs",
+            "selectedBy": "url",
+            "rows": 44,
+            "reason": null
+          }
+        ],
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-KZbMzz/p8-draft-first-event.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=dreamscape&seed=271&debug=1&game=j23vvs",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "sha256": "13cd335ecde234d6f68e6940902c363c2adba643f6ee3ce3249c424d6a1587cb"
+      },
+      {
+        "scenario": "toad-picker-complete",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-NNY4CK/toad-picker-complete.result.json",
+        "ok": false,
+        "port": 5174,
+        "serverPid": 39967,
+        "invocation": "run-NNY4CK",
+        "error": "desktop#0: Error: click [role=option][data-value=Mage]: timed out after 15000 ms; last probe: (506, 487) hits button[aria-label=\"Character type\"]\n    at Object.click (evalmachine.<anonymous>:748:15)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async subtype (evalmachine.<anonymous>:1665:2)\n    at async evalmachine.<anonymous>:1684:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1948,
+          "scenario": 25669,
+          "total": 27676
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-NNY4CK/toad-picker-complete-desktop.jsonl",
+            "gameId": "pxt2dn",
+            "selectedBy": "url",
+            "rows": 23,
+            "reason": null
+          }
+        ],
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-NNY4CK/toad-desktop-picker.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=271&debug=1&game=pxt2dn",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-NNY4CK/toad-desktop-open-select.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=271&debug=1&game=pxt2dn",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "sha256": "789ac3515a9ef41c9b78e0e535085d297c2df2976e7d0e00d89033994d78109a"
+      },
+      {
+        "scenario": "p8-sites",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-TMZKaV/p8-sites.result.json",
+        "ok": false,
+        "port": 5274,
+        "serverPid": 78918,
+        "invocation": "run-TMZKaV",
+        "error": "TimeoutError: locator.fill: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('input[data-testid=journey-debug-dreamsign-search]')\n",
+        "wallMs": {
+          "browserLeaseWait": 21533,
+          "serve": 1643,
+          "scenario": 44307,
+          "total": 67538
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-TMZKaV/p8-sites-desktop.jsonl",
+            "gameId": "dgyfa2",
+            "selectedBy": "url",
+            "rows": 29,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "c79200c0b142d2e3a25020a0abca76dc0915e724f4f3d7af3a613be7b725e053"
+      },
+      {
+        "scenario": "p8-draft",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-V2LRj3/p8-draft.result.json",
+        "ok": false,
+        "port": 5274,
+        "serverPid": 84182,
+        "invocation": "run-V2LRj3",
+        "error": "Error: click [data-draft-offer-card]:has([data-card-id=\"8a971ba7-9dfb-45be-bfbb-bf5e4f11974a\"]): timed out after 15000 ms; last probe: no rendered element\n    at Object.click (evalmachine.<anonymous>:748:15)\n    at async draft (evalmachine.<anonymous>:1662:2)\n    at async evalmachine.<anonymous>:1677:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 3794,
+          "scenario": 25285,
+          "total": 29147
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-V2LRj3/p8-draft-desktop.jsonl",
+            "gameId": "snf8v9",
+            "selectedBy": "url",
+            "rows": 68,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "083b072834f8226d76a30c3c89eff27d5fc16af06f35154caf32ca9c421785b5"
+      },
+      {
+        "scenario": "toad-picker-complete",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-XydaQw/toad-picker-complete.result.json",
+        "ok": false,
+        "port": 5174,
+        "serverPid": 45724,
+        "invocation": "run-XydaQw",
+        "error": "desktop#0: ReferenceError: URL is not defined\n    at subtype (evalmachine.<anonymous>:1669:13)\n    at async evalmachine.<anonymous>:1685:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 4082,
+          "scenario": 11966,
+          "total": 16126
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-XydaQw/toad-picker-complete-desktop.jsonl",
+            "gameId": "e37dm7",
+            "selectedBy": "url",
+            "rows": 24,
+            "reason": null
+          }
+        ],
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-XydaQw/toad-desktop-picker.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=271&debug=1&game=e37dm7",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-XydaQw/toad-desktop-open-select.png",
+            "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=271&debug=1&game=e37dm7",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "sha256": "4bc42f4babb083325995e269dcb7a5863baa50e5e158c2684e0e293f14970e1d"
+      },
+      {
+        "scenario": "probe2",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-cDZT9f/probe2.result.json",
+        "ok": true,
+        "port": 5274,
+        "serverPid": 24473,
+        "invocation": "run-cDZT9f",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 2899,
+          "scenario": 4816,
+          "total": 7791
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-cDZT9f/probe2-desktop.jsonl",
+            "gameId": "ijjs24",
+            "selectedBy": "url",
+            "rows": 20,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "2348221ad13ff9dbf8c246b68c0231e7a512b0dbb11a92e967e4f89cdeed332d"
+      },
+      {
+        "scenario": "p8-gamble",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-jaHdEL/p8-gamble.result.json",
+        "ok": true,
+        "port": 5274,
+        "serverPid": 80371,
+        "invocation": "run-jaHdEL",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1651,
+          "scenario": 38041,
+          "total": 39748
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-jaHdEL/p8-gamble-desktop.jsonl",
+            "gameId": "g2vqes",
+            "selectedBy": "url",
+            "rows": 30,
+            "reason": null
+          }
+        ],
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-jaHdEL/p8-tortoise-protected-paid-result.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&gambleGame=four-suit-reprise&seed=272&debug=1&game=g2vqes",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "sha256": "c4966f15e6bdfd2bbdc3342d300c16c2023c2dc5368c2e43887b21f9ac3cd1d0"
+      },
+      {
+        "scenario": "p8-draft",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-ocvyjD/p8-draft.result.json",
+        "ok": false,
+        "port": 5274,
+        "serverPid": 82655,
+        "invocation": "run-ocvyjD",
+        "error": "Error: click [data-draft-offer-card]:has([data-card-id=\"caaee8a9-0c22-41b4-950f-4c1131b98221\"]) [role=button]: timed out after 15000 ms; last probe: no rendered element\n    at Object.click (evalmachine.<anonymous>:748:15)\n    at async draft (evalmachine.<anonymous>:1662:2)\n    at async evalmachine.<anonymous>:1677:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 3785,
+          "scenario": 23924,
+          "total": 27777
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-ocvyjD/p8-draft-desktop.jsonl",
+            "gameId": "57disw",
+            "selectedBy": "url",
+            "rows": 68,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "e02e8ef7dee772e732d8f63e7e3e1340a99e78f69421df0a4c25b619048fce2a"
+      },
+      {
+        "scenario": "p8-draft",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-xL8kSu/p8-draft.result.json",
+        "ok": false,
+        "port": 5274,
+        "serverPid": 85472,
+        "invocation": "run-xL8kSu",
+        "error": "Error: click [data-testid=journey-debug-add-card-5a980eff-6ec7-44d8-9977-b98e66bbc2c8]: timed out after 15000 ms; last probe: no rendered element\n    at Object.click (evalmachine.<anonymous>:748:15)\n    at async draft (evalmachine.<anonymous>:1675:23)\n    at async evalmachine.<anonymous>:1684:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1954,
+          "scenario": 25187,
+          "total": 27204
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-xL8kSu/p8-draft-desktop.jsonl",
+            "gameId": "ajq2hm",
+            "selectedBy": "url",
+            "rows": 44,
+            "reason": null
+          }
+        ],
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-xL8kSu/p8-draft-first-event.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/draft?goto=dreamscape&seed=271&debug=1&game=ajq2hm",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "sha256": "6e49732c7be053500565987a9fbb297a6f319f5808ebcf07f34367a27c5c7985"
+      },
+      {
+        "scenario": "probe",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-xmdU0g/probe.result.json",
+        "ok": true,
+        "port": 5274,
+        "serverPid": 18966,
+        "invocation": "run-xmdU0g",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 4097,
+          "scenario": 3247,
+          "total": 7449
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": null,
+            "gameId": null,
+            "selectedBy": null,
+            "rows": 0,
+            "reason": "no local games database"
+          }
+        ],
+        "captures": [],
+        "sha256": "0d4a5515e8efff6aab41c2b82d5e3a1e9470c5b566af88daa24c9502b01f8bb5"
+      },
+      {
+        "scenario": "p8-anise-visual",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-xx5p9e/p8-anise-visual.result.json",
+        "ok": true,
+        "port": 5274,
+        "serverPid": 64363,
+        "invocation": "run-xx5p9e",
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 2278,
+          "scenario": 13663,
+          "total": 16005
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-xx5p9e/p8-anise-visual-desktop.jsonl",
+            "gameId": "x6u5vm",
+            "selectedBy": "url",
+            "rows": 45,
+            "reason": null
+          }
+        ],
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-xx5p9e/anise-stable-amplified-event-deck.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/draft?goto=dreamscape&seed=271&debug=1&game=x6u5vm",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "sha256": "1ec1cba8aab8952471a64ce36f88630b841e7fcffb7a5c912850c847f3a0fe1b"
+      },
+      {
+        "scenario": "p8-sites",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-zCij9M/p8-sites.result.json",
+        "ok": false,
+        "port": 5174,
+        "serverPid": 82977,
+        "invocation": "run-zCij9M",
+        "error": "QaTimeoutError: waitVisible [data-testid=cumulus-exploration-choice-0]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async sites (evalmachine.<anonymous>:1655:408)\n    at async evalmachine.<anonymous>:1668:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serveWait": 2433,
+          "serve": 5322,
+          "scenario": 33730,
+          "total": 39116
+        },
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.271/invocations/run-zCij9M/p8-sites-desktop.jsonl",
+            "gameId": "ufgm5t",
+            "selectedBy": "url",
+            "rows": 21,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "sha256": "720c34abe2f6ab58921b0a284b0d5ef965d213492bceee23a98e3e251bc62cee"
+      }
+    ],
+    "managedCleanup": "Each terminal runner log records its owned process-group cleanup and port-free check; each runner closes its own isolated MCP context. Shared MCP service preserved."
+  },
+  "browserSettlement": {
+    "at": "2026-10-15T15:01:12.900407+00:00",
+    "ownedServerPids": [
+      "76027",
+      "72609",
+      "98680",
+      "29843",
+      "89786",
+      "80502",
+      "63949",
+      "28607",
+      "33088",
+      "49834",
+      "71678",
+      "85708",
+      "92154",
+      "39967",
+      "78918",
+      "84182",
+      "45724",
+      "24473",
+      "80371",
+      "82655",
+      "85472",
+      "18966",
+      "64363",
+      "82977"
+    ],
+    "psExit": 1,
+    "psOutput": "  PID  PPID  PGID COMMAND\n",
+    "managedCleanup": "Each terminal runner log records its owned process-group cleanup and port-free check; each runner closes its own isolated MCP context. Shared MCP service preserved.",
+    "sharedMcp": "preserved; not owned",
+    "activeOwnedBrowserRunners": 0
+  },
+  "browserQualifications": [
+    "run-FQqPXk proves both viewports with real pointer scroll/choice/same-game reload/confirm; games7d99ye/u4ttoq physical cohorts and native prefixes independently verified by parent.",
+    "run-zCij9M aggregate failed, but retained Shop8c4kv7/Purgecdy8kk/Augury4sfr89 completed cells have native custody; run-JYf5IM passed Explorationvus58b/Bazaartarw6y/Revelationen7nyi/Duplicationhd3ad5. Debug Toad source and exact site continuation, not normal randomized Toad award.",
+    "run-jaHdEL real paid prevention gameg2vqes retains target and next/leave; earlier i6uhtp prefixes retained before navigation.",
+    "run-567i1V game thpxux has 12 debug physical gains at real Draft: source attempts12/6, actual9hit/9miss; not all browser ingress routes or duplication-copy coverage.",
+    "run-KZbMzz real Draft proves Tortoise offer5 and Anise Amplified firstEvent, but empty transition capture has no visual/judged credit.",
+    "run-xx5p9e stable Anise deck screenshot is distinct fresh gamex6u5vm; actual PNG opened by author and parent.",
+    "run-3EUTzg Reward gamee3cwse native31rows proves Toad resolve permission2/rng3 then ACCEPT_REWARD5."
+  ],
+  "testDelta": {
+    "files": 4,
+    "lines": 304,
+    "jsdomFiles": 0
+  },
+  "testSourceFiles": [
+    {
+      "path": "src/rules/journey/journey-on-gain.test.ts",
+      "newFile": false,
+      "beforeLines": 198,
+      "afterLines": 201,
+      "deltaLines": 3,
+      "jsdom": false
+    },
+    {
+      "path": "src/rules/journey/journey-subtype.contracts.ts",
+      "newFile": true,
+      "beforeLines": 0,
+      "afterLines": 107,
+      "deltaLines": 107,
+      "jsdom": false
+    },
+    {
+      "path": "src/rules/journey/journey-subtype-persistence.contracts.ts",
+      "newFile": true,
+      "beforeLines": 0,
+      "afterLines": 84,
+      "deltaLines": 84,
+      "jsdom": false
+    },
+    {
+      "path": "src/rules/journey/journey-subtype.fixtures.ts",
+      "newFile": true,
+      "beforeLines": 0,
+      "afterLines": 29,
+      "deltaLines": 29,
+      "jsdom": false
+    },
+    {
+      "path": "src/rules/journey/journey-deck-entry.test.ts",
+      "newFile": false,
+      "beforeLines": 489,
+      "afterLines": 491,
+      "deltaLines": 2,
+      "jsdom": false
+    },
+    {
+      "path": "src/rules/journey/journey-character-transfiguration.contracts.ts",
+      "newFile": true,
+      "beforeLines": 0,
+      "afterLines": 41,
+      "deltaLines": 41,
+      "jsdom": false
+    },
+    {
+      "path": "src/session/actions.test.ts",
+      "newFile": false,
+      "beforeLines": 319,
+      "afterLines": 320,
+      "deltaLines": 1,
+      "jsdom": false
+    },
+    {
+      "path": "src/screens/cumulus_adapters/journey-dreamsign-view-model.test.ts",
+      "newFile": false,
+      "beforeLines": 50,
+      "afterLines": 57,
+      "deltaLines": 7,
+      "jsdom": false
+    },
+    {
+      "path": "src/cumulus/screens/JourneyDreamsignScreen.test.tsx",
+      "newFile": false,
+      "beforeLines": 91,
+      "afterLines": 91,
+      "deltaLines": 0,
+      "jsdom": true
+    },
+    {
+      "path": "src/screens/cumulus_adapters/gamble-site-logging-view-model.test.ts",
+      "newFile": false,
+      "beforeLines": 339,
+      "afterLines": 343,
+      "deltaLines": 4,
+      "jsdom": false
+    },
+    {
+      "path": "src/cumulus/screens/GambleSiteScreen.four-suit-reprise.test.tsx",
+      "newFile": false,
+      "beforeLines": 157,
+      "afterLines": 173,
+      "deltaLines": 16,
+      "jsdom": true
+    },
+    {
+      "path": "src/screens/cumulus_adapters/gamble-site-view-model-four-suit-reprise.test.ts",
+      "newFile": false,
+      "beforeLines": 213,
+      "afterLines": 223,
+      "deltaLines": 10,
+      "jsdom": false
+    }
+  ],
+  "testEntrypointDelta": 0,
+  "coreFailureMapping": "See adjacent Markdown transition/failure table and actual contract rows; fresh cold review remains root-owned after author terminal.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "actual final evidence-freeze command group",
+        "observedAt": "2026-10-15T15:13:52.254269+00:00",
+        "value": 6.0
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-15T15:13:52.254269+00:00",
+      "scope": "final evidence freeze",
+      "oneMinute": 6.0
+    }
+  ],
+  "review": "No cold review clearance claimed; root will create fresh read-only Codex review against frozen base/head."
+}

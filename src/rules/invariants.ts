@@ -1,3 +1,4 @@
+import { subtypeContinuation, validJourneySubtypeScreen, validJourneySubtypeBattleBinding } from "./journey/journey-subtype";
 import { typeRemapContinuation, validJourneyTypeRemap, validTypeRemapBattleBinding } from "./journey/journey-type-remap";
 import { validShopReplenishmentRuntime } from "./journey/journey-shop";
 import { validStarterPurgeScreen, validStarterBattleBinding } from "./journey/journey-starter-acquisition";
@@ -40,7 +41,8 @@ export function foldInvariantViolations(
   state: FoldState,
   registry: JourneyModifierRegistry = journeyModifierRegistry,
 ): FoldInvariantViolation[] {
-  const acquisition = typeRemapContinuation(state.journey);
+  const acquisition = typeRemapContinuation(subtypeContinuation(state.journey));
+  const subtype = state.journey.screen.type === "journeyDreamsign" && state.journey.screen.choice.kind === "subtype" ? state.journey.screen.choice : null;
   const remap = state.journey.screen.type === "journeyDreamsign" && state.journey.screen.choice.kind === "typeRemap" ? state.journey.screen.choice : null;
   const starter = acquisition.screen.type === "journeyStarterPurge" ? acquisition.screen.choice : null;
   const visible = starter?.continuation ?? acquisition.screen;
@@ -51,6 +53,8 @@ export function foldInvariantViolations(
   const earned = displayed.type === "journeyDreamsign" && displayed.choice.kind === "afterBattle" ? displayed.choice : pending?.choice.kind === "afterBattle" ? pending.choice : null;
   const journey = earned === null ? projected : { ...projected, screen: { type: earned.returnTo } };
   const violations: FoldInvariantViolation[] = [];
+  if (subtype !== null && (!validJourneySubtypeScreen(state.journey.screen, state.journey, registry) || !validJourneySubtypeBattleBinding(state.journey, state.battle))) violations.push({ code: "journey_subtype_inconsistent", detail: "subtype" });
+  if (subtype?.suspendedBattle?.mode === "tutorial" && (state.frontDoor.phase !== "tutorial" || state.battle?.mode.kind !== "tutorial" || state.frontDoor.tutorial?.runId !== state.battle.mode.tutorialRunId)) violations.push({ code: "journey_subtype_tutorial_mismatch", detail: "tutorial" });
   if (!validJourneyTypeRemap(state.journey, registry) || remap !== null && !validTypeRemapBattleBinding(state.journey, state.battle)) violations.push({ code: "journey_type_remap_inconsistent", detail: "typeRemap" });
   if (remap?.suspendedBattle?.mode === "tutorial" && (state.frontDoor.phase !== "tutorial" || state.battle?.mode.kind !== "tutorial" || state.frontDoor.tutorial?.runId !== state.battle.mode.tutorialRunId)) violations.push({ code: "journey_type_remap_tutorial_mismatch", detail: "tutorial" });
   if (starter !== null && (!validStarterPurgeScreen(acquisition.screen, acquisition, registry) || !validStarterBattleBinding(acquisition, state.battle))) violations.push({ code: "journey_starter_choice_inconsistent", detail: String(starter.permissionSeq) });

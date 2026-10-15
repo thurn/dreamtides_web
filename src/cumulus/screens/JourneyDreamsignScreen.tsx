@@ -31,9 +31,14 @@ export interface JourneyTypeRemapView extends Omit<JourneyDreamsignView, "mode">
   readonly mode: "typeRemap";
   readonly typeOptions: readonly CardSubtype[];
 }
-export type JourneyDreamsignScreenView = JourneyDreamsignView | JourneyTypeRemapView;
+export interface JourneySubtypeView extends Omit<JourneyTypeRemapView, "mode"> {
+  readonly mode: "subtype";
+  readonly purpose: "deckSubtype" | "typeRemap";
+}
+export type JourneyDreamsignScreenView = JourneyDreamsignView | JourneyTypeRemapView | JourneySubtypeView;
 export interface JourneyDreamsignScreenProps {
   readonly view: JourneyDreamsignScreenView;
+  readonly onSubtype?: (subtype: CardSubtype) => void;
   readonly onTypeRemap?: (subtype: CardSubtype) => void;
   readonly onOffer: (dreamsignId: DreamsignId | null, purgeIndex?: number) => void;
   readonly onCopy: (heldIndex: number, expectedDreamsignId: DreamsignId) => void;
@@ -45,14 +50,14 @@ const MOBILE_OFFER_SIZE = 120;
 const DESKTOP_OFFER_SIZE = 154;
 const REPLACEMENT_SIZE = 72;
 /** Selection is tentative; every completion is an intent against a folded permission. */
-export function JourneyDreamsignScreen({ view, onOffer, onCopy, onTypeRemap }: JourneyDreamsignScreenProps) {
+export function JourneyDreamsignScreen({ view, onOffer, onCopy, onTypeRemap, onSubtype }: JourneyDreamsignScreenProps) {
   const desktop = useIsDesktop();
   const optionSize = desktop ? DESKTOP_OFFER_SIZE : MOBILE_OFFER_SIZE;
   const topClearance = menuTriggerClearance({ isDesktop: desktop, gap: token("--space-l") });
   const bottomClearance = JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE;
   const permission = `${view.sourceDreamsignId}:${view.heldIndex}:${view.choiceIndex}:${view.permissionSeq}`;
   const [chosenType, setChosenType] = useState<{ permission: string; subtype: CardSubtype } | null>(null);
-  const tentative = view.mode === "typeRemap" && chosenType?.permission === permission && view.typeOptions.includes(chosenType.subtype) ? chosenType.subtype : null;
+  const tentative = (view.mode === "typeRemap" || view.mode === "subtype") && chosenType?.permission === permission && view.typeOptions.includes(chosenType.subtype) ? chosenType.subtype : null;
   const [selected, setSelected] = useState<{ permission: string; id: DreamsignId } | null>(null);
   const incoming = view.options.find((option) => selected?.permission === permission && option.dreamsign.id === selected.id);
   const sceneUrl = view.scene === null ? null : resolveArtRef(view.scene);
@@ -63,9 +68,9 @@ export function JourneyDreamsignScreen({ view, onOffer, onCopy, onTypeRemap }: J
       <GlassPanel title={view.title}>
         <div data-journey-dreamsign-scroll="" style={{ display: "flex", flexDirection: "column", minHeight: 0, overflowY: "auto", gap: token("--space-l"), padding: token("--space-2xl") }}>
         <p style={{ margin: 0, color: token("--text-on-glass-muted"), font: token("--t-body") }}>{view.instruction}</p>
-        {view.mode === "typeRemap" && <div data-testid="journey-type-remap-picker" data-selected-subtype={tentative ?? undefined} style={{ display: "flex", flexDirection: "column", gap: token("--space-l") }}>
+        {(view.mode === "typeRemap" || view.mode === "subtype") && <div data-testid="journey-type-remap-picker" data-selected-subtype={tentative ?? undefined} style={{ display: "flex", flexDirection: "column", gap: token("--space-l") }}>
           <Select<CardSubtype | ""> options={view.typeOptions.map(subtype => ({ value: subtype, label: subtype }))} value={tentative ?? ""} placeholder={JOURNEY_SITE_MESSAGES.typeRemapPlaceholder} ariaLabel={JOURNEY_SITE_MESSAGES.typeRemapLabel} onChange={subtype => { if (subtype !== "") setChosenType({ permission, subtype }); }} />
-          <GlassButton placement="onGlass" variant="accent" label={JOURNEY_SITE_MESSAGES.typeRemapConfirm} testId="journey-type-remap-confirm" disabled={tentative === null} onPress={() => { if (tentative !== null) onTypeRemap?.(tentative); }} />
+          <GlassButton placement="onGlass" variant="accent" label={JOURNEY_SITE_MESSAGES.typeRemapConfirm} testId="journey-type-remap-confirm" disabled={tentative === null} onPress={() => { if (tentative !== null) (view.mode === "subtype" ? onSubtype : onTypeRemap)?.(tentative); }} />
         </div>}
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: token("--space-l") }}>
           {view.options.map(({ heldIndex, dreamsign }, ordinal) => <div key={`${dreamsign.id}:${heldIndex}:${ordinal}`} data-dreamsign-choice-index={heldIndex} style={{ width: optionSize, height: optionSize, flex: "0 0 auto" }}>

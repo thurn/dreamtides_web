@@ -1,3 +1,4 @@
+import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 import {
   useCallback,
   useEffect,
@@ -218,6 +219,7 @@ export interface FourSuitRepriseCardView {
 }
 
 export interface FourSuitRepriseResultView {
+  readonly purgePreventedBy?: import("../../types/journey").JourneyPurgePreventionSource;
   id: GambleResultId;
   roundNumber: 1 | 2 | 3;
   card: { rank: PlayingCardRank; suit: PlayingCardSuit };
@@ -725,6 +727,8 @@ function FourSuitOutcomeCard({
       </motion.div>
     );
   }
+
+  if (result.purgePreventedBy !== undefined) return <div data-four-suit-card-outcome="protected" data-protection-dreamsign-id={result.purgePreventedBy.dreamsignId} style={{ position: "relative", width: "100%", aspectRatio: CARD_ASPECT_RATIO_VALUE }}><GameCard model={result.target.model} selection="reward" /></div>;
 
   return (
     <motion.div
@@ -3303,7 +3307,7 @@ function FourSuitRepriseScreen({
                       minWidth: 0,
                     }}
                   >
-                    {cardOutcomePhase !== "complete" && (
+                    {(cardOutcomePhase !== "complete" || activeResult?.purgePreventedBy !== undefined) && (
                       <div
                         data-four-suit-target={target.entryId}
                         data-four-suit-target-presentation={cardOutcomePhase}
@@ -3417,14 +3421,14 @@ function FourSuitRepriseScreen({
                   >
                     <RadialAnnouncement
                       announcementId={activeResult.id}
-                      headline={gambleOutcomeLabel(view, activeResult.outcome)}
+                      headline={activeResult.purgePreventedBy === undefined ? gambleOutcomeLabel(view, activeResult.outcome) : JOURNEY_SITE_MESSAGES.purgePrevented}
                       essenceGained={
                         activeResult.essenceGained > 0
                           ? activeResult.essenceGained
                           : undefined
                       }
                       tone={
-                        activeResult.outcome === "purge" ? "danger" : "reward"
+                        activeResult.outcome === "purge" && activeResult.purgePreventedBy === undefined ? "danger" : "reward"
                       }
                       size={layout === "mobile" ? "mini" : "wager"}
                       duration="extended"

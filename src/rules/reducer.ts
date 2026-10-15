@@ -1,3 +1,4 @@
+import { validJourneySubtypeIntent, validJourneySubtypeScreen, validJourneySubtypeBattleBinding } from "./journey/journey-subtype";
 import { resolveTypeRemap, validTypeRemapIntent, validJourneyTypeRemap, validTypeRemapBattleBinding } from "./journey/journey-type-remap";
 import { finishBeforeBattlePurge, prepareBeforeBattlePurge } from "./journey/journey-before-battle-purge";
 import { duplicationSiteQuote, journeyDuplicationRecord, resolveJourneyDuplication } from "./journey/journey-duplication";
@@ -112,7 +113,7 @@ export function reduceGameEvent(
     }
     // rule 4 — prompt gate
     if (
-      pendingEnginePrompt(state.battle, battleEngine()) !== null && !(event.type === "RESOLVE_TYPE_REMAP" && validTypeRemapIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_DREAMSIGN_COPY" && validDreamsignCopyIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_STARTER_PURGE" && validStarterPurgeIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "REMOVE_DREAMSIGN" && state.journey.screen.type === "journeyDreamsign" && state.journey.screen.choice.kind === "typeRemap")
+      pendingEnginePrompt(state.battle, battleEngine()) !== null && !(event.type === "RESOLVE_JOURNEY_SUBTYPE" && validJourneySubtypeIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "REMOVE_DREAMSIGN" && state.journey.screen.type === "journeyDreamsign" && state.journey.screen.choice.kind === "subtype") && !(event.type === "RESOLVE_TYPE_REMAP" && validTypeRemapIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_DREAMSIGN_COPY" && validDreamsignCopyIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_STARTER_PURGE" && validStarterPurgeIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "REMOVE_DREAMSIGN" && state.journey.screen.type === "journeyDreamsign" && state.journey.screen.choice.kind === "typeRemap")
     ) {
       return bounce(state, "prompt_pending");
     }
@@ -145,6 +146,10 @@ function finishTransition(
   random: () => { readonly value: number; readonly drawIndex: number },
 ): ReduceResult {
   const seq = ctx.seq;
+  if (event.type === "RESOLVE_JOURNEY_SUBTYPE" && result.outcome === "applied") {
+    const resumed = modifiers.resumeSubtype({ journey: before.journey, payload: event.payload ?? {}, battle: before.battle, seq, random });
+    return resumed === null ? bounce(before) : enforceInvariants(event, { ...result, state: { ...result.state, journey: resumed.journey }, logRecords: resumed.logRecords }, modifiers);
+  }
   if (event.type === "BEGIN_BATTLE" && result.outcome === "applied" && result.state.battle === null && result.state.journey.screen.type === "journeyPurge" && result.state.journey.screen.choice.kind === "beforeBattle") return enforceInvariants(event, result, modifiers);
   if (
     result.outcome === "applied" &&
@@ -334,6 +339,8 @@ export function routeDomain(
   const payload = event.payload ?? {};
   const journey = state.journey;
   const type: GameEventType = event.type;
+  if (journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "subtype" &&
+    (isGameplayEventType(type) || type === "BATTLE_DEBUG") && type !== "RESOLVE_JOURNEY_SUBTYPE" && type !== "REMOVE_DREAMSIGN") return bounce(state);
   if (journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "typeRemap" &&
     (isGameplayEventType(type) || type === "BATTLE_DEBUG") && type !== "RESOLVE_TYPE_REMAP" && type !== "REMOVE_DREAMSIGN") return bounce(state);
   if (journey.screen.type === "journeyStarterPurge" && (isGameplayEventType(type) || type === "BATTLE_DEBUG") && type !== "RESOLVE_STARTER_PURGE" && type !== "REMOVE_DREAMSIGN") return bounce(state);
@@ -445,6 +452,8 @@ export function routeDomain(
       return journeyCase(state, deck.addCard(journey, payload, ctx));
     case "REMOVE_DECK_ENTRY":
       return journeyCase(state, deck.removeDeckEntry(journey, payload));
+    case "RESOLVE_JOURNEY_SUBTYPE":
+      return validJourneySubtypeIntent(journey, payload, state.battle, modifiers) ? { state, outcome: "applied" } : bounce(state);
     case "RESOLVE_TYPE_REMAP": {
       const result = journeyCase(state, resolveTypeRemap(journey, payload, state.battle, modifiers));
       return result.outcome === "bounced" ? result : { ...result, logRecords: [{ event: "journey_modifier_applied", fields: { dreamsignId: payload.sourceDreamsignId, heldIndex: payload.heldIndex, hook: "type_remap_resolved", choiceIndex: payload.choiceIndex, permissionSeq: payload.permissionSeq, chosenSubtype: payload.chosenSubtype, priorTypeRemap: journey.typeRemap ?? null, deckEntryIds: journey.deck.map(entry => entry.entryId) } }] };
@@ -692,6 +701,7 @@ export function routeDomain(
     case "REMOVE_DREAMSIGN": {
       const next = deck.removeDreamsign(journey, payload);
       if (next !== null && journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "typeRemap" && (!validJourneyTypeRemap(next, modifiers) || !validTypeRemapBattleBinding(next, state.battle))) return journeyCase(state, null);
+      if (next !== null && journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "subtype" && (!validJourneySubtypeScreen(next.screen, next, modifiers) || !validJourneySubtypeBattleBinding(next, state.battle))) return journeyCase(state, null);
       return journeyCase(state, next);
     }
     case "SET_DREAMSIGN_POOL":

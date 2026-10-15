@@ -56,7 +56,7 @@ export function FrontDoorRouter({
     return journey;
   }
 
-  const copyChoice = screen.type === "journeyDreamsign" && (screen.choice.kind === "copy" || screen.choice.kind === "typeRemap") && state.phase === "tutorial" ? screen.choice : null;
+  const copyChoice = screen.type === "journeyDreamsign" && (screen.choice.kind === "copy" || screen.choice.kind === "typeRemap" || screen.choice.kind === "subtype") && state.phase === "tutorial" ? screen.choice : null;
   const starterChoice = screen.type === "journeyStarterPurge" && state.phase === "tutorial" ? screen.choice : null;
   const content =
     copyChoice !== null ? (
@@ -83,7 +83,7 @@ export function FrontDoorRouter({
   return (
     <ErrorBoundary
       scope={`screen:front-door:${state.phase}`}
-      resetKey={`${state.phase}:${state.journeyId ?? "none"}${copyChoice === null ? "" : `:copy:${String(copyChoice.permissionSeq)}:${String(copyChoice.index)}`}${starterChoice === null ? "" : `:starter:${String(starterChoice.permissionSeq)}:${String(starterChoice.index)}`}`}
+      resetKey={`${state.phase}:${state.journeyId ?? "none"}${copyChoice === null ? "" : `:copy:${String(copyChoice.permissionSeq)}:${String(copyChoice.kind === "subtype" ? copyChoice.resume.sourceIndex : copyChoice.index)}`}${starterChoice === null ? "" : `:starter:${String(starterChoice.permissionSeq)}:${String(starterChoice.index)}`}`}
     >
       {content}
     </ErrorBoundary>

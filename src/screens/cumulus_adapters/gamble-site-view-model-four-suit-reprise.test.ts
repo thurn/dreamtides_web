@@ -11,7 +11,7 @@ import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import { parseShuffleCommitment } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testCardId } from "../../types/test-identities";
+import { testCardId, testDreamsignId } from "../../types/test-identities";
 import { buildGambleSiteView, GAMBLE_SITE, GUIDE, GUIDE_LINE_SOURCE } from "./gamble-site-view-model.fixtures";
 
 expect.addEqualityTesters([annotatedTextEquality]);
@@ -79,6 +79,16 @@ function copiedScenario() {
 }
 
 describe("gamble-site-view-model — Four-Suit Reprise", () => {
+  it("projects saved physical purge protection and the retained target after a round-trip", () => {
+    const { params, runtime, target } = copiedScenario();
+    const source = { dreamsignId: testDreamsignId("prevented-source"), heldIndex: 2 };
+    runtime.rounds[0] = { ...runtime.rounds[0], outcome: "purge", purgePreventedBy: source, duplicatedEntryId: undefined };
+    const view = buildGambleSiteView(params);
+    if (view?.gameId !== "four-suit-reprise") throw new Error("Missing Four-Suit view");
+    expect(view.result).toMatchObject({ purgePreventedBy: source, target: { entryId: target.entryId, cardId: target.cardId }, copy: null });
+    expect(params.state.deck.some(card => card.entryId === target.entryId)).toBe(true);
+    expect(buildGambleSiteView({ ...params, state: JSON.parse(JSON.stringify(params.state)) as typeof params.state })).toEqual(view);
+  });
   it("projects only the exact minted copy from canonical data and survives a saved round-trip", () => {
     const { params, target, copy } = copiedScenario();
     const view = buildGambleSiteView(params);

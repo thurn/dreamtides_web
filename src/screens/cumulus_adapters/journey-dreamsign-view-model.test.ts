@@ -1,3 +1,4 @@
+import { setup as subtypeSetup, apply as subtypeApply, TOAD } from "../../rules/journey/journey-subtype.fixtures";
 import { afterEach, describe, expect, it } from "vitest";
 import { buildJourneyDreamsignView } from "./journey-dreamsign-view-model";
 import { initial, apply, clear, RED, DOLL, sign } from "../../rules/journey/journey-on-gain-fixtures";
@@ -14,6 +15,12 @@ function content() {
   return { ...base, dreamscapes: [{ ...template, id: fallbackId, artKey: testDreamscapeArtKey("permission_fallback") }, { ...template, id: currentId, artKey: testDreamscapeArtKey("permission_current") }] };
 }
 describe("physical Dreamsign permission projection", () => {
+  it("projects the earned subtype purpose and original source without changing the cohort", () => {
+    const state = subtypeApply(subtypeSetup(), "ADD_DREAMSIGN", { dreamsignId: TOAD }).state.journey;
+    const snapshot = structuredClone(state);
+    expect(buildJourneyDreamsignView(state, content())).toMatchObject({ mode: "subtype", purpose: "deckSubtype", sourceDreamsignId: TOAD, heldIndex: 0, choiceIndex: 0, options: [], canContinue: false });
+    expect(state).toEqual(snapshot);
+  });
   it("projects the actual earned type permission and catalog types without changing it", () => {
     const state = remapAccepted(remapInitial(), "ADD_DREAMSIGN", { dreamsignId: MASK }, { seq: 41 }).journey;
     const before = structuredClone(state), result = buildJourneyDreamsignView(state, content());

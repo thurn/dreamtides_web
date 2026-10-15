@@ -613,6 +613,7 @@ function buildFourSuitRepriseSiteView(params: {
             roundNumber: latestRound.roundNumber,
             card: latestRound.card,
             outcome: latestRound.outcome,
+            ...(latestRound.purgePreventedBy === undefined ? {} : { purgePreventedBy: latestRound.purgePreventedBy }),
             resultRevealed: latestRound.resultRevealed,
             resultSettled: latestRound.resultSettled,
             essenceGained: latestRound.essenceGained,

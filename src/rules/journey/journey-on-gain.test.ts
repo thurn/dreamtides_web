@@ -1,3 +1,6 @@
+import "./journey-subtype.contracts";
+import "./journey-subtype-persistence.contracts";
+
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { RAT, DOLL, RED, apply, initial, clear, beginBattle, registry, RAVEN, TOME, sign } from "./journey-on-gain-fixtures";
 import { makeEntry, makeSite, SITE_ID, stateWithSites } from "./sites-fixtures";

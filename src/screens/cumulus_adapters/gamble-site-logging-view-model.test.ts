@@ -251,6 +251,10 @@ describe("gamble-site-logging-view-model", () => {
         finalEffect: "duplication",
         duplicatedEntryId: parseDeckEntryId("duplicate-101"),
       });
+      const protection = { dreamsignId: testDreamsignId("physical-protection"), heldIndex: 2 };
+      runtime.rounds[0] = { ...runtime.rounds[0], shuffleCommitment: parseShuffleCommitment("protected-round"), outcome: "purge", purgePreventedBy: protection };
+      logGambleSettled(parseSiteId("fixture-site"), runtime, view, gambleFixture());
+      expect(getLogEntries()[3]).toMatchObject({ finalEffect: "purge_prevented", purgePreventedBy: protection, selectedEntryId: parseDeckEntryId("entry-101"), payment: 25 });
     });
 
     it("records the Blackjack wager, both hands, decision, and final reward", () => {

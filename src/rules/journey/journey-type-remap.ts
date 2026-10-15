@@ -29,7 +29,7 @@ export function finishTypeRemapAcquisition(journey: JourneyState, sources: reado
   if (types.length === 0) throw new Error("Journey type-remap vocabulary is unavailable");
   let continuation: JourneyDreamsignTypeRemapChoice["continuation"];
   if (journey.screen.type === "journeyDreamsign") {
-    if (journey.screen.choice.kind === "typeRemap") throw new Error("Nested journey type-remap choice");
+    if (journey.screen.choice.kind === "typeRemap" || journey.screen.choice.kind === "subtype") throw new Error("Nested journey type-remap choice");
     continuation = { type: "journeyDreamsign", choice: journey.screen.choice };
   } else continuation = journey.screen;
   return { ...journey, screen: { type: "journeyDreamsign", choice: { kind: "typeRemap", sources: sources.map(source => ({ ...source })), index: 0, permissionSeq: seq, continuation, suspendedBattle } } };

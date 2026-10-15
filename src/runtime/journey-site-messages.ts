@@ -1,5 +1,7 @@
 /** Player-facing journey copy shared by screen builders and Cumulus controls. */
 export const JOURNEY_SITE_MESSAGES = {
+  subtypeInstruction: "Choose a character type for the Character cards currently in your deck.",
+  purgePrevented: "Protected",
   typeRemapTitle: "Choose a Character Type",
   typeRemapInstruction: "Your deck’s character-type references will use this type.",
   typeRemapLabel: "Character type",

@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { FourSuitRepriseSiteView } from "./GambleSiteScreen";
 import { transfigurationPresentationFixture } from "../test-helpers/transfiguration-fixture";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testGambleResultId } from "../../types/test-identities";
+import { testDreamsignId, testGambleResultId } from "../../types/test-identities";
 import { syntheticGameCard } from "../test-helpers/component-test-fixtures";
 import { SITE, advance, renderGamble, tid } from "./GambleSiteScreen.fixtures";
 
@@ -89,6 +89,22 @@ afterEach(() => {
 });
 
 describe("GambleSiteScreen — Four-Suit Reprise", () => {
+  it("retains a protected target through the outcome and permits next or leave", () => {
+    vi.useFakeTimers();
+    const protectedView = spadesResult({ outcome: "purge", card: { rank: "Q", suit: "clubs" }, purgePreventedBy: { dreamsignId: testDreamsignId("physical-protection"), heldIndex: 2 }, resultRevealed: true, resultSettled: true });
+    protectedView.cards = [...FOUR_SUIT.cards];
+    const onPlayAgainFourSuit = vi.fn(), onLeave = vi.fn();
+    const screen = renderGamble(protectedView, { onPlayAgainFourSuit, onLeave });
+    advance(2_000);
+    expect(screen.query('[data-four-suit-card-outcome="protected"]')).not.toBeNull();
+    expect(screen.query('[data-four-suit-card-outcome="purge"]')).toBeNull();
+    advance();
+    expect(screen.query("[data-four-suit-target]")).not.toBeNull();
+    screen.tap(tid("gamble-four-suit-play-again")); expect(onPlayAgainFourSuit).toHaveBeenCalledOnce();
+    screen.unmount();
+    const restored = renderGamble(protectedView, { onLeave }); advance(2_000); advance();
+    restored.tap(tid("gamble-four-suit-leave-after-result")); expect(onLeave).toHaveBeenCalledOnce();
+  });
   it("renders the supplied modified physical copy separately from the original target", () => {
     vi.useFakeTimers();
     const original = FOUR_SUIT.cards[0];

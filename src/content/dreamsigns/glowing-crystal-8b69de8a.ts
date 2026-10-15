@@ -1,4 +1,8 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import type { JourneyDeckEntryEffect } from "../../types/journey";
 import { dreamsign } from "../define";
+
+export const journeyDeckEntryEffect: JourneyDeckEntryEffect = { kind: "randomCharacterTransfiguration", numerator: 1, denominator: 2 };
 
 export default dreamsign({
   id: "8b69de8a-835d-4f0c-ac25-dc0e700e2983",
@@ -11,5 +15,7 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["J15", "Tag OK"],
-  pending: true,
+  journeyDeckEntry: journeyDeckEntryEffect,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("When you add a character card to your deck, it has a 50% chance to gain a random transfiguration."),
 });

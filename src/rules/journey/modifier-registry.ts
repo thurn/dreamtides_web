@@ -1,3 +1,10 @@
+import { journeySubtypeBefore, resolveJourneySubtype } from "./journey-subtype";
+import type { BattleFoldState } from "../battle/fold";
+import type { JourneyModifierBefore, JourneySubtypeResume } from "../../types/journey";
+import toad, { journeyOnGainEffect as toadEffect } from "../../content/dreamsigns/toad-8e2d26a8";
+import glowing, { journeyDeckEntryEffect as glowingEffect } from "../../content/dreamsigns/glowing-crystal-8b69de8a";
+import anise, { journeyDraftEffect as aniseEffect } from "../../content/dreamsigns/star-anise-4f21a4ab";
+import tortoise, { journeyDraftEffect as tortoiseDraft, journeyPurgeEffect as tortoisePurge } from "../../content/dreamsigns/tortoise-shell-e377c3ed";
 import theaterMask, { journeyOnGainEffect as theaterMaskEffect } from "../../content/dreamsigns/theater-mask-3d86f8ce";
 import bone, { journeyEssenceEffect as boneEffect } from "../../content/dreamsigns/carved-bone-427c71e3";
 import skull, { journeyEssenceEffect as skullEffect } from "../../content/dreamsigns/mortal-skull-eb55b141";
@@ -74,7 +81,7 @@ export interface JourneyModifierDefinition {
     readonly lookup: JourneyModifierRegistry["lookup"];
     readonly gains: readonly import("../../types/journey").JourneyDeckEntryGain[];
     readonly random: () => { readonly value: number; readonly drawIndex: number };
-    readonly before: Readonly<JourneyState>;
+    readonly before: JourneyModifierBefore;
     readonly journey: Readonly<JourneyState>;
     readonly eventType: GameplayEventType;
     readonly heldIndex: number;
@@ -100,18 +107,20 @@ export interface JourneyModifierDefinition {
       readonly incomingDreamsignId?: DreamsignId;
       readonly purges?: readonly JourneyPurgeOccurrence[];
       readonly transfigurations?: readonly { readonly entryId: import("../../types/identifiers").DeckEntryId; readonly cardId: CardId; readonly type: import("../../types/journey").TransfigurationType }[];
+      readonly transfigurationAttempts?: readonly { readonly entryId: import("../../types/identifiers").DeckEntryId; readonly cardId: CardId; readonly numerator: number; readonly denominator: number; readonly coinValue: number; readonly coinDrawIndex: number; readonly hit: boolean; readonly type?: import("../../types/journey").TransfigurationType; readonly formDrawIndex?: number }[];
       readonly copies?: readonly { readonly fromEntryId: import("../../types/identifiers").DeckEntryId; readonly entryId: import("../../types/identifiers").DeckEntryId; readonly cardId: CardId }[];
     };
   } | null;
 }
 
 export interface JourneyModifierRegistry {
+  resumeSubtype(input: { journey: JourneyState; payload: Record<string, unknown>; battle: BattleFoldState | null; seq: number; random: () => { readonly value: number; readonly drawIndex: number } }): { journey: JourneyState; logRecords: readonly ReducerLogRecord[] } | null;
   applyBattleCommits(input: Omit<Parameters<typeof applyJourneyBattleEssence>[0], "lookup">): ReturnType<typeof applyJourneyBattleEssence>;
   lookup(dreamsignId: DreamsignId): JourneyModifierDefinition | undefined;
   apply(input: {
     dreamsignGains?: readonly import("../../types/journey").JourneyDreamsignGain[];
     battleBinding?: import("../../types/journey").JourneySuspendedBattle | null;
-    before: JourneyState;
+    before: JourneyModifierBefore;
     journey: JourneyState;
     eventType: GameplayEventType;
     seq: number;
@@ -145,15 +154,13 @@ export function createJourneyModifierRegistry(
     byId.set(dreamsignId, Object.freeze({ ...definition, dreamsignId }));
   }
   const lookup = (dreamsignId: DreamsignId) => byId.get(dreamsignId);
-  return Object.freeze({
-    lookup,
-    applyBattleCommits: (input) => applyJourneyBattleEssence({ ...input, lookup }),
-    apply({ before, journey, eventType, seq, random, transfigurations, siteId, purges, dreamsignGains = [], battleBinding = null }) {
+  const run = ({ before, journey, eventType, seq, random, transfigurations, siteId, purges, dreamsignGains = [], battleBinding = null }: Parameters<JourneyModifierRegistry["apply"]>[0], resume?: JourneySubtypeResume, rngEventSeq = seq) => {
       const logRecords: ReducerLogRecord[] = [];
       let next = journey;
       // Fixed post-domain holdings; local physical occurrence cursors preserve
       // once-per-copy reactions without reconsidering an older failed threshold.
-      const held = next.dreamsigns.map(({ id }, heldIndex) => ({ id, heldIndex, definition: byId.get(id) }));
+      const observerSources = resume?.observerSources ?? next.dreamsigns.map(({ id }, heldIndex) => ({ dreamsignId: id, heldIndex }));
+      const held = observerSources.map(({ dreamsignId: id, heldIndex }) => ({ id, heldIndex, definition: byId.get(id) }));
       const entrySources = held.filter((source) => source.definition?.journeyDeckEntry !== undefined);
       const transformed = [...transfigurations];
       const consumed = new Map<number, Set<import("../../types/identifiers").DeckEntryId>>();
@@ -162,7 +169,7 @@ export function createJourneyModifierRegistry(
           heldIndex: source.heldIndex, seq, random, gains, transfigurations: occurrences, siteId, ...(purges === undefined ? {} : { purges }) });
         if (applied == null) return false;
         diagnostics.push({ event: "journey_modifier_applied", fields: {
-          dreamsignId: source.id, hook: "after_journey_event", eventType, siteId, heldIndex: source.heldIndex,
+          dreamsignId: source.id, hook: "after_journey_event", eventType, siteId, heldIndex: source.heldIndex, ...(resume === undefined ? {} : { permissionSeq: seq, rngEventSeq }),
           before: snapshot(applied.before), after: snapshot(applied.after),
           ...(applied.target === undefined ? {} : { target: applied.target }),
         } });
@@ -172,11 +179,11 @@ export function createJourneyModifierRegistry(
       // Prohibited initial additions are excluded before acquisition effects
       // measure the deck. Positive observers retain their ordinary wave order.
       const initialProhibitions = entrySources.filter((item) => item.definition!.journeyDeckEntry!.kind === "preventNightmare");
-      if (initialProhibitions.length > 0 && eventType !== "START_JOURNEY") {
+      if (resume === undefined && initialProhibitions.length > 0 && eventType !== "START_JOURNEY") {
         const initialGains = journeyDeckEntryGains(before, next);
         for (const source of initialProhibitions) invoke(source, initialGains);
       }
-      const acquisition = prepareJourneyOnGain({ before, journey: next, gains: dreamsignGains, lookup, seq, random, siteId,
+      const acquisition = prepareJourneyOnGain({ beforeContext: resume?.before ?? journeySubtypeBefore(before), eventType, observerSources, battleBinding, purges: purges ?? [], domainTransfigurations: transfigurations, resume, journey: next, gains: resume?.sources ?? dreamsignGains, lookup, seq, random, siteId,
         excludeAcquisitionAdditions(previous, tentative) {
           const diagnostics: ReducerLogRecord[] = [];
           next = tentative;
@@ -188,16 +195,17 @@ export function createJourneyModifierRegistry(
         },
       });
       next = acquisition.journey;
-      logRecords.push(...acquisition.logRecords);
-      transformed.push(...acquisition.transfigurations);
-      const gainWave = (previous: JourneyState) => {
+      logRecords.push(...acquisition.logRecords.map(row => resume === undefined ? row : { ...row, fields: { ...row.fields, rngEventSeq } }));
+      transformed.splice(0, transformed.length, ...acquisition.transfigurations);
+      if (acquisition.paused) return { journey: next, logRecords };
+      const gainWave = (previous: Readonly<Pick<JourneyState, "deck">>) => {
         if (entrySources.length === 0 || eventType === "START_JOURNEY") return;
         const gains = journeyDeckEntryGains(previous, next);
         if (gains.length === 0) return;
         for (const source of entrySources.filter((item) => item.definition!.journeyDeckEntry!.kind === "preventNightmare")) invoke(source, gains);
         for (const source of entrySources.filter((item) => item.definition!.journeyDeckEntry!.kind !== "preventNightmare")) {
           const prior = next;
-          if (invoke(source, gains) && source.definition!.journeyDeckEntry!.kind === "randomTransfiguration") transformed.push(...journeyTransfigurationOccurrences(prior, next));
+          if (invoke(source, gains) && (source.definition!.journeyDeckEntry!.kind === "randomTransfiguration" || source.definition!.journeyDeckEntry!.kind === "randomCharacterTransfiguration")) transformed.push(...journeyTransfigurationOccurrences(prior, next));
         }
       };
       const reactCopy = (source: typeof held[number]) => {
@@ -230,12 +238,29 @@ export function createJourneyModifierRegistry(
         for (const source of held.filter((item) => item.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent")) copied = reactCopy(source) || copied;
       } while (copied);
       return { journey: finishJourneyAcquisition(next, acquisition.copySources, acquisition.starterSources, acquisition.typeRemapSources, seq, battleBinding), logRecords };
+    };
+  const registry: JourneyModifierRegistry = {
+    lookup,
+    applyBattleCommits: input => applyJourneyBattleEssence({ ...input, lookup }),
+    apply: input => run(input),
+    resumeSubtype({ journey, payload, battle, seq, random }) {
+      if (journey.screen.type !== "journeyDreamsign" || journey.screen.choice.kind !== "subtype") return null;
+      const choice = journey.screen.choice, resolved = resolveJourneySubtype(journey, payload, battle, registry);
+      if (resolved === null) return null;
+      const resume = { ...choice.resume, sourceIndex: choice.resume.sourceIndex + 1 };
+      const result = run({ before: resume.before, journey: resolved, eventType: resume.eventType, seq: choice.permissionSeq, random, transfigurations: resume.transfigurations, siteId: resume.siteId, purges: resume.purges, battleBinding: choice.suspendedBattle }, resume, seq);
+      return { ...result, logRecords: [{ event: "journey_modifier_applied", fields: { dreamsignId: payload.sourceDreamsignId, heldIndex: payload.heldIndex, hook: "subtype_resolved", choiceIndex: payload.choiceIndex, permissionSeq: choice.permissionSeq, rngEventSeq: seq, chosenSubtype: payload.chosenSubtype, cohort: choice.current } }, ...result.logRecords] };
     },
-  } satisfies JourneyModifierRegistry);
+  };
+  return Object.freeze(registry);
 }
 
 /** The production registry's fixed catalog registrations. */
 export const journeyModifierRegistry = createJourneyModifierRegistry([
+  journeyOnGain(parseDreamsignId(toad.id), toadEffect),
+  journeyDeckEntry(parseDreamsignId(glowing.id), glowingEffect),
+  journeyDraft(parseDreamsignId(anise.id), aniseEffect),
+  { ...journeyPurge(parseDreamsignId(tortoise.id), tortoisePurge), ...journeyDraft(parseDreamsignId(tortoise.id), tortoiseDraft), journeyPurge: tortoisePurge },
   journeyOnGain(parseDreamsignId(theaterMask.id), theaterMaskEffect),
   journeyDraft(parseDreamsignId(mushroomCaps.id), mushroomCapsEffect),
   journeyOnGain(parseDreamsignId(twistedHerbs.id), twistedHerbsEffect),

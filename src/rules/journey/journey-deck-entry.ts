@@ -6,7 +6,7 @@ import { journeyTransfigurationCard } from "./journey-transfiguration";
 import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
 
 /** Snapshot only physical entries introduced by this operation, in deck order. */
-export function journeyDeckEntryGains(before: JourneyState, journey: JourneyState): readonly JourneyDeckEntryGain[] {
+export function journeyDeckEntryGains(before: Readonly<Pick<JourneyState, "deck">>, journey: JourneyState): readonly JourneyDeckEntryGain[] {
   const old = new Set(before.deck.map((entry) => entry.entryId));
   return journey.deck.filter((entry) => !old.has(entry.entryId)).map((entry) => {
     const card = journeyTransfigurationCard(entry);
@@ -113,7 +113,7 @@ export function validPreventedNightmareGains(value: unknown, deck: readonly unkn
 }
 
 /** Preserve the validated transaction; only fresh attempted additions are replaced. */
-function prevent(journey: JourneyState, before: JourneyState, prevented: readonly PreventedNightmareGain[], siteId: Parameters<JourneyModifierDefinition["afterJourneyEvent"]>[0]["siteId"]): JourneyState {
+function prevent(journey: JourneyState, before: Readonly<Pick<JourneyState, "deck" | "siteRuntime">>, prevented: readonly PreventedNightmareGain[], siteId: Parameters<JourneyModifierDefinition["afterJourneyEvent"]>[0]["siteId"]): JourneyState {
   const blocked = new Set(prevented.map((gain) => gain.entryId));
   let next: JourneyState = { ...journey, deck: journey.deck.filter((entry) => !blocked.has(entry.entryId)),
     battleModifiers: journey.battleModifiers.flatMap((modifier) => {
@@ -165,9 +165,10 @@ function prevent(journey: JourneyState, before: JourneyState, prevented: readonl
 
 /** Catalog values author the threshold and amount; physical gains are the sole subjects. */
 export function journeyDeckEntry(dreamsignId: DreamsignId, descriptor: JourneyDeckEntryEffect): JourneyModifierDefinition {
-  if ((descriptor.kind !== "preventNightmare" && descriptor.kind !== "warriorSpark" && descriptor.kind !== "randomTransfiguration") ||
+  if ((descriptor.kind !== "preventNightmare" && descriptor.kind !== "warriorSpark" && descriptor.kind !== "randomTransfiguration" && descriptor.kind !== "randomCharacterTransfiguration") ||
     (descriptor.kind === "warriorSpark" && (!Number.isSafeInteger(descriptor.amount) || descriptor.amount < 0)) ||
     (descriptor.kind === "randomTransfiguration" && (!Number.isSafeInteger(descriptor.minimumDeckSize) || descriptor.minimumDeckSize < 0))) throw new RangeError("Invalid journey deck entry clause.");
+  if (descriptor.kind === "randomCharacterTransfiguration" && (!Number.isSafeInteger(descriptor.numerator) || !Number.isSafeInteger(descriptor.denominator) || descriptor.numerator < 0 || descriptor.denominator < 1 || descriptor.numerator > descriptor.denominator)) throw new RangeError("Invalid character transfiguration chance.");
   const effect = Object.freeze({ ...descriptor });
   return { dreamsignId, journeyDeckEntry: effect,
     afterJourneyEvent({ before, journey, heldIndex, siteId, gains, random }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
@@ -187,6 +188,23 @@ export function journeyDeckEntry(dreamsignId: DreamsignId, descriptor: JourneyDe
         if (changes.length === 0) return null;
         const byId = new Map(changes.map((change) => [change.entryId, change]));
         return { journey: { ...journey, deck: journey.deck.map((entry) => byId.has(entry.entryId) ? { ...entry, sparkBonus: byId.get(entry.entryId)!.after } : entry) }, before: { changed: 0 }, after: { changed: changes.length, amount: effect.amount }, target: { siteIds: siteId === null ? [] : [siteId], sparkChanges: changes } };
+      }
+      if (effect.kind === "randomCharacterTransfiguration") {
+        const attempts = present.flatMap(gain => {
+          const entry = current.get(gain.entry.entryId)!;
+          if (entry.transfiguration !== null) return [];
+          const card = journeyTransfigurationCard(entry);
+          if (card === null) throw new Error("Gained journey card content is unavailable.");
+          if (card.cardType !== "Character" || card.forms.length === 0) return [];
+          const coin = random(), hit = coin.value < effect.numerator / effect.denominator;
+          const form = hit ? random() : null;
+          return [{ entryId: entry.entryId, cardId: card.cardId, numerator: effect.numerator, denominator: effect.denominator, coinValue: coin.value, coinDrawIndex: coin.drawIndex, hit,
+            ...(form === null ? {} : { type: card.forms[Math.floor(form.value * card.forms.length)], formDrawIndex: form.drawIndex }), applicableForms: card.forms }];
+        });
+        if (attempts.length === 0) return null;
+        const assignments = attempts.flatMap(attempt => attempt.type === undefined ? [] : [{ entryId: attempt.entryId, cardId: attempt.cardId, type: attempt.type }]);
+        const forms = new Map(assignments.map(assignment => [assignment.entryId, assignment.type]));
+        return { journey: { ...journey, deck: journey.deck.map(entry => forms.has(entry.entryId) ? { ...entry, transfiguration: forms.get(entry.entryId)! } : entry) }, before: { transformed: 0, deckSize: journey.deck.length }, after: { transformed: assignments.length, attempted: attempts.length, deckSize: journey.deck.length }, target: { siteIds: siteId === null ? [] : [siteId], transfigurationAttempts: attempts, transfigurations: assignments } };
       }
       if (journey.deck.length < effect.minimumDeckSize) return null;
       const eligible = present.flatMap((gain) => {

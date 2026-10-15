@@ -322,7 +322,7 @@ export function clampEssence(value: number): number {
 
 /** Locate a site by id anywhere in the atlas. */
 export function findSite(
-  journey: JourneyState,
+  journey: Readonly<Pick<JourneyState, "atlas">>,
   siteId: SiteId,
 ): SiteState | null {
   for (const node of Object.values(journey.atlas.nodes)) {

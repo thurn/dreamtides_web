@@ -3439,6 +3439,33 @@ domain consumed.
 
 ## Journey Dreamsign Acquisition Effects
 
+### Journey Character Subtype Acquisition
+
+Each physical acquisition of Toad earns a mandatory choice from the character-type
+catalog, including when the deck has no Characters or every Character already has
+the chosen type. Its cohort is the current physical entries whose effective card
+type is Character when that acquired source resolves, after prohibitions and
+earlier acquisition effects. Confirmation changes each cohort entry's permanent
+subtype and preserves its identity, form and other modifications. Later additions
+retain their own subtype. Acquired Toad and type-remap sources resolve in physical
+held-slot order before positive added-card observers and optional acquisition
+choices. Fresh additions use their resulting subtype for those observers.
+
+The earned cohort, original physical source, acquisition sequence, observer
+holdings and exact continuation survive source loss and reload. Invalid or stale
+confirmations change nothing. Removing a Dreamsign must preserve every independent
+earned continuation. A suspended battle retains its initialization and pending
+prompt while the choice owns gameplay.
+
+Glowing Crystal checks each newly added physical effective Character that has no
+form and has applicable transfigurations. Each held source grants one independent
+50% chance; a successful chance selects one uniformly applicable form. A miss
+provides no transfiguration occurrence. Existing forms remain. Tortoise Shell
+prevents authored purges and adds one card to Draft choices; a protected committed
+Four-Suit instruction retains its target, payment and continuation. Star Anise
+applies Amplified to the first effective Event gained at each Draft visit under
+the first-Event history and held-source precedence rules.
+
 ### Journey Type Remapping
 
 Each genuine physical acquisition of Theater Mask earns one mandatory choice of
