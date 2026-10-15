@@ -323,6 +323,8 @@ export interface ZoneTopSpec extends ZoneCardsBase {
  * reveals none of them and leaves the deck unshuffled (RD-hv-umm2.83-1).
  */
 export interface ZoneRandomSpec extends ZoneCardsBase {
+  /** Intersects current-zone physical members with successful occurrences this turn. */
+  readonly thisTurn?: ZoneEverySpec["thisTurn"];
   readonly pick: "random";
   readonly zone: CountedZone;
   readonly count: number;

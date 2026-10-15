@@ -1,0 +1,769 @@
+{
+  "bead": "hv-umm2.253",
+  "base": "b9439235000e80c0db27a5f854b1f3daeb990b15",
+  "dispatch": "2026-10-15T06:54:35.497Z",
+  "precommitCutoff": "2026-10-15T07:33:13.050511+00:00",
+  "finalGit": "external final-git.json receipt records actual tail after tracked near-cutoff",
+  "modelSampling": "UNKNOWN",
+  "parentPreparation": {
+    "startNativeClaim": "2026-10-15T06:45:06Z",
+    "endDispatch": "2026-10-15T06:54:35.497Z",
+    "minutes": 9.4916,
+    "scope": "Separate parent setup, source-first gap audit and same-task justiciar admission. Parent preparation before native claim is also retained in parent receipts; excluded from helper implementMin."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "entire final ordinary review-first from prepare through related checks and restore, 2026-10-15T07:02:19.395942Z through07:03:37.420044Z",
+        "receiptSHA256": "44f9f68fbf77e596448f26c84236e2df90b73c8f5219c27c5b5fe30e17d8ca7b"
+      }
+    }
+  },
+  "sourceSHA256": {
+    "src/engine/dsl/types.ts": "6adcc00dbb927a7f32f7411c69d0b005b6c814463538ab57660df5b1bdb9e0f5",
+    "src/engine/dsl/builders.ts": "4422a99e87fbfa895be50e6c63a4b514fa2ee8ebfbc245c6b5bf7579e71563ce",
+    "src/engine/effects/interpreter.ts": "cb5b50302fbd6e22e99b4983adc1538f857d12de96dbde080e685b43d1112c24",
+    "src/content/dreamsigns/poppy-flower-fdd2ffe4.ts": "bda8604f1dd7cb55dd0c630c8d7099d1a8c25b4c60fc1dc949192c6640a6e5b8",
+    "src/content/dreamsigns/larva-d4b18cc4.ts": "c8caeb4e6310d14734aa0a7f5e7c0e870926c70ac437f12e52cd1e7745d51aa1",
+    "src/content/dreamsigns/flower-petals-b765f6bb.ts": "48e3e56dfd2baf881019edbc4272cf08d08c6fd5bafb3bf0a832d4a06a4a7bf1",
+    "src/content/dreamsigns/belladonna-d76684c3.ts": "f2e27157a519cc637574a6f6f88aab5eb482a2af095e8391436e74e38f524170",
+    "src/engine/effects/primitives/contracts/random-zone-current-turn.contracts.ts": "a39ebb984becb3feb38fde8dc6ea9be796df86425c6c0dbef711aface8fd5b1b"
+  },
+  "checks": [
+    {
+      "label": "browser-bella-corrected",
+      "start": "2026-10-15T07:22:02.685774+00:00",
+      "end": "2026-10-15T07:22:39.715968+00:00",
+      "exit": 1,
+      "wallS": 37.031810998916626,
+      "cpuUserS": 5.583519,
+      "cpuSystemS": 2.519841,
+      "receipt": "browser-bella-corrected.receipt.json",
+      "receiptSHA256": "64b97c705f88e0ff40416e2e0261c0d10ba3080962be68ca22d8f6d306b19236"
+    },
+    {
+      "label": "browser-bella-mobile-fresh",
+      "start": "2026-10-15T07:25:51.684410+00:00",
+      "end": "2026-10-15T07:26:53.989479+00:00",
+      "exit": 0,
+      "wallS": 62.305964946746826,
+      "cpuUserS": 6.100328,
+      "cpuSystemS": 3.140966,
+      "receipt": "browser-bella-mobile-fresh.receipt.json",
+      "receiptSHA256": "b77f752da365269da2c3921f44b39c60b5e9a16f7a45c06a6a3ba4ab50f88a3b"
+    },
+    {
+      "label": "browser-bella-scoped",
+      "start": "2026-10-15T07:24:12.594524+00:00",
+      "end": "2026-10-15T07:25:33.288650+00:00",
+      "exit": 1,
+      "wallS": 80.69844198226929,
+      "cpuUserS": 7.47806,
+      "cpuSystemS": 4.185103,
+      "receipt": "browser-bella-scoped.receipt.json",
+      "receiptSHA256": "f99493508fbf67b1b903e35a83a0a368b19a3d937959da342ca8849b8cb69684"
+    },
+    {
+      "label": "browser-bella",
+      "start": "2026-10-15T07:20:37.464361+00:00",
+      "end": "2026-10-15T07:21:19.613447+00:00",
+      "exit": 1,
+      "wallS": 42.15451908111572,
+      "cpuUserS": 6.337297,
+      "cpuSystemS": 2.884479,
+      "receipt": "browser-bella.receipt.json",
+      "receiptSHA256": "e2472cdf7e402b19520993d34a737c6767f9d7e5477d918e35d1fd8af9188ca6"
+    },
+    {
+      "label": "browser-flower-corrected",
+      "start": "2026-10-15T07:18:48.185572+00:00",
+      "end": "2026-10-15T07:20:20.974196+00:00",
+      "exit": 0,
+      "wallS": 92.78958797454834,
+      "cpuUserS": 6.709378,
+      "cpuSystemS": 3.424359,
+      "receipt": "browser-flower-corrected.receipt.json",
+      "receiptSHA256": "96c668b4fac620c9378925ccce533862d29398fee76d5fc901adc855f66698e8"
+    },
+    {
+      "label": "browser-flower",
+      "start": "2026-10-15T07:16:00.997921+00:00",
+      "end": "2026-10-15T07:17:12.119809+00:00",
+      "exit": 1,
+      "wallS": 71.12392592430115,
+      "cpuUserS": 5.663515,
+      "cpuSystemS": 2.766177,
+      "receipt": "browser-flower.receipt.json",
+      "receiptSHA256": "e1a24f4b8e9284c7bd58f4bac849f3aad930fefb07eac2c73b5098fe73b8ebbf"
+    },
+    {
+      "label": "browser-larva-corrected",
+      "start": "2026-10-15T07:02:46.048088+00:00",
+      "end": "2026-10-15T07:03:15.428296+00:00",
+      "exit": 0,
+      "wallS": 29.38308310508728,
+      "cpuUserS": 7.366851,
+      "cpuSystemS": 3.625868,
+      "receipt": "browser-larva-corrected.receipt.json",
+      "receiptSHA256": "c5ebf331447da1cf0bcdcb6182908eaf5115e5588b7b59012748141f5622c2c7"
+    },
+    {
+      "label": "browser-larva",
+      "start": "2026-10-15T07:02:08.075707+00:00",
+      "end": "2026-10-15T07:02:13.851072+00:00",
+      "exit": 1,
+      "wallS": 5.778042793273926,
+      "cpuUserS": 7.675569,
+      "cpuSystemS": 3.367986,
+      "receipt": "browser-larva.receipt.json",
+      "receiptSHA256": "d32219103a1c6ad8f4180c88bec605f864b881926ade6a0625021450e33a0e75"
+    },
+    {
+      "label": "browser-poppy-corrected",
+      "start": "2026-10-15T07:13:41.260344+00:00",
+      "end": "2026-10-15T07:15:38.173591+00:00",
+      "exit": 0,
+      "wallS": 116.91779780387878,
+      "cpuUserS": 7.118785,
+      "cpuSystemS": 3.067659,
+      "receipt": "browser-poppy-corrected.receipt.json",
+      "receiptSHA256": "673aed3ca00f284f0903032f3702b145326f9e08daf68a06add645aa8a8015d1"
+    },
+    {
+      "label": "browser-poppy",
+      "start": "2026-10-15T07:10:34.968962+00:00",
+      "end": "2026-10-15T07:12:14.893375+00:00",
+      "exit": 1,
+      "wallS": 99.92840600013733,
+      "cpuUserS": 7.726488,
+      "cpuSystemS": 3.468625,
+      "receipt": "browser-poppy.receipt.json",
+      "receiptSHA256": "98a13ac9760f87b92ce53fde23f024be4929b954f34b2c488497c7fa13990a79"
+    },
+    {
+      "label": "contracts-final",
+      "start": "2026-10-15T07:00:21.110424+00:00",
+      "end": "2026-10-15T07:00:43.838039+00:00",
+      "exit": 0,
+      "wallS": 22.728694200515747,
+      "cpuUserS": 27.680891,
+      "cpuSystemS": 2.816186,
+      "receipt": "contracts-final.receipt.json",
+      "receiptSHA256": "668fc287dee7c1b071ad2f9dabc59801d71b8d16da4c8ed0f59dd6dca448878c"
+    },
+    {
+      "label": "focused-corrected",
+      "start": "2026-10-15T06:58:08.154965+00:00",
+      "end": "2026-10-15T06:58:24.433712+00:00",
+      "exit": 0,
+      "wallS": 16.28173017501831,
+      "cpuUserS": 9.821615,
+      "cpuSystemS": 3.900263,
+      "receipt": "focused-corrected.receipt.json",
+      "receiptSHA256": "71c4ce2df773d8820aec6f0d86140043886997350e9f0a66d336c87fa03da099"
+    },
+    {
+      "label": "focused-final",
+      "start": "2026-10-15T07:05:48.073661+00:00",
+      "end": "2026-10-15T07:05:55.587950+00:00",
+      "exit": 0,
+      "wallS": 7.515326023101807,
+      "cpuUserS": 7.96865,
+      "cpuSystemS": 2.346843,
+      "receipt": "focused-final.receipt.json",
+      "receiptSHA256": "7432d6660bce178086c7c9d9f9d4504bf2c4bbf07c4025b1738bed2a059d2b9d"
+    },
+    {
+      "label": "focused-first",
+      "start": "2026-10-15T06:57:37.612497+00:00",
+      "end": "2026-10-15T06:57:50.171741+00:00",
+      "exit": 1,
+      "wallS": 12.56158995628357,
+      "cpuUserS": 9.994591,
+      "cpuSystemS": 3.794527,
+      "receipt": "focused-first.receipt.json",
+      "receiptSHA256": "0ebea820432273e2c4db760d60c6c36dcdb42412212dd9a25c3fb042733326b4"
+    },
+    {
+      "label": "fuzz300",
+      "start": "2026-10-15T07:02:19.395926+00:00",
+      "end": "2026-10-15T07:12:03.173185+00:00",
+      "exit": 0,
+      "wallS": 583.7782800197601,
+      "cpuUserS": 531.07759,
+      "cpuSystemS": 5.45913,
+      "receipt": "fuzz300.receipt.json",
+      "receiptSHA256": "03c7971c7e907847ca529f9df0be6c4495b2ff4895d7065b0db38b9f54bcc13f"
+    },
+    {
+      "label": "knip",
+      "start": "2026-10-15T07:04:32.857660+00:00",
+      "end": "2026-10-15T07:04:39.877259+00:00",
+      "exit": 0,
+      "wallS": 7.020441055297852,
+      "cpuUserS": 4.444975,
+      "cpuSystemS": 1.82411,
+      "receipt": "knip.receipt.json",
+      "receiptSHA256": "1b079faef1976535f43b262a3b67ac137b6f15f2cc3cfe2e9de66c81ab84cfbf"
+    },
+    {
+      "label": "mutant-default-empty",
+      "start": "2026-10-15T06:59:28.879707+00:00",
+      "end": "2026-10-15T06:59:38.574803+00:00",
+      "exit": 1,
+      "wallS": 9.696404933929443,
+      "cpuUserS": 8.855001,
+      "cpuSystemS": 3.186789,
+      "receipt": "mutant-default-empty.receipt.json",
+      "receiptSHA256": "8052364ec2afdb63889f38721544babe71e31b844207717572a545716c7d333b"
+    },
+    {
+      "label": "mutant-empty-eager-rng",
+      "start": "2026-10-15T06:59:07.449421+00:00",
+      "end": "2026-10-15T06:59:18.718209+00:00",
+      "exit": 1,
+      "wallS": 11.26985502243042,
+      "cpuUserS": 9.042955,
+      "cpuSystemS": 3.242638,
+      "receipt": "mutant-empty-eager-rng.receipt.json",
+      "receiptSHA256": "c9189615541ebfc5265303678534418b7cf4957aa25b998a7bea8d827973270e"
+    },
+    {
+      "label": "mutant-missing-membership",
+      "start": "2026-10-15T06:58:46.610247+00:00",
+      "end": "2026-10-15T06:58:58.164123+00:00",
+      "exit": 1,
+      "wallS": 11.556352138519287,
+      "cpuUserS": 8.693034,
+      "cpuSystemS": 3.289268,
+      "receipt": "mutant-missing-membership.receipt.json",
+      "receiptSHA256": "b8789d4bc4271eb5cb780e6a3678f7115c4bcbb523b8518318af39eb05bbad70"
+    },
+    {
+      "label": "mutant-target-semantics",
+      "start": "2026-10-15T06:59:18.751102+00:00",
+      "end": "2026-10-15T06:59:28.845529+00:00",
+      "exit": 1,
+      "wallS": 10.095558166503906,
+      "cpuUserS": 8.783543,
+      "cpuSystemS": 3.200464,
+      "receipt": "mutant-target-semantics.receipt.json",
+      "receiptSHA256": "7bf339316fb9a88d9e47687ea158031b64d4695678cd6b41f0f536f6d2b31720"
+    },
+    {
+      "label": "mutant-wrong-actor-corrected",
+      "start": "2026-10-15T06:59:52.842365+00:00",
+      "end": "2026-10-15T07:00:02.547137+00:00",
+      "exit": 1,
+      "wallS": 9.70589280128479,
+      "cpuUserS": 8.871741,
+      "cpuSystemS": 2.993237,
+      "receipt": "mutant-wrong-actor-corrected.receipt.json",
+      "receiptSHA256": "1ea05710b6305dbf7fb8bc9206770ddb85d656b30e54fdd9672f325590670f2c"
+    },
+    {
+      "label": "mutant-wrong-actor",
+      "start": "2026-10-15T06:58:58.199481+00:00",
+      "end": "2026-10-15T06:59:07.416573+00:00",
+      "exit": 1,
+      "wallS": 9.217995882034302,
+      "cpuUserS": 8.548399999999999,
+      "cpuSystemS": 2.983886,
+      "receipt": "mutant-wrong-actor.receipt.json",
+      "receiptSHA256": "61ab1319c8bd7ec7feec4bcfd911eb1731ed1587a9b177e665d8c6631b0e71b9"
+    },
+    {
+      "label": "preflight",
+      "start": "2026-10-15T07:00:21.110466+00:00",
+      "end": "2026-10-15T07:00:23.254506+00:00",
+      "exit": 0,
+      "wallS": 2.1451592445373535,
+      "cpuUserS": 1.460574,
+      "cpuSystemS": 0.770048,
+      "receipt": "preflight.receipt.json",
+      "receiptSHA256": "6879be9cafcc15956d1c73f711f38a6457c2ec1f37f738b3fb6488c018197a8e"
+    },
+    {
+      "label": "review-first",
+      "start": "2026-10-15T07:02:19.395942+00:00",
+      "end": "2026-10-15T07:03:37.420044+00:00",
+      "exit": 0,
+      "wallS": 78.02511477470398,
+      "cpuUserS": 182.98287,
+      "cpuSystemS": 20.663729,
+      "receipt": "review-first.receipt.json",
+      "receiptSHA256": "44f9f68fbf77e596448f26c84236e2df90b73c8f5219c27c5b5fe30e17d8ca7b"
+    },
+    {
+      "label": "schema-final",
+      "start": "2026-10-15T07:32:19.813313+00:00",
+      "end": "2026-10-15T07:32:19.885073+00:00",
+      "exit": 0,
+      "wallS": 0.07339739799499512,
+      "cpuUserS": 0.053041,
+      "cpuSystemS": 0.021745999999999998,
+      "receipt": "schema-final.receipt.json",
+      "receiptSHA256": "5006401f8a9bc1f9a77e6681b2dbddca42a2d5fd4b9191c19d1eae6cb4617714"
+    },
+    {
+      "label": "schema",
+      "start": "2026-10-15T07:31:16.974487+00:00",
+      "end": "2026-10-15T07:31:17.088167+00:00",
+      "exit": 0,
+      "wallS": 0.11517715454101562,
+      "cpuUserS": 0.054437,
+      "cpuSystemS": 0.026667999999999997,
+      "receipt": "schema.receipt.json",
+      "receiptSHA256": "c0b66d976ce61ea51a8da3bc623444e5330dbf2949f5fa775f404a6845a3a964"
+    },
+    {
+      "label": "sweep",
+      "start": "2026-10-15T07:27:27.105771+00:00",
+      "end": "2026-10-15T07:27:55.179635+00:00",
+      "exit": 0,
+      "wallS": 28.075523853302002,
+      "cpuUserS": 8.253267,
+      "cpuSystemS": 4.648655,
+      "receipt": "sweep.receipt.json",
+      "receiptSHA256": "328b58bcefc3b106804dcd1dd50cabe40ed5d20f7cdd8c55db076cb0c4fcb4d1"
+    },
+    {
+      "label": "typecheck-first",
+      "start": "2026-10-15T07:00:11.016594+00:00",
+      "end": "2026-10-15T07:00:29.495778+00:00",
+      "exit": 2,
+      "wallS": 18.480841875076294,
+      "cpuUserS": 30.653921,
+      "cpuSystemS": 2.826764,
+      "receipt": "typecheck-first.receipt.json",
+      "receiptSHA256": "ec61670dff2fc8ef3654013571cbb8747d91990174dce24437f75457cb120bfc"
+    }
+  ],
+  "modules": {
+    "configuredTestEntrypointsAdded": 0,
+    "privateContractModulesAdded": 1,
+    "privateContractLines": 141,
+    "scenarioModulesAdded": 0,
+    "supportModulesAdded": 0,
+    "fixtureModulesAdded": 0,
+    "newContractCases": 24
+  },
+  "D20": "Each leaf directly composes public contracts already exercised by its primitives. Synthetic contracts cover only the admitted new optional random/history intersection. No redundant content scenario module. Actual four consumers receive proportional production workflows.",
+  "D21": [
+    {
+      "uuid": "fdd2ffe4-40f4-49cf-bc2e-2496e1042f76",
+      "firstByte": 132,
+      "sampled": false,
+      "newPromptStatusVisual": false
+    },
+    {
+      "uuid": "d4b18cc4-caeb-40b3-b0e2-f1c8b1c8354c",
+      "firstByte": 41,
+      "sampled": false,
+      "newPromptStatusVisual": false
+    },
+    {
+      "uuid": "b765f6bb-0b8a-4847-ada4-477b9493e3ad",
+      "firstByte": 230,
+      "sampled": false,
+      "newPromptStatusVisual": false
+    },
+    {
+      "uuid": "d76684c3-797e-44ae-a2ba-333e77d46a4d",
+      "firstByte": 126,
+      "sampled": false,
+      "newPromptStatusVisual": false
+    }
+  ],
+  "attemptDispositions": {
+    "focused-first": "Fixture used incorrect turn field; actual six failures retained, corrected to turnNumber.",
+    "typecheck-first": "Actual two contract Array.at target-lib errors retained; indexed accesses corrected.",
+    "contracts-final": "Historical pre-indexed-access suite5803 pass; final focused-final binds actual contract; review-first actual contract9645 pass.",
+    "mutant-wrong-actor": "Invalid mutation caused undefined-helper ReferenceError; qualified, never counted as meaningful discrimination. Corrected actor conditional yields4 real observable assertions.",
+    "browser-larva": "Caller evaluated probe before lazy panel mounted; failed before database creation; exact server cleanup retained. Corrected mounted-probe wait passed both viewports. Original caller was not contemporaneously snapshotted; later reconstructed epoch1 and its computed SHA are explicitly qualified in caller-epochs.json. Corrected successful epoch2 was snapshotted before later changes.",
+    "browser-poppy": "Partial run-x6f9QI passed both desktop branches and mobile positive branch, then missing observation during mobile second fresh-game play. No product error asserted; epoch3 caller snapshotted. Epoch4 adds requested-lab-ready plus navigation-safe committed-probe readiness on observations; full positive/negative run-rpuIr1 passes both viewports.",
+    "browser-flower": "run-IMCM4F successfully opened/cancelled real cost; canPass remained false because caller left qa.labAddCard setup debug rail open. SDK source confirms helper leaves rail visible. Epoch5 explicitly closes rendered rail and asserts absence; run-eSrjQw passes both viewports with unchanged product source.",
+    "browser-bella": "run-3FMIaJ actual positive rematerialization reached, but caller compared pre-Ending exhaustiontrue to settled post-Ending false. Existing turn.ts clearExhaustion readies all during Ending. Epoch6 checks exact latest physical rematerialized:true/existing slot and settled global cleanup; operation-level exhaustion preservation remains the public existing rematerialize primitive contract.",
+    "browser-bella-corrected": "Epoch6 unfiltered event cohort included normal opponent entries after Ending. Epoch7 actual diagnostic observes7all materializations vs1correctly player-scoped occurrence; desktop complete verifies exact latest and3-entry suppression.",
+    "browser-bella-scoped": "run-50oOyK overallfailed/partial: completed desktop cell, then mobile initial goto net::ERR_ABORTED. Unknown cause documented in own pre-existing file; no speculative shared-duty ID. Separate same-epoch mobile-only run-xDh0Iq completes that cell. No aggregate retry."
+  },
+  "rawEvidenceDirectory": "artifacts/qa/hv-umm2.253",
+  "rawReceiptFields": "Each receipt preserves exact argv/cwd/start/end/wall/CPU/load/PID/PGID/source hashes/stdoutSHA; later browser receipts also bind callerSHA. Caller epochs1/2 preserved separately.",
+  "heavyTimeline": "heavy-acquisition-observation.json: lockf waiter07:02:19Z; actual npm child born07:03:32Z seconds-resolution OS observation; subsecond acquisition uninstrumented. Larva browser cleaned before weighted acquisition, later browser dispatch follows weighted terminal. Superseded scheduling statement: after observing the free slot, later Poppy workflow started as an independent ordinary frozen-source command and acquired slot1 immediately, with no capacity queue reported; neither process waits on the other. Actual browser receipts and invocation/server observations govern timings.",
+  "poppyLogCustody": "Successful run-rpuIr1 embeds complete positive gainLog64rows and suppressedLog67rows for each viewport. Native gameLogs exports only final suppressed-game67rows per viewport: exactly2separate export files; embedded positive logs remain separately qualified.",
+  "viewedCaptures": [
+    {
+      "file": "larva-second-desktop.png",
+      "pixels": [
+        2880,
+        1800
+      ],
+      "inspected": true,
+      "invocation": "invocations/run-mSYSIR"
+    },
+    {
+      "file": "larva-second-mobile.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "inspected": true,
+      "invocation": "invocations/run-mSYSIR"
+    },
+    {
+      "file": "flower-zero-desktop.png",
+      "pixels": [
+        2880,
+        1800
+      ],
+      "inspected": true,
+      "invocation": "invocations/run-eSrjQw"
+    },
+    {
+      "file": "flower-zero-mobile.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "inspected": true,
+      "invocation": "invocations/run-eSrjQw"
+    }
+  ],
+  "mutantContractEpoch": "Meaningful mutation controls used67060369 contract epoch before Array.at target compatibility correction. Final indexed-accessa39ebb98 contract is behavior-equivalent for these nonempty synthetic hand indices, and final focused24 plus ordinary9645 bind final bytes. Invalid actor helper attempt separately qualified. No unchanged aggregate rerun.",
+  "manualQA": [
+    {
+      "invocation": "run-mSYSIR",
+      "reportSHA256": "3cad37661622f9a16ad6ac1a3dff066c6717af8c41ba04850f5c4423236c1093",
+      "overallOk": true,
+      "selectedCompletedCells": [
+        "desktop",
+        "mobile"
+      ],
+      "serverPid": 38968,
+      "port": 5274,
+      "slot": 1,
+      "caps": []
+    },
+    {
+      "invocation": "run-rpuIr1",
+      "reportSHA256": "4eef0b69aa1d0f6e13443785b65397c3ff53e137d32b0815c953887ed7fcef7d",
+      "overallOk": true,
+      "selectedCompletedCells": [
+        "desktop",
+        "mobile"
+      ],
+      "serverPid": 30820,
+      "port": 5274,
+      "slot": 1,
+      "caps": []
+    },
+    {
+      "invocation": "run-eSrjQw",
+      "reportSHA256": "134bac2e76041b1b2182a72fc3f3faaf0fb41a3ba59bff56d714578ac1ece9df",
+      "overallOk": true,
+      "selectedCompletedCells": [
+        "desktop",
+        "mobile"
+      ],
+      "serverPid": 47915,
+      "port": 5274,
+      "slot": 1,
+      "caps": []
+    },
+    {
+      "invocation": "run-50oOyK",
+      "reportSHA256": "1ba165b9d53ac025d69e9fe75239634d1acd57b50da0bb7a5fe30842c5ca7eac",
+      "overallOk": false,
+      "selectedCompletedCells": [
+        "desktop"
+      ],
+      "serverPid": 55458,
+      "port": 5274,
+      "slot": 1,
+      "caps": []
+    },
+    {
+      "invocation": "run-xDh0Iq",
+      "reportSHA256": "d3de57ad8d70b4ff052ad4ce92416a1db72d918a2560701335ddce313be3ca95",
+      "overallOk": true,
+      "selectedCompletedCells": [
+        "mobile"
+      ],
+      "serverPid": 74700,
+      "port": 5274,
+      "slot": 1,
+      "caps": []
+    }
+  ],
+  "selectedNativeExports": [
+    {
+      "invocation": "run-mSYSIR",
+      "viewport": "desktop",
+      "file": "judged-desktop.jsonl",
+      "gameId": "g9eu7s",
+      "rows": 42
+    },
+    {
+      "invocation": "run-mSYSIR",
+      "viewport": "mobile",
+      "file": "judged-mobile.jsonl",
+      "gameId": "qb3wko",
+      "rows": 42
+    },
+    {
+      "invocation": "run-rpuIr1",
+      "viewport": "desktop",
+      "file": "judged-desktop.jsonl",
+      "gameId": "s3ezhh",
+      "rows": 67
+    },
+    {
+      "invocation": "run-rpuIr1",
+      "viewport": "mobile",
+      "file": "judged-mobile.jsonl",
+      "gameId": "kuqmuk",
+      "rows": 67
+    },
+    {
+      "invocation": "run-eSrjQw",
+      "viewport": "desktop",
+      "file": "judged-desktop.jsonl",
+      "gameId": "t5eamv",
+      "rows": 97
+    },
+    {
+      "invocation": "run-eSrjQw",
+      "viewport": "mobile",
+      "file": "judged-mobile.jsonl",
+      "gameId": "raankb",
+      "rows": 95
+    },
+    {
+      "invocation": "run-50oOyK",
+      "viewport": "desktop",
+      "file": "judged-desktop.jsonl",
+      "gameId": "mhy66f",
+      "rows": 78
+    },
+    {
+      "invocation": "run-xDh0Iq",
+      "viewport": "mobile",
+      "file": "judged-mobile.jsonl",
+      "gameId": "gcunp5",
+      "rows": 79
+    }
+  ],
+  "completeEmbeddedPositiveLogs": [
+    {
+      "invocation": "run-rpuIr1",
+      "viewport": "desktop",
+      "gameId": "cuhywg",
+      "rows": 64,
+      "kind": "complete persisted positive-game read embedded in report; separate from final native export"
+    },
+    {
+      "invocation": "run-rpuIr1",
+      "viewport": "mobile",
+      "gameId": "manadg",
+      "rows": 64,
+      "kind": "complete persisted positive-game read embedded in report; separate from final native export"
+    },
+    {
+      "invocation": "run-50oOyK",
+      "viewport": "desktop",
+      "gameId": "bauw36",
+      "rows": 78,
+      "kind": "complete persisted positive-game read embedded in report; separate from final native export"
+    },
+    {
+      "invocation": "run-xDh0Iq",
+      "viewport": "mobile",
+      "gameId": "3mhbmj",
+      "rows": 78,
+      "kind": "complete persisted positive-game read embedded in report; separate from final native export"
+    }
+  ],
+  "logCustody": "8 selected final native export files represent8 completed consumer\u00d7viewport cells. The additional mobile-labelled file in partialrun-50oOyK duplicates desktopmhy66f78rows and is excluded as mobile proof/uniquegame. Poppy2 and Bella2 positive complete persisted log reads are embedded in their raw reports, separate from final native exports. Every failed/partial invocation and its exports remain retained.",
+  "results": {
+    "ordinaryReview": {
+      "testFiles": 311,
+      "tests": 9645,
+      "exit": 0
+    },
+    "historicalFullAffectedContractsAndCoverage": {
+      "tests": 5803,
+      "exit": 0,
+      "sourceEpoch": "before Array.at-only correction"
+    },
+    "finalFocused": {
+      "cases": 24,
+      "exit": 0
+    },
+    "preflight": {
+      "pass": 8,
+      "skip": 72,
+      "fail": 0
+    },
+    "weightedFuzz": {
+      "games": 300,
+      "steps": 95839,
+      "prompts": 6117,
+      "interactiveReruns": 620,
+      "failures": 0,
+      "engineWallS": 508.0,
+      "engineCpuS": 534.2,
+      "wrapperWallS": 583.7782800197601,
+      "targetIncludedEach": 600,
+      "targetExercised": [
+        719,
+        2453,
+        2024,
+        261
+      ]
+    },
+    "sweep": {
+      "pass": 8,
+      "skip": 72,
+      "fail": 0,
+      "browserLeaseWaitMs": 6,
+      "executionMs": 27937.808375
+    },
+    "judgedCompletedCells": 8,
+    "knipExit": 0,
+    "newPrimitives": 0,
+    "rulesDecisionsAdded": 0,
+    "cardIssuesAdded": 0,
+    "schemaExit": 0,
+    "ownedAndStagedWhitespace": "git diff --check plus staged diff --check required by finalizer; actual results in final-git.json"
+  },
+  "cpuScope": "Receipt CPU covers observed own local child processes; shared Playwright/Chromium CPU and model sampling start are unmeasured. All elapsed helper research/waits/QA/checks remain included in dispatch\u2192Git window.",
+  "browserCustody": "Shared Playwright MCP service127.0.0.1:8931 PID18177 preserved. Own captured provider/server identities cover Poppy corrected, Flower, Bella and subsequent active epochs where observed; earlier native logs retain exact owned PG/port cleanup. Original caller snapshot limitation explicit in caller-epochs.json. Final cleanup receipt observes owned process groups, exact slot records and shared service.",
+  "failurePathEvidence": {
+    "errorRollback": [
+      {
+        "module": "src/engine/effects/primitives/contracts/materialize-zero-spark.contracts.ts",
+        "test": "rolls back a same-step error after materialization without publishing a partial zero setting"
+      },
+      {
+        "module": "src/engine/effects/primitives/contracts/gain-triggering-card-spark.contracts.ts",
+        "test": "publishes no partial gain when a public synthetic step fails for %s"
+      }
+    ],
+    "invalidSelection": {
+      "module": "src/engine/effects/primitives/contracts/materialize-zero-spark.contracts.ts",
+      "test": "reloads and cancels a genuine target prompt, refusing foreign, stale, invalid and concurrent answers",
+      "scope": "Random refs introduce no user selection or new prompt; their result is non-target selection. Existing target protocol is covered for consumed materialize API."
+    },
+    "cancellationStaleReload": [
+      {
+        "module": "src/engine/effects/primitives/contracts/materialize-zero-spark.contracts.ts",
+        "test": "reloads and cancels a genuine target prompt, refusing foreign, stale, invalid and concurrent answers"
+      },
+      {
+        "module": "src/engine/effects/primitives/contracts/rematerialize.contracts.ts",
+        "test": "cancels safely, reloads target selection, rejects competing input and commits each trigger exactly once"
+      },
+      {
+        "actualConsumer": "Flower run-eSrjQw both viewports cancels/reopens and reloads an answerable abandon cost; Larva/Belladonna reload committed effects/history."
+      }
+    ],
+    "partialApplication": {
+      "module": "src/engine/effects/primitives/contracts/materialize-zero-spark.contracts.ts",
+      "test": "changes only the successful capacity cohort and leaves reclaimed and overflow cards alone"
+    },
+    "concurrentActors": [
+      {
+        "module": "src/engine/effects/primitives/contracts/materialize-zero-spark.contracts.ts",
+        "test": "reloads and cancels a genuine target prompt, refusing foreign, stale, invalid and concurrent answers"
+      },
+      {
+        "module": "src/engine/effects/primitives/contracts/gain-triggering-card-spark.contracts.ts",
+        "test": "replays a pending optional gain, refusal and competing actor answers for %s"
+      },
+      {
+        "module": "src/engine/effects/primitives/contracts/random-zone-current-turn.contracts.ts",
+        "test": "%s requires both the abandoning actor and holder, while dissolution follows physical membership"
+      }
+    ],
+    "emptyDefaultRng": [
+      {
+        "module": "src/engine/effects/primitives/contracts/random-zone-current-turn.contracts.ts",
+        "test": "player abandoned: an empty eligible pool consumes no RNG and still resolves its trailing effect",
+        "scope": "same named case expands across both actors/all3membership kinds"
+      },
+      {
+        "module": "src/engine/effects/primitives/contracts/random-zone-current-turn.contracts.ts",
+        "test": "%s preserves default selection, distinct count limits, type and simultaneous cost bounds"
+      },
+      {
+        "mutants": "meaningful missing-membership, corrected-wrong-actor, empty-eager-rng, target-semantics and default-empty; exact failure/restoration receipts retained. Invalid actor-helper attempt explicitly excluded."
+      }
+    ],
+    "historyReset": {
+      "module": "src/engine/effects/primitives/contracts/random-zone-current-turn.contracts.ts",
+      "test": "player abandoned: ordinary and extra turns reset eligibility",
+      "scope": "same named case expands across both actors/all3membership kinds; public engine actions and real next/extra turns"
+    },
+    "rematerializeState": {
+      "module": "src/engine/effects/primitives/contracts/rematerialize.contracts.ts",
+      "test": "keeps ready and exhausted instances, position, gained spark, variant and floating effects even at capacity",
+      "scope": "Actual Belladonna Ending observations include subsequent global cleanup; operation-level preservation asserted by this existing synthetic public contract."
+    },
+    "notApplicable": "No new event/op, persisted state/view shape, prompt kind, generic history allocation or UI surface. Count validation/default player/RNG loop/order/stream and existing membership helper remain unchanged. Existing shared runner, support and fixtures are read-only."
+  },
+  "failurePathRunBinding": "Existing listed contracts executed in historical full affected5803 and final ordinary review-first9645; own final24 binds current indexed-access contract. All pass; exact source hashes and raw receipts retained.",
+  "cleanupReceipt": {
+    "file": "cleanup-final.json",
+    "SHA256": "b794b52dff9d69f0b06147955dc60b7001ffe85e5db3d431c04af543b21de8a2",
+    "ownGroupsSettled": true,
+    "ownProviderAndServerRecordAbsent": true,
+    "sharedServicePreserved": true
+  },
+  "implementWindowScope": "Actual first helper dispatch through tracked near-Git cutoff, including research, all failures/corrections, heavy queue/execution, browser waits and verification; final-git.json retains actual final Git tail and inclusive total. No integration/update occurred during helper work.",
+  "testDeltaInterpretation": "No configured *.test.ts entrypoints or test lines added. One private auto-discovered plain contracts module141lines/24cases added; no scenarios/support/fixtures added.",
+  "frictionRecoveryWindows": [
+    {
+      "failedAttempt": "browser-larva",
+      "nextConcreteCorrection": "browser-larva-corrected",
+      "start": "2026-10-15T07:02:08.075707+00:00",
+      "end": "2026-10-15T07:02:46.048088+00:00",
+      "seconds": 37.972381
+    },
+    {
+      "failedAttempt": "browser-poppy",
+      "nextConcreteCorrection": "browser-poppy-corrected",
+      "start": "2026-10-15T07:10:34.968962+00:00",
+      "end": "2026-10-15T07:13:41.260344+00:00",
+      "seconds": 186.291382
+    },
+    {
+      "failedAttempt": "browser-flower",
+      "nextConcreteCorrection": "browser-flower-corrected",
+      "start": "2026-10-15T07:16:00.997921+00:00",
+      "end": "2026-10-15T07:18:48.185572+00:00",
+      "seconds": 167.187651
+    },
+    {
+      "failedAttempt": "browser-bella",
+      "nextConcreteCorrection": "browser-bella-corrected",
+      "start": "2026-10-15T07:20:37.464361+00:00",
+      "end": "2026-10-15T07:22:02.685774+00:00",
+      "seconds": 85.221413
+    },
+    {
+      "failedAttempt": "browser-bella-corrected",
+      "nextConcreteCorrection": "browser-bella-scoped",
+      "start": "2026-10-15T07:22:02.685774+00:00",
+      "end": "2026-10-15T07:24:12.594524+00:00",
+      "seconds": 129.90875
+    },
+    {
+      "failedAttempt": "browser-bella-scoped",
+      "nextConcreteCorrection": "browser-bella-mobile-fresh",
+      "start": "2026-10-15T07:24:12.594524+00:00",
+      "end": "2026-10-15T07:25:51.684410+00:00",
+      "seconds": 99.089886
+    }
+  ],
+  "frictionRecoveryWindowMinutes": 11.76119105
+}

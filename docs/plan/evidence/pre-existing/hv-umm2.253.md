@@ -1,0 +1,8 @@
+# hv-umm2.253 observed QA navigation abort
+
+- Observation: run-50oOyK completes Belladonna's desktop positive/reload/negative workflow. Its initial mobile `qa.goto` to the Dreamsign lab reports `net::ERR_ABORTED` while waiting for DOMContentLoaded. The invocation is failed/partial; its completed desktop cell remains distinct from the failed mobile transition. The report's Caps buffer is empty.
+- Source: base `b9439235000e80c0db27a5f854b1f3daeb990b15`; unchanged eight-file source bundle `02181b008f1a3da3f225494896f3252bb40e2f9ac2cfd1b8cd91903ba54c42cd` in `source-epoch-final.json`. Caller `judged-epoch7.mjs` SHA256 `da30405cee7d754bc5fc8d938a22fe5fd9036dbe9805f20fbb1775ea5824df8f`.
+- Evidence: `browser-bella-scoped.receipt.json` SHA256 `f99493508fbf67b1b903e35a83a0a368b19a3d937959da342ca8849b8cb69684`; `browser-bella-scoped.stdout`; `invocations/run-50oOyK/judged.result.json`; native navigation diagnostics and the actual per-viewport gameLogs therein. Window: 2026-10-15T07:24:12.594524Z–07:25:33.288650Z.
+- Cause: unestablished. The observed transport/navigation error supplies no product or provider root cause. The caller's source binding and the exact failed navigation are preserved without converting the invocation to a pass.
+- Local disposition: one separate fresh-context mobile-only diagnostic uses the same epoch7 caller with `--viewports mobile`; its result is independent cell evidence. The complete original both-actor all-variant sweep remains required.
+- Shared-duty disposition: No exact source-bound shared-duty ID is established for this particular abort. The parent executor performs the normal friction/shared-duty audit at its next dispatch boundary.

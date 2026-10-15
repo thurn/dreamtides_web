@@ -476,13 +476,15 @@ export function topOfDeck(count = 1, filter: CardFilter = {}, player: PlayerRef 
  * resolves; `costGreaterThan` keeps only cards whose copiable cost is above
  * that value ("with higher cost"); `costExactly` keeps only equal copiable
  * costs; `costLessThan` keeps only strictly lower copiable costs. All
- * resolving bounds apply together with the filter.
+ * resolving bounds apply together with the filter. `thisTurn` intersects
+ * current-zone physical members with that player's successful occurrences
+ * in the current global turn, before any random draw.
  */
 export function randomIn(
   zone: CountedZone,
   count: number,
   filter: CardFilter = {},
-  options: { readonly player?: PlayerRef; readonly costGreaterThan?: ValueExpr; readonly costExactly?: ValueExpr; readonly costLessThan?: ValueExpr } = {},
+  options: { readonly player?: PlayerRef; readonly thisTurn?: ZoneEverySpec["thisTurn"]; readonly costGreaterThan?: ValueExpr; readonly costExactly?: ValueExpr; readonly costLessThan?: ValueExpr } = {},
 ): ZoneRandomSpec {
   if (!Number.isSafeInteger(count) || count < 1) throw new Error("randomIn count must be a positive safe integer");
   return {
@@ -492,6 +494,7 @@ export function randomIn(
     player: options.player ?? "you",
     filter,
     count,
+    ...(options.thisTurn === undefined ? {} : { thisTurn: options.thisTurn }),
     ...(options.costGreaterThan === undefined ? {} : { costGreaterThan: options.costGreaterThan }),
     ...(options.costExactly === undefined ? {} : { costExactly: options.costExactly }),
     ...(options.costLessThan === undefined ? {} : { costLessThan: options.costLessThan }),

@@ -795,6 +795,7 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
       const exact = ref.costExactly === undefined ? null : evaluate(ctx, ref.costExactly, env);
       const below = ref.costLessThan === undefined ? null : evaluate(ctx, ref.costLessThan, env);
       const pool = state.sides[side][ref.zone].filter((id) => matches(id)
+        && (ref.thisTurn === undefined || matchesCurrentTurnMembership(state, id, ref.thisTurn, side))
         && (above === null || copiableCostOf(state, catalog, id) > above)
         && (exact === null || copiableCostOf(state, catalog, id) === exact)
         && (below === null || copiableCostOf(state, catalog, id) < below));

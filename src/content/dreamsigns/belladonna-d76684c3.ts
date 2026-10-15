@@ -1,4 +1,8 @@
 import { dreamsign } from "../define";
+import { lastMaterialized, materializedThisTurn, thisTurn } from "../../engine/dsl/builders";
+import { atEndOfTurn, triggered } from "../../engine/dsl/triggers";
+import { rematerialize } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 
 export default dreamsign({
   id: "d76684c3-797e-44ae-a2ba-333e77d46a4d",
@@ -15,5 +19,6 @@ export default dreamsign({
     "eb397537-8a0b-4969-924b-baee5137094c",
   ],
   tags: ["Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(atEndOfTurn("you"), rematerialize(lastMaterialized()), { condition: thisTurn(materializedThisTurn(), 2, 2) })],
+  verifiedText: expectedVerifiedText("At the end of your turn, if you materialized 2 characters this turn, rematerialize the last one."),
 });

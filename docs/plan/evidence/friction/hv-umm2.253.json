@@ -1,0 +1,52 @@
+{
+  "bead": "hv-umm2.253",
+  "phase": 5,
+  "implementMin": 38.62589185,
+  "implementWindow": {
+    "start": "2026-10-15T06:54:35.497000+00:00",
+    "end": "2026-10-15T07:33:13.050511+00:00"
+  },
+  "localValidationS": {
+    "browser-bella": 42.15451908111572,
+    "browser-bella-corrected": 37.031810998916626,
+    "browser-bella-mobile-fresh": 62.305964946746826,
+    "browser-bella-scoped": 80.69844198226929,
+    "browser-flower": 71.12392592430115,
+    "browser-flower-corrected": 92.78958797454834,
+    "browser-larva": 5.778042793273926,
+    "browser-larva-corrected": 29.38308310508728,
+    "browser-poppy": 99.92840600013733,
+    "browser-poppy-corrected": 116.91779780387878,
+    "contracts-final": 22.728694200515747,
+    "focused-corrected": 16.28173017501831,
+    "focused-final": 7.515326023101807,
+    "focused-first": 12.56158995628357,
+    "fuzz300": 583.7782800197601,
+    "knip": 7.020441055297852,
+    "mutant-default-empty": 9.696404933929443,
+    "mutant-empty-eager-rng": 11.26985502243042,
+    "mutant-missing-membership": 11.556352138519287,
+    "mutant-target-semantics": 10.095558166503906,
+    "mutant-wrong-actor": 9.217995882034302,
+    "mutant-wrong-actor-corrected": 9.70589280128479,
+    "preflight": 2.1451592445373535,
+    "review-first": 78.02511477470398,
+    "sweep": 28.075523853302002,
+    "typecheck-first": 18.480841875076294,
+    "schema-final": 0.07339739799499512,
+    "schema": 0.11517715454101562
+  },
+  "hostLoad": 8.2529296875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 11.76119105,
+      "note": "Sum of six disjoint failed-caller dispatch\u2192concrete-correction dispatch windows, including diagnostics/coordination and the completed desktop portion of a later failed transition. Probe readiness, open setup rail, Ending cleanup scope, actor-scoped observations and one fresh mobile context. Compound elapsed windows are not pure wasted time. All attempts preserved; interval provenance in measurements."
+    }
+  ]
+}
