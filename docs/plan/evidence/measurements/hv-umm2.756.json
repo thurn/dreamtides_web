@@ -1,0 +1,2869 @@
+{
+  "bead": "hv-umm2.756",
+  "kind": "evidence-only bounded external-provider diagnosis",
+  "repositoryBase": "7db4bd4930d07612a5d84a6c8267c13f51d8cd06",
+  "incidentSource": "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+  "incidentBoundaryFilesIdentical": true,
+  "dispatch": "2026-10-15T18:23:13.285Z",
+  "claim": "2026-10-15T18:21:02.969528Z",
+  "recordCutoff": "2026-10-15T18:38:17.676984+00:00",
+  "sampling": "UNKNOWN",
+  "conclusion": {
+    "observed": "two process-bound provider Node heap exhaustion incidents",
+    "candidate": "installed Tab request-object collection persists across supported unsafe raw-page navigations",
+    "repositoryOwnedOomCause": "not demonstrated",
+    "dominantRetainingGraph": "UNKNOWN",
+    "historicalExactInstalledHash": "UNKNOWN",
+    "growthRate": "UNKNOWN",
+    "performanceImprovement": "not claimed"
+  },
+  "sourceReadManifest": {
+    "bead": "hv-umm2.756",
+    "base": "7db4bd4930d07612a5d84a6c8267c13f51d8cd06",
+    "incident_source": "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+    "workspace": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+    "dispatch": "2026-10-15T18:23:13.285Z",
+    "claim": "2026-10-15T18:21:02.969528Z",
+    "sourceReads": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/README.md",
+        "range": [
+          162,
+          245
+        ],
+        "source_sha256": "f80a714072e18d76e885e572996d0f6dc557f1ae50b05224b92609c76d4c01e2",
+        "source_lines": 1066,
+        "receipt": "/tmp/756-root/browser-policy.receipt.json",
+        "stdout_path": "/tmp/756-root/browser-policy.stdout",
+        "stdout_sha256": "3967e5521e3eafe3e481f09b43f6694a6de8d3f438e07a0da6d0fcb6dbead274",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/docs/plan/workflow.md",
+        "range": [
+          1369,
+          1510
+        ],
+        "source_sha256": "711d807bba2675ba8519bb9219e6eb78f78d0ec450d08834fa950c5bb44b759e",
+        "source_lines": 1906,
+        "receipt": "/tmp/756-root/browser-workflow.receipt.json",
+        "stdout_path": "/tmp/756-root/browser-workflow.stdout",
+        "stdout_sha256": "18aba4e3c1fc5711bac8e8d3a83bfd58d7ddd0b39b3f60d5e448f8e735312002",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/docs/plan/workflow.md",
+        "range": [
+          1202,
+          1276
+        ],
+        "source_sha256": "711d807bba2675ba8519bb9219e6eb78f78d0ec450d08834fa950c5bb44b759e",
+        "source_lines": 1906,
+        "receipt": "/tmp/756-root/friction-policy.receipt.json",
+        "stdout_path": "/tmp/756-root/friction-policy.stdout",
+        "stdout_sha256": "d2fa20b88f8440b543ae718d059d11300b6df0e97095bcf2fca7ad0c57306c78",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/scenarios/card-lab-play.mjs",
+        "range": [
+          1,
+          170
+        ],
+        "source_sha256": "bb62af07c315616f9868c986b54a1fe23a166d3cda4607e5ab8a89b3f13ba724",
+        "source_lines": 304,
+        "receipt": "/tmp/756-root/lab1.receipt.json",
+        "stdout_path": "/tmp/756-root/lab1.stdout",
+        "stdout_sha256": "d64308cad4147cf9790920046b28a8a6ba5ba8ce5d557dfb052e9c05a2ae3f92",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/scenarios/card-lab-play.mjs",
+        "range": [
+          171,
+          304
+        ],
+        "source_sha256": "bb62af07c315616f9868c986b54a1fe23a166d3cda4607e5ab8a89b3f13ba724",
+        "source_lines": 304,
+        "receipt": "/tmp/756-root/lab2.receipt.json",
+        "stdout_path": "/tmp/756-root/lab2.stdout",
+        "stdout_sha256": "b7d52245e58026bc630467098415b7aeafb598df3915d6fde3b37d49c8c63c31",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/prelude.mjs",
+        "range": [
+          1360,
+          1515
+        ],
+        "source_sha256": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+        "source_lines": 2148,
+        "receipt": "/tmp/756-root/prelude-finish.receipt.json",
+        "stdout_path": "/tmp/756-root/prelude-finish.stdout",
+        "stdout_sha256": "3ee89a8b3b82580c548a2acf5a32b33ca91e718418ac96ab983b4ecea662937f",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/prelude.mjs",
+        "range": [
+          1090,
+          1220
+        ],
+        "source_sha256": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+        "source_lines": 2148,
+        "receipt": "/tmp/756-root/prelude-log.receipt.json",
+        "stdout_path": "/tmp/756-root/prelude-log.stdout",
+        "stdout_sha256": "eece988a117fc5bd5c833a3ae83e9120f1deaa7e494e32574627e01af7ec59a4",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/prelude.mjs",
+        "range": [
+          715,
+          914
+        ],
+        "source_sha256": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+        "source_lines": 2148,
+        "receipt": "/tmp/756-root/prelude-nav.receipt.json",
+        "stdout_path": "/tmp/756-root/prelude-nav.stdout",
+        "stdout_sha256": "4fe3da3e222067202309ffc9214d8b27eb84bd9c99ab3751b9343b950b575341",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/prelude.mjs",
+        "range": [
+          489,
+          715
+        ],
+        "source_sha256": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+        "source_lines": 2148,
+        "receipt": "/tmp/756-root/prelude1.receipt.json",
+        "stdout_path": "/tmp/756-root/prelude1.stdout",
+        "stdout_sha256": "f567dd410899451f44e57205720a1af6985bf0b8ac900632b82f507872086b55",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          65415,
+          65620
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-backend.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-backend.stdout",
+        "stdout_sha256": "3ba7cd93395a8df2e0e67f25e696c956d314130dda17b16bb59cfefeeb96650f",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          64740,
+          64980
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-context1.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-context1.stdout",
+        "stdout_sha256": "da0709d0f311b52f53ef4d0b1534ebfe7de185155d718860a1f2f04a4c03201f",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          73085,
+          73165
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-factory.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-factory.stdout",
+        "stdout_sha256": "0027cf0a91055ee1facb6bb4d389caa9fd3f267b37ad38a21ac9d4b8e9a76729",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          71270,
+          71440
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-http.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-http.stdout",
+        "stdout_sha256": "8e56c677738c5a5d7ade1ed13eac9e7021657c093da6003ebed220b0de99e673",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          71445,
+          71700
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-mcp-server.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-mcp-server.stdout",
+        "stdout_sha256": "b9f33213fc296568c22b8162e2680c31db7d7a0725453124e0099945d689a09c",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          66610,
+          66840
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-network-contract.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-network-contract.stdout",
+        "stdout_sha256": "c050a829df12d32f72b72792e2c2a26e38f801076c46fdba8de94463323b9c0a",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          65210,
+          65420
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-response1.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-response1.stdout",
+        "stdout_sha256": "14435be7b8d9b30e2788f8392cc5c123af85230da10452148f930273b99f4d8a",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          65125,
+          65212
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-response2.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-response2.stdout",
+        "stdout_sha256": "5e95268333b7f8f67c56c7055cfeb6b61e9e768f26f38b2b8c558da196e2c62f",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          64300,
+          64510
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-tab1.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-tab1.stdout",
+        "stdout_sha256": "a04e5d3fd5fde3835f17375549e0426413d8de4d8ce2a36ebd51ef6f98ca4240",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          64510,
+          64740
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-tab2.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-tab2.stdout",
+        "stdout_sha256": "b3d947bf7e254c339f689b14f73d125a4d4ebc5a9001b4d363770be4377ffc23",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          63745,
+          63910
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-tool-contract.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-tool-contract.stdout",
+        "stdout_sha256": "2ec77e6bd92cbd6d9270dc5ce58e8d1f4a72d60cc1ce30a5fceb43efbe2904f2",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+        "range": [
+          66950,
+          67090
+        ],
+        "source_sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+        "source_lines": 75314,
+        "receipt": "/tmp/756-root/provider-unsafe.receipt.json",
+        "stdout_path": "/tmp/756-root/provider-unsafe.stdout",
+        "stdout_sha256": "f9bc93d7749daf2b351c0feff879dae4e597b8f2819df5c381a009dfee6592db",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/run-scenario.mjs",
+        "range": [
+          1,
+          240
+        ],
+        "source_sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "source_lines": 827,
+        "receipt": "/tmp/756-root/runner1.receipt.json",
+        "stdout_path": "/tmp/756-root/runner1.stdout",
+        "stdout_sha256": "646aa226052ba7f41b72105ac42ab064eb802bbc86946bd82744e01f6f4be13a",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/run-scenario.mjs",
+        "range": [
+          330,
+          510
+        ],
+        "source_sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "source_lines": 827,
+        "receipt": "/tmp/756-root/runner2.receipt.json",
+        "stdout_path": "/tmp/756-root/runner2.stdout",
+        "stdout_sha256": "f9d3bbadfea7842602e4d5dae7104c7d1951ca81f00aaaf64342ce87b0870a91",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/run-scenario.mjs",
+        "range": [
+          515,
+          670
+        ],
+        "source_sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "source_lines": 827,
+        "receipt": "/tmp/756-root/runner3.receipt.json",
+        "stdout_path": "/tmp/756-root/runner3.stdout",
+        "stdout_sha256": "97a87ddf9a0040f75131e1b77a0bfda57b2e28e9bd7c5f154218ec0e4784b7ed",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/run-scenario.mjs",
+        "range": [
+          670,
+          827
+        ],
+        "source_sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "source_lines": 827,
+        "receipt": "/tmp/756-root/runner4.receipt.json",
+        "stdout_path": "/tmp/756-root/runner4.stdout",
+        "stdout_sha256": "a8712571133e183a119515c88d96283cf777696c156b502bdbef77a8e86726db",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/screenshot-runtime.mjs",
+        "range": [
+          1,
+          260
+        ],
+        "source_sha256": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8",
+        "source_lines": 275,
+        "receipt": "/tmp/756-root/runtime1.receipt.json",
+        "stdout_path": "/tmp/756-root/runtime1.stdout",
+        "stdout_sha256": "e0598e3c08c0e73ee5b2cb27eadacbcbe92e54e8090eca20ebe84c6bac660f82",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/run-scenario.mjs",
+        "range": [
+          240,
+          330
+        ],
+        "source_sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "source_lines": 827,
+        "receipt": "/tmp/756-root/source-gaps.receipt.json",
+        "stdout_path": "/tmp/756-root/source-gaps.stdout",
+        "stdout_sha256": "ca96ab7edf1a32a1759bce70a32e0f60b99daa54c1b12fd0d78f43562462a37e",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/scripts/qa/card-sweep.mjs",
+        "range": [
+          110,
+          292
+        ],
+        "source_sha256": "e47a10d104a7bd1d9a11308067723413810c87c7607e17cd38ebd01c1a2995dd",
+        "source_lines": 292,
+        "receipt": "/tmp/756-root/sweep1.receipt.json",
+        "stdout_path": "/tmp/756-root/sweep1.stdout",
+        "stdout_sha256": "5c474ecf3041a837862c0250b73f1e803ba0478c1eb37388838b97072e5538db",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/docs/plan/workflow.md",
+        "range": [
+          996,
+          1168
+        ],
+        "source_sha256": "711d807bba2675ba8519bb9219e6eb78f78d0ec450d08834fa950c5bb44b759e",
+        "source_lines": 1906,
+        "receipt": "/tmp/756-root/validation-review-policy.receipt.json",
+        "stdout_path": "/tmp/756-root/validation-review-policy.stdout",
+        "stdout_sha256": "ef7f2d11686179515d7e6ab79c28179cb12c7f8ac5eae3b9a6f95d46f37031b1",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.llms/skills/wt/SKILL.md",
+        "range": [
+          1,
+          190
+        ],
+        "source_sha256": "5212b7d5595fa0d30c140b27df9d80f61ee381d7715165ae5a947ec9c3b7ddaf",
+        "source_lines": 626,
+        "receipt": "/tmp/756-root/wt1.receipt.json",
+        "stdout_path": "/tmp/756-root/wt1.stdout",
+        "stdout_sha256": "23649f194ab374700eb5f3a30569901d7a3ee0fe107245e948896b4003d32bcf",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.llms/skills/wt/SKILL.md",
+        "range": [
+          191,
+          309
+        ],
+        "source_sha256": "5212b7d5595fa0d30c140b27df9d80f61ee381d7715165ae5a947ec9c3b7ddaf",
+        "source_lines": 626,
+        "receipt": "/tmp/756-root/wt2.receipt.json",
+        "stdout_path": "/tmp/756-root/wt2.stdout",
+        "stdout_sha256": "b2e5121707a509b8fd953ea21a73165401ea7979eaad6578992e2d6ba4c1558b",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/.llms/skills/wt/SKILL.md",
+        "range": [
+          501,
+          626
+        ],
+        "source_sha256": "5212b7d5595fa0d30c140b27df9d80f61ee381d7715165ae5a947ec9c3b7ddaf",
+        "source_lines": 626,
+        "receipt": "/tmp/756-root/wt3.receipt.json",
+        "stdout_path": "/tmp/756-root/wt3.stdout",
+        "stdout_sha256": "c34428eff88d42944a4ca13554cb077e4aa440c1443aef44a30ac890c17722d5",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/docs/plan/README.md",
+        "range": [
+          148,
+          334
+        ],
+        "source_sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+        "source_lines": 334,
+        "receipt": "/tmp/756-root/policies1.receipt.json",
+        "stdout_path": "/tmp/756-root/policies1.stdout",
+        "stdout_sha256": "b46b503b5fe707c0b8bc9fdc9e79d8331aa2fd68136aa3e7101215c0c98f6760",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/docs/plan/workflow.md",
+        "range": [
+          249,
+          408
+        ],
+        "source_sha256": "711d807bba2675ba8519bb9219e6eb78f78d0ec450d08834fa950c5bb44b759e",
+        "source_lines": 1906,
+        "receipt": "/tmp/756-root/policies1.receipt.json",
+        "stdout_path": "/tmp/756-root/policies1.stdout",
+        "stdout_sha256": "b46b503b5fe707c0b8bc9fdc9e79d8331aa2fd68136aa3e7101215c0c98f6760",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/docs/plan/decisions.md",
+        "range": [
+          520,
+          561
+        ],
+        "source_sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+        "source_lines": 1170,
+        "receipt": "/tmp/756-root/policies1.receipt.json",
+        "stdout_path": "/tmp/756-root/policies1.stdout",
+        "stdout_sha256": "b46b503b5fe707c0b8bc9fdc9e79d8331aa2fd68136aa3e7101215c0c98f6760",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/docs/plan/decisions.md",
+        "range": [
+          87,
+          102
+        ],
+        "source_sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+        "source_lines": 1170,
+        "receipt": "/tmp/756-root/policies1.receipt.json",
+        "stdout_path": "/tmp/756-root/policies1.stdout",
+        "stdout_sha256": "b46b503b5fe707c0b8bc9fdc9e79d8331aa2fd68136aa3e7101215c0c98f6760",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/docs/plan/decisions.md",
+        "range": [
+          591,
+          662
+        ],
+        "source_sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+        "source_lines": 1170,
+        "receipt": "/tmp/756-root/policies-repair.receipt.json",
+        "stdout_path": "/tmp/756-root/policies-repair.stdout",
+        "stdout_sha256": "8cee62418587165ed41f12ea864f2afa53c1defde09c1b27d2b0cff5a8cb3c56",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/docs/plan/decisions.md",
+        "range": [
+          762,
+          804
+        ],
+        "source_sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+        "source_lines": 1170,
+        "receipt": "/tmp/756-root/policies-repair.receipt.json",
+        "stdout_path": "/tmp/756-root/policies-repair.stdout",
+        "stdout_sha256": "8cee62418587165ed41f12ea864f2afa53c1defde09c1b27d2b0cff5a8cb3c56",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/node_modules/@modelcontextprotocol/sdk/dist/esm/client/streamableHttp.js",
+        "range": [
+          270,
+          295
+        ],
+        "source_sha256": "728ae66a1cdeb8bfabc4c0fe2b94ec1e4f7a5575d6c8d269be04229a8f858577",
+        "source_lines": 477,
+        "receipt": "/tmp/756-root/sdk-contracts.receipt.json",
+        "stdout_path": "/tmp/756-root/sdk-contracts.stdout",
+        "stdout_sha256": "3456ee9872d192f0e994b57c77da009fa5a965f05e163f5b5979a22c5e3691a9",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/node_modules/@modelcontextprotocol/sdk/dist/esm/client/streamableHttp.js",
+        "range": [
+          425,
+          465
+        ],
+        "source_sha256": "728ae66a1cdeb8bfabc4c0fe2b94ec1e4f7a5575d6c8d269be04229a8f858577",
+        "source_lines": 477,
+        "receipt": "/tmp/756-root/sdk-contracts.receipt.json",
+        "stdout_path": "/tmp/756-root/sdk-contracts.stdout",
+        "stdout_sha256": "3456ee9872d192f0e994b57c77da009fa5a965f05e163f5b5979a22c5e3691a9",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/node_modules/@modelcontextprotocol/sdk/dist/esm/shared/protocol.js",
+        "range": [
+          248,
+          270
+        ],
+        "source_sha256": "8de524602541771e084f7185e7d0fc418b8142a9cae1bd80a3ee7c70e9a9e132",
+        "source_lines": 1107,
+        "receipt": "/tmp/756-root/sdk-contracts.receipt.json",
+        "stdout_path": "/tmp/756-root/sdk-contracts.stdout",
+        "stdout_sha256": "3456ee9872d192f0e994b57c77da009fa5a965f05e163f5b5979a22c5e3691a9",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/node_modules/@modelcontextprotocol/sdk/dist/esm/shared/protocol.js",
+        "range": [
+          456,
+          500
+        ],
+        "source_sha256": "8de524602541771e084f7185e7d0fc418b8142a9cae1bd80a3ee7c70e9a9e132",
+        "source_lines": 1107,
+        "receipt": "/tmp/756-root/sdk-contracts.receipt.json",
+        "stdout_path": "/tmp/756-root/sdk-contracts.stdout",
+        "stdout_sha256": "3456ee9872d192f0e994b57c77da009fa5a965f05e163f5b5979a22c5e3691a9",
+        "returned": "complete",
+        "kind": "semantic bounded source read"
+      }
+    ],
+    "installed_manifest": "/tmp/756-root/installed-source-manifest.json",
+    "incident_manifests": [
+      "/tmp/756-root/parent-retained-incident-manifest.json",
+      "/tmp/756-root/extra-custody.json"
+    ],
+    "limitations": [
+      "Initial six read commands and scratch-wrapper bootstrap have only host tool receipts; PID/PG/precise timestamps UNKNOWN. Do not retrofill.",
+      "entry-read broad policy dump clipped. Required Areas, validation/review/friction/browser sections and decisions reread in bounded untruncated receipts; unrelated workflow sections excluded. AGENTS145lines and planREADME1\u2013147 were returned before the first clipping boundary; README148\u2013334 fully reread.",
+      "policies2 broad dump clipped. validation-review-policy/friction-policy/policies-repair/wt1/wt2/wt3 supply bounded repairs for mandatory sections; wt310\u2013500 returned in original tail, no workflow-native authority delegated to helper.",
+      "boundary-index/provider-index/incident-files/native-filter clipped inventories are discovery only. Provider class and all diagnosis-relevant exact source ranges have separate complete semantic receipts. Native kjgt description/source-backed delivered repair reused; unrelated coordination note detail excluded.",
+      "retained-custody atlas_generated row was clipped in combined output. Atlas content is unrelated inventory-only; complete selected game identity/debug/last event records are returned, original bytes remain frozen.",
+      "Full native sink has hash/byte custody, not full semantic read. Only selected game6ayjxj records are semantically inspected.",
+      "Current installed-source bytes are observed after the crash; matching path/old mtime does not establish historical exact package bytes.",
+      "All unlisted source ranges are inventory-only or outside the bounded investigation; no claim of whole-repository or whole-provider audit."
+    ],
+    "diagnosticProposal": {
+      "path": "/tmp/756-root/provider-tab-diagnostic-v01.mjs.proposed",
+      "sha256": "0598411359625c4c4c59b8004f54c4cbb1981105f253bb5dfb68a05ec970155c",
+      "executed": false
+    }
+  },
+  "sourceReadRepairs": {
+    "bead": "hv-umm2.756",
+    "original_manifest": "/tmp/756-root/stage1-source-manifest.json",
+    "original_manifest_sha256": "b8d2b1091921907506e76304b783766b062609a797b7d15484f7520638ce93fb",
+    "supersedes": "Initial broad clipped policy calls do not establish complete-call read proof for AGENTS1\u2013145, planREADME1\u2013147 or wt310\u2013500. These exact independent complete returned reads repair that gap; original manifest retained unchanged.",
+    "readRepairs": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/AGENTS.md",
+        "range": [
+          1,
+          145
+        ],
+        "source_sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+        "source_lines": 145,
+        "receipt": "/tmp/756-root/agents-repair.receipt.json",
+        "stdout_sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+        "stdout_bytes": 8068,
+        "returned": "complete untruncated tool result",
+        "exit": 0
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root/docs/plan/README.md",
+        "range": [
+          1,
+          147
+        ],
+        "source_sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+        "source_lines": 334,
+        "receipt": "/tmp/756-root/plan-readme-repair.receipt.json",
+        "stdout_sha256": "59a05bf0b2b6ae0458e83e33714ff09945f2d20d1a588932441e85f5a9ff3c6c",
+        "stdout_bytes": 8689,
+        "returned": "complete untruncated tool result",
+        "exit": 0
+      },
+      {
+        "path": "/Users/dthurn/.llms/skills/wt/SKILL.md",
+        "range": [
+          310,
+          500
+        ],
+        "source_sha256": "5212b7d5595fa0d30c140b27df9d80f61ee381d7715165ae5a947ec9c3b7ddaf",
+        "source_lines": 626,
+        "receipt": "/tmp/756-root/wt-read-repair.receipt.json",
+        "stdout_sha256": "b56fadbb98c8f99d6e3e7ca527e9ac67d8c15d1cd67039ad5eff6e355d925deb",
+        "stdout_bytes": 10469,
+        "returned": "complete untruncated tool result",
+        "exit": 0
+      }
+    ],
+    "source_effects": false,
+    "diagnostic_executed": false
+  },
+  "installed": [
+    {
+      "source": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js",
+      "snapshot": "/tmp/756-root/installed-snapshot/coreBundle.js",
+      "bytes": 3449273,
+      "sha256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+      "mtime_ns": 1787014692821498262
+    },
+    {
+      "source": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/@playwright/mcp/package.json",
+      "snapshot": "/tmp/756-root/installed-snapshot/mcp-package.json",
+      "bytes": 1530,
+      "sha256": "f42e3f730da45db21bd2edfb01679a6a33a56126514dae09444d2ca88123ef8b",
+      "mtime_ns": 1787014692807512018
+    },
+    {
+      "source": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/package.json",
+      "snapshot": "/tmp/756-root/installed-snapshot/core-package.json",
+      "bytes": 893,
+      "sha256": "cc20d8407732820e1a334b890b204360aabf5e675ebfe0d2881bc2f54d32e681",
+      "mtime_ns": 1787014692829559249
+    },
+    {
+      "source": "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/@playwright/mcp/cli.js",
+      "snapshot": "/tmp/756-root/installed-snapshot/cli.js",
+      "bytes": 1192,
+      "sha256": "70dab09ab9a5bc1943fb78e2655f00af7349f9931073833919f19c5d7d786ad6",
+      "mtime_ns": 1787014692807243239
+    },
+    {
+      "source": "/Users/dthurn/.local/share/codex-playwright-mcp/config.json",
+      "snapshot": "/tmp/756-root/installed-snapshot/config.json",
+      "bytes": 292,
+      "sha256": "045f89dfe269ef9b2c5de18bfa482adb47e27297a01e4af2eddda41dc8939a5b",
+      "mtime_ns": 1788813645265680946
+    },
+    {
+      "source": "/Users/dthurn/Library/LaunchAgents/com.dthurn.codex.playwright-mcp.plist",
+      "snapshot": "/tmp/756-root/installed-snapshot/launchagent.plist",
+      "bytes": 1238,
+      "sha256": "909295263d24ded1f8b5cd24b7b6f8ece62f8f21a0cbaee36118cf863bae5574",
+      "mtime_ns": 1787014754540617268
+    }
+  ],
+  "parentIncidentCustody": {
+    "at": "2026-10-15T18:23:50.947804+00:00",
+    "source": "peer278 retained provider incident files, read-only copied without other context/record mutation",
+    "files": [
+      {
+        "source": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.278/provider-recovery/provider-crash-v01.ips",
+        "snapshot": "/tmp/756-root/retained278/provider-crash-v01.ips",
+        "bytes": 33349,
+        "sha256": "e08675da6f9dcbd63aef9623d5daf8433dd2fd777901ff3594322af1d4e9d065"
+      },
+      {
+        "source": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.278/provider-recovery/provider-incident-archive-v03.json",
+        "snapshot": "/tmp/756-root/retained278/provider-incident-archive-v03.json",
+        "bytes": 4071,
+        "sha256": "53cfc3ad2f6fe5a5aabdc4dd0b939e97fce37c70f9f9d3562cea847840c7fc7c"
+      },
+      {
+        "source": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.278/provider-recovery/provider-recovery-v03-evidence.json",
+        "snapshot": "/tmp/756-root/retained278/provider-recovery-v03-evidence.json",
+        "bytes": 2198,
+        "sha256": "c4329bcaf96aa7d0614d06bc56978c863746ae9525f2b244c7af63967510a987"
+      },
+      {
+        "source": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.278/provider-recovery/provider-retained-owner-v01.json",
+        "snapshot": "/tmp/756-root/retained278/provider-retained-owner-v01.json",
+        "bytes": 417,
+        "sha256": "af8fefd10b1e0a1912c0c06327ff60a861c750e27f2c2f44262d87d5a588cd36"
+      },
+      {
+        "source": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.278/provider-recovery/provider-service-log-v01.txt",
+        "snapshot": "/tmp/756-root/retained278/provider-service-log-v01.txt",
+        "bytes": 13468,
+        "sha256": "d779180ab510464a9e4be4f521718977f52ca7c7cd42076fb1c87a717541b06f"
+      }
+    ]
+  },
+  "extraIncidentCustody": [
+    {
+      "source": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.278/native-sink/sweep-resonant-v01-custody.json",
+      "snapshot": "/tmp/756-root/retained278-extra/sweep-resonant-v01-custody.json",
+      "size": 2321,
+      "sha256": "e1c55cf14ad114a349feea0be8f0f367e37a6e324bcfd0bd826ec50c43f65216"
+    },
+    {
+      "source": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.278/native-sink/sweep-resonant-v01-full.jsonl",
+      "snapshot": "/tmp/756-root/retained278-extra/sweep-resonant-v01-full.jsonl",
+      "size": 7825497,
+      "sha256": "b9e16c81cc71edc03ffd51601087306ae6f583bb333f9c990abdafcd2f2aff9c"
+    },
+    {
+      "source": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.278/native-sink/sweep-resonant-v01-append.jsonl",
+      "snapshot": "/tmp/756-root/retained278-extra/sweep-resonant-v01-append.jsonl",
+      "size": 3233223,
+      "sha256": "615a381271ca2cff8cb49484a0ca327df9e86005416ac340b73c735b1ecbbce3"
+    },
+    {
+      "source": "/Users/dthurn/Library/Logs/DiagnosticReports/node-2026-10-15-030724.ips",
+      "snapshot": "/tmp/756-root/retained278-extra/node-2026-10-15-030724.ips",
+      "size": 33086,
+      "sha256": "cdcf1fdc7c1c0a04a347f0f92edd6d41e88d957be79ed309aad6f239cd97622b"
+    }
+  ],
+  "parsedFailedReports": [
+    {
+      "filename": "sweep-1b4d2adc-64ab-4020-bae6-b35321898bf0-resonant-player-attempt-1.result.json",
+      "bytes": 8520,
+      "sha256": "92488c584be6f0daabf476f7937dc289dab44b25f4281affd4205eb0a66a5854",
+      "semanticRead": "complete parsed report"
+    },
+    {
+      "filename": "sweep-465d3463-1d8a-466d-b91f-b1993332b4d3-base-enemy-attempt-1.result.json",
+      "bytes": 5859,
+      "sha256": "51e165e08ba1f2473055d84eec6eebec654280530dd96f58f812cadcf4ebf16b",
+      "semanticRead": "complete parsed report"
+    },
+    {
+      "filename": "sweep-4edf2d8d-61e4-4c3a-a388-4b52b2ebd005-base-player-attempt-1.result.json",
+      "bytes": 610,
+      "sha256": "c4dd1988e88680a970b982ad6e91bf2072335655762fea4ad0613eb7801147bc",
+      "semanticRead": "complete parsed report"
+    }
+  ],
+  "nativeTerminalEvidence": {
+    "path": "native-278-terminal-claim-comment-matches.json",
+    "sha256": "f90607d3927b1b1999f3bf0f12d2533fb6e790ebd193d7af61d5932dd4e470e3",
+    "comment": "01a140be-f661-761e-821e-841937ad160d",
+    "provenance": "acknowledged native owner record; independent raw shell wait receipt unavailable",
+    "terminal": "2026-10-15T18:00:59.830597Z",
+    "exit": 2,
+    "wallSeconds": 1355.847451,
+    "effectivePass": 143,
+    "effectiveFail": 2,
+    "ineffectiveRecoveredTimeout": 1,
+    "unattempted": 319,
+    "planned": 464
+  },
+  "diagnostic": {
+    "executedBy": "parent under native ACK01, once",
+    "receipt": {
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "/tmp/756-root/provider-tab-diagnostic-v01.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "start": "2026-10-15T18:34:15.474133+00:00",
+      "sourceOID": "7db4bd4930d07612a5d84a6c8267c13f51d8cd06",
+      "sourceCount": 5820,
+      "sourceManifestSHA256": "02444c5438764fea31ffbd3914297f4d70f29ed167cd86b27602d081c578514f",
+      "scriptSHA256": "0598411359625c4c4c59b8004f54c4cbb1981105f253bb5dfb68a05ec970155c",
+      "containmentSeconds": 30,
+      "hostLoadStart": [
+        4.34521484375,
+        7.1982421875,
+        8.42138671875
+      ],
+      "scope": "exact ACK01 one source-extracted Tab child; no browser/provider/network/service effect",
+      "pid": 96601,
+      "pgid": 96601,
+      "timedOut": false,
+      "end": "2026-10-15T18:34:15.535224+00:00",
+      "wallS": 0.060680209018755704,
+      "exit": 0,
+      "actualWait": true,
+      "hostLoadEnd": [
+        4.34521484375,
+        7.1982421875,
+        8.42138671875
+      ],
+      "stdoutSHA256": "8d0dbfcf80a7bc61fdb80d2e28358127024519aaba3744566aefc4756c65100d",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "groupAbsent": true,
+      "completeSourceMapUnchanged": true,
+      "worktreeClean": true
+    },
+    "actual": {
+      "source": "/tmp/756-root/installed-snapshot/coreBundle.js",
+      "sourceHash": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+      "classHash": "c463f64b374a3f3b6cd4adc1b7353b577fb5b664effcaaa5c3c0fb302b0c348a",
+      "rawNavigationRequestCountsAfterSnapshot": [
+        1,
+        2,
+        3
+      ],
+      "oldRequestIdentityRetainedAcrossRawNavigation": true,
+      "providerNavigateRequestCount": 1,
+      "afterPageCloseRequestCount": 0,
+      "pageListenersAfterDispose": 0,
+      "qualification": "Synthetic actual-class behavior; no browser, heap, historical-cause, response-body-size, or memory-growth measurement."
+    },
+    "scriptSHA256": "0598411359625c4c4c59b8004f54c4cbb1981105f253bb5dfb68a05ec970155c",
+    "qualification": "method-level actual source under dependency doubles; no browser/heap/cause/growth/performance claim"
+  },
+  "commands": [
+    {
+      "receipt": "ack02-read.receipt.json",
+      "sha256": "300164fa903f754137202d048d91c554905620af5304364b5da561df294b0849",
+      "tag": "ack02-read",
+      "start": "2026-10-15T18:35:16.660635+00:00",
+      "end": "2026-10-15T18:35:16.679210+00:00",
+      "wall_seconds": 0.018478124984540045,
+      "child_pid": 97556,
+      "child_process_group": 97556,
+      "wrapper_pid": 97555,
+      "wrapper_process_group": 97555,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 13238,
+      "stderr_bytes": 0,
+      "stdout_sha256": "c1c4ab2937e4ac9426a70fad0c6bb9c055c5281b7cb544acaeae50660d2f0cb4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "agents-repair.receipt.json",
+      "sha256": "e656167222e35c126a69f1b65a489992c4a8ead9d2972e22d5fbf82e406d5e20",
+      "tag": "agents-repair",
+      "start": "2026-10-15T18:31:40.915745+00:00",
+      "end": "2026-10-15T18:31:40.922881+00:00",
+      "wall_seconds": 0.0070527500356547534,
+      "child_pid": 94101,
+      "child_process_group": 94101,
+      "wrapper_pid": 94093,
+      "wrapper_process_group": 94093,
+      "argv": [
+        "sed",
+        "-n",
+        "1,145p",
+        "AGENTS.md"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 8068,
+      "stderr_bytes": 0,
+      "stdout_sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "boundary-index.receipt.json",
+      "sha256": "f19aba00274116322bab321dc76b9772bbe7270b6ef6c33cd773a255a67e0dba",
+      "tag": "boundary-index",
+      "start": "2026-10-15T18:24:16.078214+00:00",
+      "end": "2026-10-15T18:24:16.084495+00:00",
+      "wall_seconds": 0.006202999968081713,
+      "child_pid": 84653,
+      "child_process_group": 84653,
+      "wrapper_pid": 84645,
+      "wrapper_process_group": 84645,
+      "argv": [
+        "rg",
+        "-n",
+        "connectPlaywrightMcp|parseMcpResult|\\.call\\(|\\.close\\(|disconnect|pending|Promise|result|carry|finish|browser_run_code|mcp",
+        "scripts/qa/run-scenario.mjs",
+        "scripts/qa/card-sweep.mjs",
+        "scripts/qa/prelude.mjs",
+        "scripts/screenshot-runtime.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 24732,
+      "stderr_bytes": 0,
+      "stdout_sha256": "4760c98b5bc6d71119247b7410d89eb45350facaf9e8cab5f2b4750115233b94",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "browser-policy.receipt.json",
+      "sha256": "959c733a57a7e3b9b91c2e10d93ce3d470c03f98f9dfbd201d80784e0a165008",
+      "tag": "browser-policy",
+      "start": "2026-10-15T18:27:23.841020+00:00",
+      "end": "2026-10-15T18:27:23.843925+00:00",
+      "wall_seconds": 0.0028114999877288938,
+      "child_pid": 88854,
+      "child_process_group": 88854,
+      "wrapper_pid": 88846,
+      "wrapper_process_group": 88846,
+      "argv": [
+        "sed",
+        "-n",
+        "162,245p",
+        "README.md"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 5288,
+      "stderr_bytes": 0,
+      "stdout_sha256": "3967e5521e3eafe3e481f09b43f6694a6de8d3f438e07a0da6d0fcb6dbead274",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "browser-workflow.receipt.json",
+      "sha256": "6ebcfbfe808651a898146875cccb43ca0c8d7dd97dfd697f05813447723f8209",
+      "tag": "browser-workflow",
+      "start": "2026-10-15T18:27:23.913121+00:00",
+      "end": "2026-10-15T18:27:23.915993+00:00",
+      "wall_seconds": 0.0027628749958239496,
+      "child_pid": 88863,
+      "child_process_group": 88863,
+      "wrapper_pid": 88855,
+      "wrapper_process_group": 88855,
+      "argv": [
+        "sed",
+        "-n",
+        "1369,1510p",
+        "docs/plan/workflow.md"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 8389,
+      "stderr_bytes": 0,
+      "stdout_sha256": "18aba4e3c1fc5711bac8e8d3a83bfd58d7ddd0b39b3f60d5e448f8e735312002",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "check-output-audit.receipt.json",
+      "sha256": "e85ba2e699ee6d88802b85f49bd743bef34971997010b8d1942bc0954db41d30",
+      "tag": "check-output-audit",
+      "start": "2026-10-15T18:37:39.380921+00:00",
+      "end": "2026-10-15T18:37:39.403658+00:00",
+      "wall_seconds": 0.02264666697010398,
+      "child_pid": 239,
+      "child_process_group": 239,
+      "wrapper_pid": 236,
+      "wrapper_process_group": 236,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 282,
+      "stderr_bytes": 0,
+      "stdout_sha256": "3b3636a9be4498473a0c9ecb23afe85464115811d6a86cab1c7f1ce2f273cbf9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "check-runner-create.receipt.json",
+      "sha256": "1cf4f2f3ef9c646a7cc21b6c2c3c12e3668ae54e07c2f6282817f6e7375cfc58",
+      "tag": "check-runner-create",
+      "start": "2026-10-15T18:35:38.180477+00:00",
+      "end": "2026-10-15T18:35:38.200296+00:00",
+      "wall_seconds": 0.019732541986741126,
+      "child_pid": 97946,
+      "child_process_group": 97946,
+      "wrapper_pid": 97945,
+      "wrapper_process_group": 97945,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 88,
+      "stderr_bytes": 0,
+      "stdout_sha256": "0616c4868ca9217bb227e594eb721ed9843b2f8cd9a584bacd6f20b436454d3c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "crash-fields.receipt.json",
+      "sha256": "5418559250f3e3151653c46565feaabc45e33e3f869002542f88029e7e823a8b",
+      "tag": "crash-fields",
+      "start": "2026-10-15T18:26:01.056034+00:00",
+      "end": "2026-10-15T18:26:01.075489+00:00",
+      "wall_seconds": 0.01938958402024582,
+      "child_pid": 86917,
+      "child_process_group": 86917,
+      "wrapper_pid": 86914,
+      "wrapper_process_group": 86914,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 5621,
+      "stderr_bytes": 0,
+      "stdout_sha256": "c51a24ca2c419cf8d816be827165f10b57a3ebaf78c0d4999cffe8f9fe60d5d5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "current-provider-process.receipt.json",
+      "sha256": "a46d668ffd71196323eda4eaa01811e1c07bcd57990fca654b7848ddd8ad1435",
+      "tag": "current-provider-process",
+      "start": "2026-10-15T18:26:40.610651+00:00",
+      "end": "2026-10-15T18:26:40.613649+00:00",
+      "wall_seconds": 0.002921291976235807,
+      "child_pid": 87839,
+      "child_process_group": 87839,
+      "wrapper_pid": 87838,
+      "wrapper_process_group": 87838,
+      "argv": [
+        "ps",
+        "-p",
+        "11452",
+        "-o",
+        "pid=,ppid=,pgid=,lstart=,rss=,args="
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 231,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b4b5f70888d32692aef36e54f3d7fa7f22d10986da877b870f6a6f85e48be22c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "entry-read.receipt.json",
+      "sha256": "94ef411e4c854b171f6cae2366e76403cdae6d93f99f12e72e5cfc06e44863f2",
+      "tag": "entry-read",
+      "start": "2026-10-15T18:23:38.634424+00:00",
+      "end": "2026-10-15T18:23:38.654305+00:00",
+      "wall_seconds": 0.019795834028627723,
+      "child_pid": 84046,
+      "child_process_group": 84046,
+      "wrapper_pid": 84038,
+      "wrapper_process_group": 84038,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 143629,
+      "stderr_bytes": 0,
+      "stdout_sha256": "ead146bfa52f3cc69b033818267c9631e871f0e228bc9042d802ef3ba668feb5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "evidence-write.receipt.json",
+      "sha256": "67388f2a32bdd1685b1acfffd8f2ff2b87ed093308aaf0d66bd3e13d7892eb44",
+      "tag": "evidence-write",
+      "start": "2026-10-15T18:36:54.375884+00:00",
+      "end": "2026-10-15T18:36:54.400993+00:00",
+      "wall_seconds": 0.02502058300888166,
+      "child_pid": 99193,
+      "child_process_group": 99193,
+      "wrapper_pid": 99192,
+      "wrapper_process_group": 99192,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 353,
+      "stderr_bytes": 0,
+      "stdout_sha256": "5375a29be2010422592eaed3f108e9fcd3d76f40776427c7cc1f96c121a42e32",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "friction-policy.receipt.json",
+      "sha256": "1c9ac4e3d88ce659f5ece45d364c8467ce007b47ae437b6aefef9702f80c7097",
+      "tag": "friction-policy",
+      "start": "2026-10-15T18:28:28.652383+00:00",
+      "end": "2026-10-15T18:28:28.655095+00:00",
+      "wall_seconds": 0.002607500005979091,
+      "child_pid": 90241,
+      "child_process_group": 90241,
+      "wrapper_pid": 90233,
+      "wrapper_process_group": 90233,
+      "argv": [
+        "sed",
+        "-n",
+        "1202,1276p",
+        "docs/plan/workflow.md"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 4753,
+      "stderr_bytes": 0,
+      "stdout_sha256": "d2fa20b88f8440b543ae718d059d11300b6df0e97095bcf2fca7ad0c57306c78",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "incident-files.receipt.json",
+      "sha256": "fa5b8fbec98d414ac5b0ff559fb6715622671fb6a81b2d52aad9a84326135cc8",
+      "tag": "incident-files",
+      "start": "2026-10-15T18:24:57.370325+00:00",
+      "end": "2026-10-15T18:24:57.417781+00:00",
+      "wall_seconds": 0.04736887494800612,
+      "child_pid": 85446,
+      "child_process_group": 85446,
+      "wrapper_pid": 85445,
+      "wrapper_process_group": 85445,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 50807,
+      "stderr_bytes": 0,
+      "stdout_sha256": "dbb89c55dce9ab1a6cbc0c5592205bcc84c7bbfd12bff464bf35819df5ca83ec",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "incident-log.receipt.json",
+      "sha256": "bfcfbff40f6552cda914a775fcb5918165792222024dab565ce34283efe77693",
+      "tag": "incident-log",
+      "start": "2026-10-15T18:24:50.039156+00:00",
+      "end": "2026-10-15T18:24:50.041786+00:00",
+      "wall_seconds": 0.002544583985581994,
+      "child_pid": 85305,
+      "child_process_group": 85305,
+      "wrapper_pid": 85303,
+      "wrapper_process_group": 85303,
+      "argv": [
+        "cat",
+        "/tmp/756-root/retained278/provider-service-log-v01.txt"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 13468,
+      "stderr_bytes": 0,
+      "stdout_sha256": "d779180ab510464a9e4be4f521718977f52ca7c7cd42076fb1c87a717541b06f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "incident-report-read.receipt.json",
+      "sha256": "2974cfe93320a3bd8ee5a2980dc2a1ab3d8cf58c140cee38aab87b6a3fa1fe4e",
+      "tag": "incident-report-read",
+      "start": "2026-10-15T18:26:28.004095+00:00",
+      "end": "2026-10-15T18:26:28.042929+00:00",
+      "wall_seconds": 0.0387534589972347,
+      "child_pid": 87444,
+      "child_process_group": 87444,
+      "wrapper_pid": 87443,
+      "wrapper_process_group": 87443,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 15759,
+      "stderr_bytes": 0,
+      "stdout_sha256": "55ebf1ba186914c0997af1052a2f642c686e60dda079044e373dcbd3bf25ae30",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "incident-selected-index.receipt.json",
+      "sha256": "1c5fb818d778d71db16032a436349596c65bbb43f841b74cf5823195f43e3ae8",
+      "tag": "incident-selected-index",
+      "start": "2026-10-15T18:26:00.975249+00:00",
+      "end": "2026-10-15T18:26:00.995784+00:00",
+      "wall_seconds": 0.020448583003599197,
+      "child_pid": 86912,
+      "child_process_group": 86912,
+      "wrapper_pid": 86911,
+      "wrapper_process_group": 86911,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 5077,
+      "stderr_bytes": 0,
+      "stdout_sha256": "e688d2e3f64a73ae5ef9534efdbf5ac03c205be7fcd5b929413f4b6292fcd175",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "incident-small.receipt.json",
+      "sha256": "daaf676df30ae4e003692d8476c49ce1d5256354c1d7176a5957b09c51c3dde5",
+      "tag": "incident-small",
+      "start": "2026-10-15T18:23:46.167386+00:00",
+      "end": "2026-10-15T18:23:46.189619+00:00",
+      "wall_seconds": 0.022143625013995916,
+      "child_pid": 84180,
+      "child_process_group": 84180,
+      "wrapper_pid": 84179,
+      "wrapper_process_group": 84179,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 14108,
+      "stderr_bytes": 0,
+      "stdout_sha256": "660b4ae8bf5b44d9867a369c859b5307aaa70ae26e83575bf409a3b025d3e75d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "indexes.receipt.json",
+      "sha256": "657be1dcf5e5fc40e52d61899c002f8d8e9e6835e4a1f044c90f3efb09c3b9f9",
+      "tag": "indexes",
+      "start": "2026-10-15T18:23:46.086335+00:00",
+      "end": "2026-10-15T18:23:46.105969+00:00",
+      "wall_seconds": 0.019554542028345168,
+      "child_pid": 84178,
+      "child_process_group": 84178,
+      "wrapper_pid": 84170,
+      "wrapper_process_group": 84170,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 3408,
+      "stderr_bytes": 0,
+      "stdout_sha256": "d15f1a518adb2415417d632c38c99b7649a32aae324c3d571a3b5ccb14c24d3e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "knip.receipt.json",
+      "sha256": "6c140f5ebbe5711c3fd0ca1aba38f3928f811b1c460d31a523780b7d2af7a606",
+      "tag": "knip",
+      "start": "2026-10-15T18:37:15.787483+00:00",
+      "end": "2026-10-15T18:37:21.304903+00:00",
+      "wall_seconds": 5.517199625028297,
+      "pid": 99639,
+      "pgid": 99639,
+      "wrapper_pid": 99595,
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": true,
+      "process_group_absent": true,
+      "hostLoadStart": [
+        3.314453125,
+        5.35302734375,
+        7.40185546875
+      ],
+      "hostLoadEnd": [
+        3.6533203125,
+        5.357421875,
+        7.37939453125
+      ],
+      "stdout_sha256": "46a38a931f5aedf7f00a2698ffd97fe19988277101205f41178123b7f8eb8618",
+      "stderr_sha256": "49ad71f8aaba9d2c60390b7e424d7dbf17b3d753e449708015030069fbba9be1",
+      "stdout_bytes": 1125,
+      "stderr_bytes": 46833,
+      "sourceBefore": {
+        "path": "/tmp/756-root/knip.source-before.json",
+        "sha256": "a4b540ff4c3932b3a6ed76a03915abe81f9dcc45bf118152b0699ab697328476",
+        "count": 5823
+      },
+      "sourceAfter": {
+        "path": "/tmp/756-root/knip.source-after.json",
+        "sha256": "a4b540ff4c3932b3a6ed76a03915abe81f9dcc45bf118152b0699ab697328476",
+        "count": 5823
+      },
+      "sourceChanges": [],
+      "wrapper_sha256": "c0b613e5b78a1d743f095b34ca760417cfb1f1f476bf1b241e36931ccec52060",
+      "workers": "2"
+    },
+    {
+      "receipt": "lab1.receipt.json",
+      "sha256": "4949abab4c2654e476a09d1587435f72dd5bb66e9c7e8e618cbe1c7b53b51d38",
+      "tag": "lab1",
+      "start": "2026-10-15T18:26:32.949626+00:00",
+      "end": "2026-10-15T18:26:32.951982+00:00",
+      "wall_seconds": 0.0022752080112695694,
+      "child_pid": 87696,
+      "child_process_group": 87696,
+      "wrapper_pid": 87675,
+      "wrapper_process_group": 87675,
+      "argv": [
+        "sed",
+        "-n",
+        "1,170p",
+        "scripts/qa/scenarios/card-lab-play.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 12600,
+      "stderr_bytes": 0,
+      "stdout_sha256": "d64308cad4147cf9790920046b28a8a6ba5ba8ce5d557dfb052e9c05a2ae3f92",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "lab2.receipt.json",
+      "sha256": "8d6fe3844deee9945f3369177d08c8ccbc2dd3905940182b949e626c169a3cba",
+      "tag": "lab2",
+      "start": "2026-10-15T18:26:33.021184+00:00",
+      "end": "2026-10-15T18:26:33.024034+00:00",
+      "wall_seconds": 0.0027468749904073775,
+      "child_pid": 87711,
+      "child_process_group": 87711,
+      "wrapper_pid": 87700,
+      "wrapper_process_group": 87700,
+      "argv": [
+        "sed",
+        "-n",
+        "171,330p",
+        "scripts/qa/scenarios/card-lab-play.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 6850,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b7d52245e58026bc630467098415b7aeafb598df3915d6fde3b37d49c8c63c31",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "native-filter.receipt.json",
+      "sha256": "49c6ad052a9caf643c45c37e01961105c5485ff55b275d6053e38defd01f6ee1",
+      "tag": "native-filter",
+      "start": "2026-10-15T18:24:50.103582+00:00",
+      "end": "2026-10-15T18:24:50.123290+00:00",
+      "wall_seconds": 0.019637457968201488,
+      "child_pid": 85312,
+      "child_process_group": 85312,
+      "wrapper_pid": 85308,
+      "wrapper_process_group": 85308,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 23131,
+      "stderr_bytes": 0,
+      "stdout_sha256": "03019dc51fef195b2a37583af9c8cbdf9ffd3d3170ad9ae67e9ea5eeca8619cb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "native-terminal-evidence.receipt.json",
+      "sha256": "dad72b82f0794e0e1a4959873a82978bdd09014028b9ba0ac2910dd6bd05af41",
+      "tag": "native-terminal-evidence",
+      "start": "2026-10-15T18:29:02.779361+00:00",
+      "end": "2026-10-15T18:29:02.782575+00:00",
+      "wall_seconds": 0.0029049160075373948,
+      "child_pid": 91064,
+      "child_process_group": 91064,
+      "wrapper_pid": 91063,
+      "wrapper_process_group": 91063,
+      "argv": [
+        "cat",
+        "/tmp/756-root/native-278-terminal-claim-comment-matches.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 4325,
+      "stderr_bytes": 0,
+      "stdout_sha256": "f90607d3927b1b1999f3bf0f12d2533fb6e790ebd193d7af61d5932dd4e470e3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "plan-readme-repair.receipt.json",
+      "sha256": "1c71698c941e8bc38fd0d861f5f49107ce07cfd162739b31d34b526e4efc6e5c",
+      "tag": "plan-readme-repair",
+      "start": "2026-10-15T18:31:40.988713+00:00",
+      "end": "2026-10-15T18:31:40.991494+00:00",
+      "wall_seconds": 0.002697375020943582,
+      "child_pid": 94111,
+      "child_process_group": 94111,
+      "wrapper_pid": 94103,
+      "wrapper_process_group": 94103,
+      "argv": [
+        "sed",
+        "-n",
+        "1,147p",
+        "docs/plan/README.md"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 8689,
+      "stderr_bytes": 0,
+      "stdout_sha256": "59a05bf0b2b6ae0458e83e33714ff09945f2d20d1a588932441e85f5a9ff3c6c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "policies-repair.receipt.json",
+      "sha256": "3f06716379445bb06fdfdc159817e7bed53146327585da5950046390e35c8265",
+      "tag": "policies-repair",
+      "start": "2026-10-15T18:26:06.724997+00:00",
+      "end": "2026-10-15T18:26:06.743716+00:00",
+      "wall_seconds": 0.018571167020127177,
+      "child_pid": 87002,
+      "child_process_group": 87002,
+      "wrapper_pid": 86993,
+      "wrapper_process_group": 86993,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 11446,
+      "stderr_bytes": 0,
+      "stdout_sha256": "8cee62418587165ed41f12ea864f2afa53c1defde09c1b27d2b0cff5a8cb3c56",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "policies1.receipt.json",
+      "sha256": "154ebb2958675d1c612e842e699f73be00e5b359f7aaa7bf6a4a155a16b3832b",
+      "tag": "policies1",
+      "start": "2026-10-15T18:23:51.376026+00:00",
+      "end": "2026-10-15T18:23:51.394920+00:00",
+      "wall_seconds": 0.01881945796776563,
+      "child_pid": 84276,
+      "child_process_group": 84276,
+      "wrapper_pid": 84268,
+      "wrapper_process_group": 84268,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 31137,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b46b503b5fe707c0b8bc9fdc9e79d8331aa2fd68136aa3e7101215c0c98f6760",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "policies2.receipt.json",
+      "sha256": "67ee8d0e3aaf177a946b0cd5a139719cd49caf9c530c983c0c35fc3e767aa736",
+      "tag": "policies2",
+      "start": "2026-10-15T18:23:55.772440+00:00",
+      "end": "2026-10-15T18:23:55.792566+00:00",
+      "wall_seconds": 0.020050207967869937,
+      "child_pid": 84368,
+      "child_process_group": 84368,
+      "wrapper_pid": 84360,
+      "wrapper_process_group": 84360,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 79110,
+      "stderr_bytes": 0,
+      "stdout_sha256": "8cc5412c9caf7e422137d16e10d07a4b00ad36c21c6ba55d87207352d683e391",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "pre-review-host.receipt.json",
+      "sha256": "6b830603a716b586cd3ac138e6c29cfd85e3819659e572986d84a1f6d3835ce5",
+      "tag": "pre-review-host",
+      "start": "2026-10-15T18:37:10.481008+00:00",
+      "end": "2026-10-15T18:37:10.483129+00:00",
+      "wall_seconds": 0.0020270829554647207,
+      "child_pid": 99448,
+      "child_process_group": 99448,
+      "wrapper_pid": 99440,
+      "wrapper_process_group": 99440,
+      "argv": [
+        "/usr/sbin/sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 19,
+      "stderr_bytes": 0,
+      "stdout_sha256": "dd8104b9c69f8d4617f47bc5898666c15df850f9bdaeb90fd0e9c252dbce3290",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "prelude-finish.receipt.json",
+      "sha256": "cadf01c309a973fce63a4525830f7f8626a20a46ffa6be863f6224d9181b85bf",
+      "tag": "prelude-finish",
+      "start": "2026-10-15T18:25:35.700254+00:00",
+      "end": "2026-10-15T18:25:35.702913+00:00",
+      "wall_seconds": 0.0025620830128900707,
+      "child_pid": 86288,
+      "child_process_group": 86288,
+      "wrapper_pid": 86280,
+      "wrapper_process_group": 86280,
+      "argv": [
+        "sed",
+        "-n",
+        "1360,1515p",
+        "scripts/qa/prelude.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 6675,
+      "stderr_bytes": 0,
+      "stdout_sha256": "3ee89a8b3b82580c548a2acf5a32b33ca91e718418ac96ab983b4ecea662937f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "prelude-index.receipt.json",
+      "sha256": "661f6c7b2c9ca94b3c3b870ccb6f4f1ed9581367d205cc54b5669bd75ce2d624",
+      "tag": "prelude-index",
+      "start": "2026-10-15T18:25:16.022694+00:00",
+      "end": "2026-10-15T18:25:16.028828+00:00",
+      "wall_seconds": 0.006049541989341378,
+      "child_pid": 85852,
+      "child_process_group": 85852,
+      "wrapper_pid": 85844,
+      "wrapper_process_group": 85844,
+      "argv": [
+        "rg",
+        "-n",
+        "export async function createQa|async function.*[Gg]ame|finish\\(|async goto|page.goto|page.on|page.off|removeListener|snapshot|async capture|readGameLog|async read|navigation",
+        "scripts/qa/prelude.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 2064,
+      "stderr_bytes": 0,
+      "stdout_sha256": "6219313a8a08654aabd66a01ee8885f139d3b0411e1040bbea73755be341dc67",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "prelude-log.receipt.json",
+      "sha256": "c8bc31d52bb6c90082d5dbcc3812ba35364edfcd3b73bded212bdc6a3a5a2d1b",
+      "tag": "prelude-log",
+      "start": "2026-10-15T18:25:35.629671+00:00",
+      "end": "2026-10-15T18:25:35.632327+00:00",
+      "wall_seconds": 0.0025644159759394825,
+      "child_pid": 86279,
+      "child_process_group": 86279,
+      "wrapper_pid": 86271,
+      "wrapper_process_group": 86271,
+      "argv": [
+        "sed",
+        "-n",
+        "1090,1220p",
+        "scripts/qa/prelude.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 5973,
+      "stderr_bytes": 0,
+      "stdout_sha256": "eece988a117fc5bd5c833a3ae83e9120f1deaa7e494e32574627e01af7ec59a4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "prelude-nav.receipt.json",
+      "sha256": "9d744fd339998699c400f45cb50112970c6eb01184b7bf493bc274bb7d792d7d",
+      "tag": "prelude-nav",
+      "start": "2026-10-15T18:25:27.597424+00:00",
+      "end": "2026-10-15T18:25:27.600275+00:00",
+      "wall_seconds": 0.002760291041340679,
+      "child_pid": 86186,
+      "child_process_group": 86186,
+      "wrapper_pid": 86178,
+      "wrapper_process_group": 86178,
+      "argv": [
+        "sed",
+        "-n",
+        "715,914p",
+        "scripts/qa/prelude.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 10056,
+      "stderr_bytes": 0,
+      "stdout_sha256": "4fe3da3e222067202309ffc9214d8b27eb84bd9c99ab3751b9343b950b575341",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "prelude1.receipt.json",
+      "sha256": "7bfc13702869da0a60a2e10dec84f2a147f68f68de48738ff0fd4ab400582f40",
+      "tag": "prelude1",
+      "start": "2026-10-15T18:25:27.523339+00:00",
+      "end": "2026-10-15T18:25:27.526193+00:00",
+      "wall_seconds": 0.002760249946732074,
+      "child_pid": 86177,
+      "child_process_group": 86177,
+      "wrapper_pid": 86169,
+      "wrapper_process_group": 86169,
+      "argv": [
+        "sed",
+        "-n",
+        "489,715p",
+        "scripts/qa/prelude.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 10585,
+      "stderr_bytes": 0,
+      "stdout_sha256": "f567dd410899451f44e57205720a1af6985bf0b8ac900632b82f507872086b55",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "proposal-write.receipt.json",
+      "sha256": "caf68917852796882b82f5d50d1d1fe095a105a6be544141b3ebf68d2a009a88",
+      "tag": "proposal-write",
+      "start": "2026-10-15T18:27:47.140131+00:00",
+      "end": "2026-10-15T18:27:47.161705+00:00",
+      "wall_seconds": 0.021388208027929068,
+      "child_pid": 89353,
+      "child_process_group": 89353,
+      "wrapper_pid": 89351,
+      "wrapper_process_group": 89351,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 123,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b1433d4c14d1f0159c4c40097f878f0de4cfff417f8a7c267d4e3804ef27a222",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-backend.receipt.json",
+      "sha256": "286265a8cfa1b19d083a869d94123745ca35af7c5981808e21dfda79212d7b12",
+      "tag": "provider-backend",
+      "start": "2026-10-15T18:25:08.281788+00:00",
+      "end": "2026-10-15T18:25:08.290190+00:00",
+      "wall_seconds": 0.008318541978951544,
+      "child_pid": 85711,
+      "child_process_group": 85711,
+      "wrapper_pid": 85708,
+      "wrapper_process_group": 85708,
+      "argv": [
+        "sed",
+        "-n",
+        "65415,65620p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 7741,
+      "stderr_bytes": 0,
+      "stdout_sha256": "3ba7cd93395a8df2e0e67f25e696c956d314130dda17b16bb59cfefeeb96650f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-context1.receipt.json",
+      "sha256": "20c36bab8405a4452db1473e58c59dbc7da5b63c05880823333c2f05ceeb37f2",
+      "tag": "provider-context1",
+      "start": "2026-10-15T18:24:43.677347+00:00",
+      "end": "2026-10-15T18:24:43.686395+00:00",
+      "wall_seconds": 0.008954834018368274,
+      "child_pid": 85197,
+      "child_process_group": 85197,
+      "wrapper_pid": 85196,
+      "wrapper_process_group": 85196,
+      "argv": [
+        "sed",
+        "-n",
+        "64740,64980p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 9604,
+      "stderr_bytes": 0,
+      "stdout_sha256": "da0709d0f311b52f53ef4d0b1534ebfe7de185155d718860a1f2f04a4c03201f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-factory.receipt.json",
+      "sha256": "7ed465bc00813cb977aecd814e334b4273c58abd90e5a0a13a24f59ef91d01ee",
+      "tag": "provider-factory",
+      "start": "2026-10-15T18:26:51.056119+00:00",
+      "end": "2026-10-15T18:26:51.064956+00:00",
+      "wall_seconds": 0.008741999976336956,
+      "child_pid": 88186,
+      "child_process_group": 88186,
+      "wrapper_pid": 88185,
+      "wrapper_process_group": 88185,
+      "argv": [
+        "sed",
+        "-n",
+        "73085,73165p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 3292,
+      "stderr_bytes": 0,
+      "stdout_sha256": "0027cf0a91055ee1facb6bb4d389caa9fd3f267b37ad38a21ac9d4b8e9a76729",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-http.receipt.json",
+      "sha256": "947454f584db7c91d53363efc82d0af8c2db2feb6a4db67ff763de260965e03e",
+      "tag": "provider-http",
+      "start": "2026-10-15T18:25:16.091176+00:00",
+      "end": "2026-10-15T18:25:16.099712+00:00",
+      "wall_seconds": 0.008455874980427325,
+      "child_pid": 85854,
+      "child_process_group": 85854,
+      "wrapper_pid": 85853,
+      "wrapper_process_group": 85853,
+      "argv": [
+        "sed",
+        "-n",
+        "71270,71440p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 6029,
+      "stderr_bytes": 0,
+      "stdout_sha256": "8e56c677738c5a5d7ade1ed13eac9e7021657c093da6003ebed220b0de99e673",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-index-bounded.receipt.json",
+      "sha256": "bb0cb8a5297b50ff631ac0c548115e25da6e7f32221cc2417f21e346bc9aecab",
+      "tag": "provider-index-bounded",
+      "start": "2026-10-15T18:24:21.721545+00:00",
+      "end": "2026-10-15T18:24:21.725812+00:00",
+      "wall_seconds": 0.004197791975457221,
+      "child_pid": 84828,
+      "child_process_group": 84828,
+      "wrapper_pid": 84824,
+      "wrapper_process_group": 84824,
+      "argv": [
+        "rg",
+        "-n",
+        "--max-columns",
+        "220",
+        "--max-columns-preview",
+        "browser_run_code_unsafe|ServerBackend|MCPBackend|_responses|_requests|networkRequests|Response =|Context =|MCPServer",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 11981,
+      "stderr_bytes": 0,
+      "stdout_sha256": "04282dc11f667b03d6f473d60c0481c3624501dc221ea214a0de8ed5abd4f031",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-index.receipt.json",
+      "sha256": "8637a9622ad206847fafbe36b465fd56cddf6d4efa9caf62392e08c8cafd8423",
+      "tag": "provider-index",
+      "start": "2026-10-15T18:24:16.147091+00:00",
+      "end": "2026-10-15T18:24:16.155263+00:00",
+      "wall_seconds": 0.00808820896781981,
+      "child_pid": 84655,
+      "child_process_group": 84655,
+      "wrapper_pid": 84654,
+      "wrapper_process_group": 84654,
+      "argv": [
+        "rg",
+        "-n",
+        "class Response|class.*Context|_responses|responses|requests|requestBody|run_code_unsafe|onclose|sessionId|ServerBackend|MCPBackend|outputDir|networkRequests",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 431023,
+      "stderr_bytes": 0,
+      "stdout_sha256": "bc887e3d0a96b88d989e5b5a58dbcc32782bf51cd6d8563777d9f2f77e53c143",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-inventory.receipt.json",
+      "sha256": "6ab088eea7dcb36fc27509deebe24000cf63a6e0deec94628eb6ee5d9444883d",
+      "tag": "provider-inventory",
+      "start": "2026-10-15T18:24:07.264641+00:00",
+      "end": "2026-10-15T18:24:07.285756+00:00",
+      "wall_seconds": 0.021030083997175097,
+      "child_pid": 84523,
+      "child_process_group": 84523,
+      "wrapper_pid": 84522,
+      "wrapper_process_group": 84522,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 7315,
+      "stderr_bytes": 0,
+      "stdout_sha256": "6394018915ff937a7894b9fe602fcaf06fbdc56079e3c2040759ba4a6a56f40f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-listeners.receipt.json",
+      "sha256": "9ca77a2abb988fc3e548f42c71ede113ad9aab6b2dee02a968a3a1b61332c873",
+      "tag": "provider-listeners",
+      "start": "2026-10-15T18:26:51.132402+00:00",
+      "end": "2026-10-15T18:26:51.138113+00:00",
+      "wall_seconds": 0.005593542009592056,
+      "child_pid": 88188,
+      "child_process_group": 88188,
+      "wrapper_pid": 88187,
+      "wrapper_process_group": 88187,
+      "argv": [
+        "rg",
+        "-n",
+        "--max-columns",
+        "200",
+        "--max-columns-preview",
+        "_clearCollectedArtifacts|_requests\\.length|_requests.push|_requests =|setIncludeSnapshot\\(|function defineTabTool|function defineTool|function waitForCompletion",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 1527,
+      "stderr_bytes": 0,
+      "stdout_sha256": "9e46748fac535e937569448d41fdb9a96f73b62b2d9f9b749da5cb7212820fad",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-mcp-server.receipt.json",
+      "sha256": "e9734c8014e4710cb366f9b1ca3e8bbddaa58d76845a6637f19644ef1b90ca42",
+      "tag": "provider-mcp-server",
+      "start": "2026-10-15T18:25:22.599901+00:00",
+      "end": "2026-10-15T18:25:22.608399+00:00",
+      "wall_seconds": 0.008411915972828865,
+      "child_pid": 85933,
+      "child_process_group": 85933,
+      "wrapper_pid": 85932,
+      "wrapper_process_group": 85932,
+      "argv": [
+        "sed",
+        "-n",
+        "71445,71700p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 8491,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b9f33213fc296568c22b8162e2680c31db7d7a0725453124e0099945d689a09c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-network-contract.receipt.json",
+      "sha256": "301e6c8a591e46d5a8671024c9057f60e765ddbc6a0f5112830fb1203f5a3106",
+      "tag": "provider-network-contract",
+      "start": "2026-10-15T18:26:40.673769+00:00",
+      "end": "2026-10-15T18:26:40.682357+00:00",
+      "wall_seconds": 0.008497458999045193,
+      "child_pid": 87841,
+      "child_process_group": 87841,
+      "wrapper_pid": 87840,
+      "wrapper_process_group": 87840,
+      "argv": [
+        "sed",
+        "-n",
+        "66610,66840p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 10063,
+      "stderr_bytes": 0,
+      "stdout_sha256": "c050a829df12d32f72b72792e2c2a26e38f801076c46fdba8de94463323b9c0a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-response1.receipt.json",
+      "sha256": "cda9ceb796f795fba54f4678f777beb69224a837d51dbf60e921bbf0d64932ff",
+      "tag": "provider-response1",
+      "start": "2026-10-15T18:25:04.812788+00:00",
+      "end": "2026-10-15T18:25:04.822150+00:00",
+      "wall_seconds": 0.009258042031433433,
+      "child_pid": 85649,
+      "child_process_group": 85649,
+      "wrapper_pid": 85646,
+      "wrapper_process_group": 85646,
+      "argv": [
+        "sed",
+        "-n",
+        "65210,65420p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 9710,
+      "stderr_bytes": 0,
+      "stdout_sha256": "14435be7b8d9b30e2788f8392cc5c123af85230da10452148f930273b99f4d8a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-response2.receipt.json",
+      "sha256": "84c9523dfdb0ce3d227480fcff349e45875cc5fec8346666bff930fe7eea037f",
+      "tag": "provider-response2",
+      "start": "2026-10-15T18:25:08.207839+00:00",
+      "end": "2026-10-15T18:25:08.216845+00:00",
+      "wall_seconds": 0.008855082967784256,
+      "child_pid": 85705,
+      "child_process_group": 85705,
+      "wrapper_pid": 85704,
+      "wrapper_process_group": 85704,
+      "argv": [
+        "sed",
+        "-n",
+        "65125,65212p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 3158,
+      "stderr_bytes": 0,
+      "stdout_sha256": "5e95268333b7f8f67c56c7055cfeb6b61e9e768f26f38b2b8c558da196e2c62f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-server-index.receipt.json",
+      "sha256": "1f18452fc536f1c91a5acd4b700d711d7cd4a8f115cecd46735f739be760ac08",
+      "tag": "provider-server-index",
+      "start": "2026-10-15T18:24:57.481296+00:00",
+      "end": "2026-10-15T18:24:57.487027+00:00",
+      "wall_seconds": 0.005623959004878998,
+      "child_pid": 85449,
+      "child_process_group": 85449,
+      "wrapper_pid": 85447,
+      "wrapper_process_group": 85447,
+      "argv": [
+        "rg",
+        "-n",
+        "--max-columns",
+        "200",
+        "--max-columns-preview",
+        "Response2? = class|toMCP|captureSnapshot\\(|browser_close|deleteSession|sessionClosed|transports|sessions =|_sessions|backend\\.dispose|backend\\.close|dispose\\(",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 13486,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b1883b8e9ddb6d96392b630b90839b9bf1e72eec367a9676b4c5ca132593e346",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-tab1.receipt.json",
+      "sha256": "2ce6b572474e63dc76984f3fb33705bc55f1287b6c10ce928a5161dd2b6b5e64",
+      "tag": "provider-tab1",
+      "start": "2026-10-15T18:24:25.082528+00:00",
+      "end": "2026-10-15T18:24:25.091634+00:00",
+      "wall_seconds": 0.009023082966450602,
+      "child_pid": 84869,
+      "child_process_group": 84869,
+      "wrapper_pid": 84864,
+      "wrapper_process_group": 84864,
+      "argv": [
+        "sed",
+        "-n",
+        "64300,64510p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 9020,
+      "stderr_bytes": 0,
+      "stdout_sha256": "a04e5d3fd5fde3835f17375549e0426413d8de4d8ce2a36ebd51ef6f98ca4240",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-tab2.receipt.json",
+      "sha256": "b285b2090b98312ad0d5a2ede73dda2a0045c3b763431467db7345f8df944e44",
+      "tag": "provider-tab2",
+      "start": "2026-10-15T18:24:27.819012+00:00",
+      "end": "2026-10-15T18:24:27.827078+00:00",
+      "wall_seconds": 0.007987082994077355,
+      "child_pid": 84908,
+      "child_process_group": 84908,
+      "wrapper_pid": 84907,
+      "wrapper_process_group": 84907,
+      "argv": [
+        "sed",
+        "-n",
+        "64510,64740p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 9252,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b3d947bf7e254c339f689b14f73d125a4d4ebc5a9001b4d363770be4377ffc23",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-tool-contract.receipt.json",
+      "sha256": "307c93b9d32316ea2fd1cea035c61c80c763b1bb061edcf944eb8119888025b9",
+      "tag": "provider-tool-contract",
+      "start": "2026-10-15T18:26:56.803713+00:00",
+      "end": "2026-10-15T18:26:56.812465+00:00",
+      "wall_seconds": 0.008666458015795797,
+      "child_pid": 88298,
+      "child_process_group": 88298,
+      "wrapper_pid": 88297,
+      "wrapper_process_group": 88297,
+      "argv": [
+        "sed",
+        "-n",
+        "63745,63910p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 5832,
+      "stderr_bytes": 0,
+      "stdout_sha256": "2ec77e6bd92cbd6d9270dc5ce58e8d1f4a72d60cc1ce30a5fceb43efbe2904f2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "provider-unsafe.receipt.json",
+      "sha256": "df80edb4104816bbbbf0e14281e47c7041909428a79a6eca36ad06b274c29391",
+      "tag": "provider-unsafe",
+      "start": "2026-10-15T18:24:39.985963+00:00",
+      "end": "2026-10-15T18:24:39.995843+00:00",
+      "wall_seconds": 0.009797290957067162,
+      "child_pid": 85119,
+      "child_process_group": 85119,
+      "wrapper_pid": 85118,
+      "wrapper_process_group": 85118,
+      "argv": [
+        "sed",
+        "-n",
+        "66950,67090p",
+        "/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 5839,
+      "stderr_bytes": 0,
+      "stdout_sha256": "f9bc93d7749daf2b351c0feff879dae4e597b8f2819df5c381a009dfee6592db",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "retained-custody.receipt.json",
+      "sha256": "7e9a40b71c30e57b4eb994c0a6dcae03b6706f724315447c421fbf7d37fc00ef",
+      "tag": "retained-custody",
+      "start": "2026-10-15T18:26:15.469803+00:00",
+      "end": "2026-10-15T18:26:15.536662+00:00",
+      "wall_seconds": 0.06678166700294241,
+      "child_pid": 87274,
+      "child_process_group": 87274,
+      "wrapper_pid": 87273,
+      "wrapper_process_group": 87273,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 21569,
+      "stderr_bytes": 0,
+      "stdout_sha256": "33db573fdfafa366e4e5ef311cd9928a75d39f625387b0658e7fde05deb8729a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "review.receipt.json",
+      "sha256": "dfb34bc2ba3d081d60526003035ad50339bc625cd2984c718d99bee3cc39a7f9",
+      "tag": "review",
+      "start": "2026-10-15T18:37:10.710650+00:00",
+      "end": "2026-10-15T18:37:10.957840+00:00",
+      "wall_seconds": 0.2470220829709433,
+      "pid": 99458,
+      "pgid": 99458,
+      "wrapper_pid": 99449,
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": true,
+      "process_group_absent": true,
+      "hostLoadStart": [
+        3.51611328125,
+        5.4267578125,
+        7.43994140625
+      ],
+      "hostLoadEnd": [
+        3.51611328125,
+        5.4267578125,
+        7.43994140625
+      ],
+      "stdout_sha256": "0b483566796d60d69e3d514a62030480b69080bed4d42655bcc51103a4843e11",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 344,
+      "stderr_bytes": 0,
+      "sourceBefore": {
+        "path": "/tmp/756-root/review.source-before.json",
+        "sha256": "a4b540ff4c3932b3a6ed76a03915abe81f9dcc45bf118152b0699ab697328476",
+        "count": 5823
+      },
+      "sourceAfter": {
+        "path": "/tmp/756-root/review.source-after.json",
+        "sha256": "a4b540ff4c3932b3a6ed76a03915abe81f9dcc45bf118152b0699ab697328476",
+        "count": 5823
+      },
+      "sourceChanges": [],
+      "wrapper_sha256": "c0b613e5b78a1d743f095b34ca760417cfb1f1f476bf1b241e36931ccec52060",
+      "workers": "2"
+    },
+    {
+      "receipt": "runner1.receipt.json",
+      "sha256": "d06b32fa7cba5b8400232816e90cf646ef629e6486bdc874f1232e67b8ad427a",
+      "tag": "runner1",
+      "start": "2026-10-15T18:23:59.444101+00:00",
+      "end": "2026-10-15T18:23:59.449594+00:00",
+      "wall_seconds": 0.005406583019066602,
+      "child_pid": 84420,
+      "child_process_group": 84420,
+      "wrapper_pid": 84412,
+      "wrapper_process_group": 84412,
+      "argv": [
+        "sed",
+        "-n",
+        "1,240p",
+        "scripts/qa/run-scenario.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 10157,
+      "stderr_bytes": 0,
+      "stdout_sha256": "646aa226052ba7f41b72105ac42ab064eb802bbc86946bd82744e01f6f4be13a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "runner2.receipt.json",
+      "sha256": "2ea370016ec051adacdbf195c18fe5bc26bfd5b94b3c68095aae72bde5f3ef99",
+      "tag": "runner2",
+      "start": "2026-10-15T18:24:21.793340+00:00",
+      "end": "2026-10-15T18:24:21.795597+00:00",
+      "wall_seconds": 0.0021710830042138696,
+      "child_pid": 84837,
+      "child_process_group": 84837,
+      "wrapper_pid": 84829,
+      "wrapper_process_group": 84829,
+      "argv": [
+        "sed",
+        "-n",
+        "330,510p",
+        "scripts/qa/run-scenario.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 8928,
+      "stderr_bytes": 0,
+      "stdout_sha256": "f9d3bbadfea7842602e4d5dae7104c7d1951ca81f00aaaf64342ce87b0870a91",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "runner3.receipt.json",
+      "sha256": "7a0fdf5029f8e88c64f631fd7c237023c7f47429df2f86b409cde2381e10df66",
+      "tag": "runner3",
+      "start": "2026-10-15T18:24:40.062950+00:00",
+      "end": "2026-10-15T18:24:40.065467+00:00",
+      "wall_seconds": 0.002428291947580874,
+      "child_pid": 85128,
+      "child_process_group": 85128,
+      "wrapper_pid": 85120,
+      "wrapper_process_group": 85120,
+      "argv": [
+        "sed",
+        "-n",
+        "515,670p",
+        "scripts/qa/run-scenario.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 8835,
+      "stderr_bytes": 0,
+      "stdout_sha256": "97a87ddf9a0040f75131e1b77a0bfda57b2e28e9bd7c5f154218ec0e4784b7ed",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "runner4.receipt.json",
+      "sha256": "06ec100578111919f25407e7b819ce97ae116a4d84ffbd3a0ce22d572accc7d3",
+      "tag": "runner4",
+      "start": "2026-10-15T18:24:43.612770+00:00",
+      "end": "2026-10-15T18:24:43.615385+00:00",
+      "wall_seconds": 0.002537374966777861,
+      "child_pid": 85195,
+      "child_process_group": 85195,
+      "wrapper_pid": 85187,
+      "wrapper_process_group": 85187,
+      "argv": [
+        "sed",
+        "-n",
+        "670,830p",
+        "scripts/qa/run-scenario.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 8094,
+      "stderr_bytes": 0,
+      "stdout_sha256": "a8712571133e183a119515c88d96283cf777696c156b502bdbef77a8e86726db",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "runtime1.receipt.json",
+      "sha256": "ae503066d943d12d658e5983f530d9ffa094052b7ed07a4ca50f424d1323c9e7",
+      "tag": "runtime1",
+      "start": "2026-10-15T18:24:02.749929+00:00",
+      "end": "2026-10-15T18:24:02.757196+00:00",
+      "wall_seconds": 0.007183166977483779,
+      "child_pid": 84464,
+      "child_process_group": 84464,
+      "wrapper_pid": 84456,
+      "wrapper_process_group": 84456,
+      "argv": [
+        "sed",
+        "-n",
+        "1,260p",
+        "scripts/screenshot-runtime.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 8650,
+      "stderr_bytes": 0,
+      "stdout_sha256": "e0598e3c08c0e73ee5b2cb27eadacbcbe92e54e8090eca20ebe84c6bac660f82",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "sdk-close.receipt.json",
+      "sha256": "e47eb21ffb23539ae27cbd0bfad007eef1764401d4eb76f15884485a8f09e97f",
+      "tag": "sdk-close",
+      "start": "2026-10-15T18:25:22.674961+00:00",
+      "end": "2026-10-15T18:25:22.688751+00:00",
+      "wall_seconds": 0.013707583013456315,
+      "child_pid": 85942,
+      "child_process_group": 85942,
+      "wrapper_pid": 85934,
+      "wrapper_process_group": 85934,
+      "argv": [
+        "rg",
+        "-n",
+        "async close|terminateSession|_responseHandlers|_timeoutHandles|_requestMessageIdToTaskId|_onclose|delete\\(",
+        "node_modules/@modelcontextprotocol/sdk/dist/esm/client/streamableHttp.js",
+        "node_modules/@modelcontextprotocol/sdk/dist/esm/shared/protocol.js",
+        "node_modules/@modelcontextprotocol/sdk/package.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 3816,
+      "stderr_bytes": 0,
+      "stdout_sha256": "67542e36f5674d71fb868e7236edaa6730edf14b0e7baf72e01c162cedd9d0ee",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "sdk-contracts.receipt.json",
+      "sha256": "7d9e388d653e436452ed59cbc0516a0e3c386c08d1ddc0f8ec3b559e6cbcba8d",
+      "tag": "sdk-contracts",
+      "start": "2026-10-15T18:26:28.111593+00:00",
+      "end": "2026-10-15T18:26:28.130026+00:00",
+      "wall_seconds": 0.01835399999981746,
+      "child_pid": 87453,
+      "child_process_group": 87453,
+      "wrapper_pid": 87445,
+      "wrapper_process_group": 87445,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 15329,
+      "stderr_bytes": 0,
+      "stdout_sha256": "3456ee9872d192f0e994b57c77da009fa5a965f05e163f5b5979a22c5e3691a9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "source-caller-inventory.receipt.json",
+      "sha256": "6667d532e12fb76feedaa9522e2ba57a32b45921244c0b16e5677132b5ca6d5c",
+      "tag": "source-caller-inventory",
+      "start": "2026-10-15T18:27:59.376780+00:00",
+      "end": "2026-10-15T18:27:59.400051+00:00",
+      "wall_seconds": 0.023171583015937358,
+      "child_pid": 89724,
+      "child_process_group": 89724,
+      "wrapper_pid": 89716,
+      "wrapper_process_group": 89716,
+      "argv": [
+        "rg",
+        "-n",
+        "connectPlaywrightMcp|parseMcpResult|buildScenarioCode|openQaSession|runScenarioPlan|createQa\\(",
+        "scripts",
+        "--glob",
+        "*.{mjs,ts}",
+        "--glob",
+        "!*.test.*",
+        "--glob",
+        "!qa/prelude.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 2793,
+      "stderr_bytes": 0,
+      "stdout_sha256": "40f4d1e7327cbe7250d83d55d9f6d6bddd875925d6de80c778e7b3eeb5800bfd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "source-epochs.receipt.json",
+      "sha256": "c00c45aecc5e462e3bbb77b35854f63b4f733f6d0cb4e52bfc12c0bfd498db42",
+      "tag": "source-epochs",
+      "start": "2026-10-15T18:27:59.297222+00:00",
+      "end": "2026-10-15T18:27:59.306165+00:00",
+      "wall_seconds": 0.008770207990892231,
+      "child_pid": 89715,
+      "child_process_group": 89715,
+      "wrapper_pid": 89707,
+      "wrapper_process_group": 89707,
+      "argv": [
+        "git",
+        "diff",
+        "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+        "7db4bd4930d07612a5d84a6c8267c13f51d8cd06",
+        "--",
+        "scripts/qa/run-scenario.mjs",
+        "scripts/qa/card-sweep.mjs",
+        "scripts/qa/prelude.mjs",
+        "scripts/qa/scenarios/card-lab-play.mjs",
+        "scripts/screenshot-runtime.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "source-gaps.receipt.json",
+      "sha256": "a9bca20a46d28f912f385cca86a2c3d0f14dd29dae364cab71ee646b58843f43",
+      "tag": "source-gaps",
+      "start": "2026-10-15T18:28:17.339851+00:00",
+      "end": "2026-10-15T18:28:17.344340+00:00",
+      "wall_seconds": 0.004384958010632545,
+      "child_pid": 90098,
+      "child_process_group": 90098,
+      "wrapper_pid": 90090,
+      "wrapper_process_group": 90090,
+      "argv": [
+        "sed",
+        "-n",
+        "240,330p",
+        "scripts/qa/run-scenario.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 2813,
+      "stderr_bytes": 0,
+      "stdout_sha256": "ca96ab7edf1a32a1759bce70a32e0f60b99daa54c1b12fd0d78f43562462a37e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "source-read-addendum.receipt.json",
+      "sha256": "a7dd082f3063da9d71a9461c400221cb011c576cd70818db70d3b2e40c60b9c3",
+      "tag": "source-read-addendum",
+      "start": "2026-10-15T18:31:49.731890+00:00",
+      "end": "2026-10-15T18:31:49.753791+00:00",
+      "wall_seconds": 0.0218256670050323,
+      "child_pid": 94259,
+      "child_process_group": 94259,
+      "wrapper_pid": 94258,
+      "wrapper_process_group": 94258,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 112,
+      "stderr_bytes": 0,
+      "stdout_sha256": "bac161463dc31efca77e5d1505020f246ed9c27ef64dda3d31449aa1b3671007",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "stage1-freeze.receipt.json",
+      "sha256": "022b5c4f09a5e07c10454170fdc891f9bf97b47e031dda0f3d19d6296c6c0b33",
+      "tag": "stage1-freeze",
+      "start": "2026-10-15T18:27:17.120834+00:00",
+      "end": "2026-10-15T18:27:17.143684+00:00",
+      "wall_seconds": 0.02277712494833395,
+      "child_pid": 88766,
+      "child_process_group": 88766,
+      "wrapper_pid": 88765,
+      "wrapper_process_group": 88765,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 1872,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b2c36ab9644b0bc990d1f9d60ff94e79b0e586d74ca66cc7c55b1b3e8bb53fdd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "stage1-manifest.receipt.json",
+      "sha256": "3596a10199328cf38276780603f1e29bee785ff255c07edc52d409183ceeb50f",
+      "tag": "stage1-manifest",
+      "start": "2026-10-15T18:28:59.923888+00:00",
+      "end": "2026-10-15T18:29:00.075067+00:00",
+      "wall_seconds": 0.15084124996792525,
+      "child_pid": 90911,
+      "child_process_group": 90911,
+      "wrapper_pid": 90910,
+      "wrapper_process_group": 90910,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 150,
+      "stderr_bytes": 0,
+      "stdout_sha256": "009842f10dec6e4654446c6da3296f086210afee2a5af650ce5dd8481c933e5e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "stage1-proposal-write.receipt.json",
+      "sha256": "095b1b9985e1a235785e26e22b209269783f4c3b0dd078bdfa7541ee57f5da56",
+      "tag": "stage1-proposal-write",
+      "start": "2026-10-15T18:30:21.533498+00:00",
+      "end": "2026-10-15T18:30:21.553346+00:00",
+      "wall_seconds": 0.0197710829670541,
+      "child_pid": 92575,
+      "child_process_group": 92575,
+      "wrapper_pid": 92574,
+      "wrapper_process_group": 92574,
+      "argv": [
+        "python3",
+        "-"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 101,
+      "stderr_bytes": 0,
+      "stdout_sha256": "e83c4616a319dae302d0e5cc38f7bb17342d47d846cd4beab4ae40ae23ad2864",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "sweep1.receipt.json",
+      "sha256": "2b492fca843b03d1b1d9fa1e9d9914f4b61221ae0bb6ce1a7b1e93dcf4486432",
+      "tag": "sweep1",
+      "start": "2026-10-15T18:25:04.901271+00:00",
+      "end": "2026-10-15T18:25:04.903890+00:00",
+      "wall_seconds": 0.0025396670098416507,
+      "child_pid": 85679,
+      "child_process_group": 85679,
+      "wrapper_pid": 85661,
+      "wrapper_process_group": 85661,
+      "argv": [
+        "sed",
+        "-n",
+        "110,310p",
+        "scripts/qa/card-sweep.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 10065,
+      "stderr_bytes": 0,
+      "stdout_sha256": "5c474ecf3041a837862c0250b73f1e803ba0478c1eb37388838b97072e5538db",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "validation-review-policy.receipt.json",
+      "sha256": "cd17eac01ba8cfcb3dfd3d468de5f96012a70c792afa928f97e17dbc8f8e5a0d",
+      "tag": "validation-review-policy",
+      "start": "2026-10-15T18:28:28.576629+00:00",
+      "end": "2026-10-15T18:28:28.582240+00:00",
+      "wall_seconds": 0.005302416975609958,
+      "child_pid": 90232,
+      "child_process_group": 90232,
+      "wrapper_pid": 90224,
+      "wrapper_process_group": 90224,
+      "argv": [
+        "sed",
+        "-n",
+        "996,1168p",
+        "docs/plan/workflow.md"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 9484,
+      "stderr_bytes": 0,
+      "stdout_sha256": "ef7f2d11686179515d7e6ab79c28179cb12c7f8ac5eae3b9a6f95d46f37031b1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "wt-read-repair.receipt.json",
+      "sha256": "8ca45c7dc3846f6555aea90eda34d6b792e886827420a1d1668ef26914c6616c",
+      "tag": "wt-read-repair",
+      "start": "2026-10-15T18:31:41.052306+00:00",
+      "end": "2026-10-15T18:31:41.055803+00:00",
+      "wall_seconds": 0.003425207978580147,
+      "child_pid": 94117,
+      "child_process_group": 94117,
+      "wrapper_pid": 94112,
+      "wrapper_process_group": 94112,
+      "argv": [
+        "sed",
+        "-n",
+        "310,500p",
+        "/Users/dthurn/.llms/skills/wt/SKILL.md"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 10469,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b56fadbb98c8f99d6e3e7ca527e9ac67d8c15d1cd67039ad5eff6e355d925deb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "wt1.receipt.json",
+      "sha256": "e069b27740dfbe0c0e5c79d6195c57583f4d4d86459ba358d15d1125f1d17242",
+      "tag": "wt1",
+      "start": "2026-10-15T18:26:06.804636+00:00",
+      "end": "2026-10-15T18:26:06.807557+00:00",
+      "wall_seconds": 0.0028399580041877925,
+      "child_pid": 87010,
+      "child_process_group": 87010,
+      "wrapper_pid": 87006,
+      "wrapper_process_group": 87006,
+      "argv": [
+        "sed",
+        "-n",
+        "1,190p",
+        "/Users/dthurn/.llms/skills/wt/SKILL.md"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 10024,
+      "stderr_bytes": 0,
+      "stdout_sha256": "23649f194ab374700eb5f3a30569901d7a3ee0fe107245e948896b4003d32bcf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "wt2.receipt.json",
+      "sha256": "8b6fcb0a9db47c2c8e507ab2dbe39e94d2bcd82047ade6eac569d8a19559b280",
+      "tag": "wt2",
+      "start": "2026-10-15T18:26:56.875887+00:00",
+      "end": "2026-10-15T18:26:56.878455+00:00",
+      "wall_seconds": 0.0024804589920677245,
+      "child_pid": 88302,
+      "child_process_group": 88302,
+      "wrapper_pid": 88299,
+      "wrapper_process_group": 88299,
+      "argv": [
+        "sed",
+        "-n",
+        "191,309p",
+        "/Users/dthurn/.llms/skills/wt/SKILL.md"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 5908,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b2e5121707a509b8fd953ea21a73165401ea7979eaad6578992e2d6ba4c1558b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receipt": "wt3.receipt.json",
+      "sha256": "724f4b7654ea6600a03ccc12a6740fff4fcd2ba08928a0537ac66f3bb01d23d9",
+      "tag": "wt3",
+      "start": "2026-10-15T18:28:17.249720+00:00",
+      "end": "2026-10-15T18:28:17.255086+00:00",
+      "wall_seconds": 0.005299917014781386,
+      "child_pid": 90086,
+      "child_process_group": 90086,
+      "wrapper_pid": 90083,
+      "wrapper_process_group": 90083,
+      "argv": [
+        "sed",
+        "-n",
+        "501,700p",
+        "/Users/dthurn/.llms/skills/wt/SKILL.md"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exit": 0,
+      "actual_wait": "communicate returned after child exit",
+      "stdout_bytes": 6963,
+      "stderr_bytes": 0,
+      "stdout_sha256": "c34428eff88d42944a4ca13554cb077e4aa440c1443aef44a30ac890c17722d5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "initialUninstrumentedCommands": {
+    "count": 6,
+    "plus": "scratch runner bootstrap",
+    "available": "host tool returned stdout/exit/wall receipts",
+    "pid": "UNKNOWN",
+    "processGroup": "UNKNOWN",
+    "preciseStartEnd": "UNKNOWN",
+    "qualification": "Only host tool wall/exit/stdout data exists; these are not full actual-command custody. The3mandatory complete-read repairs replace the initial clipped complete-call proof claims."
+  },
+  "validation": {
+    "review": {
+      "tag": "review",
+      "start": "2026-10-15T18:37:10.710650+00:00",
+      "end": "2026-10-15T18:37:10.957840+00:00",
+      "wall_seconds": 0.2470220829709433,
+      "pid": 99458,
+      "pgid": 99458,
+      "wrapper_pid": 99449,
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": true,
+      "process_group_absent": true,
+      "hostLoadStart": [
+        3.51611328125,
+        5.4267578125,
+        7.43994140625
+      ],
+      "hostLoadEnd": [
+        3.51611328125,
+        5.4267578125,
+        7.43994140625
+      ],
+      "stdout_sha256": "0b483566796d60d69e3d514a62030480b69080bed4d42655bcc51103a4843e11",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 344,
+      "stderr_bytes": 0,
+      "sourceBefore": {
+        "path": "/tmp/756-root/review.source-before.json",
+        "sha256": "a4b540ff4c3932b3a6ed76a03915abe81f9dcc45bf118152b0699ab697328476",
+        "count": 5823
+      },
+      "sourceAfter": {
+        "path": "/tmp/756-root/review.source-after.json",
+        "sha256": "a4b540ff4c3932b3a6ed76a03915abe81f9dcc45bf118152b0699ab697328476",
+        "count": 5823
+      },
+      "sourceChanges": [],
+      "wrapper_sha256": "c0b613e5b78a1d743f095b34ca760417cfb1f1f476bf1b241e36931ccec52060",
+      "workers": "2"
+    },
+    "knip": {
+      "tag": "knip",
+      "start": "2026-10-15T18:37:15.787483+00:00",
+      "end": "2026-10-15T18:37:21.304903+00:00",
+      "wall_seconds": 5.517199625028297,
+      "pid": 99639,
+      "pgid": 99639,
+      "wrapper_pid": 99595,
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-heap756-root",
+      "exit": 0,
+      "actual_wait": true,
+      "process_group_absent": true,
+      "hostLoadStart": [
+        3.314453125,
+        5.35302734375,
+        7.40185546875
+      ],
+      "hostLoadEnd": [
+        3.6533203125,
+        5.357421875,
+        7.37939453125
+      ],
+      "stdout_sha256": "46a38a931f5aedf7f00a2698ffd97fe19988277101205f41178123b7f8eb8618",
+      "stderr_sha256": "49ad71f8aaba9d2c60390b7e424d7dbf17b3d753e449708015030069fbba9be1",
+      "stdout_bytes": 1125,
+      "stderr_bytes": 46833,
+      "sourceBefore": {
+        "path": "/tmp/756-root/knip.source-before.json",
+        "sha256": "a4b540ff4c3932b3a6ed76a03915abe81f9dcc45bf118152b0699ab697328476",
+        "count": 5823
+      },
+      "sourceAfter": {
+        "path": "/tmp/756-root/knip.source-after.json",
+        "sha256": "a4b540ff4c3932b3a6ed76a03915abe81f9dcc45bf118152b0699ab697328476",
+        "count": 5823
+      },
+      "sourceChanges": [],
+      "wrapper_sha256": "c0b613e5b78a1d743f095b34ca760417cfb1f1f476bf1b241e36931ccec52060",
+      "workers": "2"
+    },
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "focusedTests": "not applicable to evidence-only change",
+    "browser": "not applicable; zero browser effects",
+    "heavy": "not applicable; evidence-only",
+    "fastFinalChecks": "required after this evidence refresh; actual receipts retained in final-commit.json",
+    "knipStderr": {
+      "lines": 260,
+      "classification": "all260lines are missing-art/journey-art warnings from temporary asset preparation; actual restore completed and all5823file hashes unchanged",
+      "unclassifiedLines": 0,
+      "rawSHA256": "49ad71f8aaba9d2c60390b7e424d7dbf17b3d753e449708015030069fbba9be1"
+    }
+  },
+  "resources": {
+    "sharedProviderCalls": 0,
+    "sharedSignals": 0,
+    "browserContexts": 0,
+    "qaServers": 0,
+    "ports": [],
+    "parentDiagnosticGroup": 96601,
+    "parentDiagnosticGroupAbsent": true
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "actual pre-review sysctl -n vm.loadavg at2026-10-15T18:37:10.481008Z",
+        "value": 3.52,
+        "receipt": "pre-review-host.receipt.json",
+        "qualification": "sysctl text precision3.52; wrapper also records review-start full precision3.51611328125"
+      }
+    }
+  },
+  "clockQualification": "Immediate precommit evidence cutoff at recordCutoff; original dispatch includes source investigation, all clipping/repair reads, coordination/waits, parent diagnostic, checks/evidence. Actual schema/JSON/whitespace and normal Git tail after cutoff are preserved separately in final-commit.json, not predicted. Sampling UNKNOWN."
+}
