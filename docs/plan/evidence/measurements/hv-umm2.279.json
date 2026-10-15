@@ -1,0 +1,1335 @@
+{
+  "bead": "hv-umm2.279",
+  "scope": "Evidence-only complete foundation acceptance join after completed629/210/275/276/277 and retained native dependencies; no production UUID ownership or per-kind child recipe transfer.",
+  "sourceBase": "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+  "implementDispatch": "2026-10-15T16:27:48.487000+00:00",
+  "evidenceCutoff": "2026-10-15T17:04:05.942319+00:00",
+  "clockQualification": "Inclusive original helper dispatch16:27:48.487Z through final Git; final metadata cutoff here immediately precedes final schema/staging/Git. The recorded implementWindow ends at this cutoff; actual commit time and short final tail are supplied by acceptance-v04/git-return.json and the separately hashed Git receipt. No elapsed time reset, invented setup/model CPU, or performance claim.",
+  "commands": {
+    "assemble-evidence-v01": {
+      "start": "2026-10-15T16:57:38.967062+00:00",
+      "end": "2026-10-15T16:57:39.015294+00:00",
+      "wallS": 0.07624462497187778,
+      "exit": 0,
+      "argv": [
+        "python3",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/assemble-evidence.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 83594,
+      "pgid": 83594,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n83594 83581 83594 Thu Oct 15 09:57:38 2026     python3 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/assemble-evidence.py\n",
+      "userS": 0.026619,
+      "systemS": 0.011330999999999999,
+      "hostLoad": 6.08203125,
+      "stdoutSha256": "4c4f2469b4ecb35195dcf5beb3206b0df1546e4474ef9f82a09f5cc2f144a09a",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "browser-v01": {
+      "start": "2026-10-15T16:39:51.564246+00:00",
+      "end": "2026-10-15T16:40:04.075934+00:00",
+      "wallS": 12.540360416984186,
+      "exit": 1,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/run-browser.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 40921,
+      "pgid": 40921,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n40921 40911 40921 Thu Oct 15 09:39:51 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/run-browser.mjs\n",
+      "userS": 5.80109,
+      "systemS": 3.143961,
+      "hostLoad": 4.93115234375,
+      "stdoutSha256": "4f68c676241b50bcbbafb5ddf22e74b5967c36f7acb1ec3af846755aebb07810",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "browser-v02": {
+      "start": "2026-10-15T16:46:00.027472+00:00",
+      "end": "2026-10-15T16:46:15.249580+00:00",
+      "wallS": 15.251445124973543,
+      "exit": 1,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v02/run-browser.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 66657,
+      "pgid": 66657,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n66657 66638 66657 Thu Oct 15 09:46:00 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v02/run-browser.mjs\n",
+      "userS": 5.687269,
+      "systemS": 2.752006,
+      "hostLoad": 4.72607421875,
+      "stdoutSha256": "d5eec3ea2ff2c031c9be512f6888f4e72408f4447e73d0bd8507b0d649b6c5f3",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "browser-v03": {
+      "start": "2026-10-15T16:51:25.501068+00:00",
+      "end": "2026-10-15T16:51:36.360346+00:00",
+      "wallS": 10.88937483401969,
+      "exit": 1,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v03/run-browser.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 36382,
+      "pgid": 36382,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n36382 36366 36382 Thu Oct 15 09:51:25 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v03/run-browser.mjs\n",
+      "userS": 5.824229,
+      "systemS": 2.7313549999999998,
+      "hostLoad": 14.53271484375,
+      "stdoutSha256": "83ed18a52463042e0fc066345c2b9f7dd584d0604de46ec9b76fb964b3dd4b56",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "browser-v04": {
+      "start": "2026-10-15T16:53:47.124390+00:00",
+      "end": "2026-10-15T16:55:06.668095+00:00",
+      "wallS": 79.57681979198242,
+      "exit": 0,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/run-browser.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 35527,
+      "pgid": 35527,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n35527 35516 35527 Thu Oct 15 09:53:47 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/run-browser.mjs\n",
+      "userS": 8.630815,
+      "systemS": 3.51682,
+      "hostLoad": 10.76123046875,
+      "stdoutSha256": "bc7a7972be2479b8e4a68c39a5fd6ed0335e0250671b9a430ec9b2d9070715b1",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "final-audit-v01": {
+      "start": "2026-10-15T16:59:17.223559+00:00",
+      "end": "2026-10-15T16:59:17.608945+00:00",
+      "wallS": 0.41526024998165667,
+      "exit": 0,
+      "argv": [
+        "python3",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/final-audit.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 90512,
+      "pgid": 90512,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n90512 90510 90512 Thu Oct 15 09:59:17 2026     python3 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/final-audit.py\n",
+      "userS": 0.076925,
+      "systemS": 0.201113,
+      "hostLoad": 4.3427734375,
+      "stdoutSha256": "6f4371cae98144b160774fe5d01abf0c8f241d26c12d069898697ea5ab906370",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "final-evidence-v01": {
+      "start": "2026-10-15T16:58:42.272209+00:00",
+      "end": "2026-10-15T16:58:42.319325+00:00",
+      "wallS": 0.07395429199095815,
+      "exit": 0,
+      "argv": [
+        "python3",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/finalize-evidence.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 88096,
+      "pgid": 88096,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n88096 88083 88096 Thu Oct 15 09:58:42 2026     python3 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/finalize-evidence.py\n",
+      "userS": 0.024305999999999998,
+      "systemS": 0.010073,
+      "hostLoad": 4.96533203125,
+      "stdoutSha256": "f32048983d2e597c801bc69ac198d62b10b510d131aacb5fec90713dc5c46e78",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "final-schema-v01": {
+      "start": "2026-10-15T16:59:17.664425+00:00",
+      "end": "2026-10-15T16:59:17.805189+00:00",
+      "wallS": 0.17255133402068168,
+      "exit": 0,
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 90553,
+      "pgid": 90553,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n90553 90499 90553 Thu Oct 15 09:59:17 2026     node scripts/friction-triggers.mjs --validate-records\n",
+      "userS": 0.056192,
+      "systemS": 0.03017,
+      "hostLoad": 4.3427734375,
+      "stdoutSha256": "39acd126a462ab8130bb0a9239183000bdbadca3686a3b93e8625761fa03af2a",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "focused-v01": {
+      "start": "2026-10-15T16:32:02.660837+00:00",
+      "end": "2026-10-15T16:32:10.073571+00:00",
+      "wallS": 7.441207875031978,
+      "exit": 0,
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/exploration-engine-mapping.test.ts",
+        "src/battle/integration/deck-mods.test.ts",
+        "src/engine/transfigurations.test.ts",
+        "src/runtime/runtime-config.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/testing/tooling-card-lab-script.test.ts",
+        "src/transfiguration/transfiguration-logic.test.ts",
+        "src/session/providers/exploration-provider.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 9392,
+      "pgid": 9392,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n 9392  9373  9392 Thu Oct 15 09:32:02 2026     node /opt/homebrew/bin/npm test -- src/battle/integration/exploration-engine-mapping.test.ts src/battle/integration/deck-mods.test.ts src/engine/transfigurations.test.ts src/runtime/runtime-config.test.ts src/runtime/qa-scenes-battle.test.ts src/engine/testing/tooling-card-lab.test.ts src/engine/testing/tooling-card-lab-script.test.ts src/transfiguration/transfiguration-logic.test.ts src/session/providers/exploration-provider.test.ts\n",
+      "userS": 10.182761,
+      "systemS": 2.347036,
+      "hostLoad": 8.31103515625,
+      "stdoutSha256": "d53f6ad4b78be1c58daf8a0d5b6722b88e75b45220719228b45f1c4fb2ddbaaa",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "knip-v01": {
+      "start": "2026-10-15T16:33:51.543565+00:00",
+      "end": "2026-10-15T16:33:58.109673+00:00",
+      "wallS": 6.595522459014319,
+      "exit": 0,
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 16872,
+      "pgid": 16872,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n16872 16862 16872 Thu Oct 15 09:33:51 2026     node /opt/homebrew/bin/npm run knip\n",
+      "userS": 4.080694,
+      "systemS": 1.584833,
+      "hostLoad": 6.65625,
+      "stdoutSha256": "36cebbc6226bd5c745490a96f133716183f6ff497cb85b58f14921ba51fdd391",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "preflight-v01": {
+      "start": "2026-10-15T16:33:05.956168+00:00",
+      "end": "2026-10-15T16:33:07.669981+00:00",
+      "wallS": 1.7435540839796886,
+      "exit": 0,
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "7be2e6d7-abff-4c44-a0c3-35460da1693c,69964b8e-0f38-4fb7-a0cd-89430ef04c2d,764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "--variants",
+        "base,kindled,inspired,perfected,attuned",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 13665,
+      "pgid": 13665,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n13665 13654 13665 Thu Oct 15 09:33:05 2026     /usr/bin/env node /opt/homebrew/bin/npm run lab:preflight -- --cards 7be2e6d7-abff-4c44-a0c3-35460da1693c,69964b8e-0f38-4fb7-a0cd-89430ef04c2d,764b62f6-6af9-40ad-8d1f-653cc1a11030 --variants base,kindled,inspired,perfected,attuned --as both\n",
+      "userS": 1.258549,
+      "systemS": 0.652256,
+      "hostLoad": 6.51904296875,
+      "stdoutSha256": "a3f79388b48d899adf2c8401b8d4484d4933431bfd108c2345c03afec63a1f5e",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "prepare-browser-v01": {
+      "start": "2026-10-15T16:34:41.637647+00:00",
+      "end": "2026-10-15T16:34:41.713925+00:00",
+      "wallS": 0.10328833304811269,
+      "exit": 0,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/prepare-browser.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 20162,
+      "pgid": 20162,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n20162 20150 20162 Thu Oct 15 09:34:41 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/prepare-browser.mjs\n",
+      "userS": 0.046106999999999995,
+      "systemS": 0.008912999999999999,
+      "hostLoad": 5.60693359375,
+      "stdoutSha256": "e9069896281ef090c69cb501555d2b46f271327858baca3dc10ee59a59e18709",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "prepare-browser-v02": {
+      "start": "2026-10-15T16:38:20.178724+00:00",
+      "end": "2026-10-15T16:38:20.261448+00:00",
+      "wallS": 0.11388266604626551,
+      "exit": 0,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/prepare-browser.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 34812,
+      "pgid": 34812,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n34812 34809 34812 Thu Oct 15 09:38:20 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/prepare-browser.mjs\n",
+      "userS": 0.046327,
+      "systemS": 0.009968999999999999,
+      "hostLoad": 5.8251953125,
+      "stdoutSha256": "54caec89d827b2905064298373af9a2a0cc9fdbde519e7c7c33689a003aa2be5",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "prepare-browser-v03": {
+      "start": "2026-10-15T16:43:33.259733+00:00",
+      "end": "2026-10-15T16:43:33.346475+00:00",
+      "wallS": 0.11823458300204948,
+      "exit": 0,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v02/prepare-browser.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 56376,
+      "pgid": 56376,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n56376 56373 56376 Thu Oct 15 09:43:33 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v02/prepare-browser.mjs\n",
+      "userS": 0.049712,
+      "systemS": 0.010138999999999999,
+      "hostLoad": 5.51513671875,
+      "stdoutSha256": "599a9426b919d0bf8d269fc30e8542c489b1bde8d58c125e3b0f2bb5c707154e",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "prepare-browser-v04": {
+      "start": "2026-10-15T16:43:59.867708+00:00",
+      "end": "2026-10-15T16:43:59.959786+00:00",
+      "wallS": 0.12163154099835083,
+      "exit": 0,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v02/prepare-browser.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 58347,
+      "pgid": 58347,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n58347 58345 58347 Thu Oct 15 09:43:59 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v02/prepare-browser.mjs\n",
+      "userS": 0.046217999999999995,
+      "systemS": 0.008865999999999999,
+      "hostLoad": 5.1513671875,
+      "stdoutSha256": "6fec3984b10c7b0b773d46995ed1317b90056ef563bd5d578b0c754d19747aef",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "prepare-browser-v05": {
+      "start": "2026-10-15T16:50:25.369566+00:00",
+      "end": "2026-10-15T16:50:25.453459+00:00",
+      "wallS": 0.11621529201511294,
+      "exit": 0,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v03/prepare-browser.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 98565,
+      "pgid": 98565,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n98565 98515 98565 Thu Oct 15 09:50:25 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v03/prepare-browser.mjs\n",
+      "userS": 0.048165,
+      "systemS": 0.009427999999999999,
+      "hostLoad": 20.18408203125,
+      "stdoutSha256": "d1043c755c0141d26b4a9d3a173e51c5f4572caffda465a8d3658012bb15f2ba",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "prepare-browser-v06": {
+      "start": "2026-10-15T16:52:45.862757+00:00",
+      "end": "2026-10-15T16:52:45.951303+00:00",
+      "wallS": 0.12173191603505984,
+      "exit": 0,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/prepare-browser.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 17314,
+      "pgid": 17314,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n17314 17305 17314 Thu Oct 15 09:52:45 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/prepare-browser.mjs\n",
+      "userS": 0.051602999999999996,
+      "systemS": 0.011375,
+      "hostLoad": 17.8955078125,
+      "stdoutSha256": "bb4d004bea620aecf967ab9f67863a38f9a75c1346ad7e8c23d7f7f393e25e8f",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "prepare-ready-v01": {
+      "start": "2026-10-15T16:59:56.994026+00:00",
+      "end": "2026-10-15T16:59:57.076986+00:00",
+      "wallS": 0.11231416597729549,
+      "exit": 0,
+      "argv": [
+        "python3",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/prepare-ready.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 93405,
+      "pgid": 93405,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n93405 93394 93405 Thu Oct 15 09:59:56 2026     python3 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/prepare-ready.py\n",
+      "userS": 0.024401,
+      "systemS": 0.01308,
+      "hostLoad": 7.263671875,
+      "stdoutSha256": "63f85a84a9325ee4b2a5750273e13c5eb5ad799c8bb3c66c8a67927086bbe7ab",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "probe-contract-v01": {
+      "start": "2026-10-15T16:47:56.415592+00:00",
+      "end": "2026-10-15T16:48:00.928751+00:00",
+      "wallS": 4.542144416947849,
+      "exit": 0,
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/components/engine-probe-events.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 70566,
+      "pgid": 70566,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n70566 70558 70566 Thu Oct 15 09:47:56 2026     node /opt/homebrew/bin/npm test -- src/battle/components/engine-probe-events.test.ts\n",
+      "userS": 3.215291,
+      "systemS": 1.8129929999999999,
+      "hostLoad": 5.79541015625,
+      "stdoutSha256": "bd23ef8f14956a5f79179973b2a55bc63816468ef6ddc6aff8c4cb42ad734d3b",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "public-consumers-v01": {
+      "start": "2026-10-15T16:33:00.286153+00:00",
+      "end": "2026-10-15T16:33:03.300016+00:00",
+      "wallS": 3.0453779999515973,
+      "exit": 0,
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/public-consumers.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 13298,
+      "pgid": 13298,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n13298 13285 13298 Thu Oct 15 09:33:00 2026     node node_modules/tsx/dist/cli.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/public-consumers.mts\n",
+      "userS": 1.152644,
+      "systemS": 0.718287,
+      "hostLoad": 6.6513671875,
+      "stdoutSha256": "bcc61c92ce2ad8ed39d580ee3baf03c34f7896b17f4979cb09d5321a69cb4f17",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "qa-api-inventory-v01": {
+      "start": "2026-10-15T16:52:46.015514+00:00",
+      "end": "2026-10-15T16:52:46.240102+00:00",
+      "wallS": 0.2555958339944482,
+      "exit": 0,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/qa-api-inventory.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 17571,
+      "pgid": 17571,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n17571 17289 17571 Thu Oct 15 09:52:46 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/qa-api-inventory.mjs\n",
+      "userS": 0.257399,
+      "systemS": 0.02582,
+      "hostLoad": 17.8955078125,
+      "stdoutSha256": "50e3d11414b9f312213a119ea4237223c1bedc97f62d47ce88e13606ca4433b5",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "review-v01": {
+      "start": "2026-10-15T16:33:47.700033+00:00",
+      "end": "2026-10-15T16:33:48.134055+00:00",
+      "wallS": 0.4629224999807775,
+      "exit": 0,
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 16530,
+      "pgid": 16530,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n16530 16518 16530 Thu Oct 15 09:33:47 2026     /usr/bin/env node /opt/homebrew/bin/npm run review\n",
+      "userS": 0.208595,
+      "systemS": 0.21333,
+      "hostLoad": 6.62646484375,
+      "stdoutSha256": "3c74a32189d2e53cc68bfc203604087d77ba09fbb1b5bb37bd73a5c72dc9e0aa",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "source-proof-v02": {
+      "start": "2026-10-15T16:31:52.256397+00:00",
+      "end": "2026-10-15T16:31:53.445607+00:00",
+      "wallS": 1.2200060419854708,
+      "exit": 0,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/source-proof.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 8637,
+      "pgid": 8637,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n 8637  8613  8637 Thu Oct 15 09:31:52 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/source-proof.mjs\n",
+      "userS": 2.145384,
+      "systemS": 0.179449,
+      "hostLoad": 8.92041015625,
+      "stdoutSha256": "f6f3897c173ceb56cb9726bec45379d731d4ba40feba5e36dfd7c872a5148fbd",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "source-proof": {
+      "start": "2026-10-15T16:31:38.703728+00:00",
+      "end": "2026-10-15T16:31:38.910587+00:00",
+      "wallS": 0.23504958301782608,
+      "exit": 1,
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/source-proof.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 7601,
+      "pgid": 7601,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n 7601  7588  7601 Thu Oct 15 09:31:38 2026     node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/source-proof.mjs\n",
+      "userS": 0.159772,
+      "systemS": 0.014367,
+      "hostLoad": 9.94970703125,
+      "stdoutSha256": "30d7b04f9238ec3b07267561d40ae9d83199e63e2b225d39248a10bb88bea745",
+      "timedOut": false,
+      "remainingMembers": []
+    },
+    "final-clock-schema-v01": {
+      "start": "2026-10-15T17:04:05.972305+00:00",
+      "end": "2026-10-15T17:04:06.121928+00:00",
+      "wallS": 0.17842437501531094,
+      "exit": 0,
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279",
+      "pid": 12847,
+      "pgid": 12847,
+      "birth": "  PID  PPID  PGID STARTED                      COMMAND\n12847 12835 12847 Thu Oct 15 10:04:05 2026     node scripts/friction-triggers.mjs --validate-records\n",
+      "userS": 0.057058,
+      "systemS": 0.034796,
+      "hostLoad": 9.5322265625,
+      "stdoutSha256": "39acd126a462ab8130bb0a9239183000bdbadca3686a3b93e8625761fa03af2a",
+      "timedOut": false,
+      "remainingMembers": []
+    }
+  },
+  "commandMeasurementScope": "run-command.py wallS includes process identity/terminal settlement observations; UTC end is captured at command completion before final ps audit (about0.03s tail). CPU is RUSAGE_CHILDREN delta for command plus its birth ps observation; model/wrapper CPU excluded. No performance claim.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review start at2026-10-15T16:33:47.700033+00:00",
+        "source": "review-v01.receipt.json",
+        "value": 6.62646484375
+      },
+      "localValidationS.fuzz": {
+        "value": 0,
+        "reason": "No new fuzz execution; qualified historical exact-input300 reuse is distinct."
+      }
+    }
+  },
+  "setup": {
+    "owner": "parent",
+    "npmInstallExit": 0,
+    "packagesInstalled": 388,
+    "packagesAudited": 390,
+    "wallS": null,
+    "cpuS": null,
+    "advisories": {
+      "total": 17,
+      "moderate": 9,
+      "high": 7,
+      "critical": 1
+    }
+  },
+  "sourceCustody": {
+    "functionalFreeze": {
+      "file": "current-functional-freeze.json",
+      "sha256": "03c62349adc22f670359788e375fa9accab7decbfb36b8d502e16a2d5348178b",
+      "files": 2680
+    },
+    "sourceProof": {
+      "file": "fuzz-reuse-source-proof.json",
+      "sha256": "380ae53712c9420cd766b69519c1a933214684e025228ab876f67e819cc44a96",
+      "script": "source-proof.mjs",
+      "scriptSHA256": "c03c2d49d5adba7c4a65e4e25e69f410f155830a47cd6fe487901fe88ba6312a",
+      "runtimeClosureFiles": 1081,
+      "changedRuntimeInputs": [],
+      "fullApplicationDelta": [
+        "src/rules/journey/journey-entry-reservations.test.ts",
+        "src/rules/journey/journey-on-gain.ts",
+        "src/rules/journey/journey-subtype-persistence.contracts.ts",
+        "src/rules/journey/journey-subtype.ts",
+        "src/rules/journey/journey-transfiguration.ts",
+        "src/rules/journey/modifier-registry.ts"
+      ],
+      "limitations": [
+        "Static emitted-runtime relative import/export/dynamic import/require closure under current TypeScript transpilation; no claim to arbitrary reflective module loading. None of the visited files uses nonliteral dynamic imports, require or import.meta.glob.",
+        "Bare package implementation dependencies are covered by unchanged lock/package config and installed dependency setup, not recursively rehashed node_modules.",
+        "Ignored workspace art/generated outputs excluded; they are not inputs of this Node fuzz import closure."
+      ]
+    },
+    "parentIndependentProof": "/tmp/dreamtides-executor-01a1304d/279/parent-source-reuse-verification.json",
+    "compilerExhaustiveness": {
+      "currentMapping": "ddd6254ed5aa4fc364aae6497f4c5ca98dde0ff829d42235e81beb8aae036d2e",
+      "historicalMapping": "ddd6254ed5aa4fc364aae6497f4c5ca98dde0ff829d42235e81beb8aae036d2e",
+      "mappingEqual": true,
+      "currentUnion": "4b68e3dda07fc223645ca49f9445868ffa08c6e712109db6326616d66599a4c0",
+      "historicalUnion": "4b68e3dda07fc223645ca49f9445868ffa08c6e712109db6326616d66599a4c0",
+      "unionEqual": true,
+      "mutant": {
+        "name": "mutant-unmapped-kind",
+        "path": "src/data/exploration-effect-kinds.ts",
+        "beforeSHA256": "4b68e3dda07fc223645ca49f9445868ffa08c6e712109db6326616d66599a4c0",
+        "mutantSHA256": "6f6539c43d1d1c3d3f6e683abe542208eedc0b99def1910c41e6977555b0d03a",
+        "restoredSHA256": "4b68e3dda07fc223645ca49f9445868ffa08c6e712109db6326616d66599a4c0",
+        "old": "] as const;",
+        "new": "  \"629-unmapped-synthetic\",\n] as const;",
+        "exitCode": 2,
+        "restoredAt": "2026-10-15T08:48:47.310292+00:00"
+      },
+      "rawLog": "src/battle/integration/exploration-engine-mapping.ts(88,13): error TS2322: Type '\"629-unmapped-synthetic\"' is not assignable to type 'never'.\nsrc/screens/cumulus_adapters/exploration-view-model.ts(490,4): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.\nsrc/session/providers/journey-purge-receipts.ts(71,3): error TS1360: Type '{ \"purge-and-copy\": true; \"purge-one-transfigure-and-copy-others\": true; \"gain-dreamsign\": false; \"gain-nightmare-and-dreamsign\": false; \"gain-nightmare-and-offered-dreamsign\": false; \"gain-card\": false; ... 58 more ...; \"lose-half-essence-and-free-purchases\": false; }' does not satisfy the expected type 'Readonly<Record<\"purge-and-copy\" | \"purge-one-transfigure-and-copy-others\" | \"gain-dreamsign\" | \"gain-nightmare-and-dreamsign\" | \"gain-nightmare-and-offered-dreamsign\" | \"gain-card\" | ... 59 more ... | \"629-unmapped-synthetic\", boolean>>'.\n  Property '\"629-unmapped-synthetic\"' is missing in type '{ \"purge-and-copy\": true; \"purge-one-transfigure-and-copy-others\": true; \"gain-dreamsign\": false; \"gain-nightmare-and-dreamsign\": false; \"gain-nightmare-and-offered-dreamsign\": false; \"gain-card\": false; ... 58 more ...; \"lose-half-essence-and-free-purchases\": false; }' but required in type 'Readonly<Record<\"purge-and-copy\" | \"purge-one-transfigure-and-copy-others\" | \"gain-dreamsign\" | \"gain-nightmare-and-dreamsign\" | \"gain-nightmare-and-offered-dreamsign\" | \"gain-card\" | ... 59 more ... | \"629-unmapped-synthetic\", boolean>>'.\nsrc/session/providers/journey-purge-receipts.ts(75,8): error TS7053: Element implicitly has an 'any' type because expression of type '\"purge-and-copy\" | \"purge-one-transfigure-and-copy-others\" | \"gain-dreamsign\" | \"gain-nightmare-and-dreamsign\" | \"gain-nightmare-and-offered-dreamsign\" | \"gain-card\" | ... 59 more ... | \"629-unmapped-synthetic\"' can't be used to index type '{ \"purge-and-copy\": true; \"purge-one-transfigure-and-copy-others\": true; \"gain-dreamsign\": false; \"gain-nightmare-and-dreamsign\": false; \"gain-nightmare-and-offered-dreamsign\": false; \"gain-card\": false; ... 58 more ...; \"lose-half-essence-and-free-purchases\": false; }'.\n  Property '629-unmapped-synthetic' does not exist on type '{ \"purge-and-copy\": true; \"purge-one-transfigure-and-copy-others\": true; \"gain-dreamsign\": false; \"gain-nightmare-and-dreamsign\": false; \"gain-nightmare-and-offered-dreamsign\": false; \"gain-card\": false; ... 58 more ...; \"lose-half-essence-and-free-purchases\": false; }'.\n",
+      "rawLogSHA256": "1f7b53954819a7e1e40fb4ceff6bb3115b9b625d4fa9a52a83b923de8352bfc3",
+      "receipt": {
+        "argv": [
+          "node",
+          "node_modules/typescript/bin/tsc",
+          "--noEmit"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/deck-mods-prep629",
+        "start": "2026-10-15T08:48:36.249859+00:00",
+        "end": "2026-10-15T08:48:47.305842+00:00",
+        "elapsedS": 11.05584500002442,
+        "exitCode": 2,
+        "hostLoadSamples": [
+          {
+            "at": "2026-10-15T08:48:36.249859+00:00",
+            "load": 11.27880859375
+          },
+          {
+            "at": "2026-10-15T08:48:37.260761+00:00",
+            "load": 11.27880859375
+          },
+          {
+            "at": "2026-10-15T08:48:38.270836+00:00",
+            "load": 11.17626953125
+          },
+          {
+            "at": "2026-10-15T08:48:39.280888+00:00",
+            "load": 11.17626953125
+          },
+          {
+            "at": "2026-10-15T08:48:40.290947+00:00",
+            "load": 11.17626953125
+          },
+          {
+            "at": "2026-10-15T08:48:41.301010+00:00",
+            "load": 11.17626953125
+          },
+          {
+            "at": "2026-10-15T08:48:42.311065+00:00",
+            "load": 11.17626953125
+          },
+          {
+            "at": "2026-10-15T08:48:43.321128+00:00",
+            "load": 10.921875
+          },
+          {
+            "at": "2026-10-15T08:48:44.331181+00:00",
+            "load": 10.921875
+          },
+          {
+            "at": "2026-10-15T08:48:45.341238+00:00",
+            "load": 10.921875
+          },
+          {
+            "at": "2026-10-15T08:48:46.351295+00:00",
+            "load": 10.921875
+          },
+          {
+            "at": "2026-10-15T08:48:47.305842+00:00",
+            "load": 10.921875
+          }
+        ],
+        "log": "/tmp/dreamtides-executor-01a1304d/629/mutant-unmapped-kind.log",
+        "logSHA256": "1f7b53954819a7e1e40fb4ceff6bb3115b9b625d4fa9a52a83b923de8352bfc3"
+      }
+    },
+    "artifactBase": "acceptance-v01"
+  },
+  "historicalFuzzReuse": {
+    "qualification": "Historical actual300; current runtime import/input closure and lock/config equal. No current fuzz execution claimed. Full application is not byte-equal.",
+    "receipt": {
+      "start": "2026-10-15T15:42:03.758637+00:00",
+      "end": "2026-10-15T16:04:36.302707+00:00",
+      "wallS": 1352.5287525000167,
+      "exit": 0,
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "22adf539-d2c9-4f33-9416-159d03a220ad,980d283a-9558-4b66-84a0-fcb91fdf4ceb"
+      ],
+      "pid": 40368,
+      "pgid": 40368,
+      "parent": 40366,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/attuned-perfected275",
+      "userS": 1408.961588,
+      "systemS": 11.033731,
+      "stdoutSha256": "2b4056f0db7e76404d27ceac1f93190ad788baeca3e88442e69d74f7589330a1",
+      "timedOut": false,
+      "initialMembers": [
+        "40368 40366 40368 Thu Oct 15 08:42:03 2026     node /opt/homebrew/bin/npm run fuzz:engine -- --games 300 --weight-uuids 22adf539-d2c9-4f33-9416-159d03a220ad,980d283a-9558-4b66-84a0-fcb91fdf4ceb"
+      ],
+      "remainingMembers": []
+    },
+    "receiptSha256": "a4b086a0a58c72327bbcb95de2102b874d2d27181e0247c96de339af71111b3a",
+    "stdoutSha256": "2b4056f0db7e76404d27ceac1f93190ad788baeca3e88442e69d74f7589330a1"
+  },
+  "currentPublicConsumers": {
+    "script": "public-consumers.mts",
+    "scriptSHA256": "35185591230c6aedd1ec8dcc703df008471a14b01439d18a0e6ba81103ce7acb",
+    "report": "public-consumers.json",
+    "reportSHA256": "a051f23bde5f405fc9de4d87a656e5b3c0bcb9f5029c36b24d202db8b99670d0",
+    "cards": 522,
+    "tuples": 2706,
+    "counts": {
+      "base": 522,
+      "Empowered": 500,
+      "Amplified": 244,
+      "Kindled": 376,
+      "Perfected": 517,
+      "Inspired": 146,
+      "Enduring": 146,
+      "Resonant": 116,
+      "Attuned": 46,
+      "Hastened": 93
+    },
+    "eligibilityDisagreements": [],
+    "selected": [
+      {
+        "uuid": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+        "form": "Kindled",
+        "id": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+        "cardType": "character",
+        "spark": 5,
+        "costs": [
+          {
+            "cost": "energy",
+            "amount": 2
+          }
+        ],
+        "speed": "fast",
+        "abilitiesSha256": "f7f32dd3899af6b112be5722b5c68629c6360e90bc5817ddeda261101bbba553"
+      },
+      {
+        "uuid": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+        "form": "Inspired",
+        "id": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+        "cardType": "character",
+        "spark": 0,
+        "costs": [
+          {
+            "cost": "energy",
+            "amount": 1
+          }
+        ],
+        "speed": "fast",
+        "abilitiesSha256": "a43e1028bcec763477190e3daee3243f5b36d1c47db972132c3d81b3aef7532a"
+      },
+      {
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "form": "Perfected",
+        "id": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "cardType": "character",
+        "spark": 7,
+        "costs": [
+          {
+            "cost": "energy",
+            "amount": 0
+          }
+        ],
+        "speed": "fast",
+        "abilitiesSha256": "b6a524006d3d237c574a84ff1f46e2d06cac903dafad04caea6fd0f243b6d6aa"
+      },
+      {
+        "uuid": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "form": "Attuned",
+        "id": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+        "cardType": "character",
+        "spark": 5,
+        "costs": [
+          {
+            "cost": "energy",
+            "amount": 2
+          }
+        ],
+        "speed": "fast",
+        "abilitiesSha256": "30ef2d06f55ccead5be397da8b3a948ec2f886a48161b2c7e9d6f5e6d0963880"
+      }
+    ],
+    "qualification": "Current full real-card public eligibility/DTO/catalog traversal, not all-card play or per-kind child acceptance",
+    "explorationKinds": 65,
+    "artifactBase": "acceptance-v01"
+  },
+  "preflight": {
+    "pass": 20,
+    "skip": 10,
+    "fail": 0,
+    "pending": 0,
+    "qualification": "Canonical CLI has no mods argument; fixture/eligibility control only. Browser proves encoded mods transport."
+  },
+  "focusedTests": {
+    "files": 10,
+    "passed": 235,
+    "sources": [
+      {
+        "file": "acceptance-v01/focused-v01.stdout",
+        "files": 9,
+        "passed": 232
+      },
+      {
+        "file": "acceptance-v01/probe-contract-v01.stdout",
+        "files": 1,
+        "passed": 3
+      }
+    ]
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "browser": {
+    "at": "2026-10-15T16:55:06.610Z",
+    "sourceBase": "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+    "results": [
+      {
+        "cell": "composition1-player",
+        "error": null,
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 13218
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 9459
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/run-1Daa3n/composition1-player-desktop.jsonl",
+            "gameId": "wrcm6c",
+            "selectedBy": "url",
+            "rows": 32,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/run-1Daa3n/composition1-player-mobile.jsonl",
+            "gameId": "5xvsiy",
+            "selectedBy": "url",
+            "rows": 32,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "cell": "composition1-enemy",
+        "error": null,
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 8434
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/run-1Daa3n/composition1-enemy-desktop.jsonl",
+            "gameId": "hq2mob",
+            "selectedBy": "url",
+            "rows": 34,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "cell": "composition2-player",
+        "error": null,
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 9790
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/run-1Daa3n/composition2-player-desktop.jsonl",
+            "gameId": "ak7jwu",
+            "selectedBy": "url",
+            "rows": 32,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "cell": "composition2-enemy",
+        "error": null,
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 16774
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/run-1Daa3n/composition2-enemy-desktop.jsonl",
+            "gameId": "n7vtdq",
+            "selectedBy": "url",
+            "rows": 51,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "cell": "composition3-player",
+        "error": null,
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 10033
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/run-1Daa3n/composition3-player-desktop.jsonl",
+            "gameId": "6b4itm",
+            "selectedBy": "url",
+            "rows": 33,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "cell": "composition3-enemy",
+        "error": null,
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 8533
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/run-1Daa3n/composition3-enemy-desktop.jsonl",
+            "gameId": "jkus2k",
+            "selectedBy": "url",
+            "rows": 34,
+            "reason": null
+          }
+        ]
+      }
+    ],
+    "failure": null,
+    "cleanupError": null,
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v04/run-1Daa3n",
+    "wallMs": {
+      "browserLeaseWait": 6,
+      "serve": 2572
+    }
+  },
+  "callerPacket": {
+    "file": "acceptance-v04/browser-packet.json",
+    "sha256": "8886b05036fc3e3be63ff621a0ffe7fddd6f73ee0d933e8fd6b7ab1307e78045",
+    "provenance": {
+      "at": "2026-10-15T16:52:45.924Z",
+      "canonicalPath": "/Users/dthurn/dreamtides_web/.worktrees/codex-deck-mods279/scripts/qa/scenarios/card-lab-play.mjs",
+      "canonicalFileSHA256": "bb62af07c315616f9868c986b54a1fe23a166d3cda4607e5ab8a89b3f13ba724",
+      "canonicalFunctionSHA256": "74b5feb6387b3958548307e990e525bf8557da20e26d05a8e7dd21ec923d9ec9",
+      "wrapperSHA256": "f09a2f08c7e78007abf049ad9ad2693f3151269afa2ca392eae67d73089a0ee7",
+      "canonicalFunctionExactSubstring": true,
+      "cells": [
+        {
+          "cell": "composition1-player",
+          "card": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+          "form": "Kindled",
+          "variant": "kindled",
+          "as": "player",
+          "mods": "{\"sparkBonus\":3,\"costReduction\":1,\"fast\":true,\"reclaim\":1,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+          "expected": "{\"uuid\":\"7be2e6d7-abff-4c44-a0c3-35460da1693c\",\"form\":\"Kindled\",\"id\":\"7be2e6d7-abff-4c44-a0c3-35460da1693c\",\"cardType\":\"character\",\"spark\":5,\"costs\":[{\"cost\":\"energy\",\"amount\":2}],\"speed\":\"fast\",\"abilitiesSha256\":\"f7f32dd3899af6b112be5722b5c68629c6360e90bc5817ddeda261101bbba553\"}",
+          "captureAfter": "yes",
+          "captureReload": "no",
+          "viewport": "desktop,mobile"
+        },
+        {
+          "cell": "composition1-enemy",
+          "card": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+          "form": "Kindled",
+          "variant": "kindled",
+          "as": "enemy",
+          "mods": "{\"sparkBonus\":3,\"costReduction\":1,\"fast\":true,\"reclaim\":1,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+          "expected": "{\"uuid\":\"7be2e6d7-abff-4c44-a0c3-35460da1693c\",\"form\":\"Kindled\",\"id\":\"7be2e6d7-abff-4c44-a0c3-35460da1693c\",\"cardType\":\"character\",\"spark\":5,\"costs\":[{\"cost\":\"energy\",\"amount\":2}],\"speed\":\"fast\",\"abilitiesSha256\":\"f7f32dd3899af6b112be5722b5c68629c6360e90bc5817ddeda261101bbba553\"}",
+          "captureAfter": "no",
+          "captureReload": "no",
+          "viewport": "desktop"
+        },
+        {
+          "cell": "composition2-player",
+          "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+          "form": "Inspired",
+          "variant": "inspired",
+          "as": "player",
+          "mods": "{\"sparkBonus\":3,\"costReduction\":1,\"fast\":true,\"reclaim\":1,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+          "expected": "{\"uuid\":\"69964b8e-0f38-4fb7-a0cd-89430ef04c2d\",\"form\":\"Inspired\",\"id\":\"69964b8e-0f38-4fb7-a0cd-89430ef04c2d\",\"cardType\":\"character\",\"spark\":0,\"costs\":[{\"cost\":\"energy\",\"amount\":1}],\"speed\":\"fast\",\"abilitiesSha256\":\"a43e1028bcec763477190e3daee3243f5b36d1c47db972132c3d81b3aef7532a\"}",
+          "captureAfter": "no",
+          "captureReload": "no",
+          "viewport": "desktop"
+        },
+        {
+          "cell": "composition2-enemy",
+          "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+          "form": "Inspired",
+          "variant": "inspired",
+          "as": "enemy",
+          "mods": "{\"sparkBonus\":3,\"costReduction\":1,\"fast\":true,\"reclaim\":1,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+          "expected": "{\"uuid\":\"69964b8e-0f38-4fb7-a0cd-89430ef04c2d\",\"form\":\"Inspired\",\"id\":\"69964b8e-0f38-4fb7-a0cd-89430ef04c2d\",\"cardType\":\"character\",\"spark\":0,\"costs\":[{\"cost\":\"energy\",\"amount\":1}],\"speed\":\"fast\",\"abilitiesSha256\":\"a43e1028bcec763477190e3daee3243f5b36d1c47db972132c3d81b3aef7532a\"}",
+          "captureAfter": "no",
+          "captureReload": "no",
+          "viewport": "desktop"
+        },
+        {
+          "cell": "composition3-player",
+          "card": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+          "form": "Perfected",
+          "variant": "perfected",
+          "as": "player",
+          "mods": "{\"sparkBonus\":3,\"costReduction\":1,\"fast\":true,\"reclaim\":1,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+          "expected": "{\"uuid\":\"764b62f6-6af9-40ad-8d1f-653cc1a11030\",\"form\":\"Perfected\",\"id\":\"764b62f6-6af9-40ad-8d1f-653cc1a11030\",\"cardType\":\"character\",\"spark\":7,\"costs\":[{\"cost\":\"energy\",\"amount\":0}],\"speed\":\"fast\",\"abilitiesSha256\":\"b6a524006d3d237c574a84ff1f46e2d06cac903dafad04caea6fd0f243b6d6aa\"}",
+          "captureAfter": "no",
+          "captureReload": "yes",
+          "viewport": "desktop"
+        },
+        {
+          "cell": "composition3-enemy",
+          "card": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+          "form": "Perfected",
+          "variant": "perfected",
+          "as": "enemy",
+          "mods": "{\"sparkBonus\":3,\"costReduction\":1,\"fast\":true,\"reclaim\":1,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+          "expected": "{\"uuid\":\"764b62f6-6af9-40ad-8d1f-653cc1a11030\",\"form\":\"Perfected\",\"id\":\"764b62f6-6af9-40ad-8d1f-653cc1a11030\",\"cardType\":\"character\",\"spark\":7,\"costs\":[{\"cost\":\"energy\",\"amount\":0}],\"speed\":\"fast\",\"abilitiesSha256\":\"b6a524006d3d237c574a84ff1f46e2d06cac903dafad04caea6fd0f243b6d6aa\"}",
+          "captureAfter": "no",
+          "captureReload": "no",
+          "viewport": "desktop"
+        }
+      ],
+      "qualification": "Six semantic composition/controller cells; first player cell judged at desktop and mobile. Additional viewports are observations of same cell, not extra UUIDs. Canonical function embedded unchanged due serialized function binding rules."
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "error-mid-step/partial-publication",
+      "contract": "src/engine/transfigurations/contracts/transfigurations-01.contracts.ts: keeps a failing source resolution transactional before the appended instruction",
+      "observable": "Actual fold error preserves score/deck and publishes no appended draw."
+    },
+    {
+      "path": "reload/restart-mid-operation",
+      "contract": "src/engine/transfigurations/contracts/transfigurations-01.contracts.ts: reconstructs the same pending prompt after reload and rejects stale answers; kindled.contracts.ts: replays an actual fold action and reloads the same physical tuple for each side",
+      "observable": "JSON-loaded prompt/action retains identity and result; actual browser persisted source reload separately recorded."
+    },
+    {
+      "path": "invalid/malformed/foreign-input",
+      "contract": "src/battle/integration/deck-mods/preparation.contracts.ts: rejects malformed direct requests before any fixture or input can change; carries URL mods beside declared stage to real physical instances and replay; duplicate/malformed mods atomically refused",
+      "observable": "Strict decoder and actual physical request preserve input; wrong-side fold bounces."
+    },
+    {
+      "path": "stale/concurrent-actors",
+      "contract": "Existing next-battle opening-hand/smaller-hand/starting-energy contracts in eager deck-mods.test.ts, including preserves persistent plus temporary payment through cancel, reload and competing inputs and refuses stale rewards and serializes competing reward resolutions exactly once",
+      "observable": "Credited only for delivered public refusal/transaction contracts; original next-battle encounter recipes remain later acceptance joins."
+    },
+    {
+      "path": "cancel/interrupt",
+      "contract": "Existing opening-hand and smaller-hand public cancellable-payment/reload/stale actor contracts; starting-energy cancel/reload contract",
+      "observable": "Rollback and retry preserve committed physical tuple and reject superseded prompt. Evidence-only279 introduces no production state transition or cancellation protocol."
+    },
+    {
+      "path": "source-code-hash/refusal-on-new-kind",
+      "contract": "Typed ExplorationEffectKind exhaustive never default; exact-source-qualified629 deliberate new-kind compiler witness",
+      "observable": "Actual historical tsc exit2 contains mapping TS2322. Current mapping+union SHA equal; no source mutation/fault injection in279."
+    },
+    {
+      "path": "QA-interruption/resource-recovery",
+      "contract": "Existing canonical openQaSession runtime lifecycle",
+      "observable": "Own browser context/server group/lease log ownership and actual cleanup receipts; no shared provider reset or foreign process cleanup."
+    }
+  ],
+  "attempts": {
+    "source-proof": "Scratch inspection script attempted to read tracked directory symlink as file, EISDIR/exit1 before proof. Filtered actual files; v02 proof passes. Original stdout/receipt retained. No production source changed.",
+    "runtimeFailures": {
+      "firstBrowser": {
+        "at": "2026-10-15T16:40:04.030Z",
+        "sourceBase": "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+        "results": [
+          {
+            "cell": "composition1-player",
+            "error": "desktop#0: Error: Persisted actual battle init lacks declared form/modifier entry\n    at foundation (evalmachine.<anonymous>:1945:190)\n    at async evalmachine.<anonymous>:1960:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+            "caps": [],
+            "calls": [
+              {
+                "viewport": "desktop",
+                "step": 0,
+                "ms": 8299
+              }
+            ],
+            "gameLogs": [
+              {
+                "viewport": "desktop",
+                "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/run-LuzJ2V/composition1-player-desktop.jsonl",
+                "gameId": "stdqbf",
+                "selectedBy": "url",
+                "rows": 29,
+                "reason": null
+              }
+            ]
+          }
+        ],
+        "failure": "Cell failed composition1-player",
+        "cleanupError": null,
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v01/run-LuzJ2V",
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 3534
+        }
+      },
+      "secondBrowser": {
+        "at": "2026-10-15T16:46:15.191Z",
+        "sourceBase": "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+        "results": [
+          {
+            "cell": "composition1-player",
+            "error": "desktop#0: Error: page.evaluate: Error: Actual modified physical play has no resolution\n    at eval (eval at evaluate (:311:30), <anonymous>:12:72)\n    at async <anonymous>:337:30",
+            "caps": [],
+            "calls": [
+              {
+                "viewport": "desktop",
+                "step": 0,
+                "ms": 12544
+              }
+            ],
+            "gameLogs": [
+              {
+                "viewport": "desktop",
+                "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v02/run-7wYTY5/composition1-player-desktop.jsonl",
+                "gameId": "axyjkp",
+                "selectedBy": "url",
+                "rows": 32,
+                "reason": null
+              }
+            ]
+          }
+        ],
+        "failure": "Cell failed composition1-player",
+        "cleanupError": null,
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v02/run-7wYTY5",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1966
+        }
+      },
+      "thirdBrowser": {
+        "at": "2026-10-15T16:51:36.315Z",
+        "sourceBase": "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+        "results": [
+          {
+            "cell": "composition1-player",
+            "error": "desktop#0: TypeError: qa.log is not a function\n    at foundation (evalmachine.<anonymous>:1941:31)\n    at async evalmachine.<anonymous>:1982:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+            "caps": [],
+            "calls": [
+              {
+                "viewport": "desktop",
+                "step": 0,
+                "ms": 7873
+              }
+            ],
+            "gameLogs": [
+              {
+                "viewport": "desktop",
+                "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v03/run-upFl3o/composition1-player-desktop.jsonl",
+                "gameId": "z8i4o8",
+                "selectedBy": "url",
+                "rows": 29,
+                "reason": null
+              }
+            ]
+          }
+        ],
+        "failure": "Cell failed composition1-player",
+        "cleanupError": null,
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.279/acceptance-v03/run-upFl3o",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2271
+        }
+      },
+      "classification": "Known scratch observer contract error: lab uses actual LOAD_STATE payload, while first caller assumed engine.battleStarted JSONL init. Failed/uncredited first cell preserved. Revised observer reads actual persisted repository, correlates applied seq and exact debug request, freezes whole load digest before/after. Second caller wrongly required historical mounted-probe events after reload; existing probe-history contract intentionally isolates reloaded history. Third caller diagnostic used nonexistent qa.log instead of public qa.note and failed before its added guards; it is retained uncredited. Final caller requires actual source resolution before reload, uses the actual note helper, and verifies immutable persisted events and exact physical zone/state afterward. Canonical driver and production source unchanged; this is a new observer epoch, not unknown navigation retry."
+    }
+  },
+  "remainingChildAcceptance": "Original280\u2013288 retain20 eligible per-kind both-controller sweeps, per-kind judgments and real next-battle encounter recipes; this foundation records combined transport/form integration and full finalized consumer contracts. Final phase full10k/journey and complete-content sweep retain original owners.",
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "sourceEdits": [],
+  "fallout": [],
+  "runtime": {
+    "acceptance-v01": {
+      "at": "2026-10-15T16:40:04.030Z",
+      "closed": true,
+      "ownerStillExists": false,
+      "serverPid": 40960,
+      "serverPgid": "40960",
+      "remainingServerMembers": [],
+      "cleanupError": null
+    },
+    "acceptance-v02": {
+      "at": "2026-10-15T16:46:15.190Z",
+      "closed": true,
+      "ownerStillExists": false,
+      "serverPid": 66692,
+      "serverPgid": "66692",
+      "remainingServerMembers": [],
+      "cleanupError": null
+    },
+    "acceptance-v03": {
+      "at": "2026-10-15T16:51:36.315Z",
+      "closed": true,
+      "ownerStillExists": false,
+      "serverPid": 36419,
+      "serverPgid": "36419",
+      "remainingServerMembers": [],
+      "cleanupError": null
+    },
+    "acceptance-v04": {
+      "at": "2026-10-15T16:55:06.609Z",
+      "closed": true,
+      "ownerStillExists": false,
+      "serverPid": 35564,
+      "serverPgid": "35564",
+      "remainingServerMembers": [],
+      "cleanupError": null
+    }
+  },
+  "qaAudit": {
+    "file": "acceptance-v04/final-qa-audit.json",
+    "sha256": "b6830d8154df657e474226563f816ad0aaff73277e8a72442db7da0557648c13",
+    "observations": 7,
+    "semanticCells": 6,
+    "actualFinalExportRows": 248,
+    "threeEarlierFailures": "All retained uncredited in own QA ledger and immutable original epoch reports."
+  },
+  "visualJudgment": {
+    "captures": [
+      "foundation-composition1-player-desktop-resolved.png",
+      "foundation-composition1-player-mobile-resolved.png",
+      "foundation-composition3-player-desktop-reloaded.png"
+    ],
+    "dimensions": [
+      "2880x1800",
+      "780x1688",
+      "2880x1800"
+    ],
+    "scope": "Observed board cards/spark/controls/avatars; positive/horizontal geometry plus visual vertical-fit judgment, no full text/entire renderer claim."
+  },
+  "ruleInputs": [
+    {
+      "path": "docs/plan/decisions.md",
+      "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4"
+    },
+    {
+      "path": "docs/rules.md",
+      "sha256": "a2ae12e4a9ef15cc2241e0fac17db2b9c79cc2bb60162b87e121a397d61354b6"
+    },
+    {
+      "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.275-1.md",
+      "sha256": "5fb874ec0239c218d4e8e0d0e8074a03185575dba400892a39699cb36d9cee31"
+    },
+    {
+      "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.276-1.md",
+      "sha256": "ff1bd4a0e8ce656ef802223ffc313ad2e69907f3ffead46ad6390a4154fa24a4"
+    },
+    {
+      "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.277-1.md",
+      "sha256": "bb324834992576bd9adedb5fe7cadf9ddc4854349a8263f385f573c810153675"
+    }
+  ],
+  "parentBrowserProof": {
+    "file": "acceptance-v04/parent-final-browser-verification.json",
+    "sha256": "ca835a7574ceca5a3ee9d47c0e1d6ba96637e0c9050ea738b6296a12d4f047ff"
+  },
+  "finalSourceVerification": {
+    "file": "acceptance-v04/post-browser-source-verification.json",
+    "sha256": "0a383d1af44989948d92b9b328876522f191ebdf5eda9960aefbeaa3822bb31a"
+  },
+  "artifactRoot": "artifacts/qa/hv-umm2.279",
+  "remaining": [
+    "Parent fresh read-only Codex core review and native candidate/certification/promotion/close."
+  ],
+  "resourceAudit": {
+    "file": "acceptance-v04/final-resource-audit.json",
+    "sha256": "83888346b60b97311137e816051b78d099873af7ef863dbdfb134986484795f4"
+  },
+  "artifactManifest": {
+    "file": "acceptance-v04/artifact-manifest-v02.json",
+    "sha256": "d1fc892e0392c2c1def6775ef484f0a9a89a6f4a1e93c510d8ebf37a87ed6ad9",
+    "files": 195,
+    "superseded": "acceptance-v04/artifact-manifest-v01-superseded.json",
+    "disposition": "acceptance-v04/manifest-v01-disposition.json"
+  },
+  "commandArtifactBase": "acceptance-v01",
+  "readyEvidenceCutoff": "2026-10-15T16:59:57.011960+00:00",
+  "deliveryIntent": {
+    "metadataCutoff": "2026-10-15T17:04:05.942319+00:00",
+    "expectedBase": "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+    "ownedFiles": 4,
+    "remaining": "Parent fresh read-only Codex core review and native candidate/certification/promotion/close."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.279",
+  "phase": 5,
+  "implementMin": 36.290921983333334,
+  "implementWindow": {
+    "start": "2026-10-15T16:27:48.487000+00:00",
+    "end": "2026-10-15T17:04:05.942319+00:00"
+  },
+  "localValidationS": {
+    "review": 0.4629224999807775,
+    "focused": 11.983352291979827,
+    "fuzz": 0,
+    "knip": 6.595522459014319,
+    "preflight": 1.7435540839796886,
+    "publicConsumers": 3.0453779999515973
+  },
+  "hostLoad": 6.62646484375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "qa-observer-contract",
+      "minutes": 15.043202683333334,
+      "note": "Inclusive wall from first known observer-contract failure through final passing observer invocation, including research and parent coordination; active CPU/model attribution unknown. All three failed original cells remain uncredited. Product source and canonical driver unchanged."
+    }
+  ]
+}
