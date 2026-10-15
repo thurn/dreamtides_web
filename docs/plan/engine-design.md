@@ -1807,7 +1807,7 @@ controller: the hand that side holds, the deck or void it owns. They are
 card references (`CardRef`), so any primitive holding one resolves them
 through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
 
-- `fromVoid(filter, { player, count, upTo, another, costAtMost, costLessThan })` ("a
+- `fromVoid(filter, { player, count, upTo, another, costAtMost, costLessThan, thisTurn })` ("a
   character from your void"): a `ZoneTargetSpec`, a play-time target
   (`PlayTimeTarget`) declared by `cardTarget`. It is chosen with the
   character and stack targets, in a `chooseTargets` prompt with the `target`
@@ -1815,7 +1815,11 @@ through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
   `targetCandidates` offers the matching cards of that void that can be
   targeted, in void order. A chosen card counts as the effect resolves while
   it is still in that void, matching and targetable; none left reports
-  `noLegalTarget`. The cost planner excludes it like any target
+  `noLegalTarget`. Optional `thisTurn` qualification intersects the named
+  void’s current physical cards with successful `dissolved`, `abandoned`, or
+  `discarded` occurrences in the current turn, both when targets are offered
+  and as the effect resolves. Normal and extra turns each use fresh history.
+  The cost planner excludes it like any target
   (RD-hv-umm2.59-1). `costAtMost` ("≤X● cost events in your void") accepts
   `BoundValue`, including `storedCounters()` with its scoped source-count
   read described below. An X (`x()`) bound reads the X picked as the card is
@@ -1922,7 +1926,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Player rules | `ruleModifier(instruction, player)` | Static-only: optional Fast/Interrupt Event base, energy carry, or Dawn threshold with a deferred child. |
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15), `banishSelfOnResolve` ("Banish this card": the resolving event goes from the stack to its owner's Banished zone as the instruction resolves, so `resolveTop` does not put it into the void; RD-hv-umm2.475-1) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |
-| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X, a `countCards` zone count, or `thisCharacterSpark()` (RD-hv-umm2.501-1), or `storedCounters()` (rules § Counters), figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid` and `everyIn`, each with an optional `costAtMost`, a constant or X, and for `fromVoid` also a zone count, `thisCharacterSpark()` or `storedCounters()`: `fromVoid` checks it as its targets are offered and again as the effect resolves (RD-hv-umm2.495-1), `everyIn` reads it once as the effect resolves (RD-hv-umm2.86-2); `topOfDeck`, `randomIn`, `thisCardIn`) | |
+| Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X, a `countCards` zone count, or `thisCharacterSpark()` (RD-hv-umm2.501-1), or `storedCounters()` (rules § Counters), figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid` and `everyIn`, each with an optional `costAtMost`, a constant or X, and for `fromVoid` also a zone count, `thisCharacterSpark()` or `storedCounters()`: `fromVoid` checks it as its targets are offered and again as the effect resolves (RD-hv-umm2.495-1), `everyIn` reads it once as the effect resolves (RD-hv-umm2.86-2); `fromVoid` also accepts `thisTurn` for successful current-turn physical membership, checked at offer and resolution; `topOfDeck`, `randomIn`, `thisCardIn`) | |
 | Values | `storedCounters()` (the source's live in-play count, or the same activation's own payment-departure count, RD-hv-umm2.95-1), `triggerSubjectSpark()` (the abandoned or dissolved lookback subject’s effective predeparture spark; captured zero stays zero, resolving without a binding reads 0, static scopes reject it; the public scalar survives subject cessation and sampling while its ability source is identifiable), `triggerSubjectCost()` (the trigger subject’s captured copiable cost; resolving null reads 0, static scopes reject it), constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost"), `thisCharacterSpark()` (the source's effective ✦ in a resolving effect, its retained last-known ✦ once it has left play, RD-hv-umm2.460-1) | turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `turnOf(player)` (the named controller-relative player's active turn, including extra turns; resolving and static), `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `playedAnotherEventThisTurn()` (another physical event played by the resolving effect's controller this turn; excluded from `StaticCondition`), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`), `topCardMatches(filter = {}, player = "you")` (resolving; excluded from `StaticCondition`) | |

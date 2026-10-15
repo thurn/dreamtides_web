@@ -208,7 +208,8 @@ function inZoneMatching(
 
 /**
  * Whether a void card is one a zone target may name now: in that void,
- * matching its filter, and within its cost bound, read now against the
+ * matching its filter and any `thisTurn` successful current-turn physical
+ * membership qualification, and within its cost bound, read now against the
  * card's copiable cost (RD-hv-umm2.495-1). The bound is read like a
  * character selector's: an X bound reads `selectorX`, the prepared or resolving
  * ability's X, and otherwise the source card's stored X; a source ✦ bound reads
@@ -234,7 +235,7 @@ function voidTargetMatching(
     (spec.costLessThan === undefined || cost < bound(spec.costLessThan));
 }
 
-/** The cards in a void a zone target may choose by its filter and cost bound, in void order, targetable or not. */
+/** The cards in a void matching the filter, cost bound and optional successful current-turn membership, in void order, targetable or not. */
 function matchingVoidCards(
   state: BattleState,
   catalog: EngineCatalog,
@@ -757,7 +758,8 @@ const RANDOM_SELECTION_STREAM = "random:selection";
 /**
  * The cards a zone reference names now (rules § Zones → References to cards
  * in a zone): the chosen void cards still in that void, matching, within
- * their cost bound, and targetable, in the order chosen, reporting
+ * their cost bound, satisfying any `thisTurn` successful current-turn physical
+ * membership qualification, and targetable, in the order chosen, reporting
  * noLegalTarget when none remain; every matching card in the zone, in zone order; those of the top cards of
  * the deck that match, top first; up to `count` different matching cards
  * picked at random, in the order picked; or the source while it is in its

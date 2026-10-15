@@ -244,7 +244,9 @@ interface ZoneCardsBase {
  * void cards chosen as targets (rules § Targeting), when the card is played
  * or, for a triggered ability, as it resolves. A chosen card is still a
  * legal target as the effect resolves only while it is in that void, matches
- * the filter and the cost bound, and can be targeted.
+ * the filter and the cost bound, can be targeted, and satisfies any `thisTurn`
+ * qualification by successful current-turn physical membership. The same
+ * qualification applies when targets are offered.
  */
 export interface ZoneTargetSpec extends ZoneCardsBase {
   /** Intersects current-zone physical targets with successful occurrences this turn. */

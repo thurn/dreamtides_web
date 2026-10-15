@@ -1,0 +1,43 @@
+{
+  "bead": "hv-umm2.701",
+  "phase": 5,
+  "implementWindow": {
+    "start": "2026-10-15T00:09:42.764Z",
+    "end": "2026-10-15T00:18:53.949849+00:00"
+  },
+  "implementMin": 9.186430816666666,
+  "localValidationS": {
+    "focused-corrected": 9.81996666698251,
+    "omission-counterfactual": 8.902511749998666,
+    "review": 76.44679758400889,
+    "knip": 5.2853405000059865,
+    "evidence-schema": 0.25587504100985825,
+    "whitespace": 0.27480395801831037
+  },
+  "hostLoad": 22.69189453125,
+  "testDelta": {
+    "files": 0,
+    "lines": 10,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "verification-diagnostic",
+      "minutes": 0.0024398041666666664,
+      "note": "Standalone scanner does not rescan template and regex literals with parser context; it consumed comment prose as a template token. No source mismatch was present.",
+      "measuredScope": "Actual shell group observation including backup/proposal preparation, hashes and initial standalone scanner assertion; scanner-only duration is unseparated."
+    },
+    {
+      "tag": "verification-diagnostic",
+      "minutes": 9.791666666666666e-08,
+      "note": "rg reported missing src/engine/state/turn-history.ts; symbols found in actual src/engine/dsl/selectors.ts.",
+      "measuredScope": "Actual read-only symbol-search shell group observation; rg missing-path diagnostic with pipeline exit 0."
+    },
+    {
+      "tag": "verification-diagnostic",
+      "minutes": 0.0024602361166666665,
+      "note": "Diagnostic expected FAIL without Vitest project prefix |shared|. Counts and source hashes had passed. Corrected exact fail-line suffix check proves all six intended failures.",
+      "measuredScope": "Actual shell group observation including CF log extraction, parser-normalized audit and first exact-name Python matcher; matcher-only duration is unseparated."
+    }
+  ]
+}

@@ -1,0 +1,356 @@
+{
+  "bead": "hv-umm2.701",
+  "base": "d08e03d02fa6ecc9d6380fde2cfcc5760e65debc",
+  "observedAt": "2026-10-15T00:18:53.949849+00:00",
+  "dispatch": {
+    "at": "2026-10-15T00:09:57.100010+00:00",
+    "source": "actual root function_call journal",
+    "journal": "/Users/dthurn/.codex/sessions/2026/10/14/rollout-2026-10-14T05-54-26-01a13a7a-741e-7cc1-a0dd-3f8eb1805ecf.jsonl",
+    "dispatch": "2026-10-15T00:09:42.764Z",
+    "callId": "call_23ff7565bda74d22a6f242dbce36965c",
+    "argumentsSHA256": "7c63deb02c3c00d8196ed37ec47cc5e1a7303c9634220d2961561e1ac49aa0ca",
+    "helper": "/root/void_target_proof_701",
+    "bead": "hv-umm2.701"
+  },
+  "clock": {
+    "scope": "Actual helper spawn through current near-Git evidence cutoff, including reads, native acknowledgement waits, diagnostics, checks and evidence; actual automatic Git endpoint is recorded by parent in retained commit receipt. Parent pre-dispatch setup is separate.",
+    "start": "2026-10-15T00:09:42.764Z",
+    "evidenceCutoff": "2026-10-15T00:18:53.949849+00:00",
+    "elapsedMin": 9.186430816666666,
+    "samplingCPU": "UNKNOWN",
+    "budgetWaiver": false,
+    "diagnosticTiming": "Friction records actual original tool-response command-group duration only. Diagnosis and recovery remainder is unseparated inside the inclusive clock."
+  },
+  "sourceEpoch": {
+    "at": "2026-10-15T00:10:40.139825+00:00",
+    "sourceHashes": {
+      "src/engine/dsl/types.ts": "96efb6c0333ef7d95d068f7c18b8c00bacc6b2c686081667bd36e707a9058444",
+      "src/engine/effects/interpreter.ts": "7b5355c46a724b7db1b6bbe06c460259f82540bd5efba1593f4775d4c44b9700",
+      "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "5be96f909da9deedf6ef58409f6997516490afc441928379ffd6d982916b8424",
+      "docs/plan/engine-design.md": "084e706359ffef69fd32101e59e2bb845792c570448a550a960af3db6a8801cf"
+    }
+  },
+  "admissionsSHA256": {
+    "claim.json": "e0bee9f534b9b2e72a2c71a412f527bcbf66531c39420dcfe1ae2e2a4177ccbf",
+    "source-write-ack.json": "96789e13621d11dcd7a10b7ed75697545a95ccab74d326dc753431ad2d3c9ffa",
+    "counterfactual-write-ack.json": "b73c33af5fdbd2a1c490ba9660e21cd116af1563ad3141b302492f03c2a55e55",
+    "aggregate-native-ack.json": "b73c33af5fdbd2a1c490ba9660e21cd116af1563ad3141b302492f03c2a55e55"
+  },
+  "checks": [
+    {
+      "label": "focused-corrected",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "void targets qualified by current-turn membership"
+      ],
+      "sourceHashes": {
+        "src/engine/dsl/types.ts": "96efb6c0333ef7d95d068f7c18b8c00bacc6b2c686081667bd36e707a9058444",
+        "src/engine/effects/interpreter.ts": "7b5355c46a724b7db1b6bbe06c460259f82540bd5efba1593f4775d4c44b9700",
+        "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "5be96f909da9deedf6ef58409f6997516490afc441928379ffd6d982916b8424",
+        "docs/plan/engine-design.md": "084e706359ffef69fd32101e59e2bb845792c570448a550a960af3db6a8801cf"
+      },
+      "callerSHA": "f35773572d66578d328898e94566f738e87c125e3cbd9ce2c7fea0ac139230b1",
+      "start": "2026-10-15T00:10:40.208107+00:00",
+      "end": "2026-10-15T00:10:50.028225+00:00",
+      "wallS": 9.81996666698251,
+      "exit": 0,
+      "load": [
+        10.33935546875,
+        15.15625,
+        14.5107421875
+      ],
+      "pid": 99345,
+      "pgid": 99345,
+      "sourceEpochValid": true,
+      "remainingOwned": [],
+      "groupAfterReap": [],
+      "log": "/tmp/dreamtides-701/focused-corrected.log"
+    },
+    {
+      "label": "omission-counterfactual",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "composes targetability|requires successful dissolution after Veil|requires successful dissolution after reclaimed departure|deduplicates repeat occurrences|revalidates chosen physical targets|keeps capacity and rollback"
+      ],
+      "sourceHashes": {
+        "src/engine/dsl/types.ts": "96efb6c0333ef7d95d068f7c18b8c00bacc6b2c686081667bd36e707a9058444",
+        "src/engine/effects/interpreter.ts": "c2ed78bb7108368200a686d8ef0648ebfba80fb837b9c097a2436475e48d5a7d",
+        "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "5be96f909da9deedf6ef58409f6997516490afc441928379ffd6d982916b8424",
+        "docs/plan/engine-design.md": "084e706359ffef69fd32101e59e2bb845792c570448a550a960af3db6a8801cf"
+      },
+      "callerSHA": "f35773572d66578d328898e94566f738e87c125e3cbd9ce2c7fea0ac139230b1",
+      "start": "2026-10-15T00:13:10.654431+00:00",
+      "end": "2026-10-15T00:13:19.557118+00:00",
+      "wallS": 8.902511749998666,
+      "exit": 1,
+      "load": [
+        22.3896484375,
+        16.4765625,
+        15.037109375
+      ],
+      "pid": 79143,
+      "pgid": 79143,
+      "sourceEpochValid": true,
+      "remainingOwned": [],
+      "groupAfterReap": [],
+      "log": "/tmp/dreamtides-701/omission-counterfactual.log"
+    },
+    {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "sourceHashes": {
+        "src/engine/dsl/types.ts": "96efb6c0333ef7d95d068f7c18b8c00bacc6b2c686081667bd36e707a9058444",
+        "src/engine/effects/interpreter.ts": "7b5355c46a724b7db1b6bbe06c460259f82540bd5efba1593f4775d4c44b9700",
+        "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "5be96f909da9deedf6ef58409f6997516490afc441928379ffd6d982916b8424",
+        "docs/plan/engine-design.md": "084e706359ffef69fd32101e59e2bb845792c570448a550a960af3db6a8801cf"
+      },
+      "callerSHA": "f35773572d66578d328898e94566f738e87c125e3cbd9ce2c7fea0ac139230b1",
+      "start": "2026-10-15T00:13:35.515149+00:00",
+      "end": "2026-10-15T00:14:51.962590+00:00",
+      "wallS": 76.44679758400889,
+      "exit": 0,
+      "load": [
+        22.69189453125,
+        17.08056640625,
+        15.298828125
+      ],
+      "pid": 26073,
+      "pgid": 26073,
+      "sourceEpochValid": true,
+      "remainingOwned": [],
+      "groupAfterReap": [],
+      "log": "/tmp/dreamtides-701/review.log"
+    },
+    {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "sourceHashes": {
+        "src/engine/dsl/types.ts": "96efb6c0333ef7d95d068f7c18b8c00bacc6b2c686081667bd36e707a9058444",
+        "src/engine/effects/interpreter.ts": "7b5355c46a724b7db1b6bbe06c460259f82540bd5efba1593f4775d4c44b9700",
+        "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "5be96f909da9deedf6ef58409f6997516490afc441928379ffd6d982916b8424",
+        "docs/plan/engine-design.md": "084e706359ffef69fd32101e59e2bb845792c570448a550a960af3db6a8801cf"
+      },
+      "callerSHA": "f35773572d66578d328898e94566f738e87c125e3cbd9ce2c7fea0ac139230b1",
+      "start": "2026-10-15T00:15:04.465009+00:00",
+      "end": "2026-10-15T00:15:09.750493+00:00",
+      "wallS": 5.2853405000059865,
+      "exit": 0,
+      "load": [
+        14.2666015625,
+        15.9970703125,
+        15.0751953125
+      ],
+      "pid": 34529,
+      "pgid": 34529,
+      "sourceEpochValid": true,
+      "remainingOwned": [],
+      "groupAfterReap": [],
+      "log": "/tmp/dreamtides-701/knip.log"
+    },
+    {
+      "label": "evidence-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "sourceHashes": {
+        "src/engine/dsl/types.ts": "96efb6c0333ef7d95d068f7c18b8c00bacc6b2c686081667bd36e707a9058444",
+        "src/engine/effects/interpreter.ts": "7b5355c46a724b7db1b6bbe06c460259f82540bd5efba1593f4775d4c44b9700",
+        "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "5be96f909da9deedf6ef58409f6997516490afc441928379ffd6d982916b8424",
+        "docs/plan/engine-design.md": "084e706359ffef69fd32101e59e2bb845792c570448a550a960af3db6a8801cf"
+      },
+      "callerSHA": "f35773572d66578d328898e94566f738e87c125e3cbd9ce2c7fea0ac139230b1",
+      "start": "2026-10-15T00:15:31.624894+00:00",
+      "end": "2026-10-15T00:15:31.880849+00:00",
+      "wallS": 0.25587504100985825,
+      "exit": 0,
+      "load": [
+        11.22412109375,
+        15.1318359375,
+        14.7880859375
+      ],
+      "pid": 36326,
+      "pgid": 36326,
+      "sourceEpochValid": true,
+      "remainingOwned": [],
+      "groupAfterReap": [],
+      "log": "/tmp/dreamtides-701/evidence-schema.log"
+    },
+    {
+      "label": "whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "sourceHashes": {
+        "src/engine/dsl/types.ts": "96efb6c0333ef7d95d068f7c18b8c00bacc6b2c686081667bd36e707a9058444",
+        "src/engine/effects/interpreter.ts": "7b5355c46a724b7db1b6bbe06c460259f82540bd5efba1593f4775d4c44b9700",
+        "src/engine/effects/primitives/contracts/void-target-history.contracts.ts": "5be96f909da9deedf6ef58409f6997516490afc441928379ffd6d982916b8424",
+        "docs/plan/engine-design.md": "084e706359ffef69fd32101e59e2bb845792c570448a550a960af3db6a8801cf"
+      },
+      "callerSHA": "f35773572d66578d328898e94566f738e87c125e3cbd9ce2c7fea0ac139230b1",
+      "start": "2026-10-15T00:15:31.906841+00:00",
+      "end": "2026-10-15T00:15:32.181796+00:00",
+      "wallS": 0.27480395801831037,
+      "exit": 0,
+      "load": [
+        11.22412109375,
+        15.1318359375,
+        14.7880859375
+      ],
+      "pid": 36353,
+      "pgid": 36353,
+      "sourceEpochValid": true,
+      "remainingOwned": [],
+      "groupAfterReap": [],
+      "log": "/tmp/dreamtides-701/whitespace.log"
+    }
+  ],
+  "counterfactual": {
+    "analysis": {
+      "at": "2026-10-15T00:13:35.484903+00:00",
+      "exactIntendedFailures": [
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > void targets qualified by current-turn membership > composes targetability and cost bounds with successful membership for player",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > void targets qualified by current-turn membership > composes targetability and cost bounds with successful membership for enemy",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > void targets qualified by current-turn membership > requires successful dissolution after Veil despite a stale eligible void member for player",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > void targets qualified by current-turn membership > requires successful dissolution after Veil despite a stale eligible void member for enemy",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > void targets qualified by current-turn membership > requires successful dissolution after reclaimed departure despite a stale eligible void member for player",
+        "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > void targets qualified by current-turn membership > requires successful dissolution after reclaimed departure despite a stale eligible void member for enemy"
+      ],
+      "failed": 6,
+      "passingPositiveControls": 6,
+      "boundaryFamilies": 3,
+      "bothSeats": true,
+      "allCorrectedHashesRestored": true,
+      "terminalGroupsEmpty": true
+    },
+    "restoration": {
+      "start": "2026-10-15T00:13:10.629239+00:00",
+      "correctedSHA256": "7b5355c46a724b7db1b6bbe06c460259f82540bd5efba1593f4775d4c44b9700",
+      "omittedSHA256": "c2ed78bb7108368200a686d8ef0648ebfba80fb837b9c097a2436475e48d5a7d",
+      "counterfactualExit": 1,
+      "restoredAt": "2026-10-15T00:13:19.564782+00:00",
+      "restoredSHA256": "7b5355c46a724b7db1b6bbe06c460259f82540bd5efba1593f4775d4c44b9700",
+      "exactBackupMatch": true
+    },
+    "callerSHA256": "2daccf57ca43fd3fa7910da82527a74a9c315f823b1afb16d15f3c619e7bce4c",
+    "omittedManifestSHA256": "09dc11c02ba42e231b2bb41d7eb99662c19e1af4042435d05f9e806076fa7507",
+    "limits": "Synthetic public engine/fold contracts prove these selected membership boundaries; this is not a new runtime behavior or production-card acceptance run."
+  },
+  "commentExcludedSyntax": {
+    "method": "TypeScript parser/printer removes comments before byte comparison; retains all declarations and executable syntax",
+    "paths": {
+      "src/engine/dsl/types.ts": {
+        "equal": true,
+        "baseCommentExcludedSHA256": "743bbda89c7cf5c0db5c42d6a6c47a82cf905a8133d51b0365921ffc52925040",
+        "currentCommentExcludedSHA256": "743bbda89c7cf5c0db5c42d6a6c47a82cf905a8133d51b0365921ffc52925040"
+      },
+      "src/engine/effects/interpreter.ts": {
+        "equal": true,
+        "baseCommentExcludedSHA256": "92ec7db0840368de898438d170a716af51b18f07472ee3a84d2d5e2ede4d5613",
+        "currentCommentExcludedSHA256": "92ec7db0840368de898438d170a716af51b18f07472ee3a84d2d5e2ede4d5613"
+      }
+    }
+  },
+  "diagnosticFailures": [
+    {
+      "command": "node --input-type=module (initial direct TypeScript createScanner comparison)",
+      "exit": 1,
+      "cause": "Standalone scanner does not rescan template and regex literals with parser context; it consumed comment prose as a template token. No source mismatch was present.",
+      "diagnosticLog": "runtime-token-audit.log",
+      "replacement": "runtime-token-audit.mjs parses and prints with removeComments before comparing all non-comment syntax.",
+      "toolWallS": 0.14638825,
+      "toolWallScope": "Actual shell group observation including backup/proposal preparation, hashes and initial standalone scanner assertion; scanner-only duration is unseparated."
+    },
+    {
+      "command": "rg -n ... src/engine/state/turn-history.ts src/engine ... | head -24",
+      "shellExit": 0,
+      "componentFailure": "rg reported missing src/engine/state/turn-history.ts; symbols found in actual src/engine/dsl/selectors.ts.",
+      "qualification": "Read-only guessed path diagnostic, corrected by exact symbol result. No validation failure.",
+      "toolWallS": 5.875e-06,
+      "toolWallScope": "Actual read-only symbol-search shell group observation; rg missing-path diagnostic with pipeline exit 0."
+    },
+    {
+      "command": "initial exact CF log membership check (Python read-only)",
+      "exit": 1,
+      "cause": "Diagnostic expected FAIL without Vitest project prefix |shared|. Counts and source hashes had passed. Corrected exact fail-line suffix check proves all six intended failures.",
+      "replacement": "counterfactual-analysis.json",
+      "validationRepeat": false,
+      "toolWallS": 0.147614167,
+      "toolWallScope": "Actual shell group observation including CF log extraction, parser-normalized audit and first exact-name Python matcher; matcher-only duration is unseparated."
+    }
+  ],
+  "coverage": {
+    "correctedPasses": 20,
+    "counterfactualBoundaryFailures": 6,
+    "counterfactualPositiveControlPasses": 6,
+    "bothSeats": true,
+    "entrypointsAdded": 0,
+    "contractLines": 242,
+    "testLineDelta": 10,
+    "normalAndExtraTurnControls": "Retained as separate public cases, both actors."
+  },
+  "reviewFollowup": {
+    "original": {
+      "at": "2026-10-14T23:40:00.828708+00:00",
+      "review": "normal ClaudeOpus5.5 read-only retry03",
+      "source": "064cda1361935a74029bcfcfbdba42782ef056a4",
+      "packet": "632d095a8f68d6e379d55e2135f1d47f4eb3d503709ff4dc84d3e5bc6a356fbb",
+      "requiredInputs": 33,
+      "scope": "complete all; actual range account retained",
+      "exit": 0,
+      "denials": [],
+      "runtimeS": 308.5405527080293,
+      "findings": {
+        "F1": "accepted low: stalevoid negatives",
+        "F2": "accepted low: stalecheap composition",
+        "F3": "accepted low: qualifier comments/fromVoid design"
+      },
+      "followup": "hv-umm2.701",
+      "advisories": "labdefault covered by original194 live; resolutionmembership retention fact; originalreceipt hash older thanfinal qualified, no inventedfinalCF; abandoned actor expressive limitation preexisting notregression",
+      "sourceStatus": "closed completed; reviewfollowup required, debt removed"
+    },
+    "disposition": {
+      "F1": "Veil and reclaimed negatives each contain a stale eligible physical member in the named void; separate cases independently fail when the membership guard is omitted.",
+      "F2": "Cost/targetability composition contains a stale cheap physical void member; exact legal candidates exclude it and both seats fail when the membership guard is omitted.",
+      "F3": "ZoneTargetSpec and three interpreter comments, fromVoid option/resolution paragraph and Selectors row describe optional successful current-turn physical membership at offer and resolution."
+    },
+    "originalDispositionPath": "/tmp/dreamtides-pu55/boundary-retry03/review-disposition.json",
+    "originalDispositionSHA256": "9c6496f71b9042c63416939086501b0207060bf174a7c93d6c0fce273c160c05",
+    "scope": "Permanent contract, comments and design text only; normal prior Claude review is complete. No new core review required under exact native admission."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review",
+        "method": "Held runner os.getloadavg()[0], kernel one-minute load sample at dispatch."
+      }
+    }
+  },
+  "resources": {
+    "ownedTerminalGroupsEmpty": true,
+    "browserProvidersStarted": 0,
+    "serversStarted": 0,
+    "activeChecks": [],
+    "scope": "All owned runner descendants census-bound by PID, birth and process group; native children reaped before each next aggregate."
+  },
+  "limits": "No browser, fuzz or review:full required for permanent comments/tests/design-only scope; existing source runtime and declaration syntax match base. No new pre-existing issue found."
+}

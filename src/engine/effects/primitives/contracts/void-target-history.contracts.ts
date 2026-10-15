@@ -113,7 +113,9 @@ describe("void targets qualified by current-turn membership", () => {
   });
 
   it.each(SIDES)("composes targetability and cost bounds with successful membership for %s", side => {
-    const b = setup(side, [H.kill.id, bounded.id], [v.vanilla0.id, v.vanilla1.id, v.vanilla2.id, untargetable.id]);
+    const b = setup(side, [H.kill.id, bounded.id], [v.vanilla0.id, v.vanilla1.id, v.vanilla2.id, untargetable.id], {
+      [side]: { hand: [H.kill.id, bounded.id], back: [v.vanilla0.id, v.vanilla1.id, v.vanilla2.id, untargetable.id], void: [v.vanilla0.id], energy: 50, deck },
+    });
     const gone = play(b.state, side, b.ids[side].hand[0]).state;
     expect(pending(gone, side, b.ids[side].hand[1]).prompt.candidates).toEqual(b.ids[side].back.slice(0, 2).reverse());
   });
@@ -141,12 +143,20 @@ describe("void targets qualified by current-turn membership", () => {
     expect(pending(discardedState, side, d.ids[side].hand[3]).prompt.candidates).toEqual([]);
   });
 
-  it.each(SIDES)("requires successful dissolution after Veil or reclaimed departure and fresh normal/extra turns for %s", side => {
-    const veil = setup(side, [H.killAll.id, otherDissolved.id], [], { [opponent(side)]: { back: [H.veil.id], deck } });
+  it.each(SIDES)("requires successful dissolution after Veil despite a stale eligible void member for %s", side => {
+    const veil = setup(side, [H.killAll.id, otherDissolved.id], [], { [opponent(side)]: { back: [H.veil.id], void: [v.vanilla1.id], deck } });
     expect(pending(play(veil.state, side, veil.ids[side].hand[0]).state, side, veil.ids[side].hand[1]).prompt.candidates).toEqual([]);
-    const reclaimed = setup(side, [H.kill.id, rescue.id], [v.vanilla1.id]);
+  });
+
+  it.each(SIDES)("requires successful dissolution after reclaimed departure despite a stale eligible void member for %s", side => {
+    const reclaimed = setup(side, [H.kill.id, rescue.id], [v.vanilla1.id], {
+      [side]: { hand: [H.kill.id, rescue.id], back: [v.vanilla1.id], void: [v.vanilla1.id], energy: 50, deck },
+    });
     reclaimed.state.instances[reclaimed.ids[side].back[0]!].status.reclaimed = true;
     expect(pending(play(reclaimed.state, side, reclaimed.ids[side].hand[0]).state, side, reclaimed.ids[side].hand[1]).prompt.candidates).toEqual([]);
+  });
+
+  it.each(SIDES)("requires fresh membership in normal and extra turns for %s", side => {
     for (const extra of [false, true]) {
       const b = setup(side, [H.kill.id, ...(extra ? [H.extra.id] : []), rescue.id], [v.vanilla1.id]);
       let state = play(b.state, side, b.ids[side].hand[0]).state;
