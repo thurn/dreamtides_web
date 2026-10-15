@@ -94,7 +94,7 @@ const STATUS_FIELDS = {
   lostAbilities: true,
 } as const satisfies Record<keyof CardStatus, true>;
 
-const VARIANT_FIELDS = { amplified: true, transfigurations: true, deckMods: true, typeRemap: true } as const satisfies Record<
+const VARIANT_FIELDS = { amplified: true, transfigurations: true, transfigurationApplications: true, deckMods: true, typeRemap: true } as const satisfies Record<
   keyof Variant,
   true
 >;
@@ -103,7 +103,7 @@ const VARIANT_FIELDS = { amplified: true, transfigurations: true, deckMods: true
 const INSTANCE_ARITY =
   Object.keys(INSTANCE_FIELDS).length -
   4 + // Variant/status expand below; optional domain and journey origin contribute only when present.
-  Object.keys(VARIANT_FIELDS).length - 1 + // Optional remap contributes only when present.
+  Object.keys(VARIANT_FIELDS).length - 2 + // Optional remap contributes only when present.
   Object.keys(STATUS_FIELDS).length;
 
 type RecordKind = "data" | "state" | "instances";
@@ -266,7 +266,7 @@ class StructuralHasher {
 
   private instance(instance: CardInstance): void {
     const { status } = instance;
-    const arity = INSTANCE_ARITY + (instance.variant.typeRemap === undefined ? 0 : 1) - (status.playedViaAlternativeCost === undefined ? 1 : 0) + (instance.poolCandidates === undefined ? 0 : 1) + (instance.journeyDeck === undefined ? 0 : 1);
+    const arity = INSTANCE_ARITY + (instance.variant.transfigurationApplications === undefined ? 0 : 1) + (instance.variant.typeRemap === undefined ? 0 : 1) - (status.playedViaAlternativeCost === undefined ? 1 : 0) + (instance.poolCandidates === undefined ? 0 : 1) + (instance.journeyDeck === undefined ? 0 : 1);
     this.seqA = TAG_INSTANCE ^ arity;
     this.seqB = Math.imul(TAG_INSTANCE, 0x9e3779b1) ^ arity;
     this.feed(instance.id);
@@ -277,6 +277,7 @@ class StructuralHasher {
     this.feed(instance.zone);
     this.feed(instance.variant.amplified);
     this.feed(instance.variant.transfigurations);
+    if (instance.variant.transfigurationApplications !== undefined) this.feed(instance.variant.transfigurationApplications);
     this.feed(instance.variant.deckMods);
     if (instance.variant.typeRemap !== undefined) this.feed(instance.variant.typeRemap);
     this.feed(status.exhausted);

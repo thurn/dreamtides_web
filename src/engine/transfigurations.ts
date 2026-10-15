@@ -1,3 +1,4 @@
+import { resolveTransfigurationApplications, eligibleTransfigurationApplications, appendTransfigurationApplication, transfigurationApplicationStates } from "./transfiguration-applications";
 /** The fixed catalog of structural form operations, before permanent deck modifications. */
 import type { EngineCardDefinition, PrintedCard } from "./catalog";
 import type { Ability, Variant } from "./dsl/types";
@@ -46,12 +47,14 @@ function prepared(card: EngineCardDefinition, variant: Variant): Transfiguration
 
 /** Owned supported forms eligible for the current printed definition and authored variant. */
 export function eligibleEngineTransfigurations(card: EngineCardDefinition, variant: Variant = BASE_VARIANT): readonly TransfigurationType[] {
+  if (variant.transfigurationApplications !== undefined) return eligibleTransfigurationApplications(card, variant, constituentForms);
   const base = prepared(card, variant);
   return ENGINE_TRANSFIGURATIONS.filter(form => form.eligible(base)).map(form => form.id);
 }
 
 /** Resolve once from a reusable source definition; returned abilities belong to this tuple. */
 export function applyEngineTransfigurations(card: EngineCardDefinition, variant: Variant): PrintedCard {
+  if (variant.transfigurationApplications !== undefined) return resolveTransfigurationApplications(card, variant, constituentForms);
   if (!variant.transfigurations?.some(type => ENGINE_TRANSFIGURATIONS.some(form => form.id === type))) return card;
   let result = prepared(card, variant);
   if (variant.transfigurations.includes("Perfected") && perfected.eligible(result)) {
@@ -66,4 +69,14 @@ export function applyEngineTransfigurations(card: EngineCardDefinition, variant:
   }
   const { resonantChange: _change, abilities, ...definition } = result;
   return { ...definition, abilities: () => abilities };
+}
+
+/** Append one additional application to the complete ordered tuple. */
+export function appendEngineTransfiguration(card: EngineCardDefinition, variant: Variant, form: TransfigurationType): Variant {
+  return appendTransfigurationApplication(card, variant, form, constituentForms);
+}
+
+/** Catalog-owned canonical primitive-prefix metadata for worker transport. */
+export function engineTransfigurationApplicationStates(card: EngineCardDefinition, variant: Variant) {
+  return transfigurationApplicationStates(card, variant, constituentForms);
 }

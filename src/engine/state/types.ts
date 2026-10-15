@@ -1,7 +1,7 @@
 import type { DeckEntryId } from "../../types/identifiers";
 import type { CardSubtype } from "../../types/card-identity";
 import type { TransfigurationType } from "../../types/journey";
-import type { CardFilter, Condition, Cost, DeckMods, Keyword, NamedTrigger, Speed, Variant } from "../dsl/types";
+import type { CardFilter, Condition, Cost, DeckMods, Keyword, NamedTrigger, Speed, TransfigurationApplication, Variant } from "../dsl/types";
 import type { LoopTracker } from "../loops/types";
 import type {
   AbilitySource,
@@ -72,6 +72,7 @@ export interface BattleConfig {
 
 /** One journey deck entry as the battle receives it: its card and full variant (D39). */
 export interface DeckEntry {
+  readonly transfigurationApplications?: readonly TransfigurationApplication[];
   readonly cardId: CardId;
   /** Played as its amplified text (the Amplified transfiguration). */
   readonly amplified?: boolean;

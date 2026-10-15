@@ -1,3 +1,6 @@
+import type { TransfigurationPrefixState } from "./transfiguration-application-data";
+import type { TransfigurationSourceState } from "../transfiguration/transfiguration-logic";
+import type { ConstituentTransfiguration } from "./dsl/types";
 import { applyEngineTransfigurations, type TransfigurationMetadata } from "./transfigurations";
 import { remapAbilityTypes } from "./dsl/type-remap";
 import { BATTLE } from "../content/battle";
@@ -51,6 +54,10 @@ export type BaseSpark = number | "x";
 
 /** The engine's view of one card definition. */
 export interface EngineCardDefinition {
+  /** Derived source capability; omitted from worker transport. */
+  readonly transfigurationState?: (initiallyAmplified: boolean, steps: readonly ConstituentTransfiguration[]) => TransfigurationSourceState;
+  /** Canonical source states for the exact histories carried by a text-less worker catalog. */
+  readonly transfigurationStates?: readonly TransfigurationPrefixState[];
   /** Plain authored-text eligibility, supplied by the content loader. */
   readonly transfiguration?: TransfigurationMetadata;
   readonly id: CardId;
@@ -261,7 +268,7 @@ function hasStaticOutsidePlay(abilities: readonly Ability[]): boolean {
  * a figment, or a card with no transfigurations, deck mods or ability type remap.
  */
 export function plainVariant({ printing, variant }: CardInstance): boolean {
-  return printing.kind === "figment" || (variant.transfigurations === undefined && variant.deckMods === undefined && variant.typeRemap === undefined);
+  return printing.kind === "figment" || (variant.transfigurationApplications === undefined && variant.transfigurations === undefined && variant.deckMods === undefined && variant.typeRemap === undefined);
 }
 
 /** The catalog card a printing names, for prompt purposes and logs; `null` for a figment. */

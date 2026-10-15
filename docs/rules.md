@@ -3290,6 +3290,12 @@ An already selected authored Amplified variant does not itself supply another
 eligible Amplified transformation. Permanent entry modifications apply after
 the transfiguration operations.
 
+Separate transfiguration applications act in their recorded order on the entry's current copiable values. An effect that permits an additional application may apply a form that was applied previously whenever that form's conditions still hold. A previous form identity supplies no exhaustion rule. The conditions are checked before permanent entry modifications.
+
+Each Perfected application captures its eligible constituents immediately before that application and applies each captured constituent once in catalog order. An internal authored Amplified replacement does not add constituents to that snapshot. The constituents are internal to one Perfected application and supply one Perfected occasion. A later application of a constituent is a separate application.
+
+An authored Amplified application replaces the current rules text and abilities at its recorded position; subsequent operations act on that replacement. The entry's already transformed cost, spark and speed remain. Permanent entry modifications apply after the recorded transfiguration applications. Copies retain the recorded applications and Perfected snapshots. Saving, loading and resolving those values supply no additional application.
+
 ## Journey Transfiguration Effects
 
 A journey transfiguration applies one applicable form to a concrete deck entry

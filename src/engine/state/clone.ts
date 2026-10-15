@@ -100,7 +100,7 @@ function copyPrinting(printing: Printing): Printing {
 
 /** A variant: the plain `{ amplified }` shape typed, a modified one (optional fields) by `copyJson`. */
 function copyVariant(variant: Variant): Variant {
-  return variant.transfigurations === undefined && variant.deckMods === undefined && variant.typeRemap === undefined
+  return variant.transfigurationApplications === undefined && variant.transfigurations === undefined && variant.deckMods === undefined && variant.typeRemap === undefined
     ? { amplified: variant.amplified }
     : copyJson(variant);
 }

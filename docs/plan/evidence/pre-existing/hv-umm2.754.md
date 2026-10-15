@@ -1,0 +1,3 @@
+# hv-umm2.754 source observation
+
+The legacy membership Resonant dispatcher selects the first DSL ability containing its named occasion. The canonical source selector can select a later own header: `▸Dissolved, Dawn: Gain 1⍟.\n\n▸Dawn: Gain 2⍟.` maps to two triggered abilities containing Dawn, and the first can change despite the source selecting the second. The chronological path projects the canonical selected ordinal through the landed transform; legacy membership behavior remains its existing compatibility contract. This observation is source-qualified, with the exact chronological execution witness in `chronological-execution.contracts.ts`. A broader legacy mapping change needs its own scoped work.

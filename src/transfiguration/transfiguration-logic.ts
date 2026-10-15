@@ -764,3 +764,46 @@ export function transfigurationEffectDetails(
   }
   return details;
 }
+
+/** Catalog-only semantic source metadata; text stays inside the immutable source producer. */
+export interface TransfigurationSourceState {
+  readonly amplified: boolean;
+  readonly resonant: { readonly change: ResonantChange; readonly ordinal: number; readonly count: number } | null;
+}
+
+/** Reuse the canonical text operations for current eligibility and exact own-header targeting. */
+export function transfigurationSourceState(
+  original: string,
+  authored: string | undefined,
+  initiallyAmplified: boolean,
+  steps: readonly Exclude<TransfigurationType, "Perfected">[],
+): TransfigurationSourceState {
+  let text = initiallyAmplified && authored !== undefined ? authored : original;
+  for (const form of steps) {
+    if (form === "Amplified") {
+      if (authored !== undefined && authored.trim().length > 0 && authored !== text) text = authored;
+    } else {
+      const transform = textTransformFor(text, transfigurationMechanic(form).operation);
+      if (transform !== null) text = transform.plain(text);
+    }
+  }
+  const change = resonantChange(text);
+  let resonant: TransfigurationSourceState["resonant"] = null;
+  if (change === "oncePerTurn") {
+    resonant = { change, ordinal: 0, count: [...text.matchAll(/once per turn/gi)].length };
+  } else if (change !== null) {
+    const match = (change === "dawn" ? RESONANT_DAWN_HEADER : RESONANT_MATERIALIZED_HEADER).exec(text);
+    const name = change === "dawn" ? "Dawn" : "Materialized";
+    const headers: number[] = [];
+    let offset = 0;
+    for (const line of text.split("\n")) {
+      const heading = line.split(TRANSFIGURE_MARK_START).join("").split(TRANSFIGURE_MARK_END).join("").trimStart();
+      const colon = heading.indexOf(":");
+      if (heading.startsWith("▸") && colon >= 0 && heading.slice(0, colon).split(",").some(token => token.trim().replace(/^▸/, "") === name)) headers.push(offset);
+      offset += line.length + 1;
+    }
+    const selected = match === null ? -1 : match.index + (text[match.index] === "\n" ? 1 : 0);
+    resonant = { change, ordinal: headers.indexOf(selected), count: headers.length };
+  }
+  return { amplified: authored !== undefined && authored.trim().length > 0 && authored !== text, resonant };
+}

@@ -1,3 +1,6 @@
+import { engineTransfigurationApplicationStates } from "../transfigurations";
+import { isTransfigurationPrefixState } from "../transfiguration-application-data";
+import { variantOf } from "../state/create";
 /**
  * The policy worker's engine catalog. A catalog holds ability functions, so
  * it cannot cross into a worker; the worker builds its own from the content
@@ -29,7 +32,7 @@ import { SIDES } from "../state/ids";
 import type { BattleInit } from "../state/types";
 
 /** A card definition without its abilities: what a text-less card is. */
-export type ManifestCard = Omit<EngineCardDefinition, "abilities" | "synthetic">;
+export type ManifestCard = Omit<EngineCardDefinition, "abilities" | "synthetic" | "transfigurationState">;
 
 export interface ManifestEmblem<Id> {
   readonly id: Id;
@@ -62,8 +65,12 @@ export function catalogManifest(catalog: EngineCatalog, init: BattleInit): Catal
   const dreamsignIds = unique(SIDES.flatMap((side) => init.dreamsigns?.[side] ?? []));
   return {
     cards: cardIds.map((id) => {
-      const { abilities: _abilities, synthetic: _synthetic, ...plain } = catalog.card(id);
-      return structuredClone(plain);
+      const definition = catalog.card(id);
+      const { abilities: _abilities, synthetic: _synthetic, transfigurationState: _producer, transfigurationStates: _states, ...plain } = definition;
+      const entries = SIDES.flatMap(side => init.decks[side]).filter(entry => entry.cardId === id && entry.transfigurationApplications !== undefined);
+      const states = entries.flatMap(entry => engineTransfigurationApplicationStates(definition, variantOf(entry)));
+      const uniqueStates = states.filter((state, index) => states.findIndex(other => JSON.stringify(other) === JSON.stringify(state)) === index);
+      return structuredClone({ ...plain, ...(entries.length === 0 ? {} : { transfigurationStates: uniqueStates }) });
     }),
     maximumFixedCost: catalog.maximumFixedCost,
     dreamwell: unique(init.dreamwell).map((id) => {
@@ -93,7 +100,10 @@ function textlessEmblem<Id>(emblem: ManifestEmblem<Id>): { id: Id; status: Conte
 export function manifestCatalog(manifest: CatalogManifest): EngineCatalog {
   const lab = developmentLabDefinitions();
   return createCatalog(
-    withManifest([...contentCardDefinitions(), ...lab.cards], manifest.cards, (card) => ({ ...card, abilities: NO_ABILITIES })),
+    withManifest([...contentCardDefinitions(), ...lab.cards], manifest.cards, (card) => {
+      if (card.transfigurationStates !== undefined && (!Array.isArray(card.transfigurationStates) || !Array.from(card.transfigurationStates).every(isTransfigurationPrefixState))) throw new Error("Invalid transfiguration manifest states");
+      return { ...structuredClone(card), abilities: NO_ABILITIES };
+    }),
     withManifest(contentDreamwellDefinitions(), manifest.dreamwell, (card) => ({ ...card, abilities: NO_ABILITIES })),
     {
       avatars: withManifest([...contentAvatarDefinitions(), ...(lab.emblems.avatars ?? [])], manifest.avatars, textlessEmblem),

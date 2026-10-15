@@ -1,0 +1,1483 @@
+{
+  "bead": "hv-umm2.754",
+  "base": "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+  "status": "Author checks complete at recorded cutoff when all final receipts are present; parent fresh Codex core review and certified delivery pending",
+  "measurementWindow": {
+    "start": "2026-10-15T16:45:26.899000+00:00",
+    "end": "2026-10-15T17:40:27.321521+00:00",
+    "scope": "Inclusive original actual dispatch, all Stage1 investigation, custody repair, coordination, failed epochs, admission waits and validation. Cutoff precedes final Git; actual commit/tail in external final-commit receipt.",
+    "sampledProductiveCpu": "UNKNOWN"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v01 actual command start1min host load; not CPU utilization"
+      },
+      "testDelta": {
+        "files": "Six new contract modules including registration aggregator; fixture module separately listed; existing runner and exact two existing test bindings included in changed-line accounting."
+      }
+    }
+  },
+  "sourceReadCustody": {
+    "originalManifest": "/tmp/754-root/source-manifest.json",
+    "originalManifestSha256": "a7d836b76c9aa17619b66fc52f9cd081c30250eb82242dde449150f27f9cd38c",
+    "correction": "Original blanket clipped-windows-repaired wording and early source admission exceeded independently verified own source-output custody. Parent identified21paths/2152lines, repaired by43 complete bounded actual base reads before further runtime writes. Hash equality and parent selected reads are not upgrades to own reads.",
+    "addendum": "/tmp/754-root/source-manifest-addendum-02.json",
+    "addendumSha256": "7d51678e76e1763d7be992431d3ce656ecf72bc6da60b7ccd561207d1484e1ee",
+    "parentVerification": "/tmp/754-root/parent-source-read-repair-proof.json"
+  },
+  "sourceEpochQualification": {
+    "earlyReceipts": "Through knip-v01, sourceHash includes tracked source only; new helpers/contracts are not included. These are exploratory epochs, not complete final source proofs. RED core/fixture bytes separately frozen before runtime edits, baseline runtime tracked source complete.",
+    "finalReceipts": "Forward-only run.py cached+untracked-unignored manifests bind all actual new runtime and contracts. First complete epoch focused-v10; final-* and full-v01 use this complete scope. Earlier maps preserved byte-for-byte.",
+    "baselineCoreSha256": "0ff4f263feed0e8772a73792b0699e0d231b35eb43d6b3169d5955d7113e176c",
+    "runner": "One additive registration now targets chronological-all.contracts aggregator; frozen original behavioral core and fixture bytes retained.",
+    "markerProbeSha256": "ec94e16acfdb90a63983532a06e600e74b10ff06812197b4686b61211e911164",
+    "sourceHash": "fb29e480cfcf48503be6bedc22b67d80a6711dc3de657baa7bf75ed813cf8cf0"
+  },
+  "publicProof": {
+    "RED": "red-v01: four behavioral failures reaching old public initialized/catalog APIs plus two passing legacy duplicate-membership controls; no new-type import/compile refutation.",
+    "legacy": "Ten public synthetic before/after rows, both actors, five legacy modes; complete serialized/clone/view/printed tuple bytes/stateHash/canonicalHash and played outcomes. Identical frozen witness output SHA1010df9bc9bff906de3bea6f143e5cef9885b129f1606530aefda6320375f087.",
+    "execution": "Both actors: repeated Inspired/Kindled, authored chronology/reopening, current Perfected snapshots, captured/new Attuned, Resonant repeated/once/header/combined exact target and mismatch refusal, numeric modifications and payments, C12 paired references.",
+    "retention": "Real hand/stack/figment copies, gained ability source departure, serialized cloned observed determinized histories, hash changes, real pending prompt reload/accepted replay/stale/foreign answers; typed saved tuple acceptance+forgery pairs cover stack own/gained,queue own/gained,hand/abandoned/abandoned-named/nested cause,floating/delayed,ceased played/current/previous first-event and debug-history.",
+    "logging": "Actual createFoldAdapter start log callback carries full initialization UUIDs, ordered records and captured Perfected. Later journey application logging belongs to730.",
+    "transport": "Actual source catalog\u2192manifest\u2192structuredClone+JSON\u2192unknown textless worker catalog; current Perfected/Attuned eligibility, generated draws, real worker init+decide; missing/unmanifested histories refuse public init/saved acceptance.",
+    "atomicity": "Malformed ordinary/setup inputs and semantic source mismatch throw before initial state publication; caller data unchanged. Failed resolveTop keeps prior successful play payment committed, publishes no generated draws, and leaves caller input unchanged. No cross-step payment rollback claim.",
+    "selectedAuthoredText": "Initial true flag uses defined authored text even blank, matching existing loader selected metadata; absent authored text falls back to base. Nonempty distinct authored replacement eligibility remains canonical. Public undefined/empty/whitespace/identical controls retained.",
+    "catalogTrust": "Source callback captures two immutable strings. Worker prefix states are catalog-owned authority derived by actual source fold, not arbitrary Variant snapshots; fabricated catalogs are outside this source authority as with arbitrary authored ability factories. Unknown unmanifested prefixes are unsupported and refuse at public ingress.",
+    "runtimeSubtype": "Remembered effects have broad TS Extract but actual isFixedEffect producer and isFixedChange saved decoder exclude abilities changes; semantic gained traversal covers remembered status. No unreachable remembered-effects branch added.",
+    "notApplicable": "No player UI/browser/server/weighted production fuzz; original730/273/755 retain separate source/observer/journey matrices. No asynchronous transfiguration transaction or new loop policy introduced."
+  },
+  "failures": {
+    "review-v01": "First helper incorrectly treated FirstEventHistory.current/previous as a tuple rather than side record; caused673 broad saved acceptance failures plus TS/lint errors. Corrected actual typed side traversal.",
+    "review-v02": "10302passed/1failed: inherited plain-definition comparison included callback identity; finite ACK03 excludes own callback from2restbindings while retaining all data/ability assertions.",
+    "focused": "All failures retained raw: expected character Hastened eligibility, exact append whitespace, clone serialized key ordering, board back accepts UUID only, existing step payment boundary, nested saved shape subjects/mirror conditions. Corrected synthetic expectations/fixtures; no acceptance waived.",
+    "markerControl": "marker-red first .ts probe failed CJS top-level-await setup, not semantic evidence. Identical .mts marker-red-v2 reached public APIs and refuted safe Kindled transport and executed Resonant. One-line canonical marker stripping for enumeration repaired both; marker-green and both-actor main/worker contracts prove final behavior.",
+    "final-review": "First final review typechecked a new native-figment control and caught a computed-key inference TS7053/lint error; test construction repaired. Prior final-review-v2 passed on its complete source epoch before marker correction.",
+    "producerCacheDraft": "A short-lived WeakMap draft passed v07 then parent rejected production identity memoization for test equality. Draft preserved /tmp/754-root/source-producer-cache-draft.ts, removed completely before final; ACK03 exact2line test compatibility applied."
+  },
+  "commands": [
+    {
+      "label": "final-focused",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:27:06.432359+00:00",
+      "loadStart": [
+        6.95556640625,
+        8.32275390625,
+        9.3349609375
+      ],
+      "pid": 69791,
+      "pgid": 69791,
+      "sourceHash": "d606aa81a2ba284d47fc6c734e0731fa1d2cc9af3df23afc33706b0e20eae62a",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:27:08.944690+00:00",
+      "wallSeconds": 2.512159707956016,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        7.359375,
+        8.3837890625,
+        9.35009765625
+      ],
+      "childCpuSeconds": 4.5386619999999995,
+      "stdoutSha256": "15df81e49711879051f4f7c0b722c16ef4e7397e06824bc00018e23e41356b90",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-focused-v2",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:30:17.388513+00:00",
+      "loadStart": [
+        29.31396484375,
+        16.16943359375,
+        12.25390625
+      ],
+      "pid": 42075,
+      "pgid": 42075,
+      "sourceHash": "2b797e3c2c98ce7cbdac3a4341c9c6a68fefbaf5e6bcb716d2c3cb93725cb49b",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:30:20.560147+00:00",
+      "wallSeconds": 3.171039833978284,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        28.32763671875,
+        16.18310546875,
+        12.28125
+      ],
+      "childCpuSeconds": 5.471934,
+      "stdoutSha256": "417b9a3a93b96910b2d459e61044461fc95683b3d6334b4b5b79c7dd5ba74805",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-focused-v3",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:32:36.473230+00:00",
+      "loadStart": [
+        10.84716796875,
+        13.80615234375,
+        11.916015625
+      ],
+      "pid": 52308,
+      "pgid": 52308,
+      "sourceHash": "fb29e480cfcf48503be6bedc22b67d80a6711dc3de657baa7bf75ed813cf8cf0",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:32:39.221771+00:00",
+      "wallSeconds": 2.7483802079805173,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        11.099609375,
+        13.80908203125,
+        11.92822265625
+      ],
+      "childCpuSeconds": 4.841775,
+      "stdoutSha256": "a79fe7195c194bbc0caedfc0a8f5bf0ec51bb77148329d4056f630b465c78d1b",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:27:09.035467+00:00",
+      "loadStart": [
+        7.359375,
+        8.3837890625,
+        9.35009765625
+      ],
+      "pid": 69949,
+      "pgid": 69949,
+      "sourceHash": "d606aa81a2ba284d47fc6c734e0731fa1d2cc9af3df23afc33706b0e20eae62a",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:27:12.967243+00:00",
+      "wallSeconds": 3.9315643339650705,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        7.359375,
+        8.3837890625,
+        9.35009765625
+      ],
+      "childCpuSeconds": 5.495671,
+      "stdoutSha256": "cf751a4df1b2b8486af58b35d8290ee1f94c338d7aa1d85fdda9aaeab8cf704b",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-knip-v2",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:30:20.665812+00:00",
+      "loadStart": [
+        28.32763671875,
+        16.18310546875,
+        12.28125
+      ],
+      "pid": 42409,
+      "pgid": 42409,
+      "sourceHash": "2b797e3c2c98ce7cbdac3a4341c9c6a68fefbaf5e6bcb716d2c3cb93725cb49b",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:30:27.371987+00:00",
+      "wallSeconds": 6.705917082959786,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        26.93994140625,
+        16.0966796875,
+        12.2734375
+      ],
+      "childCpuSeconds": 6.262277999999999,
+      "stdoutSha256": "e6d63a2f5c9dbe81366895caaf1bea2bb4807d08ec4fb8f876d420960d6200a1",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-knip-v3",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:32:39.337220+00:00",
+      "loadStart": [
+        11.099609375,
+        13.80908203125,
+        11.92822265625
+      ],
+      "pid": 52538,
+      "pgid": 52538,
+      "sourceHash": "fb29e480cfcf48503be6bedc22b67d80a6711dc3de657baa7bf75ed813cf8cf0",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:32:45.407217+00:00",
+      "wallSeconds": 6.069796999974642,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        10.93115234375,
+        13.72900390625,
+        11.91064453125
+      ],
+      "childCpuSeconds": 6.220264,
+      "stdoutSha256": "c845a44c5415466a68b3dbf6eccf2dcd0f0272ddb557170678c098fff1604a4a",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-legacy",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/754-root/legacy-witness.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:27:13.075773+00:00",
+      "loadStart": [
+        7.81103515625,
+        8.4599609375,
+        9.37109375
+      ],
+      "pid": 70289,
+      "pgid": 70289,
+      "sourceHash": "d606aa81a2ba284d47fc6c734e0731fa1d2cc9af3df23afc33706b0e20eae62a",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:27:15.173988+00:00",
+      "wallSeconds": 2.0980612079729326,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        7.81103515625,
+        8.4599609375,
+        9.37109375
+      ],
+      "childCpuSeconds": 2.3704799999999997,
+      "stdoutSha256": "1010df9bc9bff906de3bea6f143e5cef9885b129f1606530aefda6320375f087",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-legacy-v2",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/754-root/legacy-witness.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:30:27.485633+00:00",
+      "loadStart": [
+        26.93994140625,
+        16.0966796875,
+        12.2734375
+      ],
+      "pid": 43237,
+      "pgid": 43237,
+      "sourceHash": "2b797e3c2c98ce7cbdac3a4341c9c6a68fefbaf5e6bcb716d2c3cb93725cb49b",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:30:30.326730+00:00",
+      "wallSeconds": 2.840920249989722,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        25.5830078125,
+        15.9951171875,
+        12.259765625
+      ],
+      "childCpuSeconds": 2.979126,
+      "stdoutSha256": "1010df9bc9bff906de3bea6f143e5cef9885b129f1606530aefda6320375f087",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-legacy-v3",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/754-root/legacy-witness.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:32:45.529544+00:00",
+      "loadStart": [
+        10.93115234375,
+        13.72900390625,
+        11.91064453125
+      ],
+      "pid": 53027,
+      "pgid": 53027,
+      "sourceHash": "fb29e480cfcf48503be6bedc22b67d80a6711dc3de657baa7bf75ed813cf8cf0",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:32:47.987136+00:00",
+      "wallSeconds": 2.4574178750044666,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        10.93115234375,
+        13.72900390625,
+        11.91064453125
+      ],
+      "childCpuSeconds": 2.701848,
+      "stdoutSha256": "1010df9bc9bff906de3bea6f143e5cef9885b129f1606530aefda6320375f087",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:28:15.947556+00:00",
+      "loadStart": [
+        16.28173828125,
+        10.2294921875,
+        9.9384765625
+      ],
+      "pid": 74955,
+      "pgid": 74955,
+      "sourceHash": "d606aa81a2ba284d47fc6c734e0731fa1d2cc9af3df23afc33706b0e20eae62a",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:29:56.901395+00:00",
+      "wallSeconds": 100.9522260419908,
+      "exit": 2,
+      "waited": true,
+      "loadEnd": [
+        27.736328125,
+        14.89013671875,
+        11.716796875
+      ],
+      "childCpuSeconds": 261.68145400000003,
+      "stdoutSha256": "af855c52e2b38f2a7aea7d2b94c8a4df76f8755412e4f13cb9914180c32648d6",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-review-v2",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:30:30.489689+00:00",
+      "loadStart": [
+        25.5830078125,
+        15.9951171875,
+        12.259765625
+      ],
+      "pid": 43469,
+      "pgid": 43469,
+      "sourceHash": "2b797e3c2c98ce7cbdac3a4341c9c6a68fefbaf5e6bcb716d2c3cb93725cb49b",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:31:56.654965+00:00",
+      "wallSeconds": 86.16382516699377,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        14.14013671875,
+        14.77197265625,
+        12.1533203125
+      ],
+      "childCpuSeconds": 233.724394,
+      "stdoutSha256": "49e41af78a66418b68c21069987e2614d07b60a6aa8c78542ea6d8d6a0e9d955",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "final-review-v3",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:32:48.092304+00:00",
+      "loadStart": [
+        10.93115234375,
+        13.72900390625,
+        11.91064453125
+      ],
+      "pid": 53202,
+      "pgid": 53202,
+      "sourceHash": "fb29e480cfcf48503be6bedc22b67d80a6711dc3de657baa7bf75ed813cf8cf0",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:34:08.916651+00:00",
+      "wallSeconds": 80.82310195802711,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        9.85009765625,
+        12.7451171875,
+        11.70654296875
+      ],
+      "childCpuSeconds": 225.885187,
+      "stdoutSha256": "e0d629223bc6e29f006921a87e04c2068908d5db7fa0c5830d8474441168f485",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "focused-v02",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:16:28.425495+00:00",
+      "loadStart": [
+        13.09521484375,
+        13.45654296875,
+        11.01513671875
+      ],
+      "pid": 25930,
+      "pgid": 25930,
+      "sourceHash": "6848f845fe27bd919c59c339c6c94079c610a395823e0b0614e665f49477775c",
+      "workers": 2,
+      "end": "2026-10-15T17:16:30.973541+00:00",
+      "wallSeconds": 2.547895665979013,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        13.09521484375,
+        13.45654296875,
+        11.01513671875
+      ],
+      "childCpuSeconds": 3.85527,
+      "stdoutSha256": "7eea9eee5c564b752bd0bbccd1b904a01da864dc55e6c13ca631ee8d60f65dc1",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "focused-v03",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:18:13.634146+00:00",
+      "loadStart": [
+        9.3203125,
+        12.0380859375,
+        10.7412109375
+      ],
+      "pid": 33178,
+      "pgid": 33178,
+      "sourceHash": "259a1e16f4d768e10e444d5ccc77c0bb2a654862bfd96c20f7cdb41256a33c66",
+      "workers": 2,
+      "end": "2026-10-15T17:18:16.275264+00:00",
+      "wallSeconds": 2.6407336249831133,
+      "exit": 1,
+      "waited": true,
+      "loadEnd": [
+        9.3203125,
+        12.0380859375,
+        10.7412109375
+      ],
+      "childCpuSeconds": 3.989338,
+      "stdoutSha256": "c82197f5b9a807494876c5246cc4a6b15c88c77befa2b534f33a345fbea7e8dd",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "focused-v04",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:19:47.324060+00:00",
+      "loadStart": [
+        7.3369140625,
+        10.76904296875,
+        10.38623046875
+      ],
+      "pid": 39360,
+      "pgid": 39360,
+      "sourceHash": "72f4f91b2322f869d386fc441d7c6a73543e198a901e77a30ba6d319770c60b8",
+      "workers": 2,
+      "end": "2026-10-15T17:19:49.994155+00:00",
+      "wallSeconds": 2.6699378750054166,
+      "exit": 1,
+      "waited": true,
+      "loadEnd": [
+        7.2294921875,
+        10.689453125,
+        10.3603515625
+      ],
+      "childCpuSeconds": 4.065467,
+      "stdoutSha256": "93e0b8b248ad907dac72e2dd55d9d89456d3bbd0a4ba028c07a539ee7637f470",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "focused-v05",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:20:14.980865+00:00",
+      "loadStart": [
+        7.18359375,
+        10.36767578125,
+        10.25146484375
+      ],
+      "pid": 41122,
+      "pgid": 41122,
+      "sourceHash": "32b908445110a09d4189fc863d2251542f97aac8a4df254bcb8c6f37533dc7cc",
+      "workers": 2,
+      "end": "2026-10-15T17:20:17.483816+00:00",
+      "wallSeconds": 2.5027851670165546,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        7.18359375,
+        10.36767578125,
+        10.25146484375
+      ],
+      "childCpuSeconds": 3.964996,
+      "stdoutSha256": "c5b898b1863c09b079ab67eb4198651736fb1d8eb734de1982e2109ad816de40",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "focused-v06",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:22:13.487186+00:00",
+      "loadStart": [
+        9.7412109375,
+        10.17626953125,
+        10.17626953125
+      ],
+      "pid": 49156,
+      "pgid": 49156,
+      "sourceHash": "32b908445110a09d4189fc863d2251542f97aac8a4df254bcb8c6f37533dc7cc",
+      "workers": 2,
+      "end": "2026-10-15T17:22:16.175732+00:00",
+      "wallSeconds": 2.6883823749958538,
+      "exit": 1,
+      "waited": true,
+      "loadEnd": [
+        9.7412109375,
+        10.17626953125,
+        10.17626953125
+      ],
+      "childCpuSeconds": 4.179826,
+      "stdoutSha256": "07757df8b18dc6191a4834eedd4ef87ba156540c1ea8d41da5572e64c44c3649",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "focused-v07",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:23:20.185406+00:00",
+      "loadStart": [
+        8.99169921875,
+        9.82080078125,
+        10.037109375
+      ],
+      "pid": 53754,
+      "pgid": 53754,
+      "sourceHash": "bcd403aeef54860976a7dc98cea31cf93c10f888f0dac9d55f4e13f338628095",
+      "workers": 2,
+      "end": "2026-10-15T17:23:23.548204+00:00",
+      "wallSeconds": 3.3626139579573646,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        9.552734375,
+        9.92333984375,
+        10.07177734375
+      ],
+      "childCpuSeconds": 5.651888,
+      "stdoutSha256": "0122bb4b5b718f86bb8bf1915cbfbee68bc5299ee1ae8a4449c890c9ad2b6532",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "focused-v08",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:25:09.119508+00:00",
+      "loadStart": [
+        7.9140625,
+        9.1083984375,
+        9.728515625
+      ],
+      "pid": 61516,
+      "pgid": 61516,
+      "sourceHash": "381eae9caacffeef71da7f532a9d52a48c199f92a21e22a0e9856ca10ebe8f65",
+      "workers": 2,
+      "end": "2026-10-15T17:25:12.718090+00:00",
+      "wallSeconds": 3.598396707966458,
+      "exit": 1,
+      "waited": true,
+      "loadEnd": [
+        7.9140625,
+        9.1083984375,
+        9.728515625
+      ],
+      "childCpuSeconds": 5.9740969999999995,
+      "stdoutSha256": "1598dd9e447149e9a3dd08b2423c84fa2c66262ba7dd241d0d0336faa28a8983",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "focused-v09",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:25:26.885968+00:00",
+      "loadStart": [
+        7.93212890625,
+        9.05322265625,
+        9.69775390625
+      ],
+      "pid": 62842,
+      "pgid": 62842,
+      "sourceHash": "381eae9caacffeef71da7f532a9d52a48c199f92a21e22a0e9856ca10ebe8f65",
+      "workers": 2,
+      "end": "2026-10-15T17:25:29.761752+00:00",
+      "wallSeconds": 2.8755981670110486,
+      "exit": 1,
+      "waited": true,
+      "loadEnd": [
+        8.017578125,
+        9.05224609375,
+        9.693359375
+      ],
+      "childCpuSeconds": 5.130543,
+      "stdoutSha256": "cfcbe58c1c67a6795e84d6ff63bd717e3c2a0acc55ae83c9eea33665b52950f9",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "focused-v10",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:26:24.993697+00:00",
+      "loadStart": [
+        6.63134765625,
+        8.4912109375,
+        9.4423828125
+      ],
+      "pid": 67031,
+      "pgid": 67031,
+      "sourceHash": "379b8b6fbd7e610a70f84ca440cd4dd92bb78ce77aa051d497ebe2ee6f9d3e5c",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:26:27.558747+00:00",
+      "wallSeconds": 2.564895917021204,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        6.63134765625,
+        8.4912109375,
+        9.4423828125
+      ],
+      "childCpuSeconds": 4.610647,
+      "stdoutSha256": "00a5a5de69382ce14649ec0b677e4da5850482e7cc60edc62ff3a1983ba356cf",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "full-v01",
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:38:00.004056+00:00",
+      "loadStart": [
+        5.982421875,
+        8.9599609375,
+        10.25732421875
+      ],
+      "pid": 74432,
+      "pgid": 74432,
+      "sourceHash": "fb29e480cfcf48503be6bedc22b67d80a6711dc3de657baa7bf75ed813cf8cf0",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:40:08.176356+00:00",
+      "wallSeconds": 128.17025533301057,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        18.94189453125,
+        11.29541015625,
+        10.912109375
+      ],
+      "childCpuSeconds": 324.65563099999997,
+      "stdoutSha256": "f6057da72033de9841a6db05a286fcb8bda5481ff6bfbd9cb4e7c10aaf06492f",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "knip-v01",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:25:29.864043+00:00",
+      "loadStart": [
+        8.017578125,
+        9.05224609375,
+        9.693359375
+      ],
+      "pid": 63018,
+      "pgid": 63018,
+      "sourceHash": "381eae9caacffeef71da7f532a9d52a48c199f92a21e22a0e9856ca10ebe8f65",
+      "workers": 2,
+      "end": "2026-10-15T17:25:35.327628+00:00",
+      "wallSeconds": 5.463361124973744,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        7.77587890625,
+        8.98486328125,
+        9.66552734375
+      ],
+      "childCpuSeconds": 6.135745999999999,
+      "stdoutSha256": "6a14cf0eff9e608e78a3dbceab0b986a4da021007c68400ed9a67c1725777807",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "legacy-after-v01",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/754-root/legacy-witness.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:20:17.570024+00:00",
+      "loadStart": [
+        7.18359375,
+        10.36767578125,
+        10.25146484375
+      ],
+      "pid": 41297,
+      "pgid": 41297,
+      "sourceHash": "32b908445110a09d4189fc863d2251542f97aac8a4df254bcb8c6f37533dc7cc",
+      "workers": 2,
+      "end": "2026-10-15T17:20:21.211459+00:00",
+      "wallSeconds": 3.6412453750381246,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        6.92822265625,
+        10.26171875,
+        10.21435546875
+      ],
+      "childCpuSeconds": 2.671594,
+      "stdoutSha256": "1010df9bc9bff906de3bea6f143e5cef9885b129f1606530aefda6320375f087",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "legacy-before",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/754-root/legacy-witness.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:10:30.422178+00:00",
+      "loadStart": [
+        15.15234375,
+        10.3984375,
+        9.2109375
+      ],
+      "pid": 80422,
+      "pgid": 80422,
+      "sourceHash": "21f83aebd6de7119eb305e478421c23df9484cfe27ce076cd35465bfda2b30d9",
+      "workers": 2,
+      "end": "2026-10-15T17:10:33.189256+00:00",
+      "wallSeconds": 2.766911125043407,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        14.65966796875,
+        10.375,
+        9.20947265625
+      ],
+      "childCpuSeconds": 4.03801,
+      "stdoutSha256": "1010df9bc9bff906de3bea6f143e5cef9885b129f1606530aefda6320375f087",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "marker-green",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/754-root/marker-probe.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:32:33.600999+00:00",
+      "loadStart": [
+        10.84716796875,
+        13.80615234375,
+        11.916015625
+      ],
+      "pid": 52121,
+      "pgid": 52121,
+      "sourceHash": "fb29e480cfcf48503be6bedc22b67d80a6711dc3de657baa7bf75ed813cf8cf0",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:32:36.369947+00:00",
+      "wallSeconds": 2.76878049998777,
+      "exit": 0,
+      "waited": true,
+      "loadEnd": [
+        10.84716796875,
+        13.80615234375,
+        11.916015625
+      ],
+      "childCpuSeconds": 1.703903,
+      "stdoutSha256": "003a54d536a8a9c52b8b8d25267f0a5b87342a78f3d155568c7d09cb6a807546",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "marker-red",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/754-root/marker-probe.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:31:54.154771+00:00",
+      "loadStart": [
+        14.14013671875,
+        14.77197265625,
+        12.1533203125
+      ],
+      "pid": 49540,
+      "pgid": 49540,
+      "sourceHash": "2b797e3c2c98ce7cbdac3a4341c9c6a68fefbaf5e6bcb716d2c3cb93725cb49b",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:31:56.293670+00:00",
+      "wallSeconds": 2.1387274160515517,
+      "exit": 1,
+      "waited": true,
+      "loadEnd": [
+        14.14013671875,
+        14.77197265625,
+        12.1533203125
+      ],
+      "childCpuSeconds": 2.422746,
+      "stdoutSha256": "559c18066752bc09ed7e152c23a936b7ffba2e352ec8d29d1e41a822ede40a66",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "marker-red-v2",
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/754-root/marker-probe.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:32:07.277203+00:00",
+      "loadStart": [
+        12.64794921875,
+        14.4326171875,
+        12.0634765625
+      ],
+      "pid": 50372,
+      "pgid": 50372,
+      "sourceHash": "2b797e3c2c98ce7cbdac3a4341c9c6a68fefbaf5e6bcb716d2c3cb93725cb49b",
+      "workers": 2,
+      "sourceCoverage": "cached+untracked-unignored src/scripts/package/vitest; complete forward-only",
+      "end": "2026-10-15T17:32:08.543328+00:00",
+      "wallSeconds": 1.2659781249822117,
+      "exit": 1,
+      "waited": true,
+      "loadEnd": [
+        12.115234375,
+        14.29248046875,
+        12.02783203125
+      ],
+      "childCpuSeconds": 1.4955610000000001,
+      "stdoutSha256": "1e706822da13ed711ffd2cf175c906f1508ee9ed80956e54549b9092377d283e",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "red-v01",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/transfigurations.test.ts",
+        "-t",
+        "initialized chronological applications"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:10:06.463898+00:00",
+      "loadStart": [
+        16.837890625,
+        10.248046875,
+        9.1240234375
+      ],
+      "pid": 40687,
+      "pgid": 40687,
+      "sourceHash": "21f83aebd6de7119eb305e478421c23df9484cfe27ce076cd35465bfda2b30d9",
+      "workers": 2,
+      "end": "2026-10-15T17:10:09.685818+00:00",
+      "wallSeconds": 3.221730582998134,
+      "exit": 1,
+      "waited": true,
+      "loadEnd": [
+        17.4912109375,
+        10.49267578125,
+        9.216796875
+      ],
+      "childCpuSeconds": 4.093114,
+      "stdoutSha256": "5de8254ad17a93113832913b66939d8c4d9cc4e3e03d8d9b2b9be17a0fccdda4",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "review-v01",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:16:47.715186+00:00",
+      "loadStart": [
+        11.36083984375,
+        13.05078125,
+        10.92578125
+      ],
+      "pid": 27366,
+      "pgid": 27366,
+      "sourceHash": "8930f3b449153459dc728565fb479f160e44c60bb442f64a602d8d48b0852d8e",
+      "workers": 2,
+      "end": "2026-10-15T17:18:06.791344+00:00",
+      "wallSeconds": 79.07491658302024,
+      "exit": 2,
+      "waited": true,
+      "loadEnd": [
+        9.54541015625,
+        12.17529296875,
+        10.77392578125
+      ],
+      "childCpuSeconds": 235.55830400000002,
+      "stdoutSha256": "087e651969adf6dc4c26e98636270221137ed92a712863da8d4b57a6b8d5e8db",
+      "knownProcessReaped": true
+    },
+    {
+      "label": "review-v02",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/chronological-forms754-root",
+      "start": "2026-10-15T17:20:47.901705+00:00",
+      "loadStart": [
+        7.30712890625,
+        10.01708984375,
+        10.12548828125
+      ],
+      "pid": 43370,
+      "pgid": 43370,
+      "sourceHash": "32b908445110a09d4189fc863d2251542f97aac8a4df254bcb8c6f37533dc7cc",
+      "workers": 2,
+      "end": "2026-10-15T17:22:05.677540+00:00",
+      "wallSeconds": 77.77460249996511,
+      "exit": 1,
+      "waited": true,
+      "loadEnd": [
+        10.16796875,
+        10.2685546875,
+        10.20849609375
+      ],
+      "childCpuSeconds": 222.898909,
+      "stdoutSha256": "831a8c9e115524c46044ccdfe88d592c8dbefd9763916c0974bf177da4dcfdc8",
+      "knownProcessReaped": true
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "command": "final-focused",
+      "start": [
+        6.95556640625,
+        8.32275390625,
+        9.3349609375
+      ],
+      "end": [
+        7.359375,
+        8.3837890625,
+        9.35009765625
+      ]
+    },
+    {
+      "command": "final-focused-v2",
+      "start": [
+        29.31396484375,
+        16.16943359375,
+        12.25390625
+      ],
+      "end": [
+        28.32763671875,
+        16.18310546875,
+        12.28125
+      ]
+    },
+    {
+      "command": "final-focused-v3",
+      "start": [
+        10.84716796875,
+        13.80615234375,
+        11.916015625
+      ],
+      "end": [
+        11.099609375,
+        13.80908203125,
+        11.92822265625
+      ]
+    },
+    {
+      "command": "final-knip",
+      "start": [
+        7.359375,
+        8.3837890625,
+        9.35009765625
+      ],
+      "end": [
+        7.359375,
+        8.3837890625,
+        9.35009765625
+      ]
+    },
+    {
+      "command": "final-knip-v2",
+      "start": [
+        28.32763671875,
+        16.18310546875,
+        12.28125
+      ],
+      "end": [
+        26.93994140625,
+        16.0966796875,
+        12.2734375
+      ]
+    },
+    {
+      "command": "final-knip-v3",
+      "start": [
+        11.099609375,
+        13.80908203125,
+        11.92822265625
+      ],
+      "end": [
+        10.93115234375,
+        13.72900390625,
+        11.91064453125
+      ]
+    },
+    {
+      "command": "final-legacy",
+      "start": [
+        7.81103515625,
+        8.4599609375,
+        9.37109375
+      ],
+      "end": [
+        7.81103515625,
+        8.4599609375,
+        9.37109375
+      ]
+    },
+    {
+      "command": "final-legacy-v2",
+      "start": [
+        26.93994140625,
+        16.0966796875,
+        12.2734375
+      ],
+      "end": [
+        25.5830078125,
+        15.9951171875,
+        12.259765625
+      ]
+    },
+    {
+      "command": "final-legacy-v3",
+      "start": [
+        10.93115234375,
+        13.72900390625,
+        11.91064453125
+      ],
+      "end": [
+        10.93115234375,
+        13.72900390625,
+        11.91064453125
+      ]
+    },
+    {
+      "command": "final-review",
+      "start": [
+        16.28173828125,
+        10.2294921875,
+        9.9384765625
+      ],
+      "end": [
+        27.736328125,
+        14.89013671875,
+        11.716796875
+      ]
+    },
+    {
+      "command": "final-review-v2",
+      "start": [
+        25.5830078125,
+        15.9951171875,
+        12.259765625
+      ],
+      "end": [
+        14.14013671875,
+        14.77197265625,
+        12.1533203125
+      ]
+    },
+    {
+      "command": "final-review-v3",
+      "start": [
+        10.93115234375,
+        13.72900390625,
+        11.91064453125
+      ],
+      "end": [
+        9.85009765625,
+        12.7451171875,
+        11.70654296875
+      ]
+    },
+    {
+      "command": "focused-v02",
+      "start": [
+        13.09521484375,
+        13.45654296875,
+        11.01513671875
+      ],
+      "end": [
+        13.09521484375,
+        13.45654296875,
+        11.01513671875
+      ]
+    },
+    {
+      "command": "focused-v03",
+      "start": [
+        9.3203125,
+        12.0380859375,
+        10.7412109375
+      ],
+      "end": [
+        9.3203125,
+        12.0380859375,
+        10.7412109375
+      ]
+    },
+    {
+      "command": "focused-v04",
+      "start": [
+        7.3369140625,
+        10.76904296875,
+        10.38623046875
+      ],
+      "end": [
+        7.2294921875,
+        10.689453125,
+        10.3603515625
+      ]
+    },
+    {
+      "command": "focused-v05",
+      "start": [
+        7.18359375,
+        10.36767578125,
+        10.25146484375
+      ],
+      "end": [
+        7.18359375,
+        10.36767578125,
+        10.25146484375
+      ]
+    },
+    {
+      "command": "focused-v06",
+      "start": [
+        9.7412109375,
+        10.17626953125,
+        10.17626953125
+      ],
+      "end": [
+        9.7412109375,
+        10.17626953125,
+        10.17626953125
+      ]
+    },
+    {
+      "command": "focused-v07",
+      "start": [
+        8.99169921875,
+        9.82080078125,
+        10.037109375
+      ],
+      "end": [
+        9.552734375,
+        9.92333984375,
+        10.07177734375
+      ]
+    },
+    {
+      "command": "focused-v08",
+      "start": [
+        7.9140625,
+        9.1083984375,
+        9.728515625
+      ],
+      "end": [
+        7.9140625,
+        9.1083984375,
+        9.728515625
+      ]
+    },
+    {
+      "command": "focused-v09",
+      "start": [
+        7.93212890625,
+        9.05322265625,
+        9.69775390625
+      ],
+      "end": [
+        8.017578125,
+        9.05224609375,
+        9.693359375
+      ]
+    },
+    {
+      "command": "focused-v10",
+      "start": [
+        6.63134765625,
+        8.4912109375,
+        9.4423828125
+      ],
+      "end": [
+        6.63134765625,
+        8.4912109375,
+        9.4423828125
+      ]
+    },
+    {
+      "command": "full-v01",
+      "start": [
+        5.982421875,
+        8.9599609375,
+        10.25732421875
+      ],
+      "end": [
+        18.94189453125,
+        11.29541015625,
+        10.912109375
+      ]
+    },
+    {
+      "command": "knip-v01",
+      "start": [
+        8.017578125,
+        9.05224609375,
+        9.693359375
+      ],
+      "end": [
+        7.77587890625,
+        8.98486328125,
+        9.66552734375
+      ]
+    },
+    {
+      "command": "legacy-after-v01",
+      "start": [
+        7.18359375,
+        10.36767578125,
+        10.25146484375
+      ],
+      "end": [
+        6.92822265625,
+        10.26171875,
+        10.21435546875
+      ]
+    },
+    {
+      "command": "legacy-before",
+      "start": [
+        15.15234375,
+        10.3984375,
+        9.2109375
+      ],
+      "end": [
+        14.65966796875,
+        10.375,
+        9.20947265625
+      ]
+    },
+    {
+      "command": "marker-green",
+      "start": [
+        10.84716796875,
+        13.80615234375,
+        11.916015625
+      ],
+      "end": [
+        10.84716796875,
+        13.80615234375,
+        11.916015625
+      ]
+    },
+    {
+      "command": "marker-red",
+      "start": [
+        14.14013671875,
+        14.77197265625,
+        12.1533203125
+      ],
+      "end": [
+        14.14013671875,
+        14.77197265625,
+        12.1533203125
+      ]
+    },
+    {
+      "command": "marker-red-v2",
+      "start": [
+        12.64794921875,
+        14.4326171875,
+        12.0634765625
+      ],
+      "end": [
+        12.115234375,
+        14.29248046875,
+        12.02783203125
+      ]
+    },
+    {
+      "command": "red-v01",
+      "start": [
+        16.837890625,
+        10.248046875,
+        9.1240234375
+      ],
+      "end": [
+        17.4912109375,
+        10.49267578125,
+        9.216796875
+      ]
+    },
+    {
+      "command": "review-v01",
+      "start": [
+        11.36083984375,
+        13.05078125,
+        10.92578125
+      ],
+      "end": [
+        9.54541015625,
+        12.17529296875,
+        10.77392578125
+      ]
+    },
+    {
+      "command": "review-v02",
+      "start": [
+        7.30712890625,
+        10.01708984375,
+        10.12548828125
+      ],
+      "end": [
+        10.16796875,
+        10.2685546875,
+        10.20849609375
+      ]
+    }
+  ],
+  "resources": {
+    "browser": [],
+    "servers": [],
+    "fullSuiteFixtures": "Full review runs deterministic browser-lease harness fixtures, including temporary-directory lease files and child test servers; their teardown logs are retained. No direct browser QA or server was launched by this author.",
+    "nativeOrTollgateCallsByAuthor": [],
+    "helpersSpawned": [],
+    "processes": "Each command receipt records exact owned PID/PG exit/wait/reap. Heavy outer native lock admission recorded separately from1800s inner execution; no foreign process or lock file touched."
+  },
+  "testModules": [
+    "src/engine/transfigurations/contracts/chronological-copies.contracts.ts",
+    "src/engine/transfigurations/contracts/chronological-execution.contracts.ts",
+    "src/engine/transfigurations/contracts/chronological-all.contracts.ts",
+    "src/engine/transfigurations/contracts/chronological.fixtures.ts",
+    "src/engine/transfigurations/contracts/chronological-saved.contracts.ts",
+    "src/engine/transfigurations/contracts/chronological-ingress.contracts.ts",
+    "src/engine/transfigurations/contracts/chronological.contracts.ts"
+  ],
+  "validationCutoff": "2026-10-15T17:40:27.321521+00:00"
+}

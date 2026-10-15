@@ -1,3 +1,4 @@
+import { copyTransfigurationApplications, isTransfigurationApplications } from "../transfiguration-application-data";
 import { validOpeningHandGuarantees } from "./opening-hand-guarantees";
 import { isTypeRemap } from "../dsl/type-remap";
 import { BATTLE } from "../../content/battle";
@@ -39,6 +40,12 @@ function emptySide(): SideState {
  */
 export function variantOf(entry: DeckEntry): Variant {
   const amplified = entry.amplified === true;
+  if (entry.transfigurationApplications !== undefined) {
+    if (entry.transfigurations !== undefined || !isTransfigurationApplications(entry.transfigurationApplications)) throw new Error("Invalid transfiguration applications");
+    return { amplified, transfigurationApplications: copyTransfigurationApplications(entry.transfigurationApplications),
+      ...(entry.typeRemap === undefined ? {} : { typeRemap: entry.typeRemap }),
+      ...(entry.deckMods === undefined ? {} : { deckMods: { ...entry.deckMods, typeChange: entry.deckMods.typeChange === null ? null : { ...entry.deckMods.typeChange } } }) };
+  }
   const transfigurations = entry.transfigurations ?? [];
   const deckMods = entry.deckMods ?? NO_DECK_MODS;
   const modified =
@@ -143,7 +150,8 @@ function finite(value: unknown): value is number {
 
 function validEntry(entry: DeckEntry): boolean {
   if (entry.typeRemap !== undefined && !isTypeRemap(entry.typeRemap)) return false;
-  if (!fields(entry, ["cardId", "amplified", "transfigurations", "deckMods", "typeRemap"]) ||
+  if (entry.transfigurationApplications !== undefined && (entry.transfigurations !== undefined || !isTransfigurationApplications(entry.transfigurationApplications))) return false;
+  if (!fields(entry, ["cardId", "amplified", "transfigurations", "transfigurationApplications", "deckMods", "typeRemap"]) ||
       (entry.amplified !== undefined && typeof entry.amplified !== "boolean") ||
       (entry.transfigurations !== undefined && (!Array.isArray(entry.transfigurations) ||
         !entry.transfigurations.every((type) => typeof type === "string" && Object.prototype.hasOwnProperty.call(TRANSFIGURATIONS, type))))) return false;
@@ -258,6 +266,12 @@ function validateDraftPools(pools: BattleInit["draftPools"], catalog: EngineCata
  * prepared boundary or shuffles, deals and starts the first ordinary turn.
  */
 export function initialState(init: BattleInit, catalog: EngineCatalog): BattleState {
+  for (const side of SIDES) for (const entry of init.decks[side]) {
+    if (entry.transfigurationApplications !== undefined) {
+      if (!validEntry(entry)) throw new Error("Invalid transfiguration deck entry");
+      catalog.variantCard(entry.cardId, variantOf(entry));
+    }
+  }
   if (!validOpeningHandGuarantees(init.guaranteedOpeningHand, init)) throw new Error("Invalid guaranteed opening hand");
   for (const side of SIDES) for (const entry of init.decks[side]) {
     if (entry.typeRemap !== undefined && !isTypeRemap(entry.typeRemap)) throw new Error("Invalid card ability type remap");

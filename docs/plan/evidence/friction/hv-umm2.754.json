@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.754",
+  "phase": 5,
+  "implementMin": 55.00704201666667,
+  "implementWindow": {
+    "start": "2026-10-15T16:45:26.899000+00:00",
+    "end": "2026-10-15T17:40:27.321521+00:00"
+  },
+  "localValidationS": {
+    "focused": 37.10454979084898,
+    "review": 424.78867224999703,
+    "knip": 22.170639541873243,
+    "full": 128.17025533301057
+  },
+  "hostLoad": 11.36083984375,
+  "testDelta": {
+    "files": 6,
+    "lines": 510,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "source-capability-design",
+      "minutes": 20.072338,
+      "note": "Original dispatch through Stage1 terminal17:05:31.239293Z: source-qualified immutable metadata, Resonant target ordinal and textless worker prefix transport required bounded design and parent admission; includes coordination and source inspection, not sampled CPU."
+    }
+  ]
+}

@@ -37,7 +37,15 @@ export const NO_DECK_MODS: DeckMods = { sparkBonus: 0, costReduction: 0, fast: f
  * Transfigurations other than Amplified are carried for Phase 5.7a's
  * ability transforms. Unused optional fields are omitted.
  */
+/** A single chronological application, with Perfected's original eligible constituent snapshot. */
+export type ConstituentTransfiguration = Exclude<TransfigurationType, "Perfected">;
+export type TransfigurationApplication =
+  | { readonly form: ConstituentTransfiguration }
+  | { readonly form: "Perfected"; readonly constituents: readonly ConstituentTransfiguration[] };
+
 export interface Variant {
+  /** Complete chronological mode; exclusive with legacy transfigurations membership. */
+  readonly transfigurationApplications?: readonly TransfigurationApplication[];
   readonly amplified: boolean;
   readonly transfigurations?: readonly TransfigurationType[];
   readonly deckMods?: DeckMods;

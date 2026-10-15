@@ -83,8 +83,8 @@ describe("the policy worker's catalog", () => {
     const rebuilt = manifestCatalog(JSON.parse(JSON.stringify(altered)) as CatalogManifest);
     for (const side of ["player", "enemy"] as const) {
       for (const { cardId } of init.decks[side]) {
-        const { abilities: rebuiltAbilities, ...rebuiltData } = rebuilt.card(cardId);
-        const { abilities: sourceAbilities, ...sourceData } = source.card(cardId);
+        const { abilities: rebuiltAbilities, transfigurationState: _rebuiltSource, ...rebuiltData } = rebuilt.card(cardId);
+        const { abilities: sourceAbilities, transfigurationState: _sourceState, ...sourceData } = source.card(cardId);
         expect(rebuiltData).toEqual(sourceData);
         expect(rebuiltAbilities(BASE_VARIANT)).toEqual(sourceAbilities(BASE_VARIANT));
       }
