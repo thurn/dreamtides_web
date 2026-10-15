@@ -1,3 +1,6 @@
+import { scoredWithCharacterLastTurn, staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { costModifierNth } from "../../engine/effects/primitives/cost-modifier";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +13,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["J12", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [staticAbility(costModifierNth("you", { cardType: "character" }, 1, { reduce: 2 }), { while: scoredWithCharacterLastTurn() })],
+  verifiedText: expectedVerifiedText("The first character you play each turn costs 2● less if a character you control scored ⍟ last turn."),
 });

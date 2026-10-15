@@ -1,0 +1,278 @@
+{
+  "sweep": {
+    "summary": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.251/invocations/sweep-gsDne3/summary.json",
+    "sha256": "ff8ded66be8c6b0a6e51c2808c1c6667a076a25e1755d83cbc472252992ed60b",
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-gsDne3",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.251/invocations/sweep-gsDne3",
+    "counts": {
+      "pass": 10,
+      "skip": 90
+    },
+    "attemptCounts": {
+      "pass": 10,
+      "skip": 90
+    },
+    "hostLoad": 21.9033203125,
+    "sessions": 1,
+    "leaseYields": 0,
+    "wallMs": {
+      "browserLeaseWait": 9,
+      "serve": 5982,
+      "scenario": 58389.45779000001,
+      "cleanup": 408.55970899999375,
+      "execution": 64870.531417000006,
+      "total": 64879.531417000006
+    }
+  },
+  "flashInvocation": "invocations/run-lhBi17",
+  "flashReport": "invocations/run-lhBi17/flash-powder-judged.result.json",
+  "flashResults": {
+    "desktop": {
+      "verdict": "pass",
+      "uuid": "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+      "viewport": "desktop",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "subject": "5e5e5e5e-0000-4000-8000-000000000003",
+      "ids": {
+        "first": "i51",
+        "second": "i52",
+        "third": "i53"
+      },
+      "firstPlay": {
+        "id": "i51",
+        "paid": 0
+      },
+      "secondPlay": {
+        "id": "i52",
+        "paid": 2
+      },
+      "thirdPlay": {
+        "id": "i53",
+        "paid": 0
+      },
+      "reload": true,
+      "firstPair": [
+        {
+          "id": "i51",
+          "spark": "0",
+          "width": 89.5,
+          "height": 89.5,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "id": "i52",
+          "spark": "2",
+          "width": 89.5,
+          "height": 89.5,
+          "inside": true,
+          "hit": true
+        }
+      ],
+      "finalGeometry": [
+        {
+          "id": "i51",
+          "spark": "2",
+          "width": 89.5,
+          "height": 89.5,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "id": "i52",
+          "spark": "2",
+          "width": 89.5,
+          "height": 89.5,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "id": "i53",
+          "spark": "0",
+          "width": 89.5,
+          "height": 89.5,
+          "inside": true,
+          "hit": true
+        }
+      ],
+      "phase": {
+        "width": 126.3681640625,
+        "height": 43.260009765625,
+        "inside": true,
+        "hit": true
+      },
+      "gameId": "4qvvjg",
+      "logRows": 94,
+      "limits": "Production player emblem and ordinary pointer actions with logged synthetic card additions; opposite initialization is covered by whole-batch both-controller sweep and synthetic public contracts."
+    },
+    "mobile": {
+      "verdict": "pass",
+      "uuid": "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+      "viewport": "mobile",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "subject": "5e5e5e5e-0000-4000-8000-000000000003",
+      "ids": {
+        "first": "i51",
+        "second": "i52",
+        "third": "i53"
+      },
+      "firstPlay": {
+        "id": "i51",
+        "paid": 0
+      },
+      "secondPlay": {
+        "id": "i52",
+        "paid": 2
+      },
+      "thirdPlay": {
+        "id": "i53",
+        "paid": 0
+      },
+      "reload": true,
+      "firstPair": [
+        {
+          "id": "i51",
+          "spark": "0",
+          "width": 53.859375,
+          "height": 53.859375,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "id": "i52",
+          "spark": "2",
+          "width": 53.859375,
+          "height": 53.859375,
+          "inside": true,
+          "hit": true
+        }
+      ],
+      "finalGeometry": [
+        {
+          "id": "i51",
+          "spark": "2",
+          "width": 45.59375,
+          "height": 45.59375,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "id": "i52",
+          "spark": "2",
+          "width": 45.59375,
+          "height": 45.59375,
+          "inside": true,
+          "hit": true
+        },
+        {
+          "id": "i53",
+          "spark": "0",
+          "width": 45.59375,
+          "height": 45.59375,
+          "inside": true,
+          "hit": true
+        }
+      ],
+      "phase": {
+        "width": 126.36810302734375,
+        "height": 43.260009765625,
+        "inside": true,
+        "hit": true
+      },
+      "gameId": "vhsidq",
+      "logRows": 94,
+      "limits": "Production player emblem and ordinary pointer actions with logged synthetic card additions; opposite initialization is covered by whole-batch both-controller sweep and synthetic public contracts."
+    }
+  },
+  "caps": [],
+  "captures": [
+    {
+      "filename": "flash-first-second-desktop.png",
+      "sha256": "e66673bc6beaa0a1732ae94935de8c7677e7a018f12af787dbdf69c9136778a7",
+      "pixelDimensions": [
+        2880,
+        1800
+      ],
+      "inspection": "QA helper and root each actually viewed this capture."
+    },
+    {
+      "filename": "flash-next-turn-desktop.png",
+      "sha256": "50cf247d36206538f1009447a84177bd993fa4724c607d5c03ef93a20c5d57b8",
+      "pixelDimensions": [
+        2880,
+        1800
+      ],
+      "inspection": "QA helper and root each actually viewed this capture."
+    },
+    {
+      "filename": "flash-first-second-mobile.png",
+      "sha256": "a35e0972d838a4be8b734fe3454869e68c374f21d7e1e5a4b2d84805a893a621",
+      "pixelDimensions": [
+        780,
+        1688
+      ],
+      "inspection": "QA helper and root each actually viewed this capture."
+    }
+  ],
+  "gameLogs": [
+    {
+      "viewport": "desktop",
+      "gameId": "4qvvjg",
+      "rows": 94,
+      "sha256": "a431bd8644e504cc4a5f848287f485289f1c77f685c6ce169da630b7a72c1a46",
+      "filename": "flash-powder-judged-desktop.jsonl",
+      "allRowsMatchedGameId": true
+    },
+    {
+      "viewport": "mobile",
+      "gameId": "vhsidq",
+      "rows": 94,
+      "sha256": "1558979e0a4ff889083aec63b733249533e03320fb8dbfa8327cb228179d8c2e",
+      "filename": "flash-powder-judged-mobile.jsonl",
+      "allRowsMatchedGameId": true
+    }
+  ],
+  "greenReadonlyChild": {
+    "bead": "hv-umm2.668",
+    "ledger": "docs/plan/evidence/qa-ledger/hv-umm2.668.jsonl",
+    "successfulInvocation": "invocations/run-anxu0y",
+    "judgedPasses": 4,
+    "sourceHashes": {
+      "src/content/dreamsigns/green-amulet-a42c99b2.ts": "a4b3fb536744be1925bbcc2d4e158e9d0ea278a0506aeb32ac359a381af82170",
+      "src/content/specs/dreamsigns-ready-251.scenarios.ts": "46ebb3931a087ca53e6001ec8fa9e23ad9922b1ea7946beab7aeefbe125d4bcf",
+      "docs/plan/evidence/qa-ledger/hv-umm2.668.jsonl": "8d8f96b7a62b19ea939f92428dc724fbb35b3e0d0eb5850fdef8f0d4a878d5f6"
+    },
+    "proofSHA256": "5b9aa2b440fcf8101bc464ca7e3520b885ab4a8d92f57bfc9bfc6fa8283081e2",
+    "qualification": "Consume certified child acceptance read-only per native join; four original player/enemy desktop/mobile judgments and child two failed caller attempts retained. This is not a fresh whole-engine Green browser rerun."
+  },
+  "limits": [
+    "Player production Dreamsign judged in dev-build browser at desktop/mobile using exactly three logged synthetic hand additions; no authored content metadata or engine mutation.",
+    "Enemy Dreamsign initialization is covered by complete both-controller sweep and root public contracts, not a separate enemy Flash judgment.",
+    "Existing lab synthetic blank card art is visible in captures.",
+    "Saved reload preserves game log rows, with per-document sequence numbers restarting; this proof does not claim globally unique sequence numbers."
+  ],
+  "resources": {
+    "verifiedAt": "2026-10-15T06:25:17.409388+00:00",
+    "runnerGroup": 78561,
+    "serverGroup": 79223,
+    "allOwnedGroupsAbsent": true,
+    "alsoVerifiedSweepGroupsAbsent": [
+      69155,
+      69219
+    ],
+    "census": "/tmp/dreamtides-251-01a13a7a/qa-helper/terminal-process-census.txt",
+    "ownSlot0Records": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+        "exists": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+        "exists": false
+      }
+    ],
+    "runnerConfirmedPortFree": true,
+    "providerQualification": "Normal runner terminal success and removal of own slot owner record confirm provider cleanup; no direct browser launched or foreign provider touched."
+  }
+}

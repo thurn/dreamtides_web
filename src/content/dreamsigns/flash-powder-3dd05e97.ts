@@ -1,3 +1,7 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { costModifierNth } from "../../engine/effects/primitives/cost-modifier";
+import { firstPlayedSparkSetter } from "../../engine/effects/primitives/first-played-spark-setter";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +19,9 @@ export default dreamsign({
     "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [
+    staticAbility(costModifierNth("you", { cardType: "character" }, 1, { reduce: 2 })),
+    staticAbility(firstPlayedSparkSetter(0)),
+  ],
+  verifiedText: expectedVerifiedText("The first character you play each turn costs 2● less and has 0✦."),
 });

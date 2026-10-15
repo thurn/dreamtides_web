@@ -1,0 +1,667 @@
+{
+  "bead": "hv-umm2.251",
+  "base": "657af2411da4a1cf685955ed2ae0033ea3de5a6d",
+  "implementer": "root session 01a13a7a-741e-7cc1-a0dd-3f8eb1805ecf",
+  "qaHelper": "dreamsigns_251_qa",
+  "originalRootPostClaimStart": "2026-10-15T04:39:29.997388+00:00",
+  "resumedClaimAt": "2026-10-15T06:13:32.964710+00:00",
+  "clockQualification": "Continuous original same-bead first research through final commit, including released/reclaimed prerequisite718 interval. Resumed local segment is separate. Overlapping251/718 windows are neither additive project wall nor productive effort. Evidence endpoint is a precommit cutoff; actual Git return and short tail are retained in immutable QA audit/native delivery.",
+  "entities": [
+    "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4",
+    "a42c99b2-f480-4f63-91a0-bd556120427d",
+    "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+    "044f856b-c08b-4b82-81e3-5417962bf868",
+    "9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1"
+  ],
+  "source": {
+    "at": "2026-10-15T06:22:52.499980+00:00",
+    "base": "657af2411da4a1cf685955ed2ae0033ea3de5a6d",
+    "sourceFiles": {
+      "src/content/dreamsigns/cloud-lens-3fd8861d.ts": {
+        "sha256": "0296c6a49ad2b3b66a7b86671367dfce0df9416ded7e3cde2a00ac7cd28b80d3",
+        "removingOnlyImportsAndAbilitiesVerifiedTextRestoringPendingReproducesEveryOriginalByte": true
+      },
+      "src/content/dreamsigns/flash-powder-3dd05e97.ts": {
+        "sha256": "262eefbef843329703cebb609a33153da4c7d8240538143c075ab944fccef47e",
+        "removingOnlyImportsAndAbilitiesVerifiedTextRestoringPendingReproducesEveryOriginalByte": true
+      },
+      "src/content/dreamsigns/powder-bowl-9204fbc8.ts": {
+        "sha256": "869cd20f4553008c588f04b26ef81f7706bb7d4404a5e29d16b95fda768b52fd",
+        "removingOnlyImportsAndAbilitiesVerifiedTextRestoringPendingReproducesEveryOriginalByte": true
+      },
+      "src/content/dreamsigns/skull-dagger-044f856b.ts": {
+        "sha256": "447a0f81e2a9e21678467b8b95712c092110bc65584ffb21a0c0e3d8c2ff82c2",
+        "removingOnlyImportsAndAbilitiesVerifiedTextRestoringPendingReproducesEveryOriginalByte": true
+      }
+    },
+    "readonlyChild": {
+      "src/content/dreamsigns/green-amulet-a42c99b2.ts": "a4b3fb536744be1925bbcc2d4e158e9d0ea278a0506aeb32ac359a381af82170",
+      "src/content/specs/dreamsigns-ready-251.scenarios.ts": "46ebb3931a087ca53e6001ec8fa9e23ad9922b1ea7946beab7aeefbe125d4bcf",
+      "docs/plan/evidence/qa-ledger/hv-umm2.668.jsonl": "8d8f96b7a62b19ea939f92428dc724fbb35b3e0d0eb5850fdef8f0d4a878d5f6"
+    },
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "nonTestGrossCodeLines": 28,
+    "coreReviewRequired": false,
+    "reviewReason": "Composition-only28gross non-test lines below100, no core-review label, existing exact synthetic compositions;718 independent core review settled separately."
+  },
+  "checks": {
+    "focused": {
+      "argv": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "utcStart": "2026-10-15T06:16:41.111250+00:00",
+      "utcEnd": "2026-10-15T06:17:04.010570+00:00",
+      "wallS": 22.898895957972854,
+      "exit": 0,
+      "cpuUserS": 31.146538,
+      "cpuSystemS": 1.691412,
+      "loadStart": [
+        6.8505859375,
+        13.275390625,
+        14.20703125
+      ],
+      "loadEnd": [
+        7.27783203125,
+        12.9501953125,
+        14.06787109375
+      ],
+      "sourceEpochSha256": "5c8b15f77819d768e1e7c9a0ce795608dfd55085da6d3514f3d951ff5a5d5ca3",
+      "sourceHashes": {
+        "src/content/dreamsigns/cloud-lens-3fd8861d.ts": "0296c6a49ad2b3b66a7b86671367dfce0df9416ded7e3cde2a00ac7cd28b80d3",
+        "src/content/dreamsigns/flash-powder-3dd05e97.ts": "262eefbef843329703cebb609a33153da4c7d8240538143c075ab944fccef47e",
+        "src/content/dreamsigns/powder-bowl-9204fbc8.ts": "869cd20f4553008c588f04b26ef81f7706bb7d4404a5e29d16b95fda768b52fd",
+        "src/content/dreamsigns/skull-dagger-044f856b.ts": "447a0f81e2a9e21678467b8b95712c092110bc65584ffb21a0c0e3d8c2ff82c2"
+      },
+      "pgid": 99163,
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "d78af9d3d5d738ffdb19ed66c4b586f5c87a02ece8231e6605a3810c96c748a4",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "preflight": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4,a42c99b2-f480-4f63-91a0-bd556120427d,3dd05e97-1af8-4ae9-8e1f-954eaa63e112,044f856b-c08b-4b82-81e3-5417962bf868,9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1"
+      ],
+      "utcStart": "2026-10-15T06:16:41.111252+00:00",
+      "utcEnd": "2026-10-15T06:16:43.846394+00:00",
+      "wallS": 2.7350067920051515,
+      "exit": 1,
+      "cpuUserS": 2.556212,
+      "cpuSystemS": 1.313672,
+      "loadStart": [
+        6.8505859375,
+        13.275390625,
+        14.20703125
+      ],
+      "loadEnd": [
+        6.8505859375,
+        13.275390625,
+        14.20703125
+      ],
+      "sourceEpochSha256": "5c8b15f77819d768e1e7c9a0ce795608dfd55085da6d3514f3d951ff5a5d5ca3",
+      "sourceHashes": {
+        "src/content/dreamsigns/cloud-lens-3fd8861d.ts": "0296c6a49ad2b3b66a7b86671367dfce0df9416ded7e3cde2a00ac7cd28b80d3",
+        "src/content/dreamsigns/flash-powder-3dd05e97.ts": "262eefbef843329703cebb609a33153da4c7d8240538143c075ab944fccef47e",
+        "src/content/dreamsigns/powder-bowl-9204fbc8.ts": "869cd20f4553008c588f04b26ef81f7706bb7d4404a5e29d16b95fda768b52fd",
+        "src/content/dreamsigns/skull-dagger-044f856b.ts": "447a0f81e2a9e21678467b8b95712c092110bc65584ffb21a0c0e3d8c2ff82c2"
+      },
+      "pgid": 99162,
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "43d12e2ab9ca498324a95563ef3ef5192c854ac9e8c3250c226a094223e568aa",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "preflight-corrected": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4,a42c99b2-f480-4f63-91a0-bd556120427d,3dd05e97-1af8-4ae9-8e1f-954eaa63e112,044f856b-c08b-4b82-81e3-5417962bf868,9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1"
+      ],
+      "utcStart": "2026-10-15T06:17:28.393123+00:00",
+      "utcEnd": "2026-10-15T06:17:30.566058+00:00",
+      "wallS": 2.172774666978512,
+      "exit": 0,
+      "cpuUserS": 1.444981,
+      "cpuSystemS": 0.916111,
+      "loadStart": [
+        7.5625,
+        12.5537109375,
+        13.89111328125
+      ],
+      "loadEnd": [
+        7.5625,
+        12.5537109375,
+        13.89111328125
+      ],
+      "sourceEpochSha256": "5c8b15f77819d768e1e7c9a0ce795608dfd55085da6d3514f3d951ff5a5d5ca3",
+      "sourceHashes": {
+        "src/content/dreamsigns/cloud-lens-3fd8861d.ts": "0296c6a49ad2b3b66a7b86671367dfce0df9416ded7e3cde2a00ac7cd28b80d3",
+        "src/content/dreamsigns/flash-powder-3dd05e97.ts": "262eefbef843329703cebb609a33153da4c7d8240538143c075ab944fccef47e",
+        "src/content/dreamsigns/powder-bowl-9204fbc8.ts": "869cd20f4553008c588f04b26ef81f7706bb7d4404a5e29d16b95fda768b52fd",
+        "src/content/dreamsigns/skull-dagger-044f856b.ts": "447a0f81e2a9e21678467b8b95712c092110bc65584ffb21a0c0e3d8c2ff82c2"
+      },
+      "pgid": 2417,
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "f69f03186161ce4c79c1c232cb429d4d2833b62bbf3693704a33a095dc05657d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "fuzz": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-251-01a13a7a/heavy-exec.py",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4,a42c99b2-f480-4f63-91a0-bd556120427d,3dd05e97-1af8-4ae9-8e1f-954eaa63e112,044f856b-c08b-4b82-81e3-5417962bf868,9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1"
+      ],
+      "utcStart": "2026-10-15T06:17:28.393081+00:00",
+      "utcEnd": "2026-10-15T06:32:56.767405+00:00",
+      "wallS": 928.3579895420116,
+      "exit": 0,
+      "cpuUserS": 595.17424,
+      "cpuSystemS": 7.603302,
+      "loadStart": [
+        7.5625,
+        12.5537109375,
+        13.89111328125
+      ],
+      "loadEnd": [
+        13.95458984375,
+        15.53369140625,
+        15.40673828125
+      ],
+      "sourceEpochSha256": "5c8b15f77819d768e1e7c9a0ce795608dfd55085da6d3514f3d951ff5a5d5ca3",
+      "sourceHashes": {
+        "src/content/dreamsigns/cloud-lens-3fd8861d.ts": "0296c6a49ad2b3b66a7b86671367dfce0df9416ded7e3cde2a00ac7cd28b80d3",
+        "src/content/dreamsigns/flash-powder-3dd05e97.ts": "262eefbef843329703cebb609a33153da4c7d8240538143c075ab944fccef47e",
+        "src/content/dreamsigns/powder-bowl-9204fbc8.ts": "869cd20f4553008c588f04b26ef81f7706bb7d4404a5e29d16b95fda768b52fd",
+        "src/content/dreamsigns/skull-dagger-044f856b.ts": "447a0f81e2a9e21678467b8b95712c092110bc65584ffb21a0c0e3d8c2ff82c2"
+      },
+      "pgid": 2416,
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "13333eecc30dc6e49e7351e2910189ecb5edc65ae7c8e84557ec27742102f734",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "utcStart": "2026-10-15T06:26:42.903242+00:00",
+      "utcEnd": "2026-10-15T06:28:05.353886+00:00",
+      "wallS": 82.44947454100475,
+      "exit": 0,
+      "cpuUserS": 199.599993,
+      "cpuSystemS": 24.73244,
+      "loadStart": [
+        6.326171875,
+        12.330078125,
+        14.18798828125
+      ],
+      "loadEnd": [
+        16.99560546875,
+        14.23876953125,
+        14.7431640625
+      ],
+      "sourceEpochSha256": "6f09f555dac0a6596cbc5d20363fa8955e11a5f95febe7e509c1254b1227cddf",
+      "sourceHashes": {
+        "docs/plan/evidence/qa-ledger/hv-umm2.251.jsonl": "471ad996f70bd58062fd765cfd30c15e09909dcb9b3a99bccadf1b97ea8f1614",
+        "src/content/dreamsigns/cloud-lens-3fd8861d.ts": "0296c6a49ad2b3b66a7b86671367dfce0df9416ded7e3cde2a00ac7cd28b80d3",
+        "src/content/dreamsigns/flash-powder-3dd05e97.ts": "262eefbef843329703cebb609a33153da4c7d8240538143c075ab944fccef47e",
+        "src/content/dreamsigns/powder-bowl-9204fbc8.ts": "869cd20f4553008c588f04b26ef81f7706bb7d4404a5e29d16b95fda768b52fd",
+        "src/content/dreamsigns/skull-dagger-044f856b.ts": "447a0f81e2a9e21678467b8b95712c092110bc65584ffb21a0c0e3d8c2ff82c2"
+      },
+      "pgid": 14369,
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "eb7cd78ae9a09d0de1d66f34cf24254236e9a1cbbb31aadaf5efcb24b5a06a6d",
+      "stderrSha256": "7d3ec6d1d2855123c760f38551d717f3dea279c68fca7f1c42d3424fdb2c7c0b"
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "utcStart": "2026-10-15T06:30:00.018132+00:00",
+      "utcEnd": "2026-10-15T06:30:07.024079+00:00",
+      "wallS": 7.005775124998763,
+      "exit": 0,
+      "cpuUserS": 4.318354,
+      "cpuSystemS": 2.073456,
+      "loadStart": [
+        16.8408203125,
+        16.6962890625,
+        15.7607421875
+      ],
+      "loadEnd": [
+        15.02001953125,
+        16.310546875,
+        15.63427734375
+      ],
+      "sourceEpochSha256": "6f09f555dac0a6596cbc5d20363fa8955e11a5f95febe7e509c1254b1227cddf",
+      "sourceHashes": {
+        "docs/plan/evidence/qa-ledger/hv-umm2.251.jsonl": "471ad996f70bd58062fd765cfd30c15e09909dcb9b3a99bccadf1b97ea8f1614",
+        "src/content/dreamsigns/cloud-lens-3fd8861d.ts": "0296c6a49ad2b3b66a7b86671367dfce0df9416ded7e3cde2a00ac7cd28b80d3",
+        "src/content/dreamsigns/flash-powder-3dd05e97.ts": "262eefbef843329703cebb609a33153da4c7d8240538143c075ab944fccef47e",
+        "src/content/dreamsigns/powder-bowl-9204fbc8.ts": "869cd20f4553008c588f04b26ef81f7706bb7d4404a5e29d16b95fda768b52fd",
+        "src/content/dreamsigns/skull-dagger-044f856b.ts": "447a0f81e2a9e21678467b8b95712c092110bc65584ffb21a0c0e3d8c2ff82c2"
+      },
+      "pgid": 43194,
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "1e344683669d1cfda043b08b1c79a9f4ba050fbd7af6a888b0d72a85f268b083",
+      "stderrSha256": "7d3ec6d1d2855123c760f38551d717f3dea279c68fca7f1c42d3424fdb2c7c0b"
+    }
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 91567,
+    "reportedExecutionWallS": 570.4,
+    "reportedCpuS": 600.3,
+    "failures": 0,
+    "targets": [
+      {
+        "kind": "dreamsign",
+        "uuid": "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4",
+        "included": 600,
+        "exercised": 0
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "a42c99b2-f480-4f63-91a0-bd556120427d",
+        "included": 600,
+        "exercised": 2017
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+        "included": 600,
+        "exercised": 0
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "044f856b-c08b-4b82-81e3-5417962bf868",
+        "included": 600,
+        "exercised": 0
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1",
+        "included": 600,
+        "exercised": 0
+      }
+    ],
+    "lock": {
+      "acquiredAt": "2026-10-15T06:23:22.420799+00:00",
+      "pid": 1733,
+      "pgid": 2416,
+      "load": [
+        17.5205078125,
+        18.05322265625,
+        16.25244140625
+      ],
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4,a42c99b2-f480-4f63-91a0-bd556120427d,3dd05e97-1af8-4ae9-8e1f-954eaa63e112,044f856b-c08b-4b82-81e3-5417962bf868,9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1"
+      ]
+    },
+    "launchToAcquisitionS": 354.027718,
+    "acquisitionToTerminalS": 574.346606,
+    "qualification": "Outer wrapper includes queue/startup; native reported wall/CPU are separately scoped. No comparable-load performance claim. Static exercise-zero does not establish absence of ability behavior; existing contracts and authored gameplay provide clause proofs."
+  },
+  "d20": {
+    "newScenario": false,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "reason": "Existing exact compositions cover these leaves:104 nth event/character costs;705 actual void origin;623 conditional first-character watcher;718 first-play base-zero plus separate first-character cost primitive in one public fixture and60 contracts. Green 668 already supplies four production-specific physical second-draw/permanent-cost scenarios. No new interaction or duplicate scenario is introduced.",
+    "readonlyChildScenario": "src/content/specs/dreamsigns-ready-251.scenarios.ts"
+  },
+  "rules": {
+    "newRD": [],
+    "reused": [
+      "RD-hv-umm2.104-1",
+      "RD-hv-umm2.705-1",
+      "RD-hv-umm2.623-1",
+      "RD-hv-umm2.718-1"
+    ],
+    "newPrimitive": [],
+    "cardIssues": [],
+    "ambiguity": "No unresolved clause; existing binding rulings and public APIs settle all five."
+  },
+  "qa": {
+    "sweep": {
+      "summary": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.251/invocations/sweep-gsDne3/summary.json",
+      "sha256": "ff8ded66be8c6b0a6e51c2808c1c6667a076a25e1755d83cbc472252992ed60b",
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-gsDne3",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.251/invocations/sweep-gsDne3",
+      "counts": {
+        "pass": 10,
+        "skip": 90
+      },
+      "attemptCounts": {
+        "pass": 10,
+        "skip": 90
+      },
+      "hostLoad": 21.9033203125,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 9,
+        "serve": 5982,
+        "scenario": 58389.45779000001,
+        "cleanup": 408.55970899999375,
+        "execution": 64870.531417000006,
+        "total": 64879.531417000006
+      }
+    },
+    "flashInvocation": "invocations/run-lhBi17",
+    "flashReport": "invocations/run-lhBi17/flash-powder-judged.result.json",
+    "flashResults": {
+      "desktop": {
+        "verdict": "pass",
+        "uuid": "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+        "viewport": "desktop",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "subject": "5e5e5e5e-0000-4000-8000-000000000003",
+        "ids": {
+          "first": "i51",
+          "second": "i52",
+          "third": "i53"
+        },
+        "firstPlay": {
+          "id": "i51",
+          "paid": 0
+        },
+        "secondPlay": {
+          "id": "i52",
+          "paid": 2
+        },
+        "thirdPlay": {
+          "id": "i53",
+          "paid": 0
+        },
+        "reload": true,
+        "firstPair": [
+          {
+            "id": "i51",
+            "spark": "0",
+            "width": 89.5,
+            "height": 89.5,
+            "inside": true,
+            "hit": true
+          },
+          {
+            "id": "i52",
+            "spark": "2",
+            "width": 89.5,
+            "height": 89.5,
+            "inside": true,
+            "hit": true
+          }
+        ],
+        "finalGeometry": [
+          {
+            "id": "i51",
+            "spark": "2",
+            "width": 89.5,
+            "height": 89.5,
+            "inside": true,
+            "hit": true
+          },
+          {
+            "id": "i52",
+            "spark": "2",
+            "width": 89.5,
+            "height": 89.5,
+            "inside": true,
+            "hit": true
+          },
+          {
+            "id": "i53",
+            "spark": "0",
+            "width": 89.5,
+            "height": 89.5,
+            "inside": true,
+            "hit": true
+          }
+        ],
+        "phase": {
+          "width": 126.3681640625,
+          "height": 43.260009765625,
+          "inside": true,
+          "hit": true
+        },
+        "gameId": "4qvvjg",
+        "logRows": 94,
+        "limits": "Production player emblem and ordinary pointer actions with logged synthetic card additions; opposite initialization is covered by whole-batch both-controller sweep and synthetic public contracts."
+      },
+      "mobile": {
+        "verdict": "pass",
+        "uuid": "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+        "viewport": "mobile",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "subject": "5e5e5e5e-0000-4000-8000-000000000003",
+        "ids": {
+          "first": "i51",
+          "second": "i52",
+          "third": "i53"
+        },
+        "firstPlay": {
+          "id": "i51",
+          "paid": 0
+        },
+        "secondPlay": {
+          "id": "i52",
+          "paid": 2
+        },
+        "thirdPlay": {
+          "id": "i53",
+          "paid": 0
+        },
+        "reload": true,
+        "firstPair": [
+          {
+            "id": "i51",
+            "spark": "0",
+            "width": 53.859375,
+            "height": 53.859375,
+            "inside": true,
+            "hit": true
+          },
+          {
+            "id": "i52",
+            "spark": "2",
+            "width": 53.859375,
+            "height": 53.859375,
+            "inside": true,
+            "hit": true
+          }
+        ],
+        "finalGeometry": [
+          {
+            "id": "i51",
+            "spark": "2",
+            "width": 45.59375,
+            "height": 45.59375,
+            "inside": true,
+            "hit": true
+          },
+          {
+            "id": "i52",
+            "spark": "2",
+            "width": 45.59375,
+            "height": 45.59375,
+            "inside": true,
+            "hit": true
+          },
+          {
+            "id": "i53",
+            "spark": "0",
+            "width": 45.59375,
+            "height": 45.59375,
+            "inside": true,
+            "hit": true
+          }
+        ],
+        "phase": {
+          "width": 126.36810302734375,
+          "height": 43.260009765625,
+          "inside": true,
+          "hit": true
+        },
+        "gameId": "vhsidq",
+        "logRows": 94,
+        "limits": "Production player emblem and ordinary pointer actions with logged synthetic card additions; opposite initialization is covered by whole-batch both-controller sweep and synthetic public contracts."
+      }
+    },
+    "caps": [],
+    "captures": [
+      {
+        "filename": "flash-first-second-desktop.png",
+        "sha256": "e66673bc6beaa0a1732ae94935de8c7677e7a018f12af787dbdf69c9136778a7",
+        "pixelDimensions": [
+          2880,
+          1800
+        ],
+        "inspection": "QA helper and root each actually viewed this capture."
+      },
+      {
+        "filename": "flash-next-turn-desktop.png",
+        "sha256": "50cf247d36206538f1009447a84177bd993fa4724c607d5c03ef93a20c5d57b8",
+        "pixelDimensions": [
+          2880,
+          1800
+        ],
+        "inspection": "QA helper and root each actually viewed this capture."
+      },
+      {
+        "filename": "flash-first-second-mobile.png",
+        "sha256": "a35e0972d838a4be8b734fe3454869e68c374f21d7e1e5a4b2d84805a893a621",
+        "pixelDimensions": [
+          780,
+          1688
+        ],
+        "inspection": "QA helper and root each actually viewed this capture."
+      }
+    ],
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "gameId": "4qvvjg",
+        "rows": 94,
+        "sha256": "a431bd8644e504cc4a5f848287f485289f1c77f685c6ce169da630b7a72c1a46",
+        "filename": "flash-powder-judged-desktop.jsonl",
+        "allRowsMatchedGameId": true
+      },
+      {
+        "viewport": "mobile",
+        "gameId": "vhsidq",
+        "rows": 94,
+        "sha256": "1558979e0a4ff889083aec63b733249533e03320fb8dbfa8327cb228179d8c2e",
+        "filename": "flash-powder-judged-mobile.jsonl",
+        "allRowsMatchedGameId": true
+      }
+    ],
+    "greenReadonlyChild": {
+      "bead": "hv-umm2.668",
+      "ledger": "docs/plan/evidence/qa-ledger/hv-umm2.668.jsonl",
+      "successfulInvocation": "invocations/run-anxu0y",
+      "judgedPasses": 4,
+      "sourceHashes": {
+        "src/content/dreamsigns/green-amulet-a42c99b2.ts": "a4b3fb536744be1925bbcc2d4e158e9d0ea278a0506aeb32ac359a381af82170",
+        "src/content/specs/dreamsigns-ready-251.scenarios.ts": "46ebb3931a087ca53e6001ec8fa9e23ad9922b1ea7946beab7aeefbe125d4bcf",
+        "docs/plan/evidence/qa-ledger/hv-umm2.668.jsonl": "8d8f96b7a62b19ea939f92428dc724fbb35b3e0d0eb5850fdef8f0d4a878d5f6"
+      },
+      "proofSHA256": "5b9aa2b440fcf8101bc464ca7e3520b885ab4a8d92f57bfc9bfc6fa8283081e2",
+      "qualification": "Consume certified child acceptance read-only per native join; four original player/enemy desktop/mobile judgments and child two failed caller attempts retained. This is not a fresh whole-engine Green browser rerun."
+    },
+    "limits": [
+      "Player production Dreamsign judged in dev-build browser at desktop/mobile using exactly three logged synthetic hand additions; no authored content metadata or engine mutation.",
+      "Enemy Dreamsign initialization is covered by complete both-controller sweep and root public contracts, not a separate enemy Flash judgment.",
+      "Existing lab synthetic blank card art is visible in captures.",
+      "Saved reload preserves game log rows, with per-document sequence numbers restarting; this proof does not claim globally unique sequence numbers."
+    ],
+    "resources": {
+      "verifiedAt": "2026-10-15T06:25:17.409388+00:00",
+      "runnerGroup": 78561,
+      "serverGroup": 79223,
+      "allOwnedGroupsAbsent": true,
+      "alsoVerifiedSweepGroupsAbsent": [
+        69155,
+        69219
+      ],
+      "census": "/tmp/dreamtides-251-01a13a7a/qa-helper/terminal-process-census.txt",
+      "ownSlot0Records": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+          "exists": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+          "exists": false
+        }
+      ],
+      "runnerConfirmedPortFree": true,
+      "providerQualification": "Normal runner terminal success and removal of own slot owner record confirm provider cleanup; no direct browser launched or foreign provider touched."
+    }
+  },
+  "failures": [
+    {
+      "receipt": "preflight.json",
+      "cause": "Root supplied Dreamsign UUIDs to --cards, producing100 unknownCard failures and exercising zero Dreamsign cases. Actual parser re-read; corrected --dreamsigns preflight10pass90skip. Source unchanged; complete failed output retained."
+    },
+    {
+      "cause": "Earlier source-free251 native worktree removal exit5 was followed by an unguarded release and inaccurate cleanup note. Root immediately acknowledged, reclaimed/corrected native note, retained clean protected worktree until native removal became eligible. Verified final removal and branch absence before718 delivery; proof in prior251-cleanup-completed.json under718 audit. No source or candidate existed in old251 WT."
+    },
+    {
+      "cause": "Bounded root/read-only QA lookups of nonexistent optional files and one old fuzz-output JSON parse failed; no product/runtime assertion or source effect. Actual parsers, files and report structure used; no failed result counted as pass."
+    }
+  ],
+  "review": {
+    "required": false,
+    "reason": "28 gross non-test source lines, composition only; no core-review label or phase gate. New718 capability separately received complete fresh Codex68input review with no findings before251 acceptance."
+  },
+  "standingDuties": {
+    "frictionTriggersExit": 0,
+    "phase5UncoveredAtDispatch": 7,
+    "lastRetrospective": "hv-umm2.720",
+    "dispositionedPrerequisiteCause": "missing-primitive covered by current canonical558 disposition; distinct delivered718 capability, no common unresolved workflow defect."
+  },
+  "evidenceCutoff": "2026-10-15T06:35:23.140127+00:00",
+  "priorEvidenceCutoffs": [
+    "2026-10-15T06:33:02.766548+00:00"
+  ],
+  "endpointQualification": "Final precommit cutoff, followed immediately by exact-field/whitespace/schema guards and actual Git return. Actual endpoint, inclusive original-start minutes and finite cutoff tail are in final-git-return.json in immutable QA audit/native delivery.",
+  "schemaReceipt": "schema.json in immutable QA audit, executed against this exact final source/evidence by final commit guard"
+}

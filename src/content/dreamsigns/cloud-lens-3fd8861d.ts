@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { costModifierNth } from "../../engine/effects/primitives/cost-modifier";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +16,6 @@ export default dreamsign({
     "e6863f55-50e7-4c7b-b118-609b5fc5c005",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(costModifierNth("you", { cardType: "event" }, 2, { reduce: 1 }))],
+  verifiedText: expectedVerifiedText("The second event you play each turn costs 1● less."),
 });

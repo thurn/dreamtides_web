@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.251",
+  "phase": 5,
+  "implementMin": 115.88571231666667,
+  "implementWindow": {
+    "start": "2026-10-15T04:39:29.997388+00:00",
+    "end": "2026-10-15T06:35:23.140127+00:00"
+  },
+  "localValidationS": {
+    "focused": 22.898895957972854,
+    "review": 82.44947454100475,
+    "fuzz": 928.3579895420116
+  },
+  "hostLoad": 6.326171875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "missing-primitive",
+      "minutes": 94.04945536666668,
+      "note": "Gross original setup/source-gap/prerequisite interval through resumed claim includes the bounded 718 implementation, validation, two native integration recoveries, promotion and coordination. Existing Flash zero-base capability was genuinely missing and 718 supplies it. Interval overlaps 718; not isolated diagnosis, wasted work, CPU or additive project wall. Corrected earlier 251 cleanup/release caller mistake and all original receipts retained."
+    }
+  ]
+}
