@@ -1,0 +1,1284 @@
+{
+  "bead": "hv-umm2.742",
+  "phase": 5,
+  "base": "9a9b6a80774879477f4dbb23c128777419a92c2e",
+  "auditKind": "source-read-only scoped sage investigation; evidence implementation authorized by parent after bounded proposal",
+  "dispatch": {
+    "task": "weighted_fuzz_audit742",
+    "nativeDispatch": "2026-10-15T11:32:05.820Z",
+    "call_id": "call_cb347b219a3d4e508c1a4965f935d421",
+    "oneBasedOrdinal": 66319,
+    "recordSHA256": "0f7de06f48bd04e34f0765f69ead6ea6b290b8215147342ba51b5949a8529b60",
+    "fork_turns": "all (default)",
+    "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl"
+  },
+  "implementationClock": {
+    "start": "2026-10-15T11:32:05.820Z",
+    "precommitCutoff": "2026-10-15T11:39:01.508499+00:00",
+    "elapsedThroughCutoffMin": 6.92814165,
+    "actualGitEndpoint": "UNKNOWN until parent final commit ACK and external actual Git receipt; cutoff is not a predicted Git endpoint",
+    "scope": "Gross dispatch-to-cutoff includes research, coordination and checks; final normal Git receipt supplies actual endpoint."
+  },
+  "determination": {
+    "kind": "reason; completed audit without a runtime fix",
+    "ledgerReason": "hv-umm2.742 audited weighted300 receipts for hv-umm2.244/.247/.246: different UUID batches and source epochs, unknown exact admission for244/247, measured610.792031s lock wait separate from246 native1335.3s execution. Full300, inline invariants, final-hash replay and every10 interactive replay remain required. Current316/526 optimizations and654 finite-copy repair are present; no matched-load profile/A-B evidence establishes an additional bounded common defect. Execution-cost attribution remains unknown; the22-minute execution is not declared unavoidable or an acceptable budget. See measurements/hv-umm2.742.json. All budgets and Gate46 controlled D19/full-fuzz acceptance remain binding; no runtime fix or waiver claimed.",
+    "confirmedActionableCommonCause": false,
+    "runtimeRepairFiledIDs": [],
+    "basis": [
+      "All three native runs completed literal300 games with zero failures, different five-UUID batches,86127/95621/106382 observed original steps and6748/8049/7697 prompts. These are different workloads, not matched benchmark pairs.",
+      "scripts/fuzz-engine.ts native timer starts after catalog construction and before the sequential game loop. It includes inline play, every successful final-hash replay, every10th-game interactive fold replay and summary accumulation, excluding module/catalog startup and external heavy admission.",
+      "playFuzzGame observes every original step for invariants/redaction/announced changes and runs both-viewer determinization fidelity at the first top-level decision due after each10-step stride. It separately records prompts/actions. replayFinalHash replays every recorded action; interactive replay checks prompt fingerprints, redacted published state/events, event digest/final hash and exact logged actions.",
+      "All targeted dreamsign UUIDs are forced into both actors in fuzzInit, alongside a randomly selected30percent subset of all authored dreamsigns, random authored avatars and30-card decks mixing full production/synthetic content. Thus600 included per target is expected, not isolation of the five effects.",
+      "The native observed steps counter increments only in original play observer; wall/CPU also cover hash/interactive/fidelity/legality work. CPU divided by printed steps cannot attribute cost to a specific step implementation. No current per-game phase profile exists in these receipts.",
+      "Emblem exercised counts cover applied trigger/activation and attributed copy-bonus events. Static spark/keyword layers emit none of those solely for applying. Zero exercise does not establish missing effects or positive static semantic coverage; actual effect QA remains with each original bead.",
+      "Launcher SHA is identical at244/247/246/742. Invariants and redaction source hashes are identical too. By246 randomDeck includes deckMods on all60entries, with extra random draws and type/cost/keyword modifiers; fidelity includes first-materialization members, catalog/layers include later capabilities. Deck mods make plainVariant false and require correctness-preserving outside-play scanning. This demonstrates changed consumed workload/paths, not measured causal attribution for the22-minute duration.",
+      "The literal command uses one session-owned external lockf heavy slot. The fuzz launcher has no internal admission/retry/review loop. The separate full-review lock applies to full/test-full/lint-full, not this fuzz script. Historical244/247 outer-minus-native includes unknown admission/startup/drain;246 directly measures610.792031s wait before execution.",
+      "No timeout/retry/failure specimen in these three completed summaries establishes the historical recursive-copy cause or a current generic loop defect. Source finite-copy modifier captures occurrences once and creates each bonus through copyStackOnce/copyHandOnce; bonuses do not re-enter the modifier entrypoint."
+    ],
+    "unknowns": [
+      "244/247 exact lock acquisition and execution host-load trajectories",
+      "all three complete host CPU/memory/cache/GC trajectories and current causal per-game/phase CPU profile",
+      "current matched-input/matched-load interleaved baseline/candidate throughput",
+      "whether any particular current layer/feasibility/serialization/knowledge path dominates the246 high cost",
+      "current integrated low-load D19 suite/full-fuzz budget compliance; Gate46 retains required controlled measurement"
+    ],
+    "limits": [
+      "No claim of unavoidable22-minute execution, acceptable budget, regression, savings or causal percentage.",
+      "No heavy fuzz/profile/browser rerun, new harness, runtime/test/UI/config/plan-policy edit, peer mutation or reduced recipe.",
+      "No confirmed unfixed defect is marked resolved; this reason records bounded attribution limits while completing the trigger audit."
+    ]
+  },
+  "records": {
+    "hv-umm2.244": {
+      "frictionInput": {
+        "path": "docs/plan/evidence/friction/hv-umm2.244.json",
+        "sha256": "a4464ef64028601eb4f306be3e9acbca069bf932980f482deb21a34d18794720"
+      },
+      "measurementInput": {
+        "path": "docs/plan/evidence/measurements/hv-umm2.244.json",
+        "sha256": "9f14dc0ea008e6b45b36cc29be4fb369dc6eab650f89c622477b006d9b852779"
+      },
+      "observations": {
+        "base": "8e47d80f245c669577d4400b6154b7152ca1ed70",
+        "entities": [
+          {
+            "uuid": "4dc47625-73bd-4518-a4ef-29dda2171594",
+            "module": "src/content/dreamsigns/rune-sack-4dc47625.ts",
+            "sha256": "754be126548b206aa8d244f773517eecc62201ce8e63e4c6610bda65d5a1abcb",
+            "d21": {
+              "firstByte": 162,
+              "sampled": false
+            }
+          },
+          {
+            "uuid": "4a91c56c-d828-482a-a46c-1299d69fa011",
+            "module": "src/content/dreamsigns/bestiary-4a91c56c.ts",
+            "sha256": "9d99bcdea8ad289c3f0f216cde0c52dcc30a0950550e8e140f9ecea8260ef910",
+            "d21": {
+              "firstByte": 255,
+              "sampled": false
+            }
+          },
+          {
+            "uuid": "1a21186c-cafd-4e0f-9304-1ac0ef55340a",
+            "module": "src/content/dreamsigns/gray-feather-1a21186c.ts",
+            "sha256": "452025452c23a4dc3fdeec98a54409c0e0dfcafe5a5faed2f1af45a36ca7ec46",
+            "d21": {
+              "firstByte": 69,
+              "sampled": false
+            }
+          },
+          {
+            "uuid": "396da354-9f4d-4ae7-a9dc-02d1330a2678",
+            "module": "src/content/dreamsigns/crow-396da354.ts",
+            "sha256": "e61038883e9ec32d9aeba1e2d33be27e73615ecc997f6156e0e2b143a7b83b34",
+            "d21": {
+              "firstByte": 156,
+              "sampled": false
+            }
+          },
+          {
+            "uuid": "3ed05d9a-dae0-4260-9b99-ad22d02fc583",
+            "module": "src/content/dreamsigns/bezoar-3ed05d9a.ts",
+            "sha256": "7e01e2f8336e0f6d94549393462a8ba5c50c9e05a6e2bff8b70d6a98cf8a6e26",
+            "d21": {
+              "firstByte": 24,
+              "sampled": true
+            }
+          }
+        ],
+        "commandReceipt": {
+          "started": "2026-10-15T01:06:01.179413+00:00",
+          "pid": 19312,
+          "pgid": 19312,
+          "command": [
+            "lockf",
+            "-k",
+            "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--games",
+            "300",
+            "--weight-uuids",
+            "4dc47625-73bd-4518-a4ef-29dda2171594,4a91c56c-d828-482a-a46c-1299d69fa011,1a21186c-cafd-4e0f-9304-1ac0ef55340a,396da354-9f4d-4ae7-a9dc-02d1330a2678,3ed05d9a-dae0-4260-9b99-ad22d02fc583"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-synergies-244",
+          "hostLoad": [
+            7.70068359375,
+            9.82958984375,
+            11.337890625
+          ],
+          "JOURNEY_TEST_WORKERS": "2",
+          "ended": "2026-10-15T01:22:49.767726+00:00",
+          "elapsedSeconds": 1008.588302958,
+          "exitCode": 0,
+          "timedOut": false,
+          "cleanup": [],
+          "childReaped": true,
+          "remainingGroup": false,
+          "sourceChanged": [],
+          "manifestFiles": 5261,
+          "beforeSHA256": "8942689454ef4fa51f74b45603c688a7dd8816d0e165878043ec7039704b2e29",
+          "afterSHA256": "8942689454ef4fa51f74b45603c688a7dd8816d0e165878043ec7039704b2e29",
+          "collectorBeforeSHA256": "b0849465e2ec364d780f0e031065641d915dffe94368195e77170f44c0a0810b",
+          "collectorAfterSHA256": "b0849465e2ec364d780f0e031065641d915dffe94368195e77170f44c0a0810b",
+          "stdoutSHA256": "b6d15156f78e0586ab2cbc82a8e94e2be848f6f8b8f51317672c492dd9cdaff0",
+          "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "native": {
+          "games": 300,
+          "steps": 106382,
+          "prompts": 7697,
+          "interactiveReruns": 737,
+          "failures": 0,
+          "nativeWallS": 496.8,
+          "nativeCpuS": 525.1,
+          "outerS": 1008.588302958,
+          "outerMinusNativeS": 511.788302958,
+          "differenceMeaning": "Mixed admission, startup and drain. Exact lock acquisition and execution start are unobserved. A parent observation at 01:11:06 saw only the own lockf process; the first descendant execution observation at 01:15:52 is not an exact start.",
+          "inclusion": [
+            {
+              "uuid": "4dc47625-73bd-4518-a4ef-29dda2171594",
+              "included": 600,
+              "exercised": 573
+            },
+            {
+              "uuid": "4a91c56c-d828-482a-a46c-1299d69fa011",
+              "included": 600,
+              "exercised": 3451
+            },
+            {
+              "uuid": "1a21186c-cafd-4e0f-9304-1ac0ef55340a",
+              "included": 600,
+              "exercised": 5208
+            },
+            {
+              "uuid": "396da354-9f4d-4ae7-a9dc-02d1330a2678",
+              "included": 600,
+              "exercised": 3213
+            },
+            {
+              "uuid": "3ed05d9a-dae0-4260-9b99-ad22d02fc583",
+              "included": 600,
+              "exercised": 534
+            }
+          ],
+          "feasibilityBounded": {
+            "legality": 0,
+            "prompts": 4
+          },
+          "performanceClaim": "None. Host load samples and mixed wall/CPU scopes do not establish a controlled regression or D19 low-load budget."
+        },
+        "sourceEpochQualification": "Unchanged production source at exact sourceBase; each executing target leaf SHA256 is retained in entities."
+      }
+    },
+    "hv-umm2.247": {
+      "frictionInput": {
+        "path": "docs/plan/evidence/friction/hv-umm2.247.json",
+        "sha256": "9cf9c7b2c6662511e81d9ea530307e27cc36c216c26e9655b462870e7dcec680"
+      },
+      "measurementInput": {
+        "path": "docs/plan/evidence/measurements/hv-umm2.247.json",
+        "sha256": "576bf51ba185459984e46c0173ff970405cd9b640df5af34e15759e18bf3eea6"
+      },
+      "observations": {
+        "base": "c1b13bdd8466755978c6993727a3db8340969567",
+        "entities": [
+          {
+            "uuid": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+            "module": "src/content/dreamsigns/trinket-necklace-989b55bd.ts",
+            "sha256": "e56f1631c8fd721224f5382c27eadcc1405a1e052f08160360e640a2e78adbfc",
+            "printed": "Challengers you control have +1\u2726.",
+            "d21": {
+              "firstByte": 223,
+              "sampled": false
+            }
+          },
+          {
+            "uuid": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+            "module": "src/content/dreamsigns/eye-amulet-eb6a5c19.ts",
+            "sha256": "058c70bdfaf0c21f3eababdc22d3170b1485c309aa55c0607a1ea90833ede8b8",
+            "printed": "When all characters you control are challengers, they have +2\u2726.",
+            "d21": {
+              "firstByte": 214,
+              "sampled": false
+            }
+          },
+          {
+            "uuid": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+            "module": "src/content/dreamsigns/berries-00cc7e7f.ts",
+            "sha256": "5f4e661d027d264724d35c2bd6b95f23f46642f95ad5a888b28517b03b06b057",
+            "printed": "Characters in your deck with cost \u22642\u25cf have +1\u2726.",
+            "d21": {
+              "firstByte": 35,
+              "sampled": false
+            }
+          },
+          {
+            "uuid": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+            "module": "src/content/dreamsigns/storm-tome-49f216a2.ts",
+            "sha256": "27e7bd46fcdb94623f72023bf609c445b964fe2d6eed5335a91e854ca6a637ce",
+            "printed": "Once per turn, when you play a \u22642\u25cf cost event, copy it.",
+            "d21": {
+              "firstByte": 162,
+              "sampled": false
+            }
+          },
+          {
+            "uuid": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+            "module": "src/content/dreamsigns/clover-56523397.ts",
+            "sha256": "b6c4d7f4400ed489db846074f9b8a0718e17810e1ed4efd05edab17a9b7d7047",
+            "printed": "Once per turn, when you play an event while you control no characters, copy it.",
+            "d21": {
+              "firstByte": 199,
+              "sampled": false
+            }
+          }
+        ],
+        "commandReceipt": {
+          "started": "2026-10-15T00:23:32.548291+00:00",
+          "pid": 76979,
+          "pgid": 76979,
+          "command": [
+            "lockf",
+            "-k",
+            "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--games",
+            "300",
+            "--weight-uuids",
+            "989b55bd-139f-40dc-b1fd-eb2f7b1c091a,eb6a5c19-26a6-41ef-ac7a-ce1152557b5c,00cc7e7f-4245-4447-b9dc-f647dc6241a2,49f216a2-0596-4124-bb40-60ac9afe6e0b,56523397-6c48-4df6-846b-9e4f15d7fdee"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns-battle10-247",
+          "hostLoad": [
+            21.84619140625,
+            19.89599609375,
+            16.890625
+          ],
+          "JOURNEY_TEST_WORKERS": "2",
+          "ended": "2026-10-15T00:35:40.671176+00:00",
+          "elapsedSeconds": 728.1176587920054,
+          "exitCode": 0,
+          "timedOut": false,
+          "cleanup": [],
+          "childReaped": true,
+          "remainingGroup": false,
+          "sourceChanged": [],
+          "manifestFiles": 5235,
+          "beforeSHA256": "67bec49c8377bd084ee22b4c4a4117882c987d41a81dd5621a1c6194a99b759d",
+          "afterSHA256": "67bec49c8377bd084ee22b4c4a4117882c987d41a81dd5621a1c6194a99b759d",
+          "collectorBeforeSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+          "collectorAfterSHA256": "55e9373aee62dc6fcbb627cb3fcefbdde2c42f9dfd89af0f5a86de48864d0a48",
+          "stdoutSHA256": "cf3827b505c29abce06607bc919a4a6b05372ae4742098ad0bfc079758f428ea",
+          "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "native": {
+          "games": 300,
+          "steps": 95621,
+          "wallSeconds": 663.8,
+          "cpuSeconds": 691.9,
+          "prompts": 8049,
+          "interactiveReruns": 699,
+          "interactiveMeanMs": 12.481,
+          "feasibilityBounded": {
+            "legality": 0,
+            "prompts": 4
+          },
+          "results": {
+            "player": 151,
+            "enemy": 149,
+            "draw": 0
+          },
+          "failures": 0,
+          "targets": [
+            {
+              "uuid": "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+              "included": 600,
+              "exercised": 0
+            },
+            {
+              "uuid": "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+              "included": 600,
+              "exercised": 0
+            },
+            {
+              "uuid": "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+              "included": 600,
+              "exercised": 0
+            },
+            {
+              "uuid": "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+              "included": 600,
+              "exercised": 1705
+            },
+            {
+              "uuid": "56523397-6c48-4df6-846b-9e4f15d7fdee",
+              "included": 600,
+              "exercised": 559
+            }
+          ],
+          "outerSeconds": 728.1176587920054,
+          "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "exactLockWait": "UNKNOWN",
+          "qualification": "One literal300 invocation, no retry. Outer includes admission/startup/exit; native inner wall and CPU are separate. Static exercised0 does not prove missing or exercised static semantics. No A/B performance or canonical708 fix claim.",
+          "preflightOverlap": "Independent nonheavy read-only preflight00:25:32.154962Z\u201300:25:33.907977Z may overlap inner fuzz. Native process observed live by00:25:41.796Z; no exact lock acquisition or unoverlapped execution claim."
+        },
+        "hostLoadSamples": {
+          "weighted300-v1": {
+            "at": "2026-10-15T00:23:32.548291+00:00",
+            "load": [
+              21.84619140625,
+              19.89599609375,
+              16.890625
+            ],
+            "scope": "Outer command launch, not exact inner step start"
+          }
+        },
+        "sourceEpochQualification": "Unchanged production source at exact sourceBase; each executing target leaf SHA256 is retained in entities."
+      }
+    },
+    "hv-umm2.246": {
+      "frictionInput": {
+        "path": "docs/plan/evidence/friction/hv-umm2.246.json",
+        "sha256": "a9383c82e9e1cc96aec26263a714fb9f46e6304d7a4f5863f80e763e6377c97c"
+      },
+      "measurementInput": {
+        "path": "docs/plan/evidence/measurements/hv-umm2.246.json",
+        "sha256": "0081e5d41f32c57863ef7ba54f2acced5235834cbd4b70661a5b0c453fa46bc7"
+      },
+      "observations": {
+        "base": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+        "sourceScope": {
+          "authoredLeaves": {
+            "src/content/dreamsigns/green-beetle-47081bde.ts": "5b9a8488de171bcaa378dfbf28837cfa6b23056cda04a54fb077b870044e5162",
+            "src/content/dreamsigns/twisted-herbs-1cd25b9a.ts": "a57b65b6b43025ed5e41b1702c341b6dc9915ed2b5dbdabc6462c5a478901c31"
+          },
+          "diff": "14 insertions,2deletions across two catalog leaves; no exported signature/fallout/engine/UI/rules/fixture/config change",
+          "printedFieldsAndJourneyDescriptor": "Unchanged; Herbs exported count5 acquisition descriptor and registry wiring are retained.274 supplies journey clause;663 three leaves remain read-only.",
+          "D10": "Existing C4, rules static abilities and RD52/318/274 settle all clauses; no new ruling/cardissue.",
+          "D20": "Existing primitive composition; no new scenario or tests. Existing synthetic C4 contracts cover all-zone origins/variants/created/owner boundaries/recovery; testDelta0.",
+          "coreReview": "No core-review label/new capability/renderer; gross16 non-test code lines (14 additions+2deletions), below100. Phase-gate review remains plan-owned.",
+          "grossNonTestCodeLines": 16
+        },
+        "heavySlot": {
+          "waitStart": "2026-10-15T10:23:14.917107+00:00",
+          "lockEntered": "2026-10-15T10:33:25.709138+00:00",
+          "waitS": 610.792031,
+          "commandStart": "2026-10-15T10:33:26.234664+00:00",
+          "commandEnd": "2026-10-15T10:55:45.065313+00:00",
+          "commandSpanS": 1338.830649,
+          "receiptWallS": 1339.4084999589832,
+          "receiptQualification": "wallS includes final source-hash/process-group audit overhead; start/end identify actual command span.",
+          "nativeWallS": 1335.3,
+          "nativeCpuS": 1430.4,
+          "wrapperUserCpuS": 1420.274527,
+          "wrapperSystemCpuS": 12.350629,
+          "lockWrapperTerminal": {
+            "at": "2026-10-15T10:55:45.669479+00:00",
+            "exit": 0,
+            "wallS": 1950.7272876249626,
+            "pid": 20212,
+            "pgid": 20212
+          },
+          "noPerformanceClaim": true
+        },
+        "weighted": {
+          "games": 300,
+          "steps": 86127,
+          "failures": 0,
+          "prompts": 6748,
+          "interactiveReruns": 620,
+          "feasibilityBounded": {
+            "legality": 0,
+            "prompts": 2
+          },
+          "targetIncluded": [
+            600,
+            600,
+            600,
+            600,
+            600
+          ],
+          "targetExercised": [
+            23,
+            150,
+            0,
+            0,
+            0
+          ],
+          "qualification": "Static emblem effects do not produce trigger/ability-resolution exercise counts; zero exercise counter is not an effect failure. Actual Green/Herbs effects judged separately."
+        },
+        "producerSourceEpoch": {
+          "ledgerCommitField": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+          "qualification": "Native sweep and supplemental ledger commit fields name then-current base HEAD. Execution used the two uncommitted authored leaf SHA256 bindings in sourceScope, rather than base pending definitions.",
+          "actualGitEndpoint": "Unknown until later explicit commit ACK and external actual Git receipt."
+        },
+        "commandReceipt": {
+          "lockEntered": "2026-10-15T10:33:25.709138+00:00",
+          "start": "2026-10-15T10:33:26.234664+00:00",
+          "end": "2026-10-15T10:55:45.065313+00:00",
+          "wallS": 1339.4084999589832,
+          "executionBoundS": 1800,
+          "timedOut": false,
+          "argv": [
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--games",
+            "300",
+            "--weight-uuids",
+            "1ccd8d69-e14c-4788-be1d-cb6a1b703225,95f0f483-9a76-47c6-a839-01a1d9122945,47081bde-f35d-4b5c-ba17-53e5dbf5b419,1cd25b9a-b176-4c51-8349-bb4df35cbf05,08a3983a-1b95-4d2e-a445-9d8dc2b8fca7"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle246-root-v2",
+          "env": {
+            "JOURNEY_TEST_WORKERS": "2"
+          },
+          "pid": 15665,
+          "pgid": 15665,
+          "exit": 0,
+          "startLoad": [
+            6.42138671875,
+            8.25634765625,
+            9.9892578125
+          ],
+          "endLoad": [
+            7.142578125,
+            8.849609375,
+            9.60595703125
+          ],
+          "cpuS": {
+            "user": 1420.274527,
+            "system": 12.350629
+          },
+          "changedSourcePaths": [],
+          "remainingGroupMembers": [],
+          "stdout": "/tmp/root-246/helper-v2/weighted300.stdout"
+        },
+        "sourceEpochQualification": "The executing source was base b949f6a5 plus two uncommitted authored leaf SHA256s in sourceScope; inherited three target leaves bind through base objects. The base itself retains pending Green/Herbs definitions, so neither ledger baseHEAD nor this read-only epoch matrix substitutes for those executing leaf bindings."
+      }
+    }
+  },
+  "sourceEpochHashes": {
+    "scripts/fuzz-engine.ts": {
+      "244": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+      "247": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+      "246": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+      "742": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d"
+    },
+    "src/engine/testing/fuzz.ts": {
+      "244": "c30cc9d8a01c3a1f66d9bd24cbdf84f713a02a0d01f624496926ec9f59da4f6f",
+      "247": "c30cc9d8a01c3a1f66d9bd24cbdf84f713a02a0d01f624496926ec9f59da4f6f",
+      "246": "22ff2ff46cb486945fe3957fb00ca3d62a682b6c687e12398a1a1a44640e1b45",
+      "742": "22ff2ff46cb486945fe3957fb00ca3d62a682b6c687e12398a1a1a44640e1b45"
+    },
+    "src/engine/testing/invariants.ts": {
+      "244": "9a7d1449b5bd1275661ef120648e4e2fa4d734972c823b4a8e867f4fde4161ab",
+      "247": "9a7d1449b5bd1275661ef120648e4e2fa4d734972c823b4a8e867f4fde4161ab",
+      "246": "9a7d1449b5bd1275661ef120648e4e2fa4d734972c823b4a8e867f4fde4161ab",
+      "742": "9a7d1449b5bd1275661ef120648e4e2fa4d734972c823b4a8e867f4fde4161ab"
+    },
+    "src/engine/testing/redaction.ts": {
+      "244": "afde926e7d8bf4a7d18cd4d7c085edcc58c5ec7c86d2db9436e3eec819c8b01e",
+      "247": "afde926e7d8bf4a7d18cd4d7c085edcc58c5ec7c86d2db9436e3eec819c8b01e",
+      "246": "afde926e7d8bf4a7d18cd4d7c085edcc58c5ec7c86d2db9436e3eec819c8b01e",
+      "742": "afde926e7d8bf4a7d18cd4d7c085edcc58c5ec7c86d2db9436e3eec819c8b01e"
+    },
+    "src/engine/testing/determinization-fidelity.ts": {
+      "244": "cf41a483e61b5d56cf12b5a20f6bc4e8f1f5689d15d87410affc360cce096878",
+      "247": "cf41a483e61b5d56cf12b5a20f6bc4e8f1f5689d15d87410affc360cce096878",
+      "246": "b4db6084faf70c76dbf04a787bb9f7d22f92eae37dbf551edc256013d0caa07e",
+      "742": "b4db6084faf70c76dbf04a787bb9f7d22f92eae37dbf551edc256013d0caa07e"
+    },
+    "src/engine/continuous/layers.ts": {
+      "244": "d214955dcc21fcc85a96f2cf59fe1552a086b85625716c7baffaa1b52b0543fd",
+      "247": "d214955dcc21fcc85a96f2cf59fe1552a086b85625716c7baffaa1b52b0543fd",
+      "246": "ba9cd00560472d167a6eb11c63be7d40d43c51b22168e9031394823d84563953",
+      "742": "ba9cd00560472d167a6eb11c63be7d40d43c51b22168e9031394823d84563953"
+    },
+    "src/engine/catalog.ts": {
+      "244": "cf0b03f472be9e75af4316d83da6a39fa36359207527ae709604499e14e5e63e",
+      "247": "cf0b03f472be9e75af4316d83da6a39fa36359207527ae709604499e14e5e63e",
+      "246": "42575821be65b3ae244b5c02cbecdccd6ae53b8bb40aa98a94a8b893f26282cc",
+      "742": "42575821be65b3ae244b5c02cbecdccd6ae53b8bb40aa98a94a8b893f26282cc"
+    },
+    "src/engine/view/knowledge.ts": {
+      "244": "d05e59c7cc0e78a4cdc705b58c22a6f8561ea2c8abcbe10a4bc710759ab023aa",
+      "247": "d05e59c7cc0e78a4cdc705b58c22a6f8561ea2c8abcbe10a4bc710759ab023aa",
+      "246": "75a9f2deb24c89b3b9f510a73907eec189d6ad7c20631805ceca4662c7d83f64",
+      "742": "75a9f2deb24c89b3b9f510a73907eec189d6ad7c20631805ceca4662c7d83f64"
+    },
+    "src/engine/rules/copies.ts": {
+      "244": "8426e559a515d92778af01447050115ee9e58d60a75d22030ce79e42f095dd06",
+      "247": "8426e559a515d92778af01447050115ee9e58d60a75d22030ce79e42f095dd06",
+      "246": "e51a5a1c87b6a7d0885b64f6f3395cbcfa99e5d23020a910b35043e567869093",
+      "742": "e51a5a1c87b6a7d0885b64f6f3395cbcfa99e5d23020a910b35043e567869093"
+    },
+    "src/content/dreamsigns/gem-codex-fb7316c9.ts": {
+      "244": "8761b909117990df1e6693cd5007b6df19765e3deccbb8349e8b8ba564dbe2d4",
+      "247": "8761b909117990df1e6693cd5007b6df19765e3deccbb8349e8b8ba564dbe2d4",
+      "246": "8761b909117990df1e6693cd5007b6df19765e3deccbb8349e8b8ba564dbe2d4",
+      "742": "8761b909117990df1e6693cd5007b6df19765e3deccbb8349e8b8ba564dbe2d4"
+    }
+  },
+  "readCoverage": [
+    {
+      "path": "scripts/fuzz-engine.ts",
+      "sha256": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+      "lineCount": 138,
+      "rangesRead": [
+        [
+          1,
+          138
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/testing/fuzz.ts",
+      "sha256": "22ff2ff46cb486945fe3957fb00ca3d62a682b6c687e12398a1a1a44640e1b45",
+      "lineCount": 738,
+      "rangesRead": [
+        [
+          1,
+          738
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/testing/invariants.ts",
+      "sha256": "9a7d1449b5bd1275661ef120648e4e2fa4d734972c823b4a8e867f4fde4161ab",
+      "lineCount": 153,
+      "rangesRead": [
+        [
+          1,
+          153
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/testing/announced-changes.ts",
+      "sha256": "1d2e3ef4418be69722f68edcd10b2668fefa789a84f8f65ba680fb0b196bea65",
+      "lineCount": 122,
+      "rangesRead": [
+        [
+          1,
+          122
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/testing/redaction.ts",
+      "sha256": "afde926e7d8bf4a7d18cd4d7c085edcc58c5ec7c86d2db9436e3eec819c8b01e",
+      "lineCount": 343,
+      "rangesRead": [
+        [
+          1,
+          343
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/testing/determinization-fidelity.ts",
+      "sha256": "b4db6084faf70c76dbf04a787bb9f7d22f92eae37dbf551edc256013d0caa07e",
+      "lineCount": 264,
+      "rangesRead": [
+        [
+          1,
+          264
+        ]
+      ]
+    },
+    {
+      "path": "scripts/perf-ab.ts",
+      "sha256": "57c16e3d75edfa3cc02c883dfbd25b831f5c60af1bcc300a9053a64a1df11247",
+      "lineCount": 217,
+      "rangesRead": [
+        [
+          1,
+          217
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/catalog.ts",
+      "sha256": "42575821be65b3ae244b5c02cbecdccd6ae53b8bb40aa98a94a8b893f26282cc",
+      "lineCount": 337,
+      "rangesRead": [
+        [
+          110,
+          144
+        ],
+        [
+          250,
+          335
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/continuous/layers.ts",
+      "sha256": "ba9cd00560472d167a6eb11c63be7d40d43c51b22168e9031394823d84563953",
+      "lineCount": 614,
+      "rangesRead": [
+        [
+          145,
+          245
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/view/knowledge.ts",
+      "sha256": "75a9f2deb24c89b3b9f510a73907eec189d6ad7c20631805ceca4662c7d83f64",
+      "lineCount": 652,
+      "rangesRead": [
+        [
+          1,
+          185
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/rules/copies.ts",
+      "sha256": "e51a5a1c87b6a7d0885b64f6f3395cbcfa99e5d23020a910b35043e567869093",
+      "lineCount": 153,
+      "rangesRead": [
+        [
+          1,
+          153
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/effects/primitives/copy-card.ts",
+      "sha256": "41df8130fcc97544cf37033334481dde55b367354e2c0219b443b4e52650537a",
+      "lineCount": 71,
+      "rangesRead": [
+        [
+          1,
+          71
+        ]
+      ]
+    },
+    {
+      "path": "src/engine/rules/legality.ts",
+      "sha256": "2926424a552da342d84a37b743e21c801d9dedd6276ee26e8e4205518a15cba5",
+      "lineCount": 124,
+      "rangesRead": [
+        [
+          1,
+          124
+        ]
+      ]
+    },
+    {
+      "path": "scripts/review-lock.mjs",
+      "sha256": "13728dbdab0a059e48f8e8bc390aff453f4104d1ba1c3e4208008657cd9e3af6",
+      "lineCount": 189,
+      "rangesRead": [
+        [
+          1,
+          160
+        ]
+      ]
+    },
+    {
+      "path": "scripts/review-execution.mjs",
+      "sha256": "79615e6cd20c1683b67bf05a499b94c650d291bff14b01f619035c82f72f4982",
+      "lineCount": 23,
+      "rangesRead": [
+        [
+          1,
+          23
+        ]
+      ]
+    },
+    {
+      "path": "docs/plan/workflow.md",
+      "sha256": "711d807bba2675ba8519bb9219e6eb78f78d0ec450d08834fa950c5bb44b759e",
+      "lineCount": 1906,
+      "rangesRead": [
+        [
+          1200,
+          1326
+        ],
+        [
+          1758,
+          1786
+        ]
+      ]
+    },
+    {
+      "path": "docs/plan/decisions.md",
+      "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+      "lineCount": 1170,
+      "rangesRead": [
+        [
+          87,
+          109
+        ],
+        [
+          520,
+          544
+        ],
+        [
+          762,
+          810
+        ]
+      ]
+    },
+    {
+      "path": "docs/plan/evidence/metrics.md",
+      "sha256": "515a6ffbd6de852537c1d6f27e9e6d9ba7a4d66cb800e6a03355b0fc38452b41",
+      "lineCount": 1207,
+      "rangesRead": [
+        [
+          1,
+          103
+        ],
+        [
+          850,
+          875
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/rune-sack-4dc47625.ts",
+      "sha256": "754be126548b206aa8d244f773517eecc62201ce8e63e4c6610bda65d5a1abcb",
+      "lineCount": 28,
+      "rangesRead": [
+        [
+          1,
+          28
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/bestiary-4a91c56c.ts",
+      "sha256": "9d99bcdea8ad289c3f0f216cde0c52dcc30a0950550e8e140f9ecea8260ef910",
+      "lineCount": 28,
+      "rangesRead": [
+        [
+          1,
+          28
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/gray-feather-1a21186c.ts",
+      "sha256": "452025452c23a4dc3fdeec98a54409c0e0dfcafe5a5faed2f1af45a36ca7ec46",
+      "lineCount": 23,
+      "rangesRead": [
+        [
+          1,
+          23
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/crow-396da354.ts",
+      "sha256": "e61038883e9ec32d9aeba1e2d33be27e73615ecc997f6156e0e2b143a7b83b34",
+      "lineCount": 23,
+      "rangesRead": [
+        [
+          1,
+          23
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/bezoar-3ed05d9a.ts",
+      "sha256": "7e01e2f8336e0f6d94549393462a8ba5c50c9e05a6e2bff8b70d6a98cf8a6e26",
+      "lineCount": 22,
+      "rangesRead": [
+        [
+          1,
+          22
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/trinket-necklace-989b55bd.ts",
+      "sha256": "e56f1631c8fd721224f5382c27eadcc1405a1e052f08160360e640a2e78adbfc",
+      "lineCount": 18,
+      "rangesRead": [
+        [
+          1,
+          18
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/eye-amulet-eb6a5c19.ts",
+      "sha256": "058c70bdfaf0c21f3eababdc22d3170b1485c309aa55c0607a1ea90833ede8b8",
+      "lineCount": 19,
+      "rangesRead": [
+        [
+          1,
+          19
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/berries-00cc7e7f.ts",
+      "sha256": "5f4e661d027d264724d35c2bd6b95f23f46642f95ad5a888b28517b03b06b057",
+      "lineCount": 22,
+      "rangesRead": [
+        [
+          1,
+          22
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/storm-tome-49f216a2.ts",
+      "sha256": "27e7bd46fcdb94623f72023bf609c445b964fe2d6eed5335a91e854ca6a637ce",
+      "lineCount": 22,
+      "rangesRead": [
+        [
+          1,
+          22
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/clover-56523397.ts",
+      "sha256": "b6c4d7f4400ed489db846074f9b8a0718e17810e1ed4efd05edab17a9b7d7047",
+      "lineCount": 23,
+      "rangesRead": [
+        [
+          1,
+          23
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/wolf-sigil-1ccd8d69.ts",
+      "sha256": "09226b0351811e1af10b79ccf77dd8e940ccac5711747a9956e5648916107422",
+      "lineCount": 22,
+      "rangesRead": [
+        [
+          1,
+          22
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/oak-leaf-95f0f483.ts",
+      "sha256": "589ea9557d3ef5283e7ab84694ee4ef3bbeb069caebd0cbb39d383485b9e1ebc",
+      "lineCount": 26,
+      "rangesRead": [
+        [
+          1,
+          26
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/green-beetle-47081bde.ts",
+      "sha256": "5b9a8488de171bcaa378dfbf28837cfa6b23056cda04a54fb077b870044e5162",
+      "lineCount": 24,
+      "rangesRead": [
+        [
+          1,
+          24
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/twisted-herbs-1cd25b9a.ts",
+      "sha256": "a57b65b6b43025ed5e41b1702c341b6dc9915ed2b5dbdabc6462c5a478901c31",
+      "lineCount": 24,
+      "rangesRead": [
+        [
+          1,
+          24
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/spider-medallion-08a3983a.ts",
+      "sha256": "b8621b025dc23e8ec69b2044a8774201fd3229740ae85b71151eb2fd5fe38885",
+      "lineCount": 23,
+      "rangesRead": [
+        [
+          1,
+          23
+        ]
+      ]
+    },
+    {
+      "path": "src/content/dreamsigns/gem-codex-fb7316c9.ts",
+      "sha256": "8761b909117990df1e6693cd5007b6df19765e3deccbb8349e8b8ba564dbe2d4",
+      "lineCount": 20,
+      "rangesRead": [
+        [
+          1,
+          20
+        ]
+      ]
+    }
+  ],
+  "sourceEpochDiffAudit": {
+    "base": "8e47d80f245c669577d4400b6154b7152ca1ed70",
+    "head": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+    "read": "all changed hunks for catalog/layers/copies/fuzz/knowledge/fidelity; unbounded metrics output truncated and only explicitly reread metrics ranges count as coverage",
+    "unchangedIntoAudit": "ten selected source hashes identical246base to742base"
+  },
+  "existingRemedies": {
+    "hv-umm2.316": "Completed native source59e794ef8 landedf41dc1c63; source catalog.staticsOutsidePlay/collectStatics plainVariant fallback, redaction hidden-id traversal and field-wise characteristic comparison are present. Prior matched profile/A-B -12.4percentCPU belongs only to that historical experiment.",
+    "hv-umm2.526": "Completed native landede49b2b853; current rememberKnownCards fixed-effect map/sameObservation/sameJson retain its optimized comparison contract. Historical7round -12percentCPU result belongs to oldsource/workload; remaining observed-state serialization cost noted forGate46, no current extrapolation.",
+    "hv-umm2.654/hv-wmtb": "Completed source d0853ad4b41f589dc465fe6bab866b6ed3963938 with native release01a13851-ffab-7b70-bc09-0589e6eadd26 exact200/83775steps/184.1nativewall/197.7CPU/0fail; current Gem UUID still additionalEventCopy and same finite modifier entrypoint semantics. Separate repaired oldtimeout, not cause assigned to current300passes.",
+    "hv-umm2.703/hv-edk7": "Source-specific anonymous materialization/challenge privacy/fidelity repairs retain assertion strength. Current fidelity/read-only kernel includes later member handling. Different-source unweighted seed passes are not retrospective repair proof for weighted inputs.",
+    "hv-1mj7/hv-umm2.321": "Native completed targeted catalog/coverage introduction and later authored-emblem selection, consumed by current full-catalog runner. Historical workload expansion is not a new optimization defect.",
+    "hv-lf7t/hv-umm2.736": "Existing heavy admission audit and latest retrospective keep required D17 serialization/unknown load/controlled Gate46 budgets explicit; no duplicate scheduler or budget-waiver fix."
+  },
+  "contextInputs": [
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.316.md",
+      "sha256": "d57b4f1de874d80563c57af5de65966698aa67957cc4fdb8dad788dca2f06e1c",
+      "readScope": "complete report"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.526.md",
+      "sha256": "5013671b727e37ede343d39952c3c29e1bbef4db13cc3d0682db2017f808021e",
+      "readScope": "complete report"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.703.md",
+      "sha256": "ac0915ef1a6ad42ac779b62d6b9e73e8f4ff88b4653cd4dfd199e77e35c85325",
+      "readScope": "complete report"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.654.json",
+      "sha256": "f10747a46723e25a3f87e935d4215c6be1102291a8b00f51bd2b6d20b7f6e5af",
+      "readScope": "scope/nativeFuzz/recovery/testAdvisoryRepair"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-wmtb.json",
+      "sha256": "7ae263acd4bc9ed1352588a2a790f2f31a24d53ee39c092aae5e612d4b4ca360",
+      "readScope": "boundedDiagnosis/certifiedRepair/nativeRecoveryRelease"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-edk7.json",
+      "sha256": "59cb135cd1516821fdd303fb31b84be7e95a923bf77a24a345f3f632a98dd417",
+      "readScope": "proofs/scope"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.736.json",
+      "sha256": "77564f8771ae4fc31960e8c741659a6b5f122155908e66cfb858bdd57791b32d",
+      "readScope": "costs/recurringCauseDispositions/D19"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-lf7t.json",
+      "sha256": "6caf1023ff54887fbc33392144f3221bab87861cba4409e23b44489bc6badebf",
+      "readScope": "determination/currentLauncherAudit/ledgerAppend"
+    }
+  ],
+  "nativeInputs": [
+    {
+      "path": "/tmp/root-742/hv-1mj7.native.json",
+      "sha256": "492fc56912f5219c31c34e5be59d1ad1b81a1145421b8006237e5b6829417226",
+      "readScope": "closed/completed metadata and relevant description/terminal notes; not a fresh certification replay"
+    },
+    {
+      "path": "/tmp/root-742/hv-umm2.244.native.json",
+      "sha256": "139563ad815189971e03525d08753f9c3bc0861a8d74c05af890f2aa9f0fa25c",
+      "readScope": "closed/completed metadata and relevant description/terminal notes; not a fresh certification replay"
+    },
+    {
+      "path": "/tmp/root-742/hv-umm2.247.native.json",
+      "sha256": "192c2c856087ccf1a7d43b421cb18f20bcccbf08b1404974f6336e2985379368",
+      "readScope": "closed/completed metadata and relevant description/terminal notes; not a fresh certification replay"
+    },
+    {
+      "path": "/tmp/root-742/hv-umm2.316.native.json",
+      "sha256": "5adf7321fbbe692a9af9a4a44d644e3df707447d1b8a52f2a122610ff49cfe3c",
+      "readScope": "closed/completed metadata and relevant description/terminal notes; not a fresh certification replay"
+    },
+    {
+      "path": "/tmp/root-742/hv-umm2.526.native.json",
+      "sha256": "508c008e437eb7cb5ceef11d00914c19578cef07a4759f49fe242eccca742b5d",
+      "readScope": "closed/completed metadata and relevant description/terminal notes; not a fresh certification replay"
+    },
+    {
+      "path": "/tmp/root-742/hv-umm2.654.native.json",
+      "sha256": "8a6f40e3aa094bee48bdbaef536078800d1dd5b4b83919d8c428bd443f1dbff1",
+      "readScope": "closed/completed metadata and relevant description/terminal notes; not a fresh certification replay"
+    },
+    {
+      "path": "/tmp/root-742/hv-umm2.703.native.json",
+      "sha256": "5685dd36b8fb03204e2271f01455bc2477cab7046b706f6e14fc31c6a9fe64e9",
+      "readScope": "closed/completed metadata and relevant description/terminal notes; not a fresh certification replay"
+    },
+    {
+      "path": "/tmp/root-742/hv-umm2.736.native.json",
+      "sha256": "92b651d062342cb4f503ce6fe23ccc38e10e3f6f27335b93e1e60260b8fab13d",
+      "readScope": "closed/completed metadata and relevant description/terminal notes; not a fresh certification replay"
+    },
+    {
+      "path": "/tmp/root-742/hv-wmtb.native.json",
+      "sha256": "1d8f93de9d84e570c839f3f9133332e0654d3215881edcede9b0f3c398347848",
+      "readScope": "closed/completed metadata and relevant description/terminal notes; not a fresh certification replay"
+    }
+  ],
+  "raw246Inputs": [
+    {
+      "path": "/tmp/root-246/helper-v2/weighted300.receipt.json",
+      "sha256": "e43100281b9ae181474829bad9c38799a7df217d75989872aa9286a6c2959944"
+    },
+    {
+      "path": "/tmp/root-246/helper-v2/weighted300.stdout",
+      "sha256": "749e0821d659cd6acb00f878068f0a1d457a5d84b3f08635607f43096e39f9e9"
+    },
+    {
+      "path": "/tmp/root-246/helper-v2/weighted300-lock-wait.json",
+      "sha256": "cb61a3b4bbdc9a365b4504140610786a4d34d5489e8f03a9378cd2caac96f896"
+    },
+    {
+      "path": "/tmp/root-246/parent-weighted300-audit-v2.json",
+      "sha256": "6120482899c01d745ece474163ae372572a8eb58209f38ff6b1471ae08a5be96"
+    }
+  ],
+  "ledgerAppend": {
+    "path": "docs/plan/evidence/introspection.jsonl",
+    "priorBytes": 25300,
+    "priorSHA256": "bb155568df9234bcabf1eaf250191e8a7382aa1c1fe14e036a529803d4fd59c8",
+    "lineSHA256": "b440503b3c1d8b73ec75a905352f82254f33f430ee9882a11997cca684752b57",
+    "oneLineOnly": true,
+    "disposition": "reason; no fixed-cause bead field"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "preExistingIssues": {
+    "newConfirmedIssues": [],
+    "scope": "Known prior fixes and source-qualified attribution limits are contextual evidence; no new bounded product/workflow defect diagnosed."
+  },
+  "validation": {
+    "install": {
+      "receipt": "install.receipt.json",
+      "receiptSHA256": "d7dda2ed8d3e51acc1952975fe34eb09c5dcfdae81d976fbdb51ea020235a491",
+      "label": "install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/weighted-fuzz-audit742-root",
+      "start": "2026-10-15T11:32:28.239240+00:00",
+      "end": "2026-10-15T11:32:31.256112+00:00",
+      "wallS": 3.0653462919872254,
+      "cpuS": 6.5615749999999995,
+      "hostLoadStart": [
+        8.30908203125,
+        10.66015625,
+        9.73681640625
+      ],
+      "hostLoadEnd": [
+        8.3642578125,
+        10.63232421875,
+        9.732421875
+      ],
+      "pid": 57107,
+      "pgid": 57107,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "stdoutSha256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c"
+    },
+    "review": {
+      "receipt": "review.receipt.json",
+      "receiptSHA256": "c9b4f7e313b462ffd0d5c182e446265e8e8c171a79a3a43f842aec3cd9ab50d0",
+      "label": "review",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/weighted-fuzz-audit742-root",
+      "start": "2026-10-15T11:36:35.634699+00:00",
+      "end": "2026-10-15T11:36:35.949211+00:00",
+      "wallS": 0.35596904199337587,
+      "cpuS": 0.319513,
+      "hostLoadStart": [
+        6.03515625,
+        8.41796875,
+        8.99951171875
+      ],
+      "hostLoadEnd": [
+        6.03515625,
+        8.41796875,
+        8.99951171875
+      ],
+      "pid": 4863,
+      "pgid": 4863,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "stdoutSha256": "aea2f43348daec824eb59a79b8e47d78ddd2fcd002990849ec381d0f3a41a5d4"
+    },
+    "knip": {
+      "receipt": "knip.receipt.json",
+      "receiptSHA256": "3b8ec1dd9a1eecbe85ba189236d30cdf7b53a84c72b708b5a0930bf8c14aa302",
+      "label": "knip",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/weighted-fuzz-audit742-root",
+      "start": "2026-10-15T11:36:38.842040+00:00",
+      "end": "2026-10-15T11:36:45.094565+00:00",
+      "wallS": 6.292702250008006,
+      "cpuS": 6.91026,
+      "hostLoadStart": [
+        6.0322265625,
+        8.37744140625,
+        8.98193359375
+      ],
+      "hostLoadEnd": [
+        6.109375,
+        8.3544921875,
+        8.97021484375
+      ],
+      "pid": 5191,
+      "pgid": 5191,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "stdoutSha256": "059d1d6e9c9635155122aaadf9b0523968c1591a78567ed13ae9ddcb139f0c73"
+    },
+    "triggers": {
+      "receipt": "triggers.receipt.json",
+      "receiptSHA256": "a0e07496cae04cbae573a0e13d57ba84dd89f3bdb3e43c49c1f4edf40adf86c8",
+      "label": "triggers",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/weighted-fuzz-audit742-root",
+      "start": "2026-10-15T11:37:02.808338+00:00",
+      "end": "2026-10-15T11:37:02.985241+00:00",
+      "wallS": 0.21808929200051352,
+      "cpuS": 0.18644,
+      "hostLoadStart": [
+        5.89404296875,
+        8.16650390625,
+        8.88818359375
+      ],
+      "hostLoadEnd": [
+        5.89404296875,
+        8.16650390625,
+        8.88818359375
+      ],
+      "pid": 6716,
+      "pgid": 6716,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "stdoutSha256": "d5398f7630a0bcf18a848ccfc6bf3f01690e79c8941b43fb9d9241dddeca3c08"
+    },
+    "schema": {
+      "receipt": "schema.receipt.json",
+      "receiptSHA256": "fa85e71d685eb3231fe10aa7d8a784cc89778dbfe77af72347193a2ac202b33c",
+      "label": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/weighted-fuzz-audit742-root",
+      "start": "2026-10-15T11:37:03.053892+00:00",
+      "end": "2026-10-15T11:37:03.124547+00:00",
+      "wallS": 0.11216141702607274,
+      "cpuS": 0.07654899999999999,
+      "hostLoadStart": [
+        5.89404296875,
+        8.16650390625,
+        8.88818359375
+      ],
+      "hostLoadEnd": [
+        5.89404296875,
+        8.16650390625,
+        8.88818359375
+      ],
+      "pid": 6744,
+      "pgid": 6744,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "stdoutSha256": "dead6f1650bfa2f37440686122952ad211d8d16df507a959cd3f20032970f3b8"
+    },
+    "whitespace": {
+      "receipt": "whitespace.receipt.json",
+      "receiptSHA256": "d43c85bf1c20fb08d91d6a663e07c0d9c3217e1402c95524eed4b040d208799d",
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/weighted-fuzz-audit742-root",
+      "start": "2026-10-15T11:37:03.193192+00:00",
+      "end": "2026-10-15T11:37:03.203371+00:00",
+      "wallS": 0.050024791969917715,
+      "cpuS": 0.041044,
+      "hostLoadStart": [
+        5.89404296875,
+        8.16650390625,
+        8.88818359375
+      ],
+      "hostLoadEnd": [
+        5.89404296875,
+        8.16650390625,
+        8.88818359375
+      ],
+      "pid": 6755,
+      "pgid": 6755,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual ordinary npm run review starting one-minute os.getloadavg sample at 2026-10-15T11:36:35.634699+00:00; review executes docs/friction schema only, not runtime tests/typecheck/lint."
+      }
+    }
+  },
+  "resourcePolicy": {
+    "heavyFuzzRuns": 0,
+    "browserRuns": 0,
+    "serversStarted": 0,
+    "externalConfigMutations": 0,
+    "workers": "JOURNEY_TEST_WORKERS=2 for validation",
+    "allRecordedGroupsSettled": true
+  },
+  "ordinaryValidationScope": "Review actual stdout:3 changed documentation files; friction-record schema969records/41historicalUNKNOWN only. Knip independent consumer-graph check. Supported friction:triggers exit0 lists weighted-fuzz-duration reason; other duties unchanged. No full suite/runtime/browser/performance validation claim."
+}
