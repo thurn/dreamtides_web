@@ -54,6 +54,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
       state.avatar,
       state.dreamsigns,
       state.shopModifiers.essenceDiscountPercent,
+      state.shopModifiers.freeRerolls,
       state.shopModifiers.freePurchaseModifiers,
       node,
       site,

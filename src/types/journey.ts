@@ -283,6 +283,24 @@ export interface JourneyDraftEffect {
   readonly minimumEssence?: number;
 }
 
+/** Bounded catalog clauses consumed by shop stock, Restock and card purchases. */
+export type JourneyShopEffect =
+  | { readonly kind: "additionalOptions"; readonly amount: number }
+  | { readonly kind: "firstRestockFree" }
+  | { readonly kind: "purchasedCardTransfiguration" };
+
+/** Diagnostic result of a successful purchased-card form assignment. */
+export interface JourneyShopPurchaseTransfiguration {
+  readonly dreamsignId: DreamsignId;
+  readonly heldIndex: number;
+  readonly entryId: DeckEntryId;
+  readonly cardId: CardId;
+  readonly before: null;
+  readonly type: TransfigurationType;
+  readonly applicableForms: readonly TransfigurationType[];
+  readonly drawIndex: number;
+}
+
 /** Typed catalog clauses implemented by the journeySites primitive. */
 export type JourneySitesEffect =
   | { readonly kind: "transfigurationCount"; readonly count: number }
@@ -467,6 +485,7 @@ export interface ShopPurchaseResult {
         readonly kind: "card";
         readonly cardNumber: number;
         readonly gainedEntryId: DeckEntryId;
+      readonly journeyShopTransfiguration?: JourneyShopPurchaseTransfiguration;
       }
     | {
         readonly kind: "dreamsign";

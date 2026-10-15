@@ -1,3 +1,5 @@
+import { shopStockCounts } from "../../rules/journey/journey-shop";
+import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import type { JourneyPurgeTransition } from "../../types/journey";
 import { explorationEncounterForCard } from "../../data/exploration";
 import { auguryPurgeReceipts, explorationPurgeReceipts } from "./journey-purge-receipts";
@@ -624,6 +626,7 @@ function buildCardChoiceRuntime(
 
 export function createSiteContentProvider(
   content: JourneyContent,
+  registry: Pick<JourneyModifierRegistry, "lookup"> = journeyModifierRegistry,
 ): SiteContentProvider {
   const dreamsignRegenerationPoolIds = (
     journey: JourneyState,
@@ -800,8 +803,7 @@ export function createSiteContentProvider(
             remainingDreamsignPoolIds: journey.remainingDreamsignPool,
             dreamsignTemplates: content.dreamsignTemplates,
             dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(journey),
-            cardCount: stock.cardSlots,
-            dreamsignCount: stock.dreamsignSlots,
+            ...shopStockCounts(journey, site, { cardCount: stock.cardSlots, dreamsignCount: stock.dreamsignSlots }, registry),
             rng: stream,
           });
           const baseSlots = shopSlotsToRuntime(generated.slots);
@@ -952,8 +954,7 @@ export function createSiteContentProvider(
         remainingDreamsignPoolIds: journey.remainingDreamsignPool,
         dreamsignTemplates: content.dreamsignTemplates,
         dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(journey),
-        cardCount: stock.cardSlots,
-        dreamsignCount: stock.dreamsignSlots,
+        ...shopStockCounts(journey, site, { cardCount: stock.cardSlots, dreamsignCount: stock.dreamsignSlots }, registry),
         rng: stream,
       });
       const draftState = generated.draftState ?? journey.draftState;

@@ -3284,3 +3284,30 @@ held slot or keep the current collection. An empty offer permits continuing and
 provides no substitute reward. Prepared choices survive source loss and reload.
 Resolving an acquired Dreamsign's effects preserves the remaining earned queue
 and the battle's exact terminal continuation and committed rewards.
+
+## Journey Shop Effects
+
+A shop site is a Card Shop or Dreamsign Bazaar, including its enhanced form.
+Each freshly prepared shelf uses the site's ordinary stock plus each held
+additional-options source's printed amount. Additional options are cards at a
+Card Shop and Dreamsigns at a Dreamsign Bazaar. Prepared stock persists through source loss and reload. Changing a source does
+not redraw the shelf or alter its associated pools. A successful Restock prepares fresh
+stock using the sources currently held.
+
+The first Restock at a shop site is the one that changes that visit's successful
+Restock count from zero to one. A held first-Restock-free source makes that
+Restock cost zero. Multiple such sources share the same first Restock. Existing
+global free-Restock charges are consumed before other pricing, including when
+the first Restock is otherwise free. A failed Restock consumes neither a charge
+nor the visit's first Restock. The site's ordinary Restock limit applies.
+
+For an effect referring to cards purchased from a dream bazaar, the card-selling
+Card Shop and its enhanced form are the applicable sites. A Dreamsign Bazaar
+sells Dreamsigns and is outside that card-purchase clause. A qualifying purchased
+card receives one random applicable transfiguration as its physical deck entry
+is created, before added-card modifiers observe it. It keeps a form it already
+carries and consumes no random draw; a card with no applicable form is purchased
+without a form or draw. Multiple sources cannot replace an existing form.
+Receiving this preformed card is a gain, not a new transformation occurrence on
+an original deck entry. The validated purchase retains its ordinary price,
+free-purchase charges and physical purchase receipt.

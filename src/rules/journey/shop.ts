@@ -1,3 +1,5 @@
+import { shopRestockQuote, transfigureShopPurchase } from "./journey-shop";
+import { journeyModifierRegistry, type JourneyModifierRegistry } from "./modifier-registry";
 import type { JourneyPurgeTransition } from "../../types/journey";
 // Pure shop / augury / modifier reducer cases.
 //
@@ -23,7 +25,6 @@ import type { JourneyPurgeTransition } from "../../types/journey";
 import type { EventContext } from "../../eventlog/types";
 import { isNightmareCardId } from "../../data/nightmare";
 import { getDeckContentProvider } from "./deck";
-import { rerollCost } from "../../shop/shop-pricing";
 import { effectivePrice } from "../../shop/shop-generator";
 import type {
   BattleModifier,
@@ -162,6 +163,7 @@ export function buyShopSlot(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  modifiers: JourneyModifierRegistry = journeyModifierRegistry,
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   const slotIndex = integer(payload.slotIndex);
@@ -236,15 +238,18 @@ export function buyShopSlot(
       transfiguration: slot.transfiguration ?? null,
       isBane: false,
     };
+    const prepared = transfigureShopPurchase(journey, site, entry, modifiers, ctx.rng);
+    if (prepared === null) return null;
     item = {
       kind: "card",
       cardNumber: slot.cardNumber,
       gainedEntryId: entry.entryId,
+      ...(prepared.application === undefined ? {} : { journeyShopTransfiguration: prepared.application }),
     };
     next = {
       ...journey,
       essence: clampEssence(journey.essence - pricePaid),
-      deck: [...journey.deck, entry],
+      deck: [...journey.deck, prepared.entry],
     };
   } else {
     const purchasedDreamsignId = asString(slot.dreamsign.id);
@@ -362,6 +367,7 @@ export function rerollShop(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  modifiers: JourneyModifierRegistry = journeyModifierRegistry,
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
@@ -377,10 +383,7 @@ export function rerollShop(
   if (provider === null) return null;
   const rerollConfig = provider.economyData.shop.reroll;
   if (runtime.rerollCount >= rerollConfig.maxPerVisit) return null;
-  const useFreeReroll = journey.shopModifiers.freeRerolls > 0;
-  const cost = useFreeReroll
-    ? 0
-    : rerollCost(rerollConfig, runtime.rerollCount, site.isEnhanced);
+  const { useFreeReroll, price: cost } = shopRestockQuote(journey, runtime, site, rerollConfig, modifiers);
   if (!useFreeReroll && cost > journey.essence) return null;
 
   const generated = provider.rerollShop({ journey, site, rng: ctx.rng });

@@ -1,6 +1,11 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import type { JourneyShopEffect } from "../../types/journey";
 import { dreamsign } from "../define";
 
+export const journeyShopEffect = { kind: "firstRestockFree" } as const satisfies JourneyShopEffect;
+
 export default dreamsign({
+  journeyShop: journeyShopEffect,
   id: "8a2c7b32-26ea-40e2-845a-689da5673b4d",
   name: "Witch Coin",
   imageName: "witch_coin.png",
@@ -10,5 +15,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
   tags: ["J15", "Tag OK"],
-  pending: true,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("The first Restock at each shop site costs 0."),
 });

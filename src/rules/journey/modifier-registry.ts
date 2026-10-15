@@ -1,3 +1,7 @@
+import witchCoin, { journeyShopEffect as witchCoinEffect } from "../../content/dreamsigns/witch-coin-8a2c7b32";
+import crackedOrb, { journeyShopEffect as crackedOrbEffect } from "../../content/dreamsigns/cracked-orb-8408b8c2";
+import redShard, { journeyShopEffect as redShardEffect } from "../../content/dreamsigns/red-shard-10bd78de";
+import { journeyShop } from "./journey-shop";
 import red, { journeyOnGainEffect as redEffect } from "../../content/dreamsigns/red-cheese-7e8c86cc";
 import rat, { journeyOnGainEffect as ratEffect } from "../../content/dreamsigns/white-rat-ab1da9d3";
 import doll, { journeyOnGainEffect as dollEffect } from "../../content/dreamsigns/voodoo-doll-0df9d72c";
@@ -38,6 +42,7 @@ import type { GameplayEventType } from "../events";
  * battle DSL. Administrative intents never reach a hook.
  */
 export interface JourneyModifierDefinition {
+  readonly journeyShop?: import("../../types/journey").JourneyShopEffect;
   readonly dreamsignId: DreamsignId;
   readonly journeyOnGain?: import("../../types/journey").JourneyOnGainEffect;
   readonly journeyDeckEntry?: import("../../types/journey").JourneyDeckEntryEffect;
@@ -202,6 +207,9 @@ export function createJourneyModifierRegistry(
 
 /** The production registry's fixed catalog registrations. */
 export const journeyModifierRegistry = createJourneyModifierRegistry([
+  journeyShop(parseDreamsignId(witchCoin.id), witchCoinEffect),
+  journeyShop(parseDreamsignId(crackedOrb.id), crackedOrbEffect),
+  journeyShop(parseDreamsignId(redShard.id), redShardEffect),
   journeyOnGain(parseDreamsignId(red.id), redEffect),
   journeyOnGain(parseDreamsignId(rat.id), ratEffect),
   journeyOnGain(parseDreamsignId(doll.id), dollEffect),

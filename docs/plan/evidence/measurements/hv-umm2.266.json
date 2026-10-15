@@ -1,0 +1,2519 @@
+{
+  "bead": "hv-umm2.266",
+  "phase": 5,
+  "base": "eb953de2df5a379785b6fdbf1bb86db2066dee1d",
+  "implementationWindow": {
+    "dispatch": "2026-10-15T02:44:09.223Z",
+    "dispatchProvenance": {
+      "call": "call_b28003927ae549a7a2eb4b251f0ecfe0",
+      "ordinal": 72724,
+      "rawSHA256": "be0eb1ad935522361334af925a35ac0129ba161a941d66ffbe9597baf182bf7a"
+    },
+    "modelStart": "unknown",
+    "qualification": "Continuous actual helper window includes source-first research, baseline coordination, implementation, failed epochs, all checks, peer heavy queue, QA preparation/execution and evidence/Git. It will end at own actual commit; no subtraction or old-owner interval.",
+    "prospectiveCommitEndpoint": "2026-10-15T03:51:16.635186+00:00",
+    "endpointQualification": "Actual current evidence cutoff before separate COMMITACK; not a completed commit. Refresh this endpoint at authorized commit preparation. Continuous dispatch includes all source-first research, coordination, queues, failures, QA, evidence and Git; sampling unknown."
+  },
+  "source": {
+    "freeze": "/tmp/worker266-20261015/source-freeze-v03.json",
+    "freezeSHA256": "e093e49f51cf39f1539ed486a7bdb123a47addb081a79c912a76358d727ec840",
+    "paths": 18,
+    "productionPaths": 13,
+    "ownNodeTestPaths": 2,
+    "rulesAndDecisionPaths": 3,
+    "changedNonTestCodeLines": 187,
+    "newPrimitive": "journeyShop",
+    "unchanged": "Registry gain/reward/create/apply/invoke loops, Dreamsign purchase branch, engine, screen/CSS/copy, inventory generator and printed catalog data; parent independent exact baseline audit governs.",
+    "files": [
+      {
+        "path": "src/rules/journey/journey-shop.ts",
+        "sha256": "ea84f52b43c94715c3e2529905962a28a788eb313571ef446cd89349feddbe89",
+        "lines": 90
+      },
+      {
+        "path": "src/types/journey.ts",
+        "sha256": "11389dfef2beead50d5223a42dbbdb9984aefa2de77d333f521207ec20c95fa3",
+        "lines": 1474
+      },
+      {
+        "path": "src/content/define.ts",
+        "sha256": "374aecb73c40d382f0398815c54dc169895e0bb6921a60bcbf27c595cb8f2105",
+        "lines": 186
+      },
+      {
+        "path": "src/rules/journey/modifier-registry.ts",
+        "sha256": "7ced44fffe738b4bc40a5a90222ae5400ece2afb07622de8d3e0ddc1454360b7",
+        "lines": 233
+      },
+      {
+        "path": "src/session/providers/site-provider.ts",
+        "sha256": "536321c0a6e3290b8150103d078f4a9e0e0d9edef52e953440a0dca32c6790d0",
+        "lines": 1052
+      },
+      {
+        "path": "src/rules/journey/shop.ts",
+        "sha256": "649f14a0d10f84e94dc48ed9c7bb7117c8fae5b92e2352b8ebdeb666bcf95840",
+        "lines": 781
+      },
+      {
+        "path": "src/rules/reducer.ts",
+        "sha256": "954b6b9015ba55e5538481f6f354e4fb5695729ba791095706c40fd2035169e3",
+        "lines": 741
+      },
+      {
+        "path": "src/screens/cumulus_adapters/card-shop-view-model.ts",
+        "sha256": "c9a09f87f49e1d6d0bb57a95e730b5c5340041192b006063ec0477311d4fae5c",
+        "lines": 216
+      },
+      {
+        "path": "src/screens/cumulus_adapters/dreamsign-bazaar-view-model.ts",
+        "sha256": "c6be6a57a2bf7bb12c574f6773be12e16a79286b43183ce02aa52fb36791b3dd",
+        "lines": 174
+      },
+      {
+        "path": "src/screens/cumulus_adapters/CardShopSiteScreenAdapter.tsx",
+        "sha256": "dd580dfeda23a8d9783b65e1736a79f0ffddb8044338682ea9695f57622c161b",
+        "lines": 164
+      },
+      {
+        "path": "src/content/dreamsigns/witch-coin-8a2c7b32.ts",
+        "sha256": "afb22dc35903ff69813a9f532f9958201cbde11a39a47e76c74e689661e71e5b",
+        "lines": 20
+      },
+      {
+        "path": "src/content/dreamsigns/cracked-orb-8408b8c2.ts",
+        "sha256": "44e4678a53526f5f16308d03fa1f8f918b186ed502e5033729ea4c09879eba6d",
+        "lines": 20
+      },
+      {
+        "path": "src/content/dreamsigns/red-shard-10bd78de.ts",
+        "sha256": "79071c4446bd62c5262bfd326e0574e9ed5df66ee240b2cc343a3be2ad019600",
+        "lines": 20
+      },
+      {
+        "path": "src/rules/journey/journey-shop.test.ts",
+        "sha256": "58f2115adefc4adf5058b1901feec27158ac04636e20d4bdd5d72e3570491031",
+        "lines": 291
+      },
+      {
+        "path": "src/screens/cumulus_adapters/journey-shop-quotes.test.ts",
+        "sha256": "fce004b0ce470bee8bf364a57a48edffc9792a98e0ad55798c02b5ac7d4f7113",
+        "lines": 57
+      },
+      {
+        "path": "docs/rules.md",
+        "sha256": "0135564d5708b8cf9732b641f7f57e63e719362a6a0d0d0069c4acc13136c9b0",
+        "lines": 3279
+      },
+      {
+        "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.266-1.md",
+        "sha256": "9081a6ac1e65ffab5fea1fb8fcc536f62c8bb4b58b3eb94985a88166643de711",
+        "lines": 32
+      },
+      {
+        "path": "docs/plan/evidence/card-issues/10bd78de-87ec-44e4-9b16-e755da2a9717--hv-umm2.266.md",
+        "sha256": "aa6c215680a759a9f366a00b2ffa39a0bc2dba0f93b88f5d214a2be02141b09d",
+        "lines": 5
+      }
+    ],
+    "inputManifest": {
+      "path": "/tmp/worker266-20261015/source-input-manifest-v01.json",
+      "sha256": "6587ac76aa6872ecc84317169be4f98823ec2e1d3d275c115ce7fe3890c804c6",
+      "qualification": "50 actual scoped/full source inputs with44 range hashes; discovery inventories are not source-body authority. Original retained, normative supplement separate."
+    },
+    "normativeSupplement": {
+      "path": "/tmp/worker266-20261015/source-input-normative-supplement-v01.json",
+      "sha256": "8c9aef3a78bf6c08de2f899dfed0f3cd4346eb4ecea1a778d5271551f0877b32"
+    },
+    "proposal": {
+      "path": "/tmp/worker266-20261015/source-first-proposal-v01.md",
+      "sha256": "c36802ea11f7d718924ec247f9d99c764c3592565f717787bf5523b8b3195495"
+    }
+  },
+  "testDelta": {
+    "files": 2,
+    "lines": 348,
+    "jsdomFiles": 0,
+    "configuredNodeEntrypoints": 2,
+    "owningFileLines": [
+      291,
+      57
+    ]
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "value": 10.33,
+        "measuredFor": "Successful impl-review-v02 starting sysctl vm.loadavg one-minute value; not CPU time or whole-window average."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "before-qa-v01",
+      "start": "2026-10-15T02:50:33.116064+00:00",
+      "load": "{ 10.65 12.55 13.43 }"
+    },
+    {
+      "label": "before-qa-v02",
+      "start": "2026-10-15T02:51:45.578345+00:00",
+      "load": "{ 8.29 11.49 12.96 }"
+    },
+    {
+      "label": "browser-bazaar-one-v01",
+      "start": "2026-10-15T03:32:16.643453+00:00",
+      "load": "{ 6.49 8.91 9.40 }"
+    },
+    {
+      "label": "browser-enhanced-bazaar-one-v01",
+      "start": "2026-10-15T03:37:03.015829+00:00",
+      "load": "{ 5.25 6.92 8.36 }"
+    },
+    {
+      "label": "browser-enhanced-shop-one-v01",
+      "start": "2026-10-15T03:36:36.695521+00:00",
+      "load": "{ 5.08 7.02 8.43 }"
+    },
+    {
+      "label": "browser-enhanced-shop-two-v01",
+      "start": "2026-10-15T03:37:31.002296+00:00",
+      "load": "{ 6.39 7.08 8.37 }"
+    },
+    {
+      "label": "browser-guide-probe-v01",
+      "start": "2026-10-15T03:41:37.499105+00:00",
+      "load": "{ 20.69 11.28 9.58 }"
+    },
+    {
+      "label": "browser-remaining-matrix-v01",
+      "start": "2026-10-15T03:36:36.653816+00:00",
+      "load": "{ 5.08 7.02 8.43 }"
+    },
+    {
+      "label": "browser-shop-one-v01",
+      "start": "2026-10-15T03:29:36.485464+00:00",
+      "load": "{ 10.72 10.79 10.05 }"
+    },
+    {
+      "label": "browser-shop-one-v02",
+      "start": "2026-10-15T03:30:15.469984+00:00",
+      "load": "{ 8.59 10.27 9.89 }"
+    },
+    {
+      "label": "browser-shop-one-v03",
+      "start": "2026-10-15T03:31:26.724346+00:00",
+      "load": "{ 6.69 9.38 9.58 }"
+    },
+    {
+      "label": "browser-shop-two-v01",
+      "start": "2026-10-15T03:37:16.900697+00:00",
+      "load": "{ 6.10 7.05 8.38 }"
+    },
+    {
+      "label": "card-sweep-v01",
+      "start": "2026-10-15T03:23:46.334581+00:00",
+      "load": "{ 5.13 7.05 8.86 }"
+    },
+    {
+      "label": "entity-routing-v01",
+      "start": "2026-10-15T02:44:51.302866+00:00",
+      "load": "{ 6.82 13.81 14.08 }"
+    },
+    {
+      "label": "fault-first-free-v01",
+      "start": "2026-10-15T03:17:03.731817+00:00",
+      "load": "{ 7.52 8.95 10.23 }"
+    },
+    {
+      "label": "fault-global-token-v01",
+      "start": "2026-10-15T03:17:07.159119+00:00",
+      "load": "{ 7.80 8.98 10.24 }"
+    },
+    {
+      "label": "fault-initial-stock-v01",
+      "start": "2026-10-15T03:16:56.505875+00:00",
+      "load": "{ 7.57 8.98 10.25 }"
+    },
+    {
+      "label": "fault-overwrite-preformed-v01",
+      "start": "2026-10-15T03:17:13.817152+00:00",
+      "load": "{ 7.58 8.91 10.21 }"
+    },
+    {
+      "label": "fault-purchase-form-v01",
+      "start": "2026-10-15T03:17:10.615284+00:00",
+      "load": "{ 7.80 8.98 10.24 }"
+    },
+    {
+      "label": "fault-restock-stock-v01",
+      "start": "2026-10-15T03:17:00.492896+00:00",
+      "load": "{ 7.57 8.98 10.25 }"
+    },
+    {
+      "label": "heavy-full-slot-v01",
+      "start": "2026-10-15T03:17:58.074322+00:00",
+      "load": "{ 7.41 8.70 10.06 }"
+    },
+    {
+      "label": "heavy-full-v01",
+      "start": "2026-10-15T03:18:14.611714+00:00",
+      "load": "{ 7.88 8.75 10.05 }"
+    },
+    {
+      "label": "impl-docs-white-v01",
+      "start": "2026-10-15T03:15:31.532739+00:00",
+      "load": "{ 5.79 9.31 10.50 }"
+    },
+    {
+      "label": "impl-focused-v01",
+      "start": "2026-10-15T02:59:44.329735+00:00",
+      "load": "{ 6.65 7.04 9.88 }"
+    },
+    {
+      "label": "impl-focused-v02",
+      "start": "2026-10-15T03:00:26.183647+00:00",
+      "load": "{ 8.18 7.36 9.85 }"
+    },
+    {
+      "label": "impl-focused-v03",
+      "start": "2026-10-15T03:06:24.950492+00:00",
+      "load": "{ 16.32 12.73 11.46 }"
+    },
+    {
+      "label": "impl-knip-v01",
+      "start": "2026-10-15T03:14:38.694644+00:00",
+      "load": "{ 6.23 10.05 10.82 }"
+    },
+    {
+      "label": "impl-restored-faults-runner-v01",
+      "start": "2026-10-15T03:16:56.449536+00:00",
+      "load": "{ 7.57 8.98 10.25 }"
+    },
+    {
+      "label": "impl-restored-focused-v01",
+      "start": "2026-10-15T03:17:32.610182+00:00",
+      "load": "{ 7.45 8.82 10.14 }"
+    },
+    {
+      "label": "impl-review-v01",
+      "start": "2026-10-15T03:02:29.642275+00:00",
+      "load": "{ 13.52 8.43 9.87 }"
+    },
+    {
+      "label": "impl-review-v02",
+      "start": "2026-10-15T03:07:25.672981+00:00",
+      "load": "{ 10.33 11.87 11.24 }"
+    },
+    {
+      "label": "journey300-v02",
+      "start": "2026-10-15T03:22:22.996657+00:00",
+      "load": "{ 6.67 7.79 9.29 }"
+    },
+    {
+      "label": "journey300-v03",
+      "start": "2026-10-15T03:23:29.908254+00:00",
+      "load": "{ 5.45 7.25 8.97 }"
+    },
+    {
+      "label": "lab-preflight-v01",
+      "start": "2026-10-15T03:23:14.959103+00:00",
+      "load": "{ 5.76 7.40 9.06 }"
+    },
+    {
+      "label": "next-friction-triggers-v01",
+      "start": "2026-10-15T02:41:49.484490+00:00",
+      "load": "{ 29.48 19.42 15.65 }"
+    },
+    {
+      "label": "resource-observation-v01",
+      "start": "2026-10-15T02:46:57.913443+00:00",
+      "load": "{ 15.59 13.78 13.95 }"
+    },
+    {
+      "label": "setup-doctor-v01",
+      "start": "2026-10-15T02:43:34.061486+00:00",
+      "load": "{ 12.11 16.48 14.96 }"
+    },
+    {
+      "label": "setup-install-v01",
+      "start": "2026-10-15T02:43:32.892361+00:00",
+      "load": "{ 12.11 16.48 14.96 }"
+    },
+    {
+      "label": "setup-worktree-v01",
+      "start": "2026-10-15T02:43:16.343060+00:00",
+      "load": "{ 13.88 17.02 15.12 }"
+    },
+    {
+      "label": "weighted-applicability-slot-v01",
+      "start": "2026-10-15T03:20:22.135622+00:00",
+      "load": "{ 8.52 8.35 9.68 }"
+    },
+    {
+      "label": "weighted-applicability-v01",
+      "start": "2026-10-15T03:27:23.400880+00:00",
+      "load": "{ 14.64 10.39 9.78 }"
+    }
+  ],
+  "commandReceipts": [
+    {
+      "label": "before-qa-v01",
+      "path": "/tmp/root266-20261015/before-qa-v01.receipt.json",
+      "sha256": "bb0f722e8816058330a15f609e18d2f10ac5b7ee9b991709e91bfe0d4ab97549",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "before-shops-v01",
+          "--bead",
+          "hv-umm2.266",
+          "--port",
+          "5174",
+          "--timeout",
+          "180"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T02:50:33.116064+00:00",
+        "end": "2026-10-15T02:50:55.603034+00:00",
+        "exit": 1,
+        "wallSeconds": 22.486481583036948,
+        "pid": 65559,
+        "pgid": 65559,
+        "load": "{ 10.65 12.55 13.43 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "before-qa-v02",
+      "path": "/tmp/root266-20261015/before-qa-v02.receipt.json",
+      "sha256": "52823b3c47d8682650d21ae21443b287447e16747b1cc80986f037328a9b4bb9",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "before-shops-v02",
+          "--bead",
+          "hv-umm2.266",
+          "--port",
+          "5174",
+          "--timeout",
+          "180"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T02:51:45.578345+00:00",
+        "end": "2026-10-15T02:52:05.342544+00:00",
+        "exit": 0,
+        "wallSeconds": 19.763751416991,
+        "pid": 70986,
+        "pgid": 70986,
+        "load": "{ 8.29 11.49 12.96 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "browser-bazaar-one-v01",
+      "path": "/tmp/root266-20261015/browser-bazaar-one-v01.receipt.json",
+      "sha256": "352071374980ec417374eb787e73aea255f8f98fb97966178c324d9e75c7f7d8",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root266-20261015/shop-workflow-v04.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--arg",
+          "scene=dreamsignbazaar",
+          "--arg",
+          "orbCopies=1",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:32:16.643453+00:00",
+        "end": "2026-10-15T03:32:37.854169+00:00",
+        "exit": 1,
+        "wallSeconds": 21.20997270802036,
+        "pid": 77596,
+        "pgid": 77596,
+        "load": "{ 6.49 8.91 9.40 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "browser-enhanced-bazaar-one-v01",
+      "path": "/tmp/root266-20261015/browser-enhanced-bazaar-one-v01.receipt.json",
+      "sha256": "968f702e1379cde4258d7c628f0b15d1db05d04426b0f060bbdad0b0609ab3f6",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root266-20261015/shop-workflow-v04.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--arg",
+          "scene=dreamsignbazaar-enhanced",
+          "--arg",
+          "orbCopies=1",
+          "--viewports",
+          "desktop"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:37:03.015829+00:00",
+        "end": "2026-10-15T03:37:16.829850+00:00",
+        "exit": 0,
+        "wallSeconds": 13.81377941701794,
+        "pid": 92349,
+        "pgid": 92349,
+        "load": "{ 5.25 6.92 8.36 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "browser-enhanced-shop-one-v01",
+      "path": "/tmp/root266-20261015/browser-enhanced-shop-one-v01.receipt.json",
+      "sha256": "2569f0bc30b738ea53add97df9b3448d128be2cbea71ece3acda4e8838cbe359",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root266-20261015/shop-workflow-v04.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--arg",
+          "scene=shop-enhanced",
+          "--arg",
+          "orbCopies=1",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:36:36.695521+00:00",
+        "end": "2026-10-15T03:37:02.947746+00:00",
+        "exit": 0,
+        "wallSeconds": 26.251817167038098,
+        "pid": 91289,
+        "pgid": 91289,
+        "load": "{ 5.08 7.02 8.43 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "browser-enhanced-shop-two-v01",
+      "path": "/tmp/root266-20261015/browser-enhanced-shop-two-v01.receipt.json",
+      "sha256": "78f9c1838a474a44641e3535c3bab32fbacd3dc8451f3b5a90aa44b9acaf21d4",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root266-20261015/shop-workflow-v04.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--arg",
+          "scene=shop-enhanced",
+          "--arg",
+          "orbCopies=2",
+          "--viewports",
+          "mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:37:31.002296+00:00",
+        "end": "2026-10-15T03:38:06.493291+00:00",
+        "exit": 0,
+        "wallSeconds": 35.490163333015516,
+        "pid": 93569,
+        "pgid": 93569,
+        "load": "{ 6.39 7.08 8.37 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "browser-guide-probe-v01",
+      "path": "/tmp/root266-20261015/browser-guide-probe-v01.receipt.json",
+      "sha256": "b985ae098e57440bf7270be1335e19ae84b5632567071e7781c4178aff0ec4d6",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root266-20261015/shop-workflow-guide-probe-v01.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--arg",
+          "scene=shop-enhanced",
+          "--arg",
+          "orbCopies=2",
+          "--viewports",
+          "mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:41:37.499105+00:00",
+        "end": "2026-10-15T03:42:00.380947+00:00",
+        "exit": 0,
+        "wallSeconds": 22.881436875031795,
+        "pid": 5635,
+        "pgid": 5635,
+        "load": "{ 20.69 11.28 9.58 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "browser-remaining-matrix-v01",
+      "path": "/tmp/root266-20261015/browser-remaining-matrix-v01.receipt.json",
+      "sha256": "519ab02c4bd9916eb6c21949042a36f89c8ccae1a4667375ffba245f9158e50e",
+      "actual": {
+        "argv": [
+          "python3",
+          "/tmp/root266-20261015/run-remaining-browser-matrix-v01.py"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:36:36.653816+00:00",
+        "end": "2026-10-15T03:38:06.544171+00:00",
+        "exit": 0,
+        "wallSeconds": 89.88905991596403,
+        "pid": 91286,
+        "pgid": 91286,
+        "load": "{ 5.08 7.02 8.43 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "browser-shop-one-v01",
+      "path": "/tmp/root266-20261015/browser-shop-one-v01.receipt.json",
+      "sha256": "d52d5c2adb84dd020ecc3540e330f388337b7c3517bec26af8aef01ead83c637",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/worker266-20261015/shop-workflow-v02.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--arg",
+          "scene=shop",
+          "--arg",
+          "orbCopies=1",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:29:36.485464+00:00",
+        "end": "2026-10-15T03:29:45.001928+00:00",
+        "exit": 1,
+        "wallSeconds": 8.516273458022624,
+        "pid": 65619,
+        "pgid": 65619,
+        "load": "{ 10.72 10.79 10.05 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "browser-shop-one-v02",
+      "path": "/tmp/root266-20261015/browser-shop-one-v02.receipt.json",
+      "sha256": "9fee21772badc09c2a9a65db2e3e5f3afcc3335328a9056ede35b1f5be6ae823",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root266-20261015/shop-workflow-v03.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--arg",
+          "scene=shop",
+          "--arg",
+          "orbCopies=1",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:30:15.469984+00:00",
+        "end": "2026-10-15T03:30:22.610482+00:00",
+        "exit": 2,
+        "wallSeconds": 7.140333832998294,
+        "pid": 68728,
+        "pgid": 68728,
+        "load": "{ 8.59 10.27 9.89 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "browser-shop-one-v03",
+      "path": "/tmp/root266-20261015/browser-shop-one-v03.receipt.json",
+      "sha256": "c93d59ae70ac4b6efaaedb85969bb1d6e60f017eb018c0868ce51a26c044c165",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root266-20261015/shop-workflow-v04.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--arg",
+          "scene=shop",
+          "--arg",
+          "orbCopies=1",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:31:26.724346+00:00",
+        "end": "2026-10-15T03:31:51.898080+00:00",
+        "exit": 0,
+        "wallSeconds": 25.17329324997263,
+        "pid": 73915,
+        "pgid": 73915,
+        "load": "{ 6.69 9.38 9.58 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "browser-shop-two-v01",
+      "path": "/tmp/root266-20261015/browser-shop-two-v01.receipt.json",
+      "sha256": "a4a93de6d8f34c4f73bc17178976f858af6d9f1276e2cabf379ca52a86e9a0dd",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root266-20261015/shop-workflow-v04.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--arg",
+          "scene=shop",
+          "--arg",
+          "orbCopies=2",
+          "--viewports",
+          "mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:37:16.900697+00:00",
+        "end": "2026-10-15T03:37:30.902934+00:00",
+        "exit": 0,
+        "wallSeconds": 14.002007458999287,
+        "pid": 92998,
+        "pgid": 92998,
+        "load": "{ 6.10 7.05 8.38 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "card-sweep-v01",
+      "path": "/tmp/root266-20261015/card-sweep-v01.receipt.json",
+      "sha256": "dad8a643cc9074d50b51d58729ffe11309d8b8b78db7188759d955c155a277cd",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--dreamsigns",
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d,8408b8c2-5a3f-40dd-bac4-98f2736c4176,10bd78de-87ec-44e4-9b16-e755da2a9717",
+          "--variants",
+          "all",
+          "--as",
+          "both",
+          "--port",
+          "5174"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:23:46.334581+00:00",
+        "end": "2026-10-15T03:24:05.665335+00:00",
+        "exit": 0,
+        "wallSeconds": 19.330408125009853,
+        "pid": 32276,
+        "pgid": 32276,
+        "load": "{ 5.13 7.05 8.86 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "entity-routing-v01",
+      "path": "/tmp/root266-20261015/entity-routing-v01.receipt.json",
+      "sha256": "79f0a534f5b98fc925719e1a31ea0d18c0769ad509af70cbb620205323c89942",
+      "actual": {
+        "argv": [
+          "npm",
+          "run",
+          "bead:entities",
+          "--",
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+          "8408b8c2-5a3f-40dd-bac4-98f2736c4176",
+          "10bd78de-87ec-44e4-9b16-e755da2a9717"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T02:44:51.302866+00:00",
+        "end": "2026-10-15T02:44:52.700784+00:00",
+        "exit": 0,
+        "wallSeconds": 1.3978162090061232,
+        "pid": 85171,
+        "pgid": 85171,
+        "load": "{ 6.82 13.81 14.08 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "fault-first-free-v01",
+      "path": "/tmp/root266-20261015/fault-first-free-v01.receipt.json",
+      "sha256": "7af4c78e9151cfa413c1161dd4b8bed57c6097b059c87cb7d2789954614f2f03",
+      "actual": {
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/rules/journey/journey-shop.test.ts",
+          "-t",
+          "uses one site ordinal with global token priority at Shop"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:17:03.731817+00:00",
+        "end": "2026-10-15T03:17:07.074254+00:00",
+        "exit": 1,
+        "wallSeconds": 3.3423513749730773,
+        "pid": 52722,
+        "pgid": 52722,
+        "load": "{ 7.52 8.95 10.23 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "fault-global-token-v01",
+      "path": "/tmp/root266-20261015/fault-global-token-v01.receipt.json",
+      "sha256": "6920004fa5a0db98b1c22dcfa5bb56675f1f76a4c3607c63c701e34806dcad20",
+      "actual": {
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/rules/journey/journey-shop.test.ts",
+          "-t",
+          "uses one site ordinal with global token priority at Shop"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:17:07.159119+00:00",
+        "end": "2026-10-15T03:17:10.544227+00:00",
+        "exit": 1,
+        "wallSeconds": 3.3849605409777723,
+        "pid": 57092,
+        "pgid": 57092,
+        "load": "{ 7.80 8.98 10.24 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "fault-initial-stock-v01",
+      "path": "/tmp/root266-20261015/fault-initial-stock-v01.receipt.json",
+      "sha256": "e418e0fe9fcae0f2828258890b9dc14ec051cf11d681140d64cc55a77435dd2a",
+      "actual": {
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/rules/journey/journey-shop.test.ts",
+          "-t",
+          "uses injected physical source counts for Shop initial and fresh stock"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:16:56.505875+00:00",
+        "end": "2026-10-15T03:17:00.407769+00:00",
+        "exit": 1,
+        "wallSeconds": 3.901774875004776,
+        "pid": 38648,
+        "pgid": 38648,
+        "load": "{ 7.57 8.98 10.25 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "fault-overwrite-preformed-v01",
+      "path": "/tmp/root266-20261015/fault-overwrite-preformed-v01.receipt.json",
+      "sha256": "d85347ecab210342f2d5da415c3be7b8225cb78c2f716c657030c689d11f30c6",
+      "actual": {
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/rules/journey/journey-shop.test.ts",
+          "-t",
+          "preserves prepared forms and empty eligible sets without drawing"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:17:13.817152+00:00",
+        "end": "2026-10-15T03:17:17.168541+00:00",
+        "exit": 1,
+        "wallSeconds": 3.3512821250478737,
+        "pid": 63244,
+        "pgid": 63244,
+        "load": "{ 7.58 8.91 10.21 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "fault-purchase-form-v01",
+      "path": "/tmp/root266-20261015/fault-purchase-form-v01.receipt.json",
+      "sha256": "1d0ea5a4b32b49d62bcfeaaf3fc015bd672b358edf4be0f01e50ee534ad52b06",
+      "actual": {
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/rules/journey/journey-shop.test.ts",
+          "-t",
+          "settles one legal form before gain observers and retains financial identity"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:17:10.615284+00:00",
+        "end": "2026-10-15T03:17:13.745997+00:00",
+        "exit": 1,
+        "wallSeconds": 3.1305432919762097,
+        "pid": 58623,
+        "pgid": 58623,
+        "load": "{ 7.80 8.98 10.24 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "fault-restock-stock-v01",
+      "path": "/tmp/root266-20261015/fault-restock-stock-v01.receipt.json",
+      "sha256": "ed5990db343d677e0d9fc2dea29450947d420c299c0a7b6e1d5a59a08e6e0655",
+      "actual": {
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/rules/journey/journey-shop.test.ts",
+          "-t",
+          "uses injected physical source counts for Shop initial and fresh stock"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:17:00.492896+00:00",
+        "end": "2026-10-15T03:17:03.662651+00:00",
+        "exit": 1,
+        "wallSeconds": 3.1696004580007866,
+        "pid": 46321,
+        "pgid": 46321,
+        "load": "{ 7.57 8.98 10.25 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "heavy-full-slot-v01",
+      "path": "/tmp/root266-20261015/heavy-full-slot-v01.receipt.json",
+      "sha256": "a9b1c6201a0312e664af36ad311a064014b4173b35549ed011da63194173a42a",
+      "actual": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/root266-20261015/record.py",
+          "heavy-full-v01",
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:17:58.074322+00:00",
+        "end": "2026-10-15T03:19:57.762592+00:00",
+        "exit": 0,
+        "wallSeconds": 119.68658520904137,
+        "pid": 69968,
+        "pgid": 69968,
+        "load": "{ 7.41 8.70 10.06 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "heavy-full-v01",
+      "path": "/tmp/root266-20261015/heavy-full-v01.receipt.json",
+      "sha256": "ce45269e3f5466ff5b9a39636578194c5b61508cb75186ea2e43eab80b49afb8",
+      "actual": {
+        "argv": [
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:18:14.611714+00:00",
+        "end": "2026-10-15T03:19:57.720555+00:00",
+        "exit": 0,
+        "wallSeconds": 103.10730662499554,
+        "pid": 70883,
+        "pgid": 70883,
+        "load": "{ 7.88 8.75 10.05 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "impl-docs-white-v01",
+      "path": "/tmp/root266-20261015/impl-docs-white-v01.receipt.json",
+      "sha256": "f9cf08b976e24d2e9f4db6967fe8def9b321b3546dcf03b2f25a0e33a31e9214",
+      "actual": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:15:31.532739+00:00",
+        "end": "2026-10-15T03:15:31.548464+00:00",
+        "exit": 0,
+        "wallSeconds": 0.015629874949809164,
+        "pid": 28722,
+        "pgid": 28722,
+        "load": "{ 5.79 9.31 10.50 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "impl-focused-v01",
+      "path": "/tmp/root266-20261015/impl-focused-v01.receipt.json",
+      "sha256": "7ba64d37a78a16ace74eb44c68a2d90f2fa1f1628047573b77a3fafdc81c7e35",
+      "actual": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-shop.test.ts",
+          "src/screens/cumulus_adapters/journey-shop-quotes.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T02:59:44.329735+00:00",
+        "end": "2026-10-15T02:59:49.801719+00:00",
+        "exit": 1,
+        "wallSeconds": 5.4717915410292335,
+        "pid": 87933,
+        "pgid": 87933,
+        "load": "{ 6.65 7.04 9.88 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "impl-focused-v02",
+      "path": "/tmp/root266-20261015/impl-focused-v02.receipt.json",
+      "sha256": "b7aa889a6e44d48f428ee5c5507ab6ba81723a8490a63fb81d63bc01c6929571",
+      "actual": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-shop.test.ts",
+          "src/screens/cumulus_adapters/journey-shop-quotes.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:00:26.183647+00:00",
+        "end": "2026-10-15T03:00:31.025725+00:00",
+        "exit": 0,
+        "wallSeconds": 4.841909916023724,
+        "pid": 89332,
+        "pgid": 89332,
+        "load": "{ 8.18 7.36 9.85 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "impl-focused-v03",
+      "path": "/tmp/root266-20261015/impl-focused-v03.receipt.json",
+      "sha256": "226f29039ee0b7e3a6d9c8d36f94d16444abc58f87c84ab8692c8545857191cf",
+      "actual": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-shop.test.ts",
+          "src/screens/cumulus_adapters/journey-shop-quotes.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:06:24.950492+00:00",
+        "end": "2026-10-15T03:06:32.387759+00:00",
+        "exit": 0,
+        "wallSeconds": 7.437006167019717,
+        "pid": 30732,
+        "pgid": 30732,
+        "load": "{ 16.32 12.73 11.46 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "impl-knip-v01",
+      "path": "/tmp/root266-20261015/impl-knip-v01.receipt.json",
+      "sha256": "4921e69bca967ef8de1057e26fe5ac3cbccc6bb237ab64c64a6f77cd34ae39c7",
+      "actual": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:14:38.694644+00:00",
+        "end": "2026-10-15T03:14:45.674336+00:00",
+        "exit": 0,
+        "wallSeconds": 6.9796755000134,
+        "pid": 24968,
+        "pgid": 24968,
+        "load": "{ 6.23 10.05 10.82 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "impl-restored-faults-runner-v01",
+      "path": "/tmp/root266-20261015/impl-restored-faults-runner-v01.receipt.json",
+      "sha256": "e05ad4eb4c1d59d4370e17f999cf1dfaa89dac9ff440ccb28277b5a41e967c63",
+      "actual": {
+        "argv": [
+          "python3",
+          "/tmp/worker266-20261015/run-restored-faults-v01.py"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:16:56.449536+00:00",
+        "end": "2026-10-15T03:17:17.231877+00:00",
+        "exit": 0,
+        "wallSeconds": 20.781971207994502,
+        "pid": 38447,
+        "pgid": 38447,
+        "load": "{ 7.57 8.98 10.25 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "impl-restored-focused-v01",
+      "path": "/tmp/root266-20261015/impl-restored-focused-v01.receipt.json",
+      "sha256": "72fffe8e5005ef2bc73130269503ac2dcfed38fcece86286ca515e3902dc6f7e",
+      "actual": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-shop.test.ts",
+          "src/screens/cumulus_adapters/journey-shop-quotes.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:17:32.610182+00:00",
+        "end": "2026-10-15T03:17:43.305249+00:00",
+        "exit": 0,
+        "wallSeconds": 10.694673000019975,
+        "pid": 68981,
+        "pgid": 68981,
+        "load": "{ 7.45 8.82 10.14 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "impl-review-v01",
+      "path": "/tmp/root266-20261015/impl-review-v01.receipt.json",
+      "sha256": "543fd8b64e378013fa24dab2345d27753e222b3b2dd75fe26be38ffc29f9d31d",
+      "actual": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:02:29.642275+00:00",
+        "end": "2026-10-15T03:03:49.310127+00:00",
+        "exit": 1,
+        "wallSeconds": 79.66629670799011,
+        "pid": 94643,
+        "pgid": 94643,
+        "load": "{ 13.52 8.43 9.87 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "impl-review-v02",
+      "path": "/tmp/root266-20261015/impl-review-v02.receipt.json",
+      "sha256": "07b55a7998e78c67c319687c9bc4c4a444ddab427a94640e2730d37c2850e325",
+      "actual": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:07:25.672981+00:00",
+        "end": "2026-10-15T03:08:37.377026+00:00",
+        "exit": 0,
+        "wallSeconds": 71.70263941702433,
+        "pid": 36693,
+        "pgid": 36693,
+        "load": "{ 10.33 11.87 11.24 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "journey300-v02",
+      "path": "/tmp/root266-20261015/journey300-v02.receipt.json",
+      "sha256": "04ae681382dd7adcf36e4bfef0bafd41a245c593de92dbb3c7b80f23e4613208",
+      "actual": {
+        "argv": [
+          "node",
+          "--import",
+          "tsx",
+          "/tmp/worker266-20261015/journey-300-v02.mts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:22:22.996657+00:00",
+        "end": "2026-10-15T03:22:24.850737+00:00",
+        "exit": 1,
+        "wallSeconds": 1.8539780419669114,
+        "pid": 28791,
+        "pgid": 28791,
+        "load": "{ 6.67 7.79 9.29 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "journey300-v03",
+      "path": "/tmp/root266-20261015/journey300-v03.receipt.json",
+      "sha256": "2fee7594a1117919daa1d7a50c695084dd02e51a67e4144ec7e7d22cb2fdf207",
+      "actual": {
+        "argv": [
+          "node",
+          "--import",
+          "tsx",
+          "/tmp/worker266-20261015/journey-300-v03.mts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:23:29.908254+00:00",
+        "end": "2026-10-15T03:23:33.300536+00:00",
+        "exit": 0,
+        "wallSeconds": 3.392160666990094,
+        "pid": 31732,
+        "pgid": 31732,
+        "load": "{ 5.45 7.25 8.97 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "lab-preflight-v01",
+      "path": "/tmp/root266-20261015/lab-preflight-v01.receipt.json",
+      "sha256": "cb68907b75f5d53acc1e3acb88527c8828557bc831721782958f26cbff7b5969",
+      "actual": {
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--dreamsigns",
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d,8408b8c2-5a3f-40dd-bac4-98f2736c4176,10bd78de-87ec-44e4-9b16-e755da2a9717",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:23:14.959103+00:00",
+        "end": "2026-10-15T03:23:18.444743+00:00",
+        "exit": 0,
+        "wallSeconds": 3.485516041982919,
+        "pid": 30579,
+        "pgid": 30579,
+        "load": "{ 5.76 7.40 9.06 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "next-friction-triggers-v01",
+      "path": "/tmp/root266-20261015/next-friction-triggers-v01.receipt.json",
+      "sha256": "ae5607a042e132cff9bd7a6d3b5a87b5f8501f1a97a1dbaeeb279e51c1c9163f",
+      "actual": {
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "start": "2026-10-15T02:41:49.484490+00:00",
+        "end": "2026-10-15T02:41:49.575579+00:00",
+        "exit": 0,
+        "wallSeconds": 0.09094274998642504,
+        "pid": 68484,
+        "pgid": 68484,
+        "load": "{ 29.48 19.42 15.65 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "resource-observation-v01",
+      "path": "/tmp/root266-20261015/resource-observation-v01.receipt.json",
+      "sha256": "d0d61d495d35aeba392f1cce31caca366425294ffc1a964c84c29f1afa4a933f",
+      "actual": {
+        "argv": [
+          "memory_pressure"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T02:46:57.913443+00:00",
+        "end": "2026-10-15T02:46:57.923113+00:00",
+        "exit": 0,
+        "wallSeconds": 0.009502667002379894,
+        "pid": 94558,
+        "pgid": 94558,
+        "load": "{ 15.59 13.78 13.95 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "setup-doctor-v01",
+      "path": "/tmp/root266-20261015/setup-doctor-v01.receipt.json",
+      "sha256": "4c67262d672bf9e7aa77940cebe27c043272059c676997fc47a47c669de86e73",
+      "actual": {
+        "argv": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "doctor"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T02:43:34.061486+00:00",
+        "end": "2026-10-15T02:43:35.441397+00:00",
+        "exit": 0,
+        "wallSeconds": 1.3798144579632208,
+        "pid": 79062,
+        "pgid": 79062,
+        "load": "{ 12.11 16.48 14.96 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "setup-install-v01",
+      "path": "/tmp/root266-20261015/setup-install-v01.receipt.json",
+      "sha256": "056ce14c47f9ff39c49afb6677f0c7ce09e5c4a8ae75889784c5dae647ac93cc",
+      "actual": {
+        "argv": [
+          "npm",
+          "install"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T02:43:32.892361+00:00",
+        "end": "2026-10-15T02:43:35.500555+00:00",
+        "exit": 0,
+        "wallSeconds": 2.608067166991532,
+        "pid": 78978,
+        "pgid": 78978,
+        "load": "{ 12.11 16.48 14.96 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "setup-worktree-v01",
+      "path": "/tmp/root266-20261015/setup-worktree-v01.receipt.json",
+      "sha256": "ffeaf12b6af3f0982f017deb6c0e72c0ffc73855d40eb36efd818b134e32bd2c",
+      "actual": {
+        "argv": [
+          "tg",
+          "--no-launch",
+          "--json",
+          "worktree",
+          "create",
+          "codex/journey-shop266"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "start": "2026-10-15T02:43:16.343060+00:00",
+        "end": "2026-10-15T02:43:17.219994+00:00",
+        "exit": 0,
+        "wallSeconds": 0.8768255829927512,
+        "pid": 77718,
+        "pgid": 77718,
+        "load": "{ 13.88 17.02 15.12 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "weighted-applicability-slot-v01",
+      "path": "/tmp/root266-20261015/weighted-applicability-slot-v01.receipt.json",
+      "sha256": "df329fa27305303deed2140b91a333a4c022110c8f63f02585ceb22be40c417c",
+      "actual": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/root266-20261015/record.py",
+          "weighted-applicability-v01",
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d,8408b8c2-5a3f-40dd-bac4-98f2736c4176,10bd78de-87ec-44e4-9b16-e755da2a9717"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:20:22.135622+00:00",
+        "end": "2026-10-15T03:27:25.042170+00:00",
+        "exit": 1,
+        "wallSeconds": 422.90078333299607,
+        "pid": 24883,
+        "pgid": 24883,
+        "load": "{ 8.52 8.35 9.68 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    {
+      "label": "weighted-applicability-v01",
+      "path": "/tmp/root266-20261015/weighted-applicability-v01.receipt.json",
+      "sha256": "1d58332e068f8ad137edd620cd3b5e2065ef97fd7f7f120d13ae4b999381185d",
+      "actual": {
+        "argv": [
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d,8408b8c2-5a3f-40dd-bac4-98f2736c4176,10bd78de-87ec-44e4-9b16-e755da2a9717"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:27:23.400880+00:00",
+        "end": "2026-10-15T03:27:24.998239+00:00",
+        "exit": 1,
+        "wallSeconds": 1.5972502499935217,
+        "pid": 99740,
+        "pgid": 99740,
+        "load": "{ 14.64 10.39 9.78 }",
+        "groupRemainingAtExit": []
+      }
+    }
+  ],
+  "checks": {
+    "focusedRestored": {
+      "exit": 0,
+      "tests": 25,
+      "files": 2,
+      "wallSeconds": 10.694673000019975
+    },
+    "ordinaryReview": {
+      "exit": 0,
+      "tests": 8266,
+      "files": 257,
+      "typesLintCycles": "pass",
+      "wallSeconds": 71.70263941702433
+    },
+    "knip": {
+      "exit": 0,
+      "wallSeconds": 6.9796755000134
+    },
+    "fullReview": {
+      "exit": 0,
+      "tests": 10113,
+      "files": 389,
+      "executionSeconds": 103.10730662499554,
+      "slotAndQueueSeconds": 119.68658520904137
+    }
+  },
+  "failedEpochs": [
+    {
+      "label": "impl-focused-v01",
+      "exit": 1,
+      "reason": "Own synthetic fixture aliased two pool maps; structuredClone preserved alias while JSON split it. Fixed fixture independent maps; no product defect claimed."
+    },
+    {
+      "label": "impl-review-v01",
+      "exit": 1,
+      "reason": "All8266 related tests passed; own contextual return type/import/target/readonly/narrowing/provider-spy hygiene failed lint/types. Bounded own three-file correction followed native ACK."
+    },
+    {
+      "label": "journey300-v02",
+      "exit": 1,
+      "reason": "Synthetic purchased Dreamsign own undefined imageName/imageAlt versus JSON omission at actual prefix1. Scratch v03 uses explicit serializable fixture fields; exact comparison retained."
+    },
+    {
+      "label": "before-qa-v01",
+      "exit": 1,
+      "reason": "Caller waited for zero-height screen wrapper; actual OPEN_SITE/siteentered5offers/Caps empty. Baseline v02 waits real gallery; no product bug."
+    },
+    {
+      "label": "browser-shop-one-v01",
+      "exit": 1,
+      "wallSeconds": 8.516273458022624,
+      "reason": "MCP sandbox structuredClone unavailable after source grants; scratch v03 local JSON fixture clone, no feature acceptance."
+    },
+    {
+      "label": "browser-shop-one-v02",
+      "exit": 2,
+      "wallSeconds": 7.140333832998294,
+      "reason": "Native file modal blocked result; scratch v04 actual HTML file input autoFile event executes existing parser/LOAD_STATE."
+    }
+  ],
+  "restoredFaults": {
+    "count": 6,
+    "result": "All six actual assertion failures, all18 exact before/after each, original bytes restored finally and25green afterward",
+    "proof": "/tmp/worker266-20261015/restored-fault-results-v01.json",
+    "mutations": [
+      "omit initial stock bonus:2vs5",
+      "independently omit Restock stock bonus:2vs5",
+      "disable first-free quote:zero-Essence bounce",
+      "do not decrement global free token:1vs0",
+      "bypass purchased form:nullvsEmpowered",
+      "overwrite existing form:forbidden RNG draw1vs0; no different final form claimed"
+    ],
+    "proofSHA256": "f4d9be2f8542f5d689f826b685cf9e20465d0bf744471effb9d0da53bb8b7dcf"
+  },
+  "journey300": {
+    "at": "2026-10-15T03:24:35.293933+00:00",
+    "caller": "/tmp/worker266-20261015/journey-300-v03.mts",
+    "callerSHA256": "89949233178b9c8f36c5cb7ddb11cc662adb1e835857cd795f290fddf720e984",
+    "results": "/tmp/worker266-20261015/journey-300-v03.results.json",
+    "resultsSHA256": "09b27ccc8393bd4e0ba43987d7427353edca902e3bd01ccff075d9e2179a399a",
+    "summary": {
+      "qualification": "300 finite seeded synthetic journey workflows using the production three-UUID registry and real stock/form provider/reducer/fold. Synthetic stock/economy/card pools. Full event replay and actual codec-loaded continuation at every folded prefix, including the expected exhaustion bounce. Not battle target exercise, general journey fuzzing, or browser acceptance.",
+      "runs": 300,
+      "targets": [
+        "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+        "8408b8c2-5a3f-40dd-bac4-98f2736c4176",
+        "10bd78de-87ec-44e4-9b16-e755da2a9717"
+      ],
+      "prefixContinuations": 2700,
+      "purchases": 600,
+      "positiveForms": 300,
+      "inertBazaarPurchases": 150,
+      "stockPreparations": 1800,
+      "firstFree": 600,
+      "paidRestocks": 300,
+      "all18Frozen": true
+    },
+    "independentlyAuditedRows": 300,
+    "uniqueSeeds": 300,
+    "siteModeRuns": {
+      "('Shop', False)": 75,
+      "('DreamsignBazaar', False)": 75,
+      "('Shop', True)": 75,
+      "('DreamsignBazaar', True)": 75
+    },
+    "sourceApplicationLogs": {
+      "8408b8c2-5a3f-40dd-bac4-98f2736c4176": 1500,
+      "10bd78de-87ec-44e4-9b16-e755da2a9717": 300,
+      "8a2c7b32-26ea-40e2-845a-689da5673b4d": 525
+    },
+    "actualLegalFormRecords": 300,
+    "all18Frozen": true,
+    "receipt": {
+      "argv": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/worker266-20261015/journey-300-v03.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+      "start": "2026-10-15T03:23:29.908254+00:00",
+      "end": "2026-10-15T03:23:33.300536+00:00",
+      "exit": 0,
+      "wallSeconds": 3.392160666990094,
+      "pid": 31732,
+      "pgid": 31732,
+      "load": "{ 5.45 7.25 8.97 }",
+      "groupRemainingAtExit": []
+    },
+    "qualification": "Parent inspected actual caller v01 and complete v02/v03 improvements, all300 result rows and successful terminal receipt. Full replay/2700 codec continuation comparisons executed in caller, not rerun by parent. Exact public journey synthetic fixture coverage; battle/full-game/browser acceptance distinct. Earlier v02 fixture failure retained; initial parent audit guessed domain_noop reason, corrected to actual invalid_action without product change."
+  },
+  "presence": {
+    "at": "2026-10-15T03:25:31.515227+00:00",
+    "invocation": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/sweep-2tnwXF",
+    "cells": [
+      {
+        "uuid": "8408b8c2-5a3f-40dd-bac4-98f2736c4176",
+        "side": "enemy",
+        "variant": "base",
+        "cardStatus": "authored",
+        "battleMechanicExercised": false,
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/sweep-2tnwXF/run-UBX6id/sweep-8408b8c2-5a3f-40dd-bac4-98f2736c4176-base-enemy-attempt-1.result.json",
+        "reportSHA256": "7b76fbf0d8cd31280b56493e57c714fd005770410e43a22fa39ad76b9690d5c5",
+        "caps": []
+      },
+      {
+        "uuid": "10bd78de-87ec-44e4-9b16-e755da2a9717",
+        "side": "enemy",
+        "variant": "base",
+        "cardStatus": "authored",
+        "battleMechanicExercised": false,
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/sweep-2tnwXF/run-UBX6id/sweep-10bd78de-87ec-44e4-9b16-e755da2a9717-base-enemy-attempt-1.result.json",
+        "reportSHA256": "f9770e915709704bd402e2a408f627ffa9208e205ef10ad32919e1ecf1b3613a",
+        "caps": []
+      },
+      {
+        "uuid": "10bd78de-87ec-44e4-9b16-e755da2a9717",
+        "side": "player",
+        "variant": "base",
+        "cardStatus": "authored",
+        "battleMechanicExercised": false,
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/sweep-2tnwXF/run-UBX6id/sweep-10bd78de-87ec-44e4-9b16-e755da2a9717-base-player-attempt-1.result.json",
+        "reportSHA256": "6b7fb2f29921f91598aae29f3f22291ad4d91f2ff9527cd227c150e589df0195",
+        "caps": []
+      },
+      {
+        "uuid": "8408b8c2-5a3f-40dd-bac4-98f2736c4176",
+        "side": "player",
+        "variant": "base",
+        "cardStatus": "authored",
+        "battleMechanicExercised": false,
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/sweep-2tnwXF/run-UBX6id/sweep-8408b8c2-5a3f-40dd-bac4-98f2736c4176-base-player-attempt-1.result.json",
+        "reportSHA256": "d6642c2d7956f180c6c675bb8c374170f855504e048954f2dc813ffc34f5206c",
+        "caps": []
+      },
+      {
+        "uuid": "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+        "side": "player",
+        "variant": "base",
+        "cardStatus": "authored",
+        "battleMechanicExercised": false,
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/sweep-2tnwXF/run-UBX6id/sweep-8a2c7b32-26ea-40e2-845a-689da5673b4d-base-player-attempt-1.result.json",
+        "reportSHA256": "06950dce0847825fb73cbf86434dc14817bd40b6542ddfecb5a9083f365f2a8e",
+        "caps": []
+      },
+      {
+        "uuid": "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+        "side": "enemy",
+        "variant": "base",
+        "cardStatus": "authored",
+        "battleMechanicExercised": false,
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/sweep-2tnwXF/run-UBX6id/sweep-8a2c7b32-26ea-40e2-845a-689da5673b4d-base-enemy-attempt-1.result.json",
+        "reportSHA256": "c13813ded73edd59c60746274060617221514acd18b9a74363291c95375bb7d1",
+        "caps": []
+      }
+    ],
+    "counts": {
+      "pass": 6,
+      "skip": 54
+    },
+    "ledgerSHA256": "fd737e4a864a635697ed048a9c55ce8eba09ac7c3b95b3c596a924081a1ceddb",
+    "ownGroupsFreshlyAbsent": [
+      32276,
+      32358
+    ],
+    "cleanup": "Raw runner reports ownedserver32358 port5274free and cleanup terminal; no foreign leases touched.",
+    "preflightReceipt": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "8a2c7b32-26ea-40e2-845a-689da5673b4d,8408b8c2-5a3f-40dd-bac4-98f2736c4176,10bd78de-87ec-44e4-9b16-e755da2a9717",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+      "start": "2026-10-15T03:23:14.959103+00:00",
+      "end": "2026-10-15T03:23:18.444743+00:00",
+      "exit": 0,
+      "wallSeconds": 3.485516041982919,
+      "pid": 30579,
+      "pgid": 30579,
+      "load": "{ 5.76 7.40 9.06 }",
+      "groupRemainingAtExit": []
+    },
+    "sweepReceipt": {
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.266",
+        "--dreamsigns",
+        "8a2c7b32-26ea-40e2-845a-689da5673b4d,8408b8c2-5a3f-40dd-bac4-98f2736c4176,10bd78de-87ec-44e4-9b16-e755da2a9717",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+      "start": "2026-10-15T03:23:46.334581+00:00",
+      "end": "2026-10-15T03:24:05.665335+00:00",
+      "exit": 0,
+      "wallSeconds": 19.330408125009853,
+      "pid": 32276,
+      "pgid": 32276,
+      "load": "{ 5.13 7.05 8.86 }",
+      "groupRemainingAtExit": []
+    },
+    "qualification": "Supported Dreamsign-domain inert battle presence and base eligibility only. All six reports explicitly exercised=false, authored empty battle abilities; no journey mechanic exercise claimed.54 ineligible variants skipped. Precommit HEAD equals base, frozen authored source hashes separately bind execution. Actual journey mechanics accepted separately."
+  },
+  "weightedApplicability": {
+    "at": "2026-10-15T03:28:40.589711+00:00",
+    "actualCommand": [
+      "npm",
+      "run",
+      "fuzz:engine",
+      "--",
+      "--games",
+      "300",
+      "--weight-uuids",
+      "8a2c7b32-26ea-40e2-845a-689da5673b4d,8408b8c2-5a3f-40dd-bac4-98f2736c4176,10bd78de-87ec-44e4-9b16-e755da2a9717"
+    ],
+    "receipt": {
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "8a2c7b32-26ea-40e2-845a-689da5673b4d,8408b8c2-5a3f-40dd-bac4-98f2736c4176,10bd78de-87ec-44e4-9b16-e755da2a9717"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+      "start": "2026-10-15T03:27:23.400880+00:00",
+      "end": "2026-10-15T03:27:24.998239+00:00",
+      "exit": 1,
+      "wallSeconds": 1.5972502499935217,
+      "pid": 99740,
+      "pgid": 99740,
+      "load": "{ 14.64 10.39 9.78 }",
+      "groupRemainingAtExit": []
+    },
+    "outerSlotReceipt": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root266-20261015/record.py",
+        "weighted-applicability-v01",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "8a2c7b32-26ea-40e2-845a-689da5673b4d,8408b8c2-5a3f-40dd-bac4-98f2736c4176,10bd78de-87ec-44e4-9b16-e755da2a9717"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+      "start": "2026-10-15T03:20:22.135622+00:00",
+      "end": "2026-10-15T03:27:25.042170+00:00",
+      "exit": 1,
+      "wallSeconds": 422.90078333299607,
+      "pid": 24883,
+      "pgid": 24883,
+      "load": "{ 8.52 8.35 9.68 }",
+      "groupRemainingAtExit": []
+    },
+    "executionSeconds": 1.5972502499935217,
+    "slotAndQueueSeconds": 422.90078333299607,
+    "queueAndWrapperSeconds": 421.30353308300255,
+    "requestedGames": 300,
+    "actualGames": 0,
+    "actualTargetGuardRefusal": "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+    "sourceDiagnostic": "src/engine/testing/fuzz.ts188, before withFuzzCardWeights returns to main loop",
+    "stderrSHA256": "70bf8a4534333f832cdfab06e076c8c14a35c99ceebb9b705fc587126d26c513",
+    "qualification": "One literal requested recipe6 invocation including all3UUIDs. Actual rejection stops at first Coin target; no claim of separately attempting the other two. All3 have authored empty battle abilities. This is retained non-applicability, not green weighted300/full-game proof. Same-task justiciar preserves actual journey300/contracts/sites acceptance; no fuzzer or source change."
+  },
+  "browser": {
+    "at": "2026-10-15T03:40:41.067423+00:00",
+    "caller": "/tmp/root266-20261015/shop-workflow-v04.mjs",
+    "callerSHA256": "d3568e274b2ef6a1f4670ac4935543b338aea89804e15e76fa948cd52abb1045",
+    "passedViewportCases": 8,
+    "actualFailedViewportCases": 1,
+    "all18SourceHashesExact": true,
+    "ownGroupsFreshlyAbsent": [
+      73915,
+      73991,
+      77596,
+      77673,
+      91289,
+      91371,
+      92349,
+      92419,
+      92998,
+      93068,
+      93569,
+      93639
+    ],
+    "notRun": "Remaining enhanced/duplicate Bazaar mobile cases await immediate714 repair and rejudgment; not claimed pass/fail. Two earlier harness failures remain retained separately.",
+    "qualification": "Parent read caller and actual successful results/outcomes/UUID logs/full persisted JSONL plus failed geometry and screenshots. Actual root UI actions, public JSON file-input fixture prep, app parser/LOAD_STATE, full repository-event replay and reload, not complete earned journeys. Core rules source/contracts/300seeded acceptance separate; no mobileBazaar waiver.",
+    "cases": [
+      {
+        "label": "browser-shop-one-v03",
+        "scene": "shop",
+        "viewport": "desktop",
+        "orbCopies": 1,
+        "stock": 7,
+        "finalHash": "8e6bec680584e719ee79a48891bdceccb62851b60c6295a1101865d3810e4909",
+        "events": 13,
+        "sourceApplicationLogs": {
+          "8408b8c2-5a3f-40dd-bac4-98f2736c4176": 4,
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d": 2,
+          "10bd78de-87ec-44e4-9b16-e755da2a9717": 1
+        },
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-P6hdhh/shop-workflow-v04.result.json",
+        "reportSHA256": "d72be2f0f9b92a4051f5e5f228c5cdbb445e3db6388d6f2af334b6d65937efb5",
+        "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-P6hdhh/shop-workflow-v04-desktop.jsonl",
+        "gameLogSHA256": "e962c78e352f92a917b493f4e61853502f7d066c797dd60214a77c7c31d29c27",
+        "gameLogRows": 70,
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-P6hdhh/expanded-shop-1-desktop.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/shop?goto=shop&seed=266-shop-1&debug=1&game=7bkkwn",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-P6hdhh/restocked-shop-1-desktop.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/shop?goto=shop&seed=266-shop-1&debug=1&game=7bkkwn",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "receipt": {
+          "eventSeq": 10,
+          "siteId": "site-1",
+          "slotIndex": 0,
+          "item": {
+            "kind": "card",
+            "cardNumber": 30,
+            "gainedEntryId": "deck-10-0",
+            "journeyShopTransfiguration": {
+              "dreamsignId": "10bd78de-87ec-44e4-9b16-e755da2a9717",
+              "heldIndex": 2,
+              "entryId": "deck-10-0",
+              "cardId": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+              "before": null,
+              "type": "Inspired",
+              "applicableForms": [
+                "Empowered",
+                "Amplified",
+                "Inspired",
+                "Enduring"
+              ],
+              "drawIndex": 0
+            }
+          },
+          "priceBeforeFree": 100,
+          "pricePaid": 100,
+          "essenceBefore": 1000,
+          "essenceAfter": 900
+        },
+        "caps": [],
+        "geometrySummary": {
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "documentWidth": 1440,
+          "gallery": {
+            "x": 662.390625,
+            "y": 142.40625,
+            "width": 750,
+            "height": 574.1875,
+            "right": 1412.390625,
+            "bottom": 716.59375
+          },
+          "entries": 8,
+          "rawGeometry": "Complete per-tile rectangles, ancestors, scroll/hit evidence retained in parent browser audit and raw caller result."
+        }
+      },
+      {
+        "label": "browser-shop-one-v03",
+        "scene": "shop",
+        "viewport": "mobile",
+        "orbCopies": 1,
+        "stock": 7,
+        "finalHash": "09e484d4b517315d96c6dc1ca3ef16b8f6a1668f7fa33a242046448fa9602dc2",
+        "events": 13,
+        "sourceApplicationLogs": {
+          "8408b8c2-5a3f-40dd-bac4-98f2736c4176": 4,
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d": 2,
+          "10bd78de-87ec-44e4-9b16-e755da2a9717": 1
+        },
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-P6hdhh/shop-workflow-v04.result.json",
+        "reportSHA256": "d72be2f0f9b92a4051f5e5f228c5cdbb445e3db6388d6f2af334b6d65937efb5",
+        "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-P6hdhh/shop-workflow-v04-mobile.jsonl",
+        "gameLogSHA256": "a5d581abcb47e14cdf18eeec59a43702a585f7df6ab2e54baea47ef7b7ebe244",
+        "gameLogRows": 67,
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-P6hdhh/expanded-shop-1-mobile.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/shop?goto=shop&seed=266-shop-1&debug=1&game=rrj6oy",
+            "width": 390,
+            "height": 844
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-P6hdhh/restocked-shop-1-mobile.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/shop?goto=shop&seed=266-shop-1&debug=1&game=rrj6oy",
+            "width": 390,
+            "height": 844
+          }
+        ],
+        "receipt": {
+          "eventSeq": 10,
+          "siteId": "site-1",
+          "slotIndex": 0,
+          "item": {
+            "kind": "card",
+            "cardNumber": 474,
+            "gainedEntryId": "deck-10-0",
+            "journeyShopTransfiguration": {
+              "dreamsignId": "10bd78de-87ec-44e4-9b16-e755da2a9717",
+              "heldIndex": 2,
+              "entryId": "deck-10-0",
+              "cardId": "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+              "before": null,
+              "type": "Empowered",
+              "applicableForms": [
+                "Empowered",
+                "Kindled",
+                "Attuned"
+              ],
+              "drawIndex": 0
+            }
+          },
+          "priceBeforeFree": 100,
+          "pricePaid": 100,
+          "essenceBefore": 1000,
+          "essenceAfter": 900
+        },
+        "caps": [],
+        "geometrySummary": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "gallery": {
+            "x": 8,
+            "y": 345.953125,
+            "width": 372,
+            "height": 379.796875,
+            "right": 380,
+            "bottom": 725.75
+          },
+          "entries": 8,
+          "rawGeometry": "Complete per-tile rectangles, ancestors, scroll/hit evidence retained in parent browser audit and raw caller result."
+        }
+      },
+      {
+        "label": "browser-bazaar-one-v01",
+        "scene": "dreamsignbazaar",
+        "viewport": "desktop",
+        "orbCopies": 1,
+        "stock": 5,
+        "finalHash": "17749c40e41b022dc9149645457034aa8e84cccd47ccdbaa77f81a837d3e2c3e",
+        "events": 13,
+        "sourceApplicationLogs": {
+          "8408b8c2-5a3f-40dd-bac4-98f2736c4176": 4,
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d": 2
+        },
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-OBqwdJ/shop-workflow-v04.result.json",
+        "reportSHA256": "7a8bc326a8f9e65c001dbfb3cca76478d009edd1d87ac0e2a34c2e25953dda60",
+        "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-OBqwdJ/shop-workflow-v04-desktop.jsonl",
+        "gameLogSHA256": "5b597b062a024f224b445a4892139a921ee3c2a6e58b1f025d6f99de36f5125e",
+        "gameLogRows": 73,
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-OBqwdJ/expanded-dreamsignbazaar-1-desktop.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/dreamsign-bazaar?goto=dreamsignbazaar&seed=266-dreamsignbazaar-1&debug=1&game=yhj7du",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-OBqwdJ/restocked-dreamsignbazaar-1-desktop.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/dreamsign-bazaar?goto=dreamsignbazaar&seed=266-dreamsignbazaar-1&debug=1&game=yhj7du",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "receipt": {
+          "eventSeq": 10,
+          "siteId": "site-1",
+          "slotIndex": 0,
+          "item": {
+            "kind": "dreamsign",
+            "dreamsignId": "1a21186c-cafd-4e0f-9304-1ac0ef55340a"
+          },
+          "priceBeforeFree": 50,
+          "pricePaid": 50,
+          "essenceBefore": 1000,
+          "essenceAfter": 950
+        },
+        "caps": [],
+        "geometrySummary": {
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "documentWidth": 1440,
+          "gallery": {
+            "x": 699.1875,
+            "y": 155.609375,
+            "width": 680,
+            "height": 547.78125,
+            "right": 1379.1875,
+            "bottom": 703.390625
+          },
+          "entries": 6,
+          "rawGeometry": "Complete per-tile rectangles, ancestors, scroll/hit evidence retained in parent browser audit and raw caller result."
+        }
+      },
+      {
+        "label": "browser-enhanced-shop-one-v01",
+        "scene": "shop-enhanced",
+        "viewport": "desktop",
+        "orbCopies": 1,
+        "stock": 7,
+        "finalHash": "b4bbf80850fb1e0d1361abe18caa6d92619fa05850dde5f2a515d573678bf25e",
+        "events": 13,
+        "sourceApplicationLogs": {
+          "8408b8c2-5a3f-40dd-bac4-98f2736c4176": 4,
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d": 2,
+          "10bd78de-87ec-44e4-9b16-e755da2a9717": 1
+        },
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-4ZJ2Yi/shop-workflow-v04.result.json",
+        "reportSHA256": "f57a5c112b9b350f9d7a502f5eb6db7aed9d12bb1d83f915745c55fc2efc98e2",
+        "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-4ZJ2Yi/shop-workflow-v04-desktop.jsonl",
+        "gameLogSHA256": "6eb222bda8d6eb87d5cad9299db3e42df1e098b7ead46e0eaa3575401b85f9c1",
+        "gameLogRows": 71,
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-4ZJ2Yi/expanded-shop-enhanced-1-desktop.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/shop?goto=shop-enhanced&seed=266-shop-enhanced-1&debug=1&game=p3et6g",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "receipt": {
+          "eventSeq": 10,
+          "siteId": "site-1",
+          "slotIndex": 0,
+          "item": {
+            "kind": "card",
+            "cardNumber": 365,
+            "gainedEntryId": "deck-10-0",
+            "journeyShopTransfiguration": {
+              "dreamsignId": "10bd78de-87ec-44e4-9b16-e755da2a9717",
+              "heldIndex": 2,
+              "entryId": "deck-10-0",
+              "cardId": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+              "before": null,
+              "type": "Kindled",
+              "applicableForms": [
+                "Kindled"
+              ],
+              "drawIndex": 0
+            }
+          },
+          "priceBeforeFree": 100,
+          "pricePaid": 100,
+          "essenceBefore": 1000,
+          "essenceAfter": 900
+        },
+        "caps": [],
+        "geometrySummary": {
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "documentWidth": 1440,
+          "gallery": {
+            "x": 662.390625,
+            "y": 142.40625,
+            "width": 750,
+            "height": 574.1875,
+            "right": 1412.390625,
+            "bottom": 716.59375
+          },
+          "entries": 8,
+          "rawGeometry": "Complete per-tile rectangles, ancestors, scroll/hit evidence retained in parent browser audit and raw caller result."
+        }
+      },
+      {
+        "label": "browser-enhanced-shop-one-v01",
+        "scene": "shop-enhanced",
+        "viewport": "mobile",
+        "orbCopies": 1,
+        "stock": 7,
+        "finalHash": "93b392356197f1a1dba240c76623d79a54f9a66d0039af5cf58dd9f7572e9d4d",
+        "events": 13,
+        "sourceApplicationLogs": {
+          "8408b8c2-5a3f-40dd-bac4-98f2736c4176": 4,
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d": 2,
+          "10bd78de-87ec-44e4-9b16-e755da2a9717": 1
+        },
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-4ZJ2Yi/shop-workflow-v04.result.json",
+        "reportSHA256": "f57a5c112b9b350f9d7a502f5eb6db7aed9d12bb1d83f915745c55fc2efc98e2",
+        "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-4ZJ2Yi/shop-workflow-v04-mobile.jsonl",
+        "gameLogSHA256": "66da598cee632e593b2fdcf6d435084cceec55e59cacdc7702a6cd306ab5c9bb",
+        "gameLogRows": 71,
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-4ZJ2Yi/expanded-shop-enhanced-1-mobile.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/shop?goto=shop-enhanced&seed=266-shop-enhanced-1&debug=1&game=8ug4jo",
+            "width": 390,
+            "height": 844
+          }
+        ],
+        "receipt": {
+          "eventSeq": 10,
+          "siteId": "site-1",
+          "slotIndex": 0,
+          "item": {
+            "kind": "card",
+            "cardNumber": 162,
+            "gainedEntryId": "deck-10-0",
+            "journeyShopTransfiguration": {
+              "dreamsignId": "10bd78de-87ec-44e4-9b16-e755da2a9717",
+              "heldIndex": 2,
+              "entryId": "deck-10-0",
+              "cardId": "bd27a996-bcdd-4f49-95c2-92c9d5875344",
+              "before": null,
+              "type": "Amplified",
+              "applicableForms": [
+                "Empowered",
+                "Amplified",
+                "Inspired",
+                "Enduring",
+                "Hastened"
+              ],
+              "drawIndex": 0
+            }
+          },
+          "priceBeforeFree": 100,
+          "pricePaid": 100,
+          "essenceBefore": 1000,
+          "essenceAfter": 900
+        },
+        "caps": [],
+        "geometrySummary": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "gallery": {
+            "x": 8,
+            "y": 345.953125,
+            "width": 372,
+            "height": 379.796875,
+            "right": 380,
+            "bottom": 725.75
+          },
+          "entries": 8,
+          "rawGeometry": "Complete per-tile rectangles, ancestors, scroll/hit evidence retained in parent browser audit and raw caller result."
+        }
+      },
+      {
+        "label": "browser-enhanced-bazaar-one-v01",
+        "scene": "dreamsignbazaar-enhanced",
+        "viewport": "desktop",
+        "orbCopies": 1,
+        "stock": 5,
+        "finalHash": "f8374f824a1aa4fc2905a5da16e16aaa35133da3c87853552d26da6d7822c31c",
+        "events": 13,
+        "sourceApplicationLogs": {
+          "8408b8c2-5a3f-40dd-bac4-98f2736c4176": 4,
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d": 2
+        },
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-EpSvYE/shop-workflow-v04.result.json",
+        "reportSHA256": "590a6bd63f347bf1b8b214c4464d2353a926dafaec623a7500fa0c59cf477674",
+        "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-EpSvYE/shop-workflow-v04-desktop.jsonl",
+        "gameLogSHA256": "81321ae844896f582585ed7e064a2555928290e4d79085f4242b4cab80ea7729",
+        "gameLogRows": 73,
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-EpSvYE/expanded-dreamsignbazaar-enhanced-1-desktop.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/dreamsign-bazaar?goto=dreamsignbazaar-enhanced&seed=266-dreamsignbazaar-enhanced-1&debug=1&game=c2woo8",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "receipt": {
+          "eventSeq": 10,
+          "siteId": "site-1",
+          "slotIndex": 0,
+          "item": {
+            "kind": "dreamsign",
+            "dreamsignId": "257c160f-7d70-4ebd-bb0f-f83e61907310"
+          },
+          "priceBeforeFree": 50,
+          "pricePaid": 50,
+          "essenceBefore": 1000,
+          "essenceAfter": 950
+        },
+        "caps": [],
+        "geometrySummary": {
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "documentWidth": 1440,
+          "gallery": {
+            "x": 699.1875,
+            "y": 155.609375,
+            "width": 680,
+            "height": 547.78125,
+            "right": 1379.1875,
+            "bottom": 703.390625
+          },
+          "entries": 6,
+          "rawGeometry": "Complete per-tile rectangles, ancestors, scroll/hit evidence retained in parent browser audit and raw caller result."
+        }
+      },
+      {
+        "label": "browser-shop-two-v01",
+        "scene": "shop",
+        "viewport": "mobile",
+        "orbCopies": 2,
+        "stock": 9,
+        "finalHash": "e6509c041624bc16dcc93ee5170dbbca700a2f31b83787e319e70350076d5194",
+        "events": 14,
+        "sourceApplicationLogs": {
+          "8408b8c2-5a3f-40dd-bac4-98f2736c4176": 8,
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d": 2,
+          "10bd78de-87ec-44e4-9b16-e755da2a9717": 1
+        },
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-8cEFzA/shop-workflow-v04.result.json",
+        "reportSHA256": "c70513acb8b64f08971650f13fc497de0b4fefdd7d8fde10c6683fe6c2f7eb2a",
+        "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-8cEFzA/shop-workflow-v04-mobile.jsonl",
+        "gameLogSHA256": "9e8d6fdc6f2cc5ba87bcbdab68f38da7cc73b3ceba7a62e72ba181ba35a997b2",
+        "gameLogRows": 78,
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-8cEFzA/expanded-shop-2-mobile.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/shop?goto=shop&seed=266-shop-2&debug=1&game=krq5xh",
+            "width": 390,
+            "height": 844
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-8cEFzA/restocked-shop-2-mobile.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/shop?goto=shop&seed=266-shop-2&debug=1&game=krq5xh",
+            "width": 390,
+            "height": 844
+          }
+        ],
+        "receipt": {
+          "eventSeq": 11,
+          "siteId": "site-1",
+          "slotIndex": 0,
+          "item": {
+            "kind": "card",
+            "cardNumber": 497,
+            "gainedEntryId": "deck-11-0",
+            "journeyShopTransfiguration": {
+              "dreamsignId": "10bd78de-87ec-44e4-9b16-e755da2a9717",
+              "heldIndex": 3,
+              "entryId": "deck-11-0",
+              "cardId": "831bc7cf-e8c9-4943-8156-91b7397ef849",
+              "before": null,
+              "type": "Kindled",
+              "applicableForms": [
+                "Empowered",
+                "Kindled",
+                "Resonant"
+              ],
+              "drawIndex": 0
+            }
+          },
+          "priceBeforeFree": 100,
+          "pricePaid": 100,
+          "essenceBefore": 1000,
+          "essenceAfter": 900
+        },
+        "caps": [],
+        "geometrySummary": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "gallery": {
+            "x": 8,
+            "y": 345.953125,
+            "width": 316,
+            "height": 406,
+            "right": 324,
+            "bottom": 751.953125
+          },
+          "entries": 10,
+          "rawGeometry": "Complete per-tile rectangles, ancestors, scroll/hit evidence retained in parent browser audit and raw caller result."
+        }
+      },
+      {
+        "label": "browser-enhanced-shop-two-v01",
+        "scene": "shop-enhanced",
+        "viewport": "mobile",
+        "orbCopies": 2,
+        "stock": 9,
+        "finalHash": "6ab783c2dfa265e14c63e26fef8bd6d858bbbfe0d4aae3a15b0c083b21372c2f",
+        "events": 14,
+        "sourceApplicationLogs": {
+          "8408b8c2-5a3f-40dd-bac4-98f2736c4176": 8,
+          "8a2c7b32-26ea-40e2-845a-689da5673b4d": 2,
+          "10bd78de-87ec-44e4-9b16-e755da2a9717": 1
+        },
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-b66Gup/shop-workflow-v04.result.json",
+        "reportSHA256": "41f94fd983b6a56e38f4c2c77810cbaf576855d411522658a13d8a27cf6c3ad6",
+        "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-b66Gup/shop-workflow-v04-mobile.jsonl",
+        "gameLogSHA256": "704e99b53a661c9e701fe4ef59840cf306a239597a53aa9d801e4de0ca63f1fd",
+        "gameLogRows": 78,
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-b66Gup/expanded-shop-enhanced-2-mobile.png",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/shop?goto=shop-enhanced&seed=266-shop-enhanced-2&debug=1&game=8c5xm8",
+            "width": 390,
+            "height": 844
+          }
+        ],
+        "receipt": {
+          "eventSeq": 11,
+          "siteId": "site-1",
+          "slotIndex": 0,
+          "item": {
+            "kind": "card",
+            "cardNumber": 467,
+            "gainedEntryId": "deck-11-0",
+            "journeyShopTransfiguration": {
+              "dreamsignId": "10bd78de-87ec-44e4-9b16-e755da2a9717",
+              "heldIndex": 3,
+              "entryId": "deck-11-0",
+              "cardId": "331e2846-85d1-4667-8c64-dc6c21a418ed",
+              "before": null,
+              "type": "Inspired",
+              "applicableForms": [
+                "Empowered",
+                "Inspired",
+                "Enduring",
+                "Hastened"
+              ],
+              "drawIndex": 0
+            }
+          },
+          "priceBeforeFree": 100,
+          "pricePaid": 100,
+          "essenceBefore": 1000,
+          "essenceAfter": 900
+        },
+        "caps": [],
+        "geometrySummary": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "gallery": {
+            "x": 8,
+            "y": 345.953125,
+            "width": 316,
+            "height": 406,
+            "right": 324,
+            "bottom": 751.953125
+          },
+          "entries": 10,
+          "rawGeometry": "Complete per-tile rectangles, ancestors, scroll/hit evidence retained in parent browser audit and raw caller result."
+        }
+      }
+    ],
+    "failures": [
+      {
+        "label": "browser-bazaar-one-v01",
+        "viewport": "mobile",
+        "scene": "dreamsignbazaar",
+        "orbCopies": 1,
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-OBqwdJ/shop-workflow-v04.result.json",
+        "reportSHA256": "7a8bc326a8f9e65c001dbfb3cca76478d009edd1d87ac0e2a34c2e25953dda60",
+        "error": "mobile#0: Error: shop266: unreachable expanded stock or Restock; {\"id\":\"shop-slot-4-4a9f95d5-b72d-4ee8-8d29-b05646edc23d\",\"rect\":{\"x\":101,\"y\":733.546875,\"width\":92,\"height\":148.796875,\"right\":193,\"bottom\":882.34375},\"ancestors\":[{\"rect\":{\"x\":8,\"y\":345.953125,\"width\":374,\"height\":406.046875,\"right\":382,\"bottom\":752},\"overflow\":\"hidden\",\"clientHeight\":404,\"scrollHeight\":543},{\"rect\":{\"x\":0,\"y\":0,\"width\":390,\"height\":844,\"right\":390,\"bottom\":844},\"overflow\":\"hidden\",\"clientHeight\":844,\"scrollHeight\":844}],\"centerHit\":false,\"reachableScroll\":false,\"offscreen\":true}\n    at checkReachable (evalmachine.<anonymous>:1756:60)\n    at async journeyShopWorkflow (evalmachine.<anonymous>:1792:3)\n    at async evalmachine.<anonymous>:1843:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "repair": "hv-umm2.714",
+        "capture": "expanded-dreamsignbazaar-1-mobile.png",
+        "qualification": "Failed after actual source grants/imported fresh5ware shelf geometry; Restock/purchase/reload/newsite did not execute in this viewport."
+      }
+    ],
+    "supplementaryGuideRepeat": {
+      "at": "2026-10-15T03:43:19.675325+00:00",
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-vQlYgq/shop-workflow-guide-probe-v01.result.json",
+      "reportSHA256": "d54d6e7fab673525663407ca4d0942bd7183cbdbe9602f354b99561a3135e843",
+      "observations": [
+        {
+          "label": "ordinary scene before source grants",
+          "speechRect": {
+            "x": 156.25,
+            "y": 94.71875,
+            "width": 226.1875,
+            "height": 82.6875,
+            "right": 382.4375,
+            "bottom": 177.40625
+          }
+        },
+        {
+          "label": "expanded stock",
+          "speechRect": {
+            "x": 156.25,
+            "y": 94.71875,
+            "width": 226.1875,
+            "height": 82.6875,
+            "right": 382.4375,
+            "bottom": 177.40625
+          }
+        },
+        {
+          "label": "independent site settled",
+          "speechRect": {
+            "x": 156.25,
+            "y": 94.71875,
+            "width": 226.1875,
+            "height": 82.6875,
+            "right": 382.4375,
+            "bottom": 177.40625
+          }
+        }
+      ],
+      "caps": [],
+      "imageViewed": "expanded-shop-enhanced-2-mobile.png",
+      "imageDirectory": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.266/invocations/run-vQlYgq",
+      "caller": "/tmp/root266-20261015/shop-workflow-guide-probe-v01.mjs",
+      "callerSHA256": "da714c355a54463cd6ede327d4e2d45e468fa71cd2bda90770d86a40955d7a61",
+      "receipt": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root266-20261015/shop-workflow-guide-probe-v01.mjs",
+          "--bead",
+          "hv-umm2.266",
+          "--arg",
+          "scene=shop-enhanced",
+          "--arg",
+          "orbCopies=2",
+          "--viewports",
+          "mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+        "start": "2026-10-15T03:41:37.499105+00:00",
+        "end": "2026-10-15T03:42:00.380947+00:00",
+        "exit": 0,
+        "wallSeconds": 22.881436875031795,
+        "pid": 5635,
+        "pgid": 5635,
+        "load": "{ 20.69 11.28 9.58 }",
+        "groupRemainingAtExit": []
+      },
+      "groupsFreshlyAbsent": [
+        5635,
+        5726
+      ],
+      "qualification": "Supplementary repeat of already-passing enhancedShop/twoOrb mobile workflow. Actual bubble glass geometry y94.71875..177.40625 is identical before grants/expanded/final, and parent viewed settled full readable title/copy. Earlier capture concern did not reproduce as a settled product defect; retain original image and this measured follow-up.650ms visual rest is capture preparation, not CI timing threshold. No source edits or new fix bead. Do not inflate8 independent matrix cases by counting this duplicate as new coverage."
+    },
+    "viewing": "Parent viewed all matrix captures including duplicate mobile post-Restock scroll and settled full guide text. Helper did not independently view those images.",
+    "ledger": {
+      "originalSweepRows": 60,
+      "originalSweepSHA256": "fd737e4a864a635697ed048a9c55ce8eba09ac7c3b95b3c596a924081a1ceddb",
+      "originalSweepByteLength": 49348,
+      "appendedJudgedRows": 27,
+      "passRows": 24,
+      "failRows": 3,
+      "independentViewportPasses": 8,
+      "independentViewportFails": 1,
+      "supplementaryRepeatAddsMatrixCoverage": false
+    }
+  },
+  "acceptanceDisposition": {
+    "recipe": "docs/plan/phase-5-content.md:307-312",
+    "outsideAreasJudgedFail": "Mobile expanded DreamsignBazaar stock clips fifth option; shared DreamsignGalleryPanel outside exact266 Areas. Ordinary three-ware baseline is not claimed broken. Original judged failure stays effective and names hv-umm2.714.",
+    "nextFix": "hv-umm2.714 depends266; root dispatches next after266 lands, shared panel root/header/grid scroll scope with core review and all-three-UUID rejudgment.",
+    "qualification": "No mobile Bazaar acceptance, fixed verdict, general acceptance waiver, UI scope expansion or approval wait claimed. Final acceptance joins include714 rejudgment."
+  },
+  "justiciar": {
+    "weighted": "/tmp/root266-20261015/justiciar-validation-applicability-v01-native.stdout",
+    "outOfAreasGeometry": "/tmp/root266-20261015/justiciar-bazaar-scope-v01-native.stdout",
+    "authority": "Native records govern. Specific journey acceptance retained; literal weighted guard rejection is0games, supported battle presence inert only; phase5recipe8 separately repairs outside-Areas judged failure."
+  },
+  "reviewRouting": "Root owns new fresh read-only Codex fork_none review for266 under direct permanent user instruction. Five old debt reviews are not claimed266 review.",
+  "remaining": [
+    "Fresh independent266 review/disposition and any separately admitted corrections, owned by root",
+    "Refresh actual continuous endpoint at separate COMMITACK",
+    "Root delivery and immediate714 repair/rejudgment; mobile Bazaar acceptance remains failed"
+  ],
+  "evidenceCustody": {
+    "parent-dispatch-native-v01.json": {
+      "path": "/tmp/root266-20261015/parent-dispatch-native-v01.json",
+      "sha256": "e0a16436c362a44f11c3ffdf5ad598cf4b58762195ceaaa9e7e3a4288bc9d01f"
+    },
+    "source-independent-audit-v03.json": {
+      "path": "/tmp/root266-20261015/source-independent-audit-v03.json",
+      "sha256": "118af3229add677f582e35ea749d0c45651141e3b995388662353d65e9011116"
+    },
+    "journey300-independent-audit-v01.json": {
+      "path": "/tmp/root266-20261015/journey300-independent-audit-v01.json",
+      "sha256": "fc381c1ec8ac62cb0923483296a875da8d97bec5c97237fe2f843bd071d48f56"
+    },
+    "presence-independent-audit-v01.json": {
+      "path": "/tmp/root266-20261015/presence-independent-audit-v01.json",
+      "sha256": "8604a21a38a2150e6b7b54ec098be6efab3d587c2094bb5b2eed341c5d578907"
+    },
+    "weighted-applicability-audit-v01.json": {
+      "path": "/tmp/root266-20261015/weighted-applicability-audit-v01.json",
+      "sha256": "93df9663d3b7e44b17d151b7ce1d7f643eb0a805013176bb72b88e54321693b7"
+    },
+    "browser-independent-audit-v01.json": {
+      "path": "/tmp/root266-20261015/browser-independent-audit-v01.json",
+      "sha256": "8a8e4b218fef8783aea1cb6b114f1b1d987f7f0ea725be300a2a0cc887d8bd6f"
+    },
+    "guide-capture-independent-audit-v01.json": {
+      "path": "/tmp/root266-20261015/guide-capture-independent-audit-v01.json",
+      "sha256": "1642b01f560a292bd6938375779fcec746dbc890d6d3839f6b95706cac6c497f"
+    },
+    "justiciar-validation-applicability-v01-native.stdout": {
+      "path": "/tmp/root266-20261015/justiciar-validation-applicability-v01-native.stdout",
+      "sha256": "11ad2c7386da2add6636f7e1114610267386c8cef78a248c7f2c9e82431b7bff"
+    },
+    "justiciar-bazaar-scope-v01-native.stdout": {
+      "path": "/tmp/root266-20261015/justiciar-bazaar-scope-v01-native.stdout",
+      "sha256": "4269807cb99fed8b1160325484a70d043921cc2bfc4f3ce6c5b90030ac618826"
+    },
+    "evidence-write-ack-v01-native.stdout": {
+      "path": "/tmp/root266-20261015/evidence-write-ack-v01-native.stdout",
+      "sha256": "6dbccb13867da55b82054e6f0d4641928d640ac2ae5d5b79992ba30102b836e2"
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "mid-operation provider error",
+      "proof": "Actual production-mode fold contains provider throw, unchanged prior state/no success diagnostics; next valid input spends first ordinal once."
+    },
+    {
+      "path": "reload/restart",
+      "proof": "Actual codec-loaded accepted-prefix continuation and complete state/outcomes/diagnostics/hash equality. Shop operation synchronous; no invented in-flight prompt."
+    },
+    {
+      "path": "partial write",
+      "proof": "Later real hook observes private completed payment/form/receipt/purchased flag then throws; original state/no success logs retained, recovery commits once with ordinary diagnostic prefix."
+    },
+    {
+      "path": "invalid/stale input",
+      "proof": "Malformed/out-of-range/purchased slot, invalid site, insufficient Essence, exhausted limit, null/throwing provider and invalid RNG refuse or are contained with original state; no swallowed success."
+    },
+    {
+      "path": "concurrent actors",
+      "proof": "Actual shared-head two-actor BUY/REROLL first commits, second partner_conflict; exempt concurrent OPEN generates shelf once."
+    }
+  ],
+  "originalAcceptance": {
+    "uuids": [
+      "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+      "8408b8c2-5a3f-40dd-bac4-98f2736c4176",
+      "10bd78de-87ec-44e4-9b16-e755da2a9717"
+    ],
+    "clauses": "All three exact printed clauses and native original AC retained. journeyShop typed primitive/additive production registrations; factory-covered synthetic public contracts and real provider; source loss does not redraw prepared stock; receipt diagnostic, not eligibility authority. Global free token priority/consumption preserved. RedShard applies card-selling Shop/enhancedShop per D10/RD266-1; DreamsignBazaar negative.",
+    "coverageQualification": "Rules/contracts/300finite synthetic journey checks pass; battle presence inert only, literal300weighted rejected0games. Eight independent browser cells pass; actual mobile Bazaar failure retained with immediate714 acceptance join. Enhanced/duplicate Bazaar mobile cells not run, not invented."
+  },
+  "validationFinalization": {
+    "schemaReceipt": "/tmp/root266-20261015/impl-evidence-schema-v01.receipt.json",
+    "diffReceipt": "/tmp/root266-20261015/impl-evidence-white-v01.receipt.json",
+    "qualification": "Cheap evidence-only checks run after materialization; actual terminal receipts returned separately. Aggregate checks apply to frozen source before evidence-only writes.",
+    "schemaActual": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-shop266",
+      "start": "2026-10-15T03:45:51.276489+00:00",
+      "end": "2026-10-15T03:45:51.427523+00:00",
+      "exit": 0,
+      "wallSeconds": 0.15093979198718444,
+      "pid": 80067,
+      "pgid": 80067,
+      "load": "{ 9.93 10.61 9.76 }",
+      "groupRemainingAtExit": []
+    },
+    "schemaReceiptSHA256": "4f2d324fe83369b378270dd68319484c8cb378f9e57f3b479f18baa4e3411ba3"
+  }
+}

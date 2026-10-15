@@ -1,6 +1,11 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import type { JourneyShopEffect } from "../../types/journey";
 import { dreamsign } from "../define";
 
+export const journeyShopEffect = { kind: "additionalOptions", amount: 2 } as const satisfies JourneyShopEffect;
+
 export default dreamsign({
+  journeyShop: journeyShopEffect,
   id: "8408b8c2-5a3f-40dd-bac4-98f2736c4176",
   name: "Cracked Orb",
   imageName: "magic-ball.png",
@@ -10,5 +15,6 @@ export default dreamsign({
   rarity: "Rare",
   tideIds: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
   tags: ["J15", "Tag OK"],
-  pending: true,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("Each shop site provides 2 additional options."),
 });

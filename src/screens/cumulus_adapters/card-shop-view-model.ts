@@ -1,3 +1,5 @@
+import { shopRestockQuote } from "../../rules/journey/journey-shop";
+import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 // Pure view-model builder for Tobias Tanglefur's Cumulus Card Shop.
 
 import { buildCardSourceDebugState } from "../../debug/card-source-debug";
@@ -105,8 +107,11 @@ export function buildCardShopRestock(
   runtime: ShopSiteRuntime,
   site: SiteState,
   essence: number,
+  journey?: Pick<JourneyState, "dreamsigns" | "shopModifiers">,
+  registry: Pick<JourneyModifierRegistry, "lookup"> = journeyModifierRegistry,
 ): CardShopRestockView {
-  const price = rerollCost(config, runtime.rerollCount, site.isEnhanced);
+  const price = journey === undefined ? rerollCost(config, runtime.rerollCount, site.isEnhanced)
+    : shopRestockQuote(journey, runtime, site, config, registry).price;
   return {
     entryId: parseDeckEntryId(`shop-restock-${site.id}`),
     price,
@@ -201,6 +206,7 @@ export function buildCardShopSiteView(params: {
       params.runtime,
       params.site,
       params.state.essence,
+      params.state,
     ),
     freePurchaseStatus: buildShopFreePurchaseStatus(
       params.runtime,

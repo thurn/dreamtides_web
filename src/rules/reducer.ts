@@ -602,9 +602,9 @@ export function routeDomain(
 
     // --- shop, augury & modifiers ---
     case "BUY_SHOP_SLOT":
-      return journeyCase(state, shop.buyShopSlot(journey, payload, ctx));
+      return journeyCase(state, shop.buyShopSlot(journey, payload, ctx, modifiers));
     case "REROLL_SHOP":
-      return journeyCase(state, shop.rerollShop(journey, payload, ctx));
+      return journeyCase(state, shop.rerollShop(journey, payload, ctx, modifiers));
     case "GRANT_FREE_REROLLS":
       return journeyCase(state, shop.grantFreeRerolls(journey, payload));
     case "APPLY_SHOP_DISCOUNT":

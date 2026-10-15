@@ -1,3 +1,5 @@
+import { shopRestockQuote } from "../../rules/journey/journey-shop";
+import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 // Pure view-model builder for Amunet's Cumulus Dreamsign Bazaar.
 
 import { requireGuideForSiteType } from "../../data/dreamscapes";
@@ -84,8 +86,11 @@ export function buildDreamsignBazaarRestock(
   runtime: ShopSiteRuntime,
   site: SiteState,
   essence: number,
+  journey?: Pick<JourneyState, "dreamsigns" | "shopModifiers">,
+  registry: Pick<JourneyModifierRegistry, "lookup"> = journeyModifierRegistry,
 ): DreamsignBazaarRestockView {
-  const price = rerollCost(config, runtime.rerollCount, site.isEnhanced);
+  const price = journey === undefined ? rerollCost(config, runtime.rerollCount, site.isEnhanced)
+    : shopRestockQuote(journey, runtime, site, config, registry).price;
   return {
     entryId: parseDeckEntryId(`shop-restock-${site.id}`),
     price,
@@ -158,6 +163,7 @@ export function buildDreamsignBazaarSiteView(params: {
       params.runtime,
       params.site,
       params.state.essence,
+      params.state,
     ),
     purge: buildDreamsignBazaarPurgeView(params.state, params.pendingDreamsign),
     freePurchaseStatus: buildShopFreePurchaseStatus(
