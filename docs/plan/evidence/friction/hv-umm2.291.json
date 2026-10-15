@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.291",
+  "phase": 5,
+  "implementMin": 92.6893008,
+  "implementWindow": {
+    "start": "2026-10-15T11:51:15.063Z",
+    "end": "2026-10-15T13:23:56.421048+00:00"
+  },
+  "localValidationS": {
+    "focused": 7.2495893749874085,
+    "preflight": 1.7117029590299353,
+    "review": 67.88710962503683,
+    "knip": 6.037723916000687,
+    "fuzz": 1487.2248681670171,
+    "greedy": 372.83863054198446
+  },
+  "hostLoad": 9.24365234375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 35.28208506805044,
+      "note": "Two fully unexecuted admission waiters are retained: parent-directed guard-scope repair and sequencing repair. Browser QA completed before the final full300 admission. Queue time is separate from engine execution; canceled second-wrapper exact end is unknown, so its measured start-to-parent-signal interval qualifies this aggregate."
+    }
+  ]
+}

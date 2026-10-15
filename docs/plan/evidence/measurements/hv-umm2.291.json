@@ -1,0 +1,1038 @@
+{
+  "bead": "hv-umm2.291",
+  "phase": 5,
+  "base": "d915564ce6cde52370d593e4a9ea354be58cc12c",
+  "scope": {
+    "incarnationIds": [
+      "57c65dfd-a125-440e-a410-c8c4a314b1d1",
+      "80b6296d-840e-4ed7-b684-5aadc0981bf4"
+    ],
+    "aspectIds": [
+      "e4261c6a-af79-4b94-adbb-91e69b9de0dc",
+      "61ade662-2bfe-474a-860c-5f8aa586babc"
+    ],
+    "writerBodies": "exact two Aspect values/two additive ability imports, shared expectedVerifiedText retained once from290, exact two design table rows, own evidence",
+    "recipesAndDreamsignChoices": "approved289 UUID recipes preserved byte for byte",
+    "fallout": [],
+    "newScenarios": [],
+    "newTestContractSupportFixtureModules": 0,
+    "configuredTestEntrypointsAdded": 0,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "coreReview": "not marked core-review; direct existing primitive composition, no new prompt or state shape, six changed non-test TS lines versus updatedbase; exact final source partition verified",
+    "reviewFull": "not indicated: no test infrastructure/repository configuration/cross-cutting architecture change",
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "preExistingIssues": []
+  },
+  "clock": {
+    "dispatch": "2026-10-15T11:51:15.063Z",
+    "endpointStamp": "2026-10-15T13:23:56.421048+00:00",
+    "inclusiveElapsedMin": 92.6893008,
+    "includes": "Stage1, native coordination, all failed callers, checks, admission waits, user context interruption, QA, evidence and normal Git; final actual Git bracket/tail retained separately; ordinary integration conflict/checkpoint/update/reapply and combined checks through final amend",
+    "model": "UNKNOWN",
+    "samplingStart": "UNKNOWN",
+    "parentSetup": "separate before original dispatch; setup-proof.json"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "integrated-review entire ordinary npm run review aggregate on d915564 plus exact own pair delta",
+        "receipt": "integrated-review.json",
+        "receiptSHA256": "88d64efbbfa5afd23b12e9e7a54a9ab4f94d5717425475f7276147c0ae73e9a6"
+      },
+      "implementWindow": {
+        "end": "actual near-commit stamp; actual normal Git bracket/tail in final-commit.json, no backdating"
+      }
+    }
+  },
+  "sourceSHA256": {
+    "AGENTS.md": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+    "README.md": "942beb0ffccdd16fabd4bfff2362a8d7ed6b67ee8f52b3be314aab26ebbe6e74",
+    "docs/plan/README.md": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+    "docs/plan/decisions.md": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+    "docs/plan/workflow.md": "711d807bba2675ba8519bb9219e6eb78f78d0ec450d08834fa950c5bb44b759e",
+    "docs/plan/phase-5-content.md": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+    "docs/plan/engine-design.md": "110e73dc53614d0785926e9b2162a253912dcfdcf9e9d5ce8ddaa8881aff3099",
+    "docs/plan/evidence/parallelism/hv-umm2.606.md": "048d3126d86cbe374a8f5081112dc2477f86cdb6ef159ab70b1ce300d044ab73",
+    "src/content/apollyon/design.ts": "7885a2d3b498fd364af297a623e0af53ff08343f33d590db17acdce1343191f4",
+    "src/content/apollyon/types.ts": "8792a2b2fe9640a387568083bae3d05a8cbb9986a085a42d80f21067a6f8f885",
+    "src/content/define.ts": "9f093451f935d695d5cea71fc0cc0efa345fc344d49ee497e22b20215f315c7d",
+    "docs/design.md": "6604603d1955462919f435430eb4cba6c515840bbcfd9f5aedab0fa6ba05609a",
+    "src/content/apollyon.ts": "905f416e5407f730e83e49fc47a825e2ea4d87209cf1ca7b84986f5ad0c41bc0",
+    "src/data/dreamscapes.ts": "0c4fb777ed8b546e26baf9694b22c8de048402bea30f5134a6b3d86e60cd346f",
+    "src/types/content.ts": "b971e5584cf293aa2b3fc9437bb25fc45a8a4b53293f3358c50816c0ca4dd002",
+    "src/engine/content-catalog.ts": "1dc8fd57d6986191803578ec097741c73902c030a130f099c63189de3c218260",
+    "src/battle/integration/create-battle-init.ts": "7eda4bc59586bea406dfca27ca14743a96de67c0bfe64cba0c86bf51437435a4",
+    "src/battle/integration/tide-opponent-deck.ts": "7cb7a6e60e7e768f01b3d38a476078af7811f10c8d7f850b686482405d43cd45",
+    "src/battle/integration/engine-battle-init.ts": "599b85f4552fc1659698a050a3d8da25fdb6b748d21ef12407e4d5aecc140ab9",
+    "src/session/providers/battle-init-provider.ts": "8413386f5e2508fbec32796c127f1ad6a295aaf5cf5eee74fd9fd7513a62dba9",
+    "src/engine/testing/apollyon-audit.ts": "972a50dc7600c3c692c8c717c968b3c43e97df3b740817e9bb57aa74f8446c60",
+    "src/battle/integration/apollyon-init.test.ts": "d233698d1809bfdb12b0b849aa9c83d18ddf3cc9f9e3d60796a0163f6ed394af",
+    "src/battle/integration/apollyon-aspects/pair-291.test.ts": "75cb2538a483d0312e677cdf65984bdcdfaa4bb92060e2016ceceb0e7057627f",
+    "src/content/apollyon/aspects/aspect-57c65dfd-a125-440e-a410-c8c4a314b1d1.ts": "25377404618328103a5c7775c43f648be7912c174dcdd577f2c95d305e0dc6db",
+    "src/content/apollyon/aspects/aspect-80b6296d-840e-4ed7-b684-5aadc0981bf4.ts": "fa0f373aa52502c40338b80afb973e43ecb7fd51218cff7e53155f49f6cf3de0",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.641-1.md": "e56605a948d05aa7bd51626493c435be1966ccd688d5dd0592dc675426a250d0",
+    "docs/plan/evidence/measurements/hv-umm2.641.json": "42b1b11117729bce298b009b09c60ef83bb0ba16da568e5d192f175861449c50",
+    "scripts/fuzz-engine.ts": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+    "src/engine/testing/fuzz.ts": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+    "scripts/qa/lab-preflight.ts": "d1f13b839cc3ac95ac76e1d0a758abf39be5c0f65f2d1f26265ab82b4cabae76",
+    "scripts/qa/card-sweep.mjs": "e47a10d104a7bd1d9a11308067723413810c87c7607e17cd38ebd01c1a2995dd",
+    "src/runtime/qa-scenes.ts": "34a59ba3bcdf37b98f2ec10e17636c2d4e1245737cca6a9aaa3160f29eb38f90",
+    "src/runtime/qa-journey-foundation.ts": "b0a82bcc8ca719f93d515605ac68a4f612955b0e0bbd64569b23c99bd6d2360f",
+    "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+    "scripts/qa/prelude.mjs": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+    "scripts/tournament/game.ts": "1aa447a9f856563a4c6dad923e8c2e8be1e274d0a18e09ae5c0063e8575763ad",
+    "scripts/tournament/run.ts": "9d6bc0a7de56dc8067c762e9e2a2b922a620ba36b3007b1ffd99da2e9ba4c829",
+    "scripts/tournament/generate-pool.ts": "bd5702027d551859589d4208e00fc3524384ddc0514cc8333f31d6649b5dd72c",
+    "scripts/tournament/types.ts": "ef3b629793a16de4a4b7179387b80fe358193aa0ab0a523105857c1ba52354db",
+    "scripts/tournament/schedule.ts": "512374cab23f4e8479ce70c8cb0f579eee8dcd9302460b1d92cce4c0a8f76fb6",
+    "scripts/tournament/options.ts": "e50f5918962b5a81be65319db258689502bffefacf7c42bd5f2860436787f40a",
+    "scripts/tournament/catalog.json": "2b834579039eec9c3d481ff56d6e5b363c044719f2b615c9c5e00fb70d52f06b",
+    "src/engine/dsl/verified-text.ts": "7051785703d83bf9d50c8b5d76926f1cf70ba263aed76de8515e285c8533b732",
+    "src/content/opponents.ts": "577df458e228376555077220e47617cd1ff3a1bd448dd1ec44b9f6c88547b24b",
+    "src/content/dreamsigns/mandrake-root-293a610d.ts": "85f2fba0719045baa6fcdc0602b54eb199cdc243eb9c0410116ba1a486cf44e2",
+    "src/content/dreamsigns/ivory-claw-21ae8473.ts": "f738dbd4fe2178b0bbdfdb6762aed491604f0191d4b0081b0e341b65bb00b404",
+    "src/content/avatars/seraveth-6488452d.ts": "9c31183ed08fbd9e9c3e2b54b369d09c223a5d115708e086c306672301c1e664",
+    "src/content/avatars/eldrik-bfc40414.ts": "03cd6c30cb829ae738b90b04fcdef27863e07823c8eef2268ce0c1b58cb1b7c0"
+  },
+  "authority": {
+    "original45BlockingPrerequisites": "closed/completed at claim, all retained; native preclaim.json",
+    "child641": "completed modules/contracts read-only, actual production consumers active here",
+    "documentationJoin290": "closed/completed; own updatedbase d915564 contains common mixed-status paragraph. Exact paragraph and both peer live entries/imports retained; source equality proof in integration/reapplied-source.json.",
+    "D6": "both mechanics provisional; original recipes and one real Dreamsign each retained",
+    "D20": "direct primitive composition, existing14 both-controller public contracts; no duplicate production-data scenario tests",
+    "D21": "first SHA bytes217/252, both unsampled; changed runtime workflows judged anyway",
+    "remaining295": "50 EACH/frozen pool/hv-fy5h.2/champion rerun belong to295; these40 confer no295 credit"
+  },
+  "validation": {
+    "receipts": [
+      {
+        "file": "focused.json",
+        "SHA256": "684f1f2cfa14ed1734537e3d3116916c0fd4f20ddb99476ef1492e240e072d1d",
+        "start": "2026-10-15T11:58:16.983457+00:00",
+        "end": "2026-10-15T11:58:25.152702+00:00",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/battle/integration/apollyon-aspects/pair-291.test.ts",
+          "src/battle/integration/apollyon-init.test.ts",
+          "src/engine/content-gates.test.ts"
+        ],
+        "exit": 0,
+        "wallS": 8.156916417006869,
+        "cpuS": 9.924885,
+        "loadStart": [
+          8.34228515625,
+          9.81982421875,
+          10.5986328125
+        ],
+        "pid": 29443,
+        "pgid": 29443,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "preflight.json",
+        "SHA256": "3f7dd4fa3aca8ffc8bcb5182bc38b83b4beb418e0c6459f4f56dbce426ac393f",
+        "start": "2026-10-15T11:58:24.540552+00:00",
+        "end": "2026-10-15T11:58:26.253812+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--avatars",
+          "e4261c6a-af79-4b94-adbb-91e69b9de0dc,61ade662-2bfe-474a-860c-5f8aa586babc",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "exit": 0,
+        "wallS": 1.7117029590299353,
+        "cpuS": 2.068316,
+        "loadStart": [
+          8.06787109375,
+          9.71044921875,
+          10.55029296875
+        ],
+        "pid": 29929,
+        "pgid": 29929,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "review-initial.json",
+        "SHA256": "70f3524a44c1410c13d04a54517ebd0352729e7a79d613d79d5dc3ef41c22bcc",
+        "start": "2026-10-15T12:01:01.792076+00:00",
+        "end": "2026-10-15T12:02:12.131095+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "exit": 0,
+        "wallS": 70.33668679202674,
+        "cpuS": 192.693006,
+        "loadStart": [
+          6.70947265625,
+          8.2109375,
+          9.77685546875
+        ],
+        "pid": 40271,
+        "pgid": 40271,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "knip.json",
+        "SHA256": "85913f3ac9cd06d394a4aa2a2694bbc8477fc7d5c6325e594d255265a355ae70",
+        "start": "2026-10-15T12:02:40.215787+00:00",
+        "end": "2026-10-15T12:02:47.003978+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "exit": 0,
+        "wallS": 6.778140374983195,
+        "cpuS": 6.065257,
+        "loadStart": [
+          7.95263671875,
+          8.3828125,
+          9.67626953125
+        ],
+        "pid": 46091,
+        "pgid": 46091,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "greedy-v1.json",
+        "SHA256": "42190be4099d5d3128cae85d148c71eef2577696136d2d2052a9998c8e9712d2",
+        "start": "2026-10-15T12:03:18.277343+00:00",
+        "end": "2026-10-15T12:03:22.748119+00:00",
+        "argv": [
+          "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair291-root/node_modules/.bin/tsx",
+          "/tmp/291-root/greedy-smoke.ts",
+          "greedy-v1"
+        ],
+        "exit": 1,
+        "wallS": 4.457839749986306,
+        "cpuS": 4.258094,
+        "loadStart": [
+          7.28173828125,
+          8.14599609375,
+          9.52880859375
+        ],
+        "pid": 48509,
+        "pgid": 48509,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "greedy-v2.json",
+        "SHA256": "7577cc0dc04dff238f62397d0c45f83340b2c7ac92c43c38e6ae58b38c5b044b",
+        "start": "2026-10-15T12:06:33.397736+00:00",
+        "end": "2026-10-15T12:06:42.371449+00:00",
+        "argv": [
+          "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair291-root/node_modules/.bin/tsx",
+          "/tmp/291-root/greedy-smoke.ts",
+          "greedy-v2"
+        ],
+        "exit": 1,
+        "wallS": 8.972013207967393,
+        "cpuS": 10.997318,
+        "loadStart": [
+          6.75390625,
+          7.3779296875,
+          8.90283203125
+        ],
+        "pid": 60136,
+        "pgid": 60136,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "greedy-v3.json",
+        "SHA256": "79baff6388bf9684634ecfeb1bb3c1f4d0af788c3220340662f6e5f1b6f68c74",
+        "start": "2026-10-15T12:08:43.897927+00:00",
+        "end": "2026-10-15T12:14:56.751103+00:00",
+        "argv": [
+          "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair291-root/node_modules/.bin/tsx",
+          "/tmp/291-root/greedy-smoke.mts",
+          "greedy-v3"
+        ],
+        "exit": 0,
+        "wallS": 372.83863054198446,
+        "cpuS": 405.675541,
+        "loadStart": [
+          7.95068359375,
+          7.64501953125,
+          8.791015625
+        ],
+        "pid": 67822,
+        "pgid": 67822,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "qa-recovery-v1.json",
+        "SHA256": "826bdbd3b1c3c2c6b8e663b7e5b14b14097678e68b9fef88d2e7bddb9c0eb3c9",
+        "start": "2026-10-15T12:28:33.015407+00:00",
+        "end": "2026-10-15T12:28:42.407541+00:00",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.291/boss-pair291.mjs",
+          "--bead",
+          "hv-umm2.291",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "900",
+          "--arg",
+          "incarnation=57c65dfd-a125-440e-a410-c8c4a314b1d1",
+          "--arg",
+          "seed=291004",
+          "--arg",
+          "battleSeed=36872879"
+        ],
+        "exit": 1,
+        "wallS": 9.390484917035792,
+        "cpuS": 9.03317,
+        "loadStart": [
+          5.13671875,
+          5.6220703125,
+          6.75830078125
+        ],
+        "pid": 95394,
+        "pgid": 95394,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "qa-anthem-v1.json",
+        "SHA256": "5fbf1fa6450ca919407c581abfa1a5890b2e4015736a2b7b7933e927a5e794f8",
+        "start": "2026-10-15T12:40:48.070123+00:00",
+        "end": "2026-10-15T12:41:52.778493+00:00",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.291/boss-pair291.mjs",
+          "--bead",
+          "hv-umm2.291",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "900",
+          "--arg",
+          "incarnation=80b6296d-840e-4ed7-b684-5aadc0981bf4",
+          "--arg",
+          "seed=291008",
+          "--arg",
+          "battleSeed=2827696834"
+        ],
+        "exit": 0,
+        "wallS": 64.70596600003773,
+        "cpuS": 8.62135,
+        "loadStart": [
+          3.6591796875,
+          5.21875,
+          6.1982421875
+        ],
+        "pid": 16214,
+        "pgid": 16214,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "weighted.json",
+        "SHA256": "5a5d61d737aa64d154739b1970898480623b778bd6803f12191cfce7e350e99e",
+        "start": "2026-10-15T11:58:34.517733+00:00",
+        "end": "2026-10-15T12:14:06.355562+00:00",
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--seed",
+          "hv-umm2-291",
+          "--weight-uuids",
+          "e4261c6a-af79-4b94-adbb-91e69b9de0dc,61ade662-2bfe-474a-860c-5f8aa586babc"
+        ],
+        "exit": -15,
+        "wallS": 931.8230750830262,
+        "cpuS": 0.0016250000000000001,
+        "loadStart": [
+          8.05029296875,
+          9.6533203125,
+          10.52001953125
+        ],
+        "pid": 30602,
+        "pgid": 30602,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "weighted-execution-v3.json",
+        "SHA256": "d96ee940d7d150a621bbc9bdb923100d875a42a3f9b450c152057d5c2473a303",
+        "start": "2026-10-15T12:49:16.612319+00:00",
+        "end": "2026-10-15T13:14:03.889366+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--seed",
+          "hv-umm2-291",
+          "--weight-uuids",
+          "e4261c6a-af79-4b94-adbb-91e69b9de0dc,61ade662-2bfe-474a-860c-5f8aa586babc"
+        ],
+        "exit": 0,
+        "wallS": 1487.2248681670171,
+        "cpuS": 1556.575872,
+        "loadStart": [
+          27.33056640625,
+          14.017578125,
+          9.46240234375
+        ],
+        "pid": 61513,
+        "pgid": 61513,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "weighted-queue-v3.json",
+        "SHA256": "31b90312d825bee0fff8827e37a28708d7010954a780b3fb1d023ee5184dae16",
+        "start": "2026-10-15T12:42:38.661478+00:00",
+        "end": "2026-10-15T13:14:03.908872+00:00",
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/291-root/run-check.py",
+          "weighted-execution-v3",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--seed",
+          "hv-umm2-291",
+          "--weight-uuids",
+          "e4261c6a-af79-4b94-adbb-91e69b9de0dc,61ade662-2bfe-474a-860c-5f8aa586babc"
+        ],
+        "exit": 0,
+        "wallS": 1885.2084766670014,
+        "cpuS": 1557.269307,
+        "loadStart": [
+          5.9130859375,
+          5.53857421875,
+          6.2021484375
+        ],
+        "pid": 21736,
+        "pgid": 21736,
+        "actualWait": true,
+        "groupAbsent": true
+      }
+    ],
+    "weightedSummary": [
+      "fuzz:engine 300 games, 82669 steps, 1485.0 s wall, 1554.1 s CPU (0.2 games/s wall, 0.2 games/s CPU); prompts 6664; interactive re-runs 677 (31.660 ms each); feasibility bounded {\"legality\":0,\"prompts\":0}; results {\"player\":153,\"enemy\":147,\"draw\":0}; failures 0",
+      "fuzz targets: [{\"kind\":\"avatar\",\"uuid\":\"e4261c6a-af79-4b94-adbb-91e69b9de0dc\",\"included\":300,\"exercised\":731},{\"kind\":\"avatar\",\"uuid\":\"61ade662-2bfe-474a-860c-5f8aa586babc\",\"included\":300,\"exercised\":0}]"
+    ],
+    "weightedQueueS": 397.950841,
+    "weightedWrapperS": 1487.2248681670171,
+    "weightedCpuS": 1556.575872,
+    "queueWaitAggregateQualifiedS": 2116.9251040830263,
+    "preflight": "actual engine Aspect UUIDs via unchanged --avatars/all variants/both sides:4pass/36ineligible/0fail",
+    "genericRouteApplicability": "incarnation --cards is absent from engine targets; browser avatar lab requires selectable journey Avatar. Actual Aspect UUIDs target unchanged full300 fuzzer/Node preflight; exact original-incarnation real boss UI workflow supplies browser acceptance.",
+    "originalReceiptSourceOID": "2f1e333389643380d00f7af5012b80478aee4f8e",
+    "integratedReceipts": [
+      {
+        "file": "integrated-focused.json",
+        "SHA256": "6c3dde3e7f23c8b4e379cec3f6fbd5e548a76b931142318f9ed9dcace44f2562",
+        "start": "2026-10-15T13:21:16.801513+00:00",
+        "end": "2026-10-15T13:21:24.052706+00:00",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/battle/integration/apollyon-aspects/pair-291.test.ts",
+          "src/battle/integration/apollyon-aspects/pair-290.test.ts",
+          "src/battle/integration/apollyon-init.test.ts",
+          "src/engine/content-gates.test.ts"
+        ],
+        "exit": 0,
+        "wallS": 7.2495893749874085,
+        "cpuS": 9.736199,
+        "loadStart": [
+          8.9169921875,
+          8.3134765625,
+          8.38720703125
+        ],
+        "pid": 62910,
+        "pgid": 62910,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "integrated-review.json",
+        "SHA256": "88d64efbbfa5afd23b12e9e7a54a9ab4f94d5717425475f7276147c0ae73e9a6",
+        "start": "2026-10-15T13:21:22.842455+00:00",
+        "end": "2026-10-15T13:22:30.732375+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "exit": 0,
+        "wallS": 67.88710962503683,
+        "cpuS": 189.52307100000002,
+        "loadStart": [
+          9.24365234375,
+          8.39111328125,
+          8.4140625
+        ],
+        "pid": 63125,
+        "pgid": 63125,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "integrated-knip.json",
+        "SHA256": "783137b1a5b87871c4c818b4a580fdb1ee6a47ab1440d0b493950c56361b1ba3",
+        "start": "2026-10-15T13:21:22.841745+00:00",
+        "end": "2026-10-15T13:21:28.881915+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "exit": 0,
+        "wallS": 6.037723916000687,
+        "cpuS": 7.210441,
+        "loadStart": [
+          9.24365234375,
+          8.39111328125,
+          8.4140625
+        ],
+        "pid": 63126,
+        "pgid": 63126,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      }
+    ],
+    "integrationResolution": "Parked two source paths only, parent Tollgate update, then reapplied exact own Aspect lines/docs rows with two ability imports. expectedVerifiedText exists once from290. Reversing own delta produces exact updatedbase bytes; all other landed changes retained. Original runtime matrix is not recast as integrated reruns."
+  },
+  "greedyAcceptance": {
+    "each": 20,
+    "total": 40,
+    "totalActions": 2601,
+    "totalLogRows": 8565,
+    "allCompleted": true,
+    "allReplayEqual": true,
+    "audit": "greedy40-audit.json",
+    "auditSHA256": "e99f1f13798456f5d1d93eff59026b078b2416006a820172c8c4d69228f8697c",
+    "caller": "greedy-smoke.mts",
+    "callerSHA256": "908be423ab9a08c7320947c42e3f5c8966a08e5bb29e90100a420f3021ba272e",
+    "construction": "unchanged production foundation/atlas progress/provider; exact source-qualified battle7 parking and URL seed expression avoid Vite-only host imports",
+    "decks": "full30 enemy signature-pinned real pool affinity randomfill and actual Dreamsign/liveAspect; real player Starter deck; zero enemy Starter at true completion6 by progression[10,5]",
+    "policy": "existing Greedy both sides; unchanged scale1 D23 iteration budgets",
+    "scope": "smoke cleanliness/replay, no strength/win-rate gate or balance claim",
+    "failedAttempts": "two preserved Node host import failures before games, not counted",
+    "sourceEpoch": "2f1e333389643380d00f7af5012b80478aee4f8e"
+  },
+  "qa": {
+    "acceptedCells": [
+      {
+        "bead": "hv-umm2.291",
+        "uuid": "57c65dfd-a125-440e-a410-c8c4a314b1d1",
+        "aspectId": "e4261c6a-af79-4b94-adbb-91e69b9de0dc",
+        "entityKind": "apollyonIncarnation",
+        "side": "enemy",
+        "variant": "base",
+        "viewport": "desktop",
+        "mode": "real-boss-preview-begin-phase-actions-mechanic-reload",
+        "verdict": "pass",
+        "d21Sampled": false,
+        "sceneSeed": 291004,
+        "derivedBattleSeed": 36872879,
+        "invocation": "run-cJVvIJ",
+        "rawReport": "invocations/run-cJVvIJ/boss-pair291.result.json",
+        "screens": [
+          "recovery-desktop-preview.png",
+          "recovery-desktop-exercised.png"
+        ],
+        "testedBehavior": "Historical physical i57 return from the enemy Avatar Aspect: same applied-intent seq20, triggerResolved index7 then returnedToHand index9, cost0. Later captured player Day has i57 in void; current hand and screenshot are not return proof.",
+        "reloadVersion": 127,
+        "caps": [],
+        "geometry": {
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "bodyWidth": 1440,
+          "battle": {
+            "x": 0,
+            "y": 171,
+            "width": 1440,
+            "height": 207
+          }
+        },
+        "persistedLog": "boss-pair291-desktop.jsonl",
+        "persistedLogRows": 216,
+        "commit": "031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2"
+      },
+      {
+        "bead": "hv-umm2.291",
+        "uuid": "57c65dfd-a125-440e-a410-c8c4a314b1d1",
+        "aspectId": "e4261c6a-af79-4b94-adbb-91e69b9de0dc",
+        "entityKind": "apollyonIncarnation",
+        "side": "enemy",
+        "variant": "base",
+        "viewport": "mobile",
+        "mode": "real-boss-preview-begin-phase-actions-mechanic-reload",
+        "verdict": "pass",
+        "d21Sampled": false,
+        "sceneSeed": 291004,
+        "derivedBattleSeed": 36872879,
+        "invocation": "run-cJVvIJ",
+        "rawReport": "invocations/run-cJVvIJ/boss-pair291.result.json",
+        "screens": [
+          "recovery-mobile-preview.png",
+          "recovery-mobile-exercised.png"
+        ],
+        "testedBehavior": "Historical physical i57 return from the enemy Avatar Aspect: same applied-intent seq20, triggerResolved index7 then returnedToHand index9, cost0. Later captured player Day has i57 in void; current hand and screenshot are not return proof.",
+        "reloadVersion": 127,
+        "caps": [],
+        "geometry": {
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "bodyWidth": 390,
+          "battle": {
+            "x": 0,
+            "y": 177.234375,
+            "width": 390,
+            "height": 168.796875
+          }
+        },
+        "persistedLog": "boss-pair291-mobile.jsonl",
+        "persistedLogRows": 217,
+        "commit": "031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2"
+      },
+      {
+        "bead": "hv-umm2.291",
+        "uuid": "80b6296d-840e-4ed7-b684-5aadc0981bf4",
+        "aspectId": "61ade662-2bfe-474a-860c-5f8aa586babc",
+        "entityKind": "apollyonIncarnation",
+        "side": "enemy",
+        "variant": "base",
+        "viewport": "desktop",
+        "mode": "real-boss-preview-begin-phase-actions-mechanic-reload",
+        "verdict": "pass",
+        "d21Sampled": false,
+        "sceneSeed": 291008,
+        "derivedBattleSeed": 2827696834,
+        "invocation": "run-9Begj4",
+        "rawReport": "invocations/run-9Begj4/boss-pair291.result.json",
+        "screens": [
+          "anthem-desktop-preview.png",
+          "anthem-desktop-exercised.png"
+        ],
+        "testedBehavior": "First single in-play vanilla Warrior i44 has printed1/effective2 spark, gainedSpark0, one ally, no floating effect; visible Spark2. Static ability counters are not used as exercise proof.",
+        "reloadVersion": 43,
+        "caps": [],
+        "geometry": {
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "bodyWidth": 1440,
+          "battle": {
+            "x": 0,
+            "y": 171,
+            "width": 1440,
+            "height": 207
+          }
+        },
+        "persistedLog": "boss-pair291-desktop.jsonl",
+        "persistedLogRows": 126,
+        "commit": "031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2"
+      },
+      {
+        "bead": "hv-umm2.291",
+        "uuid": "80b6296d-840e-4ed7-b684-5aadc0981bf4",
+        "aspectId": "61ade662-2bfe-474a-860c-5f8aa586babc",
+        "entityKind": "apollyonIncarnation",
+        "side": "enemy",
+        "variant": "base",
+        "viewport": "mobile",
+        "mode": "real-boss-preview-begin-phase-actions-mechanic-reload",
+        "verdict": "pass",
+        "d21Sampled": false,
+        "sceneSeed": 291008,
+        "derivedBattleSeed": 2827696834,
+        "invocation": "run-9Begj4",
+        "rawReport": "invocations/run-9Begj4/boss-pair291.result.json",
+        "screens": [
+          "anthem-mobile-preview.png",
+          "anthem-mobile-exercised.png"
+        ],
+        "testedBehavior": "First single in-play vanilla Warrior i44 has printed1/effective2 spark, gainedSpark0, one ally, no floating effect; visible Spark2. Static ability counters are not used as exercise proof.",
+        "reloadVersion": 43,
+        "caps": [],
+        "geometry": {
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "bodyWidth": 390,
+          "battle": {
+            "x": 0,
+            "y": 177.234375,
+            "width": 390,
+            "height": 168.796875
+          }
+        },
+        "persistedLog": "boss-pair291-mobile.jsonl",
+        "persistedLogRows": 126,
+        "commit": "031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2"
+      }
+    ],
+    "allEightCapturesActuallyViewed": true,
+    "finalPersistedLogRows": 685,
+    "recoveryNativeRunnerWallMs": {
+      "browserLeaseWait": 5,
+      "serve": 3181,
+      "scenario": 183999,
+      "total": 187243
+    },
+    "recoveryOuterWrapper": "UNKNOWN exit/wait/CPU/end after context refresh; nativePASS/fullreport187243ms/clean server-provider teardown/sourceposthash/groups absence recovered explicitly, no repeated run",
+    "recoveryRecoveryReceipt": "qa-recovery-v2-recovered-settlement.json",
+    "anthemReceipt": "qa-anthem-v1.json",
+    "initialFailure": "qa-recovery-v1/run-U8HIdI URL VM ReferenceError before Begin;68row native export/Caps[]/0passcredit preserved; URL operations run in qa.read page realm",
+    "driverSHA256": "f2e379be864c4b1a8f833f8448488eb3d13bc6bf0c4d34c2cdfbdbc9567784ca",
+    "serverAndProviderCleanup": "both accepted runners report cleanup and both exact own server groups are absent; each completed slot has absent owner/server records at author observation; no foreign cleanup",
+    "screens": "basenames only in accepted cells; images remain gitignored primary artifacts",
+    "sourceEpoch": "2f1e333389643380d00f7af5012b80478aee4f8e",
+    "ledgerCommit": "031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2"
+  },
+  "resourceEvidence": [
+    "weighted-admission-cancel-proof.json",
+    "weighted-queue-v2-collection.json",
+    "justiciar-sequencing-decision.json",
+    "qa-recovery-v2-recovered-settlement.json",
+    "qa-anthem-v1-settlement.json",
+    "weighted-queue-v3.json",
+    "weighted-execution-v3.json"
+  ],
+  "historicalUnknowns": "recovery wrapper exit/wait/CPU/end and model sampling time are unknown; source-bound native outcomes and observed cleanup retained; no fabricated observations",
+  "durableRawEvidence": "primary artifacts/qa/hv-umm2.291/final-proof/ plus native invocations and greedy-smoke/greedy-v3/",
+  "sourceEpochs": {
+    "originalRuntime": {
+      "sourceOID": "2f1e333389643380d00f7af5012b80478aee4f8e",
+      "baseOID": "031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2",
+      "sourceSHA256": {
+        "AGENTS.md": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+        "README.md": "942beb0ffccdd16fabd4bfff2362a8d7ed6b67ee8f52b3be314aab26ebbe6e74",
+        "docs/plan/README.md": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+        "docs/plan/decisions.md": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+        "docs/plan/workflow.md": "711d807bba2675ba8519bb9219e6eb78f78d0ec450d08834fa950c5bb44b759e",
+        "docs/plan/phase-5-content.md": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+        "docs/plan/engine-design.md": "110e73dc53614d0785926e9b2162a253912dcfdcf9e9d5ce8ddaa8881aff3099",
+        "docs/plan/evidence/parallelism/hv-umm2.606.md": "048d3126d86cbe374a8f5081112dc2477f86cdb6ef159ab70b1ce300d044ab73",
+        "src/content/apollyon/design.ts": "b4837f2b077543694c81d835b622a1eb33c2887c7399b551a08a07b5357b2c12",
+        "src/content/apollyon/types.ts": "8792a2b2fe9640a387568083bae3d05a8cbb9986a085a42d80f21067a6f8f885",
+        "src/content/define.ts": "9f093451f935d695d5cea71fc0cc0efa345fc344d49ee497e22b20215f315c7d",
+        "docs/design.md": "f1a8e1d2a09a5e8939603d6b60fada0387127257828f162d939766fc42c40b56",
+        "src/content/apollyon.ts": "905f416e5407f730e83e49fc47a825e2ea4d87209cf1ca7b84986f5ad0c41bc0",
+        "src/data/dreamscapes.ts": "0c4fb777ed8b546e26baf9694b22c8de048402bea30f5134a6b3d86e60cd346f",
+        "src/types/content.ts": "b971e5584cf293aa2b3fc9437bb25fc45a8a4b53293f3358c50816c0ca4dd002",
+        "src/engine/content-catalog.ts": "1dc8fd57d6986191803578ec097741c73902c030a130f099c63189de3c218260",
+        "src/battle/integration/create-battle-init.ts": "7eda4bc59586bea406dfca27ca14743a96de67c0bfe64cba0c86bf51437435a4",
+        "src/battle/integration/tide-opponent-deck.ts": "7cb7a6e60e7e768f01b3d38a476078af7811f10c8d7f850b686482405d43cd45",
+        "src/battle/integration/engine-battle-init.ts": "599b85f4552fc1659698a050a3d8da25fdb6b748d21ef12407e4d5aecc140ab9",
+        "src/session/providers/battle-init-provider.ts": "8413386f5e2508fbec32796c127f1ad6a295aaf5cf5eee74fd9fd7513a62dba9",
+        "src/engine/testing/apollyon-audit.ts": "972a50dc7600c3c692c8c717c968b3c43e97df3b740817e9bb57aa74f8446c60",
+        "src/battle/integration/apollyon-init.test.ts": "d233698d1809bfdb12b0b849aa9c83d18ddf3cc9f9e3d60796a0163f6ed394af",
+        "src/battle/integration/apollyon-aspects/pair-291.test.ts": "75cb2538a483d0312e677cdf65984bdcdfaa4bb92060e2016ceceb0e7057627f",
+        "src/content/apollyon/aspects/aspect-57c65dfd-a125-440e-a410-c8c4a314b1d1.ts": "25377404618328103a5c7775c43f648be7912c174dcdd577f2c95d305e0dc6db",
+        "src/content/apollyon/aspects/aspect-80b6296d-840e-4ed7-b684-5aadc0981bf4.ts": "fa0f373aa52502c40338b80afb973e43ecb7fd51218cff7e53155f49f6cf3de0",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.641-1.md": "e56605a948d05aa7bd51626493c435be1966ccd688d5dd0592dc675426a250d0",
+        "docs/plan/evidence/measurements/hv-umm2.641.json": "42b1b11117729bce298b009b09c60ef83bb0ba16da568e5d192f175861449c50",
+        "scripts/fuzz-engine.ts": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+        "src/engine/testing/fuzz.ts": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+        "scripts/qa/lab-preflight.ts": "d1f13b839cc3ac95ac76e1d0a758abf39be5c0f65f2d1f26265ab82b4cabae76",
+        "scripts/qa/card-sweep.mjs": "e47a10d104a7bd1d9a11308067723413810c87c7607e17cd38ebd01c1a2995dd",
+        "src/runtime/qa-scenes.ts": "85eb359793882c930d95f1a53691257af20c4b2ac84fc26444dd55b63f52fbf3",
+        "src/runtime/qa-journey-foundation.ts": "b0a82bcc8ca719f93d515605ac68a4f612955b0e0bbd64569b23c99bd6d2360f",
+        "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "scripts/qa/prelude.mjs": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+        "scripts/tournament/game.ts": "1aa447a9f856563a4c6dad923e8c2e8be1e274d0a18e09ae5c0063e8575763ad",
+        "scripts/tournament/run.ts": "9d6bc0a7de56dc8067c762e9e2a2b922a620ba36b3007b1ffd99da2e9ba4c829",
+        "scripts/tournament/generate-pool.ts": "bd5702027d551859589d4208e00fc3524384ddc0514cc8333f31d6649b5dd72c",
+        "scripts/tournament/types.ts": "ef3b629793a16de4a4b7179387b80fe358193aa0ab0a523105857c1ba52354db",
+        "scripts/tournament/schedule.ts": "512374cab23f4e8479ce70c8cb0f579eee8dcd9302460b1d92cce4c0a8f76fb6",
+        "scripts/tournament/options.ts": "e50f5918962b5a81be65319db258689502bffefacf7c42bd5f2860436787f40a",
+        "scripts/tournament/catalog.json": "2b834579039eec9c3d481ff56d6e5b363c044719f2b615c9c5e00fb70d52f06b",
+        "src/engine/dsl/verified-text.ts": "7051785703d83bf9d50c8b5d76926f1cf70ba263aed76de8515e285c8533b732",
+        "src/content/opponents.ts": "577df458e228376555077220e47617cd1ff3a1bd448dd1ec44b9f6c88547b24b",
+        "src/content/dreamsigns/mandrake-root-293a610d.ts": "85f2fba0719045baa6fcdc0602b54eb199cdc243eb9c0410116ba1a486cf44e2",
+        "src/content/dreamsigns/ivory-claw-21ae8473.ts": "f738dbd4fe2178b0bbdfdb6762aed491604f0191d4b0081b0e341b65bb00b404",
+        "src/content/avatars/seraveth-6488452d.ts": "9c31183ed08fbd9e9c3e2b54b369d09c223a5d115708e086c306672301c1e664",
+        "src/content/avatars/eldrik-bfc40414.ts": "03cd6c30cb829ae738b90b04fcdef27863e07823c8eef2268ce0c1b58cb1b7c0"
+      },
+      "receipts": "Existing full300,40seededGreedy,fourbrowsercells/eightcaptures and original focused/review/Knip/preflight receipts; raw bytes/hashes unchanged. QA ledger commit remains the original tested base.",
+      "notRerunOnUpdatedBase": true
+    },
+    "integratedValidation": {
+      "baseOID": "d915564ce6cde52370d593e4a9ea354be58cc12c",
+      "preAmendCheckpoint": "46c4d34f78ad40c6e278972527bd9a8cded4555c",
+      "sourceSHA256": {
+        "AGENTS.md": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+        "README.md": "942beb0ffccdd16fabd4bfff2362a8d7ed6b67ee8f52b3be314aab26ebbe6e74",
+        "docs/plan/README.md": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+        "docs/plan/decisions.md": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+        "docs/plan/workflow.md": "711d807bba2675ba8519bb9219e6eb78f78d0ec450d08834fa950c5bb44b759e",
+        "docs/plan/phase-5-content.md": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+        "docs/plan/engine-design.md": "110e73dc53614d0785926e9b2162a253912dcfdcf9e9d5ce8ddaa8881aff3099",
+        "docs/plan/evidence/parallelism/hv-umm2.606.md": "048d3126d86cbe374a8f5081112dc2477f86cdb6ef159ab70b1ce300d044ab73",
+        "src/content/apollyon/design.ts": "7885a2d3b498fd364af297a623e0af53ff08343f33d590db17acdce1343191f4",
+        "src/content/apollyon/types.ts": "8792a2b2fe9640a387568083bae3d05a8cbb9986a085a42d80f21067a6f8f885",
+        "src/content/define.ts": "9f093451f935d695d5cea71fc0cc0efa345fc344d49ee497e22b20215f315c7d",
+        "docs/design.md": "6604603d1955462919f435430eb4cba6c515840bbcfd9f5aedab0fa6ba05609a",
+        "src/content/apollyon.ts": "905f416e5407f730e83e49fc47a825e2ea4d87209cf1ca7b84986f5ad0c41bc0",
+        "src/data/dreamscapes.ts": "0c4fb777ed8b546e26baf9694b22c8de048402bea30f5134a6b3d86e60cd346f",
+        "src/types/content.ts": "b971e5584cf293aa2b3fc9437bb25fc45a8a4b53293f3358c50816c0ca4dd002",
+        "src/engine/content-catalog.ts": "1dc8fd57d6986191803578ec097741c73902c030a130f099c63189de3c218260",
+        "src/battle/integration/create-battle-init.ts": "7eda4bc59586bea406dfca27ca14743a96de67c0bfe64cba0c86bf51437435a4",
+        "src/battle/integration/tide-opponent-deck.ts": "7cb7a6e60e7e768f01b3d38a476078af7811f10c8d7f850b686482405d43cd45",
+        "src/battle/integration/engine-battle-init.ts": "599b85f4552fc1659698a050a3d8da25fdb6b748d21ef12407e4d5aecc140ab9",
+        "src/session/providers/battle-init-provider.ts": "8413386f5e2508fbec32796c127f1ad6a295aaf5cf5eee74fd9fd7513a62dba9",
+        "src/engine/testing/apollyon-audit.ts": "972a50dc7600c3c692c8c717c968b3c43e97df3b740817e9bb57aa74f8446c60",
+        "src/battle/integration/apollyon-init.test.ts": "d233698d1809bfdb12b0b849aa9c83d18ddf3cc9f9e3d60796a0163f6ed394af",
+        "src/battle/integration/apollyon-aspects/pair-291.test.ts": "75cb2538a483d0312e677cdf65984bdcdfaa4bb92060e2016ceceb0e7057627f",
+        "src/content/apollyon/aspects/aspect-57c65dfd-a125-440e-a410-c8c4a314b1d1.ts": "25377404618328103a5c7775c43f648be7912c174dcdd577f2c95d305e0dc6db",
+        "src/content/apollyon/aspects/aspect-80b6296d-840e-4ed7-b684-5aadc0981bf4.ts": "fa0f373aa52502c40338b80afb973e43ecb7fd51218cff7e53155f49f6cf3de0",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.641-1.md": "e56605a948d05aa7bd51626493c435be1966ccd688d5dd0592dc675426a250d0",
+        "docs/plan/evidence/measurements/hv-umm2.641.json": "42b1b11117729bce298b009b09c60ef83bb0ba16da568e5d192f175861449c50",
+        "scripts/fuzz-engine.ts": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+        "src/engine/testing/fuzz.ts": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+        "scripts/qa/lab-preflight.ts": "d1f13b839cc3ac95ac76e1d0a758abf39be5c0f65f2d1f26265ab82b4cabae76",
+        "scripts/qa/card-sweep.mjs": "e47a10d104a7bd1d9a11308067723413810c87c7607e17cd38ebd01c1a2995dd",
+        "src/runtime/qa-scenes.ts": "34a59ba3bcdf37b98f2ec10e17636c2d4e1245737cca6a9aaa3160f29eb38f90",
+        "src/runtime/qa-journey-foundation.ts": "b0a82bcc8ca719f93d515605ac68a4f612955b0e0bbd64569b23c99bd6d2360f",
+        "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "scripts/qa/prelude.mjs": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+        "scripts/tournament/game.ts": "1aa447a9f856563a4c6dad923e8c2e8be1e274d0a18e09ae5c0063e8575763ad",
+        "scripts/tournament/run.ts": "9d6bc0a7de56dc8067c762e9e2a2b922a620ba36b3007b1ffd99da2e9ba4c829",
+        "scripts/tournament/generate-pool.ts": "bd5702027d551859589d4208e00fc3524384ddc0514cc8333f31d6649b5dd72c",
+        "scripts/tournament/types.ts": "ef3b629793a16de4a4b7179387b80fe358193aa0ab0a523105857c1ba52354db",
+        "scripts/tournament/schedule.ts": "512374cab23f4e8479ce70c8cb0f579eee8dcd9302460b1d92cce4c0a8f76fb6",
+        "scripts/tournament/options.ts": "e50f5918962b5a81be65319db258689502bffefacf7c42bd5f2860436787f40a",
+        "scripts/tournament/catalog.json": "2b834579039eec9c3d481ff56d6e5b363c044719f2b615c9c5e00fb70d52f06b",
+        "src/engine/dsl/verified-text.ts": "7051785703d83bf9d50c8b5d76926f1cf70ba263aed76de8515e285c8533b732",
+        "src/content/opponents.ts": "577df458e228376555077220e47617cd1ff3a1bd448dd1ec44b9f6c88547b24b",
+        "src/content/dreamsigns/mandrake-root-293a610d.ts": "85f2fba0719045baa6fcdc0602b54eb199cdc243eb9c0410116ba1a486cf44e2",
+        "src/content/dreamsigns/ivory-claw-21ae8473.ts": "f738dbd4fe2178b0bbdfdb6762aed491604f0191d4b0081b0e341b65bb00b404",
+        "src/content/avatars/seraveth-6488452d.ts": "9c31183ed08fbd9e9c3e2b54b369d09c223a5d115708e086c306672301c1e664",
+        "src/content/avatars/eldrik-bfc40414.ts": "03cd6c30cb829ae738b90b04fcdef27863e07823c8eef2268ce0c1b58cb1b7c0"
+      },
+      "receipts": [
+        {
+          "file": "integrated-focused.json",
+          "SHA256": "6c3dde3e7f23c8b4e379cec3f6fbd5e548a76b931142318f9ed9dcace44f2562",
+          "start": "2026-10-15T13:21:16.801513+00:00",
+          "end": "2026-10-15T13:21:24.052706+00:00",
+          "argv": [
+            "npm",
+            "test",
+            "--",
+            "src/battle/integration/apollyon-aspects/pair-291.test.ts",
+            "src/battle/integration/apollyon-aspects/pair-290.test.ts",
+            "src/battle/integration/apollyon-init.test.ts",
+            "src/engine/content-gates.test.ts"
+          ],
+          "exit": 0,
+          "wallS": 7.2495893749874085,
+          "cpuS": 9.736199,
+          "loadStart": [
+            8.9169921875,
+            8.3134765625,
+            8.38720703125
+          ],
+          "pid": 62910,
+          "pgid": 62910,
+          "actualWait": true,
+          "groupAbsent": true,
+          "sourceUnchanged": true
+        },
+        {
+          "file": "integrated-review.json",
+          "SHA256": "88d64efbbfa5afd23b12e9e7a54a9ab4f94d5717425475f7276147c0ae73e9a6",
+          "start": "2026-10-15T13:21:22.842455+00:00",
+          "end": "2026-10-15T13:22:30.732375+00:00",
+          "argv": [
+            "npm",
+            "run",
+            "review"
+          ],
+          "exit": 0,
+          "wallS": 67.88710962503683,
+          "cpuS": 189.52307100000002,
+          "loadStart": [
+            9.24365234375,
+            8.39111328125,
+            8.4140625
+          ],
+          "pid": 63125,
+          "pgid": 63125,
+          "actualWait": true,
+          "groupAbsent": true,
+          "sourceUnchanged": true
+        },
+        {
+          "file": "integrated-knip.json",
+          "SHA256": "783137b1a5b87871c4c818b4a580fdb1ee6a47ab1440d0b493950c56361b1ba3",
+          "start": "2026-10-15T13:21:22.841745+00:00",
+          "end": "2026-10-15T13:21:28.881915+00:00",
+          "argv": [
+            "npm",
+            "run",
+            "knip"
+          ],
+          "exit": 0,
+          "wallS": 6.037723916000687,
+          "cpuS": 7.210441,
+          "loadStart": [
+            9.24365234375,
+            8.39111328125,
+            8.4140625
+          ],
+          "pid": 63126,
+          "pgid": 63126,
+          "actualWait": true,
+          "groupAbsent": true,
+          "sourceUnchanged": true
+        }
+      ],
+      "scope": "Both pair public contracts + init + content gate:73cases/4files; ordinary review and Knip. Source-only additive integration preserves exact original own ability/recipe/Dreamsign/UI behavior and separately accepted290 registrations."
+    }
+  },
+  "integration": {
+    "conflictedCandidate": "01a13fb6-70cd-7dc3-8a2b-39ebea024d52",
+    "candidateUnapproved": true,
+    "originalRuntimeSource": "2f1e333389643380d00f7af5012b80478aee4f8e",
+    "originalRuntimeBase": "031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2",
+    "temporaryParkedCheckpoint": "5fd4d736f355cdc91eed7635201ba402c0be37ae",
+    "parentUpdatedCheckpoint": "46c4d34f78ad40c6e278972527bd9a8cded4555c",
+    "updatedBase": "d915564ce6cde52370d593e4a9ea354be58cc12c",
+    "reapplyProof": "integration/reapplied-source.json",
+    "runtimeDisposition": "No repeated expensive matrix: exact own source bodies/recipes/UI and module bytes retain accepted behavior; focused combined pair/init/catalog contracts plus ordinary review and Knip validate the additive integrated composition.",
+    "checks": [
+      {
+        "file": "integrated-focused.json",
+        "SHA256": "6c3dde3e7f23c8b4e379cec3f6fbd5e548a76b931142318f9ed9dcace44f2562",
+        "start": "2026-10-15T13:21:16.801513+00:00",
+        "end": "2026-10-15T13:21:24.052706+00:00",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/battle/integration/apollyon-aspects/pair-291.test.ts",
+          "src/battle/integration/apollyon-aspects/pair-290.test.ts",
+          "src/battle/integration/apollyon-init.test.ts",
+          "src/engine/content-gates.test.ts"
+        ],
+        "exit": 0,
+        "wallS": 7.2495893749874085,
+        "cpuS": 9.736199,
+        "loadStart": [
+          8.9169921875,
+          8.3134765625,
+          8.38720703125
+        ],
+        "pid": 62910,
+        "pgid": 62910,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "integrated-review.json",
+        "SHA256": "88d64efbbfa5afd23b12e9e7a54a9ab4f94d5717425475f7276147c0ae73e9a6",
+        "start": "2026-10-15T13:21:22.842455+00:00",
+        "end": "2026-10-15T13:22:30.732375+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "exit": 0,
+        "wallS": 67.88710962503683,
+        "cpuS": 189.52307100000002,
+        "loadStart": [
+          9.24365234375,
+          8.39111328125,
+          8.4140625
+        ],
+        "pid": 63125,
+        "pgid": 63125,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      },
+      {
+        "file": "integrated-knip.json",
+        "SHA256": "783137b1a5b87871c4c818b4a580fdb1ee6a47ab1440d0b493950c56361b1ba3",
+        "start": "2026-10-15T13:21:22.841745+00:00",
+        "end": "2026-10-15T13:21:28.881915+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "exit": 0,
+        "wallS": 6.037723916000687,
+        "cpuS": 7.210441,
+        "loadStart": [
+          9.24365234375,
+          8.39111328125,
+          8.4140625
+        ],
+        "pid": 63126,
+        "pgid": 63126,
+        "actualWait": true,
+        "groupAbsent": true,
+        "sourceUnchanged": true
+      }
+    ]
+  }
+}

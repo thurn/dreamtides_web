@@ -10,6 +10,8 @@ import type { ApollyonDesign } from "./types";
 import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { spiritAnimalAspectAbilities } from "./aspects/aspect-1380edc9-09ed-44df-ad09-ab4cbfc081b5";
 import { secondEventAspectAbilities } from "./aspects/aspect-3fe26475-8023-46d3-b13b-86673b92e3d0";
+import { dawnRecoveryAspectAbilities } from "./aspects/aspect-57c65dfd-a125-440e-a410-c8c4a314b1d1";
+import { warriorAnthemAspectAbilities } from "./aspects/aspect-80b6296d-840e-4ed7-b684-5aadc0981bf4";
 
 export const APOLLYON_BATTLE_DESIGN = {
   legacyDefaultIncarnationId: parseApollyonIncarnationId("80b6296d-840e-4ed7-b684-5aadc0981bf4"),
@@ -35,7 +37,7 @@ export const APOLLYON_DESIGNS: ReadonlyMap<ApollyonIncarnationId, ApollyonDesign
     dreamsignIds: ["268341c7-bb5b-49fb-ad8d-a792b7d631a0"],
   }],
   [parseApollyonIncarnationId("80b6296d-840e-4ed7-b684-5aadc0981bf4"), {
-    aspect: { id: "61ade662-2bfe-474a-860c-5f8aa586babc", renderedText: "Warriors you control have +1✦.", proposedAbilities: () => [staticAbility(p.sparkModifier(all(characterYouControl({ subtype: "Warrior" })), 1))], pending: true },
+    aspect: { id: "61ade662-2bfe-474a-860c-5f8aa586babc", renderedText: "Warriors you control have +1✦.", proposedAbilities: () => [staticAbility(p.sparkModifier(all(characterYouControl({ subtype: "Warrior" })), 1))], abilities: warriorAnthemAspectAbilities, verifiedText: expectedVerifiedText("Warriors you control have +1✦.") },
     deckRecipe: {
       poolAvatarId: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
       archetypeTideIds: ["4b01b6c1-ccca-4e19-848a-d799d46088b2", "7343b376-88d2-45fe-8b5e-79763480ee7e"],
@@ -53,7 +55,7 @@ export const APOLLYON_DESIGNS: ReadonlyMap<ApollyonIncarnationId, ApollyonDesign
     dreamsignIds: ["1ece0e16-08de-4c99-8552-2d1d3a2bd517"],
   }],
   [parseApollyonIncarnationId("57c65dfd-a125-440e-a410-c8c4a314b1d1"), {
-    aspect: { id: "e4261c6a-af79-4b94-adbb-91e69b9de0dc", renderedText: "▸Dawn: Return a random ≤2● cost character from your void to your hand.", proposedAbilities: () => [triggered(onDawn(), p.returnFromVoid(randomIn("void", 1, { cardType: "character", costAtMost: 2 })))], pending: true },
+    aspect: { id: "e4261c6a-af79-4b94-adbb-91e69b9de0dc", renderedText: "▸Dawn: Return a random ≤2● cost character from your void to your hand.", proposedAbilities: () => [triggered(onDawn(), p.returnFromVoid(randomIn("void", 1, { cardType: "character", costAtMost: 2 })))], abilities: dawnRecoveryAspectAbilities, verifiedText: expectedVerifiedText("▸Dawn: Return a random ≤2● cost character from your void to your hand.") },
     deckRecipe: {
       poolAvatarId: "6488452d-4e9e-466c-96df-716d4ec646b1",
       archetypeTideIds: ["a182f025-8a15-44e1-be26-74766a3b0b85", "c78a2ce1-80fe-48b9-9400-98f4965e17a4"],
