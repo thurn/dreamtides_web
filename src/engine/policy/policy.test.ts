@@ -1,3 +1,4 @@
+import "./productive-activation.contracts";
 import "./overrides.contracts";
 // The placeholder policies, their requests, the optional-chain bound, and
 // aiDecision, on synthetic cards.

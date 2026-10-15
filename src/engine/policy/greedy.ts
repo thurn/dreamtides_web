@@ -34,7 +34,7 @@ const GREEDY = AI.enginePolicy.greedy;
 function boardSpark(view: BattleView, side: SideView): number {
   let total = 0;
   for (const id of [...side.frontRank, ...side.backRank]) {
-    if (id !== null) total += view.instances[id]?.characteristics.spark ?? 0;
+    if (id !== null) total += Math.min(GREEDY.sparkValueCap, view.instances[id]?.characteristics.spark ?? 0);
   }
   return total;
 }
@@ -52,7 +52,7 @@ export function evaluatePosition(view: BattleView, side: Side): number {
     weights.scoreDifference * (mine.score - theirs.score) +
     weights.boardSpark * (boardSpark(view, mine) - boardSpark(view, theirs)) +
     weights.handCard * (mine.hand.count - theirs.hand.count) +
-    weights.energy * (mine.currentEnergy - theirs.currentEnergy)
+    weights.energy * (Math.min(GREEDY.energyValueCap, mine.currentEnergy) - Math.min(GREEDY.energyValueCap, theirs.currentEnergy))
   );
 }
 
@@ -117,7 +117,16 @@ function simulate(
     // A bounded response chain can consume the pass allowance before the
     // window ends. An unfinished move cannot compete with a completed pass.
     if (action.kind === "reposition" && !endedWindow && current.result === null) return null;
-    return evaluatePosition(engine.view(current, side), side);
+    const after = engine.view(current, side);
+    const score = evaluatePosition(after, side);
+    if (action.kind === "activate" && typeof action.source === "string") {
+      const before = engine.view(state, side);
+      const priorSpark = before.instances[action.source]?.characteristics.spark;
+      const nextSpark = after.instances[action.source]?.characteristics.spark;
+      // A renewable pump must improve utility, even when passing has a worse horizon.
+      if (priorSpark != null && nextSpark != null && nextSpark > priorSpark && score <= evaluatePosition(before, side)) return null;
+    }
+    return score;
   } catch {
     return null;
   }

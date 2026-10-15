@@ -1,0 +1,674 @@
+{
+  "bead": "hv-umm2.745",
+  "base": "d11efedbf6e3b388f5e6981dd53a34f724ad75d8",
+  "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+  "implementationClock": {
+    "actualDispatch": "2026-10-15T12:49:40.587Z",
+    "evidenceCutoff": "2026-10-15T13:34:23.008486+00:00",
+    "inclusiveMinutes": 44.70702476666667,
+    "qualification": "All source reads, parent/native admission, commands, failed185.260367s exact game, held root justiciar interval, checks, and evidence remain included. Actual Git start/return will be retained by the implementation session; this document is a precommit evidence cutoff."
+  },
+  "productionContract": {
+    "sparkUtilityCeiling": 32,
+    "energyUtilityCeiling": 32,
+    "selection": "Only a card-source activation that increases that physical source effective spark and fails to strictly improve settled saturated public-view utility is excluded from that determinized sample. Neutral non-pumping responses and emblem sources keep their ordinary score competition.",
+    "scope": "Identified optional renewing-figment spark/energy pump; not a general productive-combo termination guarantee. Utility ceilings do not limit engine spark, energy, human choices, legal actions, budgets, phase progression, or loop signatures.",
+    "logging": "Existing chosen action/top-k scored candidates/visits/budget/determinization AI trace and actual engine events identify the public decision path; canonical public playGame persists472 actual decision traces."
+  },
+  "sourceFreeze": {
+    "at": "2026-10-15T13:24:57.249840+00:00",
+    "base": "d11efedbf6e3b388f5e6981dd53a34f724ad75d8",
+    "files": [
+      {
+        "path": "src/content/ai.ts",
+        "sha256": "cd73020779b454ebb064dcbd95ab9ce66f348ddefcf8d1ee2dc4feae8aaf5f1b",
+        "lines": 51
+      },
+      {
+        "path": "src/engine/policy/greedy.ts",
+        "sha256": "ae8af11253f16c76e45910eb752ec8c9a8ca88f74c382276984e99c929cc1e65",
+        "lines": 218
+      },
+      {
+        "path": "src/engine/policy/policy.test.ts",
+        "sha256": "41011ced41a4e2abeba39699b60cd77bed4744f85dfec63bf068826b242f403f",
+        "lines": 480
+      },
+      {
+        "path": "src/engine/policy/productive-activation.contracts.ts",
+        "sha256": "0d7981b59983e0d64ee8ff1c37a2f0f3fe23a6a518e2ac0b832d038fdddfa4f1",
+        "lines": 134
+      }
+    ],
+    "qualification": "Root-admitted/repaired bounded spark+energy source-pump epoch; only subsequent test literal spark initial0 admitted separately. Final review-v04 and sequentialKnip-v02 passed, all20 new cases in owning public entrypoint; no v03 runtime execution yet."
+  },
+  "testDelta": {
+    "newPrivateContracts": 1,
+    "newTestEntrypoints": 0,
+    "privateLines": 134,
+    "entrypointLines": 480,
+    "additiveTestLines": 135,
+    "newCases": 20,
+    "jsdomFiles": 0,
+    "fallout": []
+  },
+  "tests": {
+    "renewal": "Both actors; source spark0, abandon-another -> self spark2, fresh physical1spark figment on dissolution, optionally gainenergy1, with ordinary/adverse-Dusk horizons. Public runPolicy choices leave the pump within a guard derived from catalog utility ceilings while the activation remains legal.",
+    "positiveControls": "Both actors; finite useful low-spark buff, saturated-source spark+energy/draw/points, finite source departure/emblem energy, and unchanged-spark interrupt prevention against adverse pass.",
+    "determinismReplay": "Iteration-only public requests, fresh engine and cloned request equality, input immutability, legality, actual recorded action/payment/prompt replay and full stateHash."
+  },
+  "failedEpochs": {
+    "baselineRed": "Exact base greedy hash c7f8e30c12a6dc0f4f047045ffede41b5cb7db5aaaa21170165b15ecb3ac867d plus harmless catalog cap:4renewal failures/10positive controls pass.",
+    "saturationWithoutPlateauGate": "2 adverse-horizon failures/12pass; source proof reconstructed after actual run from exact base+retained sole patch and labeled accordingly, not contemporaneous capture.",
+    "ownFixtureTypecheck": "review-v01 main typecheck caught inferred string decision key; explicit PolicyRequest annotation in same private contract, review-v02 passed.",
+    "firstFullGame": "runtime-v02 same full saved input/spark-only utility epoch: actual turn9 i20/UUID290ea9db dissolve energy trigger refuted fixed-energy assumption. Root early SIGINT at185.260367s; exit-2/PGempty/allold1171hashesmatch. Wrapper cutoff=false means deadline was not reached; no completion/replay credit.",
+    "rootRecovery": {
+      "at": "2026-10-15T13:19:59.447604+00:00",
+      "decisionMakerAndImplementer": "Root same-task justiciar; helper held throughout source repair",
+      "failure": "Exact original production seed progressed past turn7 but stalled turn9 due additional public i20/UUID290ea9db whenDissolved->gainEnergy1: fixed-energy assumption was false",
+      "oldRequirementAuthority": "Agent-created source-first fixed-energy simplification; user exact full-input/game/replay acceptance stays",
+      "settlement": "Root verified92624identity and SIGINT only own group;185.260367s exit-2/groupempty/all1171oldinputs unchanged; wrapper cutoff=false means own early interruption, never pass",
+      "newRequirement": "Bound energy valuation through catalog energyValueCap32 and saturate per-side currentEnergy utility; preserve existing spark-only source-pump plateau gate, all other positive/neutral controls, engine values/actions/rules/budgets/input",
+      "sourceChanges": "Root only evaluatePosition energy expression,AI onefield/comment, sameprivate synthetic fixture optionalenergy bothactors/adverse/direct actualgain and source0/positive>0 bound independence",
+      "red": {
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/engine/policy/policy.test.ts",
+          "-t",
+          "renewable pump"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+        "start": "2026-10-15T13:17:32.267568+00:00",
+        "end": "2026-10-15T13:17:47.740076+00:00",
+        "exit": 1,
+        "wallSeconds": 15.471968542027753,
+        "pid": 49341,
+        "pgid": 49341,
+        "load": "{ 7.97 7.99 8.31 }",
+        "groupRemainingAtExit": []
+      },
+      "green": {
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/engine/policy/policy.test.ts",
+          "-t",
+          "productive activation selection"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+        "start": "2026-10-15T13:18:27.218082+00:00",
+        "end": "2026-10-15T13:18:36.069847+00:00",
+        "exit": 0,
+        "wallSeconds": 8.851534917019308,
+        "pid": 53653,
+        "pgid": 53653,
+        "load": "{ 10.73 8.74 8.56 }",
+        "groupRemainingAtExit": []
+      },
+      "failedCases": [
+        " FAIL  |shared| src/engine/policy/policy.test.ts > productive activation selection > leaves player's renewable pump (adverse: false, energy: true)",
+        " FAIL  |shared| src/engine/policy/policy.test.ts > productive activation selection > leaves player's renewable pump (adverse: true, energy: true)",
+        " FAIL  |shared| src/engine/policy/policy.test.ts > productive activation selection > leaves enemy's renewable pump (adverse: false, energy: true)",
+        " FAIL  |shared| src/engine/policy/policy.test.ts > productive activation selection > leaves enemy's renewable pump (adverse: true, energy: true)"
+      ],
+      "greenNewCases": 20,
+      "sourceFreeze": {
+        "src/content/ai.ts": "cd73020779b454ebb064dcbd95ab9ce66f348ddefcf8d1ee2dc4feae8aaf5f1b",
+        "src/engine/policy/greedy.ts": "ae8af11253f16c76e45910eb752ec8c9a8ca88f74c382276984e99c929cc1e65",
+        "src/engine/policy/productive-activation.contracts.ts": "0dade827b723f7058bdaf48e532a94ff83f9f0b524fbdeed075a81dd93dfbdca",
+        "src/engine/policy/policy.test.ts": "41011ced41a4e2abeba39699b60cd77bed4744f85dfec63bf068826b242f403f"
+      },
+      "sourceLengths": {
+        "src/content/ai.ts": 51,
+        "src/engine/policy/greedy.ts": 218,
+        "src/engine/policy/productive-activation.contracts.ts": 134,
+        "src/engine/policy/policy.test.ts": 480
+      },
+      "consequences": "Energy above32 receives no additional Greedy heuristic utility; energy in engine remains unbounded/legal and below-ceiling finite gains still valued. Scoped termination spark+energy renewal only, not universal productive combo guarantee. No author-approved user requirement relaxed.",
+      "stillOwed": "Final ordinary review/Knip/schema/whitespace on changed source; newimmutable runtime v03/caller/inputs/source/capacity ACK, same original game+public replay complete; actual final Git/clock/coldCodexcore review/TG promotion/cleanup/nativeclosure. No identical retry of old bundle."
+    },
+    "postRecoveryFixture": "One admitted synthetic finite-spark initial1->0 avoids requiring a default spark utility ceiling above1; targeted pair and final review-v04 passed."
+  },
+  "runtimeAcceptance": {
+    "at": "2026-10-15T13:28:57.556307+00:00",
+    "status": "completed",
+    "result": {
+      "kind": "victory",
+      "winner": "enemy",
+      "reason": "score"
+    },
+    "actions": 282,
+    "decisionCount": 472,
+    "sameFullSavedInit": true,
+    "allGreedyIterationOnlyTraceBudgets": true,
+    "sameReplayHash": "58711cfec676a6cfb5ba48a0c3962dcfed02407c3b0865039c8c75f2328d5832",
+    "variants": [
+      [
+        "{\"amplified\":false}",
+        73135
+      ]
+    ],
+    "definitionCounts": {
+      "cards": 522,
+      "avatars": 42,
+      "dreamsigns": 153,
+      "dreamwell": 33,
+      "figments": 10
+    },
+    "sourceI2ActivationsByTurn": {
+      "7": 31,
+      "9": 35,
+      "11": 27,
+      "13": 26,
+      "15": 24,
+      "17": 24,
+      "19": 23
+    },
+    "finalSourceI2": {
+      "printing": {
+        "kind": "card",
+        "cardId": "49641e8e-93a8-46cb-92a9-246b0fd57899"
+      },
+      "sparkGained": 190,
+      "zone": "play"
+    },
+    "finalTurn": {
+      "round": 11,
+      "turnNumber": 21,
+      "active": "player",
+      "phase": "dreamwell",
+      "sideTurns": {
+        "player": 11,
+        "enemy": 10
+      },
+      "extra": false,
+      "lastNormal": "player",
+      "extraTurns": [],
+      "challengeLane": null,
+      "beginning": false
+    },
+    "rawRows": 1761,
+    "actualObserverSteps": 1197,
+    "receipt": {
+      "argv": [
+        "node",
+        "/tmp/worker745-20261015/runtime-repro-v03.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:26:08.366798+00:00",
+      "pid": 34109,
+      "pgid": 34109,
+      "workerCount": 1,
+      "timeoutSeconds": 1790,
+      "cleanupAllowanceSeconds": 6,
+      "load": "{ 12.12 11.54 9.87 }",
+      "inputSHA256": "5449dd16b58ffb881df1661b9c412b961a34bcf781a298218ff59065750f48bf",
+      "freezeSHA256": "c724afc8b233a309efd88c3709dc0b24bfd08e8005c6d90b0fc9f1a7d92cad7d",
+      "cutoff": false,
+      "end": "2026-10-15T13:28:27.693367+00:00",
+      "wallSeconds": 139.32417029101634,
+      "exit": 0,
+      "userSeconds": 148.615682,
+      "systemSeconds": 1.9249319999999999,
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "b6290c8fb45b5a135b5bbce41d64a228870813f53c321ace88e401db8c20e8aa",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "allFrozenInputsStillMatch": true
+    },
+    "rawFiles": {
+      "runtime-repro-v03.state.json": {
+        "sha256": "e3e14fafda198ecc0334827a2e11bc416c62d268a757042ad049010a06b339c2",
+        "bytes": 134117
+      },
+      "runtime-repro-v03.events.jsonl": {
+        "sha256": "7ad2b1e9f7e5013d64337e9cc144a9138d538bb4fd352df97e3dc0a3689fdc74",
+        "bytes": 810993
+      },
+      "runtime-repro-v03.input.json": {
+        "sha256": "5449dd16b58ffb881df1661b9c412b961a34bcf781a298218ff59065750f48bf",
+        "bytes": 202536
+      },
+      "runtime-repro-v03.progress.json": {
+        "sha256": "34f3d56e28b2c87e5db31e4c7b4cea23d877d00b692759a2e5d771197176911c",
+        "bytes": 45721
+      },
+      "runtime-repro-v03.metafile.json": {
+        "sha256": "a50a6bd7f3e6fa09682ddab4e5f7617ba3ccc55808e7f744a6a8115bee8a6108",
+        "bytes": 1208153
+      },
+      "runtime-repro-v03.mjs": {
+        "sha256": "8ff10b39be62f010f9cf70237528a905b65a2fa4446b9b96d1d2c6c1a736e7ef",
+        "bytes": 2807897
+      },
+      "runtime-repro-v03.result.json": {
+        "sha256": "9c95886678f1dcf288bd5e97a9e93b5edb917efcbd9af9bd63c0b69ea84b1520",
+        "bytes": 312
+      },
+      "runtime-repro-v03.definitions.json": {
+        "sha256": "a12704552fc0e94303b5978966a5031c1cd85c5184ea8811eec9422097dfab01",
+        "bytes": 527255
+      },
+      "runtime-repro-v03.request-boundary.json": {
+        "sha256": "91d35390b7426f796aea56d5353e833a7d439ade26e6146169a4c77094275fbf",
+        "bytes": 45053
+      },
+      "runtime-repro-v03.mts": {
+        "sha256": "5e40e976975deb69903a39961b29dfeaea465d69b9253da2d2864aa236964c13",
+        "bytes": 8090
+      },
+      "runtime-repro-v03.outcome.json": {
+        "sha256": "a1c418e9d53531798cf3e12f79bee01ba13c489a76374c43421c3fb1ceda6e30",
+        "bytes": 2780228
+      }
+    },
+    "qualification": "This is one exact retained original293 full spec/seed with canonical Keeper runtime getter and owned code at745base+boundedpolicy; all actual forms were base so certified743 Resonant eligibility metadata difference not exercised. Original293 retains all wider20games/incarnation/weightedfuzz/browser acceptance. Earlier v02 rootSIGINT185.260367s is failed/incomplete and supplies no game credit."
+  },
+  "actualKeeperAvatarAppliedTriggers": 5,
+  "runtimeCatalogQualification": {
+    "sourceProof": "catalog-source-comparison-v01.json compares1645 source objects to original293 immutable checkpoint abcd255040edc9914532a0921c634be059777655. Exactly design adoption, certified743 lab setup, private743contracts and display eligibility source differ.",
+    "constructor": "Own canonical journeyContentEngine catalog with one public runtime-only Keeper avatar getter returning existing byte-identical own committed standalone canonical ability. All other catalog getters/fields/definition array retain original object identity; no peer source/recipe/definition edit.",
+    "definitions": {
+      "cards": 522,
+      "avatars": 42,
+      "dreamsigns": 153,
+      "dreamwell": 33,
+      "figments": 10
+    },
+    "dsl": "The caller explicitly invokes each definition ability list for base/amplified inputs and recursively rejects function fields before serializing emitted DSL. Source hashes bind canonical producers rather than treating function-omitting JSON as equality.",
+    "flags": "DEVfalse/PRODtrue/MODEproduction. Earlier original29345s diagnostic DEVtrue is separate from original production smoke.",
+    "forms": "Every actual observed variant was exactly amplified:false; certified743 Resonant eligibility metadata and development-only lab differences are not exercised.",
+    "remainingAcceptance": "Original293 owns its20 clean games per incarnation, full recipe weighted300fuzz and browser acceptance. This bead verifies its one exact retained seed651610971 and public replay only."
+  },
+  "failurePaths": {
+    "simulationError": "Existing caught sample failure and existing policy error/non-settling boundary contracts remain covered by final ordinary review; no engine write/transaction added.",
+    "reloadRestart": "Public cloned request/fresh engine equality and recorded action/answer replay contracts.",
+    "partialWrite": "Pure policy values/selection has no durable partial write. Actual host engine action commit protocol is unchanged.",
+    "invalidStaleInput": "Existing engine legalActions/apply admission and simulation catch determine handling; this code supplies no new legality/persistence API. Every selected synthetic action is real-engine legal.",
+    "concurrentActors": "No mutable policy progress counter/global history introduced. Both actor parameterization, repeated cloned public requests and immutable state checks cover separate contexts.",
+    "sourceDeparture": "Finite card departure and avatar activation controls pass. A source absent after simulation lacks comparable spark and falls through the guarded comparison. All emblem references share the non-string branch; no engine source lifecycle transition is added.",
+    "budgetExhaustion": "Existing iteration0/1 and fake-clock budget contracts pass in final ordinary review; no budget change."
+  },
+  "commands": {
+    "baseline-red-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "productive activation selection"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:02:32.633869+00:00",
+      "end": "2026-10-15T13:02:48.166345+00:00",
+      "exit": 1,
+      "wallSeconds": 15.531204874976538,
+      "pid": 93326,
+      "pgid": 93326,
+      "load": "{ 5.41 7.00 8.08 }",
+      "groupRemainingAtExit": []
+    },
+    "finite-spark-green-v01.receipt.json": {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "finite useful spark activation"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:23:04.117966+00:00",
+      "end": "2026-10-15T13:23:07.059774+00:00",
+      "exit": 0,
+      "wallSeconds": 2.9417010840261355,
+      "pid": 65509,
+      "pgid": 65509,
+      "load": "{ 8.20 8.44 8.44 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "src/engine/policy/policy-worker.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:04:24.651052+00:00",
+      "end": "2026-10-15T13:04:50.472259+00:00",
+      "exit": 0,
+      "wallSeconds": 25.820716500049457,
+      "pid": 4190,
+      "pgid": 4190,
+      "load": "{ 17.62 9.96 9.04 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:07:26.660514+00:00",
+      "end": "2026-10-15T13:07:31.883582+00:00",
+      "exit": 0,
+      "wallSeconds": 5.222889208002016,
+      "pid": 72237,
+      "pgid": 72237,
+      "load": "{ 9.23 9.93 9.26 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:24:26.537390+00:00",
+      "end": "2026-10-15T13:24:30.980360+00:00",
+      "exit": 0,
+      "wallSeconds": 4.442801791999955,
+      "pid": 27347,
+      "pgid": 27347,
+      "load": "{ 21.86 12.69 10.05 }",
+      "groupRemainingAtExit": []
+    },
+    "plateau-without-gate-red-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "productive activation selection"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:03:06.920048+00:00",
+      "end": "2026-10-15T13:03:17.194774+00:00",
+      "exit": 1,
+      "wallSeconds": 10.274400750000495,
+      "pid": 96272,
+      "pgid": 96272,
+      "load": "{ 7.70 7.34 8.16 }",
+      "groupRemainingAtExit": []
+    },
+    "productive-green-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "productive activation selection"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:03:28.334828+00:00",
+      "end": "2026-10-15T13:03:35.352738+00:00",
+      "exit": 0,
+      "wallSeconds": 7.017705624981318,
+      "pid": 97852,
+      "pgid": 97852,
+      "load": "{ 7.17 7.25 8.11 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:05:12.140087+00:00",
+      "end": "2026-10-15T13:06:02.267705+00:00",
+      "exit": 2,
+      "wallSeconds": 50.12669225002173,
+      "pid": 61811,
+      "pgid": 61811,
+      "load": "{ 14.92 10.59 9.34 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:06:38.109589+00:00",
+      "end": "2026-10-15T13:07:19.600583+00:00",
+      "exit": 0,
+      "wallSeconds": 41.490255457989406,
+      "pid": 68669,
+      "pgid": 68669,
+      "load": "{ 9.67 10.07 9.26 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v03.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:20:43.828757+00:00",
+      "end": "2026-10-15T13:21:32.543995+00:00",
+      "exit": 0,
+      "wallSeconds": 48.71436491701752,
+      "pid": 61911,
+      "pgid": 61911,
+      "load": "{ 6.90 7.90 8.25 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v04.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:23:26.375243+00:00",
+      "end": "2026-10-15T13:24:17.818720+00:00",
+      "exit": 0,
+      "wallSeconds": 51.44248545903247,
+      "pid": 66072,
+      "pgid": 66072,
+      "load": "{ 7.10 8.17 8.35 }",
+      "groupRemainingAtExit": []
+    },
+    "runtime-build-v01.receipt.json": {
+      "argv": [
+        "node",
+        "/tmp/worker745-20261015/build-runtime-v01.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:06:50.925533+00:00",
+      "end": "2026-10-15T13:06:51.122810+00:00",
+      "exit": 0,
+      "wallSeconds": 0.1971711249789223,
+      "pid": 69727,
+      "pgid": 69727,
+      "load": "{ 10.31 10.19 9.32 }",
+      "groupRemainingAtExit": []
+    },
+    "runtime-build-v02.receipt.json": {
+      "argv": [
+        "node",
+        "/tmp/worker745-20261015/build-runtime-v01.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:08:36.560639+00:00",
+      "end": "2026-10-15T13:08:36.798208+00:00",
+      "exit": 0,
+      "wallSeconds": 0.23750716599170119,
+      "pid": 77300,
+      "pgid": 77300,
+      "load": "{ 7.75 9.36 9.10 }",
+      "groupRemainingAtExit": []
+    },
+    "runtime-build-v03.receipt.json": {
+      "argv": [
+        "node",
+        "/tmp/worker745-20261015/build-runtime-v02.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:08:55.859211+00:00",
+      "end": "2026-10-15T13:08:56.031454+00:00",
+      "exit": 0,
+      "wallSeconds": 0.17215245898114517,
+      "pid": 78718,
+      "pgid": 78718,
+      "load": "{ 7.15 9.12 9.02 }",
+      "groupRemainingAtExit": []
+    },
+    "runtime-build-v04.receipt.json": {
+      "argv": [
+        "node",
+        "/tmp/worker745-20261015/build-runtime-v03.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:21:00.956629+00:00",
+      "end": "2026-10-15T13:21:01.163857+00:00",
+      "exit": 0,
+      "wallSeconds": 0.20711495797149837,
+      "pid": 62554,
+      "pgid": 62554,
+      "load": "{ 8.00 8.11 8.32 }",
+      "groupRemainingAtExit": []
+    },
+    "runtime-execution-v02.receipt.json": {
+      "argv": [
+        "node",
+        "/tmp/worker745-20261015/runtime-repro-v02.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:12:09.154912+00:00",
+      "pid": 92624,
+      "pgid": 92624,
+      "workerCount": 1,
+      "timeoutSeconds": 1790,
+      "cleanupAllowanceSeconds": 6,
+      "load": "{ 5.23 7.41 8.32 }",
+      "inputSHA256": "5449dd16b58ffb881df1661b9c412b961a34bcf781a298218ff59065750f48bf",
+      "freezeSHA256": "958e3c2d071fe30ec75875f19028aa83df79d7f6f1253cfdd098cea9f6439ecc",
+      "cutoff": false,
+      "end": "2026-10-15T13:15:14.418374+00:00",
+      "wallSeconds": 185.2603673330159,
+      "exit": -2,
+      "userSeconds": 215.444844,
+      "systemSeconds": 2.541444,
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "f3ff332d0f68cf73ab8b97f232e42748fac1823860011f943f86497126a6a9e1",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "allFrozenInputsStillMatch": true
+    },
+    "runtime-execution-v03.receipt.json": {
+      "argv": [
+        "node",
+        "/tmp/worker745-20261015/runtime-repro-v03.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:26:08.366798+00:00",
+      "pid": 34109,
+      "pgid": 34109,
+      "workerCount": 1,
+      "timeoutSeconds": 1790,
+      "cleanupAllowanceSeconds": 6,
+      "load": "{ 12.12 11.54 9.87 }",
+      "inputSHA256": "5449dd16b58ffb881df1661b9c412b961a34bcf781a298218ff59065750f48bf",
+      "freezeSHA256": "c724afc8b233a309efd88c3709dc0b24bfd08e8005c6d90b0fc9f1a7d92cad7d",
+      "cutoff": false,
+      "end": "2026-10-15T13:28:27.693367+00:00",
+      "wallSeconds": 139.32417029101634,
+      "exit": 0,
+      "userSeconds": 148.615682,
+      "systemSeconds": 1.9249319999999999,
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "b6290c8fb45b5a135b5bbce41d64a228870813f53c321ace88e401db8c20e8aa",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "allFrozenInputsStillMatch": true
+    },
+    "schema-v01.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:09:10.582713+00:00",
+      "end": "2026-10-15T13:09:10.739486+00:00",
+      "exit": 0,
+      "wallSeconds": 0.15665483300108463,
+      "pid": 79728,
+      "pgid": 79728,
+      "load": "{ 7.19 9.03 8.99 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-v02.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:24:57.298430+00:00",
+      "end": "2026-10-15T13:24:57.378050+00:00",
+      "exit": 0,
+      "wallSeconds": 0.07953704200917855,
+      "pid": 30447,
+      "pgid": 30447,
+      "load": "{ 16.22 12.20 9.96 }",
+      "groupRemainingAtExit": []
+    },
+    "whitespace-v01.receipt.json": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:09:10.796639+00:00",
+      "end": "2026-10-15T13:09:10.821686+00:00",
+      "exit": 0,
+      "wallSeconds": 0.02495079202344641,
+      "pid": 79764,
+      "pgid": 79764,
+      "load": "{ 7.19 9.03 8.99 }",
+      "groupRemainingAtExit": []
+    },
+    "whitespace-v02.receipt.json": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-productive745",
+      "start": "2026-10-15T13:24:57.431906+00:00",
+      "end": "2026-10-15T13:24:57.444822+00:00",
+      "exit": 0,
+      "wallSeconds": 0.01281445799395442,
+      "pid": 30466,
+      "pgid": 30466,
+      "load": "{ 16.22 12.20 9.96 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "qa": "No UI/host/renderer changes or browser framework; actual production public caller plus synthetic contracts verify changed policy behavior. No heavy/full/weighted300 command is part of this bounded correction.",
+  "rules": {
+    "newRulesDecision": false,
+    "newCardIssue": false,
+    "preExistingIssuesOutsideScope": []
+  },
+  "delivery": {
+    "acceptance": "Root acknowledged actual full-input game/replay/source/writer acceptance in final-acceptance-ack-v01-native.stdout at2026-10-15T13:33:46Z.",
+    "sourceFreeze": "This document is a precommit evidence cutoff. The implementation session retains the actual unforced Git start/return and inclusive dispatch-through-Git clock in git-final-v01.receipt.json/git-return-v01.json.",
+    "remainingRootDuties": "Fresh cold read-only Codex core review and certified Tollgate delivery, cleanup and native closure."
+  }
+}

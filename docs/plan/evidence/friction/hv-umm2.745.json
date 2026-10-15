@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.745",
+  "phase": 5,
+  "implementMin": 44.70702476666667,
+  "implementWindow": {
+    "start": "2026-10-15T12:49:40.587000+00:00",
+    "end": "2026-10-15T13:34:23.008486+00:00"
+  },
+  "localValidationS": {
+    "focused": 25.820716500049457,
+    "review": 51.44248545903247,
+    "knip": 4.442801791999955
+  },
+  "hostLoad": 12.12,
+  "testDelta": {
+    "files": 1,
+    "lines": 135,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "productive-policy-valuation",
+      "minutes": 7.838211533333333,
+      "note": "Observed interval includes185.260367s exact retained production game, explicit root early SIGINT (wrapper cutoff=false), fixed-energy assumption falsified by public i20/UUID290ea9db resolveTrigger energy gain, and root same-task justiciar source repair/admission. All failed raw evidence retained. Heuristic spark and energy utility ceilings preserve engine resources/legal actions; source-specific pumping plateau exclusion remains bounded."
+    }
+  ]
+}

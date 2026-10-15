@@ -33,6 +33,10 @@ export const AI = {
       stackPassLimit: 32,
       // Repetitions of one optional loop simulated per candidate; the live action keeps its requested count.
       loopIterationLimit: 32,
+      // Maximum utility credited to one character's spark in Greedy evaluation.
+      sparkValueCap: 32,
+      // Maximum utility credited to one side's available energy in Greedy evaluation.
+      energyValueCap: 32,
       // Candidates kept in each decision's log line.
       traceTopK: 3,
       evaluation: {
