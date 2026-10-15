@@ -418,6 +418,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   prim("reclaimNotBanished", "reclaim-not-banished.ts", { note: `continuous: cards you reclaim are not banished (${GAP_38})` }),
   // Phase 5: cost modifiers.
   ext("costModifierNth", "cost-modifier.ts", /nthInTurn|nth:/, { note: "\"the first warrior you play each turn costs…\"" }),
+  dsl("costModifierNthOrigin", [registered(`${P}cost-modifier.ts`, "CostModifierNthNode", { option: "from", optionLiteral: "void" })], ["CostModifierNthNode"], { note: "static nth matching play from the actual void, independently of payment route" }),
   prim("costModifierReclaim", "cost-modifier-reclaim.ts", { symbol: "costModifierReclaim", note: "static selected-Reclaim fixed base or whole-payment reduction" }),
   ext("costModifierActivated", "cost-modifier.ts", /activated/, { note: `cost modifiers on activated abilities (${GAP_37})` }),
   // Phase 5: DSL additions.
@@ -806,6 +807,8 @@ const CORRECTIONS: Readonly<Record<string, Correction>> = {
   "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a": { remove: ["return-from-void"], note: "returns itself from play to hand" },
   "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad": { remove: ["put-in-deck"], note: "prevent with the deckTop destination" },
   // Dreamsigns.
+  "044f856b-c08b-4b82-81e3-5417962bf868": { add: ["cost-modifier-nth-origin"], remove: ["trigger-play-from-void", "zone-cards", "cost-modifier-nth", "nth-in-turn"], note: "Passive first event from the actual void cost setting, independent of the chosen payment route" },
+  "5190a8b8-25a0-4c60-a4de-2e2c5a73af77": { add: ["cost-modifier-nth-origin"], remove: ["trigger-play-from-void", "zone-cards", "cost-modifier-nth", "nth-in-turn", "duration"], note: "Conditional static first card from the actual void reduction; current condition does not erase earlier plays" },
   "ede46f71-aa77-4b12-9824-0d3706da6a22": { add: ["first-materialization-keyword"], remove: ["grant-keyword"], note: "Bounded first actual materialization, before exhaustion; permanent physical Awakened grant" },
   "00cc7e7f-4245-4447-b9dc-f647dc6241a2": { add: ["original-deck-spark"], remove: ["spark-static", "zone-cards", "static-zone"], note: "C4 original physical membership and all-zone static spark; no selection prompt" },
   "3d86f8ce-42ac-43dc-96d5-121e6d1a6167": { add: ["type-remap"], remove: ["choose-subtype", "subtype-reference"], note: "C12: a journey-level remap stored with the run (5.6), applied to battle selectors and figment types through the deck-entry variant" },
@@ -835,6 +838,7 @@ const KEYWORD_TAGS: ReadonlySet<string> = new Set(["kw-awakened", "kw-vengeful",
 
 // Extra tags a correction may add that no rule defines.
 const EXTRA_TAGS: Readonly<Record<string, TagInfo>> = {
+  "cost-modifier-nth-origin": { family: 14, needs: ["costModifierNthOrigin"] },
   "first-materialization-keyword": { family: 8, needs: ["firstMaterializationKeyword"] },
   "give-opponent-points-cost": { family: 4, needs: ["giveOpponentPointsCost"] },
   "conditional-alternative-cost": { family: 15, needs: ["conditionalAlternativeCost", "alternativePlayResult"] },

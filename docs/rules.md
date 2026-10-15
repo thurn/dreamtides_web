@@ -1217,6 +1217,13 @@ choices do not count. Each ordinary or extra turn resets both players'
 counts. A source's static ability applies only in its functional zone; an
 ordinary in-play source held in hand does not discount its own play.
 
+An explicit "from your void" qualifier restricts the proposed play and its
+ordinal to matching cards actually played from that player's void. Hand and
+deck plays do not occupy that ordinal. Reclaim, a play permission, a card's
+alternative payment, and an immediate play instruction all count when the
+card starts that committed play in the void. The selected payment route
+preserves the normal-base and replacement-base distinction below.
+
 "The first … costs you N●" sets the matching play's normal fixed ● base.
 Normal hand plays, normal-cost play permissions and plain Reclaim use that
 base; explicit Reclaim, Offering and event alternatives choose their

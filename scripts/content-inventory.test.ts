@@ -143,6 +143,7 @@ describe("inventory exported capabilities", () => {
 // Independent authoring fixtures specify the intended API, including future forms.
 // They are not generated from descriptors or populated from the current engine.
 const completeAuthoringFixtures = new Map<string, string>([
+  ["src/engine/effects/primitives/cost-modifier.ts", 'export interface CostModifierNthNode { from?: "void" }'],
   ["src/engine/dsl/builders.ts", `
     export function controls() {} export function costPaid() {}
     export function randomIn() {} export function countCards() {}
@@ -191,6 +192,7 @@ const completeAuthoringFixtures = new Map<string, string>([
   ["src/engine/effects/primitives/grant-reclaim.ts", 'export type ReclaimCards = { tag: "inZone" } | { tag: "movedBy" } | { tag: "subject" };'],
 ]);
 const expectedCapabilityNames = [
+  "costModifierNthOrigin",
   "banishFromHandCost", "conditionControls", "conditionEnergyAtLeast", "conditionCostPaid",
   "valueHandSize", "triggerNth", "functionalZones", "oncePerTurn", "speedFast",
   "selectorFigment", "selectorHasAbility", "stackSelectorBounds", "selectorChallenger",
@@ -211,6 +213,7 @@ const typesModule = "src/engine/dsl/types.ts";
 const buildersModule = "src/engine/dsl/builders.ts";
 const triggersModule = "src/engine/dsl/triggers.ts";
 const minimalApiFixtures = [
+  ["costModifierNthOrigin", "src/engine/effects/primitives/cost-modifier.ts", 'export interface CostModifierNthNode { from?: "void" }'],
   ["banishFromHandCost", typesModule, 'export type PaymentCost = { kind: "banishFromHand" };'],
   ["conditionControls", buildersModule, 'export function controls() {}'],
   ["conditionEnergyAtLeast", typesModule, 'export type Condition = { kind: "energyAtLeast" };'],
@@ -316,6 +319,20 @@ describe("inventory descriptor contracts", () => {
   it("keeps every binding valid when representation discriminator fields are renamed", () => {
     const resolver = inventoryCapabilityResolver(new Map([...completeAuthoringFixtures].map(([module, source]) => [module, source.replaceAll("tag:", "representation:")] )));
     expect(inventoryDslCapabilities.map(entry => resolver.validate(entry.forms.map(intendedBinding)))).toEqual(expectedCapabilityNames.map(() => true));
+  });
+
+  it("requires the actual void option and tracks its pending stage precisely", () => {
+    const capability = inventoryDslCapabilities.find(entry => entry.name === "costModifierNthOrigin")!;
+    const form = capability.forms[0];
+    const resolve = (source: string) => inventoryCapabilityResolver(new Map([[form.module, source]]));
+    const absent = 'export interface CostModifierNthNode { nth: number }';
+    expect(resolve(absent).validate([{ ...form, pending: "option" }])).toBe(false);
+    expect(() => resolve(absent).validate([intendedBinding(form)])).toThrow();
+    const wrong = 'export interface CostModifierNthNode { from?: "hand" }';
+    expect(resolve(wrong)([intendedBinding(form)])).toBe(false);
+    const exact = 'export interface CostModifierNthNode { from?: "void" }';
+    expect(resolve(exact).validate([intendedBinding(form)])).toBe(true);
+    expect(() => resolve(exact).validate([{ ...form, pending: "option" }])).toThrow();
   });
 
   it("distinguishes own-card subtype overrides from selector/conditional-figment remaps", () => {

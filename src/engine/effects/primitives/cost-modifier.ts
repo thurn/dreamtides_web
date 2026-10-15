@@ -56,6 +56,8 @@ export interface CostModifierNthNode {
   readonly player: PlayerRef;
   readonly filter: CardFilter;
   readonly nth: number;
+  /** Qualify both this candidate and earlier plays by their actual origin. */
+  readonly from?: "void";
   readonly mode: "set" | "reduce";
   readonly amount: number;
 }
@@ -70,7 +72,7 @@ export const costModifierNthPrimitive = definePrimitive<CostModifierNthNode>({
     layer: 6,
     changes(node, env) {
       return [{ kind: "cost", player: resolvePlayer(env.controller, node.player), filter: node.filter,
-        amount: node.mode === "reduce" ? -node.amount : node.amount, next: false, nth: node.nth,
+        amount: node.mode === "reduce" ? -node.amount : node.amount, next: false, nth: node.nth, ...(node.from === undefined ? {} : { from: node.from }),
         ...(node.mode === "set" ? { mode: "set" as const } : {}) }];
     },
   },
@@ -82,11 +84,12 @@ export function costModifierNth(
   filter: CardFilter,
   nth: number,
   change: { readonly set: number } | { readonly reduce: number },
+  options: { readonly from?: "void" } = {},
 ): CostModifierNthNode {
   const mode = "set" in change ? "set" : "reduce";
   const amount = "set" in change ? change.set : change.reduce;
   if (!Number.isSafeInteger(nth) || nth < 1 || !Number.isSafeInteger(amount) || amount < 0) {
     throw new Error("costModifierNth requires a positive whole ordinal and nonnegative whole energy amount");
   }
-  return { op: "costModifierNth", player, filter, nth, mode, amount };
+  return { op: "costModifierNth", player, filter, nth, mode, amount, ...(options.from === undefined ? {} : { from: options.from }) };
 }

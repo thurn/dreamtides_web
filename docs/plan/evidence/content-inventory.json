@@ -6150,10 +6150,10 @@
         {"id":"86f64a29-7338-4759-81da-4c7656e543d2","kind":"dreamsign","status":"authored"},
         {"id":"257c160f-7d70-4ebd-bb0f-f83e61907310","kind":"dreamsign","status":"authored"},
         {"id":"553d2317-32f9-47bc-bae0-5018ca26d56a","kind":"dreamsign","status":"authored"},
-        {"id":"5190a8b8-25a0-4c60-a4de-2e2c5a73af77","kind":"dreamsign","status":"pending"},
-        {"id":"278ec1ab-f532-4862-84ae-63df5e49548c","kind":"dreamsign","status":"pending"}
+        {"id":"278ec1ab-f532-4862-84ae-63df5e49548c","kind":"dreamsign","status":"pending"},
+        {"id":"3fd8861d-fc4c-4097-9e28-89cc37f5b3f4","kind":"dreamsign","status":"pending"}
       ],
-      "weight": 8.8,
+      "weight": 7.9,
       "introduces": [],
       "newPromptKinds": [],
       "dependsOn": ["dreamsign-lab"],
@@ -6164,7 +6164,7 @@
       "scenarios": "src/content/specs/dreamsigns-battle-13.scenarios.ts",
       "areas": [
         "src/content/dreamsigns/black-cat-257c160f.ts",
-        "src/content/dreamsigns/cactus-5190a8b8.ts",
+        "src/content/dreamsigns/cloud-lens-3fd8861d.ts",
         "src/content/dreamsigns/egg-nest-553d2317.ts",
         "src/content/dreamsigns/pyramid-relic-278ec1ab.ts",
         "src/content/dreamsigns/spice-blossoms-86f64a29.ts",
@@ -6173,7 +6173,7 @@
       ],
       "sharedAreas": [],
       "falloutHints": [],
-      "knownDecisions": [{"id":"5190a8b8-25a0-4c60-a4de-2e2c5a73af77","rulesDecisions":["RD-hv-umm2.513-1"]}]
+      "knownDecisions": []
     },
     {
       "key": "dreamsigns-battle-14",
@@ -6182,13 +6182,13 @@
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: cost modifiers and nth-in-turn (14/23)",
       "entities": [
-        {"id":"3fd8861d-fc4c-4097-9e28-89cc37f5b3f4","kind":"dreamsign","status":"pending"},
         {"id":"a42c99b2-f480-4f63-91a0-bd556120427d","kind":"dreamsign","status":"authored"},
         {"id":"3dd05e97-1af8-4ae9-8e1f-954eaa63e112","kind":"dreamsign","status":"pending"},
+        {"id":"9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1","kind":"dreamsign","status":"pending"},
         {"id":"044f856b-c08b-4b82-81e3-5417962bf868","kind":"dreamsign","status":"pending"},
-        {"id":"9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1","kind":"dreamsign","status":"pending"}
+        {"id":"5190a8b8-25a0-4c60-a4de-2e2c5a73af77","kind":"dreamsign","status":"pending"}
       ],
-      "weight": 8.5,
+      "weight": 8.4,
       "introduces": [],
       "newPromptKinds": [],
       "dependsOn": ["dreamsign-lab"],
@@ -6198,7 +6198,7 @@
       "coreReview": false,
       "scenarios": "src/content/specs/dreamsigns-battle-14.scenarios.ts",
       "areas": [
-        "src/content/dreamsigns/cloud-lens-3fd8861d.ts",
+        "src/content/dreamsigns/cactus-5190a8b8.ts",
         "src/content/dreamsigns/flash-powder-3dd05e97.ts",
         "src/content/dreamsigns/green-amulet-a42c99b2.ts",
         "src/content/dreamsigns/powder-bowl-9204fbc8.ts",
@@ -6210,7 +6210,17 @@
       "falloutHints": [],
       "knownDecisions": [
         {"id":"3dd05e97-1af8-4ae9-8e1f-954eaa63e112","rulesDecisions":["RD-hv-umm2.611-1"]},
-        {"id":"9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1","rulesDecisions":["RD-hv-umm2.678-1"]}
+        {"id":"9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1","rulesDecisions":["RD-hv-umm2.678-1"]},
+        {
+          "id": "044f856b-c08b-4b82-81e3-5417962bf868",
+          "rulesDecisions": ["RD-hv-umm2.705-1"],
+          "note": "Passive first event from the actual void cost setting, independent of the chosen payment route"
+        },
+        {
+          "id": "5190a8b8-25a0-4c60-a4de-2e2c5a73af77",
+          "rulesDecisions": ["RD-hv-umm2.513-1","RD-hv-umm2.705-1"],
+          "note": "Conditional static first card from the actual void reduction; current condition does not erase earlier plays"
+        }
       ]
     },
     {
@@ -8147,7 +8157,8 @@
     {"name":"copyCardTimes","kind":"extension","module":"src/engine/effects/primitives/copy-card.ts","exists":true,"usedBy":5,"introducedBy":null,"note":"copying more than once"},
     {"name":"costModifier","kind":"primitive","module":"src/engine/effects/primitives/cost-modifier.ts","exists":true,"usedBy":45,"introducedBy":null},
     {"name":"costModifierActivated","kind":"extension","module":"src/engine/effects/primitives/cost-modifier.ts","exists":true,"usedBy":2,"introducedBy":null,"note":"cost modifiers on activated abilities (engine gap noted by 3.7)"},
-    {"name":"costModifierNth","kind":"extension","module":"src/engine/effects/primitives/cost-modifier.ts","exists":true,"usedBy":13,"introducedBy":null,"note":"\"the first warrior you play each turn costs…\""},
+    {"name":"costModifierNth","kind":"extension","module":"src/engine/effects/primitives/cost-modifier.ts","exists":true,"usedBy":11,"introducedBy":null,"note":"\"the first warrior you play each turn costs…\""},
+    {"name":"costModifierNthOrigin","kind":"dsl","module":"src/engine/effects/primitives/cost-modifier.ts","exists":true,"usedBy":2,"introducedBy":null,"note":"static nth matching play from the actual void, independently of payment route","forms":[{"module":"src/engine/effects/primitives/cost-modifier.ts","symbol":"CostModifierNthNode","kind":"form","option":"from","optionLiteral":"void"}]},
     {"name":"costModifierReclaim","kind":"primitive","module":"src/engine/effects/primitives/cost-modifier-reclaim.ts","exists":true,"usedBy":2,"introducedBy":null,"note":"static selected-Reclaim fixed base or whole-payment reduction"},
     {"name":"count","kind":"builder","module":null,"exists":true,"usedBy":21,"introducedBy":null},
     {"name":"countersCost","kind":"builder","module":null,"exists":true,"usedBy":9,"introducedBy":null},
@@ -8258,9 +8269,9 @@
     {"name":"takeExtraTurn","kind":"primitive","module":"src/engine/effects/primitives/take-extra-turn.ts","exists":true,"usedBy":1,"introducedBy":null,"note":"C8"},
     {"name":"takeFromAmong","kind":"primitive","module":"src/engine/effects/primitives/take-from-among.ts","exists":true,"usedBy":9,"introducedBy":null,"note":"put chosen cards from among looked-at or eroded cards into hand"},
     {"name":"triggerAbility","kind":"primitive","module":"src/engine/effects/primitives/trigger-ability.ts","exists":true,"usedBy":8,"introducedBy":null},
-    {"name":"triggerNth","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":30,"introducedBy":null,"forms":[{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"play","option":"nth"}]},
+    {"name":"triggerNth","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":29,"introducedBy":null,"forms":[{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"play","option":"nth"}]},
     {"name":"turnHistory","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":25,"introducedBy":null,"note":"turn counters: cards played, discarded, dissolved this turn","forms":[{"module":"src/engine/dsl/types.ts","symbol":"ValueExpr","kind":"form","member":"playedThisTurn"},{"module":"src/engine/dsl/types.ts","symbol":"Condition","kind":"form","member":"thisTurn"}]},
-    {"name":"untilEndOfTurn","kind":"builder","module":null,"exists":true,"usedBy":73,"introducedBy":null},
+    {"name":"untilEndOfTurn","kind":"builder","module":null,"exists":true,"usedBy":72,"introducedBy":null},
     {"name":"untilOpponentPays","kind":"builder","module":null,"exists":true,"usedBy":2,"introducedBy":null},
     {"name":"valueCardStats","kind":"dsl","module":"src/engine/dsl/builders.ts","exists":true,"usedBy":12,"introducedBy":null,"note":"\"this character's ✦\", \"that card's cost\"","forms":[{"module":"src/engine/dsl/builders.ts","symbol":"costOf","kind":"builder"}]},
     {"name":"valueHandSize","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":4,"introducedBy":null,"forms":[{"module":"src/engine/dsl/types.ts","symbol":"ValueExpr","kind":"form","member":"handSize"}]},
@@ -8278,7 +8289,7 @@
     {"name":"whenLeavesPlay","kind":"builder","module":null,"exists":true,"usedBy":5,"introducedBy":null},
     {"name":"whenLeavesVoid","kind":"builder","module":null,"exists":true,"usedBy":2,"introducedBy":null},
     {"name":"whenMaterialize","kind":"builder","module":null,"exists":true,"usedBy":18,"introducedBy":null},
-    {"name":"whenPlayFromVoidTrigger","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":6,"introducedBy":null,"note":"\"when you play a card from your void\"","forms":[{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"play","option":"from","optionLiteral":"void"}]},
+    {"name":"whenPlayFromVoidTrigger","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":4,"introducedBy":null,"note":"\"when you play a card from your void\"","forms":[{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"play","option":"from","optionLiteral":"void"}]},
     {"name":"whenPutIntoVoidTrigger","kind":"dsl","module":"src/engine/dsl/triggers.ts","exists":true,"usedBy":1,"introducedBy":null,"forms":[{"module":"src/engine/dsl/triggers.ts","symbol":"whenPutIntoVoid","kind":"builder"}]},
     {"name":"whenReclaimTrigger","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":2,"introducedBy":null,"forms":[{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"reclaim"}]},
     {"name":"whenRemovesEnemyTrigger","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":3,"introducedBy":null,"note":"\"when you dissolve or banish an enemy\"","forms":[{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"removesEnemy"},{"module":"src/engine/dsl/triggers.ts","symbol":"whenRemovesEnemy","kind":"builder"},{"module":"src/engine/dsl/triggers.ts","symbol":"whenDissolvesEnemyInChallenge","kind":"builder"}]},
@@ -8287,7 +8298,7 @@
     {"name":"whenYouChallengeWith","kind":"builder","module":null,"exists":true,"usedBy":2,"introducedBy":null},
     {"name":"whenYouPlay","kind":"builder","module":null,"exists":true,"usedBy":59,"introducedBy":null},
     {"name":"winCondition","kind":"builder","module":null,"exists":true,"usedBy":1,"introducedBy":null},
-    {"name":"zoneCardRefs","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":112,"introducedBy":null,"note":"references to cards in a void, deck, or hand","forms":[{"module":"src/engine/dsl/types.ts","symbol":"ZoneCardSpec","kind":"form"}]}
+    {"name":"zoneCardRefs","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":110,"introducedBy":null,"note":"references to cards in a void, deck, or hand","forms":[{"module":"src/engine/dsl/types.ts","symbol":"ZoneCardSpec","kind":"form"}]}
   ],
   "promptKinds": [
     {"kind":"action:payToEnd","exists":true,"usedBy":2,"firstBead":null},
@@ -8297,7 +8308,7 @@
     {"kind":"chooseCards:banishCost","exists":true,"usedBy":9,"firstBead":null},
     {"kind":"chooseCards:chooseAmong","exists":true,"usedBy":8,"firstBead":null},
     {"kind":"chooseCards:chooseFromOpponentHand","exists":true,"usedBy":10,"firstBead":null},
-    {"kind":"chooseCards:chooseInZone","exists":false,"usedBy":112,"firstBead":"cards-11"},
+    {"kind":"chooseCards:chooseInZone","exists":false,"usedBy":110,"firstBead":"cards-11"},
     {"kind":"chooseCards:discard","exists":true,"usedBy":33,"firstBead":null},
     {"kind":"chooseCards:discardCost","exists":true,"usedBy":30,"firstBead":null},
     {"kind":"chooseCards:discover","exists":true,"usedBy":22,"firstBead":null},
@@ -8915,7 +8926,7 @@
     {"id":"fe2510d9-bfee-4c35-97f9-30e0cd2e2851","kind":"avatar","name":"Yveth Coravel","status":"authored","text":"2●, ☾: Return a character you control to hand. Its cost is reduced by 1●.","module":"src/content/avatars/yveth-coravel-fe2510d9.ts","tags":["card-cost","cost-energy","cost-exhaust","cost-modifier","return-own-to-hand","targeted"],"requiredPrimitives":{"existing":["costModifier","energy","exhaustSelf","modifyCardCost","returnToHand"],"new":[]},"promptKinds":["chooseTargets:target"],"family":14,"routing":["5.4","avatars-05"]},
     {"id":"00cc7e7f-4245-4447-b9dc-f647dc6241a2","kind":"dreamsign","name":"Berries","status":"authored","rarity":"Uncommon","text":"Characters in your deck with cost ≤2● have +1✦.","module":"src/content/dreamsigns/berries-00cc7e7f.ts","clarifications":["C4"],"rulesDecisions":["RD-hv-umm2.318-1","RD-hv-umm2.589-1"],"tags":["original-deck-spark"],"requiredPrimitives":{"existing":["journeyDeckSparkModifier"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-10"],"correction":"C4 original physical membership and all-zone static spark; no selection prompt"},
     {"id":"025ce7f1-066b-480a-8a2f-364379890abd","kind":"dreamsign","name":"Spider","status":"pending","rarity":"Uncommon","text":"After each battle, you may duplicate a card.","module":"src/content/dreamsigns/spider-025ce7f1.ts","tags":["journey-duplication"],"requiredPrimitives":{"existing":[],"new":["journeyDuplication"]},"promptKinds":[],"family":0,"routing":["5.6","prim-journey-duplication"]},
-    {"id":"044f856b-c08b-4b82-81e3-5417962bf868","kind":"dreamsign","name":"Skull Dagger","status":"pending","rarity":"Uncommon","text":"The first event you play from your void each turn costs 0●.","module":"src/content/dreamsigns/skull-dagger-044f856b.ts","tags":["cost-modifier","cost-modifier-nth","nth-in-turn","trigger-play-from-void","zone-cards"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","triggerNth","whenPlayFromVoidTrigger","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":14,"routing":["5.5","dreamsigns-battle-14"]},
+    {"id":"044f856b-c08b-4b82-81e3-5417962bf868","kind":"dreamsign","name":"Skull Dagger","status":"pending","rarity":"Uncommon","text":"The first event you play from your void each turn costs 0●.","module":"src/content/dreamsigns/skull-dagger-044f856b.ts","rulesDecisions":["RD-hv-umm2.705-1"],"tags":["cost-modifier","cost-modifier-nth-origin"],"requiredPrimitives":{"existing":["costModifier","costModifierNthOrigin"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"],"correction":"Passive first event from the actual void cost setting, independent of the chosen payment route"},
     {"id":"055f211d-aa51-49eb-9162-190a946b1614","kind":"dreamsign","name":"Root Staff","status":"authored","rarity":"Uncommon","text":"When 2 or more characters you control score ⍟, draw a card, then discard a card.","module":"src/content/dreamsigns/root-staff-055f211d.ts","rulesDecisions":["RD-hv-umm2.582-1"],"tags":["discard","draw","trigger-scores"],"requiredPrimitives":{"existing":["discard","draw","whenScores"],"new":[]},"promptKinds":["chooseCards:discard"],"family":3,"routing":["5.5","dreamsigns-battle-01"]},
     {"id":"05f69d01-f8a3-4044-b7cd-0bfd9ed980cd","kind":"dreamsign","name":"Philosopher's Stone","status":"authored","rarity":"Rare","text":"Your unspent ● carries over between turns.","module":"src/content/dreamsigns/philosopher-s-stone-05f69d01.ts","rulesDecisions":["RD-hv-umm2.236-2"],"tags":["rule-modifier"],"requiredPrimitives":{"existing":["ruleModifier"],"new":[]},"promptKinds":[],"family":16,"routing":["5.5","dreamsigns-battle-22"]},
     {"id":"064cfb53-fcb4-4471-80de-27eccd23d3c0","kind":"dreamsign","name":"Carved Relic","status":"authored","rarity":"Rare","text":"▸Dawn: Return a random event from your void to your hand.","module":"src/content/dreamsigns/carved-relic-064cfb53.ts","tags":["random","return-from-void","trigger-dawn","zone-cards"],"requiredPrimitives":{"existing":["onDawn","randomSelection","returnFromVoid","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":6,"routing":["5.5","dreamsigns-battle-06"]},
@@ -8964,7 +8975,7 @@
     {"id":"3d86f8ce-42ac-43dc-96d5-121e6d1a6167","kind":"dreamsign","name":"Theater Mask","status":"pending","rarity":"Uncommon","text":"When you gain this dreamsign, pick a character type. All cards in your deck that mention character types in their text now refer to that character type.","module":"src/content/dreamsigns/theater-mask-3d86f8ce.ts","clarifications":["C12"],"tags":["journey-deck-entry","journey-on-gain","type-remap"],"requiredPrimitives":{"existing":["journeyDeckEntry","journeyOnGain"],"new":["typeRemap"]},"promptKinds":[],"family":0,"routing":["5.6","prim-type-remap"],"correction":"C12: a journey-level remap stored with the run (5.6), applied to battle selectors and figment types through the deck-entry variant"},
     {"id":"3dd05e97-1af8-4ae9-8e1f-954eaa63e112","kind":"dreamsign","name":"Flash Powder","status":"pending","rarity":"Common","text":"The first character you play each turn costs 2● less and has 0✦.","module":"src/content/dreamsigns/flash-powder-3dd05e97.ts","rulesDecisions":["RD-hv-umm2.611-1"],"tags":["cost-modifier","cost-modifier-nth","nth-in-turn","set-spark"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","setBaseSpark","triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"]},
     {"id":"3ed05d9a-dae0-4260-9b99-ad22d02fc583","kind":"dreamsign","name":"Bezoar","status":"authored","rarity":"Uncommon","text":"When you abandon a character, characters you materialize this turn have awakened.","module":"src/content/dreamsigns/bezoar-3ed05d9a.ts","rulesDecisions":["RD-hv-umm2.584-1"],"tags":["duration","grant-keyword","trigger-abandon"],"requiredPrimitives":{"existing":["grant","untilEndOfTurn","whenAbandon"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-08"]},
-    {"id":"3fd8861d-fc4c-4097-9e28-89cc37f5b3f4","kind":"dreamsign","name":"Cloud Lens","status":"pending","rarity":"Uncommon","text":"The second event you play each turn costs 1● less.","module":"src/content/dreamsigns/cloud-lens-3fd8861d.ts","tags":["cost-modifier","cost-modifier-nth","nth-in-turn"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"]},
+    {"id":"3fd8861d-fc4c-4097-9e28-89cc37f5b3f4","kind":"dreamsign","name":"Cloud Lens","status":"pending","rarity":"Uncommon","text":"The second event you play each turn costs 1● less.","module":"src/content/dreamsigns/cloud-lens-3fd8861d.ts","tags":["cost-modifier","cost-modifier-nth","nth-in-turn"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-13"]},
     {"id":"427c71e3-178f-4352-8d6f-f0789cb13c2d","kind":"dreamsign","name":"Carved Bone","status":"pending","rarity":"Uncommon","text":"When you dissolve or banish an enemy character outside of a challenge, gain 10 essence.","module":"src/content/dreamsigns/carved-bone-427c71e3.ts","tags":["journey-essence"],"requiredPrimitives":{"existing":["journeyEssence"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-03"],"correction":"journey essence paid from a battle event (removing an enemy outside a challenge); 5.6 builds the battle-result hook"},
     {"id":"4409a691-49b4-4fb0-82f6-4f45ae86d8c2","kind":"dreamsign","name":"Spider Jar","status":"authored","rarity":"Uncommon","text":"When you play your second character each turn, materialize a 1✦ warrior figment.","module":"src/content/dreamsigns/spider-jar-4409a691.ts","tags":["figments","nth-in-turn","trigger-play"],"requiredPrimitives":{"existing":["materializeFigments","triggerNth","whenYouPlay"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-18"]},
     {"id":"452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19","kind":"dreamsign","name":"Green Slime","status":"authored","rarity":"Uncommon","text":"After each battle, you may apply random transfigurations to up to 3 cards.","module":"src/content/dreamsigns/green-slime-452b7cd6.ts","rulesDecisions":["RD-hv-umm2.261-2"],"tags":["journey-transfiguration"],"requiredPrimitives":{"existing":["journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-07"]},
@@ -8980,7 +8991,7 @@
     {"id":"4e51f321-9089-4872-a0e2-ab909e242b33","kind":"dreamsign","name":"Hair Lock","status":"pending","rarity":"Rare","text":"At the start of each battle, foresee 3.","module":"src/content/dreamsigns/hair-lock-4e51f321.ts","tags":["foresee","trigger-start-of-turn"],"requiredPrimitives":{"existing":["atStartOfTurn","foresee"],"new":[]},"promptKinds":["arrange:foresee"],"family":3,"routing":["5.5","dreamsigns-battle-04"]},
     {"id":"4f21a4ab-e4aa-4718-8563-9afb72d140c0","kind":"dreamsign","name":"Star Anise","status":"pending","rarity":"Uncommon","text":"At each draft site, the first event card you add to your deck gains the Amplified Transfiguration.","module":"src/content/dreamsigns/star-anise-4f21a4ab.ts","tags":["journey-draft","journey-sites","journey-transfiguration"],"requiredPrimitives":{"existing":["journeyDraft","journeySites","journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-02"]},
     {"id":"4f5bdcac-64cb-4a45-8121-e37f5e4d3074","kind":"dreamsign","name":"Notes","status":"authored","rarity":"Uncommon","text":"Spirit animals you control have +1✦.","module":"src/content/dreamsigns/notes-4f5bdcac.ts","tags":["spark-static","subtype-reference"],"requiredPrimitives":{"existing":["ofSubtype","sparkModifier"],"new":[]},"promptKinds":[],"family":15,"routing":["5.5","dreamsigns-battle-20"]},
-    {"id":"5190a8b8-25a0-4c60-a4de-2e2c5a73af77","kind":"dreamsign","name":"Cactus","status":"pending","rarity":"Uncommon","text":"If you have discarded a card this turn, the first card you play from your void costs 1● less.","module":"src/content/dreamsigns/cactus-5190a8b8.ts","rulesDecisions":["RD-hv-umm2.513-1"],"tags":["cost-modifier","cost-modifier-nth","duration","trigger-play-from-void","turn-history","zone-cards"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","turnHistory","untilEndOfTurn","whenPlayFromVoidTrigger","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":14,"routing":["5.5","dreamsigns-battle-13"]},
+    {"id":"5190a8b8-25a0-4c60-a4de-2e2c5a73af77","kind":"dreamsign","name":"Cactus","status":"pending","rarity":"Uncommon","text":"If you have discarded a card this turn, the first card you play from your void costs 1● less.","module":"src/content/dreamsigns/cactus-5190a8b8.ts","rulesDecisions":["RD-hv-umm2.513-1","RD-hv-umm2.705-1"],"tags":["cost-modifier","cost-modifier-nth-origin","turn-history"],"requiredPrimitives":{"existing":["costModifier","costModifierNthOrigin","turnHistory"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"],"correction":"Conditional static first card from the actual void reduction; current condition does not erase earlier plays"},
     {"id":"553d2317-32f9-47bc-bae0-5018ca26d56a","kind":"dreamsign","name":"Egg Nest","status":"authored","rarity":"Uncommon","text":"The first ❖ card you play during the opponent's turn costs 1● less.","module":"src/content/dreamsigns/egg-nest-553d2317.ts","tags":["cost-modifier","cost-modifier-nth"],"requiredPrimitives":{"existing":["costModifier","costModifierNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-13"]},
     {"id":"56523397-6c48-4df6-846b-9e4f15d7fdee","kind":"dreamsign","name":"Clover","status":"authored","rarity":"Common","text":"Once per turn, when you play an event while you control no characters, copy it.","module":"src/content/dreamsigns/clover-56523397.ts","tags":["condition-controls","copy","once-per-turn","trigger-play"],"requiredPrimitives":{"existing":["conditionControls","copyCard","oncePerTurn","whenYouPlay"],"new":[]},"promptKinds":[],"family":12,"routing":["5.5","dreamsigns-battle-11"]},
     {"id":"56caa78b-021d-4b27-acab-c77fb0146ced","kind":"dreamsign","name":"Rabbit Tail","status":"authored","rarity":"Common","text":"▸Night: If you have played no characters this turn, draw a card.","module":"src/content/dreamsigns/rabbit-tail-56caa78b.ts","tags":["draw","duration","trigger-night","turn-history"],"requiredPrimitives":{"existing":["draw","onNight","turnHistory","untilEndOfTurn"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-16"]},

@@ -1,0 +1,951 @@
+{
+  "bead": "hv-umm2.705",
+  "base": "615054fd12d39e1d15a2720155ac9dea35740d38",
+  "observedAt": "2026-10-15T03:54:16.471382+00:00",
+  "dispatch": {
+    "sourceJournal": "/Users/dthurn/.codex/sessions/2026/10/14/rollout-2026-10-14T05-54-26-01a13a7a-741e-7cc1-a0dd-3f8eb1805ecf.jsonl",
+    "actualDispatch": "2026-10-15T02:42:54.996Z",
+    "call_id": "call_eac7fde67d8348c898ca9874cc9e9c95",
+    "tool": "spawn_agent",
+    "argumentsSHA256": "8c149d0ea4dbb63d6aa94f7d6f06b1ec423f475be1910eb5dad257c1a1219105",
+    "qualification": "Actual first parent spawn event; inclusive research/ACK/waits through eventual automatic Git endpoint; no CPU inference."
+  },
+  "clock": {
+    "start": "2026-10-15T02:42:54.996000+00:00",
+    "evidenceCutoff": "2026-10-15T03:54:16.471382+00:00",
+    "elapsedMin": 71.35792303333332,
+    "scope": "Inclusive original helper dispatch through final combined evidence cutoff, including original implementation/checks, parent certification conflict and native-update recovery, checkpoint/update/reapply/combined validation. No clock reset. Final amendment automatic Git endpoint is separately receipted; original commit endpoint remains immutable.",
+    "samplingCPU": "UNKNOWN",
+    "budgetWaiver": false
+  },
+  "sourceEpoch": {
+    "base": "615054fd12d39e1d15a2720155ac9dea35740d38",
+    "updatedCheckpoint": "26463b251715c64d95fc01146263723b12928865",
+    "combinedSourceFreezeSHA256": "60ebec900be05658f816d86fbe2c840b178c1ae84b0c098b33889a4c7d304249",
+    "sourceCount": 2533,
+    "scope": "Actual root current2530tracked/admittedruntime paths plus3normative/RD. Final combined validation; original full/fuzz/CF epoch retained separately and not relabeled.",
+    "all2533UnchangedAfterCombinedReview": true,
+    "newContractLines": 251,
+    "newTestEntrypoints": 0,
+    "jsdomDelta": 0
+  },
+  "checks": [
+    {
+      "label": "inventory-pending",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["node", "node_modules/tsx/dist/cli.mjs", "scripts/content-inventory.ts"],
+      "start": "2026-10-15T02:56:19.363283+00:00",
+      "end": "2026-10-15T02:56:21.652873+00:00",
+      "elapsed_seconds": 2.2894616670091636,
+      "exit_code": 0,
+      "pid": 82279,
+      "pgid": 82279,
+      "terminal_group": [],
+      "all_source_unchanged": false,
+      "sourceEpochSHA256": "34bc96ecabc107bbf563bb03807bfbd41452d24e188dfa4a0da768c05785816e",
+      "observedGroupRows": 4,
+      "rawReceipt": "inventory-pending.receipt.json",
+      "rawReceiptSHA256": "6f8c2d8f6159e452f06266bb803effdf5d08f9a7e5ae1d0eaf042aab829dea85"
+    },
+    {
+      "label": "baseline-after",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["node", "node_modules/tsx/dist/cli.mjs", "/tmp/dreamtides-705-root/origin-baseline.mjs"],
+      "start": "2026-10-15T02:56:47.561415+00:00",
+      "end": "2026-10-15T02:56:48.790719+00:00",
+      "elapsed_seconds": 1.2292388750356622,
+      "exit_code": 0,
+      "pid": 83084,
+      "pgid": 83084,
+      "terminal_group": [],
+      "all_source_unchanged": true,
+      "sourceEpochSHA256": "ee6d9ccbaa615b7087234a981af9862ff22fa84798f2462cdca9090092ce2afa",
+      "observedGroupRows": 7,
+      "rawReceipt": "baseline-after.receipt.json",
+      "rawReceiptSHA256": "41a7b15464b063a187f962469d6c3167e5659554b701e518fcc83e7fcfa4f7bf"
+    },
+    {
+      "label": "focus-origin-v1",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["node", "node_modules/vitest/vitest.mjs", "run", "src/engine/effects/primitives/contracts.test.ts", "-t", "origin-qualified nth", "--maxWorkers=2"],
+      "start": "2026-10-15T03:00:00.224463+00:00",
+      "end": "2026-10-15T03:00:04.701576+00:00",
+      "elapsed_seconds": 4.476984249951784,
+      "exit_code": 1,
+      "pid": 88409,
+      "pgid": 88409,
+      "terminal_group": [],
+      "all_source_unchanged": true,
+      "sourceEpochSHA256": "fe4a1cd30de81e33d206f502a47cb8254e4a1032edeeecfb6c5511dd49b5a6a1",
+      "observedGroupRows": 5,
+      "rawReceipt": "focus-origin-v1.receipt.json",
+      "rawReceiptSHA256": "86ec032c77530fa378519604d1d01390a0c212b056f6fb517eb1e49f21e2d487"
+    },
+    {
+      "label": "focus-origin-v2",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["node", "node_modules/vitest/vitest.mjs", "run", "src/engine/effects/primitives/contracts.test.ts", "-t", "origin-qualified nth", "--maxWorkers=2"],
+      "start": "2026-10-15T03:00:36.778751+00:00",
+      "end": "2026-10-15T03:00:40.592861+00:00",
+      "elapsed_seconds": 3.813959249993786,
+      "exit_code": 0,
+      "pid": 89674,
+      "pgid": 89674,
+      "terminal_group": [],
+      "all_source_unchanged": true,
+      "sourceEpochSHA256": "e7279b84ad7a9f79d17ab0d30fea2b42dba414341627be31945cacbad76c1fb1",
+      "observedGroupRows": 3,
+      "rawReceipt": "focus-origin-v2.receipt.json",
+      "rawReceiptSHA256": "5f8bf91ad7ff8617b1cf09193abf039193fa634448dc851171bcb39236e42e97"
+    },
+    {
+      "label": "replay-generate-v1",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["node", "node_modules/tsx/dist/cli.mjs", "scripts/regenerate-replay-fixtures.mjs"],
+      "start": "2026-10-15T03:01:14.245469+00:00",
+      "end": "2026-10-15T03:01:15.354603+00:00",
+      "elapsed_seconds": 1.109033290995285,
+      "exit_code": 0,
+      "pid": 90658,
+      "pgid": 90658,
+      "terminal_group": [],
+      "all_source_unchanged": false,
+      "sourceEpochSHA256": "6c42dd2c6bdbd94f4af346d93e988f6d1bb1f928b71d2e754f91bed15768e3b9",
+      "observedGroupRows": 4,
+      "rawReceipt": "replay-generate-v1.receipt.json",
+      "rawReceiptSHA256": "b5ee73b59d88b8dc7a4169b87c70ac82d60498ef7bba5434704fff955ade286c"
+    },
+    {
+      "label": "replay-generate-v2",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["node", "node_modules/tsx/dist/cli.mjs", "scripts/regenerate-replay-fixtures.mjs"],
+      "start": "2026-10-15T03:01:24.279578+00:00",
+      "end": "2026-10-15T03:01:25.382181+00:00",
+      "elapsed_seconds": 1.1025283749913797,
+      "exit_code": 0,
+      "pid": 90904,
+      "pgid": 90904,
+      "terminal_group": [],
+      "all_source_unchanged": true,
+      "sourceEpochSHA256": "8727341292491661045cafc0f878a4c4729b5d266bd87663c7bf3a3e921f6f5e",
+      "observedGroupRows": 4,
+      "rawReceipt": "replay-generate-v2.receipt.json",
+      "rawReceiptSHA256": "2598a3296406e01efb0bf0c3d4d122b3c819eafaee276eb0b8eb87b1a0b90dc3"
+    },
+    {
+      "label": "inventory-complete",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["node", "node_modules/tsx/dist/cli.mjs", "scripts/content-inventory.ts"],
+      "start": "2026-10-15T03:01:37.341529+00:00",
+      "end": "2026-10-15T03:01:39.403591+00:00",
+      "elapsed_seconds": 2.0619526670197956,
+      "exit_code": 0,
+      "pid": 91347,
+      "pgid": 91347,
+      "terminal_group": [],
+      "all_source_unchanged": false,
+      "sourceEpochSHA256": "8727341292491661045cafc0f878a4c4729b5d266bd87663c7bf3a3e921f6f5e",
+      "observedGroupRows": 7,
+      "rawReceipt": "inventory-complete.receipt.json",
+      "rawReceiptSHA256": "28af406ef64f84f24cf942a2a42ec6dc246e0eda312471769bd3f054fee91655"
+    },
+    {
+      "label": "focus-combined-v1",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "scripts/content-inventory.test.ts",
+        "src/rules/replay/replay.test.ts",
+        "src/engine/rules/turn-log.test.ts",
+        "-t",
+        "origin-qualified nth|static nth costs|nth|authoring|capabilit|replay|turn",
+        "--maxWorkers=2"
+      ],
+      "start": "2026-10-15T03:02:06.889213+00:00",
+      "end": "2026-10-15T03:02:13.784329+00:00",
+      "elapsed_seconds": 6.89489124994725,
+      "exit_code": 0,
+      "pid": 92827,
+      "pgid": 92827,
+      "terminal_group": [],
+      "all_source_unchanged": true,
+      "sourceEpochSHA256": "c07d023a1761a21fa73a704e574833bea43211a8f4dac00dccc465a602e2d264",
+      "observedGroupRows": 6,
+      "rawReceipt": "focus-combined-v1.receipt.json",
+      "rawReceiptSHA256": "d8715d557d1080b52437f276a69a7dbbdc7da7b02d5b08ece1f163b5e5f3c9f7"
+    },
+    {
+      "label": "review-v1",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["npm", "run", "review"],
+      "start": "2026-10-15T03:10:00.579010+00:00",
+      "end": "2026-10-15T03:11:18.241907+00:00",
+      "elapsed_seconds": 77.66134158399655,
+      "exit_code": 1,
+      "pid": 47587,
+      "pgid": 47587,
+      "terminal_group": [],
+      "all_source_unchanged": true,
+      "sourceEpochSHA256": "c07d023a1761a21fa73a704e574833bea43211a8f4dac00dccc465a602e2d264",
+      "observedGroupRows": 56,
+      "rawReceipt": "review-v1.receipt.json",
+      "rawReceiptSHA256": "6d63be4de3dff2970803910e471af8a5b0466ea4158addd709c376fb173144ff"
+    },
+    {
+      "label": "review-v2",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["npm", "run", "review"],
+      "start": "2026-10-15T03:11:27.991524+00:00",
+      "end": "2026-10-15T03:12:35.455621+00:00",
+      "elapsed_seconds": 67.4627256669919,
+      "exit_code": 0,
+      "pid": 10284,
+      "pgid": 10284,
+      "terminal_group": [],
+      "all_source_unchanged": true,
+      "sourceEpochSHA256": "6c0e620c798a0f0b9e172126dafa2de4e964abf2bfcaffa5b6a4712bf096ce30",
+      "observedGroupRows": 51,
+      "rawReceipt": "review-v2.receipt.json",
+      "rawReceiptSHA256": "55af569fb98f97c8056e28bb3d1400411454a565de34c249652c01ec77f38ba4"
+    },
+    {
+      "label": "focus-origin-v3",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["node", "node_modules/vitest/vitest.mjs", "run", "src/engine/effects/primitives/contracts.test.ts", "-t", "origin-qualified nth", "--maxWorkers=2"],
+      "start": "2026-10-15T03:13:35.609769+00:00",
+      "end": "2026-10-15T03:13:40.357758+00:00",
+      "elapsed_seconds": 4.747839040996041,
+      "exit_code": 1,
+      "pid": 20533,
+      "pgid": 20533,
+      "terminal_group": [],
+      "all_source_unchanged": true,
+      "sourceEpochSHA256": "b960fb69972525a40afc93266b22da88ed8282f4e0148a3ad3c6aad76898fce9",
+      "observedGroupRows": 5,
+      "rawReceipt": "focus-origin-v3.receipt.json",
+      "rawReceiptSHA256": "dcd43e47718160868fa794f7bd277f08eb44c44010b1cf307064a43c175850b5"
+    },
+    {
+      "label": "focus-origin-v4",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["node", "node_modules/vitest/vitest.mjs", "run", "src/engine/effects/primitives/contracts.test.ts", "-t", "origin-qualified nth", "--maxWorkers=2"],
+      "start": "2026-10-15T03:14:24.409824+00:00",
+      "end": "2026-10-15T03:14:28.630038+00:00",
+      "elapsed_seconds": 4.220305917027872,
+      "exit_code": 0,
+      "pid": 23911,
+      "pgid": 23911,
+      "terminal_group": [],
+      "all_source_unchanged": true,
+      "sourceEpochSHA256": "623665b3113c86fd3ad48d9260ac9d6e9c25a6fff319838e72d124bd75024f6e",
+      "observedGroupRows": 3,
+      "rawReceipt": "focus-origin-v4.receipt.json",
+      "rawReceiptSHA256": "03f9cdf4b4a685ad98398865d26b2c7e70e61837437f97433d3d0fd0a4fa5989"
+    },
+    {
+      "label": "knip-v1",
+      "admission": "01a13d7c-6796-72a7-8520-4fbcff5a5493",
+      "argv": ["npm", "run", "knip"],
+      "start": "2026-10-15T03:15:18.912535+00:00",
+      "end": "2026-10-15T03:15:23.517970+00:00",
+      "elapsed_seconds": 4.605319875001442,
+      "exit_code": 0,
+      "pid": 27757,
+      "pgid": 27757,
+      "terminal_group": [],
+      "all_source_unchanged": true,
+      "sourceEpochSHA256": "623665b3113c86fd3ad48d9260ac9d6e9c25a6fff319838e72d124bd75024f6e",
+      "observedGroupRows": 14,
+      "rawReceipt": "knip-v1.receipt.json",
+      "rawReceiptSHA256": "18560ec5830e69eac367a66836fc3541bb93ecbefaa18cace0160cf1839a1e15"
+    }
+  ],
+  "baseline": {
+    "replays": [
+      {
+        "name": "journey-only",
+        "oldHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+        "newHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+        "outcomesEqual": true,
+        "stateDelta": []
+      },
+      {
+        "name": "battle",
+        "oldHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+        "newHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+        "outcomesEqual": true,
+        "stateDelta": []
+      },
+      {
+        "name": "adversarial",
+        "oldHash": "fa0018ec394367d9c77fd5bebc1169d6b479ddfac2d2428fe825c2866158d5e3",
+        "newHash": "77ece22bed3662226c7f5e0f1f891651d94a2ce9738df6b7f2148e3713d95ea0",
+        "outcomesEqual": true,
+        "stateDelta": [{"path": "/battle/engine/slice/committed/turnLog/played/player/0/playedFromVoid", "before": "ABSENT", "after": false}]
+      }
+    ],
+    "rows": [
+      {
+        "side": "player",
+        "mode": "set",
+        "paid": [2, 0, 2],
+        "records": [
+          {"instance": "i2", "playedFromVoid": false, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"},
+          {"instance": "i15", "playedFromVoid": true, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"},
+          {"instance": "i16", "playedFromVoid": true, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"}
+        ]
+      },
+      {
+        "side": "player",
+        "mode": "reduce",
+        "paid": [2, 1, 2],
+        "records": [
+          {"instance": "i2", "playedFromVoid": false, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"},
+          {"instance": "i15", "playedFromVoid": true, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"},
+          {"instance": "i16", "playedFromVoid": true, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"}
+        ]
+      },
+      {
+        "side": "enemy",
+        "mode": "set",
+        "paid": [2, 0, 2],
+        "records": [
+          {"instance": "i14", "playedFromVoid": false, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"},
+          {"instance": "i27", "playedFromVoid": true, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"},
+          {"instance": "i28", "playedFromVoid": true, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"}
+        ]
+      },
+      {
+        "side": "enemy",
+        "mode": "reduce",
+        "paid": [2, 1, 2],
+        "records": [
+          {"instance": "i14", "playedFromVoid": false, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"},
+          {"instance": "i27", "playedFromVoid": true, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"},
+          {"instance": "i28", "playedFromVoid": true, "cardType": "event", "subtype": "", "allTypes": false, "namedTriggers": [], "cost": 2, "spark": null, "speed": "standard"}
+        ]
+      }
+    ],
+    "after_sha256": "8d215383c2a1d1c15c716d06f75fdbe9339a4bb368ea6d19d4389eb52a0e1711"
+  },
+  "inventory": {
+    "pendingSHA": "fe622a421e58f60a92dc70dd2e53e74c87d863e254809a992d9e4ad91fa16eae",
+    "final": {
+      "sha256": "d43a79ab6a8c5b7976304fb13137350f0de13db6cf50cf348283527dceee5b0f",
+      "unrelated_semantics_equal_to_pending": true,
+      "immutable_two_entity_fields_equal": true,
+      "two_records": [
+        {
+          "id": "044f856b-c08b-4b82-81e3-5417962bf868",
+          "kind": "dreamsign",
+          "name": "Skull Dagger",
+          "status": "pending",
+          "rarity": "Uncommon",
+          "text": "The first event you play from your void each turn costs 0●.",
+          "module": "src/content/dreamsigns/skull-dagger-044f856b.ts",
+          "rulesDecisions": ["RD-hv-umm2.705-1"],
+          "tags": ["cost-modifier", "cost-modifier-nth-origin"],
+          "requiredPrimitives": {"existing": ["costModifier", "costModifierNthOrigin"], "new": []},
+          "promptKinds": [],
+          "family": 14,
+          "routing": ["5.5", "dreamsigns-battle-14"],
+          "correction": "Passive first event from the actual void cost setting, independent of the chosen payment route"
+        },
+        {
+          "id": "5190a8b8-25a0-4c60-a4de-2e2c5a73af77",
+          "kind": "dreamsign",
+          "name": "Cactus",
+          "status": "pending",
+          "rarity": "Uncommon",
+          "text": "If you have discarded a card this turn, the first card you play from your void costs 1● less.",
+          "module": "src/content/dreamsigns/cactus-5190a8b8.ts",
+          "rulesDecisions": ["RD-hv-umm2.513-1", "RD-hv-umm2.705-1"],
+          "tags": ["cost-modifier", "cost-modifier-nth-origin", "turn-history"],
+          "requiredPrimitives": {"existing": ["costModifier", "costModifierNthOrigin", "turnHistory"], "new": []},
+          "promptKinds": [],
+          "family": 14,
+          "routing": ["5.5", "dreamsigns-battle-14"],
+          "correction": "Conditional static first card from the actual void reduction; current condition does not erase earlier plays"
+        }
+      ],
+      "mechanical_routing": [
+        {"id": "044f856b-c08b-4b82-81e3-5417962bf868", "before": ["5.5", "prim-cost-modifier-nth-origin"], "after": ["5.5", "dreamsigns-battle-14"]},
+        {"id": "15fd5a22-a786-48e3-99b0-919e810b3eba", "before": ["5.5", "dreamsigns-battle-22"], "after": ["5.5", "dreamsigns-battle-23"]},
+        {"id": "21ae8473-afa7-4384-b7d4-afbf1d84e691", "before": ["5.5", "dreamsigns-battle-19"], "after": ["5.5", "dreamsigns-battle-20"]},
+        {"id": "246ac924-74dd-4387-9fd6-5bc8e563907a", "before": ["5.5", "dreamsigns-battle-19"], "after": ["5.5", "dreamsigns-battle-20"]},
+        {"id": "4409a691-49b4-4fb0-82f6-4f45ae86d8c2", "before": ["5.5", "dreamsigns-battle-17"], "after": ["5.5", "dreamsigns-battle-18"]},
+        {"id": "5190a8b8-25a0-4c60-a4de-2e2c5a73af77", "before": ["5.5", "prim-cost-modifier-nth-origin"], "after": ["5.5", "dreamsigns-battle-14"]},
+        {"id": "6f4e2d9f-38a4-4f6a-8fde-7d942977a6df", "before": ["5.5", "dreamsigns-battle-21"], "after": ["5.5", "dreamsigns-battle-22"]},
+        {"id": "72ef4b11-5366-4798-aab0-09e5ffbb1ed8", "before": ["5.5", "dreamsigns-battle-18"], "after": ["5.5", "dreamsigns-battle-19"]},
+        {"id": "c706d0ba-2f41-4b14-95d8-db168ac6246c", "before": ["5.5", "dreamsigns-battle-14"], "after": ["5.5", "dreamsigns-battle-15"]},
+        {"id": "c75cd943-5e8b-4a56-8c09-d975571570d4", "before": ["5.5", "dreamsigns-battle-20"], "after": ["5.5", "dreamsigns-battle-21"]},
+        {"id": "fb87262c-5bde-409e-92f1-58cc7a4e5491", "before": ["5.5", "dreamsigns-battle-15"], "after": ["5.5", "dreamsigns-battle-16"]},
+        {"id": "fdd2ffe4-40f4-49cf-bc2e-2496e1042f76", "before": ["5.5", "dreamsigns-battle-16"], "after": ["5.5", "dreamsigns-battle-17"]}
+      ],
+      "projection_beads_before": 203,
+      "projection_beads_after": 202,
+      "first_audit": "Initial equality wrongly included expected generated routing and own RD discoveries; assertion failed, no mutation. Corrected audit explicitly qualifies these mechanical projection fields."
+    },
+    "parentBaseFinalAudit": "parent-inventory-base-final-verification.json",
+    "scope": "Parent independently audited basee1d334→final1209immutableUUIDentities and unrelated semantics; helper independently auditedpending→final. Exact2tags/capabilityretirement+ownRD, mechanical projection/routing/promptusedBy separatelyqualified. No native ownership/UUIDacceptance transfer."
+  },
+  "diagnostics": [
+    {
+      "cause": "Read-only path/output mistakes",
+      "detail": "Several source batches printed nested native descriptions or full stderr asset warnings beyond cap; corrected bounded selectedfields/log summaries. Missing guessed replay/eventlog/loop paths corrected by actual directory inventory. No source effect."
+    },
+    {
+      "cause": "Initial own test fixture failures",
+      "detail": "focusv1 48PASS8FAIL: event alternative row needed actualFast speed; shuffleInto takesarray; facade auto-settled stack so current-stack guard uses publicrunStep boundary. No runtime change from baseline; focusv2 56PASS."
+    },
+    {
+      "cause": "Own lib/type errors",
+      "detail": "Firstordinaryreview77.661s: allrelatedtestsPASS, Array.at unsupported byprojectlib and serializeState givenBattleSlice. Corrected ownlatestlookup toindexedlast/owncontractcommitted; reviewv2 9083PASS306files67.463s."
+    },
+    {
+      "cause": "Independent scalar fault witness fixture",
+      "detail": "Refined event+allcard legacy negatives and historical scalar case. Focusv3 56PASS2FAIL because trying facade nthSettle on runStep boundary stalled; genuine independent nthPlay fixture corrected it; focusv4 58PASS4.220s."
+    },
+    {
+      "cause": "Audit assertions",
+      "detail": "Initial inventory equality incorrectly included expectedmechanicalrouting/ownRD; checkpointgenericreceipt scan included differentlyshapedrootinstallreceipt. Corrected read-onlyaudits. Root overbroadpromptusedByequality similarlycorrected; parentwrongshared/review.md readpathcorrectedtoactualwardenSKILL. No feature mutation."
+    },
+    {
+      "cause": "Counterfactual output presentation",
+      "detail": "First candidate verbose dump included skipped test lines and exceeded tool output cap. Subsequent analyzer excludes skipped rows and binds actual complete fail/control names and raw output hashes; no mutant rerun or semantic waiver."
+    },
+    {
+      "cause": "Ordinary integration recovery",
+      "detail": "Root admission JavaScript quoting parse error occurred before effects and was corrected with literal file/nativeACK. Helper missing admission.txt corrected to actual checkpoint-admission.txt by directory inventory; guessed activated-contract filename corrected to cost-modifier-activated.contracts.ts; initial inventory audit expected tagNote rather than actual correction key, fixed read-only. Root public hash hint clarified from engine cyrb53 to actual replay GAME_ENGINE_CONFIG.hash SHA256 before proof execution. No source outside finite reapply bodies changed."
+    }
+  ],
+  "schemaNormalization": {"fields": {"hostLoad": {"measuredFor": "combined-review actual dispatch", "method": "Actual review starting load9.94287109375 printed at2026-10-15T03:45:02.643Z."}}},
+  "resources": {
+    "ownedCompletedGroupsEmpty": true,
+    "activeChecks": [],
+    "browserProvidersStarted": 0,
+    "counterfactuals": "Seven historical original3ddf negative runs settled and restored before integration; no combined-source fault run.",
+    "directManualQAServersStarted": 0,
+    "fixtureServers": "The full-test fixture subprocess tree is included in its788 observedPID+lstart ledger. This is not a blanket no-server claim; full command normal cleanup and exact observedidentity/PG terminal census are separately verified.",
+    "combinedChecks": "Combined probe/generators/focused/ordinary/Knip/evidence-schema/whitespace all completed with empty owned process groups; source remained frozen."
+  },
+  "limits": "No current production/LAB uses this new option; no UI or player workflow changed. Public contracts exercise newform; literalunweighted300 is regression only. Original250/251 retain full productionUUIDauthoring, recipes/weights/preflight/sweep/D21/newconsumerbrowserQA. ExistingUUIDintent/payment/playevents pluscapturedhistory reconstructqualification; no logschema change. Current permanent userreviewpolicy freshreadonlyCodexforknone.",
+  "heavy": {
+    "full": {
+      "wrapperElapsedS": 111.97163616598118,
+      "commandElapsedS": 111.65719758399064,
+      "queueAndLaunchS": 0.08534,
+      "childCPUSeconds": 292.484758,
+      "exit": 0,
+      "observedIdentities": 788,
+      "terminalGroup": [],
+      "remainingObservedDescendants": [],
+      "allObservedIdentityGone": true,
+      "sourceEpochValid": true,
+      "postLockHashesReverified": true,
+      "receipt": "heavy-full-receipt.json",
+      "receiptSHA": "8b0e88f6d5ccd466ae69cc09f3a6371985e5045f07188987f4222d35bd0bfb89",
+      "censusQualification": "Observed transitive PPID descendants retained by PID+lstart even after setsid/reparenting, plus original PG. Polling every100ms cannot guarantee observing every sub100ms child; normal command cleanup separately required. No process killed.",
+      "tests": 10094,
+      "files": 387,
+      "bundle": "PASS",
+      "sourceCommit": "3ddfef8ea11dfccbcc8e474a4d6f098102eb524f",
+      "base": "e1d334d3eb0bd8a013d91a1fefa213114aecdb58"
+    },
+    "fuzz": {
+      "wrapperElapsedS": 530.749496375036,
+      "commandElapsedS": 445.5281357499771,
+      "queueAndLaunchS": 85.062654,
+      "childCPUSeconds": 461.944883,
+      "exit": 0,
+      "observedIdentities": 6,
+      "terminalGroup": [],
+      "remainingObservedDescendants": [],
+      "allObservedIdentityGone": true,
+      "sourceEpochValid": true,
+      "postLockHashesReverified": true,
+      "receipt": "heavy-fuzz-receipt.json",
+      "receiptSHA": "f64bb62c34e8f6cea607a7bfb23e9e7ae4ae7ed3ed6c3ac7b84667a40e31adb1",
+      "censusQualification": "Observed transitive PPID descendants retained by PID+lstart even after setsid/reparenting, plus original PG. Polling every100ms cannot guarantee observing every sub100ms child; normal command cleanup separately required. No process killed.",
+      "games": 300,
+      "weighted": false,
+      "steps": 99272,
+      "prompts": 7500,
+      "interactiveReruns": 791,
+      "scriptWallS": 444.3,
+      "scriptCPUS": 460.3,
+      "results": {"player": 138, "enemy": 162, "draw": 0},
+      "failures": 0,
+      "newFormExercise": "Not asserted: no current producer authors the new option; public contracts supply new-form evidence.",
+      "sourceCommit": "3ddfef8ea11dfccbcc8e474a4d6f098102eb524f",
+      "base": "e1d334d3eb0bd8a013d91a1fefa213114aecdb58"
+    }
+  },
+  "counterfactuals": {
+    "rows": [
+      {
+        "id": "candidate",
+        "family": 1,
+        "failed": 6,
+        "passed": 10,
+        "oldControlPassNames": [
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 4ms",
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 3ms"
+        ],
+        "failedNameExamples": [
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player origin-qualified nth > set 1 counts only earlier matching actual void plays",
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > enemy origin-qualified nth > set 1 counts only earlier matching actual void plays"
+        ],
+        "allFailureNamesReceipt": "cf-candidate-proof.json",
+        "allFailureNamesReceiptSHA256": "e93526cf04e32448304eaecb7ca2921ca3bff0ab103b234959e76bfeb319fdb1",
+        "elapsedS": 4.843897999962792,
+        "originalSHA": "dd870d31b71d76e68e38510c9ae5d58a1957b12291640147ae2f240c81ba8fae",
+        "mutantSHA": "8e5d843a39920d4953415779a34634b008a588bf63a1a986ae4b3a117f499feb",
+        "all2529Restored": true,
+        "terminalGroup": [],
+        "rawStdoutSHA": "89caf34bfb9a8a0c98351fb82827e1e48316853c5407aac98fab8cc4226954c0",
+        "rawStderrSHA": "5f84cef538eef518cd5c306151d809a0778d234796681e72c2e3b234c558994b"
+      },
+      {
+        "id": "cohort",
+        "family": 2,
+        "failed": 12,
+        "passed": 2,
+        "oldControlPassNames": [
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 6ms",
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 4ms"
+        ],
+        "failedNameExamples": [
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player origin-qualified nth > set 1 counts only earlier matching actual void plays",
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > enemy origin-qualified nth > set 1 counts only earlier matching actual void plays"
+        ],
+        "allFailureNamesReceipt": "cf-cohort-proof.json",
+        "allFailureNamesReceiptSHA256": "8ffa37cfa2437ba89b885991e3eab7060ad9c31130dc0a74c288a6c179739b53",
+        "elapsedS": 4.696186332963407,
+        "originalSHA": "dd870d31b71d76e68e38510c9ae5d58a1957b12291640147ae2f240c81ba8fae",
+        "mutantSHA": "513d647f2c0563e8d745bbf155c2430f37f0e28b28faf69fb4ae6c2adf4de015",
+        "all2529Restored": true,
+        "terminalGroup": [],
+        "rawStdoutSHA": "b9c312ad5b6c2c2d688694e068f03123c0d79a0f2e30e6bdfe567912290659db",
+        "rawStderrSHA": "ddff6150e8742024be188cb5f8f2ebbdc56902e7f050de89e14a665f87d16fca"
+      },
+      {
+        "id": "route-conflation",
+        "family": 3,
+        "failed": 14,
+        "passed": 14,
+        "oldControlPassNames": [
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 6ms",
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 4ms"
+        ],
+        "failedNameExamples": [
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player origin-qualified nth > permission set keeps origin separate from replacement bases",
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player origin-qualified nth > alternativeCost set keeps origin separate from replacement bases"
+        ],
+        "allFailureNamesReceipt": "cf-route-conflation-proof.json",
+        "allFailureNamesReceiptSHA256": "89ccfe54008b8921b7a1f012f9583787f0dd7ae6269cb3506c76e7b7c58c9a05",
+        "elapsedS": 4.607359582965728,
+        "originalSHA": "ed6b97f4946e0c35b0234cf68c8e0100a172a6601a3efe4d039a27e9f30b07c1",
+        "mutantSHA": "754bdcca687a570a7fea3e5346014ece87651c5da77cbbbdf0e3d3d61b9d47bc",
+        "all2529Restored": true,
+        "terminalGroup": [],
+        "rawStdoutSHA": "1a93567f1f686dc89ef0de4dcb9fdf1a129859878d42c7488755d1338151542a",
+        "rawStderrSHA": "16e268aa4ae0c394cb234b084a0aedab0d0c43ca8d8577f8e0ad462cde64945b"
+      },
+      {
+        "id": "post-transition",
+        "family": 3,
+        "failed": 26,
+        "passed": 2,
+        "oldControlPassNames": [
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 6ms",
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 4ms"
+        ],
+        "failedNameExamples": [
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player origin-qualified nth > permission set keeps origin separate from replacement bases",
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player origin-qualified nth > plain set keeps origin separate from replacement bases"
+        ],
+        "allFailureNamesReceipt": "cf-post-transition-proof.json",
+        "allFailureNamesReceiptSHA256": "509c49db065310e55b81902af358255fdda4e1c0ce932bcc91b78e7235aa91b0",
+        "elapsedS": 5.1427882090210915,
+        "originalSHA": "ed6b97f4946e0c35b0234cf68c8e0100a172a6601a3efe4d039a27e9f30b07c1",
+        "mutantSHA": "054a9682f9bc21fd1d03839aba4398ece70e37f2e149d62499854a96e4af62ed",
+        "all2529Restored": true,
+        "terminalGroup": [],
+        "rawStdoutSHA": "8cf3b19fcac703ad7dd93823eef6481d1c74a5bf986c234f6cf4ba895a429bb4",
+        "rawStderrSHA": "7e97e73fd90289fa79caa159bb4337d603d20587ecac5898ac3714853e5d9fc0"
+      },
+      {
+        "id": "legacy-unknown",
+        "family": 4,
+        "failed": 4,
+        "passed": 2,
+        "oldControlPassNames": [
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 7ms",
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 4ms"
+        ],
+        "failedNameExamples": [
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player origin-qualified nth > missing legacy origin withholds only the new modifier, never guesses from current void",
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player origin-qualified nth > missing legacy origin withholds only the new modifier, never guesses from current void"
+        ],
+        "allFailureNamesReceipt": "cf-legacy-unknown-proof.json",
+        "allFailureNamesReceiptSHA256": "96cec7072777399f6aea944bf57a26397b3fbc8142a4194d9c43757460fa4bf7",
+        "elapsedS": 3.944722499989439,
+        "originalSHA": "dd870d31b71d76e68e38510c9ae5d58a1957b12291640147ae2f240c81ba8fae",
+        "mutantSHA": "c00ecff9b45e0c070e5e44e91dc28d134e9f6afcf626bdc9b2d968bd8475f606",
+        "all2529Restored": true,
+        "terminalGroup": [],
+        "rawStdoutSHA": "8088ac06c2b11bc9ba30e4f33f6ff7fcef30f8088bcfbd8793224084a37b7256",
+        "rawStderrSHA": "2dc30d79954f3032214155b4bcfe76efeb9bc14a965192c45c1e44fea4805ab8"
+      },
+      {
+        "id": "history-shape",
+        "family": 5,
+        "failed": 2,
+        "passed": 2,
+        "oldControlPassNames": [
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 9ms",
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 6ms"
+        ],
+        "failedNameExamples": [
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player origin-qualified nth > save guard validates provenance scalars and only the latest matching physical stack record",
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > enemy origin-qualified nth > save guard validates provenance scalars and only the latest matching physical stack record"
+        ],
+        "allFailureNamesReceipt": "cf-history-shape-proof.json",
+        "allFailureNamesReceiptSHA256": "6dac38b66a69fb96a43b0092715e2099b63450241fb1c8db250c7c2aa56dfdd1",
+        "elapsedS": 4.740079499955755,
+        "originalSHA": "eacb093dbff1be64cd910ec81479d6f3ce001ea91991ffb1ad5652fc02ad9cec",
+        "mutantSHA": "4e59a265d7fbc13bbefe7fe388005240051e18202abe03f012211d7b5bf5320f",
+        "all2529Restored": true,
+        "terminalGroup": [],
+        "rawStdoutSHA": "13db020a2f4307e9e48aa271b34bf96c2b183e914feb419f8bd2411db51853ea",
+        "rawStderrSHA": "077deda910e58688dce54256ec927981b7acafbc746da5cef3ed3635f2df948c"
+      },
+      {
+        "id": "stack-correlation",
+        "family": 5,
+        "failed": 2,
+        "passed": 2,
+        "oldControlPassNames": [
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > player static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 9ms",
+          "✓ |shared| src/engine/effects/primitives/contracts.test.ts > enemy static nth costs > set applies to qualifying play 1 before payment, once at cost zero too 5ms"
+        ],
+        "failedNameExamples": [
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > player origin-qualified nth > save guard validates provenance scalars and only the latest matching physical stack record",
+          "FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > enemy origin-qualified nth > save guard validates provenance scalars and only the latest matching physical stack record"
+        ],
+        "allFailureNamesReceipt": "cf-stack-correlation-proof.json",
+        "allFailureNamesReceiptSHA256": "b50277db3d2d6cd03f15334b29b1b591b11dc124ff76338b99d9d3110587b62c",
+        "elapsedS": 4.056912791973446,
+        "originalSHA": "eacb093dbff1be64cd910ec81479d6f3ce001ea91991ffb1ad5652fc02ad9cec",
+        "mutantSHA": "6bd4074cc52c770d8ab96096a531fb3d28e6503d3716e5a7ba26501196d771ec",
+        "all2529Restored": true,
+        "terminalGroup": [],
+        "rawStdoutSHA": "286852f82a3534f018c2d7ef4ef2fcd2592b9025710255e3bec292cc9f97beec",
+        "rawStderrSHA": "b652337e3962daffa32823ce35ce1eb84db78761c0e0f26c9faf4ff21f45e7a5"
+      }
+    ],
+    "scope": "Seven exact own-source faults across five changed families. Actual assertion failures and two independent old unqualified controls per row; all2529 frozen sources restored after each. Copies/cancel/runner/loop infrastructure remained unchanged; public controls cover those behaviors. Parent independently reconstructed and verified every mutant/output/source restore in parent-counterfactual-verification.json.",
+    "proposalSHA": "09adf7c1637dac5facb9963bafca74c9fc01bb6e0b4e6421ebebcdb3bdd8be63",
+    "nativeACK": "01a13d9a-3ba3-77d3-bb14-9008454ebf23",
+    "sourceCommit": "3ddfef8ea11dfccbcc8e474a4d6f098102eb524f",
+    "qualification": "Original seven exact faults and2529restores before originalcommit, not repeated on combined615. The actual combined focused and ordinary checks separately validate integration with landed peer fields."
+  },
+  "failurePaths": [
+    {
+      "category": "error",
+      "tests": [
+        "player origin-qualified nth > an unaffordable attempted void play preserves input and its unconsumed ordinal",
+        "enemy origin-qualified nth > an unaffordable attempted void play preserves input and its unconsumed ordinal"
+      ],
+      "contract": "Public illegal/unpayable play throws and preserves complete input/history. The new capture is a synchronous boolean read, and the history append remains inside the unchanged atomic runner; no new separately throwing algorithm is introduced."
+    },
+    {
+      "category": "reload",
+      "tests": [
+        "player origin-qualified nth > cancel, illegal/stale/foreign/concurrent answers and reload commit exactly one true record",
+        "enemy origin-qualified nth > cancel, illegal/stale/foreign/concurrent answers and reload commit exactly one true record"
+      ],
+      "contract": "Real pending fold state round-trips through public saved parser, resumes in a fresh fold adapter with event-prefix checking, and commits exactly one true record matching direct execution."
+    },
+    {
+      "category": "partial-write",
+      "tests": [
+        "player origin-qualified nth > cancel, illegal/stale/foreign/concurrent answers and reload commit exactly one true record",
+        "enemy origin-qualified nth > cancel, illegal/stale/foreign/concurrent answers and reload commit exactly one true record"
+      ],
+      "reasonNarrowN_A": "The new boolean read and one record field do not suspend or create a separate write transaction. The unchanged runner owns atomic clone/commit. Public pending and cancellation assertions prove no committed origin before payment/commit and exact committed-state rollback; no private post-write fault hook was added."
+    },
+    {
+      "category": "invalid-or-stale",
+      "tests": [
+        "player origin-qualified nth > cancel, illegal/stale/foreign/concurrent answers and reload commit exactly one true record",
+        "enemy origin-qualified nth > cancel, illegal/stale/foreign/concurrent answers and reload commit exactly one true record",
+        "player origin-qualified nth > save guard validates provenance scalars and only the latest matching physical stack record",
+        "enemy origin-qualified nth > save guard validates provenance scalars and only the latest matching physical stack record"
+      ],
+      "contract": "Foreign/illegal/stale prompt answers bounce; malformed historical scalar and contradictory latest physical stack provenance refuse saved input. Legacy absent field and older physical repeats remain accepted."
+    },
+    {
+      "category": "concurrent-redelivery",
+      "tests": [
+        "player origin-qualified nth > cancel, illegal/stale/foreign/concurrent answers and reload commit exactly one true record",
+        "enemy origin-qualified nth > cancel, illegal/stale/foreign/concurrent answers and reload commit exactly one true record"
+      ],
+      "contract": "A duplicate answer after the first committed answer bounces; the saved/direct folds have identical final hashes and exactly one play record. This is deterministic serialized intent redelivery, not a timing or parallel-thread stress test."
+    }
+  ],
+  "checksAfterRestoration": "Original exact2529restoration is historical before3ddf. Final combined615 epoch has its own2533freeze, actual341focused/9168ordinary/Knip/probe/generator receipts; no relabeling.",
+  "originalImplementation": {
+    "base": "e1d334d3eb0bd8a013d91a1fefa213114aecdb58",
+    "source": "3ddfef8ea11dfccbcc8e474a4d6f098102eb524f",
+    "sourceEpoch": {
+      "fullHeavyFreezeSHA": "a4aaac27baec0c3d4812be55f099328e4c59484301db76c106601216cec5eeb7",
+      "scope": "2526actualtracked/admitteduntrackedruntime/test/data/scripts/vendor/rootconfigpaths plus3normativedocs/RD; timing evidence excluded",
+      "newContractLines": 251,
+      "newTestEntrypoints": 0,
+      "jsdomDelta": 0
+    },
+    "automaticGitEndpoint": "2026-10-15T03:34:18.437492+00:00",
+    "inclusiveElapsedMin": 51.39069153333333,
+    "cutoffTailS": 2.368514,
+    "endpointReceipt": "commit-endpoint.json",
+    "qualifiedScope": "Original full, literal300 and seven causal faults validate the original frozen3ddf implementation. Earlier development checks retain their own exact source hashes and failures. None is relabeled as a run on the final combined615 source."
+  },
+  "integrationRecovery": {
+    "candidate": "01a13da1-17b1-7383-ada4-cd596527b37a",
+    "candidateDisposition": "Terminal merge-conflict, never authorized and no prepared tested generation.",
+    "nativeUpdateFirst": "Root native Tg update returned could-not-rebase exit5 with clean rollback; diagnose inapplicable for unprepared generation, no blind retry/raw rebase.",
+    "parkManifestSHA256": "691b5f82f6a94e7f81f38f646c5498e614aa7743c5048bb88d996721780283e1",
+    "temporaryCheckpoint": "457800605d8e6aef60eb5d66407fc4f21f550fba",
+    "checkpointPolicy": "Only six conflicting files restored to verified oldbase bytes, other12owned paths retained. Temporary checkpoint was never tested/submitted/approved.",
+    "updatedCheckpoint": "26463b251715c64d95fc01146263723b12928865",
+    "newBase": "615054fd12d39e1d15a2720155ac9dea35740d38",
+    "rootUpdate": "Native update succeeded from temporary checkpoint, clean/doctor healthy; peer bytes verified against saved newbase before reapply.",
+    "reapply": "Exactly original four manual source/design deltas reapplied, inventory/replay canonical. Peer220copiable/copyJson/lastPlayedCharacter/shape/liveguard and630activatedroute type/validator/DSL retained.",
+    "combinedChecks": [
+      {
+        "label": "baseline-combined",
+        "argv": ["node", "node_modules/tsx/dist/cli.mjs", "/tmp/dreamtides-705-root/origin-baseline.mjs"],
+        "start": "2026-10-15T03:41:29.690996+00:00",
+        "end": "2026-10-15T03:41:31.791817+00:00",
+        "elapsedS": 2.100659917050507,
+        "exit": 0,
+        "pid": 4931,
+        "pgid": 4931,
+        "terminalGroup": [],
+        "rawReceipt": "baseline-combined.receipt.json",
+        "rawReceiptSHA256": "8329005addcb7788aceb5c3c98cdfc4d60a63fa1228fb0790706d35503755532",
+        "sourceEpochSHA256": "3b760ea9dbbb1505be3ef53ad54feaae5886f34a72f24e247f3e658906a6c5ee",
+        "sourceUnchangedDuringCommand": true,
+        "qualification": "Read-only validation epoch stable."
+      },
+      {
+        "label": "combined-hash",
+        "argv": ["node", "node_modules/tsx/dist/cli.mjs", "/tmp/dreamtides-705-root/integration-recovery/combined-hash-proof.mjs"],
+        "start": "2026-10-15T03:42:03.544517+00:00",
+        "end": "2026-10-15T03:42:05.361333+00:00",
+        "elapsedS": 1.8166924999677576,
+        "exit": 0,
+        "pid": 56671,
+        "pgid": 56671,
+        "terminalGroup": [],
+        "rawReceipt": "combined-hash.receipt.json",
+        "rawReceiptSHA256": "2b62e2bcc256ef4bbb847fba3a4d6ad7b9b37656fff09a5e921cd6f8870de820",
+        "sourceEpochSHA256": "3b760ea9dbbb1505be3ef53ad54feaae5886f34a72f24e247f3e658906a6c5ee",
+        "sourceUnchangedDuringCommand": true,
+        "qualification": "Read-only validation epoch stable."
+      },
+      {
+        "label": "combined-inventory",
+        "argv": ["node", "node_modules/tsx/dist/cli.mjs", "scripts/content-inventory.ts"],
+        "start": "2026-10-15T03:42:33.090541+00:00",
+        "end": "2026-10-15T03:42:36.156162+00:00",
+        "elapsedS": 3.065296374959871,
+        "exit": 0,
+        "pid": 65523,
+        "pgid": 65523,
+        "terminalGroup": [],
+        "rawReceipt": "combined-inventory.receipt.json",
+        "rawReceiptSHA256": "ca44e9faddc366b5f61d3fdf8cb7cddf475e9988bc605c0330fbbb042f836012",
+        "sourceEpochSHA256": "3b760ea9dbbb1505be3ef53ad54feaae5886f34a72f24e247f3e658906a6c5ee",
+        "sourceUnchangedDuringCommand": false,
+        "qualification": "Canonical generators intentionally change only their admitted output; command epoch flag false there is expected."
+      },
+      {
+        "label": "combined-replay-gen1",
+        "argv": ["node", "node_modules/tsx/dist/cli.mjs", "scripts/regenerate-replay-fixtures.mjs"],
+        "start": "2026-10-15T03:43:20.058576+00:00",
+        "end": "2026-10-15T03:43:21.845644+00:00",
+        "elapsedS": 1.7869363329955377,
+        "exit": 0,
+        "pid": 69193,
+        "pgid": 69193,
+        "terminalGroup": [],
+        "rawReceipt": "combined-replay-gen1.receipt.json",
+        "rawReceiptSHA256": "e25a344429575e074e560d6566389adb327e005662542ce22c375f3f7d9e7883",
+        "sourceEpochSHA256": "be49a02c5c611d34d0bb0f13609869b6b20e0431c3cdbf5f2e138aa26a5ec7d9",
+        "sourceUnchangedDuringCommand": false,
+        "qualification": "Canonical generators intentionally change only their admitted output; command epoch flag false there is expected."
+      },
+      {
+        "label": "combined-replay-gen2",
+        "argv": ["node", "node_modules/tsx/dist/cli.mjs", "scripts/regenerate-replay-fixtures.mjs"],
+        "start": "2026-10-15T03:43:33.767194+00:00",
+        "end": "2026-10-15T03:43:35.255434+00:00",
+        "elapsedS": 1.4881759170093574,
+        "exit": 0,
+        "pid": 70106,
+        "pgid": 70106,
+        "terminalGroup": [],
+        "rawReceipt": "combined-replay-gen2.receipt.json",
+        "rawReceiptSHA256": "22346b5c2152ae3ca01a19c2c4e2bbd45d815414bba9bda38eea1edacdeb4b73",
+        "sourceEpochSHA256": "c48cea2efd6eb4c5b966cf761b54e474fcef86f764ca2869ce937c50efb4f8ae",
+        "sourceUnchangedDuringCommand": true,
+        "qualification": "Read-only validation epoch stable."
+      },
+      {
+        "label": "combined-focus",
+        "argv": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "scripts/content-inventory.test.ts",
+          "src/rules/replay/replay.test.ts",
+          "-t",
+          "origin-qualified nth|static nth costs|historyRefs|activated energy route|authoring|capabilit|replay",
+          "--maxWorkers=2"
+        ],
+        "start": "2026-10-15T03:43:57.890623+00:00",
+        "end": "2026-10-15T03:44:05.461583+00:00",
+        "elapsedS": 7.570777332992293,
+        "exit": 0,
+        "pid": 71899,
+        "pgid": 71899,
+        "terminalGroup": [],
+        "rawReceipt": "combined-focus.receipt.json",
+        "rawReceiptSHA256": "edc59dfa1151e9a4787e55aca1cc48d45d1ced932d45b1740ccc00f06cbc9624",
+        "sourceEpochSHA256": "c48cea2efd6eb4c5b966cf761b54e474fcef86f764ca2869ce937c50efb4f8ae",
+        "sourceUnchangedDuringCommand": true,
+        "qualification": "Read-only validation epoch stable."
+      },
+      {
+        "label": "combined-review",
+        "argv": ["npm", "run", "review"],
+        "start": "2026-10-15T03:45:02.351465+00:00",
+        "end": "2026-10-15T03:46:08.079496+00:00",
+        "elapsedS": 65.72706350003136,
+        "exit": 0,
+        "pid": 76388,
+        "pgid": 76388,
+        "terminalGroup": [],
+        "rawReceipt": "combined-review.receipt.json",
+        "rawReceiptSHA256": "00c0ea93659fb57023a5e2c9bd1195f06f51fbaa66f03cb3ae5e8fd6319c2137",
+        "sourceEpochSHA256": "c48cea2efd6eb4c5b966cf761b54e474fcef86f764ca2869ce937c50efb4f8ae",
+        "sourceUnchangedDuringCommand": true,
+        "qualification": "Read-only validation epoch stable."
+      },
+      {
+        "label": "combined-knip",
+        "argv": ["npm", "run", "knip"],
+        "start": "2026-10-15T03:46:20.023283+00:00",
+        "end": "2026-10-15T03:46:24.094286+00:00",
+        "elapsedS": 4.070888540998567,
+        "exit": 0,
+        "pid": 82061,
+        "pgid": 82061,
+        "terminalGroup": [],
+        "rawReceipt": "combined-knip.receipt.json",
+        "rawReceiptSHA256": "bba1849f8961ea3a132d2d58bd999bcb61d80c28ad7f9f9b06f9056c595fd24c",
+        "sourceEpochSHA256": "c48cea2efd6eb4c5b966cf761b54e474fcef86f764ca2869ce937c50efb4f8ae",
+        "sourceUnchangedDuringCommand": true,
+        "qualification": "Read-only validation epoch stable."
+      }
+    ],
+    "combinedProof": {
+      "scope": "Actual combined engine execution; qualified mechanical projection/hash audit only, no base615 engine executed",
+      "rows": [
+        {"side": "player", "mode": "set", "paid": [2, 0, 2], "origins": [false, true, true], "copiablePresent": true},
+        {"side": "player", "mode": "reduce", "paid": [2, 1, 2], "origins": [false, true, true], "copiablePresent": true},
+        {"side": "enemy", "mode": "set", "paid": [2, 0, 2], "origins": [false, true, true], "copiablePresent": true},
+        {"side": "enemy", "mode": "reduce", "paid": [2, 1, 2], "origins": [false, true, true], "copiablePresent": true}
+      ],
+      "adversarial": {
+        "actualCombinedHash": "d2d2cd824f92c8e5a1e776262b019187ba4f7874b730356fbc0c130eccb78dfb",
+        "base615ExpectedHash": "718249836cdd521f15e8848192265459834d65e8936d6e6f922a30a4013ac300",
+        "removeOnlyOwnBooleanHash": "718249836cdd521f15e8848192265459834d65e8936d6e6f922a30a4013ac300",
+        "ownBoolean": false,
+        "copiableRetained": true,
+        "onlyDeltaFromOriginal3ddfActual": "peer copiable record field"
+      },
+      "allThreeOutcomeSequencesEqualOriginal": true
+    },
+    "combinedInventorySHA256": "b32c761412e82231553920aa142f009e8e0240648208d4a25ad0282cc5e9c8f9",
+    "parentGeneratedVerification": "parent-combined-generated-verification.json",
+    "generatedPolicy": "All1209 immutable/unrelated semantic fields unchanged, exact2 corrections plus CloudLens routing and qualified mechanical usage/projection. Replay only adversarial finalHash718249...→d2d2..., other2/provider/genesis/events unchanged; two actual generator outputs identical.",
+    "tests": {
+      "focused": {"passed": 341, "files": 3, "elapsedS": 7.570777332992293},
+      "review": {"passed": 9168, "files": 306, "elapsedS": 65.72706350003136},
+      "knip": {"exit": 0, "elapsedS": 4.070888540998567}
+    },
+    "limits": "No duplicate full/300/causal faults were run on combined source; original evidence remains historical and combined validation is explicit. No browser, consumer authoring, native ownership mutation or foreign worktree.",
+    "frictionWindow": {
+      "start": "2026-10-15T03:36:56.826444Z",
+      "end": "2026-10-15T03:48:19.587233+00:00",
+      "minutes": 11.379346483333334,
+      "scope": "Bounded checkpoint-ACK to combined evidence cutoff wall interval, includes coordination and revalidation, excludes earlier failed candidate/update interval."
+    }
+  },
+  "originalEvidenceChecks": [
+    {
+      "label": "evidence-schema",
+      "argv": ["node", "scripts/friction-triggers.mjs", "--validate-records"],
+      "elapsedS": 0.2756330000120215,
+      "exit": 0,
+      "pid": 79232,
+      "pgid": 79232,
+      "terminalGroup": [],
+      "rawReceipt": "evidence-schema.receipt.json",
+      "rawReceiptSHA256": "07c80cf40fe9d0a6c820bc102bf300493519b032162055803f83f67a849c0dca"
+    },
+    {
+      "label": "whitespace",
+      "argv": ["python3", "/tmp/dreamtides-705-root/check-whitespace.py"],
+      "elapsedS": 0.17898279201472178,
+      "exit": 0,
+      "pid": 80680,
+      "pgid": 80680,
+      "terminalGroup": [],
+      "rawReceipt": "whitespace.receipt.json",
+      "rawReceiptSHA256": "01ff2bdb985c5aa53936bc6aae0defbcf8067e6ad73ad5854bebe43265ecb5a5"
+    }
+  ],
+  "finalEvidenceChecks": [
+    {
+      "label": "combined-evidence-schema",
+      "argv": ["node", "scripts/friction-triggers.mjs", "--validate-records"],
+      "elapsedS": 0.30525024997768924,
+      "exit": 0,
+      "pid": 91917,
+      "pgid": 91917,
+      "terminalGroup": [],
+      "rawReceipt": "combined-evidence-schema.receipt.json",
+      "rawReceiptSHA256": "d6d43b6796188621de8cb05605938b2126f7b6093394d08daf3f5a2561e3f3d2"
+    },
+    {
+      "label": "combined-whitespace",
+      "argv": ["python3", "/tmp/dreamtides-705-root/check-whitespace.py"],
+      "elapsedS": 0.18516499997349456,
+      "exit": 0,
+      "pid": 93491,
+      "pgid": 93491,
+      "terminalGroup": [],
+      "rawReceipt": "combined-whitespace.receipt.json",
+      "rawReceiptSHA256": "185bef21aa51359dc91bfbad509f0f01236986d312d603f2298f716954315bf6"
+    }
+  ]
+}

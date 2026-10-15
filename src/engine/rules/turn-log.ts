@@ -25,10 +25,10 @@ export function emptyTurnLog(): TurnLog {
  * that has since ceased to exist or become unidentifiable in a hidden zone
  * still matches by its captured speed, cost and spark.
  */
-export function recordPlayed(state: BattleState, catalog: EngineCatalog, side: Side, card: InstanceId): void {
+export function recordPlayed(state: BattleState, catalog: EngineCatalog, side: Side, card: InstanceId, playedFromVoid: boolean): void {
   const { cardType, subtype, allTypes, spark, namedTriggers } = characteristicsOf(state, catalog, card);
   const { printing, variant } = state.instances[card];
-  state.turnLog.played[side].push({ instance: card, cardType, subtype, allTypes, namedTriggers: [...namedTriggers], cost: copiableCostOf(state, catalog, card), spark, speed: instanceCard(catalog, state.instances[card]).speed, copiable: copyJson({ printing, variant }) });
+  state.turnLog.played[side].push({ instance: card, playedFromVoid, cardType, subtype, allTypes, namedTriggers: [...namedTriggers], cost: copiableCostOf(state, catalog, card), spark, speed: instanceCard(catalog, state.instances[card]).speed, copiable: copyJson({ printing, variant }) });
 }
 
 /** Select the latest actual matching play before considering its current physical survival. */

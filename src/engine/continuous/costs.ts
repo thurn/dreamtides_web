@@ -58,7 +58,9 @@ export function costModifier(
     }
     if (change.kind !== "cost" || change.route === "activated" || change.player !== player || !matchesFilter(played, change.filter)) continue;
     if (change.nth !== undefined) {
-      const earlier = state.turnLog.played[player].filter(record => playedMatchesFilter(state, catalog, record, change.filter)).length;
+      const matching = state.turnLog.played[player].filter(record => playedMatchesFilter(state, catalog, record, change.filter));
+      if (change.from === "void" && (state.instances[card].zone !== "void" || matching.some(record => record.playedFromVoid === undefined))) continue;
+      const earlier = change.from === "void" ? matching.filter(record => record.playedFromVoid === true).length : matching.length;
       if (earlier !== change.nth - 1) continue;
     }
     if (change.mode === "set") {

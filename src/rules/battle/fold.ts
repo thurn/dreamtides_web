@@ -741,6 +741,7 @@ function isBattleState(value: unknown): boolean {
     hasConsistentLinkedBanish(value) &&
     hasConsistentPoolCandidates(value) &&
     hasConsistentPlayedCopiable(value) &&
+    hasConsistentPlayedOrigin(value) &&
     (() => {
       const state = value as unknown as BattleState;
       return state.triggerQueue.every(trigger => {
@@ -1054,7 +1055,7 @@ const FLOATING_CHANGE_VALIDATORS: {
   spark: (value) => isInstanceId(value.instance) && isFiniteNumber(value.amount),
   cost: (value) =>
     (value.route === undefined || value.route === "activated") &&
-    value.nth === undefined && value.mode === undefined &&
+    value.nth === undefined && value.mode === undefined && value.from === undefined &&
     isSide(value.player) &&
     isCardFilter(value.filter) &&
     isFiniteNumber(value.amount) &&
@@ -1293,6 +1294,17 @@ function isPlayedCopiable(value: unknown): boolean {
     (mods.typeChange === null || isPlainRecord(mods.typeChange) && Object.keys(mods.typeChange).every(key => key === "cardType" || key === "subtype"));
 }
 
+/** Compare only the latest play of a currently stacked physical card, when its origin was captured. */
+function hasConsistentPlayedOrigin(value: Record<string, unknown>): boolean {
+  const state = value as unknown as BattleState;
+  return state.stack.every(item => {
+    if (item.kind !== "card") return true;
+    const matching = state.turnLog.played[item.controller].filter(played => played.instance === item.instance);
+    const record = matching[matching.length - 1];
+    return record?.playedFromVoid === undefined || record.playedFromVoid === (item.playedFromVoid === true);
+  });
+}
+
 function isTurnLog(value: unknown): boolean {
   const departures = optional(sideRecord(arrayOf(card => isPlainRecord(card) && isInstanceId(card.instance) && isCardKind(card.cardType))));
   return (
@@ -1310,6 +1322,7 @@ function isTurnLog(value: unknown): boolean {
           isBoolean(played.allTypes) &&
           optional(isPlayedCopiable)(played.copiable) &&
           optional(arrayOf(isNamedTrigger))(played.namedTriggers) &&
+          optional(isBoolean)(played.playedFromVoid) &&
           // A saved record may omit its captured cost, spark and speed.
           optional(isIndex)(played.cost) &&
           optional(oneOf({ standard: true, fast: true, interrupt: true }))(played.speed) &&

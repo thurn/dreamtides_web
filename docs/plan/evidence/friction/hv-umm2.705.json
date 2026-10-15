@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.705",
+  "phase": 5,
+  "implementWindow": {
+    "start": "2026-10-15T02:42:54.996000+00:00",
+    "end": "2026-10-15T03:54:16.471382+00:00"
+  },
+  "implementMin": 71.35792303333332,
+  "localValidationS": {
+    "review": 65.72706350003136,
+    "focused": 7.570777332992293,
+    "knip": 4.070888540998567,
+    "full": 111.65719758399064,
+    "fuzz": 445.5281357499771
+  },
+  "hostLoad": 9.94287109375,
+  "testDelta": {
+    "files": 1,
+    "lines": 268,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "integration-conflict",
+      "minutes": 11.379346483333334,
+      "note": "Checkpoint ACK 2026-10-15T03:36:56.826444Z through fixed integration cutoff 2026-10-15T03:48:19.587233+00:00: six ordinary textual/generated conflicts required park/checkpoint, parent native update, peer-preserving reapply, canonical generation and combined checks. Wall interval includes coordination/validation, not edit CPU; prior candidate/update failure time is separate."
+    }
+  ]
+}

@@ -474,8 +474,8 @@ export type ContinuousChange =
    * card-sourced activated abilities and is consumed when an activation pays.
    */
   | ({ readonly kind: "cost"; readonly player: Side; readonly filter: CardFilter; readonly amount: number; readonly next: boolean } &
-      ({ readonly nth?: never; readonly mode?: never; readonly route?: "activated" } | { readonly nth: number; readonly mode?: "set"; readonly route?: never } |
-       { readonly nth?: never; readonly mode: "set"; readonly next: false; readonly route?: never }))
+      ({ readonly nth?: never; readonly mode?: never; readonly route?: "activated"; readonly from?: never } | { readonly nth: number; readonly mode?: "set"; readonly route?: never; readonly from?: "void" } |
+       { readonly nth?: never; readonly mode: "set"; readonly next: false; readonly route?: never; readonly from?: never }))
   /** Layer 6, static only: the selected Reclaim fixed base or whole-payment reduction. */
   | { readonly kind: "reclaimCost"; readonly player: Side; readonly mode: "set" | "reduce"; readonly amount: number }
   /**
@@ -685,6 +685,8 @@ export interface SparkGain {
  * had as it was played (RD-hv-7x4l.34-1).
  */
 export interface PlayedCard {
+  /** Actual pre-payment void origin; absent legacy provenance is unknown. */
+  readonly playedFromVoid?: boolean;
   /** Public copiable values as played, retained independently of the physical card's survival. */
   readonly copiable?: Pick<CardInstance, "printing" | "variant">;
   /** Named triggers as played; missing legacy abilities are unknown and match no ability filter. */

@@ -115,6 +115,7 @@ export function commitCardPlay(ctx: StepContext, card: InstanceId, prepared: Pre
 } = {}): void {
   const { state, catalog } = ctx;
   const instance = instanceOf(state, card);
+  const playedFromVoid = instance.zone === "void";
   const side = instance.controller;
   const definition = instanceCard(catalog, instance);
   const cardId = printedCardId(instance.printing);
@@ -129,7 +130,7 @@ export function commitCardPlay(ctx: StepContext, card: InstanceId, prepared: Pre
   moveToStack(ctx, card, side, { choices: prepared.choices, x: plan.x, optionalPaid: plan.optionalPaid, ...(materializesAwakened ? { materializesAwakened: true } : {}), ...(options.slot === undefined ? {} : { slot: options.slot }) });
   if (route === "reclaim") instance.status.reclaimed = true;
   if (route === "offering") instance.status.offering = true;
-  recordPlayed(state, catalog, side, card);
+  recordPlayed(state, catalog, side, card, playedFromVoid);
   ctx.emit({ kind: "cardPlayed", side, instance: card });
   if (definition.status === "pending" && cardId !== null) {
     ctx.emit({ kind: "pendingAbility", side, cardId, instance: card, reason: "played" });
