@@ -1,0 +1,408 @@
+{
+  "bead": "hv-umm2.739",
+  "base": "2db89967b6e002357dbacabf302538940130cfad",
+  "implementation": "Root direct Justiciar operational recovery, no helper/delegation or repository code changes. Native claim clock has seconds resolution; root diagnostics before claim belong to original210 window. Original210 dispatch clock continues through this prerequisite.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Whole ordinary-review invocation starting one-minute load at2026-10-15T10:41:54.526937Z"
+      },
+      "implementWindow": {
+        "measuredFor": "Native739claim through fresh precommit cutoff, inclusive investigation, coordination, context waits, diagnostic sessions, custody and validation. Actual Git endpoint separately retained; future endpoint not predicted."
+      }
+    }
+  },
+  "testDeltaInterpretation": {
+    "dedicatedModules": 0,
+    "configuredEntrypoints": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "nonTestCodeChanged": 0
+  },
+  "diagnosticVerification": {
+    "at": "2026-10-15T10:39:42.759003+00:00",
+    "source": "2db89967b6e002357dbacabf302538940130cfad",
+    "sourceBindingsUnchanged": 2610,
+    "prefixCells": 32,
+    "prefixVerdicts": {
+      "pass": 18,
+      "skip": 14
+    },
+    "allPositiveReports": 22,
+    "uniqueNativeGames": 22,
+    "totalNativeRows": 761,
+    "singleExpectedMainDocumentRequestEach": true,
+    "noObservedPriorGameNavigation": true,
+    "cause": "Unestablished. Isolated4cells and exact preceding7-card+06prefix32cells each pass in fresh contexts; these observations do not attribute earlier navigation or prove permanent product repair.",
+    "operationalResolution": "Previously affected context/server were normally drained and all own process/record resources settled before739claim. Scope remaining210 QA to one fresh owned session per selected card; preserve existing driver/cell/retry/error semantics, complete all failing/unrecorded cells and original1000games. No code patch or whole-sample acceptance waiver.",
+    "verified": [
+      {
+        "path": "invocations/run-826Nqq/145f72b9-5ff7-4477-b7f5-55ca89a135ae-enemy.result.json",
+        "SHA256": "efe1b437d5749d5b01175a081e25d0a8bfdf1c3bbf0f38e3da1b3951336a1aee",
+        "gameId": "r3smg6",
+        "nativeRows": 37,
+        "exportSHA256": "528f3980163c0e8e6a47173253aee089e72dcc17688109cdf9b1b019730221e9",
+        "UUID": "145f72b9-5ff7-4477-b7f5-55ca89a135ae",
+        "side": "enemy",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/run-826Nqq/06f8cfff-92ec-4668-afbc-f33a274c3b1a-player.result.json",
+        "SHA256": "b14695984c6cb4867932206f2e6d6b0d0d221039088ba6eb1dd7b0342c2d3133",
+        "gameId": "vovv3h",
+        "nativeRows": 30,
+        "exportSHA256": "4c861664800374ae67e97243d0e715c2005b286d2c396a3159c5dcfea2adb766",
+        "UUID": "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+        "side": "player",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/run-826Nqq/06f8cfff-92ec-4668-afbc-f33a274c3b1a-enemy.result.json",
+        "SHA256": "91722be14af60dd4fcef9a4acc0e7bcf0ff2f809d4833854ec000325d734fa93",
+        "gameId": "bmnfhp",
+        "nativeRows": 40,
+        "exportSHA256": "4a83fef77a24ec83c5e31bfd3d8a0368c62e442eae948c3d1c0794bedbf6e7f7",
+        "UUID": "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+        "side": "enemy",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/run-826Nqq/145f72b9-5ff7-4477-b7f5-55ca89a135ae-player.result.json",
+        "SHA256": "ab87eec76dd267a0a2bac0e6903847be1715c39ed4d625c928ca58331c52f976",
+        "gameId": "7e8dnu",
+        "nativeRows": 34,
+        "exportSHA256": "68e08510158f63b9645a258bdb6825997851c7fe099c2ac9082eb73385a9173c",
+        "UUID": "145f72b9-5ff7-4477-b7f5-55ca89a135ae",
+        "side": "player",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-66959155-9e79-459e-afdb-eb4c0fbdeb11-base-player-attempt-1.result.json",
+        "SHA256": "fd9be025e4097cf7766e246a6c361166c94f89ebc77f3a1f9d12be48da157748",
+        "gameId": "ndkct4",
+        "nativeRows": 29,
+        "exportSHA256": "aa09c4448c257ac8769b999df8637bcb85bc29ea9307a4ddf92b44b7bf109079",
+        "UUID": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+        "side": "player",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-66959155-9e79-459e-afdb-eb4c0fbdeb11-base-enemy-attempt-1.result.json",
+        "SHA256": "2f828040fbc3b141055545e892ae1aec14fbac531dcf9ce664f1b9a3537d3b58",
+        "gameId": "hm8nbd",
+        "nativeRows": 31,
+        "exportSHA256": "d7ae6d8a41b8a7cbd3c5de3c6c1b82f821df4e0edc6c01abbe284c8d29960224",
+        "UUID": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+        "side": "enemy",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-435ed83c-f7a6-4a73-a684-67fcc4e49bc4-base-player-attempt-1.result.json",
+        "SHA256": "57c0312b120043be8dcba38d5067f09eca9b566e3741c052bd09145d70790505",
+        "gameId": "ekdwfk",
+        "nativeRows": 36,
+        "exportSHA256": "0580e10d2a5f357c88a5e978847004c6317b333c4065eddbcab71ec2b16cd080",
+        "UUID": "435ed83c-f7a6-4a73-a684-67fcc4e49bc4",
+        "side": "player",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-dbd014b1-1ec8-4762-bd96-48a2a4824de2-base-player-attempt-1.result.json",
+        "SHA256": "934b6c27ea61b0b4bc229edc135be778fa2438cca034e70447c1a353928b2d2d",
+        "gameId": "dcjurh",
+        "nativeRows": 32,
+        "exportSHA256": "2ef137af7624b04f20aa8efa976230d87505640dbaf0b692e859532f9b20328a",
+        "UUID": "dbd014b1-1ec8-4762-bd96-48a2a4824de2",
+        "side": "player",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-7b55efd1-6d9f-4156-9de7-1c71ccc410cb-base-enemy-attempt-1.result.json",
+        "SHA256": "a0a490b2a0ad6b8c3bf2404980bd123cd450cc2ea0fa2cb47623fb1bf97f7b89",
+        "gameId": "rsea6j",
+        "nativeRows": 32,
+        "exportSHA256": "994840343928907b51a0f5452e61f117df204204c384e74df623b3b96d110bad",
+        "UUID": "7b55efd1-6d9f-4156-9de7-1c71ccc410cb",
+        "side": "enemy",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-435ed83c-f7a6-4a73-a684-67fcc4e49bc4-amplified-player-attempt-1.result.json",
+        "SHA256": "3a08eabc05838020ca3075728eb499b721e9fdb5278aaac1dcdfacfac5cb571e",
+        "gameId": "nf2cjs",
+        "nativeRows": 36,
+        "exportSHA256": "c7af795fab553eb5122642c408a7e21bda963a994dcd83492bfdcafda695075b",
+        "UUID": "435ed83c-f7a6-4a73-a684-67fcc4e49bc4",
+        "side": "player",
+        "variant": "amplified"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-435ed83c-f7a6-4a73-a684-67fcc4e49bc4-amplified-enemy-attempt-1.result.json",
+        "SHA256": "e87311f6d08381f690292ef922904137520ac031bc988d563ae47936db465645",
+        "gameId": "pbysku",
+        "nativeRows": 52,
+        "exportSHA256": "d680d3c7efc9b1cfaed36c15bcb255ffa016bc2b93f960c9e1f5f2474f9c14e8",
+        "UUID": "435ed83c-f7a6-4a73-a684-67fcc4e49bc4",
+        "side": "enemy",
+        "variant": "amplified"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-b1bea643-1a7b-4e5e-b072-7174d3405421-base-enemy-attempt-1.result.json",
+        "SHA256": "4ae96f1c6afa4b15ae6bb5090c4d4890d6461d053ab3b6533e4c9e94d771bde4",
+        "gameId": "iitdbo",
+        "nativeRows": 31,
+        "exportSHA256": "8b1b7b29bb510311ef32c3c849362bfbaf194557e54e372d13b8f45058980a6c",
+        "UUID": "b1bea643-1a7b-4e5e-b072-7174d3405421",
+        "side": "enemy",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-5aaf13de-25bc-467f-a4a0-fe2c4373cc9f-base-enemy-attempt-1.result.json",
+        "SHA256": "c54f538f7618488a4581af36e33487a50faa3e183ed37a02994519415a9ebe6d",
+        "gameId": "dnftye",
+        "nativeRows": 42,
+        "exportSHA256": "0f3e0cc09f8ce1e4ac99fcccf19c7c106b4c7fc2a1bd957dd2e86069ad3f56e3",
+        "UUID": "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f",
+        "side": "enemy",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-06f8cfff-92ec-4668-afbc-f33a274c3b1a-base-player-attempt-1.result.json",
+        "SHA256": "d10f84946631dbcef5fbda118bd099ae7e00135217de2cabc02fd408df2939d8",
+        "gameId": "452u6w",
+        "nativeRows": 30,
+        "exportSHA256": "de1c13ac2a87104c48e3240dbcdcf2b30fcf77d10d57692114b1c4da948e42cb",
+        "UUID": "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+        "side": "player",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-435ed83c-f7a6-4a73-a684-67fcc4e49bc4-base-enemy-attempt-1.result.json",
+        "SHA256": "bc4aa158c632af9b449ad41ace01ce1a3483dbed58a20e1269ed888821824e43",
+        "gameId": "nv9dec",
+        "nativeRows": 44,
+        "exportSHA256": "11f79ef3fcaa51a9b026138f1a8076e71f8d982fedb63d5da4592b1a3137177b",
+        "UUID": "435ed83c-f7a6-4a73-a684-67fcc4e49bc4",
+        "side": "enemy",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-b1bea643-1a7b-4e5e-b072-7174d3405421-base-player-attempt-1.result.json",
+        "SHA256": "45f734a32aca6fad3825cd281fe4fd4a0d693a78e66245ac31126a776e38e220",
+        "gameId": "aedzfh",
+        "nativeRows": 29,
+        "exportSHA256": "3d4e3d70795c0c51539a62da903ee3082138352a98fa5798f3c585ce749b85e3",
+        "UUID": "b1bea643-1a7b-4e5e-b072-7174d3405421",
+        "side": "player",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-7b55efd1-6d9f-4156-9de7-1c71ccc410cb-base-player-attempt-1.result.json",
+        "SHA256": "4fdfa6f3da92e38a5070e15612a6d9705a9c7e5a5c76cbdde25cd1ff8f99d774",
+        "gameId": "vem3e3",
+        "nativeRows": 31,
+        "exportSHA256": "3b0a0607e5872e5880cca7187836e5f8525702e640f54a3fec2901e98d1f5d84",
+        "UUID": "7b55efd1-6d9f-4156-9de7-1c71ccc410cb",
+        "side": "player",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-dbd014b1-1ec8-4762-bd96-48a2a4824de2-base-enemy-attempt-1.result.json",
+        "SHA256": "5a154c7c72f16537aa44b371ae7a7c1884fe14286bcbbe03b34a30146e55bbfd",
+        "gameId": "gbo4yn",
+        "nativeRows": 34,
+        "exportSHA256": "6fb7a5818f375a4650616540da67a23e35cd0b6c5b8119ffd5e53d88bdeaba5e",
+        "UUID": "dbd014b1-1ec8-4762-bd96-48a2a4824de2",
+        "side": "enemy",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-245b49b9-e1e5-4dd0-ae18-718c437b8eb0-base-player-attempt-1.result.json",
+        "SHA256": "b70ab8e246cb9eedfc4b1d45dd9bffa86d83c07b19b9ef829336ca7f653b022e",
+        "gameId": "5mxktd",
+        "nativeRows": 29,
+        "exportSHA256": "0c28babf89571a00553df53b09c9dfcc556807ceb1791ee53d664b9809798542",
+        "UUID": "245b49b9-e1e5-4dd0-ae18-718c437b8eb0",
+        "side": "player",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-06f8cfff-92ec-4668-afbc-f33a274c3b1a-base-enemy-attempt-1.result.json",
+        "SHA256": "ca5e0ec482e934de3f71e8af79cedd4a2d9651efbb3d41bdedbf1745e14a86a0",
+        "gameId": "mhh99t",
+        "nativeRows": 40,
+        "exportSHA256": "c561b1dfb0db546fc3fcd3236488fc29efa1e43e99dedccabbe17a9b3d22174d",
+        "UUID": "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+        "side": "enemy",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-5aaf13de-25bc-467f-a4a0-fe2c4373cc9f-base-player-attempt-1.result.json",
+        "SHA256": "b6014aed76a2e544ed241848ab0df99cba0e688b374dbf9affb255d6cb1b0f59",
+        "gameId": "m38cwe",
+        "nativeRows": 31,
+        "exportSHA256": "ceaa8f5d9c5173901aeb18e6ac2b2c6aa2c138415db46e85c272177e1747a8dd",
+        "UUID": "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f",
+        "side": "player",
+        "variant": "base"
+      },
+      {
+        "path": "invocations/sweep-j9Pf0z/run-CDDwtY/sweep-245b49b9-e1e5-4dd0-ae18-718c437b8eb0-base-enemy-attempt-1.result.json",
+        "SHA256": "1a20c0030cafcba6074093ed4563fdfa3ef654ba7d5131fe099d56708d3e669d",
+        "gameId": "yqmnn9",
+        "nativeRows": 31,
+        "exportSHA256": "71b02353f727d53c3a9e4f4e67fac6493fe6a58d807ca5a7fca95fc7e1625ed5",
+        "UUID": "245b49b9-e1e5-4dd0-ae18-718c437b8eb0",
+        "side": "enemy",
+        "variant": "base"
+      }
+    ]
+  },
+  "justiciarResolution": {
+    "at": "2026-10-15T10:40:18.507571+00:00",
+    "bead": "hv-umm2.739",
+    "oldRequirement": "Establish source-backed currentcause with preservedfailedrawattempts/UUIDcontroller/game IDs/nativepersistedlogs, meaningful minimalreproduction and actualprovideroutcomes. Apply onlyexactadmittednecessaryfix; discriminate it with deterministic synthetic publiccontract/counterfactual if actualbehaviorchanges, no arbitrarytiming/defaultproductioncopy assertions. Publicbrowser workflow repeatedly transitions distinctUUID/controller/base+eligibleAmplified requests and reloads to requestedcell withmatchingphysicalIDs/logs/emptyCaps, desktop/mobile proportionaltoactualstatefulUIchange; preserveallfailures. Requiredreview/Knip/schema andfullreview onlyactualinfrastructure/crosscutting scope; currentfreeze/caller/nativeexports/exactcleanup. One ConventionalCommit/freshrequiredCodexreview/exactTollgatecertifiedpromotion andcleanup. Original210completeall320effectivecells/1000fullpoolgames onproperlyqualifiedsourceepochs; no blanketretry, acceptancewaiver or foreignresourcecleanup.",
+    "requirementSource": "Own agent-created739initialfiling; not explicituser/plan requirement",
+    "replacementRequirement": "Preserve source-bound original06baseenemy allowedretryeffectivefailure, fullrawreports/nativepersistedlogs/UUID/controller/oldgameIDs and truthful unknowninitiator. Complete boundedread-only source/lifecycle investigation and bothfocusedfreshcontextdiagnostics: isolated06and145bothactors; exactpreceding7-card+06prefix32requestedcells withunchangedactualterminaldriver and read-onlyCDPtelemetry, no prior-game contradiction, Caps[]/completepersistedpositivegameexports. Operationally contain the affectedcontext byprovednormalteardown and useexistingone-fresh-owned-session-per-card scheduling for remaining210observations; no permanentproduct/rootcausefixclaim and no codepatch unsupportedbyevidence. Original210explicit all320unique/latest234pass86legitimateAmplifiedskip/0unfixedfail and1000fullpoolgame/defaultinvariant/replay/interactive acceptance remainsfullyrequired; failed/interruptedcells getfreshoriginal-sourcepassingobservations, originalattemptsremain. Any recurrence is a realnewfailure requiringfurtherboundedrepair, neverblanketretry/reclassification. Allsource/callerhashes, rawfailures, measuredwholeordinaryreview/Knip/schema/whitespace, exactownedruntimeclosure preserved. Evidence-only5pathConventionCommit/exactTollgatecertifiedpromotion/cleanup; allrepositorycode/sharedprovider/config/foreignresourcesunchanged. No code reviewtrigger for0code/noncore/nonphasegateactualdiff.",
+    "decision": "739 JUSTICIAR RESOLUTION2026-10-15T10:40Z: replace ONLY agent-created739filing requirement exactinitiator/rootcauseidentification before furtherprogress; source=owninitial739acceptance, notuser/plan requirement. Actualboundeddiagnosis completed: originalsame8sourcebodies unchangedvsb8cd, isolated4cells PASS, exactprefix32cells18pass14sourceineligible skip, all22positiveCDP reports singleexpectedDocumentrequest/initiatorother/no redirect,22uniquegames761persistedrows andCaps[],2610sourcehashesunchanged. Earlieroldplayernavigation cause remainsUNESTABLISHED; nopermanentsourcefixclaimed. Replacement requires preservedunknown+provedaffectedcontextteardown and verifiedfresh-session operational recovery, remaining210 onefreshownedcontext percard viaexistingterminalCLI/unchangedverdict/retry/timeout semantics. This is bounded operationalcontainment, no newautomaticrunnerpolicy, codepatch, timeoutincrease, missingevidencepass or blanketretry. All explicit210320/1000/coverage/no-pending/originalfailed/interruptedcell freshpasses remainrequired; source/causequalification/currentnativeproof retained. No source/test/bodyadmission needed actual0code. Allnewfailuresstillownrepair. Originalacceptance archived /tmp/dreamtides-executor-01a1304d/739/before-justiciar-resolution.json; durable ownmeasurementsrecord old/replacement/authority/consequences. Continueordinarychecks/evidence/onecommit/certification/cleanup/nativeclose, thenoriginal210sameclock. No approval/deferral/stop.",
+    "explicitUserPlanAcceptancePreserved": true
+  },
+  "resources": {
+    "at": "2026-10-15T10:40:50.689097+00:00",
+    "ownObservedPidsAndGroups": [
+      15884,
+      15898,
+      15938,
+      22819,
+      22821,
+      22861
+    ],
+    "remaining": [],
+    "ownActiveRecords": [],
+    "serverPids": [
+      22861
+    ],
+    "normalCleanup": "Both commandreceipts exit0; normalfinallysession.close; runner reports ownedserver processgroups settled and recordedport free, own active provider/server records absent.",
+    "capturedInitialDiagnosticSession": "010e9111-7fbf-4525-bdd3-77d35ad172ed",
+    "prefixDiagnosticSessionId": "Transient identity not captured; no invented receipt.",
+    "foreignAndSharedResources": "preserved; no restart/config/sourcechanges"
+  },
+  "checks": {
+    "source-diagnostic": {
+      "label": "source-diagnostic",
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.739/diagnose.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/card-lab-navigation739",
+      "start": "2026-10-15T10:33:29.774908+00:00",
+      "loadStart": [
+        6.14697265625,
+        8.1689453125,
+        9.9482421875
+      ],
+      "pid": 15884,
+      "childPid": 15898,
+      "end": "2026-10-15T10:34:08.843825+00:00",
+      "elapsedS": 39.06868266599486,
+      "loadEnd": [
+        6.3779296875,
+        7.98583984375,
+        9.798828125
+      ],
+      "exit": 0
+    },
+    "prefix-diagnostic": {
+      "label": "prefix-diagnostic",
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.739/prefix-diagnostic.observed.mjs",
+        "--bead",
+        "hv-umm2.739",
+        "--cards",
+        "b1bea643-1a7b-4e5e-b072-7174d3405421,dbd014b1-1ec8-4762-bd96-48a2a4824de2,245b49b9-e1e5-4dd0-ae18-718c437b8eb0,5aaf13de-25bc-467f-a4a0-fe2c4373cc9f,66959155-9e79-459e-afdb-eb4c0fbdeb11,7b55efd1-6d9f-4156-9de7-1c71ccc410cb,435ed83c-f7a6-4a73-a684-67fcc4e49bc4,06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+        "--variants",
+        "base,amplified",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/card-lab-navigation739",
+      "start": "2026-10-15T10:35:16.698122+00:00",
+      "loadStart": [
+        5.75927734375,
+        7.5009765625,
+        9.482421875
+      ],
+      "pid": 22819,
+      "childPid": 22821,
+      "end": "2026-10-15T10:38:44.795252+00:00",
+      "elapsedS": 208.0956233330071,
+      "loadEnd": [
+        7.54052734375,
+        7.7822265625,
+        9.19287109375
+      ],
+      "exit": 0
+    },
+    "review": {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/card-lab-navigation739",
+      "start": "2026-10-15T10:41:54.526937+00:00",
+      "loadStart": [
+        5.5810546875,
+        7.068359375,
+        8.64013671875
+      ],
+      "pid": 30960,
+      "childPid": 30985,
+      "end": "2026-10-15T10:41:54.907093+00:00",
+      "elapsedS": 0.380199791979976,
+      "loadEnd": [
+        5.5810546875,
+        7.068359375,
+        8.64013671875
+      ],
+      "exit": 0,
+      "qualification": "Whole npm quick-review invocation including preparation/schema/restoration; evidence-only5pathdiff selected friction schema only,965records valid and0tests executed."
+    },
+    "knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/card-lab-navigation739",
+      "start": "2026-10-15T10:41:54.526931+00:00",
+      "loadStart": [
+        5.5810546875,
+        7.068359375,
+        8.64013671875
+      ],
+      "pid": 30961,
+      "childPid": 30986,
+      "end": "2026-10-15T10:41:58.885970+00:00",
+      "elapsedS": 4.359035165980458,
+      "loadEnd": [
+        5.7744140625,
+        7.08349609375,
+        8.63623046875
+      ],
+      "exit": 0
+    }
+  },
+  "qualifications": [
+    "Original navigation initiator remains unestablished; fresh diagnostics are not a permanent product repair claim.",
+    "Earlier game dyycw6 exports remain separate from22new unique passing games; original263rows and timed-out/interrupted attempts stay in210ledger.",
+    "All2610 frozen source files remain unchanged; relevant driver/App/session/URL-sync bodies also match originb8cd.",
+    "Readonly CDP Network/Page events wrap unchanged cardLabPlay. Prefix32cells18pass14skip plus isolated4pass; all22positive rawreports/exportpairs match and Caps empty.",
+    "No screenshot pixels viewed or code review claimed. Evidence-only diff has no project code-review trigger.",
+    "Shared Playwright service/configuration and foreign sessions unchanged. Initial diagnostic transport identity captured; prefix transient identity not captured, no fabricated response.",
+    "Original210 still owes400games and allmissing/failed cells. Fresh per-card session scheduling isolates remainder while preserving allcase/timeout/retry/verdict semantics and original acceptance."
+  ]
+}
