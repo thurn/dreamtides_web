@@ -8,6 +8,8 @@ import { opponent, sourceInstance } from "../../state/ids";
 import type { StepDefinition } from "../types";
 import { targetsNeedX } from "../immediate-x";
 import { readsStoredCounters } from "../../dsl/values";
+import { activationCostModifier } from "../../continuous/costs";
+import { endFloating } from "../../rules/floating";
 
 /**
  * Activates an ability of a card in play, in its holder's hand with its
@@ -41,23 +43,25 @@ export const activate: StepDefinition<ActivateStep> = {
       throw new Error(`Ability ${String(step.ability)} cannot be activated now`);
     }
     const purpose = (role: PromptRole) => purposeOf(step.source, origin, step.ability, role);
-    const prepared = prepareCostX(ctx, side, step.source, ability.costs, purpose, targetsNeedX(ability.effect));
+    const modifier = activationCostModifier(state, catalog, step.source, side);
+    const prepared = prepareCostX(ctx, side, step.source, ability.costs, purpose, targetsNeedX(ability.effect), { modifier });
     const { x } = prepared;
     const paymentDependent = targetsNeedOptionalCost(ability.effect);
     let plan: CostPlan | null = paymentDependent
-      ? planCosts(ctx, side, step.source, ability.costs, x, purpose, [], undefined,
+      ? planCosts(ctx, side, step.source, ability.costs, x, purpose, [], modifier,
         { preparedPayments: prepared.payments, ...(x === null ? {} : { selectorX: x }) }) : null;
     const [choices] = choosePlayTime(ctx, [{ ability: step.ability, effect: ability.effect }], side, step.source, (_, role) => purpose(role),
       paymentDependent ? (plan?.x ?? undefined) : (x ?? undefined), plan === null ? {} :
         { optionalPaid: plan.optionalPaid, excluded: plan.payments.flatMap(payment => payment.cards) });
     if (choices === undefined) throw new Error("choosePlayTime returns one entry per ability");
-    plan ??= planCosts(ctx, side, step.source, ability.costs, x, purpose, choices.targets.flat(), undefined,
+    plan ??= planCosts(ctx, side, step.source, ability.costs, x, purpose, choices.targets.flat(), modifier,
       { endsPlayTime: true, preparedPayments: prepared.payments, ...(x === null ? {} : { selectorX: x }) });
     const abandoned = plan.payments.find(({ cost }) => cost.cost === "abandon")?.cards[0];
     const position = abandoned === undefined ? null : slotOf(state, abandoned);
     const captured = position === null ? choices : { ...choices, abandonedPosition: { side, slot: { ...position } } };
     ctx.commitPoint();
     const paymentSourceCounters = payCosts(ctx, side, step.source, plan, readsStoredCounters(ability.effect) ? { retainSourceCounters: true } : {});
+    endFloating(ctx, effect => modifier.consumes.includes(effect.id));
     if (ability.oncePerTurn === true) {
       state.oncePerTurn.push(oncePerTurnKey(step.source, step.ability));
     }

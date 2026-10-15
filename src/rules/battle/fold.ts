@@ -1051,6 +1051,7 @@ const FLOATING_CHANGE_VALIDATORS: {
   baseSpark: (value) => isInstanceId(value.instance) && isFiniteNumber(value.value),
   spark: (value) => isInstanceId(value.instance) && isFiniteNumber(value.amount),
   cost: (value) =>
+    (value.route === undefined || value.route === "activated") &&
     value.nth === undefined && value.mode === undefined &&
     isSide(value.player) &&
     isCardFilter(value.filter) &&

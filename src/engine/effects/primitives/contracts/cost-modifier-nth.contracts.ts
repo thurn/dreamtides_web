@@ -318,7 +318,7 @@ for (const side of SIDES) describe(`${side} static nth costs`, () => {
       const raw = saved(baseline.engine.slice);
       const effect = raw.engine.slice.committed.floating[0];
       if (effect.change.kind !== "cost") throw new Error("Expected baseline numeric cost change");
-      raw.engine.slice.committed.floating[0] = { ...effect, change: { ...effect.change, ...fields } };
+      raw.engine.slice.committed.floating[0] = { ...effect, change: { ...effect.change, ...fields, route: undefined } };
       expect(parseJourneyBattleFoldState(raw)).toBeNull();
     }
   });

@@ -1002,7 +1002,9 @@ function identity({ printing, variant }: CardInstance): string {
  * of differing types and keywords (1 for the same keywords in another
  * order) plus the spark and normal cost differences. An optional Reclaim
  * quote contributes 1 for a presence mismatch, or the absolute difference
- * between the signed quotes when both are present. 0 exactly when they are equal.
+ * between the signed quotes when both are present. Signed activation adjustments
+ * retain their unfloored energy margin, with absence meaning zero.
+ * 0 exactly when they are equal.
  */
 function difference(seen: CharacteristicsView, sampled: CharacteristicsView): number {
   const missing =
@@ -1018,7 +1020,8 @@ function difference(seen: CharacteristicsView, sampled: CharacteristicsView): nu
     Number(seen.allTypes !== sampled.allTypes) +
     (reordered ? 1 : missing) +
     spark +
-    Math.abs(seen.cost - sampled.cost) + reclaim
+    Math.abs(seen.cost - sampled.cost) + reclaim +
+    Math.abs((seen.activationCostModifier ?? 0) - (sampled.activationCostModifier ?? 0))
   );
 }
 

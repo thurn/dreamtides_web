@@ -11,6 +11,7 @@ import { instanceNumber, sourceKey } from "../state/ids";
 import type { AbilityOrigin, BattleState, CardInstance, GainedAbilities } from "../state/types";
 import { abilitiesDisabled } from "./ability-disabling";
 import { costsPayable } from "./costs";
+import { activationCostModifier } from "../continuous/costs";
 import { effectEntersPlay } from "../effects/interpreter";
 import { freeBackSlotsAfterStack, timingAllows } from "./timing";
 import { charactersInPlay } from "./zones";
@@ -201,5 +202,5 @@ export function canActivate(
   if (ability.oncePerTurn === true && state.oncePerTurn.includes(oncePerTurnKey(source, index))) {
     return false;
   }
-  return costsPayable(state, side, source, ability.costs);
+  return costsPayable(state, side, source, ability.costs, activationCostModifier(state, catalog, source, side));
 }

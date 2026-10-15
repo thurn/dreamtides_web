@@ -10,7 +10,10 @@ import { definePrimitive } from "../types";
  * more, or less when it is negative. A `next` modifier, made by a resolving
  * effect, applies to one card and ends as that card is played. `duration`
  * `null` takes the enclosing `forDuration`'s, else lasts permanently (a
- * `next` modifier then lasts until it is used).
+ * `next` modifier then lasts until it is used). With `route: "activated"`,
+ * the same energy adjustment applies to matching card-sourced activations;
+ * emblems have no card characteristics and do not match. That route uses up a
+ * `next` modifier only after its activation pays successfully.
  */
 export interface CostModifierNode {
   readonly op: "costModifier";
@@ -18,6 +21,8 @@ export interface CostModifierNode {
   readonly filter: CardFilter;
   readonly amount: ValueExpr;
   readonly next: boolean;
+  /** Changes matching card-sourced activations instead of card plays. */
+  readonly route?: "activated";
   readonly duration: Duration | null;
 }
 
@@ -26,12 +31,12 @@ export const costModifierPrimitive = definePrimitive<CostModifierNode>({
   resolve(ctx, node, env) {
     const amount = evaluate(ctx, node.amount, env);
     const player = resolvePlayer(env.controller, node.player);
-    startContinuous(ctx, env, node.duration, [], [{ kind: "cost", player, filter: node.filter, amount, next: node.next }]);
+    startContinuous(ctx, env, node.duration, [], [{ kind: "cost", player, filter: node.filter, amount, next: node.next, ...(node.route === undefined ? {} : { route: node.route }) }]);
   },
   continuous: {
     layer: 6,
     changes(node, env) {
-      return [{ kind: "cost", player: resolvePlayer(env.controller, node.player), filter: node.filter, amount: env.value(node.amount), next: false }];
+      return [{ kind: "cost", player: resolvePlayer(env.controller, node.player), filter: node.filter, amount: env.value(node.amount), next: false, ...(node.route === undefined ? {} : { route: node.route }) }];
     },
   },
 });
@@ -40,9 +45,9 @@ export function costModifier(
   player: PlayerRef,
   filter: CardFilter,
   amount: ValueExpr,
-  options: { readonly next?: boolean; readonly duration?: Duration } = {},
+  options: { readonly next?: boolean; readonly duration?: Duration; readonly route?: "activated" } = {},
 ): CostModifierNode {
-  return { op: "costModifier", player, filter, amount, next: options.next === true, duration: options.duration ?? null };
+  return { op: "costModifier", player, filter, amount, next: options.next === true, duration: options.duration ?? null, ...(options.route === undefined ? {} : { route: options.route }) };
 }
 
 /** A static change to the nth matching play's normal base or whole energy payment. */

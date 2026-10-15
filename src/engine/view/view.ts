@@ -29,7 +29,8 @@ import type {
 } from "../state/types";
 import { instanceCard, type EngineCatalog } from "../catalog";
 import { characteristics, copiableCostOf } from "../continuous/characteristics";
-import { adjustedEnergy, costModifier } from "../continuous/costs";
+import { activationCostModifier, adjustedEnergy, costModifier } from "../continuous/costs";
+import { instanceOrigin, originAbilities } from "../rules/activation";
 import type { Layers } from "../continuous/layers";
 import { fixedEnergy } from "../dsl/energy";
 import type { Keyword, Variant } from "../dsl/types";
@@ -60,6 +61,8 @@ export interface CharacteristicsView {
   readonly cost: number;
   /** Current void Reclaim's unfloored fixed energy quote; X and chosen nested energy add to it. */
   readonly reclaimCost?: number;
+  /** Signed unfloored card-activation adjustment, including margin usable by X or extra energy. */
+  readonly activationCostModifier?: number;
 }
 
 /** One instance the viewer can see, with its identity: a card, a figment, or a figment copy of a card. */
@@ -419,6 +422,9 @@ export function characteristicsView(state: BattleState, catalog: EngineCatalog, 
   const card = layers.of(instance.id);
   const printed = fixedEnergy(playCosts(instanceCard(catalog, instance), instance.variant));
   const reclaimCost = reclaimEnergyQuote(state, catalog, instance.id, layers);
+  const activation = originAbilities(catalog, instanceOrigin(instance)).some(ability => ability.kind === "activated")
+    ? activationCostModifier(state, catalog, instance.id, instance.controller, layers) : null;
+  const activationAdjustment = activation === null ? 0 : activation.increase - activation.reduction;
   return {
     cardType: card.cardType,
     subtype: card.subtype,
@@ -427,6 +433,7 @@ export function characteristicsView(state: BattleState, catalog: EngineCatalog, 
     spark: card.spark,
     cost: adjustedEnergy(printed, costModifier(state, catalog, instance.id, instance.controller, layers)),
     ...(reclaimCost === undefined ? {} : { reclaimCost }),
+    ...(activationAdjustment === 0 ? {} : { activationCostModifier: activationAdjustment }),
   };
 }
 

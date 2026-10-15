@@ -1,0 +1,290 @@
+{
+  "bead": "hv-umm2.630",
+  "phase": 5,
+  "base": "400934730a5d2036691d472739311dd0efe3cfd1",
+  "scope": "Existing costModifier optional activated route for card sources, actual payment/layers/next consumption, saved literal route and D22 aggregate view observation. Primitive preparation only; no production UUID authored.",
+  "measurementWindow": {
+    "start": "2026-10-15T01:57:15.427000+00:00",
+    "end": "2026-10-15T02:38:40.715352+00:00",
+    "status": "actual pre-Git evidence cutoff; parent records subsequent checks and Git tail outside this commit",
+    "includes": "research, source/race admission, implementation, coordination, checks, waits, evidence and Git; elapsed wall time, not CPU or sampling",
+    "modelSampling": "UNKNOWN"
+  },
+  "sourceBinding": {
+    "pathCount": 12,
+    "freezeSHA256": "d19744bad5fc29d757f8c9033b31ff50dc4dc4e5e8b9a4c5f83a7e5f418f78f6",
+    "allFrozenPathsUnchangedAfterRootFaultRestorationAndFull": true,
+    "inputManifestSHA256": "007a113893aae9edacc51d41db832d9753d066944640e90f900d37548cc36af4",
+    "qualification": "Read manifest distinguishes complete/scoped reads from symbol inventory; no copied source or importer inventory in this record."
+  },
+  "publicContract": {
+    "api": "costModifier(player, filter, signedAmount, { route: \"activated\", next?, duration? })",
+    "payment": "Card-source current characteristics and actual controller; whole selected energy including X/optional/choice energy, increases then reductions/floor0; nonenergy payments preserved. Emblems have no card match. Default route object bytes stay omitted.",
+    "privacy": "Signed unfloored activation adjustment follows RD-hv-umm2.234-1 and RD-hv-umm2.53-2: X/extra-energy margin retained, no hidden producer identity/count. Existing hidden-static reconciliation compares the scalar; no sampler framework or source-attribution reconstruction.",
+    "logging": "Existing UUID/physical-source activation, energy payment, discard/reveal/other payment, effectStarted/effectEnded and fold action/prompt/error records reconstruct operations; no new event kind."
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 311,
+    "jsdomFiles": 0
+  },
+  "publicCases": 34,
+  "fallout": {
+    "path": "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts",
+    "authority": "mechanical-nth-fixture-ack-v01-native.stdout",
+    "diagnostic": "TS2322 in impl-review-v01",
+    "edit": "One deliberately invalid saved-ordinal fixture constructor appends route:undefined; original omitted-route serialized bytes and assertions preserved.",
+    "netLines": 0
+  },
+  "validation": {
+    "review": {
+      "tests": 8989,
+      "files": 306,
+      "label": "impl-review-v04"
+    },
+    "full": {
+      "tests": 9998,
+      "files": 387,
+      "label": "heavy-full-v01",
+      "stages": "prepare, full lint, both typechecks, import cycles, Knip, existing friction records, full tests, production bundle, restore assets; all exit0",
+      "reason": "Actual optional saved route and D22 state/view integration",
+      "invocations": 1
+    },
+    "focused": {
+      "cases": 34,
+      "label": "restored-contracts-green-v01"
+    },
+    "knip": "impl-knip-v02",
+    "workers": 2,
+    "receipts": [
+      {
+        "label": "impl-old-baseline-v02",
+        "start": "2026-10-15T02:06:16.070558+00:00",
+        "end": "2026-10-15T02:06:18.367609+00:00",
+        "wallSeconds": 2.2969255829812028,
+        "hostLoad": "{ 22.04 12.38 10.39 }",
+        "exit": 0,
+        "receiptSHA256": "bb6a605263156ca85bebb9b6c1834073c777c21248c297b3c55e4a2ce89eaea7",
+        "rawPrefix": "/tmp/root630-20261015/impl-old-baseline-v02"
+      },
+      {
+        "label": "impl-legacy-final-v01",
+        "start": "2026-10-15T02:19:53.608173+00:00",
+        "end": "2026-10-15T02:19:57.275093+00:00",
+        "wallSeconds": 3.666778792045079,
+        "hostLoad": "{ 20.12 15.10 12.11 }",
+        "exit": 0,
+        "receiptSHA256": "4d0107023c0ac812b1fe79e631ac50124566b43bd6bde97eef99905b66a13c55",
+        "rawPrefix": "/tmp/root630-20261015/impl-legacy-final-v01"
+      },
+      {
+        "label": "impl-cold-continuation-green-v01",
+        "start": "2026-10-15T02:21:15.245694+00:00",
+        "end": "2026-10-15T02:21:25.531235+00:00",
+        "wallSeconds": 10.285413667035755,
+        "hostLoad": "{ 19.19 16.20 12.82 }",
+        "exit": 0,
+        "receiptSHA256": "67b2817c4987897642bf8f527805dd83827cf45b95913c8b669778c88787f0d0",
+        "rawPrefix": "/tmp/root630-20261015/impl-cold-continuation-green-v01"
+      },
+      {
+        "label": "impl-review-v04",
+        "start": "2026-10-15T02:21:29.773993+00:00",
+        "end": "2026-10-15T02:22:53.922200+00:00",
+        "wallSeconds": 84.14797962497687,
+        "hostLoad": "{ 16.99 15.86 12.76 }",
+        "exit": 0,
+        "receiptSHA256": "3db27bd0ef97dd93ed2629b2e006977c420f4a39a62466de8039f19a7d8498bc",
+        "rawPrefix": "/tmp/root630-20261015/impl-review-v04"
+      },
+      {
+        "label": "impl-knip-v02",
+        "start": "2026-10-15T02:23:00.967303+00:00",
+        "end": "2026-10-15T02:23:06.355375+00:00",
+        "wallSeconds": 5.387773207970895,
+        "hostLoad": "{ 14.11 15.31 12.86 }",
+        "exit": 0,
+        "receiptSHA256": "9bffe9c6ce40cf3fca518c26780c477cf403f00956df953e422bb86372aaffbd",
+        "rawPrefix": "/tmp/root630-20261015/impl-knip-v02"
+      },
+      {
+        "label": "restored-contracts-green-v01",
+        "start": "2026-10-15T02:25:59.106465+00:00",
+        "end": "2026-10-15T02:26:07.966387+00:00",
+        "wallSeconds": 8.859793167037424,
+        "hostLoad": "{ 13.00 14.36 12.89 }",
+        "exit": 0,
+        "receiptSHA256": "877c369823679ac10c3f22d7af3162ee09329a9c7f7d4b64b2e33591ef31fef8",
+        "rawPrefix": "/tmp/root630-20261015/restored-contracts-green-v01"
+      },
+      {
+        "label": "heavy-full-v01",
+        "start": "2026-10-15T02:26:24.699176+00:00",
+        "end": "2026-10-15T02:28:22.523756+00:00",
+        "wallSeconds": 117.82426800002577,
+        "hostLoad": "{ 11.13 13.77 12.73 }",
+        "exit": 0,
+        "receiptSHA256": "974036957796832ddd54c1aeb2a5b84901a0c82cf136e09ca4e6968c26e6e5bc",
+        "rawPrefix": "/tmp/root630-20261015/heavy-full-v01"
+      },
+      {
+        "label": "heavy-full-slot-v01",
+        "start": "2026-10-15T02:26:24.668487+00:00",
+        "end": "2026-10-15T02:28:22.573608+00:00",
+        "wallSeconds": 117.90478866698686,
+        "hostLoad": "{ 11.13 13.77 12.73 }",
+        "exit": 0,
+        "receiptSHA256": "ee79d8fc607ea28a2dbb20d8f503336a13d8e2aa5233a73d923ab25e8cd63770",
+        "rawPrefix": "/tmp/root630-20261015/heavy-full-slot-v01"
+      }
+    ]
+  },
+  "heavySlot": {
+    "outerWallSeconds": 117.90478866698686,
+    "innerWallSeconds": 117.82426800002577,
+    "outerMinusInnerSeconds": 0.0805206669610925,
+    "qualification": "Difference includes wrapper overhead; no substantial isolated lock-wait or CPU claim."
+  },
+  "legacyCompatibility": {
+    "cases": 6,
+    "actors": [
+      "player",
+      "enemy"
+    ],
+    "routes": [
+      "ordinary activation",
+      "normal play",
+      "Reclaim"
+    ],
+    "savedPendingSnapshots": 12,
+    "bytesEach": 657647,
+    "oldAndCurrentSHA256": "d9c4dda79f92631cb7e24c2055f0d8865fe5bb4895339f4e6526e93271388f47",
+    "callerSHA256": "ff231711e6278edd3a969f96e1e468e5618850be1013b86789c94e95bc7cb557",
+    "beforeEditProof": "Actual old-runtime capture completed with exact clean5288-file/base proof before first runtime edit.",
+    "comparison": "Entire caller output equal: full states/events/views/logs/prompt fingerprints/saved records/intents; no normalization, migration or replay fixture restamp.",
+    "limits": "Old baseline proves strict cold pending reconstruction plus original-fold full intent replay. Final current contract additionally executes accepted answers through fresh engines from parsed loaded slices. Equality is these six cases, not every historical game; unchanged eight runtime paths carry across later test-only correction."
+  },
+  "coreFailurePaths": {
+    "lateErrorAndPartialWrite": "Valid typed authored energy-condition getter actually throws in post-payment checkVictory. Observer only records actual paid/consumed/stack prefix; runStep input stays exact and fold recovers original committed state after published prompt. Observer exceptions are swallowed and are not the fault.",
+    "precommitError": "Actual answer-source exception preserves original resources/cards/allowances/hash.",
+    "reload": "Every X/optional/discard saved suspension strict-parses; fresh engine/fold accepts its next answer from loaded state, then whole original intent sequence replay matches.",
+    "invalidStaleConcurrent": "Actual cancel/reopen supplies stale ID; foreign/illegal/stale/duplicate answers and opposing in-flight top-level action bounce.",
+    "interruptDeparture": "Actual Interrupt returns source after commitment without refund/allowance restoration; own abandon payment separately retains prepared adjustment.",
+    "privacy": "Hidden reduction margin preserves real X/optional payment under fixed sampled draws; one hidden producer plus neutral and two overlapping producers give equal public views/samples; ceased floating producer remains anonymous."
+  },
+  "restoredCounterfactuals": {
+    "bothActorsAllSix": true,
+    "totalCommandWallSeconds": 49.78206571005285,
+    "actualSymptoms": [
+      {
+        "key": "normal-route",
+        "observation": "Bothactor actual normal-card displayed energy quote2 vs4; matching activation and nonmatching-event normal/Reclaim payment controls passed first. Do not claim eventpayment assertion failed.",
+        "wallSeconds": 10.800869458995294
+      },
+      {
+        "key": "drop-discard",
+        "observation": "Bothactor chosen physicaldiscard remains hand vs requiredvoid after actual energy/counter/exhaust checks.",
+        "wallSeconds": 8.158996041980572
+      },
+      {
+        "key": "preview-consumption",
+        "observation": "Bothactor whole inputJSON changed after actuallegalActions/view previews; matchingnexteffect removed.",
+        "wallSeconds": 8.046048625023104
+      },
+      {
+        "key": "x-modifier",
+        "observation": "Bothactor legal original scriptedsequence now refuses an optionalCost confirm answer after numeric-preparation omission. Changedpromptprotocol is actualsemanticfailure; do not claim a direct captured maxbound assertion.",
+        "wallSeconds": 7.9617184170056134
+      },
+      {
+        "key": "duplicate-sources",
+        "observation": "Bothactor actualactivation remainingenergy6 vs7 after equal-valued physicalsources collapsed.",
+        "wallSeconds": 7.586409000039566
+      },
+      {
+        "key": "hidden-observation",
+        "observation": "Bothactor fixed-draw sampledactualactivation refuses chooseX answer after omitted publicquote reconciliation; authoritative control precedes sampled failure.",
+        "wallSeconds": 7.228024167008698
+      }
+    ],
+    "custody": "Each mutated whole file restored in finally with exact hash; initial/final all12 manifest exact. No per-fault all12 audit claimed. Root ran faults with helper terminal. Earlier fixture/type/loading failures are separate."
+  },
+  "failedEpochsAndCorrections": [
+    "Old caller v01 .ts selected CJS and failed top-level-await loading; identical .mts caller v02 passed before edits.",
+    "Initial focused v01 had fixture spread/forced-prompt errors; corrected own fixtures, no runtime waiver.",
+    "Review v01 failed own import/branded-ID/intent typing and one mechanical stricter-union fixture fallout. Own test typing edited while known-failed related tests ran; mixed-source failure epoch supports no final-source green claim.",
+    "Review v02 failed two invented stale-ID parser fixtures; actual public cancel/reopen ID correction passed focused and reviewv03.",
+    "Root found cold-pending equality alone did not prove accepted cold continuation. Own strict contract now uses loaded state for all fresh-fold bounces and actual accepted answers; focused/reviewv04/Knipv02 pass.",
+    "Custody ACK first said9 quoted fixture server groups; corrected audit inventory is57, all absent. These are disposable full-suite fixture diagnostic PIDs, not native QA sessions."
+  ],
+  "runtimeClosure": {
+    "auditAt": "2026-10-15T02:29:34.234859+00:00",
+    "retainedCommandReceiptGroups": 28,
+    "quotedFixtureServerPIDGroups": 57,
+    "quotedGroupsStillLive": [],
+    "nativeQAProviders": 0,
+    "nativeBrowserContexts": 0,
+    "taskDevServers": 0,
+    "qualification": "No cleanup attempted on foreign/shared services. New cheap evidence checks settle separately after this audit."
+  },
+  "frictionQualification": {
+    "tag": "local-edit-correction",
+    "grossWindow": {
+      "start": "2026-10-15T02:10:32.480830+00:00",
+      "end": "2026-10-15T02:22:53.922200+00:00"
+    },
+    "minutes": 12.357356166666667,
+    "scope": "First contract failure through final ordinary green includes test development, coordination, checks and research; not isolated editing waste, CPU or model sampling."
+  },
+  "hostLoadScope": {
+    "value": 16.99,
+    "measuredFor": "impl-review-v04 command start2026-10-15T02:21:29.773993+00:00; other per-command samples in receipts"
+  },
+  "archive": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.630/source-acceptance-v01",
+    "files": 209,
+    "bytes": 6774334,
+    "manifestSHA256": "fbb82208663e8a9b3e1616cefcb7ac0c4ae0c87dbece590036ab5a028006fcce",
+    "scope": "Immutable runtime/source acceptance and raw scratch; final evidence/Git/review/certified delivery remain pending."
+  },
+  "originalAcceptanceJoin": "hv-umm2.275 retains Attuned/Perfected production UUIDs, transforms, journey/text/eligibility/random fuzz/core review/recipes/weighted300/preflight/sweep/D21 and full acceptance. No browser, sweep, weighted fuzz or production entity acceptance claimed for630.",
+  "reviewAndDelivery": "Core cold review and exact commit/candidate/certified promotion/closure are parent-owned and pending. Local checks and source archive are not delivery.",
+  "references": {
+    "source-freeze-v02.json": {
+      "path": "/tmp/worker630-20261015/source-freeze-v02.json",
+      "sha256": "d19744bad5fc29d757f8c9033b31ff50dc4dc4e5e8b9a4c5f83a7e5f418f78f6"
+    },
+    "legacy-final-deep-comparison-v01.json": {
+      "path": "/tmp/worker630-20261015/legacy-final-deep-comparison-v01.json",
+      "sha256": "f392d739d8f2c40b55a16f8a3288a5fda0da1504748349b5aa0f255e0b3ec388"
+    },
+    "old-baseline-clean-proof-v01.json": {
+      "path": "/tmp/worker630-20261015/old-baseline-clean-proof-v01.json",
+      "sha256": "22edaef3d7ddb73338536fd02af02dce831b4c31b1fd6ce8701f961fa8cf8fa5"
+    },
+    "failure-paths-v01.md": {
+      "path": "/tmp/worker630-20261015/failure-paths-v01.md",
+      "sha256": "ed117c309109e8720d1ac856ed3f5877ba7ba8db3fdb70c5a82f28eddf0f7481"
+    },
+    "source-input-manifest-v01.json": {
+      "path": "/tmp/worker630-20261015/source-input-manifest-v01.json",
+      "sha256": "007a113893aae9edacc51d41db832d9753d066944640e90f900d37548cc36af4"
+    },
+    "heavy-full-independent-audit-v01.json": {
+      "path": "/tmp/root630-20261015/heavy-full-independent-audit-v01.json",
+      "sha256": "5a5531a0c33aff5460f98fc7730cf06bad2ea2a870b1e31eafcec36f9df11272"
+    },
+    "restored-fault-independent-audit-v01.json": {
+      "path": "/tmp/root630-20261015/restored-fault-independent-audit-v01.json",
+      "sha256": "8b23adc2399182255ce26a01eb9a6927ca2d794b95e4ff25bd694e8513a2d2eb"
+    },
+    "runtime-final-closure-v01.json": {
+      "path": "/tmp/root630-20261015/runtime-final-closure-v01.json",
+      "sha256": "0fb92e8506045f35b47e89054d7f15fb29b5851535c077299c3b89756961eeb6"
+    },
+    "source-acceptance-v01-archive.json": {
+      "path": "/tmp/root630-20261015/source-acceptance-v01-archive.json",
+      "sha256": "8ccb0e2e12a6fc6f1c060f5e384974cff0dcb305748e2e5c5f44b6c2551de095"
+    }
+  }
+}

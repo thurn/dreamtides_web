@@ -8,16 +8,16 @@
  * increases and reductions (RD-hv-umm2.422-1).
  */
 import type { EngineCatalog } from "../catalog";
-import type { EffectId, InstanceId, Side } from "../state/ids";
+import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { characteristics, copiableCostOf, filterSubjectOf, matchesFilter, playedMatchesFilter } from "./characteristics";
 import type { Layers } from "./layers";
 
-/** The cost modifications that apply to one play of one card. */
+/** The energy modifications for one card play or card-sourced activation. */
 export interface CostModifier {
   readonly increase: number;
   readonly reduction: number;
-  /** The "next card" modifiers this play uses up. */
+  /** The next matching operation modifiers this payment uses up. */
   readonly consumes: readonly EffectId[];
 }
 
@@ -56,7 +56,7 @@ export function costModifier(
       else increase += change.amount;
       continue;
     }
-    if (change.kind !== "cost" || change.player !== player || !matchesFilter(played, change.filter)) continue;
+    if (change.kind !== "cost" || change.route === "activated" || change.player !== player || !matchesFilter(played, change.filter)) continue;
     if (change.nth !== undefined) {
       const earlier = state.turnLog.played[player].filter(record => playedMatchesFilter(state, catalog, record, change.filter)).length;
       if (earlier !== change.nth - 1) continue;
@@ -75,6 +75,29 @@ export function costModifier(
     // increases or the reductions with the same result.
     if (setDifference > 0) increase += setDifference;
     else reduction -= setDifference;
+  }
+  return { increase, reduction, consumes };
+}
+
+/** Energy adjustments for card-sourced activations, independent of every card-play route. */
+export function activationCostModifier(
+  state: BattleState,
+  catalog: EngineCatalog,
+  source: AbilitySource,
+  player: Side,
+  layers: Layers = characteristics(state, catalog),
+): CostModifier {
+  if (typeof source !== "string" || state.instances[source] === undefined) return NO_COST_MODIFIER;
+  const subject = filterSubjectOf(state, catalog, source, layers.of(source));
+  let increase = 0;
+  let reduction = 0;
+  const consumes: EffectId[] = [];
+  for (const { change, effect } of layers.changes(6)) {
+    if (change.kind !== "cost" || change.route !== "activated" || change.player !== player ||
+      change.nth !== undefined || change.mode !== undefined || !matchesFilter(subject, change.filter)) continue;
+    if (change.amount > 0) increase += change.amount;
+    else reduction -= change.amount;
+    if (change.next && effect !== null) consumes.push(effect);
   }
   return { increase, reduction, consumes };
 }

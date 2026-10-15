@@ -470,10 +470,12 @@ export type ContinuousChange =
    * (less when negative). A `next` modifier applies to one card: it ends as
    * that card is played. `mode: "set"` instead sets its normal fixed energy
    * base; an optional `nth` limits the change to that matching play ordinal.
+   * A plain adjustment with `route: "activated"` instead changes matching
+   * card-sourced activated abilities and is consumed when an activation pays.
    */
   | ({ readonly kind: "cost"; readonly player: Side; readonly filter: CardFilter; readonly amount: number; readonly next: boolean } &
-      ({ readonly nth?: never; readonly mode?: never } | { readonly nth: number; readonly mode?: "set" } |
-       { readonly nth?: never; readonly mode: "set"; readonly next: false }))
+      ({ readonly nth?: never; readonly mode?: never; readonly route?: "activated" } | { readonly nth: number; readonly mode?: "set"; readonly route?: never } |
+       { readonly nth?: never; readonly mode: "set"; readonly next: false; readonly route?: never }))
   /** Layer 6, static only: the selected Reclaim fixed base or whole-payment reduction. */
   | { readonly kind: "reclaimCost"; readonly player: Side; readonly mode: "set" | "reduce"; readonly amount: number }
   /**

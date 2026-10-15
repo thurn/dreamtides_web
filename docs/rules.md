@@ -1142,6 +1142,19 @@ as "≤2● cost character" or "with cost X●" is its copiable cost: its printe
 cost after its variant and deck-entry modifications, with X in it counting as
 0. Cost changes do not affect it.
 
+**Activated energy changes:** A change expressly applying to activated abilities
+changes the whole chosen energy payment of a matching card source's activation:
+fixed energy, X, and chosen alternative or optional energy. Increases apply
+before reductions, with a minimum of 0●; every nonenergy cost remains payable.
+Match the card's current characteristics and the activating controller, including
+an ability legally working from a hand or void. A card filter does not match an
+Avatar or Dreamsign emblem. Ordinary play, Reclaim and a card's own play-cost
+changes are separate routes. A next-activation change is used up after a
+successful committed payment; previews and cancellations spend nothing.
+An identifiable source's observable activation adjustment retains its signed,
+unfloored energy margin, including a reduction that X or chosen extra energy can
+use, without identifying or counting hidden modifier producers.
+
 **A card's own cost:** "It costs N●" and "It costs N● more", following an
 instruction that puts a card into a hand, as in "Return an enemy to hand. It
 costs 2● more" or "Draw a ≤2● cost card. It costs 0●," change that card's
