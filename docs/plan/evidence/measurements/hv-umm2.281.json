@@ -1,0 +1,1350 @@
+{
+  "bead": "hv-umm2.281",
+  "phase": 5,
+  "scope": "Own original permanent cost-reduction modifier acceptance evidence; all production, tests, QA, solver and fuzzer sources read-only.",
+  "sourceBase": "7db4bd4930d07612a5d84a6c8267c13f51d8cd06",
+  "originalClaimStart": "2026-10-15T18:04:52.084117+00:00",
+  "parentSetup": {
+    "installReceipt": "runtime-v01/caller-and-source-receipts/install.receipt.json",
+    "nativeClaim": "runtime-v01/caller-and-source-receipts/claim.json",
+    "qualification": "Parent completed fresh worktree install before author dispatch. Included in original inclusive window; not rerun or attributed to helper child CPU."
+  },
+  "evidenceCutoff": "2026-10-15T19:41:44.804666+00:00",
+  "inclusiveWallMinThroughCutoff": 96.87867581666666,
+  "clockQualification": "Original inclusive claim clock remains continuous through actual amended Git endpoint. This refreshed metadata cutoff immediately precedes final schema/staging/amend; git-return-v02.json supplies actual endpoint and final tail. Original405d8f9b local endpoint remains retained as superseded/unsubmitted, with no elapsed deduction or clock reset.",
+  "commands": {
+    "heavy-queue-first0": {
+      "label": "heavy-queue-first0",
+      "start": "2026-10-15T18:23:27.466205+00:00",
+      "end": "2026-10-15T18:43:42.696855+00:00",
+      "wallS": 1215.2208182910108,
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-281-01a13a7a/run-command.py",
+        "fuzz-first0",
+        "1780",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "150",
+        "--first",
+        "0",
+        "--seed",
+        "cost-reduction-281",
+        "--weight-uuids",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 83845,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        6.68701171875,
+        7.93359375,
+        9.50927734375
+      ],
+      "userS": 719.193653,
+      "systemS": 7.127419,
+      "stdoutSha256": "bbcd68d6009c4b9e7e84ad18604a5d56b7761104a14c20d70d493cf05a9282f1"
+    },
+    "browser-reveal-native-verification-v01": {
+      "label": "browser-reveal-native-verification-v01",
+      "start": "2026-10-15T19:12:10.014248+00:00",
+      "end": "2026-10-15T19:12:12.277879+00:00",
+      "wallS": 2.2635424159816466,
+      "argv": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-vite-runtime.mjs",
+        "/tmp/dreamtides-281-01a13a7a/verify-browser-reveal.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 25958,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        4.90625,
+        7.3994140625,
+        8.8056640625
+      ],
+      "userS": 3.817613,
+      "systemS": 1.074504,
+      "stdoutSha256": "7a4ac8f73341fff07460b635a155614cbd001687ebcc95efd82da8339e831bb5"
+    },
+    "knip-v01": {
+      "label": "knip-v01",
+      "start": "2026-10-15T19:09:34.388350+00:00",
+      "end": "2026-10-15T19:09:40.422486+00:00",
+      "wallS": 6.0338902499643154,
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 95587,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        6.55517578125,
+        8.81689453125,
+        9.48828125
+      ],
+      "userS": 4.085415,
+      "systemS": 1.5909309999999999,
+      "stdoutSha256": "c924f569ce195c68076e5e0f81d4e3a224d2f5b96e35d5e46b6f51a749753333"
+    },
+    "assemble-evidence-v01": {
+      "label": "assemble-evidence-v01",
+      "start": "2026-10-15T19:38:20.778634+00:00",
+      "end": "2026-10-15T19:38:20.957493+00:00",
+      "wallS": 0.17874812497757375,
+      "argv": [
+        "python3",
+        "/tmp/dreamtides-281-01a13a7a/assemble-final.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 73167,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        13.27587890625,
+        11.16943359375,
+        10.302734375
+      ],
+      "userS": 0.066504,
+      "systemS": 0.035195,
+      "stdoutSha256": "5b776a43b1e44e9d33b2148831e7ef54d4419cef1cd86fee3019c449b57e71f6"
+    },
+    "heavy-queue-first150": {
+      "label": "heavy-queue-first150",
+      "start": "2026-10-15T18:45:07.810853+00:00",
+      "end": "2026-10-15T18:57:51.295321+00:00",
+      "wallS": 763.4766195829725,
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-281-01a13a7a/run-command.py",
+        "fuzz-first150",
+        "1780",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "150",
+        "--first",
+        "150",
+        "--seed",
+        "cost-reduction-281",
+        "--weight-uuids",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 77358,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        22.19384765625,
+        13.58544921875,
+        9.9775390625
+      ],
+      "userS": 795.913239,
+      "systemS": 6.530065,
+      "stdoutSha256": "44af3cba9c32595dc6cfcc1374c8937cd696f843d471f7687f169401ee575ea1"
+    },
+    "browser-native-verification-v02": {
+      "label": "browser-native-verification-v02",
+      "start": "2026-10-15T19:10:59.121834+00:00",
+      "end": "2026-10-15T19:11:01.071578+00:00",
+      "wallS": 1.9496319169993512,
+      "argv": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-vite-runtime.mjs",
+        "/tmp/dreamtides-281-01a13a7a/verify-browser.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 12137,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        6.69677734375,
+        8.2939453125,
+        9.22021484375
+      ],
+      "userS": 2.461396,
+      "systemS": 0.49888,
+      "stdoutSha256": "5cbda70243fb2d3649119ebf5827f64474e1ecb5691efdb1776ed9d15ff4d679"
+    },
+    "canonical-sweep": {
+      "label": "canonical-sweep",
+      "start": "2026-10-15T18:59:01.471637+00:00",
+      "end": "2026-10-15T19:37:51.557563+00:00",
+      "wallS": 2330.0893556670053,
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.281",
+        "--cards",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404",
+        "--mods",
+        "{\"costReduction\":1}",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 45021,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        6.8095703125,
+        7.81640625,
+        8.54443359375
+      ],
+      "userS": 107.252873,
+      "systemS": 57.703665,
+      "stdoutSha256": "20cb8a33e81e8cbc0db43eb3f10659b47d47b28d8e74a2ce10d51697c7d2248f"
+    },
+    "judged-visible-v03": {
+      "label": "judged-visible-v03",
+      "start": "2026-10-15T19:11:57.833567+00:00",
+      "end": "2026-10-15T19:14:44.698910+00:00",
+      "wallS": 166.86362629098585,
+      "argv": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-judgments-visible.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 23745,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        5.140625,
+        7.56103515625,
+        8.88623046875
+      ],
+      "userS": 9.013239,
+      "systemS": 6.724982,
+      "stdoutSha256": "266c40a5b191c13aa53f83a9eefcbb342996be7188ff206c09025dc56330af33"
+    },
+    "fuzz-first0": {
+      "label": "fuzz-first0",
+      "start": "2026-10-15T18:32:10.797805+00:00",
+      "end": "2026-10-15T18:43:42.641567+00:00",
+      "wallS": 691.8399385420489,
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "150",
+        "--first",
+        "0",
+        "--seed",
+        "cost-reduction-281",
+        "--weight-uuids",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 94712,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        9.654296875,
+        8.62548828125,
+        9.0283203125
+      ],
+      "userS": 719.019482,
+      "systemS": 7.065976,
+      "stdoutSha256": "06fb648f5e71d325b4f97c2354f6f11b9646395f0995bbab908b0399eee91cf9"
+    },
+    "judged-v01": {
+      "label": "judged-v01",
+      "start": "2026-10-15T19:03:21.833112+00:00",
+      "end": "2026-10-15T19:05:49.495425+00:00",
+      "wallS": 147.66076508304104,
+      "argv": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-judgments.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 32636,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        21.39306640625,
+        14.6201171875,
+        11.16357421875
+      ],
+      "userS": 8.796025,
+      "systemS": 5.242097,
+      "stdoutSha256": "c8fbd51257b952f47b379b93f9126f98bef2d8b4124db27d21a1894d9118271d"
+    },
+    "real-runtime-v01": {
+      "label": "real-runtime-v01",
+      "start": "2026-10-15T18:22:47.466289+00:00",
+      "end": "2026-10-15T18:22:52.129014+00:00",
+      "wallS": 4.6623442500131205,
+      "argv": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-281-01a13a7a/real-runtime.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 83139,
+      "exit": 1,
+      "timedOut": false,
+      "hostLoad": [
+        8.43896484375,
+        8.38916015625,
+        9.740234375
+      ],
+      "userS": 2.449973,
+      "systemS": 1.573891,
+      "stdoutSha256": "0bdfd97ca9dc2439ddb29e03599ae60188f0b230a99d171b3db4c0c487c5804a"
+    },
+    "review-v01": {
+      "label": "review-v01",
+      "start": "2026-10-15T19:09:34.388291+00:00",
+      "end": "2026-10-15T19:09:34.650292+00:00",
+      "wallS": 0.2619173330022022,
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 95586,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        6.55517578125,
+        8.81689453125,
+        9.48828125
+      ],
+      "userS": 0.14634,
+      "systemS": 0.11293199999999999,
+      "stdoutSha256": "7d75956671a67683ee08a6474917ad5d6dcb746850b8dffd9af1d8128f852ab0"
+    },
+    "judged-reveal-v02": {
+      "label": "judged-reveal-v02",
+      "start": "2026-10-15T19:09:01.132567+00:00",
+      "end": "2026-10-15T19:11:19.591739+00:00",
+      "wallS": 138.45773704198655,
+      "argv": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-judgments-reveal.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 89487,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        6.71923828125,
+        9.08837890625,
+        9.607421875
+      ],
+      "userS": 7.603617,
+      "systemS": 3.80588,
+      "stdoutSha256": "7cb468838f3e4770a7153ee23c09b1b810952532ebbc41e0fd1c70c1d24e9f7d"
+    },
+    "real-runtime-v02": {
+      "label": "real-runtime-v02",
+      "start": "2026-10-15T18:23:10.346885+00:00",
+      "end": "2026-10-15T18:23:15.115043+00:00",
+      "wallS": 4.767874834011309,
+      "argv": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-vite-runtime.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 83448,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        6.94970703125,
+        8.05419921875,
+        9.58837890625
+      ],
+      "userS": 6.158269,
+      "systemS": 1.022113,
+      "stdoutSha256": "40ffaf82f8817c21a5aed2c04894a1f81db8d14d8f176ace8df7e6110e6febe6"
+    },
+    "encounter-v01": {
+      "label": "encounter-v01",
+      "start": "2026-10-15T19:07:41.697090+00:00",
+      "end": "2026-10-15T19:10:00.005220+00:00",
+      "wallS": 138.3066577920108,
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-281-01a13a7a/encounter.mjs",
+        "--bead",
+        "hv-umm2.281",
+        "--viewports",
+        "desktop"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 74582,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        6.3232421875,
+        9.71484375,
+        9.85791015625
+      ],
+      "userS": 8.29335,
+      "systemS": 6.089595,
+      "stdoutSha256": "db4644ed7044889385b724e31addd93d2e34ea9a94330c8e86e0123cb558917e"
+    },
+    "browser-native-verification-v01": {
+      "label": "browser-native-verification-v01",
+      "start": "2026-10-15T19:10:20.305854+00:00",
+      "end": "2026-10-15T19:10:22.535558+00:00",
+      "wallS": 2.229592874995433,
+      "argv": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-vite-runtime.mjs",
+        "/tmp/dreamtides-281-01a13a7a/verify-browser.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 4939,
+      "exit": 1,
+      "timedOut": false,
+      "hostLoad": [
+        7.302734375,
+        8.63671875,
+        9.3828125
+      ],
+      "userS": 1.977884,
+      "systemS": 0.631726,
+      "stdoutSha256": "31604553e9b72eee294bba05c59cb45a166bc9e50cffb396d2e7ff4fb2ec2cd8"
+    },
+    "fuzz-first150": {
+      "label": "fuzz-first150",
+      "start": "2026-10-15T18:45:07.838289+00:00",
+      "end": "2026-10-15T18:57:51.261696+00:00",
+      "wallS": 763.4157107499777,
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "150",
+        "--first",
+        "150",
+        "--seed",
+        "cost-reduction-281",
+        "--weight-uuids",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+      "pid": 77361,
+      "exit": 0,
+      "timedOut": false,
+      "hostLoad": [
+        22.19384765625,
+        13.58544921875,
+        9.9775390625
+      ],
+      "userS": 795.675135,
+      "systemS": 6.456613,
+      "stdoutSha256": "6054651a855e1b22e0e2f9f8e1d54ed851046668c1c683d03d85167e7f7978b1"
+    }
+  },
+  "finalTailReceipts": [
+    "runtime-v01/schema-final-v02.receipt.json",
+    "runtime-v01/final-audit-v02.receipt.json",
+    "runtime-v01/staged-whitespace-v02.receipt.json",
+    "runtime-v01/git-amend-v02.receipt.json",
+    "runtime-v01/git-return-v02.json"
+  ],
+  "finalTailQualification": "Final checks, staging and Git happen after this metadata snapshot. Exact later receipts are retained; Git endpoint independently extends the same original claim clock.",
+  "cpuQualification": "Per-command child user/system CPU is measured; outer heavy-wrapper CPU includes inner work and is not added again. External Playwright MCP/browser service CPU and model CPU unknown; no wall/CPU speed comparison claimed.",
+  "hostSamples": {
+    "file": "runtime-v01/own-resource-samples.jsonl",
+    "qualification": "One observed owned engine sample near102% CPU and916656KiB RSS at host load21.77; no causal performance attribution. memory_pressure before second shard reported85% free."
+  },
+  "sourceAudit": {
+    "originalEntries": 5820,
+    "bindings": 78,
+    "bindingsFile": "runtime-v01/caller-and-source-receipts/audit-source-bindings.json",
+    "additionalReadClosure": "runtime-v01/additional-source-bindings.json",
+    "actionMap": "runtime-v01/caller-and-source-receipts/audit-action-mapping.json",
+    "realSample": "runtime-v01/caller-and-source-receipts/audit-real-sample.json",
+    "all42": "42 exact exploration action UUID/parent clauses read and all84 offered normal/enhanced provider/fold/reload/init rows passed. Old entry targets captured before3newNightmares; additions receive no immediate reduction.",
+    "weightedRouting": "Canonical fuzzer rejects42 exploration action UUIDs. Exact20 stratified real-card targets preserve pre-generated random deckMods via entry spread; no phantom target aliases or per-modifier empirical count.",
+    "D21": "Actual battle-card picks041fafeb(byte17) and33874387(byte0) each player desktop/mobile; per-kind4ef8b2e7 bothcontrollers andbothviewports. Six exploration action hash flags are not extra card targets."
+  },
+  "acceptance": {
+    "base": "7db4bd4930d07612a5d84a6c8267c13f51d8cd06",
+    "modes": {
+      "('real-content-fold-init', 'pass')": 84,
+      "('engine-preflight', 'pass')": 216,
+      "('engine-preflight', 'skip')": 184,
+      "('sweep', 'pass')": 216,
+      "('sweep', 'skip')": 184,
+      "('judged-cost-reduction', 'pass')": 18,
+      "('encounter-ui', 'pass')": 1,
+      "('weighted-fuzz', 'pass')": 2,
+      "('acceptance-join', 'pass')": 1
+    },
+    "canonicalLedgerRows": 400,
+    "browserReports": 216,
+    "computedIneligibleRows": 184,
+    "canonicalEffective": 400,
+    "allExpectedCellsMatch": true
+  },
+  "fuzz": {
+    "games": 300,
+    "ordinals": [
+      0,
+      299
+    ],
+    "shards": [
+      {
+        "first": 0,
+        "games": 150,
+        "seed": "cost-reduction-281",
+        "summary": "fuzz:engine 150 games, 39891 steps, 689.8 s wall, 723.4 s CPU (0.2 games/s wall, 0.2 games/s CPU); prompts 3702; interactive re-runs 355 (18.855 ms each); feasibility bounded {\"legality\":0,\"prompts\":0}; results {\"player\":79,\"enemy\":71,\"draw\":0}; failures 0",
+        "targets": [
+          {
+            "kind": "card",
+            "uuid": "006e2f95-59a2-4cda-a777-e64f4aa31060",
+            "included": 302,
+            "exercised": 128
+          },
+          {
+            "kind": "card",
+            "uuid": "01d53e49-7833-4122-a970-b72c73ad2c28",
+            "included": 303,
+            "exercised": 135
+          },
+          {
+            "kind": "card",
+            "uuid": "128d1878-a505-4766-91a2-e5a29498bc4e",
+            "included": 306,
+            "exercised": 280
+          },
+          {
+            "kind": "card",
+            "uuid": "0637b453-4362-4f01-b3e6-07c27af9c847",
+            "included": 301,
+            "exercised": 107
+          },
+          {
+            "kind": "card",
+            "uuid": "027ae231-6569-49bb-866f-7c36ec794a11",
+            "included": 305,
+            "exercised": 81
+          },
+          {
+            "kind": "card",
+            "uuid": "32f3d6f2-43c5-4510-a23e-558769a7a8c9",
+            "included": 302,
+            "exercised": 76
+          },
+          {
+            "kind": "card",
+            "uuid": "0a19c54c-7a2e-4614-99c9-2c9142729ebb",
+            "included": 300,
+            "exercised": 108
+          },
+          {
+            "kind": "card",
+            "uuid": "16d2e85d-f940-43dd-9867-784b3a5ec5d7",
+            "included": 303,
+            "exercised": 120
+          },
+          {
+            "kind": "card",
+            "uuid": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+            "included": 304,
+            "exercised": 108
+          },
+          {
+            "kind": "card",
+            "uuid": "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+            "included": 304,
+            "exercised": 104
+          },
+          {
+            "kind": "card",
+            "uuid": "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+            "included": 302,
+            "exercised": 324
+          },
+          {
+            "kind": "card",
+            "uuid": "017a7b4b-3ccf-4635-9956-28a72b22274e",
+            "included": 303,
+            "exercised": 121
+          },
+          {
+            "kind": "card",
+            "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+            "included": 301,
+            "exercised": 122
+          },
+          {
+            "kind": "card",
+            "uuid": "01298848-1ebb-48a1-b00b-d7e0af890870",
+            "included": 301,
+            "exercised": 110
+          },
+          {
+            "kind": "card",
+            "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+            "included": 302,
+            "exercised": 125
+          },
+          {
+            "kind": "card",
+            "uuid": "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40",
+            "included": 303,
+            "exercised": 115
+          },
+          {
+            "kind": "card",
+            "uuid": "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+            "included": 302,
+            "exercised": 180
+          },
+          {
+            "kind": "card",
+            "uuid": "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6",
+            "included": 303,
+            "exercised": 155
+          },
+          {
+            "kind": "card",
+            "uuid": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+            "included": 301,
+            "exercised": 104
+          },
+          {
+            "kind": "card",
+            "uuid": "1268a899-b209-46bb-bce4-6def1dcd0404",
+            "included": 302,
+            "exercised": 89
+          }
+        ],
+        "receipt": {
+          "label": "fuzz-first0",
+          "start": "2026-10-15T18:32:10.797805+00:00",
+          "end": "2026-10-15T18:43:42.641567+00:00",
+          "wallS": 691.8399385420489,
+          "argv": [
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--games",
+            "150",
+            "--first",
+            "0",
+            "--seed",
+            "cost-reduction-281",
+            "--weight-uuids",
+            "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+          "pid": 94712,
+          "exit": 0,
+          "timedOut": false,
+          "hostLoad": [
+            9.654296875,
+            8.62548828125,
+            9.0283203125
+          ],
+          "userS": 719.019482,
+          "systemS": 7.065976,
+          "stdoutSha256": "06fb648f5e71d325b4f97c2354f6f11b9646395f0995bbab908b0399eee91cf9"
+        }
+      },
+      {
+        "first": 150,
+        "games": 150,
+        "seed": "cost-reduction-281",
+        "summary": "fuzz:engine 150 games, 38345 steps, 759.3 s wall, 800.2 s CPU (0.2 games/s wall, 0.2 games/s CPU); prompts 3831; interactive re-runs 392 (24.420 ms each); feasibility bounded {\"legality\":0,\"prompts\":0}; results {\"player\":70,\"enemy\":80,\"draw\":0}; failures 0",
+        "targets": [
+          {
+            "kind": "card",
+            "uuid": "006e2f95-59a2-4cda-a777-e64f4aa31060",
+            "included": 304,
+            "exercised": 136
+          },
+          {
+            "kind": "card",
+            "uuid": "01d53e49-7833-4122-a970-b72c73ad2c28",
+            "included": 301,
+            "exercised": 150
+          },
+          {
+            "kind": "card",
+            "uuid": "128d1878-a505-4766-91a2-e5a29498bc4e",
+            "included": 302,
+            "exercised": 276
+          },
+          {
+            "kind": "card",
+            "uuid": "0637b453-4362-4f01-b3e6-07c27af9c847",
+            "included": 307,
+            "exercised": 114
+          },
+          {
+            "kind": "card",
+            "uuid": "027ae231-6569-49bb-866f-7c36ec794a11",
+            "included": 304,
+            "exercised": 90
+          },
+          {
+            "kind": "card",
+            "uuid": "32f3d6f2-43c5-4510-a23e-558769a7a8c9",
+            "included": 304,
+            "exercised": 95
+          },
+          {
+            "kind": "card",
+            "uuid": "0a19c54c-7a2e-4614-99c9-2c9142729ebb",
+            "included": 302,
+            "exercised": 101
+          },
+          {
+            "kind": "card",
+            "uuid": "16d2e85d-f940-43dd-9867-784b3a5ec5d7",
+            "included": 300,
+            "exercised": 115
+          },
+          {
+            "kind": "card",
+            "uuid": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+            "included": 302,
+            "exercised": 132
+          },
+          {
+            "kind": "card",
+            "uuid": "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+            "included": 303,
+            "exercised": 94
+          },
+          {
+            "kind": "card",
+            "uuid": "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+            "included": 301,
+            "exercised": 312
+          },
+          {
+            "kind": "card",
+            "uuid": "017a7b4b-3ccf-4635-9956-28a72b22274e",
+            "included": 302,
+            "exercised": 118
+          },
+          {
+            "kind": "card",
+            "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+            "included": 304,
+            "exercised": 111
+          },
+          {
+            "kind": "card",
+            "uuid": "01298848-1ebb-48a1-b00b-d7e0af890870",
+            "included": 305,
+            "exercised": 123
+          },
+          {
+            "kind": "card",
+            "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+            "included": 302,
+            "exercised": 116
+          },
+          {
+            "kind": "card",
+            "uuid": "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40",
+            "included": 301,
+            "exercised": 123
+          },
+          {
+            "kind": "card",
+            "uuid": "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+            "included": 304,
+            "exercised": 168
+          },
+          {
+            "kind": "card",
+            "uuid": "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6",
+            "included": 301,
+            "exercised": 151
+          },
+          {
+            "kind": "card",
+            "uuid": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+            "included": 306,
+            "exercised": 127
+          },
+          {
+            "kind": "card",
+            "uuid": "1268a899-b209-46bb-bce4-6def1dcd0404",
+            "included": 305,
+            "exercised": 109
+          }
+        ],
+        "receipt": {
+          "label": "fuzz-first150",
+          "start": "2026-10-15T18:45:07.838289+00:00",
+          "end": "2026-10-15T18:57:51.261696+00:00",
+          "wallS": 763.4157107499777,
+          "argv": [
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--games",
+            "150",
+            "--first",
+            "150",
+            "--seed",
+            "cost-reduction-281",
+            "--weight-uuids",
+            "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-281",
+          "pid": 77361,
+          "exit": 0,
+          "timedOut": false,
+          "hostLoad": [
+            22.19384765625,
+            13.58544921875,
+            9.9775390625
+          ],
+          "userS": 795.675135,
+          "systemS": 6.456613,
+          "stdoutSha256": "6054651a855e1b22e0e2f9f8e1d54ed851046668c1c683d03d85167e7f7978b1"
+        }
+      }
+    ],
+    "qualification": "Printing inclusion/exercise counts; existing random deck modifiers are source-supported. No per-modifier empirical count or exploration action weighting is claimed."
+  },
+  "canonicalSweep": {
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-ZIA02M",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.281/invocations/sweep-ZIA02M",
+    "counts": {
+      "pass": 216,
+      "skip": 184
+    },
+    "attemptCounts": {
+      "pass": 216,
+      "skip": 184
+    },
+    "hostLoad": 6.8095703125,
+    "requestedMods": "{\"costReduction\":1}",
+    "modsValidation": "card-lab",
+    "sessions": 13,
+    "leaseYields": 12,
+    "wallMs": {
+      "browserLeaseWait": 502779,
+      "serve": 32046,
+      "scenario": 1789261.0015859997,
+      "cleanup": 5180.695458000293,
+      "execution": 1827044.456125,
+      "total": 2329823.456125
+    }
+  },
+  "sweepQualification": "Canonical400 effective rows comprise216 actual eligible browser report calls and184 computed ineligible skips, each bound to same UUID/controller observed base eligibleVariants and public preflight. Derived skips are not separately played UI cells.",
+  "nativePaymentProof": "runtime-v01/browser-reveal-native-proof.json",
+  "encounterProof": "runtime-v01/encounter-native-proof.json",
+  "paymentQualification": "Actual physical UUID/variant and persisted intents matched to observed payment seq/index. Gloomantler fixed3->2 debits2; Soulbinder1->0 emits no zero-debit event; Cosmic3+X->2+X, playeractualX0 debits2 atBATTLE_ANSWERseq3, enemyactualX8 debits2+8 atBATTLE_ANSWERseq2. Enemy lab starts with public fixture script in flight; no autonomous policy-selected play or pre-script persisted independent commit is claimed.",
+  "visual": {
+    "skill": "/Users/dthurn/dreamtides_web/.llms/skills/cumulus/SKILL.md",
+    "observations": 8,
+    "captureArtifacts": [
+      {
+        "file": "invocations/run-EvijyW/281-visible-cost-desktop.png",
+        "sha256": "989bd0cd488e6619c2a0934a59e72c56c8e9ef0ac6d61419fa7f57e2d9a3174f",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "viewport": "desktop",
+        "visiblePrimary": {
+          "text": "Energy cost2Energy costX",
+          "opacity": 1,
+          "geometry": {
+            "x": 370,
+            "y": 138.296875,
+            "width": 46.203125,
+            "height": 28.796875,
+            "right": 416.203125,
+            "bottom": 167.09375
+          },
+          "group": "primary"
+        },
+        "judgment": "Actual viewed primary reading card shows reduced fixed2 beside X; readable above board without clipping. Opponent-side readability is supported by v02 actual visible-primary wait/DOM geometry, not these player captures."
+      },
+      {
+        "file": "invocations/run-EvijyW/281-visible-cost-mobile.png",
+        "sha256": "1eeed1f26c67f71a9b7238e7ed99874aa406afb5ff906017145db305ce576693",
+        "pixels": [
+          780,
+          1688
+        ],
+        "viewport": "mobile",
+        "visiblePrimary": {
+          "text": "Energy cost2Energy costX",
+          "opacity": 1,
+          "geometry": {
+            "x": 21.765625,
+            "y": 163.703125,
+            "width": 38.953125,
+            "height": 24.296875,
+            "right": 60.71875,
+            "bottom": 188
+          },
+          "group": "primary"
+        },
+        "judgment": "Actual viewed primary reading card shows reduced fixed2 beside X; readable above board without clipping. Opponent-side readability is supported by v02 actual visible-primary wait/DOM geometry, not these player captures."
+      }
+    ],
+    "thirdRepresentative": "Board before cost reveal in same visible-v03 invocation, separate at-rest screenshot; actual image viewed.",
+    "capturePitfall": "qa.capture calls rest() before screenshot. v01 wrapper hover never revealed; v02 true reveal/wait/DOM succeeded but helper PNGs show settled board. All retained without visual cost image credit. v03 direct public page.screenshot runs before rest; explicit primary-only visibility/opacity/viewport evidence excludes hidden measurement clones."
+  },
+  "contractJoin": {
+    "bead": "hv-umm2.632",
+    "status": "Existing delivered73syntheticcontracts/164runnercertified, source read completely; no rerun required or counted here.",
+    "sourceCommit": "1c35c12119bfee58d151b58dd04132f5a2392ac7",
+    "candidate": "01a140ba-2106-78c3-ad29-088ac8f5cf1f",
+    "certificate": "01a140ba-89d9-7262-be35-faa63ae9c4c2",
+    "testedBase": "7db4bd4930d07612a5d84a6c8267c13f51d8cd06"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "attempts": {
+    "interimRawReportScan": "Scratch KeyError rawReport: canonical derived skips correctly have no separate browser report. Retained packaging-caller-correction.json; corrected collection binds each skip to canonical base eligibleVariants. No product failure or extra UI play.",
+    "real-runtime-v01": "Zero runtime cells: bare tsx lacks import.meta.env.DEV. Corrected scratch environment uses existing Vite SSR middleware watch:null no listener, closed finally; v02 credited.",
+    "browser-native-verification-v01": "Retained scratch assertion failure because enemy cardPlayed actual epoch BATTLE_ANSWER contradicted constructor-only assumption. Corrected actual native epoch verification passes.",
+    "settledVisual": "v01/v02 captures explicitly at rest, no cost image credit; gameplay/native evidence remains valid."
+  },
+  "resourceAudit": "runtime-v01/final-resource-audit-v02.json",
+  "sourceVerification": "runtime-v01/final-source-verification-v02.json",
+  "artifactManifest": "runtime-v01/artifact-manifest-v02.json",
+  "sourceEdits": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "remaining": "Parent native candidate/certification/promotion only after helper local commit; no packaging ACK needed.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "real-runtime-v02 at2026-10-15T18:23:10.346885Z; source/modified-preflight command start",
+        "source": "runtime-v01/real-runtime-v02.receipt.json",
+        "value": 6.94970703125
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "heavy-queue-first0": {
+      "start": "2026-10-15T18:23:27.466205+00:00",
+      "oneFiveFifteenMinute": [
+        6.68701171875,
+        7.93359375,
+        9.50927734375
+      ],
+      "scope": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-281-01a13a7a/run-command.py",
+        "fuzz-first0",
+        "1780",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "150",
+        "--first",
+        "0",
+        "--seed",
+        "cost-reduction-281",
+        "--weight-uuids",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404"
+      ]
+    },
+    "browser-reveal-native-verification-v01": {
+      "start": "2026-10-15T19:12:10.014248+00:00",
+      "oneFiveFifteenMinute": [
+        4.90625,
+        7.3994140625,
+        8.8056640625
+      ],
+      "scope": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-vite-runtime.mjs",
+        "/tmp/dreamtides-281-01a13a7a/verify-browser-reveal.ts"
+      ]
+    },
+    "knip-v01": {
+      "start": "2026-10-15T19:09:34.388350+00:00",
+      "oneFiveFifteenMinute": [
+        6.55517578125,
+        8.81689453125,
+        9.48828125
+      ],
+      "scope": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    },
+    "artifact-manifest-v01": {
+      "start": "2026-10-15T19:39:21.479315+00:00",
+      "oneFiveFifteenMinute": [
+        8.63427734375,
+        10.18701171875,
+        9.99072265625
+      ],
+      "scope": [
+        "python3",
+        "/tmp/dreamtides-281-01a13a7a/make-manifest.py"
+      ]
+    },
+    "assemble-evidence-v01": {
+      "start": "2026-10-15T19:38:20.778634+00:00",
+      "oneFiveFifteenMinute": [
+        13.27587890625,
+        11.16943359375,
+        10.302734375
+      ],
+      "scope": [
+        "python3",
+        "/tmp/dreamtides-281-01a13a7a/assemble-final.py"
+      ]
+    },
+    "heavy-queue-first150": {
+      "start": "2026-10-15T18:45:07.810853+00:00",
+      "oneFiveFifteenMinute": [
+        22.19384765625,
+        13.58544921875,
+        9.9775390625
+      ],
+      "scope": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-281-01a13a7a/run-command.py",
+        "fuzz-first150",
+        "1780",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "150",
+        "--first",
+        "150",
+        "--seed",
+        "cost-reduction-281",
+        "--weight-uuids",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404"
+      ]
+    },
+    "browser-native-verification-v02": {
+      "start": "2026-10-15T19:10:59.121834+00:00",
+      "oneFiveFifteenMinute": [
+        6.69677734375,
+        8.2939453125,
+        9.22021484375
+      ],
+      "scope": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-vite-runtime.mjs",
+        "/tmp/dreamtides-281-01a13a7a/verify-browser.ts"
+      ]
+    },
+    "canonical-sweep": {
+      "start": "2026-10-15T18:59:01.471637+00:00",
+      "oneFiveFifteenMinute": [
+        6.8095703125,
+        7.81640625,
+        8.54443359375
+      ],
+      "scope": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.281",
+        "--cards",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404",
+        "--mods",
+        "{\"costReduction\":1}",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ]
+    },
+    "final-audit-v01": {
+      "start": "2026-10-15T19:38:49.368437+00:00",
+      "oneFiveFifteenMinute": [
+        10.18359375,
+        10.62548828125,
+        10.134765625
+      ],
+      "scope": [
+        "python3",
+        "/tmp/dreamtides-281-01a13a7a/final-audit.py"
+      ]
+    },
+    "judged-visible-v03": {
+      "start": "2026-10-15T19:11:57.833567+00:00",
+      "oneFiveFifteenMinute": [
+        5.140625,
+        7.56103515625,
+        8.88623046875
+      ],
+      "scope": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-judgments-visible.mjs"
+      ]
+    },
+    "fuzz-first0": {
+      "start": "2026-10-15T18:32:10.797805+00:00",
+      "oneFiveFifteenMinute": [
+        9.654296875,
+        8.62548828125,
+        9.0283203125
+      ],
+      "scope": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "150",
+        "--first",
+        "0",
+        "--seed",
+        "cost-reduction-281",
+        "--weight-uuids",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404"
+      ]
+    },
+    "judged-v01": {
+      "start": "2026-10-15T19:03:21.833112+00:00",
+      "oneFiveFifteenMinute": [
+        21.39306640625,
+        14.6201171875,
+        11.16357421875
+      ],
+      "scope": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-judgments.mjs"
+      ]
+    },
+    "real-runtime-v01": {
+      "start": "2026-10-15T18:22:47.466289+00:00",
+      "oneFiveFifteenMinute": [
+        8.43896484375,
+        8.38916015625,
+        9.740234375
+      ],
+      "scope": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-281-01a13a7a/real-runtime.ts"
+      ]
+    },
+    "git-final-commit": {
+      "start": "2026-10-15T19:39:41.396584+00:00",
+      "oneFiveFifteenMinute": [
+        9.423828125,
+        10.2568359375,
+        10.01904296875
+      ],
+      "scope": [
+        "git",
+        "commit",
+        "--quiet",
+        "-F",
+        "/tmp/dreamtides-281-01a13a7a/commit-message.txt"
+      ]
+    },
+    "schema-final-v01": {
+      "start": "2026-10-15T19:38:37.725267+00:00",
+      "oneFiveFifteenMinute": [
+        11.73193359375,
+        10.93212890625,
+        10.232421875
+      ],
+      "scope": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ]
+    },
+    "finalize-metadata-v01": {
+      "start": "2026-10-15T19:38:28.313030+00:00",
+      "oneFiveFifteenMinute": [
+        12.85302734375,
+        11.11669921875,
+        10.2890625
+      ],
+      "scope": [
+        "python3",
+        "/tmp/dreamtides-281-01a13a7a/finalize-metadata.py"
+      ]
+    },
+    "review-v01": {
+      "start": "2026-10-15T19:09:34.388291+00:00",
+      "oneFiveFifteenMinute": [
+        6.55517578125,
+        8.81689453125,
+        9.48828125
+      ],
+      "scope": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    "whitespace-v01": {
+      "start": "2026-10-15T19:38:37.725258+00:00",
+      "oneFiveFifteenMinute": [
+        11.73193359375,
+        10.93212890625,
+        10.232421875
+      ],
+      "scope": [
+        "git",
+        "diff",
+        "--check"
+      ]
+    },
+    "judged-reveal-v02": {
+      "start": "2026-10-15T19:09:01.132567+00:00",
+      "oneFiveFifteenMinute": [
+        6.71923828125,
+        9.08837890625,
+        9.607421875
+      ],
+      "scope": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-judgments-reveal.mjs"
+      ]
+    },
+    "real-runtime-v02": {
+      "start": "2026-10-15T18:23:10.346885+00:00",
+      "oneFiveFifteenMinute": [
+        6.94970703125,
+        8.05419921875,
+        9.58837890625
+      ],
+      "scope": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-vite-runtime.mjs"
+      ]
+    },
+    "encounter-v01": {
+      "start": "2026-10-15T19:07:41.697090+00:00",
+      "oneFiveFifteenMinute": [
+        6.3232421875,
+        9.71484375,
+        9.85791015625
+      ],
+      "scope": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-281-01a13a7a/encounter.mjs",
+        "--bead",
+        "hv-umm2.281",
+        "--viewports",
+        "desktop"
+      ]
+    },
+    "review-final-v01": {
+      "start": "2026-10-15T19:38:37.725300+00:00",
+      "oneFiveFifteenMinute": [
+        11.73193359375,
+        10.93212890625,
+        10.232421875
+      ],
+      "scope": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    "staged-whitespace-v01": {
+      "start": "2026-10-15T19:39:21.317731+00:00",
+      "oneFiveFifteenMinute": [
+        8.63427734375,
+        10.18701171875,
+        9.99072265625
+      ],
+      "scope": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ]
+    },
+    "browser-native-verification-v01": {
+      "start": "2026-10-15T19:10:20.305854+00:00",
+      "oneFiveFifteenMinute": [
+        7.302734375,
+        8.63671875,
+        9.3828125
+      ],
+      "scope": [
+        "node",
+        "/tmp/dreamtides-281-01a13a7a/run-vite-runtime.mjs",
+        "/tmp/dreamtides-281-01a13a7a/verify-browser.ts"
+      ]
+    },
+    "fuzz-first150": {
+      "start": "2026-10-15T18:45:07.838289+00:00",
+      "oneFiveFifteenMinute": [
+        22.19384765625,
+        13.58544921875,
+        9.9775390625
+      ],
+      "scope": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "150",
+        "--first",
+        "150",
+        "--seed",
+        "cost-reduction-281",
+        "--weight-uuids",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060,01d53e49-7833-4122-a970-b72c73ad2c28,128d1878-a505-4766-91a2-e5a29498bc4e,0637b453-4362-4f01-b3e6-07c27af9c847,027ae231-6569-49bb-866f-7c36ec794a11,32f3d6f2-43c5-4510-a23e-558769a7a8c9,0a19c54c-7a2e-4614-99c9-2c9142729ebb,16d2e85d-f940-43dd-9867-784b3a5ec5d7,21965e95-0c8c-470c-a1e1-06d7b87a8d00,041fafeb-f159-4aba-90c2-3ce4b3038bdc,06f8cfff-92ec-4668-afbc-f33a274c3b1a,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,01298848-1ebb-48a1-b00b-d7e0af890870,0458658d-7e02-4286-9249-93674d16620b,1cfc72e9-b75c-4d55-8bcf-54bb301d7e40,071bcab4-ed02-48a0-93dc-8fd0f36611c8,11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,4ef8b2e7-3525-4c25-aa30-f751467f182f,1268a899-b209-46bb-bce4-6def1dcd0404"
+      ]
+    }
+  },
+  "metadataCorrection": {
+    "reason": "Parent identified omitted explicit alternate-command hostLoad scope before native submission. Value6.94970703125 is real-runtime-v02 start, not review start.",
+    "supersededUnsubmittedLocalHead": "405d8f9b9549d940b5a92d4fc26407cbecd439e3",
+    "operation": "Amend same single local source commit; runtime/browser/fuzz unchanged; original claim clock preserved."
+  }
+}

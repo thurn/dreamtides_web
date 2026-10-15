@@ -1,0 +1,39 @@
+{
+  "bead": "hv-umm2.281",
+  "phase": 5,
+  "implementMin": 96.87867581666666,
+  "implementWindow": {
+    "start": "2026-10-15T18:04:52.084117+00:00",
+    "end": "2026-10-15T19:41:44.804666+00:00"
+  },
+  "hostLoad": 6.94970703125,
+  "localValidationS": {
+    "review": 0.2619173330022022,
+    "knip": 6.0338902499643154,
+    "realContentAndPreflight": 4.767874834011309,
+    "fuzzExecution": 1455.2556492920266,
+    "canonicalSweepExecution": 1827.0444561250001
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-lock-wait",
+      "minutes": 8.724029809699278,
+      "note": "Outer lock-wrapper wall minus post-acquisition execution includes a small wrapper overhead; two serial batches, no browser lease/server held while queued."
+    },
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 8.37965,
+      "note": "Canonical managed sweep records wait separately, including cooperative card-boundary yields; separate observer/encounter waits are retained in their complete receipts and not misattributed as engine runtime."
+    },
+    {
+      "tag": "qa-observer-contract",
+      "minutes": 11.381096633333334,
+      "note": "Inclusive overlapping interval across original settled observer, true inner reveal, and two direct screenshots. Standard capture deliberately rests pointer and closes hover; v01/v02 settled images have no visual-cost credit. Native/gameplay observations retained. One overstrict verifier assumed enemy constructor-only epoch; actual Cosmic X8 payment completes at BATTLE_ANSWER seq2. Scratch fixes only; failed receipts retained."
+    }
+  ]
+}
