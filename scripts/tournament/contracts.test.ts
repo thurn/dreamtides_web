@@ -150,19 +150,32 @@ describe("durable resume", () => {
   });
 });
 
-it("runs actual Node workers, resumes a one-leg prefix equivalently, and settles workers on failure", async () => {
+it("runs actual Node workers, resumes a one-leg prefix equivalently, and settles workers on failure", async ({ signal, onTestFinished }) => {
+  // Each batch allows a catalog boot interval for startup and another for finite
+  // synthetic game work. Four batch deadlines plus a settlement interval bound
+  // this lifecycle check; these watchdogs do not assert execution speed.
+  // Cancellation must join runBatch's worker/timer cleanup before Vitest moves on.
+  let pending: ReturnType<typeof runBatch> | undefined;
+  onTestFinished(async () => { await pending; }, SETTINGS.workerBootMs);
+  const batch = (input: Omit<Parameters<typeof runBatch>[0], "batchMs" | "signal">, interrupt?: AbortSignal) => {
+    signal.throwIfAborted();
+    pending = runBatch({ ...input, batchMs: 2 * SETTINGS.workerBootMs, signal: interrupt === undefined ? signal : AbortSignal.any([signal, interrupt]) });
+    return pending;
+  };
   const baseline: GameRecord[] = [];
-  const all = await runBatch({ manifest, matches, budgets: config.budgets, workers: 1, batchMs: SETTINGS.maximumBatchMs, onGame: (game) => baseline.push(game) });
-  expect(all.reason).toBe("complete"); expect(all.completed).toBe(matches.length);
+  const all = await batch({ manifest, matches, budgets: config.budgets, workers: 1, onGame: (game) => baseline.push(game) });
+  expect(all.reason).toBe("complete"); expect(all.completed).toBe(matches.length); expect(all.workers).toBe(1);
   const partial: GameRecord[] = [], abort = new AbortController();
-  const first = await runBatch({ manifest, matches, budgets: config.budgets, workers: 1, batchMs: SETTINGS.maximumBatchMs, signal: abort.signal, onGame(game) { partial.push(game); abort.abort(); } });
-  expect(first.reason).toBe("signal"); expect(partial).toHaveLength(1);
-  const resumed = await runBatch({ manifest, matches: matches.filter((match) => !partial.some((game) => game.ordinal === match.ordinal)), budgets: config.budgets, workers: 2, batchMs: SETTINGS.maximumBatchMs, onGame: (game) => partial.push(game) });
-  expect(resumed.reason).toBe("complete"); expect(outcomesDigest(partial)).toBe(outcomesDigest(baseline));
-  const bad = { ...spec, init: { ...spec.init, decks: { ...spec.init.decks, player: [{ cardId: parseCardId("5e5e5e5e-0000-4000-8000-00000000ffff") }] } } };
-  const failed = await runBatch({ manifest, matches: [bad], budgets: config.budgets, workers: 1, batchMs: SETTINGS.maximumBatchMs, onGame() { throw new Error("Failure must not be accepted as completed"); } });
-  expect(failed.reason).toBe("failure"); expect(failed.completed).toBe(0); expect(failed.unfinishedOrdinals).toEqual([bad.ordinal]);
-}, 15000);
+  const first = await batch({ manifest, matches, budgets: config.budgets, workers: 1, onGame(game) { partial.push(game); abort.abort(); } }, abort.signal);
+  expect(first.reason).toBe("signal"); expect(partial).toHaveLength(1); expect(first.workers).toBe(1);
+  const resumed = await batch({ manifest, matches: matches.filter((match) => !partial.some((game) => game.ordinal === match.ordinal)), budgets: config.budgets, workers: 2, onGame: (game) => partial.push(game) });
+  expect(resumed.reason).toBe("complete"); expect(resumed.workers).toBe(2); expect(outcomesDigest(partial)).toBe(outcomesDigest(baseline));
+  const missingCardId = parseCardId("5e5e5e5e-0000-4000-8000-00000000ffff");
+  const bad = { ...spec, init: { ...spec.init, decks: { ...spec.init.decks, player: [{ cardId: missingCardId }] } } };
+  const failed = await batch({ manifest, matches: [bad], budgets: config.budgets, workers: 1, onGame() { throw new Error("Failure must not be accepted as completed"); } });
+  expect(failed.reason).toBe("failure"); expect(failed.completed).toBe(0); expect(failed.workers).toBe(1); expect(failed.unfinishedOrdinals).toEqual([bad.ordinal]);
+  expect(failed.failure).toContain(missingCardId);
+}, (4 * 2 + 1) * SETTINGS.workerBootMs);
 it("reports worker request order errors without poisoning the next valid catalog boot", () => {
   const handle = workerHandler();
   expect(handle({ kind: "game", spec, budgets: config.budgets }).kind).toBe("error");

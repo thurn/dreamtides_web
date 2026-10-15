@@ -1,0 +1,828 @@
+{
+  "bead": "hv-umm2.740",
+  "base": "7c98b941f25ee200ea128ba74c3cb13eaf51f56e",
+  "sourceSHA256": "558405a21d4be90b30ba318de97496d2aeb41a8f394edfc5bcf15c93e7e179c7",
+  "scope": {
+    "writer": "scripts/tournament/contracts.test.ts existing lifecycle case only; local batch wrapper reused by four phases",
+    "production": "read-only; no fixture, catalog, policy, budgets, worker, loader, test infrastructure or config change",
+    "outsideAreaWrites": [],
+    "fallout": [],
+    "coreReview": false,
+    "reviewReason": "Existing bounded test-only case; no phase-page core-review label and no substantial production or infrastructure change. Parent owns native review decision.",
+    "reviewFullRequired": false,
+    "browser": false,
+    "heavy": false
+  },
+  "clock": {
+    "originalDispatch": "2026-10-15T10:51:09.103Z",
+    "recordCutoff": "2026-10-15T10:59:43.251828+00:00",
+    "inclusiveMinAtCutoff": 8.569147133333333,
+    "finalGitTail": "Actual normal Git start/end, final inclusive elapsed and cutoff tail are retained in final-commit.json after commit; no amend or predetermined Git date.",
+    "dispatchProvenance": "Parent verified native journal ordinal47367/call_b71e78d1f4984a1db8d5ca4af0983382; complete plaintext brief saved before dispatch. Journal message argument is encoded reference, not plaintext."
+  },
+  "diagnosis": {
+    "sourceFacts": [
+      "Original fixed15000ms outer guard spans four sequential runBatch calls and five real Node workers.",
+      "Each production worker permits min(workerBootMs30000,batchMs) for boot; original batchMs is maximumBatchMs1800000. Bootstrap registers tsx then imports worker.ts; catalog-manifest imports current content definitions even for synthetic manifest UUIDs.",
+      "runBatch finally clears deadline/boot timers, removes abort/SIGINT/SIGTERM listeners, and awaits all real Worker.terminate promises before returning.",
+      "Vitest4.1.0 withTimeout calls onTimeout before rejecting; wrapper1142 aborts context.signal, and onTestFinished wrappers await returned promise. Original case supplies neither context signal nor pending-batch join."
+    ],
+    "causeQualification": "The source-level verification guard mismatch and missing test-to-batch cancellation are established. The original raw failures identify the15000ms boundary but contain no phase timing, so their exact slow phase and all contributing causes remain unknown. Fresh unmodified source passed; it is not a reproduction or reclassification.",
+    "guardDiscrimination": {
+      "originalOuterMs": 15000,
+      "productionBootAllowanceMs": 30000,
+      "repairedBatchDeadlineMs": 60000,
+      "repairedOuterMs": 270000,
+      "cleanupHookMs": 30000,
+      "derivation": "Per batch: full catalog boot allowance plus a separate equal allowance as a finite synthetic-work liveness watchdog. Outer: four batch deadlines plus one catalog allowance for aggregate settlement; cancellation hook independently allows one catalog interval to join active cleanup.",
+      "qualification": "The work allowance and teardown reserve are explicit local safety choices, not measured speed guarantees or equivalence to the production maximum batch deadline. No forced delay, counterfactual timeout mutation, timing/statistical assertion or fabricated old-guard failure/pass experiment.",
+      "behavioralDiscrimination": "The original guard rejects while a single legitimate boot can still be within its catalog allowance. The repaired guard budgets all four phases and settlement, and timeout/cancellation propagates to active batch then joins cleanup. This follows source/protocol reasoning; observations remain below both outer guards."
+    },
+    "finiteWork": "Original deterministic synthetic four-match schedule, score target3,12-card decks and explicit8-iteration policy ceilings; game safety choice ceiling100000 and engine default turnLimit50 are read-only runtime safety bounds, not asserted performance/default-choice expectations."
+  },
+  "sourceEpochs": {
+    "recordedAt": "2026-10-15T10:55:30.412083+00:00",
+    "epochs": {
+      "baseline": {
+        "sourceSHA256": "d8fa7191b12dd4f0d5bf32178694779a0e4c26abe8eaca0ef036dc95aa3ea182",
+        "guardMs": 15000,
+        "batchMs": 1800000
+      },
+      "focused": {
+        "sourceSHA256": "ab83fac4f46327e0524a5cf701c324a41cb6b79cec0247bb742ad71093c9cd1e",
+        "guardMs": 120000,
+        "batchMs": 30000,
+        "qualification": "Reconstructed from exact second epoch by reversing only documented hook timeout and settlement comment/guard edits; not captured contemporaneously."
+      },
+      "final-focused": {
+        "sourceSHA256": "aeaf42f123f5894062a546abbfd990d2630a201926d601b307bff71310604a64",
+        "guardMs": 150000,
+        "batchMs": 30000,
+        "qualification": "Intermediate receipt label final-focused predates required boot+work allowance correction; not final validation."
+      },
+      "accepted-focused": {
+        "sourceSHA256": "558405a21d4be90b30ba318de97496d2aeb41a8f394edfc5bcf15c93e7e179c7",
+        "guardMs": 270000,
+        "batchMs": 60000,
+        "cleanupHookMs": 30000
+      }
+    }
+  },
+  "originalFailureAndLaterGreen": {
+    "all6ExactFilerHashesVerified": true,
+    "inputs": [
+      {
+        "filename": "review.log",
+        "sha256": "239c9708433cde57d2db6a6f9a9c53b3c73f7d62efdb894c1595d4733a569eaa",
+        "source": "/tmp/dreamtides-241-01a13a7a/review.log"
+      },
+      {
+        "filename": "review.json",
+        "sha256": "d1d880bd69c6a4dd9456ba814bf2b97f5de49397d29251f758a687a1ff110158",
+        "source": "/tmp/dreamtides-241-01a13a7a/review.json"
+      },
+      {
+        "filename": "tournament-isolation.log",
+        "sha256": "3c3d5887af37c8ddf8784b7614ce0cd0105d415c452167a54bdec2f8ecc292ee",
+        "source": "/tmp/dreamtides-241-01a13a7a/tournament-isolation.log"
+      },
+      {
+        "filename": "tournament-isolation.json",
+        "sha256": "639ac13ee9ff40265ee94bca425396042048f524f6ffd4480c9ec6575c3801b7",
+        "source": "/tmp/dreamtides-241-01a13a7a/tournament-isolation.json"
+      },
+      {
+        "filename": "review-corrected.log",
+        "sha256": "e83647513f9b8d150faca434206cdc25e3c0b4f4866efa4ffde9b984da1e87cd",
+        "source": "/tmp/dreamtides-241-01a13a7a/review-corrected.log"
+      },
+      {
+        "filename": "review-corrected.json",
+        "sha256": "92bfa8434641c57702d9bc16fd830ba0cf20287ecf419c8f2150860346a10d62",
+        "source": "/tmp/dreamtides-241-01a13a7a/review-corrected.json"
+      }
+    ],
+    "readCorrection": "Filing manifest resides tournament-filing; actual raw6files reside parent241 scratchdirectory. Initial sibling-path read missed; no mutation/retry of tests."
+  },
+  "historicalOutcomes": [
+    {
+      "label": "review",
+      "exit": 2,
+      "tests": "9128 passed/1 timeout",
+      "timeoutMs": 15004,
+      "wallS": 76.95817645895295,
+      "load": 7.2431640625
+    },
+    {
+      "label": "tournament-isolation",
+      "exit": 1,
+      "tests": "10 passed/1 timeout",
+      "timeoutMs": 15005,
+      "wallS": 47.871684375044424,
+      "load": 8.79248046875
+    },
+    {
+      "label": "review-corrected",
+      "exit": 0,
+      "tests": "9129 passed/283 files",
+      "wallS": 68.94351383298635,
+      "load": 6.87109375
+    }
+  ],
+  "baselineObservation": {
+    "receipt": {
+      "label": "baseline",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "scripts/tournament/contracts.test.ts",
+        "-t",
+        "runs actual Node workers"
+      ],
+      "start": "2026-10-15T10:52:19.227000+00:00",
+      "hostLoad": [
+        9.671875,
+        10.13525390625,
+        10.15234375
+      ],
+      "pid": 40868,
+      "pgid": 40868,
+      "exit": 0,
+      "end": "2026-10-15T10:52:27.597684+00:00",
+      "wallS": 8.370522124983836,
+      "actualWait": true,
+      "logSHA256": "b84e3e03ca7bd7c4528f024d26881b7d78f7cf9a84f9cec027a91443466bec6f",
+      "groupAbsent": true
+    },
+    "phases": {
+      "label": "baseline",
+      "workers": [
+        {
+          "worker": 2,
+          "bootMs": 1650.910292,
+          "totalMs": 1887.3204170000004,
+          "gameRequests": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "errorReplies": [],
+          "exit": 1,
+          "terminationResolved": true,
+          "signalListenersAtTermination": {
+            "SIGINT": 0,
+            "SIGTERM": 0
+          },
+          "resourcesAtSettlement": [
+            "MessagePort"
+          ]
+        },
+        {
+          "worker": 4,
+          "bootMs": 980.0823330000003,
+          "totalMs": 1050.3253330000007,
+          "gameRequests": [
+            0
+          ],
+          "errorReplies": [],
+          "exit": 1,
+          "terminationResolved": true,
+          "signalListenersAtTermination": {
+            "SIGINT": 0,
+            "SIGTERM": 0
+          },
+          "resourcesAtSettlement": [
+            "MessagePort"
+          ]
+        },
+        {
+          "worker": 5,
+          "bootMs": 1386.672834,
+          "totalMs": 1547.0820839999997,
+          "gameRequests": [
+            1,
+            3
+          ],
+          "errorReplies": [],
+          "exit": 1,
+          "terminationResolved": true,
+          "signalListenersAtTermination": {
+            "SIGINT": 0,
+            "SIGTERM": 0
+          },
+          "resourcesAtSettlement": [
+            "MessagePort"
+          ]
+        },
+        {
+          "worker": 6,
+          "bootMs": 1416.157792,
+          "totalMs": 1546.689292,
+          "gameRequests": [
+            2
+          ],
+          "errorReplies": [],
+          "exit": 1,
+          "terminationResolved": true,
+          "signalListenersAtTermination": {
+            "SIGINT": 0,
+            "SIGTERM": 0
+          },
+          "resourcesAtSettlement": [
+            "MessagePort"
+          ]
+        },
+        {
+          "worker": 7,
+          "bootMs": 937.5012089999991,
+          "totalMs": 957.9569590000001,
+          "gameRequests": [
+            0
+          ],
+          "errorReplies": [
+            "Unknown card 5e5e5e5e-0000-4000-8000-00000000ffff"
+          ],
+          "exit": 1,
+          "terminationResolved": true,
+          "signalListenersAtTermination": {
+            "SIGINT": 0,
+            "SIGTERM": 0
+          },
+          "resourcesAtSettlement": [
+            "MessagePort"
+          ]
+        }
+      ],
+      "allSettled": true,
+      "observationCaveat": "Real Worker subclass delegates constructor/postMessage/terminate unchanged; no delays or replacement replies. Timings are observations at this source/load, not requirements or reproduction of historical failures."
+    },
+    "sourceBinding": "baseline-source.json",
+    "qualification": "One unchanged source-qualified baseline observation only; passing observation preserved alongside all historical failure/later-green receipts."
+  },
+  "finalFocusedObservation": {
+    "receipt": {
+      "label": "accepted-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "scripts/tournament/contracts.test.ts"
+      ],
+      "start": "2026-10-15T10:55:30.463763+00:00",
+      "hostLoad": [
+        6.890625,
+        8.89404296875,
+        9.63525390625
+      ],
+      "pid": 56325,
+      "pgid": 56325,
+      "exit": 0,
+      "end": "2026-10-15T10:55:41.313320+00:00",
+      "wallS": 10.849241541989613,
+      "actualWait": true,
+      "logSHA256": "5cf94fdb44adb2fc15946c884ce0b7fe3c67d68c6edf7791971c182ab5654484",
+      "groupAbsent": true
+    },
+    "phases": {
+      "label": "accepted-focused",
+      "workers": [
+        {
+          "worker": 2,
+          "bootMs": 1073.9075830000002,
+          "totalMs": 1289.5474579999996,
+          "gameRequests": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "errorReplies": [],
+          "exit": 1,
+          "terminationResolved": true,
+          "signalListenersAtTermination": {
+            "SIGINT": 0,
+            "SIGTERM": 0
+          },
+          "resourcesAtSettlement": [
+            "MessagePort"
+          ]
+        },
+        {
+          "worker": 3,
+          "bootMs": 962.4758329999995,
+          "totalMs": 1052.782542,
+          "gameRequests": [
+            0
+          ],
+          "errorReplies": [],
+          "exit": 1,
+          "terminationResolved": true,
+          "signalListenersAtTermination": {
+            "SIGINT": 0,
+            "SIGTERM": 0
+          },
+          "resourcesAtSettlement": [
+            "MessagePort"
+          ]
+        },
+        {
+          "worker": 4,
+          "bootMs": 1386.7610000000004,
+          "totalMs": 1546.048667,
+          "gameRequests": [
+            2
+          ],
+          "errorReplies": [],
+          "exit": 1,
+          "terminationResolved": true,
+          "signalListenersAtTermination": {
+            "SIGINT": 0,
+            "SIGTERM": 0
+          },
+          "resourcesAtSettlement": [
+            "MessagePort"
+          ]
+        },
+        {
+          "worker": 5,
+          "bootMs": 1385.4391250000008,
+          "totalMs": 1545.9827500000001,
+          "gameRequests": [
+            1,
+            3
+          ],
+          "errorReplies": [],
+          "exit": 1,
+          "terminationResolved": true,
+          "signalListenersAtTermination": {
+            "SIGINT": 0,
+            "SIGTERM": 0
+          },
+          "resourcesAtSettlement": [
+            "MessagePort"
+          ]
+        },
+        {
+          "worker": 6,
+          "bootMs": 953.030917,
+          "totalMs": 971.6401249999999,
+          "gameRequests": [
+            0
+          ],
+          "errorReplies": [
+            "Unknown card 5e5e5e5e-0000-4000-8000-00000000ffff"
+          ],
+          "exit": 1,
+          "terminationResolved": true,
+          "signalListenersAtTermination": {
+            "SIGINT": 0,
+            "SIGTERM": 0
+          },
+          "resourcesAtSettlement": [
+            "MessagePort"
+          ]
+        }
+      ],
+      "allSettled": true,
+      "observationCaveat": "Real Worker subclass delegates constructor/postMessage/terminate unchanged; no delays or replacement replies. Timings are observations at this source/load, not requirements or reproduction of historical failures."
+    },
+    "tests": "11 passed/1 file; one real lifecycle case",
+    "sourceBinding": {
+      "sourceSHA256": "558405a21d4be90b30ba318de97496d2aeb41a8f394edfc5bcf15c93e7e179c7",
+      "guardMs": 270000,
+      "batchMs": 60000,
+      "cleanupHookMs": 30000
+    },
+    "instrumentation": "observe-workers.mjs delegates actual Worker constructor/postMessage/terminate, logging native thread/protocol/termination events; no worker substitute, injected delay or reply mutation."
+  },
+  "validation": {
+    "whitespace": {
+      "label": "whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "start": "2026-10-15T10:58:49.198172+00:00",
+      "hostLoad": [
+        6.4404296875,
+        8.203125,
+        9.22265625
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tournament-lifecycle740-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "NODE_OPTIONS": null,
+      "sourceSHA256": {
+        "scripts/tournament/contracts.test.ts": "558405a21d4be90b30ba318de97496d2aeb41a8f394edfc5bcf15c93e7e179c7",
+        "scripts/tournament/batch.ts": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+        "scripts/tournament/worker.ts": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+        "scripts/tournament/worker-bootstrap.mjs": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+        "scripts/tournament/catalog.json": "2b834579039eec9c3d481ff56d6e5b363c044719f2b615c9c5e00fb70d52f06b",
+        "src/engine/policy/catalog-manifest.ts": "823710e2ef75674632a4232d2c7ae78ddea93496e2a026adb44b6e680cc429d6",
+        "scripts/tournament/game.ts": "1aa447a9f856563a4c6dad923e8c2e8be1e274d0a18e09ae5c0063e8575763ad",
+        "vitest.config.ts": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+        "package-lock.json": "f681ae40a78749a4696ef3d48b525dd01fb619cc649dd3e21cce020c19242692"
+      },
+      "pid": 61037,
+      "pgid": 61037,
+      "exit": 0,
+      "end": "2026-10-15T10:58:49.222211+00:00",
+      "wallS": 0.023603665991686285,
+      "actualWait": true,
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "groupAbsent": true
+    },
+    "final-focused": {
+      "label": "final-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "scripts/tournament/contracts.test.ts"
+      ],
+      "start": "2026-10-15T10:54:05.889235+00:00",
+      "hostLoad": [
+        8.173828125,
+        9.4638671875,
+        9.8857421875
+      ],
+      "pid": 52418,
+      "pgid": 52418,
+      "exit": 0,
+      "end": "2026-10-15T10:54:18.227310+00:00",
+      "wallS": 12.33785520796664,
+      "actualWait": true,
+      "logSHA256": "2e11cdde2165f8c2180c11b0137bbb571bb11032c8e94caf545bae9b2e4337e4",
+      "groupAbsent": true
+    },
+    "knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T10:58:19.537850+00:00",
+      "hostLoad": [
+        6.91162109375,
+        8.45751953125,
+        9.34619140625
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tournament-lifecycle740-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "NODE_OPTIONS": null,
+      "sourceSHA256": {
+        "scripts/tournament/contracts.test.ts": "558405a21d4be90b30ba318de97496d2aeb41a8f394edfc5bcf15c93e7e179c7",
+        "scripts/tournament/batch.ts": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+        "scripts/tournament/worker.ts": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+        "scripts/tournament/worker-bootstrap.mjs": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+        "scripts/tournament/catalog.json": "2b834579039eec9c3d481ff56d6e5b363c044719f2b615c9c5e00fb70d52f06b",
+        "src/engine/policy/catalog-manifest.ts": "823710e2ef75674632a4232d2c7ae78ddea93496e2a026adb44b6e680cc429d6",
+        "scripts/tournament/game.ts": "1aa447a9f856563a4c6dad923e8c2e8be1e274d0a18e09ae5c0063e8575763ad",
+        "vitest.config.ts": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+        "package-lock.json": "f681ae40a78749a4696ef3d48b525dd01fb619cc649dd3e21cce020c19242692"
+      },
+      "pid": 60268,
+      "pgid": 60268,
+      "exit": 0,
+      "end": "2026-10-15T10:58:25.775911+00:00",
+      "wallS": 6.237587957992218,
+      "actualWait": true,
+      "logSHA256": "68b8bebe981652faf98586284cbaad3cafc013d3118a4ae706ad79599c0b1b92",
+      "groupAbsent": true
+    },
+    "focused": {
+      "label": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "scripts/tournament/contracts.test.ts"
+      ],
+      "start": "2026-10-15T10:53:23.995400+00:00",
+      "hostLoad": [
+        7.9267578125,
+        9.59130859375,
+        9.94970703125
+      ],
+      "pid": 48494,
+      "pgid": 48494,
+      "exit": 0,
+      "end": "2026-10-15T10:53:37.268394+00:00",
+      "wallS": 13.272779416991398,
+      "actualWait": true,
+      "logSHA256": "8275dc6f3bf3e7da84495cc1a4ae16fc1cf4ec6edf877094d0a7f6779eec7e11",
+      "groupAbsent": true
+    },
+    "baseline": {
+      "label": "baseline",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "scripts/tournament/contracts.test.ts",
+        "-t",
+        "runs actual Node workers"
+      ],
+      "start": "2026-10-15T10:52:19.227000+00:00",
+      "hostLoad": [
+        9.671875,
+        10.13525390625,
+        10.15234375
+      ],
+      "pid": 40868,
+      "pgid": 40868,
+      "exit": 0,
+      "end": "2026-10-15T10:52:27.597684+00:00",
+      "wallS": 8.370522124983836,
+      "actualWait": true,
+      "logSHA256": "b84e3e03ca7bd7c4528f024d26881b7d78f7cf9a84f9cec027a91443466bec6f",
+      "groupAbsent": true
+    },
+    "schema": {
+      "label": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T10:58:39.787340+00:00",
+      "hostLoad": [
+        6.6875,
+        8.31201171875,
+        9.27294921875
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tournament-lifecycle740-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "NODE_OPTIONS": null,
+      "sourceSHA256": {
+        "scripts/tournament/contracts.test.ts": "558405a21d4be90b30ba318de97496d2aeb41a8f394edfc5bcf15c93e7e179c7",
+        "scripts/tournament/batch.ts": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+        "scripts/tournament/worker.ts": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+        "scripts/tournament/worker-bootstrap.mjs": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+        "scripts/tournament/catalog.json": "2b834579039eec9c3d481ff56d6e5b363c044719f2b615c9c5e00fb70d52f06b",
+        "src/engine/policy/catalog-manifest.ts": "823710e2ef75674632a4232d2c7ae78ddea93496e2a026adb44b6e680cc429d6",
+        "scripts/tournament/game.ts": "1aa447a9f856563a4c6dad923e8c2e8be1e274d0a18e09ae5c0063e8575763ad",
+        "vitest.config.ts": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+        "package-lock.json": "f681ae40a78749a4696ef3d48b525dd01fb619cc649dd3e21cce020c19242692"
+      },
+      "pid": 60824,
+      "pgid": 60824,
+      "exit": 0,
+      "end": "2026-10-15T10:58:39.922185+00:00",
+      "wallS": 0.1329417920205742,
+      "actualWait": true,
+      "logSHA256": "26a03f06d142deb98b57e4269febde592f175f566efc1256141d38e0b7ca60df",
+      "groupAbsent": true
+    },
+    "accepted-focused": {
+      "label": "accepted-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "scripts/tournament/contracts.test.ts"
+      ],
+      "start": "2026-10-15T10:55:30.463763+00:00",
+      "hostLoad": [
+        6.890625,
+        8.89404296875,
+        9.63525390625
+      ],
+      "pid": 56325,
+      "pgid": 56325,
+      "exit": 0,
+      "end": "2026-10-15T10:55:41.313320+00:00",
+      "wallS": 10.849241541989613,
+      "actualWait": true,
+      "logSHA256": "5cf94fdb44adb2fc15946c884ce0b7fe3c67d68c6edf7791971c182ab5654484",
+      "groupAbsent": true
+    },
+    "review": {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T10:57:43.894709+00:00",
+      "hostLoad": [
+        7.73291015625,
+        8.68408203125,
+        9.45556640625
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tournament-lifecycle740-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "NODE_OPTIONS": null,
+      "sourceSHA256": {
+        "scripts/tournament/contracts.test.ts": "558405a21d4be90b30ba318de97496d2aeb41a8f394edfc5bcf15c93e7e179c7",
+        "scripts/tournament/batch.ts": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+        "scripts/tournament/worker.ts": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+        "scripts/tournament/worker-bootstrap.mjs": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+        "scripts/tournament/catalog.json": "2b834579039eec9c3d481ff56d6e5b363c044719f2b615c9c5e00fb70d52f06b",
+        "src/engine/policy/catalog-manifest.ts": "823710e2ef75674632a4232d2c7ae78ddea93496e2a026adb44b6e680cc429d6",
+        "scripts/tournament/game.ts": "1aa447a9f856563a4c6dad923e8c2e8be1e274d0a18e09ae5c0063e8575763ad",
+        "vitest.config.ts": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+        "package-lock.json": "f681ae40a78749a4696ef3d48b525dd01fb619cc649dd3e21cce020c19242692"
+      },
+      "pid": 59419,
+      "pgid": 59419,
+      "exit": 0,
+      "end": "2026-10-15T10:58:04.903285+00:00",
+      "wallS": 21.00666029198328,
+      "actualWait": true,
+      "logSHA256": "bbf0399c82d70714d0627cedcba797b6944bb21f9c613621d111ea35ff17450f",
+      "groupAbsent": true
+    },
+    "install": {
+      "label": "install",
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "start": "2026-10-15T10:44:41.311269+00:00",
+      "hostLoad": [
+        20.474609375,
+        12.8046875,
+        10.65576171875
+      ],
+      "pid": 79166,
+      "pgid": 79166,
+      "exit": 0,
+      "end": "2026-10-15T10:44:44.230903+00:00",
+      "wallS": 2.919487042003311,
+      "actualWait": true,
+      "logSHA256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c",
+      "groupAbsent": true
+    }
+  },
+  "requiredValidationStatus": {
+    "accepted-focused": 0,
+    "review": 0,
+    "knip": 0,
+    "schema": 0,
+    "whitespace": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review wrapper start"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "whitespace": [
+      6.4404296875,
+      8.203125,
+      9.22265625
+    ],
+    "final-focused": [
+      8.173828125,
+      9.4638671875,
+      9.8857421875
+    ],
+    "knip": [
+      6.91162109375,
+      8.45751953125,
+      9.34619140625
+    ],
+    "focused": [
+      7.9267578125,
+      9.59130859375,
+      9.94970703125
+    ],
+    "baseline": [
+      9.671875,
+      10.13525390625,
+      10.15234375
+    ],
+    "schema": [
+      6.6875,
+      8.31201171875,
+      9.27294921875
+    ],
+    "accepted-focused": [
+      6.890625,
+      8.89404296875,
+      9.63525390625
+    ],
+    "review": [
+      7.73291015625,
+      8.68408203125,
+      9.45556640625
+    ],
+    "install": [
+      20.474609375,
+      12.8046875,
+      10.65576171875
+    ]
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 13,
+    "jsdomFiles": 0
+  },
+  "testDeltaUnits": {
+    "configuredEntrypoints": 0,
+    "dedicatedTestModules": 0,
+    "physicalEntrypointLines": 13,
+    "jsdomEntrypoints": 0,
+    "caseCountDelta": 0,
+    "path": "scripts/tournament/contracts.test.ts",
+    "lineCounts": {
+      "base": 179,
+      "head": 192
+    },
+    "environment": "node (no jsdom pragma or module mocking added)"
+  },
+  "failurePaths": {
+    "errorMidStep": "Actual worker returns Unknown card plus missing UUID; completed0/unfinished ordinal retained; callback throw remains a guard and is not claimed as exercised. Observer confirms error reply before any game callback.",
+    "interrupt": "Real first-leg onGame aborts composed signal; exactly one record retained and remaining ordinals run in two real workers.",
+    "restart": "Resume equivalent outcomesDigest across actual baseline4 and one-leg+resumed3. Process-crash persistence is in unchanged durable-resume tests, not a new runtime feature.",
+    "partialWrite": "Unchanged durable-resume tests cover partial journal tail and malformed interior; this body writes no journal.",
+    "invalidInput": "Actual bad card UUID error reaches authoritative failure, distinct from boot timeout or callback error.",
+    "concurrentActors": "Resumed phase uses two actual workers; deterministic outcome digest matches single-worker baseline.",
+    "outerTimeout": "Source-verified installed Vitest signal aborts and finished hook awaits current batch; no forced timeout experiment performed."
+  },
+  "resources": {
+    "observedFiveWorkersAllSettled": true,
+    "finalFocusedSignalListenerCountsZero": true,
+    "finalFocusedOnlyRunnerMessagePortRemains": true,
+    "ownedCommands": {
+      "whitespace": {
+        "pid": 61037,
+        "pgid": 61037,
+        "actualWait": true,
+        "groupAbsent": true,
+        "exit": 0
+      },
+      "final-focused": {
+        "pid": 52418,
+        "pgid": 52418,
+        "actualWait": true,
+        "groupAbsent": true,
+        "exit": 0
+      },
+      "knip": {
+        "pid": 60268,
+        "pgid": 60268,
+        "actualWait": true,
+        "groupAbsent": true,
+        "exit": 0
+      },
+      "focused": {
+        "pid": 48494,
+        "pgid": 48494,
+        "actualWait": true,
+        "groupAbsent": true,
+        "exit": 0
+      },
+      "baseline": {
+        "pid": 40868,
+        "pgid": 40868,
+        "actualWait": true,
+        "groupAbsent": true,
+        "exit": 0
+      },
+      "schema": {
+        "pid": 60824,
+        "pgid": 60824,
+        "actualWait": true,
+        "groupAbsent": true,
+        "exit": 0
+      },
+      "accepted-focused": {
+        "pid": 56325,
+        "pgid": 56325,
+        "actualWait": true,
+        "groupAbsent": true,
+        "exit": 0
+      },
+      "review": {
+        "pid": 59419,
+        "pgid": 59419,
+        "actualWait": true,
+        "groupAbsent": true,
+        "exit": 0
+      },
+      "install": {
+        "pid": 79166,
+        "pgid": 79166,
+        "actualWait": true,
+        "groupAbsent": true,
+        "exit": 0
+      }
+    },
+    "servers": [],
+    "browserContexts": [],
+    "ports": [],
+    "heavySlots": []
+  },
+  "preservedAcceptance": "Original hv-umm2.241 failures/later-green and content acceptance, future Phase7 hv-fy5h.19 additive calibrated-policy cases, gate46 D19 controlled suite measurement and independent acceptance joins remain owned by their native tasks.",
+  "preExistingIssues": [],
+  "evidenceArchive": "artifacts/qa/hv-umm2.740/implementation/ (ignored primary capture directory)",
+  "newRulesDecisions": [],
+  "newCardIssues": []
+}
