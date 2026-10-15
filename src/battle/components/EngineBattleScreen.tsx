@@ -79,7 +79,7 @@ import { createEngineCardModels } from "../ui/engine-card-model";
 import { usePresentationQueue, usePublishedEngineEvents } from "./battle-presentation";
 import { EngineProbeHistory } from "./engine-probe-events";
 import { resolveEnemyAvatarSummary } from "./enemy-avatar-summary";
-import { presentationItems, promptPresentable, sliceKey } from "./presentation-items";
+import { presentationItems, projectNoticeDiagnostic, promptPresentable, resolveNoticeSource, sliceKey } from "./presentation-items";
 
 /** The engine debug panel (`?debug=1`, D4); a production build compiles it out (P7). */
 const EngineDebugPanel = import.meta.env.DEV ? lazy(() => import("./EngineDebugPanel")) : null;
@@ -240,11 +240,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   usePublishedEngineEvents(engine, slice, ({ events, batch, before, eventStates, seq }) => {
     if (import.meta.env.DEV) probeHistory?.append({ events, seq });
     const view = engine.view(batch.state, HUMAN);
-    const items = presentationItems(events, HUMAN, batch, before, (source) => {
-      if (source !== null && typeof source !== "string" && source.kind === "dreamwell") return dreamwell(source.id)?.name ?? null;
-      const instance = typeof source === "string" ? view.instances[source] : undefined;
-      return instance === undefined ? null : cards(instance).displaySnapshot.name;
-    }, eventStates);
+    const items = presentationItems(events, HUMAN, batch, before, (source) => resolveNoticeSource(source, view), eventStates);
     presentation.enqueue(items);
     if (items.length > 0) {
       logEvent("battle_engine_presentation_queued", {
@@ -308,13 +304,30 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         : battleLogTurns(battleLog.log.entries, HUMAN, cards, (event) => dreamwell(event.card)?.name ?? null),
     [battleLog, cards, dreamwell],
   );
-  const noticeView = useMemo(
-    () =>
-      presentation.notice === null
-        ? null
-        : { key: presentation.notice.key, ...engineBattleNoticeCopy(presentation.notice.notice) },
-    [presentation.notice],
-  );
+  const noticeView = useMemo(() => {
+    if (presentation.notice === null) return null;
+    const notice = presentation.notice.notice;
+    const source = notice.kind === "capacityReached" ? null : notice.source;
+    let sourceName: string | null = null;
+    if (source !== null) {
+      if ("printing" in source) sourceName = cards(source).displaySnapshot.name;
+      else {
+        switch (source.kind) {
+          case "dreamwell":
+            sourceName = dreamwell(source.id)?.name ?? null;
+            break;
+          case "avatar":
+          case "dreamsign":
+            break;
+          default: {
+            const exhaustive: never = source;
+            return exhaustive;
+          }
+        }
+      }
+    }
+    return { key: presentation.notice.key, ...engineBattleNoticeCopy(notice, sourceName) };
+  }, [presentation.notice, cards, dreamwell]);
 
   const board = useMemo(
     () =>
@@ -384,7 +397,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     logEventOnce(`battle_engine_notice_shown:${presentation.notice.key}`, "battle_engine_notice_shown", {
       battleId,
       key: presentation.notice.key,
-      notice: presentation.notice.notice,
+      notice: projectNoticeDiagnostic(presentation.notice.notice),
     });
     // Logged once per notice.
   }, [noticeKey]);

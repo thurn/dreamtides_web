@@ -4,6 +4,8 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   presentationItems,
+  projectNoticeDiagnostic,
+  resolveNoticeSource,
   presentedAsItem,
   type PresentationItem,
 } from "../../battle/components/presentation-items";
@@ -21,7 +23,10 @@ import { STACK } from "../../engine/testing/stack-cards";
 import { ZONE } from "../../engine/testing/zone-cards";
 import { batchStates } from "../../rules/battle/engine-battle";
 import { LAB, PROMPT_LAB_DEFINITIONS, promptLabFixture } from "../../engine/testing/prompt-lab";
-import { parsePresentationId as pid } from "../../types/identifiers";
+import { parseAvatarId, parseDreamsignId, parseDreamwellCardId, parsePresentationId as pid } from "../../types/identifiers";
+import { parseFigmentId, type AbilitySource } from "../../engine/state/ids";
+import { purposeView } from "../../engine/view/view";
+import type { PromptPurpose } from "../../engine/prompts/types";
 import { expectForward } from "./__test-helpers__/presentation-checks";
 import { discovery, foresight, labEngine, observedBoard } from "./engine-battle-presentation.fixtures";
 
@@ -336,5 +341,135 @@ describe("presentation items", () => {
       const item = step.items.find((entry) => entry.key === `${step.batch.key}:${String(index)}`);
       expect(item?.presentation).toBe("travel");
     }
+  });
+});
+
+
+describe("notice UUID provenance and diagnostics", () => {
+  const sharedName = "Synthetic shared display";
+  const cards = [0x7411, 0x7412].map((index) => ({ ...SYNTHETIC.vanilla1, id: syntheticId(index), name: sharedName, subtype: index === 0x7411 ? "Warrior" as const : "Mage" as const }));
+  const avatar = parseAvatarId("5e5e5e5e-0000-4000-8000-000000007411");
+  const dreamsign = parseDreamsignId("5e5e5e5e-0000-4000-8000-000000007411");
+  const dreamwell = parseDreamwellCardId("5e5e5e5e-0000-4000-8000-000000007411");
+  const figment = parseFigmentId("5e5e5e5e-0000-4000-8000-000000007411");
+  const catalog = createCatalog(cards, [], {
+    avatars: [{ id: avatar, status: "vanilla", abilities: () => [] }],
+    dreamsigns: [{ id: dreamsign, status: "vanilla", abilities: () => [] }],
+  }, [{ id: figment, subtype: "Warrior", spark: 1, status: "vanilla", abilities: () => [] }]);
+  const engine = createEngine(catalog);
+  const purpose = (source: PromptPurpose["source"], cardId = cards[0].id): PromptPurpose => ({ source, cardId, ability: 0, role: "target" });
+  const diagnostics = (state: BattleState, events: readonly EngineEvent[], before = state, eventStates: readonly BattleState[] = []) => {
+    const view = engine.view(state, "player");
+    return presentationItems(events, "player", { key: pid("notice-uuid"), state }, before,
+      (source) => resolveNoticeSource(source, view), eventStates)
+      .flatMap((item) => item.notice === null ? [] : [projectNoticeDiagnostic(item.notice)]);
+  };
+  const notices = (source: PromptPurpose["source"] & AbilitySource): readonly EngineEvent[] => [
+    { kind: "noLegalTarget", source },
+    { kind: "promptAutoAnswered", side: "player", prompt: "chooseTargets", purpose: purpose(source) },
+  ];
+
+  it("keeps duplicate display names distinct by printing UUID and physical instance in both notice kinds", () => {
+    for (const ordered of [cards, [...cards].reverse()]) {
+      const { state, ids } = boardState(catalog, { active: "player", phase: "day", player: { hand: ordered.map((card) => card.id) } });
+      ids.player.hand.forEach((instance, index) => {
+        expect(diagnostics(state, notices(instance))).toEqual([
+          { kind: "noLegalTarget", source: { kind: "card", instance, cardId: ordered[index].id } },
+          { kind: "autoAnswered", prompt: "chooseTargets", role: "target", source: { kind: "card", instance, cardId: ordered[index].id } },
+        ]);
+      });
+    }
+  });
+
+  it("preserves physical printing domains, repeated UUID instances, and variants", () => {
+    const { state, ids } = boardState(catalog, { active: "player", phase: "day", player: {
+      hand: [cards[0].id, { cardId: cards[0].id, amplified: true }],
+      figments: [
+        { slot: { rank: "back", index: 0 }, printing: { kind: "figment", figment, spark: 3 } },
+        { slot: { rank: "back", index: 1 }, printing: { kind: "figmentCopy", cardId: cards[0].id, spark: null } },
+      ],
+    } });
+    const [first, second] = ids.player.hand;
+    const [plain, copy] = ids.player.back;
+    if (plain === null || copy === null) throw new Error("missing physical figment");
+    expect(diagnostics(state, [first, second, plain, copy].map((source) => ({ kind: "noLegalTarget", source })))).toEqual([
+      { kind: "noLegalTarget", source: { kind: "card", instance: first, cardId: cards[0].id } },
+      { kind: "noLegalTarget", source: { kind: "card", instance: second, cardId: cards[0].id } },
+      { kind: "noLegalTarget", source: { kind: "figment", instance: plain, figment } },
+      { kind: "noLegalTarget", source: { kind: "figmentCopy", instance: copy, cardId: cards[0].id } },
+    ]);
+    const safe = engine.view(state, "player").instances[first];
+    const other = boardState(catalog, { active: "player", phase: "day", player: { hand: [cards[1].id] } });
+    const copiedCharacteristics = { ...safe, characteristics: engine.view(other.state, "player").instances[other.ids.player.hand[0]].characteristics };
+    expect(projectNoticeDiagnostic({ kind: "noLegalTarget", source: copiedCharacteristics })).toEqual({
+      kind: "noLegalTarget", source: { kind: "card", instance: first, cardId: cards[0].id },
+    });
+  });
+
+  it("resolves public emblems, honors pinned prompt UUIDs, and keeps Dreamwell identity", () => {
+    const { state } = boardState(catalog, { active: "player", phase: "day", player: { avatar, dreamsigns: [dreamsign] } });
+    const view = engine.view(state, "player");
+    const pinnedAvatar = parseAvatarId("5e5e5e5e-0000-4000-8000-000000007412");
+    const pinnedDreamsign = parseDreamsignId("5e5e5e5e-0000-4000-8000-000000007412");
+    const sources = [
+      { kind: "avatar", side: "player" },
+      { kind: "dreamsign", side: "player", index: 0 },
+      { kind: "avatar", side: "enemy", id: pinnedAvatar },
+      { kind: "dreamsign", side: "enemy", index: 9, id: pinnedDreamsign },
+      { kind: "dreamwell", side: "player", id: dreamwell },
+    ] as const;
+    expect(sources.map((source) => projectNoticeDiagnostic({ kind: "noLegalTarget", source: resolveNoticeSource(source, view) }).source)).toEqual([
+      { kind: "avatar", side: "player", id: avatar },
+      { kind: "dreamsign", side: "player", index: 0, id: dreamsign },
+      { kind: "avatar", side: "enemy", id: pinnedAvatar },
+      { kind: "dreamsign", side: "enemy", index: 9, id: pinnedDreamsign },
+      { kind: "dreamwell", side: "player", id: dreamwell },
+    ]);
+    expect(resolveNoticeSource({ kind: "avatar", side: "enemy" }, view)).toBeNull();
+    expect(resolveNoticeSource({ kind: "dreamsign", side: "player", index: 4 }, view)).toBeNull();
+    expect(resolveNoticeSource("i999", view)).toBeNull();
+  });
+
+  it("respects private events and authoritative null source redaction", () => {
+    const { state, ids } = boardState(catalog, { active: "player", phase: "day", player: { deck: [cards[0].id] }, enemy: { hand: [cards[1].id] } });
+    expect(diagnostics(state, [{ kind: "noLegalTarget", source: ids.enemy.hand[0] }])).toEqual([]);
+    expect(diagnostics(state, [{ kind: "noLegalTarget", source: ids.player.deck[0] }])).toEqual([{ kind: "noLegalTarget", source: null }]);
+    const redacted = purposeView(purpose(ids.player.deck[0]), "player", state);
+    expect(redacted.source).toBeNull();
+    expect(diagnostics(state, [
+      { kind: "promptAutoAnswered", side: "player", prompt: "chooseTargets", purpose: redacted },
+      { kind: "promptAutoAnswered", side: "player", prompt: "chooseTargets", purpose: purpose(null) },
+      { kind: "promptAutoAnswered", side: "enemy", prompt: "chooseTargets", purpose: purpose(ids.enemy.hand[0]) },
+      { kind: "noLegalTarget", source: "i999" },
+    ])).toEqual([
+      { kind: "autoAnswered", prompt: "chooseTargets", role: "target", source: null },
+      { kind: "autoAnswered", prompt: "chooseTargets", role: "target", source: null },
+      { kind: "noLegalTarget", source: null },
+    ]);
+  });
+
+  it("uses the batch safe view even when an earlier event board exposed the source, and retains queued provenance", () => {
+    const { state, ids } = boardState(catalog, { active: "player", phase: "day", player: { hand: [cards[0].id] } });
+    const instance = ids.player.hand[0];
+    const hidden = structuredClone(state);
+    hidden.instances[instance].zone = "deck";
+    hidden.sides.player.hand = [];
+    hidden.sides.player.deck = [instance];
+    expect(diagnostics(hidden, [{ kind: "noLegalTarget", source: instance }], state, [state])).toEqual([{ kind: "noLegalTarget", source: null }]);
+    const captured = resolveNoticeSource(instance, engine.view(state, "player"));
+    hidden.instances[instance] = { ...hidden.instances[instance], printing: { kind: "card", cardId: cards[1].id } };
+    expect(projectNoticeDiagnostic({ kind: "noLegalTarget", source: captured })).toEqual({
+      kind: "noLegalTarget", source: { kind: "card", instance, cardId: cards[0].id },
+    });
+  });
+
+  it("projects only bounded diagnostic fields and preserves capacity and prompt metadata", () => {
+    const { state, ids } = boardState(catalog, { active: "player", phase: "day", player: { hand: [cards[0].id] } });
+    const projected = diagnostics(state, notices(ids.player.hand[0]));
+    expect(Object.keys(projected[0]).sort()).toEqual(["kind", "source"]);
+    expect(Object.keys(projected[1]).sort()).toEqual(["kind", "prompt", "role", "source"]);
+    expect(projected[0].kind === "noLegalTarget" && Object.keys(projected[0].source ?? {}).sort()).toEqual(["cardId", "instance", "kind"]);
+    expect(JSON.stringify(projected).includes(sharedName)).toBe(false);
+    expect(projectNoticeDiagnostic({ kind: "capacityReached", missing: 2 })).toEqual({ kind: "capacityReached", missing: 2 });
   });
 });

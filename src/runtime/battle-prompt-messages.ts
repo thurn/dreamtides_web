@@ -2,9 +2,10 @@ import { costPhrase, costOptionLabel, permissionFilterFields, permittedCardKind 
 import type { BuiltInBattlePromptRef } from "../data/dreamwell-prompts";
 import type { CardFilter, Cost, Keyword, PaymentCost } from "../engine/dsl/types";
 import type { EngineEvent } from "../engine/events";
-import type { ArrangeDestination, PromptKind, PromptRole } from "../engine/prompts/types";
-import type { AbilitySource, InstanceId, Side } from "../engine/state/ids";
+import type { ArrangeDestination, PromptEmblem, PromptKind, PromptRole } from "../engine/prompts/types";
+import type { AbilitySource, DreamwellSource, InstanceId, Side } from "../engine/state/ids";
 import type { CardSubtype } from "../types/card-identity";
+import type { InstanceView } from "../engine/view/view";
 import type { CardCostMode, Expiry } from "../engine/state/types";
 
 /** Presentation-owned copy for a stable built-in battle prompt identity. */
@@ -342,6 +343,9 @@ export const ENGINE_NUMBER_PICKER_COPY = {
   submit: "Confirm",
 } as const;
 
+/** An already-redacted source snapshot retained until its notice is displayed. */
+export type EngineBattleNoticeSource = InstanceView | PromptEmblem | DreamwellSource;
+
 /** A brief notice about something the engine did on the player's behalf. */
 export type EngineBattleNotice =
   /** A prompt with one legal answer answered itself; `role` names what the answer was for. */
@@ -349,21 +353,21 @@ export type EngineBattleNotice =
       readonly kind: "autoAnswered";
       readonly prompt: PromptKind;
       readonly role: PromptRole;
-      readonly sourceName: string | null;
+      readonly source: EngineBattleNoticeSource | null;
     }
   | { readonly kind: "capacityReached"; readonly missing: number }
-  /** An ability found nothing to target; `sourceName` names it when the player can identify it. */
-  | { readonly kind: "noLegalTarget"; readonly sourceName: string | null };
+  /** An ability found nothing to target; `source` identifies it when the player can identify it. */
+  | { readonly kind: "noLegalTarget"; readonly source: EngineBattleNoticeSource | null };
 
 /** Copy of a brief battle notice. */
-export function engineBattleNoticeCopy(notice: EngineBattleNotice): { readonly title: string; readonly message: string } {
+export function engineBattleNoticeCopy(notice: EngineBattleNotice, sourceName: string | null = null): { readonly title: string; readonly message: string } {
   if (notice.kind === "noLegalTarget") {
     return {
       title: "No Legal Target",
       message:
-        notice.sourceName === null
+        sourceName === null
           ? "An ability had nothing it could target, so it did nothing."
-          : `${notice.sourceName} had nothing it could target, so it did nothing.`,
+          : `${sourceName} had nothing it could target, so it did nothing.`,
     };
   }
   if (notice.kind === "capacityReached") {
@@ -379,9 +383,9 @@ export function engineBattleNoticeCopy(notice: EngineBattleNotice): { readonly t
   return {
     title: "Chosen for You",
     message:
-      notice.sourceName === null
+      sourceName === null
         ? `There was only one ${what}, so it was chosen for you.`
-        : `There was only one ${what} for ${notice.sourceName}, so it was chosen for you.`,
+        : `There was only one ${what} for ${sourceName}, so it was chosen for you.`,
   };
 }
 

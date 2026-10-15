@@ -1,0 +1,904 @@
+{
+  "bead": "hv-umm2.741",
+  "base": "9a9b6a80774879477f4dbb23c128777419a92c2e",
+  "workspace": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+  "evidenceCutoff": "2026-10-15T11:47:38.367779+00:00",
+  "actualGitReturnTail": "/tmp/dreamtides-741-01a13a7a/git-return.json, written immediately after actual Git return; includes full interval from original claim",
+  "clock": {
+    "attempt": "2026-10-15T11:28:38.061635+00:00",
+    "claimedAt": "2026-10-15T11:28:38.186653+00:00",
+    "actor": "01a13a7a-741e-7cc1-a0dd-3f8eb1805ecf"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "measuredFor": "original native claim through evidence cutoff, including root setup, source audit, admission, implementation, waits, checks, browser and evidence; actual Git tail is measured separately without excluding prior work"
+      },
+      "hostLoad": {
+        "measuredFor": "review-2 command start 1-minute load average"
+      },
+      "localValidationS": {
+        "measuredFor": "each exact child process wall clock from launch through return; CPU scopes are command child processes only; shared Playwright provider CPU is not attributed"
+      }
+    }
+  },
+  "scopeProof": {
+    "base": "9a9b6a80774879477f4dbb23c128777419a92c2e",
+    "trackedBasePaths": 5654,
+    "exclusions": [
+      "src/battle/components/EngineBattleScreen.tsx",
+      "src/battle/components/presentation-items.ts",
+      "src/runtime/battle-prompt-messages.ts",
+      "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts"
+    ],
+    "outsideDifferences": [],
+    "finalSourceSha256": {
+      "src/battle/components/EngineBattleScreen.tsx": "0937342c23b7327fea2627c3962aa7186c88799fe271408ffde260d56b7bcf6c",
+      "src/battle/components/presentation-items.ts": "bc46b7839e2c2326ecc51d7d616f1793d37784525281ec76009c7f2d23ca5e8d",
+      "src/runtime/battle-prompt-messages.ts": "45828d99166f409b279947dcdfe7467d94d8bd602a700db9a860a639900964df",
+      "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93"
+    }
+  },
+  "baseSourceBindingsVerified": {
+    "AGENTS.md": true,
+    "README.md": true,
+    ".llms/skills/cumulus/SKILL.md": true,
+    "src/battle/components/EngineBattleScreen.tsx": true,
+    "src/battle/components/presentation-items.ts": true,
+    "src/battle/components/battle-presentation.ts": true,
+    "src/runtime/battle-prompt-messages.ts": true,
+    "src/battle/ui/engine-card-model.ts": true,
+    "src/engine/state/ids.ts": true,
+    "src/engine/state/types.ts": true,
+    "src/engine/prompts/types.ts": true,
+    "src/engine/events/index.ts": true,
+    "src/engine/events/sources.ts": true,
+    "src/engine/events/kinds/no-legal-target.ts": true,
+    "src/engine/events/kinds/prompt-auto-answered.ts": true,
+    "src/engine/view/view.ts": true,
+    "src/engine/view/knowledge.ts": true,
+    "src/engine/steps/context.ts": true,
+    "src/screens/cumulus_adapters/prompt-host-view-model.ts": true,
+    "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts": true,
+    "src/screens/cumulus_adapters/engine-battle-presentation-screen.test.ts": true,
+    "src/screens/cumulus_adapters/engine-battle-presentation.test.ts": true,
+    "src/screens/cumulus_adapters/engine-battle-presentation.fixtures.ts": true,
+    "src/screens/cumulus_adapters/__test-helpers__/presentation-checks.ts": true,
+    "src/engine/testing/prompt-lab.ts": true,
+    "src/runtime/qa-scenes.ts": true,
+    "scripts/qa/prelude.mjs": true,
+    "scripts/qa/scenarios/card-lab-play.mjs": true,
+    "scripts/qa/scenarios/engine-events.mjs": true,
+    "src/logging.ts": true,
+    "src/cumulus/screens/battle-overlays/BattlePromptHost.tsx": true
+  },
+  "observedDiagnosticProvenance": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.246/invocations/run-K461u6/green-herbs-judged-r2-desktop.jsonl",
+    "sha256": "0bbe9c9ef6a1811e27008b4ac20b1fd4fbedd97aa73b6ebf304237d2e86f9d91",
+    "rows": 195,
+    "notices": [
+      {
+        "gameId": "o87ivr",
+        "battleId": "battle:journey:1:site-5::0::dreamscape-1",
+        "key": "140:138:-1:0:9",
+        "notice": {
+          "kind": "noLegalTarget",
+          "sourceName": "Firmament Mirror"
+        },
+        "timestamp": "2026-10-15T11:00:52.688Z",
+        "event": "battle_engine_notice_shown",
+        "seq": 130
+      }
+    ],
+    "verifiedRows": 195
+  },
+  "sourceEpochs": [
+    {
+      "epoch": "initial-fixture",
+      "checks": [
+        "focused-1",
+        "typecheck-1"
+      ],
+      "sha256": {
+        "src/battle/components/EngineBattleScreen.tsx": "0937342c23b7327fea2627c3962aa7186c88799fe271408ffde260d56b7bcf6c",
+        "src/battle/components/presentation-items.ts": "bc46b7839e2c2326ecc51d7d616f1793d37784525281ec76009c7f2d23ca5e8d",
+        "src/runtime/battle-prompt-messages.ts": "45828d99166f409b279947dcdfe7467d94d8bd602a700db9a860a639900964df",
+        "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts": "c4e9da6193ced5ca9023f12e95ceaf20937b995a8dc640b90a156d4fbd588c16"
+      },
+      "snapshot": "/tmp/dreamtides-741-01a13a7a/source-epoch-initial-fixture",
+      "scope": "reconstructed exact authoring state from recorded finite edits; production unchanged across epochs"
+    },
+    {
+      "epoch": "typed-purpose-and-state",
+      "checks": [
+        "typecheck-2"
+      ],
+      "sha256": {
+        "src/battle/components/EngineBattleScreen.tsx": "0937342c23b7327fea2627c3962aa7186c88799fe271408ffde260d56b7bcf6c",
+        "src/battle/components/presentation-items.ts": "bc46b7839e2c2326ecc51d7d616f1793d37784525281ec76009c7f2d23ca5e8d",
+        "src/runtime/battle-prompt-messages.ts": "45828d99166f409b279947dcdfe7467d94d8bd602a700db9a860a639900964df",
+        "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts": "99746f9e788ad13d6a23ff1ec1c559c9cc779ba9e92dc0d18bd1350a4a75ae20"
+      },
+      "snapshot": "/tmp/dreamtides-741-01a13a7a/source-epoch-typed-purpose-and-state",
+      "scope": "reconstructed exact authoring state from recorded finite edits; production unchanged across epochs"
+    },
+    {
+      "epoch": "effective-characteristics-fixture",
+      "checks": [
+        "focused-2",
+        "review-1",
+        "qa-auto-1 (production binding only; test-only literal correction occurred during run)"
+      ],
+      "sha256": {
+        "src/battle/components/EngineBattleScreen.tsx": "0937342c23b7327fea2627c3962aa7186c88799fe271408ffde260d56b7bcf6c",
+        "src/battle/components/presentation-items.ts": "bc46b7839e2c2326ecc51d7d616f1793d37784525281ec76009c7f2d23ca5e8d",
+        "src/runtime/battle-prompt-messages.ts": "45828d99166f409b279947dcdfe7467d94d8bd602a700db9a860a639900964df",
+        "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts": "b11ab123c3b1c5c3557f40c848b8b7e9b4c84b942133fdd92027168372271003"
+      },
+      "snapshot": "/tmp/dreamtides-741-01a13a7a/source-epoch-effective-characteristics-fixture",
+      "scope": "reconstructed exact authoring state from recorded finite edits; production unchanged across epochs"
+    },
+    {
+      "epoch": "final-literal-fixture",
+      "checks": [
+        "typecheck-boundary",
+        "qa-auto-2",
+        "qa-nolegal-1",
+        "review-2",
+        "knip"
+      ],
+      "sha256": {
+        "src/battle/components/EngineBattleScreen.tsx": "0937342c23b7327fea2627c3962aa7186c88799fe271408ffde260d56b7bcf6c",
+        "src/battle/components/presentation-items.ts": "bc46b7839e2c2326ecc51d7d616f1793d37784525281ec76009c7f2d23ca5e8d",
+        "src/runtime/battle-prompt-messages.ts": "45828d99166f409b279947dcdfe7467d94d8bd602a700db9a860a639900964df",
+        "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93"
+      },
+      "snapshot": "/tmp/dreamtides-741-01a13a7a/source-epoch-final-literal-fixture",
+      "scope": "reconstructed exact authoring state from recorded finite edits; production unchanged across epochs"
+    }
+  ],
+  "mechanicalFallout": [],
+  "nonTestProductionChangedLines": 150,
+  "testDelta": {
+    "files": 0,
+    "lines": 135,
+    "jsdomFiles": 0
+  },
+  "commands": [
+    {
+      "name": "focused-1",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation-screen.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:38:23.645737+00:00",
+      "load": [
+        5.64306640625,
+        7.49267578125,
+        8.5595703125
+      ],
+      "pid": 11704,
+      "pgid": 11704,
+      "workers": "2",
+      "end": "2026-10-15T11:38:32.434166+00:00",
+      "wallS": 8.788219542009756,
+      "userS": 8.186954,
+      "sysS": 2.886752,
+      "exit": 0,
+      "logSha256": "53174dbc25052d2bc7e7307b554516d9e93a297b787d3ac7196eafcb1724749d"
+    },
+    {
+      "name": "typecheck-1",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:38:36.456898+00:00",
+      "load": [
+        9.85498046875,
+        8.30712890625,
+        8.82958984375
+      ],
+      "pid": 12566,
+      "pgid": 12566,
+      "workers": "2",
+      "end": "2026-10-15T11:38:46.026384+00:00",
+      "wallS": 9.569235374976415,
+      "userS": 19.06292,
+      "sysS": 2.785047,
+      "exit": 2,
+      "logSha256": "07fce8065280c98a2c955e5b41bf09ef67373eb3f25a292741852c5902f658a3"
+    },
+    {
+      "name": "typecheck-2",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:38:59.167882+00:00",
+      "load": [
+        16.96923828125,
+        10.0595703125,
+        9.447265625
+      ],
+      "pid": 14698,
+      "pgid": 14698,
+      "workers": "2",
+      "end": "2026-10-15T11:39:06.726788+00:00",
+      "wallS": 7.558706207957584,
+      "userS": 9.069315,
+      "sysS": 2.33694,
+      "exit": 0,
+      "logSha256": "117fc326381d6636107f0b6cd52a93b4afe2c5c0784f76b9052da7866162eef4"
+    },
+    {
+      "name": "focused-2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation-screen.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:40:25.717151+00:00",
+      "load": [
+        28.23779296875,
+        15.12890625,
+        11.4296875
+      ],
+      "pid": 79198,
+      "pgid": 79198,
+      "workers": "2",
+      "end": "2026-10-15T11:40:32.554941+00:00",
+      "wallS": 6.837615666969214,
+      "userS": 7.214011,
+      "sysS": 2.6007029999999998,
+      "exit": 0,
+      "logSha256": "422ea56bab04b7b9059f3272d9331d00d44dad08e80fcd2ddfae8c6531bfbf00"
+    },
+    {
+      "name": "review-1",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:40:46.000684+00:00",
+      "load": [
+        24.28759765625,
+        15.0849609375,
+        11.4990234375
+      ],
+      "pid": 81359,
+      "pgid": 81359,
+      "workers": "2",
+      "end": "2026-10-15T11:41:30.785733+00:00",
+      "wallS": 44.784357958997134,
+      "userS": 95.740712,
+      "sysS": 11.234208,
+      "exit": 2,
+      "logSha256": "81fb2029eb7b7b99f9fc472aa205f22874ffb567e8744bf4ce1431f69b26070d"
+    },
+    {
+      "name": "typecheck-boundary",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:42:08.961935+00:00",
+      "load": [
+        17.0263671875,
+        15.65625,
+        12.1005859375
+      ],
+      "pid": 46239,
+      "pgid": 46239,
+      "workers": "2",
+      "end": "2026-10-15T11:42:22.143481+00:00",
+      "wallS": 13.181240999954753,
+      "userS": 19.237768,
+      "sysS": 0.670821,
+      "exit": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "qa-auto-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.741/notice-uuid.mjs",
+        "--bead",
+        "hv-umm2.741",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "scene=auto-target"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:40:44.834406+00:00",
+      "load": [
+        24.28759765625,
+        15.0849609375,
+        11.4990234375
+      ],
+      "pid": 81202,
+      "pgid": 81202,
+      "workers": "2",
+      "end": "2026-10-15T11:41:13.079666+00:00",
+      "wallS": 28.244815582991578,
+      "userS": 7.867568,
+      "sysS": 3.140806,
+      "exit": 1,
+      "logSha256": "b5fd216aaec47f0a9b148e76d0dac6b7e6dc9993a2ffc1a7c8af80a8996ee30b"
+    },
+    {
+      "name": "qa-auto-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.741/notice-uuid.mjs",
+        "--bead",
+        "hv-umm2.741",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "scene=auto-target"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:42:10.154224+00:00",
+      "load": [
+        17.0263671875,
+        15.65625,
+        12.1005859375
+      ],
+      "pid": 46364,
+      "pgid": 46364,
+      "workers": "2",
+      "end": "2026-10-15T11:42:36.786276+00:00",
+      "wallS": 26.631514292035718,
+      "userS": 6.166631,
+      "sysS": 2.483062,
+      "exit": 0,
+      "logSha256": "80fa2d92f053bed06d8bac7bf06b0a6f4f97c72a112cd6a2f61bc28c89fa726f"
+    },
+    {
+      "name": "qa-nolegal-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.741/notice-uuid.mjs",
+        "--bead",
+        "hv-umm2.741",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "scene=present-zones"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:42:49.107813+00:00",
+      "load": [
+        20.6044921875,
+        16.5966796875,
+        12.59716796875
+      ],
+      "pid": 49473,
+      "pgid": 49473,
+      "workers": "2",
+      "end": "2026-10-15T11:43:22.704870+00:00",
+      "wallS": 33.59650112496456,
+      "userS": 6.338314,
+      "sysS": 3.054237,
+      "exit": 0,
+      "logSha256": "91655514464534a295d12646234d64966e284043350101526a280854ec8a382b"
+    },
+    {
+      "name": "review-2",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:43:42.497149+00:00",
+      "load": [
+        17.3271484375,
+        16.70751953125,
+        12.9091796875
+      ],
+      "pid": 9220,
+      "pgid": 9220,
+      "workers": "2",
+      "end": "2026-10-15T11:44:22.909686+00:00",
+      "wallS": 40.41190025000833,
+      "userS": 86.389664,
+      "sysS": 11.443776,
+      "exit": 0,
+      "logSha256": "88b14974db596a59f47ffc9fc6c9761ef9e6c91feca2b08043f3bc9908b85197"
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:46:00.800682+00:00",
+      "load": [
+        5.73193359375,
+        12.50439453125,
+        11.79296875
+      ],
+      "pid": 18951,
+      "pgid": 18951,
+      "workers": "2",
+      "end": "2026-10-15T11:46:05.035055+00:00",
+      "wallS": 4.234240916033741,
+      "userS": 4.021632,
+      "sysS": 1.298715,
+      "exit": 0,
+      "logSha256": "dc937e17f4f09decb311884b243fea6c96391ed84b557cf18066147f828116e8"
+    },
+    {
+      "name": "friction-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:46:36.178236+00:00",
+      "load": [
+        5.23486328125,
+        11.626953125,
+        11.50048828125
+      ],
+      "pid": 21262,
+      "pgid": 21262,
+      "workers": "2",
+      "end": "2026-10-15T11:46:36.246301+00:00",
+      "wallS": 0.06798675004392862,
+      "userS": 0.054030999999999996,
+      "sysS": 0.018758,
+      "exit": 0,
+      "logSha256": "dead6f1650bfa2f37440686122952ad211d8d16df507a959cd3f20032970f3b8"
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/notice-uuid-741",
+      "start": "2026-10-15T11:46:58.768201+00:00",
+      "load": [
+        8.98681640625,
+        11.94287109375,
+        11.61376953125
+      ],
+      "pid": 23331,
+      "pgid": 23331,
+      "workers": "2",
+      "end": "2026-10-15T11:46:58.777313+00:00",
+      "wallS": 0.008982666011434048,
+      "userS": 0.003809,
+      "sysS": 0.003398,
+      "exit": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "name": "focused-1",
+      "start": "2026-10-15T11:38:23.645737+00:00",
+      "load": [
+        5.64306640625,
+        7.49267578125,
+        8.5595703125
+      ]
+    },
+    {
+      "name": "typecheck-1",
+      "start": "2026-10-15T11:38:36.456898+00:00",
+      "load": [
+        9.85498046875,
+        8.30712890625,
+        8.82958984375
+      ]
+    },
+    {
+      "name": "typecheck-2",
+      "start": "2026-10-15T11:38:59.167882+00:00",
+      "load": [
+        16.96923828125,
+        10.0595703125,
+        9.447265625
+      ]
+    },
+    {
+      "name": "focused-2",
+      "start": "2026-10-15T11:40:25.717151+00:00",
+      "load": [
+        28.23779296875,
+        15.12890625,
+        11.4296875
+      ]
+    },
+    {
+      "name": "review-1",
+      "start": "2026-10-15T11:40:46.000684+00:00",
+      "load": [
+        24.28759765625,
+        15.0849609375,
+        11.4990234375
+      ]
+    },
+    {
+      "name": "typecheck-boundary",
+      "start": "2026-10-15T11:42:08.961935+00:00",
+      "load": [
+        17.0263671875,
+        15.65625,
+        12.1005859375
+      ]
+    },
+    {
+      "name": "qa-auto-1",
+      "start": "2026-10-15T11:40:44.834406+00:00",
+      "load": [
+        24.28759765625,
+        15.0849609375,
+        11.4990234375
+      ]
+    },
+    {
+      "name": "qa-auto-2",
+      "start": "2026-10-15T11:42:10.154224+00:00",
+      "load": [
+        17.0263671875,
+        15.65625,
+        12.1005859375
+      ]
+    },
+    {
+      "name": "qa-nolegal-1",
+      "start": "2026-10-15T11:42:49.107813+00:00",
+      "load": [
+        20.6044921875,
+        16.5966796875,
+        12.59716796875
+      ]
+    },
+    {
+      "name": "review-2",
+      "start": "2026-10-15T11:43:42.497149+00:00",
+      "load": [
+        17.3271484375,
+        16.70751953125,
+        12.9091796875
+      ]
+    },
+    {
+      "name": "knip",
+      "start": "2026-10-15T11:46:00.800682+00:00",
+      "load": [
+        5.73193359375,
+        12.50439453125,
+        11.79296875
+      ]
+    },
+    {
+      "name": "friction-schema",
+      "start": "2026-10-15T11:46:36.178236+00:00",
+      "load": [
+        5.23486328125,
+        11.626953125,
+        11.50048828125
+      ]
+    },
+    {
+      "name": "diff-check",
+      "start": "2026-10-15T11:46:58.768201+00:00",
+      "load": [
+        8.98681640625,
+        11.94287109375,
+        11.61376953125
+      ]
+    }
+  ],
+  "qa": {
+    "reports": [
+      {
+        "invocation": "run-LFW2SB",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.741/invocations/run-LFW2SB/notice-uuid.result.json",
+        "sha256": "8bfc2fe78703f7849386cf6b27cb7d11e74e45b3398518175afb54a926103be9",
+        "ok": false,
+        "port": 5274,
+        "serverPid": 81249,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 9,
+          "serve": 2960,
+          "scenario": 24526,
+          "total": 27582
+        }
+      },
+      {
+        "invocation": "run-tjrRyJ",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.741/invocations/run-tjrRyJ/notice-uuid.result.json",
+        "sha256": "561a70edbddd5fd2ad5f9a32a88bb2ab8f10cfa8ab0b3cc8bdabf0732bf05042",
+        "ok": true,
+        "port": 5274,
+        "serverPid": 46408,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1987,
+          "scenario": 23534,
+          "total": 25583
+        }
+      },
+      {
+        "invocation": "run-J7AxO3",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.741/invocations/run-J7AxO3/notice-uuid.result.json",
+        "sha256": "ab5933ebb724ea5340bf58ccda6a0cf19ae7f9ce4cc63424885da4da9aaa1a05",
+        "ok": true,
+        "port": 5274,
+        "serverPid": 49508,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 3199,
+          "scenario": 29664,
+          "total": 32938
+        }
+      }
+    ],
+    "images": [
+      {
+        "filename": "auto-target-desktop-notice.png",
+        "invocation": "run-tjrRyJ",
+        "sha256": "2156e0ddfdaadc1c64260764da46c44da6c68e6b1323c94cdcedef0c6d1d88a5",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800,
+        "cssWidth": 1440,
+        "cssHeight": 900
+      },
+      {
+        "filename": "auto-target-desktop-settled.png",
+        "invocation": "run-tjrRyJ",
+        "sha256": "ae5d1549479abb493aa40481294fbf6f910016856eb6d44ddea18dbefec5f0f0",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800,
+        "cssWidth": 1440,
+        "cssHeight": 900
+      },
+      {
+        "filename": "auto-target-mobile-notice.png",
+        "invocation": "run-tjrRyJ",
+        "sha256": "9d45c58d968f80e9c51dc431493e76181becef7739e504a314e89e0d451cc41c",
+        "pixelWidth": 780,
+        "pixelHeight": 1688,
+        "cssWidth": 390,
+        "cssHeight": 844
+      },
+      {
+        "filename": "auto-target-mobile-settled.png",
+        "invocation": "run-tjrRyJ",
+        "sha256": "0181f2a02366b94348f8ed7c8789a991e410b8a5b1a7d08ea5a794bea2c3497b",
+        "pixelWidth": 780,
+        "pixelHeight": 1688,
+        "cssWidth": 390,
+        "cssHeight": 844
+      },
+      {
+        "filename": "present-zones-desktop-notice.png",
+        "invocation": "run-J7AxO3",
+        "sha256": "7ff7e55135dc3eb7130e392643e208b4261cec8abf902a428d4424ed1de8e444",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800,
+        "cssWidth": 1440,
+        "cssHeight": 900
+      },
+      {
+        "filename": "present-zones-desktop-settled.png",
+        "invocation": "run-J7AxO3",
+        "sha256": "351733c40c4c9766945d2a7e89cb30273cc9f5c6faed9d8ab3740723718ab8e0",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800,
+        "cssWidth": 1440,
+        "cssHeight": 900
+      },
+      {
+        "filename": "present-zones-mobile-notice.png",
+        "invocation": "run-J7AxO3",
+        "sha256": "364b79c98976ff60fc4362a42ba9d00c7da821c02a1ce7f409fa3f590e05fed5",
+        "pixelWidth": 780,
+        "pixelHeight": 1688,
+        "cssWidth": 390,
+        "cssHeight": 844
+      },
+      {
+        "filename": "present-zones-mobile-settled.png",
+        "invocation": "run-J7AxO3",
+        "sha256": "09fc2b7493a785de82817faefa7c6a5ef594dc0496d985394033c6fc728f491a",
+        "pixelWidth": 780,
+        "pixelHeight": 1688,
+        "cssWidth": 390,
+        "cssHeight": 844
+      }
+    ],
+    "gameLogs": [
+      {
+        "filename": "notice-uuid-desktop.jsonl",
+        "invocation": "run-tjrRyJ",
+        "sha256": "56d5e10e3f8c86aa7eda76ab743f38137f55c083d356a309315275ba2ea46674",
+        "rows": 30,
+        "gameId": "tzvckz",
+        "scene": "auto-target",
+        "viewport": "desktop",
+        "notice": {
+          "gameId": "tzvckz",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "key": "2:2:-1:0:0",
+          "notice": {
+            "kind": "autoAnswered",
+            "prompt": "chooseTargets",
+            "role": "target",
+            "source": {
+              "kind": "card",
+              "instance": "i1",
+              "cardId": "5e5e5e5e-0000-4000-8000-0000000000d1"
+            }
+          },
+          "timestamp": "2026-10-15T11:42:16.008Z",
+          "event": "battle_engine_notice_shown",
+          "seq": 28
+        },
+        "nativeExportMatches": true
+      },
+      {
+        "filename": "notice-uuid-mobile.jsonl",
+        "invocation": "run-tjrRyJ",
+        "sha256": "7286e90f1af5b161f6139fb7e542531015fcc2207a2523f14c347b3abcdb21c9",
+        "rows": 30,
+        "gameId": "wyf2hx",
+        "scene": "auto-target",
+        "viewport": "mobile",
+        "notice": {
+          "gameId": "wyf2hx",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "key": "2:2:-1:0:0",
+          "notice": {
+            "kind": "autoAnswered",
+            "prompt": "chooseTargets",
+            "role": "target",
+            "source": {
+              "kind": "card",
+              "instance": "i1",
+              "cardId": "5e5e5e5e-0000-4000-8000-0000000000d1"
+            }
+          },
+          "timestamp": "2026-10-15T11:42:23.960Z",
+          "event": "battle_engine_notice_shown",
+          "seq": 28
+        },
+        "nativeExportMatches": true
+      },
+      {
+        "filename": "notice-uuid-desktop.jsonl",
+        "invocation": "run-J7AxO3",
+        "sha256": "973f37c9747940aedafed867d9e78c75908c65443b86e3ed3dc856b76bb60205",
+        "rows": 44,
+        "gameId": "pp445d",
+        "scene": "present-zones",
+        "viewport": "desktop",
+        "notice": {
+          "gameId": "pp445d",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "key": "3:3:-1:0:9",
+          "notice": {
+            "kind": "noLegalTarget",
+            "source": {
+              "kind": "card",
+              "instance": "i17",
+              "cardId": "5e5e5e5e-0000-4000-8000-00000000025e"
+            }
+          },
+          "timestamp": "2026-10-15T11:43:03.458Z",
+          "event": "battle_engine_notice_shown",
+          "seq": 43
+        },
+        "nativeExportMatches": true
+      },
+      {
+        "filename": "notice-uuid-mobile.jsonl",
+        "invocation": "run-J7AxO3",
+        "sha256": "9f56fdbb9969341eb777ef6c26b0fe66180e84458972c49f3890266fa451be96",
+        "rows": 46,
+        "gameId": "szho5g",
+        "scene": "present-zones",
+        "viewport": "mobile",
+        "notice": {
+          "gameId": "szho5g",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "key": "3:3:-1:0:9",
+          "notice": {
+            "kind": "noLegalTarget",
+            "source": {
+              "kind": "card",
+              "instance": "i17",
+              "cardId": "5e5e5e5e-0000-4000-8000-00000000025e"
+            }
+          },
+          "timestamp": "2026-10-15T11:43:18.720Z",
+          "event": "battle_engine_notice_shown",
+          "seq": 45
+        },
+        "nativeExportMatches": true
+      }
+    ],
+    "scenario": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.741/notice-uuid.mjs",
+      "sha256": "80f6b1c714d6f1c7f3bc1ec7eac9525faa0d78fd37a5c7cb356d398eefd9b3c0"
+    },
+    "observerAttempt1": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.741/notice-uuid-attempt1.mjs",
+      "sha256": "7469fcbb2f7cb58060be29e9b168fa741caaa9c1100ba8e3ebdaeac5d3776d0a"
+    },
+    "visualInspection": "Opened actual desktop/mobile notice captures for both flows and mobile noLegalTarget settled capture. Copy is readable, relevant physical source names render in original templates, and geometry is within each viewport. PNG dimensions verify 2x device pixels."
+  },
+  "runtimeCensus": {
+    "at": "2026-10-15T11:47:38.367779+00:00",
+    "knownOwnPidsAndPgids": [
+      9220,
+      11704,
+      12566,
+      14698,
+      18951,
+      21262,
+      23331,
+      46239,
+      46364,
+      46408,
+      49473,
+      49508,
+      79198,
+      81202,
+      81249,
+      81359
+    ],
+    "remainingKnownRows": [],
+    "port5274Listeners": "",
+    "slot1OwnerRecordPresent": false,
+    "slot1ServerRecordPresent": false,
+    "providerClosure": "Each admitted run returned through managed cleanup with no close/transport/ownership error. run-scenario.mjs:557-625 clears its exact owner record only after confirmed browser close and settled certain active RPCs, then closes SDK transport and owned server. Census concerns only this task known resources; other owners are not inventoried."
+  },
+  "ruleDecisions": [],
+  "qualifications": [
+    "Initial managed desktop attempt timed out before a battle board or game database was observed; Caps was empty. Cause remains unclassified. Documented probe-readiness wait and diagnostic capture were added only in the bead-local observer; no product code or timeouts changed.",
+    "Initial fixture typecheck identified missing ability and a readonly assignment; next typecheck passed. A later fixture refinement widened a subtype literal; review-1 identified it, final isolated typecheck and review-2 validate corrected literals.",
+    "The first browser startup overlapped review-1 workspace preparation. Successful acceptance runs used settled materializations with no overlapping review preparation; no cause is attributed to the historical timeout."
+  ],
+  "review": "Parent owns fresh read-only Codex review of immutable commit because production diff exceeds 100 changed non-test lines; this record claims no reviewer result."
+}

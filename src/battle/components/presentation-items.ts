@@ -24,7 +24,8 @@ import type { BattleSlice } from "../../engine/fold/slice";
 import type { PromptSource } from "../../engine/prompts/types";
 import { SIDES, type AbilitySource } from "../../engine/state/ids";
 import type { BattleState } from "../../engine/state/types";
-import type { EngineBattleNotice } from "../../runtime/battle-prompt-messages";
+import type { EngineBattleNotice, EngineBattleNoticeSource } from "../../runtime/battle-prompt-messages";
+import type { BattleView } from "../../engine/view/view";
 import type { DreamwellCardId, PresentationId } from "../../types/identifiers";
 import { parsePresentationId } from "../../types/identifiers";
 
@@ -385,13 +386,83 @@ function eventBoards(
   return boards;
 }
 
-/** Names a prompt's or ability's source card for a notice, when the human can identify it. */
-export type NoticeSourceName = (source: AbilitySource | PromptSource | null) => string | null;
+/** Resolves only the source identity the batch's already-redacted view permits. */
+export function resolveNoticeSource(source: AbilitySource | PromptSource | null, view: BattleView): EngineBattleNoticeSource | null {
+  if (source === null) return null;
+  if (typeof source === "string") return view.instances[source] ?? null;
+  switch (source.kind) {
+    case "dreamwell":
+      return source;
+    case "avatar": {
+      const id = "id" in source ? source.id : view.sides[source.side].avatar?.id;
+      return id === undefined ? null : { kind: "avatar", side: source.side, id };
+    }
+    case "dreamsign": {
+      const id = "id" in source ? source.id : view.sides[source.side].dreamsigns[source.index]?.id;
+      return id === undefined ? null : { kind: "dreamsign", side: source.side, index: source.index, id };
+    }
+    default: {
+      const exhaustive: never = source;
+      return exhaustive;
+    }
+  }
+}
+
+/** Minimal physical provenance for diagnostics; display snapshots stay in presentation. */
+function noticeSourceDiagnostic(source: EngineBattleNoticeSource | null) {
+  if (source === null) return null;
+  if ("printing" in source) {
+    const printing = source.printing;
+    switch (printing.kind) {
+      case "card":
+        return { kind: "card" as const, instance: source.id, cardId: printing.cardId };
+      case "figment":
+        return { kind: "figment" as const, instance: source.id, figment: printing.figment };
+      case "figmentCopy":
+        return { kind: "figmentCopy" as const, instance: source.id, cardId: printing.cardId };
+      default: {
+        const exhaustive: never = printing;
+        return exhaustive;
+      }
+    }
+  }
+  switch (source.kind) {
+    case "avatar":
+      return { kind: source.kind, side: source.side, id: source.id };
+    case "dreamsign":
+      return { kind: source.kind, side: source.side, index: source.index, id: source.id };
+    case "dreamwell":
+      return { kind: source.kind, side: source.side, id: source.id };
+    default: {
+      const exhaustive: never = source;
+      return exhaustive;
+    }
+  }
+}
+
+/** The explicit persisted fields of a shown notice, identified without display names. */
+export function projectNoticeDiagnostic(notice: EngineBattleNotice) {
+  switch (notice.kind) {
+    case "autoAnswered":
+      return { kind: notice.kind, prompt: notice.prompt, role: notice.role, source: noticeSourceDiagnostic(notice.source) };
+    case "noLegalTarget":
+      return { kind: notice.kind, source: noticeSourceDiagnostic(notice.source) };
+    case "capacityReached":
+      return { kind: notice.kind, missing: notice.missing };
+    default: {
+      const exhaustive: never = notice;
+      return exhaustive;
+    }
+  }
+}
+
+/** Captures a prompt's or ability's source from the batch's safe view. */
+export type NoticeSource = (source: AbilitySource | PromptSource | null) => EngineBattleNoticeSource | null;
 
 /**
  * The items `human` is shown for `events`, judged in `batch.state`, the
  * state that arrives with them; `before` is the state they started from.
- * `sourceName` names a notice's source card. `eventStates` are the states
+ * `source` captures a notice's safe source. `eventStates` are the states
  * observed at each event (`batchStates`); an item shows its event's board
  * (`eventBoards`), and an item whose event went unobserved the batch's
  * state in the turn `batchTurnAt` gives it.
@@ -401,7 +472,7 @@ export function presentationItems(
   human: Side,
   batch: PresentationBatch,
   before: BattleState,
-  sourceName: NoticeSourceName,
+  source: NoticeSource,
   eventStates: readonly (BattleState | undefined)[] = [],
 ): PresentationItem[] {
   const { eventDwellMs } = BATTLE.presentation;
@@ -451,13 +522,13 @@ export function presentationItems(
               kind: "autoAnswered",
               prompt: event.prompt,
               role: event.purpose.role,
-              sourceName: sourceName(event.purpose.source),
+              source: source(event.purpose.source),
             })
           : [];
       case "capacityReached":
         return event.side === human ? item("notice", eventDwellMs, null, { kind: "capacityReached", missing: event.missing }) : [];
       case "noLegalTarget":
-        return item("notice", eventDwellMs, null, { kind: "noLegalTarget", sourceName: sourceName(event.source) });
+        return item("notice", eventDwellMs, null, { kind: "noLegalTarget", source: source(event.source) });
       case "cardPlayed":
         return event.side === human
           ? item("travel", eventDwellMs)
