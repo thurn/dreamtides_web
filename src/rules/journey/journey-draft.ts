@@ -3,8 +3,27 @@ import type { JourneyDraftEffect, JourneyState, TransfigurationType } from "../.
 import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
 import { journeyTransfigurationCard } from "./journey-transfiguration";
 
-function applies(effect: Extract<JourneyDraftEffect, { kind: "additionalDraftChoices" }>, essence: number): boolean {
-  return effect.minimumEssence === undefined || essence >= effect.minimumEssence;
+type CountEffect = Extract<JourneyDraftEffect, { kind: "additionalDraftChoices" | "fewerDraftChoices" }>;
+function applies(effect: CountEffect, essence: number): boolean {
+  return effect.kind === "fewerDraftChoices" || effect.minimumEssence === undefined || essence >= effect.minimumEssence;
+}
+
+function contribution(effect: CountEffect): number {
+  return effect.kind === "fewerDraftChoices" ? -effect.fewerCards : effect.additionalCards;
+}
+
+function draftAdjustment(journey: Pick<JourneyState, "dreamsigns" | "essence">, registry: Pick<JourneyModifierRegistry, "lookup">): number {
+  let total = 0n;
+  for (const sign of journey.dreamsigns) {
+    const effect = registry.lookup(sign.id)?.journeyDraft;
+    if (effect !== undefined && effect.kind !== "firstDraftEventTransfiguration" && applies(effect, journey.essence)) total += BigInt(contribution(effect));
+  }
+  return safeCount(total);
+}
+
+function safeCount(value: bigint): number {
+  if (value < BigInt(Number.MIN_SAFE_INTEGER) || value > BigInt(Number.MAX_SAFE_INTEGER)) throw new RangeError("Draft offer count exceeds safe arithmetic.");
+  return Number(value);
 }
 
 /** Quote a new offer from the catalog base and the currently held source copies. */
@@ -14,13 +33,7 @@ export function draftOfferCount(
   registry: Pick<JourneyModifierRegistry, "lookup">,
 ): number {
   if (!Number.isSafeInteger(baseCount) || baseCount < 0) throw new RangeError("Invalid Draft base count.");
-  return journey.dreamsigns.reduce((count, sign) => {
-    const effect = registry.lookup(sign.id)?.journeyDraft;
-    const next = effect?.kind === "additionalDraftChoices" && applies(effect, journey.essence)
-      ? count + effect.additionalCards : count;
-    if (!Number.isSafeInteger(next)) throw new RangeError("Draft offer count exceeds safe arithmetic.");
-    return next;
-  }, baseCount);
+  return Math.max(1, safeCount(BigInt(baseCount) + BigInt(draftAdjustment(journey, registry))));
 }
 
 const FORM_TYPES: Readonly<Record<TransfigurationType, true>> = Object.freeze({
@@ -33,14 +46,15 @@ export function journeyDraft(dreamsignId: DreamsignId, descriptor: JourneyDraftE
   const effect = Object.freeze({ ...descriptor });
   if (effect.kind === "firstDraftEventTransfiguration") {
     if (!Object.prototype.hasOwnProperty.call(FORM_TYPES, effect.type)) throw new RangeError("Invalid journeyDraft fixed form.");
-  } else if (effect.kind !== "additionalDraftChoices" || !Number.isSafeInteger(effect.additionalCards) || effect.additionalCards < 1 ||
+  } else if (effect.kind === "fewerDraftChoices" ? !Number.isSafeInteger(effect.fewerCards) || effect.fewerCards < 1 :
+    effect.kind !== "additionalDraftChoices" || !Number.isSafeInteger(effect.additionalCards) || effect.additionalCards < 1 ||
     effect.minimumEssence !== undefined && (!Number.isFinite(effect.minimumEssence) || effect.minimumEssence < 0)) {
     throw new RangeError("Invalid journeyDraft catalog arithmetic.");
   }
   return {
     dreamsignId,
     journeyDraft: effect,
-    afterJourneyEvent({ before, journey, eventType, heldIndex, lookup }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+    afterJourneyEvent({ before, journey, eventType, lookup }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
       const draft = journey.draftState;
       if (effect.kind === "firstDraftEventTransfiguration") {
         const prior = before.draftState, entryId = draft?.siteFirstEventEntryId;
@@ -64,12 +78,10 @@ export function journeyDraft(dreamsignId: DreamsignId, descriptor: JourneyDraftE
       if ((eventType !== "ENTER_DRAFT_SITE" && eventType !== "PICK_DRAFT_CARD") ||
         draft === null || draft.activeSiteId === null || draft.currentOffer.length === 0 ||
         draft.currentOfferCount === undefined || !applies(effect, journey.essence)) return null;
-      const baseCount = draft.currentOfferCount - draftOfferCount(journey, 0, { lookup });
-      const precedingCount = draftOfferCount({ ...journey, dreamsigns: journey.dreamsigns.slice(0, heldIndex) }, baseCount, { lookup });
       return {
         journey,
-        before: { requestedCount: precedingCount, essence: journey.essence },
-        after: { requestedCount: precedingCount + effect.additionalCards,
+        before: { countAdjustment: 0, essence: journey.essence },
+        after: { countAdjustment: contribution(effect), totalAdjustment: draftAdjustment(journey, { lookup }),
           quotedCount: draft.currentOfferCount, offeredCount: draft.currentOffer.length, essence: journey.essence },
         target: { siteIds: [draft.activeSiteId] },
       };

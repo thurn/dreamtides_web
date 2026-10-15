@@ -1,4 +1,7 @@
 import { dreamsign } from "../define";
+import type { JourneyDraftEffect } from "../../types/journey";
+
+export const journeyDraftEffect = { kind: "fewerDraftChoices", fewerCards: 1 } as const satisfies JourneyDraftEffect;
 
 export default dreamsign({
   id: "6b95d6bd-c970-4465-9536-4f21e7630d0a",
@@ -12,4 +15,5 @@ export default dreamsign({
   tideIds: ["d923b6e9-8572-4b27-b456-e70e69e80b31"],
   tags: ["J10", "Tag OK"],
   pending: true,
+  journeyDraft: journeyDraftEffect,
 });

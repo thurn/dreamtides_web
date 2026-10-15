@@ -267,6 +267,7 @@ export interface AfterBattleTransfigurationSource {
 }
 
 export type JourneyOnGainEffect =
+  | { readonly kind: "addNightmaresOnGain"; readonly count: number }
   | { readonly kind: "afterBattleDreamsignChoice"; readonly offerCount: number }
   | { readonly kind: "randomTransfigurationOnGain"; readonly numerator: number; readonly denominator: number }
   | { readonly kind: "copyOwnedDreamsignOnGain" }
@@ -339,6 +340,7 @@ export type JourneyPurgeChoice =
 
 /** Bounded catalog clauses for fresh Draft offers and the visit's first Event. */
 export type JourneyDraftEffect =
+  | { readonly kind: "fewerDraftChoices"; readonly fewerCards: number }
   | { readonly kind: "additionalDraftChoices";
       readonly additionalCards: number;
       readonly minimumEssence?: number }

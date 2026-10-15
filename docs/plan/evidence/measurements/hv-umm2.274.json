@@ -1,0 +1,1761 @@
+{
+  "bead": "hv-umm2.274",
+  "sourceBase": "70961cea27a860f1b901994ac6dc6a354a2d6e48",
+  "checkpointUTC": "2026-10-15T10:02:47.947620+00:00",
+  "clockStatus": "Open dispatch-to-future-automatic-Git interval. This checkpoint is not an implementation endpoint; final friction checkpoint and actual Git-tail receipt are pending parent COMMITACK.",
+  "dispatch": {
+    "utc": "2026-10-15T07:56:41.150Z",
+    "source": "parent implementation dispatch; continuous through source investigation, coordination, waits, repairs, QA and final automatic Git"
+  },
+  "testDelta": {
+    "files": 2,
+    "lines": 320,
+    "jsdomFiles": 0
+  },
+  "testDeltaBasis": {
+    "newNodeTests": {
+      "src/rules/journey/journey-draft-reduction.test.ts": 152,
+      "src/rules/journey/journey-on-gain-nightmares.test.ts": 168
+    },
+    "existingTestNetLines": 0,
+    "fixtureModuleNotCountedAsTestFile": "src/rules/journey/journey-nightmares274-fixtures.ts"
+  },
+  "commandReceipts": [
+    {
+      "label": "battle-preservation-v01",
+      "receiptPath": "/tmp/root-274/source-first/battle-preservation-v01.receipt.json",
+      "receiptSHA256": "587a05fa7a54cb67d6ba3ef536ee9e9105152b95434412a1a6aabb5f443c431f",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain-nightmares.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:24:24.366489+00:00",
+      "wrapperPid": 14774,
+      "status": "terminal",
+      "pid": 14782,
+      "pgid": 14782,
+      "exit": 0,
+      "finished": "2026-10-15T08:24:30.583258+00:00",
+      "wallSeconds": 6.216754665947519,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/battle-preservation-v01.stdout",
+        "sha256": "0062d0b7c6864c1a34e8ed33e7d785a05c1260f3a2c1f7dfb1f3d0044d0ef5eb",
+        "bytes": 1483
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/battle-preservation-v01.stderr",
+        "sha256": "626d5655301751a6aef1faf81d452edd4c8c23f2d4ce648783b0e1d2d5e08bc3",
+        "bytes": 48393
+      }
+    },
+    {
+      "label": "browser-scene-provider-reconcile-v01",
+      "receiptPath": "/tmp/root-274/source-first/browser-scene-provider-reconcile-v01.receipt.json",
+      "receiptSHA256": "ebf0b34e4718c21f4b3a6f94930749d75dcb7cc5078acc1bd230f3805007f152",
+      "argv": [
+        "node",
+        "scripts/qa/provider-ownership.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:23:41.497512+00:00",
+      "wrapperPid": 18872,
+      "status": "terminal",
+      "pid": 18882,
+      "pgid": 18882,
+      "exit": 0,
+      "finished": "2026-10-15T09:23:41.562134+00:00",
+      "wallSeconds": 0.06467579200398177,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/browser-scene-provider-reconcile-v01.stdout",
+        "sha256": "cf7b06901deed95fb50abcd333576409bc72a42ffbdb963ae6a0e73d280a3b9c",
+        "bytes": 130
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/browser-scene-provider-reconcile-v01.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "coverage-schema-v01",
+      "receiptPath": "/tmp/root-274/source-first/coverage-schema-v01.receipt.json",
+      "receiptSHA256": "ba675308b8b6ca44acb776cfafb53cbd983e43b51dbc7e8f3c4f577c4a6cc709",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts",
+        "src/content/documents.test.ts",
+        "src/content/content-index.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:21:36.554343+00:00",
+      "wrapperPid": 79251,
+      "status": "terminal",
+      "pid": 79259,
+      "pgid": 79259,
+      "exit": 0,
+      "finished": "2026-10-15T08:21:41.930456+00:00",
+      "wallSeconds": 5.376107249991037,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/coverage-schema-v01.stdout",
+        "sha256": "5d782f139ea3fb2b0cd5e97d8d0093330a2e92d4306a228249a95c6ddbdefbec",
+        "bytes": 1530
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/coverage-schema-v01.stderr",
+        "sha256": "626d5655301751a6aef1faf81d452edd4c8c23f2d4ce648783b0e1d2d5e08bc3",
+        "bytes": 48393
+      }
+    },
+    {
+      "label": "coverage-schema-v02",
+      "receiptPath": "/tmp/root-274/source-first/coverage-schema-v02.receipt.json",
+      "receiptSHA256": "33b03707da0c61391251a9e6e930d6b76132a9ceca0bd69e202b31246f1a5b83",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts",
+        "src/content/documents.test.ts",
+        "src/content/content-index.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:57:47.437443+00:00",
+      "wrapperPid": 44819,
+      "status": "terminal",
+      "pid": 44830,
+      "pgid": 44830,
+      "exit": 0,
+      "finished": "2026-10-15T09:57:54.558115+00:00",
+      "wallSeconds": 7.120718082995154,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/coverage-schema-v02.stdout",
+        "sha256": "e72e6c1e4668d552eecf3a07d054f8bb153217bb9b5049a4151b1bd787b04e87",
+        "bytes": 1531
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/coverage-schema-v02.stderr",
+        "sha256": "626d5655301751a6aef1faf81d452edd4c8c23f2d4ce648783b0e1d2d5e08bc3",
+        "bytes": 48393
+      }
+    },
+    {
+      "label": "focused-v01",
+      "receiptPath": "/tmp/root-274/source-first/focused-v01.receipt.json",
+      "receiptSHA256": "91f532577b61b433c88cdeff381cc4dcb70a405f888a620e284c3f3736f98535",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft-reduction.test.ts",
+        "src/rules/journey/journey-on-gain-nightmares.test.ts",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-dreamsign-gains.test.ts",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-draft-first-event.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:14:11.957775+00:00",
+      "wrapperPid": 66494,
+      "status": "terminal",
+      "pid": 66505,
+      "pgid": 66505,
+      "exit": 1,
+      "finished": "2026-10-15T08:14:19.971199+00:00",
+      "wallSeconds": 8.013392916007433,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/focused-v01.stdout",
+        "sha256": "4a210837097def3afd70b27aba93bc36bf47ec521d5546b30ac86b9b503d237f",
+        "bytes": 4397
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/focused-v01.stderr",
+        "sha256": "af829b23799c3b5477ff084830049601eb2ddc6edb3f1939374e821334b4409c",
+        "bytes": 51468
+      }
+    },
+    {
+      "label": "focused-v02",
+      "receiptPath": "/tmp/root-274/source-first/focused-v02.receipt.json",
+      "receiptSHA256": "334e70de848c0d0d65a127c0f27085209715cbde9ced55a80f0f117bcfe36cfc",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft-reduction.test.ts",
+        "src/rules/journey/journey-on-gain-nightmares.test.ts",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-dreamsign-gains.test.ts",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-draft-first-event.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:15:08.531835+00:00",
+      "wrapperPid": 70105,
+      "status": "terminal",
+      "pid": 70113,
+      "pgid": 70113,
+      "exit": 0,
+      "finished": "2026-10-15T08:15:14.379258+00:00",
+      "wallSeconds": 5.8474147919914685,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/focused-v02.stdout",
+        "sha256": "a58dad983a7c84f30e85a77f65fb6da991807afb5e06311b029bab5b8bd6eaa2",
+        "bytes": 1822
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/focused-v02.stderr",
+        "sha256": "626d5655301751a6aef1faf81d452edd4c8c23f2d4ce648783b0e1d2d5e08bc3",
+        "bytes": 48393
+      }
+    },
+    {
+      "label": "friction-schema-v01",
+      "receiptPath": "/tmp/root-274/source-first/friction-schema-v01.receipt.json",
+      "receiptSHA256": "6e34be97efd69336bcd0e8c1eb1c9f25e863ed8ec33d27a8df71d76bc8061c0e",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:58:40.581805+00:00",
+      "wrapperPid": 48044,
+      "status": "terminal",
+      "pid": 48068,
+      "pgid": 48068,
+      "exit": 0,
+      "finished": "2026-10-15T09:58:40.738356+00:00",
+      "wallSeconds": 0.1566116669564508,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/friction-schema-v01.stdout",
+        "sha256": "8ba2c778d1c54029de7c3445c2a7d483b27a2684fadb4bf26754588fb8399dad",
+        "bytes": 73
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/friction-schema-v01.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "journey300-v02",
+      "receiptPath": "/tmp/root-274/source-first/journey300-v02.receipt.json",
+      "receiptSHA256": "08c2747bf17f051d1a34558cf2b40c230ed53934232f10a6ee4fe27b28582885",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/root-274/source-first/journey300-v02.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:20:09.881809+00:00",
+      "wrapperPid": 77229,
+      "status": "terminal",
+      "pid": 77238,
+      "pgid": 77238,
+      "exit": 1,
+      "finished": "2026-10-15T08:20:12.622115+00:00",
+      "wallSeconds": 2.7403199169784784,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/journey300-v02.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/journey300-v02.stderr",
+        "sha256": "7a525e1a8b389931f07df2eca9d06d5b977f6c6d289f71f80549a37cb6084cf9",
+        "bytes": 1485
+      }
+    },
+    {
+      "label": "journey300-v03",
+      "receiptPath": "/tmp/root-274/source-first/journey300-v03.receipt.json",
+      "receiptSHA256": "e910d15026c7040ff905665135234bf6fc80ebc59157ac37be9e2c8a5306599c",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/root-274/source-first/journey300-v03.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:20:43.713281+00:00",
+      "wrapperPid": 77996,
+      "status": "terminal",
+      "pid": 78005,
+      "pgid": 78005,
+      "exit": 0,
+      "finished": "2026-10-15T08:20:45.478662+00:00",
+      "wallSeconds": 1.7654207909945399,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/journey300-v03.stdout",
+        "sha256": "59f5f8dacfe247090ef12b6321f12151f996200339f4a58f8c6ec114e12c6c9d",
+        "bytes": 88345
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/journey300-v03.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "knip-v01",
+      "receiptPath": "/tmp/root-274/source-first/knip-v01.receipt.json",
+      "receiptSHA256": "4cf87195bc7705a82f4726f7a54e19830aae9c097963eda54c9bcb2105a33ef3",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:19:18.205864+00:00",
+      "wrapperPid": 76118,
+      "status": "terminal",
+      "pid": 76126,
+      "pgid": 76126,
+      "exit": 0,
+      "finished": "2026-10-15T08:19:23.877539+00:00",
+      "wallSeconds": 5.671683291031513,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/knip-v01.stdout",
+        "sha256": "a084df29aebce1355a8376fea43c7c14b24311d1e523b25456397e37177e2da5",
+        "bytes": 1134
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/knip-v01.stderr",
+        "sha256": "626d5655301751a6aef1faf81d452edd4c8c23f2d4ce648783b0e1d2d5e08bc3",
+        "bytes": 48393
+      }
+    },
+    {
+      "label": "knip-v02",
+      "receiptPath": "/tmp/root-274/source-first/knip-v02.receipt.json",
+      "receiptSHA256": "35fdee9704c720164fad424103ae0a07fe0f61c89441bdfdb0c288e388402290",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:57:06.337924+00:00",
+      "wrapperPid": 42222,
+      "status": "terminal",
+      "pid": 42231,
+      "pgid": 42231,
+      "exit": 0,
+      "finished": "2026-10-15T09:57:10.890514+00:00",
+      "wallSeconds": 4.552624042029493,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/knip-v02.stdout",
+        "sha256": "cc7d5a7e730cdb2beefbc2523b168ed66bd793ba2238b1caab3a1646ee41e653",
+        "bytes": 1134
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/knip-v02.stderr",
+        "sha256": "626d5655301751a6aef1faf81d452edd4c8c23f2d4ce648783b0e1d2d5e08bc3",
+        "bytes": 48393
+      }
+    },
+    {
+      "label": "lab-preflight-v01",
+      "receiptPath": "/tmp/root-274/source-first/lab-preflight-v01.receipt.json",
+      "receiptSHA256": "9de5e76aca7323adb69f23444fbf53e9e1f671ab09a60ca62f76c9273cceae2b",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "6b95d6bd-c970-4465-9536-4f21e7630d0a,1cd25b9a-b176-4c51-8349-bb4df35cbf05"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:21:04.902470+00:00",
+      "wrapperPid": 78571,
+      "status": "terminal",
+      "pid": 78579,
+      "pgid": 78579,
+      "exit": 1,
+      "finished": "2026-10-15T08:21:06.500856+00:00",
+      "wallSeconds": 1.5984221249818802,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/lab-preflight-v01.stdout",
+        "sha256": "4858ab2090750a3f8ef44bf7bc7ec485649b455d65e759b055f4b32f3e4c9fff",
+        "bytes": 8899
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/lab-preflight-v01.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "lab-preflight-v02",
+      "receiptPath": "/tmp/root-274/source-first/lab-preflight-v02.receipt.json",
+      "receiptSHA256": "771cbb94e973acb98d8a65c7602f19d96741b8db2251594a4062934fcd68c233",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "6b95d6bd-c970-4465-9536-4f21e7630d0a,1cd25b9a-b176-4c51-8349-bb4df35cbf05",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:21:35.413424+00:00",
+      "wrapperPid": 79205,
+      "status": "terminal",
+      "pid": 79213,
+      "pgid": 79213,
+      "exit": 0,
+      "finished": "2026-10-15T08:21:36.778293+00:00",
+      "wallSeconds": 1.36490349995438,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/lab-preflight-v02.stdout",
+        "sha256": "c97772c08f8132b14ce9ffbf4511dbb8039b983168fb2b7003021a0fd11a18eb",
+        "bytes": 13989
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/lab-preflight-v02.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "lab-sweep-v01",
+      "receiptPath": "/tmp/root-274/source-first/lab-sweep-v01.receipt.json",
+      "receiptSHA256": "047d87d03c3b1149607c12af4d5b3b0e21384cb7d8f0d201cefd65e30958c151",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--dreamsigns",
+        "6b95d6bd-c970-4465-9536-4f21e7630d0a,1cd25b9a-b176-4c51-8349-bb4df35cbf05",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:36:50.792086+00:00",
+      "wrapperPid": 32999,
+      "status": "terminal",
+      "pid": 33007,
+      "pgid": 33007,
+      "exit": 0,
+      "finished": "2026-10-15T08:37:18.592366+00:00",
+      "wallSeconds": 27.800015625020023,
+      "ownershipCaptures": 3,
+      "ownershipManifest": "/tmp/root-274/source-first/lab-sweep-v01-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/lab-sweep-v01.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/lab-sweep-v01.stderr",
+        "sha256": "bbfa2547fa73a7b0d1964abcaf7dc7b4a0190c45704ee1b4445c85c1286fd8da",
+        "bytes": 5042
+      }
+    },
+    {
+      "label": "natural-extra-seed-search-v01",
+      "receiptPath": "/tmp/root-274/source-first/natural-extra-seed-search-v01.receipt.json",
+      "receiptSHA256": "d9ac1f31b3e45ca0d012bf7131539275a402f451dfe559227fa275c45b161cbd",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/root-274/source-first/natural-extra-seeds-v01.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:05:25.439572+00:00",
+      "wrapperPid": 51403,
+      "status": "terminal",
+      "pid": 51414,
+      "pgid": 51414,
+      "exit": 0,
+      "finished": "2026-10-15T09:07:09.525329+00:00",
+      "wallSeconds": 104.0850163330324,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/natural-extra-seed-search-v01.stdout",
+        "sha256": "12e876ec0f7bf44f2ccb3bf764a17b4f759559df885c069ee5c16da7fa8e9089",
+        "bytes": 110016061
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/natural-extra-seed-search-v01.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "natural-seed-search-v01",
+      "receiptPath": "/tmp/root-274/source-first/natural-seed-search-v01.receipt.json",
+      "receiptSHA256": "ff5605f6d0484e17090603ce085b11f518e3b4cb9c3590d189b2fd8f08060306",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/root-274/source-first/natural-site-seeds-v01.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:52:32.157261+00:00",
+      "wrapperPid": 64402,
+      "status": "terminal",
+      "pid": 64412,
+      "pgid": 64412,
+      "exit": 0,
+      "finished": "2026-10-15T08:52:35.544213+00:00",
+      "wallSeconds": 3.3869797500083223,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/natural-seed-search-v01.stdout",
+        "sha256": "82f561f70af56d3d34aa654eda70633075aaf1f6d22df6df84bf85b4de4066e7",
+        "bytes": 4160668
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/natural-seed-search-v01.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "prepare-site-fixtures-v01",
+      "receiptPath": "/tmp/root-274/source-first/prepare-site-fixtures-v01.receipt.json",
+      "receiptSHA256": "64d03dd9879bdedede746acf32a4129b1a912087f2f2a36520f9bbd26b7dece6",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/root-274/source-first/prepare-site-fixtures-v01.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:29:00.309127+00:00",
+      "wrapperPid": 22204,
+      "status": "terminal",
+      "pid": 22213,
+      "pgid": 22213,
+      "exit": 1,
+      "finished": "2026-10-15T08:29:01.952710+00:00",
+      "wallSeconds": 1.6436201670439914,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/prepare-site-fixtures-v01.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/prepare-site-fixtures-v01.stderr",
+        "sha256": "830120436263bfb69690f46d62d3edfe7b57124443c44f3730e744badabab21c",
+        "bytes": 713
+      }
+    },
+    {
+      "label": "prepare-site-fixtures-v02",
+      "receiptPath": "/tmp/root-274/source-first/prepare-site-fixtures-v02.receipt.json",
+      "receiptSHA256": "11d6281e6458fb152ee2df20588a73f7c898370583b51f63caf2759667cfcd1f",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/root-274/source-first/prepare-site-fixtures-v02.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:29:38.010667+00:00",
+      "wrapperPid": 22956,
+      "status": "terminal",
+      "pid": 22968,
+      "pgid": 22968,
+      "exit": 1,
+      "finished": "2026-10-15T08:29:39.229790+00:00",
+      "wallSeconds": 1.2191533340374008,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/prepare-site-fixtures-v02.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/prepare-site-fixtures-v02.stderr",
+        "sha256": "1a5515f4d8b4193e015b05ae19f5157acadc289bd954210ac773b823792ccf08",
+        "bytes": 698
+      }
+    },
+    {
+      "label": "prepare-site-fixtures-v03",
+      "receiptPath": "/tmp/root-274/source-first/prepare-site-fixtures-v03.receipt.json",
+      "receiptSHA256": "4a0dc97fb507012e86c54d8004380a2460475b05f068fde79a2bdf28bb29ee5f",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/root-274/source-first/prepare-site-fixtures-v03.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:30:25.418109+00:00",
+      "wrapperPid": 23983,
+      "status": "terminal",
+      "pid": 23997,
+      "pgid": 23997,
+      "exit": 1,
+      "finished": "2026-10-15T08:30:26.612475+00:00",
+      "wallSeconds": 1.1943973330198787,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/prepare-site-fixtures-v03.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/prepare-site-fixtures-v03.stderr",
+        "sha256": "3db4123d0efa247bff3dcf319d5c4bea424373e883d1fc03cdc92564868e4dab",
+        "bytes": 1497
+      }
+    },
+    {
+      "label": "prepare-site-fixtures-v04",
+      "receiptPath": "/tmp/root-274/source-first/prepare-site-fixtures-v04.receipt.json",
+      "receiptSHA256": "7a14331b5e40e0e1d029de15468b1c04c1a569d4233a0568e42741549d82dc62",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/root-274/source-first/prepare-site-fixtures-v04.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:30:46.264346+00:00",
+      "wrapperPid": 24475,
+      "status": "terminal",
+      "pid": 24486,
+      "pgid": 24486,
+      "exit": 0,
+      "finished": "2026-10-15T08:30:47.775539+00:00",
+      "wallSeconds": 1.5112353329895996,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/prepare-site-fixtures-v04.stdout",
+        "sha256": "b372362650639c9b50d4c859b73e6a1f85e632247a0385ffaab2709c5b343e94",
+        "bytes": 105479
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/prepare-site-fixtures-v04.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "prepare-site-fixtures-v05",
+      "receiptPath": "/tmp/root-274/source-first/prepare-site-fixtures-v05.receipt.json",
+      "receiptSHA256": "4be3ae242613cbdd5da0b7e4c5907182255970f7423968160d278276bf230bff",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/root-274/source-first/prepare-site-fixtures-v05.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:32:52.867293+00:00",
+      "wrapperPid": 27606,
+      "status": "terminal",
+      "pid": 27621,
+      "pgid": 27621,
+      "exit": 0,
+      "finished": "2026-10-15T08:32:56.446627+00:00",
+      "wallSeconds": 3.579365207988303,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/prepare-site-fixtures-v05.stdout",
+        "sha256": "13eaafcbb4ce0cb67e56e4a55c907bb5b289077ee3367bb6b0ee547f8b1e2019",
+        "bytes": 117762
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/prepare-site-fixtures-v05.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "qa-augury-mobile-v04",
+      "receiptPath": "/tmp/root-274/source-first/qa-augury-mobile-v04.receipt.json",
+      "receiptSHA256": "54d1730cde542ae09cd03fbed1f2ffb97eeb9672232de8e4b98ba2c6a5df311a",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-augury-mobile-diagnostic-v04.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "mobile",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:54:24.205477+00:00",
+      "wrapperPid": 32627,
+      "status": "terminal",
+      "pid": 32637,
+      "pgid": 32637,
+      "exit": 0,
+      "finished": "2026-10-15T09:55:07.618338+00:00",
+      "wallSeconds": 43.412755624973215,
+      "ownershipCaptures": 3,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-augury-mobile-v04-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-augury-mobile-v04.stdout",
+        "sha256": "b1ef37f096a3af1997405829c84239816ef7a8b418c9beea8911a8aec0f879bb",
+        "bytes": 16508103
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-augury-mobile-v04.stderr",
+        "sha256": "54500bfc3dbf6fe41fbb3cbfc13572c7eb4bd458f35a10cf2e858eefbd080c94",
+        "bytes": 790
+      }
+    },
+    {
+      "label": "qa-augury-sites-v01",
+      "receiptPath": "/tmp/root-274/source-first/qa-augury-sites-v01.receipt.json",
+      "receiptSHA256": "68151877b07b0414d9aeabfc3d6125df9a67ecb9bba48fced8fd90061459878d",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-augury-sites-v01.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:43:52.902979+00:00",
+      "wrapperPid": 36252,
+      "status": "terminal",
+      "pid": 36262,
+      "pgid": 36262,
+      "exit": 1,
+      "finished": "2026-10-15T09:44:14.598007+00:00",
+      "wallSeconds": 21.69499295798596,
+      "ownershipCaptures": 3,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-augury-sites-v01-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-augury-sites-v01.stdout",
+        "sha256": "90ac1fc871a1300d9a3c2e6083e3461403b19e1c9ff74c6ff8d060f2446bfc9a",
+        "bytes": 7632
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-augury-sites-v01.stderr",
+        "sha256": "b2611f88b8ec4a8195d428badea0b3c2528c452cd87b2b9c2b03f309c688c4d5",
+        "bytes": 1925
+      }
+    },
+    {
+      "label": "qa-augury-sites-v02",
+      "receiptPath": "/tmp/root-274/source-first/qa-augury-sites-v02.receipt.json",
+      "receiptSHA256": "1e53a5eb341b5dd0873233d7cd818b6f8c258bf04b451fb31339d1f3b803379b",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-augury-sites-v02.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:48:48.376548+00:00",
+      "wrapperPid": 54281,
+      "status": "terminal",
+      "pid": 54296,
+      "pgid": 54296,
+      "exit": 1,
+      "finished": "2026-10-15T09:50:27.717773+00:00",
+      "wallSeconds": 99.34094679099508,
+      "ownershipCaptures": 3,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-augury-sites-v02-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-augury-sites-v02.stdout",
+        "sha256": "b4cf72c3c976acf1c284d36798f7fca8bf8fcd76760d1e9fc2efcd804a616253",
+        "bytes": 16722489
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-augury-sites-v02.stderr",
+        "sha256": "b1895dc3cf2238282b1aada7f69cad23eae7f6f4070eafae1a22ec6297dbe5ee",
+        "bytes": 1718
+      }
+    },
+    {
+      "label": "qa-browser-affinity-search-v03",
+      "receiptPath": "/tmp/root-274/source-first/qa-browser-affinity-search-v03.receipt.json",
+      "receiptSHA256": "8880494edb5cd5f19e637f6fa0175dc267920b251c6f6cdea2eedd41666ccf3a",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-browser-affinity-search-v03.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:30:45.422645+00:00",
+      "wrapperPid": 46252,
+      "status": "terminal",
+      "pid": 46262,
+      "pgid": 46262,
+      "exit": 0,
+      "finished": "2026-10-15T09:33:58.803864+00:00",
+      "wallSeconds": 193.38064258301165,
+      "ownershipCaptures": 5,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-browser-affinity-search-v03-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-browser-affinity-search-v03.stdout",
+        "sha256": "29c7bf72d103b93645b0130ddcc350d5bcecc334b33a734ec07b0b416c41f8e7",
+        "bytes": 1685927
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-browser-affinity-search-v03.stderr",
+        "sha256": "5cc561c0a7aecf088fd1e7e29807760e45bc6cd9aae3e8d6d67fb0d30af00738",
+        "bytes": 1019
+      }
+    },
+    {
+      "label": "qa-browser-scene-search-v01",
+      "receiptPath": "/tmp/root-274/source-first/qa-browser-scene-search-v01.receipt.json",
+      "receiptSHA256": "77f3ae6e32b5f6845fa9277569bf88f9f2d47f009d0cf4a46714701cdf77788f",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-browser-scene-search-v02.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:18:09.840359+00:00",
+      "wrapperPid": 78500,
+      "status": "terminal",
+      "pid": 78513,
+      "pgid": 78513,
+      "exit": 2,
+      "finished": "2026-10-15T09:22:15.460562+00:00",
+      "wallSeconds": 245.61826558300527,
+      "ownershipCaptures": 4,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-browser-scene-search-v01-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-browser-scene-search-v01.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-browser-scene-search-v01.stderr",
+        "sha256": "295e12ea8eacca02ef2a8991e4283e8cd8722284de7f8e959b5c0d784014b129",
+        "bytes": 1275
+      }
+    },
+    {
+      "label": "qa-browser-scene-search-v03",
+      "receiptPath": "/tmp/root-274/source-first/qa-browser-scene-search-v03.receipt.json",
+      "receiptSHA256": "c62597be30965db19263690e2ed91833557e5ce95a65593a72755520e9bfc1e5",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-browser-scene-search-v03.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:36:24.063328+00:00",
+      "wrapperPid": 56514,
+      "status": "terminal",
+      "pid": 56523,
+      "pgid": 56523,
+      "exit": 0,
+      "finished": "2026-10-15T09:39:22.015377+00:00",
+      "wallSeconds": 177.95152233401313,
+      "ownershipCaptures": 4,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-browser-scene-search-v03-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-browser-scene-search-v03.stdout",
+        "sha256": "63f47bc6922419cca6f89587d765fccde8d3df6eaf511e2383ecdb104b060288",
+        "bytes": 113842
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-browser-scene-search-v03.stderr",
+        "sha256": "dcfa98b0477716ce12c61bbcebbca6964eba3c57a40e477f7135f15508b8e8b8",
+        "bytes": 1004
+      }
+    },
+    {
+      "label": "qa-draft-v01",
+      "receiptPath": "/tmp/root-274/source-first/qa-draft-v01.receipt.json",
+      "receiptSHA256": "34e340f2ba4c2706b12df3f6631a83c74f086b66590be65aed9d3b9b1c7ebdab",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-draft.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:25:34.741661+00:00",
+      "wrapperPid": 16901,
+      "status": "terminal",
+      "pid": 16914,
+      "pgid": 16914,
+      "exit": 0,
+      "finished": "2026-10-15T08:26:05.588808+00:00",
+      "wallSeconds": 30.84686191700166,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-draft-v01.stdout",
+        "sha256": "565767793794861488c8dd3d7feb329a4c6c5106f8d2371b4ab96314cc7a0b4e",
+        "bytes": 29234
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-draft-v01.stderr",
+        "sha256": "f59f8a99f091b9f0f623f305646ec5e3d1b5826e1071cd06b706b2c14f59b1a9",
+        "bytes": 860
+      }
+    },
+    {
+      "label": "qa-exploration-debug-v01",
+      "receiptPath": "/tmp/root-274/source-first/qa-exploration-debug-v01.receipt.json",
+      "receiptSHA256": "fe8a1e287d5a713a9e7b4f3903c8a7b2bee07d417b2f9eb876ce0b2fdfcf1ebc",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-exploration-debug-v01.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:51:28.029292+00:00",
+      "wrapperPid": 6169,
+      "status": "terminal",
+      "pid": 6205,
+      "pgid": 6205,
+      "exit": 0,
+      "finished": "2026-10-15T09:53:11.975995+00:00",
+      "wallSeconds": 103.94641887501348,
+      "ownershipCaptures": 4,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-exploration-debug-v01-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-exploration-debug-v01.stdout",
+        "sha256": "554de536073f0ee7d98cdd85a4cc1d6782084b2e321f9529c92f5101ae11f6a7",
+        "bytes": 5083840
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-exploration-debug-v01.stderr",
+        "sha256": "ca37f6474b46d9c1cb9de29d6fd0b716b56ab6eed2f3c8bf58d6d38702af29a4",
+        "bytes": 929
+      }
+    },
+    {
+      "label": "qa-free-v01",
+      "receiptPath": "/tmp/root-274/source-first/qa-free-v01.receipt.json",
+      "receiptSHA256": "1e799c67ff0e753266bc4e0cc648b379be822f49c61d718b7048d4d423313838",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-free-acquisition-v02.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "270"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:38:45.798637+00:00",
+      "wrapperPid": 36098,
+      "status": "terminal",
+      "pid": 36107,
+      "pgid": 36107,
+      "exit": 2,
+      "finished": "2026-10-15T08:38:53.574938+00:00",
+      "wallSeconds": 7.77625833300408,
+      "ownershipCaptures": 4,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-free-v01-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-free-v01.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-free-v01.stderr",
+        "sha256": "78ce2cce44de6c33526a3d807900d8d73991026bbc9c7e6cdb12c96650785dc4",
+        "bytes": 1704
+      }
+    },
+    {
+      "label": "qa-free-v02",
+      "receiptPath": "/tmp/root-274/source-first/qa-free-v02.receipt.json",
+      "receiptSHA256": "9e633d7b12e137e3a4a3c812088288e7adf2f383345725d452a9317033fa78d5",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-free-acquisition-v03.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "270"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:40:35.360832+00:00",
+      "wrapperPid": 58961,
+      "status": "terminal",
+      "pid": 59176,
+      "pgid": 59176,
+      "exit": 2,
+      "finished": "2026-10-15T08:40:42.083218+00:00",
+      "wallSeconds": 6.722350457974244,
+      "ownershipCaptures": 3,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-free-v02-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-free-v02.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-free-v02.stderr",
+        "sha256": "39db2a8f8347f8649b28c36c9c9e80112752de65a5ee7ae13f5f2d68d300b17e",
+        "bytes": 1715
+      }
+    },
+    {
+      "label": "qa-gravok-sites-v01",
+      "receiptPath": "/tmp/root-274/source-first/qa-gravok-sites-v01.receipt.json",
+      "receiptSHA256": "793e83558e0c280bf01484dfaf49fe5aaa14c719aeacd80145643b2f151ef8f3",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-gravok-sites-v01.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:15:27.247677+00:00",
+      "wrapperPid": 7969,
+      "status": "terminal",
+      "pid": 7981,
+      "pgid": 7981,
+      "exit": 0,
+      "finished": "2026-10-15T09:17:02.706613+00:00",
+      "wallSeconds": 95.45822095801122,
+      "ownershipCaptures": 3,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-gravok-sites-v01-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-gravok-sites-v01.stdout",
+        "sha256": "eb280a798752862377a5788eb20bc930271cfe7385c7cb9f80e7ffc0a5be46ce",
+        "bytes": 1448655
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-gravok-sites-v01.stderr",
+        "sha256": "1e7d257dabf3aae1f2bc7335b37d5e487349f23149fe13800d335d335737ca37",
+        "bytes": 914
+      }
+    },
+    {
+      "label": "qa-natural-sites-v01",
+      "receiptPath": "/tmp/root-274/source-first/qa-natural-sites-v01.receipt.json",
+      "receiptSHA256": "49254acd70bff33d75b520015fdf24043ced4c25c706e2c993fbf55619808172",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-sites-v01.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:54:59.538872+00:00",
+      "wrapperPid": 32821,
+      "status": "terminal",
+      "pid": 32831,
+      "pgid": 32831,
+      "exit": 1,
+      "finished": "2026-10-15T08:55:09.716318+00:00",
+      "wallSeconds": 10.177408125018701,
+      "ownershipCaptures": 3,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-natural-sites-v01-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-natural-sites-v01.stdout",
+        "sha256": "e5742aed90cc60d736753acfc7d75b4327aecf5da2d304a6fda33591fa28ce67",
+        "bytes": 7322
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-natural-sites-v01.stderr",
+        "sha256": "d9ea54f0944e9c211ef4e9926bef10ab08934ce649f80fac484f8854207e70e8",
+        "bytes": 1923
+      }
+    },
+    {
+      "label": "qa-natural-sites-v02",
+      "receiptPath": "/tmp/root-274/source-first/qa-natural-sites-v02.receipt.json",
+      "receiptSHA256": "21a57c6cd53945509a3494997abf10ff49566ab58d7eb6b8f9586468add913cc",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-sites-v03.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:57:22.938197+00:00",
+      "wrapperPid": 99808,
+      "status": "terminal",
+      "pid": 99817,
+      "pgid": 99817,
+      "exit": 1,
+      "finished": "2026-10-15T08:58:33.630763+00:00",
+      "wallSeconds": 70.69203170901164,
+      "ownershipCaptures": 4,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-natural-sites-v02-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-natural-sites-v02.stdout",
+        "sha256": "f4e2a8c2dceecd37d9775b393b026d31e4c52a90fb3f3e3194790b974d52aa66",
+        "bytes": 35580
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-natural-sites-v02.stderr",
+        "sha256": "2dfcab2e9167d3a601afc0aa101fe7970da61909e6d713df44699c5d5a12a5ea",
+        "bytes": 1735
+      }
+    },
+    {
+      "label": "qa-natural-sites-v03",
+      "receiptPath": "/tmp/root-274/source-first/qa-natural-sites-v03.receipt.json",
+      "receiptSHA256": "25f59d466e6d02afa3845046b92a0f7123d73735a53c2a42c0193a47b7bc3e7e",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-sites-v05.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "480"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:08:21.879160+00:00",
+      "wrapperPid": 23054,
+      "status": "terminal",
+      "pid": 23065,
+      "pgid": 23065,
+      "exit": 0,
+      "finished": "2026-10-15T09:11:15.535558+00:00",
+      "wallSeconds": 173.65503458300373,
+      "ownershipCaptures": 4,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-natural-sites-v03-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-natural-sites-v03.stdout",
+        "sha256": "96b5aab89bf81df5ed3ce99e14430093e20b26857a6a92aaf0fdb1a20e907008",
+        "bytes": 3153074
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-natural-sites-v03.stderr",
+        "sha256": "63793caf7e6bc3440f564226594a189ef8a07bfd8664f2ee4e6314edf8f243ef",
+        "bytes": 922
+      }
+    },
+    {
+      "label": "qa-revelation-diagnostic-v01",
+      "receiptPath": "/tmp/root-274/source-first/qa-revelation-diagnostic-v01.receipt.json",
+      "receiptSHA256": "69733293006e96738e0bdfd366eb4e770df9ba0a93fb878e6649d6b8fdbf5abd",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-revelation-diagnostic-v02.mjs",
+        "--bead",
+        "hv-umm2.274",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "90"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:02:57.513642+00:00",
+      "wrapperPid": 84824,
+      "status": "terminal",
+      "pid": 84838,
+      "pgid": 84838,
+      "exit": 0,
+      "finished": "2026-10-15T09:03:38.071595+00:00",
+      "wallSeconds": 40.5576967910165,
+      "ownershipCaptures": 4,
+      "ownershipManifest": "/tmp/root-274/source-first/qa-revelation-diagnostic-v01-ownership/manifest.json",
+      "stdout": {
+        "path": "/tmp/root-274/source-first/qa-revelation-diagnostic-v01.stdout",
+        "sha256": "54ed0448844f3f3f1fe041c346216d9b930d2fd42d912974075a0a02033c3abe",
+        "bytes": 254030
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/qa-revelation-diagnostic-v01.stderr",
+        "sha256": "7a7e156c57fd8623a18e738e66140e4ac4f0a219cd9de1c18f492564d4d42580",
+        "bytes": 820
+      }
+    },
+    {
+      "label": "review-v01",
+      "receiptPath": "/tmp/root-274/source-first/review-v01.receipt.json",
+      "receiptSHA256": "c3165cd66f1bcda3361cca182866d5d8cc04204202a7c86824445b7f8fd29c0d",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:15:34.988616+00:00",
+      "wrapperPid": 70927,
+      "status": "terminal",
+      "pid": 70935,
+      "pgid": 70935,
+      "exit": 2,
+      "finished": "2026-10-15T08:16:36.792486+00:00",
+      "wallSeconds": 61.80326158303069,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/review-v01.stdout",
+        "sha256": "6b8b985cc73ccabca2d5ef0f09354bd3dae855981fec5cbb87897bf8f8790a96",
+        "bytes": 3517
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/review-v01.stderr",
+        "sha256": "626d5655301751a6aef1faf81d452edd4c8c23f2d4ce648783b0e1d2d5e08bc3",
+        "bytes": 48393
+      }
+    },
+    {
+      "label": "review-v02",
+      "receiptPath": "/tmp/root-274/source-first/review-v02.receipt.json",
+      "receiptSHA256": "285b8d6b3d1512bbde63c26975f263fe41cba83917f4320857a94674c6fe1060",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T08:16:51.800953+00:00",
+      "wrapperPid": 72826,
+      "status": "terminal",
+      "pid": 72838,
+      "pgid": 72838,
+      "exit": 0,
+      "finished": "2026-10-15T08:17:50.576767+00:00",
+      "wallSeconds": 58.775233583000954,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/review-v02.stdout",
+        "sha256": "1665552d6ea4e0340514a8d6dd9c517585a0f53d4d45b448853cdb950fd6a8e1",
+        "bytes": 2136
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/review-v02.stderr",
+        "sha256": "626d5655301751a6aef1faf81d452edd4c8c23f2d4ce648783b0e1d2d5e08bc3",
+        "bytes": 48393
+      }
+    },
+    {
+      "label": "review-v03",
+      "receiptPath": "/tmp/root-274/source-first/review-v03.receipt.json",
+      "receiptSHA256": "b8ae52658a131a181df45697d7806c03440794c6b3f96aac5ba112afde70004a",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "started": "2026-10-15T09:55:44.984491+00:00",
+      "wrapperPid": 37602,
+      "status": "terminal",
+      "pid": 37637,
+      "pgid": 37637,
+      "exit": 0,
+      "finished": "2026-10-15T09:56:51.135747+00:00",
+      "wallSeconds": 66.15113170800032,
+      "stdout": {
+        "path": "/tmp/root-274/source-first/review-v03.stdout",
+        "sha256": "5dafed012f02bf9c84270c1307c13d53486934e360265cd72c0217042af2ad0a",
+        "bytes": 2376
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/review-v03.stderr",
+        "sha256": "626d5655301751a6aef1faf81d452edd4c8c23f2d4ce648783b0e1d2d5e08bc3",
+        "bytes": 48393
+      }
+    },
+    {
+      "label": "weighted300",
+      "receiptPath": "/tmp/root-274/source-first/weighted300.receipt.json",
+      "receiptSHA256": "42a0d1d8a5b00741cd4aa3ae3da8270ed661347c4d75a8d6ab0ebe41a1ba0c7d",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "6b95d6bd-c970-4465-9536-4f21e7630d0a,1cd25b9a-b176-4c51-8349-bb4df35cbf05"
+      ],
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-dreamsigns274-root",
+      "toolSessionId": 89998,
+      "initialToolWaitSeconds": 1.001266125,
+      "exit": 1,
+      "exitWitness": "tools.write_stdin session89998 terminal exit1",
+      "games": 0,
+      "exercised": 0,
+      "failure": "fuzz.ts188 pending Dreamsign requires nonempty authored battle abilities",
+      "exactStartUTC": null,
+      "exactEndUTC": null,
+      "pid": null,
+      "pgid": null,
+      "qualification": "First raw command preceded receipt wrapper creation. Exact child start/end/PID/PG were not recorded; file birth/mtime are artifact timestamps, not asserted process timing. Subsequent checks use explicit scratch receipt wrapper. No unchanged retry solely to reconstruct metadata.",
+      "files": {
+        "weighted300.stdout": {
+          "sha256": "3b62edd7b706e8afe15de72520b803091ce2ac9cc4fe12f22f11794fcd01575f",
+          "birthUTC": "2026-10-15T08:10:01.221862+00:00",
+          "modifiedUTC": "2026-10-15T08:10:01.309157+00:00"
+        },
+        "weighted300.stderr": {
+          "sha256": "befbfab023bf2c16e2f6ef48509c4281bccb10da7d29d4c1d1575d773f75ba2a",
+          "birthUTC": "2026-10-15T08:10:01.221916+00:00",
+          "modifiedUTC": "2026-10-15T08:10:03.608729+00:00"
+        }
+      },
+      "stdout": {
+        "path": "/tmp/root-274/source-first/weighted300.stdout",
+        "sha256": "3b62edd7b706e8afe15de72520b803091ce2ac9cc4fe12f22f11794fcd01575f",
+        "bytes": 101
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/weighted300.stderr",
+        "sha256": "befbfab023bf2c16e2f6ef48509c4281bccb10da7d29d4c1d1575d773f75ba2a",
+        "bytes": 1082
+      }
+    }
+  ],
+  "preparedModules": {
+    "journey274-natural-revelation-diagnostic-v01.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-revelation-diagnostic-v01.mjs",
+      "sha256": "b25b6df96e3331bb3b7aad3afed6c3e1822aab000625e6871bf3cf8320e5f1a1",
+      "executionReceipts": [],
+      "status": "prepared-not-executed"
+    },
+    "journey274-natural-sites-v05.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-sites-v05.mjs",
+      "sha256": "e43d78b7aa4577246492015d509a3836c8b775b5c04792e53d15fd682d28e4eb",
+      "executionReceipts": [
+        "qa-natural-sites-v03"
+      ],
+      "status": "executed"
+    },
+    "journey274-natural-sites-v04.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-sites-v04.mjs",
+      "sha256": "36d1eacf06d223a52b3de056a9457e9ae38191aa736e89c6be81ca7c861658ab",
+      "executionReceipts": [],
+      "status": "prepared-not-executed"
+    },
+    "journey274-natural-revelation-diagnostic-v02.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-revelation-diagnostic-v02.mjs",
+      "sha256": "18fd7b6fe8fd481cf292214c39ee6e6a0ead3cf197a3060a5a3c3fa4ac3542ab",
+      "executionReceipts": [
+        "qa-revelation-diagnostic-v01"
+      ],
+      "status": "executed"
+    },
+    "journey274-augury-mobile-diagnostic-v03.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-augury-mobile-diagnostic-v03.mjs",
+      "sha256": "4087e2418f42cb9e8afd117a62cc2a87a0a3da80573eb5f4b97749ea53931c35",
+      "executionReceipts": [],
+      "status": "prepared-not-executed"
+    },
+    "journey274-browser-scene-search-v02.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-browser-scene-search-v02.mjs",
+      "sha256": "01da6de8017ecc9c261ebfe3831d1756caefb99770c795a089d4028582cc85b7",
+      "executionReceipts": [
+        "qa-browser-scene-search-v01"
+      ],
+      "status": "executed"
+    },
+    "journey274-natural-sites-v03.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-sites-v03.mjs",
+      "sha256": "8e9518533c6a212c71057677f83dea3287b02c6fa351485329abea8b00a25832",
+      "executionReceipts": [
+        "qa-natural-sites-v02"
+      ],
+      "status": "executed"
+    },
+    "journey274-natural-sites-v02.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-sites-v02.mjs",
+      "sha256": "510e05bf96e28d7c9c45d9bc463c80ca9c8c439385b1e99d4423f6e874af68c0",
+      "executionReceipts": [],
+      "status": "prepared-not-executed"
+    },
+    "journey274-browser-scene-search-v03.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-browser-scene-search-v03.mjs",
+      "sha256": "baffc9545f6eac45453fe84a5856cd96bfb7045a1c46d1a92ec8e32b89e9a3d4",
+      "executionReceipts": [
+        "qa-browser-scene-search-v03"
+      ],
+      "status": "executed"
+    },
+    "journey274-browser-scene-search-v01.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-browser-scene-search-v01.mjs",
+      "sha256": "7b40676e29969df29398bf9acf6fc1fa4c898c4421a3b4fdf8d85b39692db484",
+      "executionReceipts": [],
+      "status": "prepared-not-executed"
+    },
+    "journey274-natural-sites-v01.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-natural-sites-v01.mjs",
+      "sha256": "986958d99e863edd0a12faaa63f199d52015c4019057735f78b0e25fa69b3948",
+      "executionReceipts": [
+        "qa-natural-sites-v01"
+      ],
+      "status": "executed"
+    },
+    "journey274-augury-mobile-diagnostic-v04.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-augury-mobile-diagnostic-v04.mjs",
+      "sha256": "85441d1f38f02648ca9ddd18c38dc2e4dc5e7ce5a04ef7102e89416cc841f2d3",
+      "executionReceipts": [
+        "qa-augury-mobile-v04"
+      ],
+      "status": "executed"
+    },
+    "journey274-gravok-sites-v01.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-gravok-sites-v01.mjs",
+      "sha256": "6f36f198f7ae012c4d0da2e304ce6480ddf23cf54113331181288bd28d5c9f5a",
+      "executionReceipts": [
+        "qa-gravok-sites-v01"
+      ],
+      "status": "executed"
+    },
+    "journey274-browser-affinity-search-v01.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-browser-affinity-search-v01.mjs",
+      "sha256": "3c59e878c8be4e1f6c392092d8d3baa2f34c1ed6ee0bbdea17cbdda04d71e85f",
+      "executionReceipts": [],
+      "status": "prepared-not-executed"
+    },
+    "journey274-browser-affinity-search-v03.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-browser-affinity-search-v03.mjs",
+      "sha256": "0bff5f79a6c898aa48d70e26c53258889cb8bbef3b6a37e5eb6d9b17e21ef6d3",
+      "executionReceipts": [
+        "qa-browser-affinity-search-v03"
+      ],
+      "status": "executed"
+    },
+    "journey274-browser-affinity-search-v02.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-browser-affinity-search-v02.mjs",
+      "sha256": "c00d7922f25dae3fa350372e85e0cd0b8261fbf76f46b33c0a953fcf154197b5",
+      "executionReceipts": [],
+      "status": "prepared-not-executed"
+    },
+    "journey274-free-acquisition.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-free-acquisition.mjs",
+      "sha256": "6e7102cc9ff30ca3def96b415de2a97042876be7ca47b41c067444ef09626505",
+      "executionReceipts": [],
+      "status": "prepared-not-executed"
+    },
+    "journey274-draft.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-draft.mjs",
+      "sha256": "a9ec5196f2165a591eab2433d968800ffc0fd34c6a5531475f83cbfbd060fec7",
+      "executionReceipts": [
+        "qa-draft-v01"
+      ],
+      "status": "executed"
+    },
+    "journey274-augury-sites-v01.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-augury-sites-v01.mjs",
+      "sha256": "279095c5af68117320c89621219788d2d59052d9d31d7f3ddeeef63d06639d1b",
+      "executionReceipts": [
+        "qa-augury-sites-v01"
+      ],
+      "status": "executed"
+    },
+    "journey274-augury-sites-v02.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-augury-sites-v02.mjs",
+      "sha256": "ccc756a1e75b318bcd44749f66b7460bf5271f41254e15172b864fe5efdaca64",
+      "executionReceipts": [
+        "qa-augury-sites-v02"
+      ],
+      "status": "executed"
+    },
+    "journey274-free-acquisition-v03.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-free-acquisition-v03.mjs",
+      "sha256": "6fea1ebe374d5f5cfef6b3b29be7f8bae9a7bdb7db0571a8888df63436b97474",
+      "executionReceipts": [
+        "qa-free-v02"
+      ],
+      "status": "executed"
+    },
+    "journey274-exploration-debug-v01.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-exploration-debug-v01.mjs",
+      "sha256": "ef75078f937fd1f97e2364d085004634e09bd603c9a107cc0fc01c8514870727",
+      "executionReceipts": [
+        "qa-exploration-debug-v01"
+      ],
+      "status": "executed"
+    },
+    "journey274-free-acquisition-v02.mjs": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.274/journey274-free-acquisition-v02.mjs",
+      "sha256": "33fb370b6787b562fe6bd1667e79e7f5693be8e3971c334bd5b891df965fc3df",
+      "executionReceipts": [
+        "qa-free-v01"
+      ],
+      "status": "executed"
+    }
+  },
+  "qualifications": [
+    "Literal weighted command refused pending battle content before game loop: games0, battleWeightedPassfalse. Unknown first-command PID/start/end remain unknown; artifact times are not process times.",
+    "Supplemental300 uses synthetic-provider public journey contracts and production leaves; it is separate from weighted battle and full journey coverage.",
+    "Lab preflight/sweep pending4 and skip36 establishes battle applicability/presence only, not implemented journey effects.",
+    "Prepared fixture envelopes were hand-serialized with buildGitSha unknown; no factory/serializer calls claimed. Both actual filechooser attempts stopped before site acquisition claims.",
+    "Old scene search v02 transport failure returned zero bytes/no known candidate progress. Separate parent source-specific incident retirement preserves exact original ownership bytes and does not fabricate mcpExecutionCompleted or successful search.",
+    "Bounded affinity search v03 actual1214 attempts:2Augury seed17 matches,1000 ordinaryTidemark exhausted,180 enhanced partial. Tidemark extra-game matrix disposition retains Gamble site coverage through actual Gravok.",
+    "Scene search v03 actual660 attempts:500 ordinaryExploration exhausted,160 enhanced partial; earned group unattempted. No Exploration match or earned pass claimed.",
+    "Actual tutorial-guidance OPEN/COMPLETE events caused Auguryv01 caller expected-order failure after real Herbs acquisition; repair retains and source-validates guidance separately.",
+    "All actual QA per-case results, UUID logs, source bindings, geometry, Caps and custody must be interpreted with their exact invocation. Parent owns judged QA ledger.",
+    "Parent original P8 scope disposition v02 retains each affected site type via registered scene plus debug-granted Dreamsign; stronger natural-H-at-every-acquisition-source, extra Tidemark game and earned-Battle browser joins were agent-added expansions and are superseded by exact native authority. Public hook/queue/battle-preservation contracts remain required and passed.",
+    "Parent audited all original affected-site QA join:69ledgerrows includes machine pending/skip rows and separately judged actual workflow rows; row count is not a battle or full-journey coverage claim.",
+    "Auguryv02 completed both desktopcases but initial mobile15s menu readiness missed; v04 mobile-only diagnostic with explicit60s budget completed both cases. Initial diagnostic showed CreatingGame/headnull then readiness. Earlier timeout cause unknown; no product fix or performance pass claimed."
+  ],
+  "authorityDispositions": [
+    {
+      "path": "/tmp/root-274/p8-matrix-authority-native-v02.json",
+      "sha256": "44f2a5772c82cb14c52a7056ef5a8084a65f1ad7b9d683a6a9cff9c53e5a35d8"
+    },
+    {
+      "path": "/tmp/root-274/final-site-qa-ack-native-v01.json",
+      "sha256": "cea4d80886292179a0362931fb872ab902a152a05667e8b040e4193d17fe8c17"
+    },
+    {
+      "path": "/tmp/root-274/site-matrix-disposition-native-v01.json",
+      "sha256": "29c7604aa3e43900ac7de28c3e2d62b2b298e085d779eca0c3eb6ad84b8e8136"
+    },
+    {
+      "path": "/tmp/root-274/provider-incident-retirement-v02.json",
+      "sha256": "3bb828aba23b5361c6ab0ea51ee192c1f2995bafda353b85a564e4e397d3598e"
+    },
+    {
+      "path": "/tmp/root-274/provider-incident-settled-native-v02.json",
+      "sha256": "d0fec3aa99844e42fb8be3832aef0413b49a747eaf4de19333c967e36e850278"
+    }
+  ],
+  "parentAudits": [
+    {
+      "path": "/tmp/root-274/parent-affinity-search-audit-v03.json",
+      "sha256": "9be24945cd24931940e5e401ecd64b78ef0f62838141ebaab3f7142f07b1721b"
+    },
+    {
+      "path": "/tmp/root-274/parent-augury-desktop-audit-v02.json",
+      "sha256": "ce5a2af172a1af029572022b7365ac6aee17acfdc4d7e2e15329f47b98b9111d"
+    },
+    {
+      "path": "/tmp/root-274/parent-augury-failure-audit-v01.json",
+      "sha256": "fbec161a6d1745ca8f654ba55b0b35463ee1df5f629b4116afd0065fc15eb357"
+    },
+    {
+      "path": "/tmp/root-274/parent-augury-mobile-audit-v04.json",
+      "sha256": "259bb4130c2d99e76fde1091a962a1022acf890ed0efa369857b30214cc18e85"
+    },
+    {
+      "path": "/tmp/root-274/parent-browser-scene-failure-audit-v01.json",
+      "sha256": "30d4e5134229dbc99b69beae4b4201b5c10bd77b80d9d0aada1c3a7c1b2ee330"
+    },
+    {
+      "path": "/tmp/root-274/parent-exploration-audit-v01.json",
+      "sha256": "c8b26c3b7887620473144ffc4aff9c82eef3b1b4da92c781e85a3f92a0de842c"
+    },
+    {
+      "path": "/tmp/root-274/parent-final-source-audit-v01.json",
+      "sha256": "2b115c6c59ac17473e6a2fe6574e8d302b02d57d672760ead4f5c8881d816fa2"
+    },
+    {
+      "path": "/tmp/root-274/parent-free-qa-prelaunch-audit-v01.json",
+      "sha256": "41472bb53d80ed0c24535a6858ed0df5ec9cc47c9c8273acb28aaf486a499358"
+    },
+    {
+      "path": "/tmp/root-274/parent-gravok-sites-audit-v01.json",
+      "sha256": "2784f0908c8291b8beccfda27712e461e3ae7a726117494c228917c2f2989301"
+    },
+    {
+      "path": "/tmp/root-274/parent-implementation-audit-v01.json",
+      "sha256": "8efd8f239707255d3acec85340d56659dac0b59e33775430acc55bff4b1c5e3d"
+    },
+    {
+      "path": "/tmp/root-274/parent-lab-sweep-audit-v01.json",
+      "sha256": "80b8faa725f1193efc6a6e34b0eda3a8c4a353a7c9d7efba6cc0eba6e172ad89"
+    },
+    {
+      "path": "/tmp/root-274/parent-natural-prelaunch-audit-v01.json",
+      "sha256": "39787342d54fba21b40fc3c9498e3bee08f21126d4fc2dfeb0e45f2ce81d1cf6"
+    },
+    {
+      "path": "/tmp/root-274/parent-natural-sites-audit-v03.json",
+      "sha256": "0f20c4f6c0f8c12dcf2b8a5aacee1d992a1ca8a1e91fe96a8142c4f4e25b315d"
+    },
+    {
+      "path": "/tmp/root-274/parent-proposal-source-audit-v01.json",
+      "sha256": "5e23cc9e7f10524759af2ceb437ce23fb050ecd9e9e20acf1244d3e5adbc230d"
+    },
+    {
+      "path": "/tmp/root-274/parent-proposal-source-audit-v02.json",
+      "sha256": "db1aeaa8ff230c8d4af4e1d62716bf00106b82a96b1fc1dce8ed12979285fc1c"
+    },
+    {
+      "path": "/tmp/root-274/parent-qa-draft-audit-v01.json",
+      "sha256": "a1fb3dc285db8aa266340796455375bd9287afdec5cc2e1b5ff7f4868212719a"
+    },
+    {
+      "path": "/tmp/root-274/parent-qa-draft-audit-v02.json",
+      "sha256": "97e383386993d3adb38c0691095bb3978927a8e356e4faf13510e1ba96d492a4"
+    },
+    {
+      "path": "/tmp/root-274/parent-revelation-diagnostic-audit-v01.json",
+      "sha256": "5b5844fe2baadd581c1e486c6a3843559ec613b4c46a83278b5f67e0fb04cf9b"
+    },
+    {
+      "path": "/tmp/root-274/parent-scene-search-audit-v03.json",
+      "sha256": "3a4851e964bb6b89f74db236b742e12b6135c3ef6eb502d03f5cc40402680f94"
+    },
+    {
+      "path": "/tmp/root-274/parent-supplemental-audit-v01.json",
+      "sha256": "c2f4012347272b375d469a2e09e219ff1cd6ca2dd0edef0fb29384ba6e1387e0"
+    }
+  ],
+  "earlyRawAttempt": {
+    "label": "draft-before",
+    "argv": [
+      "npm",
+      "test",
+      "--",
+      "src/rules/journey/journey-draft-reduction.test.ts"
+    ],
+    "exactProcessStartUTC": null,
+    "exactProcessEndUTC": null,
+    "qualification": "First pre-wrapper baseline failure: stdout records unsupported new reduction descriptor,11 failing and1 passing case; exact initial process timing/session was not preserved. Observed child PG54594 subsequently absent. No reconstructed timestamps or successful product claim.",
+    "artifacts": {
+      "stdout": {
+        "path": "/tmp/root-274/source-first/draft-before.stdout",
+        "sha256": "54a0c9865914d6021c2a21e4d7cde98c5a95eac5d521f4e8547d2b11b6757a44"
+      },
+      "stderr": {
+        "path": "/tmp/root-274/source-first/draft-before.stderr",
+        "sha256": "ce0ef1a73b20b206405b3870f684d6895dd83942dd0fc878cb92eb09b1a386b5"
+      }
+    }
+  },
+  "validationSummary": {
+    "finalReview": {
+      "label": "review-v03",
+      "exit": 0,
+      "testFiles": 272,
+      "tests": 8957
+    },
+    "finalKnip": {
+      "label": "knip-v02",
+      "exit": 0
+    },
+    "finalSanctionedCoverageSchema": {
+      "label": "coverage-schema-v02",
+      "exit": 0
+    },
+    "literalWeighted": {
+      "label": "weighted300",
+      "games": 0,
+      "battleWeightedPass": false
+    },
+    "supplementalJourney": {
+      "label": "journey300-v03",
+      "distinctSeeds": 300,
+      "providerQualification": "synthetic public journey fixtures with production scoped descriptors; not weighted battle or full journey"
+    },
+    "parentJudgedLedgerRows": 69
+  },
+  "helperProofArtifacts": [
+    {
+      "path": "/tmp/root-274/source-first/final-resource-proof-v01.json",
+      "sha256": "e302a0c55fdac38eec893a252bea57b248a618b02c4d029e176423c1be93678b"
+    },
+    {
+      "path": "/tmp/root-274/source-first/helper-final-site-visual-v01.json",
+      "sha256": "e611d6c0d7b79ce96c33fd337a5f71931858b3535e4a639a32d807f1d5499f54"
+    },
+    {
+      "path": "/tmp/root-274/source-first/natural-sites-helper-visual-v01.json",
+      "sha256": "bf7841588455fc4c2666ed27cbb9d298b78a680c13b3581c66f6f9a8ca4170f9"
+    },
+    {
+      "path": "/tmp/root-274/source-first/source-freeze-v01.json",
+      "sha256": "bbc2168b3dc7b8049387bf50197d680768fe6a89f933a64413822d78042ef3cd"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "utc": "2026-10-15T09:55:44.805581+00:00",
+      "measuredFor": "review-v03 starting sysctl -n vm.loadavg",
+      "raw": "{ 10.42 12.68 11.18 }",
+      "oneMinute": 10.42
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v03 starting sysctl -n vm.loadavg 1-minute sample"
+      },
+      "localValidationS.review": {
+        "measuredFor": "review-v03"
+      },
+      "localValidationS.knip": {
+        "measuredFor": "knip-v02"
+      },
+      "localValidationS.coverage": {
+        "measuredFor": "coverage-schema-v02"
+      }
+    }
+  },
+  "frictionCheckpointSHA256": "c006ef48455bee6ffa00df9a9fdd1494a7966ce20d05e2e3f19297ad62ffe4bb",
+  "frictionQualification": "Measured pre-commit checkpoint; implementWindow end must be refreshed immediately before parent-authorized automatic Git. Exact Git endpoint is retained by parent; this file does not assert a future endpoint."
+}

@@ -9,6 +9,8 @@ import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, validAf
 import { journeyTransfigurationCard, journeyTransfigurationOccurrences, validJourneyTransfigurationScreen } from "./journey-transfiguration";
 import { prepareAfterBattleDreamsignOffer, findSite } from "./sites";
 import { validJourneyPurgeScreen } from "./journey-purge";
+import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
+import { getDeckContentProvider, mintEntryId } from "./deck";
 
 const record = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const index = (value: unknown): value is number => typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
@@ -17,13 +19,33 @@ const effectLog = (source: JourneyDreamsignGain, fields: Record<string, unknown>
 
 
 /** The concrete acquisition stage precedes the existing card-observer waves. */
-export function prepareJourneyOnGain(input: { before: JourneyState; journey: JourneyState; gains: readonly JourneyDreamsignGain[]; lookup: JourneyModifierRegistry["lookup"]; seq: number; random: () => { value: number; drawIndex: number }; siteId: SiteId | null }) {
+export function prepareJourneyOnGain(input: { before: JourneyState; journey: JourneyState; gains: readonly JourneyDreamsignGain[]; lookup: JourneyModifierRegistry["lookup"]; seq: number; random: () => { value: number; drawIndex: number }; siteId: SiteId | null;
+  excludeAcquisitionAdditions: (previous: JourneyState, tentative: JourneyState) => { journey: JourneyState; logRecords: readonly ReducerLogRecord[] } }) {
   let journey = input.journey;
   const starterSources: import("../../types/journey").JourneyStarterPurgeSource[] = [];
   const transfigurations: JourneyTransfigurationOccurrence[] = [], copySources: JourneyDreamsignGain[] = [], logRecords: ReducerLogRecord[] = [];
+  const attemptedEntries: import("../../types/journey").DeckEntry[] = [];
   for (const source of input.gains) {
     if (journey.dreamsigns[source.heldIndex]?.id !== source.dreamsignId) throw new Error("Acquired Dreamsign physical slot changed.");
     const effect = input.lookup(source.dreamsignId)?.journeyOnGain;
+    if (effect?.kind === "addNightmaresOnGain") {
+      const cardNumber = getDeckContentProvider()?.resolveCardNumber(NIGHTMARE_CARD_ID);
+      if (cardNumber === undefined || cardNumber === null) throw new Error("Acquired Nightmare content is unavailable.");
+      const previous = journey, added: import("../../types/journey").DeckEntry[] = [];
+      for (let n = 0; n < effect.count; n++) {
+        const entry = { entryId: mintEntryId([...journey.deck, ...attemptedEntries], input.seq, n), cardNumber, transfiguration: null, isBane: true };
+        added.push(entry);
+        attemptedEntries.push(entry);
+      }
+      const excluded = input.excludeAcquisitionAdditions(previous, { ...journey, deck: [...journey.deck, ...added] });
+      journey = excluded.journey;
+      const present = new Set(journey.deck.map((entry) => entry.entryId));
+      const gainedEntryIds = added.filter((entry) => present.has(entry.entryId)).map((entry) => entry.entryId);
+      logRecords.push(effectLog(source, { siteId: input.siteId, permissionSeq: input.seq, cardId: NIGHTMARE_CARD_ID,
+        attemptedEntryIds: added.map((entry) => entry.entryId), gainedEntryIds,
+        before: { deckSize: previous.deck.length }, after: { deckSize: journey.deck.length, attempted: added.length,
+          gained: gainedEntryIds.length, prevented: added.length - gainedEntryIds.length } }), ...excluded.logRecords);
+    }
     if (effect?.kind === "purgeStarterOnGain" || effect?.kind === "perfectStarterOnGain") {
       const previous = journey, prepared = prepareStarterAcquisition(journey, source, effect, input.seq, input.siteId);
       journey = prepared.journey;
@@ -74,7 +96,7 @@ export function finishJourneyAcquisition(journey: JourneyState, copySources: rea
 }
 
 export function journeyOnGain(dreamsignId: DreamsignId, descriptor: JourneyOnGainEffect): JourneyModifierDefinition {
-  if (descriptor.kind === "afterBattleDreamsignChoice" ? !index(descriptor.offerCount) || descriptor.offerCount < 1 : descriptor.kind === "randomTransfigurationOnGain" ? !index(descriptor.numerator) || !index(descriptor.denominator) || descriptor.denominator < 1 || descriptor.numerator > descriptor.denominator : descriptor.kind === "purgeStarterOnGain" ? !index(descriptor.maxCount) || descriptor.maxCount < 1 : descriptor.kind === "perfectStarterOnGain" ? descriptor.transfiguration !== "Perfected" : descriptor.kind !== "copyOwnedDreamsignOnGain") throw new RangeError("Invalid journeyOnGain descriptor.");
+  if (descriptor.kind === "addNightmaresOnGain" ? !index(descriptor.count) || descriptor.count < 1 : descriptor.kind === "afterBattleDreamsignChoice" ? !index(descriptor.offerCount) || descriptor.offerCount < 1 : descriptor.kind === "randomTransfigurationOnGain" ? !index(descriptor.numerator) || !index(descriptor.denominator) || descriptor.denominator < 1 || descriptor.numerator > descriptor.denominator : descriptor.kind === "purgeStarterOnGain" ? !index(descriptor.maxCount) || descriptor.maxCount < 1 : descriptor.kind === "perfectStarterOnGain" ? descriptor.transfiguration !== "Perfected" : descriptor.kind !== "copyOwnedDreamsignOnGain") throw new RangeError("Invalid journeyOnGain descriptor.");
   const effect = Object.freeze({ ...descriptor });
   return { dreamsignId, journeyOnGain: effect, afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, seq, random }) {
     if (effect.kind !== "afterBattleDreamsignChoice" || eventType !== "END_BATTLE" || siteId === null || before.screen.type !== "site" || before.screen.siteId !== siteId || findSite(before, siteId)?.type !== "Battle") return null;

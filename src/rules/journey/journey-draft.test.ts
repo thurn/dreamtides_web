@@ -84,7 +84,7 @@ describe("journeyDraft public offer preparation", () => {
     const records = result.logRecords ?? [];
     expect(records).toHaveLength(applied);
     expect(records.map((r) => r.fields.dreamsignId)).toEqual(ids.filter((id) => id !== OTHER && (id !== CONDITIONAL || essence >= 11)));
-    if (applied > 0) expect(records[records.length - 1]?.fields.after).toMatchObject({ requestedCount: count, quotedCount: count, offeredCount: count });
+    if (applied > 0) expect(records[records.length - 1]?.fields.after).toMatchObject({ totalAdjustment: count - config.packSize, quotedCount: count, offeredCount: count });
     expect(records.every((r) => !JSON.stringify(r).includes("Same synthetic name"))).toBe(true);
   });
 

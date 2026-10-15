@@ -1,0 +1,32 @@
+{
+  "bead": "hv-umm2.274",
+  "phase": 5,
+  "implementMin": 126.11279413333334,
+  "implementWindow": {
+    "start": "2026-10-15T07:56:41.150000+00:00",
+    "end": "2026-10-15T10:02:47.917648+00:00"
+  },
+  "clockStatus": "Measured pre-commit checkpoint; refresh immediately before parent-authorized automatic Git. Actual Git endpoint and tail receipt remain pending, not claimed by this checkpoint.",
+  "localValidationS": {
+    "focused": 5.8474147919914685,
+    "review": 66.15113170800032,
+    "knip": 4.552624042029493,
+    "coverage": 7.120718082995154,
+    "journey300": 1.7654207909945399,
+    "preflight": 1.36490349995438,
+    "sweep": 27.800015625020023
+  },
+  "hostLoad": 10.42,
+  "testDelta": {
+    "files": 2,
+    "lines": 320,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 78.14484788333333,
+      "note": "Gross observed browser caller preparation/recovery interval from first portable-fixture attempt to exact native P8 matrix disposition. Includes successful site checks, source research, coordination and waits inside that interval; it is not exclusive idle, CPU, or wasted time. Caller mismatches included Node-only fixture imports, modal transport ingress, asynchronous fold observation, tutorial-guidance event order, and treating qa.read navigation-retry timeout as a computation deadline. Original site-type scene-plus-debug-grant scope is explicitly retained; expanded natural-offer-at-every-source and extra-game requirements are dispositioned. Exact failed, exhausted, partial and not-executed versions are retained in measurements."
+    }
+  ]
+}

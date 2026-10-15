@@ -45,6 +45,8 @@ import slime, { journeyTransfigurationEffect as slimeEffect } from "../../conten
 import ledger, { journeySitesEffect as ledgerEffect } from "../../content/dreamsigns/leaf-ledger-d9f0f7ff";
 import { journeyTransfiguration } from "./journey-transfiguration";
 import type { GameplayEventType } from "../events";
+import mushroomCaps, { journeyDraftEffect as mushroomCapsEffect } from "../../content/dreamsigns/mushroom-caps-6b95d6bd";
+import twistedHerbs, { journeyOnGainEffect as twistedHerbsEffect } from "../../content/dreamsigns/twisted-herbs-1cd25b9a";
 
 /**
  * A pure hook over a validated gameplay journey transition, separate from the
@@ -154,11 +156,11 @@ export function createJourneyModifierRegistry(
       const entrySources = held.filter((source) => source.definition?.journeyDeckEntry !== undefined);
       const transformed = [...transfigurations];
       const consumed = new Map<number, Set<import("../../types/identifiers").DeckEntryId>>();
-      const invoke = (source: typeof held[number], gains: readonly import("../../types/journey").JourneyDeckEntryGain[], occurrences = transfigurations) => {
+      const invoke = (source: typeof held[number], gains: readonly import("../../types/journey").JourneyDeckEntryGain[], occurrences = transfigurations, diagnostics = logRecords) => {
         const applied = source.definition?.afterJourneyEvent({ lookup, before, journey: next, eventType,
           heldIndex: source.heldIndex, seq, random, gains, transfigurations: occurrences, siteId, ...(purges === undefined ? {} : { purges }) });
         if (applied == null) return false;
-        logRecords.push({ event: "journey_modifier_applied", fields: {
+        diagnostics.push({ event: "journey_modifier_applied", fields: {
           dreamsignId: source.id, hook: "after_journey_event", eventType, siteId, heldIndex: source.heldIndex,
           before: snapshot(applied.before), after: snapshot(applied.after),
           ...(applied.target === undefined ? {} : { target: applied.target }),
@@ -173,7 +175,17 @@ export function createJourneyModifierRegistry(
         const initialGains = journeyDeckEntryGains(before, next);
         for (const source of initialProhibitions) invoke(source, initialGains);
       }
-      const acquisition = prepareJourneyOnGain({ before, journey: next, gains: dreamsignGains, lookup, seq, random, siteId });
+      const acquisition = prepareJourneyOnGain({ before, journey: next, gains: dreamsignGains, lookup, seq, random, siteId,
+        excludeAcquisitionAdditions(previous, tentative) {
+          const diagnostics: ReducerLogRecord[] = [];
+          next = tentative;
+          if (initialProhibitions.length > 0) {
+            const gains = journeyDeckEntryGains(previous, next);
+            for (const source of initialProhibitions) invoke(source, gains, transfigurations, diagnostics);
+          }
+          return { journey: next, logRecords: diagnostics };
+        },
+      });
       next = acquisition.journey;
       logRecords.push(...acquisition.logRecords);
       transformed.push(...acquisition.transfigurations);
@@ -223,6 +235,8 @@ export function createJourneyModifierRegistry(
 
 /** The production registry's fixed catalog registrations. */
 export const journeyModifierRegistry = createJourneyModifierRegistry([
+  journeyDraft(parseDreamsignId(mushroomCaps.id), mushroomCapsEffect),
+  journeyOnGain(parseDreamsignId(twistedHerbs.id), twistedHerbsEffect),
   journeyEssence(parseDreamsignId(bone.id), boneEffect),
   journeyEssence(parseDreamsignId(skull.id), skullEffect),
   journeyOnGain(parseDreamsignId(teeth.id), teethEffect),

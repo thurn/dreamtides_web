@@ -1,4 +1,7 @@
 import { dreamsign } from "../define";
+import type { JourneyOnGainEffect } from "../../types/journey";
+
+export const journeyOnGainEffect = { kind: "addNightmaresOnGain", count: 5 } as const satisfies JourneyOnGainEffect;
 
 export default dreamsign({
   id: "1cd25b9a-b176-4c51-8349-bb4df35cbf05",
@@ -11,4 +14,5 @@ export default dreamsign({
   tideIds: ["51903b9a-825b-4d9a-8a6d-071670c3caaa"],
   tags: ["J16", "Tag OK", "Ally Audit"],
   pending: true,
+  journeyOnGain: journeyOnGainEffect,
 });

@@ -155,6 +155,12 @@ a debug reroll retains the current offer's quoted count. Offers contain
 unique cards, and cards already shown at this site remain excluded. The final
 pick prepares no additional offer.
 
+Draft choice increases and decreases combine over the catalog base before a
+minimum of one choice applies. Each qualifying held copy contributes its printed
+amount. The aggregate adjustment and the base plus that adjustment must each be
+safe integers; an intermediate sum outside that range does not invalidate a
+safe final sum. A prepared offer retains its quoted count through later changes.
+
 The first successful Event pick in each concrete Draft visit consumes that
 visit's first-Event opportunity, regardless of held Dreamsigns, an existing
 form, or eligibility for a specified form. Character picks and rejected picks
@@ -3417,6 +3423,16 @@ loading a journey, and converting a Dreamsign into a copy are not acquisitions.
 Initial prohibitions on card additions apply before acquisition effects measure
 or transform the deck. Acquisition effects then apply before positive journey
 observers; each observer uses the holdings after the validated operation.
+
+An acquisition that adds Nightmare cards attempts its printed number of fresh
+physical entries for each acquired held slot. Losing the Dreamsign retains those
+cards; a later acquisition applies again. Each such batch excludes prohibited
+additions before a later acquisition effect measures or transforms the deck.
+Resolving the canonical Nightmare identity requires available content even when
+an addition is prohibited. Surviving domain additions and acquisition additions
+form the first positive added-card observer batch after all acquisition effects;
+its deck-size requirements use the resulting surviving deck. Additions produced
+later by ordinary observers form subsequent waves.
 
 A random transfiguration of half your deck selects distinct eligible unformed
 entries, limited to the whole-number floor of half the total deck size. Entries
