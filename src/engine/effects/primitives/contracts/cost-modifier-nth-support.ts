@@ -35,19 +35,23 @@ export function nthPlay(engine: Engine, state: BattleState, side: Side, card: In
   return { ...result, state: nthSettle(engine, result.state, source) };
 }
 
-const NTH_ROUTES = [
-  { name: "hand", route: "hand", from: "hand", set: 7, reduce: 8 },
-  { name: "permission", route: "permission", from: "void", set: 7, reduce: 8 },
-  { name: "plain Reclaim", route: "reclaim", from: "void", set: 7, reduce: 8 },
-  { name: "printed Reclaim", route: "reclaim", from: "void", set: 12, reduce: 11 },
-  { name: "granted Reclaim", route: "reclaim", from: "void", set: 11, reduce: 10 },
-  { name: "Offering", route: "offering", from: "hand", set: 5, reduce: 4 },
-  { name: "card alternative", route: "alternativeCost", from: "hand", set: 5, reduce: 4 },
-  { name: "event alternative", route: "eventAlternative", from: "hand", set: 6, reduce: 5 },
-] as const satisfies readonly { name: string; route: PlayRoute; from: PlayZone; set: number; reduce: number }[];
-export const NTH_COST_ROWS = SIDES.flatMap(side => NTH_ROUTES.flatMap(route => (["set", "reduce"] as const).map(mode => ({
+type NthRoute<Route extends PlayRoute> = { name: string; route: Route; from: PlayZone; set: number; reduce: number };
+/** A new public route must supply at least one nth payment witness. */
+const NTH_ROUTES = {
+  hand: [{ name: "hand", route: "hand", from: "hand", set: 7, reduce: 8 }],
+  permission: [{ name: "permission", route: "permission", from: "void", set: 7, reduce: 8 }],
+  reclaim: [
+    { name: "plain Reclaim", route: "reclaim", from: "void", set: 7, reduce: 8 },
+    { name: "printed Reclaim", route: "reclaim", from: "void", set: 12, reduce: 11 },
+    { name: "granted Reclaim", route: "reclaim", from: "void", set: 11, reduce: 10 },
+  ],
+  offering: [{ name: "Offering", route: "offering", from: "hand", set: 5, reduce: 4 }],
+  alternativeCost: [{ name: "card alternative", route: "alternativeCost", from: "hand", set: 5, reduce: 4 }],
+  eventAlternative: [{ name: "event alternative", route: "eventAlternative", from: "hand", set: 6, reduce: 5 }],
+} as const satisfies { readonly [Route in PlayRoute]: readonly [NthRoute<Route>, ...NthRoute<Route>[]] };
+export const NTH_COST_ROWS = SIDES.flatMap(side => Object.values(NTH_ROUTES).flatMap(routes => routes.flatMap(route => (["set", "reduce"] as const).map(mode => ({
   side, route, mode, label: `${side} nth ${mode} by ${route.name}`, expected: route[mode],
-}))));
+})))));
 /** Payments derived from RD-hv-umm2.104-1: base + chosen X + 3 additional energy + tax3 - reduction1. */
 export function observeNthCostRow(row: typeof NTH_COST_ROWS[number]) {
   const { side, route, mode } = row;

@@ -1,0 +1,323 @@
+{
+  "bead": "hv-umm2.704",
+  "base": "1e0398642e3fb530abdeaa7cf35fa3b74578e1f6",
+  "window": {
+    "dispatch": "2026-10-15T00:11:12.995Z",
+    "samplingStart": "UNKNOWN",
+    "rootClaim": "2026-10-15T00:09:38Z",
+    "precommitCutoff": "2026-10-15T00:19:49.466957+00:00",
+    "scope": "Gross dispatch through automatic Git; research, admission, checks, deliberate faults, coordination and heavy admission included. Exact automatic Git receipt and cutoff tail are external; cutoff is refreshed directly before Git."
+  },
+  "sourceFiles": {
+    "src/engine/loops/event-copy-continuation.ts": {
+      "baseSha256": "17ace9ec5ce7853d5e952ee56d3a7e6895191bb3fdc09e3c8b2255da1de4b4cc",
+      "sha256": "ae46a721e75c3b3a3557e77d6646e29e7627e0473cdbfd5050885e84af77ab87",
+      "lines": 246
+    },
+    "src/engine/effects/primitives/contracts/cost-modifier-nth.contracts.ts": {
+      "baseSha256": "ad853fedf576ba919ff708eb9a2566c1e14346221aa4731a02d01f2511160b65",
+      "sha256": "d5e9423dbd88ca0b372af420e4813b627c492a35456d4d994c7cba2b411b835c",
+      "lines": 330
+    },
+    "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts": {
+      "baseSha256": "6a8dd7c2de5e32f6e7e9e16facf1136a754a76ccf6d7b3b03f8ef2fed1d8fae9",
+      "sha256": "962cd9a110b109570ac14bf36a85117b0a0ae612efc64ca6f755ce451582c539",
+      "lines": 103
+    }
+  },
+  "checks": {
+    "before-passive": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "nth copy FIFO"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nth-cost-review-704",
+      "start": "2026-10-15T00:13:45.942004+00:00",
+      "end": "2026-10-15T00:13:57.382521+00:00",
+      "pid": 27870,
+      "pgid": 27870,
+      "exitCode": 1,
+      "wallSeconds": 11.440479708951898,
+      "cpuSeconds": {
+        "user": 10.55923,
+        "system": 3.682831
+      },
+      "startLoad": [
+        23.2255859375,
+        17.375,
+        15.42333984375
+      ],
+      "endLoad": [
+        21.1982421875,
+        17.1318359375,
+        15.359375
+      ]
+    },
+    "focused": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nth-cost-review-704",
+      "start": "2026-10-15T00:14:04.488346+00:00",
+      "end": "2026-10-15T00:14:31.602175+00:00",
+      "pid": 29573,
+      "pgid": 29573,
+      "exitCode": 0,
+      "wallSeconds": 27.113696624990553,
+      "cpuSeconds": {
+        "user": 29.992209,
+        "system": 3.755426
+      },
+      "startLoad": [
+        19.91796875,
+        16.99462890625,
+        15.3310546875
+      ],
+      "endLoad": [
+        18.56396484375,
+        16.8876953125,
+        15.33837890625
+      ]
+    },
+    "full-lock": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/704/run-command.py",
+        "full",
+        "/Users/dthurn/dreamtides_web/.worktrees/nth-cost-review-704",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nth-cost-review-704",
+      "start": "2026-10-15T00:17:06.835668+00:00",
+      "end": "2026-10-15T00:19:36.253145+00:00",
+      "pid": 42793,
+      "pgid": 42793,
+      "exitCode": 0,
+      "wallSeconds": 149.41649358300492,
+      "cpuSeconds": {
+        "user": 313.716229,
+        "system": 39.831908
+      },
+      "startLoad": [
+        8.7412109375,
+        13.27685546875,
+        14.1044921875
+      ],
+      "endLoad": [
+        19.8251953125,
+        15.18017578125,
+        14.66015625
+      ]
+    },
+    "full": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nth-cost-review-704",
+      "start": "2026-10-15T00:17:06.859539+00:00",
+      "end": "2026-10-15T00:19:36.247222+00:00",
+      "pid": 42796,
+      "pgid": 42796,
+      "exitCode": 0,
+      "wallSeconds": 149.38669908302836,
+      "cpuSeconds": {
+        "user": 313.69856,
+        "system": 39.822418
+      },
+      "startLoad": [
+        8.7412109375,
+        13.27685546875,
+        14.1044921875
+      ],
+      "endLoad": [
+        19.8251953125,
+        15.18017578125,
+        14.66015625
+      ]
+    },
+    "knip": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nth-cost-review-704",
+      "start": "2026-10-15T00:16:51.359369+00:00",
+      "end": "2026-10-15T00:16:56.070339+00:00",
+      "pid": 41648,
+      "pgid": 41648,
+      "exitCode": 0,
+      "wallSeconds": 4.7109819580218755,
+      "cpuSeconds": {
+        "user": 4.123615,
+        "system": 1.37934
+      },
+      "startLoad": [
+        9.02392578125,
+        13.5517578125,
+        14.2138671875
+      ],
+      "endLoad": [
+        9.34228515625,
+        13.54248046875,
+        14.20654296875
+      ]
+    },
+    "mapped-route-counterfactual": {
+      "command": [
+        "./node_modules/.bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nth-cost-review-704",
+      "start": "2026-10-15T00:14:58.906303+00:00",
+      "end": "2026-10-15T00:15:10.139914+00:00",
+      "pid": 34157,
+      "pgid": 34157,
+      "exitCode": 2,
+      "wallSeconds": 11.233568082971033,
+      "cpuSeconds": {
+        "user": 16.53842,
+        "system": 0.518612
+      },
+      "startLoad": [
+        14.8125,
+        16.13232421875,
+        15.1171875
+      ],
+      "endLoad": [
+        13.5244140625,
+        15.814453125,
+        15.01611328125
+      ]
+    },
+    "review": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nth-cost-review-704",
+      "start": "2026-10-15T00:15:47.873910+00:00",
+      "end": "2026-10-15T00:16:48.346954+00:00",
+      "pid": 37660,
+      "pgid": 37660,
+      "exitCode": 0,
+      "wallSeconds": 60.4726523749996,
+      "cpuSeconds": {
+        "user": 175.9076,
+        "system": 15.648707
+      },
+      "startLoad": [
+        9.63623046875,
+        14.58642578125,
+        14.59912109375
+      ],
+      "endLoad": [
+        9.54833984375,
+        13.72998046875,
+        14.2802734375
+      ]
+    },
+    "timestamp-fixture-counterfactual": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "later nth provider"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/nth-cost-review-704",
+      "start": "2026-10-15T00:14:39.459128+00:00",
+      "end": "2026-10-15T00:14:48.475693+00:00",
+      "pid": 32731,
+      "pgid": 32731,
+      "exitCode": 1,
+      "wallSeconds": 9.016541082994081,
+      "cpuSeconds": {
+        "user": 7.6474269999999995,
+        "system": 2.554512
+      },
+      "startLoad": [
+        17.22119140625,
+        16.6591796875,
+        15.275390625
+      ],
+      "endLoad": [
+        16.482421875,
+        16.51513671875,
+        15.232421875
+      ]
+    }
+  },
+  "counterfactuals": {
+    "before-passive": "Unmodified production classification: both actor positive public copy FIFOs fail null versus mandatoryLoop, while both carryEnergy negative controls pass. Sole passive entry restores configured threshold draw.",
+    "timestamp-fixture-counterfactual": "Four actual entry/reentry cases fail preview1 versus0 after deliberately resetting only the freshly entered fixture provider timestamp to0. This is a fixture causal control, not a cost-reader mutation. Own contract restored byte exactly.",
+    "mapped-route-counterfactual": "Omitting only the mapped hand route makes TypeScript reject the missing required PlayRoute property. Own support restored byte exactly."
+  },
+  "reviewDispositions": {
+    "passiveStatic": "Accepted explicit costModifierNth exemption only; captured plays and turn cannot change in the audited copy-only FIFO. All other proof checks remain.",
+    "reverseSetter": "Accepted actual later nth provider entry and reentry after individual setter for both actors; live preview and paid energy discriminate timestamp order.",
+    "routeCoverage": "Accepted nonempty per-PlayRoute mapped groups preserving all eight payment variants and both actors. Existing exhaustive general composition table remains byte unchanged.",
+    "deckTop": "Accepted missing actual nth known-top permission workflow. Real first and second deck plays pay0 then2.",
+    "leastEnergy": "Accepted missing nth least mandatory choice affordability: exact2 offered and paid; energy1 excluded. General composition and setter contracts are readonly.",
+    "stateAmountComment": "Resolved by existing current state type amount documentation; no edit.",
+    "costReaderComment": "Deferred readonly to234 owner; this commit contains no cost reader/comment change."
+  },
+  "failurePaths": {
+    "errorMidStep": "No new resolving primitive or failure path. Existing nth public fold contract cancel/saved reload/illegal/foreign/stale/concurrent answers passes in focused/full suites.",
+    "reloadRestart": "Own public copying witness uses a bounded24 automatic-step loop, configured checkFrom8/window16/resolutionCap128; it serializes/deserializes each automatic step, asserts input immutability, and preserves exact terminal classification for both actors. Existing nth pending saved reload remains.",
+    "partialWrite": "No storage or new persistent field. Copy step immutable input assertion and existing nth fold cancel exact state hash control cover transaction boundary.",
+    "invalidStaleInput": "Existing nth cancel/saved reload/illegal/foreign/stale/concurrent answers contract retained and run; classification adds no input.",
+    "concurrentActors": "Both actor fixtures, existing double-answer bounce and turn-history isolation retained and run. No shared asynchronous mutation introduced."
+  },
+  "verificationScope": {
+    "browser": "Not started: explicit admitted termination proof and synthetic contract repair has no UI workflow/presentation change.",
+    "weightedFuzz": "Not repeated: no source leaf, gameplay payment algorithm, action or state shape changed. Full local termination-proof validation required.",
+    "resources": "Every command uses external actual UTC/monotonic/PID+PGID/CPU/load receipt. Final resource scan and exact Git endpoints external. Heavy outer includes admission; inner full begins after lock acquisition. Two workers.",
+    "fallout": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "testDelta": {
+      "entrypoints": 0,
+      "netLines": 96,
+      "jsdomFiles": 0
+    },
+    "scope": "Three admitted existing files and own compact evidence only."
+  },
+  "heavyAdmissionAndStartupS": 0.023871,
+  "heavyQualification": "Outer minus inner startup is not pure lock contention. Runtime and CPU/load are separate; no performance improvement claimed."
+}

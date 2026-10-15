@@ -1,0 +1,26 @@
+{
+  "bead": "hv-umm2.704",
+  "phase": 5,
+  "implementMin": 8.607865949999999,
+  "implementWindow": {
+    "start": "2026-10-15T00:11:12.995Z",
+    "end": "2026-10-15T00:19:49.466957+00:00"
+  },
+  "localValidationS": {
+    "before-passive": 11.440479708951898,
+    "focused": 27.113696624990553,
+    "full-lock": 149.41649358300492,
+    "full": 149.38669908302836,
+    "knip": 4.7109819580218755,
+    "mapped-route-counterfactual": 11.233568082971033,
+    "review": 60.4726523749996,
+    "timestamp-fixture-counterfactual": 9.016541082994081
+  },
+  "hostLoad": 19.03466796875,
+  "testDelta": {
+    "files": 0,
+    "lines": 96,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

@@ -1,10 +1,16 @@
 /** Prepayment ordinal qualification uses committed captured plays, with normal-base setters. */
 import { describe, expect, it } from "vitest";
-import { activated, additionalCost, all, characterYouControl, controls, discardCostFilter, energy, event, keyword, randomIn, self, staticAbility } from "../../../dsl/builders";
-import { triggered, triggeringCard, whenYouPlay } from "../../../dsl/triggers";
+import { activated, additionalCost, all, characterYouControl, controls, choiceCost, discardCostFilter, energy, event, keyword, randomIn, self, staticAbility } from "../../../dsl/builders";
+import { triggered, triggeringCard, whenYouPlay, whenCopyTrigger } from "../../../dsl/triggers";
+import { createEngine } from "../../../engine";
+import { nextAutomaticStep } from "../../../steps/driver";
+import { runStep } from "../../../steps/runner";
+import { boardState } from "../../../testing/board";
+import { testCatalog } from "../../../testing/synthetic-cards";
+import { parseDreamsignId } from "../../../../types/identifiers";
 import type { CardFilter, Speed } from "../../../dsl/types";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
-import { stateHash } from "../../../state/hash";
+import { deserializeState, serializeState, stateHash } from "../../../state/hash";
 import { SIDES, opponent } from "../../../state/ids";
 import { NO_PROMPTS } from "../../../steps/sources";
 import { at, passUntil } from "../../../testing/trigger-harness";
@@ -16,6 +22,9 @@ import { copyCard } from "../copy-card";
 import { giveAllTypes } from "../give-all-types";
 import { returnToHand } from "../return-to-hand";
 import { takeExtraTurn } from "../take-extra-turn";
+import { playFromZone } from "../play-from-zone";
+import { revealDeckTop } from "../reveal-deck-top";
+import { ruleModifier } from "../rule-modifier";
 import { gainPoints } from "../gain-points";
 import { changeCardCost } from "../modify-card-cost";
 import { nthCard, nthFixture, nthPlay, nthSettle } from "./cost-modifier-nth-support";
@@ -184,6 +193,89 @@ for (const side of SIDES) describe(`${side} static nth costs`, () => {
     const changed = nthPlay(f.engine, f.state, side, f.ids[side].hand[0]).state;
     expect(nthPlay(f.engine, changed, side, f.ids[side].hand[1]).state.sides[side].currentEnergy).toBe(29);
     expect(f.engine.view(changed, side).instances[f.ids[side].hand[1]]?.characteristics.cost).toBe(1);
+  });
+
+  for (const reentry of [false, true]) it(`later nth provider ${reentry ? "reentry" : "entry"} wins over an existing individual setter`, () => {
+    const filter = { cardType: "character", subtype: "Warrior" } as const;
+    const provider = nthCard(40, { subtype: "Mage", costs: [energy(4)], abilities: () => [
+      staticAbility(costModifierNth("you", filter, 1, { set: 0 })), activated([], returnToHand(self())),
+    ] });
+    const subject = nthCard(41, { subtype: "Warrior" });
+    const setter = nthCard(42, { cardType: "event", spark: null, costs: [energy(0)], abilities: () => [event(changeCardCost(randomIn("hand", 1, filter), { set: 1 }))] });
+    const f = nthFixture(side, [provider, subject, setter], { back: reentry ? [provider.id] : [],
+      hand: [setter.id, subject.id, ...(reentry ? [] : [provider.id])] });
+    const providerId = reentry ? f.ids[side].back[0]! : f.ids[side].hand[2];
+    const subjectId = f.ids[side].hand[1];
+    let state = nthPlay(f.engine, f.state, side, f.ids[side].hand[0]).state;
+    expect(f.engine.view(state, side).instances[subjectId]?.characteristics.cost).toBe(1);
+    if (reentry) state = nthSettle(f.engine, f.engine.apply(state, side, { kind: "activate", source: providerId, ability: 1 }, NO_PROMPTS).state);
+    state = nthPlay(f.engine, state, side, providerId).state;
+    expect(f.engine.view(state, side).instances[subjectId]?.characteristics.cost).toBe(0);
+    const before = state.sides[side].currentEnergy;
+    const played = nthPlay(f.engine, state, side, subjectId);
+    expect(before - played.state.sides[side].currentEnergy).toBe(0);
+    expect(played.state.turnLog.played[side].filter(record => record.instance === subjectId)).toHaveLength(1);
+  });
+
+  it("applies nth qualification to the actual known deck top permission", () => {
+    const filter = { cardType: "event" } as const;
+    const provider = nthCard(43, { abilities: () => [staticAbility(costModifierNth("you", filter, 1, { set: 0 })),
+      staticAbility(playFromZone("deck", filter)), staticAbility(revealDeckTop())] });
+    const subject = nthCard(44, { cardType: "event", spark: null, abilities: () => [event(gainPoints(0))] });
+    const f = nthFixture(side, [provider, subject], { back: [provider.id], deck: [subject.id, subject.id], energy: 2 });
+    const [first, second] = f.ids[side].deck;
+    expect(f.engine.legalActions(f.state, side)).toContainEqual({ kind: "play", card: first, from: "deck" });
+    const played = nthPlay(f.engine, f.state, side, first, "deck");
+    expect(played.state.sides[side].currentEnergy).toBe(2);
+    expect(f.engine.view(played.state, side).instances[second]?.characteristics.cost).toBe(2);
+    expect(nthPlay(f.engine, played.state, side, second, "deck").state.sides[side].currentEnergy).toBe(0);
+  });
+
+  it("offers an nth play at its least mandatory choice energy and rejects one less", () => {
+    const provider = nthCard(45, { abilities: () => [staticAbility(costModifierNth("you", { cardType: "event" }, 1, { set: 0 }))] });
+    const subject = nthCard(46, { cardType: "event", spark: null, abilities: () => [additionalCost(choiceCost([energy(2)], [energy(4)])), event(gainPoints(0))] });
+    for (const energy of [1, 2]) {
+      const f = nthFixture(side, [provider, subject], { back: [provider.id], hand: [subject.id], energy });
+      const action = { kind: "play", card: f.ids[side].hand[0], from: "hand" } as const;
+      if (energy === 2) expect(f.engine.legalActions(f.state, side)).toContainEqual(action);
+      else expect(f.engine.legalActions(f.state, side)).not.toContainEqual(action);
+      if (energy === 2) {
+        const paid = nthPlay(f.engine, f.state, side, action.card, "hand", { answer: () => 0 });
+        expect(paid.state.sides[side].currentEnergy).toBe(0);
+        expect(paid.state.turnLog.played[side].map(record => record.instance)).toEqual([action.card]);
+      }
+    }
+  });
+
+  it.each([false, true])("proves the nth copy FIFO while preserving an unreviewed static guard=%s", unreviewed => {
+    const sign = parseDreamsignId("5e5e5e5e-0000-4000-8000-000000704001");
+    const subject = nthCard(47, { cardType: "event", spark: null, costs: [energy(0)], abilities: () => [event(gainPoints(0))] });
+    const engine = createEngine(testCatalog([subject], { dreamsigns: [{ id: sign, status: "authored", abilities: () => [
+      staticAbility(costModifierNth("you", { cardType: "event" }, 2, { set: 0 })),
+      triggered(whenYouPlay({ cardType: "event" }), copyCard(triggeringCard())),
+      triggered(whenCopyTrigger("you", { cardType: "event" }), copyCard(triggeringCard())),
+      ...(unreviewed ? [staticAbility(ruleModifier({ rule: "carryEnergy" }))] : []),
+    ] }] }));
+    const f = boardState(engine.catalog, { active: side, phase: "day", [side]: { hand: [subject.id], dreamsigns: [sign] } });
+    const initial = { ...f.state, config: { ...f.state.config, mandatoryLoopCheckFrom: 8, mandatoryLoopWindow: 16, resolutionCap: 128 } };
+    const played = runStep(initial, { kind: "play", card: f.ids[side].hand[0], from: "hand" }, NO_PROMPTS, engine.catalog);
+    if (played.kind !== "done") throw new Error("Synthetic play unexpectedly suspended");
+    let state = played.state, copies = 0;
+    for (let i = 0; i < 24 && state.result === null; i++) {
+      const step = nextAutomaticStep(state, engine.catalog, engine.memo);
+      if (step === null) throw new Error("Expected renewing copy FIFO");
+      const input = serializeState(state), loaded = deserializeState(input);
+      const next = runStep(loaded, step, NO_PROMPTS, engine.catalog, { automatic: true });
+      expect(serializeState(loaded)).toBe(input);
+      if (next.kind !== "done") throw new Error("Synthetic copy unexpectedly suspended");
+      copies += next.events.filter(e => e.kind === "cardCopied").length;
+      state = next.state;
+    }
+    expect(copies).toBeGreaterThan(1);
+    expect(state.result).toEqual(unreviewed ? null : { kind: "draw", reason: "mandatoryLoop" });
+    if (!unreviewed) expect(state.automaticSteps).toBe(initial.config.mandatoryLoopCheckFrom);
+    expect(state.turn).toEqual(initial.turn);
+    expect(state.turnLog.played[side]).toHaveLength(1);
   });
 
   it("cancel, saved reload, illegal/foreign/stale and concurrent answers never double-consume first", () => {
