@@ -1,0 +1,183 @@
+{
+  "bead": "hv-umm2.719",
+  "base": "0112bc856ef983364ca69016b3d0c44749ff4131",
+  "timing": {
+    "claimCall": "2026-10-15T05:01:56.735060+00:00",
+    "claimAck": "2026-10-15T05:01:56.838829+00:00",
+    "preGitCutoff": "2026-10-15T05:12:40.557912+00:00",
+    "actualGitEnd": "UNKNOWN before Git; external final-commit-receipt.json supplies endpoint and tail",
+    "inclusiveThroughCutoffS": 643.822852,
+    "scope": "Includes setup, source-first research, coordination/admission, broken-base and passing checks, all waits, cleanup and packaging. Clock never reset."
+  },
+  "authority": {
+    "grant": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/exact-write-grant.txt",
+      "sha256": "90355f4b375d3c39b557c6e9d279e87f49d2243ecd2ff20e5c0a1e7a60387267"
+    },
+    "nativeAck": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/exact-write-native-ack.json",
+      "sha256": "40ba12d34d2272ec286444888e8c7cc2b831087dead49d15ab1f19b3a59003e5"
+    },
+    "proposal": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/proposal.json",
+      "sha256": "6c54435f6839c827e62afe57d92dac47ff07b2a3c97d51230b32bf1ba8247c7e"
+    },
+    "historicalSourceFirstManifest": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/manifest.json",
+      "sha256": "f6d0dc6d38a38d4ac1d79504a8361c18d72a9909e0e82d1c8c7d7c8118d4214b"
+    },
+    "qualification": "Stage0 and fresh write admission union78; Flash-setter conditional determinize is not writable, and first-entry/history/Offering bodies are distinct. Parent alone owns native lifecycle."
+  },
+  "source": {
+    "finalManifest": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/final-source-manifest.json",
+      "sha256": "5ce049a3398ff665fbec46102e9f3fdfa3dc350b072f4fe8354f262bd3a1daf4"
+    },
+    "changedOwnPaths": 2,
+    "readOnlyDependenciesPreserved": 14,
+    "scopeProof": "Reversing only the admitted known-subject branch reconstructs exact base determinize bytes. Anonymous candidate domain and all other branches unchanged. Complete original contract is an unchanged byte prefix.",
+    "classification": "Core reconstruction/privacy repair; no authoritative fields, DTO, rules, content, UI, registry/config or test-entrypoint changes. Parent fresh read-only Codex fork:none review follows terminal commit."
+  },
+  "testDelta": {
+    "physicalPlainModules": 0,
+    "netLines": 25,
+    "configuredEntrypoints": 0,
+    "jsdomFiles": 0,
+    "contractLines": 491,
+    "previousCases": 82,
+    "newCases": 8,
+    "finalOwnCases": 90
+  },
+  "checks": [
+    {
+      "label": "regression-broken-base",
+      "exit": 1,
+      "seconds": 10.193591999995988,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/regression-broken-base.receipt.json",
+        "sha256": "3b18632d7e345de10aeede16a5800a51db755e637634f69aab6dc652b8bf2830"
+      },
+      "stdoutSHA256": "fb56da2f7427a26706faf62d4a75fa543619ae8430346cec932996935c89c2bd",
+      "results": [
+        "Test Files  1 failed (1)",
+        "Tests  4 failed | 4 passed | 5552 skipped (5560)"
+      ]
+    },
+    {
+      "label": "regression-repaired",
+      "exit": 0,
+      "seconds": 11.323320666968357,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/regression-repaired.receipt.json",
+        "sha256": "cf6091d82941db43964796e8534f98025e364f8ca72871bf55059bd77d0b2292"
+      },
+      "stdoutSHA256": "680b6b071ee2769ee675c6f068071ebf8e17751189591723edf411ecee2cbf96",
+      "results": [
+        "Test Files  1 passed (1)",
+        "Tests  90 passed | 5470 skipped (5560)"
+      ]
+    },
+    {
+      "label": "integration",
+      "exit": 0,
+      "seconds": 28.316787165997084,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/integration.receipt.json",
+        "sha256": "521e8c747b8185290bcd88324c375fcab3793ba5ae317763252c91b89a7fbc28"
+      },
+      "stdoutSHA256": "f002f0a43f56f7d6bcb75514a0590b6a89a9ecf8675af74a012446911b882105",
+      "results": [
+        "Test Files  7 passed (7)",
+        "Tests  5679 passed (5679)"
+      ]
+    },
+    {
+      "label": "review",
+      "exit": 0,
+      "seconds": 56.09776212502038,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/review.receipt.json",
+        "sha256": "2059abe38045eed3bff0bd11753532fbb654056d096715b2ec88b2aa130696a9"
+      },
+      "stdoutSHA256": "b64948524608ed2d77d9c4c163a100cdfd1c0a66034255f0c1fd9530465fe1fc",
+      "results": [
+        "Test Files  119 passed (119)",
+        "Tests  7893 passed (7893)"
+      ]
+    },
+    {
+      "label": "knip",
+      "exit": 0,
+      "seconds": 8.243003666982986,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/knip.receipt.json",
+        "sha256": "0ee6a34457028ff5e9ad3be35265c4826a37266d3e0ab209f2fb77c216dd3fe6"
+      },
+      "stdoutSHA256": "ecf102996ea360f8f6e80e2563e529e31373dfbe882745c5102a15720c41ef51",
+      "results": []
+    },
+    {
+      "label": "review-full",
+      "exit": 0,
+      "seconds": 139.88220191700384,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/review-full.receipt.json",
+        "sha256": "6811c095c0935c26dc94d793bdd2d3b622c10ad19c7d2047640b88a7db169101"
+      },
+      "stdoutSHA256": "e156b5dd5e107a97fb27b316f7293c4e6c507d57a95eaaa65d3763191df562c3",
+      "results": [
+        "Test Files  389 passed (389)",
+        "Tests  10400 passed (10400)"
+      ]
+    }
+  ],
+  "brokenBase": {
+    "proof": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/broken-base-source-proof.json",
+      "sha256": "5d48b4e52f7a19d93f20059a93480d7058dc05a2fbe5cb24e0d56933275cf07a"
+    },
+    "actualPass": 4,
+    "actualFail": 4,
+    "failure": "Both cost and Fast opposite-view cases naturally sample the wrong controller and award opponent3/actor0 instead of actor3/opponent0. Soft assertions retain controller and both real result witnesses. Both holder orientations pass. Source-before/after equals base8b74c8d0887077c2002bda2b8b32d1ff4f5fc67ac7855bcfe537f3bd3cadb02d; no fixture correction or production edit preceded this run."
+  },
+  "publicWitness": {
+    "matrix": "Both actors \u00d7 both viewers \u00d7 incompatible cost / Fast occasion =8 cases. Declared synthetic source costs1/speed standard; hidden hand Explorer reader has either own cost\u22641 or opponent cost\u22654/Fast. Real abandonment precedes making the reader public.",
+    "observed": "Known physical subject and UUID stay fixed through public projection, private reconstruction and saved real child execution. Incompatible opposite-player branch is excluded; compatible child awards actor3/opponent0, matching authoritative execution.",
+    "limits": "Known branch matches only immutable costAtMost/costAtLeast/fast against instanceCard copiable cost/speed, without historicalOrigin/namedTriggers lookup during candidate compatibility. Existing downstream child-origin reconstruction remains unchanged. Dynamic type/subtype/allTypes/spark/hasAbility eligibility remains historical. The typed matchesFilter tuple contains unused structural fields but its projected filter contains no dynamic key. Anonymous full tuple/filter remains unchanged. Multiple genuinely compatible hidden occasions remain qualified sampling; no actual unseen side, current owner/controller inference, new observation or historical field is claimed."
+  },
+  "failureFamilies": {
+    "invalidMissing": "Known physical subject stays pinned and missing-member or zero-compatible-occasion domain errors retain refusal. Existing saves bounded binding, clones independently and rejects malformed saved receipts contract (module157) remains; no authoritative format or new invalid-input route.",
+    "restartReplay": "New view/determinize/view plus saved sampled real child execution. Existing replays pending named child contract (module250) covers reconstructed committed-intent equivalence; save/hash/clone contract is module157.",
+    "partialError": "Existing rolls back actual resolution prefix on error while committed abandonment remains paid contract (module291) remains. Reconstruction is a pure local sample operation and never partially writes authoritative state.",
+    "staleConcurrent": "Existing replays pending named child, refusing stale, concurrent, foreign and cancellation intents contract (module250) retained; this branch creates no prompt or answer transition.",
+    "refusalCancel": "Existing F3 optional decline (module395), cancels paid-action planning before abandonment (module279) and automatic-child cancellation refusal (module250) retained. No new cancellable transition needs an artificial duplicate test.",
+    "privacy": "Prior entirely blind indistinguishability and unknown-referent/domain/alias contracts retained. Stable incompatible-occasion exclusion adds no observations or hidden reader classification; compatible hidden alternatives remain sampled."
+  },
+  "qa": {
+    "disposition": "Source-only private reconstruction repair;90 public synthetic contracts, relevant engine/view/fold integration and one heavy-locked full architecture check. No feature browser/provider/LAB/Cumulus, captures, production300, artificial mutation quota or native exports.",
+    "productionUUIDsTransferred": [],
+    "originalAcceptanceOwners": [
+      "hv-umm2.257",
+      "hv-umm2.258"
+    ],
+    "originalRecipe": "Original owners retain all entity authoring, weighted300/preflight/sweep/D21/final acceptance joins."
+  },
+  "resources": {
+    "settlement": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/resource-settlement.json",
+      "sha256": "d6d9dbc0c1bc9799288de15bc18aa05f9be8e976cc01be4e1ea88b318247076c"
+    },
+    "live": [],
+    "qualification": "All recorded own command and reported isolated full-check fixture groups absent and handles collected. Full-check fake-server/provider fixtures are infrastructure checks, not feature QA. Exact kernel heavy-lock acquisition/wait UNKNOWN. No foreign groups signalled."
+  },
+  "provenance": {
+    "setupInstall": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/install.receipt.json",
+      "sha256": "22d612ca4b14d1fc76c811c64f77cc5aa5625dc78a8fbf34e98c6b1727d61e46"
+    },
+    "claim": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named719/claim-native.json",
+      "sha256": "923f9d40627218e2ca2a99c0cb36b682cef6a5d262efca2af6f80526a4469626"
+    }
+  }
+}

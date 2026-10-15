@@ -819,9 +819,15 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     if (occasions.length === 0) return undefined;
     // Unobserved departure changes are sampled from compatible copiable tuples; an observed physical subject stays fixed.
     const candidates = occasions.flatMap(occasion => Object.values(instances).flatMap(instance => {
-      // An identified admitted subject already established its historical eligibility before departure.
-      if (shown.subject !== null) return instance.id === shown.subject
-        ? [{ candidate: instance, controller: resolvePlayer(shown.controller, occasion.player) }] : [];
+      // Identified subjects retain historical dynamic eligibility and copiable occasion constraints.
+      if (shown.subject !== null) {
+        if (instance.id !== shown.subject) return [];
+        const card = instanceCard(catalog, instance);
+        const { costAtMost, costAtLeast, fast } = occasion.filter;
+        return matchesFilter({ cardType: card.cardType, subtype: card.subtype, allTypes: false, spark: null,
+          cost: fixedEnergy(card.costs), speed: card.speed }, { costAtMost, costAtLeast, fast })
+          ? [{ candidate: instance, controller: resolvePlayer(shown.controller, occasion.player) }] : [];
+      }
       const card = instanceCard(catalog, instance);
       const facts: FilterSubject = { cardType: card.cardType, subtype: card.subtype, allTypes: false,
         cost: fixedEnergy(card.costs), spark: card.spark === "x" ? 0 : card.spark ?? 0, speed: card.speed,
