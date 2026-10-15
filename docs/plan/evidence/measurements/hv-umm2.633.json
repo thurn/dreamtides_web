@@ -1,0 +1,189 @@
+{
+  "bead": "hv-umm2.633",
+  "base": "c1b7b70cf8723e5e1aa9b575f32354b9f0cadaa9",
+  "scope": "One323line private plain synthetic contract module, zero production LOC/UUID/API/runner/config edits; three own evidence files.",
+  "moduleSHA256": "9838bef4de42ea648ad9fc62decacb1fff1dc78df065f5d369b974c4d512147d",
+  "sourceFirst": {
+    "proposal": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633/proposal.md",
+    "proposalSHA256": "c601b6a0aa76ed81695ac0c8d2b50e0194b40dcf1aa67d46b816161fa8c4bddf",
+    "manifest": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633/source-audit.json",
+    "manifestSHA256": "e0c951a4e37697dedbd75206819adb1cb321f283c0aa82b0d31234c02a3fc98b",
+    "qualification": "Actual read ranges/partial/hash-only provenance retained;68 source bindings73reference hashes289reference lines independently matched by parent. Historical605/606 scheduling/source presence is distinct from current runtime proof.",
+    "authority": [
+      "ACK633-01",
+      "ACK633-02"
+    ]
+  },
+  "publicPath": "Actual change_deck_entry_keywords DTO -> applyJourneyRewardEffect -> engineDeckEntry/createEngineBattleInit -> public createEngine/createFoldAdapter -> legal play, actual payment, DSL filtered gameplay and public views.",
+  "actorQualification": "The real journey bridge maps player; the unchanged complete mapped deck is explicitly seated on enemy through public BattleInit. This is not production enemy journey DTO transport.",
+  "contracts": [
+    "Actual reward idempotence, bridge/ordinary deal and modified/unmodified sameUUID physical copies on both actors; immutable printing and inputs.",
+    "Fast ownDay/ownNight/opposingDusk legal play and payment; preserved Interrupt response on real stack, Fast response refusal, insufficient resource/wrong zone/actor refusal.",
+    "Real whenYouPlay Fast+Event/Character/nth filters score distinct outcomes; current filtered draw includes actual Fast Event while excluding Character; both public views retain captured played type/speed.",
+    "160explicit actor/form/stack cases cover all9 applicable delivered forms with standard/Fast/Interrupt inputs, prototype order, real payments/scores/draw/activation/reclaim/zone results and sentinels.",
+    "Permanent opposite-type conversion retains original form eligibility and applicable abilities; Event->Character spark0.",
+    "Downstream chronological inputs distinguish Inspired/Amplified position, Perfected snapshots/later append and repeated Kindled/Empowered before permanent changes. Actual journey bridge still emits legacy single-form tuples.",
+    "Physical lifetime through return/play/turn, clone/JSON/hash equality, cold recreate from actual rewarded journey.",
+    "Real precommit discard cancellation, invalid/foreign/stale/competing intents, cold reload/replay, one committed payment and duplicate answer refusal; real reward mismatch/composite and missing bridge-data refusal."
+  ],
+  "failureObligations": {
+    "droppedDTO": "Real tuple/initialized instance/play/filter contracts; own-input Fast omission gives actual expected subjects.length0 failure.",
+    "wrongSideVariantType": "Both explicit actor seatings, physical sameUUID sentinels, intrinsic Interrupt/Amplified/Perfected/type conversion and DSL filtered-score outcomes. Wrong local physical target gives actual subjectNightfalse assertion.",
+    "transformPaymentOrder": "Resolved cost7->floor3->minus2=1 discriminates incorrect floor((7-2)/2)=2; chronological own-input swap gives actual hand3 versus2 failure. Sensitivity is an input-order surrogate, not production mutation proof.",
+    "invalidStaleReplay": "Actual typed reward target/composite refusal and fold invalid/foreign/competing/cancel/stale/duplicate-answer paths with unchanged input/committed assertions and cold deterministic replay.",
+    "syntheticSubstitution": "Native original acceptance join, not fabricated CI prose test: original282 retains complete34filedUUID/fullrecipes/weighted300/preflight/base+Amplified BOTH-controller sweeps,20stratified real cards EACH controller, one D21kindjudgment/coverage/final acceptance."
+  },
+  "preservedAcceptance": {
+    "owner": "hv-umm2.282",
+    "transferredProductionUUIDs": [],
+    "qualification": "177synthetic contracts and3localinputsurrogates do not discharge original real-content/fuzz/QA acceptance. Parent alone retains native final joins/closure."
+  },
+  "infrastructureQualification": {
+    "newTransitions": 0,
+    "tested": "Real precommit payment suspension/cancel/replay and permanent variant lifetime through existing public APIs.",
+    "unchanged": "Fold recovered/evaluate/advance/intent guards, root CAS partner/unknown-window prompt policy, and host replay reconciliation remain unchanged. No new storage/transaction/concurrency/worker format or partial durable write exists.",
+    "notClaimed": "These tests are not asynchronous database race/crash recovery or fullserializer/worker transport proof. No synthetic private error hook or blanket infrastructure mirror test."
+  },
+  "sensitivity": {
+    "proposal": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633/sensitivity-proposal.json",
+    "proposalSHA256": "d0cf68e69f9bec015191f772943812f14282eb5d0d357a0d89b3f5a88974a85d",
+    "actual": "3expected semanticREDs each1failed340skipped341discovered/exit1; exactbaseline323line SHA restored aftereach, all5827oldtracked payloads protected and ownedPGs empty.",
+    "productionMutationProof": false
+  },
+  "checks": [
+    {
+      "name": "focus01",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633/focus01.receipt.json",
+      "receiptSHA256": "46a436dd063d94f1a68854782b7642ee8cc6b24595e395a982cd4a165f8e61f7",
+      "exit": 0,
+      "elapsedS": 6.877409083012026,
+      "pid": 99852,
+      "pgid": 99852,
+      "startUtc": "2026-10-15T19:09:55.151425+00:00",
+      "endUtc": "2026-10-15T19:10:02.028825+00:00",
+      "rawLogSHA256": "abec82b7e23548da33daa77f1b9db836c5edbf5ebfea855ead4ea0351b450b31",
+      "sourceManifestSHA256": "54e4705e18a0ed3e96a5d53ed2c3875422e4554bf04872541fbaa570abf20627",
+      "qualification": "177Fast passed164sibling skipped341discovered."
+    },
+    {
+      "name": "sensitivity01-dropped-handoff-fast",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633/sensitivity01-dropped-handoff-fast.receipt.json",
+      "receiptSHA256": "fb35fc1d32155c6577af7048da9937c5500dbade35cdf522472df7d8e8739508",
+      "exit": 1,
+      "elapsedS": 5.874079208995681,
+      "pid": 79749,
+      "pgid": 79749,
+      "startUtc": "2026-10-15T19:17:28.260309+00:00",
+      "endUtc": "2026-10-15T19:17:34.134369+00:00",
+      "rawLogSHA256": "67f60bc395cf236829257dbe69fa525ff2274a9163fdcc7f442799cfdc992e8a",
+      "sourceManifestSHA256": "cdfae222cd6f2678c065cb9d74bbe68b373f5a07f31eeb1915e3d52a9eeb3690",
+      "qualification": "Expected semantic RED, one selected failure340skipped341discovered; local input sensitivity only."
+    },
+    {
+      "name": "sensitivity02-wrong-physical-target",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633/sensitivity02-wrong-physical-target.receipt.json",
+      "receiptSHA256": "b04868dc1cc5682c6ff1883fa0b35a2456cab2b1dc3020df334e94e2ca4c44fd",
+      "exit": 1,
+      "elapsedS": 6.058526833017822,
+      "pid": 80966,
+      "pgid": 80966,
+      "startUtc": "2026-10-15T19:17:34.641875+00:00",
+      "endUtc": "2026-10-15T19:17:40.700386+00:00",
+      "rawLogSHA256": "62b63538bc8fd08aa4fee40805830aba809f550f3e3ee753c84aca2632be6001",
+      "sourceManifestSHA256": "86e403236b58901c4a26a96ef69136a083b1481680fb1b8e86f154e595cd9eb1",
+      "qualification": "Expected semantic RED, one selected failure340skipped341discovered; local input sensitivity only."
+    },
+    {
+      "name": "sensitivity03-chronological-input-order",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633/sensitivity03-chronological-input-order.receipt.json",
+      "receiptSHA256": "54f8f60a9cd464eb1cc6fc5a7278679718517366008e3037c35cc6cc72291f1c",
+      "exit": 1,
+      "elapsedS": 6.126660916022956,
+      "pid": 82344,
+      "pgid": 82344,
+      "startUtc": "2026-10-15T19:17:41.444678+00:00",
+      "endUtc": "2026-10-15T19:17:47.571330+00:00",
+      "rawLogSHA256": "06b4896877e5e8691415904c84211c951446b0e90e909bf29f4c8d51d97b65cb",
+      "sourceManifestSHA256": "2fc537dd86b5fd6061063655e106ba7dedf93dadfd74c3f061cdad488ad8a232",
+      "qualification": "Expected semantic RED, one selected failure340skipped341discovered; local input sensitivity only."
+    },
+    {
+      "name": "focus02-restored",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633/focus02-restored.receipt.json",
+      "receiptSHA256": "2727565e2092c3abdebf7838f14d1c92263eddc8d487ce426956aaac8444bad8",
+      "exit": 0,
+      "elapsedS": 9.767112708010245,
+      "pid": 87160,
+      "pgid": 87160,
+      "startUtc": "2026-10-15T19:18:05.600185+00:00",
+      "endUtc": "2026-10-15T19:18:15.367287+00:00",
+      "rawLogSHA256": "cfcefb52f5699e30484b38b4c92ec2a97e3a3ee259c3a49c36b2fa4e66c15309",
+      "sourceManifestSHA256": "9c697ba6ebb0d6b4fcaa3d63985d5640849b19b59c5f722c2374b11633216150",
+      "qualification": "177Fast passed164sibling skipped341discovered."
+    },
+    {
+      "name": "review01",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633/review01.receipt.json",
+      "receiptSHA256": "bcbff48d36eba00120bc77bead70b8a3ce15b137d0f43cd3b925e2bda7c517b0",
+      "exit": 0,
+      "elapsedS": 19.55626562499674,
+      "pid": 59402,
+      "pgid": 59402,
+      "startUtc": "2026-10-15T19:19:33.446912+00:00",
+      "endUtc": "2026-10-15T19:19:53.003180+00:00",
+      "rawLogSHA256": "bc3ac47abc8a03c5d9aa807ae7b802add16f8cc4d43dc420624804cd0f7f5813",
+      "sourceManifestSHA256": "5b0060fc4d259815e8c2e0305b502d10bb5e8b07c743161a980ff2b4b0a93946",
+      "qualification": "Ordinary base-pinned review: both TS projects/importcycles/lint/frictionschema and all341 related runner contracts passed."
+    },
+    {
+      "name": "knip01",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633/knip01.receipt.json",
+      "receiptSHA256": "2838e8642182ec0c7503d38b7e729f8fbc093631d2b342a59f71697e2992c775",
+      "exit": 0,
+      "elapsedS": 4.986540749960113,
+      "pid": 67114,
+      "pgid": 67114,
+      "startUtc": "2026-10-15T19:20:10.108560+00:00",
+      "endUtc": "2026-10-15T19:20:15.095075+00:00",
+      "rawLogSHA256": "dc6c9e1530eabfee3434cb14798bfb03f15f0fc64a916c5e4a82f023c9caef54",
+      "sourceManifestSHA256": "5b0060fc4d259815e8c2e0305b502d10bb5e8b07c743161a980ff2b4b0a93946",
+      "qualification": "Knip passed, no unused file/export/dependency introduced; no waiver."
+    }
+  ],
+  "validationScope": "No production UUID/status/verifiedText change; original282 retains full coverage. No new UI/runtime workflow/config/test infrastructure: browser/heavy/full checks not applicable.633 is noncore/nongate, so no mandatory cold review or review debt; any required future review uses fresh read-only fork_turns:none Codex.",
+  "clock": {
+    "start": "2026-10-15T18:48:48.029680Z",
+    "cutoff": "2026-10-15T19:24:20.076253+00:00",
+    "scope": "Inclusive original claim/setup/source audit/coordination/waits/authoring/checks through actual precommit evidence cutoff. Subsequent final metadata schema/working-whitespace and parent/Git tail use external exact receipts without rewriting frozen timing evidence."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful ordinary review actual command start2026-10-15T19:19:33.446912+00:00, confirmed review step startload14.4150390625.",
+        "qualification": "No comparable-load performance claim."
+      },
+      "implementMin": {
+        "measuredFor": "Parent-required inclusive original claim window, including setup before helper dispatch."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 323,
+    "jsdomFiles": 0
+  },
+  "resources": {
+    "servers": 0,
+    "browserContexts": 0,
+    "heavyCommands": 0,
+    "ownedProcessGroups": "99852/79749/80966/82344/87160/59402/67114 terminal; each exact receipt has empty ownedPG observation.",
+    "active": []
+  },
+  "preExisting": "Inherited npm install17advisories9moderate7high1critical; no audit/fix/dependency effects. Disposable missing-art warnings in focused prepare are followed by full restored linking.",
+  "receiptCustody": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/fast-contract633",
+  "finalMetadataVerification": {
+    "sequence": "After freezing these exact evidence bytes, run admitted node friction-triggers --validate-records and git diff --check; save full final manifests/runtime/exit/log receipts externally in receiptCustody for parent inspection. No future result or commit timestamp asserted here.",
+    "sourceShape": "All5827 original tracked file/symlink payloads immutable, one323line synthetic contract plus3own evidence files.",
+    "git": "Staging/commit/native lifecycle not performed; requires separate parent final ACK."
+  }
+}
