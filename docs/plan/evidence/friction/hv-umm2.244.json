@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.244",
+  "phase": 5,
+  "implementMin": 35.9777308,
+  "implementWindow": {
+    "start": "2026-10-15T01:02:08.619Z",
+    "end": "2026-10-15T01:38:07.282848+00:00"
+  },
+  "localValidationS": {
+    "focused": 6.496223374968395,
+    "fuzz": 1008.588302958,
+    "fixturePrecheck": 3.31966849998571,
+    "preflight": 3.330873375001829,
+    "browserQA": 184.74662866600556,
+    "review": 0.3247223749640398,
+    "knip": 5.959481084020808
+  },
+  "hostLoad": 5.0830078125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "weighted-fuzz-duration",
+      "minutes": 16.8098050493,
+      "note": "The required unchanged-source five-Dreamsign weighted300 command took 1008.588303 s outer wall, including mixed heavy admission, startup and drain. Native execution reported 496.8 s wall/525.1 s CPU and 106382 steps, zero failures. The 511.788303 s difference is not an exact lock wait. This records total validation cost, not a measured regression, identified slowdown cause or comparable-load budget result."
+    }
+  ]
+}
