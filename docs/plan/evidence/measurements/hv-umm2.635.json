@@ -1,0 +1,740 @@
+{
+  "bead": "hv-umm2.635",
+  "base": "0216a4bc5f445559b9e6114cb56603e1a6674bc2",
+  "qualification": "Public synthetic preparation; original284 retains full real-content acceptance. Source audit is not formal code review. No staging/commit authority used.",
+  "scope": {
+    "privateModule": "src/battle/integration/deck-mods/subtype-change.contracts.ts",
+    "moduleSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+    "moduleLines": 379,
+    "newSubtypeCases": 73,
+    "canonicalRunnerTotal": 510,
+    "runnerWrite": false,
+    "runtimeSourceWrites": false,
+    "newProductionTransitions": 0,
+    "productionLOC": 0,
+    "productionUUIDsAuthored": [],
+    "rulesRDWrites": false,
+    "falloutFiles": []
+  },
+  "authority": {
+    "implementation-brief.md": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/implementation-brief.md",
+      "sha256": "d641eafc9a8aa66ed025d5b6dbca45f74fa74201bfcb5221dc888b8c5bb018ad"
+    },
+    "proposal.md": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/proposal.md",
+      "sha256": "3cfc107880b91b1fc32fdfac7477772166e852472fe732520de84fb243220b3c"
+    },
+    "source-audit.json": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/source-audit.json",
+      "sha256": "12e3eaeb990c77812e8ca0e0230ba5d828c90420f43c2bdf830db0cf70066584"
+    },
+    "parent-write-runtime-ack01.json": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/parent-write-runtime-ack01.json",
+      "sha256": "da7706b3755a42071603fbe6f6a093fb3316f679f777d57c5561c870e613b845"
+    },
+    "native-write-runtime-ack01.receipt.json": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/native-write-runtime-ack01.receipt.json",
+      "sha256": "2f0b140520b5553d6b7c2e4612853adfa5bcb0244c0a41a03f1f3146a27b403d"
+    }
+  },
+  "consumer": "Existing2-line eager import.meta.glob in deck-mods.test.ts discovers the sole private module; no runner/entrypoint/registry/config changes.",
+  "normativeBindings": [
+    "D39 permanent entry changes after structural operations; D10 ladder; rules98-109/current zone type291-300/captured play2355-2364/layer order2857-2875/ability remap2905/C5 figment copies3106-3119/transfigurations3248-3297; complete275/276/277 RDs. Exact hashes/read ranges in source-audit.json."
+  ],
+  "contracts": [
+    "Both actors: actual reward->engineDeckEntry/createEngineBattleInit->ordinary start/deal, exact physical modified copy, unmodified sameUUID copies on both sides and immutable journey/init/catalog. Journey producer is player-addressed; fixture seats its complete already-mapped deck on each engine actor without claiming an enemy journey producer.",
+    "56 actor/form/companion rows cover all9 relevant delivered forms through canonical actual journey records and bridge, with subtype alone/companion cost/spark/Fast/Reclaim: actual7->3->1 payment,3->6->7 spark, preserved authored effects, Attuned activation, Resonant Dissolved, Inspired draw, Enduring actual void price and Hastened actual Night play. Event-history currentCharacter retains Event form eligibility and zero spark.",
+    "Public typed target prompts/negative predicates reject plainWarrior/opposite actors, actual Mage play/materialize triggers and typal spark bonus, typed deck draw/void return with actual physical movement. Prepared subject identity derives from declared hand[0]/backRank[0]/deck[0], independently asserting its expected modifier; no modifier-based subject lookup.",
+    "Layer1 Mage remains recorded beneath real layer2 allTypes, later chooseSubtype Warrior replaces earlier allTypes and later giveAllTypes restores it. Actual Warrior target succeeds/negativeWarrior legality refuses; public view and return lifetime expose current subtype/allTypes independently of permanent record.",
+    "Literal Warrior selectors retained after own subtype changes; separate journey ability remap redirects their real effect. Actual figment and hand copies retain copiable subtype/variant and independent physical identity; sameUUID and same-display-name/differentUUID sentinels remain independent.",
+    "Chronological Inspired/Amplified order produces0/1draw; repeated Kindled/Empowered/Kindled produces13spark after bonus; Perfected then Inspired produces2draws. All actual canonical histories travel through journey bridge; scalar primary matching first history form is valid.",
+    "Physical return/replay/turn/clone/serialized cold reload and fresh journey battle preserve subtype/history once; same continuation hashes match while changed subtype produces different state hash.",
+    "Actual selected/all synthetic producer offers use current card type, including Event->Character and Character->Event controls; mechanical type record/affected physical IDs match, all other entry fields preserved; no explicit UI label copy assertion. Same unresolved request reproduces; consumed-site replay refuses.",
+    "Concrete entry/UUID/number mismatch and valid-then-invalid composite refuse atomically; provider stale version/action/encounter/reroll and ineligible selection refuse. Mismatched journey primary/history and conflicting engine legacy-membership/ordered record refuse without source mutation.",
+    "Real subtype-filtered optional/discard payment: wrong actor, invalid target, competing action, stale/duplicate answer refuse; cancellation pays nothing; save on second prompt and cold replay commit one debit/movement/play. Corrupt saved answer recovers engine_error, clears inFlight and retains committed subtype/resources."
+  ],
+  "fiveFailures": {
+    "droppedDTO": "Physical engine modified-copy assertion plus actual typed target/draw/trigger effects.",
+    "wrongSideVariantType": "Both actors, independent physical setup identities, sameUUID/differentUUID same-name sentinels, actual current card-type eligibility and allTypes/typeRemap distinctions.",
+    "ordering": "Actual cost/activation/spark/draw/void route/window effects and chronological repeated/snapshot applications.",
+    "invalidStaleReplay": "Provider and fold refusal/cancel/competing/duplicate/reload/error recovery preserve gameplay and single debit.",
+    "syntheticSubstitution": "Administrative original284 final join retains all32 UUIDs, >=20 stratified real cards on EACH controller, one judgment, weighted300/preflight/sweep/D21/coverage. No synthetic case counts toward that acceptance."
+  },
+  "checks": [
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "synthetic persistent subtype"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:47:37.652946+00:00",
+      "sourceSHA256": null,
+      "loadAtStart": [
+        18.927734375,
+        12.23828125,
+        11.84130859375
+      ],
+      "pid": 90709,
+      "pgid": 90709,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n90709 90706 90709 Thu Oct 15 13:47:37 2026     node /opt/homebrew/bin/npm test -- src/battle/integration/deck-mods.test.ts -t synthetic persistent subtype\n",
+      "exit": 0,
+      "endUtc": "2026-10-15T20:47:46.414138+00:00",
+      "elapsedS": 8.76030304201413,
+      "childUserS": 6.65192,
+      "childSystemS": 2.712014,
+      "loadAtEnd": [
+        19.81396484375,
+        12.53271484375,
+        11.947265625
+      ],
+      "sourceAfterSHA256": null,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/focus01.log",
+      "rawLogSHA256": "3f62d0c0d8ef2e320c3eae33a97b1f2c07a3d2f4d1c7be336f869a59c8aca863",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "synthetic persistent subtype"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:47:56.738318+00:00",
+      "sourceSHA256": "4c51204b756ef711f38de60dad58b5865102ec46443a5833eda586a459888862",
+      "loadAtStart": [
+        17.9794921875,
+        12.48828125,
+        11.94140625
+      ],
+      "pid": 92597,
+      "pgid": 92597,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n92597 92587 92597 Thu Oct 15 13:47:56 2026     /usr/bin/env node /opt/homebrew/bin/npm test -- src/battle/integration/deck-mods.test.ts -t synthetic persistent subtype\n",
+      "exit": 1,
+      "endUtc": "2026-10-15T20:48:05.130038+00:00",
+      "elapsedS": 8.391449750051834,
+      "childUserS": 6.774903,
+      "childSystemS": 2.553112,
+      "loadAtEnd": [
+        17.10009765625,
+        12.39697265625,
+        11.912109375
+      ],
+      "sourceAfterSHA256": "4c51204b756ef711f38de60dad58b5865102ec46443a5833eda586a459888862",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/focus02.log",
+      "rawLogSHA256": "3df58ee4799090b159d3548338fc627af522c8bc29200694d8b170d432f12864",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "synthetic persistent subtype"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:48:52.738051+00:00",
+      "sourceSHA256": "5481c6333feadd0c8db8c2e323cae36e2260de1d2fd20a5cfeeb784a3c9d9e32",
+      "loadAtStart": [
+        12.6962890625,
+        12.0498046875,
+        11.81884765625
+      ],
+      "pid": 97136,
+      "pgid": 97136,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n97136 97126 97136 Thu Oct 15 13:48:52 2026     /usr/bin/env node /opt/homebrew/bin/npm test -- src/battle/integration/deck-mods.test.ts -t synthetic persistent subtype\n",
+      "exit": 0,
+      "endUtc": "2026-10-15T20:49:01.050491+00:00",
+      "elapsedS": 8.312162416987121,
+      "childUserS": 6.525366,
+      "childSystemS": 2.507341,
+      "loadAtEnd": [
+        12.31982421875,
+        11.982421875,
+        11.79638671875
+      ],
+      "sourceAfterSHA256": "5481c6333feadd0c8db8c2e323cae36e2260de1d2fd20a5cfeeb784a3c9d9e32",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/focus03.log",
+      "rawLogSHA256": "fbb70458395aa81623518c32e59aad80c391ee5740ee0d14307342aa42782b59",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "synthetic persistent subtype"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:49:23.464634+00:00",
+      "sourceSHA256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9",
+      "loadAtStart": [
+        10.00634765625,
+        11.48095703125,
+        11.62060546875
+      ],
+      "pid": 99566,
+      "pgid": 99566,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n99566 99556 99566 Thu Oct 15 13:49:23 2026     node node_modules/vitest/vitest.mjs run src/battle/integration/deck-mods.test.ts -t synthetic persistent subtype\n",
+      "exit": 0,
+      "endUtc": "2026-10-15T20:49:26.772069+00:00",
+      "elapsedS": 3.3072543329908513,
+      "childUserS": 4.29484,
+      "childSystemS": 0.827394,
+      "loadAtEnd": [
+        10.40576171875,
+        11.5390625,
+        11.64013671875
+      ],
+      "sourceAfterSHA256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/focus04.log",
+      "rawLogSHA256": "8bd8a6266c1fd1bad129b3af86e0de12f73095493ffac1ac0eb1e33839935422",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "carries the reward and complete journey history"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:50:03.155426+00:00",
+      "sourceSHA256": "ac62d7f4e7b4154b8d3516b3269477cba8874383fb118f2271e180e8573188b2",
+      "loadAtStart": [
+        9.69140625,
+        11.24072265625,
+        11.5263671875
+      ],
+      "pid": 3114,
+      "pgid": 3114,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n 3114  3112  3114 Thu Oct 15 13:50:03 2026     node node_modules/vitest/vitest.mjs run src/battle/integration/deck-mods.test.ts -t carries the reward and complete journey history\n",
+      "exit": 1,
+      "endUtc": "2026-10-15T20:50:05.844698+00:00",
+      "elapsedS": 2.689104832999874,
+      "childUserS": 3.424556,
+      "childSystemS": 0.7431059999999999,
+      "loadAtEnd": [
+        9.69140625,
+        11.24072265625,
+        11.5263671875
+      ],
+      "sourceAfterSHA256": "ac62d7f4e7b4154b8d3516b3269477cba8874383fb118f2271e180e8573188b2",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/sensitivity-drop-dto.log",
+      "rawLogSHA256": "84f0820ae2bedeae7aaffd7322fdf71bae6795cdf1ead8950ae7e83cdef1c63b",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "carries the reward and complete journey history"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:50:05.871382+00:00",
+      "sourceSHA256": "39d001d528c307dfdcfefab9bd3a03c7366d8080d38670f8490a30782e62c2d2",
+      "loadAtStart": [
+        9.69140625,
+        11.24072265625,
+        11.5263671875
+      ],
+      "pid": 3287,
+      "pgid": 3287,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n 3287  3285  3287 Thu Oct 15 13:50:05 2026     node node_modules/vitest/vitest.mjs run src/battle/integration/deck-mods.test.ts -t carries the reward and complete journey history\n",
+      "exit": 1,
+      "endUtc": "2026-10-15T20:50:08.493685+00:00",
+      "elapsedS": 2.6221363749937154,
+      "childUserS": 3.416303,
+      "childSystemS": 0.7146319999999999,
+      "loadAtEnd": [
+        10.1162109375,
+        11.302734375,
+        11.54638671875
+      ],
+      "sourceAfterSHA256": "39d001d528c307dfdcfefab9bd3a03c7366d8080d38670f8490a30782e62c2d2",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/sensitivity-wrong-seat.log",
+      "rawLogSHA256": "714ca8e5be776cfa7c3f92d0ffddc699b82c5051006e795115de75374c305667",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "keeps chronological replacements"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:50:08.519374+00:00",
+      "sourceSHA256": "b684eb53dff8b8c300e8987e1688389e02988e189d0d8cef1faa4f149610941b",
+      "loadAtStart": [
+        10.1162109375,
+        11.302734375,
+        11.54638671875
+      ],
+      "pid": 3457,
+      "pgid": 3457,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n 3457  3454  3457 Thu Oct 15 13:50:08 2026     node node_modules/vitest/vitest.mjs run src/battle/integration/deck-mods.test.ts -t keeps chronological replacements\n",
+      "exit": 1,
+      "endUtc": "2026-10-15T20:50:11.145414+00:00",
+      "elapsedS": 2.6258864999981597,
+      "childUserS": 3.451901,
+      "childSystemS": 0.695479,
+      "loadAtEnd": [
+        10.1162109375,
+        11.302734375,
+        11.54638671875
+      ],
+      "sourceAfterSHA256": "b684eb53dff8b8c300e8987e1688389e02988e189d0d8cef1faa4f149610941b",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/sensitivity-reverse-history.log",
+      "rawLogSHA256": "0425925ee3a24621409a3df95d6d4f1f50c780ab1da2e603f2f0ac8b6534e333",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:50:20.059672+00:00",
+      "sourceSHA256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9",
+      "loadAtStart": [
+        10.04345703125,
+        11.24365234375,
+        11.52197265625
+      ],
+      "pid": 5408,
+      "pgid": 5408,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n 5408  5398  5408 Thu Oct 15 13:50:20 2026     node /opt/homebrew/bin/npm test -- src/battle/integration/deck-mods.test.ts\n",
+      "exit": 0,
+      "endUtc": "2026-10-15T20:50:27.019550+00:00",
+      "elapsedS": 6.959649625001475,
+      "childUserS": 7.892079,
+      "childSystemS": 1.900737,
+      "loadAtEnd": [
+        9.56201171875,
+        11.1025390625,
+        11.46826171875
+      ],
+      "sourceAfterSHA256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/final-runner01.log",
+      "rawLogSHA256": "2a288bf5447f3ff2d215577fe78c0d859a3a7cb07a6e97823426546a57c0bcef",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "synthetic persistent subtype"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:50:54.650714+00:00",
+      "sourceSHA256": "b2d42567c75e1df1a84bbc9f8cc67967262bb79789323b6adc14a746a29371d1",
+      "loadAtStart": [
+        9.31982421875,
+        10.93017578125,
+        11.3955078125
+      ],
+      "pid": 11940,
+      "pgid": 11940,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n11940 11930 11940 Thu Oct 15 13:50:54 2026     node node_modules/vitest/vitest.mjs run src/battle/integration/deck-mods.test.ts -t synthetic persistent subtype\n",
+      "exit": 0,
+      "endUtc": "2026-10-15T20:50:57.537430+00:00",
+      "elapsedS": 2.8865577920223586,
+      "childUserS": 3.910681,
+      "childSystemS": 0.700859,
+      "loadAtEnd": [
+        9.0537109375,
+        10.84814453125,
+        11.36376953125
+      ],
+      "sourceAfterSHA256": "b2d42567c75e1df1a84bbc9f8cc67967262bb79789323b6adc14a746a29371d1",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/focus05.log",
+      "rawLogSHA256": "aafca7d9fcb9be56ef7d0e3aed56d9444f7b81af568aa60fa2e3dbf15d76c0bf",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:51:30.215869+00:00",
+      "sourceSHA256": "b2d42567c75e1df1a84bbc9f8cc67967262bb79789323b6adc14a746a29371d1",
+      "loadAtStart": [
+        8.5986328125,
+        10.5478515625,
+        11.23486328125
+      ],
+      "pid": 16462,
+      "pgid": 16462,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n16462 16452 16462 Thu Oct 15 13:51:30 2026     node /opt/homebrew/bin/npm run review\n",
+      "exit": 2,
+      "endUtc": "2026-10-15T20:51:50.118531+00:00",
+      "elapsedS": 19.90227300004335,
+      "childUserS": 63.191921,
+      "childSystemS": 8.508116,
+      "loadAtEnd": [
+        13.57763671875,
+        11.484375,
+        11.55078125
+      ],
+      "sourceAfterSHA256": "b2d42567c75e1df1a84bbc9f8cc67967262bb79789323b6adc14a746a29371d1",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/review01.log",
+      "rawLogSHA256": "188d31c32579113267f4083ebb72187a9263c118fd6767c675f691e726a53fcc",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:52:00.618888+00:00",
+      "sourceSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+      "loadAtStart": [
+        19.2890625,
+        12.79638671875,
+        12.0166015625
+      ],
+      "pid": 19226,
+      "pgid": 19226,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n19226 19216 19226 Thu Oct 15 13:52:00 2026     node /opt/homebrew/bin/npm test -- src/battle/integration/deck-mods.test.ts\n",
+      "exit": 0,
+      "endUtc": "2026-10-15T20:52:09.939997+00:00",
+      "elapsedS": 9.320760250033345,
+      "childUserS": 9.952697,
+      "childSystemS": 2.531106,
+      "loadAtEnd": [
+        20.009765625,
+        13.1513671875,
+        12.150390625
+      ],
+      "sourceAfterSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/final-runner02.log",
+      "rawLogSHA256": "974b0c3bcccc9a7cc4c770d9c8defb07cd042b43d3111f0006bf8b387bc8794f",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:52:21.906587+00:00",
+      "sourceSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+      "loadAtStart": [
+        21.93212890625,
+        13.91064453125,
+        12.4384765625
+      ],
+      "pid": 20985,
+      "pgid": 20985,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n20985 20975 20985 Thu Oct 15 13:52:21 2026     node /opt/homebrew/bin/npm run review\n",
+      "exit": 0,
+      "endUtc": "2026-10-15T20:52:35.976026+00:00",
+      "elapsedS": 14.06911995797418,
+      "childUserS": 34.289223,
+      "childSystemS": 6.887453,
+      "loadAtEnd": [
+        24.05615234375,
+        14.63623046875,
+        12.712890625
+      ],
+      "sourceAfterSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/review02.log",
+      "rawLogSHA256": "27da5c9ec548da4f274641c30ffca21e4a5d7bda9f2b445a7ab63f5b9da230c8",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:52:38.740847+00:00",
+      "sourceSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+      "loadAtStart": [
+        22.60986328125,
+        14.49267578125,
+        12.67333984375
+      ],
+      "pid": 61067,
+      "pgid": 61067,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n61067 61021 61067 Thu Oct 15 13:52:38 2026     node /opt/homebrew/bin/npm run knip\n",
+      "exit": 0,
+      "endUtc": "2026-10-15T20:52:44.312322+00:00",
+      "elapsedS": 5.57106141699478,
+      "childUserS": 4.483341,
+      "childSystemS": 1.850927,
+      "loadAtEnd": [
+        21.599609375,
+        14.41796875,
+        12.6572265625
+      ],
+      "sourceAfterSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/knip01.log",
+      "rawLogSHA256": "fc91fdf4d787c32d298d4b704ed8cd13647abd58d2d3824f38145083bd0711f2",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:54:07.423344+00:00",
+      "sourceSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+      "loadAtStart": [
+        11.6787109375,
+        13.220703125,
+        12.38037109375
+      ],
+      "pid": 85196,
+      "pgid": 85196,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n85196 85186 85196 Thu Oct 15 13:54:07 2026     node scripts/friction-triggers.mjs --validate-records\n",
+      "exit": 0,
+      "endUtc": "2026-10-15T20:54:07.556501+00:00",
+      "elapsedS": 0.13303187501151115,
+      "childUserS": 0.056024,
+      "childSystemS": 0.032702999999999996,
+      "loadAtEnd": [
+        11.6787109375,
+        13.220703125,
+        12.38037109375
+      ],
+      "sourceAfterSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/schema01.log",
+      "rawLogSHA256": "190b1056a7f02751725aa9c4c337204539796be4eb986929b3098c212d8543f9",
+      "runtimeSettled": true
+    },
+    {
+      "argv": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/verify_packet.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-contract635-root",
+      "startUtc": "2026-10-15T20:54:47.888599+00:00",
+      "sourceSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+      "loadAtStart": [
+        9.38916015625,
+        12.46337890625,
+        12.14208984375
+      ],
+      "pid": 88021,
+      "pgid": 88021,
+      "birthObservation": "  PID  PPID  PGID STARTED                      COMMAND\n88021 88011 88021 Thu Oct 15 13:54:47 2026     python3 /tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/verify_packet.py\n",
+      "exit": 0,
+      "endUtc": "2026-10-15T20:54:48.422737+00:00",
+      "elapsedS": 0.5339902500272729,
+      "childUserS": 0.095038,
+      "childSystemS": 0.283271,
+      "loadAtEnd": [
+        9.38916015625,
+        12.46337890625,
+        12.14208984375
+      ],
+      "sourceAfterSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/whitespace01.log",
+      "rawLogSHA256": "f9b64841d43322ee661d055c2f933b577bde58b59442643a0699a127b51f3cb8",
+      "runtimeSettled": true
+    }
+  ],
+  "sensitivity": {
+    "qualification": "Exactly3 bounded own-fixture input sensitivity epochs, secondary evidence only; no production mutant edits/score. Exact baseline1d442c3b restored after each; final4cc7cd17 later strengthens independent source oracle, omits explicit UI label assertion, and corrects fixture union typing. Diff retained; final510/510 and review/Knip bind final source.",
+    "baseline": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/subtype-baseline.ts.txt",
+      "sha256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9"
+    },
+    "postProbeDiff": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/post-sensitivity-oracle-strengthening.diff",
+      "sha256": "47cfff0e378c48680091a543c9096428d470ce553d470ee1dc9e8bae819a4b7c"
+    },
+    "epochs": [
+      {
+        "epoch": "sensitivity-drop-dto",
+        "startUtc": "2026-10-15T20:50:03.134213+00:00",
+        "restoreUtc": "2026-10-15T20:50:05.848884+00:00",
+        "baselineSHA256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9",
+        "mutatedSHA256": "ac62d7f4e7b4154b8d3516b3269477cba8874383fb118f2271e180e8573188b2",
+        "restoredSHA256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9",
+        "expectedRed": true,
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/sensitivity-drop-dto.receipt.json",
+        "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/sensitivity-drop-dto.log"
+      },
+      {
+        "epoch": "sensitivity-wrong-seat",
+        "startUtc": "2026-10-15T20:50:05.849150+00:00",
+        "restoreUtc": "2026-10-15T20:50:08.497896+00:00",
+        "baselineSHA256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9",
+        "mutatedSHA256": "39d001d528c307dfdcfefab9bd3a03c7366d8080d38670f8490a30782e62c2d2",
+        "restoredSHA256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9",
+        "expectedRed": true,
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/sensitivity-wrong-seat.receipt.json",
+        "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/sensitivity-wrong-seat.log"
+      },
+      {
+        "epoch": "sensitivity-reverse-history",
+        "startUtc": "2026-10-15T20:50:08.498129+00:00",
+        "restoreUtc": "2026-10-15T20:50:11.149471+00:00",
+        "baselineSHA256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9",
+        "mutatedSHA256": "b684eb53dff8b8c300e8987e1688389e02988e189d0d8cef1faa4f149610941b",
+        "restoredSHA256": "1d442c3bad62852c8a17a710bdada1111160a6bab4218b78e1f003d9cfb2b4d9",
+        "expectedRed": true,
+        "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/sensitivity-reverse-history.receipt.json",
+        "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-contract635/sensitivity-reverse-history.log"
+      }
+    ],
+    "failures": [
+      "Drop only actual subtype DTO after bridge-shape assertion: actual engine modified physical count0 vs1 for both actors.",
+      "Wrong mapped-deck seat after bridge-shape assertion: actual engine owner/controller opposite expected for both actors.",
+      "Reverse actual journey append order: actual resolved hand count3 vs2 for both actors."
+    ],
+    "exactReconstructedInputs": [
+      {
+        "epoch": "sensitivity-drop-dto",
+        "source": "sensitivity-drop-dto.source.ts.txt",
+        "sourceSHA256": "ac62d7f4e7b4154b8d3516b3269477cba8874383fb118f2271e180e8573188b2",
+        "patch": "sensitivity-drop-dto.input.diff",
+        "patchSHA256": "0398494ae26915d5627eb44f2c799b4f42f45ff5aa6368eee80d22fd7ad983c2",
+        "matchesActualRuntimeReceipt": true
+      },
+      {
+        "epoch": "sensitivity-wrong-seat",
+        "source": "sensitivity-wrong-seat.source.ts.txt",
+        "sourceSHA256": "39d001d528c307dfdcfefab9bd3a03c7366d8080d38670f8490a30782e62c2d2",
+        "patch": "sensitivity-wrong-seat.input.diff",
+        "patchSHA256": "a7d80f96f461508e85685e1c06ff69307404b0d34c22d73f9479c8ab45431d9b",
+        "matchesActualRuntimeReceipt": true
+      },
+      {
+        "epoch": "sensitivity-reverse-history",
+        "source": "sensitivity-reverse-history.source.ts.txt",
+        "sourceSHA256": "b684eb53dff8b8c300e8987e1688389e02988e189d0d8cef1faa4f149610941b",
+        "patch": "sensitivity-reverse-history.input.diff",
+        "patchSHA256": "9b71c0983c55f62e5738fc733569da80497bc1c377a694bff921aec4891a1764",
+        "matchesActualRuntimeReceipt": true
+      }
+    ],
+    "reconstructionQualification": "Own scratch only, no execution or extra mutation epoch; each reconstructed complete source hash equals the actual prior runtime receipt. Exact diffs against retained actual baseline permit independent verification."
+  },
+  "failedAttempts": {
+    "focus01": "Exit0/437skips/zero subtype cases before new file moved to own WT: NON-VERIFICATION, never subtype-green evidence.",
+    "focus02": "9 failures/64passed; bounded fixture corrections: hidden-deck views, automatic singleton target, explicit in-play allTypes duration, bridge remap enrichment. No production defect.",
+    "review01": "Main typecheck rejected own fixture nondiscriminated BattlePlacement; corrected play/slot union only, reran final runner and review. All other phases including510cases already passed."
+  },
+  "incident": {
+    "at": "2026-10-15T20:47:56.664372+00:00",
+    "error": "Initial new-file shell write omitted workdir and created only this new untracked path in primary; immediately moved exact bytes to own authorized worktree and removed the unintended primary path.",
+    "sourceSHA256": "4c51204b756ef711f38de60dad58b5865102ec46443a5833eda586a459888862",
+    "bytes": 33977,
+    "primaryPathAbsent": true,
+    "ownPathPresent": true,
+    "firstFocusQualification": "Wrapper ran in own worktree before the move; all437 prior cases skipped and zero new cases. This is not subtype test verification."
+  },
+  "incidentDisposition": "Own workdir mistake, not pre-existing product issue. Exact new bytes moved to authorized WT; unintended primary path removed. Parent independently verified primary clean/path absent; every later mutation/check has explicit absolute own source/worktree and wrapper cwd/source assertions.",
+  "resources": {
+    "at": "2026-10-15T20:54:07.345675+00:00",
+    "ownedPgids": [
+      3114,
+      3287,
+      3457,
+      5408,
+      11940,
+      16462,
+      19226,
+      20985,
+      61067,
+      66086,
+      90709,
+      92597,
+      97136,
+      99566
+    ],
+    "remainingProcesses": [],
+    "servers": [],
+    "browserContexts": [],
+    "heavyCommands": []
+  },
+  "sourceGuard": {
+    "at": "2026-10-15T20:51:48.876104+00:00",
+    "guardedPayloads": 5868,
+    "differences": [],
+    "scope": "Own worktree initial tracked file/symlink payloads; no Git mutation"
+  },
+  "preExisting": "Unchanged install17advisories (9moderate,7high,1critical) confirmed from parent raw log; disposable art warnings restored by actual restore-local-assets receipts.",
+  "reviews": "Nongate/noncore plain private contracts require no formal cold review. Parent source verification is not formal review. No helper/reviewer spawned.",
+  "validationScope": "Two Vitest workers; focused/owning runner/review/Knip only. No browser/heavy/full/fuzz/solver/catalog/QA body changes or checks required by scope.",
+  "accounting": {
+    "inclusiveClaimUtc": "2026-10-15T20:33:34.089583+00:00",
+    "precommitEvidenceCutoffUtc": "2026-10-15T21:00:41.114496+00:00",
+    "inclusiveMinutesToCutoff": 27.117081883333334,
+    "scope": "All parent setup, source research, coordination, failed attempts, checks and waits since original claim included. Time after this cutoff, parent final collection and actual later Git must remain separate real tail; no future timestamps or completion claims.",
+    "git": null
+  },
+  "retainedEvidence": "acceptance-v01/ under own gitignored artifacts/qa/hv-umm2.635; filename/hash manifest acceptance-manifest.json retains complete own proof/log/receipt/source/input deltas after checks settle.",
+  "finalPrecommitProof": {
+    "at": "2026-10-15T20:54:48.418167+00:00",
+    "ownFourPaths": [
+      "docs/plan/evidence/friction/hv-umm2.635.json",
+      "docs/plan/evidence/measurements/hv-umm2.635.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.635.md",
+      "src/battle/integration/deck-mods/subtype-change.contracts.ts"
+    ],
+    "untrackedOnly": true,
+    "whitespaceValid": true,
+    "jsonValid": true,
+    "initialPayloads": 5868,
+    "changedInitialPayloads": [],
+    "recordedPgids": [
+      3114,
+      3287,
+      3457,
+      5408,
+      11940,
+      16462,
+      19226,
+      20985,
+      61067,
+      66086,
+      85196,
+      90709,
+      92597,
+      97136,
+      99566
+    ],
+    "remainingOwnedProcesses": [],
+    "sourceSHA256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+    "status": "?? docs/plan/evidence/friction/hv-umm2.635.json\n?? docs/plan/evidence/measurements/hv-umm2.635.json\n?? docs/plan/evidence/pre-existing/hv-umm2.635.md\n?? src/battle/integration/deck-mods/subtype-change.contracts.ts\n"
+  },
+  "localValidationComplete": true,
+  "gitStatus": "Exactly own4 untracked paths; no staging or commit before final parental ACK."
+}

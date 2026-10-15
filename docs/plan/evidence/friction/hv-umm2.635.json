@@ -1,0 +1,22 @@
+{
+  "bead": "hv-umm2.635",
+  "phase": 5,
+  "implementMin": 27.117081883333334,
+  "implementWindow": {
+    "start": "2026-10-15T20:33:34.089583+00:00",
+    "end": "2026-10-15T21:00:41.114496+00:00"
+  },
+  "windowQualification": "Inclusive original claim through actual precommit evidence cutoff. Parent collection/waits and subsequent real Git tail remain separately measurable; commit and promotion have not occurred.",
+  "hostLoad": 11.6787109375,
+  "testDelta": {
+    "files": 1,
+    "lines": 379,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "localValidationS": {
+    "focused": 9.320760250033345,
+    "review": 14.06911995797418,
+    "knip": 5.57106141699478
+  }
+}
