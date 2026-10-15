@@ -31,7 +31,7 @@ export function hasUnknownScoreGroup(fold: EngineBattleFold, catalog = currentCa
     const avatar = fold.init.avatars?.[side];
     return (avatar !== undefined && readsGroup(() => catalog.avatar(avatar).abilities(BASE_VARIANT))) ||
       (fold.init.dreamsigns?.[side] ?? []).some(id => readsGroup(() => catalog.dreamsign(id).abilities(BASE_VARIANT))) ||
-      fold.init.decks[side].some(entry => readsGroup(() => catalog.card(entry.cardId).abilities(variantOf(entry))));
+      fold.init.decks[side].some(entry => readsGroup(() => catalog.variantCard(entry.cardId, variantOf(entry)).abilities(variantOf(entry))));
   }) || states.some(state => SIDES.some(side => {
     const avatar = state.sides[side].avatar;
     return (avatar !== null && readsGroup(() => catalog.avatar(avatar.id).abilities(BASE_VARIANT))) ||

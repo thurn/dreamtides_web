@@ -23,7 +23,7 @@ export function linkedSourceContext(ctx: StepContext, source: AbilitySource, ori
     ? departed
     : { enteredPlayAt: instance.enteredZoneAt, gained: sourceAbilityGroups(ctx.state, source) };
   if (current === undefined) return null;
-  let base = ctx.catalog.card(origin.cardId).abilities(origin.variant).length;
+  let base = ctx.catalog.variantCard(origin.cardId, origin.variant).abilities(origin.variant).length;
   if (ability < base) return { source, enteredPlayAt: current.enteredPlayAt, ability };
   for (const [index, group] of (origin.gained ?? []).entries()) {
     const length = gainedGroupAbilities(ctx.catalog, group).length;

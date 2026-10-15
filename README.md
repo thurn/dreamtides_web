@@ -47,7 +47,7 @@ the origin that hosts it (see `.env.example`).
 | `npm run import-cycles` | Fails on a module-load read inside an import cycle |
 | `npm run build` | Production build into `dist/` |
 | `npm run fuzz:engine -- --games 200` | Seeded rules-engine fuzzer: invariants after every step, replay check, every 10th game replayed interactively through the fold |
-| `npm run fuzz:engine -- --games 300 --weight-uuids <entity-uuid,...>` | Target catalog cards, avatars, authored battle Dreamsigns, Dreamwell cards, and figments; report observed inclusion and exercise counts and preserve targets in failure repro commands |
+| `npm run fuzz:engine -- --games 300 --weight-uuids <entity-uuid,...>` | Target catalog cards, avatars, authored battle Dreamsigns, Dreamwell cards, figments, and registered transfigurations; report observed inclusion and exercise counts and preserve targets in failure repro commands |
 | `npm run prepare-workspace` | Refresh art links and generated adapters |
 
 The engine fuzzer resolves `--weight-uuids` by UUID into branded, kind-specific
@@ -58,13 +58,17 @@ pending, vanilla and authored-empty Dreamsigns fail because they cannot exercise
 battle text. Journey effects belong to the journey layer, outside the battle DSL. The full unweighted
 emblem pool includes synthetic fixtures and catalog avatars and Dreamsigns;
 selection uses the same seeded random policy. Catalog registration contributes
-no target coverage.
+no target coverage. Registered transfiguration targets use their glossary UUIDs:
+Empowered, Amplified, Inspired, Enduring, Hastened and Resonant. A form requires
+an implemented eligible card in at least one authored variant. Card and form
+targets share the 30 reserved physical deck slots.
 
 Target inclusion and the `fuzz targets` summary have these contracts:
 
 | Kind | Setup | `included` | `exercised` |
 | --- | --- | --- | --- |
 | Card | Reserve one entry per UUID in each otherwise random deck, up to 30 distinct targets | Actual deck entries across both sides | `cardPlayed` events |
+| Transfiguration | Reserve one eligible card/form entry per UUID in each deck; preserve the sampled amplified flag when eligible candidates exist, otherwise use the other authored variant; retain deck modifications | Actual deck entries carrying the declared form | `cardPlayed` events carrying the declared form |
 | Avatar | Fill the two avatar slots from a deterministic window of requested UUIDs; one target fills both sides | Selected battle-init emblems | Applied triggered-ability resolutions and activations |
 | Dreamsign | Add every requested UUID to both sides alongside randomly selected emblems | Selected battle-init emblems | Applied triggered-ability resolutions and activations |
 | Dreamwell | In each targeted tier, choose a target window and fill the remaining candidate slots randomly to the catalog's `cardsPerRecurringOrder` limit; other tiers keep their full pool | Actual entries built into the shared Dreamwell deck at battle creation | `dreamwellDrawn` events |
@@ -76,6 +80,8 @@ coverage or full text coverage. Dreamwell entries can remain undrawn in a short
 battle. Figment support uses catalog spark and abilities; capacity or competing
 first-turn effects can prevent materialization, which contributes zero coverage.
 Requested entities always retain their definitions in the full engine catalog.
+A form's play counter proves that its declared variant was played; it does not
+claim that every printed trigger, instruction or static effect was exercised.
 
 Limited target windows rotate by the absolute game ordinal (`--first`), so enough
 consecutive games select every requested avatar, Dreamwell card and figment. The

@@ -515,21 +515,31 @@ function amplifiedTransform(card: CardData): TextTransform | null {
  *   - `▸Materialized:` also fires on dissolve → `▸Materialized, Dissolved:`
  *   - `once per turn` → `any number of times per turn`
  */
+/** The existing displayed operation selected by Resonant, before structural interpretation. */
+export type ResonantChange = "oncePerTurn" | "dawn" | "materialized";
+export function resonantChange(text: string): ResonantChange | null {
+  if (/once per turn/i.test(text)) return "oncePerTurn";
+  if (text.includes("▸Dawn")) return "dawn";
+  if (text.includes("▸Materialized:")) return "materialized";
+  return null;
+}
+
 function resonantTransform(text: string): TextTransform | null {
-  if (/once per turn/i.test(text)) {
+  const change = resonantChange(text);
+  if (change === "oncePerTurn") {
     return {
       plain: (t) => t.replace(/once per turn/i, "any number of times per turn"),
       marked: (t) =>
         t.replace(/once per turn/i, mark("any number of times per turn")),
     };
   }
-  if (text.includes("▸Dawn")) {
+  if (change === "dawn") {
     return {
       plain: (t) => t.replace("▸Dawn", "▸Materialized, Dawn"),
       marked: (t) => t.replace("▸Dawn", `▸${mark("Materialized, ")}Dawn`),
     };
   }
-  if (text.includes("▸Materialized:")) {
+  if (change === "materialized") {
     return {
       plain: (t) => t.replace("▸Materialized:", "▸Materialized, Dissolved:"),
       marked: (t) =>

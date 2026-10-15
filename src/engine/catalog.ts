@@ -1,3 +1,4 @@
+import { applyEngineTransfigurations, type TransfigurationMetadata } from "./transfigurations";
 import { remapAbilityTypes } from "./dsl/type-remap";
 import { BATTLE } from "../content/battle";
 import type { CardSubtype } from "../types/card-identity";
@@ -50,6 +51,8 @@ export type BaseSpark = number | "x";
 
 /** The engine's view of one card definition. */
 export interface EngineCardDefinition {
+  /** Plain authored-text eligibility, supplied by the content loader. */
+  readonly transfiguration?: TransfigurationMetadata;
   readonly id: CardId;
   readonly cardType: "character" | "event";
   /** The costs paid to play the card, in printed order: "2 X" is `[energy(2), energyX()]`. */
@@ -113,6 +116,8 @@ export interface EngineCatalog {
    */
   readonly characterTypes: readonly CardSubtype[];
   card(id: CardId): EngineCardDefinition;
+  /** Resolves one immutable variant tuple; returned abilities belong to that resolved tuple. */
+  variantCard(this: EngineCatalog, id: CardId, variant: Variant): PrintedCard;
   dreamwellCard(id: DreamwellCardId): EngineDreamwellDefinition;
   avatar(id: AvatarId): EngineAvatarDefinition;
   dreamsign(id: DreamsignId): EngineDreamsignDefinition;
@@ -179,8 +184,8 @@ export function printedCard(catalog: EngineCatalog, printing: Printing): Printed
 
 /**
  * The printed card an instance is played as (layer 1): its printing's card
- * with its variant's deck-entry modifications applied (D39), in the
- * prototype's order: the type change, then the cost reduction, Fast, and
+ * with structural transfigurations followed by its deck-entry modifications
+ * (D39), in the prototype's order: type, then cost reduction, Fast, and
  * Reclaim, then the spark bonus. A character with no printed spark, an
  * Event turned into a Character, has 0 spark and takes no spark bonus, as
  * in the prototype.
@@ -189,7 +194,9 @@ export function instanceCard(
   catalog: EngineCatalog,
   instance: { readonly printing: Printing; readonly variant: Variant },
 ): PrintedCard {
-  const printed = printedCard(catalog, instance.printing);
+  const printed = instance.printing.kind === "figment"
+    ? printedCard(catalog, instance.printing)
+    : catalog.variantCard(instance.printing.cardId, instance.variant);
   const mods = instance.variant.deckMods;
   const card = mods === undefined ? printed : modifiedCard(printed, mods);
   return instance.printing.kind === "figmentCopy" && instance.printing.spark !== null && card.cardType === "character"
@@ -319,6 +326,9 @@ export function createCatalog(
     avatar: (id) => lookup(avatarsById, id, "avatar"),
     dreamsign: (id) => lookup(dreamsignsById, id, "dreamsign"),
     figment: (id) => lookup(figmentsById, id, "figment"),
+    variantCard(this: EngineCatalog, id, variant) {
+      return applyEngineTransfigurations(this.card(id), variant);
+    },
     card(id) {
       const definition = cardsById.get(id);
       if (definition === undefined) {

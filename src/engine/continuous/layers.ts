@@ -239,7 +239,7 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
     // so a loss made before the gain never removes it. A lost one (its own, and those gained before its
     // latest loss) does not apply.
     const lost = instance.status.lostAbilities;
-    const own = catalog.card(printing.cardId).abilities(instance.variant);
+    const own = catalog.variantCard(printing.cardId, instance.variant).abilities(instance.variant);
     if (lost === undefined) add(instance.id, instance.controller, indexedStatics(own), instance.enteredZoneAt, instance.zone);
     let offset = own.length;
     let group = 0;

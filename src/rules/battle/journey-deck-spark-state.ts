@@ -28,7 +28,7 @@ function requiresJourneyDeckSparkOrigins(fold: EngineBattleFold, catalog: Engine
     const avatar = fold.init.avatars?.[side];
     return (avatar !== undefined && abilities(() => catalog.avatar(avatar).abilities(BASE_VARIANT))) ||
       (fold.init.dreamsigns?.[side] ?? []).some(id => abilities(() => catalog.dreamsign(id).abilities(BASE_VARIANT))) ||
-      fold.init.decks[side].some(entry => abilities(() => catalog.card(entry.cardId).abilities(variantOf(entry))));
+      fold.init.decks[side].some(entry => abilities(() => catalog.variantCard(entry.cardId, variantOf(entry)).abilities(variantOf(entry))));
   });
   const retained = states.some(state => SIDES.some(side => {
     const avatar = state.sides[side].avatar;

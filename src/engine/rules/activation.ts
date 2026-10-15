@@ -65,7 +65,7 @@ export function abilityOrigin(state: BattleState, source: AbilitySource): Abilit
 
 /** The abilities one gained group grants: a card's for its variant, or a figment type's. */
 export function gainedGroupAbilities(catalog: EngineCatalog, group: GainedAbilities): readonly Ability[] {
-  return "figment" in group ? catalog.figment(group.figment).abilities(BASE_VARIANT) : catalog.card(group.cardId).abilities(group.variant);
+  return "figment" in group ? catalog.figment(group.figment).abilities(BASE_VARIANT) : catalog.variantCard(group.cardId, group.variant).abilities(group.variant);
 }
 
 /**
@@ -96,7 +96,7 @@ function withoutLost(groups: readonly (readonly Ability[])[], lost: number): rea
 export function originAbilities(catalog: EngineCatalog, origin: AbilityOrigin): readonly Ability[] {
   switch (origin.kind) {
     case "card": {
-      const own = catalog.card(origin.cardId).abilities(origin.variant);
+      const own = catalog.variantCard(origin.cardId, origin.variant).abilities(origin.variant);
       if (origin.gained === undefined && origin.lost === undefined) return own;
       const groups = [own, ...(origin.gained ?? []).map((group) => gainedGroupAbilities(catalog, group))];
       return origin.lost === undefined ? groups.flat() : withoutLost(groups, origin.lost + 1);

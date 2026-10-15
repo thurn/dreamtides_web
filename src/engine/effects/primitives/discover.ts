@@ -136,7 +136,7 @@ function askingAbility(state: BattleState, catalog: EngineCatalog, purpose: Prom
   const instance = typeof purpose.source === "string" ? state.instances[purpose.source] : undefined;
   if (instance === undefined || purpose.ability === null) return undefined;
   if (purpose.cardId !== null) {
-    const printed = catalog.card(purpose.cardId).abilities(instance.variant);
+    const printed = catalog.variantCard(purpose.cardId, instance.variant).abilities(instance.variant);
     if (purpose.ability < printed.length) return printed[purpose.ability];
   }
   const live = instanceOrigin(instance);

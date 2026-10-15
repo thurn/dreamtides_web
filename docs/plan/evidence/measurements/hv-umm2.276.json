@@ -1,0 +1,298 @@
+{
+  "bead": "hv-umm2.276",
+  "status": "local-acceptance-verified; parent-cold-review-and-delivery-pending",
+  "baseline": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+  "sourceFreeze": "production-freeze-v04.json",
+  "matrix": "form-matrix-v07.json",
+  "implementationClock": {
+    "start": "2026-10-15T09:38:05.996Z",
+    "measurementCutoff": "2026-10-15T11:37:03.787724+00:00",
+    "includes": "Inclusive start09:38:05.996Z covers source/authority audit, admission, implementation, all waits, failed and successful validation, incident recovery and final actual Git. This committed cutoff precedes the sole Git command; linked final Git receipt supplies actual inclusive end without forced dates.",
+    "sampling": "unknown",
+    "finalGitReceipt": "validation-final-v02/git-commit-v01.receipt.json"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v04 wrapper start, one-minute load"
+      },
+      "localValidationS.full": {
+        "measuredFor": "Full review observed prepare-start11:32:23.399Z through outer terminal11:34:22.697530Z, including cleanup and excluding heavy queue. Full outer wrapper elapsed2120.381899s is separately retained."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "counterfactual-rebuild-v01": "{ 8.36 10.87 11.99 }",
+    "cycles-v02": "{ 10.53 11.50 12.25 }",
+    "focused-v01": "{ 9.77 12.06 11.08 }",
+    "focused-v02": "{ 7.99 9.90 10.36 }",
+    "focused-v03": "{ 9.12 10.01 10.38 }",
+    "focused-v04": "{ 19.89 12.95 11.45 }",
+    "focused-v05": "{ 25.67 19.87 14.83 }",
+    "focused-v06": "{ 11.02 11.61 12.29 }",
+    "focused-v07": "{ 7.37 10.49 11.83 }",
+    "focused-v08": "{ 7.26 9.71 11.39 }",
+    "focused-v09": "{ 9.65 11.65 12.07 }",
+    "focused-v10": "{ 12.09 11.07 11.51 }",
+    "judgments-v01": "{ 9.58 11.52 12.02 }",
+    "judgments-v02": "{ 7.36 9.81 11.21 }",
+    "judgments-v03": "{ 10.90 10.85 11.42 }",
+    "knip-v01": "{ 5.79 10.58 12.16 }",
+    "preflight-v01": "{ 26.10 16.33 12.86 }",
+    "red-before-v01": "{ 9.68 12.69 11.15 }",
+    "review-v01": "{ 5.95 10.70 12.21 }",
+    "review-v02": "{ 7.37 10.49 11.83 }",
+    "review-v03": "{ 10.76 10.39 11.62 }",
+    "sweep-v01": "{ 24.33 16.66 13.08 }",
+    "typecheck-v01": "{ 8.49 11.31 10.86 }",
+    "typecheck-v02": "{ 9.11 10.00 10.38 }",
+    "typecheck-v03": "{ 18.08 13.12 11.56 }",
+    "weighted300-v01": "{ 21.69 14.34 12.04 }",
+    "enduring-v04": "{ 9.46 10.39 11.18 }",
+    "enduring-v05": "{ 8.48 10.00 10.98 }",
+    "focused-v11": "{ 8.97 9.51 9.88 }",
+    "fuzz-tuple-red-v01": "{ 22.86 12.65 10.55 }",
+    "preflight-v02": "{ 8.83 8.02 9.48 }",
+    "purchase-battle-v01": "{ 6.94 8.56 10.16 }",
+    "purchase-battle-v02": "{ 7.89 7.81 9.51 }",
+    "remaining-judgments-v04": "{ 7.53 9.44 10.70 }",
+    "schema-v01": "{ 8.46 9.86 10.90 }",
+    "sweep-v02": "{ 8.65 8.10 9.42 }",
+    "weighted300-v02": "{ 8.15 10.47 11.79 }",
+    "whitespace-v01": "{ 8.67 9.88 10.90 }",
+    "schema-v02": "{ 5.33 7.43 8.84 }",
+    "diagnostic-winter-res-player-v01": "{ 7.73 8.68 9.46 }",
+    "diagnostic-legion-emp-player-v01": "{ 6.68 8.38 9.31 }",
+    "diagnostic-gloom-res-enemy-v01": "{ 7.28 8.75 9.51 }",
+    "review-v04": "{ 7.14 8.98 9.67 }",
+    "knip-v02": "{ 9.85 9.31 9.73 }",
+    "full-v01": "{ 6.31 8.11 9.18 }",
+    "weighted300-v03": "{ 8.48 9.34 9.81 }"
+  },
+  "commands": {
+    "counterfactual-rebuild-v01": {"utc":["2026-10-15T10:16:48.031979+00:00","2026-10-15T10:16:53.186057+00:00"],"exit":1,"elapsedS":5.153983,"scope":"entire command wrapper","receipt":"validation-final-v02/counterfactual-rebuild-v01.receipt.json","sha256":"c8d4468ba5c62b2c8c52f766ac18ce784565cff18803bf276e4cf60a49cc3aae"},
+    "cycles-v02": {"utc":["2026-10-15T10:16:17.129244+00:00","2026-10-15T10:16:18.881098+00:00"],"exit":0,"elapsedS":1.75175,"scope":"entire command wrapper","receipt":"validation-final-v02/cycles-v02.receipt.json","sha256":"7e9e4cb483334ed63215fbb4f58172d6c16b1a15579f5cb48122be5a0eff17ca"},
+    "diagnostic-gloom-res-enemy-v01": {"utc":["2026-10-15T10:57:18.189177+00:00","2026-10-15T10:57:29.554070+00:00"],"exit":0,"elapsedS":11.364713,"scope":"entire command wrapper","receipt":"validation-final-v02/diagnostic-gloom-res-enemy-v01.receipt.json","sha256":"85eeb17fc1947ab00ad50042905bbb4dc99a9c1d60fb4a6c0dc5482f586eb840"},
+    "diagnostic-legion-emp-player-v01": {"utc":["2026-10-15T10:58:24.336486+00:00","2026-10-15T10:58:38.334380+00:00"],"exit":0,"elapsedS":13.997659,"scope":"entire command wrapper","receipt":"validation-final-v02/diagnostic-legion-emp-player-v01.receipt.json","sha256":"e5ad9c35490f37375e93ba9259aecf403464eed403f7c849452a04719470d276"},
+    "diagnostic-winter-res-player-v01": {"utc":["2026-10-15T10:57:44.049630+00:00","2026-10-15T10:57:59.470600+00:00"],"exit":0,"elapsedS":15.420746,"scope":"entire command wrapper","receipt":"validation-final-v02/diagnostic-winter-res-player-v01.receipt.json","sha256":"bbb6167aa32f56dd97ec35add783aadd08388493f2b86c05131204fc3c1565f6"},
+    "enduring-v04": {"utc":["2026-10-15T10:28:37.268394+00:00","2026-10-15T10:29:07.070877+00:00"],"exit":1,"elapsedS":29.802021,"scope":"entire command wrapper","receipt":"validation-final-v02/enduring-v04.receipt.json","sha256":"ee104c58d6a6aeae00c9892a677a00b96cf6bdda561a98a76123d7f9d5ddce9a"},
+    "enduring-v05": {"utc":["2026-10-15T10:29:36.304617+00:00","2026-10-15T10:30:01.643607+00:00"],"exit":0,"elapsedS":25.338706,"scope":"entire command wrapper","receipt":"validation-final-v02/enduring-v05.receipt.json","sha256":"de58b5edace9b995a708d2ce587e2b417f7b9d36396c185c8e8950153c9827bc"},
+    "focused-v01": {"utc":["2026-10-15T09:56:57.863877+00:00","2026-10-15T09:57:03.551914+00:00"],"exit":0,"elapsedS":5.68792,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v01.receipt.json","sha256":"a3d1c30c235ace5b94c08bc617644492bd72a42fe675c2e44dd64768ed2f0421"},
+    "focused-v02": {"utc":["2026-10-15T10:01:05.801790+00:00","2026-10-15T10:01:13.714221+00:00"],"exit":1,"elapsedS":7.912338,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v02.receipt.json","sha256":"d1e345bab6bec753ebe9db65bf6b33b99cc3905c0dbb3255ed2d1b6c52c59f19"},
+    "focused-v03": {"utc":["2026-10-15T10:01:29.424105+00:00","2026-10-15T10:01:35.126693+00:00"],"exit":1,"elapsedS":5.7025,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v03.receipt.json","sha256":"5f2d9fcdd60da6a6e56c9eea88408b3164611436a1152d0c68ab7f3ec7702f26"},
+    "focused-v04": {"utc":["2026-10-15T10:02:27.285890+00:00","2026-10-15T10:02:39.278432+00:00"],"exit":0,"elapsedS":11.992458,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v04.receipt.json","sha256":"0ea21ac9b18a6eafa1aff5c100d0cd1f82fcf82927d3b40342aa04714890a299"},
+    "focused-v05": {"utc":["2026-10-15T10:06:25.603714+00:00","2026-10-15T10:06:34.085015+00:00"],"exit":0,"elapsedS":8.481157,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v05.receipt.json","sha256":"f5641c439d9e4bc6cf8ec76dc680424c5147500d6e32ef6cd76f5f9ae8ccac2f"},
+    "focused-v06": {"utc":["2026-10-15T10:16:15.973079+00:00","2026-10-15T10:16:23.279167+00:00"],"exit":0,"elapsedS":7.305955,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v06.receipt.json","sha256":"f8a81356eb5a44bfaed74645482106544405ff9e05645d75cc8104a91e36b06a"},
+    "focused-v07": {"utc":["2026-10-15T10:17:10.276807+00:00","2026-10-15T10:17:17.031992+00:00"],"exit":1,"elapsedS":6.755065,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v07.receipt.json","sha256":"41ae1e5a51424814ebd897615320bfe21847fc47be694d6f7dac8048156ddde6"},
+    "focused-v08": {"utc":["2026-10-15T10:18:51.623197+00:00","2026-10-15T10:19:03.863917+00:00"],"exit":0,"elapsedS":12.240447,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v08.receipt.json","sha256":"cfe0af2cb9b65935bb634d97d5a0857ffa70bb745c9d95390a656359071289a7"},
+    "focused-v09": {"utc":["2026-10-15T10:21:10.543300+00:00","2026-10-15T10:21:17.842756+00:00"],"exit":0,"elapsedS":7.299303,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v09.receipt.json","sha256":"0d53b88234e3421e13f4daed72645b1790a28fc290813c5478bf48bb59c90de7"},
+    "focused-v10": {"utc":["2026-10-15T10:26:30.449336+00:00","2026-10-15T10:26:38.103581+00:00"],"exit":0,"elapsedS":7.654108,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v10.receipt.json","sha256":"93cae0b89a63516e599602bd2b96ba1d5f1d23056741711477edf35c00e38b6c"},
+    "focused-v11": {"utc":["2026-10-15T10:54:41.083326+00:00","2026-10-15T10:54:46.652234+00:00"],"exit":0,"elapsedS":5.568763,"scope":"entire command wrapper","receipt":"validation-final-v02/focused-v11.receipt.json","sha256":"61c81baba64415e0ede888b429a4b7983ebf088c9135f5f87272048beb585860"},
+    "full-v01": {"utc":["2026-10-15T10:59:02.280990+00:00","2026-10-15T11:34:22.697530+00:00"],"exit":0,"elapsedS":2120.381899,"scope":"wrapper including queue and child execution","receipt":"validation-final-v02/full-v01.receipt.json","sha256":"05b4efaead5d57b872b013d6ca30e831a85c10b5e04e43635bbb5ce7455a819c"},
+    "fuzz-tuple-red-v01": {"utc":["2026-10-15T10:44:20.250232+00:00","2026-10-15T10:44:23.253437+00:00"],"exit":1,"elapsedS":3.003114,"scope":"entire command wrapper","receipt":"validation-final-v02/fuzz-tuple-red-v01.receipt.json","sha256":"22000cecf54f3672bf45a25416d6fa93bff34c4760a2baf74f531ec7e5f24aa7"},
+    "judgments-v01": {"utc":["2026-10-15T10:21:26.497654+00:00","2026-10-15T10:22:36.257782+00:00"],"exit":1,"elapsedS":69.759504,"scope":"entire command wrapper","receipt":"validation-final-v02/judgments-v01.receipt.json","sha256":"92c2d06e483b5b854a1911b35a6d0de3cf150f26b40ebcce34e01fed0005e378"},
+    "judgments-v02": {"utc":["2026-10-15T10:24:15.089368+00:00","2026-10-15T10:24:58.475252+00:00"],"exit":1,"elapsedS":43.385499,"scope":"entire command wrapper","receipt":"validation-final-v02/judgments-v02.receipt.json","sha256":"a7d887f440eae432475f6873c62ca6a33f78c99cc6eb8aa776d7021cdc59ba27"},
+    "judgments-v03": {"utc":["2026-10-15T10:26:43.322674+00:00","2026-10-15T10:27:34.997729+00:00"],"exit":1,"elapsedS":51.674576,"scope":"entire command wrapper","receipt":"validation-final-v02/judgments-v03.receipt.json","sha256":"b6f28587980b4fa9fb4f0315419804f18f32f10d45e02a654c80f04ddc14296e"},
+    "knip-v01": {"utc":["2026-10-15T10:12:27.263486+00:00","2026-10-15T10:12:34.520859+00:00"],"exit":0,"elapsedS":7.257258,"scope":"entire command wrapper","receipt":"validation-final-v02/knip-v01.receipt.json","sha256":"40c4bf7f24c8137cd530c1a2b919613fec190e0e4ab3bf821e57df6f6a9c1445"},
+    "knip-v02": {"utc":["2026-10-15T10:56:43.154775+00:00","2026-10-15T10:56:47.043381+00:00"],"exit":0,"elapsedS":3.888493,"scope":"entire command wrapper","receipt":"validation-final-v02/knip-v02.receipt.json","sha256":"55b03a4575f5374f73340f7b5b385e56208d29209f14e82d11494fb1882f49fc"},
+    "preflight-v01": {"utc":["2026-10-15T10:03:54.031693+00:00","2026-10-15T10:03:58.791505+00:00"],"exit":0,"elapsedS":4.759437,"scope":"entire command wrapper","receipt":"validation-final-v02/preflight-v01.receipt.json","sha256":"da5041e8aac64d62ce8804545c930656c788fc1d435376cea172e40d09f2cf25"},
+    "preflight-v02": {"utc":["2026-10-15T10:36:47.895507+00:00","2026-10-15T10:36:55.658755+00:00"],"exit":0,"elapsedS":7.763011,"scope":"entire command wrapper","receipt":"validation-final-v02/preflight-v02.receipt.json","sha256":"762efa0b8d39f5f143cc8c60ad2c0b130467ca9e00257cc6955a52c4041f5674"},
+    "purchase-battle-v01": {"utc":["2026-10-15T10:32:50.890370+00:00","2026-10-15T10:33:25.647479+00:00"],"exit":1,"elapsedS":34.756856,"scope":"entire command wrapper","receipt":"validation-final-v02/purchase-battle-v01.receipt.json","sha256":"93b2413f2b8eac69c4df512fca9fe315347127a1d20f47cbfce303782b76defd"},
+    "purchase-battle-v02": {"utc":["2026-10-15T10:35:50.177816+00:00","2026-10-15T10:37:31.239182+00:00"],"exit":0,"elapsedS":101.06046,"scope":"entire command wrapper","receipt":"validation-final-v02/purchase-battle-v02.receipt.json","sha256":"d0742738d9d9603aa49b93f372064367b2628ffe5333bd854964564917e8f4f8"},
+    "red-before-v01": {"utc":["2026-10-15T09:55:25.912192+00:00","2026-10-15T09:55:31.590355+00:00"],"exit":1,"elapsedS":5.678051,"scope":"entire command wrapper","receipt":"validation-final-v02/red-before-v01.receipt.json","sha256":"29239242d8a2756b7d4e3fbaf56eb0cf591d1686840f741369e017519ef04f79"},
+    "remaining-judgments-v04": {"utc":["2026-10-15T10:30:39.650598+00:00","2026-10-15T10:32:33.976658+00:00"],"exit":0,"elapsedS":114.325093,"scope":"entire command wrapper","receipt":"validation-final-v02/remaining-judgments-v04.receipt.json","sha256":"31822159b8bd143debb607f0f882566af599f5905de2d6bb66b5fef1495df8e6"},
+    "review-v01": {"utc":["2026-10-15T10:12:26.106566+00:00","2026-10-15T10:13:54.509618+00:00"],"exit":1,"elapsedS":88.402275,"scope":"entire command wrapper","receipt":"validation-final-v02/review-v01.receipt.json","sha256":"b613badfd3218902af33c025dada6ed7d0220147c17ef99f8dce1dd8a45b96fb"},
+    "review-v02": {"utc":["2026-10-15T10:17:11.436264+00:00","2026-10-15T10:18:29.206418+00:00"],"exit":1,"elapsedS":77.769479,"scope":"entire command wrapper","receipt":"validation-final-v02/review-v02.receipt.json","sha256":"9af18df66278156d3d89b1a7e03d3c82eb74a829507e0cdb84f76fa65b1c4b14"},
+    "review-v03": {"utc":["2026-10-15T10:18:52.768837+00:00","2026-10-15T10:20:10.965072+00:00"],"exit":0,"elapsedS":78.195545,"scope":"entire command wrapper","receipt":"validation-final-v02/review-v03.receipt.json","sha256":"ebd3d95f8d49e7bcd70e27f4b45c42603a870da4d138ac9885a09fecde49adbf"},
+    "review-v04": {"utc":["2026-10-15T10:55:28.144456+00:00","2026-10-15T10:56:37.023866+00:00"],"exit":0,"elapsedS":68.878576,"scope":"entire command wrapper","receipt":"validation-final-v02/review-v04.receipt.json","sha256":"d56dbae7f49ddc17a6f6b6f7a2b70cecdbc860df8469fbf2262b771008f2df2f"},
+    "schema-v01": {"utc":["2026-10-15T10:30:02.466756+00:00","2026-10-15T10:30:02.539484+00:00"],"exit":0,"elapsedS":0.072639,"scope":"entire command wrapper","receipt":"validation-final-v02/schema-v01.receipt.json","sha256":"654e638ad328bfc29b0d6835fdac4c260e3c690de874f187ce6c9fc26c42ae80"},
+    "schema-v02": {"utc":["2026-10-15T11:00:01.580733+00:00","2026-10-15T11:00:01.654830+00:00"],"exit":0,"elapsedS":0.074016,"scope":"entire command wrapper","receipt":"validation-final-v02/schema-v02.receipt.json","sha256":"eb0d1be369f289fc7af283798fe7cd0bc9910bf60d9544974117a03b19b9b716"},
+    "sweep-v01": {"utc":["2026-10-15T10:04:19.539640+00:00","2026-10-15T10:08:34.894477+00:00"],"exit":2,"elapsedS":255.352618,"scope":"entire command wrapper","receipt":"validation-final-v02/sweep-v01.receipt.json","sha256":"f1206b3fa39b122524627f66898de2a9b0f2ea6e4212aa41782672420446283d"},
+    "sweep-v02": {"utc":["2026-10-15T10:37:42.575611+00:00","2026-10-15T10:53:33.792530+00:00"],"exit":1,"elapsedS":951.200178,"scope":"entire command wrapper","receipt":"validation-final-v02/sweep-v02.receipt.json","sha256":"9602329bc06d266e16c5d1a215c9616d88940bebd89856e3d0d4588bdf76b2e1"},
+    "typecheck-v01": {"utc":["2026-10-15T09:57:53.406690+00:00","2026-10-15T09:58:05.814206+00:00"],"exit":0,"elapsedS":12.407362,"scope":"entire command wrapper","receipt":"validation-final-v02/typecheck-v01.receipt.json","sha256":"ba1c2743ef67f0f6dd8949ca35c41672523d5923c2d44066aebe72fc84e0a53a"},
+    "typecheck-v02": {"utc":["2026-10-15T10:01:35.201605+00:00","2026-10-15T10:01:48.022839+00:00"],"exit":2,"elapsedS":12.8211,"scope":"entire command wrapper","receipt":"validation-final-v02/typecheck-v02.receipt.json","sha256":"d29ec7b2383b4978dd28a3390cecf632feb546676a54c5872a6e7baf37bee2ce"},
+    "typecheck-v03": {"utc":["2026-10-15T10:02:54.301308+00:00","2026-10-15T10:03:09.138797+00:00"],"exit":0,"elapsedS":14.837383,"scope":"entire command wrapper","receipt":"validation-final-v02/typecheck-v03.receipt.json","sha256":"03e96febad4b700ee83907950f6b65a4ad1f1ae687c6655754ef1ee77eb391fc"},
+    "weighted300-v01": {"utc":["2026-10-15T10:03:19.392712+00:00","2026-10-15T10:16:03.596282+00:00"],"exit":130,"elapsedS":764.189188,"scope":"wrapper including queue and child execution","receipt":"validation-final-v02/weighted300-v01.receipt.json","sha256":"366b0147d25c85c774908db32fdf5585ede42228420280adfae18d1f3a76ffa1"},
+    "weighted300-v02": {"utc":["2026-10-15T10:17:29.002943+00:00","2026-10-15T10:33:25.682295+00:00"],"exit":0,"elapsedS":956.671983,"scope":"wrapper including queue and child execution","receipt":"validation-final-v02/weighted300-v02.receipt.json","sha256":"3c8afe348dc5e832a3f94f789b3c789cfbdcf0df887eaa132a5990acae6d1a21"},
+    "weighted300-v03": {"utc":["2026-10-15T10:55:05.351234+00:00","2026-10-15T11:32:23.196308+00:00"],"exit":0,"elapsedS":2237.809495,"scope":"wrapper including queue and child execution","receipt":"validation-final-v02/weighted300-v03.receipt.json","sha256":"a321f60652a5265bb174770bb2d929b4e62bd856b623548004f518cf2c10fb33"},
+    "whitespace-v01": {"utc":["2026-10-15T10:30:02.623506+00:00","2026-10-15T10:30:02.643716+00:00"],"exit":0,"elapsedS":0.020112,"scope":"entire command wrapper","receipt":"validation-final-v02/whitespace-v01.receipt.json","sha256":"0970d1ed882291589f14628a457b1fd5b66000e06f7d071d9a14598686a3de06"}
+  },
+  "testDelta": {
+    "scope": [
+      "src/engine/transfigurations.test.ts",
+      "src/engine/transfigurations/contracts/transfigurations-01.contracts.ts",
+      "src/engine/transfigurations/contracts/transfigurations-01.fixtures.ts"
+    ],
+    "files": 3,
+    "lines": 353,
+    "jsdomFiles": 0
+  },
+  "proofs": {
+    "redBefore": "red-before-v01 (both-side actual draw absent)",
+    "publicRebuildCounterfactual": {
+      "start": "2026-10-15T10:16:48.012699+00:00",
+      "counterfactual": "Expose structurally wrapped abilities through public cardDefinitions, then public createCatalog rebuild applies Inspired again. Expected actual second catalog battle draw overrun.",
+      "beforeSha256": "8093ade5dafc671b8304c3d9a90aeb96b9c2df6dfe0f17fa1a8733aebd39ecc4",
+      "mutatedSha256": "efc145f62ceece0a8986ce73465f005862cb7ce25cfe86b3e6d29e7a0344ca1b",
+      "exit": 1,
+      "restoredSha256": "8093ade5dafc671b8304c3d9a90aeb96b9c2df6dfe0f17fa1a8733aebd39ecc4",
+      "end": "2026-10-15T10:16:53.228553+00:00"
+    },
+    "normalRegressions": "review-v01 caught import evaluation cycle, substituted public catalog bypass and ordinary printed callback instability; fixed only admitted bodies.",
+    "unavailableTarget": "Known Resonant UUID with metadata-free synthetic pool rejects unavailable eligible form; separate unknown UUID/capacity negatives retained.",
+    "fuzzTuple": "fuzz-tuple-red-v01 failed actual retained amplified=true on base-only Resonant fixture. Bounded candidate selection now preserves the reserved amplified flag when eligible, otherwise changes only that flag; availability spans both flags. focused-v11 passes deterministic base-only, amplified-only and both-side eligible fixture cases while retaining deckMods. Root actual-catalog audit found no base-only current Resonant definitions, so retained v03 current-catalog gameplay/fuzz outcomes remain valid; final fuzzer epoch requires new300."
+  },
+  "qa": {
+    "planned": "All8cards*7variants*2controllers=112cells; six forms remain linked to exact source cards and UUIDs. Both-controller captured sweep, desktop/mobile six actual outcome judgments and real site-purchase-to-battle workflow remain required.",
+    "matrixCorrection": "v01 incorrectly encoded planned judged:true, retained unchanged. v02-v04 corrected actual outcome status and inherited old source binding; v05 player outcomes partial; v06 final both-controller per-cell evidence and judgments bind fullv04 source hashes, preserving original aggregate failures and source-equivalence note.",
+    "firstSweep": "sweep-v01 failed transport, no final acceptance; exact owner incident recovery below.",
+    "judgmentScenarioCorrections": "v01 clicked before actual presentation; v02/v03 expected a banished event on normal Reclaim resolution; v04 expected prevented from an unrelated prevention path. Full source readback proved normal cardPlayed/resolved plus physical banished/status.reclaimed/payment/persisted action. Enduring-v05 passed both viewports. Purchase-v01 assumed immediate lazy probe and one padded physical copy; v02 awaited actual probe readiness and compared exact persisted init tuple count and full physical ID set after reload. No product or shared QA edits.",
+    "judgments": "All six player desktop/mobile actual outcomes plus separately inspected six opponent captured sweep results and paired-controller public synthetic outcomes; visual-inspection-v03 records exact reports/capture observations and limitations.",
+    "purchase": "run-k0eiFy: real Inspired purchase on card2162742c-09d0-4e62-ae49-0f8f79b45adc, quote40/payment200\u2192160, accepted event and same-game battle init with two padded copies i8/i23, identical full physical ID set and battle after reload, both viewports, empty caps. Selected purchase captures show full original plus appended text and tint.",
+    "capturedSweep": {
+      "invocation": "invocations/sweep-S8G2uz",
+      "exit": 1,
+      "counts": {
+        "pass": 67,
+        "skip": 42,
+        "fail": 3
+      },
+      "attemptCounts": {
+        "pass": 67,
+        "skip": 42,
+        "fail": 5
+      },
+      "diagnostics": "All three root-authorized fresh about:blank exact-cell tracked card-lab-play diagnostics passed with captures and empty caps. Original aggregate exit1 remains unchanged; final per-cell evidence70pass42skip0fail."
+    },
+    "sourceProvenance": "qa-source-provenance-v01.json (supplemental after-run tracked caller/card source hashes equal initial baseline, bead-local scenario hashes; no claim this supplemental capture predated runtime)"
+  },
+  "providerIncident": {
+    "certificate": "/tmp/root276-20261015/justiciar-browser-incident-v01/termination-authority-v01.json",
+    "certificateSHA256": "bbdd825c17b4000682e6ffcdacdc6ef5be3b712d04c22b25f19f4d70e645294d",
+    "result": {
+      "at": "2026-10-15T10:20:20.936Z",
+      "state": "own-record-incident-archived",
+      "archive": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json.incident-reconciled-7c6ee096-95d0-465d-8e83-9f9bb8e696fd.json",
+      "ownerSHA256": "935829219c56d903dd9c811147229dcdf0e0efac2ab52ccd6b0a99dca4c99746",
+      "certificate": "/tmp/root276-20261015/justiciar-browser-incident-v01/termination-authority-v01.json",
+      "certificateSHA256": "bbdd825c17b4000682e6ffcdacdc6ef5be3b712d04c22b25f19f4d70e645294d",
+      "slotLockHeldDuringAllEffects": true,
+      "failedSweepRetained": true,
+      "successfulBrowserCloseClaimed": false
+    },
+    "successfulOriginalBrowserCloseClaimed": false,
+    "automatedGuardsChanged": false
+  },
+  "obsoleteFuzzCancellation": {
+    "at": "2026-10-15T10:16:03.535644+00:00",
+    "signal": "SIGINT",
+    "pgid": 3101,
+    "sourceStarted": "weighted300-v01.started.json",
+    "identityBefore": [
+      "2835  3101  3101 npm run fuzz:engine --games 300 --weight-uuids ***,***,***,***,***,***",
+      "2856  2835  3101 node /Users/dthurn/dreamtides_web/.worktrees/codex-transfiguration-transforms276/node_modules/.bin/tsx scripts/fuzz-engine.ts --games 300 --weight-uuids 19f6c2c9-dd6b-4d65-9f95-f6a3486772cc,a2c070ca-eacd-4cca-b69d-3d48f0787a16,a66c513e-500b-4891-8c09-9641ae300ba4,c3fa83af-ee3b-47cd-8112-5e5cc38821de,eb4cfc5f-237a-47cd-9215-7cce3f15583f,f0ff63b4-424b-4ae9-81d5-a4f6546afa3f",
+      "2860  2856  3101 /opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/codex-transfiguration-transforms276/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/codex-transfiguration-transforms276/node_modules/tsx/dist/loader.mjs scripts/fuzz-engine.ts --games 300 --weight-uuids 19f6c2c9-dd6b-4d65-9f95-f6a3486772cc,a2c070ca-eacd-4cca-b69d-3d48f0787a16,a66c513e-500b-4891-8c09-9641ae300ba4,c3fa83af-ee3b-47cd-8112-5e5cc38821de,eb4cfc5f-237a-47cd-9215-7cce3f15583f,f0ff63b4-424b-4ae9-81d5-a4f6546afa3f",
+      "3012  2860  3101 /Users/dthurn/dreamtides_web/.worktrees/codex-transfiguration-transforms276/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+      "3101  3079  3101 lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 19f6c2c9-dd6b-4d65-9f95-f6a3486772cc,a2c070ca-eacd-4cca-b69d-3d48f0787a16,a66c513e-500b-4891-8c09-9641ae300ba4,c3fa83af-ee3b-47cd-8112-5e5cc38821de,eb4cfc5f-237a-47cd-9215-7cce3f15583f,f0ff63b4-424b-4ae9-81d5-a4f6546afa3f"
+    ],
+    "reason": "Review-v01 proved own integration regressions; parent explicitly admitted settling obsolete loaded epoch before final fixes and required new final300. No pass claim."
+  },
+  "coverageScope": "Own six form UUID/verifiedText coverage contract plus current content-gates; original278 wider20per8/everyResonant/3judgments and sibling275/277 retain original joins.",
+  "readCustody": "validation-final-v02/read-coverage-v03.json",
+  "authority": "/tmp/root276-20261015/native-scope-v04.stdout",
+  "finiteReaderAudit": "/tmp/root276-20261015/finite-reader-independent-audit-v01.json",
+  "rawCustody": "validation-custody-v02.json",
+  "outsideScopeAudit": "validation-final-v02/outside-scope-audit-v02.json",
+  "heavyQueueObservation": "/tmp/worker276-20261015/heavy-queue-observation-v01.json",
+  "heavyExecutionObservation": "/tmp/worker276-20261015/weighted300-v03-execution-observed-v01.json",
+  "verboseDraft": {
+    "path": "measurements-verbose-v01.json",
+    "sha256": "ddf62bdb86bca4b6807384fd71d2fe514e877a98557ddb32aa87f5718570e4fa",
+    "retains": "Full verbose pre-compaction evidence; exact raw receipt contents also retained under validation-final-v02."
+  },
+  "commandReceiptContract": "Each linked receipt retains exact UTC start/end, argv/cwd, exit, monotonic wrapper elapsed, PID/PG, host load and remaining-process census. Command summaries distinguish wrappers that include queue from command execution; raw started and output files are adjacent. Expected failures, incident closure, source epochs and final acceptance are retained.",
+  "finalEvidenceChecks": {
+    "schema": "validation-final-v02/schema-v03.receipt.json",
+    "whitespace": "validation-final-v02/whitespace-v02.receipt.json",
+    "stagedFreeze": "staged-freeze-v01.json",
+    "note": "Exact terminal receipts and staged patch are retained in final ignored custody; these final small checks occur after this cutoff is written."
+  },
+  "validationOutcome": {
+    "review": {
+      "files": 336,
+      "tests": 9961,
+      "exit": 0
+    },
+    "focused": {
+      "files": 3,
+      "tests": 51,
+      "exit": 0
+    },
+    "knip": {
+      "exit": 0
+    },
+    "full": {
+      "files": 417,
+      "tests": 10970,
+      "exit": 0,
+      "count": 1
+    },
+    "weighted300Final": {
+      "games": 300,
+      "steps": 79061,
+      "prompts": 6616,
+      "interactiveReruns": 680,
+      "failures": 0,
+      "reportedExecutionWallSeconds": 939.6,
+      "reportedCpuSeconds": 990.0,
+      "outerWrapperSeconds": 2237.809494875022,
+      "targets": [
+        {
+          "uuid": "19f6c2c9-dd6b-4d65-9f95-f6a3486772cc",
+          "included": 1511,
+          "exercised": 964
+        },
+        {
+          "uuid": "a2c070ca-eacd-4cca-b69d-3d48f0787a16",
+          "included": 1532,
+          "exercised": 582
+        },
+        {
+          "uuid": "a66c513e-500b-4891-8c09-9641ae300ba4",
+          "included": 4870,
+          "exercised": 2141
+        },
+        {
+          "uuid": "c3fa83af-ee3b-47cd-8112-5e5cc38821de",
+          "included": 1075,
+          "exercised": 416
+        },
+        {
+          "uuid": "eb4cfc5f-237a-47cd-9215-7cce3f15583f",
+          "included": 1905,
+          "exercised": 975
+        },
+        {
+          "uuid": "f0ff63b4-424b-4ae9-81d5-a4f6546afa3f",
+          "included": 1922,
+          "exercised": 1029
+        }
+      ]
+    },
+    "preflight": {
+      "pass": 70,
+      "skip": 42,
+      "fail": 0
+    },
+    "browserFinalPerCellEvidence": {
+      "pass": 70,
+      "skip": 42,
+      "fail": 0,
+      "originalAggregateExit": 1
+    },
+    "journey": "Real purchase\u2192persisted battle variant identity/reload, desktop/mobile, empty caps; run-k0eiFy",
+    "judgments": "Six player desktop/mobile outcome judgments plus separately inspected opponent captures/results; form-matrix-v07.json and visual-inspection-v03.json"
+  },
+  "fullExecutionObservation": "validation-final-v02/full-v01-execution-observed-v01.json",
+  "gameplaySourceEquivalence": "All27v04 hashes/modes match after full. Compared withv03, only testing/fuzz.ts differs; all retained gameplay engine and existing QA caller bytes are exact. Supplemental caller/card source baseline hashes are in qa-source-provenance-v01.json."
+}

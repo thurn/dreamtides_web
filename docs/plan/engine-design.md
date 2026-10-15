@@ -2216,19 +2216,24 @@ intervening-if condition. Its content owner composes that condition with
 
 ## Transfigurations
 
-Phase 5.7a builds these transforms. Until then the engine `Variant` carries
-each deck entry's transfigurations and applies only Amplified, as its
-amplified flag. Each transfiguration is a pure transform of an entity's
-abilities, with an eligibility predicate.
+The engine `Variant` carries each deck entry's forms. `EngineCatalog.variantCard`
+resolves a tuple's authored variant and supported structural forms once;
+`instanceCard` applies its permanent deck modifications afterward, then a
+figment copy's explicit spark override. Public catalog definitions retain
+reusable authored factories. Direct own, gained and historical ability readers
+use the same resolved tuple. Each supported form has a UUID, eligibility
+predicate, structural transform and verified text. The registered forms are
+Empowered, Amplified, Inspired, Enduring, Hastened and Resonant; the remaining
+Phase 5.7a modules extend that catalog.
 
 There are nine ([F6](decisions.md#established-facts)):
 
 | Transfiguration | Eligibility | Transform |
 | --- | --- | --- |
-| Empowered | printed cost > 0 | cost → `floor(cost / 2)` (4→2, 3→1, 2→1, 1→0; [F5](decisions.md#established-facts)) |
-| Amplified | `amplifiedText` present | `v.amplified = true` |
+| Empowered | positive fixed printed cost; pure X is ineligible | cost → `floor(cost / 2)` (4→2, 3→1, 2→1, 1→0; [F5](decisions.md#established-facts)) |
+| Amplified | distinct nonempty authored `amplifiedText` | `v.amplified = true` |
 | Kindled | character | base spark ×2; 0 → 1 |
-| Resonant | has `▸Materialized`, `▸Dawn`, or once-per-turn | Materialized also on Dissolved; Dawn also on Materialized; drop `oncePerTurn` |
+| Resonant | supported displayed once-per-turn, `▸Dawn`, or literal `▸Materialized:` occurrence | Change its first selected occurrence, in that priority: drop the restriction, add Materialized, or add Dissolved; preserve conditions and zones |
 | Inspired | event | append `draw(1)` |
 | Enduring | event | add `keyword(reclaim())` |
 | Hastened | event that is not Fast | speed → Fast |

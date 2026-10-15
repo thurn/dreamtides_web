@@ -482,14 +482,18 @@ beads.
 
 `hv-umm2.630` prepares the activated-cost implementation after its actual
 cost/source prerequisites. Original `hv-umm2.275` owns Attuned
-(`22adf539-d2c9-4f33-9416-159d03a220ad`) and Perfected
-(`980d283a-9558-4b66-84a0-fcb91fdf4ceb`) composition and complete acceptance.
+(`980d283a-9558-4b66-84a0-fcb91fdf4ceb`) and Perfected
+(`22adf539-d2c9-4f33-9416-159d03a220ad`) composition and complete acceptance.
 `hv-umm2.276` owns the shared transform dispatcher, catalog/loader and fuzz
-bodies for its six exact glossary UUIDs. `hv-umm2.277` owns the unique
-Resonant module (`f40df441-0e44-4122-b4d4-cdc4085a9ffb`) and additive
-registration after that foundation. Perfected follows both 276 and 277;
-Kindled belongs to 276 (`f0ff63b4-424b-4ae9-81d5-a4f6546afa3f`). All original
-journey, eligibility, text, transform-contract and sweep joins remain.
+bodies and its six exact glossary forms: Hastened (`19f6c2c9-dd6b-4d65-9f95-f6a3486772cc`),
+Amplified (`a2c070ca-eacd-4cca-b69d-3d48f0787a16`), Empowered
+(`a66c513e-500b-4891-8c09-9641ae300ba4`), Resonant
+(`c3fa83af-ee3b-47cd-8112-5e5cc38821de`), Enduring
+(`eb4cfc5f-237a-47cd-9215-7cce3f15583f`) and Inspired
+(`f0ff63b4-424b-4ae9-81d5-a4f6546afa3f`). `hv-umm2.277` owns the unique
+Kindled module (`f40df441-0e44-4122-b4d4-cdc4085a9ffb`) and additive
+registration after that foundation. Perfected follows both 276 and 277.
+All original journey, eligibility, text, transform-contract and sweep joins remain.
 
 ### 5.7 Transfigurations
 

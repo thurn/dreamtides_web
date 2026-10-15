@@ -121,7 +121,7 @@ function abilitiesEnded(ctx: StepContext, id: InstanceId): void {
   mirrorAbilities(state, id);
   const instance = state.instances[id];
   if (instance === undefined || instance.printing.kind === "figment") return;
-  const own = ctx.catalog.card(instance.printing.cardId).abilities(instance.variant).length;
+  const own = ctx.catalog.variantCard(instance.printing.cardId, instance.variant).abilities(instance.variant).length;
   state.oncePerTurn = state.oncePerTurn.filter((key) => {
     const { source, ability } = oncePerTurnParts(key);
     return source !== id || ability < own;

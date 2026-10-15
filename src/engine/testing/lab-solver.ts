@@ -443,7 +443,8 @@ export function labBoard(
 ): { setup: BoardSetup; state: BattleState; opener: Side | null } {
   const entry: DeckEntry = typeof card === "string" ? { cardId: card } : card;
   const cardId = entry.cardId;
-  const definition = engine.catalog.card(cardId);
+  const variant = variantOf(entry);
+  const definition = engine.catalog.variantCard(cardId, variant);
   const back: Record<Side, (CardId | null)[]> = { player: [], enemy: [] };
   const figments: Record<Side, NonNullable<SideSetup["figments"]>[number][]> = { player: [], enemy: [] };
   const voids: Record<Side, CardId[]> = { player: [], enemy: [] };
@@ -452,7 +453,6 @@ export function labBoard(
   const zones = { void: voids, hand: hands, deck: decks };
   let opener: CardId | null = null;
   const xRange = labXRange(definition.costs);
-  const variant = variantOf(entry);
   const abilities = definition.abilities(variant);
   const countActivations = abilities.filter((ability) => ability.kind === "activated" && ability.costs.some((cost) => cost.cost === "abandon" && cost.count === "x"));
   const activationCosts = countActivations.flatMap((ability) => ability.kind === "activated" ? ability.costs : []);

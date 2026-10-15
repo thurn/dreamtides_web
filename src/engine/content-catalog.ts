@@ -1,3 +1,4 @@
+import { resonantChange } from "../transfiguration/transfiguration-logic";
 import { AVATARS } from "../content/avatars";
 import { APOLLYON_INCARNATIONS } from "../content/apollyon";
 import { CARDS } from "../content/cards";
@@ -57,6 +58,10 @@ function cardCosts(card: CardDefinition): CardCost[] {
 export function engineCardFromContent(card: CardDefinition): EngineCardDefinition {
   return {
     id: parseCardId(card.id),
+    transfiguration: {
+      amplified: card.amplifiedText !== undefined && card.amplifiedText.trim().length > 0 && card.amplifiedText !== card.renderedText,
+      resonant: { base: resonantChange(card.renderedText), amplified: resonantChange(card.amplifiedText ?? card.renderedText) },
+    },
     cardType: card.cardType === "Character" ? "character" : "event",
     costs: cardCosts(card),
     spark: card.cardType !== "Character" ? null : card.sparkVariable === true ? "x" : card.spark,

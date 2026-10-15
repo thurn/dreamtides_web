@@ -1,0 +1,6 @@
+# RD-hv-umm2.276-1: A transfiguration changes the occurrence selected by its displayed form
+
+- Ladder: 2 (existing actual Transfiguration text and stat operations in `src/transfiguration/transfiguration-logic.ts`, `resonantTransform` and `applyStatStep`); F5 explicitly settles floor rounding.
+- rules.md: § Transfigurations
+- Affects: c3fa83af-ee3b-47cd-8112-5e5cc38821de, a66c513e-500b-4891-8c09-9641ae300ba4
+- Why: Resonant's displayed operation selects one category in priority order: the first once-per-turn restriction, otherwise the first supported Dawn header, otherwise the first literal Materialized header. The structural instruction changes that same first occurrence, preserving its other conditions and functional zone. Existing static once-per-turn void-play permissions are restrictions of that kind. A combined trigger already containing the added occasion still triggers once for that occasion. Existing supported header spelling determines eligibility. Empowered replaces a positive fixed printed cost with one halved fixed value, dropping its original multi-orb labels; this includes a printed fixed-plus-X base. A pure X cost is ineligible. The engine follows those actual prototype operations without changing catalog text.

@@ -691,7 +691,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     const origin = instanceOrigin(instance);
     if (origin.kind === "card") {
       const { lost: _lost, gained, ...printed } = origin;
-      return ability < catalog.card(origin.cardId).abilities(origin.variant).length || gained === undefined ? printed : { ...printed, gained };
+      return ability < catalog.variantCard(origin.cardId, origin.variant).abilities(origin.variant).length || gained === undefined ? printed : { ...printed, gained };
     }
     if (origin.kind === "figment") { const { lost: _lost, ...printed } = origin; return printed; }
     return origin;

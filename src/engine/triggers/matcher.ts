@@ -535,7 +535,7 @@ function sameGained(a: readonly GainedAbilities[], b: readonly GainedAbilities[]
  */
 function gainedRecordsDropped(state: BattleState, catalog: EngineCatalog, listener: Listener, index: number): boolean {
   const { origin } = listener;
-  if (origin.kind !== "card" || index < catalog.card(origin.cardId).abilities(origin.variant).length) return false;
+  if (origin.kind !== "card" || index < catalog.variantCard(origin.cardId, origin.variant).abilities(origin.variant).length) return false;
   const now = abilityOrigin(state, listener.source);
   return now?.kind !== "card" || !sameGained(now.gained ?? [], origin.gained ?? []);
 }

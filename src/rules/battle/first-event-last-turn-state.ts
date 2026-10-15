@@ -39,7 +39,7 @@ export function hasUnknownFirstEventHistory(fold: EngineBattleFold, catalog = cu
     const avatar = fold.init.avatars?.[side];
     return avatar !== undefined && reads(() => catalog.avatar(avatar).abilities(BASE_VARIANT)) ||
       (fold.init.dreamsigns?.[side] ?? []).some(id => reads(() => catalog.dreamsign(id).abilities(BASE_VARIANT))) ||
-      fold.init.decks[side].some(entry => reads(() => catalog.card(entry.cardId).abilities(variantOf(entry))));
+      fold.init.decks[side].some(entry => reads(() => catalog.variantCard(entry.cardId, variantOf(entry)).abilities(variantOf(entry))));
   })) return true;
   const retained = (value: unknown): boolean => {
     if (Array.isArray(value)) return value.some(retained);

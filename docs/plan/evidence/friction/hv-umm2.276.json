@@ -1,0 +1,38 @@
+{
+  "bead": "hv-umm2.276",
+  "phase": 5,
+  "implementMin": 118.96319539999999,
+  "implementWindow": {
+    "start": "2026-10-15T09:38:05.996Z",
+    "end": "2026-10-15T11:37:03.787724+00:00"
+  },
+  "localValidationS": {
+    "review": 68.87857620796422,
+    "focused": 5.568763457995374,
+    "knip": 3.8884931670036167,
+    "full": 119.29853
+  },
+  "hostLoad": 7.14,
+  "testDelta": {
+    "files": 3,
+    "lines": 353,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-provider-heap-oom",
+      "minutes": 12,
+      "note": "Owned initial sweep lost MCP execution after provider heap OOM. Parent justiciar proved old provider/browser termination and archived only exact own record under kernel lock; failed reports retained; all acceptance remains."
+    },
+    {
+      "tag": "browser-qa-scenario-source-readback",
+      "minutes": 16.079025466666668,
+      "note": "Observed10:21:26.497654\u201310:37:31.239182 interval includes scenario runs and correction work: chooser presentation, actual Reclaim resolved/zone event contract, lazy probe readiness and padded init physical identity. Wrong observer assumptions were corrected after full source readback; initial failures retained, no product or shared QA edits."
+    },
+    {
+      "tag": "shared-heavy-capacity-queue",
+      "minutes": 22,
+      "note": "Final weighted300 wrapper queued10:55:05.351234Z until own npm child host ps lstart11:16:41Z(second precision), approximately21m36. Full wrapper queue10:59:02.280990\u201311:32:23Z overlaps this interval and own weighted execution; durations are not additive. Root verified a live shared holder read-only. No signals, source change or acceptance waiver; full interval belongs to implementation clock."
+    }
+  ]
+}

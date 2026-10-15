@@ -1,3 +1,5 @@
+import { ENGINE_TRANSFIGURATIONS, eligibleEngineTransfigurations } from "../transfigurations";
+import { parseGlossaryEntryId, type GlossaryEntryId } from "../../types/identifiers";
 import {
   createCatalog,
   type EmblemDefinitions,
@@ -132,7 +134,8 @@ export type FuzzTarget =
   | { readonly kind: "avatar"; readonly uuid: AvatarId }
   | { readonly kind: "dreamsign"; readonly uuid: DreamsignId }
   | { readonly kind: "dreamwell"; readonly uuid: DreamwellCardId }
-  | { readonly kind: "figment"; readonly uuid: FigmentId };
+  | { readonly kind: "figment"; readonly uuid: FigmentId }
+  | { readonly kind: "transfiguration"; readonly uuid: GlossaryEntryId };
 
 /** Counts observed setup inclusion and engine events; see README for each kind's units. */
 export interface FuzzTargetCoverage {
@@ -172,6 +175,7 @@ function weightedCards(pool: FuzzPool): readonly CardId[] {
 function availableTargets(pool: FuzzPool): FuzzTarget[] {
   return [
     ...pool.cards.map((card): FuzzTarget => ({ kind: "card", uuid: card.id })),
+    ...ENGINE_TRANSFIGURATIONS.map((form): FuzzTarget => ({ kind: "transfiguration", uuid: form.uuid })),
     ...(pool.emblems.avatars ?? []).map((avatar): FuzzTarget => ({ kind: "avatar", uuid: avatar.id })),
     ...(pool.emblems.dreamsigns ?? []).map((sign): FuzzTarget => ({ kind: "dreamsign", uuid: sign.id })),
     ...pool.dreamwell.map((card): FuzzTarget => ({ kind: "dreamwell", uuid: card.id })),
@@ -182,7 +186,12 @@ function availableTargets(pool: FuzzPool): FuzzTarget[] {
 function fuzzTargets(pool: FuzzPool): readonly FuzzTarget[] {
   const targets = pool.targets ?? weightedCards(pool).map((uuid): FuzzTarget => ({ kind: "card", uuid }));
   const known = availableTargets(pool);
+  if (targets.filter(target => target.kind === "card" || target.kind === "transfiguration").length > DECK_SIZE) throw new Error("Fuzz card and form targets exceed physical deck capacity.");
   for (const target of targets) {
+    if (target.kind === "transfiguration") {
+      const form = ENGINE_TRANSFIGURATIONS.find(form => form.uuid === target.uuid);
+      if (form === undefined || !fuzzCatalogCards(pool).some(card => card.status !== "pending" && [false, true].some(amplified => eligibleEngineTransfigurations(card, { amplified }).includes(form.id)))) throw new Error(`Fuzz form has no implemented eligible card: ${target.uuid}`);
+    }
     if (target.kind === "dreamsign") {
       const sign = pool.emblems.dreamsigns?.find((sign) => sign.id === target.uuid);
       if (sign?.status !== "authored" || sign.abilities(BASE_VARIANT).length === 0) {
@@ -221,6 +230,7 @@ export function withFuzzCardWeights(pool: FuzzPool, input: string | undefined): 
         return { kind: "dreamwell", uuid: id };
       }
       case "figment": return { kind: "figment", uuid: parseFigmentId(uuid) };
+      case "transfiguration": return { kind: "transfiguration", uuid: parseGlossaryEntryId(uuid) };
     }
   });
   const weightedCardIds = targets.flatMap((target) => target.kind === "card" ? [target.uuid] : []);
@@ -321,6 +331,25 @@ export function randomDeck(random: PolicyRandom, pool: FuzzPool): DeckEntry[] {
     },
   }));
   for (const [index, cardId] of targets.entries()) deck[index] = { ...deck[index], cardId };
+  const cards = fuzzCatalogCards(pool);
+  for (const [index, entry] of deck.entries()) {
+    const card = cards.find(card => card.id === entry.cardId)!;
+    // Uniformly choose an eligible registered form or the unformed alternative.
+    // The choice set derives from the catalog, with the existing amplified draw retained.
+    const form = random.pick([null, ...eligibleEngineTransfigurations(card, { amplified: entry.amplified === true })]);
+    if (form !== null) deck[index] = { ...entry, transfigurations: [form] };
+  }
+  const forms = fuzzTargets(pool).flatMap(target => target.kind === "transfiguration" ? [target.uuid] : []);
+  for (const [index, uuid] of forms.entries()) {
+    const form = ENGINE_TRANSFIGURATIONS.find(form => form.uuid === uuid)!;
+    const slot = targets.length + index;
+    const entry = deck[slot];
+    const eligible = (amplified: boolean) => cards.filter(card => card.status !== "pending" && eligibleEngineTransfigurations(card, { amplified }).includes(form.id));
+    const preferred = eligible(entry.amplified === true);
+    const amplified = preferred.length > 0 ? entry.amplified === true : entry.amplified !== true;
+    const card = random.pick(preferred.length > 0 ? preferred : eligible(amplified));
+    deck[slot] = { ...entry, cardId: card.id, amplified, transfigurations: [form.id] };
+  }
   return deck;
 }
 
@@ -449,6 +478,10 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool, o
     const { target } = coverage;
     for (const side of ["player", "enemy"] as const) {
       if (target.kind === "card") coverage.included += init.decks[side].filter((entry) => entry.cardId === target.uuid).length;
+      if (target.kind === "transfiguration") {
+        const form = ENGINE_TRANSFIGURATIONS.find(form => form.uuid === target.uuid)!;
+        coverage.included += init.decks[side].filter(entry => entry.transfigurations?.includes(form.id)).length;
+      }
       if (target.kind === "avatar" && init.avatars?.[side] === target.uuid) coverage.included += 1;
       if (target.kind === "dreamsign") coverage.included += init.dreamsigns?.[side]?.filter((id) => id === target.uuid).length ?? 0;
     }
@@ -488,6 +521,10 @@ export function playFuzzGame(engine: Engine, seed: BattleSeed, pool: FuzzPool, o
             if (target.kind === "figment" && event.kind === "materialized" && createdFigments.get(event.instance) === target.uuid) {
               coverage.included += 1;
               coverage.exercised += 1;
+            }
+            if (target.kind === "transfiguration" && event.kind === "cardPlayed") {
+              const form = ENGINE_TRANSFIGURATIONS.find(form => form.uuid === target.uuid)!;
+              if (observed.instances[event.instance]?.variant.transfigurations?.includes(form.id)) coverage.exercised += 1;
             }
             if (target.kind === "card" && event.kind === "cardPlayed") {
               const printing = observed.instances[event.instance]?.printing;
