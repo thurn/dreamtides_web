@@ -9,12 +9,14 @@ import type { DiscoverNode } from "./discover";
 /**
  * Put the referenced zone cards, or the character just discovered, into
  * play; "… with awakened" (`awakened`) enters them without the exhausted
- * status (RD-hv-umm2.93-2).
+ * status (RD-hv-umm2.93-2). `zeroSpark` sets a permanent zero base before
+ * entry observers, preserving additive spark (RD-hv-umm2.625-1).
  */
 export interface MaterializeNode {
   readonly op: "materialize";
   readonly from: ZoneCardSpec | DiscoverNode;
   readonly awakened?: true;
+  readonly zeroSpark?: true;
 }
 
 export const materializePrimitive = definePrimitive<MaterializeNode>({
@@ -36,11 +38,11 @@ export const materializePrimitive = definePrimitive<MaterializeNode>({
       candidates = (["player", "enemy"] as const).flatMap((side) => ctx.state.sides[side][ref.zone].filter((id) => selected.has(id)));
     }
     for (const id of candidates) {
-      if (cardMatchesFilter(ctx.state, ctx.catalog, id, { cardType: "character" })) enterCharacter(ctx, id, env.controller, undefined, node.awakened === true);
+      if (cardMatchesFilter(ctx.state, ctx.catalog, id, { cardType: "character" })) enterCharacter(ctx, id, env.controller, undefined, node.awakened === true, node.zeroSpark === true ? env.source : undefined);
     }
   },
 });
 
-export function materialize(from: ZoneCardSpec | DiscoverNode, options: { readonly awakened?: boolean } = {}): MaterializeNode {
-  return { op: "materialize", from, ...(options.awakened === true ? { awakened: true } : {}) };
+export function materialize(from: ZoneCardSpec | DiscoverNode, options: { readonly awakened?: boolean; readonly zeroSpark?: boolean } = {}): MaterializeNode {
+  return { op: "materialize", from, ...(options.awakened === true ? { awakened: true } : {}), ...(options.zeroSpark === true ? { zeroSpark: true } : {}) };
 }

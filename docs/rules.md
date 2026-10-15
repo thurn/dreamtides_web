@@ -1603,6 +1603,8 @@ Putting a character directly into play (for example "return to play" or
 "materialize from your void") is not "playing" it: it costs no energy, does not
 use the stack, cannot be Prevented, and does not fire "when you play" triggers.
 
+**Materialize with zero spark:** An instruction to materialize a character followed by "It has 0✦" sets that physical character's base spark to 0 as it enters play, before materialization abilities match. Its variant and printed characteristics stay the same; gained spark and other spark modifications apply on top of the zero base. Setting the base is not gaining spark. Only selected characters that successfully enter receive this change: a full battlefield, a reclaimed card that cannot enter, and every other unsuccessful entry change nothing. The setting is permanent and stays with that physical card through source, control, and zone changes, including leaving and entering play again. A later base-spark setting uses the ordinary ordering of continuous effects; another successful zero-spark materialization sets a new zero base. A character that ceases to exist keeps no change. The materialization uses its instruction's ordinary source zone and selection; this spark instruction adds no targeting, historical selection, or random draw.
+
 **First-play entry spark:** "The first character you play each turn materializes
 with +N✦" applies to your first actual character play in that turn, counted
 separately for each player on either player's turn. If that original played card

@@ -1,0 +1,38 @@
+{
+  "bead": "hv-umm2.625",
+  "phase": 5,
+  "implementMin": 19.56082071666667,
+  "implementWindow": {
+    "start": "2026-10-15T06:07:46.174000+00:00",
+    "end": "2026-10-15T06:27:19.823243+00:00"
+  },
+  "localValidationS": {
+    "browser-01": 28.364059958024882,
+    "browser-02": 45.344148125033826,
+    "browser-03": 15.238628958002664,
+    "browser-04": 69.06335358397337,
+    "content-gate": 3.707401708001271,
+    "contracts-01": 22.238697583030444,
+    "fault-capacity": 4.4301122080069035,
+    "fault-empty-rng": 4.351161625003442,
+    "fault-gained": 4.415828833007254,
+    "fault-lifetime": 4.5235865419963375,
+    "fault-postentry": 4.362904666981194,
+    "fault-unrelated": 4.524870000022929,
+    "focused-01": 13.347396333003417,
+    "focused-02": 10.73562262498308,
+    "knip-01": 7.383861125039402,
+    "restored-focused": 4.879352083953563,
+    "review-01": 73.01128404203337,
+    "schema-01": 0.5821809580083936,
+    "typecheck-01": 14.954412500024773,
+    "whitespace-01": 0.5122982090106234
+  },
+  "hostLoad": 6.6220703125,
+  "testDelta": {
+    "files": 1,
+    "lines": 250,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

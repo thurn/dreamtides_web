@@ -322,6 +322,8 @@ export const LAB = {
       return {};
     },
   }),
+  /** Permanent zero base on the exact selected successful void entry. */
+  materializeZeroSpark: labEvent(0x62500, 0, p.materialize(fromVoid({ cardType: "character" }), { zeroSpark: true })),
 } as const satisfies Record<string, EngineCardDefinition>;
 
 /** Every definition a lab battle may name: the synthetic, DSL, stack, loop, trigger, continuous, zone, and lab cards. */
@@ -495,6 +497,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
     text: "As you play this, look at the top 2 cards of your deck: put one into your hand and the other on the top or bottom of your deck.",
   },
   [DSL.immediateVoidCharacter.id]: { name: "Lab Immediate Return", text: "You may immediately play a ≤2● cost character from your void. Gain 1⍟." },
+  [LAB.materializeZeroSpark.id]: { name: "Lab Quiet Arrival", text: "Materialize a character from your void. It has 0✦." },
 };
 
 /** Instance ids of the placed cards, per side and zone, in setup order. */

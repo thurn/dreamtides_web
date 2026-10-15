@@ -1,0 +1,775 @@
+{
+  "bead": "hv-umm2.625",
+  "base": "4c81581482ddd992a346f145d2073771fcc10626",
+  "dispatch": "2026-10-15T06:07:46.174000+00:00",
+  "precommitCutoff": "2026-10-15T06:27:19.823243+00:00",
+  "finalGit": "external receipt; tracked precommit cutoff plus actual tail reported separately",
+  "modelSampling": "UNKNOWN",
+  "parentPreparation": "Separate parent setup from06:04; excluded before actual firstdispatch06:07:46.174Z",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "entire ordinary review-01 including prepare/checks/restore, with exact raw receipt SHA256",
+        "receiptSHA256": "265e5e06510f8ce97f2dc133600d226385e0c6ddbb80d87f7f3dfaab4eb5b34b"
+      }
+    }
+  },
+  "checks": [
+    {
+      "label": "browser-01",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.625/materialize-zero-spark.mjs",
+        "--bead",
+        "hv-umm2.625",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:18:16.773850+00:00",
+      "end": "2026-10-15T06:18:45.138402+00:00",
+      "wallS": 28.364059958024882,
+      "exit": 1,
+      "pid": 5883,
+      "pgid": 5883,
+      "hostLoadStart": [
+        13.8515625,
+        13.11083984375,
+        13.99755859375
+      ],
+      "hostLoadEnd": [
+        23.67578125,
+        15.568359375,
+        14.8623046875
+      ],
+      "cpuUserS": 6.709077,
+      "cpuSystemS": 3.545217,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "323122dbc9a2f2e585183a55779cc96ff55c6bd2e6cea2b3b31171efdb9aa12b",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "browser-02",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.625/materialize-zero-spark.mjs",
+        "--bead",
+        "hv-umm2.625",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:19:22.023491+00:00",
+      "end": "2026-10-15T06:20:07.370998+00:00",
+      "wallS": 45.344148125033826,
+      "exit": 1,
+      "pid": 68334,
+      "pgid": 68334,
+      "hostLoadStart": [
+        21.31884765625,
+        15.9052734375,
+        15.01220703125
+      ],
+      "hostLoadEnd": [
+        23.71142578125,
+        17.26220703125,
+        15.55419921875
+      ],
+      "cpuUserS": 6.876262,
+      "cpuSystemS": 2.902741,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "fd6459471bd96bbcb2f067036a75e3f67b76a5d1dae1af57331f6f7db6fdcb6a",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "browser-03",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.625/materialize-zero-spark.mjs",
+        "--bead",
+        "hv-umm2.625",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:20:44.065522+00:00",
+      "end": "2026-10-15T06:20:59.304481+00:00",
+      "wallS": 15.238628958002664,
+      "exit": 1,
+      "pid": 31272,
+      "pgid": 31272,
+      "hostLoadStart": [
+        21.470703125,
+        17.50927734375,
+        15.71728515625
+      ],
+      "hostLoadEnd": [
+        19.81787109375,
+        17.3369140625,
+        15.68701171875
+      ],
+      "cpuUserS": 6.167789,
+      "cpuSystemS": 3.014706,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "791d581b38dad94b3207a1eb3dc923c4dafe736f56e36c0780f04f7afc54265f",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "browser-04",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.625/materialize-zero-spark.mjs",
+        "--bead",
+        "hv-umm2.625",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:21:27.389625+00:00",
+      "end": "2026-10-15T06:22:36.454017+00:00",
+      "wallS": 69.06335358397337,
+      "exit": 0,
+      "pid": 34747,
+      "pgid": 34747,
+      "hostLoadStart": [
+        14.71630859375,
+        16.37060546875,
+        15.39501953125
+      ],
+      "hostLoadEnd": [
+        23.3623046875,
+        18.87060546875,
+        16.4228515625
+      ],
+      "cpuUserS": 6.334875,
+      "cpuSystemS": 2.9188549999999998,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "88769e69799e4a0d6048b662768972283f14e132ecd7b023800f448ecd733fb8",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "content-gate",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:23:15.926021+00:00",
+      "end": "2026-10-15T06:23:19.633574+00:00",
+      "wallS": 3.707401708001271,
+      "exit": 0,
+      "pid": 1266,
+      "pgid": 1266,
+      "hostLoadStart": [
+        18.349609375,
+        18.22314453125,
+        16.30126953125
+      ],
+      "hostLoadEnd": [
+        18.349609375,
+        18.22314453125,
+        16.30126953125
+      ],
+      "cpuUserS": 3.087557,
+      "cpuSystemS": 0.885149,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "170fd7936d11bb66cc1a9cf55da8b55ea59f7ac1d28669011244746d6e1fd175",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "contracts-01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:15:04.782318+00:00",
+      "end": "2026-10-15T06:15:27.021359+00:00",
+      "wallS": 22.238697583030444,
+      "exit": 0,
+      "pid": 93174,
+      "pgid": 93174,
+      "hostLoadStart": [
+        11.12939453125,
+        16.232421875,
+        15.2548828125
+      ],
+      "hostLoadEnd": [
+        9.56640625,
+        15.44482421875,
+        14.9970703125
+      ],
+      "cpuUserS": 27.217339,
+      "cpuSystemS": 2.538329,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "81c01b30fe8f161793c10394566feb3c9e54337378c19f159a3c8dc97d3ff477",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "fault-capacity",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize zero spark.*successful capacity cohort"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:16:04.791980+00:00",
+      "end": "2026-10-15T06:16:09.222209+00:00",
+      "wallS": 4.4301122080069035,
+      "exit": 1,
+      "pid": 96857,
+      "pgid": 96857,
+      "hostLoadStart": [
+        7.48193359375,
+        14.27197265625,
+        14.5869140625
+      ],
+      "hostLoadEnd": [
+        7.44287109375,
+        14.15087890625,
+        14.5419921875
+      ],
+      "cpuUserS": 5.358179,
+      "cpuSystemS": 1.072428,
+      "sourceSHA256": "b85ef537fd695b50fa6a3a7239f73ba881ac23dd09b7431d10c1432aa8fab49d",
+      "outputSHA256": "83072bfe5d37cfb0b222b658f74a3029b04575e61438d51d73e73a22f41190c1",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "fault-empty-rng",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize zero spark.*empty eligibility"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:16:13.801587+00:00",
+      "end": "2026-10-15T06:16:18.152906+00:00",
+      "wallS": 4.351161625003442,
+      "exit": 1,
+      "pid": 97375,
+      "pgid": 97375,
+      "hostLoadStart": [
+        7.8076171875,
+        14.11474609375,
+        14.52685546875
+      ],
+      "hostLoadEnd": [
+        7.50244140625,
+        13.94677734375,
+        14.46484375
+      ],
+      "cpuUserS": 5.356402,
+      "cpuSystemS": 1.028304,
+      "sourceSHA256": "cf94e7508a0b195ba3bedf670cd67d54ceef0c5b3601bfaed27677f9b3c27cde",
+      "outputSHA256": "2f612bda3a405e6440fc7bb8c00fb36f3c3e34e31d0eacc2bd94a4f0d461713e",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "fault-gained",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize zero spark.*variant printing"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:16:00.348780+00:00",
+      "end": "2026-10-15T06:16:04.764730+00:00",
+      "wallS": 4.415828833007254,
+      "exit": 1,
+      "pid": 96589,
+      "pgid": 96589,
+      "hostLoadStart": [
+        7.6982421875,
+        14.4287109375,
+        14.6435546875
+      ],
+      "hostLoadEnd": [
+        7.48193359375,
+        14.27197265625,
+        14.5869140625
+      ],
+      "cpuUserS": 5.400194,
+      "cpuSystemS": 1.056731,
+      "sourceSHA256": "ac70770daa005c5ad041f061f07953a201140bb3965f2c5884a6aa679ce0390c",
+      "outputSHA256": "0e1117cbffb38d4fa9ca554705e076f728b7a48eb4309111164ee2433a906c0a",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "fault-lifetime",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize zero spark.*intrinsic entry setting"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:16:09.250079+00:00",
+      "end": "2026-10-15T06:16:13.773835+00:00",
+      "wallS": 4.5235865419963375,
+      "exit": 1,
+      "pid": 97119,
+      "pgid": 97119,
+      "hostLoadStart": [
+        7.44287109375,
+        14.15087890625,
+        14.5419921875
+      ],
+      "hostLoadEnd": [
+        7.8076171875,
+        14.11474609375,
+        14.52685546875
+      ],
+      "cpuUserS": 5.469569,
+      "cpuSystemS": 1.051204,
+      "sourceSHA256": "3b0774f9e934a761a5a83190ee63ab1eb4e2656af1092c1f4b0b9571d15391e2",
+      "outputSHA256": "21accfa724eb8192da926e280cdce1985f0e25eea26a418323ad34a8877d12f8",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "fault-postentry",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize zero spark.*base before arrival"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:15:55.957921+00:00",
+      "end": "2026-10-15T06:16:00.320950+00:00",
+      "wallS": 4.362904666981194,
+      "exit": 1,
+      "pid": 96341,
+      "pgid": 96341,
+      "hostLoadStart": [
+        7.6982421875,
+        14.4287109375,
+        14.6435546875
+      ],
+      "hostLoadEnd": [
+        7.6982421875,
+        14.4287109375,
+        14.6435546875
+      ],
+      "cpuUserS": 5.381998,
+      "cpuSystemS": 1.027271,
+      "sourceSHA256": "350f456b88ebec78e5b0722e247c1eb136fe7204a448a20431244ae3e2c4f358",
+      "outputSHA256": "fc56690cb0f97d4f58d8d4fc7b88f43b67d0f6b6504f0c1237025aedbaafda14",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "fault-unrelated",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize zero spark.*randomly selected physical"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:15:51.403766+00:00",
+      "end": "2026-10-15T06:15:55.928782+00:00",
+      "wallS": 4.524870000022929,
+      "exit": 1,
+      "pid": 96061,
+      "pgid": 96061,
+      "hostLoadStart": [
+        7.93359375,
+        14.58837890625,
+        14.70068359375
+      ],
+      "hostLoadEnd": [
+        7.6982421875,
+        14.4287109375,
+        14.6435546875
+      ],
+      "cpuUserS": 5.30903,
+      "cpuSystemS": 1.040417,
+      "sourceSHA256": "ead40302549d12ef48dbab41f81dcf74522daa847c068a5434f3d4bab8a3cb8d",
+      "outputSHA256": "62d65bfb3f881ede1687dab0dfa6de9163f2ce4c9c4f3a241e62f72d0e043a02",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "focused-01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize zero spark"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:13:37.830246+00:00",
+      "end": "2026-10-15T06:13:51.177860+00:00",
+      "wallS": 13.347396333003417,
+      "exit": 1,
+      "pid": 86946,
+      "pgid": 86946,
+      "hostLoadStart": [
+        16.92919921875,
+        18.37646484375,
+        15.833984375
+      ],
+      "hostLoadEnd": [
+        15.40625,
+        17.97900390625,
+        15.736328125
+      ],
+      "cpuUserS": 9.816064,
+      "cpuSystemS": 3.708502,
+      "sourceSHA256": "6c5853873c88540c41789ad97bdd8dd45616c7d8399985e68556a218537b09ac",
+      "outputSHA256": "9e89b831d8c5c515663f813d378b172827579676f9afbf11e8aab681c65edc72",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "focused-02",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize zero spark"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:14:02.497442+00:00",
+      "end": "2026-10-15T06:14:13.233244+00:00",
+      "wallS": 10.73562262498308,
+      "exit": 0,
+      "pid": 88822,
+      "pgid": 88822,
+      "hostLoadStart": [
+        14.11962890625,
+        17.6171875,
+        15.6337890625
+      ],
+      "hostLoadEnd": [
+        13.71337890625,
+        17.41552734375,
+        15.5849609375
+      ],
+      "cpuUserS": 8.056136,
+      "cpuSystemS": 3.083765,
+      "sourceSHA256": "03f733a2044b4df8345018e553c89fcd1fe5effddc1f8301f13d860771b7f026",
+      "outputSHA256": "0467b21dc5de212b53e1e2d47b8a50afdf4933b3dd301845308906c813c9c3b3",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "knip-01",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:18:02.326352+00:00",
+      "end": "2026-10-15T06:18:09.710395+00:00",
+      "wallS": 7.383861125039402,
+      "exit": 0,
+      "pid": 4620,
+      "pgid": 4620,
+      "hostLoadStart": [
+        7.4052734375,
+        11.96826171875,
+        13.623046875
+      ],
+      "hostLoadEnd": [
+        7.77294921875,
+        11.96875,
+        13.61328125
+      ],
+      "cpuUserS": 4.783558,
+      "cpuSystemS": 2.567277,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "212b4878d3f0e539b2e5ef6e82322b77a57876e3fc2624654bb42c5ea5d03116",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "restored-focused",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "materialize zero spark"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:16:26.912886+00:00",
+      "end": "2026-10-15T06:16:31.792382+00:00",
+      "wallS": 4.879352083953563,
+      "exit": 0,
+      "pid": 98135,
+      "pgid": 98135,
+      "hostLoadStart": [
+        7.20361328125,
+        13.66845703125,
+        14.35986328125
+      ],
+      "hostLoadEnd": [
+        7.18701171875,
+        13.5576171875,
+        14.31640625
+      ],
+      "cpuUserS": 5.586851,
+      "cpuSystemS": 1.042772,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "af984d4f417e6501bdb6a8df361cd3b1eb9403f89ba2cfb86cc0a1bb7fa464df",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "review-01",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:16:46.468660+00:00",
+      "end": "2026-10-15T06:17:59.480947+00:00",
+      "wallS": 73.01128404203337,
+      "exit": 0,
+      "pid": 99547,
+      "pgid": 99547,
+      "hostLoadStart": [
+        6.6220703125,
+        13.12109375,
+        14.14697265625
+      ],
+      "hostLoadEnd": [
+        7.44091796875,
+        12.05224609375,
+        13.662109375
+      ],
+      "cpuUserS": 175.462786,
+      "cpuSystemS": 17.765516,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "4ae40568fa24d85c79fdabb2ae4f9163bfdfc51af5e40f5875229b637aa1a450",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "schema-01",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:25:44.191235+00:00",
+      "end": "2026-10-15T06:25:44.773513+00:00",
+      "wallS": 0.5821809580083936,
+      "exit": 0,
+      "pid": 10905,
+      "pgid": 10905,
+      "hostLoadStart": [
+        7.47998046875,
+        13.84521484375,
+        14.82470703125
+      ],
+      "hostLoadEnd": [
+        7.47998046875,
+        13.84521484375,
+        14.82470703125
+      ],
+      "cpuUserS": 0.067124,
+      "cpuSystemS": 0.023476999999999998,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "7a722981b321ceb0523d1126a9d9dd5de92d60e41fb7ab5d838bc8318d42eae4",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "typecheck-01",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:14:46.756876+00:00",
+      "end": "2026-10-15T06:15:01.711564+00:00",
+      "wallS": 14.954412500024773,
+      "exit": 0,
+      "pid": 92048,
+      "pgid": 92048,
+      "hostLoadStart": [
+        12.984375,
+        16.82958984375,
+        15.44384765625
+      ],
+      "hostLoadEnd": [
+        11.12939453125,
+        16.232421875,
+        15.2548828125
+      ],
+      "cpuUserS": 27.340037,
+      "cpuSystemS": 2.102874,
+      "sourceSHA256": "fe15724f0cf1d7e27e98e8e2c8e7eedeeabafe744e250e555f5d9a13c59c96fd",
+      "outputSHA256": "21b7dcbe65392d3a6d4dde4ca6211105f84355a73d3c8fe3cb667b6bfc469366",
+      "modelSampling": "UNKNOWN"
+    },
+    {
+      "label": "whitespace-01",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-zero625",
+      "start": "2026-10-15T06:26:19.681715+00:00",
+      "end": "2026-10-15T06:26:20.194412+00:00",
+      "wallS": 0.5122982090106234,
+      "exit": 0,
+      "pid": 13055,
+      "pgid": 13055,
+      "hostLoadStart": [
+        6.46533203125,
+        12.8828125,
+        14.43310546875
+      ],
+      "hostLoadEnd": [
+        6.46533203125,
+        12.8828125,
+        14.43310546875
+      ],
+      "cpuUserS": 0.007017,
+      "cpuSystemS": 0.0069559999999999995,
+      "sourceSHA256": "986168971c0d5121de5b9e10d6ca635c1c2dc04235c4bd4a365e08481f8c797a",
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "modelSampling": "UNKNOWN"
+    }
+  ],
+  "testModules": {
+    "plainContractModules": 1,
+    "contractLines": 250,
+    "newScenarioModules": 0,
+    "newSupportModules": 0,
+    "newFixtureModules": 0,
+    "existingFixtureModulesModified": 1,
+    "configuredEntrypointsDelta": 0,
+    "jsdomDelta": 0
+  },
+  "faults": [
+    {
+      "label": "fault-unrelated",
+      "exit": 1,
+      "restored": true
+    },
+    {
+      "label": "fault-postentry",
+      "exit": 1,
+      "restored": true
+    },
+    {
+      "label": "fault-gained",
+      "exit": 1,
+      "restored": true
+    },
+    {
+      "label": "fault-capacity",
+      "exit": 1,
+      "restored": true
+    },
+    {
+      "label": "fault-lifetime",
+      "exit": 1,
+      "restored": true
+    },
+    {
+      "label": "fault-empty-rng",
+      "exit": 1,
+      "restored": true
+    }
+  ],
+  "resources": {
+    "at": "2026-10-15T06:27:19.774779+00:00",
+    "ownedGroups": [
+      1266,
+      4620,
+      5883,
+      5931,
+      10905,
+      13055,
+      31272,
+      31309,
+      34747,
+      34787,
+      68334,
+      68381,
+      86946,
+      88822,
+      92048,
+      93174,
+      96061,
+      96341,
+      96589,
+      96857,
+      97119,
+      97375,
+      98135,
+      99547
+    ],
+    "survivors": [],
+    "port5274Exit": 0,
+    "port5274Listeners": "12586",
+    "records": {
+      "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+        "exists": true,
+        "content": "{\"token\":\"5016f166-c0cd-48f1-af65-b3a29311cc65\",\"pid\":12347,\"bead\":\"hv-umm2.255\",\"label\":\"blue-feather-judged\",\"checkout\":\"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root\",\"slot\":1,\"port\":5274,\"startedAt\":\"2026-10-15T06:26:12.496Z\",\"providerState\":\"active\",\"mcpSessionId\":\"2006a30d-83a6-4e6b-a548-25b3a7ecdd26\",\"mcpUrl\":\"http://localhost:8931/mcp\",\"mcpProtocolVersion\":\"2025-11-25\"}\n"
+      },
+      "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+        "exists": true,
+        "content": "{\"token\":\"fc1bf032-f603-488a-8d19-3c1bbb56fc49\",\"runner\":{\"pid\":12347,\"group\":12347,\"started\":\"Wed Oct 14 23:26:08 2026\",\"state\":\"Ss\",\"command\":\"node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/blue-feather-judged.mjs --bead hv-umm2.255 --port 5174 --arg side=enemy --viewports desktop,mobile\"},\"server\":{\"pid\":12384,\"group\":12384,\"started\":\"Wed Oct 14 23:26:08 2026\",\"state\":\"Rs\",\"command\":\"/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json fc1bf032-f603-488a-8d19-3c1bbb56fc49 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort\"},\"cwd\":\"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root\",\"port\":5274}\n"
+      }
+    },
+    "providerCleanup": "All four runner commands returned normal cleanup; each own context/client completed and own server port was free in final runner receipt. No shared service shutdown."
+  },
+  "browser": {
+    "accepted": "invocations/run-pxaKiC/materialize-zero-spark.result.json",
+    "failedCallers": [
+      "run-iDHUvR",
+      "run-khat7d",
+      "run-JSkPmW"
+    ],
+    "caps": [],
+    "viewports": [
+      "desktop",
+      "mobile"
+    ],
+    "allFourCapturesViewed": true,
+    "specializedBaseSparkLog": "Not defined; existing action/answer plus initial UUID setup reconstruct the deterministic instruction. Live effectStarted precedes materialized."
+  },
+  "archive": "artifacts/qa/hv-umm2.625/receipts/helper",
+  "scope": "Existing-shape permanent baseSpark zero-entry option, exact normative/RD and end-of-LAB event/text; state/view/fold/layers/production/config/driver unchanged."
+}

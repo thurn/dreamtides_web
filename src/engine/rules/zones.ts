@@ -338,6 +338,7 @@ export function enterPlay(
   side: Side,
   slot: Slot,
   awakened = false,
+  zeroSparkSource?: AbilitySource,
 ): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
@@ -352,6 +353,9 @@ export function enterPlay(
   instance.zone = "play";
   instance.enteredZoneAt = ++state.clock;
   setOccupant(state, side, slot, id);
+  if (zeroSparkSource !== undefined) {
+    addFloating(ctx, { controller: side, source: zeroSparkSource, expiry: { at: "never" }, change: { kind: "baseSpark", instance: id, value: 0 } });
+  }
   applyMaterializeKeywordModifiers(ctx, id, side);
   if (firstPlayedEntry) applyFirstPlayedCharacterEntrySpark(ctx, id, side);
   instance.status.exhausted = !awakened && !hasKeyword(state, ctx.catalog, id, "awakened");
@@ -373,9 +377,10 @@ export function placement(state: BattleState, side: Side, slot?: Slot): Slot | n
  * Battlefield Capacity), and a reclaimed card never leaves the Banished
  * zone. `awakened` makes it enter as an Awakened character does, without
  * the exhausted status, already as `materialized` announces it. Returns
- * whether it entered play.
+ * whether it entered play. `zeroSparkSource` gives only a successful entry a
+ * permanent zero base before observers, attributed to that effect source.
  */
-export function materialize(ctx: StepContext, id: InstanceId, side: Side, slot?: Slot, awakened = false): boolean {
+export function materialize(ctx: StepContext, id: InstanceId, side: Side, slot?: Slot, awakened = false, zeroSparkSource?: AbilitySource): boolean {
   const instance = instanceOf(ctx.state, id);
   if (instance.status.reclaimed) return false;
   const position = placement(ctx.state, side, slot);
@@ -383,7 +388,7 @@ export function materialize(ctx: StepContext, id: InstanceId, side: Side, slot?:
     ctx.emit({ kind: "capacityReached", side, instance: id, missing: 1 });
     return false;
   }
-  enterPlay(ctx, id, side, position, awakened);
+  enterPlay(ctx, id, side, position, awakened, zeroSparkSource);
   return true;
 }
 
