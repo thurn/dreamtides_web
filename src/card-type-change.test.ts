@@ -13,6 +13,7 @@ import { transfigurationFixture } from "./testing/transfiguration-fixture";
 import { parseDeckEntryId } from "./types/identifiers";
 import { parseCardTypeChangePredicateId } from "./types/identifiers";
 import { testCardId } from "./types/test-identities";
+import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "./runtime/transfigure-markers";
 
 const transfigurationData = transfigurationFixture();
 
@@ -183,5 +184,95 @@ describe("resolveDeckEntryCard", () => {
     expect(resolveDeckEntryCard(transfigurationData, card, entry).spark).toBe(
       5,
     );
+  });
+});
+
+
+describe("effective Reclaim declaration contracts", () => {
+  const declarations = [
+    "Reclaim", "Reclaim 9●", "Reclaim – 9●, Banish 3 cards from your void",
+    "Reclaim – Abandon a character", "Reclaim – Discard X cards",
+  ];
+  const mark = (text: string): string => TRANSFIGURE_MARK_START + text + TRANSFIGURE_MARK_END;
+  const effective = (text: string, price = 1): CardData =>
+    applyCardKeywordModification(makeCard({ renderedText: text }), { setReclaim: price });
+  const declaration = (price = 1): string => effective("", price).renderedText.trim();
+
+  it.each(declarations)("converges complete %s declarations while preserving their neighbors", (old) => {
+    for (const [prefix, suffix] of [
+      ["", ""],
+      ["A synthetic neighbor. ", ". Another synthetic neighbor."],
+      ["A synthetic neighbor.\n\n", ".\n\nA following ability."],
+    ]) {
+      const source = prefix + old + suffix;
+      const card = makeCard({ renderedText: source });
+      const before = structuredClone(card);
+      const actual = applyCardKeywordModification(card, { setReclaim: 1 });
+      expect(actual.renderedText).toBe(effective(prefix + declaration() + suffix).renderedText);
+      expect(actual.renderedText.startsWith(prefix)).toBe(true);
+      expect(actual.renderedText.endsWith(suffix)).toBe(true);
+      expect(actual.reclaimCost).toBe(1);
+      expect(actual.energyCost).toBe(card.energyCost);
+      expect(card).toEqual(before);
+      expect(effective(actual.renderedText).renderedText).toBe(actual.renderedText);
+      expect(effective(effective(source, 4).renderedText).renderedText).toBe(actual.renderedText);
+    }
+  });
+
+  it("preserves keyword-list separators and prose references without treating them as declarations", () => {
+    const prefix = "When you reclaim this character, it gains a counter.\n\nAwakened, ";
+    const suffix = "\n\nReclaim abilities cost you less. Cards you reclaim travel.";
+    const actual = effective(prefix + declarations[1] + suffix);
+    expect(actual.renderedText).toBe(effective(prefix + declaration() + suffix).renderedText);
+    expect(actual.renderedText.startsWith(prefix)).toBe(true);
+    expect(actual.renderedText.endsWith(suffix)).toBe(true);
+    const prose = "A character may gain Reclaim 9●. When you reclaim this character, draw.";
+    expect(effective(prose).renderedText.startsWith(prose)).toBe(true);
+  });
+
+  it("keeps zero override priority and a single declaration across repeated grants", () => {
+    const source = makeCard({ renderedText: declarations[2] + ". Reclaim." });
+    const result = applyCardKeywordModification(source, { setReclaim: 0, reclaim: 8 });
+    expect(result).toEqual(applyCardKeywordModification(source, { setReclaim: 0 }));
+    expect(result.reclaimCost).toBe(0);
+    expect(result.renderedText.split(declaration(0)).length - 1).toBe(1);
+    expect(result.renderedText.trimEnd()).toBe(effective(declaration(0) + ".", 0).renderedText);
+    expect(effective(result.renderedText, 0).renderedText).toBe(result.renderedText);
+  });
+
+  it.each(declarations)("preserves whole-clause and neighboring marks for %s", (old) => {
+    const prefix = mark("A marked neighbor.") + " ";
+    const suffix = " An unmarked neighbor. " + mark("Another marked neighbor.");
+    const actual = effective(prefix + mark(old + ".") + suffix).renderedText;
+    const expected = effective(prefix + mark(declaration() + ".") + suffix).renderedText;
+    expect(actual).toBe(expected);
+    expect(actual.startsWith(prefix)).toBe(true);
+    expect(actual.endsWith(suffix)).toBe(true);
+    expect(effective(actual).renderedText).toBe(actual);
+  });
+
+  it("preserves separately marked payment and outside highlight state", () => {
+    const prefix = "A preceding ability. ";
+    const suffix = ". An unmarked sentence. " + mark("A marked sentence.");
+    const old = "Reclaim " + mark("9●") + suffix;
+    const canonical = declaration();
+    const split = canonical.indexOf(" ");
+    const expected = prefix + canonical.slice(0, split + 1) + mark(canonical.slice(split + 1)) + suffix;
+    expect(effective(prefix + old).renderedText).toBe(expected);
+  });
+
+  it("agrees across legacy and chronological Enduring records without mutating printed inputs", () => {
+    const card = makeCard({ renderedText: "A synthetic event." });
+    const legacy = makeDeckEntry({ transfiguration: "Enduring", keywordModification: { setReclaim: 1 } });
+    const history = { ...legacy, transfigurationApplications: [{ form: "Enduring" as const }] };
+    const before = structuredClone({ card, legacy, history });
+    const first = resolveDeckEntryCard(transfigurationData, card, legacy);
+    const second = resolveDeckEntryCard(transfigurationData, card, history);
+    expect(second.renderedText).toBe(first.renderedText);
+    expect(second.reclaimCost).toBe(first.reclaimCost);
+    expect(second.energyCost).toBe(first.energyCost);
+    expect(first.renderedText.split(declaration()).length - 1).toBe(1);
+    expect(first.reclaimCost).toBe(1);
+    expect({ card, legacy, history }).toEqual(before);
   });
 });

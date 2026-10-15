@@ -1,3 +1,4 @@
+import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "./runtime/transfigure-markers";
 import { resolveDeckEntryTransfigurations } from "./transfiguration/deck-entry-transfigurations";
 import type { CardData } from "./types/cards";
 import type {
@@ -110,15 +111,59 @@ function normalizedReclaimCost(reclaim: number | undefined): number | null {
 }
 
 function appendReclaimText(renderedText: string, reclaimCost: number): string {
-  const reclaimLine = `Reclaim ${String(reclaimCost)}●`;
-  const textWithReplacement = renderedText.replace(
-    /Reclaim\s+\d+●/i,
-    reclaimLine,
-  );
-  if (textWithReplacement !== renderedText) return textWithReplacement;
-  return renderedText.trimEnd().endsWith(reclaimLine)
-    ? renderedText
-    : `${renderedText.trimEnd()}\n\n${reclaimLine}`;
+  // Find declarations in visible text, retaining source offsets and tint state
+  // so a replaced payment cannot change the highlighting of its neighbors.
+  let visible = "";
+  let highlighted = false;
+  const offsets: number[] = [];
+  const highlights: boolean[] = [];
+  for (let index = 0; index < renderedText.length; index += 1) {
+    const character = renderedText[index];
+    if (character === TRANSFIGURE_MARK_START || character === TRANSFIGURE_MARK_END) {
+      highlighted = character === TRANSFIGURE_MARK_START;
+    } else {
+      offsets.push(index);
+      highlights.push(highlighted);
+      visible += character;
+    }
+  }
+  // Payment commas belong to the multipart cost; a period/newline ends it.
+  // Sentence/keyword-list boundaries exclude ordinary prose references.
+  const declarations = [...visible.matchAll(
+    /(^|[\n.,][ \t]*|[!?][ \t]+)(Reclaim)(?:[ \t]+\d+[ \t]*●|[ \t]+–[ \t]*[^.\n]+)?(?=[.,\n]|[ \t]*$)/gi,
+  )];
+  if (declarations.length === 0) {
+    return `${renderedText.trimEnd()}\n\nReclaim ${String(reclaimCost)}●`;
+  }
+  const transition = (before: boolean, after: boolean): string =>
+    before === after ? "" : after ? TRANSFIGURE_MARK_START : TRANSFIGURE_MARK_END;
+  let result = renderedText;
+  for (let index = declarations.length - 1; index >= 0; index -= 1) {
+    const match = declarations[index];
+    const start = match.index + match[1].length;
+    const wordEnd = start + match[2].length;
+    const end = match.index + match[0].length;
+    if (index > 0) {
+      const removalEnd = visible[end] === "." ? end + 1 : end;
+      result = result.slice(0, offsets[start]) +
+        transition(highlights[start], highlights[removalEnd - 1]) +
+        result.slice(offsets[removalEnd - 1] + 1);
+      continue;
+    }
+    const tailStart = offsets[wordEnd - 1] + 1;
+    const tailEnd = offsets[end - 1] + 1;
+    const before = highlights[wordEnd - 1];
+    const after = highlights[end - 1];
+    const paymentHighlighted = end === wordEnd ? before :
+      highlights.slice(wordEnd, end).some((tinted, offset) =>
+        tinted && !/\s/.test(visible[wordEnd + offset]));
+    const spaceHighlighted = end === wordEnd ? before : highlights[wordEnd];
+    const payment = transition(before, spaceHighlighted) + " " +
+      transition(spaceHighlighted, paymentHighlighted) + String(reclaimCost) + "●" +
+      transition(paymentHighlighted, after);
+    result = result.slice(0, tailStart) + payment + result.slice(tailEnd);
+  }
+  return result;
 }
 
 /** Returns a card-like value with all deck-entry card modifications applied. */

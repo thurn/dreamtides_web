@@ -1,0 +1,723 @@
+{
+  "bead": "hv-umm2.758",
+  "base": "0216a4bc5f445559b9e6114cb56603e1a6674bc2",
+  "scope": {
+    "sourceWriter": "src/card-type-change.ts::appendReclaimText and one additive existing-marker import",
+    "testWriter": "additive public/metamorphic cases in existing src/card-type-change.test.ts",
+    "nonTestDelta": {
+      "added": 54,
+      "deleted": 9,
+      "gross": 63
+    },
+    "originalTrackedPayloadsBound": 5868,
+    "changedOriginalPaths": [
+      "src/card-type-change.test.ts",
+      "src/card-type-change.ts"
+    ],
+    "peerFunctionsAndFilesUnchanged": true,
+    "sourceAuditIsFormalReview": false,
+    "reviewDisposition": "Root assessed gross63 non-test lines, no new primitive/prompt/gate; no formal review required. Parent collection and visual acceptance are not formal review. Root rechecks final scope before delivery.",
+    "runtimeSHA256": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+    "finalTestSHA256": "3687eadc7fd5c1a4775ec3639b5da9d88a5369c1d1b77dae066fb6939114ecb6",
+    "qaSourceEpoch": [
+      {
+        "path": "src/card-type-change.ts",
+        "sha256": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73"
+      },
+      {
+        "path": "src/card-type-change.test.ts",
+        "sha256": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      }
+    ],
+    "qaEpochQualification": "A single derived duplicate-declaration equality assertion was added to the owning test after successful QA. Runtime formatter bytes remain identical. Final focused/review/Knip receipts bind the reinforced test epoch; original red applies only to its exact retained earlier test epoch."
+  },
+  "authority": {
+    "stage1-brief.md": {
+      "path": "/tmp/dreamtides-758-01a13a7a/stage1-brief.md",
+      "sha256": "d21b2beaf1d2cfd6e196447d79b7bb7b5880ff2931f9b6ccd09a80118d9f2b4a"
+    },
+    "finite-proposal.md": {
+      "path": "/tmp/dreamtides-758-01a13a7a/finite-proposal.md",
+      "sha256": "03dede5790688bc2b29df8d034da2e243f0261bd52fab7dcc227b34fbcd8150e"
+    },
+    "source-bindings.json": {
+      "path": "/tmp/dreamtides-758-01a13a7a/source-bindings.json",
+      "sha256": "290b8623b33989d176be73704a9b1d8ddee1cf002e2239e097138a4746dfae58"
+    },
+    "finite-ack.json": {
+      "path": "/tmp/dreamtides-758-01a13a7a/finite-ack.json",
+      "sha256": "a24133897e1c6308c113ed5e2b8d2c3837cad60326b150db045a284c268785c9"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final wrapper start via os.getloadavg()[0], 2026-10-15T21:00:33.542688Z; final ordinary review actual starting load also appears in retained log."
+      },
+      "implementWindow": {
+        "measuredFor": "Inclusive native claim acknowledgement through this frozen evidence cutoff. Final actual Git clock and post-cutoff metadata/check/commit tail are separately retained in scratch terminal-bindings.json; no future Git timestamp is assigned."
+      }
+    }
+  },
+  "claimClock": "2026-10-15T20:39:33.239154+00:00",
+  "frozenEvidenceCutoff": "2026-10-15T21:02:56.170365+00:00",
+  "validation": [
+    {
+      "label": "browser-v01",
+      "command": [
+        "node",
+        "/tmp/dreamtides-758-01a13a7a/browser-v01.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:54:49.363036+00:00",
+      "end": "2026-10-15T20:55:21.331595+00:00",
+      "wallS": 31.96810104197357,
+      "userS": 6.076528,
+      "systemS": 3.035213,
+      "hostLoad": [
+        9.38916015625,
+        12.46337890625,
+        12.14208984375
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      },
+      "exit": 1
+    },
+    {
+      "label": "browser-v02",
+      "command": [
+        "node",
+        "/tmp/dreamtides-758-01a13a7a/browser-v02.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:56:03.541323+00:00",
+      "end": "2026-10-15T20:57:20.121109+00:00",
+      "wallS": 76.57879645901266,
+      "userS": 6.678467,
+      "systemS": 3.030188,
+      "hostLoad": [
+        10.408203125,
+        12.14111328125,
+        12.0458984375
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      },
+      "exit": 0
+    },
+    {
+      "label": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/card-type-change.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:59:33.695314+00:00",
+      "end": "2026-10-15T20:59:38.751421+00:00",
+      "wallS": 5.055969082983211,
+      "userS": 4.605968,
+      "systemS": 1.774983,
+      "hostLoad": [
+        4.958984375,
+        8.69970703125,
+        10.59228515625
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "3687eadc7fd5c1a4775ec3639b5da9d88a5369c1d1b77dae066fb6939114ecb6"
+      },
+      "exit": 0
+    },
+    {
+      "label": "green-focused-v01",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/card-type-change.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:50:46.434460+00:00",
+      "end": "2026-10-15T20:50:51.089937+00:00",
+      "wallS": 4.655336374999024,
+      "userS": 4.643909,
+      "systemS": 1.596073,
+      "hostLoad": [
+        9.93115234375,
+        11.09912109375,
+        11.4599609375
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "912680e8de5323f6b797f965fa9ebb8b2f5c3062e1cbe13a993a478edd4393fe",
+        "src/card-type-change.test.ts": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      },
+      "exit": 1
+    },
+    {
+      "label": "green-focused-v02",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/card-type-change.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:51:01.527915+00:00",
+      "end": "2026-10-15T20:51:06.170925+00:00",
+      "wallS": 4.642868583032396,
+      "userS": 4.608162,
+      "systemS": 1.587978,
+      "hostLoad": [
+        9.0537109375,
+        10.84814453125,
+        11.36376953125
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      },
+      "exit": 0
+    },
+    {
+      "label": "knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T21:01:59.561175+00:00",
+      "end": "2026-10-15T21:02:03.492020+00:00",
+      "wallS": 3.9307130420347676,
+      "userS": 3.953376,
+      "systemS": 1.318463,
+      "hostLoad": [
+        5.39794921875,
+        7.43310546875,
+        9.77197265625
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "3687eadc7fd5c1a4775ec3639b5da9d88a5369c1d1b77dae066fb6939114ecb6"
+      },
+      "exit": 0
+    },
+    {
+      "label": "knip-v01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:51:58.950161+00:00",
+      "end": "2026-10-15T20:52:05.286883+00:00",
+      "wallS": 6.336469792004209,
+      "userS": 5.252408,
+      "systemS": 1.841685,
+      "hostLoad": [
+        19.2890625,
+        12.79638671875,
+        12.0166015625
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      },
+      "exit": 0
+    },
+    {
+      "label": "native-proof-v01",
+      "command": [
+        "node",
+        "/tmp/dreamtides-758-01a13a7a/run-ssr.mjs",
+        "/tmp/dreamtides-758-01a13a7a/verify-native-v01.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:58:03.732951+00:00",
+      "end": "2026-10-15T20:58:06.133830+00:00",
+      "wallS": 2.4007705000112765,
+      "userS": 3.844773,
+      "systemS": 1.180239,
+      "hostLoad": [
+        6.40673828125,
+        10.11669921875,
+        11.25390625
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      },
+      "exit": 0
+    },
+    {
+      "label": "public-rejudgment-v01",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-758-01a13a7a/public-rejudgment-v01.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:52:25.619507+00:00",
+      "end": "2026-10-15T20:52:28.868387+00:00",
+      "wallS": 3.248709167004563,
+      "userS": 3.077726,
+      "systemS": 1.464756,
+      "hostLoad": [
+        21.93212890625,
+        13.91064453125,
+        12.4384765625
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      },
+      "exit": 1
+    },
+    {
+      "label": "public-rejudgment-v02",
+      "command": [
+        "node",
+        "/tmp/dreamtides-758-01a13a7a/run-ssr.mjs",
+        "/tmp/dreamtides-758-01a13a7a/public-rejudgment-v01.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:52:50.552163+00:00",
+      "end": "2026-10-15T20:52:53.359702+00:00",
+      "wallS": 2.8074054999742657,
+      "userS": 4.36399,
+      "systemS": 1.29249,
+      "hostLoad": [
+        20.67041015625,
+        14.34423828125,
+        12.6416015625
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      },
+      "exit": 0
+    },
+    {
+      "label": "red-focused-corrected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/card-type-change.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:50:12.333380+00:00",
+      "end": "2026-10-15T20:50:17.407196+00:00",
+      "wallS": 5.073688333970495,
+      "userS": 4.88105,
+      "systemS": 1.772548,
+      "hostLoad": [
+        9.7861328125,
+        11.21435546875,
+        11.513671875
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "84894759b5395bc762c7a6098bf11bc6f7c6f860bc90daa8c8cc0bd8e42fb6af",
+        "src/card-type-change.test.ts": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      },
+      "exit": 1
+    },
+    {
+      "label": "red-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/card-type-change.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:49:48.526822+00:00",
+      "end": "2026-10-15T20:49:55.155950+00:00",
+      "wallS": 6.6289633749984205,
+      "userS": 5.705542,
+      "systemS": 2.194624,
+      "hostLoad": [
+        10.96484375,
+        11.546875,
+        11.63720703125
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "84894759b5395bc762c7a6098bf11bc6f7c6f860bc90daa8c8cc0bd8e42fb6af",
+        "src/card-type-change.test.ts": "1d86ab5f90d88be1fb8ee22925cb63a29a9c9a9d05485643e2ed7c6bf359d9f5"
+      },
+      "exit": 1
+    },
+    {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T21:00:33.542688+00:00",
+      "end": "2026-10-15T21:01:15.859227+00:00",
+      "wallS": 42.315974791999906,
+      "userS": 106.945087,
+      "systemS": 9.478085,
+      "hostLoad": [
+        4.7822265625,
+        7.92626953125,
+        10.169921875
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "3687eadc7fd5c1a4775ec3639b5da9d88a5369c1d1b77dae066fb6939114ecb6"
+      },
+      "exit": 0
+    },
+    {
+      "label": "review-v01",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-display-758",
+      "start": "2026-10-15T20:51:20.823049+00:00",
+      "end": "2026-10-15T20:52:18.576069+00:00",
+      "wallS": 57.752261792018544,
+      "userS": 148.876435,
+      "systemS": 12.433154,
+      "hostLoad": [
+        8.2421875,
+        10.54931640625,
+        11.24365234375
+      ],
+      "hostLoadScope": "validation wrapper start os.getloadavg; 1/5/15-minute",
+      "sourceSha256": {
+        "src/card-type-change.ts": "3e1f850cdfc17d8d0aca95ffa282d51a196b5aa0baf7a1f2f7a4e0e6c2085b73",
+        "src/card-type-change.test.ts": "4bacec0a90cbb62107c9171afdd15a4fe199d2e1cba3303b12779d425b3bd62e"
+      },
+      "exit": 0
+    }
+  ],
+  "cpuQualification": "Wrapper resource.getrusage(RUSAGE_CHILDREN) user/system CPU includes completed owned child processes; shared external MCP browser CPU is outside this measurement scope. Wall/CPU/load accompany exact commands and source hashes.",
+  "hostLoadSamples": [
+    {
+      "label": "browser-v01",
+      "start": "2026-10-15T20:54:49.363036+00:00",
+      "load": [
+        9.38916015625,
+        12.46337890625,
+        12.14208984375
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "browser-v02",
+      "start": "2026-10-15T20:56:03.541323+00:00",
+      "load": [
+        10.408203125,
+        12.14111328125,
+        12.0458984375
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "focused-final",
+      "start": "2026-10-15T20:59:33.695314+00:00",
+      "load": [
+        4.958984375,
+        8.69970703125,
+        10.59228515625
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "green-focused-v01",
+      "start": "2026-10-15T20:50:46.434460+00:00",
+      "load": [
+        9.93115234375,
+        11.09912109375,
+        11.4599609375
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "green-focused-v02",
+      "start": "2026-10-15T20:51:01.527915+00:00",
+      "load": [
+        9.0537109375,
+        10.84814453125,
+        11.36376953125
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "knip-final",
+      "start": "2026-10-15T21:01:59.561175+00:00",
+      "load": [
+        5.39794921875,
+        7.43310546875,
+        9.77197265625
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "knip-v01",
+      "start": "2026-10-15T20:51:58.950161+00:00",
+      "load": [
+        19.2890625,
+        12.79638671875,
+        12.0166015625
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "native-proof-v01",
+      "start": "2026-10-15T20:58:03.732951+00:00",
+      "load": [
+        6.40673828125,
+        10.11669921875,
+        11.25390625
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "public-rejudgment-v01",
+      "start": "2026-10-15T20:52:25.619507+00:00",
+      "load": [
+        21.93212890625,
+        13.91064453125,
+        12.4384765625
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "public-rejudgment-v02",
+      "start": "2026-10-15T20:52:50.552163+00:00",
+      "load": [
+        20.67041015625,
+        14.34423828125,
+        12.6416015625
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "red-focused-corrected",
+      "start": "2026-10-15T20:50:12.333380+00:00",
+      "load": [
+        9.7861328125,
+        11.21435546875,
+        11.513671875
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "red-focused",
+      "start": "2026-10-15T20:49:48.526822+00:00",
+      "load": [
+        10.96484375,
+        11.546875,
+        11.63720703125
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "review-final",
+      "start": "2026-10-15T21:00:33.542688+00:00",
+      "load": [
+        4.7822265625,
+        7.92626953125,
+        10.169921875
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    },
+    {
+      "label": "review-v01",
+      "start": "2026-10-15T20:51:20.823049+00:00",
+      "load": [
+        8.2421875,
+        10.54931640625,
+        11.24365234375
+      ],
+      "scope": "validation wrapper start os.getloadavg; 1/5/15-minute"
+    }
+  ],
+  "redQualification": {
+    "red-focused": "13 failed/12 passed; one failure was an overly broad whole-object legacy/history assertion, corrected before production edit because current757 adds sparkVariable. It is not counted as a formatter defect.",
+    "red-focused-corrected": "12 behavioral failures/13 passed at unchanged formatter84894759 and corrected test4bacec0a; both precede production edit.",
+    "green-focused-v01": "One marker-space placement failure; corrected locally.",
+    "focusedFinalTail": "The later derived equality strengthens duplicate elimination. No additional counterfactual red is claimed for this assertion."
+  },
+  "attemptQualification": {
+    "public-rejudgment-v01": "Bare tsx import.meta.env.DEV harness boundary; zero productive cells; no product failure. Vite SSR middleware wrapper then passes both real cells.",
+    "browser-v01": "Observer expected an optional Soulbinder chooser; actual sole legal activation directly opened abandonCost. Native accepted intent/prompt, empty Caps, cleanup retained. No formatter failure or accepted visible cells from this attempt.",
+    "browser-v02": "Four real desktop/mobile cells pass; exact canonical function embedded byte-for-byte, both real modified preflights before launch."
+  },
+  "publicProof": {
+    "path": "/tmp/dreamtides-758-01a13a7a/diagnostic-public-results.json",
+    "sha256": "1f87527e70953b33a2192590623fb57ec7451afd5b0fa602d5e5d583db1f489c",
+    "cells": 2,
+    "proof": "Actual current resolver/dealt/model/marked text, full mapped physical explicit energy1 ability, public from:void payment1/status/zone/provenance and deterministic replay."
+  },
+  "nativeProof": {
+    "path": "/tmp/dreamtides-758-01a13a7a/native-proof-v01.json",
+    "sha256": "a6354e174b8846b8dfd9bace555c14191bb0d74ca4e879b97bc8a1ffe0180b33",
+    "cells": 4,
+    "games": [
+      {
+        "uuid": "1268a899-b209-46bb-bce4-6def1dcd0404",
+        "viewport": "desktop",
+        "gameId": "puyr6p",
+        "rows": 54,
+        "physicalId": "i1",
+        "payment": 1,
+        "zone": "play",
+        "finalNativeHash": "0f183922868e13ec6e0eacdc237db97fa211fc039dd2ef9c1e4ea1e4167f23eb"
+      },
+      {
+        "uuid": "1268a899-b209-46bb-bce4-6def1dcd0404",
+        "viewport": "mobile",
+        "gameId": "v43rkp",
+        "rows": 52,
+        "physicalId": "i1",
+        "payment": 1,
+        "zone": "play",
+        "finalNativeHash": "0f183922868e13ec6e0eacdc237db97fa211fc039dd2ef9c1e4ea1e4167f23eb"
+      },
+      {
+        "uuid": "01d53e49-7833-4122-a970-b72c73ad2c28",
+        "viewport": "desktop",
+        "gameId": "thq6fk",
+        "rows": 61,
+        "physicalId": "i1",
+        "payment": 1,
+        "zone": "banished",
+        "finalNativeHash": "6cbac4afdc23bd3fd9b21f74480a99d79705ef1a33fc4cbf647c277bd7606032"
+      },
+      {
+        "uuid": "01d53e49-7833-4122-a970-b72c73ad2c28",
+        "viewport": "mobile",
+        "gameId": "midzpj",
+        "rows": 61,
+        "physicalId": "i1",
+        "payment": 1,
+        "zone": "banished",
+        "finalNativeHash": "6cbac4afdc23bd3fd9b21f74480a99d79705ef1a33fc4cbf647c277bd7606032"
+      }
+    ]
+  },
+  "captures": [
+    {
+      "filename": "reclaim-01d53e49-desktop-after-reclaim.png",
+      "sha256": "4a9b525a64bf943a0948f90735dc8c1fbac18c439742f1e50912651093ab29be",
+      "bytes": 2806136,
+      "inspected": true,
+      "pixels": "2880x1800"
+    },
+    {
+      "filename": "reclaim-01d53e49-desktop-void-gallery.png",
+      "sha256": "2dbc168c83937c407ea05a9595b2e78b376db3e965dd393fddfff946402abed0",
+      "bytes": 2563325,
+      "inspected": true,
+      "pixels": "2880x1800"
+    },
+    {
+      "filename": "reclaim-01d53e49-mobile-after-reclaim.png",
+      "sha256": "40d0326fbb6e44009d5dbd2919ef27d2ed6898e2ad1a4d0c053916ac07a32019",
+      "bytes": 1008038,
+      "inspected": true,
+      "pixels": "780x1688"
+    },
+    {
+      "filename": "reclaim-01d53e49-mobile-void-gallery.png",
+      "sha256": "62d4120718cb59bad2f4d3cca7f7dcc994f3e95608b4748b76412cf43f468c81",
+      "bytes": 632074,
+      "inspected": true,
+      "pixels": "780x1688"
+    },
+    {
+      "filename": "reclaim-1268a899-desktop-after-reclaim.png",
+      "sha256": "e08a1b43327c487875f82b40b478f1b15eeb14cda98e0ff9cc464c15d7ac9739",
+      "bytes": 2969308,
+      "inspected": true,
+      "pixels": "2880x1800"
+    },
+    {
+      "filename": "reclaim-1268a899-desktop-void-gallery.png",
+      "sha256": "42ad653cb9753329d38964a8ac1542832a02d23ed1f1c7e2b3bdbff005dfb89f",
+      "bytes": 2676451,
+      "inspected": true,
+      "pixels": "2880x1800"
+    },
+    {
+      "filename": "reclaim-1268a899-mobile-after-reclaim.png",
+      "sha256": "08eef9d349ae6454e0ed08ea76013c6a6e1941d7c1929ec8f27219a14ce863d7",
+      "bytes": 1144407,
+      "inspected": true,
+      "pixels": "780x1688"
+    },
+    {
+      "filename": "reclaim-1268a899-mobile-void-gallery.png",
+      "sha256": "53a6d39b45944a2490f0a5460d61898fac65fbe4cadc98d67e5f12bb769c983f",
+      "bytes": 745991,
+      "inspected": true,
+      "pixels": "780x1688"
+    }
+  ],
+  "browserCaller": {
+    "path": "/tmp/dreamtides-758-01a13a7a/browser-source-v02.mjs",
+    "sha256": "759444f024cf260d451b1921c6c82ec391e854d98e61e27e5c2cbe166f26781c",
+    "canonicalSha256": "74b5feb6387b3958548307e990e525bf8557da20e26d05a8e7dd21ec923d9ec9",
+    "embeddedByteForByte": true,
+    "bindingPath": "/tmp/dreamtides-758-01a13a7a/browser-bindings-v02.json"
+  },
+  "cleanup": {
+    "at": "2026-10-15T21:02:56.170365+00:00",
+    "serverProcessGroups": [
+      89120,
+      99385
+    ],
+    "liveOwnedGroups": [],
+    "contexts": "Both session.close calls completed; raw browser_close RPC responses not separately captured. Each runner reports its owned server process group cleanup and port free. Shared MCP service is retained.",
+    "serverOwnedRoots": [
+      {
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 89120,
+        "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "invocation": "run-6KJuJ9",
+        "captureDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.758/invocations/run-6KJuJ9"
+      },
+      {
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 99385,
+        "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+        "invocation": "run-r9yWYm",
+        "captureDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.758/invocations/run-r9yWYm"
+      }
+    ]
+  },
+  "remainingOutsideThisRepair": "Original283 retains all58 action UUIDs, real20 eligible cards EACH controller, all recipes, D21, weighted300/preflight/sweep and final acceptance after repair landing and own worktree update. Root owns native candidate/certification/promotion/cleanup."
+}
