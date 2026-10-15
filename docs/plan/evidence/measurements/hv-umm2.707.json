@@ -1,0 +1,856 @@
+{
+  "bead": "hv-umm2.707",
+  "phase": 5,
+  "dispatch": "2026-10-15T00:27:10.522Z",
+  "implementationWindowStatus": "Final committed evidence uses an actual immediate pre-Git cutoff. Original dispatch includes all reads, user-return interruption, native scope waits, checks, QA attempts and coordination through this cutoff. External final-commit receipt records actual Git start/end and precise remaining tail; no future terminal time or active CPU is claimed, and no postcommit clock amendment is made.",
+  "sourceBase": "13dc7960c17f9bf2b645ec7966b80361b94d0a9f",
+  "scope": "Exact fixed revealSource preparation in planCosts local plan; public synthetic contracts and direct engine-design mirrors. No changes to prompt/fold/fingerprint/payment/affordability/LAB/renderer/config.",
+  "probe": {
+    "callerSHA256": "f34333edba5952cad1a921b4faa32ca104e9a5852d518ea3c96d5c4854b3428a",
+    "beforeSHA256": "123e15fe6144f60ea940ead81b8961d2918de3d4df6684548cb28bfe528fcab3",
+    "afterSHA256": "228e8b98c4fea977a1258edf62de86b965001ee174fa1cf1d3a7666c6f8538bd",
+    "cells": 8,
+    "result": "Both actors, both cost orders and forced-auto modes: exact singleton committed reveal once, no source reveal prompt or autoanswer. Current LAB default abandon-first pending prompt equals its observed baseline. Synthetic reveal-first saved prefix is refused by unchanged fingerprint/fold boundary with immutable state and private source.",
+    "fixtureVerification": {
+      "fixtureEnvelopes": [
+        {
+          "side": "player",
+          "revealFirst": false,
+          "envelopeExactlyMatchesBaseline": true,
+          "baselineInputHash": "06cc30b137424d",
+          "repairedInputHash": "06cc30b137424d",
+          "committedInputsEqual": true
+        },
+        {
+          "side": "enemy",
+          "revealFirst": false,
+          "envelopeExactlyMatchesBaseline": true,
+          "baselineInputHash": "0cbfd59921240c",
+          "repairedInputHash": "0cbfd59921240c",
+          "committedInputsEqual": true
+        },
+        {
+          "side": "player",
+          "revealFirst": true,
+          "envelopeExactlyMatchesBaseline": true,
+          "baselineInputHash": "1f946a11cd98a5",
+          "repairedInputHash": "1f946a11cd98a5",
+          "committedInputsEqual": true
+        },
+        {
+          "side": "enemy",
+          "revealFirst": true,
+          "envelopeExactlyMatchesBaseline": true,
+          "baselineInputHash": "13cb45ff8ede69",
+          "repairedInputHash": "13cb45ff8ede69",
+          "committedInputsEqual": true
+        }
+      ],
+      "all8probeInputHashesEqual": true,
+      "qualification": "Contracts create the same board through board(side,restart[index]); restart IDs/cost order/effect/base stats and board hand/back/deck/energy/phase match the immutable public probe. Catalog includes other synthetic definitions, which are not serialized in BattleState. Four persisted envelopes mechanically match exact before JSON; before/after probe committed inputs match."
+    },
+    "compatibilityLimit": "Completed state hashes differ because loop history retains different recorded answer arrays. No claim of byte-identical historical synthetic whole states or automatic migration; production source catalogs contain no source-reveal authoring at inspected base."
+  },
+  "checks": {
+    "baseline-red": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "physical hand activation|foreign-owned source"
+      ],
+      "start": "2026-10-15T02:14:39.357521+00:00",
+      "end": "2026-10-15T02:14:47.582732+00:00",
+      "elapsedSeconds": 8.220975833013654,
+      "exit": 1,
+      "hostLoad": "{ 13.55 10.28 9.71 }",
+      "stdoutSHA256": "6dee13d285f5cc9aeedb385acff3703cde80b052798508e4a4c6767ff14e02fc",
+      "stderrSHA256": "bd1d460cfbd6c21a0e0ce0452d4f7b5f4b2a0387a6cac1bb09cd97f1be4c2664",
+      "result": "Expected causal regression: ten failures from source auto notices/actual singleton prompt; 22 passed, 5037 skipped."
+    },
+    "focused-hand": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "physical hand activation|foreign-owned source"
+      ],
+      "start": "2026-10-15T02:15:04.306758+00:00",
+      "end": "2026-10-15T02:15:14.084246+00:00",
+      "elapsedSeconds": 9.774102208029944,
+      "exit": 0,
+      "hostLoad": "{ 13.33 10.44 9.78 }",
+      "stdoutSHA256": "ec6a489a21f349fbc970c0cffd6572b381968937903bed70f968b61caf1cc43d",
+      "stderrSHA256": "8a1ece778b483c8108aa697c625b67b2e12ddcbd11feee76819227dcc4f1ab7d",
+      "result": "32 passed; 5037 skipped."
+    },
+    "focused-eager-cost-replay": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/rules/costs-discard-hand.test.ts",
+        "src/engine/rules/costs-search.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/rules/costs-discard-x-min.test.ts",
+        "src/engine/rules/activation.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts"
+      ],
+      "start": "2026-10-15T02:15:45.514891+00:00",
+      "end": "2026-10-15T02:16:11.512264+00:00",
+      "elapsedSeconds": 25.993977958976757,
+      "exit": 0,
+      "hostLoad": "{ 20.98 12.98 10.75 }",
+      "stdoutSHA256": "1bd58517592fccf155be0967d2850fbb8670eaecfc298967cd0b809fb7406c5f",
+      "stderrSHA256": "8a1ece778b483c8108aa697c625b67b2e12ddcbd11feee76819227dcc4f1ab7d",
+      "result": "5164 tests across nine files passed; full eager contract suite plus affected costs and fold prompt/intent tests."
+    },
+    "continuation-after": {
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/dreamtides-707-root/continuation-probe.ts"
+      ],
+      "start": "2026-10-15T02:15:29.201965+00:00",
+      "end": "2026-10-15T02:15:29.911576+00:00",
+      "elapsedSeconds": 0.7045429169666022,
+      "exit": 0,
+      "hostLoad": "{ 21.87 12.56 10.55 }",
+      "stdoutSHA256": "228e8b98c4fea977a1258edf62de86b965001ee174fa1cf1d3a7666c6f8538bd",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T02:17:23.208858+00:00",
+      "end": "2026-10-15T02:18:53.979108+00:00",
+      "elapsedSeconds": 90.76629062503343,
+      "exit": 1,
+      "hostLoad": "{ 11.94 12.43 10.80 }",
+      "stdoutSHA256": "b3fc3bff3059c7788aea7ba6d8c4d0e7a91222a75229dd08573463fdce46f99a",
+      "stderrSHA256": "8a1ece778b483c8108aa697c625b67b2e12ddcbd11feee76819227dcc4f1ab7d",
+      "result": "Related8851tests306files, types and import cycles passed; overall exit1 from new helper raw kind:string domain lint. Corrected to public EngineEvent closed union before successful rerun."
+    },
+    "review-repaired": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T02:19:52.720225+00:00",
+      "end": "2026-10-15T02:21:20.101590+00:00",
+      "elapsedSeconds": 87.37686150002992,
+      "exit": 0,
+      "hostLoad": "{ 20.12 15.10 12.11 }",
+      "stdoutSHA256": "22e44798453f17f7657b7f305cc0956f6ce59c6bdf1314057cfd3e71404296d5",
+      "stderrSHA256": "8a1ece778b483c8108aa697c625b67b2e12ddcbd11feee76819227dcc4f1ab7d",
+      "result": "Overall exit0: lint/types/cycles and8851relatedtests306files passed."
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T02:21:29.641295+00:00",
+      "end": "2026-10-15T02:21:36.559138+00:00",
+      "elapsedSeconds": 6.914315958041698,
+      "exit": 0,
+      "hostLoad": "{ 16.99 15.86 12.76 }",
+      "stdoutSHA256": "44e0178f7066cfcda84189fee9b36f527b5ea62e15dfe1b595dc2a92b87543f3",
+      "stderrSHA256": "8a1ece778b483c8108aa697c625b67b2e12ddcbd11feee76819227dcc4f1ab7d"
+    },
+    "schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T02:21:54.757449+00:00",
+      "end": "2026-10-15T02:21:54.944754+00:00",
+      "elapsedSeconds": 0.18282674998044968,
+      "exit": 0,
+      "hostLoad": "{ 15.87 15.72 12.80 }",
+      "stdoutSHA256": "554870fd596c86481479c76d599a439f21c923ab30b1f4da0e578a7bde603d64",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "qualification": "Current record inventory passed before final own friction record; final endpoint record schema will be checked again before commit."
+    },
+    "whitespace": {
+      "argv": [
+        "python3",
+        "/tmp/dreamtides-707-root/check-scoped-source.py"
+      ],
+      "start": "2026-10-15T02:22:23.757716+00:00",
+      "end": "2026-10-15T02:22:23.804844+00:00",
+      "elapsedSeconds": 0.0428855000063777,
+      "exit": 0,
+      "hostLoad": "{ 15.50 15.63 12.85 }",
+      "stdoutSHA256": "0d72053d194245c25460121c3fb0bd7dda007603d1b3577614647a63eea13c75",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "final-schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T02:31:01.999214+00:00",
+      "end": "2026-10-15T02:31:02.183753+00:00",
+      "elapsedSeconds": 0.18072779098292813,
+      "exit": 0,
+      "hostLoad": "{ 9.17 11.84 12.17 }",
+      "stdoutSHA256": "a002741321e8c86b4cb49531061b783013b90f17458af992f4eff304bb02e219",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "qualification": "Includes own provisional-clock eight-field friction record; final end snapshot refresh keeps schema shape and finite clock math unchanged."
+    }
+  },
+  "diagnostics": {
+    "readFailures": [
+      "Stage1 nonexistent guessed paths and unmatched validate glob are retained in scratch source-proposal.json.",
+      "Implementation inspection attempted guessed UI files and unmatched BattleHand glob; commands failed read-only and were corrected with rg --files.",
+      "One grouped diagnostic output exceeded the tool display budget; full source files were read in targeted ranges.",
+      "Further guessed presentation filename read failed; source timing proof was read from actual EngineBattleScreen and native prelude. One overly broad log detail display truncated; corrected compact event-field projection.",
+      "QA2 unified exec session handle was not retained because one tool output projected only command.output; exact owned OS runner/wrapper receipts retained and observed terminal0 without relaunch. Root later reported one guessed engine-view-model filename read failure, corrected to current EngineBattleScreen proof."
+    ],
+    "assetWarnings": "The review runner isolated asset preparation reports missing-cache links, then restore-local-assets links the local assets. These generated workspace materializations are uncommitted.",
+    "parentDiagnostics": "Root reported two truncated large native metadata reads and unmatched scratch packet glob; corrected through compact fields and Path.iterdir. Reported tiny tool wait metadata is not human analysis or CPU time. Root also reported a nonexistent guessed scratch probe Python file read and an incorrect success inference from related-test exit0 tail; corrected to overall review exit1 before required successful rerun."
+  },
+  "runtimeCustody": [
+    {
+      "label": "baseline-red",
+      "pid": 40897,
+      "pgid": 40897,
+      "birthCensus": "40897 40897 Wed Oct 14 19:14:39 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts -t physical hand activation|foreign-owned source\n",
+      "postterminalGroupCensus": []
+    },
+    {
+      "label": "focused-hand",
+      "pid": 43238,
+      "pgid": 43238,
+      "birthCensus": "43238 43238 Wed Oct 14 19:15:04 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts -t physical hand activation|foreign-owned source\n",
+      "postterminalGroupCensus": []
+    },
+    {
+      "label": "focused-eager-cost-replay",
+      "pid": 54921,
+      "pgid": 54921,
+      "birthCensus": "54921 54921 Wed Oct 14 19:15:45 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/rules/costs.test.ts src/engine/rules/costs-discard-hand.test.ts src/engine/rules/costs-search.test.ts src/engine/rules/costs-play-x.test.ts src/engine/rules/costs-discard-x-min.test.ts src/engine/rules/activation.test.ts src/engine/fold/fold-prompts.test.ts src/engine/fold/fold-intents.test.ts\n",
+      "postterminalGroupCensus": []
+    },
+    {
+      "label": "continuation-after",
+      "pid": 45045,
+      "pgid": 45045,
+      "birthCensus": "45045 45045 Wed Oct 14 19:15:29 2026     node node_modules/tsx/dist/cli.mjs /tmp/dreamtides-707-root/continuation-probe.ts\n",
+      "postterminalGroupCensus": []
+    },
+    {
+      "label": "review",
+      "pid": 12367,
+      "pgid": 12367,
+      "birthCensus": "12367 12367 Wed Oct 14 19:17:23 2026     node /opt/homebrew/bin/npm run review\n",
+      "postterminalGroupCensus": []
+    },
+    {
+      "label": "review-repaired",
+      "pid": 83728,
+      "pgid": 83728,
+      "birthCensus": "83728 83728 Wed Oct 14 19:19:52 2026     node /opt/homebrew/bin/npm run review\n",
+      "postterminalGroupCensus": []
+    },
+    {
+      "label": "knip",
+      "pid": 92498,
+      "pgid": 92498,
+      "birthCensus": "92498 92498 Wed Oct 14 19:21:29 2026     node /opt/homebrew/bin/npm run knip\n",
+      "postterminalGroupCensus": []
+    },
+    {
+      "label": "schema",
+      "pid": 94383,
+      "pgid": 94383,
+      "birthCensus": "94383 94383 Wed Oct 14 19:21:54 2026     node scripts/friction-triggers.mjs --validate-records\n",
+      "postterminalGroupCensus": []
+    },
+    {
+      "label": "whitespace",
+      "pid": 96172,
+      "pgid": 96172,
+      "birthCensus": "96172 96172 Wed Oct 14 19:22:23 2026     python3 /tmp/dreamtides-707-root/check-scoped-source.py\n",
+      "postterminalGroupCensus": []
+    },
+    {
+      "label": "final-schema",
+      "pid": 99195,
+      "pgid": 99195,
+      "birthCensus": "99195 99195 Wed Oct 14 19:31:02 2026     node scripts/friction-triggers.mjs --validate-records\n",
+      "postterminalGroupCensus": []
+    }
+  ],
+  "qa": {
+    "status": "PASS final separately admitted readiness-corrected caller; original failedattempt retained",
+    "attempts": [
+      {
+        "invocation": "run-aSsF1V",
+        "scenarioSHA256": "2e734e2ba69f84b5e40e454054a3a716f9de54f57f212f777edd6f7edd417d7a",
+        "start": "2026-10-15T02:22:23.907575+00:00",
+        "end": "2026-10-15T02:23:27.522371+00:00",
+        "elapsedSeconds": 63.61449329101015,
+        "exit": 1,
+        "result": "Desktop activation-only plus dualfixture cancel/reload/payment/resolution succeeded before postresolution handtap timed out waiting chooser; mobile not run; no completePASS.",
+        "caps": [],
+        "captures": [
+          "hand-source-abandon-desktop.png",
+          "hand-source-chooser-desktop.png"
+        ],
+        "mcpSessionId": "5e8b8deb-97c0-4057-85a0-f9da8d4aa2a6",
+        "mcpProtocolVersion": "2025-11-25",
+        "runnerPid": 96181,
+        "runnerGroup": 96181,
+        "serverPid": 96251,
+        "port": 5174,
+        "cleanup": {
+          "postterminalGroupCensus": [],
+          "remainingOwnOwnerRecords": [],
+          "serverCensus": "",
+          "portListenerCensus": "",
+          "qualification": "Runner returned known scenario error and normal finally cleanup; active negotiated owner identity captured. Fleeting execution-completed owner snapshot/raw browser_close response was not captured. No raw close acknowledgement invented."
+        },
+        "sourceDiagnosis": "Committedstack0+costeffect precedes presentationhead completion. EngineBattleScreen181-196 returns legal[] while older head displayed; canInteract false. Final tap after reveal was hover only; raw log has no later battleintent. Revised caller waits existing public canPass/main/no-prompt before tapping chooser."
+      },
+      {
+        "invocation": "run-9FS6B6",
+        "scenarioSHA256": "6a4319e503424753f77d04f92fc68c892671281fb19defb33b1f0cb859450925",
+        "start": "2026-10-15T02:27:38.604184+00:00",
+        "end": "2026-10-15T02:28:15.865231+00:00",
+        "elapsedSeconds": 37.26083837496117,
+        "runnerWallMs": {
+          "browserLeaseWait": 9,
+          "serve": 2924,
+          "scenario": 33569,
+          "total": 36637
+        },
+        "exit": 0,
+        "result": "Bothviewports x both existing LAB fixtures passed cancellation/reopen/pendingreload/ordinary abandon/exact source reveal/resolution; dual fixture played source at three energy.",
+        "caps": [],
+        "captures": [
+          "hand-source-abandon-desktop.png",
+          "hand-source-chooser-desktop.png",
+          "hand-source-chooser-mobile.png"
+        ],
+        "captureDimensions": [
+          [
+            2880,
+            1800
+          ],
+          [
+            2880,
+            1800
+          ],
+          [
+            780,
+            1688
+          ]
+        ],
+        "mcpSessionId": "b5bac134-b532-40be-a16f-eb3ade3dbe17",
+        "mcpProtocolVersion": "2025-11-25",
+        "runnerPid": 24276,
+        "runnerGroup": 24276,
+        "serverPid": 24320,
+        "port": 5174,
+        "cleanup": {
+          "postterminalGroupCensus": [],
+          "remainingOwnOwnerRecords": [],
+          "serverCensus": "",
+          "portListenerCensus": "",
+          "qualification": "Normal native runner exit0 includes awaited finally closure. Active original negotiated identity retained; no raw browser_close response or fleeting execution-completed record captured."
+        },
+        "outcomes": {
+          "desktop": {
+            "viewport": "desktop",
+            "results": [
+              {
+                "fixture": "hand-source-activation-only",
+                "source": "i3",
+                "sourcePrinting": "5e5e5e5e-0000-4000-8000-000000063000",
+                "pending": "0:1:0",
+                "restarted": "0:3:0",
+                "cancelled": true,
+                "reloadedPrompt": "0:3:0",
+                "geometry": [
+                  {
+                    "state": "activation-choice",
+                    "x": 1019,
+                    "y": 660.75,
+                    "width": 124,
+                    "height": 116,
+                    "inViewport": true,
+                    "hit": true
+                  },
+                  {
+                    "state": "cancel",
+                    "x": 826.625,
+                    "y": 20.75,
+                    "width": 88.375,
+                    "height": 42,
+                    "inViewport": true,
+                    "hit": true
+                  },
+                  {
+                    "state": "activation-choice",
+                    "x": 1019,
+                    "y": 660.75,
+                    "width": 124,
+                    "height": 116,
+                    "inViewport": true,
+                    "hit": true
+                  }
+                ],
+                "reveals": [
+                  {
+                    "kind": "revealed",
+                    "side": "player",
+                    "instances": [
+                      "i3"
+                    ]
+                  }
+                ],
+                "abandoned": [
+                  {
+                    "kind": "abandoned",
+                    "instance": "i1",
+                    "side": "player"
+                  }
+                ],
+                "revealAutoNotices": 0,
+                "handAfter": [
+                  "i3",
+                  "i4"
+                ],
+                "knownAfter": true,
+                "costChange": [
+                  {
+                    "controller": "player",
+                    "source": "i3",
+                    "expiry": {
+                      "at": "never"
+                    },
+                    "change": {
+                      "kind": "cardCost",
+                      "instance": "i3",
+                      "mode": "reduce",
+                      "amount": 1
+                    },
+                    "id": "e1",
+                    "timestamp": 1
+                  }
+                ],
+                "played": null
+              },
+              {
+                "fixture": "hand-source-play-and-activate",
+                "source": "i3",
+                "sourcePrinting": "5e5e5e5e-0000-4000-8000-000000063000",
+                "pending": "0:1:0",
+                "restarted": "0:3:0",
+                "cancelled": true,
+                "reloadedPrompt": "0:3:0",
+                "geometry": [
+                  {
+                    "state": "activation-choice",
+                    "x": 1151,
+                    "y": 660.75,
+                    "width": 124,
+                    "height": 116,
+                    "inViewport": true,
+                    "hit": true
+                  },
+                  {
+                    "state": "cancel",
+                    "x": 826.625,
+                    "y": 20.75,
+                    "width": 88.375,
+                    "height": 42,
+                    "inViewport": true,
+                    "hit": true
+                  },
+                  {
+                    "state": "activation-choice",
+                    "x": 1151,
+                    "y": 660.75,
+                    "width": 124,
+                    "height": 116,
+                    "inViewport": true,
+                    "hit": true
+                  }
+                ],
+                "reveals": [
+                  {
+                    "kind": "revealed",
+                    "side": "player",
+                    "instances": [
+                      "i3"
+                    ]
+                  }
+                ],
+                "abandoned": [
+                  {
+                    "kind": "abandoned",
+                    "instance": "i2",
+                    "side": "player"
+                  }
+                ],
+                "revealAutoNotices": 0,
+                "handAfter": [
+                  "i3",
+                  "i4"
+                ],
+                "knownAfter": true,
+                "costChange": [
+                  {
+                    "controller": "player",
+                    "source": "i3",
+                    "expiry": {
+                      "at": "never"
+                    },
+                    "change": {
+                      "kind": "cardCost",
+                      "instance": "i3",
+                      "mode": "reduce",
+                      "amount": 1
+                    },
+                    "id": "e1",
+                    "timestamp": 1
+                  }
+                ],
+                "played": {
+                  "zone": "play",
+                  "energy": 1
+                }
+              }
+            ]
+          },
+          "mobile": {
+            "viewport": "mobile",
+            "results": [
+              {
+                "fixture": "hand-source-activation-only",
+                "source": "i3",
+                "sourcePrinting": "5e5e5e5e-0000-4000-8000-000000063000",
+                "pending": "0:1:0",
+                "restarted": "0:3:0",
+                "cancelled": true,
+                "reloadedPrompt": "0:3:0",
+                "geometry": [
+                  {
+                    "state": "activation-choice",
+                    "x": 21,
+                    "y": 727.859375,
+                    "width": 110.65625,
+                    "height": 95.125,
+                    "inViewport": true,
+                    "hit": true
+                  },
+                  {
+                    "state": "cancel",
+                    "x": 269.125,
+                    "y": 20.75,
+                    "width": 88.375,
+                    "height": 42,
+                    "inViewport": true,
+                    "hit": true
+                  },
+                  {
+                    "state": "activation-choice",
+                    "x": 21,
+                    "y": 727.859375,
+                    "width": 110.65625,
+                    "height": 95.125,
+                    "inViewport": true,
+                    "hit": true
+                  }
+                ],
+                "reveals": [
+                  {
+                    "kind": "revealed",
+                    "side": "player",
+                    "instances": [
+                      "i3"
+                    ]
+                  }
+                ],
+                "abandoned": [
+                  {
+                    "kind": "abandoned",
+                    "instance": "i1",
+                    "side": "player"
+                  }
+                ],
+                "revealAutoNotices": 0,
+                "handAfter": [
+                  "i3",
+                  "i4"
+                ],
+                "knownAfter": true,
+                "costChange": [
+                  {
+                    "controller": "player",
+                    "source": "i3",
+                    "expiry": {
+                      "at": "never"
+                    },
+                    "change": {
+                      "kind": "cardCost",
+                      "instance": "i3",
+                      "mode": "reduce",
+                      "amount": 1
+                    },
+                    "id": "e1",
+                    "timestamp": 1
+                  }
+                ],
+                "played": null
+              },
+              {
+                "fixture": "hand-source-play-and-activate",
+                "source": "i3",
+                "sourcePrinting": "5e5e5e5e-0000-4000-8000-000000063000",
+                "pending": "0:1:0",
+                "restarted": "0:3:0",
+                "cancelled": true,
+                "reloadedPrompt": "0:3:0",
+                "geometry": [
+                  {
+                    "state": "activation-choice",
+                    "x": 139.65625,
+                    "y": 727.859375,
+                    "width": 110.671875,
+                    "height": 95.125,
+                    "inViewport": true,
+                    "hit": true
+                  },
+                  {
+                    "state": "cancel",
+                    "x": 269.125,
+                    "y": 20.75,
+                    "width": 88.375,
+                    "height": 42,
+                    "inViewport": true,
+                    "hit": true
+                  },
+                  {
+                    "state": "activation-choice",
+                    "x": 139.65625,
+                    "y": 727.859375,
+                    "width": 110.671875,
+                    "height": 95.125,
+                    "inViewport": true,
+                    "hit": true
+                  }
+                ],
+                "reveals": [
+                  {
+                    "kind": "revealed",
+                    "side": "player",
+                    "instances": [
+                      "i3"
+                    ]
+                  }
+                ],
+                "abandoned": [
+                  {
+                    "kind": "abandoned",
+                    "instance": "i2",
+                    "side": "player"
+                  }
+                ],
+                "revealAutoNotices": 0,
+                "handAfter": [
+                  "i3",
+                  "i4"
+                ],
+                "knownAfter": true,
+                "costChange": [
+                  {
+                    "controller": "player",
+                    "source": "i3",
+                    "expiry": {
+                      "at": "never"
+                    },
+                    "change": {
+                      "kind": "cardCost",
+                      "instance": "i3",
+                      "mode": "reduce",
+                      "amount": 1
+                    },
+                    "id": "e1",
+                    "timestamp": 1
+                  }
+                ],
+                "played": {
+                  "zone": "play",
+                  "energy": 1
+                }
+              }
+            ]
+          }
+        },
+        "durableGameLogs": [
+          {
+            "viewport": "desktop",
+            "filename": "hand-source-707-desktop.jsonl",
+            "gameId": "r9nprc",
+            "rows": 57
+          },
+          {
+            "viewport": "mobile",
+            "filename": "hand-source-707-mobile.jsonl",
+            "gameId": "oovqc4",
+            "rows": 53
+          }
+        ],
+        "durableLogQualification": "Runner exports the final current dualfixture game per viewport; each earlier activation-only fixture also asserted its durable UUID reveal before navigating. Raw reveal/abandon/cost effect for all four workflows is retained in scenario outcomes."
+      }
+    ],
+    "visualInspection": "Root and helper inspected final captures. Existing mobile long activation label visibly extends above/below its95.125CSS-high button; panel and actionable center fit viewport. Capture precedes payment planning, and UI/LAB copy is unchanged. Recorded in own pre-existing evidence; interaction PASS does not claim universal visual PASS."
+  },
+  "review": {
+    "status": "Parent owns fresh normal other-family core review of the exact resulting commit after this helper stops."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 68,
+    "jsdomFiles": 0,
+    "plainContractModulesModified": 1,
+    "source": "Root exact diff reported net67 before one additional public event type import; physical332-to400 line delta is68."
+  },
+  "hostLoadSamples": [
+    {
+      "check": "baseline-red",
+      "raw": "{ 13.55 10.28 9.71 }",
+      "oneMinute": 13.55,
+      "scope": "owned process starting sysctl sample"
+    },
+    {
+      "check": "focused-hand",
+      "raw": "{ 13.33 10.44 9.78 }",
+      "oneMinute": 13.33,
+      "scope": "owned process starting sysctl sample"
+    },
+    {
+      "check": "focused-eager-cost-replay",
+      "raw": "{ 20.98 12.98 10.75 }",
+      "oneMinute": 20.98,
+      "scope": "owned process starting sysctl sample"
+    },
+    {
+      "check": "continuation-after",
+      "raw": "{ 21.87 12.56 10.55 }",
+      "oneMinute": 21.87,
+      "scope": "owned process starting sysctl sample"
+    },
+    {
+      "check": "review",
+      "raw": "{ 11.94 12.43 10.80 }",
+      "oneMinute": 11.94,
+      "scope": "owned process starting sysctl sample"
+    },
+    {
+      "check": "review-repaired",
+      "raw": "{ 20.12 15.10 12.11 }",
+      "oneMinute": 20.12,
+      "scope": "owned process starting sysctl sample"
+    },
+    {
+      "check": "knip",
+      "raw": "{ 16.99 15.86 12.76 }",
+      "oneMinute": 16.99,
+      "scope": "owned process starting sysctl sample"
+    },
+    {
+      "check": "schema",
+      "raw": "{ 15.87 15.72 12.80 }",
+      "oneMinute": 15.87,
+      "scope": "owned process starting sysctl sample"
+    },
+    {
+      "check": "whitespace",
+      "raw": "{ 15.50 15.63 12.85 }",
+      "oneMinute": 15.5,
+      "scope": "owned process starting sysctl sample"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "successful ordinary review starting sample20.12; the measurement is host1minute load, not CPU usage"
+      }
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "tests": [
+        "rolls back an actual failing Interrupt resolver while retaining the earlier committed source payment",
+        "restarts both printed orders and refuses the captured reveal-first continuation without changing private state"
+      ],
+      "qualification": "Actual reachable failed Interrupt resolver rollback/input immutability is preserved. It is not a public witness of the manual post-pay source-departure guard. New reservation writes only replay-local plan data; committed payCosts path unchanged."
+    },
+    {
+      "path": "reload or restart mid-operation",
+      "tests": [
+        "cancels and refuses malformed, foreign and stale answers atomically, including a reloaded pending slice",
+        "reconstructs the committed and answered activation by replaying its public intents",
+        "restarts both printed orders and refuses the captured reveal-first continuation without changing private state"
+      ],
+      "qualification": "Actual baseline default abandon-first saved envelopes accepted; custom reveal-first captured prefix refused without a fingerprint waiver. Native UI reload preserves0:3:0 before payment."
+    },
+    {
+      "path": "partial write",
+      "tests": [
+        "restarts both printed orders and refuses the captured reveal-first continuation without changing private state"
+      ],
+      "qualification": "No new storage operation or write unit: fixed reservation is local and not persisted, and existing intent fold/checkpoint storage is unchanged. Old incomplete/divergent in-flight records safely recover unchanged committed gameplay/private state; storage crash tests would duplicate unchanged infrastructure."
+    },
+    {
+      "path": "invalid or stale input",
+      "tests": [
+        "cancels and refuses malformed, foreign and stale answers atomically, including a reloaded pending slice",
+        "refuses hand abilities without one mandatory exact source reveal before any publication",
+        "rejects malformed manual source-payment plans before spending or revealing",
+        "restarts both printed orders and refuses the captured reveal-first continuation without changing private state"
+      ]
+    },
+    {
+      "path": "concurrent actors",
+      "tests": [
+        "cancels and refuses malformed, foreign and stale answers atomically, including a reloaded pending slice",
+        "restarts both printed orders and refuses the captured reveal-first continuation without changing private state",
+        "pays a foreign-owned source for its actual player holder",
+        "pays a foreign-owned source for its actual enemy holder"
+      ],
+      "qualification": "Both actors run the public suite; duplicate activation while one step pending bounces stepInFlight, foreign-side answers bounce, cancelled-attempt answers stale. Client serialization/intent storage unchanged."
+    }
+  ],
+  "independentParentVerification": {
+    "browserTerminalReceipt": "parent-browser-terminal-verification.json in own scratch",
+    "scope": "Root independently checked all four returned QA outcomes, three PNG dimensions and images, owned process groups24276/24320, owner/server removal and freeport. This verifies one already counted QA execution; it is not another run."
+  },
+  "implementationCutoff": {
+    "at": "2026-10-15T02:32:51.774216+00:00",
+    "originalDispatch": "2026-10-15T00:27:10.522Z",
+    "elapsedMinutes": 125.68753693333333,
+    "endpointReceipt": "final-commit.process.json retained in own scratch; final schema/staging/commit tail recorded externally",
+    "postCutoffChecks": "Final schema and all-file staged whitespace execute after this cutoff; actual terminal receipts are retained externally rather than predicting their result in this committed file."
+  }
+}

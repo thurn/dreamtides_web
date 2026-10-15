@@ -1560,7 +1560,8 @@ Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
   prepayment spark is captured as X (`abandonSparkCapture`);
 - banish matching void cards (`banishFromVoidCost`), with a fixed count, or
   an X count at least the cost's least X (`banishXCost`, 1 by default);
-- reveal from hand;
+- reveal matching cards from hand (`revealCost`), or the exact physical hand
+  source (`revealSourceCost`);
 - fixed source counters (`countersCost`) or a mandatory top-level X counter
   payment (`countersXCost`, minimum 1 by default);
 - ⍟ (`pointsCost`), payable only with the payer's full amount and paid as
@@ -1593,6 +1594,18 @@ are prepared only on that branch, preserving inherited choices, X, source,
 trigger subject and optional-cost bindings. The existing step clone, answer
 fingerprint, published-prefix and recovery protocols govern suspension and
 replay; the wrapper adds no saved state or payment receipt.
+
+**Hand-source activation** uses `activated(costs, effect, { zone: "hand" })`
+and requires exactly one mandatory top-level `revealSourceCost()`. The acting
+holder controls and physically holds that source in hand, including a card
+owned by the opponent. The planner reserves this predetermined source as a
+singleton payment without a card-choice prompt or automatic-choice notice.
+Targets and other payments cannot use the reserved card. A chosen earlier
+whole-hand discard makes a later source reveal unpayable; a later whole-hand
+discard takes the remaining hand cards. The exact source is revealed once at
+committed payment, so preparing or cancelling other choices preserves its
+privacy. A known source may pay again in a later activation. The default
+activation zone is play; an explicit `zone: "void"` uses its owner's void.
 
 **Cost choices are play-time prompts** before `commitPoint()`: which
 alternative to pay, whether to pay the optional cost, which cards to discard,

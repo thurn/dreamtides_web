@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { parsePromptId } from "../../../../types/identifiers";
 import { createCatalog, type EngineCardDefinition } from "../../../catalog";
 import { createEngine } from "../../../engine";
 import { activated, additionalCost, abandonCost, abandonSparkCapture, choiceCost, discardHandCost, energy, event, stackItem, target, optionalCost, revealCost, revealSourceCost, self, staticAbility, all, characterYouControl, x } from "../../../dsl/builders";
 import type { Cost } from "../../../dsl/types";
 import { createFoldAdapter, type BattleIntent, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { firstLegalAnswer } from "../../../prompts/answers";
+import type { EngineEvent } from "../../../events";
 import { abilitySources, canActivate, instanceOrigin } from "../../../rules/activation";
 import type { Action } from "../../../rules/actions";
 import { Context } from "../../../steps/context";
@@ -59,7 +61,12 @@ const failingInterrupt: EngineCardDefinition = { ...spell(20, p.discard(1, "oppo
 } };
 const revealBeforeAbandon = make(21, [revealSourceCost(), abandonCost()]);
 const unrevealed = make(22, []);
-const engine = createEngine(createCatalog([...SYNTHETIC_CARDS, card, exact, twice, discardThen, revealThen, optionalThen, nestedThen, genericTwice, generic, captured, ordinary, voidSource, support, playReserved, afterChoice, afterOptional, recall, dissolve, interruption, prevention, failingInterrupt, revealBeforeAbandon, unrevealed], []));
+// These public fixture definitions match the retained eight-cell pre-repair continuation probe.
+const restart = [false, true].map((first, index) => ({
+  ...make(23 + index, first ? [revealSourceCost(), abandonCost()] : [abandonCost(), revealSourceCost()]),
+  id: syntheticId(0x70700 + index),
+}));
+const engine = createEngine(createCatalog([...SYNTHETIC_CARDS, card, exact, twice, discardThen, revealThen, optionalThen, nestedThen, genericTwice, generic, captured, ordinary, voidSource, support, playReserved, afterChoice, afterOptional, recall, dissolve, interruption, prevention, failingInterrupt, revealBeforeAbandon, unrevealed, ...restart], []));
 const fold = () => createFoldAdapter(engine);
 const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
 const other = (side: Side): Side => side === "player" ? "enemy" : "player";
@@ -75,6 +82,7 @@ const board = (side: Side, source = card, hand = [source.id, SYNTHETIC.event0.id
 });
 const legal = (state: BattleState, side: Side, source: InstanceId) => engine.legalActions(state, side).some(a => a.kind === "activate" && a.source === source);
 const finish = (state: BattleState) => passUntil(engine, state, next => next.stack.length === 0).state;
+const sourceNotices = (events: readonly EngineEvent[]) => events.filter(e => e.kind === "promptAutoAnswered" && e.purpose.role === "revealCost");
 const reduced = (state: BattleState, side: Side, source: InstanceId) => engine.view(state, side).instances[source]?.characteristics.cost;
 
 for (const side of ["player", "enemy"] as const) describe(`physical hand activation: ${side}`, () => {
@@ -90,6 +98,7 @@ for (const side of ["player", "enemy"] as const) describe(`physical hand activat
     expect(privatePrompt.purpose.source).toBeNull();
     expect(privatePrompt.purpose.cardId).toBeNull();
     const paid = applied(adapter.reduce(opened.slice, { kind: "answer", side, promptId: pending.prompt.id, value: [ids[side].back[0]!] }));
+    expect(sourceNotices(paid.published)).toEqual([]);
     expect(paid.published.filter(e => e.kind === "revealed")).toEqual([{ kind: "revealed", side, instances: [source] }]);
     expect(paid.slice.committed.instances[ids[side].back[0]!].zone).toBe("void");
     const settled = finish(paid.slice.committed);
@@ -113,6 +122,7 @@ for (const side of ["player", "enemy"] as const) describe(`physical hand activat
     expect(pending.prompt.cancellable).toBe(true);
     expect(engine.view(pending.display, other(side)).instances[source]).toBeUndefined();
     expect(promptView(pending.prompt, other(side), pending.display).purpose.source).toBeNull();
+    expect(sourceNotices(opened.published)).toEqual([]);
     expect(opened.published.some(e => e.kind === "revealed" || e.kind === "abandoned")).toBe(false);
     const cancelled = applied(adapter.reduce(opened.slice, { kind: "cancel", side, promptId: pending.prompt.id }));
     expect(cancelled.published.some(e => e.kind === "revealed" || e.kind === "abandoned")).toBe(false);
@@ -125,11 +135,14 @@ for (const side of ["player", "enemy"] as const) describe(`physical hand activat
     const { state, ids } = board(side, exact);
     const source = ids[side].hand[0];
     const adapter = fold();
-    const first = applied(adapter.reduce(sliceOf(state), { kind: "battleAction", side, action: action(source) }));
+    const withoutAuto = { ...state, config: { ...state.config, autoAnswerForcedPrompts: false } };
+    const first = applied(adapter.reduce(sliceOf(withoutAuto), { kind: "battleAction", side, action: action(source) }));
+    expect(sourceNotices(first.published)).toEqual([]);
     expect(first.slice.inFlight).toBeNull();
     expect(first.published.filter(e => e.kind === "revealed")).toEqual([{ kind: "revealed", side, instances: [source] }]);
     const after = finish(first.slice.committed);
     const second = applied(adapter.reduce(sliceOf(after), { kind: "battleAction", side, action: action(source) }));
+    expect(sourceNotices(second.published)).toEqual([]);
     expect(second.slice.inFlight).toBeNull();
     expect(second.published.filter(e => e.kind === "revealed")).toEqual([{ kind: "revealed", side, instances: [source] }]);
     expect(reduced(finish(second.slice.committed), side, source)).toBe(2);
@@ -300,7 +313,58 @@ for (const side of ["player", "enemy"] as const) describe(`physical hand activat
     expect(engine.view(replay.committed, other(side))).toEqual(engine.view(paid.slice.committed, other(side)));
   });
 
-  it("keeps play, explicit void activation and generic reveal as their separate public actions", () => {
+  it("restarts both printed orders and refuses the captured reveal-first continuation without changing private state", () => {
+    for (const [index, definition] of restart.entries()) {
+      const b = board(side, definition);
+      const source = b.ids[side].hand[0];
+      const adapter = fold();
+      const start: BattleIntent = { kind: "battleAction", side, action: action(source) };
+      const opened = applied(adapter.reduce(sliceOf(b.state), start));
+      const saved = JSON.parse(JSON.stringify(opened.slice)) as BattleSlice;
+      const fresh = fold();
+      const pending = fresh.pending(saved)!;
+      expect(pending.prompt.purpose.role).toBe("abandonCost");
+      expect(pending.prompt.id).toBe("0:1:0");
+      expect(saved.inFlight?.answers).toEqual([]);
+      expect(sourceNotices(opened.published)).toEqual([]);
+      expect(engine.view(pending.display, other(side)).instances[source]).toBeUndefined();
+      const answer: BattleIntent = { kind: "answer", side, promptId: pending.prompt.id, value: [b.ids[side].back[0]!] };
+      const paid = applied(fresh.reduce(saved, answer));
+      expect(paid.published.filter(e => e.kind === "revealed")).toEqual([{ kind: "revealed", side, instances: [source] }]);
+      expect(sourceNotices(paid.published)).toEqual([]);
+      const replay = fold();
+      const replayed = applied(replay.reduce(applied(replay.reduce(sliceOf(b.state), start)).slice, answer));
+      expect(stateHash(replayed.slice.committed)).toBe(stateHash(paid.slice.committed));
+      expect(fresh.reduce(saved, start)).toEqual({ kind: "bounced", reason: "stepInFlight" });
+      if (index === 0) {
+        // Actual baseline abandon-first saved envelope: no reveal answer precedes this pending choice.
+        const old = { committed: b.state, ...JSON.parse(side === "player"
+          ? '{"inFlight":{"step":{"kind":"activate","source":"i3","ability":0},"automatic":false,"answers":[]},"publishedEvents":0,"attempt":1}'
+          : '{"inFlight":{"step":{"kind":"activate","source":"i11","ability":0},"automatic":false,"answers":[]},"publishedEvents":0,"attempt":1}') } as BattleSlice;
+        expect(fold().pending(old)?.prompt).toEqual(pending.prompt);
+        expect(stateHash(applied(fold().reduce(old, answer)).slice.committed)).toBe(stateHash(paid.slice.committed));
+      } else {
+        // Actual pre-repair public probe prefix; this custom reveal-first catalog has a different saved prompt protocol.
+        const old = { committed: b.state, ...JSON.parse(side === "player"
+          ? '{"inFlight":{"step":{"kind":"activate","source":"i3","ability":0},"automatic":false,"answers":[{"fingerprint":"1a6ci4xzodw","value":["i3"],"auto":true}]},"publishedEvents":1,"attempt":1}'
+          : '{"inFlight":{"step":{"kind":"activate","source":"i11","ability":0},"automatic":false,"answers":[{"fingerprint":"5brpe2hus4","value":["i11"],"auto":true}]},"publishedEvents":1,"attempt":1}') } as BattleSlice;
+        const before = stateHash(old.committed);
+        const stale: BattleIntent = { ...answer, promptId: parsePromptId("0:1:1") };
+        expect(fresh.reduce(saved, stale)).toEqual({ kind: "bounced", reason: "stalePrompt" });
+        expect(fold().pending(old)).toBeNull();
+        const refused = fold().reduce(old, stale);
+        if (refused.kind !== "applied") throw new Error(`bounced ${refused.reason}`);
+        expect(refused.error?.kind).toBe("engine_error");
+        expect(refused.slice.inFlight).toBeNull();
+        expect(refused.published).toEqual([]);
+        expect(stateHash(refused.slice.committed)).toBe(before);
+        expect(stateHash(old.committed)).toBe(before);
+        expect(engine.view(refused.slice.committed, other(side)).instances[source]).toBeUndefined();
+      }
+    }
+  });
+
+  it("keeps default in-play, explicit void activation and generic reveal as their separate public actions", () => {
     const b = boardState(engine.catalog, { active: side, phase: "day", [side]: { hand: [SYNTHETIC.event0.id, SYNTHETIC.event0.id], back: [ordinary.id, generic.id], void: [voidSource.id], deck }, [other(side)]: { deck } });
     expect(canActivate(b.state, engine.catalog, side, b.ids[side].back[0]!, 0)).toBe(true);
     expect(canActivate(b.state, engine.catalog, side, b.ids[side].void[0], 0)).toBe(true);
@@ -310,6 +374,9 @@ for (const side of ["player", "enemy"] as const) describe(`physical hand activat
     expect(pending.prompt.kind).toBe("chooseCards");
     const paid = applied(adapter.reduce(out.slice, { kind: "answer", side, promptId: pending.prompt.id, value: [b.ids[side].hand[0]] }));
     expect(paid.published.filter(e => e.kind === "revealed")).toEqual([{ kind: "revealed", side, instances: [b.ids[side].hand[0]] }]);
+    const singleton = boardState(engine.catalog, { active: side, phase: "day", [side]: { hand: [SYNTHETIC.event0.id], back: [generic.id], deck }, [other(side)]: { deck } });
+    const automatic = applied(fold().reduce(sliceOf(singleton.state), { kind: "battleAction", side, action: action(singleton.ids[side].back[0]!) }));
+    expect(sourceNotices(automatic.published)).toHaveLength(1);
   });
 });
 
@@ -324,6 +391,7 @@ for (const holder of ["player", "enemy"] as const) it(`pays a foreign-owned sour
   expect(canActivate(b.state, engine.catalog, holder, id, 0)).toBe(true);
   expect(canActivate(b.state, engine.catalog, owner, id, 0)).toBe(false);
   const out = applied(fold().reduce(sliceOf(b.state), { kind: "battleAction", side: holder, action: action(id) }));
+  expect(sourceNotices(out.published)).toEqual([]);
   expect(out.published.filter(e => e.kind === "revealed")).toEqual([{ kind: "revealed", side: holder, instances: [id] }]);
   expect(reduced(finish(out.slice.committed), holder, id)).toBe(3);
   const missing: BattleState = { ...b.state, sides: { ...b.state.sides, [holder]: { ...b.state.sides[holder], hand: [] } } };

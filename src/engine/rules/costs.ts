@@ -433,6 +433,14 @@ export function planCosts(
       throw new Infeasible("Source reveal cannot follow a chosen whole-hand discard");
     }
     if (sourceDeparted && cannotFollowDeparture(cost)) throw new Infeasible("A departed source cannot pay a later source cost");
+    if (cost.cost === "revealSource") {
+      if (typeof source !== "string" || !canRevealSource(state, side, source) || used.includes(source)) {
+        throw new Infeasible("Source reveal needs its distinct physical hand source");
+      }
+      used.push(source);
+      payments.push({ cost, cards: [source] });
+      return;
+    }
     if (cost.cost === "countersX") {
       if (capturedX === null || !Number.isSafeInteger(capturedX) || capturedX < cost.min) throw new Infeasible("Counter X needs its prepared binding");
       payments.push({ cost, cards: [] });

@@ -1,0 +1,404 @@
+{
+  "bead": "hv-umm2.707",
+  "sourceBase": "13dc7960c17f9bf2b645ec7966b80361b94d0a9f",
+  "sourceSHA256": {
+    "src/engine/rules/costs.ts": "9dff222989a41129a48106c1656daac3935402bbd2d9e50982f6a98d5fe2344c",
+    "src/engine/effects/primitives/contracts/hand-source-activation.contracts.ts": "39730fa35577516f31d4ccd67a8b1c8c163358ef67cb2ea43240313e2a3795cb",
+    "docs/plan/engine-design.md": "da13c6318c2d0f5a5ae328e7f8dbfa7d15f0a1354aa7369f0671f4f406334eeb"
+  },
+  "status": "PASS final caller; original partial failed caller retained in measurements",
+  "final": {
+    "invocation": "run-9FS6B6",
+    "scenarioSHA256": "6a4319e503424753f77d04f92fc68c892671281fb19defb33b1f0cb859450925",
+    "start": "2026-10-15T02:27:38.604184+00:00",
+    "end": "2026-10-15T02:28:15.865231+00:00",
+    "elapsedSeconds": 37.26083837496117,
+    "runnerWallMs": {
+      "browserLeaseWait": 9,
+      "serve": 2924,
+      "scenario": 33569,
+      "total": 36637
+    },
+    "exit": 0,
+    "result": "Bothviewports x both existing LAB fixtures passed cancellation/reopen/pendingreload/ordinary abandon/exact source reveal/resolution; dual fixture played source at three energy.",
+    "caps": [],
+    "captures": [
+      "hand-source-abandon-desktop.png",
+      "hand-source-chooser-desktop.png",
+      "hand-source-chooser-mobile.png"
+    ],
+    "captureDimensions": [
+      [
+        2880,
+        1800
+      ],
+      [
+        2880,
+        1800
+      ],
+      [
+        780,
+        1688
+      ]
+    ],
+    "mcpSessionId": "b5bac134-b532-40be-a16f-eb3ade3dbe17",
+    "mcpProtocolVersion": "2025-11-25",
+    "runnerPid": 24276,
+    "runnerGroup": 24276,
+    "serverPid": 24320,
+    "port": 5174,
+    "cleanup": {
+      "postterminalGroupCensus": [],
+      "remainingOwnOwnerRecords": [],
+      "serverCensus": "",
+      "portListenerCensus": "",
+      "qualification": "Normal native runner exit0 includes awaited finally closure. Active original negotiated identity retained; no raw browser_close response or fleeting execution-completed record captured."
+    },
+    "outcomes": {
+      "desktop": {
+        "viewport": "desktop",
+        "results": [
+          {
+            "fixture": "hand-source-activation-only",
+            "source": "i3",
+            "sourcePrinting": "5e5e5e5e-0000-4000-8000-000000063000",
+            "pending": "0:1:0",
+            "restarted": "0:3:0",
+            "cancelled": true,
+            "reloadedPrompt": "0:3:0",
+            "geometry": [
+              {
+                "state": "activation-choice",
+                "x": 1019,
+                "y": 660.75,
+                "width": 124,
+                "height": 116,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "state": "cancel",
+                "x": 826.625,
+                "y": 20.75,
+                "width": 88.375,
+                "height": 42,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "state": "activation-choice",
+                "x": 1019,
+                "y": 660.75,
+                "width": 124,
+                "height": 116,
+                "inViewport": true,
+                "hit": true
+              }
+            ],
+            "reveals": [
+              {
+                "kind": "revealed",
+                "side": "player",
+                "instances": [
+                  "i3"
+                ]
+              }
+            ],
+            "abandoned": [
+              {
+                "kind": "abandoned",
+                "instance": "i1",
+                "side": "player"
+              }
+            ],
+            "revealAutoNotices": 0,
+            "handAfter": [
+              "i3",
+              "i4"
+            ],
+            "knownAfter": true,
+            "costChange": [
+              {
+                "controller": "player",
+                "source": "i3",
+                "expiry": {
+                  "at": "never"
+                },
+                "change": {
+                  "kind": "cardCost",
+                  "instance": "i3",
+                  "mode": "reduce",
+                  "amount": 1
+                },
+                "id": "e1",
+                "timestamp": 1
+              }
+            ],
+            "played": null
+          },
+          {
+            "fixture": "hand-source-play-and-activate",
+            "source": "i3",
+            "sourcePrinting": "5e5e5e5e-0000-4000-8000-000000063000",
+            "pending": "0:1:0",
+            "restarted": "0:3:0",
+            "cancelled": true,
+            "reloadedPrompt": "0:3:0",
+            "geometry": [
+              {
+                "state": "activation-choice",
+                "x": 1151,
+                "y": 660.75,
+                "width": 124,
+                "height": 116,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "state": "cancel",
+                "x": 826.625,
+                "y": 20.75,
+                "width": 88.375,
+                "height": 42,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "state": "activation-choice",
+                "x": 1151,
+                "y": 660.75,
+                "width": 124,
+                "height": 116,
+                "inViewport": true,
+                "hit": true
+              }
+            ],
+            "reveals": [
+              {
+                "kind": "revealed",
+                "side": "player",
+                "instances": [
+                  "i3"
+                ]
+              }
+            ],
+            "abandoned": [
+              {
+                "kind": "abandoned",
+                "instance": "i2",
+                "side": "player"
+              }
+            ],
+            "revealAutoNotices": 0,
+            "handAfter": [
+              "i3",
+              "i4"
+            ],
+            "knownAfter": true,
+            "costChange": [
+              {
+                "controller": "player",
+                "source": "i3",
+                "expiry": {
+                  "at": "never"
+                },
+                "change": {
+                  "kind": "cardCost",
+                  "instance": "i3",
+                  "mode": "reduce",
+                  "amount": 1
+                },
+                "id": "e1",
+                "timestamp": 1
+              }
+            ],
+            "played": {
+              "zone": "play",
+              "energy": 1
+            }
+          }
+        ]
+      },
+      "mobile": {
+        "viewport": "mobile",
+        "results": [
+          {
+            "fixture": "hand-source-activation-only",
+            "source": "i3",
+            "sourcePrinting": "5e5e5e5e-0000-4000-8000-000000063000",
+            "pending": "0:1:0",
+            "restarted": "0:3:0",
+            "cancelled": true,
+            "reloadedPrompt": "0:3:0",
+            "geometry": [
+              {
+                "state": "activation-choice",
+                "x": 21,
+                "y": 727.859375,
+                "width": 110.65625,
+                "height": 95.125,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "state": "cancel",
+                "x": 269.125,
+                "y": 20.75,
+                "width": 88.375,
+                "height": 42,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "state": "activation-choice",
+                "x": 21,
+                "y": 727.859375,
+                "width": 110.65625,
+                "height": 95.125,
+                "inViewport": true,
+                "hit": true
+              }
+            ],
+            "reveals": [
+              {
+                "kind": "revealed",
+                "side": "player",
+                "instances": [
+                  "i3"
+                ]
+              }
+            ],
+            "abandoned": [
+              {
+                "kind": "abandoned",
+                "instance": "i1",
+                "side": "player"
+              }
+            ],
+            "revealAutoNotices": 0,
+            "handAfter": [
+              "i3",
+              "i4"
+            ],
+            "knownAfter": true,
+            "costChange": [
+              {
+                "controller": "player",
+                "source": "i3",
+                "expiry": {
+                  "at": "never"
+                },
+                "change": {
+                  "kind": "cardCost",
+                  "instance": "i3",
+                  "mode": "reduce",
+                  "amount": 1
+                },
+                "id": "e1",
+                "timestamp": 1
+              }
+            ],
+            "played": null
+          },
+          {
+            "fixture": "hand-source-play-and-activate",
+            "source": "i3",
+            "sourcePrinting": "5e5e5e5e-0000-4000-8000-000000063000",
+            "pending": "0:1:0",
+            "restarted": "0:3:0",
+            "cancelled": true,
+            "reloadedPrompt": "0:3:0",
+            "geometry": [
+              {
+                "state": "activation-choice",
+                "x": 139.65625,
+                "y": 727.859375,
+                "width": 110.671875,
+                "height": 95.125,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "state": "cancel",
+                "x": 269.125,
+                "y": 20.75,
+                "width": 88.375,
+                "height": 42,
+                "inViewport": true,
+                "hit": true
+              },
+              {
+                "state": "activation-choice",
+                "x": 139.65625,
+                "y": 727.859375,
+                "width": 110.671875,
+                "height": 95.125,
+                "inViewport": true,
+                "hit": true
+              }
+            ],
+            "reveals": [
+              {
+                "kind": "revealed",
+                "side": "player",
+                "instances": [
+                  "i3"
+                ]
+              }
+            ],
+            "abandoned": [
+              {
+                "kind": "abandoned",
+                "instance": "i2",
+                "side": "player"
+              }
+            ],
+            "revealAutoNotices": 0,
+            "handAfter": [
+              "i3",
+              "i4"
+            ],
+            "knownAfter": true,
+            "costChange": [
+              {
+                "controller": "player",
+                "source": "i3",
+                "expiry": {
+                  "at": "never"
+                },
+                "change": {
+                  "kind": "cardCost",
+                  "instance": "i3",
+                  "mode": "reduce",
+                  "amount": 1
+                },
+                "id": "e1",
+                "timestamp": 1
+              }
+            ],
+            "played": {
+              "zone": "play",
+              "energy": 1
+            }
+          }
+        ]
+      }
+    },
+    "durableGameLogs": [
+      {
+        "viewport": "desktop",
+        "filename": "hand-source-707-desktop.jsonl",
+        "gameId": "r9nprc",
+        "rows": 57
+      },
+      {
+        "viewport": "mobile",
+        "filename": "hand-source-707-mobile.jsonl",
+        "gameId": "oovqc4",
+        "rows": 53
+      }
+    ],
+    "durableLogQualification": "Runner exports the final current dualfixture game per viewport; each earlier activation-only fixture also asserted its durable UUID reveal before navigating. Raw reveal/abandon/cost effect for all four workflows is retained in scenario outcomes."
+  },
+  "validation": "Native8931 existing runner and existing registered LAB fixtures; no injected state, custom policy or renderer changes."
+}
