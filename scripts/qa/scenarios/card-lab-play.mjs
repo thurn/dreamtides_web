@@ -18,7 +18,7 @@
 // captures the settled board.
 
 /**
- * @typedef {{ card: string, avatar?: string, dreamsign?: string, side?: string, status: string, reason: string | null, detail: string | null, eligibleVariants: string[], entityKind: "card" | "dreamwell" | "avatar" | "dreamsign" | null, cardStatus: string | null, cardType: string | null }} CardLabReport
+ * @typedef {{ card: string, avatar?: string, dreamsign?: string, side?: string, status: string, reason: string | null, detail: string | null, eligibleVariants: string[], entityKind: "card" | "dreamwell" | "avatar" | "dreamsign" | null, cardStatus: string | null, cardType: string | null, requestedMods: string | null, deckMods: Record<string, unknown> | null }} CardLabReport
  * @typedef {{ id: string, owner: string, zone: string, printing: { kind: string, cardId?: string } }} ProbeInstance
  * @typedef {{ kind: string, side: string, id: string, candidates?: string[] }} ProbePrompt
  * @typedef {{ seq: number, index: number, kind: string, instance: string | null, event: { kind: string, side?: string, card?: string, energyAdded?: number, active?: string, phase?: string, cause?: string, current?: number, max?: number, maxChange?: number } }} ProbeEvent
@@ -32,7 +32,7 @@
  * @returns {Promise<CardLabPlayResult>}
  */
 export default async function cardLabPlay(qa) {
-  const { card, avatar, dreamsign, variant = "base", as: side = "player" } = qa.args;
+  const { card, avatar, dreamsign, variant = "base", as: side = "player", mods } = qa.args;
   const deadline = Date.now() + Number(qa.args.timeoutMs ?? "60000");
   /** @type {string[]} */
   const failures = [];
@@ -57,11 +57,23 @@ export default async function cardLabPlay(qa) {
   try {
     const identities = ["card", "avatar", "dreamsign"].filter(key => qa.args[key] !== undefined)
       .map(key => `${key}=${encodeURIComponent(qa.args[key])}`).join("&");
-    await qa.open(`/?goto=card-lab&${identities}&variant=${encodeURIComponent(variant ?? "base")}&as=${encodeURIComponent(side ?? "player")}&seed=1&debug=1`, qa.viewport, { allowErrors: true });
+    await qa.open(`/?goto=card-lab&${identities}&variant=${encodeURIComponent(variant ?? "base")}&as=${encodeURIComponent(side ?? "player")}&seed=1&debug=1${mods === undefined ? "" : `&mods=${encodeURIComponent(mods)}`}`, qa.viewport, { allowErrors: true });
     const lab = await qa.waitFor("the card-lab report", () => /** @type {LabWindow} */ (window).__cardLab ?? null, null, { timeout: Math.max(1, deadline - Date.now()), allowErrors: true });
     if (lab.status !== "ready") {
       fail(`card-lab ${String(lab.reason)}${lab.detail === null ? "" : `: ${String(lab.detail)}`}`);
       return outcome(lab.reason === "ineligibleVariant" ? "skip" : "fail", { lab });
+    }
+    if (mods !== undefined && lab.requestedMods !== mods) fail("the card-lab modifier transport differs from the requested JSON");
+    if (mods !== undefined) {
+      /** @type {unknown} */
+      const parsed = JSON.parse(mods);
+      if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) throw new Error("the card-lab accepted malformed modifier JSON");
+      const requested = /** @type {Record<string, unknown>} */ (parsed);
+      const change = typeof requested.typeChange === "object" && requested.typeChange !== null ? /** @type {Record<string, unknown>} */ (requested.typeChange) : null;
+      const expected = { sparkBonus: requested.sparkBonus ?? 0, costReduction: requested.costReduction ?? 0, fast: requested.fast ?? false, reclaim: requested.reclaim ?? null, typeChange: change === null ? null : { cardType: change.cardType, subtype: change.subtype } };
+      const effective = lab.deckMods ?? { sparkBonus: 0, costReduction: 0, fast: false, reclaim: null, typeChange: null };
+      for (const [key, value] of Object.entries(expected)) if (JSON.stringify(effective[key]) !== JSON.stringify(value)) fail(`the card-lab modifier ${key} differs from its request`);
+      if (change !== null && lab.cardType !== (change.cardType === "character" ? "Character" : "Event")) fail("the card-lab reports the wrong effective card type");
     }
     await qa.waitFor("the engine probe", () => (/** @type {LabWindow} */ (window).__engineProbe === undefined ? null : true), null, { timeout: Math.max(1, deadline - Date.now()) });
     await qa.waitVisible("[data-battle-mobile]", { timeout: Math.max(1000, deadline - Date.now()) });

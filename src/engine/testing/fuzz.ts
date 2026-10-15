@@ -45,6 +45,7 @@ import type { FigmentId, InstanceId } from "../state/ids";
 import { DREAMWELL_RULES } from "../../content/dreamwell-rules";
 import { atStartOfFirstTurn, triggered } from "../dsl/triggers";
 import { materializeFigments, playFromZone, returnToHand, sequence, shuffleInto } from "../effects/primitives";
+import { parseCardSubtype } from "../../types/card-identity";
 import { BASE_VARIANT } from "../dsl/types";
 
 /** A recorded top-level action and the prompt answers given while it ran. */
@@ -308,9 +309,16 @@ export function fuzzEngineCatalog(pool: FuzzPool, extra: readonly EngineCardDefi
 export function randomDeck(random: PolicyRandom, pool: FuzzPool): DeckEntry[] {
   const synthetic = FUZZ_SYNTHETIC;
   const targets = weightedCards(pool);
-  const deck = Array.from({ length: DECK_SIZE }, () => ({
+  const deck: DeckEntry[] = Array.from({ length: DECK_SIZE }, () => ({
     cardId: (random.next() < 0.5 ? random.pick(synthetic) : random.pick(pool.cards)).id,
     amplified: random.next() < 0.1,
+    deckMods: {
+      sparkBonus: random.pick([0, 1, 2]),
+      costReduction: random.pick([0, 1, 2]),
+      fast: random.next() < 0.5,
+      reclaim: random.pick([null, 0, 1, 2]),
+      typeChange: random.pick([null, { cardType: "character" as const, subtype: parseCardSubtype("Warrior") }, { cardType: "event" as const, subtype: parseCardSubtype("") }]),
+    },
   }));
   for (const [index, cardId] of targets.entries()) deck[index] = { ...deck[index], cardId };
   return deck;

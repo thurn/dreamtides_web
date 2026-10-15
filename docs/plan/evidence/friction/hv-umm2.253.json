@@ -38,8 +38,8 @@
   },
   "hostLoad": 8.2529296875,
   "testDelta": {
-    "files": 0,
-    "lines": 0,
+    "files": 1,
+    "lines": 141,
     "jsdomFiles": 0
   },
   "friction": [

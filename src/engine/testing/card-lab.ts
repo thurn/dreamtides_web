@@ -17,6 +17,7 @@ import { cardIdFromUnknown } from "../../types/card-identity";
 import { actionsEqual, allowedBy, type Action } from "../rules/actions";
 import { applyDebugOp } from "../debug/debug-actions";
 import type { TransfigurationType } from "../../types/journey";
+import { deckModsFromUnknown } from "../dsl/deck-mods";
 import { fixedEnergy } from "../dsl/energy";
 import type { BoardSetup } from "./board";
 import { labBoard } from "./lab-solver";
@@ -313,7 +314,8 @@ export function cardLabEnemyAction(engine: Engine, init: BattleInit, slice: Batt
  */
 export function cardLabFixture(engine: Engine, request: CardLabRequest, pool: readonly EngineCardDefinition[]): PromptLabFixture {
   const stage = request.stage === undefined ? undefined : cardLabStageFromUnknown(request.stage);
-  const { setup: solved, opener } = labBoard(engine, request.entry, pool, request.side, stage);
+  const entry = request.entry.deckMods === undefined ? request.entry : { ...request.entry, deckMods: deckModsFromUnknown(request.entry.deckMods) };
+  const { setup: solved, opener } = labBoard(engine, entry, pool, request.side, stage);
   if (stage !== undefined) {
     for (const side of SIDES) for (const id of [...(solved[side]?.front ?? []), ...(solved[side]?.back ?? [])]) {
       if (id !== null && engine.catalog.card(id).cardType !== "character") throw new Error("Declared lab ranks require characters");

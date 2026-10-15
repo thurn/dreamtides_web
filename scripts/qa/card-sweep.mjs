@@ -2,7 +2,7 @@
 //
 //   node scripts/qa/card-sweep.mjs --bead <id> --cards <uuid,...|starter>
 //     [--variants all|<v>,...] [--as player|enemy|both] [--timeout <s>]
-//     [--port <n>] [--capture]
+//     [--port <n>] [--capture] [--mods <JSON>]
 //
 // For each card, side, and variant it runs the `card-lab-play` scenario
 // (scripts/qa/scenarios/card-lab-play.mjs) in the card-lab through a runner
@@ -36,7 +36,7 @@ const VARIANTS = ["base", "amplified", "empowered", "kindled", "resonant", "insp
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 
 /**
- * @typedef {{ bead: string, cards: string[], entityKind: "card" | "avatar" | "dreamsign", variants: string[], sides: string[], timeoutS: number, port: number | null, capture: boolean }} SweepOptions
+ * @typedef {{ bead: string, cards: string[], entityKind: "card" | "avatar" | "dreamsign", variants: string[], sides: string[], timeoutS: number, port: number | null, capture: boolean, mods?: string }} SweepOptions
  */
 
 /**
@@ -69,6 +69,7 @@ export function parseSweepArgs(argv) {
       options.sides = raw === "both" ? ["player", "enemy"] : [raw];
     } else if (arg === "--timeout") options.timeoutS = Number(value());
     else if (arg === "--port") options.port = Number(value());
+    else if (arg === "--mods") options.mods = value();
     else if (arg === "--capture") options.capture = true;
     else throw new Error(`unknown argument ${arg}`);
   }
@@ -80,6 +81,12 @@ export function parseSweepArgs(argv) {
   if (options.variants[0] !== "base") options.variants = ["base", ...options.variants.filter((variant) => variant !== "base")];
   if (options.sides.some((side) => side !== "player" && side !== "enemy")) throw new Error("--as is player, enemy, or both");
   if (!(options.timeoutS > 0)) throw new Error("--timeout must be a positive number of seconds");
+  if (options.mods !== undefined) {
+    /** @type {unknown} */
+    const mods = JSON.parse(options.mods);
+    if (typeof mods !== "object" || mods === null || Array.isArray(mods)) throw new Error("--mods must be a deck-modification JSON object");
+    if (options.entityKind !== "card") throw new Error("--mods requires --cards");
+  }
   return options;
 }
 
@@ -141,7 +148,8 @@ export async function runSweepCell({ run, closed, save, record }) {
     record({ verdict: result.verdict, notes: result.notes, screens: result.screens ?? [], attempt,
       effective: !retry, failureKinds: result.failureKinds ?? [], rawReport,
       navigation: report.log.filter(({ label }) => label === "qa.navigation").map(({ data }) => data),
-      ...(result.lab?.entityKind === undefined ? {} : { entityKind: result.lab.entityKind }) });
+      ...(result.lab?.entityKind === undefined ? {} : { entityKind: result.lab.entityKind }),
+      ...(result.lab === undefined ? {} : { requestedMods: result.lab.requestedMods, deckMods: result.lab.deckMods }) });
     if (!retry) return result;
   }
   throw new Error("sweep cell exhausted without an effective verdict");
@@ -210,7 +218,7 @@ async function main() {
   const totals = createSweepCounts();
   const { counts, attemptCounts } = totals;
   const record = (/** @type {Record<string, unknown>} */ line) => {
-    appendFileSync(ledger, `${JSON.stringify({ ...line, mode: "sweep", bead: options.bead, commit })}\n`);
+    appendFileSync(ledger, `${JSON.stringify({ ...line, mode: "sweep", bead: options.bead, commit, requestedMods: options.mods ?? null, modsValidation: "card-lab" })}\n`);
     const verdict = String(line.verdict);
     totals.record(line);
     say(`${verdict.padEnd(7)} ${String(line.uuid)} ${String(line.variant)}${line.as === "enemy" ? " as enemy" : ""}${line.notes === "" ? "" : ` (${String(line.notes)})`}`);
@@ -250,7 +258,7 @@ async function main() {
             const timeoutMs = options.timeoutS * 1000;
             const result = await runSweepCell({
               run: (attempt) => session.run(cardLabPlay.toString(),
-                { [options.entityKind]: card, variant, as: side, timeoutMs: String(timeoutMs), capture: capture === "" ? "" : `${capture}-attempt-${String(attempt)}` }, timeoutMs + 30_000),
+                { [options.entityKind]: card, variant, as: side, ...(options.mods === undefined ? {} : { mods: options.mods }), timeoutMs: String(timeoutMs), capture: capture === "" ? "" : `${capture}-attempt-${String(attempt)}` }, timeoutMs + 30_000),
               closed: session.closed,
               save: (report, attempt) => {
                 const filename = `sweep-${card}-${variant}-${side}-attempt-${String(attempt)}.result.json`;
@@ -268,7 +276,7 @@ async function main() {
     },
   });
   const total = performance.now() - startedClock;
-  const summary = { event: "cardSweepSummary", invocation, evidenceDir: invocationDir, counts, attemptCounts, hostLoad, sessions, leaseYields: yields,
+  const summary = { event: "cardSweepSummary", invocation, evidenceDir: invocationDir, counts, attemptCounts, hostLoad, requestedMods: options.mods ?? null, modsValidation: "card-lab", sessions, leaseYields: yields,
     wallMs: { ...wallMs, execution: total - wallMs.browserLeaseWait, total } };
   writeFileSync(join(invocationDir, "summary.json"), JSON.stringify(summary, null, 2) + "\n");
   say(JSON.stringify(summary));

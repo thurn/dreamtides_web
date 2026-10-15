@@ -1,0 +1,37 @@
+{
+  "bead": "hv-umm2.629",
+  "phase": 5,
+  "implementMin": 36.229406749999995,
+  "implementWindow": {
+    "start": "2026-10-15T08:28:20.467Z",
+    "end": "2026-10-15T09:04:34.231405+00:00"
+  },
+  "localValidationS": {
+    "review-terminal": 43.29222912498517,
+    "mutant-wrong-dto": 8.281109250034206,
+    "knip": 5.484151207958348,
+    "mutant-unmapped-kind": 11.05584500002442,
+    "review-second": 40.37643149995711,
+    "browser-refusal": 10.089104749960825,
+    "browser-player": 59.28500787500525,
+    "review-first": 42.941777457948774,
+    "schema": 0.15297641698271036,
+    "focused-corrected": 11.880763041961472,
+    "browser-enemy-accepted": 24.202327749982942,
+    "mutant-dropped-token": 8.708817166974768,
+    "review-final": 53.35251091700047,
+    "sweep": 61.78377045801608,
+    "typecheck-third": 5.751750292023644,
+    "mutant-unknown-field": 8.146224334021099,
+    "focused-final": 5.078754750022199,
+    "browser-player-accepted": 29.62601754197385,
+    "browser-player-final": 26.432038375001866
+  },
+  "hostLoad": 13.5029296875,
+  "testDelta": {
+    "files": 3,
+    "lines": 258,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

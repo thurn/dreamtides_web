@@ -266,7 +266,8 @@ function parseGotoScene(params: URLSearchParams): QaSceneId | null {
   const domain = dreamsign ? "dreamsign" : avatar ? "avatar" : "card";
   const ambiguous = domain !== "card" && (["card", "avatar", "dreamsign"].filter(name => params.has(name)).length > 1 || params.getAll(domain).length !== 1);
   const prefix = domain === "card" ? "card-lab" : `card-lab-${domain}${ambiguous ? "-ambiguous" : ""}`;
-  return parseQaSceneId(`${prefix}:${token(domain, "")}:${token("variant", "base")}:${token("as", "player")}${stage === null ? "" : `:${encodeURIComponent(stage)}`}`);
+  const mods = params.has("mods") ? params.getAll("mods").length === 1 ? params.get("mods") : "invalid duplicate mods" : null;
+  return parseQaSceneId(`${prefix}:${token(domain, "")}:${token("variant", "base")}:${token("as", "player")}${stage === null && mods === null ? "" : `:${stage === null ? "" : stage === "" && mods !== null ? "%00" : encodeURIComponent(stage)}`}${mods === null ? "" : `:${encodeURIComponent(mods)}`}`);
 }
 
 function parseSeedOverride(rawSeed: string | null): number | null {

@@ -1,0 +1,1335 @@
+{
+  "bead": "hv-umm2.629",
+  "base": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260",
+  "actualFirstDispatch": "2026-10-15T08:28:20.467Z",
+  "clock": "inclusive first dispatch through precommit cutoff; research, admission continuations, all waits, failed/corrected checks, QA and Git work included. No reset. Actual final Git endpoint is retained separately by the parent packet after commit.",
+  "recordedAt": "2026-10-15T09:03:19.991390+00:00",
+  "samplingModelCpuAttribution": "unknown",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "entire final ordinary npm run review invocation, including preparation and restoration; starting sample is immediately before subprocess dispatch",
+        "receipt": "review-terminal.receipt.json",
+        "receiptSHA256": "3523bac4c424f1c997cc00234aa085ba6e08b6b2d841eb375b7eda2874676540",
+        "logSHA256": "4f6deb4c16304aff605ebe06a79fd6e4503d920d20dd90a163121f67f5dbc8e4"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-15T08:54:52.338638+00:00",
+      "load": 13.5029296875
+    },
+    {
+      "at": "2026-10-15T08:54:53.348940+00:00",
+      "load": 12.82177734375
+    },
+    {
+      "at": "2026-10-15T08:54:54.349771+00:00",
+      "load": 12.82177734375
+    },
+    {
+      "at": "2026-10-15T08:54:55.349911+00:00",
+      "load": 12.82177734375
+    },
+    {
+      "at": "2026-10-15T08:54:56.358070+00:00",
+      "load": 12.82177734375
+    },
+    {
+      "at": "2026-10-15T08:54:57.365384+00:00",
+      "load": 12.82177734375
+    },
+    {
+      "at": "2026-10-15T08:54:58.375473+00:00",
+      "load": 12.67578125
+    },
+    {
+      "at": "2026-10-15T08:54:59.377513+00:00",
+      "load": 12.67578125
+    },
+    {
+      "at": "2026-10-15T08:55:00.387589+00:00",
+      "load": 12.67578125
+    },
+    {
+      "at": "2026-10-15T08:55:01.389698+00:00",
+      "load": 12.67578125
+    },
+    {
+      "at": "2026-10-15T08:55:02.399759+00:00",
+      "load": 12.67578125
+    },
+    {
+      "at": "2026-10-15T08:55:03.409081+00:00",
+      "load": 12.30126953125
+    },
+    {
+      "at": "2026-10-15T08:55:04.409201+00:00",
+      "load": 12.30126953125
+    },
+    {
+      "at": "2026-10-15T08:55:05.411303+00:00",
+      "load": 12.30126953125
+    },
+    {
+      "at": "2026-10-15T08:55:06.420542+00:00",
+      "load": 12.30126953125
+    },
+    {
+      "at": "2026-10-15T08:55:07.430593+00:00",
+      "load": 12.30126953125
+    },
+    {
+      "at": "2026-10-15T08:55:08.431312+00:00",
+      "load": 11.71630859375
+    },
+    {
+      "at": "2026-10-15T08:55:09.434207+00:00",
+      "load": 11.71630859375
+    },
+    {
+      "at": "2026-10-15T08:55:10.444256+00:00",
+      "load": 11.71630859375
+    },
+    {
+      "at": "2026-10-15T08:55:11.450398+00:00",
+      "load": 11.71630859375
+    },
+    {
+      "at": "2026-10-15T08:55:12.452497+00:00",
+      "load": 11.71630859375
+    },
+    {
+      "at": "2026-10-15T08:55:13.452765+00:00",
+      "load": 11.25830078125
+    },
+    {
+      "at": "2026-10-15T08:55:14.462831+00:00",
+      "load": 11.25830078125
+    },
+    {
+      "at": "2026-10-15T08:55:15.463796+00:00",
+      "load": 11.25830078125
+    },
+    {
+      "at": "2026-10-15T08:55:16.471998+00:00",
+      "load": 11.25830078125
+    },
+    {
+      "at": "2026-10-15T08:55:17.482082+00:00",
+      "load": 11.25830078125
+    },
+    {
+      "at": "2026-10-15T08:55:18.482826+00:00",
+      "load": 13.0791015625
+    },
+    {
+      "at": "2026-10-15T08:55:19.492880+00:00",
+      "load": 13.0791015625
+    },
+    {
+      "at": "2026-10-15T08:55:20.502941+00:00",
+      "load": 13.0791015625
+    },
+    {
+      "at": "2026-10-15T08:55:21.512997+00:00",
+      "load": 13.0791015625
+    },
+    {
+      "at": "2026-10-15T08:55:22.523081+00:00",
+      "load": 13.0791015625
+    },
+    {
+      "at": "2026-10-15T08:55:23.533145+00:00",
+      "load": 14.43408203125
+    },
+    {
+      "at": "2026-10-15T08:55:24.534311+00:00",
+      "load": 14.43408203125
+    },
+    {
+      "at": "2026-10-15T08:55:25.544036+00:00",
+      "load": 14.43408203125
+    },
+    {
+      "at": "2026-10-15T08:55:26.553507+00:00",
+      "load": 14.43408203125
+    },
+    {
+      "at": "2026-10-15T08:55:27.555908+00:00",
+      "load": 14.43408203125
+    },
+    {
+      "at": "2026-10-15T08:55:28.556984+00:00",
+      "load": 14.15869140625
+    },
+    {
+      "at": "2026-10-15T08:55:29.567042+00:00",
+      "load": 14.15869140625
+    },
+    {
+      "at": "2026-10-15T08:55:30.576155+00:00",
+      "load": 14.15869140625
+    },
+    {
+      "at": "2026-10-15T08:55:31.586221+00:00",
+      "load": 14.15869140625
+    },
+    {
+      "at": "2026-10-15T08:55:32.592984+00:00",
+      "load": 14.15869140625
+    },
+    {
+      "at": "2026-10-15T08:55:33.594858+00:00",
+      "load": 16.3076171875
+    },
+    {
+      "at": "2026-10-15T08:55:34.604930+00:00",
+      "load": 16.3076171875
+    },
+    {
+      "at": "2026-10-15T08:55:35.615005+00:00",
+      "load": 16.3076171875
+    },
+    {
+      "at": "2026-10-15T08:55:35.631265+00:00",
+      "load": 16.3076171875
+    }
+  ],
+  "validationEvidenceDir": "validation",
+  "validation": {
+    "review-terminal": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T08:54:52.338638+00:00",
+      "end": "2026-10-15T08:55:35.631265+00:00",
+      "elapsedS": 43.29222912498517,
+      "exitCode": 0,
+      "log": "review-terminal.log",
+      "logSHA256": "4f6deb4c16304aff605ebe06a79fd6e4503d920d20dd90a163121f67f5dbc8e4",
+      "receipt": "review-terminal.receipt.json",
+      "receiptSHA256": "3523bac4c424f1c997cc00234aa085ba6e08b6b2d841eb375b7eda2874676540"
+    },
+    "mutant-wrong-dto": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/exploration-engine-mapping.test.ts"
+      ],
+      "start": "2026-10-15T08:48:27.939860+00:00",
+      "end": "2026-10-15T08:48:36.221104+00:00",
+      "elapsedS": 8.281109250034206,
+      "exitCode": 1,
+      "log": "mutant-wrong-dto.log",
+      "logSHA256": "307acb021d9e447212ab29155f7f9e7258b950df41fb535ab95334f3230507b1",
+      "receipt": "mutant-wrong-dto.receipt.json",
+      "receiptSHA256": "f74e565f287356698ed9b1f388c227e592bea974951d449bfe8419d2093b2170"
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T08:50:52.193893+00:00",
+      "end": "2026-10-15T08:50:57.678177+00:00",
+      "elapsedS": 5.484151207958348,
+      "exitCode": 0,
+      "log": "knip.log",
+      "logSHA256": "b85355fd58dd09b1b798ae5238ad9099729becc18c6838d675f558e236faf75e",
+      "receipt": "knip.receipt.json",
+      "receiptSHA256": "20ec51b318d8e0c3e710d33f7568de9a888a6aff63b6eabe8a4d8da5d716ecdf"
+    },
+    "mutant-unmapped-kind": {
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-15T08:48:36.249859+00:00",
+      "end": "2026-10-15T08:48:47.305842+00:00",
+      "elapsedS": 11.05584500002442,
+      "exitCode": 2,
+      "log": "mutant-unmapped-kind.log",
+      "logSHA256": "1f7b53954819a7e1e40fb4ceff6bb3115b9b625d4fa9a52a83b923de8352bfc3",
+      "receipt": "mutant-unmapped-kind.receipt.json",
+      "receiptSHA256": "46126df86a9d9f5fb2f3d0a8f186a9e3ceb8cf8cbab61bbd57a10578a34fe275"
+    },
+    "review-second": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T08:49:42.839446+00:00",
+      "end": "2026-10-15T08:50:23.214569+00:00",
+      "elapsedS": 40.37643149995711,
+      "exitCode": 0,
+      "log": "review-second.log",
+      "logSHA256": "d76ef619cc22440a05e0496d870391c79cda2515a07f256dd6e1e39f4c217846",
+      "receipt": "review-second.receipt.json",
+      "receiptSHA256": "df4389c0437d43ada20e15ee4834ba8a1bbb298feb9d50b4a53797fc8e45d3a2"
+    },
+    "browser-refusal": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.629/mods-refusal.mjs",
+        "--bead",
+        "hv-umm2.629",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "120"
+      ],
+      "start": "2026-10-15T08:59:18.224147+00:00",
+      "end": "2026-10-15T08:59:28.313726+00:00",
+      "elapsedS": 10.089104749960825,
+      "exitCode": 1,
+      "log": "browser-refusal.log",
+      "logSHA256": "d44955502eded38f535efe21387ac41d22693ad891c2f20c45bd3d49453077cf",
+      "receipt": "browser-refusal.receipt.json",
+      "receiptSHA256": "b28f3722f8ab77a0ea3f20015f6ddeceb175b5c8600cf684eb1e5c8f8725ddf8"
+    },
+    "browser-player": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.629/mods-workflow.mjs",
+        "--bead",
+        "hv-umm2.629",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "card=e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "--arg",
+        "as=player",
+        "--arg",
+        "mods={\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-15T08:45:58.796020+00:00",
+      "end": "2026-10-15T08:46:58.081711+00:00",
+      "elapsedS": 59.28500787500525,
+      "exitCode": 0,
+      "log": "browser-player.log",
+      "logSHA256": "764ff5c071826852a34a9b5285a57745fb36702db335e52939a9f9e440578bfa",
+      "receipt": "browser-player.receipt.json",
+      "receiptSHA256": "fc86a934b7e658bb1dd7b04fcc29257fa5c1036e6ccd64b35a66af791c3b18aa"
+    },
+    "review-first": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T08:44:36.503157+00:00",
+      "end": "2026-10-15T08:45:19.445421+00:00",
+      "elapsedS": 42.941777457948774,
+      "exitCode": 1,
+      "log": "review-first.log",
+      "logSHA256": "c1275bcfeb1a7e444ca06dbabc832e0719c8808ca485b5f74aaa989e54b9fcc3",
+      "receipt": "review-first.receipt.json",
+      "receiptSHA256": "4565f5d7466bfb87f81a6cd2cd9331c662d0ab7c84d175995984abfb60da7103"
+    },
+    "schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T09:03:19.781218+00:00",
+      "end": "2026-10-15T09:03:19.934298+00:00",
+      "elapsedS": 0.15297641698271036,
+      "exitCode": 0,
+      "log": "schema.log",
+      "logSHA256": "94b756446b0d9815c52235dad8304757f41a93d0614263236318801b43941259",
+      "receipt": "schema.receipt.json",
+      "receiptSHA256": "51e34e04d2d15aff581b8015586998d157e546bb0e807ca3c8fd7dd1a2344276"
+    },
+    "focused-corrected": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/exploration-engine-mapping.test.ts",
+        "src/battle/integration/deck-mods.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/runtime/runtime-config.test.ts",
+        "scripts/qa/card-sweep.test.mjs",
+        "scripts/qa/scenarios/card-lab-play.test.mjs"
+      ],
+      "start": "2026-10-15T08:47:51.972277+00:00",
+      "end": "2026-10-15T08:48:03.853519+00:00",
+      "elapsedS": 11.880763041961472,
+      "exitCode": 0,
+      "log": "focused-corrected.log",
+      "logSHA256": "7e6ee1b2f3fa569bd2332174a89e70e26adf714ec75baed1ad414c6e165e2f3d",
+      "receipt": "focused-corrected.receipt.json",
+      "receiptSHA256": "14036e2e13a6abdab2f38b24d063160bb7449d095537f2d655325c59afe71cce"
+    },
+    "browser-enemy-accepted": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.629/mods-workflow-final.mjs",
+        "--bead",
+        "hv-umm2.629",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "card=e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "--arg",
+        "as=enemy",
+        "--arg",
+        "mods={\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"event\",\"subtype\":\"\"}}",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-15T08:56:48.092815+00:00",
+      "end": "2026-10-15T08:57:12.295369+00:00",
+      "elapsedS": 24.202327749982942,
+      "exitCode": 0,
+      "log": "browser-enemy-accepted.log",
+      "logSHA256": "261ab2c2f65406d2ff25e23ea54f84ca9cebf1165df0de7dad47fac8dd3ccb66",
+      "receipt": "browser-enemy-accepted.receipt.json",
+      "receiptSHA256": "a23778bd392bd9f1c814b5dfc4415b97df93ea684378e38be0968cb39c06ba59"
+    },
+    "mutant-dropped-token": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "start": "2026-10-15T08:48:47.339333+00:00",
+      "end": "2026-10-15T08:48:56.048478+00:00",
+      "elapsedS": 8.708817166974768,
+      "exitCode": 1,
+      "log": "mutant-dropped-token.log",
+      "logSHA256": "b157e0aa9246694f6d34a1d495f2acae91872d8d81b7725f200f977d268ccd86",
+      "receipt": "mutant-dropped-token.receipt.json",
+      "receiptSHA256": "5f79c23a5510f634543c716f805d2a81bc380883654387951ee74f0903ba9cd1"
+    },
+    "review-final": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T08:53:02.347215+00:00",
+      "end": "2026-10-15T08:53:55.700206+00:00",
+      "elapsedS": 53.35251091700047,
+      "exitCode": 0,
+      "log": "review-final.log",
+      "logSHA256": "c15bcd7a18cc123d41b80c0d8ee4c1cf571a1cd100a4ad592f55979e7a36aef8",
+      "receipt": "review-final.receipt.json",
+      "receiptSHA256": "10a45179efd1949a895d08cf23e2170e4321f3e64dd10327f062429702c8b20f"
+    },
+    "sweep": {
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.629",
+        "--cards",
+        "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "--variants",
+        "base",
+        "--as",
+        "both",
+        "--mods",
+        "{\"typeChange\":{\"subtype\":\"\",\"cardType\":\"event\"},\"fast\":true}",
+        "--timeout",
+        "60"
+      ],
+      "start": "2026-10-15T08:57:46.350064+00:00",
+      "end": "2026-10-15T08:58:48.134618+00:00",
+      "elapsedS": 61.78377045801608,
+      "exitCode": 0,
+      "log": "sweep.log",
+      "logSHA256": "ffc6b0581f6e66709d98bb19cbc6965c2575ae164993b1565b3d6aeb906ed4df",
+      "receipt": "sweep.receipt.json",
+      "receiptSHA256": "9b3f8c4ad1e6e940dbe6e03b347d14c8c7bb377d59716c1654f3004003db779d"
+    },
+    "typecheck-third": {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-10-15T08:43:41.371502+00:00",
+      "end": "2026-10-15T08:43:47.123386+00:00",
+      "elapsedS": 5.751750292023644,
+      "exitCode": 0,
+      "log": "typecheck-third.log",
+      "logSHA256": "a17177d9c0c4e5e09f1b39a6f2fe3ac97090600f367f3e0ab9b5cca3018d444e",
+      "receipt": "typecheck-third.receipt.json",
+      "receiptSHA256": "8c49f615b39c60c11f886b74d68ac64cd5acc286cc67768a1975bb9e24d9e95c"
+    },
+    "mutant-unknown-field": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "start": "2026-10-15T08:48:56.084330+00:00",
+      "end": "2026-10-15T08:49:04.230905+00:00",
+      "elapsedS": 8.146224334021099,
+      "exitCode": 1,
+      "log": "mutant-unknown-field.log",
+      "logSHA256": "23d0184fd3c90388a57fcd6ae483f4d7d571685fe84ce52fc61f5bb9f9098af1",
+      "receipt": "mutant-unknown-field.receipt.json",
+      "receiptSHA256": "265b3affd87cc7f2e7afa70d4904e02023a1b6ccd046cdeb31e75b512950f5a3"
+    },
+    "focused-final": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/exploration-engine-mapping.test.ts",
+        "src/battle/integration/deck-mods.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/runtime/runtime-config.test.ts",
+        "scripts/qa/card-sweep.test.mjs"
+      ],
+      "start": "2026-10-15T08:45:16.640741+00:00",
+      "end": "2026-10-15T08:45:21.719601+00:00",
+      "elapsedS": 5.078754750022199,
+      "exitCode": 1,
+      "log": "focused-final.log",
+      "logSHA256": "5feed4c5487c3d66246b96220be1e84c52c748e22fce785db77e04f72bc5ccd3",
+      "receipt": "focused-final.receipt.json",
+      "receiptSHA256": "1e207ce5d276f9a15ddac0f9bfefa300113bb1003d5f733bdb1c5d108344dad3"
+    },
+    "browser-player-accepted": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.629/mods-workflow-final.mjs",
+        "--bead",
+        "hv-umm2.629",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "card=e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "--arg",
+        "as=player",
+        "--arg",
+        "mods={\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-15T08:55:58.678335+00:00",
+      "end": "2026-10-15T08:56:28.304670+00:00",
+      "elapsedS": 29.62601754197385,
+      "exitCode": 0,
+      "log": "browser-player-accepted.log",
+      "logSHA256": "01c4535e9bee078247ad0a79ef76c2b2be6f0187ff8af0bbff773d9c662a26f4",
+      "receipt": "browser-player-accepted.receipt.json",
+      "receiptSHA256": "6dcf326aa6fac97f75f5f461b29f8938aa7447b9532c19f6e84041d4c970439f"
+    },
+    "browser-player-final": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.629/mods-workflow-final.mjs",
+        "--bead",
+        "hv-umm2.629",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "card=e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "--arg",
+        "as=player",
+        "--arg",
+        "mods={\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-15T08:51:31.871929+00:00",
+      "end": "2026-10-15T08:51:58.304240+00:00",
+      "elapsedS": 26.432038375001866,
+      "exitCode": 0,
+      "log": "browser-player-final.log",
+      "logSHA256": "6ac570476f096054ef02deb12d9b81feb53d38d72b710970e519bc66026471bf",
+      "receipt": "browser-player-final.receipt.json",
+      "receiptSHA256": "5647296abfc2aea634e575d7794275b833fa100e8211fcad3dde776ca3f92895"
+    }
+  },
+  "earlyAttemptsWithoutOuterWrapper": {
+    "typecheck-first.log": "typecheck-node unsafe JS indexing; corrected",
+    "focused-first.log": "3 transport fixtures reused a UUID already in development lab catalog; corrected to unique synthetic UUID",
+    "focused-second.log": "12/12 pass after unique fixture correction",
+    "typecheck-second.log": "typed fixture prose, ES2020 own-property API and exhausted field narrowing/declaration diagnostics; corrected; raw phase timestamps/load retained"
+  },
+  "failures": {
+    "review-first": "own JSON unknown annotations/raw fixture seed, unconditional no-mod provenance guard and default option shape; corrected within admitted bodies",
+    "focused-final": "7 existing script test failures from no-mod guard/default shape; corrected, focused-corrected84/84",
+    "browser-refusal": "expected exit1: explicit invalidMods refusal and no physical modifier leakage passed; one existing console.error retained; no runtime errors/promise rejections"
+  },
+  "reviewScope": {
+    "ordinary": "46 related files / 6549 tests pass plus lint, both typechecks and source cycle checks",
+    "full": "not invoked: additive local existing DeckMods boundary/projection and conventional eager contract runner; no configuration, state, privacy, setup sequencing, engine behavior or global infrastructure changed",
+    "heavyCommands": []
+  },
+  "testDeltaInterpretation": {
+    "dedicatedFiles": 3,
+    "netLines": 258,
+    "jsdomFiles": 0,
+    "configuredEntrypointsAdded": 2,
+    "plainContractModulesAdded": 1,
+    "paths": {
+      "src/battle/integration/exploration-engine-mapping.test.ts": 141,
+      "src/battle/integration/deck-mods.test.ts": 2,
+      "src/battle/integration/deck-mods/preparation.contracts.ts": 115
+    }
+  },
+  "sourceFirst": {
+    "proposal": "source-first-proposal.md",
+    "addendum": "source-first-addendum.md",
+    "sourceManifest": "source-first-manifest.json",
+    "finiteAdmissionSHA256": "b23ab9333533e1e709c1deebbe0eb584e61325cff1ef2bae2a02bed12d7c7d0e",
+    "peerAudit": "source-first-peer-scope-audit.json",
+    "noRepositoryEffectsBeforeFiniteAdmission": true
+  },
+  "source253Correction": {
+    "at": "2026-10-15T07:46:48.794481+00:00",
+    "source": "a69ea8afb35a820a34d0ed565af0e1c68ec1ee26",
+    "frictionSHA256": "9f51f038c8b4c23d441b98de22e17d6418cbc4a4febdac32b025db81e6bb8e14",
+    "measurementsSHA256": "62c179f855b4584b924249fc6e853705c2923f07c6f96426a43694941377dc78",
+    "currentTestDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "actualNewPrivateContractNumstat": "141\t0\tsrc/engine/effects/primitives/contracts/random-zone-current-turn.contracts.ts",
+    "confirmedTargetTestDelta": {
+      "files": 1,
+      "lines": 141,
+      "jsdomFiles": 0
+    },
+    "configuredEntrypointsAddedRemain": 0,
+    "policy": "workflow Introspection: A landed record whose measurement needs correcting is corrected in the same session next bead, or next retrospective, inside its own commit. A measurement correction is never a bead of its own.",
+    "nextAction": "Carry this bounded source-bound correction with original values/provenance into the next genuine task native scope before its writer dispatch, after current cold review settles. Do not edit landed source or review snapshot. Do not tell current cold reviewer parent findings.",
+    "clockQualification": "Tracked cutoff07:33:13.050511 precedes actual commit07:33:13.313928 by0.263417s, within policy tolerance. Full final postcommitGit endpoint07:34:01.621971 and48.57146s tail separately retained; no additional precision-only clock work.",
+    "boundedAdjacentSpotCheck": {
+      "hv-umm2.625": {
+        "source": "0aad0f5b9741c8e965363aeff8458f19ace323e6",
+        "testDelta": {
+          "files": 1,
+          "lines": 250,
+          "jsdomFiles": 0
+        }
+      },
+      "hv-umm2.621": {
+        "source": "0138fe7c0508a55bbb6c3490d1a156f7bdc2f09d",
+        "testDelta": {
+          "files": 4,
+          "lines": 461,
+          "jsdomFiles": 0
+        }
+      },
+      "qualification": "Adjacent prior own records already use dedicated-module units; no broader correction scope inferred."
+    },
+    "appliedIn": "hv-umm2.629",
+    "originalFrictionTestDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "correctedFrictionTestDelta": {
+      "files": 1,
+      "lines": 141,
+      "jsdomFiles": 0
+    },
+    "configuredEntrypointsAdded": 0,
+    "allOtherJSONFieldsPreserved": true,
+    "currentFrictionSHA256": "e9d808935e77a6203bd57e961baaa2bf70505ed058c7dc384b5931072324d896",
+    "currentMeasurementsSHA256": "fd9a9b67bcfe15c5b9e6b5d543880e4e9ebd424f07ddb1a08982400fb25c8a73"
+  },
+  "acceptedSource": {
+    "at": "2026-10-15T08:55:58.652869+00:00",
+    "base": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260",
+    "sha256": {
+      "src/data/exploration-effect-kinds.ts": "4b68e3dda07fc223645ca49f9445868ffa08c6e712109db6326616d66599a4c0",
+      "src/data/exploration.ts": "e594f06ce2e87091ca07e1c3c80c31396fa9a3c85a9f893509839bfb65f8071d",
+      "src/battle/integration/engine-battle-init.ts": "599b85f4552fc1659698a050a3d8da25fdb6b748d21ef12407e4d5aecc140ab9",
+      "src/runtime/runtime-config.ts": "ac6f1c717cb64075399ec49773c46bd8043a73bdf7e44f961d2e677acbe1c366",
+      "src/runtime/qa-scenes.ts": "85eb359793882c930d95f1a53691257af20c4b2ac84fc26444dd55b63f52fbf3",
+      "src/engine/testing/card-lab.ts": "de419d716462a8429ac379fac3a42c487e3cb312b0911eee891a7927117aca14",
+      "src/engine/testing/lab-solver.ts": "3cc3cd81e02678d17c858f2db1afa437e1d038b413ec80d6483b9006c2334858",
+      "src/engine/testing/fuzz.ts": "22ff2ff46cb486945fe3957fb00ca3d62a682b6c687e12398a1a1a44640e1b45",
+      "scripts/qa/scenarios/card-lab-play.mjs": "bb62af07c315616f9868c986b54a1fe23a166d3cda4607e5ab8a89b3f13ba724",
+      "scripts/qa/card-sweep.mjs": "e47a10d104a7bd1d9a11308067723413810c87c7607e17cd38ebd01c1a2995dd",
+      "src/types/journey.ts": "228630deb239fd21cfe9ef90fe80423f3ea03b0804a228d901f3dc0e2e5020e6",
+      "src/engine/dsl/types.ts": "a0e4a223673efffc3587303c69ea6cde0ee44588658e17784eb1723e4ab40d68",
+      "src/session/providers/exploration-provider.ts": "39ed8f9a05494ef7279ae6362385e2c5b4cefce1ed5c3a810f42b9dff4936903",
+      "src/rules/journey/reward-effects.ts": "567d747df5377b70babaaa243399d60288fb8d08bae54280487d479abe5f2ce8",
+      "src/engine/catalog.ts": "42575821be65b3ae244b5c02cbecdccd6ae53b8bb40aa98a94a8b893f26282cc",
+      "src/engine/state/create.ts": "85f715f9d8f1085902f4ba8d1eeb6de1a1b823f1d3cecc57b4703820d9f0a020",
+      "src/engine/steps/kinds/begin-battle.ts": "3a3314adb77fdcc5c7b8785f4772289286e87d1abf03c0af0da570e1b9b82aba",
+      "src/engine/testing/board.ts": "e413fa76285203d1e25697e175307ede6fee09c1a9ea472e8f07e1b96d24e0d7",
+      "src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+      "vitest.config.ts": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+      "docs/plan/evidence/parallelism/hv-umm2.605.md": "aa4257f12dc5287a9ea622a97010f405aca00a7ddebc9a7a30242dd2c81042b6",
+      "docs/plan/evidence/parallelism/hv-umm2.606.md": "048d3126d86cbe374a8f5081112dc2477f86cdb6ef159ab70b1ce300d044ab73",
+      "docs/plan/evidence/parallelism/hv-umm2.674.md": "41416b004627857a9bf4e159ebf9be81da946f8de70f4fa9776b0534053a3f01",
+      "src/types/card-identity.ts": "2a631f057f3d4a36671e3dd0b7a98a5c889a68db370237573a84d0166ff909f5",
+      "src/engine/testing/prompt-lab.ts": "b0fc33b78f9f180e450c54408818c9d84c07d0f43d5584a3d566574496b07128",
+      "src/engine/effects/abilities.ts": "887f26e51c74cfe869f45346b2ad4f869c88874deec2b6942c19b55d9bc4a2f1",
+      "src/engine/index.ts": "8b594a91dc94d601feb2d0494f512893f80a7451bdc9739c679d77d8cee4df44",
+      "src/engine/dsl/deck-mods.ts": "2aa2e2835034d6f2656e1fef28dc6a37b13b87ebefc775a8d33d163e1a42eef5",
+      "src/battle/integration/exploration-engine-mapping.ts": "ddd6254ed5aa4fc364aae6497f4c5ca98dde0ff829d42235e81beb8aae036d2e",
+      "src/battle/integration/exploration-engine-mapping.test.ts": "99f1f829ec124583cd6b4edac07e80fa84e740070bd4f2806e6e5a989da3ff9b",
+      "src/battle/integration/deck-mods.test.ts": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+      "src/battle/integration/deck-mods/preparation.contracts.ts": "840270d5a877d3a7ef64f04f9e6bb8cb65c4f91106c91283e25747f677996dc3",
+      "caller:/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.629/mods-workflow-final.mjs": "2644243a18040f6dd531639cf59245a030d4d62e39d73038b064266038931aef",
+      "caller:/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.629/mods-refusal.mjs": "3f2d2918f725ecef3f4ed6295896a5532db46380409ee430cc547b0825a1a6d5"
+    }
+  },
+  "readonlySourceSHA256": {
+    "src/battle/integration/engine-battle-init.ts": "599b85f4552fc1659698a050a3d8da25fdb6b748d21ef12407e4d5aecc140ab9",
+    "src/engine/testing/lab-solver.ts": "3cc3cd81e02678d17c858f2db1afa437e1d038b413ec80d6483b9006c2334858",
+    "src/session/providers/exploration-provider.ts": "39ed8f9a05494ef7279ae6362385e2c5b4cefce1ed5c3a810f42b9dff4936903",
+    "src/rules/journey/reward-effects.ts": "567d747df5377b70babaaa243399d60288fb8d08bae54280487d479abe5f2ce8",
+    "src/engine/catalog.ts": "42575821be65b3ae244b5c02cbecdccd6ae53b8bb40aa98a94a8b893f26282cc",
+    "src/engine/state/create.ts": "85f715f9d8f1085902f4ba8d1eeb6de1a1b823f1d3cecc57b4703820d9f0a020",
+    "src/engine/steps/kinds/begin-battle.ts": "3a3314adb77fdcc5c7b8785f4772289286e87d1abf03c0af0da570e1b9b82aba",
+    "src/data/exploration-effect-kinds.ts": "4b68e3dda07fc223645ca49f9445868ffa08c6e712109db6326616d66599a4c0"
+  },
+  "counterfactuals": [
+    {
+      "name": "mutant-wrong-dto",
+      "path": "src/battle/integration/exploration-engine-mapping.ts",
+      "beforeSHA256": "ddd6254ed5aa4fc364aae6497f4c5ca98dde0ff829d42235e81beb8aae036d2e",
+      "mutantSHA256": "11864e2a7c716545803ff51901914277e6e8aa1b448a3a195a45d0c9b8cf83ef",
+      "restoredSHA256": "ddd6254ed5aa4fc364aae6497f4c5ca98dde0ff829d42235e81beb8aae036d2e",
+      "old": "entry.sparkBonus = mods.sparkBonus",
+      "new": "entry.sparkBonus = 0",
+      "exitCode": 1,
+      "restoredAt": "2026-10-15T08:48:36.225820+00:00"
+    },
+    {
+      "name": "mutant-unmapped-kind",
+      "path": "src/data/exploration-effect-kinds.ts",
+      "beforeSHA256": "4b68e3dda07fc223645ca49f9445868ffa08c6e712109db6326616d66599a4c0",
+      "mutantSHA256": "6f6539c43d1d1c3d3f6e683abe542208eedc0b99def1910c41e6977555b0d03a",
+      "restoredSHA256": "4b68e3dda07fc223645ca49f9445868ffa08c6e712109db6326616d66599a4c0",
+      "old": "] as const;",
+      "new": "  \"629-unmapped-synthetic\",\n] as const;",
+      "exitCode": 2,
+      "restoredAt": "2026-10-15T08:48:47.310292+00:00"
+    },
+    {
+      "name": "mutant-dropped-token",
+      "path": "src/runtime/runtime-config.ts",
+      "beforeSHA256": "0f2d7bf72436545f839cb75721f8b257be24c5cbf8e94ea8927b394479523c2d",
+      "mutantSHA256": "d96307d25b392d04f2cf65f35b8b824bbbe1fd859b626eba65172862f26f6be3",
+      "restoredSHA256": "0f2d7bf72436545f839cb75721f8b257be24c5cbf8e94ea8927b394479523c2d",
+      "old": "const mods = params.has(\"mods\") ? params.getAll(\"mods\").length === 1 ? params.get(\"mods\") : \"invalid duplicate mods\" : null;",
+      "new": "const mods = null;",
+      "exitCode": 1,
+      "restoredAt": "2026-10-15T08:48:56.053759+00:00"
+    },
+    {
+      "name": "mutant-unknown-field",
+      "path": "src/engine/dsl/deck-mods.ts",
+      "beforeSHA256": "2aa2e2835034d6f2656e1fef28dc6a37b13b87ebefc775a8d33d163e1a42eef5",
+      "mutantSHA256": "2ff94dc9ce15659e92542a65682dcf69ad4dabeaf5fa576d8dfb9403a4d21295",
+      "restoredSHA256": "2aa2e2835034d6f2656e1fef28dc6a37b13b87ebefc775a8d33d163e1a42eef5",
+      "old": "if (Object.keys(input).some(key => ![\"sparkBonus\", \"costReduction\", \"fast\", \"reclaim\", \"typeChange\"].includes(key))) return invalid();",
+      "new": "",
+      "exitCode": 1,
+      "restoredAt": "2026-10-15T08:49:04.236934+00:00"
+    }
+  ],
+  "finalAcceptanceQualification": "Preparation only: deterministic synthetic/partial randomDeck contracts and one UUID/two-controller bounded real sweep. Original hv-umm2.279 retains full stacking after275-277/210, full300, final10k, complete content sweep and journey acceptance; no production UUID authoring or final acceptance claimed.",
+  "qa": {
+    "acceptedRuns": {
+      "browser-player-accepted": {
+        "evidenceDir": "invocations/run-UzVBRC",
+        "report": "mods-workflow-final.result.json",
+        "ok": true,
+        "caps": [],
+        "runtime": {
+          "pid": 63693,
+          "port": 5274,
+          "slot": 1
+        }
+      },
+      "browser-enemy-accepted": {
+        "evidenceDir": "invocations/run-zHRrDO",
+        "report": "mods-workflow-final.result.json",
+        "ok": true,
+        "caps": [],
+        "runtime": {
+          "pid": 96980,
+          "port": 5274,
+          "slot": 1
+        }
+      }
+    },
+    "epochs": {
+      "initial": "browser-player/source packet qa-frozen-source.json; preserved initial caller mods-workflow.mjs",
+      "intermediate": "browser-player-final/source packet qa-final-frozen-source.json; matching original caller bytes archived as mods-workflow-epoch2.mjs",
+      "accepted": "qa-accepted-frozen-source.json; current app source; wrapper serializes the earlier driver whose sole subsequent production difference is the no-mod guard, an unreachable difference because every supplied request includes mods; actual CLI sweep directly invokes terminal-source cardLabPlay on both actors"
+    },
+    "sweep": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-QwblVO",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.629/invocations/sweep-QwblVO",
+      "counts": {
+        "pass": 2
+      },
+      "attemptCounts": {
+        "pass": 2
+      },
+      "hostLoad": 10.34326171875,
+      "requestedMods": "{\"typeChange\":{\"subtype\":\"\",\"cardType\":\"event\"},\"fast\":true}",
+      "modsValidation": "card-lab",
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 4086,
+        "scenario": 56969.621542,
+        "cleanup": 458.0731250000026,
+        "execution": 61592.297333,
+        "total": 61599.297333
+      }
+    },
+    "refusal": {
+      "evidenceDir": "invocations/run-0SeH5j",
+      "report": "mods-refusal.result.json",
+      "result": {
+        "expectedRefusal": true,
+        "report": {
+          "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "requestedMods": "{\"sparkBonus\":2,\"unknown\":true}",
+          "deckMods": null,
+          "status": "rejected",
+          "reason": "invalidMods",
+          "detail": "Invalid deck modifications",
+          "eligibleVariants": [
+            "base",
+            "empowered",
+            "kindled",
+            "perfected"
+          ],
+          "entityKind": null,
+          "cardStatus": null,
+          "cardType": null
+        },
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": [
+            "card-lab: invalidMods for {\"mods\":\"{\\\"sparkBonus\\\":2,\\\"unknown\\\":true}\",\"card\":\"e83014d3-9d35-4e80-a1b3-9b25360ad2af\",\"variant\":\"base\",\"side\":\"player\"}"
+          ]
+        },
+        "unmodifiedPhysicalEntries": true
+      },
+      "runnerOk": false,
+      "expectedExit": 1
+    },
+    "authorActualCaptureViews": [
+      {
+        "filename": "mods-player-desktop-played.png",
+        "evidenceDir": "invocations/run-ZhuVNh",
+        "sha256": "85e51ad762910f6bb05b28afb49511a6ff9fba15ff810667bffce8e2e27f8e84",
+        "viewedBy": "author",
+        "actualTool": "view_image",
+        "dimensions": "2880 x 1800",
+        "qualification": "visible board/controller controls judged from image; state, modifier values, replay and Caps established separately by executed reports"
+      },
+      {
+        "filename": "mods-player-mobile-played.png",
+        "evidenceDir": "invocations/run-ZhuVNh",
+        "sha256": "d1439abbf8b2361eba82df0c4b17494a252498dc558da05c533f02c094b51a8a",
+        "viewedBy": "author",
+        "actualTool": "view_image",
+        "dimensions": "780 x 1688",
+        "qualification": "visible board/controller controls judged from image; state, modifier values, replay and Caps established separately by executed reports"
+      },
+      {
+        "filename": "mods-player-desktop-played.png",
+        "evidenceDir": "invocations/run-UzVBRC",
+        "sha256": "85e51ad762910f6bb05b28afb49511a6ff9fba15ff810667bffce8e2e27f8e84",
+        "viewedBy": "author",
+        "actualTool": "view_image",
+        "dimensions": "2880 x 1800",
+        "qualification": "visible board/controller controls judged from image; state, modifier values, replay and Caps established separately by executed reports"
+      },
+      {
+        "filename": "mods-player-mobile-played.png",
+        "evidenceDir": "invocations/run-UzVBRC",
+        "sha256": "d1439abbf8b2361eba82df0c4b17494a252498dc558da05c533f02c094b51a8a",
+        "viewedBy": "author",
+        "actualTool": "view_image",
+        "dimensions": "780 x 1688",
+        "qualification": "visible board/controller controls judged from image; state, modifier values, replay and Caps established separately by executed reports"
+      },
+      {
+        "filename": "mods-enemy-desktop-played.png",
+        "evidenceDir": "invocations/run-zHRrDO",
+        "sha256": "c5fc2809f9531516682cd5de578bc01f012edef68601ead0c29259cdf30db9ba",
+        "viewedBy": "author",
+        "actualTool": "view_image",
+        "dimensions": "2880 x 1800",
+        "qualification": "visible board/controller controls judged from image; state, modifier values, replay and Caps established separately by executed reports"
+      },
+      {
+        "filename": "mods-enemy-mobile-played.png",
+        "evidenceDir": "invocations/run-zHRrDO",
+        "sha256": "4f20dc22315456404072c31b349a85e579d77012d547d4506f5d2ca89e11956d",
+        "viewedBy": "author",
+        "actualTool": "view_image",
+        "dimensions": "780 x 1688",
+        "qualification": "visible board/controller controls judged from image; state, modifier values, replay and Caps established separately by executed reports"
+      }
+    ],
+    "parentActualViews": "Parent records its own exact3 accepted image observations in its independent parent packet; author does not attribute further views or runtime assertions to parent.",
+    "logs": [
+      {
+        "run": "browser-player",
+        "filename": "mods-workflow-desktop.jsonl",
+        "evidenceDir": "invocations/run-ZhuVNh",
+        "sha256": "d00b8412bfe4e51205802cf07db7c2c0f2abc3f6c3a95bddb496594c5364172a",
+        "rows": 33,
+        "gameId": "5h7hns",
+        "modifierReports": [
+          {
+            "gameId": "5h7hns",
+            "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "requestedMods": "{\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+            "deckMods": {
+              "sparkBonus": 2,
+              "costReduction": 1,
+              "fast": true,
+              "reclaim": 0,
+              "typeChange": {
+                "cardType": "character",
+                "subtype": "Mage"
+              }
+            },
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base",
+              "empowered",
+              "kindled",
+              "perfected"
+            ],
+            "entityKind": "card",
+            "cardStatus": "vanilla",
+            "cardType": "Character",
+            "timestamp": "2026-10-15T08:46:10.428Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        ],
+        "custody": "runner exported the selected game persisted IndexedDB JSONL before closing its own context; author read report rows"
+      },
+      {
+        "run": "browser-player",
+        "filename": "mods-workflow-mobile.jsonl",
+        "evidenceDir": "invocations/run-ZhuVNh",
+        "sha256": "dea0aaae005610da59de055f44a8e8fe3b2c7d895ed79284768a7724a1a87653",
+        "rows": 33,
+        "gameId": "z3wfir",
+        "modifierReports": [
+          {
+            "gameId": "z3wfir",
+            "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "requestedMods": "{\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+            "deckMods": {
+              "sparkBonus": 2,
+              "costReduction": 1,
+              "fast": true,
+              "reclaim": 0,
+              "typeChange": {
+                "cardType": "character",
+                "subtype": "Mage"
+              }
+            },
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base",
+              "empowered",
+              "kindled",
+              "perfected"
+            ],
+            "entityKind": "card",
+            "cardStatus": "vanilla",
+            "cardType": "Character",
+            "timestamp": "2026-10-15T08:46:44.184Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        ],
+        "custody": "runner exported the selected game persisted IndexedDB JSONL before closing its own context; author read report rows"
+      },
+      {
+        "run": "browser-player-final",
+        "filename": "mods-workflow-final-desktop.jsonl",
+        "evidenceDir": "invocations/run-mwNrJ8",
+        "sha256": "7d136e31c9325596da0387804800e0e0a530fbdac311a0fa42338a0b44a47114",
+        "rows": 33,
+        "gameId": "xygfxr",
+        "modifierReports": [
+          {
+            "gameId": "xygfxr",
+            "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "requestedMods": "{\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+            "deckMods": {
+              "sparkBonus": 2,
+              "costReduction": 1,
+              "fast": true,
+              "reclaim": 0,
+              "typeChange": {
+                "cardType": "character",
+                "subtype": "Mage"
+              }
+            },
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base",
+              "empowered",
+              "kindled",
+              "perfected"
+            ],
+            "entityKind": "card",
+            "cardStatus": "vanilla",
+            "cardType": "Character",
+            "timestamp": "2026-10-15T08:51:36.979Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        ],
+        "custody": "runner exported the selected game persisted IndexedDB JSONL before closing its own context; author read report rows"
+      },
+      {
+        "run": "browser-player-final",
+        "filename": "mods-workflow-final-mobile.jsonl",
+        "evidenceDir": "invocations/run-mwNrJ8",
+        "sha256": "e02ff64c77c744d2f03cad93963b94f2507bdcc5df47cab9b8b02fadb103c27f",
+        "rows": 33,
+        "gameId": "vrqzbg",
+        "modifierReports": [
+          {
+            "gameId": "vrqzbg",
+            "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "requestedMods": "{\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+            "deckMods": {
+              "sparkBonus": 2,
+              "costReduction": 1,
+              "fast": true,
+              "reclaim": 0,
+              "typeChange": {
+                "cardType": "character",
+                "subtype": "Mage"
+              }
+            },
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base",
+              "empowered",
+              "kindled",
+              "perfected"
+            ],
+            "entityKind": "card",
+            "cardStatus": "vanilla",
+            "cardType": "Character",
+            "timestamp": "2026-10-15T08:51:49.333Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        ],
+        "custody": "runner exported the selected game persisted IndexedDB JSONL before closing its own context; author read report rows"
+      },
+      {
+        "run": "browser-player-accepted",
+        "filename": "mods-workflow-final-desktop.jsonl",
+        "evidenceDir": "invocations/run-UzVBRC",
+        "sha256": "81ab46fbf4ff3e441a882a1b776089ac1563d501eaa7f268d50d73dbdde1a3ee",
+        "rows": 33,
+        "gameId": "4ma692",
+        "modifierReports": [
+          {
+            "gameId": "4ma692",
+            "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "requestedMods": "{\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+            "deckMods": {
+              "sparkBonus": 2,
+              "costReduction": 1,
+              "fast": true,
+              "reclaim": 0,
+              "typeChange": {
+                "cardType": "character",
+                "subtype": "Mage"
+              }
+            },
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base",
+              "empowered",
+              "kindled",
+              "perfected"
+            ],
+            "entityKind": "card",
+            "cardStatus": "vanilla",
+            "cardType": "Character",
+            "timestamp": "2026-10-15T08:56:05.415Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        ],
+        "custody": "runner exported the selected game persisted IndexedDB JSONL before closing its own context; author read report rows"
+      },
+      {
+        "run": "browser-player-accepted",
+        "filename": "mods-workflow-final-mobile.jsonl",
+        "evidenceDir": "invocations/run-UzVBRC",
+        "sha256": "dbf9a30926041c4971a877819695cd9375811d81c40f17abf77dc1cf798e52fe",
+        "rows": 33,
+        "gameId": "hcy77u",
+        "modifierReports": [
+          {
+            "gameId": "hcy77u",
+            "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "requestedMods": "{\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"character\",\"subtype\":\"Mage\"}}",
+            "deckMods": {
+              "sparkBonus": 2,
+              "costReduction": 1,
+              "fast": true,
+              "reclaim": 0,
+              "typeChange": {
+                "cardType": "character",
+                "subtype": "Mage"
+              }
+            },
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base",
+              "empowered",
+              "kindled",
+              "perfected"
+            ],
+            "entityKind": "card",
+            "cardStatus": "vanilla",
+            "cardType": "Character",
+            "timestamp": "2026-10-15T08:56:19.331Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        ],
+        "custody": "runner exported the selected game persisted IndexedDB JSONL before closing its own context; author read report rows"
+      },
+      {
+        "run": "browser-enemy-accepted",
+        "filename": "mods-workflow-final-desktop.jsonl",
+        "evidenceDir": "invocations/run-zHRrDO",
+        "sha256": "66168b79099584905a340ca3b8af008dc2b447291dcb4af62638f2293c5bbac0",
+        "rows": 35,
+        "gameId": "vkpc8p",
+        "modifierReports": [
+          {
+            "gameId": "vkpc8p",
+            "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+            "variant": "base",
+            "side": "enemy",
+            "stage": null,
+            "requestedMods": "{\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"event\",\"subtype\":\"\"}}",
+            "deckMods": {
+              "sparkBonus": 2,
+              "costReduction": 1,
+              "fast": true,
+              "reclaim": 0,
+              "typeChange": {
+                "cardType": "event",
+                "subtype": ""
+              }
+            },
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base",
+              "empowered",
+              "kindled",
+              "perfected"
+            ],
+            "entityKind": "card",
+            "cardStatus": "vanilla",
+            "cardType": "Event",
+            "timestamp": "2026-10-15T08:56:53.044Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        ],
+        "custody": "runner exported the selected game persisted IndexedDB JSONL before closing its own context; author read report rows"
+      },
+      {
+        "run": "browser-enemy-accepted",
+        "filename": "mods-workflow-final-mobile.jsonl",
+        "evidenceDir": "invocations/run-zHRrDO",
+        "sha256": "5b54791cdee6078763d6689f80d033295d15460ee87c6f41e4fb7c92d9c4bc9a",
+        "rows": 35,
+        "gameId": "v3fcf4",
+        "modifierReports": [
+          {
+            "gameId": "v3fcf4",
+            "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+            "variant": "base",
+            "side": "enemy",
+            "stage": null,
+            "requestedMods": "{\"sparkBonus\":2,\"costReduction\":1,\"fast\":true,\"reclaim\":0,\"typeChange\":{\"cardType\":\"event\",\"subtype\":\"\"}}",
+            "deckMods": {
+              "sparkBonus": 2,
+              "costReduction": 1,
+              "fast": true,
+              "reclaim": 0,
+              "typeChange": {
+                "cardType": "event",
+                "subtype": ""
+              }
+            },
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base",
+              "empowered",
+              "kindled",
+              "perfected"
+            ],
+            "entityKind": "card",
+            "cardStatus": "vanilla",
+            "cardType": "Event",
+            "timestamp": "2026-10-15T08:57:04.465Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        ],
+        "custody": "runner exported the selected game persisted IndexedDB JSONL before closing its own context; author read report rows"
+      },
+      {
+        "run": "browser-refusal",
+        "filename": "mods-refusal-desktop.jsonl",
+        "evidenceDir": "invocations/run-0SeH5j",
+        "sha256": "ff1530d73a3888cafc75a85a876bc5d5f8c906622f9b14a8b73af077778f47ce",
+        "rows": 17,
+        "gameId": "pfkyo2",
+        "modifierReports": [
+          {
+            "gameId": "pfkyo2",
+            "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "requestedMods": "{\"sparkBonus\":2,\"unknown\":true}",
+            "deckMods": null,
+            "status": "rejected",
+            "reason": "invalidMods",
+            "detail": "Invalid deck modifications",
+            "eligibleVariants": [
+              "base",
+              "empowered",
+              "kindled",
+              "perfected"
+            ],
+            "entityKind": null,
+            "cardStatus": null,
+            "cardType": null,
+            "timestamp": "2026-10-15T08:59:26.470Z",
+            "event": "debug_card_lab_rejected",
+            "seq": 15
+          }
+        ],
+        "custody": "runner exported the selected game persisted IndexedDB JSONL before closing its own context; author read report rows"
+      }
+    ],
+    "sourceRuntimeMutationOverlap": "All initial browser sessions completed before four serial mutants; mutants restored before accepted source freeze; no mutation during accepted browser/sweep/refusal invocations."
+  },
+  "runtimeCleanup": {
+    "at": "2026-10-15T09:03:19.991390+00:00",
+    "exactOwnedServerProcessGroups": {
+      "80452": "",
+      "60333": "",
+      "63693": "",
+      "96980": "",
+      "69357": "",
+      "1749": ""
+    },
+    "ownProviderOrServerRecordsRemaining": false,
+    "sharedRecords": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+        "observation": "foreign record preserved",
+        "sha256": "db21660ae9f3a372b27b58ad3930bd221145cc82b7461eca18df3e5267657ce2"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+        "observation": "foreign record preserved",
+        "sha256": "308470b9a918680e5644f49a36806ef4f18d3593cbca997f02d1814ebb270bcb"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "observation": "foreign record preserved",
+        "sha256": "40bc55ee08f1076566162f909cce686119dc554361901cda61e1d70434fdd5a2"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "observation": "foreign record preserved",
+        "sha256": "a966dd223813e6af592be6fa8a12ac3fea4b5b085bd88a0d6bca18f1c8dbc5ea"
+      }
+    ],
+    "ports": {
+      "5174": "COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME\nnode    85658 dthurn   16u  IPv4 0x5e7f7c7979b29243      0t0  TCP 127.0.0.1:5174 (LISTEN)",
+      "5274": "COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME\nnode    85041 dthurn   16u  IPv4 0x9f77417ec6ea08a4      0t0  TCP 127.0.0.1:5274 (LISTEN)"
+    },
+    "sharedMcpServicePreserved": true,
+    "method": "All scenario/sweep sessions closed by normal owned runner cleanup; separate ps/ownership/port audit. No shared service or foreign context/slot/process was closed."
+  },
+  "delivery": "one local Conventional Commit with Bead trailer; parent owns fresh read-only Codex cold review and exact native candidate/promotion; no deploy/push/images committed"
+}

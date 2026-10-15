@@ -40,6 +40,7 @@ import {
   type CardLabVariant,
   type DreamwellLabRequest,
 } from "../engine/testing/card-lab";
+import { journeyDeckModFields } from "../battle/integration/exploration-engine-mapping";
 import { engineDeckEntry } from "../battle/integration/engine-battle-init";
 import { logEvent } from "../logging";
 import type { CardData } from "../types/cards";
@@ -474,6 +475,7 @@ interface CardLabTokens {
   readonly variant: string;
   readonly side: string;
   readonly stage?: string;
+  readonly mods?: string;
 }
 
 const CARD_LAB_PREFIX = "card-lab:";
@@ -489,13 +491,14 @@ type CardLabResolution =
   | { readonly kind: "ok"; readonly entityKind: "dreamwell"; readonly request: DreamwellLabRequest; readonly eligible: readonly CardLabVariant[] }
   | {
       readonly kind: "rejected";
-      readonly reason: "unknownCard" | "unknownAvatar" | "unknownDreamsign" | "ambiguousRequest" | "unknownVariant" | "unknownSide" | "ineligibleVariant" | "unplayable" | "invalidStage";
+      readonly reason: "unknownCard" | "unknownAvatar" | "unknownDreamsign" | "ambiguousRequest" | "unknownVariant" | "unknownSide" | "ineligibleVariant" | "unplayable" | "invalidStage" | "invalidMods";
       readonly eligible: readonly CardLabVariant[];
       readonly detail?: string;
     };
 
 /** Resolves a card-lab request against the content: the card, its eligible variants, and its deck entry. */
 function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens, engine?: Engine): CardLabResolution {
+  if (tokens.mods !== undefined && (tokens.avatar !== undefined || tokens.dreamsign !== undefined)) return { kind: "rejected", reason: "invalidMods", eligible: [] };
   if (tokens.ambiguous === true) return { kind: "rejected", reason: "ambiguousRequest", eligible: [] };
   if (tokens.dreamsign !== undefined) {
     const dreamsignId = dreamsignIdFromUnknown(tokens.dreamsign);
@@ -524,6 +527,7 @@ function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens, e
   const cardId = isCardId(tokens.card) ? parseCardId(tokens.card) : null;
   const card = [...journeyContent.cardDatabase.values()].find((candidate) => candidate.id === cardId);
   if (card === undefined) {
+    if (tokens.mods !== undefined) return { kind: "rejected", reason: "invalidMods", eligible: [] };
     const dreamwellId = dreamwellCardIdFromUnknown(tokens.card);
     if (dreamwellId === null || !journeyContent.dreamwellCards.some((candidate) => candidate.id === dreamwellId)) return { kind: "rejected", reason: "unknownCard", eligible: [] };
     const eligible = ["base"] as const;
@@ -550,7 +554,9 @@ function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens, e
   if (variant === null) return { kind: "rejected", reason: "unknownVariant", eligible };
   if (tokens.side !== "player" && tokens.side !== "enemy") return { kind: "rejected", reason: "unknownSide", eligible };
   if (!eligible.includes(variant)) return { kind: "rejected", reason: "ineligibleVariant", eligible };
-  const entry = engineDeckEntry(cardLabDeckEntry(card, variant), card, journeyContent.transfigurationData);
+  let entry;
+  try { entry = engineDeckEntry(cardLabDeckEntry(card, variant, tokens.mods), card, journeyContent.transfigurationData); }
+  catch (error) { return { kind: "rejected", reason: "invalidMods", eligible, detail: error instanceof Error ? error.message : String(error) }; }
   try {
     const stage = tokens.stage === undefined ? undefined : cardLabStageFromUnknown(JSON.parse(tokens.stage));
     return { kind: "ok", entityKind: "card", request: { entry, variant, side: tokens.side, ...(stage === undefined ? {} : { stage }) }, card, eligible };
@@ -560,8 +566,9 @@ function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens, e
 }
 
 /** The journey deck entry of the lab card, so the battle deals its transfigured display. */
-function cardLabDeckEntry(card: CardData, variant: CardLabVariant): DeckEntry {
+function cardLabDeckEntry(card: CardData, variant: CardLabVariant, mods?: string): DeckEntry {
   return {
+    ...(mods === undefined ? {} : journeyDeckModFields(JSON.parse(mods))),
     entryId: parseDeckEntryId("card-lab"),
     cardNumber: card.cardNumber,
     transfiguration: variantTransfiguration(variant),
@@ -583,11 +590,14 @@ function cardLabScene(id: QaSceneId): QaScene {
   const ambiguous = normalized.startsWith(AMBIGUOUS_LAB_PREFIX) || normalized.startsWith(AMBIGUOUS_DREAMSIGN_LAB_PREFIX);
   const avatar = !dreamsign && (ambiguous || normalized.startsWith(AVATAR_LAB_PREFIX));
   const prefix = dreamsign ? ambiguous ? AMBIGUOUS_DREAMSIGN_LAB_PREFIX : DREAMSIGN_LAB_PREFIX : ambiguous ? AMBIGUOUS_LAB_PREFIX : avatar ? AVATAR_LAB_PREFIX : CARD_LAB_PREFIX;
-  const [card = "", variant = "base", side = "player", encodedStage] = id.slice(prefix.length).split(":");
+  const [card = "", variant = "base", side = "player", encodedStage, encodedMods] = id.slice(prefix.length).split(":");
   let stage: string | undefined;
-  try { stage = encodedStage === undefined ? undefined : decodeURIComponent(encodedStage); }
+  try { stage = encodedStage === undefined || (encodedStage === "" && encodedMods !== undefined) ? undefined : decodeURIComponent(encodedStage); }
   catch { stage = "invalid"; }
-  const tokens: CardLabTokens = { card: avatar || dreamsign ? "" : card.toLowerCase(), ...(dreamsign ? { dreamsign: card.toLowerCase(), ambiguous } : {}), ...(avatar ? { avatar: card.toLowerCase(), ambiguous } : {}), variant: variant.toLowerCase(), side: side.toLowerCase(), ...(stage === undefined ? {} : { stage }) };
+  let mods: string | undefined;
+  try { mods = encodedMods === undefined ? undefined : decodeURIComponent(encodedMods); }
+  catch { mods = "invalid"; }
+  const tokens: CardLabTokens = { ...(mods === undefined ? {} : { mods }), card: avatar || dreamsign ? "" : card.toLowerCase(), ...(dreamsign ? { dreamsign: card.toLowerCase(), ambiguous } : {}), ...(avatar ? { avatar: card.toLowerCase(), ambiguous } : {}), variant: variant.toLowerCase(), side: side.toLowerCase(), ...(stage === undefined ? {} : { stage }) };
   return {
     id,
     label: "Card Lab",
@@ -602,7 +612,7 @@ function cardLabScene(id: QaSceneId): QaScene {
         return template === undefined ? state : { ...state, dreamsigns: resolved.request.side === "player" ? [createDreamsign(template)] : [] };
       }
       if (state === null || resolved.kind !== "ok" || resolved.entityKind !== "card") return state;
-      return { ...state, deck: [...state.deck, cardLabDeckEntry(resolved.card, resolved.request.variant)] };
+      return { ...state, deck: [...state.deck, cardLabDeckEntry(resolved.card, resolved.request.variant, tokens.mods)] };
     },
   };
 }
@@ -620,13 +630,15 @@ function publishCardLab(tokens: CardLabTokens, resolved: CardLabResolution, engi
     variant: tokens.variant,
     side: tokens.side,
     stage: tokens.stage ?? null,
+    requestedMods: tokens.mods ?? null,
+    deckMods: resolved.kind === "ok" && resolved.entityKind === "card" ? resolved.request.entry.deckMods ?? null : null,
     status: resolved.kind === "ok" ? "ready" : "rejected",
     reason: resolved.kind === "ok" ? null : resolved.reason,
     detail: resolved.kind === "ok" ? null : (resolved.detail ?? null),
     eligibleVariants: resolved.eligible,
     entityKind: resolved.kind === "ok" ? resolved.entityKind : null,
     cardStatus: resolved.kind === "ok" ? resolved.entityKind === "card" ? cardLabContentStatus(resolved.request.entry.cardId) : resolved.entityKind === "dreamsign" ? engine.catalog.dreamsign(resolved.request.dreamsignId).status : resolved.entityKind === "avatar" ? engine.catalog.avatar(resolved.request.avatarId).status : engine.catalog.dreamwellCard(resolved.request.cardId).status : null,
-    cardType: resolved.kind === "ok" ? resolved.entityKind === "card" ? resolved.card.cardType : resolved.entityKind === "dreamsign" ? "Dreamsign" : resolved.entityKind === "avatar" ? "Avatar" : "Dreamwell" : null,
+    cardType: resolved.kind === "ok" ? resolved.entityKind === "card" ? resolved.request.entry.deckMods?.typeChange?.cardType === "character" ? "Character" : resolved.request.entry.deckMods?.typeChange?.cardType === "event" ? "Event" : resolved.card.cardType : resolved.entityKind === "dreamsign" ? "Dreamsign" : resolved.entityKind === "avatar" ? "Avatar" : "Dreamwell" : null,
   };
   (globalThis as { __cardLab?: unknown }).__cardLab = report;
   logEvent(resolved.kind === "ok" ? "debug_card_lab_loaded" : "debug_card_lab_rejected", report);
