@@ -465,6 +465,14 @@ export function engineStatuses(
   for (const { change, expiry, controller, source } of view.floating) {
     const lasting = expiry.at !== "never";
     switch (change.kind) {
+      case "firstMaterializationKeyword": {
+        if (typeof change.instance === "string") {
+          const horizons = materializeMembers.get(change.instance) ?? new Set();
+          if (!horizons.has(expiry.at)) mark(change.instance, badge("keyword", { kind: "keyword", keyword: change.keyword, gains: true, expiry }));
+          materializeMembers.set(change.instance, horizons.add(expiry.at));
+        }
+        break;
+      }
       case "materializeKeyword": {
         // This kind grants Awakened through the current turn's Ending.
         if (change.instance === null) {
@@ -581,7 +589,7 @@ export function engineStatuses(
   for (const { change } of view.floating) {
     if (change.kind === "keyword" && change.gains) {
       floatingGains.set(change.instance, (floatingGains.get(change.instance) ?? new Set()).add(change.keyword));
-    } else if (change.kind === "materializeKeyword" && typeof change.instance === "string") {
+    } else if ((change.kind === "materializeKeyword" || change.kind === "firstMaterializationKeyword") && typeof change.instance === "string") {
       floatingGains.set(change.instance, (floatingGains.get(change.instance) ?? new Set()).add(change.keyword));
     }
   }

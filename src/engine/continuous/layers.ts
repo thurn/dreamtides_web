@@ -75,6 +75,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   subtype: 2,
   keyword: 3,
   materializeKeyword: 3,
+  firstMaterializationKeyword: 3,
   abilities: 3,
   loseAbilities: 3,
   baseSpark: 4,
@@ -547,6 +548,7 @@ export class Layers {
         case "subtype":
           result = { ...result, subtype: change.subtype, allTypes: false };
           break;
+        case "firstMaterializationKeyword":
         case "materializeKeyword":
           result = { ...result, keywords: [...result.keywords.filter(keyword => keyword !== change.keyword), change.keyword] };
           break;

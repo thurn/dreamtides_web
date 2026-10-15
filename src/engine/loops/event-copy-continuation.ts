@@ -56,6 +56,7 @@ const EMITTED: readonly EngineEventKind[] = [
 const PASSIVE_STATICS: readonly string[] = [
   "additionalDrawPhaseCards", // Phase-only draw counts cannot act in this copy-only FIFO.
   "journeyDeckSparkModifier", // Static copiable-cost eligibility cannot act in this FIFO.
+  "firstMaterializationKeyword", // Copy-only work cannot materialize a character or advance its turn.
   "costModifierNth", // This copy-only FIFO cannot change committed plays or advance the turn.
   "costModifier", "sparkModifier", "grant", "grantCardKeyword", "giveAllTypes", "setBaseSpark",
   "playFromZone", "playRestriction", "selfCostReduction", "revealDeckTop", "reclaimNotBanished",
@@ -93,6 +94,7 @@ function passiveFloating(state: BattleState, catalog: EngineCatalog): boolean {
           live?.zone === "play" && instanceCard(catalog, live).cardType === "character" &&
           banished?.zone === "banished" && banished.enteredZoneAt === change.banishedAt;
       }
+      case "firstMaterializationKeyword": return false;
       case "materializeKeyword": return false;
       case "preserveEphemeralHand": return false;
       case "reclaimCost": return false;

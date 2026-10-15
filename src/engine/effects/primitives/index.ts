@@ -54,6 +54,7 @@ export * from "./lose-energy";
 export * from "./lose-points";
 export * from "./materialize";
 export * from "./materialize-keyword-modifier";
+export * from "./first-materialization-keyword";
 export * from "./materialize-chosen";
 export * from "./materialize-figment-copy";
 export * from "./materialize-figments";

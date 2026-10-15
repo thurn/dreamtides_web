@@ -1,0 +1,2271 @@
+{
+  "bead": "hv-umm2.590",
+  "sourceBase": "323bd4c6f1848045103eec40cf5840f47a04b4df",
+  "sampling": "UNKNOWN",
+  "canonicalDispatch": "2026-10-15T00:34:02.579Z",
+  "actualReclaimAcknowledgment": "2026-10-15T00:33:28Z",
+  "nativeStartedAtQualification": "Earlier native started_at belongs to the prior source-free claim. The current reclaimed interval starts at the actual acknowledgment, not that historical field.",
+  "measurementCutoff": "2026-10-15T01:15:05.958207+00:00",
+  "canonicalElapsedMinutes": 41.05632011666667,
+  "reclaimGrossElapsedMinutes": 41.63263678333333,
+  "clockQualification": "Inclusive native helper dispatch to finite pre-Git evidence cut-off; actual automatic Git launch/end and final dispatch-to-commit interval retained in git-commit receipt/final handoff outside the source commit. Includes source research, scope admission, failed checks, source repairs, coordination, queue/admission, all validation and cleanup. No productive-CPU or performance claim.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v2 wrapper/first review step actual start 1-minute load; exact matched stdout/receipt",
+        "unit": "1-minute host load"
+      },
+      "implementWindow.end": {
+        "measuredFor": "finite pre-Git evidence cut-off immediately before final commit; actual automatic Git receipt supplied separately"
+      },
+      "testDelta": {
+        "measuredFor": "No test entrypoint/jsdom file added. Two auto-discovered private contract modules plus private synthetic support contribute502lines; existing fidelity oracle own-kind edits have net0lines."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "compile-initial": {
+      "start": [
+        10.4794921875,
+        15.02685546875,
+        15.51171875
+      ],
+      "end": [
+        10.177734375,
+        14.81201171875,
+        15.42919921875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "sweep-v2": {
+      "start": [
+        9.02392578125,
+        11.40869140625,
+        12.1494140625
+      ],
+      "end": [
+        9.173828125,
+        11.36181640625,
+        12.1240234375
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "focused-boundaries": {
+      "start": [
+        5.50341796875,
+        9.37109375,
+        12.599609375
+      ],
+      "end": [
+        5.462890625,
+        9.29833984375,
+        12.5546875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "focused-all": {
+      "start": [
+        7.31982421875,
+        9.5546875,
+        12.6064453125
+      ],
+      "end": [
+        15.79931640625,
+        11.32080078125,
+        13.15087890625
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "full-outer": {
+      "start": [
+        7.9072265625,
+        11.0712890625,
+        12.7099609375
+      ],
+      "end": [
+        6.71728515625,
+        9.40771484375,
+        11.7578125
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "preflight": {
+      "start": [
+        7.83447265625,
+        11.00341796875,
+        12.67626953125
+      ],
+      "end": [
+        7.83447265625,
+        11.00341796875,
+        12.67626953125
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "friction-schema": {
+      "start": [
+        5.53564453125,
+        5.61181640625,
+        8.23046875
+      ],
+      "end": [
+        5.53564453125,
+        5.61181640625,
+        8.23046875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "prepare-workspace": {
+      "start": [
+        8.96826171875,
+        14.31494140625,
+        15.240234375
+      ],
+      "end": [
+        8.96826171875,
+        14.31494140625,
+        15.240234375
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "focused-fidelity-fixed": {
+      "start": [
+        9.2529296875,
+        11.93212890625,
+        13.95849609375
+      ],
+      "end": [
+        8.826171875,
+        11.7529296875,
+        13.87060546875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "weighted-outer": {
+      "start": [
+        7.9072265625,
+        11.0712890625,
+        12.7099609375
+      ],
+      "end": [
+        6.71728515625,
+        9.40771484375,
+        11.7578125
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "review": {
+      "start": [
+        13.51318359375,
+        12.73388671875,
+        13.53857421875
+      ],
+      "end": [
+        16.99560546875,
+        14.283203125,
+        14.0693359375
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "fault-wrong-side": {
+      "start": [
+        22.833984375,
+        13.6455078125,
+        13.94091796875
+      ],
+      "end": [
+        22.53564453125,
+        13.89990234375,
+        14.0283203125
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "full-v2-outer": {
+      "start": [
+        9.67333984375,
+        12.05322265625,
+        12.41845703125
+      ],
+      "end": [
+        8.0048828125,
+        10.78271484375,
+        11.875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "full-v2-inner": {
+      "start": [
+        9.67333984375,
+        12.05322265625,
+        12.41845703125
+      ],
+      "end": [
+        8.0048828125,
+        10.78271484375,
+        11.875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "fault-exclude-created": {
+      "start": [
+        22.53564453125,
+        13.89990234375,
+        14.0283203125
+      ],
+      "end": [
+        21.37158203125,
+        13.8017578125,
+        13.99267578125
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "copy-before-entry": {
+      "start": [
+        7.12451171875,
+        10.91015625,
+        13.451171875
+      ],
+      "end": [
+        6.951171875,
+        10.748046875,
+        13.36376953125
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "knip": {
+      "start": [
+        9.74169921875,
+        12.37939453125,
+        13.33056640625
+      ],
+      "end": [
+        10.3349609375,
+        12.41650390625,
+        13.33251953125
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "fault-keyword-expiry": {
+      "start": [
+        21.37158203125,
+        13.8017578125,
+        13.99267578125
+      ],
+      "end": [
+        19.2353515625,
+        13.59375,
+        13.91650390625
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "fault-wrong-ordinal": {
+      "start": [
+        23.591796875,
+        13.4658203125,
+        13.8818359375
+      ],
+      "end": [
+        22.833984375,
+        13.6455078125,
+        13.94091796875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "focused-fidelity": {
+      "start": [
+        11.2685546875,
+        12.63720703125,
+        14.29443359375
+      ],
+      "end": [
+        10.30419921875,
+        12.38525390625,
+        14.185546875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "preflight-v2": {
+      "start": [
+        9.09423828125,
+        11.5498046875,
+        12.2119140625
+      ],
+      "end": [
+        8.92626953125,
+        11.47412109375,
+        12.18115234375
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "doctor": {
+      "start": [
+        11.341796875,
+        14.87939453125,
+        15.3232421875
+      ],
+      "end": [
+        12.19482421875,
+        14.99755859375,
+        15.3623046875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "fault-late-source-allocation": {
+      "start": [
+        19.2353515625,
+        13.59375,
+        13.91650390625
+      ],
+      "end": [
+        17.42724609375,
+        13.39208984375,
+        13.84130859375
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "logging-focused": {
+      "start": [
+        12.3662109375,
+        9.83935546875,
+        11.65380859375
+      ],
+      "end": [
+        12.26123046875,
+        9.89501953125,
+        11.65185546875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "review-v2": {
+      "start": [
+        16.16357421875,
+        10.80419921875,
+        11.95361328125
+      ],
+      "end": [
+        21.99072265625,
+        13.908203125,
+        13.0380859375
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "focused-own": {
+      "start": [
+        6.56298828125,
+        12.072265625,
+        14.27685546875
+      ],
+      "end": [
+        6.677734375,
+        12.00439453125,
+        14.23974609375
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "judged-v2": {
+      "start": [
+        8.32373046875,
+        10.51123046875,
+        11.72412109375
+      ],
+      "end": [
+        9.31494140625,
+        10.5283203125,
+        11.68603515625
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "sweep": {
+      "start": [
+        7.50732421875,
+        10.77392578125,
+        12.564453125
+      ],
+      "end": [
+        7.89013671875,
+        10.748046875,
+        12.5341796875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "weighted-v2-outer": {
+      "start": [
+        9.40283203125,
+        11.9189453125,
+        12.3662109375
+      ],
+      "end": [
+        2.96630859375,
+        5.57568359375,
+        8.8828125
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "weighted-v2-inner": {
+      "start": [
+        8.0048828125,
+        10.78271484375,
+        11.875
+      ],
+      "end": [
+        2.96630859375,
+        5.57568359375,
+        8.8828125
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "friction-dispatch": {
+      "start": [
+        16.97021484375,
+        15.8388671875,
+        15.6455078125
+      ],
+      "end": [
+        16.97021484375,
+        15.8388671875,
+        15.6455078125
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "knip-v2": {
+      "start": [
+        17.94384765625,
+        13.50830078125,
+        12.9140625
+      ],
+      "end": [
+        17.7880859375,
+        13.54931640625,
+        12.93212890625
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "review-fixed": {
+      "start": [
+        15.7470703125,
+        14.125,
+        14.015625
+      ],
+      "end": [
+        10.17529296875,
+        12.58984375,
+        13.42041015625
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "focused-own-fixed": {
+      "start": [
+        11.79052734375,
+        12.6591796875,
+        14.39453125
+      ],
+      "end": [
+        16.0244140625,
+        13.5546875,
+        14.69287109375
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "install": {
+      "start": [
+        11.341796875,
+        14.87939453125,
+        15.3232421875
+      ],
+      "end": [
+        12.19482421875,
+        14.99755859375,
+        15.3623046875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "focused-own-complete": {
+      "start": [
+        6.00927734375,
+        10.15087890625,
+        13.0556640625
+      ],
+      "end": [
+        5.93994140625,
+        9.99755859375,
+        12.966796875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "focused-initial": {
+      "start": [
+        6.39453125,
+        12.41064453125,
+        14.44580078125
+      ],
+      "end": [
+        6.84326171875,
+        12.40380859375,
+        14.43115234375
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    },
+    "fault-post-announcement-grant": {
+      "start": [
+        13.7763671875,
+        12.85693359375,
+        13.62353515625
+      ],
+      "end": [
+        11.82470703125,
+        12.470703125,
+        13.47216796875
+      ],
+      "scope": "actual command receipt including admission/materialization/cleanup"
+    }
+  },
+  "runs": {
+    "compile-initial": {
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:39:24.939495+00:00",
+      "end": "2026-10-15T00:39:36.039518+00:00",
+      "pid": 6191,
+      "pgid": 6191,
+      "exitCode": 2,
+      "wallSeconds": 11.099997291050386,
+      "cpuSeconds": {
+        "user": 16.297771,
+        "system": 0.574952
+      },
+      "startLoad": [
+        10.4794921875,
+        15.02685546875,
+        15.51171875
+      ],
+      "endLoad": [
+        10.177734375,
+        14.81201171875,
+        15.42919921875
+      ]
+    },
+    "sweep-v2": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.590",
+        "--dreamsigns",
+        "ede46f71-aa77-4b12-9824-0d3706da6a22",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T01:02:55.426654+00:00",
+      "end": "2026-10-15T01:03:05.709267+00:00",
+      "pid": 7429,
+      "pgid": 7429,
+      "exitCode": 0,
+      "wallSeconds": 10.282469291996676,
+      "cpuSeconds": {
+        "user": 6.8623199999999995,
+        "system": 3.709946
+      },
+      "startLoad": [
+        9.02392578125,
+        11.40869140625,
+        12.1494140625
+      ],
+      "endLoad": [
+        9.173828125,
+        11.36181640625,
+        12.1240234375
+      ]
+    },
+    "focused-boundaries": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:45:55.159383+00:00",
+      "end": "2026-10-15T00:46:02.246575+00:00",
+      "pid": 86985,
+      "pgid": 86985,
+      "exitCode": 1,
+      "wallSeconds": 7.086895417014603,
+      "cpuSeconds": {
+        "user": 7.635953,
+        "system": 2.227555
+      },
+      "startLoad": [
+        5.50341796875,
+        9.37109375,
+        12.599609375
+      ],
+      "endLoad": [
+        5.462890625,
+        9.29833984375,
+        12.5546875
+      ]
+    },
+    "focused-all": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:46:13.741241+00:00",
+      "end": "2026-10-15T00:46:35.725104+00:00",
+      "pid": 88462,
+      "pgid": 88462,
+      "exitCode": 0,
+      "wallSeconds": 21.98340979096247,
+      "cpuSeconds": {
+        "user": 26.307735,
+        "system": 2.788776
+      },
+      "startLoad": [
+        7.31982421875,
+        9.5546875,
+        12.6064453125
+      ],
+      "endLoad": [
+        15.79931640625,
+        11.32080078125,
+        13.15087890625
+      ]
+    },
+    "full-outer": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/590-reclaimed/run-command.py",
+        "full-inner",
+        "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-15T00:54:49.167272+00:00",
+      "end": "2026-10-15T00:57:20.221027+00:00",
+      "pid": 74211,
+      "pgid": 74211,
+      "exitCode": -2,
+      "wallSeconds": 151.05118062498514,
+      "cpuSeconds": {
+        "user": 0.000513,
+        "system": 0.001552
+      },
+      "startLoad": [
+        7.9072265625,
+        11.0712890625,
+        12.7099609375
+      ],
+      "endLoad": [
+        6.71728515625,
+        9.40771484375,
+        11.7578125
+      ]
+    },
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "ede46f71-aa77-4b12-9824-0d3706da6a22",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:54:51.686196+00:00",
+      "end": "2026-10-15T00:54:53.195432+00:00",
+      "pid": 74409,
+      "pgid": 74409,
+      "exitCode": 0,
+      "wallSeconds": 1.5092456670245156,
+      "cpuSeconds": {
+        "user": 1.292809,
+        "system": 0.566443
+      },
+      "startLoad": [
+        7.83447265625,
+        11.00341796875,
+        12.67626953125
+      ],
+      "endLoad": [
+        7.83447265625,
+        11.00341796875,
+        12.67626953125
+      ]
+    },
+    "friction-schema": {
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T01:14:23.697887+00:00",
+      "end": "2026-10-15T01:14:23.959642+00:00",
+      "pid": 9873,
+      "pgid": 9873,
+      "exitCode": 0,
+      "wallSeconds": 0.2617872910341248,
+      "cpuSeconds": {
+        "user": 0.139398,
+        "system": 0.054089
+      },
+      "startLoad": [
+        5.53564453125,
+        5.61181640625,
+        8.23046875
+      ],
+      "endLoad": [
+        5.53564453125,
+        5.61181640625,
+        8.23046875
+      ]
+    },
+    "prepare-workspace": {
+      "command": [
+        "npm",
+        "run",
+        "prepare-workspace"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:39:51.087504+00:00",
+      "end": "2026-10-15T00:39:53.454337+00:00",
+      "pid": 7851,
+      "pgid": 7851,
+      "exitCode": 0,
+      "wallSeconds": 2.3668473750003614,
+      "cpuSeconds": {
+        "user": 2.063858,
+        "system": 0.955803
+      },
+      "startLoad": [
+        8.96826171875,
+        14.31494140625,
+        15.240234375
+      ],
+      "endLoad": [
+        8.96826171875,
+        14.31494140625,
+        15.240234375
+      ]
+    },
+    "focused-fidelity-fixed": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:43:30.218475+00:00",
+      "end": "2026-10-15T00:43:39.796013+00:00",
+      "pid": 78070,
+      "pgid": 78070,
+      "exitCode": 1,
+      "wallSeconds": 9.57750766701065,
+      "cpuSeconds": {
+        "user": 7.704592,
+        "system": 2.920702
+      },
+      "startLoad": [
+        9.2529296875,
+        11.93212890625,
+        13.95849609375
+      ],
+      "endLoad": [
+        8.826171875,
+        11.7529296875,
+        13.87060546875
+      ]
+    },
+    "weighted-outer": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/590-reclaimed/run-command.py",
+        "weighted-inner",
+        "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "ede46f71-aa77-4b12-9824-0d3706da6a22"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-15T00:54:49.167339+00:00",
+      "end": "2026-10-15T00:57:20.289376+00:00",
+      "pid": 74212,
+      "pgid": 74212,
+      "exitCode": 70,
+      "wallSeconds": 151.11944974999642,
+      "cpuSeconds": {
+        "user": 159.876437,
+        "system": 1.8744129999999999
+      },
+      "startLoad": [
+        7.9072265625,
+        11.0712890625,
+        12.7099609375
+      ],
+      "endLoad": [
+        6.71728515625,
+        9.40771484375,
+        11.7578125
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:48:50.686861+00:00",
+      "end": "2026-10-15T00:50:15.912260+00:00",
+      "pid": 98534,
+      "pgid": 98534,
+      "exitCode": 2,
+      "wallSeconds": 85.22401654196437,
+      "cpuSeconds": {
+        "user": 215.604566,
+        "system": 24.081403
+      },
+      "startLoad": [
+        13.51318359375,
+        12.73388671875,
+        13.53857421875
+      ],
+      "endLoad": [
+        16.99560546875,
+        14.283203125,
+        14.0693359375
+      ]
+    },
+    "fault-wrong-side": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:47:08.386030+00:00",
+      "end": "2026-10-15T00:47:15.898940+00:00",
+      "pid": 92968,
+      "pgid": 92968,
+      "exitCode": 1,
+      "wallSeconds": 7.512818832998164,
+      "cpuSeconds": {
+        "user": 7.633139,
+        "system": 2.274344
+      },
+      "startLoad": [
+        22.833984375,
+        13.6455078125,
+        13.94091796875
+      ],
+      "endLoad": [
+        22.53564453125,
+        13.89990234375,
+        14.0283203125
+      ]
+    },
+    "full-v2-outer": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/590-reclaimed/run-command.py",
+        "full-v2-inner",
+        "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-15T01:01:55.542533+00:00",
+      "end": "2026-10-15T01:03:47.014179+00:00",
+      "pid": 54461,
+      "pgid": 54461,
+      "exitCode": 0,
+      "wallSeconds": 111.46975595800905,
+      "cpuSeconds": {
+        "user": 247.661961,
+        "system": 31.302098
+      },
+      "startLoad": [
+        9.67333984375,
+        12.05322265625,
+        12.41845703125
+      ],
+      "endLoad": [
+        8.0048828125,
+        10.78271484375,
+        11.875
+      ]
+    },
+    "full-v2-inner": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T01:01:55.564716+00:00",
+      "end": "2026-10-15T01:03:47.009618+00:00",
+      "pid": 54464,
+      "pgid": 54464,
+      "exitCode": 0,
+      "wallSeconds": 111.4430167079554,
+      "cpuSeconds": {
+        "user": 247.645242,
+        "system": 31.294117
+      },
+      "startLoad": [
+        9.67333984375,
+        12.05322265625,
+        12.41845703125
+      ],
+      "endLoad": [
+        8.0048828125,
+        10.78271484375,
+        11.875
+      ]
+    },
+    "fault-exclude-created": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:47:15.925337+00:00",
+      "end": "2026-10-15T00:47:23.342883+00:00",
+      "pid": 93585,
+      "pgid": 93585,
+      "exitCode": 1,
+      "wallSeconds": 7.41746070899535,
+      "cpuSeconds": {
+        "user": 7.48032,
+        "system": 2.25619
+      },
+      "startLoad": [
+        22.53564453125,
+        13.89990234375,
+        14.0283203125
+      ],
+      "endLoad": [
+        21.37158203125,
+        13.8017578125,
+        13.99267578125
+      ]
+    },
+    "copy-before-entry": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "real first-materialization copy FIFO",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:44:28.021529+00:00",
+      "end": "2026-10-15T00:44:36.813187+00:00",
+      "pid": 81600,
+      "pgid": 81600,
+      "exitCode": 1,
+      "wallSeconds": 8.791761792032048,
+      "cpuSeconds": {
+        "user": 7.320392,
+        "system": 2.534646
+      },
+      "startLoad": [
+        7.12451171875,
+        10.91015625,
+        13.451171875
+      ],
+      "endLoad": [
+        6.951171875,
+        10.748046875,
+        13.36376953125
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:52:59.003690+00:00",
+      "end": "2026-10-15T00:53:06.441095+00:00",
+      "pid": 67437,
+      "pgid": 67437,
+      "exitCode": 0,
+      "wallSeconds": 7.437316125025973,
+      "cpuSeconds": {
+        "user": 4.582219,
+        "system": 2.100028
+      },
+      "startLoad": [
+        9.74169921875,
+        12.37939453125,
+        13.33056640625
+      ],
+      "endLoad": [
+        10.3349609375,
+        12.41650390625,
+        13.33251953125
+      ]
+    },
+    "fault-keyword-expiry": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:47:23.370961+00:00",
+      "end": "2026-10-15T00:47:32.703326+00:00",
+      "pid": 94039,
+      "pgid": 94039,
+      "exitCode": 1,
+      "wallSeconds": 9.332245416997466,
+      "cpuSeconds": {
+        "user": 7.807675,
+        "system": 2.80403
+      },
+      "startLoad": [
+        21.37158203125,
+        13.8017578125,
+        13.99267578125
+      ],
+      "endLoad": [
+        19.2353515625,
+        13.59375,
+        13.91650390625
+      ]
+    },
+    "fault-wrong-ordinal": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:46:59.135823+00:00",
+      "end": "2026-10-15T00:47:08.359730+00:00",
+      "pid": 92201,
+      "pgid": 92201,
+      "exitCode": 1,
+      "wallSeconds": 9.223784624948166,
+      "cpuSeconds": {
+        "user": 7.771758,
+        "system": 2.573784
+      },
+      "startLoad": [
+        23.591796875,
+        13.4658203125,
+        13.8818359375
+      ],
+      "endLoad": [
+        22.833984375,
+        13.6455078125,
+        13.94091796875
+      ]
+    },
+    "focused-fidelity": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:42:52.690960+00:00",
+      "end": "2026-10-15T00:43:02.717456+00:00",
+      "pid": 75244,
+      "pgid": 75244,
+      "exitCode": 1,
+      "wallSeconds": 10.026466499955859,
+      "cpuSeconds": {
+        "user": 8.021185,
+        "system": 3.121461
+      },
+      "startLoad": [
+        11.2685546875,
+        12.63720703125,
+        14.29443359375
+      ],
+      "endLoad": [
+        10.30419921875,
+        12.38525390625,
+        14.185546875
+      ]
+    },
+    "preflight-v2": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "ede46f71-aa77-4b12-9824-0d3706da6a22",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T01:02:44.157145+00:00",
+      "end": "2026-10-15T01:02:47.835595+00:00",
+      "pid": 99144,
+      "pgid": 99144,
+      "exitCode": 0,
+      "wallSeconds": 3.678431583044585,
+      "cpuSeconds": {
+        "user": 1.257606,
+        "system": 0.917999
+      },
+      "startLoad": [
+        9.09423828125,
+        11.5498046875,
+        12.2119140625
+      ],
+      "endLoad": [
+        8.92626953125,
+        11.47412109375,
+        12.18115234375
+      ]
+    },
+    "doctor": {
+      "command": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:33:48.058005+00:00",
+      "end": "2026-10-15T00:33:49.569257+00:00",
+      "pid": 35709,
+      "pgid": 35709,
+      "exitCode": 0,
+      "wallSeconds": 1.5112783340155147,
+      "cpuSeconds": {
+        "user": 0.022267,
+        "system": 0.01659
+      },
+      "startLoad": [
+        11.341796875,
+        14.87939453125,
+        15.3232421875
+      ],
+      "endLoad": [
+        12.19482421875,
+        14.99755859375,
+        15.3623046875
+      ]
+    },
+    "fault-late-source-allocation": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:47:32.732553+00:00",
+      "end": "2026-10-15T00:47:43.875378+00:00",
+      "pid": 94664,
+      "pgid": 94664,
+      "exitCode": 0,
+      "wallSeconds": 11.14266466605477,
+      "cpuSeconds": {
+        "user": 7.720705,
+        "system": 2.91907
+      },
+      "startLoad": [
+        19.2353515625,
+        13.59375,
+        13.91650390625
+      ],
+      "endLoad": [
+        17.42724609375,
+        13.39208984375,
+        13.84130859375
+      ]
+    },
+    "logging-focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:58:48.652380+00:00",
+      "end": "2026-10-15T00:58:58.506556+00:00",
+      "pid": 84159,
+      "pgid": 84159,
+      "exitCode": 0,
+      "wallSeconds": 9.854074290953577,
+      "cpuSeconds": {
+        "user": 8.713613,
+        "system": 2.960307
+      },
+      "startLoad": [
+        12.3662109375,
+        9.83935546875,
+        11.65380859375
+      ],
+      "endLoad": [
+        12.26123046875,
+        9.89501953125,
+        11.65185546875
+      ]
+    },
+    "review-v2": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:59:07.518231+00:00",
+      "end": "2026-10-15T01:00:24.307112+00:00",
+      "pid": 85258,
+      "pgid": 85258,
+      "exitCode": 0,
+      "wallSeconds": 76.78761587501504,
+      "cpuSeconds": {
+        "user": 207.672078,
+        "system": 21.641742
+      },
+      "startLoad": [
+        16.16357421875,
+        10.80419921875,
+        11.95361328125
+      ],
+      "endLoad": [
+        21.99072265625,
+        13.908203125,
+        13.0380859375
+      ]
+    },
+    "focused-own": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:41:21.018766+00:00",
+      "end": "2026-10-15T00:41:27.967138+00:00",
+      "pid": 13509,
+      "pgid": 13509,
+      "exitCode": 1,
+      "wallSeconds": 6.94837329199072,
+      "cpuSeconds": {
+        "user": 7.376316,
+        "system": 2.208462
+      },
+      "startLoad": [
+        6.56298828125,
+        12.072265625,
+        14.27685546875
+      ],
+      "endLoad": [
+        6.677734375,
+        12.00439453125,
+        14.23974609375
+      ]
+    },
+    "judged-v2": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.590/judged.mjs",
+        "--bead",
+        "hv-umm2.590",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T01:04:26.131410+00:00",
+      "end": "2026-10-15T01:04:55.966911+00:00",
+      "pid": 13631,
+      "pgid": 13631,
+      "exitCode": 0,
+      "wallSeconds": 29.835023207997438,
+      "cpuSeconds": {
+        "user": 6.597568,
+        "system": 2.772985
+      },
+      "startLoad": [
+        8.32373046875,
+        10.51123046875,
+        11.72412109375
+      ],
+      "endLoad": [
+        9.31494140625,
+        10.5283203125,
+        11.68603515625
+      ]
+    },
+    "sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.590",
+        "--dreamsigns",
+        "ede46f71-aa77-4b12-9824-0d3706da6a22",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:55:06.463905+00:00",
+      "end": "2026-10-15T00:55:17.103397+00:00",
+      "pid": 75399,
+      "pgid": 75399,
+      "exitCode": 0,
+      "wallSeconds": 10.639347209013067,
+      "cpuSeconds": {
+        "user": 6.130407,
+        "system": 3.384389
+      },
+      "startLoad": [
+        7.50732421875,
+        10.77392578125,
+        12.564453125
+      ],
+      "endLoad": [
+        7.89013671875,
+        10.748046875,
+        12.5341796875
+      ]
+    },
+    "weighted-v2-outer": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/590-reclaimed/run-command.py",
+        "weighted-v2-inner",
+        "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "ede46f71-aa77-4b12-9824-0d3706da6a22"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-15T01:02:07.811759+00:00",
+      "end": "2026-10-15T01:11:15.232808+00:00",
+      "pid": 55330,
+      "pgid": 55330,
+      "exitCode": 0,
+      "wallSeconds": 547.4116074170452,
+      "cpuSeconds": {
+        "user": 471.404532,
+        "system": 4.296923
+      },
+      "startLoad": [
+        9.40283203125,
+        11.9189453125,
+        12.3662109375
+      ],
+      "endLoad": [
+        2.96630859375,
+        5.57568359375,
+        8.8828125
+      ]
+    },
+    "weighted-v2-inner": {
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "ede46f71-aa77-4b12-9824-0d3706da6a22"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T01:03:47.037135+00:00",
+      "end": "2026-10-15T01:11:15.229055+00:00",
+      "pid": 11311,
+      "pgid": 11311,
+      "exitCode": 0,
+      "wallSeconds": 448.1841864170274,
+      "cpuSeconds": {
+        "user": 471.386574,
+        "system": 4.286615
+      },
+      "startLoad": [
+        8.0048828125,
+        10.78271484375,
+        11.875
+      ],
+      "endLoad": [
+        2.96630859375,
+        5.57568359375,
+        8.8828125
+      ]
+    },
+    "friction-dispatch": {
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:35:33.940960+00:00",
+      "end": "2026-10-15T00:35:34.306095+00:00",
+      "pid": 56796,
+      "pgid": 56796,
+      "exitCode": 0,
+      "wallSeconds": 0.36517624999396503,
+      "cpuSeconds": {
+        "user": 0.165235,
+        "system": 0.084591
+      },
+      "startLoad": [
+        16.97021484375,
+        15.8388671875,
+        15.6455078125
+      ],
+      "endLoad": [
+        16.97021484375,
+        15.8388671875,
+        15.6455078125
+      ]
+    },
+    "knip-v2": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T01:00:40.449513+00:00",
+      "end": "2026-10-15T01:00:45.591282+00:00",
+      "pid": 46029,
+      "pgid": 46029,
+      "exitCode": 0,
+      "wallSeconds": 5.141716916987207,
+      "cpuSeconds": {
+        "user": 4.619572,
+        "system": 1.810662
+      },
+      "startLoad": [
+        17.94384765625,
+        13.50830078125,
+        12.9140625
+      ],
+      "endLoad": [
+        17.7880859375,
+        13.54931640625,
+        12.93212890625
+      ]
+    },
+    "review-fixed": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:50:33.267966+00:00",
+      "end": "2026-10-15T00:52:40.023960+00:00",
+      "pid": 60047,
+      "pgid": 60047,
+      "exitCode": 0,
+      "wallSeconds": 126.75384062499506,
+      "cpuSeconds": {
+        "user": 172.543179,
+        "system": 20.30726
+      },
+      "startLoad": [
+        15.7470703125,
+        14.125,
+        14.015625
+      ],
+      "endLoad": [
+        10.17529296875,
+        12.58984375,
+        13.42041015625
+      ]
+    },
+    "focused-own-fixed": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:41:58.424711+00:00",
+      "end": "2026-10-15T00:42:06.584747+00:00",
+      "pid": 16189,
+      "pgid": 16189,
+      "exitCode": 0,
+      "wallSeconds": 8.160020250012167,
+      "cpuSeconds": {
+        "user": 8.435468,
+        "system": 2.542012
+      },
+      "startLoad": [
+        11.79052734375,
+        12.6591796875,
+        14.39453125
+      ],
+      "endLoad": [
+        16.0244140625,
+        13.5546875,
+        14.69287109375
+      ]
+    },
+    "install": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:33:48.058001+00:00",
+      "end": "2026-10-15T00:33:50.772757+00:00",
+      "pid": 35710,
+      "pgid": 35710,
+      "exitCode": 0,
+      "wallSeconds": 2.714777166955173,
+      "cpuSeconds": {
+        "user": 2.128632,
+        "system": 3.633143
+      },
+      "startLoad": [
+        11.341796875,
+        14.87939453125,
+        15.3232421875
+      ],
+      "endLoad": [
+        12.19482421875,
+        14.99755859375,
+        15.3623046875
+      ]
+    },
+    "focused-own-complete": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:45:08.868192+00:00",
+      "end": "2026-10-15T00:45:15.927635+00:00",
+      "pid": 84147,
+      "pgid": 84147,
+      "exitCode": 0,
+      "wallSeconds": 7.055264999973588,
+      "cpuSeconds": {
+        "user": 7.596691,
+        "system": 2.204867
+      },
+      "startLoad": [
+        6.00927734375,
+        10.15087890625,
+        13.0556640625
+      ],
+      "endLoad": [
+        5.93994140625,
+        9.99755859375,
+        12.966796875
+      ]
+    },
+    "focused-initial": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/first-materialization-keyword.contracts.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:41:03.230346+00:00",
+      "end": "2026-10-15T00:41:06.892942+00:00",
+      "pid": 12224,
+      "pgid": 12224,
+      "exitCode": 1,
+      "wallSeconds": 3.662616374960635,
+      "cpuSeconds": {
+        "user": 2.774276,
+        "system": 1.26897
+      },
+      "startLoad": [
+        6.39453125,
+        12.41064453125,
+        14.44580078125
+      ],
+      "endLoad": [
+        6.84326171875,
+        12.40380859375,
+        14.43115234375
+      ]
+    },
+    "fault-post-announcement-grant": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first materialization",
+        "--maxWorkers=2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+      "start": "2026-10-15T00:48:19.308634+00:00",
+      "end": "2026-10-15T00:48:31.684304+00:00",
+      "pid": 96621,
+      "pgid": 96621,
+      "exitCode": 1,
+      "wallSeconds": 12.375502583978232,
+      "cpuSeconds": {
+        "user": 7.685523,
+        "system": 3.034802
+      },
+      "startLoad": [
+        13.7763671875,
+        12.85693359375,
+        13.62353515625
+      ],
+      "endLoad": [
+        11.82470703125,
+        12.470703125,
+        13.47216796875
+      ]
+    }
+  },
+  "heavyAdmission": {
+    "full": {
+      "outerStart": "2026-10-15T01:01:55.542533+00:00",
+      "innerStart": "2026-10-15T01:01:55.564716+00:00",
+      "queuePlusProcessStartupSeconds": 0.022183,
+      "innerProcessingAndCleanupSeconds": 111.4430167079554,
+      "outerTotalSeconds": 111.46975595800905,
+      "qualification": "Outer-to-inner interval includes lock queue and process startup; not a pure contention measurement."
+    },
+    "weighted": {
+      "outerStart": "2026-10-15T01:02:07.811759+00:00",
+      "innerStart": "2026-10-15T01:03:47.037135+00:00",
+      "queuePlusProcessStartupSeconds": 99.225376,
+      "innerProcessingAndCleanupSeconds": 448.1841864170274,
+      "outerTotalSeconds": 547.4116074170452,
+      "qualification": "Outer-to-inner interval includes lock queue and process startup; not a pure contention measurement."
+    }
+  },
+  "oldSourceHeavyAttempts": {
+    "full-outer": {
+      "receipt": {
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/dreamtides-executor-01a1304d/590-reclaimed/run-command.py",
+          "full-inner",
+          "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "start": "2026-10-15T00:54:49.167272+00:00",
+        "end": "2026-10-15T00:57:20.221027+00:00",
+        "pid": 74211,
+        "pgid": 74211,
+        "exitCode": -2,
+        "wallSeconds": 151.05118062498514,
+        "cpuSeconds": {
+          "user": 0.000513,
+          "system": 0.001552
+        },
+        "startLoad": [
+          7.9072265625,
+          11.0712890625,
+          12.7099609375
+        ],
+        "endLoad": [
+          6.71728515625,
+          9.40771484375,
+          11.7578125
+        ]
+      },
+      "disposition": "Intentionally interrupted while queued for the minimal own durable logging acceptance repair; inner never started."
+    },
+    "weighted-outer": {
+      "receipt": {
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/dreamtides-executor-01a1304d/590-reclaimed/run-command.py",
+          "weighted-inner",
+          "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "ede46f71-aa77-4b12-9824-0d3706da6a22"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web",
+        "start": "2026-10-15T00:54:49.167339+00:00",
+        "end": "2026-10-15T00:57:20.289376+00:00",
+        "pid": 74212,
+        "pgid": 74212,
+        "exitCode": 70,
+        "wallSeconds": 151.11944974999642,
+        "cpuSeconds": {
+          "user": 159.876437,
+          "system": 1.8744129999999999
+        },
+        "startLoad": [
+          7.9072265625,
+          11.0712890625,
+          12.7099609375
+        ],
+        "endLoad": [
+          6.71728515625,
+          9.40771484375,
+          11.7578125
+        ]
+      },
+      "disposition": "Intentionally interrupted on earlier source epoch; actual inner74215 settled, no terminal inner receipt and no completed300aggregate. No completed300 or performance claim."
+    },
+    "settlementProof": "logging-repair-readers-settled.json"
+  },
+  "validation": {
+    "ownSyntheticCases": 52,
+    "registeredContracts": 5119,
+    "ordinaryReviewRelatedCases": 8901,
+    "ordinaryReviewFiles": 306,
+    "fullCases": 9910,
+    "fullFiles": 387,
+    "fullProductionBundle": true,
+    "fullWorkers": 2,
+    "literalWeightedGames": 300,
+    "weightedAggregate": {
+      "games": 300,
+      "steps": 102228,
+      "prompts": 7768,
+      "interactiveReruns": 845,
+      "failures": 0,
+      "targetIncluded": 600,
+      "targetExercised": 0,
+      "qualification": "Static trigger-counter reports exercised=0; targeted desktop/mobile first/second materialization QA directly exercised the clause. No fuzz clause-exercise claim."
+    },
+    "literalWeightedUuid": "ede46f71-aa77-4b12-9824-0d3706da6a22",
+    "finalPreflight": "2/2 initializer passes, exercised=false",
+    "finalSweep": "2/2 initializer passes, exercised=false",
+    "liveQa": {
+      "at": "2026-10-15T01:06:21.027515+00:00",
+      "sourceEpoch": "v2-direct-durable-grant",
+      "sourceManifestSha256": "a5976b90096768bb42817e807baeebb6aecfa7c8734ef472c63f1d82e1203aa5",
+      "allCoreFrozenSha256Unchanged": true,
+      "callerSha256": "738c2156ec67ad8258a481678e05f23fe3f8472d14171bf59c8ddb5796c2af69",
+      "reportSha256": "250b5600b99f3a2fb6e2669c82b53c689da114ee28b1a0345d8b241d26e30d4a",
+      "attempts": 1,
+      "receipt": {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.590/judged.mjs",
+          "--bead",
+          "hv-umm2.590",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "240"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-materialization-590-resumed",
+        "start": "2026-10-15T01:04:26.131410+00:00",
+        "end": "2026-10-15T01:04:55.966911+00:00",
+        "pid": 13631,
+        "pgid": 13631,
+        "exitCode": 0,
+        "wallSeconds": 29.835023207997438,
+        "cpuSeconds": {
+          "user": 6.597568,
+          "system": 2.772985
+        },
+        "startLoad": [
+          8.32373046875,
+          10.51123046875,
+          11.72412109375
+        ],
+        "endLoad": [
+          9.31494140625,
+          10.5283203125,
+          11.68603515625
+        ]
+      },
+      "sourceQualifiedRows": {
+        "desktop": {
+          "verdict": "pass",
+          "exercised": true,
+          "gameId": "aqu4rr",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "ids": [
+            "i51",
+            "i52"
+          ],
+          "taps": [
+            1,
+            1
+          ],
+          "turnNumber": 1,
+          "durableGrant": {
+            "gameId": "aqu4rr",
+            "version": 7,
+            "detail": {
+              "kind": "effectStarted",
+              "effect": "e1",
+              "controller": "player",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "expiry": {
+                "at": "never"
+              },
+              "change": {
+                "kind": "firstMaterializationKeyword",
+                "player": "player",
+                "keyword": "awakened",
+                "instance": "i51"
+              }
+            },
+            "timestamp": "2026-10-15T01:04:33.610Z",
+            "event": "engine.firstMaterializationKeyword",
+            "seq": 30
+          },
+          "actualSourceUuid": "ede46f71-aa77-4b12-9824-0d3706da6a22",
+          "actualDebugLoadUuid": "ede46f71-aa77-4b12-9824-0d3706da6a22",
+          "matchingBattleStartedPresent": false,
+          "logRows": 43,
+          "reloadSameGrant": true,
+          "geometry": [
+            {
+              "id": "i51",
+              "x": 254.5,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "exhausted": "false",
+              "hit": true,
+              "inViewport": true,
+              "badges": [
+                {
+                  "x": 258.078125,
+                  "y": 487.078125,
+                  "width": 23.265625,
+                  "height": 23.265625
+                }
+              ]
+            },
+            {
+              "id": "i52",
+              "x": 348,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "exhausted": "true",
+              "hit": true,
+              "inViewport": true,
+              "badges": []
+            }
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        "mobile": {
+          "verdict": "pass",
+          "exercised": true,
+          "gameId": "okq78v",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "ids": [
+            "i51",
+            "i52"
+          ],
+          "taps": [
+            1,
+            1
+          ],
+          "turnNumber": 1,
+          "durableGrant": {
+            "gameId": "okq78v",
+            "version": 7,
+            "detail": {
+              "kind": "effectStarted",
+              "effect": "e1",
+              "controller": "player",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "expiry": {
+                "at": "never"
+              },
+              "change": {
+                "kind": "firstMaterializationKeyword",
+                "player": "player",
+                "keyword": "awakened",
+                "instance": "i51"
+              }
+            },
+            "timestamp": "2026-10-15T01:04:48.129Z",
+            "event": "engine.firstMaterializationKeyword",
+            "seq": 30
+          },
+          "actualSourceUuid": "ede46f71-aa77-4b12-9824-0d3706da6a22",
+          "actualDebugLoadUuid": "ede46f71-aa77-4b12-9824-0d3706da6a22",
+          "matchingBattleStartedPresent": false,
+          "logRows": 43,
+          "reloadSameGrant": true,
+          "geometry": [
+            {
+              "id": "i51",
+              "x": 23.40625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "exhausted": "false",
+              "hit": true,
+              "inViewport": true,
+              "badges": [
+                {
+                  "x": 25.546875,
+                  "y": 418.03125,
+                  "width": 14,
+                  "height": 14
+                }
+              ]
+            },
+            {
+              "id": "i52",
+              "x": 81.265625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "exhausted": "true",
+              "hit": true,
+              "inViewport": true,
+              "badges": []
+            }
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      },
+      "captures": {
+        "first-materialization-first-desktop.png": {
+          "sha256": "c8f062e7418bdd1d818cd1f69061b933a2db9b1724281465d4ad331b4e04f509",
+          "width": 2880,
+          "height": 1800,
+          "selfViewed": true
+        },
+        "first-materialization-reloaded-desktop.png": {
+          "sha256": "2a01050095879e5bf844a03fe084da36cddc34dfc5c8b8f64e4ae431a7ac7191",
+          "width": 2880,
+          "height": 1800,
+          "selfViewed": true
+        },
+        "first-materialization-reloaded-mobile.png": {
+          "sha256": "2209f0eccb76563e9e2c8c9f6754c1af3342dddbe859f3e3797ed0f8c7a4aba3",
+          "width": 780,
+          "height": 1688,
+          "selfViewed": true
+        }
+      },
+      "serverPid": 13668,
+      "slot": 1,
+      "port": 5274,
+      "allOwnedGroupsGone": true,
+      "portFree": true,
+      "noCoreWritesDuringRuntime": true
+    },
+    "parentVisualAndRawVerificationFile": "qa-parent-verification.json",
+    "counterfactualDispositions": {
+      "checkedAt": "2026-10-15T00:51:24.088151+00:00",
+      "controls": [
+        {
+          "label": "wrong-ordinal",
+          "path": "src/engine/effects/primitives/first-materialization-keyword.ts",
+          "faultSha256": "3d3c78d07925d31e4aaadbda29827fa827be3eda2ac2e12159b6811c08d89083",
+          "exitCode": 1,
+          "restoredExactHash": true,
+          "at": "2026-10-15T00:47:08.363889+00:00",
+          "actualCaseSummary": "44 failed | 6 passed | 5067 skipped (5117)",
+          "disposition": "Expected semantic contract failure, exact original bytes restored after terminal child."
+        },
+        {
+          "label": "wrong-side",
+          "path": "src/engine/effects/primitives/first-materialization-keyword.ts",
+          "faultSha256": "2efb3206449fe385ea4a5a0c58de5430d3be3242c238a47229f347155d8069b5",
+          "exitCode": 1,
+          "restoredExactHash": true,
+          "at": "2026-10-15T00:47:15.903035+00:00",
+          "actualCaseSummary": "40 failed | 10 passed | 5067 skipped (5117)",
+          "disposition": "Expected semantic contract failure, exact original bytes restored after terminal child."
+        },
+        {
+          "label": "exclude-created",
+          "path": "src/engine/effects/primitives/first-materialization-keyword.ts",
+          "faultSha256": "7b37291eedbd2fae4409b30556b217ce98090524dfe9a29e567ddc827b4c244c",
+          "exitCode": 1,
+          "restoredExactHash": true,
+          "at": "2026-10-15T00:47:23.347109+00:00",
+          "actualCaseSummary": "10 failed | 40 passed | 5067 skipped (5117)",
+          "disposition": "Expected semantic contract failure, exact original bytes restored after terminal child."
+        },
+        {
+          "label": "keyword-expiry",
+          "path": "src/engine/effects/primitives/first-materialization-keyword.ts",
+          "faultSha256": "0a1ca358131af3ce6c335e9ff48292da33796297d03b316beb7f1d46b5dd0dda",
+          "exitCode": 1,
+          "restoredExactHash": true,
+          "at": "2026-10-15T00:47:32.707884+00:00",
+          "actualCaseSummary": "12 failed | 38 passed | 5067 skipped (5117)",
+          "disposition": "Expected semantic contract failure, exact original bytes restored after terminal child."
+        },
+        {
+          "label": "late-source-allocation",
+          "path": "src/engine/view/determinize.ts",
+          "faultSha256": "10193f189c99ba034349eac07785cab85ae981c6969d01efffc64b49f6c85836",
+          "exitCode": 0,
+          "restoredExactHash": true,
+          "at": "2026-10-15T00:47:43.879773+00:00",
+          "actualCaseSummary": "50 passed | 5067 skipped (5117)",
+          "disposition": "Survived; unchanged existing final state.nextInstance assignment already protects reserved identities. Unnecessary own preallocation simplified away. Future creation contract retained; no alias-kill claim."
+        },
+        {
+          "label": "post-announcement-grant",
+          "path": "src/engine/effects/primitives/first-materialization-keyword.ts",
+          "faultSha256": "26f048294ec2a29c85ba6c6f1054168e748c33f57da3c2804d1c92d7af9eaba1",
+          "exitCode": 1,
+          "restoredExactHash": true,
+          "at": "2026-10-15T00:48:31.690007+00:00",
+          "actualCaseSummary": "16 failed | 34 passed | 5067 skipped (5117)",
+          "disposition": "Expected semantic contract failure, exact original bytes restored after terminal child."
+        }
+      ],
+      "finalSourceNote": "Own preallocation removed after surviving control. Five actual semantic faults killed; no frozen zones/history/policy body mutated."
+    }
+  },
+  "finalizationCallerCorrection": {
+    "at": "2026-10-15T01:14:51.188535+00:00",
+    "operation": "finalize-evidence.py after initial staging",
+    "actualExitCode": 1,
+    "cause": "Scratch caller enumerated only unstaged/untracked paths when computing private contract line count, so the staged files were omitted. Assertion stopped before evidence writes.",
+    "correction": "Include cached paths in the finite path set; no product source or tests changed."
+  },
+  "sourceRepairs": {
+    "fixedClassification": "Own new kind uses false in fixed-effect registry because anonymous floating-member transport already retains the permanent physical grant; actual duplicate-channel failures and successful correction retained. Existing kind classifications unchanged.",
+    "redactedSource": "Own null-source branch uses existing rememberedSource(null); existing final nextInstance=next protects future creation. Late-allocation counterfactual survived; no necessity or alias-kill claim for a separate preallocation map.",
+    "durableGrant": "Exactly3 additive lines in engine/log.ts persist actual first-materialization grant; own actual first/second event mapper contracts and live durable record prove it. Prior source epoch preflight/sweep and intentionally cancelled heavy readers retained."
+  },
+  "qaAttempts": {
+    "targetedLaunches": 1,
+    "prelaunchCallerSourceCorrection": "Caller initially planned a battleStarted record; actual lab constructor is separate/unlogged and publishes debug_card_lab_loaded. Before any launch the caller required actual debug UUID plus observed initial membership and new durable grant, with battleStarted optional/notclaimed.",
+    "initializationEpochs": [
+      "sweep-s3ZEn7 v1-prelogging",
+      "sweep-4KAJ0Q v2-direct-durable-grant"
+    ],
+    "targetedInvocation": "run-4gNgC2",
+    "callerSha256": "738c2156ec67ad8258a481678e05f23fe3f8472d14171bf59c8ddb5796c2af69"
+  },
+  "d21": {
+    "uuid": "ede46f71-aa77-4b12-9824-0d3706da6a22",
+    "firstByteDecimal": 59,
+    "firstByteHex": "0x3B",
+    "sampled": false,
+    "selectionRule": "SHA256 canonical UUID first byte <26",
+    "qualified": "Existing keyword badge reused; desktop/mobile live workflow and all3 captures performed regardless of sample. Earlier0x59radix spelling corrected natively."
+  },
+  "allOwnedReceiptGroupsGone": true,
+  "coreFrozenHashMap": {
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.590-1.md": "1ff2656556cde7b4f51a0928baa85101fa33a9fde9edb99a40a5e56dc95c7bc5",
+    "docs/rules.md": "65c953b07c0e59772dc62fed02510ab4489c12faf4af384caa11c23a5a264528",
+    "scripts/content-inventory.ts": "0bc2da4248c384f6faeaf56e68ba696c4d99bf54c4c2d228c192307d05757583",
+    "src/content/dreamsigns/crystal-orb-ede46f71.ts": "9010e84de5f8124139afcda42b0c0fa6e453235dba71b2c4595d9701a23681fd",
+    "src/engine/continuous/layers.ts": "5cdd80d3fdac5f4a89baa42499d2b15a92c07b3bcb72089ca5c9616e8fdfa968",
+    "src/engine/effects/primitives/contracts/first-materialization-keyword-fidelity.contracts.ts": "64e2eb3ba88584baa45e0c77bea104a34a760d40cd6035ad0af289f18addf358",
+    "src/engine/effects/primitives/contracts/first-materialization-keyword-support.ts": "0f41576ab53e28dc57af5d60565e6bc69fc5e591dc59aca249feeb9ebdba63de",
+    "src/engine/effects/primitives/contracts/first-materialization-keyword.contracts.ts": "885c727cf86c3d41d52967ba95ed423fef72fcffa987f17234c708a17edbc0ed",
+    "src/engine/effects/primitives/first-materialization-keyword.ts": "108b3abdd00e8741ad48ad151e01d8683f95ee41a5aa6caeedee1446f96f7b20",
+    "src/engine/effects/primitives/index.ts": "da7beb07b1460388e8d1faa1651fa990819e65edad7ff847d1b5dd3d4ef02fa6",
+    "src/engine/effects/primitives/materialize-keyword-modifier.ts": "c9ca7ac7f37a5466a15a7fb5790695ca7709266c9dd0dcc38e14b77cc0de8c89",
+    "src/engine/effects/registry.ts": "6cc901f3009acf208b0cbb951ccb0448d3a8a38c529cfc1a25e4ea1cfd832e60",
+    "src/engine/log.ts": "f137d376d752353413a59510c09faa02d45df4a9f51a91172e441d8d50e8a6f9",
+    "src/engine/loops/event-copy-continuation.ts": "4782e20f06e5821121cf7c1be357b18f3ea71b199b5dda98137a765661fc9a4b",
+    "src/engine/rules/floating.ts": "a3c7e070ff2a1f9cfeac8a5aeb15a49c8094785ab252c9596f4d25d7deb3655e",
+    "src/engine/state/types.ts": "fdb78ffb75e200c99608e776708040230b4d620043da2bfee8a974f6e728d5bc",
+    "src/engine/testing/determinization-fidelity.ts": "b4db6084faf70c76dbf04a787bb9f7d22f92eae37dbf551edc256013d0caa07e",
+    "src/engine/view/determinize.ts": "b9d9dec674237b8888f0a5e3c6b2dc7183bcfc40c5e8b35638e9b83d7ab073ec",
+    "src/engine/view/knowledge.ts": "75a9f2deb24c89b3b9f510a73907eec189d6ad7c20631805ceca4662c7d83f64",
+    "src/engine/view/view.ts": "fde0b039a636462911c54bfa511d66529bb7960b7f037b9c78cf610693cca4ac",
+    "src/rules/battle/fold.ts": "78ac7a1edc2d2433bc46fb6f760123b47fd0a79fbd22b4b5a99896828d89c4d5",
+    "src/runtime/battle-prompt-messages.ts": "9800e463dcbc7a23c55aed42a20e8c16a1a8e55ba387171d0ab217b9be070c74",
+    "src/screens/cumulus_adapters/engine-battle-view-model.ts": "e731f1c58b9f678c548c67c834dedee6185a9e026f8b9b6e7661cd8fe3fbb48f"
+  },
+  "frozenReadonly": {
+    "src/engine/rules/zones.ts": {
+      "sha256": "6ae4b30cf024dcbcb74cc2bcf29983ec3db0442d4dacfa90ddfcffd6b9b8cb9b",
+      "exactBase": true
+    },
+    "src/engine/rules/figments.ts": {
+      "sha256": "147c62502412376520d47daef263ff3e6aeb0bca10b11e01d13f979f2f94c2b5",
+      "exactBase": true
+    },
+    "src/engine/rules/turn-log.ts": {
+      "sha256": "596a9c85c796ef93cdd45d11954b6ef09b93ec49b19f6b50e37b4bf75e1afc06",
+      "exactBase": true
+    },
+    "src/engine/state/create.ts": {
+      "sha256": "915e50d79254f4046218a9f3cfc4fc28ea361e956a3a76ee3506ccf7867d1920",
+      "exactBase": true
+    },
+    "src/engine/state/clone.ts": {
+      "sha256": "426589bf8e3a28c12629f02632fdec8da562b759f945c84d82d3f8c741e64be7",
+      "exactBase": true
+    },
+    "src/engine/dsl/types.ts": {
+      "sha256": "96efb6c0333ef7d95d068f7c18b8c00bacc6b2c686081667bd36e707a9058444",
+      "exactBase": true
+    },
+    "src/engine/dsl/builders.ts": {
+      "sha256": "5ea9a5c970273ae0a907def87e13cd0e8e58bbe528456a54a0da80871ed1edba",
+      "exactBase": true
+    },
+    "src/engine/effects/types.ts": {
+      "sha256": "8894facb73979c3896472bba6ce1eac05c32eb57d15d6c1b1e9f2319794b22d2",
+      "exactBase": true
+    },
+    "src/engine/triggers/matcher.ts": {
+      "sha256": "64237c64713d3b703e74e66c45438870de41dc9f3b2706049a221b80faf2993e",
+      "exactBase": true
+    },
+    "src/engine/effects/interpreter.ts": {
+      "sha256": "7b5355c46a724b7db1b6bbe06c460259f82540bd5efba1593f4775d4c44b9700",
+      "exactBase": true
+    },
+    "src/engine/continuous/costs.ts": {
+      "sha256": "4d93f5deb6d09eecc4546d22f7daf62135e434727251b95ccfa4989458869540",
+      "exactBase": true
+    }
+  },
+  "sourcePlanAndNativeAdmissions": [
+    "source-proposal.json",
+    "writeack.txt",
+    "unknown-source-repair-ack.txt",
+    "logging-repair-ack.txt",
+    "runtime-authority.txt",
+    "runtime-v2-native-ack.json"
+  ]
+}

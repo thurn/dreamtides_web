@@ -1,3 +1,6 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { staticAbility } from "../../engine/dsl/builders";
+import { firstMaterializationKeyword } from "../../engine/effects/primitives/first-materialization-keyword";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,6 @@ export default dreamsign({
     "eb397537-8a0b-4969-924b-baee5137094c",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  verifiedText: expectedVerifiedText("The first character you materialize each turn has awakened."),
+  abilities: () => [staticAbility(firstMaterializationKeyword())],
 });

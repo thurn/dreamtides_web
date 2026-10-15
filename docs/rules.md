@@ -1513,6 +1513,31 @@ Putting a character directly into play (for example "return to play" or
 "materialize from your void") is not "playing" it: it costs no energy, does not
 use the stack, cannot be Prevented, and does not fire "when you play" triggers.
 
+**First-materialization keywords:** "The first character you materialize each
+turn has awakened" gives Awakened permanently to the first character you
+successfully materialize under your control in each turn. Each player's
+materializations are counted separately on either player's turn, including
+extra turns. Characters enter one at a time in their actual materialization
+order, so only the first of a batch qualifies. A failed materialization,
+including one prevented by a full back rank, counts for nothing. Initial
+battlefield placement is setup and consumes no materialization.
+
+Every actual materialization counts, including a character played normally,
+a character put into play without being played, a created character, a figment
+or figment copy, and an in-play character rematerialized. A rematerialization
+can receive the keyword but preserves exhaustion. A qualifying true entry has
+the keyword before exhaustion is determined and before materialization
+observers match it. An already Awakened character still consumes the first
+occasion. The ability must apply as that occasion happens; beginning to apply
+later does not select an earlier materialization or a later character.
+
+The permanent grant follows that physical character across zone and control
+changes and remains after its source leaves. A character that ceases to exist
+keeps nothing. Multiple sources select the same first occasion; they do not
+select additional characters. Later materializations and turn boundaries do
+not end an earlier grant. Other keyword gains, losses, and durations use their
+ordinary ordering and lifetime rules.
+
 **Materialization keyword windows:** "When you abandon a character, characters
 you materialize this turn have awakened" grants Awakened through this turn's
 Ending to each physical character you successfully materialized earlier this

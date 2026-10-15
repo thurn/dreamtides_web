@@ -192,6 +192,8 @@ const FIXED_CHANGE_KINDS: Readonly<Record<FixedCardChange["kind"], boolean>> = {
   subtype: true,
   keyword: true,
   materializeKeyword: true,
+  // Its permanent physical member is retained by the anonymous floating-member channel.
+  firstMaterializationKeyword: false,
   abilities: false,
   // It ends as its character leaves play, and a view keeps it without its source (rules/floating.ts `keptWithoutSource`).
   loseAbilities: false,

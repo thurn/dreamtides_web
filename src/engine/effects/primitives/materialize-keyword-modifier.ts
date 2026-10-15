@@ -1,3 +1,4 @@
+import { applyFirstMaterializationKeyword } from "./first-materialization-keyword";
 import { addFloating } from "../../rules/floating";
 import { materializedThisTurn } from "../../rules/turn-log";
 import type { InstanceId, Side } from "../../state/ids";
@@ -18,6 +19,7 @@ function grantEntry(ctx: StepContext, instance: InstanceId, window: FloatingEffe
 
 /** Called before a true entry's exhaustion check, or a rematerialization's announcement. */
 export function applyMaterializeKeywordModifiers(ctx: StepContext, instance: InstanceId, side: Side): void {
+  applyFirstMaterializationKeyword(ctx, instance, side);
   const windows = ctx.state.floating.filter(effect => effect.change.kind === "materializeKeyword" && effect.change.instance === null && effect.change.player === side);
   for (const window of windows) grantEntry(ctx, instance, window);
 }

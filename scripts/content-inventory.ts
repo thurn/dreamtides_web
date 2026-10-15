@@ -336,6 +336,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   prim("ifThen", "if-then.ts"),
   prim("materializeFigmentCopy", "materialize-figment-copy.ts"),
   prim("materializeFigments", "materialize-figments.ts"),
+  prim("firstMaterializationKeyword", "first-materialization-keyword.ts", { note: "First successful materialization each turn gains Awakened before entry readiness" }),
   prim("optional", "optional.ts"),
   prim("phase", "phase.ts"),
   prim("prevent", "prevent.ts"),
@@ -805,6 +806,7 @@ const CORRECTIONS: Readonly<Record<string, Correction>> = {
   "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a": { remove: ["return-from-void"], note: "returns itself from play to hand" },
   "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad": { remove: ["put-in-deck"], note: "prevent with the deckTop destination" },
   // Dreamsigns.
+  "ede46f71-aa77-4b12-9824-0d3706da6a22": { add: ["first-materialization-keyword"], remove: ["grant-keyword"], note: "Bounded first actual materialization, before exhaustion; permanent physical Awakened grant" },
   "00cc7e7f-4245-4447-b9dc-f647dc6241a2": { add: ["original-deck-spark"], remove: ["spark-static", "zone-cards", "static-zone"], note: "C4 original physical membership and all-zone static spark; no selection prompt" },
   "3d86f8ce-42ac-43dc-96d5-121e6d1a6167": { add: ["type-remap"], remove: ["choose-subtype", "subtype-reference"], note: "C12: a journey-level remap stored with the run (5.6), applied to battle selectors and figment types through the deck-entry variant" },
   "427c71e3-178f-4352-8d6f-f0789cb13c2d": { note: "journey essence paid from a battle event (removing an enemy outside a challenge); 5.6 builds the battle-result hook" },
@@ -833,6 +835,7 @@ const KEYWORD_TAGS: ReadonlySet<string> = new Set(["kw-awakened", "kw-vengeful",
 
 // Extra tags a correction may add that no rule defines.
 const EXTRA_TAGS: Readonly<Record<string, TagInfo>> = {
+  "first-materialization-keyword": { family: 8, needs: ["firstMaterializationKeyword"] },
   "give-opponent-points-cost": { family: 4, needs: ["giveOpponentPointsCost"] },
   "conditional-alternative-cost": { family: 15, needs: ["conditionalAlternativeCost", "alternativePlayResult"] },
   "banish-self": { family: 5, needs: ["banishCards"] },

@@ -1036,6 +1036,7 @@ function isEffectRef(value: unknown): boolean {
 const FLOATING_CHANGE_VALIDATORS: {
   readonly [K in FloatingChange["kind"]]: (value: Record<string, unknown>) => boolean;
 } = {
+  firstMaterializationKeyword: value => isInstanceId(value.instance) && isSide(value.player) && value.keyword === "awakened",
   materializeKeyword: value => nullable(isInstanceId)(value.instance) && isSide(value.player) && value.keyword === "awakened",
   allTypes: (value) => isInstanceId(value.instance),
   temporary: (value) => isInstanceId(value.instance),
@@ -1102,6 +1103,8 @@ function isFloatingEffect(value: unknown): boolean {
     isIndex(value.timestamp) &&
     isExpiry(value.expiry) &&
     isFloatingChange(value.change) &&
+    (!(isPlainRecord(value.change) && value.change.kind === "firstMaterializationKeyword") ||
+      (isPlainRecord(value.expiry) && value.expiry.at === "never")) &&
     (!(isPlainRecord(value.change) && value.change.kind === "materializeKeyword") ||
       (isPlainRecord(value.expiry) && value.expiry.at === "endOfTurn")) &&
     (value.sourceObservedBy === undefined || (isPlainRecord(value.change) && value.change.kind === "disableTriggers" && value.change.mode === "triggeredAndActivated" &&

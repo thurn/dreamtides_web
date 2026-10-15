@@ -909,6 +909,8 @@ function effectStartedText(
   const { change, expiry } = event;
   const line = (subject: string, status: EngineStatusCopy) => `${subject}: ${engineStatusLabel(status, human)}.`;
   switch (change.kind) {
+    case "firstMaterializationKeyword":
+      return change.instance === null ? null : line(card(change.instance), { kind: "keyword", keyword: change.keyword, gains: true, expiry });
     case "materializeKeyword":
       return change.instance === null
         ? `${change.player === human ? "Your" : "Your opponent’s"} materializations have Awakened${expiryPhrase(expiry, human)}.`

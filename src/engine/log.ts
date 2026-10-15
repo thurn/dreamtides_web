@@ -26,6 +26,7 @@
  * | an `effectStarted` event whose character loses all its abilities | `engine.abilitiesLost`, with its card, source, and expiry |
  * | a bounded chosen-hand banishment's `effectStarted` event | `engine.banishReturnStarted`, with its physical source, card, entry and expiry |
  * | a selective-disabling `effectStarted` event | `engine.abilitiesDisabled`, with its physical source, target, mode and expiry |
+ * | a first-materialization keyword `effectStarted` event | `engine.firstMaterializationKeyword`, with its physical member, source, player, keyword and permanent expiry |
  * | an `effectEnded` event | `engine.effectEnded`, correlated with its start by effect id |
  * | a `handEmptied` event | `engine.handEmptied`, with only the hand holder |
  * | a `returnedToHand` event | `engine.returnedToHand`, correlated by physical instance |
@@ -106,6 +107,7 @@ export type EngineLogRecord =
   | (RecordBase & { readonly event: "engine.abilitiesDisabled"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.abilitiesLost"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.banishReturnStarted"; readonly detail: EventOf<"effectStarted"> })
+  | (RecordBase & { readonly event: "engine.firstMaterializationKeyword"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.effectEnded"; readonly detail: EventOf<"effectEnded"> })
   | (RecordBase & { readonly event: "engine.revealed"; readonly detail: EventOf<"revealed"> })
   | (RecordBase & { readonly event: "engine.handEmptied"; readonly detail: EventOf<"handEmptied"> })
@@ -145,6 +147,7 @@ export function eventLogRecord(event: EngineEvent, version: number): EngineLogRe
     case "winConditionMet":
       return { event: "engine.winCondition", version, detail: event };
     case "effectStarted":
+      if (event.change.kind === "firstMaterializationKeyword") return { event: "engine.firstMaterializationKeyword", version, detail: event };
       if (event.change.kind === "disableTriggers") return { event: "engine.abilitiesDisabled", version, detail: event };
       if (event.change.kind === "banishedToHandUntil") return { event: "engine.banishReturnStarted", version, detail: event };
       if (event.change.kind === "loseAbilities") return { event: "engine.abilitiesLost", version, detail: event };

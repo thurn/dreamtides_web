@@ -269,7 +269,7 @@ function restoreLoop(state: BattleState, view: BattleView): void {
 
 /** A floating change from its view, with each captured card resolved by `captured`. */
 function floatingChange(change: FloatingChangeView, captured: (cards: readonly CapturedCardView[]) => InstanceId[]): FloatingChange {
-  if (change.kind === "materializeKeyword") {
+  if (change.kind === "materializeKeyword" || change.kind === "firstMaterializationKeyword") {
     if (change.instance !== null && typeof change.instance !== "string" &&
         (!Number.isSafeInteger(change.instance.member) || change.instance.member < 0 || !SIDES.includes(change.instance.owner))) {
       throw new Error("Cannot determinize invalid materialization keyword member");
@@ -524,7 +524,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     instances[id] = { ...instances[id], ...(descriptor.journeyDeck === undefined ? {} : { journeyDeck: descriptor.journeyDeck }), printing: copy(descriptor.printing), variant: copy(descriptor.variant), status: copy(descriptor.status) };
     assigned.set(descriptor.member, id);
   }
-  const capturedFacts = [...view.floating.flatMap(({ change }) => change.kind === "materializeKeyword" && change.instance !== null ? [change.instance] : change.kind === "trigger" ? change.captured ?? [] : []),
+  const capturedFacts = [...view.floating.flatMap(({ change }) => (change.kind === "materializeKeyword" || change.kind === "firstMaterializationKeyword") && change.instance !== null ? [change.instance] : change.kind === "trigger" ? change.captured ?? [] : []),
     ...shownOccurrences(view.triggerQueue).flatMap((trigger) => trigger.captured ?? [])].filter((card): card is HiddenCapturedCardView => typeof card !== "string" && "printing" in card && "variant" in card);
   const rememberedSource = (source: AbilitySource | { readonly member: number } | null, allowUnknown = false): AbilitySource => {
     if (source !== null && typeof source === "object" && "member" in source) {
@@ -876,7 +876,8 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
           : provenance != null && "ceased" in provenance ? ceasedSource(provenance.ceased)
           : provenance !== undefined ? rememberedSource(provenance, effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated")
             : effect.source === null && effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated" ? rememberedSource(null)
-              : effect.source === null ? { kind: "avatar", side: effect.controller } : copy(effect.source),
+              : effect.source === null && effect.change.kind === "firstMaterializationKeyword" ? rememberedSource(null)
+                : effect.source === null ? { kind: "avatar", side: effect.controller } : copy(effect.source),
         ...(effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated"
           ? { sourceObservedBy: provenance != null && "obligation" in provenance ? [] : [viewer] } : {}),
         change: floatingChange(effect.change, captured) };
