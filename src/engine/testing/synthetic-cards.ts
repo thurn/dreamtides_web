@@ -13,7 +13,10 @@ import {
 } from "../catalog";
 import { parseCardId } from "../../types/card-identity";
 import { parseDreamwellCardId } from "../../types/identifiers";
-import { activated, all, anyCharacter, discardCost, energy, event as eventAbility, keyword, target } from "../dsl/builders";
+import { activated, all, anyCharacter, discardCost, energy, event as eventAbility, keyword, self, staticAbility, target } from "../dsl/builders";
+import { firstPlayedSparkSetter } from "../effects/primitives/first-played-spark-setter";
+import { costModifierNth } from "../effects/primitives/cost-modifier";
+import { returnToHand } from "../effects/primitives/return-to-hand";
 import { dissolve } from "../effects/primitives/dissolve";
 import { erode } from "../effects/primitives/erode";
 import { materializeFigmentCopy } from "../effects/primitives/materialize-figment-copy";
@@ -91,6 +94,12 @@ export const SYNTHETIC = {
   event1: event(12, 1, "standard"),
   fastEvent: event(13, 1, "fast"),
   interruptEvent: event(14, 1, "interrupt"),
+  firstPlayedSparkSetter: {
+    ...character(0x718000, 0, 1), status: "authored",
+    abilities: () => [staticAbility(firstPlayedSparkSetter(0)),
+      staticAbility(costModifierNth("you", { cardType: "character" }, 1, { reduce: 2 })),
+      activated([], returnToHand(self()))],
+  },
 } as const;
 
 export const SYNTHETIC_CARDS: readonly EngineCardDefinition[] = Object.values(SYNTHETIC);

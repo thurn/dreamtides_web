@@ -1,0 +1,387 @@
+{
+  "bead": "hv-umm2.718",
+  "sourceBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+  "status": "PASS combined saved reload/player flow; original desktop/mobile judged captures retain their original epoch",
+  "originalSourceBase": "29f6decf5ff6fbaf5ca8a6a3551de68b6a1074ff",
+  "originalSourceSHA256": {
+    "docs/plan/engine-design.md": "ce0be2dd21d5e09aae00afe303329b7a28107363d911a9f0418bf7921fe5192c",
+    "docs/plan/evidence/content-inventory.json": "ca754596eb42ca9b40b85b1859ed73d2ac29515d10d154d3be7e71bd01e4f99f",
+    "docs/plan/evidence/friction/hv-umm2.718.json": "5dcc33937014b3c760a0d09004193493b96ea4e7862f5bbdc9212420c1365fc2",
+    "docs/plan/evidence/pre-existing/hv-umm2.718.md": "e92fc6d34bf1b54c6719aa97c5b783e763c0ed15d0aefcd73bfb33f511f59b99",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.718-1.md": "7cae9e6703aaa398d9fb92b595242ec9401ae3159fa67bbd99a69d58c2977824",
+    "docs/rules.md": "8836f2c7914649307ba1f564574cdfa91b971e5525cefcc5cd3e214d2e5f0f19",
+    "scripts/content-inventory.ts": "3c8f24ac245bf9c5ed6f698b80a8e45ed55badee4eba9b0f72aa0107a2b4970d",
+    "src/engine/effects/primitives/contracts/first-played-spark-setter-support.ts": "50f8e210ce3f89922623adf9581b57ab19f660b6612a3daf7935e26cdba72dd2",
+    "src/engine/effects/primitives/contracts/first-played-spark-setter.contracts.ts": "2c4b38ed60bd34efcea14315e10666c30f1f3eec97a11d154d7cbd94fe094223",
+    "src/engine/effects/primitives/contracts/history-refs.contracts.ts": "1446707f1291660a12ab2a2c7b35b1d5faa0ffdcd3952a8962cb9f5c49999c8b",
+    "src/engine/effects/primitives/first-played-spark-setter.ts": "77bdbffac0f378bca832fc2ff82fd1b75669127de54b13e6c5af1b518b09c078",
+    "src/engine/effects/primitives/index.ts": "12640119037da1818f5b16c840183542140ca2210e4cae9ec61646508d0d7370",
+    "src/engine/effects/registry.ts": "2b879985a5b8dd5dbe47e2ac90f6ceaed7b6678490c8a8133a80ea3619396343",
+    "src/engine/testing/synthetic-cards.ts": "ec3e23320168ce455bc467f3efc5dfa87cfa45e68b9ed106b8a8259c94f18a31",
+    "src/engine/view/determinize.test.ts": "358197a0d1ac5688eccf34ac6ddc4b2e8ee77d465cb2db46299cebe3955ba8e6",
+    "src/engine/view/determinize.ts": "28ae0e2ce85d86ad2343606720d36c33fdf6539426398dcf6042d9d3ce4e1223",
+    "src/engine/view/view.test.ts": "4b7d7c4e653e42e1213b88e3b4a28764e8497d1b58f4c8b9fce396420c6e6a42",
+    "src/engine/view/view.ts": "82f7284a8a376718a8f984370cba01804987bb955ac88097dc81706b51b7b7e3"
+  },
+  "original": {
+    "epoch": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+    "invocation": "run-sxt5CD",
+    "wallMs": {
+      "browserLeaseWait": 9,
+      "serve": 2610,
+      "scenario": 30088,
+      "total": 32772
+    },
+    "runnerPid": 94833,
+    "serverPid": 94878,
+    "port": 5274,
+    "slot": 1,
+    "ok": true,
+    "caps": [],
+    "results": {
+      "desktop": {
+        "early": {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=69964b8e-0f38-4fb7-a0cd-89430ef04c2d&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000718000%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000003%22%2C%225e5e5e5e-0000-4000-8000-000000000003%22%5D%2C%22energy%22%3A7%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-00000000000e%22%5D%2C%22energy%22%3A0%7D%7D&game=bodksh",
+          "width": 1440,
+          "height": 900,
+          "dpr": 2
+        },
+        "geometry": [
+          {
+            "id": "i1",
+            "spark": "1",
+            "slot": "B0",
+            "width": 89.5,
+            "height": 89.5,
+            "visible": true,
+            "hit": true
+          },
+          {
+            "id": "i2",
+            "spark": "0",
+            "slot": "B1",
+            "width": 89.5,
+            "height": 89.5,
+            "visible": true,
+            "hit": true
+          },
+          {
+            "id": "i3",
+            "spark": "2",
+            "slot": "B2",
+            "width": 89.5,
+            "height": 89.5,
+            "visible": true,
+            "hit": true
+          }
+        ],
+        "payment": {
+          "before": 7,
+          "after": 5
+        },
+        "first": {
+          "instance": "i2",
+          "spark": 0
+        },
+        "second": {
+          "instance": "i3",
+          "spark": 2
+        },
+        "sourceDeparture": "hand",
+        "reload": true
+      },
+      "mobile": {
+        "early": {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=69964b8e-0f38-4fb7-a0cd-89430ef04c2d&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000718000%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000003%22%2C%225e5e5e5e-0000-4000-8000-000000000003%22%5D%2C%22energy%22%3A7%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-00000000000e%22%5D%2C%22energy%22%3A0%7D%7D&game=mm7yxh",
+          "width": 390,
+          "height": 844,
+          "dpr": 2
+        },
+        "geometry": [
+          {
+            "id": "i1",
+            "spark": "1",
+            "slot": "B0",
+            "width": 53.859375,
+            "height": 53.859375,
+            "visible": true,
+            "hit": true
+          },
+          {
+            "id": "i2",
+            "spark": "0",
+            "slot": "B1",
+            "width": 53.859375,
+            "height": 53.859375,
+            "visible": true,
+            "hit": true
+          },
+          {
+            "id": "i3",
+            "spark": "2",
+            "slot": "B2",
+            "width": 53.859375,
+            "height": 53.859375,
+            "visible": true,
+            "hit": true
+          }
+        ],
+        "payment": {
+          "before": 7,
+          "after": 5
+        },
+        "first": {
+          "instance": "i2",
+          "spark": 0
+        },
+        "second": {
+          "instance": "i3",
+          "spark": 2
+        },
+        "sourceDeparture": "hand",
+        "reload": true
+      }
+    },
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "gameId": "bodksh",
+        "rows": 45,
+        "selectedBy": "url",
+        "reason": null
+      },
+      {
+        "viewport": "mobile",
+        "gameId": "mm7yxh",
+        "rows": 45,
+        "selectedBy": "url",
+        "reason": null
+      }
+    ],
+    "inspection": {
+      "at": "2026-10-15T05:28:30.037906+00:00",
+      "sourceEpoch": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+      "imagesViewedBy": "implementing Codex agent via view_image; root independently inspected (parent-browser-verification.json)",
+      "captures": [
+        {
+          "filename": "first-played-source-departed-desktop.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "17543e4b4e951e7fe13c5b6f52845a5dd5ef86e5c746f9284e1496f4f1ae1309"
+        },
+        {
+          "filename": "first-played-zero-desktop.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "8e8de2e1cc3da31900375bb843e0e5e34948d7558c0ef00bc6cee1f4deb12ab9"
+        },
+        {
+          "filename": "first-played-zero-mobile.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "388a294a0d9e7fef83a7831b98dae84b7c9998208f067760a21cd1fd2e30b0a0"
+        }
+      ],
+      "serverGroupCensus": "",
+      "portListeners": "",
+      "inspection": "Synthetic art-free cards render distinct 1/0/2 spark at first-play state on desktop/mobile. Visible positive-hit cards fit rank viewport. Source-departure desktop shows two2spark characters and source in ordinary hand; hand fan extends beyond lower edge by existing layout. No changed UI or animation claims."
+    },
+    "previousFailedInvocation": "run-oPsuwJ: presentation-readiness caller timeout after first real play; no second intent/captures; caps empty; retained failed JSONL and rawreceipt.",
+    "epochQualification": "Browser workflow source bodies remain identical after browser02. The sole later runtime delta admitted separately is firstPlayedSparkSetter passive event-copy classification, covered by real modal-copy contracts; parent accepted bounded epoch qualification. No human inspection claimed."
+  },
+  "combined": {
+    "sourceBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+    "sourceEpoch": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+    "invocation": "run-neNGpM",
+    "ok": true,
+    "wallMs": {
+      "browserLeaseWait": 6,
+      "serve": 2590,
+      "scenario": 12463,
+      "total": 15130
+    },
+    "runnerPid": 95682,
+    "serverPid": 96256,
+    "port": 5274,
+    "slot": 1,
+    "captures": [],
+    "caps": [],
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "gameId": "r874x9",
+        "selectedBy": "url",
+        "rows": 45,
+        "reason": null
+      }
+    ],
+    "result": {
+      "ids": {
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "player": {
+          "front": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "back": [
+            "i1",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "hand": [
+            "i2",
+            "i3"
+          ],
+          "void": []
+        },
+        "enemy": {
+          "front": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "back": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "hand": [
+            "i12"
+          ],
+          "void": []
+        }
+      },
+      "early": {
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=69964b8e-0f38-4fb7-a0cd-89430ef04c2d&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000718000%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000003%22%2C%225e5e5e5e-0000-4000-8000-000000000003%22%5D%2C%22energy%22%3A7%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-00000000000e%22%5D%2C%22energy%22%3A0%7D%7D&game=r874x9",
+        "width": 1440,
+        "height": 900,
+        "dpr": 2
+      },
+      "geometry": [
+        {
+          "id": "i1",
+          "spark": "1",
+          "slot": "B0",
+          "width": 89.5,
+          "height": 89.5,
+          "visible": true,
+          "hit": true
+        },
+        {
+          "id": "i2",
+          "spark": "0",
+          "slot": "B1",
+          "width": 89.5,
+          "height": 89.5,
+          "visible": true,
+          "hit": true
+        },
+        {
+          "id": "i3",
+          "spark": "2",
+          "slot": "B2",
+          "width": 89.5,
+          "height": 89.5,
+          "visible": true,
+          "hit": true
+        }
+      ],
+      "payment": {
+        "before": 7,
+        "after": 5
+      },
+      "first": {
+        "instance": "i2",
+        "spark": 0
+      },
+      "second": {
+        "instance": "i3",
+        "spark": 2
+      },
+      "sourceDeparture": "hand",
+      "logs": {
+        "actions": [
+          {
+            "gameId": "r874x9",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i2",
+              "from": "hand"
+            },
+            "answers": [],
+            "timestamp": "2026-10-15T05:44:04.585Z",
+            "event": "engine.action",
+            "seq": 26
+          },
+          {
+            "gameId": "r874x9",
+            "version": 2,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i3",
+              "from": "hand"
+            },
+            "answers": [],
+            "timestamp": "2026-10-15T05:44:06.127Z",
+            "event": "engine.action",
+            "seq": 33
+          },
+          {
+            "gameId": "r874x9",
+            "version": 4,
+            "side": "player",
+            "action": {
+              "kind": "activate",
+              "source": "i1",
+              "ability": 2
+            },
+            "answers": [],
+            "timestamp": "2026-10-15T05:44:07.908Z",
+            "event": "engine.action",
+            "seq": 38
+          }
+        ],
+        "uuidDeclaration": true
+      },
+      "reload": true
+    },
+    "cleanup": {
+      "runnerGroupAfterExit": [],
+      "serverPidCensus": "",
+      "portListenerCensus": "COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME\nnode    91089 dthurn   30u  IPv4 0x614825418d462b3e      0t0  TCP 127.0.0.1:5274 (LISTEN)\n"
+    },
+    "qualification": "One fresh combined desktop first-play/source-departure/saved-reload check, including complete null current first-event windows. No new images or visual changes; original desktop/mobile3 inspected captures remain qualified to original source epoch."
+  },
+  "latestSourceBase": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+  "latestQualification": "Original three desktop/mobile captures and failed browser01 caller remain at original source; actual saved reload/player flow run-neNGpM remains at9eb3. No96 browser run claimed. Registry addition composes already separate624 operation, public runtime contracts cover coupling."
+}

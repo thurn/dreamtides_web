@@ -59,6 +59,7 @@ const PASSIVE_STATICS: readonly string[] = [
   "firstMaterializationKeyword", // Copy-only work cannot materialize a character or advance its turn.
   "firstPlayedCharacterEntrySpark", // This FIFO cannot play or materialize a character.
   "costModifierNth", // This copy-only FIFO cannot change committed plays or advance the turn.
+  "firstPlayedSparkSetter", // Copy-only work cannot change the first play, its live subject or the source.
   "costModifier", "sparkModifier", "grant", "grantCardKeyword", "giveAllTypes", "setBaseSpark",
   "playFromZone", "playRestriction", "selfCostReduction", "revealDeckTop", "reclaimNotBanished",
   "preserveEphemeralHand", // Own-Ending cleanup is inert while this FIFO keeps phases fixed.

@@ -290,7 +290,12 @@ describe("historyRefs", () => {
       expect(comparableView(engine.view(sampled, viewer))).toEqual(comparableView(view));
       expect(loaded(sampled)).not.toBeNull();
       const physical = sampled.turnLog.played[side][0].instance;
-      expect(sampled.instances[physical]).toBeUndefined();
+      const member = view.turnLog.played[side][0].firstCharacterMember;
+      const descriptor = view.hiddenCards?.[side].find(card => card.member === member);
+      expect(descriptor).toBeDefined();
+      expect({ printing: descriptor!.printing, variant: descriptor!.variant }).toEqual(view.turnLog.played[side][0].copiable);
+      expect(sampled.instances[physical]).toMatchObject({ zone: "deck", printing: descriptor!.printing, variant: descriptor!.variant });
+      expect(sampled.instances[sampled.turnLog.materialized![side][0].instance]).toBeUndefined();
       const reading = engine.apply(sampled, side, { kind: "activate", source: { kind: "dreamsign", side, index: 0 }, ability: 0 }, NO_PROMPTS);
       const read = passUntil(engine, reading.state, next => next.stack.length === 0 && next.triggerQueue.length === 0);
       expect(repeated([...reading.events, ...read.events])).toEqual([]);

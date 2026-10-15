@@ -1,0 +1,4517 @@
+{
+  "bead": "hv-umm2.718",
+  "sourceBase": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+  "clockStart": "2026-10-15T04:48:50.496648Z",
+  "status": "Combined implementation restored on96a1; parent fresh cold review and exact native delivery remain after final amended commit.",
+  "receiptLocation": "/tmp/dreamtides-718-01a13a7a",
+  "receiptQualification": "Each label retains argv, source hashes, UTC/CPU/load, output hashes, PID/PG birth before effects and exit census in scratch. Review01 captured empty sourceHashes because staged files were omitted by collector; review-01-source-supplement.json was recorded after dispatch while index/source stayed unchanged. Subsequent collector uses git diff HEAD and captures staged files before effects. Historical zero-selected/import-error counterfactual attempts are diagnostic only.",
+  "counterfactuals": [
+    {
+      "label": "cf1-emblem-stack-03",
+      "mutationSha256": "c30aac9c5176e2889ee517d1d6f6194780ba972d08feb78e71893f7cd6e93644",
+      "exit": 1,
+      "genuineAssertionFailures": 2
+    },
+    {
+      "label": "cf2-materialization-03",
+      "mutationSha256": "8e8b7b9401bfe7efc5c130cc80182967e6077f5547ac08d9816a96d77f8895eb",
+      "exit": 1,
+      "genuineAssertionFailures": 2
+    },
+    {
+      "label": "cf3-final-zero-03",
+      "mutationSha256": "68febe9a443a7e92c5bdd96ad2dad4a87e9e9ff675602f5200bd7435293ca7fd",
+      "exit": 1,
+      "genuineAssertionFailures": 2
+    },
+    {
+      "label": "cf4-reentry-03",
+      "mutationSha256": "08cb968c74d6a1751151e45f540e013cfbd875666d4c9b8cb81937efcb868df6",
+      "exit": 1,
+      "genuineAssertionFailures": 2
+    },
+    {
+      "label": "cf5-copy-inheritance-03",
+      "mutationSha256": "dd5fea4891bbe3f8c99fdabcca1b92513d070e93197b2f47d255b5413478acad",
+      "exit": 1,
+      "genuineAssertionFailures": 2
+    }
+  ],
+  "limits": [
+    "No production Flash UUID authoring. Original251 keeps full fiveUUID/child668/weighted300/preflight/sweep/D21/batch acceptance.",
+    "Old standalone BattleView with absent firstCharacterMember retains anonymous fallback; authoritative saved state preserves physical identity.",
+    "Generic anonymous materialized/departure histories and authoritative state/schema stay unchanged.",
+    "No local fuzzer or step runner modification; no transferred release fuzz waiver.",
+    "No custom logging operation: existing committed engine actions and catalog UUID declaration reconstruct ordinary play/source activation; hidden DTO marker is derived."
+  ],
+  "originalChecks": {
+    "focused-06": {
+      "utcStart": "2026-10-15T05:19:23.681217+00:00",
+      "utcEnd": "2026-10-15T05:19:28.377118+00:00",
+      "wallS": 4.6957887089811265,
+      "exit": 0,
+      "cpuUserS": 5.652552,
+      "cpuSystemS": 1.173135,
+      "sourceEpochSha256": "4d697a1c368889695153b38a469f9a598ec00598e2941bb4e49197e0f12b81e6",
+      "pid": 4231,
+      "pgid": 4231,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        10.97119140625,
+        14.380859375,
+        14.11083984375
+      ],
+      "loadEnd": [
+        10.81298828125,
+        14.29150390625,
+        14.08056640625
+      ],
+      "stdoutSha256": "02a4a049864284c7853ba8d055ac09507d555d60a56df2e26b8c59c603750e29",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration-01": {
+      "utcStart": "2026-10-15T05:25:14.699350+00:00",
+      "utcEnd": "2026-10-15T05:25:34.931350+00:00",
+      "wallS": 20.231743459007703,
+      "exit": 0,
+      "cpuUserS": 28.150467,
+      "cpuSystemS": 1.5339639999999999,
+      "sourceEpochSha256": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+      "pid": 91496,
+      "pgid": 91496,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        5.4521484375,
+        10.6689453125,
+        12.74365234375
+      ],
+      "loadEnd": [
+        8.27685546875,
+        10.9541015625,
+        12.7958984375
+      ],
+      "stdoutSha256": "9a11c1a3dd3c335b157c51b666bb06bbe80e06d3eda500dcaeb8b906fbf647c9",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inventory-check-01": {
+      "utcStart": "2026-10-15T05:25:19.551164+00:00",
+      "utcEnd": "2026-10-15T05:25:22.228410+00:00",
+      "wallS": 2.677115332975518,
+      "exit": 0,
+      "cpuUserS": 3.060438,
+      "cpuSystemS": 0.7879879999999999,
+      "sourceEpochSha256": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+      "pid": 91817,
+      "pgid": 91817,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        5.73583984375,
+        10.64111328125,
+        12.7216796875
+      ],
+      "loadEnd": [
+        5.73583984375,
+        10.64111328125,
+        12.7216796875
+      ],
+      "stdoutSha256": "dd71741421fa680a35c9ac132e4c77a3526538fe88f4c1722b735261a8d8b4f3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "review-01": {
+      "utcStart": "2026-10-15T05:20:22.784743+00:00",
+      "utcEnd": "2026-10-15T05:21:42.714364+00:00",
+      "wallS": 79.92868374998216,
+      "exit": 1,
+      "cpuUserS": 216.16469,
+      "cpuSystemS": 20.821325,
+      "sourceEpochSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "pid": 11317,
+      "pgid": 11317,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        14.060546875,
+        14.4658203125,
+        14.14697265625
+      ],
+      "loadEnd": [
+        16.6337890625,
+        15.68701171875,
+        14.6728515625
+      ],
+      "stdoutSha256": "26549fb5b7e6dc36a88d20be929494b02408f3d237408c77d25254c3838e68e9",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "review-02": {
+      "utcStart": "2026-10-15T05:25:42.278178+00:00",
+      "utcEnd": "2026-10-15T05:26:56.582279+00:00",
+      "wallS": 74.3033027080237,
+      "exit": 0,
+      "cpuUserS": 207.22182,
+      "cpuSystemS": 20.318054,
+      "sourceEpochSha256": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+      "pid": 94060,
+      "pgid": 94060,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        8.33447265625,
+        10.92138671875,
+        12.7734375
+      ],
+      "loadEnd": [
+        13.34716796875,
+        12.439453125,
+        13.2265625
+      ],
+      "stdoutSha256": "b31e9ffc8504d196fdf2fa0836373c9c39a9ffd81927095af8b157bf5db02248",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "loop-witness-01": {
+      "utcStart": "2026-10-15T05:27:16.402401+00:00",
+      "utcEnd": "2026-10-15T05:27:20.925912+00:00",
+      "wallS": 4.523343792010564,
+      "exit": 1,
+      "cpuUserS": 5.45223,
+      "cpuSystemS": 1.135116,
+      "sourceEpochSha256": "f12da764e6b8d1802087b131b6d1c6b70a23380259a2da9c0c94e22d2ea0bfdb",
+      "pid": 57718,
+      "pgid": 57718,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        11.84130859375,
+        12.138671875,
+        13.09912109375
+      ],
+      "loadEnd": [
+        11.53369140625,
+        12.06982421875,
+        13.06884765625
+      ],
+      "stdoutSha256": "809fe1d207be79f829f25e6de48d49f2ca5d6f35a887b2a9ef88d9ea24ef98cb",
+      "stderrSha256": "3591be00fe654caf5e0bae71372c9ed14a8910806848d0bef56d3a174cf5b519"
+    },
+    "loop-optional-01": {
+      "utcStart": "2026-10-15T05:28:15.437747+00:00",
+      "utcEnd": "2026-10-15T05:28:19.889111+00:00",
+      "wallS": 4.451247624994721,
+      "exit": 0,
+      "cpuUserS": 4.973383,
+      "cpuSystemS": 1.161787,
+      "sourceEpochSha256": "03bfb302ae421e98f2c35280ff0ecc67fe852ca962f12a97b10c29e2c25dd6bc",
+      "pid": 61673,
+      "pgid": 61673,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        8.287109375,
+        11.111328125,
+        12.65087890625
+      ],
+      "loadEnd": [
+        8.0234375,
+        11.009765625,
+        12.60595703125
+      ],
+      "stdoutSha256": "2e635c506967e28eb19206961ccb10c50e6208885e154daa760603ea4538ca4d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "loop-fixed-01": {
+      "utcStart": "2026-10-15T05:29:16.696814+00:00",
+      "utcEnd": "2026-10-15T05:29:21.383875+00:00",
+      "wallS": 4.686923334025778,
+      "exit": 0,
+      "cpuUserS": 5.590607,
+      "cpuSystemS": 1.207867,
+      "sourceEpochSha256": "dc4782f6b41b01c4706e88a058e7fa36fef4a44c9cee943ca9e27413a45fb166",
+      "pid": 87370,
+      "pgid": 87370,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        8.20654296875,
+        10.51220703125,
+        12.31640625
+      ],
+      "loadEnd": [
+        8.91064453125,
+        10.61962890625,
+        12.34375
+      ],
+      "stdoutSha256": "72b8e8d85c6dd75d911721cd37a8690ffb9c2b82b115eed1a6d090e40357ebe5",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "focused-final": {
+      "utcStart": "2026-10-15T05:29:30.987247+00:00",
+      "utcEnd": "2026-10-15T05:29:53.013493+00:00",
+      "wallS": 22.025913959019817,
+      "exit": 0,
+      "cpuUserS": 30.791764,
+      "cpuSystemS": 1.751693,
+      "sourceEpochSha256": "9843c31fd135d104e10eeef292ac0eceaa80f2b50c983047ae02a1e80485f058",
+      "pid": 95888,
+      "pgid": 95888,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.0166015625,
+        10.58251953125,
+        12.31005859375
+      ],
+      "loadEnd": [
+        8.47314453125,
+        10.35107421875,
+        12.18603515625
+      ],
+      "stdoutSha256": "e806b42b645254565a8b707c779586734d0e53250a7b4a2bfc1576fe05ef7ca0",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "review-final": {
+      "utcStart": "2026-10-15T05:30:19.654868+00:00",
+      "utcEnd": "2026-10-15T05:31:23.845251+00:00",
+      "wallS": 64.1896683750092,
+      "exit": 0,
+      "cpuUserS": 173.757419,
+      "cpuSystemS": 16.95206,
+      "sourceEpochSha256": "847cf55752c878052cb40644393e26d055e6dc251be8cf2af1ef4072f191bf0a",
+      "pid": 2400,
+      "pgid": 2400,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        8.9248046875,
+        10.2705078125,
+        12.091796875
+      ],
+      "loadEnd": [
+        9.6708984375,
+        10.35400390625,
+        12.00439453125
+      ],
+      "stdoutSha256": "5c07f3e13cefe9496fbc9a20f34fc16839777487832f653afb3c1ce36a789d40",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "knip-01": {
+      "utcStart": "2026-10-15T05:30:24.603738+00:00",
+      "utcEnd": "2026-10-15T05:30:29.882623+00:00",
+      "wallS": 5.278710374957882,
+      "exit": 0,
+      "cpuUserS": 4.753523,
+      "cpuSystemS": 1.827488,
+      "sourceEpochSha256": "847cf55752c878052cb40644393e26d055e6dc251be8cf2af1ef4072f191bf0a",
+      "pid": 2810,
+      "pgid": 2810,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        10.2919921875,
+        10.53125,
+        12.1728515625
+      ],
+      "loadEnd": [
+        10.2685546875,
+        10.52197265625,
+        12.15966796875
+      ],
+      "stdoutSha256": "878ee64ddf1756ad6ff4a9c9059f690f28a4dc4ac15ddd80cd2fba74baa08cc9",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "full-01": {
+      "utcStart": "2026-10-15T05:31:29.800214+00:00",
+      "utcEnd": "2026-10-15T05:33:34.653876+00:00",
+      "wallS": 124.85232704103692,
+      "exit": 0,
+      "cpuUserS": 272.708524,
+      "cpuSystemS": 32.906987,
+      "sourceEpochSha256": "b474bc59520a7b9db2a9ca7d764d16561b2ca5af2b83e6ad4790f26f03b386a0",
+      "pid": 7290,
+      "pgid": 7290,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.419921875,
+        10.27587890625,
+        11.95703125
+      ],
+      "loadEnd": [
+        18.12353515625,
+        11.89990234375,
+        12.28369140625
+      ],
+      "stdoutSha256": "6e81998ba74a73344d5a010a78a36868d20df45cf53ee8f96d9195a8aff3e9d6",
+      "stderrSha256": "afe50dcea0faf4ba060a82e7598ccfba805485053bad219e6c67564f75c16561"
+    },
+    "schema-final": {
+      "utcStart": "2026-10-15T05:34:11.613476+00:00",
+      "utcEnd": "2026-10-15T05:34:11.869750+00:00",
+      "wallS": 0.25619762495625764,
+      "exit": 0,
+      "cpuUserS": 0.10987899999999999,
+      "cpuSystemS": 0.121974,
+      "sourceEpochSha256": "1f81c115ac381078a9f0bbbb2080d69a8aff0957cbd48680bf20ad2ab36417c7",
+      "pid": 52736,
+      "pgid": 52736,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        18.673828125,
+        12.75341796875,
+        12.58056640625
+      ],
+      "loadEnd": [
+        18.673828125,
+        12.75341796875,
+        12.58056640625
+      ],
+      "stdoutSha256": "0b5e9b48873bae800d1bfd626f072eda8c44dc38ab638e13e894eabfe2ac1b9d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "originalSourceSHA256": {
+    "scripts/content-inventory.ts": "3c8f24ac245bf9c5ed6f698b80a8e45ed55badee4eba9b0f72aa0107a2b4970d",
+    "src/engine/effects/primitives/contracts/first-played-spark-setter-support.ts": "50f8e210ce3f89922623adf9581b57ab19f660b6612a3daf7935e26cdba72dd2",
+    "src/engine/effects/primitives/contracts/first-played-spark-setter.contracts.ts": "f7d1f761986da127d51189eb91a0c0b09cc6ef8962ec607c08495a1af6a2d161",
+    "src/engine/effects/primitives/contracts/history-refs.contracts.ts": "1446707f1291660a12ab2a2c7b35b1d5faa0ffdcd3952a8962cb9f5c49999c8b",
+    "src/engine/effects/primitives/first-played-spark-setter.ts": "77bdbffac0f378bca832fc2ff82fd1b75669127de54b13e6c5af1b518b09c078",
+    "src/engine/effects/primitives/index.ts": "12640119037da1818f5b16c840183542140ca2210e4cae9ec61646508d0d7370",
+    "src/engine/effects/registry.ts": "2b879985a5b8dd5dbe47e2ac90f6ceaed7b6678490c8a8133a80ea3619396343",
+    "src/engine/loops/event-copy-continuation.ts": "7fd9501259c2c2cf24d3e5af2d67adea5d4db4b0aa1e48078e2c32e2998a8d98",
+    "src/engine/testing/synthetic-cards.ts": "ec3e23320168ce455bc467f3efc5dfa87cfa45e68b9ed106b8a8259c94f18a31",
+    "src/engine/view/determinize.test.ts": "358197a0d1ac5688eccf34ac6ddc4b2e8ee77d465cb2db46299cebe3955ba8e6",
+    "src/engine/view/determinize.ts": "28ae0e2ce85d86ad2343606720d36c33fdf6539426398dcf6042d9d3ce4e1223",
+    "src/engine/view/view.test.ts": "4b7d7c4e653e42e1213b88e3b4a28764e8497d1b58f4c8b9fce396420c6e6a42",
+    "src/engine/view/view.ts": "82f7284a8a376718a8f984370cba01804987bb955ac88097dc81706b51b7b7e3"
+  },
+  "originalInventory": {
+    "method": "Own script/index/registry/synthetic restored exact HEAD bytes and own RD absent only during diagnostic generator; all other textual generator inputs baseline-identical. Restore hashes checked; runtime registry/synthetic/private primitive changes outside baseline descriptor roots affect no immutable entity projection. No detached checkout/runtime base rebuild.",
+    "total": 1209,
+    "uuidMembershipEqual": true,
+    "immutableFieldsEqual": [
+      "id",
+      "kind",
+      "name",
+      "cardType",
+      "rarity",
+      "cost",
+      "speed",
+      "subtype",
+      "spark",
+      "text",
+      "amplifiedText",
+      "module"
+    ],
+    "baselineStaleness": {
+      "0c52e8c3-a792-4eea-955f-a0c61463c066": [
+        "routing",
+        "rulesDecisions"
+      ],
+      "10bd78de-87ec-44e4-9b16-e755da2a9717": [
+        "cardIssues",
+        "requiredPrimitives",
+        "routing",
+        "rulesDecisions",
+        "status"
+      ],
+      "1cd25b9a-b176-4c51-8349-bb4df35cbf05": [
+        "routing"
+      ],
+      "1cf06f9b-d698-434b-8e36-8a47206f4c0c": [
+        "requiredPrimitives"
+      ],
+      "278ec1ab-f532-4862-84ae-63df5e49548c": [
+        "status"
+      ],
+      "5190a8b8-25a0-4c60-a4de-2e2c5a73af77": [
+        "status"
+      ],
+      "58472ad2-88b1-4dc7-a161-c6dea7d8c43d": [
+        "routing"
+      ],
+      "6b95d6bd-c970-4465-9536-4f21e7630d0a": [
+        "routing"
+      ],
+      "8408b8c2-5a3f-40dd-bac4-98f2736c4176": [
+        "requiredPrimitives",
+        "routing",
+        "rulesDecisions",
+        "status"
+      ],
+      "883f88fb-ac50-419a-8382-c22edee29755": [
+        "requiredPrimitives",
+        "routing"
+      ],
+      "8a2c7b32-26ea-40e2-845a-689da5673b4d": [
+        "requiredPrimitives",
+        "routing",
+        "rulesDecisions",
+        "status"
+      ],
+      "9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1": [
+        "rulesDecisions"
+      ],
+      "c2af5460-e61f-409b-9b86-6ac7db34d748": [
+        "rulesDecisions"
+      ],
+      "cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f": [
+        "requiredPrimitives"
+      ],
+      "d78864da-eb31-4f25-9d51-94fca7ecf810": [
+        "rulesDecisions"
+      ],
+      "d9f0f7ff-63c0-4247-8831-054d7fed931d": [
+        "routing"
+      ]
+    },
+    "featureDelta": {
+      "3dd05e97-1af8-4ae9-8e1f-954eaa63e112": [
+        "correction",
+        "requiredPrimitives",
+        "routing",
+        "rulesDecisions",
+        "tags"
+      ],
+      "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4": [
+        "routing"
+      ]
+    },
+    "featureSourceRestored": {
+      "scripts/content-inventory.ts": true,
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.718-1.md": true,
+      "src/engine/effects/primitives/index.ts": true,
+      "src/engine/effects/registry.ts": true,
+      "src/engine/testing/synthetic-cards.ts": true
+    },
+    "baselineOutputSha256": "4f19e6394c38d05254e1b708b96d0039f60fcdfd03917d3c8ae95d84e98c6097",
+    "finalOutputSha256": "ca754596eb42ca9b40b85b1859ed73d2ac29515d10d154d3be7e71bd01e4f99f"
+  },
+  "originalBrowser": {
+    "epoch": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+    "invocation": "run-sxt5CD",
+    "wallMs": {
+      "browserLeaseWait": 9,
+      "serve": 2610,
+      "scenario": 30088,
+      "total": 32772
+    },
+    "runnerPid": 94833,
+    "serverPid": 94878,
+    "port": 5274,
+    "slot": 1,
+    "ok": true,
+    "caps": [],
+    "results": {
+      "desktop": {
+        "early": {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=69964b8e-0f38-4fb7-a0cd-89430ef04c2d&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000718000%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000003%22%2C%225e5e5e5e-0000-4000-8000-000000000003%22%5D%2C%22energy%22%3A7%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-00000000000e%22%5D%2C%22energy%22%3A0%7D%7D&game=bodksh",
+          "width": 1440,
+          "height": 900,
+          "dpr": 2
+        },
+        "geometry": [
+          {
+            "id": "i1",
+            "spark": "1",
+            "slot": "B0",
+            "width": 89.5,
+            "height": 89.5,
+            "visible": true,
+            "hit": true
+          },
+          {
+            "id": "i2",
+            "spark": "0",
+            "slot": "B1",
+            "width": 89.5,
+            "height": 89.5,
+            "visible": true,
+            "hit": true
+          },
+          {
+            "id": "i3",
+            "spark": "2",
+            "slot": "B2",
+            "width": 89.5,
+            "height": 89.5,
+            "visible": true,
+            "hit": true
+          }
+        ],
+        "payment": {
+          "before": 7,
+          "after": 5
+        },
+        "first": {
+          "instance": "i2",
+          "spark": 0
+        },
+        "second": {
+          "instance": "i3",
+          "spark": 2
+        },
+        "sourceDeparture": "hand",
+        "reload": true
+      },
+      "mobile": {
+        "early": {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=69964b8e-0f38-4fb7-a0cd-89430ef04c2d&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000718000%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000003%22%2C%225e5e5e5e-0000-4000-8000-000000000003%22%5D%2C%22energy%22%3A7%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-00000000000e%22%5D%2C%22energy%22%3A0%7D%7D&game=mm7yxh",
+          "width": 390,
+          "height": 844,
+          "dpr": 2
+        },
+        "geometry": [
+          {
+            "id": "i1",
+            "spark": "1",
+            "slot": "B0",
+            "width": 53.859375,
+            "height": 53.859375,
+            "visible": true,
+            "hit": true
+          },
+          {
+            "id": "i2",
+            "spark": "0",
+            "slot": "B1",
+            "width": 53.859375,
+            "height": 53.859375,
+            "visible": true,
+            "hit": true
+          },
+          {
+            "id": "i3",
+            "spark": "2",
+            "slot": "B2",
+            "width": 53.859375,
+            "height": 53.859375,
+            "visible": true,
+            "hit": true
+          }
+        ],
+        "payment": {
+          "before": 7,
+          "after": 5
+        },
+        "first": {
+          "instance": "i2",
+          "spark": 0
+        },
+        "second": {
+          "instance": "i3",
+          "spark": 2
+        },
+        "sourceDeparture": "hand",
+        "reload": true
+      }
+    },
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "gameId": "bodksh",
+        "rows": 45,
+        "selectedBy": "url",
+        "reason": null
+      },
+      {
+        "viewport": "mobile",
+        "gameId": "mm7yxh",
+        "rows": 45,
+        "selectedBy": "url",
+        "reason": null
+      }
+    ],
+    "inspection": {
+      "at": "2026-10-15T05:28:30.037906+00:00",
+      "sourceEpoch": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+      "imagesViewedBy": "implementing Codex agent via view_image; root independently inspected (parent-browser-verification.json)",
+      "captures": [
+        {
+          "filename": "first-played-source-departed-desktop.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "17543e4b4e951e7fe13c5b6f52845a5dd5ef86e5c746f9284e1496f4f1ae1309"
+        },
+        {
+          "filename": "first-played-zero-desktop.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "8e8de2e1cc3da31900375bb843e0e5e34948d7558c0ef00bc6cee1f4deb12ab9"
+        },
+        {
+          "filename": "first-played-zero-mobile.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "388a294a0d9e7fef83a7831b98dae84b7c9998208f067760a21cd1fd2e30b0a0"
+        }
+      ],
+      "serverGroupCensus": "",
+      "portListeners": "",
+      "inspection": "Synthetic art-free cards render distinct 1/0/2 spark at first-play state on desktop/mobile. Visible positive-hit cards fit rank viewport. Source-departure desktop shows two2spark characters and source in ordinary hand; hand fan extends beyond lower edge by existing layout. No changed UI or animation claims."
+    },
+    "previousFailedInvocation": "run-oPsuwJ: presentation-readiness caller timeout after first real play; no second intent/captures; caps empty; retained failed JSONL and rawreceipt.",
+    "epochQualification": "Browser workflow source bodies remain identical after browser02. The sole later runtime delta admitted separately is firstPlayedSparkSetter passive event-copy classification, covered by real modal-copy contracts; parent accepted bounded epoch qualification. No human inspection claimed."
+  },
+  "originalHeavyLock": {
+    "utcAcquired": "2026-10-15T05:31:29.848910+00:00",
+    "pid": 7295,
+    "pgid": 7290,
+    "loadAtAcquisition": [
+      9.419921875,
+      10.27587890625,
+      11.95703125
+    ],
+    "argv": [
+      "/opt/homebrew/bin/npm",
+      "run",
+      "review:full"
+    ],
+    "queueAndLaunchS": 0.048696,
+    "acquisitionToTerminalS": 124.804966,
+    "qualification": "Outer receipt includes queue plus process launch and lock wrapper overhead; acquisition receipt is written only inside acquired lock before exec. Two workers."
+  },
+  "originalValidationCounts": {
+    "focused-final": [
+      "Test Files  5 passed (5)",
+      "Tests  5705 passed (5705)"
+    ],
+    "review-final": [
+      "Test Files  308 passed (308)",
+      "Tests  9429 passed (9429)"
+    ],
+    "full-01": [
+      "Test Files  389 passed (389)",
+      "Tests  10438 passed (10438)"
+    ]
+  },
+  "originalImplementationWindow": {
+    "start": "2026-10-15T04:48:50.496648Z",
+    "end": "2026-10-15T05:34:40.033784+00:00"
+  },
+  "originalSourceBodyAudit": {
+    "browserRuntimeBodiesUnchanged": {
+      "src/engine/effects/primitives/first-played-spark-setter.ts": true,
+      "src/engine/effects/primitives/index.ts": true,
+      "src/engine/effects/registry.ts": true,
+      "src/engine/testing/synthetic-cards.ts": true,
+      "src/engine/view/determinize.ts": true,
+      "src/engine/view/view.ts": true
+    },
+    "fullSourceBodiesUnchanged": {
+      "scripts/content-inventory.ts": true,
+      "src/engine/effects/primitives/contracts/first-played-spark-setter-support.ts": true,
+      "src/engine/effects/primitives/contracts/first-played-spark-setter.contracts.ts": true,
+      "src/engine/effects/primitives/contracts/history-refs.contracts.ts": true,
+      "src/engine/effects/primitives/first-played-spark-setter.ts": true,
+      "src/engine/effects/primitives/index.ts": true,
+      "src/engine/effects/registry.ts": true,
+      "src/engine/loops/event-copy-continuation.ts": true,
+      "src/engine/testing/synthetic-cards.ts": true,
+      "src/engine/view/determinize.test.ts": true,
+      "src/engine/view/determinize.ts": true,
+      "src/engine/view/view.test.ts": true,
+      "src/engine/view/view.ts": true
+    },
+    "gitTestNumstat": [
+      [
+        "70",
+        "0",
+        "src/engine/effects/primitives/contracts/first-played-spark-setter-support.ts"
+      ],
+      [
+        "368",
+        "0",
+        "src/engine/effects/primitives/contracts/first-played-spark-setter.contracts.ts"
+      ],
+      [
+        "6",
+        "1",
+        "src/engine/effects/primitives/contracts/history-refs.contracts.ts"
+      ],
+      [
+        "1",
+        "1",
+        "src/engine/view/determinize.test.ts"
+      ],
+      [
+        "1",
+        "1",
+        "src/engine/view/view.test.ts"
+      ]
+    ],
+    "testDelta": {
+      "files": 2,
+      "lines": 443,
+      "jsdomFiles": 0
+    },
+    "onlyPostBrowserRuntimeDelta": "src/engine/loops/event-copy-continuation.ts one admitted own passive entry"
+  },
+  "originalSchemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final owned command group start (1-minute os.getloadavg), before prepare; actual per-step samples retained below"
+      },
+      "testDelta": {
+        "measuredFor": "1 new auto-discovered plain semantic contract; no configured entrypoints/jsdom;438 new contract+helper lines and5 net existing expectation lines;2 newly added dedicated test paths including helper"
+      }
+    }
+  },
+  "originalHostLoadSamples": [
+    {
+      "step": "prepare",
+      "utc": "2026-10-15T05:30:19.902Z",
+      "load1m": 8.9248046875
+    },
+    {
+      "step": "typecheck",
+      "utc": "2026-10-15T05:30:21.721Z",
+      "load1m": 8.9248046875
+    },
+    {
+      "step": "typecheck-node",
+      "utc": "2026-10-15T05:30:21.722Z",
+      "load1m": 8.9248046875
+    },
+    {
+      "step": "import-cycles",
+      "utc": "2026-10-15T05:30:21.722Z",
+      "load1m": 8.9248046875
+    },
+    {
+      "step": "lint",
+      "utc": "2026-10-15T05:30:21.722Z",
+      "load1m": 8.9248046875
+    },
+    {
+      "step": "test-related",
+      "utc": "2026-10-15T05:30:21.723Z",
+      "load1m": 8.9248046875
+    },
+    {
+      "step": "friction-records",
+      "utc": "2026-10-15T05:30:21.723Z",
+      "load1m": 8.9248046875
+    },
+    {
+      "step": "restore-local-assets",
+      "utc": "2026-10-15T05:31:22.502Z",
+      "load1m": 9.6708984375
+    }
+  ],
+  "originalTestDelta": {
+    "addedDedicatedTestPaths": 2,
+    "changedDedicatedTestPaths": 5,
+    "plainContractFiles": 1,
+    "configuredEntryPoints": 0,
+    "jsdomEntryPoints": 0,
+    "newPrivateContractModules": 1,
+    "newPrivateHelpers": 1,
+    "newContractLines": 438,
+    "existingTestNetLines": 5,
+    "newCases": 54
+  },
+  "originalAllOwnedCommandReceipts": {
+    "browser-01": {
+      "utcStart": "2026-10-15T05:11:03.064179+00:00",
+      "utcEnd": "2026-10-15T05:11:56.980954+00:00",
+      "wallS": 53.916077582980506,
+      "exit": 1,
+      "cpuUserS": 6.737328,
+      "cpuSystemS": 3.282808,
+      "sourceEpochSha256": "d6ba24d0624c83eca269e5ac91948437dc49c62a4a6c9118fe14effec75f58ab",
+      "pid": 84077,
+      "pgid": 84077,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        24.5439453125,
+        17.09912109375,
+        14.0234375
+      ],
+      "loadEnd": [
+        16.9169921875,
+        16.17333984375,
+        13.86669921875
+      ],
+      "stdoutSha256": "7fdc7e3e394ca0848c5e4d1bb9459e973fb45a9c283e82ae190d1d6d4ee20636",
+      "stderrSha256": "35165d44a18c15ddbaa1ca55f5490e15303fa9856620eaf75281261cf8fd7dc7"
+    },
+    "browser-02": {
+      "utcStart": "2026-10-15T05:25:51.411999+00:00",
+      "utcEnd": "2026-10-15T05:26:24.887737+00:00",
+      "wallS": 33.475289666967,
+      "exit": 0,
+      "cpuUserS": 7.145302,
+      "cpuSystemS": 3.025829,
+      "sourceEpochSha256": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+      "pid": 94833,
+      "pgid": 94833,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.720703125,
+        11.13623046875,
+        12.828125
+      ],
+      "loadEnd": [
+        16.3408203125,
+        12.82373046875,
+        13.38623046875
+      ],
+      "stdoutSha256": "37b8bf750b776ee96e4adbbf2ae40d3f4d35e8c66e9cc8411ba1c4e80ff1980b",
+      "stderrSha256": "8b87baf11d0ba7ded824eaf4ff1cc7d96c85dce6700c9eda8b08dfdca158548d"
+    },
+    "cf1-emblem-stack-02": {
+      "utcStart": "2026-10-15T05:05:49.808454+00:00",
+      "utcEnd": "2026-10-15T05:05:53.372288+00:00",
+      "wallS": 3.5636943749850616,
+      "exit": 1,
+      "cpuUserS": 4.239977,
+      "cpuSystemS": 1.006155,
+      "sourceEpochSha256": "90e5296bd2d53ffa0389d0b70e752a6b47bcb9423ec8bbf014492c6d73789897",
+      "pid": 10802,
+      "pgid": 10802,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        6.92529296875,
+        10.2333984375,
+        11.5810546875
+      ],
+      "loadEnd": [
+        6.92529296875,
+        10.2333984375,
+        11.5810546875
+      ],
+      "stdoutSha256": "2952ebd426311c9cd9d11fc5d0cb90ba17d39802e0e3269925fb0991b3eb9093",
+      "stderrSha256": "128ebc720263cbf19f5802005e5b7571dd19155326d646edcc877cdbc4c52ca1"
+    },
+    "cf1-emblem-stack-03": {
+      "utcStart": "2026-10-15T05:07:03.827475+00:00",
+      "utcEnd": "2026-10-15T05:07:07.926234+00:00",
+      "wallS": 4.098647915991023,
+      "exit": 1,
+      "cpuUserS": 5.036575,
+      "cpuSystemS": 1.045158,
+      "sourceEpochSha256": "ab57abd1feceda1de79955a4bf25c0fa40dee8853d8b034c3a918ad0df72a14d",
+      "pid": 23401,
+      "pgid": 23401,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        10.076171875,
+        10.45751953125,
+        11.5478515625
+      ],
+      "loadEnd": [
+        10.076171875,
+        10.45751953125,
+        11.5478515625
+      ],
+      "stdoutSha256": "81612c7bd73e9b8cc5ef07d59ad1c35532f46e7b5aef8889fc80812d67112529",
+      "stderrSha256": "0996754a67a7e5de86fc35b92994c44c95713721b21670817afc379baa82c8cc"
+    },
+    "cf1-emblem-stack": {
+      "utcStart": "2026-10-15T05:05:03.906401+00:00",
+      "utcEnd": "2026-10-15T05:05:10.106349+00:00",
+      "wallS": 6.198703333968297,
+      "exit": 0,
+      "cpuUserS": 6.146265,
+      "cpuSystemS": 1.258022,
+      "sourceEpochSha256": "b969af718789b4a0a7e5a7d8f590ce06392054205bf2b6b6f56d78cec43256d5",
+      "pid": 82512,
+      "pgid": 82512,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        6.2958984375,
+        10.70263671875,
+        11.81396484375
+      ],
+      "loadEnd": [
+        6.51220703125,
+        10.67431640625,
+        11.79736328125
+      ],
+      "stdoutSha256": "5a685a6d35002c1545deb28cd04de0c5e39172832bab16f3a33cd092fa463ba7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "cf2-materialization-03": {
+      "utcStart": "2026-10-15T05:07:07.995241+00:00",
+      "utcEnd": "2026-10-15T05:07:11.829653+00:00",
+      "wallS": 3.834297458000947,
+      "exit": 1,
+      "cpuUserS": 4.755075,
+      "cpuSystemS": 0.9656279999999999,
+      "sourceEpochSha256": "5181353098b9b1f09d969f7ae20c07cc9948b7fedf91f328c4a26a82572729d7",
+      "pid": 23652,
+      "pgid": 23652,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        10.076171875,
+        10.45751953125,
+        11.5478515625
+      ],
+      "loadEnd": [
+        9.66943359375,
+        10.36669921875,
+        11.50927734375
+      ],
+      "stdoutSha256": "cc95355f7d6b794368ea6f317fe2975472d7397d26a733d3a7b3cae2408c5029",
+      "stderrSha256": "43b77fb63a126913b4bf21d5c98202b50dbb3eb74afa809465bf0715761c919a"
+    },
+    "cf3-final-zero-03": {
+      "utcStart": "2026-10-15T05:07:11.899024+00:00",
+      "utcEnd": "2026-10-15T05:07:15.899006+00:00",
+      "wallS": 3.9998535829945467,
+      "exit": 1,
+      "cpuUserS": 4.968721,
+      "cpuSystemS": 0.996911,
+      "sourceEpochSha256": "b2de19b093dfcdef6036d56d21b75055e1d7a46fabfb93910edbcf7ad6a27471",
+      "pid": 23918,
+      "pgid": 23918,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.66943359375,
+        10.36669921875,
+        11.50927734375
+      ],
+      "loadEnd": [
+        9.21533203125,
+        10.2607421875,
+        11.46484375
+      ],
+      "stdoutSha256": "a289f12e5431a4cb577a18eab082aeb059a924b18ead19474c848305115a1899",
+      "stderrSha256": "7af3037e08487fe269d3685be9309e8e77b0dc198dd2a0fd824d1dcb471f0434"
+    },
+    "cf4-reentry-03": {
+      "utcStart": "2026-10-15T05:07:15.971319+00:00",
+      "utcEnd": "2026-10-15T05:07:20.266011+00:00",
+      "wallS": 4.294554624997545,
+      "exit": 1,
+      "cpuUserS": 5.226952,
+      "cpuSystemS": 1.095635,
+      "sourceEpochSha256": "a27956539f2ef923089bc2621e3f0225f2948dd03c3419af2f986a04dcdb2c4a",
+      "pid": 24178,
+      "pgid": 24178,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.21533203125,
+        10.2607421875,
+        11.46484375
+      ],
+      "loadEnd": [
+        8.95751953125,
+        10.18994140625,
+        11.4326171875
+      ],
+      "stdoutSha256": "5b94500156b9ae64e55bd1bfcd2d13f4d9a56cdf5abfd2dfac82f790e945f28f",
+      "stderrSha256": "70de99d775d55be3cd90c286c42268c883d8db80b0f7638f5715807bf2873672"
+    },
+    "cf5-copy-inheritance-03": {
+      "utcStart": "2026-10-15T05:07:20.338133+00:00",
+      "utcEnd": "2026-10-15T05:07:24.458903+00:00",
+      "wallS": 4.1206627920037135,
+      "exit": 1,
+      "cpuUserS": 4.976304,
+      "cpuSystemS": 1.069752,
+      "sourceEpochSha256": "176a9008ecdf05f2524cfc571ea0cf4af60939535b547f17bfbd00771ca6acfa",
+      "pid": 24486,
+      "pgid": 24486,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        8.95751953125,
+        10.18994140625,
+        11.4326171875
+      ],
+      "loadEnd": [
+        8.39990234375,
+        10.0537109375,
+        11.376953125
+      ],
+      "stdoutSha256": "3af2bdce4bc1351cfcbf6c160732fb7762702e48ea56412505ef4526aa72005b",
+      "stderrSha256": "87600c0a31809a1d94786615b28dee0ff39085d13261da75dc1508f3f2b815f5"
+    },
+    "focused-01": {
+      "utcStart": "2026-10-15T05:03:16.289857+00:00",
+      "utcEnd": "2026-10-15T05:03:22.140025+00:00",
+      "wallS": 5.8500194160151295,
+      "exit": 1,
+      "cpuUserS": 5.954136,
+      "cpuSystemS": 1.2812379999999999,
+      "pid": 75005,
+      "pgid": 75005,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.2451171875,
+        12.86279296875,
+        12.63720703125
+      ],
+      "loadEnd": [
+        8.98486328125,
+        12.74853515625,
+        12.59814453125
+      ],
+      "stdoutSha256": "cdb88912f2218be97d64e7793192b93df4ccc564d52badd0b5adaa81464207ac",
+      "stderrSha256": "c927717144359fbd8c9a162dca2bfdeecc2b54d03970c0a3730b5a98cbf7de74"
+    },
+    "focused-02": {
+      "utcStart": "2026-10-15T05:03:31.855510+00:00",
+      "utcEnd": "2026-10-15T05:03:36.585832+00:00",
+      "wallS": 4.730179541977122,
+      "exit": 0,
+      "cpuUserS": 5.723169,
+      "cpuSystemS": 1.123141,
+      "pid": 75944,
+      "pgid": 75944,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        8.75927734375,
+        12.5751953125,
+        12.5380859375
+      ],
+      "loadEnd": [
+        8.6181640625,
+        12.482421875,
+        12.50537109375
+      ],
+      "stdoutSha256": "db4e1b1c3a1200fe37359f2eeda235c090639cb38fa4896dcd45969abaa5785f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "focused-03": {
+      "utcStart": "2026-10-15T05:04:14.138373+00:00",
+      "utcEnd": "2026-10-15T05:04:18.129510+00:00",
+      "wallS": 3.991036958002951,
+      "exit": 0,
+      "cpuUserS": 5.05716,
+      "cpuSystemS": 0.962958,
+      "pid": 79040,
+      "pgid": 79040,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        7.2275390625,
+        11.6494140625,
+        12.1982421875
+      ],
+      "loadEnd": [
+        7.2275390625,
+        11.6494140625,
+        12.1982421875
+      ],
+      "stdoutSha256": "149eabc2d38fbc65ce92387abbdf13f0d92d9d432f4ab99809a15886bbdff6d4",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "focused-04": {
+      "utcStart": "2026-10-15T05:09:50.715104+00:00",
+      "utcEnd": "2026-10-15T05:09:58.963345+00:00",
+      "wallS": 8.248050417052582,
+      "exit": 0,
+      "cpuUserS": 7.04158,
+      "cpuSystemS": 1.440007,
+      "sourceEpochSha256": "d780c8da8661aef4a5e09ed153e2d8792beac98701bdb224c5823d94d9d5a602",
+      "pid": 90745,
+      "pgid": 90745,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        24.673828125,
+        14.87890625,
+        13.02685546875
+      ],
+      "loadEnd": [
+        26.27978515625,
+        15.568359375,
+        13.2939453125
+      ],
+      "stdoutSha256": "783079317b03615783c2d192e430fcfa574675e409c96a8e99596baf2476071d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "focused-05": {
+      "utcStart": "2026-10-15T05:10:41.726227+00:00",
+      "utcEnd": "2026-10-15T05:10:48.261611+00:00",
+      "wallS": 6.535192792012822,
+      "exit": 0,
+      "cpuUserS": 6.784406,
+      "cpuSystemS": 1.419379,
+      "sourceEpochSha256": "d6ba24d0624c83eca269e5ac91948437dc49c62a4a6c9118fe14effec75f58ab",
+      "pid": 67570,
+      "pgid": 67570,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        25.71875,
+        16.76708984375,
+        13.8359375
+      ],
+      "loadEnd": [
+        26.0615234375,
+        16.986328125,
+        13.93017578125
+      ],
+      "stdoutSha256": "c29e130ac5883618b4057bbff750970200463f5ca7797d30eb2b9f5147c8e3b8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "focused-06": {
+      "utcStart": "2026-10-15T05:19:23.681217+00:00",
+      "utcEnd": "2026-10-15T05:19:28.377118+00:00",
+      "wallS": 4.6957887089811265,
+      "exit": 0,
+      "cpuUserS": 5.652552,
+      "cpuSystemS": 1.173135,
+      "sourceEpochSha256": "4d697a1c368889695153b38a469f9a598ec00598e2941bb4e49197e0f12b81e6",
+      "pid": 4231,
+      "pgid": 4231,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        10.97119140625,
+        14.380859375,
+        14.11083984375
+      ],
+      "loadEnd": [
+        10.81298828125,
+        14.29150390625,
+        14.08056640625
+      ],
+      "stdoutSha256": "02a4a049864284c7853ba8d055ac09507d555d60a56df2e26b8c59c603750e29",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "focused-final": {
+      "utcStart": "2026-10-15T05:29:30.987247+00:00",
+      "utcEnd": "2026-10-15T05:29:53.013493+00:00",
+      "wallS": 22.025913959019817,
+      "exit": 0,
+      "cpuUserS": 30.791764,
+      "cpuSystemS": 1.751693,
+      "sourceEpochSha256": "9843c31fd135d104e10eeef292ac0eceaa80f2b50c983047ae02a1e80485f058",
+      "pid": 95888,
+      "pgid": 95888,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.0166015625,
+        10.58251953125,
+        12.31005859375
+      ],
+      "loadEnd": [
+        8.47314453125,
+        10.35107421875,
+        12.18603515625
+      ],
+      "stdoutSha256": "e806b42b645254565a8b707c779586734d0e53250a7b4a2bfc1576fe05ef7ca0",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "full-01": {
+      "utcStart": "2026-10-15T05:31:29.800214+00:00",
+      "utcEnd": "2026-10-15T05:33:34.653876+00:00",
+      "wallS": 124.85232704103692,
+      "exit": 0,
+      "cpuUserS": 272.708524,
+      "cpuSystemS": 32.906987,
+      "sourceEpochSha256": "b474bc59520a7b9db2a9ca7d764d16561b2ca5af2b83e6ad4790f26f03b386a0",
+      "pid": 7290,
+      "pgid": 7290,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.419921875,
+        10.27587890625,
+        11.95703125
+      ],
+      "loadEnd": [
+        18.12353515625,
+        11.89990234375,
+        12.28369140625
+      ],
+      "stdoutSha256": "6e81998ba74a73344d5a010a78a36868d20df45cf53ee8f96d9195a8aff3e9d6",
+      "stderrSha256": "afe50dcea0faf4ba060a82e7598ccfba805485053bad219e6c67564f75c16561"
+    },
+    "hidden-fixed-01": {
+      "utcStart": "2026-10-15T05:18:19.935469+00:00",
+      "utcEnd": "2026-10-15T05:18:25.231880+00:00",
+      "wallS": 5.295960874995217,
+      "exit": 0,
+      "cpuUserS": 5.784048,
+      "cpuSystemS": 1.45916,
+      "sourceEpochSha256": "41825890197a5f12452910787df5dc7f155599fa26825494d0745d4fc1a707b3",
+      "pid": 81712,
+      "pgid": 81712,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        15.56689453125,
+        15.83740234375,
+        14.576171875
+      ],
+      "loadEnd": [
+        15.201171875,
+        15.7568359375,
+        14.55517578125
+      ],
+      "stdoutSha256": "223815d38ae558fa71fb5dc26b61922ddf6de0c5db37d41e049c1ad746798cdc",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "hidden-regression-01": {
+      "utcStart": "2026-10-15T05:13:40.851129+00:00",
+      "utcEnd": "2026-10-15T05:13:46.299238+00:00",
+      "wallS": 5.447936250013299,
+      "exit": 1,
+      "cpuUserS": 5.9667,
+      "cpuSystemS": 1.406827,
+      "sourceEpochSha256": "f7e0628fbf264d5c030b337bd147b5892b3bd1fcb5824c52a7952314da8819bf",
+      "pid": 50124,
+      "pgid": 50124,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        19.73779296875,
+        16.61865234375,
+        14.25048828125
+      ],
+      "loadEnd": [
+        18.9580078125,
+        16.50830078125,
+        14.22509765625
+      ],
+      "stdoutSha256": "806e4f533f3e413fdc1ed692f351e9003f0e3bc74edc81e7bc1afb998579f618",
+      "stderrSha256": "03194af114841eb70ae939693f1c21e13490202c26168823879891e9b9b938b0"
+    },
+    "hidden-regression-02": {
+      "utcStart": "2026-10-15T05:14:06.575556+00:00",
+      "utcEnd": "2026-10-15T05:14:11.640968+00:00",
+      "wallS": 5.065242582990322,
+      "exit": 1,
+      "cpuUserS": 5.940729,
+      "cpuSystemS": 1.248186,
+      "sourceEpochSha256": "a75bf2a0e902194f1f32fb1519598234ec8f46a9d0cefcb09676976e39b68122",
+      "pid": 62538,
+      "pgid": 62538,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        16.8330078125,
+        16.169921875,
+        14.15576171875
+      ],
+      "loadEnd": [
+        16.20556640625,
+        16.05078125,
+        14.12548828125
+      ],
+      "stdoutSha256": "f1bf7255a0896831f5ff168be6bce733f38765a0072d3a6fe0900b925f3dde45",
+      "stderrSha256": "3eb86b9a35b3866918e96fea175d038faa2babc135414facab2de06e8fc3735b"
+    },
+    "integration-01": {
+      "utcStart": "2026-10-15T05:25:14.699350+00:00",
+      "utcEnd": "2026-10-15T05:25:34.931350+00:00",
+      "wallS": 20.231743459007703,
+      "exit": 0,
+      "cpuUserS": 28.150467,
+      "cpuSystemS": 1.5339639999999999,
+      "sourceEpochSha256": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+      "pid": 91496,
+      "pgid": 91496,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        5.4521484375,
+        10.6689453125,
+        12.74365234375
+      ],
+      "loadEnd": [
+        8.27685546875,
+        10.9541015625,
+        12.7958984375
+      ],
+      "stdoutSha256": "9a11c1a3dd3c335b157c51b666bb06bbe80e06d3eda500dcaeb8b906fbf647c9",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inventory-01": {
+      "utcStart": "2026-10-15T05:04:44.020819+00:00",
+      "utcEnd": "2026-10-15T05:04:47.266676+00:00",
+      "wallS": 3.245044334034901,
+      "exit": 0,
+      "cpuUserS": 3.775699,
+      "cpuSystemS": 1.176505,
+      "pid": 81020,
+      "pgid": 81020,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        6.72412109375,
+        11.08154296875,
+        11.97119140625
+      ],
+      "loadEnd": [
+        6.72412109375,
+        11.08154296875,
+        11.97119140625
+      ],
+      "stdoutSha256": "7e1b63e75e7539f164c176122549f7048d5d29a2e714f8ca8e52f0a96adca6b2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inventory-02": {
+      "utcStart": "2026-10-15T05:08:36.271532+00:00",
+      "utcEnd": "2026-10-15T05:08:39.321068+00:00",
+      "wallS": 3.0494240000261925,
+      "exit": 0,
+      "cpuUserS": 3.52206,
+      "cpuSystemS": 0.89808,
+      "sourceEpochSha256": "91cdd4a6607bf6b2130d69d26c571bbd92dd06b51bbf5232af2d2249dbc8849c",
+      "pid": 29075,
+      "pgid": 29075,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        15.75439453125,
+        11.4375,
+        11.76220703125
+      ],
+      "loadEnd": [
+        15.29345703125,
+        11.41357421875,
+        11.75146484375
+      ],
+      "stdoutSha256": "7e1b63e75e7539f164c176122549f7048d5d29a2e714f8ca8e52f0a96adca6b2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inventory-03": {
+      "utcStart": "2026-10-15T05:09:32.706357+00:00",
+      "utcEnd": "2026-10-15T05:09:35.457942+00:00",
+      "wallS": 2.7514562089927495,
+      "exit": 0,
+      "cpuUserS": 3.238438,
+      "cpuSystemS": 0.8800429999999999,
+      "sourceEpochSha256": "d780c8da8661aef4a5e09ed153e2d8792beac98701bdb224c5823d94d9d5a602",
+      "pid": 76652,
+      "pgid": 76652,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        18.53662109375,
+        13.20654296875,
+        12.41357421875
+      ],
+      "loadEnd": [
+        17.7724609375,
+        13.13623046875,
+        12.3935546875
+      ],
+      "stdoutSha256": "7e1b63e75e7539f164c176122549f7048d5d29a2e714f8ca8e52f0a96adca6b2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inventory-baseline-02": {
+      "utcStart": "2026-10-15T05:08:32.693452+00:00",
+      "utcEnd": "2026-10-15T05:08:36.176184+00:00",
+      "wallS": 3.482405040995218,
+      "exit": 0,
+      "cpuUserS": 3.547916,
+      "cpuSystemS": 1.033736,
+      "sourceEpochSha256": "442d61e17802f543061f8705550ad605622f1ad95e3a5c9a8c6b08282dc4f020",
+      "pid": 28801,
+      "pgid": 28801,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        14.427734375,
+        11.107421875,
+        11.64892578125
+      ],
+      "loadEnd": [
+        15.75439453125,
+        11.4375,
+        11.76220703125
+      ],
+      "stdoutSha256": "7e1b63e75e7539f164c176122549f7048d5d29a2e714f8ca8e52f0a96adca6b2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inventory-baseline-03": {
+      "utcStart": "2026-10-15T05:09:29.568551+00:00",
+      "utcEnd": "2026-10-15T05:09:32.623587+00:00",
+      "wallS": 3.0549148339778185,
+      "exit": 0,
+      "cpuUserS": 3.232876,
+      "cpuSystemS": 0.8723059999999999,
+      "sourceEpochSha256": "b3406b7d4e29fa70a115ce9f33035aa79795e32c9758ca36c3f91460a456965f",
+      "pid": 73489,
+      "pgid": 73489,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        18.53662109375,
+        13.20654296875,
+        12.41357421875
+      ],
+      "loadEnd": [
+        18.53662109375,
+        13.20654296875,
+        12.41357421875
+      ],
+      "stdoutSha256": "7e1b63e75e7539f164c176122549f7048d5d29a2e714f8ca8e52f0a96adca6b2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inventory-baseline": {
+      "utcStart": "2026-10-15T05:07:51.275468+00:00",
+      "utcEnd": "2026-10-15T05:07:54.825077+00:00",
+      "wallS": 3.5495246250065975,
+      "exit": 1,
+      "cpuUserS": 1.199145,
+      "cpuSystemS": 1.025847,
+      "sourceEpochSha256": "7515150caa4ac4444c8a77823b14cdb3d3382831cc06a8fccaebf394353bd591",
+      "pid": 25718,
+      "pgid": 25718,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        7.33642578125,
+        9.67724609375,
+        11.20263671875
+      ],
+      "loadEnd": [
+        7.14892578125,
+        9.59912109375,
+        11.166015625
+      ],
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "a549d348c459c0a833a34f42fe9230bab3bba4c8d0aaa1aff4af0ed7202c265e"
+    },
+    "inventory-check-01": {
+      "utcStart": "2026-10-15T05:25:19.551164+00:00",
+      "utcEnd": "2026-10-15T05:25:22.228410+00:00",
+      "wallS": 2.677115332975518,
+      "exit": 0,
+      "cpuUserS": 3.060438,
+      "cpuSystemS": 0.7879879999999999,
+      "sourceEpochSha256": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+      "pid": 91817,
+      "pgid": 91817,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        5.73583984375,
+        10.64111328125,
+        12.7216796875
+      ],
+      "loadEnd": [
+        5.73583984375,
+        10.64111328125,
+        12.7216796875
+      ],
+      "stdoutSha256": "dd71741421fa680a35c9ac132e4c77a3526538fe88f4c1722b735261a8d8b4f3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "knip-01": {
+      "utcStart": "2026-10-15T05:30:24.603738+00:00",
+      "utcEnd": "2026-10-15T05:30:29.882623+00:00",
+      "wallS": 5.278710374957882,
+      "exit": 0,
+      "cpuUserS": 4.753523,
+      "cpuSystemS": 1.827488,
+      "sourceEpochSha256": "847cf55752c878052cb40644393e26d055e6dc251be8cf2af1ef4072f191bf0a",
+      "pid": 2810,
+      "pgid": 2810,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        10.2919921875,
+        10.53125,
+        12.1728515625
+      ],
+      "loadEnd": [
+        10.2685546875,
+        10.52197265625,
+        12.15966796875
+      ],
+      "stdoutSha256": "878ee64ddf1756ad6ff4a9c9059f690f28a4dc4ac15ddd80cd2fba74baa08cc9",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "loop-fixed-01": {
+      "utcStart": "2026-10-15T05:29:16.696814+00:00",
+      "utcEnd": "2026-10-15T05:29:21.383875+00:00",
+      "wallS": 4.686923334025778,
+      "exit": 0,
+      "cpuUserS": 5.590607,
+      "cpuSystemS": 1.207867,
+      "sourceEpochSha256": "dc4782f6b41b01c4706e88a058e7fa36fef4a44c9cee943ca9e27413a45fb166",
+      "pid": 87370,
+      "pgid": 87370,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        8.20654296875,
+        10.51220703125,
+        12.31640625
+      ],
+      "loadEnd": [
+        8.91064453125,
+        10.61962890625,
+        12.34375
+      ],
+      "stdoutSha256": "72b8e8d85c6dd75d911721cd37a8690ffb9c2b82b115eed1a6d090e40357ebe5",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "loop-optional-01": {
+      "utcStart": "2026-10-15T05:28:15.437747+00:00",
+      "utcEnd": "2026-10-15T05:28:19.889111+00:00",
+      "wallS": 4.451247624994721,
+      "exit": 0,
+      "cpuUserS": 4.973383,
+      "cpuSystemS": 1.161787,
+      "sourceEpochSha256": "03bfb302ae421e98f2c35280ff0ecc67fe852ca962f12a97b10c29e2c25dd6bc",
+      "pid": 61673,
+      "pgid": 61673,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        8.287109375,
+        11.111328125,
+        12.65087890625
+      ],
+      "loadEnd": [
+        8.0234375,
+        11.009765625,
+        12.60595703125
+      ],
+      "stdoutSha256": "2e635c506967e28eb19206961ccb10c50e6208885e154daa760603ea4538ca4d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "loop-witness-01": {
+      "utcStart": "2026-10-15T05:27:16.402401+00:00",
+      "utcEnd": "2026-10-15T05:27:20.925912+00:00",
+      "wallS": 4.523343792010564,
+      "exit": 1,
+      "cpuUserS": 5.45223,
+      "cpuSystemS": 1.135116,
+      "sourceEpochSha256": "f12da764e6b8d1802087b131b6d1c6b70a23380259a2da9c0c94e22d2ea0bfdb",
+      "pid": 57718,
+      "pgid": 57718,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        11.84130859375,
+        12.138671875,
+        13.09912109375
+      ],
+      "loadEnd": [
+        11.53369140625,
+        12.06982421875,
+        13.06884765625
+      ],
+      "stdoutSha256": "809fe1d207be79f829f25e6de48d49f2ca5d6f35a887b2a9ef88d9ea24ef98cb",
+      "stderrSha256": "3591be00fe654caf5e0bae71372c9ed14a8910806848d0bef56d3a174cf5b519"
+    },
+    "prepare-01": {
+      "utcStart": "2026-10-15T05:10:21.786803+00:00",
+      "utcEnd": "2026-10-15T05:10:24.251585+00:00",
+      "wallS": 2.4646669579669833,
+      "exit": 0,
+      "cpuUserS": 1.4420709999999999,
+      "cpuSystemS": 0.878998,
+      "sourceEpochSha256": "d6ba24d0624c83eca269e5ac91948437dc49c62a4a6c9118fe14effec75f58ab",
+      "pid": 37686,
+      "pgid": 37686,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        25.8125,
+        16.1083984375,
+        13.537109375
+      ],
+      "loadEnd": [
+        27.0283203125,
+        16.521484375,
+        13.69775390625
+      ],
+      "stdoutSha256": "1ced68bda3554c7673815f97e1bf5378ed2ad0a4cba9c5541339ac0290d19b41",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "review-01": {
+      "utcStart": "2026-10-15T05:20:22.784743+00:00",
+      "utcEnd": "2026-10-15T05:21:42.714364+00:00",
+      "wallS": 79.92868374998216,
+      "exit": 1,
+      "cpuUserS": 216.16469,
+      "cpuSystemS": 20.821325,
+      "sourceEpochSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "pid": 11317,
+      "pgid": 11317,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        14.060546875,
+        14.4658203125,
+        14.14697265625
+      ],
+      "loadEnd": [
+        16.6337890625,
+        15.68701171875,
+        14.6728515625
+      ],
+      "stdoutSha256": "26549fb5b7e6dc36a88d20be929494b02408f3d237408c77d25254c3838e68e9",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "review-02": {
+      "utcStart": "2026-10-15T05:25:42.278178+00:00",
+      "utcEnd": "2026-10-15T05:26:56.582279+00:00",
+      "wallS": 74.3033027080237,
+      "exit": 0,
+      "cpuUserS": 207.22182,
+      "cpuSystemS": 20.318054,
+      "sourceEpochSha256": "acc0442d995021c0b178e61fe141f2a063e42a88fc97ea302c5d1c9847d0e7fa",
+      "pid": 94060,
+      "pgid": 94060,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        8.33447265625,
+        10.92138671875,
+        12.7734375
+      ],
+      "loadEnd": [
+        13.34716796875,
+        12.439453125,
+        13.2265625
+      ],
+      "stdoutSha256": "b31e9ffc8504d196fdf2fa0836373c9c39a9ffd81927095af8b157bf5db02248",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "review-final": {
+      "utcStart": "2026-10-15T05:30:19.654868+00:00",
+      "utcEnd": "2026-10-15T05:31:23.845251+00:00",
+      "wallS": 64.1896683750092,
+      "exit": 0,
+      "cpuUserS": 173.757419,
+      "cpuSystemS": 16.95206,
+      "sourceEpochSha256": "847cf55752c878052cb40644393e26d055e6dc251be8cf2af1ef4072f191bf0a",
+      "pid": 2400,
+      "pgid": 2400,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        8.9248046875,
+        10.2705078125,
+        12.091796875
+      ],
+      "loadEnd": [
+        9.6708984375,
+        10.35400390625,
+        12.00439453125
+      ],
+      "stdoutSha256": "5c07f3e13cefe9496fbc9a20f34fc16839777487832f653afb3c1ce36a789d40",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "schema-final": {
+      "utcStart": "2026-10-15T05:34:11.613476+00:00",
+      "utcEnd": "2026-10-15T05:34:11.869750+00:00",
+      "wallS": 0.25619762495625764,
+      "exit": 0,
+      "cpuUserS": 0.10987899999999999,
+      "cpuSystemS": 0.121974,
+      "sourceEpochSha256": "1f81c115ac381078a9f0bbbb2080d69a8aff0957cbd48680bf20ad2ab36417c7",
+      "pid": 52736,
+      "pgid": 52736,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        18.673828125,
+        12.75341796875,
+        12.58056640625
+      ],
+      "loadEnd": [
+        18.673828125,
+        12.75341796875,
+        12.58056640625
+      ],
+      "stdoutSha256": "0b5e9b48873bae800d1bfd626f072eda8c44dc38ab638e13e894eabfe2ac1b9d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "typecheck-01": {
+      "utcStart": "2026-10-15T05:09:50.712869+00:00",
+      "utcEnd": "2026-10-15T05:10:08.433845+00:00",
+      "wallS": 17.720711458008736,
+      "exit": 2,
+      "cpuUserS": 22.943082,
+      "cpuSystemS": 0.849262,
+      "sourceEpochSha256": "d780c8da8661aef4a5e09ed153e2d8792beac98701bdb224c5823d94d9d5a602",
+      "pid": 90743,
+      "pgid": 90743,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        24.673828125,
+        14.87890625,
+        13.02685546875
+      ],
+      "loadEnd": [
+        25.85693359375,
+        15.658203125,
+        13.3388671875
+      ],
+      "stdoutSha256": "f97ac214741dbd509d87e6bd7e1c4d98fe4929c77d3a75b6e9958fc4de4556c3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "typecheck-02": {
+      "utcStart": "2026-10-15T05:10:41.726925+00:00",
+      "utcEnd": "2026-10-15T05:10:57.951340+00:00",
+      "wallS": 16.22415370901581,
+      "exit": 0,
+      "cpuUserS": 21.921632,
+      "cpuSystemS": 0.8057949999999999,
+      "sourceEpochSha256": "d6ba24d0624c83eca269e5ac91948437dc49c62a4a6c9118fe14effec75f58ab",
+      "pid": 67571,
+      "pgid": 67571,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        25.71875,
+        16.76708984375,
+        13.8359375
+      ],
+      "loadEnd": [
+        25.4619140625,
+        17.15185546875,
+        14.02392578125
+      ],
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "originalSourceBase": "29f6decf5ff6fbaf5ca8a6a3551de68b6a1074ff",
+  "originalSourceCommit": "208f9f74f6f564a9cad1a5ff71c847cac3d95f78",
+  "originalGitReturn": {
+    "utcGitStart": "2026-10-15T05:34:40.128735+00:00",
+    "utcGitReturn": "2026-10-15T05:34:40.157170+00:00",
+    "gitExit": 0,
+    "evidenceCutoff": "2026-10-15T05:34:40.033784+00:00",
+    "cutoffToActualGitReturnS": 0.123386,
+    "claimInclusiveStart": "2026-10-15T04:48:50.496648+00:00",
+    "claimInclusiveToActualGitReturnMin": 45.82767536666667,
+    "indexTreeBeforeCommit": "326bc5c2018113a03f8511a8c2c925bee86e588f",
+    "commit": "208f9f74f6f564a9cad1a5ff71c847cac3d95f78",
+    "statusAfter": ""
+  },
+  "counterfactualQualification": "Five original fault families ran on original208f9f74 source only. Own functional op/fixture/owned hub deltas are preserved on newbase; original mutations are not repeated. Four new public mixed-history actor/viewer cases validate the combined boundary.",
+  "combinedCommandReceipts": {
+    "combined-browser": {
+      "utcStart": "2026-10-15T05:43:56.164653+00:00",
+      "utcEnd": "2026-10-15T05:44:11.915047+00:00",
+      "wallS": 15.750063374987803,
+      "exit": 0,
+      "cpuUserS": 6.194018,
+      "cpuSystemS": 2.870665,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 95682,
+      "pgid": 95682,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        12.9248046875,
+        9.24072265625,
+        10.5966796875
+      ],
+      "loadEnd": [
+        14.94677734375,
+        9.8388671875,
+        10.7841796875
+      ],
+      "stdoutSha256": "ea032953d74cc4d91dc62cdbc00e8eb53eb449f05e94dfcabe8e419047491454",
+      "stderrSha256": "751ba9632afa5f9ece761bba38e647e9f1a1d55e48e79a55cacc17515da52c33"
+    },
+    "combined-canonical-base": {
+      "utcStart": "2026-10-15T05:42:29.713047+00:00",
+      "utcEnd": "2026-10-15T05:42:34.296708+00:00",
+      "wallS": 4.582610874960665,
+      "exit": 0,
+      "cpuUserS": 2.793014,
+      "cpuSystemS": 1.195661,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "a1376cea89971e7e571306ff29585f4d5a387aebe77fcd5211a45087f6cbdb4b",
+      "pid": 75196,
+      "pgid": 75196,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        5.58642578125,
+        8.333984375,
+        10.5048828125
+      ],
+      "loadEnd": [
+        5.58642578125,
+        8.333984375,
+        10.5048828125
+      ],
+      "stdoutSha256": "0513df8f7d103ee2dd6b8f12b920f90b44e7bfdc6a67f85f52086ef4f24d3aec",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "combined-full": {
+      "utcStart": "2026-10-15T05:46:44.249101+00:00",
+      "utcEnd": "2026-10-15T05:56:20.495523+00:00",
+      "wallS": 576.2390762909781,
+      "exit": 0,
+      "cpuUserS": 264.403393,
+      "cpuSystemS": 30.175655,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "183156d127263a248bd6edc0e3ae9641e15d9274f63ce96efb2ba37e710e8e21",
+      "pid": 92679,
+      "pgid": 92679,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        29.15966796875,
+        16.8798828125,
+        13.4365234375
+      ],
+      "loadEnd": [
+        11.3837890625,
+        13.46240234375,
+        12.98974609375
+      ],
+      "stdoutSha256": "1310c1d487f87f786ab8b214e90f2aeeaf87ef3e827ba9bababd9b45721c5b21",
+      "stderrSha256": "cfc36b8a513a824b60e01443e73720f5c5dcd96e9054c45ae23d538eb36247bd"
+    },
+    "combined-generator-audit": {
+      "utcStart": "2026-10-15T05:42:29.561286+00:00",
+      "utcEnd": "2026-10-15T05:42:34.371988+00:00",
+      "wallS": 4.809611292032059,
+      "exit": 0,
+      "cpuUserS": 2.902263,
+      "cpuSystemS": 1.336577,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "ec6ff0ad44e35ca7b4cb4ed1b885b8aec3e5f75f927b55087b57a39b2b2b4c0b",
+      "pid": 75180,
+      "pgid": 75180,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        5.89892578125,
+        8.44091796875,
+        10.55517578125
+      ],
+      "loadEnd": [
+        5.58642578125,
+        8.333984375,
+        10.5048828125
+      ],
+      "stdoutSha256": "9e3a78c8c37ef101aa8182108174280000c1787680041267c2e77def284e6df5",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "combined-identity": {
+      "utcStart": "2026-10-15T05:43:15.582452+00:00",
+      "utcEnd": "2026-10-15T05:43:19.564347+00:00",
+      "wallS": 3.981753583007958,
+      "exit": 0,
+      "cpuUserS": 4.460363,
+      "cpuSystemS": 1.089195,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 76633,
+      "pgid": 76633,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        4.4892578125,
+        7.650390625,
+        10.13916015625
+      ],
+      "loadEnd": [
+        4.4892578125,
+        7.650390625,
+        10.13916015625
+      ],
+      "stdoutSha256": "140fc832cd503b4686b01fc208255c03607a6d82eb6b5d1795d688cc69279094",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "combined-integration": {
+      "utcStart": "2026-10-15T05:43:38.657653+00:00",
+      "utcEnd": "2026-10-15T05:44:01.973896+00:00",
+      "wallS": 23.315812916029245,
+      "exit": 0,
+      "cpuUserS": 32.601655,
+      "cpuSystemS": 1.9301599999999999,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 78227,
+      "pgid": 78227,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        7.39306640625,
+        8.09619140625,
+        10.240234375
+      ],
+      "loadEnd": [
+        12.6103515625,
+        9.236328125,
+        10.5869140625
+      ],
+      "stdoutSha256": "4c14a12fb48a663c61980637f19982a4dddff83da7a09b0984ac0ba17e6bf570",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "combined-inventory-01": {
+      "utcStart": "2026-10-15T05:41:13.932781+00:00",
+      "utcEnd": "2026-10-15T05:41:16.998164+00:00",
+      "wallS": 3.065264875011053,
+      "exit": 0,
+      "cpuUserS": 2.960802,
+      "cpuSystemS": 1.031365,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "c3e2561adfb546eb637f43d245261cb60bf379f9771d3de16e41cee6b48604ce",
+      "pid": 72070,
+      "pgid": 72070,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        5.1201171875,
+        8.6142578125,
+        10.779296875
+      ],
+      "loadEnd": [
+        7.7529296875,
+        9.10205078125,
+        10.9384765625
+      ],
+      "stdoutSha256": "0513df8f7d103ee2dd6b8f12b920f90b44e7bfdc6a67f85f52086ef4f24d3aec",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "combined-inventory-check": {
+      "utcStart": "2026-10-15T05:44:34.666714+00:00",
+      "utcEnd": "2026-10-15T05:44:39.393735+00:00",
+      "wallS": 4.726909457996953,
+      "exit": 0,
+      "cpuUserS": 3.690835,
+      "cpuSystemS": 1.217162,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 39264,
+      "pgid": 39264,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        19.306640625,
+        11.134765625,
+        11.224609375
+      ],
+      "loadEnd": [
+        20.16259765625,
+        11.44775390625,
+        11.33447265625
+      ],
+      "stdoutSha256": "dd71741421fa680a35c9ac132e4c77a3526538fe88f4c1722b735261a8d8b4f3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "combined-knip": {
+      "utcStart": "2026-10-15T05:44:34.670243+00:00",
+      "utcEnd": "2026-10-15T05:44:41.922093+00:00",
+      "wallS": 7.251683500013314,
+      "exit": 0,
+      "cpuUserS": 5.293509,
+      "cpuSystemS": 2.346852,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 39265,
+      "pgid": 39265,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        19.306640625,
+        11.134765625,
+        11.224609375
+      ],
+      "loadEnd": [
+        20.0693359375,
+        11.57275390625,
+        11.37890625
+      ],
+      "stdoutSha256": "5c071aebaecacb61f92d9e695e4af31a3227ea9c7f4d7fe11bafb52fb38ae496",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "combined-restore-02": {
+      "utcStart": "2026-10-15T05:40:44.214547+00:00",
+      "utcEnd": "2026-10-15T05:40:44.391341+00:00",
+      "wallS": 0.1767168749938719,
+      "exit": 0,
+      "cpuUserS": 0.081297,
+      "cpuSystemS": 0.148995,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "22bdd0ab6eb7be38e75bada8d2ec72bac9ece750ae3c7a5fd4aae4e7efdd7cfc",
+      "pid": 69411,
+      "pgid": 69411,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        6.06884765625,
+        9.13818359375,
+        11.03564453125
+      ],
+      "loadEnd": [
+        6.06884765625,
+        9.13818359375,
+        11.03564453125
+      ],
+      "stdoutSha256": "5783794af2bffaf8e54ade92fb1686da155acc4a13cf62616733d5a1c3f9a339",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "combined-restore": {
+      "utcStart": "2026-10-15T05:40:27.042112+00:00",
+      "utcEnd": "2026-10-15T05:40:27.176331+00:00",
+      "wallS": 0.13415166700724512,
+      "exit": 1,
+      "cpuUserS": 0.063944,
+      "cpuSystemS": 0.10150999999999999,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "22bdd0ab6eb7be38e75bada8d2ec72bac9ece750ae3c7a5fd4aae4e7efdd7cfc",
+      "pid": 68165,
+      "pgid": 68165,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        6.65966796875,
+        9.40380859375,
+        11.16162109375
+      ],
+      "loadEnd": [
+        6.65966796875,
+        9.40380859375,
+        11.16162109375
+      ],
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "3832825c31c52c5482a2450a5f06cf9062a574e5fb4a14fa03cb4e792d56b605"
+    },
+    "combined-review": {
+      "utcStart": "2026-10-15T05:44:28.169124+00:00",
+      "utcEnd": "2026-10-15T05:46:01.306684+00:00",
+      "wallS": 93.13626954198116,
+      "exit": 0,
+      "cpuUserS": 237.655115,
+      "cpuSystemS": 24.181512,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 38884,
+      "pgid": 38884,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        17.5927734375,
+        10.66455078125,
+        11.06103515625
+      ],
+      "loadEnd": [
+        23.4384765625,
+        14.18310546875,
+        12.36181640625
+      ],
+      "stdoutSha256": "ac20399cf1e1ba10a22f05b7fac517f10bbae487cc60908425f5029726c81fb3",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "combined-schema": {
+      "utcStart": "2026-10-15T05:56:52.583173+00:00",
+      "utcEnd": "2026-10-15T05:56:52.734418+00:00",
+      "wallS": 0.15116066695190966,
+      "exit": 0,
+      "cpuUserS": 0.095012,
+      "cpuSystemS": 0.10917099999999999,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "420574eb3520183b5d6a08f50bd90bb5a098d9295165610323d0a390e76d0667",
+      "pid": 94881,
+      "pgid": 94881,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.25537109375,
+        12.73486328125,
+        12.74072265625
+      ],
+      "loadEnd": [
+        9.25537109375,
+        12.73486328125,
+        12.74072265625
+      ],
+      "stdoutSha256": "2b5da4dd6c82e0470284da58bf10561bce38e24be6a2cb1f720bba014e4211d9",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recovery-phase1": {
+      "utcStart": "2026-10-15T05:38:04.389255+00:00",
+      "utcEnd": "2026-10-15T05:38:04.653472+00:00",
+      "wallS": 0.26409529196098447,
+      "exit": 0,
+      "cpuUserS": 0.10027699999999999,
+      "cpuSystemS": 0.292128,
+      "sourceEpochSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "pid": 57730,
+      "pgid": 57730,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.3759765625,
+        11.35888671875,
+        12.072265625
+      ],
+      "loadEnd": [
+        9.265625,
+        11.302734375,
+        12.04833984375
+      ],
+      "stdoutSha256": "13f822d33d0cee552c758bf69a54227eb46ad34e25fc0152cc79c9c5088538b2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "integrationRecovery": {
+    "candidate": "01a13e0f-bbf1-7be0-b41a-57eb73f54a57",
+    "candidateTerminal": "merge-conflict/unauthorized/no attempts; independent adjacent622 additions",
+    "phase1": {
+      "phase": "PHASE1 temporary build-incomplete checkpoint only",
+      "utcStart": "2026-10-15T05:38:04.529166+00:00",
+      "originalSource": "208f9f74f6f564a9cad1a5ff71c847cac3d95f78",
+      "originalBase": "29f6decf5ff6fbaf5ca8a6a3551de68b6a1074ff",
+      "bindings": {
+        "src/engine/view/view.ts": {
+          "capturedBaseSha256": "4ace31ceef77bfbdaa06c4c71d45bcffcee2efdf3e11477d0a2e9376e16bea28",
+          "capturedSourceSha256": "82f7284a8a376718a8f984370cba01804987bb955ac88097dc81706b51b7b7e3"
+        },
+        "src/engine/view/determinize.ts": {
+          "capturedBaseSha256": "e5c1582eca93e4856e5676be57526b57dbac215cbb820556359cc1cd24f30ca1",
+          "capturedSourceSha256": "28ae0e2ce85d86ad2343606720d36c33fdf6539426398dcf6042d9d3ce4e1223"
+        }
+      },
+      "originalGitReturnReceipt": {
+        "utcGitStart": "2026-10-15T05:34:40.128735+00:00",
+        "utcGitReturn": "2026-10-15T05:34:40.157170+00:00",
+        "gitExit": 0,
+        "evidenceCutoff": "2026-10-15T05:34:40.033784+00:00",
+        "cutoffToActualGitReturnS": 0.123386,
+        "claimInclusiveStart": "2026-10-15T04:48:50.496648+00:00",
+        "claimInclusiveToActualGitReturnMin": 45.82767536666667,
+        "indexTreeBeforeCommit": "326bc5c2018113a03f8511a8c2c925bee86e588f",
+        "commit": "208f9f74f6f564a9cad1a5ff71c847cac3d95f78",
+        "statusAfter": ""
+      },
+      "checks": "No build/test/review/candidate submission or native update; only source custody and exact blob/status verification.",
+      "utcGitStart": "2026-10-15T05:38:04.547837+00:00",
+      "utcGitReturn": "2026-10-15T05:38:04.594707+00:00",
+      "gitExit": 0,
+      "checkpoint": "ffdbd65ce0652164505b4aa181ba60bce3044b37",
+      "tree": "01cfc30b8d8746ab56041ff6eb7d93c3053fcbb2",
+      "changedBlobs": [
+        "src/engine/view/determinize.ts",
+        "src/engine/view/view.ts"
+      ],
+      "allOtherTreeBlobsIdentical": true,
+      "statusAfter": "clean",
+      "phaseComplete": true
+    },
+    "updatedCheckpoint": {
+      "at": "2026-10-15T05:39:08.360321+00:00",
+      "updatedCheckpoint": "0eb1e2c54b82522fb68bc76e1dc0d63472dec3a1",
+      "updatedBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "stagingAtVerification": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "clean": true,
+      "doctorHealthy": true,
+      "noPendingUpdate": true,
+      "peerPathBindingsBeforeOwnRestore": {
+        "src/engine/view/view.ts": "1d9c64c12fd93674ce21efa03c2f625a805112537e0f92666342017becb91e99",
+        "src/engine/view/determinize.ts": "9de970a16985413d57b98d8193e07ae81ae6f8a1a473fa731a9b7646a60d6c0b"
+      },
+      "DO_NOT_SUBMIT": "Build-incomplete checkpoint lacks718 view/determinize deltas."
+    },
+    "restoration": {
+      "at": "2026-10-15T05:40:44.293255+00:00",
+      "checkpoint": "0eb1e2c54b82522fb68bc76e1dc0d63472dec3a1",
+      "newBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "paths": {
+        "src/engine/view/view.ts": {
+          "peerSha256": "1d9c64c12fd93674ce21efa03c2f625a805112537e0f92666342017becb91e99",
+          "combinedSha256": "2d98854f09359739355f2690b73a2ee7b5415d2a02468a481c4558855fdc214b",
+          "ownEdits": 3,
+          "inverseOwnEditsRestoresEveryPeerByte": true
+        },
+        "src/engine/view/determinize.ts": {
+          "peerSha256": "9de970a16985413d57b98d8193e07ae81ae6f8a1a473fa731a9b7646a60d6c0b",
+          "combinedSha256": "92e245672cd7adfbb081ed2f2ea882e560713f2ceec7017b82f27e7279ea27eb",
+          "ownEdits": 3,
+          "inverseOwnEditsRestoresEveryPeerByte": true
+        }
+      },
+      "privateFunctionalSourcesEqualOriginal208f9f74": true,
+      "ownHubDeltaLinesExactlyMatchOriginal": true,
+      "allPeerBytesPreserved": true
+    },
+    "parentIndependentPeerPreservation": {
+      "at": "2026-10-15T05:42:15.796699+00:00",
+      "paths": {
+        "src/engine/view/view.ts": {
+          "independentReverseDiffReproducesEveryPeerByte": true,
+          "operations": [
+            {
+              "tag": "replace",
+              "base": [
+                306,
+                306
+              ],
+              "source": [
+                306,
+                306
+              ]
+            },
+            {
+              "tag": "insert",
+              "base": [
+                309,
+                308
+              ],
+              "source": [
+                309,
+                310
+              ]
+            },
+            {
+              "tag": "replace",
+              "base": [
+                488,
+                488
+              ],
+              "source": [
+                490,
+                492
+              ]
+            },
+            {
+              "tag": "replace",
+              "base": [
+                495,
+                495
+              ],
+              "source": [
+                499,
+                503
+              ]
+            },
+            {
+              "tag": "replace",
+              "base": [
+                776,
+                777
+              ],
+              "source": [
+                784,
+                785
+              ]
+            }
+          ],
+          "peerSha256": "1d9c64c12fd93674ce21efa03c2f625a805112537e0f92666342017becb91e99"
+        },
+        "src/engine/view/determinize.ts": {
+          "independentReverseDiffReproducesEveryPeerByte": true,
+          "operations": [
+            {
+              "tag": "replace",
+              "base": [
+                407,
+                407
+              ],
+              "source": [
+                407,
+                407
+              ]
+            },
+            {
+              "tag": "replace",
+              "base": [
+                412,
+                412
+              ],
+              "source": [
+                412,
+                413
+              ]
+            },
+            {
+              "tag": "insert",
+              "base": [
+                527,
+                526
+              ],
+              "source": [
+                528,
+                546
+              ]
+            }
+          ],
+          "peerSha256": "9de970a16985413d57b98d8193e07ae81ae6f8a1a473fa731a9b7646a60d6c0b"
+        }
+      }
+    },
+    "sourceAudit": {
+      "sourceBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "currentEqualsFullDispatch": {
+        "scripts/content-inventory.ts": true,
+        "src/engine/effects/primitives/contracts/first-played-spark-setter-support.ts": true,
+        "src/engine/effects/primitives/contracts/first-played-spark-setter.contracts.ts": true,
+        "src/engine/effects/primitives/contracts/history-refs.contracts.ts": true,
+        "src/engine/effects/primitives/first-played-spark-setter.ts": true,
+        "src/engine/effects/primitives/index.ts": true,
+        "src/engine/effects/registry.ts": true,
+        "src/engine/loops/event-copy-continuation.ts": true,
+        "src/engine/testing/synthetic-cards.ts": true,
+        "src/engine/view/determinize.test.ts": true,
+        "src/engine/view/determinize.ts": true,
+        "src/engine/view/view.test.ts": true,
+        "src/engine/view/view.ts": true
+      },
+      "combinedBrowserEqualsFullDispatch": {
+        "scripts/content-inventory.ts": true,
+        "src/engine/effects/primitives/contracts/first-played-spark-setter-support.ts": true,
+        "src/engine/effects/primitives/contracts/first-played-spark-setter.contracts.ts": true,
+        "src/engine/effects/primitives/contracts/history-refs.contracts.ts": true,
+        "src/engine/effects/primitives/first-played-spark-setter.ts": true,
+        "src/engine/effects/primitives/index.ts": true,
+        "src/engine/effects/registry.ts": true,
+        "src/engine/loops/event-copy-continuation.ts": true,
+        "src/engine/testing/synthetic-cards.ts": true,
+        "src/engine/view/determinize.test.ts": true,
+        "src/engine/view/determinize.ts": true,
+        "src/engine/view/view.test.ts": true,
+        "src/engine/view/view.ts": true
+      },
+      "originalOwnedBlocksPreserved": "phase2-restored.json and parent-independent-peer-preservation.json",
+      "onlyOwnTestExtension": "4 mixed first-character/current-first-event reconstruction cases; original cases preserved"
+    },
+    "callerDiagnostic": "combined-restore guard compared whole shared hubs to oldsource and safely stopped before writes on expected peer export additions; corrected guard compares exact own delta lines and private functional bytes. No peer/source loss."
+  },
+  "browser": {
+    "sourceBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+    "sourceEpoch": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+    "invocation": "run-neNGpM",
+    "ok": true,
+    "wallMs": {
+      "browserLeaseWait": 6,
+      "serve": 2590,
+      "scenario": 12463,
+      "total": 15130
+    },
+    "runnerPid": 95682,
+    "serverPid": 96256,
+    "port": 5274,
+    "slot": 1,
+    "captures": [],
+    "caps": [],
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "gameId": "r874x9",
+        "selectedBy": "url",
+        "rows": 45,
+        "reason": null
+      }
+    ],
+    "result": {
+      "ids": {
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "player": {
+          "front": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "back": [
+            "i1",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "hand": [
+            "i2",
+            "i3"
+          ],
+          "void": []
+        },
+        "enemy": {
+          "front": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "back": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "hand": [
+            "i12"
+          ],
+          "void": []
+        }
+      },
+      "early": {
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=69964b8e-0f38-4fb7-a0cd-89430ef04c2d&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000718000%22%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000003%22%2C%225e5e5e5e-0000-4000-8000-000000000003%22%5D%2C%22energy%22%3A7%7D%2C%22enemy%22%3A%7B%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-00000000000e%22%5D%2C%22energy%22%3A0%7D%7D&game=r874x9",
+        "width": 1440,
+        "height": 900,
+        "dpr": 2
+      },
+      "geometry": [
+        {
+          "id": "i1",
+          "spark": "1",
+          "slot": "B0",
+          "width": 89.5,
+          "height": 89.5,
+          "visible": true,
+          "hit": true
+        },
+        {
+          "id": "i2",
+          "spark": "0",
+          "slot": "B1",
+          "width": 89.5,
+          "height": 89.5,
+          "visible": true,
+          "hit": true
+        },
+        {
+          "id": "i3",
+          "spark": "2",
+          "slot": "B2",
+          "width": 89.5,
+          "height": 89.5,
+          "visible": true,
+          "hit": true
+        }
+      ],
+      "payment": {
+        "before": 7,
+        "after": 5
+      },
+      "first": {
+        "instance": "i2",
+        "spark": 0
+      },
+      "second": {
+        "instance": "i3",
+        "spark": 2
+      },
+      "sourceDeparture": "hand",
+      "logs": {
+        "actions": [
+          {
+            "gameId": "r874x9",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i2",
+              "from": "hand"
+            },
+            "answers": [],
+            "timestamp": "2026-10-15T05:44:04.585Z",
+            "event": "engine.action",
+            "seq": 26
+          },
+          {
+            "gameId": "r874x9",
+            "version": 2,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i3",
+              "from": "hand"
+            },
+            "answers": [],
+            "timestamp": "2026-10-15T05:44:06.127Z",
+            "event": "engine.action",
+            "seq": 33
+          },
+          {
+            "gameId": "r874x9",
+            "version": 4,
+            "side": "player",
+            "action": {
+              "kind": "activate",
+              "source": "i1",
+              "ability": 2
+            },
+            "answers": [],
+            "timestamp": "2026-10-15T05:44:07.908Z",
+            "event": "engine.action",
+            "seq": 38
+          }
+        ],
+        "uuidDeclaration": true
+      },
+      "reload": true
+    },
+    "cleanup": {
+      "runnerGroupAfterExit": [],
+      "serverPidCensus": "",
+      "portListenerCensus": "COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME\nnode    91089 dthurn   30u  IPv4 0x614825418d462b3e      0t0  TCP 127.0.0.1:5274 (LISTEN)\n"
+    },
+    "qualification": "One fresh combined desktop first-play/source-departure/saved-reload check, including complete null current first-event windows. No new images or visual changes; original desktop/mobile3 inspected captures remain qualified to original source epoch."
+  },
+  "heavyLock": {
+    "utcAcquired": "2026-10-15T05:54:25.440190+00:00",
+    "pid": 95700,
+    "pgid": 92679,
+    "loadAtAcquisition": [
+      14.318359375,
+      13.984375,
+      13.04638671875
+    ],
+    "argv": [
+      "/opt/homebrew/bin/npm",
+      "run",
+      "review:full"
+    ],
+    "queueAndLaunchS": 461.191089,
+    "acquisitionToTerminalS": 115.055333,
+    "qualification": "One combined-source full after622/719 integration; original full retained separately.2workers; no performance comparison."
+  },
+  "priorCombinedChecks": {
+    "combined-full": {
+      "utcStart": "2026-10-15T05:46:44.249101+00:00",
+      "utcEnd": "2026-10-15T05:56:20.495523+00:00",
+      "wallS": 576.2390762909781,
+      "exit": 0,
+      "cpuUserS": 264.403393,
+      "cpuSystemS": 30.175655,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "183156d127263a248bd6edc0e3ae9641e15d9274f63ce96efb2ba37e710e8e21",
+      "pid": 92679,
+      "pgid": 92679,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        29.15966796875,
+        16.8798828125,
+        13.4365234375
+      ],
+      "loadEnd": [
+        11.3837890625,
+        13.46240234375,
+        12.98974609375
+      ],
+      "stdoutSha256": "1310c1d487f87f786ab8b214e90f2aeeaf87ef3e827ba9bababd9b45721c5b21",
+      "stderrSha256": "cfc36b8a513a824b60e01443e73720f5c5dcd96e9054c45ae23d538eb36247bd"
+    },
+    "combined-identity": {
+      "utcStart": "2026-10-15T05:43:15.582452+00:00",
+      "utcEnd": "2026-10-15T05:43:19.564347+00:00",
+      "wallS": 3.981753583007958,
+      "exit": 0,
+      "cpuUserS": 4.460363,
+      "cpuSystemS": 1.089195,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 76633,
+      "pgid": 76633,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        4.4892578125,
+        7.650390625,
+        10.13916015625
+      ],
+      "loadEnd": [
+        4.4892578125,
+        7.650390625,
+        10.13916015625
+      ],
+      "stdoutSha256": "140fc832cd503b4686b01fc208255c03607a6d82eb6b5d1795d688cc69279094",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "combined-integration": {
+      "utcStart": "2026-10-15T05:43:38.657653+00:00",
+      "utcEnd": "2026-10-15T05:44:01.973896+00:00",
+      "wallS": 23.315812916029245,
+      "exit": 0,
+      "cpuUserS": 32.601655,
+      "cpuSystemS": 1.9301599999999999,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 78227,
+      "pgid": 78227,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        7.39306640625,
+        8.09619140625,
+        10.240234375
+      ],
+      "loadEnd": [
+        12.6103515625,
+        9.236328125,
+        10.5869140625
+      ],
+      "stdoutSha256": "4c14a12fb48a663c61980637f19982a4dddff83da7a09b0984ac0ba17e6bf570",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "combined-inventory-check": {
+      "utcStart": "2026-10-15T05:44:34.666714+00:00",
+      "utcEnd": "2026-10-15T05:44:39.393735+00:00",
+      "wallS": 4.726909457996953,
+      "exit": 0,
+      "cpuUserS": 3.690835,
+      "cpuSystemS": 1.217162,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 39264,
+      "pgid": 39264,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        19.306640625,
+        11.134765625,
+        11.224609375
+      ],
+      "loadEnd": [
+        20.16259765625,
+        11.44775390625,
+        11.33447265625
+      ],
+      "stdoutSha256": "dd71741421fa680a35c9ac132e4c77a3526538fe88f4c1722b735261a8d8b4f3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "combined-knip": {
+      "utcStart": "2026-10-15T05:44:34.670243+00:00",
+      "utcEnd": "2026-10-15T05:44:41.922093+00:00",
+      "wallS": 7.251683500013314,
+      "exit": 0,
+      "cpuUserS": 5.293509,
+      "cpuSystemS": 2.346852,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 39265,
+      "pgid": 39265,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        19.306640625,
+        11.134765625,
+        11.224609375
+      ],
+      "loadEnd": [
+        20.0693359375,
+        11.57275390625,
+        11.37890625
+      ],
+      "stdoutSha256": "5c071aebaecacb61f92d9e695e4af31a3227ea9c7f4d7fe11bafb52fb38ae496",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "combined-review": {
+      "utcStart": "2026-10-15T05:44:28.169124+00:00",
+      "utcEnd": "2026-10-15T05:46:01.306684+00:00",
+      "wallS": 93.13626954198116,
+      "exit": 0,
+      "cpuUserS": 237.655115,
+      "cpuSystemS": 24.181512,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "97e105bdf2cb4ccdbd3e0abd8b824eef95dcf1b6a5a71c78c95e3f9957b8260b",
+      "pid": 38884,
+      "pgid": 38884,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        17.5927734375,
+        10.66455078125,
+        11.06103515625
+      ],
+      "loadEnd": [
+        23.4384765625,
+        14.18310546875,
+        12.36181640625
+      ],
+      "stdoutSha256": "ac20399cf1e1ba10a22f05b7fac517f10bbae487cc60908425f5029726c81fb3",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "combined-schema": {
+      "utcStart": "2026-10-15T05:56:52.583173+00:00",
+      "utcEnd": "2026-10-15T05:56:52.734418+00:00",
+      "wallS": 0.15116066695190966,
+      "exit": 0,
+      "cpuUserS": 0.095012,
+      "cpuSystemS": 0.10917099999999999,
+      "sourceReference": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "sourceEpochSha256": "420574eb3520183b5d6a08f50bd90bb5a098d9295165610323d0a390e76d0667",
+      "pid": 94881,
+      "pgid": 94881,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        9.25537109375,
+        12.73486328125,
+        12.74072265625
+      ],
+      "loadEnd": [
+        9.25537109375,
+        12.73486328125,
+        12.74072265625
+      ],
+      "stdoutSha256": "2b5da4dd6c82e0470284da58bf10561bce38e24be6a2cb1f720bba014e4211d9",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "priorCombinedSourceSHA256": {
+    "scripts/content-inventory.ts": "3c8f24ac245bf9c5ed6f698b80a8e45ed55badee4eba9b0f72aa0107a2b4970d",
+    "src/engine/effects/primitives/contracts/first-played-spark-setter-support.ts": "50f8e210ce3f89922623adf9581b57ab19f660b6612a3daf7935e26cdba72dd2",
+    "src/engine/effects/primitives/contracts/first-played-spark-setter.contracts.ts": "c1afc3312ce7eb139f793377faa342531e2e605af3cf45b61791ba3018947a2a",
+    "src/engine/effects/primitives/contracts/history-refs.contracts.ts": "1446707f1291660a12ab2a2c7b35b1d5faa0ffdcd3952a8962cb9f5c49999c8b",
+    "src/engine/effects/primitives/first-played-spark-setter.ts": "77bdbffac0f378bca832fc2ff82fd1b75669127de54b13e6c5af1b518b09c078",
+    "src/engine/effects/primitives/index.ts": "23e9f2ede942030d89d7075b4abc3bf705adef7ad461d233027c1c8958c7bb34",
+    "src/engine/effects/registry.ts": "f2c0421eaeda4f2283cae9ee14009b7c68dd66f6da5871340956edac526e49e0",
+    "src/engine/loops/event-copy-continuation.ts": "76a4c61a332194840df36d731b377147dd4404c45cd95e267422f449fb5f5e4f",
+    "src/engine/testing/synthetic-cards.ts": "ec3e23320168ce455bc467f3efc5dfa87cfa45e68b9ed106b8a8259c94f18a31",
+    "src/engine/view/determinize.test.ts": "358197a0d1ac5688eccf34ac6ddc4b2e8ee77d465cb2db46299cebe3955ba8e6",
+    "src/engine/view/determinize.ts": "92e245672cd7adfbb081ed2f2ea882e560713f2ceec7017b82f27e7279ea27eb",
+    "src/engine/view/view.test.ts": "4b7d7c4e653e42e1213b88e3b4a28764e8497d1b58f4c8b9fce396420c6e6a42",
+    "src/engine/view/view.ts": "2d98854f09359739355f2690b73a2ee7b5415d2a02468a481c4558855fdc214b"
+  },
+  "priorCombinedInventory": {
+    "newBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+    "method": "Coherent same-WT source-frozen diagnostic; exact newbase generator/index/registry/synthetic bytes and ownRD excluded; all saved feature input/output bytes restored in finally. No whole-base-engine claim. Other own changed paths are outside generator runtime catalog leaves, DSL/capability probes or evidence scanner input directories.",
+    "total": 1209,
+    "uuidMembershipAnd12ImmutableFieldsEqual": true,
+    "immutableFields": [
+      "id",
+      "kind",
+      "name",
+      "cardType",
+      "rarity",
+      "cost",
+      "speed",
+      "subtype",
+      "spark",
+      "text",
+      "amplifiedText",
+      "module"
+    ],
+    "baseCommittedSha256": "b32c761412e82231553920aa142f009e8e0240648208d4a25ad0282cc5e9c8f9",
+    "baseCanonicalSha256": "3bb4f9974f200300f73a2b10c66f606839be4392113fdf5b271e6f24f64d0def",
+    "featureCanonicalSha256": "a19e6daaff55e3a77195812ee3472d7042daafa12d422576a8387bd129a7ea4f",
+    "featureDiffersFromOriginal718Output": true,
+    "baselineInputsExact": {
+      "scripts/content-inventory.ts": true,
+      "src/engine/effects/primitives/index.ts": true,
+      "src/engine/effects/registry.ts": true,
+      "src/engine/testing/synthetic-cards.ts": true
+    },
+    "savedBytesRestored": {
+      "scripts/content-inventory.ts": true,
+      "src/engine/effects/primitives/index.ts": true,
+      "src/engine/effects/registry.ts": true,
+      "src/engine/testing/synthetic-cards.ts": true,
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.718-1.md": true,
+      "docs/plan/evidence/content-inventory.json": true
+    },
+    "inherited": {
+      "entities": {
+        "025ce7f1-066b-480a-8a2f-364379890abd": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "0c52e8c3-a792-4eea-955f-a0c61463c066": [
+          "routing",
+          "rulesDecisions"
+        ],
+        "0df9d72c-58ea-42a0-a72a-cbc540a1836a": [
+          "routing"
+        ],
+        "108841ce-4feb-4c73-972e-0277c727c63e": [
+          "routing"
+        ],
+        "10bd78de-87ec-44e4-9b16-e755da2a9717": [
+          "cardIssues",
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "1328e611-fa2f-426f-87e2-97f26c061866": [
+          "routing"
+        ],
+        "1cd25b9a-b176-4c51-8349-bb4df35cbf05": [
+          "routing"
+        ],
+        "1cf06f9b-d698-434b-8e36-8a47206f4c0c": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "278ec1ab-f532-4862-84ae-63df5e49548c": [
+          "status"
+        ],
+        "34ce9428-dda9-4efa-bacd-5ec2698561c1": [
+          "routing"
+        ],
+        "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59": [
+          "routing"
+        ],
+        "452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19": [
+          "routing"
+        ],
+        "488bf436-c6d5-4e38-8a19-e50041f53766": [
+          "routing"
+        ],
+        "5190a8b8-25a0-4c60-a4de-2e2c5a73af77": [
+          "status"
+        ],
+        "58472ad2-88b1-4dc7-a161-c6dea7d8c43d": [
+          "routing"
+        ],
+        "6b95d6bd-c970-4465-9536-4f21e7630d0a": [
+          "routing"
+        ],
+        "71f77dd5-3bb5-4987-80f4-13dc69f74e6b": [
+          "routing"
+        ],
+        "7e8c86cc-788f-4648-be84-e0935c40c31e": [
+          "routing"
+        ],
+        "7ec00da2-2b2d-4613-9a2a-8611d38199ca": [
+          "rulesDecisions"
+        ],
+        "8408b8c2-5a3f-40dd-bac4-98f2736c4176": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "883f88fb-ac50-419a-8382-c22edee29755": [
+          "requiredPrimitives",
+          "routing"
+        ],
+        "8a2c7b32-26ea-40e2-845a-689da5673b4d": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1": [
+          "rulesDecisions"
+        ],
+        "95a162c1-5fb0-4966-b631-eec1e8ec96ef": [
+          "routing"
+        ],
+        "c2af5460-e61f-409b-9b86-6ac7db34d748": [
+          "rulesDecisions"
+        ],
+        "cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f": [
+          "requiredPrimitives",
+          "routing"
+        ],
+        "d78864da-eb31-4f25-9d51-94fca7ecf810": [
+          "rulesDecisions"
+        ],
+        "d9f0f7ff-63c0-4247-8831-054d7fed931d": [
+          "routing"
+        ],
+        "da7e4b45-9106-4116-bc1c-3aec8885396b": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "f4df5a74-7822-4552-a3ab-f50b00758593": [
+          "routing"
+        ]
+      },
+      "beads": {
+        "apollyon-01": [
+          "order"
+        ],
+        "apollyon-02": [
+          "order"
+        ],
+        "apollyon-03": [
+          "order"
+        ],
+        "apollyon-04": [
+          "order"
+        ],
+        "apollyon-05": [
+          "order"
+        ],
+        "apollyon-design": [
+          "order"
+        ],
+        "apollyon-sanity": [
+          "order"
+        ],
+        "deck-mods-card-type-change": [
+          "order"
+        ],
+        "deck-mods-cost-reduction": [
+          "order"
+        ],
+        "deck-mods-fast": [
+          "order"
+        ],
+        "deck-mods-foundation": [
+          "order"
+        ],
+        "deck-mods-reclaim": [
+          "order"
+        ],
+        "deck-mods-spark-bonus": [
+          "order"
+        ],
+        "deck-mods-subtype-change": [
+          "order"
+        ],
+        "dreamsigns-battle-11": [
+          "knownDecisions"
+        ],
+        "dreamsigns-battle-13": [
+          "entities"
+        ],
+        "dreamsigns-battle-14": [
+          "entities",
+          "knownDecisions"
+        ],
+        "dreamsigns-battle-22": [
+          "knownDecisions"
+        ],
+        "dreamsigns-journey-01": [
+          "order",
+          "title"
+        ],
+        "dreamsigns-journey-02": [
+          "knownDecisions",
+          "order",
+          "title"
+        ],
+        "dreamsigns-journey-03": [
+          "areas",
+          "entities",
+          "knownDecisions",
+          "order",
+          "title",
+          "weight"
+        ],
+        "dreamsigns-journey-04": [
+          "areas",
+          "entities",
+          "knownDecisions",
+          "order",
+          "title",
+          "weight"
+        ],
+        "dreamsigns-journey-05": [
+          "areas",
+          "dependsOn",
+          "entities",
+          "knownDecisions",
+          "order",
+          "title",
+          "weight"
+        ],
+        "dreamsigns-journey-06": [
+          "areas",
+          "dependsOn",
+          "entities",
+          "knownDecisions",
+          "order",
+          "title",
+          "weight"
+        ],
+        "dreamsigns-journey-07": [
+          "areas",
+          "entities",
+          "knownDecisions",
+          "order",
+          "serializedAfter",
+          "title",
+          "weight"
+        ],
+        "dreamsigns-journey-08": [
+          "areas",
+          "coreReview",
+          "dependsOn",
+          "entities",
+          "externalDependsOn",
+          "falloutHints",
+          "introduces",
+          "key",
+          "kind",
+          "knownDecisions",
+          "newPromptKinds",
+          "order",
+          "pilot",
+          "scenarios",
+          "section",
+          "serializedAfter",
+          "sharedAreas",
+          "title",
+          "weight"
+        ],
+        "next-battle-opening-hand": [
+          "order"
+        ],
+        "next-battle-smaller-hand": [
+          "order"
+        ],
+        "next-battle-starting-energy": [
+          "order"
+        ],
+        "prim-journey-battle-init": [
+          "order"
+        ],
+        "prim-journey-duplication": [
+          "areas",
+          "coreReview",
+          "dependsOn",
+          "entities",
+          "externalDependsOn",
+          "falloutHints",
+          "introduces",
+          "key",
+          "kind",
+          "knownDecisions",
+          "newPromptKinds",
+          "order",
+          "pilot",
+          "scenarios",
+          "section",
+          "serializedAfter",
+          "sharedAreas",
+          "title",
+          "weight"
+        ],
+        "prim-journey-shop": [
+          "areas",
+          "coreReview",
+          "dependsOn",
+          "entities",
+          "externalDependsOn",
+          "falloutHints",
+          "introduces",
+          "key",
+          "kind",
+          "knownDecisions",
+          "newPromptKinds",
+          "order",
+          "pilot",
+          "scenarios",
+          "section",
+          "serializedAfter",
+          "sharedAreas",
+          "title",
+          "weight"
+        ],
+        "prim-type-remap": [
+          "order"
+        ],
+        "transfiguration-sweep": [
+          "order"
+        ],
+        "transfigurations-01": [
+          "order"
+        ],
+        "transfigurations-02": [
+          "order"
+        ]
+      },
+      "primitives": {
+        "journeyDuplication": [
+          "exists",
+          "introducedBy"
+        ],
+        "journeyShop": [
+          "exists",
+          "introducedBy"
+        ]
+      },
+      "topLevel": {
+        "summary": {
+          "before": {
+            "countsByKind": {
+              "card": 522,
+              "dreamwell": 33,
+              "figment": 10,
+              "avatar": 32,
+              "dreamsign": 153,
+              "transfiguration": 9,
+              "explorationEffect": 440,
+              "apollyonIncarnation": 10
+            },
+            "total": 1209,
+            "duplicateIds": 0,
+            "pendingByKind": {
+              "card": 0,
+              "dreamwell": 0,
+              "figment": 0,
+              "avatar": 0,
+              "dreamsign": 45,
+              "transfiguration": 0,
+              "explorationEffect": 0,
+              "apollyonIncarnation": 0
+            },
+            "cardsWithAmplifiedText": 244,
+            "beads": 201,
+            "beadsBySection": {
+              "5.2": 129,
+              "5.3": 7,
+              "5.4": 9,
+              "5.5": 24,
+              "5.6": 12,
+              "5.7a": 2,
+              "5.7": 1,
+              "5.7b": 10,
+              "5.8": 7
+            },
+            "beadsByKind": {
+              "primitive": 4,
+              "composition": 174,
+              "task": 23
+            },
+            "largestCompositionBead": 6,
+            "newPrimitives": 4,
+            "notes": [
+              "The beads list is the current planning projection; filed native Entities, Areas, acceptance criteria and dependency graph govern execution. Read entities by filed UUIDs; a filed key identifies its original filing and scenario slug, not a current projection scope. Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md \u00a7 Serialization edges) are added at filing, from sharedAreas and entity modules.",
+              "Primitive and prompt existence is probed against src/engine and journey factories against their production registry in src/rules/journey when the script runs; DSL capabilities name callable exports or registered forms with required semantic options. Filed native UUID scopes remain authoritative.",
+              "Tags come from regex rules and manual corrections in scripts/content-inventory.ts; an implementing session reads the printed text clause by clause (recipe step 2) and may need primitives the tags miss."
+            ]
+          },
+          "after": {
+            "countsByKind": {
+              "card": 522,
+              "dreamwell": 33,
+              "figment": 10,
+              "avatar": 32,
+              "dreamsign": 153,
+              "transfiguration": 9,
+              "explorationEffect": 440,
+              "apollyonIncarnation": 10
+            },
+            "total": 1209,
+            "duplicateIds": 0,
+            "pendingByKind": {
+              "card": 0,
+              "dreamwell": 0,
+              "figment": 0,
+              "avatar": 0,
+              "dreamsign": 37,
+              "transfiguration": 0,
+              "explorationEffect": 0,
+              "apollyonIncarnation": 0
+            },
+            "cardsWithAmplifiedText": 244,
+            "beads": 200,
+            "beadsBySection": {
+              "5.2": 129,
+              "5.3": 7,
+              "5.4": 9,
+              "5.5": 24,
+              "5.6": 11,
+              "5.7a": 2,
+              "5.7": 1,
+              "5.7b": 10,
+              "5.8": 7
+            },
+            "beadsByKind": {
+              "primitive": 2,
+              "composition": 175,
+              "task": 23
+            },
+            "largestCompositionBead": 6,
+            "newPrimitives": 2,
+            "notes": [
+              "The beads list is the current planning projection; filed native Entities, Areas, acceptance criteria and dependency graph govern execution. Read entities by filed UUIDs; a filed key identifies its original filing and scenario slug, not a current projection scope. Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md \u00a7 Serialization edges) are added at filing, from sharedAreas and entity modules.",
+              "Primitive and prompt existence is probed against src/engine and journey factories against their production registry in src/rules/journey when the script runs; DSL capabilities name callable exports or registered forms with required semantic options. Filed native UUID scopes remain authoritative.",
+              "Tags come from regex rules and manual corrections in scripts/content-inventory.ts; an implementing session reads the printed text clause by clause (recipe step 2) and may need primitives the tags miss."
+            ]
+          }
+        }
+      }
+    },
+    "feature": {
+      "entities": {
+        "3dd05e97-1af8-4ae9-8e1f-954eaa63e112": [
+          "correction",
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "tags"
+        ],
+        "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4": [
+          "routing"
+        ]
+      },
+      "beads": {
+        "dreamsigns-battle-13": [
+          "areas",
+          "entities",
+          "knownDecisions",
+          "weight"
+        ],
+        "dreamsigns-battle-14": [
+          "areas",
+          "entities",
+          "knownDecisions",
+          "weight"
+        ]
+      },
+      "primitives": {
+        "firstPlayedSparkSetter": [
+          "exists",
+          "kind",
+          "module",
+          "name",
+          "note",
+          "usedBy"
+        ],
+        "setBaseSpark": [
+          "usedBy"
+        ],
+        "triggerNth": [
+          "usedBy"
+        ]
+      },
+      "topLevel": {}
+    },
+    "nativeCarry": {
+      "at": "2026-10-15T05:43:34.704456+00:00",
+      "proofSHA256": "83529e98ba38dda2f22d9b6450a08fc930b935b16791c89e87fb4c362780233f",
+      "decision": "Finite UPDATED-BASE canonical inventory carry admission 2026-10-15T05:43:34.448935+00:00: after native rebase to certified9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4, parent independently parses all three full inventories, verifies all1209 UUID membership/12immutable fields and empty production catalog diff, and recomputes every changed field. Current base committed b32c7614; coherent canonical baseline3bb4f9974f200300f73a2b10c66f606839be4392113fdf5b271e6f24f64d0def; featurea19e6daaff55e3a77195812ee3472d7042daafa12d422576a8387bd129a7ea4f. Admit exactly30 inherited entity rows/36 planning bead rows/2 existing primitive rows(journeyDuplication/journeyShop) and derived summary fields(beads,beadsByKind,beadsBySection,newPrimitives,pendingByKind) enumerated by full newbase-inventory-audit.json and compact parent-newbase-inventory-carry.json. Feature-only delta remains exactly two entity UUID rows Flash3dd05e97 + companion routing3fd8861d, battle13/14 four derived fields, ownnewprimitive descriptor plus setBaseSpark/triggerNth usage; no feature other top-level changes. All four baseline inputs exact newbase during diagnostic, ownRD excluded, all six feature bytes restored finally; no base-engine execution/performance claim. Carry ONLY canonical regenerated output, no manualJSONpatch or runtime authority expansion. Retain original source208f9f74 baseline16/featureca754596 separately with its original receipts; current final evidence must name newbase30/featurea19e6da and actual combined checks. Original251 native5UUID scope and full recipes remain unchanged regardless positional generated regrouping. Parent independently reversed own edits from both combined observer files and reproduced every updated-peer byte (622/719), proof parent-independent-peer-preservation.json."
+    }
+  },
+  "priorCombinedValidationCounts": {
+    "combined-identity": [
+      "Test Files  1 passed (1)",
+      "Tests  4 passed | 5665 skipped (5669)"
+    ],
+    "combined-integration": [
+      "Test Files  9 passed (9)",
+      "Tests  5802 passed (5802)"
+    ],
+    "combined-review": [
+      "Test Files  311 passed (311)",
+      "Tests  9523 passed (9523)"
+    ],
+    "combined-full": [
+      "Test Files  392 passed (392)",
+      "Tests  10532 passed (10532)"
+    ]
+  },
+  "priorCombinedImplementationWindow": {
+    "start": "2026-10-15T04:48:50.496648Z",
+    "end": "2026-10-15T05:57:10.773412+00:00"
+  },
+  "priorCombinedSchemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "combined-review owned command start;1-minute load, per-step samples below"
+      },
+      "testDelta": {
+        "measuredFor": "Git diff from9eb3 newbase:399line own contract+70line helper+5net existing test lines;2 added dedicated test paths;0 configured entrypoints/jsdom"
+      }
+    }
+  },
+  "priorCombinedHostLoadSamples": [
+    {
+      "step": "prepare",
+      "utc": "2026-10-15T05:44:28.541Z",
+      "load1m": 17.5927734375
+    },
+    {
+      "step": "typecheck",
+      "utc": "2026-10-15T05:44:31.773Z",
+      "load1m": 19.306640625
+    },
+    {
+      "step": "typecheck-node",
+      "utc": "2026-10-15T05:44:31.774Z",
+      "load1m": 19.306640625
+    },
+    {
+      "step": "import-cycles",
+      "utc": "2026-10-15T05:44:31.776Z",
+      "load1m": 19.306640625
+    },
+    {
+      "step": "lint",
+      "utc": "2026-10-15T05:44:31.778Z",
+      "load1m": 19.306640625
+    },
+    {
+      "step": "test-related",
+      "utc": "2026-10-15T05:44:31.780Z",
+      "load1m": 19.306640625
+    },
+    {
+      "step": "friction-records",
+      "utc": "2026-10-15T05:44:31.783Z",
+      "load1m": 19.306640625
+    },
+    {
+      "step": "restore-local-assets",
+      "utc": "2026-10-15T05:45:59.018Z",
+      "load1m": 24.34716796875
+    }
+  ],
+  "priorCombinedTestDelta": {
+    "addedDedicatedTestPaths": 2,
+    "changedDedicatedTestPaths": 5,
+    "configuredEntryPoints": 0,
+    "jsdomEntryPoints": 0,
+    "newPrivateContractModules": 1,
+    "newPrivateHelpers": 1,
+    "newContractLines": 469,
+    "existingTestNetLines": 5,
+    "netLines": 474,
+    "newCases": 58
+  },
+  "priorCombinedSourceBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+  "priorCombinedSourceCommit": "1f7d9b63cee013efb39a97d759cb1ae5f87c630d",
+  "priorCombinedGitReturn": {
+    "sourceBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+    "checkpointBefore": "0eb1e2c54b82522fb68bc76e1dc0d63472dec3a1",
+    "originalSource": "208f9f74f6f564a9cad1a5ff71c847cac3d95f78",
+    "originalGitReturn": {
+      "utcGitStart": "2026-10-15T05:34:40.128735+00:00",
+      "utcGitReturn": "2026-10-15T05:34:40.157170+00:00",
+      "gitExit": 0,
+      "evidenceCutoff": "2026-10-15T05:34:40.033784+00:00",
+      "cutoffToActualGitReturnS": 0.123386,
+      "claimInclusiveStart": "2026-10-15T04:48:50.496648+00:00",
+      "claimInclusiveToActualGitReturnMin": 45.82767536666667,
+      "indexTreeBeforeCommit": "326bc5c2018113a03f8511a8c2c925bee86e588f",
+      "commit": "208f9f74f6f564a9cad1a5ff71c847cac3d95f78",
+      "statusAfter": ""
+    },
+    "evidenceCutoff": "2026-10-15T05:57:10.773412+00:00",
+    "utcGitStart": "2026-10-15T05:57:10.945492+00:00",
+    "utcGitReturn": "2026-10-15T05:57:10.973964+00:00",
+    "gitExit": 0,
+    "claimInclusiveStart": "2026-10-15T04:48:50.496648+00:00",
+    "claimInclusiveToActualGitReturnMin": 68.34128860000001,
+    "cutoffToActualGitReturnS": 0.200552,
+    "indexTreeBeforeCommit": "faf8db1ee7e64ce502c5baa65928ab30a507a7f9",
+    "commit": "1f7d9b63cee013efb39a97d759cb1ae5f87c630d",
+    "statusAfter": ""
+  },
+  "testDelta": {
+    "addedDedicatedTestPaths": 2,
+    "changedDedicatedTestPaths": 5,
+    "configuredEntryPoints": 0,
+    "jsdomEntryPoints": 0,
+    "newPrivateContractModules": 1,
+    "newPrivateHelpers": 1,
+    "newContractLines": 486,
+    "existingTestNetLines": 5,
+    "netLines": 491,
+    "newCases": 60
+  },
+  "sourceSHA256": {
+    "scripts/content-inventory.ts": "3c8f24ac245bf9c5ed6f698b80a8e45ed55badee4eba9b0f72aa0107a2b4970d",
+    "src/engine/effects/primitives/contracts/first-played-spark-setter-support.ts": "50f8e210ce3f89922623adf9581b57ab19f660b6612a3daf7935e26cdba72dd2",
+    "src/engine/effects/primitives/contracts/first-played-spark-setter.contracts.ts": "25b5cf36fd50c3637ca6be9b0f147d8f75b9d2e29cbed76e83cfea064f1213b1",
+    "src/engine/effects/primitives/contracts/history-refs.contracts.ts": "1446707f1291660a12ab2a2c7b35b1d5faa0ffdcd3952a8962cb9f5c49999c8b",
+    "src/engine/effects/primitives/first-played-spark-setter.ts": "77bdbffac0f378bca832fc2ff82fd1b75669127de54b13e6c5af1b518b09c078",
+    "src/engine/effects/primitives/index.ts": "0e763470cd63dd9abedc0d55d87f867c1bb8296f6ce86e7627ccad295007a393",
+    "src/engine/effects/registry.ts": "aaf962ec15d9d49dbf909ecd046e528cf0e9300d564d55d8c463fc591df23518",
+    "src/engine/loops/event-copy-continuation.ts": "fa1fa8893c61b7b8c58971d39bda1f600052bc1d9c908f282df302a1ae0c348a",
+    "src/engine/testing/synthetic-cards.ts": "ec3e23320168ce455bc467f3efc5dfa87cfa45e68b9ed106b8a8259c94f18a31",
+    "src/engine/view/determinize.test.ts": "358197a0d1ac5688eccf34ac6ddc4b2e8ee77d465cb2db46299cebe3955ba8e6",
+    "src/engine/view/determinize.ts": "92e245672cd7adfbb081ed2f2ea882e560713f2ceec7017b82f27e7279ea27eb",
+    "src/engine/view/view.test.ts": "4b7d7c4e653e42e1213b88e3b4a28764e8497d1b58f4c8b9fce396420c6e6a42",
+    "src/engine/view/view.ts": "2d98854f09359739355f2690b73a2ee7b5415d2a02468a481c4558855fdc214b"
+  },
+  "latestCommandReceipts": {
+    "latest-canonical-base": {
+      "utcStart": "2026-10-15T06:03:19.180773+00:00",
+      "utcEnd": "2026-10-15T06:03:24.178363+00:00",
+      "wallS": 4.997432000003755,
+      "exit": 0,
+      "cpuUserS": 3.235899,
+      "cpuSystemS": 1.29386,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "bd917d3ac717c4135642a9960bf22b9d3f71c0ba2d9c7bb834a2e7658cf38b06",
+      "pid": 78304,
+      "pgid": 78304,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        20.17138671875,
+        13.8984375,
+        12.841796875
+      ],
+      "loadEnd": [
+        19.4365234375,
+        13.85009765625,
+        12.83056640625
+      ],
+      "stdoutSha256": "0513df8f7d103ee2dd6b8f12b920f90b44e7bfdc6a67f85f52086ef4f24d3aec",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "latest-coupling": {
+      "utcStart": "2026-10-15T06:02:32.388824+00:00",
+      "utcEnd": "2026-10-15T06:02:37.399701+00:00",
+      "wallS": 5.010716874967329,
+      "exit": 0,
+      "cpuUserS": 5.642846,
+      "cpuSystemS": 1.297675,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3e7cf8535d889db556aef437d890932c0e3b894e860909a52706752ec7a47bd",
+      "pid": 74382,
+      "pgid": 74382,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        18.93896484375,
+        12.61669921875,
+        12.35400390625
+      ],
+      "loadEnd": [
+        18.94384765625,
+        12.72265625,
+        12.392578125
+      ],
+      "stdoutSha256": "05cbc56c1dcff29a14d2a79a5737d04ea84b8662ec3fb6564a602b4bf39321b6",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "latest-generator-audit": {
+      "utcStart": "2026-10-15T06:03:18.974557+00:00",
+      "utcEnd": "2026-10-15T06:03:24.269200+00:00",
+      "wallS": 5.294502916978672,
+      "exit": 0,
+      "cpuUserS": 3.366635,
+      "cpuSystemS": 1.56834,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3c9fb19a045743c7b8d0a9165408c4e09785413c9a4d4b1239e7cba96d70aa7",
+      "pid": 78280,
+      "pgid": 78280,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        20.17138671875,
+        13.8984375,
+        12.841796875
+      ],
+      "loadEnd": [
+        19.4365234375,
+        13.85009765625,
+        12.83056640625
+      ],
+      "stdoutSha256": "880d8e7b1dea117f441a8fe2f691f4e0e9485681dcb8831474164f868bd9aa10",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "latest-integration": {
+      "utcStart": "2026-10-15T06:04:16.253358+00:00",
+      "utcEnd": "2026-10-15T06:04:43.571535+00:00",
+      "wallS": 27.317746167012956,
+      "exit": 0,
+      "cpuUserS": 36.060362,
+      "cpuSystemS": 2.176086,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3c9fb19a045743c7b8d0a9165408c4e09785413c9a4d4b1239e7cba96d70aa7",
+      "pid": 14040,
+      "pgid": 14040,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        21.27001953125,
+        15.0810546875,
+        13.33544921875
+      ],
+      "loadEnd": [
+        21.04833984375,
+        15.47216796875,
+        13.52294921875
+      ],
+      "stdoutSha256": "a49192915d8716a55e569691651c9cdd88efa40689605f8523ca1c12190d7bee",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "latest-inventory-check": {
+      "utcStart": "2026-10-15T06:06:26.341867+00:00",
+      "utcEnd": "2026-10-15T06:06:28.859175+00:00",
+      "wallS": 2.5171790000167675,
+      "exit": 0,
+      "cpuUserS": 3.044491,
+      "cpuSystemS": 0.7978989999999999,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3c9fb19a045743c7b8d0a9165408c4e09785413c9a4d4b1239e7cba96d70aa7",
+      "pid": 79299,
+      "pgid": 79299,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        15.22607421875,
+        15.189453125,
+        13.65234375
+      ],
+      "loadEnd": [
+        15.22607421875,
+        15.189453125,
+        13.65234375
+      ],
+      "stdoutSha256": "dd71741421fa680a35c9ac132e4c77a3526538fe88f4c1722b735261a8d8b4f3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "latest-inventory": {
+      "utcStart": "2026-10-15T06:02:51.152311+00:00",
+      "utcEnd": "2026-10-15T06:02:54.354042+00:00",
+      "wallS": 3.201563916984014,
+      "exit": 0,
+      "cpuUserS": 3.272106,
+      "cpuSystemS": 0.991231,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3e7cf8535d889db556aef437d890932c0e3b894e860909a52706752ec7a47bd",
+      "pid": 76509,
+      "pgid": 76509,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        20.05810546875,
+        13.23486328125,
+        12.57861328125
+      ],
+      "loadEnd": [
+        20.05810546875,
+        13.23486328125,
+        12.57861328125
+      ],
+      "stdoutSha256": "0513df8f7d103ee2dd6b8f12b920f90b44e7bfdc6a67f85f52086ef4f24d3aec",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "latest-knip": {
+      "utcStart": "2026-10-15T06:04:38.478471+00:00",
+      "utcEnd": "2026-10-15T06:04:45.452992+00:00",
+      "wallS": 6.974373208009638,
+      "exit": 0,
+      "cpuUserS": 5.24732,
+      "cpuSystemS": 2.317338,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3c9fb19a045743c7b8d0a9165408c4e09785413c9a4d4b1239e7cba96d70aa7",
+      "pid": 53324,
+      "pgid": 53324,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        19.92138671875,
+        15.15966796875,
+        13.40234375
+      ],
+      "loadEnd": [
+        22.56591796875,
+        15.87890625,
+        13.677734375
+      ],
+      "stdoutSha256": "18ded5c50a90e1c7f0667adf7cca1c03036ffa29d3441f085664e4234c8d19e3",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "latest-restore": {
+      "utcStart": "2026-10-15T06:02:32.181989+00:00",
+      "utcEnd": "2026-10-15T06:02:32.291922+00:00",
+      "wallS": 0.10982279200106859,
+      "exit": 0,
+      "cpuUserS": 0.040522999999999997,
+      "cpuSystemS": 0.206205,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "59e22736876f4107b3bf8b9fb1b00bfd956c07d2145f6eff64abcb6d86d834c6",
+      "pid": 74363,
+      "pgid": 74363,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        18.93896484375,
+        12.61669921875,
+        12.35400390625
+      ],
+      "loadEnd": [
+        18.93896484375,
+        12.61669921875,
+        12.35400390625
+      ],
+      "stdoutSha256": "c72d42584532986567acd9c79cad723b654035f5951cf5d54de036c8d2d883d5",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "latest-review": {
+      "utcStart": "2026-10-15T06:04:37.342734+00:00",
+      "utcEnd": "2026-10-15T06:05:52.348930+00:00",
+      "wallS": 75.00518833397655,
+      "exit": 0,
+      "cpuUserS": 208.8367,
+      "cpuSystemS": 21.607211,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3c9fb19a045743c7b8d0a9165408c4e09785413c9a4d4b1239e7cba96d70aa7",
+      "pid": 51933,
+      "pgid": 51933,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        19.92138671875,
+        15.15966796875,
+        13.40234375
+      ],
+      "loadEnd": [
+        14.94921875,
+        15.10205078125,
+        13.55615234375
+      ],
+      "stdoutSha256": "17781fadff17f02ae2088df25add064972e78ff48592d2d486a148dcad69aac2",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "latest-schema": {
+      "utcStart": "2026-10-15T06:08:13.184287+00:00",
+      "utcEnd": "2026-10-15T06:08:13.452167+00:00",
+      "wallS": 0.2677837500232272,
+      "exit": 0,
+      "cpuUserS": 0.11185099999999999,
+      "cpuSystemS": 0.143902,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "10b2f9556c386dc8020c29f0a167282bec4739adaa70010fd9d69d38df24e5ad",
+      "pid": 87032,
+      "pgid": 87032,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        10.986328125,
+        13.49658203125,
+        13.15625
+      ],
+      "loadEnd": [
+        10.986328125,
+        13.49658203125,
+        13.15625
+      ],
+      "stdoutSha256": "341e44ce889f58f3748dada87cfd2839faed5a750b2f62f9c3aa5ea2deb1b80b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "checks": {
+    "latest-coupling": {
+      "utcStart": "2026-10-15T06:02:32.388824+00:00",
+      "utcEnd": "2026-10-15T06:02:37.399701+00:00",
+      "wallS": 5.010716874967329,
+      "exit": 0,
+      "cpuUserS": 5.642846,
+      "cpuSystemS": 1.297675,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3e7cf8535d889db556aef437d890932c0e3b894e860909a52706752ec7a47bd",
+      "pid": 74382,
+      "pgid": 74382,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        18.93896484375,
+        12.61669921875,
+        12.35400390625
+      ],
+      "loadEnd": [
+        18.94384765625,
+        12.72265625,
+        12.392578125
+      ],
+      "stdoutSha256": "05cbc56c1dcff29a14d2a79a5737d04ea84b8662ec3fb6564a602b4bf39321b6",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "latest-integration": {
+      "utcStart": "2026-10-15T06:04:16.253358+00:00",
+      "utcEnd": "2026-10-15T06:04:43.571535+00:00",
+      "wallS": 27.317746167012956,
+      "exit": 0,
+      "cpuUserS": 36.060362,
+      "cpuSystemS": 2.176086,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3c9fb19a045743c7b8d0a9165408c4e09785413c9a4d4b1239e7cba96d70aa7",
+      "pid": 14040,
+      "pgid": 14040,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        21.27001953125,
+        15.0810546875,
+        13.33544921875
+      ],
+      "loadEnd": [
+        21.04833984375,
+        15.47216796875,
+        13.52294921875
+      ],
+      "stdoutSha256": "a49192915d8716a55e569691651c9cdd88efa40689605f8523ca1c12190d7bee",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "latest-inventory-check": {
+      "utcStart": "2026-10-15T06:06:26.341867+00:00",
+      "utcEnd": "2026-10-15T06:06:28.859175+00:00",
+      "wallS": 2.5171790000167675,
+      "exit": 0,
+      "cpuUserS": 3.044491,
+      "cpuSystemS": 0.7978989999999999,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3c9fb19a045743c7b8d0a9165408c4e09785413c9a4d4b1239e7cba96d70aa7",
+      "pid": 79299,
+      "pgid": 79299,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        15.22607421875,
+        15.189453125,
+        13.65234375
+      ],
+      "loadEnd": [
+        15.22607421875,
+        15.189453125,
+        13.65234375
+      ],
+      "stdoutSha256": "dd71741421fa680a35c9ac132e4c77a3526538fe88f4c1722b735261a8d8b4f3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "latest-knip": {
+      "utcStart": "2026-10-15T06:04:38.478471+00:00",
+      "utcEnd": "2026-10-15T06:04:45.452992+00:00",
+      "wallS": 6.974373208009638,
+      "exit": 0,
+      "cpuUserS": 5.24732,
+      "cpuSystemS": 2.317338,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3c9fb19a045743c7b8d0a9165408c4e09785413c9a4d4b1239e7cba96d70aa7",
+      "pid": 53324,
+      "pgid": 53324,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        19.92138671875,
+        15.15966796875,
+        13.40234375
+      ],
+      "loadEnd": [
+        22.56591796875,
+        15.87890625,
+        13.677734375
+      ],
+      "stdoutSha256": "18ded5c50a90e1c7f0667adf7cca1c03036ffa29d3441f085664e4234c8d19e3",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "latest-review": {
+      "utcStart": "2026-10-15T06:04:37.342734+00:00",
+      "utcEnd": "2026-10-15T06:05:52.348930+00:00",
+      "wallS": 75.00518833397655,
+      "exit": 0,
+      "cpuUserS": 208.8367,
+      "cpuSystemS": 21.607211,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "d3c9fb19a045743c7b8d0a9165408c4e09785413c9a4d4b1239e7cba96d70aa7",
+      "pid": 51933,
+      "pgid": 51933,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        19.92138671875,
+        15.15966796875,
+        13.40234375
+      ],
+      "loadEnd": [
+        14.94921875,
+        15.10205078125,
+        13.55615234375
+      ],
+      "stdoutSha256": "17781fadff17f02ae2088df25add064972e78ff48592d2d486a148dcad69aac2",
+      "stderrSha256": "0de989c0c984a9b947e51a97c1b8ccf41197c37ead32ee9f58f70b78957686c5"
+    },
+    "latest-schema": {
+      "utcStart": "2026-10-15T06:08:13.184287+00:00",
+      "utcEnd": "2026-10-15T06:08:13.452167+00:00",
+      "wallS": 0.2677837500232272,
+      "exit": 0,
+      "cpuUserS": 0.11185099999999999,
+      "cpuSystemS": 0.143902,
+      "sourceReference": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "sourceEpochSha256": "10b2f9556c386dc8020c29f0a167282bec4739adaa70010fd9d69d38df24e5ad",
+      "pid": 87032,
+      "pgid": 87032,
+      "sameGroupAfterExit": [],
+      "loadStart": [
+        10.986328125,
+        13.49658203125,
+        13.15625
+      ],
+      "loadEnd": [
+        10.986328125,
+        13.49658203125,
+        13.15625
+      ],
+      "stdoutSha256": "341e44ce889f58f3748dada87cfd2839faed5a750b2f62f9c3aa5ea2deb1b80b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "validationCounts": {
+    "latest-coupling": [
+      "Test Files  1 passed (1)",
+      "Tests  2 passed | 5729 skipped (5731)"
+    ],
+    "latest-integration": [
+      "Test Files  9 passed (9)",
+      "Tests  5864 passed (5864)"
+    ],
+    "latest-review": [
+      "Test Files  311 passed (311)",
+      "Tests  9585 passed (9585)"
+    ]
+  },
+  "inventory": {
+    "newBase": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+    "method": "Coherent same-WT source-frozen diagnostic; exact newbase generator/index/registry/synthetic bytes and ownRD excluded; all saved feature input/output bytes restored in finally. No whole-base-engine claim. Other own changed paths are outside generator runtime catalog leaves, DSL/capability probes or evidence scanner input directories.",
+    "total": 1209,
+    "uuidMembershipAnd12ImmutableFieldsEqual": true,
+    "immutableFields": [
+      "id",
+      "kind",
+      "name",
+      "cardType",
+      "rarity",
+      "cost",
+      "speed",
+      "subtype",
+      "spark",
+      "text",
+      "amplifiedText",
+      "module"
+    ],
+    "baseCommittedSha256": "b32c761412e82231553920aa142f009e8e0240648208d4a25ad0282cc5e9c8f9",
+    "baseCanonicalSha256": "71831c806bb1262fde62fd04969e7c764765695f37c9543cc8fd134b7dfdf30e",
+    "featureCanonicalSha256": "419029b3b498a672a9679acd27b997f0d74b1fbaac11bf46842ce788c91fd996",
+    "featureDiffersFromOriginal718Output": true,
+    "baselineInputsExact": {
+      "scripts/content-inventory.ts": true,
+      "src/engine/effects/primitives/index.ts": true,
+      "src/engine/effects/registry.ts": true,
+      "src/engine/testing/synthetic-cards.ts": true
+    },
+    "savedBytesRestored": {
+      "scripts/content-inventory.ts": true,
+      "src/engine/effects/primitives/index.ts": true,
+      "src/engine/effects/registry.ts": true,
+      "src/engine/testing/synthetic-cards.ts": true,
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.718-1.md": true,
+      "docs/plan/evidence/content-inventory.json": true
+    },
+    "inherited": {
+      "entities": {
+        "025ce7f1-066b-480a-8a2f-364379890abd": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "0c52e8c3-a792-4eea-955f-a0c61463c066": [
+          "routing",
+          "rulesDecisions"
+        ],
+        "0df9d72c-58ea-42a0-a72a-cbc540a1836a": [
+          "routing"
+        ],
+        "108841ce-4feb-4c73-972e-0277c727c63e": [
+          "routing"
+        ],
+        "10bd78de-87ec-44e4-9b16-e755da2a9717": [
+          "cardIssues",
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "11018e32-f47e-45fd-a8cf-3a9e3f3be71b": [
+          "rulesDecisions"
+        ],
+        "1328e611-fa2f-426f-87e2-97f26c061866": [
+          "routing"
+        ],
+        "1cd25b9a-b176-4c51-8349-bb4df35cbf05": [
+          "routing"
+        ],
+        "1cf06f9b-d698-434b-8e36-8a47206f4c0c": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "278ec1ab-f532-4862-84ae-63df5e49548c": [
+          "status"
+        ],
+        "34ce9428-dda9-4efa-bacd-5ec2698561c1": [
+          "routing"
+        ],
+        "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59": [
+          "routing"
+        ],
+        "452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19": [
+          "routing"
+        ],
+        "488bf436-c6d5-4e38-8a19-e50041f53766": [
+          "routing"
+        ],
+        "5190a8b8-25a0-4c60-a4de-2e2c5a73af77": [
+          "status"
+        ],
+        "58472ad2-88b1-4dc7-a161-c6dea7d8c43d": [
+          "routing"
+        ],
+        "6b95d6bd-c970-4465-9536-4f21e7630d0a": [
+          "routing"
+        ],
+        "71f77dd5-3bb5-4987-80f4-13dc69f74e6b": [
+          "routing"
+        ],
+        "7e8c86cc-788f-4648-be84-e0935c40c31e": [
+          "routing"
+        ],
+        "7ec00da2-2b2d-4613-9a2a-8611d38199ca": [
+          "rulesDecisions"
+        ],
+        "8408b8c2-5a3f-40dd-bac4-98f2736c4176": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "883f88fb-ac50-419a-8382-c22edee29755": [
+          "requiredPrimitives",
+          "routing"
+        ],
+        "8a2c7b32-26ea-40e2-845a-689da5673b4d": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1": [
+          "rulesDecisions"
+        ],
+        "95a162c1-5fb0-4966-b631-eec1e8ec96ef": [
+          "routing"
+        ],
+        "c2af5460-e61f-409b-9b86-6ac7db34d748": [
+          "rulesDecisions"
+        ],
+        "cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f": [
+          "requiredPrimitives",
+          "routing"
+        ],
+        "d78864da-eb31-4f25-9d51-94fca7ecf810": [
+          "rulesDecisions"
+        ],
+        "d9f0f7ff-63c0-4247-8831-054d7fed931d": [
+          "routing"
+        ],
+        "da7e4b45-9106-4116-bc1c-3aec8885396b": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ],
+        "f4df5a74-7822-4552-a3ab-f50b00758593": [
+          "routing"
+        ]
+      },
+      "beads": {
+        "apollyon-01": [
+          "order"
+        ],
+        "apollyon-02": [
+          "order"
+        ],
+        "apollyon-03": [
+          "order"
+        ],
+        "apollyon-04": [
+          "order"
+        ],
+        "apollyon-05": [
+          "order"
+        ],
+        "apollyon-design": [
+          "order"
+        ],
+        "apollyon-sanity": [
+          "order"
+        ],
+        "deck-mods-card-type-change": [
+          "order"
+        ],
+        "deck-mods-cost-reduction": [
+          "order"
+        ],
+        "deck-mods-fast": [
+          "order"
+        ],
+        "deck-mods-foundation": [
+          "order"
+        ],
+        "deck-mods-reclaim": [
+          "order"
+        ],
+        "deck-mods-spark-bonus": [
+          "order"
+        ],
+        "deck-mods-subtype-change": [
+          "order"
+        ],
+        "dreamsigns-battle-11": [
+          "knownDecisions"
+        ],
+        "dreamsigns-battle-13": [
+          "entities"
+        ],
+        "dreamsigns-battle-14": [
+          "entities",
+          "knownDecisions"
+        ],
+        "dreamsigns-battle-19": [
+          "knownDecisions"
+        ],
+        "dreamsigns-battle-22": [
+          "knownDecisions"
+        ],
+        "dreamsigns-journey-01": [
+          "order",
+          "title"
+        ],
+        "dreamsigns-journey-02": [
+          "knownDecisions",
+          "order",
+          "title"
+        ],
+        "dreamsigns-journey-03": [
+          "areas",
+          "entities",
+          "knownDecisions",
+          "order",
+          "title",
+          "weight"
+        ],
+        "dreamsigns-journey-04": [
+          "areas",
+          "entities",
+          "knownDecisions",
+          "order",
+          "title",
+          "weight"
+        ],
+        "dreamsigns-journey-05": [
+          "areas",
+          "dependsOn",
+          "entities",
+          "knownDecisions",
+          "order",
+          "title",
+          "weight"
+        ],
+        "dreamsigns-journey-06": [
+          "areas",
+          "dependsOn",
+          "entities",
+          "knownDecisions",
+          "order",
+          "title",
+          "weight"
+        ],
+        "dreamsigns-journey-07": [
+          "areas",
+          "entities",
+          "knownDecisions",
+          "order",
+          "serializedAfter",
+          "title",
+          "weight"
+        ],
+        "dreamsigns-journey-08": [
+          "areas",
+          "coreReview",
+          "dependsOn",
+          "entities",
+          "externalDependsOn",
+          "falloutHints",
+          "introduces",
+          "key",
+          "kind",
+          "knownDecisions",
+          "newPromptKinds",
+          "order",
+          "pilot",
+          "scenarios",
+          "section",
+          "serializedAfter",
+          "sharedAreas",
+          "title",
+          "weight"
+        ],
+        "next-battle-opening-hand": [
+          "order"
+        ],
+        "next-battle-smaller-hand": [
+          "order"
+        ],
+        "next-battle-starting-energy": [
+          "order"
+        ],
+        "prim-journey-battle-init": [
+          "order"
+        ],
+        "prim-journey-duplication": [
+          "areas",
+          "coreReview",
+          "dependsOn",
+          "entities",
+          "externalDependsOn",
+          "falloutHints",
+          "introduces",
+          "key",
+          "kind",
+          "knownDecisions",
+          "newPromptKinds",
+          "order",
+          "pilot",
+          "scenarios",
+          "section",
+          "serializedAfter",
+          "sharedAreas",
+          "title",
+          "weight"
+        ],
+        "prim-journey-shop": [
+          "areas",
+          "coreReview",
+          "dependsOn",
+          "entities",
+          "externalDependsOn",
+          "falloutHints",
+          "introduces",
+          "key",
+          "kind",
+          "knownDecisions",
+          "newPromptKinds",
+          "order",
+          "pilot",
+          "scenarios",
+          "section",
+          "serializedAfter",
+          "sharedAreas",
+          "title",
+          "weight"
+        ],
+        "prim-type-remap": [
+          "order"
+        ],
+        "transfiguration-sweep": [
+          "order"
+        ],
+        "transfigurations-01": [
+          "order"
+        ],
+        "transfigurations-02": [
+          "order"
+        ]
+      },
+      "primitives": {
+        "journeyDuplication": [
+          "exists",
+          "introducedBy"
+        ],
+        "journeyShop": [
+          "exists",
+          "introducedBy"
+        ]
+      },
+      "topLevel": {
+        "summary": {
+          "before": {
+            "countsByKind": {
+              "card": 522,
+              "dreamwell": 33,
+              "figment": 10,
+              "avatar": 32,
+              "dreamsign": 153,
+              "transfiguration": 9,
+              "explorationEffect": 440,
+              "apollyonIncarnation": 10
+            },
+            "total": 1209,
+            "duplicateIds": 0,
+            "pendingByKind": {
+              "card": 0,
+              "dreamwell": 0,
+              "figment": 0,
+              "avatar": 0,
+              "dreamsign": 45,
+              "transfiguration": 0,
+              "explorationEffect": 0,
+              "apollyonIncarnation": 0
+            },
+            "cardsWithAmplifiedText": 244,
+            "beads": 201,
+            "beadsBySection": {
+              "5.2": 129,
+              "5.3": 7,
+              "5.4": 9,
+              "5.5": 24,
+              "5.6": 12,
+              "5.7a": 2,
+              "5.7": 1,
+              "5.7b": 10,
+              "5.8": 7
+            },
+            "beadsByKind": {
+              "primitive": 4,
+              "composition": 174,
+              "task": 23
+            },
+            "largestCompositionBead": 6,
+            "newPrimitives": 4,
+            "notes": [
+              "The beads list is the current planning projection; filed native Entities, Areas, acceptance criteria and dependency graph govern execution. Read entities by filed UUIDs; a filed key identifies its original filing and scenario slug, not a current projection scope. Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md \u00a7 Serialization edges) are added at filing, from sharedAreas and entity modules.",
+              "Primitive and prompt existence is probed against src/engine and journey factories against their production registry in src/rules/journey when the script runs; DSL capabilities name callable exports or registered forms with required semantic options. Filed native UUID scopes remain authoritative.",
+              "Tags come from regex rules and manual corrections in scripts/content-inventory.ts; an implementing session reads the printed text clause by clause (recipe step 2) and may need primitives the tags miss."
+            ]
+          },
+          "after": {
+            "countsByKind": {
+              "card": 522,
+              "dreamwell": 33,
+              "figment": 10,
+              "avatar": 32,
+              "dreamsign": 153,
+              "transfiguration": 9,
+              "explorationEffect": 440,
+              "apollyonIncarnation": 10
+            },
+            "total": 1209,
+            "duplicateIds": 0,
+            "pendingByKind": {
+              "card": 0,
+              "dreamwell": 0,
+              "figment": 0,
+              "avatar": 0,
+              "dreamsign": 37,
+              "transfiguration": 0,
+              "explorationEffect": 0,
+              "apollyonIncarnation": 0
+            },
+            "cardsWithAmplifiedText": 244,
+            "beads": 200,
+            "beadsBySection": {
+              "5.2": 129,
+              "5.3": 7,
+              "5.4": 9,
+              "5.5": 24,
+              "5.6": 11,
+              "5.7a": 2,
+              "5.7": 1,
+              "5.7b": 10,
+              "5.8": 7
+            },
+            "beadsByKind": {
+              "primitive": 2,
+              "composition": 175,
+              "task": 23
+            },
+            "largestCompositionBead": 6,
+            "newPrimitives": 2,
+            "notes": [
+              "The beads list is the current planning projection; filed native Entities, Areas, acceptance criteria and dependency graph govern execution. Read entities by filed UUIDs; a filed key identifies its original filing and scenario slug, not a current projection scope. Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md \u00a7 Serialization edges) are added at filing, from sharedAreas and entity modules.",
+              "Primitive and prompt existence is probed against src/engine and journey factories against their production registry in src/rules/journey when the script runs; DSL capabilities name callable exports or registered forms with required semantic options. Filed native UUID scopes remain authoritative.",
+              "Tags come from regex rules and manual corrections in scripts/content-inventory.ts; an implementing session reads the printed text clause by clause (recipe step 2) and may need primitives the tags miss."
+            ]
+          }
+        }
+      }
+    },
+    "feature": {
+      "entities": {
+        "3dd05e97-1af8-4ae9-8e1f-954eaa63e112": [
+          "correction",
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "tags"
+        ],
+        "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4": [
+          "routing"
+        ]
+      },
+      "beads": {
+        "dreamsigns-battle-13": [
+          "areas",
+          "entities",
+          "knownDecisions",
+          "weight"
+        ],
+        "dreamsigns-battle-14": [
+          "areas",
+          "entities",
+          "knownDecisions",
+          "weight"
+        ]
+      },
+      "primitives": {
+        "firstPlayedSparkSetter": [
+          "exists",
+          "kind",
+          "module",
+          "name",
+          "note",
+          "usedBy"
+        ],
+        "setBaseSpark": [
+          "usedBy"
+        ],
+        "triggerNth": [
+          "usedBy"
+        ]
+      },
+      "topLevel": {}
+    },
+    "nativeCarry": {
+      "at": "2026-10-15T06:07:18.656702+00:00",
+      "proofSHA256": "a70925e48e1c16192dc095a3d6b50a21423c3e5f1f7c442a7e7bc3d804ac57cf",
+      "decision": "Finite UPDATED-BASE canonical inventory carry admission 2026-10-15T06:07:18.656702+00:00: parent independently parsed all three full inventories at certified base96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f, recomputed every changed field and verified all1209 UUIDs/12 immutable fields plus empty src/content diff. Admit exactly31 inherited entity rows/37 planning bead rows/2 existing primitive rows and derived summary fields enumerated in newbase-inventory-audit.json and parent-newbase-inventory-carry.json. Baseline canonical71831c806bb1262fde62fd04969e7c764765695f37c9543cc8fd134b7dfdf30e; feature419029b3b498a672a9679acd27b997f0d74b1fbaac11bf46842ce788c91fd996. Feature delta remains precisely Flash3dd05e97 metadata and Cloud3fd8861d routing, battle13/14 four derived fields, own primitive descriptor plus setBaseSpark/triggerNth usage; no other feature top-level delta. All4 diagnostic inputs exact base, own RD excluded, all6 feature bytes restored; no whole-base-engine claim. Canonical output only, no manual JSON patches, no runtime authority expansion. Prior208 and1f7 proofs/source epochs remain separately qualified. Original251 five-UUID native acceptance and recipes unchanged despite generated positional grouping. Latest624 coupling bothactor2PASS and focused5864/ordinaryreview/Knip pass; prior two full/browser runs retain exact original-source qualifications; no automatic third full/browser."
+    }
+  },
+  "registryRecovery": {
+    "parentIndependentRegistryPreservation": {
+      "at": "2026-10-15T06:08:17.718847+00:00",
+      "base": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "path": "src/engine/effects/registry.ts",
+      "peerSHA256": "f7ede21512be8713bb319be3c52a17a963a67a171bb6cf99d793357b56f28e7d",
+      "combinedSHA256": "aaf962ec15d9d49dbf909ecd046e528cf0e9300d564d55d8c463fc591df23518",
+      "exactOwnAddedLines": [
+        "  firstPlayedSparkSetterPrimitive,\n",
+        "  get firstPlayedSparkSetter() { return firstPlayedSparkSetterPrimitive; },\n"
+      ],
+      "inverseReproducesEveryPeerByte": true
+    },
+    "observedState": {
+      "at": "2026-10-15T05:59:29.951374+00:00",
+      "source": "1f7d9b63cee013efb39a97d759cb1ae5f87c630d",
+      "base": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "staging": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "candidate": "01a13e23-b2a4-7ed0-b057-387c83657859",
+      "candidateState": "merge-conflict; never authorized",
+      "conflicts": [
+        "src/engine/effects/registry.ts"
+      ],
+      "nativeUpdate": "Failed exit5 and cleanrollback exactsource; doctor healthy/no pending update",
+      "scope": "Adjacent624 firstPlayedCharacterEntrySpark import/getter alongside ownfirstPlayedSparkSetter; distinct bounded forms, preserve both."
+    },
+    "phase3a": {
+      "phase": "PHASE3A temporary BUILD-INCOMPLETE checkpoint only",
+      "utcStart": "2026-10-15T06:00:28.987782+00:00",
+      "source": "1f7d9b63cee013efb39a97d759cb1ae5f87c630d",
+      "base": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+      "originalFinalReceipt": {
+        "sourceBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+        "checkpointBefore": "0eb1e2c54b82522fb68bc76e1dc0d63472dec3a1",
+        "originalSource": "208f9f74f6f564a9cad1a5ff71c847cac3d95f78",
+        "originalGitReturn": {
+          "utcGitStart": "2026-10-15T05:34:40.128735+00:00",
+          "utcGitReturn": "2026-10-15T05:34:40.157170+00:00",
+          "gitExit": 0,
+          "evidenceCutoff": "2026-10-15T05:34:40.033784+00:00",
+          "cutoffToActualGitReturnS": 0.123386,
+          "claimInclusiveStart": "2026-10-15T04:48:50.496648+00:00",
+          "claimInclusiveToActualGitReturnMin": 45.82767536666667,
+          "indexTreeBeforeCommit": "326bc5c2018113a03f8511a8c2c925bee86e588f",
+          "commit": "208f9f74f6f564a9cad1a5ff71c847cac3d95f78",
+          "statusAfter": ""
+        },
+        "evidenceCutoff": "2026-10-15T05:57:10.773412+00:00",
+        "utcGitStart": "2026-10-15T05:57:10.945492+00:00",
+        "utcGitReturn": "2026-10-15T05:57:10.973964+00:00",
+        "gitExit": 0,
+        "claimInclusiveStart": "2026-10-15T04:48:50.496648+00:00",
+        "claimInclusiveToActualGitReturnMin": 68.34128860000001,
+        "cutoffToActualGitReturnS": 0.200552,
+        "indexTreeBeforeCommit": "faf8db1ee7e64ce502c5baa65928ab30a507a7f9",
+        "commit": "1f7d9b63cee013efb39a97d759cb1ae5f87c630d",
+        "statusAfter": ""
+      },
+      "binding": {
+        "path": "src/engine/effects/registry.ts",
+        "sourceSha256": "f2c0421eaeda4f2283cae9ee14009b7c68dd66f6da5871340956edac526e49e0",
+        "capturedBaseSha256": "41b7c5b8afebbdc1a4c3f721dfbcaecf39d7eeb4d924a1ebee89aab4ec410532"
+      },
+      "checks": "No build/test/review/candidate/native update; exact custody/blob/status guards only.",
+      "utcGitStart": "2026-10-15T06:00:29.003492+00:00",
+      "utcGitReturn": "2026-10-15T06:00:29.039321+00:00",
+      "gitExit": 0,
+      "checkpoint": "3194ccb2623de15b7425e2144cb1178ba7e1a2b5",
+      "changedBlobs": [
+        "src/engine/effects/registry.ts"
+      ],
+      "allOtherTreeBlobsIdentical": true,
+      "statusAfter": "clean",
+      "phaseComplete": true
+    },
+    "updatedCheckpoint": {
+      "at": "2026-10-15T06:00:59.545320+00:00",
+      "checkpoint": "69f16ed0a8a3cde4b17e9656d98c8685a7de604b",
+      "base": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "stagingAtVerification": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "registryPeerSha256": "f7ede21512be8713bb319be3c52a17a963a67a171bb6cf99d793357b56f28e7d",
+      "healthyCleanNoPendingUpdate": true,
+      "DO_NOT_SUBMIT": "Registry own entry absent, build incomplete"
+    },
+    "restoration": {
+      "at": "2026-10-15T06:02:32.287563+00:00",
+      "checkpoint": "69f16ed0a8a3cde4b17e9656d98c8685a7de604b",
+      "newBase": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "peerSha256": "f7ede21512be8713bb319be3c52a17a963a67a171bb6cf99d793357b56f28e7d",
+      "combinedSha256": "aaf962ec15d9d49dbf909ecd046e528cf0e9300d564d55d8c463fc591df23518",
+      "onlyOwnTwoLinesAdded": true,
+      "inverseOwnLinesReproducesEveryPeerByte": true,
+      "peer624ImportAndGetterPreserved": true
+    },
+    "settled624Coupling": "Both actors: separate original-entry additive gain1 with live base0 yields1 before gain/materialize observers; first entry awards11 points, public gain precedes materialized; same-turn return retains gain1 and printed base5, replay restores live base0 with no second gain publication and only materialize observer point. Exact own primitive/view/fixture bodies unchanged. No production content or default algorithm dependency.",
+    "originalRulingTiming": "Original D10 adoption and zero-base ruling remain source-qualified; settled624 separate gain composes after base setting and does not define this Flash setter."
+  },
+  "implementationWindow": {
+    "start": "2026-10-15T04:48:50.496648Z",
+    "end": "2026-10-15T06:08:53.678729+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "latest-review owned command start; 1-minute load with per-step samples"
+      },
+      "testDelta": {
+        "measuredFor": "Git diff from96a1:416line own contract+70line helper+5net existing test lines;2 added dedicated paths;0 configured entrypoints/jsdom"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "prepare",
+      "utc": "2026-10-15T06:04:37.656Z",
+      "load1m": 19.92138671875
+    },
+    {
+      "step": "typecheck",
+      "utc": "2026-10-15T06:04:39.892Z",
+      "load1m": 19.92138671875
+    },
+    {
+      "step": "typecheck-node",
+      "utc": "2026-10-15T06:04:39.893Z",
+      "load1m": 19.92138671875
+    },
+    {
+      "step": "import-cycles",
+      "utc": "2026-10-15T06:04:39.893Z",
+      "load1m": 19.92138671875
+    },
+    {
+      "step": "lint",
+      "utc": "2026-10-15T06:04:39.894Z",
+      "load1m": 19.92138671875
+    },
+    {
+      "step": "test-related",
+      "utc": "2026-10-15T06:04:39.894Z",
+      "load1m": 19.92138671875
+    },
+    {
+      "step": "friction-records",
+      "utc": "2026-10-15T06:04:39.895Z",
+      "load1m": 19.92138671875
+    },
+    {
+      "step": "restore-local-assets",
+      "utc": "2026-10-15T06:05:50.863Z",
+      "load1m": 14.94921875
+    }
+  ],
+  "recoveryIntervals": {
+    "firstObservedStart": "2026-10-15T05:37:21.924504+00:00",
+    "firstEvidenceCutoff": "2026-10-15T05:57:10.773412+00:00",
+    "firstObservedEnvelopeMin": 19.814148466666666,
+    "secondObservedStart": "2026-10-15T05:59:29.951374+00:00",
+    "secondEvidenceCutoff": "2026-10-15T06:08:53.678729+00:00",
+    "secondObservedEnvelopeMin": 9.395455916666666,
+    "cumulativeEnvelopeMin": 31.52923708333333,
+    "qualification": "Observed state snapshots through evidence cutoff, not exact candidate terminal times. Two native park/update/reapply cycles plus coordination, generation, checks and queue; earlier initial candidate/update failure interval is outside selected recovery envelope but inside overall claim-inclusive clock."
+  },
+  "latestSourceAudit": {
+    "sourceBase": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+    "comparedPriorSource": "1f7d9b63cee013efb39a97d759cb1ae5f87c630d",
+    "functionalBytesEqualPrior": {
+      "src/engine/effects/primitives/first-played-spark-setter.ts": "77bdbffac0f378bca832fc2ff82fd1b75669127de54b13e6c5af1b518b09c078",
+      "src/engine/testing/synthetic-cards.ts": "ec3e23320168ce455bc467f3efc5dfa87cfa45e68b9ed106b8a8259c94f18a31",
+      "src/engine/view/view.ts": "2d98854f09359739355f2690b73a2ee7b5415d2a02468a481c4558855fdc214b",
+      "src/engine/view/determinize.ts": "92e245672cd7adfbb081ed2f2ea882e560713f2ceec7017b82f27e7279ea27eb"
+    },
+    "currentEqualsValidatedSource": {
+      "scripts/content-inventory.ts": true,
+      "src/engine/effects/primitives/contracts/first-played-spark-setter-support.ts": true,
+      "src/engine/effects/primitives/contracts/first-played-spark-setter.contracts.ts": true,
+      "src/engine/effects/primitives/contracts/history-refs.contracts.ts": true,
+      "src/engine/effects/primitives/first-played-spark-setter.ts": true,
+      "src/engine/effects/primitives/index.ts": true,
+      "src/engine/effects/registry.ts": true,
+      "src/engine/loops/event-copy-continuation.ts": true,
+      "src/engine/testing/synthetic-cards.ts": true,
+      "src/engine/view/determinize.test.ts": true,
+      "src/engine/view/determinize.ts": true,
+      "src/engine/view/view.test.ts": true,
+      "src/engine/view/view.ts": true
+    },
+    "registryInversePeerByteProof": {
+      "at": "2026-10-15T06:02:32.287563+00:00",
+      "checkpoint": "69f16ed0a8a3cde4b17e9656d98c8685a7de604b",
+      "newBase": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+      "peerSha256": "f7ede21512be8713bb319be3c52a17a963a67a171bb6cf99d793357b56f28e7d",
+      "combinedSha256": "aaf962ec15d9d49dbf909ecd046e528cf0e9300d564d55d8c463fc591df23518",
+      "onlyOwnTwoLinesAdded": true,
+      "inverseOwnLinesReproducesEveryPeerByte": true,
+      "peer624ImportAndGetterPreserved": true
+    }
+  },
+  "validationQualification": "Exactly two source-qualified full runs retained: original208 and combined1f7/9eb3. Latest96 registry merge preserves both operations and all own runtime bodies; two added624 coupling cases and focused5864/review9585 cover combined behavior. No third full or browser rerun: no new uncovered semantic concern or player-flow body change. Original counterfactuals remain source-qualified; no unchanged mutation replay.",
+  "browserQualification": "Original three desktop/mobile captures and failed browser01 caller remain at original source; actual saved reload/player flow run-neNGpM remains at9eb3. No96 browser run claimed. Registry addition composes already separate624 operation, public runtime contracts cover coupling."
+}

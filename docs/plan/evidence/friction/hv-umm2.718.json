@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.718",
+  "phase": 5,
+  "implementMin": 80.05303468333334,
+  "implementWindow": {
+    "start": "2026-10-15T04:48:50.496648Z",
+    "end": "2026-10-15T06:08:53.678729+00:00"
+  },
+  "localValidationS": {
+    "focused": 27.317746167012956,
+    "review": 75.00518833397655,
+    "knip": 6.974373208009638,
+    "schema": 0.2677837500232272
+  },
+  "hostLoad": 19.92138671875,
+  "testDelta": {
+    "files": 2,
+    "lines": 491,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "hidden-history-provenance",
+      "minutes": 11.135396566666666,
+      "note": "Observed proof-to-integration window: real hidden first-card continuation4fails/2savedpasses required finite view relation/remap and native admission, then broader exact-shape/history expectations and additive fixture ordering repair. Includes source inspection/native waits/checks, not a pure coding or benchmark duration."
+    },
+    {
+      "tag": "integration-conflict",
+      "minutes": 31.52923708333333,
+      "note": "Cumulative conservative observed envelope from first savedstate05:37:21.924504Z through latest final evidence/Git cutoff: TWO native park/update/reapply cycles, all coordination, coherent generator audits, validation and shared-lock queue. Earlier initial candidate/update failure interval lies outside this chosen envelope but inside original04:48:50.496648Z claim-inclusive clock. Not isolated edit/loss/CPU time. First completed envelope19.814148min remains separately preserved; second savedstate05:59:29.951374Z and both candidate observations remain in measurements. Existing Phase5 trigger disposition introspection.jsonl line70/audit713; no duplicate filing or semantic serialization."
+    }
+  ]
+}

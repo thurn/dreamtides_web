@@ -79,6 +79,7 @@ import {
   materializePrimitive,
   materializeKeywordModifierPrimitive,
   firstMaterializationKeywordPrimitive,
+  firstPlayedSparkSetterPrimitive,
   firstPlayedCharacterEntrySparkPrimitive,
   materializeChosenPrimitive,
   materializeFigmentCopyPrimitive,
@@ -129,6 +130,7 @@ export type Effect = {
 }[keyof Exports];
 
 const DEFINITIONS = {
+  get firstPlayedSparkSetter() { return firstPlayedSparkSetterPrimitive; },
   get costSetter() { return costSetterPrimitive; },
   get costModifierNth() { return costModifierNthPrimitive; },
   get costModifierReclaim() { return costModifierReclaimPrimitive; },

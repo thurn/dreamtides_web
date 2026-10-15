@@ -344,6 +344,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   prim("returnToHand", "return-to-hand.ts"),
   prim("sequence", "sequence.ts"),
   prim("setBaseSpark", "set-base-spark.ts"),
+  prim("firstPlayedSparkSetter", "first-played-spark-setter.ts", { note: "Live base-spark zero for the current turn’s first committed physical character play" }),
   prim("sparkModifier", "spark-modifier.ts"),
   prim("journeyDeckSparkModifier", "journey-deck-spark-modifier.ts", { note: "C4 original physical journey-deck spark in all zones" }),
   prim("triggerAbility", "trigger-ability.ts"),
@@ -807,6 +808,7 @@ const CORRECTIONS: Readonly<Record<string, Correction>> = {
   "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a": { remove: ["return-from-void"], note: "returns itself from play to hand" },
   "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad": { remove: ["put-in-deck"], note: "prevent with the deckTop destination" },
   // Dreamsigns.
+  "3dd05e97-1af8-4ae9-8e1f-954eaa63e112": { add: ["first-played-spark-setter"], remove: ["set-spark", "nth-in-turn"], note: "Current-turn physical first-play static base-spark zero; separate nth cost reduction" },
   "044f856b-c08b-4b82-81e3-5417962bf868": { add: ["cost-modifier-nth-origin"], remove: ["trigger-play-from-void", "zone-cards", "cost-modifier-nth", "nth-in-turn"], note: "Passive first event from the actual void cost setting, independent of the chosen payment route" },
   "5190a8b8-25a0-4c60-a4de-2e2c5a73af77": { add: ["cost-modifier-nth-origin"], remove: ["trigger-play-from-void", "zone-cards", "cost-modifier-nth", "nth-in-turn", "duration"], note: "Conditional static first card from the actual void reduction; current condition does not erase earlier plays" },
   "ede46f71-aa77-4b12-9824-0d3706da6a22": { add: ["first-materialization-keyword"], remove: ["grant-keyword"], note: "Bounded first actual materialization, before exhaustion; permanent physical Awakened grant" },
@@ -838,6 +840,7 @@ const KEYWORD_TAGS: ReadonlySet<string> = new Set(["kw-awakened", "kw-vengeful",
 
 // Extra tags a correction may add that no rule defines.
 const EXTRA_TAGS: Readonly<Record<string, TagInfo>> = {
+  "first-played-spark-setter": { family: 8, needs: ["firstPlayedSparkSetter"] },
   "cost-modifier-nth-origin": { family: 14, needs: ["costModifierNthOrigin"] },
   "first-materialization-keyword": { family: 8, needs: ["firstMaterializationKeyword"] },
   "give-opponent-points-cost": { family: 4, needs: ["giveOpponentPointsCost"] },

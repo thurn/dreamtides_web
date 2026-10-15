@@ -472,7 +472,7 @@ describe("historical plays in simulations", () => {
       });
       state.turnLog.played.player.push({ instance: ceased ? "i999" : ids.player.deck[0], cardType: "character", subtype: testCardSubtype("Warrior"), allTypes: false, cost: 2 });
       const seen = histories.view(state, viewer);
-      expect(seen.turnLog.played.player).toEqual([{ instance: null, cardType: "character", subtype: testCardSubtype("Warrior"), allTypes: false, cost: 2 }]);
+      expect(seen.turnLog.played.player).toEqual([{ instance: null, firstCharacterMember: null, cardType: "character", subtype: testCardSubtype("Warrior"), allTypes: false, cost: 2 }]);
       const sampled = determinize(seen, { player: [{ cardId: watcher.id }, { cardId: SYNTHETIC.vanilla2.id }, { cardId: SYNTHETIC.vanilla2.id }], enemy: [{ cardId: SYNTHETIC.vanilla1.id }] }, seeded(`history-${viewer}`), histories.catalog);
       expect(histories.view(sampled, viewer).turnLog).toEqual(seen.turnLog);
       const ghost = sampled.turnLog.played.player[0].instance;

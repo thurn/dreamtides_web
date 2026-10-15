@@ -292,7 +292,7 @@ it("keeps public play facts without exposing hidden current printing or identity
     const historical = ids.player.deck[0];
     state.turnLog.played.player.push({ instance: historical, cardType: "character", subtype: testCardSubtype("Mage"), allTypes: true, ...(storedCost === undefined ? {} : { cost: storedCost }) });
     const seen = view(state, viewer, catalog);
-    expect(seen.turnLog.played.player).toEqual([{ instance: null, cardType: "character", subtype: testCardSubtype("Mage"), allTypes: true, ...(storedCost === undefined ? {} : { cost: 2 }) }]);
+    expect(seen.turnLog.played.player).toEqual([{ instance: null, firstCharacterMember: null, cardType: "character", subtype: testCardSubtype("Mage"), allTypes: true, ...(storedCost === undefined ? {} : { cost: 2 }) }]);
     expect(strings(seen).has(historical)).toBe(false);
     const changed = cloneState(state);
     changed.instances[historical] = { ...changed.instances[historical], printing: { kind: "card", cardId: v.vanilla5.id } };

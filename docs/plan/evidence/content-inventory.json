@@ -18,17 +18,17 @@
       "dreamwell": 0,
       "figment": 0,
       "avatar": 0,
-      "dreamsign": 45,
+      "dreamsign": 37,
       "transfiguration": 0,
       "explorationEffect": 0,
       "apollyonIncarnation": 0
     },
     "cardsWithAmplifiedText": 244,
-    "beads": 201,
-    "beadsBySection": {"5.2":129,"5.3":7,"5.4":9,"5.5":24,"5.6":12,"5.7a":2,"5.7":1,"5.7b":10,"5.8":7},
-    "beadsByKind": {"primitive":4,"composition":174,"task":23},
+    "beads": 200,
+    "beadsBySection": {"5.2":129,"5.3":7,"5.4":9,"5.5":24,"5.6":11,"5.7a":2,"5.7":1,"5.7b":10,"5.8":7},
+    "beadsByKind": {"primitive":2,"composition":175,"task":23},
     "largestCompositionBead": 6,
-    "newPrimitives": 4,
+    "newPrimitives": 2,
     "notes": [
       "The beads list is the current planning projection; filed native Entities, Areas, acceptance criteria and dependency graph govern execution. Read entities by filed UUIDs; a filed key identifies its original filing and scenario slug, not a current projection scope. Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md § Serialization edges) are added at filing, from sharedAreas and entity modules.",
       "Primitive and prompt existence is probed against src/engine and journey factories against their production registry in src/rules/journey when the script runs; DSL capabilities name callable exports or registered forms with required semantic options. Filed native UUID scopes remain authoritative.",
@@ -6099,7 +6099,11 @@
       "sharedAreas": [],
       "falloutHints": [],
       "knownDecisions": [
-        {"id":"7ec00da2-2b2d-4613-9a2a-8611d38199ca","clarifications":["C3"],"rulesDecisions":["RD-hv-umm2.678-1"]},
+        {
+          "id": "7ec00da2-2b2d-4613-9a2a-8611d38199ca",
+          "clarifications": ["C3"],
+          "rulesDecisions": ["RD-hv-umm2.622-1","RD-hv-umm2.678-1"]
+        },
         {"id":"fb7316c9-ef29-42fd-993e-d3337cb06921","rulesDecisions":["RD-hv-umm2.233-1","RD-hv-umm2.654-1"]},
         {"id":"2ebf0bbb-440c-4dba-8e48-228daadc0a1e","clarifications":["C5"],"rulesDecisions":["RD-hv-7x4l.1-11"]}
       ]
@@ -6150,10 +6154,10 @@
         {"id":"86f64a29-7338-4759-81da-4c7656e543d2","kind":"dreamsign","status":"authored"},
         {"id":"257c160f-7d70-4ebd-bb0f-f83e61907310","kind":"dreamsign","status":"authored"},
         {"id":"553d2317-32f9-47bc-bae0-5018ca26d56a","kind":"dreamsign","status":"authored"},
-        {"id":"278ec1ab-f532-4862-84ae-63df5e49548c","kind":"dreamsign","status":"pending"},
-        {"id":"3fd8861d-fc4c-4097-9e28-89cc37f5b3f4","kind":"dreamsign","status":"pending"}
+        {"id":"3dd05e97-1af8-4ae9-8e1f-954eaa63e112","kind":"dreamsign","status":"pending"},
+        {"id":"278ec1ab-f532-4862-84ae-63df5e49548c","kind":"dreamsign","status":"authored"}
       ],
-      "weight": 7.9,
+      "weight": 8,
       "introduces": [],
       "newPromptKinds": [],
       "dependsOn": ["dreamsign-lab"],
@@ -6164,8 +6168,8 @@
       "scenarios": "src/content/specs/dreamsigns-battle-13.scenarios.ts",
       "areas": [
         "src/content/dreamsigns/black-cat-257c160f.ts",
-        "src/content/dreamsigns/cloud-lens-3fd8861d.ts",
         "src/content/dreamsigns/egg-nest-553d2317.ts",
+        "src/content/dreamsigns/flash-powder-3dd05e97.ts",
         "src/content/dreamsigns/pyramid-relic-278ec1ab.ts",
         "src/content/dreamsigns/spice-blossoms-86f64a29.ts",
         "src/content/specs/dreamsigns-battle-13.scenarios.ts",
@@ -6173,7 +6177,13 @@
       ],
       "sharedAreas": [],
       "falloutHints": [],
-      "knownDecisions": []
+      "knownDecisions": [
+        {
+          "id": "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+          "rulesDecisions": ["RD-hv-umm2.611-1","RD-hv-umm2.718-1"],
+          "note": "Current-turn physical first-play static base-spark zero; separate nth cost reduction"
+        }
+      ]
     },
     {
       "key": "dreamsigns-battle-14",
@@ -6182,13 +6192,13 @@
       "kind": "composition",
       "title": "5.5 Dreamsigns: battle effects: cost modifiers and nth-in-turn (14/23)",
       "entities": [
+        {"id":"3fd8861d-fc4c-4097-9e28-89cc37f5b3f4","kind":"dreamsign","status":"pending"},
         {"id":"a42c99b2-f480-4f63-91a0-bd556120427d","kind":"dreamsign","status":"authored"},
-        {"id":"3dd05e97-1af8-4ae9-8e1f-954eaa63e112","kind":"dreamsign","status":"pending"},
         {"id":"9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1","kind":"dreamsign","status":"pending"},
         {"id":"044f856b-c08b-4b82-81e3-5417962bf868","kind":"dreamsign","status":"pending"},
-        {"id":"5190a8b8-25a0-4c60-a4de-2e2c5a73af77","kind":"dreamsign","status":"pending"}
+        {"id":"5190a8b8-25a0-4c60-a4de-2e2c5a73af77","kind":"dreamsign","status":"authored"}
       ],
-      "weight": 8.4,
+      "weight": 8.1,
       "introduces": [],
       "newPromptKinds": [],
       "dependsOn": ["dreamsign-lab"],
@@ -6199,7 +6209,7 @@
       "scenarios": "src/content/specs/dreamsigns-battle-14.scenarios.ts",
       "areas": [
         "src/content/dreamsigns/cactus-5190a8b8.ts",
-        "src/content/dreamsigns/flash-powder-3dd05e97.ts",
+        "src/content/dreamsigns/cloud-lens-3fd8861d.ts",
         "src/content/dreamsigns/green-amulet-a42c99b2.ts",
         "src/content/dreamsigns/powder-bowl-9204fbc8.ts",
         "src/content/dreamsigns/skull-dagger-044f856b.ts",
@@ -6209,8 +6219,7 @@
       "sharedAreas": [],
       "falloutHints": [],
       "knownDecisions": [
-        {"id":"3dd05e97-1af8-4ae9-8e1f-954eaa63e112","rulesDecisions":["RD-hv-umm2.611-1"]},
-        {"id":"9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1","rulesDecisions":["RD-hv-umm2.678-1"]},
+        {"id":"9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1","rulesDecisions":["RD-hv-umm2.623-1","RD-hv-umm2.678-1"]},
         {
           "id": "044f856b-c08b-4b82-81e3-5417962bf868",
           "rulesDecisions": ["RD-hv-umm2.705-1"],
@@ -6412,7 +6421,10 @@
       ],
       "sharedAreas": [],
       "falloutHints": [],
-      "knownDecisions": [{"id":"1dfa4d90-8270-4b7c-87be-d95ab6201e00","rulesDecisions":["RD-hv-umm2.611-1"]}]
+      "knownDecisions": [
+        {"id":"11018e32-f47e-45fd-a8cf-3a9e3f3be71b","rulesDecisions":["RD-hv-umm2.624-1"]},
+        {"id":"1dfa4d90-8270-4b7c-87be-d95ab6201e00","rulesDecisions":["RD-hv-umm2.611-1"]}
+      ]
     },
     {
       "key": "dreamsigns-battle-20",
@@ -6528,6 +6540,7 @@
       "falloutHints": [],
       "knownDecisions": [
         {"id":"6f4e2d9f-38a4-4f6a-8fde-7d942977a6df","rulesDecisions":["RD-hv-umm2.236-3"]},
+        {"id":"d78864da-eb31-4f25-9d51-94fca7ecf810","rulesDecisions":["RD-hv-umm2.618-1"]},
         {
           "id": "2d4eb3ee-0931-45ed-8365-69f18096ead5",
           "rulesDecisions": ["RD-hv-p1ss-1","RD-hv-umm2.237-1","RD-hv-vwcb-1"]
@@ -6586,74 +6599,8 @@
       "knownDecisions": []
     },
     {
-      "key": "prim-journey-shop",
-      "order": 171,
-      "section": "5.6",
-      "kind": "primitive",
-      "title": "5.6 primitive journeyShop (Dreamsigns: journey effects (P8))",
-      "entities": [
-        {"id":"8a2c7b32-26ea-40e2-845a-689da5673b4d","kind":"dreamsign","status":"pending"},
-        {"id":"8408b8c2-5a3f-40dd-bac4-98f2736c4176","kind":"dreamsign","status":"pending"},
-        {"id":"10bd78de-87ec-44e4-9b16-e755da2a9717","kind":"dreamsign","status":"pending"}
-      ],
-      "weight": 4.4,
-      "introduces": [{"name":"journeyShop","kind":"journey","module":"src/rules/journey/journey-shop.ts"}],
-      "newPromptKinds": [],
-      "dependsOn": ["journey-registry"],
-      "serializedAfter": [],
-      "externalDependsOn": [],
-      "pilot": false,
-      "coreReview": true,
-      "scenarios": "src/content/specs/prim-journey-shop.scenarios.ts",
-      "areas": [
-        "src/content/dreamsigns/cracked-orb-8408b8c2.ts",
-        "src/content/dreamsigns/red-shard-10bd78de.ts",
-        "src/content/dreamsigns/witch-coin-8a2c7b32.ts",
-        "engine hubs",
-        "registration hubs",
-        "src/content/specs/prim-journey-shop.scenarios.ts",
-        "src/content/specs/index.ts"
-      ],
-      "sharedAreas": ["engine hubs","registration hubs"],
-      "falloutHints": [],
-      "knownDecisions": []
-    },
-    {
-      "key": "prim-journey-duplication",
-      "order": 172,
-      "section": "5.6",
-      "kind": "primitive",
-      "title": "5.6 primitive journeyDuplication (Dreamsigns: journey effects (P8))",
-      "entities": [
-        {"id":"025ce7f1-066b-480a-8a2f-364379890abd","kind":"dreamsign","status":"pending"},
-        {"id":"1cf06f9b-d698-434b-8e36-8a47206f4c0c","kind":"dreamsign","status":"pending"},
-        {"id":"da7e4b45-9106-4116-bc1c-3aec8885396b","kind":"dreamsign","status":"pending"}
-      ],
-      "weight": 4.5,
-      "introduces": [{"name":"journeyDuplication","kind":"journey","module":"src/rules/journey/journey-duplication.ts"}],
-      "newPromptKinds": [],
-      "dependsOn": ["journey-registry","prim-journey-shop"],
-      "serializedAfter": [],
-      "externalDependsOn": [],
-      "pilot": false,
-      "coreReview": true,
-      "scenarios": "src/content/specs/prim-journey-duplication.scenarios.ts",
-      "areas": [
-        "src/content/dreamsigns/cracked-mirror-1cf06f9b.ts",
-        "src/content/dreamsigns/spider-025ce7f1.ts",
-        "src/content/dreamsigns/spiral-shell-da7e4b45.ts",
-        "engine hubs",
-        "registration hubs",
-        "src/content/specs/prim-journey-duplication.scenarios.ts",
-        "src/content/specs/index.ts"
-      ],
-      "sharedAreas": ["engine hubs","registration hubs"],
-      "falloutHints": [],
-      "knownDecisions": []
-    },
-    {
       "key": "prim-journey-battle-init",
-      "order": 173,
+      "order": 171,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive journeyBattleInit (Dreamsigns: journey effects (P8))",
@@ -6680,7 +6627,7 @@
     },
     {
       "key": "prim-type-remap",
-      "order": 174,
+      "order": 172,
       "section": "5.6",
       "kind": "primitive",
       "title": "5.6 primitive typeRemap (Dreamsigns: journey effects (P8))",
@@ -6715,10 +6662,10 @@
     },
     {
       "key": "dreamsigns-journey-01",
-      "order": 175,
+      "order": 173,
       "section": "5.6",
       "kind": "composition",
-      "title": "5.6 Dreamsigns: journey effects (P8) (1/7)",
+      "title": "5.6 Dreamsigns: journey effects (P8) (1/8)",
       "entities": [
         {"id":"31df4c62-6ab2-47f2-a4ff-c32b8e554b3b","kind":"dreamsign","status":"authored"},
         {"id":"9f34b5f6-4766-4a7e-a841-d7b945cad504","kind":"dreamsign","status":"authored"},
@@ -6757,10 +6704,10 @@
     },
     {
       "key": "dreamsigns-journey-02",
-      "order": 176,
+      "order": 174,
       "section": "5.6",
       "kind": "composition",
-      "title": "5.6 Dreamsigns: journey effects (P8) (2/7)",
+      "title": "5.6 Dreamsigns: journey effects (P8) (2/8)",
       "entities": [
         {"id":"c2af5460-e61f-409b-9b86-6ac7db34d748","kind":"dreamsign","status":"authored"},
         {"id":"1c505034-e405-495d-8418-6e3c06d974f0","kind":"dreamsign","status":"authored"},
@@ -6789,7 +6736,7 @@
       "sharedAreas": [],
       "falloutHints": [],
       "knownDecisions": [
-        {"id":"c2af5460-e61f-409b-9b86-6ac7db34d748","rulesDecisions":["RD-hv-umm2.264-1"]},
+        {"id":"c2af5460-e61f-409b-9b86-6ac7db34d748","rulesDecisions":["RD-hv-umm2.264-1","RD-hv-umm2.266-1"]},
         {"id":"1c505034-e405-495d-8418-6e3c06d974f0","rulesDecisions":["RD-hv-umm2.267-1"]},
         {"id":"2dcf92bf-93b3-400c-ab97-69d3098f8868","rulesDecisions":["RD-hv-umm2.267-1"]},
         {
@@ -6801,18 +6748,18 @@
     },
     {
       "key": "dreamsigns-journey-03",
-      "order": 177,
+      "order": 175,
       "section": "5.6",
       "kind": "composition",
-      "title": "5.6 Dreamsigns: journey effects (P8) (3/7)",
+      "title": "5.6 Dreamsigns: journey effects (P8) (3/8)",
       "entities": [
+        {"id":"025ce7f1-066b-480a-8a2f-364379890abd","kind":"dreamsign","status":"authored"},
+        {"id":"1cf06f9b-d698-434b-8e36-8a47206f4c0c","kind":"dreamsign","status":"authored"},
+        {"id":"da7e4b45-9106-4116-bc1c-3aec8885396b","kind":"dreamsign","status":"authored"},
         {"id":"427c71e3-178f-4352-8d6f-f0789cb13c2d","kind":"dreamsign","status":"pending"},
-        {"id":"eb55b141-82f8-4ba4-b319-420f762e9ee4","kind":"dreamsign","status":"pending"},
-        {"id":"f4df5a74-7822-4552-a3ab-f50b00758593","kind":"dreamsign","status":"authored"},
-        {"id":"488bf436-c6d5-4e38-8a19-e50041f53766","kind":"dreamsign","status":"authored"},
-        {"id":"95a162c1-5fb0-4966-b631-eec1e8ec96ef","kind":"dreamsign","status":"authored"}
+        {"id":"eb55b141-82f8-4ba4-b319-420f762e9ee4","kind":"dreamsign","status":"pending"}
       ],
-      "weight": 8,
+      "weight": 7.9,
       "introduces": [],
       "newPromptKinds": [],
       "dependsOn": ["journey-registry"],
@@ -6822,17 +6769,20 @@
       "coreReview": false,
       "scenarios": "src/content/specs/dreamsigns-journey-03.scenarios.ts",
       "areas": [
-        "src/content/dreamsigns/banded-worm-95a162c1.ts",
         "src/content/dreamsigns/carved-bone-427c71e3.ts",
+        "src/content/dreamsigns/cracked-mirror-1cf06f9b.ts",
         "src/content/dreamsigns/mortal-skull-eb55b141.ts",
-        "src/content/dreamsigns/sickle-488bf436.ts",
-        "src/content/dreamsigns/strange-fruit-f4df5a74.ts",
+        "src/content/dreamsigns/spider-025ce7f1.ts",
+        "src/content/dreamsigns/spiral-shell-da7e4b45.ts",
         "src/content/specs/dreamsigns-journey-03.scenarios.ts",
         "src/content/specs/index.ts"
       ],
       "sharedAreas": [],
       "falloutHints": [],
       "knownDecisions": [
+        {"id":"025ce7f1-066b-480a-8a2f-364379890abd","rulesDecisions":["RD-hv-umm2.268-1"]},
+        {"id":"1cf06f9b-d698-434b-8e36-8a47206f4c0c","rulesDecisions":["RD-hv-umm2.268-1"]},
+        {"id":"da7e4b45-9106-4116-bc1c-3aec8885396b","rulesDecisions":["RD-hv-umm2.268-1"]},
         {
           "id": "427c71e3-178f-4352-8d6f-f0789cb13c2d",
           "note": "journey essence paid from a battle event (removing an enemy outside a challenge); 5.6 builds the battle-result hook"
@@ -6840,30 +6790,23 @@
         {
           "id": "eb55b141-82f8-4ba4-b319-420f762e9ee4",
           "note": "journey essence paid from a battle event (dissolving an enemy in a challenge); 5.6 builds the battle-result hook"
-        },
-        {"id":"f4df5a74-7822-4552-a3ab-f50b00758593","rulesDecisions":["RD-hv-umm2.265-1"]},
-        {"id":"488bf436-c6d5-4e38-8a19-e50041f53766","rulesDecisions":["RD-hv-umm2.265-1"]},
-        {
-          "id": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
-          "rulesDecisions": ["RD-hv-umm2.262-1"],
-          "cardIssues": ["95a162c1-5fb0-4966-b631-eec1e8ec96ef--hv-umm2.262"]
         }
       ]
     },
     {
       "key": "dreamsigns-journey-04",
-      "order": 178,
+      "order": 176,
       "section": "5.6",
       "kind": "composition",
-      "title": "5.6 Dreamsigns: journey effects (P8) (4/7)",
+      "title": "5.6 Dreamsigns: journey effects (P8) (4/8)",
       "entities": [
+        {"id":"f4df5a74-7822-4552-a3ab-f50b00758593","kind":"dreamsign","status":"authored"},
+        {"id":"488bf436-c6d5-4e38-8a19-e50041f53766","kind":"dreamsign","status":"authored"},
+        {"id":"95a162c1-5fb0-4966-b631-eec1e8ec96ef","kind":"dreamsign","status":"authored"},
         {"id":"af92858a-0c50-4abf-a622-04c024ca32b3","kind":"dreamsign","status":"authored"},
-        {"id":"be59c0ba-6286-49e3-a88d-86b0977cc30a","kind":"dreamsign","status":"authored"},
-        {"id":"0df9d72c-58ea-42a0-a72a-cbc540a1836a","kind":"dreamsign","status":"authored"},
-        {"id":"7e8c86cc-788f-4648-be84-e0935c40c31e","kind":"dreamsign","status":"authored"},
-        {"id":"1328e611-fa2f-426f-87e2-97f26c061866","kind":"dreamsign","status":"pending"}
+        {"id":"be59c0ba-6286-49e3-a88d-86b0977cc30a","kind":"dreamsign","status":"authored"}
       ],
-      "weight": 7.9,
+      "weight": 7.5,
       "introduces": [],
       "newPromptKinds": [],
       "dependsOn": ["journey-registry"],
@@ -6873,17 +6816,24 @@
       "coreReview": false,
       "scenarios": "src/content/specs/dreamsigns-journey-04.scenarios.ts",
       "areas": [
-        "src/content/dreamsigns/paired-teeth-1328e611.ts",
+        "src/content/dreamsigns/banded-worm-95a162c1.ts",
         "src/content/dreamsigns/pearl-shell-be59c0ba.ts",
-        "src/content/dreamsigns/red-cheese-7e8c86cc.ts",
+        "src/content/dreamsigns/sickle-488bf436.ts",
         "src/content/dreamsigns/star-badge-af92858a.ts",
-        "src/content/dreamsigns/voodoo-doll-0df9d72c.ts",
+        "src/content/dreamsigns/strange-fruit-f4df5a74.ts",
         "src/content/specs/dreamsigns-journey-04.scenarios.ts",
         "src/content/specs/index.ts"
       ],
       "sharedAreas": [],
       "falloutHints": [],
       "knownDecisions": [
+        {"id":"f4df5a74-7822-4552-a3ab-f50b00758593","rulesDecisions":["RD-hv-umm2.265-1"]},
+        {"id":"488bf436-c6d5-4e38-8a19-e50041f53766","rulesDecisions":["RD-hv-umm2.265-1"]},
+        {
+          "id": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+          "rulesDecisions": ["RD-hv-umm2.262-1"],
+          "cardIssues": ["95a162c1-5fb0-4966-b631-eec1e8ec96ef--hv-umm2.262"]
+        },
         {
           "id": "af92858a-0c50-4abf-a622-04c024ca32b3",
           "rulesDecisions": ["RD-hv-umm2.262-1"],
@@ -6893,38 +6843,36 @@
           "id": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
           "rulesDecisions": ["RD-hv-umm2.262-1"],
           "cardIssues": ["be59c0ba-6286-49e3-a88d-86b0977cc30a--hv-umm2.262"]
-        },
-        {"id":"0df9d72c-58ea-42a0-a72a-cbc540a1836a","rulesDecisions":["RD-hv-umm2.263-1"]},
-        {"id":"7e8c86cc-788f-4648-be84-e0935c40c31e","rulesDecisions":["RD-hv-umm2.263-1"]}
+        }
       ]
     },
     {
       "key": "dreamsigns-journey-05",
-      "order": 179,
+      "order": 177,
       "section": "5.6",
       "kind": "composition",
-      "title": "5.6 Dreamsigns: journey effects (P8) (5/7)",
+      "title": "5.6 Dreamsigns: journey effects (P8) (5/8)",
       "entities": [
+        {"id":"0df9d72c-58ea-42a0-a72a-cbc540a1836a","kind":"dreamsign","status":"authored"},
+        {"id":"7e8c86cc-788f-4648-be84-e0935c40c31e","kind":"dreamsign","status":"authored"},
+        {"id":"1328e611-fa2f-426f-87e2-97f26c061866","kind":"dreamsign","status":"pending"},
         {"id":"ab1da9d3-376a-460a-a9dc-4737e59e558b","kind":"dreamsign","status":"authored"},
-        {"id":"e7d23bf7-4d60-4b43-94c4-14a06c0f9116","kind":"dreamsign","status":"pending"},
-        {"id":"108841ce-4feb-4c73-972e-0277c727c63e","kind":"dreamsign","status":"authored"},
-        {"id":"71f77dd5-3bb5-4987-80f4-13dc69f74e6b","kind":"dreamsign","status":"pending"},
-        {"id":"883f88fb-ac50-419a-8382-c22edee29755","kind":"dreamsign","status":"pending"}
+        {"id":"e7d23bf7-4d60-4b43-94c4-14a06c0f9116","kind":"dreamsign","status":"pending"}
       ],
-      "weight": 8.9,
+      "weight": 8.5,
       "introduces": [],
       "newPromptKinds": [],
-      "dependsOn": ["journey-registry","prim-journey-shop"],
+      "dependsOn": ["journey-registry"],
       "serializedAfter": [],
       "externalDependsOn": [],
       "pilot": false,
       "coreReview": false,
       "scenarios": "src/content/specs/dreamsigns-journey-05.scenarios.ts",
       "areas": [
-        "src/content/dreamsigns/charm-staff-883f88fb.ts",
+        "src/content/dreamsigns/paired-teeth-1328e611.ts",
         "src/content/dreamsigns/rainbow-jellyfish-e7d23bf7.ts",
-        "src/content/dreamsigns/scorpion-71f77dd5.ts",
-        "src/content/dreamsigns/slug-108841ce.ts",
+        "src/content/dreamsigns/red-cheese-7e8c86cc.ts",
+        "src/content/dreamsigns/voodoo-doll-0df9d72c.ts",
         "src/content/dreamsigns/white-rat-ab1da9d3.ts",
         "src/content/specs/dreamsigns-journey-05.scenarios.ts",
         "src/content/specs/index.ts"
@@ -6932,44 +6880,89 @@
       "sharedAreas": [],
       "falloutHints": [],
       "knownDecisions": [
-        {"id":"ab1da9d3-376a-460a-a9dc-4737e59e558b","rulesDecisions":["RD-hv-umm2.263-1"]},
-        {"id":"108841ce-4feb-4c73-972e-0277c727c63e","rulesDecisions":["RD-hv-umm2.261-2","RD-hv-umm2.265-1"]}
+        {"id":"0df9d72c-58ea-42a0-a72a-cbc540a1836a","rulesDecisions":["RD-hv-umm2.263-1"]},
+        {"id":"7e8c86cc-788f-4648-be84-e0935c40c31e","rulesDecisions":["RD-hv-umm2.263-1"]},
+        {"id":"ab1da9d3-376a-460a-a9dc-4737e59e558b","rulesDecisions":["RD-hv-umm2.263-1"]}
       ]
     },
     {
       "key": "dreamsigns-journey-06",
-      "order": 180,
+      "order": 178,
       "section": "5.6",
       "kind": "composition",
-      "title": "5.6 Dreamsigns: journey effects (P8) (6/7)",
+      "title": "5.6 Dreamsigns: journey effects (P8) (6/8)",
       "entities": [
-        {"id":"cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f","kind":"dreamsign","status":"pending"},
-        {"id":"3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59","kind":"dreamsign","status":"authored"},
-        {"id":"58472ad2-88b1-4dc7-a161-c6dea7d8c43d","kind":"dreamsign","status":"authored"},
-        {"id":"d9f0f7ff-63c0-4247-8831-054d7fed931d","kind":"dreamsign","status":"authored"},
-        {"id":"0c52e8c3-a792-4eea-955f-a0c61463c066","kind":"dreamsign","status":"authored"}
+        {"id":"108841ce-4feb-4c73-972e-0277c727c63e","kind":"dreamsign","status":"authored"},
+        {"id":"71f77dd5-3bb5-4987-80f4-13dc69f74e6b","kind":"dreamsign","status":"pending"},
+        {"id":"8408b8c2-5a3f-40dd-bac4-98f2736c4176","kind":"dreamsign","status":"authored"},
+        {"id":"883f88fb-ac50-419a-8382-c22edee29755","kind":"dreamsign","status":"pending"},
+        {"id":"8a2c7b32-26ea-40e2-845a-689da5673b4d","kind":"dreamsign","status":"authored"}
       ],
-      "weight": 7.9,
+      "weight": 8,
       "introduces": [],
       "newPromptKinds": [],
-      "dependsOn": ["journey-registry","prim-journey-shop"],
+      "dependsOn": ["journey-registry"],
       "serializedAfter": [],
       "externalDependsOn": [],
       "pilot": false,
       "coreReview": false,
       "scenarios": "src/content/specs/dreamsigns-journey-06.scenarios.ts",
       "areas": [
-        "src/content/dreamsigns/curled-tail-3c0ced1a.ts",
-        "src/content/dreamsigns/leaf-ledger-d9f0f7ff.ts",
-        "src/content/dreamsigns/purple-crystal-cd4bb1f4.ts",
-        "src/content/dreamsigns/rainbow-mushroom-58472ad2.ts",
-        "src/content/dreamsigns/spell-tome-0c52e8c3.ts",
+        "src/content/dreamsigns/charm-staff-883f88fb.ts",
+        "src/content/dreamsigns/cracked-orb-8408b8c2.ts",
+        "src/content/dreamsigns/scorpion-71f77dd5.ts",
+        "src/content/dreamsigns/slug-108841ce.ts",
+        "src/content/dreamsigns/witch-coin-8a2c7b32.ts",
         "src/content/specs/dreamsigns-journey-06.scenarios.ts",
         "src/content/specs/index.ts"
       ],
       "sharedAreas": [],
       "falloutHints": [],
       "knownDecisions": [
+        {"id":"108841ce-4feb-4c73-972e-0277c727c63e","rulesDecisions":["RD-hv-umm2.261-2","RD-hv-umm2.265-1"]},
+        {"id":"8408b8c2-5a3f-40dd-bac4-98f2736c4176","rulesDecisions":["RD-hv-umm2.266-1"]},
+        {"id":"8a2c7b32-26ea-40e2-845a-689da5673b4d","rulesDecisions":["RD-hv-umm2.266-1"]}
+      ]
+    },
+    {
+      "key": "dreamsigns-journey-07",
+      "order": 179,
+      "section": "5.6",
+      "kind": "composition",
+      "title": "5.6 Dreamsigns: journey effects (P8) (7/8)",
+      "entities": [
+        {"id":"10bd78de-87ec-44e4-9b16-e755da2a9717","kind":"dreamsign","status":"authored"},
+        {"id":"cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f","kind":"dreamsign","status":"pending"},
+        {"id":"3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59","kind":"dreamsign","status":"authored"},
+        {"id":"58472ad2-88b1-4dc7-a161-c6dea7d8c43d","kind":"dreamsign","status":"authored"},
+        {"id":"d9f0f7ff-63c0-4247-8831-054d7fed931d","kind":"dreamsign","status":"authored"}
+      ],
+      "weight": 8,
+      "introduces": [],
+      "newPromptKinds": [],
+      "dependsOn": ["journey-registry"],
+      "serializedAfter": [],
+      "externalDependsOn": [],
+      "pilot": false,
+      "coreReview": false,
+      "scenarios": "src/content/specs/dreamsigns-journey-07.scenarios.ts",
+      "areas": [
+        "src/content/dreamsigns/curled-tail-3c0ced1a.ts",
+        "src/content/dreamsigns/leaf-ledger-d9f0f7ff.ts",
+        "src/content/dreamsigns/purple-crystal-cd4bb1f4.ts",
+        "src/content/dreamsigns/rainbow-mushroom-58472ad2.ts",
+        "src/content/dreamsigns/red-shard-10bd78de.ts",
+        "src/content/specs/dreamsigns-journey-07.scenarios.ts",
+        "src/content/specs/index.ts"
+      ],
+      "sharedAreas": [],
+      "falloutHints": [],
+      "knownDecisions": [
+        {
+          "id": "10bd78de-87ec-44e4-9b16-e755da2a9717",
+          "rulesDecisions": ["RD-hv-umm2.266-1"],
+          "cardIssues": ["10bd78de-87ec-44e4-9b16-e755da2a9717--hv-umm2.266"]
+        },
         {
           "id": "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
           "rulesDecisions": ["RD-hv-umm2.260-1"],
@@ -6980,23 +6973,23 @@
           "rulesDecisions": ["RD-hv-umm2.260-1"],
           "cardIssues": ["58472ad2-88b1-4dc7-a161-c6dea7d8c43d--hv-umm2.260"]
         },
-        {"id":"d9f0f7ff-63c0-4247-8831-054d7fed931d","rulesDecisions":["RD-hv-umm2.261-1"]},
-        {"id":"0c52e8c3-a792-4eea-955f-a0c61463c066","rulesDecisions":["RD-hv-umm2.261-1","RD-hv-umm2.264-1"]}
+        {"id":"d9f0f7ff-63c0-4247-8831-054d7fed931d","rulesDecisions":["RD-hv-umm2.261-1"]}
       ]
     },
     {
-      "key": "dreamsigns-journey-07",
-      "order": 181,
+      "key": "dreamsigns-journey-08",
+      "order": 180,
       "section": "5.6",
       "kind": "composition",
-      "title": "5.6 Dreamsigns: journey effects (P8) / Dreamsigns: journey effects (P8): energy and points / Dreamsigns: journey effects (P8): spark, Support, anthems, and base spark (7/7)",
+      "title": "5.6 Dreamsigns: journey effects (P8) / Dreamsigns: journey effects (P8): energy and points / Dreamsigns: journey effects (P8): spark, Support, anthems, and base spark (8/8)",
       "entities": [
+        {"id":"0c52e8c3-a792-4eea-955f-a0c61463c066","kind":"dreamsign","status":"authored"},
         {"id":"34ce9428-dda9-4efa-bacd-5ec2698561c1","kind":"dreamsign","status":"pending"},
         {"id":"452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19","kind":"dreamsign","status":"authored"},
         {"id":"6b95d6bd-c970-4465-9536-4f21e7630d0a","kind":"dreamsign","status":"pending"},
         {"id":"1cd25b9a-b176-4c51-8349-bb4df35cbf05","kind":"dreamsign","status":"pending"}
       ],
-      "weight": 6.7,
+      "weight": 8.2,
       "introduces": [],
       "newPromptKinds": [],
       "dependsOn": ["journey-registry"],
@@ -7007,22 +7000,29 @@
       "externalDependsOn": [],
       "pilot": false,
       "coreReview": false,
-      "scenarios": "src/content/specs/dreamsigns-journey-07.scenarios.ts",
+      "scenarios": "src/content/specs/dreamsigns-journey-08.scenarios.ts",
       "areas": [
         "src/content/dreamsigns/glow-pouch-34ce9428.ts",
         "src/content/dreamsigns/green-slime-452b7cd6.ts",
         "src/content/dreamsigns/mushroom-caps-6b95d6bd.ts",
+        "src/content/dreamsigns/spell-tome-0c52e8c3.ts",
         "src/content/dreamsigns/twisted-herbs-1cd25b9a.ts",
-        "src/content/specs/dreamsigns-journey-07.scenarios.ts",
+        "src/content/specs/dreamsigns-journey-08.scenarios.ts",
         "src/content/specs/index.ts"
       ],
       "sharedAreas": [],
       "falloutHints": [],
-      "knownDecisions": [{"id":"452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19","rulesDecisions":["RD-hv-umm2.261-2"]}]
+      "knownDecisions": [
+        {
+          "id": "0c52e8c3-a792-4eea-955f-a0c61463c066",
+          "rulesDecisions": ["RD-hv-umm2.261-1","RD-hv-umm2.264-1","RD-hv-umm2.266-1"]
+        },
+        {"id":"452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19","rulesDecisions":["RD-hv-umm2.261-2"]}
+      ]
     },
     {
       "key": "transfigurations-01",
-      "order": 182,
+      "order": 181,
       "section": "5.7a",
       "kind": "composition",
       "title": "5.7a Transfiguration transforms (1/2)",
@@ -7059,7 +7059,7 @@
     },
     {
       "key": "transfigurations-02",
-      "order": 183,
+      "order": 182,
       "section": "5.7a",
       "kind": "composition",
       "title": "5.7a Transfiguration transforms (2/2)",
@@ -7090,7 +7090,7 @@
     },
     {
       "key": "transfiguration-sweep",
-      "order": 184,
+      "order": 183,
       "section": "5.7",
       "kind": "task",
       "title": "5.7 Transfiguration sweep sample",
@@ -7111,7 +7111,7 @@
     },
     {
       "key": "deck-mods-foundation",
-      "order": 185,
+      "order": 184,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: exhaustive mapping, card-lab mods, fuzz mods",
@@ -7132,7 +7132,7 @@
     },
     {
       "key": "deck-mods-spark-bonus",
-      "order": 186,
+      "order": 185,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: spark bonus",
@@ -7265,7 +7265,7 @@
     },
     {
       "key": "deck-mods-cost-reduction",
-      "order": 187,
+      "order": 186,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: cost reduction",
@@ -7329,7 +7329,7 @@
     },
     {
       "key": "deck-mods-fast",
-      "order": 188,
+      "order": 187,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: Fast",
@@ -7385,7 +7385,7 @@
     },
     {
       "key": "deck-mods-reclaim",
-      "order": 189,
+      "order": 188,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: granted and overridden Reclaim",
@@ -7465,7 +7465,7 @@
     },
     {
       "key": "deck-mods-subtype-change",
-      "order": 190,
+      "order": 189,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: subtype change",
@@ -7519,7 +7519,7 @@
     },
     {
       "key": "deck-mods-card-type-change",
-      "order": 191,
+      "order": 190,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: card-type change",
@@ -7540,7 +7540,7 @@
     },
     {
       "key": "next-battle-opening-hand",
-      "order": 192,
+      "order": 191,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: next-battle opening hand",
@@ -7629,7 +7629,7 @@
     },
     {
       "key": "next-battle-starting-energy",
-      "order": 193,
+      "order": 192,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: next-battle starting energy",
@@ -7717,7 +7717,7 @@
     },
     {
       "key": "next-battle-smaller-hand",
-      "order": 194,
+      "order": 193,
       "section": "5.7b",
       "kind": "task",
       "title": "5.7b Deck-entry modifications: next-battle smaller hand and cost discount",
@@ -7768,7 +7768,7 @@
     },
     {
       "key": "apollyon-design",
-      "order": 195,
+      "order": 194,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations: provisional mechanics design (D6)",
@@ -7800,7 +7800,7 @@
     },
     {
       "key": "apollyon-01",
-      "order": 196,
+      "order": 195,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations (1/5)",
@@ -7860,7 +7860,7 @@
     },
     {
       "key": "apollyon-02",
-      "order": 197,
+      "order": 196,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations (2/5)",
@@ -7920,7 +7920,7 @@
     },
     {
       "key": "apollyon-03",
-      "order": 198,
+      "order": 197,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations (3/5)",
@@ -7980,7 +7980,7 @@
     },
     {
       "key": "apollyon-04",
-      "order": 199,
+      "order": 198,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations (4/5)",
@@ -8040,7 +8040,7 @@
     },
     {
       "key": "apollyon-05",
-      "order": 200,
+      "order": 199,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon incarnations (5/5)",
@@ -8100,7 +8100,7 @@
     },
     {
       "key": "apollyon-sanity",
-      "order": 201,
+      "order": 200,
       "section": "5.8",
       "kind": "task",
       "title": "5.8 Apollyon sanity matrix and frozen deck pool",
@@ -8122,8 +8122,6 @@
   ],
   "primitives": [
     {"name":"journeyBattleInit","kind":"journey","module":"src/rules/journey/journey-battle-init.ts","exists":false,"usedBy":1,"introducedBy":"prim-journey-battle-init","note":"battle-start effects: opening hand, draw counts, hand rules","forms":[{"module":"src/rules/journey/journey-battle-init.ts","symbol":"journeyBattleInit","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
-    {"name":"journeyDuplication","kind":"journey","module":"src/rules/journey/journey-duplication.ts","exists":false,"usedBy":3,"introducedBy":"prim-journey-duplication","note":"duplication counts","forms":[{"module":"src/rules/journey/journey-duplication.ts","symbol":"journeyDuplication","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
-    {"name":"journeyShop","kind":"journey","module":"src/rules/journey/journey-shop.ts","exists":false,"usedBy":6,"introducedBy":"prim-journey-shop","note":"shop offers, pricing, restocks, duplication, the Dream Bazaar","forms":[{"module":"src/rules/journey/journey-shop.ts","symbol":"journeyShop","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
     {"name":"typeRemap","kind":"dsl","module":"src/engine/dsl/types.ts","exists":false,"usedBy":1,"introducedBy":"prim-type-remap","note":"C12 type remap for selectors and figments (engine gap noted by hv-7x4l.8 (3.8))","forms":[{"module":"src/engine/dsl/types.ts","symbol":"DeckMods","kind":"form","option":"typeRemap","pending":"option"}]},
     {"name":"abandon","kind":"primitive","module":"src/engine/effects/primitives/abandon.ts","exists":true,"usedBy":5,"introducedBy":null,"note":"abandon(chooser, predicate) as an effect"},
     {"name":"abandonCost","kind":"builder","module":null,"exists":true,"usedBy":71,"introducedBy":null},
@@ -8184,6 +8182,7 @@
     {"name":"erode","kind":"primitive","module":"src/engine/effects/primitives/erode.ts","exists":true,"usedBy":25,"introducedBy":null},
     {"name":"exhaustSelf","kind":"builder","module":null,"exists":true,"usedBy":74,"introducedBy":null},
     {"name":"firstMaterializationKeyword","kind":"primitive","module":"src/engine/effects/primitives/first-materialization-keyword.ts","exists":true,"usedBy":1,"introducedBy":null,"note":"First successful materialization each turn gains Awakened before entry readiness"},
+    {"name":"firstPlayedSparkSetter","kind":"primitive","module":"src/engine/effects/primitives/first-played-spark-setter.ts","exists":true,"usedBy":1,"introducedBy":null,"note":"Live base-spark zero for the current turn’s first committed physical character play"},
     {"name":"firstTimeEachTurn","kind":"dsl","module":"src/engine/dsl/triggers.ts","exists":true,"usedBy":2,"introducedBy":null,"note":"\"the first time each turn …\"","forms":[{"module":"src/engine/dsl/triggers.ts","symbol":"firstTimeEachTurn","kind":"builder"},{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"handBecomesEmpty","option":"firstTimeEachTurn"},{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"namedAbilityTriggered","option":"firstTimeEachTurn"}]},
     {"name":"floating","kind":"primitive","module":"src/engine/effects/primitives/floating-trigger.ts","exists":true,"usedBy":9,"introducedBy":null},
     {"name":"foresee","kind":"primitive","module":"src/engine/effects/primitives/foresee.ts","exists":true,"usedBy":17,"introducedBy":null},
@@ -8205,9 +8204,11 @@
     {"name":"journeyDeckEntry","kind":"journey","module":"src/rules/journey/journey-deck-entry.ts","exists":true,"usedBy":8,"introducedBy":null,"note":"deck-entry changes from dreamsigns (D39 variant)","forms":[{"module":"src/rules/journey/journey-deck-entry.ts","symbol":"journeyDeckEntry","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
     {"name":"journeyDeckSparkModifier","kind":"primitive","module":"src/engine/effects/primitives/journey-deck-spark-modifier.ts","exists":true,"usedBy":1,"introducedBy":null,"note":"C4 original physical journey-deck spark in all zones"},
     {"name":"journeyDraft","kind":"journey","module":"src/rules/journey/journey-draft.ts","exists":true,"usedBy":6,"introducedBy":null,"note":"draft choice counts","forms":[{"module":"src/rules/journey/journey-draft.ts","symbol":"journeyDraft","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
+    {"name":"journeyDuplication","kind":"journey","module":"src/rules/journey/journey-duplication.ts","exists":true,"usedBy":3,"introducedBy":null,"note":"duplication counts","forms":[{"module":"src/rules/journey/journey-duplication.ts","symbol":"journeyDuplication","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
     {"name":"journeyEssence","kind":"journey","module":"src/rules/journey/journey-essence.ts","exists":true,"usedBy":8,"introducedBy":null,"note":"essence gains and site rewards","forms":[{"module":"src/rules/journey/journey-essence.ts","symbol":"journeyEssence","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
     {"name":"journeyOnGain","kind":"journey","module":"src/rules/journey/journey-on-gain.ts","exists":true,"usedBy":9,"introducedBy":null,"note":"\"when you gain this dreamsign\" one-shots","forms":[{"module":"src/rules/journey/journey-on-gain.ts","symbol":"journeyOnGain","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
     {"name":"journeyPurge","kind":"journey","module":"src/rules/journey/journey-purge.ts","exists":true,"usedBy":6,"introducedBy":null,"note":"purge permissions, payouts, and windows","forms":[{"module":"src/rules/journey/journey-purge.ts","symbol":"journeyPurge","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
+    {"name":"journeyShop","kind":"journey","module":"src/rules/journey/journey-shop.ts","exists":true,"usedBy":6,"introducedBy":null,"note":"shop offers, pricing, restocks, duplication, the Dream Bazaar","forms":[{"module":"src/rules/journey/journey-shop.ts","symbol":"journeyShop","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
     {"name":"journeySites","kind":"journey","module":"src/rules/journey/journey-sites.ts","exists":true,"usedBy":19,"introducedBy":null,"note":"site enhancement and rerolls, essence-site alternatives","forms":[{"module":"src/rules/journey/journey-sites.ts","symbol":"journeySites","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
     {"name":"journeyTransfiguration","kind":"journey","module":"src/rules/journey/journey-transfiguration.ts","exists":true,"usedBy":11,"introducedBy":null,"note":"transfiguration counts, random and forced transfigurations","forms":[{"module":"src/rules/journey/journey-transfiguration.ts","symbol":"journeyTransfiguration","kind":"builder","registration":{"module":"src/rules/journey/modifier-registry.ts","symbol":"journeyModifierRegistry","constructor":"createJourneyModifierRegistry"}}]},
     {"name":"keyword","kind":"builder","module":null,"exists":true,"usedBy":39,"introducedBy":null},
@@ -8255,7 +8256,7 @@
     {"name":"selectorChallenger","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":8,"introducedBy":null,"note":"challengers","forms":[{"module":"src/engine/dsl/types.ts","symbol":"CharacterSelector","kind":"form","option":"challenging"}]},
     {"name":"selectorFigment","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":8,"introducedBy":null,"note":"figment or not","forms":[{"module":"src/engine/dsl/types.ts","symbol":"CharacterSelector","kind":"form","option":"figment"}]},
     {"name":"selectorHasAbility","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":2,"introducedBy":null,"note":"\"characters with ▸Materialized abilities\"","forms":[{"module":"src/engine/dsl/types.ts","symbol":"CharacterSelector","kind":"form","option":"hasAbility"},{"module":"src/engine/dsl/types.ts","symbol":"CardFilter","kind":"form","option":"hasAbility"}]},
-    {"name":"setBaseSpark","kind":"primitive","module":"src/engine/effects/primitives/set-base-spark.ts","exists":true,"usedBy":7,"introducedBy":null},
+    {"name":"setBaseSpark","kind":"primitive","module":"src/engine/effects/primitives/set-base-spark.ts","exists":true,"usedBy":6,"introducedBy":null},
     {"name":"shuffleInto","kind":"primitive","module":"src/engine/effects/primitives/shuffle-into.ts","exists":true,"usedBy":5,"introducedBy":null},
     {"name":"sparkModifier","kind":"primitive","module":"src/engine/effects/primitives/spark-modifier.ts","exists":true,"usedBy":34,"introducedBy":null},
     {"name":"speedFast","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":21,"introducedBy":null,"forms":[{"module":"src/engine/dsl/types.ts","symbol":"Speed","kind":"form","literal":"fast"}]},
@@ -8269,7 +8270,7 @@
     {"name":"takeExtraTurn","kind":"primitive","module":"src/engine/effects/primitives/take-extra-turn.ts","exists":true,"usedBy":1,"introducedBy":null,"note":"C8"},
     {"name":"takeFromAmong","kind":"primitive","module":"src/engine/effects/primitives/take-from-among.ts","exists":true,"usedBy":9,"introducedBy":null,"note":"put chosen cards from among looked-at or eroded cards into hand"},
     {"name":"triggerAbility","kind":"primitive","module":"src/engine/effects/primitives/trigger-ability.ts","exists":true,"usedBy":8,"introducedBy":null},
-    {"name":"triggerNth","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":29,"introducedBy":null,"forms":[{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"play","option":"nth"}]},
+    {"name":"triggerNth","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":28,"introducedBy":null,"forms":[{"module":"src/engine/dsl/types.ts","symbol":"Trigger","kind":"form","member":"play","option":"nth"}]},
     {"name":"turnHistory","kind":"dsl","module":"src/engine/dsl/types.ts","exists":true,"usedBy":25,"introducedBy":null,"note":"turn counters: cards played, discarded, dissolved this turn","forms":[{"module":"src/engine/dsl/types.ts","symbol":"ValueExpr","kind":"form","member":"playedThisTurn"},{"module":"src/engine/dsl/types.ts","symbol":"Condition","kind":"form","member":"thisTurn"}]},
     {"name":"untilEndOfTurn","kind":"builder","module":null,"exists":true,"usedBy":72,"introducedBy":null},
     {"name":"untilOpponentPays","kind":"builder","module":null,"exists":true,"usedBy":2,"introducedBy":null},
@@ -8925,29 +8926,29 @@
     {"id":"f6208407-c4e9-42ac-b533-346704f5e39e","kind":"avatar","name":"Ovanel","status":"authored","text":"2●, ☾: If you played an event this turn, draw an event.","module":"src/content/avatars/ovanel-f6208407.ts","tags":["cost-energy","cost-exhaust","draw-matching","duration","turn-history"],"requiredPrimitives":{"existing":["drawMatching","energy","exhaustSelf","turnHistory","untilEndOfTurn"],"new":[]},"promptKinds":[],"family":14,"routing":["5.4","avatars-05"]},
     {"id":"fe2510d9-bfee-4c35-97f9-30e0cd2e2851","kind":"avatar","name":"Yveth Coravel","status":"authored","text":"2●, ☾: Return a character you control to hand. Its cost is reduced by 1●.","module":"src/content/avatars/yveth-coravel-fe2510d9.ts","tags":["card-cost","cost-energy","cost-exhaust","cost-modifier","return-own-to-hand","targeted"],"requiredPrimitives":{"existing":["costModifier","energy","exhaustSelf","modifyCardCost","returnToHand"],"new":[]},"promptKinds":["chooseTargets:target"],"family":14,"routing":["5.4","avatars-05"]},
     {"id":"00cc7e7f-4245-4447-b9dc-f647dc6241a2","kind":"dreamsign","name":"Berries","status":"authored","rarity":"Uncommon","text":"Characters in your deck with cost ≤2● have +1✦.","module":"src/content/dreamsigns/berries-00cc7e7f.ts","clarifications":["C4"],"rulesDecisions":["RD-hv-umm2.318-1","RD-hv-umm2.589-1"],"tags":["original-deck-spark"],"requiredPrimitives":{"existing":["journeyDeckSparkModifier"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-10"],"correction":"C4 original physical membership and all-zone static spark; no selection prompt"},
-    {"id":"025ce7f1-066b-480a-8a2f-364379890abd","kind":"dreamsign","name":"Spider","status":"pending","rarity":"Uncommon","text":"After each battle, you may duplicate a card.","module":"src/content/dreamsigns/spider-025ce7f1.ts","tags":["journey-duplication"],"requiredPrimitives":{"existing":[],"new":["journeyDuplication"]},"promptKinds":[],"family":0,"routing":["5.6","prim-journey-duplication"]},
+    {"id":"025ce7f1-066b-480a-8a2f-364379890abd","kind":"dreamsign","name":"Spider","status":"authored","rarity":"Uncommon","text":"After each battle, you may duplicate a card.","module":"src/content/dreamsigns/spider-025ce7f1.ts","rulesDecisions":["RD-hv-umm2.268-1"],"tags":["journey-duplication"],"requiredPrimitives":{"existing":["journeyDuplication"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-03"]},
     {"id":"044f856b-c08b-4b82-81e3-5417962bf868","kind":"dreamsign","name":"Skull Dagger","status":"pending","rarity":"Uncommon","text":"The first event you play from your void each turn costs 0●.","module":"src/content/dreamsigns/skull-dagger-044f856b.ts","rulesDecisions":["RD-hv-umm2.705-1"],"tags":["cost-modifier","cost-modifier-nth-origin"],"requiredPrimitives":{"existing":["costModifier","costModifierNthOrigin"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"],"correction":"Passive first event from the actual void cost setting, independent of the chosen payment route"},
     {"id":"055f211d-aa51-49eb-9162-190a946b1614","kind":"dreamsign","name":"Root Staff","status":"authored","rarity":"Uncommon","text":"When 2 or more characters you control score ⍟, draw a card, then discard a card.","module":"src/content/dreamsigns/root-staff-055f211d.ts","rulesDecisions":["RD-hv-umm2.582-1"],"tags":["discard","draw","trigger-scores"],"requiredPrimitives":{"existing":["discard","draw","whenScores"],"new":[]},"promptKinds":["chooseCards:discard"],"family":3,"routing":["5.5","dreamsigns-battle-01"]},
     {"id":"05f69d01-f8a3-4044-b7cd-0bfd9ed980cd","kind":"dreamsign","name":"Philosopher's Stone","status":"authored","rarity":"Rare","text":"Your unspent ● carries over between turns.","module":"src/content/dreamsigns/philosopher-s-stone-05f69d01.ts","rulesDecisions":["RD-hv-umm2.236-2"],"tags":["rule-modifier"],"requiredPrimitives":{"existing":["ruleModifier"],"new":[]},"promptKinds":[],"family":16,"routing":["5.5","dreamsigns-battle-22"]},
     {"id":"064cfb53-fcb4-4471-80de-27eccd23d3c0","kind":"dreamsign","name":"Carved Relic","status":"authored","rarity":"Rare","text":"▸Dawn: Return a random event from your void to your hand.","module":"src/content/dreamsigns/carved-relic-064cfb53.ts","tags":["random","return-from-void","trigger-dawn","zone-cards"],"requiredPrimitives":{"existing":["onDawn","randomSelection","returnFromVoid","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":6,"routing":["5.5","dreamsigns-battle-06"]},
     {"id":"069c6e8f-4f41-4f13-9ec9-2009b4186e3b","kind":"dreamsign","name":"Spotted Mug","status":"pending","rarity":"Uncommon","text":"When you gain this dreamsign, pick an event card in your deck.\n\nThat card is always in your opening hand.","module":"src/content/dreamsigns/spotted-mug-069c6e8f.ts","tags":["journey-battle-init","journey-on-gain"],"requiredPrimitives":{"existing":["journeyOnGain"],"new":["journeyBattleInit"]},"promptKinds":[],"family":0,"routing":["5.6","prim-journey-battle-init"]},
     {"id":"08a3983a-1b95-4d2e-a445-9d8dc2b8fca7","kind":"dreamsign","name":"Spider Medallion","status":"authored","rarity":"Uncommon","text":"When you have 3 or more challengers, they have +2✦.","module":"src/content/dreamsigns/spider-medallion-08a3983a.ts","tags":["selector-challenger","spark-static"],"requiredPrimitives":{"existing":["selectorChallenger","sparkModifier"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-10"]},
-    {"id":"0c52e8c3-a792-4eea-955f-a0c61463c066","kind":"dreamsign","name":"Spell Tome","status":"authored","rarity":"Uncommon","text":"When you transfigure an event, add a copy of it to your deck.","module":"src/content/dreamsigns/spell-tome-0c52e8c3.ts","rulesDecisions":["RD-hv-umm2.261-1","RD-hv-umm2.264-1"],"tags":["journey-transfiguration"],"requiredPrimitives":{"existing":["journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-06"]},
+    {"id":"0c52e8c3-a792-4eea-955f-a0c61463c066","kind":"dreamsign","name":"Spell Tome","status":"authored","rarity":"Uncommon","text":"When you transfigure an event, add a copy of it to your deck.","module":"src/content/dreamsigns/spell-tome-0c52e8c3.ts","rulesDecisions":["RD-hv-umm2.261-1","RD-hv-umm2.264-1","RD-hv-umm2.266-1"],"tags":["journey-transfiguration"],"requiredPrimitives":{"existing":["journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-08"]},
     {"id":"0d668e16-1729-4289-ad1d-0fb3c1374ee9","kind":"dreamsign","name":"Skull Pendant","status":"authored","rarity":"Uncommon","text":"Characters with ▸Materialized abilities cost you 1● less.","module":"src/content/dreamsigns/skull-pendant-0d668e16.ts","tags":["cost-modifier","selector-has-ability","trigger-materialized"],"requiredPrimitives":{"existing":["costModifier","onMaterialized","selectorHasAbility"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-16"]},
-    {"id":"0df9d72c-58ea-42a0-a72a-cbc540a1836a","kind":"dreamsign","name":"Voodoo Doll","status":"authored","rarity":"Common","text":"When you gain this dreamsign, choose another dreamsign you own. This dreamsign becomes a copy of it.","module":"src/content/dreamsigns/voodoo-doll-0df9d72c.ts","rulesDecisions":["RD-hv-umm2.263-1"],"tags":["journey-on-gain"],"requiredPrimitives":{"existing":["journeyOnGain"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-04"]},
-    {"id":"108841ce-4feb-4c73-972e-0277c727c63e","kind":"dreamsign","name":"Slug","status":"authored","rarity":"Uncommon","text":"After each battle, you may purge up to 2 cards.","module":"src/content/dreamsigns/slug-108841ce.ts","rulesDecisions":["RD-hv-umm2.261-2","RD-hv-umm2.265-1"],"tags":["journey-purge"],"requiredPrimitives":{"existing":["journeyPurge"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-05"]},
-    {"id":"10bd78de-87ec-44e4-9b16-e755da2a9717","kind":"dreamsign","name":"Red Shard","status":"pending","rarity":"Uncommon","text":"Cards you purchase from dream bazaar sites gain a random transfiguration.","module":"src/content/dreamsigns/red-shard-10bd78de.ts","tags":["journey-shop","journey-sites","journey-transfiguration"],"requiredPrimitives":{"existing":["journeySites","journeyTransfiguration"],"new":["journeyShop"]},"promptKinds":[],"family":0,"routing":["5.6","prim-journey-shop"]},
+    {"id":"0df9d72c-58ea-42a0-a72a-cbc540a1836a","kind":"dreamsign","name":"Voodoo Doll","status":"authored","rarity":"Common","text":"When you gain this dreamsign, choose another dreamsign you own. This dreamsign becomes a copy of it.","module":"src/content/dreamsigns/voodoo-doll-0df9d72c.ts","rulesDecisions":["RD-hv-umm2.263-1"],"tags":["journey-on-gain"],"requiredPrimitives":{"existing":["journeyOnGain"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-05"]},
+    {"id":"108841ce-4feb-4c73-972e-0277c727c63e","kind":"dreamsign","name":"Slug","status":"authored","rarity":"Uncommon","text":"After each battle, you may purge up to 2 cards.","module":"src/content/dreamsigns/slug-108841ce.ts","rulesDecisions":["RD-hv-umm2.261-2","RD-hv-umm2.265-1"],"tags":["journey-purge"],"requiredPrimitives":{"existing":["journeyPurge"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-06"]},
+    {"id":"10bd78de-87ec-44e4-9b16-e755da2a9717","kind":"dreamsign","name":"Red Shard","status":"authored","rarity":"Uncommon","text":"Cards you purchase from dream bazaar sites gain a random transfiguration.","module":"src/content/dreamsigns/red-shard-10bd78de.ts","rulesDecisions":["RD-hv-umm2.266-1"],"cardIssues":["10bd78de-87ec-44e4-9b16-e755da2a9717--hv-umm2.266"],"tags":["journey-shop","journey-sites","journey-transfiguration"],"requiredPrimitives":{"existing":["journeyShop","journeySites","journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-07"]},
     {"id":"10f27800-99f8-4504-9d94-26bcb3c32788","kind":"dreamsign","name":"Essence Vial","status":"authored","rarity":"Uncommon","text":"Once per turn, when you abandon a character or discard a character, that card gains reclaim.","module":"src/content/dreamsigns/essence-vial-10f27800.ts","tags":["grant-reclaim","grant-reclaim-triggering","once-per-turn","trigger-abandon"],"requiredPrimitives":{"existing":["grantReclaim","grantReclaimTriggeringCard","oncePerTurn","whenAbandon"],"new":[]},"promptKinds":[],"family":6,"routing":["5.5","dreamsigns-battle-05"]},
-    {"id":"11018e32-f47e-45fd-a8cf-3a9e3f3be71b","kind":"dreamsign","name":"Silver Key","status":"pending","rarity":"Uncommon","text":"The first character you play each turn materializes with +1✦.","module":"src/content/dreamsigns/silver-key-11018e32.ts","tags":["nth-in-turn"],"requiredPrimitives":{"existing":["triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-19"]},
+    {"id":"11018e32-f47e-45fd-a8cf-3a9e3f3be71b","kind":"dreamsign","name":"Silver Key","status":"pending","rarity":"Uncommon","text":"The first character you play each turn materializes with +1✦.","module":"src/content/dreamsigns/silver-key-11018e32.ts","rulesDecisions":["RD-hv-umm2.624-1"],"tags":["nth-in-turn"],"requiredPrimitives":{"existing":["triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-19"]},
     {"id":"12ec9625-cbfb-4056-9c3e-98ed8c8bea70","kind":"dreamsign","name":"Charm Bracelet","status":"authored","rarity":"Common","text":"Once per turn, when you return a character you control to hand, your next character this turn costs 1● less.","module":"src/content/dreamsigns/charm-bracelet-12ec9625.ts","tags":["cost-modifier","duration","once-per-turn","trigger-return"],"requiredPrimitives":{"existing":["costModifier","oncePerTurn","untilEndOfTurn","whenReturnTrigger"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-15"]},
-    {"id":"1328e611-fa2f-426f-87e2-97f26c061866","kind":"dreamsign","name":"Paired Teeth","status":"pending","rarity":"Uncommon","text":"When you gain this dreamsign, you may purge up to 4 starter cards from your deck.","module":"src/content/dreamsigns/paired-teeth-1328e611.ts","tags":["journey-on-gain","journey-purge"],"requiredPrimitives":{"existing":["journeyOnGain","journeyPurge"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-04"]},
+    {"id":"1328e611-fa2f-426f-87e2-97f26c061866","kind":"dreamsign","name":"Paired Teeth","status":"pending","rarity":"Uncommon","text":"When you gain this dreamsign, you may purge up to 4 starter cards from your deck.","module":"src/content/dreamsigns/paired-teeth-1328e611.ts","tags":["journey-on-gain","journey-purge"],"requiredPrimitives":{"existing":["journeyOnGain","journeyPurge"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-05"]},
     {"id":"15fd5a22-a786-48e3-99b0-919e810b3eba","kind":"dreamsign","name":"Opal","status":"pending","rarity":"Uncommon","text":"You may pay Offering costs by discarding a card instead of banishing a card from your hand.","module":"src/content/dreamsigns/opal-15fd5a22.ts","tags":["rule-modifier","zone-cards"],"requiredPrimitives":{"existing":["ruleModifier","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":16,"routing":["5.5","dreamsigns-battle-23"]},
     {"id":"1a21186c-cafd-4e0f-9304-1ac0ef55340a","kind":"dreamsign","name":"Gray Feather","status":"authored","rarity":"Uncommon","text":"When a character you control gains ✦, it gains 1 additional ✦.","module":"src/content/dreamsigns/gray-feather-1a21186c.ts","clarifications":["C17"],"rulesDecisions":["RD-hv-7x4l.1-20","RD-hv-7x4l.46-1"],"tags":["additional-spark"],"requiredPrimitives":{"existing":["gainAdditionalSpark","whenGainsSpark"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-07"]},
     {"id":"1a524712-ef7e-43d9-bd79-5dea5250bf08","kind":"dreamsign","name":"Rainbow Horn","status":"authored","rarity":"Uncommon","text":"▸Dawn: Add a random ≤2● cost event from the card pool to your hand.","module":"src/content/dreamsigns/rainbow-horn-1a524712.ts","clarifications":["C11"],"rulesDecisions":["RD-hv-9vy4-1","RD-hv-gy8c-1","RD-hv-umm2.580-1"],"tags":["create-card","random","trigger-dawn"],"requiredPrimitives":{"existing":["createCard","onDawn","randomSelection"],"new":[]},"promptKinds":[],"family":3,"routing":["5.5","dreamsigns-battle-01"]},
     {"id":"1c505034-e405-495d-8418-6e3c06d974f0","kind":"dreamsign","name":"Sea Urchin","status":"authored","rarity":"Uncommon","text":"While you have at least 300 essence, draft site choices show an additional card.","module":"src/content/dreamsigns/sea-urchin-1c505034.ts","rulesDecisions":["RD-hv-umm2.267-1"],"tags":["journey-draft","journey-essence","journey-sites"],"requiredPrimitives":{"existing":["journeyDraft","journeyEssence","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-02"]},
     {"id":"1ccd8d69-e14c-4788-be1d-cb6a1b703225","kind":"dreamsign","name":"Wolf Sigil","status":"authored","rarity":"Uncommon","text":"When a character you control dissolves an enemy in a challenge, it gains +2✦.","module":"src/content/dreamsigns/wolf-sigil-1ccd8d69.ts","rulesDecisions":["RD-hv-umm2.229-2"],"tags":["gain-spark","trigger-removes-enemy"],"requiredPrimitives":{"existing":["gainSpark","whenRemovesEnemyTrigger"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-09"]},
-    {"id":"1cd25b9a-b176-4c51-8349-bb4df35cbf05","kind":"dreamsign","name":"Twisted Herbs","status":"pending","rarity":"Uncommon","text":"When you gain this dreamsign, add 5 Nightmare cards to your deck.\n\nCharacters you control have +1✦.","module":"src/content/dreamsigns/twisted-herbs-1cd25b9a.ts","tags":["journey-deck-entry","journey-on-gain","spark-static"],"requiredPrimitives":{"existing":["journeyDeckEntry","journeyOnGain","sparkModifier"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","5.6","dreamsigns-battle-09","dreamsigns-journey-07"]},
-    {"id":"1cf06f9b-d698-434b-8e36-8a47206f4c0c","kind":"dreamsign","name":"Cracked Mirror","status":"pending","rarity":"Uncommon","text":"The first card you purchase from each shop site is duplicated.","module":"src/content/dreamsigns/cracked-mirror-1cf06f9b.ts","tags":["journey-duplication","journey-shop","journey-sites"],"requiredPrimitives":{"existing":["journeySites"],"new":["journeyDuplication","journeyShop"]},"promptKinds":[],"family":0,"routing":["5.6","prim-journey-duplication"]},
+    {"id":"1cd25b9a-b176-4c51-8349-bb4df35cbf05","kind":"dreamsign","name":"Twisted Herbs","status":"pending","rarity":"Uncommon","text":"When you gain this dreamsign, add 5 Nightmare cards to your deck.\n\nCharacters you control have +1✦.","module":"src/content/dreamsigns/twisted-herbs-1cd25b9a.ts","tags":["journey-deck-entry","journey-on-gain","spark-static"],"requiredPrimitives":{"existing":["journeyDeckEntry","journeyOnGain","sparkModifier"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","5.6","dreamsigns-battle-09","dreamsigns-journey-08"]},
+    {"id":"1cf06f9b-d698-434b-8e36-8a47206f4c0c","kind":"dreamsign","name":"Cracked Mirror","status":"authored","rarity":"Uncommon","text":"The first card you purchase from each shop site is duplicated.","module":"src/content/dreamsigns/cracked-mirror-1cf06f9b.ts","rulesDecisions":["RD-hv-umm2.268-1"],"tags":["journey-duplication","journey-shop","journey-sites"],"requiredPrimitives":{"existing":["journeyDuplication","journeyShop","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-03"]},
     {"id":"1dfa4d90-8270-4b7c-87be-d95ab6201e00","kind":"dreamsign","name":"Blue Feather","status":"pending","rarity":"Uncommon","text":"If the first card you draw during your turn is a warrior, reduce its cost by 1● and it gains +2✦.","module":"src/content/dreamsigns/blue-feather-1dfa4d90.ts","rulesDecisions":["RD-hv-umm2.611-1"],"tags":["card-cost","cost-modifier","cost-modifier-nth","gain-spark","nth-in-turn","subtype-reference","trigger-draw-filter"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","drawTriggerFilter","gainSpark","modifyCardCost","ofSubtype","triggerNth"],"new":[]},"promptKinds":[],"family":15,"routing":["5.5","dreamsigns-battle-19"]},
     {"id":"1ece0e16-08de-4c99-8552-2d1d3a2bd517","kind":"dreamsign","name":"Shadow Droplet","status":"authored","rarity":"Uncommon","text":"Survivors in your void have reclaim.","module":"src/content/dreamsigns/shadow-droplet-1ece0e16.ts","tags":["grant-reclaim","static-zone","subtype-reference","zone-cards"],"requiredPrimitives":{"existing":["grantReclaim","ofSubtype","staticZones","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":15,"routing":["5.5","dreamsigns-battle-20"]},
     {"id":"2059aa74-8897-4c76-833f-ddef7d34346c","kind":"dreamsign","name":"Skull Codex","status":"authored","rarity":"Rare","text":"Reclaim abilities cost you 0●.","module":"src/content/dreamsigns/skull-codex-2059aa74.ts","rulesDecisions":["RD-hv-umm2.234-1"],"tags":["cost-modifier","kw-reclaim","reclaim-cost-modifier"],"requiredPrimitives":{"existing":["costModifier","costModifierReclaim","reclaim"],"new":[]},"promptKinds":["chooseMode:playRoute"],"family":14,"routing":["5.5","dreamsigns-battle-15"]},
@@ -8959,7 +8960,7 @@
     {"id":"26786698-fdf2-493d-905b-4273a20586c9","kind":"dreamsign","name":"Potion Mortar","status":"authored","rarity":"Common","text":"▸Dawn: A random card in your hand costs 1● this turn.","module":"src/content/dreamsigns/potion-mortar-26786698.ts","tags":["duration","random","trigger-dawn"],"requiredPrimitives":{"existing":["onDawn","randomSelection","untilEndOfTurn"],"new":[]},"promptKinds":[],"family":0,"routing":["5.5","dreamsigns-battle-01"]},
     {"id":"268341c7-bb5b-49fb-ad8d-a792b7d631a0","kind":"dreamsign","name":"Witch Hat","status":"authored","rarity":"Uncommon","text":"When you play your second event each turn, draw a card.","module":"src/content/dreamsigns/witch-hat-268341c7.ts","tags":["draw","nth-in-turn","trigger-play"],"requiredPrimitives":{"existing":["draw","triggerNth","whenYouPlay"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-16"]},
     {"id":"2788cdad-2735-4cdf-89a8-dcecaca87369","kind":"dreamsign","name":"Phoenix Feather","status":"authored","rarity":"Uncommon","text":"When you play a character, it gains +1✦ for each character you control that left play this turn.","module":"src/content/dreamsigns/phoenix-feather-2788cdad.ts","rulesDecisions":["RD-hv-7x4l.46-1","RD-hv-umm2.611-1"],"tags":["count-value","duration","gain-spark","trigger-leaves-play","trigger-play","turn-history"],"requiredPrimitives":{"existing":["count","gainSpark","turnHistory","untilEndOfTurn","whenLeavesPlay","whenYouPlay"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-16"]},
-    {"id":"278ec1ab-f532-4862-84ae-63df5e49548c","kind":"dreamsign","name":"Pyramid Relic","status":"pending","rarity":"Uncommon","text":"The second character you play each turn costs 1● less.","module":"src/content/dreamsigns/pyramid-relic-278ec1ab.ts","tags":["cost-modifier","cost-modifier-nth","nth-in-turn"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-13"]},
+    {"id":"278ec1ab-f532-4862-84ae-63df5e49548c","kind":"dreamsign","name":"Pyramid Relic","status":"authored","rarity":"Uncommon","text":"The second character you play each turn costs 1● less.","module":"src/content/dreamsigns/pyramid-relic-278ec1ab.ts","tags":["cost-modifier","cost-modifier-nth","nth-in-turn"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-13"]},
     {"id":"293a610d-ea75-4974-88da-13e4c86f248f","kind":"dreamsign","name":"Mandrake Root","status":"authored","rarity":"Uncommon","text":"Once per turn, when a character you control is dissolved, return a random character with lower cost from your void to hand.","module":"src/content/dreamsigns/mandrake-root-293a610d.ts","rulesDecisions":["RD-hv-umm2.65-1"],"tags":["once-per-turn","random","return-from-void","selector-bounds","trigger-dissolved-other","zone-cards"],"requiredPrimitives":{"existing":["oncePerTurn","randomSelection","returnFromVoid","selectorBounds","whenDissolvedTrigger","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":6,"routing":["5.5","dreamsigns-battle-06"]},
     {"id":"2cbcbebb-fb79-4833-a770-2216873147c4","kind":"dreamsign","name":"Spotted Egg","status":"authored","rarity":"Uncommon","text":"When you play your second event each turn, it gains reclaim 0●.","module":"src/content/dreamsigns/spotted-egg-2cbcbebb.ts","rulesDecisions":["RD-hv-umm2.612-1"],"tags":["grant-reclaim","grant-reclaim-triggering","nth-in-turn","trigger-play"],"requiredPrimitives":{"existing":["grantReclaim","grantReclaimTriggeringCard","triggerNth","whenYouPlay"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-18"]},
     {"id":"2d4eb3ee-0931-45ed-8365-69f18096ead5","kind":"dreamsign","name":"Charm Pouch","status":"authored","rarity":"Rare","text":"The first time each turn you trigger a ▸Materialized ability, trigger that ability again.","module":"src/content/dreamsigns/charm-pouch-2d4eb3ee.ts","rulesDecisions":["RD-hv-p1ss-1","RD-hv-umm2.237-1","RD-hv-vwcb-1"],"tags":["first-time-each-turn","nth-in-turn","trigger-ability","trigger-materialized"],"requiredPrimitives":{"existing":["firstTimeEachTurn","onMaterialized","triggerAbility","triggerNth"],"new":[]},"promptKinds":[],"family":16,"routing":["5.5","dreamsigns-battle-22"]},
@@ -8967,20 +8968,20 @@
     {"id":"2ebf0bbb-440c-4dba-8e48-228daadc0a1e","kind":"dreamsign","name":"Attuned Petals","status":"pending","rarity":"Uncommon","text":"Once per turn, when you abandon a character, materialize a 0✦ figment copy of it.","module":"src/content/dreamsigns/attuned-petals-2ebf0bbb.ts","clarifications":["C5"],"rulesDecisions":["RD-hv-7x4l.1-11"],"tags":["copy","figment-copy","once-per-turn","trigger-abandon"],"requiredPrimitives":{"existing":["copyCard","materializeFigmentCopy","oncePerTurn","whenAbandon"],"new":[]},"promptKinds":[],"family":12,"routing":["5.5","dreamsigns-battle-11"]},
     {"id":"31df4c62-6ab2-47f2-a4ff-c32b8e554b3b","kind":"dreamsign","name":"Raven Skull","status":"authored","rarity":"Common","text":"Nightmare cards cannot be added to your deck.","module":"src/content/dreamsigns/raven-skull-31df4c62.ts","rulesDecisions":["RD-hv-umm2.264-1"],"tags":["journey-deck-entry"],"requiredPrimitives":{"existing":["journeyDeckEntry"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-01"]},
     {"id":"3380c657-79ca-400b-abb7-4b56fbb92af4","kind":"dreamsign","name":"Leather Satchel","status":"pending","rarity":"Rare","text":"When you abandon a character, trigger its ▸Materialized and ▸Dawn abilities.","module":"src/content/dreamsigns/leather-satchel-3380c657.ts","tags":["trigger-abandon","trigger-ability","trigger-dawn","trigger-materialized"],"requiredPrimitives":{"existing":["onDawn","onMaterialized","triggerAbility","whenAbandon"],"new":[]},"promptKinds":[],"family":16,"routing":["5.5","dreamsigns-battle-23"]},
-    {"id":"34ce9428-dda9-4efa-bacd-5ec2698561c1","kind":"dreamsign","name":"Glow Pouch","status":"pending","rarity":"Uncommon","text":"When you apply a transfiguration to a card, apply an additional random transfiguration to it.","module":"src/content/dreamsigns/glow-pouch-34ce9428.ts","tags":["journey-transfiguration"],"requiredPrimitives":{"existing":["journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-07"]},
+    {"id":"34ce9428-dda9-4efa-bacd-5ec2698561c1","kind":"dreamsign","name":"Glow Pouch","status":"pending","rarity":"Uncommon","text":"When you apply a transfiguration to a card, apply an additional random transfiguration to it.","module":"src/content/dreamsigns/glow-pouch-34ce9428.ts","tags":["journey-transfiguration"],"requiredPrimitives":{"existing":["journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-08"]},
     {"id":"39260dd5-cb43-47d5-a007-effbe13d6417","kind":"dreamsign","name":"Ginger Root","status":"authored","rarity":"Uncommon","text":"Once per turn, when you foresee, draw a card.","module":"src/content/dreamsigns/ginger-root-39260dd5.ts","rulesDecisions":["RD-hv-umm2.230-1"],"tags":["draw","once-per-turn","trigger-foresee"],"requiredPrimitives":{"existing":["draw","oncePerTurn","whenForeseeTrigger"],"new":[]},"promptKinds":[],"family":3,"routing":["5.5","dreamsigns-battle-02"]},
     {"id":"396da354-9f4d-4ae7-a9dc-02d1330a2678","kind":"dreamsign","name":"Crow","status":"authored","rarity":"Uncommon","text":"When you play an event, a random character gains +1✦ until end of turn.","module":"src/content/dreamsigns/crow-396da354.ts","rulesDecisions":["RD-hv-umm2.583-1"],"tags":["duration","gain-spark","random","trigger-play"],"requiredPrimitives":{"existing":["gainSpark","randomSelection","untilEndOfTurn","whenYouPlay"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-07"]},
     {"id":"3a22a33f-5682-4d00-b0ec-86e43b6ed9df","kind":"dreamsign","name":"Magic Fish","status":"authored","rarity":"Rare","text":"Once per turn, when you play a spirit animal, draw a card.","module":"src/content/dreamsigns/magic-fish-3a22a33f.ts","tags":["draw","once-per-turn","trigger-play"],"requiredPrimitives":{"existing":["draw","oncePerTurn","whenYouPlay"],"new":[]},"promptKinds":[],"family":3,"routing":["5.5","dreamsigns-battle-02"]},
-    {"id":"3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59","kind":"dreamsign","name":"Curled Tail","status":"authored","rarity":"Uncommon","text":"You may reroll dream journey sites once to present new options.","module":"src/content/dreamsigns/curled-tail-3c0ced1a.ts","rulesDecisions":["RD-hv-umm2.260-1"],"cardIssues":["3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59--hv-umm2.260"],"tags":["journey-sites"],"requiredPrimitives":{"existing":["journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-06"]},
+    {"id":"3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59","kind":"dreamsign","name":"Curled Tail","status":"authored","rarity":"Uncommon","text":"You may reroll dream journey sites once to present new options.","module":"src/content/dreamsigns/curled-tail-3c0ced1a.ts","rulesDecisions":["RD-hv-umm2.260-1"],"cardIssues":["3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59--hv-umm2.260"],"tags":["journey-sites"],"requiredPrimitives":{"existing":["journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-07"]},
     {"id":"3d86f8ce-42ac-43dc-96d5-121e6d1a6167","kind":"dreamsign","name":"Theater Mask","status":"pending","rarity":"Uncommon","text":"When you gain this dreamsign, pick a character type. All cards in your deck that mention character types in their text now refer to that character type.","module":"src/content/dreamsigns/theater-mask-3d86f8ce.ts","clarifications":["C12"],"tags":["journey-deck-entry","journey-on-gain","type-remap"],"requiredPrimitives":{"existing":["journeyDeckEntry","journeyOnGain"],"new":["typeRemap"]},"promptKinds":[],"family":0,"routing":["5.6","prim-type-remap"],"correction":"C12: a journey-level remap stored with the run (5.6), applied to battle selectors and figment types through the deck-entry variant"},
-    {"id":"3dd05e97-1af8-4ae9-8e1f-954eaa63e112","kind":"dreamsign","name":"Flash Powder","status":"pending","rarity":"Common","text":"The first character you play each turn costs 2● less and has 0✦.","module":"src/content/dreamsigns/flash-powder-3dd05e97.ts","rulesDecisions":["RD-hv-umm2.611-1"],"tags":["cost-modifier","cost-modifier-nth","nth-in-turn","set-spark"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","setBaseSpark","triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"]},
+    {"id":"3dd05e97-1af8-4ae9-8e1f-954eaa63e112","kind":"dreamsign","name":"Flash Powder","status":"pending","rarity":"Common","text":"The first character you play each turn costs 2● less and has 0✦.","module":"src/content/dreamsigns/flash-powder-3dd05e97.ts","rulesDecisions":["RD-hv-umm2.611-1","RD-hv-umm2.718-1"],"tags":["cost-modifier","cost-modifier-nth","first-played-spark-setter"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","firstPlayedSparkSetter"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-13"],"correction":"Current-turn physical first-play static base-spark zero; separate nth cost reduction"},
     {"id":"3ed05d9a-dae0-4260-9b99-ad22d02fc583","kind":"dreamsign","name":"Bezoar","status":"authored","rarity":"Uncommon","text":"When you abandon a character, characters you materialize this turn have awakened.","module":"src/content/dreamsigns/bezoar-3ed05d9a.ts","rulesDecisions":["RD-hv-umm2.584-1"],"tags":["duration","grant-keyword","trigger-abandon"],"requiredPrimitives":{"existing":["grant","untilEndOfTurn","whenAbandon"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-08"]},
-    {"id":"3fd8861d-fc4c-4097-9e28-89cc37f5b3f4","kind":"dreamsign","name":"Cloud Lens","status":"pending","rarity":"Uncommon","text":"The second event you play each turn costs 1● less.","module":"src/content/dreamsigns/cloud-lens-3fd8861d.ts","tags":["cost-modifier","cost-modifier-nth","nth-in-turn"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-13"]},
+    {"id":"3fd8861d-fc4c-4097-9e28-89cc37f5b3f4","kind":"dreamsign","name":"Cloud Lens","status":"pending","rarity":"Uncommon","text":"The second event you play each turn costs 1● less.","module":"src/content/dreamsigns/cloud-lens-3fd8861d.ts","tags":["cost-modifier","cost-modifier-nth","nth-in-turn"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"]},
     {"id":"427c71e3-178f-4352-8d6f-f0789cb13c2d","kind":"dreamsign","name":"Carved Bone","status":"pending","rarity":"Uncommon","text":"When you dissolve or banish an enemy character outside of a challenge, gain 10 essence.","module":"src/content/dreamsigns/carved-bone-427c71e3.ts","tags":["journey-essence"],"requiredPrimitives":{"existing":["journeyEssence"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-03"],"correction":"journey essence paid from a battle event (removing an enemy outside a challenge); 5.6 builds the battle-result hook"},
     {"id":"4409a691-49b4-4fb0-82f6-4f45ae86d8c2","kind":"dreamsign","name":"Spider Jar","status":"authored","rarity":"Uncommon","text":"When you play your second character each turn, materialize a 1✦ warrior figment.","module":"src/content/dreamsigns/spider-jar-4409a691.ts","tags":["figments","nth-in-turn","trigger-play"],"requiredPrimitives":{"existing":["materializeFigments","triggerNth","whenYouPlay"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-18"]},
-    {"id":"452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19","kind":"dreamsign","name":"Green Slime","status":"authored","rarity":"Uncommon","text":"After each battle, you may apply random transfigurations to up to 3 cards.","module":"src/content/dreamsigns/green-slime-452b7cd6.ts","rulesDecisions":["RD-hv-umm2.261-2"],"tags":["journey-transfiguration"],"requiredPrimitives":{"existing":["journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-07"]},
+    {"id":"452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19","kind":"dreamsign","name":"Green Slime","status":"authored","rarity":"Uncommon","text":"After each battle, you may apply random transfigurations to up to 3 cards.","module":"src/content/dreamsigns/green-slime-452b7cd6.ts","rulesDecisions":["RD-hv-umm2.261-2"],"tags":["journey-transfiguration"],"requiredPrimitives":{"existing":["journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-08"]},
     {"id":"47081bde-f35d-4b5c-ba17-53e5dbf5b419","kind":"dreamsign","name":"Green Beetle","status":"pending","rarity":"Uncommon","text":"Characters in your deck with cost ≥4● have awakened.","module":"src/content/dreamsigns/green-beetle-47081bde.ts","clarifications":["C4"],"rulesDecisions":["RD-hv-umm2.318-1","RD-hv-umm2.52-1"],"tags":["grant-card-keyword","grant-keyword","selector-bounds","static-zone","zone-cards"],"requiredPrimitives":{"existing":["grant","grantCardKeyword","selectorBounds","staticZones","zoneCardRefs"],"new":[]},"promptKinds":["chooseCards:chooseInZone"],"family":8,"routing":["5.5","dreamsigns-battle-09"]},
-    {"id":"488bf436-c6d5-4e38-8a19-e50041f53766","kind":"dreamsign","name":"Sickle","status":"authored","rarity":"Uncommon","text":"At each essence site, you may forgo the essence to purge 2 cards.","module":"src/content/dreamsigns/sickle-488bf436.ts","rulesDecisions":["RD-hv-umm2.265-1"],"tags":["journey-essence","journey-purge","journey-sites"],"requiredPrimitives":{"existing":["journeyEssence","journeyPurge","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-03"]},
+    {"id":"488bf436-c6d5-4e38-8a19-e50041f53766","kind":"dreamsign","name":"Sickle","status":"authored","rarity":"Uncommon","text":"At each essence site, you may forgo the essence to purge 2 cards.","module":"src/content/dreamsigns/sickle-488bf436.ts","rulesDecisions":["RD-hv-umm2.265-1"],"tags":["journey-essence","journey-purge","journey-sites"],"requiredPrimitives":{"existing":["journeyEssence","journeyPurge","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-04"]},
     {"id":"49990864-1db0-4c08-91ae-40a1f04223e4","kind":"dreamsign","name":"Algae","status":"authored","rarity":"Uncommon","text":"Once per turn, when you draw a character, reduce its cost by 1● until end of turn.","module":"src/content/dreamsigns/algae-49990864.ts","rulesDecisions":["RD-hv-umm2.235-1"],"tags":["card-cost","cost-modifier","duration","once-per-turn","trigger-draw","trigger-draw-filter"],"requiredPrimitives":{"existing":["costModifier","drawTriggerFilter","modifyCardCost","oncePerTurn","untilEndOfTurn","whenDraw"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-12"]},
     {"id":"49f216a2-0596-4124-bb40-60ac9afe6e0b","kind":"dreamsign","name":"Storm Tome","status":"authored","rarity":"Rare","text":"Once per turn, when you play a ≤2● cost event, copy it.","module":"src/content/dreamsigns/storm-tome-49f216a2.ts","tags":["card-filter-bounds","copy","once-per-turn","trigger-play"],"requiredPrimitives":{"existing":["cardFilterBounds","copyCard","oncePerTurn","whenYouPlay"],"new":[]},"promptKinds":[],"family":12,"routing":["5.5","dreamsigns-battle-10"]},
     {"id":"4a91c56c-d828-482a-a46c-1299d69fa011","kind":"dreamsign","name":"Bestiary","status":"authored","rarity":"Rare","text":"When you discard a card, materialize a 2✦ radiant figment.","module":"src/content/dreamsigns/bestiary-4a91c56c.ts","clarifications":["C2"],"cardIssues":["4a91c56c-d828-482a-a46c-1299d69fa011--hv-umm2.244","4a91c56c-d828-482a-a46c-1299d69fa011--hv-umm2.661"],"tags":["figments","trigger-discard"],"requiredPrimitives":{"existing":["materializeFigments","whenDiscard"],"new":[]},"promptKinds":[],"family":7,"routing":["5.5","dreamsigns-battle-07"]},
@@ -8991,42 +8992,42 @@
     {"id":"4e51f321-9089-4872-a0e2-ab909e242b33","kind":"dreamsign","name":"Hair Lock","status":"pending","rarity":"Rare","text":"At the start of each battle, foresee 3.","module":"src/content/dreamsigns/hair-lock-4e51f321.ts","tags":["foresee","trigger-start-of-turn"],"requiredPrimitives":{"existing":["atStartOfTurn","foresee"],"new":[]},"promptKinds":["arrange:foresee"],"family":3,"routing":["5.5","dreamsigns-battle-04"]},
     {"id":"4f21a4ab-e4aa-4718-8563-9afb72d140c0","kind":"dreamsign","name":"Star Anise","status":"pending","rarity":"Uncommon","text":"At each draft site, the first event card you add to your deck gains the Amplified Transfiguration.","module":"src/content/dreamsigns/star-anise-4f21a4ab.ts","tags":["journey-draft","journey-sites","journey-transfiguration"],"requiredPrimitives":{"existing":["journeyDraft","journeySites","journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-02"]},
     {"id":"4f5bdcac-64cb-4a45-8121-e37f5e4d3074","kind":"dreamsign","name":"Notes","status":"authored","rarity":"Uncommon","text":"Spirit animals you control have +1✦.","module":"src/content/dreamsigns/notes-4f5bdcac.ts","tags":["spark-static","subtype-reference"],"requiredPrimitives":{"existing":["ofSubtype","sparkModifier"],"new":[]},"promptKinds":[],"family":15,"routing":["5.5","dreamsigns-battle-20"]},
-    {"id":"5190a8b8-25a0-4c60-a4de-2e2c5a73af77","kind":"dreamsign","name":"Cactus","status":"pending","rarity":"Uncommon","text":"If you have discarded a card this turn, the first card you play from your void costs 1● less.","module":"src/content/dreamsigns/cactus-5190a8b8.ts","rulesDecisions":["RD-hv-umm2.513-1","RD-hv-umm2.705-1"],"tags":["cost-modifier","cost-modifier-nth-origin","turn-history"],"requiredPrimitives":{"existing":["costModifier","costModifierNthOrigin","turnHistory"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"],"correction":"Conditional static first card from the actual void reduction; current condition does not erase earlier plays"},
+    {"id":"5190a8b8-25a0-4c60-a4de-2e2c5a73af77","kind":"dreamsign","name":"Cactus","status":"authored","rarity":"Uncommon","text":"If you have discarded a card this turn, the first card you play from your void costs 1● less.","module":"src/content/dreamsigns/cactus-5190a8b8.ts","rulesDecisions":["RD-hv-umm2.513-1","RD-hv-umm2.705-1"],"tags":["cost-modifier","cost-modifier-nth-origin","turn-history"],"requiredPrimitives":{"existing":["costModifier","costModifierNthOrigin","turnHistory"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"],"correction":"Conditional static first card from the actual void reduction; current condition does not erase earlier plays"},
     {"id":"553d2317-32f9-47bc-bae0-5018ca26d56a","kind":"dreamsign","name":"Egg Nest","status":"authored","rarity":"Uncommon","text":"The first ❖ card you play during the opponent's turn costs 1● less.","module":"src/content/dreamsigns/egg-nest-553d2317.ts","tags":["cost-modifier","cost-modifier-nth"],"requiredPrimitives":{"existing":["costModifier","costModifierNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-13"]},
     {"id":"56523397-6c48-4df6-846b-9e4f15d7fdee","kind":"dreamsign","name":"Clover","status":"authored","rarity":"Common","text":"Once per turn, when you play an event while you control no characters, copy it.","module":"src/content/dreamsigns/clover-56523397.ts","tags":["condition-controls","copy","once-per-turn","trigger-play"],"requiredPrimitives":{"existing":["conditionControls","copyCard","oncePerTurn","whenYouPlay"],"new":[]},"promptKinds":[],"family":12,"routing":["5.5","dreamsigns-battle-11"]},
     {"id":"56caa78b-021d-4b27-acab-c77fb0146ced","kind":"dreamsign","name":"Rabbit Tail","status":"authored","rarity":"Common","text":"▸Night: If you have played no characters this turn, draw a card.","module":"src/content/dreamsigns/rabbit-tail-56caa78b.ts","tags":["draw","duration","trigger-night","turn-history"],"requiredPrimitives":{"existing":["draw","onNight","turnHistory","untilEndOfTurn"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-16"]},
-    {"id":"58472ad2-88b1-4dc7-a161-c6dea7d8c43d","kind":"dreamsign","name":"Rainbow Mushroom","status":"authored","rarity":"Uncommon","text":"In each dreamscape, 1 additional site is enhanced.","module":"src/content/dreamsigns/rainbow-mushroom-58472ad2.ts","rulesDecisions":["RD-hv-umm2.260-1"],"cardIssues":["58472ad2-88b1-4dc7-a161-c6dea7d8c43d--hv-umm2.260"],"tags":["journey-sites"],"requiredPrimitives":{"existing":["journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-06"]},
+    {"id":"58472ad2-88b1-4dc7-a161-c6dea7d8c43d","kind":"dreamsign","name":"Rainbow Mushroom","status":"authored","rarity":"Uncommon","text":"In each dreamscape, 1 additional site is enhanced.","module":"src/content/dreamsigns/rainbow-mushroom-58472ad2.ts","rulesDecisions":["RD-hv-umm2.260-1"],"cardIssues":["58472ad2-88b1-4dc7-a161-c6dea7d8c43d--hv-umm2.260"],"tags":["journey-sites"],"requiredPrimitives":{"existing":["journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-07"]},
     {"id":"5a22f358-bc84-44b1-a201-5f9f57940c51","kind":"dreamsign","name":"Tarot Card","status":"authored","rarity":"Uncommon","text":"When you challenge with 2 or more characters, draw a card.","module":"src/content/dreamsigns/tarot-card-5a22f358.ts","clarifications":["C10"],"rulesDecisions":["RD-hv-7x4l.1-15"],"tags":["draw","trigger-challenge-with"],"requiredPrimitives":{"existing":["draw","whenYouChallengeWith"],"new":[]},"promptKinds":[],"family":3,"routing":["5.5","dreamsigns-battle-03"]},
     {"id":"6103508c-4991-4b80-9dc1-f30122957296","kind":"dreamsign","name":"Pig Nose","status":"authored","rarity":"Rare","text":"Survivors you control have +2✦.","module":"src/content/dreamsigns/pig-nose-6103508c.ts","tags":["spark-static","subtype-reference"],"requiredPrimitives":{"existing":["ofSubtype","sparkModifier"],"new":[]},"promptKinds":[],"family":15,"routing":["5.5","dreamsigns-battle-20"]},
     {"id":"62e1a588-f719-415c-9434-80aa08ce2e6a","kind":"dreamsign","name":"Red Pin","status":"authored","rarity":"Uncommon","text":"Once per turn, when you play a 2● cost character, draw a card.","module":"src/content/dreamsigns/red-pin-62e1a588.ts","tags":["card-filter-bounds","draw","once-per-turn","selector-bounds","trigger-play"],"requiredPrimitives":{"existing":["cardFilterBounds","draw","oncePerTurn","selectorBounds","whenYouPlay"],"new":[]},"promptKinds":[],"family":3,"routing":["5.5","dreamsigns-battle-01"]},
     {"id":"64a28f37-54a4-4152-8c72-2ebc61e19aac","kind":"dreamsign","name":"Steel Wand","status":"authored","rarity":"Rare","text":"Once per turn, when you play a ❖ card, draw a card.","module":"src/content/dreamsigns/steel-wand-64a28f37.ts","tags":["draw","once-per-turn","trigger-play"],"requiredPrimitives":{"existing":["draw","oncePerTurn","whenYouPlay"],"new":[]},"promptKinds":[],"family":3,"routing":["5.5","dreamsigns-battle-02"]},
     {"id":"6b51e477-352c-489b-8d5f-049bc378fde9","kind":"dreamsign","name":"Piranha","status":"authored","rarity":"Uncommon","text":"When a character you control scores ⍟ in a challenge, it scores 1 additional ⍟.","module":"src/content/dreamsigns/piranha-6b51e477.ts","rulesDecisions":["RD-hv-umm2.229-1"],"tags":["trigger-scores"],"requiredPrimitives":{"existing":["whenScores"],"new":[]},"promptKinds":[],"family":0,"routing":["5.5","dreamsigns-battle-01"]},
     {"id":"6b5c0f18-198c-44e7-92e8-d639298b8cf6","kind":"dreamsign","name":"Sealed Scroll","status":"authored","rarity":"Uncommon","text":"Once per turn, when a spirit animal you control is dissolved, draw a card.","module":"src/content/dreamsigns/sealed-scroll-6b5c0f18.ts","rulesDecisions":["RD-hv-umm2.65-1"],"tags":["draw","once-per-turn","trigger-dissolved-other"],"requiredPrimitives":{"existing":["draw","oncePerTurn","whenDissolvedTrigger"],"new":[]},"promptKinds":[],"family":3,"routing":["5.5","dreamsigns-battle-02"]},
-    {"id":"6b95d6bd-c970-4465-9536-4f21e7630d0a","kind":"dreamsign","name":"Mushroom Caps","status":"pending","rarity":"Common","text":"When drafting cards, see 1 fewer choice.\n\n▸Dawn: Gain 1●.","module":"src/content/dreamsigns/mushroom-caps-6b95d6bd.ts","tags":["gain-energy","journey-draft","trigger-dawn"],"requiredPrimitives":{"existing":["gainEnergy","journeyDraft","onDawn"],"new":[]},"promptKinds":[],"family":4,"routing":["5.5","5.6","dreamsigns-battle-04","dreamsigns-journey-07"]},
+    {"id":"6b95d6bd-c970-4465-9536-4f21e7630d0a","kind":"dreamsign","name":"Mushroom Caps","status":"pending","rarity":"Common","text":"When drafting cards, see 1 fewer choice.\n\n▸Dawn: Gain 1●.","module":"src/content/dreamsigns/mushroom-caps-6b95d6bd.ts","tags":["gain-energy","journey-draft","trigger-dawn"],"requiredPrimitives":{"existing":["gainEnergy","journeyDraft","onDawn"],"new":[]},"promptKinds":[],"family":4,"routing":["5.5","5.6","dreamsigns-battle-04","dreamsigns-journey-08"]},
     {"id":"6dac6bff-af3a-4749-8547-01fded1c81c9","kind":"dreamsign","name":"Flaming Button","status":"authored","rarity":"Uncommon","text":"Once per turn, when you copy an event, gain 1●.","module":"src/content/dreamsigns/flaming-button-6dac6bff.ts","rulesDecisions":["RD-hv-umm2.233-1"],"tags":["gain-energy","once-per-turn","trigger-copy"],"requiredPrimitives":{"existing":["gainEnergy","oncePerTurn","whenCopyTrigger"],"new":[]},"promptKinds":[],"family":12,"routing":["5.5","dreamsigns-battle-12"]},
     {"id":"6e20e6c7-295a-48b1-b252-b8b00d6902c9","kind":"dreamsign","name":"Amanita","status":"authored","rarity":"Uncommon","text":"Once per turn, when a character you control leaves play, your next character this turn costs 2● less.","module":"src/content/dreamsigns/amanita-6e20e6c7.ts","tags":["cost-modifier","duration","once-per-turn","trigger-leaves-play"],"requiredPrimitives":{"existing":["costModifier","oncePerTurn","untilEndOfTurn","whenLeavesPlay"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-15"]},
     {"id":"6f4e2d9f-38a4-4f6a-8fde-7d942977a6df","kind":"dreamsign","name":"Hourglass","status":"authored","rarity":"Rare","text":"If 3 or more ▸Dawn abilities trigger during your Dawn phase, draw a card.","module":"src/content/dreamsigns/hourglass-6f4e2d9f.ts","rulesDecisions":["RD-hv-umm2.236-3"],"tags":["draw","rule-modifier","trigger-dawn"],"requiredPrimitives":{"existing":["draw","onDawn","ruleModifier"],"new":[]},"promptKinds":[],"family":16,"routing":["5.5","dreamsigns-battle-22"]},
-    {"id":"71f77dd5-3bb5-4987-80f4-13dc69f74e6b","kind":"dreamsign","name":"Scorpion","status":"pending","rarity":"Uncommon","text":"Before each battle, if you have more than 30 cards in your deck, you may purge cards of your choice while remaining at or above 30 cards.","module":"src/content/dreamsigns/scorpion-71f77dd5.ts","tags":["journey-purge"],"requiredPrimitives":{"existing":["journeyPurge"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-05"]},
+    {"id":"71f77dd5-3bb5-4987-80f4-13dc69f74e6b","kind":"dreamsign","name":"Scorpion","status":"pending","rarity":"Uncommon","text":"Before each battle, if you have more than 30 cards in your deck, you may purge cards of your choice while remaining at or above 30 cards.","module":"src/content/dreamsigns/scorpion-71f77dd5.ts","tags":["journey-purge"],"requiredPrimitives":{"existing":["journeyPurge"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-06"]},
     {"id":"72ef4b11-5366-4798-aab0-09e5ffbb1ed8","kind":"dreamsign","name":"Wing","status":"authored","rarity":"Rare","text":"When you draw your second card each turn, gain 1 maximum ●.","module":"src/content/dreamsigns/wing-72ef4b11.ts","tags":["max-energy","nth-in-turn","trigger-draw"],"requiredPrimitives":{"existing":["gainMaxEnergy","triggerNth","whenDraw"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-19"]},
     {"id":"73efd845-6009-4686-860c-01c7f5b1c074","kind":"dreamsign","name":"Black Feather","status":"authored","rarity":"Uncommon","text":"When you abandon a character, a random character you control gains +X✦ where X is the abandoned character's ✦.","module":"src/content/dreamsigns/black-feather-73efd845.ts","rulesDecisions":["RD-hv-7x4l.46-1"],"tags":["gain-spark","random","trigger-abandon","value-card-stat"],"requiredPrimitives":{"existing":["gainSpark","randomSelection","valueCardStats","whenAbandon"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-08"]},
     {"id":"7a37386d-6e7c-4f08-b07f-e92a1fd69893","kind":"dreamsign","name":"Bead Charm","status":"authored","rarity":"Uncommon","text":"Challengers you control that share a character type with another challenger you control have +2✦.","module":"src/content/dreamsigns/bead-charm-7a37386d.ts","tags":["choose-subtype","selector-challenger","spark-static"],"requiredPrimitives":{"existing":["chooseSubtype","selectorChallenger","sparkModifier"],"new":[]},"promptKinds":["chooseSubtype:chooseSubtype"],"family":15,"routing":["5.5","dreamsigns-battle-19"]},
-    {"id":"7e8c86cc-788f-4648-be84-e0935c40c31e","kind":"dreamsign","name":"Red Cheese","status":"authored","rarity":"Common","text":"After each battle, pick 1 of 3 dreamsigns to gain.","module":"src/content/dreamsigns/red-cheese-7e8c86cc.ts","rulesDecisions":["RD-hv-umm2.263-1"],"tags":["journey-on-gain"],"requiredPrimitives":{"existing":["journeyOnGain"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-04"]},
-    {"id":"7ec00da2-2b2d-4613-9a2a-8611d38199ca","kind":"dreamsign","name":"Dreamcatcher","status":"pending","rarity":"Rare","text":"▸Dawn: Add an ethereal copy of the first event you played last turn to your hand.","module":"src/content/dreamsigns/dreamcatcher-7ec00da2.ts","clarifications":["C3"],"rulesDecisions":["RD-hv-umm2.678-1"],"tags":["copy","copy-in-hand","history-reference","trigger-dawn"],"requiredPrimitives":{"existing":["copyCard","createCopyInHand","historyRefs","onDawn"],"new":[]},"promptKinds":[],"family":12,"routing":["5.5","dreamsigns-battle-11"]},
+    {"id":"7e8c86cc-788f-4648-be84-e0935c40c31e","kind":"dreamsign","name":"Red Cheese","status":"authored","rarity":"Common","text":"After each battle, pick 1 of 3 dreamsigns to gain.","module":"src/content/dreamsigns/red-cheese-7e8c86cc.ts","rulesDecisions":["RD-hv-umm2.263-1"],"tags":["journey-on-gain"],"requiredPrimitives":{"existing":["journeyOnGain"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-05"]},
+    {"id":"7ec00da2-2b2d-4613-9a2a-8611d38199ca","kind":"dreamsign","name":"Dreamcatcher","status":"pending","rarity":"Rare","text":"▸Dawn: Add an ethereal copy of the first event you played last turn to your hand.","module":"src/content/dreamsigns/dreamcatcher-7ec00da2.ts","clarifications":["C3"],"rulesDecisions":["RD-hv-umm2.622-1","RD-hv-umm2.678-1"],"tags":["copy","copy-in-hand","history-reference","trigger-dawn"],"requiredPrimitives":{"existing":["copyCard","createCopyInHand","historyRefs","onDawn"],"new":[]},"promptKinds":[],"family":12,"routing":["5.5","dreamsigns-battle-11"]},
     {"id":"8340cce5-8e27-4940-ab79-34e09fdbcae1","kind":"dreamsign","name":"Dragon Egg","status":"authored","rarity":"Rare","text":"Once per turn, when you play a card from your void, draw a card.","module":"src/content/dreamsigns/dragon-egg-8340cce5.ts","tags":["draw","once-per-turn","trigger-play","trigger-play-from-void"],"requiredPrimitives":{"existing":["draw","oncePerTurn","whenPlayFromVoidTrigger","whenYouPlay"],"new":[]},"promptKinds":[],"family":3,"routing":["5.5","dreamsigns-battle-03"]},
-    {"id":"8408b8c2-5a3f-40dd-bac4-98f2736c4176","kind":"dreamsign","name":"Cracked Orb","status":"pending","rarity":"Rare","text":"Each shop site provides 2 additional options.","module":"src/content/dreamsigns/cracked-orb-8408b8c2.ts","tags":["journey-shop","journey-sites"],"requiredPrimitives":{"existing":["journeySites"],"new":["journeyShop"]},"promptKinds":[],"family":0,"routing":["5.6","prim-journey-shop"]},
+    {"id":"8408b8c2-5a3f-40dd-bac4-98f2736c4176","kind":"dreamsign","name":"Cracked Orb","status":"authored","rarity":"Rare","text":"Each shop site provides 2 additional options.","module":"src/content/dreamsigns/cracked-orb-8408b8c2.ts","rulesDecisions":["RD-hv-umm2.266-1"],"tags":["journey-shop","journey-sites"],"requiredPrimitives":{"existing":["journeyShop","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-06"]},
     {"id":"86f64a29-7338-4759-81da-4c7656e543d2","kind":"dreamsign","name":"Spice Blossoms","status":"authored","rarity":"Uncommon","text":"When you play an event, it costs 1● less for each card you have discarded this turn.","module":"src/content/dreamsigns/spice-blossoms-86f64a29.ts","tags":["card-cost","cost-modifier","duration","trigger-play","turn-history"],"requiredPrimitives":{"existing":["costModifier","modifyCardCost","turnHistory","untilEndOfTurn","whenYouPlay"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-13"]},
     {"id":"87239e3f-04f7-45bd-9b73-944ef36ad445","kind":"dreamsign","name":"Eyeball Slime","status":"pending","rarity":"Uncommon","text":"Cards in your hand with ephemeral are not banished at the end of your turn.","module":"src/content/dreamsigns/eyeball-slime-87239e3f.ts","tags":["ephemeral","rule-modifier","static-zone","trigger-end-of-turn"],"requiredPrimitives":{"existing":["atEndOfTurnTrigger","draw","ruleModifier","staticZones"],"new":[]},"promptKinds":[],"family":16,"routing":["5.5","dreamsigns-battle-22"]},
     {"id":"8778bf17-4e0a-4ce7-b23c-4daf49a782a7","kind":"dreamsign","name":"Serpent Tome","status":"authored","rarity":"Uncommon","text":"Reclaim abilities cost you 1● less.","module":"src/content/dreamsigns/serpent-tome-8778bf17.ts","rulesDecisions":["RD-hv-umm2.234-1"],"tags":["cost-modifier","kw-reclaim","reclaim-cost-modifier"],"requiredPrimitives":{"existing":["costModifier","costModifierReclaim","reclaim"],"new":[]},"promptKinds":["chooseMode:playRoute"],"family":14,"routing":["5.5","dreamsigns-battle-15"]},
-    {"id":"883f88fb-ac50-419a-8382-c22edee29755","kind":"dreamsign","name":"Charm Staff","status":"pending","rarity":"Uncommon","text":"After you buy an item at a shop site, replace it immediately with another item for purchase.","module":"src/content/dreamsigns/charm-staff-883f88fb.ts","tags":["journey-shop","journey-sites"],"requiredPrimitives":{"existing":["journeySites"],"new":["journeyShop"]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-05"]},
+    {"id":"883f88fb-ac50-419a-8382-c22edee29755","kind":"dreamsign","name":"Charm Staff","status":"pending","rarity":"Uncommon","text":"After you buy an item at a shop site, replace it immediately with another item for purchase.","module":"src/content/dreamsigns/charm-staff-883f88fb.ts","tags":["journey-shop","journey-sites"],"requiredPrimitives":{"existing":["journeyShop","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-06"]},
     {"id":"89c83d7e-5617-49b4-b6cd-214680fe0627","kind":"dreamsign","name":"Candle","status":"authored","rarity":"Uncommon","text":"When you play an event, the character you control with the highest ✦ gains +1✦.","module":"src/content/dreamsigns/candle-89c83d7e.ts","rulesDecisions":["RD-hv-umm2.588-1"],"tags":["gain-spark","selector-bounds","trigger-play"],"requiredPrimitives":{"existing":["gainSpark","selectorBounds","whenYouPlay"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-09"]},
-    {"id":"8a2c7b32-26ea-40e2-845a-689da5673b4d","kind":"dreamsign","name":"Witch Coin","status":"pending","rarity":"Uncommon","text":"The first Restock at each shop site costs 0.","module":"src/content/dreamsigns/witch-coin-8a2c7b32.ts","tags":["journey-shop","journey-sites"],"requiredPrimitives":{"existing":["journeySites"],"new":["journeyShop"]},"promptKinds":[],"family":0,"routing":["5.6","prim-journey-shop"]},
+    {"id":"8a2c7b32-26ea-40e2-845a-689da5673b4d","kind":"dreamsign","name":"Witch Coin","status":"authored","rarity":"Uncommon","text":"The first Restock at each shop site costs 0.","module":"src/content/dreamsigns/witch-coin-8a2c7b32.ts","rulesDecisions":["RD-hv-umm2.266-1"],"tags":["journey-shop","journey-sites"],"requiredPrimitives":{"existing":["journeyShop","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-06"]},
     {"id":"8b69de8a-835d-4f0c-ac25-dc0e700e2983","kind":"dreamsign","name":"Glowing Crystal","status":"pending","rarity":"Uncommon","text":"When you add a character card to your deck, it has a 50% chance to gain a random transfiguration.","module":"src/content/dreamsigns/glowing-crystal-8b69de8a.ts","tags":["journey-deck-entry","journey-transfiguration"],"requiredPrimitives":{"existing":["journeyDeckEntry","journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-01"]},
     {"id":"8b87b0c7-e7d5-4c53-b99b-b1e2407cb519","kind":"dreamsign","name":"Red Heart","status":"authored","rarity":"Uncommon","text":"When you erode a card, a random character you control gains +1✦.","module":"src/content/dreamsigns/red-heart-8b87b0c7.ts","rulesDecisions":["RD-hv-umm2.87-1"],"tags":["gain-spark","random","trigger-erode"],"requiredPrimitives":{"existing":["gainSpark","randomSelection","whenErodeTrigger"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-08"]},
     {"id":"8e2d26a8-ff39-48a4-a30e-434479c4675f","kind":"dreamsign","name":"Toad","status":"pending","rarity":"Rare","text":"When you gain this dreamsign, pick a character type.\n\nCharacter cards in your deck are that character type.","module":"src/content/dreamsigns/toad-8e2d26a8.ts","tags":["journey-deck-entry","journey-on-gain"],"requiredPrimitives":{"existing":["journeyDeckEntry","journeyOnGain"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-01"],"correction":"a journey one-shot that changes each deck entry's subtype (D39 typeChange)"},
-    {"id":"9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1","kind":"dreamsign","name":"Powder Bowl","status":"pending","rarity":"Uncommon","text":"The first character you play each turn costs 2● less if a character you control scored ⍟ last turn.","module":"src/content/dreamsigns/powder-bowl-9204fbc8.ts","rulesDecisions":["RD-hv-umm2.678-1"],"tags":["cost-modifier","cost-modifier-nth","nth-in-turn","turn-history"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","triggerNth","turnHistory"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"]},
+    {"id":"9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1","kind":"dreamsign","name":"Powder Bowl","status":"pending","rarity":"Uncommon","text":"The first character you play each turn costs 2● less if a character you control scored ⍟ last turn.","module":"src/content/dreamsigns/powder-bowl-9204fbc8.ts","rulesDecisions":["RD-hv-umm2.623-1","RD-hv-umm2.678-1"],"tags":["cost-modifier","cost-modifier-nth","nth-in-turn","turn-history"],"requiredPrimitives":{"existing":["costModifier","costModifierNth","triggerNth","turnHistory"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-14"]},
     {"id":"946dbb36-0a90-495a-bf0f-17351c93d74b","kind":"dreamsign","name":"Green Fly","status":"authored","rarity":"Uncommon","text":"The first card you erode each turn gains reclaim.","module":"src/content/dreamsigns/green-fly-946dbb36.ts","rulesDecisions":["RD-hv-umm2.87-1"],"tags":["grant-reclaim","grant-reclaim-triggering","nth-in-turn","trigger-erode"],"requiredPrimitives":{"existing":["grantReclaim","grantReclaimTriggeringCard","triggerNth","whenErodeTrigger"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-18"]},
     {"id":"94e5683d-a24c-4f89-8afa-652d7c6c79aa","kind":"dreamsign","name":"Black Attuned","status":"authored","rarity":"Rare","text":"When you play an event while you control 3 or more warriors, copy it.","module":"src/content/dreamsigns/black-attuned-94e5683d.ts","tags":["condition-controls","copy","trigger-play"],"requiredPrimitives":{"existing":["conditionControls","copyCard","whenYouPlay"],"new":[]},"promptKinds":[],"family":12,"routing":["5.5","dreamsigns-battle-11"]},
-    {"id":"95a162c1-5fb0-4966-b631-eec1e8ec96ef","kind":"dreamsign","name":"Banded Worm","status":"authored","rarity":"Uncommon","text":"When you enter a new dreamscape, gain essence equal to 20% of your current essence.","module":"src/content/dreamsigns/banded-worm-95a162c1.ts","rulesDecisions":["RD-hv-umm2.262-1"],"cardIssues":["95a162c1-5fb0-4966-b631-eec1e8ec96ef--hv-umm2.262"],"tags":["journey-essence","journey-sites"],"requiredPrimitives":{"existing":["journeyEssence","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-03"]},
+    {"id":"95a162c1-5fb0-4966-b631-eec1e8ec96ef","kind":"dreamsign","name":"Banded Worm","status":"authored","rarity":"Uncommon","text":"When you enter a new dreamscape, gain essence equal to 20% of your current essence.","module":"src/content/dreamsigns/banded-worm-95a162c1.ts","rulesDecisions":["RD-hv-umm2.262-1"],"cardIssues":["95a162c1-5fb0-4966-b631-eec1e8ec96ef--hv-umm2.262"],"tags":["journey-essence","journey-sites"],"requiredPrimitives":{"existing":["journeyEssence","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-04"]},
     {"id":"95f0f483-9a76-47c6-a839-01a1d9122945","kind":"dreamsign","name":"Oak Leaf","status":"authored","rarity":"Uncommon","text":"When you return a character you control to hand, it gains +2✦.","module":"src/content/dreamsigns/oak-leaf-95f0f483.ts","rulesDecisions":["RD-hv-umm2.611-1"],"tags":["gain-spark","trigger-return"],"requiredPrimitives":{"existing":["gainSpark","whenReturnTrigger"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-09"]},
     {"id":"989b55bd-139f-40dc-b1fd-eb2f7b1c091a","kind":"dreamsign","name":"Trinket Necklace","status":"authored","rarity":"Uncommon","text":"Challengers you control have +1✦.","module":"src/content/dreamsigns/trinket-necklace-989b55bd.ts","rulesDecisions":["RD-hv-umm2.70-1"],"tags":["selector-challenger","spark-static"],"requiredPrimitives":{"existing":["selectorChallenger","sparkModifier"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-10"]},
     {"id":"9aaed05a-2223-42f2-9b9d-81a53eab811c","kind":"dreamsign","name":"Honeycombs","status":"authored","rarity":"Uncommon","text":"Once per turn, when you discard a card, gain 1●.","module":"src/content/dreamsigns/honeycombs-9aaed05a.ts","tags":["gain-energy","once-per-turn","trigger-discard"],"requiredPrimitives":{"existing":["gainEnergy","oncePerTurn","whenDiscard"],"new":[]},"promptKinds":[],"family":4,"routing":["5.5","dreamsigns-battle-05"]},
@@ -9050,19 +9051,19 @@
     {"id":"bb8bb233-7cb1-43b3-af30-e71ab9e832c5","kind":"dreamsign","name":"Sealed Letter","status":"pending","rarity":"Uncommon","text":"When you abandon a character, its ▸Dissolved ability triggers an additional time.","module":"src/content/dreamsigns/sealed-letter-bb8bb233.ts","tags":["copy-times","trigger-abandon","trigger-ability","trigger-dissolved-self"],"requiredPrimitives":{"existing":["copyCardTimes","onDissolved","triggerAbility","whenAbandon"],"new":[]},"promptKinds":[],"family":16,"routing":["5.5","dreamsigns-battle-21"]},
     {"id":"be59c0ba-6286-49e3-a88d-86b0977cc30a","kind":"dreamsign","name":"Pearl Shell","status":"authored","rarity":"Uncommon","text":"At each essence site you visit, you are instead offered a Dreamsign.","module":"src/content/dreamsigns/pearl-shell-be59c0ba.ts","rulesDecisions":["RD-hv-umm2.262-1"],"cardIssues":["be59c0ba-6286-49e3-a88d-86b0977cc30a--hv-umm2.262"],"tags":["journey-essence","journey-sites"],"requiredPrimitives":{"existing":["journeyEssence","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-04"]},
     {"id":"bfec4f5d-9b0d-4ed2-b470-db73d852448f","kind":"dreamsign","name":"Dead Rat","status":"authored","rarity":"Uncommon","text":"▸Dawn: You may abandon a character to draw a card.","module":"src/content/dreamsigns/dead-rat-bfec4f5d.ts","tags":["draw","trigger-dawn","you-may"],"requiredPrimitives":{"existing":["draw","onDawn","optional"],"new":[]},"promptKinds":["confirm:youMay"],"family":3,"routing":["5.5","dreamsigns-battle-03"]},
-    {"id":"c2af5460-e61f-409b-9b86-6ac7db34d748","kind":"dreamsign","name":"Blue Crystal","status":"authored","rarity":"Common","text":"If your deck has 30 or more cards, cards you add to it gain a random transfiguration.","module":"src/content/dreamsigns/blue-crystal-c2af5460.ts","rulesDecisions":["RD-hv-umm2.264-1"],"tags":["journey-deck-entry","journey-transfiguration"],"requiredPrimitives":{"existing":["journeyDeckEntry","journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-02"]},
+    {"id":"c2af5460-e61f-409b-9b86-6ac7db34d748","kind":"dreamsign","name":"Blue Crystal","status":"authored","rarity":"Common","text":"If your deck has 30 or more cards, cards you add to it gain a random transfiguration.","module":"src/content/dreamsigns/blue-crystal-c2af5460.ts","rulesDecisions":["RD-hv-umm2.264-1","RD-hv-umm2.266-1"],"tags":["journey-deck-entry","journey-transfiguration"],"requiredPrimitives":{"existing":["journeyDeckEntry","journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-02"]},
     {"id":"c706d0ba-2f41-4b14-95d8-db168ac6246c","kind":"dreamsign","name":"Amplified Acorn","status":"authored","rarity":"Uncommon","text":"Once per turn, when you discard a card, your next card this turn costs 2● less.","module":"src/content/dreamsigns/amplified-acorn-c706d0ba.ts","tags":["cost-modifier","duration","once-per-turn","trigger-discard"],"requiredPrimitives":{"existing":["costModifier","oncePerTurn","untilEndOfTurn","whenDiscard"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-15"]},
     {"id":"c75cd943-5e8b-4a56-8c09-d975571570d4","kind":"dreamsign","name":"Butterfly Wings","status":"pending","rarity":"Uncommon","text":"The ▸Dawn ability of a random character you control triggers an additional time each turn.","module":"src/content/dreamsigns/butterfly-wings-c75cd943.ts","tags":["copy-times","random","trigger-ability","trigger-dawn"],"requiredPrimitives":{"existing":["copyCardTimes","onDawn","randomSelection","triggerAbility"],"new":[]},"promptKinds":[],"family":16,"routing":["5.5","dreamsigns-battle-21"]},
     {"id":"c92438fc-8e1f-4f97-9dcf-8ca0edaa8607","kind":"dreamsign","name":"Black Horn","status":"authored","rarity":"Rare","text":"When you dissolve or banish an enemy character, gain 2●.","module":"src/content/dreamsigns/black-horn-c92438fc.ts","rulesDecisions":["RD-hv-umm2.229-2"],"tags":["gain-energy","trigger-removes-enemy"],"requiredPrimitives":{"existing":["gainEnergy","whenRemovesEnemyTrigger"],"new":[]},"promptKinds":[],"family":4,"routing":["5.5","dreamsigns-battle-05"]},
-    {"id":"cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f","kind":"dreamsign","name":"Purple Crystal","status":"pending","rarity":"Uncommon","text":"The first card you purchase at each dream bazaar site costs 25% less and gains a random transfiguration.","module":"src/content/dreamsigns/purple-crystal-cd4bb1f4.ts","tags":["journey-shop","journey-sites","journey-transfiguration"],"requiredPrimitives":{"existing":["journeySites","journeyTransfiguration"],"new":["journeyShop"]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-06"]},
+    {"id":"cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f","kind":"dreamsign","name":"Purple Crystal","status":"pending","rarity":"Uncommon","text":"The first card you purchase at each dream bazaar site costs 25% less and gains a random transfiguration.","module":"src/content/dreamsigns/purple-crystal-cd4bb1f4.ts","tags":["journey-shop","journey-sites","journey-transfiguration"],"requiredPrimitives":{"existing":["journeyShop","journeySites","journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-07"]},
     {"id":"cd81a49d-df58-4e0e-b1b2-33a82b386052","kind":"dreamsign","name":"Rosemary","status":"authored","rarity":"Common","text":"Dreamsign and dreamsign draft sites are enhanced.","module":"src/content/dreamsigns/rosemary-cd81a49d.ts","rulesDecisions":["RD-hv-umm2.267-1","RD-hv-umm2.598-1"],"cardIssues":["cd81a49d-df58-4e0e-b1b2-33a82b386052--hv-umm2.598"],"tags":["journey-draft","journey-sites"],"requiredPrimitives":{"existing":["journeyDraft","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-02"]},
     {"id":"d1fdbe21-56f6-43c0-aaac-1e4683964da5","kind":"dreamsign","name":"Bell","status":"authored","rarity":"Uncommon","text":"When you play a character from your void, rematerialize it.","module":"src/content/dreamsigns/bell-d1fdbe21.ts","rulesDecisions":["RD-hv-umm2.243-1"],"cardIssues":["d1fdbe21-56f6-43c0-aaac-1e4683964da5--hv-umm2.243"],"tags":["rematerialize","trigger-play","trigger-play-from-void"],"requiredPrimitives":{"existing":["rematerialize","whenPlayFromVoidTrigger","whenYouPlay"],"new":[]},"promptKinds":[],"family":6,"routing":["5.5","dreamsigns-battle-07"]},
     {"id":"d2a916c1-321a-4ae3-9a50-0b7f13c5eff6","kind":"dreamsign","name":"Worm Apple","status":"authored","rarity":"Uncommon","text":"You may play ❖ and ❖❖ events for 1●.","module":"src/content/dreamsigns/worm-apple-d2a916c1.ts","rulesDecisions":["RD-hv-umm2.236-1"],"tags":["cost-modifier","rule-modifier"],"requiredPrimitives":{"existing":["costModifier","ruleModifier"],"new":[]},"promptKinds":[],"family":16,"routing":["5.5","dreamsigns-battle-21"]},
     {"id":"d4b18cc4-caeb-40b3-b0e2-f1c8b1c8354c","kind":"dreamsign","name":"Larva","status":"pending","rarity":"Rare","text":"When you play a character, it gains +1✦ for each other character you have played this turn.","module":"src/content/dreamsigns/larva-d4b18cc4.ts","rulesDecisions":["RD-hv-7x4l.46-1","RD-hv-umm2.611-1"],"tags":["duration","gain-spark","trigger-play","turn-history"],"requiredPrimitives":{"existing":["gainSpark","turnHistory","untilEndOfTurn","whenYouPlay"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-17"]},
     {"id":"d76684c3-797e-44ae-a2ba-333e77d46a4d","kind":"dreamsign","name":"Belladonna","status":"pending","rarity":"Uncommon","text":"At the end of your turn, if you materialized 2 characters this turn, rematerialize the last one.","module":"src/content/dreamsigns/belladonna-d76684c3.ts","rulesDecisions":["RD-hv-umm2.220-1","RD-hv-umm2.86-1"],"cardIssues":["d76684c3-797e-44ae-a2ba-333e77d46a4d--hv-umm2.220"],"tags":["duration","history-reference","rematerialize","trigger-end-of-turn","turn-history"],"requiredPrimitives":{"existing":["atEndOfTurnTrigger","historyRefs","rematerialize","turnHistory","untilEndOfTurn"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-17"]},
-    {"id":"d78864da-eb31-4f25-9d51-94fca7ecf810","kind":"dreamsign","name":"Tongue","status":"pending","rarity":"Rare","text":"After you draw your opening hand, you may discard any number of cards, then draw that many cards.","module":"src/content/dreamsigns/tongue-d78864da.ts","tags":["draw","rule-modifier","you-may"],"requiredPrimitives":{"existing":["draw","optional","ruleModifier"],"new":[]},"promptKinds":["confirm:youMay"],"family":16,"routing":["5.5","dreamsigns-battle-22"]},
-    {"id":"d9f0f7ff-63c0-4247-8831-054d7fed931d","kind":"dreamsign","name":"Leaf Ledger","status":"authored","rarity":"Uncommon","text":"At each transfiguration site you visit, transfigure 2 cards instead of 1.","module":"src/content/dreamsigns/leaf-ledger-d9f0f7ff.ts","rulesDecisions":["RD-hv-umm2.261-1"],"tags":["journey-sites","journey-transfiguration"],"requiredPrimitives":{"existing":["journeySites","journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-06"]},
-    {"id":"da7e4b45-9106-4116-bc1c-3aec8885396b","kind":"dreamsign","name":"Spiral Shell","status":"pending","rarity":"Common","text":"At duplication sites, you always gain 4 copies of the selected card.","module":"src/content/dreamsigns/spiral-shell-da7e4b45.ts","tags":["journey-duplication","journey-sites"],"requiredPrimitives":{"existing":["journeySites"],"new":["journeyDuplication"]},"promptKinds":[],"family":0,"routing":["5.6","prim-journey-duplication"]},
+    {"id":"d78864da-eb31-4f25-9d51-94fca7ecf810","kind":"dreamsign","name":"Tongue","status":"pending","rarity":"Rare","text":"After you draw your opening hand, you may discard any number of cards, then draw that many cards.","module":"src/content/dreamsigns/tongue-d78864da.ts","rulesDecisions":["RD-hv-umm2.618-1"],"tags":["draw","rule-modifier","you-may"],"requiredPrimitives":{"existing":["draw","optional","ruleModifier"],"new":[]},"promptKinds":["confirm:youMay"],"family":16,"routing":["5.5","dreamsigns-battle-22"]},
+    {"id":"d9f0f7ff-63c0-4247-8831-054d7fed931d","kind":"dreamsign","name":"Leaf Ledger","status":"authored","rarity":"Uncommon","text":"At each transfiguration site you visit, transfigure 2 cards instead of 1.","module":"src/content/dreamsigns/leaf-ledger-d9f0f7ff.ts","rulesDecisions":["RD-hv-umm2.261-1"],"tags":["journey-sites","journey-transfiguration"],"requiredPrimitives":{"existing":["journeySites","journeyTransfiguration"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-07"]},
+    {"id":"da7e4b45-9106-4116-bc1c-3aec8885396b","kind":"dreamsign","name":"Spiral Shell","status":"authored","rarity":"Common","text":"At duplication sites, you always gain 4 copies of the selected card.","module":"src/content/dreamsigns/spiral-shell-da7e4b45.ts","rulesDecisions":["RD-hv-umm2.268-1"],"tags":["journey-duplication","journey-sites"],"requiredPrimitives":{"existing":["journeyDuplication","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-03"]},
     {"id":"dbbade86-9fb6-4283-b2dc-9c1ef66fd531","kind":"dreamsign","name":"Skull Drum","status":"authored","rarity":"Uncommon","text":"When you play an event while you control 3 or more spirit animals, it costs 1● less.","module":"src/content/dreamsigns/skull-drum-dbbade86.ts","tags":["card-cost","condition-controls","cost-modifier","trigger-play"],"requiredPrimitives":{"existing":["conditionControls","costModifier","modifyCardCost","whenYouPlay"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-12"]},
     {"id":"dec81fa2-7865-448c-95bc-622b884cea9e","kind":"dreamsign","name":"Rune Stone","status":"authored","rarity":"Uncommon","text":"Figments you control have +1✦.","module":"src/content/dreamsigns/rune-stone-dec81fa2.ts","tags":["figment-selector","figments","spark-static"],"requiredPrimitives":{"existing":["materializeFigments","selectorFigment","sparkModifier"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-08"]},
     {"id":"e377c3ed-16f5-4424-a9f1-73f9750ace9f","kind":"dreamsign","name":"Tortoise Shell","status":"pending","rarity":"Uncommon","text":"Cards in your deck cannot be purged.\n\nDraft site choices show an additional card.","module":"src/content/dreamsigns/tortoise-shell-e377c3ed.ts","tags":["journey-deck-entry","journey-draft","journey-purge","journey-sites"],"requiredPrimitives":{"existing":["journeyDeckEntry","journeyDraft","journeyPurge","journeySites"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-01"]},
@@ -9071,7 +9072,7 @@
     {"id":"eb6a5c19-26a6-41ef-ac7a-ce1152557b5c","kind":"dreamsign","name":"Eye Amulet","status":"authored","rarity":"Common","text":"When all characters you control are challengers, they have +2✦.","module":"src/content/dreamsigns/eye-amulet-eb6a5c19.ts","tags":["selector-challenger","spark-static"],"requiredPrimitives":{"existing":["selectorChallenger","sparkModifier"],"new":[]},"promptKinds":[],"family":8,"routing":["5.5","dreamsigns-battle-10"]},
     {"id":"ede46f71-aa77-4b12-9824-0d3706da6a22","kind":"dreamsign","name":"Crystal Orb","status":"authored","rarity":"Uncommon","text":"The first character you materialize each turn has awakened.","module":"src/content/dreamsigns/crystal-orb-ede46f71.ts","rulesDecisions":["RD-hv-umm2.590-1"],"cardIssues":["ede46f71-aa77-4b12-9824-0d3706da6a22--hv-umm2.590"],"tags":["first-materialization-keyword","materialize-card","nth-in-turn","trigger-materialize-nth"],"requiredPrimitives":{"existing":["firstMaterializationKeyword","materialize","materializeNthTrigger","triggerNth"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-18"],"correction":"Bounded first actual materialization, before exhaustion; permanent physical Awakened grant"},
     {"id":"ef25fba0-58a0-4b69-be06-3668679fcdc7","kind":"dreamsign","name":"Green Cauldron","status":"authored","rarity":"Uncommon","text":"The first time each turn your hand becomes empty, draw a card.","module":"src/content/dreamsigns/green-cauldron-ef25fba0.ts","rulesDecisions":["RD-hv-6yev-1","RD-hv-sw0d-1","RD-hv-umm2.237-1"],"tags":["draw","first-time-each-turn","nth-in-turn","rule-modifier"],"requiredPrimitives":{"existing":["draw","firstTimeEachTurn","ruleModifier","triggerNth"],"new":[]},"promptKinds":[],"family":16,"routing":["5.5","dreamsigns-battle-21"]},
-    {"id":"f4df5a74-7822-4552-a3ab-f50b00758593","kind":"dreamsign","name":"Strange Fruit","status":"authored","rarity":"Uncommon","text":"When you purge a card, gain 50 essence.","module":"src/content/dreamsigns/strange-fruit-f4df5a74.ts","rulesDecisions":["RD-hv-umm2.265-1"],"tags":["journey-essence","journey-purge"],"requiredPrimitives":{"existing":["journeyEssence","journeyPurge"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-03"]},
+    {"id":"f4df5a74-7822-4552-a3ab-f50b00758593","kind":"dreamsign","name":"Strange Fruit","status":"authored","rarity":"Uncommon","text":"When you purge a card, gain 50 essence.","module":"src/content/dreamsigns/strange-fruit-f4df5a74.ts","rulesDecisions":["RD-hv-umm2.265-1"],"tags":["journey-essence","journey-purge"],"requiredPrimitives":{"existing":["journeyEssence","journeyPurge"],"new":[]},"promptKinds":[],"family":0,"routing":["5.6","dreamsigns-journey-04"]},
     {"id":"fb7316c9-ef29-42fd-993e-d3337cb06921","kind":"dreamsign","name":"Gem Codex","status":"authored","rarity":"Uncommon","text":"When you copy an event, copy it an additional time.","module":"src/content/dreamsigns/gem-codex-fb7316c9.ts","rulesDecisions":["RD-hv-umm2.233-1","RD-hv-umm2.654-1"],"tags":["copy","copy-times","trigger-copy"],"requiredPrimitives":{"existing":["copyCard","copyCardTimes","whenCopyTrigger"],"new":[]},"promptKinds":[],"family":12,"routing":["5.5","dreamsigns-battle-11"]},
     {"id":"fb87262c-5bde-409e-92f1-58cc7a4e5491","kind":"dreamsign","name":"Purple Potion","status":"authored","rarity":"Uncommon","text":"3● cost characters cost you 2●.","module":"src/content/dreamsigns/purple-potion-fb87262c.ts","tags":["cost-modifier","selector-bounds"],"requiredPrimitives":{"existing":["costModifier","selectorBounds"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-16"]},
     {"id":"fdd2ffe4-40f4-49cf-bc2e-2496e1042f76","kind":"dreamsign","name":"Poppy Flower","status":"pending","rarity":"Common","text":"▸Night: If you have played no cards this turn, gain 2●.","module":"src/content/dreamsigns/poppy-flower-fdd2ffe4.ts","tags":["duration","gain-energy","trigger-night","turn-history"],"requiredPrimitives":{"existing":["gainEnergy","onNight","turnHistory","untilEndOfTurn"],"new":[]},"promptKinds":[],"family":14,"routing":["5.5","dreamsigns-battle-17"]},

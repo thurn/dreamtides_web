@@ -102,3 +102,4 @@ export * from "./partial-redraw-hand";
 export * from "./additional-draw-phase";
 
 export * from "./trigger-abandoned-named";
+export * from "./first-played-spark-setter";

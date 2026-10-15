@@ -304,9 +304,11 @@ export interface SideView {
   readonly dreamsigns: readonly DreamsignView[];
 }
 
-/** Public facts of a play, without linking an unidentified current card to it. */
+/** Public play facts, with an anonymous relation for the current first character. */
 export interface PlayedCardView extends Omit<PlayedCard, "instance"> {
   readonly instance: InstanceId | null;
+  /** Existing hidden descriptor member for the first character; null when none, absent for legacy history. */
+  readonly firstCharacterMember?: number | null;
 }
 
 /** Public facts of a materialization, without linking an unidentified current card to it. */
@@ -497,14 +499,20 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     const entry = (side: Side) => window[side] === null ? null : { ...copy(window[side]), instance: visible(window[side].instance) ? window[side].instance : null };
     return { player: entry("player"), enemy: entry("enemy") };
   };
-  const playedView = (card: PlayedCard): PlayedCardView => {
+  const firstPlayedCharacters = { player: state.turnLog.played.player.find(card => card.cardType === "character"),
+    enemy: state.turnLog.played.enemy.find(card => card.cardType === "character") };
+  const playedView = (card: PlayedCard, firstCharacter: boolean): PlayedCardView => {
     const known = visible(card.instance);
     // Legacy records can recover a cost or spark only from a card this viewer
     // sees. Private printing is not evidence of a publicly known historical
     // cost or spark.
     const cost = card.cost ?? (known ? copiableCostOf(state, catalog, card.instance) : undefined);
     const spark = card.spark !== undefined ? card.spark : known ? layers.of(card.instance).spark : undefined;
-    return { ...copy(card), instance: known ? card.instance : null, ...(cost === undefined ? {} : { cost }), ...(spark === undefined ? {} : { spark }) };
+    const current = state.instances[card.instance];
+    const hidden = !known && firstCharacter && (current?.zone === "hand" || current?.zone === "deck") ? anonymousSource(card.instance) : null;
+    return { ...copy(card), instance: known ? card.instance : null,
+      ...(firstCharacter ? { firstCharacterMember: hidden?.member ?? null } : {}),
+      ...(cost === undefined ? {} : { cost }), ...(spark === undefined ? {} : { spark }) };
   };
   const materializedView = (card: MaterializedCard): MaterializedCardView => ({ ...card, instance: visible(card.instance) ? card.instance : null });
   const departureView = (cards: readonly TurnDeparture[] = []): TurnDepartureView[] => cards.map(card => ({ ...card, instance: visible(card.instance) ? card.instance : null }));
@@ -785,8 +793,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       abandoned: { player: departureView(state.turnLog.abandoned?.player), enemy: departureView(state.turnLog.abandoned?.enemy) },
       dawnProgress: { knownCount: state.turnLog.dawnProgress?.known[viewer] ?? 0 },
       played: {
-        player: state.turnLog.played.player.map(playedView),
-        enemy: state.turnLog.played.enemy.map(playedView),
+        player: state.turnLog.played.player.map(card => playedView(card, card === firstPlayedCharacters.player)),
+        enemy: state.turnLog.played.enemy.map(card => playedView(card, card === firstPlayedCharacters.enemy)),
       },
       drawn: { ...state.turnLog.drawn },
       materialized: {

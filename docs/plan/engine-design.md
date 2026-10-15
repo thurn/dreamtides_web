@@ -2190,7 +2190,9 @@ operations name that reference only while its physical card exists.
 
 The pair is public historical play information. Current physical aliases remain
 hidden independently, and anonymous history IDs are reserved before hidden cards
-are sampled. Existing turn-log cloning, structural hashing, JSON serialization,
+are sampled. The first played character can retain an observer-local hidden member
+relation for same-turn static effects, as specified under Views and hidden information.
+Existing turn-log cloning, structural hashing, JSON serialization,
 view copying and determinization transport the pair. Saved loading validates its
 exact data shape and agreement with the same live physical card's Printing/Variant
 pair when both are present. Absent legacy pairs and ceased physical cards remain
@@ -2530,8 +2532,14 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   cost facts in turn order even when their card has ceased or become hidden.
   A record links to its instance only while this viewer identifies it.
   Otherwise its instance field is null. Determinization reserves fresh identities for
-  anonymous historical records before dealing hidden cards, without creating
-  instances for those records. Stored costs keep authoritative and simulated
+  anonymous historical records before dealing hidden cards. The first captured
+  character play per side carries `firstCharacterMember`: its existing anonymous
+  hidden-card descriptor member when available, or null for known, ceased or
+  unremembered cards. After hidden dealing, sampling binds a numeric member to
+  that exact dealt physical card; the observer sees neither its physical ID nor
+  its position. Missing legacy markers retain the anonymous fallback. Other
+  anonymous histories reserve identities without creating current instances.
+  Stored costs keep authoritative and simulated
   cost-bounded play counts equal. A legacy record missing its cost recovers
   it only from a visible instance in a view; a hidden or ceased legacy cost
   is unknown and matches no cost bound in simulation. Authoritative rules

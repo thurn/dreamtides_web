@@ -404,12 +404,13 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
   }
   let next = highest(view, "i") + 1;
   // Reserve anonymous history identities before minting hidden instances.
-  // These facts name no current card and remain anonymous when viewed again.
+  // Most facts name no current card; a first-character member relation is rebound after hidden dealing.
   const anonymous = <T extends { readonly instance: InstanceId | null }>(cards: readonly T[]) => cards.map((card) => {
     const instance: InstanceId = card.instance ?? `i${next++}`;
     return { ...copy(card), instance };
   });
-  const playedCards = { player: anonymous(view.turnLog.played.player), enemy: anonymous(view.turnLog.played.enemy) };
+  const played = (side: Side) => anonymous(view.turnLog.played[side].map(({ firstCharacterMember: _member, ...card }) => card));
+  const playedCards = { player: played("player"), enemy: played("enemy") };
   const firstEventHistory: FirstEventHistory | undefined = view.firstEventHistory === undefined ? undefined : (() => {
     const history = view.firstEventHistory;
     if (history === null || typeof history !== "object" || Object.keys(history).some(key => key !== "current" && key !== "previous")) throw new Error("Cannot determinize invalid first-event history");
@@ -550,6 +551,25 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     if (id === undefined) throw new Error(`Cannot determinize anonymous member ${String(descriptor.member)}: no matching decklist card`);
     instances[id] = { ...instances[id], ...(descriptor.journeyDeck === undefined ? {} : { journeyDeck: descriptor.journeyDeck }), printing: copy(descriptor.printing), variant: copy(descriptor.variant), status: copy(descriptor.status) };
     assigned.set(descriptor.member, id);
+  }
+  // Only the first played character retains this observer-local physical relation.
+  // Other anonymous history stays a historical fact without a current member.
+  for (const side of SIDES) {
+    const first = view.turnLog.played[side].findIndex(card => card.cardType === "character");
+    view.turnLog.played[side].forEach((shown, index) => {
+      const member = shown.firstCharacterMember;
+      if (member === undefined) return;
+      if (index !== first || member !== null && (!Number.isSafeInteger(member) || member < 0)) throw new Error("Invalid first-character history member");
+      if (member === null) return;
+      const matches = descriptors.filter(descriptor => descriptor.member === member);
+      const descriptor = matches[0], id = assigned.get(member);
+      if (shown.instance !== null || matches.length !== 1 || descriptor === undefined || id === undefined ||
+          (instances[id]?.zone !== "hand" && instances[id]?.zone !== "deck") ||
+          shown.copiable !== undefined && canonicalHash(shown.copiable) !== canonicalHash({ printing: descriptor.printing, variant: descriptor.variant })) {
+        throw new Error("Cannot determinize first-character history without its compatible hidden member");
+      }
+      playedCards[side][index] = { ...playedCards[side][index], instance: id };
+    });
   }
   const capturedFacts = [...view.floating.flatMap(({ change }) => (change.kind === "materializeKeyword" || change.kind === "firstMaterializationKeyword") && change.instance !== null ? [change.instance] : change.kind === "trigger" ? change.captured ?? [] : []),
     ...shownOccurrences(view.triggerQueue).flatMap((trigger) => trigger.captured ?? [])].filter((card): card is HiddenCapturedCardView => typeof card !== "string" && "printing" in card && "variant" in card);

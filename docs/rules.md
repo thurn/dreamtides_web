@@ -714,6 +714,31 @@ character's printed spark. Gained spark and spark it has from other effects
 still apply on top of the new base. If several such effects apply, the most
 recent one wins (see [Order of continuous effects](#ability-types)).
 
+**First played character has 0✦:** "The first character you play each
+turn … has 0✦" is a static base-spark setting. It applies to the same physical
+card as your first committed character play in the current turn, while that
+card is a character in play and the static ability applies. Gained spark,
+Support and other spark changes apply on top of 0; other base-spark settings
+use the ordinary continuous-effect order. This setting is not a spark gain.
+It applies as the character enters, before materialization abilities check
+its spark. Outside play the card has its ordinary spark.
+
+Each player's first committed character play counts separately during either
+player's turn. A Prevented play occupies first; a failed play, cancelled
+choice, preview, stack copy or character materialized without being played
+does not. The character's type and player are read at play time. Earlier
+plays count even while the static source was absent or its condition false;
+restoring the ability applies it to that turn's first physical card. That
+card need not still be controlled by the player who played it. If it leaves
+and returns during the same turn, it qualifies again while in play; a
+distinct copy does not inherit its place. If it ceases to exist, the second
+play does not replace it. Each ordinary or extra turn starts a fresh cohort
+for both players, and cards from preceding turns cease to qualify. The
+source's current controller supplies "you". Removing the source, losing its
+ability or making its condition false ends the setting immediately. Several
+copies of the ability set the same base to 0; their separately printed cost
+reductions each apply to the first matching play.
+
 **Spark below 0:** Spark changes add up, but a character's spark is never less
 than 0 for any rule that reads it. A 1✦ character with −3✦ of changes has 0✦,
 and it needs +3✦ more to reach 1✦.
