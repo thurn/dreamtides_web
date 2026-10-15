@@ -13,7 +13,8 @@
  *    instead (RD-hv-7x4l.8-1).
  */
 import { applyMaterializeKeywordModifiers } from "../effects/primitives/materialize-keyword-modifier";
-import { recordLeftPlay, recordDissolved, recordAbandoned } from "./turn-log";
+import { applyFirstPlayedCharacterEntrySpark } from "../effects/primitives/first-played-entry-spark";
+import { recordLeftPlay, recordDissolved, recordAbandoned, isFirstPlayedCharacterEntry } from "./turn-log";
 import type { AbilitySource, InstanceId, Side, Slot, Zone } from "../state/ids";
 import { BACK_RANK_SIZE, sourceInstance } from "../state/ids";
 import { effectiveSpark } from "./spark";
@@ -343,6 +344,7 @@ export function enterPlay(
   if (occupant(state, side, slot) !== null) {
     throw new Error(`Slot ${slot.rank}${String(slot.index)} is occupied`);
   }
+  const firstPlayedEntry = isFirstPlayedCharacterEntry(state, side, id);
   const hand = departingHand(state, instance);
   depart(ctx, instance, "play");
   detach(state, instance);
@@ -351,6 +353,7 @@ export function enterPlay(
   instance.enteredZoneAt = ++state.clock;
   setOccupant(state, side, slot, id);
   applyMaterializeKeywordModifiers(ctx, id, side);
+  if (firstPlayedEntry) applyFirstPlayedCharacterEntrySpark(ctx, id, side);
   instance.status.exhausted = !awakened && !hasKeyword(state, ctx.catalog, id, "awakened");
   announceEmptyHand(ctx, hand);
   ctx.emit({ kind: "materialized", instance: id, side, slot });

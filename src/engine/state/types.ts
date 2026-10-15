@@ -416,6 +416,8 @@ export type RuleModifierInstruction =
   | { readonly rule: "dawnThreshold"; readonly count: number };
 
 export type ContinuousChange =
+  /** Static-only gain instruction for the first actual character play's original successful entry. */
+  | { readonly kind: "firstPlayedCharacterEntrySpark"; readonly player: Side; readonly amount: number }
   /** Null is static first-occasion eligibility; physical grants permanently retain Awakened. */
   | { readonly kind: "firstMaterializationKeyword"; readonly player: Side; readonly keyword: "awakened"; readonly instance: InstanceId | null }
   /** Null enables the player's current-turn cohort; a physical member retains Awakened until the same expiry. */

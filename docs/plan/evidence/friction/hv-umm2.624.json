@@ -1,0 +1,36 @@
+{
+  "bead": "hv-umm2.624",
+  "phase": 5,
+  "implementMin": 59.909201149999994,
+  "implementWindow": {
+    "start": "2026-10-15T04:50:55.717Z",
+    "end": "2026-10-15T05:50:50.269069+00:00"
+  },
+  "localValidationS": {
+    "affected-1-1792041348874722000": 26.009802459040657,
+    "focused-1-1792041327922823000": 8.858435707981698,
+    "full-1-1792042110945322000": 117.3077862909995,
+    "knip-1-1792041658134291000": 8.428905332984868,
+    "review-1-1792041427485342000": 83.22609037504299,
+    "review-2-1792041555513833000": 73.56858508300502,
+    "typecheck-1-1792041284875482000": 20.785943249997217,
+    "first-materialization-substitution": 9.893965207971632,
+    "lifetime-consumed-allowance": 7.195888334012125,
+    "play-time-gain": 7.001646000018809,
+    "post-materialization-gain": 6.9723753340076655,
+    "repeat-entry-identity-only": 7.328908083029091,
+    "restored-focused": 7.201478541013785,
+    "schema-1": 0.138609790999908,
+    "whitespace-1": 0.035054792009759694,
+    "integration-focused": 18.21983116696356,
+    "integration-review": 82.84378887497587,
+    "integration-knip": 11.123756999964826
+  },
+  "hostLoad": 10.44677734375,
+  "testDelta": {
+    "files": 1,
+    "lines": 388,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

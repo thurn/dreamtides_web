@@ -132,6 +132,16 @@ export function recordAbandoned(state: BattleState, side: Side, occurrence: Turn
 export function charactersPlayedCountThisTurn(state: BattleState, side: Side): number {
   return state.turnLog.played[side].filter(card => card.cardType === "character").length;
 }
+
+/** The current stack visit is the turn's first captured character play, not a later replay of that card. */
+export function isFirstPlayedCharacterEntry(state: BattleState, side: Side, instance: InstanceId): boolean {
+  if (state.instances[instance]?.zone !== "stack" || !state.stack.some(item =>
+    item.kind === "card" && item.instance === instance && item.controller === side)) return false;
+  const played = state.turnLog.played[side];
+  const first = played.findIndex(card => card.cardType === "character");
+  return first >= 0 && played[first].instance === instance &&
+    !played.slice(first + 1).some(card => card.instance === instance);
+}
 export function discardedCountThisTurn(state: BattleState, side: Side): number { return state.turnLog.discarded?.[side] ?? 0; }
 export function leftPlayCountThisTurn(state: BattleState, side: Side): number { return state.turnLog.leftPlay?.[side].filter(card => card.cardType === "character").length ?? 0; }
 export function dissolvedCountThisTurn(state: BattleState, side: Side): number { return state.turnLog.dissolved?.[side].filter(card => card.cardType === "character").length ?? 0; }

@@ -968,6 +968,7 @@ function effectStartedText(
       return `${change.player === human ? "You" : "Your opponent"} may play only ${plural(change.count, "card", "cards")} each turn${expiryPhrase(expiry, human)}.`;
     case "revealDeckTop":
     case "preserveEphemeralHand":
+    case "firstPlayedCharacterEntrySpark":
     case "offeringDiscardPaymentOption":
     case "reclaimNotBanished":
     case "reclaimCost":

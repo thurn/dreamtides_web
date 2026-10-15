@@ -79,6 +79,7 @@ import {
   materializePrimitive,
   materializeKeywordModifierPrimitive,
   firstMaterializationKeywordPrimitive,
+  firstPlayedCharacterEntrySparkPrimitive,
   materializeChosenPrimitive,
   materializeFigmentCopyPrimitive,
   materializeFigmentsPrimitive,
@@ -303,6 +304,7 @@ const DEFINITIONS = {
   get materializeChosen() { return materializeChosenPrimitive; },
   get materializeKeywordModifier() { return materializeKeywordModifierPrimitive; },
   get firstMaterializationKeyword() { return firstMaterializationKeywordPrimitive; },
+  get firstPlayedCharacterEntrySpark() { return firstPlayedCharacterEntrySparkPrimitive; },
   get materialize() {
     return materializePrimitive;
   },

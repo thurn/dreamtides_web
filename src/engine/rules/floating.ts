@@ -162,6 +162,7 @@ function sameBoundary(expiry: Expiry, boundary: Expiry): boolean {
  */
 export function changedInstance(change: FloatingChange): InstanceId | null {
   switch (change.kind) {
+    case "firstPlayedCharacterEntrySpark":
     case "trigger":
     case "cost":
     case "reclaimCost":

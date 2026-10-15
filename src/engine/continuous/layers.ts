@@ -72,6 +72,7 @@ export interface Characteristics {
 
 /** The layer each kind of continuous change applies in. */
 const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
+  firstPlayedCharacterEntrySpark: 6,
   allTypes: 2,
   subtype: 2,
   keyword: 3,
@@ -274,6 +275,7 @@ function byTimestamp(a: OrderedChange, b: OrderedChange): number {
  */
 function changed(change: ContinuousChange): InstanceId | null {
   switch (change.kind) {
+    case "firstPlayedCharacterEntrySpark":
     case "cost":
     case "reclaimCost":
     case "playFrom":
@@ -339,6 +341,14 @@ export class Layers {
       ? total + this.expand(entry).reduce((count, change) =>
           change.kind === "additionalDrawPhaseCards" && change.player === side ? count + change.count : count, 0)
       : total, 0);
+  }
+
+  /** Live source occurrences for this entry, expanding no unrelated layer-6 instructions. */
+  firstPlayedCharacterEntrySpark(side: Side): readonly { readonly source: AbilitySource; readonly ability: number; readonly amount: number }[] {
+    return this.statics.flatMap(entry => entry.controller === side && entry.node.op === "firstPlayedCharacterEntrySpark"
+      ? this.expand(entry).flatMap(change => change.kind === "firstPlayedCharacterEntrySpark" && change.player === side
+        ? [{ source: entry.source, ability: entry.ability, amount: change.amount }] : [])
+      : []);
   }
 
   /** Every change of `layer`, in the order it applies. */

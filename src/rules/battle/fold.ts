@@ -1083,6 +1083,7 @@ function isEffectRef(value: unknown): boolean {
 const FLOATING_CHANGE_VALIDATORS: {
   readonly [K in FloatingChange["kind"]]: (value: Record<string, unknown>) => boolean;
 } = {
+  firstPlayedCharacterEntrySpark: () => false, // Entry-gain instructions are static-only.
   firstMaterializationKeyword: value => isInstanceId(value.instance) && isSide(value.player) && value.keyword === "awakened",
   materializeKeyword: value => nullable(isInstanceId)(value.instance) && isSide(value.player) && value.keyword === "awakened",
   allTypes: (value) => isInstanceId(value.instance),

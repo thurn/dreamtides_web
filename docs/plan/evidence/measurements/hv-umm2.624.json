@@ -1,0 +1,1743 @@
+{
+  "bead": "hv-umm2.624",
+  "sourceBase": "29f6decf5ff6fbaf5ca8a6a3551de68b6a1074ff",
+  "dispatch": {
+    "at": "2026-10-15T04:50:55.717Z",
+    "journalOrdinal": 40995,
+    "callId": "call_98b2ba71e65743738ed07a9af94fb618",
+    "tool": "spawn_agent",
+    "samplingStart": "UNKNOWN"
+  },
+  "timingCutoff": {
+    "at": "2026-10-15T05:50:50.269069+00:00",
+    "inclusiveMinutes": 59.909201149999994,
+    "qualification": "Precommit evidence cutoff; refresh immediately before the one normal automatic-date commit after parent final-package ACK. External final Git receipt supplies exact commit endpoint; no postcommit tracked rewrite."
+  },
+  "windowPolicy": "Inclusive original dispatch through Stage1 research, parent reads, authority admission, queue waits, implementation, every check attempt, evidence and final automatic Git. Host elapsed wall time, no performance comparison.",
+  "scope": {
+    "publicForm": "firstPlayedCharacterEntrySpark(amount:number)",
+    "rulesDecision": "RD-hv-umm2.624-1",
+    "lifecycle": "Only the original successful stack visit of each controller current-global-turn first captured character play receives permanent additive gain before materialized matching. Actual live source contributions and causal observers are snapshotted before every mutation/emission.",
+    "newPersistentStateFields": 0,
+    "newSteps": 0,
+    "driverChanges": 0,
+    "productionUUIDsTransferred": 0,
+    "retainedConsumerUUID": "11018e32-f47e-45fd-a8cf-3a9e3f3be71b",
+    "finalAcceptanceOwner": "hv-umm2.255",
+    "coreReviewRequired": true,
+    "coreReviewStatus": "Required separate parent-owned fresh read-only Codex subagent, fork_turns none, exact committed base/head; pending at helper precommit cutoff.",
+    "newSavedStateDTOFields": 0,
+    "newOptionalPublicEventProvenance": "entrySpark"
+  },
+  "sourceGuard": {
+    "initialTrackedCount": 5409,
+    "outsideInitialPathsByteExact": 5396,
+    "frozenSourceCount": 5412,
+    "frozenSourceMapSha256": "0412c3b55ac9697cd8f4213e5f814bec3b5e3320c0a830b30efdf265b9f044bd",
+    "changedSourceRulesRDTestPaths": 16,
+    "ownEvidencePaths": 3,
+    "admittedFinalPathCount": 19,
+    "nonTestTypeScriptAdded": 100,
+    "nonTestTypeScriptDeleted": 3,
+    "nonTestTypeScriptGross": 103,
+    "testDelta": {
+      "files": 1,
+      "lines": 388,
+      "jsdomFiles": 0
+    },
+    "privateContractModuleLines": 388,
+    "contractCases": 40,
+    "configuredEntrypoints": 0,
+    "parentNumstatReceipt": "624-parent-pre-evidence-numstat.json",
+    "finalFunctionalHashes": {
+      "docs/rules.md": "a3e9e839b3d1ee31db1a5d346b316cd5bffa7fa448f8c3f3cae0138bd8898ae8",
+      "src/engine/continuous/layers.ts": "6313ad0dfc80c8fc2a412e24549c966b3e167d93a630d99bf466b4f2d52b25b4",
+      "src/engine/effects/primitives/index.ts": "6cae38e604977880992961e98069e1008907f618105d636cf9e45081ad6aeb64",
+      "src/engine/effects/registry.ts": "6e36762fac2c3c0db81dc334f8c503608fefc217f57a732c9f57798ae0d1cc73",
+      "src/engine/events/kinds/spark-gained.ts": "125035924f3191012b181bd94bd1432e0d884f590d3fb7f52639baac0c23f8d0",
+      "src/engine/log.ts": "2c057e596047e602a9a6799c68eabff9f554d81956b14c98027749e99df355c1",
+      "src/engine/loops/event-copy-continuation.ts": "d061912ca26987a1f48facc2c9ce74a9a2230d52744977667def7c1b99eb3e5a",
+      "src/engine/rules/floating.ts": "5292212c2eb6647ccc421c6fe779b97e1dc119e8aae6f3bc1dcb135940ff4200",
+      "src/engine/rules/turn-log.ts": "076b4314f9a86ab09b069df5a4c63f8b2de5f222e62628b3d2fbca7c566ee104",
+      "src/engine/rules/zones.ts": "f14f506cb8e1f53c8c070cccc9dd770ab7c62847dea17e667b2753033c914338",
+      "src/engine/state/types.ts": "3798157aa233441c7f9d74abc2567ea0eed3e442174fd757fb4050ed01cae8f3",
+      "src/rules/battle/fold.ts": "b2d317ee9ef991694317133dbe1696e63434617dc189d07eb9e97255f5128a0b",
+      "src/runtime/battle-prompt-messages.ts": "b21d07e8e1f21523e72ae11b45ced26e45f6f594acf91e26f1aaee9659ae990a",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.624-1.md": "6bce67a36342bb85f0e634e2b0d19dbc744313519434354fce0f727132833cd0",
+      "src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts": "daeabf1326b8d8a5b2940d00f209c3340fb45ec6751282f1cc89dae601a9f0bf",
+      "src/engine/effects/primitives/first-played-entry-spark.ts": "e750edd9565c3ef1ffe32acf2abfe88678e4e5028b2f6d240905aa5bbf476614"
+    },
+    "allFiveMutantsFinallyRestored": true,
+    "allFullInputsUnchanged": true,
+    "frozenSourceMapEncoding": "SHA256 of UTF8 JSON sourceHashes with sorted keys and compact comma/colon separators.",
+    "historicalBindingQualification": "This original sourceGuard and finalFunctionalHashes bind implementation validation at d73b61f03b683bacc8286bbfe61bd6382bf0a585. Active combined source hashes and checks are recorded in integration; prior source epochs remain unchanged."
+  },
+  "checks": {
+    "affected-1-1792041348874722000": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/turn-log.test.ts",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "src/rules/battle/engine-battle-replay.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:15:48.874824+00:00",
+      "ended": "2026-10-15T05:16:14.885751+00:00",
+      "exitCode": 0,
+      "elapsedS": 26.009802459040657,
+      "loadBefore": [
+        20.04296875,
+        17.3955078125,
+        14.853515625
+      ],
+      "loadAfter": [
+        16.83740234375,
+        16.8623046875,
+        14.734375
+      ],
+      "pid": 29918,
+      "processGroup": 29918,
+      "stdoutSha256": "f6a750a9d86b1cb16c2b8e72fe4b2c46ecc077f047cbdda476946489c22e196a",
+      "rawReceipt": "affected-1-1792041348874722000/receipt.json",
+      "rawReceiptSha256": "f13a9dd66fd59e501c838e5d1b6e504bf0a54821039aa60e950a63aa0d254aa6",
+      "sourceEpochBeforeSha256": "b0aae991cb33633943493b99fa4e019ed0fabdfe60584ddeda4ae6d8d38bff82",
+      "sourceEpochAfterSha256": "b0aae991cb33633943493b99fa4e019ed0fabdfe60584ddeda4ae6d8d38bff82",
+      "sourceUnchanged": true
+    },
+    "focused-1-1792041327922823000": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "firstPlayedCharacterEntrySpark"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:15:27.923100+00:00",
+      "ended": "2026-10-15T05:15:36.782570+00:00",
+      "exitCode": 0,
+      "elapsedS": 8.858435707981698,
+      "loadBefore": [
+        20.83740234375,
+        17.27880859375,
+        14.73779296875
+      ],
+      "loadAfter": [
+        20.6376953125,
+        17.33837890625,
+        14.78759765625
+      ],
+      "pid": 99141,
+      "processGroup": 99141,
+      "stdoutSha256": "f617223630fad07d1b6396cfefe6f92fb68af0d198bf211b3fcc4daecc492a95",
+      "rawReceipt": "focused-1-1792041327922823000/receipt.json",
+      "rawReceiptSha256": "265d2a518e8796151c8b87b400dddfd1e7408e9dcac381a7c9e9d81f2f700e05",
+      "sourceEpochBeforeSha256": "b0aae991cb33633943493b99fa4e019ed0fabdfe60584ddeda4ae6d8d38bff82",
+      "sourceEpochAfterSha256": "b0aae991cb33633943493b99fa4e019ed0fabdfe60584ddeda4ae6d8d38bff82",
+      "sourceUnchanged": true
+    },
+    "full-1-1792042110945322000": {
+      "argv": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:28:30.945432+00:00",
+      "ended": "2026-10-15T05:30:28.254483+00:00",
+      "exitCode": 0,
+      "elapsedSIncludingLockWait": 117.3077862909995,
+      "loadBefore": [
+        7.70556640625,
+        10.84375,
+        12.5283203125
+      ],
+      "loadAfter": [
+        10.2919921875,
+        10.53125,
+        12.1728515625
+      ],
+      "pid": 62716,
+      "processGroup": 62716,
+      "stdoutSha256": "edb7ddf78093e9c979cd19e5195f04580e250e9e1fbbbbd3eda85e180a908a38",
+      "actualDirectChildWait": true,
+      "cleanup": {
+        "events": [
+          {
+            "at": "2026-10-15T05:30:28.207269+00:00",
+            "action": "natural-grace",
+            "membersBefore": []
+          }
+        ],
+        "membersAfter": [],
+        "directChildWaited": true
+      },
+      "firstPrepareMarkerAt": "2026-10-15T05:28:31.209Z",
+      "timingQualification": "Elapsed host wall time includes lock wait, startup, validation and cleanup; no benchmark. First prepare marker follows acquisition and startup and cannot isolate lock wait.",
+      "resourceQualification": "Full suite owns synthetic temporary server/provider transport harnesses. Reported server IDs may be logical adapter group IDs; observed actual OS identities and own group are recorded separately. This is not player-workflow browser QA.",
+      "rawReceipt": "full-1-1792042110945322000/receipt.json",
+      "rawReceiptSha256": "e5117963ab2c01fa314c78b89ce121e17dd2f26b78fde634264a3758641d215f",
+      "sourceEpochBeforeSha256": "0412c3b55ac9697cd8f4213e5f814bec3b5e3320c0a830b30efdf265b9f044bd",
+      "sourceEpochAfterSha256": "0412c3b55ac9697cd8f4213e5f814bec3b5e3320c0a830b30efdf265b9f044bd",
+      "sourceUnchanged": true
+    },
+    "knip-1-1792041658134291000": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:20:58.134421+00:00",
+      "ended": "2026-10-15T05:21:06.564286+00:00",
+      "exitCode": 0,
+      "elapsedS": 8.428905332984868,
+      "loadBefore": [
+        19.83984375,
+        15.9423828125,
+        14.70166015625
+      ],
+      "loadAfter": [
+        20.23583984375,
+        16.14404296875,
+        14.78662109375
+      ],
+      "pid": 68686,
+      "processGroup": 68686,
+      "stdoutSha256": "141022ea99c90b55df5e326104f31288df17afb270fb8091c58c84d340fdca2c",
+      "rawReceipt": "knip-1-1792041658134291000/receipt.json",
+      "rawReceiptSha256": "2d69084d09261ca66c705976f15411f5c2f6b2570f7c6a35cffea9913cde6477",
+      "sourceEpochBeforeSha256": "472bba820ccf458b79303956a33d5670a3467336faadcc4b41a44aeee14a7b77",
+      "sourceEpochAfterSha256": "472bba820ccf458b79303956a33d5670a3467336faadcc4b41a44aeee14a7b77",
+      "sourceUnchanged": true
+    },
+    "review-1-1792041427485342000": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:17:07.485439+00:00",
+      "ended": "2026-10-15T05:18:30.713084+00:00",
+      "exitCode": 1,
+      "elapsedS": 83.22609037504299,
+      "loadBefore": [
+        12.03466796875,
+        15.5791015625,
+        14.380859375
+      ],
+      "loadAfter": [
+        14.30419921875,
+        15.5615234375,
+        14.4931640625
+      ],
+      "pid": 38136,
+      "processGroup": 38136,
+      "stdoutSha256": "96a6f3b09f1b09726db8d70e8573d579b271edfa83685e08aa7788d9c9ac04d5",
+      "rawReceipt": "review-1-1792041427485342000/receipt.json",
+      "rawReceiptSha256": "dda38e9ca0d0501ff70800ea580aad233f1c76181be2a4e56a108618294cd8e3",
+      "sourceEpochBeforeSha256": "b0aae991cb33633943493b99fa4e019ed0fabdfe60584ddeda4ae6d8d38bff82",
+      "sourceEpochAfterSha256": "b0aae991cb33633943493b99fa4e019ed0fabdfe60584ddeda4ae6d8d38bff82",
+      "sourceUnchanged": true
+    },
+    "review-2-1792041555513833000": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:19:15.513924+00:00",
+      "ended": "2026-10-15T05:20:29.083970+00:00",
+      "exitCode": 0,
+      "elapsedS": 73.56858508300502,
+      "loadBefore": [
+        10.44677734375,
+        14.3369140625,
+        14.09423828125
+      ],
+      "loadAfter": [
+        17.4013671875,
+        15.14697265625,
+        14.39111328125
+      ],
+      "pid": 3668,
+      "processGroup": 3668,
+      "stdoutSha256": "23cbc6d866ba104b1ab3c389a0737a65173358468bf08bf063acd251ffc01107",
+      "rawReceipt": "review-2-1792041555513833000/receipt.json",
+      "rawReceiptSha256": "bc61855f01389d614d438d2ca091856791ec4fa10ca7a04f3e2988f5b0270f1d",
+      "sourceEpochBeforeSha256": "472bba820ccf458b79303956a33d5670a3467336faadcc4b41a44aeee14a7b77",
+      "sourceEpochAfterSha256": "472bba820ccf458b79303956a33d5670a3467336faadcc4b41a44aeee14a7b77",
+      "sourceUnchanged": true
+    },
+    "typecheck-1-1792041284875482000": {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:14:44.875577+00:00",
+      "ended": "2026-10-15T05:15:05.665600+00:00",
+      "exitCode": 2,
+      "elapsedS": 20.785943249997217,
+      "loadBefore": [
+        15.7197265625,
+        16.03564453125,
+        14.20166015625
+      ],
+      "loadAfter": [
+        16.93212890625,
+        16.2783203125,
+        14.330078125
+      ],
+      "pid": 66597,
+      "processGroup": 66597,
+      "stdoutSha256": "e173edcf9fa108c127d8dfb446c04e8229c466216a71db8871ec777743b36957",
+      "rawReceipt": "typecheck-1-1792041284875482000/receipt.json",
+      "rawReceiptSha256": "05be0f35d93dbf0865ad6ec5ab24251f37e38f55fe1023ff97d6b8ac7fbe0f54",
+      "sourceEpochBeforeSha256": "cf45a6091da381b67f15cb2b545cf378fa33023711405f99622cba677380f940",
+      "sourceEpochAfterSha256": "cf45a6091da381b67f15cb2b545cf378fa33023711405f99622cba677380f940",
+      "sourceUnchanged": true
+    },
+    "first-materialization-substitution": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "firstPlayedCharacterEntrySpark.*selects\\ actual\\ first\\ character\\ play\\ after\\ event\\ and\\ nonplayed\\ entries,\\ before\\ materialization\\ observers",
+        "--reporter=json",
+        "--outputFile",
+        "/tmp/624-validation/counterfactuals-1792041847037328000/first-materialization-substitution/vitest.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:24:07.286022+00:00",
+      "ended": "2026-10-15T05:24:17.286939+00:00",
+      "exitCode": 1,
+      "elapsedS": 9.893965207971632,
+      "loadBefore": [
+        6.81591796875,
+        12.14892578125,
+        13.40087890625
+      ],
+      "loadAfter": [
+        6.68994140625,
+        11.94580078125,
+        13.31396484375
+      ],
+      "pid": 85931,
+      "processGroup": 85931,
+      "stdoutSha256": "5be8d8a32367295f7ac7aff0adcec1d0fa1edca0a1a4826636bb15a662ef67ca",
+      "reportSha256": "8d2d3daafc2239dc108fa123cfd23ae6d9b5e4143cb34eaea3967e6f58cd6029",
+      "waitedPid": 85931,
+      "processGroupAfterWait": [],
+      "processGroupReaped": true,
+      "expectedOutcomeObserved": true,
+      "expectedFailureNames": [
+        "firstPlayedCharacterEntrySpark for enemy selects actual first character play after event and nonplayed entries, before materialization observers",
+        "firstPlayedCharacterEntrySpark for player selects actual first character play after event and nonplayed entries, before materialization observers"
+      ],
+      "actualAssertions": [
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player selects actual first character play after event and nonplayed entries, before materialization observers",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected { cardType: 'character', \u2026(6) } to match object { baseSpark: 2, spark: 3 }\n(5 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/expect/dist/index.js:1278:10)\n    at Proxy.<anonymous> (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/expect/dist/index.js:1151:15)\n    at Proxy.methodWrapper (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/chai/index.js:1700:25)\n    at /Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts:123:53\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:296:11\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1258:26\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1681:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1678:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1660:20"
+          ]
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy selects actual first character play after event and nonplayed entries, before materialization observers",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected { cardType: 'character', \u2026(6) } to match object { baseSpark: 2, spark: 3 }\n(5 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/expect/dist/index.js:1278:10)\n    at Proxy.<anonymous> (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/expect/dist/index.js:1151:15)\n    at Proxy.methodWrapper (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/chai/index.js:1700:25)\n    at /Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts:123:53\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:296:11\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1258:26\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1681:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1678:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1660:20"
+          ]
+        }
+      ],
+      "sourceUnchangedDuringCheck": true,
+      "cleanup": {
+        "events": [
+          {
+            "at": "2026-10-15T05:24:17.243079+00:00",
+            "action": "natural-grace",
+            "membersBefore": []
+          }
+        ],
+        "membersAfter": [],
+        "directChildWaited": true,
+        "absent": true
+      },
+      "rawReceipt": "counterfactuals-1792041847037328000/first-materialization-substitution/receipt.json",
+      "rawReceiptSha256": "a5ac894b276a9131fadd2cd316d4166f221f0de8dfe5948e79c5d9631b392ff0",
+      "sourceEpochBeforeSha256": "fd1f60dc0bd50e9d3330c4730791b257b0bc47c2acba423e65c6fbd1c7aee9ec",
+      "sourceEpochAfterSha256": "fd1f60dc0bd50e9d3330c4730791b257b0bc47c2acba423e65c6fbd1c7aee9ec",
+      "sourceUnchanged": true
+    },
+    "lifetime-consumed-allowance": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "firstPlayedCharacterEntrySpark.*keeps\\ both\\ players'\\ counts\\ separate\\ on\\ opponent\\ turns\\ and\\ renews\\ a\\ real\\ replay\\ on\\ a\\ normal\\ and\\ extra\\ turn",
+        "--reporter=json",
+        "--outputFile",
+        "/tmp/624-validation/counterfactuals-1792041847037328000/lifetime-consumed-allowance/vitest.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:24:41.108506+00:00",
+      "ended": "2026-10-15T05:24:48.419989+00:00",
+      "exitCode": 1,
+      "elapsedS": 7.195888334012125,
+      "loadBefore": [
+        6.310546875,
+        11.43408203125,
+        13.08935546875
+      ],
+      "loadAfter": [
+        6.28564453125,
+        11.34375,
+        13.04736328125
+      ],
+      "pid": 88814,
+      "processGroup": 88814,
+      "stdoutSha256": "eb2405148ee2fc23f9722e2fab4fdec036f7336262f27e4220d1087e28ea0a1f",
+      "reportSha256": "443c9e2840f8dcba8e70448c23fbddb78f0618e6a7204b664fb30a666b351ccc",
+      "waitedPid": 88814,
+      "processGroupAfterWait": [],
+      "processGroupReaped": true,
+      "expectedOutcomeObserved": true,
+      "expectedFailureNames": [
+        "firstPlayedCharacterEntrySpark for enemy keeps both players' counts separate on opponent turns and renews a real replay on a normal and extra turn",
+        "firstPlayedCharacterEntrySpark for player keeps both players' counts separate on opponent turns and renews a real replay on a normal and extra turn"
+      ],
+      "actualAssertions": [
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player keeps both players' counts separate on opponent turns and renews a real replay on a normal and extra turn",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected 3 to be 4 // Object.is equality\n    at /Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts:261:60\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:296:11\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1258:26\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1681:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1678:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1660:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1627:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:2309:64"
+          ]
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy keeps both players' counts separate on opponent turns and renews a real replay on a normal and extra turn",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected 3 to be 4 // Object.is equality\n    at /Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts:261:60\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:296:11\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1258:26\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1681:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1678:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1660:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1627:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:2309:64"
+          ]
+        }
+      ],
+      "sourceUnchangedDuringCheck": true,
+      "cleanup": {
+        "events": [
+          {
+            "at": "2026-10-15T05:24:48.378348+00:00",
+            "action": "natural-grace",
+            "membersBefore": []
+          }
+        ],
+        "membersAfter": [],
+        "directChildWaited": true,
+        "absent": true
+      },
+      "rawReceipt": "counterfactuals-1792041847037328000/lifetime-consumed-allowance/receipt.json",
+      "rawReceiptSha256": "7ac6b70be4de9e1922e206164629f5e954e7b9f77bfa1e51a89da42dc9d5d2eb",
+      "sourceEpochBeforeSha256": "cf7f3e41afeeff86e6a88339de6a3fcd7530df0d403cc6a0e2eb3e246d4409e8",
+      "sourceEpochAfterSha256": "cf7f3e41afeeff86e6a88339de6a3fcd7530df0d403cc6a0e2eb3e246d4409e8",
+      "sourceUnchanged": true
+    },
+    "play-time-gain": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "firstPlayedCharacterEntrySpark.*gives\\ no\\ never\\-entered\\ Prevented\\ card\\ a\\ gain\\ or\\ later\\ effect\\-entry\\ promise",
+        "--reporter=json",
+        "--outputFile",
+        "/tmp/624-validation/counterfactuals-1792041847037328000/play-time-gain/vitest.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:24:17.827701+00:00",
+      "ended": "2026-10-15T05:24:24.941160+00:00",
+      "exitCode": 1,
+      "elapsedS": 7.001646000018809,
+      "loadBefore": [
+        6.68994140625,
+        11.94580078125,
+        13.31396484375
+      ],
+      "loadAfter": [
+        6.58984375,
+        11.74951171875,
+        13.22802734375
+      ],
+      "pid": 86771,
+      "processGroup": 86771,
+      "stdoutSha256": "49a548691e4f3ee08d1fe3d585f123e95b56def8c538dff9b98deb57b89f6266",
+      "reportSha256": "a016a48d2a0bb3e262a305344b4efcd0fae09ae40e40e38701fdad659efb025a",
+      "waitedPid": 86771,
+      "processGroupAfterWait": [],
+      "processGroupReaped": true,
+      "expectedOutcomeObserved": true,
+      "expectedFailureNames": [
+        "firstPlayedCharacterEntrySpark for enemy gives no never-entered Prevented card a gain or later effect-entry promise",
+        "firstPlayedCharacterEntrySpark for player gives no never-entered Prevented card a gain or later effect-entry promise"
+      ],
+      "actualAssertions": [
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player gives no never-entered Prevented card a gain or later effect-entry promise",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected { id: 'i1', printing: { \u2026(2) }, \u2026(7) } to match object { zone: 'void', \u2026(1) }\n(19 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/expect/dist/index.js:1278:10)\n    at Proxy.<anonymous> (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/expect/dist/index.js:1151:15)\n    at Proxy.methodWrapper (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/chai/index.js:1700:25)\n    at /Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts:207:50\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:296:11\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1258:26\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1681:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1678:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1660:20"
+          ]
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy gives no never-entered Prevented card a gain or later effect-entry promise",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected { id: 'i22', printing: { \u2026(2) }, \u2026(7) } to match object { zone: 'void', \u2026(1) }\n(19 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/expect/dist/index.js:1278:10)\n    at Proxy.<anonymous> (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/expect/dist/index.js:1151:15)\n    at Proxy.methodWrapper (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/chai/index.js:1700:25)\n    at /Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts:207:50\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:296:11\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1258:26\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1681:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1678:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1660:20"
+          ]
+        }
+      ],
+      "sourceUnchangedDuringCheck": true,
+      "cleanup": {
+        "events": [
+          {
+            "at": "2026-10-15T05:24:24.897746+00:00",
+            "action": "natural-grace",
+            "membersBefore": []
+          }
+        ],
+        "membersAfter": [],
+        "directChildWaited": true,
+        "absent": true
+      },
+      "rawReceipt": "counterfactuals-1792041847037328000/play-time-gain/receipt.json",
+      "rawReceiptSha256": "838052c784511d38d70c9a11e318c0389c4f315d4adbdd0312f62da7293751c4",
+      "sourceEpochBeforeSha256": "ddeede5fd349d699cc5528fc6520ff73bdd5e82f11d5eb3b68992b86dc96d9e0",
+      "sourceEpochAfterSha256": "ddeede5fd349d699cc5528fc6520ff73bdd5e82f11d5eb3b68992b86dc96d9e0",
+      "sourceUnchanged": true
+    },
+    "post-materialization-gain": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "firstPlayedCharacterEntrySpark.*selects\\ actual\\ first\\ character\\ play\\ after\\ event\\ and\\ nonplayed\\ entries,\\ before\\ materialization\\ observers",
+        "--reporter=json",
+        "--outputFile",
+        "/tmp/624-validation/counterfactuals-1792041847037328000/post-materialization-gain/vitest.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:24:25.485123+00:00",
+      "ended": "2026-10-15T05:24:32.569554+00:00",
+      "exitCode": 1,
+      "elapsedS": 6.9723753340076655,
+      "loadBefore": [
+        6.58984375,
+        11.74951171875,
+        13.22802734375
+      ],
+      "loadAfter": [
+        6.38232421875,
+        11.62060546875,
+        13.173828125
+      ],
+      "pid": 87352,
+      "processGroup": 87352,
+      "stdoutSha256": "4be8cd5e8034a32e4aeb9749b892bfb3842afc38a455d5db2b6079782137ccd1",
+      "reportSha256": "9c7bf42e27c35bdfac60b243a19749b77d421f5af9ab7e8a70d364f7af467a98",
+      "waitedPid": 87352,
+      "processGroupAfterWait": [],
+      "processGroupReaped": true,
+      "expectedOutcomeObserved": true,
+      "expectedFailureNames": [
+        "firstPlayedCharacterEntrySpark for enemy selects actual first character play after event and nonplayed entries, before materialization observers",
+        "firstPlayedCharacterEntrySpark for player selects actual first character play after event and nonplayed entries, before materialization observers"
+      ],
+      "actualAssertions": [
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player selects actual first character play after event and nonplayed entries, before materialization observers",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected 1 to be 11 // Object.is equality\n    at /Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts:125:44\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:296:11\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1258:26\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1681:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1678:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1660:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1627:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:2309:64"
+          ]
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy selects actual first character play after event and nonplayed entries, before materialization observers",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected 1 to be 11 // Object.is equality\n    at /Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts:125:44\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:296:11\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1258:26\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1681:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1678:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1660:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1627:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:2309:64"
+          ]
+        }
+      ],
+      "sourceUnchangedDuringCheck": true,
+      "cleanup": {
+        "events": [
+          {
+            "at": "2026-10-15T05:24:32.529952+00:00",
+            "action": "natural-grace",
+            "membersBefore": []
+          }
+        ],
+        "membersAfter": [],
+        "directChildWaited": true,
+        "absent": true
+      },
+      "rawReceipt": "counterfactuals-1792041847037328000/post-materialization-gain/receipt.json",
+      "rawReceiptSha256": "7f9491c3dba74443cc80129f61531321de9900b00d6513e95dd363cb87045729",
+      "sourceEpochBeforeSha256": "595805de86dfbd2e7ab88d76d3ddb96a2ace384462176f8561d5f8daff180fb7",
+      "sourceEpochAfterSha256": "595805de86dfbd2e7ab88d76d3ddb96a2ace384462176f8561d5f8daff180fb7",
+      "sourceUnchanged": true
+    },
+    "repeat-entry-identity-only": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "firstPlayedCharacterEntrySpark.*retains\\ gains\\ through\\ source\\ departure\\ and\\ reentry\\ without\\ repeating\\ on\\ same\\-turn\\ replay\\ or\\ rematerialize",
+        "--reporter=json",
+        "--outputFile",
+        "/tmp/624-validation/counterfactuals-1792041847037328000/repeat-entry-identity-only/vitest.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:24:33.121129+00:00",
+      "ended": "2026-10-15T05:24:40.560879+00:00",
+      "exitCode": 1,
+      "elapsedS": 7.328908083029091,
+      "loadBefore": [
+        6.38232421875,
+        11.62060546875,
+        13.173828125
+      ],
+      "loadAfter": [
+        6.310546875,
+        11.43408203125,
+        13.08935546875
+      ],
+      "pid": 87944,
+      "processGroup": 87944,
+      "stdoutSha256": "43d77caddb306d6a043d74892706ff36dec4137cbb2c8e9ae363160ef5feb3ec",
+      "reportSha256": "fe1c82046ebfe397228192a6089c7dd1a99b7de47781317ae466497a46d6af86",
+      "waitedPid": 87944,
+      "processGroupAfterWait": [],
+      "processGroupReaped": true,
+      "expectedOutcomeObserved": true,
+      "expectedFailureNames": [
+        "firstPlayedCharacterEntrySpark for enemy retains gains through source departure and reentry without repeating on same-turn replay or rematerialize",
+        "firstPlayedCharacterEntrySpark for player retains gains through source departure and reentry without repeating on same-turn replay or rematerialize"
+      ],
+      "actualAssertions": [
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player retains gains through source departure and reentry without repeating on same-turn replay or rematerialize",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected [ { kind: 'sparkGained', \u2026(5) } ] to deeply equal []\n    at /Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts:235:36\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:296:11\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1258:26\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1681:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1678:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1660:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1627:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:2309:64"
+          ]
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy retains gains through source departure and reentry without repeating on same-turn replay or rematerialize",
+          "status": "failed",
+          "failureMessages": [
+            "AssertionError: expected [ { kind: 'sparkGained', \u2026(5) } ] to deeply equal []\n    at /Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts:235:36\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:296:11\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1258:26\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1681:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1678:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1660:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:1627:10)\n    at file:///Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root/node_modules/@vitest/runner/dist/index.js:2309:64"
+          ]
+        }
+      ],
+      "sourceUnchangedDuringCheck": true,
+      "cleanup": {
+        "events": [
+          {
+            "at": "2026-10-15T05:24:40.518548+00:00",
+            "action": "natural-grace",
+            "membersBefore": []
+          }
+        ],
+        "membersAfter": [],
+        "directChildWaited": true,
+        "absent": true
+      },
+      "rawReceipt": "counterfactuals-1792041847037328000/repeat-entry-identity-only/receipt.json",
+      "rawReceiptSha256": "862473df25965c1d26cade10fa8edaf5e6ba9e470809d0acace85c3555dbf924",
+      "sourceEpochBeforeSha256": "c92e50d3aea4b7479d850cd041816ba304d59fb6edfc5882e61ebb9b88f35749",
+      "sourceEpochAfterSha256": "c92e50d3aea4b7479d850cd041816ba304d59fb6edfc5882e61ebb9b88f35749",
+      "sourceUnchanged": true
+    },
+    "restored-focused": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "firstPlayedCharacterEntrySpark",
+        "--reporter=json",
+        "--outputFile",
+        "/tmp/624-validation/counterfactuals-1792041847037328000/restored-focused/vitest.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "workers": 2,
+      "started": "2026-10-15T05:24:48.862453+00:00",
+      "ended": "2026-10-15T05:24:56.178386+00:00",
+      "exitCode": 0,
+      "elapsedS": 7.201478541013785,
+      "loadBefore": [
+        6.28564453125,
+        11.34375,
+        13.04736328125
+      ],
+      "loadAfter": [
+        6.228515625,
+        11.1669921875,
+        12.96435546875
+      ],
+      "pid": 89462,
+      "processGroup": 89462,
+      "stdoutSha256": "c2331372fc77bd1afc2ec9f7aa9da918aa44cfff662b46da6fa4cb975adb26a1",
+      "reportSha256": "d5c373d31d415680c658437081c1588cb07fea1e267a656bd23e3806bf6a8836",
+      "waitedPid": 89462,
+      "processGroupAfterWait": [],
+      "processGroupReaped": true,
+      "expectedOutcomeObserved": true,
+      "actualAssertions": [
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player selects actual first character play after event and nonplayed entries, before materialization observers",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player adds each occurrence's amount using actual source variant and retains ordinary base/additive layers",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player uses captured effective character type after deck changes, never a printed event ordinal",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player reads live functional sources and conditions at original entry, without an at-play promise",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player snapshots all source conditions and causal observers before the first contribution",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player applies source control and functional-zone applicability to the acting controller",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player qualifies an opponent-owned hand card by its actual playing controller",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player gives no never-entered Prevented card a gain or later effect-entry promise",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player excludes the created stack copy but includes a created hand card genuinely played first",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player retains gains through source departure and reentry without repeating on same-turn replay or rematerialize",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player retains physical gains after control transfer and excludes them from a nonplayed figment copy",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player keeps both players' counts separate on opponent turns and renews a real replay on a normal and extra turn",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player rejects full plays atomically and does not defer an original entry that loses its last slot",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player preserves pending entry, gained spark and second-play exclusion through clone/save/view sampling",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player keeps an anonymous concealed first-play ordinal without selecting a newly created replacement",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player cancels real payment choices, reloads, rejects stale/wrong-side/concurrent answers, and commits one gain",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player reloads a materialization observer prompt after the entry gain was committed without gaining or logging twice",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player keeps committed entry once when a subsequent observer errors and rejects static instructions in current/history saves",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player freezes causal privacy at entry and logs exact source occurrences while preserving ordinary gain events",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for player keeps zero inert and refuses invalid authored amounts before any play",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy selects actual first character play after event and nonplayed entries, before materialization observers",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy adds each occurrence's amount using actual source variant and retains ordinary base/additive layers",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy uses captured effective character type after deck changes, never a printed event ordinal",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy reads live functional sources and conditions at original entry, without an at-play promise",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy snapshots all source conditions and causal observers before the first contribution",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy applies source control and functional-zone applicability to the acting controller",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy qualifies an opponent-owned hand card by its actual playing controller",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy gives no never-entered Prevented card a gain or later effect-entry promise",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy excludes the created stack copy but includes a created hand card genuinely played first",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy retains gains through source departure and reentry without repeating on same-turn replay or rematerialize",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy retains physical gains after control transfer and excludes them from a nonplayed figment copy",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy keeps both players' counts separate on opponent turns and renews a real replay on a normal and extra turn",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy rejects full plays atomically and does not defer an original entry that loses its last slot",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy preserves pending entry, gained spark and second-play exclusion through clone/save/view sampling",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy keeps an anonymous concealed first-play ordinal without selecting a newly created replacement",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy cancels real payment choices, reloads, rejects stale/wrong-side/concurrent answers, and commits one gain",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy reloads a materialization observer prompt after the entry gain was committed without gaining or logging twice",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy keeps committed entry once when a subsequent observer errors and rejects static instructions in current/history saves",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy freezes causal privacy at entry and logs exact source occurrences while preserving ordinary gain events",
+          "status": "passed",
+          "failureMessages": []
+        },
+        {
+          "fullName": "firstPlayedCharacterEntrySpark for enemy keeps zero inert and refuses invalid authored amounts before any play",
+          "status": "passed",
+          "failureMessages": []
+        }
+      ],
+      "sourceUnchangedDuringCheck": true,
+      "cleanup": {
+        "events": [
+          {
+            "at": "2026-10-15T05:24:56.136775+00:00",
+            "action": "natural-grace",
+            "membersBefore": []
+          }
+        ],
+        "membersAfter": [],
+        "directChildWaited": true,
+        "absent": true
+      },
+      "rawReceipt": "counterfactuals-1792041847037328000/restored-focused/receipt.json",
+      "rawReceiptSha256": "aa1f969cc44c204de9cb9d724c2ad0cce10f2a8500d9e1bdd03663fcd5d03ae7",
+      "sourceEpochBeforeSha256": "0412c3b55ac9697cd8f4213e5f814bec3b5e3320c0a830b30efdf265b9f044bd",
+      "sourceEpochAfterSha256": "0412c3b55ac9697cd8f4213e5f814bec3b5e3320c0a830b30efdf265b9f044bd",
+      "sourceUnchanged": true
+    },
+    "schema-1": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "started": "2026-10-15T05:32:26.223873+00:00",
+      "ended": "2026-10-15T05:32:26.363246+00:00",
+      "exitCode": 0,
+      "elapsedS": 0.138609790999908,
+      "loadBefore": [
+        8.314453125,
+        9.828125,
+        11.68359375
+      ],
+      "loadAfter": [
+        8.314453125,
+        9.828125,
+        11.68359375
+      ],
+      "pid": 41280,
+      "processGroup": 41280,
+      "stdoutSha256": "77abf63dcc69dd2482d8ec470b3e0ffd1830fbfd58408618643d339a18abf4b2",
+      "rawReceipt": "schema-1-1792042346223794000/receipt.json",
+      "rawReceiptSha256": "4264d6fdbe9a100b40c9ffd07f78e801881bc77ef4f687f2586d61b7b769a10d",
+      "sourceUnchanged": true,
+      "qualification": "Lightweight metadata/schema or owned-path whitespace check; subsequent metadata-only evidence refresh remains pending final Git admission."
+    },
+    "whitespace-1": {
+      "argv": [
+        "python3",
+        "-c",
+        "import pathlib,json,sys\npaths=json.loads(sys.argv[1]); failures=[]\nfor path in paths:\n data=pathlib.Path(path).read_bytes()\n if not data.endswith(b\"\\n\"): failures.append(path+\": missing final newline\")\n for number,line in enumerate(data.splitlines(),1):\n  if line.rstrip(b\" \\t\")!=line: failures.append(path+\":\"+str(number)+\": trailing whitespace\")\nprint(json.dumps({\"checkedPaths\":len(paths),\"failures\":failures}))\nsys.exit(1 if failures else 0)\n",
+        "[\"docs/rules.md\", \"src/engine/continuous/layers.ts\", \"src/engine/effects/primitives/index.ts\", \"src/engine/effects/registry.ts\", \"src/engine/events/kinds/spark-gained.ts\", \"src/engine/log.ts\", \"src/engine/loops/event-copy-continuation.ts\", \"src/engine/rules/floating.ts\", \"src/engine/rules/turn-log.ts\", \"src/engine/rules/zones.ts\", \"src/engine/state/types.ts\", \"src/rules/battle/fold.ts\", \"src/runtime/battle-prompt-messages.ts\", \"docs/plan/evidence/rules-decisions/RD-hv-umm2.624-1.md\", \"src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts\", \"src/engine/effects/primitives/first-played-entry-spark.ts\", \"docs/plan/evidence/friction/hv-umm2.624.json\", \"docs/plan/evidence/measurements/hv-umm2.624.json\", \"docs/plan/evidence/measurements/hv-umm2.624.md\"]"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+      "started": "2026-10-15T05:32:45.095692+00:00",
+      "ended": "2026-10-15T05:32:45.130740+00:00",
+      "exitCode": 0,
+      "elapsedS": 0.035054792009759694,
+      "loadBefore": [
+        8.34619140625,
+        9.740234375,
+        11.60888671875
+      ],
+      "loadAfter": [
+        8.34619140625,
+        9.740234375,
+        11.60888671875
+      ],
+      "pid": 44535,
+      "processGroup": 44535,
+      "stdoutSha256": "80b49492e15a5e49a0df4651922d475483cdb048327f833ad9deab22fa980411",
+      "rawReceipt": "whitespace-1-1792042365095159000/receipt.json",
+      "rawReceiptSha256": "0204fed42fce09d75d547168f2023f16a55baec8e4f486a42f7db8021d0a88b7",
+      "sourceUnchanged": true,
+      "qualification": "Lightweight metadata/schema or owned-path whitespace check; subsequent metadata-only evidence refresh remains pending final Git admission."
+    }
+  },
+  "counterfactuals": {
+    "rawSummary": "counterfactuals-1792041847037328000/summary.json",
+    "rawSummarySha256": "b75058a264f2b1485a4379a2c5df426c0861f0887a1dcf8bf3121cc4bfb0e8fd",
+    "successful": true,
+    "families": [
+      {
+        "name": "first-materialization-substitution",
+        "title": "selects actual first character play after event and nonplayed entries, before materialization observers",
+        "causalReason": "Earlier real nonplayed figment materialization incorrectly consumes eligibility; first actual character must still gain.",
+        "intendedBothActorAssertionFailures": true,
+        "all5412Restored": true
+      },
+      {
+        "name": "play-time-gain",
+        "title": "gives no never-entered Prevented card a gain or later effect-entry promise",
+        "causalReason": "Actual never-entered prevented card incorrectly receives gain at play commitment; expected void gainedSpark0 fails.",
+        "intendedBothActorAssertionFailures": true,
+        "all5412Restored": true
+      },
+      {
+        "name": "post-materialization-gain",
+        "title": "selects actual first character play after event and nonplayed entries, before materialization observers",
+        "causalReason": "Materialization matching sees prior spark2 and misses >=3 observer; queue score/order assertions distinguish required pre-match application.",
+        "intendedBothActorAssertionFailures": true,
+        "all5412Restored": true
+      },
+      {
+        "name": "repeat-entry-identity-only",
+        "title": "retains gains through source departure and reentry without repeating on same-turn replay or rematerialize",
+        "causalReason": "Keeping first physical identity but dropping stack-visit and occurrence guards wrongly grants again on same-turn replay or effect reentry; rematerialize uses its separate untouched path and is not the causal mutant.",
+        "intendedBothActorAssertionFailures": true,
+        "all5412Restored": true
+      },
+      {
+        "name": "lifetime-consumed-allowance",
+        "title": "keeps both players' counts separate on opponent turns and renews a real replay on a normal and extra turn",
+        "causalReason": "Treating retained gain as a lifetime consumed allowance incorrectly blocks the same physical original play in a fresh turn; expected spark4 is3.",
+        "intendedBothActorAssertionFailures": true,
+        "all5412Restored": true
+      }
+    ],
+    "restoredFocusedGreen": true,
+    "qualification": "Exact intended player and enemy AssertionErrors in each of five separate mutants; runtime/import/caller errors do not count. Mutant4 distinguishes same-turn replay/effect reentry; rematerialize uses its untouched separate route. Every temporary file is restored after its own process group has settled."
+  },
+  "failureAttempts": {
+    "typecheck-1": "Terminal2 on private fixture API typing: stack selector needed kind, branded subtype parser, functional zone any. Corrected only private synthetic fixtures.",
+    "review-1": "Terminal1 on private module-level mutable InlineSource fixture. Related9415/308 passed. Replaced answer source with per-operation factory; review-2 is fully green.",
+    "qualification": "All failed outputs, command arguments, timing, source epochs and terminal statuses are retained; no failure is reported as an accepted pass."
+  },
+  "fullValidation": {
+    "tests": 10424,
+    "testFiles": 389,
+    "actualTerminal": 0,
+    "justification": "Cross-cutting optional entrySpark provenance/redaction and reconstructible logging.",
+    "command": [
+      "/usr/bin/lockf",
+      "-k",
+      "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "/opt/homebrew/bin/npm",
+      "run",
+      "review:full"
+    ],
+    "callerSha256": "3c10dee7e863f8e8d6d47910a8bb242fe0b13ba5304c7e1c1f466d3561f5c0e8",
+    "lockInclusiveWallSeconds": 117.3077862909995,
+    "firstPrepareMarkerAt": "2026-10-15T05:28:31.209Z",
+    "timingQualification": "Elapsed host wall time includes lock wait, startup, validation and cleanup; no benchmark. First prepare marker follows acquisition and startup and cannot isolate lock wait.",
+    "allSourceInputsUnchanged": true,
+    "reportedSyntheticServerIds": {
+      "startup": [
+        65281,
+        65468,
+        65851,
+        65974,
+        66622,
+        66668,
+        67284,
+        67400,
+        67618,
+        68053,
+        68342,
+        68722,
+        69429,
+        69554,
+        69645,
+        70219,
+        70506,
+        70887,
+        71538,
+        71682,
+        71774,
+        72385,
+        72504,
+        73652,
+        73947,
+        74690,
+        75778,
+        76106,
+        76746,
+        76832,
+        77596,
+        77916,
+        78052,
+        78208,
+        78800,
+        78945,
+        79735,
+        79917,
+        80140,
+        80391,
+        81102,
+        81235,
+        81722,
+        81895,
+        82017,
+        82715,
+        82890,
+        83107,
+        85419,
+        86048,
+        88812,
+        89256,
+        90726,
+        91408,
+        91967,
+        94693,
+        95117
+      ],
+      "cleanup": [
+        65281,
+        65468,
+        65851,
+        65974,
+        66622,
+        66668,
+        67284,
+        67400,
+        67618,
+        68053,
+        68342,
+        68722,
+        69429,
+        69554,
+        69645,
+        70219,
+        70506,
+        70887,
+        71538,
+        71682,
+        71774,
+        72385,
+        72504,
+        73652,
+        73947,
+        74690,
+        75778,
+        76106,
+        76746,
+        76832,
+        77596,
+        77916,
+        78052,
+        78208,
+        78800,
+        78945,
+        79735,
+        79917,
+        80140,
+        80391,
+        81102,
+        81235,
+        81722,
+        81895,
+        82017,
+        82715,
+        82890,
+        83107,
+        83944,
+        85419,
+        88812,
+        89256,
+        90726,
+        91408,
+        91967,
+        94693,
+        95117
+      ],
+      "union": [
+        65281,
+        65468,
+        65851,
+        65974,
+        66622,
+        66668,
+        67284,
+        67400,
+        67618,
+        68053,
+        68342,
+        68722,
+        69429,
+        69554,
+        69645,
+        70219,
+        70506,
+        70887,
+        71538,
+        71682,
+        71774,
+        72385,
+        72504,
+        73652,
+        73947,
+        74690,
+        75778,
+        76106,
+        76746,
+        76832,
+        77596,
+        77916,
+        78052,
+        78208,
+        78800,
+        78945,
+        79735,
+        79917,
+        80140,
+        80391,
+        81102,
+        81235,
+        81722,
+        81895,
+        82017,
+        82715,
+        82890,
+        83107,
+        83944,
+        85419,
+        86048,
+        88812,
+        89256,
+        90726,
+        91408,
+        91967,
+        94693,
+        95117
+      ]
+    },
+    "reportedAndObservedGroupUnion": [
+      62716,
+      65281,
+      65468,
+      65851,
+      65974,
+      66622,
+      66668,
+      67284,
+      67400,
+      67618,
+      68053,
+      68342,
+      68722,
+      69429,
+      69554,
+      69645,
+      70219,
+      70506,
+      70887,
+      71538,
+      71682,
+      71774,
+      72385,
+      72504,
+      73652,
+      73947,
+      74690,
+      75778,
+      76106,
+      76746,
+      76832,
+      77596,
+      77916,
+      78052,
+      78208,
+      78800,
+      78945,
+      79735,
+      79917,
+      80140,
+      80391,
+      81102,
+      81235,
+      81722,
+      81895,
+      82017,
+      82715,
+      82890,
+      83107,
+      83944,
+      85419,
+      86048,
+      88812,
+      89256,
+      90726,
+      91408,
+      91967,
+      94693,
+      95117
+    ],
+    "remainingGroupUnionMembers": [],
+    "remainingReportedServerPids": [],
+    "remainingObservedIdentities": [],
+    "ownGroupCleanup": {
+      "events": [
+        {
+          "at": "2026-10-15T05:30:28.207269+00:00",
+          "action": "natural-grace",
+          "membersBefore": []
+        }
+      ],
+      "membersAfter": [],
+      "directChildWaited": true
+    },
+    "syntheticResourcesQualification": "Full suite owns synthetic temporary server/provider transport harnesses. Reported server IDs may be logical adapter group IDs; observed actual OS identities and own group are recorded separately. This is not player-workflow browser QA."
+  },
+  "hostLoadSamples": {
+    "affected-1-1792041348874722000": {
+      "start": [
+        20.04296875,
+        17.3955078125,
+        14.853515625
+      ],
+      "end": [
+        16.83740234375,
+        16.8623046875,
+        14.734375
+      ]
+    },
+    "focused-1-1792041327922823000": {
+      "start": [
+        20.83740234375,
+        17.27880859375,
+        14.73779296875
+      ],
+      "end": [
+        20.6376953125,
+        17.33837890625,
+        14.78759765625
+      ]
+    },
+    "full-1-1792042110945322000": {
+      "start": [
+        7.70556640625,
+        10.84375,
+        12.5283203125
+      ],
+      "end": [
+        10.2919921875,
+        10.53125,
+        12.1728515625
+      ]
+    },
+    "knip-1-1792041658134291000": {
+      "start": [
+        19.83984375,
+        15.9423828125,
+        14.70166015625
+      ],
+      "end": [
+        20.23583984375,
+        16.14404296875,
+        14.78662109375
+      ]
+    },
+    "review-1-1792041427485342000": {
+      "start": [
+        12.03466796875,
+        15.5791015625,
+        14.380859375
+      ],
+      "end": [
+        14.30419921875,
+        15.5615234375,
+        14.4931640625
+      ]
+    },
+    "review-2-1792041555513833000": {
+      "start": [
+        10.44677734375,
+        14.3369140625,
+        14.09423828125
+      ],
+      "end": [
+        17.4013671875,
+        15.14697265625,
+        14.39111328125
+      ]
+    },
+    "typecheck-1-1792041284875482000": {
+      "start": [
+        15.7197265625,
+        16.03564453125,
+        14.20166015625
+      ],
+      "end": [
+        16.93212890625,
+        16.2783203125,
+        14.330078125
+      ]
+    },
+    "first-materialization-substitution": {
+      "start": [
+        6.81591796875,
+        12.14892578125,
+        13.40087890625
+      ],
+      "end": [
+        6.68994140625,
+        11.94580078125,
+        13.31396484375
+      ]
+    },
+    "lifetime-consumed-allowance": {
+      "start": [
+        6.310546875,
+        11.43408203125,
+        13.08935546875
+      ],
+      "end": [
+        6.28564453125,
+        11.34375,
+        13.04736328125
+      ]
+    },
+    "play-time-gain": {
+      "start": [
+        6.68994140625,
+        11.94580078125,
+        13.31396484375
+      ],
+      "end": [
+        6.58984375,
+        11.74951171875,
+        13.22802734375
+      ]
+    },
+    "post-materialization-gain": {
+      "start": [
+        6.58984375,
+        11.74951171875,
+        13.22802734375
+      ],
+      "end": [
+        6.38232421875,
+        11.62060546875,
+        13.173828125
+      ]
+    },
+    "repeat-entry-identity-only": {
+      "start": [
+        6.38232421875,
+        11.62060546875,
+        13.173828125
+      ],
+      "end": [
+        6.310546875,
+        11.43408203125,
+        13.08935546875
+      ]
+    },
+    "restored-focused": {
+      "start": [
+        6.28564453125,
+        11.34375,
+        13.04736328125
+      ],
+      "end": [
+        6.228515625,
+        11.1669921875,
+        12.96435546875
+      ]
+    },
+    "schema-1": {
+      "start": [
+        8.314453125,
+        9.828125,
+        11.68359375
+      ],
+      "end": [
+        8.314453125,
+        9.828125,
+        11.68359375
+      ]
+    },
+    "whitespace-1": {
+      "start": [
+        8.34619140625,
+        9.740234375,
+        11.60888671875
+      ],
+      "end": [
+        8.34619140625,
+        9.740234375,
+        11.60888671875
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Ordinary review-2 typecheck step starting2026-10-15T05:19:17.254Z, recorded one-minute load10.44677734375. Wrapper and all other samples retained separately."
+      }
+    }
+  },
+  "publicContractCasesPerActor": [
+    "selects actual first character play after event and nonplayed entries, before materialization observers",
+    "adds each occurrence's amount using actual source variant and retains ordinary base/additive layers",
+    "uses captured effective character type after deck changes, never a printed event ordinal",
+    "reads live functional sources and conditions at original entry, without an at-play promise",
+    "snapshots all source conditions and causal observers before the first contribution",
+    "applies source control and functional-zone applicability to the acting controller",
+    "qualifies an opponent-owned hand card by its actual playing controller",
+    "gives no never-entered Prevented card a gain or later effect-entry promise",
+    "excludes the created stack copy but includes a created hand card genuinely played first",
+    "retains gains through source departure and reentry without repeating on same-turn replay or rematerialize",
+    "retains physical gains after control transfer and excludes them from a nonplayed figment copy",
+    "keeps both players' counts separate on opponent turns and renews a real replay on a normal and extra turn",
+    "rejects full plays atomically and does not defer an original entry that loses its last slot",
+    "preserves pending entry, gained spark and second-play exclusion through clone/save/view sampling",
+    "keeps an anonymous concealed first-play ordinal without selecting a newly created replacement",
+    "cancels real payment choices, reloads, rejects stale/wrong-side/concurrent answers, and commits one gain",
+    "reloads a materialization observer prompt after the entry gain was committed without gaining or logging twice",
+    "keeps committed entry once when a subsequent observer errors and rejects static instructions in current/history saves",
+    "freezes causal privacy at entry and logs exact source occurrences while preserving ordinary gain events",
+    "keeps zero inert and refuses invalid authored amounts before any play"
+  ],
+  "failurePaths": {
+    "entryFailure": "Real competing play trigger fills last back slot; original resolves to void with gainedSpark0. Full play rejection is atomic; later effect entry has no deferred gain. Actual Prevented first card remains ungranted and occupies its ordinal.",
+    "partialWriteError": "Before-input state hash proves a subsequent materialization observer error preserves input. The committed entry gain remains once across cold retry of the failing observer.",
+    "reloadReplay": "Pending original stack, permanent gained values and concealed captured ordinal survive serialize/clone/view/determinize and cold fold continuation. Valid baseline current/history saves pass before forged static-only floating descriptors are rejected.",
+    "refusalCancelConcurrency": "Actual discard additional-cost prompt: cancel, cold reload, wrong actor, invalid/stale input and competing answer branches preserve committed state; valid branch commits once. Post-entry optional observer prompt reload/refusal preserves already committed gain.",
+    "lifetime": "Same physical ID retains permanent gain across source departure/zones/control and receives a fresh grant only when genuinely first played in a later normal or extra turn. Created stack copy and nonplayed figment-copy entries do not gain; copiable spark excludes gained spark."
+  },
+  "privacy": "Trusted own logs reconstruct instance/source/ability/controller/amount/expiry. Every contribution and combined causal observer is snapshotted before first gain. Hidden-source provenance stays null for unobserving viewers after later reveal; ordinary spark event shape/seenBy/empty log behavior is checked unchanged.",
+  "qaApplicability": {
+    "workflowBrowserRun": false,
+    "reason": "Production Silver Key consumer remains pending and is read-only for this capability. The own new UI arm is static-only null and adds no prompt, copy or visible interaction. Public synthetic fold/view/replay contracts and full suite cover the actual capability.",
+    "retainedConsumerAcceptance": "Original hv-umm2.255 retains immutable UUID authoring, complete recipe, weighted300/preflight/sweep/D20/D21/coverage/browser and final acceptance joins. No fake consumer, lab driver or browser pass is claimed.",
+    "localProductionFuzzQuota": null,
+    "releaseFuzzRetained": true,
+    "directServersBrowsersProviders": []
+  },
+  "resources": {
+    "workers": 2,
+    "primaryHeavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "fullAttempts": 1,
+    "artificialLockWaitTimeout": null,
+    "checkProcessesSerial": true,
+    "allDiagnosticsWaitedAndGroupsAbsent": true,
+    "all58SyntheticReportedIdsAbsent": true,
+    "rawSamplesRetained": true,
+    "parentOrdinaryGroupAudit": "624-parent-ordinary-audit.json",
+    "parentDiagnosticAudit": "624-parent-diagnostic-verification.json",
+    "allReportedAndObserved59GroupsAbsent": true,
+    "parentFullAudit": "624-parent-full-verification.json"
+  },
+  "receipts": {
+    "liveDirectory": "/tmp/624-validation",
+    "primaryArchive": "artifacts/qa/hv-umm2.624/receipts/helper/validation/",
+    "allFailuresRetained": true,
+    "sourceManifest": "624-stage1-source-manifest.json",
+    "proposal": "624-stage1-proposal.md",
+    "diagnosticPlan": "624-counterfactual-plan.json",
+    "diagnosticCaller": "624-counterfactuals.py",
+    "heavyCaller": "624-heavy.py",
+    "archiveVerifiedByParent": true,
+    "parentProofs": "artifacts/qa/hv-umm2.624/receipts/parent/"
+  },
+  "newPreExistingIssues": [],
+  "integration": {
+    "originalSourceOID": "d73b61f03b683bacc8286bbfe61bd6382bf0a585",
+    "originalBase": "29f6decf5ff6fbaf5ca8a6a3551de68b6a1074ff",
+    "originalImplementationCutoff": {
+      "at": "2026-10-15T05:37:47.888193+00:00",
+      "inclusiveMinutes": 46.86951988333333,
+      "qualification": "Precommit evidence cutoff; refresh immediately before the one normal automatic-date commit after parent final-package ACK. External final Git receipt supplies exact commit endpoint; no postcommit tracked rewrite."
+    },
+    "activeBase": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+    "checkpointAfterNativeUpdate": "256a440b3c3dcb67699e6b8046d6815b6ac94869",
+    "failedCandidate": "01a13e14-2d3a-79e0-9570-ae7d6279112c",
+    "failedCandidateTerminalState": "merge-conflict, never authorized; cancellation already-terminal",
+    "conflictingPath": "src/runtime/battle-prompt-messages.ts",
+    "method": "Workflow clean rollback, exact one-line own nullcase parked in a temporary checkpoint, owning tg --no-launch update, exact reapply preserving Offering peer nullcase; no raw Git rebase or new branch.",
+    "ownedDeltaEquivalence": "All19 task added/deleted line sequences exactly match original source before integration evidence metadata; gameplay implementation and contracts unchanged.",
+    "combinedFunctionalHashes": {
+      "docs/rules.md": "c0afdc4a7dd5601e4cb14aa3aaa554d2f0cd0b21c2cefe190127fc6f59d8b4f6",
+      "src/engine/continuous/layers.ts": "ba9cd00560472d167a6eb11c63be7d40d43c51b22168e9031394823d84563953",
+      "src/engine/effects/primitives/index.ts": "51ef64e977dc7f35ebe10c4059da943772d8a02955af10af0b6274d16963e013",
+      "src/engine/effects/registry.ts": "f7ede21512be8713bb319be3c52a17a963a67a171bb6cf99d793357b56f28e7d",
+      "src/engine/events/kinds/spark-gained.ts": "125035924f3191012b181bd94bd1432e0d884f590d3fb7f52639baac0c23f8d0",
+      "src/engine/log.ts": "2c057e596047e602a9a6799c68eabff9f554d81956b14c98027749e99df355c1",
+      "src/engine/loops/event-copy-continuation.ts": "c5844080e18f411d19829970dec0d61e8f004be283ff77154200b85a3f7e72ab",
+      "src/engine/rules/floating.ts": "539f01f332553bbc913bf2b2a60905ffaa0057263b4664eacd8b415e8d137d33",
+      "src/engine/rules/turn-log.ts": "500750f250bdcaff681a82d2f296aad03a847ee4cb0c6cef495950a53077357a",
+      "src/engine/rules/zones.ts": "f14f506cb8e1f53c8c070cccc9dd770ab7c62847dea17e667b2753033c914338",
+      "src/engine/state/types.ts": "dc86475a9755584bd09497e0544e32d014f75e7ddfe1ee22ff3c53952da6a9ce",
+      "src/rules/battle/fold.ts": "a602fd0b3102339594bc7ce65dd07cd0261183af06dbee4372697f0dce339499",
+      "src/runtime/battle-prompt-messages.ts": "2d897c7bb274c1e1fcdce7989ca016d6cad1f79a4163f2615c98d6f7c9cc3e2e",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.624-1.md": "6bce67a36342bb85f0e634e2b0d19dbc744313519434354fce0f727132833cd0",
+      "src/engine/effects/primitives/contracts/first-played-entry-spark.contracts.ts": "daeabf1326b8d8a5b2940d00f209c3340fb45ec6751282f1cc89dae601a9f0bf",
+      "src/engine/effects/primitives/first-played-entry-spark.ts": "e750edd9565c3ef1ffe32acf2abfe88678e4e5028b2f6d240905aa5bbf476614"
+    },
+    "checks": {
+      "focused": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "firstPlayedCharacterEntrySpark"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+        "started": "2026-10-15T05:45:29.755548+00:00",
+        "loadBefore": [
+          16.5849609375,
+          11.9775390625,
+          11.5419921875
+        ],
+        "workers": 2,
+        "sourceCount": 5452,
+        "sourceBeforeMapSHA": "e925fc4934cef28bfad1fdd87cf82ee39b51a41d4acc9c47d04c69306162cfc0",
+        "pid": 42658,
+        "processGroup": 42658,
+        "state": "terminal",
+        "exitCode": 0,
+        "ended": "2026-10-15T05:45:47.978605+00:00",
+        "elapsedS": 18.21983116696356,
+        "loadAfter": [
+          23.1767578125,
+          13.63330078125,
+          12.138671875
+        ],
+        "sourceUnchanged": true,
+        "sourceAfterMapSHA": "e925fc4934cef28bfad1fdd87cf82ee39b51a41d4acc9c47d04c69306162cfc0",
+        "stdoutSHA": "d1e8ebb2472ea8d2e552a22e4b5a8a3772893b34e926b29dd23b0377b4e36364",
+        "actualChildWait": true,
+        "groupAbsent": true,
+        "rawReceipt": "/tmp/624-integration/focused/receipt.json",
+        "rawReceiptSHA": "935f4c7122d030eddacbc5e51735b469c5fc1021c3b3c193f68b772481aa6755"
+      },
+      "review": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+        "started": "2026-10-15T05:46:00.283942+00:00",
+        "loadBefore": [
+          23.4384765625,
+          14.18310546875,
+          12.36181640625
+        ],
+        "workers": 2,
+        "sourceCount": 5452,
+        "sourceBeforeMapSHA": "e925fc4934cef28bfad1fdd87cf82ee39b51a41d4acc9c47d04c69306162cfc0",
+        "pid": 44794,
+        "processGroup": 44794,
+        "state": "terminal",
+        "exitCode": 0,
+        "ended": "2026-10-15T05:47:23.131275+00:00",
+        "elapsedS": 82.84378887497587,
+        "loadAfter": [
+          20.64697265625,
+          16.2080078125,
+          13.34619140625
+        ],
+        "sourceUnchanged": true,
+        "sourceAfterMapSHA": "e925fc4934cef28bfad1fdd87cf82ee39b51a41d4acc9c47d04c69306162cfc0",
+        "stdoutSHA": "2379d1fd16366b475bb544ba3ac78444dc7ac7bc6a0c344925a155fd75405d1f",
+        "actualChildWait": true,
+        "groupAbsent": true,
+        "rawReceipt": "/tmp/624-integration/review/receipt.json",
+        "rawReceiptSHA": "76c901d0f5c475fc5826aad1a2bf05ff1cfe1aa746d9ecd19af97fc55abb9f22"
+      },
+      "knip": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/first-played-entry-spark-624-root",
+        "started": "2026-10-15T05:47:37.773339+00:00",
+        "loadBefore": [
+          18.1162109375,
+          15.869140625,
+          13.27490234375
+        ],
+        "workers": 2,
+        "sourceCount": 5452,
+        "sourceBeforeMapSHA": "e925fc4934cef28bfad1fdd87cf82ee39b51a41d4acc9c47d04c69306162cfc0",
+        "pid": 8090,
+        "processGroup": 8090,
+        "state": "terminal",
+        "exitCode": 0,
+        "ended": "2026-10-15T05:47:48.901509+00:00",
+        "elapsedS": 11.123756999964826,
+        "loadAfter": [
+          18.4853515625,
+          16.021484375,
+          13.35888671875
+        ],
+        "sourceUnchanged": true,
+        "sourceAfterMapSHA": "e925fc4934cef28bfad1fdd87cf82ee39b51a41d4acc9c47d04c69306162cfc0",
+        "stdoutSHA": "25bec85bfff86fa772f81af7f0cc26baf547cb518b566bdb28ba3ef259a8adbd",
+        "actualChildWait": true,
+        "groupAbsent": true,
+        "rawReceipt": "/tmp/624-integration/knip/receipt.json",
+        "rawReceiptSHA": "effc1f816eb6daf16614b41b5662409646521c822242c583d4839e56278f2a19"
+      }
+    },
+    "focusedPasses": 40,
+    "relatedPasses": 9505,
+    "relatedFiles": 311,
+    "historicalFullAndDiagnosticsQualification": "Full10424/389 and five causal fault families remain tied to originalSourceOID. Combined behavior validated by focused40, ordinary9505/311 and Knip. No second unchanged local full/fault campaign; certified integration/release gates remain required.",
+    "reviewQualification": "Initial source review1 interrupted and not accepted because source base changed. Final base/head requires NEW fresh read-only Codex review2 fork_turns none.",
+    "resources": "All3 combined-check Popen children actually waited and PGs absent. Review57501 and Knip64520 tool sessions collected; initial focused enclosing tool session ID unretained, actual child42658 terminal0 and group absent observed.",
+    "originalDispatch": "2026-10-15T04:50:55.717Z",
+    "samplingStart": "UNKNOWN"
+  }
+}

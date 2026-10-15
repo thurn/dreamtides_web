@@ -1578,6 +1578,23 @@ Putting a character directly into play (for example "return to play" or
 "materialize from your void") is not "playing" it: it costs no energy, does not
 use the stack, cannot be Prevented, and does not fire "when you play" triggers.
 
+**First-play entry spark:** "The first character you play each turn materializes
+with +N✦" applies to your first actual character play in that turn, counted
+separately for each player on either player's turn. If that original played card
+successfully enters play from its stack item as it resolves, each source applying
+at that entry gives that physical character N permanent gained ✦ before
+materialization abilities match. The gain adds to its spark rather than setting
+its base, and positive gains can trigger gain abilities. A source must be in its
+functional zone then; an entering character's own applicable static ability can
+contribute. Each source contributes once to the entry. The gain remains through
+source, control and zone changes. A copy put on the stack, a nonplayed
+materialization, and rematerialization receive no benefit from that play. A
+Prevented first play still counts first but gains nothing, including if that card
+is later materialized by an effect. A later play in the same turn gives no
+additional entry gain; a new first character play in a later normal or extra turn
+can give a new gain. A failed entry gains nothing and supplies no deferred entry
+benefit.
+
 **First-materialization keywords:** "The first character you materialize each
 turn has awakened" gives Awakened permanently to the first character you
 successfully materialize under your control in each turn. Each player's

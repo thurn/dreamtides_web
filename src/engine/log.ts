@@ -27,6 +27,7 @@
  * | a bounded chosen-hand banishment's `effectStarted` event | `engine.banishReturnStarted`, with its physical source, card, entry and expiry |
  * | a selective-disabling `effectStarted` event | `engine.abilitiesDisabled`, with its physical source, target, mode and expiry |
  * | a first-materialization keyword `effectStarted` event | `engine.firstMaterializationKeyword`, with its physical member, source, player, keyword and permanent expiry |
+ * | an attributed entry-only `sparkGained` event | `engine.firstPlayedCharacterEntrySpark`, with physical card, source occurrence, controller and amount |
  * | an `effectEnded` event | `engine.effectEnded`, correlated with its start by effect id |
  * | an `openingHandCompleted` event | `engine.openingHandCompleted`, with only its side |
  * | a `handEmptied` event | `engine.handEmptied`, with only the hand holder |
@@ -110,6 +111,7 @@ export type EngineLogRecord =
   | (RecordBase & { readonly event: "engine.abilitiesLost"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.banishReturnStarted"; readonly detail: EventOf<"effectStarted"> })
   | (RecordBase & { readonly event: "engine.firstMaterializationKeyword"; readonly detail: EventOf<"effectStarted"> })
+  | (RecordBase & { readonly event: "engine.firstPlayedCharacterEntrySpark"; readonly detail: EventOf<"sparkGained"> })
   | (RecordBase & { readonly event: "engine.effectEnded"; readonly detail: EventOf<"effectEnded"> })
   | (RecordBase & { readonly event: "engine.revealed"; readonly detail: EventOf<"revealed"> })
   | (RecordBase & { readonly event: "engine.handEmptied"; readonly detail: EventOf<"handEmptied"> })
@@ -156,6 +158,8 @@ export function eventLogRecord(event: EngineEvent, version: number): EngineLogRe
       if (event.change.kind === "banishedToHandUntil") return { event: "engine.banishReturnStarted", version, detail: event };
       if (event.change.kind === "loseAbilities") return { event: "engine.abilitiesLost", version, detail: event };
       return event.change.kind === "abilities" ? { event: "engine.abilitiesGained", version, detail: event } : null;
+    case "sparkGained":
+      return event.entrySpark === undefined ? null : { event: "engine.firstPlayedCharacterEntrySpark", version, detail: event };
     case "effectEnded":
       return { event: "engine.effectEnded", version, detail: event };
     case "revealed":
