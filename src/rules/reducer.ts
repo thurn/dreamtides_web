@@ -55,6 +55,7 @@ import * as sites from "./journey/sites";
 import { journeyTransfigurationCard, journeyTransfigurationOccurrences, resolveJourneyTransfiguration } from "./journey/journey-transfiguration";
 import { resolveStarterPurge, validStarterPurgeIntent } from "./journey/journey-starter-acquisition";
 import { resolveJourneyPurge } from "./journey/journey-purge";
+import { preventsJourneyPurge } from "./journey/journey-purge-prohibition";
 import * as journeySites from "./journey/journey-sites";
 import * as cardTutorial from "./card-tutorial-guidance";
 import { assertFoldInvariants } from "./invariants";
@@ -147,6 +148,9 @@ function finishTransition(
     isKnownEventType(event.type) &&
     isGameplayEventType(event.type)
   ) {
+    if ((result.purges?.length ?? 0) > 0 && preventsJourneyPurge(result.state.journey, modifiers)) {
+      return bounce(before, "invalid_action");
+    }
     const siteId = siteIdFromUnknown(event.payload?.siteId) ??
       (before.journey.screen.type === "site" ? before.journey.screen.siteId : null);
     // Domain occurrences are frozen once; modifier-produced copies are not inputs.

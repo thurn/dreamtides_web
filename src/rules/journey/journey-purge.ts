@@ -42,9 +42,10 @@ export function validJourneyPurgeScreen(screen: unknown, journey: JourneyState, 
     currentPurgeSource(choice as unknown as JourneyPurgeChoice) !== undefined;
 }
 
-/** Register only the two printed purge windows. Earned Slug copies retain their terminal route. */
+/** Register printed purge permissions or a passive prohibition. */
 export function journeyPurge(dreamsignId: DreamsignId, descriptor: JourneyPurgeEffect): JourneyModifierDefinition {
   const effect = Object.freeze({ ...descriptor });
+  if (effect.kind === "preventPurge") return { dreamsignId, journeyPurge: effect, afterJourneyEvent: () => null };
   if ((effect.kind !== "afterBattlePurge" && effect.kind !== "replaceEssenceWithPurge") ||
     !positiveInteger(effect.kind === "afterBattlePurge" ? effect.maxCount : effect.count)) {
     throw new RangeError("Invalid journeyPurge catalog count.");

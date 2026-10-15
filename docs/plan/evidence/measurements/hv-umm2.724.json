@@ -1,0 +1,501 @@
+{
+  "bead": "hv-umm2.724",
+  "sourceBase": "a0b763956d914cfa72ae1c6281a943d671c20a2d",
+  "clockStart": "2026-10-15T07:00:47.126473+00:00",
+  "status": "Implementation checks and parent precommit audit pass; fresh core review and exact certified delivery remain with parent.",
+  "receiptLocation": "/tmp/dreamtides-724-01a13a7a",
+  "checks": {
+    "focused-01": {
+      "label": "focused-01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-purge-prohibition.test.ts"
+      ],
+      "utcStart": "2026-10-15T07:04:39.475064+00:00",
+      "loadStart": [
+        6.953125,
+        9.1484375,
+        10.1630859375
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "876d7f70497fbc898b2f2770ae426a843e0caf5d347de3124a9805b2c6f19117",
+        "src/rules/journey/journey-purge.ts": "948565f2d1afcbd63ba1c15493193d8cf56c6412547464cecc09b24f9dc5e549",
+        "src/rules/reducer.ts": "5cd91dee6eb9c95a7b2ab831e3491d59dee92e1c7cc101bebb203f1a572f63e4",
+        "src/types/journey.ts": "9f771cfd3c45e883f8e94e95c3b1c3e862dbac30581f035d7d03ad7beec25043",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.724-1.md": "0f4ca22e7cf4a60f41bba08aed94e962625bf3f6e108308b8d31d913174d69cf",
+        "src/rules/journey/journey-purge-prohibition.test.ts": "54af7658a2ebd0263e0a2e696f934a9ff5ce31467cab41a864620467c52d1c21",
+        "src/rules/journey/journey-purge-prohibition.ts": "8ddac48f001fb182563bdb00d5646a807af9d4764345a7a934ef021c2ae4de98"
+      },
+      "pid": 47151,
+      "pgid": 47151,
+      "utcEnd": "2026-10-15T07:04:46.723369+00:00",
+      "wallS": 7.248111625027377,
+      "exit": 1,
+      "cpuUserS": 6.807757,
+      "cpuSystemS": 2.4114229999999997,
+      "loadEnd": [
+        7.11669921875,
+        9.1455078125,
+        10.15625
+      ],
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "1f7dd1e50e1334bb7d3216a8e22b304e61c8754c9323a96f88731328d5d46979",
+      "stderrSha256": "7cfaa15541c34be653bc2959bc357ba01af9c83193eb0cd5daa4ce459025c484"
+    },
+    "focused-02": {
+      "label": "focused-02",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-purge-prohibition.test.ts"
+      ],
+      "utcStart": "2026-10-15T07:05:24.961336+00:00",
+      "loadStart": [
+        6.93115234375,
+        8.830078125,
+        9.99267578125
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "876d7f70497fbc898b2f2770ae426a843e0caf5d347de3124a9805b2c6f19117",
+        "src/rules/journey/journey-purge.ts": "948565f2d1afcbd63ba1c15493193d8cf56c6412547464cecc09b24f9dc5e549",
+        "src/rules/reducer.ts": "5cd91dee6eb9c95a7b2ab831e3491d59dee92e1c7cc101bebb203f1a572f63e4",
+        "src/types/journey.ts": "9f771cfd3c45e883f8e94e95c3b1c3e862dbac30581f035d7d03ad7beec25043",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.724-1.md": "0f4ca22e7cf4a60f41bba08aed94e962625bf3f6e108308b8d31d913174d69cf",
+        "src/rules/journey/journey-purge-prohibition.test.ts": "b80f0fb90bc43906fc5f6fc5e365431f4a3193878890195b8ef7eaa67c4b1607",
+        "src/rules/journey/journey-purge-prohibition.ts": "8ddac48f001fb182563bdb00d5646a807af9d4764345a7a934ef021c2ae4de98"
+      },
+      "pid": 50286,
+      "pgid": 50286,
+      "utcEnd": "2026-10-15T07:05:30.674358+00:00",
+      "wallS": 5.712833416997455,
+      "exit": 1,
+      "cpuUserS": 5.694015,
+      "cpuSystemS": 1.997298,
+      "loadEnd": [
+        7.0166015625,
+        8.81591796875,
+        9.98095703125
+      ],
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "ab7041a39c6c6ec954dde1c5455b6ca11e83c12b046e65f5a640e68e3d4d65d6",
+      "stderrSha256": "b20d55d29b448859b13f446d0f07829051d82017759b58652f29696240c74ee9"
+    },
+    "focused-03": {
+      "label": "focused-03",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-purge-prohibition.test.ts"
+      ],
+      "utcStart": "2026-10-15T07:06:13.298561+00:00",
+      "loadStart": [
+        7.12451171875,
+        8.57861328125,
+        9.83154296875
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "876d7f70497fbc898b2f2770ae426a843e0caf5d347de3124a9805b2c6f19117",
+        "src/rules/journey/journey-purge.ts": "948565f2d1afcbd63ba1c15493193d8cf56c6412547464cecc09b24f9dc5e549",
+        "src/rules/reducer.ts": "5cd91dee6eb9c95a7b2ab831e3491d59dee92e1c7cc101bebb203f1a572f63e4",
+        "src/types/journey.ts": "9f771cfd3c45e883f8e94e95c3b1c3e862dbac30581f035d7d03ad7beec25043",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.724-1.md": "0f4ca22e7cf4a60f41bba08aed94e962625bf3f6e108308b8d31d913174d69cf",
+        "src/rules/journey/journey-purge-prohibition.test.ts": "580acbae597aa8271015545b940d26de7a1591dc01c09cb55d777745c3f31562",
+        "src/rules/journey/journey-purge-prohibition.ts": "8ddac48f001fb182563bdb00d5646a807af9d4764345a7a934ef021c2ae4de98"
+      },
+      "pid": 54057,
+      "pgid": 54057,
+      "utcEnd": "2026-10-15T07:06:20.569263+00:00",
+      "wallS": 7.2704237080179155,
+      "exit": 0,
+      "cpuUserS": 6.361548,
+      "cpuSystemS": 2.77517,
+      "loadEnd": [
+        7.8349609375,
+        8.70166015625,
+        9.86767578125
+      ],
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "fd87b1477a1eb4c6a052b7950b1b8fb86c3b32c04a1cad1518075b3b111a0fdb",
+      "stderrSha256": "cbdac5c19444d231bd175852bf2ecf5c1d33a5f8827f87d25b9103cbffe06d06"
+    },
+    "owning-01": {
+      "label": "owning-01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-purge-prohibition.test.ts",
+        "src/rules/journey/journey-purge.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/rules/journey/modifier-registry.test.ts",
+        "src/rules/journey/sites.test.ts",
+        "src/rules/journey/deck.test.ts",
+        "src/rules/journey/shop.test.ts",
+        "src/session/providers/journey-purge-receipts.test.ts",
+        "src/session/providers/exploration-provider.test.ts",
+        "src/session/providers/site-provider.test.ts"
+      ],
+      "utcStart": "2026-10-15T07:07:02.809335+00:00",
+      "loadStart": [
+        20.0712890625,
+        11.697265625,
+        10.90185546875
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "876d7f70497fbc898b2f2770ae426a843e0caf5d347de3124a9805b2c6f19117",
+        "src/rules/journey/journey-purge.ts": "948565f2d1afcbd63ba1c15493193d8cf56c6412547464cecc09b24f9dc5e549",
+        "src/rules/reducer.ts": "5cd91dee6eb9c95a7b2ab831e3491d59dee92e1c7cc101bebb203f1a572f63e4",
+        "src/types/journey.ts": "9f771cfd3c45e883f8e94e95c3b1c3e862dbac30581f035d7d03ad7beec25043",
+        "docs/plan/evidence/friction/hv-umm2.724.json": "5085fdaf4d53bbf2b1514f8230da2025ff9d1daa050507f368318071a57b05d8",
+        "docs/plan/evidence/measurements/hv-umm2.724.json": "1ac488b2baae473c264c13f9a811c0808a97de6ad0a0b8e66f0909067e368ba5",
+        "docs/plan/evidence/measurements/hv-umm2.724.md": "668742f77a8f778f8be19bb3f6cf4889a158c43f818f8943b2128c3fc0d89aa8",
+        "docs/plan/evidence/pre-existing/hv-umm2.724.md": "1dd335d891a3b5e11cbd575f49c968ccc9e5134c3219738be512ca6fc169ecda",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.724-1.md": "4017e945a04057428c0f5056b9163c0ee516412df7a10f3900ab3f67d2581e6b",
+        "src/rules/journey/journey-purge-prohibition.test.ts": "580acbae597aa8271015545b940d26de7a1591dc01c09cb55d777745c3f31562",
+        "src/rules/journey/journey-purge-prohibition.ts": "8ddac48f001fb182563bdb00d5646a807af9d4764345a7a934ef021c2ae4de98"
+      },
+      "pid": 13423,
+      "pgid": 13423,
+      "utcEnd": "2026-10-15T07:07:11.981234+00:00",
+      "wallS": 9.171659083047416,
+      "exit": 0,
+      "cpuUserS": 8.28094,
+      "cpuSystemS": 2.791882,
+      "loadEnd": [
+        20.0654296875,
+        11.8349609375,
+        10.955078125
+      ],
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "3c091982829c080030ceae81eccf522176c57f05fea79b816346433a0cc0f7ce",
+      "stderrSha256": "cbdac5c19444d231bd175852bf2ecf5c1d33a5f8827f87d25b9103cbffe06d06"
+    },
+    "focused-04": {
+      "label": "focused-04",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-purge-prohibition.test.ts"
+      ],
+      "utcStart": "2026-10-15T07:08:03.779946+00:00",
+      "loadStart": [
+        14.6904296875,
+        11.76708984375,
+        10.9873046875
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "876d7f70497fbc898b2f2770ae426a843e0caf5d347de3124a9805b2c6f19117",
+        "src/rules/journey/journey-purge.ts": "948565f2d1afcbd63ba1c15493193d8cf56c6412547464cecc09b24f9dc5e549",
+        "src/rules/reducer.ts": "5cd91dee6eb9c95a7b2ab831e3491d59dee92e1c7cc101bebb203f1a572f63e4",
+        "src/types/journey.ts": "9f771cfd3c45e883f8e94e95c3b1c3e862dbac30581f035d7d03ad7beec25043",
+        "docs/plan/evidence/friction/hv-umm2.724.json": "5085fdaf4d53bbf2b1514f8230da2025ff9d1daa050507f368318071a57b05d8",
+        "docs/plan/evidence/measurements/hv-umm2.724.json": "1ac488b2baae473c264c13f9a811c0808a97de6ad0a0b8e66f0909067e368ba5",
+        "docs/plan/evidence/measurements/hv-umm2.724.md": "668742f77a8f778f8be19bb3f6cf4889a158c43f818f8943b2128c3fc0d89aa8",
+        "docs/plan/evidence/pre-existing/hv-umm2.724.md": "1dd335d891a3b5e11cbd575f49c968ccc9e5134c3219738be512ca6fc169ecda",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.724-1.md": "4017e945a04057428c0f5056b9163c0ee516412df7a10f3900ab3f67d2581e6b",
+        "src/rules/journey/journey-purge-prohibition.test.ts": "9230cc073771c26c62f3a1fdec01f74acb589628b09fb955ceb290670db24722",
+        "src/rules/journey/journey-purge-prohibition.ts": "8ddac48f001fb182563bdb00d5646a807af9d4764345a7a934ef021c2ae4de98"
+      },
+      "pid": 18703,
+      "pgid": 18703,
+      "utcEnd": "2026-10-15T07:08:13.486893+00:00",
+      "wallS": 9.706742957991082,
+      "exit": 0,
+      "cpuUserS": 6.890534,
+      "cpuSystemS": 2.767889,
+      "loadEnd": [
+        17.5849609375,
+        12.48193359375,
+        11.25
+      ],
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "b49d9072eeda736e93e9bc7e14d8f97896c30402b7f871ffc6bf1377bded138f",
+      "stderrSha256": "cbdac5c19444d231bd175852bf2ecf5c1d33a5f8827f87d25b9103cbffe06d06"
+    },
+    "review-01": {
+      "label": "review-01",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "utcStart": "2026-10-15T07:08:13.577644+00:00",
+      "loadStart": [
+        17.5849609375,
+        12.48193359375,
+        11.25
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "876d7f70497fbc898b2f2770ae426a843e0caf5d347de3124a9805b2c6f19117",
+        "src/rules/journey/journey-purge.ts": "948565f2d1afcbd63ba1c15493193d8cf56c6412547464cecc09b24f9dc5e549",
+        "src/rules/reducer.ts": "5cd91dee6eb9c95a7b2ab831e3491d59dee92e1c7cc101bebb203f1a572f63e4",
+        "src/types/journey.ts": "9f771cfd3c45e883f8e94e95c3b1c3e862dbac30581f035d7d03ad7beec25043",
+        "docs/plan/evidence/friction/hv-umm2.724.json": "5085fdaf4d53bbf2b1514f8230da2025ff9d1daa050507f368318071a57b05d8",
+        "docs/plan/evidence/measurements/hv-umm2.724.json": "1ac488b2baae473c264c13f9a811c0808a97de6ad0a0b8e66f0909067e368ba5",
+        "docs/plan/evidence/measurements/hv-umm2.724.md": "668742f77a8f778f8be19bb3f6cf4889a158c43f818f8943b2128c3fc0d89aa8",
+        "docs/plan/evidence/pre-existing/hv-umm2.724.md": "1dd335d891a3b5e11cbd575f49c968ccc9e5134c3219738be512ca6fc169ecda",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.724-1.md": "4017e945a04057428c0f5056b9163c0ee516412df7a10f3900ab3f67d2581e6b",
+        "src/rules/journey/journey-purge-prohibition.test.ts": "9230cc073771c26c62f3a1fdec01f74acb589628b09fb955ceb290670db24722",
+        "src/rules/journey/journey-purge-prohibition.ts": "8ddac48f001fb182563bdb00d5646a807af9d4764345a7a934ef021c2ae4de98"
+      },
+      "pid": 19550,
+      "pgid": 19550,
+      "utcEnd": "2026-10-15T07:09:01.961731+00:00",
+      "wallS": 48.38309129199479,
+      "exit": 0,
+      "cpuUserS": 120.83598500000001,
+      "cpuSystemS": 12.630965,
+      "loadEnd": [
+        20.17626953125,
+        14.158203125,
+        11.947265625
+      ],
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "299543069d983043f08a5d1d5301aef9278d4fd3a737f2371f1016e88c5de21a",
+      "stderrSha256": "cbdac5c19444d231bd175852bf2ecf5c1d33a5f8827f87d25b9103cbffe06d06"
+    },
+    "knip-01": {
+      "label": "knip-01",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "utcStart": "2026-10-15T07:09:17.177546+00:00",
+      "loadStart": [
+        17.53955078125,
+        13.87158203125,
+        11.8828125
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "876d7f70497fbc898b2f2770ae426a843e0caf5d347de3124a9805b2c6f19117",
+        "src/rules/journey/journey-purge.ts": "948565f2d1afcbd63ba1c15493193d8cf56c6412547464cecc09b24f9dc5e549",
+        "src/rules/reducer.ts": "5cd91dee6eb9c95a7b2ab831e3491d59dee92e1c7cc101bebb203f1a572f63e4",
+        "src/types/journey.ts": "9f771cfd3c45e883f8e94e95c3b1c3e862dbac30581f035d7d03ad7beec25043",
+        "docs/plan/evidence/friction/hv-umm2.724.json": "5085fdaf4d53bbf2b1514f8230da2025ff9d1daa050507f368318071a57b05d8",
+        "docs/plan/evidence/measurements/hv-umm2.724.json": "1ac488b2baae473c264c13f9a811c0808a97de6ad0a0b8e66f0909067e368ba5",
+        "docs/plan/evidence/measurements/hv-umm2.724.md": "668742f77a8f778f8be19bb3f6cf4889a158c43f818f8943b2128c3fc0d89aa8",
+        "docs/plan/evidence/pre-existing/hv-umm2.724.md": "1dd335d891a3b5e11cbd575f49c968ccc9e5134c3219738be512ca6fc169ecda",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.724-1.md": "4017e945a04057428c0f5056b9163c0ee516412df7a10f3900ab3f67d2581e6b",
+        "src/rules/journey/journey-purge-prohibition.test.ts": "9230cc073771c26c62f3a1fdec01f74acb589628b09fb955ceb290670db24722",
+        "src/rules/journey/journey-purge-prohibition.ts": "8ddac48f001fb182563bdb00d5646a807af9d4764345a7a934ef021c2ae4de98"
+      },
+      "pid": 79406,
+      "pgid": 79406,
+      "utcEnd": "2026-10-15T07:09:24.861898+00:00",
+      "wallS": 7.684015583014116,
+      "exit": 0,
+      "cpuUserS": 4.8491919999999995,
+      "cpuSystemS": 2.047104,
+      "loadEnd": [
+        16.92138671875,
+        13.85888671875,
+        11.9013671875
+      ],
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "69ff57be3840719bd267fe1f522e332b0407629c9d4c0ea0c05213d728e01019",
+      "stderrSha256": "cbdac5c19444d231bd175852bf2ecf5c1d33a5f8827f87d25b9103cbffe06d06"
+    },
+    "full-01": {
+      "label": "full-01",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-724-01a13a7a/heavy-entry.py"
+      ],
+      "utcStart": "2026-10-15T07:09:30.301835+00:00",
+      "loadStart": [
+        16.28662109375,
+        13.77783203125,
+        11.88427734375
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "876d7f70497fbc898b2f2770ae426a843e0caf5d347de3124a9805b2c6f19117",
+        "src/rules/journey/journey-purge.ts": "948565f2d1afcbd63ba1c15493193d8cf56c6412547464cecc09b24f9dc5e549",
+        "src/rules/reducer.ts": "5cd91dee6eb9c95a7b2ab831e3491d59dee92e1c7cc101bebb203f1a572f63e4",
+        "src/types/journey.ts": "9f771cfd3c45e883f8e94e95c3b1c3e862dbac30581f035d7d03ad7beec25043",
+        "docs/plan/evidence/friction/hv-umm2.724.json": "5085fdaf4d53bbf2b1514f8230da2025ff9d1daa050507f368318071a57b05d8",
+        "docs/plan/evidence/measurements/hv-umm2.724.json": "1ac488b2baae473c264c13f9a811c0808a97de6ad0a0b8e66f0909067e368ba5",
+        "docs/plan/evidence/measurements/hv-umm2.724.md": "668742f77a8f778f8be19bb3f6cf4889a158c43f818f8943b2128c3fc0d89aa8",
+        "docs/plan/evidence/pre-existing/hv-umm2.724.md": "1dd335d891a3b5e11cbd575f49c968ccc9e5134c3219738be512ca6fc169ecda",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.724-1.md": "4017e945a04057428c0f5056b9163c0ee516412df7a10f3900ab3f67d2581e6b",
+        "src/rules/journey/journey-purge-prohibition.test.ts": "9230cc073771c26c62f3a1fdec01f74acb589628b09fb955ceb290670db24722",
+        "src/rules/journey/journey-purge-prohibition.ts": "8ddac48f001fb182563bdb00d5646a807af9d4764345a7a934ef021c2ae4de98"
+      },
+      "pid": 80371,
+      "pgid": 80371,
+      "utcEnd": "2026-10-15T07:14:09.237735+00:00",
+      "wallS": 278.93328699999256,
+      "exit": 0,
+      "cpuUserS": 273.07572100000004,
+      "cpuSystemS": 33.361925,
+      "loadEnd": [
+        19.80810546875,
+        14.8759765625,
+        12.71142578125
+      ],
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "fc3813bae46ea0eef6ac55c999eada61ba9eced0f5ca0ba20e0b8c9fc074c59c",
+      "stderrSha256": "51beac2508dec3f726d4bddf886a93f6c43cc0cbe98a5aa0e704330287440019"
+    },
+    "schema-01": {
+      "label": "schema-01",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "utcStart": "2026-10-15T07:15:20.388267+00:00",
+      "loadStart": [
+        11.56591796875,
+        13.76611328125,
+        12.486328125
+      ],
+      "sourceHashes": {
+        "docs/rules.md": "876d7f70497fbc898b2f2770ae426a843e0caf5d347de3124a9805b2c6f19117",
+        "src/rules/journey/journey-purge.ts": "948565f2d1afcbd63ba1c15493193d8cf56c6412547464cecc09b24f9dc5e549",
+        "src/rules/reducer.ts": "5cd91dee6eb9c95a7b2ab831e3491d59dee92e1c7cc101bebb203f1a572f63e4",
+        "src/types/journey.ts": "9f771cfd3c45e883f8e94e95c3b1c3e862dbac30581f035d7d03ad7beec25043",
+        "docs/plan/evidence/friction/hv-umm2.724.json": "e3afecc4c4962a2bf69e45243f84c7c70dac0ddeb99fc9d4fa49ac5de26db8cb",
+        "docs/plan/evidence/measurements/hv-umm2.724.json": "491173a3466d38e8afcd32cb49ddc47d4ca1cdb7f4c47df247aaf2943f5cb9c2",
+        "docs/plan/evidence/measurements/hv-umm2.724.md": "03bd4e6131b3518e2ecf7197ed86c347562643311676a90e499a713fc6f7a2a8",
+        "docs/plan/evidence/pre-existing/hv-umm2.724.md": "696b2301823c7b2efbcd59a744912b176b04cc4be7905f72d3095fd9d414936b",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.724-1.md": "4017e945a04057428c0f5056b9163c0ee516412df7a10f3900ab3f67d2581e6b",
+        "src/rules/journey/journey-purge-prohibition.test.ts": "9230cc073771c26c62f3a1fdec01f74acb589628b09fb955ceb290670db24722",
+        "src/rules/journey/journey-purge-prohibition.ts": "8ddac48f001fb182563bdb00d5646a807af9d4764345a7a934ef021c2ae4de98"
+      },
+      "pid": 38262,
+      "pgid": 38262,
+      "utcEnd": "2026-10-15T07:15:20.543457+00:00",
+      "wallS": 0.15506366698537022,
+      "exit": 0,
+      "cpuUserS": 0.054667,
+      "cpuSystemS": 0.026977,
+      "loadEnd": [
+        11.56591796875,
+        13.76611328125,
+        12.486328125
+      ],
+      "sameGroupAfterExit": [],
+      "stdoutSha256": "615c76992890d3845c64e0bbab65853e938992c4d1e77f6a48410a6649b05a49",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "qualifications": [
+    "Original root postclaim clock is retained. Final evidence cutoff precedes the single Git commit; the actual return and cutoff tail are recorded separately in scratch terminal-handoff.json.",
+    "Domain random draws can validate a proposed transaction; their indices are event-local. A denied transaction commits no modifier draws or positive observer effects.",
+    "Initial focused failures were authored fixture errors: table argument expansion, Bane free cost, empty Nightmare target rejection, earned Atlas layer coherence, and Augury ordered acquisition prefix. None required production API expansion.",
+    "Recursive Augury receipt handling is exercised through the public synthetic provider seam; actual production Augury purge and duplicate offers are also exercised. The current real Augury writer appends holdings; source loss is exercised both by a real remove intent before a subsequent purge and by a truthful synthetic Exploration mutation in the same validated compound result.",
+    "Original271 owns production source authoring and site/browser QA, plus future272starter/273Scorpion receipt joins. No browser, battle fuzzer or production content claim for this capability."
+  ],
+  "resources": {
+    "observedAt": "2026-10-15T07:14:30.373834+00:00",
+    "fullTestFixtureServerPidsMentioned": [
+      202,
+      443,
+      741,
+      1095,
+      1554,
+      2776,
+      2975,
+      3723,
+      4798,
+      5052,
+      5694,
+      5782,
+      6346,
+      6854,
+      7025,
+      7148,
+      7799,
+      7885,
+      8666,
+      8860,
+      9251,
+      9459,
+      9819,
+      10389,
+      10539,
+      10980,
+      11211,
+      11334,
+      12189,
+      12719,
+      13579,
+      13981,
+      14590,
+      18927,
+      19401,
+      20861,
+      21601,
+      22121,
+      23483,
+      23906,
+      93820,
+      93972,
+      94357,
+      94514,
+      95167,
+      95182,
+      95794,
+      95917,
+      96007,
+      96611,
+      96732,
+      97258,
+      97838,
+      98122,
+      98421,
+      98583,
+      99161,
+      99311
+    ],
+    "remainingMatchingPidOrPgid": [],
+    "qualification": "These are full-suite QA-runtime harness test fixtures, not feature browser QA or a helper-launched player workflow. Raw stderr preserves expected simulated ownership/cleanup failure cases."
+  },
+  "evidenceCutoff": "2026-10-15T07:17:25.926641+00:00",
+  "fullReview": {
+    "reason": "Cross-cutting reducer transaction policy",
+    "workers": 2,
+    "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "lockAcquired": {
+      "utc": "2026-10-15T07:12:03.191662+00:00",
+      "pid": 91440,
+      "pgid": 80371,
+      "load": [
+        13.70458984375,
+        13.21142578125,
+        11.9296875
+      ],
+      "workers": "2"
+    },
+    "queueUtcS": 152.889827,
+    "executionToWrapperTerminalUtcS": 126.046073,
+    "wrapperWallIncludingQueueS": 278.93328699999256,
+    "tests": 10659,
+    "testFiles": 394,
+    "qualification": "UTC queue/execution intervals and monotonic wrapper wall differ by clock/measurement overhead; no comparable-load throughput claim."
+  },
+  "validation": {
+    "finalFocusedTests": 14,
+    "owningTests": 123,
+    "owningFiles": 9,
+    "owningQualification": "8 existing files plus then13-test new file; a nonexistent site-provider.test.ts argument selected nothing. Final14-test source passed focused04, review01 and full01.",
+    "reviewTests": 6798,
+    "reviewFiles": 92,
+    "allChecksExitZero": true,
+    "sourceProductionGrossLines": 20,
+    "newTestFiles": 1,
+    "newTestLines": 282,
+    "newJsdomFiles": 0
+  },
+  "implementMinToCutoff": 16.646669466666665,
+  "finalCommitTailReceipt": "Scratch commit-01.json processReturnAt and terminal-handoff.json bind actual Git return after this cutoff."
+}

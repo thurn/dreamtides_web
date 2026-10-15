@@ -183,7 +183,8 @@ export interface CardSourceDebugState {
 /** Printed journey purge permissions and validated domain occurrences. */
 export type JourneyPurgeEffect =
   | { readonly kind: "afterBattlePurge"; readonly maxCount: number }
-  | { readonly kind: "replaceEssenceWithPurge"; readonly count: number };
+  | { readonly kind: "replaceEssenceWithPurge"; readonly count: number }
+  | { readonly kind: "preventPurge" };
 
 export interface JourneyPurgeOccurrence {
   readonly entryId: DeckEntryId;

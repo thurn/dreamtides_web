@@ -3249,6 +3249,15 @@ its original entry and card identity determine the purge. Replacing a card
 without a purge clause, removing a card through the debug editor, replacing a
 Dreamsign, and expiry of temporary deck grants are distinct operations.
 
+When a held source prohibits card purges, a validated gameplay transaction that
+purges at least one deck entry is unavailable. Holdings after the proposed
+transaction determine the prohibition. The entire transaction is rejected before
+positive journey observers: costs, companion rewards, Essence, pools, cursors,
+continuations, battle state, and modifier random draws remain uncommitted. An
+optional zero-entry decline is valid. Multiple prohibition sources are redundant.
+The concrete purge definition above distinguishes this prohibition from card
+replacement, administrative removal, temporary expiry, and Dreamsign replacement.
+
 A gain of Essence when a card is purged applies after the validated purge and
 its costs, once per purged entry for each source copy held after that change.
 The prospective gain cannot pay the purge's upfront cost. A rejected intent
