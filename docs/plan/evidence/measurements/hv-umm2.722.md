@@ -1,6 +1,6 @@
 # hv-umm2.722 verification
 
-Dispatch: `2026-10-15T06:37:28.823Z`. Evidence cutoff: `2026-10-15T06:55:23.785215Z`. The implementation window includes research, coordination, all validation and packaging; its final cutoff is refreshed immediately before the automatic-date commit. Actual Git completion is recorded externally, with at most 60 seconds of tail.
+Dispatch: `2026-10-15T06:37:05.497Z`. Evidence cutoff: `2026-10-15T06:55:23.785215Z`. The implementation window includes research, coordination, all validation and packaging; its final cutoff is refreshed immediately before the automatic-date commit. Actual Git completion is recorded externally, with at most 60 seconds of tail.
 
 | Check | Result | Outer wall seconds |
 | --- | --- | ---: |
@@ -19,3 +19,5 @@ All validation source maps were frozen. The initial typecheck created only the c
 Immutable resource proof: `implementation-20261015T063728823Z/implementation-resource-audit-v01.json`, SHA-256 `b12923bc9623d5e409e8bcec4b2a094103992f53000af96c51c7edf1ed5118c0`, under this bead's primary ignored QA archive. The structured measurement links the complete path, exact commands, raw outputs, wall/CPU/load samples, source epochs and process-group cleanup. Every validation and full-suite synthetic server fixture group was absent at the final process audit. No feature browser/server/provider/fuzz run or image was launched.
 
 Fresh cold core review and certified delivery belong to the parent session. Original journey and authored-content acceptance remains with hv-umm2.269.
+
+Dispatch correction (hv-umm2.726): the exact native implementation call is call_1067beb160e74ed0820e22848e9e7ed2 at 2026-10-15T06:37:05.497Z. The original receipt selected a later extraction call at 2026-10-15T06:37:28.823Z through substring matching and understated elapsed time by 23.326 seconds. The corrected cutoff interval is 18.304803583 minutes; original cutoff, automatic Git end, 0.425421-second tail, source-qualified checks and immutable raw receipts retain their recorded values. The source-linked correction proof is in this measurement JSON.

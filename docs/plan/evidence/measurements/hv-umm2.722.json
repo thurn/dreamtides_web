@@ -2,8 +2,25 @@
   "bead": "hv-umm2.722",
   "base": "86d87f649b3f4b61b0743c81be9ba13cd3f44340",
   "dispatch": {
-    "start": "2026-10-15T06:37:28.823Z",
-    "proof": "/tmp/root-722/dispatch.json"
+    "start": "2026-10-15T06:37:05.497Z",
+    "proof": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.726/dispatch-correction-v01/correction-proof.json",
+    "originalProof": "/tmp/root-722/dispatch.json",
+    "correction": {
+      "bead": "hv-umm2.726",
+      "originalRecordedStart": "2026-10-15T06:37:28.823Z",
+      "understatedSeconds": 23.326,
+      "exactCall": {
+        "task": "guaranteed_opening722",
+        "nativeDispatch": "2026-10-15T06:37:05.497Z",
+        "call_id": "call_1067beb160e74ed0820e22848e9e7ed2",
+        "oneBasedOrdinal": 60382,
+        "recordSHA256": "f2808df0eda0b76d662a92f87f3f9995093ea0832e598ba38a1a38a2e7fda8e1",
+        "fork_turns": "none",
+        "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl"
+      },
+      "proofSHA256": "c1a6bec869b4145f7b2c6e44537095bdf395cbf374a1a467073f7737d7763142",
+      "rule": "Select exact structured payload.type=function_call, name=spawn_agent, parsed arguments.task_name; reject ambiguous matches. Original source/raw receipt is preserved."
+    }
   },
   "cutoff": {
     "at": "2026-10-15T06:55:23.785215Z",

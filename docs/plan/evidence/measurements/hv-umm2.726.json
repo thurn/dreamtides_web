@@ -1,0 +1,91 @@
+{
+  "bead": "hv-umm2.726",
+  "base": "a0b763956d914cfa72ae1c6281a943d671c20a2d",
+  "selfImplementation": true,
+  "implementWindow": {
+    "start": "2026-10-15T07:06:47.275482+00:00",
+    "end": "2026-10-15T07:13:01.187614+00:00",
+    "meaning": "Conservative actual claim-ack start includes setup, analysis, validation, packaging and future Git. Final precommit cutoff is supplied before commit; future Git end stays external."
+  },
+  "correction": {
+    "originalSource": "341665a62958e22ad8dce7bb79648bced1f66d78",
+    "originalTested": "a0b763956d914cfa72ae1c6281a943d671c20a2d",
+    "originalRecordedStart": "2026-10-15T06:37:28.823Z",
+    "correctStart": "2026-10-15T06:37:05.497Z",
+    "understatedSeconds": 23.326,
+    "correctedOriginalCutoffMinutes": 18.304803583333335,
+    "correctedOriginalThroughGitMinutes": 18.311893933333334,
+    "originalCutoff": "2026-10-15T06:55:23.785215Z",
+    "originalGitEnd": "2026-10-15T06:55:24.210636Z",
+    "originalCutoffTailSeconds": 0.425421,
+    "originalReceiptPreserved": "/tmp/root-722/dispatch.json",
+    "originalReceiptSHA256": "4aedaf68532bae2d3f3ede0fdf798d02c07b7be53f6c8cfa9a10f6db9167b768",
+    "exactImplementationCall": {
+      "task": "guaranteed_opening722",
+      "nativeDispatch": "2026-10-15T06:37:05.497Z",
+      "call_id": "call_1067beb160e74ed0820e22848e9e7ed2",
+      "oneBasedOrdinal": 60382,
+      "recordSHA256": "f2808df0eda0b76d662a92f87f3f9995093ea0832e598ba38a1a38a2e7fda8e1",
+      "fork_turns": "none",
+      "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl"
+    },
+    "exactReviewCall": {
+      "task": "cold_review_722",
+      "nativeDispatch": "2026-10-15T06:58:06.338Z",
+      "call_id": "call_7ec5e9cf077941c5947c41c4b35f407d",
+      "oneBasedOrdinal": 60810,
+      "recordSHA256": "df999d49f2bf7e2fe56009e1c65224dd428dbe9c77d3a55c4db8a9b7a1ce24b8",
+      "fork_turns": "none",
+      "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl"
+    },
+    "original269DispatchVerified": {
+      "task": "journey_opening269",
+      "nativeDispatch": "2026-10-15T06:16:33.746Z",
+      "call_id": "call_da06dd3e80fe4e53a70ba6c5c417a6f6",
+      "oneBasedOrdinal": 59858,
+      "recordSHA256": "dfce7120b567a3b715be5125271e04a974a5540b5d0906e1a6916d04d0aa8c4b",
+      "fork_turns": "none",
+      "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl"
+    },
+    "permanentProof": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.726/dispatch-correction-v01/correction-proof.json",
+    "permanentProofSHA256": "c1a6bec869b4145f7b2c6e44537095bdf395cbf374a1a467073f7737d7763142"
+  },
+  "scope": "Only three original722 timing evidence files plus three own evidence files. Production/test/UI/config and raw historical command, resource, source and certification records are unchanged.",
+  "checks": {
+    "friction-triggers": {
+      "seconds": 0.2741861669928767,
+      "exit": 0,
+      "receipt": "/tmp/root-726/friction-triggers.receipt.json",
+      "receiptSHA256": "68bf5fe8fffc777d6fca33cf4a7d2a2d25b2a9486478206843767b7fc6ea66c4"
+    },
+    "review": {
+      "seconds": 0.31926516600651667,
+      "exit": 0,
+      "receipt": "/tmp/root-726/review.receipt.json",
+      "receiptSHA256": "0140c3932fac6b8fbe2e8cb4fced08e0f8faf77943e35ca43d3b1d8589b0ce03"
+    },
+    "knip": {
+      "seconds": 7.508124084037263,
+      "exit": 0,
+      "receipt": "/tmp/root-726/knip.receipt.json",
+      "receiptSHA256": "38c1ee94bc2370e346e99d6841780658d83b12d2c89d66cb67a11450ca82345a"
+    }
+  },
+  "coreReviewRequired": false,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "futureGitEnd": null,
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "value": 14.3271484375,
+        "measuredFor": "end of own doc-only review",
+        "source": "review.receipt.json hostLoad[0]",
+        "at": "2026-10-15T07:10:01.251726+00:00"
+      }
+    }
+  }
+}
