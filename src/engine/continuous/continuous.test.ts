@@ -6,16 +6,26 @@
  * effect, memoization, and the view.
  */
 import { describe, expect, it } from "vitest";
+import { instanceCard, type EngineCardDefinition } from "../catalog";
+import { activated, all, anyCharacter, characterYouControl, energyX, event, self, staticAbility, target, x } from "../dsl/builders";
+import { onMaterialized, triggered } from "../dsl/triggers";
+import { NO_DECK_MODS } from "../dsl/types";
+import { cardsIn, gainControl, gainPoints, grantCardKeyword, materializeFigmentCopy, returnToHand, sequence, sparkModifier } from "../effects/primitives";
+import { createEngine } from "../engine";
+import { createFoldAdapter, type BattleSlice } from "../fold/slice";
 import { matchingCharacters } from "../dsl/selectors";
 import { hasKeyword } from "../rules/keywords";
-import { serializeState } from "../state/hash";
+import { cloneState } from "../state/clone";
+import { serializeState, stateHash } from "../state/hash";
+import { opponent, SIDES } from "../state/ids";
 import type { InstanceId } from "../state/ids";
-import { NO_PROMPTS } from "../steps/sources";
-import { placeFigment } from "../testing/board";
+import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
+import { boardState, placeFigment } from "../testing/board";
+import { syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { CONTINUOUS_EMBLEMS, CONTINUOUS_DREAMSIGN } from "../testing/continuous-cards";
 import { DSL } from "../testing/dsl-cards";
 import { at, passUntil } from "../testing/trigger-harness";
-import { characteristics, characteristicsOf, rememberCharacteristics } from "./characteristics";
+import { cardMatchesFilter, characteristics, characteristicsOf, rememberCharacteristics } from "./characteristics";
 import { Layers } from "./layers";
 import {
   enemyBaseThree,
@@ -269,4 +279,130 @@ describe("view", () => {
     expect(seen.instances[ids.player.front[0]!]?.characteristics).toMatchObject({ spark: 2, keywords: ["vengeful"], allTypes: true });
     expect(seen.instances[ids.player.hand[0]]?.characteristics).toMatchObject({ cost: 2, spark: 3 });
   });
+});
+
+describe("permanent spark on a printed X character", () => {
+  const variable: EngineCardDefinition = {
+    ...v.vanilla1, id: syntheticId(0x7470), costs: [energyX()], spark: "x", status: "authored",
+    abilities: () => [triggered(onMaterialized(), gainPoints(x())), activated([], returnToHand(self()))],
+  };
+  const numeric: EngineCardDefinition = { ...v.vanilla3, id: syntheticId(0x7471) };
+  const copier: EngineCardDefinition = {
+    ...v.event0, id: syntheticId(0x7472), status: "authored",
+    abilities: () => [event(sequence(materializeFigmentCopy(target(anyCharacter())), materializeFigmentCopy(target(anyCharacter()), { zeroSpark: true })))],
+  };
+  const thief: EngineCardDefinition = { ...v.event0, id: syntheticId(0x7473), status: "authored", abilities: () => [event(gainControl(target(anyCharacter())))] };
+  const filterSource: EngineCardDefinition = {
+    ...v.vanilla0, id: syntheticId(0x7474), status: "authored",
+    abilities: () => [staticAbility(grantCardKeyword(cardsIn("hand", { sparkAtLeast: 2 }), "vengeful")), activated([], returnToHand(self()))],
+  };
+  const support: EngineCardDefinition = {
+    ...v.vanilla0, id: syntheticId(0x7475), status: "authored",
+    abilities: () => [staticAbility(sparkModifier(all(characterYouControl()), 3))],
+  };
+  const E = createEngine(testCatalog([variable, numeric, copier, thief, filterSource, support]));
+  const C = E.catalog;
+  const mods = { ...NO_DECK_MODS, sparkBonus: 2 };
+
+  for (const side of SIDES) {
+    it(`adds entry spark while preserving the paid X and physical neighbors for ${side}`, () => {
+      for (const [bonus, handSpark, playedSpark] of [[2, 2, 6], [0, 0, 4], [-2, 0, 2], [-6, 0, 1]]) {
+        const { state, ids } = boardState(C, { active: side, phase: "day", [side]: {
+          hand: [{ cardId: variable.id, deckMods: { ...mods, sparkBonus: bonus } }, variable.id], energy: 10,
+          back: bonus === -6 ? [support.id] : bonus === 2 ? [filterSource.id] : [],
+        } });
+        const [id, neighbor] = ids[side].hand;
+        const before = stateHash(state);
+        expect(characteristicsOf(state, C, id).spark).toBe(handSpark);
+        expect(cardMatchesFilter(state, C, id, { sparkAtLeast: handSpark, sparkAtMost: handSpark })).toBe(true);
+        expect(E.view(state, side).instances[id].characteristics.spark).toBe(handSpark);
+        expect(characteristicsOf(state, C, neighbor).spark).toBe(0);
+        let ready = state;
+        if (bonus === 2) {
+          expect(hasKeyword(ready, C, id, "vengeful")).toBe(true);
+          expect(hasKeyword(ready, C, neighbor, "vengeful")).toBe(false);
+          ready = E.apply(ready, side, { kind: "activate", source: ids[side].back[0]!, ability: 1 }, NO_PROMPTS).state;
+          expect(hasKeyword(ready, C, id, "vengeful")).toBe(false);
+          expect(characteristicsOf(ready, C, id).spark).toBe(2);
+        }
+        const answers = new ScriptedSource([4]);
+        const played = E.apply(ready, side, { kind: "play", card: id, from: "hand" }, answers);
+        answers.assertExhausted();
+        expect(played.answers.some(answer => answer.value === 4)).toBe(true);
+        expect(played.state.sides[side]).toMatchObject({ currentEnergy: 6, score: 4 });
+        expect(played.state.instances[id]).toMatchObject({ zone: "play", status: { x: 4 } });
+        expect(characteristicsOf(played.state, C, id).spark).toBe(playedSpark);
+        expect(matchingCharacters(played.state, C, { controller: "you", sparkAtLeast: playedSpark, sparkAtMost: playedSpark }, side, { kind: "avatar", side })).toContain(id);
+        expect(cardMatchesFilter(played.state, C, id, { sparkAtLeast: playedSpark + 1 })).toBe(false);
+        for (const viewer of SIDES) expect(E.view(played.state, viewer).instances[id].characteristics.spark).toBe(playedSpark);
+        expect(instanceCard(C, played.state.instances[id]).costs).toEqual([energyX()]);
+        expect(characteristicsOf(played.state, C, neighbor).spark).toBe(0);
+        expect(C.card(variable.id).spark).toBe("x");
+        expect(stateHash(state)).toBe(before);
+      }
+    });
+
+    it(`retains the chosen X through fold replay, saved reload, cloning and public views for ${side}`, () => {
+      const entries = [{ cardId: variable.id, deckMods: mods }, { cardId: variable.id }];
+      const { state, ids } = boardState(C, { active: side, phase: "day", [side]: { hand: entries, energy: 10 } });
+      const id = ids[side].hand[0];
+      const initial: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+      const fold = createFoldAdapter(E);
+      const opened = fold.reduce(initial, { kind: "battleAction", side, action: { kind: "play", card: id, from: "hand" } });
+      if (opened.kind !== "applied") throw new Error("Synthetic X play bounced");
+      expect(opened.error).toBeNull();
+      const saved = JSON.parse(JSON.stringify(opened.slice)) as BattleSlice;
+      const cold = createFoldAdapter(createEngine(C));
+      const prompt = cold.pending(saved)!.prompt;
+      expect(prompt.kind).toBe("chooseNumber");
+      const answer = { kind: "answer" as const, side, promptId: prompt.id, value: 4 };
+      const result = cold.reduce(saved, answer), replay = fold.reduce(opened.slice, answer);
+      if (result.kind !== "applied" || replay.kind !== "applied") throw new Error("Synthetic X answer bounced");
+      expect(result.error).toBeNull(); expect(result.slice.inFlight).toBeNull();
+      expect(stateHash(result.slice.committed)).toBe(stateHash(replay.slice.committed));
+      const loaded = JSON.parse(JSON.stringify(result.slice)) as BattleSlice;
+      for (const restored of [loaded.committed, cloneState(loaded.committed)]) {
+        expect(restored.instances[id]).toMatchObject({ printing: { cardId: variable.id }, variant: { deckMods: mods }, zone: "play", status: { x: 4 } });
+        expect(restored.sides[side]).toMatchObject({ currentEnergy: 6, score: 4 });
+        for (const viewer of SIDES) {
+          const seen = E.view(restored, viewer);
+          expect(seen.instances[id].characteristics.spark).toBe(6);
+          const sampled = E.determinize(seen, { player: side === "player" ? entries : [], enemy: side === "enemy" ? entries : [] }, () => 0.5);
+          expect(E.view(sampled, viewer).instances[id].characteristics).toEqual(seen.instances[id].characteristics);
+        }
+      }
+    });
+
+    it(`keeps numeric and Kindled bases, type changes and explicit copy overrides distinct for ${side}`, () => {
+      const { state, ids } = boardState(C, { active: side, phase: "day", [side]: { hand: [
+        { cardId: numeric.id, deckMods: mods }, { cardId: variable.id, transfigurations: ["Kindled"], deckMods: mods },
+        { cardId: v.event0.id, deckMods: mods },
+        { cardId: variable.id, deckMods: { ...mods, typeChange: { cardType: "event", subtype: "" } } },
+        { cardId: v.event0.id, deckMods: { ...mods, typeChange: { cardType: "character", subtype: "Warrior" } } },
+      ], energy: 10 } });
+      expect(ids[side].hand.map(id => characteristicsOf(state, C, id).spark)).toEqual([5, 3, null, null, 0]);
+      const numbered = E.apply(state, side, { kind: "play", card: ids[side].hand[0], from: "hand" }, NO_PROMPTS).state;
+      const kindled = E.apply(numbered, side, { kind: "play", card: ids[side].hand[1], from: "hand" }, new ScriptedSource([4])).state;
+      expect(kindled.sides[side].currentEnergy).toBe(3);
+      expect(kindled.instances[ids[side].hand[1]].status.x).toBe(4);
+      expect(ids[side].hand.slice(0, 2).map(id => characteristicsOf(kindled, C, id).spark)).toEqual([5, 3]);
+      const copyBoard = boardState(C, { active: side, phase: "day", [side]: { hand: [{ cardId: variable.id, deckMods: mods }, copier.id], energy: 10, deck }, [opponent(side)]: { hand: [thief.id], deck } });
+      const original = copyBoard.ids[side].hand[0];
+      let current = E.apply(copyBoard.state, side, { kind: "play", card: original, from: "hand" }, new ScriptedSource([4])).state;
+      current = E.apply(current, side, { kind: "play", card: copyBoard.ids[side].hand[1], from: "hand" }, new ScriptedSource([[original], [original]])).state;
+      const copies = Object.values(current.instances).filter(instance => instance.printing.kind === "figmentCopy");
+      expect(copies).toHaveLength(2);
+      expect(copies.map(instance => characteristicsOf(current, C, instance.id).spark)).toEqual([2, 0]);
+      expect(copies.every(instance => instance.id !== original && instance.variant.deckMods?.sparkBonus === 2)).toBe(true);
+      expect(characteristicsOf(current, C, original).spark).toBe(6);
+      current = passUntil(E, current, at(E, opponent(side), "day")).state;
+      const stolen = E.apply(current, opponent(side), { kind: "play", card: copyBoard.ids[opponent(side)].hand[0], from: "hand" }, new ScriptedSource([[original]])).state;
+      expect(stolen.instances[original]).toMatchObject({ owner: side, controller: opponent(side), status: { x: 4 } });
+      expect(characteristicsOf(stolen, C, original).spark).toBe(6);
+      expect(stolen.instances[copyBoard.ids[opponent(side)].hand[0]].zone).toBe("void");
+      const returned = E.apply(stolen, opponent(side), { kind: "activate", source: original, ability: 1 }, NO_PROMPTS).state;
+      expect(returned.instances[original]).toMatchObject({ owner: side, controller: side, zone: "hand", status: { x: null } });
+      expect(characteristicsOf(returned, C, original).spark).toBe(2);
+    });
+  }
 });

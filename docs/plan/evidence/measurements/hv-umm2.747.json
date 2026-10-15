@@ -1,0 +1,536 @@
+{
+  "bead": "hv-umm2.747",
+  "base": "16477356526f24e645a29dd6b13f5b1b25003b41",
+  "implementationStart": "2026-10-15T13:48:01.462290Z",
+  "sourceHashes": {
+    "src/engine/continuous/layers.ts": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+    "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780",
+    "src/engine/rules/costs.ts": "fd07770035f8d209525a3cdb5003ed79a308892d7344e4608b214d9392d7909c"
+  },
+  "sourceScope": {
+    "production": "Layers.copiable unresolved-X base expression only; no API, type, event, persisted field or payment change",
+    "tests": "Additive existing continuous.test.ts public synthetic contracts, 408 total lines, 6 new tests, both actors",
+    "imports": "Existing public catalog/DSL/primitive/fold/engine/view/clone APIs only; sequence composition separately admitted; no export edits"
+  },
+  "normativeInputs": [
+    "docs/plan/decisions.md D39: permanent additive entry spark in layer1 after structural forms",
+    "docs/rules.md Spark below0/outsideplay and Character X",
+    "src/engine/transfigurations/kindled.ts canonical Kindled transform"
+  ],
+  "commands": [
+    {
+      "label": "baseline-red",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-variable-spark747-root",
+      "start": "2026-10-15T14:06:17.255188+00:00",
+      "sourceHashes": {
+        "src/engine/continuous/layers.ts": "b5b42a5a6c2183ad7d7970aa51313eff72992e295d3cba4d8ec6819bdce1150a",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780",
+        "src/engine/rules/costs.ts": "fd07770035f8d209525a3cdb5003ed79a308892d7344e4608b214d9392d7909c"
+      },
+      "pid": 96436,
+      "exitCode": 1,
+      "wallS": 4.7630419170018286,
+      "end": "2026-10-15T14:06:22.018541+00:00",
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/variable-spark747/baseline-red.log",
+      "terminal": true
+    },
+    {
+      "label": "repair-green",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-variable-spark747-root",
+      "start": "2026-10-15T14:06:33.904134+00:00",
+      "sourceHashes": {
+        "src/engine/continuous/layers.ts": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780",
+        "src/engine/rules/costs.ts": "fd07770035f8d209525a3cdb5003ed79a308892d7344e4608b214d9392d7909c"
+      },
+      "pid": 97649,
+      "exitCode": 0,
+      "wallS": 3.6680571669712663,
+      "end": "2026-10-15T14:06:37.572478+00:00",
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/variable-spark747/repair-green.log",
+      "terminal": true
+    },
+    {
+      "label": "actual-payment-debit",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "-t",
+        "adds entry spark while preserving the paid X"
+      ],
+      "start": "2026-10-15T14:07:32.302448+00:00",
+      "restoreExpected": "fd07770035f8d209525a3cdb5003ed79a308892d7344e4608b214d9392d7909c",
+      "sourceHashes": {
+        "src/engine/rules/costs.ts": "a144d91e536351a5c7ae14303b1278d5f45a41aa28abf04ddff582b763beff04",
+        "src/engine/continuous/layers.ts": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780"
+      },
+      "pid": 2959,
+      "exitCode": 1,
+      "wallS": 7.555784916039556,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/variable-spark747/mutant-actual-payment-debit.log",
+      "end": "2026-10-15T14:07:39.860529+00:00",
+      "restored": "fd07770035f8d209525a3cdb5003ed79a308892d7344e4608b214d9392d7909c",
+      "terminal": true
+    },
+    {
+      "label": "double-bonus",
+      "start": "2026-10-15T14:07:06.754364+00:00",
+      "restoreExpected": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "-t",
+        "permanent spark on a printed X character"
+      ],
+      "sourceHashes": {
+        "src/engine/continuous/layers.ts": "856261aa65be8be34322f31e1fde38a0f7662508d059e58458b80b53e096da9f",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780"
+      },
+      "pid": 705,
+      "exitCode": 1,
+      "wallS": 3.648811291961465,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/variable-spark747/mutant-double-bonus.log",
+      "end": "2026-10-15T14:07:10.403820+00:00",
+      "restored": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+      "terminal": true
+    },
+    {
+      "label": "omission",
+      "start": "2026-10-15T14:07:03.073599+00:00",
+      "restoreExpected": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "-t",
+        "permanent spark on a printed X character"
+      ],
+      "sourceHashes": {
+        "src/engine/continuous/layers.ts": "41f0cf32b5761930cefebe82c7467f347fbb7d88aa42d58d9439b62ea2bc3d40",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780"
+      },
+      "pid": 265,
+      "exitCode": 1,
+      "wallS": 3.6796316250110976,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/variable-spark747/mutant-omission.log",
+      "end": "2026-10-15T14:07:06.754083+00:00",
+      "restored": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+      "terminal": true
+    },
+    {
+      "label": "premature-clamp",
+      "start": "2026-10-15T14:07:14.058381+00:00",
+      "restoreExpected": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "-t",
+        "permanent spark on a printed X character"
+      ],
+      "sourceHashes": {
+        "src/engine/continuous/layers.ts": "9bac17307fe25d4c9cde7b6da9f9f8d47ddaae75e6c6426d49310c4b88172993",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780"
+      },
+      "pid": 1460,
+      "exitCode": 1,
+      "wallS": 3.643874124973081,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/variable-spark747/mutant-premature-clamp.log",
+      "end": "2026-10-15T14:07:17.702897+00:00",
+      "restored": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+      "terminal": true
+    },
+    {
+      "label": "resolved-x-one",
+      "start": "2026-10-15T14:07:10.404107+00:00",
+      "restoreExpected": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "-t",
+        "permanent spark on a printed X character"
+      ],
+      "sourceHashes": {
+        "src/engine/continuous/layers.ts": "d529fcefef36402c87094805c77310922eca739532ff0d345569c6d618458623",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780"
+      },
+      "pid": 1117,
+      "exitCode": 1,
+      "wallS": 3.653183916991111,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/variable-spark747/mutant-resolved-x-one.log",
+      "end": "2026-10-15T14:07:14.058119+00:00",
+      "restored": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+      "terminal": true
+    },
+    {
+      "label": "focused-consumers",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/continuous/continuous-zones.test.ts",
+        "src/engine/transfigurations.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-variable-spark747-root",
+      "start": "2026-10-15T14:07:51.973696+00:00",
+      "sourceHashes": {
+        "src/engine/continuous/layers.ts": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780",
+        "src/engine/rules/costs.ts": "fd07770035f8d209525a3cdb5003ed79a308892d7344e4608b214d9392d7909c"
+      },
+      "pid": 4801,
+      "exitCode": 0,
+      "wallS": 9.475287374982145,
+      "end": "2026-10-15T14:08:01.450469+00:00",
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/variable-spark747/focused-consumers.log",
+      "terminal": true
+    },
+    {
+      "label": "qa-first-desktop",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.747/variable-spark747.mjs",
+        "--bead",
+        "hv-umm2.747",
+        "--viewports",
+        "desktop"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-variable-spark747-root",
+      "start": "2026-10-15T14:11:37.215214+00:00",
+      "driverSha256": "c1dac54d70ebd406725f3531ff098b8e0bb4826d35f073336109d5c178786609",
+      "sourceHashes": {
+        "src/engine/continuous/layers.ts": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780",
+        "src/engine/rules/costs.ts": "fd07770035f8d209525a3cdb5003ed79a308892d7344e4608b214d9392d7909c"
+      },
+      "observedOwnerRecords": [
+        {
+          "at": "2026-10-15T14:11:40.737124+00:00",
+          "record": {
+            "token": "446d95a4-71bb-46b4-9af7-84735863665a",
+            "pid": 22077,
+            "bead": "hv-umm2.747",
+            "label": "variable-spark747",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-variable-spark747-root",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-15T14:11:40.708Z",
+            "providerState": "startup-unconfirmed"
+          }
+        },
+        {
+          "at": "2026-10-15T14:11:40.842334+00:00",
+          "record": {
+            "token": "446d95a4-71bb-46b4-9af7-84735863665a",
+            "pid": 22077,
+            "bead": "hv-umm2.747",
+            "label": "variable-spark747",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-variable-spark747-root",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-15T14:11:40.708Z",
+            "providerState": "active",
+            "mcpSessionId": "ad2d2dfd-4020-4bbf-93f0-46ec2887e267",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        }
+      ],
+      "pid": 22077,
+      "exitCode": 0,
+      "end": "2026-10-15T14:11:50.864227+00:00",
+      "wallS": 13.64750808296958,
+      "terminal": true,
+      "slotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+      "ownerRecordAbsent": true,
+      "serverRecordAbsent": true,
+      "serverPid": 22131,
+      "port": 5274,
+      "remainingServerGroup": "",
+      "portListeningAfterTerminal": false,
+      "normalCleanupMessage": "[qa] runtime: server process group 22131 on port 5274 cleanup attempted; port free"
+    },
+    {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T14:13:31.140464+00:00",
+      "hostLoadRaw": "{ 5.83 6.86 8.20 }",
+      "hostLoad": 5.83,
+      "sourceHashes": {
+        "src/engine/continuous/layers.ts": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780",
+        "src/engine/rules/costs.ts": "fd07770035f8d209525a3cdb5003ed79a308892d7344e4608b214d9392d7909c"
+      },
+      "pid": 30616,
+      "exitCode": 0,
+      "wallS": 75.06105104100425,
+      "end": "2026-10-15T14:14:46.202930+00:00",
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/variable-spark747/final-review.log",
+      "terminal": true
+    },
+    {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T14:14:46.206237+00:00",
+      "hostLoadRaw": "{ 6.68 6.96 8.13 }",
+      "hostLoad": 6.68,
+      "sourceHashes": {
+        "src/engine/continuous/layers.ts": "e6e286981ee87a71d55eb2261193aa862ecc08748e9cbf6770546ea7893848b8",
+        "src/engine/continuous/continuous.test.ts": "18375c5e2b07ecfc4a9cee3aa0e9461385feeaa5b8e4d15b17b4b2bcfa3c1780",
+        "src/engine/rules/costs.ts": "fd07770035f8d209525a3cdb5003ed79a308892d7344e4608b214d9392d7909c"
+      },
+      "pid": 36138,
+      "exitCode": 0,
+      "wallS": 4.22637962497538,
+      "end": "2026-10-15T14:14:50.432889+00:00",
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/variable-spark747/final-knip.log",
+      "terminal": true
+    },
+    {
+      "label": "final-schema-whitespace",
+      "start": "2026-10-15T14:15:27.670582+00:00",
+      "checks": [
+        {
+          "command": [
+            "node",
+            "scripts/friction-triggers.mjs",
+            "--validate-records"
+          ],
+          "start": "2026-10-15T14:15:27.670693+00:00",
+          "end": "2026-10-15T14:15:27.742734+00:00",
+          "wallS": 0.07206529105314985,
+          "exitCode": 0,
+          "output": "Friction evidence valid: 980 records, 41 historical unknown measurements\n"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "start": "2026-10-15T14:15:27.742768+00:00",
+          "end": "2026-10-15T14:15:27.753021+00:00",
+          "wallS": 0.010271167033351958,
+          "exitCode": 0,
+          "output": ""
+        }
+      ],
+      "end": "2026-10-15T14:15:27.753048+00:00",
+      "wallS": 0.08235974999843165,
+      "terminal": true
+    }
+  ],
+  "counterfactualDisposition": {
+    "baseline": "Actual unmodified production failed both actors: hand0 expected2, play4 expected6, plain copy0 expected2",
+    "omission": "Failed intended both-actor omission assertions; exact approved repair restored",
+    "double-bonus": "Failed hand4 expected2 and play8 expected6; exact approved repair restored",
+    "resolved-x-one": "X evaluation only; failed3 expected2/6; this does not stand for payment rewriting",
+    "premature-clamp": "Failed supported paid4 + permanent\u22126 + static3: observed3 expected1 for both actors",
+    "actual-payment-debit": "Separately admitted temporary payCosts energy-X debit min(X,1) failed both actors energy9 expected6 while selected answer4/materialized score4 remained; full costs.ts original bytes/hash restored"
+  },
+  "failurePaths": {
+    "transition": "Pure existing characteristic evaluation; introduces no action, transition, write, storage or prompt branch",
+    "replayAndReload": "New public fold JSON roundtrip at chooseNumber, answer4, replay equality, clone and visible determinization parity for both actors",
+    "refusalCancellationStaleInput": "Unchanged fold/cost protocol is covered by focused costs-play-x.test.ts; new computation neither accepts input nor changes payment planning",
+    "partialWriteError": "Existing immutable-step work-copy and fold transactional errors remain authoritative; calculation mutates no state and adds no partial-write path",
+    "sourceControlZone": "Public filtered-static source return, actual opponent gainControl, same physical return to owner withXnull, copied variants and explicitzero overrides"
+  },
+  "qa": {
+    "report": "variable-spark747.result.json",
+    "invocation": "run-C6WRrj",
+    "scenarioDriver": "variable-spark747.mjs",
+    "driverSha256": "c1dac54d70ebd406725f3531ff098b8e0bb4826d35f073336109d5c178786609",
+    "runtimeReceipt": "qa-first-desktop.receipt.json",
+    "gameLog": "variable-spark747-desktop.jsonl",
+    "screenshot": "ordinary-x4-spark6-desktop.png",
+    "captureDimensions": [
+      2880,
+      1800
+    ],
+    "cssViewport": [
+      1440,
+      900
+    ],
+    "visualInspection": "Capture inspected: played card spark6 and player energy6/10 rendered clearly; ordinary phase control is available",
+    "uuid": "c92a7dc0-04b0-4c54-9485-59a92505eabc",
+    "instance": "i1",
+    "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+    "gameId": "a7fbgj",
+    "hand": {
+      "value": "2",
+      "box": {
+        "x": 705.484375,
+        "y": 732,
+        "width": 128.90625,
+        "height": 180.46875
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "hit": {
+        "x": 769.9375,
+        "y": 822.234375
+      }
+    },
+    "chosenX": 4,
+    "picker": {
+      "x": 990.171875,
+      "y": 597,
+      "width": 250.328125,
+      "height": 42,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    "board": {
+      "value": "6",
+      "box": {
+        "x": 254.5,
+        "y": 483.5,
+        "width": 89.5,
+        "height": 89.5
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "hit": {
+        "x": 299.25,
+        "y": 528.25
+      }
+    },
+    "reloadGeometry": {
+      "value": "6",
+      "box": {
+        "x": 254.5,
+        "y": 483.5,
+        "width": 89.5,
+        "height": 89.5
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "hit": {
+        "x": 299.25,
+        "y": 528.25
+      }
+    },
+    "energy": {
+      "before": 10,
+      "played": 6,
+      "reloaded": 6
+    },
+    "recordedPlay": {
+      "gameId": "a7fbgj",
+      "version": 0,
+      "side": "player",
+      "action": {
+        "kind": "play",
+        "card": "i1",
+        "from": "hand"
+      },
+      "answers": [
+        {
+          "fingerprint": "1w0xrcvvxti",
+          "value": 4
+        }
+      ],
+      "timestamp": "2026-10-15T14:11:45.136Z",
+      "event": "engine.action",
+      "seq": 32
+    },
+    "caps": {
+      "errors": [],
+      "rejections": [],
+      "consoleErrors": []
+    },
+    "sameGameReload": true,
+    "cleanup": "Contemporaneous terminal receipt at 2026-10-15T14:11:50.864227Z: canonical runner exited0 through its source-verified browser_close/RPC drain/transport cleanup order, own records absent, serverPG22131 absent and port5274 free. Parent later observed a foreign port5274 rebind; that process was not signaled. Negotiated MCP identity was captured from the own active record; raw provider close transcripts were not audited."
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-15T14:13:14.920411+00:00",
+      "value": 6.65,
+      "measuredFor": "post-QA evidence preparation"
+    },
+    {
+      "at": "2026-10-15T14:13:31.140464+00:00",
+      "value": 5.83,
+      "measuredFor": "final npm run review start"
+    },
+    {
+      "at": "2026-10-15T14:14:46.206237+00:00",
+      "value": 6.68,
+      "measuredFor": "final npm run knip start"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final npm run review start"
+      }
+    }
+  },
+  "reviewAndKnip": {
+    "review": {
+      "exitCode": 0,
+      "wallS": 75.06105104100425
+    },
+    "knip": {
+      "exitCode": 0,
+      "wallS": 4.22637962497538
+    },
+    "coreReview": "Parent owns fresh read-only exact-commit reviewer and finding verification; pending parent delivery"
+  },
+  "finalValidation": {
+    "review": "342 related test files, 10116 tests passed; typechecks, lint, import cycles and friction schema passed",
+    "knip": "exit0",
+    "schema": "explicit --validate-records exit0",
+    "whitespace": "git diff --check exit0",
+    "productionEpochUnchangedAfterQA": true
+  },
+  "implementationWindow": {
+    "start": "2026-10-15T13:48:01.462290+00:00",
+    "end": "2026-10-15T14:17:07.064473+00:00",
+    "endMeasuredFor": "Immediate precommit observation; exact Git command start/end and resulting source OID retained in final-commit.receipt.json"
+  },
+  "reviewQualification": "Review and Knip passed at final production/test epoch; subsequent own evidence updates record actual timings, cleanup qualification and this inclusive precommit window. Metadata-only final schema and whitespace checks run immediately before commit."
+}

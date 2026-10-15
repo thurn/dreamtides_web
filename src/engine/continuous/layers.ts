@@ -551,7 +551,10 @@ export class Layers {
     for (const ability of definition.abilities(instance.variant)) {
       if (ability.kind === "keyword") keywords.add(ability.keyword);
     }
-    const base = definition.spark === null ? null : definition.spark === "x" ? (instance.status.x ?? 0) : definition.spark;
+    // Numeric bases already include entry mods; a remaining X needs its permanent bonus after resolving X.
+    const base = definition.spark === null ? null : definition.spark === "x"
+      ? (instance.status.x ?? 0) + (instance.variant.deckMods?.sparkBonus ?? 0)
+      : definition.spark;
     return {
       cardType: definition.cardType,
       subtype: definition.subtype,
