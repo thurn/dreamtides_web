@@ -97,5 +97,30 @@
     "start": "2026-10-15T19:05:34.858Z",
     "cutoff": "2026-10-15T20:16:07.202075+00:00",
     "tail": "Author admission, normal Git and final settlement remain measured in external delivery-tail receipt, preserving the original dispatch origin."
-  }
+  },
+  "measurementCorrections": [
+    {
+      "correctedBy": "hv-umm2.284",
+      "kind": "inclusive-implementation-window",
+      "sourceOID": "b84dfc2fd5db233cef93e388cace92f37f162cec",
+      "sourceFrictionSha256": "f04cae49da46553341bbaeeaad186a803b085aad70d5f96881ff17bad4689ecc",
+      "sourceMeasurementSha256": "8f282b6e7a153b7b2b9cf4597ff4e705f92a646c67ae9a6b858e0f161de4afad",
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.287/final-v01/delivery-tail.json",
+      "receiptSha256": "06aa27e2e4d7cf477e2bae1c1f8c634da92f5c58b2c0206083c4a896b6458539",
+      "originalImplementWindow": {
+        "start": "2026-10-15T19:05:34.858Z",
+        "end": "2026-10-15T20:16:07.202075+00:00"
+      },
+      "originalImplementMin": 70.53906791666667,
+      "correctedImplementWindow": {
+        "start": "2026-10-15T19:05:34.858Z",
+        "end": "2026-10-15T20:18:08.931761Z"
+      },
+      "correctedImplementMin": 72.5678960167,
+      "inclusiveDispatchToActualGitEndS": 4354.073761,
+      "preservedEvidenceCutoff": "2026-10-15T20:16:07.202075+00:00",
+      "preservedActualCutoffTailS": 121.729686,
+      "qualification": "Current friction window ends at actual measured normal Git completion. Original evidence cutoff, source snapshots, raw artifacts and through-cutoff accounting remain preserved. Correction rides this next ordinary bead under workflow friction-ledger; no closed-bead lifecycle/history change."
+    }
+  ]
 }

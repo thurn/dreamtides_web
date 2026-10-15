@@ -1,0 +1,239 @@
+{
+  "bead": "hv-umm2.284",
+  "scope": "Original full32 subtype-change actions; existing child635 joined;20eligible real Characters both actors/base+Kindled; current weighted300 and one kind judged. Evidence-only source writer.",
+  "sourceBase": "3f1cfa7d6a9033d04c001fe227bde58581fcbd3f",
+  "implementDispatch": "2026-10-15T21:20:57.135Z",
+  "evidenceCutoff": "2026-10-15T22:21:10.117066+00:00",
+  "status": "Runtime and ordinary final checks passed; exact six evidence paths await final content acceptance and normal Git delivery.",
+  "clockQualification": "Inclusive dispatch through this actual metadata cutoff includes research, failed harness epoch, parent admissions, heavy/browser execution and waits. Final actual Git completion/tail belongs to external delivery receipt; no entire-session CPU inferred.",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284",
+  "immutableInputManifest": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/immutable-inputs-v01.manifest.json",
+    "sha256": "638b23ee01ec97ac607023869703169dd05f2d9d965c25f082cad15f31baae40",
+    "files": 128
+  },
+  "runtimeAcceptance": {
+    "packet": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/immutable-inputs-v01/acceptance-v01/packet-index.json",
+    "sha256": "a2b1b60fd3cc101ed9ef218ebf9e17a279cf65c1d91d67cd09dad39cfa8a7bc1",
+    "sourceGuard": {
+      "originalPayloads": 5886,
+      "mismatches": []
+    },
+    "producerCases": 74,
+    "producerActions": 32,
+    "modifiedNodePreflight": 80,
+    "realNodeTypalCases": 4,
+    "focusedTests": 665,
+    "stockControlPreflight": 80,
+    "weightedGames": 300,
+    "weightedSteps": 84945,
+    "interactiveReruns": 494,
+    "boundedFeasibility": {
+      "legality": 0,
+      "prompts": 4
+    },
+    "browserModifiedCells": 80,
+    "judgedCases": 3,
+    "uniqueNativeGames": 83,
+    "nativeLogRows": 2525,
+    "actualPngs": 3,
+    "canonicalBrowserClosures": 2,
+    "nativeLogQualification": "2525 is the final exported JSONL row total across 83 unique games. In-body observations occur before export and can have fewer rows because export appends logging records."
+  },
+  "child635": {
+    "rawSource": "8060999ffa10225b78587e2487d6138077e677de",
+    "certifiedTested": "e0f293d436b6215ec71a41a8ebb7795bb68196ed",
+    "currentBase": "3f1cfa7d6a9033d04c001fe227bde58581fcbd3f",
+    "certifiedTestedAncestor": true,
+    "path": "src/battle/integration/deck-mods/subtype-change.contracts.ts",
+    "rawSha256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+    "certifiedSha256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+    "currentSha256": "4cc7cd17c515ece44ac79fd752e34ae9e0f3e95b16ffb9d77729c9354bf07658",
+    "rawSourceAncestryClaim": false,
+    "owningRunner": "src/battle/integration/deck-mods.test.ts",
+    "discovery": "import.meta.glob(\"./deck-mods/*.contracts.ts\", { eager: true })",
+    "qualification": "Complete current 379-line module read; exact source equality and certified ancestry independently checked. Current owning runner executed in the actual focused command: 4 files and 665 tests passed, including 510 owning-runner tests. The existing 73 synthetic child cases supply no real-card, producer or browser credit."
+  },
+  "actualReceipts": {
+    "public-node": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/execution-v03/public-node.receipt.json",
+      "sha256": "012fe1d2691a16a72419f7e3cd49843da263c7b3167f5c6fa4db9e5a928a351d",
+      "wallS": 13.48295729100937,
+      "userS": 11.973572,
+      "systemS": 1.682342,
+      "exit": 0,
+      "qualification": "Actual owned command wall/CPU includes birth/ps and terminal cleanup. Deadline starts before Popen and initial ps after source validation (and heavy lock admission when applicable)."
+    },
+    "focused": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/execution-v03/focused.receipt.json",
+      "sha256": "57adbcc1110dea1d853c587f577e99c38b9c4860ecff1832a3520a7477c7376b",
+      "wallS": 8.126454874989577,
+      "userS": 8.977049,
+      "systemS": 2.2792619999999997,
+      "exit": 0,
+      "qualification": "Actual owned command wall/CPU includes birth/ps and terminal cleanup. Deadline starts before Popen and initial ps after source validation (and heavy lock admission when applicable)."
+    },
+    "stock-control-preflight": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/execution-v03/stock-control-preflight.receipt.json",
+      "sha256": "96de540cf4ae2821abae30bd907ef13fc8490f47ca5c27c814296c97b6698076",
+      "wallS": 3.375152624968905,
+      "userS": 1.259033,
+      "systemS": 0.768495,
+      "exit": 0,
+      "qualification": "Actual owned command wall/CPU includes birth/ps and terminal cleanup. Deadline starts before Popen and initial ps after source validation (and heavy lock admission when applicable)."
+    },
+    "weighted300": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/execution-v03/weighted300.receipt.json",
+      "sha256": "d1d4cb7fa9780db4b78c30f700fa030902e279f682d7cf743023af29ec49d2d4",
+      "wallS": 1368.1364593330072,
+      "userS": 1429.430214,
+      "systemS": 9.907167000000001,
+      "exit": 0,
+      "qualification": "Actual owned command wall/CPU includes birth/ps and terminal cleanup. Deadline starts before Popen and initial ps after source validation (and heavy lock admission when applicable)."
+    },
+    "browser-pilot": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/browser-v05-pilot/browser-pilot.receipt.json",
+      "sha256": "edd20f67012c578d678af929ff8ac42f352b9e4ab8097768ea47ec3c6dae8526",
+      "wallS": 23.197280124993995,
+      "userS": 7.003099,
+      "systemS": 3.727385,
+      "exit": 0,
+      "qualification": "Actual owned command wall/CPU includes birth/ps and terminal cleanup. Deadline starts before Popen and initial ps after source validation (and heavy lock admission when applicable)."
+    },
+    "browser-matrix": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/browser-v05-matrix/browser-matrix.receipt.json",
+      "sha256": "5f5ec7d0d52fd54371d415cce60805638cfe93e0e09f09b3940f5dc432c5ecaf",
+      "wallS": 573.6656269159866,
+      "userS": 19.021335999999998,
+      "systemS": 13.76399,
+      "exit": 0,
+      "qualification": "Actual owned command wall/CPU includes birth/ps and terminal cleanup. Deadline starts before Popen and initial ps after source validation (and heavy lock admission when applicable)."
+    },
+    "review": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/final-validation-v01/review.receipt.json",
+      "sha256": "956ab23f58adfb0abe9fa3b7dc3ce7f4b7bb106cc9957d62ff6f9b7b332e0499",
+      "wallS": 0.6878201249637641,
+      "userS": 0.25804299999999997,
+      "systemS": 0.226497,
+      "exit": 0,
+      "qualification": "Actual owned command wall/CPU includes birth/ps and terminal cleanup. Deadline starts before Popen and initial ps after source validation (and heavy lock admission when applicable)."
+    },
+    "knip": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/final-validation-v01/knip.receipt.json",
+      "sha256": "a456c963e3a4ca1dd3f1e1789d2d74a343d2c0ec572e5e2fc7000673e55906a5",
+      "wallS": 6.757019209035207,
+      "userS": 4.4535,
+      "systemS": 1.9411939999999999,
+      "exit": 0,
+      "qualification": "Actual owned command wall/CPU includes birth/ps and terminal cleanup. Deadline starts before Popen and initial ps after source validation (and heavy lock admission when applicable)."
+    },
+    "friction-schema": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/final-validation-v01/friction-schema.receipt.json",
+      "sha256": "0d10bcc9543a5687bce0a8eb04860c895aa76e4129ca1a20ed16d9045b78bcac",
+      "wallS": 0.5057050420437008,
+      "userS": 0.092917,
+      "systemS": 0.136132,
+      "exit": 0,
+      "qualification": "Actual owned command wall/CPU includes birth/ps and terminal cleanup. Deadline starts before Popen and initial ps after source validation (and heavy lock admission when applicable)."
+    },
+    "whitespace": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/final-validation-v01/whitespace.receipt.json",
+      "sha256": "7a75c92c0f18a4b88bd58d77f747802b45bea4447dc978c466abfea735a5b41f",
+      "wallS": 0.28033350000623614,
+      "userS": 0.043583,
+      "systemS": 0.15425099999999997,
+      "exit": 0,
+      "qualification": "Actual owned command wall/CPU includes birth/ps and terminal cleanup. Deadline starts before Popen and initial ps after source validation (and heavy lock admission when applicable)."
+    }
+  },
+  "negativeEpochs": [
+    {
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/execution-v02/public-node.receipt.json",
+      "sha256": "6480cfdc7f0a4eb5e6cf9ea058f216aa0949790a2e7e1b917539f93d45177e3d",
+      "exit": 1,
+      "cause": "External harness catalog omitted lab synthetic definitions used by actual solver. Bounded external-only v03 repair matched actual stock preflight extension.74producer partial outputs retained; no full-node/browser credit from failed epoch. Not a production/pre-existing defect."
+    }
+  ],
+  "qualifications": [
+    "Producer is actual authored public journey player rule path; both engine actors receive complete actual player-mapped entries by explicit seating.",
+    "Stock enemy card-lab play is constructor/prepaid under LOAD_STATE; separate declared enemy judgment uses actual live native BATTLE_ACTION play then challenge/pass. No AI-quality claim.",
+    "Stock80 proves actual requested mods/variant/side, physical current played subtype/source resolution and UI/Caps; it does not exercise every printed ability.",
+    "Current weighted300 targets20real cards+Kindled and random typed mods, not exploration-action traversal;32actions are separately proved by74producer cases. No historical300 reused.",
+    "Actual independent parent and helper views cover3PNGs. Lower initial desktop hand detail crop qualified; no board/control clipping observed. No selected prompt/temporary duration in fixture; no absent-path credit.",
+    "Command child CPU is scoped to owned processes; shared Playwright browser/provider CPU and whole implementation CPU are not inferred."
+  ],
+  "d21Judgment": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/immutable-inputs-v01/acceptance-v01/d21-judgment.md",
+    "helperActualViews": 3,
+    "parentActualViews": 3,
+    "parentProof": "/tmp/dreamtides-executor-01a1304d/284/parent-browser-complete-verification.json"
+  },
+  "resourceProof": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/immutable-inputs-v01/acceptance-v01/resource-settlement.json",
+    "sha256": "f33d043a68b05da8af296d45ef04ed064322bd3922a2fd62db31661bd9323746",
+    "freshOwnPgAbsence": 10
+  },
+  "old287Correction": {
+    "correctedBy": "hv-umm2.284",
+    "kind": "inclusive-implementation-window",
+    "sourceOID": "b84dfc2fd5db233cef93e388cace92f37f162cec",
+    "sourceFrictionSha256": "f04cae49da46553341bbaeeaad186a803b085aad70d5f96881ff17bad4689ecc",
+    "sourceMeasurementSha256": "8f282b6e7a153b7b2b9cf4597ff4e705f92a646c67ae9a6b858e0f161de4afad",
+    "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.287/final-v01/delivery-tail.json",
+    "receiptSha256": "06aa27e2e4d7cf477e2bae1c1f8c634da92f5c58b2c0206083c4a896b6458539",
+    "originalImplementWindow": {
+      "start": "2026-10-15T19:05:34.858Z",
+      "end": "2026-10-15T20:16:07.202075+00:00"
+    },
+    "originalImplementMin": 70.53906791666667,
+    "correctedImplementWindow": {
+      "start": "2026-10-15T19:05:34.858Z",
+      "end": "2026-10-15T20:18:08.931761Z"
+    },
+    "correctedImplementMin": 72.5678960167,
+    "inclusiveDispatchToActualGitEndS": 4354.073761,
+    "preservedEvidenceCutoff": "2026-10-15T20:16:07.202075+00:00",
+    "preservedActualCutoffTailS": 121.729686,
+    "qualification": "Current friction window ends at actual measured normal Git completion. Original evidence cutoff, source snapshots, raw artifacts and through-cutoff accounting remain preserved. Correction rides this next ordinary bead under workflow friction-ledger; no closed-bead lifecycle/history change."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual npm run review starting 2026-10-15T22:18:08.261569+00:00",
+        "sample": "{ 10.81 14.17 12.04 }",
+        "scope": "Wrapper host load sampled immediately before Popen; shared host observation, not whole implementation CPU."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "rulesDecisions": [],
+  "sourceRepairs": [],
+  "coreReview": "N/A evidence-only noncore nongate",
+  "fallout": [],
+  "plannedFinalPaths": [
+    "docs/plan/evidence/qa-ledger/hv-umm2.284.jsonl",
+    "docs/plan/evidence/friction/hv-umm2.284.json",
+    "docs/plan/evidence/measurements/hv-umm2.284.json",
+    "docs/plan/evidence/pre-existing/hv-umm2.284.md",
+    "docs/plan/evidence/friction/hv-umm2.287.json",
+    "docs/plan/evidence/measurements/hv-umm2.287.json"
+  ],
+  "finalTailPlan": "Prepare complete evidence/index/check receipts before final content/Git ACK. Refresh own two clock fields+accounting to fresh cutoff immediately before last fast schema/scope/staged-whitespace checks and one normal Conventional Commit. Capture exact Git+whole-own-PG settlement end/CPU before postverification; target<60s external tail. Parent alone lifecycle.",
+  "finalChecks": {
+    "reviewScope": "Actual quick review selected friction-records for six evidence files; no production code changed.",
+    "knip": "Actual prepare, Knip and linked-art restore passed; preparation missing-art warnings retained in stderr, restored original tracked payload guard clean.",
+    "schema": "Explicit friction evidence validation passed: 1014 records, 41 historical unknown measurements.",
+    "sourceGuard": "All 5886 original payloads compared with exact six evidence exceptions; those six current draft bytes were also frozen pre/post each actual check.",
+    "draftEpoch": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/final-validation-v01/draft-before-final-check-accounting"
+  },
+  "finalAccounting": {
+    "metadataCutoff": "2026-10-15T22:21:10.117066+00:00",
+    "dispatch": "2026-10-15T21:20:57.135Z",
+    "actualGitReceipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.284/final-delivery-v01/delivery-tail.json",
+    "qualification": "The external receipt records actual commit plus owned-process-group settlement end and inclusive dispatch duration; this metadata cutoff precedes normal Git delivery."
+  }
+}
