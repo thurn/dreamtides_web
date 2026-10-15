@@ -45,6 +45,7 @@ import { TRIGGER, TRIGGER_CARDS } from "./trigger-cards";
 import { ZONE, ZONE_CARDS, ZONE_FIGMENTS } from "./zone-cards";
 import { DECK_TOP, DECK_TOP_CARDS } from "./deck-top-cards";
 import { CHOSEN_HAND_BANISH_CARDS, HAND_BANISH } from "./chosen-hand-banish-cards";
+import { OFFERING_DISCARD_CARDS, OFFERING_DISCARD_CARD_TEXT } from "./offering-discard-cards";
 
 function labEvent(index: number, cost: number, effect: Parameters<typeof event>[0]): EngineCardDefinition {
   return {
@@ -336,6 +337,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
     ...CAPTURE_CARDS,
     ...ZONE_CARDS,
     ...CHOSEN_HAND_BANISH_CARDS,
+    ...OFFERING_DISCARD_CARDS,
     ...DECK_TOP_CARDS,
     ...Object.values(LAB),
   ],
@@ -345,6 +347,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  ...OFFERING_DISCARD_CARD_TEXT,
   [LAB.conditionalAlternative.id]: { name: "Lab Kindred Arrival", text: "If you control a survivor, you may play this card from your hand or void for 1●. If played this way, it materializes with awakened." },
   [LAB.alternativeSurvivor.id]: { name: "Lab Survivor", text: "0●: Return this character to hand." },
   [LAB.materializeChosen.id]: { name: "Lab Hand Arrival", text: "Materialize a ≤2● cost character from your hand." },

@@ -87,6 +87,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   playFrom: 6,
   revealDeckTop: 6,
   preserveEphemeralHand: 6,
+  offeringDiscardPaymentOption: 6,
   cannotPlay: 6,
   playLimit: 6,
   reclaimNotBanished: 6,
@@ -278,6 +279,7 @@ function changed(change: ContinuousChange): InstanceId | null {
     case "playFrom":
     case "revealDeckTop":
     case "preserveEphemeralHand":
+    case "offeringDiscardPaymentOption":
     case "cannotPlay":
     case "playLimit":
     case "reclaimNotBanished":
@@ -323,6 +325,12 @@ export class Layers {
   preservesEphemeralHand(side: Side): boolean {
     return this.statics.some((entry) => entry.controller === side && entry.node.op === "preserveEphemeralHand" &&
       this.expand(entry).some((change) => change.kind === "preserveEphemeralHand" && change.player === side));
+  }
+
+  /** Whether the holder may choose a discard for an Offering payment under its live statics. */
+  offeringDiscardPaymentAllowed(side: Side): boolean {
+    return this.statics.some((entry) => entry.controller === side && entry.node.op === "offeringDiscardPaymentOption" &&
+      this.expand(entry).some((change) => change.kind === "offeringDiscardPaymentOption" && change.player === side));
   }
 
   /** Sum applicable static Draw-phase instructions only, without expanding unrelated layer-6 rules. */

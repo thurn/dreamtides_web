@@ -17,6 +17,7 @@ import { createFoldAdapter, type BattleSlice } from "../../engine/fold/slice";
 import { boardState } from "../../engine/testing/board";
 import { dreamwellLabBattle } from "../../engine/testing/card-lab";
 import { SYNTHETIC_CARDS, SYNTHETIC } from "../../engine/testing/synthetic-cards";
+import { OFFERING_DISCARD } from "../../engine/testing/offering-discard-cards";
 import { LAB, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle } from "../../engine/testing/prompt-lab";
 import { firstLegalAnswer, isLegalAnswer } from "../../engine/prompts/answers";
 import type { Answer, PromptRole } from "../../engine/prompts/types";
@@ -307,6 +308,41 @@ describe("prompt surfaces over the prompt lab", () => {
 function choiceView(view: import("../../cumulus/screens/MobileBattleScreen").MobileBattleView) { return view.prompt.surface.kind === "choice" ? view.prompt.surface.choice : null; }
 
 describe("typed payment route presentation", () => {
+  it("keeps the Offering payment pair in the chooser with its original answers and cancellation", () => {
+    const { state, ids } = boardState(labEngine.catalog, { active: "player", phase: "day", player: {
+      back: [OFFERING_DISCARD.holder.id], hand: [OFFERING_DISCARD.offered.id, SYNTHETIC.event0.id, SYNTHETIC.event0.id], energy: 5,
+    } });
+    const fold = createFoldAdapter(labEngine);
+    const route = fold.reduce({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 }, {
+      kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" },
+    });
+    if (route.kind !== "applied" || route.error !== null) throw new Error("missing Offering route");
+    const selected = fold.reduce(route.slice, { kind: "answer", side: "player", promptId: fold.pending(route.slice)!.prompt.id, value: 1 });
+    if (selected.kind !== "applied" || selected.error !== null) throw new Error("missing Offering payment choice");
+    const pending = fold.pending(selected.slice)!;
+    const prompt = pending.prompt;
+    if (prompt.kind !== "chooseMode" || prompt.costOptions === undefined) throw new Error("missing payment metadata");
+    const model = screenOf(state, prompt, pending.display, true, labEngine);
+    expect(model.prompt.surface).toMatchObject({ kind: "choice", presentation: "chooser", key: prompt.id });
+    expect(model.prompt.host?.cancellable).toBe(true);
+    expect(choiceView(model.view)?.presentation).toBe("chooser");
+    expect(selectionsOf(model)).toEqual([0, 1]);
+    const unrelated: Extract<PendingEnginePrompt, { kind: "chooseMode" }>[] = [
+      { ...prompt, purpose: { ...prompt.purpose, role: "chooseOne" } },
+      { ...prompt, costOptions: undefined },
+      { ...prompt, costOptions: [...prompt.costOptions].reverse() },
+      { ...prompt, costOptions: [[{ cost: "banishFromHand", count: 2 }], prompt.costOptions[1]] },
+      { ...prompt, costOptions: [prompt.costOptions[0], [{ cost: "discard", count: 1, filter: { cardType: "event" } }]] },
+      { ...prompt, costOptions: [prompt.costOptions[0], [{ cost: "discard", count: 1, filter: {}, captureCost: true }]] },
+      { ...prompt, options: prompt.options.map(option => ({ ...option, legal: option.mode === 0 })) },
+    ];
+    for (const other of unrelated) {
+      const inline = screenOf(state, other, pending.display, true, labEngine);
+      expect(choiceView(inline.view)?.presentation).toBeUndefined();
+      expect(selectionsOf(inline)).toEqual(other.options.filter(option => option.legal).map(option => option.mode));
+    }
+  });
+
   it.each(["playRoute", "voidRoute"] as const)("keeps three legal %s routes beside the status with their original answers", role => {
     const from = role === "voidRoute" ? "void" : "hand";
     const { state, ids } = boardState(labEngine.catalog, { active: "player", phase: "day", player: { [from]: [SYNTHETIC.event0.id], energy: 10 } });

@@ -97,6 +97,7 @@ function passiveFloating(state: BattleState, catalog: EngineCatalog): boolean {
       case "firstMaterializationKeyword": return false;
       case "materializeKeyword": return false;
       case "preserveEphemeralHand": return false;
+      case "offeringDiscardPaymentOption": return false;
       case "reclaimCost": return false;
       case "additionalDrawPhaseCards": return false;
       case "ruleModifier": return false; // Static-only rules carry no floating passivity proof.

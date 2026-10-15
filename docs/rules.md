@@ -1825,6 +1825,11 @@ Offering sets a printed energy-X binding to 0. A mandatory abandon-X cost
 without printed energy-X chooses its count before targets and pays no energy
 for that count. Its additional costs and Offering's hand banish still apply.
 
+A static permission to discard instead of banishing for Offering lets its
+controller choose either payment, using one other card in the hand they hold.
+Several copies grant the same alternatives once. Either payment plays the card
+by Offering, with its additional costs and persistent Offering status.
+
 A card that has Offering from another ability, as with "Cards in your hand
 have Offering," can be played this way while it has the keyword in hand. A
 card played from the void is never played by Offering (see [Playing from the

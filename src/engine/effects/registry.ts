@@ -96,6 +96,7 @@ import {
   rematerializePrimitive,
   reclaimNotBanishedPrimitive,
   preserveEphemeralHandPrimitive,
+  offeringDiscardPaymentOptionPrimitive,
   repeatPrimitive,
   returnAllButOnePrimitive,
   returnFromVoidPrimitive,
@@ -348,6 +349,7 @@ const DEFINITIONS = {
     return rematerializePrimitive;
   },
   get preserveEphemeralHand() { return preserveEphemeralHandPrimitive; },
+  get offeringDiscardPaymentOption() { return offeringDiscardPaymentOptionPrimitive; },
   get reclaimNotBanished() {
     return reclaimNotBanishedPrimitive;
   },

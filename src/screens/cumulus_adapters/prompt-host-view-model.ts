@@ -105,7 +105,7 @@ export interface PromptChoiceOption {
 
 /** The control row's choice buttons: what they ask, and each option with what it does. */
 export interface PromptChoices {
-  /** Local action choices and multi-route payments use the existing choice panel. */
+  /** Local actions, multi-route payments and the Offering payment pair use the existing choice panel. */
   readonly presentation?: "chooser";
   readonly key: MobileBattlePromptKey;
   readonly label: string;
@@ -457,6 +457,17 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
   }
 }
 
+/** This exact Offering payment pair has labels that need the existing wrapping choice panel. */
+function offeringPaymentChoice(prompt: PendingEnginePrompt): boolean {
+  if (prompt.kind !== "chooseMode" || prompt.purpose.role !== "chooseCost" || prompt.costOptions?.length !== 2 ||
+    prompt.options.length !== 2 || !prompt.options.every((option, index) => option.legal && option.mode === index)) return false;
+  const [banish, discard] = prompt.costOptions;
+  if (banish.length !== 1 || discard.length !== 1) return false;
+  const first = banish[0], second = discard[0];
+  return first.cost === "banishFromHand" && first.count === 1 && second.cost === "discard" && second.count === 1 &&
+    Object.keys(second.filter).length === 0 && !("captureCost" in second && second.captureCost === true);
+}
+
 function choice(
   prompt: PendingEnginePrompt,
   options: readonly { readonly copy: EnginePromptOptionCopy; readonly answer: Answer }[],
@@ -467,8 +478,8 @@ function choice(
     host,
     surface: {
       kind: "choice",
-      ...(prompt.kind === "chooseMode" && (prompt.purpose.role === "playRoute" || prompt.purpose.role === "voidRoute") &&
-        prompt.options.filter(option => option.legal && option.route !== undefined).length >= 3
+      ...((prompt.kind === "chooseMode" && (prompt.purpose.role === "playRoute" || prompt.purpose.role === "voidRoute") &&
+        prompt.options.filter(option => option.legal && option.route !== undefined).length >= 3) || offeringPaymentChoice(prompt)
         ? { presentation: "chooser" as const } : {}),
       key: prompt.id,
       label: host?.heading?.title ?? "",

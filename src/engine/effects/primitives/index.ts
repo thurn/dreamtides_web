@@ -72,6 +72,7 @@ export * from "./put-in-deck";
 export * from "./rematerialize";
 export * from "./reclaim-not-banished";
 export * from "./preserve-ephemeral-hand";
+export * from "./offering-discard-payment";
 export * from "./repeat";
 export * from "./return-from-void";
 export * from "./return-all-but-one";

@@ -7,6 +7,7 @@ import type { Layers } from "../continuous/layers";
 import { playPermission } from "../continuous/permissions";
 import type { AlternativeCostAbility, Cost, Speed } from "../dsl/types";
 import { fixedEnergy } from "../dsl/energy";
+import { choiceCost, discardCost } from "../dsl/builders";
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
@@ -22,7 +23,8 @@ export type PlayZone = "hand" | "void" | "deck";
 
 /**
  * How a card is played: from hand for its costs; from hand by Offering, for
- * 0● (X is 0) and a card banished from hand plus its other costs; from its
+ * 0● (X is 0) and another hand card banished, or discarded under a static
+ * permission, plus its other costs; from its
  * owner's void by a play permission (continuous/permissions.ts), for its
  * normal costs; or from its owner's void by Reclaim, for its reclaim costs
  * in place of its printed energy cost, or its normal costs with plain
@@ -104,7 +106,9 @@ export function routeCosts(state: BattleState, catalog: EngineCatalog, id: Insta
     case "permission":
       return playCosts(definition, variant);
     case "offering":
-      return [{ cost: "banishFromHand", count: 1 }, ...additionalCosts(definition, variant)];
+      return [layers.offeringDiscardPaymentAllowed(instance.controller)
+        ? choiceCost([{ cost: "banishFromHand", count: 1 }], [discardCost()])
+        : { cost: "banishFromHand", count: 1 }, ...additionalCosts(definition, variant)];
     case "reclaim": {
       const costs = explicitReclaimCosts(state, catalog, id, layers);
       return costs === null ? playCosts(definition, variant) : [...costs, ...additionalCosts(definition, variant)];
@@ -131,8 +135,8 @@ export function reclaimEnergyQuote(state: BattleState, catalog: EngineCatalog, i
 
 /**
  * Whether `side` passes the quick cost checks for playing `id` by `route`:
- * the costs that need no choice, and for Offering another card in hand to
- * banish. The play's prompts check the other cost choices.
+ * the costs that need no choice, and for Offering another card in hand for
+ * its selected payment. The play's prompts check the other cost choices.
  */
 export function routePayable(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId, route: PlayRoute): boolean {
   const costs = routeCosts(state, catalog, id, route);

@@ -168,6 +168,7 @@ export function changedInstance(change: FloatingChange): InstanceId | null {
     case "playLimit":
     case "revealDeckTop":
     case "preserveEphemeralHand":
+    case "offeringDiscardPaymentOption":
     case "reclaimNotBanished":
     case "ruleModifier":
     case "additionalDrawPhaseCards":

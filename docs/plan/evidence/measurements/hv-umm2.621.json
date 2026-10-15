@@ -1,0 +1,842 @@
+{
+  "bead": "hv-umm2.621",
+  "base": "d614f2258f7aa864911dadd34e2b02880e0216cd",
+  "dispatch": {
+    "actualSourceInspectionDispatch": "2026-10-15T04:44:32.614000+00:00",
+    "sampling": "UNKNOWN",
+    "modelStart": "UNKNOWN"
+  },
+  "endpoint": {
+    "at": "2026-10-15T05:19:31.392948+00:00",
+    "qualification": "Final precommit evidence cutoff. Original dispatch through this cutoff includes source research/admissions/check/QA/recovery/waits. Actual Git completion and inclusive elapsed are appended to ignored receipts/final-git.json after commit; that exact endpoint cannot be embedded in its own commit. Tail must remain under one minute."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "os.getloadavg 1-minute value at start of entire final review-v04 invocation; not isolated test CPU/load.",
+        "receipt": "receipts/review-v04.json",
+        "receiptSHA256": "b6d161db977d532e435b3c132c4f0da0b13d2c3dc5da402682ffd4d0d640e404"
+      },
+      "localValidationS": {
+        "measuredFor": "Final successful review/Knip/browser, last focused engine plus UI checks, and unchanged engine content gate. Other failed/diagnostic attempt costs separately enumerated in checks."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "baseline-public-v01": {
+      "start": [
+        12.591796875,
+        10.8310546875,
+        11.5419921875
+      ],
+      "end": [
+        12.591796875,
+        10.8310546875,
+        11.5419921875
+      ]
+    },
+    "focused-v01": {
+      "start": [
+        9.3095703125,
+        10.8388671875,
+        11.4912109375
+      ],
+      "end": [
+        10.04296875,
+        10.94287109375,
+        11.5205078125
+      ]
+    },
+    "focused-v02": {
+      "start": [
+        9.71630859375,
+        10.7724609375,
+        11.4375
+      ],
+      "end": [
+        10.0478515625,
+        10.8115234375,
+        11.443359375
+      ]
+    },
+    "focused-v03": {
+      "start": [
+        9.8837890625,
+        10.7646484375,
+        11.4228515625
+      ],
+      "end": [
+        9.73291015625,
+        10.71875,
+        11.40234375
+      ]
+    },
+    "mutant-forced-discard-v01": {
+      "start": [
+        10.77099609375,
+        10.8828125,
+        11.44775390625
+      ],
+      "end": [
+        11.19970703125,
+        10.96875,
+        11.47119140625
+      ]
+    },
+    "mutant-skips-additional-v01": {
+      "start": [
+        11.19970703125,
+        10.96875,
+        11.47119140625
+      ],
+      "end": [
+        10.77490234375,
+        10.88671875,
+        11.43603515625
+      ]
+    },
+    "review-v01": {
+      "start": [
+        10.77490234375,
+        10.88671875,
+        11.43603515625
+      ],
+      "end": [
+        10.1435546875,
+        10.70849609375,
+        11.32470703125
+      ]
+    },
+    "review-v02": {
+      "start": [
+        12.41064453125,
+        11.119140625,
+        11.44970703125
+      ],
+      "end": [
+        20.3828125,
+        14.51025390625,
+        12.74609375
+      ]
+    },
+    "tournament-focused-v01": {
+      "start": [
+        18.20556640625,
+        14.306640625,
+        12.70361328125
+      ],
+      "end": [
+        18.78173828125,
+        14.64501953125,
+        12.85302734375
+      ]
+    },
+    "review-v03": {
+      "start": [
+        17.46923828125,
+        14.646484375,
+        12.9033203125
+      ],
+      "end": [
+        16.890625,
+        15.2275390625,
+        13.29248046875
+      ]
+    },
+    "knip-v01": {
+      "start": [
+        16.09814453125,
+        15.0908203125,
+        13.25537109375
+      ],
+      "end": [
+        16.25,
+        15.138671875,
+        13.28271484375
+      ]
+    },
+    "content-gates-v01": {
+      "start": [
+        16.25,
+        15.138671875,
+        13.28271484375
+      ],
+      "end": [
+        15.5771484375,
+        15.0341796875,
+        13.26708984375
+      ]
+    },
+    "qa-controls-v01": {
+      "start": [
+        14.1845703125,
+        14.75244140625,
+        13.1875
+      ],
+      "end": [
+        13.7939453125,
+        14.64599609375,
+        13.16748046875
+      ]
+    },
+    "qa-controls-v02": {
+      "start": [
+        10.01416015625,
+        13.36279296875,
+        12.7998046875
+      ],
+      "end": [
+        9.44091796875,
+        12.9619140625,
+        12.6708984375
+      ]
+    },
+    "qa-controls-v03": {
+      "start": [
+        7.21240234375,
+        11.79248046875,
+        12.2548828125
+      ],
+      "end": [
+        6.666015625,
+        10.9970703125,
+        11.93603515625
+      ]
+    },
+    "qa-geometry-v01": {
+      "start": [
+        8.8203125,
+        10.23974609375,
+        11.51123046875
+      ],
+      "end": [
+        9.8115234375,
+        10.41064453125,
+        11.55712890625
+      ]
+    },
+    "ui-before-fix-v01": {
+      "start": [
+        25.85693359375,
+        15.658203125,
+        13.3388671875
+      ],
+      "end": [
+        23.70703125,
+        15.53662109375,
+        13.322265625
+      ]
+    },
+    "ui-focused-v01": {
+      "start": [
+        26.0615234375,
+        16.986328125,
+        13.93017578125
+      ],
+      "end": [
+        25.41552734375,
+        17.0029296875,
+        13.95361328125
+      ]
+    },
+    "review-v04": {
+      "start": [
+        17.4921875,
+        16.2216796875,
+        13.84228515625
+      ],
+      "end": [
+        11.5888671875,
+        14.8232421875,
+        13.52001953125
+      ]
+    },
+    "knip-v02": {
+      "start": [
+        18.9580078125,
+        16.50830078125,
+        14.22509765625
+      ],
+      "end": [
+        18.240234375,
+        16.39990234375,
+        14.2001953125
+      ]
+    },
+    "qa-controls-v04": {
+      "start": [
+        18.240234375,
+        16.39990234375,
+        14.2001953125
+      ],
+      "end": [
+        15.7197265625,
+        16.03564453125,
+        14.20166015625
+      ]
+    }
+  },
+  "proofRoot": "artifacts/qa/hv-umm2.621/",
+  "receiptManifest": {
+    "file": "receipts/manifest.json",
+    "sha256": "27bff9d34ab29226a09a7ae5a8cfc557fa43f25fe7e7b3fd05fbd43b483451e6"
+  },
+  "source": {
+    "proposal": "receipts/source-proposal.json",
+    "originalWholeBindings": 47,
+    "originalRangeBindings": 70,
+    "finalEpoch": "98c364f024e0e28f255ee905756bd3ace9f19ac072a1208cb7e9f3524d2f68c8",
+    "finalWholeBindings": 53,
+    "file": "receipts/final-source-epoch.json",
+    "admissions": [
+      "receipts/finite-admission.md",
+      "receipts/ui-finite-admission.md",
+      "receipts/ui-admission-test-clarification.md",
+      "receipts/qa-geometry-clarification.md"
+    ],
+    "ownerAudit": "receipts/parent-body-overlap-audit.json",
+    "earlierEpochQualification": "Original successful engine review/content/mutants use original exact engine bytes. Final timing differs only by two JSDoc adjustments; reverse-comment proof reconstructs exact restored f3f4b17f SHA. UI routing and regression are separately checked at final 53-file epoch. Early focused/mutant/review-v01/v02 receipts lack contemporaneous epoch maps; no retroactive epoch claim. UI-before-fix had old 52-file recorder set; ui-before-fix-bindings.json supplies actual UI-test SHA."
+  },
+  "checks": [
+    {
+      "id": "baseline-public-v01",
+      "receipt": "receipts/baseline-public-v01.json",
+      "receiptSHA256": "bb86b9965eebf2d979d15362693637df6fc5743db13342b507f462dd1adbd4d3",
+      "log": "receipts/baseline-public-v01.log",
+      "logSHA256": "bcd46cefa0f5fada1f962a01b774e59fc32fea793f30e712b10f9bf95252c8b4",
+      "exitCode": 0,
+      "wallS": 2.9173892499529757,
+      "pgid": 17961,
+      "sourceEpoch": null,
+      "sourceUnchanged": null,
+      "terminalGroupAbsent": null,
+      "disposition": "Pre-implementation public baseline: default Offering banishes; no chooseCost."
+    },
+    {
+      "id": "focused-v01",
+      "receipt": "receipts/focused-v01.json",
+      "receiptSHA256": "c32dfd76158b3d9c282ad8f8f6a35c2d051ee1142e9ea9cc938e9d9ec7ca87d7",
+      "log": "receipts/focused-v01.log",
+      "logSHA256": "1922835a002a9169cb646cad06e4ac316743c65bded60720b4de3920e13aa121",
+      "exitCode": 1,
+      "wallS": 10.064289709029254,
+      "pgid": 5070,
+      "sourceEpoch": null,
+      "sourceUnchanged": null,
+      "terminalGroupAbsent": null,
+      "disposition": "4 failures: test expectation incorrectly read status.x on stack; source keeps X on stack until resolution."
+    },
+    {
+      "id": "focused-v02",
+      "receipt": "receipts/focused-v02.json",
+      "receiptSHA256": "ac79fcfa70be9041535d4868c7774a7dba742a1e5e2116d05f101f94d0e2adda",
+      "log": "receipts/focused-v02.log",
+      "logSHA256": "866d0b074f26434fb1593454760cd827f78f86b70bfcc8a42717f5f505627981",
+      "exitCode": 1,
+      "wallS": 8.149228041991591,
+      "pgid": 14757,
+      "sourceEpoch": null,
+      "sourceUnchanged": null,
+      "terminalGroupAbsent": null,
+      "disposition": "2 failures: own target fixture expected incorrect prompt role; corrected expectation to actual target."
+    },
+    {
+      "id": "focused-v03",
+      "receipt": "receipts/focused-v03.json",
+      "receiptSHA256": "2d11fcb80f6db2092721a5e9a27fab871dc1a1d7442a1d72d57690bf94ede9b7",
+      "log": "receipts/focused-v03.log",
+      "logSHA256": "601bd96b605f1b003009772bd303af96a7f614ae42c442c05a9783107fedc896",
+      "exitCode": 0,
+      "wallS": 8.638702082971577,
+      "pgid": 15753,
+      "sourceEpoch": null,
+      "sourceUnchanged": null,
+      "terminalGroupAbsent": null,
+      "disposition": "25 own public contract cases pass; 5512 other cases skipped by focused filter."
+    },
+    {
+      "id": "mutant-forced-discard-v01",
+      "receipt": "receipts/mutant-forced-discard-v01.json",
+      "receiptSHA256": "96e95a00a8e78baaac57900a8cc7b3b194159b4f938cbcd673e259a26f718d91",
+      "log": "receipts/mutant-forced-discard-v01.log",
+      "logSHA256": "f87310cb9be30989b34f211bc3751916da2baf6f875bc987495f9846fb8bf76d",
+      "exitCode": 1,
+      "wallS": 7.904212832974736,
+      "pgid": 18038,
+      "sourceEpoch": null,
+      "sourceUnchanged": null,
+      "terminalGroupAbsent": null,
+      "disposition": "Expected genuine failure: actual admitted Offering branch forced discard; missing two-way public choice detected."
+    },
+    {
+      "id": "mutant-skips-additional-v01",
+      "receipt": "receipts/mutant-skips-additional-v01.json",
+      "receiptSHA256": "4065bcba6d7ef32614dc8bd8fa8c7e0bcac00223b18c460d7e6afa4017d1151d",
+      "log": "receipts/mutant-skips-additional-v01.log",
+      "logSHA256": "64cf88afe8c0934f4d4ada6ffbcefe43e09ff9dce19e21f2edb5512d73c21a9f",
+      "exitCode": 1,
+      "wallS": 7.726305541989859,
+      "pgid": 18647,
+      "sourceEpoch": null,
+      "sourceUnchanged": null,
+      "terminalGroupAbsent": null,
+      "disposition": "Expected genuine failure: actual admitted Offering branch bypassed additional costs; energy mismatch detected."
+    },
+    {
+      "id": "review-v01",
+      "receipt": "receipts/review-v01.json",
+      "receiptSHA256": "e1dd1c2ba49a8a49c9854d4b2b4d062c65a0740196454e1801aba7f1eb02500e",
+      "log": "receipts/review-v01.log",
+      "logSHA256": "cecb59a04822591a10683a2724b6e070618886744795d17835ec4bd92698dc68",
+      "exitCode": 2,
+      "wallS": 69.3678455419722,
+      "pgid": 19884,
+      "sourceEpoch": null,
+      "sourceUnchanged": null,
+      "terminalGroupAbsent": null,
+      "disposition": "9368 tests/308 files pass; aggregate fails own test lint (unsafe nested any and unused self); test-only fix."
+    },
+    {
+      "id": "review-v02",
+      "receipt": "receipts/review-v02.json",
+      "receiptSHA256": "a3e06cc263d16c34b6ba64f8d2ca90747489751783bdb617225019152fadc083",
+      "log": "receipts/review-v02.log",
+      "logSHA256": "a2444f54a675bbfaf206ddaca67711cd1eab652ee2eadf439adc9ba76e8cbf2b",
+      "exitCode": 1,
+      "wallS": 87.09006545797456,
+      "pgid": 27174,
+      "sourceEpoch": null,
+      "sourceUnchanged": null,
+      "terminalGroupAbsent": null,
+      "disposition": "9367 pass/1 timeout in unchanged existing tournament worker test; no timeout/config/source waiver."
+    },
+    {
+      "id": "tournament-focused-v01",
+      "receipt": "receipts/tournament-focused-v01.json",
+      "receiptSHA256": "c968098fda0d9aaf4749833b38af247d8fef98230ac25360a95fc6be10d7a4c1",
+      "log": "receipts/tournament-focused-v01.log",
+      "logSHA256": "a14c41dc2a5e9d56604c61469cb4677e8026af0b7ae5d8265a5685641860f29e",
+      "exitCode": 0,
+      "wallS": 15.09827374998713,
+      "pgid": 97941,
+      "sourceEpoch": null,
+      "sourceUnchanged": null,
+      "terminalGroupAbsent": null,
+      "disposition": "The exact unchanged timed-out test passes (1 pass/10 skip)."
+    },
+    {
+      "id": "review-v03",
+      "receipt": "receipts/review-v03.json",
+      "receiptSHA256": "70d6718317b6c8830e8da187f854ffb1a0b1dd473e3224b349f6cd9b1b9b91e8",
+      "log": "receipts/review-v03.log",
+      "logSHA256": "5d90bbacdd497eefeee7ff4982633e5f804230f503d1535f69b32bed9ceb6f66",
+      "exitCode": 0,
+      "wallS": 84.66068958403775,
+      "pgid": 1977,
+      "sourceEpoch": "e4e4a4b1607e9966322c802e7b62fafed70e4d27631b8ca7523ec51cdd48d4f2",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "One unchanged aggregate retry passes 9368 tests/308 files, type/lint/import checks."
+    },
+    {
+      "id": "knip-v01",
+      "receipt": "receipts/knip-v01.json",
+      "receiptSHA256": "e041a88dd1a93c58302e883adf7afa17b24ca51e15a11b2b371b6f8e05bb3f4c",
+      "log": "receipts/knip-v01.log",
+      "logSHA256": "6dd4ca214ea8e48e60c275314ca024085ad9cd1fec0fc8393c59a816c7b0b296",
+      "exitCode": 0,
+      "wallS": 5.841381625039503,
+      "pgid": 63703,
+      "sourceEpoch": "e4e4a4b1607e9966322c802e7b62fafed70e4d27631b8ca7523ec51cdd48d4f2",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Pass at original engine epoch."
+    },
+    {
+      "id": "content-gates-v01",
+      "receipt": "receipts/content-gates-v01.json",
+      "receiptSHA256": "1e5f77f3948dc10c8e6418dc60dce906ecd4d31e6a398a184e80821a55abc2b0",
+      "log": "receipts/content-gates-v01.log",
+      "logSHA256": "eb56a555109c062c73ab953ded466f67874207ea4046e4aeb019de31080d9d1a",
+      "exitCode": 0,
+      "wallS": 5.456438124994747,
+      "pgid": 64216,
+      "sourceEpoch": "e4e4a4b1607e9966322c802e7b62fafed70e4d27631b8ca7523ec51cdd48d4f2",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "20 content gate tests pass at original engine epoch; UI correction and two JSDoc changes do not change engine semantics."
+    },
+    {
+      "id": "qa-controls-v01",
+      "receipt": "receipts/qa-controls-v01.json",
+      "receiptSHA256": "3b0fde2e5c533f9d1a1032697335cf75f6d31d90fbcc110bd0ab49286b109423",
+      "log": "receipts/qa-controls-v01.log",
+      "logSHA256": "26f1553d8295439a423577c86464a88d9ce28b5749b19c1a54b426bf45e67059",
+      "exitCode": 1,
+      "wallS": 7.371396540955175,
+      "pgid": 66432,
+      "sourceEpoch": "e4e4a4b1607e9966322c802e7b62fafed70e4d27631b8ca7523ec51cdd48d4f2",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Caller setup fails unknownCard before gameplay; synthetic URL anchor invalid in production catalog; raw Caps retained."
+    },
+    {
+      "id": "qa-controls-v02",
+      "receipt": "receipts/qa-controls-v02.json",
+      "receiptSHA256": "f0ed1a372e4450bcb08d77f3fa0ceb19e8d6ef2dbddfc92103e988c9d8376211",
+      "log": "receipts/qa-controls-v02.log",
+      "logSHA256": "a95d0352e88ec217cd87bf34ff99c1167941daffa1abbde08f909952d4309459",
+      "exitCode": 1,
+      "wallS": 24.333335792005528,
+      "pgid": 72879,
+      "sourceEpoch": "e4e4a4b1607e9966322c802e7b62fafed70e4d27631b8ca7523ec51cdd48d4f2",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Partial desktop banish/cancel/reload succeeds; observer selects animation/hand source and fails geometry; not final acceptance."
+    },
+    {
+      "id": "qa-controls-v03",
+      "receipt": "receipts/qa-controls-v03.json",
+      "receiptSHA256": "96a3d0729adbae2a17c53def72a4fa7212bc053fd189c29d159698ef0367db12",
+      "log": "receipts/qa-controls-v03.log",
+      "logSHA256": "338c7b4f9f53ac8081ddc9f6b8df452f75fa2a7ad88684bed6305537b5eabe05",
+      "exitCode": 0,
+      "wallS": 41.2173901249771,
+      "pgid": 78531,
+      "sourceEpoch": "e4e4a4b1607e9966322c802e7b62fafed70e4d27631b8ca7523ec51cdd48d4f2",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Four interactions pass with Caps empty; actual visual review finds cost choice/status overlap. Interaction-only partial coverage."
+    },
+    {
+      "id": "qa-geometry-v01",
+      "receipt": "receipts/qa-geometry-v01.json",
+      "receiptSHA256": "75f0db4441173038e0f6e2d87f5cbb03c8818360ad6c88b615428131317f6244",
+      "log": "receipts/qa-geometry-v01.log",
+      "logSHA256": "c235daee62ca53bd3aa20c63e9c376380b6e95ed6c2bb205bc352d5812cc653b",
+      "exitCode": 0,
+      "wallS": 12.315431374998298,
+      "pgid": 20728,
+      "sourceEpoch": "e4e4a4b1607e9966322c802e7b62fafed70e4d27631b8ca7523ec51cdd48d4f2",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Diagnostic quantifies actual overlap; two partial choice captures, not full workflow acceptance."
+    },
+    {
+      "id": "ui-before-fix-v01",
+      "receipt": "receipts/ui-before-fix-v01.json",
+      "receiptSHA256": "2da805d22babe16500a1ee871d3ac77ba08b9590bf7fff45771f1cecb1216885",
+      "log": "receipts/ui-before-fix-v01.log",
+      "logSHA256": "345a220efa5736702994bf1a931c2ae93edb44cde0a0cac8b88a72d087fffb15",
+      "exitCode": 1,
+      "wallS": 8.065150666981936,
+      "pgid": 2006,
+      "sourceEpoch": "e4e4a4b1607e9966322c802e7b62fafed70e4d27631b8ca7523ec51cdd48d4f2",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Expected genuine public-builder assertion failure: exact real Offering payment prompt lacks chooser presentation."
+    },
+    {
+      "id": "ui-focused-v01",
+      "receipt": "receipts/ui-focused-v01.json",
+      "receiptSHA256": "0dc5198af3f5e79ca2b8d7e66f56848906fe9e695f44e837ba5da22d6aa1326a",
+      "log": "receipts/ui-focused-v01.log",
+      "logSHA256": "14a3b405bbf9575ec05084874d148a456343c4e1e5e2e890f19ca325b70a672f",
+      "exitCode": 0,
+      "wallS": 8.564232332981192,
+      "pgid": 72492,
+      "sourceEpoch": "a497ea87074520d1b39b27af35588378345be78c8cb314b1bc6720634762f18f",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "All 13 existing UI builder tests pass including additive regression."
+    },
+    {
+      "id": "review-v04",
+      "receipt": "receipts/review-v04.json",
+      "receiptSHA256": "b6d161db977d532e435b3c132c4f0da0b13d2c3dc5da402682ffd4d0d640e404",
+      "log": "receipts/review-v04.log",
+      "logSHA256": "1e4ee77a692eefa14c429c9788594fd5e9a93b147e240b2c6a8045ad10aa3549",
+      "exitCode": 0,
+      "wallS": 77.42225679103285,
+      "pgid": 91803,
+      "sourceEpoch": "98c364f024e0e28f255ee905756bd3ace9f19ac072a1208cb7e9f3524d2f68c8",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Final source: 9369 tests/308 files plus type/lint/import checks pass."
+    },
+    {
+      "id": "knip-v02",
+      "receipt": "receipts/knip-v02.json",
+      "receiptSHA256": "92d57482ca2f9a565f6246f0e3c6b7dba166fc85508f1dafe0750fafc4b89943",
+      "log": "receipts/knip-v02.log",
+      "logSHA256": "6e59487b46fc334188956c94097fde721cd358210d3e6049dc6b28085401a907",
+      "exitCode": 0,
+      "wallS": 6.932535625004675,
+      "pgid": 59031,
+      "sourceEpoch": "98c364f024e0e28f255ee905756bd3ace9f19ac072a1208cb7e9f3524d2f68c8",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Final source pass."
+    },
+    {
+      "id": "qa-controls-v04",
+      "receipt": "receipts/qa-controls-v04.json",
+      "receiptSHA256": "39fb5cfb76ccb7d108fc3fc46385be5942bc40c3e90c39cceee75913e57d3edb",
+      "log": "receipts/qa-controls-v04.log",
+      "logSHA256": "8f230c6bfcd2f160f6d7389c0dd8dee67efc567ddea0718aba7add686bd59742",
+      "exitCode": 0,
+      "wallS": 54.79424670897424,
+      "pgid": 60128,
+      "sourceEpoch": "98c364f024e0e28f255ee905756bd3ace9f19ac072a1208cb7e9f3524d2f68c8",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Final source full four workflows pass, all 12 final captures viewed; both payer outcomes, cancellation/cold reload and geometry verified."
+    },
+    {
+      "id": "schema-v01",
+      "receipt": "receipts/schema-v01.json",
+      "receiptSHA256": "7086dd6e0894ba28d5125ee52f29906602842d68a8b91347bfcc7cc2f47aa6ec",
+      "log": "receipts/schema-v01.log",
+      "logSHA256": "96b062118133187af1f965bf0525a94a00f7eb0fb14918d7850579d2920ddf3c",
+      "exitCode": 0,
+      "wallS": 0.14438079198589548,
+      "pgid": 1154,
+      "sourceEpoch": "98c364f024e0e28f255ee905756bd3ace9f19ac072a1208cb7e9f3524d2f68c8",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Pass; final schema and all-staged whitespace are checked again immediately before commit, with receipts in final-git manifest."
+    },
+    {
+      "id": "whitespace-v01",
+      "receipt": "receipts/whitespace-v01.json",
+      "receiptSHA256": "cf1ac7c3a8c1b481655a3715537736e8780c56d42238a51bf8f54d852ff101ad",
+      "log": "receipts/whitespace-v01.log",
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exitCode": 0,
+      "wallS": 0.031009458005428314,
+      "pgid": 1173,
+      "sourceEpoch": "98c364f024e0e28f255ee905756bd3ace9f19ac072a1208cb7e9f3524d2f68c8",
+      "sourceUnchanged": true,
+      "terminalGroupAbsent": true,
+      "disposition": "Pass; final schema and all-staged whitespace are checked again immediately before commit, with receipts in final-git manifest."
+    }
+  ],
+  "counterfactuals": {
+    "actualAdmittedMutants": [
+      "mutant-forced-discard-v01",
+      "mutant-skips-additional-v01"
+    ],
+    "restoration": "receipts/mutant-restoration.json",
+    "wholeTimingFileRestoredAfterEach": true,
+    "finalJSDocOnlyProof": "receipts/timing-comment-only-proof.json",
+    "remainingPublicClasses": "Source/target/prior-payment exclusion, wrong-side and stale/cancelled/replayed inputs are discriminating public illegal actions with otherwise legal scene and exact error plus legal completion/recovery. Generic costs/transport remain read-only. Public reasons include notYourPrompt, illegalAnswer, stalePrompt, noPendingPrompt and illegalAction."
+  },
+  "testInventory": {
+    "newModules": {
+      "src/engine/effects/primitives/contracts/offering-discard-payment.contracts.ts": 155,
+      "src/engine/effects/primitives/contracts/offering-discard-recovery.contracts.ts": 180,
+      "src/engine/effects/primitives/contracts/offering-discard-support.ts": 67,
+      "src/engine/testing/offering-discard-cards.ts": 23
+    },
+    "existingUIRegressionAddedLines": 36,
+    "totalAddedTestLines": 461,
+    "configuredEntrypointDelta": 0,
+    "jsdomDelta": 0,
+    "scope": "Deterministic synthetic public contracts through existing contract aggregator plus existing UI-builder test; support/fixture modules counted as actual files."
+  },
+  "qa": {
+    "accepted": "invocations/run-Rzojoe/offering-discard-controls-v04.result.json",
+    "acceptedRawSHA256": "d23ea423ac008b293915ef24d602a693829b6ade89e12d2ebcffb1796353927f",
+    "caller": "offering-discard-controls-v04.mjs",
+    "callerSHA256": "1afaee06f9261bf193057262693641480458b9276000fc053bb3e7ec1c0e614a",
+    "sourceManifest": "receipts/qa-manifest-v04.json",
+    "cleanup": "receipts/qa-controls-v04-cleanup.json",
+    "caps": [],
+    "workflows": 4,
+    "captures": [
+      {
+        "file": "invocations/run-Rzojoe/offering-cost-choice-0-desktop.png",
+        "sha256": "441d283ca6170a493fa62ce7eef82fb60d40f520f6fff771e3bc723193212d0e",
+        "css": [
+          1440,
+          900
+        ],
+        "png": [
+          2880,
+          1800
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-payer-0-desktop.png",
+        "sha256": "30609dbd405932c1dc7ddedbcacc0848669bb9c26605c456d975dcdef3f3d770",
+        "css": [
+          1440,
+          900
+        ],
+        "png": [
+          2880,
+          1800
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-paid-0-desktop.png",
+        "sha256": "796fa2bb2c929926f3cc13226ff04470b4920165cf2b170322127dca69913b35",
+        "css": [
+          1440,
+          900
+        ],
+        "png": [
+          2880,
+          1800
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-cost-choice-1-desktop.png",
+        "sha256": "b498ff00f04105e0bf1554f0eef71162966f0c78901134be6f6ee9f6f72a5b43",
+        "css": [
+          1440,
+          900
+        ],
+        "png": [
+          2880,
+          1800
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-payer-1-desktop.png",
+        "sha256": "3c33b1d593b719423af1b7860afc7a6a5ab0a30592182482fc2b5b72583bf099",
+        "css": [
+          1440,
+          900
+        ],
+        "png": [
+          2880,
+          1800
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-paid-1-desktop.png",
+        "sha256": "5cc48783c33778adfe13ebf94086c6cef30f8bef10b168536d36166d9704f85f",
+        "css": [
+          1440,
+          900
+        ],
+        "png": [
+          2880,
+          1800
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-cost-choice-0-mobile.png",
+        "sha256": "3d952261968dec787c4cf1493ac6975936cdce664c4896b414fcb02f1a96dd2e",
+        "css": [
+          390,
+          844
+        ],
+        "png": [
+          780,
+          1688
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-payer-0-mobile.png",
+        "sha256": "d26e2dd8fee96d708671c08528d8e1498da186f5ca17da9d0dae59c4a3a8b7c9",
+        "css": [
+          390,
+          844
+        ],
+        "png": [
+          780,
+          1688
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-paid-0-mobile.png",
+        "sha256": "7e0972dd01c0ff01f8d7145e84fd5ef0fba309738d050155f5d680b33e31af17",
+        "css": [
+          390,
+          844
+        ],
+        "png": [
+          780,
+          1688
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-cost-choice-1-mobile.png",
+        "sha256": "3d952261968dec787c4cf1493ac6975936cdce664c4896b414fcb02f1a96dd2e",
+        "css": [
+          390,
+          844
+        ],
+        "png": [
+          780,
+          1688
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-payer-1-mobile.png",
+        "sha256": "7a12b652e08dcc98027a9486aa711844fa10952b3f5b8ec5320d1e8173fd950a",
+        "css": [
+          390,
+          844
+        ],
+        "png": [
+          780,
+          1688
+        ],
+        "viewed": true
+      },
+      {
+        "file": "invocations/run-Rzojoe/offering-paid-1-mobile.png",
+        "sha256": "88bce34ecf7207d2ff70994c786bfe7605c26d21403c0d4ae3f586eb00ad7c32",
+        "css": [
+          390,
+          844
+        ],
+        "png": [
+          780,
+          1688
+        ],
+        "viewed": true
+      }
+    ],
+    "geometry": "All final v04 option/status/resource and submit boxes fully visible/hit-tested and zero intersections; exact physical card fan candidates use visible clipped region and owned exposed hitpoints. Current board source uses rank-scoped physical ID. All 12 final captures actually viewed.",
+    "navigationAnchor": {
+      "uuid": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      "role": "Read-only valid URL anchor validated by resolveCardLab; never played or claimed as feature consumer. Actual staged holder/source/payers are synthetic UUIDs, assertions physical-ID bound.",
+      "sourceBinding": "receipts/qa-manifest-v02.json"
+    },
+    "productionConsumer": "Original 15fd5a22-a786-48e3-99b0-919e810b3eba /258 remains read-only and pending full original acceptance. No production authoring, weighted-content sweep or shared-driver behavior changed.",
+    "attemptDisposition": "v01 caller unknownCard failure; v02 animation-node observer failure after partial successful play; v03 interaction PASS but visual overlap; geometry-v01 diagnostic only. v04 is sole accepted final workflow and all retained raw reports/callers/logs are in manifest.",
+    "persistedLogs": "Four persisted-case observations (game identity, play, opened/answered/cancelled actions and exact UUID/physical payer) plus two final per-viewport full JSONL exports: desktop 65 rows, mobile 71 rows. No claim of four full raw exports."
+  },
+  "runtime": {
+    "terminalGroups": "receipts/all-owned-terminal-groups.json",
+    "allAttemptCleanupFiles": [
+      "receipts/qa-controls-v01-cleanup.json",
+      "receipts/qa-controls-v02-cleanup.json",
+      "receipts/qa-controls-v03-cleanup.json",
+      "receipts/qa-geometry-v01-cleanup.json",
+      "receipts/qa-controls-v04-cleanup.json"
+    ],
+    "port": 5274,
+    "ownFinalGroupsAbsent": true,
+    "ownCurrentRecordsAbsent": true,
+    "sourceFrozenDuringFinalReaders": true,
+    "earlierSettlementQualification": "review-v02-group-settlement.json records missing pre-isolated-launch group observation honestly; before-review-v03-groups.json proves no prior group before retry. Final receipts record at-terminal groups and unchanged source epochs.",
+    "finalizationReceipts": "receipts/final-delivery-manifest.json records final schema, all-staged whitespace, Git completion and final terminal audit; created after commit and not recursively hashed by the committed manifest."
+  },
+  "preExisting": "docs/plan/evidence/pre-existing/hv-umm2.621.md",
+  "delivery": "One local commit; parent owns fresh read-only Codex core review and native/Tollgate promotion."
+}

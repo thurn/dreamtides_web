@@ -1111,6 +1111,7 @@ const FLOATING_CHANGE_VALIDATORS: {
   additionalDrawPhaseCards: () => false, // Draw-phase instructions are static-only.
   ruleModifier: () => false, // Player rules are static-only.
   preserveEphemeralHand: () => false, // A static instruction never enters saved floating effects.
+  offeringDiscardPaymentOption: () => false, // Offering payment choices are static-only.
   revealDeckTop: () => false, // A static instruction never enters saved floating effects.
   playFrom: (value) =>
     isSide(value.player) &&
