@@ -1,0 +1,810 @@
+{
+  "bead": "hv-umm2.744",
+  "base": "57bc2e5082390107bd2038e2fb079e3dc479b4ef",
+  "sourceEpoch": {
+    "description": "Then-current base HEAD plus exact uncommitted admitted source/test bytes during all QA and checks; ledger commit field identifies the source base.",
+    "sha256": {
+      "src/runtime/qa-scenes.ts": "34a59ba3bcdf37b98f2ec10e17636c2d4e1245737cca6a9aaa3160f29eb38f90",
+      "src/runtime/qa-scenes-battle.test.ts": "d74f61164f98e46a4b402693f42ad81b875ad58dc3e9e076889479ef2f025716"
+    }
+  },
+  "scope": {
+    "nonTestGrossLines": 22,
+    "files": [
+      "src/runtime/qa-scenes.ts resolveCardLab avatar catalog membership and withCardLab avatar presentation only",
+      "src/runtime/qa-scenes-battle.test.ts existing avatar cases and imports only"
+    ],
+    "apiChanges": false,
+    "selectableRosterAndCatalogChanged": false,
+    "productionAbilityStatusChanged": false,
+    "rendererOrStyleChanged": false
+  },
+  "implementationClock": {
+    "dispatch": "2026-10-15T12:27:13.218Z",
+    "dispatchCall": "call_24e6fcefb6fd4d9da7b2a5c00f739a23",
+    "dispatchRecordSha256": "217a17549cbf702843ebf2912811cc1b1e0e8610be9a7be1e0104fca4cb4f935",
+    "currentCutoff": "2026-10-15T12:48:06.076626+00:00",
+    "grossMinutesAtCutoff": 20.8809771,
+    "actualGitCommitEndpoint": "Not yet observed at this actual precommit cutoff; the external final-git.receipt.json records actual Git start/end/OID and dispatch-to-Git-end interval.",
+    "includes": "Research, source admission, user interruption/resume, QA, validation, coordination and final Git tail remain in this continuous window."
+  },
+  "commands": {
+    "browser-admission": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-744/helper/aspect-avatar-admission.mjs",
+        "--bead",
+        "hv-umm2.744",
+        "--port",
+        "5274",
+        "--arg",
+        "avatar=395f7a98-d40a-4b42-a4c6-6f38648255f7",
+        "--timeout",
+        "180"
+      ],
+      "start": "2026-10-15T12:41:44.250448+00:00",
+      "end": "2026-10-15T12:42:12.141050+00:00",
+      "wallSeconds": 28.022270957997534,
+      "exit": 0,
+      "pid": 19043,
+      "pgid": 19043,
+      "hostLoadStart": [
+        4.88818359375,
+        5.349609375,
+        6.1875
+      ],
+      "hostLoadEnd": [
+        5.296875,
+        5.39599609375,
+        6.173828125
+      ],
+      "cpuSeconds": 11.192112999999999,
+      "stdoutSha256": "b313e68d9958eb82e8845ed8a7412988f374b8489fd7fae43ad2b8e17f13ebb3",
+      "changedBindings": [],
+      "remainingGroupMembers": [],
+      "receipt": "browser-admission.receipt.json",
+      "receiptSha256": "f9d9ff6420e15614d112c405e3196cd12217b5ee7c2d979bc3224ecebaecf952",
+      "stdout": "browser-admission.stdout"
+    },
+    "browser-sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.744",
+        "--avatars",
+        "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--port",
+        "5274"
+      ],
+      "start": "2026-10-15T12:42:24.369014+00:00",
+      "end": "2026-10-15T12:42:32.919506+00:00",
+      "wallSeconds": 8.7042217089911,
+      "exit": 0,
+      "pid": 20907,
+      "pgid": 20907,
+      "hostLoadStart": [
+        5.6513671875,
+        5.46533203125,
+        6.18896484375
+      ],
+      "hostLoadEnd": [
+        5.99267578125,
+        5.5478515625,
+        6.20947265625
+      ],
+      "cpuSeconds": 8.092967999999999,
+      "stdoutSha256": "2e82f7fcfbee7aec08cb4cad464f3426d3451ce869e96e2a5b0900925a2e5499",
+      "changedBindings": [],
+      "remainingGroupMembers": [],
+      "receipt": "browser-sweep.receipt.json",
+      "receiptSha256": "2725f990eee5dcca8a7fe707aee10988bb7cde059ccaffb1b5b78ba9720d1685",
+      "stdout": "browser-sweep.stdout"
+    },
+    "counterfactual-old-guard": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "-t",
+        "loads an exact avatar emblem"
+      ],
+      "start": "2026-10-15T12:32:27.890760+00:00",
+      "end": "2026-10-15T12:32:32.796020+00:00",
+      "wallSeconds": 5.177300041948911,
+      "exit": 1,
+      "pid": 100,
+      "pgid": 100,
+      "hostLoadStart": [
+        7.9150390625,
+        6.01611328125,
+        6.59033203125
+      ],
+      "hostLoadEnd": [
+        8.16162109375,
+        6.0986328125,
+        6.61572265625
+      ],
+      "cpuSeconds": 6.245389,
+      "stdoutSha256": "8520fe8b79a04902975b11b21d7af4d45466b1a62c96b60177d0288d74629546",
+      "changedBindings": [],
+      "remainingGroupMembers": [],
+      "receipt": "counterfactual-old-guard.receipt.json",
+      "receiptSha256": "a2a047e70c63f8cac7a156aed10dfd670921947c507ba28d9f9355cddcd813b4",
+      "stdout": "counterfactual-old-guard.stdout"
+    },
+    "final-knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T12:45:13.629852+00:00",
+      "end": "2026-10-15T12:45:22.009813+00:00",
+      "wallSeconds": 8.58413825003663,
+      "exit": 0,
+      "pid": 27881,
+      "pgid": 27881,
+      "hostLoadStart": [
+        6.07080078125,
+        5.79638671875,
+        6.19384765625
+      ],
+      "hostLoadEnd": [
+        8.00048828125,
+        6.20166015625,
+        6.33154296875
+      ],
+      "cpuSeconds": 6.661963999999999,
+      "stdoutSha256": "ba35c8ee6c51e048b09e69f63f9ae6779519bc01c2470d913fde8a9c546c2bb9",
+      "changedBindings": [],
+      "remainingGroupMembers": [],
+      "receipt": "final-knip.receipt.json",
+      "receiptSha256": "aea1824fce57f0ba1185e6f8573d86ea99d078118b2f2aa181e222a7e0dcac0b",
+      "stdout": "final-knip.stdout"
+    },
+    "final-review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T12:44:31.085137+00:00",
+      "end": "2026-10-15T12:44:49.393529+00:00",
+      "wallSeconds": 18.432609541981947,
+      "exit": 0,
+      "pid": 26300,
+      "pgid": 26300,
+      "hostLoadStart": [
+        6.6435546875,
+        5.78515625,
+        6.20751953125
+      ],
+      "hostLoadEnd": [
+        7.37548828125,
+        5.990234375,
+        6.27294921875
+      ],
+      "cpuSeconds": 61.669523,
+      "stdoutSha256": "b2f3a54f483824608ad5ccf8fcdc2396f2e6862af425ef7262617f2ca94ee645",
+      "changedBindings": [],
+      "remainingGroupMembers": [],
+      "receipt": "final-review.receipt.json",
+      "receiptSha256": "0842383bf528654d6893a1640d3767206eb8f2222fb97e2b01bd2effa57f816a",
+      "stdout": "final-review.stdout"
+    },
+    "final-schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T12:45:29.095757+00:00",
+      "end": "2026-10-15T12:45:29.205202+00:00",
+      "wallSeconds": 0.269187249999959,
+      "exit": 0,
+      "pid": 29107,
+      "pgid": 29107,
+      "hostLoadStart": [
+        7.759765625,
+        6.181640625,
+        6.32373046875
+      ],
+      "hostLoadEnd": [
+        7.759765625,
+        6.181640625,
+        6.32373046875
+      ],
+      "cpuSeconds": 0.09772399999999999,
+      "stdoutSha256": "7ae3b1fd4cfada8b6c8027c3e00579400ba7fd5f4d152363a2fa0f1da03d9cee",
+      "changedBindings": [],
+      "remainingGroupMembers": [],
+      "receipt": "final-schema.receipt.json",
+      "receiptSha256": "4a47067a7286e9e5b789347925ab6a2febe7ed520af828ea8ba77602333703b2",
+      "stdout": "final-schema.stdout"
+    },
+    "focused-avatar": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "-t",
+        "avatar|LOAD_STATE"
+      ],
+      "start": "2026-10-15T12:31:57.060614+00:00",
+      "end": "2026-10-15T12:32:02.974658+00:00",
+      "wallSeconds": 6.501832209003624,
+      "exit": 0,
+      "pid": 99475,
+      "pgid": 99475,
+      "hostLoadStart": [
+        5.888671875,
+        5.490234375,
+        6.43408203125
+      ],
+      "hostLoadEnd": [
+        6.3779296875,
+        5.59814453125,
+        6.46630859375
+      ],
+      "cpuSeconds": 6.975415,
+      "stdoutSha256": "754e2aa61551b1c2a0480c8c9a062e433156a2090523fe409770b5c4f2da0a46",
+      "changedBindings": [],
+      "remainingGroupMembers": [],
+      "receipt": "focused-avatar.receipt.json",
+      "receiptSha256": "2ae73ed07c2643dd3fd73f4ec1c1194afb83eb74153c410d3c86737935b2f588",
+      "stdout": "focused-avatar.stdout"
+    },
+    "focused-contracts": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "src/runtime/qa-scenes.test.ts",
+        "src/engine/testing/avatar-lab.test.ts",
+        "src/battle/components/enemy-avatar-summary.test.ts",
+        "src/battle/integration/apollyon-init.test.ts"
+      ],
+      "start": "2026-10-15T12:32:46.016175+00:00",
+      "end": "2026-10-15T12:32:50.242505+00:00",
+      "wallSeconds": 4.374312625033781,
+      "exit": 0,
+      "pid": 618,
+      "pgid": 618,
+      "hostLoadStart": [
+        8.9521484375,
+        6.3974609375,
+        6.71435546875
+      ],
+      "hostLoadEnd": [
+        8.79541015625,
+        6.4072265625,
+        6.7158203125
+      ],
+      "cpuSeconds": 7.9951799999999995,
+      "stdoutSha256": "cdcdc3f18e7d46cf036a184d4a61f09cbc56675cb5bdf9de872b9a78d1f557d8",
+      "changedBindings": [],
+      "remainingGroupMembers": [],
+      "receipt": "focused-contracts.receipt.json",
+      "receiptSha256": "4e0630a3ae092b6abeef20371b4cc4645902113dd611d3ddf6c5fdafc3074403",
+      "stdout": "focused-contracts.stdout"
+    },
+    "npm-install": {
+      "start": "2026-10-15T12:27:31.939226+00:00",
+      "end": "2026-10-15T12:27:34.586054+00:00",
+      "wallSeconds": 2.646670084039215,
+      "exit": 0,
+      "pid": 94339,
+      "pgid": 94339,
+      "receipt": "npm-install.receipt.json",
+      "receiptSha256": "1839dc1403a090252f35e662172f471c8f2fcc1351bb93943e063314e92f3c59",
+      "stdout": "npm-install.stdout"
+    },
+    "qa-serialization": {
+      "command": [
+        "node",
+        "/tmp/root-744/helper/check-qa-serialization.mjs"
+      ],
+      "start": "2026-10-15T12:41:24.458486+00:00",
+      "end": "2026-10-15T12:41:24.679157+00:00",
+      "wallSeconds": 0.3289404999813996,
+      "exit": 0,
+      "pid": 18219,
+      "pgid": 18219,
+      "hostLoadStart": [
+        4.82421875,
+        5.3603515625,
+        6.2109375
+      ],
+      "hostLoadEnd": [
+        5.078125,
+        5.40380859375,
+        6.22119140625
+      ],
+      "cpuSeconds": 0.151132,
+      "stdoutSha256": "265be4ef76785d0aa038fef021e85940342cbb2e27db4a34886eb228502eedd3",
+      "changedBindings": [],
+      "remainingGroupMembers": [],
+      "receipt": "qa-serialization.receipt.json",
+      "receiptSha256": "7b138d26b389d27e1aadddd0252a58e50a7ca65a26ec9e5e556937211708bafb",
+      "stdout": "qa-serialization.stdout"
+    },
+    "final-whitespace": {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "start": "2026-10-15T12:46:01.823417+00:00",
+      "end": "2026-10-15T12:46:01.877924+00:00",
+      "wallSeconds": 0.19505991600453854,
+      "exit": 0,
+      "pid": 83983,
+      "pgid": 83983,
+      "hostLoadStart": [
+        11.47705078125,
+        7.23193359375,
+        6.6962890625
+      ],
+      "hostLoadEnd": [
+        11.47705078125,
+        7.23193359375,
+        6.6962890625
+      ],
+      "cpuSeconds": 0.006536,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changedBindings": [],
+      "remainingGroupMembers": [],
+      "receipt": "final-whitespace.receipt.json",
+      "receiptSha256": "e2f54d4a4bb997b66aaa65ae9c26f15c25226ade1517aa920571aae13428ed70",
+      "stdout": "final-whitespace.stdout"
+    }
+  },
+  "commandTimingScopes": {
+    "wallSeconds": "Scratch recorder start through child settlement and tracked-source postguard; receipt start/end delimit child command interval. npm-install wallSeconds starts just before spawn.",
+    "cpuSeconds": "Actual subprocess child CPU including recorder observation utilities; no matched-baseline performance claim.",
+    "validationWorkers": 2
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final-review command starting one-minute load"
+      }
+    }
+  },
+  "contracts": {
+    "focused": {
+      "files": 5,
+      "tests": 235,
+      "exit": 0,
+      "covers": [
+        "Selectable roster and two distinct loaded Aspect UUIDs with equal display names, both actors, uppercase route, pending status, actual single permanent slot, correct profile identity, serialized LOAD_STATE init and slice",
+        "Synthetic authored roster and Aspect first-turn ability, LOAD_STATE ownership and exact probe source/controller observations for both actors",
+        "Malformed/unknown/same-name unregistered/engine-registered-lab-only/raw-incarnation UUID rejection; side/variant/stage/mod/ambiguity guards for roster and Aspect",
+        "Existing registry, avatar lab, boss integration and enemy summary contracts"
+      ]
+    },
+    "counterfactual": {
+      "receipt": "counterfactual-old-guard.receipt.json",
+      "exit": 1,
+      "scope": "Only original roster-only admission guard restored temporarily; loaded Aspect metadata expected ready but observed rejected unknownAvatar; fixed exact source bytes restored immediately. Expected negative sensitivity check, not an outstanding product failure.",
+      "restoration": "counterfactual-restoration.json"
+    },
+    "testDelta": {
+      "files": 0,
+      "lines": 19,
+      "jsdomFiles": 0
+    },
+    "reviewPolicy": "22 non-test additions plus deletions; no new API/primitive or core-review label; parent handles actual review routing."
+  },
+  "browser": {
+    "admissionReport": "invocations/run-iRDSLC/aspect-avatar-admission.result.json",
+    "admissionReportSha256": "fc47022148f40b7ebbd7308dcf55a3f36816371e487afbfc86a94117b9c395b7",
+    "caps": [],
+    "error": null,
+    "calls": [
+      {
+        "viewport": "desktop",
+        "step": 0,
+        "ms": 14268
+      },
+      {
+        "viewport": "mobile",
+        "step": 0,
+        "ms": 9169
+      }
+    ],
+    "wallMs": {
+      "browserLeaseWait": 749,
+      "serve": 3147,
+      "scenario": 23438,
+      "total": 27413
+    },
+    "observations": [
+      {
+        "uuid": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+        "side": "player",
+        "viewport": "desktop",
+        "admissionVerdict": "pass",
+        "abilityVerdict": "pending",
+        "pendingMetadata": "pending",
+        "actualPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "constructorHistoryPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "oppositeEmpty": true,
+        "profiles": [
+          {
+            "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "revealId": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "disabled": null,
+            "x": 698,
+            "y": 617.8571166992188,
+            "width": 44,
+            "height": 44,
+            "withinViewport": true
+          }
+        ],
+        "reloadSameGame": true,
+        "reloadPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "reloadProfiles": [
+          {
+            "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "revealId": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "disabled": null,
+            "x": 698,
+            "y": 617.8571166992188,
+            "width": 44,
+            "height": 44,
+            "withinViewport": true
+          }
+        ],
+        "gameId": "ymhzda",
+        "storedLogRows": 27,
+        "screens": [
+          "aspect-player-desktop.png"
+        ]
+      },
+      {
+        "uuid": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+        "side": "enemy",
+        "viewport": "desktop",
+        "admissionVerdict": "pass",
+        "abilityVerdict": "pending",
+        "pendingMetadata": "pending",
+        "actualPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "constructorHistoryPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "oppositeEmpty": true,
+        "profiles": [
+          {
+            "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "revealId": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "disabled": null,
+            "x": 698,
+            "y": 94.12723541259766,
+            "width": 44,
+            "height": 43.99999237060547,
+            "withinViewport": true
+          }
+        ],
+        "reloadSameGame": true,
+        "reloadPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "reloadProfiles": [
+          {
+            "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "revealId": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "disabled": null,
+            "x": 698,
+            "y": 94.12723541259766,
+            "width": 44,
+            "height": 43.99999237060547,
+            "withinViewport": true
+          }
+        ],
+        "gameId": "e4zp3y",
+        "storedLogRows": 51,
+        "screens": [
+          "aspect-enemy-desktop.png"
+        ]
+      },
+      {
+        "uuid": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+        "side": "player",
+        "viewport": "mobile",
+        "admissionVerdict": "pass",
+        "abilityVerdict": "pending",
+        "pendingMetadata": "pending",
+        "actualPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "constructorHistoryPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "oppositeEmpty": true,
+        "profiles": [
+          {
+            "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "revealId": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "disabled": null,
+            "x": 173,
+            "y": 606.109375,
+            "width": 44,
+            "height": 44,
+            "withinViewport": true
+          }
+        ],
+        "reloadSameGame": true,
+        "reloadPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "reloadProfiles": [
+          {
+            "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "revealId": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "disabled": null,
+            "x": 173,
+            "y": 606.109375,
+            "width": 44,
+            "height": 44,
+            "withinViewport": true
+          }
+        ],
+        "gameId": "57pvc8",
+        "storedLogRows": 27,
+        "screens": [
+          "aspect-player-mobile.png"
+        ]
+      },
+      {
+        "uuid": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+        "side": "enemy",
+        "viewport": "mobile",
+        "admissionVerdict": "pass",
+        "abilityVerdict": "pending",
+        "pendingMetadata": "pending",
+        "actualPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "constructorHistoryPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "oppositeEmpty": true,
+        "profiles": [
+          {
+            "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "revealId": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "disabled": null,
+            "x": 173,
+            "y": 104.578125,
+            "width": 44,
+            "height": 44,
+            "withinViewport": true
+          }
+        ],
+        "reloadSameGame": true,
+        "reloadPermanent": {
+          "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "exhausted": false
+        },
+        "reloadProfiles": [
+          {
+            "id": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "revealId": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+            "disabled": null,
+            "x": 173,
+            "y": 104.578125,
+            "width": 44,
+            "height": 44,
+            "withinViewport": true
+          }
+        ],
+        "gameId": "dwiww4",
+        "storedLogRows": 51,
+        "screens": [
+          "aspect-enemy-mobile.png"
+        ]
+      }
+    ],
+    "captures": [
+      {
+        "filename": "aspect-enemy-desktop.png",
+        "sha256": "ca97b90bf165fbdbf72b4cfd0eee4307f4546f1baafa059edb640e131d381dca",
+        "pixels": [
+          2880,
+          1800
+        ]
+      },
+      {
+        "filename": "aspect-enemy-mobile.png",
+        "sha256": "19dbe8ad22fa7555703b87868f7c26e1de16d2e3a6080aafe1da16b8d8676d13",
+        "pixels": [
+          780,
+          1688
+        ]
+      },
+      {
+        "filename": "aspect-player-desktop.png",
+        "sha256": "5bdb97577c889fd2149132a388f3022fd287d4cd228c1c4ad13fb7db68b6068c",
+        "pixels": [
+          2880,
+          1800
+        ]
+      },
+      {
+        "filename": "aspect-player-mobile.png",
+        "sha256": "e3e44ebf4885992ac53e4d5eeca3f4fb6b4031d2a52ca363b825f8c910331373",
+        "pixels": [
+          780,
+          1688
+        ]
+      }
+    ],
+    "visualQualification": "Existing Aspect portrait fallback monogram is visible at the correct controller. Enemy captures occur during an ordinary AI card reveal; these are admission-state observations, not stable final visuals or authored ability evidence.",
+    "sweep": {
+      "rows": 20,
+      "counts": {
+        "pending": 2,
+        "skip": 18
+      },
+      "sha256": "808bd935523bceb25fc3bd2fc9cbe3142023b54e8d22ce685904ffe3ca9046f5",
+      "rawBaseReports": [
+        {
+          "path": "invocations/sweep-L7fa9e/run-L5RrqP/sweep-395f7a98-d40a-4b42-a4c6-6f38648255f7-base-player-attempt-1.result.json",
+          "sha256": "ef718ab53d02c1ed4cb200e872c4965ee66a94b21b6b6d12c096f8bab244b258"
+        },
+        {
+          "path": "invocations/sweep-L7fa9e/run-L5RrqP/sweep-395f7a98-d40a-4b42-a4c6-6f38648255f7-base-enemy-attempt-1.result.json",
+          "sha256": "9dfbbe083d5083a6758d8d1cf8ada3c4e91e511a034a5ff54b9dd0f90956a1aa"
+        }
+      ]
+    },
+    "ledger": {
+      "nativeRows": 20,
+      "supplementalRows": 4,
+      "nativeBytesSha256": "808bd935523bceb25fc3bd2fc9cbe3142023b54e8d22ce685904ffe3ca9046f5",
+      "counts": {
+        "nativePending": 2,
+        "nativeSkip": 18,
+        "supplementalPendingWithAdmissionPass": 4,
+        "authoredAbilityPasses": 0
+      }
+    },
+    "qualification": "Known registered production Aspect reaches the browser lab and retains pending status. Synthetic contracts prove direct init.avatars and authored plumbing. Original pair290\u2013294 authoring, weighted300, canonical authored sweeps and 20 Greedy games EACH remain acceptance of their pair beads.",
+    "custody": {
+      "browser-admission": {
+        "custodySnapshots": [
+          {
+            "at": "2026-10-15T12:41:45.166146+00:00",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "image": "/tmp/root-744/helper/browser-admission-custody-0.server.json",
+            "sha256": "5189b6a7a26b5c3c2e327d9c86a3f310b2d6a221cc39a6e8acdcaaeea17cfffb"
+          },
+          {
+            "at": "2026-10-15T12:41:48.319625+00:00",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "image": "/tmp/root-744/helper/browser-admission-custody-1.owner.json",
+            "sha256": "3330794bda4e2b6f9358e0e15253c8f9ed41f6244583b26df1dab5da64041b6f"
+          },
+          {
+            "at": "2026-10-15T12:41:48.372669+00:00",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "image": "/tmp/root-744/helper/browser-admission-custody-2.owner.json",
+            "sha256": "30f91faaee6ecdf2dcdd1c15abb1e519ca559d2b7a02f9e869985a85c0e6fabb"
+          },
+          {
+            "at": "2026-10-15T12:42:11.870395+00:00",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "image": "/tmp/root-744/helper/browser-admission-custody-3.owner.json",
+            "sha256": "917cab118a380f86b19286731b239415e019a8f09e41629534cc3901ceeab53d"
+          },
+          {
+            "at": "2026-10-15T12:42:11.923700+00:00",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "image": "/tmp/root-744/helper/browser-admission-custody-4.server.json",
+            "sha256": "29e2ca9d54b7b62c4095446773a78cc4b5bb14ea9fa108571a4031eec3ec03b1"
+          }
+        ],
+        "ownCustodyAfter": {
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+        },
+        "serverGroupsAfter": {
+          "19338": []
+        },
+        "portsAfter": {
+          "5274": ""
+        },
+        "remainingGroupMembers": [],
+        "changedBindings": []
+      },
+      "browser-sweep": {
+        "custodySnapshots": [
+          {
+            "at": "2026-10-15T12:42:24.580740+00:00",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "image": "/tmp/root-744/helper/browser-sweep-custody-0.server.json",
+            "sha256": "155750cfb9e7ece6fdbafc9902cf4bfa75178bb27eb699bd5674a8a80e7e8e11"
+          },
+          {
+            "at": "2026-10-15T12:42:26.202221+00:00",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "image": "/tmp/root-744/helper/browser-sweep-custody-1.owner.json",
+            "sha256": "aa5ddb52a1c60b5c7255956d1f07dcea921fa32be7fe4984d82bb6b78e789784"
+          },
+          {
+            "at": "2026-10-15T12:42:32.647309+00:00",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "image": "/tmp/root-744/helper/browser-sweep-custody-2.server.json",
+            "sha256": "5081dacd391374378a9d85ef2c34310d9c00a5393bb771235ffa1d4e37090a46"
+          }
+        ],
+        "ownCustodyAfter": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": false,
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json": false
+        },
+        "serverGroupsAfter": {
+          "20943": []
+        },
+        "portsAfter": {
+          "5174": ""
+        },
+        "remainingGroupMembers": [],
+        "changedBindings": []
+      }
+    }
+  },
+  "preExistingIssues": "No unrelated pre-existing defect confirmed in consumed reader/presentation or stored-log observations.",
+  "localMechanicalCorrections": [
+    "Initial scratch browser packet writer requested an absent src/content/apollyon/index.ts support path; corrected to actual src/content/apollyon.ts before writing the packet or executing browser QA. No source or runtime effect."
+  ],
+  "validationState": {
+    "review": 0,
+    "knip": 0,
+    "schema": 0,
+    "whitespace": 0,
+    "commit": "Precommit cutoff only; no Git endpoint is asserted in this source evidence. Parent finite final authorization is recorded externally."
+  },
+  "validationCoverage": {
+    "review": {
+      "files": 8,
+      "tests": 287,
+      "phases": "prepare, lint-diff, typecheck, import-cycles, test-related, friction schema and local-asset restoration; all terminal0"
+    },
+    "schema": {
+      "records": 973,
+      "historicalUnknowns": 41
+    },
+    "heavyFullOrFuzz": "Not required: bounded development QA reader/presentation mapping and synthetic existing-contract extension; no engine/content/config/test-infrastructure change."
+  },
+  "validationWarnings": "Ordinary review preparation uses an empty local-art mirror and reports missing files there. Both final commands restored actual workspace art successfully (564 cards,32 avatar portraits/cutouts,153 Dreamsigns,226 journey images,521 Exploration images). Tracked source guard remained unchanged."
+}

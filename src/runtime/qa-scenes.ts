@@ -4,6 +4,7 @@ import type { EngineEvent } from "../engine";
 import { avatarLabBattle, type AvatarLabRequest } from "../engine/testing/avatar-lab";
 import { parseAvatarId } from "../types/identifiers";
 import { rememberInitialProbeEvents } from "../battle/components/engine-probe-events";
+import { resolveEnemyAvatarSummary } from "../battle/components/enemy-avatar-summary";
 import type { JourneyContent } from "../data/journey-content";
 import type { DeckEntry, JourneyState, SiteState, SiteType } from "../types/journey";
 import { initialJourneyState } from "../rules/fold-state";
@@ -515,7 +516,7 @@ function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens, e
     let avatarId;
     try { avatarId = parseAvatarId(tokens.avatar); }
     catch { return { kind: "rejected", reason: "unknownAvatar", eligible: [] }; }
-    if (!journeyContent.avatars.some(avatar => avatar.id === avatarId)) return { kind: "rejected", reason: "unknownAvatar", eligible: [] };
+    if (!journeyContent.avatars.some(avatar => avatar.id === avatarId) && !journeyContent.apollyonIncarnations.some(incarnation => incarnation.aspect.id === avatarId)) return { kind: "rejected", reason: "unknownAvatar", eligible: [] };
     const eligible = ["base"] as const;
     const variant = cardLabVariant(tokens.variant);
     if (variant === null) return { kind: "rejected", reason: "unknownVariant", eligible };
@@ -680,6 +681,25 @@ function withCardLab(battle: JourneyBattleFoldState, tokens: CardLabTokens, jour
     return withLabBattle(presented, lab, published);
   }
   if (resolved.kind !== "ok" || resolved.entityKind !== "avatar") return withLabBattle(battle, lab, published);
+  const incarnation = journeyContent.apollyonIncarnations.find(candidate => candidate.aspect.id === resolved.request.avatarId);
+  if (incarnation !== undefined) {
+    const enemyDescriptor = {
+      id: battle.init.enemyDescriptor.id,
+      incarnationId: incarnation.id,
+      aspectId: incarnation.aspect.id,
+      name: incarnation.title,
+      subtitle: incarnation.description,
+      portraitSeed: battle.init.enemyDescriptor.portraitSeed,
+      abilityText: incarnation.aspect.renderedText,
+      dreamsigns: battle.init.enemyDescriptor.dreamsigns,
+      signatureCards: battle.init.enemyDescriptor.signatureCards,
+    };
+    const presented = { ...battle, init: resolved.request.side === "player"
+      ? { ...battle.init, avatarSummary: resolveEnemyAvatarSummary(enemyDescriptor, journeyContent), opponentAbilityActive: false }
+      : { ...battle.init, avatarSummary: null, opponentAbilityActive: true, enemyDescriptor },
+    };
+    return withLabBattle(presented, lab, published);
+  }
   const avatar = journeyContent.avatars.find(candidate => candidate.id === resolved.request.avatarId);
   if (avatar === undefined) return withLabBattle(battle, lab, published);
   const presented = {

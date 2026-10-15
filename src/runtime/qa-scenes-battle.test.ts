@@ -30,6 +30,7 @@ import { reduceGameEvent } from "../rules/reducer";
 import { validateLoadedState } from "../rules/journey/lifecycle";
 import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 import { testCardId, testEventActor } from "../types/test-identities";
+import { AVATAR } from "../engine/testing/stack-cards";
 import { journeyBattleOf } from "../rules/battle/fold";
 import { SYNTHETIC } from "../engine/testing/synthetic-cards";
 import { aiDecision } from "../engine/policy/decide";
@@ -37,44 +38,62 @@ import {
   activeSiteOf,
   battleSceneContent,
   makeJourneyContent,
+  makeAvatar,
   SCENE_OPTIONS,
 } from "./qa-scenes.fixtures";
 
 describe("the battle layer QA scenes", () => {
   it("loads an exact avatar emblem and presentation for either controller and rejects invalid requests atomically", () => {
-    const content = battleSceneContent();
+    const base = battleSceneContent();
+    const content = { ...base, apollyonIncarnations: base.apollyonIncarnations.map(incarnation => ({ ...incarnation, title: base.avatars[0].name })) };
     const avatar = content.avatars[0];
+    const unregistered = makeAvatar("unregistered-avatar");
+    expect(unregistered.name).toBe(avatar.name);
+    const targets = [avatar, ...content.apollyonIncarnations.map(incarnation => ({ id: incarnation.aspect.id, name: incarnation.title, renderedText: incarnation.aspect.renderedText }))];
     const build = (token: string) => {
       const id = parseQaSceneId(token);
       const journey = buildQaScene(id, content, SCENE_OPTIONS);
       if (journey === null) throw new Error("Avatar scene did not build");
       return { journey, battle: buildQaSceneBattle(id, content, journey) };
     };
-    for (const side of ["player", "enemy"] as const) {
-      const { journey, battle } = build(`card-lab-avatar:${avatar.id}:base:${side}`);
-      expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "ready", entityKind: "avatar", avatar: avatar.id, cardStatus: "pending", eligibleVariants: ["base"] });
-      expect(battle?.engine.init.avatars).toEqual({ [side]: avatar.id });
-      expect(battle?.engine.slice.committed.sides[side].avatar).toEqual({ id: avatar.id, exhausted: false });
+    for (const target of targets) for (const side of ["player", "enemy"] as const) {
+      const { journey, battle } = build(`card-lab-avatar:${target.id}:base:${side}`);
+      expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "ready", entityKind: "avatar", avatar: target.id, cardStatus: "pending", eligibleVariants: ["base"] });
+      expect(battle?.engine.init.avatars).toEqual({ [side]: target.id });
+      expect(battle?.engine.slice.committed.sides[side].avatar).toEqual({ id: target.id, exhausted: false });
       expect(battle?.engine.slice.committed.sides[side === "player" ? "enemy" : "player"].avatar).toBeNull();
-      if (side === "player") expect(battle?.init.avatarSummary?.id).toBe(avatar.id);
-      else expect(battle?.init).toMatchObject({ opponentAbilityActive: true, enemyDescriptor: { avatarId: avatar.id, name: avatar.name, abilityText: avatar.renderedText } });
+      if (side === "player") expect(battle?.init.avatarSummary?.id).toBe(target.id);
+      else {
+        expect(battle?.init).toMatchObject({ opponentAbilityActive: true, enemyDescriptor: { name: target.name, abilityText: target.renderedText } });
+        expect(battle?.init.enemyDescriptor.avatarId).toBe(target.id === avatar.id ? target.id : undefined);
+        expect(battle?.init.enemyDescriptor.aspectId).toBe(target.id === avatar.id ? undefined : target.id);
+      }
+      if (battle === null) throw new Error("Avatar lab missing");
+      const profile = side === "player" ? battle.init.avatarSummary : resolveEnemyAvatarSummary(battle.init.enemyDescriptor, content);
+      expect(buildBattleAvatarStatus(profile, false).avatarProfile?.id).toBe(target.id);
       const snapshot = { snapshot: journey, battle };
       const loaded = validateLoadedState({ ...initialFoldState(journey.seed, TEST_CONTENT_CONFIG), journey }, JSON.parse(JSON.stringify(snapshot)) as typeof snapshot);
       expect(journeyBattleOf(loaded?.battle ?? null)?.engine.slice).toEqual(battle?.engine.slice);
-      const uppercase = build(`CARD-LAB-AVATAR:${avatar.id}:base:${side}`).battle;
-      expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "ready", entityKind: "avatar", avatar: avatar.id });
-      expect(uppercase?.engine.init.avatars).toEqual({ [side]: avatar.id });
+      expect(journeyBattleOf(loaded?.battle ?? null)?.init).toEqual(battle.init);
+      const uppercase = build(`CARD-LAB-AVATAR:${target.id}:base:${side}`).battle;
+      expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "ready", entityKind: "avatar", avatar: target.id });
+      expect(uppercase?.engine.init.avatars).toEqual({ [side]: target.id });
     }
+    expect(createBattleInitProvider(content).engine.catalog.avatar(AVATAR.drawer.id).id).toBe(AVATAR.drawer.id);
     const errors = vi.spyOn(console, "error").mockImplementation(() => undefined);
     try {
-      for (const [prefix, uuid, suffix, reason] of [
+      for (const validId of [avatar.id, content.apollyonIncarnations[0].aspect.id]) for (const [prefix, uuid, suffix, reason] of [
         ["card-lab-avatar", "bogus", "base:player", "unknownAvatar"],
         ["card-lab-avatar", SYNTHETIC.vanilla1.id, "base:player", "unknownAvatar"],
-        ["card-lab-avatar", avatar.id, "base:other", "unknownSide"],
-        ["card-lab-avatar", avatar.id, "bogus:player", "unknownVariant"],
-        ["card-lab-avatar", avatar.id, "amplified:player", "ineligibleVariant"],
-        ["card-lab-avatar", avatar.id, "base:player:%7B%7D", "invalidStage"],
-        ["card-lab-avatar-ambiguous", avatar.id, "base:player", "ambiguousRequest"],
+        ["card-lab-avatar", unregistered.id, "base:player", "unknownAvatar"],
+        ["card-lab-avatar", AVATAR.drawer.id, "base:player", "unknownAvatar"],
+        ["card-lab-avatar", content.apollyonIncarnations[0].id, "base:player", "unknownAvatar"],
+        ["card-lab-avatar", validId, "base:other", "unknownSide"],
+        ["card-lab-avatar", validId, "bogus:player", "unknownVariant"],
+        ["card-lab-avatar", validId, "amplified:player", "ineligibleVariant"],
+        ["card-lab-avatar", validId, "base:player:%7B%7D", "invalidStage"],
+        ["card-lab-avatar", validId, "base:player::%7B%7D", "invalidMods"],
+        ["card-lab-avatar-ambiguous", validId, "base:player", "ambiguousRequest"],
       ]) {
         const { battle } = build(`${prefix}:${uuid}:${suffix}`);
         expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "rejected", reason });
@@ -98,9 +117,9 @@ describe("the battle layer QA scenes", () => {
     else expect(profiles.enemy.avatarProfile?.unavailable).toBe(true);
   });
 
-  it.each(["player", "enemy"] as const)("retains %s first-turn observations at the exact final LOAD_STATE init", side => {
+  it.each((["player", "enemy"] as const).flatMap(side => (["roster", "aspect"] as const).map(kind => ({ side, kind }))))("retains $side $kind first-turn observations at the exact final LOAD_STATE init", ({ side, kind }) => {
     const content = battleSceneContent();
-    const avatar = content.avatars[0];
+    const avatar = kind === "roster" ? content.avatars[0] : content.apollyonIncarnations[0].aspect;
     const factory = battleInitProviders.createBattleInitProvider;
     const original = factory(content).engine;
     const definition = { id: avatar.id, status: "authored" as const, abilities: () => [triggered(atStartOfFirstTurn(), gainPoints(2))] };
