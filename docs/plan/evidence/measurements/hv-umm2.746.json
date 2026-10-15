@@ -1,0 +1,1047 @@
+{
+  "bead": "hv-umm2.746",
+  "phase": 5,
+  "status": "validated implementation prepared for parent-owned cold review and certified delivery",
+  "dispatchStart": "2026-10-15T13:49:56.618Z",
+  "base": "16477356526f24e645a29dd6b13f5b1b25003b41",
+  "sourceAudit": {
+    "proposal": "/tmp/worker746-20261015/proposal-v01.md",
+    "coverage": "/tmp/worker746-20261015/read-coverage-v01.md",
+    "supplement": "/tmp/worker746-20261015/proposal-supplement-v01.md",
+    "hashes": "/tmp/worker746-20261015/source-hashes-v01.txt"
+  },
+  "synthetic": {
+    "newCases": 14,
+    "privateContractLines": 134,
+    "entryLines": 481,
+    "baselineRed": {
+      "log": "/tmp/worker746-20261015/synthetic-red-v01.log",
+      "testsFailed": 6,
+      "controlsPassed": 8,
+      "status": "actual baseline chooses play for both sides; early UTC/argv/cwd/load/CPU/exit retained; PID/PG/monotonic unavailable"
+    },
+    "firstGreen": {
+      "log": "/tmp/worker746-20261015/policy-green-v01.log",
+      "testsPassed": 65,
+      "wallSeconds": 12.68,
+      "cpuUserSeconds": 14.69,
+      "cpuSystemSeconds": 2.38,
+      "status": "early PID/PG/monotonic unavailable"
+    },
+    "restorationRed": {
+      "name": "synthetic-restoration-red-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "Phasing play horizon"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:01:15.807460+00:00",
+      "startedMonotonicNs": 318411736463000,
+      "hostLoadStart": [
+        18.1337890625,
+        10.3896484375,
+        9.44970703125
+      ],
+      "pid": 88630,
+      "pgid": 88630,
+      "endedAt": "2026-10-15T14:01:21.983814+00:00",
+      "endedMonotonicNs": 318417912590083,
+      "wallSeconds": 6.176127083,
+      "exitCode": 1,
+      "cpuUserSeconds": 6.050578,
+      "cpuSystemSeconds": 2.084686,
+      "hostLoadEnd": [
+        19.484375,
+        10.7978515625,
+        9.59912109375
+      ],
+      "groupEmpty": true
+    },
+    "restoredGreen": {
+      "name": "focused-restored-green-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "src/engine/policy/policy-worker.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts",
+        "src/battle/engine-ai/engine-ai-driver.test.ts",
+        "src/battle/engine-ai/use-engine-ai.test.tsx",
+        "scripts/tournament/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:01:37.535876+00:00",
+      "startedMonotonicNs": 318433464602708,
+      "hostLoadStart": [
+        18.97216796875,
+        11.22021484375,
+        9.7763671875
+      ],
+      "pid": 13968,
+      "pgid": 13968,
+      "endedAt": "2026-10-15T14:01:57.465082+00:00",
+      "endedMonotonicNs": 318453393380750,
+      "wallSeconds": 19.928778042,
+      "exitCode": 0,
+      "cpuUserSeconds": 32.76489,
+      "cpuSystemSeconds": 6.700834,
+      "hostLoadEnd": [
+        17.11962890625,
+        11.19189453125,
+        9.791015625
+      ],
+      "groupEmpty": true
+    },
+    "directPrimitive": {
+      "name": "direct-primitive-green-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "playFromZone view"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:02:13.798110+00:00",
+      "startedMonotonicNs": 318469726358583,
+      "hostLoadStart": [
+        15.11279296875,
+        11.12744140625,
+        9.80078125
+      ],
+      "pid": 19182,
+      "pgid": 19182,
+      "endedAt": "2026-10-15T14:02:22.559246+00:00",
+      "endedMonotonicNs": 318478487206000,
+      "wallSeconds": 8.760847417,
+      "exitCode": 0,
+      "cpuUserSeconds": 9.077078,
+      "cpuSystemSeconds": 2.503203,
+      "hostLoadEnd": [
+        14.56640625,
+        11.1396484375,
+        9.8203125
+      ],
+      "groupEmpty": true
+    },
+    "baselineSHA256": "ae8af11253f16c76e45910eb752ec8c9a8ca88f74c382276984e99c929cc1e65",
+    "greenSHA256": "bf5231d121871a9732dc13eec8369669d63debfbc85af4b31b71b5de2c71e3c7",
+    "productiveActivationSHA256": "0d7981b59983e0d64ee8ff1c37a2f0f3fe23a6a518e2ac0b832d038fdddfa4f1",
+    "restorationRedFinal": {
+      "name": "synthetic-restoration-red-v02",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "Phasing play horizon"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:05:55.826802+00:00",
+      "startedMonotonicNs": 318691751958916,
+      "hostLoadStart": [
+        9.71923828125,
+        11.21337890625,
+        10.16015625
+      ],
+      "pid": 94805,
+      "pgid": 94805,
+      "endedAt": "2026-10-15T14:06:00.621471+00:00",
+      "endedMonotonicNs": 318696546443208,
+      "wallSeconds": 4.794484292,
+      "exitCode": 1,
+      "cpuUserSeconds": 4.863963,
+      "cpuSystemSeconds": 1.6635119999999999,
+      "hostLoadEnd": [
+        9.58154296875,
+        11.15966796875,
+        10.1474609375
+      ],
+      "groupEmpty": true
+    },
+    "restoredGreenFinal": {
+      "name": "synthetic-restored-green-v02",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "Phasing play horizon"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:07:20.142865+00:00",
+      "startedMonotonicNs": 318776066876000,
+      "hostLoadStart": [
+        5.69970703125,
+        9.5107421875,
+        9.60400390625
+      ],
+      "pid": 2042,
+      "pgid": 2042,
+      "endedAt": "2026-10-15T14:07:24.960314+00:00",
+      "endedMonotonicNs": 318780884125791,
+      "wallSeconds": 4.817249791,
+      "exitCode": 0,
+      "cpuUserSeconds": 4.862055,
+      "cpuSystemSeconds": 1.65572,
+      "hostLoadEnd": [
+        5.6435546875,
+        9.435546875,
+        9.57666015625
+      ],
+      "groupEmpty": true
+    },
+    "finalPrivateContractSHA256": "8542e3603ae1ef83477131e4ad80ac94d54bafa46e08a55c95819ccf4a44d093",
+    "typeRepair": "Initial ordinary review found3 decklist fixture cast errors. A three-line typed helper explicitly assigns player/enemy arrays; same behavioral controls pass. Failed review epoch is retained."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "successful ordinary npm run review v02 start"
+      },
+      "testDelta": {
+        "basis": "one new134-line private test-source .contracts.ts file plus one additive import;135 added test-source lines,1 new test-source file,zero new test entrypoints"
+      },
+      "localValidationS.focused": {
+        "measuredFor": "Sum of all retained actual focused validation epochs, failed and successful: first baseline RED8.26s, first GREEN12.68s, restoration REDv01 6.176127083s, restored full-policy/direct-consumer GREENv01 19.928778042s, direct primitive GREEN8.760847417s, final-contract restoration REDv02 4.794484292s and restored GREENv02 4.817249791s. Early time-command wall values are retained with their explicitly unavailable PID/group/monotonic fields."
+      },
+      "localValidationS.review": {
+        "measuredFor": "Final successful ordinary reviewv02 only:35.970104375s. Failed reviewv01 45.894136167s remains in checks and its full raw receipt/log, included in the inclusive implementation window."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "name": "synthetic-restoration-red-v01",
+      "start": "2026-10-15T14:01:15.807460+00:00",
+      "startLoad": [
+        18.1337890625,
+        10.3896484375,
+        9.44970703125
+      ],
+      "end": "2026-10-15T14:01:21.983814+00:00",
+      "endLoad": [
+        19.484375,
+        10.7978515625,
+        9.59912109375
+      ]
+    },
+    {
+      "name": "focused-restored-green-v01",
+      "start": "2026-10-15T14:01:37.535876+00:00",
+      "startLoad": [
+        18.97216796875,
+        11.22021484375,
+        9.7763671875
+      ],
+      "end": "2026-10-15T14:01:57.465082+00:00",
+      "endLoad": [
+        17.11962890625,
+        11.19189453125,
+        9.791015625
+      ]
+    },
+    {
+      "name": "direct-primitive-green-v01",
+      "start": "2026-10-15T14:02:13.798110+00:00",
+      "startLoad": [
+        15.11279296875,
+        11.12744140625,
+        9.80078125
+      ],
+      "end": "2026-10-15T14:02:22.559246+00:00",
+      "endLoad": [
+        14.56640625,
+        11.1396484375,
+        9.8203125
+      ]
+    },
+    {
+      "name": "review-v01",
+      "start": "2026-10-15T14:03:49.249358+00:00",
+      "startLoad": [
+        11.04443359375,
+        10.611328125,
+        9.728515625
+      ],
+      "end": "2026-10-15T14:04:35.144269+00:00",
+      "endLoad": [
+        15.35986328125,
+        12.01220703125,
+        10.30029296875
+      ]
+    },
+    {
+      "name": "review-v02",
+      "start": "2026-10-15T14:04:48.562423+00:00",
+      "startLoad": [
+        15.27978515625,
+        12.15771484375,
+        10.38134765625
+      ],
+      "end": "2026-10-15T14:05:24.533153+00:00",
+      "endLoad": [
+        12.28564453125,
+        11.7705078125,
+        10.3115234375
+      ]
+    },
+    {
+      "name": "synthetic-restoration-red-v02",
+      "start": "2026-10-15T14:05:55.826802+00:00",
+      "startLoad": [
+        9.71923828125,
+        11.21337890625,
+        10.16015625
+      ],
+      "end": "2026-10-15T14:06:00.621471+00:00",
+      "endLoad": [
+        9.58154296875,
+        11.15966796875,
+        10.1474609375
+      ]
+    },
+    {
+      "name": "synthetic-restored-green-v02",
+      "start": "2026-10-15T14:07:20.142865+00:00",
+      "startLoad": [
+        5.69970703125,
+        9.5107421875,
+        9.60400390625
+      ],
+      "end": "2026-10-15T14:07:24.960314+00:00",
+      "endLoad": [
+        5.6435546875,
+        9.435546875,
+        9.57666015625
+      ]
+    },
+    {
+      "name": "knip-v01",
+      "start": "2026-10-15T14:07:42.606186+00:00",
+      "startLoad": [
+        5.5615234375,
+        9.23388671875,
+        9.501953125
+      ],
+      "end": "2026-10-15T14:07:51.361160+00:00",
+      "endLoad": [
+        6.0224609375,
+        9.2099609375,
+        9.48974609375
+      ]
+    },
+    {
+      "name": "runtime-inspection-v01",
+      "start": "2026-10-15T14:07:38.781150+00:00",
+      "startLoad": [
+        5.5615234375,
+        9.23388671875,
+        9.501953125
+      ],
+      "end": "2026-10-15T14:07:38.856594+00:00",
+      "endLoad": [
+        5.5615234375,
+        9.23388671875,
+        9.501953125
+      ]
+    },
+    {
+      "name": "runtime-inspection-v02",
+      "start": "2026-10-15T14:08:06.120119+00:00",
+      "startLoad": [
+        5.9482421875,
+        9.03564453125,
+        9.42236328125
+      ],
+      "end": "2026-10-15T14:08:06.220468+00:00",
+      "endLoad": [
+        5.9482421875,
+        9.03564453125,
+        9.42236328125
+      ]
+    }
+  ],
+  "runtime": {
+    "status": "completed and public replay matched",
+    "naturalSeed": 3,
+    "engineSeed": "1902386275",
+    "savedInputSHA256": "6a82aea09ff24026f2ed27eb0fa56e35b68bae1b7eb0b2d46b557555029ac271",
+    "observationSHA256": "fae4623cad0e9604a13ebedc6dec0f06404d2e95d66359717a4522118bf0182c",
+    "catalogComparison": "/tmp/root746-20261015/catalog-source-comparison-v01.json",
+    "freezePath": "/tmp/worker746-20261015/runtime-freeze-v02.json",
+    "freezeSHA256": "5ed89deff9f50a3d7957d1838bb1286c734fa9f3f5297fe51b8aed51893ea6f9",
+    "inspection": {
+      "at": "2026-10-15T14:08:06.216Z",
+      "flags": {
+        "DEV": false,
+        "PROD": true,
+        "MODE": "production"
+      },
+      "inputSHA256": "6a82aea09ff24026f2ed27eb0fa56e35b68bae1b7eb0b2d46b557555029ac271",
+      "specSHA256": "b069fb28e1274147d073d20ec0912a8efabde389d9ff7d811cf971b6aedbbd9a",
+      "definitionsSHA256": "72fd95c11d72921142edbfda6782c24d6df8c42f58d59fefbf93db84af73630d",
+      "budgets": {
+        "turnPlanning": {
+          "iterations": 256
+        },
+        "response": {
+          "iterations": 64
+        }
+      },
+      "catalogQualification": "Canonical own catalog, one outer authored Aspect getter delegates unchanged delivered644 smallEnemyDissolveAspectAbilities. Original294 input/spec/recipe untouched; current canonical source differences qualified separately."
+    },
+    "inspectionFailure": "v01 scratch CommonJS bundle initialization failed before catalog/game; v02 Node createRequire banner supports bundled js-sha256. Raw epochs retained separately.",
+    "acceptanceProofPath": "/tmp/worker746-20261015/runtime-acceptance-proof-v01.json",
+    "acceptanceProofSHA256": "c672888abf980b6316d013db4e3d4152a3ecc83d19e966a615acbe4fac8e2430",
+    "receipt": {
+      "argv": [
+        "node",
+        "/tmp/worker746-20261015/runtime-repro-v02.mjs",
+        "--play"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "startedAt": "2026-10-15T14:13:02.532381+00:00",
+      "startedMonotonicNs": 319118451887250,
+      "workerCount": 1,
+      "timeoutSeconds": 1790,
+      "cleanupAllowanceSeconds": 6,
+      "hostLoadStart": [
+        7.3154296875,
+        7.205078125,
+        8.369140625
+      ],
+      "freezeSHA256": "5ed89deff9f50a3d7957d1838bb1286c734fa9f3f5297fe51b8aed51893ea6f9",
+      "cutoff": false,
+      "pid": 28607,
+      "pgid": 28607,
+      "endedAt": "2026-10-15T14:13:07.088634+00:00",
+      "endedMonotonicNs": 319123007771791,
+      "wallSeconds": 4.555884541,
+      "exitCode": 0,
+      "cpuUserSeconds": 5.546499,
+      "cpuSystemSeconds": 0.141669,
+      "hostLoadEnd": [
+        7.1298828125,
+        7.16845703125,
+        8.34912109375
+      ],
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "d5f5aca0f7cfdf95a5c0078fcbedeef8171c184659b47e85c744d1180d5f5988",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "allFrozenInputsStillMatch": true
+    },
+    "result": {
+      "kind": "victory",
+      "winner": "player",
+      "reason": "score"
+    },
+    "finalStateHash": "cd74bdb0e805e3b49a8a83de00e07403f91e9fb33830009e85f69eb8ab08177d",
+    "publicReplayHash": "cd74bdb0e805e3b49a8a83de00e07403f91e9fb33830009e85f69eb8ab08177d",
+    "finalTurn": {
+      "round": 8,
+      "turnNumber": 15,
+      "active": "player",
+      "phase": "challenge",
+      "sideTurns": {
+        "player": 8,
+        "enemy": 7
+      },
+      "extra": false,
+      "lastNormal": "player",
+      "extraTurns": [],
+      "challengeLane": 1,
+      "beginning": false
+    },
+    "finalScores": {
+      "player": 25,
+      "enemy": 2
+    },
+    "actualActions": 72,
+    "actualRequests": 60,
+    "actualSteps": 307,
+    "nonAutomaticRecordedAnswers": 6,
+    "actualActionsMatchCanonicalOutcome": true,
+    "actualRequestFactsMatchCanonicalLogs": true,
+    "actualStepVersionsContiguous": true,
+    "sourceFreezePostRunMatched": true,
+    "variantsObserved": {
+      "amplified:false": 18486
+    },
+    "originalPhysicalPhasingPlayObservations": [
+      {
+        "at": "2026-10-15T14:13:02.878Z",
+        "event": "beforeActualAction",
+        "version": 99,
+        "turn": {
+          "round": 3,
+          "turnNumber": 6,
+          "active": "enemy",
+          "phase": "day",
+          "sideTurns": {
+            "player": 3,
+            "enemy": 3
+          },
+          "extra": false,
+          "lastNormal": "enemy",
+          "extraTurns": [],
+          "challengeLane": null,
+          "beginning": false
+        },
+        "side": "enemy",
+        "action": {
+          "kind": "play",
+          "card": "i45",
+          "from": "hand"
+        }
+      },
+      {
+        "at": "2026-10-15T14:13:03.071Z",
+        "event": "beforeActualAction",
+        "version": 142,
+        "turn": {
+          "round": 4,
+          "turnNumber": 8,
+          "active": "enemy",
+          "phase": "day",
+          "sideTurns": {
+            "player": 4,
+            "enemy": 4
+          },
+          "extra": false,
+          "lastNormal": "enemy",
+          "extraTurns": [],
+          "challengeLane": null,
+          "beginning": false
+        },
+        "side": "enemy",
+        "action": {
+          "kind": "play",
+          "card": "i48",
+          "from": "hand"
+        }
+      }
+    ],
+    "artifacts": {
+      "runtime-v01.definitions.json": {
+        "sha256": "72fd95c11d72921142edbfda6782c24d6df8c42f58d59fefbf93db84af73630d",
+        "bytes": 528886
+      },
+      "runtime-v01.events.jsonl": {
+        "sha256": "2269b25ec208bb7dedf9529b2626e504d69d21bca9998597cdb1501551b2baa5",
+        "bytes": 1831190
+      },
+      "runtime-v01.input.json": {
+        "sha256": "6a82aea09ff24026f2ed27eb0fa56e35b68bae1b7eb0b2d46b557555029ac271",
+        "bytes": 137044
+      },
+      "runtime-v01.inspection.json": {
+        "sha256": "409a3e42143ff1c1086016038553e0a9d917ad3a5752216357e46b82a3e7b49e",
+        "bytes": 750
+      },
+      "runtime-v01.outcome.json": {
+        "sha256": "20066016eeaac0b280296b9fa1ad839eaca3e0d186cc01b2754ad433eaa51792",
+        "bytes": 177468
+      },
+      "runtime-v01.progress.json": {
+        "sha256": "9cec68c6e11f1a41073f49dde56744aa0adc98d359eb14a8339f54a1b74c3bb7",
+        "bytes": 36887
+      },
+      "runtime-v01.request-boundary.json": {
+        "sha256": "f4c7ccb358a1e73fe1055aef6bfeb21ba51c4fe9c97e6e24fc4be82ce30c2976",
+        "bytes": 36215
+      },
+      "runtime-v01.result.json": {
+        "sha256": "e6dd6426b21c78cb22e1b5ced62641e79fd1ec04d8be0fc670ef33b082ee0789",
+        "bytes": 419
+      },
+      "runtime-v01.state.json": {
+        "sha256": "2a3d6747c0ea69d98b847863b5a3964a96f8be0fa11149ffb6c2c3cf496f5377",
+        "bytes": 101574
+      },
+      "runtime-execution-v02.started.json": {
+        "sha256": "de067d711b01fbed60aa8ccd93061c5683e3ed1a3f525631d92591753540cd24",
+        "bytes": 559
+      },
+      "runtime-execution-v02.receipt.json": {
+        "sha256": "d2e3ac9d3d45f09e68941753e0f5e531aec106f05773cd6dbe1aa16e47a2f1d8",
+        "bytes": 1074
+      },
+      "runtime-execution-v02.stdout": {
+        "sha256": "d5f5aca0f7cfdf95a5c0078fcbedeef8171c184659b47e85c744d1180d5f5988",
+        "bytes": 2456
+      },
+      "runtime-execution-v02.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "runtime-freeze-v02.json": {
+        "sha256": "5ed89deff9f50a3d7957d1838bb1286c734fa9f3f5297fe51b8aed51893ea6f9",
+        "bytes": 266353
+      },
+      "runtime-repro-v02.metafile.json": {
+        "sha256": "ee1e9017416d9f0da5ec607fb4c6f4b3cf107f0af17c93516d9b7428e0836ca5",
+        "bytes": 686560
+      },
+      "runtime-repro-v02.mjs": {
+        "sha256": "47e96d948655a10bef0995fce94e61c4f0ca925f3cb0e683386c3bb90fdd06a5",
+        "bytes": 2450832
+      },
+      "runtime-repro-v01.mts": {
+        "sha256": "205ccde236862301f9485d42b5c069a89fd98bd3aeb6d215f66712d266bc5cf9",
+        "bytes": 12457
+      },
+      "run-runtime-v02.py": {
+        "sha256": "523bdd074dfe61b3264a3895d4e40bd5223104e919924ea4a634e345735e8802",
+        "bytes": 2940
+      }
+    }
+  },
+  "failurePaths": {
+    "simulationError": "both side rejects error simulated play boundary",
+    "nonSettling": "both side rejects non-settling simulated play boundary",
+    "restart": "same request on fresh engine/structured clone; recorded nonauto answer replay exact stateHash",
+    "invalidOrStaleSample": "existing public Engine legality exception maps to unknown score; no legality writes",
+    "partialWrite": "pure sampled search has no persistence writes",
+    "concurrentActors": "both side mirrored requests over cloned views; public legality unchanged"
+  },
+  "acceptanceOwnership": "Only this exact saved seed3 repair reproduction belongs here; original294 full40Greedy/full300/recipe/lab and295 matrix remain with their owners;749 activation response predicate followup separate",
+  "checks": {
+    "synthetic-restoration-red-v01": {
+      "name": "synthetic-restoration-red-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "Phasing play horizon"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:01:15.807460+00:00",
+      "startedMonotonicNs": 318411736463000,
+      "hostLoadStart": [
+        18.1337890625,
+        10.3896484375,
+        9.44970703125
+      ],
+      "pid": 88630,
+      "pgid": 88630,
+      "endedAt": "2026-10-15T14:01:21.983814+00:00",
+      "endedMonotonicNs": 318417912590083,
+      "wallSeconds": 6.176127083,
+      "exitCode": 1,
+      "cpuUserSeconds": 6.050578,
+      "cpuSystemSeconds": 2.084686,
+      "hostLoadEnd": [
+        19.484375,
+        10.7978515625,
+        9.59912109375
+      ],
+      "groupEmpty": true
+    },
+    "focused-restored-green-v01": {
+      "name": "focused-restored-green-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "src/engine/policy/policy-worker.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts",
+        "src/battle/engine-ai/engine-ai-driver.test.ts",
+        "src/battle/engine-ai/use-engine-ai.test.tsx",
+        "scripts/tournament/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:01:37.535876+00:00",
+      "startedMonotonicNs": 318433464602708,
+      "hostLoadStart": [
+        18.97216796875,
+        11.22021484375,
+        9.7763671875
+      ],
+      "pid": 13968,
+      "pgid": 13968,
+      "endedAt": "2026-10-15T14:01:57.465082+00:00",
+      "endedMonotonicNs": 318453393380750,
+      "wallSeconds": 19.928778042,
+      "exitCode": 0,
+      "cpuUserSeconds": 32.76489,
+      "cpuSystemSeconds": 6.700834,
+      "hostLoadEnd": [
+        17.11962890625,
+        11.19189453125,
+        9.791015625
+      ],
+      "groupEmpty": true
+    },
+    "direct-primitive-green-v01": {
+      "name": "direct-primitive-green-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "playFromZone view"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:02:13.798110+00:00",
+      "startedMonotonicNs": 318469726358583,
+      "hostLoadStart": [
+        15.11279296875,
+        11.12744140625,
+        9.80078125
+      ],
+      "pid": 19182,
+      "pgid": 19182,
+      "endedAt": "2026-10-15T14:02:22.559246+00:00",
+      "endedMonotonicNs": 318478487206000,
+      "wallSeconds": 8.760847417,
+      "exitCode": 0,
+      "cpuUserSeconds": 9.077078,
+      "cpuSystemSeconds": 2.503203,
+      "hostLoadEnd": [
+        14.56640625,
+        11.1396484375,
+        9.8203125
+      ],
+      "groupEmpty": true
+    },
+    "review-v01": {
+      "name": "review-v01",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:03:49.249358+00:00",
+      "startedMonotonicNs": 318565176266208,
+      "hostLoadStart": [
+        11.04443359375,
+        10.611328125,
+        9.728515625
+      ],
+      "pid": 28499,
+      "pgid": 28499,
+      "endedAt": "2026-10-15T14:04:35.144269+00:00",
+      "endedMonotonicNs": 318611070402375,
+      "wallSeconds": 45.894136167,
+      "exitCode": 2,
+      "cpuUserSeconds": 120.816433,
+      "cpuSystemSeconds": 13.564486,
+      "hostLoadEnd": [
+        15.35986328125,
+        12.01220703125,
+        10.30029296875
+      ],
+      "groupEmpty": true
+    },
+    "review-v02": {
+      "name": "review-v02",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:04:48.562423+00:00",
+      "startedMonotonicNs": 318624488517750,
+      "hostLoadStart": [
+        15.27978515625,
+        12.15771484375,
+        10.38134765625
+      ],
+      "pid": 89071,
+      "pgid": 89071,
+      "endedAt": "2026-10-15T14:05:24.533153+00:00",
+      "endedMonotonicNs": 318660458622125,
+      "wallSeconds": 35.970104375,
+      "exitCode": 0,
+      "cpuUserSeconds": 90.360601,
+      "cpuSystemSeconds": 10.846961,
+      "hostLoadEnd": [
+        12.28564453125,
+        11.7705078125,
+        10.3115234375
+      ],
+      "groupEmpty": true
+    },
+    "synthetic-restoration-red-v02": {
+      "name": "synthetic-restoration-red-v02",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "Phasing play horizon"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:05:55.826802+00:00",
+      "startedMonotonicNs": 318691751958916,
+      "hostLoadStart": [
+        9.71923828125,
+        11.21337890625,
+        10.16015625
+      ],
+      "pid": 94805,
+      "pgid": 94805,
+      "endedAt": "2026-10-15T14:06:00.621471+00:00",
+      "endedMonotonicNs": 318696546443208,
+      "wallSeconds": 4.794484292,
+      "exitCode": 1,
+      "cpuUserSeconds": 4.863963,
+      "cpuSystemSeconds": 1.6635119999999999,
+      "hostLoadEnd": [
+        9.58154296875,
+        11.15966796875,
+        10.1474609375
+      ],
+      "groupEmpty": true
+    },
+    "synthetic-restored-green-v02": {
+      "name": "synthetic-restored-green-v02",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "Phasing play horizon"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:07:20.142865+00:00",
+      "startedMonotonicNs": 318776066876000,
+      "hostLoadStart": [
+        5.69970703125,
+        9.5107421875,
+        9.60400390625
+      ],
+      "pid": 2042,
+      "pgid": 2042,
+      "endedAt": "2026-10-15T14:07:24.960314+00:00",
+      "endedMonotonicNs": 318780884125791,
+      "wallSeconds": 4.817249791,
+      "exitCode": 0,
+      "cpuUserSeconds": 4.862055,
+      "cpuSystemSeconds": 1.65572,
+      "hostLoadEnd": [
+        5.6435546875,
+        9.435546875,
+        9.57666015625
+      ],
+      "groupEmpty": true
+    },
+    "knip-v01": {
+      "name": "knip-v01",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:07:42.606186+00:00",
+      "startedMonotonicNs": 318798529870666,
+      "hostLoadStart": [
+        5.5615234375,
+        9.23388671875,
+        9.501953125
+      ],
+      "pid": 3872,
+      "pgid": 3872,
+      "endedAt": "2026-10-15T14:07:51.361160+00:00",
+      "endedMonotonicNs": 318807284617000,
+      "wallSeconds": 8.754746334,
+      "exitCode": 0,
+      "cpuUserSeconds": 4.486792,
+      "cpuSystemSeconds": 2.268574,
+      "hostLoadEnd": [
+        6.0224609375,
+        9.2099609375,
+        9.48974609375
+      ],
+      "groupEmpty": true
+    },
+    "runtime-inspection-v01": {
+      "name": "runtime-inspection-v01",
+      "argv": [
+        "node",
+        "/tmp/worker746-20261015/runtime-repro-v01.mjs",
+        "--inspect"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:07:38.781150+00:00",
+      "startedMonotonicNs": 318794705051875,
+      "hostLoadStart": [
+        5.5615234375,
+        9.23388671875,
+        9.501953125
+      ],
+      "pid": 3568,
+      "pgid": 3568,
+      "endedAt": "2026-10-15T14:07:38.856594+00:00",
+      "endedMonotonicNs": 318794780219250,
+      "wallSeconds": 0.075167375,
+      "exitCode": 1,
+      "cpuUserSeconds": 0.064984,
+      "cpuSystemSeconds": 0.009380999999999999,
+      "hostLoadEnd": [
+        5.5615234375,
+        9.23388671875,
+        9.501953125
+      ],
+      "groupEmpty": true
+    },
+    "runtime-inspection-v02": {
+      "name": "runtime-inspection-v02",
+      "argv": [
+        "node",
+        "/tmp/worker746-20261015/runtime-repro-v02.mjs",
+        "--inspect"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:08:06.120119+00:00",
+      "startedMonotonicNs": 318822043618208,
+      "hostLoadStart": [
+        5.9482421875,
+        9.03564453125,
+        9.42236328125
+      ],
+      "pid": 5850,
+      "pgid": 5850,
+      "endedAt": "2026-10-15T14:08:06.220468+00:00",
+      "endedMonotonicNs": 318822143722041,
+      "wallSeconds": 0.100103833,
+      "exitCode": 0,
+      "cpuUserSeconds": 0.10038899999999999,
+      "cpuSystemSeconds": 0.011783,
+      "hostLoadEnd": [
+        5.9482421875,
+        9.03564453125,
+        9.42236328125
+      ],
+      "groupEmpty": true
+    },
+    "final-schema-v01": {
+      "name": "final-schema-v01",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-phasing746",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "startedAt": "2026-10-15T14:09:44.383141+00:00",
+      "startedMonotonicNs": 318920305168125,
+      "hostLoadStart": [
+        4.50830078125,
+        7.69189453125,
+        8.8544921875
+      ],
+      "pid": 13456,
+      "pgid": 13456,
+      "endedAt": "2026-10-15T14:09:44.505446+00:00",
+      "endedMonotonicNs": 318920427354291,
+      "wallSeconds": 0.122186166,
+      "exitCode": 0,
+      "cpuUserSeconds": 0.056236999999999995,
+      "cpuSystemSeconds": 0.029280999999999998,
+      "hostLoadEnd": [
+        4.50830078125,
+        7.69189453125,
+        8.8544921875
+      ],
+      "groupEmpty": true
+    }
+  },
+  "resources": {
+    "observedAt": "2026-10-15T14:15:05.037688+00:00",
+    "groups": [
+      2042,
+      3568,
+      3872,
+      5850,
+      13456,
+      13968,
+      19182,
+      28499,
+      28607,
+      88630,
+      89071,
+      94805
+    ],
+    "remaining": [],
+    "claim": "All contemporary command receipts record empty group at terminal; this final scoped process-table observation finds no remaining owned group."
+  },
+  "testSourceDelta": {
+    "files": 1,
+    "lines": 135,
+    "jsdomFiles": 0,
+    "newEntrypoints": 0
+  },
+  "implementationMeasurement": {
+    "dispatchStart": "2026-10-15T13:49:56.618000+00:00",
+    "evidenceCutoffAt": "2026-10-15T14:17:38.587180+00:00",
+    "evidenceCutoffMonotonicNs": 319394517773166,
+    "inclusiveMinutesToEvidenceCutoff": 27.699486333333333,
+    "scope": "Inclusive source audit, coordination, checks, failures, catalog preparation and actual game/replay through the final ordinary Git preparation boundary. Actual unforced Git invocation/return and clock tail retained in /tmp/worker746-20261015/ordinary-commit-v01.receipt.json; no interval reset or subtraction."
+  }
+}
