@@ -122,7 +122,7 @@ describe("gamble-site-logging-view-model", () => {
       expect(getLogEntries()).toHaveLength(1);
       expect(getLogEntries()[0]).toMatchObject({
         event: "gamble_wager_settled",
-        gameId: "tidemark-ladder-climb",
+        gambleGameId: "tidemark-ladder-climb",
         selectionTrace: testGambleSelectionTrace("tidemark-ladder-climb"),
         gambleFoldHash: gambleFixture().foldHash,
         attemptNumber: 1,
@@ -227,7 +227,7 @@ describe("gamble-site-logging-view-model", () => {
       expect(getLogEntries()).toHaveLength(3);
       expect(getLogEntries()[0]).toMatchObject({
         event: "gamble_game_prepared",
-        gameId: "four-suit-reprise",
+        gambleGameId: "four-suit-reprise",
         selectionTrace: testGambleSelectionTrace("four-suit-reprise"),
         drawCost: 25,
         outcomes: [
@@ -309,7 +309,7 @@ describe("gamble-site-logging-view-model", () => {
       expect(getLogEntries()).toHaveLength(3);
       expect(getLogEntries()[0]).toMatchObject({
         event: "gamble_game_prepared",
-        gameId: "blackjack",
+        gambleGameId: "blackjack",
         selectionTrace: testGambleSelectionTrace("blackjack"),
         wagerCost: 50,
         prizeEssence: 300,

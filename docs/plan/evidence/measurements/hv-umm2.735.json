@@ -1,0 +1,395 @@
+{
+  "bead": "hv-umm2.735",
+  "phase": 5,
+  "base": "d0710c77c428f7e81665605ed543d047bf5131c4",
+  "implementationClock": {
+    "dispatchStart": "2026-10-15T09:05:21.549Z",
+    "evidenceCutoff": "2026-10-15T09:16:00.647239+00:00",
+    "endMeaning": "Last pre-commit evidence write. Actual Git start/end, final OID and marker gap are external timed receipts retained by the session; no forced Git dates.",
+    "sampling": "UNKNOWN",
+    "inclusiveElapsedMinutes": 10.651637316666667
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final review starting sysctl 1-minute load"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 285,
+    "jsdomFiles": 0
+  },
+  "sourceChanges": [
+    "gambleCatalogLogFields catalog field gameId to gambleGameId",
+    "logGambleReplacement catalog field gameId to gambleGameId; typed argument/signature/key/other fields retained"
+  ],
+  "scopeAdmission": {
+    "receipt": "native-scope-v03.json",
+    "sha256": "b3c6d7e9958e1c4e521b14d0a26dd230feef7c3f5d337ed3984c22f3923e8288",
+    "reason": "Read-only source audit confirmed a second catalog-field collision in the replacement producer before its write; parent native Areas admission preceded that write."
+  },
+  "publicCaptureContract": {
+    "chain": [
+      "setLogContext({gameId: branded run ID})",
+      "public logGamblePrepared/Resolved/Settled/Replacement",
+      "real logEventOnce and logEvent merge ambient context with diagnostic fields",
+      "setJourneyLogCapture to real createGameLogCapture.capture",
+      "GameRepository using createMemoryKeyValueStore",
+      "readGameLog (same export data path as createLocalGameControls.exportLog)",
+      "fresh GameRepository on retained memory store reads the same bytes"
+    ],
+    "diagnosticKinds": 5,
+    "recordsPerRuntime": 3,
+    "replacementGameKinds": 2,
+    "checks": [
+      "exact run gameId and separate catalog gambleGameId",
+      "site identity and selection trace/fold hash",
+      "selected physical entry/card UUID/copy entry and payment",
+      "replacement and awarded Dreamsign UUIDs",
+      "repeat producer calls create exactly one copy of each record",
+      "export bytes match actual emitted records and reopened storage; unrelated run log stays empty"
+    ],
+    "limitations": "Synthetic public capture/persistence/export-data contract; no browser/IndexedDB/download-button exercise. Presentation, gameplay, callbacks, capture/storage merge and retry semantics are unchanged."
+  },
+  "redBefore": {
+    "firstAttempt": "red-before01: 2/2 runtime identity assertions failed",
+    "completeAttempt": "red-before02: 7/7 identity assertions failed for all five supported runtime variants and both replacement variants",
+    "frozenInputs": "red-before02-manifest.json",
+    "rawDiagnostics": "red-before02.stdout contains actual emitted JSONL with catalog ID overwriting run gameId; stderr contains exact AssertionErrors",
+    "cause": "src/logging.ts logEvent merges ...logContext then ...sanitized; catalog producer gameId takes precedence. attachGameLog supplies ambient run identity. game-log-capture.report merge is the error-report helper, not the Gamble collision source."
+  },
+  "iterationCorrection": "review01 stopped at type-aware lint for untyped JSON.parse in the new test; its parsed-record boundary is explicitly typed before review02. focused01 caught two existing runtime fixture keys mistakenly renamed by a broad expectation text edit. After that process was terminal both fixture keys were restored; focused02 passed20/3. Existing test final delta is only three payload expectations.",
+  "readFirstCoverage": "read-first-coverage-v01.json",
+  "readerAudit": {
+    "receipt": "reader-audit01.receipt.json",
+    "search": "finite src/ + scripts/ event-name and gambleGameId references; inspected both actual exported producer callers and logger/capture/export path",
+    "result": "No consumer parses the catalog ID from these diagnostic event names. Existing gambleGameId vocabulary is used in runtime/provider requests. No signature/reader edit or fallout admitted/needed."
+  },
+  "qa": {
+    "browser": "not needed for internal diagnostic field attribution demonstrated on the real public capture/persistence/export-data path",
+    "heavy": "not needed for bounded producer correction; no architecture/config/test infrastructure edits",
+    "coreReview": false,
+    "nonTestChangedLines": 4
+  },
+  "validation": {
+    "focused01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/session/gamble-log-identity.test.ts",
+        "src/screens/cumulus_adapters/gamble-site-logging-view-model.test.ts",
+        "src/session/game-log-capture.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-gamble-log-identity735",
+      "start": "2026-10-15T09:09:13.077983+00:00",
+      "end": "2026-10-15T09:09:18.926648+00:00",
+      "exit": 1,
+      "wallSeconds": 5.8485507080331445,
+      "pid": 26463,
+      "pgid": 26463,
+      "load": "{ 7.65 11.21 10.95 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "42156084dfe5fca61a1f24e6d570632e6f3cd7051e5b7879ccf8b3412e590831",
+      "stderrSHA256": "fc40fdd5288cf4ad36290a90421e6814d8cfd7d63f6d214f3787b1b2e501de43"
+    },
+    "focused02": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/session/gamble-log-identity.test.ts",
+        "src/screens/cumulus_adapters/gamble-site-logging-view-model.test.ts",
+        "src/session/game-log-capture.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-gamble-log-identity735",
+      "start": "2026-10-15T09:09:32.109345+00:00",
+      "end": "2026-10-15T09:09:37.258401+00:00",
+      "exit": 0,
+      "wallSeconds": 5.148922041989863,
+      "pid": 27619,
+      "pgid": 27619,
+      "load": "{ 8.34 11.16 10.93 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "51707fc62271905af7907ac59c5ac1224a8fa4a38786da8dd06f4f44c5afcab7",
+      "stderrSHA256": "350c10a0c96a44d1e7f26404657dd96ca24f1e6e6f08a86d5ce20dd912b36418"
+    },
+    "knip01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-gamble-log-identity735",
+      "start": "2026-10-15T09:13:44.328428+00:00",
+      "end": "2026-10-15T09:13:51.867287+00:00",
+      "exit": 0,
+      "wallSeconds": 7.53872416698141,
+      "pid": 234,
+      "pgid": 234,
+      "load": "{ 9.14 12.08 11.57 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "026664b44bdd82d9e414319639ff20149bf2edf8343f3b44a4b83033ae50a118",
+      "stderrSHA256": "350c10a0c96a44d1e7f26404657dd96ca24f1e6e6f08a86d5ce20dd912b36418"
+    },
+    "reader-audit01": {
+      "argv": [
+        "rg",
+        "-n",
+        "gamble_(game_prepared|wager_resolved|wager_settled|dreamsign_replaced)|gambleGameId",
+        "src",
+        "scripts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-gamble-log-identity735",
+      "start": "2026-10-15T09:10:09.281795+00:00",
+      "end": "2026-10-15T09:10:09.324083+00:00",
+      "exit": 0,
+      "wallSeconds": 0.04219966597156599,
+      "pid": 30164,
+      "pgid": 30164,
+      "load": "{ 8.44 10.85 10.83 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "0500c4c93228ca0bb2ba57511845c0e52318138740e8880a90f9af47299b6e8c",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "red-before01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/session/gamble-log-identity.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-gamble-log-identity735",
+      "start": "2026-10-15T09:08:05.120881+00:00",
+      "end": "2026-10-15T09:08:15.328325+00:00",
+      "exit": 1,
+      "wallSeconds": 10.207252790976781,
+      "pid": 22012,
+      "pgid": 22012,
+      "load": "{ 8.37 12.21 11.26 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "b64251c6862fa72395a005d0be4acdbbde548b383d19f2ca22c395dcdfa8cd9d",
+      "stderrSHA256": "8607fd5082da20f1512fa385e8ba1971506ff3a40e7b133294521da4f5982112"
+    },
+    "red-before02": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/session/gamble-log-identity.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-gamble-log-identity735",
+      "start": "2026-10-15T09:08:48.628363+00:00",
+      "end": "2026-10-15T09:08:56.983098+00:00",
+      "exit": 1,
+      "wallSeconds": 8.354553624987602,
+      "pid": 24922,
+      "pgid": 24922,
+      "load": "{ 7.46 11.48 11.03 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "cfa282cfbd935c6aecee1a23f97544ef6715758eb62261185bb6f7a214c1e42c",
+      "stderrSHA256": "d0b18c665cf8baa1e254595ff3f607fec0552b5579c7ffb28a063735a50abf32"
+    },
+    "review01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-gamble-log-identity735",
+      "start": "2026-10-15T09:12:18.650790+00:00",
+      "end": "2026-10-15T09:12:38.551710+00:00",
+      "exit": 1,
+      "wallSeconds": 19.900691832997836,
+      "pid": 94755,
+      "pgid": 94755,
+      "load": "{ 13.30 13.29 11.89 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "f43159404710cf295fa2115c6a2e1f3ede1b68dac2a84691408648276e8abe71",
+      "stderrSHA256": "350c10a0c96a44d1e7f26404657dd96ca24f1e6e6f08a86d5ce20dd912b36418"
+    },
+    "review02": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-gamble-log-identity735",
+      "start": "2026-10-15T09:13:02.322577+00:00",
+      "end": "2026-10-15T09:13:22.707381+00:00",
+      "exit": 0,
+      "wallSeconds": 20.38439937500516,
+      "pid": 97500,
+      "pgid": 97500,
+      "load": "{ 11.38 12.89 11.82 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "f55dc1adbab111286ebbf037e8ba11f0586cd4e28b50b84f7cf2c4afcb61803c",
+      "stderrSHA256": "350c10a0c96a44d1e7f26404657dd96ca24f1e6e6f08a86d5ce20dd912b36418"
+    },
+    "schema01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-gamble-log-identity735",
+      "start": "2026-10-15T09:14:13.672607+00:00",
+      "end": "2026-10-15T09:14:13.797910+00:00",
+      "exit": 0,
+      "wallSeconds": 0.1252282079658471,
+      "pid": 2445,
+      "pgid": 2445,
+      "load": "{ 9.80 12.00 11.56 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "3f03e7d6fb3c777ad3c1ed03b29bc0b05e5116aea203ac25e689a5ecf76ca728",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "whitespace01": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-gamble-log-identity735",
+      "start": "2026-10-15T09:14:25.817665+00:00",
+      "end": "2026-10-15T09:14:25.829955+00:00",
+      "exit": 0,
+      "wallSeconds": 0.012208292027935386,
+      "pid": 3158,
+      "pgid": 3158,
+      "load": "{ 8.58 11.62 11.43 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "hostLoadSamples": {
+    "focused01": {
+      "start": "2026-10-15T09:09:13.077983+00:00",
+      "oneMinute": 7.65
+    },
+    "focused02": {
+      "start": "2026-10-15T09:09:32.109345+00:00",
+      "oneMinute": 8.34
+    },
+    "knip01": {
+      "start": "2026-10-15T09:13:44.328428+00:00",
+      "oneMinute": 9.14
+    },
+    "reader-audit01": {
+      "start": "2026-10-15T09:10:09.281795+00:00",
+      "oneMinute": 8.44
+    },
+    "red-before01": {
+      "start": "2026-10-15T09:08:05.120881+00:00",
+      "oneMinute": 8.37
+    },
+    "red-before02": {
+      "start": "2026-10-15T09:08:48.628363+00:00",
+      "oneMinute": 7.46
+    },
+    "review01": {
+      "start": "2026-10-15T09:12:18.650790+00:00",
+      "oneMinute": 13.3
+    },
+    "review02": {
+      "start": "2026-10-15T09:13:02.322577+00:00",
+      "oneMinute": 11.38
+    },
+    "schema01": {
+      "start": "2026-10-15T09:14:13.672607+00:00",
+      "oneMinute": 9.8
+    },
+    "whitespace01": {
+      "start": "2026-10-15T09:14:25.817665+00:00",
+      "oneMinute": 8.58
+    }
+  },
+  "runtimeLedger": {
+    "browserContexts": [],
+    "servers": [],
+    "emulators": [],
+    "commandGroups": [
+      {
+        "name": "focused01",
+        "pid": 26463,
+        "pgid": 26463,
+        "exit": 1,
+        "remainingAtExit": []
+      },
+      {
+        "name": "focused02",
+        "pid": 27619,
+        "pgid": 27619,
+        "exit": 0,
+        "remainingAtExit": []
+      },
+      {
+        "name": "knip01",
+        "pid": 234,
+        "pgid": 234,
+        "exit": 0,
+        "remainingAtExit": []
+      },
+      {
+        "name": "reader-audit01",
+        "pid": 30164,
+        "pgid": 30164,
+        "exit": 0,
+        "remainingAtExit": []
+      },
+      {
+        "name": "red-before01",
+        "pid": 22012,
+        "pgid": 22012,
+        "exit": 1,
+        "remainingAtExit": []
+      },
+      {
+        "name": "red-before02",
+        "pid": 24922,
+        "pgid": 24922,
+        "exit": 1,
+        "remainingAtExit": []
+      },
+      {
+        "name": "review01",
+        "pid": 94755,
+        "pgid": 94755,
+        "exit": 1,
+        "remainingAtExit": []
+      },
+      {
+        "name": "review02",
+        "pid": 97500,
+        "pgid": 97500,
+        "exit": 0,
+        "remainingAtExit": []
+      },
+      {
+        "name": "schema01",
+        "pid": 2445,
+        "pgid": 2445,
+        "exit": 0,
+        "remainingAtExit": []
+      },
+      {
+        "name": "whitespace01",
+        "pid": 3158,
+        "pgid": 3158,
+        "exit": 0,
+        "remainingAtExit": []
+      }
+    ]
+  },
+  "workspaceAssets": {
+    "observation": "Review preparation isolates DREAMTIDES_LOCAL_ASSET_HOME under its empty node_modules/.cache/journey-review/local-assets and emits missing-art warnings; its finally block restores real local links.",
+    "source": "scripts/review.mjs416-442,557-588 inspected read-only",
+    "result": "Expected isolated validation workspace warnings, not an actionable missing-art defect: each recorded restore succeeds with564card/32avatar/153Dreamsign/226journey/521Exploration images. No source asset change or pre-existing issue file applies."
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": []
+}

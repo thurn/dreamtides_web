@@ -18,7 +18,7 @@ function gambleCatalogLogFields(
   gambleData: GambleData,
 ) {
   return {
-    gameId: runtime.gameId,
+    gambleGameId: runtime.gameId,
     gambleFoldHash: gambleData.foldHash,
     selectionTrace: runtime.selectionTrace,
   };
@@ -526,7 +526,7 @@ export function logGambleReplacement(
     "gamble_dreamsign_replaced",
     {
       siteId,
-      gameId,
+      gambleGameId: gameId,
       replacedDreamsignId,
       awardedDreamsignId: awardedDreamsignId ?? null,
     },
