@@ -1,0 +1,394 @@
+{
+  "bead": "hv-umm2.277",
+  "status": "local acceptance verified; parent final review routing and delivery pending",
+  "baseline": "2fc03fa05124766208fe2c944747616de6875d3e",
+  "entity": {
+    "uuid": "f40df441-0e44-4122-b4d4-cdc4085a9ffb",
+    "kind": "transfiguration",
+    "form": "Kindled",
+    "newPrimitives": [],
+    "amplifiedText": null,
+    "verifiedText": "registry contract checks exact canonical text"
+  },
+  "implementationClock": {
+    "start": "2026-10-15T12:51:22.669383+00:00",
+    "measurementCutoff": "2026-10-15T13:42:21.473205+00:00",
+    "elapsedMinAtCutoff": 50.980063699999995,
+    "includes": "Entire claim/setup/source audit/admission/implementation/checks/all waits/runtime/evidence through cutoff. Cutoff precedes actual Git; git-return.json supplies final actual return/CPU and inclusive clock without predicting it.",
+    "finalGitReceipt": "git-return.json",
+    "install": "install-observed.json retains exit0/17advisories; exact outer timing/CPU unknown; install not repeated"
+  },
+  "sourceFreeze": {
+    "at": "2026-10-15T13:23:01.533173+00:00",
+    "productionUnchangedFromV01": true,
+    "testChange": "X ordinary control uses zero permanentbonus; optional transfigurations check narrowed; no behavior change",
+    "paths": {
+      "src/engine/transfigurations/kindled.ts": "a523b2d3c72bbf28a2898cbab33e75b7bc414cb466bc407474024566370191d8",
+      "src/engine/transfigurations.ts": "a141862501eb7f1e83081d3da7f996ad8545150ed4d63c6c9f3bde9ae356c0b5",
+      "src/engine/transfigurations/contracts/kindled.contracts.ts": "87e93f933414249f769061d016e74c631f841d17ce4c0153481b5bf2bf8b54da",
+      "src/engine/transfigurations.test.ts": "dedf0e8f8ab3daaf38722cfd5b909e3b9e4ea76a3b2d9d6c48106d5271e3502c"
+    }
+  },
+  "readOnlySources": {
+    "bound": 90,
+    "recheckedUnchangedReadOnly": 86,
+    "drift": [],
+    "receipt": "readonly-consumer-recheck.json"
+  },
+  "scope": {
+    "writerAdmission": "stage2-admission.json",
+    "writers": 13,
+    "fallout": [],
+    "newPublicAPIs": 0,
+    "newTestEntrypoints": 0,
+    "plainContractModules": 1,
+    "newCases": 9,
+    "contractLines": 130,
+    "testLineDelta": 131,
+    "jsdomEntrypoints": 0,
+    "scenarioModules": 0,
+    "scenarioReason": "D20 primitive composition; public synthetic transform contracts at existing transfiguration entrypoint. Existing generalized all-registered-form fuzz recipe extends automatically. No duplicate-form/reapplication ruling."
+  },
+  "rules": {
+    "decision": "RD-hv-umm2.277-1",
+    "ladder": "D10 step2 actual prototype",
+    "cardsWithIssues": [],
+    "preexisting": [
+      "mobile-deck type/form order: existing 730, source-only observation",
+      "ordinary printed-X permanent bonus: canonical 747, source observation independently reproduced by parent for both actors"
+    ]
+  },
+  "validation": {
+    "consumers-v01": {
+      "receipt": "consumers-v01.receipt.json",
+      "exit": 0,
+      "wallS": 6.296871185302734,
+      "childUserS": 7.286758,
+      "childSystemS": 2.109233,
+      "rawSha256": "eae1ea4491010b6a04431bafcfedbf0e5de4ac9bce195b163ad6387f112e4656"
+    },
+    "discovery-v01": {
+      "receipt": "discovery-v01.receipt.json",
+      "exit": 0,
+      "wallS": 10.093406915664673,
+      "childUserS": 6.80706,
+      "childSystemS": 3.02493,
+      "rawSha256": "ee34574012ec074e6141fb6fc184b348ee272c011264cf7bc88166793c2b4bb6"
+    },
+    "exact-base-v01": {
+      "receipt": "exact-base-v01.receipt.json",
+      "exit": 0,
+      "wallS": 12.703038930892944,
+      "childUserS": 5.554606,
+      "childSystemS": 2.386558,
+      "rawSha256": "93991b8b6938a0e8a4a685e2df77ad460403d334d733bd8564fda37f098d1e5a"
+    },
+    "focused-v02": {
+      "receipt": "focused-v02.receipt.json",
+      "exit": 1,
+      "wallS": 6.365673780441284,
+      "childUserS": 6.494815,
+      "childSystemS": 2.015681,
+      "rawSha256": "647501604ebf718318414ae166ee900603c945b28a7995c11816da983de94606"
+    },
+    "focused-v03": {
+      "receipt": "focused-v03.receipt.json",
+      "exit": 0,
+      "wallS": 6.2224040031433105,
+      "childUserS": 6.308321,
+      "childSystemS": 1.999948,
+      "rawSha256": "262acc6b59688f0e576a824f60039e6b0c5791a398d108e804ae5b023c94fbaa"
+    },
+    "focused-v04": {
+      "receipt": "focused-v04.receipt.json",
+      "exit": 0,
+      "wallS": 5.8056640625,
+      "childUserS": 5.859068,
+      "childSystemS": 1.8823619999999999,
+      "rawSha256": "3d01ea66b0f150a60f0dc264eb1fdd122f8b6834dfc66fcb7725c9aceee10ba9"
+    },
+    "journey-v01": {
+      "receipt": "journey-v01.receipt.json",
+      "exit": 0,
+      "wallS": 42.37841796875,
+      "childUserS": 6.302868,
+      "childSystemS": 2.671071,
+      "rawSha256": "66e5b0c12f84d760c4da47e408efe164a4895cfc022024131926a69ed63f39c3"
+    },
+    "journey-visual-v02": {
+      "receipt": "journey-visual-v02.receipt.json",
+      "exit": 0,
+      "wallS": 50.50580382347107,
+      "childUserS": 6.654014,
+      "childSystemS": 3.366846,
+      "rawSha256": "5bcaf592707a2a628d70df53b084b6a91e7c6b07971646f0325c90cff4914ce2"
+    },
+    "knip-v01": {
+      "receipt": "knip-v01.receipt.json",
+      "exit": 0,
+      "wallS": 4.767714977264404,
+      "childUserS": 4.609521,
+      "childSystemS": 1.503362,
+      "rawSha256": "96a0219ad4cb3c684ac86ae7c0320b4ae5df61293726dbdc837a9daef33350ea"
+    },
+    "numeric-v01": {
+      "receipt": "numeric-v01.receipt.json",
+      "exit": 0,
+      "wallS": 39.76213312149048,
+      "childUserS": 7.948853,
+      "childSystemS": 4.046801,
+      "rawSha256": "89e01588985eb995816374ac0f29fac639c9502f373c7ea1aa788c897b187a8a"
+    },
+    "preflight-v01": {
+      "receipt": "preflight-v01.receipt.json",
+      "exit": 0,
+      "wallS": 1.6157817840576172,
+      "childUserS": 1.47709,
+      "childSystemS": 0.54482,
+      "rawSha256": "edf8e2a5784fd31c79bf212efd35894160f1c2945927181559ddc910b2e91d7d"
+    },
+    "review-v01": {
+      "receipt": "review-v01.receipt.json",
+      "exit": 2,
+      "wallS": 77.37546110153198,
+      "childUserS": 211.127864,
+      "childSystemS": 15.868486,
+      "rawSha256": "073f586bff5041b400c7f413abcf8e7b188eb9f16cbb6f0386a9fdbe88090126"
+    },
+    "review-v02": {
+      "receipt": "review-v02.receipt.json",
+      "exit": 0,
+      "wallS": 76.59545803070068,
+      "childUserS": 187.541226,
+      "childSystemS": 16.715251,
+      "rawSha256": "1bcdc1dcf138a7a71a96e701d9e16e2a0b98a5b3e97a3e12b58593b1973dc6fe"
+    },
+    "schema-preliminary": {
+      "receipt": "schema-preliminary.receipt.json",
+      "exit": 0,
+      "wallS": 0.14354991912841797,
+      "childUserS": 0.060922,
+      "childSystemS": 0.037741,
+      "rawSha256": "6a70c046b9c6789eeb7b29c67e0f18df14c9811ad5fd109aad94be1da2206512"
+    },
+    "sweep-v01": {
+      "receipt": "sweep-v01.receipt.json",
+      "exit": 1,
+      "wallS": 141.04468512535095,
+      "childUserS": 9.654898,
+      "childSystemS": 5.193716,
+      "rawSha256": "1cae4f985b7661f14d548968af78f02598d4b3f9d33abbcd28741eff75b0c1cd"
+    },
+    "weighted-execution-v01": {
+      "receipt": "weighted-execution-v01.receipt.json",
+      "exit": 0,
+      "wallS": 1457.3300030231476,
+      "childUserS": 1529.28434,
+      "childSystemS": 14.552189,
+      "rawSha256": "51a8519d3727591fc00c62d406a12b34c5b235c87a2f404bfde34fc856489d99"
+    },
+    "weighted-outer-v01": {
+      "receipt": "weighted-outer-v01.receipt.json",
+      "exit": 0,
+      "wallS": 1511.0667130947113,
+      "childUserS": 1529.786546,
+      "childSystemS": 14.708046,
+      "rawSha256": "e46d5f35a522fe0f03954d0428e29565f0eb1206cb7c18d6b64e3d384a9a4080"
+    },
+    "weighted-sample-v01": {
+      "receipt": "weighted-sample-v01.receipt.json",
+      "exit": 0,
+      "wallS": 1.21199631690979,
+      "childUserS": 0.082656,
+      "childSystemS": 0.09584899999999999,
+      "rawSha256": "c29ad979e22d0524de6228db3eec86f80ea99178dad4821033a0579b936c5652"
+    },
+    "schema-final": {
+      "label": "schema-final",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/resonant-277",
+      "wrapperPid": 38421,
+      "wrapperPgid": 38402,
+      "startEpoch": 1792071741.529192,
+      "start": "2026-10-15T13:42:21.529246+00:00",
+      "load": [
+        4.20556640625,
+        6.9150390625,
+        8.6103515625
+      ],
+      "head": "2fc03fa05124766208fe2c944747616de6875d3e",
+      "log": "/tmp/dreamtides-277-01a13a7a/schema-final.log",
+      "state": "terminal",
+      "pid": 38424,
+      "pgid": 38424,
+      "exit": 0,
+      "endEpoch": 1792071741.6520488,
+      "end": "2026-10-15T13:42:21.652061+00:00",
+      "wallS": 0.12285685539245605,
+      "childUserS": 0.059125,
+      "childSystemS": 0.029068,
+      "rawSha256": "6a70c046b9c6789eeb7b29c67e0f18df14c9811ad5fd109aad94be1da2206512"
+    },
+    "whitespace-final": {
+      "label": "whitespace-final",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/resonant-277",
+      "wrapperPid": 38431,
+      "wrapperPgid": 38402,
+      "startEpoch": 1792071741.678129,
+      "start": "2026-10-15T13:42:21.678180+00:00",
+      "load": [
+        4.20556640625,
+        6.9150390625,
+        8.6103515625
+      ],
+      "head": "2fc03fa05124766208fe2c944747616de6875d3e",
+      "log": "/tmp/dreamtides-277-01a13a7a/whitespace-final.log",
+      "state": "terminal",
+      "pid": 38435,
+      "pgid": 38435,
+      "exit": 0,
+      "endEpoch": 1792071741.6954272,
+      "end": "2026-10-15T13:42:21.695439+00:00",
+      "wallS": 0.017298221588134766,
+      "childUserS": 0.007581999999999999,
+      "childSystemS": 0.042407,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "weighted300": {
+    "qualifiedPass": true,
+    "summary": "fuzz:engine 300 games, 82207 steps, 1455.9 s wall, 1541.8 s CPU (0.2 games/s wall, 0.2 games/s CPU); prompts 6588; interactive re-runs 636 (25.585 ms each); feasibility bounded {\"legality\":0,\"prompts\":0}; results {\"player\":135,\"enemy\":165,\"draw\":0}; failures 0",
+    "targets": [
+      {
+        "kind": "transfiguration",
+        "uuid": "f40df441-0e44-4122-b4d4-cdc4085a9ffb",
+        "included": 3820,
+        "exercised": 1543
+      }
+    ],
+    "queueS": 53.73241710662842,
+    "actualExecutionS": 1457.3300030231476,
+    "cpuS": 1543.836529,
+    "seed": "hv-umm2.277",
+    "first": 0,
+    "games": 300,
+    "interactiveEvery": 10,
+    "recipe": "Exact glossary UUID target via existingCLI; fullrandom otherforms/deckmods/content+syntheticmix, inline invariants/determinization/finalhash and defaultinteractive replay retained. Included/exercised counts are observations, not full text coverage.",
+    "outerReceipt": "weighted-outer-v01.receipt.json",
+    "executionReceipt": "weighted-execution-v01.receipt.json"
+  },
+  "browser": {
+    "projection": [
+      "7dd2214f-8d16-453a-9f28-62712e64eae1",
+      "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
+      "9d51dca1-28d7-4e8e-bc13-c5b665d6db72",
+      "c92a7dc0-04b0-4c54-9485-59a92505eabc"
+    ],
+    "preflight": {
+      "pass": 20,
+      "skip": 4,
+      "fail": 0,
+      "variants": [
+        "base",
+        "amplified",
+        "kindled"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ]
+    },
+    "sweep": {
+      "requestedKindledPass": 8,
+      "requestedKindledFail": 0,
+      "mandatoryBaseDiscovery": 8,
+      "rawPass": 15,
+      "rawUnknownFail": 1,
+      "rawExit": 1,
+      "finalBaseCellPass": 8,
+      "exactFreshCorrection": "exact-base-v01.receipt.json",
+      "failureCause": "unknown; probe disappeared",
+      "rawSummary": "invocations/sweep-Syliys/summary.json"
+    },
+    "numeric": "invocations/run-SC2pGP/numeric.result.json",
+    "numericCases": 6,
+    "numericLogCustody": "numeric-per-game-log-custody.json filters original own development sink into receipts/numeric-<viewport>-<case>-<gameId>.jsonl; all6 actual plays and savedreload records retained; no rerun",
+    "journey": "invocations/run-vSPyJ1/journey-v01.result.json",
+    "journeyViews": 2,
+    "journeyNaturalSource": {
+      "seed": 1,
+      "entryId": "deck-1",
+      "cardUuid": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "quotedEssence": 10,
+      "before": 200,
+      "after": 190,
+      "loggedOccurrences": 1,
+      "paddedInstances": [
+        "i1",
+        "i16"
+      ],
+      "spark": 2
+    },
+    "visualFollowup": "invocations/run-LYNA8p/journey-visual-v02.result.json",
+    "visualQualification": "Original journey missingart is functional-only. New isolated games recreate same natural selection after review-v02 completed for actual image-ready visual judgment, without transferring savedstate or repeating greenhandoff. Causeunknown beyond observed review overlap.",
+    "d21": {
+      "firstByte": 246,
+      "sampled": false,
+      "newPromptKinds": 0,
+      "newStatusKinds": 0,
+      "newVisualKinds": 0,
+      "existingPresentation": "Kindled flame/tint/orbbadge/descriptors",
+      "extraJudgments": "Actual numeric6/player+journeyboth+enemyreference; QAledger preserves raw/fresh/qualification."
+    },
+    "captures": "visual-inspection.json records29actual2xPNGs, sixopenedimages includingqualifiedinitialmissingart. Trackedledger lists filenamesonly.",
+    "actualPorts": [
+      5174,
+      5274
+    ],
+    "futureAcceptance": "278 full20eligible/everyResonant/sample sweeps and261 ingresses remain their original acceptance."
+  },
+  "acceptance": {
+    "definitionAndVerifiedText": "pass",
+    "ambiguityLadder": "pass",
+    "syntheticTransformAndDisplayEligibility": "pass",
+    "weighted300": "pass",
+    "preflight": "pass with4eligibleAmplifiedskips",
+    "bothSeatKindledSweep": "pass8/8; originalbaseunknownfailure rejudgedpass",
+    "desktopMobileNumericPlayReload": "pass",
+    "realJourneySelectionPaidOnceLogReloadBattleHandoff": "pass both",
+    "imageReadyJudgment": "pass both; originalmissingartqualified",
+    "review": "pass338files10059tests",
+    "knip": "pass",
+    "contentCoverageGate": "pass in54consumer checks",
+    "schemaWhitespace": "pass; schema-final and whitespace-final receipts",
+    "runtimeCleanup": "pass; own weighted process group empty and all six browser contexts/servers closed; no runtime retained",
+    "negativeControls": "not required by latest finite stage2 admission; root directed omission of agent-added source mutations. No source-mutating counterfactual executed."
+  },
+  "parentBrowserVerification": "parent-browser-verification.json independently binds rawreports, byte-equal6nativegame logs and29PNG hashes; read-only verification, not cold code review",
+  "rawReceipts": "receipts/ under own ignored QA directory; SHA256 per wrapper log plus artifact manifest. No timing or performance claim.",
+  "runtimeLedger": "runtime-ledger.json",
+  "sourceAndReviewRouting": "parent-source-and-review-routing.json: all5690sourcepaths rehashed, zero unadmitted changes, gross non-test17, coldreview N/A under actual leaf criteria; parent final native check remains",
+  "sourceHashes": {
+    "src/engine/transfigurations/kindled.ts": "a523b2d3c72bbf28a2898cbab33e75b7bc414cb466bc407474024566370191d8",
+    "src/engine/transfigurations/contracts/kindled.contracts.ts": "87e93f933414249f769061d016e74c631f841d17ce4c0153481b5bf2bf8b54da",
+    "src/engine/transfigurations.ts": "a141862501eb7f1e83081d3da7f996ad8545150ed4d63c6c9f3bde9ae356c0b5",
+    "src/engine/transfigurations.test.ts": "dedf0e8f8ab3daaf38722cfd5b909e3b9e4ea76a3b2d9d6c48106d5271e3502c",
+    "docs/rules.md": "d5e52845d601777687051c10b0f83590216a9fbd64a230ef6b7e1a52cc5e6d14",
+    "docs/plan/engine-design.md": "b04142abebb4791a66f21f0dd506521a5e2a04aba32776071a6e8032310cd5f7",
+    "README.md": "f80a714072e18d76e885e572996d0f6dc557f1ae50b05224b92609c76d4c01e2",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.277-1.md": "bb324834992576bd9adedb5fe7cadf9ddc4854349a8263f385f573c810153675",
+    "docs/plan/evidence/friction/hv-umm2.277.json": "88bfd7e1904197cf12800c21a9228073617f7082b56bea48eac1159b6a6bc1b8",
+    "docs/plan/evidence/measurements/hv-umm2.277.md": "c5f748485d5d7564c88a69f1628e4e0b3bb13f0ecd4c51015e72dfd3d6f396fe",
+    "docs/plan/evidence/qa-ledger/hv-umm2.277.jsonl": "b28124655cb288b6a8cc79de668521def3420f95ce67fd7948c27acf1eceb960",
+    "docs/plan/evidence/pre-existing/hv-umm2.277.md": "aea61a758e72da12bcd9b81f9693cb1093b6620799eb8d06410a2fce1c29c022"
+  }
+}

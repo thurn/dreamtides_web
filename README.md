@@ -59,7 +59,7 @@ battle text. Journey effects belong to the journey layer, outside the battle DSL
 emblem pool includes synthetic fixtures and catalog avatars and Dreamsigns;
 selection uses the same seeded random policy. Catalog registration contributes
 no target coverage. Registered transfiguration targets use their glossary UUIDs:
-Empowered, Amplified, Inspired, Enduring, Hastened and Resonant. A form requires
+Empowered, Amplified, Kindled, Inspired, Enduring, Hastened and Resonant. A form requires
 an implemented eligible card in at least one authored variant. Card and form
 targets share the 30 reserved physical deck slots.
 

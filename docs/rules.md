@@ -3256,6 +3256,12 @@ stronger abilities. Inspired appends one card draw to an Event, Enduring adds
 plain Reclaim at its ordinary cost, and Hastened makes a standard Event Fast.
 An explicit printed or granted Reclaim cost retains its ordinary priority.
 
+Kindled doubles a Character’s printed numeric spark, setting it to 1 when it
+is 0. A Character’s printed variable X or absent spark becomes a fixed 1.
+The chosen X still pays its ordinary cost and does not replace that fixed
+spark. Permanent entry spark modifications apply afterward; its other
+characteristics and authored abilities remain. Events are ineligible.
+
 Resonant changes the first supported occurrence selected by the card's displayed
 text: first a once-per-turn restriction; otherwise a ▸Dawn header; otherwise a
 literal ▸Materialized: header. It removes that restriction, adds Materialized

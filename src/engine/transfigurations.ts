@@ -7,6 +7,7 @@ import type { TransfigurationType } from "../types/journey";
 import type { ResonantChange } from "../transfiguration/transfiguration-logic";
 import { empowered } from "./transfigurations/empowered";
 import { amplified } from "./transfigurations/amplified";
+import { kindled } from "./transfigurations/kindled";
 import { inspired } from "./transfigurations/inspired";
 import { enduring } from "./transfigurations/enduring";
 import { hastened } from "./transfigurations/hastened";
@@ -31,7 +32,7 @@ export interface EngineTransfigurationDefinition {
 }
 
 /** Catalog order; later form owners add only their own definition. */
-export const ENGINE_TRANSFIGURATIONS: readonly EngineTransfigurationDefinition[] = [empowered, amplified, inspired, enduring, hastened, resonant];
+export const ENGINE_TRANSFIGURATIONS: readonly EngineTransfigurationDefinition[] = [empowered, amplified, kindled, inspired, enduring, hastened, resonant];
 
 function prepared(card: EngineCardDefinition, variant: Variant): TransfigurationCard {
   const useAmplified = variant.amplified || variant.transfigurations?.includes("Amplified") === true && card.transfiguration?.amplified === true;
