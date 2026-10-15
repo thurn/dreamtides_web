@@ -1,0 +1,286 @@
+{
+  "bead": "hv-umm2.275",
+  "phase": 5,
+  "status": "Combined-source local acceptance verified; parent fresh changed-range Codex review and native delivery pending",
+  "baseline": "2bb6ba40628d6544b2ddb35c79dc9d39b0e4d723",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.275",
+  "implementationClock": {
+    "start": "2026-10-15T14:07:01.052Z",
+    "source": "native-authority/dispatch-receipt.json",
+    "includes": "First dispatch through final Git inclusive: source analysis, parent scope admissions, all waits, implementation, failed and successful verification, browser recovery and evidence. Parent claim 13:57:12\u2192dispatch is separate preparation.",
+    "endQualification": "Committed cutoff is sampled immediately before Git. Actual git-return.json supplies final inclusive Git end without predicting or forcing commit timestamps.",
+    "measurementCutoff": "2026-10-15T16:07:57.169826+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Completion review prepare start2026-10-15T15:39:45.936Z, measured load10.8076171875; historical review source remains recorded in its own receipt."
+      }
+    }
+  },
+  "sourceEpochs": {
+    "runtime": "functional-freeze-v01.json: 2635 exact paths; runtime fuzz and QA source bytes preserved.",
+    "final": "functional-freeze-v02-test-only.json: same 2635 paths; sole admitted determinize.test.ts one-line arbitrary count assertion deletion, SHA a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63.",
+    "actualAudit": "final-functional-source-verification.json checks 2635 final current files; parent-running-source-verification.json independently confirms 2634 identical / 1 expected difference at 14:33:12.934051Z. Final Git blob audit remains distinct.",
+    "runtimeReruns": "Test-only delta changes no runtime input, fixture, seed, game count or default algorithm; retained runtime outcomes bind exact v01 source, final review/Knip bind final test epoch."
+  },
+  "scope": "Unique Attuned/Perfected definitions and plain contracts; additive registry/runner; natively admitted finite prepared/dispatch bodies, pure canonical rule data, exact Attuned matcher/span/tint repair, registered forms paragraph and rules; describe-local synthetic pool append; exact one-line forbidden count assertion deletion. Shared catalog/payment/continuous/fuzzer/UI behavior bodies unchanged.",
+  "D10": "RD-hv-umm2.275-1: step 2 prototype settles first positive payment/original eligibility; selector comparison boundary settled directly by existing normative cost rules.",
+  "D20": "No new scenario module: pure transfiguration composition is completely covered by stable synthetic public catalog/engine contracts, including actual consumed payment route, topology, original-vs-amplified snapshot, ordered exact-once folding and replay. No entity behavior exceeds existing primitives; 0 new primitive opcodes, 0 DSL members, 0 prompt kinds, 0 test entrypoints. Own plain contract module adds 19 cases to existing node runner.",
+  "coverageGate": {
+    "command": "npm test -- src/engine/content-gates.test.ts",
+    "receipt": "coverage-gate-v01.receipt.json",
+    "outcome": "20 passed, 1 module; sanctioned current-content gate; no additional mutable-data CI assertion."
+  },
+  "verification": {
+    "finalReview": {
+      "receipt": "review-v03.receipt.json",
+      "modules": 342,
+      "cases": 10129,
+      "wallS": 89.133452
+    },
+    "finalKnip": {
+      "receipt": "knip-v01.receipt.json",
+      "wallS": 7.57715
+    },
+    "focused": {
+      "receipt": "focused-v03.receipt.json",
+      "cases": 62,
+      "wallS": 5.242046
+    },
+    "determinize": "determinize-v01.receipt.json",
+    "consumerFailurePaths": "failure-path-consumers-v01.receipt.json: 48 passed across 2 modules; 5749 unrelated cases skipped by explicit test-name filter.",
+    "allMeasuredCommands": "validation-commands-final.json retains every exact argv/cwd/start/end/whole wall/OS CPU/exit/stdout hash, including failures.",
+    "earlyFocusedGap": "focused-initial.stdout and focused-second.stdout retained; outer wall unmeasured, not fabricated. Initial 6 fixture failures corrected whole physical-instance variants; second 59 passed.",
+    "failedEpochs": "review-v01 import cycle/type fixture errors, review-v02 unsupported count gate, judged-v01 activation observer timeout, judged-v02 wrong DOM zone, journey-v01 mobile outside-viewport target; exact raw receipts remain.",
+    "fullReview": "Not run: no test infrastructure, repository configuration or cross-cutting architecture change requiring review:full.",
+    "sourceJoins": "source-joins-v01.receipt.json: 69 passed across 3 existing synthetic consumer modules."
+  },
+  "fuzz": {
+    "receipt": "heavy-inner-v01.receipt.json",
+    "outerReceipt": "heavy-outer-v01.receipt.json",
+    "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock python3 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.275/run-command.py heavy-inner-v01 npm run fuzz:engine -- --games 300 --weight-uuids 22adf539-d2c9-4f33-9416-159d03a220ad,980d283a-9558-4b66-84a0-fcb91fdf4ceb",
+    "workers": 2,
+    "games": 300,
+    "steps": 72878,
+    "prompts": 6168,
+    "interactiveFoldReruns": 660,
+    "interactiveGames": 30,
+    "failures": 0,
+    "engineWallS": 1451.5,
+    "engineCpuS": 1517.0,
+    "innerWholeS": 1453.0044625410228,
+    "outerWholeS": 1453.038707,
+    "OSCpuS": 1518.929412,
+    "admissionOverheadS": 0.029768,
+    "qualification": "Admission difference includes wrapper overhead, not pure lock queue; healthy single execution under 1800 seconds. Full pool, random transfigurations, default invariants/hash/every tenth game interactive; no weakened defaults.",
+    "targets": [
+      {
+        "uuid": "22adf539-d2c9-4f33-9416-159d03a220ad",
+        "includedPhysicalEntries": 3983,
+        "exercisedPhysicalEntries": 1980
+      },
+      {
+        "uuid": "980d283a-9558-4b66-84a0-fcb91fdf4ceb",
+        "includedPhysicalEntries": 785,
+        "exercisedPhysicalEntries": 237
+      }
+    ],
+    "targetCounterScope": "Physical-entry counts, not counts of games.",
+    "feasibilityBounds": {
+      "legality": 0,
+      "prompt": 1
+    }
+  },
+  "QA": {
+    "sample": "sample.json:20 eligible real UUIDs per form, stratified by card type and inventory mechanic family; canonical preflight+canonical sweeps match 20 UUIDs, base and target form, and both controllers.",
+    "preflight": {
+      "Attuned": "80 passed, 0 skipped, 0 pending, 0 failed; preflight-attuned-v01.receipt.json",
+      "Perfected": "80 passed, 0 skipped, 0 pending, 0 failed; preflight-perfected-v01.receipt.json"
+    },
+    "matrix": "matrix-final-v01.json: 160 expected latest passes; 0 latest failures, skips or pending. 171 raw cells: 165 passes, 6 unknown failures; 0 automatic retries; 165 distinct actual positive native game IDs.",
+    "navigation": "Original sweeps report 78 passes / 2 unknown failures and 77 passes / 3 unknown failures; one isolated Toll failure repeats. Parent Justiciar authorized bounded fresh operational recovery and one distinct CDP experiment. Preserve every negative. Experiment proves Vite full-reload only in traced epoch, not six original initiators or underlying file cause; hv-kjgt owns followup.",
+    "canonicalCaller": "card-sweep.canonical.mjs exact bytes; card-sweep.observed.mjs adds export only plus absolute path relocation, full diff and hash in observer-metadata.json. New CDP-only wrapper full diff/hash in navigation-observer-metadata.json. No canonical cell/verdict/fixture/solver/budget/retry change.",
+    "nativeProof": "Every positive cell raw report binds UUID/variant/controller/status/eligibleVariants, Caps[], public zone/resolution event kinds; adjacent exact native JSONL includes debug_card_lab_loaded and applied LOAD_STATE. Enemy staged initial play is valid; no invented engine.battleStarted lab requirement.",
+    "judged": "judged-journey-final-v01.json: 3 real UUIDs per form \u00d7 desktop/mobile = 12 positive judgments. Exact physical normal UI play, production catalog tuple/DOM tint, actual outcome and same-battle reload; Eclipse energy 7\u21925 and counter 1 after activation on both viewports.",
+    "journey": "Actual source setup qualified: canonical enhanced Transfiguration LOAD_STATE + ADD_CARD; real ADD_DREAMSIGN invokes authored Rainbow Jellyfish Perfected starters on-gain. Ordinary paid Attuned offer, essence 200\u2192170, exact physical UUID, real engine.battleStarted containing both forms, identical full physical tuples after reload; desktop v01 and mobile v02. No natural acquisition or Frostforge visit claimed.",
+    "homeSpecialty": "Readonly source integration: Frostforge db2a796d-31b0-4bed-8b0a-22113e1754f2 signatureSite Transfiguration, atlas-generator home signature\u2192mandatory enhanced site. Enhanced canonical scene uses same runtime; prior 261 journey/source contracts retained.",
+    "screens": "Six judged desktop/mobile hand/changed activation captures plus selected journey preview desktop/mobile and one existing Perfected hover full viewport inspection. Full hover rect fits 1440\u00d7900; normal small hand rect extends 12.47 px below 900 and is not claimed fully visible. Captures referenced by filename in ignored primary QA only.",
+    "sampleCustody": "sample-custody.json: original printed four-mismatch audit stdout retained exactly with own SHA; overwritten sample.json original filename bytes/hash not claimed. Final sample has 0 mismatches; read-only 2088 current base/amplified eligibility audit has 0 mismatches, not a new data-dependent unit gate.",
+    "sourceJoinEvidence": {
+      "TransfigurationSite": "Real UI/runtime on desktop and mobile: exact Attuned physical entry, quoted 30 essence, paid 200\u2192170, persisted purchase, ordinary progression to battle, both form variants retained after reload. Raw journey reports and native exports are indexed in judged-journey-final-v01.json.",
+      "homeSpecialty": "Read-only source proof, no natural Frostforge UI visit: src/content/dreamscapes.ts Frostforge UUID db2a796d-31b0-4bed-8b0a-22113e1754f2 has signatureSite Transfiguration; src/atlas/atlas-generator.ts uses that signature to make the mandatory enhanced site. Canonical enhanced-scene UI uses the same site runtime.",
+      "Dreamsign": "Actual runtime on-gain through public actions facade: authored Rainbow Jellyfish UUID e7d23bf7-4d60-4b43-94c4-14a06c0f9116 is administratively granted with ADD_DREAMSIGN in a fresh game; its real on-gain marks ten eligible physical starter entries Perfected. Real UI battle initialization contains those entries and the paid Attuned entry, and reload preserves their resolved definitions. No natural Dreamsign acquisition is claimed.",
+      "Exploration": "Read-only source plus existing delivered public contracts, freshly executed as source-joins-v01. Authored encounter card c86c1364-6ac4-4c90-8053-4e49441a2c83 / action e01fd10a-0e68-4bf4-b0fb-9859ba0d6443 supplies Attuned to purge-one-transfigure-and-copy-others. Provider routes this generic fixed-form operation into signed physical-entry preparation; existing synthetic contracts test distinct offers, replay/forged receipts, and engine transfiguration handoff. Own synthetic public catalog contracts establish Attuned/Perfected semantics after that handoff. No Exploration UI or production encounter play is claimed; the optional planned browser scenario was not executed. These unchanged paths have no distinct new interaction risk requiring another browser matrix."
+    }
+  },
+  "coreFailurePaths": {
+    "errorsAndPartialWrites": "New transforms are synchronous pure derived definitions with immutable source tuples, no persisted write/async protocol. Synthetic source immutability and repeated reconstruction tests protect failure isolation; authored factories build under coverage gate. Existing journey provider-failure contract tests no partial copy/cost and successful retry/replay; consumer failure-path run retains actual execution.",
+    "reload": "Own saved JSON stateHash / catalog reconstruction equality and normal UI same-battle physical variants after reload; journey paid purchase exactly once and full transformed battle tuple equality. 630 consumer tests strict pending reload/full payment replay.",
+    "staleInputs": "Own pure X, zero, ineligible and already amplified current threshold controls, no unintended source mutation; unaffordable/foreign activation absent from legal actions. Existing journey stale, unavailable, poor and repeated-entry contract and 630 invalid, stale and competing actor contract are read-only consumers.",
+    "concurrentActors": "No new write owner/event/CAS protocol in form layer; existing journey CAS concurrent/unknown windows and 630 competing actor tests remain authoritative. Both controllers exercise own actual payments.",
+    "cancellationAndRollback": "No form-owned cancellation lifecycle. 630 consumer preview, cancel and no spend, post-payment failure rollback and Interrupt consumption tests cover consumed payment route.",
+    "newAsyncErrorTests": "Not applicable to pure form layer; existing eventlog consumer failure paths executed rather than duplicate implementation-shaped tests."
+  },
+  "resourceCustody": "runtime-final-settlement.json exact own native tokens/context/strict port/runner/server PG/birth/OS rows, all known own PIDs absent and no current own native record. Two canonical sweep sessions used 5274 then 5174 under fair lease; all ports at least 5174. Initial judged/short Attuned recoveries lack separate live birth snapshots, explicitly qualified. Native cleanup confirms own context close before unlink; separate raw close RPC receipt unavailable. No peer cleanup/shared service / configuration action.",
+  "artifactManifest": "artifacts-manifest-final-v01.json (ignored primary QA); exact path/size/SHA immutable receipt/caller/raw report/native log/image set. Git-return and post-Git blob audit are later distinct receipts excluded prospectively, not fabricated.",
+  "fallout": [
+    "Four selector-comparison display false positives repaired within exact native admission.",
+    "Already selected authored Amplified eligibility metadata copied only in prepared tuple under admission.",
+    "D19 unsupported sample count assertion deleted exactly, substantive tests retained.",
+    "Navigation cause-repair hv-kjgt remains open; source untouched.",
+    "Foreign 747 variable X + permanent spark bonus separate body, untouched."
+  ],
+  "remaining": "Parent fresh read-only Codex changed-range review, exact native candidate/promotion and closure.",
+  "historicalCheckpoint": {
+    "status": "local acceptance verified; parent fresh cold core review and native delivery pending",
+    "remaining": "Parent fresh read-only Codex core review, finding dispositions if any, exact native candidate/promotion/closure. No remaining local acceptance work.",
+    "actualInclusiveImplementMin": 61.01086406666666,
+    "source": "cc8e1b38c0f18f64e4cfe5d148094626145be000",
+    "qualification": "All preceding sourceEpochs/verification/fuzz/QA fields retain their original source epochs, negative observations and limitations. They are historical acceptance evidence; current-source affected handoff and final 300-game join are below."
+  },
+  "completion": {
+    "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.275/completion-v01",
+    "updatedHead": "244b6fd0b939505f1823b518ccf92597e712b85f",
+    "updatedBase": "af5ceb4d44176b52effae2de8f03cfdafa90608f",
+    "prerequisite": {
+      "bead": "hv-jxsl",
+      "source": "1748e0cd91e8baf98a531e23b69b60d41c68e8e9",
+      "certifiedTested": "af5ceb4d44176b52effae2de8f03cfdafa90608f",
+      "finding": "Original source cold review accepted P2: eager journey Perfected amplified flag changed the initial constituent set. The bridge selects authored Amplified only for explicit Amplified entries; engine owns Perfected selection."
+    },
+    "sourceFreeze": {
+      "path": "functional-freeze-v02.json",
+      "sha256": "edc9f7a065e0eaa9fad0ddcad1a2c163b10fd855126567df6b7681f2a6c2c645",
+      "paths": 2679,
+      "finalVerification": "final-functional-source-verification.json",
+      "delta": "10 appended synthetic public DTO/catalog/payment/reload cases, +72 lines in the owned contract. No runtime/config/runner/catalog/payment/continuous/fuzzer/UI body changes during completion. Parent old-freeze comparison identifies 46 peer/prerequisite changes in the updated base, so old broad sweep and old weighted300 are explicitly historical."
+    },
+    "contracts": {
+      "newCases": 10,
+      "totalOwnNewCases": 29,
+      "testDeltaFromUpdatedBase": {
+        "files": 1,
+        "lines": 273,
+        "jsdomFiles": 0
+      },
+      "fileLines": 272,
+      "coverage": "Both actors; formContent\u2192engineCardFromContent real metadata; branded CardData/entry identity\u2192actual engineDeckEntry\u2192board hand\u2192instanceCard; display spark/cost structural agreement for original and JSON-restored states; initially Amplified+Kindled-only zero-cost one-spark card resolves spark2; new authored activation pays full3 energy through ordinary play+activate; removed base activation, distinct Resonant categories and newly authored once-per-turn limits preserve original eligibility; source/state immutability and action-result hashes."
+    },
+    "verification": {
+      "focused": {
+        "receipt": "focused-v01.receipt.json",
+        "modules": 3,
+        "cases": 129,
+        "wallS": 5.757687333971262
+      },
+      "review": {
+        "receipt": "review-v01.receipt.json",
+        "modules": 342,
+        "cases": 10215,
+        "wallS": 82.7350698329974,
+        "userS": 230.097273,
+        "systemS": 17.975063,
+        "hostLoadAtPrepareStart": 10.8076171875
+      },
+      "knip": {
+        "receipt": "knip-v01.receipt.json",
+        "wallS": 3.88321704196278
+      },
+      "contentCoverage": "Original20-case source-qualified gate retained; completion changes no runtime body and final review validates data. No extra content gate required by the completion delta.",
+      "fullReview": "Not applicable: no repository configuration, test infrastructure or cross-cutting architecture edit.",
+      "unmeasuredInspections": "Direct source-only inspection commands, including repeated/truncated reads and output-tail reads, lack separate wall/CPU receipts; no timing or validation credit is fabricated. Runtime validation commands have complete receipts."
+    },
+    "fuzz": {
+      "receipt": "heavy-inner-v01.receipt.json",
+      "outerReceipt": "heavy-outer-v01.receipt.json",
+      "rawSummary": "heavy-inner-v01.stdout",
+      "games": 300,
+      "workers": 2,
+      "targets": [
+        "22adf539-d2c9-4f33-9416-159d03a220ad",
+        "980d283a-9558-4b66-84a0-fcb91fdf4ceb"
+      ],
+      "executionWallS": 1352.5287525000167,
+      "outerWallS": 1352.5636361250072,
+      "queueAndAdmissionOverheadS": 0.03488362499047071,
+      "queueQualification": "Outer minus inner includes wrapper startup/teardown and admission; it is not pure lock queue time.",
+      "userS": 1408.961588,
+      "systemS": 11.033731,
+      "timeLimitS": 1800,
+      "timedOut": false,
+      "remainingGroupMembers": [],
+      "qualification": "Single final combined-source weighted300, full pool and ordinary invariants/hash/every-tenth interactive replay. Actual execution bound excludes lock queue. OS process-group ownership and terminal settlement retained.",
+      "reportedGames": 300,
+      "steps": 72921,
+      "engineWallS": 1351.2,
+      "engineCpuS": 1418.6,
+      "prompts": 6219,
+      "interactiveFoldReruns": 716,
+      "failures": 0,
+      "interactiveGames": 30,
+      "feasibilityBounds": {
+        "legality": 0,
+        "prompts": 1
+      },
+      "observedTargets": [
+        {
+          "kind": "transfiguration",
+          "uuid": "22adf539-d2c9-4f33-9416-159d03a220ad",
+          "included": 3983,
+          "exercised": 1976
+        },
+        {
+          "kind": "transfiguration",
+          "uuid": "980d283a-9558-4b66-84a0-fcb91fdf4ceb",
+          "included": 785,
+          "exercised": 250
+        }
+      ],
+      "targetCounterScope": "Physical-entry inclusion and card-play counts, not counts of games."
+    },
+    "QA": {
+      "receipt": "browser-v01.receipt.json",
+      "report": "journey-current.result.json",
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "gameIds": [
+        "uztrc8",
+        "a83yjn"
+      ],
+      "rawLogRows": 231,
+      "caps": [],
+      "proof": "Each fresh journey uses administrative LOAD_STATE/ADD_CARD and ADD_DREAMSIGN; actual authored on-gain creates Perfected starter entries. Ordinary Attuned purchase pays200\u2192170/quote30; ordinary progression emits actual engine.battleStarted with20 Perfected entries and no eager amplified flag, plus Attuned;22 physical form tuples agree before/after same-battle reload. No natural Dreamsign acquisition, Frostforge visit or new broad sweep is claimed.",
+      "captures": [
+        "run-JOH3AA/journey-attuned-desktop-selected.png",
+        "run-JOH3AA/journey-attuned-mobile-selected.png"
+      ],
+      "captureVerification": "Desktop2880\u00d71800/mobile780\u00d71688; both inspected. Selected preview/confirm visible, center-hit and no horizontal overflow; art loaded.",
+      "oldSweep": "Original160 expected latest positive cells/165 unique positive games/six unknown navigation failures remain bound to old source. No current-runtime broad-matrix credit. hv-kjgt remains cause-repair followup; observed diagnostic Vite reload is positive proof only in its epoch."
+    },
+    "resources": {
+      "active": "runtime-active.json",
+      "settled": "runtime-settled.json",
+      "slot": 1,
+      "port": 5274,
+      "serverPG": 65750,
+      "browserClosedAt": "2026-10-15T15:39:14.658Z",
+      "ownerRecordRemoved": true,
+      "recordedServerMembersAbsent": true,
+      "heavyPG": 40368,
+      "heavyRemainingMembers": []
+    },
+    "oldArtifacts": {
+      "manifest": "../artifacts-manifest-final-v01.json",
+      "count": 563,
+      "verification": "old-artifact-preservation.json",
+      "mismatches": []
+    },
+    "commandIndex": "validation-commands-final.json",
+    "artifactManifest": "artifacts-manifest-final.json",
+    "inclusiveClock": "Original dispatch2026-10-15T14:07:01.052Z through actual amended Git return. Historical61.010864minute checkpoint retained; review, prerequisite, queues and all completion work included without reset. Committed cutoff sampled immediately before Git; git-return.json records actual inclusive end.",
+    "measurementCutoff": "2026-10-15T16:07:57.169826+00:00"
+  }
+}

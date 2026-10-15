@@ -2223,8 +2223,8 @@ figment copy's explicit spark override. Public catalog definitions retain
 reusable authored factories. Direct own, gained and historical ability readers
 use the same resolved tuple. Each supported form has a UUID, eligibility
 predicate, structural transform and verified text. The registered forms are
-Empowered, Amplified, Kindled, Inspired, Enduring, Hastened and Resonant; the remaining
-Phase 5.7a modules extend that catalog.
+Empowered, Amplified, Kindled, Inspired, Enduring, Hastened, Resonant, Attuned
+and Perfected.
 
 There are nine ([F6](decisions.md#established-facts)):
 

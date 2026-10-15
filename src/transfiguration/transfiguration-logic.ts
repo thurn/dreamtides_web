@@ -1,3 +1,4 @@
+import { TRANSFIGURATION_RULES } from "../content/transfiguration";
 import type { CardData } from "../types/cards";
 import type {
   TransfigurationChange,
@@ -91,13 +92,12 @@ export function transfigurationMechanic(
         eligibility: { kind: "activatedEnergyCost" },
         operation: {
           kind: "reduceActivatedEnergyCost",
-          amount: 1,
-          minimum: 0,
+          ...TRANSFIGURATION_RULES.attuned,
         },
       };
     case "Perfected":
       return {
-        eligibility: { kind: "atLeastEligibleForms", count: 2 },
+        eligibility: { kind: "atLeastEligibleForms", count: TRANSFIGURATION_RULES.perfected.minimumEligibleForms },
         operation: { kind: "applyEligibleForms" },
       };
   }
@@ -559,7 +559,7 @@ function resonantTransform(text: string): TextTransform | null {
  * colon, or newline) in between. This skips `N●` amounts that appear inside an
  * effect rather than a cost.
  */
-const ATTUNED_COST_PATTERN = /([1-9]\d*)●(?=[^:.\n]*:)/;
+const ATTUNED_COST_PATTERN = /(?<![\d≤≥])([1-9]\d*)●(?![ \t]+cost\b)(?=[^:.\n]*:)/;
 
 /**
  * Attuned reduces an activated ability's energy cost by 1, tinting only the
@@ -574,11 +574,32 @@ function attunedTransform(
   if (match === null) {
     return null;
   }
-  const token = `${match[1]}●`;
+  const start = match.index;
+  const end = start + match[1].length;
   const newNum = String(Math.max(minimum, parseInt(match[1], 10) - amount));
   return {
-    plain: (t) => t.replace(token, `${newNum}●`),
-    marked: (t) => t.replace(token, `${mark(newNum)}●`),
+    plain: text => text.slice(0, start) + newNum + text.slice(end),
+    marked(text) {
+      // Map the selected plain number through the existing tint boundaries.
+      // An authored Amplified replacement can already tint part of that number.
+      let visible = 0;
+      let tinted = false;
+      let from = -1;
+      let to = -1;
+      let tintedBefore = false;
+      let tintedAfter = false;
+      for (let index = 0; index < text.length; index += 1) {
+        const character = text[index];
+        if (character === TRANSFIGURE_MARK_START) { tinted = true; continue; }
+        if (character === TRANSFIGURE_MARK_END) { tinted = false; continue; }
+        if (visible === start) { from = index; tintedBefore = tinted; }
+        visible += 1;
+        if (visible === end) { to = index + 1; tintedAfter = tinted; break; }
+      }
+      if (from < 0 || to < 0) return text;
+      return text.slice(0, from) + (tintedBefore ? "" : TRANSFIGURE_MARK_START) + newNum
+        + (tintedAfter ? "" : TRANSFIGURE_MARK_END) + text.slice(to);
+    },
   };
 }
 

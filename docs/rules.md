@@ -3273,6 +3273,23 @@ to another ability supplies no header. All other conditions, costs and
 functional zones remain. A combined ability triggers once
 for each occasion it contains, including an occasion already present.
 
+
+Attuned reduces the first positive fixed ● payment in the first supported
+activated ability by 1, to a minimum of 0. Printed payment order includes
+optional payments and alternatives. Other payments, X, conditions and functional
+zones remain. A pure X payment, a zero payment, and a character selector's
+cost comparison do not supply a positive fixed ● payment.
+
+Perfected requires at least two other eligible forms on the entry's current
+authored variant. It captures those eligible forms and applies them once in
+catalog order: Empowered, Amplified, Kindled, Inspired, Enduring, Hastened,
+Resonant, Attuned. An authored Amplified replacement supplies the abilities
+for subsequent operations; it does not add constituents to the captured set.
+A form explicitly present alongside Perfected applies once in that same order.
+An already selected authored Amplified variant does not itself supply another
+eligible Amplified transformation. Permanent entry modifications apply after
+the transfiguration operations.
+
 ## Journey Transfiguration Effects
 
 A journey transfiguration applies one applicable form to a concrete deck entry

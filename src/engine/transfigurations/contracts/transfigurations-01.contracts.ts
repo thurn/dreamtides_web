@@ -290,7 +290,7 @@ describe("form resolution failure and variant isolation", () => {
 });
 
 describe("public weighted form fuzz recipes", () => {
-  const pool: FuzzPool = { cards: [{ ...FORM_EVENT, transfiguration: metadata() }, donor], dreamwell: [], emblems: {}, figments: [] };
+  const pool: FuzzPool = { cards: [{ ...FORM_EVENT, transfiguration: metadata() }, donor, { ...FORM_FILLER, id: syntheticId(0x2750), status: "authored", abilities: () => [b.activated([b.energy(2)], p.gainPoints(1))] }], dreamwell: [], emblems: {}, figments: [] };
   it("reserves each exact owned form on each side, retains mods and reproduces the recipe", () => {
     const weighted = withFuzzCardWeights(pool, ENGINE_TRANSFIGURATIONS.map(form => form.uuid).join(","));
     const first = fuzzInit(battleSeed("form-targets"), weighted);

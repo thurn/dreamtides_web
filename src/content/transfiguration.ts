@@ -1,3 +1,9 @@
+/** Shared numeric rules for structural operations and displayed previews. */
+export const TRANSFIGURATION_RULES = {
+  attuned: { amount: 1, minimum: 0 },
+  perfected: { minimumEligibleForms: 2 },
+} as const;
+
 // Configuration for the transfiguration mechanic which upgrades cards
 
 export const TRANSFIGURATION = {

@@ -12,6 +12,8 @@ import { inspired } from "./transfigurations/inspired";
 import { enduring } from "./transfigurations/enduring";
 import { hastened } from "./transfigurations/hastened";
 import { resonant } from "./transfigurations/resonant";
+import { attuned } from "./transfigurations/attuned";
+import { createPerfected } from "./transfigurations/perfected";
 
 export interface TransfigurationMetadata {
   readonly amplified: boolean;
@@ -32,12 +34,14 @@ export interface EngineTransfigurationDefinition {
 }
 
 /** Catalog order; later form owners add only their own definition. */
-export const ENGINE_TRANSFIGURATIONS: readonly EngineTransfigurationDefinition[] = [empowered, amplified, kindled, inspired, enduring, hastened, resonant];
+const constituentForms: readonly EngineTransfigurationDefinition[] = [empowered, amplified, kindled, inspired, enduring, hastened, resonant, attuned];
+const perfected = createPerfected(constituentForms);
+export const ENGINE_TRANSFIGURATIONS: readonly EngineTransfigurationDefinition[] = [...constituentForms, perfected];
 
 function prepared(card: EngineCardDefinition, variant: Variant): TransfigurationCard {
   const useAmplified = variant.amplified || variant.transfigurations?.includes("Amplified") === true && card.transfiguration?.amplified === true;
   const effective = useAmplified === variant.amplified ? variant : { ...variant, amplified: useAmplified };
-  return { ...card, abilities: card.abilities(effective), resonantChange: card.transfiguration?.resonant[useAmplified ? "amplified" : "base"] ?? null };
+  return { ...card, transfiguration: card.transfiguration === undefined ? undefined : { ...card.transfiguration, amplified: card.transfiguration.amplified && !useAmplified }, abilities: card.abilities(effective), resonantChange: card.transfiguration?.resonant[useAmplified ? "amplified" : "base"] ?? null };
 }
 
 /** Owned supported forms eligible for the current printed definition and authored variant. */
@@ -50,8 +54,15 @@ export function eligibleEngineTransfigurations(card: EngineCardDefinition, varia
 export function applyEngineTransfigurations(card: EngineCardDefinition, variant: Variant): PrintedCard {
   if (!variant.transfigurations?.some(type => ENGINE_TRANSFIGURATIONS.some(form => form.id === type))) return card;
   let result = prepared(card, variant);
-  for (const form of ENGINE_TRANSFIGURATIONS) {
-    if (variant.transfigurations?.includes(form.id) === true && form.eligible(result)) result = form.transform(result);
+  if (variant.transfigurations.includes("Perfected") && perfected.eligible(result)) {
+    // Capture before an authored Amplified replacement changes available abilities.
+    const selected = perfected.constituents(result);
+    if (selected.includes(amplified)) result = prepared(card, { ...variant, amplified: true });
+    result = perfected.transform(result, selected, variant.transfigurations);
+  } else {
+    for (const form of constituentForms) {
+      if (variant.transfigurations.includes(form.id) && form.eligible(result)) result = form.transform(result);
+    }
   }
   const { resonantChange: _change, abilities, ...definition } = result;
   return { ...definition, abilities: () => abilities };

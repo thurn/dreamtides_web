@@ -1,0 +1,39 @@
+{
+  "bead": "hv-umm2.275",
+  "phase": 5,
+  "implementMin": 120.9352971,
+  "implementWindow": {
+    "start": "2026-10-15T14:07:01.052000+00:00",
+    "end": "2026-10-15T16:07:57.169826+00:00"
+  },
+  "localValidationS": {
+    "review": 82.7350698329974,
+    "knip": 3.88321704196278,
+    "focused": 5.757687333971262,
+    "determinize": 7.544737,
+    "coverage": 6.757163,
+    "failurePaths": 11.227647,
+    "sourceJoins": 7.125926,
+    "fuzz": 1352.5287525000167,
+    "preflight": 4.185665,
+    "completionBrowser": 82.86748312501004
+  },
+  "hostLoad": 10.8076171875,
+  "testDelta": {
+    "files": 1,
+    "lines": 273,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "card-sweep-navigation-unknown",
+      "minutes": 38.22095363333333,
+      "note": "Observed navigation-failure triage interval 14:19:29.779Z through diagnostic terminal 14:57:43.036218Z; includes overlaps with independent QA/fuzz/evidence, not exclusive active repair time. Five original unknown failures and one isolated Toll repeat retained. Parent Justiciar authorized bounded recovery and a distinct CDP experiment; all 160 expected cells have positive canonical observations. Vite full-reload is proved only in the diagnostic epoch; original initiators and underlying file cause remain unestablished. Followup hv-kjgt owns cause repair."
+    },
+    {
+      "tag": "perfected-bridge-review-prerequisite",
+      "minutes": 21.909283333333335,
+      "note": "Observed review/prerequisite coordination window15:13:11.443Z cold dispatch\u219215:35:06Z native post-child continuation snapshot. Includes full-scope cold review, accepted bridge P2 verification, separately owned hv-jxsl prerequisite certification and parent update/dispatch; not exclusive productive repair time or all attributed to the defect. Original dispatch clock remains inclusive."
+    }
+  ]
+}
