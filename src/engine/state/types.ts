@@ -840,6 +840,18 @@ export interface ChallengeScoring {
   settled: boolean;
 }
 
+/** One physical character's positive Challenge award, with its controller at the occasion. */
+export interface CharacterScorer {
+  readonly instance: InstanceId;
+  readonly controller: Side;
+}
+
+/** Independent current and preceding global-turn cohorts; null is unknown legacy history. */
+export interface CharacterScoring {
+  current: CharacterScorer[] | null;
+  previous: CharacterScorer[] | null;
+}
+
 export interface ChallengeState {
   /** Absent in legacy snapshots whose scoring provenance is unknown. */
   scoring?: ChallengeScoring;
@@ -940,6 +952,8 @@ export interface BattleState {
   /** Changes with a duration, in creation order. */
   floating: FloatingEffect[];
   turnLog: TurnLog;
+  /** Absent legacy provenance is unknown, distinct from a known empty cohort. */
+  characterScoring?: CharacterScoring;
   /** Next effect number to mint. */
   nextEffect: number;
   /** Once-per-turn abilities used (activated) or triggered this turn, by source key and ability index. */

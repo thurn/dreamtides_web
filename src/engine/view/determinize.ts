@@ -66,7 +66,7 @@ import { isFixedEffect } from "./knowledge";
 import { freshStatus, variantOf } from "../state/create";
 import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
-import type { BattleState, CardInstance, DeckEntry, FloatingChange, FloatingEffect, PayableEffect, QueuedTrigger, SideState, RememberedEffect } from "../state/types";
+import type { BattleState, CardInstance, CharacterScorer, DeckEntry, FloatingChange, FloatingEffect, PayableEffect, QueuedTrigger, SideState, RememberedEffect } from "../state/types";
 import {
   characteristicsView,
   type BattleView,
@@ -917,6 +917,38 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     return { challengers, blockers, ...(scoring === undefined ? {} : { scoring }), ...(unpairedBlockers.length === 0 ? {} : { unpairedBlockers }) };
   })();
   const clock = Math.max(0, ...Object.values(instances).map((instance) => instance.enteredZoneAt), ...view.floating.map((effect) => effect.timestamp));
+  const characterScoring = view.characterScoring === undefined ? undefined : (() => {
+    const history = view.characterScoring;
+    if (history === null || typeof history !== "object" || Object.keys(history).some(key => key !== "current" && key !== "previous")) {
+      throw new Error("Cannot determinize invalid character scoring history");
+    }
+    const cohort = (entries: typeof history.current): CharacterScorer[] | null => {
+      if (entries === null) return null;
+      if (!Array.isArray(entries)) throw new Error("Cannot determinize invalid character scoring window");
+      const used = new Set<InstanceId>();
+      return entries.map((entry: NonNullable<typeof history.current>[number]) => {
+        if (entry === null || typeof entry !== "object" || Object.keys(entry).some(key => key !== "instance" && key !== "controller") ||
+            (entry.controller !== "player" && entry.controller !== "enemy")) throw new Error("Cannot determinize invalid character scorer");
+        const reference = entry.instance;
+        let instance: InstanceId;
+        if (reference === null) instance = `i${next++}`;
+        else if (typeof reference === "string") {
+          if (view.instances[reference] === undefined) throw new Error("Cannot determinize unidentified character scorer");
+          instance = reference;
+        } else {
+          if (reference === undefined || typeof reference !== "object" || Object.keys(reference).length !== 1 ||
+              !Number.isSafeInteger(reference.member) || reference.member < 0) throw new Error("Cannot determinize invalid scorer member");
+          const assignedInstance = assigned.get(reference.member);
+          if (assignedInstance === undefined) throw new Error("Cannot determinize unbound scorer member");
+          instance = assignedInstance;
+        }
+        if (used.has(instance)) throw new Error("Cannot determinize duplicate character scorers");
+        used.add(instance);
+        return { instance, controller: entry.controller };
+      });
+    };
+    return { current: cohort(history.current), previous: cohort(history.previous) };
+  })();
   const state: BattleState = {
     version: view.version,
     seed,
@@ -968,6 +1000,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       drawn: { ...view.turnLog.drawn },
       materialized: materializedCards,
     },
+    ...(characterScoring === undefined ? {} : { characterScoring }),
     nextEffect: highest([view.payable, view.floating, descriptors], "e") + 1,
     oncePerTurn: [...view.oncePerTurn],
     dreamwell: { deck: [], next: 0, catalog: [] },

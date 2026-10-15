@@ -286,6 +286,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
     triggerQueue: [],
     floating: [],
     turnLog: emptyTurnLog(),
+    characterScoring: { current: [], previous: [] },
     nextEffect: 1,
     oncePerTurn: [],
     dreamwell: { deck: [], next: 0, catalog: [] },

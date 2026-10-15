@@ -16,6 +16,22 @@ export function emptyTurnLog(): TurnLog {
   return { discarded: { player: 0, enemy: 0 }, leftPlay: { player: [], enemy: [] }, dissolved: { player: [], enemy: [] }, abandoned: { player: [], enemy: [] }, played: { player: [], enemy: [] }, drawn: { player: 0, enemy: 0 }, materialized: { player: [], enemy: [] } };
 }
 
+/** Records only actual positive Challenge awards; one new fact cannot complete an unknown window. */
+export function recordCharacterScored(state: BattleState, instance: InstanceId, controller: Side, points: number): void {
+  const current = state.characterScoring?.current;
+  if (points > 0 && current != null && !current.some(entry => entry.instance === instance)) {
+    current.push({ instance, controller });
+  }
+}
+
+/** Replaces the prior global turn before start-of-turn callbacks, including every extra turn. */
+export function rotateCharacterScoring(state: BattleState): void {
+  state.characterScoring = {
+    current: [],
+    previous: state.turn.turnNumber <= 1 ? [] : state.characterScoring?.current ?? null,
+  };
+}
+
 /**
  * Records that `side` played `card`, with its effective type, subtype,
  * "has all character types", named triggered abilities and spark, and its copiable speed and cost as it is

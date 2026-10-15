@@ -12,6 +12,7 @@ import type {
   BattleState,
   CardInstance,
   CardStatus,
+  CharacterScorer,
   ContinuousChange,
   RememberedCard,
   ChallengeState,
@@ -360,6 +361,12 @@ interface ChallengeView extends Readonly<Omit<ChallengeState, "unpairedBlockers"
   };
 }
 
+/** Public scoring provenance relates an unidentified observed card only by its anonymous member. */
+interface CharacterScoringView {
+  readonly current: readonly { readonly instance: InstanceId | { readonly member: number } | null; readonly controller: Side }[] | null;
+  readonly previous: CharacterScoringView["current"];
+}
+
 export interface BattleView {
   /** Public non-zone source multisets, without any link to hidden physical cards. */
   readonly draftPools?: BattleState["draftPools"];
@@ -401,6 +408,7 @@ export interface BattleView {
   /** Triggered abilities waiting to resolve, first in, first out. */
   readonly triggerQueue: readonly QueuedTriggerView[];
   readonly turnLog: TurnLogView;
+  readonly characterScoring?: CharacterScoringView;
   /** Once-per-turn abilities used this turn, except those of sources the viewer cannot see. */
   readonly oncePerTurn: readonly OncePerTurnKey[];
   /** The shared Dreamwell: cards left before the next cycle, and the catalog cycles are built from. */
@@ -514,6 +522,11 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   };
   const anonymousSource = (source: InstanceId): { readonly member: number } | null =>
     state.instances[source] !== undefined && remembered.has(source) ? { member: memberFor(source) } : null;
+  const characterScoring = state.characterScoring === undefined ? undefined : (() => {
+    const cohort = (entries: CharacterScorer[] | null) =>
+      entries === null ? null : entries.map(({ instance, controller }) => ({ controller, instance: visible(instance) ? instance : anonymousSource(instance) }));
+    return { current: cohort(state.characterScoring.current), previous: cohort(state.characterScoring.previous) };
+  })();
   const capturedView = (captured: readonly InstanceId[]): CapturedCardView[] =>
     captured.flatMap((id): CapturedCardView[] => {
       if (visible(id)) return [id];
@@ -768,6 +781,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         enemy: materializedThisTurn(state, "enemy").map(materializedView),
       },
     },
+    ...(characterScoring === undefined ? {} : { characterScoring }),
     // A key names its source by instance ID or emblem: `i12#0`, `avatar:player#1`.
     oncePerTurn: state.oncePerTurn.filter((key) => {
       const source = key.slice(0, key.indexOf("#"));

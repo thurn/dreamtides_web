@@ -1,4 +1,5 @@
 import { hasUnknownScoreGroup } from "./score-group-state";
+import { hasUnknownLastTurnScoring } from "./last-turn-scoring-state";
 import { canonicalHash } from "../../engine/state/hash";
 // Immutable battle display metadata and engine slices, plus load validation.
 import type { EngineCatalog } from "../../engine/catalog";
@@ -113,7 +114,7 @@ export type TutorialBattlePresentation = OpponentPlayPresentation | DreamwellRev
 export function parseEngineBattleFold(value: unknown, catalog?: EngineCatalog): EngineBattleFold | null {
   if (!isPlainRecord(value) || !isEngineBattleInit(value.init) || !isBattleSlice(value.slice, true)) return null;
   const fold = value as unknown as EngineBattleFold;
-  return hasConsistentDraftPools(fold) && !hasInvalidJourneyDeckSparkOrigins(fold, catalog) && !hasUnknownScoreGroup(fold, catalog) ? fold : null;
+  return hasConsistentDraftPools(fold) && !hasInvalidJourneyDeckSparkOrigins(fold, catalog) && !hasUnknownScoreGroup(fold, catalog) && !hasUnknownLastTurnScoring(fold, catalog) ? fold : null;
 }
 
 function hasConsistentDraftPools(fold: EngineBattleFold): boolean {
@@ -728,6 +729,7 @@ function isBattleState(value: unknown): boolean {
     isArrayOf(value.triggerQueue, isQueuedTrigger) &&
     isArrayOf(value.floating, isFloatingEffect) &&
     isTurnLog(value.turnLog) &&
+    isCharacterScoring(value) &&
     isIndex(value.nextEffect) &&
     isArrayOf(value.oncePerTurn, isString) &&
     isDreamwellState(value.dreamwell) &&
@@ -752,6 +754,19 @@ function isBattleState(value: unknown): boolean {
       });
     })()
   );
+}
+
+/** Two bounded physical scoring windows distinguish known-empty from legacy-unknown. */
+function isCharacterScoring(state: Record<string, unknown>): boolean {
+  const value = state.characterScoring;
+  if (value === undefined) return true;
+  if (!isPlainRecord(value) || !hasOnlyFields(value, ["current", "previous"])) return false;
+  const valid = (cohort: unknown): boolean => cohort === null || isArrayOf(cohort, entry =>
+    isPlainRecord(entry) && hasOnlyFields(entry, ["instance", "controller"]) && isInstanceId(entry.instance) && isSide(entry.controller) &&
+    Number(String(entry.instance).slice(1)) < Number(state.nextInstance)) &&
+    new Set((cohort as { instance: InstanceId }[]).map(entry => entry.instance)).size === cohort.length;
+  return valid(value.current) && valid(value.previous) &&
+    (!isPlainRecord(state.turn) || Number(state.turn.turnNumber) > 1 || value.previous === null || (value.previous as unknown[]).length === 0);
 }
 
 /** An observed snapshot may be stale; only its physical ownership and fixed-effect targets remain structural references. */

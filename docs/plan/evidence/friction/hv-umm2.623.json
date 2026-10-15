@@ -1,0 +1,53 @@
+{
+  "bead": "hv-umm2.623",
+  "phase": 5,
+  "implementMin": 60.15399028333333,
+  "implementWindow": {
+    "start": "2026-10-15T03:27:35.811Z",
+    "end": "2026-10-15T04:27:45.050417+00:00"
+  },
+  "localValidationS": {
+    "focused-initial": 8.695108874992002,
+    "focused-scoring": 11.772905500023626,
+    "focused-complete": 7.58973916596733,
+    "typecheck-owned": 11.952850791974925,
+    "focused-fixed": 12.126625833974686,
+    "ordinary-before-controls": 80.48898820899194,
+    "fixture-causal": 6.228049291996285,
+    "fixture-causal-esm": 5.506311334029306,
+    "fixture-source-counterfactual": 3.597928208007943,
+    "generator-1": 2.3479331249836832,
+    "generator-2": 1.9587269170442596,
+    "negative-1": 12.170201625034679,
+    "negative-2": 8.494660542055499,
+    "negative-3": 8.420570583024528,
+    "negative-4": 8.780181083013304,
+    "negative-5": 7.882706957985647,
+    "focused-restored": 7.197406208026223,
+    "focused-final": 7.350521292013582,
+    "negative-occurrence-controller": 10.910404667025432,
+    "review-final": 68.00112208299106,
+    "knip-final": 5.373948374995962,
+    "full-lock": 114.15392329200404,
+    "full-final": 114.1234760840307,
+    "fuzz-lock": 466.4810946669895,
+    "fuzz-300": 466.4480722909793,
+    "schema-final": 0.18780387501465157,
+    "whitespace-final": 0.010816916998010129,
+    "combined-fixture-source-counterfactual": 1.889956999977585,
+    "combined-generator-1": 1.695116292044986,
+    "combined-generator-2": 1.7054367910022847,
+    "combined-focused": 9.396312292024959,
+    "combined-focused-final": 8.58179199998267,
+    "combined-review": 74.07850050000707,
+    "combined-knip": 4.48644366703229
+  },
+  "hostLoad": 10.67333984375,
+  "testDelta": {
+    "files": 4,
+    "lines": 593,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "friction": []
+}

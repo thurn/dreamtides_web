@@ -9,7 +9,7 @@ import { drawDreamwell } from "./dreamwell";
 import type { ChooseCardsPrompt } from "../prompts/types";
 import { expireAt } from "./floating";
 import { discardCards, drawCard, setEnergy } from "./resources";
-import { emptyTurnLog } from "./turn-log";
+import { emptyTurnLog, rotateCharacterScoring } from "./turn-log";
 import { endBattle } from "./victory";
 import type { BattleSetup } from "../state/types";
 import { banish, charactersInPlay, instanceOf } from "./zones";
@@ -160,6 +160,7 @@ function leavePhase(ctx: StepContext, phase: Phase): void {
 function resetForTurn(ctx: StepContext, side: Side): void {
   const { state } = ctx;
   state.turn.sideTurns[side] += 1;
+  rotateCharacterScoring(state);
   state.turnLog = emptyTurnLog();
   if (state.challenge !== null) delete state.challenge.scoring;
   state.oncePerTurn = [];

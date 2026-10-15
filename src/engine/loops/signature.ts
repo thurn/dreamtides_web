@@ -72,6 +72,7 @@ const STATE_FIELDS = {
    * RD-hv-umm2.692-1); replay checks actual rules against the recording.
    */
   turnLog: "resource",
+  characterScoring: "position",
   nextEffect: "resource",
   oncePerTurn: "position",
   dreamwell: "position",

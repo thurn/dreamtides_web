@@ -418,6 +418,8 @@ export type Duration =
 
 /** A condition an effect checks when it resolves. */
 export type Condition =
+  /** A presently controlled in-play character made a positive Challenge award in the preceding global turn. */
+  | { readonly cond: "scoredWithCharacterLastTurn"; readonly player: PlayerRef }
   | { readonly cond: "thisTurn"; readonly count: CurrentTurnCountValue; readonly atLeast: number; readonly atMost?: number }
   /** A committed event this turn from a physical card other than the resolving source. */
   | { readonly cond: "playedAnotherEventThisTurn" }

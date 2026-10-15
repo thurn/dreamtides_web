@@ -4,6 +4,7 @@ import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { copiableCostOf } from "../continuous/characteristics";
 import { gainPoints } from "./resources";
+import { recordCharacterScored } from "./turn-log";
 import { hasKeyword } from "./keywords";
 import { effectiveSpark } from "./spark";
 import { dissolve, instanceOf, slotOf } from "./zones";
@@ -131,6 +132,7 @@ export function resolveLane(ctx: StepContext, lane: number): void {
   const challengerSpark = effectiveSpark(state, catalog, challenger);
   if (blocker === null) {
     recordScorer(ctx, challenger, challengerSpark);
+    recordCharacterScored(state, challenger, instanceOf(state, challenger).controller, challengerSpark);
     gainPoints(ctx, active, challengerSpark, "challenge");
     ctx.emit({
       kind: "laneResolved",
@@ -165,6 +167,7 @@ export function resolveLane(ctx: StepContext, lane: number): void {
         ? defending
         : null;
   recordScorer(ctx, challenger, scored);
+  recordCharacterScored(state, challenger, instanceOf(state, challenger).controller, scored);
   gainPoints(ctx, active, scored, "challenge");
   ctx.emit({
     kind: "laneResolved",

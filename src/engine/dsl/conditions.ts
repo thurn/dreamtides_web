@@ -30,6 +30,16 @@ export function conditionHoldsWith(
   scope: ConditionScope,
 ): boolean {
   switch (condition.cond) {
+    case "scoredWithCharacterLastTurn": {
+      if (state.turn.turnNumber <= 1) return false;
+      const previous = state.characterScoring?.previous;
+      if (previous == null) throw new Error("Previous-turn character scoring requires known history");
+      const player = resolvePlayer(scope.controller, condition.player);
+      return previous.some(({ instance }) => {
+        const card = state.instances[instance];
+        return card !== undefined && card.zone === "play" && card.controller === player && read(instance).cardType === "character";
+      });
+    }
     case "thisTurn": {
       const count = evaluateValue(state, condition.count, { controller: scope.controller, source: scope.source, x: null, count: () => 0, countCards: () => 0 });
       return count >= condition.atLeast && (condition.atMost === undefined || count <= condition.atMost);

@@ -277,6 +277,11 @@ export function turnOf(player: PlayerRef): Extract<Condition, { readonly cond: "
   return { cond: "turnOf", player };
 }
 
+/** Present control of a physical character that scored in the preceding completed global turn. */
+export function scoredWithCharacterLastTurn(player: PlayerRef = "you"): Extract<Condition, { readonly cond: "scoredWithCharacterLastTurn" }> {
+  return { cond: "scoredWithCharacterLastTurn", player };
+}
+
 /** "If this card was reclaimed": its latest actual committed play used Reclaim, independent of its replacement status. */
 export function sourceWasReclaimed(): Extract<Condition, { readonly cond: "sourceWasReclaimed" }> {
   return { cond: "sourceWasReclaimed" };
