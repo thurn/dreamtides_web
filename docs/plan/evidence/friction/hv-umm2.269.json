@@ -1,0 +1,54 @@
+{
+  "bead": "hv-umm2.269",
+  "phase": 5,
+  "implementMin": 955.2407303666666,
+  "implementWindow": {
+    "start": "2026-10-15T06:16:33.746000+00:00",
+    "end": "2026-10-15T22:11:48.189822+00:00"
+  },
+  "localValidationS": {
+    "review": 77.42080520902527,
+    "focused": 920.5155510829645,
+    "layout": 10.06217137502972,
+    "knip": 4.591176040994469,
+    "full": 336.2466666249675,
+    "weightedRefusal": 1373.2720510829822,
+    "journey300": 11.570477083034348,
+    "preflight": 2.131929917028174,
+    "sweep": 37.76076820801245,
+    "browser": 124.41762683301931
+  },
+  "hostLoad": 10.6875,
+  "testDelta": {
+    "files": 6,
+    "lines": 590,
+    "jsdomFiles": 1
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 25.902616916666666,
+      "note": "Conservative observed lower bound across three disjoint owned heavy-lock queues; exact acquisitions and remaining queue/runtime split UNKNOWN. Total command durations include all queue time; original gross includes these waits."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 45.301547600000006,
+      "note": "Observed gross file-chooser setup repair interval from actual states-v02 modal terminal to the observed historical20:06:43.334756Z evidence checkpoint, including intervening layout repair/checks and other QA, not exclusive debugging/idle time. Serial/concurrent page FileChooser did not settle managed MCP modal; exact own negotiated public SDK session upload path used after native finite admission. All failed attempts and raw outcomes retained."
+    },
+    {
+      "tag": "integration-conflict",
+      "minutes": 23.065255866666668,
+      "note": "Observed integration repair problem interval from retained20:32:38.252266Z source-state observation to the observed historical20:55:42.167618Z evidence cutoff. Exact2 textual conflicts parked/native-updated/additively reapplied preserving landed transfiguration-record validation; includes reapply/checks/runtime/evidence, not exclusive coding or idle. Native merge-conflict and all receipts retained. Whole original06:16 gross remains OPEN through fresh current visual and eventual finalGit."
+    },
+    {
+      "tag": "visual-layout-repair",
+      "minutes": 10.058394700000001,
+      "note": "Observed gross confirmed-P3 follow-up interval from actual currentvisual terminal21:03:19.081Z to evidencecutoff21:13:22.584682Z. Includes parent finding verification/admission, existingGlassPanel boundedownemptybranch repair, focused/ordinary/Knip, single5x2browser+actualcaptureviews/custody/evidence; not exclusive coding or idle. Priorfailedempty capture retained; newexactcontenthug/Continue/HUD geometry passes. Original06:16gross remainsOPEN through freshrepairvisual/finalGit."
+    },
+    {
+      "tag": "core-review-repair",
+      "minutes": 38.08302653333333,
+      "note": "Observed gross confirmedP1 followup from actualCOREterminal21:28:42.675Z to observed historical22:06:47.656592Z evidencecutoff. Includes parentnativecancelsettlement/admission, sourceproposal/red\u2192green repair, canceledobsoleteownedlockwait419.408s/correctedfocused920.516s, ordinary/Knip/public300/publicfixture/browser/views/custody/evidence. Not exclusivecoding/idle/queue. Source/time/birth/cancel receipts preserved; exactlockacquisition splitUNKNOWN; original06:16grosscontinuous through futurefinalGit."
+    }
+  ]
+}

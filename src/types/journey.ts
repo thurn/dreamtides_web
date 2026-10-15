@@ -158,6 +158,8 @@ export interface Avatar {
 /** A passive effect collected during the journey. */
 export interface Dreamsign {
   id: DreamsignId;
+  /** One chosen physical journey entry, retained through its later forms. */
+  readonly openingHandEntryId?: DeckEntryId;
   name: string;
   effectDescription: string;
   imageName?: string;
@@ -271,7 +273,12 @@ export interface AfterBattleTransfigurationSource {
   readonly maxCount: number;
 }
 
+export interface JourneyBattleInitEffect {
+  readonly kind: "chosenOpeningHandEntry";
+}
+
 export type JourneyOnGainEffect =
+  | { readonly kind: "chooseOpeningHandEventOnGain" }
   | { readonly kind: "deckSubtypeOnGain" }
   | { readonly kind: "typeRemapOnGain" }
   | { readonly kind: "addNightmaresOnGain"; readonly count: number }
@@ -308,6 +315,13 @@ export type JourneyModifierBefore = Readonly<Pick<JourneyState,
   "deck" | "screen" | "siteRuntime" | "dreamsigns" | "essence" |
   "currentDreamscape" | "shopModifiers" | "draftState" | "atlas"
 >>;
+/** Captured canonical eligibility for one acquired physical opening source. */
+export interface JourneyOpeningHandAcquisition extends JourneyDreamsignGain {
+  /** Detached canonical-resolution inputs at this source, before later acquisition effects. */
+  readonly deckAtAcquisition: readonly DeckEntry[];
+  readonly outcome: "prepared" | "limited";
+  readonly eligibleEntries: readonly { readonly entryId: DeckEntryId; readonly cardId: CardId }[];
+}
 export interface JourneySubtypeResume {
   readonly before: JourneyModifierBefore;
   readonly eventType: import("../rules/events").GameplayEventType;
@@ -316,6 +330,8 @@ export interface JourneySubtypeResume {
   readonly sourceIndex: number;
   readonly observerSources: readonly JourneyDreamsignGain[];
   readonly copySources: readonly JourneyDreamsignGain[];
+  /** Complete processed opening acquisitions, including limited outcomes. */
+  readonly openingHandAcquisitions?: readonly JourneyOpeningHandAcquisition[];
   readonly starterSources: readonly JourneyStarterPurgeSource[];
   readonly transfigurations: readonly JourneyTransfigurationOccurrence[];
   readonly attemptedEntries: readonly DeckEntry[];
@@ -335,8 +351,8 @@ export interface AfterBattleDreamsignSource {
   readonly earnedSeq: number; readonly offerCount: number;
   readonly offeredDreamsigns: readonly Dreamsign[]; readonly remainingPoolIds: readonly DreamsignId[];
 }
-export interface JourneyDreamsignCopyChoice {
-  readonly kind: "copy"; readonly sources: readonly JourneyDreamsignGain[]; readonly index: number;
+export type JourneyDreamsignCopyChoice = ({ readonly kind: "copy" } | { readonly kind: "openingHand" }) & {
+  readonly sources: readonly JourneyDreamsignGain[]; readonly index: number;
   readonly permissionSeq: number; readonly heldIds: readonly DreamsignId[];
   readonly continuation: Exclude<Screen, { type: "journeyDreamsign" }> | { readonly type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice };
   readonly suspendedBattle: JourneySuspendedBattle | null;

@@ -3510,8 +3510,8 @@ runtime chosen-type bindings, and copiable variants; the card's own printed
 subtype and statistics are preserved.
 
 All type-remap choices earned by an acquisition resolve before its optional
-starter-purge choices. The starter choices, mandatory Dreamsign-copy choices,
-and earned site or post-battle choices then resume their exact saved order and
+starter-purge choices. The starter choices, source-ordered mandatory Dreamsign-copy and Event-selection
+choices, and earned site or post-battle choices then resume their exact saved order and
 continuation. A pending type-remap choice suspends ordinary journey and battle
 gameplay. Resolving that exact choice or removing a Dreamsign is permitted;
 source removal preserves the earned choice. Administrative operations retain
@@ -3534,6 +3534,29 @@ Displayed journey-card text substitutes literal type words while preserving
 proper names, references to a type chosen later, and figment-creation text whose
 chosen type is not a figment type.
 
+A Dreamsign that asks you to pick an Event for your opening hand binds one
+physical deck entry to its held record. Pick a current effective Event when
+one is available. With no eligible Event, the effect is limited and selects
+nothing; unavailable canonical card content prevents the operation from
+committing. The binding follows the same entry through later forms and
+permanent type changes. A new physical copy or same-printing replacement is
+distinct. Removing the chosen entry makes its binding inert. Only a currently
+held source applies; a fresh acquisition chooses again. Full-record Dreamsign
+conversion copies the binding without earning another acquisition.
+
+After mandatory acquired subtype and type-remap choices, starter acquisition
+permissions resolve before mandatory Dreamsign conversion and Event selection.
+The latter choices follow acquired held-slot order, with the exact earned
+continuation and any suspended battle preserved. An Event permission prepared
+before a subtype pause stays earned. If earlier starter purges leave a prepared
+Event selection with no eligible target, its only completion selects nothing.
+Each held bound source designates the first original input slot of its surviving
+entry for the next normal journey battle; deck padding supplies distinct battle
+copies. Several sources selecting the same entry draw it once with all sources
+attributed. Guaranteed cards occupy ordinary opening-hand slots as described
+under Guaranteed opening cards. A selection made during a live battle preserves
+that battle's initialization, engine state and pending prompt.
+
 A starter card is identified by its canonical card identity's starter metadata,
 including the starter-deck role. Permanent entry changes and transfigurations do
 not change that identity. An acquisition that applies Perfected applies it to
@@ -3546,7 +3569,7 @@ physical starter entries present when the Dreamsign is gained. Each acquired
 copy earns a permission. The permissions survive source loss and reload; later
 acquisitions cannot enlarge an earned permission. Finishing a permission with
 zero entries declines it. Starter acquisition choices resolve before mandatory
-Dreamsign copy choices, preserving their exact continuation and any suspended
+Dreamsign copy and Event-selection choices, preserving their exact continuation and any suspended
 battle. Purging these entries is an authored journey purge and supplies the
 ordinary per-purged-card occurrences. Invalid or stale choices change nothing.
 

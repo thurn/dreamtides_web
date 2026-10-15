@@ -1,5 +1,9 @@
 /** Player-facing journey copy shared by screen builders and Cumulus controls. */
 export const JOURNEY_SITE_MESSAGES = {
+  openingHandTitle: "Choose an Opening Card",
+  openingHandInstruction: "Choose an Event to have in your opening hand.",
+  openingHandConfirm: "Choose This Card",
+  openingHandEmpty: "There are no Events to choose.",
   subtypeInstruction: "Choose a character type for the Character cards currently in your deck.",
   purgePrevented: "Protected",
   typeRemapTitle: "Choose a Character Type",

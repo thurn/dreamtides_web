@@ -1,4 +1,5 @@
 import { validJourneyTransfigurationRecord } from "./journey-transfiguration";
+import { journeyOpeningHandEntries, validJourneyOpeningBindings } from "./journey-battle-init";
 import { cardIdFromUnknown, cardSubtypeFromUnknown, type CardSubtype } from "../../types/card-identity";
 import { deckEntryIdFromUnknown, dreamsignIdFromUnknown, cardTypeChangePredicateIdFromUnknown, parseCardTypeChangePredicateId, siteIdFromUnknown } from "../../types/identifiers";
 import type { DeckEntry, JourneyDreamsignSubtypeChoice, JourneyModifierBefore, JourneyState, JourneySubtypeResume, JourneySuspendedBattle } from "../../types/journey";
@@ -120,12 +121,28 @@ export function validJourneySubtypeScreen(screen: unknown, journey: JourneyState
     const choice = raw as unknown as JourneyDreamsignSubtypeChoice;
     if (!choice.resume.sources.some(source => registry.lookup(source.dreamsignId)?.journeyOnGain?.kind === "deckSubtypeOnGain")) return false;
     const processed = choice.resume.sources.slice(0, choice.resume.sourceIndex);
+    if (!validJourneyOpeningBindings(old.dreamsigns, id => registry.lookup(id))) return false;
+    const expectedOpening = processed.filter(source => registry.lookup(source.dreamsignId)?.journeyOnGain?.kind === "chooseOpeningHandEventOnGain");
+    const receipts = choice.resume.openingHandAcquisitions ?? [];
+    if (r.openingHandAcquisitions !== undefined && !Array.isArray(r.openingHandAcquisitions) || receipts.length !== expectedOpening.length) return false;
+    for (const [n, receipt] of receipts.entries()) {
+      const expected = expectedOpening[n];
+      if (!record(receipt) || Object.keys(receipt).length !== 5 || !["dreamsignId", "heldIndex", "deckAtAcquisition", "outcome", "eligibleEntries"].every(key => key in receipt) ||
+        receipt.dreamsignId !== expected.dreamsignId || receipt.heldIndex !== expected.heldIndex || registry.lookup(expected.dreamsignId)?.journeyBattleInit?.kind !== "chosenOpeningHandEntry" ||
+        !validEntries(receipt.deckAtAcquisition) || !Array.isArray(receipt.eligibleEntries)) return false;
+      const cohort = journeyOpeningHandEntries(receipt.deckAtAcquisition, journeyTransfigurationCard);
+      if (cohort === null || receipt.outcome !== (cohort.length === 0 ? "limited" : "prepared") || receipt.eligibleEntries.length !== cohort.length) return false;
+      for (const [ordinal, captured] of receipt.eligibleEntries.entries()) {
+        if (!record(captured) || Object.keys(captured).length !== 2 || deckEntryIdFromUnknown(captured.entryId) === null || cardIdFromUnknown(captured.cardId) === null ||
+          captured.entryId !== cohort[ordinal].entry.entryId || captured.cardId !== cohort[ordinal].cardId) return false;
+      }
+    }
     const expectedCopies = processed.filter(source => registry.lookup(source.dreamsignId)?.journeyOnGain?.kind === "copyOwnedDreamsignOnGain" && choice.resume.observerSources.length > 1);
     const expectedStarters = processed.filter(source => registry.lookup(source.dreamsignId)?.journeyOnGain?.kind === "purgeStarterOnGain");
     const sameSources = (expected: typeof processed, actual: Readonly<typeof processed>) => expected.length === actual.length && expected.every((source, n) => source.dreamsignId === actual[n].dreamsignId && source.heldIndex === actual[n].heldIndex);
     if (!sameSources(expectedCopies, choice.resume.copySources) || !sameSources(expectedStarters, choice.resume.starterSources)) return false;
     const source = choice.resume.sources[choice.resume.sourceIndex], effect = registry.lookup(source.dreamsignId)?.journeyOnGain;
-    if (choice.resume.sources.slice(choice.resume.sourceIndex + 1).some(item => registry.lookup(item.dreamsignId)?.journeyOnGain?.kind === "copyOwnedDreamsignOnGain" && journey.dreamsigns[item.heldIndex]?.id !== item.dreamsignId)) return false;
+    if (choice.resume.sources.slice(choice.resume.sourceIndex + 1).some(item => (registry.lookup(item.dreamsignId)?.journeyOnGain?.kind === "copyOwnedDreamsignOnGain" || registry.lookup(item.dreamsignId)?.journeyOnGain?.kind === "chooseOpeningHandEventOnGain") && journey.dreamsigns[item.heldIndex]?.id !== item.dreamsignId)) return false;
     if (choice.current.kind === "deckSubtype") {
       if (effect?.kind !== "deckSubtypeOnGain" || !Array.isArray(choice.current.entries)) return false;
       const expected = journey.deck.flatMap(entry => { const card = journeyTransfigurationCard(entry); if (card === null) throw new Error("Unavailable cohort content"); return card.cardType === "Character" ? [{ entryId: entry.entryId, cardId: card.cardId }] : []; });
@@ -150,7 +167,7 @@ export function validJourneySubtypeScreen(screen: unknown, journey: JourneyState
     const purgeIds = new Set();
     for (const purge of r.purges) { if (!record(purge) || deckEntryIdFromUnknown(purge.entryId) === null || purgeIds.has(purge.entryId) || purge.cardId !== undefined && cardIdFromUnknown(purge.cardId) === null) return false; purgeIds.add(purge.entryId); }
     // Existing queue validators own their earned-source and continuation contracts.
-    const tail = finishJourneyAcquisition(subtypeContinuation(journey), choice.resume.copySources, choice.resume.starterSources, [], choice.permissionSeq, choice.suspendedBattle);
+    const tail = finishJourneyAcquisition(subtypeContinuation(journey), choice.resume.copySources, choice.resume.starterSources, [], choice.permissionSeq, choice.suspendedBattle, receipts, id => registry.lookup(id));
     const projected = c12(journey, choice, tail.screen as JourneyDreamsignSubtypeChoice["continuation"]);
     if (choice.current.kind === "typeRemap") return validTypeRemapScreen(projected.screen, projected, registry);
     return validSubtypeTail(tail, registry, choice);

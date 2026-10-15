@@ -1,4 +1,9 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import type { JourneyBattleInitEffect, JourneyOnGainEffect } from "../../types/journey";
 import { dreamsign } from "../define";
+
+export const journeyBattleInitEffect = { kind: "chosenOpeningHandEntry" } as const satisfies JourneyBattleInitEffect;
+export const journeyOnGainEffect = { kind: "chooseOpeningHandEventOnGain" } as const satisfies JourneyOnGainEffect;
 
 export default dreamsign({
   id: "069c6e8f-4f41-4f13-9ec9-2009b4186e3b",
@@ -10,5 +15,8 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
   tags: ["J16", "Tag OK"],
-  pending: true,
+  abilities: () => [],
+  journeyBattleInit: journeyBattleInitEffect,
+  journeyOnGain: journeyOnGainEffect,
+  verifiedText: expectedVerifiedText("When you gain this dreamsign, pick an event card in your deck.\n\nThat card is always in your opening hand."),
 });

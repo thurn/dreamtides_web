@@ -67,7 +67,7 @@ export function validStarterPurgeScreen(screen: unknown, journey: JourneyState, 
   if (binding === null) return true;
   if (!record(binding) || (binding.mode !== "journey" && binding.mode !== "tutorial") || typeof binding.battleId !== "string") return false;
   try { parseBattleId(binding.battleId); } catch { return false; }
-  if (continuation.type === "journeyDreamsign" && record(continuation.choice) && continuation.choice.kind === "copy") return record(continuation.choice.suspendedBattle) && continuation.choice.suspendedBattle.battleId === binding.battleId && continuation.choice.suspendedBattle.mode === binding.mode;
+  if (continuation.type === "journeyDreamsign" && record(continuation.choice) && (continuation.choice.kind === "copy" || continuation.choice.kind === "openingHand")) return record(continuation.choice.suspendedBattle) && continuation.choice.suspendedBattle.battleId === binding.battleId && continuation.choice.suspendedBattle.mode === binding.mode;
   return binding.mode === "tutorial" || continuation.type === "site";
 }
 export function validStarterBattleBinding(journey: JourneyState, battle: BattleFoldState | null): boolean {
@@ -75,7 +75,7 @@ export function validStarterBattleBinding(journey: JourneyState, battle: BattleF
   const { suspendedBattle: binding, continuation } = journey.screen.choice;
   if (binding === null) return battle === null;
   if (battle === null || battle.init.battleId !== binding.battleId || battle.mode.kind !== binding.mode) return false;
-  const screen = continuation.type === "journeyDreamsign" && continuation.choice.kind === "copy" ? continuation.choice.continuation : continuation;
+  const screen = continuation.type === "journeyDreamsign" && (continuation.choice.kind === "copy" || continuation.choice.kind === "openingHand") ? continuation.choice.continuation : continuation;
   return binding.mode === "tutorial" || screen.type === "site" && screen.siteId === battle.init.siteId && journey.currentDreamscape === battle.init.nodeId && journey.completionLevel === battle.init.completionLevelAtStart;
 }
 export function validStarterPurgeIntent(journey: JourneyState, payload: Record<string, unknown>, battle: BattleFoldState | null, registry: JourneyModifierRegistry): boolean {

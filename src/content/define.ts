@@ -80,6 +80,7 @@ interface CardFields {
 export type CardDefinition = CardFields & ContentStatus;
 
 interface DreamsignFields {
+  readonly journeyBattleInit?: import("../types/journey").JourneyBattleInitEffect;
   readonly journeyDuplication?: import("../types/journey").JourneyDuplicationEffect;
   readonly journeyShop?: import("../types/journey").JourneyShopEffect;
   readonly journeyOnGain?: import("../types/journey").JourneyOnGainEffect;

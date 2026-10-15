@@ -33,6 +33,7 @@ import type {
 } from "../../eventlog/types";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
+import { assertJourneyOpeningCheckpoint } from "../journey/journey-battle-init";
 
 /**
  * The canonical `EngineConfig<FoldState>` for the real Dreamtides game.
@@ -60,6 +61,7 @@ export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
     assertJourneyTypeRemapCheckpoint(state, journeyModifierRegistry);
     assertBeforeBattlePurgeCheckpoint(state);
     assertJourneyDeckSparkCheckpoint(state);
+    assertJourneyOpeningCheckpoint(state, journeyModifierRegistry);
     assertScoreGroupCheckpoint(state);
     assertLastTurnScoringCheckpoint(state);
     assertFirstEventHistoryCheckpoint(state);

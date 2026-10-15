@@ -1,3 +1,5 @@
+import mug, { journeyBattleInitEffect as mugBattleEffect, journeyOnGainEffect as mugGainEffect } from "../../content/dreamsigns/spotted-mug-069c6e8f";
+import { journeyBattleInit } from "./journey-battle-init";
 import { journeySubtypeBefore, resolveJourneySubtype } from "./journey-subtype";
 import type { BattleFoldState } from "../battle/fold";
 import type { DeckEntry, JourneyModifierBefore, JourneySubtypeResume } from "../../types/journey";
@@ -61,6 +63,7 @@ import twistedHerbs, { journeyOnGainEffect as twistedHerbsEffect } from "../../c
  * battle DSL. Administrative intents never reach a hook.
  */
 export interface JourneyModifierDefinition {
+  readonly journeyBattleInit?: import("../../types/journey").JourneyBattleInitEffect;
   readonly journeyDuplication?: import("../../types/journey").JourneyDuplicationEffect;
   readonly journeyShop?: import("../../types/journey").JourneyShopEffect;
   readonly dreamsignId: DreamsignId;
@@ -244,7 +247,7 @@ export function createJourneyModifierRegistry(
         copied = false;
         for (const source of held.filter((item) => item.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent")) copied = reactCopy(source) || copied;
       } while (copied);
-      return { journey: finishJourneyAcquisition(next, acquisition.copySources, acquisition.starterSources, acquisition.typeRemapSources, seq, battleBinding), logRecords };
+      return { journey: finishJourneyAcquisition(next, acquisition.copySources, acquisition.starterSources, acquisition.typeRemapSources, seq, battleBinding, acquisition.openingHandAcquisitions, lookup), logRecords };
     };
   const registry: JourneyModifierRegistry = {
     lookup,
@@ -264,6 +267,7 @@ export function createJourneyModifierRegistry(
 
 /** The production registry's fixed catalog registrations. */
 export const journeyModifierRegistry = createJourneyModifierRegistry([
+  journeyBattleInit(parseDreamsignId(mug.id), mugBattleEffect, mugGainEffect),
   journeyOnGain(parseDreamsignId(toad.id), toadEffect),
   journeyDeckEntry(parseDreamsignId(glowing.id), glowingEffect),
   journeyDraft(parseDreamsignId(anise.id), aniseEffect),

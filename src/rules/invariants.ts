@@ -4,6 +4,7 @@ import { validShopReplenishmentRuntime } from "./journey/journey-shop";
 import { validStarterPurgeScreen, validStarterBattleBinding } from "./journey/journey-starter-acquisition";
 import { validJourneyDuplicationScreen } from "./journey/journey-duplication";
 import { validJourneyDreamsignScreen, validDreamsignBattleBinding } from "./journey/journey-on-gain";
+import { validJourneyOpeningBindings } from "./journey/journey-battle-init";
 import { validJourneyTransfigurationRecords, validJourneyTransfigurationScreen } from "./journey/journey-transfiguration";
 import { validJourneyPurgeScreen } from "./journey/journey-purge";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "./journey/modifier-registry";
@@ -47,12 +48,13 @@ export function foldInvariantViolations(
   const starter = acquisition.screen.type === "journeyStarterPurge" ? acquisition.screen.choice : null;
   const visible = starter?.continuation ?? acquisition.screen;
   const signChoice = visible.type === "journeyDreamsign" ? visible.choice : null;
-  const displayed = signChoice?.kind === "copy" ? signChoice.continuation : visible;
+  const displayed = signChoice?.kind === "copy" || signChoice?.kind === "openingHand" ? signChoice.continuation : visible;
   const projected = { ...state.journey, screen: displayed };
   const pending = displayed.type === "journeyPurge" || displayed.type === "journeyTransfiguration" || displayed.type === "journeyDuplication" ? displayed : null;
   const earned = displayed.type === "journeyDreamsign" && displayed.choice.kind === "afterBattle" ? displayed.choice : pending?.choice.kind === "afterBattle" ? pending.choice : null;
   const journey = earned === null ? projected : { ...projected, screen: { type: earned.returnTo } };
   const violations: FoldInvariantViolation[] = [];
+  if (!validJourneyOpeningBindings(state.journey.dreamsigns, (id) => registry.lookup(id))) violations.push({ code: "journey_opening_binding_inconsistent", detail: "binding" });
   if (subtype !== null && (!validJourneySubtypeScreen(state.journey.screen, state.journey, registry) || !validJourneySubtypeBattleBinding(state.journey, state.battle))) violations.push({ code: "journey_subtype_inconsistent", detail: "subtype" });
   if (subtype?.suspendedBattle?.mode === "tutorial" && (state.frontDoor.phase !== "tutorial" || state.battle?.mode.kind !== "tutorial" || state.frontDoor.tutorial?.runId !== state.battle.mode.tutorialRunId)) violations.push({ code: "journey_subtype_tutorial_mismatch", detail: "tutorial" });
   if (!validJourneyTypeRemap(state.journey, registry) || remap !== null && !validTypeRemapBattleBinding(state.journey, state.battle)) violations.push({ code: "journey_type_remap_inconsistent", detail: "typeRemap" });
@@ -64,7 +66,7 @@ export function foldInvariantViolations(
   if (pending !== null && (state.battle !== null || !(pending.type === "journeyDuplication" ? validJourneyDuplicationScreen(pending, projected, registry) : pending.type === "journeyPurge" ? validJourneyPurgeScreen(pending, projected, registry) : validJourneyTransfigurationScreen(pending, projected, registry)))) {
     violations.push({ code: "journey_purge_choice_inconsistent", detail: pending.choice.siteId });
   }
-  if (signChoice?.kind === "copy" && signChoice.suspendedBattle?.mode === "tutorial" && (state.frontDoor.phase !== "tutorial" || state.battle?.mode.kind !== "tutorial" || state.frontDoor.tutorial?.runId !== state.battle.mode.tutorialRunId)) violations.push({ code: "journey_copy_tutorial_mismatch", detail: "tutorial" });
+  if ((signChoice?.kind === "copy" || signChoice?.kind === "openingHand") && signChoice.suspendedBattle?.mode === "tutorial" && (state.frontDoor.phase !== "tutorial" || state.battle?.mode.kind !== "tutorial" || state.frontDoor.tutorial?.runId !== state.battle.mode.tutorialRunId)) violations.push({ code: "journey_copy_tutorial_mismatch", detail: "tutorial" });
   if (journey.essence < 0) {
     violations.push({
       code: "essence_out_of_bounds",

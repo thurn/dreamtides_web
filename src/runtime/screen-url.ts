@@ -43,7 +43,7 @@ export function screenToJourneyPath(
     case "journeyStarterPurge":
       return screenToJourneyPath({ ...state, screen: screen.choice.continuation }, artCatalog);
     case "journeyDreamsign":
-      return screen.choice.kind === "copy" || screen.choice.kind === "typeRemap" || screen.choice.kind === "subtype" ? screenToJourneyPath({ ...state, screen: screen.choice.continuation }, artCatalog) : `/dreamsign/${screen.choice.siteId}`;
+      return screen.choice.kind === "copy" || screen.choice.kind === "typeRemap" || screen.choice.kind === "subtype" || screen.choice.kind === "openingHand" ? screenToJourneyPath({ ...state, screen: screen.choice.continuation }, artCatalog) : `/dreamsign/${screen.choice.siteId}`;
     case "journeyDuplication":
       return `/duplication/${screen.choice.siteId}`;
     case "journeyTransfiguration":

@@ -24,7 +24,7 @@ function browserPolicyWorker(): PolicyWorker {
 
 export function useEngineAi(policy: PolicyId, enabled = true): void {
   const state = useGameState();
-  const runnable = enabled && state.journey.screen.type !== "journeyStarterPurge" && !(state.journey.screen.type === "journeyDreamsign" && (state.journey.screen.choice.kind === "copy" || state.journey.screen.choice.kind === "typeRemap" || state.journey.screen.choice.kind === "subtype"));
+  const runnable = enabled && state.journey.screen.type !== "journeyStarterPurge" && !(state.journey.screen.type === "journeyDreamsign" && (state.journey.screen.choice.kind === "copy" || state.journey.screen.choice.kind === "typeRemap" || state.journey.screen.choice.kind === "subtype" || state.journey.screen.choice.kind === "openingHand"));
   const actions = useActions();
   const clientId = useClientId();
   const engine = getBattleInitProvider()?.engine ?? null;

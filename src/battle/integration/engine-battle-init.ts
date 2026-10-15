@@ -21,6 +21,8 @@ import type { CardData } from "../../types/cards";
 import type { AvatarId, DreamsignId, DreamwellCardId } from "../../types/identifiers";
 import type { BattleModifier, DeckEntry, JourneyState } from "../../types/journey";
 import type { TransfigurationData } from "../../types/transfiguration-data";
+import { journeyOpeningHandGuarantees } from "../../rules/journey/journey-battle-init";
+import { journeyModifierRegistry } from "../../rules/journey/modifier-registry";
 
 export interface EngineBattleInitInput {
   /** The battle seed `createBattleInit` resolved. */
@@ -68,6 +70,7 @@ export function createEngineBattleInit(input: EngineBattleInitInput): EngineBatt
       ...(journey.typeRemap === undefined ? {} : { typeRemap: journey.typeRemap }) }),
   );
   const nextBattle = nextBattleEffects(journey.battleModifiers);
+  const guaranteedOpeningHand = journeyOpeningHandGuarantees(journey, (id) => journeyModifierRegistry.lookup(id));
   return {
     seed: battleSeed(String(input.seed)),
     scoreToWin: input.scoreToWin,
@@ -87,6 +90,7 @@ export function createEngineBattleInit(input: EngineBattleInitInput): EngineBatt
       enemy: [...enemy.dreamsigns],
     },
     ...(nextBattle === null ? {} : { nextBattle: { player: nextBattle } }),
+    ...(guaranteedOpeningHand.length === 0 ? {} : { guaranteedOpeningHand: { player: guaranteedOpeningHand } }),
   };
 }
 

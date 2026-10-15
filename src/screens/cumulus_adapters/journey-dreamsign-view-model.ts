@@ -7,11 +7,11 @@ import type { JourneyDreamsignScreenView } from "../../cumulus/screens/JourneyDr
 import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 /** Concrete folded permission projection, independent of catalog selection policy. */
 export function buildJourneyDreamsignView(journey: JourneyState, content: JourneyContent): JourneyDreamsignScreenView | null {
-  if (journey.screen.type !== "journeyDreamsign") return null;
+  if (journey.screen.type !== "journeyDreamsign" || journey.screen.choice.kind === "openingHand") return null;
   const choice = journey.screen.choice;
   let continuation = choice.kind === "copy" || choice.kind === "typeRemap" || choice.kind === "subtype" ? choice.continuation : journey.screen;
   if (continuation.type === "journeyStarterPurge") continuation = continuation.choice.continuation;
-  if (continuation.type === "journeyDreamsign" && continuation.choice.kind === "copy") continuation = continuation.choice.continuation;
+  if (continuation.type === "journeyDreamsign" && (continuation.choice.kind === "copy" || continuation.choice.kind === "openingHand")) continuation = continuation.choice.continuation;
   const siteId = continuation.type === "site" ? continuation.siteId : choice.kind === "afterBattle" ? choice.siteId : continuation.type === "journeyPurge" || continuation.type === "journeyTransfiguration" || continuation.type === "journeyDuplication" ? continuation.choice.siteId : continuation.type === "journeyDreamsign" && continuation.choice.kind === "afterBattle" ? continuation.choice.siteId : null;
   const node = siteId === null ? journey.currentDreamscape === null ? null : journey.atlas.nodes[journey.currentDreamscape] ?? null : Object.values(journey.atlas.nodes).find((candidate) => candidate.sites.some((site) => site.id === siteId)) ?? null;
   // Standalone tutorial/genesis choices use existing catalog atmosphere, never a fabricated gameplay site.

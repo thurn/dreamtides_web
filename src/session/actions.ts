@@ -135,6 +135,7 @@ export interface GameActions {
   resolveTypeRemap: (sourceDreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, chosenSubtype: CardSubtype) => Promise<number>;
   resolveJourneySubtype: (sourceDreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, chosenSubtype: CardSubtype) => Promise<number>;
   resolveDreamsignCopy: (sourceDreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, targetHeldIndex: number, expectedTargetDreamsignId: DreamsignId) => Promise<number>;
+  resolveOpeningHandEntry: (dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, entryId: DeckEntryId | null) => Promise<number>;
   resolveJourneyDuplication: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, earnedSeq: number, entryId: DeckEntryId | null) => Promise<number>;
   resolveJourneyTransfiguration: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => Promise<number>;
   resolveStarterPurge: (dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, entryIds: readonly DeckEntryId[]) => Promise<number>;
@@ -540,6 +541,8 @@ export function makeActions(append: AppendFn): GameActions {
       emit("RESOLVE_JOURNEY_SUBTYPE", { sourceDreamsignId, heldIndex, choiceIndex, permissionSeq, chosenSubtype }),
     resolveDreamsignCopy: (sourceDreamsignId, heldIndex, choiceIndex, permissionSeq, targetHeldIndex, expectedTargetDreamsignId) =>
       emit("RESOLVE_DREAMSIGN_COPY", { sourceDreamsignId, heldIndex, choiceIndex, permissionSeq, targetHeldIndex, expectedTargetDreamsignId }),
+    resolveOpeningHandEntry: (dreamsignId, heldIndex, choiceIndex, permissionSeq, entryId) =>
+      emit("RESOLVE_OPENING_HAND_ENTRY", { dreamsignId, heldIndex, choiceIndex, permissionSeq, entryId }),
     resolveJourneyDuplication: (siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, entryId) =>
       emit("RESOLVE_JOURNEY_DUPLICATION", { siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, entryId }),
     resolveJourneyTransfiguration: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>

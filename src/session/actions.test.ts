@@ -125,6 +125,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.resolveTypeRemap(testDreamsignId("source"), 1, 0, 1, "Mage");
   void actions.resolveJourneySubtype(testDreamsignId("source"), 1, 0, 1, "Mage");
   void actions.resolveDreamsignCopy(testDreamsignId("source"), 1, 0, 1, 0, testDreamsignId("target"));
+  void actions.resolveOpeningHandEntry(testDreamsignId("source"), 0, 0, 1, parseDeckEntryId("entry-1"));
   void actions.resolveStarterPurge(testDreamsignId("dreamsign-1"), 0, 0, 1, [parseDeckEntryId("entry-1")]);
   void actions.resolveJourneyPurge(parseSiteId("site-1"), testDreamsignId("dreamsign-1"), 0, 0, [parseDeckEntryId("entry-1")]);
   void actions.duplicateDeckEntry(parseDeckEntryId("entry-1"));

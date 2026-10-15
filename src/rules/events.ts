@@ -137,6 +137,7 @@ export interface EventPayloads {
   RESOLVE_TYPE_REMAP: { sourceDreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; permissionSeq: number; chosenSubtype: CardSubtype };
   RESOLVE_JOURNEY_SUBTYPE: { sourceDreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; permissionSeq: number; chosenSubtype: CardSubtype };
   RESOLVE_DREAMSIGN_COPY: { sourceDreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; permissionSeq: number; targetHeldIndex: number; expectedTargetDreamsignId: DreamsignId };
+  RESOLVE_OPENING_HAND_ENTRY: { dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; permissionSeq: number; entryId: DeckEntryId | null };
   RESOLVE_STARTER_PURGE: { dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; permissionSeq: number; entryIds: DeckEntryId[] };
   RESOLVE_JOURNEY_PURGE: { siteId: SiteId; dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; entryIds: DeckEntryId[]; earnedSeq?: number };
   PURGE_DECK_CARDS: { siteId: SiteId; entryIds: DeckEntryId[] };
@@ -413,6 +414,7 @@ const EVENT_INTENT_CLASSES = {
   RESOLVE_TYPE_REMAP: "gameplay",
   RESOLVE_JOURNEY_SUBTYPE: "gameplay",
   RESOLVE_DREAMSIGN_COPY: "gameplay",
+  RESOLVE_OPENING_HAND_ENTRY: "gameplay",
   RESOLVE_STARTER_PURGE: "gameplay",
   RESOLVE_JOURNEY_PURGE: "gameplay",
   PURGE_DECK_CARDS: "gameplay",
@@ -553,6 +555,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   RESOLVE_TYPE_REMAP: true,
   RESOLVE_JOURNEY_SUBTYPE: true,
   RESOLVE_DREAMSIGN_COPY: true,
+  RESOLVE_OPENING_HAND_ENTRY: true,
   RESOLVE_STARTER_PURGE: true,
   RESOLVE_JOURNEY_PURGE: true,
   PURGE_DECK_CARDS: true,

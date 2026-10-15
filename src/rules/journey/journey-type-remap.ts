@@ -59,7 +59,7 @@ export function validTypeRemapScreen(screen: unknown, journey: JourneyState, reg
     if (!record(tail.choice) || !record(tail.choice.continuation)) return false;
     tail = tail.choice.continuation;
   }
-  if (tail.type === "journeyDreamsign" && record(tail.choice) && tail.choice.kind === "copy") {
+  if (tail.type === "journeyDreamsign" && record(tail.choice) && (tail.choice.kind === "copy" || tail.choice.kind === "openingHand")) {
     if (!record(tail.choice.continuation)) return false;
     tail = tail.choice.continuation;
   }
@@ -67,7 +67,7 @@ export function validTypeRemapScreen(screen: unknown, journey: JourneyState, reg
   if (tail.type === "site" && (journey.currentDreamscape === null || !journey.atlas.nodes[journey.currentDreamscape]?.sites.some(site => site.id === tail.siteId))) return false;
   const projected = { ...journey, screen: continuation as unknown as Screen };
   if (continuation.type === "journeyDreamsign") {
-    if (!record(continuation.choice) || !["copy", "afterBattle"].includes(String(continuation.choice.kind)) || !validJourneyDreamsignScreen(continuation, projected, registry)) return false;
+    if (!record(continuation.choice) || !["copy", "openingHand", "afterBattle"].includes(String(continuation.choice.kind)) || !validJourneyDreamsignScreen(continuation, projected, registry)) return false;
   } else if (continuation.type === "journeyStarterPurge") {
     if (!validStarterPurgeScreen(continuation, projected, registry)) return false;
   } else if (continuation.type === "journeyPurge") {
@@ -99,7 +99,7 @@ export function validTypeRemapBattleBinding(journey: JourneyState, battle: Battl
   if (battle === null || battle.init.battleId !== binding.battleId || battle.mode.kind !== binding.mode) return false;
   let screen: Screen = journey.screen.choice.continuation;
   if (screen.type === "journeyStarterPurge") screen = screen.choice.continuation;
-  if (screen.type === "journeyDreamsign" && screen.choice.kind === "copy") screen = screen.choice.continuation;
+  if (screen.type === "journeyDreamsign" && (screen.choice.kind === "copy" || screen.choice.kind === "openingHand")) screen = screen.choice.continuation;
   return binding.mode === "tutorial" || screen.type === "site" && screen.siteId === battle.init.siteId && journey.currentDreamscape === battle.init.nodeId && journey.completionLevel === battle.init.completionLevelAtStart;
 }
 

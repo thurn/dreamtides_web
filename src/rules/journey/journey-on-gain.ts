@@ -1,22 +1,20 @@
+import { advanceJourneyAcquisition, journeyAcquisitionKind, journeyOpeningHandEntries, validJourneyAcquisitionScreen, validJourneyAcquisitionBattleBinding } from "./journey-battle-init";
 import { prepareJourneySubtypeChoice, validJourneySubtypeScreen, validJourneySubtypeBattleBinding } from "./journey-subtype";
 import { finishTypeRemapAcquisition, validTypeRemapScreen, validTypeRemapBattleBinding } from "./journey-type-remap";
 import { prepareStarterAcquisition, finishStarterAcquisition } from "./journey-starter-acquisition";
-import { validJourneyDuplicationScreen } from "./journey-duplication";
 import type { ReducerLogRecord } from "../../eventlog/types";
-import { parseBattleId, dreamsignIdFromUnknown, siteIdFromUnknown, type DreamsignId, type SiteId } from "../../types/identifiers";
-import type { AfterBattleJourneyChoice, JourneyDreamsignCopyChoice, JourneyDreamsignGain, JourneyOnGainEffect, JourneyState, JourneySuspendedBattle, JourneyTransfigurationOccurrence, Screen } from "../../types/journey";
+import { dreamsignIdFromUnknown, type DreamsignId, type SiteId } from "../../types/identifiers";
+import type { AfterBattleJourneyChoice, JourneyDreamsignCopyChoice, JourneyDreamsignGain, JourneyOpeningHandAcquisition, JourneyOnGainEffect, JourneyState, JourneySuspendedBattle, JourneyTransfigurationOccurrence } from "../../types/journey";
 import type { BattleFoldState } from "../battle/fold";
 import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
 import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, validAfterBattleChoice } from "./journey-after-battle";
-import { journeyTransfigurationCard, journeyTransfigurationOccurrences, validJourneyTransfigurationScreen } from "./journey-transfiguration";
+import { journeyTransfigurationCard, journeyTransfigurationOccurrences } from "./journey-transfiguration";
 import { prepareAfterBattleDreamsignOffer, findSite } from "./sites";
-import { validJourneyPurgeScreen } from "./journey-purge";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { getDeckContentProvider, mintEntryId } from "./deck";
 
 const record = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const index = (value: unknown): value is number => typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
-const battleId = (value: unknown) => { if (typeof value !== "string") return null; try { return parseBattleId(value); } catch { return null; } };
 const effectLog = (source: JourneyDreamsignGain, fields: Record<string, unknown>): ReducerLogRecord => ({ event: "journey_modifier_applied", fields: { dreamsignId: source.dreamsignId, heldIndex: source.heldIndex, hook: "on_dreamsign_gain", ...fields } });
 
 
@@ -25,6 +23,7 @@ export function prepareJourneyOnGain(input: { reservedEntries?: readonly import(
   excludeAcquisitionAdditions: (previous: JourneyState, tentative: JourneyState) => { journey: JourneyState; logRecords: readonly ReducerLogRecord[] } }) {
   let journey = input.journey;
   const starterSources = [...(input.resume?.starterSources ?? [])];
+  const openingHandAcquisitions: JourneyOpeningHandAcquisition[] = [...(input.resume?.openingHandAcquisitions ?? [])];
   const transfigurations = [...(input.resume?.transfigurations ?? input.domainTransfigurations)], copySources = [...(input.resume?.copySources ?? [])], typeRemapSources: JourneyDreamsignGain[] = [], logRecords: ReducerLogRecord[] = [];
   const attemptedEntries = [...(input.reservedEntries ?? input.resume?.attemptedEntries ?? [])];
   const mixed = input.resume !== undefined || input.gains.some(source => input.lookup(source.dreamsignId)?.journeyOnGain?.kind === "deckSubtypeOnGain");
@@ -33,10 +32,10 @@ export function prepareJourneyOnGain(input: { reservedEntries?: readonly import(
     if (input.resume === undefined && journey.dreamsigns[source.heldIndex]?.id !== source.dreamsignId) throw new Error("Acquired Dreamsign physical slot changed.");
     const effect = input.lookup(source.dreamsignId)?.journeyOnGain;
     if (mixed && (effect?.kind === "deckSubtypeOnGain" || effect?.kind === "typeRemapOnGain")) {
-      const resume = { before: input.beforeContext, eventType: input.eventType, siteId: input.siteId, sources: input.gains, sourceIndex, observerSources: input.observerSources, copySources, starterSources, transfigurations, attemptedEntries, purges: input.purges };
+      const resume = { before: input.beforeContext, eventType: input.eventType, siteId: input.siteId, sources: input.gains, sourceIndex, observerSources: input.observerSources, copySources, openingHandAcquisitions, starterSources, transfigurations, attemptedEntries, purges: input.purges };
       journey = prepareJourneySubtypeChoice(journey, resume, input.seq, input.battleBinding, effect.kind === "deckSubtypeOnGain" ? "deckSubtype" : "typeRemap");
       logRecords.push(effectLog(source, { permissionSeq: input.seq, choicePrepared: true, sourceIndex, purpose: effect.kind, cohort: journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "subtype" ? journey.screen.choice.current : null }));
-      return { journey, transfigurations, copySources, starterSources, typeRemapSources, logRecords, paused: true };
+      return { journey, transfigurations, copySources, openingHandAcquisitions, starterSources, typeRemapSources, logRecords, paused: true };
     }
     if (effect?.kind === "typeRemapOnGain") {
       typeRemapSources.push(source);
@@ -67,6 +66,15 @@ export function prepareJourneyOnGain(input: { reservedEntries?: readonly import(
       transfigurations.push(...journeyTransfigurationOccurrences(previous, journey));
       logRecords.push(prepared.log);
     }
+    if (effect?.kind === "chooseOpeningHandEventOnGain") {
+      const eligible = journeyOpeningHandEntries(journey.deck, journeyTransfigurationCard);
+      if (eligible === null) throw new Error("Opening-hand acquisition content is unavailable.");
+      const eligibleEntries = eligible.map(({ entry, cardId }) => ({ entryId: entry.entryId, cardId }));
+      const outcome = eligibleEntries.length === 0 ? "limited" : "prepared";
+      openingHandAcquisitions.push({ ...source, deckAtAcquisition: structuredClone(journey.deck), outcome, eligibleEntries });
+      logRecords.push(effectLog(source, { siteId: input.siteId, permissionSeq: input.seq,
+        eligibleEntries, outcome, choicePrepared: outcome === "prepared" }));
+    }
     if (effect?.kind === "copyOwnedDreamsignOnGain") {
       if (journey.dreamsigns.length > 1) copySources.push(source);
       logRecords.push(effectLog(source, { permissionSeq: input.seq, targetCount: journey.dreamsigns.length - 1, choicePrepared: journey.dreamsigns.length > 1 }));
@@ -90,27 +98,32 @@ export function prepareJourneyOnGain(input: { reservedEntries?: readonly import(
     transfigurations.push(...journeyTransfigurationOccurrences(previous, journey));
     logRecords.push(effectLog(source, { siteId: input.siteId, permissionSeq: input.seq, before: { deckSize: previous.deck.length, eligible: eligible.length }, after: { requested, transformed: count }, eligibleEntryIds: eligible.map(({ entry }) => entry.entryId), transformations: selections }));
   }
-  return { journey, transfigurations, copySources, starterSources, typeRemapSources, logRecords, paused: false };
+  return { journey, transfigurations, copySources, openingHandAcquisitions, starterSources, typeRemapSources, logRecords, paused: false };
 }
 
 /** Delay the copy screen until every ordinary observer has earned its continuation. */
-export function finishJourneyOnGain(journey: JourneyState, sources: readonly JourneyDreamsignGain[], seq: number, suspendedBattle: JourneySuspendedBattle | null): JourneyState {
+export function finishJourneyOnGain(journey: JourneyState, sources: readonly JourneyDreamsignGain[], seq: number, suspendedBattle: JourneySuspendedBattle | null, lookup: JourneyModifierRegistry["lookup"]): JourneyState {
   if (sources.length === 0) return journey;
   let continuation: JourneyDreamsignCopyChoice["continuation"];
   if (journey.screen.type === "journeyDreamsign") {
-    if (journey.screen.choice.kind === "copy" || journey.screen.choice.kind === "typeRemap" || journey.screen.choice.kind === "subtype") throw new Error("Nested Dreamsign copy permission.");
+    if (journey.screen.choice.kind === "copy" || journey.screen.choice.kind === "openingHand" || journey.screen.choice.kind === "typeRemap" || journey.screen.choice.kind === "subtype") throw new Error("Nested Dreamsign copy permission.");
     continuation = { type: "journeyDreamsign", choice: journey.screen.choice };
   } else continuation = journey.screen;
-  const choice: JourneyDreamsignCopyChoice = { kind: "copy", sources, index: 0, permissionSeq: seq, heldIds: journey.dreamsigns.map((sign) => sign.id), continuation, suspendedBattle };
+  const kind = journeyAcquisitionKind(sources[0], lookup);
+  if (kind === null) throw new Error("Journey acquisition role is unavailable.");
+  const choice: JourneyDreamsignCopyChoice = { kind, sources, index: 0, permissionSeq: seq, heldIds: journey.dreamsigns.map((sign) => sign.id), continuation, suspendedBattle };
   return { ...journey, screen: { type: "journeyDreamsign", choice } };
 }
 
-export function finishJourneyAcquisition(journey: JourneyState, copySources: readonly JourneyDreamsignGain[], starterSources: readonly import("../../types/journey").JourneyStarterPurgeSource[], typeRemapSources: readonly JourneyDreamsignGain[], seq: number, binding: JourneySuspendedBattle | null): JourneyState {
-  return finishTypeRemapAcquisition(finishStarterAcquisition(finishJourneyOnGain(journey, copySources, seq, binding), starterSources, seq, binding), typeRemapSources, seq, binding);
+export function finishJourneyAcquisition(journey: JourneyState, copySources: readonly JourneyDreamsignGain[], starterSources: readonly import("../../types/journey").JourneyStarterPurgeSource[], typeRemapSources: readonly JourneyDreamsignGain[], seq: number, binding: JourneySuspendedBattle | null, openingHandAcquisitions: readonly JourneyOpeningHandAcquisition[], lookup: JourneyModifierRegistry["lookup"]): JourneyState {
+  const openingSources = openingHandAcquisitions.filter(receipt => receipt.outcome === "prepared")
+    .map(({ dreamsignId, heldIndex }) => ({ dreamsignId, heldIndex }));
+  const sources = [...copySources, ...openingSources].sort((a, b) => a.heldIndex - b.heldIndex);
+  return finishTypeRemapAcquisition(finishStarterAcquisition(finishJourneyOnGain(journey, sources, seq, binding, lookup), starterSources, seq, binding), typeRemapSources, seq, binding);
 }
 
 export function journeyOnGain(dreamsignId: DreamsignId, descriptor: JourneyOnGainEffect): JourneyModifierDefinition {
-  if (descriptor.kind === "addNightmaresOnGain" ? !index(descriptor.count) || descriptor.count < 1 : descriptor.kind === "afterBattleDreamsignChoice" ? !index(descriptor.offerCount) || descriptor.offerCount < 1 : descriptor.kind === "randomTransfigurationOnGain" ? !index(descriptor.numerator) || !index(descriptor.denominator) || descriptor.denominator < 1 || descriptor.numerator > descriptor.denominator : descriptor.kind === "purgeStarterOnGain" ? !index(descriptor.maxCount) || descriptor.maxCount < 1 : descriptor.kind === "perfectStarterOnGain" ? descriptor.transfiguration !== "Perfected" : descriptor.kind !== "copyOwnedDreamsignOnGain" && descriptor.kind !== "typeRemapOnGain" && descriptor.kind !== "deckSubtypeOnGain") throw new RangeError("Invalid journeyOnGain descriptor.");
+  if (descriptor.kind === "addNightmaresOnGain" ? !index(descriptor.count) || descriptor.count < 1 : descriptor.kind === "afterBattleDreamsignChoice" ? !index(descriptor.offerCount) || descriptor.offerCount < 1 : descriptor.kind === "randomTransfigurationOnGain" ? !index(descriptor.numerator) || !index(descriptor.denominator) || descriptor.denominator < 1 || descriptor.numerator > descriptor.denominator : descriptor.kind === "purgeStarterOnGain" ? !index(descriptor.maxCount) || descriptor.maxCount < 1 : descriptor.kind === "perfectStarterOnGain" ? descriptor.transfiguration !== "Perfected" : descriptor.kind !== "chooseOpeningHandEventOnGain" && descriptor.kind !== "copyOwnedDreamsignOnGain" && descriptor.kind !== "typeRemapOnGain" && descriptor.kind !== "deckSubtypeOnGain") throw new RangeError("Invalid journeyOnGain descriptor.");
   const effect = Object.freeze({ ...descriptor });
   return { dreamsignId, journeyOnGain: effect, afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, seq, random }) {
     if (effect.kind !== "afterBattleDreamsignChoice" || eventType !== "END_BATTLE" || siteId === null || before.screen.type !== "site" || before.screen.siteId !== siteId || findSite(before, siteId)?.type !== "Battle") return null;
@@ -129,38 +142,13 @@ export function validJourneyDreamsignScreen(screen: unknown, journey: JourneySta
   if (choice.kind === "subtype") return validJourneySubtypeScreen(screen, journey, registry);
   if (choice.kind === "typeRemap") return validTypeRemapScreen(screen, journey, registry);
   if (choice.kind === "afterBattle") return validAfterBattleChoice(choice, journey, registry) && (choice.sources as AfterBattleJourneyChoice["sources"])[choice.index as number].kind === "dreamsign";
-  if (choice.kind !== "copy" || journey.dreamsigns.length < 2 || !Array.isArray(choice.sources) || choice.sources.length === 0 || !index(choice.index) || choice.index >= choice.sources.length || !index(choice.permissionSeq) || !Array.isArray(choice.heldIds) || choice.heldIds.length !== journey.dreamsigns.length || choice.heldIds.some((id, i) => id !== journey.dreamsigns[i].id) || !record(choice.continuation)) return false;
-  const seen = new Set<number>();
-  let previousSlot = -1;
-  for (const [n, source] of choice.sources.entries()) {
-    if (!record(source) || !index(source.heldIndex) || source.heldIndex >= journey.dreamsigns.length || source.heldIndex <= previousSlot || seen.has(source.heldIndex)) return false;
-    seen.add(source.heldIndex); previousSlot = source.heldIndex; const id = dreamsignIdFromUnknown(source.dreamsignId);
-    if (id === null || registry.lookup(id)?.journeyOnGain?.kind !== "copyOwnedDreamsignOnGain" || (n >= choice.index && journey.dreamsigns[source.heldIndex]?.id !== id)) return false;
-  }
-  const continuation = choice.continuation;
-  if (continuation.type === "journeyDreamsign") {
-    if (!record(continuation.choice) || continuation.choice.kind !== "afterBattle" || !validAfterBattleChoice(continuation.choice, journey, registry)) return false;
-    const current = (continuation.choice as unknown as AfterBattleJourneyChoice).sources[(continuation.choice as unknown as AfterBattleJourneyChoice).index];
-    if (current.kind !== "dreamsign") return false;
-  } else if (continuation.type === "journeyPurge") {
-    if (!validJourneyPurgeScreen(continuation, journey, registry)) return false;
-  } else if (continuation.type === "journeyDuplication") {
-    if (!validJourneyDuplicationScreen(continuation, journey, registry)) return false;
-  } else if (continuation.type === "journeyTransfiguration") {
-    if (!validJourneyTransfigurationScreen(continuation, journey, registry)) return false;
-  } else if (continuation.type === "site" ? siteIdFromUnknown(continuation.siteId) === null : !["journeyStart", "atlas", "dreamscape", "journeyComplete", "journeyFailed", "journeyPurge", "journeyTransfiguration"].includes(String(continuation.type))) return false;
-  if (continuation.type === "site" && (findSite(journey, siteIdFromUnknown(continuation.siteId)!) === undefined || journey.currentDreamscape === null || !journey.atlas.nodes[journey.currentDreamscape]?.sites.some((site) => site.id === continuation.siteId))) return false;
-  return choice.suspendedBattle === null || record(choice.suspendedBattle) && battleId(choice.suspendedBattle.battleId) !== null && (choice.suspendedBattle.mode === "journey" || choice.suspendedBattle.mode === "tutorial");
+  return validJourneyAcquisitionScreen(screen, journey, registry);
 }
 
 export function validDreamsignBattleBinding(journey: JourneyState, battle: BattleFoldState | null): boolean {
   if (journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "subtype") return validJourneySubtypeBattleBinding(journey, battle);
   if (journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "typeRemap") return validTypeRemapBattleBinding(journey, battle);
-  if (journey.screen.type !== "journeyDreamsign" || journey.screen.choice.kind !== "copy") return battle === null;
-  const choice = journey.screen.choice, binding = choice.suspendedBattle;
-  if (binding === null) return battle === null;
-  if (battle === null || battle.init.battleId !== binding.battleId || battle.mode.kind !== binding.mode) return false;
-  return binding.mode !== "journey" || choice.continuation.type === "site" && choice.continuation.siteId === battle.init.siteId && journey.currentDreamscape === battle.init.nodeId && journey.completionLevel === battle.init.completionLevelAtStart;
+  return validJourneyAcquisitionBattleBinding(journey, battle);
 }
 
 export function validDreamsignCopyIntent(journey: JourneyState, payload: Record<string, unknown>, battle: BattleFoldState | null, registry: JourneyModifierRegistry): boolean {
@@ -175,8 +163,7 @@ export function resolveDreamsignCopy(journey: JourneyState, payload: Record<stri
   if (!validDreamsignCopyIntent(journey, payload, battle, registry) || journey.screen.type !== "journeyDreamsign" || journey.screen.choice.kind !== "copy") return null;
   const choice = journey.screen.choice, source = choice.sources[choice.index], target = journey.dreamsigns[payload.targetHeldIndex as number];
   const dreamsigns = journey.dreamsigns.map((sign, i) => i === source.heldIndex ? { ...target } : sign);
-  const screen: Screen = choice.index + 1 === choice.sources.length ? choice.continuation : { type: "journeyDreamsign", choice: { ...choice, index: choice.index + 1, heldIds: dreamsigns.map((sign) => sign.id) } };
-  return { ...journey, dreamsigns, screen };
+  return advanceJourneyAcquisition({ ...journey, dreamsigns }, choice, id => registry.lookup(id));
 }
 
 export function resolveAfterBattleDreamsign(journey: JourneyState, payload: Record<string, unknown>, registry: JourneyModifierRegistry): JourneyState | null {
