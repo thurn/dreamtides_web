@@ -102,6 +102,9 @@ export interface TriggerUses {
  * are read from as the event fires.
  */
 export interface ArmedTriggers {
+  readonly abandonedNamed?: import("../state/types").AbandonedNamedBinding;
+  /** Live queued readers confirmed within this departure's work step, never persisted indices. */
+  readonly namedReaders?: import("../state/types").AbandonedNamedBinding[];
   readonly abilities: ReadonlyMap<OncePerTurnKey, ArmedAbility>;
   readonly floating: readonly FloatingEffect[];
   readonly origin: AbilityOrigin | null;

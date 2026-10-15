@@ -1,0 +1,433 @@
+{
+  "bead": "hv-umm2.616",
+  "base": "eb953de2df5a379785b6fdbf1bb86db2066dee1d",
+  "publicAPI": "triggerAbandonedNamed(materialized | dawn | dissolved)",
+  "timing": {
+    "claimCall": "2026-10-15T02:48:23.609162+00:00",
+    "claimAck": "2026-10-15T02:48:23.732192+00:00",
+    "preGitCutoff": "2026-10-15T03:53:16.680128+00:00",
+    "actualGitEnd": "UNKNOWN before Git; external final-commit-receipt.json supplies endpoint and tail",
+    "inclusiveThroughCutoffS": 3893.070966,
+    "scope": "Includes setup, source-first research, parent coordination/debt-review wait, implementation, all failed attempts/CFs/checks, cleanup and evidence. No clock reset."
+  },
+  "authority": {
+    "grant": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/finite-admission/exact-write-grant.txt",
+      "sha256": "2b40eebbf9ff8dbfcf7147b4ab65e159ab2f26ceeb4a37ed4924f2e1573af685"
+    },
+    "nativeAck": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/finite-admission/exact-write-native-ack.json",
+      "sha256": "2e684b415dce8df0571e2e4c72bf451ac4bc4b59f265b43562d88e70da6fe360"
+    },
+    "amendment": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/parent-finite-scope-amendment.md",
+      "sha256": "6ecc22d75c4a86506383a2b1be62a1c3b77b21e1a3a23a4b4b0cfdd33b7f610f"
+    }
+  },
+  "source": {
+    "finalManifest": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/final-source-manifest.json",
+      "sha256": "d4cee332ee23e979b25011d472d31843731c374c7d2d1c5321d68b11965c4f74"
+    },
+    "historicalSourceFirst": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/source-first-manifest.json",
+      "sha256": "21f0d7945a983b8d7837febe79b37da661572f0a21ac0afc0d2de5e69c677b29"
+    },
+    "oldMatcherFunctionsPreserved": 10,
+    "readOnlyDependenciesPreserved": 34,
+    "classification": "15 admitted src paths including one new contract, additive rules and RD. No production UUID authoring, UI/config/entrypoint/generator edits. Core cold review belongs to parent, using a fresh read-only Codex subagent fork:none."
+  },
+  "testDelta": {
+    "physicalPlainContractModules": 1,
+    "netLines": 363,
+    "configuredEntrypoints": 0,
+    "jsdomFiles": 0,
+    "finalOwnCases": 56
+  },
+  "checks": [
+    {
+      "label": "cf1-live-rescan",
+      "exit": 1,
+      "seconds": 9.874299499962945,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/cf1-live-rescan.receipt.json",
+        "sha256": "a9570370c53bafb673d14874b6830fd28459f265a2bcc792e80db3598588ac2b"
+      },
+      "stdoutSHA256": "aa044dd5fcc49d00d724c414e9715c9d1fb1e42c1aa0d4d661fd89b3da39a179"
+    },
+    {
+      "label": "cf2-named-selection",
+      "exit": 1,
+      "seconds": 8.855792042042594,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/cf2-named-selection.receipt.json",
+        "sha256": "66ba56f62f8bd71ed8102ae542b78d1f216f92b7f2adc3a93255e5dc05fea231"
+      },
+      "stdoutSHA256": "6d623812c5b83fca9be1fc651ae39354f47ffb5ce9423c5001e4bb77348ee3d2"
+    },
+    {
+      "label": "cf3-unconfirmed-dissolved",
+      "exit": 1,
+      "seconds": 9.004890124953818,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/cf3-unconfirmed-dissolved.receipt.json",
+        "sha256": "b6aba2f704d0fe1845630eef65c3ab8f28f50ad7384e0b397c633f97f887d2df"
+      },
+      "stdoutSHA256": "b038856905381fa0dbfddec8fafa1b6ee4db8767ba4b58ca466cab3d362609c2"
+    },
+    {
+      "label": "cf4-source-linked-bindings",
+      "exit": 1,
+      "seconds": 7.8409731250139885,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/cf4-source-linked-bindings.receipt.json",
+        "sha256": "3954b9e195bdfd43ef6ec2f5b4089a91c8853ba08a414cf1965c3cabd228b087"
+      },
+      "stdoutSHA256": "edb831440276f63b6b10dca60538f8a9ec5277c7bc009d48f3befd71ab694c1e"
+    },
+    {
+      "label": "cf5-once-receipt",
+      "exit": 1,
+      "seconds": 8.102432999992743,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/cf5-once-receipt.receipt.json",
+        "sha256": "9d026331b61f7b22a878aff44354c8c5d6d1c33ab9993edfadbe968078e72dc9"
+      },
+      "stdoutSHA256": "2ff6263660150a672c81f3b85501f0f4fedc58d2b62e5ba4335bc30c5be837b0"
+    },
+    {
+      "label": "consumer-entities-before",
+      "exit": 0,
+      "seconds": 2.7900566660100594,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/consumer-entities-before.receipt.json",
+        "sha256": "f750ab5a34949628f96fff38d8f435cb7aaa4b67dd6b11376ff479e17d2f5271"
+      },
+      "stdoutSHA256": "ef689638e9c4e6b286a282cbba8d1a1002ae6bc619521ff62293e9a91019d525"
+    },
+    {
+      "label": "focus-complete",
+      "exit": 1,
+      "seconds": 6.962228125019465,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/focus-complete.receipt.json",
+        "sha256": "f9e7b37039d36e3729d7cee37da95e78b9e6e2bf9d3d9a5c1aef9ababc574942"
+      },
+      "stdoutSHA256": "ed7edc058c7efaf3267e57970bca69a73cf1ecb1968feb1d669a1bc56ad344c7"
+    },
+    {
+      "label": "focus-expanded",
+      "exit": 1,
+      "seconds": 6.9260667089838535,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/focus-expanded.receipt.json",
+        "sha256": "ecca3635645d101f79abeb5007f9f0059f1d8dd733c7815efdec7bee7c1aaee9"
+      },
+      "stdoutSHA256": "83ce3f608f6f3172da1e14382c35fcdf1835d2460b23d3a5b0301509ad749c10"
+    },
+    {
+      "label": "focus-initial",
+      "exit": 1,
+      "seconds": 9.353076458966825,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/focus-initial.receipt.json",
+        "sha256": "bda58d6a0cbd2c3886da15f4495debff7720f2c3842e23efcc4f9b5493994074"
+      },
+      "stdoutSHA256": "2a084f9af349629728ea41f9eba0dde2c2dfbdea8e5b4155fb9a5202bed8a3c4"
+    },
+    {
+      "label": "focus-privacy-complete",
+      "exit": 0,
+      "seconds": 10.995308291981928,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/focus-privacy-complete.receipt.json",
+        "sha256": "9005426c27d3d619c734e967597539a65e832b273e88cac62edf5b037e3751fe"
+      },
+      "stdoutSHA256": "b0204a560928feee51d04fd819d7749efae14abe9c1e6a5e4213cdd1a2b71529"
+    },
+    {
+      "label": "focus-reader-correction",
+      "exit": 1,
+      "seconds": 7.1032650410197675,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/focus-reader-correction.receipt.json",
+        "sha256": "59ab936aeae7c2985f52de6ce37bb1e62db96e4cff5129c61220ca050fb0129e"
+      },
+      "stdoutSHA256": "91316f2cda9e855bcdde4115e6f23b682e889ebe661b3e42ed9a5e52734b2cdd"
+    },
+    {
+      "label": "integration",
+      "exit": 1,
+      "seconds": 21.322082500031684,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/integration.receipt.json",
+        "sha256": "138599801ace329659826696366eb5ad1f825c2f49a921d18e21471dfd41a6f2"
+      },
+      "stdoutSHA256": "bb513f78799c8a4a2d50686db0ca5c005132949111bef150cd6fd967e913dec0"
+    },
+    {
+      "label": "knip-final",
+      "exit": 0,
+      "seconds": 6.732923583011143,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/knip-final.receipt.json",
+        "sha256": "ef53120d9b25102aa74ad374b4e8b30486d37f9ae4fb011cbc124c15dc2dd6cb"
+      },
+      "stdoutSHA256": "48eebf015d2a20cc3e6b572c9257a0b2b4bd68095034f5039611397600494d6c"
+    },
+    {
+      "label": "knip",
+      "exit": 0,
+      "seconds": 8.382367375015747,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/knip.receipt.json",
+        "sha256": "6698697d251929a665bd48c4755026166bd450107c0adabed8d2cbe77331af1f"
+      },
+      "stdoutSHA256": "a69666ecc8c67e8d87c46a236bc5472c230f9fe26e29849b003d976196943207"
+    },
+    {
+      "label": "nested-log-repaired",
+      "exit": 0,
+      "seconds": 7.0203307080082595,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/nested-log-repaired.receipt.json",
+        "sha256": "60873247cb25910fd6825773f5d0a359c5d443863b5e335b4fc28ce90f75424e"
+      },
+      "stdoutSHA256": "c53a8dc4d1df631d796816f27bef05f6f87b28e6774464cab9f92a85b6aef1bb"
+    },
+    {
+      "label": "nested-log-witness",
+      "exit": 1,
+      "seconds": 8.69964083301602,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/nested-log-witness.receipt.json",
+        "sha256": "6e15a8316845421700f4d1eb12abd9e742e338788f95b8a34860bcc05adb70ab"
+      },
+      "stdoutSHA256": "461661ebf46b9489650529b2bc891c11e0c255107ea9bf9ce601c2d0d724eb23"
+    },
+    {
+      "label": "npm-install",
+      "exit": 0,
+      "seconds": 2.624508249980863,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/npm-install.receipt.json",
+        "sha256": "a8b57e58e619465dd0ada519fa343648d5afde1f2d73e10d891401209943625e"
+      },
+      "stdoutSHA256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c"
+    },
+    {
+      "label": "restoration-integration",
+      "exit": 0,
+      "seconds": 30.14240604202496,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/restoration-integration.receipt.json",
+        "sha256": "bf1493f534c3b89388fcd291717b2abd30b44bada7453e4a06199b17d89f720f"
+      },
+      "stdoutSHA256": "fec470d354fb5717f9ab9ff66030cf7d00d7cefe55098cc8f124dac3f6eaf6f7"
+    },
+    {
+      "label": "review-corrected",
+      "exit": 0,
+      "seconds": 74.20917687495239,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/review-corrected.receipt.json",
+        "sha256": "f6bd7256e09f53f4fe59ef0e0d2facb274dc3ea85029aa90adeef3e5198415cd"
+      },
+      "stdoutSHA256": "687334544d7284a99367b117747fa09d2dc3ee46eed219f49c089576bf2dce63"
+    },
+    {
+      "label": "review-final",
+      "exit": 0,
+      "seconds": 78.02948441699846,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/review-final.receipt.json",
+        "sha256": "6bf2cb2716c14f621c97dec22933bbf1847e05eac719b3fc5c0b08c5ff63d258"
+      },
+      "stdoutSHA256": "7f251e6f595dd6a170128802c0999194dabbf7feee835b158a6e10e2916a5024"
+    },
+    {
+      "label": "review-full",
+      "exit": 0,
+      "seconds": 121.96078279102221,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/review-full.receipt.json",
+        "sha256": "8aab4df6c172a36afaf149fefc3ed4644b42b0e2df7b55ede57a51464cfb39f6"
+      },
+      "stdoutSHA256": "677fb3be9b489221fdf4bf5801f089c248e514b4ae63fc5c42e8b984af24b066"
+    },
+    {
+      "label": "review",
+      "exit": 2,
+      "seconds": 68.75860025000293,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/review.receipt.json",
+        "sha256": "e39211612d2c6e783e214d6dc835f2e132ce5f512d0bf385976a660d66b2d65c"
+      },
+      "stdoutSHA256": "7f561ac8804a78da560eaaa819a71cc8f91b3d35b3846cfaa73cc2808a66b562"
+    },
+    {
+      "label": "schema-corrected",
+      "exit": 2,
+      "seconds": 0.061134207993745804,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/schema-corrected.receipt.json",
+        "sha256": "c911a4e8cb9a639f189c5f3aa0176d91db5cd655cad0f138ee686672c1239ab4"
+      },
+      "stdoutSHA256": "1af8658a8ed05f21c87407454d527d64981d1a6edb966defef6f2c6da85ae414"
+    },
+    {
+      "label": "schema-final",
+      "exit": 2,
+      "seconds": 0.049470749974716455,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/schema-final.receipt.json",
+        "sha256": "944705d02e38d322a9187ca2faab4be3e2aa3b9640a8c3390de5afdff03b796d"
+      },
+      "stdoutSHA256": "e0cff5c6b647ecff7d92fd691f24ef3bbb0ae872c3fad4c9f6b328411f169f85"
+    },
+    {
+      "label": "typecheck-initial",
+      "exit": 1,
+      "seconds": 15.919454500020947,
+      "receipt": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/typecheck-initial.receipt.json",
+        "sha256": "96e7ca817cd5a395df923ec7df602863568c1432d1be70ead9f97f100fc9371d"
+      },
+      "stdoutSHA256": "511fd5812f4375019027d527c146eef86d51098b0a86ec698f01de5b6917606f"
+    }
+  ],
+  "counterfactuals": [
+    {
+      "label": "cf1-live-rescan",
+      "mutation": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/cf1-live-rescan.mutation.json",
+        "sha256": "d494755d06ddd5229cdd75924d0b950855d3900c54f2321581988a9293389e2e"
+      },
+      "qualification": "Live rescan substitution: 30 failures distinguish departure origin/ceased/gained/controller/batch behavior; source restored."
+    },
+    {
+      "label": "cf2-named-selection",
+      "mutation": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/cf2-named-selection.mutation.json",
+        "sha256": "eec9eaa4b857f35eb5815296f618170ace9d7e24c177c7cbc154b9c1aab59e9c"
+      },
+      "qualification": "Wrong-name selection: 4 valid positive executions fail at the existing own Invalid retained abandoned named definition guard after the selection bypass. Runtime guard/execution sensitivity, not numeric wrong-output or observer-batching assertions."
+    },
+    {
+      "label": "cf3-unconfirmed-dissolved",
+      "mutation": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/cf3-unconfirmed-dissolved.mutation.json",
+        "sha256": "1f231755f0841c9207bcbe5f68ea58a3e0306eb2dd56668665cdb65b8a43d637"
+      },
+      "qualification": "Removed confirmation gate: 2 reclaimed-case failures detect phantom extra admissions. Exact ordinary1+extra-per-reader count is a positive contract, not this fault alone."
+    },
+    {
+      "label": "cf4-source-linked-bindings",
+      "mutation": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/cf4-source-linked-bindings.mutation.json",
+        "sha256": "94c033781f0753b2a231811f6a1502bc954885dc14e5c1a9e505c1fe9ffd26da"
+      },
+      "qualification": "Removed sourceSpark and linkedSource transport: 6 failures, scalar and ceased paired-return witnesses. SubjectCost is preserved by a separate positive child-vs-reader contract, not mutated here."
+    },
+    {
+      "label": "cf5-once-receipt",
+      "mutation": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/cf5-once-receipt.mutation.json",
+        "sha256": "85a93607dccd054f080100d222b869d9d409f488140c3acbab042e061d22e75d"
+      },
+      "qualification": "Removed once receipt check: 10 failures. Does not mutate disabling/privacy; positive contracts separately cover them."
+    }
+  ],
+  "failures": [
+    {
+      "stage": "evidence packaging",
+      "cause": "Own generator incorrectly treated parent worktree-create receipt as a command stdout receipt; filter command receipts. First schema-final invocation used invalid --validate flag, usage exit2; corrected to --validate-records, then the first corrected invocation pointed at friction/ rather than the evidence root and could not find friction-tags.json (exit2). Final invocation uses docs/plan/evidence. No source or test repair."
+    },
+    {
+      "stage": "typecheck-initial",
+      "cause": "Own restoration spread retained a source-less linked context; destructure then rebuild with actual source."
+    },
+    {
+      "stage": "focus-initial",
+      "actual": "12 pass /18 fail",
+      "cause": "Own fixture called whenAbandon with filter in the player slot; corrected public signature. Figment-copy fixture also supplied explicit nullable spark."
+    },
+    {
+      "stage": "focus-reader-correction",
+      "actual": "26 pass /4 fail",
+      "cause": "New reconstructed binding restored referent but not queued subject; fixed subject association for saved validation."
+    },
+    {
+      "stage": "focus-expanded",
+      "actual": "42 pass /2 fail",
+      "cause": "Own privacy control incorrectly expected binding on the control body with no reader; condition assertion on actual reader."
+    },
+    {
+      "stage": "focus-complete",
+      "actual": "44 pass /2 fail",
+      "cause": "Historical reader visibility needed separate captured audience rather than current source visibility. Added own readerObservedBy transport and sampled-body positive controls."
+    },
+    {
+      "stage": "integration",
+      "actual": "5995 pass /1 fail",
+      "cause": "Own restoreAbandoned called triggerBody for an unrelated Dreamwell event bonus. Exclude non-trigger queue kinds in the own helper."
+    },
+    {
+      "stage": "review",
+      "actual": "9129 related tests pass; test typecheck failed",
+      "cause": "Own reader factory parameter inferred SequenceNode; annotate Effect. Replace readonly variant fixture immutably."
+    },
+    {
+      "stage": "nested-log-witness",
+      "actual": "2 fail",
+      "cause": "Same-step once confirmation mutated a previously emitted nested raw cause. Own binding registration now covers derived same-departure readers; raw causes containing the new field detach. Final 56 cases pass."
+    }
+  ],
+  "failureFamilies": {
+    "originAndEligibility": "Both controllers; exact actual variant/gained/lost and predeparture functional set; void-only exclusion; ordinary Dissolved replacement/condition/disabled/once; held readers and independent reacquisition.",
+    "orderingAndValues": "Actual index FIFO before observer reactions; ordinary1+one extra per held reader; child source spark and subject cost differ from observer; exact paired banishment visits including ceased source.",
+    "reloadReplayRefusal": "Saved queue/hash/clone; committed+pending state reconstruction and same intent fold/published-event equivalence; declined optional child; stale/no-pending, concurrent and foreign answer bounce; automatic child cancellation refused.",
+    "atomicity": "Real runStep resolution admits a child and changes energy before a missing synthetic figment error; work rolls back while prior committed abandonment remains. Planning cancellation has no admitted trigger. No fabricated production exception.",
+    "privacy": "Blind reader indistinguishable control; historical reader/current hidden definition separated; privately sampled actual reader; known reader/unidentified current referent and ceased linked referent execute from both views; malformed bounded saved receipts reject; raw same-step data detached."
+  },
+  "qa": {
+    "disposition": "Source-only engine capability; no new player workflow/visual form. Public synthetic runtime contracts and one locked full architecture check are proportionate. No browser/provider/Cumulus/LAB, production300, captures or native exports.",
+    "productionUUIDsTransferred": [],
+    "originalAcceptanceOwners": [
+      "hv-umm2.257",
+      "hv-umm2.258"
+    ],
+    "originalConsumerUUIDs": [
+      "bb8bb233-7cb1-43b3-af30-e71ab9e832c5",
+      "3380c657-79ca-400b-abb7-4b56fbb92af4"
+    ],
+    "originalRecipe": "Both originals retain entity authoring, full weighted300/preflight/sweep/D21/final acceptance. Source consumer inventory new[] is coarse, not capability proof."
+  },
+  "resources": {
+    "settlement": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/resource-settlement.json",
+      "sha256": "c78df07c3e17b25dc954ef7b1dffc37e91f7b7780de28ec74949bda23ddbf8d2"
+    },
+    "live": [],
+    "qualification": "Full-check temporary fake-server/provider fixtures belong to check infrastructure, not feature browser QA or shared8931 sessions. Exact own reported fixture groups were checked absent; no foreign groups signalled."
+  },
+  "provenance": {
+    "setupInstall": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/npm-install.receipt.json",
+      "sha256": "a8b57e58e619465dd0ada519fa343648d5afde1f2d73e10d891401209943625e"
+    },
+    "consumerEntities": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/consumer-entities-before.receipt.json",
+      "sha256": "f750ab5a34949628f96fff38d8f435cb7aaa4b67dd6b11376ff479e17d2f5271"
+    },
+    "consumerStdout": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/consumer-entities-before.stdout",
+      "sha256": "ef689638e9c4e6b286a282cbba8d1a1002ae6bc619521ff62293e9a91019d525"
+    },
+    "sourceFirstProposal": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named616/source-first-proposal.md",
+      "sha256": "bf6e8cebcf2032c6c9b379cc6dbd8d8f83e43a82db950866158e8a023f49d5c6"
+    }
+  },
+  "epochQualification": "Five CFs bind their recorded pre-final-log-repair epochs and exact restores. Later same-departure nested logging/registration change has its own failed and passing witness plus final review/full checks; no claim of additional unrun mutants."
+}

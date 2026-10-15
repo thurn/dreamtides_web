@@ -51,7 +51,7 @@ import { effectiveSpark } from "../rules/spark";
 import { charactersInPlay, isFigment } from "../rules/zones";
 import type { AbilitySource, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { opponent, SIDES, sourceInstance, sourceKey } from "../state/ids";
-import type { BattleState, FloatingEffect, GainedAbilities, HandCopyContext, MaterializedCard, Printing, QueuedTrigger, SparkGain } from "../state/types";
+import type { AbandonedNamedBinding, AbandonedNamedEntry, BattleState, FloatingEffect, GainedAbilities, HandCopyContext, MaterializedCard, Printing, QueuedTrigger, SparkGain } from "../state/types";
 import type { ArmedAbility, ArmedTriggers, LookbackEventKind, StepContext, TriggerBlocks, TriggerListener } from "../steps/types";
 import { sidesBlindTo } from "../view/knowledge";
 import { hasImmutableRepeatAllowance, hasNamedTrigger, readsImmediateRepeat, ruleReactionBody, triggerBody } from "./body";
@@ -212,6 +212,7 @@ function subjectMatches(
 
 /** A match, the card its event concerns, and the gain a "when … gains ✦" trigger matched. */
 interface Match {
+  readonly abandonedNamed?: AbandonedNamedBinding;
   readonly triggeringAbility?: QueuedTrigger["triggeringAbility"];
   readonly handCopy?: HandCopyContext;
   readonly subject: InstanceId | null;
@@ -603,12 +604,17 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
   const effect = triggerBody(ctx.catalog, matched.origin, matched.ability, matched.node).effect;
   const linkedSource = matched.linkedSource ?? (everyNode(effect).some((node) => node.op === "linkedBanish")
     ? linkedSourceContext(ctx, matched.source, matched.origin, matched.ability) : null);
-  const { lastKnownSubjectCost: armedCost, lastKnownSubjectSpark: armedSpark, handCopy, triggeringAbility, ...record } = matched;
+  const { lastKnownSubjectCost: armedCost, lastKnownSubjectSpark: armedSpark, handCopy, triggeringAbility, abandonedNamed, ...record } = matched;
+  const requested = requestedAbandonedNames(effect);
+  const retainedAbandoned = abandonedNamed === undefined || requested.length === 0 ? undefined
+    : { ...structuredClone(abandonedNamed), readerObservedBy: SIDES.filter(viewer => sourceObserved(ctx, matched.source, viewer)),
+      entries: structuredClone(abandonedNamed.entries.filter(entry => requested.includes(entry.named))) };
   const readsCopy = readsSubjectCopy(effect);
   const subjectCost = readsSubjectValue(effect, "subjectCost") ? armedCost ?? (matched.subject !== null && ctx.state.instances[matched.subject] !== undefined
     ? copiableCostOf(ctx.state, ctx.catalog, matched.subject) : undefined) : undefined;
   const subjectSpark = readsSubjectValue(effect, "subjectSpark") ? armedSpark : undefined;
   const retained = { ...record,
+    ...(retainedAbandoned === undefined ? {} : { abandonedNamed: retainedAbandoned }),
     ...(triggeringAbility === undefined || !readsImmediateRepeat(effect) ? {} : { triggeringAbility: JSON.parse(JSON.stringify({ ...triggeringAbility,
       readerObservedBy: triggeringAbility.readerObservedBy ?? matched.repeated?.observedBy ?? SIDES.filter(viewer => sourceObserved(ctx, matched.source, viewer)),
     })) as NonNullable<QueuedTrigger["triggeringAbility"]> }),
@@ -621,10 +627,18 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
   const hidden = matched.subjectHiddenFrom ?? (matched.subject === null ? [] : sidesBlindTo(ctx.state, matched.subject));
   const trigger: QueuedTrigger = hidden.length === 0 ? retained : { ...retained, subjectHiddenFrom: hidden };
   ctx.state.triggerQueue.push(trigger);
+  for (const binding of abandonedBindings(trigger)) {
+    const armed = ctx.armedTriggers.dissolved.get(binding.source);
+    if (armed?.abandonedNamed !== undefined && binding.entries.some(entry => armed.abandonedNamed!.entries.some(original => sameAbandonedOccurrence(original, entry)))) {
+      armed.namedReaders?.push(binding);
+    }
+  }
   const firstNamedThisTurn = recordFirstNamedAdmission(ctx, trigger, descriptor);
   ctx.emit({
     kind: "triggerQueued",
-    ...(trigger.triggeringAbility === undefined ? {} : { triggeringAbility: trigger.triggeringAbility }),
+    ...(trigger.abandonedNamed === undefined ? {} : { abandonedNamed: structuredClone(trigger.abandonedNamed) }),
+    ...(trigger.triggeringAbility === undefined ? {} : { triggeringAbility: abandonedBindings(trigger.triggeringAbility.occurrence).length === 0
+      ? trigger.triggeringAbility : structuredClone(trigger.triggeringAbility) }),
     source: trigger.source,
     controller: trigger.controller,
     ability: trigger.ability,
@@ -670,6 +684,7 @@ function matchListener(ctx: StepContext, side: Side, listener: Listener, event: 
     const inZone = matching.emblem || worksInZone(ability.zone, matching.zone);
     const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedAbility !== undefined, admission, firstHandEmpty);
     const queued = match === null ? null : enqueueAbility(ctx, matching, ability, index, { ...match,
+      ...(event.kind !== "abandoned" || match.subject !== event.instance || armed.abandonedNamed === undefined ? {} : { abandonedNamed: armed.abandonedNamed }),
       ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
       ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),
     }, armedAbility ?? null);
@@ -721,6 +736,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
       ability: ref.ability,
       node: ref.node,
       ...match,
+      ...(event.kind !== "abandoned" || match.subject !== event.instance || armed.abandonedNamed === undefined ? {} : { abandonedNamed: armed.abandonedNamed }),
       ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
       ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),
       ...(captured === undefined ? {} : { captured: [...captured] }),
@@ -809,7 +825,10 @@ function armLookbacks(ctx: StepContext, event: LeftPlayEvent, departing: Departu
       if (armsFor(state, catalog, entry.kind, floating.trigger, event.instance, floating.listener)) entry.floating.push(effect);
     }
   }
+  const abandonedNamed = captureAbandonedNamed(ctx, event, origin, armed);
+  const namedReaders: AbandonedNamedBinding[] = [];
   for (const { kind, abilities, floating } of armed) ctx.armedTriggers[kind].set(event.instance, { abilities, floating, origin,
+    ...(abandonedNamed === undefined ? {} : { abandonedNamed, namedReaders }),
     ...(leaving === undefined ? {} : {
       subjectCost: copiableCostOf(state, catalog, event.instance),
       subjectSpark: event.spark ?? effectiveSpark(state, catalog, event.instance),
@@ -869,6 +888,7 @@ export function matchEvent(ctx: StepContext, event: EngineEvent): void {
     admitted.push(...matchFloating(ctx, side, event, armed, undefined, firstHandEmpty));
   }
   if (event.kind === "leftPlay") armLookbacks(ctx, event, departing);
+  if (event.kind === "dissolved" && armed.abandonedNamed !== undefined) confirmAbandonedNamed(ctx, armed, admitted);
   queueDawnReactions(ctx, beforeDawn);
   observeNamedAdmissions(ctx, admitted, (entry) => matchNamedAdmission(ctx, entry), () => hasNamedAdmissionObserver(ctx));
 }
@@ -906,6 +926,120 @@ function matchNamedAdmission(ctx: StepContext, admission: NamedAdmission): Named
   }
   queueDawnReactions(ctx, beforeDawn);
   return admitted;
+}
+
+/** Immediate readers only: a floating body's referent belongs to its future occasion. */
+export function requestedAbandonedNames(effect: EffectNode, seen = new Set<EffectNode>()): AbandonedNamedEntry["named"][] {
+  if (seen.has(effect) || effect.op === "floatingTrigger") return [];
+  seen.add(effect);
+  if (effect.op === "triggerAbandonedNamed") return [(effect as import("../effects/primitives/trigger-abandoned-named").TriggerAbandonedNamedNode).named];
+  const definition = primitiveDefinition(effect.op);
+  return [...new Set([...definition.children?.(effect) ?? [], ...definition.deferred?.(effect) ?? []]
+    .flatMap(child => requestedAbandonedNames(child, seen)))];
+}
+
+function captureAbandonedNamed(ctx: StepContext, event: LeftPlayEvent, origin: import("../state/types").AbilityOrigin | null,
+  armed: readonly { readonly kind: LookbackEventKind; readonly abilities: ReadonlyMap<OncePerTurnKey, ArmedAbility>; readonly floating: readonly FloatingEffect[] }[]): AbandonedNamedBinding | undefined {
+  if (origin === null || origin.kind !== "card" && origin.kind !== "figment") return undefined;
+  const requests = armed.filter(entry => entry.kind === "abandoned").flatMap(entry => [
+    ...[...entry.abilities].flatMap(([key, value]) => {
+      const index = Number(key.slice(key.lastIndexOf("#") + 1));
+      return requestedAbandonedNames(triggerBody(ctx.catalog, value.listener.origin, index, null).effect);
+    }),
+    ...entry.floating.flatMap(effect => effect.change.kind === "trigger"
+      ? requestedAbandonedNames(triggerBody(ctx.catalog, effect.change.ref.origin, effect.change.ref.ability, effect.change.ref.node).effect) : []),
+  ]);
+  if (requests.length === 0) return undefined;
+  const entries = originAbilities(ctx.catalog, origin).flatMap((ability, index): AbandonedNamedEntry[] => {
+    if (ability.kind !== "triggered") return [];
+    const occurrence = linkedSourceContext(ctx, event.instance, origin, index) ?? {
+      source: event.instance, enteredPlayAt: ctx.state.instances[event.instance].enteredZoneAt, ability: index,
+    };
+    const blocks = triggerBlocks(ctx.state, ctx.catalog, event.instance, index);
+    const effect = ability.effect;
+    return [...new Set(requests)].flatMap(named => !hasNamedTrigger(ability.trigger, named) || named !== "dissolved" && !worksInZone(ability.zone, "play") ? [] : [{
+      named, ability: index, ...blocks, occurrence,
+      ...(everyNode(effect).some(node => node.op === "linkedBanish") ? { linkedSource: occurrence } : {}),
+      ...(event.spark === undefined ? {} : { lastKnownSourceSpark: event.spark }),
+      ...(readsSubjectValue(effect, "subjectCost") ? { lastKnownSubjectCost: copiableCostOf(ctx.state, ctx.catalog, event.instance) } : {}),
+      ...(readsSubjectValue(effect, "subjectSpark") ? { lastKnownSubjectSpark: event.spark ?? effectiveSpark(ctx.state, ctx.catalog, event.instance) } : {}),
+    }]);
+  });
+  return { source: event.instance, origin: structuredClone(origin), controller: event.side,
+    observedBy: SIDES.filter(viewer => sourceObserved(ctx, event.instance, viewer)), entries };
+}
+
+function sameAbandonedOccurrence(a: AbandonedNamedEntry, b: AbandonedNamedEntry): boolean {
+  return a.ability === b.ability && a.occurrence.source === b.occurrence.source && a.occurrence.enteredPlayAt === b.occurrence.enteredPlayAt &&
+    a.occurrence.gainedFrom === b.occurrence.gainedFrom && a.occurrence.ability === b.occurrence.ability;
+}
+
+function abandonedBindings(queued: QueuedTrigger): AbandonedNamedBinding[] {
+  const bindings: AbandonedNamedBinding[] = [];
+  for (let current: QueuedTrigger | undefined = queued; current !== undefined; current = current.triggeringAbility?.occurrence) {
+    if (current.abandonedNamed !== undefined) bindings.push(current.abandonedNamed);
+  }
+  return bindings;
+}
+
+function spendAbandonedNamed(ctx: StepContext, binding: AbandonedNamedBinding, entry: AbandonedNamedEntry): void {
+  for (const other of [binding, ...ctx.state.triggerQueue.flatMap(abandonedBindings)]) {
+    for (const candidate of other.entries) if (sameAbandonedOccurrence(candidate, entry)) candidate.used = true;
+  }
+}
+
+/** Actual ordinary admissions confirm this departure; no raw event or arbitrary queue scan can supply one. */
+function confirmAbandonedNamed(ctx: StepContext, armed: ArmedTriggers, admitted: readonly NamedAdmission[]): void {
+  const binding = armed.abandonedNamed!;
+  for (const admission of admitted) {
+    const queued = admission.queued;
+    if (queued.source !== binding.source || queued.node !== null || !hasNamedTrigger(admission.trigger, "dissolved")) continue;
+    for (const reader of [binding, ...armed.namedReaders ?? []]) for (const entry of reader.entries) {
+      if (entry.ability !== queued.ability) continue;
+      if (entry.named === "dissolved") entry.confirmed = true;
+      const definition = originAbilities(ctx.catalog, binding.origin)[entry.ability];
+      if (definition?.kind === "triggered" && definition.oncePerTurn === true) spendAbandonedNamed(ctx, reader, entry);
+    }
+  }
+}
+
+/** Retained-origin named admissions, batched for the entire instruction before reactions. */
+export function triggerAbandonedNamedBatch(ctx: StepContext, binding: AbandonedNamedBinding, named: AbandonedNamedEntry["named"]): void {
+  const beforeDawn = ctx.state.turnLog.dawnProgress?.total ?? 0;
+  const admitted: NamedAdmission[] = [];
+  const listener: TriggerListener = { source: binding.source, controller: binding.controller, origin: binding.origin, zone: "play", emblem: false };
+  for (const entry of binding.entries) {
+    if (entry.named !== named || entry.disabled || named === "dissolved" && entry.confirmed !== true) continue;
+    const ability = originAbilities(ctx.catalog, binding.origin)[entry.ability];
+    if (ability?.kind !== "triggered" || !hasNamedTrigger(ability.trigger, named)) throw new Error("Invalid retained abandoned named definition");
+    const current = triggerBlocks(ctx.state, ctx.catalog, binding.source, entry.ability);
+    const currentOccurrence = entry.occurrence.gainedFrom === undefined
+      ? !gainedRecordsDropped(ctx.state, ctx.catalog, listener, entry.ability)
+      : sourceAbilityGroups(ctx.state, binding.source).includes(entry.occurrence.gainedFrom);
+    if (current.disabled || ability.oncePerTurn === true && (entry.used || currentOccurrence && current.used)) continue;
+    if (ability.condition !== undefined && !conditionHolds(ctx.state, ctx.catalog, ability.condition,
+      { controller: binding.controller, source: binding.source, optionalPaid: [] })) continue;
+    const match = { subject: binding.source, subjectHiddenFrom: SIDES.filter(viewer => !binding.observedBy.includes(viewer)),
+      ...(entry.linkedSource === undefined ? {} : { linkedSource: entry.linkedSource }),
+      ...(entry.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: entry.lastKnownSourceSpark }),
+      ...(entry.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: entry.lastKnownSubjectCost }),
+      ...(entry.lastKnownSubjectSpark === undefined ? {} : { lastKnownSubjectSpark: entry.lastKnownSubjectSpark }),
+    };
+    const queued = enqueue(ctx, { source: binding.source, origin: binding.origin, controller: binding.controller,
+      ability: entry.ability, node: null, ...match }, ability.trigger);
+    recordDawnAdmission(ctx, binding.source, ability.trigger, binding.observedBy);
+    if (ability.oncePerTurn === true) {
+      if (currentOccurrence) {
+        const key = oncePerTurnKey(binding.source, entry.ability);
+        ctx.triggerUses.oncePerTurn.push(key);
+        ctx.state.oncePerTurn.push(key);
+      }
+      spendAbandonedNamed(ctx, binding, entry);
+    }
+    admitted.push(queued);
+  }
+  queueDawnReactions(ctx, beforeDawn);
+  observeNamedAdmissions(ctx, admitted, entry => matchNamedAdmission(ctx, entry), () => hasNamedAdmissionObserver(ctx));
 }
 
 /**

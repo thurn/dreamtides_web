@@ -856,6 +856,7 @@ export function effectEntersPlay(effect: EffectNode): boolean {
 export interface ResolveOptions {
   readonly paymentSourceCounters?: number;
   readonly triggeringAbility?: import("../state/types").QueuedTrigger["triggeringAbility"];
+  readonly abandonedNamed?: import("../state/types").AbandonedNamedBinding;
   /** Choices prepared during this resolution, with conditional subtrees reached at their instructions. Transient, never saved. */
   readonly resolutionChoices?: true;
   readonly linkedSource?: LinkedSourceContext;
@@ -1068,6 +1069,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
   const specs = collectTargets(effect, chosen, deferred);
   const scope: ResolutionChoiceScope | undefined = deferred ? { modes: new Map(), targets: new Map() } : undefined;
   const env: EffectEnv = {
+    ...(options.abandonedNamed === undefined ? {} : { abandonedNamed: options.abandonedNamed }),
     ...(options.triggeringAbility === undefined ? {} : { triggeringAbility: options.triggeringAbility }),
     ...(scope === undefined ? {} : { resolutionChoiceScope: scope }),
     linkedSource: options.linkedSource ?? (everyNode(effect).some((node) => node.op === "linkedBanish") ? linkedSourceContext(ctx, options.source, options.origin, options.ability) : null),

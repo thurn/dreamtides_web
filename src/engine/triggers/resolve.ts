@@ -40,6 +40,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   if (choices === null) return;
   resolveEffect(ctx, body.effect, {
     source,
+    ...(trigger.abandonedNamed === undefined ? {} : { abandonedNamed: trigger.abandonedNamed }),
     ...(trigger.triggeringAbility === undefined ? {} : { triggeringAbility: trigger.triggeringAbility }),
     ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     ...(linkedSource === undefined ? {} : { linkedSource }),

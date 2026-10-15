@@ -47,7 +47,8 @@ export function liveLinkedBanished(state: BattleState, resolving?: LinkedSourceC
     const instance = state.instances[record.source];
     const current = instance?.zone === "play" && instance.enteredZoneAt === record.enteredPlayAt &&
       (record.gainedFrom === undefined || sourceAbilityGroups(state, record.source).includes(record.gainedFrom));
-    const owed = state.triggerQueue.some((trigger) => trigger.linkedSource !== undefined && sameLinkedSource(trigger.linkedSource, record));
+    const owed = state.triggerQueue.some((trigger) => trigger.linkedSource !== undefined && sameLinkedSource(trigger.linkedSource, record) ||
+      trigger.abandonedNamed?.entries.some(entry => entry.linkedSource !== undefined && sameLinkedSource(entry.linkedSource, record)) === true);
     if (!current && !owed && (resolving === undefined || resolving === null || !sameLinkedSource(resolving, record))) return [];
     const cards = record.cards.filter(({ instance: id, enteredBanishedAt }) => {
       const card = state.instances[id];
@@ -87,10 +88,19 @@ export function linkedPosition(state: BattleState): { readonly linkedBanished: u
     return { source: value.source, visit, current, acquired, acquiredSlot, ability: value.ability };
   };
   // Queue order is semantic and provides a stable order for owed historical objects.
-  for (const trigger of state.triggerQueue) if (trigger.linkedSource !== undefined) context(trigger.linkedSource);
+  for (const trigger of state.triggerQueue) {
+    if (trigger.linkedSource !== undefined) context(trigger.linkedSource);
+    for (const entry of trigger.abandonedNamed?.entries ?? []) {
+      context(entry.occurrence);
+      if (entry.linkedSource !== undefined) context(entry.linkedSource);
+    }
+  }
   const linkedBanished = liveLinkedBanished(state).map((record) => ({ context: context(record), cards: record.cards.map(({ instance }) => instance) }))
     .sort((a, b) => { const left = JSON.stringify(a), right = JSON.stringify(b); return left < right ? -1 : left > right ? 1 : 0; });
-  const triggerQueue = state.triggerQueue.map(({ linkedSource, ...trigger }) => ({ ...trigger,
+  const triggerQueue = state.triggerQueue.map(({ linkedSource, abandonedNamed, ...trigger }) => ({ ...trigger,
+    ...(abandonedNamed === undefined ? {} : { abandonedNamed: { ...abandonedNamed, entries: abandonedNamed.entries.map(({ occurrence, linkedSource: linked, ...entry }) => ({
+      ...entry, occurrence: context(occurrence), ...(linked === undefined ? {} : { linkedSource: context(linked) }),
+    })) } }),
     ...(linkedSource === undefined ? {} : { linkedSource: context(linkedSource) }),
   }));
   return { linkedBanished: linkedBanished.length === 0 ? undefined : linkedBanished, triggerQueue };

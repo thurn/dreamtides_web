@@ -88,6 +88,7 @@ export interface ResolutionChoiceScope {
 
 /** What a primitive sees while it resolves. */
 export interface EffectEnv {
+  readonly abandonedNamed?: import("../state/types").AbandonedNamedBinding;
   readonly triggeringAbility?: import("../state/types").QueuedTrigger["triggeringAbility"];
   readonly handCopy?: import("../state/types").HandCopyContext;
   /** Transient conditional bindings in this lexical resolution; rebuilt from answers on replay. */

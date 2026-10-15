@@ -596,7 +596,32 @@ export interface HandCopyContext {
   readonly originalHiddenFrom: readonly Side[];
 }
 
+/** A bounded named-ability instruction retained from one abandonment. */
+export interface AbandonedNamedEntry {
+  readonly named: "materialized" | "dawn" | "dissolved";
+  readonly ability: number;
+  readonly disabled: boolean;
+  used: boolean;
+  /** Actual source visit/acquisition, also for non-linked once identity. */
+  readonly occurrence: LinkedSourceContext;
+  readonly linkedSource?: LinkedSourceContext;
+  readonly lastKnownSourceSpark?: number;
+  readonly lastKnownSubjectCost?: number;
+  readonly lastKnownSubjectSpark?: number;
+  confirmed?: true;
+}
+
+export interface AbandonedNamedBinding {
+  readonly readerObservedBy?: readonly Side[];
+  readonly source: InstanceId;
+  readonly origin: Extract<AbilityOrigin, { readonly kind: "card" | "figment" }>;
+  readonly controller: Side;
+  readonly observedBy: readonly Side[];
+  readonly entries: readonly AbandonedNamedEntry[];
+}
+
 interface QueuedAbility {
+  readonly abandonedNamed?: AbandonedNamedBinding;
   /** Sampled historical context withheld by the input view, independent of current source visibility. */
   readonly historyHiddenFrom?: readonly Side[];
   /** Audience and named classification of an actual explicitly repeated pending occurrence. */

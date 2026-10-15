@@ -1129,6 +1129,8 @@ function hasConsistentLinkedBanish(value: Record<string, unknown>): boolean {
   return state.triggerQueue.every(trigger => {
     for (let current: typeof trigger | undefined = trigger; current !== undefined; current = current.triggeringAbility?.occurrence) {
       if (current.linkedSource !== undefined && current.linkedSource.enteredPlayAt > state.clock) return false;
+      if (current.abandonedNamed?.entries.some(entry => entry.occurrence.enteredPlayAt > state.clock ||
+        entry.linkedSource !== undefined && entry.linkedSource.enteredPlayAt > state.clock)) return false;
     }
     return true;
   });
@@ -1176,9 +1178,38 @@ function isQueuedTrigger(value: unknown): boolean {
   }
 }
 
+/** A bounded saved abandonment, never a recursive queue or mutable ability lookup. */
+function isAbandonedNamed(value: unknown): boolean {
+  if (!isPlainRecord(value) || Object.keys(value).some(key => !["source", "origin", "controller", "observedBy", "readerObservedBy", "entries"].includes(key)) ||
+      !isInstanceId(value.source) || !isSide(value.controller) || !isAbilityOrigin(value.origin) || !isPlainRecord(value.origin) ||
+      value.origin.kind !== "card" && value.origin.kind !== "figment" ||
+      Object.keys(value.origin).some(key => !["kind", "cardId", "variant", "gained", "lost", "id"].includes(key)) ||
+      !isArrayOf(value.observedBy, isSide) || new Set(value.observedBy).size !== value.observedBy.length ||
+      value.readerObservedBy !== undefined && (!isArrayOf(value.readerObservedBy, isSide) || new Set(value.readerObservedBy).size !== value.readerObservedBy.length) || !Array.isArray(value.entries)) return false;
+  const keys = new Set<string>();
+  return value.entries.every(entry => {
+    if (!isPlainRecord(entry) || Object.keys(entry).some(key => !["named", "ability", "disabled", "used", "occurrence", "linkedSource", "lastKnownSourceSpark", "lastKnownSubjectCost", "lastKnownSubjectSpark", "confirmed"].includes(key)) ||
+        typeof entry.named !== "string" || !["materialized", "dawn", "dissolved"].includes(entry.named) || !isIndex(entry.ability) || !isBoolean(entry.disabled) || !isBoolean(entry.used) ||
+        !isLinkedSource(entry.occurrence) || !isPlainRecord(entry.occurrence) || entry.occurrence.source !== value.source ||
+        Object.keys(entry.occurrence).some(key => !["source", "enteredPlayAt", "ability", "gainedFrom"].includes(key)) ||
+        entry.confirmed !== undefined && (entry.confirmed !== true || entry.named !== "dissolved") ||
+        ![entry.lastKnownSourceSpark, entry.lastKnownSubjectCost, entry.lastKnownSubjectSpark].every(number => number === undefined || isFiniteNumber(number) && number >= 0)) return false;
+    if (entry.linkedSource !== undefined && (!isLinkedSource(entry.linkedSource) || !isPlainRecord(entry.linkedSource) ||
+        Object.keys(entry.linkedSource).some(key => !["source", "enteredPlayAt", "ability", "gainedFrom"].includes(key)) ||
+        entry.linkedSource.source !== entry.occurrence.source || entry.linkedSource.enteredPlayAt !== entry.occurrence.enteredPlayAt ||
+        entry.linkedSource.gainedFrom !== entry.occurrence.gainedFrom || entry.linkedSource.ability !== entry.occurrence.ability)) return false;
+    const key = `${String(entry.named)}:${String(entry.ability)}`;
+    if (keys.has(key)) return false;
+    keys.add(key);
+    return true;
+  });
+}
+
 function isQueuedTriggerRecord(value: unknown): boolean {
   if (!isPlainRecord(value)) return false;
   if (value.kind !== undefined && value.kind !== "dreamwellBonus" && value.kind !== "ruleReaction") return false;
+  if (value.abandonedNamed !== undefined && (value.kind !== undefined || !isAbandonedNamed(value.abandonedNamed) ||
+      !isPlainRecord(value.abandonedNamed) || value.subject !== value.abandonedNamed.source)) return false;
   if (value.historyHiddenFrom !== undefined && (value.kind !== undefined || !isArrayOf(value.historyHiddenFrom, isSide) ||
     new Set(value.historyHiddenFrom).size !== value.historyHiddenFrom.length)) return false;
   if (value.repeated !== undefined && (value.kind !== undefined || !isPlainRecord(value.repeated) ||

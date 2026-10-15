@@ -1,0 +1,44 @@
+{
+  "bead": "hv-umm2.616",
+  "phase": 5,
+  "implementMin": 64.8845161,
+  "implementWindow": {
+    "start": "2026-10-15T02:48:23.609162+00:00",
+    "end": "2026-10-15T03:53:16.680128+00:00"
+  },
+  "localValidationS": {
+    "cf1-live-rescan": 9.874299499962945,
+    "cf2-named-selection": 8.855792042042594,
+    "cf3-unconfirmed-dissolved": 9.004890124953818,
+    "cf4-source-linked-bindings": 7.8409731250139885,
+    "cf5-once-receipt": 8.102432999992743,
+    "consumer-entities-before": 2.7900566660100594,
+    "focus-complete": 6.962228125019465,
+    "focus-expanded": 6.9260667089838535,
+    "focus-initial": 9.353076458966825,
+    "focus-privacy-complete": 10.995308291981928,
+    "focus-reader-correction": 7.1032650410197675,
+    "integration": 21.322082500031684,
+    "knip-final": 6.732923583011143,
+    "knip": 8.382367375015747,
+    "nested-log-repaired": 7.0203307080082595,
+    "nested-log-witness": 8.69964083301602,
+    "npm-install": 2.624508249980863,
+    "restoration-integration": 30.14240604202496,
+    "review-corrected": 74.20917687495239,
+    "review-final": 78.02948441699846,
+    "review-full": 121.96078279102221,
+    "review": 68.75860025000293,
+    "schema-corrected": 0.061134207993745804,
+    "schema-final": 0.049470749974716455,
+    "typecheck-initial": 15.919454500020947
+  },
+  "hostLoad": 9.662109375,
+  "testDelta": {
+    "files": 1,
+    "lines": 363,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "friction": []
+}

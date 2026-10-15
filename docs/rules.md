@@ -2770,6 +2770,14 @@ chosen first even when the text puts another instruction before "Choose one:":
 for "Look at the top 4 cards of your deck. Choose one: …", the mode is chosen
 as the card is played, and the look happens as it resolves.
 
+### Named abilities of an abandoned character
+
+An instruction to trigger an abandoned character's ▸Materialized or ▸Dawn abilities uses the actual abilities it had working in play immediately before that abandonment, including gained abilities and excluding lost abilities. A genuinely void-only ability is outside that set. These abilities belong to the character's last controller in play even if it changes zones or ceases to exist. Captured source values and paired banishment refer to that same physical source and acquired ability occurrence. X and counters follow their ordinary live-value rules.
+
+An instruction that makes its ▸Dissolved ability trigger an additional time requires an actual ordinary ▸Dissolved admission from that abandonment. A replacement that banishes the character without dissolving it, a failed condition, disabled triggers or an already spent allowance supplies no additional occurrence. Each such instruction admits one additional occurrence of each eligible ordinary ability.
+
+Capture does not replenish an allowance. An ability limited to once per turn remains limited across combined named descriptors, sequential instructions and multiple held readers, including when its gained-ability record ends. A later acquisition is a separate occurrence. Departure-time blocking and current disabling both apply; intervening conditions are checked when requested and again on resolution. Each instruction admits all matching abilities in index order before reactions to those admissions, following the ordinary FIFO order.
+
 ## Durations
 
 An effect with a duration lasts until its boundary, wherever the cards it

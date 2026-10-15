@@ -110,6 +110,7 @@ import {
   takeExtraTurnPrimitive,
   takeFromAmongPrimitive,
   triggerAbilityPrimitive,
+  triggerAbandonedNamedPrimitive,
   repeatTriggeringAbilityPrimitive,
   winTheGamePrimitive,
   withMaterializedPrimitive,
@@ -383,6 +384,7 @@ const DEFINITIONS = {
   get takeFromAmong() {
     return takeFromAmongPrimitive;
   },
+  get triggerAbandonedNamed() { return triggerAbandonedNamedPrimitive; },
   get repeatTriggeringAbility() {
     return repeatTriggeringAbilityPrimitive;
   },

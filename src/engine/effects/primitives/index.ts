@@ -96,3 +96,5 @@ export * from "./self-cost-reduction";
 export * from "./redraw-hand";
 export * from "./partial-redraw-hand";
 export * from "./additional-draw-phase";
+
+export * from "./trigger-abandoned-named";

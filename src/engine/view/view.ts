@@ -204,7 +204,23 @@ export interface FloatingEffectView {
  * could not identify as the ability triggered or cannot identify now
  * (`seesSubject`).
  */
+export type AbandonedNamedView = { readonly hidden: true } | {
+  readonly source: InstanceId | null;
+  readonly anonymousSource?: { readonly member: number; readonly owner: Side } | { readonly ceased: number };
+  readonly origin: import("../state/types").AbandonedNamedBinding["origin"];
+  readonly controller: Side;
+  readonly linked?: readonly (Omit<LinkedBanishedCards, "source" | "cards"> & { readonly cards: readonly {
+    readonly card: InstanceId | { readonly member: number; readonly owner: Side }; readonly enteredBanishedAt: number;
+  }[] })[];
+  readonly entries: readonly (Omit<import("../state/types").AbandonedNamedEntry, "occurrence" | "linkedSource"> & {
+    readonly occurrence: Omit<LinkedSourceContext, "source">;
+    readonly linkedSource?: Omit<LinkedSourceContext, "source">;
+
+  })[];
+};
+
 export interface QueuedTriggerView {
+  readonly abandonedNamed?: AbandonedNamedView;
   readonly repeated?: import("../dsl/types").NamedTrigger;
   /** Nested observed cause only: immutable ownership/member, or known cessation; no hidden current definition. */
   readonly anonymousSource?: { readonly member: number; readonly owner: Side } | { readonly ceased: true };
@@ -548,14 +564,32 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         : observed !== undefined && !sourceSeen && typeof record.source === "string"
           ? { rememberedSource: anonymousSource(record.source) } : {}) };
   });
+  const abandonedView = (binding: import("../state/types").AbandonedNamedBinding): AbandonedNamedView => {
+    if (!binding.observedBy.includes(viewer)) return { hidden: true };
+    const seen = visible(binding.source);
+    const withoutSource = ({ source: _source, ...context }: LinkedSourceContext) => copy(context);
+    return { source: seen ? binding.source : null, origin: copy(binding.origin), controller: binding.controller,
+      ...(!seen ? { anonymousSource: state.instances[binding.source] === undefined ? { ceased: memberFor(binding.source) }
+        : { member: memberFor(binding.source), owner: state.instances[binding.source].owner } } : {}),
+      linked: liveLinkedBanished(state).filter(record => binding.entries.some(entry => entry.linkedSource !== undefined &&
+        record.source === binding.source && record.enteredPlayAt === entry.linkedSource.enteredPlayAt && record.gainedFrom === entry.linkedSource.gainedFrom))
+        .map(({ cards, ...context }) => ({ ...withoutSource(context), cards: cards.map(({ instance: id, enteredBanishedAt }) => ({
+          card: visible(id) ? id : { member: memberFor(id), owner: state.instances[id].owner }, enteredBanishedAt,
+        })) })),
+      entries: binding.entries.map(({ occurrence, linkedSource, ...entry }) => ({ ...copy(entry), occurrence: withoutSource(occurrence),
+        ...(linkedSource === undefined ? {} : { linkedSource: withoutSource(linkedSource) }),
+      })),
+    };
+  };
   const queuedView = (trigger: import("../state/types").QueuedTrigger, observedBy?: readonly Side[]): QueuedTriggerView => {
-    const audience = observedBy ?? trigger.repeated?.observedBy ?? trigger.triggeringAbility?.readerObservedBy;
+    const audience = observedBy ?? trigger.repeated?.observedBy ?? trigger.triggeringAbility?.readerObservedBy ?? trigger.abandonedNamed?.readerObservedBy;
     const instructionSeen = trigger.repeated?.visibleTo.includes(viewer) === true;
     const originSeen = trigger.historyHiddenFrom?.includes(viewer) !== true && (audience === undefined ? visibleSource(trigger.source) : audience.includes(viewer) &&
       (trigger.repeated === undefined || instructionSeen || visibleSource(trigger.source)));
     const causeKnown = originSeen;
     return {
       ...(!instructionSeen ? {} : { repeated: trigger.repeated.named }),
+      ...(trigger.abandonedNamed === undefined || !originSeen ? {} : { abandonedNamed: abandonedView(trigger.abandonedNamed) }),
       ...(trigger.triggeringAbility === undefined || !originSeen ? {} : { triggeringAbility: {
         named: trigger.triggeringAbility.named, occurrence: queuedView(trigger.triggeringAbility.occurrence, trigger.triggeringAbility.observedBy ?? []),
       } }),

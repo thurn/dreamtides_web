@@ -45,6 +45,7 @@
  *   controller's avatar: its filter, named card, duration, and consumption
  *   are independent of its source identity.
  */
+import { requestedAbandonedNames } from "../triggers/matcher";
 import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import { Layers } from "../continuous/layers";
 import { matchesFilter, type FilterSubject } from "../continuous/characteristics";
@@ -604,7 +605,12 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
         : !Number.isSafeInteger(anonymous.member) || anonymous.member < 0 || !SIDES.includes(anonymous.owner) ||
           Object.keys(anonymous).some(key => key !== "member" && key !== "owner")))) throw new Error("Cannot determinize invalid anonymous cause source");
     const minimal = (occurrence.captured ?? []).filter((card): card is { readonly member: number; readonly owner: Side } => typeof card !== "string" && !("printing" in card));
-    for (const fact of [...minimal, ...(anonymous === undefined || "ceased" in anonymous ? [] : [anonymous])]) {
+    const own = occurrence.abandonedNamed;
+    const abandonedFacts = own === undefined || "hidden" in own ? [] : [
+      ...(own.anonymousSource === undefined || "ceased" in own.anonymousSource ? [] : [own.anonymousSource]),
+      ...(own.linked ?? []).flatMap(record => record.cards.flatMap(({ card }) => typeof card === "string" ? [] : [card])),
+    ];
+    for (const fact of [...minimal, ...(anonymous === undefined || "ceased" in anonymous ? [] : [anonymous]), ...abandonedFacts]) {
       if (!Number.isSafeInteger(fact.member) || fact.member < 0 || !SIDES.includes(fact.owner) ||
         Object.keys(fact).some(key => key !== "member" && key !== "owner")) throw new Error("Cannot determinize invalid captured owner/member");
       const earlier = causeOwners.get(fact.member);
@@ -739,6 +745,62 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     if (occurrence === undefined) throw new Error("Cannot determinize a withheld reader without a compatible named cause");
     return { named: observer.named, occurrence, observedBy: [], readerObservedBy: [] };
   };
+  const abandonedCeased = new Map<number, InstanceId>();
+  const restoredLinked: import("../state/types").LinkedBanishedCards[] = [];
+  const restoreAbandoned = (shown: QueuedTriggerView, origin: QueuedTrigger["origin"]): QueuedTrigger["abandonedNamed"] => {
+    if (shown.kind !== undefined) {
+      if (shown.abandonedNamed !== undefined) throw new Error("Abandoned binding requires a triggered reader");
+      return undefined;
+    }
+    const requested = requestedAbandonedNames(triggerBody(catalog, origin, shown.ability, shown.node).effect);
+    if (requested.length === 0) {
+      if (shown.abandonedNamed !== undefined) throw new Error("Abandoned binding belongs to an immediate reader");
+      return undefined;
+    }
+    const binding = shown.abandonedNamed;
+    if (binding === undefined && shown.origin !== null) return undefined;
+    if (binding !== undefined && !("hidden" in binding)) {
+      let source = binding.source;
+      if (source === null) {
+        const anonymous = binding.anonymousSource;
+        if (anonymous === undefined) throw new Error("Missing abandoned referent alias");
+        if ("ceased" in anonymous) {
+          source = abandonedCeased.get(anonymous.ceased) ?? `i${next++}`;
+          abandonedCeased.set(anonymous.ceased, source);
+        } else source = assigned.get(anonymous.member) ?? null;
+      }
+      if (source === null) throw new Error("Missing abandoned referent member");
+      for (const record of binding.linked ?? []) {
+        const restored = { ...copy(record), source, cards: record.cards.map(({ card, enteredBanishedAt }) => {
+          const instance = typeof card === "string" ? card : assigned.get(card.member);
+          if (instance === undefined) throw new Error("Missing owed banished member");
+          return { instance, enteredBanishedAt };
+        }) };
+        if (!restoredLinked.some(old => canonicalHash(old) === canonicalHash(restored))) restoredLinked.push(restored);
+      }
+      return { source, origin: copy(binding.origin), controller: binding.controller, observedBy: [view.viewer], readerObservedBy: [view.viewer],
+        entries: binding.entries.map(({ occurrence, linkedSource, ...entry }) => ({ ...copy(entry), occurrence: { ...copy(occurrence), source },
+          ...(linkedSource === undefined ? {} : { linkedSource: { ...copy(linkedSource), source } }) })) };
+    }
+    // Omitted blind-reader metadata carries no new-op classification. Only the actually sampled body asks for it.
+    const branches = (trigger: Trigger): Extract<Trigger, { on: "abandon" }>[] => trigger.on === "either" ? trigger.triggers.flatMap(branches) : trigger.on === "abandon" ? [trigger] : [];
+    const controllers = branches(triggerBody(catalog, origin, shown.ability, shown.node).trigger).map(trigger => resolvePlayer(shown.controller, trigger.player));
+    if (controllers.length === 0) return undefined;
+    const controller = controllers[Math.floor(random() * controllers.length)];
+    const candidates = Object.values(instances).filter(instance => (shown.subject === null || instance.id === shown.subject) && originAbilities(catalog, historicalOrigin(instance, 0)).some(ability =>
+      ability.kind === "triggered" && requested.some(named => hasNamedTrigger(ability.trigger, named) && (named === "dissolved" || worksInZone(ability.zone, "play")))));
+    const candidate = candidates[Math.floor(random() * candidates.length)];
+    if (candidate === undefined) throw new Error("No compatible abandoned referent domain");
+    const candidateOrigin = historicalOrigin(candidate, 0);
+    if (candidateOrigin.kind !== "card" && candidateOrigin.kind !== "figment") throw new Error("Invalid abandoned referent origin");
+    return { source: candidate.id, origin: candidateOrigin, controller, observedBy: [], readerObservedBy: [],
+      entries: originAbilities(catalog, candidateOrigin).flatMap((ability, index) => ability.kind !== "triggered" ? []
+        : requested.flatMap(named => !hasNamedTrigger(ability.trigger, named) || named !== "dissolved" && !worksInZone(ability.zone, "play") ? [] : [{
+          named, ability: index, disabled: false, used: ability.oncePerTurn === true,
+          occurrence: { source: candidate.id, enteredPlayAt: candidate.enteredZoneAt, ability: index },
+          ...(named === "dissolved" ? { confirmed: true as const } : {}),
+        }])) };
+  };
   const restoreQueued = (shown: QueuedTriggerView, named?: import("../dsl/types").NamedTrigger): QueuedTrigger | null => {
     named ??= shown.repeated;
     const knownReader = shown.triggeringAbility !== undefined && shown.origin !== null;
@@ -763,14 +825,16 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     if (shown.kind === "ruleReaction") return { kind: "ruleReaction", ...identity, controller: shown.controller,
       ability: shown.ability, node: null, subject: null,
       ...(shown.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: shown.lastKnownSourceSpark }) };
+    const abandonedNamed = restoreAbandoned(shown, identity.origin);
     return {
       ...identity,
+      ...(abandonedNamed === undefined ? {} : { abandonedNamed }),
       ...(shown.origin === null ? { historyHiddenFrom: [...SIDES] } : {}),
       ...(shown.repeated === undefined ? {} : { repeated: { named: shown.repeated, observedBy: shown.origin === null ? [] : [view.viewer], visibleTo: [view.viewer] } }),
       ...(shown.kind === "dreamwellBonus" ? { kind: shown.kind } : {}),
       ...(shown.linkedSource === undefined ? {} : { linkedSource: copy(shown.linkedSource) }),
       controller: shown.controller, ability: shown.ability, node: shown.node,
-      subject: shown.subject ?? (shown.handCopy !== undefined || shown.handCopyHidden === true ? `i${next++}` : null),
+      subject: shown.subject ?? abandonedNamed?.source ?? (shown.handCopy !== undefined || shown.handCopyHidden === true ? `i${next++}` : null),
       ...(shown.subject === null && (shown.handCopy !== undefined || shown.handCopyHidden === true) ? { subjectHiddenFrom: [view.viewer] } : {}),
       ...(shown.handCopy === undefined ? {} : { handCopy: copy(shown.handCopy) }),
       ...(shown.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: shown.lastKnownSubjectCost }),
@@ -867,7 +931,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     stack: view.stack.map((item) => copy(item)),
     priority: view.priority,
     payable,
-    linkedBanished: copy([...(view.linkedBanished ?? [])]),
+    linkedBanished: copy([...(view.linkedBanished ?? []), ...restoredLinked.filter(record => !(view.linkedBanished ?? []).some(old => canonicalHash(old) === canonicalHash(record)))]),
     triggerQueue,
     floating: [...anonymousEffects, ...view.floating.map((effect): FloatingEffect => {
       const { rememberedSource: provenance, ...record } = copy(effect);
