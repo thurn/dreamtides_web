@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.192",
+  "phase": 5,
+  "implementMin": 74.20644999999999,
+  "implementWindow": {
+    "start": "2026-10-14T23:31:08.613Z",
+    "end": "2026-10-15T00:45:21+00:00"
+  },
+  "localValidationS": {
+    "focused-after703": 6.005377166031394,
+    "coverage-after703": 6.19758754101349,
+    "preflight-after703": 3.4510540000046603,
+    "review-after703": 77.22967712499667,
+    "knip-after703": 7.069428040995263,
+    "weighted-repaired703-1": 443.30847104103304,
+    "sweep-after703-1": 467.2975552920252,
+    "judged-after703-1": 60.2185180420056,
+    "schema-evidence-1": 0.1394248339929618
+  },
+  "hostLoad": 9.150390625,
+  "testDelta": {
+    "files": 0,
+    "lines": 119,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "determinization-fidelity",
+      "minutes": 32.521304316666665,
+      "note": "Original weighted seed163 exposed hidden materialization-grant fidelity comparison gap. Measured original compound terminal23:41:02.231639Z to parent integration00:13:33.509898Z includes diagnosis, admission, mandatory independent repair703 and dormant wait; elapsed rather than productive edit time."
+    }
+  ]
+}

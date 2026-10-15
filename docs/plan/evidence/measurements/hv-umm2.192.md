@@ -1,0 +1,22 @@
+# hv-umm2.192 validation evidence
+
+Original dispatch: 2026-10-14T23:31:08.613Z. Final automatic Git committer second: 2026-10-15T00:45:21+00:00; inclusive elapsed 74.206450000 minutes.
+The inclusive window includes the full audit, all attempts, native admission and repair waits, checkpoint/update, validation, evidence packaging and Git. Automatic Git time supplies the final second; precise external brackets and final blob/source hashes are ignored receipts.
+
+The original five UUIDs retain all printed metadata and prerequisites. The three authored leaves have 23 gross non-test source lines; the private 119-line module adds 14 synthetic cases and no test entrypoint or jsdom file. Child684's two leaves and eight-case private module remain byte exact and are consumed read-only. Rules/RD anchors and finite source hashes are in the JSON companion. No new primitive, RD, card issue or mechanical fallout is required.
+
+Final focused checks pass22 cases; coverage passes20. Full five-UUID preflight passes50 and skips50 with zero failures. Ordinary review passes7995 tests in255 files plus types/lint/cycles; Knip passes. Wrapper wall times and load samples, every retained earlier receipt, and final schema/whitespace receipts are kept with the ignored evidence. Review's actual test phase is62.82 seconds at observed starting load9.150390625; this is not a performance or budget claim.
+
+Repaired weighted validation runs two standard150-game CLI workers under one heavy lock, first0/150, seed cards80-192-repaired703:300 games,98,358 steps, zero failures,658 interactive prompt reruns. Queue/startup144.737911 seconds, execution298.562855 seconds. Actual per-worker included/exercised UUID counts and terminal receipts are retained; passing games have no individual JSONL export.
+
+The original run's one seed163 failure, six floating-grant divergences and exact original log bytes remain retained. The bounded public diagnostic reproduces that syndrome; its final replay is one applied step past the detection boundary. Mandatory independent repair703 is the integrated parent. Its normal Claude review debt remains explicitly pending with the parent after actual session-cap responses.
+
+Full browser sweep:50 pass,50 skip, zero fail,100 ledger rows, empty Caps; raw reports are retained. The standard sweep does not export persisted journey JSONL. D21 samples Exile (first byte14); other bytes122/65/67/246 do not sample, and this batch introduces no new prompt/status/visual surface. Exile's four judged player/enemy desktop/mobile games pass with eight viewed captures and complete per-game JSONL. The enemy play uses declared scripted public lab AI intents and is qualified accordingly.
+
+Judgments cover exact enemy-only targets, readable Cancel, cancellation before payment, pending prompt reload, selected target dissolution, energy2→0 and source void, full canonical settled reload equivalence including game/battle/version/history/head/cards/resources, and rendered logs. The second physical hand card is present and nonplayable with raw attributes and positive viewport intersection. Its existing fanned preview is partly cropped; the evidence makes no full-box-fit or disabled pointer-hit claim. Mobile controls fit; enemy reveal is clear with underlying controls intentionally inactive.
+
+Captures (filenames only): exile-target-desktop.png, exile-resolved-desktop.png, exile-enemy-reveal-desktop.png, exile-enemy-resolved-desktop.png, exile-target-mobile.png, exile-resolved-mobile.png, exile-enemy-reveal-mobile.png, exile-enemy-resolved-mobile.png. Ignored invocation run-pRw27q retains full result, game manifest, snapshots, geometry, raw logs and capture hashes.
+
+Both browser invocations use native browser lease only and no heavy overlap. Exact owner/server bytes, provider identities, positive server/member lifetimes, native cleanup acknowledgements, absent own records/groups and free actual ports are retained. All own processes are terminal. Source hashes remain frozen; final packaging changes only this bead's evidence. Parent owns native delivery and the independent repair review debt; this local commit does not claim certification, promotion or publication.
+
+Required game logs also expose the pre-existing atlas_node_revealed dreamscapeName field beside its UUID. The own pre-existing report records the source and all four games; parent filed independent nonblocking repair hv-umm2.709 after native duplicate audit.

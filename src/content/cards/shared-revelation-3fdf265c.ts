@@ -1,3 +1,6 @@
+import { event, playedAnotherEventThisTurn } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { discard, draw, ifThen, sequence } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 276,
   art: { x: 0.126, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(sequence(draw(2), ifThen(playedAnotherEventThisTurn(), sequence(), discard(1))))],
+  verifiedText: expectedVerifiedText("Draw two cards, then discard a card unless you played another event this turn."),
 });

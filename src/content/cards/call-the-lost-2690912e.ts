@@ -1,3 +1,8 @@
+import { energy, event, playedThisTurn, reclaim } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import shadow from "../figments/shadow-86125402";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +24,9 @@ export default card({
   cardNumber: 116,
   art: { x: -0.068, y: 1, scale: 1.07 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(materializeFigments(parseFigmentId(shadow.id), playedThisTurn(), { spark: 2 })),
+    reclaim(energy(2)),
+  ],
+  verifiedText: expectedVerifiedText("For each card you've played this turn, materialize a 2✦ shadow figment.\n\nReclaim 2●"),
 });

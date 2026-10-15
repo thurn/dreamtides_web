@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { costSetter } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 349,
   art: { x: 0, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(costSetter("you", { cardType: "character", costAtMost: 2 }, 0))],
+  verifiedText: expectedVerifiedText("≤2● cost characters cost you 0●."),
 });
