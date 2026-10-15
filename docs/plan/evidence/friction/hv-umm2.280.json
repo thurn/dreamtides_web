@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.280",
+  "phase": 5,
+  "implementMin": 71.4208169,
+  "implementWindow": {
+    "start": "2026-10-15T17:31:26.027170Z",
+    "end": "2026-10-15T18:42:51.276184+00:00"
+  },
+  "localValidationS": {
+    "focused": 8.763593999959994,
+    "preflight": 3.764202792022843,
+    "publicResolver": 3.921973209013231,
+    "sweep": 531.2778930420172,
+    "judged": 48.33499100001063,
+    "fuzz": 1586.4,
+    "review": 0.3944583749980666,
+    "knip": 5.186191041022539,
+    "schema": 0.0700275000417605,
+    "workingWhitespace": 0.008794957946520299,
+    "stagedWhitespace": 0.010124584019649774
+  },
+  "hostLoad": 5.134765625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 19.689609496533134,
+      "note": "Launch17:46:00.568511Z to firstnpmoutput observation18:05:41.954773Z (1181.376569792s). Offset includes heavycapacity wait, commandstartup and <=1s observation interval; not exactlockacquisition or purequeue timing. Existingdesignedcontention disposition; actualengineexecution separately measured. Fullgrossclaimclock retained."
+    }
+  ]
+}

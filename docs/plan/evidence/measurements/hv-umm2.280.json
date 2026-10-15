@@ -1,0 +1,3392 @@
+{
+  "bead": "hv-umm2.280",
+  "sourceBase": "df560876173b82bd4a440afcd651ed2942c6164a",
+  "claimStart": "2026-10-15T17:31:26.027170Z",
+  "scope": "Evidence-only original spark-bonus acceptance join; immutable production/catalog/consumer/test/runner/config sources. Original111actionUUIDs and20stratifiedrealcards eachactor pluskindjudgment retained.",
+  "codeDelta": {
+    "productionLines": 0,
+    "testFiles": 0,
+    "testLines": 0,
+    "entrypoints": 0,
+    "configEdits": 0
+  },
+  "sourceCustody": {
+    "initialTracked": 5798,
+    "unchangedAfterAllQA": true,
+    "sourceManifestSHA256": "880b38f60481614f1a6f789c3249ce7a63e67cd71552b5d71e1063d4d74644fd",
+    "sourceManifestBindings": 79,
+    "qualification": "Source hashes/static importer census are provenance, not behavioral proof. Real public/runtime evidence is separate.",
+    "finiteAcknowledgments": [
+      "ACK280-01",
+      "ACK280-02",
+      "ACK280-03",
+      "ACK280-04",
+      "ACK280-05"
+    ],
+    "finalSourceGuard": {
+      "at": "2026-10-15T18:32:31.923710+00:00",
+      "initialTracked": 5798,
+      "changed": [],
+      "scope": "Allinitialtracked bytes and symlinktargets after bothfuzz/QA terminal; newlycreatedowncanonicalQAledger excludedinitialset."
+    },
+    "finalSourceGuardSHA256": "1eff4721a58ff3dcbc796d33ded610d1648379fb3b05696b95884760b691bab9",
+    "postValidationSourceGuard": {
+      "at": "2026-10-15T18:39:43.377279+00:00",
+      "initialTracked": 5798,
+      "changed": [],
+      "scope": "All initial tracked bytes and symlink target bytes after ordinary review/Knip; four admitted new evidence files outside initial set."
+    }
+  },
+  "filedUUIDScope": {
+    "count": 111,
+    "kinds": {
+      "increase-spark-all": 62,
+      "purge-random-subtype-and-increase-spark": 49
+    },
+    "allAmounts": {
+      "1": 111
+    },
+    "subtypeCounts": {
+      "allCharacters": 62,
+      "Warrior": 33,
+      "Monster": 2,
+      "Survivor": 7,
+      "Mage": 1,
+      "Synth": 1,
+      "Visionary": 1,
+      "Visitor": 3,
+      "Spirit Animal": 1
+    },
+    "domain": "explorationEffect action UUIDs, not battle-card UUIDs",
+    "newRequiredPrimitives": [],
+    "genericD21Samples": [
+      "41c670d1-c12c-4152-a184-05a4cbed2be9",
+      "bb8d9d56-cb78-44a9-8bef-6b4c87c20ec8",
+      "bf8e314f-074a-422a-beb4-d55092114bb4",
+      "e4d90d10-b9ad-464d-a7ab-e7a261fdcb59",
+      "750bc96a-ac8d-499d-9618-1f27e5e6dea0",
+      "e9d14079-adda-42b1-a0e1-8fe8fa8113a7",
+      "e8b93126-2317-469b-b1b8-8427e8b92322",
+      "581f1236-2c9a-4f47-b4e8-f980581baec6",
+      "e9d4f9de-8795-4c88-9f88-f125b6dd621b",
+      "875aa793-b67b-401d-b957-510315aa0922",
+      "46e7de23-2c95-4611-aa5c-ba39b9507229"
+    ],
+    "actions": [
+      {
+        "uuid": "fbd22f73-9eb7-458a-bd2c-6a65ac5cdd6d",
+        "encounterCardUUID": "886c9d49-b25f-4ddd-97f0-2ec4b42eda89",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          220,
+          226
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "c6be47aa-68dc-4d5e-aeff-ac85de91f368",
+        "encounterCardUUID": "c97b0a5b-64d0-480f-8db7-3fde93738d86",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1276,
+          1282
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "571d4537-5ff6-47df-bdc0-77be447f411c",
+        "encounterCardUUID": "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1307,
+          1313
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "65bcfadc-5775-4dd5-9147-4e82fa75e2ad",
+        "encounterCardUUID": "e3193b23-2002-40a9-91fc-e0713200355e",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1331,
+          1339
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "72ab2b5b-cf89-4981-8398-acccbe026886",
+        "encounterCardUUID": "8a5d7d67-91c9-41c4-b22e-8287954efa09",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1404,
+          1412
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "8f3c1320-83e9-4198-9927-00d9345cdcad",
+        "encounterCardUUID": "20a6474c-55b8-4b1b-9155-baac62a06f1e",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Monster",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1420,
+          1428
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "867723b0-3489-412a-813a-1c0ef8098be2",
+        "encounterCardUUID": "f3f97e2c-3bb6-4a20-9880-f59c50e5af93",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1481,
+          1487
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "41c670d1-c12c-4152-a184-05a4cbed2be9",
+        "encounterCardUUID": "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1529,
+          1535
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "bb8d9d56-cb78-44a9-8bef-6b4c87c20ec8",
+        "encounterCardUUID": "78673e2b-a6d1-43de-8850-3d3327de5cc6",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1564,
+          1572
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "1ebb9a53-fb79-4cf2-a9a7-2a00a6fb4b8c",
+        "encounterCardUUID": "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Survivor",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1592,
+          1600
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "091b66c8-316c-4ef5-9bbb-26db6c8d45d3",
+        "encounterCardUUID": "8855e20c-e23f-4499-a5e8-a7a46ff81d2b",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1786,
+          1794
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "d1233e3f-06e7-4a78-9192-4ca49cb0728c",
+        "encounterCardUUID": "55340736-7fc5-4555-8f47-081d770a6e8d",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          1934,
+          1940
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "910acca3-f35d-4fe7-9a5d-b7d91fdc2818",
+        "encounterCardUUID": "82749215-ed35-44e3-a745-72ca76036c7c",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          2130,
+          2138
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "bbf77c1f-5f24-4e37-8062-ca2b30dc65d8",
+        "encounterCardUUID": "c73f978e-8196-4589-a432-845265115555",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          2169,
+          2177
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "739338ed-18ee-405f-ac7f-d61b172ef040",
+        "encounterCardUUID": "2d180bd7-4cc7-49fb-b76c-0990656cedc0",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Mage",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          2213,
+          2221
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "003415d5-e8d0-446e-8f2c-70da5c55d79a",
+        "encounterCardUUID": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          2270,
+          2278
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "bf8e314f-074a-422a-beb4-d55092114bb4",
+        "encounterCardUUID": "956aaeb1-5280-4294-bf80-73079f35c5f6",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          2392,
+          2400
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "8dfae3bb-c49b-49bf-ac27-c7293d293dc1",
+        "encounterCardUUID": "5a747998-7219-4e23-be42-b8cb3be12348",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Synth",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          2582,
+          2590
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "61faffda-a3cd-4b60-b033-bd6bc412207c",
+        "encounterCardUUID": "7697da0e-d759-4c75-8c9c-477e9058b035",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          2605,
+          2613
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "19e2443d-3b39-43e8-a1c6-afac64aeab2c",
+        "encounterCardUUID": "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          2627,
+          2633
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "cbe7a8e8-0275-4f1d-9be5-077f004aa4d4",
+        "encounterCardUUID": "26a05558-4692-43d2-ae6c-a6eb385a6d22",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          3161,
+          3167
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "59d712a3-f2d7-460a-937c-3c0808e4874d",
+        "encounterCardUUID": "312e42cb-e8ee-43da-9ef8-173a69583c97",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          3208,
+          3214
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "1b8b8de3-a11b-4280-aa12-939aa0dd0489",
+        "encounterCardUUID": "98f16d26-be71-49ad-9034-5fafb5d3f053",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          3222,
+          3228
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "d8efb5f7-1149-475f-b109-999f89f9a97c",
+        "encounterCardUUID": "f82c7407-b642-4ab1-8878-171f9121b3eb",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          3317,
+          3325
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "e4d90d10-b9ad-464d-a7ab-e7a261fdcb59",
+        "encounterCardUUID": "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          3441,
+          3447
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "80701c20-b897-4307-9222-1d56aa1b446f",
+        "encounterCardUUID": "32f3d6f2-43c5-4510-a23e-558769a7a8c9",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          3822,
+          3828
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "63fb1aa5-e761-47f4-9c94-e407967cb6dd",
+        "encounterCardUUID": "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          3913,
+          3919
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "ec53cc34-edb3-4264-9998-457672f91662",
+        "encounterCardUUID": "37d9165f-2b3a-44a2-848b-401cf4466a7c",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Visionary",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          3927,
+          3935
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "750bc96a-ac8d-499d-9618-1f27e5e6dea0",
+        "encounterCardUUID": "0637b453-4362-4f01-b3e6-07c27af9c847",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Visitor",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          4137,
+          4145
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "15a3b944-2a40-4c5c-917e-bf708fd13ea6",
+        "encounterCardUUID": "07ceb104-0b27-473a-bc72-e6225479ed83",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          4314,
+          4320
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "7ce8a057-9d68-41b1-94d0-c2c05ec827ef",
+        "encounterCardUUID": "a7c2ee76-48c9-4587-8f01-81d00ae280cb",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          4511,
+          4517
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "d4cb0655-c311-4497-b06a-548a1549ccd4",
+        "encounterCardUUID": "a36898f6-707e-4b28-89dc-ec896f484203",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          4576,
+          4582
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "bbaf2e35-d7fd-4d0c-a0f9-6d67af20f6ce",
+        "encounterCardUUID": "b4754e5a-29e6-418c-bdfa-8e0230a21b7b",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          4590,
+          4596
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "2532f464-2151-49c2-a130-2e94b89ca8e8",
+        "encounterCardUUID": "c11eb833-a45b-4983-949d-848039d0504c",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          4658,
+          4664
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "10325095-5749-422a-9398-68fc12eb3830",
+        "encounterCardUUID": "465d3463-1d8a-466d-b91f-b1993332b4d3",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          4723,
+          4731
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "f13f121e-f02d-4bff-adb6-d42276e218f9",
+        "encounterCardUUID": "9b9c2743-75b3-499d-b5fb-c3429c92d420",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5024,
+          5030
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "daf9c800-5a82-4af4-8ecc-ca97fe78ba77",
+        "encounterCardUUID": "ea118471-164b-4d7f-bb02-044c862ed07e",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Survivor",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5048,
+          5056
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "0a6038e3-2a98-4a27-b03a-707355b4fee2",
+        "encounterCardUUID": "18ff6a45-148a-40bf-85ae-4a51f32f406a",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5167,
+          5173
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "3fd7101f-f88b-4025-a708-291934eeea31",
+        "encounterCardUUID": "f3282494-2fcf-4c06-bfbe-3474b28aa87a",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5256,
+          5262
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "e78e529b-a267-46cc-846c-46d6d5b6c7f7",
+        "encounterCardUUID": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5348,
+          5354
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "d7e68bf2-a5b8-4d37-90c5-0a0e81e61add",
+        "encounterCardUUID": "1268a899-b209-46bb-bce4-6def1dcd0404",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5437,
+          5443
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "fccc9055-cae3-427e-8055-4951d19accf6",
+        "encounterCardUUID": "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5522,
+          5528
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "06726bb6-4ec0-433d-b88a-87f752f7dbc2",
+        "encounterCardUUID": "f46490a5-7030-4ade-93e9-bedb5813f590",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Survivor",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5637,
+          5645
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "302b8c4c-ab36-4730-8ac1-f3fdcf192f10",
+        "encounterCardUUID": "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Survivor",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5712,
+          5720
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "255a201d-6779-4805-ae59-857756c7a8df",
+        "encounterCardUUID": "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5904,
+          5912
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "08d29b7e-55bf-4b88-b61a-88c2e7f56a88",
+        "encounterCardUUID": "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          5983,
+          5991
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "ffd8190c-a34d-40d4-8e9b-65142eff53e8",
+        "encounterCardUUID": "2708c635-9332-4cfb-b43d-889ba2e329b6",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6084,
+          6090
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "ded01c5a-c919-4f61-bb4f-31f7bb64680c",
+        "encounterCardUUID": "2e8571c0-4faf-4e7a-a702-26952d2035ee",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Survivor",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6144,
+          6152
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "c007cf3f-7779-4081-bcae-b1726dc816c2",
+        "encounterCardUUID": "448abb34-d77d-40ac-8292-58db03176247",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6253,
+          6261
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "75579971-169c-42bb-a622-684d551de035",
+        "encounterCardUUID": "de946f5a-1e27-4d40-ae44-9ef8cc041949",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6276,
+          6282
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "5b4149c5-5097-48be-ae56-c6609fa42175",
+        "encounterCardUUID": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6425,
+          6431
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "e4c739a2-ff7f-4b8f-9f48-4dcd4fcd19be",
+        "encounterCardUUID": "245b49b9-e1e5-4dd0-ae18-718c437b8eb0",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6471,
+          6477
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "90036feb-0132-4ba8-8415-0f11a17c898d",
+        "encounterCardUUID": "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6533,
+          6541
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "63648d40-a6ec-442f-aa36-24aafcb01ddc",
+        "encounterCardUUID": "90a6a7a0-b739-475e-8379-647741aab423",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6590,
+          6596
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "cb27950c-7df6-4a8e-a540-0a9ae04cae1c",
+        "encounterCardUUID": "f79c63f6-7cf1-4030-be39-217fd3c2fb7f",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6640,
+          6648
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "e9d14079-adda-42b1-a0e1-8fe8fa8113a7",
+        "encounterCardUUID": "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Visitor",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6725,
+          6733
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "6b56baff-fe52-4b32-9e52-534d34863444",
+        "encounterCardUUID": "8624f9c7-dc92-4f4a-9c79-319b9c121b19",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6832,
+          6838
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "a6c5d591-c423-4700-9a69-7ea25fc80236",
+        "encounterCardUUID": "6d6ce556-60df-486f-b2d8-5df168a6f75e",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          6900,
+          6906
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "b718d1a0-af08-4d66-977f-5a8fa2a08ee6",
+        "encounterCardUUID": "243a15d3-a4eb-415c-b106-86d4a2b7ec6a",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          7295,
+          7303
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "b6e5c3c3-cff9-404f-9521-b890c1c5139c",
+        "encounterCardUUID": "72debe2e-1f47-4a66-83c3-71bb72876663",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          7321,
+          7327
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "aea75970-6235-40ac-b422-c6327f0a9c8f",
+        "encounterCardUUID": "09e17f29-8ee1-477f-8175-ff37eb1f254a",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Survivor",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          7335,
+          7343
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "50c0f784-ad01-4fde-9cff-27a0fedbe1d6",
+        "encounterCardUUID": "dbd014b1-1ec8-4762-bd96-48a2a4824de2",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          7476,
+          7482
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "d244c4b0-3a78-4961-a975-ebadcae7df6f",
+        "encounterCardUUID": "7ffb1179-6c94-4f80-9613-ece2b799f19d",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          7655,
+          7661
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "51f5fe3f-8c57-4366-94db-d270fa71ea04",
+        "encounterCardUUID": "b977afaf-f583-45ec-8e34-99fbfa4e9190",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          7703,
+          7711
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "124bc32b-bb3e-4f6e-bddf-2bf6545c0e07",
+        "encounterCardUUID": "3cda9dd7-cb81-43c1-9db5-1444d7363e13",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          7719,
+          7725
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "8f7e4825-8e28-4a4b-97c3-289dde13c3b1",
+        "encounterCardUUID": "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          7751,
+          7757
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "42531eee-ce02-47e4-92bb-4d80217bef9e",
+        "encounterCardUUID": "4b4cc613-2e28-4851-975f-14146286a062",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          7799,
+          7807
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "ced812d9-7943-4625-aead-10e08af7d0ea",
+        "encounterCardUUID": "0bddeb19-ff49-4a77-bc06-955377ba3ed1",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          7925,
+          7933
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "eeefd61b-d20e-439c-966b-c6ce07870182",
+        "encounterCardUUID": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Monster",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          8094,
+          8102
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "ffa72a9e-4858-4a3d-8ba2-5b3f9ae86256",
+        "encounterCardUUID": "a42fbd1b-7629-48c9-90da-e9a4246867d7",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          8187,
+          8193
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "d33d4cc1-d5dc-4ff5-ac11-195a72be9a5e",
+        "encounterCardUUID": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          8234,
+          8242
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "2fe0502f-ba70-4c91-8af0-37f907731203",
+        "encounterCardUUID": "747859fb-6fca-49fc-a653-08011a9bb44c",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          8272,
+          8280
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "b7321ee5-b0a5-48b8-b320-4ae9fbc8aa76",
+        "encounterCardUUID": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          8388,
+          8396
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "525c322c-6a70-4874-bfcf-27eca02508cc",
+        "encounterCardUUID": "01298848-1ebb-48a1-b00b-d7e0af890870",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          8799,
+          8805
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "c577d037-bd4f-432e-b0af-09e77e7ba94d",
+        "encounterCardUUID": "c6d8a7cc-3856-4030-96eb-450e406dec33",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          8826,
+          8832
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "8c75f115-e1a1-473f-83bf-c8369b8d0a31",
+        "encounterCardUUID": "56411ed4-bda9-4fdf-82e5-b5492de67039",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          8872,
+          8878
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "e8b93126-2317-469b-b1b8-8427e8b92322",
+        "encounterCardUUID": "4644db03-fbcd-4af5-a229-17962ce093d5",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          8940,
+          8946
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "581f1236-2c9a-4f47-b4e8-f980581baec6",
+        "encounterCardUUID": "4f7cb174-6324-46a8-9973-44adfa7fef9f",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          9032,
+          9038
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "5ab02a06-fdb4-4a8a-a377-70c4f0148323",
+        "encounterCardUUID": "2c9711c7-800c-4e55-a488-17ea5a6813c6",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          9064,
+          9070
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "b1b1d7c9-f765-413b-aaa6-a1ad41eaf413",
+        "encounterCardUUID": "8fed2e20-09c6-43e0-b6e0-5a4a417529a1",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          9109,
+          9117
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "d9a98018-25d4-4def-aa1d-ae1c71a4a8fb",
+        "encounterCardUUID": "d2a3d344-613c-449e-9a87-0f720a85585d",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          9210,
+          9216
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "e9d4f9de-8795-4c88-9f88-f125b6dd621b",
+        "encounterCardUUID": "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          9494,
+          9500
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "542ca815-ab73-4251-8de4-ea8e932135ac",
+        "encounterCardUUID": "c92a7dc0-04b0-4c54-9485-59a92505eabc",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          9536,
+          9542
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "ac2d6b33-402a-469f-a032-e41903b7811a",
+        "encounterCardUUID": "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          9806,
+          9814
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "f3beb8c5-cb4e-408d-bdb2-b0d2249712f5",
+        "encounterCardUUID": "34ef6c0c-1a23-4870-a52c-90d34e9769be",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          9906,
+          9912
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "71311891-4fab-4956-a346-959b2dc7e031",
+        "encounterCardUUID": "f0a70e7d-46af-4d32-92cc-9d510e97a07e",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          9950,
+          9958
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "ade4e283-b41c-4291-b7f2-c8016e6bfb0b",
+        "encounterCardUUID": "e4e8d3b9-3463-4b92-8fbe-35064f72402d",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          9966,
+          9972
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "875aa793-b67b-401d-b957-510315aa0922",
+        "encounterCardUUID": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10021,
+          10029
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "7382f0c8-6815-496f-a49a-16a982db9448",
+        "encounterCardUUID": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10046,
+          10052
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "345db217-c611-4c41-b844-1232492b9a92",
+        "encounterCardUUID": "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10068,
+          10074
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "88f91d60-01ef-48ee-a2aa-49bdba4f3d86",
+        "encounterCardUUID": "d95533f4-7809-44a8-a882-7675c61cee1c",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10236,
+          10244
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "82892492-1abf-411f-b26a-bda5cadeb706",
+        "encounterCardUUID": "95711262-8510-475c-a572-c1cd144d54cb",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10263,
+          10269
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "46e7de23-2c95-4611-aa5c-ba39b9507229",
+        "encounterCardUUID": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10307,
+          10313
+        ],
+        "d21Sampled": true
+      },
+      {
+        "uuid": "653fffee-ea77-4cd3-b1ec-b3409ba82760",
+        "encounterCardUUID": "73fc1b7f-3c2b-4993-9590-924240515c2f",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Spirit Animal",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10328,
+          10336
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "b284f3ab-e20b-411b-9f81-1ea25f8470d0",
+        "encounterCardUUID": "49641e8e-93a8-46cb-92a9-246b0fd57899",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Survivor",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10366,
+          10374
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "9e777f6d-6c26-4dc3-b049-a5bb8767c249",
+        "encounterCardUUID": "ce09ddfa-c349-4b32-b524-fb74444cddcb",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10434,
+          10442
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "c799b0b3-dde2-40db-a569-a76fe90185de",
+        "encounterCardUUID": "89c0d03c-2199-415a-bc66-89e451034328",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10493,
+          10499
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "fb9586f5-4a9e-41c7-a711-9e808662ddeb",
+        "encounterCardUUID": "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Visitor",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10528,
+          10536
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "26a4b37c-865c-4cb8-9105-879709f23ae5",
+        "encounterCardUUID": "4124a05c-b6dd-4334-b202-59fa17d77668",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10604,
+          10610
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "438b139d-835e-4eba-93e0-34d152681365",
+        "encounterCardUUID": "8451340c-02c5-465a-8c25-51efb2dc857a",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          10715,
+          10721
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "0d57b28b-3f03-46ed-9bfe-5ea8f4b80cdf",
+        "encounterCardUUID": "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11135,
+          11141
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "5dae9bee-5718-42ce-a4dc-55b5f7973af8",
+        "encounterCardUUID": "ca37f80e-8474-4d40-b793-7a900f6ca467",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11272,
+          11280
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "a9f63ed8-65e6-412a-b515-af6c12ee531d",
+        "encounterCardUUID": "6497d8b1-85b8-486d-99e2-5c141486d508",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11298,
+          11306
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "4a59f8a7-6704-4aa3-a7b3-00683145565c",
+        "encounterCardUUID": "41d0aa36-f15a-487d-b97c-7fd765973921",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11358,
+          11364
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "6265b65f-5d85-4cfc-b1a3-5d2ac17f1184",
+        "encounterCardUUID": "426825c7-7259-41af-ac1c-c042b878d69b",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11388,
+          11396
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "f08b8e9c-69cf-4de9-b93c-e35859a2df98",
+        "encounterCardUUID": "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11429,
+          11435
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "008c0224-5be4-4b37-b0b6-c05213a3af0b",
+        "encounterCardUUID": "41044897-b70a-4e2b-8eb6-baf843a14a43",
+        "kind": "purge-random-subtype-and-increase-spark",
+        "amount": 1,
+        "subtype": "Warrior",
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11676,
+          11684
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "a5fe7663-d7a0-46b2-99ec-f9fc1cff2be2",
+        "encounterCardUUID": "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11820,
+          11826
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "34b990e1-387f-4d61-a7f7-2bff50fd4c2f",
+        "encounterCardUUID": "b4df0b25-0c46-4faa-8db6-84f5f3c3444b",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11871,
+          11877
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "0728a8ae-a839-4851-abe0-2df32da02553",
+        "encounterCardUUID": "7977748d-02c1-4702-ba68-5c49f7f0759b",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11893,
+          11899
+        ],
+        "d21Sampled": false
+      },
+      {
+        "uuid": "72785214-e131-4966-8d37-93abb25ffc69",
+        "encounterCardUUID": "c06b993d-a1f4-42ad-85a9-ebf611d9a129",
+        "kind": "increase-spark-all",
+        "amount": 1,
+        "subtype": null,
+        "engineField": "Variant.deckMods.sparkBonus",
+        "sourceRange": [
+          11996,
+          12002
+        ],
+        "d21Sampled": false
+      }
+    ]
+  },
+  "publicResolver": {
+    "source": "public-resolver.proposal.mts",
+    "sourceSHA256": "103d64a65f7a95623bf7f90292593ab17639b4fb7e2695c3decbdd089c9558b0",
+    "report": "public-resolver.result.json",
+    "reportSHA256": "c8ac0a9f369a5449d6d5d944e9011cf6607eba83baef6822dab741df50366c3d",
+    "actualActions": 111,
+    "actualActorStarts": 222,
+    "actualSampleTuples": 58,
+    "sampleDistinctUUIDs": 20,
+    "qualification": [
+      "Actual loaded catalog action objects in focused single-action offer fixtures.",
+      "Real journey-player reward DTO explicitly seated on each actor; no claim that journey enemy rewards use this mapping.",
+      "Node public engine start/source-card projection; browser acceptance and native persisted game logs are separate.",
+      "All111 actual action cases include the exact11 selected generic D21 action identities; none is used as a battle-card UUID."
+    ],
+    "assertions": "Each immutable real action in focused single-action offer; actual subtype eligibility and physical purge, prior additive bonus, survivor bonus, unrelated/Event exclusion, stale/encounter refusal, deterministic replay and already-resolved refusal; realrewardDTO/engineDeckEntry/createEngineBattleInit/physicalengine start on each explicit actor seating. Twentyrealcard physicalstarts base/eligibleAmplified.",
+    "catalogImmutable": true,
+    "rawQualificationDisposition": "The immutable raw report/source last qualification uses an overbroad All111 generic hash phrase. Exact selection is11of111actions, as recorded in filedUUIDScope.genericD21Samples and the action audit. Counts/source/runtime evidence are unchanged; the qualification here is authoritative."
+  },
+  "realSample": [
+    {
+      "uuid": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "family": 1,
+      "module": "src/content/cards/nocturne-strummer-5a980eff.ts",
+      "sourceSHA256": "326cfb50990405f21bb345c266ee592d9bd57b3b09b2c8648739d04d9cc6f963"
+    },
+    {
+      "uuid": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+      "family": 2,
+      "module": "src/content/cards/night-scavenger-19aeffa6.ts",
+      "sourceSHA256": "a21f772deba8298721495ca06f84409c4350dd9d2271705b59649dfe88a61cdc"
+    },
+    {
+      "uuid": "0e1209c3-1041-4079-9b1c-f96816a7deb5",
+      "family": 3,
+      "module": "src/content/cards/wildpath-companions-0e1209c3.ts",
+      "sourceSHA256": "5d79b4e71d9477bc8ec1b4db96f14c45ff99f83eb50783e045f43e76fc7730a1"
+    },
+    {
+      "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+      "family": 4,
+      "module": "src/content/cards/iron-pharaoh-0458658d.ts",
+      "sourceSHA256": "f71a46e039cb08e3007dcef019fa9711ff42af366693cc257b29eded14e7efe3"
+    },
+    {
+      "uuid": "1bae969b-0bc4-4777-86f3-1e860d601c5c",
+      "family": 5,
+      "module": "src/content/cards/bloodsun-oppressor-1bae969b.ts",
+      "sourceSHA256": "992d81375e941b921558f9716ebfc10fe0500d33f3fb60f15a3eb71027e0c234"
+    },
+    {
+      "uuid": "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+      "family": 6,
+      "module": "src/content/cards/gloomantler-041fafeb.ts",
+      "sourceSHA256": "a01631d3a4a4fd4fb61fd160357ef079b692bc1a6969d57d9b9bd60e22fe2f4b"
+    },
+    {
+      "uuid": "01298848-1ebb-48a1-b00b-d7e0af890870",
+      "family": 7,
+      "module": "src/content/cards/silent-gatherer-01298848.ts",
+      "sourceSHA256": "96a2c4c401b5f99870d9006b5d47da18117050abbb7f50116e0e54d57a6c7297"
+    },
+    {
+      "uuid": "017a7b4b-3ccf-4635-9956-28a72b22274e",
+      "family": 8,
+      "module": "src/content/cards/remnant-scavenger-017a7b4b.ts",
+      "sourceSHA256": "2cad7dc981269c631a2d34a52ae5a2bb6278e57a8756a8e342b222fae370d767"
+    },
+    {
+      "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+      "family": 9,
+      "module": "src/content/cards/soulbinder-33874387.ts",
+      "sourceSHA256": "b12c3d1d6f8b245fb417399b05835af16aa3af14c3a3532c258527f0c0affe76"
+    },
+    {
+      "uuid": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+      "family": 10,
+      "module": "src/content/cards/fallen-one-31501d09.ts",
+      "sourceSHA256": "1c21a415c046f0021da9ece10ec66a80671bdad3da58a0c60398718bc52a7786"
+    },
+    {
+      "uuid": "15b63630-d9f8-473b-9717-15ad91ff2f16",
+      "family": 11,
+      "module": "src/content/cards/threadbreaker-15b63630.ts",
+      "sourceSHA256": "1f505ef8f83765e6ee2da67aa7f8d716c6c1cf151b9adf1d8f32109e16464a28"
+    },
+    {
+      "uuid": "4cec92f2-9bac-4949-a602-cd0a44618aaf",
+      "family": 12,
+      "module": "src/content/cards/the-ringleader-4cec92f2.ts",
+      "sourceSHA256": "a993909c31ef78048f11d5f4099554fc7ea0687d8f7b653f9cd5a8b70130af50"
+    },
+    {
+      "uuid": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+      "family": 13,
+      "module": "src/content/cards/cosmic-puppeteer-4ef8b2e7.ts",
+      "sourceSHA256": "f2e3dad1f2da4904f8a0d13a48084e41161da268d8e842db94d565de5f8fe9dd"
+    },
+    {
+      "uuid": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+      "family": 14,
+      "module": "src/content/cards/echo-architect-21965e95.ts",
+      "sourceSHA256": "11930d4a98381fc8628a83355bde0330c5b7d55367e1ecadd97a76893a0a089d"
+    },
+    {
+      "uuid": "09e17f29-8ee1-477f-8175-ff37eb1f254a",
+      "family": 15,
+      "module": "src/content/cards/seer-of-the-fallen-09e17f29.ts",
+      "sourceSHA256": "c0221421280d303b158cc98b75f6dbf392a0fd28e1aeb4f2d9fd7bd13e90ba49"
+    },
+    {
+      "uuid": "1750c85c-f547-4d21-b7e3-9e5c5fcb3171",
+      "family": 16,
+      "module": "src/content/cards/sunrise-virtuoso-1750c85c.ts",
+      "sourceSHA256": "d9ca96671cd7cdc6dfde1dba9e9cd6d453e909246657ab3add747dea7098dce2"
+    },
+    {
+      "uuid": "2a828466-450a-4637-9c68-6b54522450c0",
+      "family": 2,
+      "module": "src/content/cards/circuit-breaker-2a828466.ts",
+      "sourceSHA256": "129a9f27ebe54f991076a305217f6d81293887154a70c15994093fb26a9d0e00"
+    },
+    {
+      "uuid": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+      "family": 8,
+      "module": "src/content/cards/inferno-s-herald-01a8482b.ts",
+      "sourceSHA256": "053956fc87d3d39c63a3e6c0ef6ac6bf9d6b1c9946ac589606f074a498ae54a9"
+    },
+    {
+      "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+      "family": 9,
+      "module": "src/content/cards/celestial-lookout-374ec185.ts",
+      "sourceSHA256": "f7fc1688c5276a89dd36c050796be2f98dc3901e5bd49d6f8e169a54f9a534bb"
+    },
+    {
+      "uuid": "14ac6804-ed1d-4148-aad7-11796b6fff6c",
+      "family": 15,
+      "module": "src/content/cards/luminwings-14ac6804.ts",
+      "sourceSHA256": "47d63dac86c35d42906295e302a3061d4dfbaa1a863a0d0b01182783b58acd11"
+    }
+  ],
+  "focused": {
+    "receipt": {
+      "name": "focus-ack01",
+      "ack": "ACK280-01",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+      "start": "2026-10-15T17:40:56.507031+00:00",
+      "end": "2026-10-15T17:41:05.270854+00:00",
+      "elapsedS": 8.763593999959994,
+      "pid": 2445,
+      "pgid": 2445,
+      "exit": 0,
+      "hostLoad": 20.9931640625,
+      "userS": 10.018557,
+      "systemS": 2.886594,
+      "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/focus-ack01.log",
+      "logSHA256": "1865ece533bc92f4a81931020f2190f33a86f0687fd377139ca0c48ef8410709"
+    },
+    "files": 2,
+    "passed": 111,
+    "qualification": "91 joined synthetic runner contracts plus20 sanctioned content-gate checks; not111actiontests."
+  },
+  "preflight": {
+    "baseAmplified": {
+      "receipt": {
+        "name": "preflight-ack01",
+        "ack": "ACK280-01",
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "5a980eff-6ec7-44d8-9977-b98e66bbc2c8,19aeffa6-fd1b-4b8f-bb0c-c35659521976,0e1209c3-1041-4079-9b1c-f96816a7deb5,0458658d-7e02-4286-9249-93674d16620b,1bae969b-0bc4-4777-86f3-1e860d601c5c,041fafeb-f159-4aba-90c2-3ce4b3038bdc,01298848-1ebb-48a1-b00b-d7e0af890870,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,31501d09-5dde-44f4-a938-7ca95ad988a0,15b63630-d9f8-473b-9717-15ad91ff2f16,4cec92f2-9bac-4949-a602-cd0a44618aaf,4ef8b2e7-3525-4c25-aa30-f751467f182f,21965e95-0c8c-470c-a1e1-06d7b87a8d00,09e17f29-8ee1-477f-8175-ff37eb1f254a,1750c85c-f547-4d21-b7e3-9e5c5fcb3171,2a828466-450a-4637-9c68-6b54522450c0,01a8482b-5b4f-4c49-8791-2702cb5dfd3d,374ec185-b0f7-40e6-9988-09e96abccebe,14ac6804-ed1d-4148-aad7-11796b6fff6c",
+          "--variants",
+          "base,amplified",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+        "start": "2026-10-15T17:41:05.271363+00:00",
+        "end": "2026-10-15T17:41:07.003476+00:00",
+        "elapsedS": 1.7321077500237152,
+        "pid": 7747,
+        "pgid": 7747,
+        "exit": 0,
+        "hostLoad": 20.56494140625,
+        "userS": 1.5624400000000005,
+        "systemS": 0.6088279999999999,
+        "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/preflight-ack01.log",
+        "logSHA256": "e8d3915e2e104c5896f84f8d52518a2505b7e04622489407956d702a6cd3ca85"
+      },
+      "pass": 58,
+      "skip": 22,
+      "pending": 0,
+      "fail": 0
+    },
+    "baseKindled": {
+      "receipt": {
+        "name": "kindled-preflight",
+        "argv": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+          "--variants",
+          "base,kindled",
+          "--as",
+          "both"
+        ],
+        "pid": 22055,
+        "pgid": 22055,
+        "birth": "22055 22015 22055 Thu Oct 15 11:01:57 2026     node /opt/homebrew/bin/npm run lab:preflight -- --cards 19aeffa6-fd1b-4b8f-bb0c-c35659521976 --variants base,kindled --as both\n",
+        "start": "2026-10-15T18:01:57.615632+00:00",
+        "hostLoad": 8.98291015625,
+        "end": "2026-10-15T18:01:59.647730+00:00",
+        "elapsedS": 2.0320950419991277,
+        "exit": 0,
+        "userS": 1.3281139999999998,
+        "systemS": 0.640759,
+        "logSHA256": "59ec629988fa49cb5426e87d7a1e86902baa2c46b6ca8f15b449979e709e424f",
+        "observedProviderTokens": [],
+        "observedServerTokens": [],
+        "unsettled": [],
+        "closureQualification": "Canonical process terminal follows managed session close. Exact observed own records/groups checked; later foreign record images preserved. Full canonical stdout carries selected slot/server/strict port/normal cleanup messages. No foreign cleanup or provider reset."
+      },
+      "pass": 4,
+      "skip": 0,
+      "pending": 0,
+      "fail": 0
+    },
+    "qualification": "CanonicalCLI accepts no mods. These prove fixture/eligibility controls on matched cards/forms/controllers. Actualmodstransport/resolution and numericoracle are browser/publicengine evidence."
+  },
+  "recipeApplicability": {
+    "literal111CardPreflight": "Source-domain inapplicable: CLI resolves actionUUIDs as absent cards; no falsepass or predetermined-invalid invocation. Same-controller/base+eligibleAmplified20realcards preflight/sweep supplies realcard coverage.",
+    "literal111Weighted300": "Source-domain inapplicable: withFuzzCardWeights availableTargets excludes explorationEffect and rejects unknown UUIDs. No action is disguised as a battleCardUUID. Actualcurrent300weighted20realcards requested separately, with all111publicresolver acceptance retained.",
+    "generic11D21Samples": "Exact actionhash identities retained above and exercised by all111actual publicresolver cases; modification-specific D21 requires20realcards eachactor andonekindjudgment. No claim that action UUIDs were judged as battlecards.",
+    "syntheticJoin": "Closed631 is the prepared synthetic contract module; actualcurrentjoined runner passed. It does not replace real20bothactor/judgment.",
+    "rules": "D39/public prototype order, current rules Transfigurations and settled RD-hv-umm2.277-1; no new ambiguity or normative edit in this evidence-only scope.",
+    "scenarioModule": "No new authored abilities/primitive/productionbehavior; no new scenario or test module required."
+  },
+  "sweep": {
+    "receipt": {
+      "name": "sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.280",
+        "--cards",
+        "5a980eff-6ec7-44d8-9977-b98e66bbc2c8,19aeffa6-fd1b-4b8f-bb0c-c35659521976,0e1209c3-1041-4079-9b1c-f96816a7deb5,0458658d-7e02-4286-9249-93674d16620b,1bae969b-0bc4-4777-86f3-1e860d601c5c,041fafeb-f159-4aba-90c2-3ce4b3038bdc,01298848-1ebb-48a1-b00b-d7e0af890870,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,31501d09-5dde-44f4-a938-7ca95ad988a0,15b63630-d9f8-473b-9717-15ad91ff2f16,4cec92f2-9bac-4949-a602-cd0a44618aaf,4ef8b2e7-3525-4c25-aa30-f751467f182f,21965e95-0c8c-470c-a1e1-06d7b87a8d00,09e17f29-8ee1-477f-8175-ff37eb1f254a,1750c85c-f547-4d21-b7e3-9e5c5fcb3171,2a828466-450a-4637-9c68-6b54522450c0,01a8482b-5b4f-4c49-8791-2702cb5dfd3d,374ec185-b0f7-40e6-9988-09e96abccebe,14ac6804-ed1d-4148-aad7-11796b6fff6c",
+        "--variants",
+        "base,amplified",
+        "--as",
+        "both",
+        "--mods",
+        "{\"sparkBonus\":1}"
+      ],
+      "pid": 23097,
+      "pgid": 23097,
+      "birth": "23097 23060 23097 Thu Oct 15 11:02:06 2026     node scripts/qa/card-sweep.mjs --bead hv-umm2.280 --cards 5a980eff-6ec7-44d8-9977-b98e66bbc2c8,19aeffa6-fd1b-4b8f-bb0c-c35659521976,0e1209c3-1041-4079-9b1c-f96816a7deb5,0458658d-7e02-4286-9249-93674d16620b,1bae969b-0bc4-4777-86f3-1e860d601c5c,041fafeb-f159-4aba-90c2-3ce4b3038bdc,01298848-1ebb-48a1-b00b-d7e0af890870,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,31501d09-5dde-44f4-a938-7ca95ad988a0,15b63630-d9f8-473b-9717-15ad91ff2f16,4cec92f2-9bac-4949-a602-cd0a44618aaf,4ef8b2e7-3525-4c25-aa30-f751467f182f,21965e95-0c8c-470c-a1e1-06d7b87a8d00,09e17f29-8ee1-477f-8175-ff37eb1f254a,1750c85c-f547-4d21-b7e3-9e5c5fcb3171,2a828466-450a-4637-9c68-6b54522450c0,01a8482b-5b4f-4c49-8791-2702cb5dfd3d,374ec185-b0f7-40e6-9988-09e96abccebe,14ac6804-ed1d-4148-aad7-11796b6fff6c --variants base,amplified --as both --mods {\"sparkBonus\":1}\n",
+      "start": "2026-10-15T18:02:06.428300+00:00",
+      "hostLoad": 11.76513671875,
+      "end": "2026-10-15T18:10:57.712252+00:00",
+      "elapsedS": 531.2778930420172,
+      "exit": 0,
+      "userS": 35.297652,
+      "systemS": 18.254496,
+      "logSHA256": "0e38e240ec176d782b221eef4c737a5f871b6130a63ede34f6397d7a69bc19d4",
+      "observedProviderTokens": [
+        "3a53d598-c53b-448b-96a1-5bed0dbe0f1c",
+        "8f929349-6ee2-45ef-a510-e7f6874d69fd",
+        "1642a2f7-8d32-45c1-9ba5-a82f9c12901f",
+        "c642d6b7-f071-4124-b6d5-2a04c251001a",
+        "e821dc37-adec-44cc-b997-4364b98ef631"
+      ],
+      "observedServerTokens": [
+        "6c189356-5f9b-40db-aaf1-48ac2527cd19",
+        "39740ac2-4f5e-4467-abd4-61874c76d6bc",
+        "a59ac672-665f-492a-af42-b2599c108b9c",
+        "8f97fa8a-4833-46b1-bc6e-ea0739587a64",
+        "006cdde5-2e86-4705-b156-1fba8e0b8e5e"
+      ],
+      "unsettled": [],
+      "closureQualification": "Canonical process terminal follows managed session close. Exact observed own records/groups checked; later foreign record images preserved. Full canonical stdout carries selected slot/server/strict port/normal cleanup messages. No foreign cleanup or provider reset."
+    },
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-e7bHx2",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.280/invocations/sweep-e7bHx2",
+      "counts": {
+        "pass": 58,
+        "skip": 22
+      },
+      "attemptCounts": {
+        "pass": 58,
+        "skip": 22
+      },
+      "hostLoad": 11.76513671875,
+      "requestedMods": "{\"sparkBonus\":1}",
+      "modsValidation": "card-lab",
+      "sessions": 5,
+      "leaseYields": 4,
+      "wallMs": {
+        "browserLeaseWait": 71032,
+        "serve": 10904,
+        "scenario": 447026.71558200003,
+        "cleanup": 1725.3984989999153,
+        "execution": 459865.043958,
+        "total": 530897.043958
+      }
+    },
+    "canonicalLedgerBytesSHA256": "e12b47f74aa0821744ca76138293a664d3c51143e658de259ee4f07ba4cd9258",
+    "canonicalRows": 80,
+    "counts": {
+      "pass": 58,
+      "skip": 22
+    },
+    "qualifiedRealUUIDs": 20,
+    "families": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "rawAttemptsEqualEffectiveCells": true,
+    "retries": 0,
+    "rawReports": [
+      {
+        "uuid": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-5a980eff-6ec7-44d8-9977-b98e66bbc2c8-base-player-attempt-1.result.json",
+        "sha256": "b229e52258ecdc078feafb3274c249e110d7556864115316299c303d033c1693",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-5a980eff-6ec7-44d8-9977-b98e66bbc2c8-base-enemy-attempt-1.result.json",
+        "sha256": "8430ebc25d06f23c81f46924371cda4542e6229dbe8bd87545e7cfb8ed6f94b3",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-19aeffa6-fd1b-4b8f-bb0c-c35659521976-base-player-attempt-1.result.json",
+        "sha256": "b7ed7dc0a36207cd0fd6076b2d7f979868e75ba0c6f0625820ae2e4746dee919",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+        "as": "player",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-19aeffa6-fd1b-4b8f-bb0c-c35659521976-amplified-player-attempt-1.result.json",
+        "sha256": "8e6d7f4f59f5c848e876f870fdf002eac49f08d9ad31421173739872d0d67976",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-19aeffa6-fd1b-4b8f-bb0c-c35659521976-base-enemy-attempt-1.result.json",
+        "sha256": "231a522de8c26dd75c3d82e6e665626369e35d99a903840abb0442a84ff072c6",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+        "as": "enemy",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-19aeffa6-fd1b-4b8f-bb0c-c35659521976-amplified-enemy-attempt-1.result.json",
+        "sha256": "5fbe56522a2eb33ec510130919da5fd6226f1fd0efb9d7e332f0551ddaf6c608",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "0e1209c3-1041-4079-9b1c-f96816a7deb5",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-0e1209c3-1041-4079-9b1c-f96816a7deb5-base-player-attempt-1.result.json",
+        "sha256": "8a693b02e095e827074222fdd1e5cf400755b97f9cb3b26f4247caa2dd608984",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "0e1209c3-1041-4079-9b1c-f96816a7deb5",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-0e1209c3-1041-4079-9b1c-f96816a7deb5-base-enemy-attempt-1.result.json",
+        "sha256": "c0db893e51dff04c08922b254aaee40fcb29366b6d68d3872802cb5179a59c99",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-0458658d-7e02-4286-9249-93674d16620b-base-player-attempt-1.result.json",
+        "sha256": "d9d41ad92ba9f75e4ce07cd5c3cb9b3f3f158e1a148a331b4c810e3752671ca6",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+        "as": "player",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-0458658d-7e02-4286-9249-93674d16620b-amplified-player-attempt-1.result.json",
+        "sha256": "fe20fee127170b8e95df2bb6d9db6ffc7a55e44da59d09a0ebd185c96a28710b",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-0458658d-7e02-4286-9249-93674d16620b-base-enemy-attempt-1.result.json",
+        "sha256": "6aa47b8de90d0f4d2a3c527e8747d2d85c8bbc07dc096fdac5a54703b01412bc",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+        "as": "enemy",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-0458658d-7e02-4286-9249-93674d16620b-amplified-enemy-attempt-1.result.json",
+        "sha256": "3e17c4c91131a15ded602d98f911f0783c87e4b5d5d7be0ddf756d1fae7ab409",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "1bae969b-0bc4-4777-86f3-1e860d601c5c",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-1bae969b-0bc4-4777-86f3-1e860d601c5c-base-player-attempt-1.result.json",
+        "sha256": "e10e621250311b4e695b5569d09156fe9a5fce75ff7e1109a93e2172a8f01903",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "1bae969b-0bc4-4777-86f3-1e860d601c5c",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-1bae969b-0bc4-4777-86f3-1e860d601c5c-base-enemy-attempt-1.result.json",
+        "sha256": "e0858bd94ac3aacbd98709282352e32df5a17af5501462f686c025777ac1348a",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-041fafeb-f159-4aba-90c2-3ce4b3038bdc-base-player-attempt-1.result.json",
+        "sha256": "44560beef355d28d927095ef92bfbab086fb5b0fd917d7cff795aae0bb55d0e1",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+        "as": "player",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-041fafeb-f159-4aba-90c2-3ce4b3038bdc-amplified-player-attempt-1.result.json",
+        "sha256": "f7316166fe461d5414258060970d83d6db07669007b80aa4ab2f9be4bef041c1",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-041fafeb-f159-4aba-90c2-3ce4b3038bdc-base-enemy-attempt-1.result.json",
+        "sha256": "9d1e2d852a8710a35755275444141ffb4619f9d75d192b39f7820526fc2e52b7",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+        "as": "enemy",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-041fafeb-f159-4aba-90c2-3ce4b3038bdc-amplified-enemy-attempt-1.result.json",
+        "sha256": "6bea4216f85044702f55bf352193fdddb70dfd364b1352e89faa0c1b3c0b8915",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "01298848-1ebb-48a1-b00b-d7e0af890870",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-01298848-1ebb-48a1-b00b-d7e0af890870-base-player-attempt-1.result.json",
+        "sha256": "e14fc424ce7670020bb8e981e74adddcd4816d4357c92aa81d0619c404bd82eb",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "01298848-1ebb-48a1-b00b-d7e0af890870",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-01298848-1ebb-48a1-b00b-d7e0af890870-base-enemy-attempt-1.result.json",
+        "sha256": "8652b8516198326d20b5934839b8068188ade532b9a4a79ff45f952bc9f9a1dc",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "017a7b4b-3ccf-4635-9956-28a72b22274e",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-017a7b4b-3ccf-4635-9956-28a72b22274e-base-player-attempt-1.result.json",
+        "sha256": "28de08e2bd673f4d46c7969c3af430f4c82e08dbae105997ebfc648ad9d6e23e",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "017a7b4b-3ccf-4635-9956-28a72b22274e",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-017a7b4b-3ccf-4635-9956-28a72b22274e-base-enemy-attempt-1.result.json",
+        "sha256": "6c76a8dac50559443b4a1b04500b45afac333c36658ef859e1d69ac246f0180f",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-33874387-2490-48ed-93bc-a47a16e399ad-base-player-attempt-1.result.json",
+        "sha256": "6e53b3c47eba7cad270eb6bb591fb46d6c69cd9090758bd4244732105e07f34e",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+        "as": "player",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-33874387-2490-48ed-93bc-a47a16e399ad-amplified-player-attempt-1.result.json",
+        "sha256": "d8b32a052123e92a0c556470d814e5f19f9f3076d54ecc3cb06a33e38c5f1a74",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-33874387-2490-48ed-93bc-a47a16e399ad-base-enemy-attempt-1.result.json",
+        "sha256": "99588c2aa629dfcd0628e13fad6f9ee5be08817a1e8621b816ad40bcfb8f99f7",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+        "as": "enemy",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-33874387-2490-48ed-93bc-a47a16e399ad-amplified-enemy-attempt-1.result.json",
+        "sha256": "3da94ed32eaaa4ed36bb20cf8184d6e6dd9b1f526847dc9f6202cfb6818c420c",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-31501d09-5dde-44f4-a938-7ca95ad988a0-base-player-attempt-1.result.json",
+        "sha256": "7217e9cfe04bb1de427bc85f73dc6702040989ca1a6e4e184b0ea4e45be8f393",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-6fk0Nr/sweep-31501d09-5dde-44f4-a938-7ca95ad988a0-base-enemy-attempt-1.result.json",
+        "sha256": "07bc9ef0adea48006b9c3dda48cf28eb350517f33e658e85ab06c000af4a6a71",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "15b63630-d9f8-473b-9717-15ad91ff2f16",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-4KaIsa/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-base-player-attempt-1.result.json",
+        "sha256": "62e45947c0c5a853fb2ac82a5617a95b4270ec03bea0b4634541004a33bcbaf0",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "15b63630-d9f8-473b-9717-15ad91ff2f16",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-4KaIsa/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-base-enemy-attempt-1.result.json",
+        "sha256": "48ba206f1752641b964f0e4a978b01c323c41bcf4f4b39142f07bf06858b32ec",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "4cec92f2-9bac-4949-a602-cd0a44618aaf",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-4cec92f2-9bac-4949-a602-cd0a44618aaf-base-player-attempt-1.result.json",
+        "sha256": "c8cc6c909e63aad6da7e3b320b98554aa2f0c23c789bf1a7b2227a80ce84580a",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "4cec92f2-9bac-4949-a602-cd0a44618aaf",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-4cec92f2-9bac-4949-a602-cd0a44618aaf-base-enemy-attempt-1.result.json",
+        "sha256": "2ed3f4b84dea74dc0a4c59befc7a50ae176c4aaa060d96fda0660330e366d2ab",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-4ef8b2e7-3525-4c25-aa30-f751467f182f-base-player-attempt-1.result.json",
+        "sha256": "c45113ec55b85267377ccf265cc16b1415d704c729851efbb874fba4724e48f8",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-4ef8b2e7-3525-4c25-aa30-f751467f182f-base-enemy-attempt-1.result.json",
+        "sha256": "059f1fbadb27d226d0dd4f959a9b066db0cac30a840b9b4778a39995b8c707ec",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-21965e95-0c8c-470c-a1e1-06d7b87a8d00-base-player-attempt-1.result.json",
+        "sha256": "e29589d66e30a477d70c1acf4501e473e9cc7982d825d265e2c36e627c648d3c",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-21965e95-0c8c-470c-a1e1-06d7b87a8d00-base-enemy-attempt-1.result.json",
+        "sha256": "54ddc032f1282851ddd6046eac9762aa114031e542eac71451e337e3bf14194c",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "09e17f29-8ee1-477f-8175-ff37eb1f254a",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-09e17f29-8ee1-477f-8175-ff37eb1f254a-base-player-attempt-1.result.json",
+        "sha256": "d5de80ef348c7c341f802f875da8c1758181dc9c66222646775ada4c9c39e6a3",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "09e17f29-8ee1-477f-8175-ff37eb1f254a",
+        "as": "player",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-09e17f29-8ee1-477f-8175-ff37eb1f254a-amplified-player-attempt-1.result.json",
+        "sha256": "71194083996d8a3791cb9a5e3c639333492a407a908034aac423809cf4cd77e9",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "09e17f29-8ee1-477f-8175-ff37eb1f254a",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-09e17f29-8ee1-477f-8175-ff37eb1f254a-base-enemy-attempt-1.result.json",
+        "sha256": "10e6a5cf5ca370a5424bc7f2e22edb309e7086c1491cb6caf86dd64e2182a8bc",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "09e17f29-8ee1-477f-8175-ff37eb1f254a",
+        "as": "enemy",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-09e17f29-8ee1-477f-8175-ff37eb1f254a-amplified-enemy-attempt-1.result.json",
+        "sha256": "29426ff3e078580f7f7992c6d55b1d384b9cddb1a9f67803b5eacfac69b555c1",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "1750c85c-f547-4d21-b7e3-9e5c5fcb3171",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-1750c85c-f547-4d21-b7e3-9e5c5fcb3171-base-player-attempt-1.result.json",
+        "sha256": "0cbd91972d2ebbd7d0cc9d834f798726cae40e2d96793a956e459531f89ed6bc",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "1750c85c-f547-4d21-b7e3-9e5c5fcb3171",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-1750c85c-f547-4d21-b7e3-9e5c5fcb3171-base-enemy-attempt-1.result.json",
+        "sha256": "75292dc67aa6002ac545abaf569d145ef5f4b284eb3bbc12b4e9563620a0dfd8",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "2a828466-450a-4637-9c68-6b54522450c0",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-2a828466-450a-4637-9c68-6b54522450c0-base-player-attempt-1.result.json",
+        "sha256": "e0efc75ae4d71f123655525f43a365c23fa2ffee51450433aee88e91ee65d4b7",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "2a828466-450a-4637-9c68-6b54522450c0",
+        "as": "player",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-2a828466-450a-4637-9c68-6b54522450c0-amplified-player-attempt-1.result.json",
+        "sha256": "9ba4695a598cf63ccd517380f3a71ef95cc0a7cd31ff776d94f5946fcaf49d4a",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "2a828466-450a-4637-9c68-6b54522450c0",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-2a828466-450a-4637-9c68-6b54522450c0-base-enemy-attempt-1.result.json",
+        "sha256": "1641db35cd4ab3efc4a6a8139043f7ac8883a74e7e07d7cecdfec07b8d6e3535",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "2a828466-450a-4637-9c68-6b54522450c0",
+        "as": "enemy",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-2a828466-450a-4637-9c68-6b54522450c0-amplified-enemy-attempt-1.result.json",
+        "sha256": "420475b6af5c04262d22ef3229e0e788aad9affe8c6467389d52b4bb76255f05",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-01a8482b-5b4f-4c49-8791-2702cb5dfd3d-base-player-attempt-1.result.json",
+        "sha256": "03dc85ec1aedebefa1082aeaab2475ceb0c31b84be38cbb79eaaecca5ae0ac20",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+        "as": "player",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-01a8482b-5b4f-4c49-8791-2702cb5dfd3d-amplified-player-attempt-1.result.json",
+        "sha256": "34e5b06e8eda9f77e4ffc081545588f9951a22fe5acda26ff335e8a8eef9881e",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-01a8482b-5b4f-4c49-8791-2702cb5dfd3d-base-enemy-attempt-1.result.json",
+        "sha256": "974f6c5e04d346d87ee2bce446e324a982fffc6b774b3558e939bb27593d9dd1",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+        "as": "enemy",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-Rnfr1T/sweep-01a8482b-5b4f-4c49-8791-2702cb5dfd3d-amplified-enemy-attempt-1.result.json",
+        "sha256": "d14a2b1673ed24a8812b282e2871a2000a454543ac8833024836051609b50ade",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-vA9CV8/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-base-player-attempt-1.result.json",
+        "sha256": "5ce19bc9b4dd6697d07a12b20bf5e582e34f8ec1ad62f9371965d0199e6740f2",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "as": "player",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-vA9CV8/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-amplified-player-attempt-1.result.json",
+        "sha256": "998be034f0f1f6d8f9e029d6f0bd9359a0f8001f95af8379619426997769a961",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-vA9CV8/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-base-enemy-attempt-1.result.json",
+        "sha256": "3725e1c642e94dcb1f8582f2ab0b3450a4f7d37cc85071eb05ec24b9cd8449cc",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+        "as": "enemy",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-vA9CV8/sweep-374ec185-b0f7-40e6-9988-09e96abccebe-amplified-enemy-attempt-1.result.json",
+        "sha256": "01c7bf67fe363c23f026fa8ec52975758fd2c208af5b940a72916878f03ddf8a",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "14ac6804-ed1d-4148-aad7-11796b6fff6c",
+        "as": "player",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-y3pEjF/sweep-14ac6804-ed1d-4148-aad7-11796b6fff6c-base-player-attempt-1.result.json",
+        "sha256": "c2a13cc41cefd81195b39f0a728bce46fbff221b0ddf20bfd423e3c8f7a97a4c",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "14ac6804-ed1d-4148-aad7-11796b6fff6c",
+        "as": "player",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-y3pEjF/sweep-14ac6804-ed1d-4148-aad7-11796b6fff6c-amplified-player-attempt-1.result.json",
+        "sha256": "0c89ae2e617bc752f44f65dc20e8c346997442589a966c1543282e08685633fc",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "14ac6804-ed1d-4148-aad7-11796b6fff6c",
+        "as": "enemy",
+        "variant": "base",
+        "rawReport": "invocations/sweep-e7bHx2/run-y3pEjF/sweep-14ac6804-ed1d-4148-aad7-11796b6fff6c-base-enemy-attempt-1.result.json",
+        "sha256": "fe653da08118a5f43c6be8c57746547af226f40002c404b951361e2e82c6ae1a",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "uuid": "14ac6804-ed1d-4148-aad7-11796b6fff6c",
+        "as": "enemy",
+        "variant": "amplified",
+        "rawReport": "invocations/sweep-e7bHx2/run-y3pEjF/sweep-14ac6804-ed1d-4148-aad7-11796b6fff6c-amplified-enemy-attempt-1.result.json",
+        "sha256": "93594d522d3e9b510c9404797963dd8a826203fe18570a6878417b24cdf5def5",
+        "error": null,
+        "caps": [],
+        "verdict": "pass"
+      }
+    ],
+    "qualification": "Modifiertransport/readiness, real UI controls/source-scoped resolution and emptyCaps on58eligible cells;22source-backedAmplifiedskips. Numeric Kindled oracle separately judged."
+  },
+  "judged": {
+    "receipt": {
+      "name": "judged",
+      "argv": [
+        "node",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/judged-caller.proposal.mjs"
+      ],
+      "pid": 35517,
+      "pgid": 35517,
+      "birth": "35517 35497 35517 Thu Oct 15 11:11:10 2026     node /tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/judged-caller.proposal.mjs\n",
+      "start": "2026-10-15T18:11:10.049751+00:00",
+      "hostLoad": 9.76953125,
+      "end": "2026-10-15T18:11:58.385270+00:00",
+      "elapsedS": 48.33499100001063,
+      "exit": 0,
+      "userS": 6.464854000000001,
+      "systemS": 2.9187640000000004,
+      "logSHA256": "07f83b6cf24f151d5cfa7883ec68e2f24aedec60b09d2504f71437f881619002",
+      "observedProviderTokens": [
+        "fa7efab0-fe61-4bae-81dc-ab0e9e557212"
+      ],
+      "observedServerTokens": [
+        "01052cfb-253d-4f89-bbdf-80906d1b79a6"
+      ],
+      "unsettled": [],
+      "closureQualification": "Canonical process terminal follows managed session close. Exact observed own records/groups checked; later foreign record images preserved. Full canonical stdout carries selected slot/server/strict port/normal cleanup messages. No foreign cleanup or provider reset."
+    },
+    "callerSHA256": "1349ae881753f856e28f06e7ebd6e733be4a5f654395c273e8debfa2eea7a1f0",
+    "callerPacketSHA256": "6f2ba2ea194fe4eaf7f8617399b8432e892d7cdc93dc5e0cb187083ae4c8b566",
+    "overallReportSHA256": "ee7e12043ae55cb1316ef3848c5f0709e2dd1e38966653374b90f63b818fd44d",
+    "observations": [
+      {
+        "as": "player",
+        "viewport": "desktop",
+        "gameId": "w6rvm7",
+        "physical": "i1",
+        "beforeSpark": "5",
+        "afterSpark": "5",
+        "fullPersistedArrayEqual": true,
+        "persistedArraySHA256": "16024ae8ac23144e253b71bb107e831c2d0f16971ad9ce1baa4b60be893dc724",
+        "beforeEventCount": 2,
+        "afterEventCount": 2,
+        "initEqual": true,
+        "entryEqual": true,
+        "beforeSourceEvents": [
+          {
+            "seq": 2,
+            "index": 3,
+            "kind": "resolved",
+            "instance": "i1",
+            "event": {
+              "kind": "resolved",
+              "instance": "i1"
+            }
+          },
+          {
+            "seq": 2,
+            "index": 4,
+            "kind": "materialized",
+            "instance": "i1",
+            "event": {
+              "kind": "materialized",
+              "instance": "i1",
+              "side": "player",
+              "slot": {
+                "rank": "back",
+                "index": 0
+              }
+            }
+          }
+        ],
+        "afterMountedSourceEvents": 0,
+        "beforeGeometry": {
+          "x": 254.5,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "afterGeometry": {
+          "x": 254.5,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "controlHit": {
+          "x": 1117.8125,
+          "y": 597,
+          "width": 122.6875,
+          "height": 42,
+          "hit": true
+        },
+        "screens": [
+          "spark-kindled-player-desktop-resolved.png",
+          "spark-kindled-player-desktop-reloaded.png"
+        ],
+        "nativeActionCounts": [
+          {
+            "side": "player",
+            "kind": "play",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "as": "player",
+        "viewport": "mobile",
+        "gameId": "m9oqdm",
+        "physical": "i1",
+        "beforeSpark": "5",
+        "afterSpark": "5",
+        "fullPersistedArrayEqual": true,
+        "persistedArraySHA256": "acd0a6a917cff4f576dc34da3d4bb5807891f9c4b43ffbfa1b824f86e4ab214e",
+        "beforeEventCount": 2,
+        "afterEventCount": 2,
+        "initEqual": true,
+        "entryEqual": true,
+        "beforeSourceEvents": [
+          {
+            "seq": 2,
+            "index": 3,
+            "kind": "resolved",
+            "instance": "i1",
+            "event": {
+              "kind": "resolved",
+              "instance": "i1"
+            }
+          },
+          {
+            "seq": 2,
+            "index": 4,
+            "kind": "materialized",
+            "instance": "i1",
+            "event": {
+              "kind": "materialized",
+              "instance": "i1",
+              "side": "player",
+              "slot": {
+                "rank": "back",
+                "index": 0
+              }
+            }
+          }
+        ],
+        "afterMountedSourceEvents": 0,
+        "beforeGeometry": {
+          "x": 23.40625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "afterGeometry": {
+          "x": 23.40625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "controlHit": {
+          "x": 259.3125,
+          "y": 522.828125,
+          "width": 122.6875,
+          "height": 42,
+          "hit": true
+        },
+        "screens": [
+          "spark-kindled-player-mobile-resolved.png"
+        ],
+        "nativeActionCounts": [
+          {
+            "side": "player",
+            "kind": "play",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "as": "enemy",
+        "viewport": "desktop",
+        "gameId": "yzbyg6",
+        "physical": "i10",
+        "beforeSpark": "5",
+        "afterSpark": "5",
+        "fullPersistedArrayEqual": true,
+        "persistedArraySHA256": "23d5864a85f4748c34aa0690a8961ac7dd6eaa8f9673a45c4812b79e3ccb04b9",
+        "beforeEventCount": 3,
+        "afterEventCount": 3,
+        "initEqual": true,
+        "entryEqual": true,
+        "beforeSourceEvents": [
+          {
+            "seq": 2,
+            "index": 0,
+            "kind": "resolved",
+            "instance": "i10",
+            "event": {
+              "kind": "resolved",
+              "instance": "i10"
+            }
+          },
+          {
+            "seq": 2,
+            "index": 1,
+            "kind": "materialized",
+            "instance": "i10",
+            "event": {
+              "kind": "materialized",
+              "instance": "i10",
+              "side": "enemy",
+              "slot": {
+                "rank": "back",
+                "index": 0
+              }
+            }
+          }
+        ],
+        "afterMountedSourceEvents": 0,
+        "beforeGeometry": {
+          "x": 254.5,
+          "y": 183,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "afterGeometry": {
+          "x": 254.5,
+          "y": 183,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "controlHit": {
+          "x": 1115.97216796875,
+          "y": 596.3699951171875,
+          "width": 126.3681640625,
+          "height": 43.260009765625,
+          "hit": true
+        },
+        "screens": [],
+        "nativeActionCounts": [
+          {
+            "side": "player",
+            "kind": "pass",
+            "count": 1
+          },
+          {
+            "side": "enemy",
+            "kind": "pass",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "as": "enemy",
+        "viewport": "mobile",
+        "gameId": "sg9h9e",
+        "physical": "i10",
+        "beforeSpark": "5",
+        "afterSpark": "5",
+        "fullPersistedArrayEqual": true,
+        "persistedArraySHA256": "78231fac4377f2ce3470e228263d460da30e95739448739c24c81e12df331fc6",
+        "beforeEventCount": 3,
+        "afterEventCount": 3,
+        "initEqual": true,
+        "entryEqual": true,
+        "beforeSourceEvents": [
+          {
+            "seq": 2,
+            "index": 0,
+            "kind": "resolved",
+            "instance": "i10",
+            "event": {
+              "kind": "resolved",
+              "instance": "i10"
+            }
+          },
+          {
+            "seq": 2,
+            "index": 1,
+            "kind": "materialized",
+            "instance": "i10",
+            "event": {
+              "kind": "materialized",
+              "instance": "i10",
+              "side": "enemy",
+              "slot": {
+                "rank": "back",
+                "index": 0
+              }
+            }
+          }
+        ],
+        "afterMountedSourceEvents": 0,
+        "beforeGeometry": {
+          "x": 23.40625,
+          "y": 222.3125,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "afterGeometry": {
+          "x": 23.40625,
+          "y": 222.3125,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "controlHit": {
+          "x": 257.4721984863281,
+          "y": 522.1981201171875,
+          "width": 126.36810302734375,
+          "height": 43.260009765625,
+          "hit": true
+        },
+        "screens": [],
+        "nativeActionCounts": [
+          {
+            "side": "player",
+            "kind": "pass",
+            "count": 1
+          },
+          {
+            "side": "enemy",
+            "kind": "pass",
+            "count": 1
+          }
+        ]
+      }
+    ],
+    "nativeGameLogs": [
+      {
+        "filename": "spark280-kindled-player-desktop.jsonl",
+        "relativePath": "invocations/judged-a0foAy/run-DQN44P/spark280-kindled-player-desktop.jsonl",
+        "sha256": "5cbea19a7578b26027c9df3ed769d3976a52089b54c4a9ead5fc7b1b4161beef",
+        "rows": 35,
+        "gameId": "w6rvm7"
+      },
+      {
+        "filename": "spark280-kindled-player-mobile.jsonl",
+        "relativePath": "invocations/judged-a0foAy/run-DQN44P/spark280-kindled-player-mobile.jsonl",
+        "sha256": "67ff0e743db747632d39dba083e05b82fbf65e43c1c0f7e4d11e303ef5d370af",
+        "rows": 34,
+        "gameId": "m9oqdm"
+      },
+      {
+        "filename": "spark280-kindled-enemy-desktop.jsonl",
+        "relativePath": "invocations/judged-a0foAy/run-DQN44P/spark280-kindled-enemy-desktop.jsonl",
+        "sha256": "9a74314cd64dfb4f947c2e994bcf7a1dfbab5d33919ab983c7d59cea7b0d77c3",
+        "rows": 36,
+        "gameId": "yzbyg6"
+      },
+      {
+        "filename": "spark280-kindled-enemy-mobile.jsonl",
+        "relativePath": "invocations/judged-a0foAy/run-DQN44P/spark280-kindled-enemy-mobile.jsonl",
+        "sha256": "b527f211d19b734669a022323744fc37b1441ae8cd37f3f8f2cb2e8095f8d692",
+        "rows": 36,
+        "gameId": "sg9h9e"
+      }
+    ],
+    "runtime": {
+      "admitted": {
+        "owner": {
+          "token": "fa7efab0-fe61-4bae-81dc-ab0e9e557212",
+          "pid": 35517,
+          "bead": "hv-umm2.280",
+          "label": "spark280-judged",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-15T18:11:12.207Z",
+          "providerState": "active",
+          "mcpSessionId": "059d848a-6cbe-40ec-a6b9-43bed21e40af",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "serverRecord": {
+          "token": "01052cfb-253d-4f89-bbdf-80906d1b79a6",
+          "runner": {
+            "pid": 35517,
+            "group": 35517,
+            "started": "Thu Oct 15 11:11:10 2026",
+            "state": "Ss",
+            "command": "node /tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/judged-caller.proposal.mjs"
+          },
+          "server": {
+            "pid": 35563,
+            "group": 35563,
+            "started": "Thu Oct 15 11:11:10 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 01052cfb-253d-4f89-bbdf-80906d1b79a6 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+          "port": 5274
+        },
+        "serverIdentity": {
+          "pid": 35563,
+          "group": 35563,
+          "started": "Thu Oct 15 11:11:10 2026",
+          "state": "Ss",
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 01052cfb-253d-4f89-bbdf-80906d1b79a6 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+        },
+        "port": 5274,
+        "slot": 1,
+        "leasePath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+        "selectedSlotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+        "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json"
+      },
+      "closed": true,
+      "closedAt": "2026-10-15T18:11:58.030Z",
+      "ownOwnerRetained": false,
+      "ownServerRetained": false,
+      "sameServerStillPresent": false,
+      "groupAfterClose": "",
+      "listenersAfterClose": "",
+      "cleanupError": null,
+      "failure": null,
+      "selectedLeaseSettlement": "Canonical close resolved after browser_close, active RPC drain, SDK transport, exact owner clearance, verified own server group and port cleanup, and selected lease release. Uncertain cleanup propagates failure; no manual provider/lease retirement.",
+      "laterIdentityQualification": "Record/PID reuse is compared with the exact admitted token/birth/command. A later port listener is reported without control; parent must qualify any reuse from actual identity/chronology. Any nonempty old group is uncredited pending identity audit; foreign records are preserved."
+    },
+    "qualification": "Actualfour canonicalKindled+spark1cells, bothcontrollers desktop/mobile; physicalnumeric5 before/after genuine native reload. Full persisted action arrays equal; mounted afterreload observations reset and are not durable-history evidence. Enemyplay is prepaid canonicalconstructor script; nativeengine.action logs showactualpasses, no enemylivepolicyplay claim.",
+    "visualJudgment": {
+      "viewedAllThree": true,
+      "dimensions": {
+        "spark-kindled-player-desktop-resolved.png": [
+          2880,
+          1800
+        ],
+        "spark-kindled-player-mobile-resolved.png": [
+          780,
+          1688
+        ],
+        "spark-kindled-player-desktop-reloaded.png": [
+          2880,
+          1800
+        ]
+      },
+      "observation": "Spark5/exhausted source visible, NextPhase accessible, own card/control fit without clipping/overlap on inspected desktop/mobile and reloaded desktop. No whole-renderer claim."
+    }
+  },
+  "fuzz": {
+    "request": {
+      "bead": "hv-umm2.280",
+      "base": "df560876173b82bd4a440afcd651ed2942c6164a",
+      "authority": "PROPOSAL ONLY",
+      "argv": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "/opt/homebrew/bin/npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "spark280-20261015",
+        "--weight-uuids",
+        "5a980eff-6ec7-44d8-9977-b98e66bbc2c8,19aeffa6-fd1b-4b8f-bb0c-c35659521976,0e1209c3-1041-4079-9b1c-f96816a7deb5,0458658d-7e02-4286-9249-93674d16620b,1bae969b-0bc4-4777-86f3-1e860d601c5c,041fafeb-f159-4aba-90c2-3ce4b3038bdc,01298848-1ebb-48a1-b00b-d7e0af890870,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,31501d09-5dde-44f4-a938-7ca95ad988a0,15b63630-d9f8-473b-9717-15ad91ff2f16,4cec92f2-9bac-4949-a602-cd0a44618aaf,4ef8b2e7-3525-4c25-aa30-f751467f182f,21965e95-0c8c-470c-a1e1-06d7b87a8d00,09e17f29-8ee1-477f-8175-ff37eb1f254a,1750c85c-f547-4d21-b7e3-9e5c5fcb3171,2a828466-450a-4637-9c68-6b54522450c0,01a8482b-5b4f-4c49-8791-2702cb5dfd3d,374ec185-b0f7-40e6-9988-09e96abccebe,14ac6804-ed1d-4148-aad7-11796b6fff6c"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+      "outputs": [
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/fuzz-current300.log",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/fuzz-current300.running.json",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/fuzz-current300.receipt.json",
+        "logs/fuzz/spark280-20261015-0-300/*.jsonl on failure only"
+      ],
+      "custody": "One own process group started with start_new_session, lockf holds exactheavylock; waitterminal and recordactualPID/PGID/start/end/UTC/elapsed/CPU/load/logSHA. Do not signal any foreignprocess. On interruption signal only admitted ownPGID then settle. No browsercontext/server. No broader source/evidencewrites.",
+      "budget": "Each actual fuzz execution max30min D17; heavylockwait measuredseparately when possible; no additional workerprocesses, env2. A failed/exhausted batch is retained exact outcome; no retry or inputchange without finiteACK.",
+      "proofScope": "300 actualcurrentfullpool battles with random mods+forms eachside, weighted20realcardUUIDs, defaultinteractiveEvery10, determinization/invariant/replay checks. This is an actualreal-card substitute for source-inapplicable literal111explorationEffect weighting, explicitly preserving111actionresolver evidence separately.",
+      "historicalDisposition": "279 historical300 remains historicalonly; parent identified actualcurrentruntimeApollyon design drift, so no unchangedclosure/currentreuseclaim."
+    },
+    "runningIdentity": {
+      "name": "fuzz-current300",
+      "ack": "ACK280-02",
+      "argv": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "/opt/homebrew/bin/npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "spark280-20261015",
+        "--weight-uuids",
+        "5a980eff-6ec7-44d8-9977-b98e66bbc2c8,19aeffa6-fd1b-4b8f-bb0c-c35659521976,0e1209c3-1041-4079-9b1c-f96816a7deb5,0458658d-7e02-4286-9249-93674d16620b,1bae969b-0bc4-4777-86f3-1e860d601c5c,041fafeb-f159-4aba-90c2-3ce4b3038bdc,01298848-1ebb-48a1-b00b-d7e0af890870,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,31501d09-5dde-44f4-a938-7ca95ad988a0,15b63630-d9f8-473b-9717-15ad91ff2f16,4cec92f2-9bac-4949-a602-cd0a44618aaf,4ef8b2e7-3525-4c25-aa30-f751467f182f,21965e95-0c8c-470c-a1e1-06d7b87a8d00,09e17f29-8ee1-477f-8175-ff37eb1f254a,1750c85c-f547-4d21-b7e3-9e5c5fcb3171,2a828466-450a-4637-9c68-6b54522450c0,01a8482b-5b4f-4c49-8791-2702cb5dfd3d,374ec185-b0f7-40e6-9988-09e96abccebe,14ac6804-ed1d-4148-aad7-11796b6fff6c"
+      ],
+      "start": "2026-10-15T17:46:00.568511+00:00",
+      "pid": 35476,
+      "pgid": 35476,
+      "birth": "35476 35465 35476 Thu Oct 15 10:46:00 2026     /usr/bin/lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock env JOURNEY_TEST_WORKERS=2 /opt/homebrew/bin/npm run fuzz:engine -- --games 300 --seed spark280-20261015 --weight-uuids 5a980eff-6ec7-44d8-9977-b98e66bbc2c8,19aeffa6-fd1b-4b8f-bb0c-c35659521976,0e1209c3-1041-4079-9b1c-f96816a7deb5,0458658d-7e02-4286-9249-93674d16620b,1bae969b-0bc4-4777-86f3-1e860d601c5c,041fafeb-f159-4aba-90c2-3ce4b3038bdc,01298848-1ebb-48a1-b00b-d7e0af890870,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,31501d09-5dde-44f4-a938-7ca95ad988a0,15b63630-d9f8-473b-9717-15ad91ff2f16,4cec92f2-9bac-4949-a602-cd0a44618aaf,4ef8b2e7-3525-4c25-aa30-f751467f182f,21965e95-0c8c-470c-a1e1-06d7b87a8d00,09e17f29-8ee1-477f-8175-ff37eb1f254a,1750c85c-f547-4d21-b7e3-9e5c5fcb3171,2a828466-450a-4637-9c68-6b54522450c0,01a8482b-5b4f-4c49-8791-2702cb5dfd3d,374ec185-b0f7-40e6-9988-09e96abccebe,14ac6804-ed1d-4148-aad7-11796b6fff6c\n",
+      "hostLoad": 6.97216796875,
+      "firstOutput": {
+        "at": "2026-10-15T18:05:41.954773+00:00",
+        "elapsedS": 1181.376569791988,
+        "qualification": "First npm log bytes observed after heavylock acquired; <=1s observation interval. This bounds wait+startup to initialoutput; engine execution has its own summary clock."
+      }
+    },
+    "actualTerminal": {
+      "receipt": {
+        "name": "fuzz-current300",
+        "ack": "ACK280-02",
+        "argv": [
+          "/usr/bin/lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "/opt/homebrew/bin/npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--seed",
+          "spark280-20261015",
+          "--weight-uuids",
+          "5a980eff-6ec7-44d8-9977-b98e66bbc2c8,19aeffa6-fd1b-4b8f-bb0c-c35659521976,0e1209c3-1041-4079-9b1c-f96816a7deb5,0458658d-7e02-4286-9249-93674d16620b,1bae969b-0bc4-4777-86f3-1e860d601c5c,041fafeb-f159-4aba-90c2-3ce4b3038bdc,01298848-1ebb-48a1-b00b-d7e0af890870,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,31501d09-5dde-44f4-a938-7ca95ad988a0,15b63630-d9f8-473b-9717-15ad91ff2f16,4cec92f2-9bac-4949-a602-cd0a44618aaf,4ef8b2e7-3525-4c25-aa30-f751467f182f,21965e95-0c8c-470c-a1e1-06d7b87a8d00,09e17f29-8ee1-477f-8175-ff37eb1f254a,1750c85c-f547-4d21-b7e3-9e5c5fcb3171,2a828466-450a-4637-9c68-6b54522450c0,01a8482b-5b4f-4c49-8791-2702cb5dfd3d,374ec185-b0f7-40e6-9988-09e96abccebe,14ac6804-ed1d-4148-aad7-11796b6fff6c"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+        "start": "2026-10-15T17:46:00.568511+00:00",
+        "end": "2026-10-15T18:32:09.304282+00:00",
+        "elapsedS": 2768.7078650419717,
+        "pid": 35476,
+        "pgid": 35476,
+        "birth": "35476 35465 35476 Thu Oct 15 10:46:00 2026     /usr/bin/lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock env JOURNEY_TEST_WORKERS=2 /opt/homebrew/bin/npm run fuzz:engine -- --games 300 --seed spark280-20261015 --weight-uuids 5a980eff-6ec7-44d8-9977-b98e66bbc2c8,19aeffa6-fd1b-4b8f-bb0c-c35659521976,0e1209c3-1041-4079-9b1c-f96816a7deb5,0458658d-7e02-4286-9249-93674d16620b,1bae969b-0bc4-4777-86f3-1e860d601c5c,041fafeb-f159-4aba-90c2-3ce4b3038bdc,01298848-1ebb-48a1-b00b-d7e0af890870,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,31501d09-5dde-44f4-a938-7ca95ad988a0,15b63630-d9f8-473b-9717-15ad91ff2f16,4cec92f2-9bac-4949-a602-cd0a44618aaf,4ef8b2e7-3525-4c25-aa30-f751467f182f,21965e95-0c8c-470c-a1e1-06d7b87a8d00,09e17f29-8ee1-477f-8175-ff37eb1f254a,1750c85c-f547-4d21-b7e3-9e5c5fcb3171,2a828466-450a-4637-9c68-6b54522450c0,01a8482b-5b4f-4c49-8791-2702cb5dfd3d,374ec185-b0f7-40e6-9988-09e96abccebe,14ac6804-ed1d-4148-aad7-11796b6fff6c\n",
+        "exit": 0,
+        "timedOut": false,
+        "firstOutput": {
+          "at": "2026-10-15T18:05:41.954773+00:00",
+          "elapsedS": 1181.376569791988,
+          "qualification": "First npm log bytes observed after heavylock acquired; <=1s observation interval. This bounds wait+startup to initialoutput; engine execution has its own summary clock."
+        },
+        "hostLoad": 6.97216796875,
+        "userS": 1657.047164,
+        "systemS": 11.132712,
+        "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/fuzz-current300.log",
+        "logSHA256": "4bd3dadfdccc8ff9e8a11a14dd5df9339af4cd3982a51ac1cf2a5b76e7252099"
+      },
+      "nativeSummary": "fuzz:engine 300 games, 93903 steps, 1586.4 s wall, 1666.0 s CPU (0.2 games/s wall, 0.2 games/s CPU); prompts 6386; interactive re-runs 637 (24.094 ms each); feasibility bounded {\"legality\":0,\"prompts\":0}; results {\"player\":147,\"enemy\":153,\"draw\":0}; failures 0",
+      "games": 300,
+      "steps": 93903,
+      "engineWallS": 1586.4,
+      "engineCpuS": 1666.0,
+      "prompts": 6386,
+      "interactiveEvery": 10,
+      "interactiveReruns": 637,
+      "interactiveRerunMeanMs": 24.094,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 0
+      },
+      "results": {
+        "player": 147,
+        "enemy": 153,
+        "draw": 0
+      },
+      "failures": 0,
+      "targetCoverage": [
+        {
+          "kind": "card",
+          "uuid": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+          "included": 608,
+          "exercised": 251
+        },
+        {
+          "kind": "card",
+          "uuid": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+          "included": 605,
+          "exercised": 254
+        },
+        {
+          "kind": "card",
+          "uuid": "0e1209c3-1041-4079-9b1c-f96816a7deb5",
+          "included": 612,
+          "exercised": 232
+        },
+        {
+          "kind": "card",
+          "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+          "included": 609,
+          "exercised": 275
+        },
+        {
+          "kind": "card",
+          "uuid": "1bae969b-0bc4-4777-86f3-1e860d601c5c",
+          "included": 605,
+          "exercised": 273
+        },
+        {
+          "kind": "card",
+          "uuid": "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+          "included": 610,
+          "exercised": 246
+        },
+        {
+          "kind": "card",
+          "uuid": "01298848-1ebb-48a1-b00b-d7e0af890870",
+          "included": 606,
+          "exercised": 255
+        },
+        {
+          "kind": "card",
+          "uuid": "017a7b4b-3ccf-4635-9956-28a72b22274e",
+          "included": 604,
+          "exercised": 245
+        },
+        {
+          "kind": "card",
+          "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+          "included": 606,
+          "exercised": 292
+        },
+        {
+          "kind": "card",
+          "uuid": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+          "included": 605,
+          "exercised": 249
+        },
+        {
+          "kind": "card",
+          "uuid": "15b63630-d9f8-473b-9717-15ad91ff2f16",
+          "included": 605,
+          "exercised": 493
+        },
+        {
+          "kind": "card",
+          "uuid": "4cec92f2-9bac-4949-a602-cd0a44618aaf",
+          "included": 605,
+          "exercised": 231
+        },
+        {
+          "kind": "card",
+          "uuid": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+          "included": 604,
+          "exercised": 246
+        },
+        {
+          "kind": "card",
+          "uuid": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+          "included": 604,
+          "exercised": 232
+        },
+        {
+          "kind": "card",
+          "uuid": "09e17f29-8ee1-477f-8175-ff37eb1f254a",
+          "included": 604,
+          "exercised": 225
+        },
+        {
+          "kind": "card",
+          "uuid": "1750c85c-f547-4d21-b7e3-9e5c5fcb3171",
+          "included": 607,
+          "exercised": 239
+        },
+        {
+          "kind": "card",
+          "uuid": "2a828466-450a-4637-9c68-6b54522450c0",
+          "included": 606,
+          "exercised": 242
+        },
+        {
+          "kind": "card",
+          "uuid": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+          "included": 603,
+          "exercised": 250
+        },
+        {
+          "kind": "card",
+          "uuid": "374ec185-b0f7-40e6-9988-09e96abccebe",
+          "included": 604,
+          "exercised": 254
+        },
+        {
+          "kind": "card",
+          "uuid": "14ac6804-ed1d-4148-aad7-11796b6fff6c",
+          "included": 611,
+          "exercised": 271
+        }
+      ],
+      "ownResource": {
+        "at": "2026-10-15T18:32:31.349644+00:00",
+        "pgid": 35476,
+        "psExit": 1,
+        "members": "",
+        "stderr": "",
+        "qualification": "Read after exact admitted300 terminal; no signal or foreignprocesscontrol. Empty matching group certifies ownchildren terminal at observation."
+      },
+      "ownResourceSHA256": "42c82d21fcf554c97fd216bfa561cc78a89c61398aff32cd8e74c274b340a3c7",
+      "batchBoundQualification": "Actualenginewall1586.4s and observedfirstnpmoutput\u2192terminal1587.331295s are below30min. Outer2768.707865s includes launch\u2192firstoutput1181.376570s, startup/monitor/drain. No exactheavylockacquisition timestamp or purequeue duration claimed.",
+      "replayScope": "ActualCLI source checks invariants, announced changes, determinization fidelity and finalhashreplay; every10thordinal usesinteractivefoldreplay. Zero nativefailures; no historicalrun substituted."
+    },
+    "hostLoadScope": "Commandlaunch load belongsactualreceipt; no comparable-load performance claim.",
+    "historicalReuseDisposition": "Historical279300 remains historical only. Parent source closure comparison found actualcurrentApollyondesign runtimechange plus2imports; unchangedclosure reuse rejected. Actualcurrent300 required."
+  },
+  "validation": {
+    "review": {
+      "status": "GREEN",
+      "receipt": {
+        "ack": "ACK280-04",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+        "start": "2026-10-15T18:38:34.835115+00:00",
+        "pid": 1437,
+        "pgid": 1437,
+        "identity": " 1437  1429  1437 Thu Oct 15 11:38:34 2026     node /opt/homebrew/bin/npm run review\n",
+        "hostLoad": 5.134765625,
+        "hostLoadAll": [
+          5.134765625,
+          5.373046875,
+          7.21923828125
+        ],
+        "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/review-ack04.log",
+        "end": "2026-10-15T18:38:35.229674+00:00",
+        "elapsedS": 0.3944583749980666,
+        "exitCode": 0,
+        "cpuUserS": 0.22045299999999998,
+        "cpuSystemS": 0.22558399999999998,
+        "logSHA256": "3f9f0678565cc6ef8e83fe425b2fdd265fbf4eab73cd478342c93d5a57c007f1",
+        "logBytes": 341
+      },
+      "retainedReceipt": "acceptance-v01/review-ack04.receipt.json",
+      "retainedLog": "acceptance-v01/review-ack04.log",
+      "qualification": "Actual ordinary evidence-scope invocation, once; no source/test/config change. Canonical adaptive review ran friction-records:997valid records,41historical unknown measurements."
+    },
+    "knip": {
+      "status": "GREEN",
+      "receipt": {
+        "ack": "ACK280-04",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+        "start": "2026-10-15T18:38:46.967473+00:00",
+        "pid": 1844,
+        "pgid": 1844,
+        "identity": " 1844  1834  1844 Thu Oct 15 11:38:46 2026     (env)\n",
+        "hostLoad": 5.45556640625,
+        "hostLoadAll": [
+          5.45556640625,
+          5.43505859375,
+          7.208984375
+        ],
+        "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/knip-ack04.log",
+        "end": "2026-10-15T18:38:52.153751+00:00",
+        "elapsedS": 5.186191041022539,
+        "exitCode": 0,
+        "cpuUserS": 4.452997,
+        "cpuSystemS": 1.564914,
+        "logSHA256": "5129909eb9101d7f243c0a9ead4f2c1db4ab76d49d403b8f46c76a09a3f838d2",
+        "logBytes": 49010
+      },
+      "retainedReceipt": "acceptance-v01/knip-ack04.receipt.json",
+      "retainedLog": "acceptance-v01/knip-ack04.log",
+      "qualification": "Actual ordinary evidence-scope invocation, once; no source/test/config change. Isolated prepare emitted missing-art warnings, then canonical restore linked564cards/32avatars/153dreamsigns/226journey/521exploration; token source unchanged."
+    },
+    "schema": {
+      "status": "GREEN",
+      "receipt": {
+        "ack": "ACK280-04",
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+        "start": "2026-10-15T18:39:51.938917+00:00",
+        "pid": 3310,
+        "pgid": 3310,
+        "identity": " 3310  3309  3310 Thu Oct 15 11:39:51 2026     node scripts/friction-triggers.mjs --validate-records\n",
+        "hostLoad": 4.2939453125,
+        "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/schema-ack04.log",
+        "end": "2026-10-15T18:39:52.009047+00:00",
+        "elapsedS": 0.0700275000417605,
+        "exitCode": 0,
+        "cpuUserS": 0.053356999999999995,
+        "cpuSystemS": 0.020454,
+        "logSHA256": "91b29014a14f3344ed2fda866d2c2c46d5bcd891024aae96f443f1cc159774f4",
+        "logBytes": 73
+      },
+      "retainedReceipt": "acceptance-v01/schema-ack04.receipt.json",
+      "retainedLog": "acceptance-v01/schema-ack04.log",
+      "qualification": "Actual friction schema validation:997 valid records,41historical unknown measurements."
+    },
+    "workingWhitespace": {
+      "status": "GREEN",
+      "receipt": {
+        "ack": "ACK280-04",
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+        "start": "2026-10-15T18:39:52.009510+00:00",
+        "pid": 3312,
+        "pgid": 3312,
+        "identity": " 3312  3309  3312 Thu Oct 15 11:39:52 2026     git diff --check\n",
+        "hostLoad": 4.2939453125,
+        "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-spark280/working-whitespace-ack04.log",
+        "end": "2026-10-15T18:39:52.018274+00:00",
+        "elapsedS": 0.008794957946520299,
+        "exitCode": 0,
+        "cpuUserS": 0.003555,
+        "cpuSystemS": 0.033721,
+        "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "logBytes": 0
+      },
+      "retainedReceipt": "acceptance-v01/working-whitespace-ack04.receipt.json",
+      "retainedLog": "acceptance-v01/working-whitespace-ack04.log",
+      "qualification": "Actual finite ACK280-04 invocation. Working diff check runs before own untracked evidence is staged; exact staged check remains required under final Git admission."
+    },
+    "stagedWhitespace": {
+      "status": "GREEN",
+      "receipt": {
+        "ack": "ACK280-05",
+        "argv": [
+          "git",
+          "diff",
+          "--cached",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-spark280-root",
+        "start": "2026-10-15T18:42:26.071524+00:00",
+        "end": "2026-10-15T18:42:26.081644+00:00",
+        "pid": 7684,
+        "pgid": 7684,
+        "identity": " 7684  7671  7684 Thu Oct 15 11:42:26 2026     git diff --cached --check\n",
+        "hostLoad": 9.515625,
+        "elapsedS": 0.010124584019649774,
+        "exitCode": 0,
+        "cpuUserS": 0.004292,
+        "cpuSystemS": 0.004182,
+        "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "logBytes": 0
+      },
+      "retainedReceipt": "acceptance-v01/staged-whitespace-first-ack05.receipt.json",
+      "retainedLog": "acceptance-v01/staged-whitespace-first-ack05.log",
+      "qualification": "Actual first exact-four-file staged check under ACK280-05. This receipt/clock metadata binding is restaged and checked again; final staged-check and final fast schema actual receipts are retained externally with the Git terminal receipt, without asserting future results here."
+    },
+    "reviewFull": "Notapplicable: evidence-only scope; no testinfrastructure/repositoryconfiguration/crosscuttingarchitecture change.",
+    "coldReview": "Nativeheavy/browser labels, no core-review/phasegate; nooptional review dispatch in this scope."
+  },
+  "setup": {
+    "install": {
+      "start": "2026-10-15T17:32:24.712550+00:00",
+      "end": "2026-10-15T17:32:27.271490+00:00",
+      "pid": 51511,
+      "elapsedS": 2.5589272499782965,
+      "exit": 0,
+      "logSHA256": "c52e4d018ce31ebeeed8f8e50ecc98705da1552b5f9f03a17813073b3272b789"
+    },
+    "reportedAdvisories": {
+      "total": 17,
+      "moderate": 9,
+      "high": 7,
+      "critical": 1
+    },
+    "qualification": "Installer output observation only, not a new audit or independent severity assessment."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "clock": {
+    "start": "2026-10-15T17:31:26.027170Z",
+    "cutoff": "2026-10-15T18:42:51.276184+00:00",
+    "includes": "Originalclaim through immediateprecommit metadata cutoff includes all setup, audits/research/coordination, waits and validation/evidence work. ActualGit start/end/CPU/wall and finaltail are separately retained in the postcommit terminalreceipt; no Git-tail arithmetic is included in this precommit cutoff.",
+    "cutoffScope": "Actual immediateprecommit metadata cutoff after first staging/check. Tail from this cutoff through final schema/restaging/staged check/commit/verification is measured separately in acceptance-v01/git-terminal.receipt.json; original claim-through-finalcommit gross is retained there."
+  },
+  "artifactPlan": {
+    "base": "artifacts/qa/hv-umm2.280/",
+    "retainedInvocationRoots": [
+      "invocations/sweep-e7bHx2",
+      "invocations/judged-a0foAy"
+    ],
+    "acceptedScratchCopies": "Exactnamedsource/audit/command/proofinputs from ownscratch to newacceptance-v01 afterfiniteACK",
+    "finalManifest": {
+      "status": "ACTUAL",
+      "path": "acceptance-v01/artifact-manifest.json",
+      "sha256": "a0ae121cc0193e0df48c73ce7e8fd9b15153ab99f2984c367c1e5f91528d3766",
+      "fileCount": 47,
+      "qualification": "37 exact admitted inputs plus10 actual review/Knip/schema/working/first-staged-check logs and receipts. Canonical invocation roots and later final-check/Git-tail receipts retained separately; manifest excludes itself."
+    },
+    "gitTerminalReceipt": "acceptance-v01/git-terminal.receipt.json"
+  },
+  "finalBarrier": {
+    "resources": "Bothadmittedactualcurrent300andallQA reachedterminal; ownQAcontexts/records/servergroups/ports settled; fuzzPG35476 empty at18:32:31Z; initial5798trackedbytes unchanged.",
+    "actualRuntimeACKs": [
+      "ACK280-01",
+      "ACK280-02",
+      "ACK280-03"
+    ],
+    "evidenceWriterACK": "ACK280-04",
+    "finalValidation": "Actual ordinary review, Knip, schema, working whitespace and first exact-four-file staged whitespace GREEN. ACK280-05 admits this two-JSON receipt/clock refresh, restaging, final fast schema/staged whitespace and ONE local commit; actual terminal outcomes retained externally in acceptance-v01/git-terminal.receipt.json.",
+    "finalGitACK": "ACK280-05"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual ordinary review launch 2026-10-15T18:38:34.835115+00:00",
+        "value": 5.134765625
+      },
+      "localValidationS.fuzz": {
+        "measuredFor": "Nativecurrentfuzzer algorithm clock,1586.4s, roundedbyactualCLI; outercommand2768.707865s and1181.376570s launch\u2192firstoutputoffset retained separately."
+      }
+    }
+  },
+  "resources": {
+    "status": "Allownedruntime settled before evidence proposal",
+    "fuzz": {
+      "at": "2026-10-15T18:32:31.349644+00:00",
+      "pgid": 35476,
+      "psExit": 1,
+      "members": "",
+      "stderr": "",
+      "qualification": "Read after exact admitted300 terminal; no signal or foreignprocesscontrol. Empty matching group certifies ownchildren terminal at observation."
+    },
+    "qaGuard": {
+      "at": "2026-10-15T18:11:58.548601+00:00",
+      "oldTracked": 5798,
+      "changed": [],
+      "scope": "All initial tracked bytes, symlink target bytes. New own ledger is intentionally outside this initial set."
+    },
+    "qualification": "Canonicalnormalclose contract and actualobserved ownrecords/groups/ports, not uncapturedraw-wire completion claims. Foreign records/processes preserved; later reuse identity-qualified."
+  }
+}
