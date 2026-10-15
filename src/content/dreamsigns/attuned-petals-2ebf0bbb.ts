@@ -1,3 +1,6 @@
+import { triggered, whenAbandon } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { copyAbandonedSubjectAsFigment } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,14 @@ export default dreamsign({
     "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
   ],
   tags: ["Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    triggered(
+      whenAbandon("you", { cardType: "character" }),
+      copyAbandonedSubjectAsFigment({ zeroSpark: true }),
+      { oncePerTurn: true },
+    ),
+  ],
+  verifiedText: expectedVerifiedText(
+    "Once per turn, when you abandon a character, materialize a 0✦ figment copy of it.",
+  ),
 });

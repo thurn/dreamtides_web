@@ -1,3 +1,6 @@
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { copyFirstEventLastTurnToHand } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +18,10 @@ export default dreamsign({
     "e6863f55-50e7-4c7b-b118-609b5fc5c005",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [
+    triggered(onDawn(), copyFirstEventLastTurnToHand({ ephemeral: true })),
+  ],
+  verifiedText: expectedVerifiedText(
+    "▸Dawn: Add an ethereal copy of the first event you played last turn to your hand.",
+  ),
 });

@@ -1,0 +1,580 @@
+{
+  "bead": "hv-umm2.248",
+  "base": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+  "implementWindow": {
+    "start": "2026-10-15T05:42:25.124Z",
+    "end": "2026-10-15T06:00:15.919662+00:00"
+  },
+  "implementMin": 17.846594366666668,
+  "dispatchProof": {
+    "callId": "call_e91f430f18f049c8b9e5cfc20bc51ce1",
+    "receipt": "audit/dispatch-native-proof.json",
+    "sampling": "UNKNOWN",
+    "modelStart": "UNKNOWN"
+  },
+  "clockQualification": "Actual first helper dispatch through near-commit cutoff includes every source read, command, admission/resource wait and QA. Exact final Git end and cutoff-to-Git tail are in ignored final-git receipt; no forced dates.",
+  "parentPreparation": {
+    "observedAt": "2026-10-15T05:34:53.910006+00:00",
+    "end": "2026-10-15T05:42:25.124Z",
+    "scope": "parent preclaim verification, claim, worktree setup/install and source/native admission audit; separately costed, outside helper clock",
+    "receipts": "parent scratch248 preclaim/setup receipts"
+  },
+  "source": {
+    "authoredLeaves": {
+      "src/content/dreamsigns/attuned-petals-2ebf0bbb.ts": "990c46e0db6b5e8b725a504132bd2e8a959867f90445a6d0ca97426b2e5de0af",
+      "src/content/dreamsigns/dreamcatcher-7ec00da2.ts": "8f65eaa936484cca35ccf4f70399d69f24a2e227a75bc5106bd0ad3f8f3c8fea"
+    },
+    "added": 22,
+    "deleted": 2,
+    "grossRuntimeLines": 24,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "scenarioModules": 0,
+      "supportModules": 0,
+      "fixtureModules": 0,
+      "jsdomFiles": 0,
+      "configuredEntrypoints": 0
+    },
+    "newKinds": [],
+    "fallout": 0,
+    "D20": "Two single-trigger compositions consume certified primitives. Existing synthetic contracts cover once gating, copiable values/cessation, global history/extra turns, transactional cancellation/replay and Ephemeral lifecycle; no original scenario module is warranted.",
+    "normative": "C3/C5, RD-hv-7x4l.1-11, RD-hv-umm2.678-1 and RD-hv-umm2.622-1; canonical printed fields unchanged. C3 issue filed.",
+    "sourceFreeze": "audit/source-freeze.json",
+    "frozenFiles": 2561,
+    "finalFreezeCheck": "audit/final-freeze-check.json"
+  },
+  "checks": {
+    "focused": {
+      "exit": 0,
+      "wallS": 27.923291333019733,
+      "start": "2026-10-15T05:43:36.417329+00:00",
+      "end": "2026-10-15T05:44:04.340979+00:00",
+      "receipt": "audit/focused-receipt.json",
+      "receiptSha256": "1a172825670881992e6a03214588eb34dee5dab069e1234dfc908ceaa64a24ea"
+    },
+    "preflight": {
+      "exit": 0,
+      "wallS": 1.9089567919727415,
+      "start": "2026-10-15T05:44:03.875936+00:00",
+      "end": "2026-10-15T05:44:05.784882+00:00",
+      "receipt": "audit/preflight-receipt.json",
+      "receiptSha256": "be0648340183659ca2c42408919420480164b9e891f5ec3555579049e9e38706"
+    },
+    "review": {
+      "exit": 0,
+      "wallS": 90.7004951669951,
+      "start": "2026-10-15T05:44:24.801868+00:00",
+      "end": "2026-10-15T05:45:55.503404+00:00",
+      "receipt": "audit/review-receipt.json",
+      "receiptSha256": "12441b4cb6f2ce355fc8f827933a59643a252faf4ec07c0028beaa39ded1c0e0"
+    },
+    "knip": {
+      "exit": 0,
+      "wallS": 7.320943625003565,
+      "start": "2026-10-15T05:46:13.539118+00:00",
+      "end": "2026-10-15T05:46:20.860066+00:00",
+      "receipt": "audit/knip-receipt.json",
+      "receiptSha256": "3c85f305ff0224f4a7f496149c1eea0e6b28271c1d12fbb2bdae974a1195ef10"
+    },
+    "weighted300": {
+      "exit": 0,
+      "wallS": 622.6935143339797,
+      "start": "2026-10-15T05:44:02.719004+00:00",
+      "end": "2026-10-15T05:54:25.420355+00:00",
+      "receipt": "audit/weighted300-receipt.json",
+      "receiptSha256": "d20f871759f665d3722cfae4784f19c6afa8101a9e76613e4079483f4fbe1182"
+    },
+    "source-and-child": {
+      "exit": 0,
+      "wallS": 0.026242374966386706,
+      "start": "2026-10-15T05:47:09.579425+00:00",
+      "end": "2026-10-15T05:47:09.605637+00:00",
+      "receipt": "audit/source-and-child-receipt.json",
+      "receiptSha256": "069428c55f2176c24897484e5b299ddabcd20dfbdc8ec9a3f09a2f679d453004"
+    },
+    "petals-v1": {
+      "exit": 0,
+      "wallS": 32.7121788749937,
+      "start": "2026-10-15T05:55:03.686373+00:00",
+      "end": "2026-10-15T05:55:36.398931+00:00",
+      "receipt": "audit/petals-v1-receipt.json",
+      "receiptSha256": "d4038b27af98eea082d9a9d767ef479c48fb4c78cb2cf780b4098b4ae5b2627b"
+    },
+    "dreamcatcher-v1": {
+      "exit": 0,
+      "wallS": 98.54526024998631,
+      "start": "2026-10-15T05:55:55.568267+00:00",
+      "end": "2026-10-15T05:57:34.114744+00:00",
+      "receipt": "audit/dreamcatcher-v1-receipt.json",
+      "receiptSha256": "7e29ccea0104d341ef917ede78579021558243494a82ebb1922d99eaf5ce710e"
+    },
+    "sweep": {
+      "exit": 0,
+      "wallS": 46.392096625000704,
+      "start": "2026-10-15T05:58:04.772417+00:00",
+      "end": "2026-10-15T05:58:51.165067+00:00",
+      "receipt": "audit/sweep-receipt.json",
+      "receiptSha256": "ad7d1c4b35156c1675dc2339b63e126f5966ddbe177bb805c9264800523945b5"
+    }
+  },
+  "hostLoad": 17.5927734375,
+  "hostLoadSamples": {
+    "focused": {
+      "at": "2026-10-15T05:43:36.417329+00:00",
+      "load1": 7.39306640625,
+      "scope": "local command process start"
+    },
+    "preflight": {
+      "at": "2026-10-15T05:44:03.875936+00:00",
+      "load1": 12.6103515625,
+      "scope": "local command process start"
+    },
+    "review": {
+      "at": "2026-10-15T05:44:24.801868+00:00",
+      "load1": 17.5927734375,
+      "scope": "local command process start"
+    },
+    "knip": {
+      "at": "2026-10-15T05:46:13.539118+00:00",
+      "load1": 27.75244140625,
+      "scope": "local command process start"
+    },
+    "weighted300": {
+      "at": "2026-10-15T05:44:02.719004+00:00",
+      "load1": 12.6103515625,
+      "scope": "local command process start"
+    },
+    "source-and-child": {
+      "at": "2026-10-15T05:47:09.579425+00:00",
+      "load1": 22.57861328125,
+      "scope": "local command process start"
+    },
+    "petals-v1": {
+      "at": "2026-10-15T05:55:03.686373+00:00",
+      "load1": 15.49951171875,
+      "scope": "local command process start"
+    },
+    "dreamcatcher-v1": {
+      "at": "2026-10-15T05:55:55.568267+00:00",
+      "load1": 13.06982421875,
+      "scope": "local command process start"
+    },
+    "sweep": {
+      "at": "2026-10-15T05:58:04.772417+00:00",
+      "load1": 7.42138671875,
+      "scope": "local command process start"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final production-source ordinary npm run review process start (whole invocation; not one test step)",
+        "receipt": "audit/review-receipt.json",
+        "receiptSha256": "12441b4cb6f2ce355fc8f827933a59643a252faf4ec07c0028beaa39ded1c0e0"
+      }
+    }
+  },
+  "testResults": {
+    "focused": {
+      "files": 2,
+      "tests": 5631,
+      "includes": "src/engine/effects/primitives/contracts.test.ts + actual src/engine/content-gates.test.ts"
+    },
+    "ordinaryReview": {
+      "files": 260,
+      "tests": 8627,
+      "scope": "ordinary review on final production source; Knip separate; evidence schema/owned whitespace verified at final staging"
+    },
+    "reviewRouting": "Original noncore composition; no new primitive/kind/shared behavior. D18 fresh core/phase-gate review not required; parent owns routing."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 99422,
+    "nativeWallS": 620.8,
+    "nativeCpuS": 643.5,
+    "prompts": 7560,
+    "interactiveReruns": 796,
+    "failures": 0,
+    "targets": [
+      {
+        "kind": "dreamsign",
+        "uuid": "94e5683d-a24c-4f89-8afa-652d7c6c79aa",
+        "included": 600,
+        "exercised": 460
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "7ec00da2-2b2d-4613-9a2a-8611d38199ca",
+        "included": 600,
+        "exercised": 2583
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "2ebf0bbb-440c-4dba-8e48-228daadc0a1e",
+        "included": 600,
+        "exercised": 418
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "b6333eba-5573-441c-b286-1cd7f7cb6916",
+        "included": 600,
+        "exercised": 271
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "dbbade86-9fb6-4283-b2dc-9c1ef66fd531",
+        "included": 600,
+        "exercised": 0
+      }
+    ],
+    "resourceQualification": "Literal lockf -k primary heavy.lock, JOURNEY_TEST_WORKERS=2; fuzzer is serial. Exact kernel acquisition/queue duration was not measured. Native command had started by first process observation; wrapper inclusive622.694s includes lock/startup. Own PG15596 settled before browser admission. Static modifier exercised0 is not payment proof; child actual payment judgments satisfy that consumer clause."
+  },
+  "qa": {
+    "preflight": {
+      "pass": 10,
+      "skip": 90,
+      "fail": 0,
+      "qualification": "All5, both controllers, all default variants. Dreamsigns support base only; 9 other variants per side are ineligible. Initialization is distinct from copy-effect proof."
+    },
+    "sweep": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-a7tmua",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.248/invocations/sweep-a7tmua",
+      "counts": {
+        "pass": 10,
+        "skip": 90
+      },
+      "attemptCounts": {
+        "pass": 10,
+        "skip": 90
+      },
+      "hostLoad": 7.42138671875,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 4144,
+        "scenario": 41639.251707999996,
+        "cleanup": 335.92704099999537,
+        "execution": 46185.340500000006,
+        "total": 46191.340500000006
+      }
+    },
+    "consumerProofs": {
+      "petals": {
+        "invocation": "invocations/run-MtjDlD",
+        "rawReport": "petals.result.json",
+        "rawSha256": "f164ca7f1808b59a42b5b141e5ca400a8ab7d1a937a325f321674821595e10da",
+        "caps": "native report has no captured errors; each successful frozen caller invokes assertCaps; separate raw clean-buffer payload is not returned",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2903,
+          "scenario": 29145,
+          "total": 32129
+        },
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 37254,
+        "games": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.248/invocations/run-MtjDlD/petals-desktop.jsonl",
+            "gameId": "sh69qg",
+            "selectedBy": "url",
+            "rows": 67,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.248/invocations/run-MtjDlD/petals-mobile.jsonl",
+            "gameId": "t3psjv",
+            "selectedBy": "url",
+            "rows": 67,
+            "reason": null
+          }
+        ],
+        "cases": {
+          "desktop": {
+            "source": "i51",
+            "cancelled": true,
+            "finalCopies": 0,
+            "reload": true,
+            "copy": "i52",
+            "printing": {
+              "kind": "figmentCopy",
+              "cardId": "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7",
+              "spark": 0
+            },
+            "geometry": {
+              "card": {
+                "x": 254.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5
+              },
+              "control": {
+                "x": 1120.5,
+                "y": 597,
+                "width": 120,
+                "height": 42
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "spark": "0"
+            },
+            "copyStatus": {
+              "exhausted": true,
+              "gainedSpark": 0,
+              "counters": 0,
+              "created": true,
+              "reclaimed": false,
+              "playedViaReclaim": false,
+              "playedViaAlternativeCost": false,
+              "offering": false,
+              "ephemeral": false,
+              "x": null
+            },
+            "firstTurn": 1,
+            "finalTurn": 1
+          },
+          "mobile": {
+            "source": "i51",
+            "cancelled": true,
+            "finalCopies": 0,
+            "reload": true,
+            "copy": "i52",
+            "printing": {
+              "kind": "figmentCopy",
+              "cardId": "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7",
+              "spark": 0
+            },
+            "geometry": {
+              "card": {
+                "x": 23.40625,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375
+              },
+              "control": {
+                "x": 262,
+                "y": 522.828125,
+                "width": 120,
+                "height": 42
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "spark": "0"
+            },
+            "copyStatus": {
+              "exhausted": true,
+              "gainedSpark": 0,
+              "counters": 0,
+              "created": true,
+              "reclaimed": false,
+              "playedViaReclaim": false,
+              "playedViaAlternativeCost": false,
+              "offering": false,
+              "ephemeral": false,
+              "x": null
+            },
+            "firstTurn": 1,
+            "finalTurn": 1
+          }
+        }
+      },
+      "dreamcatcher": {
+        "invocation": "invocations/run-8Z3acK",
+        "rawReport": "dreamcatcher.result.json",
+        "rawSha256": "d99aff958f5b4b459058bc33c755e899de7c77fb7b1682fce0dec8dc20f19758",
+        "caps": "native report has no captured errors; each successful frozen caller invokes assertCaps; separate raw clean-buffer payload is not returned",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1979,
+          "scenario": 95979,
+          "total": 98022
+        },
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 90335,
+        "games": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.248/invocations/run-8Z3acK/dreamcatcher-desktop.jsonl",
+            "gameId": "5peva9",
+            "selectedBy": "url",
+            "rows": 100,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.248/invocations/run-8Z3acK/dreamcatcher-mobile.jsonl",
+            "gameId": "f92gps",
+            "selectedBy": "url",
+            "rows": 100,
+            "reason": null
+          }
+        ],
+        "cases": {
+          "desktop": {
+            "source": "i51",
+            "reload": true,
+            "ceased": true,
+            "copy": "i52",
+            "printing": {
+              "kind": "card",
+              "cardId": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83"
+            },
+            "geometry": {
+              "badges": [
+                {
+                  "kind": "created",
+                  "label": "Created by an effect: ceases to exist instead of going to a deck, hand, void, or banishment",
+                  "x": 1224.466064453125,
+                  "y": 754.2799072265625,
+                  "width": 29.885009765625,
+                  "height": 29.88494873046875
+                },
+                {
+                  "kind": "duration",
+                  "label": "Ephemeral: banished at the end of the turn while in hand",
+                  "x": 1222.3734130859375,
+                  "y": 784.2068481445312,
+                  "width": 29.8848876953125,
+                  "height": 29.88494873046875
+                }
+              ],
+              "card": {
+                "x": 1210.250732421875,
+                "y": 731.552978515625,
+                "width": 141.18115234375,
+                "height": 189.02117919921875
+              },
+              "control": {
+                "x": 1117.8125,
+                "y": 597,
+                "width": 122.6875,
+                "height": 42
+              },
+              "exposed": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            },
+            "copyStatus": {
+              "exhausted": false,
+              "gainedSpark": 0,
+              "counters": 0,
+              "created": true,
+              "reclaimed": false,
+              "playedViaReclaim": false,
+              "playedViaAlternativeCost": false,
+              "offering": false,
+              "ephemeral": true,
+              "x": null
+            },
+            "playedTurn": 2,
+            "playedActive": "enemy",
+            "dawnTurn": 3
+          },
+          "mobile": {
+            "source": "i51",
+            "reload": true,
+            "ceased": true,
+            "copy": "i52",
+            "printing": {
+              "kind": "card",
+              "cardId": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83"
+            },
+            "geometry": {
+              "badges": [
+                {
+                  "kind": "created",
+                  "label": "Created by an effect: ceases to exist instead of going to a deck, hand, void, or banishment",
+                  "x": 240.29281616210938,
+                  "y": 693.0692749023438,
+                  "width": 30.773406982421875,
+                  "height": 30.7734375
+                },
+                {
+                  "kind": "duration",
+                  "label": "Ephemeral: banished at the end of the turn while in hand",
+                  "x": 237.15695190429688,
+                  "y": 722.9049072265625,
+                  "width": 30.773406982421875,
+                  "height": 30.7734375
+                }
+              ],
+              "card": {
+                "x": 218.04457092285156,
+                "y": 666.8659057617188,
+                "width": 170.82591247558594,
+                "height": 224.12811279296875
+              },
+              "control": {
+                "x": 259.3125,
+                "y": 522.828125,
+                "width": 122.6875,
+                "height": 42
+              },
+              "exposed": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            },
+            "copyStatus": {
+              "exhausted": false,
+              "gainedSpark": 0,
+              "counters": 0,
+              "created": true,
+              "reclaimed": false,
+              "playedViaReclaim": false,
+              "playedViaAlternativeCost": false,
+              "offering": false,
+              "ephemeral": true,
+              "x": null
+            },
+            "playedTurn": 2,
+            "playedActive": "enemy",
+            "dawnTurn": 3
+          }
+        }
+      }
+    },
+    "d21": {
+      "sampledUuid": "b6333eba-5573-441c-b286-1cd7f7cb6916",
+      "firstByte": 15,
+      "childLedger": "docs/plan/evidence/qa-ledger/hv-umm2.665.jsonl",
+      "childLedgerSha256": "71e697c9f8758ba5359b7d70c27bd30db68ae451e1202840395eff76d0ae2a04",
+      "childSampleJudgments": 4,
+      "qualification": "Seven accepted prior aggregate cells retained successful exact-call assertion execution, per-game logs/captures and next-navigation raw three-buffer snapshots; later failure lost full return carry. Five focused cells retain full detailed state payload.",
+      "nativePartition": "Certified665 judged ledger satisfies transferred UUID acceptance. All3 leaves and child evidence remain byte-identical in frozen source map; full5 fuzz/preflight/sweep run here. Other4 entities are nonsampled, and no new prompt/status/visual kind is introduced. Own2 consumer workflows are additional proportional judgments."
+    },
+    "consumerManifest": "audit/consumer-evidence-manifest.json",
+    "judgment": "Four DPR2 captures actually viewed; zero-base board spark, created/Ephemeral badges and control separation verified. Dense hand fan retains exposed headers and copied-card hit point; lower card body crosses viewport edge as established layout.",
+    "attempts": "Every mandatory command and both v1 consumers passed first runtime attempt. Sweep raw and effective counts are identical. Source-audit query corrections below are not product failures."
+  },
+  "inspectionCorrections": [
+    "Initial combined document output was truncated; targeted normative/API/runtime reads followed.",
+    "Read-only searches referenced absent optional lab-stage/card-lab-stage module guesses, engine/events.ts and old UI debug/status locations; actual files discovered/read before runtime. Some unmatched shell globs exited nonzero; no source effect or validation reliance.",
+    "Before runtime, caller source audit corrected icon close selection to actual aria-label, spark stat nesting and persisted action/trigger log schema. Immutable caller-v1 snapshots bind actual runtime.",
+    "A post-heavy ps/rg absence query exited1 because own process was absent; explicit Python group-empty assertion subsequently passed."
+  ],
+  "resources": {
+    "remaining": [],
+    "settlement": "audit/final-runtime-settlement.json",
+    "providerEndpoint": "http://localhost:8931/mcp",
+    "protocol": "2025-11-25",
+    "custody": "Each sequential run held native browser slot1/port5274 and its own SDK browser context/server group. Exact active owner/server snapshots and successful teardown/absent-record proofs retained; shared service preserved.",
+    "cpuScope": "Local wrapper receipts include child user/system CPU; shared provider/browser CPU is UNKNOWN, not attributed.",
+    "heavyBrowserOverlap": false
+  },
+  "preExistingIssues": [],
+  "finalization": "Evidence cutoff precedes final schema/staged-whitespace checks and one normal-date Conventional Commit. Ignored final receipt records actual Git end, full source OID, clean status, clock tail and file hashes."
+}

@@ -1,0 +1,40 @@
+{
+  "bead": "hv-umm2.248",
+  "phase": 5,
+  "implementMin": 17.846594366666668,
+  "implementWindow": {
+    "start": "2026-10-15T05:42:25.124Z",
+    "end": "2026-10-15T06:00:15.919662+00:00"
+  },
+  "localValidationS": {
+    "focused": 27.923291333019733,
+    "preflight": 1.9089567919727415,
+    "review": 90.7004951669951,
+    "knip": 7.320943625003565,
+    "weighted300": 622.6935143339797,
+    "source-and-child": 0.026242374966386706,
+    "petals-v1": 32.7121788749937,
+    "dreamcatcher-v1": 98.54526024998631,
+    "sweep": 46.392096625000704
+  },
+  "hostLoad": 17.5927734375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "scenarioModules": 0,
+    "supportModules": 0,
+    "fixtureModules": 0,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "friction": [],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final production-source ordinary npm run review process start (whole invocation; not one test step)",
+        "receipt": "audit/review-receipt.json",
+        "receiptSha256": "12441b4cb6f2ce355fc8f827933a59643a252faf4ec07c0028beaa39ded1c0e0"
+      }
+    }
+  }
+}
