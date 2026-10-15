@@ -145,15 +145,19 @@ describe("settled scoring-group trigger", () => {
     const pending = adapter.pending(current)!;
     expect(pending.prompt.kind).toBe("chooseCards");
     const cold = JSON.parse(JSON.stringify(current)) as BattleSlice, before = stateHash(cold.committed);
+    const unchanged = JSON.parse(JSON.stringify(cold)) as BattleSlice;
     expect(adapter.pending(cold)?.prompt).toEqual(pending.prompt);
-    for (const intent of [
-      { kind: "answer", side: opponent(side), promptId: pending.prompt.id, value: [] },
-      { kind: "answer", side, promptId: parsePromptId("999:999:999"), value: [] },
-      { kind: "answer", side, promptId: pending.prompt.id, value: [] },
-    ] as const) expect(adapter.reduce(cold, intent).kind).toBe("bounced");
-    expect(stateHash(cold.committed)).toBe(before);
     const prompt = pending.prompt; if (prompt.kind !== "chooseCards") throw Error("Wrong prompt");
     const answer = { kind: "answer" as const, side, promptId: prompt.id, value: prompt.candidates.slice(0, prompt.min) };
+    for (const [intent, reason] of [
+      [{ ...answer, side: opponent(side) }, "notYourPrompt"],
+      [{ ...answer, promptId: parsePromptId("999:999:999") }, "stalePrompt"],
+      [{ ...answer, value: [] }, "illegalAnswer"],
+    ] as const) {
+      expect(adapter.reduce(cold, intent)).toEqual({ kind: "bounced", reason });
+      expect(cold).toEqual(unchanged);
+      expect(stateHash(cold.committed)).toBe(before);
+    }
     const complete = applied(adapter.reduce(cold, answer));
     expect(adapter.reduce(complete, answer).kind).toBe("bounced");
     expect(complete.committed.sides[side].void.length - cold.committed.sides[side].void.length).toBe(1);

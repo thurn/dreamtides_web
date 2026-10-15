@@ -319,5 +319,21 @@
     "scope": "Three admitted existing files and own compact evidence only."
   },
   "heavyAdmissionAndStartupS": 0.023871,
-  "heavyQualification": "Outer minus inner startup is not pure lock contention. Runtime and CPU/load are separate; no performance improvement claimed."
+  "heavyQualification": "Outer minus inner startup is not pure lock contention. Runtime and CPU/load are separate; no performance improvement claimed.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting 1-minute host load",
+        "correction": {
+          "bead": "hv-umm2.712",
+          "originalValue": 19.03466796875,
+          "correctedValue": 9.63623046875,
+          "receiptPath": "/tmp/dreamtides-executor-01a1304d/704/review/inputs/review-receipt.json",
+          "receiptSHA256": "b7cf37b8b04bad7c169fd47d08b5d79bb3b2732b741515dd864b3aa392fb432c",
+          "samplingClock": "2026-10-15T00:15:47.873910+00:00",
+          "scope": "Actual review command startLoad[0]; all historical windows, checks and other samples preserved."
+        }
+      }
+    }
+  }
 }

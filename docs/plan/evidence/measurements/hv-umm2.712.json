@@ -1,0 +1,547 @@
+{
+  "bead": "hv-umm2.712",
+  "sourceBase": "8685a75f75cd3849c27e13155e93fc14ecd7e998",
+  "dispatch": {
+    "at": "2026-10-15T03:26:54.814Z",
+    "journalOrdinal": 38858,
+    "callId": "call_d8698168984946668cfb37b31589004b",
+    "samplingStart": "UNKNOWN"
+  },
+  "windowPolicy": "Inclusive original helper dispatch through final automatic Git: audit, admission, coordination, waits, failed caller, intentional negatives, checks and packaging included; elapsed wall time, no performance claim. Final automatic committer and external bracket are retained in final-commit.receipt.json.",
+  "timingCutoff": {
+    "at": "2026-10-15T03:38:27.230570+00:00",
+    "inclusiveMinutes": 11.540276166666667,
+    "qualification": "Refreshed immediately before one automatic-date Git commit; exact final committer clock remains external, no postcommit tracked rewrite."
+  },
+  "scope": {
+    "testBlock": "Existing pending-discard block only in score-group-trigger.contracts.ts; no new case or entrypoint. Both actors retain cold reload, full-slice/hash immutability, exact public rejection reasons, single commit and duplicate rejection.",
+    "productionChanges": 0,
+    "fallout": [],
+    "testDelta": {
+      "files": 0,
+      "lines": 4,
+      "jsdomFiles": 0
+    },
+    "moduleLines": 348,
+    "extraEvidence": "Own friction JSON, measurement JSON/MD and pre-existing MD only; parent confirmed production-derived fixture concern tracked separately as hv-umm2.715."
+  },
+  "checks": {
+    "focused-initial": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reloads a pending discard, rejects stale/wrong/invalid/duplicate answers and commits once"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-answer-witnesses-712-root",
+      "start": "2026-10-15T03:27:55.980962+00:00",
+      "startLoad": [
+        10.56201171875,
+        9.7705078125,
+        9.57568359375
+      ],
+      "pid": 2017,
+      "pgid": 2017,
+      "port": null,
+      "end": "2026-10-15T03:28:07.537074+00:00",
+      "exitCode": 0,
+      "wallSeconds": 11.555888959032018,
+      "endLoad": [
+        14.47265625,
+        10.677734375,
+        9.90283203125
+      ],
+      "cpuSeconds": {
+        "user": 10.403122,
+        "system": 3.532057
+      },
+      "outputSHA256": "1bd75a8948235a9deb58945359592c14dce0ce0225c12bb2a51330e192e9173b",
+      "actualWait": true,
+      "leaderAbsent": true
+    },
+    "v2-without-stale-guard": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reloads a pending discard, rejects stale/wrong/invalid/duplicate answers and commits once"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-answer-witnesses-712-root",
+      "start": "2026-10-15T03:34:04.673122+00:00",
+      "startLoad": [
+        5.66357421875,
+        8.001953125,
+        8.99072265625
+      ],
+      "pid": 84984,
+      "pgid": 84984,
+      "port": null,
+      "end": "2026-10-15T03:34:11.719084+00:00",
+      "exitCode": 1,
+      "wallSeconds": 7.045893584028818,
+      "endLoad": [
+        6.01611328125,
+        8.0009765625,
+        8.97900390625
+      ],
+      "cpuSeconds": {
+        "user": 7.142259999999999,
+        "system": 2.204706
+      },
+      "outputSHA256": "10d0216ff2165e8f7815e6e665b8e429324b61e4f342bdd632b926edd9af0c5a",
+      "actualWait": true,
+      "leaderAbsent": true
+    },
+    "v2-without-wrong-side-guard": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reloads a pending discard, rejects stale/wrong/invalid/duplicate answers and commits once"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-answer-witnesses-712-root",
+      "start": "2026-10-15T03:34:11.953125+00:00",
+      "startLoad": [
+        6.01611328125,
+        8.0009765625,
+        8.97900390625
+      ],
+      "pid": 85529,
+      "pgid": 85529,
+      "port": null,
+      "end": "2026-10-15T03:34:18.919063+00:00",
+      "exitCode": 1,
+      "wallSeconds": 6.965873042005114,
+      "endLoad": [
+        6.1748046875,
+        8.00048828125,
+        8.97314453125
+      ],
+      "cpuSeconds": {
+        "user": 7.300059,
+        "system": 2.168615
+      },
+      "outputSHA256": "3b0e4fa9d5ef6b44263e677af0944cf521327956530c65b6ced4514003274b42",
+      "actualWait": true,
+      "leaderAbsent": true
+    },
+    "focused-restored-v2": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reloads a pending discard, rejects stale/wrong/invalid/duplicate answers and commits once"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-answer-witnesses-712-root",
+      "start": "2026-10-15T03:34:19.191561+00:00",
+      "startLoad": [
+        6.1748046875,
+        8.00048828125,
+        8.97314453125
+      ],
+      "pid": 86162,
+      "pgid": 86162,
+      "port": null,
+      "end": "2026-10-15T03:34:26.462545+00:00",
+      "exitCode": 0,
+      "wallSeconds": 7.270906167046633,
+      "endLoad": [
+        6.32080078125,
+        8.0,
+        8.96728515625
+      ],
+      "cpuSeconds": {
+        "user": 7.477041999999999,
+        "system": 2.319509
+      },
+      "outputSHA256": "341a7c67ae4b26d3ee3a12a2709b7120fcf65d53e324f618792234e8059db3e7",
+      "actualWait": true,
+      "leaderAbsent": true
+    },
+    "review": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-answer-witnesses-712-root",
+      "start": "2026-10-15T03:35:12.268434+00:00",
+      "startLoad": [
+        5.19384765625,
+        7.47705078125,
+        8.7197265625
+      ],
+      "pid": 88792,
+      "pgid": 88792,
+      "port": null,
+      "end": "2026-10-15T03:35:37.096597+00:00",
+      "exitCode": 0,
+      "wallSeconds": 24.827743042027578,
+      "endLoad": [
+        6.4931640625,
+        7.6103515625,
+        8.73193359375
+      ],
+      "cpuSeconds": {
+        "user": 68.168135,
+        "system": 7.122803
+      },
+      "outputSHA256": "5a2283a1cf2353b7d589943e673c918523c3300dac67246af388196e08ca46af",
+      "actualWait": true,
+      "leaderAbsent": true
+    },
+    "knip": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-answer-witnesses-712-root",
+      "start": "2026-10-15T03:35:42.774895+00:00",
+      "startLoad": [
+        6.13330078125,
+        7.51708984375,
+        8.6923828125
+      ],
+      "pid": 89733,
+      "pgid": 89733,
+      "port": null,
+      "end": "2026-10-15T03:35:47.682722+00:00",
+      "exitCode": 0,
+      "wallSeconds": 4.907679750001989,
+      "endLoad": [
+        6.04248046875,
+        7.47509765625,
+        8.67041015625
+      ],
+      "cpuSeconds": {
+        "user": 4.040175,
+        "system": 1.481719
+      },
+      "outputSHA256": "31973f39985638d1f9296ccc3920a7e0af5f00d62ec9b6728bc744596948bf26",
+      "actualWait": true,
+      "leaderAbsent": true
+    },
+    "schema-before-evidence": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-answer-witnesses-712-root",
+      "start": "2026-10-15T03:35:56.466120+00:00",
+      "startLoad": [
+        6.439453125,
+        7.533203125,
+        8.68359375
+      ],
+      "pid": 90403,
+      "pgid": 90403,
+      "port": null,
+      "end": "2026-10-15T03:35:56.536687+00:00",
+      "exitCode": 0,
+      "wallSeconds": 0.07045737496810034,
+      "endLoad": [
+        6.24365234375,
+        7.47412109375,
+        8.65576171875
+      ],
+      "cpuSeconds": {
+        "user": 0.053811,
+        "system": 0.021273
+      },
+      "outputSHA256": "ce26358144bdf3a8c8578900e9f8a8478691230b8f36f43a044b557e5a52c198",
+      "actualWait": true,
+      "leaderAbsent": true
+    },
+    "whitespace-before-evidence": {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-answer-witnesses-712-root",
+      "start": "2026-10-15T03:35:56.611194+00:00",
+      "startLoad": [
+        6.24365234375,
+        7.47412109375,
+        8.65576171875
+      ],
+      "pid": 90405,
+      "pgid": 90405,
+      "port": null,
+      "end": "2026-10-15T03:35:56.622525+00:00",
+      "exitCode": 0,
+      "wallSeconds": 0.011239541985560209,
+      "endLoad": [
+        6.24365234375,
+        7.47412109375,
+        8.65576171875
+      ],
+      "cpuSeconds": {
+        "user": 0.003971,
+        "system": 0.027986
+      },
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "actualWait": true,
+      "leaderAbsent": true
+    }
+  },
+  "hostLoadSamples": {
+    "focused-initial": {
+      "start": [
+        10.56201171875,
+        9.7705078125,
+        9.57568359375
+      ],
+      "end": [
+        14.47265625,
+        10.677734375,
+        9.90283203125
+      ]
+    },
+    "v2-without-stale-guard": {
+      "start": [
+        5.66357421875,
+        8.001953125,
+        8.99072265625
+      ],
+      "end": [
+        6.01611328125,
+        8.0009765625,
+        8.97900390625
+      ]
+    },
+    "v2-without-wrong-side-guard": {
+      "start": [
+        6.01611328125,
+        8.0009765625,
+        8.97900390625
+      ],
+      "end": [
+        6.1748046875,
+        8.00048828125,
+        8.97314453125
+      ]
+    },
+    "focused-restored-v2": {
+      "start": [
+        6.1748046875,
+        8.00048828125,
+        8.97314453125
+      ],
+      "end": [
+        6.32080078125,
+        8.0,
+        8.96728515625
+      ]
+    },
+    "review": {
+      "start": [
+        5.19384765625,
+        7.47705078125,
+        8.7197265625
+      ],
+      "end": [
+        6.4931640625,
+        7.6103515625,
+        8.73193359375
+      ]
+    },
+    "knip": {
+      "start": [
+        6.13330078125,
+        7.51708984375,
+        8.6923828125
+      ],
+      "end": [
+        6.04248046875,
+        7.47509765625,
+        8.67041015625
+      ]
+    },
+    "schema-before-evidence": {
+      "start": [
+        6.439453125,
+        7.533203125,
+        8.68359375
+      ],
+      "end": [
+        6.24365234375,
+        7.47412109375,
+        8.65576171875
+      ]
+    },
+    "whitespace-before-evidence": {
+      "start": [
+        6.24365234375,
+        7.47412109375,
+        8.65576171875
+      ],
+      "end": [
+        6.24365234375,
+        7.47412109375,
+        8.65576171875
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review starting 1-minute load, 2026-10-15T03:35:12.268434+00:00"
+      }
+    }
+  },
+  "sourceFreeze": {
+    "path": "712-before-cf-freeze.json",
+    "sha256": "7ccc3f1f68cd313871b160f5b98576a1926122212cc3244ff72c3fbe7fffc59a",
+    "trackedCount": 5332,
+    "afterRestorationAllExact": true,
+    "productionFoldSHA256": "0f21932397fa3607ef83b41efda19c5a741c068bfd41026f5d944e0bb309cf7f",
+    "substantiveFiles": {
+      "docs/plan/evidence/friction/hv-umm2.704.json": "cb369cca7fcb5f7bff76e71c128ef65b9befc96aaee9131e5f8e410801689eea",
+      "docs/plan/evidence/measurements/hv-umm2.704.json": "5349fb037186c3f2132d2f21c5694053c7e0167179f5c2c2f1b8f939eca68322",
+      "src/engine/effects/primitives/contracts/score-group-trigger.contracts.ts": "7023622e2dec39aeaff601650361a8e19a4dcb5c485064371f79fc4bc4e1750c"
+    }
+  },
+  "counterfactuals": {
+    "callerSHA256": "5f02df85aa239403131fcb7d87a66a70951b5cb8f8abd9a6ff9591636f2d51cb",
+    "runnerSHA256": "34a232f9ba637d40a1ce50bbd182942c79c41cb815050bfad0297de596a4b0ec",
+    "results": {
+      "allTrackedFilesRestored": true,
+      "trackedFiles": 5332,
+      "results": [
+        {
+          "name": "v2-without-stale-guard",
+          "start": "2026-10-15T03:34:04.672161+00:00",
+          "sourcePath": "/Users/dthurn/dreamtides_web/.worktrees/scoring-answer-witnesses-712-root/src/engine/fold/slice.ts",
+          "originalSHA256": "0f21932397fa3607ef83b41efda19c5a741c068bfd41026f5d944e0bb309cf7f",
+          "mutantSHA256": "e329ca10dffacf1dc2e96d98dd752e3621835cd518581de2b31109b69de1a524",
+          "guard": "        if (prompt.id !== intent.promptId) return { kind: \"bounced\", reason: \"stalePrompt\" };\n",
+          "freezeSHA256": "7ccc3f1f68cd313871b160f5b98576a1926122212cc3244ff72c3fbe7fffc59a",
+          "exitCode": 1,
+          "expectedFailedCases": 2,
+          "actors": [
+            "player",
+            "enemy"
+          ],
+          "expectedMissingGuardReason": "stalePrompt",
+          "end": "2026-10-15T03:34:11.720083+00:00",
+          "restoredSHA256": "0f21932397fa3607ef83b41efda19c5a741c068bfd41026f5d944e0bb309cf7f",
+          "restoredBytesExact": true
+        },
+        {
+          "name": "v2-without-wrong-side-guard",
+          "start": "2026-10-15T03:34:11.952326+00:00",
+          "sourcePath": "/Users/dthurn/dreamtides_web/.worktrees/scoring-answer-witnesses-712-root/src/engine/fold/slice.ts",
+          "originalSHA256": "0f21932397fa3607ef83b41efda19c5a741c068bfd41026f5d944e0bb309cf7f",
+          "mutantSHA256": "db70c8e5e5c7ce5f36885256c1c38f778fe7b1075f1ac2fa76f59dcc43756b5e",
+          "guard": "        if (prompt.side !== intent.side) return { kind: \"bounced\", reason: \"notYourPrompt\" };\n",
+          "freezeSHA256": "7ccc3f1f68cd313871b160f5b98576a1926122212cc3244ff72c3fbe7fffc59a",
+          "exitCode": 1,
+          "expectedFailedCases": 2,
+          "actors": [
+            "player",
+            "enemy"
+          ],
+          "expectedMissingGuardReason": "notYourPrompt",
+          "end": "2026-10-15T03:34:18.920098+00:00",
+          "restoredSHA256": "0f21932397fa3607ef83b41efda19c5a741c068bfd41026f5d944e0bb309cf7f",
+          "restoredBytesExact": true
+        }
+      ]
+    },
+    "meaning": "Each deleted answer guard makes otherwise legal input apply for both actors instead of the exact intended public rejection. Each source restored byte exactly before next test; final baseline two cases pass. Cancel guards and all other bytes retained. Diagnostic only, no mutation CI gate.",
+    "safeCallerFailure": {
+      "toolChunk": "8bda34",
+      "observedExitCode": 1,
+      "toolWallSeconds": 0.150383791,
+      "failure": "guard count assertion before first S.write_bytes/Popen",
+      "productMutation": false,
+      "testsLaunched": 0,
+      "tracked5332Exact": true,
+      "sourceSHA256": "0f21932397fa3607ef83b41efda19c5a741c068bfd41026f5d944e0bb309cf7f",
+      "outerPid": "UNKNOWN: tool did not return PID for already-terminal caller",
+      "recordedAt": "2026-10-15T03:30:56.486427+00:00"
+    }
+  },
+  "historical704Correction": {
+    "frictionOnlyField": "hostLoad",
+    "measurementOnlyAddition": "schemaNormalization.fields.hostLoad",
+    "originalValue": 19.03466796875,
+    "correctedValue": 9.63623046875,
+    "allOtherHistoricalDataEqual": true,
+    "provenance": {
+      "fields": {
+        "hostLoad": {
+          "measuredFor": "npm run review starting 1-minute host load",
+          "correction": {
+            "bead": "hv-umm2.712",
+            "originalValue": 19.03466796875,
+            "correctedValue": 9.63623046875,
+            "receiptPath": "/tmp/dreamtides-executor-01a1304d/704/review/inputs/review-receipt.json",
+            "receiptSHA256": "b7cf37b8b04bad7c169fd47d08b5d79bb3b2732b741515dd864b3aa392fb432c",
+            "samplingClock": "2026-10-15T00:15:47.873910+00:00",
+            "scope": "Actual review command startLoad[0]; all historical windows, checks and other samples preserved."
+          }
+        }
+      }
+    }
+  },
+  "failurePaths": {
+    "errorMidStep": "No transition added; existing failed-group rollback contract passes in all5274 related contracts.",
+    "reloadRestart": "Changed existing test JSON round-trips pending slice and confirms exact prompt before both actors reject and validly commit.",
+    "partialWrite": "Each rejected intent preserves full cold slice and committed hash; immutable transaction tested, no new writer.",
+    "invalidStaleInput": "Both actor wrong-side/stale attempts use legal candidates and exact public reasons; separate empty illegalAnswer. Both independently sensitive to their guard deletion.",
+    "concurrentActors": "Existing both-seat valid commit once and duplicate rejection retained; no asynchronous or shared-state transition added."
+  },
+  "resourcePolicy": {
+    "workers": 2,
+    "heavy": false,
+    "browser": false,
+    "fullFuzz": false,
+    "serversProviders": [],
+    "receiptScope": "Popen actual waits/reaped leaders; final whole PG absence audit retained separately. Initial already-terminal v1 outer PID unavailable, UNKNOWN explicitly retained."
+  },
+  "validationQualification": "Ordinary diff-aware review passed5274 tests in one entrypoint; no full-suite/budget/throughput claim. Prepare emits existing optional art warnings then restores linked assets.",
+  "coreReview": {
+    "required": true,
+    "status": "Parent owns fresh read-only no-context Codex review after exact commit; not claimed complete here."
+  },
+  "finalization": {
+    "onlyClockRefresh": [
+      "friction.implementWindow.end",
+      "friction.implementMin",
+      "measurements.timingCutoff.at",
+      "measurements.timingCutoff.inclusiveMinutes"
+    ],
+    "oneCommit": true,
+    "automaticDates": true,
+    "postCommitTrackedRewrite": false
+  },
+  "preExisting": {
+    "file": "docs/plan/evidence/pre-existing/hv-umm2.712.md",
+    "followup": "hv-umm2.715",
+    "boundary": "Production-derived RootStaff fixture/import outside writable pending-answer block; unchanged source, no repair claimed."
+  }
+}

@@ -1,0 +1,11 @@
+# hv-umm2.712: scoring answer rejection witnesses
+
+The existing pending-discard contract uses legal candidate answers for wrong-side and stale IDs, with exact public `notYourPrompt` and `stalePrompt` results. A separate empty answer checks `illegalAnswer`. Both seats preserve the entire cold slice and committed hash, then commit once and reject a duplicate. The coherent contract module is 348 lines; test entrypoints, cases and jsdom counts are unchanged, with four net test lines.
+
+Initial focused validation passed both actor cases. Each independently omitted answer guard produced two assertion failures: the legal answer applied instead of the expected public rejection. The production fold was restored byte exactly after each diagnostic, with all 5,332 tracked hashes verified before the next operation. Restored focused validation passed both actor cases. Ordinary review passed 5,274 contracts; Knip, schema and whitespace passed. Full, fuzz and browser work are outside this test and evidence scope. Command times, CPU, host loads, output hashes and actual waits are in the adjacent JSON and ignored receipts. No performance comparison is claimed.
+
+The first diagnostic caller stopped at its guard-count assertion before any write or test launch because the cancel block contains the same guard lines. Its unavailable outer PID is explicitly UNKNOWN. The admitted second caller selects only the answer block, preserves the complete cancel suffix and proves the exact one-line delta. Raw negative outputs and each restoration receipt are retained.
+
+The named 704 correction sets its friction host load to the actual review-start 1-minute sample, 9.63623046875, at 2026-10-15T00:15:47.873910Z. Its measurement provenance retains the original 19.03466796875 and exact historical receipt SHA/path. Every other historical datum is preserved.
+
+Elapsed implementation starts at original dispatch 2026-10-15T03:26:54.814Z and includes all reads, waits, attempts, checks and packaging through the automatic final Git committer clock, retained externally. Sampling start is UNKNOWN. The committed cutoff is refreshed immediately before Git; no date override or tracked postcommit rewrite is used. Parent owns independent core review and certified delivery.

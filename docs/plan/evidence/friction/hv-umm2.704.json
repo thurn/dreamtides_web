@@ -16,7 +16,7 @@
     "review": 60.4726523749996,
     "timestamp-fixture-counterfactual": 9.016541082994081
   },
-  "hostLoad": 19.03466796875,
+  "hostLoad": 9.63623046875,
   "testDelta": {
     "files": 0,
     "lines": 96,
