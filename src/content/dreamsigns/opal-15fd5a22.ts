@@ -1,4 +1,7 @@
 import { dreamsign } from "../define";
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { offeringDiscardPaymentOption } from "../../engine/effects/primitives";
 
 export default dreamsign({
   id: "15fd5a22-a786-48e3-99b0-919e810b3eba",
@@ -13,5 +16,6 @@ export default dreamsign({
     "e1620ab4-7e68-4a57-a6eb-d7a3380c4dc5",
   ],
   tags: ["J12", "Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(offeringDiscardPaymentOption())],
+  verifiedText: expectedVerifiedText("You may pay Offering costs by discarding a card instead of banishing a card from your hand."),
 });

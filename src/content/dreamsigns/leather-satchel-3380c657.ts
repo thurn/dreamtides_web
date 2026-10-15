@@ -1,4 +1,7 @@
 import { dreamsign } from "../define";
+import { triggered, whenAbandon } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { sequence, triggerAbandonedNamed } from "../../engine/effects/primitives";
 
 export default dreamsign({
   id: "3380c657-79ca-400b-abb7-4b56fbb92af4",
@@ -15,5 +18,6 @@ export default dreamsign({
     "eb397537-8a0b-4969-924b-baee5137094c",
   ],
   tags: ["Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(whenAbandon(), sequence(triggerAbandonedNamed("materialized"), triggerAbandonedNamed("dawn")))],
+  verifiedText: expectedVerifiedText("When you abandon a character, trigger its ▸Materialized and ▸Dawn abilities."),
 });
