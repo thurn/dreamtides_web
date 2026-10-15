@@ -1,0 +1,32 @@
+{
+  "bead": "hv-umm2.761",
+  "phase": 5,
+  "implementMin": 35.882992800000004,
+  "implementWindow": {
+    "start": "2026-10-15T22:30:57.063187+00:00",
+    "end": "2026-10-15T23:06:50.042755+00:00"
+  },
+  "localValidationS": {
+    "focusedRedInitial": 5.2965177920414135,
+    "focusedRed": 5.346992290986236,
+    "focused": 5.241069166979287,
+    "review": 21.47711891704239,
+    "knip": 5.967851958004758,
+    "reviewFull": 131.87263058294775,
+    "schema": 0.07203579199267551,
+    "finalCheapChecks": 0.08392420900054276
+  },
+  "hostLoad": 10.091796875,
+  "testDelta": {
+    "files": 0,
+    "lines": 108,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-command-admission",
+      "minutes": 16.908620883333334,
+      "note": "The required local full review recorded 1014.517253 seconds from outer request to inner recorder start. This includes shared heavy-slot admission and process/source-guard startup; the kernel lock owner and pure lock-wait time were not identified. The command ran once and passed."
+    }
+  ]
+}

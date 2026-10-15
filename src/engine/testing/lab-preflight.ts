@@ -1,5 +1,5 @@
 /** Node-side card-lab resolution checks; browser presentation remains the sweep's contract. */
-import type { EngineCardDefinition } from "../catalog";
+import { instanceCard, type EngineCardDefinition } from "../catalog";
 import { BATTLE } from "../../content/battle";
 import type { Engine } from "../engine";
 import type { EngineEvent } from "../events";
@@ -178,11 +178,12 @@ export function runCardLabPreflight(
     const resolved = events.findIndex((event) => event.kind === "resolved" && event.instance === instance);
     if (resolved < 0) throw new PreflightFailure("missingResolution", "No source-scoped resolved event");
     const card = engine.catalog.card(request.entry.cardId);
-    const expected: Zone[] = card.cardType === "character" ? ["play"] : ["void", "banished"];
+    const cardType = instanceCard(engine.catalog, source!).cardType;
+    const expected: Zone[] = cardType === "character" ? ["play"] : ["void", "banished"];
     const materialized = events.findIndex((event) => event.kind === "materialized" && event.instance === instance);
     // Engine events arrive in execution order; browser probe seq belongs to its wrapper.
     const abandoned = materialized >= 0 && events.some((event, index) => event.kind === "abandoned" && event.instance === instance && index > materialized);
-    if (card.cardType === "character" && materialized > resolved && abandoned) expected.push("void");
+    if (cardType === "character" && materialized > resolved && abandoned) expected.push("void");
     const zone = slice.committed.instances[instance]?.zone;
     if (zone === undefined || !expected.includes(zone)) throw new PreflightFailure("unexpectedZone", `Source zone ${String(zone)}; expected ${expected.join(" or ")}`);
     return result(card.status === "pending" ? "pending" : "pass");

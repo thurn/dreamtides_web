@@ -1,0 +1,1266 @@
+{
+  "bead": "hv-umm2.761",
+  "base": "b72b7514c65ba21a0f6172e4801cf08c05f1466d",
+  "claimStartUTC": "2026-10-15T22:30:57.063187+00:00",
+  "implementationEndQualification": "Evidence cutoff is the actual recorded time after full check and collection. Parent records the later actual Git endpoint; no forecast or reset.",
+  "sourceOnlyBriefSHA256": "cca8e5845357c995e1696c56b399870f7468684ca7da9240e7ddaa2782454f55",
+  "stage1ProposalSHA256": "bedcb36bdd6557bac45ae19c57a3cc44e4cadf2d200113b2419f1d1eab7c4874",
+  "sourceLedger": {
+    "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/source-ledger-stage1.json",
+    "sha256": "5c6e51201f61af9724d6d6c310686962c91d15e3bac82abc2414c2cf074c8a26",
+    "qualification": "Selected actual semantic ranges with delivery chunks; clipped calls excluded and repaired; sourcepacket CLI unused. No whole-engine completeness claim."
+  },
+  "authority": [
+    "ACK761-WHEEL-DIAG-01",
+    "ACK761-WHEEL-DIAG-ESM-02",
+    "ACK761-WRITE-CHECK-01"
+  ],
+  "runtimeRunner": {
+    "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/run-check.py",
+    "sha256": "664912249f3820e1147a133b41252e34099c2c5f2dc079007dd3fd2ebc316e84",
+    "cpuQualification": "Exact /usr/bin/time -l command-family CPU retained separately; RUSAGE_CHILDREN includes ps identity calls.",
+    "identity": "PID/PG/birth only, no mutable argv comparisons",
+    "sourceGuard": "5916 initial tracked paths, file bytes or literal symlink text; five admitted writer paths only"
+  },
+  "commands": [
+    {
+      "label": "wheel-diagnostic-before",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-before.receipt.json",
+      "receiptSHA256": "396e8d3b5a080b1aef3992989eddfaf03e5d17dd5ad030b0b361b9d443a14848",
+      "command": [
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-preflight-type761-root/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/diagnostic-wheel-kind.proposed.ts"
+      ],
+      "startUTC": "2026-10-15T22:39:31.402095+00:00",
+      "endUTC": "2026-10-15T22:39:35.872520+00:00",
+      "wallSeconds": 4.47029091703007,
+      "exit": 1,
+      "pid": 97582,
+      "pgid": 97582,
+      "birthIdentity": "97582 97489 97582 Thu Oct 15 15:39:31 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-before.before.source.json",
+        "sha256": "dc9c8043aaac92a31c9c2c806ea9caadf59ca2391818415777a7c68c9aa6cc82",
+        "trackedCount": 5916,
+        "changedTracked": [],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "55a9476b6a99483db7e88c1921dd70596901ec8f4712b6bed17557a53170ba9d"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "119b733b046d3bcecb113d284c87a8b0d6c26ec64146fe3ff3bac645f47a5a04"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-before.after.source.json",
+        "sha256": "dc9c8043aaac92a31c9c2c806ea9caadf59ca2391818415777a7c68c9aa6cc82",
+        "trackedCount": 5916,
+        "changedTracked": [],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "55a9476b6a99483db7e88c1921dd70596901ec8f4712b6bed17557a53170ba9d"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "119b733b046d3bcecb113d284c87a8b0d6c26ec64146fe3ff3bac645f47a5a04"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-before.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-before.stderr.log": {
+          "sha256": "92f680c70bcc965e3d3d29590238a678945adbaab6f45c37aac0bdcfdec295d4",
+          "bytes": 1499
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-before.time.txt": {
+          "sha256": "05c036cc7daac3f87b272e2ddb908fef9cc94cd3995c64fe7d8fc5f9bccc35a3",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "wheel-diagnostic-esm",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-esm.receipt.json",
+      "receiptSHA256": "62251e86bba4b4f96c87bb906b13becfd589228aae42b17b97737929467a8111",
+      "command": [
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-preflight-type761-root/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/diagnostic-wheel-kind.proposed.mts"
+      ],
+      "startUTC": "2026-10-15T22:40:28.723176+00:00",
+      "endUTC": "2026-10-15T22:40:31.061869+00:00",
+      "wallSeconds": 2.338559209019877,
+      "exit": 0,
+      "pid": 2692,
+      "pgid": 2692,
+      "birthIdentity": "2692  2672  2692 Thu Oct 15 15:40:28 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-esm.before.source.json",
+        "sha256": "dc9c8043aaac92a31c9c2c806ea9caadf59ca2391818415777a7c68c9aa6cc82",
+        "trackedCount": 5916,
+        "changedTracked": [],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "55a9476b6a99483db7e88c1921dd70596901ec8f4712b6bed17557a53170ba9d"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "119b733b046d3bcecb113d284c87a8b0d6c26ec64146fe3ff3bac645f47a5a04"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-esm.after.source.json",
+        "sha256": "dc9c8043aaac92a31c9c2c806ea9caadf59ca2391818415777a7c68c9aa6cc82",
+        "trackedCount": 5916,
+        "changedTracked": [],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "55a9476b6a99483db7e88c1921dd70596901ec8f4712b6bed17557a53170ba9d"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "119b733b046d3bcecb113d284c87a8b0d6c26ec64146fe3ff3bac645f47a5a04"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-esm.stdout.log": {
+          "sha256": "ffe8633a9ed13f7eebbfff59035651d675619254e045cfb576ecbee089eca1e4",
+          "bytes": 27450
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-esm.stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-esm.time.txt": {
+          "sha256": "18053666b50b5e2e799379b762be8a7af68877de895603a9f25e23982bb14a8d",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "focused-red",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red.receipt.json",
+      "receiptSHA256": "667d37f41440f5c158e4c54e304ffa33b2ecbc01ad3a26db269e39ae0c9418f3",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-preflight.test.ts"
+      ],
+      "startUTC": "2026-10-15T22:42:36.534675+00:00",
+      "endUTC": "2026-10-15T22:42:41.831347+00:00",
+      "wallSeconds": 5.2965177920414135,
+      "exit": 1,
+      "pid": 13326,
+      "pgid": 13326,
+      "birthIdentity": "13326 13292 13326 Thu Oct 15 15:42:36 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red.before.source.json",
+        "sha256": "c76fc375c9ca22ab0118a109d850111623d9ee581d63ed6d811c24be4021ec54",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "80e333ae4124eecdd1d2420000d66e6864813b10b652dca87ae4f02cb4fed731"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "119b733b046d3bcecb113d284c87a8b0d6c26ec64146fe3ff3bac645f47a5a04"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red.after.source.json",
+        "sha256": "c76fc375c9ca22ab0118a109d850111623d9ee581d63ed6d811c24be4021ec54",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "80e333ae4124eecdd1d2420000d66e6864813b10b652dca87ae4f02cb4fed731"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "119b733b046d3bcecb113d284c87a8b0d6c26ec64146fe3ff3bac645f47a5a04"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red.stdout.log": {
+          "sha256": "dead1fb11d6412be6bf8ef1d0d0937a672521a4032029ce2249b9d5e1dec6eb4",
+          "bytes": 3858
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red.stderr.log": {
+          "sha256": "f6e4ae1230db394f7ebcdab81e689ae709b2e6520791218d1853a542ce9b1764",
+          "bytes": 69695
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red.time.txt": {
+          "sha256": "bee337e18027b2caad379f51e4bf1010850de8fdd0bec0467410d6ff93dcd77b",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "focused-red-fixtures-corrected",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red-fixtures-corrected.receipt.json",
+      "receiptSHA256": "9648ecae5b53f4605f741ad9805b598bda6dd90e2cee9d54a1dfcc370314ba0a",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-preflight.test.ts"
+      ],
+      "startUTC": "2026-10-15T22:42:57.975395+00:00",
+      "endUTC": "2026-10-15T22:43:03.322526+00:00",
+      "wallSeconds": 5.346992290986236,
+      "exit": 1,
+      "pid": 15301,
+      "pgid": 15301,
+      "birthIdentity": "15301 15219 15301 Thu Oct 15 15:42:57 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red-fixtures-corrected.before.source.json",
+        "sha256": "100823c2fc24fd6207c39690ad58c329f8300c6d6234bafc35d1091109d8d8ab",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "119b733b046d3bcecb113d284c87a8b0d6c26ec64146fe3ff3bac645f47a5a04"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red-fixtures-corrected.after.source.json",
+        "sha256": "100823c2fc24fd6207c39690ad58c329f8300c6d6234bafc35d1091109d8d8ab",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "119b733b046d3bcecb113d284c87a8b0d6c26ec64146fe3ff3bac645f47a5a04"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red-fixtures-corrected.stdout.log": {
+          "sha256": "b876bac0b0145abf64803ce73bc4855a42cabc762cb2a5c66a0478d9af77669c",
+          "bytes": 2910
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red-fixtures-corrected.stderr.log": {
+          "sha256": "a21dcd869792d8a853f68346d3b3aee4abb3245b23eea130986e497cbabc3ee0",
+          "bytes": 66092
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-red-fixtures-corrected.time.txt": {
+          "sha256": "5aa6c59ab880ad78c6ef9394a4c1b903b619a151c54ff4aa25a90f915e4c8c36",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "focused-green",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-green.receipt.json",
+      "receiptSHA256": "5182a2edf685a00a4cd70218084ea8bdacc180ab7da5ab02a6f14f42b70d3622",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-preflight.test.ts"
+      ],
+      "startUTC": "2026-10-15T22:43:19.497821+00:00",
+      "endUTC": "2026-10-15T22:43:24.739000+00:00",
+      "wallSeconds": 5.241069166979287,
+      "exit": 0,
+      "pid": 17223,
+      "pgid": 17223,
+      "birthIdentity": "17223 17156 17223 Thu Oct 15 15:43:19 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-green.before.source.json",
+        "sha256": "114554e172577db19d2bfcba01d4cca07123293cfd43ddf17d25e03ba7907a84",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-green.after.source.json",
+        "sha256": "114554e172577db19d2bfcba01d4cca07123293cfd43ddf17d25e03ba7907a84",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-green.stdout.log": {
+          "sha256": "141a3511ad00e64943bdd7a6c2da6ebc7fe4f587eae4c56b4f8fa1f3f3af840f",
+          "bytes": 1471
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-green.stderr.log": {
+          "sha256": "d30cd47b76ca535571a78ea71fdb907299511cf7cad72d482eba152d71b4989a",
+          "bytes": 48913
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/focused-green.time.txt": {
+          "sha256": "c13e2341116586011ac6dad0f41ea67079698b7061822dbf1807173ea9f419a7",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "review",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review.receipt.json",
+      "receiptSHA256": "89ae1f70d50d221f3dd71a790a2441ac7ef0342f39f61d4009e9ea7b043afd63",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUTC": "2026-10-15T22:43:31.045340+00:00",
+      "endUTC": "2026-10-15T22:43:52.522649+00:00",
+      "wallSeconds": 21.47711891704239,
+      "exit": 0,
+      "pid": 18284,
+      "pgid": 18284,
+      "birthIdentity": "18284 18251 18284 Thu Oct 15 15:43:31 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review.before.source.json",
+        "sha256": "114554e172577db19d2bfcba01d4cca07123293cfd43ddf17d25e03ba7907a84",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review.after.source.json",
+        "sha256": "114554e172577db19d2bfcba01d4cca07123293cfd43ddf17d25e03ba7907a84",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review.stdout.log": {
+          "sha256": "a7e97d04e8482d8da1d58e517ad0654d8a8ddd3d5c3f4406f08fa72a8cc816c4",
+          "bytes": 2127
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review.stderr.log": {
+          "sha256": "d30cd47b76ca535571a78ea71fdb907299511cf7cad72d482eba152d71b4989a",
+          "bytes": 48913
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review.time.txt": {
+          "sha256": "e5ebb3b72a9c96d8a15906a00dc442d9b9ad273e3a50e511b8a37e0ac2ccaccb",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "knip",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/knip.receipt.json",
+      "receiptSHA256": "03497af27da8434dfb9821964edf6ac25469955b7fab0135fc6601f1ab13b442",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUTC": "2026-10-15T22:43:59.314795+00:00",
+      "endUTC": "2026-10-15T22:44:05.282799+00:00",
+      "wallSeconds": 5.967851958004758,
+      "exit": 0,
+      "pid": 20597,
+      "pgid": 20597,
+      "birthIdentity": "20597 20555 20597 Thu Oct 15 15:43:59 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/knip.before.source.json",
+        "sha256": "114554e172577db19d2bfcba01d4cca07123293cfd43ddf17d25e03ba7907a84",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/knip.after.source.json",
+        "sha256": "114554e172577db19d2bfcba01d4cca07123293cfd43ddf17d25e03ba7907a84",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/knip.stdout.log": {
+          "sha256": "8307cecf927e23407d1df014b0a2012cc753be5e24c03c340f1896f5853c879c",
+          "bytes": 1140
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/knip.stderr.log": {
+          "sha256": "d30cd47b76ca535571a78ea71fdb907299511cf7cad72d482eba152d71b4989a",
+          "bytes": 48913
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/knip.time.txt": {
+          "sha256": "6d1d6c81837a1803dd7da38f53029362500b85efed495a0a6e57d65de9283dd6",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "data-pulse-diagnostic-after",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/data-pulse-diagnostic-after.receipt.json",
+      "receiptSHA256": "d27f9d98c0143a9a43b755d9b5f64272fc440cf563cf2425059eb0f0a92b43cd",
+      "command": [
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-preflight-type761-root/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/diagnostic-data-pulse-kind.mts"
+      ],
+      "startUTC": "2026-10-15T22:44:17.570508+00:00",
+      "endUTC": "2026-10-15T22:44:19.220030+00:00",
+      "wallSeconds": 1.6493965410045348,
+      "exit": 0,
+      "pid": 22041,
+      "pgid": 22041,
+      "birthIdentity": "22041 22019 22041 Thu Oct 15 15:44:17 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/data-pulse-diagnostic-after.before.source.json",
+        "sha256": "114554e172577db19d2bfcba01d4cca07123293cfd43ddf17d25e03ba7907a84",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/data-pulse-diagnostic-after.after.source.json",
+        "sha256": "114554e172577db19d2bfcba01d4cca07123293cfd43ddf17d25e03ba7907a84",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/data-pulse-diagnostic-after.stdout.log": {
+          "sha256": "f814ed5390f29e869f606f24225865d2cd21bfd92acb179fa69f39482ba32caa",
+          "bytes": 17005
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/data-pulse-diagnostic-after.stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/data-pulse-diagnostic-after.time.txt": {
+          "sha256": "a47f1e54139d40fad2cba2538fbab97da951f80e8a51d8efa8fdf83a87a24743",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "wheel-diagnostic-after",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-after.receipt.json",
+      "receiptSHA256": "0a49be0e3fe5fc79b4ca7e15341c55fc8890b549fd08bb4fe289ca12b2ececa3",
+      "command": [
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-preflight-type761-root/node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/diagnostic-wheel-kind.proposed.mts"
+      ],
+      "startUTC": "2026-10-15T22:44:24.277003+00:00",
+      "endUTC": "2026-10-15T22:44:26.088112+00:00",
+      "wallSeconds": 1.8109795830096118,
+      "exit": 0,
+      "pid": 22773,
+      "pgid": 22773,
+      "birthIdentity": "22773 22698 22773 Thu Oct 15 15:44:24 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-after.before.source.json",
+        "sha256": "114554e172577db19d2bfcba01d4cca07123293cfd43ddf17d25e03ba7907a84",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-after.after.source.json",
+        "sha256": "114554e172577db19d2bfcba01d4cca07123293cfd43ddf17d25e03ba7907a84",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": null,
+          "docs/plan/evidence/measurements/hv-umm2.761.json": null,
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": null,
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-after.stdout.log": {
+          "sha256": "3bf786a01d14626dc20416dfc428fc052a1964c14fbfe6a465940f4c51899d65",
+          "bytes": 27344
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-after.stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/wheel-diagnostic-after.time.txt": {
+          "sha256": "c4fed8cd737d8320292c3a8700aa3d4db4db11d2fbed0dc44814193e577f43b4",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "review-full",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.receipt.json",
+      "receiptSHA256": "ff362c4b18578a93fdca3c04df9dd8391173f02c86001269c47dab0c2b140115",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/run-check.py",
+        "inner",
+        "review-full.inner",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startUTC": "2026-10-15T22:45:35.162452+00:00",
+      "endUTC": "2026-10-15T23:04:41.835561+00:00",
+      "wallSeconds": 1146.6429685420007,
+      "exit": 0,
+      "pid": 28717,
+      "pgid": 28717,
+      "birthIdentity": "28717 28693 28717 Thu Oct 15 15:45:35 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "inheritedGroup": false,
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.before.source.json",
+        "sha256": "768b91c8bdc4737ac2ef41fe26564ccee89c34a4c517129bab7abf681042e9b8",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "38bfef78babf03e67e74b347313078dcfd46d08886b1309c8d389e021fa5de26"
+          },
+          "docs/plan/evidence/measurements/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "b75f2c0cdabd26e240707df0cb398abdb2b25dfe89fa09d75c78f8d9cb4b4589"
+          },
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": {
+            "kind": "file",
+            "sha256": "995991d1043c25cc4bfe8f817df9544bb279179b8ac265a56313407d4cc78520"
+          },
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.after.source.json",
+        "sha256": "768b91c8bdc4737ac2ef41fe26564ccee89c34a4c517129bab7abf681042e9b8",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "38bfef78babf03e67e74b347313078dcfd46d08886b1309c8d389e021fa5de26"
+          },
+          "docs/plan/evidence/measurements/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "b75f2c0cdabd26e240707df0cb398abdb2b25dfe89fa09d75c78f8d9cb4b4589"
+          },
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": {
+            "kind": "file",
+            "sha256": "995991d1043c25cc4bfe8f817df9544bb279179b8ac265a56313407d4cc78520"
+          },
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.stdout.log": {
+          "sha256": "e10095c58b41e75f11c00084e89966eade285cfc262a3041483e960aadc7a8af",
+          "bytes": 324
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.time.txt": {
+          "sha256": "afc5391ab6364783d3055fda279f78451a995eea37ea72672936cc210e10d5bb",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "review-full.inner",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.inner.receipt.json",
+      "receiptSHA256": "a8bc33286e42675bce62efff2b465f407f3350a4b868ddb37631d98639207532",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startUTC": "2026-10-15T23:02:29.679705+00:00",
+      "endUTC": "2026-10-15T23:04:41.554188+00:00",
+      "wallSeconds": 131.87263058294775,
+      "exit": 0,
+      "pid": 60201,
+      "pgid": 28717,
+      "birthIdentity": "60201 60168 28717 Thu Oct 15 16:02:29 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": null,
+      "inheritedGroup": true,
+      "sourceBefore": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.inner.before.source.json",
+        "sha256": "768b91c8bdc4737ac2ef41fe26564ccee89c34a4c517129bab7abf681042e9b8",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "38bfef78babf03e67e74b347313078dcfd46d08886b1309c8d389e021fa5de26"
+          },
+          "docs/plan/evidence/measurements/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "b75f2c0cdabd26e240707df0cb398abdb2b25dfe89fa09d75c78f8d9cb4b4589"
+          },
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": {
+            "kind": "file",
+            "sha256": "995991d1043c25cc4bfe8f817df9544bb279179b8ac265a56313407d4cc78520"
+          },
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.inner.after.source.json",
+        "sha256": "768b91c8bdc4737ac2ef41fe26564ccee89c34a4c517129bab7abf681042e9b8",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "38bfef78babf03e67e74b347313078dcfd46d08886b1309c8d389e021fa5de26"
+          },
+          "docs/plan/evidence/measurements/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "b75f2c0cdabd26e240707df0cb398abdb2b25dfe89fa09d75c78f8d9cb4b4589"
+          },
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": {
+            "kind": "file",
+            "sha256": "995991d1043c25cc4bfe8f817df9544bb279179b8ac265a56313407d4cc78520"
+          },
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "outputs": {
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.inner.stdout.log": {
+          "sha256": "342995a4532e306764bd179a17f40569689cf2a052178aa8daa23540b63ad732",
+          "bytes": 2627
+        },
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.inner.stderr.log": {
+          "sha256": "2c2d9873ccd379e755e872b0c73a21c615e1606819f571b64d2752fb9eee6609",
+          "bytes": 100854
+        },
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.inner.time.txt": {
+          "sha256": "cd4e3893a6ae4bdd255117b4c713bbfce1e109b6c97a7c5644b6bff05efde17e",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "schema-final",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/schema-final.receipt.json",
+      "receiptSHA256": "54ee479e9abfd4ab3e544d71f2854f63bf133646e4bfe4a9a289b8805995a41f",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startUTC": "2026-10-15T23:05:41.771338+00:00",
+      "endUTC": "2026-10-15T23:05:41.843472+00:00",
+      "wallSeconds": 0.07203579199267551,
+      "exit": 0,
+      "pid": 40703,
+      "pgid": 40703,
+      "birthIdentity": "40703 40661 40703 Thu Oct 15 16:05:41 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/schema-final.before.source.json",
+        "sha256": "6a0a9ad27e8c63c2446b8ee80602443638fcf2cd6853c93127a992f2580dcc11",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "851032d67e0ac2f40ed7f913acfc9e62bff83a32cde2251398d49cbc60352159"
+          },
+          "docs/plan/evidence/measurements/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "844e95a339874781c3317da28f0c9300fee35f4ae7a4234b33c1b4ebfbc2f81f"
+          },
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": {
+            "kind": "file",
+            "sha256": "995991d1043c25cc4bfe8f817df9544bb279179b8ac265a56313407d4cc78520"
+          },
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/schema-final.after.source.json",
+        "sha256": "6a0a9ad27e8c63c2446b8ee80602443638fcf2cd6853c93127a992f2580dcc11",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "851032d67e0ac2f40ed7f913acfc9e62bff83a32cde2251398d49cbc60352159"
+          },
+          "docs/plan/evidence/measurements/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "844e95a339874781c3317da28f0c9300fee35f4ae7a4234b33c1b4ebfbc2f81f"
+          },
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": {
+            "kind": "file",
+            "sha256": "995991d1043c25cc4bfe8f817df9544bb279179b8ac265a56313407d4cc78520"
+          },
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/schema-final.stdout.log": {
+          "sha256": "a6f9179bd322395966c831bd37530f0eb2a4b572b8a4b271f7d45998bafc4a45",
+          "bytes": 74
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/schema-final.stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/schema-final.time.txt": {
+          "sha256": "937c9d68882a43821d139a331c17502141cad7d52e9b40c16d13a0a55f968a64",
+          "bytes": 777
+        }
+      }
+    },
+    {
+      "label": "final-cheap-checks",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/final-cheap-checks.receipt.json",
+      "receiptSHA256": "ad2f39a905a87e35c9e435c316bfc33d1298c463b18302943aadfb3f6e6c01a9",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/final-check.py"
+      ],
+      "startUTC": "2026-10-15T23:06:10.421190+00:00",
+      "endUTC": "2026-10-15T23:06:10.505261+00:00",
+      "wallSeconds": 0.08392420900054276,
+      "exit": 0,
+      "pid": 43285,
+      "pgid": 43285,
+      "birthIdentity": "43285 43266 43285 Thu Oct 15 16:06:10 2026",
+      "directChildAbsent": true,
+      "remainingGroupMembers": [],
+      "sourceBefore": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/final-cheap-checks.before.source.json",
+        "sha256": "6a0a9ad27e8c63c2446b8ee80602443638fcf2cd6853c93127a992f2580dcc11",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "851032d67e0ac2f40ed7f913acfc9e62bff83a32cde2251398d49cbc60352159"
+          },
+          "docs/plan/evidence/measurements/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "844e95a339874781c3317da28f0c9300fee35f4ae7a4234b33c1b4ebfbc2f81f"
+          },
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": {
+            "kind": "file",
+            "sha256": "995991d1043c25cc4bfe8f817df9544bb279179b8ac265a56313407d4cc78520"
+          },
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "sourceAfter": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/final-cheap-checks.after.source.json",
+        "sha256": "6a0a9ad27e8c63c2446b8ee80602443638fcf2cd6853c93127a992f2580dcc11",
+        "trackedCount": 5916,
+        "changedTracked": [
+          "src/engine/testing/lab-preflight.test.ts",
+          "src/engine/testing/lab-preflight.ts"
+        ],
+        "allowedSource": {
+          "docs/plan/evidence/friction/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "851032d67e0ac2f40ed7f913acfc9e62bff83a32cde2251398d49cbc60352159"
+          },
+          "docs/plan/evidence/measurements/hv-umm2.761.json": {
+            "kind": "file",
+            "sha256": "844e95a339874781c3317da28f0c9300fee35f4ae7a4234b33c1b4ebfbc2f81f"
+          },
+          "docs/plan/evidence/pre-existing/hv-umm2.761.md": {
+            "kind": "file",
+            "sha256": "995991d1043c25cc4bfe8f817df9544bb279179b8ac265a56313407d4cc78520"
+          },
+          "src/engine/testing/lab-preflight.test.ts": {
+            "kind": "file",
+            "sha256": "dab0a154e8e801f273f1d64a44f54e84b9709da52d56b9450e645497d44329e1"
+          },
+          "src/engine/testing/lab-preflight.ts": {
+            "kind": "file",
+            "sha256": "4f5937e41226721d50f04b8e0852bbb0c3f97bd46c7ded6a125cf50b5ad06fb9"
+          }
+        }
+      },
+      "outputs": {
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/final-cheap-checks.stdout.log": {
+          "sha256": "42df3073bdabe065024c17c39d7d7bad02e838bb807f9f4bd65dd3a7ccc1dfdc",
+          "bytes": 1793
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/final-cheap-checks.stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/final-cheap-checks.time.txt": {
+          "sha256": "fc66b4f01392d4e8100397b85823ea54a03d95da579c80eae2bf1ecbce56d856",
+          "bytes": 777
+        }
+      }
+    }
+  ],
+  "failureAttempts": [
+    {
+      "attempt": "wheel-diagnostic-before",
+      "cause": "External scratch .ts entry used CJS output; current development.ts top-level await requires ESM parse. No diagnostic rows produced.",
+      "repair": "Exact same5965-byte body/hash copied to own scratch .mts; finite diagnostic loader ACK; no package/config edit."
+    },
+    {
+      "attempt": "focused-red",
+      "cause": "Initial test snapshot compared fixture ability function against catalog wrapper function, and unique-subtype abandonment solver had no pool candidate.32 failed/20 passed includes18 intended false zones plus fixture/test errors.",
+      "repair": "Snapshot actual public catalog before run and provide synthetic staging candidate, then clear declared ranks to isolate self-abandon. Test-only repair; product unchanged."
+    },
+    {
+      "attempt": "focused-red-fixtures-corrected",
+      "cause": "Meaningful regression RED:18 failures are source type false-zone verdicts across both actors/directions/forms/copy/self-banish/pending.34 pass including plain controls and existing20.",
+      "repair": "Exact bounded instanceCard selected-source kind branch/import, preserving base status and every guard."
+    }
+  ],
+  "finalRealDiagnosticSummary": {
+    "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/real-diagnostics-final-summary.json",
+    "sha256": "ec92a0e605e54ac73f2222ff8d75355fe3e992e629893e2bb13fcfeab24e18dd",
+    "dataPulse": "Both actors plain pass void/changed pass play, payment2/gain2/draw1, exactphysical source; immutable inputs/catalog.",
+    "wheel": "Both actors plain pass banished/changed pass play with resolved->banished->materialized;10 total draws, exactphysical source; immutable inputs/catalog.",
+    "qualification": "Additional manual real-data evidence only; deterministic CI uses synthetic fixtures. Original285 full real20bothactor/judgment/weighted300 acceptance remains separate."
+  },
+  "scope": {
+    "product": "instanceCard import and selectedphysical-source kind at finalexpected-zone branch; basecard.status/sourceUUID/owner/printing/resolved/zone/abandoned/intent/error guards unchanged",
+    "tests": "32 additive deterministic synthetic public tests; both actors/directions/plain controls, actual amplified/Empowered+mods, retained ordinary payment/gain/draw, staged unmodifiedsameprinting cost copy, legitimate materializedthenabandoned, selfbanish and changedpending/refusal/errors",
+    "fallout": []
+  },
+  "newStateTransitionPaths": {
+    "midStepError": "No new state transition; existing thrown-resolution regression plus keeps converted pending, refusal and resolution-error classifications for player/enemy verify failure.",
+    "reloadOrRestart": "Not applicable: pure synchronous final acceptance classification, no persisted state or recovery code changed.",
+    "partialWrite": "Not applicable: helper creates no new game write or durable transition.",
+    "invalidOrStaleInput": "Existing invalidbudget/solver/unplayable regressions retained; changedkind refused energy0 and invalidintent guard cases.",
+    "concurrentActors": "Independent bothactors fixtures and selectedphysical copy tests; no shared runtime mutation introduced."
+  },
+  "requiredReview": {
+    "type": "fresh read-only Codex fork:none",
+    "status": "Pending parent-owned immutable review; helper never self-reviews or spawns."
+  },
+  "heavyFull": {
+    "required": true,
+    "status": "Passed exactly one local review:full",
+    "workers": 2,
+    "outerWallS": 1146.6429685420007,
+    "innerWallS": 131.87263058294775,
+    "admissionAndStartupS": 1014.517253,
+    "admissionQualification": "outer request to inner recorder start; includes lock admission and process startup, not pure lock wait",
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "tests": 11997,
+    "files": 432,
+    "testStepWallS": 93.7,
+    "testStepStartingLoad": 10.12890625,
+    "performanceQualification": "Observed loaded-host test step only. No low-load suite-budget or global performance conclusion.",
+    "commandFamilyCPUTimes": {
+      "outer": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.time.txt",
+      "inner": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/preflight-type761/review-full.inner.time.txt"
+    }
+  },
+  "resources": "All owned command groups are absent, including outer heavy PG28717 and57 existing full-suite synthetic detached server groups. Temporary lifecycle fixture roots are removed. No live application server, browser context, MCP transport, fuzz or provider job was opened.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "ordinary review static/typecheck/lint/relatedtests start22:43:33.035Z"
+      }
+    }
+  },
+  "preExisting": "Native creation emitted nonblocking beads.role warning; no shared Git configuration changed. Preparation isolation emitted expected missing-local-art warnings then restored available local assets; source guards unchanged outside admitted paths.",
+  "fullSuiteSyntheticResources": {
+    "qualification": "The admitted full suite runs existing hermetic browser lease/server lifecycle fixtures in temporary roots. These are test resources, not live application browser QA. Raw synthetic fault/cleanup stderr is retained.",
+    "recordedDetachedServerProcessGroups": [
+      63550,
+      63698,
+      64072,
+      64206,
+      64865,
+      64911,
+      65580,
+      65639,
+      65790,
+      66312,
+      66598,
+      66976,
+      67640,
+      67795,
+      67889,
+      68506,
+      68625,
+      69143,
+      69711,
+      69942,
+      70029,
+      70682,
+      70770,
+      71898,
+      72044,
+      72798,
+      73910,
+      74133,
+      74857,
+      75240,
+      75916,
+      76050,
+      76140,
+      76704,
+      76863,
+      77369,
+      77969,
+      78187,
+      78273,
+      78929,
+      79274,
+      79638,
+      79784,
+      80041,
+      80267,
+      80901,
+      81133,
+      81219,
+      83402,
+      83817,
+      89245,
+      89667,
+      91326,
+      92028,
+      92452,
+      93190,
+      93648
+    ],
+    "remainingRecordedGroupMembers": [],
+    "recordedTemporaryRoots": [
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-2Sg2ZF",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-3jWYK4",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-6LAQbT",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-7Ebwlb",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-FWMlaf",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-GMos7N",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-GbUXx0",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-GypMEt",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-KYYLlk",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-OKeaXW",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-TbjOHi",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-TcQVpu",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-Um1EpP",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-WDSIgF",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-XstFJY",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-YCHrCb",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-cu6ysT",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-dVJ87q",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-dzWCAs",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-eqlIzd",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-f9CcxV",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-h2eSuM",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-hUhgIK",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-hw644x",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-qDGjce",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-tfhNAO",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-yW5x19",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-zTmBZi"
+    ],
+    "temporaryRootsStillExist": [],
+    "observationUTC": "2026-10-15T23:05:41.587504+00:00"
+  },
+  "helperDispatchUTC": null,
+  "helperDispatchQualification": "Spawn tool supplied no timestamp. Parent native helper checkpoint 2026-10-15T22:33:14.328295Z is an observed upper bound only; original claim start governs the inclusive window.",
+  "evidenceCutoffUTC": "2026-10-15T23:06:50.042755+00:00",
+  "finalCheapChecks": {
+    "schema": "Passed script friction record validation; current JSON serialized with standard serializer.",
+    "whitespace": "Passed git diff --check and explicit trailing whitespace/single terminal LF checks on all five paths, including untracked new Markdown.",
+    "product": "Exact source transform is import + selected physical effective kind + two kind reads; guards/status body identical.",
+    "tests": "Base test file prefix preserved except six mechanical imports;32 added tests,108 net test lines,379 lines total.",
+    "source": "5916 tracked initial payload identities plus admitted own paths, no unrelated changes.",
+    "resource": "All recorded ordinary groups and outer heavy group absent;57 full-suite synthetic detached server groups absent and their temporary roots removed."
+  },
+  "readDeliveryQualification": "Initial clipped source reads are excluded in source ledger and repaired by bounded selected ranges. The first large RED log display also clipped and is not completeness proof; corrected RED failure section and stdout were delivered completely in chunk365f45, and all raw logs/receipts remain retained."
+}

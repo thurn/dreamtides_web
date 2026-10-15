@@ -17,7 +17,12 @@ import { firstLegalAnswer } from "../prompts/answers";
 import type { ChooseNumberPrompt } from "../prompts/types";
 import { hasKeyword } from "../rules/keywords";
 import type { InstanceId, Side } from "../state/ids";
-import type { BattleState } from "../state/types";
+import type { BattleState, DeckEntry } from "../state/types";
+import { draw } from "../effects/primitives/draw";
+import { gainEnergy } from "../effects/primitives/gain-energy";
+import { sequence } from "../effects/primitives/sequence";
+import { abandon } from "../effects/primitives/abandon";
+import { banishSelfOnResolve } from "../effects/primitives/banish-self-on-resolve";
 import { LAB, PROMPT_LAB_DEFINITIONS } from "./prompt-lab";
 import { parseCardSubtype } from "../../types/card-identity";
 import { cardLabBattle } from "./card-lab";
@@ -267,5 +272,108 @@ describe("node card-lab preflight", () => {
     const guarded = runCardLabPreflight(engine, request(LAB.putFromTop), definitions.cards, 1);
     expect(guarded).toMatchObject({ verdict: "fail", reason: "stalled" });
     expect(guarded.detail).toContain("Intent guard exhausted");
+  });
+});
+
+
+describe("preflight physical effective card kinds", () => {
+  const subtype = parseCardSubtype("PreflightKind");
+  const cards: readonly EngineCardDefinition[] = [SYNTHETIC.event0, SYNTHETIC.vanilla3].map((base, index) => ({
+    ...base, id: syntheticId(0x76100 + index), costs: [energy(4)], subtype, status: "authored",
+    abilities: (variant) => [event(sequence(gainEnergy(variant.amplified ? 3 : 2), draw(1)))],
+  }));
+  const kindEngine = createEngine(testCatalog(cards));
+  for (const side of ["player", "enemy"] as const) for (const card of cards) for (const form of ["base", "amplified", "empowered"] as const) {
+    for (const changed of [false, true]) {
+      it(`preflights ${card.cardType} as ${changed ? "converted" : "printed"} for ${side} in ${form}`, () => {
+        const cardType = changed ? card.cardType === "event" ? "character" : "event" : card.cardType;
+        const stacked = form === "empowered";
+        const entry: DeckEntry = {
+          cardId: card.id,
+          ...(form === "amplified" ? { amplified: true } : {}),
+          ...(stacked ? { transfigurations: ["Empowered"] } : {}),
+          ...(changed || stacked ? { deckMods: { ...NO_DECK_MODS,
+            ...(stacked ? { costReduction: 1, fast: true, reclaim: 2, sparkBonus: 2 } : {}),
+            ...(changed ? { typeChange: { cardType, subtype } } : {}),
+          } } : {}),
+        };
+        const input = { entry, variant: form, side };
+        const before = structuredClone(input);
+        const definition = kindEngine.catalog.card(card.id);
+        const printed = { ...definition, costs: definition.costs.map((cost) => ({ ...cost })) };
+        const result = runCardLabPreflight(kindEngine, input, cards);
+        expect(result).toMatchObject({ uuid: card.id, side, variant: form, verdict: "pass", reason: null, resolved: true, zone: cardType === "character" ? "play" : "void" });
+        expect(result.instance).not.toBeNull();
+        expect(result.events).toContainEqual({ kind: "cardPlayed", side, instance: result.instance });
+        expect(result.events).toContainEqual({ kind: "resolved", instance: result.instance });
+        expect(result.events.filter((event) => event.kind === "materialized" && event.instance === result.instance)).toHaveLength(cardType === "character" ? 1 : 0);
+        expect(result.events.filter((event) => event.kind === "energyChanged" && event.side === side && event.cause === "payment")).toEqual([
+          expect.objectContaining({ change: stacked ? -1 : -4 }),
+        ]);
+        expect(result.events.filter((event) => event.kind === "energyChanged" && event.side === side && event.cause === "effect")).toEqual([
+          expect.objectContaining({ change: form === "amplified" ? 3 : 2 }),
+        ]);
+        expect(result.events.filter((event) => event.kind === "cardDrawn" && event.side === side)).toHaveLength(1);
+        expect(input).toEqual(before);
+        expect(kindEngine.catalog.card(card.id)).toEqual(printed);
+      });
+    }
+  }
+
+  it.each(["player", "enemy"] as const)("uses the played variant beside an unmodified same-printing cost copy for %s", (side) => {
+    const base = cards[1];
+    const card: EngineCardDefinition = { ...base, id: syntheticId(0x76102), abilities: (variant) => [...base.abilities(variant), additionalCost(abandonCost({ subtype }))] };
+    const lab = createEngine(testCatalog([card]));
+    const input = { entry: { cardId: card.id, deckMods: { ...NO_DECK_MODS, typeChange: { cardType: "event" as const, subtype } } }, variant: "base" as const, side };
+    const fixtureEvents: EngineEvent[] = [];
+    const fixture = cardLabBattle(lab, input, [card], (published) => fixtureEvents.push(...published));
+    const scripted = fixtureEvents.find((event) => event.kind === "cardPlayed" && event.side === side);
+    const id = scripted?.kind === "cardPlayed" ? scripted.instance : fixture.slice.committed.sides[side].hand[0];
+    expect(fixture.slice.committed.instances[id]).toMatchObject({ owner: side, controller: side, printing: { kind: "card", cardId: card.id }, variant: { deckMods: input.entry.deckMods } });
+    const result = runCardLabPreflight(lab, input, [card]);
+    expect(result).toMatchObject({ verdict: "pass", reason: null, resolved: true, zone: "void", instance: id });
+    const paid = result.events.filter((event) => event.kind === "abandoned");
+    expect(paid).toHaveLength(1);
+    expect(paid[0].instance).not.toBe(result.instance);
+    expect(result.events).toContainEqual({ kind: "resolved", instance: result.instance });
+  });
+
+  it.each(["player", "enemy"] as const)("accepts a converted character that materializes then abandons itself for %s", (side) => {
+    const card: EngineCardDefinition = { ...cards[0], id: syntheticId(0x76103), abilities: () => [triggered(onMaterialized(), abandon("you", { subtype }))] };
+    const victim: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(0x76107), subtype };
+    const lab = createEngine(testCatalog([card, victim]));
+    const result = runCardLabPreflight(lab, {
+      entry: { cardId: card.id, deckMods: { ...NO_DECK_MODS, typeChange: { cardType: "character", subtype } } }, variant: "base", side,
+      stage: { player: { back: [], front: [] }, enemy: { back: [], front: [] } },
+    }, [victim]);
+    expect(result).toMatchObject({ verdict: "pass", reason: null, resolved: true, zone: "void" });
+    const source = result.events.filter((event) => "instance" in event && event.instance === result.instance).map((event) => event.kind);
+    expect(source.indexOf("resolved")).toBeLessThan(source.indexOf("materialized"));
+    expect(source.indexOf("materialized")).toBeLessThan(source.indexOf("abandoned"));
+  });
+
+  it.each(["player", "enemy"] as const)("preserves self-banishment and converted-character materialization for %s", (side) => {
+    const card: EngineCardDefinition = { ...cards[0], id: syntheticId(0x76104), abilities: () => [event(sequence(draw(1), banishSelfOnResolve()))] };
+    const lab = createEngine(testCatalog([card]));
+    for (const changed of [false, true]) {
+      const result = runCardLabPreflight(lab, {
+        entry: { cardId: card.id, ...(changed ? { deckMods: { ...NO_DECK_MODS, typeChange: { cardType: "character" as const, subtype } } } : {}) }, variant: "base", side,
+      }, []);
+      expect(result).toMatchObject({ verdict: "pass", reason: null, resolved: true, zone: changed ? "play" : "banished" });
+      expect(result.events).toContainEqual({ kind: "banished", side, instance: result.instance });
+      expect(result.events.filter((event) => event.kind === "cardDrawn" && event.side === side)).toHaveLength(1);
+      expect(result.events.filter((event) => event.kind === "materialized" && event.instance === result.instance)).toHaveLength(changed ? 1 : 0);
+    }
+  });
+
+  it.each(["player", "enemy"] as const)("keeps converted pending, refusal and resolution-error classifications for %s", (side) => {
+    const pending: EngineCardDefinition = { ...SYNTHETIC.event0, id: syntheticId(0x76105), status: "pending" };
+    const fault: EngineCardDefinition = { ...cards[0], id: syntheticId(0x76106), synthetic: { resolve: () => { throw new Error("synthetic changed-kind fault"); } } };
+    const lab = createEngine(testCatalog([pending, fault]));
+    const input = (card: EngineCardDefinition) => ({ entry: { cardId: card.id, deckMods: { ...NO_DECK_MODS, typeChange: { cardType: "character" as const, subtype } } }, variant: "base" as const, side });
+    expect(runCardLabPreflight(lab, input(pending), [])).toMatchObject({ verdict: "pending", reason: null, resolved: true, zone: "play" });
+    expect(runCardLabPreflight(lab, input(fault), [])).toMatchObject({ verdict: "fail", reason: "engineError", resolved: false });
+    expect(runCardLabPreflight(lab, { ...input(fault), stage: { [side]: { energy: 0 } } }, [])).toMatchObject({ verdict: "fail", reason: "unplayable", resolved: false });
+    expect(runCardLabPreflight(lab, input(pending), [], 0)).toMatchObject({ verdict: "fail", reason: "stalled", resolved: false, events: [] });
   });
 });
