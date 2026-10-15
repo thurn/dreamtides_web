@@ -789,7 +789,8 @@ function isLookbackEvent(event: EngineEvent): event is LookbackEvent {
  */
 function armsFor(state: BattleState, catalog: EngineCatalog, kind: LookbackEventKind, trigger: Trigger, id: InstanceId, listener: Listener): boolean {
   if (trigger.on === "either") return trigger.triggers.some((branch) => armsFor(state, catalog, kind, branch, id, listener));
-  if (kind === "abandoned") return trigger.on === "abandon" && filterMatches(catalog, state, trigger.filter, id);
+  if (kind === "abandoned") return trigger.on === "abandon" &&
+    resolvePlayer(listener.controller, trigger.player) === state.instances[id]?.controller && filterMatches(catalog, state, trigger.filter, id);
   if (trigger.on !== "dissolve") return false;
   const instance = state.instances[id];
   if (instance === undefined || (trigger.figment !== undefined && isFigment(instance) !== trigger.figment)) return false;

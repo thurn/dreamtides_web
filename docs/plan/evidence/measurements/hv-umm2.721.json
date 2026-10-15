@@ -1,0 +1,207 @@
+{
+  "bead": "hv-umm2.721",
+  "base": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+  "timing": {
+    "claimCall": "2026-10-15T05:21:52.175489+00:00",
+    "claimAck": "2026-10-15T05:21:52.314474+00:00",
+    "preGitCutoff": "2026-10-15T05:39:04.249296+00:00",
+    "actualGitEnd": "UNKNOWN before Git; external final-commit-receipt.json supplies actual endpoint and tail",
+    "inclusiveThroughCutoffS": 1032.073807,
+    "scope": "Includes setup/research, coordination/admission, real broken-base and passing checks, all waits, cleanup and packaging. Clock never reset."
+  },
+  "authority": {
+    "grant": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/exact-write-grant.txt",
+      "sha256": "3f51633f12845773bd6fd78e24871bdf4cc2b65274582befb18acd9750dc6830"
+    },
+    "nativeAck": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/exact-write-native-ack.json",
+      "sha256": "ea52a7bd54657041483acacf65d8892c0a577dee9c945dbfa1e14a527fe91bc4"
+    },
+    "proposal": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/proposal.json",
+      "sha256": "d3fe7ef0eae72a92ea2bbf0166bbf463af7852ce31581be8204ae901a0617f8c"
+    },
+    "historicalManifest": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/manifest.json",
+      "sha256": "d34b684b57ed27e5a353e224776deee1c77fccceabdacbab95af200ee6056d6a"
+    },
+    "qualification": "Saved Stage0 union77, fresh finite admission union76; peer720 owns due retrospective. No independent graph/foreign duty changes by helper."
+  },
+  "source": {
+    "finalManifest": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/final-source-manifest.json",
+      "sha256": "216c8b165ab9cb4a3d5f13e561e79d9e9153927f662e3b7f3692cf7ce572562f"
+    },
+    "changedOwnPaths": 2,
+    "readOnlyDependenciesPreserved": 20,
+    "proof": "Reversing only armsFor abandoned leaf reconstructs whole exact base matcher. Recursion/signature/callers/Dissolved/matchTrigger/matchKind/enqueue/armedBlocks/repeat/once/observer/named/copy/history byte-identical. Existing491line90named module whole SHA preserved.",
+    "classification": "Core critical admission repair, no authoritative fields, DTO, rules/content/UI/config/registry/entrypoint changes. Existing eager contract glob discovers the new private plain module. Parent owns fresh read-only Codex fork:none review after terminal commit."
+  },
+  "testDelta": {
+    "physicalPlainModules": 1,
+    "netLines": 111,
+    "configuredEntrypoints": 0,
+    "jsdomFiles": 0,
+    "contractLines": 111,
+    "newCases": 20,
+    "retainedNamedCases": 90,
+    "ordinaryLookbackCases": 21,
+    "focusedCases": 131
+  },
+  "checks": [
+    {
+      "label": "regression-broken-base",
+      "exit": 1,
+      "seconds": 9.527053917001467,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/regression-broken-base.receipt.json",
+        "sha256": "f01dccd2358dc5241744326cd31106435ac664291e5998eb6b8c4ed5eabf6f1b"
+      },
+      "stdoutSHA256": "a94ffa7aba66792257f9690b6b779d2b5d804139fe158ecf10cb25bd0c4b5440",
+      "results": [
+        "Test Files  1 failed (1)",
+        "Tests  6 failed | 14 passed | 5586 skipped (5606)"
+      ]
+    },
+    {
+      "label": "regression-repaired",
+      "exit": 0,
+      "seconds": 8.103243958961684,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/regression-repaired.receipt.json",
+        "sha256": "a357335974af6d7ff2b4c057a9f23e8baa0bdccc9bcc1cabe6826a5559c5bf9f"
+      },
+      "stdoutSHA256": "163c451e9a3c5170fb8aec10ce63e3f4e063b850ada3572e84577e4ffed00c55",
+      "results": [
+        "Test Files  1 passed (1)",
+        "Tests  131 passed | 5475 skipped (5606)"
+      ]
+    },
+    {
+      "label": "integration",
+      "exit": 0,
+      "seconds": 28.527135875017848,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/integration.receipt.json",
+        "sha256": "5d610df6391848dbe6ca970510ae02b97aec69ffe725edb84dd0ad7bbdf6b020"
+      },
+      "stdoutSHA256": "446b53bd60c0b352e5eb5cf66d98e502fb4dc723e725cf1499eb229fcb58b066",
+      "results": [
+        "Test Files  7 passed (7)",
+        "Tests  5725 passed (5725)"
+      ]
+    },
+    {
+      "label": "review",
+      "exit": 1,
+      "seconds": 78.25829870800953,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/review.receipt.json",
+        "sha256": "7919b0434ea255533bfd863cfc7cd68bdcce78d8bbaf8fb71eeff99f96b75299"
+      },
+      "stdoutSHA256": "b5af7e922115ecd06d9ed6c80d3223cf9952842ce48200ceefc31a56b085a7b5",
+      "results": [
+        "Test Files  311 passed (311)",
+        "Tests  9459 passed (9459)"
+      ]
+    },
+    {
+      "label": "knip",
+      "exit": 0,
+      "seconds": 8.95976995798992,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/knip.receipt.json",
+        "sha256": "394e690a638aa91c326e478d70c16cd1288c4acc90d2158c5cb2e9a56971ca13"
+      },
+      "stdoutSHA256": "ffc34cec4e151bb3388be5b6f91e56ee61e8b1770028877e2eb654ed1cca4503",
+      "results": []
+    },
+    {
+      "label": "review-repaired",
+      "exit": 0,
+      "seconds": 68.0846714170184,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/review-repaired.receipt.json",
+        "sha256": "e19d73d06774df10d7358b25f4867b1026e116472ed95b9ec2ac756bc6fdb107"
+      },
+      "stdoutSHA256": "4b9a7c54a9b57e0241edd56ed0c871f06c2c4d598c96fdf068da1767b6421e42",
+      "results": [
+        "Test Files  311 passed (311)",
+        "Tests  9459 passed (9459)"
+      ]
+    },
+    {
+      "label": "review-full",
+      "exit": 0,
+      "seconds": 118.63378720800392,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/review-full.receipt.json",
+        "sha256": "d20f2161b6eacfe872438de0d5ab088c441a97bf97e0c12b9edccf5e54aafcab"
+      },
+      "stdoutSHA256": "eccc930cd7adb506e5f946aa3b02232a56ae2a693a03aa63bc9a2919f9bd01a8",
+      "results": [
+        "Test Files  392 passed (392)",
+        "Tests  10468 passed (10468)"
+      ]
+    }
+  ],
+  "brokenBase": {
+    "proof": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/broken-base-source-proof.json",
+      "sha256": "78a2ccbdee4fbaa23e7df791e0d2202ec5962c2761cf57c72d1611fb047fe0f1"
+    },
+    "actualFail": 6,
+    "actualPass": 14,
+    "failure": "Four visible/hand crossed descriptor negatives and two floating negatives falsely enqueue a real reader and award3 rather than0. Soft assertions retain queue and actual effect witnesses. Whole-leaf positives, OR-once, effective types/spark and real gainControl controls pass. No fixture correction or production edit preceded the broken run."
+  },
+  "fixtureTypeRepair": "Initial ordinary review passed9459 related tests/type/cycles but failed lint on one unnecessary non-null assertion in the new module61 hand[0] ternary. Removed only that assertion; no runtime or test semantic change. Repaired review and sole full bind final bytes. No duplicate focused/integration rerun for this annotation-only repair.",
+  "preexisting": {
+    "provenance": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/pre-existing-provenance.json",
+      "sha256": "657863e8f08cbc8be224e98ff940ee51a860e3b6e998e2c9d9c785d9f899316b"
+    },
+    "nativeDiscovery": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/native-bead.json",
+      "sha256": "5665f2c683d4374d0f96c982ae178d8a0946b51b6f86fac85a98647d1df6f39d"
+    },
+    "qualification": "Separate issue discovered by fresh719 reviewer after immutable freeze/promotion;719 changed-line review had no findings. Whole matcher SHA5ee4aa2b6f3445415fba5cb5015453b4f652ca53efe548e84f5a3e362ccba17d is identical at719base0112bc,719source1d7f602 and own721base5a270b. No719 amendment or invented dependency."
+  },
+  "publicWitnesses": {
+    "wholeBranch": "Both actors, printed visible/hand readers and floating readers require complete player+filter eligibility in one either leaf. Two genuinely matching whole leaves still admit one occurrence.",
+    "lookback": "Temporary allTypes/spark from a source-bound modifier qualifies before departure; expiry does not block the armed positive. Existing old lookbacks also cover reclaimed/created departure replacements.",
+    "control": "Actual public gainControl moves an enemy-owned unique Warrior to acting control, then actual abandon returns it to original owner void. Acting-side reader queues/scores, original-owner-only reader does not. Explicit subtype selectors make every abandonment unique.",
+    "resume": "Public serialize/deserialize hash equality and actual queued resolution in every new case. This is queued-state load/continuation, not a new claim of full intent replay."
+  },
+  "failureFamilies": {
+    "invalidActor": "Existing abandonCharacter rejects noncontroller abandonment; existing public abandon choice validation remains. New leaf creates no new intent or invalid-input route.",
+    "interrupt": "Existing abandon look-back Prevent ransom contract retains actual interruption abandonment; no new timing window.",
+    "restartReplay": "New queued-state hash/save continuation plus existing readonly retained-named module250 pending intent replay equivalence and module157 clone/malformed-save rejection.",
+    "partialError": "Existing public abandon synthetic failure-after-effect and retained-named module291 runStep prefix rollback retain committed abandonment without partial new resolution writes. New guard is a pure read before queue admission.",
+    "staleConcurrent": "Readonly retained-named module250 no-pending/stale/foreign/concurrent answer contracts remain; no new prompt transition.",
+    "refusalCancel": "Readonly module279 paid-action planning cancellation, module250 automatic-child cancellation refusal and nested optional decline remain; no artificial duplicate prompt test."
+  },
+  "qa": {
+    "disposition": "Source-only admission repair. Public synthetic runtime/load contracts, relevant engine/view/fold integration and one locked full architecture check; no new player workflow, feature browser/provider/LAB/Cumulus, captures/native exports, production300 or artificial mutation quota.",
+    "productionUUIDsTransferred": [],
+    "originalAcceptance": "Original production owners keep every UUID and full authoring/weighted300/preflight/sweep/D21/final recipes. This independent pre-existing bug has no invented719/original257/258 prerequisite."
+  },
+  "resources": {
+    "settlement": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/resource-settlement.json",
+      "sha256": "e4fd193310b0f89306518c26908e28dadc2cc1d238c98f10ecf296db819e5ae4"
+    },
+    "live": [],
+    "qualification": "Recorded own command groups and actual reported full-check fixture start/cleanup union independently absent; per-group flags are authoritative, not an assumption that every group had both reports. Handles collected. Fake full-check servers/providers are infrastructure fixtures, not feature QA. Exact kernel lock wait UNKNOWN; no foreign signals."
+  },
+  "provenance": {
+    "setupInstall": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/install.receipt.json",
+      "sha256": "2a21ba1647ff38c31cf931da19d336f1f7822c03e0c66c916a5c2974ced5ba5e"
+    },
+    "claim": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandon-arming721/claim-native.json",
+      "sha256": "232840d8688c03c42aa53cdaa19ff64016ae2303a86e5f905477565c9dafbb84"
+    }
+  }
+}
