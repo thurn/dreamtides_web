@@ -1,0 +1,226 @@
+{
+  "bead": "hv-umm2.715",
+  "sourceBase": "ff2531dc0862024a0cfe495ed0d4b2888e318512",
+  "dispatch": {
+    "at": "2026-10-15T03:47:32.763Z",
+    "journalOrdinal": 39426,
+    "callId": "call_9b66542fe12e497d8e21b6cb61b70841",
+    "tool": "spawn_agent",
+    "samplingStart": "UNKNOWN"
+  },
+  "timingCutoff": {
+    "at": "2026-10-15T03:52:28.735176+00:00",
+    "inclusiveMinutes": 4.9328696,
+    "qualification": "Precommit cutoff refreshed immediately before one normal automatic-date Git commit. Exact final automatic committer and external bracket are retained in final-commit.receipt.json; no postcommit tracked rewrite."
+  },
+  "windowPolicy": "Inclusive original dispatch through all research, attempts, coordination, checks, evidence and final automatic Git. Elapsed wall time; no performance comparison.",
+  "scope": {
+    "fixture": "Local branded synthetic Dreamsign UUID 5e5e5e5e-0000-4000-8000-000000715001; triggered whenScoreGroup(2) sequence(draw(1),discard(1)).",
+    "sourcePaths": [
+      "src/engine/effects/primitives/contracts/score-group-trigger.contracts.ts"
+    ],
+    "productionChanges": 0,
+    "newCases": 0,
+    "fallout": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "coreReviewRequired": false,
+    "evidencePaths": [
+      "docs/plan/evidence/friction/hv-umm2.715.json",
+      "docs/plan/evidence/measurements/hv-umm2.715.json",
+      "docs/plan/evidence/measurements/hv-umm2.715.md"
+    ]
+  },
+  "sourceGuard": {
+    "initialTrackedCount": 5347,
+    "outsideSourceExactCount": 5346,
+    "onlyModifiedInitialPath": "src/engine/effects/primitives/contracts/score-group-trigger.contracts.ts",
+    "allTestBodiesExact": true,
+    "pendingAnswerBlockExact": true,
+    "moduleLines": 348,
+    "sourceSHA256": "e21e802e47c8b3d624fec45c2f54f95e6defb93cd3ac1b190e608023c5581b3f",
+    "initialManifestSHA256": "d060922faf04f5d08e9075d222bb7273ca2f428b70015951bf63e063684e8b6e",
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "newCases": 0,
+    "configuredEntrypoints": 0
+  },
+  "checks": {
+    "focused": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "settled scoring-group trigger"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-group-fixture-715-root",
+      "start": "2026-10-15T03:50:29.964129+00:00",
+      "startLoad": [
+        11.51904296875,
+        11.724609375,
+        10.50390625
+      ],
+      "pid": 88881,
+      "pgid": 88881,
+      "port": null,
+      "end": "2026-10-15T03:50:40.247394+00:00",
+      "exitCode": 0,
+      "wallSeconds": 10.283032541978173,
+      "endLoad": [
+        10.8173828125,
+        11.568359375,
+        10.46240234375
+      ],
+      "cpuSeconds": {
+        "user": 9.967446,
+        "system": 3.217678
+      },
+      "outputSHA256": "0f85c98163510067699b7dd54954d62628e51c700e8056b69af03a45e4736310",
+      "actualWait": true,
+      "leaderAbsent": true
+    },
+    "review": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-group-fixture-715-root",
+      "start": "2026-10-15T03:50:43.649607+00:00",
+      "startLoad": [
+        10.59130859375,
+        11.5087890625,
+        10.44775390625
+      ],
+      "pid": 90581,
+      "pgid": 90581,
+      "port": null,
+      "end": "2026-10-15T03:51:12.839948+00:00",
+      "exitCode": 0,
+      "wallSeconds": 29.1996192499646,
+      "endLoad": [
+        11.888671875,
+        11.79443359375,
+        10.59033203125
+      ],
+      "cpuSeconds": {
+        "user": 76.615169,
+        "system": 7.855851
+      },
+      "outputSHA256": "7eb3cf59f978772201717859494892a01833bd96649bc1dbae5c59e3b9bc169f",
+      "actualWait": true,
+      "leaderAbsent": true
+    },
+    "knip": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/scoring-group-fixture-715-root",
+      "start": "2026-10-15T03:51:50.132051+00:00",
+      "startLoad": [
+        8.4716796875,
+        10.947265625,
+        10.32861328125
+      ],
+      "pid": 95772,
+      "pgid": 95772,
+      "port": null,
+      "end": "2026-10-15T03:51:55.185650+00:00",
+      "exitCode": 0,
+      "wallSeconds": 5.053585625020787,
+      "endLoad": [
+        8.193359375,
+        10.84814453125,
+        10.29736328125
+      ],
+      "cpuSeconds": {
+        "user": 4.1839,
+        "system": 1.478517
+      },
+      "outputSHA256": "10dbd73334f05973118799446557742069e509b93d2709511f01cbd0243eb94c",
+      "actualWait": true,
+      "leaderAbsent": true
+    }
+  },
+  "hostLoadSamples": {
+    "focused": {
+      "start": [
+        11.51904296875,
+        11.724609375,
+        10.50390625
+      ],
+      "end": [
+        10.8173828125,
+        11.568359375,
+        10.46240234375
+      ]
+    },
+    "review": {
+      "start": [
+        10.59130859375,
+        11.5087890625,
+        10.44775390625
+      ],
+      "end": [
+        11.888671875,
+        11.79443359375,
+        10.59033203125
+      ]
+    },
+    "knip": {
+      "start": [
+        8.4716796875,
+        10.947265625,
+        10.32861328125
+      ],
+      "end": [
+        8.193359375,
+        10.84814453125,
+        10.29736328125
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting 1-minute host load at 2026-10-15T03:50:43.649607+00:00"
+      }
+    }
+  },
+  "focused": {
+    "passed": 31,
+    "skipped": 5273,
+    "scope": "Full existing settled scoring-group describe through contracts.test.ts, both actor seats."
+  },
+  "failurePaths": {
+    "errorMidStep": "No new transition; existing failed-group rollback contract passes for both actors.",
+    "reloadRestart": "Existing pending-discard JSON reload and current/history hashed checkpoint recovery contracts pass for both actors.",
+    "partialWrite": "Existing rejected intent preserves full cold slice and committed hash; no writer introduced.",
+    "invalidStaleInput": "Preserved 712 legal-candidate wrong-side/stale-ID exact public reasons plus independent illegal-answer and duplicate rejection contracts pass.",
+    "concurrentActors": "Both player and enemy contract cases pass; no concurrent transition introduced."
+  },
+  "resourcePolicy": {
+    "workers": 2,
+    "heavy": false,
+    "browser": false,
+    "serversProviders": [],
+    "fuzzFull": false,
+    "settlement": "Every check uses actual Popen.wait; final process-group absence audit and Git external bracket retained in ignored receipts."
+  },
+  "validationQualification": "Bounded fixture substitution; focused whole describe, ordinary diff-aware review, Knip. Final all-record schema and staged whitespace receipts retained externally. No full-suite, browser, fuzz, production leaf coverage or benchmark claim.",
+  "knownWorkflowDisposition": "Parent fresh friction report found integration-conflict/phase5 owned by active canonical hv-umm2.713; no duplicate audit or configuration edit.",
+  "newPreExistingIssues": []
+}

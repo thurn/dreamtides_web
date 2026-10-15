@@ -29,7 +29,6 @@ import { decodeGenesis, decodeEvent, isFoldableGenesis } from "../../../../event
 import { hashState } from "../../../../eventlog/hash";
 import type { FoldState } from "../../../../rules/fold-state";
 import battleFixture from "../../../../rules/replay/fixtures/battle.json";
-import rootStaff from "../../../../content/dreamsigns/root-staff-055f211d";
 import * as p from "../index";
 
 const card = (n: number, abilities: EngineCardDefinition["abilities"]): EngineCardDefinition => ({ ...v.vanilla3, id: syntheticId(0x582000 + n), status: "authored", abilities });
@@ -45,7 +44,8 @@ const flat = card(10, () => [triggered(onNight(), p.sequence(p.gainPoints(7), p.
 const paused = card(11, () => [triggered(whenScores(), p.optional(p.gainEnergy(0)))]);
 const faulty = card(12, () => [triggered(whenScoreGroup(2), p.sequence(p.draw(1), p.gainAdditionalSpark(self(), 1)))]);
 const zero = { ...v.vanilla1, id: syntheticId(0x582005), spark: 0 };
-const sign: EngineDreamsignDefinition = { status: "authored", id: parseDreamsignId(rootStaff.id), abilities: rootStaff.abilities! };
+const sign: EngineDreamsignDefinition = { status: "authored", id: parseDreamsignId("5e5e5e5e-0000-4000-8000-000000715001"),
+  abilities: () => [triggered(whenScoreGroup(2), p.sequence(p.draw(1), p.discard(1)))] };
 const engine = createEngine(testCatalog([watch, opposingWatch, individual, depart, zero, thief, groupedScorer, shuffled, mover, flat, paused, faulty], { dreamsigns: [sign] }));
 const deck = Array.from({ length: 18 }, () => v.vanilla1.id);
 const choose = (prompt: Prompt): Answer => {
@@ -59,9 +59,9 @@ const applied = (out: IntentOutcome): BattleSlice => {
   if (out.kind !== "applied" || out.error !== null) throw new Error(`Unexpected outcome ${JSON.stringify(out)}`);
   return out.slice;
 };
-function setup(side: Side, count = 2, staff = false) {
+function setup(side: Side, count = 2, withDreamsign = false) {
   return boardState(engine.catalog, { active: side, phase: "day", scoreToWin: 100,
-    [side]: { front: Array.from({ length: count }, () => v.vanilla3.id), back: staff ? [] : [watch.id, individual.id], dreamsigns: staff ? [sign.id] : [], deck },
+    [side]: { front: Array.from({ length: count }, () => v.vanilla3.id), back: withDreamsign ? [] : [watch.id, individual.id], dreamsigns: withDreamsign ? [sign.id] : [], deck },
     [opponent(side)]: { back: [watch.id, opposingWatch.id], deck } });
 }
 const finish = (state: BattleState) => passUntil(engine, state, at(engine, opponent(state.turn.active), "day"), source);
@@ -111,7 +111,7 @@ describe("settled scoring-group trigger", () => {
     expect(settled.challenge?.scoring?.scorers[0]).toEqual({ instance: b.ids[side].front[0], controller: side });
   });
 
-  it.each(["player", "enemy"] as const)("executes the actual leaf once, drawing before its discard for %s", side => {
+  it.each(["player", "enemy"] as const)("executes the synthetic dreamsign once, drawing before its discard for %s", side => {
     const b = setup(side, 3, true), done = finish(b.state);
     const group = done.steps.find(s => s.step.kind === "resolveTrigger" && s.events.some(e => e.kind === "triggerResolved" && typeof e.source === "object" && e.source?.kind === "dreamsign"))!;
     expect(group.events.filter(e => e.kind === "cardDrawn" || e.kind === "discarded").map(e => e.kind)).toEqual(["cardDrawn", "discarded"]);
