@@ -1,0 +1,40 @@
+{
+  "bead": "hv-umm2.210",
+  "phase": 5,
+  "implementMin": 125.12189548333335,
+  "implementWindow": {
+    "start": "2026-10-15T09:39:48.799Z",
+    "end": "2026-10-15T11:44:56.112729+00:00"
+  },
+  "localValidationS": {
+    "focused": 14.11870083300164,
+    "preflight": 3.0199525839998387,
+    "knip": 7.072411499975715,
+    "review": 1.0163890839903615,
+    "fuzz": 5019.085895083961,
+    "browser": 2459.046478418866
+  },
+  "hostLoad": 15.97,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-provider-oom",
+      "minutes": 13.74257824420929,
+      "note": "737fatalprovider operationalrecovery; rawfailures retained with same-original-source freshpassing observation; measured interval includes recovery and waits, no permanentfix claim."
+    },
+    {
+      "tag": "qa-navigation-readiness",
+      "minutes": 20.89147304693858,
+      "note": "739fresh-context containment with unestablishednavigationinitiator; rawfailures retained with same-original-source freshpassing observation; measured interval includes recovery and waits, no permanentfix claim."
+    },
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 49.33067194723447,
+      "note": "Sum of two zero-game canceled unadmitted caller windows and remaining-batch pre-admission intervals; includes startup/teardown overhead. Intervals can overlap browser/recovery work; not additive project elapsed or an exact kernel-lock-only timer."
+    }
+  ]
+}

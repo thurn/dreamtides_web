@@ -1,0 +1,1528 @@
+{
+  "bead": "hv-umm2.210",
+  "phase": 5,
+  "base": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+  "dispatch": "2026-10-15T09:39:48.799Z",
+  "precommitCutoff": "2026-10-15T11:44:56.112729+00:00",
+  "finalGitEndpoint": "final-git.json records actual commit start/end/source/head and final resource proof; near-cutoff tracked window is within1minute and includes all original research/recovery/continuations/cleanup",
+  "status": "all required acceptance and final ordinaryreview passed; ready for one local commit",
+  "sampling": {
+    "populationDefinition": "Every production CARDS UUID, including special cards registered in CARDS; Dreamwell cards, figments and emblems are separate catalogs and excluded from this card-only browser sample. Full fuzz uses every production catalog plus its existing synthetic fixtures.",
+    "sampling": "Partition by printed type, union of authored base/Amplified ability kinds (vanilla if empty), and actual Amplified eligibility. Select ceil(0.10 * stratum population) in each nonempty stratum by ascending SHA256(hv-umm2.210|stratum|UUID), UUID tie break. No names used. This covers at least 10% of each stratum; rounding exceeds whole-pool minimum.",
+    "populationCount": 522,
+    "requiredMinimum": 53,
+    "selectedCount": 80,
+    "requestedCells": 320,
+    "actualExpectedBrowserCells": 234,
+    "figmentCount": 10,
+    "pendingCards": [],
+    "pendingFigments": [],
+    "strata": [
+      {
+        "key": "Character|activated+keyword+reclaim|amplified",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "1dc8f23e-58bd-47e5-9510-b48315fba1df"
+        ]
+      },
+      {
+        "key": "Character|activated+keyword|amplified",
+        "population": 5,
+        "selected": 1,
+        "uuids": [
+          "7ffb1179-6c94-4f80-9613-ece2b799f19d"
+        ]
+      },
+      {
+        "key": "Character|activated+keyword|base-only",
+        "population": 6,
+        "selected": 1,
+        "uuids": [
+          "7992dbb5-ca45-4066-aca3-ff1d6d87619e"
+        ]
+      },
+      {
+        "key": "Character|activated+reclaim|amplified",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "d30bd488-f921-49cb-a44f-353c54cb6548"
+        ]
+      },
+      {
+        "key": "Character|activated+static|base-only",
+        "population": 11,
+        "selected": 2,
+        "uuids": [
+          "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
+          "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f"
+        ]
+      },
+      {
+        "key": "Character|activated+triggered|amplified",
+        "population": 21,
+        "selected": 3,
+        "uuids": [
+          "a5056a4c-542b-4a7c-8fe6-895126c7d4c8",
+          "920ef495-5560-4fa6-9a95-b9584ef6a4cf",
+          "0458658d-7e02-4286-9249-93674d16620b"
+        ]
+      },
+      {
+        "key": "Character|activated+triggered|base-only",
+        "population": 14,
+        "selected": 2,
+        "uuids": [
+          "ecf77f27-df0f-47c4-99c2-48d7fa46a137",
+          "81074582-dfb3-497c-8c04-f97a24d6b1d4"
+        ]
+      },
+      {
+        "key": "Character|activated|amplified",
+        "population": 47,
+        "selected": 5,
+        "uuids": [
+          "516dbd2d-dae4-4873-937e-adfeeee4444d",
+          "648237c5-ceff-4a28-aaf8-4aa099eae80d",
+          "8a5d7d67-91c9-41c4-b22e-8287954efa09",
+          "07ceb104-0b27-473a-bc72-e6225479ed83",
+          "bd43b120-2503-406c-8b72-ea3dc55198a0"
+        ]
+      },
+      {
+        "key": "Character|activated|base-only",
+        "population": 34,
+        "selected": 4,
+        "uuids": [
+          "c97b0a5b-64d0-480f-8db7-3fde93738d86",
+          "ed4d5342-0690-40b7-ab48-6b76035466f2",
+          "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7",
+          "f10a9ba9-f5eb-4011-9426-a89c5de3b550"
+        ]
+      },
+      {
+        "key": "Character|additionalCost+static|base-only",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "3e802ecd-a83b-491b-9528-a4672d0e986f"
+        ]
+      },
+      {
+        "key": "Character|additionalCost+triggered|amplified",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "f860e815-3ed9-463d-ac4d-ed8d2778f8ad"
+        ]
+      },
+      {
+        "key": "Character|additionalCost+triggered|base-only",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "c750af2e-8185-4af0-bb38-4a41430c71b3"
+        ]
+      },
+      {
+        "key": "Character|additionalCost|base-only",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "78599234-6054-4df1-8e79-c38782517f9a"
+        ]
+      },
+      {
+        "key": "Character|alternativeCost+static|amplified",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa"
+        ]
+      },
+      {
+        "key": "Character|keyword+static|base-only",
+        "population": 2,
+        "selected": 1,
+        "uuids": [
+          "7ad10754-690c-45fa-abe6-28944da6eef6"
+        ]
+      },
+      {
+        "key": "Character|keyword+triggered|amplified",
+        "population": 6,
+        "selected": 1,
+        "uuids": [
+          "7dd2214f-8d16-453a-9f28-62712e64eae1"
+        ]
+      },
+      {
+        "key": "Character|keyword+triggered|base-only",
+        "population": 9,
+        "selected": 1,
+        "uuids": [
+          "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5"
+        ]
+      },
+      {
+        "key": "Character|reclaim+static|amplified",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa"
+        ]
+      },
+      {
+        "key": "Character|reclaim+static|base-only",
+        "population": 2,
+        "selected": 1,
+        "uuids": [
+          "1268a899-b209-46bb-bce4-6def1dcd0404"
+        ]
+      },
+      {
+        "key": "Character|reclaim+triggered|amplified",
+        "population": 6,
+        "selected": 1,
+        "uuids": [
+          "2a828466-450a-4637-9c68-6b54522450c0"
+        ]
+      },
+      {
+        "key": "Character|reclaim+triggered|base-only",
+        "population": 2,
+        "selected": 1,
+        "uuids": [
+          "bedee263-27b9-4d73-ab77-6b5c747dff69"
+        ]
+      },
+      {
+        "key": "Character|reclaim|base-only",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "cd7ff671-2317-4a54-b9da-acfefb90e6b0"
+        ]
+      },
+      {
+        "key": "Character|static+triggered|amplified",
+        "population": 5,
+        "selected": 1,
+        "uuids": [
+          "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9"
+        ]
+      },
+      {
+        "key": "Character|static+triggered|base-only",
+        "population": 2,
+        "selected": 1,
+        "uuids": [
+          "e4e8d3b9-3463-4b92-8fbe-35064f72402d"
+        ]
+      },
+      {
+        "key": "Character|static|amplified",
+        "population": 7,
+        "selected": 1,
+        "uuids": [
+          "29c4c45d-33df-42ac-bf28-387eb00264aa"
+        ]
+      },
+      {
+        "key": "Character|static|base-only",
+        "population": 18,
+        "selected": 2,
+        "uuids": [
+          "9d51dca1-28d7-4e8e-bc13-c5b665d6db72",
+          "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277"
+        ]
+      },
+      {
+        "key": "Character|triggered|amplified",
+        "population": 83,
+        "selected": 9,
+        "uuids": [
+          "954e8d50-d494-4fb2-b4c7-74979083b774",
+          "e455225f-c444-44a2-8796-805cae2b755f",
+          "7def28c4-d75a-47e1-ae86-5b7093cc0419",
+          "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+          "98f16d26-be71-49ad-9034-5fafb5d3f053",
+          "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+          "0d867086-8413-40c3-820f-1a5de486577e",
+          "48257e3e-9600-4edf-a905-e73a41ab5ec1",
+          "d2a3d344-613c-449e-9a87-0f720a85585d"
+        ]
+      },
+      {
+        "key": "Character|triggered|base-only",
+        "population": 82,
+        "selected": 9,
+        "uuids": [
+          "965ce3b2-a722-475c-99c5-5b35685d2404",
+          "ea118471-164b-4d7f-bb02-044c862ed07e",
+          "5e1b943f-9fa2-4055-b613-5dd09a048c99",
+          "8367b757-c3d2-4c22-9043-8baadee1c5ba",
+          "0269e363-5567-47a4-80cd-8ebc061fe7e1",
+          "b1bea643-1a7b-4e5e-b072-7174d3405421",
+          "dbd014b1-1ec8-4762-bd96-48a2a4824de2",
+          "245b49b9-e1e5-4dd0-ae18-718c437b8eb0",
+          "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f"
+        ]
+      },
+      {
+        "key": "Character|vanilla|base-only",
+        "population": 5,
+        "selected": 1,
+        "uuids": [
+          "66959155-9e79-459e-afdb-eb4c0fbdeb11"
+        ]
+      },
+      {
+        "key": "Event|additionalCost+event+reclaim|base-only",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "7b55efd1-6d9f-4156-9de7-1c71ccc410cb"
+        ]
+      },
+      {
+        "key": "Event|additionalCost+event|amplified",
+        "population": 6,
+        "selected": 1,
+        "uuids": [
+          "435ed83c-f7a6-4a73-a684-67fcc4e49bc4"
+        ]
+      },
+      {
+        "key": "Event|additionalCost+event|base-only",
+        "population": 7,
+        "selected": 1,
+        "uuids": [
+          "06f8cfff-92ec-4668-afbc-f33a274c3b1a"
+        ]
+      },
+      {
+        "key": "Event|alternativeCost+event|base-only",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "a56e0f68-30b6-404e-9b83-a7584177f21e"
+        ]
+      },
+      {
+        "key": "Event|event+keyword|amplified",
+        "population": 2,
+        "selected": 1,
+        "uuids": [
+          "145f72b9-5ff7-4477-b7f5-55ca89a135ae"
+        ]
+      },
+      {
+        "key": "Event|event+keyword|base-only",
+        "population": 6,
+        "selected": 1,
+        "uuids": [
+          "d217303e-b115-484a-b22c-0e44d5701389"
+        ]
+      },
+      {
+        "key": "Event|event+playCondition|amplified",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "4d4618bd-4779-4953-b446-dab05e1da5db"
+        ]
+      },
+      {
+        "key": "Event|event+reclaim|amplified",
+        "population": 12,
+        "selected": 2,
+        "uuids": [
+          "2931e20b-1a80-4ddd-8944-20e68d182886",
+          "56f019a8-6b77-4bcb-bfa6-37b94e188ead"
+        ]
+      },
+      {
+        "key": "Event|event+reclaim|base-only",
+        "population": 9,
+        "selected": 1,
+        "uuids": [
+          "0211963d-d097-4427-9d16-5e857621e481"
+        ]
+      },
+      {
+        "key": "Event|event+static|base-only",
+        "population": 1,
+        "selected": 1,
+        "uuids": [
+          "8bf53fe6-8a25-401e-9a99-84343a026bb0"
+        ]
+      },
+      {
+        "key": "Event|event+triggered|amplified",
+        "population": 2,
+        "selected": 1,
+        "uuids": [
+          "8a8af982-d1a1-42a0-9229-5e3af13e8dbe"
+        ]
+      },
+      {
+        "key": "Event|event+triggered|base-only",
+        "population": 5,
+        "selected": 1,
+        "uuids": [
+          "5931e388-1856-4e5a-85f8-a5aa34f867b1"
+        ]
+      },
+      {
+        "key": "Event|event|amplified",
+        "population": 36,
+        "selected": 4,
+        "uuids": [
+          "cc98441a-a8f9-421f-9895-423bd7fc31b4",
+          "d24ea640-638d-4ce2-b15d-b3f4588bda6b",
+          "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+          "41c14462-86b9-42a4-8a61-859d59ffa466"
+        ]
+      },
+      {
+        "key": "Event|event|base-only",
+        "population": 57,
+        "selected": 6,
+        "uuids": [
+          "a911ef71-799c-4240-ad13-8fabd3caeafa",
+          "2a230602-a39b-4ec2-a467-97b92b389aff",
+          "3076694f-ffc2-46c9-8e1a-39f3878c73c9",
+          "5ce69085-aa75-4654-8abe-f9e773931e63",
+          "f7ffe999-685d-4ea2-85de-2e567eb2a042",
+          "13c45db4-ebab-4364-a14a-59a2e9c52bb5"
+        ]
+      }
+    ],
+    "selected": [
+      "1dc8f23e-58bd-47e5-9510-b48315fba1df",
+      "7ffb1179-6c94-4f80-9613-ece2b799f19d",
+      "7992dbb5-ca45-4066-aca3-ff1d6d87619e",
+      "d30bd488-f921-49cb-a44f-353c54cb6548",
+      "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
+      "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f",
+      "a5056a4c-542b-4a7c-8fe6-895126c7d4c8",
+      "920ef495-5560-4fa6-9a95-b9584ef6a4cf",
+      "0458658d-7e02-4286-9249-93674d16620b",
+      "ecf77f27-df0f-47c4-99c2-48d7fa46a137",
+      "81074582-dfb3-497c-8c04-f97a24d6b1d4",
+      "516dbd2d-dae4-4873-937e-adfeeee4444d",
+      "648237c5-ceff-4a28-aaf8-4aa099eae80d",
+      "8a5d7d67-91c9-41c4-b22e-8287954efa09",
+      "07ceb104-0b27-473a-bc72-e6225479ed83",
+      "bd43b120-2503-406c-8b72-ea3dc55198a0",
+      "c97b0a5b-64d0-480f-8db7-3fde93738d86",
+      "ed4d5342-0690-40b7-ab48-6b76035466f2",
+      "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7",
+      "f10a9ba9-f5eb-4011-9426-a89c5de3b550",
+      "3e802ecd-a83b-491b-9528-a4672d0e986f",
+      "f860e815-3ed9-463d-ac4d-ed8d2778f8ad",
+      "c750af2e-8185-4af0-bb38-4a41430c71b3",
+      "78599234-6054-4df1-8e79-c38782517f9a",
+      "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa",
+      "7ad10754-690c-45fa-abe6-28944da6eef6",
+      "7dd2214f-8d16-453a-9f28-62712e64eae1",
+      "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
+      "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa",
+      "1268a899-b209-46bb-bce4-6def1dcd0404",
+      "2a828466-450a-4637-9c68-6b54522450c0",
+      "bedee263-27b9-4d73-ab77-6b5c747dff69",
+      "cd7ff671-2317-4a54-b9da-acfefb90e6b0",
+      "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
+      "e4e8d3b9-3463-4b92-8fbe-35064f72402d",
+      "29c4c45d-33df-42ac-bf28-387eb00264aa",
+      "9d51dca1-28d7-4e8e-bc13-c5b665d6db72",
+      "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277",
+      "954e8d50-d494-4fb2-b4c7-74979083b774",
+      "e455225f-c444-44a2-8796-805cae2b755f",
+      "7def28c4-d75a-47e1-ae86-5b7093cc0419",
+      "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+      "98f16d26-be71-49ad-9034-5fafb5d3f053",
+      "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+      "0d867086-8413-40c3-820f-1a5de486577e",
+      "48257e3e-9600-4edf-a905-e73a41ab5ec1",
+      "d2a3d344-613c-449e-9a87-0f720a85585d",
+      "965ce3b2-a722-475c-99c5-5b35685d2404",
+      "ea118471-164b-4d7f-bb02-044c862ed07e",
+      "5e1b943f-9fa2-4055-b613-5dd09a048c99",
+      "8367b757-c3d2-4c22-9043-8baadee1c5ba",
+      "0269e363-5567-47a4-80cd-8ebc061fe7e1",
+      "b1bea643-1a7b-4e5e-b072-7174d3405421",
+      "dbd014b1-1ec8-4762-bd96-48a2a4824de2",
+      "245b49b9-e1e5-4dd0-ae18-718c437b8eb0",
+      "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f",
+      "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+      "7b55efd1-6d9f-4156-9de7-1c71ccc410cb",
+      "435ed83c-f7a6-4a73-a684-67fcc4e49bc4",
+      "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+      "a56e0f68-30b6-404e-9b83-a7584177f21e",
+      "145f72b9-5ff7-4477-b7f5-55ca89a135ae",
+      "d217303e-b115-484a-b22c-0e44d5701389",
+      "4d4618bd-4779-4953-b446-dab05e1da5db",
+      "2931e20b-1a80-4ddd-8944-20e68d182886",
+      "56f019a8-6b77-4bcb-bfa6-37b94e188ead",
+      "0211963d-d097-4427-9d16-5e857621e481",
+      "8bf53fe6-8a25-401e-9a99-84343a026bb0",
+      "8a8af982-d1a1-42a0-9229-5e3af13e8dbe",
+      "5931e388-1856-4e5a-85f8-a5aa34f867b1",
+      "cc98441a-a8f9-421f-9895-423bd7fc31b4",
+      "d24ea640-638d-4ce2-b15d-b3f4588bda6b",
+      "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+      "41c14462-86b9-42a4-8a61-859d59ffa466",
+      "a911ef71-799c-4240-ad13-8fabd3caeafa",
+      "2a230602-a39b-4ec2-a467-97b92b389aff",
+      "3076694f-ffc2-46c9-8e1a-39f3878c73c9",
+      "5ce69085-aa75-4654-8abe-f9e773931e63",
+      "f7ffe999-685d-4ea2-85de-2e567eb2a042",
+      "13c45db4-ebab-4364-a14a-59a2e9c52bb5"
+    ]
+  },
+  "samplingClarifications": {
+    "strata": 43,
+    "selectedPercent": 15.32567049808429,
+    "amplifiedEligibleSelected": 37,
+    "eligibleBaseAndAmplifiedBothActorCells": 234,
+    "legitimateAmplifiedIneligibleCells": 86,
+    "coverageGate": {
+      "tests": 20,
+      "files": 1,
+      "exit": 0
+    },
+    "sourceCatalogPending": {
+      "cards": 0,
+      "figments": 0
+    },
+    "nativePrerequisites": "parent fresh audit all173blocking prerequisites closedcompleted after737and739"
+  },
+  "browser": {
+    "rows": 331,
+    "allAttemptVerdicts": {
+      "pass": 237,
+      "skip": 89,
+      "fail": 5
+    },
+    "latestUniqueCells": 320,
+    "latestVerdicts": {
+      "pass": 234,
+      "skip": 86
+    },
+    "remainingUniqueCells": 0,
+    "unfixedLatestFailures": [],
+    "complete320": true,
+    "passReportsVerified": 237,
+    "uniqueNativeGames": 237,
+    "nativeLogRows": 7556,
+    "originalFailureDispositions": [
+      {
+        "row": 210,
+        "key": [
+          "b1bea643-1a7b-4e5e-b072-7174d3405421",
+          "base",
+          "enemy"
+        ],
+        "report": "invocations/sweep-8PHugq/run-S3zwEC/sweep-b1bea643-1a7b-4e5e-b072-7174d3405421-base-enemy-attempt-1.result.json",
+        "disposition": "737fatalprovider recovery; originalunknown retained",
+        "failedExport": null
+      },
+      {
+        "row": 241,
+        "key": [
+          "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+          "base",
+          "enemy"
+        ],
+        "report": "invocations/sweep-8l4nax/run-WUxnME/sweep-06f8cfff-92ec-4668-afbc-f33a274c3b1a-base-enemy-attempt-1.result.json",
+        "disposition": "739sourcefirstcontextcontainment; originalineffectivetimeout retained",
+        "failedExport": {
+          "gameId": "dyycw6",
+          "rows": 34,
+          "SHA256": "b186fdd0495431b60127e461da9fad1ca9a943a709ac092c7edfb207210c9054",
+          "qualification": "Originalfailed observation log; mayreferpriorgame, excludedfromuniqueacceptedgamecount"
+        }
+      },
+      {
+        "row": 242,
+        "key": [
+          "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+          "base",
+          "enemy"
+        ],
+        "report": "invocations/sweep-8l4nax/run-WUxnME/sweep-06f8cfff-92ec-4668-afbc-f33a274c3b1a-base-enemy-attempt-2.result.json",
+        "disposition": "739sourcefirstcontextcontainment; rootinitiatorunknown/effectivefail retained; freshsame-sourcepass still required",
+        "failedExport": {
+          "gameId": "dyycw6",
+          "rows": 38,
+          "SHA256": "c4b9c870d879e6935cef86a35bccf9495e90ab739b159299b6f70662759397fd",
+          "qualification": "Originalfailed observation log; mayreferpriorgame, excludedfromuniqueacceptedgamecount"
+        }
+      },
+      {
+        "row": 248,
+        "key": [
+          "145f72b9-5ff7-4477-b7f5-55ca89a135ae",
+          "base",
+          "player"
+        ],
+        "report": "invocations/sweep-8l4nax/run-WUxnME/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-base-player-attempt-1.result.json",
+        "disposition": "Exactlyone allowednative structuredtimeout-onlyretry passed; bothreports retained",
+        "failedExport": {
+          "gameId": "4wr7pw",
+          "rows": 42,
+          "SHA256": "2d05cd134506b514fd19f7549fcf5e49e7184d52ca975d41dfea72f68f68b388",
+          "qualification": "Originalfailed observation log; mayreferpriorgame, excludedfromuniqueacceptedgamecount"
+        }
+      },
+      {
+        "row": 262,
+        "key": [
+          "2931e20b-1a80-4ddd-8944-20e68d182886",
+          "amplified",
+          "player"
+        ],
+        "report": "invocations/sweep-8l4nax/run-WUxnME/sweep-2931e20b-1a80-4ddd-8944-20e68d182886-amplified-player-attempt-1.result.json",
+        "disposition": "DirectedparentSIGINT interruptedobservation; unknownretained/freshsame-sourcepass required",
+        "failedExport": null
+      }
+    ]
+  },
+  "browserQualification": {
+    "source": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+    "observerProof": "card-sweep-observer-proof.json",
+    "originalCaller": "card-sweep.original.mjs",
+    "actualCaller": "card-sweep.observed.mjs",
+    "callerDelta": "card-sweep-observer.diff",
+    "scope": "unchanged terminal cardLabPlay normal physical-instance/controller/publicUI/resolution/zone/visible-control/board-change/Caps checks; only existingpublic exportGameLog metadata and unique per-attempt persistedJSONL observer added",
+    "verification": "browser-final-verification.json",
+    "latestCellMap": "latest-cell-acceptance-map.json",
+    "historical211PrefixSHA256": "f87e47e518daf36abe05520b10934b46d317654d7e17d21f0e5b568a36c72428",
+    "historical263PrefixSHA256": "d11b700163f2d8bdefe286153c70c3562a40f8e990de5c0ee1e2b8df897ba377",
+    "freshOneCardOwnedSessions": 17,
+    "runtimeProof": "per-card-runtime-final.json",
+    "perCardTimingQualification": "native summary inner total, custody wholecommand start/end and launcher post-return timestamps retain distinct scopes; equality is not asserted",
+    "pixelClaims": "none; no presentation/source change"
+  },
+  "fuzz": {
+    "actualCompletedGames": 1000,
+    "uniqueIndices": 1000,
+    "completeIndices0Through999": true,
+    "totalSteps": 297748,
+    "totalPrompts": 23456,
+    "totalInteractiveReruns": 2415,
+    "totalFailures": 0,
+    "summedEngineWallS": 2675.5,
+    "summedEngineCpuS": 2878.0,
+    "timingQualification": "Engine wall/CPU fields are terminal summary values rounded to0.1s; outer and admission observations retain distinct actual scopes. Outer minus inner includes observer/process startup and teardown, and is not asserted as pure lock wait. Each batch is separately admitted under primary heavy lock; browser takes a separate lease.",
+    "completedInteractiveGameIndices": [
+      0,
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170,
+      180,
+      190,
+      200,
+      210,
+      220,
+      230,
+      240,
+      250,
+      260,
+      270,
+      280,
+      290,
+      300,
+      310,
+      320,
+      330,
+      340,
+      350,
+      360,
+      370,
+      380,
+      390,
+      400,
+      410,
+      420,
+      430,
+      440,
+      450,
+      460,
+      470,
+      480,
+      490,
+      500,
+      510,
+      520,
+      530,
+      540,
+      550,
+      560,
+      570,
+      580,
+      590,
+      600,
+      610,
+      620,
+      630,
+      640,
+      650,
+      660,
+      670,
+      680,
+      690,
+      700,
+      710,
+      720,
+      730,
+      740,
+      750,
+      760,
+      770,
+      780,
+      790,
+      800,
+      810,
+      820,
+      830,
+      840,
+      850,
+      860,
+      870,
+      880,
+      890,
+      900,
+      910,
+      920,
+      930,
+      940,
+      950,
+      960,
+      970,
+      980,
+      990
+    ],
+    "requiredInteractiveGameCount": 100,
+    "interactiveQualification": "Default --interactive-every10 uses absolute index. Completed successful indices divisible by10 enter interactive replay according to the frozen source control flow. The required complete1000stream includes100such games; this partial audit lists only actually completed indices. Interactive reruns count fold reruns, not games."
+  },
+  "fuzzProtocol": {
+    "prefix": "fuzz",
+    "segments": [
+      {
+        "first": 0,
+        "last": 199,
+        "games": 200,
+        "summary": {
+          "games": 200,
+          "steps": 59289,
+          "engineWallS": 553.6,
+          "engineCpuS": 625.7,
+          "prompts": 4593,
+          "interactiveReruns": 458,
+          "feasibilityBounded": {
+            "legality": 0,
+            "prompts": 0
+          },
+          "results": {
+            "player": 105,
+            "enemy": 95,
+            "draw": 0
+          },
+          "failures": 0
+        },
+        "admission": {
+          "admittedAt": "2026-10-15T09:41:08.247678+00:00",
+          "admittedLoad": [
+            9.22216796875,
+            8.193359375,
+            8.8232421875
+          ],
+          "lockChildPid": 25456,
+          "argv": [
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--seed",
+            "fuzz",
+            "--first",
+            "0",
+            "--games",
+            "200"
+          ],
+          "npmPid": 25459,
+          "npmBornAt": "2026-10-15T09:41:08.249205+00:00",
+          "end": "2026-10-15T09:50:24.730047+00:00",
+          "elapsedS": 556.4806518330006,
+          "exit": 0,
+          "loadEnd": [
+            24.056640625,
+            12.142578125,
+            9.90478515625
+          ]
+        },
+        "outerReceipt": {
+          "label": "fuzz-0",
+          "argv": [
+            "lockf",
+            "-k",
+            "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+            "env",
+            "JOURNEY_TEST_WORKERS=2",
+            "python3",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.210/checkpoint/fuzz-inner.py",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.210/checkpoint",
+            "0"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/card-checkpoint210",
+          "start": "2026-10-15T09:41:08.218548+00:00",
+          "source": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+          "loadStart": [
+            9.22216796875,
+            8.193359375,
+            8.8232421875
+          ],
+          "pid": 25450,
+          "environment": {
+            "JOURNEY_TEST_WORKERS": null
+          },
+          "childPid": 25455,
+          "end": "2026-10-15T09:50:25.196937+00:00",
+          "elapsedS": 556.9767157089664,
+          "exit": 0,
+          "loadEnd": [
+            24.056640625,
+            12.142578125,
+            9.90478515625
+          ]
+        },
+        "receipts": [
+          {
+            "filename": "fuzz-0.receipt.json",
+            "sha256": "3c9c75c8ea8f6dd48078eaa55196f4ce9d6543d8d386977390cb4777e9ad084c"
+          },
+          {
+            "filename": "fuzz-0.admission.json",
+            "sha256": "d9e10110bb84ae8b8e27f98c4750750d0ddb015b80e40e0f428e2c01400fe0f8"
+          },
+          {
+            "filename": "fuzz-0.stdout",
+            "sha256": "d38a62614fb30a0d45788b92cbc1df6c35e557155796bce5c4ed87f436e35573"
+          },
+          {
+            "filename": "fuzz-0.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      {
+        "first": 200,
+        "last": 399,
+        "games": 200,
+        "summary": {
+          "games": 200,
+          "steps": 58790,
+          "engineWallS": 531.2,
+          "engineCpuS": 564.8,
+          "prompts": 4587,
+          "interactiveReruns": 470,
+          "feasibilityBounded": {
+            "legality": 0,
+            "prompts": 1
+          },
+          "results": {
+            "player": 100,
+            "enemy": 100,
+            "draw": 0
+          },
+          "failures": 0
+        },
+        "admission": {
+          "admittedAt": "2026-10-15T09:50:25.268523+00:00",
+          "admittedLoad": [
+            24.056640625,
+            12.142578125,
+            9.90478515625
+          ],
+          "lockChildPid": 60788,
+          "argv": [
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--seed",
+            "fuzz",
+            "--first",
+            "200",
+            "--games",
+            "200"
+          ],
+          "npmPid": 60789,
+          "npmBornAt": "2026-10-15T09:50:25.270116+00:00",
+          "end": "2026-10-15T09:59:20.560594+00:00",
+          "elapsedS": 535.2904119159793,
+          "exit": 0,
+          "loadEnd": [
+            8.4775390625,
+            10.66845703125,
+            10.65478515625
+          ]
+        },
+        "outerReceipt": {
+          "label": "fuzz-200",
+          "argv": [
+            "lockf",
+            "-k",
+            "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+            "env",
+            "JOURNEY_TEST_WORKERS=2",
+            "python3",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.210/checkpoint/fuzz-inner.py",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.210/checkpoint",
+            "200"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/card-checkpoint210",
+          "start": "2026-10-15T09:50:25.239200+00:00",
+          "source": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+          "loadStart": [
+            24.056640625,
+            12.142578125,
+            9.90478515625
+          ],
+          "pid": 60785,
+          "environment": {
+            "JOURNEY_TEST_WORKERS": null
+          },
+          "childPid": 60787,
+          "end": "2026-10-15T09:59:20.911536+00:00",
+          "elapsedS": 535.6707644999842,
+          "exit": 0,
+          "loadEnd": [
+            8.4775390625,
+            10.66845703125,
+            10.65478515625
+          ]
+        },
+        "receipts": [
+          {
+            "filename": "fuzz-200.receipt.json",
+            "sha256": "7dd074f1ad764151c293472b6fb9a658ea7d3abc78fbc9d93295deb937efdd27"
+          },
+          {
+            "filename": "fuzz-200.admission.json",
+            "sha256": "0bf3da8a6584ade658a857d07f72cb20a42c8e2a01e74b214906dcaebaaf51aa"
+          },
+          {
+            "filename": "fuzz-200.stdout",
+            "sha256": "73ac8125dfa78973479fb2a45e635938a6bb7270dc6ad8fd0ceee4aec206d1a8"
+          },
+          {
+            "filename": "fuzz-200.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      {
+        "first": 400,
+        "last": 599,
+        "games": 200,
+        "summary": {
+          "games": 200,
+          "steps": 61281,
+          "engineWallS": 546.6,
+          "engineCpuS": 582.3,
+          "prompts": 4890,
+          "interactiveReruns": 496,
+          "feasibilityBounded": {
+            "legality": 0,
+            "prompts": 0
+          },
+          "results": {
+            "player": 102,
+            "enemy": 98,
+            "draw": 0
+          },
+          "failures": 0
+        },
+        "admission": {
+          "admittedAt": "2026-10-15T09:59:20.968858+00:00",
+          "admittedLoad": [
+            8.4775390625,
+            10.66845703125,
+            10.65478515625
+          ],
+          "lockChildPid": 50328,
+          "argv": [
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--seed",
+            "fuzz",
+            "--first",
+            "400",
+            "--games",
+            "200"
+          ],
+          "npmPid": 50329,
+          "npmBornAt": "2026-10-15T09:59:20.970442+00:00",
+          "end": "2026-10-15T10:08:29.259833+00:00",
+          "elapsedS": 548.2769525839831,
+          "exit": 0,
+          "loadEnd": [
+            11.0869140625,
+            16.79736328125,
+            14.33837890625
+          ]
+        },
+        "outerReceipt": {
+          "label": "fuzz-400",
+          "argv": [
+            "lockf",
+            "-k",
+            "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+            "env",
+            "JOURNEY_TEST_WORKERS=2",
+            "python3",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.210/checkpoint/fuzz-inner.py",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.210/checkpoint",
+            "400"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/card-checkpoint210",
+          "start": "2026-10-15T09:59:20.940766+00:00",
+          "source": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+          "loadStart": [
+            8.4775390625,
+            10.66845703125,
+            10.65478515625
+          ],
+          "pid": 50323,
+          "environment": {
+            "JOURNEY_TEST_WORKERS": null
+          },
+          "childPid": 50327,
+          "end": "2026-10-15T10:08:29.745192+00:00",
+          "elapsedS": 548.7904163750354,
+          "exit": 0,
+          "loadEnd": [
+            11.0869140625,
+            16.79736328125,
+            14.33837890625
+          ]
+        },
+        "receipts": [
+          {
+            "filename": "fuzz-400.receipt.json",
+            "sha256": "e3a4ae2fb04899130c1cf96ed3610f0e2419ed546170f8f64f1684b7e3881e13"
+          },
+          {
+            "filename": "fuzz-400.admission.json",
+            "sha256": "4137850925fe2bd3a2ed56a613f0429fc91dd59ceb41a16159670b96face90b7"
+          },
+          {
+            "filename": "fuzz-400.stdout",
+            "sha256": "5ccbca9c6f125f5bc68e600636fb3b7307245deb9455cd531381cb4cae8bfec0"
+          },
+          {
+            "filename": "fuzz-400.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      {
+        "first": 600,
+        "last": 799,
+        "games": 200,
+        "summary": {
+          "games": 200,
+          "steps": 61288,
+          "engineWallS": 523.7,
+          "engineCpuS": 555.2,
+          "prompts": 4899,
+          "interactiveReruns": 446,
+          "feasibilityBounded": {
+            "legality": 0,
+            "prompts": 6
+          },
+          "results": {
+            "player": 103,
+            "enemy": 97,
+            "draw": 0
+          },
+          "failures": 0
+        },
+        "admission": {
+          "admittedAt": "2026-10-15T11:07:55.335406+00:00",
+          "admittedLoad": [
+            6.1865234375,
+            8.4091796875,
+            9.240234375
+          ],
+          "lockChildPid": 44355,
+          "argv": [
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--seed",
+            "fuzz",
+            "--first",
+            "600",
+            "--games",
+            "200"
+          ],
+          "npmPid": 44360,
+          "npmBornAt": "2026-10-15T11:07:55.337775+00:00",
+          "end": "2026-10-15T11:16:41.742307+00:00",
+          "elapsedS": 526.3919651249889,
+          "exit": 0,
+          "loadEnd": [
+            19.5224609375,
+            9.478515625,
+            8.7705078125
+          ]
+        },
+        "outerReceipt": {
+          "label": "fuzz-600",
+          "argv": [
+            "lockf",
+            "-k",
+            "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+            "env",
+            "JOURNEY_TEST_WORKERS=2",
+            "python3",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.210/checkpoint/fuzz-inner.py",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.210/checkpoint",
+            "600"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/card-checkpoint210",
+          "start": "2026-10-15T10:46:47.985046+00:00",
+          "source": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+          "loadStart": [
+            10.546875,
+            11.88427734375,
+            10.61181640625
+          ],
+          "pid": 2760,
+          "environment": {
+            "JOURNEY_TEST_WORKERS": null
+          },
+          "childPid": 2766,
+          "end": "2026-10-15T11:16:42.628168+00:00",
+          "elapsedS": 1794.6147539580124,
+          "exit": 0,
+          "loadEnd": [
+            19.5224609375,
+            9.478515625,
+            8.7705078125
+          ]
+        },
+        "receipts": [
+          {
+            "filename": "fuzz-600.receipt.json",
+            "sha256": "1c67c3d02c9661272ecbe0e1b1e7b3775356e730b5abf858bc51a853032d02cc"
+          },
+          {
+            "filename": "fuzz-600.admission.json",
+            "sha256": "cf3ef19e89e06f6eb62c1a024c052a28e2de303cad88e94be7b0bd3214b94f4a"
+          },
+          {
+            "filename": "fuzz-600.stdout",
+            "sha256": "785b74640a3ef74237ab5b66ce4c869b5d44dcb9fa8491501cb3a482296e6f51"
+          },
+          {
+            "filename": "fuzz-600.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      },
+      {
+        "first": 800,
+        "last": 999,
+        "games": 200,
+        "summary": {
+          "games": 200,
+          "steps": 57100,
+          "engineWallS": 520.4,
+          "engineCpuS": 550.0,
+          "prompts": 4487,
+          "interactiveReruns": 545,
+          "feasibilityBounded": {
+            "legality": 0,
+            "prompts": 0
+          },
+          "results": {
+            "player": 95,
+            "enemy": 105,
+            "draw": 0
+          },
+          "failures": 0
+        },
+        "admission": {
+          "admittedAt": "2026-10-15T11:34:22.718900+00:00",
+          "admittedLoad": [
+            7.421875,
+            9.736328125,
+            9.49609375
+          ],
+          "lockChildPid": 96128,
+          "argv": [
+            "npm",
+            "run",
+            "fuzz:engine",
+            "--",
+            "--seed",
+            "fuzz",
+            "--first",
+            "800",
+            "--games",
+            "200"
+          ],
+          "npmPid": 96132,
+          "npmBornAt": "2026-10-15T11:34:22.720799+00:00",
+          "end": "2026-10-15T11:43:04.735153+00:00",
+          "elapsedS": 522.0094318339834,
+          "exit": 0,
+          "loadEnd": [
+            22.767578125,
+            17.2822265625,
+            12.91162109375
+          ]
+        },
+        "outerReceipt": {
+          "label": "fuzz-800",
+          "argv": [
+            "lockf",
+            "-k",
+            "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+            "env",
+            "JOURNEY_TEST_WORKERS=2",
+            "python3",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.210/checkpoint/fuzz-inner.py",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.210/checkpoint",
+            "800"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/card-checkpoint210",
+          "start": "2026-10-15T11:16:42.658610+00:00",
+          "source": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+          "loadStart": [
+            19.5224609375,
+            9.478515625,
+            8.7705078125
+          ],
+          "pid": 22792,
+          "environment": {
+            "JOURNEY_TEST_WORKERS": null
+          },
+          "childPid": 22893,
+          "end": "2026-10-15T11:43:05.712603+00:00",
+          "elapsedS": 1583.0332445419626,
+          "exit": 0,
+          "loadEnd": [
+            22.767578125,
+            17.2822265625,
+            12.91162109375
+          ]
+        },
+        "receipts": [
+          {
+            "filename": "fuzz-800.receipt.json",
+            "sha256": "df5172d152cc126ba29a1baf8c389ecf89bc7445273760936623d1bcea7e80cc"
+          },
+          {
+            "filename": "fuzz-800.admission.json",
+            "sha256": "72c4b5e1689e3b3d33075bd38af78500efb13b22dccd5387f3767b8eb4859222"
+          },
+          {
+            "filename": "fuzz-800.stdout",
+            "sha256": "b0cdf0f6866fe07cf7d6916e8cf540f2cc6adcc5c7fad1be0b6109ff9842dea7"
+          },
+          {
+            "filename": "fuzz-800.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    ],
+    "pool": "all unchanged productioncard/Dreamwell/emblem/figment definitions plus existing syntheticfixtures; no weights/targets; defaultstepinvariants/finalhashreplay/absoluteevery10interactive",
+    "lock": "each200 separately under primaryheavy.lock/workers2/1800sexecution guard after actualadmission; heavyneverheld waitingbrowser; source and all argv frozen",
+    "priorCanceledWaiters": "failure-1 andfailure-2 preserve both600neveradmitted receipts/driver/stdout/stderr;0gamescredit; sourcefirst600neverrerun"
+  },
+  "operationalRecoveries": {
+    "737": {
+      "scope": "nativecertified fatal-provider incidentretirement/operationalrecovery with absent originalcompletionreceipt preserved; no sharedrestart/config/sourcefix",
+      "proof": "737-incident-retirement.json",
+      "rootWindowMin": 4.5929
+    },
+    "739": {
+      "scope": "nativecertified bounded source-first investigation/fresh-context operationalcontainment; navigationinitiator remains unestablished, no permanentproductfix;17singlecard freshsessions explicit scheduling authority",
+      "proof": "739-justiciar-resolution.json",
+      "rootWindowMin": 11.2168
+    },
+    "qualification": "both rootwindows are nested within original210implementation wall and never added as separate projectelapsed/CPU; diagnosticgames from737/739 are excluded from210acceptance"
+  },
+  "checks": [
+    {
+      "label": "coverage-gate",
+      "start": "2026-10-15T09:41:49.785550+00:00",
+      "end": "2026-10-15T09:42:03.904269+00:00",
+      "wholeInvocationS": 14.11870083300164,
+      "exit": 0,
+      "receipt": "coverage-gate.receipt.json",
+      "receiptSHA256": "f0d7517e13a02c753b35caec1813160144a7fe1b0530f4743b6bdac4012720e3",
+      "scope": "whole custody wrapper from launch through detected child completion; includes all child preparation/check/restoration phases plus up to1s completion polling; native phase scopes remain in stdout",
+      "loadStart": [
+        8.2587890625,
+        8.10986328125,
+        8.7646484375
+      ],
+      "loadEnd": [
+        8.09033203125,
+        8.0732421875,
+        8.7392578125
+      ]
+    },
+    {
+      "label": "preflight",
+      "start": "2026-10-15T09:41:59.289084+00:00",
+      "end": "2026-10-15T09:42:02.309017+00:00",
+      "wholeInvocationS": 3.0199525839998387,
+      "exit": 0,
+      "receipt": "preflight.receipt.json",
+      "receiptSHA256": "1f38ce075a182569499987bb1a21677bd49c77974a1da7b840274d8bbb667cf6",
+      "scope": "whole custody wrapper from launch through detected child completion; includes all child preparation/check/restoration phases plus up to1s completion polling; native phase scopes remain in stdout",
+      "loadStart": [
+        7.83740234375,
+        8.02392578125,
+        8.72607421875
+      ],
+      "loadEnd": [
+        8.09033203125,
+        8.0732421875,
+        8.7392578125
+      ]
+    },
+    {
+      "label": "knip",
+      "start": "2026-10-15T09:43:05.256607+00:00",
+      "end": "2026-10-15T09:43:12.329008+00:00",
+      "wholeInvocationS": 7.072411499975715,
+      "exit": 0,
+      "receipt": "knip.receipt.json",
+      "receiptSHA256": "3fe42038c26e6199d09fb4ae641e6037a91567c7b868c6892e6780b999fae477",
+      "scope": "whole custody wrapper from launch through detected child completion; includes all child preparation/check/restoration phases plus up to1s completion polling; native phase scopes remain in stdout",
+      "loadStart": [
+        7.52294921875,
+        7.89208984375,
+        8.62353515625
+      ],
+      "loadEnd": [
+        7.36865234375,
+        7.845703125,
+        8.59814453125
+      ]
+    },
+    {
+      "label": "review-final",
+      "start": "2026-10-15T11:44:00.576662+00:00",
+      "end": "2026-10-15T11:44:01.593031+00:00",
+      "wholeInvocationS": 1.0163890839903615,
+      "exit": 0,
+      "receipt": "review-final.receipt.json",
+      "receiptSHA256": "fde2a3b6626c5618caf42a85d7d692c9a71a65b124ddaaf44591274d1ed9518a",
+      "scope": "whole custody wrapper from launch through detected child completion; includes all child preparation/check/restoration phases plus up to1s completion polling; native phase scopes remain in stdout",
+      "loadStart": [
+        15.974609375,
+        16.4423828125,
+        12.88134765625
+      ],
+      "loadEnd": [
+        15.736328125,
+        16.384765625,
+        12.8818359375
+      ]
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "entire final ordinaryreview 2026-10-15T11:44:00.576662+00:00 through 2026-10-15T11:44:01.593031+00:00",
+        "measurement": "final-review-load.json",
+        "receiptSHA256": "fde2a3b6626c5618caf42a85d7d692c9a71a65b124ddaaf44591274d1ed9518a"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "coverage-gate": {
+      "start": [
+        8.2587890625,
+        8.10986328125,
+        8.7646484375
+      ],
+      "end": [
+        8.09033203125,
+        8.0732421875,
+        8.7392578125
+      ]
+    },
+    "preflight": {
+      "start": [
+        7.83740234375,
+        8.02392578125,
+        8.72607421875
+      ],
+      "end": [
+        8.09033203125,
+        8.0732421875,
+        8.7392578125
+      ]
+    },
+    "knip": {
+      "start": [
+        7.52294921875,
+        7.89208984375,
+        8.62353515625
+      ],
+      "end": [
+        7.36865234375,
+        7.845703125,
+        8.59814453125
+      ]
+    },
+    "review-final": {
+      "start": [
+        15.974609375,
+        16.4423828125,
+        12.88134765625
+      ],
+      "end": [
+        15.736328125,
+        16.384765625,
+        12.8818359375
+      ]
+    }
+  },
+  "knipReuse": "initial wholeinvocation exit0/7.0724115s retained; all original2603source/catalog/config bytes unchanged and tracked production/config diff empty, so no redundant rerun",
+  "frictionImpactWindows": [
+    {
+      "tag": "browser-provider-oom",
+      "start": "2026-10-15T10:08:45.473283+00:00",
+      "end": "2026-10-15T10:22:30.027977+00:00",
+      "minutes": 13.74257824420929,
+      "scope": "actual failed-report write through accepted fresh-report write; includes coordination/recovery/queue gaps, not active effort/CPU",
+      "failedRawReport": "invocations/sweep-8PHugq/run-S3zwEC/sweep-b1bea643-1a7b-4e5e-b072-7174d3405421-base-enemy-attempt-1.result.json",
+      "acceptedRawReport": "invocations/sweep-8l4nax/run-WUxnME/sweep-b1bea643-1a7b-4e5e-b072-7174d3405421-base-enemy-attempt-1.result.json"
+    },
+    {
+      "tag": "qa-navigation-readiness",
+      "start": "2026-10-15T10:26:44.779010+00:00",
+      "end": "2026-10-15T10:47:38.267392+00:00",
+      "minutes": 20.89147304693858,
+      "scope": "actual failed-report write through accepted fresh-report write; includes coordination/recovery/queue gaps, not active effort/CPU",
+      "failedRawReport": "invocations/sweep-8l4nax/run-WUxnME/sweep-06f8cfff-92ec-4668-afbc-f33a274c3b1a-base-enemy-attempt-2.result.json",
+      "acceptedRawReport": "invocations/sweep-vkCWH8/run-qcz5nk/sweep-06f8cfff-92ec-4668-afbc-f33a274c3b1a-base-enemy-attempt-1.result.json"
+    }
+  ],
+  "preAdmissionObservations": [
+    {
+      "receipt": "failure-1/pre-resume-fuzz-600.receipt.json",
+      "start": "2026-10-15T10:08:29.783607+00:00",
+      "end": "2026-10-15T10:11:52.228519+00:00",
+      "seconds": 202.4433890840155,
+      "games": 0,
+      "qualification": "unadmittedwaiter canceled; whole caller window includes launch/teardown and is not exact kernel-lock-only wait"
+    },
+    {
+      "receipt": "failure-2/before-per-card-fuzz-600.receipt.json",
+      "start": "2026-10-15T10:21:53.329684+00:00",
+      "end": "2026-10-15T10:29:03.319193+00:00",
+      "seconds": 429.986277750053,
+      "games": 0,
+      "qualification": "unadmittedwaiter canceled; whole caller window includes launch/teardown and is not exact kernel-lock-only wait"
+    },
+    {
+      "receipt": "fuzz-600.receipt.json",
+      "start": "2026-10-15T10:46:47.985046+00:00",
+      "admittedAt": "2026-10-15T11:07:55.335406+00:00",
+      "seconds": 1267.35036,
+      "qualification": "observed pre-admission interval includes observer/process startup and lock queue; not asserted as pure kernel wait"
+    },
+    {
+      "receipt": "fuzz-800.receipt.json",
+      "start": "2026-10-15T11:16:42.658610+00:00",
+      "admittedAt": "2026-10-15T11:34:22.718900+00:00",
+      "seconds": 1060.06029,
+      "qualification": "observed pre-admission interval includes observer/process startup and lock queue; not asserted as pure kernel wait"
+    }
+  ],
+  "parentPreparation": {
+    "claimToOriginalDispatchMin": 6.09665,
+    "scope": "separate parent preparation before original helperdispatch; nativeclaim secondsresolution; not helper implementMin"
+  },
+  "modelSamplingCpu": "UNKNOWN; engineCPU fields are rounded actualCLI summaries only",
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "dedicatedTestContractSupportScenarioModules": 0,
+    "dedicatedModuleNetLines": 0,
+    "configuredEntrypointChanges": 0,
+    "dedicatedModuleCategories": {
+      "test": {
+        "files": 0,
+        "netLines": 0
+      },
+      "contract": {
+        "files": 0,
+        "netLines": 0
+      },
+      "support": {
+        "files": 0,
+        "netLines": 0
+      },
+      "scenario": {
+        "files": 0,
+        "netLines": 0
+      }
+    },
+    "configuredEntrypoints": {
+      "files": 0,
+      "netLines": 0,
+      "entriesAdded": 0,
+      "entriesRemoved": 0
+    }
+  },
+  "sourceEvidence": {
+    "frozenManifest": "frozen-source.json",
+    "trackedSourcePathsCompared": 2603,
+    "sourceEdits": 0,
+    "productionConfigChanges": 0,
+    "finalResourceProof": "final-runtime-proof.json"
+  },
+  "artifactManifest": "artifact-manifest-final.json",
+  "reviewCounts": {
+    "ordinaryReview": {
+      "tests": 0,
+      "scope": "actual evidence-only friction-records selection; zero test-runner invocations"
+    }
+  },
+  "delivery": "one ConventionalCommit with Bead:hv-umm2.210; parent owns exactcandidate/reviewrouting/authorization/certification/promotion/nativeclose"
+}
