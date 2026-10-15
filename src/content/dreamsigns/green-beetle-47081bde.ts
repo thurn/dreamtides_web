@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { journeyDeckKeyword } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,8 @@ export default dreamsign({
     "d5cf7078-48ae-402d-837e-dde02b1a7153",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [
+    staticAbility(journeyDeckKeyword("you", { cardType: "character", costAtLeast: 4 }, "awakened")),
+  ],
+  verifiedText: expectedVerifiedText("Characters in your deck with cost ≥4● have awakened."),
 });

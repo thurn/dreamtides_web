@@ -1,0 +1,43 @@
+{
+  "bead": "hv-umm2.246",
+  "phase": 5,
+  "implementMin": 70.61879088333333,
+  "implementWindow": {
+    "start": "2026-10-15T10:15:49.869Z",
+    "end": "2026-10-15T11:26:26.996453+00:00"
+  },
+  "localValidationS": {
+    "focused": 15.134117873967625,
+    "preflight": 1.7487221670453437,
+    "fuzz": 1339.4084999589832,
+    "judged": 145.69643041701056,
+    "sweep": 34.663616958016064,
+    "review": 70.88197170896456,
+    "knip": 4.9894964169943705,
+    "schema": 0.1295854999916628,
+    "contentGate": 5.932197208981961
+  },
+  "hostLoad": 7.369140625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 10.179867183333332,
+      "note": "Native heavy lock wait measured 610.792031s before lock entry; command execution and receipt audit are separate. Required weighted300 only holds this slot; no browser overlap or scheduler-defect claim."
+    },
+    {
+      "tag": "weighted-fuzz-duration",
+      "minutes": 22.255,
+      "note": "Required exact five-UUID weighted300 native execution: 1335.3s wall/1430.4s CPU,86127steps,zero failures. Wrapper command span and audit overhead are recorded separately. This is validation cost, without comparable-load regression, cause or D19 budget claim."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 15.86068615,
+      "note": "R1 caller used unsupported DOM CSS; R2 optional forced-next-draw oracle timed out with unknown cause. Bounded actual-log replay stopped on separately logged discard answer; bounded seed-only lookup selected candidate1. R3 independently verified actual initial-hand original and both effects on desktop/mobile. All failed/unknown receipts and native cleanup remain retained."
+    }
+  ]
+}

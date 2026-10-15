@@ -1,0 +1,1074 @@
+{
+  "bead": "hv-umm2.246",
+  "phase": 5,
+  "recordedAt": "2026-10-15T11:19:59.713733+00:00",
+  "implementationClock": {
+    "dispatch": "2026-10-15T10:15:49.869Z",
+    "dispatchReceipt": "call_6d37c13c7fdc4f538ea9d07832cd3471; parent journal ordinal64846; SHA72e9cea63e88c59d82af18cb8a82cb7e8135e3e8b071451c7e3d9cf7bf43c472",
+    "currentCutoff": "2026-10-15T11:26:26.996453+00:00",
+    "grossElapsedMin": 70.61879088333333,
+    "actualGitEndpoint": "unknown until actual Git commit; current precommit cutoff includes research, coordination, admission, resource waits, validation, QA and diagnosis; external commit receipt records the actual Git endpoint and cutoff-to-Git tail",
+    "historicalSourceFree246": "Separate 2026-10-13 owned interval02:35:04Z..02:51:11Z (16.116666667min) retained in native bead history; excluded from this current dispatch-to-Git interval."
+  },
+  "base": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+  "sourceScope": {
+    "authoredLeaves": {
+      "src/content/dreamsigns/green-beetle-47081bde.ts": "5b9a8488de171bcaa378dfbf28837cfa6b23056cda04a54fb077b870044e5162",
+      "src/content/dreamsigns/twisted-herbs-1cd25b9a.ts": "a57b65b6b43025ed5e41b1702c341b6dc9915ed2b5dbdabc6462c5a478901c31"
+    },
+    "diff": "14 insertions,2deletions across two catalog leaves; no exported signature/fallout/engine/UI/rules/fixture/config change",
+    "printedFieldsAndJourneyDescriptor": "Unchanged; Herbs exported count5 acquisition descriptor and registry wiring are retained.274 supplies journey clause;663 three leaves remain read-only.",
+    "D10": "Existing C4, rules static abilities and RD52/318/274 settle all clauses; no new ruling/cardissue.",
+    "D20": "Existing primitive composition; no new scenario or tests. Existing synthetic C4 contracts cover all-zone origins/variants/created/owner boundaries/recovery; testDelta0.",
+    "coreReview": "No core-review label/new capability/renderer; gross16 non-test code lines (14 additions+2deletions), below100. Phase-gate review remains plan-owned.",
+    "grossNonTestCodeLines": 16
+  },
+  "entities": [
+    "1ccd8d69-e14c-4788-be1d-cb6a1b703225",
+    "95f0f483-9a76-47c6-a839-01a1d9122945",
+    "47081bde-f35d-4b5c-ba17-53e5dbf5b419",
+    "1cd25b9a-b176-4c51-8349-bb4df35cbf05",
+    "08a3983a-1b95-4d2e-a445-9d8dc2b8fca7"
+  ],
+  "D21": [
+    {
+      "uuid": "1ccd8d69-e14c-4788-be1d-cb6a1b703225",
+      "firstByte": 56,
+      "sampled": false,
+      "newPromptStatusVisualKind": false
+    },
+    {
+      "uuid": "95f0f483-9a76-47c6-a839-01a1d9122945",
+      "firstByte": 100,
+      "sampled": false,
+      "newPromptStatusVisualKind": false
+    },
+    {
+      "uuid": "47081bde-f35d-4b5c-ba17-53e5dbf5b419",
+      "firstByte": 228,
+      "sampled": false,
+      "newPromptStatusVisualKind": false
+    },
+    {
+      "uuid": "1cd25b9a-b176-4c51-8349-bb4df35cbf05",
+      "firstByte": 129,
+      "sampled": false,
+      "newPromptStatusVisualKind": false
+    },
+    {
+      "uuid": "08a3983a-1b95-4d2e-a445-9d8dc2b8fca7",
+      "firstByte": 110,
+      "sampled": false,
+      "newPromptStatusVisualKind": false
+    }
+  ],
+  "commands": {
+    "focused-c4": {
+      "command": "npm test -- src/engine/effects/primitives/contracts.test.ts -t 'journey-deck keyword'",
+      "start": "2026-10-15T10:21:19.983981+00:00",
+      "end": "2026-10-15T10:21:28.807332+00:00",
+      "wallS": 8.863413582963403,
+      "cpuS": {
+        "user": 8.863536999999999,
+        "system": 2.803067
+      },
+      "startLoad": [
+        9.02392578125,
+        11.44482421875,
+        11.9951171875
+      ],
+      "endLoad": [
+        9.29541015625,
+        11.42822265625,
+        11.98291015625
+      ],
+      "pid": 12690,
+      "pgid": 12690,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "focused-c4.receipt.json",
+      "receiptSHA256": "23a41da94e78bba6e45de664913143108d0e0f04e172e24f82527349211f6ed5",
+      "stdout": "focused-c4.stdout",
+      "stdoutSHA256": "92e587c0fe830bc9f46a501d767311b46be110354be7e640e2b03e834c345c90"
+    },
+    "focused-leaf-consumers": {
+      "command": "npm test -- src/engine/content-gates.test.ts src/engine/continuous/continuous.test.ts src/rules/journey/journey-on-gain-nightmares.test.ts",
+      "start": "2026-10-15T10:21:28.847860+00:00",
+      "end": "2026-10-15T10:21:35.079203+00:00",
+      "wallS": 6.270704291004222,
+      "cpuS": {
+        "user": 6.683990999999999,
+        "system": 2.255886
+      },
+      "startLoad": [
+        9.29541015625,
+        11.42822265625,
+        11.98291015625
+      ],
+      "endLoad": [
+        9.19140625,
+        11.37109375,
+        11.95947265625
+      ],
+      "pid": 13296,
+      "pgid": 13296,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "focused-leaf-consumers.receipt.json",
+      "receiptSHA256": "b21b1c6846a6ef09c04f5e553be0ff406f7d49e1d1e51c94b63033a43950785a",
+      "stdout": "focused-leaf-consumers.stdout",
+      "stdoutSHA256": "4a26a6d99a5a94c2a72f7ce9dbc072038e2d9f2f65c4bfd44f2c104d98fce2bc"
+    },
+    "node-preflight": {
+      "command": "npm run lab:preflight -- --dreamsigns 1ccd8d69-e14c-4788-be1d-cb6a1b703225,95f0f483-9a76-47c6-a839-01a1d9122945,47081bde-f35d-4b5c-ba17-53e5dbf5b419,1cd25b9a-b176-4c51-8349-bb4df35cbf05,08a3983a-1b95-4d2e-a445-9d8dc2b8fca7 --variants all --as both",
+      "start": "2026-10-15T10:21:35.118926+00:00",
+      "end": "2026-10-15T10:21:36.829359+00:00",
+      "wallS": 1.7487221670453437,
+      "cpuS": {
+        "user": 1.508279,
+        "system": 0.6373199999999999
+      },
+      "startLoad": [
+        9.19140625,
+        11.37109375,
+        11.95947265625
+      ],
+      "endLoad": [
+        9.19140625,
+        11.37109375,
+        11.95947265625
+      ],
+      "pid": 13795,
+      "pgid": 13795,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "node-preflight.receipt.json",
+      "receiptSHA256": "72b401c98e337f1abe63b048e5919f2d4292a8e65fbf3a9806bc4ccb9a590c1e",
+      "stdout": "node-preflight.stdout",
+      "stdoutSHA256": "ccc68cc3bb5af052490397899b29f21f2f2e65ba47bfd4deddd109ca7b8a75e8"
+    },
+    "weighted300": {
+      "command": "npm run fuzz:engine -- --games 300 --weight-uuids 1ccd8d69-e14c-4788-be1d-cb6a1b703225,95f0f483-9a76-47c6-a839-01a1d9122945,47081bde-f35d-4b5c-ba17-53e5dbf5b419,1cd25b9a-b176-4c51-8349-bb4df35cbf05,08a3983a-1b95-4d2e-a445-9d8dc2b8fca7",
+      "start": "2026-10-15T10:33:26.234664+00:00",
+      "end": "2026-10-15T10:55:45.065313+00:00",
+      "wallS": 1339.4084999589832,
+      "cpuS": {
+        "user": 1420.274527,
+        "system": 12.350629
+      },
+      "startLoad": [
+        6.42138671875,
+        8.25634765625,
+        9.9892578125
+      ],
+      "endLoad": [
+        7.142578125,
+        8.849609375,
+        9.60595703125
+      ],
+      "pid": 15665,
+      "pgid": 15665,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "weighted300.receipt.json",
+      "receiptSHA256": "e43100281b9ae181474829bad9c38799a7df217d75989872aa9286a6c2959944",
+      "stdout": "weighted300.stdout",
+      "stdoutSHA256": "749e0821d659cd6acb00f878068f0a1d457a5d84b3f08635607f43096e39f9e9"
+    },
+    "scratch-syntax": {
+      "command": "node --check /tmp/root-246/helper-v2/green-herbs-judged.mjs",
+      "start": "2026-10-15T10:55:57.707145+00:00",
+      "end": "2026-10-15T10:55:57.750052+00:00",
+      "wallS": 0.042796416964847594,
+      "cpuS": {
+        "user": 0.035456999999999995,
+        "system": 0.00729
+      },
+      "startLoad": [
+        8.72802734375,
+        9.14697265625,
+        9.703125
+      ],
+      "endLoad": [
+        8.72802734375,
+        9.14697265625,
+        9.703125
+      ],
+      "pid": 57148,
+      "pgid": 57148,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "scratch-syntax.receipt.json",
+      "receiptSHA256": "4015b11f2d3a4ad39800b71ef20721c4a9be72a9be517ffd4d0818d40663bac0",
+      "stdout": "scratch-syntax.stdout",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scratch-serialization": {
+      "command": "node /tmp/root-246/helper-v2/serialize-qa.mjs",
+      "start": "2026-10-15T10:56:15.447812+00:00",
+      "end": "2026-10-15T10:56:15.634557+00:00",
+      "wallS": 0.18662237498210743,
+      "cpuS": {
+        "user": 0.132243,
+        "system": 0.033289
+      },
+      "startLoad": [
+        8.32080078125,
+        9.03662109375,
+        9.650390625
+      ],
+      "endLoad": [
+        8.32080078125,
+        9.03662109375,
+        9.650390625
+      ],
+      "pid": 57553,
+      "pgid": 57553,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "scratch-serialization.receipt.json",
+      "receiptSHA256": "344d9e2018c07681837fa91b2e3ade1743a5a7f181dfd24cad4325ad124adcec",
+      "stdout": "scratch-serialization.stdout",
+      "stdoutSHA256": "008624a5b7085f8a64455bc1d8eee0d5e872098c536626ebf7285befbe940595"
+    },
+    "judged-r1": {
+      "command": "node scripts/qa/run-scenario.mjs /tmp/root-246/helper-v2/green-herbs-judged.mjs --bead hv-umm2.246 --port 5174 --viewports desktop,mobile --timeout 600",
+      "start": "2026-10-15T10:56:23.137738+00:00",
+      "end": "2026-10-15T10:56:34.976017+00:00",
+      "wallS": 11.838081415975466,
+      "cpuS": {
+        "user": 6.060115,
+        "system": 2.924443
+      },
+      "startLoad": [
+        8.375,
+        9.03564453125,
+        9.646484375
+      ],
+      "endLoad": [
+        9.22705078125,
+        9.18212890625,
+        9.6875
+      ],
+      "pid": 57733,
+      "pgid": 57733,
+      "exit": 1,
+      "remainingGroupMembers": [],
+      "receipt": "judged-r1.receipt.json",
+      "receiptSHA256": "6b99939faa8f11a09726e5623450b11b317af7af487eee6852cb2d4c24084907",
+      "stdout": "judged-r1.stdout",
+      "stdoutSHA256": "78822cd4bcce29ba73b2ab7dd965ef39b3c0e476ed7bbe9a46b118af35b2f56d"
+    },
+    "scratch-r2-syntax": {
+      "command": "node --check /tmp/root-246/helper-v2/green-herbs-judged-r2.mjs",
+      "start": "2026-10-15T10:59:16.480264+00:00",
+      "end": "2026-10-15T10:59:16.520219+00:00",
+      "wallS": 0.03987520799273625,
+      "cpuS": {
+        "user": 0.033356,
+        "system": 0.006117999999999999
+      },
+      "startLoad": [
+        5.36181640625,
+        7.81494140625,
+        9.05224609375
+      ],
+      "endLoad": [
+        5.36181640625,
+        7.81494140625,
+        9.05224609375
+      ],
+      "pid": 61447,
+      "pgid": 61447,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "scratch-r2-syntax.receipt.json",
+      "receiptSHA256": "223a3920ca71c783cd6b54a83d9112321166948a3d9b95ef23c120d95890e91b",
+      "stdout": "scratch-r2-syntax.stdout",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scratch-r2-serialization": {
+      "command": "node /tmp/root-246/helper-v2/serialize-qa-r2.mjs",
+      "start": "2026-10-15T10:59:19.455968+00:00",
+      "end": "2026-10-15T10:59:19.624855+00:00",
+      "wallS": 0.16879179194802418,
+      "cpuS": {
+        "user": 0.11870299999999999,
+        "system": 0.027163
+      },
+      "startLoad": [
+        5.01220703125,
+        7.70166015625,
+        9.0048828125
+      ],
+      "endLoad": [
+        5.01220703125,
+        7.70166015625,
+        9.0048828125
+      ],
+      "pid": 61479,
+      "pgid": 61479,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "scratch-r2-serialization.receipt.json",
+      "receiptSHA256": "48b61892aa0d348301cb0d80ec4a0e76f5e87cba24f603c8120dff95ed0ea8d0",
+      "stdout": "scratch-r2-serialization.stdout",
+      "stdoutSHA256": "a3c12b5961eb4fd1e3d38b14d79564186c5498cda87fe9089e0d69e03eeca471"
+    },
+    "judged-r2": {
+      "command": "node scripts/qa/run-scenario.mjs /tmp/root-246/helper-v2/green-herbs-judged-r2.mjs --bead hv-umm2.246 --port 5174 --viewports desktop,mobile --timeout 600",
+      "start": "2026-10-15T10:59:27.234340+00:00",
+      "end": "2026-10-15T11:01:08.614555+00:00",
+      "wallS": 101.3790648340364,
+      "cpuS": {
+        "user": 5.264551,
+        "system": 2.605964
+      },
+      "startLoad": [
+        4.9306640625,
+        7.64013671875,
+        8.97509765625
+      ],
+      "endLoad": [
+        4.53173828125,
+        6.736328125,
+        8.47314453125
+      ],
+      "pid": 61575,
+      "pgid": 61575,
+      "exit": 1,
+      "remainingGroupMembers": [],
+      "receipt": "judged-r2.receipt.json",
+      "receiptSHA256": "4abf72d574182075f72d7df1095ca26a21913fecbcd0645b44be66123e555e0b",
+      "stdout": "judged-r2.stdout",
+      "stdoutSHA256": "ec966460dddf31666e63896df95c98e5733ee3aeda39ec6cbf2c5a70b0d9b770"
+    },
+    "replay-r2-draw": {
+      "command": "node_modules/.bin/tsx /tmp/root-246/helper-v2/replay-r2-draw.mts",
+      "start": "2026-10-15T11:07:04.529501+00:00",
+      "end": "2026-10-15T11:07:05.957177+00:00",
+      "wallS": 1.4275662500294857,
+      "cpuS": {
+        "user": 0.9178069999999999,
+        "system": 0.459159
+      },
+      "startLoad": [
+        4.96435546875,
+        8.619140625,
+        9.36083984375
+      ],
+      "endLoad": [
+        4.96435546875,
+        8.619140625,
+        9.36083984375
+      ],
+      "pid": 41300,
+      "pgid": 41300,
+      "exit": 1,
+      "remainingGroupMembers": [],
+      "receipt": "replay-r2-draw.receipt.json",
+      "receiptSHA256": "4d8d0bd7f7b151e2dec5468c0d8cef2be12f00005c0cf200df8f464c890e5c56",
+      "stdout": "replay-r2-draw.stdout",
+      "stdoutSHA256": "8fbfc5ba9384ad85e340a5c08d4f2d264dd5f8c193802c2725023049e05b0a77"
+    },
+    "initial-hand-lookup": {
+      "command": "node_modules/.bin/tsx /tmp/root-246/helper-v2/lookup-initial-original.mts",
+      "start": "2026-10-15T11:09:18.150266+00:00",
+      "end": "2026-10-15T11:09:20.701632+00:00",
+      "wallS": 2.5512164999963716,
+      "cpuS": {
+        "user": 1.007976,
+        "system": 0.6232179999999999
+      },
+      "startLoad": [
+        5.5546875,
+        7.7255859375,
+        8.90478515625
+      ],
+      "endLoad": [
+        5.51025390625,
+        7.68017578125,
+        8.8818359375
+      ],
+      "pid": 49171,
+      "pgid": 49171,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "initial-hand-lookup.receipt.json",
+      "receiptSHA256": "0ec0224a993f30c9f54753479e823728eccce0719a1a333d0703c87412c039af",
+      "stdout": "initial-hand-lookup.stdout",
+      "stdoutSHA256": "75d12fc7015e5b759a6c61dc004cc719f67a43d60666746c67108e5910331362"
+    },
+    "scratch-r3-syntax": {
+      "command": "node --check /tmp/root-246/helper-v2/green-herbs-judged-r3.mjs",
+      "start": "2026-10-15T11:11:25.809695+00:00",
+      "end": "2026-10-15T11:11:25.848611+00:00",
+      "wallS": 0.03882833296665922,
+      "cpuS": {
+        "user": 0.032597,
+        "system": 0.00603
+      },
+      "startLoad": [
+        4.9365234375,
+        6.66748046875,
+        8.30810546875
+      ],
+      "endLoad": [
+        4.9365234375,
+        6.66748046875,
+        8.30810546875
+      ],
+      "pid": 56722,
+      "pgid": 56722,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "scratch-r3-syntax.receipt.json",
+      "receiptSHA256": "7a46d3a7b39aa2a9d25caeca18c002fd58c9cd009f8de8191a345ab15396e449",
+      "stdout": "scratch-r3-syntax.stdout",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scratch-r3-serialization": {
+      "command": "node /tmp/root-246/helper-v2/serialize-qa-r3.mjs",
+      "start": "2026-10-15T11:11:32.721413+00:00",
+      "end": "2026-10-15T11:11:32.893060+00:00",
+      "wallS": 0.17156270798295736,
+      "cpuS": {
+        "user": 0.126972,
+        "system": 0.028190999999999997
+      },
+      "startLoad": [
+        5.1015625,
+        6.6728515625,
+        8.30029296875
+      ],
+      "endLoad": [
+        5.1015625,
+        6.6728515625,
+        8.30029296875
+      ],
+      "pid": 57152,
+      "pgid": 57152,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "scratch-r3-serialization.receipt.json",
+      "receiptSHA256": "6db8e280b9675a586b30455838eb5adf43fdfadf41c1759a2b35ebef98b5d052",
+      "stdout": "scratch-r3-serialization.stdout",
+      "stdoutSHA256": "26a9a5e0dd74ac1fadd477e684c444b575b7f41bf6781a23214372c3a614d2fd"
+    },
+    "judged-r3": {
+      "command": "node scripts/qa/run-scenario.mjs /tmp/root-246/helper-v2/green-herbs-judged-r3.mjs --bead hv-umm2.246 --port 5174 --viewports desktop,mobile --timeout 600",
+      "start": "2026-10-15T11:11:42.299107+00:00",
+      "end": "2026-10-15T11:12:14.778907+00:00",
+      "wallS": 32.479284166998696,
+      "cpuS": {
+        "user": 7.512907,
+        "system": 3.27506
+      },
+      "startLoad": [
+        5.3193359375,
+        6.6669921875,
+        8.27880859375
+      ],
+      "endLoad": [
+        6.89501953125,
+        6.970703125,
+        8.3349609375
+      ],
+      "pid": 57773,
+      "pgid": 57773,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "judged-r3.receipt.json",
+      "receiptSHA256": "78bfb02f23f76429abeceb711427d6bfdf2099913598d63acf635dc7a769fff8",
+      "stdout": "judged-r3.stdout",
+      "stdoutSHA256": "a7cea97209fa35395c6765cca18231e6cf48109ab378c2ed97ad9e222814c17b"
+    },
+    "sweep-all5": {
+      "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.246 --dreamsigns 1ccd8d69-e14c-4788-be1d-cb6a1b703225,95f0f483-9a76-47c6-a839-01a1d9122945,47081bde-f35d-4b5c-ba17-53e5dbf5b419,1cd25b9a-b176-4c51-8349-bb4df35cbf05,08a3983a-1b95-4d2e-a445-9d8dc2b8fca7 --variants all --as both --port 5174",
+      "start": "2026-10-15T11:12:30.112962+00:00",
+      "end": "2026-10-15T11:13:04.777126+00:00",
+      "wallS": 34.663616958016064,
+      "cpuS": {
+        "user": 6.196129,
+        "system": 3.318795
+      },
+      "startLoad": [
+        6.82421875,
+        6.94091796875,
+        8.29150390625
+      ],
+      "endLoad": [
+        8.0888671875,
+        7.24560546875,
+        8.3544921875
+      ],
+      "pid": 60687,
+      "pgid": 60687,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "sweep-all5.receipt.json",
+      "receiptSHA256": "3f2ae65bdd07cb2297edc4d2f4095ed1c42674249ea2838183bfa893724eb1d6",
+      "stdout": "sweep-all5.stdout",
+      "stdoutSHA256": "de8e94d6b42a14b3885b9e9c3867471e846754ab9d8680978f4bc8fa718682fd"
+    },
+    "final-review": {
+      "command": "npm run review",
+      "start": "2026-10-15T11:16:04.786971+00:00",
+      "end": "2026-10-15T11:17:15.670031+00:00",
+      "wallS": 70.88197170896456,
+      "cpuS": {
+        "user": 174.322772,
+        "system": 18.143111
+      },
+      "startLoad": [
+        7.369140625,
+        6.18408203125,
+        7.630859375
+      ],
+      "endLoad": [
+        17.05517578125,
+        9.96337890625,
+        8.974609375
+      ],
+      "pid": 65336,
+      "pgid": 65336,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "final-review.receipt.json",
+      "receiptSHA256": "36af027a3a784fc26ccbc2a50db517f2380547be987b226856c4db2254681166",
+      "stdout": "final-review.stdout",
+      "stdoutSHA256": "8c9ba6075fb9a8e40c3a5632187c007aa31ca1301b55ea9854c5c645a026198d"
+    },
+    "final-knip": {
+      "command": "npm run knip",
+      "start": "2026-10-15T11:17:26.908826+00:00",
+      "end": "2026-10-15T11:17:31.898504+00:00",
+      "wallS": 4.9894964169943705,
+      "cpuS": {
+        "user": 4.3228159999999995,
+        "system": 1.556581
+      },
+      "startLoad": [
+        15.19482421875,
+        9.79931640625,
+        8.927734375
+      ],
+      "endLoad": [
+        14.69873046875,
+        9.78564453125,
+        8.927734375
+      ],
+      "pid": 26955,
+      "pgid": 26955,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "final-knip.receipt.json",
+      "receiptSHA256": "c372f2e089cc908d5f700c387750659fdfa1232bbc8585e396ea773a06d0b256",
+      "stdout": "final-knip.stdout",
+      "stdoutSHA256": "636f7f258214862bc7698f58013336b44fd5352e79de3f72135997cd0a90dfd6"
+    },
+    "final-schema": {
+      "command": "node scripts/friction-triggers.mjs --validate-records",
+      "start": "2026-10-15T11:19:39.256171+00:00",
+      "end": "2026-10-15T11:19:39.385847+00:00",
+      "wallS": 0.1295854999916628,
+      "cpuS": {
+        "user": 0.059538,
+        "system": 0.034987
+      },
+      "startLoad": [
+        10.7421875,
+        10.61767578125,
+        9.4140625
+      ],
+      "endLoad": [
+        10.7421875,
+        10.61767578125,
+        9.4140625
+      ],
+      "pid": 91410,
+      "pgid": 91410,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "final-schema.receipt.json",
+      "receiptSHA256": "9a49be6a3f492a1961b36a41e67581b4dabbb6fc994ddf00c13e4521b2671ddf",
+      "stdout": "final-schema.stdout",
+      "stdoutSHA256": "f27db0b848622058f4360e3e97bdcc47a2ed970d326c23149b339d7ce3ea7bc7"
+    },
+    "final-content-gate": {
+      "command": "npm test -- src/engine/content-gates.test.ts",
+      "start": "2026-10-15T11:18:19.588502+00:00",
+      "end": "2026-10-15T11:18:25.520909+00:00",
+      "wallS": 5.932197208981961,
+      "cpuS": {
+        "user": 5.230306,
+        "system": 2.104008
+      },
+      "startLoad": [
+        15.126953125,
+        10.45166015625,
+        9.2080078125
+      ],
+      "endLoad": [
+        17.5732421875,
+        11.154296875,
+        9.47314453125
+      ],
+      "pid": 30129,
+      "pgid": 30129,
+      "exit": 0,
+      "remainingGroupMembers": [],
+      "receipt": "final-content-gate.receipt.json",
+      "receiptSHA256": "38febd338e3f93f1e96bc0f9a927a19374507f2e5f2e659ccf907c07bc6967b8",
+      "stdout": "final-content-gate.stdout",
+      "stdoutSHA256": "8234bd3b2e63beb72cbfcad1fa4894a8c91ffb868484235cfb21512637e00a31"
+    }
+  },
+  "heavySlot": {
+    "waitStart": "2026-10-15T10:23:14.917107+00:00",
+    "lockEntered": "2026-10-15T10:33:25.709138+00:00",
+    "waitS": 610.792031,
+    "commandStart": "2026-10-15T10:33:26.234664+00:00",
+    "commandEnd": "2026-10-15T10:55:45.065313+00:00",
+    "commandSpanS": 1338.830649,
+    "receiptWallS": 1339.4084999589832,
+    "receiptQualification": "wallS includes final source-hash/process-group audit overhead; start/end identify actual command span.",
+    "nativeWallS": 1335.3,
+    "nativeCpuS": 1430.4,
+    "wrapperUserCpuS": 1420.274527,
+    "wrapperSystemCpuS": 12.350629,
+    "lockWrapperTerminal": {
+      "at": "2026-10-15T10:55:45.669479+00:00",
+      "exit": 0,
+      "wallS": 1950.7272876249626,
+      "pid": 20212,
+      "pgid": 20212
+    },
+    "noPerformanceClaim": true
+  },
+  "weighted": {
+    "games": 300,
+    "steps": 86127,
+    "failures": 0,
+    "prompts": 6748,
+    "interactiveReruns": 620,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 2
+    },
+    "targetIncluded": [
+      600,
+      600,
+      600,
+      600,
+      600
+    ],
+    "targetExercised": [
+      23,
+      150,
+      0,
+      0,
+      0
+    ],
+    "qualification": "Static emblem effects do not produce trigger/ability-resolution exercise counts; zero exercise counter is not an effect failure. Actual Green/Herbs effects judged separately."
+  },
+  "preflight": {
+    "pass": 10,
+    "skip": 90,
+    "pending": 0,
+    "fail": 0,
+    "domain": "--dreamsigns; --variants all; --as both"
+  },
+  "sweep": {
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-uCtgoc",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.246/invocations/sweep-uCtgoc",
+    "counts": {
+      "pass": 10,
+      "skip": 90
+    },
+    "attemptCounts": {
+      "pass": 10,
+      "skip": 90
+    },
+    "hostLoad": 6.82421875,
+    "requestedMods": null,
+    "modsValidation": "card-lab",
+    "sessions": 1,
+    "leaseYields": 0,
+    "wallMs": {
+      "browserLeaseWait": 5,
+      "serve": 1965,
+      "scenario": 32092.697292,
+      "cleanup": 418.6918750000041,
+      "execution": 34535.662417,
+      "total": 34540.662417
+    }
+  },
+  "judged": {
+    "R3": {
+      "invocation": "run-Ghs0BI",
+      "result": {
+        "desktop": {
+          "original": "i16",
+          "battleId": "battle:journey:1:site-5::0::dreamscape-1",
+          "held": [
+            "47081bde-f35d-4b5c-ba17-53e5dbf5b419",
+            "1cd25b9a-b176-4c51-8349-bb4df35cbf05"
+          ],
+          "printingUUID": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          "physical": {
+            "owner": "player",
+            "journeyDeck": true,
+            "created": false,
+            "variant": {
+              "amplified": false
+            }
+          },
+          "beforeReload": {
+            "zone": "play",
+            "exhausted": "false",
+            "effectiveSpark": "5",
+            "gainedSpark": 0
+          },
+          "afterReload": {
+            "zone": "play",
+            "exhausted": "false",
+            "effectiveSpark": "5",
+            "gainedSpark": 0
+          },
+          "geometry": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "inViewport": true
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "persistedPlay": {
+            "rows": 53,
+            "matches": [
+              {
+                "gameId": "cibf8h",
+                "version": 10,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i16",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-15T11:11:54.117Z",
+                "event": "engine.action",
+                "seq": 43
+              }
+            ]
+          }
+        },
+        "mobile": {
+          "original": "i16",
+          "battleId": "battle:journey:1:site-5::0::dreamscape-1",
+          "held": [
+            "47081bde-f35d-4b5c-ba17-53e5dbf5b419",
+            "1cd25b9a-b176-4c51-8349-bb4df35cbf05"
+          ],
+          "printingUUID": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          "physical": {
+            "owner": "player",
+            "journeyDeck": true,
+            "created": false,
+            "variant": {
+              "amplified": false
+            }
+          },
+          "beforeReload": {
+            "zone": "play",
+            "exhausted": "false",
+            "effectiveSpark": "5",
+            "gainedSpark": 0
+          },
+          "afterReload": {
+            "zone": "play",
+            "exhausted": "false",
+            "effectiveSpark": "5",
+            "gainedSpark": 0
+          },
+          "geometry": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375,
+            "inViewport": true
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "persistedPlay": {
+            "rows": 53,
+            "matches": [
+              {
+                "gameId": "bdxy2r",
+                "version": 10,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i16",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-15T11:12:08.519Z",
+                "event": "engine.action",
+                "seq": 43
+              }
+            ]
+          }
+        }
+      },
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.246/invocations/run-Ghs0BI/green-herbs-judged-r3-desktop.jsonl",
+          "gameId": "cibf8h",
+          "selectedBy": "url",
+          "rows": 56,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.246/invocations/run-Ghs0BI/green-herbs-judged-r3-mobile.jsonl",
+          "gameId": "bdxy2r",
+          "selectedBy": "url",
+          "rows": 56,
+          "reason": null
+        }
+      ],
+      "caps": [],
+      "workflowPasses": 2,
+      "entityViewportPassCells": 4,
+      "qualification": "Actual UUID-backed diagnostic acquisition before normal real battle; no natural reward or full journey acceptance claim.",
+      "rawReport": {
+        "invocation": "run-Ghs0BI",
+        "filename": "green-herbs-judged-r3.result.json",
+        "sha256": "968e44450affd712aa2720f8fe9389650177eba0287a82ef7fc722ed7c7492ce"
+      }
+    },
+    "captures": [
+      {
+        "filename": "green-herbs-original-desktop.png",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "sha256": "0c3d5071ed70b440a8934c777134eb75228d52e17c4f752427a01993d71461fb",
+        "visuallyInspected": true
+      },
+      {
+        "filename": "green-herbs-original-mobile.png",
+        "pixels": [
+          780,
+          1688
+        ],
+        "sha256": "3ae881cb203bcb6f97f55f3e4b5c44e568e75acc15cf27ea8db7549fbf8de9cf",
+        "visuallyInspected": true
+      },
+      {
+        "filename": "green-herbs-original-detail-desktop.png",
+        "pixels": [
+          260,
+          260
+        ],
+        "sha256": "e10468750d9c8ac680f0fe842a09370d06a9f17cddca21f434883d933512ad59",
+        "visuallyInspected": true
+      }
+    ],
+    "visualJudgment": "Both original upright ready cards and effective5 are visible and legible within viewport; no presentation defect established. Parent independently confirmed original pixel dimensions and all three images.",
+    "parentProof": "/tmp/root-246/parent-judged-r3-audit-v2.json",
+    "R1": {
+      "invocation": "run-ozpzTC",
+      "exit": 1,
+      "scope": "desktop setup only, no play/capture; mobile unrun",
+      "caps": [],
+      "cause": "Caller passed Playwright-only :has-text pseudo-selector to DOM CSS qa.click; corrected supported TextTarget in R2."
+    },
+    "R2": {
+      "invocation": "run-K461u6",
+      "exit": 1,
+      "scope": "Optional forced-next-draw setup timed out90s; no play/capture; mobileunrun",
+      "caps": [],
+      "cause": "Unknown; applied public forceDraw and normal progression are observed, but exact retained physical oracle timeline is unavailable. No product defect inferred. Optional setup replaced; all original effect acceptance retained."
+    },
+    "failedReplay": {
+      "exit": 1,
+      "scope": "Actual logged init/actions; stopped on missing standalone later discard answer, before final timeline write; no complete causal diagnosis."
+    },
+    "preparedUnexecuted": "replay-r2-draw-prefix.mts remains unexecuted; no result claimed.",
+    "lookup": {
+      "exit": 0,
+      "candidates": 1,
+      "foundSeed": 1,
+      "qualification": "Seed-only copy of actualR2logged init is hypothetical setup; R3 independently re-established actual original in hand before effect judgment."
+    }
+  },
+  "inherited663": {
+    "machineLedgerRows": 60,
+    "pass": 6,
+    "skip": 54,
+    "D21sampled": 0,
+    "supplementalWorkflowCells": "Six composite historical cells: R6 three desktop+mobileOak; R7mobileSpider/Wolf. Prior failures/qualifications retained in delivered663 evidence. Current246 whole-five weighted/preflight/sweep/coverage are separate.",
+    "parentReadOnlyProof": "/tmp/root-246/inherited663-acceptance-audit-v2.json"
+  },
+  "custodyProofs": {
+    "source-implemented-proof.json": {
+      "sha256": "7c215bacdc30de3c77188f70152a01205be5688bbc15bdf7f22cd35cd5147658",
+      "observedAt": "2026-10-15T10:24:18.238503+00:00",
+      "changedBindings": [],
+      "ownGroups": [],
+      "providerRecordExists": null,
+      "serverRecordExists": null,
+      "portListenerExit": null,
+      "qualification": "Raw proof retained in scratch; missing nullable record fields are not applicable to that proof kind."
+    },
+    "pre-browser-heavy-settled.json": {
+      "sha256": "f6b6b98bbec314cbef9e81f91a4d480556829361418afcbeb1af3e03ea34923c",
+      "observedAt": "2026-10-15T10:55:57.680380+00:00",
+      "changedBindings": [],
+      "ownGroups": [],
+      "providerRecordExists": null,
+      "serverRecordExists": null,
+      "portListenerExit": null,
+      "qualification": "Raw proof retained in scratch; missing nullable record fields are not applicable to that proof kind."
+    },
+    "judged-r1-postguard.json": {
+      "sha256": "566351d59847aadd6a1806728408ac23bd8f3aefc718fdfdeaa1e1912e6de05a",
+      "observedAt": "2026-10-15T10:56:46.441805+00:00",
+      "changedBindings": [],
+      "ownGroups": [],
+      "providerRecordExists": null,
+      "serverRecordExists": null,
+      "portListenerExit": null,
+      "qualification": "Raw proof retained in scratch; missing nullable record fields are not applicable to that proof kind."
+    },
+    "judged-r1-custody.json": {
+      "sha256": "815a5d7b03c0b78aa617c761e0eea9234dbf5f0d02169b5c9e4b51906fa00b87",
+      "observedAt": "2026-10-15T10:56:55.102677+00:00",
+      "changedBindings": [],
+      "ownGroups": [],
+      "providerRecordExists": false,
+      "serverRecordExists": false,
+      "portListenerExit": 1,
+      "qualification": "Raw proof retained in scratch; missing nullable record fields are not applicable to that proof kind."
+    },
+    "judged-r2-postguard-custody.json": {
+      "sha256": "ac275137c816add80cbdf0ada9624196f23051203287d9b34caef291a388ec83",
+      "observedAt": "2026-10-15T11:01:43.045716+00:00",
+      "changedBindings": [],
+      "ownGroups": [],
+      "providerRecordExists": false,
+      "serverRecordExists": false,
+      "portListenerExit": 1,
+      "qualification": "Raw proof retained in scratch; missing nullable record fields are not applicable to that proof kind."
+    },
+    "replay-r2-draw-postguard.json": {
+      "sha256": "fa01c902d6fb2f45ff22d0a52fcf6c94d2479d09c7cb3d6382fa7f0f22f30a02",
+      "observedAt": "2026-10-15T11:09:12.219115+00:00",
+      "changedBindings": [],
+      "ownGroups": [],
+      "providerRecordExists": null,
+      "serverRecordExists": null,
+      "portListenerExit": null,
+      "qualification": "Raw proof retained in scratch; missing nullable record fields are not applicable to that proof kind."
+    },
+    "lookup-initial-original-postguard.json": {
+      "sha256": "80a286e2c6b67e5548587da3023c49f9a4b6d335363061738e6b16f5edbd0edf",
+      "observedAt": "2026-10-15T11:10:05.490551+00:00",
+      "changedBindings": [],
+      "ownGroups": [],
+      "providerRecordExists": null,
+      "serverRecordExists": null,
+      "portListenerExit": null,
+      "qualification": "Raw proof retained in scratch; missing nullable record fields are not applicable to that proof kind."
+    },
+    "judged-r3-postguard-custody.json": {
+      "sha256": "9ff485e3435d2f1abca6690d64535c8ea0667e265b238ecf573624ae5d19e9a8",
+      "observedAt": "2026-10-15T11:12:30.084525+00:00",
+      "changedBindings": [],
+      "ownGroups": [],
+      "providerRecordExists": false,
+      "serverRecordExists": false,
+      "portListenerExit": 1,
+      "qualification": "Raw proof retained in scratch; missing nullable record fields are not applicable to that proof kind."
+    },
+    "sweep-all5-postguard-custody.json": {
+      "sha256": "82cfe6a350da5fce07421145d5cafb894d486c13bb4e66c67c515bc6d41c6288",
+      "observedAt": "2026-10-15T11:13:37.923676+00:00",
+      "changedBindings": [],
+      "ownGroups": [],
+      "providerRecordExists": false,
+      "serverRecordExists": false,
+      "portListenerExit": 1,
+      "qualification": "Raw proof retained in scratch; missing nullable record fields are not applicable to that proof kind."
+    }
+  },
+  "runtimeSettlement": "All admitted command groups settled in actual receipts; native R1/R2/R3/sweep closed own isolated MCP contexts/RPCs/provider records, stopped own server groups and freed recorded5274. Own slot1 provider/server records absent at postguards. No foreign record read/mutation, shared restart, upload or deploy.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final-review starting one-minute load"
+      }
+    }
+  },
+  "localMechanicalCorrections": [
+    "Initial evidence-writer preparation hit weighted receipt missing label before tracked writes; follow-on git add exited128 on absent evidence paths. Writer now annotates measurement copy with its known command label, preserving raw receipt bytes.",
+    "One scratch-only prefix-proposal construction assertion exited before any write/execution; corrected preparation remained unexecuted."
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "finalChecks": {
+    "review": 0,
+    "knip": 0,
+    "contentGate": 0,
+    "schema": 0,
+    "remaining": "Final clock refresh and cheap schema/whitespace checks; explicit parent commit ACK remains pending."
+  },
+  "producerSourceEpoch": {
+    "ledgerCommitField": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+    "qualification": "Native sweep and supplemental ledger commit fields name then-current base HEAD. Execution used the two uncommitted authored leaf SHA256 bindings in sourceScope, rather than base pending definitions.",
+    "actualGitEndpoint": "Unknown until later explicit commit ACK and external actual Git receipt."
+  },
+  "commandDefaults": {
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle246-root-v2",
+    "env": {
+      "JOURNEY_TEST_WORKERS": "2"
+    },
+    "qualification": "Each raw immutable receipt contains exact argv, process data and CPU/load observations. Listed wallS follows its raw receipt scope; weighted start/end and audit overhead are separated above."
+  },
+  "coverage": {
+    "reviewFiles": 283,
+    "reviewTests": 9123,
+    "reviewExit": 0,
+    "explicitContentGateExit": 0,
+    "qualification": "Review dot reporter omits per-file names; explicit focused final content gate establishes the requested current coverage result without inferring a named test from dot output."
+  },
+  "preExistingDiagnostic": {
+    "event": "battle_engine_notice_shown",
+    "logSeq": 130,
+    "invocation": "run-K461u6",
+    "logFilename": "green-herbs-judged-r2-desktop.jsonl",
+    "logSHA256": "0bbe9c9ef6a1811e27008b4ac20b1fd4fbedd97aa73b6ebf304237d2e86f9d91",
+    "observed": "noLegalTarget notice projects display sourceName without a source UUID; unchanged EngineBattleScreen384..388 logs notice directly and presentation-items460 constructs it.",
+    "invariant": "UUID-only diagnostic identity",
+    "scope": "Both UI/logging bodies remain read-only; parent owns bounded dedup/followup. No name-keyed/equality bug asserted.",
+    "sourceHashes": {
+      "src/battle/components/EngineBattleScreen.tsx": "6e96d5cfa10da65c27f18f63ca2c432b6ba3351241df6a813d72b91319bf703b",
+      "src/battle/components/presentation-items.ts": "98308d9ca2e7834b8a3a3e3abb18934d80113ba350079be96f65a012a098b2c9"
+    }
+  },
+  "validationWarnings": "Ordinary review temporarily shadows local art for its checks and reports missing materializations during prepare; its successful restore-local-assets phase linked all actual art before return. No loaded-host D19 suite budget or performance claim."
+}
