@@ -1,0 +1,1120 @@
+{
+  "bead": "hv-umm2.760",
+  "sourceBase": "1b0a60bad303d514a19296267cd60009b5aa939a",
+  "recordCutoff": "2026-10-15T21:31:56.646922+00:00",
+  "clockQualification": "Actual precommit evidence cutoff at recordCutoff, including inclusive original claim, all reads/repair/coordination/waits/checks/parent collection. Actual schema/staging/commit/end-tail after cutoff is retained separately in final-git-proof.json and supplemental archive; no Git end was predicted.",
+  "sourceReadLedger": {
+    "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/source-packets760/source-binding-ledger.json",
+    "qualification": "22 whole/selected input qualifications; initial whole wt call excluded and five actual bounded repair reads complete. Native39 projected scopes/acceptance and relevant exact union body segments read; unrelated native histories and engine sections not claimed."
+  },
+  "proposalCorrection": "Original source-proposal.md demonstration target src/rules/journey/deck-entry-transfigurations.ts is absent. adoption-01 correctly refused; actual source discovery and parent correction select src/transfiguration/deck-entry-transfigurations.ts at same exact base. No writer scope changed.",
+  "adoption": {
+    "rawLog": "adoption-02.log",
+    "rawBytes": 8072,
+    "rawSha256": "aaa48513f873871e1b8273821b0ab45ef51b8ad88c1119814cc9466207537361",
+    "markerHash": "d1582434ecf91cb5abf7268280506cb34d07bfe91c0705c462bde769e3da0930",
+    "source": {
+      "kind": "git-blob",
+      "commit": "1b0a60bad303d514a19296267cd60009b5aa939a",
+      "blob": "d6be00d4b975794be1f2879bc1869ec5872555f8",
+      "path": "src/transfiguration/deck-entry-transfigurations.ts"
+    },
+    "sourceSha256": "aeb3ad9a1198684fa0fcf852530415e98f84336de906d665627e17a9442508d2",
+    "actualReadBytes": [
+      0,
+      7155
+    ],
+    "toolDelivery": "one selected packet returned completely at 7000-token budget, no clipping; JSON and terminal marker actually read",
+    "semanticQualification": "full selected helper source context read for resumed755; not755proof/result/final acceptance; other owner later adoption remains future",
+    "failedProbe": "adoption-01 nonexistent proposed path refused with no stdout; stderr+actual PID/PG/exit retained"
+  },
+  "validation": [
+    {
+      "label": "focused-01",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/plan-source-packet.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:15:47.318512+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        9.04443359375,
+        9.994140625,
+        11.11181640625
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 6906,
+          "sha256": "1886166cf73c4c8fd12c4d81bd6a80dc3b5e28b501c93bcfe994f546e8864700"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 9441,
+          "sha256": "05a4806956e2fe9ffd7a6c703048b49bfc0e00a91972345e6d5e6069e51395bd"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 9275,
+      "pgid": 9275,
+      "birth": "Thu Oct 15 14:15:47 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:15:55.961815+00:00",
+      "wallSeconds": 8.642967708001379,
+      "cpuUserSeconds": 7.117401,
+      "cpuSystemSeconds": 2.563385,
+      "hostLoadEnd": [
+        14.21630859375,
+        11.0654296875,
+        11.47802734375
+      ],
+      "groupAfter": "",
+      "logBytes": 50380,
+      "logSha256": "e0d471b09d7525a9dd6473e5422e5019056b60ce99be38bf369473757a483e6c"
+    },
+    {
+      "label": "adoption-01",
+      "command": [
+        "node",
+        "scripts/plan-source-packet.mjs",
+        "--git",
+        "1b0a60bad303d514a19296267cd60009b5aa939a",
+        "--path",
+        "src/rules/journey/deck-entry-transfigurations.ts",
+        "--packet",
+        "1",
+        "--max-bytes",
+        "9000"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:16:17.646101+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        23.83203125,
+        13.44482421875,
+        12.31982421875
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 6906,
+          "sha256": "1886166cf73c4c8fd12c4d81bd6a80dc3b5e28b501c93bcfe994f546e8864700"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 9441,
+          "sha256": "05a4806956e2fe9ffd7a6c703048b49bfc0e00a91972345e6d5e6069e51395bd"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 12987,
+      "pgid": 12987,
+      "birth": "Thu Oct 15 14:16:17 2026",
+      "exit": 2,
+      "end": "2026-10-15T21:16:17.709318+00:00",
+      "wallSeconds": 0.06298612500540912,
+      "cpuUserSeconds": 0.051878999999999995,
+      "cpuSystemSeconds": 0.012032,
+      "hostLoadEnd": [
+        23.83203125,
+        13.44482421875,
+        12.31982421875
+      ],
+      "groupAfter": "",
+      "logBytes": 162,
+      "logSha256": "1a64f1da8fd4bd19d08af41943c747a1f9cd5ded4102537cd9a430dd9ebcb7e5"
+    },
+    {
+      "label": "adoption-02",
+      "command": [
+        "node",
+        "scripts/plan-source-packet.mjs",
+        "--git",
+        "1b0a60bad303d514a19296267cd60009b5aa939a",
+        "--path",
+        "src/transfiguration/deck-entry-transfigurations.ts",
+        "--packet",
+        "1",
+        "--max-bytes",
+        "9000"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:16:28.785280+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        21.74072265625,
+        13.50146484375,
+        12.35986328125
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 6906,
+          "sha256": "1886166cf73c4c8fd12c4d81bd6a80dc3b5e28b501c93bcfe994f546e8864700"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 9441,
+          "sha256": "05a4806956e2fe9ffd7a6c703048b49bfc0e00a91972345e6d5e6069e51395bd"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 14230,
+      "pgid": 14230,
+      "birth": "Thu Oct 15 14:16:28 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:16:28.862457+00:00",
+      "wallSeconds": 0.07673337496817112,
+      "cpuUserSeconds": 0.060447999999999995,
+      "cpuSystemSeconds": 0.018092,
+      "hostLoadEnd": [
+        21.74072265625,
+        13.50146484375,
+        12.35986328125
+      ],
+      "groupAfter": "",
+      "logBytes": 8072,
+      "logSha256": "aaa48513f873871e1b8273821b0ab45ef51b8ad88c1119814cc9466207537361"
+    },
+    {
+      "label": "focused-02",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/plan-source-packet.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:17:04.113054+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        16.68408203125,
+        13.1826171875,
+        12.2900390625
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 6906,
+          "sha256": "1886166cf73c4c8fd12c4d81bd6a80dc3b5e28b501c93bcfe994f546e8864700"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 9919,
+          "sha256": "1c3230197943bf50820ff236b2d0a620569504a64dc0ecda4062c2ed6f9acc7d"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 17521,
+      "pgid": 17521,
+      "birth": "Thu Oct 15 14:17:04 2026",
+      "exit": 1,
+      "end": "2026-10-15T21:17:10.306559+00:00",
+      "wallSeconds": 6.193219709035475,
+      "cpuUserSeconds": 5.21057,
+      "cpuSystemSeconds": 1.644792,
+      "hostLoadEnd": [
+        15.587890625,
+        13.01318359375,
+        12.2353515625
+      ],
+      "groupAfter": "",
+      "logBytes": 51222,
+      "logSha256": "d594c4e016498ded10e496d4d34e24f26e904cf9391243d7343d6cc051257002"
+    },
+    {
+      "label": "focused-03",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/plan-source-packet.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:17:56.769779+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        10.3642578125,
+        11.9970703125,
+        11.89990234375
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 6906,
+          "sha256": "1886166cf73c4c8fd12c4d81bd6a80dc3b5e28b501c93bcfe994f546e8864700"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 10268,
+          "sha256": "b81c9126ae104f700d0930336b3d995a65ea3cb38bdcd6bddd9bdcce15aa17ee"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 22322,
+      "pgid": 22322,
+      "birth": "Thu Oct 15 14:17:56 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:18:05.144525+00:00",
+      "wallSeconds": 8.37377954099793,
+      "cpuUserSeconds": 5.228829,
+      "cpuSystemSeconds": 2.244647,
+      "hostLoadEnd": [
+        9.638671875,
+        11.78369140625,
+        11.82470703125
+      ],
+      "groupAfter": "",
+      "logBytes": 50379,
+      "logSha256": "9c95e5debd62ab5a1af0a1ecc665f1db4c9c57ae0b6c93e7bb9b1709ff4e48cf"
+    },
+    {
+      "label": "review-01",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:18:22.346761+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        9.38623046875,
+        11.61572265625,
+        11.76318359375
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 6906,
+          "sha256": "1886166cf73c4c8fd12c4d81bd6a80dc3b5e28b501c93bcfe994f546e8864700"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 10268,
+          "sha256": "b81c9126ae104f700d0930336b3d995a65ea3cb38bdcd6bddd9bdcce15aa17ee"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 24953,
+      "pgid": 24953,
+      "birth": "Thu Oct 15 14:18:22 2026",
+      "exit": 2,
+      "end": "2026-10-15T21:18:42.872924+00:00",
+      "wallSeconds": 20.525269042002037,
+      "cpuUserSeconds": 62.214799,
+      "cpuSystemSeconds": 9.659712,
+      "hostLoadEnd": [
+        10.591796875,
+        11.76513671875,
+        11.8134765625
+      ],
+      "groupAfter": "",
+      "logBytes": 80168,
+      "logSha256": "607d27f1eb3953928c7351402e21be97c6312e3eca7aa7cdd428e9abf7659a76"
+    },
+    {
+      "label": "node-types-02",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.node.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:19:53.380384+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        8.0751953125,
+        10.70703125,
+        11.40478515625
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11339,
+          "sha256": "c2ac7ab472421e5007cd241ceee942021e16abe0ddff38a27a06e3844ee74be9"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 32972,
+      "pgid": 32972,
+      "birth": "Thu Oct 15 14:19:53 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:19:57.937966+00:00",
+      "wallSeconds": 4.557263833004981,
+      "cpuUserSeconds": 8.234723,
+      "cpuSystemSeconds": 0.318475,
+      "hostLoadEnd": [
+        8.0751953125,
+        10.70703125,
+        11.40478515625
+      ],
+      "groupAfter": "",
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "scripts-lint-02",
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "scripts/plan-source-packet.mjs",
+        "scripts/plan-source-packet.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:19:53.380417+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        8.0751953125,
+        10.70703125,
+        11.40478515625
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11339,
+          "sha256": "c2ac7ab472421e5007cd241ceee942021e16abe0ddff38a27a06e3844ee74be9"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 32971,
+      "pgid": 32971,
+      "birth": "Thu Oct 15 14:19:53 2026",
+      "exit": 1,
+      "end": "2026-10-15T21:19:55.454592+00:00",
+      "wallSeconds": 2.0739288330078125,
+      "cpuUserSeconds": 3.401614,
+      "cpuSystemSeconds": 0.33649,
+      "hostLoadEnd": [
+        8.0751953125,
+        10.70703125,
+        11.40478515625
+      ],
+      "groupAfter": "",
+      "logBytes": 236,
+      "logSha256": "7648639d7270c4ab0d1086ea0c7bbe9bd138fb3c198be682c7db89e23854c937"
+    },
+    {
+      "label": "scripts-lint-03",
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "scripts/plan-source-packet.mjs",
+        "scripts/plan-source-packet.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:20:22.996878+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        7.4501953125,
+        10.3701171875,
+        11.26416015625
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11389,
+          "sha256": "37ab069cdbf5f371b9dd43c8d7c54a999db42342413da0ae10a4b87b55ba3d85"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 35021,
+      "pgid": 35021,
+      "birth": "Thu Oct 15 14:20:22 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:20:24.350382+00:00",
+      "wallSeconds": 1.3532469170168042,
+      "cpuUserSeconds": 2.876544,
+      "cpuSystemSeconds": 0.20589,
+      "hostLoadEnd": [
+        7.173828125,
+        10.26416015625,
+        11.22119140625
+      ],
+      "groupAfter": "",
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "review-02",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:20:39.412005+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        7.4775390625,
+        10.1845703125,
+        11.17578125
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11389,
+          "sha256": "37ab069cdbf5f371b9dd43c8d7c54a999db42342413da0ae10a4b87b55ba3d85"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 36189,
+      "pgid": 36189,
+      "birth": "Thu Oct 15 14:20:39 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:20:53.087698+00:00",
+      "wallSeconds": 13.675379333028104,
+      "cpuUserSeconds": 35.330756,
+      "cpuSystemSeconds": 6.685437,
+      "hostLoadEnd": [
+        7.9375,
+        10.1572265625,
+        11.14794921875
+      ],
+      "groupAfter": "",
+      "logBytes": 51267,
+      "logSha256": "ad7c1d411248d9cf766d6a1f8c9efd2ce7d2c45325ad0a5c7744dee0778e0d89"
+    },
+    {
+      "label": "focused-04",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/plan-source-packet.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:21:31.437148+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        6.400390625,
+        9.5361328125,
+        10.880859375
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11827,
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 40302,
+      "pgid": 40302,
+      "birth": "Thu Oct 15 14:21:31 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:21:37.125998+00:00",
+      "wallSeconds": 5.688568582991138,
+      "cpuUserSeconds": 4.846743,
+      "cpuSystemSeconds": 1.536686,
+      "hostLoadEnd": [
+        6.3681640625,
+        9.47705078125,
+        10.85205078125
+      ],
+      "groupAfter": "",
+      "logBytes": 50377,
+      "logSha256": "5f841d547d97d85ca1739150d59291116fe8860b0cabc4c8091a2a59913adf82"
+    },
+    {
+      "label": "review-03",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:21:56.053914+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        6.42041015625,
+        9.28369140625,
+        10.75
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11827,
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 42605,
+      "pgid": 42605,
+      "birth": "Thu Oct 15 14:21:56 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:22:09.571579+00:00",
+      "wallSeconds": 13.517326958011836,
+      "cpuUserSeconds": 35.423542,
+      "cpuSystemSeconds": 6.566499,
+      "hostLoadEnd": [
+        7.115234375,
+        9.31396484375,
+        10.73583984375
+      ],
+      "groupAfter": "",
+      "logBytes": 51272,
+      "logSha256": "a56fe16c1d131a192639d6eb6ffca7bf750693a6f54bc17fd0d79ccf140288c5"
+    },
+    {
+      "label": "knip-01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:22:12.337145+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        7.115234375,
+        9.31396484375,
+        10.73583984375
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11827,
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 44193,
+      "pgid": 44193,
+      "birth": "Thu Oct 15 14:22:12 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:22:17.007753+00:00",
+      "wallSeconds": 4.670328708947636,
+      "cpuUserSeconds": 4.11821,
+      "cpuSystemSeconds": 1.318206,
+      "hostLoadEnd": [
+        7.02587890625,
+        9.2587890625,
+        10.7080078125
+      ],
+      "groupAfter": "",
+      "logBytes": 50048,
+      "logSha256": "d776e5bada3bee8b8ee298951b4b97a249f90174492a7234a4d370ab8cc1d103"
+    },
+    {
+      "label": "full-lock-01",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/source-packets760/run-check.py",
+        "full-execution-01",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:22:35.946612+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        6.44287109375,
+        8.96875,
+        10.5693359375
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11827,
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 46010,
+      "pgid": 46010,
+      "birth": "Thu Oct 15 14:22:35 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:24:59.137114+00:00",
+      "wallSeconds": 143.18934404099127,
+      "cpuUserSeconds": 321.008347,
+      "cpuSystemSeconds": 34.190632,
+      "hostLoadEnd": [
+        11.68408203125,
+        11.66357421875,
+        11.53173828125
+      ],
+      "groupAfter": "",
+      "logBytes": 2774,
+      "logSha256": "777c63367ebca590483f7277f5008d8d67abbbfc384e7f37bc1484530fdb3a64"
+    },
+    {
+      "label": "full-execution-01",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:22:35.973288+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        6.44287109375,
+        8.96875,
+        10.5693359375
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11827,
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 46016,
+      "pgid": 46016,
+      "birth": "Thu Oct 15 14:22:35 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:24:59.098022+00:00",
+      "wallSeconds": 143.12359287496656,
+      "cpuUserSeconds": 320.977693,
+      "cpuSystemSeconds": 34.155493,
+      "hostLoadEnd": [
+        11.68408203125,
+        11.66357421875,
+        11.53173828125
+      ],
+      "groupAfter": "",
+      "logBytes": 103467,
+      "logSha256": "fd5809eb5bb427948fc882a515a8a2c9d60f925c2bb717ff08adf7257d39e677"
+    },
+    {
+      "label": "final-schema-01",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:26:27.543762+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        8.2451171875,
+        10.755859375,
+        11.20703125
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11827,
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 71774,
+      "pgid": 71774,
+      "birth": "Thu Oct 15 14:26:27 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:26:27.612731+00:00",
+      "wallSeconds": 0.06870495795737952,
+      "cpuUserSeconds": 0.053232999999999996,
+      "cpuSystemSeconds": 0.02175,
+      "hostLoadEnd": [
+        8.2451171875,
+        10.755859375,
+        11.20703125
+      ],
+      "groupAfter": "",
+      "logBytes": 74,
+      "logSha256": "eab8c626e1df2b6f4ab0c6d0aaebeb79217e742a450bdc4c6f813a8e438aa912"
+    },
+    {
+      "label": "final-integrity-01",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/source-packets760/final-integrity.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-source-packets760-root",
+      "start": "2026-10-15T21:26:27.543644+00:00",
+      "workerEnv": "2",
+      "hostLoadStart": [
+        8.2451171875,
+        10.755859375,
+        11.20703125
+      ],
+      "inputEpoch": {
+        "scripts/plan-source-packet.mjs": {
+          "bytes": 7815,
+          "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753"
+        },
+        "scripts/plan-source-packet.test.mjs": {
+          "bytes": 11827,
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd"
+        },
+        "docs/plan/workflow.md": {
+          "bytes": 104126,
+          "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+        }
+      },
+      "pid": 71773,
+      "pgid": 71773,
+      "birth": "Thu Oct 15 14:26:27 2026",
+      "exit": 0,
+      "end": "2026-10-15T21:26:27.751193+00:00",
+      "wallSeconds": 0.20730541698867455,
+      "cpuUserSeconds": 0.076695,
+      "cpuSystemSeconds": 0.157782,
+      "hostLoadEnd": [
+        8.2451171875,
+        10.755859375,
+        11.20703125
+      ],
+      "groupAfter": "",
+      "logBytes": 1549,
+      "logSha256": "94b1cdbdf77ae943ccc999bb55b29e7b6a684a57d55a8d8e4cb590044785cac1"
+    }
+  ],
+  "failures": [
+    {
+      "label": "adoption-01",
+      "qualification": "Absent proposal path refused; no successful read claimed; repaired discovery/adoption-02 exact source retained."
+    },
+    {
+      "label": "focused-02",
+      "qualification": "Added one-codepoint ceiling test initially subtracted one byte, while maxBytes decimal width shrank by one byte. The packet correctly fit. Test subtracts two bytes; final focused-03 passes6. No production repair. Initial broad log return clipped/excluded; complete diagnostic bytes49702:51222 separately read."
+    },
+    {
+      "label": "review-01",
+      "qualification": "Own initial MJS lacked strict checkJs/JSDoc annotations; main project TS and6 public CLI tests passed, Node TS and ESLint failed. Genuine parameter/record types, required-map-value narrowing and explicit BigIntStats comparisons repair own scripts; no waiver/config change. Broad combined diagnostic return clipped/excluded; complete TS-only diagnostics subsequently read."
+    },
+    {
+      "label": "scripts-lint-02",
+      "qualification": "After type annotations Node TS passed; one unsafe JSON.parse assignment remained. Public test decoder now assigns parse output to unknown before packet shape assertion; scripts-lint-03 passes."
+    }
+  ],
+  "coreFailurePaths": {
+    "errorMidStep": "Exact public tests: \"refuses malformed input and preparation failures without partial stdout\" and \"refuses an envelope ceiling that cannot hold one whole code point\". Both require nonzero exit and empty stdout for preparation failures.",
+    "restart": "Exact public test: \"restarts deterministically and refuses a changed epoch between independent packet reads\".",
+    "partialWrite": "No source or receipt persistence exists, so no filesystem partial-write transition applies. Exact public reconstruction tests \"reconstructs exact escaped BOM, CRLF, controls and multibyte bytes across small packets and long lines\" and \"reconstructs selected half-open UTF8 byte ranges and empty sources/ranges\" verify packet/body markers and hashes. OS transport completeness remains consumer-owned.",
+    "invalidOrStaleInput": "Exact public tests: \"refuses malformed input and preparation failures without partial stdout\" and \"restarts deterministically and refuses a changed epoch between independent packet reads\".",
+    "concurrency": "Exact public test: \"restarts deterministically and refuses a changed epoch between independent packet reads\" proves independent same-epoch calls and stale hash refusal after an intervening edit. \"refuses malformed input and preparation failures without partial stdout\" covers refusal. Observed fstat/path races are rejected; no timing-dependent race test or post-check pathname stability promise."
+  },
+  "readOnlyQualifications": "Current file can follow a symlink to a regular target; pre-stat plus O_NONBLOCK/fstat prevents waiting on nonregular replacement. Full hash binds bytes read. Reads can update OS access metadata; no CLI filesystem write operation. Git disables replacement refs, optional locks and lazy fetch; synthetic replacement-ref and source inventory controls verify local behavior.",
+  "publicConsumer": "Plan source-first/read-first executor and cold reviewer procedure; dedicated actual subprocess spawn target resolved by import.meta.resolve. No exports or config/entry waivers.",
+  "runtimeLedger": [
+    {
+      "label": "focused-01",
+      "pid": 9275,
+      "pgid": 9275,
+      "birth": "Thu Oct 15 14:15:47 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "adoption-01",
+      "pid": 12987,
+      "pgid": 12987,
+      "birth": "Thu Oct 15 14:16:17 2026",
+      "terminalExit": 2,
+      "groupAfter": ""
+    },
+    {
+      "label": "adoption-02",
+      "pid": 14230,
+      "pgid": 14230,
+      "birth": "Thu Oct 15 14:16:28 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "focused-02",
+      "pid": 17521,
+      "pgid": 17521,
+      "birth": "Thu Oct 15 14:17:04 2026",
+      "terminalExit": 1,
+      "groupAfter": ""
+    },
+    {
+      "label": "focused-03",
+      "pid": 22322,
+      "pgid": 22322,
+      "birth": "Thu Oct 15 14:17:56 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "review-01",
+      "pid": 24953,
+      "pgid": 24953,
+      "birth": "Thu Oct 15 14:18:22 2026",
+      "terminalExit": 2,
+      "groupAfter": ""
+    },
+    {
+      "label": "node-types-02",
+      "pid": 32972,
+      "pgid": 32972,
+      "birth": "Thu Oct 15 14:19:53 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "scripts-lint-02",
+      "pid": 32971,
+      "pgid": 32971,
+      "birth": "Thu Oct 15 14:19:53 2026",
+      "terminalExit": 1,
+      "groupAfter": ""
+    },
+    {
+      "label": "scripts-lint-03",
+      "pid": 35021,
+      "pgid": 35021,
+      "birth": "Thu Oct 15 14:20:22 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "review-02",
+      "pid": 36189,
+      "pgid": 36189,
+      "birth": "Thu Oct 15 14:20:39 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "focused-04",
+      "pid": 40302,
+      "pgid": 40302,
+      "birth": "Thu Oct 15 14:21:31 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "review-03",
+      "pid": 42605,
+      "pgid": 42605,
+      "birth": "Thu Oct 15 14:21:56 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "knip-01",
+      "pid": 44193,
+      "pgid": 44193,
+      "birth": "Thu Oct 15 14:22:12 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "full-lock-01",
+      "pid": 46010,
+      "pgid": 46010,
+      "birth": "Thu Oct 15 14:22:35 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "full-execution-01",
+      "pid": 46016,
+      "pgid": 46016,
+      "birth": "Thu Oct 15 14:22:35 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "final-schema-01",
+      "pid": 71774,
+      "pgid": 71774,
+      "birth": "Thu Oct 15 14:26:27 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    },
+    {
+      "label": "final-integrity-01",
+      "pid": 71773,
+      "pgid": 71773,
+      "birth": "Thu Oct 15 14:26:27 2026",
+      "terminalExit": 0,
+      "groupAfter": ""
+    }
+  ],
+  "deliveryQualification": "No staging/commit/native candidate/promotion/core review performed by helper. Parent owns finite final Git ACK, fresh read-only Codex core review, certified delivery and later other-owner755 adoption.",
+  "parentSourceContextAdoption": {
+    "atUtc": "2026-10-15T21:18:31.979960+00:00",
+    "source": {
+      "kind": "git-blob",
+      "commit": "1b0a60bad303d514a19296267cd60009b5aa939a",
+      "blob": "d6be00d4b975794be1f2879bc1869ec5872555f8",
+      "path": "src/transfiguration/deck-entry-transfigurations.ts"
+    },
+    "sourceBytes": 7155,
+    "sourceLines": 90,
+    "sourceSHA256": "aeb3ad9a1198684fa0fcf852530415e98f84336de906d665627e17a9442508d2",
+    "contiguousRanges": [
+      [
+        0,
+        4130
+      ],
+      [
+        4130,
+        7155
+      ]
+    ],
+    "exactGitBlobReconstruction": true,
+    "rawBodyMarkerContentHashesVerified": true,
+    "outerToolReadReceipts": [
+      {
+        "index": 1,
+        "chunk": "cc94ef",
+        "exit": 0,
+        "completeUntruncatedReturnedMarkerObserved": true
+      },
+      {
+        "index": 2,
+        "chunk": "7497ce",
+        "exit": 0,
+        "completeUntruncatedReturnedMarkerObserved": true
+      }
+    ],
+    "oneSelectedPacketPerOuterCall": true,
+    "semanticRead": "Parent actually read complete90line orderedjourney source acrossboth returnedpackets asresumed755context; this is neither755proofacceptance norforeignowneradoption",
+    "cliSourceSHA256": "1886166cf73c4c8fd12c4d81bd6a80dc3b5e28b501c93bcfe994f546e8864700",
+    "childWallSumS": 0.16246937599498779,
+    "ownedPGsEmpty": true,
+    "qualification": "Allrawstdoutandpreparedreceipt retained; semanticread creditedonlyafteractualcomplete returnedouterresults, notfrompreparedmarkers",
+    "epochQualification": "Parent proof binds CLI1886166c source epoch. Subsequent edits add JSDoc/private required-map-value narrowing and explicit same-file comparisons; consumer source object/content remains unchanged. No claim of later other-owner755 adoption."
+  },
+  "heavySlot": {
+    "outerReceipt": "full-lock-01.receipt.json",
+    "executionReceipt": "full-execution-01.receipt.json",
+    "observedAdmissionIntervalSeconds": 0.026676,
+    "qualification": "Interval from outer lock command start to post-lock inner wrapper start includes lock wait and wrapper startup; it is not pure lock-wait CPU or a predicted duration. Execution wall/CPU/load is separate in inner receipt. Exactly one heavy full review, no browser lease."
+  },
+  "fullSuiteObservation": {
+    "filesPassed": 426,
+    "testsPassed": 11833,
+    "vitestWallSeconds": 98.41,
+    "qualification": "Observed loaded-host suite duration exceeds60s target; this does not establish controlled comparable-low-load regression/compliance, a three-bead trigger, or a capacity claim/budget waiver. Existing full-suite synthetic QA ownership tests are part of review:full; no separate provider/browser/fuzz run."
+  },
+  "finalSourceEpoch": {
+    "scripts/plan-source-packet.mjs": {
+      "sha256": "1626f02ec6b5eaef788e239a1c9a9070b1e8086d0f6b12b86dbd037a419f7753",
+      "bytes": 7815,
+      "lines": 189
+    },
+    "scripts/plan-source-packet.test.mjs": {
+      "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+      "bytes": 11827,
+      "lines": 235
+    },
+    "docs/plan/workflow.md": {
+      "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5",
+      "bytes": 104126,
+      "lines": 1951
+    }
+  },
+  "postAdmissionReadQualifications": [
+    {
+      "path": "tsconfig.node.json",
+      "sha256": "43758d179dbc45ece9ff19a6612b44532fe83cf19bad6b49cc27c6c4fd9b7c9b",
+      "qualification": "Whole actual strict checkJs config read after own review-01 failure; unchanged."
+    },
+    {
+      "path": "scripts/review-plan.mjs",
+      "sha256": "95f59988e0a7db7903255e56c0c0fb3c0fbb9ba4037b91c73f770fefd66eea31",
+      "actualReadBytes": [
+        2603,
+        3806
+      ],
+      "lines": [
+        86,
+        138
+      ],
+      "qualification": "Actual fullExecutionPlan body selected range read; other ranges unread; unchanged."
+    }
+  ],
+  "validationEpochQualifications": [
+    "focused-01:5test early epoch; focused-02:6test failed added ceiling expectation; focused-03:6test corrected expectation + range metadata checks.",
+    "review-01 strict MJS errors; targeted node-types-02 pass and scripts-lint-02 single parse assignment error; scripts-lint-03 unknown-parse narrowing pass.",
+    "review-02 passed typed epoch. Fixture-only Git hermeticity update followed terminal exit; final focused-04/review-03/Knip/full all bind final CLI/test/workflow hashes.",
+    "No exact old CLI file copy was retained before typing edits. Parent real two-call source-context adoption stays qualified to recorded1886166c CLI hash, not an invented archived source file."
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-03 wrapper command start; detailed hostLoadStart/End retained in each exact receipt"
+      }
+    }
+  },
+  "proofArchive": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.760/acceptance-v01",
+  "coldCoreReview": "Pending parent-dispatched fresh read-only Codex core review with verified exact-source scope and findings dispositions. Parent source collection is not cold review.",
+  "collectionQualification": "Source/checks complete; actual final schema/whitespace/5878-binding and six-path checks are retained as separate final receipts to avoid self-referential evidence hashes. Native candidate/promotion/cleanup and fresh core review remain parent-owned."
+}

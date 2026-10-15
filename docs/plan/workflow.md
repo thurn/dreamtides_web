@@ -790,6 +790,48 @@ Every brief contains, verbatim or by exact path:
     test name or the reason no test applies;
   - anything left undone.
 
+### Bounded source packets
+
+Plan executors and cold reviewers can prepare one source packet per command:
+
+```sh
+node scripts/plan-source-packet.mjs --git <full-commit-oid> --path docs/plan/workflow.md --packet 1 --max-bytes 10000
+node scripts/plan-source-packet.mjs --file <explicit-path> --sha256 <full-source-sha256> --packet 1 --max-bytes 10000
+```
+
+`--git` requires a full lowercase commit OID and literal repository-relative
+path; output binds its exact blob OID. Replacement refs and lazy fetching are
+disabled. `--file` requires the expected full lowercase SHA256 of a regular
+file's bytes. A symlink may name a regular target; the opened target and final
+pathname must agree. Observed identity/size/mtime/ctime changes during reading
+are refused. The hash binds the bytes read, without promising that the pathname
+stays unchanged after the final check. The command performs no filesystem writes;
+reads can update operating-system access metadata.
+
+Optional `--start N --end N` selects zero-based, half-open UTF8 byte offsets,
+defaulting to the full source. Offsets splitting a code point and malformed
+UTF8 are refused. Text preserves BOM, CRLF and control bytes. Packets can split
+a long line, while each code point stays intact. `--packet` is one-based.
+The JSON line carries full-source/range/content SHA256 hashes, source identity,
+packet index/count and absolute content offsets. Its following terminal line
+is `END_SOURCE_PACKET <sha256-of-exact-JSON-line-including-newline>`.
+
+The mandatory ceiling bounds literal emitted UTF8 bytes, including JSON
+escaping, metadata, both newlines and terminal marker. A conservative envelope
+reserve may refuse a ceiling that could fit a tighter encoding. Invalid input
+or preparation failure emits no stdout; successful preparation emits exactly
+one selected packet. The CLI writes neither source files nor receipts.
+
+Invoke **one packet per outer tool call**, with adequate inner and outer token
+budgets. Verify the complete returned JSON line, terminal marker/body hash,
+content hash, offsets and intended source epoch. Request subsequent indices
+with the same source, range and ceiling; current-file reads retain the same
+expected full hash. Retain actual delivery evidence separately. An emitted
+packet certifies preparation only: tool delivery and semantic reading require
+consumer verification. A clipped call is excluded and repaired with a smaller
+ceiling. Complete source coverage requires all requested contiguous ranges;
+paths, hashes and preparation markers alone do not establish a completed read.
+
 ### Collect a result
 
 When a subagent returns:
@@ -1087,6 +1129,9 @@ completed read. Required historical material can be copied to scratch from
 its exact source object with provenance recorded by the dispatcher. Keep the
 reviewer's access limited to reading the snapshot, required scratch inputs
 and review instructions. Preserve configured tool restrictions.
+The [bounded source packet procedure](#bounded-source-packets) can prepare
+these reads; its preparation markers retain the same delivery and completeness
+qualification.
 
 The reviewer returns a scope account before its findings: each required path
 or section is complete, partial or unread, with any denied read identified.
