@@ -11,6 +11,7 @@ export * from "./choose-one";
 export * from "./choose-player";
 export * from "./choose-subtype";
 export * from "./copy-card";
+export * from "./copy-abandoned-subject";
 export * from "./cost-modifier";
 export * from "./cost-modifier-reclaim";
 export * from "./cost-setter";

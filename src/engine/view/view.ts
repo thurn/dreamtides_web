@@ -228,6 +228,8 @@ export interface QueuedTriggerView {
   /** Public predeparture spark, retained while this trigger's source is identifiable. */
   readonly lastKnownSubjectSpark?: number;
   readonly handCopy?: import("../state/types").HandCopyContext;
+  /** Public copiable values; their departed physical subject may be unidentified. */
+  readonly abandonedCopy?: import("../state/types").AbandonedCopyContext;
   /** A private hand-copy action whose flags remain unknown. */
   readonly handCopyHidden?: true;
   /** Copiable values of an original this viewer observed, without its hidden alias. */
@@ -608,6 +610,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         ? { handCopy: copy(trigger.handCopy) }
         : { handCopyHidden: true, ...(!trigger.handCopy.originalHiddenFrom.includes(viewer)
             ? { handCopyOriginal: { printing: copy(trigger.handCopy.printing), variant: copy(trigger.handCopy.variant) } } : {}) }),
+      ...(trigger.abandonedCopy === undefined || !causeKnown ? {} : { abandonedCopy: copy(trigger.abandonedCopy) }),
       ...(trigger.lastKnownSubjectCost === undefined || !causeKnown || trigger.subjectHiddenFrom?.includes(viewer) === true ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
       ...(trigger.lastKnownSubjectSpark === undefined || !causeKnown ? {} : { lastKnownSubjectSpark: trigger.lastKnownSubjectSpark }),
       ...(trigger.lastKnownSubjectCost !== undefined && causeKnown && trigger.subjectHiddenFrom?.includes(viewer) === true ? { subjectCostHidden: true } : {}),

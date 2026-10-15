@@ -215,6 +215,7 @@ interface Match {
   readonly abandonedNamed?: AbandonedNamedBinding;
   readonly triggeringAbility?: QueuedTrigger["triggeringAbility"];
   readonly handCopy?: HandCopyContext;
+  readonly abandonedCopy?: import("../state/types").AbandonedCopyContext;
   readonly subject: InstanceId | null;
   /** Visibility captured at a confirmed public departure, even when the subject has since ceased to exist. */
   readonly subjectHiddenFrom?: readonly Side[];
@@ -586,6 +587,15 @@ function readsSubjectCopy(node: EffectNode, seen = new Set<EffectNode>()): boole
   return [...definition.children?.(node) ?? [], ...definition.deferred?.(node) ?? []].some(child => readsSubjectCopy(child, seen));
 }
 
+/** A future floating body binds its own abandonment, outside this immediate occasion. */
+function readsAbandonedSubjectCopy(node: EffectNode, seen = new Set<EffectNode>()): boolean {
+  if (seen.has(node) || node.op === "floatingTrigger") return false;
+  seen.add(node);
+  if (node.op === "copyAbandonedSubjectAsFigment") return true;
+  const definition = primitiveDefinition(node.op);
+  return [...definition.children?.(node) ?? [], ...definition.deferred?.(node) ?? []].some(child => readsAbandonedSubjectCopy(child, seen));
+}
+
 /** Whether this body reads the retained subject value, including nested value and target fields. */
 function readsSubjectValue(value: unknown, kind: "subjectCost" | "subjectSpark", seen = new Set<object>()): boolean {
   if (value === null || typeof value !== "object" || seen.has(value)) return false;
@@ -604,7 +614,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
   const effect = triggerBody(ctx.catalog, matched.origin, matched.ability, matched.node).effect;
   const linkedSource = matched.linkedSource ?? (everyNode(effect).some((node) => node.op === "linkedBanish")
     ? linkedSourceContext(ctx, matched.source, matched.origin, matched.ability) : null);
-  const { lastKnownSubjectCost: armedCost, lastKnownSubjectSpark: armedSpark, handCopy, triggeringAbility, abandonedNamed, ...record } = matched;
+  const { lastKnownSubjectCost: armedCost, lastKnownSubjectSpark: armedSpark, handCopy, abandonedCopy, triggeringAbility, abandonedNamed, ...record } = matched;
   const requested = requestedAbandonedNames(effect);
   const retainedAbandoned = abandonedNamed === undefined || requested.length === 0 ? undefined
     : { ...structuredClone(abandonedNamed), readerObservedBy: SIDES.filter(viewer => sourceObserved(ctx, matched.source, viewer)),
@@ -619,6 +629,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
       readerObservedBy: triggeringAbility.readerObservedBy ?? matched.repeated?.observedBy ?? SIDES.filter(viewer => sourceObserved(ctx, matched.source, viewer)),
     })) as NonNullable<QueuedTrigger["triggeringAbility"]> }),
     ...(handCopy === undefined || !readsCopy ? {} : { handCopy }),
+    ...(abandonedCopy === undefined || !readsAbandonedSubjectCopy(effect) ? {} : { abandonedCopy }),
     ...(subjectCost === undefined ? {} : { lastKnownSubjectCost: subjectCost }),
     ...(subjectSpark === undefined ? {} : { lastKnownSubjectSpark: subjectSpark }),
     ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
@@ -645,6 +656,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
     node: trigger.node,
     subject: trigger.subject,
     ...(trigger.handCopy === undefined ? {} : { handCopy: trigger.handCopy }),
+    ...(trigger.abandonedCopy === undefined ? {} : { abandonedCopy: trigger.abandonedCopy }),
     ...(trigger.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
     ...(trigger.lastKnownSubjectSpark === undefined ? {} : { lastKnownSubjectSpark: trigger.lastKnownSubjectSpark }),
     ...(trigger.subjectHiddenFrom === undefined ? {} : { subjectHiddenFrom: [...trigger.subjectHiddenFrom] }),
@@ -687,6 +699,7 @@ function matchListener(ctx: StepContext, side: Side, listener: Listener, event: 
       ...(event.kind !== "abandoned" || match.subject !== event.instance || armed.abandonedNamed === undefined ? {} : { abandonedNamed: armed.abandonedNamed }),
       ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
       ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),
+      ...(armed.abandonedCopy === undefined || event.kind !== "abandoned" || match.subject !== event.instance ? {} : { abandonedCopy: armed.abandonedCopy }),
     }, armedAbility ?? null);
     if (queued !== null) admitted.push(queued);
   });
@@ -739,6 +752,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
       ...(event.kind !== "abandoned" || match.subject !== event.instance || armed.abandonedNamed === undefined ? {} : { abandonedNamed: armed.abandonedNamed }),
       ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
       ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),
+      ...(armed.abandonedCopy === undefined || event.kind !== "abandoned" || match.subject !== event.instance ? {} : { abandonedCopy: armed.abandonedCopy }),
       ...(captured === undefined ? {} : { captured: [...captured] }),
       ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     }, floating.trigger));
@@ -804,13 +818,14 @@ function armLookbacks(ctx: StepContext, event: LeftPlayEvent, departing: Departu
   const { state, catalog } = ctx;
   const leaving = state.instances[event.instance];
   const origin = leaving === undefined ? null : instanceOrigin(leaving);
-  const armed = kinds.map((kind) => ({ kind, abilities: new Map<OncePerTurnKey, ArmedAbility>(), floating: [] as FloatingEffect[] }));
+  const armed = kinds.map((kind) => ({ kind, abilities: new Map<OncePerTurnKey, ArmedAbility>(), floating: [] as FloatingEffect[], copySubject: false }));
   for (const side of SIDES) {
     for (const listener of listeners(state, side, departing)) {
       originAbilities(catalog, listener.origin).forEach((ability, index) => {
         if (ability.kind !== "triggered" || !(listener.emblem || worksInZone(ability.zone, listener.zone))) return;
         for (const entry of armed) {
           if (!armsFor(state, catalog, entry.kind, ability.trigger, event.instance, listener)) continue;
+          if (entry.kind === "abandoned" && readsAbandonedSubjectCopy(ability.effect)) entry.copySubject = true;
           entry.abilities.set(oncePerTurnKey(listener.source, index), {
             listener, blocks: triggerBlocks(state, catalog, listener.source, index), usesFrom: ctx.triggerUses.oncePerTurn.length,
           });
@@ -822,12 +837,17 @@ function armLookbacks(ctx: StepContext, event: LeftPlayEvent, departing: Departu
     const floating = floatingListener(ctx, effect);
     if (floating === null) continue;
     for (const entry of armed) {
-      if (armsFor(state, catalog, entry.kind, floating.trigger, event.instance, floating.listener)) entry.floating.push(effect);
+      if (armsFor(state, catalog, entry.kind, floating.trigger, event.instance, floating.listener)) {
+        entry.floating.push(effect);
+        if (entry.kind === "abandoned" && effect.change.kind === "trigger" &&
+            readsAbandonedSubjectCopy(triggerBody(catalog, effect.change.ref.origin, effect.change.ref.ability, effect.change.ref.node).effect)) entry.copySubject = true;
+      }
     }
   }
   const abandonedNamed = captureAbandonedNamed(ctx, event, origin, armed);
   const namedReaders: AbandonedNamedBinding[] = [];
-  for (const { kind, abilities, floating } of armed) ctx.armedTriggers[kind].set(event.instance, { abilities, floating, origin,
+  for (const { kind, abilities, floating, copySubject } of armed) ctx.armedTriggers[kind].set(event.instance, { abilities, floating, origin,
+    ...(copySubject && leaving !== undefined ? { abandonedCopy: structuredClone({ printing: leaving.printing, variant: leaving.variant }) } : {}),
     ...(abandonedNamed === undefined ? {} : { abandonedNamed, namedReaders }),
     ...(leaving === undefined ? {} : {
       subjectCost: copiableCostOf(state, catalog, event.instance),

@@ -25,6 +25,7 @@ import {
   chooseOnePrimitive,
   choosePlayerPrimitive,
   chooseSubtypePrimitive,
+  copyAbandonedSubjectAsFigmentPrimitive,
   copyCardPrimitive,
   copyCardTimesPrimitive,
   costModifierPrimitive,
@@ -162,6 +163,9 @@ const DEFINITIONS = {
   },
   get chooseSubtype() {
     return chooseSubtypePrimitive;
+  },
+  get copyAbandonedSubjectAsFigment() {
+    return copyAbandonedSubjectAsFigmentPrimitive;
   },
   get copyCard() {
     return copyCardPrimitive;

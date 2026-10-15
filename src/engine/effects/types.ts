@@ -91,6 +91,7 @@ export interface EffectEnv {
   readonly abandonedNamed?: import("../state/types").AbandonedNamedBinding;
   readonly triggeringAbility?: import("../state/types").QueuedTrigger["triggeringAbility"];
   readonly handCopy?: import("../state/types").HandCopyContext;
+  readonly abandonedCopy?: import("../state/types").AbandonedCopyContext;
   /** Transient conditional bindings in this lexical resolution; rebuilt from answers on replay. */
   readonly resolutionChoiceScope?: ResolutionChoiceScope;
   readonly linkedSource: LinkedSourceContext | null;

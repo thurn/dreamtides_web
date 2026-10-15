@@ -12,6 +12,8 @@ export interface TriggerQueuedEvent {
   readonly triggeringAbility?: import("../../state/types").QueuedTrigger["triggeringAbility"];
   readonly linkedSource?: LinkedSourceContext;
   readonly handCopy?: import("../../state/types").HandCopyContext;
+  /** Authoritative causal values; public event projection omits them. */
+  readonly abandonedCopy?: import("../../state/types").AbandonedCopyContext;
   readonly kind: "triggerQueued";
   /** The engine names it; it is `null` as a side that cannot identify it sees the event (`eventSeenBy`). */
   readonly source: AbilitySource | null;
@@ -47,7 +49,7 @@ export const triggerQueued: EventDefinition<TriggerQueuedEvent> = {
   kind: "triggerQueued",
   privateTo: (event, state) => sourcePrivacy(event.source, state),
   redact(event, viewer, state) {
-    const { triggeringAbility: _cause, abandonedNamed: _abandoned, ...publicEvent } = event;
+    const { triggeringAbility: _cause, abandonedNamed: _abandoned, abandonedCopy: _abandonedCopy, ...publicEvent } = event;
     const redacted = redactSource(publicEvent, viewer, state);
     const { lastKnownSubjectCost: _subjectCost, ...withoutCost } = redacted;
     const costSeen = redacted.source !== null && redacted.subjectHiddenFrom?.includes(viewer) !== true ? redacted : withoutCost;

@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.615",
+  "phase": 5,
+  "implementMin": 126.22503216666668,
+  "implementWindow": {
+    "start": "2026-10-15T02:23:57.454000+00:00",
+    "end": "2026-10-15T04:30:10.955930+00:00"
+  },
+  "localValidationS": {
+    "focused": 76.48588013648987,
+    "review": 163.80658102035522,
+    "knip": 12.072820901870728,
+    "schema": 0.4577300548553467,
+    "reviewFull": 117.0541980266571,
+    "counterfactual": 39.48841047286987
+  },
+  "hostLoad": 18.0361328125,
+  "testDelta": {
+    "files": 1,
+    "lines": 402,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "integration-conflict",
+      "minutes": 21.141261366666665,
+      "note": "Conservative recovery envelope from actual post-first-update receipt 2026-10-15T04:09:02.480248+00:00 through 2026-10-15T04:30:10.955930+00:00; candidate terminal timestamp unknown. Includes clean rollback, parking/native update, own-hunk reapplication, coordination, joint fixture correction and combined checks. Mixed elapsed wall scope; no claim of isolated lost/edit/CPU/lock-wait time. Includes evidence packaging correction; old immutable Git receipts retain their original cutoffs."
+    }
+  ]
+}

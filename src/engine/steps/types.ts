@@ -110,6 +110,8 @@ export interface ArmedTriggers {
   readonly origin: AbilityOrigin | null;
   /** The departing subject’s copiable cost before it leaves play. */
   readonly subjectCost?: number;
+  /** Copiable values for an immediate abandoned-copy reader, before departure. */
+  readonly abandonedCopy?: import("../state/types").AbandonedCopyContext;
   /** Public effective spark immediately before the subject leaves play. */
   readonly subjectSpark?: number;
 }

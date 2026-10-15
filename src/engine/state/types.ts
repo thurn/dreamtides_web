@@ -587,6 +587,12 @@ export interface LinkedBanishedCards extends LinkedSourceContext {
   readonly cards: readonly { readonly instance: InstanceId; readonly enteredBanishedAt: number }[];
 }
 
+/** Public copiable values captured before a confirmed abandoned subject leaves play. */
+export interface AbandonedCopyContext {
+  readonly printing: Printing;
+  readonly variant: Variant;
+}
+
 export interface HandCopyContext {
   readonly printing: Extract<Printing, { readonly kind: "card" }>;
   readonly variant: Variant;
@@ -635,6 +641,8 @@ interface QueuedAbility {
   readonly linkedSource?: LinkedSourceContext;
   /** Captured hand-copy action, only for a body copying its subject. */
   readonly handCopy?: HandCopyContext;
+  /** Retained only for a body copying its confirmed abandoned subject. */
+  readonly abandonedCopy?: AbandonedCopyContext;
   /** Effective spark just before the source last left play, while this trigger waited. */
   readonly lastKnownSourceSpark?: number;
   readonly source: AbilitySource;

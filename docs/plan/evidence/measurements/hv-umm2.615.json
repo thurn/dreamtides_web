@@ -1,0 +1,984 @@
+{
+  "bead": "hv-umm2.615",
+  "base": "2327d24778810fb760c60662de502d70ed57951e",
+  "sourceEpoch": "source-epoch-1.json",
+  "sourceManifest": {
+    "src/engine/effects/interpreter.ts": "813a5d694a446a7d868cfb19400885ca914a0ecf340adfbe81d6c1e06318dd34",
+    "src/engine/effects/primitives/index.ts": "e2979d487ad88eef2342a54854cbf5945dc0c5a3bac7def1cfefc035cb449248",
+    "src/engine/effects/registry.ts": "6afcb71d259dc072b760dca0ca8074e5357c0e8c71c979a96e52c63a770004bc",
+    "src/engine/effects/types.ts": "b27516691916f512e419e8737a6929b066745cf1f2ebb17119f00fdf1a068630",
+    "src/engine/events/kinds/trigger-queued.ts": "339e7eff7ea68d6f2d9e162c9f5dac22568c78f80c8ad2c6a22b8f2d207ffb95",
+    "src/engine/state/types.ts": "a7fc25e0b2bc6ac5f4174d1fa4cb3569f4c6d9970bc5fe3dc36ade5b0ddb3321",
+    "src/engine/steps/types.ts": "0f4beedf4673bfb71db93ff098ddf3ecea37162423106b7a292f887db8ce2c57",
+    "src/engine/triggers/matcher.ts": "b8d81a7c77a53d74e3f99e1f85a4884acca89c14026f49da76a64424949b2b0a",
+    "src/engine/triggers/resolve.ts": "14afdd30aa2c6e4ecf14e767684e5d87600b2e1589eff8decfbe34e8b003d994",
+    "src/engine/view/determinize.ts": "f158d684c3b7f2ed19f5bf819a32378be280fad72e5d329b0e5fd455ceadfb9f",
+    "src/engine/view/view.ts": "2e9d91b863444bccd87cdea1592a8953f219ed869f9d5fb3e69002175e1567d4",
+    "src/rules/battle/fold.ts": "dc1aedddb4bfa96adbb5f382eaa6c44bd5351929d4def6b112a4b084ed7c9a13",
+    "src/engine/effects/primitives/contracts/copy-abandoned-subject.contracts.ts": "34742f4de310aa518b3d262936c7fee9a6560e8f8697059896f601831b709067",
+    "src/engine/effects/primitives/copy-abandoned-subject.ts": "12323910297575391ac30f844ca9925eb6b0906068993dcb63c7842d55211a91"
+  },
+  "sourceManifestSHA256": "d7bef8c9461fccef3e9d6d2f11ab8f2fc67f1882b12769b2174f5743ecd5f5a3",
+  "authority": {
+    "planSHA256": "0a3ab4016101d60bfdd468e32ad7fbbbf22597e1bfc83653e859bc13289e2bf1",
+    "stage1ManifestSHA256": "d815ae04fab03fd706c38b251cde36f21686aeeafd96a17287730b3eead13c0f",
+    "exactPaths": 14,
+    "evidencePaths": 4
+  },
+  "windows": {
+    "originalInclusiveGross": {
+      "start": "2026-10-15T02:23:57.454000+00:00",
+      "preGitCutoff": "2026-10-15T04:30:10.955930+00:00",
+      "elapsedS": 7573.50193,
+      "qualification": "Conservative original dispatch-to-cutoff gross wall interval includes previous ownership, unvalidated checkpoint, prerequisite wait, released/inactive gap, current-owner preparation and verification. Not productive time; inactive gap cannot be precisely attributed from present receipts."
+    },
+    "newOwnerContinuationGross": {
+      "start": "2026-10-15T03:50:30.168282+00:00",
+      "preGitCutoff": "2026-10-15T04:30:10.955930+00:00",
+      "elapsedS": 2380.787648,
+      "qualification": "New-owner continuation gross wall interval includes source reads, native admission wait, implementation, tests, evidence and packaging. Parent setup/install are separate. CPU/edit/idle attribution unknown."
+    },
+    "automaticGit": "Original18c90 receipt /tmp/root-615/final-git-receipt.json and prior76b receipt /tmp/root-615/conflict-recovery-01/final-amend-git-receipt.json remain immutable. Superseding evidence correction uses /tmp/root-615/conflict-recovery-01/final-amend-repair-02-receipt.json. Automatic dates; no postcommit tracked rewrite."
+  },
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "abandoned-copy|malformed zero-spark|guards exact saved tuples"
+      ],
+      "started": "2026-10-15T03:55:43.663789+00:00",
+      "ended": "2026-10-15T03:55:57.645008+00:00",
+      "elapsed_s": 13.98132610321045,
+      "exit": 0,
+      "source_manifest": "source-epoch-1.json",
+      "receipt": "check-01-focused.json",
+      "receiptSHA256": "b610c467cacd8b94700bc88b7d23c7a53f883cb39f62493984617940791bd0fe",
+      "stdoutSHA256": "86f550a81e071349087636f1144620ce89b53e7bca4b1c745639dc6ada4d42fa"
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers-redaction.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "-t",
+        "copy|abandon|last.*played|retained|fold|saved|reload|stale|concurrent|prompt"
+      ],
+      "started": "2026-10-15T03:57:20.796069+00:00",
+      "ended": "2026-10-15T03:57:41.752376+00:00",
+      "elapsed_s": 20.956366062164307,
+      "exit": 0,
+      "source_manifest": "source-epoch-1.json",
+      "manifest_unchanged": true,
+      "receipt": "check-02-controls.json",
+      "receiptSHA256": "cf9d0f64ac89d0e73f7df742e0e40590417326a286a2ab75e07ccfd2daec5820",
+      "stdoutSHA256": "3cce963916b4c2d3adecea547bdc9572a3b8ffb1de7883a6e01a63d49738fb98"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "started": "2026-10-15T03:59:05.589170+00:00",
+      "ended": "2026-10-15T04:00:33.377780+00:00",
+      "elapsed_s": 87.78867101669312,
+      "exit": 0,
+      "source_manifest": "source-epoch-1.json",
+      "manifest_unchanged": true,
+      "receipt": "check-03-review.json",
+      "receiptSHA256": "c7d206477b446dd5579b150d4ba4ea0c1f692fc1d5aac376dc46fc9a0f919425",
+      "stdoutSHA256": "e2777618352aded66bd58119b6eaef329e01e812be19a0e2cbf31b0e0e2d8380"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "started": "2026-10-15T04:00:44.482198+00:00",
+      "ended": "2026-10-15T04:00:50.993312+00:00",
+      "elapsed_s": 6.511152982711792,
+      "exit": 0,
+      "source_manifest": "source-epoch-1.json",
+      "manifest_unchanged": true,
+      "receipt": "check-04-knip.json",
+      "receiptSHA256": "a0769651ee094277368491d20771c50f9f19581cf829eea59816ab7d60948d41",
+      "stdoutSHA256": "6d5038bad2ce94b5e5cb0fc08ff9d1d537117c7f2c9c34d4f59f9639e9a7c5b4"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "started": "2026-10-15T04:01:18.891737+00:00",
+      "ended": "2026-10-15T04:01:19.019158+00:00",
+      "elapsed_s": 0.1274549961090088,
+      "exit": 0,
+      "source_manifest": "source-epoch-1.json",
+      "manifest_unchanged": true,
+      "receipt": "check-05-schema.json",
+      "receiptSHA256": "511cf27ab931df9e702a4574786217a9b760a3206d8aed4ab58bced410d0afd4",
+      "stdoutSHA256": "48083197bea155fd7ca975279c59957ef557d2cc33325db2c8c355e9ad48843b"
+    },
+    {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-615/run-full-inner.py"
+      ],
+      "started": "2026-10-15T04:02:37.772677+00:00",
+      "ended": "2026-10-15T04:04:34.826827+00:00",
+      "elapsed_s": 117.0541980266571,
+      "exit": 0,
+      "source_manifest": "source-epoch-1.json",
+      "manifest_unchanged": true,
+      "receipt": "check-06-full.json",
+      "receiptSHA256": "f243ed2eb6d65080da0e2eb8b9853f30dec5bf9a069ffb73c799c29c7e27f69d",
+      "stdoutSHA256": "95f88351267c32abfa5783c96eeef6230389bcd22571e734bb82ff9bc9becccc"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "started": "2026-10-15T04:05:34.602739+00:00",
+      "ended": "2026-10-15T04:05:34.751453+00:00",
+      "elapsed_s": 0.14875197410583496,
+      "exit": 0,
+      "source_manifest": "source-epoch-1.json",
+      "manifest_unchanged": true,
+      "receipt": "check-07-final-schema.json",
+      "receiptSHA256": "8cf62220fd23222adfe710d540ade03ce35d3cd64b4669980200020a82bfc198",
+      "stdoutSHA256": "48083197bea155fd7ca975279c59957ef557d2cc33325db2c8c355e9ad48843b"
+    }
+  ],
+  "counterfactuals": [
+    {
+      "counterfactual": 1,
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "copies a ceased"
+      ],
+      "started": "2026-10-15T03:56:31.613979+00:00",
+      "ended": "2026-10-15T03:56:36.909742+00:00",
+      "elapsed_s": 5.2958128452301025,
+      "exit": 1,
+      "mutated_sha256": {
+        "src/engine/effects/primitives/copy-abandoned-subject.ts": "aff7385ea14919db405513f7875a5a33b7cc58361f0389a34ab1b2a9ca5683b0"
+      },
+      "baseline_source_manifest": "source-epoch-1.json",
+      "restored_exact_manifest": true,
+      "receipt": "counterfactual-1.json",
+      "receiptSHA256": "316021edac697cd46c753561298fec2939c4364afef8b6cd8845244cf21883ad",
+      "stdoutSHA256": "1752335eb5aa5d10c6537ec631ed7d215ef7aa03cef2831de6b43c65bfea0e8e"
+    },
+    {
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "copies a ceased"
+      ],
+      "started": "2026-10-15T03:58:05.116058+00:00",
+      "ended": "2026-10-15T03:58:11.233129+00:00",
+      "elapsed_s": 6.1169517040252686,
+      "exit": 1,
+      "mutated_sha256": "2dfd2214712604b436e3449930bc7d36ccea8cedf0e6512ba29518fc7880e9c1",
+      "reason": "silent live lookup loses ceased original: expected output cardinality assertion failure",
+      "restored_exact_manifest": true,
+      "receipt": "counterfactual-1b.json",
+      "receiptSHA256": "f47457dc450e88464346b58e314c189206ab85ff5ab0163c526f6dbae95ad904",
+      "stdoutSHA256": "4a34c6101c36b1f426c84674736bf30f401a775516dc88b3227fe53a62b3ff9c"
+    },
+    {
+      "counterfactual": 2,
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "preserves complete D39"
+      ],
+      "started": "2026-10-15T03:56:36.911791+00:00",
+      "ended": "2026-10-15T03:56:41.742628+00:00",
+      "elapsed_s": 4.830864906311035,
+      "exit": 1,
+      "mutated_sha256": {
+        "src/engine/triggers/matcher.ts": "41dae0ba3d4a9feded644431e4de395ba5b803fbccd243b5668f84e16705605c"
+      },
+      "baseline_source_manifest": "source-epoch-1.json",
+      "restored_exact_manifest": true,
+      "receipt": "counterfactual-2.json",
+      "receiptSHA256": "818a2532da22b62735aebac2642123b58a1c2150d0789808f12d488f5c88d455",
+      "stdoutSHA256": "e29269476371dc545c3da8e2308364a2a884bcce0d139ea1fd83f9aed21cc1a9"
+    },
+    {
+      "counterfactual": 3,
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "copies no temporary spark"
+      ],
+      "started": "2026-10-15T03:56:41.744890+00:00",
+      "ended": "2026-10-15T03:56:47.190788+00:00",
+      "elapsed_s": 5.445940017700195,
+      "exit": 1,
+      "mutated_sha256": {
+        "src/engine/effects/primitives/copy-abandoned-subject.ts": "a1f39842839d2363ea0705ae4d9eadb4ed4298efa9ffed1fdc286e6916b09634",
+        "src/engine/triggers/matcher.ts": "a60bdfe307c6d5966e8911c6e339a0035720f4586e844eae13497e5712a0ba04"
+      },
+      "baseline_source_manifest": "source-epoch-1.json",
+      "restored_exact_manifest": true,
+      "receipt": "counterfactual-3.json",
+      "receiptSHA256": "678fd8b159e3b3d0f8ddd74c94d53fda63d1575e957c0204e9e9afd0978d749e",
+      "stdoutSHA256": "3f7db5217d5f38af3c6a7fa5ce2eaa1183e6c397ab4f0aea9681278b15db1ca6"
+    },
+    {
+      "counterfactual": 4,
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps the trigger controller"
+      ],
+      "started": "2026-10-15T03:56:47.198316+00:00",
+      "ended": "2026-10-15T03:56:52.014251+00:00",
+      "elapsed_s": 4.815985918045044,
+      "exit": 1,
+      "mutated_sha256": {
+        "src/engine/effects/primitives/copy-abandoned-subject.ts": "f696825a3a24f5393647100498c2101dd71ae3090f3374eb54bc85f69810373c"
+      },
+      "baseline_source_manifest": "source-epoch-1.json",
+      "restored_exact_manifest": true,
+      "receipt": "counterfactual-4.json",
+      "receiptSHA256": "9d414fca92f5061107723014f1f142df0d6922b65ae9d7aa6737fb261962a7b1",
+      "stdoutSHA256": "27b6b54c3a8d8a95eb0dc7be4421efc7c9ed6e59635f9108de5145eb5c47a454"
+    },
+    {
+      "counterfactual": 5,
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "preserves known copies through both views"
+      ],
+      "started": "2026-10-15T03:56:52.015881+00:00",
+      "ended": "2026-10-15T03:56:58.871184+00:00",
+      "elapsed_s": 6.855350017547607,
+      "exit": 1,
+      "mutated_sha256": {
+        "src/engine/view/view.ts": "00be51da64409b29eb17b7590b0a8db04367a76bcca136358cadbd96c3ba94f8"
+      },
+      "baseline_source_manifest": "source-epoch-1.json",
+      "restored_exact_manifest": true,
+      "receipt": "counterfactual-5.json",
+      "receiptSHA256": "d37b4c48365d4e513105f0a3051b32181e258e0f116a27b20d395c01d988cf16",
+      "stdoutSHA256": "7b3b3d2cd3988ee93b70d3e626fe9afe162a073e718cb17225c6ee0993055c1d"
+    },
+    {
+      "counterfactual": 6,
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "preserves known copies through both views"
+      ],
+      "started": "2026-10-15T03:56:58.873433+00:00",
+      "ended": "2026-10-15T03:57:05.000816+00:00",
+      "elapsed_s": 6.12750506401062,
+      "exit": 1,
+      "mutated_sha256": {
+        "src/engine/view/determinize.ts": "0f52d401c1e803f6f133634c395601e00cba33e06b4977548e066f015994bf3c"
+      },
+      "baseline_source_manifest": "source-epoch-1.json",
+      "restored_exact_manifest": true,
+      "receipt": "counterfactual-6.json",
+      "receiptSHA256": "e576e5116cd66eeb0f485a3ce843299770994e71550489221c69a5a503e37e73",
+      "stdoutSHA256": "811ee38cc034532c4fa8096c6d1e5b86265ab014c8ac4924a15663b5ea061c8e"
+    }
+  ],
+  "counterfactualDisposition": {
+    "1": "runtime missing-live-original exception inside resolving step; expected causal failure, retained separately",
+    "1b": "explicit output cardinality assertion red for silent ceased live lookup",
+    "2": "four full-Variant equality assertions red",
+    "3": "two output gainedSpark/counters exclusion assertions red",
+    "4": "two original-controller recipient assertions red",
+    "5": "two hidden-cause tuple-absence assertions red",
+    "6": "two known-copy determinized-view equality assertions red",
+    "restoration": "All14 source hashes restored exactly after each mutation. Public contract frozen before every mutant."
+  },
+  "hostLoadSamples": [
+    {
+      "time": "2026-10-15T03:55:49.356Z",
+      "load": 29.994140625,
+      "receipt": "check-01-focused.json"
+    },
+    {
+      "time": "2026-10-15T03:57:23.234Z",
+      "load": 25.5263671875,
+      "receipt": "check-02-controls.json"
+    },
+    {
+      "time": "2026-10-15T03:59:10.684Z",
+      "load": 18.0361328125,
+      "receipt": "check-03-review.json"
+    },
+    {
+      "time": "2026-10-15T03:59:10.687Z",
+      "load": 18.0361328125,
+      "receipt": "check-03-review.json"
+    },
+    {
+      "time": "2026-10-15T04:00:46.319Z",
+      "load": 19.328125,
+      "receipt": "check-04-knip.json"
+    },
+    {
+      "time": "2026-10-15T04:02:42.132Z",
+      "load": 9.1025390625,
+      "receipt": "check-06-full.json"
+    },
+    {
+      "time": "2026-10-15T04:02:42.133Z",
+      "load": 9.1025390625,
+      "receipt": "check-06-full.json"
+    },
+    {
+      "time": "2026-10-15T04:02:42.135Z",
+      "load": 9.1025390625,
+      "receipt": "check-06-full.json"
+    },
+    {
+      "time": "2026-10-15T04:03:12.171Z",
+      "load": 8.13671875,
+      "receipt": "check-06-full.json"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "check-03-review.json"
+      }
+    }
+  },
+  "resources": {
+    "servers": [],
+    "browserContexts": [],
+    "providers": [],
+    "ownedTestSessions": "All reported terminal receipts only; no long-lived resources. Parent owns full review heavy slot and cold reviewer."
+  },
+  "scope": "One capability, no production consumer. Original248 retains productionUUID/fullrecipe/weighted300/browser/D21/coverage and final joins. No new UI workflow, event/prompt/change kind. copies/catalog/history/hash/clone/DSL/layers/UI/config unchanged.",
+  "review": "Heavy review:full passed387 files/10149 tests and production bundle; required fresh read-only fork-none Codex core review and certified delivery remain parent-owned and pending; final packaging ACK is recorded.",
+  "fullReview": {
+    "inner": {
+      "acquiredUTC": "2026-10-15T04:02:38.407085+00:00",
+      "lockHolderPID": 43300,
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "sourceFreeze": "source-ready-entire-manifest.json",
+      "sourceFreezeSHA256": "f0195d5c02e8e3f153a84b0f443fa28676d777de775283b57f171ea9d866c1f1",
+      "childPID": 43327,
+      "childPGID": 43327,
+      "endedUTC": "2026-10-15T04:04:34.634010+00:00",
+      "executionElapsedS": 116.22687005996704,
+      "exit": 0,
+      "entireFreezeUnchanged": true
+    },
+    "outer": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-615/run-full-inner.py"
+      ],
+      "started": "2026-10-15T04:02:37.772677+00:00",
+      "ended": "2026-10-15T04:04:34.826827+00:00",
+      "elapsed_s": 117.0541980266571,
+      "exit": 0,
+      "source_manifest": "source-epoch-1.json",
+      "manifest_unchanged": true
+    },
+    "innerReceiptSHA256": "99900ec809fed7ea0f640602b6d0f44abb35038c6246a2a589d236ff39a65f75",
+    "resources": {
+      "at": "2026-10-15T04:04:59.491193+00:00",
+      "groupsFromOwnFullCommand": {
+        "43327": "absent",
+        "45993": "absent",
+        "46172": "absent",
+        "46555": "absent",
+        "46687": "absent",
+        "47354": "absent",
+        "47398": "absent",
+        "48047": "absent",
+        "48106": "absent",
+        "48291": "absent",
+        "48771": "absent",
+        "49073": "absent",
+        "49451": "absent",
+        "50103": "absent",
+        "50244": "absent",
+        "50334": "absent",
+        "50951": "absent",
+        "51068": "absent",
+        "51595": "absent",
+        "52227": "absent",
+        "52392": "absent",
+        "52479": "absent",
+        "53125": "absent",
+        "53212": "absent",
+        "54254": "absent",
+        "54728": "absent",
+        "55491": "absent",
+        "56568": "absent",
+        "56838": "absent",
+        "57449": "absent",
+        "57565": "absent",
+        "58124": "absent",
+        "58658": "absent",
+        "58862": "absent",
+        "58948": "absent",
+        "59595": "absent",
+        "59680": "absent",
+        "60448": "absent",
+        "60777": "absent",
+        "60904": "absent",
+        "61070": "absent",
+        "61797": "absent",
+        "61945": "absent",
+        "62538": "absent",
+        "62595": "absent",
+        "62782": "absent",
+        "63396": "absent",
+        "63746": "absent",
+        "63874": "absent",
+        "66082": "absent",
+        "66648": "absent",
+        "68850": "absent",
+        "69335": "absent",
+        "70816": "absent",
+        "71485": "absent",
+        "72051": "absent",
+        "75799": "absent",
+        "76244": "absent"
+      },
+      "fullInner": {
+        "acquiredUTC": "2026-10-15T04:02:38.407085+00:00",
+        "lockHolderPID": 43300,
+        "command": [
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "sourceFreeze": "source-ready-entire-manifest.json",
+        "sourceFreezeSHA256": "f0195d5c02e8e3f153a84b0f443fa28676d777de775283b57f171ea9d866c1f1",
+        "childPID": 43327,
+        "childPGID": 43327,
+        "endedUTC": "2026-10-15T04:04:34.634010+00:00",
+        "executionElapsedS": 116.22687005996704,
+        "exit": 0,
+        "entireFreezeUnchanged": true
+      },
+      "featureServers": [],
+      "featureBrowserContexts": [],
+      "featureProviders": [],
+      "priorReadOnlyResourceProbe": "one scratch set-union typo raised before checking any group; corrected with no runtime effect"
+    },
+    "qualification": "Exactly one parent-acknowledged review:full under the primary heavy lock; outer elapsed includes lock acquisition, manifest verification and process setup. Start-to-acquisition envelope is not isolated lock wait."
+  },
+  "operationalReadSlips": [
+    "Read-only dry patch compatibility check refused only copies.ts because current220 extracted the constructor; no patch was applied in Stage1.",
+    "One attempted retained-last-played contract filename was absent; actual owning contract paths were found with rg.",
+    "One zsh runtime/engine* read glob matched no paths; a scoped rg read was used.",
+    "One scratch resource-probe set-union typo failed before checking any process; corrected. These slips are distinct from acceptance failures and caused no repository/runtime mutation."
+  ],
+  "sourceProtection": {
+    "ordinaryEntireFreezeSHA256": "69f1f882bf6ec06ff23ead57102da5666f93e4e357d8659dde591f39d4311ccf",
+    "fullEntireFreezeSHA256": "f0195d5c02e8e3f153a84b0f443fa28676d777de775283b57f171ea9d866c1f1",
+    "initialTracked": 5350,
+    "initialOutsideOwn14Unchanged": 5338,
+    "existingTouched": 12,
+    "newSourceTest": 2,
+    "ownEvidence": 4,
+    "mirrors": 2515
+  },
+  "integration": {
+    "base": "60c227afbe848db6c8bd72465cdd8eece908825d",
+    "incompleteUpdatedCheckpoint": "196e57a50790a1ba8a59cca5ca63557a7db3f184",
+    "originalValidatedSource": "18c90c4769d794778f58a5974874c94a191805fc",
+    "originalValidatedSourceWindows": {
+      "originalInclusiveGross": {
+        "start": "2026-10-15T02:23:57.454000+00:00",
+        "preGitCutoff": "2026-10-15T04:08:25.803078+00:00",
+        "elapsedS": 6268.349078,
+        "qualification": "Conservative original dispatch-to-cutoff gross wall interval includes previous ownership, unvalidated checkpoint, prerequisite wait, released/inactive gap, current-owner preparation and verification. Not productive time; inactive gap cannot be precisely attributed from present receipts."
+      },
+      "newOwnerContinuationGross": {
+        "start": "2026-10-15T03:50:30.168282+00:00",
+        "preGitCutoff": "2026-10-15T04:08:25.803078+00:00",
+        "elapsedS": 1075.634796,
+        "qualification": "New-owner continuation gross wall interval includes source reads, native admission wait, implementation, tests, evidence and packaging. Parent setup/install are separate. CPU/edit/idle attribution unknown."
+      },
+      "automaticGit": "Automatic dates without override; actual Git completion, cutoff-to-terminal tail and clean status are retained externally in /tmp/root-615/final-git-receipt.json. No postcommit tracked rewrite."
+    },
+    "firstCandidate": {
+      "id": "01a13dbf-8d5c-7eb0-a011-5d550c387c75",
+      "outcome": "terminal merge-conflict; never authorized; actual terminal timestamp unknown",
+      "firstNativeUpdate": {
+        "at": "2026-10-15T04:09:02.480248+00:00",
+        "exit": 5
+      }
+    },
+    "recovery": {
+      "start": "2026-10-15T04:09:02.480248+00:00",
+      "measuredThrough": "2026-10-15T04:30:10.955930+00:00",
+      "elapsedS": 1268.475682,
+      "qualification": "Conservative mixed recovery envelope starts at actual post-first-native-update receipt, not inferred candidate terminal. Includes parking/native update/reapplication/coordination/new joint fixture correction and combined validation. Not isolated editing, lock wait, productive or lost time. A parent orchestration JavaScript syntax error occurred before any shell/effect and was corrected without source impact."
+    },
+    "parking": {
+      "started": "2026-10-15T04:10:10.987410+00:00",
+      "ended": "2026-10-15T04:10:11.038231+00:00",
+      "originalSource": "18c90c4769d794778f58a5974874c94a191805fc",
+      "checkpoint": "c9710c9d6493ef5deac7d1ff9efdce9241d1c09d",
+      "base": "2327d24778810fb760c60662de502d70ed57951e",
+      "parent": "2327d24778810fb760c60662de502d70ed57951e",
+      "clean": true,
+      "parked3SHA256": {
+        "src/engine/events/kinds/trigger-queued.ts": "d2bab9ce0446455288281baf3c2d615d824694eaaa97f8676ab6536505190174",
+        "src/engine/triggers/matcher.ts": "fd00a2343abec21dbd5e0ceb0d20d929bbee24bbe4eb0b9d0948289f3ac791f4",
+        "src/engine/view/determinize.ts": "e333ccf221f87ff922448e90af0089f0570cdc2c3f72e292d0cdf4e7957bafd4"
+      },
+      "other15SourceSHA256": {
+        "docs/plan/evidence/friction/hv-umm2.615.json": "3acfb46667acddbafb35625f908858954ee6e90b2eda62d2ffd7aba6d8a0e57b",
+        "docs/plan/evidence/measurements/hv-umm2.615.json": "a2e20f9f9ee6b0dec5e49449ba0bff84dfd8c179267fcd3c10e55c3dcd177ef8",
+        "docs/plan/evidence/measurements/hv-umm2.615.md": "18727fc8cdbc4b3d371346d88c7b5eba99f723a93a2931947e23a7edfe40f442",
+        "docs/plan/evidence/pre-existing/hv-umm2.615.md": "698f1e5f74aafcfebfa64c2200a1be84a577f09bdfd1dc7f13cff7c9282ae1d9",
+        "src/engine/effects/interpreter.ts": "813a5d694a446a7d868cfb19400885ca914a0ecf340adfbe81d6c1e06318dd34",
+        "src/engine/effects/primitives/contracts/copy-abandoned-subject.contracts.ts": "34742f4de310aa518b3d262936c7fee9a6560e8f8697059896f601831b709067",
+        "src/engine/effects/primitives/copy-abandoned-subject.ts": "12323910297575391ac30f844ca9925eb6b0906068993dcb63c7842d55211a91",
+        "src/engine/effects/primitives/index.ts": "e2979d487ad88eef2342a54854cbf5945dc0c5a3bac7def1cfefc035cb449248",
+        "src/engine/effects/registry.ts": "6afcb71d259dc072b760dca0ca8074e5357c0e8c71c979a96e52c63a770004bc",
+        "src/engine/effects/types.ts": "b27516691916f512e419e8737a6929b066745cf1f2ebb17119f00fdf1a068630",
+        "src/engine/state/types.ts": "a7fc25e0b2bc6ac5f4174d1fa4cb3569f4c6d9970bc5fe3dc36ade5b0ddb3321",
+        "src/engine/steps/types.ts": "0f4beedf4673bfb71db93ff098ddf3ecea37162423106b7a292f887db8ce2c57",
+        "src/engine/triggers/resolve.ts": "14afdd30aa2c6e4ecf14e767684e5d87600b2e1589eff8decfbe34e8b003d994",
+        "src/engine/view/view.ts": "2e9d91b863444bccd87cdea1592a8953f219ed869f9d5fb3e69002175e1567d4",
+        "src/rules/battle/fold.ts": "dc1aedddb4bfa96adbb5f382eaa6c44bd5351929d4def6b112a4b084ed7c9a13"
+      },
+      "other15Exact": true,
+      "sourceBackupsVerified": true,
+      "candidateSubmitted": false,
+      "testsRun": false,
+      "gitExit": 0
+    },
+    "nativeUpdate": {
+      "start": "2026-10-15T04:10:44.020079+00:00",
+      "end": "2026-10-15T04:10:44.426758+00:00",
+      "exit": 0
+    },
+    "reapplicationProof": {
+      "at": "2026-10-15T04:13:23.094769+00:00",
+      "updatedHead": "196e57a50790a1ba8a59cca5ca63557a7db3f184",
+      "newBase": "60c227afbe848db6c8bd72465cdd8eece908825d",
+      "operations": [
+        {
+          "path": "src/engine/events/kinds/trigger-queued.ts",
+          "before": "  readonly handCopy?: import(\"../../state/types\").HandCopyContext;",
+          "after": "  readonly handCopy?: import(\"../../state/types\").HandCopyContext;\n  /** Authoritative causal values; public event projection omits them. */\n  readonly abandonedCopy?: import(\"../../state/types\").AbandonedCopyContext;",
+          "count": 1
+        },
+        {
+          "path": "src/engine/events/kinds/trigger-queued.ts",
+          "before": "triggeringAbility: _cause, abandonedNamed: _abandoned, ...publicEvent",
+          "after": "triggeringAbility: _cause, abandonedNamed: _abandoned, abandonedCopy: _abandonedCopy, ...publicEvent",
+          "count": 1
+        },
+        {
+          "path": "src/engine/triggers/matcher.ts",
+          "before": "  readonly handCopy?: HandCopyContext;",
+          "after": "  readonly handCopy?: HandCopyContext;\n  readonly abandonedCopy?: import(\"../state/types\").AbandonedCopyContext;",
+          "count": 1
+        },
+        {
+          "path": "src/engine/triggers/matcher.ts",
+          "before": "/** Whether this body reads the retained subject value, including nested value and target fields. */",
+          "after": "/** A future floating body binds its own abandonment, outside this immediate occasion. */\nfunction readsAbandonedSubjectCopy(node: EffectNode, seen = new Set<EffectNode>()): boolean {\n  if (seen.has(node) || node.op === \"floatingTrigger\") return false;\n  seen.add(node);\n  if (node.op === \"copyAbandonedSubjectAsFigment\") return true;\n  const definition = primitiveDefinition(node.op);\n  return [...definition.children?.(node) ?? [], ...definition.deferred?.(node) ?? []].some(child => readsAbandonedSubjectCopy(child, seen));\n}\n\n/** Whether this body reads the retained subject value, including nested value and target fields. */",
+          "count": 1
+        },
+        {
+          "path": "src/engine/triggers/matcher.ts",
+          "before": "lastKnownSubjectSpark: armedSpark, handCopy, triggeringAbility, abandonedNamed, ...record",
+          "after": "lastKnownSubjectSpark: armedSpark, handCopy, abandonedCopy, triggeringAbility, abandonedNamed, ...record",
+          "count": 1
+        },
+        {
+          "path": "src/engine/triggers/matcher.ts",
+          "before": "    ...(handCopy === undefined || !readsCopy ? {} : { handCopy }),",
+          "after": "    ...(handCopy === undefined || !readsCopy ? {} : { handCopy }),\n    ...(abandonedCopy === undefined || !readsAbandonedSubjectCopy(effect) ? {} : { abandonedCopy }),",
+          "count": 1
+        },
+        {
+          "path": "src/engine/triggers/matcher.ts",
+          "before": "    ...(trigger.handCopy === undefined ? {} : { handCopy: trigger.handCopy }),",
+          "after": "    ...(trigger.handCopy === undefined ? {} : { handCopy: trigger.handCopy }),\n    ...(trigger.abandonedCopy === undefined ? {} : { abandonedCopy: trigger.abandonedCopy }),",
+          "count": 1
+        },
+        {
+          "path": "src/engine/triggers/matcher.ts",
+          "before": "      ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),",
+          "after": "      ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),\n      ...(armed.abandonedCopy === undefined || event.kind !== \"abandoned\" || match.subject !== event.instance ? {} : { abandonedCopy: armed.abandonedCopy }),",
+          "count": 2
+        },
+        {
+          "path": "src/engine/triggers/matcher.ts",
+          "before": "const armed = kinds.map((kind) => ({ kind, abilities: new Map<OncePerTurnKey, ArmedAbility>(), floating: [] as FloatingEffect[] }));",
+          "after": "const armed = kinds.map((kind) => ({ kind, abilities: new Map<OncePerTurnKey, ArmedAbility>(), floating: [] as FloatingEffect[], copySubject: false }));",
+          "count": 1
+        },
+        {
+          "path": "src/engine/triggers/matcher.ts",
+          "before": "          if (!armsFor(state, catalog, entry.kind, ability.trigger, event.instance, listener)) continue;",
+          "after": "          if (!armsFor(state, catalog, entry.kind, ability.trigger, event.instance, listener)) continue;\n          if (entry.kind === \"abandoned\" && readsAbandonedSubjectCopy(ability.effect)) entry.copySubject = true;",
+          "count": 1
+        },
+        {
+          "path": "src/engine/triggers/matcher.ts",
+          "before": "      if (armsFor(state, catalog, entry.kind, floating.trigger, event.instance, floating.listener)) entry.floating.push(effect);",
+          "after": "      if (armsFor(state, catalog, entry.kind, floating.trigger, event.instance, floating.listener)) {\n        entry.floating.push(effect);\n        if (entry.kind === \"abandoned\" && effect.change.kind === \"trigger\" &&\n            readsAbandonedSubjectCopy(triggerBody(catalog, effect.change.ref.origin, effect.change.ref.ability, effect.change.ref.node).effect)) entry.copySubject = true;\n      }",
+          "count": 1
+        },
+        {
+          "path": "src/engine/triggers/matcher.ts",
+          "before": "  for (const { kind, abilities, floating } of armed) ctx.armedTriggers[kind].set(event.instance, { abilities, floating, origin,",
+          "after": "  for (const { kind, abilities, floating, copySubject } of armed) ctx.armedTriggers[kind].set(event.instance, { abilities, floating, origin,\n    ...(copySubject && leaving !== undefined ? { abandonedCopy: structuredClone({ printing: leaving.printing, variant: leaving.variant }) } : {}),",
+          "count": 1
+        },
+        {
+          "path": "src/engine/view/determinize.ts",
+          "before": "shown.handCopy !== undefined || shown.handCopyHidden === true ? `i${next++}` : null",
+          "after": "shown.handCopy !== undefined || shown.handCopyHidden === true || shown.abandonedCopy !== undefined ? `i${next++}` : null",
+          "count": 1
+        },
+        {
+          "path": "src/engine/view/determinize.ts",
+          "before": "shown.subject === null && (shown.handCopy !== undefined || shown.handCopyHidden === true)",
+          "after": "shown.subject === null && (shown.handCopy !== undefined || shown.handCopyHidden === true || shown.abandonedCopy !== undefined)",
+          "count": 1
+        },
+        {
+          "path": "src/engine/view/determinize.ts",
+          "before": "      ...(shown.handCopy === undefined ? {} : { handCopy: copy(shown.handCopy) }),",
+          "after": "      ...(shown.handCopy === undefined ? {} : { handCopy: copy(shown.handCopy) }),\n      ...(shown.abandonedCopy === undefined ? {} : { abandonedCopy: copy(shown.abandonedCopy) }),",
+          "count": 1
+        }
+      ],
+      "peerSHA256": {
+        "src/engine/events/kinds/trigger-queued.ts": "ab7e7f9378d5561ca18d5fde006d96d8767d2a2ad7649627641115a2a2d52276",
+        "src/engine/triggers/matcher.ts": "53c93f2642f7c6939d708e9cc0af3fc52a9cb304b7abc60d8607c17dc524e65b",
+        "src/engine/view/determinize.ts": "594bc9eb2b74436480e153f4e9bb236453099e16df942b0f27e2a2270bfbe10e"
+      },
+      "combinedSHA256": {
+        "src/engine/events/kinds/trigger-queued.ts": "68841bc889370e7ef0708f1d46755883b6e752b8ad74edc2cf09d386da854efc",
+        "src/engine/triggers/matcher.ts": "f40defad139e3754c3a5b441bbb8ed68ae837586b46c433c907781da9bb2a8ac",
+        "src/engine/view/determinize.ts": "f14c43aadb82110c5308b68cffe2b903f1758ce801b363962e2033f325c11080"
+      },
+      "inverseSHA256": {
+        "src/engine/events/kinds/trigger-queued.ts": "ab7e7f9378d5561ca18d5fde006d96d8767d2a2ad7649627641115a2a2d52276",
+        "src/engine/triggers/matcher.ts": "53c93f2642f7c6939d708e9cc0af3fc52a9cb304b7abc60d8607c17dc524e65b",
+        "src/engine/view/determinize.ts": "594bc9eb2b74436480e153f4e9bb236453099e16df942b0f27e2a2270bfbe10e"
+      },
+      "inverseOwnOnlyRecoversExactPeer3": true,
+      "outsideUpdated3Changed": [],
+      "privateContractSHA256": "34742f4de310aa518b3d262936c7fee9a6560e8f8697059896f601831b709067"
+    },
+    "reapplicationProofSHA256": "d0316e060d2701da4768e19b7cddd1e42fde5bfd8f37a30ce24d3ec690f101dd",
+    "sourceEpoch": "source-epoch-4.json",
+    "sourceManifest": {
+      "src/engine/effects/interpreter.ts": "398bf3c48a39f3098fca872d8945c9e768e26fc65c407244e1f7de80e9211c7a",
+      "src/engine/effects/primitives/index.ts": "92db95ab521c1c54df95ff6175ac341730d65dd053b8f07f07e4e301f13bd4ab",
+      "src/engine/effects/registry.ts": "43b75b377e359639a24e52a98177e756f9d79c8890daabfce6283db56468a09e",
+      "src/engine/effects/types.ts": "8f684ef541519851d4d7abc342e9cc157c54db5e80e3a4bbe15f6766e2e9c8be",
+      "src/engine/events/kinds/trigger-queued.ts": "68841bc889370e7ef0708f1d46755883b6e752b8ad74edc2cf09d386da854efc",
+      "src/engine/state/types.ts": "8ce63ceab2bd382a6e3304fb79b8fc3a2cffa41e8fffe74e08894b336730187f",
+      "src/engine/steps/types.ts": "35d02b31cb1e7e6480b71e6f056e631cf27fd9dc2bd9d9ea182cdff24ff9f42a",
+      "src/engine/triggers/matcher.ts": "f40defad139e3754c3a5b441bbb8ed68ae837586b46c433c907781da9bb2a8ac",
+      "src/engine/triggers/resolve.ts": "63f52c0c18f0dc00f62379e3203e2e1f0feecc741dcd9c0590e03c8ca795a8c3",
+      "src/engine/view/determinize.ts": "f14c43aadb82110c5308b68cffe2b903f1758ce801b363962e2033f325c11080",
+      "src/engine/view/view.ts": "90fcab7f0f49a1b21a0128bcaa74969b21c2b0ac87c7f8d225c2c619a67b9451",
+      "src/rules/battle/fold.ts": "661d6611b50dc08ba6f062645a88d77e9891703fd17acf045bda207e0cc90a06",
+      "src/engine/effects/primitives/contracts/copy-abandoned-subject.contracts.ts": "c8717da7589d36f147278a53bd310734ac297cceec0e5b77188843aaa845f71c",
+      "src/engine/effects/primitives/copy-abandoned-subject.ts": "12323910297575391ac30f844ca9925eb6b0906068993dcb63c7842d55211a91"
+    },
+    "contract": {
+      "lines": 402,
+      "expandedCases": 34,
+      "addedJointCases": 2,
+      "scope": "One actual public listener sequences abandoned copy and retained Dawn execution. Both controllers, ceased figmentCopy/later-hidden ordinary card, both viewers, both tuple fields, save acceptance, null alias, view/determinize/view equality, exactly one zero-spark copy then one named child gaining2 current energy. No named-runtime rewrite.",
+      "firstFailure": "integration-check-02-joint exit1: new test incorrectly read SideSetup energy name on public SideState, giving undefined/NaN. Corrected only two reads to currentEnergy; introduced fixture mistake, not product/named-runtime defect.",
+      "correctedPass": "integration-check-03-joint exit0, both expanded cases and all inner states/viewers."
+    },
+    "checks": [
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/triggers/triggers-redaction.test.ts",
+          "src/engine/fold/fold-prompts.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/rules/battle/engine-battle-intents.test.ts",
+          "-t",
+          "copy|abandon|named|last.*played|retained|fold|saved|reload|stale|concurrent|prompt"
+        ],
+        "started": "2026-10-15T04:13:38.901984+00:00",
+        "ended": "2026-10-15T04:13:53.004209+00:00",
+        "elapsed_s": 14.102256059646606,
+        "exit": 0,
+        "source_manifest": "source-epoch-2.json",
+        "manifest_unchanged": true,
+        "receipt": "integration-check-01-controls.json",
+        "receiptSHA256": "373a87e836fb6175a7c127cff29aeb76b8bbe66b5b2bfc32f5341bd5180a3e41",
+        "stdoutSHA256": "092ac752af206ce266820bc3f6e1ae194321352a307422c9bdcf0199461125f2"
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "keeps joint copy and named bindings"
+        ],
+        "started": "2026-10-15T04:15:50.785645+00:00",
+        "ended": "2026-10-15T04:15:57.823124+00:00",
+        "elapsed_s": 7.037511825561523,
+        "exit": 1,
+        "source_manifest": "source-epoch-3.json",
+        "manifest_unchanged": true,
+        "receipt": "integration-check-02-joint.json",
+        "receiptSHA256": "fe1df7b9c00ca58d7efa74ee4a5883dda80ce69061bcf5e8005c14bf0e62128e",
+        "stdoutSHA256": "1b0dcee64e9409ed83a3121110a9f3e68bcd0813377cf4b74b4b422a20a32585"
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "keeps joint copy and named bindings"
+        ],
+        "started": "2026-10-15T04:16:25.527512+00:00",
+        "ended": "2026-10-15T04:16:32.795943+00:00",
+        "elapsed_s": 7.2684619426727295,
+        "exit": 0,
+        "source_manifest": "source-epoch-4.json",
+        "manifest_unchanged": true,
+        "receipt": "integration-check-03-joint.json",
+        "receiptSHA256": "e61320e9d18fd85cde2e3fd4dc23a589b4a123cc09b90b798d143dbf210de016",
+        "stdoutSHA256": "13566bc7922b116020b41786e9a81ceac544387d7fc4db70637149c394932d6e"
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/triggers/triggers-redaction.test.ts",
+          "src/engine/fold/fold-prompts.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/rules/battle/engine-battle-intents.test.ts",
+          "-t",
+          "copy|abandon|named|malformed zero-spark|last.*played|retained|fold|saved|reload|stale|concurrent|prompt"
+        ],
+        "started": "2026-10-15T04:18:03.280156+00:00",
+        "ended": "2026-10-15T04:18:16.420076+00:00",
+        "elapsed_s": 13.139958143234253,
+        "exit": 0,
+        "source_manifest": "source-epoch-4.json",
+        "manifest_unchanged": true,
+        "receipt": "integration-check-04-controls.json",
+        "receiptSHA256": "bc54cc1f079694861a13fe9618cd9a3878cf9975764aad2c0519a01c0dc8e680",
+        "stdoutSHA256": "65fe17513a3c3d15d222371011f015b475d13775e4fd7a9d7e5393667c62a7f5"
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "started": "2026-10-15T04:18:58.725665+00:00",
+        "ended": "2026-10-15T04:20:14.743505+00:00",
+        "elapsed_s": 76.01791000366211,
+        "exit": 0,
+        "source_manifest": "source-epoch-4.json",
+        "manifest_unchanged": true,
+        "receipt": "integration-check-05-review.json",
+        "receiptSHA256": "bc3b0a43b0f9be622889370451f3c7793322d9c1d0c0cee1eb6d854da3d90ee3",
+        "stdoutSHA256": "6863fa19ddcceb5310e30edc07604c03dc4095249aaefa1ab1b9cbeb43deacbb"
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "started": "2026-10-15T04:20:17.554140+00:00",
+        "ended": "2026-10-15T04:20:23.115771+00:00",
+        "elapsed_s": 5.5616679191589355,
+        "exit": 0,
+        "source_manifest": "source-epoch-4.json",
+        "manifest_unchanged": true,
+        "receipt": "integration-check-06-knip.json",
+        "receiptSHA256": "57603377bd4a98aa1a86ff909d22affd146f567519663331e30f393735321529",
+        "stdoutSHA256": "ef32116443c4c7bddefe28f426c6231e25f59360e1317d71501985dc00b00092"
+      },
+      {
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "started": "2026-10-15T04:21:06.305819+00:00",
+        "ended": "2026-10-15T04:21:06.487291+00:00",
+        "elapsed_s": 0.18152308464050293,
+        "exit": 0,
+        "source_manifest": "source-epoch-4.json",
+        "manifest_unchanged": true,
+        "receipt": "integration-check-07-schema.json",
+        "receiptSHA256": "3d557ff62b20d1e56ae5d9dceeea90e2b8dc848029c60a3478eec1a225518e35",
+        "stdoutSHA256": "504718fb31754f9ea08d5ac96e8e1fcc02b99b4996f870e1866546df0512752c"
+      }
+    ],
+    "originalEvidenceQualification": "All original checks/full/faults and original source hashes above remain bound18c90 with373-line/32-case contract. Their receipt bytes were not changed or relabeled as combined-source runs. Combined source uses402 lines/34 cases and only the actual integration checks listed here; no repeated heavy/fuzz/browser run.",
+    "finalAmend": "Parent evidence-only correction authorized; actual automatic-date Git bracket/source/tail retained externally at /tmp/root-615/conflict-recovery-01/final-amend-repair-02-receipt.json. Prior receipts remain immutable.",
+    "terminalSummaries": [
+      {
+        "receipt": "integration-check-01-controls.json",
+        "exit": 0,
+        "filesPassed": 5,
+        "testsPassed": 1261,
+        "sourceManifest": "source-epoch-2.json"
+      },
+      {
+        "receipt": "integration-check-02-joint.json",
+        "exit": 1,
+        "filesPassed": null,
+        "testsPassed": null,
+        "sourceManifest": "source-epoch-3.json"
+      },
+      {
+        "receipt": "integration-check-03-joint.json",
+        "exit": 0,
+        "filesPassed": 1,
+        "testsPassed": 2,
+        "sourceManifest": "source-epoch-4.json"
+      },
+      {
+        "receipt": "integration-check-04-controls.json",
+        "exit": 0,
+        "filesPassed": 5,
+        "testsPassed": 1264,
+        "sourceManifest": "source-epoch-4.json"
+      },
+      {
+        "receipt": "integration-check-05-review.json",
+        "exit": 0,
+        "filesPassed": 308,
+        "testsPassed": 9283,
+        "sourceManifest": "source-epoch-4.json"
+      },
+      {
+        "receipt": "integration-check-06-knip.json",
+        "exit": 0,
+        "filesPassed": null,
+        "testsPassed": null,
+        "sourceManifest": "source-epoch-4.json"
+      },
+      {
+        "receipt": "integration-check-07-schema.json",
+        "exit": 0,
+        "filesPassed": null,
+        "testsPassed": null,
+        "sourceManifest": "source-epoch-4.json"
+      }
+    ],
+    "hostLoadSamples": [
+      {
+        "time": "2026-10-15T04:13:42.270Z",
+        "load": 4.69384765625,
+        "receipt": "integration-check-01-controls.json"
+      },
+      {
+        "time": "2026-10-15T04:15:52.415Z",
+        "load": 6.72021484375,
+        "receipt": "integration-check-02-joint.json"
+      },
+      {
+        "time": "2026-10-15T04:16:27.256Z",
+        "load": 6.58349609375,
+        "receipt": "integration-check-03-joint.json"
+      },
+      {
+        "time": "2026-10-15T04:18:05.257Z",
+        "load": 5.5029296875,
+        "receipt": "integration-check-04-controls.json"
+      },
+      {
+        "time": "2026-10-15T04:19:02.368Z",
+        "load": 5.2578125,
+        "receipt": "integration-check-05-review.json"
+      },
+      {
+        "time": "2026-10-15T04:20:19.794Z",
+        "load": 17.11083984375,
+        "receipt": "integration-check-06-knip.json"
+      }
+    ],
+    "resources": {
+      "allRecordedOwnedCheckSessions": "terminal; no feature servers/browser contexts/providers or long-lived jobs",
+      "completedSessions": [
+        86086,
+        76442,
+        91357,
+        22424,
+        82882,
+        42885
+      ],
+      "fullRerun": false
+    },
+    "schemaTimingQualification": "Friction schema duration sums known original schema receipts plus integration-check-07-schema (0.18152308464050293s). The final pre-Git schema step is retained separately in final-amend-git-receipt.json and is not predicted in committed totals.",
+    "packagingCorrection": {
+      "priorSource": "76b0095c1b7a41daf7362c58202677cc8c06a786",
+      "reason": "Prior Markdown recovery duration was stale while paired JSON/friction were correct; superseded before submission. One shared cutoff now drives all three records.",
+      "source14Unchanged": true,
+      "receipt": "/tmp/root-615/conflict-recovery-01/final-amend-repair-02-receipt.json"
+    }
+  }
+}

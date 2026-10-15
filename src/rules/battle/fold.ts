@@ -1158,6 +1158,19 @@ function isHandCopyContext(value: unknown): boolean {
     new Set(value.originalHiddenFrom).size === value.originalHiddenFrom.length;
 }
 
+/** Exact data-only abandoned subject values; catalog resolution occurs before creation. */
+function isAbandonedCopyContext(value: unknown): boolean {
+  if (!isPlainRecord(value) || !hasOnlyFields(value, ["printing", "variant"]) ||
+      !isPrinting(value.printing) || !isPlainRecord(value.printing) || !isVariant(value.variant) || !isPlainRecord(value.variant)) return false;
+  const printing = value.printing;
+  const keys = printing.kind === "card" ? ["kind", "cardId"] : printing.kind === "figment" ? ["kind", "figment", "spark"] : ["kind", "cardId", "spark"];
+  return hasOnlyFields(printing, keys) &&
+    hasOnlyFields(value.variant, ["amplified", "transfigurations", "deckMods"]) &&
+    (value.variant.deckMods === undefined || isPlainRecord(value.variant.deckMods) &&
+      hasOnlyFields(value.variant.deckMods, ["sparkBonus", "costReduction", "fast", "reclaim", "typeChange"]) &&
+      (value.variant.deckMods.typeChange === null || isPlainRecord(value.variant.deckMods.typeChange) && hasOnlyFields(value.variant.deckMods.typeChange, ["cardType", "subtype"])));
+}
+
 function isQueuedTrigger(value: unknown): boolean {
   const ancestors = new Set<object>();
   let current = value;
@@ -1221,7 +1234,7 @@ function isQueuedTriggerRecord(value: unknown): boolean {
     !isPlainRecord(value.origin) || value.origin.kind === "dreamwell" || value.node !== null || value.subject !== null ||
     value.captured !== undefined || value.gain !== undefined || value.scored !== undefined || value.discardedCount !== undefined ||
     value.lastKnownSubjectCost !== undefined || value.lastKnownSubjectSpark !== undefined ||
-    value.subjectHiddenFrom !== undefined || value.handCopy !== undefined || value.linkedSource !== undefined
+    value.subjectHiddenFrom !== undefined || value.handCopy !== undefined || value.abandonedCopy !== undefined || value.linkedSource !== undefined
   )) return false;
   if (isPlainRecord(value.origin) && value.origin.kind === "dreamwell" && value.node === null && value.kind !== "dreamwellBonus") return false;
   if (value.kind === "dreamwellBonus" && (
@@ -1230,7 +1243,7 @@ function isQueuedTriggerRecord(value: unknown): boolean {
     value.source.id !== value.origin.id || value.source.side !== value.controller ||
     value.node !== null || value.subject !== null ||
     value.captured !== undefined || value.gain !== undefined || value.scored !== undefined || value.discardedCount !== undefined ||
-    value.lastKnownSourceSpark !== undefined || value.lastKnownSubjectCost !== undefined || value.lastKnownSubjectSpark !== undefined || value.subjectHiddenFrom !== undefined || value.handCopy !== undefined
+    value.lastKnownSourceSpark !== undefined || value.lastKnownSubjectCost !== undefined || value.lastKnownSubjectSpark !== undefined || value.subjectHiddenFrom !== undefined || value.handCopy !== undefined || value.abandonedCopy !== undefined
   )) return false;
   return (
     isPlainRecord(value) &&
@@ -1241,6 +1254,9 @@ function isQueuedTriggerRecord(value: unknown): boolean {
     optional((context) => isLinkedSource(context) && (context as Record<string, unknown>).source === value.source)(value.linkedSource) &&
     nullable(isIndex)(value.node) &&
     nullable(isInstanceId)(value.subject) &&
+    optional(isAbandonedCopyContext)(value.abandonedCopy) &&
+    (value.abandonedCopy === undefined || value.kind === undefined && value.subject !== null && value.handCopy === undefined &&
+      value.gain === undefined && value.scored === undefined && value.discardedCount === undefined) &&
     optional(isHandCopyContext)(value.handCopy) &&
     (value.handCopy === undefined || value.subject !== null && value.gain === undefined && value.scored === undefined && value.discardedCount === undefined && value.captured === undefined) &&
     optional(arrayOf(isSide))(value.subjectHiddenFrom) &&
