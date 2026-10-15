@@ -1,0 +1,215 @@
+{
+  "bead": "hv-umm2.737",
+  "base": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+  "implementation": "Parent directly under Justiciar mandatory no-delegation recovery; claim timestamp seconds-resolution; preclaim210 diagnostics remain separate, continuous210 window not reset.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Whole final ordinary-review invocation starting one-minute load, recorded2026-10-15T10:17:31.330380Z"
+      },
+      "implementWindow": {
+        "measuredFor": "Own737 root direct implementation from native claim through precommit cutoff, inclusive diagnostics, runtime/control, checks and delivery preparation. Final Git endpoint recorded separately, never predicted."
+      }
+    }
+  },
+  "testDeltaInterpretation": {
+    "dedicatedModules": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0,
+    "productionCodeLines": 0
+  },
+  "incident": {
+    "at": "2026-10-15T10:15:35.656Z",
+    "bead": "hv-umm2.737",
+    "authority": "Bounded same-task Justiciar incident; native737 scope/210dependency; independent fatal-provider process and absent headless-child proof plus exact missing-session observation; not automated completion-based reconciliation.",
+    "state": "own-incident-retired",
+    "archive": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json.incident-settled-hv-umm2.737-8eaf5bea-57f0-4448-8950-ea216b5a6842.json",
+    "originalSHA256": "55d90e2d4b9fac87cbe73d056021515875124faa00e37fa66694ce2cded799ba",
+    "providerCompletionReceipt": "absent, never fabricated",
+    "originalCell": "unknown transport failure remains in210ledger",
+    "processSnapshotSHA256": "91b8ff21b1db572f7460498f755c93132aa072c92a936d6cadda91d5e00035a7",
+    "sharedServiceRestart": false,
+    "foreignRecordsModified": false
+  },
+  "crashLifecycle": {
+    "at": "2026-10-15T10:15:01.296816+00:00",
+    "crashPID": 73697,
+    "crashCaptureUtc": "2026-10-15T10:07:23.846Z",
+    "replacementPID": 98583,
+    "providerCrashSHA256": "cdcf1fdc7c1c0a04a347f0f92edd6d41e88d957be79ed309aad6f239cd97622b",
+    "crashExcerptSHA256": "1f6d777268a95f25758a01c2a655a6a70ca46613b1e7d8e961ac494627007373",
+    "processSnapshotSHA256": "0cea502dc4d4e06fa492c219078ee4b627ee26a46984ee74b23178b58259a7ca",
+    "oldProviderAbsent": true,
+    "priorRunnerServerAbsent": true,
+    "headlessPlaywrightChromiumProcesses": [],
+    "qualification": "Dead old provider process + native SIGABRT/OOM lifecycle + no surviving headless Playwright Chromium process, independently of session-map absence. User Chrome and shared replacement provider preserved. No claimed mcpExecutionCompleted response; original attempt unknown."
+  },
+  "control": {
+    "at": "2026-10-15T10:16:46.345773+00:00",
+    "source": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+    "sourcePathsUnchanged": 2610,
+    "report": "invocations/sweep-aRHzfb/run-zE1NuE/sweep-b1bea643-1a7b-4e5e-b072-7174d3405421-base-enemy-attempt-1.result.json",
+    "reportSHA256": "d814bd8d584df2b366181a28ab644e459df5c1e6228dbcfcc8a310da66eec2f0",
+    "exportSHA256": "5277fccaf188b79d017dc0c8e187b6bc94ef343ec58cc7a7b16bf3a3eaccb9b5",
+    "gameId": "r9kiuv",
+    "nativeRows": 31,
+    "emptyCaps": true,
+    "result": {
+      "verdict": "pass",
+      "notes": "",
+      "failureKinds": [],
+      "lab": {
+        "card": "b1bea643-1a7b-4e5e-b072-7174d3405421",
+        "variant": "base",
+        "side": "enemy",
+        "stage": null,
+        "requestedMods": null,
+        "deckMods": null,
+        "status": "ready",
+        "reason": null,
+        "detail": null,
+        "eligibleVariants": [
+          "base",
+          "empowered",
+          "kindled",
+          "resonant",
+          "perfected"
+        ],
+        "entityKind": "card",
+        "cardStatus": "authored",
+        "cardType": "Character"
+      },
+      "zone": "play",
+      "answered": 0,
+      "passes": 1,
+      "events": [
+        "energyChanged",
+        "handEmptied",
+        "cardPlayed",
+        "resolved",
+        "materialized",
+        "challengersDesignated",
+        "phaseChanged"
+      ],
+      "screens": []
+    },
+    "ownProviderRecords": [],
+    "qualification": "Fresh737current-source control only, original210failure retained; no pixel inspection; no source edits."
+  },
+  "qualifications": [
+    "Original210 attempt remains unknown failure, not a passing emptyCaps observation; no report result/log returned by timed-out RPC.",
+    "Dead provider plus native SIGABRT/OOM and absent surviving headless Chromium establishes cessation independently of missing session; normal completion receipt absent and never fabricated.",
+    "Automatic native provider reconciliation honestly refused completion-unconfirmed; this is explicitly bounded incident-specific archive under exactkernel lock, not a policy change.",
+    "Fresh737control uses current737source, distinct from frozen210base. Original210 still needs failedcase and remaining109cells on its accepted source, all1000games with400remaining.",
+    "2,610 frozen source bindings unchanged throughoutcontrol; ephemeral caller differs from terminal only existingexport metadata/persistence and ownabsolute references; no repository code edits.",
+    "Sharedservice automatically restarted; cause of provider memory accumulation is unestablished. No sharedrestart/configuration/source/foreignrecord changes.",
+    "No screenshot pixels viewed or visual/code review claimed."
+  ],
+  "checks": {
+    "review": {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-incident737",
+      "start": "2026-10-15T10:17:31.330380+00:00",
+      "loadStart": [
+        8.15380859375,
+        10.4736328125,
+        11.79345703125
+      ],
+      "pid": 95622,
+      "childPid": 95641,
+      "end": "2026-10-15T10:17:31.659484+00:00",
+      "elapsedS": 0.3292130830232054,
+      "loadEnd": [
+        8.15380859375,
+        10.4736328125,
+        11.79345703125
+      ],
+      "exit": 0,
+      "qualification": "Entire npm quick-review invocation including actual preparation/schema/restoration. Evidence-only5pathdiff selected schema only:964records valid; zero tests executed, no testpasscount inferred."
+    },
+    "knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-incident737",
+      "start": "2026-10-15T10:17:31.329843+00:00",
+      "loadStart": [
+        8.15380859375,
+        10.4736328125,
+        11.79345703125
+      ],
+      "pid": 95623,
+      "childPid": 95640,
+      "end": "2026-10-15T10:17:39.300133+00:00",
+      "elapsedS": 7.970278583001345,
+      "loadEnd": [
+        8.5234375,
+        10.47412109375,
+        11.77783203125
+      ],
+      "exit": 0
+    },
+    "control": {
+      "label": "control",
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.737/control.observed.mjs",
+        "--bead",
+        "hv-umm2.737",
+        "--cards",
+        "b1bea643-1a7b-4e5e-b072-7174d3405421",
+        "--variants",
+        "base",
+        "--as",
+        "enemy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/browser-incident737",
+      "start": "2026-10-15T10:16:00.792724+00:00",
+      "loadStart": [
+        10.87939453125,
+        11.5927734375,
+        12.2958984375
+      ],
+      "pid": 89222,
+      "childPid": 89235,
+      "end": "2026-10-15T10:16:12.501202+00:00",
+      "elapsedS": 11.708439583017025,
+      "loadEnd": [
+        11.015625,
+        11.60693359375,
+        12.2890625
+      ],
+      "exit": 0
+    }
+  },
+  "remainingChecks": [
+    "finalfrictionschema",
+    "whitespace",
+    "exactcertifieddelivery"
+  ],
+  "normalRuntimeCleanup": {
+    "at": "2026-10-15T10:17:50.112731+00:00",
+    "ownedControlAndReviewPidsOrGroups": [
+      89222,
+      89235,
+      89272,
+      95622,
+      95641
+    ],
+    "remaining": [],
+    "ownActiveProviderRecord": false,
+    "ownServerRecord": false,
+    "normalControlCleanup": "actualrunner exit0/summarycleanup352.244ms/portfree/ownerrecordabsent. Transient freshcontrol sessionID not captured; no identity invented.",
+    "sourceSnapshot": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+    "noCodeChanges": true
+  }
+}
