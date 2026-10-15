@@ -1,0 +1,614 @@
+{
+  "bead": "hv-umm2.639",
+  "base": "27dfe4f8ee7a4d45c680715265e7e7b044345471",
+  "branch": "wt/deck-smaller-contract-639",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/deck-smaller-contract-639",
+  "clock": {
+    "claim": {
+      "claimAttempt": "2026-10-15T09:51:28.050993+00:00",
+      "claimAcknowledged": "2026-10-15T09:51:28.178506+00:00",
+      "actor": "01a13a7a-741e-7cc1-a0dd-3f8eb1805ecf"
+    },
+    "evidenceCutoff": "2026-10-15T10:02:11.537482+00:00",
+    "elapsedSecondsToCutoff": 643.358976,
+    "includes": "Continuous original parent post-claim setup/install/audit/implementation/coordination/checks/waits through cutoff. Actual Git return follows in scratch commit-tail.json; clock is never reset.",
+    "gitReturn": "Actual local Git return recorded separately in scratch tail after commit; cutoff gap must be <=60 seconds."
+  },
+  "sourceAudit": {
+    "time": "2026-10-15T09:55:30.262762+00:00",
+    "base": "27dfe4f8ee7a4d45c680715265e7e7b044345471",
+    "sources": {
+      "src/battle/integration/deck-mods.test.ts": {
+        "sha256": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+        "baselineMatches": true
+      },
+      "src/battle/integration/deck-mods/preparation.contracts.ts": {
+        "sha256": "840270d5a877d3a7ef64f04f9e6bb8cb65c4f91106c91283e25747f677996dc3",
+        "baselineMatches": true
+      },
+      "src/battle/integration/deck-mods/opening-hand.contracts.ts": {
+        "sha256": "c0649edf6e9cd1d875c04b0e6d3bab40b12ab62bb33f4390ac70a86f40bb34a5",
+        "baselineMatches": true
+      },
+      "src/battle/integration/engine-battle-init.ts": {
+        "sha256": "599b85f4552fc1659698a050a3d8da25fdb6b748d21ef12407e4d5aecc140ab9",
+        "baselineMatches": true
+      },
+      "src/engine/catalog.ts": {
+        "sha256": "42575821be65b3ae244b5c02cbecdccd6ae53b8bb40aa98a94a8b893f26282cc",
+        "baselineMatches": true
+      },
+      "src/engine/state/create.ts": {
+        "sha256": "85f715f9d8f1085902f4ba8d1eeb6de1a1b823f1d3cecc57b4703820d9f0a020",
+        "baselineMatches": true
+      },
+      "src/engine/steps/kinds/begin-battle.ts": {
+        "sha256": "3a3314adb77fdcc5c7b8785f4772289286e87d1abf03c0af0da570e1b9b82aba",
+        "baselineMatches": true
+      },
+      "src/rules/journey/reward-effects.ts": {
+        "sha256": "567d747df5377b70babaaa243399d60288fb8d08bae54280487d479abe5f2ce8",
+        "baselineMatches": true
+      },
+      "src/session/providers/exploration-provider.ts": {
+        "sha256": "39ed8f9a05494ef7279ae6362385e2c5b4cefce1ed5c3a810f42b9dff4936903",
+        "baselineMatches": true
+      }
+    },
+    "method": [
+      "Read complete public reward DTO union and provider smaller-hand resolution; actual createEngineBattleInit/engineDeckEntry/nextBattleEffects, catalog modifiedCard cost composition, create/dealtDeck, beginBattle and victorious END_BATTLE lifetime consumers.",
+      "Read 605/606 source-ledger scope and phase5.7b workflow dispatch/validation/review/resource rules. Existing eager glob is read-only. General structural transforms belong to canonical275\u2013277; delivered Amplified branch is usable here.",
+      "Journey reward is player-only; public nextBattle supports both actors. Provider effect fixed -1/+1 with no action count validation. Every dealt copy receives total discount before payment.",
+      "Synthetic fixtures only; exact native original288 snapshot retains29 productionUUIDs and all real-content acceptance."
+    ],
+    "runtime": {
+      "pid": 36690,
+      "pgid": 36690,
+      "load": [
+        10.4287109375,
+        12.798828125,
+        11.1982421875
+      ]
+    }
+  },
+  "protectedSourcesAtCutoff": {
+    "src/battle/integration/deck-mods.test.ts": {
+      "sha256": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+      "baselineMatches": true
+    },
+    "src/battle/integration/deck-mods/preparation.contracts.ts": {
+      "sha256": "840270d5a877d3a7ef64f04f9e6bb8cb65c4f91106c91283e25747f677996dc3",
+      "baselineMatches": true
+    },
+    "src/battle/integration/deck-mods/opening-hand.contracts.ts": {
+      "sha256": "c0649edf6e9cd1d875c04b0e6d3bab40b12ab62bb33f4390ac70a86f40bb34a5",
+      "baselineMatches": true
+    },
+    "src/battle/integration/engine-battle-init.ts": {
+      "sha256": "599b85f4552fc1659698a050a3d8da25fdb6b748d21ef12407e4d5aecc140ab9",
+      "baselineMatches": true
+    },
+    "src/engine/catalog.ts": {
+      "sha256": "42575821be65b3ae244b5c02cbecdccd6ae53b8bb40aa98a94a8b893f26282cc",
+      "baselineMatches": true
+    },
+    "src/engine/state/create.ts": {
+      "sha256": "85f715f9d8f1085902f4ba8d1eeb6de1a1b823f1d3cecc57b4703820d9f0a020",
+      "baselineMatches": true
+    },
+    "src/engine/steps/kinds/begin-battle.ts": {
+      "sha256": "3a3314adb77fdcc5c7b8785f4772289286e87d1abf03c0af0da570e1b9b82aba",
+      "baselineMatches": true
+    },
+    "src/rules/journey/reward-effects.ts": {
+      "sha256": "567d747df5377b70babaaa243399d60288fb8d08bae54280487d479abe5f2ce8",
+      "baselineMatches": true
+    },
+    "src/session/providers/exploration-provider.ts": {
+      "sha256": "39ed8f9a05494ef7279ae6362385e2c5b4cefce1ed5c3a810f42b9dff4936903",
+      "baselineMatches": true
+    }
+  },
+  "module": {
+    "path": "src/battle/integration/deck-mods/smaller-hand.contracts.ts",
+    "sha256": "7c92ee54cf985af464a41e6661ee73f36c135c76edaefc1e79a1aa9cd548071e",
+    "modifiedAt": "2026-10-15T09:57:45.923936+00:00",
+    "newPlainContractModules": 1,
+    "lines": 261,
+    "newCases": 10,
+    "configuredEntrypointDelta": 0,
+    "jsdomDelta": 0,
+    "runner": "Existing src/battle/integration/deck-mods.test.ts eager glob; read-only."
+  },
+  "checks": {
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T09:59:31.281672+00:00",
+      "end": "2026-10-15T09:59:36.644919+00:00",
+      "wallS": 5.3631430409732275,
+      "userS": 4.478501,
+      "sysS": 1.650289,
+      "hostLoad": [
+        8.82958984375,
+        10.66455078125,
+        10.65283203125
+      ],
+      "exitCode": 0,
+      "pid": 50911,
+      "pgid": 50911,
+      "workers": 2,
+      "terminal": true,
+      "sourceEpoch": {
+        "sha256": "7c92ee54cf985af464a41e6661ee73f36c135c76edaefc1e79a1aa9cd548071e",
+        "modifiedAt": "2026-10-15T09:57:45.923936+00:00"
+      }
+    },
+    "review-first": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T09:58:36.796813+00:00",
+      "end": "2026-10-15T09:58:58.146727+00:00",
+      "wallS": 21.349787249986548,
+      "userS": 56.102252,
+      "sysS": 8.551501,
+      "hostLoad": [
+        8.107421875,
+        10.828125,
+        10.703125
+      ],
+      "exitCode": 0,
+      "pid": 47707,
+      "pgid": 47707,
+      "workers": 2,
+      "terminal": true,
+      "sourceEpoch": {
+        "sha256": "7c92ee54cf985af464a41e6661ee73f36c135c76edaefc1e79a1aa9cd548071e",
+        "modifiedAt": "2026-10-15T09:57:45.923936+00:00"
+      }
+    },
+    "focused-first": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ],
+      "start": "2026-10-15T09:57:24.752764+00:00",
+      "end": "2026-10-15T09:57:33.912447+00:00",
+      "wallS": 9.159578207996674,
+      "userS": 7.486392,
+      "sysS": 2.875129,
+      "hostLoad": [
+        9.45947265625,
+        11.78466796875,
+        11.00439453125
+      ],
+      "exitCode": 1,
+      "pid": 43346,
+      "pgid": 43346,
+      "workers": 2,
+      "terminal": true,
+      "sourceEpoch": {
+        "sha256": "2f2ffdbbb74f317896c147979ea62e6f5071283f20e3622bea88281ec91e406f",
+        "modifiedAt": "2026-10-15T09:57:24.726156+00:00"
+      }
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T10:01:23.380194+00:00",
+      "end": "2026-10-15T10:01:23.505433+00:00",
+      "wallS": 0.12514716695295647,
+      "userS": 0.057054999999999995,
+      "sysS": 0.032712,
+      "hostLoad": [
+        8.60791015625,
+        9.9296875,
+        10.35693359375
+      ],
+      "exitCode": 0,
+      "pid": 57486,
+      "pgid": 57486,
+      "workers": 2,
+      "terminal": true,
+      "sourceEpoch": {
+        "sha256": "7c92ee54cf985af464a41e6661ee73f36c135c76edaefc1e79a1aa9cd548071e",
+        "modifiedAt": "2026-10-15T09:57:45.923936+00:00"
+      }
+    },
+    "diff-check": {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "start": "2026-10-15T10:01:23.531264+00:00",
+      "end": "2026-10-15T10:01:23.540502+00:00",
+      "wallS": 0.009140625013969839,
+      "userS": 0.003189,
+      "sysS": 0.003064,
+      "hostLoad": [
+        8.60791015625,
+        9.9296875,
+        10.35693359375
+      ],
+      "exitCode": 0,
+      "pid": 57493,
+      "pgid": 57493,
+      "workers": 2,
+      "terminal": true,
+      "sourceEpoch": {
+        "sha256": "7c92ee54cf985af464a41e6661ee73f36c135c76edaefc1e79a1aa9cd548071e",
+        "modifiedAt": "2026-10-15T09:57:45.923936+00:00"
+      }
+    },
+    "focused-second": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ],
+      "start": "2026-10-15T09:57:45.953905+00:00",
+      "end": "2026-10-15T09:57:55.556871+00:00",
+      "wallS": 9.602635791001376,
+      "userS": 7.047553,
+      "sysS": 2.910257,
+      "hostLoad": [
+        8.56201171875,
+        11.42578125,
+        10.89306640625
+      ],
+      "exitCode": 0,
+      "pid": 44653,
+      "pgid": 44653,
+      "workers": 2,
+      "terminal": true,
+      "sourceEpoch": {
+        "sha256": "7c92ee54cf985af464a41e6661ee73f36c135c76edaefc1e79a1aa9cd548071e",
+        "modifiedAt": "2026-10-15T09:57:45.923936+00:00"
+      }
+    }
+  },
+  "failureModeProof": [
+    {
+      "failure": "DTO silently dropped before engine",
+      "witness": "Actual exploration reward asserts persisted modifier and resolution DTO; real createEngineBattleInit produces exact player nextBattle; real engine dealing proves reduced hand and every physical copy discount. Real BEGIN_BATTLE/END_BATTLE lifetime tests use actual mapper output."
+    },
+    {
+      "failure": "Wrong side/variant/type receives modifier",
+      "witness": "Both-side tables prove two active discounts, ignored expired modifier, full hand/deck physical identities, preserved printed UUID/Amplified/type/spark/Fast fields and unaffected opponent. Every dealt copy receives total cost reduction, including undealt cards."
+    },
+    {
+      "failure": "Ordering versus transfiguration/payment is incorrect",
+      "witness": "Real engineDeckEntry carries delivered Amplified and Character-to-Event type changes beside persistent reduction 1; temporary reduction 1 quotes/spends3 on printed split-orb cost 5, resolves Amplified 2 points, and discounts a second play. Source journey retains permanent1 after temporary expiry. General structural transforms remain 275\u2013277/original acceptance."
+    },
+    {
+      "failure": "Invalid/stale/replay input changes state",
+      "witness": "Existing public provider event-fold fixture alternates branded clients and bounces duplicate resolution plus stale version/encounter/reroll/visited site. Both-side engine tests cover wrong actor, illegal answer, stale prompt, serialized pending reload, cancellation, cancelled-attempt stale answer, duplicate committed answer, deterministic replay, immutable input and committed atomic snapshots. END_BATTLE refuses unfinished and duplicate completion."
+    },
+    {
+      "failure": "Synthetic proof substitutes for original 20 both-side/judgment acceptance",
+      "witness": "This module uses two synthetic UUIDs and 40 physical copies per controller. Current original288 native snapshot retains all 29 filed production UUIDs, full authoring/recipes/rules/weighted300/preflight/sweep/D21/coverage, >=20 eligible real cards EACH controller, one judgment per modification kind, actual encounter-to-battle empty-Caps QA and original final joins. No production UUID or acceptance is transferred."
+    }
+  ],
+  "qualification": {
+    "failedFirstRun": "Three authored-fixture failures, not product RED: opposing card zone-entry timestamp reflects changed deal order; two lifecycle fixtures inherited incompatible fixed draft-pool card100. Only authorized module fixtures corrected. Complete failed raw log retained; focused-second/review-first/Knip qualify final source epoch.",
+    "deliveredTransforms": "Amplified ability selection and type/persistent/temporary/payment composition only. Canonical275\u2013277 and original288 retain full structural transforms/content acceptance; source presence is not behavior proof.",
+    "providerFixedEffect": "Actual smaller-hand provider effect is -1hand/+1discount with no count validation. Tests do not invent action count rejection. Journey reward maps player only; both-side tests use public engine nextBattle with actual engineDeckEntry values.",
+    "pendingAndFailure": "Reward resolution and initial dealing are synchronous; they expose no reward-specific pending/cancel/fault transition. Public pending play exercises cancellation/reload/atomic state. No fault injector, fake consumer or production counterfactual mutation is used. Broader engine fault recovery remains engine-owned.",
+    "lifetime": "Actual victorious END_BATTLE consumes a single-battle reward and decrements a two-battle modifier to 1; fresh real mapped battle applies only retained temporary effects while permanent entry reduction survives. Source entries and input DTOs remain immutable."
+  },
+  "originalAcceptance": {
+    "owner": "hv-umm2.288",
+    "nativeSnapshot": "original-288-native.json",
+    "sha256": "6beb02e30ca7c89971814bf7945a54bbba02d512381cd78d4b88365764685881",
+    "filedUuidCount": 29,
+    "filedUuids": [
+      "a5042cfa-d3dd-4a62-b4e2-5d86d3cc2874",
+      "49273949-f29c-440f-b843-5a9d0640c236",
+      "c0d41e23-2f38-4d17-a1a3-32285b7e4da6",
+      "92feb9c6-efb6-48da-ba52-936841f17de8",
+      "4ebf0221-0b1b-4a47-9d68-0138cdba2cfb",
+      "c7c50596-f234-4f4e-823d-88700dc1ab99",
+      "a6d3bfe2-72d9-42d7-8380-fe97fff4de47",
+      "38549dea-c5b6-49df-bda9-d621a7e0ca6f",
+      "8b3c547f-3043-4d29-b40c-3629a38f848f",
+      "472e903b-f832-4cd9-90ab-82dee9f8177c",
+      "1bf1f186-404a-44f2-a705-6474fca1ddf6",
+      "3d435a07-0fae-46cb-b589-03bb93b15c55",
+      "7bcb0ab4-5d61-41ca-8f88-c9d9502ef82b",
+      "09917d76-41ef-4117-a0e6-84f716663df2",
+      "285662bc-bb49-489f-9ae2-c957e218aeba",
+      "3994f237-6cdc-4047-b98d-97e7f31fcfb0",
+      "fb695274-f200-4f17-8dc5-7745ae63a2f9",
+      "514d3ba6-e57a-438e-8dfd-28cf7db97e5d",
+      "e9875a87-289d-40b1-a19e-2e566c3b332d",
+      "8c2fbeca-9f8e-4156-9437-ae3405daff0e",
+      "144f5e25-c537-4d71-8dab-7de719eb93a5",
+      "c890dbf0-4d74-4a0e-8ffc-2e5aef3cb38f",
+      "ee5061c9-ec09-4b86-b5aa-8cef605a1796",
+      "eb514a7e-b571-45c5-b672-488df11e1fa4",
+      "af570fe6-7543-4c9a-9b1e-a103cd739945",
+      "8e112255-2140-4e46-bb60-d30d286fc8ac",
+      "f6bf3f1f-ef1d-4f94-8a85-b8620c7bfc6a",
+      "2ff475a8-37b2-4cd2-ad8b-648968b27ec3",
+      "07145c6c-20f3-4a2d-9058-d8dba4fc23e0"
+    ],
+    "retained": "Complete original production union/recipes/rules/weighted300/preflight/sweep/D21/coverage,20 eligible real cards EACH controller, judgment per kind, actual encounter\u2192battle/Caps and original final joins; no transfer or waiver."
+  },
+  "rawEvidence": {
+    "directory": "/tmp/dreamtides-mod-contract-01a13a7a/hv-umm2.639",
+    "hashes": [
+      {
+        "file": "before-claim.json",
+        "sha256": "6cacbab7c146a10fe73e7fbf5ea2e11110e47b6374946341e4f63d44be12337d"
+      },
+      {
+        "file": "claim.json",
+        "sha256": "2e6e1cfe75e677369eabe53e443100f16437e7d9def0719f4b8f76aa34d23ddd"
+      },
+      {
+        "file": "clock.json",
+        "sha256": "0d665b2acd69e726fe98a1612ce9e023738220356aafbfdef90bc3e45afa09a7"
+      },
+      {
+        "file": "diff-check-start.json",
+        "sha256": "ac0807deba3bfca28231732468ae64d57be2b362c3aabda381231732df42ed1d"
+      },
+      {
+        "file": "diff-check.json",
+        "sha256": "087fb16f03670226ff4c796e604f03a4fc8c37b08f8ab3a7891f8291c43e2897"
+      },
+      {
+        "file": "diff-check.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "file": "dispatch-friction-triggers.log",
+        "sha256": "f61bd5fa08def61c5476d4a43f75881e733aeb5b76e85a8793f0d554f180ddc4"
+      },
+      {
+        "file": "dispatch-native.json",
+        "sha256": "f810fc2ed05400d237bd78ef96af26ca5ee095f518f0a80f2cd048c890392eb1"
+      },
+      {
+        "file": "dispatch-source-admission.json",
+        "sha256": "33c26cdab3f26b7447bd6f47ad0328b5d6637aa468ea2a36f090ba5b84ba7180"
+      },
+      {
+        "file": "focused-first-start.json",
+        "sha256": "5122ee0b6e646c3c6aaae84aa47d7546eb1a6ecbbc081d141a193fba85e1dd4f"
+      },
+      {
+        "file": "focused-first.json",
+        "sha256": "f141e151b59921d0a5dfb25ab018e90812aefff185c345e9294386c94709233e"
+      },
+      {
+        "file": "focused-first.log",
+        "sha256": "2c12c0517f1503d3e2b7e9715bf20969f1eebf245624a8daad0e4cfa26d4cc89"
+      },
+      {
+        "file": "focused-second-start.json",
+        "sha256": "93ed878e31641e6338e181a142328a7cb7e3b0f28beb02caccb3fdc5d32540d2"
+      },
+      {
+        "file": "focused-second.json",
+        "sha256": "a69c8ffa16cd66ab591d4e9f9f4a43640fb8d6a8c3b53b8580b8f42a8ce008ab"
+      },
+      {
+        "file": "focused-second.log",
+        "sha256": "0f084ba1fcaf36c7723af94c474ec982338f877d18ad3f6f61ec1e1d1f19ac81"
+      },
+      {
+        "file": "fresh-preclaim.json",
+        "sha256": "6cacbab7c146a10fe73e7fbf5ea2e11110e47b6374946341e4f63d44be12337d"
+      },
+      {
+        "file": "initial-doctor.json",
+        "sha256": "3bb29fa561eed4ac60113eccf843bf020faf228842b2d9ce6e30428eb4f8c45f"
+      },
+      {
+        "file": "initial-status.json",
+        "sha256": "6baaae5b4a432231d4b94697f56dabdcbaf5dcd415b928c02d6eae05338ac74d"
+      },
+      {
+        "file": "install.log",
+        "sha256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c"
+      },
+      {
+        "file": "knip-start.json",
+        "sha256": "813758a83107dc4d810c1d4c20dfd5f461541cf7ed6ad66e37144729361653cc"
+      },
+      {
+        "file": "knip.json",
+        "sha256": "d0e65b42e02e8cdd35fe36dd0b83a9b59c2ebbbc8083c61835eaa95bff9e257d"
+      },
+      {
+        "file": "knip.log",
+        "sha256": "4613f2400c1893e1be651022bce5706a3788f09d045a814ab9954f2c4e94e731"
+      },
+      {
+        "file": "original-288-native.json",
+        "sha256": "6beb02e30ca7c89971814bf7945a54bbba02d512381cd78d4b88365764685881"
+      },
+      {
+        "file": "review-first-start.json",
+        "sha256": "adaed9a7ec09bddb7f3bccfe32ad4c8816117ff766ea9b81086226093b13fac8"
+      },
+      {
+        "file": "review-first.json",
+        "sha256": "72caf1f83932e4b1732513c7049495df810035ba8507367526da3c8bcb74fe47"
+      },
+      {
+        "file": "review-first.log",
+        "sha256": "aec9bf4ceb156b84a70732e843867f0c8c0367ad3c014c3023b2e4351cbaa8f8"
+      },
+      {
+        "file": "schema-start.json",
+        "sha256": "c36935a4360b599e8186944313e16b52fcbe0366cd307c57b633dd7c0a897f11"
+      },
+      {
+        "file": "schema.json",
+        "sha256": "b2468b3b80450f6ef5482144dcb1e04c3b5590ae1043b99150f3ea4513ddfa76"
+      },
+      {
+        "file": "schema.log",
+        "sha256": "e8969b20c1e9272ef3e7e6481583ad496d6e2f61fdb2a95dad271c2e51e49e49"
+      },
+      {
+        "file": "source-audit.json",
+        "sha256": "9fa6b9ed38aa16f55008abff0ac8ee46f4a48c4f0bcaaf592b67345a0b2e56c2"
+      },
+      {
+        "file": "source-bindings.json",
+        "sha256": "8b5290cb28b46134faf18122292d562060575022ede735fb15d87a008f6d4802"
+      },
+      {
+        "file": "worktree-create.json",
+        "sha256": "bb162b3431f69dca7b3c4d36de8e4f32d1730ccc1487afe2f1a19200fc46fd83"
+      }
+    ],
+    "terminalCensus": "terminal-process-census.txt",
+    "censusSha256": "ecdf6b253a45c423fdf493f1d88d64ebff2dfb7442c35a07bacc36c9de1e3f44"
+  },
+  "hostLoadSamples": [
+    {
+      "name": "knip",
+      "at": "2026-10-15T09:59:31.281672+00:00",
+      "value": [
+        8.82958984375,
+        10.66455078125,
+        10.65283203125
+      ],
+      "measuredFor": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    },
+    {
+      "name": "review-first",
+      "at": "2026-10-15T09:58:36.796813+00:00",
+      "value": [
+        8.107421875,
+        10.828125,
+        10.703125
+      ],
+      "measuredFor": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    {
+      "name": "focused-first",
+      "at": "2026-10-15T09:57:24.752764+00:00",
+      "value": [
+        9.45947265625,
+        11.78466796875,
+        11.00439453125
+      ],
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ]
+    },
+    {
+      "name": "schema",
+      "at": "2026-10-15T10:01:23.380194+00:00",
+      "value": [
+        8.60791015625,
+        9.9296875,
+        10.35693359375
+      ],
+      "measuredFor": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ]
+    },
+    {
+      "name": "diff-check",
+      "at": "2026-10-15T10:01:23.531264+00:00",
+      "value": [
+        8.60791015625,
+        9.9296875,
+        10.35693359375
+      ],
+      "measuredFor": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ]
+    },
+    {
+      "name": "focused-second",
+      "at": "2026-10-15T09:57:45.953905+00:00",
+      "value": [
+        8.56201171875,
+        11.42578125,
+        10.89306640625
+      ],
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ]
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-first command start; inner check load samples are in raw review log."
+      },
+      "testDelta": {
+        "files": "Configured test entrypoints added minus deleted:0. One new plain contract module and its lines counted separately.",
+        "lines": 261
+      }
+    }
+  },
+  "runtime": {
+    "workers": 2,
+    "processGroups": [
+      50911,
+      47707,
+      43346,
+      57486,
+      57493,
+      44653
+    ],
+    "allRecordedGroupsTerminalAtCutoff": true,
+    "remainingOwnedMembers": [],
+    "browserContexts": [],
+    "servers": [],
+    "ports": [],
+    "heavyRuns": [],
+    "cpuScope": "User/sys timings aggregate each command process group child usage; parent setup time remains included in overall wall window without inferred CPU attribution."
+  },
+  "delivery": {
+    "fallout": [],
+    "productionLines": 0,
+    "codeReviewRouting": "No core-review or phase-gate label; synthetic test-only scope. Parent decides threshold and routes required review only to NEW fresh read-only Codex fork:none. Helper spawns none.",
+    "nativeDelivery": "Root only; helper returns one clean local Conventional Commit."
+  }
+}
