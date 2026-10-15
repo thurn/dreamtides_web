@@ -1,0 +1,428 @@
+{
+  "bead": "hv-umm2.638",
+  "baseOid": "8605a62d8dcaf1696107fb8d440737633ae14919",
+  "sourceEpoch": {
+    "path": "src/battle/integration/deck-mods/starting-energy.contracts.ts",
+    "sha256": "f5e77797a1362c569fb2de96b445bc6804d9eaf89c2df43c1e211b66943e186b",
+    "physicalLines": 246,
+    "productionLines": 0,
+    "runnerSHA256": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+    "runnerChanged": false
+  },
+  "dispatch": {
+    "at": "2026-10-15T09:42:32.261000+00:00",
+    "callId": "call_8d6f00a836a149eba9c9c673cef1d5c2",
+    "ordinal": 46803,
+    "provenance": "Actual original helper dispatch supplied and independently bound by parent; stage1, research, WRITE_ACK coordination, implementation and validation remain in the same elapsed window."
+  },
+  "clock": {
+    "start": "2026-10-15T09:42:32.261000+00:00",
+    "cutoff": "2026-10-15T09:59:17.277834+00:00",
+    "inclusiveMin": 16.750280566666667,
+    "scope": "Original dispatch through source-first inspection, authorization, implementation, checks, evidence packaging and immediately preceding Git cutoff. Exact actual Git start/end and cutoff tail are recorded in final-commit.json outside committed source.",
+    "sampling": "UNKNOWN",
+    "productiveCpu": "UNKNOWN",
+    "commitEndpointQualification": "Final source uses the immediately preceding cutoff; external final-commit.json binds normal Git bracket, actual wait, exact commit/base/path hashes and inclusive dispatch-through-Git-end duration.",
+    "finalCommitReceipt": "artifacts/qa/hv-umm2.638/receipts/implementation/final-commit.json"
+  },
+  "authority": {
+    "proposalSHA256": "03b81dfc02f4b76566a391dac0854a3c72685291f096cbcbcb740e62142ca4f7",
+    "stage1ManifestSHA256": "37f169ea135d47f8572b9eae79e81b7b6e4dcd8a71217d71fdce1dd14e5fe18d",
+    "parentWriteACKProofSHA256": "489fe509e982dd991298932a14ebf53be78c05e60eeef4246a9d4b1a607b31fe",
+    "stage1InputBindings": 55,
+    "initialTrackedHashes": 5609,
+    "scopedWriters": [
+      "src/battle/integration/deck-mods/starting-energy.contracts.ts",
+      "docs/plan/evidence/friction/hv-umm2.638.json",
+      "docs/plan/evidence/measurements/hv-umm2.638.json"
+    ],
+    "briefProvenance": {
+      "at": "2026-10-15T09:53:33.990651+00:00",
+      "originalNativeArgumentCapture": "helper-brief-native-argument-reference.txt",
+      "originalNativeArgumentSHA256": "465fa522d1c62867b93e1c9a5d694739e1d49e5eb691810d2299ead909805c24",
+      "originalCaptureQualification": "Opaque native journal argument reference; not readable original prompt text. Original dispatch time/call identity remains independently matched.",
+      "humanReadableSupplement": "/tmp/638-root/helper-brief.txt",
+      "supplementSHA256": "b6501a9b7ed7ee1684f107b86f558eae664d29f1d68b23f87c053b039d72b556",
+      "basis": "Visible initial source-bound tool brief plus exact binding native WRITE_ACK; reconstructed supplement, not claimed raw original prompt bytes.",
+      "clockUnchanged": "2026-10-15T09:42:32.261Z"
+    },
+    "noNativeEffectsByHelper": true,
+    "noSubagents": true
+  },
+  "publicFlow": {
+    "producer": "Actual buildExplorationRuntime/resolveExplorationChoice for positive integer energy offers at distinct synthetic sites emits the complete BattleModifier DTO. JourneyRewardEffect union has no energy arm.",
+    "adapter": "Whole createEngineBattleInit output and engineDeckEntry preserve UUID/variant/deck discount; real engine starts that typed init.",
+    "enemyQualification": "Journey reward adapter addresses player only. Enemy coverage explicitly seats its complete public deck and NextBattleEffects in enemy BattleInit; this is synthetic engine-seat coverage.",
+    "lifecycle": "Existing fixtureBattleInitProvider supplies valid journey metadata and atlas-completion seams. Its engineInit is replaced as a whole with actual createEngineBattleInit output. Actual BEGIN_BATTLE, free points-mode event play/answer, real engine player victory and END_BATTLE own energy and consumption.",
+    "lifetime": "One-battle emitted DTOs disappear only at authoritative successful player-victory END_BATTLE. Typed lifetime2 fixtures decrement to1 and still seed subsequent startup. Defeat/draw follow existing terminal journey failure; no new consumption rule is asserted.",
+    "rules": "No new D10 ruling. D39 and existing BattleModifier/victory behavior govern; rules.md completed-opening-hands order places starting energy before opening triggers."
+  },
+  "contracts": {
+    "newExpandedCases": 16,
+    "existingRunnerExpandedCases": 23,
+    "foundationCases": 7,
+    "environment": "node",
+    "isolatedCounts": [
+      2,
+      3
+    ],
+    "stackedEnergy": 5,
+    "paymentOracle": {
+      "printedCost": 2,
+      "permanentDiscount": 1,
+      "startupCurrent": 2,
+      "startupMax": 2,
+      "afterPaymentCurrent": 1,
+      "afterPaymentMax": 2
+    },
+    "matrix": {
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "cardTypes": [
+        "character",
+        "event"
+      ],
+      "variants": [
+        "base",
+        "Amplified"
+      ]
+    },
+    "printedDefinitionsImmutable": true,
+    "identities": "Branded card UUIDs, deck-entry IDs and physical instance IDs; no name-based identity."
+  },
+  "failurePaths": [
+    {
+      "path": "DTO dropped before engine",
+      "witness": "Isolated2/3 and stacked5 assert both current and max in real public startup. Deliberately omitted nextBattle public-input control starts0, cannot pay discounted subject and Engine.apply refuses illegal play."
+    },
+    {
+      "path": "Wrong side/variant/type",
+      "witness": "2 sides x2 card types x2 variants inspect physical owner/controller/UUID/variant and public effective cost, actual payment; opposite side remains energy0 and variants unmodified."
+    },
+    {
+      "path": "Ordering versus variant/payment",
+      "witness": "Public starting-energy event precedes both completed-opening-hand occasions; Amplified/discount transport survives and payment spends1 current while retaining max2. General non-Amplified transformations are original276/287 obligations, not claimed here."
+    },
+    {
+      "path": "Invalid/stale/replay/concurrent changes state",
+      "witness": "Actual offer invalid count/version/action/expected encounter/reroll/visited/resolved refusal; equal valid replay; incomplete and repeated END refusal; cancelled play prompt and wrong/stale/repeated answers; JSON LOAD_STATE; unknown/conflicting actor END refusal leave committed state/DTO and logs unchanged as applicable."
+    },
+    {
+      "path": "Error/partial/recovery",
+      "witness": "Actual missing-card-data adapter error returns no init and leaves full journey unchanged, complete fixture mapping recovers. Terminal completion provider declines atomically before lifecycle consumption and succeeds after existing fixture-provider restoration."
+    },
+    {
+      "path": "Cancel/reload/restart",
+      "witness": "Actual adjacent cancellable points-mode play prompt, persisted attempt IDs after cancellation and LOAD_STATE, stale answer refusal and equal replay. Startup itself is synchronous and has no independent cancellable partial transaction."
+    },
+    {
+      "path": "Synthetic evidence substituted for original acceptance",
+      "witness": "Original287 remains full acceptance owner; all real66UUID/20bothcontrollers/judgment/actual encounter-to-battle empty-Caps checks are explicitly unsatisfied by638."
+    }
+  ],
+  "acceptanceBoundary": {
+    "original": "hv-umm2.287",
+    "productionUUIDsTransferred": [],
+    "fullFiledUUIDCountRetained": 66,
+    "realCardsPerControllerRequired": 20,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "judgmentRequired": true,
+    "genuineEncounterBattleEmptyCapsRequired": true,
+    "satisfiedByThisSyntheticChild": false,
+    "completeRecipesWeightedFuzzPreflightSweepCoverage": "Retained by original owners; no claim from synthetic module or one encounter."
+  },
+  "scope": {
+    "plainContractModulesAdded": 1,
+    "configuredEntrypointsAdded": 0,
+    "jsdomFilesAdded": 0,
+    "testDelta": {
+      "files": 1,
+      "lines": 246,
+      "jsdomFiles": 0
+    },
+    "testDeltaInterpretation": "files counts the one new physical plain contract module; configured test entrypoints stay0. lines counts all246 physical contract-module lines.",
+    "fallout": [],
+    "productionChanges": [],
+    "runnerChanges": [],
+    "preExistingIssues": [],
+    "newRulesDecisions": [],
+    "contentCoverageApplicability": "No catalog/entity/engine coverage implementation changes; original UUID content checks retain full acceptance.",
+    "fullReviewApplicability": "Test-only plain module under existing eager runner; no test infrastructure/config/cross-cutting architecture or production changes.",
+    "browserApplicability": "No runtime/player workflow or visual change. Real encounter QA belongs to original287.",
+    "coldReviewApplicability": "Native task has no core-review label; parent exact WRITE_ACK determined no per-bead cold review for this test-only scope and re-evaluates actual diff."
+  },
+  "validation": [
+    {
+      "label": "focused-01",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/starting-energy638-root",
+      "start": "2026-10-15T09:54:51.009287+00:00",
+      "hostLoadRaw": "{ 10.84 13.20 11.26 }",
+      "sourceSha256": "f5e77797a1362c569fb2de96b445bc6804d9eaf89c2df43c1e211b66943e186b",
+      "sourceLines": 246,
+      "parentPid": 34323,
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "pid": 34334,
+      "pgid": 34334,
+      "actualWaitReturnCode": 0,
+      "end": "2026-10-15T09:54:58.899720+00:00",
+      "wallSeconds": 7.890433,
+      "processGroupAfterWait": "",
+      "rawLog": "focused-01.log",
+      "rawLogSha256": "c4b88bff7619c6d2d43589735a29a2c60b4e818ba189f882fa1e65f36b4d323a",
+      "receiptSha256": "2ada5808f14a15b3354f5145fe2bb6b73df6765fd9a3e4d36e5f7be28538f78f"
+    },
+    {
+      "label": "review-01",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/starting-energy638-root",
+      "start": "2026-10-15T09:55:35.225444+00:00",
+      "hostLoadRaw": "{ 10.23 12.72 11.18 }",
+      "sourceSha256": "f5e77797a1362c569fb2de96b445bc6804d9eaf89c2df43c1e211b66943e186b",
+      "stagedPathsAtStart": [
+        "src/battle/integration/deck-mods/starting-energy.contracts.ts"
+      ],
+      "parentPid": 36970,
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "pid": 36984,
+      "pgid": 36984,
+      "actualWaitReturnCode": 0,
+      "end": "2026-10-15T09:55:48.468952+00:00",
+      "wallSeconds": 13.243508,
+      "processGroupAfterWait": "",
+      "rawLog": "review-01.log",
+      "rawLogSha256": "a87880d8b4f341ba23e40d9a768124cc3790c00ec30112bd5746fc81524f08ef",
+      "receiptSha256": "83844874f09fcd4e52398cb92d30179074c079d589bd480574f369f6d05d181b"
+    },
+    {
+      "label": "knip-01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/starting-energy638-root",
+      "start": "2026-10-15T09:55:57.226407+00:00",
+      "hostLoadRaw": "{ 10.22 12.51 11.15 }",
+      "sourceSha256": "f5e77797a1362c569fb2de96b445bc6804d9eaf89c2df43c1e211b66943e186b",
+      "parentPid": 38389,
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "pid": 38400,
+      "pgid": 38400,
+      "actualWaitReturnCode": 0,
+      "end": "2026-10-15T09:56:03.340419+00:00",
+      "wallSeconds": 6.114012,
+      "processGroupAfterWait": "",
+      "rawLog": "knip-01.log",
+      "rawLogSha256": "457c9ee682a8f99c3d4c2ca4d6a7cac03218880a9f03d65fa16d970905754c49",
+      "receiptSha256": "073ae3712474513762e84cce23a6b74b81b002a932aece2366de2c525050da12"
+    },
+    {
+      "label": "schema-01",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/starting-energy638-root",
+      "start": "2026-10-15T09:58:23.317728+00:00",
+      "hostLoadRaw": "{ 8.11 10.97 10.75 }",
+      "sourceEpoch": {
+        "src/battle/integration/deck-mods/starting-energy.contracts.ts": "f5e77797a1362c569fb2de96b445bc6804d9eaf89c2df43c1e211b66943e186b",
+        "docs/plan/evidence/friction/hv-umm2.638.json": "8b5936be1c9f8f913d3d79ed6d90a6512e1cd990b99eb1a5d722bd8846977e45",
+        "docs/plan/evidence/measurements/hv-umm2.638.json": "00b4c4a8983973a00ee78bc6103c0d7e292c8626e6019fa6d4512cd1b330085b"
+      },
+      "parentPid": 46923,
+      "pid": 46935,
+      "pgid": 46935,
+      "actualWaitReturnCode": 0,
+      "end": "2026-10-15T09:58:23.458323+00:00",
+      "wallSeconds": 0.140595,
+      "processGroupAfterWait": "",
+      "rawLog": "schema-01.log",
+      "rawLogSha256": "21f31f162a3a926eb1334f65e23c5c0ff695c048de66f8d43d3bd37c4c78f08b",
+      "receiptSha256": "f28a2f0be76c0e7c4123db26f5c2d836ab2ba76e7d4983ac6c85ca3c90e7ad20"
+    },
+    {
+      "label": "whitespace-01",
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/starting-energy638-root",
+      "start": "2026-10-15T09:58:23.461634+00:00",
+      "hostLoadRaw": "{ 8.11 10.97 10.75 }",
+      "sourceEpoch": {
+        "src/battle/integration/deck-mods/starting-energy.contracts.ts": "f5e77797a1362c569fb2de96b445bc6804d9eaf89c2df43c1e211b66943e186b",
+        "docs/plan/evidence/friction/hv-umm2.638.json": "8b5936be1c9f8f913d3d79ed6d90a6512e1cd990b99eb1a5d722bd8846977e45",
+        "docs/plan/evidence/measurements/hv-umm2.638.json": "00b4c4a8983973a00ee78bc6103c0d7e292c8626e6019fa6d4512cd1b330085b"
+      },
+      "parentPid": 46923,
+      "pid": 46943,
+      "pgid": 46943,
+      "actualWaitReturnCode": 0,
+      "end": "2026-10-15T09:58:23.475191+00:00",
+      "wallSeconds": 0.013557,
+      "processGroupAfterWait": "",
+      "rawLog": "whitespace-01.log",
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receiptSha256": "14ccd421007c1e18435abc4aafa035a895f8319c0c3aac66f37f2f66fa3dd756"
+    }
+  ],
+  "validationScopeQualification": "Ordinary review covers staged new module and runs typechecks, import cycles, lint and related existing runner (23 cases). Evidence is packaged afterwards and receives separate final schema/whitespace checks whose exact final receipts are external. No baseline test or full/browser/fuzz run was necessary.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-01 typecheck/import-cycles/lint/related-test starting value at2026-10-15T09:55:36.994Z from actual review log",
+        "source": "sysctl/review step sample",
+        "oneMinute": 10.455078125
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "check": "focused-01",
+      "raw": "{ 10.84 13.20 11.26 }",
+      "scope": "Whole command start"
+    },
+    {
+      "check": "review-01",
+      "raw": "{ 10.23 12.72 11.18 }",
+      "scope": "Whole command start"
+    },
+    {
+      "check": "knip-01",
+      "raw": "{ 10.22 12.51 11.15 }",
+      "scope": "Whole command start"
+    }
+  ],
+  "budgets": {
+    "focusedCommandSeconds": 7.890433,
+    "reviewCommandSeconds": 13.243508,
+    "newModuleUnder500Lines": true,
+    "lowLoadSuiteMeasurement": "UNKNOWN; no full-suite/performance claim at this host load. Budgets monitored, never asserted in tests."
+  },
+  "preparedWorkspaceWarnings": "Task checks use existing review-runner workspace preparation/local asset isolation. Missing-art warning output is retained verbatim in raw logs; restore-local-assets completed0 each time. These expected optional local art warnings establish no new source defect or acceptance waiver.",
+  "resources": {
+    "install": "Parent-installed before actual helper dispatch; no helper reinstall.",
+    "commands": [
+      {
+        "label": "focused-01",
+        "pid": 34334,
+        "pgid": 34334,
+        "actualWaitReturnCode": 0,
+        "processGroupAfterWait": ""
+      },
+      {
+        "label": "review-01",
+        "pid": 36984,
+        "pgid": 36984,
+        "actualWaitReturnCode": 0,
+        "processGroupAfterWait": ""
+      },
+      {
+        "label": "knip-01",
+        "pid": 38400,
+        "pgid": 38400,
+        "actualWaitReturnCode": 0,
+        "processGroupAfterWait": ""
+      },
+      {
+        "label": "schema-01",
+        "pid": 46935,
+        "pgid": 46935,
+        "actualWaitReturnCode": 0,
+        "processGroupAfterWait": ""
+      },
+      {
+        "label": "whitespace-01",
+        "pid": 46943,
+        "pgid": 46943,
+        "actualWaitReturnCode": 0,
+        "processGroupAfterWait": ""
+      }
+    ],
+    "servers": [],
+    "browserContexts": [],
+    "heavyCommands": [],
+    "qaPort": "inapplicable; none reserved",
+    "allStartedCheckGroupsSettled": true
+  },
+  "evidenceArchive": {
+    "directory": "artifacts/qa/hv-umm2.638/receipts/implementation/",
+    "sourceFirstDirectory": "artifacts/qa/hv-umm2.638/receipts/source-first/",
+    "rawLogs": "focused-01.log,review-01.log,knip-01.log and subsequent schema/whitespace/final-commit receipts; exact SHA256 manifest outside committed source."
+  },
+  "delivery": "One detailed normal-date local Conventional Commit with Bead: hv-umm2.638 trailer. Parent owns native integration/candidate/approval/promotion and actual completion; helper stops after terminal local handoff.",
+  "additionalReadBindings": [
+    {
+      "path": "src/engine/steps/sources.ts",
+      "sha256": "50b12b052dd86d425ae5772646d5f7fe5a823ca86193c9e74ac14c3f8be31920",
+      "ranges": [
+        [
+          1,
+          69
+        ]
+      ]
+    },
+    {
+      "path": "src/rules/battle/engine-battle.ts",
+      "sha256": "69d7a307a00ccbbe371e5df0402b35c03b93ec2f5548f49a572e6c86062b82dc",
+      "ranges": [
+        [
+          30,
+          85
+        ],
+        [
+          135,
+          180
+        ]
+      ]
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-n913.json",
+      "sha256": "168fb5c058689f90a65f07d9e83f82af0f0aa918f826ee3a49abfc45d5f24b23",
+      "ranges": [
+        [
+          1,
+          25
+        ]
+      ]
+    }
+  ],
+  "finalScopeAudit": {
+    "initialTrackedFilesUnchanged": 5609,
+    "sourcePathsOutsideAdmission": [],
+    "stagedPaths": [
+      "src/battle/integration/deck-mods/starting-energy.contracts.ts",
+      "docs/plan/evidence/friction/hv-umm2.638.json",
+      "docs/plan/evidence/measurements/hv-umm2.638.json"
+    ],
+    "moduleLines": 246,
+    "allChecksSuccessful": true,
+    "allRecordedCheckProcessGroupsAbsent": true,
+    "fallout": []
+  }
+}
