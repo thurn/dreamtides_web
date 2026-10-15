@@ -157,7 +157,7 @@ describe("ScreenRouter site dispatch", () => {
     expect(container.querySelectorAll("[data-gamble-gates] [data-gamble-gate]")).toHaveLength(3);
     const chooseSix = container.querySelector('[data-testid="gamble-choose-six"]');
     expect(chooseSix).toBeInstanceOf(HTMLButtonElement);
-    expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(site.id, undefined);
+    expect(mutations.ensureGambleSiteRuntime).not.toHaveBeenCalled();
 
     const forced = mountRouter({ state: makeStateFor(site), query: "?gambleGame=ladder-climb" });
     expect(forced.mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(

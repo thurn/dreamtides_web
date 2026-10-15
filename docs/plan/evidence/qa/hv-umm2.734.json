@@ -1,0 +1,122 @@
+{
+  "bead": "hv-umm2.734",
+  "invocation": "run-59wPak",
+  "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.734/invocations/run-59wPak",
+  "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.734/invocations/run-59wPak/restored-gamble.result.json",
+  "rawReportSha256": "92d92db67095de6c3560630d544109185540cb267dc74914348b91fc74e353ef",
+  "scenarioSha256": "d7a21ba1136d112026bbfb988b05746d5c90e789996c3a921fed2d6dc1c96e2c",
+  "productionSourceSha256": "22bbfed2c17931e5f73263bf9139d3a49a24843f13135706bb0bdb073c97d099",
+  "ok": true,
+  "port": 5274,
+  "slot": 1,
+  "serverPgid": 35926,
+  "wallMs": {
+    "browserLeaseWait": 6,
+    "serve": 4119,
+    "scenario": 27071,
+    "total": 31250
+  },
+  "capture": "restored-gamble-settled-desktop.png",
+  "result": {
+    "verdict": "pass",
+    "origin": "http://localhost:5274",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "declaration": {
+      "entryId": "deck-1",
+      "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "cardNumber": 510,
+      "source": {
+        "entryId": "deck-1",
+        "cardNumber": 510,
+        "transfiguration": null,
+        "isBane": false
+      },
+      "controlledCard": {
+        "rank": "7",
+        "suit": "hearts"
+      },
+      "retainedCommitment": "5cf5abca0483f229",
+      "stagedEssence": 200,
+      "staging": "Existing native Gamble scene is replayed read-only into a declared ready runtime, then loaded directly into a distinct local game. Only first committed card and affordability floor are staged; no OPEN_SITE, pre-opening or future-run intent key is created in that game.",
+      "ingress": {
+        "gameId": "qa734copymv9aefxi",
+        "seq": 1,
+        "type": "LOAD_STATE",
+        "openSiteEvents": 0,
+        "runId": "journey:1",
+        "readyRuntimePreserved": true
+      }
+    },
+    "siteId": "site-1",
+    "source": {
+      "entryId": "deck-1",
+      "cardNumber": 510,
+      "transfiguration": null,
+      "isBane": false
+    },
+    "copy": {
+      "entryId": "deck-3-0",
+      "cardNumber": 510,
+      "transfiguration": null,
+      "isBane": false
+    },
+    "round": {
+      "roundNumber": 1,
+      "shuffleCommitment": "5cf5abca0483f229",
+      "card": {
+        "rank": "7",
+        "suit": "hearts"
+      },
+      "targetEntryId": "deck-1",
+      "targetCardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "costPaid": 25,
+      "outcome": "duplication",
+      "resultRevealed": true,
+      "resultSettled": true,
+      "essenceGained": 0,
+      "duplicatedEntryId": "deck-3-0"
+    },
+    "essence": {
+      "before": 200,
+      "after": 175
+    },
+    "beforeGeometry": [
+      {
+        "selector": "[data-testid=\"gamble-four-suit-draw\"]",
+        "width": 124.578125,
+        "height": 42,
+        "inside": true,
+        "hit": true
+      }
+    ],
+    "afterGeometry": [
+      {
+        "selector": "[data-testid=\"gamble-four-suit-leave-after-result\"]",
+        "width": 80.59375,
+        "height": 42,
+        "inside": true,
+        "hit": true
+      }
+    ],
+    "reload": true,
+    "continuation": {
+      "type": "dreamscape"
+    },
+    "gameId": "qa734copymv9aefxi",
+    "openingIntents": 0,
+    "retainedGame": true,
+    "logRowsBeforeReload": 9,
+    "persistedLogRows": 25,
+    "caps": {
+      "errors": [],
+      "rejections": [],
+      "consoleErrors": []
+    }
+  },
+  "accumulatedCaps": [],
+  "resourceReceipt": "/tmp/dreamtides-734-01a13a7a/resource-settlement.json",
+  "qualification": "Declared first committed hearts7 and affordability floor via real LOAD_STATE. Source ordinary unmodified target, no opening intent or successful future-run key. Original native scene proves genuine absent-runtime initialization before staging a distinct restored game."
+}

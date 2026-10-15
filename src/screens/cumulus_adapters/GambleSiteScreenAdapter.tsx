@@ -86,9 +86,10 @@ export function GambleSiteScreenAdapter({
   );
   useEffect(() => {
     if (site === null) return;
-    mutations.ensureGambleSiteRuntime(site.id, gambleGameId ?? undefined);
+    if (runtime === null)
+      mutations.ensureGambleSiteRuntime(site.id, gambleGameId ?? undefined);
     logGambleSiteEntered(site);
-  }, [gambleGameId, mutations, site]);
+  }, [gambleGameId, mutations, runtime, site]);
   useEffect(() => {
     if (runtime === null || view === null) return;
     logGamblePrepared(siteId, runtime, view, gambleData);

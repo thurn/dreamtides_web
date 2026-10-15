@@ -1,0 +1,420 @@
+{
+  "bead": "hv-umm2.734",
+  "base": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260",
+  "clock": {
+    "originalClaimAcknowledged": "2026-10-15T08:34:23.379940+00:00",
+    "evidenceCutoff": "2026-10-15T08:42:57.836780+00:00",
+    "inclusiveElapsedMinToCutoff": 8.574280666666668,
+    "qualification": "Cutoff immediately before final schema/whitespace/staging/commit. Actual Git-return and tail are retained externally in final-git-return.json."
+  },
+  "checks": {
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gamble-restoration-734",
+      "start": "2026-10-15T08:42:11.572962+00:00",
+      "end": "2026-10-15T08:42:15.894507+00:00",
+      "wallS": 4.321425333968364,
+      "userS": 3.863666,
+      "sysS": 1.443038,
+      "hostLoad": [
+        5.13916015625,
+        4.9482421875,
+        5.0576171875
+      ],
+      "pid": 73194,
+      "pgid": 73194,
+      "exitCode": 0,
+      "sourceHashes": {
+        "src/components/ScreenRouter-sites.test.tsx": "0e8253b93677f2040e756d0159e31f6719669fc622b9ec27fcfe8c031ce93ca0",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx": "22bbfed2c17931e5f73263bf9139d3a49a24843f13135706bb0bdb073c97d099",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx": "299a4123f944480502ba6877f102cae5a4d5d020c19c6bba8db887c97263378e"
+      },
+      "outputSha256": "17fd326d7b5a04f5905fed26f4469adb3b4d017eda1a49172516f7c8d2ad36db"
+    },
+    "red-before": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gamble-restoration-734",
+      "start": "2026-10-15T08:37:44.838661+00:00",
+      "end": "2026-10-15T08:37:54.935915+00:00",
+      "wallS": 10.09694491699338,
+      "userS": 5.735011,
+      "sysS": 3.01848,
+      "hostLoad": [
+        4.0283203125,
+        4.13134765625,
+        4.8837890625
+      ],
+      "pid": 34301,
+      "pgid": 34301,
+      "exitCode": 1,
+      "sourceHashes": {
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx": "0385b9dc5958da996092ebd8887d2a0a2abc216dc7da47bc14a5370b4e448f5b",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx": "bc30126984ce04c09b1565ced58878bc89036637a4bb061a50835b1b1e7bfc15"
+      },
+      "outputSha256": "1dc341a4ad9db1d7c6827a918baca2fd07eb927cd3ec09a9593d668759aa1b82"
+    },
+    "review-first": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gamble-restoration-734",
+      "start": "2026-10-15T08:39:02.224004+00:00",
+      "end": "2026-10-15T08:39:19.713833+00:00",
+      "wallS": 17.489418042008765,
+      "userS": 65.481227,
+      "sysS": 9.842475,
+      "hostLoad": [
+        4.46875,
+        4.19921875,
+        4.84033203125
+      ],
+      "pid": 36601,
+      "pgid": 36601,
+      "exitCode": 2,
+      "sourceHashes": {
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx": "22bbfed2c17931e5f73263bf9139d3a49a24843f13135706bb0bdb073c97d099",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx": "2778db18b72d2eb163ca54b1a502ac5ed22d90262b0d498371430d10d6e5a0af"
+      },
+      "outputSha256": "b5604f948094812b3cd3243bf8c3b1cfe685b059c382d382dfce843d09af89e1"
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx",
+        "src/screens/cumulus_adapters/gamble-site-actions-view-model.test.ts",
+        "src/screens/cumulus_adapters/gamble-site-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gamble-restoration-734",
+      "start": "2026-10-15T08:38:36.997532+00:00",
+      "end": "2026-10-15T08:38:48.083210+00:00",
+      "wallS": 11.08545295795193,
+      "userS": 8.187898,
+      "sysS": 3.810744,
+      "hostLoad": [
+        3.6630859375,
+        4.02880859375,
+        4.8017578125
+      ],
+      "pid": 35770,
+      "pgid": 35770,
+      "exitCode": 0,
+      "sourceHashes": {
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx": "22bbfed2c17931e5f73263bf9139d3a49a24843f13135706bb0bdb073c97d099",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx": "e011b34ac2cea24f94af6895189eaa2109f99a4481bdef7535b5151bfafec4e1"
+      },
+      "outputSha256": "2ba59b0c7787a63bae344163fc4efe521e30a3cc6b5df960c19a4c9829665133"
+    },
+    "focused-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx",
+        "src/screens/cumulus_adapters/gamble-site-view-model.test.ts",
+        "src/screens/cumulus_adapters/gamble-site-view-model-four-suit-reprise.test.ts",
+        "src/screens/cumulus_adapters/gamble-site-logging-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gamble-restoration-734",
+      "start": "2026-10-15T08:39:45.308680+00:00",
+      "end": "2026-10-15T08:39:51.457817+00:00",
+      "wallS": 6.149001874960959,
+      "userS": 7.281352,
+      "sysS": 2.532095,
+      "hostLoad": [
+        5.94775390625,
+        4.7568359375,
+        5.01904296875
+      ],
+      "pid": 37793,
+      "pgid": 37793,
+      "exitCode": 0,
+      "sourceHashes": {
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx": "22bbfed2c17931e5f73263bf9139d3a49a24843f13135706bb0bdb073c97d099",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx": "299a4123f944480502ba6877f102cae5a4d5d020c19c6bba8db887c97263378e"
+      },
+      "outputSha256": "384001379866c5fc44222e6a0136956f5ee32c422e538a2fe320208b80c3c65e"
+    },
+    "focused-owning-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx",
+        "src/components/ScreenRouter-sites.test.tsx",
+        "src/screens/cumulus_adapters/gamble-site-view-model.test.ts",
+        "src/screens/cumulus_adapters/gamble-site-view-model-four-suit-reprise.test.ts",
+        "src/screens/cumulus_adapters/gamble-site-logging-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gamble-restoration-734",
+      "start": "2026-10-15T08:40:47.780247+00:00",
+      "end": "2026-10-15T08:40:55.156508+00:00",
+      "wallS": 7.376101292029489,
+      "userS": 9.664297,
+      "sysS": 2.705314,
+      "hostLoad": [
+        5.732421875,
+        4.92431640625,
+        5.06005859375
+      ],
+      "pid": 67089,
+      "pgid": 67089,
+      "exitCode": 0,
+      "sourceHashes": {
+        "src/components/ScreenRouter-sites.test.tsx": "0e8253b93677f2040e756d0159e31f6719669fc622b9ec27fcfe8c031ce93ca0",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx": "22bbfed2c17931e5f73263bf9139d3a49a24843f13135706bb0bdb073c97d099",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx": "299a4123f944480502ba6877f102cae5a4d5d020c19c6bba8db887c97263378e"
+      },
+      "outputSha256": "31a6bf7780730737eaa2d1a771114c50f58866c8d620aa244a95e046c73b3b0a"
+    },
+    "red-before-valid-fixture": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gamble-restoration-734",
+      "start": "2026-10-15T08:38:04.810762+00:00",
+      "end": "2026-10-15T08:38:12.913001+00:00",
+      "wallS": 8.102106042031664,
+      "userS": 5.371176,
+      "sysS": 2.660248,
+      "hostLoad": [
+        3.7646484375,
+        4.05810546875,
+        4.8388671875
+      ],
+      "pid": 34945,
+      "pgid": 34945,
+      "exitCode": 1,
+      "sourceHashes": {
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx": "0385b9dc5958da996092ebd8887d2a0a2abc216dc7da47bc14a5370b4e448f5b",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx": "e011b34ac2cea24f94af6895189eaa2109f99a4481bdef7535b5151bfafec4e1"
+      },
+      "outputSha256": "1e1f80e19014b39118146af7835a3c6c3826734e68c617830fd9b3371ce2d250"
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gamble-restoration-734",
+      "start": "2026-10-15T08:41:44.215339+00:00",
+      "end": "2026-10-15T08:41:59.625809+00:00",
+      "wallS": 15.4102263340028,
+      "userS": 40.342215,
+      "sysS": 7.509194,
+      "hostLoad": [
+        5.2265625,
+        4.93115234375,
+        5.0546875
+      ],
+      "pid": 72584,
+      "pgid": 72584,
+      "exitCode": 0,
+      "sourceHashes": {
+        "src/components/ScreenRouter-sites.test.tsx": "0e8253b93677f2040e756d0159e31f6719669fc622b9ec27fcfe8c031ce93ca0",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx": "22bbfed2c17931e5f73263bf9139d3a49a24843f13135706bb0bdb073c97d099",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx": "299a4123f944480502ba6877f102cae5a4d5d020c19c6bba8db887c97263378e"
+      },
+      "outputSha256": "0f8e3812db321c4a94b384ba6279a75d091c1543745b3c50c3e9431e9591e433"
+    },
+    "browser": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "restored-gamble",
+        "--bead",
+        "hv-umm2.734",
+        "--timeout",
+        "400"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gamble-restoration-734",
+      "start": "2026-10-15T08:38:38.115736+00:00",
+      "end": "2026-10-15T08:39:09.952027+00:00",
+      "wallS": 31.835948374995496,
+      "userS": 7.600036,
+      "sysS": 4.553583,
+      "hostLoad": [
+        3.85009765625,
+        4.0615234375,
+        4.80859375
+      ],
+      "pid": 35898,
+      "pgid": 35898,
+      "exitCode": 0,
+      "sourceHashes": {
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx": "22bbfed2c17931e5f73263bf9139d3a49a24843f13135706bb0bdb073c97d099",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx": "2778db18b72d2eb163ca54b1a502ac5ed22d90262b0d498371430d10d6e5a0af"
+      },
+      "outputSha256": "fe48971bcd6eceb3772b0d83a6a2b5ab7790a2eaf7d2dcb943fe271255e356fd"
+    }
+  },
+  "sourceHashes": {
+    "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx": "22bbfed2c17931e5f73263bf9139d3a49a24843f13135706bb0bdb073c97d099",
+    "src/screens/cumulus_adapters/GambleSiteScreenAdapter.test.tsx": "299a4123f944480502ba6877f102cae5a4d5d020c19c6bba8db887c97263378e",
+    "src/components/ScreenRouter-sites.test.tsx": "0e8253b93677f2040e756d0159e31f6719669fc622b9ec27fcfe8c031ce93ca0"
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 107,
+    "jsdomFiles": 1
+  },
+  "testScope": {
+    "new": "2 synthetic jsdom adapter contracts using real view builder/actions and mocked context/screen; no production catalog or UI-copy assertions. Restored runtime observes zero opening intents across StrictMode refresh/remount; normal first entry emits one initialization and subsequently uses folded runtime. Draw/leave intents stay wired.",
+    "focusedFinal": "New adapter, owning ScreenRouter sites, Gamble view model, Four-Suit view model and Gamble logging view model.",
+    "firstFocusedQualification": "The first focused command included nonexistent gamble-site-actions-view-model.test.ts; it selected no test file. No actions-test execution is claimed. Final explicit owning selection uses only existing paths.",
+    "red": "red-before-valid-fixture retained original production adapter hash 0385b9dc5958da996092ebd8887d2a0a2abc216dc7da47bc14a5370b4e448f5b and failed for emitted initialization on ready runtime. red-before first failed because synthetic guide dialogue was incomplete.",
+    "authoringFailure": "review-first failed own fixture type annotations and stale owning-router expectation; corrected finite assertion admitted by parent. Existing caught tutorial-provider diagnostic in router fixture is pre-existing.",
+    "browserEpoch": "All browser interaction used final unchanged production adapter SHA22bbfed2c17931e5f73263bf9139d3a49a24843f13135706bb0bdb073c97d099; only test type and owning expectation edits followed.",
+    "full": "Not run: bounded adapter initialization, no test infrastructure/config/architecture change.",
+    "contentFuzzSweep": "Not applicable: no content leaf or battle behavior change."
+  },
+  "hostLoadSamples": {
+    "knip": [
+      5.13916015625,
+      4.9482421875,
+      5.0576171875
+    ],
+    "red-before": [
+      4.0283203125,
+      4.13134765625,
+      4.8837890625
+    ],
+    "review-first": [
+      4.46875,
+      4.19921875,
+      4.84033203125
+    ],
+    "focused": [
+      3.6630859375,
+      4.02880859375,
+      4.8017578125
+    ],
+    "focused-final": [
+      5.94775390625,
+      4.7568359375,
+      5.01904296875
+    ],
+    "focused-owning-final": [
+      5.732421875,
+      4.92431640625,
+      5.06005859375
+    ],
+    "red-before-valid-fixture": [
+      3.7646484375,
+      4.05810546875,
+      4.8388671875
+    ],
+    "review": [
+      5.2265625,
+      4.93115234375,
+      5.0546875
+    ],
+    "browser": [
+      3.85009765625,
+      4.0615234375,
+      4.80859375
+    ]
+  },
+  "resources": {
+    "observed": "2026-10-15T08:42:57.812866+00:00",
+    "groups": [
+      {
+        "check": "red-before",
+        "pid": 34301,
+        "pgid": 34301,
+        "exitCode": 1,
+        "members": []
+      },
+      {
+        "check": "red-before-valid-fixture",
+        "pid": 34945,
+        "pgid": 34945,
+        "exitCode": 1,
+        "members": []
+      },
+      {
+        "check": "focused",
+        "pid": 35770,
+        "pgid": 35770,
+        "exitCode": 0,
+        "members": []
+      },
+      {
+        "check": "focused-final",
+        "pid": 37793,
+        "pgid": 37793,
+        "exitCode": 0,
+        "members": []
+      },
+      {
+        "check": "focused-owning-final",
+        "pid": 67089,
+        "pgid": 67089,
+        "exitCode": 0,
+        "members": []
+      },
+      {
+        "check": "review-first",
+        "pid": 36601,
+        "pgid": 36601,
+        "exitCode": 2,
+        "members": []
+      },
+      {
+        "check": "review",
+        "pid": 72584,
+        "pgid": 72584,
+        "exitCode": 0,
+        "members": []
+      },
+      {
+        "check": "knip",
+        "pid": 73194,
+        "pgid": 73194,
+        "exitCode": 0,
+        "members": []
+      },
+      {
+        "check": "browser",
+        "pid": 35898,
+        "pgid": 35898,
+        "exitCode": 0,
+        "members": []
+      }
+    ],
+    "ownedBrowser": {
+      "invocation": "run-59wPak",
+      "port": 5274,
+      "serverPgid": 35926,
+      "serverMembers": [],
+      "runnerTerminal": 0,
+      "cleanupReceipt": "browser.log: server process group 35926 on port 5274 cleanup attempted; port free",
+      "slotOwnerAbsent": true,
+      "serverRecordAbsent": true,
+      "portListenerAbsent": true,
+      "portProbeExit": 1
+    },
+    "allOwnedResourcesSettled": true
+  },
+  "limits": [
+    "No new screen, presentation or responsive changes; one existing-screen desktop interaction capture, no mobile matrix or final cold visual review required.",
+    "Original271 content acceptance and733 permanent modification copying remain assigned to their owning beads.",
+    "No separate new diagnostic event: existing public intent and UUID settlement logs reconstruct the repaired initialization workflow."
+  ]
+}
