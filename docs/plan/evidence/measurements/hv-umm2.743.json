@@ -1,0 +1,386 @@
+{
+  "bead": "hv-umm2.743",
+  "sourceBase": "57bc2e5082390107bd2038e2fb079e3dc479b4ef",
+  "dispatch": {
+    "timestamp": "2026-10-15T11:57:39.796Z",
+    "hostFile": "/Users/dthurn/.codex/sessions/2026/10/10/rollout-2026-10-10T20-08-54-01a128ef-4fc7-7a52-8a19-816921410323.jsonl",
+    "ordinal": 85320,
+    "rawEventSHA256": "8ce6fa7b9225654190325b0e97d71e3aaa945c105a707a4165c3b2c06bf6dca0",
+    "agent": "/root/resonant_followup743",
+    "clockMeaning": "Actual spawn dispatch through final Git; all research/admission/queue/checks/evidence included"
+  },
+  "evidenceCutoff": "2026-10-15T12:45:06.603012+00:00",
+  "implementWindowMeaning": "Actual dispatch through this precommit evidence cutoff, including research/admission/verification/interruption/recovery. Final actual Git receipt and inclusive elapsed are retained in ignored final custody/native notes; timestamps are never forced. Cutoff-to-Git tail is explicit.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v02 initial host load"
+      }
+    }
+  },
+  "commands": [
+    {
+      "label": "baseline-marked-v01",
+      "start": "2026-10-15T12:08:41.123786+00:00",
+      "end": "2026-10-15T12:08:45.070529+00:00",
+      "exit": 0,
+      "wallSeconds": 3.9466297079925425,
+      "receipt": "validation-final-v01/worker/baseline-marked-v01.receipt.json",
+      "sha256": "364a1774c4bf276c5ae88edfedd890a2736f457e469ba2ddc9e39e2e11038486"
+    },
+    {
+      "label": "baseline-marked-v02",
+      "start": "2026-10-15T12:10:16.155531+00:00",
+      "end": "2026-10-15T12:10:19.172996+00:00",
+      "exit": 0,
+      "wallSeconds": 3.0173171249916777,
+      "receipt": "validation-final-v01/worker/baseline-marked-v02.receipt.json",
+      "sha256": "c612a6398bd81cca871ca31f7046e056ab968fb23373cc3fdd25331c71120b41"
+    },
+    {
+      "label": "browser-final-01",
+      "start": "2026-10-15T12:40:40.834760+00:00",
+      "end": "2026-10-15T12:40:52.122456+00:00",
+      "exit": 0,
+      "wallSeconds": 11.28751158399973,
+      "receipt": "validation-final-v01/worker/browser-final-01.receipt.json",
+      "sha256": "85ee5bfd6a19628f6c674cf1c1d0ca67e8e569b28996862255b11f742bb04a35"
+    },
+    {
+      "label": "browser-final-02",
+      "start": "2026-10-15T12:40:52.265576+00:00",
+      "end": "2026-10-15T12:41:02.879748+00:00",
+      "exit": 0,
+      "wallSeconds": 10.613976416003425,
+      "receipt": "validation-final-v01/worker/browser-final-02.receipt.json",
+      "sha256": "c61c4d778674b3f8d0964ebe4e277ff08640e652539dbf70e32badff59f74d96"
+    },
+    {
+      "label": "browser-final-03",
+      "start": "2026-10-15T12:41:03.014410+00:00",
+      "end": "2026-10-15T12:41:12.729231+00:00",
+      "exit": 0,
+      "wallSeconds": 9.714651249989402,
+      "receipt": "validation-final-v01/worker/browser-final-03.receipt.json",
+      "sha256": "b49511b4f1c4a558c552b9f3b58f0277e399f7afb4ea15c59ccc17ca0e695da2"
+    },
+    {
+      "label": "browser-final-04",
+      "start": "2026-10-15T12:41:12.874792+00:00",
+      "end": "2026-10-15T12:41:23.800442+00:00",
+      "exit": 0,
+      "wallSeconds": 10.925462124985643,
+      "receipt": "validation-final-v01/worker/browser-final-04.receipt.json",
+      "sha256": "bbfad710f7a63dc92975a45679d062b6c01f38ea169924776b589ec15b3fbcf0"
+    },
+    {
+      "label": "browser-final-05",
+      "start": "2026-10-15T12:41:23.934894+00:00",
+      "end": "2026-10-15T12:41:34.122695+00:00",
+      "exit": 0,
+      "wallSeconds": 10.187576124968473,
+      "receipt": "validation-final-v01/worker/browser-final-05.receipt.json",
+      "sha256": "3b57dc8ae71a03d809b59d83264430803e54aa274d20ffe6d3283c64c98c5c7c"
+    },
+    {
+      "label": "browser-final-06",
+      "start": "2026-10-15T12:41:34.256671+00:00",
+      "end": "2026-10-15T12:41:45.031993+00:00",
+      "exit": 0,
+      "wallSeconds": 10.775113540992606,
+      "receipt": "validation-final-v01/worker/browser-final-06.receipt.json",
+      "sha256": "ab362ca935725da114a27da2a26f71990a222e7b120f58503d4b4cde345e0675"
+    },
+    {
+      "label": "browser-final-07",
+      "start": "2026-10-15T12:42:10.911437+00:00",
+      "end": "2026-10-15T12:42:20.709401+00:00",
+      "exit": 0,
+      "wallSeconds": 9.79778212500969,
+      "receipt": "validation-final-v01/worker/browser-final-07.receipt.json",
+      "sha256": "9907881ccae4fe1d01dfd35813237725f875872a30e3c035dd2ef75fce745f00"
+    },
+    {
+      "label": "browser-final-08",
+      "start": "2026-10-15T12:42:20.781934+00:00",
+      "end": "2026-10-15T12:42:31.302709+00:00",
+      "exit": 0,
+      "wallSeconds": 10.520594041969161,
+      "receipt": "validation-final-v01/worker/browser-final-08.receipt.json",
+      "sha256": "511e20cfd6bdabd4fc77e45675f09fe82b503c5cf2855557b5cdbc131b2b94e8"
+    },
+    {
+      "label": "browser-final-09",
+      "start": "2026-10-15T12:42:31.380248+00:00",
+      "end": "2026-10-15T12:42:44.777413+00:00",
+      "exit": 0,
+      "wallSeconds": 13.39695737499278,
+      "receipt": "validation-final-v01/worker/browser-final-09.receipt.json",
+      "sha256": "4d403be377b7c1b4f51213fee8f30981b39ac22788691b8e3b60c81582bf5107"
+    },
+    {
+      "label": "browser-final-10",
+      "start": "2026-10-15T12:42:44.870795+00:00",
+      "end": "2026-10-15T12:43:00.630739+00:00",
+      "exit": 0,
+      "wallSeconds": 15.759720749978442,
+      "receipt": "validation-final-v01/worker/browser-final-10.receipt.json",
+      "sha256": "14097d8a7a007392da08144d46f00c41e9454201effeb9bf77958305c2f4af43"
+    },
+    {
+      "label": "browser-final-11",
+      "start": "2026-10-15T12:43:00.712383+00:00",
+      "end": "2026-10-15T12:43:12.310282+00:00",
+      "exit": 0,
+      "wallSeconds": 11.597703624982387,
+      "receipt": "validation-final-v01/worker/browser-final-11.receipt.json",
+      "sha256": "a525949f4a3265a097dd147062e463d79fa6c645bdd9cd0512a65fdfac42731a"
+    },
+    {
+      "label": "browser-final-12",
+      "start": "2026-10-15T12:43:12.383445+00:00",
+      "end": "2026-10-15T12:43:21.906295+00:00",
+      "exit": 0,
+      "wallSeconds": 9.52265916694887,
+      "receipt": "validation-final-v01/worker/browser-final-12.receipt.json",
+      "sha256": "7d9d4cecce2568a9cff8db36a0ee99761a5ce65a1cbd87222e279bbf44ee07f6"
+    },
+    {
+      "label": "browser-final-13",
+      "start": "2026-10-15T12:43:21.984882+00:00",
+      "end": "2026-10-15T12:43:32.942015+00:00",
+      "exit": 0,
+      "wallSeconds": 10.956969792023301,
+      "receipt": "validation-final-v01/worker/browser-final-13.receipt.json",
+      "sha256": "e73c14c2b4aaf933a35068ed35950a1e2f71b6dc638c7c27c5c2a3a548b7d309"
+    },
+    {
+      "label": "browser-final-14",
+      "start": "2026-10-15T12:43:33.019591+00:00",
+      "end": "2026-10-15T12:43:43.487311+00:00",
+      "exit": 0,
+      "wallSeconds": 10.46756804198958,
+      "receipt": "validation-final-v01/worker/browser-final-14.receipt.json",
+      "sha256": "0b38f9fd5a225aa5e34a64d505f42b548dbcf5bacbb7b1444a19820056840b38"
+    },
+    {
+      "label": "browser-final-15",
+      "start": "2026-10-15T12:44:15.272426+00:00",
+      "end": "2026-10-15T12:44:25.644868+00:00",
+      "exit": 0,
+      "wallSeconds": 10.372258458985016,
+      "receipt": "validation-final-v01/worker/browser-final-15.receipt.json",
+      "sha256": "3b937e3268c4ff23621aed45223dd216941965ad586c7fea277aae96a9507256"
+    },
+    {
+      "label": "browser-final-16",
+      "start": "2026-10-15T12:44:25.726330+00:00",
+      "end": "2026-10-15T12:44:37.486911+00:00",
+      "exit": 0,
+      "wallSeconds": 11.760134374955669,
+      "receipt": "validation-final-v01/worker/browser-final-16.receipt.json",
+      "sha256": "246580b5e24f5c77c8610ce04f067b5f8b18712f41e36ae876ae3903d64d966a"
+    },
+    {
+      "label": "browser-final-17",
+      "start": "2026-10-15T12:44:37.586328+00:00",
+      "end": "2026-10-15T12:44:49.347388+00:00",
+      "exit": 0,
+      "wallSeconds": 11.760805999976583,
+      "receipt": "validation-final-v01/worker/browser-final-17.receipt.json",
+      "sha256": "23d834574461e7605bcfe5d1af04846a322aedd359a0024338d6cf7fd359dca8"
+    },
+    {
+      "label": "browser-pilot-v01",
+      "start": "2026-10-15T12:20:30.746882+00:00",
+      "end": "2026-10-15T12:21:00.895471+00:00",
+      "exit": 1,
+      "wallSeconds": 30.148234832973685,
+      "receipt": "validation-final-v01/worker/browser-pilot-v01.receipt.json",
+      "sha256": "d0f738fd054447785d8af524bbe7d9b0bdb841d79dd2ccd8f482b907dc515323"
+    },
+    {
+      "label": "browser-pilot-v02",
+      "start": "2026-10-15T12:25:59.227184+00:00",
+      "end": "2026-10-15T12:26:15.479705+00:00",
+      "exit": 1,
+      "wallSeconds": 16.25225912500173,
+      "receipt": "validation-final-v01/worker/browser-pilot-v02.receipt.json",
+      "sha256": "1db71ee7c9e26956fae0abd468d3aaeab68fa248636d284db77a59dfb255d315"
+    },
+    {
+      "label": "browser-pilot-v03",
+      "start": "2026-10-15T12:39:30.676894+00:00",
+      "end": "2026-10-15T12:39:45.543494+00:00",
+      "exit": 0,
+      "wallSeconds": 14.866371416021138,
+      "receipt": "validation-final-v01/worker/browser-pilot-v03.receipt.json",
+      "sha256": "fc2d246e1e16ef1e801a1700e5039f035513bfb5266be4392bc28d88768cc439"
+    },
+    {
+      "label": "focused-v01",
+      "start": "2026-10-15T12:09:19.144426+00:00",
+      "end": "2026-10-15T12:09:22.071465+00:00",
+      "exit": 0,
+      "wallSeconds": 2.92692233400885,
+      "receipt": "validation-final-v01/worker/focused-v01.receipt.json",
+      "sha256": "dbdc625d638eaa830e08eb9cb0043383c1590570a16888bc62ca4bbce1e8217c"
+    },
+    {
+      "label": "focused-v02",
+      "start": "2026-10-15T12:10:41.928087+00:00",
+      "end": "2026-10-15T12:10:48.618870+00:00",
+      "exit": 0,
+      "wallSeconds": 6.690625082992483,
+      "receipt": "validation-final-v01/worker/focused-v02.receipt.json",
+      "sha256": "0ddfa69a9e9ec4c895c1d4244e356ef6f1cc8e69a275bdb6c7ef36f64c8af1a8"
+    },
+    {
+      "label": "focused-v03",
+      "start": "2026-10-15T12:11:31.565778+00:00",
+      "end": "2026-10-15T12:11:36.891769+00:00",
+      "exit": 0,
+      "wallSeconds": 5.325803416024428,
+      "receipt": "validation-final-v01/worker/focused-v03.receipt.json",
+      "sha256": "42373bc67037a10d6a089ef11646f513974161f69d30b82d7d69cf0031d2a08b"
+    },
+    {
+      "label": "focused-v04",
+      "start": "2026-10-15T12:13:17.850602+00:00",
+      "end": "2026-10-15T12:13:23.809054+00:00",
+      "exit": 0,
+      "wallSeconds": 5.958314583986066,
+      "receipt": "validation-final-v01/worker/focused-v04.receipt.json",
+      "sha256": "4f54eb65695e6f5e028a4214399ccd4c154c6d6cd289a31121e6f2a1360a2cc0"
+    },
+    {
+      "label": "knip-v01",
+      "start": "2026-10-15T12:14:48.988791+00:00",
+      "end": "2026-10-15T12:14:53.848686+00:00",
+      "exit": 0,
+      "wallSeconds": 4.859728207986336,
+      "receipt": "validation-final-v01/worker/knip-v01.receipt.json",
+      "sha256": "45374fdbcfbc55e1f9647237e7cfca0933779571011527087319b696b297ac09"
+    },
+    {
+      "label": "marked-interaction-v01",
+      "start": "2026-10-15T12:09:44.606009+00:00",
+      "end": "2026-10-15T12:09:47.583562+00:00",
+      "exit": 1,
+      "wallSeconds": 2.9773801660048775,
+      "receipt": "validation-final-v01/worker/marked-interaction-v01.receipt.json",
+      "sha256": "14ac04a3a8bab73a22ee7cb0dc23974ad7ccb0628a1486e9c149015870c88b6c"
+    },
+    {
+      "label": "preflight-v01",
+      "start": "2026-10-15T12:20:12.232114+00:00",
+      "end": "2026-10-15T12:20:15.371492+00:00",
+      "exit": 0,
+      "wallSeconds": 3.139270999992732,
+      "receipt": "validation-final-v01/worker/preflight-v01.receipt.json",
+      "sha256": "9e6f886d6040399e0dfc34811a752e117f471629bf99536614a603ec523daadd"
+    },
+    {
+      "label": "red-v01",
+      "start": "2026-10-15T12:08:49.416138+00:00",
+      "end": "2026-10-15T12:08:52.399567+00:00",
+      "exit": 1,
+      "wallSeconds": 2.9832924170186743,
+      "receipt": "validation-final-v01/worker/red-v01.receipt.json",
+      "sha256": "5386480f54f384868262c3aae1b004ff000f633ce5f90de61aecd565cea5b44a"
+    },
+    {
+      "label": "review-v01",
+      "start": "2026-10-15T12:11:58.392442+00:00",
+      "end": "2026-10-15T12:12:59.240600+00:00",
+      "exit": 2,
+      "wallSeconds": 60.84757270803675,
+      "receipt": "validation-final-v01/worker/review-v01.receipt.json",
+      "sha256": "b76819758ecf8660caa684e170272e26e92d6eb891fe527ca35c02b7c47703b3"
+    },
+    {
+      "label": "review-v02",
+      "start": "2026-10-15T12:13:43.390410+00:00",
+      "end": "2026-10-15T12:14:32.481514+00:00",
+      "exit": 0,
+      "wallSeconds": 49.09049158298876,
+      "receipt": "validation-final-v01/worker/review-v02.receipt.json",
+      "sha256": "26cc98361d2eb9e93bee7c8c9c46d84a2cabcf06f1df1d5e93700e3261cb68dd"
+    },
+    {
+      "label": "schema-v01",
+      "start": "2026-10-15T12:15:49.520435+00:00",
+      "end": "2026-10-15T12:15:49.600908+00:00",
+      "exit": 0,
+      "wallSeconds": 0.0803699170355685,
+      "receipt": "validation-final-v01/worker/schema-v01.receipt.json",
+      "sha256": "4fb25982bb30d467a8ba202053526458bc3a266dddbd1d0d41596d922fc3712d"
+    },
+    {
+      "label": "schema-v02",
+      "start": "2026-10-15T12:16:45.735381+00:00",
+      "end": "2026-10-15T12:16:45.815478+00:00",
+      "exit": 0,
+      "wallSeconds": 0.07999783300329,
+      "receipt": "validation-final-v01/worker/schema-v02.receipt.json",
+      "sha256": "46cd1b646ea7adbcfedfbcf5a46fa62e5a3958fce7a7b878b4f16122041ff767"
+    },
+    {
+      "label": "whitespace-v01",
+      "start": "2026-10-15T12:16:22.539772+00:00",
+      "end": "2026-10-15T12:16:22.557305+00:00",
+      "exit": 0,
+      "wallSeconds": 0.01742929103784263,
+      "receipt": "validation-final-v01/worker/whitespace-v01.receipt.json",
+      "sha256": "0b26cfdc975ac82615c183f9c9f5b9d34daf537ddd40f8c8886b601a4918e9ab"
+    }
+  ],
+  "sourceFreeze": {
+    "manifest": "validation-final-v01/worker/production-freeze-v01.json",
+    "sha256": "3996b23d64c3c3ec842ca2f56d74784e2800b9cf6a408d8c6e0fbe3e7dbc98e4",
+    "files": 14,
+    "allExactAfterQA": true
+  },
+  "checks": {
+    "focused": "134 tests/5 actual files pass focused-v04",
+    "review": "8431 tests/188 related files; lint/types/cycles pass review-v02",
+    "knip": "pass knip-v01",
+    "red": "8 discriminating failures tests-only red-v01; canonical-marker regression marked-interaction-v01 and synthetic type correction review-v01 preserved",
+    "preflight": "32 exact tuples:16 base passes,10 Resonant passes,6 Resonant ineligible skips,0 failures",
+    "fullAndWeighted": "Not required for this bounded existing selector/predicate correction; no new entity batch, architecture/config/fuzzer/runner change. Original276 checks and278 broader acceptance retained."
+  },
+  "browser": {
+    "scenario": "resonant-resources-root-v04.mjs",
+    "scenarioSHA256": "4569005593288317cab1132aa445403cd590fddbd9188025bec03d84b34758e8",
+    "outcomes": "validation-final-v01/root/browser-final-outcomes-v01.json",
+    "resonantPlays": 12,
+    "baseControlPlays": 6,
+    "ineligibilityChecksOnBase": 6,
+    "invalidVariantBrowserRequests": 0,
+    "caps": "empty all18",
+    "geometry": "All12 Resonant physical source rectangles within desktop1440x900 or mobile390x844 viewport; six base controls use tracked interaction/log/caps checks.",
+    "persistence": "Exact requested tuples in active URL-selected per-game logs; all12 Resonant applied source/controller triggers after loaded request.",
+    "effects": "Actual void return/Discover/opponent hand banish/combined energy/Dawn-to-Materialized reclaim on initial physical resources, both actors.",
+    "captures": [
+      "743-void-player-desktop.png",
+      "743-void-player-mobile.png"
+    ],
+    "visualInspection": "Root inspected both final representative captures: physical board source and controls visible. Captures show post-play workflow; no claim of full hand rules-text readability.",
+    "failedEpochs": [
+      "run-Ldsavl wrong ordinary startup observer",
+      "run-ivXat2 Node VM URL unavailable"
+    ],
+    "recovery": "Root same-task justiciar context-resolution-v01 and native recovery record retain actual evidence/no acceptance waiver. Auditor queued-row discriminator, Event void/banished zone expectation, and postrelease foreign-slot ownership checks repaired without rerunning successful browser cases.",
+    "cleanup": "All owned wrappers/server groups settled after each cell; retained confirmed provider closure/port-free cleanup. Subsequent peer slot ownership is not owned residue.",
+    "widerAcceptance": "Original278 full per-form/every-Resonant/sampling/judgment joins remain."
+  },
+  "reviewClassification": {
+    "nonTestCodeChanged": 18,
+    "countMeaning": "additions+deletions:16 display+2 lab; tests/docs excluded",
+    "coreReview": false,
+    "required": false,
+    "basis": "Below executor >100 non-test line threshold; not a phase gate or phase-page core-review bead. Accepted origin276 fresh review findings are repaired by this bead."
+  },
+  "rulesDecision": "RD-hv-umm2.743-1; current own-header rule applies, D10 ladder not invoked",
+  "finalChecksOwed": "Final schema/triggers/whitespace after this file; exact staged freeze, real Git receipt and certified delivery retained in ignored custody/native notes."
+}

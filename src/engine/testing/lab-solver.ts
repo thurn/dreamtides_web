@@ -214,7 +214,7 @@ function playConditionVoidDeficit(engine: Engine, cards: readonly CardId[], filt
 
 /** Whether an ability is a ▸Materialized trigger, which fires as the lab's play of a character enters play. */
 function isMaterializedTrigger(ability: Ability): ability is TriggeredAbility {
-  return ability.kind === "triggered" && "on" in ability.trigger && ability.trigger.on === "materialized";
+  return ability.kind === "triggered" && namedTriggersOf([ability]).includes("materialized");
 }
 
 /**

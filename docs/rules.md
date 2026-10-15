@@ -3260,8 +3260,11 @@ Resonant changes the first supported occurrence selected by the card's displayed
 text: first a once-per-turn restriction; otherwise a ▸Dawn header; otherwise a
 literal ▸Materialized: header. It removes that restriction, adds Materialized
 to that Dawn ability, or adds Dissolved to that Materialized ability,
-respectively. This includes a once-per-turn static play permission. All other
-conditions, costs and functional zones remain. A combined ability triggers once
+respectively. This includes a once-per-turn static play permission. A named
+header belongs to the card’s own ability and starts a rules-text line,
+including a comma-separated combined header. A quoted instruction referring
+to another ability supplies no header. All other conditions, costs and
+functional zones remain. A combined ability triggers once
 for each occasion it contains, including an occasion already present.
 
 ## Journey Transfiguration Effects

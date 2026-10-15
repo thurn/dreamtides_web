@@ -517,10 +517,14 @@ function amplifiedTransform(card: CardData): TextTransform | null {
  */
 /** The existing displayed operation selected by Resonant, before structural interpretation. */
 export type ResonantChange = "oncePerTurn" | "dawn" | "materialized";
+// Prior text transforms may leave their canonical tint markers before a header.
+const RESONANT_HEADER_PREFIX = String.raw`(^|\n)([ \t${TRANSFIGURE_MARK_START}${TRANSFIGURE_MARK_END}]*(?:▸(?:Materialized|Dissolved|Dawn|Dusk|Night|Challenge),[ \t]*)*?)`;
+const RESONANT_DAWN_HEADER = new RegExp(RESONANT_HEADER_PREFIX + String.raw`▸Dawn(?=(?:,[ \t]*▸?(?:Materialized|Dissolved|Dawn|Dusk|Night|Challenge))*:)`);
+const RESONANT_MATERIALIZED_HEADER = new RegExp(RESONANT_HEADER_PREFIX + "▸Materialized:");
 export function resonantChange(text: string): ResonantChange | null {
   if (/once per turn/i.test(text)) return "oncePerTurn";
-  if (text.includes("▸Dawn")) return "dawn";
-  if (text.includes("▸Materialized:")) return "materialized";
+  if (RESONANT_DAWN_HEADER.test(text)) return "dawn";
+  if (RESONANT_MATERIALIZED_HEADER.test(text)) return "materialized";
   return null;
 }
 
@@ -535,15 +539,15 @@ function resonantTransform(text: string): TextTransform | null {
   }
   if (change === "dawn") {
     return {
-      plain: (t) => t.replace("▸Dawn", "▸Materialized, Dawn"),
-      marked: (t) => t.replace("▸Dawn", `▸${mark("Materialized, ")}Dawn`),
+      plain: (t) => t.replace(RESONANT_DAWN_HEADER, "$1$2▸Materialized, Dawn"),
+      marked: (t) => t.replace(RESONANT_DAWN_HEADER, `$1$2▸${mark("Materialized, ")}Dawn`),
     };
   }
   if (change === "materialized") {
     return {
-      plain: (t) => t.replace("▸Materialized:", "▸Materialized, Dissolved:"),
+      plain: (t) => t.replace(RESONANT_MATERIALIZED_HEADER, "$1$2▸Materialized, Dissolved:"),
       marked: (t) =>
-        t.replace("▸Materialized:", `▸Materialized${mark(", Dissolved")}:`),
+        t.replace(RESONANT_MATERIALIZED_HEADER, `$1$2▸Materialized${mark(", Dissolved")}:`),
     };
   }
   return null;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createCatalog, instanceCard, type EngineCardDefinition } from "../../catalog";
+import { createCatalog, instanceCard, printedCardId, type EngineCardDefinition } from "../../catalog";
 import { createEngine } from "../../engine";
 import { NO_PROMPTS } from "../../steps/sources";
 import { boardState } from "../../testing/board";
@@ -7,14 +7,16 @@ import { stateHash } from "../../state/hash";
 import { FORM_EVENT, FORM_FILLER, formContent, metadata } from "./transfigurations-01.fixtures";
 import * as b from "../../dsl/builders";
 import * as p from "../../effects/primitives";
-import { triggered, onDawn, onMaterialized, whenYouPlay, whenScoreGroup, either } from "../../dsl/triggers";
+import { triggered, onDawn, onMaterialized, onDissolved, whenYouPlay, whenScoreGroup, either } from "../../dsl/triggers";
 import { BASE_VARIANT, NO_DECK_MODS, type Variant } from "../../dsl/types";
 import { createFoldAdapter, type BattleSlice } from "../../fold/slice";
 import { ScriptedSource } from "../../steps/sources";
-import { syntheticId } from "../../testing/synthetic-cards";
+import { labBoard } from "../../testing/lab-solver";
+import { firstLegalAnswer } from "../../prompts/answers";
+import { testCatalog, syntheticId } from "../../testing/synthetic-cards";
 import { ENGINE_TRANSFIGURATIONS, eligibleEngineTransfigurations } from "../../transfigurations";
 import { engineCardFromContent } from "../../content-catalog";
-import { eligibleTransfigurations } from "../../../transfiguration/transfiguration-logic";
+import { eligibleTransfigurations, applyTransfigurationToCard, buildTransfigurationDisplay, TRANSFIGURE_MARK_START, TRANSFIGURE_MARK_END } from "../../../transfiguration/transfiguration-logic";
 import { transfigurationFixture } from "../../../testing/transfiguration-fixture";
 import { parseCardId, parseCardName } from "../../../types/card-identity";
 import { TRANSFIGURATION } from "../../../content/transfiguration";
@@ -331,4 +333,114 @@ describe("public weighted form fuzz recipes", () => {
     const cards = Array.from({ length: DECK_SIZE }, (_, index) => ({ ...FORM_EVENT, id: syntheticId(0x2800 + index) }));
     expect(() => withFuzzCardWeights({ ...pool, cards }, [...cards.map(card => card.id), ENGINE_TRANSFIGURATIONS[0].uuid].join(","))).toThrow();
   });
+});
+
+
+// Regression contracts for the shared own-header and materialized-fixture boundaries.
+const formDisplay = (content: ReturnType<typeof formContent>) => ({ ...content, id: parseCardId(content.id), name: parseCardName(content.name), roles: content.roles === undefined ? undefined : [...content.roles], energyCosts: content.energyCosts === undefined ? undefined : [...content.energyCosts] });
+describe("Resonant own headers and composite lab resources", () => {
+  it("rejects quoted external names and headers without changing an ineligible card", () => {
+    for (const reference of ["'▸Dawn'", "'▸Dawn:'", "'▸Materialized:'"]) {
+      const content = formContent({ renderedText: `Trigger the ${reference} ability of another character.` });
+      const display = formDisplay(content), definition = engineCardFromContent(content);
+      expect(eligibleTransfigurations(transfigurationFixture(), display)).not.toContain("Resonant");
+      expect(eligibleEngineTransfigurations(definition)).not.toContain("Resonant");
+      expect(applyTransfigurationToCard(transfigurationFixture(), display, "Resonant")).toBe(display);
+      const catalog = createCatalog([definition], []);
+      expect(catalog.variantCard(definition.id, formVariant(["Resonant"])).abilities(BASE_VARIANT)).toEqual(definition.abilities(BASE_VARIANT));
+    }
+  });
+  it("selects a real header after an earlier quoted reference in both display paths", () => {
+    for (const heading of ["▸Dawn:", "▸Materialized:"]) {
+      const content = formContent({ renderedText: `Trigger the '▸Dawn:' ability of another character.\n\n${heading} Gain 1⍟.` });
+      const display = formDisplay(content), data = transfigurationFixture();
+      const built = buildTransfigurationDisplay(data, display, "Resonant");
+      expect(eligibleTransfigurations(data, display)).toContain("Resonant");
+      expect(eligibleTransfigurations(data, built.card)).not.toContain("Resonant");
+      expect(built.display.markedText.split(TRANSFIGURE_MARK_START).join("").split(TRANSFIGURE_MARK_END).join("")).toBe(built.card.renderedText);
+    }
+  });
+  it("retains the unsupported single-marker combined spelling", () => {
+    const content = formContent({ renderedText: "▸Materialized, Dawn: Gain 1⍟." });
+    expect(eligibleEngineTransfigurations(engineCardFromContent(content))).not.toContain("Resonant");
+    expect(eligibleTransfigurations(transfigurationFixture(), formDisplay(content))).not.toContain("Resonant");
+  });
+  it("preserves public marked/plain equivalence after authored Amplified text", () => {
+    const data = transfigurationFixture();
+    for (const [renderedText, amplifiedText] of [["Gain 1⍟.", "▸Dawn: Gain 2⍟."], ["▸Dawn: Gain 1⍟.", "Veil\n\n▸Dawn: Gain 2⍟."]]) {
+      const display = formDisplay(formContent({ renderedText, amplifiedText }));
+      const built = buildTransfigurationDisplay(data, display, "Perfected");
+      expect(built.display.markedText.split(TRANSFIGURE_MARK_START).join("").split(TRANSFIGURE_MARK_END).join("")).toBe(built.card.renderedText);
+    }
+  });
+  for (const side of ["player", "enemy"] as const) {
+    it(`keeps actual base/amplified eligibility and physical plays aligned for ${side}`, () => {
+      for (const baseDawn of [false, true]) for (const amplified of [false, true]) {
+        const content = formContent({ cardType: "Character", spark: 1, renderedText: baseDawn ? "▸Dawn: Gain 2⍟." : "Trigger the '▸Dawn' ability of another character.",
+          amplifiedText: baseDawn ? "Trigger the '▸Dawn' ability of another character." : "▸Dawn: Gain 2⍟.",
+          abilities: variant => variant.amplified !== baseDawn ? [triggered(onDawn(), p.gainPoints(2))] : [],
+        });
+        const definition = engineCardFromContent(content);
+        const variant = formVariant(["Resonant"], amplified), eligible = amplified !== baseDawn;
+        expect(eligibleEngineTransfigurations(definition, variant).includes("Resonant")).toBe(eligible);
+        const display = formDisplay({ ...content, renderedText: amplified ? content.amplifiedText! : content.renderedText });
+        expect(eligibleTransfigurations(transfigurationFixture(), display).includes("Resonant")).toBe(eligible);
+        const catalog = createCatalog([definition], []), engine = createEngine(catalog);
+        const { state, ids } = boardState(catalog, { active: side, phase: "day", [side]: { hand: [{ cardId: definition.id, ...variant }], energy: 10 } });
+        const result = engine.apply(state, side, { kind: "play", card: ids[side].hand[0], from: "hand" }, NO_PROMPTS);
+        expect(result.state.sides[side].score).toBe(eligible ? 2 : 0);
+        expect(definition.transfiguration).toEqual(engineCardFromContent(content).transfiguration);
+      }
+    });
+    it(`preserves first category, first occurrence and combined admission for ${side}`, () => {
+      const mat = triggered(onMaterialized(), p.gainPoints(2)), dawn = triggered(onDawn(), p.gainPoints(3));
+      const rows = [
+        { text: "▸Materialized: Gain 2⍟.\n\nTrigger '▸Dawn'.\n\n▸Dawn: Gain 3⍟.\n\n▸Dawn: Gain 5⍟.", abilities: [mat, dawn, triggered(onDawn(), p.gainPoints(5))], score: 5 },
+        { text: "Trigger '▸Dawn'.\n\n▸Materialized: Gain 2⍟.", abilities: [mat], score: 2 },
+        { text: "▸Materialized, ▸Dawn: Gain 3⍟.", abilities: [triggered(either(onMaterialized(), onDawn()), p.gainPoints(3))], score: 3 },
+        { text: "▸Dawn: Gain 3⍟.\n\n▸Materialized: Gain 2⍟.\n\n▸Dawn: Gain 5⍟.", abilities: [dawn, mat, triggered(onDawn(), p.gainPoints(5))], score: 5 },
+      ];
+      for (const row of rows) {
+        const definition = engineCardFromContent(formContent({ cardType: "Character", spark: 1, renderedText: row.text, abilities: () => row.abilities }));
+        const catalog = createCatalog([definition, dissolver], []), engine = createEngine(catalog);
+        const { state, ids } = boardState(catalog, { active: side, phase: "day", [side]: { hand: [formEntry(definition, ["Resonant"]), dissolver.id], energy: 10 } });
+        const first = engine.apply(state, side, { kind: "play", card: ids[side].hand[0], from: "hand" }, NO_PROMPTS);
+        expect(first.state.sides[side].score).toBe(row.score);
+        if (row.abilities.length === 1 && row.abilities[0] === mat) {
+          const second = engine.apply(first.state, side, { kind: "play", card: ids[side].hand[1], from: "hand" }, new ScriptedSource([[ids[side].hand[0]]]));
+          expect(second.state.sides[side].score).toBe(4);
+        }
+      }
+    });
+    it(`stages and resolves direct, composite and transformed entry resources for ${side}`, () => {
+      const mage = { ...FORM_FILLER, id: syntheticId(0x7431), subtype: "Mage" as const };
+      const effects = p.sequence(p.returnFromVoid(b.fromVoid({ cardType: "event" })), p.banishChosen(), p.discover({ cardType: "character", subtype: "Mage" }), p.dissolve(b.target(b.characterYouControl({ subtype: "Mage" }))));
+      const triggers = [onMaterialized(), either(onMaterialized(), onDissolved()), either(onDawn(), either(onDissolved(), onMaterialized())), onMaterialized(), onDawn()];
+      for (const [index, trigger] of triggers.entries()) {
+        const card: EngineCardDefinition = { ...FORM_FILLER, id: syntheticId(0x7432), costs: [b.energy(3)], status: "authored", transfiguration: metadata(index === 4 ? "dawn" : "materialized"), abilities: () => [triggered(trigger, effects)] };
+        const variant = { ...formVariant(index >= 3 ? ["Resonant"] : []), deckMods: { ...NO_DECK_MODS, costReduction: 1, sparkBonus: 2 } };
+        const catalog = testCatalog([card, mage]), engine = createEngine(catalog), other = side === "player" ? "enemy" : "player";
+        const solved = labBoard(engine, { cardId: card.id, ...variant }, [mage, FORM_EVENT], side);
+        expect(boardState(catalog, solved.setup).state).toEqual(solved.state);
+        expect(solved.state.sides[side].void).toHaveLength(1);
+        expect(solved.state.sides[other].hand).toHaveLength(1);
+        expect(solved.state.sides[side].backRank.filter(id => id !== null)).toHaveLength(1);
+        expect(solved.state.sides[side].deck.filter(id => printedCardId(solved.state.instances[id].printing) === mage.id)).toHaveLength(1);
+        const source = solved.state.sides[side].hand[0], target = solved.state.sides[side].backRank[0]!;
+        const result = engine.apply(solved.state, side, { kind: "play", card: source, from: "hand" }, { answer: firstLegalAnswer });
+        expect(result.state.sides[side].hand).toHaveLength(2);
+        expect(result.state.instances[target].zone).toBe("void");
+        expect(result.state.sides[other].banished).toHaveLength(1);
+        expect(result.state.sides[side].currentEnergy).toBe(8);
+        expect(instanceCard(catalog, result.state.instances[source]).spark).toBe(3);
+        expect(result.events.some(event => event.kind === "triggerResolved" && event.source === source && event.applied)).toBe(true);
+        expect(result.events.some(event => event.kind === "noLegalTarget")).toBe(false);
+      }
+      const dawnOnly: EngineCardDefinition = { ...FORM_FILLER, id: syntheticId(0x7433), status: "authored", abilities: () => [triggered(either(onDawn(), onDissolved()), effects)] };
+      const control = labBoard(createEngine(testCatalog([dawnOnly, mage])), dawnOnly.id, [mage, FORM_EVENT], side).state;
+      expect(control.sides[side].void).toEqual([]); expect(control.sides[side === "player" ? "enemy" : "player"].hand).toEqual([]);
+      expect(control.sides[side].backRank.every(id => id === null)).toBe(true);
+      expect(control.sides[side].deck.every(id => printedCardId(control.instances[id].printing) !== mage.id)).toBe(true);
+    });
+  }
 });

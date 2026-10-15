@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.743",
+  "phase": 5,
+  "implementMin": 47.44678353333334,
+  "implementWindow": {
+    "start": "2026-10-15T11:57:39.796000+00:00",
+    "end": "2026-10-15T12:45:06.603012+00:00"
+  },
+  "localValidationS": {
+    "focused": 5.958314583986066,
+    "review": 49.09049158298876,
+    "knip": 4.859728207986336
+  },
+  "hostLoad": 8.04,
+  "testDelta": {
+    "files": 0,
+    "lines": 112,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 19.259058233333334,
+      "note": "Observed interval includes two failed agent observer pilots, actual producer/context readback, interruption and root recovery. LOAD_STATE lab logging differs from ordinary battle startup; Node observer VM has no URL global. Corrected source-bound observer retains active-game/applied-trigger/resource/geometry/caps acceptance. Raw failures preserved; production and shared tools unchanged."
+    }
+  ]
+}
