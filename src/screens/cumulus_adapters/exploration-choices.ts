@@ -1,6 +1,7 @@
 // Card, Dreamsign, and Avatar choice views and authored action parameters
 // shared by the Exploration action and resolution view models.
 
+import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
 import type { ExplorationCardChoiceView } from "../../cumulus/screens/ExplorationSiteScreen";
@@ -9,6 +10,7 @@ import { createDreamsign } from "../../data/dreamsigns";
 import { toJourneyAvatar } from "../../data/avatar-selection";
 import type { JourneyContent } from "../../data/journey-content";
 import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
+import type { CardSubtype } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
@@ -50,6 +52,7 @@ export function modelForCard(card: CardData): GameCardModel {
 export function deckCardChoice(
   entry: DeckEntry,
   content: JourneyContent,
+  typeRemap?: CardSubtype,
 ): ExplorationCardChoiceView<DeckEntryId> | null {
   const base = content.cardDatabase.get(entry.cardNumber);
   if (base === undefined) return null;
@@ -68,10 +71,10 @@ export function deckCardChoice(
         ).display;
   return {
     entryId: entry.entryId,
-    model: {
+    model: remapGameCardModelTypes({
       ...modelForCard(resolved),
       ...(transfiguration === undefined ? {} : { transfiguration }),
-    },
+    }, typeRemap),
     isBane: entry.isBane,
   };
 }

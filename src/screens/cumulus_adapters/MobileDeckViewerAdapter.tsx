@@ -32,8 +32,9 @@ export function MobileDeckViewerAdapter({
         journeyContent.transfigurationData,
         state.deck,
         journeyContent.cardDatabase,
+        state.typeRemap,
       ),
-    [state.deck, journeyContent.cardDatabase, journeyContent.transfigurationData],
+    [state.deck, state.typeRemap, journeyContent.cardDatabase, journeyContent.transfigurationData],
   );
 
   useEffect(() => {

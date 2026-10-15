@@ -1,3 +1,4 @@
+import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import type { CardData } from "../../types/cards";
 import type { DreamsignTemplate } from "../../types/content";
 import type { JourneyState } from "../../types/journey";
@@ -69,7 +70,7 @@ export function buildJourneyDebugEditorView(
         model:
           displaySnapshot === null
             ? null
-            : {
+            : remapGameCardModelTypes({
                 cardId: displaySnapshot.id,
                 displaySnapshot,
                 ...(entry.transfiguration === null || base === undefined
@@ -81,7 +82,7 @@ export function buildJourneyDebugEditorView(
                         entry.transfiguration,
                       ).display,
                     }),
-              },
+              }, state.typeRemap),
       };
     }),
   };

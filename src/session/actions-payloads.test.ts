@@ -22,6 +22,13 @@ import { testCardId, testDreamsignId, testExplorationActionId, testTutorialActio
 import { AUGURY_DECLINE } from "./actions.fixtures";
 
 describe("game actions facade", () => {
+  it("writes the exact physical C12 permission and chosen subtype", () => {
+    const captured: EventDraft[] = [], actions = makeActions(draft => { captured.push(draft); return Promise.resolve(1); });
+    const sourceDreamsignId = testDreamsignId("type-remap-source");
+    void actions.resolveTypeRemap(sourceDreamsignId, 2, 1, 19, "Mage");
+    expect(captured).toEqual([{ type: "RESOLVE_TYPE_REMAP", payload: { sourceDreamsignId, heldIndex: 2, choiceIndex: 1, permissionSeq: 19, chosenSubtype: "Mage" } }]);
+  });
+
   it("forwards earning identity only when supplied for a purge permission", () => {
     const captured: EventDraft[] = [], actions = makeActions((draft) => { captured.push(draft); return Promise.resolve(captured.length); });
     const siteId = parseSiteId("before729-site"), dreamsignId = testDreamsignId("before729-source");

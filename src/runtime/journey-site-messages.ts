@@ -1,5 +1,10 @@
 /** Player-facing journey copy shared by screen builders and Cumulus controls. */
 export const JOURNEY_SITE_MESSAGES = {
+  typeRemapTitle: "Choose a Character Type",
+  typeRemapInstruction: "Your deck’s character-type references will use this type.",
+  typeRemapLabel: "Character type",
+  typeRemapPlaceholder: "Choose a type",
+  typeRemapConfirm: "Confirm Choice",
   beforeBattlePurgeInstruction: (count: number) => `You may purge up to ${String(count)} cards before this battle.`,
   starterPurgeTitle: "Purge Starter Cards",
   starterPurgeInstruction: (count: number) => `You may purge up to ${String(count)} starter cards from your deck.`,

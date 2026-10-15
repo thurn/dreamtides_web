@@ -56,7 +56,7 @@ export function FrontDoorRouter({
     return journey;
   }
 
-  const copyChoice = screen.type === "journeyDreamsign" && screen.choice.kind === "copy" && state.phase === "tutorial" ? screen.choice : null;
+  const copyChoice = screen.type === "journeyDreamsign" && (screen.choice.kind === "copy" || screen.choice.kind === "typeRemap") && state.phase === "tutorial" ? screen.choice : null;
   const starterChoice = screen.type === "journeyStarterPurge" && state.phase === "tutorial" ? screen.choice : null;
   const content =
     copyChoice !== null ? (

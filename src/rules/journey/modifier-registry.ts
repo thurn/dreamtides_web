@@ -1,3 +1,4 @@
+import theaterMask, { journeyOnGainEffect as theaterMaskEffect } from "../../content/dreamsigns/theater-mask-3d86f8ce";
 import bone, { journeyEssenceEffect as boneEffect } from "../../content/dreamsigns/carved-bone-427c71e3";
 import skull, { journeyEssenceEffect as skullEffect } from "../../content/dreamsigns/mortal-skull-eb55b141";
 import teeth, { journeyOnGainEffect as teethEffect } from "../../content/dreamsigns/paired-teeth-1328e611";
@@ -228,13 +229,14 @@ export function createJourneyModifierRegistry(
         copied = false;
         for (const source of held.filter((item) => item.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent")) copied = reactCopy(source) || copied;
       } while (copied);
-      return { journey: finishJourneyAcquisition(next, acquisition.copySources, acquisition.starterSources, seq, battleBinding), logRecords };
+      return { journey: finishJourneyAcquisition(next, acquisition.copySources, acquisition.starterSources, acquisition.typeRemapSources, seq, battleBinding), logRecords };
     },
   } satisfies JourneyModifierRegistry);
 }
 
 /** The production registry's fixed catalog registrations. */
 export const journeyModifierRegistry = createJourneyModifierRegistry([
+  journeyOnGain(parseDreamsignId(theaterMask.id), theaterMaskEffect),
   journeyDraft(parseDreamsignId(mushroomCaps.id), mushroomCapsEffect),
   journeyOnGain(parseDreamsignId(twistedHerbs.id), twistedHerbsEffect),
   journeyEssence(parseDreamsignId(bone.id), boneEffect),

@@ -39,6 +39,7 @@ export function DesktopDeckViewerAdapter({
         journeyContent.avatars,
         journeyContent.poolContext,
         state.seed,
+        state.typeRemap,
       ),
     [
       state.deck,
@@ -49,6 +50,7 @@ export function DesktopDeckViewerAdapter({
       journeyContent.poolContext,
       journeyContent.transfigurationData,
       state.seed,
+      state.typeRemap,
     ],
   );
   const cardCount = view.cards.length;

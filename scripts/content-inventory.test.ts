@@ -185,8 +185,8 @@ const completeAuthoringFixtures = new Map<string, string>([
     export interface TriggeredAbility { oncePerTurn?: boolean }
     export interface DeckMods {
       typeChange?: { cardType: "character" | "event"; subtype: string };
-      typeRemap?: { selectorSubtype: string; conditionalFigmentSubtype: string };
     }
+    export interface Variant { typeRemap?: string; }
   `],
   ["src/engine/effects/types.ts", 'export type CardRef = { tag: "source" } | { tag: "lastPlayed" };'],
   ["src/engine/effects/primitives/grant-reclaim.ts", 'export type ReclaimCards = { tag: "inZone" } | { tag: "movedBy" } | { tag: "subject" };'],
@@ -263,7 +263,7 @@ const minimalApiFixtures = [
   ["materializeNthTrigger", typesModule, 'export type Trigger = { kind: "materialize"; nth?: number };'],
   ["atEndOfTurnTrigger", triggersModule, 'export function atEndOfTurn() {}'],
   ["firstTimeEachTurn", typesModule, 'export type Trigger = { kind: "handBecomesEmpty"; firstTimeEachTurn?: true } | { kind: "namedAbilityTriggered"; firstTimeEachTurn?: true };'],
-  ["typeRemap", typesModule, 'export interface DeckMods { typeRemap?: { selectorSubtype: string; conditionalFigmentSubtype: string } }'],
+  ["typeRemap", typesModule, 'export interface Variant { typeRemap?: string }'],
   ["discardCostFilterMin", typesModule, 'export type PaymentCost = { kind: "discard"; min?: number };'],
   ["abandonXCost", buildersModule, 'export function abandonXCost() {}'],
   ["cardFilterSparkBounds", typesModule, 'export interface CardFilter { sparkAtMost?: number }'],
@@ -337,10 +337,13 @@ describe("inventory descriptor contracts", () => {
 
   it("distinguishes own-card subtype overrides from selector/conditional-figment remaps", () => {
     const sources = new Map(completeAuthoringFixtures);
-    sources.set("src/engine/dsl/types.ts", 'export interface DeckMods { typeChange?: { subtype: string } }');
+    sources.set("src/engine/dsl/types.ts", 'export interface DeckMods { typeChange?: { subtype: string } } export interface Variant { amplified: boolean }');
     const c12 = inventoryDslCapabilities.find(entry => entry.name === "typeRemap");
     expect(c12).toBeDefined();
-    expect(inventoryCapabilityResolver(sources).validate(c12?.forms ?? [])).toBe(false);
+    expect(inventoryCapabilityResolver(sources)(c12?.forms ?? [])).toBe(false);
+    expect(() => inventoryCapabilityResolver(sources).validate(c12?.forms ?? [])).toThrow();
+    sources.set(typesModule, 'export interface Variant { amplified: boolean; typeRemap?: string }');
+    expect(inventoryCapabilityResolver(sources).validate(c12?.forms ?? [])).toBe(true);
   });
 
   it("diagnoses missing modules and stale exported names instead of projecting missing capabilities", () => {
@@ -383,7 +386,7 @@ const pendingBindings = inventoryDslCapabilities.flatMap(entry => entry.forms
   .filter(form => form.pending !== undefined)
   .map(form => ({ name: entry.name, symbol: form.symbol, form })));
 
-describe("pending inventory lifecycle", () => {
+if (pendingBindings.length > 0) describe("pending inventory lifecycle", () => {
   it.each(pendingBindings)("requires retirement for fulfilled $name ($symbol)", ({ name, form }) => {
     const scoped = { ...form, module: scopedModule(name, form.module) };
     expect(() => minimalResolver.validate([scoped])).toThrow();

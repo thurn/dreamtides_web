@@ -9,6 +9,7 @@
 // each its own definition: a definition is matched by the instance's display
 // variant, and a card in a variant no deck entry dealt shows the catalog card.
 
+import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
 import type { InstanceView } from "../../engine";
 import type { DeckMods } from "../../engine/dsl/types";
@@ -102,10 +103,11 @@ export function createEngineCardModels(sources: EngineCardSources): EngineCardMo
       characteristics.cost,
       characteristics.spark ?? "",
       instanceDisplayVariant(instance),
+      instance.variant.typeRemap ?? "",
     ].join("|");
     const cached = cache.get(key);
     if (cached !== undefined) return cached;
-    const model = buildModel(sources, definitions, instance);
+    const model = remapGameCardModelTypes(buildModel(sources, definitions, instance), instance.variant.typeRemap);
     cache.set(key, model);
     return model;
   }, { nameOf: (identity: EngineCardIdentity) => cardName(sources, definitions, identity.printing.cardId, identity.variant) });

@@ -26,7 +26,7 @@ export function buildJourneyPurgeView(state: JourneyState, content: JourneyConte
     choiceIndex: choice.kind === "afterBattle" ? choice.index : 0,
     scene: dreamscapeSceneRef(node, content), guide: buildPurgeGuideView(resolvePurgeGuide(content.guides), instruction),
     cards: state.deck.flatMap((entry) => {
-      const card = toDeckCardView(content.transfigurationData, entry, content.cardDatabase);
+      const card = toDeckCardView(content.transfigurationData, entry, content.cardDatabase, state.typeRemap);
       return card === null ? [] : [card];
     }), minCount: choice.kind === "essenceSite" ? limit : 0, maxCount: limit,
     title: "Purge Cards", instruction,

@@ -3433,6 +3433,47 @@ domain consumed.
 
 ## Journey Dreamsign Acquisition Effects
 
+### Journey Type Remapping
+
+Each genuine physical acquisition of Theater Mask earns one mandatory choice of
+a character type from the game's character-type catalog. Acquired copies resolve
+in their held-slot order. Replacing a held Dreamsign with the same identity is an
+acquisition; preparing an offer, loading a run, and converting a Dreamsign into
+a copy are not acquisitions.
+
+A completed choice stores one type remap with the run. A later completed choice
+replaces it, applying to the original type references rather than chaining text
+substitutions. The remap applies to every present and future journey deck entry
+and persists after the source is lost. A new run starts without a remap. Card
+ability type remapping governs selectors, conditions, figment identity and spark,
+runtime chosen-type bindings, and copiable variants; the card's own printed
+subtype and statistics are preserved.
+
+All type-remap choices earned by an acquisition resolve before its optional
+starter-purge choices. The starter choices, mandatory Dreamsign-copy choices,
+and earned site or post-battle choices then resume their exact saved order and
+continuation. A pending type-remap choice suspends ordinary journey and battle
+gameplay. Resolving that exact choice or removing a Dreamsign is permitted;
+source removal preserves the earned choice. Administrative operations retain
+their ordinary validation and do not earn acquisition effects. A saved choice
+retains its physical source, acquisition sequence, cursor, continuation, and any
+suspended battle binding. Invalid, incomplete, stale, or conflicting choices
+change nothing.
+
+Dreamsign removal must also preserve the validity of independent earned
+continuations. If removing a held Dreamsign would invalidate a saved copy or
+other earned permission, the entire removal is refused without changing the
+run. The type-remap permission itself does not require its source to remain
+held.
+
+Opening or dismissing the type picker and selecting a tentative type commit no
+gameplay change. Confirming a valid type completes the current physical choice.
+An already initialized battle retains its initialization, engine state, and
+pending prompt; the run's remap applies when a later battle is initialized.
+Displayed journey-card text substitutes literal type words while preserving
+proper names, references to a type chosen later, and figment-creation text whose
+chosen type is not a figment type.
+
 A starter card is identified by its canonical card identity's starter metadata,
 including the starter-deck role. Permanent entry changes and transfigurations do
 not change that identity. An acquisition that applies Perfected applies it to

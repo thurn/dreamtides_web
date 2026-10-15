@@ -20,7 +20,7 @@ export function buildJourneyDuplicationView(state: JourneyState, content: Journe
     choiceIndex: choice.index, earnedSeq: source.earnedSeq, scene: dreamscapeSceneRef(node, content),
     guide: buildDuplicationGuideView(resolveDuplicationGuide(content.guides), instruction),
     cards: state.deck.flatMap((entry) => {
-      const card = toDeckCardView(content.transfigurationData, entry, content.cardDatabase);
+      const card = toDeckCardView(content.transfigurationData, entry, content.cardDatabase, state.typeRemap);
       return card === null ? [] : [card];
     }), title: JOURNEY_SITE_MESSAGES.duplicationTitle, instruction,
     continueLabel: JOURNEY_SITE_MESSAGES.continue, confirmLabel: JOURNEY_SITE_MESSAGES.duplicateCard };

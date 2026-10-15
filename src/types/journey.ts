@@ -267,6 +267,7 @@ export interface AfterBattleTransfigurationSource {
 }
 
 export type JourneyOnGainEffect =
+  | { readonly kind: "typeRemapOnGain" }
   | { readonly kind: "addNightmaresOnGain"; readonly count: number }
   | { readonly kind: "afterBattleDreamsignChoice"; readonly offerCount: number }
   | { readonly kind: "randomTransfigurationOnGain"; readonly numerator: number; readonly denominator: number }
@@ -288,6 +289,14 @@ export interface JourneyStarterPurgeChoice {
   readonly suspendedBattle: JourneySuspendedBattle | null;
 }
 export interface JourneyDreamsignGain { readonly dreamsignId: DreamsignId; readonly heldIndex: number }
+export interface JourneyDreamsignTypeRemapChoice {
+  readonly kind: "typeRemap";
+  readonly sources: readonly JourneyDreamsignGain[];
+  readonly index: number;
+  readonly permissionSeq: number;
+  readonly continuation: Exclude<Screen, { type: "journeyDreamsign" }> | { readonly type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice | JourneyDreamsignCopyChoice };
+  readonly suspendedBattle: JourneySuspendedBattle | null;
+}
 export interface JourneySuspendedBattle { readonly battleId: import("./identifiers").BattleId; readonly mode: "journey" | "tutorial" }
 export interface AfterBattleDreamsignSource {
   readonly kind: "dreamsign"; readonly dreamsignId: DreamsignId; readonly heldIndex: number;
@@ -1409,7 +1418,7 @@ export type Screen =
       tutorialAvatarId?: AvatarId;
     }
   | { type: "journeyStarterPurge"; readonly choice: JourneyStarterPurgeChoice }
-  | { type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice | JourneyDreamsignCopyChoice }
+  | { type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice | JourneyDreamsignCopyChoice | JourneyDreamsignTypeRemapChoice }
   | { type: "journeyPurge"; readonly choice: JourneyPurgeChoice }
   | { type: "journeyTransfiguration"; readonly choice: AfterBattleJourneyChoice }
   | { type: "journeyDuplication"; readonly choice: AfterBattleJourneyChoice }
@@ -1521,6 +1530,8 @@ export interface TransfiguredSiteOfferModifier {
 
 /** The top-level journey state object. */
 export interface JourneyState {
+  /** C12's completed run-wide choice, projected into each future battle entry. */
+  readonly typeRemap?: CardSubtype;
   /** Event-log identity of the current assembled or loaded run. */
   readonly runId: JourneyId | null;
   /** Whether this run was assembled from the authored tutorial journey handoff. */

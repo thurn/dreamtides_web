@@ -6,7 +6,7 @@ import { dreamsignViewFixture } from "../test-helpers/dreamsign-fixture";
 import { artRef } from "../primitives/art";
 import { parseDreamscapeArtKey } from "../../types/identifiers";
 import { testDreamsignId } from "../../types/test-identities";
-import { JourneyDreamsignScreen, type JourneyDreamsignView } from "./JourneyDreamsignScreen";
+import { JourneyDreamsignScreen, type JourneyDreamsignView, type JourneyTypeRemapView } from "./JourneyDreamsignScreen";
 const source = testDreamsignId("copy-source"), target = testDreamsignId("copy-target");
 function view(patch: Partial<JourneyDreamsignView> = {}): JourneyDreamsignView {
   const dreamsign = dreamsignViewFixture({ id: target, name: "Synthetic", imageName: "synthetic.png" });
@@ -14,6 +14,23 @@ function view(patch: Partial<JourneyDreamsignView> = {}): JourneyDreamsignView {
 }
 function click(element: Element | null) { if (element === null) throw new Error("missing control"); act(() => (element as HTMLElement).click()); }
 describe("folded Dreamsign choice presentation", () => {
+  it("keeps a type tentative through menu dismissal, confirms it once and resets for a new permission", () => {
+    const typeView: JourneyTypeRemapView = { ...view({ options: [] }), mode: "typeRemap", typeOptions: ["Mage", "Shadow"] };
+    const onTypeRemap = vi.fn(), onCopy = vi.fn(), onOffer = vi.fn();
+    const rendered = renderInCumulus(<JourneyDreamsignScreen view={typeView} onTypeRemap={onTypeRemap} onCopy={onCopy} onOffer={onOffer} />);
+    const confirm = () => rendered.container.querySelector<HTMLButtonElement>('[data-testid="journey-type-remap-confirm"]')!;
+    expect(confirm().getAttribute("aria-disabled")).toBe("true");
+    click(rendered.container.querySelector('[aria-haspopup="listbox"]'));
+    act(() => { window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" })); });
+    expect(document.querySelector('[role="listbox"]')).toBeNull(); expect(onTypeRemap).not.toHaveBeenCalled();
+    click(rendered.container.querySelector('[aria-haspopup="listbox"]'));
+    click(document.querySelector('[role="option"][data-value="Shadow"]'));
+    expect(confirm().getAttribute("aria-disabled")).not.toBe("true"); expect(onTypeRemap).not.toHaveBeenCalled();
+    click(confirm()); expect(onTypeRemap).toHaveBeenCalledExactlyOnceWith("Shadow");
+    expect(onCopy).not.toHaveBeenCalled(); expect(onOffer).not.toHaveBeenCalled();
+    rendered.rerender(<JourneyDreamsignScreen view={{ ...typeView, permissionSeq: 8 }} onTypeRemap={onTypeRemap} onCopy={onCopy} onOffer={onOffer} />);
+    expect(confirm().getAttribute("aria-disabled")).toBe("true");
+  });
   it("renders actual scene art and preserves same-printing physical target callbacks", () => {
     const onCopy = vi.fn(), onOffer = vi.fn();
     const { container } = renderInCumulus(<JourneyDreamsignScreen view={view()} onCopy={onCopy} onOffer={onOffer} />);

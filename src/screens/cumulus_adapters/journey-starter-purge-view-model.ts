@@ -17,7 +17,7 @@ export function buildJourneyStarterPurgeView(journey: JourneyState, content: Jou
     cards: journey.deck.flatMap((entry) => {
       const earned = source.entries.find((old) => old.entryId === entry.entryId), base = content.cardDatabase.get(entry.cardNumber);
       if (earned === undefined || base?.id !== earned.cardId || !(base.isStarter === true || base.roles?.includes("starter-deck"))) return [];
-      const card = toDeckCardView(content.transfigurationData, entry, content.cardDatabase);
+      const card = toDeckCardView(content.transfigurationData, entry, content.cardDatabase, journey.typeRemap);
       return card === null ? [] : [card];
     }) };
 }

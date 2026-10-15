@@ -7,6 +7,7 @@
 // stable avatar UUID and seed resolve the same selected tide preview shown at
 // journey start.
 
+import type { CardSubtype } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { AvatarContent } from "../../types/content";
 import type { RunPoolContext } from "../../data/journey-content";
@@ -49,13 +50,14 @@ export function buildDesktopDeckView(
   avatars: readonly AvatarContent[],
   poolContext: RunPoolContext,
   journeySeed: JourneySeed,
+  typeRemap?: CardSubtype,
 ): DesktopDeckView {
   const avatarContent =
     avatar === null
       ? undefined
       : avatars.find((candidate) => candidate.id === avatar.id);
   return {
-    cards: buildMobileDeckView(transfigurationData, deck, cardDatabase).cards,
+    cards: buildMobileDeckView(transfigurationData, deck, cardDatabase, typeRemap).cards,
     avatar: toAvatarView(avatar),
     dreamsigns: dreamsigns.map((dreamsign) =>
       toDreamsignView(dreamsign),

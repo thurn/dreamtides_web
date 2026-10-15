@@ -1,3 +1,4 @@
+import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 // Pure view-model builder for the mobile deck viewer. Resolves each deck entry
 // to the card the player actually holds — transfiguration, type/keyword
 // changes, persistent spark bonuses, and debug stat overrides applied — paired
@@ -6,6 +7,7 @@
 // adapter acquires live state and calls `buildMobileDeckView`; this module maps
 // domain data to the screen's view types and nothing else.
 
+import type { CardSubtype } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import {
@@ -32,6 +34,7 @@ export function toDeckCardView(
   transfigurationData: TransfigurationData,
   entry: DeckEntry,
   cardDatabase: Map<number, CardData>,
+  typeRemap?: CardSubtype,
 ): DeckCardView | null {
   const base = cardDatabase.get(entry.cardNumber);
   if (base === undefined) return null;
@@ -44,13 +47,13 @@ export function toDeckCardView(
   if (entry.transfiguration === null) {
     return {
       entryId: entry.entryId,
-      model: {
+      model: remapGameCardModelTypes({
         cardId: modified.id,
         displaySnapshot: applyCardStatOverride(
           applyCardSparkBonus(modified, entry.sparkBonus),
           entry.statOverride,
         ),
-      },
+      }, typeRemap),
       isBane: entry.isBane,
     };
   }
@@ -62,14 +65,14 @@ export function toDeckCardView(
   );
   return {
     entryId: entry.entryId,
-    model: {
+    model: remapGameCardModelTypes({
       cardId: transfigured.card.id,
       displaySnapshot: applyCardStatOverride(
         applyCardSparkBonus(transfigured.card, entry.sparkBonus),
         entry.statOverride,
       ),
       transfiguration: transfigured.display,
-    },
+    }, typeRemap),
     isBane: entry.isBane,
   };
 }
@@ -82,10 +85,11 @@ export function buildMobileDeckView(
   transfigurationData: TransfigurationData,
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
+  typeRemap?: CardSubtype,
 ): MobileDeckView {
   const cards: DeckCardView[] = [];
   for (const entry of deck) {
-    const view = toDeckCardView(transfigurationData, entry, cardDatabase);
+    const view = toDeckCardView(transfigurationData, entry, cardDatabase, typeRemap);
     if (view !== null) cards.push(view);
   }
   return { cards };

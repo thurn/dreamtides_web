@@ -1,6 +1,7 @@
 // Pure view-model builder for Durgan Forgehammer's standard Cumulus
 // Transfiguration site.
 
+import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
@@ -67,7 +68,7 @@ export function buildTransfigurationCandidates(
       if (!isEnhanced && candidates.size >= STANDARD_CANDIDATE_COUNT) continue;
       candidate = {
         entryId: entry.entryId,
-        model: { cardId: card.id, displaySnapshot: card },
+        model: remapGameCardModelTypes({ cardId: card.id, displaySnapshot: card }, state.typeRemap),
         availability: "available",
         reforgedType: null,
         forms: [],
@@ -94,11 +95,11 @@ export function buildTransfigurationCandidates(
               amount: offer.essenceCost,
               affordable: offer.essenceCost <= state.essence,
             },
-      previewModel: {
+      previewModel: remapGameCardModelTypes({
         cardId: card.id,
         displaySnapshot: preview.card,
         transfiguration: preview.display,
-      },
+      }, state.typeRemap),
     });
   }
 
@@ -127,11 +128,11 @@ export function buildTransfigurationCandidates(
     );
     wholeDeck.push({
       entryId: entry.entryId,
-      model: {
+      model: remapGameCardModelTypes({
         cardId: card.id,
         displaySnapshot: reforged.card,
         transfiguration: reforged.display,
-      },
+      }, state.typeRemap),
       availability: "reforged",
       reforgedType: entry.transfiguration,
       forms: [],

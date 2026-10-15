@@ -1,0 +1,48 @@
+{
+  "bead": "hv-umm2.270",
+  "phase": 5,
+  "implementMin": 421.01025526666666,
+  "implementWindow": {
+    "start": "2026-10-15T06:21:11.908777+00:00",
+    "end": "2026-10-15T13:22:12.524093+00:00"
+  },
+  "localValidationS": {
+    "review": 65.93328916601604,
+    "full": 103.77198708296055,
+    "affected": 7.895285791,
+    "lastFocused": 6.978190666006412,
+    "weightedGuard": 1.4717803329695016,
+    "sweep": 48.602348749991506,
+    "desktopAndMobileAttempt04": 167.2993359999964,
+    "mobileFinal": 72.87189195799874,
+    "combinedFocused": 14.665360208018683,
+    "combinedReview": 66.88248587498674,
+    "combinedKnip": 4.217517125012819,
+    "combinedFullIncludingHeavyWait": 1381.4779849580373,
+    "combinedInventory": 5.547242083004676,
+    "combinedInventoryDiagnostic": 4.146888374991249
+  },
+  "hostLoad": 11.56005859375,
+  "testDelta": {
+    "files": 4,
+    "lines": 434,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-driver-contract",
+      "minutes": 20.194548816666664,
+      "note": "Actual browser01 start08:54:29.850167Z through final mobile05 end09:14:41.523096Z; wrapper geometry, repeated physicalUUID selection, standard-speed day timing and responsive deck hook repaired in bounded driver revisions; retained failed attempts and green desktop04 without repeating it."
+    },
+    {
+      "tag": "integration-conflict",
+      "minutes": 12.6063542,
+      "note": "Observed recovery proposal12:40:36.744444Z through fullqueue12:53:13.125696Z: clean native rollback, exact8-path parking, parent native update, preserving all landed bodies,3interopcases and ownlintguard correction. Fullqueue follows separately."
+    },
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 20.850205066666668,
+      "note": "Pre-prepare upper bound includes occupied heavy slot and startup:12:53:13.125696Z\u219213:14:04.138Z. Parent confirmed active peer workload; one queued run, no duplicate or foreign signal."
+    }
+  ]
+}

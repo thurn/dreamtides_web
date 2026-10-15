@@ -1,3 +1,4 @@
+import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { validPreventedNightmareGains } from "../../rules/journey/journey-deck-entry";
 // Pure view-model construction for a resolved Exploration action: the reward
@@ -116,8 +117,8 @@ function resolvedTransfigurationViews(
     ) {
       return [];
     }
-    const before = deckCardChoice({ ...entry, transfiguration: null }, content);
-    const after = deckCardChoice(entry, content);
+    const before = deckCardChoice({ ...entry, transfiguration: null }, content, state.typeRemap);
+    const after = deckCardChoice(entry, content, state.typeRemap);
     if (
       before === null ||
       after === null ||
@@ -188,7 +189,7 @@ function compoundActionRewardForResolution(
 
   const purgedSnapshots = resolution.purgedEntrySnapshots ?? [];
   const purged = purgedSnapshots.flatMap((entry) => {
-    const card = deckCardChoice(entry, content);
+    const card = deckCardChoice(entry, content, state.typeRemap);
     return card === null ? [] : [card];
   });
   if (
@@ -237,9 +238,8 @@ function compoundActionRewardForResolution(
     }
     const before = deckCardChoice(
       { ...entry, keywordModification: mapping.before },
-      content,
-    );
-    const after = deckCardChoice(entry, content);
+      content, state.typeRemap);
+    const after = deckCardChoice(entry, content, state.typeRemap);
     return before === null || after === null
       ? []
       : [
@@ -266,7 +266,7 @@ function compoundActionRewardForResolution(
     const entry = state.deck.find(
       (candidate) => candidate.entryId === mapping.entryId,
     );
-    const card = entry === undefined ? null : deckCardChoice(entry, content);
+    const card = entry === undefined ? null : deckCardChoice(entry, content, state.typeRemap);
     return card !== null &&
       mapping.cardId === NIGHTMARE_CARD_ID &&
       card.model.cardId === NIGHTMARE_CARD_ID
@@ -291,9 +291,9 @@ function compoundActionRewardForResolution(
       (entry) => entry.entryId === mapping.mintedEntryId,
     );
     const source =
-      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content);
+      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content, state.typeRemap);
     const copy =
-      copyEntry === undefined ? null : deckCardChoice(copyEntry, content);
+      copyEntry === undefined ? null : deckCardChoice(copyEntry, content, state.typeRemap);
     return source !== null &&
       copy !== null &&
       source.model.cardId === mapping.sourceCardId &&
@@ -623,11 +623,11 @@ function multiCardReplacementRewardForResolution(
       (entry) => entry.entryId === mapping.replacementEntryId,
     );
     const source =
-      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content);
+      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content, state.typeRemap);
     const replacement =
       replacementEntry === undefined
         ? null
-        : deckCardChoice(replacementEntry, content);
+        : deckCardChoice(replacementEntry, content, state.typeRemap);
     if (
       prepared === undefined ||
       source === null ||
@@ -710,11 +710,11 @@ function randomFixedCardReplacementRewardForResolution(
   const replacementEntry = state.deck.find(
     (entry) => entry.entryId === mapping.replacementEntryId,
   );
-  const purged = deckCardChoice(sourceSnapshot, content);
+  const purged = deckCardChoice(sourceSnapshot, content, state.typeRemap);
   const gained =
     replacementEntry === undefined
       ? null
-      : deckCardChoice(replacementEntry, content);
+      : deckCardChoice(replacementEntry, content, state.typeRemap);
   if (
     purged === null ||
     gained === null ||
@@ -781,7 +781,7 @@ function randomCardCopiesRewardForResolution(
   if (blocked.some((mapping) => {
     const target = preparation.targets.find((item) => item.entryId === mapping.sourceEntryId);
     const source = state.deck.find((item) => item.entryId === mapping.sourceEntryId);
-    return target?.cardId !== mapping.sourceCardId || source === undefined || deckCardChoice(source, content)?.model.cardId !== mapping.sourceCardId;
+    return target?.cardId !== mapping.sourceCardId || source === undefined || deckCardChoice(source, content, state.typeRemap)?.model.cardId !== mapping.sourceCardId;
   })) return null;
   const pairs = mappings.flatMap((mapping) => {
     const target = preparation.targets.find((target) => target.entryId === mapping.sourceEntryId);
@@ -792,9 +792,9 @@ function randomCardCopiesRewardForResolution(
       (entry) => entry.entryId === mapping.mintedEntryId,
     );
     const source =
-      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content);
+      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content, state.typeRemap);
     const copy =
-      copyEntry === undefined ? null : deckCardChoice(copyEntry, content);
+      copyEntry === undefined ? null : deckCardChoice(copyEntry, content, state.typeRemap);
     if (
       target === undefined ||
       source === null ||
@@ -900,9 +900,8 @@ function cardTypeChangesRewardForResolution(
     }
     const before = deckCardChoice(
       { ...entry, typeChange: mapping.beforeTypeChange },
-      content,
-    );
-    const after = deckCardChoice(entry, content);
+      content, state.typeRemap);
+    const after = deckCardChoice(entry, content, state.typeRemap);
     if (
       before === null ||
       after === null ||
@@ -1013,8 +1012,8 @@ function multiCardTransfigurationRewardForResolution(
     ) {
       return [];
     }
-    const before = deckCardChoice({ ...entry, transfiguration: null }, content);
-    const after = deckCardChoice(entry, content);
+    const before = deckCardChoice({ ...entry, transfiguration: null }, content, state.typeRemap);
+    const after = deckCardChoice(entry, content, state.typeRemap);
     if (
       before === null ||
       after === null ||
@@ -1116,8 +1115,8 @@ function starterCardTransfigurationRewardForResolution(
     ) {
       return [];
     }
-    const before = deckCardChoice({ ...entry, transfiguration: null }, content);
-    const after = deckCardChoice(entry, content);
+    const before = deckCardChoice({ ...entry, transfiguration: null }, content, state.typeRemap);
+    const after = deckCardChoice(entry, content, state.typeRemap);
     if (
       before === null ||
       after === null ||
@@ -1169,7 +1168,7 @@ function starterCardRewardForResolution(
   }
   const purgedSnapshots = resolution.purgedEntrySnapshots ?? [];
   const purged = purgedSnapshots.flatMap((entry) => {
-    const choice = deckCardChoice(entry, content);
+    const choice = deckCardChoice(entry, content, state.typeRemap);
     return choice === null ? [] : [choice];
   });
   if (
@@ -1213,7 +1212,7 @@ function starterCardRewardForResolution(
       (entry) => entry.entryId === pair.gainedEntryId,
     );
     const gainedCard =
-      gainedEntry === undefined ? null : deckCardChoice(gainedEntry, content);
+      gainedEntry === undefined ? null : deckCardChoice(gainedEntry, content, state.typeRemap);
     if (
       purgedCard === undefined ||
       purgedCard.model.cardId !== pair.purgedCardId ||
@@ -1496,7 +1495,7 @@ export function rewardForResolution(
           (candidate) => candidate.entryId === entryId,
         );
         if (entry === undefined) return [];
-        const card = deckCardChoice(entry, content);
+        const card = deckCardChoice(entry, content, state.typeRemap);
         return card?.model.cardId === NIGHTMARE_CARD_ID ? [card] : [];
       });
       const persistedNightmareCount = resolution.gainedCardIds.filter(
@@ -1548,19 +1547,19 @@ export function rewardForResolution(
   if (resolvedAction?.effectKind === "purge-and-copy") {
     const purgedEntry = resolution.purgedEntrySnapshots?.[0];
     const purgedCard =
-      purgedEntry === undefined ? null : deckCardChoice(purgedEntry, content);
+      purgedEntry === undefined ? null : deckCardChoice(purgedEntry, content, state.typeRemap);
     const sourceEntryId = resolution.affectedEntryIds[0];
     const sourceEntry = state.deck.find(
       (candidate) => candidate.entryId === sourceEntryId,
     );
     const source =
-      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content);
+      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content, state.typeRemap);
     const cards = (resolution.gainedEntryIds ?? []).flatMap((entryId) => {
       const entry = state.deck.find(
         (candidate) => candidate.entryId === entryId,
       );
       if (entry === undefined) return [];
-      const card = deckCardChoice(entry, content);
+      const card = deckCardChoice(entry, content, state.typeRemap);
       return card === null ? [] : [card];
     });
     if (
@@ -1585,7 +1584,7 @@ export function rewardForResolution(
         (candidate) => candidate.entryId === entryId,
       );
       if (entry === undefined) return [];
-      const source = deckCardChoice(entry, content);
+      const source = deckCardChoice(entry, content, state.typeRemap);
       return source === null ? [] : [source];
     });
     const copies = (resolution.gainedEntryIds ?? []).flatMap((entryId) => {
@@ -1593,7 +1592,7 @@ export function rewardForResolution(
         (candidate) => candidate.entryId === entryId,
       );
       if (entry === undefined) return [];
-      const copy = deckCardChoice(entry, content);
+      const copy = deckCardChoice(entry, content, state.typeRemap);
       return copy === null ? [] : [copy];
     });
     const blockedSources = new Set(blockedCopiesForAction.map((copy) => copy.sourceEntryId));
@@ -1619,13 +1618,13 @@ export function rewardForResolution(
       (candidate) => candidate.entryId === sourceEntryId,
     );
     const source =
-      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content);
+      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content, state.typeRemap);
     const cards = (resolution.gainedEntryIds ?? []).flatMap((entryId) => {
       const entry = state.deck.find(
         (candidate) => candidate.entryId === entryId,
       );
       if (entry === undefined) return [];
-      const card = deckCardChoice(entry, content);
+      const card = deckCardChoice(entry, content, state.typeRemap);
       return card === null ? [] : [card];
     });
     if (sourceEntryId !== undefined && source !== null && ((blockedCopiesForAction.length === 0 && cards.length > 0) ||
@@ -1769,12 +1768,12 @@ export function rewardForResolution(
       return {
         kind: "transfiguration",
         entryId,
-        before: modelForCard(before),
-        after: {
+        before: remapGameCardModelTypes(modelForCard(before), state.typeRemap),
+        after: remapGameCardModelTypes({
           cardId: after.id,
           displaySnapshot: after,
           transfiguration: display,
-        },
+        }, state.typeRemap),
       };
     }
   }
@@ -1795,7 +1794,7 @@ export function rewardForResolution(
   if (resolvedAction?.effectKind === "purge-for-essence") {
     const purgedEntry = resolution.purgedEntrySnapshots?.[0];
     const card =
-      purgedEntry === undefined ? null : deckCardChoice(purgedEntry, content);
+      purgedEntry === undefined ? null : deckCardChoice(purgedEntry, content, state.typeRemap);
     if (card !== null) {
       return {
         kind: "purged-card-essence",
@@ -1818,7 +1817,7 @@ export function rewardForResolution(
           (candidate) => candidate.entryId === entryId,
         );
         if (entry === undefined) return [];
-        const card = deckCardChoice(entry, content);
+        const card = deckCardChoice(entry, content, state.typeRemap);
         return card === null ? [] : [card];
       }),
       predicate: resolvedAction.predicate,
@@ -1831,7 +1830,7 @@ export function rewardForResolution(
     const affectedEntryIds = new Set(resolution.affectedEntryIds);
     const cards = state.deck.flatMap((entry) => {
       if (!affectedEntryIds.has(entry.entryId)) return [];
-      const card = deckCardChoice(entry, content);
+      const card = deckCardChoice(entry, content, state.typeRemap);
       return card === null ? [] : [card];
     });
     if (cards.length === 0) return null;
@@ -1895,7 +1894,7 @@ export function rewardForResolution(
   const cards = resolution.gainedCardIds.flatMap((cardId, index) => {
     const entryId = resolution.gainedEntryIds?.[index];
     const entry = state.deck.find((candidate) => candidate.entryId === entryId);
-    const choice = entry === undefined ? null : deckCardChoice(entry, content);
+    const choice = entry === undefined ? null : deckCardChoice(entry, content, state.typeRemap);
     if (choice?.model.cardId === cardId) return [choice.model];
     const card = cardById(content, cardId);
     return card === null ? [] : [modelForCard(card)];
@@ -1904,7 +1903,7 @@ export function rewardForResolution(
     resolvedAction?.effectKind === "purge-selected" ||
     resolvedAction?.effectKind === "purge-random-subtype-and-increase-spark"
       ? (resolution.purgedEntrySnapshots ?? []).flatMap((entry) => {
-          const card = deckCardChoice(entry, content);
+          const card = deckCardChoice(entry, content, state.typeRemap);
           return card === null ? [] : [card];
         })
       : resolvedAction?.effectKind === "purge-and-copy" ||

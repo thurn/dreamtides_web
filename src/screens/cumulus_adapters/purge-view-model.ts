@@ -6,6 +6,7 @@ import {
   purgeVisitCost,
   type PurgePriceModifiers,
 } from "../../purge/purge-pricing";
+import type { CardSubtype } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { EconomyData } from "../../types/economy-data";
 import type { DeckEntry, JourneyState, SiteState } from "../../types/journey";
@@ -46,10 +47,11 @@ export function buildPurgeCardViews(
   transfigurationData: TransfigurationData,
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
+  typeRemap?: CardSubtype,
 ): PurgeCardView[] {
   const cards: PurgeCardView[] = [];
   for (const entry of deck) {
-    const view = toDeckCardView(transfigurationData, entry, cardDatabase);
+    const view = toDeckCardView(transfigurationData, entry, cardDatabase, typeRemap);
     if (view === null) continue;
     cards.push({
       ...view,
@@ -128,6 +130,7 @@ export function buildPurgeSiteView(params: {
       params.transfigurationData,
       params.state.deck,
       params.cardDatabase,
+      params.state.typeRemap,
     ),
     visitCosts: buildPurgeVisitCosts(params.economyData.purge, modifiers),
     maxPaidSelections,

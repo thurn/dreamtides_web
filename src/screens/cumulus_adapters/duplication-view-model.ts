@@ -56,7 +56,7 @@ export function buildDuplicationCards(
   for (const entryId of runtime.entryIds) {
     const entry = deckByEntryId.get(entryId);
     if (entry === undefined) continue;
-    const card = toDeckCardView(transfigurationData, entry, cardDatabase);
+    const card = toDeckCardView(transfigurationData, entry, cardDatabase, state.typeRemap);
     if (card === null) continue;
     cards.push({ entryId: card.entryId, model: card.model });
   }

@@ -3,6 +3,7 @@ import { validCommittedPurgePrevention } from "./journey-committed-purge-state";
 import { assertBeforeBattlePurgeCheckpoint } from "./journey-before-battle-purge";
 import { validStarterPurgeScreen, validStarterBattleBinding } from "./journey-starter-acquisition";
 import { validJourneyDuplicationScreen } from "./journey-duplication";
+import { validJourneyTypeRemap, validTypeRemapBattleBinding } from "./journey-type-remap";
 import { validJourneyDreamsignScreen, validDreamsignBattleBinding } from "./journey-on-gain";
 import { getDeckContentProvider } from "./deck";
 import { validPreventedNightmareGains } from "./journey-deck-entry";
@@ -478,6 +479,7 @@ export function validateLoadedState(
     if (battle === null) return null;
   }
 
+  if (snapshot.screen.type === "journeyDreamsign" && snapshot.screen.choice.kind === "typeRemap" && (!validTypeRemapBattleBinding(snapshot, battle) || snapshot.screen.choice.suspendedBattle?.mode === "tutorial" && (battle?.mode.kind !== "tutorial" || state.frontDoor.phase !== "tutorial" || state.frontDoor.tutorial?.runId !== battle.mode.tutorialRunId))) return null;
   if (snapshot.screen.type === "journeyStarterPurge" && !validStarterBattleBinding(snapshot, battle)) return null;
   if (snapshot.screen.type === "journeyStarterPurge" && snapshot.screen.choice.suspendedBattle?.mode === "tutorial" && (battle?.mode.kind !== "tutorial" || state.frontDoor.phase !== "tutorial" || state.frontDoor.tutorial?.runId !== battle.mode.tutorialRunId)) return null;
   if (snapshot.screen.type === "journeyDreamsign" && !validDreamsignBattleBinding(snapshot, battle)) return null;
@@ -634,6 +636,7 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
       typeof permission.heldIndex !== "number" || !Number.isSafeInteger(permission.heldIndex) || permission.heldIndex < 0 ||
       !Array.isArray(runtime.acceptedEntryIds) || runtime.acceptedEntryIds.length > effect.count || new Set(runtime.acceptedEntryIds).size !== runtime.acceptedEntryIds.length) return false;
   }
+  if (!validJourneyTypeRemap(value as unknown as JourneyState, registry)) return false;
   if (value.screen.type === "journeyStarterPurge" && !validStarterPurgeScreen(value.screen, value as unknown as JourneyState, registry)) return false;
   if (value.screen.type === "journeyDuplication" && !validJourneyDuplicationScreen(value.screen, value as unknown as JourneyState, registry)) return false;
   if (value.screen.type === "journeyDreamsign" && !validJourneyDreamsignScreen(value.screen, value as unknown as JourneyState, registry)) return false;

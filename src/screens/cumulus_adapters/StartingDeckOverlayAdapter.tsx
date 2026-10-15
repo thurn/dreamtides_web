@@ -35,8 +35,9 @@ export function StartingDeckOverlayAdapter({
       buildStartingDeckView(
         state.deck,
         journeyContent.cardDatabase,
+        state.typeRemap,
       ),
-    [state.deck, journeyContent.cardDatabase],
+    [state.deck, state.typeRemap, journeyContent.cardDatabase],
   );
   const cardCount = view.cards.length;
 

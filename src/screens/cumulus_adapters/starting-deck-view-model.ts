@@ -6,6 +6,8 @@
 // live state and calls `buildStartingDeckView`; this module maps domain data to
 // the overlay's view types and nothing else.
 
+import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
+import type { CardSubtype } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import {
@@ -32,6 +34,7 @@ import type {
 export function buildStartingDeckCards(
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
+  typeRemap?: CardSubtype,
 ): StartingDeckCardView[] {
   const cards: StartingDeckCardView[] = [];
   for (const entry of deck) {
@@ -49,7 +52,7 @@ export function buildStartingDeckCards(
     );
     cards.push({
       entryId: entry.entryId,
-      model: { cardId: card.id, displaySnapshot: card },
+      model: remapGameCardModelTypes({ cardId: card.id, displaySnapshot: card }, typeRemap),
       testId: `starting-deck-modal-card-${entry.entryId}`,
     });
   }
@@ -59,6 +62,7 @@ export function buildStartingDeckCards(
 export function buildStartingDeckView(
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
+  typeRemap?: CardSubtype,
 ): StartingDeckView {
-  return { cards: buildStartingDeckCards(deck, cardDatabase) };
+  return { cards: buildStartingDeckCards(deck, cardDatabase, typeRemap) };
 }

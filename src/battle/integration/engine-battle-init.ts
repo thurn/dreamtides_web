@@ -26,7 +26,7 @@ export interface EngineBattleInitInput {
   readonly seed: number;
   readonly scoreToWin: number;
   readonly startingSide: NonNullable<EngineBattleInit["startingSide"]>;
-  readonly journey: Pick<JourneyState, "deck" | "avatar" | "dreamsigns" | "battleModifiers"> & Partial<Pick<JourneyState, "draftState" | "resolvedPackage">>;
+  readonly journey: Pick<JourneyState, "deck" | "avatar" | "dreamsigns" | "battleModifiers"> & Partial<Pick<JourneyState, "draftState" | "resolvedPackage" | "typeRemap">>;
   /** The opponent `createBattleInit` built for this battle. */
   readonly enemy: EngineBattleOpponent;
   readonly cardDatabase: ReadonlyMap<number, CardData>;
@@ -63,7 +63,8 @@ export interface EngineBattleOpponent {
 export function createEngineBattleInit(input: EngineBattleInitInput): EngineBattleInit {
   const { journey, enemy } = input;
   const playerDeck = padBattleDeck(journey.deck, input.minimumDeckSize).map((entry) =>
-    engineDeckEntry(entry, cardOf(input.cardDatabase, entry.cardNumber), input.transfigurationData),
+    ({ ...engineDeckEntry(entry, cardOf(input.cardDatabase, entry.cardNumber), input.transfigurationData),
+      ...(journey.typeRemap === undefined ? {} : { typeRemap: journey.typeRemap }) }),
   );
   const nextBattle = nextBattleEffects(journey.battleModifiers);
   return {

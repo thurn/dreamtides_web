@@ -32,7 +32,7 @@ import type { DeckEntryId } from "../types/identifiers";
 import type { PublicationId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
 import type { QaSceneId } from "../types/identifiers";
-import type { CardId } from "../types/card-identity";
+import type { CardId, CardSubtype } from "../types/card-identity";
 import type { JourneyMutationSource } from "../types/journey-source";
 export {
   parseJourneyMutationSource,
@@ -370,6 +370,7 @@ export interface JourneyMutations {
    * authoritative price from the selected entries, site, and folded modifiers.
    */
   resolveAfterBattleDreamsign: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, earnedSeq: number, offeredDreamsignId: DreamsignId | null, purgeIndex?: number) => void;
+  resolveTypeRemap: (sourceDreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, chosenSubtype: CardSubtype) => void;
   resolveDreamsignCopy: (sourceDreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, targetHeldIndex: number, expectedTargetDreamsignId: DreamsignId) => void;
   resolveJourneyDuplication: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, earnedSeq: number, entryId: DeckEntryId | null) => void;
   resolveJourneyTransfiguration: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => void;

@@ -122,6 +122,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.resolveJourneyDuplication(parseSiteId("site-1"), testDreamsignId("source"), 0, 0, 1, null);
   void actions.resolveJourneyTransfiguration(parseSiteId("site-1"), testDreamsignId("dreamsign-1"), 0, 0, [parseDeckEntryId("entry-1")]);
   void actions.resolveAfterBattleDreamsign(parseSiteId("site-1"), testDreamsignId("source"), 0, 0, 1, testDreamsignId("offered"));
+  void actions.resolveTypeRemap(testDreamsignId("source"), 1, 0, 1, "Mage");
   void actions.resolveDreamsignCopy(testDreamsignId("source"), 1, 0, 1, 0, testDreamsignId("target"));
   void actions.resolveStarterPurge(testDreamsignId("dreamsign-1"), 0, 0, 1, [parseDeckEntryId("entry-1")]);
   void actions.resolveJourneyPurge(parseSiteId("site-1"), testDreamsignId("dreamsign-1"), 0, 0, [parseDeckEntryId("entry-1")]);

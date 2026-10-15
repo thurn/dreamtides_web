@@ -20,6 +20,8 @@
 // content and calls `registerGameProviders(content)` before opening the local
 // game and folding its log.
 
+import { registerJourneyTypeRemapProvider } from "../../rules/journey/journey-type-remap";
+import { journeyContentEngine } from "./battle-init-provider";
 import { registerJourneyTransfigurationProvider } from "../../rules/journey/journey-transfiguration";
 import { createJourneyTransfigurationProvider } from "./journey-transfiguration-provider";
 import type { JourneyContent } from "../../data/journey-content";
@@ -51,6 +53,7 @@ import { createCardTutorialGuidanceContentProvider } from "./card-tutorial-guida
  * folding any event.
  */
 export function registerGameProviders(content: JourneyContent): void {
+  registerJourneyTypeRemapProvider(journeyContentEngine(content).catalog.characterTypes);
   registerTutorialFrontDoorContentProvider({
     playerCardId:
       content.tutorial.battle.tutorialCardConstants
@@ -78,6 +81,7 @@ export function registerGameProviders(content: JourneyContent): void {
  * {@link registerGameProviders}.
  */
 export function clearGameProviders(): void {
+  registerJourneyTypeRemapProvider(null);
   registerTutorialFrontDoorContentProvider(null);
   registerJourneyLifecycleContentProvider(null);
   registerDeckContentProvider(null);

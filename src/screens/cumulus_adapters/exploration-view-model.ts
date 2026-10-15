@@ -1,3 +1,4 @@
+import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import { explorationRerollAllowance, explorationRerollCount } from "../../rules/journey/journey-sites";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
@@ -100,7 +101,7 @@ function eligibleDeckCards(
   predicate?: ExplorationPredicate,
 ): readonly ExplorationCardChoiceView<DeckEntryId>[] {
   return state.deck.flatMap((entry) => {
-    const card = deckCardChoice(entry, content);
+    const card = deckCardChoice(entry, content, state.typeRemap);
     if (card === null) return [];
     if (
       predicate !== undefined &&
@@ -157,18 +158,18 @@ function freeTransfigurationCandidates(
         change: offer.change,
         effectDetails: transfigurationEffectDetails(offer, card),
         pricing: { kind: "unpriced" as const },
-        previewModel: {
+        previewModel: remapGameCardModelTypes({
           cardId: card.id,
           displaySnapshot: preview.card,
           transfiguration: preview.display,
-        },
+        }, state.typeRemap),
       };
     });
     if (forms.length === 0) return [];
     return [
       {
         entryId: entry.entryId,
-        model: modelForCard(card),
+        model: remapGameCardModelTypes(modelForCard(card), state.typeRemap),
         availability: "available" as const,
         reforgedType: null,
         forms,
@@ -233,7 +234,7 @@ function preparedMultiCardReplacementCards(
       (candidate) => candidate.entryId === binding.sourceEntryId,
     );
     if (entry === undefined) return [];
-    const choice = deckCardChoice(entry, content);
+    const choice = deckCardChoice(entry, content, state.typeRemap);
     return choice !== null && choice.model.cardId === binding.sourceCardId
       ? [choice]
       : [];
@@ -281,7 +282,7 @@ function offeredDeckCards(
   return ids.flatMap((entryId) => {
     const entry = state.deck.find((candidate) => candidate.entryId === entryId);
     if (entry === undefined) return [];
-    const card = deckCardChoice(entry, content);
+    const card = deckCardChoice(entry, content, state.typeRemap);
     return card === null ? [] : [card];
   });
 }
@@ -1078,7 +1079,7 @@ function starterCardVariableTarget(
   if (entryId === undefined || purgedEntryIds?.length !== 1) return null;
   const entry = state.deck.find((candidate) => candidate.entryId === entryId);
   if (entry === undefined) return null;
-  const choice = deckCardChoice(entry, content);
+  const choice = deckCardChoice(entry, content, state.typeRemap);
   if (choice === null) return null;
   return {
     entryId,
@@ -1149,14 +1150,15 @@ function deckCardVariableTarget(
             card,
             action.transfiguration,
           );
+          const model = remapGameCardModelTypes({ cardId: card.id, displaySnapshot: preview.card, transfiguration: preview.display }, state.typeRemap);
           return {
             kind: "card" as const,
-            card: preview.card,
+            card: model.displaySnapshot,
             entryId: target.entryId,
-            transfiguration: preview.display,
+            transfiguration: model.transfiguration,
           };
         })()
-      : { kind: "card" as const, card, entryId: target.entryId };
+      : { kind: "card" as const, card: remapGameCardModelTypes(modelForCard(card), state.typeRemap).displaySnapshot, entryId: target.entryId };
   return {
     entryId: target.entryId,
     entity,

@@ -1,3 +1,5 @@
+import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
+import type { CardSubtype } from "../../types/card-identity";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type { CardData } from "../../types/cards";
 import type { ArtRef } from "../../cumulus/primitives/art";
@@ -461,13 +463,14 @@ function buildBlackjackSiteView(params: {
 function buildFourSuitTransfigurationCandidate(
   transfigurationData: TransfigurationData,
   target: FourSuitRepriseTarget,
+  typeRemap?: CardSubtype,
 ): TransfigurationCandidateView {
   return {
     entryId: target.entryId,
-    model: {
+    model: remapGameCardModelTypes({
       cardId: target.cardSnapshot.id,
       displaySnapshot: target.cardSnapshot,
-    },
+    }, typeRemap),
     availability: "available",
     reforgedType: null,
     forms: target.transfigurationOffers.map((offer) => {
@@ -490,11 +493,11 @@ function buildFourSuitTransfigurationCandidate(
           ),
         effectDetails: offer.effectDetails,
         pricing: { kind: "unpriced" },
-        previewModel: {
+        previewModel: remapGameCardModelTypes({
           cardId: target.cardSnapshot.id,
           displaySnapshot: preview.card,
           transfiguration: preview.display,
-        },
+        }, typeRemap),
       };
     }),
   };
@@ -502,14 +505,15 @@ function buildFourSuitTransfigurationCandidate(
 
 function fourSuitCardView(
   target: FourSuitRepriseTarget,
+  typeRemap?: CardSubtype,
 ): FourSuitRepriseCardView {
   return {
     entryId: target.entryId,
     cardId: target.cardId,
-    model: {
+    model: remapGameCardModelTypes({
       cardId: target.cardSnapshot.id,
       displaySnapshot: target.cardSnapshot,
-    },
+    }, typeRemap),
   };
 }
 
@@ -549,15 +553,15 @@ function buildFourSuitRepriseSiteView(params: {
     target === null
       ? null
       : {
-          ...fourSuitCardView(target),
+          ...fourSuitCardView(target, params.state.typeRemap),
           model:
             chosenPreview === null
-              ? fourSuitCardView(target).model
-              : {
+              ? fourSuitCardView(target, params.state.typeRemap).model
+              : remapGameCardModelTypes({
                   cardId: target.cardSnapshot.id,
                   displaySnapshot: chosenPreview.card,
                   transfiguration: chosenPreview.display,
-                },
+                }, params.state.typeRemap),
         };
   const minted = latestRound?.outcome === "duplication" && latestRound.resultSettled
     ? params.state.deck.find((entry) => entry.entryId === latestRound.duplicatedEntryId)
@@ -565,11 +569,11 @@ function buildFourSuitRepriseSiteView(params: {
   const base = minted === undefined ? undefined : params.cardDatabase?.get(minted.cardNumber);
   const copy: FourSuitRepriseCardView | null = minted === undefined || base === undefined ||
     target === null || minted.entryId === target.entryId || minted.cardNumber !== target.cardNumber || base.id !== latestRound?.targetCardId
-    ? null : { entryId: minted.entryId, cardId: base.id, model: {
+    ? null : { entryId: minted.entryId, cardId: base.id, model: remapGameCardModelTypes({
       cardId: base.id, displaySnapshot: resolveDeckEntryCard(params.transfigurationData, base, minted),
       ...(minted.transfiguration === null ? {} : { transfiguration: buildTransfigurationDisplay(params.transfigurationData, base, minted.transfiguration).display }),
-    } };
-  const cards = availableTargets.map(fourSuitCardView);
+    }, params.state.typeRemap) };
+  const cards = availableTargets.map(target => fourSuitCardView(target, params.state.typeRemap));
   const roundNumber = (
     runtime.phase === "choose"
       ? Math.min(runtime.rounds.length + 1, params.game.rules.maxRounds)
@@ -616,8 +620,7 @@ function buildFourSuitRepriseSiteView(params: {
             copy,
             transfigurationCandidate: buildFourSuitTransfigurationCandidate(
               params.transfigurationData,
-              target,
-            ),
+              target, params.state.typeRemap),
             chosenTransfiguration: latestRound.chosenTransfiguration ?? null,
           },
     canPlayAgain:

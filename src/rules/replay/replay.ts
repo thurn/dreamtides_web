@@ -1,3 +1,4 @@
+import { assertJourneyTypeRemapCheckpoint } from "../journey/journey-type-remap";
 import { assertShopReplenishmentCheckpoint } from "../journey/journey-shop";
 import { assertCommittedPurgePreventionCheckpoint } from "../journey/journey-committed-purge-state";
 import { journeyModifierRegistry } from "../journey/modifier-registry";
@@ -52,6 +53,7 @@ export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
   encode: (state) => JSON.stringify(state),
   decode: (raw) => {
     const state: unknown = JSON.parse(raw);
+    assertJourneyTypeRemapCheckpoint(state, journeyModifierRegistry);
     assertBeforeBattlePurgeCheckpoint(state);
     assertJourneyDeckSparkCheckpoint(state);
     assertScoreGroupCheckpoint(state);

@@ -19,7 +19,7 @@ export function buildJourneyTransfigurationView(state: JourneyState, content: Jo
     scene: dreamscapeSceneRef(node, content), guide: buildTransfigurationGuideView(resolveTransfigurationGuide(content.guides), instruction),
     cards: state.deck.flatMap((entry) => {
       if (entry.transfiguration !== null || (provider.resolve(entry)?.forms.length ?? 0) === 0) return [];
-      const card = toDeckCardView(content.transfigurationData, entry, content.cardDatabase);
+      const card = toDeckCardView(content.transfigurationData, entry, content.cardDatabase, state.typeRemap);
       return card === null ? [] : [card];
     }), maxCount: source.maxCount, title: JOURNEY_SITE_MESSAGES.randomTransfigurationTitle, instruction,
     continueLabel: JOURNEY_SITE_MESSAGES.continue, confirmLabel: JOURNEY_SITE_MESSAGES.transfigureCount };

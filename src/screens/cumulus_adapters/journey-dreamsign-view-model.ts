@@ -1,19 +1,27 @@
+import { journeyTypeRemapTypes } from "../../rules/journey/journey-type-remap";
 import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 import type { JourneyContent } from "../../data/journey-content";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import type { JourneyState } from "../../types/journey";
-import type { JourneyDreamsignView } from "../../cumulus/screens/JourneyDreamsignScreen";
+import type { JourneyDreamsignScreenView } from "../../cumulus/screens/JourneyDreamsignScreen";
 import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 /** Concrete folded permission projection, independent of catalog selection policy. */
-export function buildJourneyDreamsignView(journey: JourneyState, content: JourneyContent): JourneyDreamsignView | null {
+export function buildJourneyDreamsignView(journey: JourneyState, content: JourneyContent): JourneyDreamsignScreenView | null {
   if (journey.screen.type !== "journeyDreamsign") return null;
   const choice = journey.screen.choice;
-  const continuation = choice.kind === "copy" ? choice.continuation : journey.screen;
+  let continuation = choice.kind === "copy" || choice.kind === "typeRemap" ? choice.continuation : journey.screen;
+  if (continuation.type === "journeyStarterPurge") continuation = continuation.choice.continuation;
+  if (continuation.type === "journeyDreamsign" && continuation.choice.kind === "copy") continuation = continuation.choice.continuation;
   const siteId = continuation.type === "site" ? continuation.siteId : choice.kind === "afterBattle" ? choice.siteId : continuation.type === "journeyPurge" || continuation.type === "journeyTransfiguration" || continuation.type === "journeyDuplication" ? continuation.choice.siteId : continuation.type === "journeyDreamsign" && continuation.choice.kind === "afterBattle" ? continuation.choice.siteId : null;
   const node = siteId === null ? journey.currentDreamscape === null ? null : journey.atlas.nodes[journey.currentDreamscape] ?? null : Object.values(journey.atlas.nodes).find((candidate) => candidate.sites.some((site) => site.id === siteId)) ?? null;
   // Standalone tutorial/genesis choices use existing catalog atmosphere, never a fabricated gameplay site.
   const scene = dreamscapeSceneRef(node ?? { dreamscapeId: content.dreamscapes[0]?.id ?? null }, content);
   const held = journey.dreamsigns.map((sign, heldIndex) => ({ heldIndex, dreamsign: toDreamsignView(sign) }));
+  if (choice.kind === "typeRemap") {
+    const source = choice.sources[choice.index];
+    return { mode: "typeRemap", scene, sourceDreamsignId: source.dreamsignId, heldIndex: source.heldIndex, choiceIndex: choice.index, permissionSeq: choice.permissionSeq, siteId,
+      title: JOURNEY_SITE_MESSAGES.typeRemapTitle, instruction: JOURNEY_SITE_MESSAGES.typeRemapInstruction, typeOptions: journeyTypeRemapTypes(), options: [], held, atCap: false, canContinue: false };
+  }
   if (choice.kind === "copy") {
     const source = choice.sources[choice.index];
     return { mode: "copy", scene, sourceDreamsignId: source.dreamsignId, heldIndex: source.heldIndex, choiceIndex: choice.index, permissionSeq: choice.permissionSeq, siteId: choice.continuation.type === "site" ? choice.continuation.siteId : null,

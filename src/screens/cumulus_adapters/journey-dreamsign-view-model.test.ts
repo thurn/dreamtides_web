@@ -6,13 +6,20 @@ import { makeTestAtlasNode } from "../../testing/atlas-fixtures";
 import { parseAtlasNodeId, parseSiteId } from "../../types/identifiers";
 import { testDreamscapeId, testDreamscapeArtKey } from "../../types/test-identities";
 import { artRef } from "../../cumulus/primitives/art";
-afterEach(clear);
+import { initial as remapInitial, clear as remapClear, accepted as remapAccepted, MASK, TYPES } from "../../rules/journey/journey-type-remap-fixtures";
+afterEach(() => { remapClear(); clear(); });
 const fallbackId = testDreamscapeId("permission-fallback"), currentId = testDreamscapeId("permission-current");
 function content() {
   const base = makeAuguryTestContent({ cards: [] }), template = base.dreamscapes[0];
   return { ...base, dreamscapes: [{ ...template, id: fallbackId, artKey: testDreamscapeArtKey("permission_fallback") }, { ...template, id: currentId, artKey: testDreamscapeArtKey("permission_current") }] };
 }
 describe("physical Dreamsign permission projection", () => {
+  it("projects the actual earned type permission and catalog types without changing it", () => {
+    const state = remapAccepted(remapInitial(), "ADD_DREAMSIGN", { dreamsignId: MASK }, { seq: 41 }).journey;
+    const before = structuredClone(state), result = buildJourneyDreamsignView(state, content());
+    expect(result).toMatchObject({ mode: "typeRemap", sourceDreamsignId: MASK, heldIndex: 0, permissionSeq: 41, choiceIndex: 0, canContinue: false, options: [], typeOptions: TYPES });
+    expect(state).toEqual(before);
+  });
   it("keeps duplicate physical targets and resolves current continuation scene by UUID", () => {
     const state = apply(initial([RED, RED]), "ADD_DREAMSIGN", { dreamsignId: DOLL }).state.journey;
     const nodeId = parseAtlasNodeId("permission-node"), siteId = parseSiteId("permission-site"), node = makeTestAtlasNode(nodeId, [{ id: siteId, type: "Battle", isEnhanced: false, isVisited: false }]);
