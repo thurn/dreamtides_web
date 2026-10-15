@@ -216,6 +216,8 @@ export function DreamsignGalleryPanel({
         position: "relative",
         width: "100%",
         maxWidth: "100%",
+        maxHeight: "100%",
+        minHeight: 0,
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
@@ -227,6 +229,7 @@ export function DreamsignGalleryPanel({
     >
       <header
         style={{
+          flexShrink: 0,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -257,6 +260,11 @@ export function DreamsignGalleryPanel({
       <div
         style={{
           display: "grid",
+          minHeight: 0,
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-y",
+          overscrollBehaviorY: "contain",
           gridTemplateColumns: `repeat(${compact ? "2" : "4"}, ${String(itemWidth)}px)`,
           gap: compact ? token("--space-xs") : token("--space-s"),
           justifyContent: "center",
