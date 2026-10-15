@@ -1,0 +1,475 @@
+{
+  "bead": "hv-umm2.713",
+  "phase": 5,
+  "base": "615054fd12d39e1d15a2720155ac9dea35740d38",
+  "binding": "dreamtides_web; own parent-created conflict-audit-713 worktree; native state belongs to parent",
+  "trigger": "integration-conflict/phase-5",
+  "dispatch": {
+    "path": "/tmp/root-713/dispatch.json",
+    "sha256": "f594ae93003e8d718a51eb98f3090d7e3814d291fa35419114a9f00e8cf1d241"
+  },
+  "implementWindow": {
+    "start": "2026-10-15T03:40:27.218783+00:00",
+    "end": "2026-10-15T03:46:06.172499+00:00"
+  },
+  "implementMin": 5.6492286,
+  "measurementScope": "Continuous actual dispatch through near-Git cutoff includes research, coordination, evidence and checks. Automatic Git tail retained externally within one minute; no backdating or postcommit tracked rewrite. Model start, isolated productive time and critical-path contribution unknown.",
+  "setupSeparate": {
+    "path": "/tmp/root-713/npm-install.receipt.json",
+    "sha256": "f94e3f384da9585a21be0a0857e9bcce3be82b0fe7f602de7bfe1e8dd18ff763"
+  },
+  "originalEvidence": [
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.220.json",
+      "sha256": "438efa5c5f0f2d131197b7229dfef83fec32b3805ca49e8ff603efcb7e154581",
+      "lines": 31,
+      "verifiedUnchanged": true
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.220.json",
+      "sha256": "8a62ccf72dd4a52035604752dac37a7c3f27593c1dad3feee6e3ec0384ff8f37",
+      "lines": 3090,
+      "verifiedUnchanged": true
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.220.md",
+      "sha256": "e948d9a6002c6c400babf561e2505ba559049042a1fec85f8ba8e59980f2c4d8",
+      "lines": 29,
+      "verifiedUnchanged": true
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.234.json",
+      "sha256": "c22ecb2986c164321556ab98b5423c625505fa00194d63f3f0cbf5d55ad4fed7",
+      "lines": 44,
+      "verifiedUnchanged": true
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.234.json",
+      "sha256": "080a9ab3a6d9af9b7a8c5ccf04b369c98e820b2b57a828465e64ac16af2cc5a8",
+      "lines": 477,
+      "verifiedUnchanged": true
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.234.md",
+      "sha256": "e74a8a3dc52f46b952afb3d7ffa39e8796b9bf29ff063a59813767c46fa43a9f",
+      "lines": 29,
+      "verifiedUnchanged": true
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.588.json",
+      "sha256": "71ef63c1fb169869b724f3d6453cc5449b0721ec1221c03d50f0d7c6716cbeb6",
+      "lines": 53,
+      "verifiedUnchanged": true
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.588.json",
+      "sha256": "086cb0c0d9a446c03fa54e592de531f7e349a932978eaf0fe0585b8f6cd8c469",
+      "lines": 1156,
+      "verifiedUnchanged": true
+    }
+  ],
+  "nativeCandidates": [
+    {
+      "bead": "hv-umm2.220",
+      "original": {
+        "path": "/tmp/root-713/native/01a13d87-7ff4-7db2-b1c9-9c0f484bfe07.status.json",
+        "sha256": "78c388aa475314b669cfc4e6df099efd1c266aa4dd232c46408059d716ae3b3d",
+        "candidate": "01a13d87-7ff4-7db2-b1c9-9c0f484bfe07",
+        "source": "f0114a8012088a2d7f2991d46f7b92e5a39a8745",
+        "state": "merge-conflict",
+        "authorized": false,
+        "cleanup": "not-eligible",
+        "terminalReason": "candidate could not be constructed on promoted `staging` 8685a75f75cd3849c27e13155e93fc14ecd7e998: applying source f0114a8012088a2d7f2991d46f7b92e5a39a8745 (source base 53e88efa62b282cc6b82e9120da049e7367675f1) produced merge conflicts in [\"docs/plan/evidence/content-inventory.json\", \"scripts/content-inventory.test.ts\", \"src/rules/battle/fold.ts\", \"src/rules/replay/fixtures/adversarial.json\"]. Rebase the single task commit onto the latest promoted `staging` 8685a75f75cd3849c27e13155e93fc14ecd7e998, resolve and regenerate, then resubmit",
+        "certificate": null,
+        "tested": null
+      },
+      "final": {
+        "path": "/tmp/root-713/native/01a13d98-35ce-7952-b91c-52a0ac47b01e.status.json",
+        "sha256": "7fd309c305d5bc894ae012336aa13e0fe7870b1f458f8149575a7e20cac0b8f8",
+        "candidate": "01a13d98-35ce-7952-b91c-52a0ac47b01e",
+        "source": "615054fd12d39e1d15a2720155ac9dea35740d38",
+        "state": "promoted",
+        "authorized": true,
+        "cleanup": "completed",
+        "terminalReason": null,
+        "certificate": "01a13d99-b736-7000-b40c-81a6c8f32577",
+        "tested": "615054fd12d39e1d15a2720155ac9dea35740d38"
+      }
+    },
+    {
+      "bead": "hv-umm2.234",
+      "original": {
+        "path": "/tmp/root-713/native/01a13ccb-48be-7122-a487-fb490933d31e.status.json",
+        "sha256": "be80f66c4f55802e524371b68ed784f8f58d22475f1051261565e05ba32e6f43",
+        "candidate": "01a13ccb-48be-7122-a487-fb490933d31e",
+        "source": "a1cf6471f121829d1c71527af3beb70e48242b02",
+        "state": "merge-conflict",
+        "authorized": false,
+        "cleanup": "not-eligible",
+        "terminalReason": "candidate could not be constructed on promoted `staging` 8eb2e0d1e5d27737375e9b6cf619be49c5b5dffd: applying source a1cf6471f121829d1c71527af3beb70e48242b02 (source base 07f842d01d1e43aeb0e57bac5c29671e7b81b2a1) produced merge conflicts in [\"docs/plan/evidence/content-inventory.json\", \"src/engine/rules/timing.ts\"]. Rebase the single task commit onto the latest promoted `staging` 8eb2e0d1e5d27737375e9b6cf619be49c5b5dffd, resolve and regenerate, then resubmit",
+        "certificate": null,
+        "tested": null
+      },
+      "final": {
+        "path": "/tmp/root-713/native/01a13cd9-e7b1-73e2-984e-801b26c2d3ac.status.json",
+        "sha256": "a7a8c8415c1a9c1967f6a838bda05afb062d09de435067a828b83c2ba242fce4",
+        "candidate": "01a13cd9-e7b1-73e2-984e-801b26c2d3ac",
+        "source": "519d7b9f96658ef17c6a9f9cf6810c73e56e3476",
+        "state": "promoted",
+        "authorized": true,
+        "cleanup": "completed",
+        "terminalReason": null,
+        "certificate": "01a13cdd-d662-7131-98af-7f6f9ab86f51",
+        "tested": "8fee862c17ada458e7e14346b95c612d1583193d"
+      }
+    },
+    {
+      "bead": "hv-umm2.588",
+      "original": {
+        "path": "/tmp/root-713/native/01a137b0-b61f-7913-84dd-aba4208f6c87.status.json",
+        "sha256": "553475fa85783f4b63d158c3832daa9e5987268eeefb93d4d3181504b7b985be",
+        "candidate": "01a137b0-b61f-7913-84dd-aba4208f6c87",
+        "source": "252909247eb86d46797b0df87a41bb12fc4cf41b",
+        "state": "merge-conflict",
+        "authorized": false,
+        "cleanup": "not-eligible",
+        "terminalReason": "candidate could not be constructed on promoted `staging` 67f4456be1caa7d6ad7da0551adab9904382b947: applying source 252909247eb86d46797b0df87a41bb12fc4cf41b (source base 871c15a5e4ef4c9f4556f9acb834912d9dab9a0d) produced merge conflicts in [\"src/engine/dsl/types.ts\", \"src/engine/effects/interpreter.ts\"]. Rebase the single task commit onto the latest promoted `staging` 67f4456be1caa7d6ad7da0551adab9904382b947, resolve and regenerate, then resubmit",
+        "certificate": null,
+        "tested": null
+      },
+      "final": {
+        "path": "/tmp/root-713/native/01a137bf-509b-71b2-8ed3-5b562319378c.status.json",
+        "sha256": "67561c350e78ca11812f4ff86d8f6d21f86b2f9d062d62dfbb123f6a2bba8434",
+        "candidate": "01a137bf-509b-71b2-8ed3-5b562319378c",
+        "source": "efee65dfefd063d7dc2642e37f9eaa5235182da6",
+        "state": "promoted",
+        "authorized": true,
+        "cleanup": "completed",
+        "terminalReason": null,
+        "certificate": "01a137c1-5022-76e0-9542-79443f40df3d",
+        "tested": "1c61a0a205d9289b8a9cf34302c2318b3cc7c131"
+      }
+    }
+  ],
+  "nativeBeadsAndComments": [
+    {
+      "path": "/tmp/root-713/native/220.bead.json",
+      "sha256": "4020cd50909c459c6f0e782a768ba3397e19b2397782ebefef250feb8939f1ef"
+    },
+    {
+      "path": "/tmp/root-713/native/220.comments.stdout",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "/tmp/root-713/native/234.bead.json",
+      "sha256": "b6ddb0abb045adc7edff83035acf4778ffbaeef4e1f5566ab7bb24775f5c6229"
+    },
+    {
+      "path": "/tmp/root-713/native/234.comments.stdout",
+      "sha256": "6b84262e9ff6d258deeef76029bcb5e042ff72c29fc18eb24e614f983e862411"
+    },
+    {
+      "path": "/tmp/root-713/native/588.bead.json",
+      "sha256": "2a5e6d5e644f7092b315206d4ecfcfe551f319ff6f18736f17b7021ad870e9fc"
+    },
+    {
+      "path": "/tmp/root-713/native/588.comments.stdout",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    }
+  ],
+  "retainedReceipts": [
+    {
+      "path": "/tmp/root-220/conflict-recovery-01/integration/body-integration-audit.json",
+      "sha256": "dede3fed0a72538fa59f87de7b43cbb37c59ee05d3f53a8e8af27a92eb9ff321"
+    },
+    {
+      "path": "/tmp/root-220/conflict-recovery-01/integration/parent-integration-causality-audit.json",
+      "sha256": "ca985439cf9bd4831dc03a9ac2cc1887a4392e9a5adb75aa6fdd9af97d0132e4"
+    },
+    {
+      "path": "/tmp/root-220/conflict-recovery-01/integration/parent-integration-final-checks-audit.json",
+      "sha256": "93269f13d9e85c6e146f2e46949d5ee13319ee1d194c9147d1d5d6eff569529d"
+    },
+    {
+      "path": "/tmp/root-220/delivery-proof.json",
+      "sha256": "dd5470fb00f3023b603e3205942371c7d82ee438d3733c2f9c817741b335e46f"
+    },
+    {
+      "path": "/tmp/root234-20261014/integration-conflict-v01/manifest.json",
+      "sha256": "60d20d9223864aeb8afcefa8e0ca107caf212d2c1fb873b0e96a6425c3b59830"
+    },
+    {
+      "path": "/tmp/root234-20261014/integration-native-update-verification-v02.json",
+      "sha256": "cfa869053d746c97a18afa97dabd96286387f4735346c6ded17f62735ce5a596"
+    },
+    {
+      "path": "/tmp/root234-20261014/integration-timing-semantic-inspection-v01.json",
+      "sha256": "033c657214aa0bd3a78a079e352bf2b84be96991a0c1237847a70fcc91049a14"
+    },
+    {
+      "path": "/tmp/root234-20261014/integration-freeze-checks-audit-v02.json",
+      "sha256": "d755d030b76b2102a04813e081945abfa72b6c44bd053294975b6ca6c1b029a8"
+    },
+    {
+      "path": "/tmp/root234-20261014/integration-root-source-audit-v02.json",
+      "sha256": "7ff76ffd7fc1dcecbd47ceea48b216d7bed40ce6031b6777e74e828556429199"
+    },
+    {
+      "path": "/tmp/root234-20261014/delivery-independent-verification-v01.json",
+      "sha256": "20d43b35604996d8daed1759c34029793ba589afd2b4fe2e00675d9aee26774a"
+    },
+    {
+      "path": "/tmp/root-588/update-first.receipt.json",
+      "sha256": "30d811a831cc6893ef484654ec5f5bd2b008f3e1a13521c565dfb7d10cfd978a"
+    },
+    {
+      "path": "/tmp/root-588/update-parked.stdout",
+      "sha256": "cb4a3ca075082103962ddf9540e0c82bdb47a0d896723deb89f302ca21fa8f88"
+    },
+    {
+      "path": "/tmp/root-588/update-parked.receipt.json",
+      "sha256": "a216b8b8cb70ec96fbb756200e41d4aee54a928d88eee7e388dfc9885eb3efea"
+    }
+  ],
+  "causeAssessment": [
+    {
+      "bead": "hv-umm2.220",
+      "originalBase": "53e88efa62b282cc6b82e9120da049e7367675f1",
+      "integratedBase": "8685a75f75cd3849c27e13155e93fc14ecd7e998",
+      "paths": [
+        "docs/plan/evidence/content-inventory.json",
+        "scripts/content-inventory.test.ts",
+        "src/rules/battle/fold.ts",
+        "src/rules/replay/fixtures/adversarial.json"
+      ],
+      "overlap": "Own retained copiable predicate/type pair beside firstTimeEachTurn inventory and first-occurrence/alternative-cost/awakened/status/activated-route validation. Additions reverse to exact peer bytes. Canonical regeneration preserves 1209 UUIDs and immutable fields. Whole-state pair-only projection removes solely played.player[0].copiable, recovering base fa0018ec from actual 71824983; two other fixture states, provider/events and all 12 outcomes agree.",
+      "combinedChecks": "4 files/5424 focused; 306 files/9108 related review; Knip; deterministic canonical repeat. Original full/fuzz/browser remain f011-bound.",
+      "windowMinutes": 14.314060933333334,
+      "windowScope": "Actual candidate terminal 03:07:36.407677Z through integrated Knip 03:21:55.251333Z; mixed diagnosis, clean rollback/parking/update/reapplication, causality and checks, including concurrent parent 6nkw debt audit. Not pure loss."
+    },
+    {
+      "bead": "hv-umm2.234",
+      "originalBase": "07f842d01d1e43aeb0e57bac5c29671e7b81b2a1",
+      "integratedBase": "8eb2e0d1e5d27737375e9b6cf619be49c5b5dffd",
+      "paths": [
+        "docs/plan/evidence/content-inventory.json",
+        "src/engine/rules/timing.ts"
+      ],
+      "overlap": "Own Reclaim layers/eligibility/quote readers compose with landed 103 alternativeCost helper/payment/access/immediate-route behavior. Exact input comparisons retain both. Existing exhaustive composition table extends from 288 to 324 rows with 36 actual alternative-route cases: base 0/X 0/opponent 5; original expectations retained.",
+      "combinedChecks": "10 files/5129 focused; 306 files/8686 review; Knip; canonical generation. Historical full/300/browser evidence retains original source epoch.",
+      "windowMinutes": 10.26054805,
+      "windowScope": "First observed conflict status 23:43:17.778121Z through Knip 23:53:33.411004Z; two-path parking/native update/reapplication and combined validation. Candidate terminal time itself is not inferred."
+    },
+    {
+      "bead": "hv-umm2.588",
+      "originalBase": "871c15a5e4ef4c9f4556f9acb834912d9dab9a0d",
+      "integratedBase": "67f4456be1caa7d6ad7da0551adab9904382b947",
+      "paths": [
+        "src/engine/dsl/types.ts",
+        "src/engine/effects/interpreter.ts"
+      ],
+      "overlap": "Distinct highestSpark interface/union member/helper/case/import alongside randomCharacter/topOfDeck/copy forms. Removing exact own additions recovers peer bodies byte for byte; helper and interface match original source. No common dispatcher rewrite.",
+      "combinedChecks": "31 selected focused; 299 files/6438 review; Knip; 20 coverage checks; actual synthetic 300/replay on separately labelled combined manifest. Original counterfactuals remain original-source proof.",
+      "windowMinutes": 11.5910326,
+      "windowScope": "Gross recovery/parking/native update/reapplication/combined validation and shared heavy-lock wait. Combined fuzz 350.843811s is acquisition/bootstrap/execution inclusive; OS birth is whole-second, exact isolated acquisition/execution unknown."
+    }
+  ],
+  "currentRules": {
+    "serialization": "workflow.md:492-545 permits independent helpers/cases/fields in shared files; only incompatible behavior or a real prerequisite justifies ordering.",
+    "recovery": "workflow.md:881-929 records parent-only native update, clean rollback, saved delta, temporary parking checkpoint never submitted, reapply preserving both sides and combined checks.",
+    "introspection": "D42 and workflow trigger reason disposition require cause evidence; no speed change is proposed. D17 shared heavy admission is intentional.",
+    "review": "D18 permanent fresh read-only fork_turns:none Codex policy applies to reviews. This evidence-only audit is not core-review and launches none. Native source snapshots retain historical review routes. Parent reports220 exact coverage review completed with no findings and snapshot removed; review disposition remains parent-owned, separate from integration-friction evidence."
+  },
+  "alternatives": [
+    {
+      "option": "Serialize every shared file or generated output",
+      "disposition": "Unsupported: sources show compatible additions and exact peer retention, while current rules require precise behavioral incompatibility. No counterfactual throughput or savings evidence."
+    },
+    {
+      "option": "Repair the native clean-rollback/parking routine",
+      "disposition": "No unresolved failure demonstrated: three retained recoveries succeeded through the documented routine, with clean health and final certified promotion. Unsupported220 diagnose attempt had no prepared generation and was not repeatedly retried."
+    },
+    {
+      "option": "Assign all reported minutes to a shared tooling or scheduling defect",
+      "disposition": "Unsupported: distinct mixed envelopes contain necessary validation, concurrent audit or designed heavy admission. Existing issue homes, including tooling/readability hv-2boo/hv-umm2.673 and existing additive-registry disposition hv-umm2.563, remain separate; no duplicate improvement is filed."
+    }
+  ],
+  "disposition": {
+    "kind": "reason",
+    "reason": "Audit hv-umm2.713: exact reports hv-umm2.220, hv-umm2.234 and hv-umm2.588 concern distinct composable additions: retained-play validation plus derived inventory/replay hashes, Reclaim alongside landed alternativeCost routes, and highestSpark alongside randomCharacter/topOfDeck/copy references. All three original candidates are terminal merge-conflict and unauthorized; their final replacements are certified, promoted and cleaned. Saved-input comparisons and combined contracts preserve both sides after parent-owned clean rollback, bounded parking and native update. Current behavioral serialization and update/reapplication rules cover these ordinary textual collisions; no common unresolved actionable defect is demonstrated. Filename-only serialization would restrict independent work without an identified behavioral incompatibility. The 14.314061, 10.26054805 and 11.5910326 minute windows have different mixed scopes, including concurrent audit or lock wait; they establish neither pure loss nor comparable-load savings. Exact provenance, timing limits and existing separate issue homes remain in measurements/hv-umm2.713.json.",
+    "newImprovementBeads": [],
+    "runtimeFix": false
+  },
+  "limits": [
+    "No claim that three tags prove one common cause.",
+    "No budget, acceptance, serialization, behavior, rendering or source validation changes.",
+    "Native status snapshots establish source/tested distinction and cleanup; historical release observations are not current publication claims.",
+    "Temporary checkpoints are recovery artifacts, never candidates. Failed UUID lookups of comment/session IDs are not candidates.",
+    "Original check/fuzz/browser evidence is source-bound; audit does not rerun or relabel it."
+  ],
+  "auditReadFailures": [
+    {
+      "operation": "Read optional docs/plan/evidence/pre-existing/hv-umm2.234.md",
+      "result": "File absent; command exit1 after reading existing220 and588 files; corrected to retained integration receipts. No repository mutation or product defect."
+    }
+  ],
+  "failurePaths": {
+    "errorMidStep": "Evidence-only audit; failed read retained, no new game transition or test applies.",
+    "reloadRestart": "No new operation/persistence boundary; source/candidate/receipt hashes provide resumable audit binding.",
+    "partialWrite": "No runtime writer; JSON/JSONL parse, append-only prefix and exact scope checks validate the artifact.",
+    "invalidStaleInput": "Exact source manifest and six candidate IDs checked; failed unrelated UUID lookups excluded.",
+    "concurrentActors": "Read-only foreign records, parent alone owns native state; only own four evidence paths writable."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "validation": {
+    "review": {
+      "receipt": {
+        "path": "/tmp/root-713/review.receipt.json",
+        "sha256": "a8e105b75d28c937bda9ad023d54bbd922519a51afefc728f248702bb04c0dd8"
+      },
+      "seconds": 0.38972904201364145,
+      "exitCode": 0,
+      "processGroup": 73226,
+      "remainingGroupMembers": []
+    },
+    "knip": {
+      "receipt": {
+        "path": "/tmp/root-713/knip.receipt.json",
+        "sha256": "337914ba8d92301e707dec18e0ea9a5809275caf10b677eb0ed0224ea3a76c26"
+      },
+      "seconds": 7.697819332999643,
+      "exitCode": 0,
+      "processGroup": 73320,
+      "remainingGroupMembers": []
+    },
+    "schema": {
+      "receipt": {
+        "path": "/tmp/root-713/schema.receipt.json",
+        "sha256": "5e278bc06ff0637f0866bb98ab982a3f9ee7efc59dc744d5add611f020af0c12"
+      },
+      "seconds": 0.10036612499970943,
+      "exitCode": 0,
+      "processGroup": 73802,
+      "remainingGroupMembers": []
+    },
+    "triggers": {
+      "receipt": {
+        "path": "/tmp/root-713/triggers.receipt.json",
+        "sha256": "3b9e5c6d5800063db758daa874c153fa277b134fc81b5d35f793f1c5e2e76b25"
+      },
+      "seconds": 0.20235887495800853,
+      "exitCode": 0,
+      "processGroup": 73822,
+      "remainingGroupMembers": []
+    },
+    "whitespace": {
+      "receipt": {
+        "path": "/tmp/root-713/whitespace.receipt.json",
+        "sha256": "16afd39a2e078a67c76ed16ea3692d12971af64214374ec1627617283084325d"
+      },
+      "seconds": 0.014269875013269484,
+      "exitCode": 0,
+      "processGroup": 73865,
+      "remainingGroupMembers": []
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "review",
+      "start": "2026-10-15T03:44:15.625616+00:00",
+      "raw": "{ 10.43 10.98 9.78 }",
+      "oneMinute": 10.43
+    },
+    {
+      "label": "knip",
+      "start": "2026-10-15T03:44:16.045141+00:00",
+      "raw": "{ 10.43 10.98 9.78 }",
+      "oneMinute": 10.43
+    },
+    {
+      "label": "schema",
+      "start": "2026-10-15T03:44:23.772877+00:00",
+      "raw": "{ 10.22 10.91 9.77 }",
+      "oneMinute": 10.22
+    },
+    {
+      "label": "triggers",
+      "start": "2026-10-15T03:44:23.904820+00:00",
+      "raw": "{ 10.22 10.91 9.77 }",
+      "oneMinute": 10.22
+    },
+    {
+      "label": "whitespace",
+      "start": "2026-10-15T03:44:24.137146+00:00",
+      "raw": "{ 10.22 10.91 9.77 }",
+      "oneMinute": 10.22
+    }
+  ],
+  "runtimeLedger": {
+    "longLived": [],
+    "validationProcesses": [
+      {
+        "label": "review",
+        "pid": 73226,
+        "processGroup": 73226,
+        "state": "terminal",
+        "exitCode": 0,
+        "remainingGroupMembers": []
+      },
+      {
+        "label": "knip",
+        "pid": 73320,
+        "processGroup": 73320,
+        "state": "terminal",
+        "exitCode": 0,
+        "remainingGroupMembers": []
+      },
+      {
+        "label": "schema",
+        "pid": 73802,
+        "processGroup": 73802,
+        "state": "terminal",
+        "exitCode": 0,
+        "remainingGroupMembers": []
+      },
+      {
+        "label": "triggers",
+        "pid": 73822,
+        "processGroup": 73822,
+        "state": "terminal",
+        "exitCode": 0,
+        "remainingGroupMembers": []
+      },
+      {
+        "label": "whitespace",
+        "pid": 73865,
+        "processGroup": 73865,
+        "state": "terminal",
+        "exitCode": 0,
+        "remainingGroupMembers": []
+      }
+    ]
+  },
+  "remaining": "Parent independently verifies exact commit and owns certification/promotion/cleanup/release observation; audit local commit is not delivery.",
+  "validationQualification": "Review quick selected only friction-records for the four evidence paths: 916 valid records/41 accepted historical unknowns; no runtime/test selection. Knip passed after ordinary workspace materialization and restored local assets. Exact check artifact hashes bind the pre-final-clock evidence epoch; final schema and staged whitespace receipts bind the final automatic-clock packaging. No runtime source changes.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "value": 10.4287109375,
+        "measuredFor": "review friction-records step start, actual review stdout full-precision value"
+      }
+    }
+  },
+  "finalPackaging": {
+    "cutoff": "2026-10-15T03:46:06.172499+00:00",
+    "receipt": "/tmp/root-713/final-git.receipt.json",
+    "finalManifest": "/tmp/root-713/final-manifest.json",
+    "finalSchemaReceipt": "/tmp/root-713/final-schema.receipt.json",
+    "stagedWhitespaceReceipt": "/tmp/root-713/final-staged-whitespace.receipt.json",
+    "qualification": "Actual cutoff precedes immediate final schema/staging/commit with automatic dates; external receipt measures actual tail, required at most60s. No tracked postcommit rewrite."
+  }
+}
