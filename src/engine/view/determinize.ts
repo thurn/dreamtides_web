@@ -66,7 +66,7 @@ import { isFixedEffect } from "./knowledge";
 import { freshStatus, variantOf } from "../state/create";
 import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
-import type { BattleState, CardInstance, CharacterScorer, DeckEntry, FloatingChange, FloatingEffect, PayableEffect, QueuedTrigger, SideState, RememberedEffect } from "../state/types";
+import type { BattleState, CardInstance, CharacterScorer, FirstEventHistory, DeckEntry, FloatingChange, FloatingEffect, PayableEffect, QueuedTrigger, SideState, RememberedEffect } from "../state/types";
 import {
   characteristicsView,
   type BattleView,
@@ -410,6 +410,32 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     return { ...copy(card), instance };
   });
   const playedCards = { player: anonymous(view.turnLog.played.player), enemy: anonymous(view.turnLog.played.enemy) };
+  const firstEventHistory: FirstEventHistory | undefined = view.firstEventHistory === undefined ? undefined : (() => {
+    const history = view.firstEventHistory;
+    if (history === null || typeof history !== "object" || Object.keys(history).some(key => key !== "current" && key !== "previous")) throw new Error("Cannot determinize invalid first-event history");
+    const restore = (window: typeof history.current, current: boolean): FirstEventHistory["current"] => {
+      if (window === null) return null;
+      if (window === undefined || typeof window !== "object" || Object.keys(window).length !== 2 || !SIDES.every(side => side in window)) throw new Error("Cannot determinize partial first-event window");
+      const entry = (side: Side) => {
+        const shown = window[side];
+        const played = playedCards[side].find(card => card.cardType === "event");
+        if (shown === null) {
+          if (current && played !== undefined) throw new Error("Cannot determinize an empty first-event contradiction");
+          return null;
+        }
+        if (shown === undefined || typeof shown !== "object" || Object.keys(shown).some(key => !["instance", "printing", "variant"].includes(key)) || shown.printing?.kind !== "card") throw new Error("Cannot determinize invalid first event");
+        if (shown.instance !== null && view.instances[shown.instance] === undefined) throw new Error("Cannot determinize unidentified first event");
+        const definition = instanceCard(catalog, shown);
+        if (definition.cardType !== "event") throw new Error("Cannot determinize a non-event history");
+        definition.abilities(shown.variant);
+        if (current && (played === undefined || shown.instance !== null && shown.instance !== played.instance || played.copiable !== undefined && canonicalHash(played.copiable) !== canonicalHash({ printing: shown.printing, variant: shown.variant }))) throw new Error("Cannot determinize contradictory first-event occurrence");
+        const instance: InstanceId = current ? played!.instance : shown.instance ?? `i${next++}`;
+        return { instance, printing: copy(shown.printing), variant: copy(shown.variant) };
+      };
+      return { player: entry("player"), enemy: entry("enemy") };
+    };
+    return { current: restore(history.current, true), previous: restore(history.previous, false) };
+  })();
   const materializedCards = { player: anonymous(view.turnLog.materialized.player), enemy: anonymous(view.turnLog.materialized.enemy) };
   const departures = (kind: "leftPlay" | "dissolved" | "abandoned") => ({
     player: anonymous(view.turnLog[kind]?.player ?? []), enemy: anonymous(view.turnLog[kind]?.enemy ?? []),
@@ -1021,6 +1047,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       materialized: materializedCards,
     },
     ...(characterScoring === undefined ? {} : { characterScoring }),
+    ...(firstEventHistory === undefined ? {} : { firstEventHistory }),
     nextEffect: highest([view.payable, view.floating, descriptors], "e") + 1,
     oncePerTurn: [...view.oncePerTurn],
     dreamwell: { deck: [], next: 0, catalog: [] },

@@ -286,6 +286,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
     triggerQueue: [],
     floating: [],
     turnLog: emptyTurnLog(),
+    firstEventHistory: { current: { player: null, enemy: null }, previous: { player: null, enemy: null } },
     characterScoring: { current: [], previous: [] },
     nextEffect: 1,
     oncePerTurn: [],

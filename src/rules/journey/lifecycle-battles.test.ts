@@ -204,6 +204,8 @@ describe("LOAD_STATE journey battles", () => {
     const committed = battle.engine.slice.committed;
     const [handCard] = committed.sides.player.hand;
     const state_ = ["engine", "slice", "committed"];
+    // Legacy scalar play records carry unknown first-event provenance.
+    const legacyBattle = withField(battle, [...state_, "firstEventHistory"], REMOVED);
     const record = { instance: handCard, cardType: "character", subtype: "", allTypes: false };
     const costChange = {
       id: "e1", controller: "player", source: handCard, timestamp: 0, expiry: { at: "endOfTurn" },
@@ -216,7 +218,7 @@ describe("LOAD_STATE journey battles", () => {
       [[...state_, "turnLog", "played", "player"], [{ ...record, instance: "i999" }]],
       [[...state_, "floating"], [costChange]],
     ] as const) {
-      expect(load(state, withField(battle, path, value)).outcome, path.join(".")).toBe("applied");
+      expect(load(state, withField(legacyBattle, path, value)).outcome, path.join(".")).toBe("applied");
     }
   });
 

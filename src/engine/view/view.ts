@@ -13,6 +13,7 @@ import type {
   CardInstance,
   CardStatus,
   CharacterScorer,
+  FirstEventPlay,
   ContinuousChange,
   RememberedCard,
   ChallengeState,
@@ -367,6 +368,11 @@ interface CharacterScoringView {
   readonly previous: CharacterScoringView["current"];
 }
 
+interface FirstEventHistoryView {
+  readonly current: Readonly<Record<Side, (Omit<FirstEventPlay, "instance"> & { readonly instance: InstanceId | null }) | null>> | null;
+  readonly previous: FirstEventHistoryView["current"];
+}
+
 export interface BattleView {
   /** Public non-zone source multisets, without any link to hidden physical cards. */
   readonly draftPools?: BattleState["draftPools"];
@@ -409,6 +415,7 @@ export interface BattleView {
   readonly triggerQueue: readonly QueuedTriggerView[];
   readonly turnLog: TurnLogView;
   readonly characterScoring?: CharacterScoringView;
+  readonly firstEventHistory?: FirstEventHistoryView;
   /** Once-per-turn abilities used this turn, except those of sources the viewer cannot see. */
   readonly oncePerTurn: readonly OncePerTurnKey[];
   /** The shared Dreamwell: cards left before the next cycle, and the catalog cycles are built from. */
@@ -485,6 +492,11 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     }
   }
   const visible = (id: InstanceId): boolean => id in instances;
+  const firstEventWindow = (window: NonNullable<BattleState["firstEventHistory"]>["current"]): FirstEventHistoryView["current"] => {
+    if (window === null) return null;
+    const entry = (side: Side) => window[side] === null ? null : { ...copy(window[side]), instance: visible(window[side].instance) ? window[side].instance : null };
+    return { player: entry("player"), enemy: entry("enemy") };
+  };
   const playedView = (card: PlayedCard): PlayedCardView => {
     const known = visible(card.instance);
     // Legacy records can recover a cost or spark only from a card this viewer
@@ -783,6 +795,9 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       },
     },
     ...(characterScoring === undefined ? {} : { characterScoring }),
+    ...(state.firstEventHistory === undefined ? {} : { firstEventHistory: {
+      current: firstEventWindow(state.firstEventHistory.current), previous: firstEventWindow(state.firstEventHistory.previous),
+    } }),
     // A key names its source by instance ID or emblem: `i12#0`, `avatar:player#1`.
     oncePerTurn: state.oncePerTurn.filter((key) => {
       const source = key.slice(0, key.indexOf("#"));

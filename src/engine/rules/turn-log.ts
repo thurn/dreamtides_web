@@ -12,6 +12,22 @@ import { copyJson } from "../state/clone";
 import type { InstanceId, Side } from "../state/ids";
 import type { BattleState, MaterializedCard, PlayedCard, TurnDeparture, TurnLog } from "../state/types";
 
+/** Captures one actor's earliest actual event, without completing an unknown legacy window. */
+function recordFirstEventPlayed(state: BattleState, side: Side, played: PlayedCard): void {
+  const current = state.firstEventHistory?.current;
+  if (current == null || current[side] !== null || played.cardType !== "event") return;
+  if (played.copiable?.printing.kind !== "card") throw new Error("A first event requires captured card values");
+  current[side] = copyJson({ instance: played.instance, printing: played.copiable.printing, variant: played.copiable.variant });
+}
+
+/** Each completed actual turn replaces the preceding global window before callbacks. */
+export function rotateFirstEventHistory(state: BattleState): void {
+  state.firstEventHistory = {
+    current: { player: null, enemy: null },
+    previous: state.turn.turnNumber <= 1 ? { player: null, enemy: null } : state.firstEventHistory?.current ?? null,
+  };
+}
+
 export function emptyTurnLog(): TurnLog {
   return { discarded: { player: 0, enemy: 0 }, leftPlay: { player: [], enemy: [] }, dissolved: { player: [], enemy: [] }, abandoned: { player: [], enemy: [] }, played: { player: [], enemy: [] }, drawn: { player: 0, enemy: 0 }, materialized: { player: [], enemy: [] } };
 }
@@ -45,6 +61,7 @@ export function recordPlayed(state: BattleState, catalog: EngineCatalog, side: S
   const { cardType, subtype, allTypes, spark, namedTriggers } = characteristicsOf(state, catalog, card);
   const { printing, variant } = state.instances[card];
   state.turnLog.played[side].push({ instance: card, playedFromVoid, cardType, subtype, allTypes, namedTriggers: [...namedTriggers], cost: copiableCostOf(state, catalog, card), spark, speed: instanceCard(catalog, state.instances[card]).speed, copiable: copyJson({ printing, variant }) });
+  recordFirstEventPlayed(state, side, state.turnLog.played[side][state.turnLog.played[side].length - 1]);
 }
 
 /** Select the latest actual matching play before considering its current physical survival. */

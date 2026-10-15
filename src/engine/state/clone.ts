@@ -206,6 +206,7 @@ export function cloneState(state: BattleState): BattleState {
     triggerQueue: copyJson(state.triggerQueue),
     floating: copyJson(state.floating),
     turnLog: copyJson(state.turnLog),
+    ...(state.firstEventHistory === undefined ? {} : { firstEventHistory: copyJson(state.firstEventHistory) }),
     ...(state.characterScoring === undefined ? {} : { characterScoring: copyJson(state.characterScoring) }),
     nextEffect: state.nextEffect,
     oncePerTurn: state.oncePerTurn.slice(),

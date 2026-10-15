@@ -758,6 +758,19 @@ export interface FirstOccurrences {
   known: Record<Side, Record<Side, NamedTrigger[]>>;
 }
 
+/** One actual first event play, independent of its current physical survival. */
+export interface FirstEventPlay {
+  readonly instance: InstanceId;
+  readonly printing: Extract<Printing, { readonly kind: "card" }>;
+  readonly variant: Variant;
+}
+
+/** Whole-window null is unknown; a side's null is a known absence of event plays. */
+export interface FirstEventHistory {
+  current: Record<Side, FirstEventPlay | null> | null;
+  previous: Record<Side, FirstEventPlay | null> | null;
+}
+
 export interface TurnLog {
   /** Absent legacy history begins conservatively empty. */
   firstOccurrences?: FirstOccurrences;
@@ -953,6 +966,8 @@ export interface BattleState {
   /** Changes with a duration, in creation order. */
   floating: FloatingEffect[];
   turnLog: TurnLog;
+  /** First events by actor in the current and preceding completed global turn. */
+  firstEventHistory?: FirstEventHistory;
   /** Absent legacy provenance is unknown, distinct from a known empty cohort. */
   characterScoring?: CharacterScoring;
   /** Next effect number to mint. */

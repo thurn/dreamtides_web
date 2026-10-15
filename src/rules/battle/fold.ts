@@ -1,4 +1,5 @@
 import { hasUnknownScoreGroup } from "./score-group-state";
+import { hasUnknownFirstEventHistory } from "./first-event-last-turn-state";
 import { hasUnknownLastTurnScoring } from "./last-turn-scoring-state";
 import { canonicalHash } from "../../engine/state/hash";
 // Immutable battle display metadata and engine slices, plus load validation.
@@ -114,7 +115,7 @@ export type TutorialBattlePresentation = OpponentPlayPresentation | DreamwellRev
 export function parseEngineBattleFold(value: unknown, catalog?: EngineCatalog): EngineBattleFold | null {
   if (!isPlainRecord(value) || !isEngineBattleInit(value.init) || !isBattleSlice(value.slice, true)) return null;
   const fold = value as unknown as EngineBattleFold;
-  return hasConsistentDraftPools(fold) && !hasInvalidJourneyDeckSparkOrigins(fold, catalog) && !hasUnknownScoreGroup(fold, catalog) && !hasUnknownLastTurnScoring(fold, catalog) ? fold : null;
+  return hasConsistentDraftPools(fold) && !hasInvalidJourneyDeckSparkOrigins(fold, catalog) && !hasUnknownScoreGroup(fold, catalog) && !hasUnknownLastTurnScoring(fold, catalog) && !hasUnknownFirstEventHistory(fold, catalog) ? fold : null;
 }
 
 function hasConsistentDraftPools(fold: EngineBattleFold): boolean {
@@ -730,6 +731,7 @@ function isBattleState(value: unknown): boolean {
     isArrayOf(value.floating, isFloatingEffect) &&
     isTurnLog(value.turnLog) &&
     isCharacterScoring(value) &&
+    isFirstEventHistory(value) &&
     isIndex(value.nextEffect) &&
     isArrayOf(value.oncePerTurn, isString) &&
     isDreamwellState(value.dreamwell) &&
@@ -754,6 +756,30 @@ function isBattleState(value: unknown): boolean {
       });
     })()
   );
+}
+
+/** Exact bounded first-event values retain historical originals without requiring their survival. */
+function isFirstEventHistory(state: Record<string, unknown>): boolean {
+  const value = state.firstEventHistory;
+  if (value === undefined) return true;
+  if (!isPlainRecord(value) || Object.keys(value).length !== 2 || !hasOnlyFields(value, ["current", "previous"])) return false;
+  const window = (entries: unknown): boolean => entries === null || isPlainRecord(entries) && Object.keys(entries).length === 2 &&
+    hasOnlyFields(entries, ["player", "enemy"]) && SIDES.every(side => {
+      const entry = entries[side];
+      return entry === null || isPlainRecord(entry) && Object.keys(entry).length === 3 && hasOnlyFields(entry, ["instance", "printing", "variant"]) &&
+        isInstanceId(entry.instance) && Number(String(entry.instance).slice(1)) < Number(state.nextInstance) &&
+        isPlainRecord(entry.printing) && entry.printing.kind === "card" && isPlayedCopiable({ printing: entry.printing, variant: entry.variant });
+    });
+  if (!window(value.current) || !window(value.previous)) return false;
+  const battle = state as unknown as BattleState;
+  if (battle.turn.turnNumber <= 1 && value.previous !== null && SIDES.some(side => (value.previous as Record<Side, unknown>)[side] !== null)) return false;
+  const current = battle.firstEventHistory!.current;
+  return current === null || SIDES.every(side => {
+    const first = battle.turnLog.played[side].find(card => card.cardType === "event");
+    const retained = current[side];
+    return retained === null ? first === undefined : first !== undefined && first.instance === retained.instance &&
+      (first.copiable === undefined || canonicalHash(first.copiable) === canonicalHash({ printing: retained.printing, variant: retained.variant }));
+  });
 }
 
 /** Two bounded physical scoring windows distinguish known-empty from legacy-unknown. */

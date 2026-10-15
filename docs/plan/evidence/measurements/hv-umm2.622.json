@@ -1,0 +1,557 @@
+{
+  "bead": "hv-umm2.622",
+  "base": "f21c773d28c30c56a17c0c321ca226d33cde2b76",
+  "workspace": "/Users/dthurn/dreamtides_web/.worktrees/first-previous-turn-event-622",
+  "window": {
+    "dispatch": "2026-10-15T04:37:09.175Z",
+    "precommitCutoff": "2026-10-15T05:12:27.666065+00:00",
+    "inclusiveSeconds": 2118.491065,
+    "modelSampling": "UNKNOWN",
+    "qualification": "Inclusive native helper dispatch through current cutoff, including source investigation, admission wait, edits, failed attempts, counterfactuals, validation, packaging and parent coordination. Final Git endpoint is retained externally; setup/install separate. Shared scalar supplies this file and friction."
+  },
+  "sourceFiles": {
+    "src/engine/effects/primitives/copy-first-event-last-turn.ts": {
+      "sha256": "ffc4a99d1ade51d08784e3fb173c4e1125901c0f75fcb5e927832a9336348a11",
+      "lines": 35
+    },
+    "src/engine/effects/primitives/contracts/first-event-last-turn-copy.contracts.ts": {
+      "sha256": "415f93476be5d8d452018ae83b58dc189191c7c7e29eab9327897dbf448122cb",
+      "lines": 384
+    },
+    "src/engine/rules/turn-log.ts": {
+      "sha256": "105183092e28a9fd039325b1260dd7dd28513496f8f7a2ba5105a157493e89be",
+      "lines": 141
+    },
+    "src/engine/rules/turn.ts": {
+      "sha256": "1585311dd186a5b093236e38ba44127b2529be0bd0f423b32beb45fa4e5e969a",
+      "lines": 268
+    },
+    "src/engine/state/types.ts": {
+      "sha256": "73c58ca314f9b65d103f1f7c8c681e5e28fb8e1a2ab97bf4d7555a1416d4b55b",
+      "lines": 991
+    },
+    "src/engine/state/create.ts": {
+      "sha256": "cc2c5a583906365837b791195c5e154f1d88311d6d95a2e4a9f947844d2e7372",
+      "lines": 331
+    },
+    "src/engine/state/clone.ts": {
+      "sha256": "a6e5d007c5164482130be7d390671cafd80aa49c302406c0d3fabb5c4a58f033",
+      "lines": 220
+    },
+    "src/engine/view/view.ts": {
+      "sha256": "1d9c64c12fd93674ce21efa03c2f625a805112537e0f92666342017becb91e99",
+      "lines": 900
+    },
+    "src/engine/view/determinize.ts": {
+      "sha256": "f61938ff17a47e43539ff4e89bcede09b2b095e0743c20e07b9e6c4f95394876",
+      "lines": 1424
+    },
+    "src/rules/battle/fold.ts": {
+      "sha256": "60a957d1847101dcd37886b6ceb85554111b4544be362cdc788c849aced94f88",
+      "lines": 1645
+    },
+    "src/engine/effects/primitives/index.ts": {
+      "sha256": "da35197776f527573baae1c497a6f2159440d6b0eca120bf6cb30199390a9692",
+      "lines": 102
+    },
+    "src/engine/effects/registry.ts": {
+      "sha256": "97ffb2a871d7e984db8bb8f38d70daf0e1f2656d1766a0e5015cf4ad3df31c23",
+      "lines": 429
+    },
+    "src/engine/loops/signature.ts": {
+      "sha256": "4195c5296fe6c3560eec7d662ca5816ca3f6f1bb010253ad80aa8a5d36caa279",
+      "lines": 221
+    },
+    "src/rules/battle/first-event-last-turn-state.ts": {
+      "sha256": "ea598b8c40ab846b79669dbcaeff2519763a464f81d49483da961be9c9e1801f",
+      "lines": 73
+    },
+    "src/rules/replay/replay.ts": {
+      "sha256": "89ae14d56483118c416e3ceedef4abb44bb5720cf97a267998fc06669b89e0f6",
+      "lines": 104
+    },
+    "src/rules/replay/fixtures/adversarial.json": {
+      "sha256": "40e3ac900ce4ba8cae60d51e15a7c00d96e76830d6dcfd8738b03b3ce021c376",
+      "lines": 171
+    },
+    "src/rules/journey/lifecycle-battles.test.ts": {
+      "sha256": "3deed3c97c7b7ac619c2e63c7298187c99fbb72fd46906dab9064c10a0240430",
+      "lines": 363
+    }
+  },
+  "scopeProofHashes": {
+    "source-first-plan.md": "fa0e83a3e19b8de5af1c420a2ab11b277bdb92eaf7cd14099163fc5486fad3b9",
+    "source-investigation-proof.json": "0e6bf84031c54c96eef743ab27d1dd5fb5b998629858f1a8899b943235a51299",
+    "source-admission-proof.json": "2767c446226590e4f07b0678d4a64d21c3cfe8eec4724ba83d55798cd3c0dabc",
+    "fixture-fallout-admission-proof.json": "3a2154b242e913c98f17c8b7d0a32f16c521134c19f0a3ee8a24a6fd057f898b",
+    "negative-controls.json": "0a70133ac6cb45ea847278787850588aa30673c709c94dacdad0afd2c2ed60e7",
+    "generator-proof.json": "fd33cebb0b7a5b31d02ab2a2c29b34ea20d97d1dd49403bf57b6384389f821b8",
+    "parent-counterfactual-audit.json": "77192c02caf8feebcfcb2ab6f6d3f15dc8cd1659b35c03cc34e7d11ab3854042"
+  },
+  "validation": {
+    "fixture-feature": {
+      "sha256": "f0606c35de26a537337aa9588df4c053a229d7abf92dbfcd37778c3d10c8d27e",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/lifecycle-battles.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn|LOAD_STATE journey battles"
+      ],
+      "start": "2026-10-15T05:02:07.277908+00:00",
+      "end": "2026-10-15T05:02:15.195148+00:00",
+      "wallSeconds": 7.917107874993235,
+      "exit": 0,
+      "pid": 70168,
+      "pgid": 70168,
+      "processGroupAbsent": true
+    },
+    "focused-complete-fixed": {
+      "sha256": "ca5862d797ae50973f4f8eba043752150c6c542514cb0dc556952b1fef23d812",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn"
+      ],
+      "start": "2026-10-15T04:54:21.386024+00:00",
+      "end": "2026-10-15T04:54:30.496980+00:00",
+      "wallSeconds": 9.110809917037841,
+      "exit": 0,
+      "pid": 12995,
+      "pgid": 12995,
+      "processGroupAbsent": true
+    },
+    "focused-complete": {
+      "sha256": "b0298809b46eccb924dbaaef25c19385295b1b86d7121958dc9113cdcd57e9d7",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn"
+      ],
+      "start": "2026-10-15T04:53:59.455707+00:00",
+      "end": "2026-10-15T04:54:08.971588+00:00",
+      "wallSeconds": 9.515726124984212,
+      "exit": 1,
+      "pid": 6205,
+      "pgid": 6205,
+      "processGroupAbsent": true
+    },
+    "focused-controls": {
+      "sha256": "28b63cf7a5588702f51e7ca2db18a5fe1054743924b5089afdc67e7db19c8da9",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "src/rules/replay/replay.test.ts"
+      ],
+      "start": "2026-10-15T04:57:24.935993+00:00",
+      "end": "2026-10-15T04:58:01.775436+00:00",
+      "wallSeconds": 36.83888791699428,
+      "exit": 0,
+      "pid": 28875,
+      "pgid": 28875,
+      "processGroupAbsent": true
+    },
+    "focused-fixture-fixed": {
+      "sha256": "acdbe2291b34ba8a41e17d724f30392b9a69e171f074262f44754be09f4d9f94",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn"
+      ],
+      "start": "2026-10-15T04:51:54.221093+00:00",
+      "end": "2026-10-15T04:52:02.875438+00:00",
+      "wallSeconds": 8.654190915985964,
+      "exit": 1,
+      "pid": 53926,
+      "pgid": 53926,
+      "processGroupAbsent": true
+    },
+    "focused-initial": {
+      "sha256": "7ae566495714063ff5f467ded199e4f30f88f77f392d2e1ab69d58765cfed082",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn"
+      ],
+      "start": "2026-10-15T04:51:07.581219+00:00",
+      "end": "2026-10-15T04:51:19.826803+00:00",
+      "wallSeconds": 12.245428125024773,
+      "exit": 1,
+      "pid": 18115,
+      "pgid": 18115,
+      "processGroupAbsent": true
+    },
+    "focused-positive": {
+      "sha256": "33673a8fe86402ac57cec6c1da54a3852bd66a2ee80d868fc6470307f1159167",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn"
+      ],
+      "start": "2026-10-15T04:52:52.677858+00:00",
+      "end": "2026-10-15T04:53:04.962089+00:00",
+      "wallSeconds": 12.28398745803861,
+      "exit": 0,
+      "pid": 73994,
+      "pgid": 73994,
+      "processGroupAbsent": true
+    },
+    "full-lock": {
+      "sha256": "1bf737bb287478380b18e193e0ce374c11000f1bbbfc8e9601c6d8057faa9781",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-622/run.py",
+        "full",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-15T05:05:03.214838+00:00",
+      "end": "2026-10-15T05:06:54.471999+00:00",
+      "wallSeconds": 111.2524051250075,
+      "exit": 0,
+      "pid": 82362,
+      "pgid": 82362,
+      "processGroupAbsent": true
+    },
+    "full": {
+      "sha256": "ba92f2c52514b3f079775651d42935fe50d33d1fca787c1477679835f60ccd49",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-15T05:05:03.241544+00:00",
+      "end": "2026-10-15T05:06:54.466810+00:00",
+      "wallSeconds": 111.22049799998058,
+      "exit": 0,
+      "pid": 82365,
+      "pgid": 82365,
+      "processGroupAbsent": true
+    },
+    "generator-1": {
+      "sha256": "5a7ed5893de2e7424dcf3de81c6f5a5376c5bf24f0b5e9e2ebe817fa63431071",
+      "command": [
+        "npm",
+        "run",
+        "regenerate-replay-fixtures"
+      ],
+      "start": "2026-10-15T04:56:44.418263+00:00",
+      "end": "2026-10-15T04:56:46.336144+00:00",
+      "wallSeconds": 1.917796499968972,
+      "exit": 0,
+      "pid": 24922,
+      "pgid": 24922,
+      "processGroupAbsent": true
+    },
+    "generator-2": {
+      "sha256": "76c3ed072ed31b2e1235c29da0be0a4e05580ec8673efb2f941fa9209e939ec0",
+      "command": [
+        "npm",
+        "run",
+        "regenerate-replay-fixtures"
+      ],
+      "start": "2026-10-15T04:56:46.363567+00:00",
+      "end": "2026-10-15T04:56:47.910856+00:00",
+      "wallSeconds": 1.5472058749874122,
+      "exit": 0,
+      "pid": 25067,
+      "pgid": 25067,
+      "processGroupAbsent": true
+    },
+    "knip": {
+      "sha256": "f60b37719e24c5f315b1b5e7921a0e7de7751e87a4e17b24b88e470721f345c8",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T05:04:06.602259+00:00",
+      "end": "2026-10-15T05:04:12.042805+00:00",
+      "wallSeconds": 5.44045312498929,
+      "exit": 0,
+      "pid": 78413,
+      "pgid": 78413,
+      "processGroupAbsent": true
+    },
+    "negative-1-global-window": {
+      "sha256": "49a39bc1269a407a7aebdd43437b20570ce27c296fb89bdf8f71c7f737760979",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn.*global window"
+      ],
+      "start": "2026-10-15T04:54:51.686008+00:00",
+      "end": "2026-10-15T04:54:59.902476+00:00",
+      "wallSeconds": 8.216286332986783,
+      "exit": 1,
+      "pid": 15563,
+      "pgid": 15563,
+      "processGroupAbsent": true
+    },
+    "negative-2-first-selection": {
+      "sha256": "504409ace60ffa0e48c523595fc9c42d307ab29ad2ce3ca9e21030e27789e5ac",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn.*first actual event"
+      ],
+      "start": "2026-10-15T04:54:59.931718+00:00",
+      "end": "2026-10-15T04:55:07.998170+00:00",
+      "wallSeconds": 8.06631683401065,
+      "exit": 1,
+      "pid": 16219,
+      "pgid": 16219,
+      "processGroupAbsent": true
+    },
+    "negative-3-captured-values": {
+      "sha256": "92810a6d8d231ba1c9ea8c6de200bfc7dbbc9eb554e9e8ebf694ff141f179f5a",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn.*captured values"
+      ],
+      "start": "2026-10-15T04:55:08.026459+00:00",
+      "end": "2026-10-15T04:55:16.581776+00:00",
+      "wallSeconds": 8.555196083965711,
+      "exit": 1,
+      "pid": 16893,
+      "pgid": 16893,
+      "processGroupAbsent": true
+    },
+    "negative-4-ephemeral-lifecycle": {
+      "sha256": "a7048b358ee0d53f1f2bee930a942e3162efafb3f9b086b581bedf4672fdb06c",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn.*created lifecycle"
+      ],
+      "start": "2026-10-15T04:55:16.614119+00:00",
+      "end": "2026-10-15T04:55:24.406010+00:00",
+      "wallSeconds": 7.791729459015187,
+      "exit": 1,
+      "pid": 17874,
+      "pgid": 17874,
+      "processGroupAbsent": true
+    },
+    "negative-5-hidden-alias": {
+      "sha256": "de547d60f0a3da0bbd81649e74eebaccf461e97d85284e0056c5b376b43355b8",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "first-event last-turn.*privacy and sampling"
+      ],
+      "start": "2026-10-15T04:55:24.435952+00:00",
+      "end": "2026-10-15T04:55:32.482595+00:00",
+      "wallSeconds": 8.046481249970384,
+      "exit": 1,
+      "pid": 18500,
+      "pgid": 18500,
+      "processGroupAbsent": true
+    },
+    "own-lint": {
+      "sha256": "ba736f703b1a7512cd61db045c19eac1577def930d2995fc1f7bd03c48bb31ad",
+      "command": [
+        "node_modules/.bin/eslint",
+        "src/engine/effects/primitives/contracts/first-event-last-turn-copy.contracts.ts"
+      ],
+      "start": "2026-10-15T05:01:39.021781+00:00",
+      "end": "2026-10-15T05:01:42.063362+00:00",
+      "wallSeconds": 3.0414736249949783,
+      "exit": 0,
+      "pid": 67553,
+      "pgid": 67553,
+      "processGroupAbsent": true
+    },
+    "review-fixed": {
+      "sha256": "1bed240d281fde255f89b7116e0523d8f5bb008ab5a7120706077425733a1eaa",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T05:02:28.943914+00:00",
+      "end": "2026-10-15T05:03:39.500953+00:00",
+      "wallSeconds": 70.5566074589733,
+      "exit": 0,
+      "pid": 71741,
+      "pgid": 71741,
+      "processGroupAbsent": true
+    },
+    "review": {
+      "sha256": "4ca9592818122f0e17ae8dddc1bd748384ac78a0aab49b1768b552f4605f892f",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T04:58:49.746453+00:00",
+      "end": "2026-10-15T05:00:21.324400+00:00",
+      "wallSeconds": 91.57737033301964,
+      "exit": 1,
+      "pid": 97736,
+      "pgid": 97736,
+      "processGroupAbsent": true
+    },
+    "schema": {
+      "sha256": "15fec9a4f9de6d83093ed0e69c83ac019477981960a0f4d5d6e8d7c03dcefaea",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T05:08:48.951462+00:00",
+      "end": "2026-10-15T05:08:49.100231+00:00",
+      "wallSeconds": 0.14866191701730713,
+      "exit": 0,
+      "pid": 29951,
+      "pgid": 29951,
+      "processGroupAbsent": true
+    },
+    "typecheck": {
+      "sha256": "40dbf2ba20b2c0dfb8102c2e097603493430f82dd4e64336938926e43bae93a2",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-10-15T04:55:42.130143+00:00",
+      "end": "2026-10-15T04:56:00.248528+00:00",
+      "wallSeconds": 18.118199290998746,
+      "exit": 2,
+      "pid": 20256,
+      "pgid": 20256,
+      "processGroupAbsent": true
+    },
+    "whitespace": {
+      "sha256": "020b514d1471982c14dca8f26f7778c5107c423130a2aab5283dbc211e8c6905",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "start": "2026-10-15T05:08:49.133055+00:00",
+      "end": "2026-10-15T05:08:49.163928+00:00",
+      "wallSeconds": 0.03076458297437057,
+      "exit": 0,
+      "pid": 29961,
+      "pgid": 29961,
+      "processGroupAbsent": true
+    }
+  },
+  "counterfactuals": {
+    "receipt": "negative-controls.json",
+    "sha256": "0a70133ac6cb45ea847278787850588aa30673c709c94dacdad0afd2c2ed60e7",
+    "families": 5,
+    "behavioralFailures": 5,
+    "restoredExactBytes": true,
+    "epochQualification": "Original controls preceded type-only private fixture fixes and final checks; parent whole-source normalized audit verifies only each intended own mutation differed. Family3 detects changed live variant and invalid catalog preflight; ceased case is positive. Family5 fails independent invariantViolations on exposed i1/i15 in both views, before the explicit null assertion."
+  },
+  "replayFixture": {
+    "proofSHA256": "fd33cebb0b7a5b31d02ab2a2c29b34ea20d97d1dd49403bf57b6384389f821b8",
+    "twoRunsByteIdentical": true,
+    "changedField": "adversarial.json.finalHash",
+    "otherFieldsAndOutputsUnchanged": true,
+    "generatorAndConfigUnchanged": true
+  },
+  "failurePaths": {
+    "capture/error after recordPlayed": "transactional capture rolls back an error after actual play recording and recovers from the committed boundary (both actors): existing play listener throws from an unknown condition after actual capture; input state hash stays exact, saved committed retry succeeds.",
+    "capture/precommit cancellation and invalid input": "transactional prompt replay and refusal: modal play cancellation leaves the committed state exact; wrong actor, stale/invalid answer, competing action and reused answer are rejected.",
+    "rotation/Ending suspend and reload": "transactional Ending suspension keeps the preceding window fixed until an actual completed transition (both actors): real hand-limit choice holds both histories; cold answer replay yields identical state and next preceding window.",
+    "rotation/first global, opponent and extra boundaries": "global window cases (both actors) use normal, consecutive own extra and explicit opponent extra turns, ordinary rounds, first battle turn and first own turn with an off-turn Interrupt.",
+    "copy/partial write and recovery": "transactional prompt replay and refusal: a real hand copy precedes an ordinary discard prompt and deterministic subsequent error; no partial gameplay copy/ID/history commits; saved valid definition resumes once with stable state hash.",
+    "copy/preallocation refusal": "unsupported builder and invalid captured catalog preflight throw; unknown required previous history throws; saved-boundary cases reject malformed or missing required windows.",
+    "copy/cancel and concurrency": "resolving operation uses existing uncancellable step; cancel/wrong actor/stale/malformed/concurrent inputs bounce; the primitive itself raises no prompt and adds no asynchronous writer.",
+    "view/sample privacy": "privacy and sampling cases (both actors/viewers) preserve public tuples, redact current hidden/ceased aliases, share current first-play occurrence IDs, reserve previous absent IDs, retain comparable views and equal fixed-draw samples for hidden-alias counterfactuals.",
+    "save/checkpoint/raw import": "actual local repository rejects a required unknown hashed checkpoint and recovers identical state from preserved genesis/events; raw LOAD_STATE appends one intent event but keeps exact fold state. Malformed and required unknown raw folds reject; unrelated legacy stays accepted and complete later windows recover."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "actual evidence-write sysctl vm.loadavg observation at 2026-10-15T05:12:27.666065+00:00",
+        "raw": "{ 14.08 15.55 13.72 }"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 386,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "limits": [
+    "No production UUID authored; original hv-umm2.248 retains full recipe/weighted300/preflight/sweep/D20/D21/coverage/final joins and C3 card-issue ownership.",
+    "No new UI workflow/prompt/status/event kind; no browser or local default fuzz run. Existing copy/knowledge/events/matcher/scoring/flow/config/generator source unchanged.",
+    "Parent owns fresh read-only Codex review, findings/dispositions, exact candidate promotion and integration; no code review claim here.",
+    "All initial5396 regular files were unchanged at prewrite audit; two pre-existing tracked directory symlinks independently matched base.",
+    "Source-free proposed LOAD_STATE no-event-count-change wording is superseded by actual protocol evidence: one intent is appended and exact folded state remains unchanged.",
+    "Full validation includes synthetic browser-lease runtime/failure fixtures, not feature browser QA or an MCP context. Their logged server groups are included in the explicit runtime audit."
+  ],
+  "validationReceiptTiming": "Receipt start is the scratch-runner timestamp before source hashing and process spawn; end follows child wait. Wall time includes runner/source-manifest/log startup and child execution. These are observed invocation envelopes, not CPU/sampling time.",
+  "heavySlot": {
+    "outerStart": "2026-10-15T05:05:03.214838+00:00",
+    "innerRunnerStart": "2026-10-15T05:05:03.241544+00:00",
+    "outerToInnerStartSeconds": 0.026706,
+    "qualification": "Observed lock wait plus process/interpreter/import/stamp startup envelope, not a pure measured lock wait. Inner runner starts after lock acquisition; no separate first-instruction-under-lock timestamp is claimed."
+  },
+  "caseCounts": {
+    "ownFeature": 26,
+    "ownContractLines": 384,
+    "featureAndLegacyFixture": 29,
+    "focusedEntryPoints": 7,
+    "focusedCases": 5652,
+    "reviewEntryPoints": 308,
+    "reviewCases": 9369,
+    "fullEntryPoints": 389,
+    "fullCases": 10378
+  },
+  "runtimeAudit": {
+    "path": "/tmp/root-622/runtime-audit-precommit-frozen.json",
+    "sha256": "eb699caad42ef880b758da117537d5133b3a188fb18ae7de5a53dc89817c4581",
+    "groups": 99,
+    "present": [],
+    "qualification": "Includes direct command groups and server groups spawned by full validation synthetic browser-lease tests; those are test infrastructure, not feature browser QA or an MCP context. No unrelated group is stopped. Numeric reuse requires attribution, never broad termination. Immutable precommit audit; final schema and Git groups are recorded separately externally."
+  }
+}

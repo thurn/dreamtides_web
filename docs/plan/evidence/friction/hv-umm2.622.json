@@ -1,0 +1,42 @@
+{
+  "bead": "hv-umm2.622",
+  "phase": 5,
+  "implementMin": 35.30818441666667,
+  "implementWindow": {
+    "start": "2026-10-15T04:37:09.175Z",
+    "end": "2026-10-15T05:12:27.666065+00:00"
+  },
+  "localValidationS": {
+    "fixture-feature": 7.917107874993235,
+    "focused-complete-fixed": 9.110809917037841,
+    "focused-complete": 9.515726124984212,
+    "focused-controls": 36.83888791699428,
+    "focused-fixture-fixed": 8.654190915985964,
+    "focused-initial": 12.245428125024773,
+    "focused-positive": 12.28398745803861,
+    "full-lock": 111.2524051250075,
+    "full": 111.22049799998058,
+    "generator-1": 1.917796499968972,
+    "generator-2": 1.5472058749874122,
+    "knip": 5.44045312498929,
+    "negative-1-global-window": 8.216286332986783,
+    "negative-2-first-selection": 8.06631683401065,
+    "negative-3-captured-values": 8.555196083965711,
+    "negative-4-ephemeral-lifecycle": 7.791729459015187,
+    "negative-5-hidden-alias": 8.046481249970384,
+    "own-lint": 3.0414736249949783,
+    "review-fixed": 70.5566074589733,
+    "review": 91.57737033301964,
+    "schema": 0.14866191701730713,
+    "typecheck": 18.118199290998746,
+    "whitespace": 0.03076458297437057
+  },
+  "hostLoad": 14.08,
+  "testDelta": {
+    "files": 1,
+    "lines": 386,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "friction": []
+}

@@ -73,6 +73,7 @@ const STATE_FIELDS = {
    */
   turnLog: "resource",
   characterScoring: "position",
+  firstEventHistory: "position",
   nextEffect: "resource",
   oncePerTurn: "position",
   dreamwell: "position",

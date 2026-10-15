@@ -19,6 +19,7 @@ export * from "./rule-modifier";
 export * from "./create-card";
 export * from "./create-random-from-pool";
 export * from "./create-copy-in-hand";
+export * from "./copy-first-event-last-turn";
 export * from "./disable-triggers";
 export * from "./discard";
 export * from "./discard-chosen";

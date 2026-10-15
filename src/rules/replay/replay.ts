@@ -1,4 +1,5 @@
 import { assertScoreGroupCheckpoint } from "../battle/score-group-state";
+import { assertFirstEventHistoryCheckpoint } from "../battle/first-event-last-turn-state";
 import { assertLastTurnScoringCheckpoint } from "../battle/last-turn-scoring-state";
 // The replay harness: the canonical game EngineConfig plus a one-call log
 // replayer used by the fixture regression net and by src/session/.
@@ -50,6 +51,7 @@ export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
     assertJourneyDeckSparkCheckpoint(state);
     assertScoreGroupCheckpoint(state);
     assertLastTurnScoringCheckpoint(state);
+    assertFirstEventHistoryCheckpoint(state);
     return state as FoldState;
   },
   hash: hashState,

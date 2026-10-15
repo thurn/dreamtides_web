@@ -38,6 +38,7 @@ import {
   createCardPrimitive,
   createRandomFromPoolPrimitive,
   createCopyInHandPrimitive,
+  copyFirstEventLastTurnToHandPrimitive,
   disableTriggersPrimitive,
   redrawHandPrimitive,
   redrawChosenHandPrimitive,
@@ -185,6 +186,7 @@ const DEFINITIONS = {
   get createRandomFromPool() {
     return createRandomFromPoolPrimitive;
   },
+  get copyFirstEventLastTurnToHand() { return copyFirstEventLastTurnToHandPrimitive; },
   get createCopyInHand() {
     return createCopyInHandPrimitive;
   },
