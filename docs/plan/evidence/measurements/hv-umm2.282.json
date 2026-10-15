@@ -1,0 +1,1824 @@
+{
+  "bead": "hv-umm2.282",
+  "sourceBase": "e371d5ae5334ca0b2d4caae9fbed47d6284b3be9",
+  "claimStart": "2026-10-15T19:27:15.111878+00:00",
+  "scope": "Evidence-only Fast acceptance join; production/catalog/consumer/tests/shared runners/configuration read-only. All34 filed exploration action UUIDs,20 actual cards each actor, Fast judgment and current300 retained.",
+  "codeDelta": {
+    "productionLines": 0,
+    "testFiles": 0,
+    "testLines": 0,
+    "entrypoints": 0,
+    "configEdits": 0
+  },
+  "sourceCustody": {
+    "initialTracked": 5835,
+    "unchangedAfterAllRuntime": true,
+    "guardSHA256": "c69017c7e0361800a800be7573d8f1f6056f622aacbd2eea8670dcd35452c0ad",
+    "audit": "acceptance-v01/source-audit.json",
+    "auditSHA256": "86ceeb362e903f752e03b69734cc7cbeb9546a88c7a13e71aa316510d98448d1",
+    "qualification": "Source hashes/import closure are provenance, not behavior. Symlinks hash link text without dereferencing.",
+    "finiteAcknowledgments": [
+      "ACK282-01",
+      "ACK282-01b",
+      "ACK282-02",
+      "ACK282-03",
+      "ACK282-03b",
+      "ACK282-03c",
+      "ACK282-04"
+    ],
+    "postValidationGuard": {
+      "at": "2026-10-15T20:24:25.624272+00:00",
+      "protectedCount": 5835,
+      "changed": [],
+      "qualification": "After review/Knip restore, every initial tracked payload/link text compared; four new admitted evidence files are outside initial set."
+    },
+    "postValidationGuardSHA256": "1b21fac274bd95bec71f3fe3e81e1f638b3e82322609ce4cd19bb30e5d98a6b9"
+  },
+  "filedUUIDScope": {
+    "count": 34,
+    "domain": "explorationEffect action UUIDs, distinct from weighted battle-card UUIDs",
+    "kinds": {
+      "make-fast-all": 33,
+      "make-predicate-fast-and-gain-nightmares": 1
+    },
+    "newRequiredPrimitives": [],
+    "genericD21Samples": [
+      "f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9",
+      "d451ccef-f4be-407e-800b-55c04608896b",
+      "66a93ab4-c049-46eb-a176-d4b63e69c840",
+      "5ce24a74-9a00-40ec-92ec-8caba0836f98"
+    ],
+    "actions": [
+      {
+        "uuid": "cb4a0eae-a464-4888-a2e4-390c3e986899",
+        "encounterCardUUID": "15b63630-d9f8-473b-9717-15ad91ff2f16",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          234,
+          239
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "83a3d2b7-0ca2-40f4-89fa-726f6efb732b",
+        "encounterCardUUID": "e7c93c3b-14db-4131-ab50-71d152331777",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          916,
+          921
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "ff2a2adc-9678-4e91-8c29-853a045270e5",
+        "encounterCardUUID": "42427d15-c019-4786-9d7e-285829c4f3cb",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          1012,
+          1017
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "75a6bd0b-714b-46ed-b5c4-9485f8319959",
+        "encounterCardUUID": "6e019832-2e0c-4166-81c3-54f7995425df",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          1998,
+          2003
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "a63c84e0-5d10-4155-8fcc-f6c967330014",
+        "encounterCardUUID": "7697da0e-d759-4c75-8c9c-477e9058b035",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          2614,
+          2619
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "ed726ca9-6e65-4680-8596-444d872c28db",
+        "encounterCardUUID": "181b4924-743b-49c3-8056-6afd08ebde1d",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          3754,
+          3759
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "66957744-1b9e-486c-a015-ece9cc8ded3e",
+        "encounterCardUUID": "b8a66998-f2d8-401d-8262-d5a658563936",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          4243,
+          4248
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "902931da-6ab3-4987-b345-3317b4ade36a",
+        "encounterCardUUID": "b64f0beb-6ba4-4559-b6ab-091c2f60a613",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          4623,
+          4628
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "8fd01df5-2022-4ed9-8a80-b24b41cdcfd5",
+        "encounterCardUUID": "29d25251-8b42-4d3d-97e6-6c3abaabd9a2",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          4926,
+          4931
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "c7e23aa9-7ff6-4d41-b0bc-0993d9bb0b6c",
+        "encounterCardUUID": "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          5192,
+          5197
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "d70a2fb9-6b0f-4c6d-87f8-b39beeef5bc8",
+        "encounterCardUUID": "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          5529,
+          5534
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9",
+        "encounterCardUUID": "bd43b120-2503-406c-8b72-ea3dc55198a0",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          5602,
+          5607
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "d451ccef-f4be-407e-800b-55c04608896b",
+        "encounterCardUUID": "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          5992,
+          5997
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "fcce63dc-f8c5-4183-be2a-9de4929ca8c2",
+        "encounterCardUUID": "c96c6c7f-c0fe-4272-b856-a54ace01f596",
+        "effectKind": "make-predicate-fast-and-gain-nightmares",
+        "predicate": "event",
+        "nightmareCount": 2,
+        "sourceRange": [
+          6518,
+          6525
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 14,
+            "initialHash": "092a89b769ffdb",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 14,
+            "initialHash": "0ca823d3fb7835",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "7f5989f5-dcea-452b-a678-4febe5f6baba",
+        "encounterCardUUID": "f7ffe999-685d-4ea2-85de-2e567eb2a042",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          7264,
+          7269
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "2dbedc84-1c2f-459e-9e6e-acafa1cd93ee",
+        "encounterCardUUID": "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          8038,
+          8043
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "485a331a-b263-4921-a342-81453dfd1dbf",
+        "encounterCardUUID": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          8319,
+          8324
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "305154b4-f3c1-44f7-804a-70a7c01f7c7f",
+        "encounterCardUUID": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          8339,
+          8344
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "52949805-3fb2-40fd-b72d-4448a49b2722",
+        "encounterCardUUID": "8e003d04-e489-4c55-9c72-fc5612909d07",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          8786,
+          8791
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "9f73489e-d41f-4883-b2cb-d571ef95fd2d",
+        "encounterCardUUID": "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          9138,
+          9143
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "66a93ab4-c049-46eb-a176-d4b63e69c840",
+        "encounterCardUUID": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          9334,
+          9339
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "2719cc15-94db-4fea-b061-e92a78371fb5",
+        "encounterCardUUID": "c430ed7b-523e-4580-9a53-d43d11265633",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          9442,
+          9447
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "eb808cb8-fdf4-4ad2-ae06-60103b5321ed",
+        "encounterCardUUID": "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          9516,
+          9521
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "5ce24a74-9a00-40ec-92ec-8caba0836f98",
+        "encounterCardUUID": "8d35aec1-29ad-432c-9c23-25a52804cbae",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          9550,
+          9555
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "363b6fc0-cc56-459f-8940-18c0a0b3717a",
+        "encounterCardUUID": "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          9996,
+          10001
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "4790344c-2167-4bf9-bef0-5d33787d7f68",
+        "encounterCardUUID": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          10301,
+          10306
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "c9b12011-3160-443e-ae04-ff36762059a4",
+        "encounterCardUUID": "0a19c54c-7a2e-4614-99c9-2c9142729ebb",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          10353,
+          10358
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "8e010cae-a23c-441c-b807-ac4186f49c55",
+        "encounterCardUUID": "ed4d5342-0690-40b7-ab48-6b76035466f2",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          10629,
+          10634
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "bac27741-0ac8-448b-a838-0e624b5b5846",
+        "encounterCardUUID": "e3431bd0-5a81-497f-9ec9-18275b568c00",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          10919,
+          10924
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "d449caaa-9d41-4d63-af5c-23b6aa9d6ce5",
+        "encounterCardUUID": "18979c10-39b8-42fb-ac1d-dd784da498d1",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          11663,
+          11668
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "90d2a24d-5eb8-44bb-85dc-97cc700497e3",
+        "encounterCardUUID": "9d63ba3e-fafb-466e-8418-ce5f8941ba30",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          11702,
+          11707
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "08b717a3-c3fa-4f94-8758-f6449d528c52",
+        "encounterCardUUID": "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          11814,
+          11819
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "34f9fc83-52e4-4709-9361-6cc10129354d",
+        "encounterCardUUID": "629fe4d4-826f-41b9-a913-458a503856a8",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          11948,
+          11953
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      },
+      {
+        "uuid": "30a4aa09-ccb4-453d-8e92-ce059736c678",
+        "encounterCardUUID": "c06b993d-a1f4-42ad-85a9-ebf611d9a129",
+        "effectKind": "make-fast-all",
+        "predicate": null,
+        "nightmareCount": 0,
+        "sourceRange": [
+          11990,
+          11995
+        ],
+        "actors": [
+          {
+            "as": "player",
+            "physicalCount": 12,
+            "initialHash": "03ddbc4e7cffec",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          },
+          {
+            "as": "enemy",
+            "physicalCount": 12,
+            "initialHash": "112b37f84cd271",
+            "qualification": "complete actual journey-player DTO seated on public actor"
+          }
+        ]
+      }
+    ]
+  },
+  "contracts": {
+    "joinedBead": "hv-umm2.633",
+    "currentRunner": "src/battle/integration/deck-mods.test.ts",
+    "coverageGate": "src/engine/content-gates.test.ts",
+    "files": 2,
+    "testsPassed": 361,
+    "receipt": "acceptance-v01/focused-ack01.receipt.json",
+    "stacking": "Delivered synthetic public DSL Fast contracts cover this kind and chronological transfiguration stacking; existing source unchanged."
+  },
+  "publicResolver": {
+    "actions": 34,
+    "completeActorMappings": 68,
+    "mappedPreflight": {
+      "cells": 80,
+      "pass": 62,
+      "skip": 18,
+      "qualification": "Public runCardLabPreflight receives actual engineDeckEntry Fast DTO. Stock preflight CLI has no mods flag and was not claimed as modified."
+    },
+    "windowChecks": 2,
+    "raw": "acceptance-v01/public-resolver.result.json",
+    "rawSHA256": "f14a1ad4cf57b1ec75c1bee9a95245269f8e1f9734bbba027aa01b8b1a149c27",
+    "qualification": "Real journey player DTO is mapped by production bridge then seated intact on each public actor; no enemy journey bridge claim. Full variant multiset retains duplicates, Amplified/legacy applications/type and all deckMods; lower-level filters secondary to public DSL/window/payment behavior. Predicate changes only prior matching entries; mints2distinct physical Nightmares without retroactive Fast."
+  },
+  "realCardSample": {
+    "cards": [
+      {
+        "id": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+        "family": 1,
+        "cardType": "Character",
+        "speed": "standard",
+        "amplifiedSourceEligible": false,
+        "sourceSHA256": "326cfb50990405f21bb345c266ee592d9bd57b3b09b2c8648739d04d9cc6f963",
+        "module": "src/content/cards/nocturne-strummer-5a980eff.ts"
+      },
+      {
+        "id": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+        "family": 2,
+        "cardType": "Character",
+        "speed": "standard",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "a21f772deba8298721495ca06f84409c4350dd9d2271705b59649dfe88a61cdc",
+        "module": "src/content/cards/night-scavenger-19aeffa6.ts"
+      },
+      {
+        "id": "0e1209c3-1041-4079-9b1c-f96816a7deb5",
+        "family": 3,
+        "cardType": "Character",
+        "speed": "standard",
+        "amplifiedSourceEligible": false,
+        "sourceSHA256": "5d79b4e71d9477bc8ec1b4db96f14c45ff99f83eb50783e045f43e76fc7730a1",
+        "module": "src/content/cards/wildpath-companions-0e1209c3.ts"
+      },
+      {
+        "id": "0458658d-7e02-4286-9249-93674d16620b",
+        "family": 4,
+        "cardType": "Character",
+        "speed": "standard",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "f71a46e039cb08e3007dcef019fa9711ff42af366693cc257b29eded14e7efe3",
+        "module": "src/content/cards/iron-pharaoh-0458658d.ts"
+      },
+      {
+        "id": "1bae969b-0bc4-4777-86f3-1e860d601c5c",
+        "family": 5,
+        "cardType": "Character",
+        "speed": "standard",
+        "amplifiedSourceEligible": false,
+        "sourceSHA256": "992d81375e941b921558f9716ebfc10fe0500d33f3fb60f15a3eb71027e0c234",
+        "module": "src/content/cards/bloodsun-oppressor-1bae969b.ts"
+      },
+      {
+        "id": "01298848-1ebb-48a1-b00b-d7e0af890870",
+        "family": 7,
+        "cardType": "Character",
+        "speed": "standard",
+        "amplifiedSourceEligible": false,
+        "sourceSHA256": "96a2c4c401b5f99870d9006b5d47da18117050abbb7f50116e0e54d57a6c7297",
+        "module": "src/content/cards/silent-gatherer-01298848.ts"
+      },
+      {
+        "id": "017a7b4b-3ccf-4635-9956-28a72b22274e",
+        "family": 8,
+        "cardType": "Character",
+        "speed": "standard",
+        "amplifiedSourceEligible": false,
+        "sourceSHA256": "2cad7dc981269c631a2d34a52ae5a2bb6278e57a8756a8e342b222fae370d767",
+        "module": "src/content/cards/remnant-scavenger-017a7b4b.ts"
+      },
+      {
+        "id": "33874387-2490-48ed-93bc-a47a16e399ad",
+        "family": 9,
+        "cardType": "Character",
+        "speed": "standard",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "b12c3d1d6f8b245fb417399b05835af16aa3af14c3a3532c258527f0c0affe76",
+        "module": "src/content/cards/soulbinder-33874387.ts"
+      },
+      {
+        "id": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+        "family": 10,
+        "cardType": "Character",
+        "speed": "standard",
+        "amplifiedSourceEligible": false,
+        "sourceSHA256": "1c21a415c046f0021da9ece10ec66a80671bdad3da58a0c60398718bc52a7786",
+        "module": "src/content/cards/fallen-one-31501d09.ts"
+      },
+      {
+        "id": "08fe3190-f559-4152-941d-33ec4180f509",
+        "family": 4,
+        "cardType": "Event",
+        "speed": "standard",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "b111b1b27fee069a46cec42eaaaffdcb7197e12b642e5c5980623e80ac57499a",
+        "module": "src/content/cards/data-pulse-08fe3190.ts"
+      },
+      {
+        "id": "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+        "family": 4,
+        "cardType": "Event",
+        "speed": "standard",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "7cd6d778ccfa55f29b8ca7e00383871f642da714e5bc2fc5615652518bc51914",
+        "module": "src/content/cards/glimpse-of-infinity-1658d9a0.ts"
+      },
+      {
+        "id": "151b80b1-0a3f-48d4-9c85-99a9c274fd7f",
+        "family": 7,
+        "cardType": "Event",
+        "speed": "standard",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "4bc8ec250558ac3beb8f1b410e748cc6c2bc3e1b6ba5b11b4958fb167c33ebf2",
+        "module": "src/content/cards/ethereal-army-151b80b1.ts"
+      },
+      {
+        "id": "dcaba429-6fbc-4ea5-b063-871134ccd03b",
+        "family": 3,
+        "cardType": "Event",
+        "speed": "standard",
+        "amplifiedSourceEligible": false,
+        "sourceSHA256": "348df29f345a4a7adac5884884630b12fc7eec528c4ae080510138737faf397e",
+        "module": "src/content/cards/skies-of-change-dcaba429.ts"
+      },
+      {
+        "id": "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+        "family": 6,
+        "cardType": "Character",
+        "speed": "fast",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "2b9fe85535525e62ee2579121cba1a59aa7d1d25ba6f6c3764766ada42e035fa",
+        "module": "src/content/cards/consumed-berserker-071bcab4.ts"
+      },
+      {
+        "id": "41d0aa36-f15a-487d-b97c-7fd765973921",
+        "family": 8,
+        "cardType": "Character",
+        "speed": "fast",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "05c4c86c300d2a0bca8a34d4a5f07916e342bc4639151cee8cb4623dfcfe7383",
+        "module": "src/content/cards/symphonic-muse-41d0aa36.ts"
+      },
+      {
+        "id": "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
+        "family": 14,
+        "cardType": "Character",
+        "speed": "fast",
+        "amplifiedSourceEligible": false,
+        "sourceSHA256": "f5bc9af3832b2b359b34524cecbbe926fcdd02b9fe9adb3f4a4c85a0c180575c",
+        "module": "src/content/cards/resonance-surveyor-5b2b2188.ts"
+      },
+      {
+        "id": "09332e5b-3b4e-458f-9df0-3fc0419f65c3",
+        "family": 5,
+        "cardType": "Event",
+        "speed": "fast",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "b011218c7806a053dcbbcb834a4a319c1ca6529c8689a16fd45afca0984c2117",
+        "module": "src/content/cards/unleash-ruin-09332e5b.ts"
+      },
+      {
+        "id": "d24ea640-638d-4ce2-b15d-b3f4588bda6b",
+        "family": 12,
+        "cardType": "Event",
+        "speed": "fast",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "34cf85a3dc3a4e1e7e515f42a51268ecc0cac310d9bca6190b7c63c6636b0847",
+        "module": "src/content/cards/echoes-of-eternity-d24ea640.ts"
+      },
+      {
+        "id": "15b63630-d9f8-473b-9717-15ad91ff2f16",
+        "family": 11,
+        "cardType": "Character",
+        "speed": "interrupt",
+        "amplifiedSourceEligible": false,
+        "sourceSHA256": "1f505ef8f83765e6ee2da67aa7f8d716c6c1cf151b9adf1d8f32109e16464a28",
+        "module": "src/content/cards/threadbreaker-15b63630.ts"
+      },
+      {
+        "id": "3725379c-676d-4efd-81ee-7e45d80db6d0",
+        "family": 3,
+        "cardType": "Event",
+        "speed": "interrupt",
+        "amplifiedSourceEligible": true,
+        "sourceSHA256": "5ac473f605ae4023053bf6749495b643fac13e50b723347379a4330afa696f3c",
+        "module": "src/content/cards/fragments-of-vision-3725379c.ts"
+      }
+    ],
+    "familyCount": 13,
+    "speedCounts": {
+      "standard": 13,
+      "fast": 5,
+      "interrupt": 2
+    },
+    "qualification": "All20 eligible because make-all targets every deck entry without speed exclusion:13 actual ordinary-to-Fast changes,5 intrinsicFast and2 intrinsicInterrupt preservation controls.11 Amplified-eligible cards;20 base per controller plus11 Amplified per controller actually played."
+  },
+  "canonicalSweep": {
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-eIYR8i",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.282/invocations/sweep-eIYR8i",
+      "counts": {
+        "pass": 62,
+        "skip": 18
+      },
+      "attemptCounts": {
+        "pass": 62,
+        "skip": 18
+      },
+      "hostLoad": 8,
+      "requestedMods": "{\"fast\":true}",
+      "modsValidation": "card-lab",
+      "sessions": 11,
+      "leaseYields": 10,
+      "wallMs": {
+        "browserLeaseWait": 128286,
+        "serve": 26192,
+        "scenario": 514225.96158600005,
+        "cleanup": 10984.191082000048,
+        "execution": 551873.4441249999,
+        "total": 680159.4441249999
+      }
+    },
+    "rawRows": 80,
+    "prefixSHA256": "83b98c3078c71dce48862636ec263bcd54fa81538657287879d50d2d93b38184",
+    "prefixBytes": 336435,
+    "effectiveCounts": {
+      "pass": 62,
+      "skip": 18
+    },
+    "attemptCounts": {
+      "pass": 62,
+      "skip": 18
+    },
+    "distinctUUIDsEachController": 20,
+    "qualification": "Exact raw canonical bytes preserved;18 ineligible forms legitimately skip without browser runs. All62 raw actual reports/transport/resolution/Caps/navigation verified.",
+    "settlement": "acceptance-v01/canonical-settlement.json"
+  },
+  "judgment": {
+    "verdict": "pass",
+    "kind": "fast",
+    "cells": 18,
+    "plans": 9,
+    "mcpCalls": 22,
+    "uniqueGames": 18,
+    "exportedJSONLRows": 589,
+    "caps": 0,
+    "cellsDetail": [
+      {
+        "uuid": "f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9",
+        "proofKind": "exploration-f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9",
+        "viewport": "desktop",
+        "as": "player",
+        "gameId": "3hfa9k",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/exploration-f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9",
+        "proofKind": "exploration-f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9",
+        "viewport": "mobile",
+        "as": "player",
+        "gameId": "wqh5xn",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/exploration-f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "d451ccef-f4be-407e-800b-55c04608896b",
+        "proofKind": "exploration-d451ccef-f4be-407e-800b-55c04608896b",
+        "viewport": "desktop",
+        "as": "player",
+        "gameId": "yrthqp",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/exploration-d451ccef-f4be-407e-800b-55c04608896b.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "d451ccef-f4be-407e-800b-55c04608896b",
+        "proofKind": "exploration-d451ccef-f4be-407e-800b-55c04608896b",
+        "viewport": "mobile",
+        "as": "player",
+        "gameId": "e26qgv",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/exploration-d451ccef-f4be-407e-800b-55c04608896b.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "66a93ab4-c049-46eb-a176-d4b63e69c840",
+        "proofKind": "exploration-66a93ab4-c049-46eb-a176-d4b63e69c840",
+        "viewport": "desktop",
+        "as": "player",
+        "gameId": "bsy9pb",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/exploration-66a93ab4-c049-46eb-a176-d4b63e69c840.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "66a93ab4-c049-46eb-a176-d4b63e69c840",
+        "proofKind": "exploration-66a93ab4-c049-46eb-a176-d4b63e69c840",
+        "viewport": "mobile",
+        "as": "player",
+        "gameId": "bksaah",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/exploration-66a93ab4-c049-46eb-a176-d4b63e69c840.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "5ce24a74-9a00-40ec-92ec-8caba0836f98",
+        "proofKind": "exploration-5ce24a74-9a00-40ec-92ec-8caba0836f98",
+        "viewport": "desktop",
+        "as": "player",
+        "gameId": "uyws97",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/exploration-5ce24a74-9a00-40ec-92ec-8caba0836f98.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "5ce24a74-9a00-40ec-92ec-8caba0836f98",
+        "proofKind": "exploration-5ce24a74-9a00-40ec-92ec-8caba0836f98",
+        "viewport": "mobile",
+        "as": "player",
+        "gameId": "nki26y",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/exploration-5ce24a74-9a00-40ec-92ec-8caba0836f98.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "fcce63dc-f8c5-4183-be2a-9de4929ca8c2",
+        "proofKind": "exploration-fcce63dc-f8c5-4183-be2a-9de4929ca8c2",
+        "viewport": "desktop",
+        "as": "player",
+        "gameId": "k7f2ad",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/exploration-fcce63dc-f8c5-4183-be2a-9de4929ca8c2.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "fcce63dc-f8c5-4183-be2a-9de4929ca8c2",
+        "proofKind": "exploration-fcce63dc-f8c5-4183-be2a-9de4929ca8c2",
+        "viewport": "mobile",
+        "as": "player",
+        "gameId": "7ys8gf",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/exploration-fcce63dc-f8c5-4183-be2a-9de4929ca8c2.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+        "proofKind": "fast-kind-player",
+        "viewport": "desktop",
+        "as": "player",
+        "gameId": "qt6mhs",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/fast-kind-player.result.json",
+        "screens": [
+          "fast-kind-desktop.png"
+        ]
+      },
+      {
+        "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+        "proofKind": "fast-kind-player",
+        "viewport": "mobile",
+        "as": "player",
+        "gameId": "8ad8oj",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/fast-kind-player.result.json",
+        "screens": [
+          "fast-kind-mobile.png"
+        ]
+      },
+      {
+        "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+        "proofKind": "fast-kind-enemy",
+        "viewport": "desktop",
+        "as": "enemy",
+        "gameId": "zr4rqc",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/fast-kind-enemy.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+        "proofKind": "fast-kind-enemy",
+        "viewport": "mobile",
+        "as": "enemy",
+        "gameId": "dhd7e3",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/fast-kind-enemy.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+        "proofKind": "fast-own-night",
+        "viewport": "desktop",
+        "as": "player",
+        "gameId": "afekjp",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/fast-own-night.result.json",
+        "screens": [
+          "fast-night-changed-desktop.png"
+        ]
+      },
+      {
+        "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+        "proofKind": "fast-own-night",
+        "viewport": "mobile",
+        "as": "player",
+        "gameId": "dsg3fe",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/fast-own-night.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "dcaba429-6fbc-4ea5-b063-871134ccd03b",
+        "proofKind": "fast-additional-cost-cancel-retry",
+        "viewport": "desktop",
+        "as": "player",
+        "gameId": "3j8wss",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/fast-additional-cost-cancel-retry.result.json",
+        "screens": []
+      },
+      {
+        "uuid": "dcaba429-6fbc-4ea5-b063-871134ccd03b",
+        "proofKind": "fast-additional-cost-cancel-retry",
+        "viewport": "mobile",
+        "as": "player",
+        "gameId": "2t3rp2",
+        "rawReport": "invocations/fast-judgment-raw-Ga1nvC/run-y7c3v7/fast-additional-cost-cancel-retry.result.json",
+        "screens": []
+      }
+    ],
+    "raw": "acceptance-v01/custom-qa-raw-reports.json",
+    "receipt": "acceptance-v01/custom-qa-raw.receipt.json",
+    "visualVerdict": "All3 actual images viewed. Desktop/mobile resolved controls/stats/hand unobstructed; Night shows two same-UUID Event copies, only modified copy has Fast bolt and playable outline. Existing lab filler is a control.",
+    "captures": [
+      {
+        "filename": "fast-kind-desktop.png",
+        "dimensions": [
+          2880,
+          1800
+        ],
+        "sha256": "6ced36d1a13b2bf1c900c60bebe19c4a4f66a8e6bfca267bf06f1fa815a6bff4"
+      },
+      {
+        "filename": "fast-kind-mobile.png",
+        "dimensions": [
+          780,
+          1688
+        ],
+        "sha256": "6cb4ad6c4c7fb2f8e67545fbb5a7b663b040833dd61a1e343d65c983f9477bdc"
+      },
+      {
+        "filename": "fast-night-changed-desktop.png",
+        "dimensions": [
+          2880,
+          1800
+        ],
+        "sha256": "b2fe541f272fbe8d44c6be018ee81dd4b07aa9ff6fe43244174f95f222bee96d"
+      }
+    ],
+    "captureQualification": "CSS desktop1440x900/mobile390x844. Native PNGs use DPR2:2880x1800/780x1688; view tool resized desktop preview only. Screens in ledger are filenames only.",
+    "scriptedEnemyQualification": "Actual canonical scripted lab play through normal host; no policy-selected AI assertion.",
+    "reloadCoverage": {
+      "explorationCells": 10,
+      "kindCells": 4,
+      "cancellationCells": 2,
+      "nightCells": "Affordance/payment/play checks only. The exact admitted night function performs no reload; no reload credit assigned to these2cells."
+    },
+    "evidenceCorrection": "Night ledger rows omit reloadVerified and explicitly qualify coverage. Original admitted assertions and runtime outcomes are retained; no extra QA run or expectation change."
+  },
+  "negativeAttempts": [
+    {
+      "kind": "qa-opening",
+      "receipt": "acceptance-v01/custom-qa.receipt.json",
+      "elapsedS": 54.64605466701323,
+      "gameId": "c2e69c",
+      "appliedExplorationChoice": false,
+      "caps": 0,
+      "acceptanceCredit": false,
+      "disposition": "ACK282-03b normal channel click."
+    },
+    {
+      "kind": "qa-function-serialization",
+      "receipt": "acceptance-v01/custom-qa-channel.receipt.json",
+      "elapsedS": 16.78671991598094,
+      "gameId": "aq69kc",
+      "appliedExplorationChoice": true,
+      "caps": 0,
+      "acceptanceCredit": false,
+      "disposition": "ACK282-03c original function text AST extraction across both boundaries, no helper global/page hook."
+    }
+  ],
+  "fuzz": {
+    "argv": [
+      "env",
+      "JOURNEY_TEST_WORKERS=2",
+      "npm",
+      "run",
+      "fuzz:engine",
+      "--",
+      "--games",
+      "300",
+      "--seed",
+      "hv-umm2-282-current-fast",
+      "--first",
+      "0",
+      "--interactive-every",
+      "10",
+      "--weight-uuids",
+      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8,19aeffa6-fd1b-4b8f-bb0c-c35659521976,0e1209c3-1041-4079-9b1c-f96816a7deb5,0458658d-7e02-4286-9249-93674d16620b,1bae969b-0bc4-4777-86f3-1e860d601c5c,01298848-1ebb-48a1-b00b-d7e0af890870,017a7b4b-3ccf-4635-9956-28a72b22274e,33874387-2490-48ed-93bc-a47a16e399ad,31501d09-5dde-44f4-a938-7ca95ad988a0,08fe3190-f559-4152-941d-33ec4180f509,1658d9a0-c3b0-4eb7-babc-4933acf362c4,151b80b1-0a3f-48d4-9c85-99a9c274fd7f,dcaba429-6fbc-4ea5-b063-871134ccd03b,071bcab4-ed02-48a0-93dc-8fd0f36611c8,41d0aa36-f15a-487d-b97c-7fd765973921,5b2b2188-b9f0-4b3b-9185-26a820d343c7,09332e5b-3b4e-458f-9df0-3fc0419f65c3,d24ea640-638d-4ce2-b15d-b3f4588bda6b,15b63630-d9f8-473b-9717-15ad91ff2f16,3725379c-676d-4efd-81ee-7e45d80db6d0"
+    ],
+    "games": 300,
+    "steps": 72768,
+    "prompts": 6515,
+    "interactiveEvery": 10,
+    "interactiveReruns": 683,
+    "interactiveMeanMs": 33.064,
+    "failures": 0,
+    "bounded": {
+      "legality": 0,
+      "prompts": 0
+    },
+    "results": {
+      "player": 141,
+      "enemy": 159,
+      "draw": 0
+    },
+    "targetCoverage": [
+      {
+        "kind": "card",
+        "uuid": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+        "included": 607,
+        "exercised": 198
+      },
+      {
+        "kind": "card",
+        "uuid": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+        "included": 606,
+        "exercised": 190
+      },
+      {
+        "kind": "card",
+        "uuid": "0e1209c3-1041-4079-9b1c-f96816a7deb5",
+        "included": 604,
+        "exercised": 194
+      },
+      {
+        "kind": "card",
+        "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+        "included": 603,
+        "exercised": 226
+      },
+      {
+        "kind": "card",
+        "uuid": "1bae969b-0bc4-4777-86f3-1e860d601c5c",
+        "included": 603,
+        "exercised": 200
+      },
+      {
+        "kind": "card",
+        "uuid": "01298848-1ebb-48a1-b00b-d7e0af890870",
+        "included": 608,
+        "exercised": 172
+      },
+      {
+        "kind": "card",
+        "uuid": "017a7b4b-3ccf-4635-9956-28a72b22274e",
+        "included": 602,
+        "exercised": 186
+      },
+      {
+        "kind": "card",
+        "uuid": "33874387-2490-48ed-93bc-a47a16e399ad",
+        "included": 611,
+        "exercised": 209
+      },
+      {
+        "kind": "card",
+        "uuid": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+        "included": 603,
+        "exercised": 175
+      },
+      {
+        "kind": "card",
+        "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+        "included": 606,
+        "exercised": 250
+      },
+      {
+        "kind": "card",
+        "uuid": "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+        "included": 603,
+        "exercised": 304
+      },
+      {
+        "kind": "card",
+        "uuid": "151b80b1-0a3f-48d4-9c85-99a9c274fd7f",
+        "included": 601,
+        "exercised": 213
+      },
+      {
+        "kind": "card",
+        "uuid": "dcaba429-6fbc-4ea5-b063-871134ccd03b",
+        "included": 605,
+        "exercised": 261
+      },
+      {
+        "kind": "card",
+        "uuid": "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+        "included": 606,
+        "exercised": 283
+      },
+      {
+        "kind": "card",
+        "uuid": "41d0aa36-f15a-487d-b97c-7fd765973921",
+        "included": 608,
+        "exercised": 318
+      },
+      {
+        "kind": "card",
+        "uuid": "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
+        "included": 606,
+        "exercised": 345
+      },
+      {
+        "kind": "card",
+        "uuid": "09332e5b-3b4e-458f-9df0-3fc0419f65c3",
+        "included": 607,
+        "exercised": 282
+      },
+      {
+        "kind": "card",
+        "uuid": "d24ea640-638d-4ce2-b15d-b3f4588bda6b",
+        "included": 604,
+        "exercised": 336
+      },
+      {
+        "kind": "card",
+        "uuid": "15b63630-d9f8-473b-9717-15ad91ff2f16",
+        "included": 607,
+        "exercised": 535
+      },
+      {
+        "kind": "card",
+        "uuid": "3725379c-676d-4efd-81ee-7e45d80db6d0",
+        "included": 606,
+        "exercised": 631
+      }
+    ],
+    "nativeWallS": 1485.2,
+    "nativeCpuS": 1551.7,
+    "commandElapsedS": 1486.7837466669735,
+    "commandUserS": 1542.357773,
+    "commandSystemS": 11.458896,
+    "commandCpuScope": "wait4 exact spawned child including reaped descendants; own manifest and ps probes excluded",
+    "outerElapsedS": 1487.454341833014,
+    "outerToInnerStartS": 0.24400495801819488,
+    "queueQualification": "Outer-to-inner offset includes manifest/launcher startup and bounds any lock wait; exact acquisition instant/pure queue duration not claimed. Timeout applies1800s inside acquired lock only.",
+    "qualification": "CLI has no --mods flag. Current weighted actual-card corpus checks engine invariants, determinization fidelity and hash replay with retained random deckMods. This is not300Fast-modified decks or direct exploration-action fuzzing. All34 filed action UUIDs lie outside closed fuzzer target domain; actual20-card alternative is explicit. No historical run reused.",
+    "receipt": "acceptance-v01/fuzz-inner-ack01.receipt.json",
+    "rawLogSHA256": "9188e0f25f9c9429b6b976177cae4fbf7be86ab2042bcbe5d2c3eb7d627a4cc3",
+    "resourceGuard": "acceptance-v01/resource-guard.py",
+    "watchdog": {
+      "receipt": "acceptance-v01/watchdog-ack01b.receipt.json",
+      "result": "early-terminal-group-empty-no-action",
+      "events": [],
+      "qualification": "Supplemental stable PID+PGID+lstart watcher retained original1800s deadline after mutable npm command identity defect found in initial guard. No guard edits, run restart, signals or timeout occurred."
+    }
+  },
+  "resources": {
+    "allOwnedRuntimeSettled": true,
+    "fuzz": "acceptance-v01/fuzz-settlement.json",
+    "canonical": "acceptance-v01/canonical-settlement.json",
+    "custom": "acceptance-v01/custom-qa-raw-settlement.json",
+    "custodyQualification": "Current exact own tokens/PG births and normalclose protocol retained; some earlier canonical yielded-session tokens were not captured and are not promoted to raw wire-close proof. Foreign/reused records remain protected. Independent pureNode1243file closure/6618ASTedges enabled activeQA overlap; no idleQA lease waiting for heavy."
+  },
+  "setup": {
+    "install": {
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-fast282-root",
+      "pid": 37249,
+      "pgid": 37249,
+      "birthObservation": "37249 37238 37249 Thu Oct 15 12:28:19 2026     /usr/bin/env node /opt/homebrew/bin/npm install\n",
+      "startUtc": "2026-10-15T19:28:19.606154+00:00",
+      "endUtc": "2026-10-15T19:28:22.312216+00:00",
+      "elapsedS": 2.7059952500276268,
+      "loadAtStart": [
+        11.9951171875,
+        11.8037109375,
+        10.34912109375
+      ],
+      "loadAtEnd": [
+        11.9951171875,
+        11.8037109375,
+        10.34912109375
+      ],
+      "childUserS": 2.01934,
+      "childSystemS": 4.105021,
+      "cpuScope": "RUSAGE_CHILDREN including ps probe",
+      "exit": 0,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/real-fast282/npm-install.log",
+      "rawLogSHA256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c"
+    },
+    "reportedAdvisories": {
+      "total": 17,
+      "moderate": 9,
+      "high": 7,
+      "critical": 1
+    },
+    "qualification": "Actual installer output observation only; no new audit/fix."
+  },
+  "validation": {
+    "review": {
+      "status": "GREEN",
+      "receipt": {
+        "ack": "ACK282-04",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-fast282-root",
+        "startUtc": "2026-10-15T20:23:19.134855+00:00",
+        "loadAtStart": [
+          6.09423828125,
+          10.52734375,
+          11.24755859375
+        ],
+        "pid": 50196,
+        "pgid": 50196,
+        "birth": "50196 50184 50196 Thu Oct 15 13:23:19 2026     /usr/bin/env node /opt/homebrew/bin/npm run review\n",
+        "endUtc": "2026-10-15T20:23:19.520189+00:00",
+        "elapsedS": 0.3853510420303792,
+        "exit": 0,
+        "childUserS": 0.20544199999999999,
+        "childSystemS": 0.222488,
+        "cpuScope": "wait4 exact child including reaped descendants; excludes ps observation",
+        "loadAtEnd": [
+          6.09423828125,
+          10.52734375,
+          11.24755859375
+        ],
+        "logSHA256": "6675e6a91ccff6df5995babb08d2a28064ae203ab49f5a617adb596d26fdb6a7",
+        "logBytes": 344,
+        "postGroup": ""
+      },
+      "retainedReceipt": "acceptance-v01/review-ack04.receipt.json",
+      "retainedLog": "acceptance-v01/review-ack04.log"
+    },
+    "knip": {
+      "status": "GREEN",
+      "receipt": {
+        "ack": "ACK282-04",
+        "argv": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-fast282-root",
+        "startUtc": "2026-10-15T20:23:19.523641+00:00",
+        "loadAtStart": [
+          6.09423828125,
+          10.52734375,
+          11.24755859375
+        ],
+        "pid": 50288,
+        "pgid": 50288,
+        "birth": "50288 50184 50288 Thu Oct 15 13:23:19 2026     (env)\n",
+        "endUtc": "2026-10-15T20:23:26.099188+00:00",
+        "elapsedS": 6.575489291979466,
+        "exit": 0,
+        "childUserS": 4.175337,
+        "childSystemS": 1.829903,
+        "cpuScope": "wait4 exact child including reaped descendants; excludes ps observation",
+        "loadAtEnd": [
+          6.09228515625,
+          10.37841796875,
+          11.18603515625
+        ],
+        "logSHA256": "f0a1e310f11d774b761f1eb82cd474a5304f788d60d126bbe99406b139061fe5",
+        "logBytes": 48750,
+        "postGroup": ""
+      },
+      "retainedReceipt": "acceptance-v01/knip-ack04.receipt.json",
+      "retainedLog": "acceptance-v01/knip-ack04.log",
+      "qualification": "Canonical isolated prepare emitted missing-art warnings; normal restore linked564cards/32avatars/153dreamsigns/226journey/521exploration;192typed tokens unchanged. All5835initialtrackedpayloads remain identical."
+    },
+    "schema": {
+      "status": "GREEN",
+      "receipt": {
+        "ack": "ACK282-04",
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-fast282-root",
+        "startUtc": "2026-10-15T20:23:26.102655+00:00",
+        "loadAtStart": [
+          6.09228515625,
+          10.37841796875,
+          11.18603515625
+        ],
+        "pid": 50882,
+        "pgid": 50882,
+        "birth": "50882 50184 50882 Thu Oct 15 13:23:26 2026     node scripts/friction-triggers.mjs --validate-records\n",
+        "endUtc": "2026-10-15T20:23:26.180822+00:00",
+        "elapsedS": 0.07819620799273252,
+        "exit": 0,
+        "childUserS": 0.055014,
+        "childSystemS": 0.027791,
+        "cpuScope": "wait4 exact child including reaped descendants; excludes ps observation",
+        "loadAtEnd": [
+          6.09228515625,
+          10.37841796875,
+          11.18603515625
+        ],
+        "logSHA256": "bd56b9e86a385e7123c334ab09889fbc7e4e8beb1855340df62bec12bf7560aa",
+        "logBytes": 74,
+        "postGroup": ""
+      },
+      "retainedReceipt": "acceptance-v01/schema-ack04.receipt.json",
+      "retainedLog": "acceptance-v01/schema-ack04.log",
+      "qualification": "1004 valid records,41 historical unknown measurements. Later clock/receipt JSON refresh preserves validated schema; final fast validation required with final Git ACK."
+    },
+    "workingWhitespace": {
+      "status": "GREEN",
+      "receipt": {
+        "ack": "ACK282-04",
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-real-fast282-root",
+        "startUtc": "2026-10-15T20:23:26.183902+00:00",
+        "loadAtStart": [
+          6.09228515625,
+          10.37841796875,
+          11.18603515625
+        ],
+        "pid": 50889,
+        "pgid": 50889,
+        "birth": "50889 50184 50889 Thu Oct 15 13:23:26 2026     git diff --check\n",
+        "endUtc": "2026-10-15T20:23:26.192957+00:00",
+        "elapsedS": 0.009081707976292819,
+        "exit": 0,
+        "childUserS": 0.003649,
+        "childSystemS": 0.036754999999999996,
+        "cpuScope": "wait4 exact child including reaped descendants; excludes ps observation",
+        "loadAtEnd": [
+          6.09228515625,
+          10.37841796875,
+          11.18603515625
+        ],
+        "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "logBytes": 0,
+        "postGroup": ""
+      },
+      "retainedReceipt": "acceptance-v01/workingWhitespace-ack04.receipt.json",
+      "retainedLog": "acceptance-v01/workingWhitespace-ack04.log",
+      "qualification": "Actual working diff check before staging. All four evidence files are new/untracked; exact staged whitespace remains required under final Git ACK."
+    },
+    "reviewFull": "Not applicable: no test infrastructure/repository configuration/cross-cutting architecture change.",
+    "formalColdReview": "No phase gate/core-review label; evidence-only nongate scope."
+  },
+  "clock": {
+    "start": "2026-10-15T19:27:15.111878+00:00",
+    "cutoff": "2026-10-15T20:27:42.972342+00:00",
+    "includes": "Original claim through actual metadata cutoff, including setup, research, source audits, parent coordination, queue waits, failed attempts and validation. Final Git tail/claim-through-commit recorded separately after final parent admission; no future time or result asserted.",
+    "gitTail": "Recorded later in ignored acceptance-v01/git-terminal.receipt.json after separate final ACK."
+  },
+  "artifactPlan": {
+    "base": "artifacts/qa/hv-umm2.282/",
+    "archive": "acceptance-v01",
+    "manifestSHA256": "422f42a7f2638aae95bf1c0190ebf0510c8bf48ec80f62a744370156c300baa4",
+    "archiveFiles": 121,
+    "canonicalInvocation": "invocations/sweep-eIYR8i",
+    "negativeInvocations": [
+      "invocations/fast-judgment-4G9TX0",
+      "invocations/fast-judgment-channel-Y1iJEf"
+    ],
+    "judgedInvocation": "invocations/fast-judgment-raw-Ga1nvC",
+    "finalManifest": {
+      "path": "acceptance-v01/artifact-manifest-final.json",
+      "sha256": "65ed08c38bf0613260c2f3d237d25d1f27dc3144ff68b3883b216b755dc0567d",
+      "files": 131,
+      "qualification": "121 initial exact own source/proof/receipt inputs plus8actualchecklogs/receipts, original121filemanifest and post-validation guard. Later Git-tail receipts remain separate; manifest excludes itself."
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual ordinary review launch2026-10-15T20:23:19.134855+00:00",
+        "value": 6.09423828125
+      },
+      "localValidationS.fuzz": {
+        "measuredFor": "Rounded native fuzzer algorithm1485.2s; actual command1486.783747s and outer1487.454342s recorded separately."
+      }
+    }
+  },
+  "qaLedger": {
+    "rows": 134,
+    "canonicalRows": 80,
+    "setupNegativeRows": 2,
+    "judgedRows": 18,
+    "publicResolverRows": 34,
+    "sha256": "9c32b6cec1376c3c415af83851fe0c16e1c6a6e0e34d7775edbcf81216ae1e04"
+  }
+}

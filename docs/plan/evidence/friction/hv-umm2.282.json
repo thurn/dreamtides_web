@@ -1,0 +1,40 @@
+{
+  "bead": "hv-umm2.282",
+  "phase": 5,
+  "implementMin": 60.46434106666666,
+  "implementWindow": {
+    "start": "2026-10-15T19:27:15.111878+00:00",
+    "end": "2026-10-15T20:27:42.972342+00:00"
+  },
+  "localValidationS": {
+    "focused": 7.536656,
+    "publicResolverAndMappedPreflight": 3.4531644999515265,
+    "sweep": 680.1594441249999,
+    "customSetupOpeningFailure": 54.64605466701323,
+    "customSerializationFailure": 16.78671991598094,
+    "customJudgment": 285.2219349159859,
+    "fuzz": 1485.2,
+    "review": 0.3853510420303792,
+    "knip": 6.575489291979466,
+    "schema": 0.07819620799273252,
+    "workingWhitespace": 0.009081707976292819
+  },
+  "hostLoad": 6.09423828125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "weighted-fuzz-duration",
+      "minutes": 24.779729111116225,
+      "note": "Actual current300 command1486.783747s/native1485.2s/72768steps. Attribution unknown; no matched-load performance claim or fuzz waiver. All20 actual card targets exercised; CLI has no mods flag."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 9.217575183333334,
+      "note": "Gross first scratch attempt launch to corrected raw-source run launch, includes reads/parent admission and independent fuzz overlap. Two actual setup failures retained: omitted normal channel ingress, then TSX helper leakage after one applied choice. Neither receives complete-cell acceptance credit."
+    }
+  ]
+}
