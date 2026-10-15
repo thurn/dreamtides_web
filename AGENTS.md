@@ -42,12 +42,13 @@ their worktrees with `tg --no-launch update` (docs/plan/workflow.md
   semantic prerequisites and final acceptance joins. Project-specific rules in
   docs/plan/workflow.md govern this tradeoff over generic skill guidance.
 - Tollgate's local gate is the only CI. Never add GitHub Actions workflows.
-- Request independent review from the other model family than the session
-  that implemented the work (the Codex CLI for Claude Code sessions, the
-  Claude Code CLI for Codex sessions) at every plan phase gate and for every
-  bead the phase pages mark core-review; see the Reviews section of
-  `docs/plan/workflow.md`. This explicitly authorizes more than one review per
-  session.
+- All code reviews use fresh read-only Codex subagents with no prior context,
+  regardless of which model implemented the change. Spawn each reviewer with
+  `fork_turns: "none"`, supplying only its review brief and exact source inputs.
+  This permanent user policy takes precedence over review routing in shared
+  skills. Request review at every plan phase gate and for every bead the phase
+  pages mark core-review; see the Reviews section of `docs/plan/workflow.md`.
+  This explicitly authorizes more than one review per session.
 - Never deploy, upload assets, or run `npm run deploy`. Touch other
   repositories only as decision D16 allows: for Track T, and under its
   tooling-fix exception, where a Hive or Tollgate defect blocking the run is

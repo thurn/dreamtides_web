@@ -1043,45 +1043,26 @@ Tests follow AGENTS.md and [D19](decisions.md#d19-test-pruning):
 
 ## Reviews
 
-### Temporary Sol review routing
+### Fresh Codex subagents
 
-By user authorization, effective October 12, 2026 until October 13, 2026 at
-18:00 America/Los_Angeles (`2026-10-14T01:00:00Z`), Claude's weekly usage cap
-routes **all code reviews** to a fresh read-only `gpt-5.6-sol` reviewer through
-the Codex CLI. Every session uses the Codex command below, including for
-Codex-authored changes, core-review beads, phase gates, the Track T gate, and
-outstanding Claude review debt. This policy overrides project and skill
-requirements for Claude or the other model family and Claude-unavailable
-waiting, retries, and debt mechanics. Do not attempt or retry Claude reviews
-during this window.
-
-Preserve cold context, the exact base and head OIDs and required review scope,
-read-only access, finding verification and disposition records, validation,
-and delivery requirements. Record the reviewer model and temporary routing
-honestly, including same-family routing for Codex-authored changes. A
-successful required Sol review of the debt's exact range satisfies that review
-obligation; record its findings and dispositions and clear the corresponding
-review-debt label. Claude's cap does not create or retain debt when the
-required Sol review succeeds. At the deadline this override expires
-automatically, and normal Claude/cross-family routing applies to subsequent
-reviews.
-
-### Normal review routing and shared procedure
-
-Under normal routing, the independent review is a fresh reviewer from the
-other model family than the session that implemented the work
-([D18](decisions.md#d18-review-cadence)): `gpt-5.6-sol` through the Codex CLI
-for a Claude Code session's beads, and `claude-opus-5-5` through the Claude
-Code CLI for a Codex session's beads. It runs:
+All code reviews use a **fresh read-only Codex subagent with no prior
+context**, regardless of which model implemented the change
+([D18](decisions.md#d18-review-cadence)). This permanent user policy takes
+precedence over review routing in shared skills and applies to outstanding
+review debt. Spawn each reviewer with `fork_turns: "none"`. Supply only its
+review brief and exact source inputs; keep author conversation and prior
+findings out of its initial context. The required reviews run:
 
 - for every bead marked **core-review** on the phase and track pages,
   **asynchronously** ([D18](decisions.md#d18-review-cadence));
 - on every phase gate bead, and the Track T gate, covering the whole diff and
   blocking the gate.
 
-Use the binary path, not the shell alias; the Codex alias adds
-`--dangerously-bypass-approvals-and-sandbox`. Run the review in the background
-with stdin closed.
+Run the review asynchronously in a new Codex subagent. Give it read-only
+instructions: inspect source and return a report, without editing files,
+claiming beads, changing delivery state or starting implementation helpers.
+Each separate review starts a new subagent rather than reusing an implementer
+or a reviewer from another change.
 
 Tollgate removes the bead's worktree when the bead lands, so the review runs
 in a **review snapshot**: a detached worktree at the bead's exact commit,
@@ -1103,10 +1084,9 @@ Make each required input readable with the reviewer's authorized tools.
 For long files, give the full required line ranges and request successive
 reads through their end. A path list or a truncated first chunk is not a
 completed read. Required historical material can be copied to scratch from
-its exact source object with provenance recorded by the dispatcher. For the
-Claude recipe, instruct individual `Read`, `Grep` and `Glob` calls and simple
-granted Git commands; do not request shell `cat`, loops, chained commands or
-ungranted Git forms. Keep the existing tool grants and configured denies.
+its exact source object with provenance recorded by the dispatcher. Keep the
+reviewer's access limited to reading the snapshot, required scratch inputs
+and review instructions. Preserve configured tool restrictions.
 
 The reviewer returns a scope account before its findings: each required path
 or section is complete, partial or unread, with any denied read identified.
@@ -1114,48 +1094,33 @@ It distinguishes source inspection from checks actually run. The dispatcher
 checks that account against the packet, actual read coverage and a successful
 terminal result; a no-findings sentence alone does not establish complete scope.
 
-**During the temporary override, every session reviews with Codex. Under
-normal routing, Claude Code sessions review with Codex:**
+**Dispatch a fresh Codex subagent.** Use `spawn_agent` with
+`fork_turns: "none"` and a self-contained message such as:
 
-```sh
-/Users/dthurn/.local/bin/codex exec -m gpt-5.6-sol -s read-only -C "$SNAPSHOT" \
-  -o "$SCRATCH/review-<bead-id>.md" "$(cat <<'EOF'
-Independently review the completed change for the request below. Work read-only.
-Inspect the diff of <head-oid> against <base-oid> in this repository and read enough
-surrounding code to validate each claim. Report only actionable correctness or
-architecture issues, brittle tests, missing coverage for changed behavior, or
-duplication likely to diverge. For each finding cite file and line, explain the
-concrete failure mode, and why it belongs to this change. If none, say so.
-
+```text
+Use the warden skill for an independent read-only review. Do not edit files,
+claim beads, change delivery state or start implementation helpers.
+Workspace: <review snapshot at exact head OID>
+Base: <full base OID>
+Head: <full head OID>
 Required-scope packet: <immutable scratch packet path bound to base/head>
-Read every required input and report complete/partial/unread coverage and any
-denied required read before findings. Use the authorized tools for this recipe.
-Request: <bead title + acceptance criteria + relevant docs/plan page section>
+Request: <bead title + acceptance criteria + relevant plan section>
 Repository instructions: AGENTS.md, docs/plan/README.md, docs/plan/engine-design.md
-EOF
-)" < /dev/null
+Invariants and checks: <applicable contracts and completed validation>
+
+Read every required input and enough surrounding source to verify each claim.
+Report complete/partial/unread coverage and any denied read before findings.
+Distinguish source inspection from checks actually run. Report actionable
+correctness or architecture issues, brittle tests, missing coverage for changed
+behavior, or duplication likely to diverge. Cite file and line, explain the
+concrete failure mode and why it belongs to this change. If none, say so.
+Return the report to the dispatcher.
 ```
 
-**Under normal routing, Codex sessions review with Claude.** Write the same
-prompt to `$SCRATCH/review-<bead-id>.prompt` and pass it on stdin, because
-`--allowedTools` takes several values:
-
-```sh
-cd "$SNAPSHOT" && /Users/dthurn/.local/bin/claude -p --model claude-opus-5-5 \
-  --tools Read,Grep,Glob,Bash --permission-mode dontAsk \
-  --add-dir "$SNAPSHOT" "$SCRATCH" \
-    /Users/dthurn/.llms/skills/warden /Users/dthurn/.llms/skills/shared \
-  --allowedTools Read Grep Glob \
-    'Bash(git diff:*)' 'Bash(git log:*)' 'Bash(git show:*)' \
-  < "$SCRATCH/review-<bead-id>.prompt" > "$SCRATCH/review-<bead-id>.md"
-```
-
-The explicit grants cover the required read tools as well as the narrow Git
-commands. Keep the input directories limited to the review snapshot, its
-scratch inputs, and the named review skills. Preserve configured denies and
-`dontAsk`; the reviewer has no Write/Edit tool or mutating Git grant. A report
+The dispatcher retains the returned report in its scratch directory. Inspect
+scope coverage and the successful terminal result before accepting it. A report
 with a denied required read or an incomplete diff is scope-limited and does
-not satisfy the review. Inspect those fields before accepting the result.
+not satisfy the review.
 
 When required scope is incomplete on an unchanged range, the same cold
 reviewer may finish the missing reads using the packet or a source-bound
@@ -1188,25 +1153,18 @@ overlap, so list the phase's commits for the reviewer with
 `git log --grep 'Bead: <epic-id>.'` on the `Bead:` trailers, not just a
 range.
 
-**When the reviewer's family is unavailable** (a usage limit, a signed-out
-CLI, or a service error), follow this procedure under normal routing. During
-the [temporary Sol override](#temporary-sol-review-routing), route Claude
-review debt to Sol and use the discharge procedure above without waiting for
-or retrying Claude:
+**When a fresh Codex review subagent is unavailable** (a usage limit,
+missing subagent capability, or a service error):
 
-1. Record `review-debt` in the bead notes, with the base and head OIDs,
-   and add the label `review-debt` to the bead. Any session may retry it.
-2. Continue.
-3. Retry once at each later dispatch boundary. When it succeeds, review the
-   debt's exact range, file a follow-up bead for confirmed findings, and
-   remove the label.
-4. At a gate, if debt remains and the reviewer's family has failed for over
-   6 hours, run a **fallback cold review** from the session's own family:
-   - a subagent with the `warden` skill and no inherited context;
-   - given the same scope and diff;
-   - labelled "fallback (same family)" in the notes.
-
-   Never describe a fallback as the independent review.
+1. Record `review-debt` in the bead notes with the exact base and head OIDs,
+   required-scope packet and failure, and add the `review-debt` label.
+2. Continue eligible work. Retry fresh Codex review once at each later dispatch
+   boundary; any session with Codex subagent access may perform the review.
+3. On successful review of the debt's exact range, verify and record findings
+   and dispositions, file follow-up beads for confirmed findings, and clear
+   the corresponding label.
+4. A phase gate or Track T gate waits for required Codex reviews and resolved
+   findings. Reviewer availability does not change the required reviewer type.
 
 ## Mason passes
 
@@ -1850,8 +1808,8 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
 - **Flaky test.** If Tollgate attributes it `flaky-or-non-hermetic`, fix the
   test's hermeticity in a dedicated bead, or delete the test if it fails D19.
   Never retry until green.
-- **Reviewer unavailable** (either family). Follow the current routing and
-  debt procedure in [Reviews](#reviews), including the temporary Sol override.
+- **Codex review subagent unavailable.** Follow the review-debt procedure in
+  [Reviews](#reviews).
 - **Playwright MCP unavailable.** Run `playwright-mcp-service start` and retry
   once. If it is still down, continue non-QA work. Record QA debt, and clear it
   before the bead closes, or before the phase gate at the latest.

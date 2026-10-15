@@ -21,16 +21,12 @@ restart, do these steps in order:
 2. Follow [workflow → Re-entry](workflow.md#re-entry-after-compaction-or-restart).
 3. Read only the page for the current phase.
 
-**Temporary global review policy, October 12–13, 2026.** Claude is at its
-weekly usage cap. Until Tuesday, October 13 at 18:00 America/Los_Angeles
-(`2026-10-14T01:00:00Z`), every session uses a fresh read-only `gpt-5.6-sol`
-reviewer through the Codex CLI for all code reviews, including
-Codex-authored changes and outstanding Claude review debt. This
-user-authorized policy overrides other-family routing and Claude-unavailable
-waiting and retries. The deadline automatically restores normal
-Claude/cross-family routing. Read
-[the review procedure](workflow.md#temporary-sol-review-routing) before
-dispatching a review.
+**Permanent review policy.** Every code review uses a fresh read-only Codex
+subagent with no prior context, regardless of which model implemented the
+change. Spawn each reviewer with `fork_turns: "none"` and supply only its
+review brief and exact source inputs. This user policy takes precedence over
+shared skill routing and applies to outstanding review debt. Read
+[the review procedure](workflow.md#reviews) before dispatching a review.
 
 ## Outcomes
 
@@ -175,10 +171,8 @@ Shared design references:
   plan grants promotion authority for in-scope work.
 - **Helpers:**
   - one implementation subagent per session, or the session itself;
-  - a fresh reviewer following [the current review routing](workflow.md#reviews);
-    normal routing uses the other model family (the Codex CLI for
-    Claude Code sessions' beads, the Claude Code CLI for Codex sessions'),
-    run asynchronously;
+  - a fresh read-only Codex review subagent with `fork_turns: "none"`,
+    following [the review procedure](workflow.md#reviews) asynchronously;
   - read-only subagents for mason audits, retrospectives, and QA, run by the
     session that needs them;
   - background processes each session owns, such as dev servers, fuzz soaks,
