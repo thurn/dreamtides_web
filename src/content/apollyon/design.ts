@@ -1,6 +1,6 @@
 /** Provisional D6 specifications. Pair-authoring beads adopt and verify the live abilities. */
 import { all, characterYouControl, randomIn, staticAbility } from "../../engine/dsl/builders";
-import { onDawn, triggered, triggeringCard, whenAbandon, whenDiscard, whenYouPlay } from "../../engine/dsl/triggers";
+import { onDawn, triggered, triggeringCard, whenYouPlay } from "../../engine/dsl/triggers";
 import * as p from "../../engine/effects/primitives";
 import { smallEnemyDissolveAspectAbilities } from "./aspects/aspect-ccc0385e-ff00-4be3-a807-99e4def47d2d";
 import { reclaimedCharacterSparkAspectAbilities } from "./aspects/aspect-e70d2d02-9ba6-434b-94d3-73ad29d3e9f4";
@@ -16,6 +16,8 @@ import { spiritAnimalAspectAbilities } from "./aspects/aspect-1380edc9-09ed-44df
 import { secondEventAspectAbilities } from "./aspects/aspect-3fe26475-8023-46d3-b13b-86673b92e3d0";
 import { dawnRecoveryAspectAbilities } from "./aspects/aspect-57c65dfd-a125-440e-a410-c8c4a314b1d1";
 import { warriorAnthemAspectAbilities } from "./aspects/aspect-80b6296d-840e-4ed7-b684-5aadc0981bf4";
+import keeperOfNamesAspect from "./aspects/aspect-9ae35d68-a432-45f6-ab8c-07572a25ad6b";
+import butcherAspect from "./aspects/aspect-ac116276-5569-491b-85c9-e192823bddae";
 
 export const APOLLYON_BATTLE_DESIGN = {
   legacyDefaultIncarnationId: parseApollyonIncarnationId("80b6296d-840e-4ed7-b684-5aadc0981bf4"),
@@ -50,7 +52,7 @@ export const APOLLYON_DESIGNS: ReadonlyMap<ApollyonIncarnationId, ApollyonDesign
     dreamsignIds: ["21ae8473-afa7-4384-b7d4-afbf1d84e691"],
   }],
   [parseApollyonIncarnationId("ac116276-5569-491b-85c9-e192823bddae"), {
-    aspect: { id: "e9fa35a7-fe02-4046-b10b-78e1abcc557a", renderedText: "Once per turn, when you abandon a character, draw a card.", proposedAbilities: () => [triggered(whenAbandon("you", { cardType: "character" }), p.draw(1), { oncePerTurn: true })], pending: true },
+    aspect: { id: "e9fa35a7-fe02-4046-b10b-78e1abcc557a", renderedText: "Once per turn, when you abandon a character, draw a card.", proposedAbilities: butcherAspect, abilities: butcherAspect, verifiedText: expectedVerifiedText("Once per turn, when you abandon a character, draw a card.") },
     deckRecipe: {
       poolAvatarId: "16b579fe-c15b-4df6-8262-d45ce44732ae",
       archetypeTideIds: ["ee5e7dd2-0c11-4349-94e1-ec1ae35b20af", "ebb877b5-7f18-413b-8509-3d1e452e0df2"],
@@ -77,7 +79,7 @@ export const APOLLYON_DESIGNS: ReadonlyMap<ApollyonIncarnationId, ApollyonDesign
     dreamsignIds: ["8340cce5-8e27-4940-ab79-34e09fdbcae1"],
   }],
   [parseApollyonIncarnationId("9ae35d68-a432-45f6-ab8c-07572a25ad6b"), {
-    aspect: { id: "00974abd-19d8-4d83-8af9-6a34e67f11a0", renderedText: "Once per turn, when you discard a card, it gains reclaim until end of turn.", proposedAbilities: () => [triggered(whenDiscard(), p.grantReclaim(triggeringCard(), { duration: "untilEndOfTurn" }), { oncePerTurn: true })], pending: true },
+    aspect: { id: "00974abd-19d8-4d83-8af9-6a34e67f11a0", renderedText: "Once per turn, when you discard a card, it gains reclaim until end of turn.", proposedAbilities: keeperOfNamesAspect, abilities: keeperOfNamesAspect, verifiedText: expectedVerifiedText("Once per turn, when you discard a card, it gains reclaim until end of turn.") },
     deckRecipe: {
       poolAvatarId: "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
       archetypeTideIds: ["77765ea3-16fb-4ab7-9f4f-4610f2f04d9f", "e4d7c1fe-cae0-4cec-8254-2656eff4359b"],
