@@ -1,3 +1,6 @@
+import { characterYouControl, conditionalAlternativeCost, controls, energy, staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { playSelfFromZone } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,15 @@ export default card({
   cardNumber: 288,
   art: { x: 0, y: 0.608, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => {
+    const condition = controls(characterYouControl({ subtype: "Survivor" }));
+    return [
+      conditionalAlternativeCost(condition, [energy(1)], variant.amplified ? { materializesAwakened: true } : {}),
+      staticAbility(playSelfFromZone("void"), { zone: "void", while: condition }),
+    ];
+  },
+  verifiedText: expectedVerifiedText(
+    "If you control a survivor, you may play this card from your hand or void for 1●.",
+    "If you control a survivor, you may play this card from your hand or void for 1●. If played this way, it materializes with awakened.",
+  ),
 });

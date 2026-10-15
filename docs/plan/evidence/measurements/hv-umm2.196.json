@@ -1,0 +1,901 @@
+{
+  "bead": "hv-umm2.196",
+  "base": "b0e29829e32562dd7ce4aff91c668b69bfd8e770",
+  "implementationWindow": {
+    "start": "2026-10-15T02:43:42.366Z",
+    "end": "2026-10-15T03:03:33.045343+00:00"
+  },
+  "implementationMinutes": 19.84465571666667,
+  "sampling": "UNKNOWN",
+  "scope": "Original four-UUID final acceptance join; remaining one leaf composition. Child686 leaves are read-only.",
+  "sourceEpoch": {
+    "freezeAt": "2026-10-15T02:45:22.778979+00:00",
+    "base": "b0e29829e32562dd7ce4aff91c668b69bfd8e770",
+    "files": {
+      "src/content/cards/kindred-sparks-a30a5fdc.ts": "24168c15bb7faaca8891e593e2ba96676c5ff0c76cdf9e059597e374a12cb415",
+      "src/content/cards/sky-voyager-3d1fadf6.ts": "94aebe210aea8332f6c52137933acc3bfd304b6cae95793fdae5a54868c1383d",
+      "src/content/cards/soulcleft-spinner-40b44ed7.ts": "940855d59ff45380d971447a5b5316de22533f2cf5e165ab4594b672971e229a",
+      "src/content/cards/spirit-of-the-lightgrove-401fdd0a.ts": "f8cf4c14e4e3b8e198ac1464f1c1fc07bce7226b5b1b0bc926c35eecf23f1175",
+      "src/engine/dsl/builders.ts": "6f0608b0f38db1d5dcbf8c04901a9d4b7cf3df9f4e7f455d124fe496ce123d88",
+      "src/engine/rules/timing.ts": "9b7d373404628a9172db48872fa110cafb411ef74bc756db9d0ab5bf32bc8a61",
+      "src/engine/steps/kinds/play.ts": "cea68bdbc1da5785dd95c544fbd0349987b9a048e666d8e496449c9d1c5e8442",
+      "src/engine/continuous/permissions.ts": "d08f6aa5b1c69c8dbe1c38a25568a1609a30d99a4feb0ed1179c444096b94a08",
+      "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+      "scripts/qa/prelude.mjs": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+      "scripts/qa/card-sweep.mjs": "83f2d5e65a8e45dcbae1016531fc4e048d93c2749459410f710b13213b904e00"
+    }
+  },
+  "checks": {
+    "focused": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/content/coverage.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:44:58.962916+00:00",
+      "end": "2026-10-15T02:45:19.819519+00:00",
+      "pid": 85733,
+      "pgid": 85733,
+      "exitCode": 0,
+      "wallSeconds": 20.85624754196033,
+      "cpuSeconds": {
+        "user": 25.087214,
+        "system": 2.721025
+      },
+      "startLoad": [
+        6.9951171875,
+        13.7314453125,
+        14.046875
+      ],
+      "endLoad": [
+        6.45166015625,
+        13.16650390625,
+        13.8359375
+      ]
+    },
+    "coverage": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:47:58.084075+00:00",
+      "end": "2026-10-15T02:48:05.451618+00:00",
+      "pid": 54453,
+      "pgid": 54453,
+      "exitCode": 0,
+      "wallSeconds": 7.367473583028186,
+      "cpuSeconds": {
+        "user": 5.553651,
+        "system": 2.693047
+      },
+      "startLoad": [
+        13.42431640625,
+        13.669921875,
+        13.904296875
+      ],
+      "endLoad": [
+        13.49951171875,
+        13.6796875,
+        13.9052734375
+      ]
+    },
+    "review": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:46:32.816606+00:00",
+      "end": "2026-10-15T02:47:47.352888+00:00",
+      "pid": 92695,
+      "pgid": 92695,
+      "exitCode": 0,
+      "wallSeconds": 74.53494541696273,
+      "cpuSeconds": {
+        "user": 188.269826,
+        "system": 19.252583
+      },
+      "startLoad": [
+        13.18115234375,
+        13.16796875,
+        13.74169921875
+      ],
+      "endLoad": [
+        14.41796875,
+        13.86376953125,
+        13.974609375
+      ]
+    },
+    "knip": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:47:59.241485+00:00",
+      "end": "2026-10-15T02:48:05.368420+00:00",
+      "pid": 54631,
+      "pgid": 54631,
+      "exitCode": 0,
+      "wallSeconds": 6.126858375035226,
+      "cpuSeconds": {
+        "user": 4.826241,
+        "system": 2.090367
+      },
+      "startLoad": [
+        13.42431640625,
+        13.669921875,
+        13.904296875
+      ],
+      "endLoad": [
+        13.49951171875,
+        13.6796875,
+        13.9052734375
+      ]
+    },
+    "preflight": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9,401fdd0a-356b-49c1-806d-d50617b084d2,a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa,40b44ed7-d737-455b-bd42-e617a263b110"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:45:33.629064+00:00",
+      "end": "2026-10-15T02:45:35.395560+00:00",
+      "pid": 88371,
+      "pgid": 88371,
+      "exitCode": 0,
+      "wallSeconds": 1.7664986670133658,
+      "cpuSeconds": {
+        "user": 1.6297059999999999,
+        "system": 0.614224
+      },
+      "startLoad": [
+        5.8154296875,
+        12.69970703125,
+        13.6572265625
+      ],
+      "endLoad": [
+        6.0703125,
+        12.63818359375,
+        13.6298828125
+      ]
+    },
+    "fuzz": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9,401fdd0a-356b-49c1-806d-d50617b084d2,a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa,40b44ed7-d737-455b-bd42-e617a263b110"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:45:32.473485+00:00",
+      "end": "2026-10-15T02:53:29.079150+00:00",
+      "pid": 88271,
+      "pgid": 88271,
+      "exitCode": 0,
+      "wallSeconds": 476.59661045798566,
+      "cpuSeconds": {
+        "user": 499.781194,
+        "system": 5.6246979999999995
+      },
+      "startLoad": [
+        5.8154296875,
+        12.69970703125,
+        13.6572265625
+      ],
+      "endLoad": [
+        6.90966796875,
+        10.19580078125,
+        12.2958984375
+      ]
+    },
+    "sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.196",
+        "--cards",
+        "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9,401fdd0a-356b-49c1-806d-d50617b084d2,a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa,40b44ed7-d737-455b-bd42-e617a263b110"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:46:31.777629+00:00",
+      "end": "2026-10-15T02:51:05.110452+00:00",
+      "pid": 92589,
+      "pgid": 92589,
+      "exitCode": 0,
+      "wallSeconds": 273.3276637090021,
+      "cpuSeconds": {
+        "user": 11.150396,
+        "system": 4.612105
+      },
+      "startLoad": [
+        13.18115234375,
+        13.16796875,
+        13.74169921875
+      ],
+      "endLoad": [
+        10.44970703125,
+        12.34326171875,
+        13.322265625
+      ]
+    },
+    "void-diagnostic": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/196/void-diagnostic.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:57:43.398431+00:00",
+      "end": "2026-10-15T02:57:49.436090+00:00",
+      "pid": 84399,
+      "pgid": 84399,
+      "exitCode": 0,
+      "wallSeconds": 6.037593875022139,
+      "cpuSeconds": {
+        "user": 2.471411,
+        "system": 2.020893
+      },
+      "startLoad": [
+        5.3076171875,
+        7.13330078125,
+        10.3447265625
+      ],
+      "endLoad": [
+        5.04248046875,
+        7.0478515625,
+        10.29541015625
+      ]
+    },
+    "live": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/kindred-live.mjs",
+        "--bead",
+        "hv-umm2.196",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:58:41.310748+00:00",
+      "end": "2026-10-15T03:00:25.156353+00:00",
+      "pid": 86299,
+      "pgid": 86299,
+      "exitCode": 0,
+      "wallSeconds": 103.8437147079967,
+      "cpuSeconds": {
+        "user": 8.244644,
+        "system": 3.962169
+      },
+      "startLoad": [
+        6.2568359375,
+        7.0654296875,
+        10.09765625
+      ],
+      "endLoad": [
+        8.80029296875,
+        7.4638671875,
+        9.90087890625
+      ]
+    }
+  },
+  "hostLoadSamples": {
+    "focused": {
+      "start": [
+        6.9951171875,
+        13.7314453125,
+        14.046875
+      ],
+      "end": [
+        6.45166015625,
+        13.16650390625,
+        13.8359375
+      ]
+    },
+    "coverage": {
+      "start": [
+        13.42431640625,
+        13.669921875,
+        13.904296875
+      ],
+      "end": [
+        13.49951171875,
+        13.6796875,
+        13.9052734375
+      ]
+    },
+    "review": {
+      "start": [
+        13.18115234375,
+        13.16796875,
+        13.74169921875
+      ],
+      "end": [
+        14.41796875,
+        13.86376953125,
+        13.974609375
+      ]
+    },
+    "knip": {
+      "start": [
+        13.42431640625,
+        13.669921875,
+        13.904296875
+      ],
+      "end": [
+        13.49951171875,
+        13.6796875,
+        13.9052734375
+      ]
+    },
+    "preflight": {
+      "start": [
+        5.8154296875,
+        12.69970703125,
+        13.6572265625
+      ],
+      "end": [
+        6.0703125,
+        12.63818359375,
+        13.6298828125
+      ]
+    },
+    "fuzz": {
+      "start": [
+        5.8154296875,
+        12.69970703125,
+        13.6572265625
+      ],
+      "end": [
+        6.90966796875,
+        10.19580078125,
+        12.2958984375
+      ]
+    },
+    "sweep": {
+      "start": [
+        13.18115234375,
+        13.16796875,
+        13.74169921875
+      ],
+      "end": [
+        10.44970703125,
+        12.34326171875,
+        13.322265625
+      ]
+    },
+    "void-diagnostic": {
+      "start": [
+        5.3076171875,
+        7.13330078125,
+        10.3447265625
+      ],
+      "end": [
+        5.04248046875,
+        7.0478515625,
+        10.29541015625
+      ]
+    },
+    "live": {
+      "start": [
+        6.2568359375,
+        7.0654296875,
+        10.09765625
+      ],
+      "end": [
+        8.80029296875,
+        7.4638671875,
+        9.90087890625
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final own evidence/schema checkpoint",
+        "command": "sysctl -n vm.loadavg",
+        "observedAt": "2026-10-15T03:03:33.045343+00:00",
+        "raw": "{ 17.60 11.01 10.75 }"
+      }
+    }
+  },
+  "d20": "Independent existing public primitive composition, including exact-source conditional void permission and captured entry option supplied together by698. Existing synthetic two-actor contracts cover condition/payment/permission/readiness/physical latest method/cancellation/reload; actual-source UI covers Sky/Spirit all-types qualification and both source zones. No new scenario or CI test duplication. Child686 likewise legitimately has no private scenario.",
+  "d21": {
+    "firstBytes": {
+      "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9": 178,
+      "401fdd0a-356b-49c1-806d-d50617b084d2": 190,
+      "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa": 237,
+      "40b44ed7-d737-455b-bd42-e617a263b110": 158
+    },
+    "sampled": [],
+    "newPromptStatusVisualKinds": [],
+    "mandatoryJudged": 0,
+    "voluntaryLiveWorkflow": "eight cases on each desktop/mobile, existing route/status renderer, manually judged three captures"
+  },
+  "counts": {
+    "cards": 4,
+    "basePrintings": 4,
+    "amplifiedPrintings": 3,
+    "newPrimitives": 0,
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "sweepPass": 42,
+    "sweepSkip": 38,
+    "sweepFail": 0
+  },
+  "preflight": {
+    "event": "labPreflightSummary",
+    "cards": [
+      "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
+      "401fdd0a-356b-49c1-806d-d50617b084d2",
+      "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa",
+      "40b44ed7-d737-455b-bd42-e617a263b110"
+    ],
+    "avatars": [],
+    "dreamsigns": [],
+    "variants": [
+      "base",
+      "amplified",
+      "empowered",
+      "kindled",
+      "resonant",
+      "inspired",
+      "enduring",
+      "hastened",
+      "attuned",
+      "perfected"
+    ],
+    "sides": [
+      "player",
+      "enemy"
+    ],
+    "counts": {
+      "pass": 42,
+      "pending": 0,
+      "skip": 38,
+      "fail": 0
+    },
+    "elapsedMs": 41.2579589999998,
+    "hostLoad": 6.0703125,
+    "enemyMode": "scripted-lab-play-first-legal-prompts"
+  },
+  "sweep": {
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-RqdGgY",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/invocations/sweep-RqdGgY",
+    "counts": {
+      "pass": 42,
+      "skip": 38
+    },
+    "attemptCounts": {
+      "pass": 42,
+      "skip": 38
+    },
+    "hostLoad": 13.18115234375,
+    "sessions": 1,
+    "leaseYields": 0,
+    "wallMs": {
+      "browserLeaseWait": 7,
+      "serve": 3605,
+      "scenario": 269013.64079100004,
+      "cleanup": 348.9905420000432,
+      "execution": 273062.601584,
+      "total": 273069.601584
+    }
+  },
+  "fuzzSummary": [
+    "fuzz:engine 300 games, 99280 steps, 475.1 s wall, 503.7 s CPU (0.6 games/s wall, 0.6 games/s CPU); prompts 7089; interactive re-runs 717 (7.408 ms each); feasibility bounded {\"legality\":0,\"prompts\":1}; results {\"player\":148,\"enemy\":152,\"draw\":0}; failures 0",
+    "fuzz targets: [{\"kind\":\"card\",\"uuid\":\"3d1fadf6-42e5-4d03-9a72-9bc25968c2b9\",\"included\":609,\"exercised\":154},{\"kind\":\"card\",\"uuid\":\"401fdd0a-356b-49c1-806d-d50617b084d2\",\"included\":615,\"exercised\":192},{\"kind\":\"card\",\"uuid\":\"a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa\",\"included\":619,\"exercised\":137},{\"kind\":\"card\",\"uuid\":\"40b44ed7-d737-455b-bd42-e617a263b110\",\"included\":617,\"exercised\":135}]"
+  ],
+  "fuzzWallQualification": "Outer duration includes lock queue, process startup and engine execution; engine summary supplies inner wall/CPU. The difference is not claimed as exact lock wait.",
+  "live": {
+    "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/invocations/run-3duEwM/kindred-live.result.json",
+    "caller": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/kindred-live.mjs",
+    "callerSha256": "c28452338f61e66bb9cab6242814972179ca4cabd6ac1725a480eafd7a4d75b2",
+    "viewports": [
+      "desktop",
+      "mobile"
+    ],
+    "casesEach": 8,
+    "caps": [],
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/invocations/run-3duEwM/kindred-live-desktop.jsonl",
+        "gameId": "eti2ck",
+        "selectedBy": "url",
+        "rows": 41,
+        "reason": null
+      },
+      {
+        "viewport": "mobile",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/invocations/run-3duEwM/kindred-live-mobile.jsonl",
+        "gameId": "3qyau5",
+        "selectedBy": "url",
+        "rows": 41,
+        "reason": null
+      }
+    ],
+    "screens": [
+      "kindred-chooser-desktop.png",
+      "kindred-materialized-desktop.png",
+      "kindred-materialized-mobile.png"
+    ],
+    "assertions": [
+      "actual production printing UUID and separate physical source IDs",
+      "base/amplified hand and void alternatives spend1; amplified alternatives enter ready without keyword badge",
+      "ordinary hand and conditionally permitted ordinary void routes spend4 and enter exhausted",
+      "opponent-only qualifier denies void; unqualified hand preserves its single ordinary route",
+      "existing Sky/Spirit all-types in play satisfy own Survivor condition",
+      "cancellation and cold reload leave unpaid source/history unchanged and retain pending route/game identity",
+      "pointer-hit geometry positive,in viewport,nonoverlapping at2x; real cardPlayed and stored route answers",
+      "per-game IndexedDB JSONL preserved raw in every case; final game exports retained"
+    ],
+    "reportSha256": "39bd84caaed37291d42302f3588047d2e629e87c3796918bb23c62111e4cd124",
+    "perCaseStoredLogFiles": {
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/desktop-0-fckpz2.jsonl": "a17c9c5ead30919fc3750234d1b814a329dc057d653861479b2074177a69dd33",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/desktop-1-6tgzko.jsonl": "52f54797a3a4902997015f2e8b149ae2cb9cf9808b0cc7f02bf238b36c6dafb7",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/desktop-2-mzpsd6.jsonl": "e2b286a33ca54b990192a17958d0bb93900d3e0a7c7aa2382453064ce56d8cc1",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/desktop-3-qexc3n.jsonl": "8db170989c1294d6c009a20ace5e0d808e03d420cd0c795388aef43d3069f951",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/desktop-4-yretuj.jsonl": "0a9d5a0b25bf6dfad319ef6cef38bd25819f769715445f47ae33874cc877fbe0",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/desktop-5-ojjs7y.jsonl": "eea1401403fc95a81f939ff47115a123e433bfd105651b6db74af1e5f5fa0ac1",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/desktop-6-zewk6k.jsonl": "97b43056c796aae4f47ba6b02716cca0dd0d71709c81e2aa2b610a6cd86ab834",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/desktop-7-eti2ck.jsonl": "132193f99bdd3d9ab4be767d75df001d02b796d79e35d866dcc11478d2bed9ae",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/mobile-0-fjys2c.jsonl": "6a529161cb9f8344cf5f91d3bc9c28817976cc0ee468f53428f5492082213e99",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/mobile-1-aoi5tz.jsonl": "b1cabd5080c1a7cf155098e688f0f5297395f0fd902d8782d144e8bfa09cb670",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/mobile-2-zoshk9.jsonl": "a418d58b5148233f5dcab40ac58ca21fc12aaafb9f791577f5ecb5aceca40898",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/mobile-3-kan8dn.jsonl": "bf0a6d64df2cb60ef0184f30e37cea8216fe0e3ef60e71334db541ed79e71869",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/mobile-4-p8ftwq.jsonl": "9b27773824ac1ffa45a68d6aad601033cdebd5608065df266fcc6ee53f6468d4",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/mobile-5-62jv9q.jsonl": "f16300f299c3ce34b1b5d3461fb39d915c6657ddc7600ca5548809c7b2b30bb1",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/mobile-6-4htzz8.jsonl": "5ca466e97a53c9466dd273ac79bf539979112cb506d60775097c137e04df4c8f",
+      "/tmp/dreamtides-executor-01a1304d/196/live-case-logs/mobile-7-3qyau5.jsonl": "a476538d4f4db5222e04df47b6e7d225e2caac07ddd3fa57f85c8160c86e71c9"
+    }
+  },
+  "runtime": {
+    "settlements": {
+      "sweep": {
+        "clock": "2026-10-15T02:51:05.138125+00:00",
+        "exitCode": 0,
+        "callerSha256Before": "41ad4b2bf8d76f349441b42cd2424ae180b3f6606525bbb124230ada016d6fd0",
+        "callerSha256After": "6f9af4f84f3e343e0e96e00c95d782158654ee545ed7bccafbf8011c11b7009c",
+        "resources": [
+          {
+            "serverGroup": 92630,
+            "remainingProcesses": [],
+            "matchingRecords": []
+          }
+        ]
+      },
+      "live": {
+        "clock": "2026-10-15T03:00:25.211697+00:00",
+        "exitCode": 0,
+        "callerSha256Before": "c28452338f61e66bb9cab6242814972179ca4cabd6ac1725a480eafd7a4d75b2",
+        "callerSha256After": "c28452338f61e66bb9cab6242814972179ca4cabd6ac1725a480eafd7a4d75b2",
+        "executedCaller": true,
+        "resources": [
+          {
+            "serverGroup": 86333,
+            "remainingProcesses": [],
+            "matchingRecords": []
+          }
+        ]
+      }
+    },
+    "failedLiveSettlements": {
+      "live-v1": {
+        "clock": "2026-10-15T02:52:09.243258+00:00",
+        "exitCode": 1,
+        "callerSha256Before": "6f9af4f84f3e343e0e96e00c95d782158654ee545ed7bccafbf8011c11b7009c",
+        "callerSha256After": "6f9af4f84f3e343e0e96e00c95d782158654ee545ed7bccafbf8011c11b7009c",
+        "executedCaller": true,
+        "resources": [
+          {
+            "serverGroup": 71843,
+            "remainingProcesses": [],
+            "matchingRecords": []
+          }
+        ]
+      },
+      "live-v2": {
+        "clock": "2026-10-15T02:54:53.420491+00:00",
+        "exitCode": 1,
+        "callerSha256Before": "f4bf0de0fc61ab3252c6556cc195603267f29cd4010152b55db1176b28d97db7",
+        "callerSha256After": "f4bf0de0fc61ab3252c6556cc195603267f29cd4010152b55db1176b28d97db7",
+        "executedCaller": true,
+        "resources": [
+          {
+            "serverGroup": 79429,
+            "remainingProcesses": [],
+            "matchingRecords": []
+          }
+        ]
+      },
+      "live-v3": {
+        "clock": "2026-10-15T02:57:44.740048+00:00",
+        "exitCode": 1,
+        "callerSha256Before": "02219166743b6b3c26f2b31ab04ecc4eaaf38a1880fef62c3791b3856fe7a699",
+        "callerSha256After": "02219166743b6b3c26f2b31ab04ecc4eaaf38a1880fef62c3791b3856fe7a699",
+        "executedCaller": true,
+        "resources": [
+          {
+            "serverGroup": 82359,
+            "remainingProcesses": [],
+            "matchingRecords": []
+          }
+        ]
+      }
+    },
+    "resources": [
+      "actual runner/server/provider identities in sweep-live-ownership.json, live-v1-live-ownership.json, live-v2-live-ownership.json, live-v3-live-ownership.json and live-live-ownership.json",
+      "all actual own server groups settled and matching ownership records absent",
+      "shared MCP service preserved"
+    ],
+    "sourceFrozen": true
+  },
+  "qualifiedAttempts": [
+    {
+      "label": "focused",
+      "qualification": "Command included nonexistent src/content/coverage.test.ts filter; only contracts.test.ts matched (5254 contracts). This is not coverage-gate evidence; explicit src/engine/content-gates.test.ts passed20 afterward."
+    },
+    {
+      "label": "caller-preparation",
+      "qualification": "TDZ and inaccurate synthetic-printing prose caught before execution, old caller never run; caller-revisions.json retains hashes."
+    },
+    {
+      "label": "sweep-monitor",
+      "qualification": "Actual sweep exit0 accepted. Initial external monitor needlessly hashed not-used live caller; its final caller-change assertion failed after preparation-only correction. Runtime source and all sweep inputs unchanged, resources settled; no sweep retry. Revised monitor checks executed caller only."
+    }
+  ],
+  "failedLiveAttempts": {
+    "live-v1": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/kindred-live.mjs",
+        "--bead",
+        "hv-umm2.196",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:51:56.014288+00:00",
+      "end": "2026-10-15T02:52:09.103958+00:00",
+      "pid": 71800,
+      "pgid": 71800,
+      "exitCode": 1,
+      "wallSeconds": 13.089467625017278,
+      "cpuSeconds": {
+        "user": 5.854914,
+        "system": 2.623373
+      },
+      "startLoad": [
+        9.43310546875,
+        11.63427734375,
+        12.98974609375
+      ],
+      "endLoad": [
+        8.96533203125,
+        11.4638671875,
+        12.91357421875
+      ]
+    },
+    "live-v2": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/kindred-live.mjs",
+        "--bead",
+        "hv-umm2.196",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:54:13.089799+00:00",
+      "end": "2026-10-15T02:54:53.324868+00:00",
+      "pid": 79401,
+      "pgid": 79401,
+      "exitCode": 1,
+      "wallSeconds": 40.23435708298348,
+      "cpuSeconds": {
+        "user": 6.048796,
+        "system": 2.888852
+      },
+      "startLoad": [
+        5.62060546875,
+        9.3642578125,
+        11.87841796875
+      ],
+      "endLoad": [
+        5.58642578125,
+        8.892578125,
+        11.58935546875
+      ]
+    },
+    "live-v3": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/kindred-live.mjs",
+        "--bead",
+        "hv-umm2.196",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards84-final196",
+      "start": "2026-10-15T02:56:20.316899+00:00",
+      "end": "2026-10-15T02:57:44.543400+00:00",
+      "pid": 82329,
+      "pgid": 82329,
+      "exitCode": 1,
+      "wallSeconds": 84.22493304102682,
+      "cpuSeconds": {
+        "user": 5.760311,
+        "system": 2.934624
+      },
+      "startLoad": [
+        4.05224609375,
+        7.572265625,
+        10.82421875
+      ],
+      "endLoad": [
+        5.3076171875,
+        7.13330078125,
+        10.3447265625
+      ]
+    }
+  },
+  "callerRevisions": [
+    {
+      "at": "2026-10-15T02:49:23.464586+00:00",
+      "oldSha256": "41ad4b2bf8d76f349441b42cd2424ae180b3f6606525bbb124230ada016d6fd0",
+      "newSha256": "6f9af4f84f3e343e0e96e00c95d782158654ee545ed7bccafbf8011c11b7009c",
+      "execution": "old caller not executed",
+      "reason": "Parent caught cases TDZ and inaccurate synthetic-printing prose before first live QA; production source epoch unchanged."
+    },
+    {
+      "at": "2026-10-15T02:53:50.640720+00:00",
+      "oldSha256": "6f9af4f84f3e343e0e96e00c95d782158654ee545ed7bccafbf8011c11b7009c",
+      "newSha256": "f4bf0de0fc61ab3252c6556cc195603267f29cd4010152b55db1176b28d97db7",
+      "reason": "Live-v1 base hand passed; amplified initial guard rejected explicit rawUUID hand override. Omit source hand override; actual0-cost synthetic discard prepares variant-bearing original physical void card through public UI. No debug move API exists; DebugOp add is base-only.",
+      "execution": "v1 terminal1, all own resources settled before revision; production epoch unchanged"
+    },
+    {
+      "at": "2026-10-15T02:56:20.230433+00:00",
+      "oldSha256": "f4bf0de0fc61ab3252c6556cc195603267f29cd4010152b55db1176b28d97db7",
+      "newSha256": "02219166743b6b3c26f2b31ab04ecc4eaaf38a1880fef62c3791b3856fe7a699",
+      "reason": "v2 both hand cases passed and actual discard retained amplified physical source. Caller clicked before demonstrating rendered playable affordance; actual committed/preparation proof was insufficient. EngineBattleScreen599\u2013605 selects chooser using derived voidPlays, CardPile exposes semantic playable ring. Add semantic data-pile-selection=playable and rendered own main control waits. Exact internal race/timing cause is not established.",
+      "execution": "v2 terminal1,Caps[],actual custody settled; runtime source epoch unchanged"
+    },
+    {
+      "at": "2026-10-15T02:58:41.222379+00:00",
+      "oldSha256": "02219166743b6b3c26f2b31ab04ecc4eaaf38a1880fef62c3791b3856fe7a699",
+      "newSha256": "c28452338f61e66bb9cab6242814972179ca4cabd6ac1725a480eafd7a4d75b2",
+      "reason": "v3 probe had main decision,empty stack,no prompt/inFlight but rendered canPassfalse. Source read of labAddCard shows debug rail stays open; actual caller omitted close. Explicitly close existing rendered rail and wait absent before setup event. Narrow production-source permission diagnostic passed both actors\u00d7both all-types providers. Exact unobserved prior click target is not asserted.",
+      "execution": "v3 terminal1,Caps[],all actual owned resources settled before revision; frozen source unchanged"
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "preExistingIssues": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "review": "Not core-review; production diff below100 non-test lines; no independent review required. Parent owns policy decision.",
+  "commitBoundaryQualification": "Evidence end is an actual pre-Git cutoff. Scratch git-commit-receipt.json records inclusive actual Git end and short tail; final interval must remain within one minute.",
+  "failedLiveReports": {
+    "live-v1": {
+      "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/invocations/run-WGRnTV/kindred-live.result.json",
+      "sha256": "9dbe8cabeb21eb0b2c37f5cb320a599045dd8e53cecf1217997b65d137fc6a5b",
+      "scope": "base hand case completed; amplified source variant staging guard rejected; no amplified behavior verdict"
+    },
+    "live-v2": {
+      "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/invocations/run-VFJ7pC/kindred-live.result.json",
+      "sha256": "f7f6c1a1cde88f6cdd8365a0c8bc54108cdf3865d20cd236529a31402f804192",
+      "scope": "base/amplified hand cases completed; real amplified discard tovoid completed; guessed affordance chooser control absent"
+    },
+    "live-v3": {
+      "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.196/invocations/run-tk7C8f/kindred-live.result.json",
+      "sha256": "69627f1620583083f9d419827f796f6b9ab6f9ec6dbf6b2d6a1b0297b128b8b0",
+      "scope": "base/amplified hand cases completed; actual amplified discard succeeded; open debug rail retained, canPass hit unavailable; no voidplay verdict"
+    }
+  },
+  "screenshots": [
+    {
+      "filename": "kindred-chooser-desktop.png",
+      "sha256": "780bb0d2665c11b5812f753d14ab61c2c8924948a5c30f3adabeadb74baa7f70",
+      "dimensions": "2880x1800",
+      "deviceScale": 2,
+      "judgment": "clear, card readiness and payment routes legible, no changed-workflow clipping/overlap"
+    },
+    {
+      "filename": "kindred-materialized-desktop.png",
+      "sha256": "af8715d3e8c5e1605245eeb58b2ff1af06fb10325e91562c22a1af568330d25d",
+      "dimensions": "2880x1800",
+      "deviceScale": 2,
+      "judgment": "clear, card readiness and payment routes legible, no changed-workflow clipping/overlap"
+    },
+    {
+      "filename": "kindred-materialized-mobile.png",
+      "sha256": "59f9aff0044f8a5d94ee6f94889d91b3bd758676b7d875545ea4144a4cdf83b4",
+      "dimensions": "780x1688",
+      "deviceScale": 2,
+      "judgment": "clear, card readiness and payment routes legible, no changed-workflow clipping/overlap"
+    }
+  ],
+  "effectiveCases": {
+    "desktop": [
+      {"mode":"hand-alternative","variant":"base","zone":"hand","gameId":"fckpz2","source":"i2","provider":"i1","energies":{"player":4,"enemy":2},"status":{"exhausted":true,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":true,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"2fyiz26n186","value":1}],"cancellations":1,"reloads":1,"rawStoredRows":46},
+      {"mode":"hand-alternative","variant":"amplified","zone":"hand","gameId":"6tgzko","source":"i2","provider":"i1","energies":{"player":4,"enemy":2},"status":{"exhausted":false,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":true,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"2fyiz26n186","value":1}],"cancellations":1,"reloads":1,"rawStoredRows":46},
+      {"mode":"void-alternative","variant":"amplified","zone":"void","gameId":"mzpsd6","source":"i2","provider":"i1","energies":{"player":4,"enemy":2},"status":{"exhausted":false,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":true,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"81ihzh3i1g","value":1}],"cancellations":1,"reloads":1,"rawStoredRows":53},
+      {"mode":"hand-normal","variant":"amplified","zone":"hand","gameId":"qexc3n","source":"i2","provider":"i1","energies":{"player":1,"enemy":2},"status":{"exhausted":true,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":false,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"2fyiz26n186","value":0}],"cancellations":0,"reloads":0,"rawStoredRows":34},
+      {"mode":"void-denied","variant":"amplified","zone":"void","gameId":"yretuj","source":"i1","provider":null,"energies":{"player":5,"enemy":2},"status":{"exhausted":false,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":false,"offering":false,"ephemeral":false,"x":null},"routeAnswers":null,"cancellations":0,"reloads":0,"rawStoredRows":31},
+      {"mode":"hand-unqualified","variant":"amplified","zone":"hand","gameId":"ojjs7y","source":"i1","provider":null,"energies":{"player":1,"enemy":2},"status":{"exhausted":true,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":false,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[],"cancellations":0,"reloads":0,"rawStoredRows":29},
+      {"mode":"void-alternative","variant":"base","zone":"void","gameId":"zewk6k","source":"i2","provider":"i1","energies":{"player":4,"enemy":2},"status":{"exhausted":true,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":true,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"81ihzh3i1g","value":1}],"cancellations":1,"reloads":1,"rawStoredRows":53},
+      {"mode":"void-normal","variant":"amplified","zone":"void","gameId":"eti2ck","source":"i2","provider":"i1","energies":{"player":1,"enemy":2},"status":{"exhausted":true,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":false,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"81ihzh3i1g","value":0}],"cancellations":0,"reloads":0,"rawStoredRows":41}
+    ],
+    "mobile": [
+      {"mode":"hand-alternative","variant":"base","zone":"hand","gameId":"fjys2c","source":"i2","provider":"i1","energies":{"player":4,"enemy":2},"status":{"exhausted":true,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":true,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"2fyiz26n186","value":1}],"cancellations":1,"reloads":1,"rawStoredRows":46},
+      {"mode":"hand-alternative","variant":"amplified","zone":"hand","gameId":"aoi5tz","source":"i2","provider":"i1","energies":{"player":4,"enemy":2},"status":{"exhausted":false,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":true,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"2fyiz26n186","value":1}],"cancellations":1,"reloads":1,"rawStoredRows":50},
+      {"mode":"void-alternative","variant":"amplified","zone":"void","gameId":"zoshk9","source":"i2","provider":"i1","energies":{"player":4,"enemy":2},"status":{"exhausted":false,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":true,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"81ihzh3i1g","value":1}],"cancellations":1,"reloads":1,"rawStoredRows":53},
+      {"mode":"hand-normal","variant":"amplified","zone":"hand","gameId":"kan8dn","source":"i2","provider":"i1","energies":{"player":1,"enemy":2},"status":{"exhausted":true,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":false,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"2fyiz26n186","value":0}],"cancellations":0,"reloads":0,"rawStoredRows":34},
+      {"mode":"void-denied","variant":"amplified","zone":"void","gameId":"p8ftwq","source":"i1","provider":null,"energies":{"player":5,"enemy":2},"status":{"exhausted":false,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":false,"offering":false,"ephemeral":false,"x":null},"routeAnswers":null,"cancellations":0,"reloads":0,"rawStoredRows":31},
+      {"mode":"hand-unqualified","variant":"amplified","zone":"hand","gameId":"62jv9q","source":"i1","provider":null,"energies":{"player":1,"enemy":2},"status":{"exhausted":true,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":false,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[],"cancellations":0,"reloads":0,"rawStoredRows":29},
+      {"mode":"void-alternative","variant":"base","zone":"void","gameId":"4htzz8","source":"i2","provider":"i1","energies":{"player":4,"enemy":2},"status":{"exhausted":true,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":true,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"81ihzh3i1g","value":1}],"cancellations":1,"reloads":1,"rawStoredRows":53},
+      {"mode":"void-normal","variant":"amplified","zone":"void","gameId":"3qyau5","source":"i2","provider":"i1","energies":{"player":1,"enemy":2},"status":{"exhausted":true,"gainedSpark":0,"counters":0,"created":false,"reclaimed":false,"playedViaReclaim":false,"playedViaAlternativeCost":false,"offering":false,"ephemeral":false,"x":null},"routeAnswers":[{"fingerprint":"81ihzh3i1g","value":0}],"cancellations":0,"reloads":0,"rawStoredRows":41}
+    ]
+  },
+  "finalChecks": {
+    "schema": "/tmp/dreamtides-executor-01a1304d/196/final-schema-receipt.json",
+    "allOwnedWhitespace": "/tmp/dreamtides-executor-01a1304d/196/final-whitespace.json",
+    "runtimeCensus": "/tmp/dreamtides-executor-01a1304d/196/final-runtime-census.json"
+  },
+  "parentIndependentVerification": [
+    "/tmp/dreamtides-executor-01a1304d/196/parent-live-verification.json",
+    "/tmp/dreamtides-executor-01a1304d/196/parent-fuzz-verification.json",
+    "/tmp/dreamtides-executor-01a1304d/196/child-source-binding.json"
+  ]
+}
