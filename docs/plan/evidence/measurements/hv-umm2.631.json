@@ -1,0 +1,295 @@
+{
+  "bead": "hv-umm2.631",
+  "phase": 5,
+  "sourceBase": "fac405c580883120912759bf1244c5ffa80f2d37",
+  "claimStart": "2026-10-15T17:08:45.927991Z",
+  "recordedAt": "2026-10-15T17:28:27.055256+00:00",
+  "scope": {
+    "productionEdits": 0,
+    "contractModule": "src/battle/integration/deck-mods/spark-bonus.contracts.ts",
+    "contractSHA256": "20e3354eecf4f8c7c0b63d6627ba9e5373c7d160557c400b7565629d22240cda",
+    "contractLines": 293,
+    "testEntryPoint": "src/battle/integration/deck-mods.test.ts",
+    "discovery": "Existing eager glob; runner unchanged. One new plain module, zero test entrypoints.",
+    "sourceFirstManifestSHA256": "1ba5aaf3c8a3199233b367566e40fbbcea62cbd44b5f2ff27a71fdc0269b7c93",
+    "sourceFirstBindings": 66,
+    "sourceFirstProposalSHA256": "8fb1b0063206159bfb4b7ff976f3934088aef17f5165c02b2d993ff882166fed",
+    "sourcePresenceIsBehaviorProof": false,
+    "finiteAcknowledgments": [
+      "ACK631-01",
+      "ACK631-02",
+      "ACK631-03"
+    ]
+  },
+  "publicProof": {
+    "actualPath": "resolveExplorationChoice/applyJourneyRewardEffect -> journey DeckEntry -> engineDeckEntry/createEngineBattleInit -> Engine.createBattle or FoldAdapter.start -> public play, activation, filter, view and determinization",
+    "syntheticActors": "Real bridge player deck explicitly seated intact on either actor; actual journey enemy reward semantics are not claimed. Ordinary deal is tested separately from the supported public BattleInit.setup interaction declarations.",
+    "identities": "Reserved synthetic UUIDs and branded entry/type/site/action/physical identities. Same-UUID modified/plain physical copies remain independent.",
+    "forms": "Numeric/Amplified/Empowered/Kindled/Resonant/Attuned/Perfected stack with spark and other deck fields; Event rows exercise Inspired/Enduring/Hastened and Event-to-Character zero / Character-to-Event null exclusions.",
+    "arithmetic": "Kindled8+3=11, Empowered4/2 minus1 payment, Attuned3/2 activation, selectedX4 payment vs ordinaryX+3=7 or Kindled1+3=4; numeric/X signed -6 plus later3 reads1.",
+    "lifetime": "Persistent and expiring gains, return, next-turn expiry, clone/JSON and deterministic replay; both views/filter/determinization agree.",
+    "transaction": "Actual offer invalid/stale/resolved refusals, invalid typed target/UUID/number/nonfinite/composite and mapping recovery; real target prompt cancellation, persisted reload, competing action and stale/wrong-side/illegal answer refuse without gameplay debit; valid replay commits one gain/payment."
+  },
+  "validation": {
+    "initialFocused": {
+      "name": "focused-initial",
+      "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/battle/integration/deck-mods.test.ts",
+      "start": "2026-10-15T17:21:28.598701+00:00",
+      "end": "2026-10-15T17:21:37.195553+00:00",
+      "elapsedS": 8.596642749966122,
+      "pid": 46088,
+      "exit": 0,
+      "sourceSHA256": "14c7ea52e03c521843c00e8467a80fc83659881aae7d97f286f549c90574172c",
+      "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark-contract631/focused-initial.log",
+      "logSHA256": "387a77689cfb622423d56f818228098d57219a1efc1faa27253e00874583dc29"
+    },
+    "restoredFocused": {
+      "name": "focused-restored",
+      "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/battle/integration/deck-mods.test.ts",
+      "start": "2026-10-15T17:23:48.320213+00:00",
+      "end": "2026-10-15T17:23:56.186991+00:00",
+      "elapsedS": 7.86658783297753,
+      "pid": 55846,
+      "exit": 0,
+      "sourceSHA256": "14c7ea52e03c521843c00e8467a80fc83659881aae7d97f286f549c90574172c",
+      "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark-contract631/focused-restored.log",
+      "logSHA256": "51460b1c19bbde08b9c329101e3230dd911cd58b5acc8c1934ad6531b3450272"
+    },
+    "focusedCounts": "Existing eager runner: 91 passed, 1 file; added module registers 41 public tests including 28 table rows, no new entrypoint.",
+    "firstReviewFailure": {
+      "name": "review-final",
+      "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "start": "2026-10-15T17:25:01.229939+00:00",
+      "end": "2026-10-15T17:25:18.077811+00:00",
+      "elapsedS": 16.84749583300436,
+      "pid": 60935,
+      "exit": 1,
+      "hostLoad": 6.94140625,
+      "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark-contract631/review-final.log",
+      "logSHA256": "71923bbd17172aa1a2c4ec2b18a74e3f4818d25ae2106af3604615a15f3dd8f9",
+      "classification": "Only two prefer-const bindings in new module; typecheck/cycles/schema/91 related tests passed."
+    },
+    "boundedLintCorrection": "Two declaration splits: target becomes const; no runtime or expected-value changes. Original291line sensitivity epoch remains historical source-bound.",
+    "review": {
+      "name": "review-corrected",
+      "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "start": "2026-10-15T17:25:47.451721+00:00",
+      "end": "2026-10-15T17:25:59.576886+00:00",
+      "elapsedS": 12.124916124972515,
+      "pid": 64436,
+      "exit": 0,
+      "hostLoad": 7.43505859375,
+      "sourceSHA256": "20e3354eecf4f8c7c0b63d6627ba9e5373c7d160557c400b7565629d22240cda",
+      "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark-contract631/review-corrected.log",
+      "logSHA256": "7cdad3980488f64394ab733e00d0bae3a2fb328cd44271b9e3dfa789691e7dcf"
+    },
+    "knip": {
+      "name": "knip-final",
+      "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+      "start": "2026-10-15T17:26:16.706259+00:00",
+      "end": "2026-10-15T17:26:21.369043+00:00",
+      "elapsedS": 4.662638624955434,
+      "pid": 66432,
+      "exit": 0,
+      "hostLoad": 6.76953125,
+      "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark-contract631/knip-final.log",
+      "logSHA256": "68917b7a950a302dd6ec27129ad082bce19738609b36998b5eec321f52f16f67"
+    }
+  },
+  "sensitivity": {
+    "qualification": "Only own new test handoff inputs perturbed. These are sensitivity surrogates, not production mutation proof. Three exact epochs restore original fullbytes/hash after each.",
+    "proposalSHA256": "b1b3d9f674e5777adf74d1441211e9ce440b43d5db994fea5afd78bdacac59f2",
+    "epochs": [
+      {
+        "name": "sensitivity-dropped-dto",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/battle/integration/deck-mods.test.ts",
+          "-t",
+          "applies"
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "start": "2026-10-15T17:23:17.542191+00:00",
+        "end": "2026-10-15T17:23:25.978875+00:00",
+        "elapsedS": 8.436482416989747,
+        "pid": 53519,
+        "exit": 1,
+        "baselineSHA256": "14c7ea52e03c521843c00e8467a80fc83659881aae7d97f286f549c90574172c",
+        "perturbedSHA256": "435d97c961f94f6bc1fba9f5f468e7b5b7eae707301eb06bbd77f23b2d3c5202",
+        "patchSHA256": "9b69af3f0d93cff2129bef023a6a2ba32ef1d30175772e7a47a22253eefd20be",
+        "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark-contract631/sensitivity-dropped-dto.log",
+        "logSHA256": "dd173651b8e19181f64c9d5734485ba956ee28e6d0d3139ea494e318852c3ec8",
+        "restoredSHA256": "14c7ea52e03c521843c00e8467a80fc83659881aae7d97f286f549c90574172c",
+        "restoredAt": "2026-10-15T17:23:25.979303+00:00"
+      },
+      {
+        "name": "sensitivity-wrong-side",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/battle/integration/deck-mods.test.ts",
+          "-t",
+          "applies"
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "start": "2026-10-15T17:23:25.980344+00:00",
+        "end": "2026-10-15T17:23:32.186217+00:00",
+        "elapsedS": 6.205798291019164,
+        "pid": 54167,
+        "exit": 1,
+        "baselineSHA256": "14c7ea52e03c521843c00e8467a80fc83659881aae7d97f286f549c90574172c",
+        "perturbedSHA256": "75beda5fb4dd40e31e8155625e01782d355dfaede82cd5259202b27f1af9b279",
+        "patchSHA256": "574580ca4ed09aad90f4dc1cc97d238631b65037a17fd7889ce868c33a5bd6e0",
+        "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark-contract631/sensitivity-wrong-side.log",
+        "logSHA256": "8e81f50007c38c1d9814023137023c5cd203e11e2cf9064774e56ee8c2478595",
+        "restoredSHA256": "14c7ea52e03c521843c00e8467a80fc83659881aae7d97f286f549c90574172c",
+        "restoredAt": "2026-10-15T17:23:32.186577+00:00"
+      },
+      {
+        "name": "sensitivity-kindled-bonus-order",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/battle/integration/deck-mods.test.ts",
+          "-t",
+          "applies"
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "start": "2026-10-15T17:23:32.187146+00:00",
+        "end": "2026-10-15T17:23:38.446053+00:00",
+        "elapsedS": 6.258836874971166,
+        "pid": 54620,
+        "exit": 1,
+        "baselineSHA256": "14c7ea52e03c521843c00e8467a80fc83659881aae7d97f286f549c90574172c",
+        "perturbedSHA256": "70492dddd6ef4f1178829ff3676df795a5542cb587d205213d98e76eeedb5528",
+        "patchSHA256": "4b2a0a225f53337364e9caa695ef149eac96360153cffa7cd1a391770bda5068",
+        "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark-contract631/sensitivity-kindled-bonus-order.log",
+        "logSHA256": "9766941a4bbcadef8fb77b4933075172f9758d8a598a14e187f30507efc46651",
+        "restoredSHA256": "14c7ea52e03c521843c00e8467a80fc83659881aae7d97f286f549c90574172c",
+        "restoredAt": "2026-10-15T17:23:38.448118+00:00"
+      }
+    ],
+    "observed": [
+      {
+        "name": "dropped-dto",
+        "failed": 28,
+        "arithmetic": "4 vs7;8 vs11"
+      },
+      {
+        "name": "wrong-side",
+        "failed": 28,
+        "arithmetic": "4 vs7/11"
+      },
+      {
+        "name": "kindled-order-input-surrogate",
+        "failed": 4,
+        "passed": 24,
+        "arithmetic": "14 vs11"
+      }
+    ],
+    "allSemanticFailures": true,
+    "compilerImportFailures": false
+  },
+  "failureCategories": {
+    "droppedDTO": "Actual reward-to-engine handoff and first sensitivity.",
+    "wrongSideVariantType": "Both actors, plain physical copies, authored points and Event exclusions; second sensitivity.",
+    "orderPayment": "Explicit structural arithmetic and actual card/activation/X debits; third input surrogate.",
+    "staleReplayState": "Genuine actual offer and prompt refusal/cancel/reload/concurrency/replay cases.",
+    "finalJoinProvenance": "No data/count/string unit assertion substitutes preparation for original280."
+  },
+  "preservedAcceptance": {
+    "semanticPrerequisitesClosed": [
+      "hv-umm2.629",
+      "hv-umm2.275",
+      "hv-umm2.276",
+      "hv-umm2.277",
+      "hv-umm2.747",
+      "hv-umm2.751",
+      "hv-n913"
+    ],
+    "finalOwner": "hv-umm2.280",
+    "retained": "Original111 UUID union and complete recipes; >=20 stratified eligible real UUIDs per modification on EACH actor and one judgment; preflight/weighted300/base+Amplified sweep/content coverage and final Phase5 joins. No production UUID authored.",
+    "peerBoundaries": "Later chronology754, additional forms730 and feature269 remain read-only independent owner duties.",
+    "existingRepairs": "747 counterfactualDisposition and751 semanticProof retain original public signed/X/payment RED evidence. This bead does not repeat their production edits or imply new source-mutation proof."
+  },
+  "validationScope": "Pure public synthetic contract preparation. No browser/runtime, full review, fuzz, mutable production-data acceptance, new API, config, registry, or entrypoint. Current631 unlabeled noncore scope requires ordinary review/Knip, not an optional cold reviewer.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "successful corrected npm run review launch",
+        "qualification": "Actual os.getloadavg 1-minute observation; review step itself separately logs loads. No comparable-load performance claim."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-15T17:25:01.158527+00:00",
+      "oneMinute": 6.94140625,
+      "scope": "review launch preparation"
+    },
+    {
+      "at": "2026-10-15T17:25:47.451721+00:00",
+      "oneMinute": 7.43505859375,
+      "scope": "successful corrected review launch"
+    }
+  ],
+  "finalChecks": {
+    "status": "Ordinary review, Knip and measured final fast schema/whitespace checks GREEN. Final timing-only evidence refresh is followed by fast schema and working/staged whitespace checks; immutable post-refresh receipts stay in the session scratch directory.",
+    "codeEpochSHA256": "20e3354eecf4f8c7c0b63d6627ba9e5373c7d160557c400b7565629d22240cda",
+    "reviewTestCounts": "91 passed in1file;529ms tests/966ms Vitest; all lint/typecheck/cycles/schema steps passed.",
+    "repetition": "First review failed only two own prefer-const declarations; one exact lint correction caused the necessary second review. No repeated green aggregates.",
+    "fastChecksBeforeClockRefresh": [
+      {
+        "name": "schema-final",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "start": "2026-10-15T17:26:46.124008+00:00",
+        "end": "2026-10-15T17:26:46.199303+00:00",
+        "elapsedS": 0.07521041698055342,
+        "pid": 68466,
+        "exit": 0,
+        "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark-contract631/schema-final.log",
+        "logSHA256": "af6477068d6c0939f010b2d2680e36e36b92c9df7caa4aef2f16bf7188637e53"
+      },
+      {
+        "name": "whitespace-final",
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "start": "2026-10-15T17:26:46.199413+00:00",
+        "end": "2026-10-15T17:26:46.209595+00:00",
+        "elapsedS": 0.010202000034041703,
+        "pid": 68471,
+        "exit": 0,
+        "logPath": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark-contract631/whitespace-final.log",
+        "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "clock": {
+    "start": "2026-10-15T17:08:45.927991Z",
+    "includes": "Claim/setup/source audit/research, drafting, parent admission waits, focus and sensitivity checks, evidence and final validation through immediate precommit.",
+    "endStatus": "Immediate precommit evidence cutoff. Actual Git start/end/PID/elapsed and the short schema/stage/commit tail are recorded separately after commit without amending the immutable source.",
+    "immediatePrecommitCutoff": "2026-10-15T17:28:27.055256+00:00"
+  },
+  "resources": {
+    "runtimeProcessesStarted": 0,
+    "browserContextsStarted": 0,
+    "commandProcesses": "All recorded npm focus/sensitivity/review/Knip children reached terminal states via wait. No server, heavy command, or runtime resource is retained."
+  }
+}
