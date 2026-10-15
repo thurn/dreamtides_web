@@ -1,0 +1,46 @@
+{
+  "bead": "hv-umm2.254",
+  "phase": 5,
+  "implementMin": 39.28768718333333,
+  "implementWindow": {
+    "start": "2026-10-15T01:23:08.965000+00:00",
+    "end": "2026-10-15T02:02:26.226231+00:00"
+  },
+  "localValidationS": {
+    "review": 0.22669095802120864,
+    "focused": 28.06030816701241,
+    "knip": 6.0385140419821255,
+    "entities": 1.8294594999752007,
+    "schema": 0.06489241705276072,
+    "preflight": 3.14038299996173,
+    "review-evidence": 0.3138053329894319,
+    "sweep": 71.93176187499193,
+    "judged-enemy": 82.57231066701934,
+    "judged-enemy-repaired": 49.715270666987635,
+    "judged-enemy-readiness": 122.46130641701166,
+    "judged-enemy-log": 223.74347458296688,
+    "weighted-outer": 1517.811140957987,
+    "weighted": 516.8234673329862,
+    "final-review": 0.31075895798858255,
+    "final-schema": 0.06757670798106119,
+    "final-whitespace": 0.006914291996508837
+  },
+  "hostLoad": 13.42333984375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-navigation-timeout",
+      "minutes": 0.5015833333333333,
+      "note": "Actual first navigation started-to-failure interval from native node-wall trace1792027696338\u20131792027726433ms. Crystal Orb player page.goto promise timed out despite earlier DOMContentLoaded/load observations; shared runner retained ineffective failure and same-cell retry passed. Cause undetermined. Inclusive navigation wall duration, not CPU or lease queue."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 6.69456095,
+      "note": "Inclusive first opponent matrix launch to final corrected caller launch. Includes actual private far-Dusk pass/readiness/post-effect Banished-gallery mistakes, terminal cleanup, inspection and bounded caller repairs. Not CPU or browser lease wait; all failed/partial/final reports retained. No source/driver or acceptance change."
+    }
+  ]
+}
