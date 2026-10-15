@@ -1,22 +1,25 @@
 /** Synthetic public lab contracts: resolution, prompt progress, and staging failures. */
 import { describe, expect, it } from "vitest";
-import { createCatalog, type EngineCardDefinition } from "../catalog";
+import { createCatalog, type EngineCardDefinition, type EngineFigmentDefinition } from "../catalog";
 import { createEngine } from "../engine";
 import type { EngineEvent } from "../events";
-import { abandonCost, additionalCost, enemyCharacter, energy, energyX, event, everyIn, fromVoid, target, x } from "../dsl/builders";
+import { abandonCost, additionalCost, characterYouControl, controls, enemyCharacter, energy, energyX, event, everyIn, fromVoid, target, x } from "../dsl/builders";
 import { onMaterialized, triggered } from "../dsl/triggers";
 import { thisCharacterSpark } from "../dsl/values";
 import { dissolve } from "../effects/primitives/dissolve";
 import { effectiveSpark } from "../rules/spark";
 import { copiableCostOf } from "../continuous/characteristics";
 import { materialize } from "../effects/primitives/materialize";
+import { materializeFigments } from "../effects/primitives/materialize-figments";
+import { gainSpark } from "../effects/primitives/gain-spark";
+import { ifThen } from "../effects/primitives/if-then";
 import { NO_DECK_MODS, type CardCost, type ZoneEverySpec } from "../dsl/types";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { grantReclaim } from "../effects/primitives/grant-reclaim";
 import { firstLegalAnswer } from "../prompts/answers";
 import type { ChooseNumberPrompt } from "../prompts/types";
 import { hasKeyword } from "../rules/keywords";
-import type { InstanceId, Side } from "../state/ids";
+import { parseFigmentId, type InstanceId, type Side } from "../state/ids";
 import type { BattleState, DeckEntry } from "../state/types";
 import { draw } from "../effects/primitives/draw";
 import { gainEnergy } from "../effects/primitives/gain-energy";
@@ -90,6 +93,53 @@ describe("node Dreamwell lab preflight", () => {
 });
 
 describe("node card-lab preflight", () => {
+  it.each(["player", "enemy"] as const)("resolves a Materialized conditional's alternate figment branch as %s", (side) => {
+    const subtype = parseCardSubtype("ConditionalFixtureSubtype");
+    const figment: EngineFigmentDefinition = {
+      id: parseFigmentId("5e5e5e5e-0000-4000-8000-000000027801"),
+      subtype, spark: 0, status: "vanilla", abilities: () => [],
+    };
+    const source: EngineCardDefinition = {
+      ...SYNTHETIC.vanilla2, id: syntheticId(0x27802), status: "authored",
+      abilities: () => [triggered(onMaterialized(), ifThen(
+        controls(characterYouControl({ subtype })),
+        gainSpark(target(characterYouControl({ subtype })), 1),
+        materializeFigments(figment.id, 1),
+      ))],
+    };
+    const labEngine = createEngine(testCatalog([source], {}, [figment]));
+    const result = runCardLabPreflight(labEngine, request(source, side), []);
+    expect(result).toMatchObject({ verdict: "pass", resolved: true, zone: "play" });
+    expect(result.events).toContainEqual(expect.objectContaining({
+      kind: "cardCreated", side, printing: { kind: "figment", figment: figment.id, spark: 0 }, zone: "play",
+    }));
+    expect(result.events.filter((event) => event.kind === "materialized")).toHaveLength(2);
+    expect(result.events.some((event) => event.kind === "noLegalTarget" || event.kind === "sparkGained")).toBe(false);
+
+    // A declared matching character selects the other branch at resolution.
+    const matching: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(0x27803), subtype };
+    const withTarget = createEngine(testCatalog([source, matching], {}, [figment]));
+    const targeted = runCardLabPreflight(withTarget, {
+      ...request(source, side), stage: { [side]: { back: [matching.id] } },
+    }, [matching]);
+    expect(targeted).toMatchObject({ verdict: "pass", resolved: true, zone: "play" });
+    expect(targeted.events.filter((event) => event.kind === "sparkGained")).toEqual([
+      expect.objectContaining({ amount: 1 }),
+    ]);
+    expect(targeted.events.some((event) => event.kind === "cardCreated" || event.kind === "noLegalTarget")).toBe(false);
+  });
+
+  it.each(["player", "enemy"] as const)("rejects an unsatisfiable unconditional Materialized target as %s", (side) => {
+    const source: EngineCardDefinition = {
+      ...SYNTHETIC.vanilla2, id: syntheticId(0x27804), status: "authored",
+      abilities: () => [triggered(onMaterialized(), gainSpark(target(characterYouControl({
+        subtype: parseCardSubtype("RequiredFixtureSubtype"),
+      })), 1))],
+    };
+    const result = runCardLabPreflight(createEngine(testCatalog([source])), request(source, side), []);
+    expect(result).toMatchObject({ verdict: "fail", reason: "fixtureFailed", instance: null, resolved: false, events: [] });
+  });
+
   it("resolves synthetic lab cards through legal target, private-card, arrangement, and discard prompts on both sides", () => {
     for (const card of [LAB.drawTwoThenDiscard, LAB.discardChosen, LAB.putFromTop, LAB.abandon]) for (const side of ["player", "enemy"] as const) {
       const result = runCardLabPreflight(engine, request(card, side), definitions.cards);

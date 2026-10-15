@@ -1,0 +1,53 @@
+{
+  "bead": "hv-umm2.278",
+  "phase": 5,
+  "implementMin": 432.3618758,
+  "implementWindow": {
+    "start": "2026-10-15T16:24:05Z",
+    "end": "2026-10-15T23:36:26.712548+00:00"
+  },
+  "localValidationS": {
+    "review": 50.617633207992185,
+    "focused": 5.85295025,
+    "reviewFull": 187.079931208,
+    "knip": 7.904794832982589
+  },
+  "hostLoad": 9.72,
+  "testDelta": {
+    "files": 0,
+    "lines": 50,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "lab-solver-override",
+      "minutes": 11.968262533333332,
+      "note": "Elapsed observed recovery windows, union within tag; detailed endpoints/source custody in measurements. Other tags can overlap; minutes are not additive or exclusive editing time."
+    },
+    {
+      "tag": "browser-provider-heap-oom",
+      "minutes": 14.337768066666666,
+      "note": "Elapsed observed recovery windows, union within tag; detailed endpoints/source custody in measurements. Other tags can overlap; minutes are not additive or exclusive editing time."
+    },
+    {
+      "tag": "browser-completion-proof",
+      "minutes": 34.1683345,
+      "note": "Elapsed observed recovery windows, union within tag; detailed endpoints/source custody in measurements. Other tags can overlap; minutes are not additive or exclusive editing time."
+    },
+    {
+      "tag": "card-sweep-navigation-unknown",
+      "minutes": 31.18708333333333,
+      "note": "Elapsed observed recovery windows, union within tag; detailed endpoints/source custody in measurements. Other tags can overlap; minutes are not additive or exclusive editing time."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 73.28294553333333,
+      "note": "26 failed private caller/fixture observations through their first credited same-key success, unioned. Includes coordination/waits/independent work; excludes four provider-interrupted Enduring observations."
+    },
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 20.082083333333333,
+      "note": "Cumulative native wallMs.browserLeaseWait across511 terminal single-runner invocations; aggregate sweeps/session lease accounting separate. No subtraction from implementation window."
+    }
+  ]
+}

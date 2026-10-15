@@ -8,11 +8,12 @@ import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
 import { mentionsChosenSubtype } from "../effects/primitives/choose-subtype";
 import { everyNode, everyTarget } from "../effects/interpreter";
-import type { Effect } from "../effects/registry";
+import { primitiveDefinition, type Effect } from "../effects/registry";
+import type { EffectNode } from "../effects/types";
 import { namedTriggersOf } from "../dsl/abilities";
 import { BASE_VARIANT } from "../dsl/types";
 import { fixedEnergy, xCost } from "../dsl/energy";
-import type { Ability, BoundValue, VoidCostBound, CardCost, CardCountValue, CardFilter, CharacterPredicate, CharacterSelector, Cost, PlayerRef, StackItemSelector, TriggeredAbility, Variant, ZoneTargetSpec } from "../dsl/types";
+import type { Ability, BoundValue, VoidCostBound, CardCost, CardCountValue, CardFilter, CharacterPredicate, CharacterSelector, Cost, PlayerRef, PlayTimeTarget, StackItemSelector, TriggeredAbility, Variant, ZoneTargetSpec } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -215,6 +216,23 @@ function playConditionVoidDeficit(engine: Engine, cards: readonly CardId[], filt
 /** Whether an ability is a ▸Materialized trigger, which fires as the lab's play of a character enters play. */
 function isMaterializedTrigger(ability: Ability): ability is TriggeredAbility {
   return ability.kind === "triggered" && namedTriggersOf([ability]).includes("materialized");
+}
+
+/** Trigger conditionals choose their branch and its targets during resolution. */
+function materializedTargets(effect: EffectNode): PlayTimeTarget[] {
+  const targets = new Set<PlayTimeTarget>();
+  const seen = new Set<EffectNode>();
+  const walk = (node: EffectNode): void => {
+    if (seen.has(node)) return;
+    seen.add(node);
+    const definition = primitiveDefinition(node.op);
+    for (const target of definition.targets?.(node) ?? []) targets.add(target);
+    if (definition.deferConditionalChoices === true) return;
+    for (const child of definition.children?.(node) ?? []) walk(child);
+    for (const child of definition.deferred?.(node) ?? []) walk(child);
+  };
+  walk(effect);
+  return [...targets];
 }
 
 /**
@@ -474,7 +492,7 @@ export function labBoard(
       }
     }
   };
-  for (const spec of materialized.flatMap(everyTarget)) {
+  for (const spec of materialized.flatMap(materializedTargets)) {
     if (spec.kind === "stackTarget") {
       opener ??= stackOpener(spec.selector);
       continue;
