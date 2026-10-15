@@ -1,0 +1,647 @@
+{
+  "bead": "hv-umm2.748",
+  "base": "9d0e59b4f9878b557f6be8d4bac93844e8caabdf",
+  "originalDispatch": "2026-10-15T13:45:06.682Z",
+  "samplingModelStart": "UNKNOWN",
+  "workspace": "/Users/dthurn/dreamtides_web/.worktrees/c12-removal748-root",
+  "stage1Proposal": "/tmp/748-root/stage1-proposal.md",
+  "writeAdmission": "/tmp/748-root/write-ack-proof.json",
+  "validationReceipts": [
+    {
+      "name": "baseline01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-type-remap.test.ts",
+        "-t",
+        "removes a restored C12 source"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/c12-removal748-root",
+      "envOverrides": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "start": "2026-10-15T13:49:46.761227+00:00",
+      "end": "2026-10-15T13:49:53.532259+00:00",
+      "seconds": 6.924652917019557,
+      "exit": 1,
+      "waitReturned": true,
+      "pid": 98460,
+      "pgid": 98460,
+      "processGroupAbsent": true,
+      "hostLoad": 7.072265625,
+      "sourceChangedDuringCommand": [],
+      "stdout": "/tmp/748-root/baseline01.stdout",
+      "stderr": "/tmp/748-root/baseline01.stderr",
+      "heavy": false,
+      "capacityWaitSeconds": 0,
+      "executionGuard": "repository review runner for npm commands; direct command otherwise; no external capacity or browser lock",
+      "receipt": {
+        "path": "/tmp/748-root/baseline01.receipt.json",
+        "sha256": "7920548931fdf16623e2f1ea5e92a2c2a3e71aa245bd8c0244afb44d573be688"
+      },
+      "rawHashes": {
+        "stdout": "b607dd14722b372e43927675d4a2915c6f78499e265bb908b1fe8a39cf6146fa",
+        "stderr": "70bf86af64217e7c40d4e56fe8320940cbf7f056ff39511f74fac12301f1ccf2"
+      },
+      "sourceManifestCounts": {
+        "sourcePre": 5717,
+        "sourcePost": 5717
+      },
+      "relevantSourceSHA256": {
+        "sourcePre": {
+          "src/rules/reducer.ts": "2f00067ebd8618eceb9ed8cbf02070364a745d3b8e37c69af5fbdd71739be22a",
+          "src/rules/journey/journey-type-remap.test.ts": "98bb261c6a253418bf370b1e7769e3eff72fe86edf3437e0ed686f74b1e4673e",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        },
+        "sourcePost": {
+          "src/rules/reducer.ts": "2f00067ebd8618eceb9ed8cbf02070364a745d3b8e37c69af5fbdd71739be22a",
+          "src/rules/journey/journey-type-remap.test.ts": "98bb261c6a253418bf370b1e7769e3eff72fe86edf3437e0ed686f74b1e4673e",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        }
+      }
+    },
+    {
+      "name": "repaired01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-type-remap.test.ts",
+        "-t",
+        "removes a restored C12 source"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/c12-removal748-root",
+      "envOverrides": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "start": "2026-10-15T13:50:02.011756+00:00",
+      "end": "2026-10-15T13:50:07.587201+00:00",
+      "seconds": 5.731392250047065,
+      "exit": 0,
+      "waitReturned": true,
+      "pid": 99786,
+      "pgid": 99786,
+      "processGroupAbsent": true,
+      "hostLoad": 6.4541015625,
+      "sourceChangedDuringCommand": [],
+      "stdout": "/tmp/748-root/repaired01.stdout",
+      "stderr": "/tmp/748-root/repaired01.stderr",
+      "heavy": false,
+      "capacityWaitSeconds": 0,
+      "executionGuard": "repository review runner for npm commands; direct command otherwise; no external capacity or browser lock",
+      "receipt": {
+        "path": "/tmp/748-root/repaired01.receipt.json",
+        "sha256": "6fcb104e269d26e478fa53ff87fa0d79d50bbd2b8f3f9253b6fcce5b20c44e58"
+      },
+      "rawHashes": {
+        "stdout": "0fdc25028b03564b2aa0346819576a7578d6f09e5bcf8054af5418150391f37c",
+        "stderr": "cc82cd6064416f8f010d8ef8f5a8331dc561b342f1b334e7f530f17c54af206a"
+      },
+      "sourceManifestCounts": {
+        "sourcePre": 5717,
+        "sourcePost": 5717
+      },
+      "relevantSourceSHA256": {
+        "sourcePre": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "98bb261c6a253418bf370b1e7769e3eff72fe86edf3437e0ed686f74b1e4673e",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        },
+        "sourcePost": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "98bb261c6a253418bf370b1e7769e3eff72fe86edf3437e0ed686f74b1e4673e",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        }
+      }
+    },
+    {
+      "name": "focused01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-type-remap.test.ts",
+        "src/rules/reducer.test.ts",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-before-battle-purge.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/c12-removal748-root",
+      "envOverrides": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "start": "2026-10-15T13:51:15.362629+00:00",
+      "end": "2026-10-15T13:51:21.309526+00:00",
+      "seconds": 6.106375250034034,
+      "exit": 1,
+      "waitReturned": true,
+      "pid": 6170,
+      "pgid": 6170,
+      "processGroupAbsent": true,
+      "hostLoad": 6.37109375,
+      "sourceChangedDuringCommand": [],
+      "stdout": "/tmp/748-root/focused01.stdout",
+      "stderr": "/tmp/748-root/focused01.stderr",
+      "heavy": false,
+      "capacityWaitSeconds": 0,
+      "executionGuard": "repository review runner for npm commands; direct command otherwise; no external capacity or browser lock",
+      "receipt": {
+        "path": "/tmp/748-root/focused01.receipt.json",
+        "sha256": "ebf288612b55a14b804e400889a283dae0658d25d41af9f34f9f12b31913a23f"
+      },
+      "rawHashes": {
+        "stdout": "996fc9820e6647d7a7adf1ab6a1efc626ef7c5834cf02adb8a56cf4bbc271907",
+        "stderr": "7fb4e5c76560b6d807ad3fbd55d1b9eff529fae21cb9eb794e68ee15075ad203"
+      },
+      "sourceManifestCounts": {
+        "sourcePre": 5717,
+        "sourcePost": 5717
+      },
+      "relevantSourceSHA256": {
+        "sourcePre": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "2bcb34c1d78ce38e121a77215354b3d86c5c40ff9cf626e7e2242fc7cba6378d",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        },
+        "sourcePost": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "2bcb34c1d78ce38e121a77215354b3d86c5c40ff9cf626e7e2242fc7cba6378d",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        }
+      }
+    },
+    {
+      "name": "focused02",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-type-remap.test.ts",
+        "src/rules/reducer.test.ts",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-before-battle-purge.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/c12-removal748-root",
+      "envOverrides": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "start": "2026-10-15T13:51:30.419733+00:00",
+      "end": "2026-10-15T13:51:36.369567+00:00",
+      "seconds": 6.102781459048856,
+      "exit": 0,
+      "waitReturned": true,
+      "pid": 7352,
+      "pgid": 7352,
+      "processGroupAbsent": true,
+      "hostLoad": 6.99658203125,
+      "sourceChangedDuringCommand": [],
+      "stdout": "/tmp/748-root/focused02.stdout",
+      "stderr": "/tmp/748-root/focused02.stderr",
+      "heavy": false,
+      "capacityWaitSeconds": 0,
+      "executionGuard": "repository review runner for npm commands; direct command otherwise; no external capacity or browser lock",
+      "receipt": {
+        "path": "/tmp/748-root/focused02.receipt.json",
+        "sha256": "9ae7c79c0ac1bf8fef9a66df897745284f24a8af26940f74665a939ca874fa34"
+      },
+      "rawHashes": {
+        "stdout": "69a079d04ab62346817c11721eb5ea13a5acca174b6cd8afed71ffae1af1055d",
+        "stderr": "cc82cd6064416f8f010d8ef8f5a8331dc561b342f1b334e7f530f17c54af206a"
+      },
+      "sourceManifestCounts": {
+        "sourcePre": 5717,
+        "sourcePost": 5717
+      },
+      "relevantSourceSHA256": {
+        "sourcePre": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "9120af93c40326b3d09ca0ce0fdaa31558cb6fe090d310247e655cc59a64cd9c",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        },
+        "sourcePost": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "9120af93c40326b3d09ca0ce0fdaa31558cb6fe090d310247e655cc59a64cd9c",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        }
+      }
+    },
+    {
+      "name": "review01",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/c12-removal748-root",
+      "envOverrides": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "start": "2026-10-15T13:52:29.497401+00:00",
+      "end": "2026-10-15T13:53:13.221204+00:00",
+      "seconds": 44.26337425003294,
+      "exit": 2,
+      "waitReturned": true,
+      "pid": 11632,
+      "pgid": 11632,
+      "processGroupAbsent": true,
+      "hostLoad": 5.83837890625,
+      "sourceChangedDuringCommand": [],
+      "stdout": "/tmp/748-root/review01.stdout",
+      "stderr": "/tmp/748-root/review01.stderr",
+      "heavy": false,
+      "capacityWaitSeconds": 0,
+      "executionGuard": "repository review runner for npm commands; direct command otherwise; no external capacity or browser lock",
+      "receipt": {
+        "path": "/tmp/748-root/review01.receipt.json",
+        "sha256": "f30f393a32cf823ce63bce912cc648d26538a69a8516f02734843042675aa3a6"
+      },
+      "rawHashes": {
+        "stdout": "c57e56fd2484ebbd5728aa4dc62bc98c4c98aa058eca387e3aa900194417fc5d",
+        "stderr": "cc82cd6064416f8f010d8ef8f5a8331dc561b342f1b334e7f530f17c54af206a"
+      },
+      "sourceManifestCounts": {
+        "sourcePre": 5717,
+        "sourcePost": 5717
+      },
+      "relevantSourceSHA256": {
+        "sourcePre": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "d173be90edb82bfef36de3f580a11760c44dca9f853986c2afe672e506c8d2e8",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        },
+        "sourcePost": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "d173be90edb82bfef36de3f580a11760c44dca9f853986c2afe672e506c8d2e8",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        }
+      }
+    },
+    {
+      "name": "review02",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/c12-removal748-root",
+      "envOverrides": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "start": "2026-10-15T13:53:20.473858+00:00",
+      "end": "2026-10-15T13:53:58.149997+00:00",
+      "seconds": 38.17939237499377,
+      "exit": 0,
+      "waitReturned": true,
+      "pid": 15315,
+      "pgid": 15315,
+      "processGroupAbsent": true,
+      "hostLoad": 8.1298828125,
+      "sourceChangedDuringCommand": [],
+      "stdout": "/tmp/748-root/review02.stdout",
+      "stderr": "/tmp/748-root/review02.stderr",
+      "heavy": false,
+      "capacityWaitSeconds": 0,
+      "executionGuard": "repository review runner for npm commands; direct command otherwise; no external capacity or browser lock",
+      "receipt": {
+        "path": "/tmp/748-root/review02.receipt.json",
+        "sha256": "efea778603b82174ffbed6ec73b01605ed491e35ba8044b76cf6518561788b9d"
+      },
+      "rawHashes": {
+        "stdout": "a3802db2423d27fc1779ba33d656050929ec96e6b0c0fe81b0237d2da6d0d980",
+        "stderr": "cc82cd6064416f8f010d8ef8f5a8331dc561b342f1b334e7f530f17c54af206a"
+      },
+      "sourceManifestCounts": {
+        "sourcePre": 5717,
+        "sourcePost": 5717
+      },
+      "relevantSourceSHA256": {
+        "sourcePre": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "a93d219c8bf64ce01a88495f6eced35f0faae420136659493c66dee3ef04e244",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        },
+        "sourcePost": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "a93d219c8bf64ce01a88495f6eced35f0faae420136659493c66dee3ef04e244",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        }
+      }
+    },
+    {
+      "name": "knip01",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/c12-removal748-root",
+      "envOverrides": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "start": "2026-10-15T13:54:03.056688+00:00",
+      "end": "2026-10-15T13:54:07.837753+00:00",
+      "seconds": 4.9279192090034485,
+      "exit": 0,
+      "waitReturned": true,
+      "pid": 18266,
+      "pgid": 18266,
+      "processGroupAbsent": true,
+      "hostLoad": 7.13720703125,
+      "sourceChangedDuringCommand": [],
+      "stdout": "/tmp/748-root/knip01.stdout",
+      "stderr": "/tmp/748-root/knip01.stderr",
+      "heavy": false,
+      "capacityWaitSeconds": 0,
+      "executionGuard": "repository review runner for npm commands; direct command otherwise; no external capacity or browser lock",
+      "receipt": {
+        "path": "/tmp/748-root/knip01.receipt.json",
+        "sha256": "60731a85268a12be11261312d7121d177aa1c4f849f5d8608ec4bbe6ea09bd00"
+      },
+      "rawHashes": {
+        "stdout": "77612c44ba1ecd76cf1686cb2d6fed7c0831b2fc2d6251eb6151d14e2904bf2e",
+        "stderr": "cc82cd6064416f8f010d8ef8f5a8331dc561b342f1b334e7f530f17c54af206a"
+      },
+      "sourceManifestCounts": {
+        "sourcePre": 5717,
+        "sourcePost": 5717
+      },
+      "relevantSourceSHA256": {
+        "sourcePre": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "a93d219c8bf64ce01a88495f6eced35f0faae420136659493c66dee3ef04e244",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        },
+        "sourcePost": {
+          "src/rules/reducer.ts": "9ea56c7d027353f352d238791394182f6932a0918a187b5340c148c024f8db17",
+          "src/rules/journey/journey-type-remap.test.ts": "a93d219c8bf64ce01a88495f6eced35f0faae420136659493c66dee3ef04e244",
+          "src/rules/journey/journey-type-remap-fixtures.ts": "832330784a46bda57e1b7fa19ae4d8f11935f3af4178596a04484387eda99c59"
+        }
+      }
+    }
+  ],
+  "failurePaths": [
+    {
+      "path": "safe source loss / later exact resolution / battle and prompt identity",
+      "tests": [
+        "removes a restored C12 source while preserving its actual suspended engine prompt and earned choice"
+      ]
+    },
+    {
+      "path": "mid-step failure / partial write / independent nested permission invalidation",
+      "tests": [
+        "refuses destructive nested copy removal with an actual engine prompt, starter=false",
+        "refuses destructive nested copy removal with an actual engine prompt, starter=true",
+        "keeps mixed acquisition permissions and refuses destructive nested removal: %s/%s/%s"
+      ],
+      "proof": "The public LOAD accepts the saved C12 and genuine acquired copy/starter permissions with a real engine in-flight prompt. Removing Mask, the copy source or another physical holding is refused with original FoldState reference. Resolving C12 returns exact saved independent continuation."
+    },
+    {
+      "path": "reload / restart / saved binding",
+      "tests": [
+        "keeps non-C12 engine prompts and saved battle provenance strict",
+        "round-trips the actual compacted codec and rejects forged scalar, source order and foreign-node site",
+        "rejects inconsistent null versus nested suspended bindings in the actual codec",
+        "preserves a live battle through choice and reload, tutorial=%s",
+        "replays the real local event stream with completed and pending state intact"
+      ]
+    },
+    {
+      "path": "invalid removal / stale permission / blocked other gameplay",
+      "tests": [
+        "retains removal validation and ordinary CAS while a C12 choice suspends an engine prompt",
+        "refuses partial/stale/foreign choices and other gameplay atomically"
+      ]
+    },
+    {
+      "path": "concurrent actors / unknown conflict / partner conflict / self-chain / neutral event",
+      "tests": [
+        "retains removal validation and ordinary CAS while a C12 choice suspends an engine prompt",
+        "rule 3 \u2014 compare-and-swap window"
+      ]
+    },
+    {
+      "path": "unrelated prompt removal remains blocked",
+      "tests": [
+        "keeps non-C12 engine prompts and saved battle provenance strict"
+      ]
+    },
+    {
+      "path": "earned starter and postbattle permission source lifetime",
+      "tests": [
+        "restores the exact earned pre-battle permission after C12 and hands the drained scalar/deck to ordinary initialization",
+        "resumes the actual remaining earned purposes after an earned Mask, final=%s"
+      ],
+      "applicability": "Earned starter/afterbattle permissions do not require the source currently held. No invented held-source refusal assertion is appropriate. The nested-copy cases prove destructive invalidation under an optional starter wrapper; existing validators and earned-route tests preserve saved continuation contracts."
+    },
+    {
+      "path": "asynchronous interruption / storage crash timing",
+      "applicability": "No asynchronous I/O or new process is introduced by this synchronous pure reducer transition. Atomic refusal and accepted save/reload exercise its observable persistence boundaries; no crash-timing injection applies."
+    }
+  ],
+  "runtimeLedger": {
+    "servers": [],
+    "browsers": [],
+    "heavySlots": [],
+    "capacityWaitSeconds": 0,
+    "environment": "Per-command JOURNEY_TEST_WORKERS=2 only; no global environment or NODE_OPTIONS workaround. Repository runner owns execution guard; focused/review/knip require no D17 heavy slot.",
+    "commands": [
+      {
+        "name": "baseline01",
+        "pid": 98460,
+        "pgid": 98460,
+        "terminalExit": 1,
+        "waitReturned": true,
+        "processGroupAbsent": true
+      },
+      {
+        "name": "repaired01",
+        "pid": 99786,
+        "pgid": 99786,
+        "terminalExit": 0,
+        "waitReturned": true,
+        "processGroupAbsent": true
+      },
+      {
+        "name": "focused01",
+        "pid": 6170,
+        "pgid": 6170,
+        "terminalExit": 1,
+        "waitReturned": true,
+        "processGroupAbsent": true
+      },
+      {
+        "name": "focused02",
+        "pid": 7352,
+        "pgid": 7352,
+        "terminalExit": 0,
+        "waitReturned": true,
+        "processGroupAbsent": true
+      },
+      {
+        "name": "review01",
+        "pid": 11632,
+        "pgid": 11632,
+        "terminalExit": 2,
+        "waitReturned": true,
+        "processGroupAbsent": true
+      },
+      {
+        "name": "review02",
+        "pid": 15315,
+        "pgid": 15315,
+        "terminalExit": 0,
+        "waitReturned": true,
+        "processGroupAbsent": true
+      },
+      {
+        "name": "knip01",
+        "pid": 18266,
+        "pgid": 18266,
+        "terminalExit": 0,
+        "waitReturned": true,
+        "processGroupAbsent": true
+      }
+    ]
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": [],
+  "testDelta": {
+    "files": 0,
+    "lines": 77,
+    "jsdomFiles": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review02 concurrent checks starting 2026-10-15T13:53:23.469Z, stdout load=7.958984375"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "baseline01",
+      "at": "2026-10-15T13:49:46.761227+00:00",
+      "value": 7.072265625,
+      "scope": "outer wrapper command bracket before npm spawn; review step values are retained in stdout"
+    },
+    {
+      "command": "repaired01",
+      "at": "2026-10-15T13:50:02.011756+00:00",
+      "value": 6.4541015625,
+      "scope": "outer wrapper command bracket before npm spawn; review step values are retained in stdout"
+    },
+    {
+      "command": "focused01",
+      "at": "2026-10-15T13:51:15.362629+00:00",
+      "value": 6.37109375,
+      "scope": "outer wrapper command bracket before npm spawn; review step values are retained in stdout"
+    },
+    {
+      "command": "focused02",
+      "at": "2026-10-15T13:51:30.419733+00:00",
+      "value": 6.99658203125,
+      "scope": "outer wrapper command bracket before npm spawn; review step values are retained in stdout"
+    },
+    {
+      "command": "review01",
+      "at": "2026-10-15T13:52:29.497401+00:00",
+      "value": 5.83837890625,
+      "scope": "outer wrapper command bracket before npm spawn; review step values are retained in stdout"
+    },
+    {
+      "command": "review02",
+      "at": "2026-10-15T13:53:20.473858+00:00",
+      "value": 8.1298828125,
+      "scope": "outer wrapper command bracket before npm spawn; review step values are retained in stdout"
+    },
+    {
+      "command": "knip01",
+      "at": "2026-10-15T13:54:03.056688+00:00",
+      "value": 7.13720703125,
+      "scope": "outer wrapper command bracket before npm spawn; review step values are retained in stdout"
+    }
+  ],
+  "timingScope": "Each early receipt start precedes source prehash; end follows terminal child wait, while seconds also includes posthash/receipt preparation. These are measured outer command brackets, not isolated child CPU times. Per-step UTC starts/wall times are retained in raw runner stdout. All waits include normal subprocess wait; no D17 capacity/browser wait occurred.",
+  "executionGuardClarification": "scripts/review.mjs requiresFullReviewSlot only for full/lint-full/test-full (lines540-545). Ordinary test/quick/knip here use no repository full-review execution lock and no heavy or browser capacity slot. The early generic receipt executionGuard label names the runner, not a claimed lock.",
+  "failures": [
+    {
+      "receipt": "baseline01",
+      "exit": 1,
+      "reason": "Expected public removal applied, observed bounced at the target assertion on unchanged runtime; exact baseline witness retained."
+    },
+    {
+      "receipt": "focused01",
+      "exit": 1,
+      "reason": "Both nested fixture saves attempted LOAD_STATE from a current engine prompt and correctly received prompt_pending. Test ingress changed to accepted pre-prompt paused state; focused02 passed."
+    },
+    {
+      "receipt": "review01",
+      "exit": 2,
+      "reason": "Own readonly CAS test tuple incompatible with mutable EventContext; unnecessary prompt nonnull assertion after helper narrowing. Owning test-only corrections; review02 passed. Related tests in review01 already passed 89 files/6780 tests."
+    }
+  ],
+  "validationResults": {
+    "baseline": "1 failed / 18 skipped in 1 owning file, intentional regression witness",
+    "repairedWitness": "1 passed / 18 skipped in same owning file before further test additions",
+    "focused02": "5 files /95 tests passed",
+    "review02": "lint, both typechecks, import cycles, friction schema, 89 related files/6780 tests passed",
+    "knip01": "passed",
+    "sourceStableDuringCommands": true,
+    "finalOwningCases": 23,
+    "baselineOwningCases": 19,
+    "caseDelta": 4
+  },
+  "sourceScope": {
+    "runtime": "src/rules/reducer.ts exact pendingEnginePrompt condition; one appended C12 REMOVE_DREAMSIGN conjunct",
+    "tests": "src/rules/journey/journey-type-remap.test.ts only; original public actual-prompt producer extracted locally",
+    "fixtureWrites": [],
+    "fallout": [],
+    "peerBodies": "CAS/resolvers/domain removal/finishTransition/engine/registry/on-gain/codec/UI/rules/config untouched",
+    "domainRemoval": "existing single const next remains computed once; existing nested and battle-binding validation retained"
+  },
+  "review": {
+    "status": "required parent-owned fresh read-only Codex changed-range core review after terminal author handoff",
+    "authorSelfReview": false
+  },
+  "rawArchive": "Full 5717-path pre/post maps remain in /tmp/748-root/<name>.receipt.json with raw stdout/stderr and SHA256 citations above; parent may retain them in the primary gitignored QA archive before worktree cleanup.",
+  "finalEvidenceSchema": {
+    "name": "schema01",
+    "argv": [
+      "node",
+      "scripts/friction-triggers.mjs",
+      "--validate-records"
+    ],
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/c12-removal748-root",
+    "envOverrides": {
+      "JOURNEY_TEST_WORKERS": "2"
+    },
+    "start": "2026-10-15T13:54:50.080958+00:00",
+    "end": "2026-10-15T13:54:50.290635+00:00",
+    "seconds": 0.3338242080062628,
+    "exit": 0,
+    "waitReturned": true,
+    "pid": 21432,
+    "pgid": 21432,
+    "processGroupAbsent": true,
+    "hostLoad": 5.4521484375,
+    "sourceChangedDuringCommand": [],
+    "stdout": "/tmp/748-root/schema01.stdout",
+    "stderr": "/tmp/748-root/schema01.stderr",
+    "heavy": false,
+    "capacityWaitSeconds": 0,
+    "executionGuard": "repository review runner for npm commands; direct command otherwise; no external capacity or browser lock",
+    "receiptSHA256": "1af13cb3b8af499607267edf8a5fc0a2a706c4a0f0b2ff8776fd20e33f405615",
+    "sourceManifestCounts": {
+      "sourcePre": 5717,
+      "sourcePost": 5717
+    }
+  },
+  "commitWindow": {
+    "start": "2026-10-15T13:45:06.682Z",
+    "endMeaning": "Final pre-commit observation timestamp in friction implementWindow, verified against real normal Git bracket/tail in /tmp/748-root/final-commit.json. Inclusive dispatch through all Stage1, coordination, failures, checks, evidence and Git; final tail retained separately without self-referential commit writes.",
+    "samplingModelStart": "UNKNOWN"
+  }
+}

@@ -21,6 +21,22 @@ import { pendingEnginePrompt } from "../battle/engine-battle";
 import { MASK, OTHER, DOLL, TEETH, TYPES, nightmareAcquisition, initial, apply, accepted, choicePayload, auguryGains, cards, RED, SLUG, SLIME, SPIDER, sign, install, clear, event, ctx, GENESIS } from "./journey-type-remap-fixtures";
 afterEach(clear);
 
+function suspendedRemap(held: Parameters<typeof initial>[0] = []) {
+  const world = battleWorld({ held, discard: true }); install();
+  const paused = accepted(world.state, "ADD_DREAMSIGN", { dreamsignId: MASK });
+  const card = world.state.battle!.engine.slice.committed.sides.player.hand[0];
+  let played = accepted(world.state, "BATTLE_ACTION", { side: "player", action: { kind: "play", card, from: "hand" } });
+  for (let n = 0; n < 4 && pendingEnginePrompt(played.battle, world.engine) === null; n++) {
+    const side = world.engine.decision(played.battle!.engine.slice.committed)?.side;
+    if (side === undefined) throw new Error("No public decision before prompt");
+    played = accepted(played, "BATTLE_ACTION", { side, action: { kind: "pass" } });
+  }
+  const prompt = pendingEnginePrompt(played.battle, world.engine);
+  if (prompt === null) throw new Error("Missing actual suspended engine prompt");
+  const restored = accepted(paused, "LOAD_STATE", { snapshot: structuredClone(paused.journey), battle: structuredClone(played.battle) });
+  return { world, paused, played, prompt, restored };
+}
+
 describe("earned run type remap", () => {
   it.each([false, true])("retains acquired Nightmare additions and prohibition before the C12 wrapper, prevented=%s", prevented => {
     const { before, result, modifiers, acquired, prohibition } = nightmareAcquisition(prevented);
@@ -118,7 +134,8 @@ describe("earned run type remap", () => {
 
   it.each([[MASK, TEETH, DOLL], [DOLL, MASK, TEETH]])("keeps mixed acquisition permissions and refuses destructive nested removal: %s/%s/%s", (...gains) => {
     let state = auguryGains(gains, [OTHER]);
-    expect(apply(state, "REMOVE_DREAMSIGN", { dreamsignId: MASK }).state).toBe(state);
+    const refused = apply(state, "REMOVE_DREAMSIGN", { dreamsignId: MASK });
+    expect(refused.outcome).toBe("bounced"); expect(refused.state).toBe(state);
     state = accepted(state, "RESOLVE_TYPE_REMAP", choicePayload(state));
     expect(state.journey.screen.type).toBe("journeyStarterPurge");
     if (state.journey.screen.type !== "journeyStarterPurge") throw new Error("missing starter permission");
@@ -219,21 +236,81 @@ describe("earned run type remap", () => {
     expect(replayed.state).toEqual(log.state()); expect(replayed.state.journey.typeRemap).toBe("Mage");
   });
 
-  it("resolves a restored earned choice while the actual suspended battle owes a prompt", () => {
-    const world = battleWorld({ held: [], discard: true }); install();
-    const paused = accepted(world.state, "ADD_DREAMSIGN", { dreamsignId: MASK });
-    const card = world.state.battle!.engine.slice.committed.sides.player.hand[0];
-    let played = accepted(world.state, "BATTLE_ACTION", { side: "player", action: { kind: "play", card, from: "hand" } });
-    for (let n = 0; n < 4 && pendingEnginePrompt(played.battle, world.engine) === null; n++) {
-      const side = world.engine.decision(played.battle!.engine.slice.committed)?.side;
-      if (side === undefined) throw new Error("No public decision before prompt");
-      played = accepted(played, "BATTLE_ACTION", { side, action: { kind: "pass" } });
+  it("removes a restored C12 source while preserving its actual suspended engine prompt and earned choice", () => {
+    const { world, prompt, restored } = suspendedRemap();
+    expect(apply(restored, "BATTLE_CANCEL", { side: "player", promptId: prompt.prompt.id }).state).toBe(restored);
+    const permission = structuredClone(restored.journey.screen), payload = choicePayload(restored);
+    const removed = apply(restored, "REMOVE_DREAMSIGN", { dreamsignId: MASK });
+    expect(removed.outcome).toBe("applied");
+    expect(removed.state.journey.dreamsigns.map(sign => sign.id)).not.toContain(MASK);
+    expect(removed.state.journey.screen).toEqual(permission);
+    expect(removed.state.battle).toBe(restored.battle);
+    expect(pendingEnginePrompt(removed.state.battle, world.engine)).toEqual(prompt);
+    const complete = accepted(removed.state, "RESOLVE_TYPE_REMAP", payload);
+    expect(complete.journey.typeRemap).toBe("Mage");
+    expect(complete.journey.screen).toEqual(world.state.journey.screen);
+    expect(complete.battle).toBe(restored.battle); expect(pendingEnginePrompt(complete.battle, world.engine)).toEqual(prompt);
+  });
+
+  it("retains removal validation and ordinary CAS while a C12 choice suspends an engine prompt", () => {
+    const { world, prompt, restored } = suspendedRemap([OTHER]);
+    for (const payload of [{}, { dreamsignId: null }, { dreamsignId: 1 }, { dreamsignId: "invalid" }, { dreamsignId: DOLL }]) {
+      const result = apply(restored, "REMOVE_DREAMSIGN", payload);
+      expect(result.outcome).toBe("bounced"); expect(result.state).toBe(restored);
     }
-    const prompt = pendingEnginePrompt(played.battle, world.engine); expect(prompt).not.toBeNull();
-    const restored = accepted(paused, "LOAD_STATE", { snapshot: structuredClone(paused.journey), battle: structuredClone(played.battle) });
-    expect(apply(restored, "BATTLE_CANCEL", { side: "player", promptId: prompt!.prompt.id }).state).toBe(restored);
-    const complete = accepted(restored, "RESOLVE_TYPE_REMAP", choicePayload(restored));
-    expect(complete.battle).toBe(restored.battle); expect(pendingEnginePrompt(complete.battle, world.engine)?.prompt.id).toBe(prompt!.prompt.id);
+    for (const [context, reason] of [
+      [{ intervening: "unknown" }, "unknown_conflict"],
+      [{ intervening: [{ seq: 12, type: "ADD_CARD", actor: testEventActor("bob") }] }, "partner_conflict"],
+    ] satisfies [Parameters<typeof apply>[3], string][]) {
+      const result = apply(restored, "REMOVE_DREAMSIGN", { dreamsignId: MASK }, context);
+      expect(result.bounceReason).toBe(reason); expect(result.state).toBe(restored);
+    }
+    for (const [actor, type] of [["alice", "ADD_CARD"], ["bob", "SET_CARD_SOURCE_DEBUG"]] as const) {
+      const result = apply(restored, "REMOVE_DREAMSIGN", { dreamsignId: MASK }, { intervening: [{ seq: 12, type, actor: testEventActor(actor) }] });
+      expect(result.outcome).toBe("applied"); expect(result.state.journey.screen).toEqual(restored.journey.screen);
+      expect(result.state.battle).toBe(restored.battle); expect(pendingEnginePrompt(result.state.battle, world.engine)).toEqual(prompt);
+    }
+    const removed = accepted(restored, "REMOVE_DREAMSIGN", { dreamsignId: MASK });
+    const stale = apply(removed, "RESOLVE_TYPE_REMAP", { ...choicePayload(restored), permissionSeq: choicePayload(restored).permissionSeq + 1 });
+    expect(stale.outcome).toBe("bounced"); expect(stale.state).toBe(removed);
+    for (const [type, payload] of [["ADD_CARD", { cardId: cards[0].id }], ["BATTLE_ACTION", { side: "player", action: { kind: "pass" } }]] as const) {
+      const result = apply(restored, type, payload);
+      expect(result.bounceReason).toBe("prompt_pending"); expect(result.state).toBe(restored);
+    }
+  });
+
+  it("keeps non-C12 engine prompts and saved battle provenance strict", () => {
+    const { world, paused, played, prompt, restored } = suspendedRemap([OTHER]);
+    const blocked = apply(played, "REMOVE_DREAMSIGN", { dreamsignId: OTHER });
+    expect(blocked.bounceReason).toBe("prompt_pending"); expect(blocked.state).toBe(played);
+    const screen = restored.journey.screen;
+    if (screen.type !== "journeyDreamsign" || screen.choice.kind !== "typeRemap") throw new Error("Missing restored C12 choice");
+    for (const binding of [null, { mode: "journey", battleId: parseBattleId("remap-foreign-battle") }, { mode: "tutorial", battleId: restored.battle!.init.battleId }]) {
+      const result = apply(paused, "LOAD_STATE", { snapshot: { ...restored.journey, screen: { ...screen, choice: { ...screen.choice, suspendedBattle: binding } } }, battle: structuredClone(played.battle) });
+      expect(result.outcome).toBe("bounced"); expect(result.state).toBe(paused);
+    }
+    expect(pendingEnginePrompt(restored.battle, world.engine)).toEqual(prompt);
+  });
+
+  it.each([false, true])("refuses destructive nested copy removal with an actual engine prompt, starter=%s", starter => {
+    const acquired = auguryGains(starter ? [MASK, TEETH, DOLL] : [MASK, DOLL], [OTHER]);
+    const { world, paused, prompt, restored } = suspendedRemap([OTHER]);
+    const earned = acquired.journey.screen, live = restored.journey.screen;
+    if (earned.type !== "journeyDreamsign" || earned.choice.kind !== "typeRemap" || live.type !== "journeyDreamsign" || live.choice.kind !== "typeRemap") throw new Error("Missing genuine C12 acquisitions");
+    const saved = earned.choice.continuation;
+    const copy = saved.type === "journeyStarterPurge" ? saved.choice.continuation : saved;
+    if (copy.type !== "journeyDreamsign" || copy.choice.kind !== "copy") throw new Error("Missing genuine copy continuation");
+    const boundCopy = { ...copy, choice: { ...copy.choice, suspendedBattle: live.choice.suspendedBattle, continuation: live.choice.continuation } };
+    const continuation = saved.type === "journeyStarterPurge" ? { ...saved, choice: { ...saved.choice, suspendedBattle: live.choice.suspendedBattle, continuation: boundCopy } } : boundCopy;
+    const state = accepted(paused, "LOAD_STATE", { snapshot: { ...restored.journey, dreamsigns: acquired.journey.dreamsigns, screen: { ...earned, choice: { ...earned.choice, suspendedBattle: live.choice.suspendedBattle, continuation } } }, battle: structuredClone(restored.battle) });
+    for (const dreamsignId of [MASK, DOLL, OTHER]) {
+      const result = apply(state, "REMOVE_DREAMSIGN", { dreamsignId });
+      expect(result.outcome).toBe("bounced"); expect(result.state).toBe(state);
+      expect(pendingEnginePrompt(result.state.battle, world.engine)).toEqual(prompt);
+    }
+    const resumed = accepted(state, "RESOLVE_TYPE_REMAP", choicePayload(state));
+    expect(resumed.journey.screen).toEqual(continuation); expect(resumed.battle).toBe(state.battle);
+    expect(pendingEnginePrompt(resumed.battle, world.engine)).toEqual(prompt);
   });
 
   it.each([false, true])("preserves a live battle through choice and reload, tutorial=%s", tutorial => {

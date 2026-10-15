@@ -112,7 +112,7 @@ export function reduceGameEvent(
     }
     // rule 4 — prompt gate
     if (
-      pendingEnginePrompt(state.battle, battleEngine()) !== null && !(event.type === "RESOLVE_TYPE_REMAP" && validTypeRemapIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_DREAMSIGN_COPY" && validDreamsignCopyIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_STARTER_PURGE" && validStarterPurgeIntent(state.journey, event.payload ?? {}, state.battle, modifiers))
+      pendingEnginePrompt(state.battle, battleEngine()) !== null && !(event.type === "RESOLVE_TYPE_REMAP" && validTypeRemapIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_DREAMSIGN_COPY" && validDreamsignCopyIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_STARTER_PURGE" && validStarterPurgeIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "REMOVE_DREAMSIGN" && state.journey.screen.type === "journeyDreamsign" && state.journey.screen.choice.kind === "typeRemap")
     ) {
       return bounce(state, "prompt_pending");
     }
