@@ -71,6 +71,14 @@ export function whenNamedAbilityTriggered(named: NamedTrigger, player: PlayerRef
   return { on: "namedAbilityTriggered", named, player };
 }
 
+/** The player's first hand-empty or successful named-ability occasion in the whole turn. */
+export function firstTimeEachTurn(trigger: Trigger): Trigger {
+  if (trigger.on !== "handBecomesEmpty" && trigger.on !== "namedAbilityTriggered") {
+    throw new Error("A first-time trigger requires a hand-empty or named-ability occasion");
+  }
+  return { ...trigger, firstTimeEachTurn: true };
+}
+
 /** "When you play a card matching `filter`", or "your `nth` such card this turn". */
 export function whenYouPlay(filter: CardFilter = {}, nth?: number): Trigger {
   return { on: "play", player: "you", filter, ...(nth === undefined ? {} : { nth }) };

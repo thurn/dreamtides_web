@@ -708,7 +708,16 @@ export interface TurnDeparture {
   readonly cardType: "character" | "event";
 }
 
+/** Bounded current-turn facts; known named categories are viewer-qualified subsets. */
+export interface FirstOccurrences {
+  handEmptied: Record<Side, boolean>;
+  named: Record<Side, NamedTrigger[]>;
+  known: Record<Side, Record<Side, NamedTrigger[]>>;
+}
+
 export interface TurnLog {
+  /** Absent legacy history begins conservatively empty. */
+  firstOccurrences?: FirstOccurrences;
   /** Completed discard occurrence counts, including cards that cease to exist. */
   discarded?: Record<Side, number>;
   /** Physical completed discards, grouped by the hand they left; repeated occurrences are retained. */

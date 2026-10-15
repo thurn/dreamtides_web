@@ -1222,10 +1222,24 @@ function isQueuedTriggerRecord(value: unknown): boolean {
   );
 }
 
+/** Exact bounded first-occasion facts; observer knowledge is a subset of actual facts. */
+function isFirstOccurrences(value: unknown): boolean {
+  const exactSides = (record: unknown, guard: Guard): record is Record<Side, unknown> =>
+    isPlainRecord(record) && Object.keys(record).length === 2 && SIDES.every(side => guard(record[side]));
+  const names = (set: unknown): boolean => Array.isArray(set) &&
+    set.every(isNamedTrigger) && new Set(set).size === set.length;
+  if (!isPlainRecord(value) || Object.keys(value).length !== 3 ||
+      !exactSides(value.handEmptied, isBoolean) || !exactSides(value.named, names)) return false;
+  const actual = value.named;
+  return exactSides(value.known, sets => exactSides(sets, names) && SIDES.every(side =>
+    (sets[side] as unknown[]).every(named => (actual[side] as unknown[]).includes(named))));
+}
+
 function isTurnLog(value: unknown): boolean {
   const departures = optional(sideRecord(arrayOf(card => isPlainRecord(card) && isInstanceId(card.instance) && isCardKind(card.cardType))));
   return (
     isPlainRecord(value) &&
+    optional(isFirstOccurrences)(value.firstOccurrences) &&
     optional(sideRecord(arrayOf(isInstanceId)))(value.discardedCards) &&
     optional(sideRecord(isIndex))(value.discarded) && departures(value.leftPlay) && departures(value.dissolved) && departures(value.abandoned) &&
     sideRecord(

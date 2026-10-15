@@ -1,3 +1,6 @@
+import { firstTimeEachTurn, triggered, whenHandBecomesEmpty } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { draw } from "../../engine/effects/primitives/draw";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +13,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
   tags: ["J15", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(firstTimeEachTurn(whenHandBecomesEmpty()), draw(1))],
+  verifiedText: expectedVerifiedText("The first time each turn your hand becomes empty, draw a card."),
 });

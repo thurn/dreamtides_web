@@ -1,0 +1,42 @@
+{
+  "bead": "hv-umm2.237",
+  "phase": 5,
+  "implementMin": 72.33130426666666,
+  "implementWindow": {
+    "start": "2026-10-15T00:40:26.407000+00:00",
+    "end": "2026-10-15T01:52:46.285256+00:00"
+  },
+  "localValidationS": {
+    "focusedAttempts": 106.57474062498659,
+    "review": 63.16903270804323,
+    "knip": 4.881309000018518,
+    "restoredCounterfactuals": 30.84594324999489,
+    "compatibility": 7.423225042002741,
+    "typecheckAttempt": 16.676698291965295,
+    "inventoryGeneration": 2.2141050830250606,
+    "full": 98.5739539579954,
+    "fuzz": 461.3856027920265,
+    "preflight": 3.1385012500104494,
+    "sweep": 16.76915754203219,
+    "judgedWorkflowAttempts": 236.02468625002075,
+    "diagnostic": 9.117173917009495
+  },
+  "hostLoad": 8.13,
+  "testDelta": {
+    "files": 2,
+    "lines": 361,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 15.097961,
+      "note": "Full and weighted300 outer-wrapper durations minus actual execution; includes native slot wait and wrapper overhead, not isolated idle/CPU time."
+    },
+    {
+      "tag": "card-sweep-presentation-readiness",
+      "minutes": 10.519127716666667,
+      "note": "Observed workflow-v01 start through workflow-v02 completion includes completed desktopCharm, failed later caller, bounded diagnostic/recovery and remaining3cell execution. Root caller now waits existing playabletrue+rolebutton; no product bug proved, no isolated editing-time claim."
+    }
+  ]
+}

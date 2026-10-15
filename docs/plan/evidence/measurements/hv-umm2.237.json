@@ -1,0 +1,919 @@
+{
+  "bead": "hv-umm2.237",
+  "phase": 5,
+  "base": "abf6062de4adf8123370839e966d57f61af167b9",
+  "source": {
+    "freezeSHA256": "070c1cdf55c4aca67ee12662d50687022f67d66cd6b11e4fb48bf5c94834d4fd",
+    "paths": 22,
+    "archive": {
+      "directory": "source-acceptance-v01",
+      "files": 354,
+      "bytes": 46304476,
+      "manifestSHA256": "e7d0a0fc61a9001ca44979271312952325c18256f2f135014da0bc6acf77d70f"
+    },
+    "qualification": "Every accepted command/app run used base plus the frozen22-path overlay; automatic ledger commit fields identify base HEAD and do not claim validation of unmodified base."
+  },
+  "implementationWindow": {
+    "start": "2026-10-15T00:40:26.407000+00:00",
+    "status": "Actual evidence cutoff immediately before cheap schema and exact Git boundary; actual Git tail retained outside commit, not included in this cutoff.",
+    "includes": "research, source inspection, ACK waits, implementation, checks, heavy-slot waits, QA, failure recovery and evidence",
+    "modelSamplingStart": "unknown",
+    "immediatePreGitCutoff": "2026-10-15T01:52:46.285256+00:00",
+    "elapsedMinutesToPreGitCutoff": 72.33130426666666
+  },
+  "historicalPriorOwner": {
+    "start": "2026-10-14T08:46:04.871Z",
+    "end": "2026-10-14T08:58:24.942402Z",
+    "base": "b8b66925609c63ce06b5470ca13707eb980fd633",
+    "scope": "source-free research checkpoint only; no ownership or implementation/approval transfer",
+    "releaseDependencyGap": "distinct from current fresh-owner interval; not measured here"
+  },
+  "setup": {
+    "npmInstallSeconds": 3.028961583,
+    "scope": "parent fresh-worktree setup, separate from helper dispatch"
+  },
+  "validationSeconds": {
+    "focusedAttempts": 106.57474062498659,
+    "review": 63.16903270804323,
+    "knip": 4.881309000018518,
+    "restoredCounterfactuals": 30.84594324999489,
+    "compatibility": 7.423225042002741,
+    "typecheckAttempt": 16.676698291965295,
+    "inventoryGeneration": 2.2141050830250606,
+    "full": 98.5739539579954,
+    "fuzz": 461.3856027920265,
+    "preflight": 3.1385012500104494,
+    "sweep": 16.76915754203219,
+    "judgedWorkflowAttempts": 236.02468625002075,
+    "diagnostic": 9.117173917009495
+  },
+  "heavySlot": {
+    "fullOuterSeconds": 519.1471737499814,
+    "fullActualSeconds": 98.5739539579954,
+    "fuzzOuterSeconds": 946.6900354170357,
+    "fuzzActualSeconds": 461.3856027920265,
+    "differenceSecondsIncludingWaitAndWrapperOverhead": 905.8776524169953,
+    "differenceMinutesIncludingWaitAndWrapperOverhead": 15.097961,
+    "scope": "Outer minus execution receipts includes native lock wait and wrapper overhead. No productive-time or CPU inference."
+  },
+  "hostLoadSamples": {
+    "diagnostic-v01-initial": {
+      "start": "2026-10-15T01:37:45.627693+00:00",
+      "end": "2026-10-15T01:37:49.865662+00:00",
+      "exit": 0,
+      "wallSeconds": 4.237757958995644,
+      "pid": 9572,
+      "pgid": 9572,
+      "load": "{ 2.79 4.67 7.34 }",
+      "groupRemainingAtExit": []
+    },
+    "diagnostic-v01-observer": {
+      "start": "2026-10-15T01:37:45.627564+00:00",
+      "end": "2026-10-15T01:37:54.835954+00:00",
+      "exit": 0,
+      "wallSeconds": 9.208233625045978,
+      "pid": 9573,
+      "pgid": 9573,
+      "load": "{ 2.79 4.67 7.34 }",
+      "groupRemainingAtExit": []
+    },
+    "diagnostic-v01": {
+      "start": "2026-10-15T01:37:45.595637+00:00",
+      "end": "2026-10-15T01:37:54.713130+00:00",
+      "exit": 0,
+      "wallSeconds": 9.117173917009495,
+      "pid": 9567,
+      "pgid": 9567,
+      "load": "{ 2.79 4.67 7.34 }",
+      "groupRemainingAtExit": []
+    },
+    "entities-v01": {
+      "start": "2026-10-15T00:39:20.014616+00:00",
+      "end": "2026-10-15T00:39:21.345342+00:00",
+      "exit": 0,
+      "wallSeconds": 1.3306282499688677,
+      "pid": 5899,
+      "pgid": 5899,
+      "load": "{ 10.78 15.16 15.56 }",
+      "groupRemainingAtExit": []
+    },
+    "heavy-full-slot-v01": {
+      "start": "2026-10-15T01:05:52.150389+00:00",
+      "end": "2026-10-15T01:14:31.306622+00:00",
+      "exit": 0,
+      "wallSeconds": 519.1471737499814,
+      "pid": 18785,
+      "pgid": 18785,
+      "load": "{ 7.66 9.89 11.38 }",
+      "groupRemainingAtExit": []
+    },
+    "heavy-full-v01": {
+      "start": "2026-10-15T01:12:52.686505+00:00",
+      "end": "2026-10-15T01:14:31.262463+00:00",
+      "exit": 0,
+      "wallSeconds": 98.5739539579954,
+      "pid": 59254,
+      "pgid": 59254,
+      "load": "{ 4.53 5.43 8.46 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-combined-dawn-red-v01": {
+      "start": "2026-10-15T01:01:56.885180+00:00",
+      "end": "2026-10-15T01:02:04.944462+00:00",
+      "exit": 1,
+      "wallSeconds": 8.059075083001517,
+      "pid": 54667,
+      "pgid": 54667,
+      "load": "{ 9.67 12.05 12.42 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-combined-dawn-red-v02": {
+      "start": "2026-10-15T01:02:44.996690+00:00",
+      "end": "2026-10-15T01:02:54.630428+00:00",
+      "exit": 1,
+      "wallSeconds": 9.633457833027933,
+      "pid": 356,
+      "pgid": 356,
+      "load": "{ 9.09 11.55 12.21 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-current-basecompat-v01": {
+      "start": "2026-10-15T00:58:31.143064+00:00",
+      "end": "2026-10-15T00:58:35.032944+00:00",
+      "exit": 0,
+      "wallSeconds": 3.889744875021279,
+      "pid": 82978,
+      "pgid": 82978,
+      "load": "{ 7.73 8.87 11.35 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-fault-global-v01": {
+      "start": "2026-10-15T00:59:22.763587+00:00",
+      "end": "2026-10-15T00:59:35.296748+00:00",
+      "exit": 1,
+      "wallSeconds": 12.532819291984197,
+      "pid": 86380,
+      "pgid": 86380,
+      "load": "{ 17.67 11.37 12.13 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-fault-privacy-v01": {
+      "start": "2026-10-15T01:00:07.878686+00:00",
+      "end": "2026-10-15T01:00:16.490520+00:00",
+      "exit": 1,
+      "wallSeconds": 8.61152995802695,
+      "pid": 22035,
+      "pgid": 22035,
+      "load": "{ 23.74 13.79 12.98 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-fault-sibling-v01": {
+      "start": "2026-10-15T00:59:45.776448+00:00",
+      "end": "2026-10-15T00:59:55.478318+00:00",
+      "exit": 1,
+      "wallSeconds": 9.701593999983743,
+      "pid": 87904,
+      "pgid": 87904,
+      "load": "{ 19.95 12.48 12.52 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-first-contract-v01": {
+      "start": "2026-10-15T00:52:56.553017+00:00",
+      "end": "2026-10-15T00:53:07.117975+00:00",
+      "exit": 0,
+      "wallSeconds": 10.564557624980807,
+      "pid": 67218,
+      "pgid": 67218,
+      "load": "{ 9.74 12.38 13.33 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-first-contract-v02": {
+      "start": "2026-10-15T00:54:28.591290+00:00",
+      "end": "2026-10-15T00:54:36.491936+00:00",
+      "exit": 1,
+      "wallSeconds": 7.9004391669877805,
+      "pid": 72881,
+      "pgid": 72881,
+      "load": "{ 8.87 11.46 12.88 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-first-contract-v03": {
+      "start": "2026-10-15T00:55:14.966296+00:00",
+      "end": "2026-10-15T00:55:22.687981+00:00",
+      "exit": 1,
+      "wallSeconds": 7.721430832985789,
+      "pid": 76137,
+      "pgid": 76137,
+      "load": "{ 7.71 10.76 12.55 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-first-contract-v04": {
+      "start": "2026-10-15T00:55:58.658564+00:00",
+      "end": "2026-10-15T00:56:08.204409+00:00",
+      "exit": 1,
+      "wallSeconds": 9.545599625038449,
+      "pid": 78803,
+      "pgid": 78803,
+      "load": "{ 7.81 10.37 12.31 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-first-contract-v05": {
+      "start": "2026-10-15T00:56:43.564696+00:00",
+      "end": "2026-10-15T00:56:49.961564+00:00",
+      "exit": 0,
+      "wallSeconds": 6.396683709055651,
+      "pid": 80374,
+      "pgid": 80374,
+      "load": "{ 7.42 9.90 12.04 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-focused-final-v01": {
+      "start": "2026-10-15T01:00:39.143837+00:00",
+      "end": "2026-10-15T01:00:48.045485+00:00",
+      "exit": 1,
+      "wallSeconds": 8.901383249962237,
+      "pid": 45810,
+      "pgid": 45810,
+      "load": "{ 18.90 13.62 12.95 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-focused-final-v02": {
+      "start": "2026-10-15T01:01:18.264571+00:00",
+      "end": "2026-10-15T01:01:38.149056+00:00",
+      "exit": 0,
+      "wallSeconds": 19.884063165984116,
+      "pid": 52025,
+      "pgid": 52025,
+      "load": "{ 13.46 12.92 12.72 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-inventory-test-v01": {
+      "start": "2026-10-15T00:58:53.060297+00:00",
+      "end": "2026-10-15T00:59:03.632372+00:00",
+      "exit": 1,
+      "wallSeconds": 10.571786916989367,
+      "pid": 84480,
+      "pgid": 84480,
+      "load": "{ 11.94 9.79 11.63 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-inventory-v01": {
+      "start": "2026-10-15T00:57:25.243680+00:00",
+      "end": "2026-10-15T00:57:27.457873+00:00",
+      "exit": 0,
+      "wallSeconds": 2.2141050830250606,
+      "pid": 81320,
+      "pgid": 81320,
+      "load": "{ 6.58 9.33 11.72 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-knip-v01": {
+      "start": "2026-10-15T01:05:21.721757+00:00",
+      "end": "2026-10-15T01:05:26.603227+00:00",
+      "exit": 0,
+      "wallSeconds": 4.881309000018518,
+      "pid": 16875,
+      "pgid": 16875,
+      "load": "{ 8.79 10.31 11.57 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-named-key-green-v01": {
+      "start": "2026-10-15T01:03:49.665161+00:00",
+      "end": "2026-10-15T01:03:57.061631+00:00",
+      "exit": 0,
+      "wallSeconds": 7.396263416972943,
+      "pid": 11496,
+      "pgid": 11496,
+      "load": "{ 8.00 10.78 11.88 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-restored-base-v01": {
+      "start": "2026-10-15T00:58:14.645738+00:00",
+      "end": "2026-10-15T00:58:18.179353+00:00",
+      "exit": 0,
+      "wallSeconds": 3.5334801669814624,
+      "pid": 82488,
+      "pgid": 82488,
+      "load": "{ 5.06 8.57 11.31 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-review-v01": {
+      "start": "2026-10-15T01:04:15.290881+00:00",
+      "end": "2026-10-15T01:05:18.461059+00:00",
+      "exit": 0,
+      "wallSeconds": 63.16903270804323,
+      "pid": 13003,
+      "pgid": 13003,
+      "load": "{ 8.13 10.59 11.77 }",
+      "groupRemainingAtExit": []
+    },
+    "impl-typecheck-v01": {
+      "start": "2026-10-15T00:57:33.626394+00:00",
+      "end": "2026-10-15T00:57:50.303755+00:00",
+      "exit": 2,
+      "wallSeconds": 16.676698291965295,
+      "pid": 81424,
+      "pgid": 81424,
+      "load": "{ 6.45 9.26 11.68 }",
+      "groupRemainingAtExit": []
+    },
+    "install-v01": {
+      "start": "2026-10-15T00:38:56.745851+00:00",
+      "end": "2026-10-15T00:38:59.774951+00:00",
+      "exit": 0,
+      "wallSeconds": 3.0289615830406547,
+      "pid": 4036,
+      "pgid": 4036,
+      "load": "{ 13.52 16.00 15.86 }",
+      "groupRemainingAtExit": []
+    },
+    "preflight-v01": {
+      "start": "2026-10-15T01:08:53.946202+00:00",
+      "end": "2026-10-15T01:08:57.084814+00:00",
+      "exit": 0,
+      "wallSeconds": 3.1385012500104494,
+      "pid": 23530,
+      "pgid": 23530,
+      "load": "{ 3.02 6.99 9.90 }",
+      "groupRemainingAtExit": []
+    },
+    "recovery-queue-v01": {
+      "start": "2026-10-15T01:36:47.208845+00:00",
+      "end": "2026-10-15T01:36:47.422905+00:00",
+      "exit": 0,
+      "wallSeconds": 0.21397904097102582,
+      "pid": 8706,
+      "pgid": 8706,
+      "load": "{ 2.85 5.16 7.70 }",
+      "groupRemainingAtExit": []
+    },
+    "setup-doctor-v01": {
+      "start": "2026-10-15T00:38:56.746287+00:00",
+      "end": "2026-10-15T00:38:58.409614+00:00",
+      "exit": 0,
+      "wallSeconds": 1.6631714159739204,
+      "pid": 4035,
+      "pgid": 4035,
+      "load": "{ 13.52 16.00 15.86 }",
+      "groupRemainingAtExit": []
+    },
+    "setup-worktree-v01": {
+      "start": "2026-10-15T00:38:36.218214+00:00",
+      "end": "2026-10-15T00:38:40.739921+00:00",
+      "exit": 0,
+      "wallSeconds": 4.5214342920226045,
+      "pid": 98217,
+      "pgid": 98217,
+      "load": "{ 14.02 16.28 15.95 }",
+      "groupRemainingAtExit": []
+    },
+    "sweep-v01-initial": {
+      "start": "2026-10-15T01:30:57.358594+00:00",
+      "end": "2026-10-15T01:31:00.368567+00:00",
+      "exit": 0,
+      "wallSeconds": 3.0097952500218526,
+      "pid": 99703,
+      "pgid": 99703,
+      "load": "{ 5.54 8.41 9.61 }",
+      "groupRemainingAtExit": []
+    },
+    "sweep-v01-observer": {
+      "start": "2026-10-15T01:30:57.358316+00:00",
+      "end": "2026-10-15T01:31:14.251605+00:00",
+      "exit": 0,
+      "wallSeconds": 16.893045042001177,
+      "pid": 99701,
+      "pgid": 99701,
+      "load": "{ 5.54 8.41 9.61 }",
+      "groupRemainingAtExit": []
+    },
+    "sweep-v01": {
+      "start": "2026-10-15T01:30:57.325935+00:00",
+      "end": "2026-10-15T01:31:14.095310+00:00",
+      "exit": 0,
+      "wallSeconds": 16.76915754203219,
+      "pid": 99695,
+      "pgid": 99695,
+      "load": "{ 5.54 8.41 9.61 }",
+      "groupRemainingAtExit": []
+    },
+    "weighted300-slot-v01": {
+      "start": "2026-10-15T01:14:44.522009+00:00",
+      "end": "2026-10-15T01:30:31.203631+00:00",
+      "exit": 0,
+      "wallSeconds": 946.6900354170357,
+      "pid": 10327,
+      "pgid": 10327,
+      "load": "{ 5.69 5.62 8.17 }",
+      "groupRemainingAtExit": []
+    },
+    "weighted300-v01": {
+      "start": "2026-10-15T01:22:49.772593+00:00",
+      "end": "2026-10-15T01:30:31.158955+00:00",
+      "exit": 0,
+      "wallSeconds": 461.3856027920265,
+      "pid": 13437,
+      "pgid": 13437,
+      "load": "{ 7.01 11.14 10.68 }",
+      "groupRemainingAtExit": []
+    },
+    "workflow-v01-initial": {
+      "start": "2026-10-15T01:31:54.058451+00:00",
+      "end": "2026-10-15T01:31:56.414830+00:00",
+      "exit": 0,
+      "wallSeconds": 2.3562810830189846,
+      "pid": 3568,
+      "pgid": 3568,
+      "load": "{ 5.11 7.83 9.32 }",
+      "groupRemainingAtExit": []
+    },
+    "workflow-v01-observer": {
+      "start": "2026-10-15T01:31:54.057170+00:00",
+      "end": "2026-10-15T01:33:26.012488+00:00",
+      "exit": 0,
+      "wallSeconds": 91.95445466699312,
+      "pid": 3567,
+      "pgid": 3567,
+      "load": "{ 5.11 7.83 9.32 }",
+      "groupRemainingAtExit": []
+    },
+    "workflow-v01": {
+      "start": "2026-10-15T01:31:54.026058+00:00",
+      "end": "2026-10-15T01:33:25.921531+00:00",
+      "exit": 1,
+      "wallSeconds": 91.89460987498751,
+      "pid": 3560,
+      "pgid": 3560,
+      "load": "{ 5.11 7.83 9.32 }",
+      "groupRemainingAtExit": []
+    },
+    "workflow-v02-initial": {
+      "start": "2026-10-15T01:40:01.084155+00:00",
+      "end": "2026-10-15T01:40:06.533160+00:00",
+      "exit": 0,
+      "wallSeconds": 5.448881749995053,
+      "pid": 17536,
+      "pgid": 17536,
+      "load": "{ 22.86 10.55 9.19 }",
+      "groupRemainingAtExit": []
+    },
+    "workflow-v02-observer": {
+      "start": "2026-10-15T01:40:01.083756+00:00",
+      "end": "2026-10-15T01:42:25.320001+00:00",
+      "exit": 0,
+      "wallSeconds": 144.23493066697847,
+      "pid": 17535,
+      "pgid": 17535,
+      "load": "{ 22.86 10.55 9.19 }",
+      "groupRemainingAtExit": []
+    },
+    "workflow-v02": {
+      "start": "2026-10-15T01:40:01.042309+00:00",
+      "end": "2026-10-15T01:42:25.173721+00:00",
+      "exit": 0,
+      "wallSeconds": 144.13007637503324,
+      "pid": 17528,
+      "pgid": 17528,
+      "load": "{ 22.86 10.55 9.19 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "ordinary review-v01 starting1-minute vm.loadavg",
+        "value": 8.13
+      },
+      "implementMin": {
+        "measuredFor": "actual continuous helper dispatch to provisional evidence cutoff; close immediately before authorized Git"
+      }
+    }
+  },
+  "tests": {
+    "ordinary": {
+      "files": 306,
+      "tests": 8895,
+      "exit": 0
+    },
+    "full": {
+      "files": 387,
+      "tests": 9904,
+      "exit": 0
+    },
+    "contractLines": 291,
+    "privateFixtureLines": 60,
+    "privateRuntimeHelperLines": 95,
+    "testDelta": {
+      "files": 2,
+      "lines": 361,
+      "jsdomFiles": 0
+    },
+    "d20": "Both leaf abilities are primitive compositions; synthetic contracts cover first-history/sibling/privacy/recovery interactions. No production scenario module/shared runner needed.",
+    "coverage": "content gates passed in focused-final-v02, ordinary related review and full configured stages; both battle-only leaf pending markers cleared with exact verifiedText."
+  },
+  "weighted": {
+    "at": "2026-10-15T01:40:52.417509+00:00",
+    "games": 300,
+    "steps": 101918,
+    "failures": 0,
+    "targets": [
+      {
+        "kind": "dreamsign",
+        "uuid": "2d4eb3ee-0931-45ed-8365-69f18096ead5",
+        "included": 600,
+        "exercised": 519
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "ef25fba0-58a0-4b69-be06-3668679fcdc7",
+        "included": 600,
+        "exercised": 70
+      }
+    ],
+    "actualExecutionSeconds": 461.3856027920265,
+    "slotWrapperSeconds": 946.6900354170357,
+    "differenceIncludesWaitAndWrapperOverheadSeconds": 485.3044326250092,
+    "programReportedSummary": "fuzz:engine 300 games, 101918 steps, 458.2 s wall, 490.0 s CPU (0.7 games/s wall, 0.6 games/s CPU); prompts 7951; interactive re-runs 862 (7.505 ms each); feasibility bounded {\"legality\":0,\"prompts\":5}; results {\"player\":161,\"enemy\":139,\"draw\":0}; failures 0",
+    "rawSHA256": "cbd439c5c64cba3e607cdcd89724da55dba06994720bd0b6b9ef4388db5cf619",
+    "qualification": "Exact literal weighted both filedUUIDs; source freeze unchanged. Program-reported CPU differs from parent wall receipts and is preserved only as its observed reported scope. Random run does not substitute for deterministic first/same-turn/reset and privacy/failure contracts."
+  },
+  "browser": {
+    "preflight": {
+      "pass": 4,
+      "ineligible": 36,
+      "exit": 0
+    },
+    "sweep": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-WwOBWk",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.237/invocations/sweep-WwOBWk",
+      "counts": {
+        "pass": 4,
+        "skip": 36
+      },
+      "attemptCounts": {
+        "pass": 4,
+        "skip": 36
+      },
+      "hostLoad": 5.541015625,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 2596,
+        "scenario": 13545.344584,
+        "cleanup": 368.92675000000054,
+        "execution": 16575.692125,
+        "total": 16580.692125
+      }
+    },
+    "sample": {
+      "threshold": 26,
+      "firstBytes": {
+        "2d4eb3ee-0931-45ed-8365-69f18096ead5": 16,
+        "ef25fba0-58a0-4b69-be06-3668679fcdc7": 16
+      }
+    },
+    "judged": [
+      {
+        "uuid": "2d4eb3ee-0931-45ed-8365-69f18096ead5",
+        "mode": "charm",
+        "viewport": "desktop",
+        "gameId": "buyyxv",
+        "reportSHA256": "ab8b9550c43870086e346b9b69e678f0239f33c540550b1aa1585c327f3406f5",
+        "completedNote": "completed charm first-occurrence cell",
+        "noteAt": "desktop#0",
+        "plays": 3,
+        "semantic": [
+          {
+            "instance": "i51",
+            "cardUUID": "41d0aa36-f15a-487d-b97c-7fd765973921",
+            "draws": 2,
+            "observerResolutions": 1,
+            "turn": 1,
+            "handCount": 7
+          },
+          {
+            "instance": "i52",
+            "cardUUID": "41d0aa36-f15a-487d-b97c-7fd765973921",
+            "draws": 1,
+            "observerResolutions": 0,
+            "turn": 1,
+            "handCount": 8
+          },
+          {
+            "instance": "i53",
+            "cardUUID": "41d0aa36-f15a-487d-b97c-7fd765973921",
+            "draws": 2,
+            "observerResolutions": 1,
+            "turn": 3,
+            "handCount": 11
+          }
+        ],
+        "exactWholeStatePendingReplays": 2,
+        "storedRows": 110,
+        "storedJSONLSHA256": "3031ada91f403b7fb54a96c40da9c98c60e96f37d0c921c0232dee95180068e3",
+        "logProvenance": "complete same-game reader lines in completed-cell note; native last-game export belongs to a later scene",
+        "capsEmpty": true,
+        "geometryVerified": true,
+        "qualification": "Completed desktop#0 only from failed invocation; later failure retained",
+        "rawReport": "invocations/run-wSw9HR/qa-first-time-v01.result.json",
+        "archivedStoredJSONL": "source-acceptance-v01/parent/accepted-charm-desktop-v01.jsonl"
+      },
+      {
+        "uuid": "ef25fba0-58a0-4b69-be06-3668679fcdc7",
+        "mode": "cauldron",
+        "viewport": "desktop",
+        "gameId": "qgfsen",
+        "reportSHA256": "5cb7f02949dc23e50012912319290d1976097906b02c384ec2fef89b7651efe9",
+        "completedNote": "completed cauldron first-occurrence cell",
+        "noteAt": "desktop#1",
+        "plays": 7,
+        "semantic": [
+          {
+            "instance": "i5",
+            "cardUUID": "5e5e5e5e-0000-4000-8000-000000000002",
+            "draws": 1,
+            "observerResolutions": 1,
+            "turn": 1,
+            "handCount": 1
+          },
+          {
+            "instance": "i12",
+            "cardUUID": "5e5e5e5e-0000-4000-8000-000000000002",
+            "draws": 0,
+            "observerResolutions": 0,
+            "turn": 1,
+            "handCount": 0
+          },
+          {
+            "instance": "i2",
+            "cardUUID": "5e5e5e5e-0000-4000-8000-000000000002",
+            "draws": 1,
+            "observerResolutions": 1,
+            "turn": 3,
+            "handCount": 1
+          }
+        ],
+        "exactWholeStatePendingReplays": 2,
+        "storedRows": 122,
+        "storedJSONLSHA256": "0e70a2229c76c677e201f77925b5c236fed2c532660946b9dc1cd4e292ecb727",
+        "logProvenance": "native runner last-game export and completed-cell note exact bytes",
+        "capsEmpty": true,
+        "geometryVerified": true,
+        "qualification": "Completed cell from terminal passing remaining-three invocation",
+        "rawReport": "invocations/run-XiG5t1/qa-first-time-v02.result.json",
+        "archivedStoredJSONL": "source-acceptance-v01/parent/accepted-cauldron-desktop-v01.jsonl"
+      },
+      {
+        "uuid": "2d4eb3ee-0931-45ed-8365-69f18096ead5",
+        "mode": "charm",
+        "viewport": "mobile",
+        "gameId": "eewh4u",
+        "reportSHA256": "5cb7f02949dc23e50012912319290d1976097906b02c384ec2fef89b7651efe9",
+        "completedNote": "completed charm first-occurrence cell",
+        "noteAt": "mobile#0",
+        "plays": 3,
+        "semantic": [
+          {
+            "instance": "i51",
+            "cardUUID": "41d0aa36-f15a-487d-b97c-7fd765973921",
+            "draws": 2,
+            "observerResolutions": 1,
+            "turn": 1,
+            "handCount": 7
+          },
+          {
+            "instance": "i52",
+            "cardUUID": "41d0aa36-f15a-487d-b97c-7fd765973921",
+            "draws": 1,
+            "observerResolutions": 0,
+            "turn": 1,
+            "handCount": 8
+          },
+          {
+            "instance": "i53",
+            "cardUUID": "41d0aa36-f15a-487d-b97c-7fd765973921",
+            "draws": 2,
+            "observerResolutions": 1,
+            "turn": 3,
+            "handCount": 11
+          }
+        ],
+        "exactWholeStatePendingReplays": 2,
+        "storedRows": 107,
+        "storedJSONLSHA256": "187d91e926973eddbac1f32e71b92d2e966a0cfa6203f810a8c8a7b297c8d7f2",
+        "logProvenance": "complete same-game reader lines in completed-cell note; native last-game export belongs to a later scene",
+        "capsEmpty": true,
+        "geometryVerified": true,
+        "qualification": "Completed cell from terminal passing remaining-three invocation",
+        "rawReport": "invocations/run-XiG5t1/qa-first-time-v02.result.json",
+        "archivedStoredJSONL": "source-acceptance-v01/parent/accepted-charm-mobile-v01.jsonl"
+      },
+      {
+        "uuid": "ef25fba0-58a0-4b69-be06-3668679fcdc7",
+        "mode": "cauldron",
+        "viewport": "mobile",
+        "gameId": "qj8xqo",
+        "reportSHA256": "5cb7f02949dc23e50012912319290d1976097906b02c384ec2fef89b7651efe9",
+        "completedNote": "completed cauldron first-occurrence cell",
+        "noteAt": "mobile#1",
+        "plays": 7,
+        "semantic": [
+          {
+            "instance": "i5",
+            "cardUUID": "5e5e5e5e-0000-4000-8000-000000000002",
+            "draws": 1,
+            "observerResolutions": 1,
+            "turn": 1,
+            "handCount": 1
+          },
+          {
+            "instance": "i12",
+            "cardUUID": "5e5e5e5e-0000-4000-8000-000000000002",
+            "draws": 0,
+            "observerResolutions": 0,
+            "turn": 1,
+            "handCount": 0
+          },
+          {
+            "instance": "i2",
+            "cardUUID": "5e5e5e5e-0000-4000-8000-000000000002",
+            "draws": 1,
+            "observerResolutions": 1,
+            "turn": 3,
+            "handCount": 1
+          }
+        ],
+        "exactWholeStatePendingReplays": 2,
+        "storedRows": 116,
+        "storedJSONLSHA256": "8abb19ee7ba0841383be811e07910b1b812fe299c7c812bb100b2f2baaebe077",
+        "logProvenance": "native runner last-game export and completed-cell note exact bytes",
+        "capsEmpty": true,
+        "geometryVerified": true,
+        "qualification": "Completed cell from terminal passing remaining-three invocation",
+        "rawReport": "invocations/run-XiG5t1/qa-first-time-v02.result.json",
+        "archivedStoredJSONL": "source-acceptance-v01/parent/accepted-cauldron-mobile-v01.jsonl"
+      }
+    ],
+    "exactReplays": 8,
+    "storedJSONLRows": 455,
+    "captures": [
+      {
+        "filename": "charm-same-turn-desktop-2x.png",
+        "width": 1440,
+        "height": 900,
+        "sha256": "9e9cd311bf67ecf69274e58157f096584bf0f73726e5bdb41774f56c188ebad9",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800,
+        "rootVisuallyInspected": true
+      },
+      {
+        "filename": "cauldron-log-desktop-2x.png",
+        "width": 1440,
+        "height": 900,
+        "sha256": "4cb6722237b6f93b7a961be04557134d32004c7c8b174b76ea669388f2ea0ac1",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800,
+        "rootVisuallyInspected": true
+      },
+      {
+        "filename": "cauldron-next-turn-mobile-2x.png",
+        "width": 390,
+        "height": 844,
+        "sha256": "94fc4a1dd24885fb683f48e5422de800c1410fa38fa49e0956c45ecd13afcff7",
+        "pixelWidth": 780,
+        "pixelHeight": 1688,
+        "rootVisuallyInspected": true
+      }
+    ],
+    "ledger": {
+      "automaticPrefixRows": 40,
+      "automaticPrefixBytes": 32596,
+      "automaticPrefixSHA256": "79792aceef016943fa69b4b3048a1320db08c3856049e03d6188f7bab24ad43e",
+      "appendedJudgedRows": 4,
+      "sourceQualification": "base plus frozen source overlay"
+    },
+    "failurePath": {
+      "workflowV01": {
+        "exit": 1,
+        "scope": "desktopCharm completed and accepted; later desktopCauldron caller stalled awaiting zoneplay after multiple ordinary plays; first physical play succeeded, no product bug proved"
+      },
+      "diagnosticV01": {
+        "exit": 0,
+        "acceptance": false,
+        "scope": "bounded no-capture diagnostic proved first physical play entered play, materialized, settled stack/pending; did not count as judged pass"
+      },
+      "resolution": "Same-task justiciar investigated current source and retained zoneplay acceptance. Root scratch caller alone now waits existing playabletrue plus descendant rolebutton before native tap, while preserving exact per-play proof. Workflow-v02 completes only remaining3cells. No product/source/policy/scene/runner edits or acceptance waiver."
+    }
+  },
+  "runtimeClosure": {
+    "at": "2026-10-15T01:44:25.617755+00:00",
+    "sessions": [
+      {
+        "run": "sweep-v01",
+        "token": "e3c0f244-b720-4cfb-b53d-04f5f7dbd48b",
+        "mcpSessionId": "8e813c91-7016-4dd3-9e9c-7437db3fbdd9",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "protocol": "2025-11-25",
+        "ownOwnerTokenCleared": true,
+        "ownServerTokensCleared": true,
+        "runnerTerminal": 0,
+        "providerCompletion": "Native managed close confirmed, RPCs settled, transport closed before exact owner clear; all source/custody code bound by per-run plan."
+      },
+      {
+        "run": "workflow-v01",
+        "token": "f8fabee0-8aaf-482c-93a5-5e67b36507cf",
+        "mcpSessionId": "1ba63772-36d8-4387-acc4-758da4a274e6",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "protocol": "2025-11-25",
+        "ownOwnerTokenCleared": true,
+        "ownServerTokensCleared": true,
+        "runnerTerminal": 1,
+        "providerCompletion": "Native managed close confirmed, RPCs settled, transport closed before exact owner clear; all source/custody code bound by per-run plan."
+      },
+      {
+        "run": "diagnostic-v01",
+        "token": "0be9b753-fe36-49fc-8d74-593f8ad8ff75",
+        "mcpSessionId": "6beafd8b-3f58-4c43-a635-574e8bcb2c7d",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "protocol": "2025-11-25",
+        "ownOwnerTokenCleared": true,
+        "ownServerTokensCleared": true,
+        "runnerTerminal": 0,
+        "providerCompletion": "Native managed close confirmed, RPCs settled, transport closed before exact owner clear; all source/custody code bound by per-run plan."
+      },
+      {
+        "run": "workflow-v02",
+        "token": "0b7de351-2af5-46cc-bba4-05745973110d",
+        "mcpSessionId": "604d7626-1992-43d0-8064-d07004464e06",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "protocol": "2025-11-25",
+        "ownOwnerTokenCleared": true,
+        "ownServerTokensCleared": true,
+        "runnerTerminal": 0,
+        "providerCompletion": "Native managed close confirmed, RPCs settled, transport closed before exact owner clear; all source/custody code bound by per-run plan."
+      }
+    ],
+    "ownGroups": [
+      3560,
+      3648,
+      9567,
+      9643,
+      17528,
+      18298,
+      99695,
+      99792
+    ],
+    "ownGroupsRemaining": [],
+    "source22Unchanged": true,
+    "originalPinnedCleanupReceiptsPreserved": true
+  },
+  "compatibility": {
+    "prefixes": {
+      "normalSHA256": "05255365c256d18ecfb61bccca5a51adb7f4406102fc1c25c15a891e9577d23e",
+      "namedSHA256": "9a40c3fc1a675a27aad301f469c034bf68dba32e450950391afc2fa805ce6292"
+    },
+    "fixtureSHA256": "405844ec5b33a92e0e945455fc28b5b53979cd3d7b8665c0affc87d2cfa249e0",
+    "baseline": "Actual unmodified-base capture/cold reload before runtime edits; exact-restored-base rerun reproduces original full hashes and persists complete old finals. Current cold replay passes both byte-identical prefixes.",
+    "causalProof": "Normal final all fields equal. Named final becomes all-field equal to actual old final after removing ONLY firstOccurrences. No fixture/hash restamp or tolerant prefix matching.",
+    "legacy": "Absent history conservatively false/empty; wholly unseen historical facts may be omitted under D22."
+  },
+  "failuresAndCounterfactuals": {
+    "fixtureErrors": "first-contract-v02 NO_PROMPTS fixture reached optional prematurely; v03 expectation conflicted with retained reader audience; v04 manually assembled pending fixture omitted actual published prefix. Replaced by actual public fold opening. These are not semantic-red proofs.",
+    "typecheckAttempt": "Unused self import removed before final freeze.",
+    "inventoryFixture": "Actual obsolete oncePerTurn-only positive fixture failed; narrowly admitted callable/twoflag fixtures plus negative assertion now pass.",
+    "restoredFaults": [
+      "global: later preacquisition/ineligible first scores1 vs0",
+      "sibling: extra observer violates exact first-admitted FIFO selection",
+      "privacy: hidden Dawn category disclosed instead of empty known set"
+    ],
+    "finiteDawn": "red-v01 Stuck at Dawn harness alone is not terminal proof; direct red-v02 explicitly observed false mandatoryLoop bothactors. Narrow semantic key addition corrected finite chain; existing genuine unbounded named cycles still draw.",
+    "fullDiagnostics": "Disposable mocked lease/provider tests intentionally print error/server diagnostics; they are not actual managed MCP sessions or product failures."
+  },
+  "logging": "Existing authoritative handEmptied, UUID/source-qualified trigger/action/resolution and turn-reset logs reconstruct first decisions; no new log schema/event.455 same-game persisted JSONL rows audited in actual QA.",
+  "inventory": "Canonical generation once; original2statuses/RDs plus4pre-existing status/RD projections accepted, immutable fields unchanged; own pre-existingMD records them.",
+  "reviewAndDelivery": "Parent owns normal cold core review, exact native candidate/promotion and closure. Helper creates one separately authorized commit after this actual cutoff; its exact interval/OID/status live in the outside-commit Git completion receipt.",
+  "evidenceChecks": {
+    "schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-time-each-turn237",
+      "start": "2026-10-15T01:49:20.730103+00:00",
+      "end": "2026-10-15T01:49:20.873370+00:00",
+      "exit": 0,
+      "wallSeconds": 0.14317141700303182,
+      "pid": 22484,
+      "pgid": 22484,
+      "load": "{ 13.45 11.75 10.06 }",
+      "groupRemainingAtExit": []
+    },
+    "ledgerPrefixUnchanged": true,
+    "all22FrozenSourceHashesUnchanged": true,
+    "ledgerRows": 44,
+    "judgedRows": 4
+  }
+}

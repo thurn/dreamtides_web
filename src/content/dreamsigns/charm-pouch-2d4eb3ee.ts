@@ -1,3 +1,6 @@
+import { firstTimeEachTurn, triggered, whenNamedAbilityTriggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { repeatTriggeringAbility } from "../../engine/effects/primitives/repeat-triggering-ability";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +18,6 @@ export default dreamsign({
     "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [triggered(firstTimeEachTurn(whenNamedAbilityTriggered("materialized")), repeatTriggeringAbility())],
+  verifiedText: expectedVerifiedText("The first time each turn you trigger a ▸Materialized ability, trigger that ability again."),
 });

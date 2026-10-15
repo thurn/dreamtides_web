@@ -883,6 +883,14 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
         change: floatingChange(effect.change, captured) };
     })].sort((a, b) => a.timestamp - b.timestamp || Number(a.id.slice(1)) - Number(b.id.slice(1))),
     turnLog: {
+      firstOccurrences: {
+        handEmptied: { player: view.turnLog.firstOccurrences?.handEmptied.player ?? false, enemy: view.turnLog.firstOccurrences?.handEmptied.enemy ?? false },
+        named: { player: [...view.turnLog.firstOccurrences?.named.player ?? []], enemy: [...view.turnLog.firstOccurrences?.named.enemy ?? []] },
+        known: {
+          player: { player: viewer === "player" ? [...view.turnLog.firstOccurrences?.named.player ?? []] : [], enemy: viewer === "player" ? [...view.turnLog.firstOccurrences?.named.enemy ?? []] : [] },
+          enemy: { player: viewer === "enemy" ? [...view.turnLog.firstOccurrences?.named.player ?? []] : [], enemy: viewer === "enemy" ? [...view.turnLog.firstOccurrences?.named.enemy ?? []] : [] },
+        },
+      },
       discarded: { player: view.turnLog.discarded?.player ?? 0, enemy: view.turnLog.discarded?.enemy ?? 0 },
       discardedCards,
       leftPlay: leftPlayCards, dissolved: dissolvedCards, abandoned: abandonedCards,

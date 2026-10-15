@@ -673,7 +673,7 @@ export type MaterializeNth = number | { readonly atLeast: number };
 export type Trigger =
   | { readonly on: NamedTrigger }
   /** A successful named-bearing ability admission; the occasion has no card subject. */
-  | { readonly on: "namedAbilityTriggered"; readonly named: NamedTrigger; readonly player: PlayerRef }
+  | { readonly on: "namedAbilityTriggered"; readonly named: NamedTrigger; readonly player: PlayerRef; readonly firstTimeEachTurn?: true }
   /** "When you play your `nth` … this turn" counts only the plays that match. */
   | { readonly on: "play"; readonly player: PlayerRef; readonly filter: CardFilter; readonly nth?: number; readonly from?: never }
   /**
@@ -699,7 +699,7 @@ export type Trigger =
   | { readonly on: "copy"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "foresee"; readonly player: PlayerRef }
   /** Each settled positive-to-zero transition of the hand its player holds, without a card subject. */
-  | { readonly on: "handBecomesEmpty"; readonly player: PlayerRef }
+  | { readonly on: "handBecomesEmpty"; readonly player: PlayerRef; readonly firstTimeEachTurn?: true }
   /** Once per completed positive discard instruction, payment descriptor, or hand-limit choice. */
   | { readonly on: "discardBatch"; readonly player: PlayerRef }
   /**

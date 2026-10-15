@@ -467,7 +467,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("drawTriggerFilter", [registered(DSL_TYPES, "Trigger", { member: "draw", option: "filter" })], ["Trigger"], { note: "\"when you draw a character\"" }),
   dsl("materializeNthTrigger", [registered(DSL_TYPES, "Trigger", { member: "materialize", option: "nth" })], ["Trigger"], { note: "\"your second spirit animal in a turn\"" }),
   dsl("atEndOfTurnTrigger", [callable(DSL_TRIGGERS, "atEndOfTurn")], ["Trigger"], { note: "\"at the end of your turn\" (Ending)" }),
-  dsl("firstTimeEachTurn", [registered(DSL_TYPES, "TriggeredAbility", { option: "oncePerTurn" })], ["TriggeredAbility"], { note: "\"the first time each turn …\"" }),
+  dsl("firstTimeEachTurn", [callable(DSL_TRIGGERS, "firstTimeEachTurn"), registered(DSL_TYPES, "Trigger", { member: "handBecomesEmpty", option: "firstTimeEachTurn" }), registered(DSL_TYPES, "Trigger", { member: "namedAbilityTriggered", option: "firstTimeEachTurn" })], ["Trigger", "TurnLog"], { note: "\"the first time each turn …\"" }),
   dsl("typeRemap", [registered(DSL_TYPES, "DeckMods", { option: "typeRemap", pending: "option" })], ["Variant"], { note: `C12 type remap for selectors and figments (${GAP_38})` }),
   // Journey-modifier registry (P8, 5.6).
   journey("journeyEssence", "essence gains and site rewards"),

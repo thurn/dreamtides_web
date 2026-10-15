@@ -30,7 +30,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
     if (!hasNamedTrigger(repeatedBody.trigger, named)) throw new Error("A repeated occurrence has no matching named trigger");
     if (!hasImmutableRepeatAllowance(ctx.catalog, origin, ability, node, repeatedBody)) throw new Error("A repeated occurrence has spent its immutable allowance");
   }
-  if (trigger.kind === "ruleReaction") observeRuleReactions(ctx, [trigger]);
+  observeRuleReactions(ctx, [trigger]);
   const applied =
     body.condition === null ||
     conditionHolds(ctx.state, ctx.catalog, body.condition, { controller, source, optionalPaid: [] });

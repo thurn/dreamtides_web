@@ -295,6 +295,11 @@ export interface MaterializedCardView extends Omit<MaterializedCard, "instance">
 export interface TurnDepartureView extends Omit<TurnDeparture, "instance"> { readonly instance: InstanceId | null; }
 
 export interface TurnLogView {
+  /** Public empty-hand facts and only this viewer's proved named categories. */
+  readonly firstOccurrences?: {
+    readonly handEmptied: Readonly<Record<Side, boolean>>;
+    readonly named: Readonly<Record<Side, readonly import("../dsl/types").NamedTrigger[]>>;
+  };
   readonly discarded?: Readonly<Record<Side, number>>;
   readonly discardedCards?: Readonly<Record<Side, readonly (InstanceId | null)[]>>;
   readonly leftPlay?: Readonly<Record<Side, readonly TurnDepartureView[]>>;
@@ -698,6 +703,10 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     linkedBanished: liveLinkedBanished(state).filter((record) => visible(record.source)).map(copy),
     triggerQueue,
     turnLog: {
+      firstOccurrences: {
+        handEmptied: { player: state.turnLog.firstOccurrences?.handEmptied.player ?? false, enemy: state.turnLog.firstOccurrences?.handEmptied.enemy ?? false },
+        named: { player: [...state.turnLog.firstOccurrences?.known[viewer].player ?? []], enemy: [...state.turnLog.firstOccurrences?.known[viewer].enemy ?? []] },
+      },
       discarded: { player: state.turnLog.discarded?.player ?? 0, enemy: state.turnLog.discarded?.enemy ?? 0 },
       discardedCards: { player: (state.turnLog.discardedCards?.player ?? []).map(id => visible(id) ? id : null),
         enemy: (state.turnLog.discardedCards?.enemy ?? []).map(id => visible(id) ? id : null) },

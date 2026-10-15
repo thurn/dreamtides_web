@@ -2212,6 +2212,24 @@ discarded together, earlier cards' discard abilities precede the hand-empty
 abilities, and abilities for the completed discard of one or more cards follow
 all of them.
 
+**The first time each turn:** An ability that watches the first time your hand
+becomes empty or you trigger a named ability watches that player's first such
+occasion in the whole current turn. Earlier occasions count even while the
+watching ability is absent, disabled, in a zone where it does not work, or has
+an intervening condition that fails. Gaining or regaining the ability does not
+make a later occasion first. Each eligible copy watches the same first occasion;
+each player's history starts fresh every turn, including extra turns.
+
+For a named ability, the occasion is its first successful admission, including
+a combined trigger admitted through another branch, an explicit instruction,
+and a floating or delayed ability. A physical materialization alone is not a
+named-ability admission. Simultaneous admissions are counted in their usual
+trigger order, so the first admitted ability is the one a watching instruction
+repeats. The original ability's limits and intervening condition still apply
+to that repeat. An identifiable watching reaction establishes that the named
+occasion happened without identifying a hidden original source. Learned facts
+persist when a source becomes hidden; unseen history remains private.
+
 **Counting ▸Dawn abilities:** "If 3 or more ▸Dawn abilities trigger during
 your Dawn phase, draw a card" counts actual successful admissions during
 that phase, including either player's abilities. A named-Dawn ability

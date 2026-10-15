@@ -155,7 +155,7 @@ const completeAuthoringFixtures = new Map<string, string>([
   ["src/engine/dsl/triggers.ts", `
     export function whenDissolved() {} export function whenDiscardSelf() {}
     export function whenPutIntoVoid() {} export function atEndOfTurn() {}
-    export function whenForesee() {}
+    export function whenForesee() {} export function firstTimeEachTurn() {}
     export function whenRemovesEnemy() {} export function whenDissolvesEnemyInChallenge() {}
   `],
   ["src/engine/dsl/types.ts", `
@@ -165,7 +165,8 @@ const completeAuthoringFixtures = new Map<string, string>([
     export type Trigger = { tag: "play"; nth?: number; from?: "hand" | "void" }
       | { tag: "draw"; filter?: object } | { tag: "materialize"; nth?: number }
       | { tag: "reclaim" } | { tag: "returnToHand" } | { tag: "erode" }
-      | { tag: "foresee" } | { tag: "copy" } | { tag: "removesEnemy" };
+      | { tag: "foresee" } | { tag: "copy" } | { tag: "removesEnemy" }
+      | { tag: "handBecomesEmpty"; firstTimeEachTurn?: true } | { tag: "namedAbilityTriggered"; firstTimeEachTurn?: true };
     export type FunctionalZone = "hand" | "void" | "deck";
     export interface ActivatedAbility { oncePerTurn?: boolean; zone?: FunctionalZone }
     export type Speed = "standard" | "fast";
@@ -256,7 +257,7 @@ const minimalApiFixtures = [
   ["drawTriggerFilter", typesModule, 'export type Trigger = { kind: "draw"; filter?: object };'],
   ["materializeNthTrigger", typesModule, 'export type Trigger = { kind: "materialize"; nth?: number };'],
   ["atEndOfTurnTrigger", triggersModule, 'export function atEndOfTurn() {}'],
-  ["firstTimeEachTurn", typesModule, 'export interface TriggeredAbility { oncePerTurn?: boolean }'],
+  ["firstTimeEachTurn", typesModule, 'export type Trigger = { kind: "handBecomesEmpty"; firstTimeEachTurn?: true } | { kind: "namedAbilityTriggered"; firstTimeEachTurn?: true };'],
   ["typeRemap", typesModule, 'export interface DeckMods { typeRemap?: { selectorSubtype: string; conditionalFigmentSubtype: string } }'],
   ["discardCostFilterMin", typesModule, 'export type PaymentCost = { kind: "discard"; min?: number };'],
   ["abandonXCost", buildersModule, 'export function abandonXCost() {}'],
@@ -273,6 +274,7 @@ for (const [capability, intendedModule, source] of minimalApiFixtures) {
     minimalSources.set(scopedModule(capability, module), module === intendedModule ? source : "export {};");
   }
 }
+minimalSources.set(scopedModule("firstTimeEachTurn", triggersModule), "export function firstTimeEachTurn() {};");
 minimalSources.set(scopedModule("whenRemovesEnemyTrigger", triggersModule),
   "export function whenRemovesEnemy() {} export function whenDissolvesEnemyInChallenge() {}");
 minimalSources.set(scopedModule("whenForeseeTrigger", triggersModule), "export function whenForesee() {}");
@@ -287,6 +289,14 @@ const intendedBinding = (form: InventoryCapabilityForm): InventoryCapabilityForm
 };
 
 describe("inventory descriptor contracts", () => {
+  it("requires actual first-occasion descriptors beyond source-local oncePerTurn", () => {
+    const sources = new Map(completeAuthoringFixtures);
+    sources.set(typesModule, 'export interface TriggeredAbility { oncePerTurn?: boolean }');
+    const first = inventoryDslCapabilities.find(entry => entry.name === "firstTimeEachTurn");
+    expect(first).toBeDefined();
+    expect(inventoryCapabilityResolver(sources)(first?.forms.filter(form => form.module === typesModule) ?? [])).toBe(false);
+  });
+
   it("covers every actual descriptor with an independent intended authoring fixture", () => {
     expect(inventoryDslCapabilities.map(entry => entry.name).sort()).toEqual([...expectedCapabilityNames].sort());
     expect(inventoryDslCapabilities.flatMap(entry => entry.forms).every(form => completeAuthoringFixtures.has(form.module))).toBe(true);

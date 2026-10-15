@@ -6,6 +6,7 @@ import type { AbilitySource, Side } from "../state/ids";
 import { SIDES } from "../state/ids";
 import type { AbilityOrigin, QueuedTrigger } from "../state/types";
 import type { StepContext } from "../steps/types";
+import { observeFirstOccurrences } from "./first-time-each-turn";
 
 /** A saved reference may be absent; only the catalog lookup is fallible inspection. */
 function catalogReferenceExists(lookup: () => unknown): boolean {
@@ -40,6 +41,7 @@ export function sourceObserved(ctx: Pick<StepContext, "state">, source: AbilityS
 
 /** Observation raises only a viewer's lower bound; authoritative admissions stay unchanged. */
 export function observeRuleReactions(ctx: Pick<StepContext, "state" | "catalog">, triggers: readonly QueuedTrigger[] = ctx.state.triggerQueue): void {
+  observeFirstOccurrences(ctx, triggers, sourceObserved, originPresent);
   const progress = ctx.state.turnLog.dawnProgress;
   if (progress === undefined) return;
   for (const trigger of triggers) {

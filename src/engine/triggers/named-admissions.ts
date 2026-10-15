@@ -1,6 +1,6 @@
 /** Synchronous, complete-batch observation of actual named-bearing admissions. */
 import { isNamedTrigger } from "../dsl/abilities";
-import type { Trigger } from "../dsl/types";
+import type { NamedTrigger, Trigger } from "../dsl/types";
 import { endBattle } from "../rules/victory";
 import type { QueuedTrigger } from "../state/types";
 import type { StepContext } from "../steps/types";
@@ -9,6 +9,7 @@ import type { StepContext } from "../steps/types";
 export interface NamedAdmission {
   readonly queued: QueuedTrigger;
   readonly trigger: Trigger;
+  readonly firstNamedThisTurn?: readonly NamedTrigger[];
 }
 
 /** Completes the current step immediately after a proved admission-only draw. */
@@ -40,7 +41,8 @@ export function observeNamedAdmissions(
       // sibling consumed an allowance after this occurrence was enqueued.
       // Causal bindings are consumed by resolving bodies, never admission eligibility.
       const { triggeringAbility: _cause, repeated: _audience, ...queued } = admission.queued;
-      const key = JSON.stringify([{ queued, trigger: admission.trigger }, ctx.triggerUses.oncePerTurn.length, ctx.triggerUses.once.size]);
+      // First-category metadata changes observer eligibility even for an identical queued tuple.
+      const key = JSON.stringify([{ queued, trigger: admission.trigger, firstNamedThisTurn: admission.firstNamedThisTurn ?? [] }, ctx.triggerUses.oncePerTurn.length, ctx.triggerUses.once.size]);
       if (ancestry.has(key)) {
         endBattle(ctx, { kind: "draw", reason: "mandatoryLoop" });
         throw new AdmissionCycleDraw();

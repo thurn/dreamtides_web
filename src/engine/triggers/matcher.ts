@@ -57,6 +57,7 @@ import { sidesBlindTo } from "../view/knowledge";
 import { hasImmutableRepeatAllowance, hasNamedTrigger, readsImmediateRepeat, ruleReactionBody, triggerBody } from "./body";
 import { observeRuleReactions, sourceObserved } from "./rule-reactions";
 import { observeNamedAdmissions, type NamedAdmission } from "./named-admissions";
+import { recordFirstHandEmpty, recordFirstNamedAdmission } from "./first-time-each-turn";
 
 /** Every trigger kind except the `either` combinator, which matches through its branches. */
 type TriggerKind = Exclude<Trigger["on"], "either">;
@@ -242,15 +243,16 @@ function matchTrigger(
   inZone: boolean,
   armed: boolean,
   admission?: NamedAdmission,
+  firstHandEmpty = false,
 ): Match | null {
   if (trigger.on === "either") {
     for (const branch of trigger.triggers) {
-      const match = matchTrigger(state, catalog, branch, event, listener, inZone, armed, admission);
+      const match = matchTrigger(state, catalog, branch, event, listener, inZone, armed, admission, firstHandEmpty);
       if (match !== null) return match;
     }
     return null;
   }
-  const match = matchKind(state, catalog, trigger, event, listener, inZone, armed, admission);
+  const match = matchKind(state, catalog, trigger, event, listener, inZone, armed, admission, firstHandEmpty);
   if (match !== null && !TRIGGER_EVENTS[trigger.on].includes(event.kind)) {
     throw new Error(`Trigger ${trigger.on} matched ${event.kind}, which TRIGGER_EVENTS does not list`);
   }
@@ -324,6 +326,7 @@ function matchKind(
   inZone: boolean,
   armed: boolean,
   admission?: NamedAdmission,
+  firstHandEmpty = false,
 ): Match | null {
   const self = sourceInstance(listener.source);
   const you = listener.controller;
@@ -347,7 +350,8 @@ function matchKind(
   switch (trigger.on) {
     case "namedAbilityTriggered":
       return admission !== undefined && event.kind === "triggerQueued" &&
-        admission.queued.controller === resolvePlayer(you, trigger.player) && hasNamedTrigger(admission.trigger, trigger.named)
+        admission.queued.controller === resolvePlayer(you, trigger.player) && hasNamedTrigger(admission.trigger, trigger.named) &&
+        (trigger.firstTimeEachTurn !== true || admission.firstNamedThisTurn?.includes(trigger.named) === true)
           ? { subject: null, triggeringAbility: { named: trigger.named, occurrence: admission.queued,
             observedBy: admission.queued.repeated?.observedBy ?? SIDES.filter(viewer => sourceObserved({ state }, admission.queued.source, viewer)) } } : null;
     case "materialized":
@@ -398,7 +402,8 @@ function matchKind(
     case "foresee":
       return event.kind === "foresaw" && event.side === resolvePlayer(you, trigger.player) ? NO_SUBJECT : null;
     case "handBecomesEmpty":
-      return event.kind === "handEmptied" && event.side === resolvePlayer(you, trigger.player) ? NO_SUBJECT : null;
+      return event.kind === "handEmptied" && event.side === resolvePlayer(you, trigger.player) &&
+        (trigger.firstTimeEachTurn !== true || firstHandEmpty) ? NO_SUBJECT : null;
     case "discardBatch":
       return event.kind === "discardBatch" && event.count > 0 && event.side === resolvePlayer(you, trigger.player)
         ? { subject: null, discardedCount: event.count } : null;
@@ -616,6 +621,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
   const hidden = matched.subjectHiddenFrom ?? (matched.subject === null ? [] : sidesBlindTo(ctx.state, matched.subject));
   const trigger: QueuedTrigger = hidden.length === 0 ? retained : { ...retained, subjectHiddenFrom: hidden };
   ctx.state.triggerQueue.push(trigger);
+  const firstNamedThisTurn = recordFirstNamedAdmission(ctx, trigger, descriptor);
   ctx.emit({
     kind: "triggerQueued",
     ...(trigger.triggeringAbility === undefined ? {} : { triggeringAbility: trigger.triggeringAbility }),
@@ -634,7 +640,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
     ...(trigger.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
     ...(trigger.linkedSource === undefined ? {} : { linkedSource: trigger.linkedSource }),
   });
-  return { queued: trigger, trigger: descriptor };
+  return { queued: trigger, trigger: descriptor, firstNamedThisTurn };
 }
 
 /**
@@ -646,7 +652,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
  * controller (RD-hv-umm2.342-1); its other abilities use their current
  * controller.
  */
-function matchListener(ctx: StepContext, side: Side, listener: Listener, event: EngineEvent, armed: ArmedTriggers, admission?: NamedAdmission): NamedAdmission[] {
+function matchListener(ctx: StepContext, side: Side, listener: Listener, event: EngineEvent, armed: ArmedTriggers, admission?: NamedAdmission, firstHandEmpty = false): NamedAdmission[] {
   const admitted: NamedAdmission[] = [];
   const departing = isLookbackEvent(event) && listener.source === event.instance;
   const dissolving = departing && event.kind === "dissolved";
@@ -662,7 +668,7 @@ function matchListener(ctx: StepContext, side: Side, listener: Listener, event: 
     );
     if (matching.controller !== side) return;
     const inZone = matching.emblem || worksInZone(ability.zone, matching.zone);
-    const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedAbility !== undefined, admission);
+    const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedAbility !== undefined, admission, firstHandEmpty);
     const queued = match === null ? null : enqueueAbility(ctx, matching, ability, index, { ...match,
       ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
       ...(armed.subjectSpark === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectSpark: armed.subjectSpark }),
@@ -691,7 +697,7 @@ function effectNumber(id: EffectId): number {
  * since, but a one-shot trigger that has triggered this step does not
  * trigger again from any record still holding it.
  */
-function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: ArmedTriggers, admission?: NamedAdmission): NamedAdmission[] {
+function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: ArmedTriggers, admission?: NamedAdmission, firstHandEmpty = false): NamedAdmission[] {
   const admitted: NamedAdmission[] = [];
   const armedHere = armed.floating.filter((effect) => effect.controller === side);
   const current = floatingTriggers(ctx.state, side).filter((effect) => !armedHere.some((entry) => entry.id === effect.id));
@@ -702,7 +708,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
     if (floating === null || effect.change.kind !== "trigger") continue;
     const { ref, once, captured, lastKnownSourceSpark } = effect.change;
     const isArmed = armedHere.includes(effect);
-    const match = matchTrigger(ctx.state, ctx.catalog, floating.trigger, event, floating.listener, true, isArmed, admission);
+    const match = matchTrigger(ctx.state, ctx.catalog, floating.trigger, event, floating.listener, true, isArmed, admission, firstHandEmpty);
     if (match === null) continue;
     if (once) {
       ctx.triggerUses.once.add(effect.id);
@@ -853,13 +859,14 @@ export function matchEvent(ctx: StepContext, event: EngineEvent): void {
     });
   }
   if (event.kind === "materialized") recordMaterialized(state, ctx.catalog, event.side, event.instance);
+  const firstHandEmpty = event.kind === "handEmptied" && recordFirstHandEmpty(state, event.side);
   const beforeDawn = state.turnLog.dawnProgress?.total ?? 0;
   const admitted: NamedAdmission[] = [];
   const departing = departure(state, event);
   const armed = isLookbackEvent(event) ? takeArmed(ctx, event) : NOTHING_ARMED;
   for (const side of [state.turn.active, opponent(state.turn.active)]) {
-    for (const listener of listeners(state, side, departing)) admitted.push(...matchListener(ctx, side, listener, event, armed));
-    admitted.push(...matchFloating(ctx, side, event, armed));
+    for (const listener of listeners(state, side, departing)) admitted.push(...matchListener(ctx, side, listener, event, armed, undefined, firstHandEmpty));
+    admitted.push(...matchFloating(ctx, side, event, armed, undefined, firstHandEmpty));
   }
   if (event.kind === "leftPlay") armLookbacks(ctx, event, departing);
   queueDawnReactions(ctx, beforeDawn);
