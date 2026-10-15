@@ -8,6 +8,7 @@ import type { JourneyModifierRegistry } from "./modifier-registry";
 import { journeyTransfigurationCard } from "./journey-transfiguration";
 import { journeyTypeRemapTypes, validTypeRemapScreen, validTypeRemapIntent, validTypeRemapBattleBinding, resolveTypeRemap } from "./journey-type-remap";
 import { finishJourneyAcquisition } from "./journey-on-gain";
+import { validShopReplenishmentRuntime } from "./journey-shop";
 
 const record = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const index = (value: unknown): value is number => typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
@@ -56,6 +57,22 @@ function validEntries(value: unknown): value is readonly DeckEntry[] {
   });
 }
 
+/** Deferred purchase hooks consume historical receipt kinds and concrete slots. */
+function validHistoricalShop(runtime: Record<string, unknown>): boolean {
+  if (!Array.isArray(runtime.purchaseHistory) || !index(runtime.rerollCount) || !Array.isArray(runtime.slots)) return false;
+  for (const receipt of runtime.purchaseHistory) {
+    if (!record(receipt) || !record(receipt.item) || receipt.item.kind !== "card" && receipt.item.kind !== "dreamsign") return false;
+  }
+  for (const slot of runtime.slots) {
+    if (!record(slot) || typeof slot.purchased !== "boolean" || typeof slot.basePrice !== "number" || !Number.isFinite(slot.basePrice) || slot.basePrice < 0 ||
+      typeof slot.discountPercent !== "number" || !Number.isFinite(slot.discountPercent) || slot.discountPercent < 0 || slot.discountPercent > 100) return false;
+    if (slot.itemType === "card") {
+      if (!index(slot.cardNumber) || slot.transfiguration !== undefined && (typeof slot.transfiguration !== "string" || !["Empowered", "Amplified", "Kindled", "Inspired", "Enduring", "Hastened", "Resonant", "Attuned", "Perfected"].includes(slot.transfiguration))) return false;
+    } else if (slot.itemType !== "dreamsign" || !record(slot.dreamsign) || dreamsignIdFromUnknown(slot.dreamsign.id) === null) return false;
+  }
+  return validShopReplenishmentRuntime(runtime);
+}
+
 function validBefore(value: Record<string, unknown>, journey: JourneyState): boolean {
   const screen = value.screen, shop = value.shopModifiers, atlas = value.atlas;
   if (!record(screen) || typeof screen.type !== "string" || !["journeyStart", "atlas", "dreamscape", "site", "journeyComplete", "journeyFailed", "journeyDreamsign", "journeyStarterPurge", "journeyPurge", "journeyTransfiguration", "journeyDuplication"].includes(String(screen.type)) || !record(shop) || !record(atlas) || !record(atlas.nodes)) return false;
@@ -74,7 +91,7 @@ function validBefore(value: Record<string, unknown>, journey: JourneyState): boo
     if (draft.siteFirstEventEntryId !== undefined && draft.siteFirstEventEntryId !== null && deckEntryIdFromUnknown(draft.siteFirstEventEntryId) === null) return false;
   }
   if (!record(value.siteRuntime)) return false;
-  return Object.entries(value.siteRuntime).every(([id, runtime]) => siteIdFromUnknown(id) !== null && record(runtime) && ["shop", "reward", "dreamsignOffer", "essence", "cardChoice", "augury", "gamble", "exploration", "randomSite"].includes(String(runtime.kind)));
+  return Object.entries(value.siteRuntime).every(([id, runtime]) => siteIdFromUnknown(id) !== null && record(runtime) && ["shop", "reward", "dreamsignOffer", "essence", "cardChoice", "augury", "gamble", "exploration", "randomSite"].includes(String(runtime.kind)) && (runtime.kind !== "shop" || validHistoricalShop(runtime)));
 }
 
 /** Validate this finite saved acquisition role and every independent earned queue. */

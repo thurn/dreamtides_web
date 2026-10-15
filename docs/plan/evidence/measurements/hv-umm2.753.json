@@ -1,0 +1,385 @@
+{
+  "bead": "hv-umm2.753",
+  "base": "a2e068e78b42ae40a9dc929582aa965f23cd35e2",
+  "classification": "Internal historical saved-state guard repair; owning plain contracts, no architecture/config/test-infrastructure or presentation change. Ordinary validation only.",
+  "scope": {
+    "production": [
+      "journey-subtype.ts::validBefore",
+      "journey-subtype.ts::private validHistoricalShop and existing-validator import"
+    ],
+    "contracts": "journey-subtype-persistence.contracts.ts (imported by existing journey-on-gain.test.ts)",
+    "outsideAreaEdits": []
+  },
+  "originalPostclaimClock": "2026-10-15T15:30:08.700609+00:00",
+  "sourceAudit": {
+    "boundWholeFiles": 42,
+    "allInitial26Matched": true,
+    "proposalSHA256": "aea7efae95784af2c1b7de7a4bec2ebb7e6563da9f3d32c5d9c6b557e730ef34",
+    "nativeAdmissionAt": "2026-10-15T15:43:13.147186+00:00",
+    "semanticReadRangesSeparate": true
+  },
+  "validation": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "-t",
+        "rejects historical shop missing history"
+      ],
+      "start": "2026-10-15T15:44:48.509780+00:00",
+      "end": "2026-10-15T15:44:56.790242+00:00",
+      "wallS": 8.279939125000965,
+      "userCpuS": 6.516392,
+      "sysCpuS": 2.490085,
+      "exitCode": 1,
+      "hostLoad": 9.47705078125,
+      "logSha256": "7a9328a2aa0df810e9531b2f7fc47fde6e2494ab333e586511d83f18be10dc6d",
+      "productionSha256": "e60e5f126027c6482a0cd63d25e7aa471165ccf32387f6687bce0fe66b0d7258",
+      "contractSha256": "6c2002d5487de082cabd3f67f631da39b9c227390760614b439139e5673b574c"
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "-t",
+        "rejects historical shop missing history"
+      ],
+      "start": "2026-10-15T15:45:30.479172+00:00",
+      "end": "2026-10-15T15:45:36.267383+00:00",
+      "wallS": 5.787733583012596,
+      "userCpuS": 6.030295,
+      "sysCpuS": 1.9379579999999998,
+      "exitCode": 1,
+      "hostLoad": 7.8955078125,
+      "logSha256": "556a9f296501a8ca2da8d857fba3665c654d6dcc3c7582c8d98ad6f2522fdd87",
+      "productionSha256": "e60e5f126027c6482a0cd63d25e7aa471165ccf32387f6687bce0fe66b0d7258",
+      "contractSha256": "ecb35793a7bc8ccb2f08426651a68e12fc4f58a779917b004f77ccf80aa23802"
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts"
+      ],
+      "start": "2026-10-15T15:46:02.224135+00:00",
+      "end": "2026-10-15T15:46:08.123511+00:00",
+      "wallS": 5.898820000002161,
+      "userCpuS": 6.090494,
+      "sysCpuS": 1.945039,
+      "exitCode": 0,
+      "hostLoad": 7.763671875,
+      "logSha256": "1bfcd7399ed2c8c8e4e53f982bb0ed2d566f6f50a2b034e44d5df1d8c81e788d"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T15:47:46.566406+00:00",
+      "end": "2026-10-15T15:48:36.984759+00:00",
+      "wallS": 50.41751079203095,
+      "userCpuS": 125.434233,
+      "sysCpuS": 13.195067,
+      "exitCode": 2,
+      "hostLoad": 6.3984375,
+      "logSha256": "737a2a7f611d5f5bd5f5c693ff728312c51734f5865965e056bc59475f566161",
+      "runnerPid": 27443,
+      "commandPid": 27455,
+      "codeSHA256": {
+        "src/rules/journey/journey-subtype.ts": "a493b1e2ac359f824cabb2eb9354f62160add26ee88659cb0472de740b4cfe55",
+        "src/rules/journey/journey-subtype-persistence.contracts.ts": "ecb35793a7bc8ccb2f08426651a68e12fc4f58a779917b004f77ccf80aa23802"
+      }
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-duplication.test.ts"
+      ],
+      "start": "2026-10-15T15:49:08.594317+00:00",
+      "end": "2026-10-15T15:49:16.074460+00:00",
+      "wallS": 7.479757166001946,
+      "userCpuS": 6.9024469999999996,
+      "sysCpuS": 2.247272,
+      "exitCode": 0,
+      "hostLoad": 7.01708984375,
+      "logSha256": "dc839984d83ffa5b1790799d9726183e058373492eba7c9f28ba21dd7497f430",
+      "runnerPid": 32904,
+      "commandPid": 32914,
+      "codeSHA256": {
+        "src/rules/journey/journey-subtype.ts": "a493b1e2ac359f824cabb2eb9354f62160add26ee88659cb0472de740b4cfe55",
+        "src/rules/journey/journey-subtype-persistence.contracts.ts": "c6decd98aead84060e1ae6af6c26f7984710b35542d0855db24b2d8350b18fcd"
+      }
+    },
+    {
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "start": "2026-10-15T15:49:26.016316+00:00",
+      "end": "2026-10-15T15:49:38.268300+00:00",
+      "wallS": 12.251591500011273,
+      "userCpuS": 17.472483,
+      "sysCpuS": 0.6033919999999999,
+      "exitCode": 0,
+      "hostLoad": 7.7080078125,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runnerPid": 34158,
+      "commandPid": 34171,
+      "codeSHA256": {
+        "src/rules/journey/journey-subtype.ts": "a493b1e2ac359f824cabb2eb9354f62160add26ee88659cb0472de740b4cfe55",
+        "src/rules/journey/journey-subtype-persistence.contracts.ts": "c6decd98aead84060e1ae6af6c26f7984710b35542d0855db24b2d8350b18fcd"
+      }
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T15:49:38.743055+00:00",
+      "end": "2026-10-15T15:49:43.659529+00:00",
+      "wallS": 4.916131249978207,
+      "userCpuS": 4.380214,
+      "sysCpuS": 1.3785939999999999,
+      "exitCode": 0,
+      "hostLoad": 7.69775390625,
+      "logSha256": "78410826e80cafb6c736dbd8ff133a3ce56dffcc99ca64b8aa110e3430aa4bcd",
+      "runnerPid": 34988,
+      "commandPid": 34998,
+      "codeSHA256": {
+        "src/rules/journey/journey-subtype.ts": "a493b1e2ac359f824cabb2eb9354f62160add26ee88659cb0472de740b4cfe55",
+        "src/rules/journey/journey-subtype-persistence.contracts.ts": "c6decd98aead84060e1ae6af6c26f7984710b35542d0855db24b2d8350b18fcd"
+      }
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T15:50:15.596607+00:00",
+      "end": "2026-10-15T15:50:53.239618+00:00",
+      "wallS": 37.642329457972664,
+      "userCpuS": 97.693711,
+      "sysCpuS": 9.724561,
+      "exitCode": 0,
+      "hostLoad": 6.7021484375,
+      "logSha256": "9d873ef6c1ece2438e807d7722fc9ea66df506b3f569612f1bfe82868bc1cfdb",
+      "runnerPid": 37503,
+      "commandPid": 37515,
+      "codeSHA256": {
+        "src/rules/journey/journey-subtype.ts": "a493b1e2ac359f824cabb2eb9354f62160add26ee88659cb0472de740b4cfe55",
+        "src/rules/journey/journey-subtype-persistence.contracts.ts": "c6decd98aead84060e1ae6af6c26f7984710b35542d0855db24b2d8350b18fcd"
+      }
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T15:51:31.127508+00:00",
+      "end": "2026-10-15T15:51:31.201164+00:00",
+      "wallS": 0.0732930829981342,
+      "userCpuS": 0.056581,
+      "sysCpuS": 0.022579,
+      "exitCode": 0,
+      "hostLoad": 6.25146484375,
+      "logSha256": "e668472c57e5fdf60958f0be53ba9c39cbc348bfcf266a00543a74f35985e488",
+      "runnerPid": 42603,
+      "commandPid": 42605,
+      "codeSHA256": {
+        "src/rules/journey/journey-subtype.ts": "a493b1e2ac359f824cabb2eb9354f62160add26ee88659cb0472de740b4cfe55",
+        "src/rules/journey/journey-subtype-persistence.contracts.ts": "c6decd98aead84060e1ae6af6c26f7984710b35542d0855db24b2d8350b18fcd"
+      }
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "start": "2026-10-15T15:51:31.226976+00:00",
+      "end": "2026-10-15T15:51:31.237410+00:00",
+      "wallS": 0.01018600002862513,
+      "userCpuS": 0.004118,
+      "sysCpuS": 0.037119,
+      "exitCode": 0,
+      "hostLoad": 6.25146484375,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runnerPid": 42587,
+      "commandPid": 42611,
+      "codeSHA256": {
+        "src/rules/journey/journey-subtype.ts": "a493b1e2ac359f824cabb2eb9354f62160add26ee88659cb0472de740b4cfe55",
+        "src/rules/journey/journey-subtype-persistence.contracts.ts": "c6decd98aead84060e1ae6af6c26f7984710b35542d0855db24b2d8350b18fcd"
+      }
+    }
+  ],
+  "negativeResult": "On unchanged production, real prior Dreamsign purchase then Toad purchase with held Mirror earned the pending choice; historical purchaseHistory omitted only in saved before. LOAD applied and canonical decode accepted it. Both rejection assertions failed in regression-red-both. Current shop was unchanged and valid.",
+  "positiveCoverage": [
+    "empty historical history",
+    "real prior card and Dreamsign histories",
+    "legacy receipts without optional replenishment provenance",
+    "optional expectedOffer provenance",
+    "LOAD and canonical encode/decode then actual subtype confirmation",
+    "same paid shop state/route and physical cohort",
+    "later first-card Mirror duplication and consumed prior-card behavior",
+    "ordinary C12 and nonshop subtype reload continuity",
+    "formed prior-card shop slot"
+  ],
+  "negativeCoverage": [
+    "missing/nonarray history",
+    "nonrecord receipt and malformed consumed item bodies",
+    "present malformed expectedOffer provenance",
+    "consumed slot/reroll structural fields"
+  ],
+  "failurePaths": {
+    "invalidPersistedInput": "Public LOAD rejects atomically and canonical decode throws in every malformed-history/consumed-shop-field row.",
+    "reload": "Public earned BUY pending choice survives LOAD/codec and resumes same site; valid history and later observer behavior verified.",
+    "partialWriteAndMidstepError": "Guard is pure before intake acceptance; rejected LOAD retains original state. Existing unavailable-content/retry contract exercises fold containment.",
+    "staleRepeatedConcurrent": "Existing subtype contracts exercise stale/CAS actor rejection; new shop baseline exercises repeated confirmation after success."
+  },
+  "validationLimits": [
+    "No local full review: private guard plus owning contracts is not cross-cutting architecture.",
+    "No browser/lab/content-weighted engine fuzz: internal saved-state intake repair; authored entities/presentation/engine unchanged.",
+    "No performance claim."
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final process start, one-minute host load from os.getloadavg; each command retains its own starting observation"
+      }
+    }
+  },
+  "runtime": {
+    "browserContexts": [],
+    "servers": [],
+    "longLivedProcesses": [],
+    "completedCheckProcessReceipts": [
+      {
+        "label": "review-1",
+        "role": "runnerPid",
+        "pid": 27443,
+        "remainingProcess": ""
+      },
+      {
+        "label": "review-1",
+        "role": "commandPid",
+        "pid": 27455,
+        "remainingProcess": ""
+      },
+      {
+        "label": "focused-2",
+        "role": "runnerPid",
+        "pid": 32904,
+        "remainingProcess": ""
+      },
+      {
+        "label": "focused-2",
+        "role": "commandPid",
+        "pid": 32914,
+        "remainingProcess": ""
+      },
+      {
+        "label": "types-repair",
+        "role": "runnerPid",
+        "pid": 34158,
+        "remainingProcess": ""
+      },
+      {
+        "label": "types-repair",
+        "role": "commandPid",
+        "pid": 34171,
+        "remainingProcess": ""
+      },
+      {
+        "label": "knip",
+        "role": "runnerPid",
+        "pid": 34988,
+        "remainingProcess": ""
+      },
+      {
+        "label": "knip",
+        "role": "commandPid",
+        "pid": 34998,
+        "remainingProcess": ""
+      },
+      {
+        "label": "review-final",
+        "role": "runnerPid",
+        "pid": 37503,
+        "remainingProcess": ""
+      },
+      {
+        "label": "review-final",
+        "role": "commandPid",
+        "pid": 37515,
+        "remainingProcess": ""
+      },
+      {
+        "label": "schema-final",
+        "role": "runnerPid",
+        "pid": 42603,
+        "remainingProcess": ""
+      },
+      {
+        "label": "schema-final",
+        "role": "commandPid",
+        "pid": 42605,
+        "remainingProcess": ""
+      },
+      {
+        "label": "whitespace",
+        "role": "runnerPid",
+        "pid": 42587,
+        "remainingProcess": ""
+      },
+      {
+        "label": "whitespace",
+        "role": "commandPid",
+        "pid": 42611,
+        "remainingProcess": ""
+      }
+    ]
+  },
+  "preExistingIssues": [],
+  "validationNotes": [
+    "The initial focused negative result and review-1 failure are retained, not counted as successful validation.",
+    "review-1: runtime related tests112files/7174cases passed, lint/cycle/node types/schema passed; aggregate exit2 from local fixture/table type inference. Corrections are confined to admitted local contract fixtures.",
+    "focused-2:2files/90tests passed, including71owning acquisition and19existing duplication tests. Main typecheck repair check passed.",
+    "Final ordinary review:112files/7174tests pass; both typechecks, lint, static cycle and friction schema checks pass.",
+    "Knip:exit0 on the same frozen two-source-file hashes as final review."
+  ],
+  "testDelta": {
+    "entrypoints": 0,
+    "netContractLines": 105,
+    "newCases": 35,
+    "jsdomFiles": 0
+  },
+  "finalCodeSHA256": {
+    "src/rules/journey/journey-subtype.ts": "a493b1e2ac359f824cabb2eb9354f62160add26ee88659cb0472de740b4cfe55",
+    "src/rules/journey/journey-subtype-persistence.contracts.ts": "c6decd98aead84060e1ae6af6c26f7984710b35542d0855db24b2d8350b18fcd"
+  },
+  "reviewStatus": "Parent-owned fresh read-only Codex review runs after author terminal; this evidence records validation, not cold-review clearance.",
+  "deliveryStatus": "Parent owns exact candidate, approval, promotion and release observation.",
+  "implementWindow": {
+    "start": "2026-10-15T15:30:08.700609+00:00",
+    "end": "2026-10-15T15:52:29.541253+00:00"
+  },
+  "implementMin": 22.34734406666667,
+  "commitReceipt": "The final packaging timestamp is retained here; the synchronous Git return and exact full elapsed window are recorded by the author in /tmp/dreamtides-753-01a13a7a/author-terminal.json and passed to the parent."
+}
