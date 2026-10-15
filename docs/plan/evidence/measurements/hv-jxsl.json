@@ -1,0 +1,972 @@
+{
+  "bead": "hv-jxsl",
+  "baseline": "bcc30272aebc1d49d55e2d79e9d1886438ef48a3",
+  "scope": {
+    "production": "engine-battle-init.ts engineDeckEntry authored flag selection and unused local third parameter/import only",
+    "publicContract": "new exclusive perfected-variant.contracts.ts via unchanged deck-mods.test.ts eager runner",
+    "fallout": [],
+    "newVariantFields": 0,
+    "newTestEntrypoints": 0,
+    "newCases": 6,
+    "testDelta": {
+      "files": 1,
+      "lines": 56,
+      "jsdomFiles": 0
+    },
+    "preExistingIssues": []
+  },
+  "implementationClock": {
+    "originalDispatch": "2026-10-15T15:22:45.580000+00:00",
+    "proof": "/tmp/jxsl-root/dispatch-proof.json",
+    "parentClaim": "2026-10-15T15:20:59.949890Z",
+    "measurementCutoff": "2026-10-15T15:30:02.748820+00:00",
+    "elapsedMin": 7.286147,
+    "qualification": "Original dispatch inclusive across source audit, proposal/grant coordination, edits, failed baseline, validation and evidence. Conservative final precommit cutoff; actual normal Git end and cutoff tail supplied by external /tmp/jxsl-root/final-commit.json. Actual model sampling UNKNOWN.",
+    "sampling": "UNKNOWN"
+  },
+  "sourceAudit": {
+    "receipt": "/tmp/jxsl-root/source-audit.receipt.json",
+    "frozenInitialTrackedPaths": 5758,
+    "outsideAdmissionChanges": 0,
+    "grossNonTestLines": 7,
+    "qualification": "runtime/test unchanged after audit; final four-path hashes and evidence/schema/Git tails supplied externally by final-commit.json"
+  },
+  "sourceConclusion": "Perfected carries its form without preselecting authored Amplified; explicit Amplified selects authored true. Original275 read-only prepared()/constituent snapshot contract explains the distinction.",
+  "validation": {
+    "whitespace-final": {
+      "label": "whitespace-final",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 67662,
+      "start": "2026-10-15T15:29:39.949720+00:00",
+      "startEpoch": 1792078179.949824,
+      "loadStart": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/whitespace-final.log",
+      "pid": 67724,
+      "pgid": 67724,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:29:39.959763+00:00",
+      "endEpoch": 1792078179.9597912,
+      "wallS": 0.00996708869934082,
+      "childUserS": 0.003953,
+      "childSystemS": 0.040056999999999995,
+      "loadEnd": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "focused-consumers-final": {
+      "label": "focused-consumers-final",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "src/battle/integration/exploration-engine-mapping.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 61052,
+      "start": "2026-10-15T15:28:12.977624+00:00",
+      "startEpoch": 1792078092.97775,
+      "loadStart": [
+        6.90185546875,
+        10.2353515625,
+        9.71728515625
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/focused-consumers-final.log",
+      "pid": 61063,
+      "pgid": 61063,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:28:19.002563+00:00",
+      "endEpoch": 1792078099.002594,
+      "wallS": 6.02484393119812,
+      "childUserS": 6.647824,
+      "childSystemS": 2.31231,
+      "loadEnd": [
+        6.98974609375,
+        10.19775390625,
+        9.70703125
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "rawSha256": "3a298bb274f8389e1ad01e8c5376237b4ad1aae89a4d85bf3786c42a8d5f2f10",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 56453,
+      "start": "2026-10-15T15:27:07.107180+00:00",
+      "startEpoch": 1792078027.1072981,
+      "loadStart": [
+        10.494140625,
+        11.419921875,
+        10.06103515625
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/knip.log",
+      "pid": 56463,
+      "pgid": 56463,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:27:11.986566+00:00",
+      "endEpoch": 1792078031.986594,
+      "wallS": 4.879295825958252,
+      "childUserS": 4.391036,
+      "childSystemS": 1.327265,
+      "loadEnd": [
+        10.2939453125,
+        11.36279296875,
+        10.048828125
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "rawSha256": "b82bc42c56ba1e27fdae71c35c6b7db5473ba09794ec11624cb11534d254ca81",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "review": {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 55658,
+      "start": "2026-10-15T15:26:55.856020+00:00",
+      "startEpoch": 1792078015.856127,
+      "loadStart": [
+        10.99267578125,
+        11.56201171875,
+        10.08642578125
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/review.log",
+      "pid": 55678,
+      "pgid": 55678,
+      "exit": 2,
+      "waited": true,
+      "end": "2026-10-15T15:27:36.582032+00:00",
+      "endEpoch": 1792078056.582067,
+      "wallS": 40.725939989089966,
+      "childUserS": 107.528156,
+      "childSystemS": 10.028142,
+      "loadEnd": [
+        9.18603515625,
+        11.01171875,
+        9.95947265625
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "rawSha256": "a8d9facc42bf6b0acae2a67d67010312a1954ae1357c34404c8428d1a1596eb6",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "focused-green": {
+      "label": "focused-green",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "Perfected journey variant protocol"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 50039,
+      "start": "2026-10-15T15:26:01.716711+00:00",
+      "startEpoch": 1792077961.716842,
+      "loadStart": [
+        17.26318359375,
+        12.54296875,
+        10.32421875
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/focused-green.log",
+      "pid": 50055,
+      "pgid": 50055,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:26:07.843390+00:00",
+      "endEpoch": 1792077967.843447,
+      "wallS": 6.126605033874512,
+      "childUserS": 6.311714,
+      "childSystemS": 1.956359,
+      "loadEnd": [
+        16.36083984375,
+        12.43408203125,
+        10.298828125
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "rawSha256": "acf1552471269ac1f0729959fbf1ad427d839d07a0cbb88875befd22b98010c2",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "baseline-red-final": {
+      "label": "baseline-red-final",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "Perfected journey variant protocol"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 60043,
+      "start": "2026-10-15T15:27:59.683712+00:00",
+      "startEpoch": 1792078079.6839511,
+      "loadStart": [
+        7.65673828125,
+        10.541015625,
+        9.81396484375
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "624b8bd50a9bf92c5f531650453bee868622e819220e54fa272e39f87c3aa80b",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/baseline-red-final.log",
+      "pid": 60058,
+      "pgid": 60058,
+      "exit": 1,
+      "waited": true,
+      "end": "2026-10-15T15:28:07.147964+00:00",
+      "endEpoch": 1792078087.147993,
+      "wallS": 7.4640419483184814,
+      "childUserS": 5.35374,
+      "childSystemS": 2.457304,
+      "loadEnd": [
+        7.24169921875,
+        10.35791015625,
+        9.75732421875
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "624b8bd50a9bf92c5f531650453bee868622e819220e54fa272e39f87c3aa80b",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "rawSha256": "67fbcf72266584405edec5f411951f0fcc1303b84e8be0458d63c205fbe784b2",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "review-final": {
+      "label": "review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 62593,
+      "start": "2026-10-15T15:28:35.359458+00:00",
+      "startEpoch": 1792078115.359572,
+      "loadStart": [
+        6.53515625,
+        9.94189453125,
+        9.6240234375
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/review-final.log",
+      "pid": 62614,
+      "pgid": 62614,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:29:12.400853+00:00",
+      "endEpoch": 1792078152.4008808,
+      "wallS": 37.041308879852295,
+      "childUserS": 84.54225,
+      "childSystemS": 10.255838,
+      "loadEnd": [
+        6.31787109375,
+        9.4736328125,
+        9.46630859375
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "rawSha256": "277e3cd9536a7f5e05a920c18730557a5a75480a24fc0ce0911cd9be35171147",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "source-audit": {
+      "label": "source-audit",
+      "argv": [
+        "python3",
+        "/tmp/jxsl-root/audit-source.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 67672,
+      "start": "2026-10-15T15:29:39.384428+00:00",
+      "startEpoch": 1792078179.384539,
+      "loadStart": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/source-audit.log",
+      "pid": 67674,
+      "pgid": 67674,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:29:39.748554+00:00",
+      "endEpoch": 1792078179.748579,
+      "wallS": 0.3640401363372803,
+      "childUserS": 0.090346,
+      "childSystemS": 0.12363299999999999,
+      "loadEnd": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "rawSha256": "1930778724ccd15ef36eee7744f6e8c1105ee1799af45bec637cd03e12779a11",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "focused-consumers": {
+      "label": "focused-consumers",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "src/battle/integration/exploration-engine-mapping.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 50824,
+      "start": "2026-10-15T15:26:07.925889+00:00",
+      "startEpoch": 1792077967.9260302,
+      "loadStart": [
+        16.36083984375,
+        12.43408203125,
+        10.298828125
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/focused-consumers.log",
+      "pid": 50837,
+      "pgid": 50837,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:26:14.089369+00:00",
+      "endEpoch": 1792077974.089399,
+      "wallS": 6.1633689403533936,
+      "childUserS": 7.558614,
+      "childSystemS": 2.061393,
+      "loadEnd": [
+        15.61083984375,
+        12.34375,
+        10.279296875
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "rawSha256": "b93953c5a54fe314bd74c809ada6fd986a6b015451fe590f98a43ae7251d7074",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "stage-final-source": {
+      "label": "stage-final-source",
+      "argv": [
+        "git",
+        "add",
+        "src/battle/integration/engine-battle-init.ts",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts",
+        "docs/plan/evidence/friction/hv-jxsl.json",
+        "docs/plan/evidence/measurements/hv-jxsl.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 62607,
+      "start": "2026-10-15T15:28:35.291884+00:00",
+      "startEpoch": 1792078115.291987,
+      "loadStart": [
+        6.53515625,
+        9.94189453125,
+        9.6240234375
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/stage-final-source.log",
+      "pid": 62609,
+      "pgid": 62609,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:28:35.307044+00:00",
+      "endEpoch": 1792078115.3070688,
+      "wallS": 0.01508188247680664,
+      "childUserS": 0.004403,
+      "childSystemS": 0.0050609999999999995,
+      "loadEnd": [
+        6.53515625,
+        9.94189453125,
+        9.6240234375
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "baseline-red": {
+      "label": "baseline-red",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "Perfected journey variant protocol"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 47529,
+      "start": "2026-10-15T15:25:46.157192+00:00",
+      "startEpoch": 1792077946.157381,
+      "loadStart": [
+        20.4931640625,
+        12.77392578125,
+        10.3515625
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "624b8bd50a9bf92c5f531650453bee868622e819220e54fa272e39f87c3aa80b",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/baseline-red.log",
+      "pid": 47545,
+      "pgid": 47545,
+      "exit": 1,
+      "waited": true,
+      "end": "2026-10-15T15:25:53.517734+00:00",
+      "endEpoch": 1792077953.517777,
+      "wallS": 7.360395908355713,
+      "childUserS": 7.272324,
+      "childSystemS": 2.461184,
+      "loadEnd": [
+        18.94677734375,
+        12.6982421875,
+        10.3525390625
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "624b8bd50a9bf92c5f531650453bee868622e819220e54fa272e39f87c3aa80b",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "rawSha256": "9fb782ef9ed27da606630834617a5fcdfead2185c875761401b960dcc3b8a1a0",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "stage-for-review": {
+      "label": "stage-for-review",
+      "argv": [
+        "git",
+        "add",
+        "src/battle/integration/engine-battle-init.ts",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts",
+        "docs/plan/evidence/friction/hv-jxsl.json",
+        "docs/plan/evidence/measurements/hv-jxsl.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 55671,
+      "start": "2026-10-15T15:26:55.791532+00:00",
+      "startEpoch": 1792078015.791636,
+      "loadStart": [
+        10.99267578125,
+        11.56201171875,
+        10.08642578125
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/stage-for-review.log",
+      "pid": 55673,
+      "pgid": 55673,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:26:55.804548+00:00",
+      "endEpoch": 1792078015.804574,
+      "wallS": 0.01293802261352539,
+      "childUserS": 0.00462,
+      "childSystemS": 0.004974,
+      "loadEnd": [
+        10.99267578125,
+        11.56201171875,
+        10.08642578125
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "585a5951814d2237c148fd05db9ab41d5b4b42ac9910096c8d505a25a12b8fde"
+      },
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "focused-green-final": {
+      "label": "focused-green-final",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "Perfected journey variant protocol"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 60591,
+      "start": "2026-10-15T15:28:07.252174+00:00",
+      "startEpoch": 1792078087.25251,
+      "loadStart": [
+        7.24169921875,
+        10.35791015625,
+        9.75732421875
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/focused-green-final.log",
+      "pid": 60604,
+      "pgid": 60604,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:28:12.899558+00:00",
+      "endEpoch": 1792078092.8995872,
+      "wallS": 5.6470770835876465,
+      "childUserS": 5.379814,
+      "childSystemS": 2.158804,
+      "loadEnd": [
+        6.90185546875,
+        10.2353515625,
+        9.71728515625
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "rawSha256": "228dafe04d47af47a2309757f9d4d2624e3f007da495b7bd8c2af8a937692ac7",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "knip-final": {
+      "label": "knip-final",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 63102,
+      "start": "2026-10-15T15:28:40.608582+00:00",
+      "startEpoch": 1792078120.60874,
+      "loadStart": [
+        6.251953125,
+        9.826171875,
+        9.5849609375
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/knip-final.log",
+      "pid": 63113,
+      "pgid": 63113,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:28:45.358470+00:00",
+      "endEpoch": 1792078125.3585038,
+      "wallS": 4.74976372718811,
+      "childUserS": 4.370797,
+      "childSystemS": 1.776311,
+      "loadEnd": [
+        6.6318359375,
+        9.84521484375,
+        9.5927734375
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "rawSha256": "20642a0f21bb6172ea937b28dd668e47e1dfaaea698faa96b79928b0b1d0bd5c",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    },
+    "schema-final": {
+      "label": "schema-final",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/perfected-bridge-jxsl-root",
+      "wrapperPid": 67714,
+      "start": "2026-10-15T15:29:39.824885+00:00",
+      "startEpoch": 1792078179.824973,
+      "loadStart": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ],
+      "sourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "log": "/tmp/jxsl-root/schema-final.log",
+      "pid": 67716,
+      "pgid": 67716,
+      "exit": 0,
+      "waited": true,
+      "end": "2026-10-15T15:29:39.895826+00:00",
+      "endEpoch": 1792078179.8958569,
+      "wallS": 0.07088375091552734,
+      "childUserS": 0.05585,
+      "childSystemS": 0.018392,
+      "loadEnd": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ],
+      "endSourceHashes": {
+        "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+        "src/battle/integration/deck-mods/perfected-variant.contracts.ts": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd"
+      },
+      "rawSha256": "49fccc5926da3448d6c379a9add507e75df61a7fa6b8bdcd3175a07785c5463d",
+      "processGroupRemaining": [],
+      "processGroupAbsent": true
+    }
+  },
+  "hostLoadSamples": {
+    "whitespace-final": {
+      "start": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ],
+      "end": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ]
+    },
+    "focused-consumers-final": {
+      "start": [
+        6.90185546875,
+        10.2353515625,
+        9.71728515625
+      ],
+      "end": [
+        6.98974609375,
+        10.19775390625,
+        9.70703125
+      ]
+    },
+    "knip": {
+      "start": [
+        10.494140625,
+        11.419921875,
+        10.06103515625
+      ],
+      "end": [
+        10.2939453125,
+        11.36279296875,
+        10.048828125
+      ]
+    },
+    "review": {
+      "start": [
+        10.99267578125,
+        11.56201171875,
+        10.08642578125
+      ],
+      "end": [
+        9.18603515625,
+        11.01171875,
+        9.95947265625
+      ]
+    },
+    "focused-green": {
+      "start": [
+        17.26318359375,
+        12.54296875,
+        10.32421875
+      ],
+      "end": [
+        16.36083984375,
+        12.43408203125,
+        10.298828125
+      ]
+    },
+    "baseline-red-final": {
+      "start": [
+        7.65673828125,
+        10.541015625,
+        9.81396484375
+      ],
+      "end": [
+        7.24169921875,
+        10.35791015625,
+        9.75732421875
+      ]
+    },
+    "review-final": {
+      "start": [
+        6.53515625,
+        9.94189453125,
+        9.6240234375
+      ],
+      "end": [
+        6.31787109375,
+        9.4736328125,
+        9.46630859375
+      ]
+    },
+    "source-audit": {
+      "start": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ],
+      "end": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ]
+    },
+    "focused-consumers": {
+      "start": [
+        16.36083984375,
+        12.43408203125,
+        10.298828125
+      ],
+      "end": [
+        15.61083984375,
+        12.34375,
+        10.279296875
+      ]
+    },
+    "stage-final-source": {
+      "start": [
+        6.53515625,
+        9.94189453125,
+        9.6240234375
+      ],
+      "end": [
+        6.53515625,
+        9.94189453125,
+        9.6240234375
+      ]
+    },
+    "baseline-red": {
+      "start": [
+        20.4931640625,
+        12.77392578125,
+        10.3515625
+      ],
+      "end": [
+        18.94677734375,
+        12.6982421875,
+        10.3525390625
+      ]
+    },
+    "stage-for-review": {
+      "start": [
+        10.99267578125,
+        11.56201171875,
+        10.08642578125
+      ],
+      "end": [
+        10.99267578125,
+        11.56201171875,
+        10.08642578125
+      ]
+    },
+    "focused-green-final": {
+      "start": [
+        7.24169921875,
+        10.35791015625,
+        9.75732421875
+      ],
+      "end": [
+        6.90185546875,
+        10.2353515625,
+        9.71728515625
+      ]
+    },
+    "knip-final": {
+      "start": [
+        6.251953125,
+        9.826171875,
+        9.5849609375
+      ],
+      "end": [
+        6.6318359375,
+        9.84521484375,
+        9.5927734375
+      ]
+    },
+    "schema-final": {
+      "start": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ],
+      "end": [
+        5.57177734375,
+        9.0478515625,
+        9.31201171875
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review starting host 1-minute load"
+      }
+    }
+  },
+  "regressionWitness": {
+    "baseline": "Unchanged exact initial runtime source hash in baseline-red-final receipt; final contract bytes identical across final baseline and green receipts. Final baseline2failures/4controls pass; own focused green6pass; full consumers57pass. Preliminary identical-byte epoch retained; review first attempt exposed missing required synthetic typeChange metadata, corrected only own fixture then repeated complete final RED/GREEN.",
+    "contractSHA256": "77709b08133ec0ae57edd1a840ae280a4a869d60400bccf377b72928ac7c5acd",
+    "runtimeBaselineSHA256": "624b8bd50a9bf92c5f531650453bee868622e819220e54fa272e39f87c3aa80b",
+    "runtimeFinalSHA256": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05"
+  },
+  "acceptanceBoundaries": {
+    "bridge": "Actual engineDeckEntry and createEngineBattleInit observable tuple protocol; synthetic card text/form eligibility changes, plain/Amplified controls, UUID/deckMods and input immutability",
+    "original275": "Retains actual combined zero-cost Character >=2 constituents, base/amplified Attuned/Resonant predicates, refreshed journey QA, full weighted fuzz/core-review and exact new-source acceptance after native update; current staging does not register Perfected execution",
+    "original273": "Parent-owned source-free prerequisite checkpoint unchanged",
+    "browserFuzz": "No browser/heavy obligation for this finite tuple-only prerequisite; not run",
+    "review": "Native no core-review label; not phase gate; expected <100 gross non-test LOC. Parent computes actual trigger and owns any required fresh Codex fork:none review. No claim original275 review covers this source."
+  },
+  "performance": "No performance or quiet-host budget claim; host load is observed, not isolated CPU.",
+  "runtime": "No servers, browser, ports or long-lived runtime. Every diagnostic has actual start/end/wall/wait/PG-absence receipt. Raw logs and SHA256 in /tmp/jxsl-root/.",
+  "inspectionQualification": "Stage1 only read source and scratch native data; missing guessed paths and broad truncations corrected by bounded reads. No validation claimed for source inspection. All diagnostic epochs retained, including expected baseline failure.",
+  "checkCounts": {
+    "ownCases": 6,
+    "finalBaseline": {
+      "failed": 2,
+      "passedControls": 4,
+      "skippedOther": 44
+    },
+    "finalConsumers": {
+      "files": 2,
+      "tests": 57
+    },
+    "finalReviewRelated": {
+      "files": 67,
+      "tests": 6758
+    },
+    "finalReviewExit": 0,
+    "finalKnipExit": 0
+  },
+  "finalTailReceipts": "/tmp/jxsl-root/final-commit.json retains final schema/stage/whitespace/normal Git/clean-state actual receipts and all command epochs; no predicted timestamps."
+}

@@ -1,0 +1,22 @@
+{
+  "bead": "hv-jxsl",
+  "phase": 5,
+  "implementMin": 7.286147,
+  "implementWindow": {
+    "start": "2026-10-15T15:22:45.580000+00:00",
+    "end": "2026-10-15T15:30:02.748820+00:00"
+  },
+  "localValidationS": {
+    "baselineExpectedFailure": 7.4640419483184814,
+    "focused": 11.671921014785767,
+    "review": 37.041308879852295,
+    "knip": 4.74976372718811
+  },
+  "hostLoad": 6.53515625,
+  "testDelta": {
+    "files": 1,
+    "lines": 56,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

@@ -14,7 +14,6 @@ import type {
 } from "../../engine";
 import type { DeckMods } from "../../engine/dsl/types";
 import { battleSeed } from "../../engine/state/ids";
-import { eligibleTransfigurations } from "../../transfiguration/transfiguration-logic";
 import type { CardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { AvatarId, DreamsignId, DreamwellCardId } from "../../types/identifiers";
@@ -137,12 +136,10 @@ function fixedDraftPool(input: EngineBattleInitInput): CardId[] {
 export function engineDeckEntry(
   entry: DeckEntry,
   card: CardData,
-  transfigurationData: TransfigurationData,
+  _transfigurationData: TransfigurationData,
 ): EngineDeckEntry {
   const transfiguration = entry.transfiguration;
-  const amplified =
-    transfiguration === "Amplified" ||
-    (transfiguration === "Perfected" && eligibleTransfigurations(transfigurationData, card).includes("Amplified"));
+  const amplified = transfiguration === "Amplified";
   const deckMods = deckModsOf(entry);
   return {
     cardId: card.id,
