@@ -56,6 +56,7 @@ interface RecordBase {
 }
 
 export type EngineLogRecord =
+  | (RecordBase & { readonly event: "engine.openingHandGuaranteed"; readonly detail: EventOf<"cardDrawn"> & { readonly instance: NonNullable<EventOf<"cardDrawn">["instance"]>; readonly openingHandGuaranteed: NonNullable<EventOf<"cardDrawn">["openingHandGuaranteed"]> } })
   | (RecordBase & { readonly event: "engine.openingHandCompleted"; readonly detail: EventOf<"openingHandCompleted"> })
   | (RecordBase & { readonly event: "engine.scoreGroup"; readonly detail: EventOf<"scoreGroup"> })
   | (RecordBase & {
@@ -134,6 +135,8 @@ export function engineLogLine(record: EngineLogRecord, gameId: GameId, timestamp
 /** The record an engine event maps to, or `null` for an event the log leaves to replay. */
 export function eventLogRecord(event: EngineEvent, version: number): EngineLogRecord | null {
   switch (event.kind) {
+    case "cardDrawn":
+      return event.openingHandGuaranteed === undefined || event.instance === null ? null : { event: "engine.openingHandGuaranteed", version, detail: { ...event, instance: event.instance, openingHandGuaranteed: event.openingHandGuaranteed } };
     case "openingHandCompleted":
       return { event: "engine.openingHandCompleted", version, detail: event };
     case "scoreGroup":

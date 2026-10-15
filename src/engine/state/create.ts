@@ -1,3 +1,4 @@
+import { validOpeningHandGuarantees } from "./opening-hand-guarantees";
 import { BATTLE } from "../../content/battle";
 import { DREAMWELL_RULES } from "../../content/dreamwell-rules";
 import type { TransfigurationType } from "../../types/journey";
@@ -254,6 +255,7 @@ function validateDraftPools(pools: BattleInit["draftPools"], catalog: EngineCata
  * prepared boundary or shuffles, deals and starts the first ordinary turn.
  */
 export function initialState(init: BattleInit, catalog: EngineCatalog): BattleState {
+  if (!validOpeningHandGuarantees(init.guaranteedOpeningHand, init)) throw new Error("Invalid guaranteed opening hand");
   const config = battleConfig(init);
   validateDraftPools(init.draftPools, catalog);
   validateSetup(init, catalog, config);

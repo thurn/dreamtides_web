@@ -509,6 +509,15 @@ and Ending run as automatic bookends.
 skip the Dreamwell draw in round 1. The first player's first turn skips the Draw
 phase.
 
+**Guaranteed opening cards:** A guarantee identifies one original physical deck
+slot. Deal distinct guaranteed cards first in their held-source order, counting
+them toward the ordinary opening hand. The ordinary hand contains at least as
+many cards as there are distinct guaranteed slots, including when its other
+modifiers reduce its size to zero. Multiple sources guaranteeing the same slot
+draw that card once. Shuffle the full deck normally; the other cards retain
+their shuffled order. Extra opening-hand groups follow this ordinary deal.
+Prepared Draw, Dawn, and Day setups do not accept opening-hand guarantees.
+
 **Completed opening hands:** Opening setup finishes both players' ordinary
 opening hands, all extra opening-hand groups, and starting energy before any
 "after you draw your opening hand" ability triggers. Each player has one such

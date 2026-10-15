@@ -1,3 +1,4 @@
+import { drawGuaranteedOpeningHand } from "../../rules/opening-hand-guarantees";
 import { cardMatchesFilter } from "../../continuous/characteristics";
 import { buildDreamwellDeck } from "../../rules/dreamwell";
 import { drawCard, setEnergy } from "../../rules/resources";
@@ -16,6 +17,7 @@ import type { StepContext, StepDefinition } from "../types";
 export interface BeginBattleStep {
   readonly kind: "beginBattle";
   readonly dreamwell: readonly DreamwellCardId[];
+  readonly guaranteedOpeningHand?: BattleInit["guaranteedOpeningHand"];
   /** Extra opening-hand draws per side, after the ordinary hand. */
   readonly openingHand?: Readonly<Partial<Record<Side, readonly OpeningHandDraw[]>>>;
   /** Energy, current and maximum, each side begins with. */
@@ -26,7 +28,8 @@ export interface BeginBattleStep {
 
 /** The `beginBattle` step that starts a battle from its init. */
 export function beginBattleStep(init: BattleInit): BeginBattleStep {
-  if (init.setup !== undefined) return { kind: "beginBattle", dreamwell: init.dreamwell, preparedPhase: init.setup.turn.phase };
+  const guaranteed = init.guaranteedOpeningHand === undefined ? {} : { guaranteedOpeningHand: init.guaranteedOpeningHand };
+  if (init.setup !== undefined) return { kind: "beginBattle", dreamwell: init.dreamwell, ...guaranteed, preparedPhase: init.setup.turn.phase };
   const openingHand: Partial<Record<Side, readonly OpeningHandDraw[]>> = {};
   const startingEnergy: Partial<Record<Side, number>> = {};
   for (const side of SIDES) {
@@ -38,6 +41,7 @@ export function beginBattleStep(init: BattleInit): BeginBattleStep {
   return {
     kind: "beginBattle",
     dreamwell: init.dreamwell,
+    ...guaranteed,
     ...(Object.keys(openingHand).length === 0 ? {} : { openingHand }),
     ...(Object.keys(startingEnergy).length === 0 ? {} : { startingEnergy }),
   };
@@ -69,13 +73,21 @@ export const beginBattle: StepDefinition<BeginBattleStep> = {
       beginPreparedPhase(ctx, step.preparedPhase);
       return;
     }
+    const originalDecks = step.guaranteedOpeningHand === undefined ? undefined : {
+      player: [...state.sides.player.deck], enemy: [...state.sides.enemy.deck],
+    };
     for (const side of SIDES) {
       shuffleInPlace(state, `shuffle:${side}`, state.sides[side].deck);
     }
     buildDreamwellDeck(state, ctx.catalog, step.dreamwell);
     for (const side of SIDES) {
-      for (let count = 0; count < state.config.openingHandSize[side]; count++) {
-        drawCard(ctx, side);
+      const guarantees = step.guaranteedOpeningHand?.[side];
+      if (guarantees !== undefined && guarantees.length > 0 && originalDecks !== undefined) {
+        drawGuaranteedOpeningHand(ctx, side, originalDecks[side], guarantees);
+      } else {
+        for (let count = 0; count < state.config.openingHandSize[side]; count++) {
+          drawCard(ctx, side);
+        }
       }
       for (const draw of step.openingHand?.[side] ?? []) drawOpeningGroup(ctx, side, draw);
       const energy = step.startingEnergy?.[side] ?? 0;

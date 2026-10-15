@@ -1,3 +1,4 @@
+import type { DeckEntryId } from "../../types/identifiers";
 import type { CardSubtype } from "../../types/card-identity";
 import type { TransfigurationType } from "../../types/journey";
 import type { CardFilter, Condition, Cost, DeckMods, Keyword, NamedTrigger, Speed, Variant } from "../dsl/types";
@@ -90,6 +91,14 @@ export interface OpeningHandDraw {
   readonly filter: CardFilter | null;
 }
 
+/** One held source's guarantee for an original physical input-deck slot. */
+export interface OpeningHandGuarantee {
+  readonly deckIndex: number;
+  readonly entryId: DeckEntryId;
+  readonly dreamsignId: DreamsignId;
+  readonly heldIndex: number;
+}
+
 /**
  * The next-battle effects a journey carries into one battle (D39). Battle
  * setup consumes them once: the opening hand and starting energy in the
@@ -154,6 +163,8 @@ export interface BattleInit {
   readonly avatars?: Readonly<Partial<Record<Side, AvatarId>>>;
   /** Each side's dreamsigns, in order. */
   readonly dreamsigns?: Readonly<Partial<Record<Side, readonly DreamsignId[]>>>;
+  /** Selected original input slots, in held-source order, occupying ordinary opening-hand slots. */
+  readonly guaranteedOpeningHand?: Readonly<Partial<Record<Side, readonly OpeningHandGuarantee[]>>>;
   /** Each side's next-battle effects. */
   readonly nextBattle?: Readonly<Partial<Record<Side, NextBattleEffects>>>;
   /** Explicit initial zones/resources at a supported phase boundary; input decks are ordered. */

@@ -1,6 +1,7 @@
 import { hasUnknownScoreGroup } from "./score-group-state";
 import { hasUnknownFirstEventHistory } from "./first-event-last-turn-state";
 import { hasUnknownLastTurnScoring } from "./last-turn-scoring-state";
+import { validOpeningHandGuarantees } from "../../engine/state/opening-hand-guarantees";
 import { canonicalHash } from "../../engine/state/hash";
 // Immutable battle display metadata and engine slices, plus load validation.
 import type { EngineCatalog } from "../../engine/catalog";
@@ -115,7 +116,28 @@ export type TutorialBattlePresentation = OpponentPlayPresentation | DreamwellRev
 export function parseEngineBattleFold(value: unknown, catalog?: EngineCatalog): EngineBattleFold | null {
   if (!isPlainRecord(value) || !isEngineBattleInit(value.init) || !isBattleSlice(value.slice, true)) return null;
   const fold = value as unknown as EngineBattleFold;
-  return hasConsistentDraftPools(fold) && !hasInvalidJourneyDeckSparkOrigins(fold, catalog) && !hasUnknownScoreGroup(fold, catalog) && !hasUnknownLastTurnScoring(fold, catalog) && !hasUnknownFirstEventHistory(fold, catalog) ? fold : null;
+  return hasConsistentOpeningHandGuarantees(fold) && hasConsistentDraftPools(fold) && !hasInvalidJourneyDeckSparkOrigins(fold, catalog) && !hasUnknownScoreGroup(fold, catalog) && !hasUnknownLastTurnScoring(fold, catalog) && !hasUnknownFirstEventHistory(fold, catalog) ? fold : null;
+}
+
+function hasConsistentOpeningHandGuarantees(fold: EngineBattleFold): boolean {
+  const slices = [fold.slice, ...(fold.slice.history === undefined ? [] : [fold.slice.history.base])];
+  const expected = fold.init.guaranteedOpeningHand;
+  return slices.every(slice => {
+    const step = slice.inFlight?.step;
+    if (step?.kind !== "beginBattle") return true;
+    const actual = step.guaranteedOpeningHand;
+    if (!validOpeningHandGuarantees(actual, fold.init) || (step.preparedPhase !== undefined &&
+      SIDES.some(side => (actual?.[side]?.length ?? 0) > 0))) return false;
+    if (expected === undefined || actual === undefined) return expected === actual;
+    return SIDES.every(side => {
+      const a = actual[side], b = expected[side];
+      return a === undefined || b === undefined ? a === b : a.length === b.length && a.every((source, index) => {
+        const other = b[index];
+        return other !== undefined && source.deckIndex === other.deckIndex && source.entryId === other.entryId &&
+          source.dreamsignId === other.dreamsignId && source.heldIndex === other.heldIndex;
+      });
+    });
+  });
 }
 
 function hasConsistentDraftPools(fold: EngineBattleFold): boolean {
@@ -437,6 +459,7 @@ function isEngineBattleInit(value: unknown): boolean {
       value.dreamsigns,
     ) &&
     optional(sideRecord(isNextBattleEffects, true))(value.nextBattle) &&
+    validOpeningHandGuarantees(value.guaranteedOpeningHand, value) &&
     optional(isVictorySides)(value.victorySides) &&
     optional(nullable(isPositiveIndex))(value.turnLimit) &&
     (value.setup === undefined || isEngineSetup(value.setup, value))
@@ -615,6 +638,7 @@ function isInFlight(value: unknown): boolean {
     isPlainRecord(value) &&
     isPlainRecord(value.step) &&
     oneOf(STEP_KINDS)(value.step.kind) &&
+    (value.step.kind === "beginBattle" ? validOpeningHandGuarantees(value.step.guaranteedOpeningHand) : value.step.guaranteedOpeningHand === undefined) &&
     (value.step.kind !== "beginBattle" || optional(oneOf({ draw: true, dawn: true, day: true }))(value.step.preparedPhase)) &&
     isBoolean(value.automatic) &&
     isArrayOf(value.answers, isRecordedAnswer)

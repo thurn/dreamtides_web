@@ -1,0 +1,463 @@
+{
+  "bead": "hv-umm2.722",
+  "base": "86d87f649b3f4b61b0743c81be9ba13cd3f44340",
+  "dispatch": {
+    "start": "2026-10-15T06:37:28.823Z",
+    "proof": "/tmp/root-722/dispatch.json"
+  },
+  "cutoff": {
+    "at": "2026-10-15T06:55:23.785215Z",
+    "meaning": "Precommit evidence cutoff; actual automatic Git end is measured externally after COMMITACK. The final cutoff is refreshed immediately before commit without changing validation source.",
+    "maxUnmeasuredTailSeconds": 60
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v01 native concurrent static/related-test stage start",
+        "source": "sysctl-derived native review output at 2026-10-15T06:45:32.684Z",
+        "value": 6.31640625
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "focused-affected-v03",
+      "at": "2026-10-15T06:44:32.286166Z",
+      "sample": "{ 6.66 11.34 14.02 }"
+    },
+    {
+      "command": "focused-v01",
+      "at": "2026-10-15T06:42:48.330086Z",
+      "sample": "{ 13.08 13.78 15.13 }"
+    },
+    {
+      "command": "focused-v02",
+      "at": "2026-10-15T06:43:33.583204Z",
+      "sample": "{ 9.34 12.68 14.65 }"
+    },
+    {
+      "command": "full-envelope-v01",
+      "at": "2026-10-15T06:47:59.298719Z",
+      "sample": "{ 6.72 9.01 12.42 }"
+    },
+    {
+      "command": "full-v01",
+      "at": "2026-10-15T06:47:59.636135Z",
+      "sample": "{ 6.72 9.01 12.42 }"
+    },
+    {
+      "command": "knip-v01",
+      "at": "2026-10-15T06:47:23.958123Z",
+      "sample": "{ 6.16 9.15 12.61 }"
+    },
+    {
+      "command": "review-v01",
+      "at": "2026-10-15T06:45:30.977867Z",
+      "sample": "{ 6.34 10.42 13.50 }"
+    },
+    {
+      "command": "typecheck-v01",
+      "at": "2026-10-15T06:40:04.693521Z",
+      "sample": "{ 10.71 16.54 16.33 }"
+    }
+  ],
+  "commands": [
+    {
+      "label": "focused-affected-v03",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/opening-hand-guarantees.test.ts",
+        "src/engine/core.test.ts",
+        "src/engine/log.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/rules/battle/engine-battle.test.ts",
+        "src/rules/battle/engine-battle-errors.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/guaranteed-opening722-root",
+      "start": "2026-10-15T06:44:32.286166Z",
+      "pid": 55705,
+      "pgid": 55705,
+      "hostLoad": "{ 6.66 11.34 14.02 }",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "end": "2026-10-15T06:44:58.257393Z",
+      "wallS": 25.970796665991656,
+      "exit": 0,
+      "userCpuS": 32.787333,
+      "systemCpuS": 2.95214,
+      "sourceUnchanged": true,
+      "cleanup": "command parent reaped; no task server/browser/provider launched",
+      "stdout": "/tmp/root-722/focused-affected-v03.stdout",
+      "stderr": "/tmp/root-722/focused-affected-v03.stderr",
+      "receipt": "focused-affected-v03.receipt.json",
+      "receiptSha256": "7a6dd30f3be870ca0ee6f732828fe0c26cab73d391a553ff00bc7c3d04edb0fd",
+      "sourceBeforeSha256": "053aab6aacdc0be3196f8256c1a2d91570737caf9052f553027bfff1faa37e79",
+      "sourceAfterSha256": "053aab6aacdc0be3196f8256c1a2d91570737caf9052f553027bfff1faa37e79"
+    },
+    {
+      "label": "focused-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/opening-hand-guarantees.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/guaranteed-opening722-root",
+      "start": "2026-10-15T06:42:48.330086Z",
+      "pid": 33520,
+      "pgid": 33520,
+      "hostLoad": "{ 13.08 13.78 15.13 }",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "end": "2026-10-15T06:42:57.373051Z",
+      "wallS": 9.042745874961838,
+      "exit": 1,
+      "userCpuS": 5.606742,
+      "systemCpuS": 2.597121,
+      "sourceUnchanged": true,
+      "cleanup": "command parent reaped; no task server/browser/provider launched",
+      "stdout": "/tmp/root-722/focused-v01.stdout",
+      "stderr": "/tmp/root-722/focused-v01.stderr",
+      "receipt": "focused-v01.receipt.json",
+      "receiptSha256": "f94c38273e5ec569a3988be6365b6a9d8d2fa5e7b52043c55b86083902848dc8",
+      "sourceBeforeSha256": "d1efafd7ff763353027dc7aaf199fe07d58620173f0bc8a3a5db867a32e6ed45",
+      "sourceAfterSha256": "d1efafd7ff763353027dc7aaf199fe07d58620173f0bc8a3a5db867a32e6ed45"
+    },
+    {
+      "label": "focused-v02",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/opening-hand-guarantees.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/guaranteed-opening722-root",
+      "start": "2026-10-15T06:43:33.583204Z",
+      "pid": 51664,
+      "pgid": 51664,
+      "hostLoad": "{ 9.34 12.68 14.65 }",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "end": "2026-10-15T06:43:43.635491Z",
+      "wallS": 10.051802540954668,
+      "exit": 0,
+      "userCpuS": 5.858491,
+      "systemCpuS": 2.7446479999999998,
+      "sourceUnchanged": true,
+      "cleanup": "command parent reaped; no task server/browser/provider launched",
+      "stdout": "/tmp/root-722/focused-v02.stdout",
+      "stderr": "/tmp/root-722/focused-v02.stderr",
+      "receipt": "focused-v02.receipt.json",
+      "receiptSha256": "76d91715e72b178dbf5c73f959c1238bc0b583daa6cb774876b4dfa49fb55232",
+      "sourceBeforeSha256": "10a390545f7e45d4f0b589510e00e2ec48c66c5ea975c369800176f0c5747f73",
+      "sourceAfterSha256": "10a390545f7e45d4f0b589510e00e2ec48c66c5ea975c369800176f0c5747f73"
+    },
+    {
+      "label": "full-envelope-v01",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root-722/full-under-lock.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/guaranteed-opening722-root",
+      "start": "2026-10-15T06:47:59.298719Z",
+      "commandStart": "2026-10-15T06:47:59.590632Z",
+      "runnerVersion": 2,
+      "runnerSha256": "609c39e68bb50e33c94f3dac81e91001368454a58fefaed60b21eb95f604e9a6",
+      "pid": 69898,
+      "pgid": 69898,
+      "hostLoad": "{ 6.72 9.01 12.42 }",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "end": "2026-10-15T06:49:58.669754Z",
+      "wallS": 119.36922054103343,
+      "exit": 0,
+      "userCpuS": 265.799146,
+      "systemCpuS": 29.541174,
+      "sourceUnchanged": true,
+      "cleanup": "command parent reaped; no task server/browser/provider launched",
+      "stdout": "/tmp/root-722/full-envelope-v01.stdout",
+      "stderr": "/tmp/root-722/full-envelope-v01.stderr",
+      "receipt": "full-envelope-v01.receipt.json",
+      "receiptSha256": "6d9805e6b9225b9849bea829693911551fa411dd55d1dcc67c329b90e0311172",
+      "sourceBeforeSha256": "5ab2a9ebc6f35c196aa60514773b9d968a5e5e96802bfe7fbcd530644ad9ad97",
+      "sourceAfterSha256": "5ab2a9ebc6f35c196aa60514773b9d968a5e5e96802bfe7fbcd530644ad9ad97"
+    },
+    {
+      "label": "full-v01",
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/guaranteed-opening722-root",
+      "start": "2026-10-15T06:47:59.636135Z",
+      "commandStart": "2026-10-15T06:47:59.715901Z",
+      "runnerVersion": 2,
+      "runnerSha256": "609c39e68bb50e33c94f3dac81e91001368454a58fefaed60b21eb95f604e9a6",
+      "pid": 69916,
+      "pgid": 69916,
+      "hostLoad": "{ 6.72 9.01 12.42 }",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "end": "2026-10-15T06:49:58.594216Z",
+      "wallS": 118.9563383339555,
+      "exit": 0,
+      "userCpuS": 265.70241,
+      "systemCpuS": 29.434186,
+      "sourceUnchanged": true,
+      "cleanup": "command parent reaped; no task server/browser/provider launched",
+      "stdout": "/tmp/root-722/full-v01.stdout",
+      "stderr": "/tmp/root-722/full-v01.stderr",
+      "receipt": "full-v01.receipt.json",
+      "receiptSha256": "ffb5dfcb5d2fc89233746c528c6c26b8ff38428dba466e0b2d184f41216cf2aa",
+      "sourceBeforeSha256": "5ab2a9ebc6f35c196aa60514773b9d968a5e5e96802bfe7fbcd530644ad9ad97",
+      "sourceAfterSha256": "5ab2a9ebc6f35c196aa60514773b9d968a5e5e96802bfe7fbcd530644ad9ad97"
+    },
+    {
+      "label": "knip-v01",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/guaranteed-opening722-root",
+      "start": "2026-10-15T06:47:23.958123Z",
+      "pid": 67310,
+      "pgid": 67310,
+      "hostLoad": "{ 6.16 9.15 12.61 }",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "end": "2026-10-15T06:47:29.507583Z",
+      "wallS": 5.5492422499810345,
+      "exit": 0,
+      "userCpuS": 4.327862,
+      "systemCpuS": 1.79057,
+      "sourceUnchanged": true,
+      "cleanup": "command parent reaped; no task server/browser/provider launched",
+      "stdout": "/tmp/root-722/knip-v01.stdout",
+      "stderr": "/tmp/root-722/knip-v01.stderr",
+      "receipt": "knip-v01.receipt.json",
+      "receiptSha256": "b11c106a91fbd4fa109a62d584a69f28651213b9663e9843fdda655231ae3e2f",
+      "sourceBeforeSha256": "5ab2a9ebc6f35c196aa60514773b9d968a5e5e96802bfe7fbcd530644ad9ad97",
+      "sourceAfterSha256": "5ab2a9ebc6f35c196aa60514773b9d968a5e5e96802bfe7fbcd530644ad9ad97"
+    },
+    {
+      "label": "review-v01",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/guaranteed-opening722-root",
+      "start": "2026-10-15T06:45:30.977867Z",
+      "pid": 59960,
+      "pgid": 59960,
+      "hostLoad": "{ 6.34 10.42 13.50 }",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "end": "2026-10-15T06:46:40.026126Z",
+      "wallS": 69.0472137920442,
+      "exit": 0,
+      "userCpuS": 193.673992,
+      "systemCpuS": 17.023238,
+      "sourceUnchanged": true,
+      "cleanup": "command parent reaped; no task server/browser/provider launched",
+      "stdout": "/tmp/root-722/review-v01.stdout",
+      "stderr": "/tmp/root-722/review-v01.stderr",
+      "receipt": "review-v01.receipt.json",
+      "receiptSha256": "7dd929eb319a243eeac3a269faf683de8c03ad579e66c6eccde59c0a30d120fb",
+      "sourceBeforeSha256": "a0048d684623c7dd2a2e3ebd099cb0b090414c592b64cc6f2b093c2b969e03e7",
+      "sourceAfterSha256": "a0048d684623c7dd2a2e3ebd099cb0b090414c592b64cc6f2b093c2b969e03e7"
+    },
+    {
+      "label": "typecheck-v01",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/guaranteed-opening722-root",
+      "start": "2026-10-15T06:40:04.693521Z",
+      "pid": 80777,
+      "pgid": 80777,
+      "hostLoad": "{ 10.71 16.54 16.33 }",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "end": "2026-10-15T06:40:22.428696Z",
+      "wallS": 17.734842208970804,
+      "exit": 2,
+      "userCpuS": 28.673248,
+      "systemCpuS": 2.728543,
+      "sourceUnchanged": false,
+      "cleanup": "command parent reaped; no task server/browser/provider launched",
+      "stdout": "/tmp/root-722/typecheck-v01.stdout",
+      "stderr": "/tmp/root-722/typecheck-v01.stderr",
+      "receipt": "typecheck-v01.receipt.json",
+      "receiptSha256": "a77652452aa2e3fb30c5417b68bb94a5c56222a776966620f23151b9aed5ed9d",
+      "sourceBeforeSha256": "f86349e45776ad2dd2462308d32677065f56e83dc0f9370641007a40f8e59e81",
+      "sourceAfterSha256": "63110bf5d19f03c4209048f27b7cb922ad8fbabc61688cf686a3c254b214dc2c"
+    }
+  ],
+  "resourceAudit": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.722/implementation-20261015T063728823Z/implementation-resource-audit-v01.json",
+    "sha256": "b12923bc9623d5e409e8bcec4b2a094103992f53000af96c51c7edf1ed5118c0"
+  },
+  "sourceEpochs": {
+    "review": "Stable review-v01 epoch; final test-only prepared fixture clears nextBattle.",
+    "final": "Knip and the single locked full-v01 use the final production and test source epoch. Both before/after source maps are identical.",
+    "firstTypecheckMaterialization": "The original false freeze is retained: only ignored, untracked generated src/cumulus/primitives/tokens.ts was created by prepare. No tracked source changed during any validation command."
+  },
+  "results": {
+    "owning": {
+      "tests": 15,
+      "lines": 254
+    },
+    "affected": {
+      "files": 7,
+      "tests": 5827,
+      "wallS": 25.970796665991656
+    },
+    "review": {
+      "files": 312,
+      "tests": 9628,
+      "wallS": 69.0472137920442
+    },
+    "full": {
+      "files": 393,
+      "tests": 10637,
+      "vitestDurationS": 77.51,
+      "nativeTestStageS": 78.2,
+      "commandWallS": 118.9563383339555,
+      "envelopeWallS": 119.36922054103343,
+      "workers": 2,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "coverage": "Includes existing content-gates contracts and whole-suite schema, privacy and fold coverage. No production content changed.",
+      "budget": "Observed Vitest 77.51 seconds and native test phase 78.2 seconds exceed the D19 under-60-second target; this observed run did not meet the target. No controlled low-load qualification or comparison is claimed."
+    }
+  },
+  "attemptDispositions": [
+    {
+      "attempt": "typecheck-v01",
+      "result": "Two own validator syntax/library errors corrected before focused validation; generated token creation retained separately."
+    },
+    {
+      "attempt": "focused-v01",
+      "result": "13 passed, 2 failed. Tests incorrectly required rollback of published private knowledge. Assertions now preserve committed zones, actual selected instance, turn and RNG while permitting retained disclosure."
+    }
+  ],
+  "savedFixtures": "Prospective beginBattle DTOs test strict current/history-base load guards. Real afterOpeningHand redraw prompts provide the runtime suspension, JSON cold replay, cancellation refusal, published-prefix, continuation and rollback evidence.",
+  "scope": "Seven admitted existing source/rules files, two new functional modules, one cohesive public synthetic suite and own RD/evidence. Engine index export omitted because BattleInit is the used public declaration. No authored UUID or journey/UI consumer is claimed.",
+  "processCleanup": {
+    "command": [
+      "ps",
+      "-axo",
+      "pid,ppid,pgid"
+    ],
+    "validationProcessGroups": [
+      33520,
+      51664,
+      55705,
+      59960,
+      67310,
+      69898,
+      69916,
+      80777
+    ],
+    "fullSuiteSyntheticFixtureGroups": [
+      442,
+      1193,
+      2010,
+      2482,
+      72334,
+      72469,
+      72823,
+      72978,
+      73628,
+      73671,
+      74279,
+      74395,
+      74495,
+      75066,
+      75351,
+      75730,
+      76407,
+      76552,
+      76642,
+      77228,
+      77444,
+      77892,
+      78525,
+      78698,
+      78790,
+      79399,
+      79527,
+      80634,
+      80929,
+      81694,
+      82800,
+      82944,
+      83695,
+      83828,
+      84593,
+      84781,
+      85001,
+      85222,
+      85734,
+      85946,
+      86721,
+      86896,
+      87114,
+      87486,
+      88021,
+      88196,
+      88627,
+      88912,
+      88948,
+      89826,
+      89939,
+      90061,
+      92478,
+      93212,
+      97512,
+      97979,
+      99502
+    ],
+    "liveMatchingGroups": []
+  },
+  "pendingParentDuties": [
+    "Fresh read-only Codex core review after helper completion",
+    "Exact candidate/certificate/promotion and release qualification",
+    "Native closure"
+  ],
+  "ownSchema": {
+    "argv": [
+      "node",
+      "scripts/friction-triggers.mjs",
+      "--validate-records"
+    ],
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/guaranteed-opening722-root",
+    "start": "2026-10-15T06:51:19.041574Z",
+    "commandStart": "2026-10-15T06:51:19.113915Z",
+    "end": "2026-10-15T06:51:19.241841Z",
+    "wallS": 0.20019508403493091,
+    "exit": 0,
+    "pid": 11245,
+    "pgid": 11245,
+    "sourceUnchanged": true,
+    "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.722/implementation-20261015T063728823Z/schema-v01.receipt.json"
+  }
+}
