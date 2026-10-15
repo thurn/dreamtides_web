@@ -180,7 +180,9 @@ function finishTransition(
           const quote = offers.find((offer) => offer.type === entry.transfiguration);
           const details = event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" ? journeyTransfigurationCard(old) : null;
           return { entryId: entry.entryId, cardId: quote?.previewCard.id ?? details?.cardId ?? null, type: entry.transfiguration,
-            applicableForms: details?.forms ?? offers.map((offer) => offer.type), essenceCost: quote?.essenceCost ?? 0,
+            ...(entry.transfigurationApplications === undefined ? {} : { transfigurationApplications: entry.transfigurationApplications }),
+            applicableForms: event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" && entry.transfigurationApplications !== undefined
+              ? (details?.applicableForms ?? []).filter((form) => form !== "Perfected") : details?.forms ?? offers.map((offer) => offer.type), essenceCost: quote?.essenceCost ?? 0,
             ...(quote === undefined ? {} : { effectDetails: quote.effectDetails }) };
         }),
         essenceBefore: before.journey.essence, essenceAfter: domain.essence } });

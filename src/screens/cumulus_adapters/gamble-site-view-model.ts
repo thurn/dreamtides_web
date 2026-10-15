@@ -1,3 +1,4 @@
+import { buildDeckEntryTransfigurationDisplay } from "../../transfiguration/deck-entry-transfigurations";
 import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import type { CardSubtype } from "../../types/card-identity";
 import { resolveDeckEntryCard } from "../../card-type-change";
@@ -549,13 +550,18 @@ function buildFourSuitRepriseSiteView(params: {
           target.cardSnapshot,
           latestRound.chosenTransfiguration,
         );
+  const actualTarget = target === null ? undefined : params.state.deck.find(entry => entry.entryId === target.entryId);
+  const actualBase = actualTarget === undefined ? undefined : params.cardDatabase?.get(actualTarget.cardNumber);
+  const actualDisplay = actualTarget?.transfigurationApplications === undefined || actualBase === undefined || target === null || actualBase.id !== target.cardId || actualTarget.cardNumber !== target.cardNumber ? null : buildDeckEntryTransfigurationDisplay(params.transfigurationData, actualBase, actualTarget);
   const resultTarget =
     target === null
       ? null
       : {
           ...fourSuitCardView(target, params.state.typeRemap),
           model:
-            chosenPreview === null
+            actualDisplay !== null && actualTarget !== undefined && actualBase !== undefined
+              ? remapGameCardModelTypes({ cardId: actualBase.id, displaySnapshot: resolveDeckEntryCard(params.transfigurationData, actualBase, actualTarget), transfiguration: actualDisplay.display }, params.state.typeRemap)
+              : chosenPreview === null
               ? fourSuitCardView(target, params.state.typeRemap).model
               : remapGameCardModelTypes({
                   cardId: target.cardSnapshot.id,
@@ -571,7 +577,7 @@ function buildFourSuitRepriseSiteView(params: {
     target === null || minted.entryId === target.entryId || minted.cardNumber !== target.cardNumber || base.id !== latestRound?.targetCardId
     ? null : { entryId: minted.entryId, cardId: base.id, model: remapGameCardModelTypes({
       cardId: base.id, displaySnapshot: resolveDeckEntryCard(params.transfigurationData, base, minted),
-      ...(minted.transfiguration === null ? {} : { transfiguration: buildTransfigurationDisplay(params.transfigurationData, base, minted.transfiguration).display }),
+      ...(minted.transfiguration === null ? {} : { transfiguration: buildDeckEntryTransfigurationDisplay(params.transfigurationData, base, minted)!.display }),
     }, params.state.typeRemap) };
   const cards = availableTargets.map(target => fourSuitCardView(target, params.state.typeRemap));
   const roundNumber = (

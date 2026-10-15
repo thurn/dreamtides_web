@@ -1,3 +1,4 @@
+import { isDeckEntryTransfigurationRecord, type TransfigurationRecordResult } from "../../transfiguration/deck-entry-transfigurations";
 import type { EventContext } from "../../eventlog/types";
 import type { CardId } from "../../types/card-identity";
 import type { CardType } from "../../types/cards";
@@ -9,7 +10,9 @@ import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modif
 import { findSite } from "./sites";
 
 export interface JourneyTransfigurationProvider {
-  resolve(entry: Readonly<DeckEntry>): { readonly cardId: CardId; readonly cardType: CardType; readonly subtype: import("../../types/card-identity").CardSubtype; readonly forms: readonly TransfigurationType[]; readonly starter?: boolean; readonly perfectedEligible?: boolean } | null;
+  validateRecord?(entry: Readonly<DeckEntry>): boolean;
+  apply?(entry: Readonly<DeckEntry>, form: TransfigurationType): TransfigurationRecordResult<DeckEntry>;
+  resolve(entry: Readonly<DeckEntry>): { readonly cardId: CardId; readonly cardType: CardType; readonly subtype: import("../../types/card-identity").CardSubtype; readonly forms: readonly TransfigurationType[]; readonly applicableForms?: readonly TransfigurationType[]; readonly starter?: boolean; readonly perfectedEligible?: boolean } | null;
 }
 let provider: JourneyTransfigurationProvider | null = null;
 export function registerJourneyTransfigurationProvider(value: JourneyTransfigurationProvider | null): void { provider = value; }
@@ -73,8 +76,40 @@ export function resolveJourneyTransfiguration(journey: JourneyState, payload: Re
   if (selected.some((entry) => entry === undefined || entry.transfiguration !== null)) return null;
   if (selected.length === 0) return advanceAfterBattle(journey, choice);
   if (provider === null) return null;
+  if (selected.some(entry => !validJourneyTransfigurationRecord(entry))) return null;
   const resolved = selected.map((entry) => provider!.resolve(entry!));
-  if (resolved.some((card) => card === null || card.forms.length === 0)) return null;
-  const forms = new Map(ids.map((id, index) => [id!, resolved[index]!.forms[Math.floor(ctx.rng(index) * resolved[index]!.forms.length)]]));
-  return advanceAfterBattle({ ...journey, deck: journey.deck.map((entry) => forms.has(entry.entryId) ? { ...entry, transfiguration: forms.get(entry.entryId)! } : entry) }, choice);
+  const available = resolved.map(card => card === null ? [] : provider!.apply === undefined ? card.forms : (card.applicableForms ?? []).filter(form => form !== "Perfected"));
+  if (available.some(forms => forms.length === 0)) return null;
+  // Preflight every source/form before any random draw, including injected capabilities.
+  if (provider.apply !== undefined && selected.some((entry, index) => available[index].some(form => !provider!.apply!(entry!, form).ok))) return null;
+  const changed = new Map(ids.map((id, index) => {
+    const form = available[index][Math.floor(ctx.rng(index) * available[index].length)];
+    const result = provider!.apply?.(selected[index]!, form);
+    if (result !== undefined && !result.ok) throw new Error("Transfiguration source changed during append");
+    return [id!, result?.ok ? result.value : { ...selected[index]!, transfiguration: form }];
+  }));
+  return advanceAfterBattle({ ...journey, deck: journey.deck.map(entry => changed.get(entry.entryId) ?? entry) }, choice);
+}
+
+/** A legacy resolver cannot certify a present complete record. */
+export function validJourneyTransfigurationRecord(entry: unknown): boolean {
+  if (!isDeckEntryTransfigurationRecord(entry)) return false;
+  if (typeof entry !== "object" || entry === null || !("transfigurationApplications" in entry)) return true;
+  try { return provider?.validateRecord?.(entry as DeckEntry) === true; } catch { return false; }
+}
+function record(value: unknown): value is Record<string, unknown> { return typeof value === "object" && value !== null && !Array.isArray(value); }
+/** Only persisted DeckEntry-bearing locations consumed by journey continuations are inspected. */
+export function validJourneyTransfigurationRecords(journey: unknown): boolean {
+  if (!record(journey)) return true;
+  const entries = (value: unknown) => !Array.isArray(value) || value.every(validJourneyTransfigurationRecord);
+  const runtimes = (value: unknown) => !record(value) || Object.values(value).every(runtime => !record(runtime) || !record(runtime.resolution) || entries(runtime.resolution.purgedEntrySnapshots));
+  if (!entries(journey.deck) || !runtimes(journey.siteRuntime)) return false;
+  const screen = journey.screen;
+  if (!record(screen) || !record(screen.choice) || screen.choice.kind !== "subtype" || !record(screen.choice.resume)) return true;
+  const resume = screen.choice.resume;
+  return (!record(resume.before) || entries(resume.before.deck) && runtimes(resume.before.siteRuntime)) && entries(resume.attemptedEntries) &&
+    (!Array.isArray(resume.transfigurations) || resume.transfigurations.every(occurrence => !record(occurrence) || validJourneyTransfigurationRecord(occurrence.entry)));
+}
+export function assertJourneyTransfigurationCheckpoint(state: unknown): void {
+  if (record(state) && !validJourneyTransfigurationRecords(state.journey)) throw new Error("Invalid journey transfiguration checkpoint");
 }

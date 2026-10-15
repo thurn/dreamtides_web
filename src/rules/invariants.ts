@@ -4,7 +4,7 @@ import { validShopReplenishmentRuntime } from "./journey/journey-shop";
 import { validStarterPurgeScreen, validStarterBattleBinding } from "./journey/journey-starter-acquisition";
 import { validJourneyDuplicationScreen } from "./journey/journey-duplication";
 import { validJourneyDreamsignScreen, validDreamsignBattleBinding } from "./journey/journey-on-gain";
-import { validJourneyTransfigurationScreen } from "./journey/journey-transfiguration";
+import { validJourneyTransfigurationRecords, validJourneyTransfigurationScreen } from "./journey/journey-transfiguration";
 import { validJourneyPurgeScreen } from "./journey/journey-purge";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "./journey/modifier-registry";
 import { layerOrdinal } from "../types/layer-name";
@@ -90,6 +90,7 @@ export function foldInvariantViolations(
     if (!validShopReplenishmentRuntime(runtime)) violations.push({ code: "journey_shop_replenishment_inconsistent", detail: siteId });
   }
 
+  if (!validJourneyTransfigurationRecords(state.journey)) violations.push({ code: "journey_transfiguration_record_inconsistent", detail: "applications" });
   if (journey.runId === null) return violations;
 
   const nodes = Object.values(journey.atlas.nodes);

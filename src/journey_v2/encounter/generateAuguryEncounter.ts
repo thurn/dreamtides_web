@@ -205,6 +205,7 @@ function inputSignature(context: AuguryContext): unknown {
         entryId: deckCard.entryId,
         cardNumber: deckCard.cardNumber,
         transfiguration: deckCard.deckEntry.transfiguration,
+        ...(deckCard.deckEntry.transfigurationApplications === undefined ? {} : { transfigurationApplications: deckCard.deckEntry.transfigurationApplications }),
         keywordModification: deckCard.deckEntry.keywordModification ?? null,
         typeChange: deckCard.deckEntry.typeChange ?? null,
         isBane: deckCard.deckEntry.isBane,

@@ -1,3 +1,5 @@
+import { isTransfigurationApplications, copyTransfigurationApplications } from "../engine/transfiguration-application-data";
+import type { TransfigurationPresentation } from "../types/transfiguration-data";
 import {
   cardIdFromUnknown,
   cardSubtypeFromUnknown,
@@ -209,8 +211,30 @@ function cardTransfigurationDisplayFromUnknown(
   ) {
     return null;
   }
+  let applications: CardTransfigurationDisplay["applications"];
+  if ("applications" in value) {
+    if (!Array.isArray(value.applications) || value.applications.length === 0 || Object.keys(value.applications).length !== value.applications.length) return null;
+    const presentation = (raw: unknown, type: TransfigurationType): raw is TransfigurationPresentation => isPlainRecord(raw) && typeof raw.name === "string" && typeof raw.description === "string" && raw.glyph === `transfiguration${type}` && isHexColor(raw.accentColor) && isHexColor(raw.tintColor);
+    const decoded = [];
+    for (const step of value.applications) {
+      if (!isPlainRecord(step)) return null;
+      const rawApplications = [step.application];
+      if (!isTransfigurationApplications(rawApplications) || !presentation(step.form, rawApplications[0].form)) return null;
+      const application = copyTransfigurationApplications(rawApplications)[0];
+      if (application.form === "Perfected") {
+        if (!Array.isArray(step.constituents) || step.constituents.length !== application.constituents.length || Object.keys(step.constituents).length !== step.constituents.length || !step.constituents.every((form, index) => presentation(form, application.constituents[index]))) return null;
+        decoded.push({ application, form: { ...step.form }, constituents: step.constituents.map(form => ({ ...form })) });
+      } else {
+        if ("constituents" in step) return null;
+        decoded.push({ application, form: { ...step.form } });
+      }
+    }
+    if (decoded[0].application.form !== value.type || form.glyph !== `transfiguration${value.type}`) return null;
+    applications = decoded;
+  }
   return {
     type: value.type,
+    ...(applications === undefined ? {} : { applications }),
     form: {
       name: form.name,
       description: form.description,

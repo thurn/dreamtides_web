@@ -43,6 +43,8 @@ export interface TransfigurationFormDefinition {
   readonly rewardScore: TransfigurationRewardScore;
 }
 
+export type TransfigurationPresentation = Pick<TransfigurationFormDefinition, "name" | "description" | "glyph" | "accentColor" | "tintColor">;
+
 export interface TransfigurationData {
   readonly schemaVersion: 1;
   readonly contentHash: ContentHash;

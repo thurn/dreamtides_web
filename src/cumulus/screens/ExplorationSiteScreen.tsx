@@ -1,3 +1,4 @@
+import { transfigurationDisplayName } from "../../runtime/transfiguration-display";
 import type { Glyph } from "../primitives/glyph";
 import type { CardSubtype } from "../../types/card-identity";
 // ExplorationSiteScreen — Layaway draws one possibility from the player's
@@ -1755,12 +1756,12 @@ function CardTransfigurationPairPresentation({
       data-card-id={mapping.cardId}
       data-before-transfiguration="none"
       data-after-transfiguration={mapping.afterTransfiguration}
-      data-after-form-name={mapping.after.model.transfiguration.form.name}
+      data-after-form-name={transfigurationDisplayName(mapping.after.model.transfiguration)}
       role="group"
       aria-label={
         scope === "starter"
-          ? `Starter card ${mapping.before.model.displaySnapshot.name} transfigured into its ${mapping.after.model.transfiguration.form.name} form`
-          : `${mapping.before.model.displaySnapshot.name} transfigured into its ${mapping.after.model.transfiguration.form.name} form`
+          ? `Starter card ${mapping.before.model.displaySnapshot.name} transfigured into its ${transfigurationDisplayName(mapping.after.model.transfiguration)} form`
+          : `${mapping.before.model.displaySnapshot.name} transfigured into its ${transfigurationDisplayName(mapping.after.model.transfiguration)} form`
       }
       initial={{
         opacity: reduceMotion ? 1 : 0,
@@ -4079,7 +4080,7 @@ export function ExplorationSiteScreen({
               transfigurationRevealed ? "transfigured" : "original"
             }
             role="status"
-            aria-label={`Transfiguring ${transfigurationReward.before.displaySnapshot.name} into its ${transfigurationReward.after.transfiguration.form.name} form`}
+            aria-label={`Transfiguring ${transfigurationReward.before.displaySnapshot.name} into its ${transfigurationDisplayName(transfigurationReward.after.transfiguration)} form`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{

@@ -1,3 +1,4 @@
+import { buildDeckEntryTransfigurationDisplay, clearDeckEntryTransfigurations } from "../../transfiguration/deck-entry-transfigurations";
 import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { validPreventedNightmareGains } from "../../rules/journey/journey-deck-entry";
@@ -41,7 +42,6 @@ import type {
   JourneyState,
   TransfigurationType,
 } from "../../types/journey";
-import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import { transfigurationForm } from "../../data/transfiguration-data";
 import type { CardId } from "../../types/card-identity";
 import type { DeckEntryId } from "../../types/identifiers";
@@ -117,7 +117,7 @@ function resolvedTransfigurationViews(
     ) {
       return [];
     }
-    const before = deckCardChoice({ ...entry, transfiguration: null }, content, state.typeRemap);
+    const before = deckCardChoice(clearDeckEntryTransfigurations(entry), content, state.typeRemap);
     const after = deckCardChoice(entry, content, state.typeRemap);
     if (
       before === null ||
@@ -1012,7 +1012,7 @@ function multiCardTransfigurationRewardForResolution(
     ) {
       return [];
     }
-    const before = deckCardChoice({ ...entry, transfiguration: null }, content, state.typeRemap);
+    const before = deckCardChoice(clearDeckEntryTransfigurations(entry), content, state.typeRemap);
     const after = deckCardChoice(entry, content, state.typeRemap);
     if (
       before === null ||
@@ -1115,7 +1115,7 @@ function starterCardTransfigurationRewardForResolution(
     ) {
       return [];
     }
-    const before = deckCardChoice({ ...entry, transfiguration: null }, content, state.typeRemap);
+    const before = deckCardChoice(clearDeckEntryTransfigurations(entry), content, state.typeRemap);
     const after = deckCardChoice(entry, content, state.typeRemap);
     if (
       before === null ||
@@ -1753,18 +1753,11 @@ export function rewardForResolution(
       base !== undefined
     ) {
       const before = resolveDeckEntryCard(content.transfigurationData, base, {
-        ...entry,
-        transfiguration: null,
+        ...clearDeckEntryTransfigurations(entry),
       });
-      const after = resolveDeckEntryCard(content.transfigurationData, base, {
-        ...entry,
-        transfiguration: type,
-      });
-      const display = buildTransfigurationDisplay(
-        content.transfigurationData,
-        base,
-        type,
-      ).display;
+      const afterEntry = entry.transfigurationApplications === undefined ? { ...entry, transfiguration: type } : entry;
+      const after = resolveDeckEntryCard(content.transfigurationData, base, afterEntry);
+      const display = buildDeckEntryTransfigurationDisplay(content.transfigurationData, base, afterEntry)!.display;
       return {
         kind: "transfiguration",
         entryId,

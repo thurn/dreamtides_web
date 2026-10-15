@@ -149,8 +149,12 @@ export function buildTransfigurationDisplay(
   type: TransfigurationType,
 ): TransfiguredCard {
   const definition = transfigurationForm(data, type);
-  const steps = operationSteps(data, original, definition);
+  return buildTransfigurationStepsDisplay(data, original, type, operationSteps(data, original, definition).filter((step): step is Exclude<TransfigurationType, "Perfected"> => step !== "Perfected"));
+}
 
+/** Replays already certified primitive steps, retaining cumulative text markers. */
+export function buildTransfigurationStepsDisplay(data: TransfigurationData, original: CardData, type: TransfigurationType, steps: readonly Exclude<TransfigurationType, "Perfected">[]): TransfiguredCard {
+  const definition = transfigurationForm(data, type);
   let card = original;
   let markedText = original.renderedText;
   let energyChanged = false;

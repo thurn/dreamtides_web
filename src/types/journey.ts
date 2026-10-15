@@ -117,11 +117,15 @@ export interface DeckEntryCardModification {
 export type AtlasNodeState =
   "unrevealed" | "revealedLocked" | "available" | "completed" | "forgone";
 
+import type { TransfigurationApplication } from "../engine/dsl/types";
+
 /** An entry in the player's deck. Duplicates are possible. */
 export interface DeckEntry {
   entryId: DeckEntryId;
   cardNumber: number;
   transfiguration: TransfigurationType | null;
+  /** Complete chronological applications; the scalar is the first application. */
+  transfigurationApplications?: readonly TransfigurationApplication[];
   typeChange?: CardTypeChange | null;
   keywordModification?: CardKeywordModification | null;
   /** Permanent additive spark granted to this concrete deck entry. */

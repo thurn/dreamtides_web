@@ -867,6 +867,7 @@ export function selectReward(
       cardUuid: baseCard.id,
       cardNumber: baseCard.cardNumber,
       transfiguration: entry.transfiguration,
+        ...(entry.transfigurationApplications === undefined ? {} : { transfigurationApplications: entry.transfigurationApplications }),
     }))
     .sort((left, right) => compareStableKeys(left.entryId, right.entryId));
   const candidateDigest = stableDigest(

@@ -1,0 +1,2176 @@
+{
+  "bead": "hv-umm2.757",
+  "base": "c1b7b70cf8723e5e1aa9b575f32354b9f0cadaa9",
+  "clock": {
+    "originalDispatch": "2026-10-15T18:49:49.003000+00:00",
+    "journalOrdinal": 54392,
+    "dispatchCall": "call_db5e285f26ac43a69dd92f577bc014a0",
+    "authorEvidenceCutoff": "2026-10-15T20:20:39.827319+00:00",
+    "continuousThrough": "actual Git completion recorded in final-commit.json; includes source audit, coordination, failed runs, queue, QA and Git",
+    "sampling": "UNKNOWN",
+    "claimClock": "Parent-owned native claim is a separate clock; no reset/backdate or substitution."
+  },
+  "artifactDirectory": "artifacts/qa/hv-umm2.757/author",
+  "authority": [
+    {
+      "name": "ack01.txt",
+      "sha256": "6232c11bab3a4fd7b0a175dbcf62d34ae124912c87557c99cf9f80406a10eba5"
+    },
+    {
+      "name": "ack02.txt",
+      "sha256": "477ab85249840b1c2a2b25b95c1e39e21f789e39955b07d9337a8fba47f31e0c"
+    },
+    {
+      "name": "ack03.txt",
+      "sha256": "10d13a99b70e89a03d5393e6d96960903fb65f6ea1f80e9f9c0b5eeeb65dab17"
+    },
+    {
+      "name": "ack04.txt",
+      "sha256": "e5f6d59ca0c14adf991eca0c666f96b496bd21b034eb4c0b42f33c64027f921f"
+    }
+  ],
+  "sourceCustody": {
+    "initialTrackedPayloads": 5827,
+    "scope": "Every real run freezes all tracked and untracked-unignored file payloads, including literal symlink targets, before execution. Each receipt has exact argv/times/load/PID/PG/wait/exit plus raw log and complete source manifest.",
+    "stage1OriginalProposalSha256": "cdcf688bf21924a11ed1b40e78f8dd2962be59577c67ddad949b4f76c691de16",
+    "stage1OriginalManifestSha256": "66f43ede475c61c9c0762513fed845fcc05d2b072babdf61bf9ea3d9c78a1292",
+    "stage1AddendumSha256": "dd056edd1bb69161c85b5733878c87674abcdc0753b42c2fdf9f4e1cd5cf7ec4",
+    "readRepair": {
+      "paths": 18,
+      "semanticLines": 1338,
+      "literalStart": "2026-10-15T19:07:31.415974Z",
+      "literalEnd": "2026-10-15T19:08:40.951489Z",
+      "literalReadWallSeconds": 69.535515,
+      "coverageClaim": "original premature; repaired addendum controls"
+    },
+    "runtimeSourceLastChanged": "ACK04 diagnostic-only applicableForms expression before focused-diagnostic-control-final; final focused/review/Knip/heavy src maps match. Browser-v4 is explicitly its pre-diagnostic epoch, with the sole runtime difference independently checked as the exact log property; UI/provider/state-transition bytes match. Evidence-only files are written after final heavy."
+  },
+  "baseline": {
+    "run": "baseline-own",
+    "tests": 65,
+    "passed": 55,
+    "failed": 10,
+    "publicBehavioralRed": 9,
+    "capabilityAbsenceFailure": 1,
+    "sevenFinalBaselineHashes": {
+      "src/battle/ui/journey-transfiguration-record.contracts.ts": "30c034c17816f69bdc90499998450de89947fd79b3a5217408a463c23c8db939",
+      "src/rules/journey/journey-transfiguration-record-ingress.contracts.ts": "fb07e5ababdeeb25105dac5612a71bfb8da5aa4a11b2c7f352b8989611c6ecff",
+      "src/rules/journey/journey-transfiguration-record.contracts.ts": "ea067b9d1a3ed7791194eff1c45982ae6e7ffdda9b099ca93d899e99df298a36",
+      "src/rules/journey/journey-transfiguration-record.fixtures.ts": "031f507c0c1de3edbb78051540cc96fd5f1b5c31367f35e0fef578285635b537",
+      "src/screens/cumulus_adapters/journey-transfiguration-record.contracts.ts": "9ce95fa5df40fc487e45a20ee544d065598434766f5e1653ce968b583eb4b3bf",
+      "src/session/journey-transfiguration-record-persistence.contracts.ts": "262f94e4d6ed6c1075fd0bec86bc4309009663da907585da4a45d874b905859e",
+      "src/session/providers/journey-transfiguration-record.contracts.ts": "213adbb6adcc2efbfec0a195caf9503e93068833d3220d3d9ee198f8c949cdb5"
+    },
+    "qualification": "Seven original baseline newfiles immutable. Five historical runner snapshots necessarily gain additional ACK02 imports; not claimed unchanged."
+  },
+  "finalFocused": {
+    "run": "focused-diagnostic-control-final",
+    "tests": 91,
+    "failed": 0
+  },
+  "finalReview": {
+    "run": "review-diagnostic-green",
+    "files": 257,
+    "tests": 9161,
+    "failed": 0
+  },
+  "testDelta": {
+    "logicalNewContractModules": 11,
+    "newTestEntrypointFiles": 0,
+    "netContractAndRunnerImportLines": 526,
+    "separateFixtureFiles": 1,
+    "separateFixtureLines": 26,
+    "newJsdomFiles": 0,
+    "allNewContractFixtureLines": 541,
+    "additiveRunnerImportLines": 11
+  },
+  "heavy": {
+    "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "admissionRun": "heavy-admission-diagnostic-final",
+    "innerRun": "heavy-full-diagnostic-final",
+    "queueAndStartupSeconds": 0.195091,
+    "innerExecutionGuardSeconds": 1800,
+    "innerActualSeconds": 135.72482085227966,
+    "workers": 2,
+    "browserResourcesHeldWhileQueued": false,
+    "qualification": "Outer actual wait includes lock admission plus inner execution;1800s guard begins only inside acquired lock. Inner npm review also performs its normal repository review-slot acquisition; its raw log retains that boundary."
+  },
+  "runLedgerCutoff": "This committed measurement snapshots actual runs through final heavy. Subsequent schema/whitespace and Git receipts, exact final source map and actual Git completion are retained in final-commit.json and author/runs.",
+  "runs": [
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T19:18:25.293460+00:00",
+      "loadStart": [
+        14.90234375,
+        8.97509765625,
+        8.82177734375
+      ],
+      "sourceManifest": "runs/baseline-own/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 90892,
+      "pgid": 90892,
+      "end": "2026-10-15T19:18:33.602318+00:00",
+      "wallSeconds": 8.308899641036987,
+      "loadEnd": [
+        18.73193359375,
+        9.9814453125,
+        9.18017578125
+      ],
+      "exit": 1,
+      "wait": "subprocess.wait actual completion",
+      "name": "baseline-own",
+      "rawLog": "runs/baseline-own/raw.log",
+      "receipt": "runs/baseline-own/run.json"
+    },
+    {
+      "argv": [
+        "env",
+        "QA_757_RAW_DIR=/tmp/757-root/qa-mcp-dom-raw",
+        "node",
+        "--import",
+        "/tmp/757-root/retain-mcp-response.mjs",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/757-root/757-qa-dom-diagnostic.mjs",
+        "--bead",
+        "hv-umm2.757",
+        "--timeout",
+        "250",
+        "--viewports",
+        "desktop"
+      ],
+      "start": "2026-10-15T19:55:01.589449+00:00",
+      "loadStart": [
+        19.869140625,
+        12.98486328125,
+        11.65380859375
+      ],
+      "sourceManifest": "runs/browser-dom-diagnostic/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 77293,
+      "pgid": 77293,
+      "end": "2026-10-15T19:55:31.865212+00:00",
+      "wallSeconds": 30.27583384513855,
+      "loadEnd": [
+        21.4326171875,
+        14.0458984375,
+        12.08544921875
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "browser-dom-diagnostic",
+      "rawLog": "runs/browser-dom-diagnostic/raw.log",
+      "receipt": "runs/browser-dom-diagnostic/run.json"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/757-root/757-qa.mjs",
+        "--bead",
+        "hv-umm2.757",
+        "--timeout",
+        "500",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-15T19:36:39.784025+00:00",
+      "loadStart": [
+        11.8994140625,
+        9.900390625,
+        9.78515625
+      ],
+      "sourceManifest": "runs/browser-first/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 716,
+      "pgid": 716,
+      "end": "2026-10-15T19:38:11.596526+00:00",
+      "wallSeconds": 91.81255412101746,
+      "loadEnd": [
+        14.05322265625,
+        11.244140625,
+        10.318359375
+      ],
+      "exit": 1,
+      "wait": "subprocess.wait actual completion",
+      "name": "browser-first",
+      "rawLog": "runs/browser-first/raw.log",
+      "receipt": "runs/browser-first/run.json"
+    },
+    {
+      "argv": [
+        "env",
+        "QA_757_RAW_DIR=/tmp/757-root/qa-mcp-save-raw",
+        "node",
+        "--import",
+        "/tmp/757-root/retain-mcp-response.mjs",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/757-root/757-qa-save-diagnostic.mjs",
+        "--bead",
+        "hv-umm2.757",
+        "--timeout",
+        "250",
+        "--viewports",
+        "desktop"
+      ],
+      "start": "2026-10-15T19:57:38.712719+00:00",
+      "loadStart": [
+        11.55908203125,
+        12.81689453125,
+        11.8642578125
+      ],
+      "sourceManifest": "runs/browser-save-diagnostic/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 65589,
+      "pgid": 65589,
+      "end": "2026-10-15T19:57:57.989453+00:00",
+      "wallSeconds": 19.276774168014526,
+      "loadEnd": [
+        10.85107421875,
+        12.58251953125,
+        11.80224609375
+      ],
+      "exit": 2,
+      "wait": "subprocess.wait actual completion",
+      "name": "browser-save-diagnostic",
+      "rawLog": "runs/browser-save-diagnostic/raw.log",
+      "receipt": "runs/browser-save-diagnostic/run.json"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/757-root/757-qa-v2.mjs",
+        "--bead",
+        "hv-umm2.757",
+        "--timeout",
+        "500",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-15T19:51:36.407872+00:00",
+      "loadStart": [
+        9.02294921875,
+        10.3427734375,
+        10.69287109375
+      ],
+      "sourceManifest": "runs/browser-v2/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 53581,
+      "pgid": 53581,
+      "end": "2026-10-15T19:52:06.077495+00:00",
+      "wallSeconds": 29.66966414451599,
+      "loadEnd": [
+        12.7529296875,
+        11.1845703125,
+        10.98876953125
+      ],
+      "exit": 2,
+      "wait": "subprocess.wait actual completion",
+      "name": "browser-v2",
+      "rawLog": "runs/browser-v2/raw.log",
+      "receipt": "runs/browser-v2/run.json"
+    },
+    {
+      "argv": [
+        "env",
+        "QA_757_RAW_DIR=/tmp/757-root/qa-mcp-v3-raw",
+        "node",
+        "--import",
+        "/tmp/757-root/retain-mcp-response.mjs",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/757-root/757-qa-v3.mjs",
+        "--bead",
+        "hv-umm2.757",
+        "--timeout",
+        "500",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-15T19:58:40.654256+00:00",
+      "loadStart": [
+        10.2099609375,
+        12.18408203125,
+        11.6953125
+      ],
+      "sourceManifest": "runs/browser-v3/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 77973,
+      "pgid": 77973,
+      "end": "2026-10-15T19:58:51.841794+00:00",
+      "wallSeconds": 11.187580108642578,
+      "loadEnd": [
+        9.6357421875,
+        11.99609375,
+        11.6337890625
+      ],
+      "exit": 2,
+      "wait": "subprocess.wait actual completion",
+      "name": "browser-v3",
+      "rawLog": "runs/browser-v3/raw.log",
+      "receipt": "runs/browser-v3/run.json"
+    },
+    {
+      "argv": [
+        "env",
+        "QA_757_RAW_DIR=/tmp/757-root/qa-mcp-v4-raw",
+        "node",
+        "--import",
+        "/tmp/757-root/retain-mcp-response.mjs",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/757-root/757-qa-v4.mjs",
+        "--bead",
+        "hv-umm2.757",
+        "--timeout",
+        "500",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-15T19:59:42.675675+00:00",
+      "loadStart": [
+        10.8154296875,
+        11.9375,
+        11.62939453125
+      ],
+      "sourceManifest": "runs/browser-v4/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 90489,
+      "pgid": 90489,
+      "end": "2026-10-15T20:00:35.168607+00:00",
+      "wallSeconds": 52.49297523498535,
+      "loadEnd": [
+        10.23583984375,
+        11.6904296875,
+        11.5615234375
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "browser-v4",
+      "rawLog": "runs/browser-v4/raw.log",
+      "receipt": "runs/browser-v4/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T19:29:07.987938+00:00",
+      "loadStart": [
+        9.81494140625,
+        11.302734375,
+        10.2421875
+      ],
+      "sourceManifest": "runs/controls-complete/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 40475,
+      "pgid": 40475,
+      "end": "2026-10-15T19:29:15.618387+00:00",
+      "wallSeconds": 7.63048791885376,
+      "loadEnd": [
+        9.46826171875,
+        11.17724609375,
+        10.2099609375
+      ],
+      "exit": 1,
+      "wait": "subprocess.wait actual completion",
+      "name": "controls-complete",
+      "rawLog": "runs/controls-complete/raw.log",
+      "receipt": "runs/controls-complete/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T19:25:43.544292+00:00",
+      "loadStart": [
+        20.49169921875,
+        11.65771484375,
+        9.98291015625
+      ],
+      "sourceManifest": "runs/controls-first/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 20657,
+      "pgid": 20657,
+      "end": "2026-10-15T19:25:49.891631+00:00",
+      "wallSeconds": 6.347386121749878,
+      "loadEnd": [
+        21.4130859375,
+        11.9951171875,
+        10.11181640625
+      ],
+      "exit": 1,
+      "wait": "subprocess.wait actual completion",
+      "name": "controls-first",
+      "rawLog": "runs/controls-first/raw.log",
+      "receipt": "runs/controls-first/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts"
+      ],
+      "start": "2026-10-15T19:44:46.634881+00:00",
+      "loadStart": [
+        22.2568359375,
+        14.7607421875,
+        11.7626953125
+      ],
+      "sourceManifest": "runs/copiable-design-counterexample/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 15218,
+      "pgid": 15218,
+      "end": "2026-10-15T19:44:53.217197+00:00",
+      "wallSeconds": 6.582378387451172,
+      "loadEnd": [
+        21.27490234375,
+        14.681640625,
+        11.751953125
+      ],
+      "exit": 1,
+      "wait": "subprocess.wait actual completion",
+      "name": "copiable-design-counterexample",
+      "rawLog": "runs/copiable-design-counterexample/raw.log",
+      "receipt": "runs/copiable-design-counterexample/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts"
+      ],
+      "start": "2026-10-15T19:46:00.960421+00:00",
+      "loadStart": [
+        15.025390625,
+        14.17578125,
+        11.78955078125
+      ],
+      "sourceManifest": "runs/copiable-design-counterexample-both/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 22715,
+      "pgid": 22715,
+      "end": "2026-10-15T19:46:06.731071+00:00",
+      "wallSeconds": 5.7706921100616455,
+      "loadEnd": [
+        14.70263671875,
+        14.123046875,
+        11.78466796875
+      ],
+      "exit": 1,
+      "wait": "subprocess.wait actual completion",
+      "name": "copiable-design-counterexample-both",
+      "rawLog": "runs/copiable-design-counterexample-both/raw.log",
+      "receipt": "runs/copiable-design-counterexample-both/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts"
+      ],
+      "start": "2026-10-15T20:09:51.181789+00:00",
+      "loadStart": [
+        9.29248046875,
+        10.5078125,
+        10.9619140625
+      ],
+      "sourceManifest": "runs/diagnostic-applicability-counterexample/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 2996,
+      "pgid": 2996,
+      "end": "2026-10-15T20:09:56.675939+00:00",
+      "wallSeconds": 5.494189023971558,
+      "loadEnd": [
+        9.10888671875,
+        10.44921875,
+        10.9384765625
+      ],
+      "exit": 1,
+      "wait": "subprocess.wait actual completion",
+      "name": "diagnostic-applicability-counterexample",
+      "rawLog": "runs/diagnostic-applicability-counterexample/raw.log",
+      "receipt": "runs/diagnostic-applicability-counterexample/run.json"
+    },
+    {
+      "argv": [
+        "npx",
+        "eslint",
+        "src/rules/journey/journey-transfiguration-record-controls.contracts.ts"
+      ],
+      "start": "2026-10-15T20:14:22.461721+00:00",
+      "loadStart": [
+        6.94140625,
+        8.63916015625,
+        9.9853515625
+      ],
+      "sourceManifest": "runs/diagnostic-control-lint/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 18436,
+      "pgid": 18436,
+      "end": "2026-10-15T20:14:25.375393+00:00",
+      "wallSeconds": 2.913707971572876,
+      "loadEnd": [
+        7.34619140625,
+        8.69482421875,
+        9.9970703125
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "diagnostic-control-lint",
+      "rawLog": "runs/diagnostic-control-lint/raw.log",
+      "receipt": "runs/diagnostic-control-lint/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T19:22:28.336388+00:00",
+      "loadStart": [
+        7.94921875,
+        9.267578125,
+        9.126953125
+      ],
+      "sourceManifest": "runs/first-core/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 93069,
+      "pgid": 93069,
+      "end": "2026-10-15T19:22:34.805241+00:00",
+      "wallSeconds": 6.468909025192261,
+      "loadEnd": [
+        8.61669921875,
+        9.35888671875,
+        9.16015625
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "first-core",
+      "rawLog": "runs/first-core/raw.log",
+      "receipt": "runs/first-core/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T19:46:32.756085+00:00",
+      "loadStart": [
+        12.8994140625,
+        13.7431640625,
+        11.71435546875
+      ],
+      "sourceManifest": "runs/focused-ack03/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 25957,
+      "pgid": 25957,
+      "end": "2026-10-15T19:46:38.627719+00:00",
+      "wallSeconds": 5.871689796447754,
+      "loadEnd": [
+        12.5869140625,
+        13.6640625,
+        11.6982421875
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "focused-ack03",
+      "rawLog": "runs/focused-ack03/raw.log",
+      "receipt": "runs/focused-ack03/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T20:14:34.867852+00:00",
+      "loadStart": [
+        7.078125,
+        8.61669921875,
+        9.9619140625
+      ],
+      "sourceManifest": "runs/focused-diagnostic-control-final/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 18626,
+      "pgid": 18626,
+      "end": "2026-10-15T20:14:39.954506+00:00",
+      "wallSeconds": 5.08669900894165,
+      "loadEnd": [
+        6.75146484375,
+        8.5234375,
+        9.9208984375
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "focused-diagnostic-control-final",
+      "rawLog": "runs/focused-diagnostic-control-final/raw.log",
+      "receipt": "runs/focused-diagnostic-control-final/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T20:10:59.841744+00:00",
+      "loadStart": [
+        7.55029296875,
+        9.7841796875,
+        10.65576171875
+      ],
+      "sourceManifest": "runs/focused-diagnostic-final/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 8442,
+      "pgid": 8442,
+      "end": "2026-10-15T20:11:06.187262+00:00",
+      "wallSeconds": 6.345556020736694,
+      "loadEnd": [
+        8.09912109375,
+        9.82470703125,
+        10.65966796875
+      ],
+      "exit": 1,
+      "wait": "subprocess.wait actual completion",
+      "name": "focused-diagnostic-final",
+      "rawLog": "runs/focused-diagnostic-final/raw.log",
+      "receipt": "runs/focused-diagnostic-final/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T20:12:24.821266+00:00",
+      "loadStart": [
+        9.22900390625,
+        9.57421875,
+        10.4775390625
+      ],
+      "sourceManifest": "runs/focused-diagnostic-green/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 14537,
+      "pgid": 14537,
+      "end": "2026-10-15T20:12:30.332780+00:00",
+      "wallSeconds": 5.511553049087524,
+      "loadEnd": [
+        9.03955078125,
+        9.52197265625,
+        10.4482421875
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "focused-diagnostic-green",
+      "rawLog": "runs/focused-diagnostic-green/raw.log",
+      "receipt": "runs/focused-diagnostic-green/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T19:40:26.882372+00:00",
+      "loadStart": [
+        8.15966796875,
+        9.83740234375,
+        9.876953125
+      ],
+      "sourceManifest": "runs/focused-final/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 83593,
+      "pgid": 83593,
+      "end": "2026-10-15T19:40:32.791982+00:00",
+      "wallSeconds": 5.909659147262573,
+      "loadEnd": [
+        7.986328125,
+        9.7734375,
+        9.85400390625
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "focused-final",
+      "rawLog": "runs/focused-final/raw.log",
+      "receipt": "runs/focused-final/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T19:31:54.824022+00:00",
+      "loadStart": [
+        8.76904296875,
+        9.91845703125,
+        9.8291015625
+      ],
+      "sourceManifest": "runs/focused-green/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 80729,
+      "pgid": 80729,
+      "end": "2026-10-15T19:32:00.469908+00:00",
+      "wallSeconds": 5.645931005477905,
+      "loadEnd": [
+        9.66796875,
+        10.08544921875,
+        9.888671875
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "focused-green",
+      "rawLog": "runs/focused-green/raw.log",
+      "receipt": "runs/focused-green/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/ui/engine-card-model.test.ts",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "start": "2026-10-15T19:48:01.334224+00:00",
+      "loadStart": [
+        8.53662109375,
+        12.11669921875,
+        11.291015625
+      ],
+      "sourceManifest": "runs/focused-scope-restored/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 33881,
+      "pgid": 33881,
+      "end": "2026-10-15T19:48:10.007428+00:00",
+      "wallSeconds": 8.67325496673584,
+      "loadEnd": [
+        9.25439453125,
+        12.14697265625,
+        11.310546875
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "focused-scope-restored",
+      "rawLog": "runs/focused-scope-restored/raw.log",
+      "receipt": "runs/focused-scope-restored/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/mobile-deck-view-model.test.ts"
+      ],
+      "start": "2026-10-15T19:39:46.316437+00:00",
+      "loadStart": [
+        9.3095703125,
+        10.21923828125,
+        10.0068359375
+      ],
+      "sourceManifest": "runs/gamble-guard-control/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 80177,
+      "pgid": 80177,
+      "end": "2026-10-15T19:39:52.734157+00:00",
+      "wallSeconds": 6.417762756347656,
+      "loadEnd": [
+        9.44482421875,
+        10.23193359375,
+        10.01220703125
+      ],
+      "exit": 1,
+      "wait": "subprocess.wait actual completion",
+      "name": "gamble-guard-control",
+      "rawLog": "runs/gamble-guard-control/raw.log",
+      "receipt": "runs/gamble-guard-control/run.json"
+    },
+    {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/757-root/run-heavy.py",
+        "heavy-full",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-15T20:00:59.003002+00:00",
+      "loadStart": [
+        9.12646484375,
+        11.3515625,
+        11.44287109375
+      ],
+      "sourceManifest": "runs/heavy-admission/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 6059,
+      "pgid": 6059,
+      "end": "2026-10-15T20:08:41.177394+00:00",
+      "wallSeconds": 462.174439907074,
+      "loadEnd": [
+        12.1787109375,
+        11.23193359375,
+        11.2421875
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "heavy-admission",
+      "rawLog": "runs/heavy-admission/raw.log",
+      "receipt": "runs/heavy-admission/run.json"
+    },
+    {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/757-root/run-heavy.py",
+        "heavy-full-diagnostic-final",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-15T20:16:13.325833+00:00",
+      "loadStart": [
+        26.98828125,
+        13.96435546875,
+        11.806640625
+      ],
+      "sourceManifest": "runs/heavy-admission-diagnostic-final/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 23208,
+      "pgid": 23208,
+      "end": "2026-10-15T20:18:29.254547+00:00",
+      "wallSeconds": 135.9287712574005,
+      "loadEnd": [
+        11.8037109375,
+        13.34521484375,
+        11.93408203125
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "heavy-admission-diagnostic-final",
+      "rawLog": "runs/heavy-admission-diagnostic-final/raw.log",
+      "receipt": "runs/heavy-admission-diagnostic-final/run.json"
+    },
+    {
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-15T20:06:27.434266+00:00",
+      "loadStart": [
+        11.587890625,
+        11.06494140625,
+        11.216796875
+      ],
+      "sourceManifest": "runs/heavy-full/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "innerExecutionGuardSeconds": 1800,
+      "admission": "caller acquired heavy.lock before invoking this inner recorder",
+      "sysctlVmLoadavgStart": "vm.loadavg: { 11.59 11.06 11.22 }",
+      "pid": 51007,
+      "pgid": 51007,
+      "end": "2026-10-15T20:08:41.167759+00:00",
+      "wallSeconds": 133.73352694511414,
+      "loadEnd": [
+        12.1787109375,
+        11.23193359375,
+        11.2421875
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion; inner-only1800s guard",
+      "sysctlVmLoadavgEnd": "vm.loadavg: { 12.18 11.23 11.24 }",
+      "name": "heavy-full",
+      "rawLog": "runs/heavy-full/raw.log",
+      "receipt": "runs/heavy-full/run.json"
+    },
+    {
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-15T20:16:13.520924+00:00",
+      "loadStart": [
+        26.98828125,
+        13.96435546875,
+        11.806640625
+      ],
+      "sourceManifest": "runs/heavy-full-diagnostic-final/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "innerExecutionGuardSeconds": 1800,
+      "admission": "caller acquired heavy.lock before invoking this inner recorder",
+      "sysctlVmLoadavgStart": "vm.loadavg: { 26.99 13.96 11.81 }",
+      "pid": 23245,
+      "pgid": 23245,
+      "end": "2026-10-15T20:18:29.245694+00:00",
+      "wallSeconds": 135.72482085227966,
+      "loadEnd": [
+        11.8037109375,
+        13.34521484375,
+        11.93408203125
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion; inner-only1800s guard",
+      "sysctlVmLoadavgEnd": "vm.loadavg: { 11.80 13.35 11.93 }",
+      "name": "heavy-full-diagnostic-final",
+      "rawLog": "runs/heavy-full-diagnostic-final/raw.log",
+      "receipt": "runs/heavy-full-diagnostic-final/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T19:49:41.409488+00:00",
+      "loadStart": [
+        7.52978515625,
+        10.93359375,
+        10.9306640625
+      ],
+      "sourceManifest": "runs/knip-ack03/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 42706,
+      "pgid": 42706,
+      "end": "2026-10-15T19:49:47.738389+00:00",
+      "wallSeconds": 6.328943252563477,
+      "loadEnd": [
+        8.1279296875,
+        11.0009765625,
+        10.9541015625
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "knip-ack03",
+      "rawLog": "runs/knip-ack03/raw.log",
+      "receipt": "runs/knip-ack03/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T20:12:57.104747+00:00",
+      "loadStart": [
+        7.96533203125,
+        9.22314453125,
+        10.3125
+      ],
+      "sourceManifest": "runs/knip-diagnostic-final/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 16916,
+      "pgid": 16916,
+      "end": "2026-10-15T20:13:04.091134+00:00",
+      "wallSeconds": 6.986432075500488,
+      "loadEnd": [
+        7.8076171875,
+        9.16943359375,
+        10.287109375
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "knip-diagnostic-final",
+      "rawLog": "runs/knip-diagnostic-final/raw.log",
+      "receipt": "runs/knip-diagnostic-final/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T20:14:57.410273+00:00",
+      "loadStart": [
+        7.46533203125,
+        8.56982421875,
+        9.904296875
+      ],
+      "sourceManifest": "runs/knip-diagnostic-green/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 19149,
+      "pgid": 19149,
+      "end": "2026-10-15T20:15:02.147486+00:00",
+      "wallSeconds": 4.737260103225708,
+      "loadEnd": [
+        8.46875,
+        8.75927734375,
+        9.96337890625
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "knip-diagnostic-green",
+      "rawLog": "runs/knip-diagnostic-green/raw.log",
+      "receipt": "runs/knip-diagnostic-green/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T19:43:09.988060+00:00",
+      "loadStart": [
+        11.3837890625,
+        9.75146484375,
+        9.7822265625
+      ],
+      "sourceManifest": "runs/knip-final/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 97616,
+      "pgid": 97616,
+      "end": "2026-10-15T19:43:14.820957+00:00",
+      "wallSeconds": 4.832934856414795,
+      "loadEnd": [
+        10.95263671875,
+        9.68896484375,
+        9.759765625
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "knip-final",
+      "rawLog": "runs/knip-final/raw.log",
+      "receipt": "runs/knip-final/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T19:32:49.644923+00:00",
+      "loadStart": [
+        8.6708984375,
+        9.6474609375,
+        9.72998046875
+      ],
+      "sourceManifest": "runs/knip-first/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 84536,
+      "pgid": 84536,
+      "end": "2026-10-15T19:32:57.068686+00:00",
+      "wallSeconds": 7.4238121509552,
+      "loadEnd": [
+        9.41748046875,
+        9.78564453125,
+        9.7783203125
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "knip-first",
+      "rawLog": "runs/knip-first/raw.log",
+      "receipt": "runs/knip-first/run.json"
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "/tmp/757-root/757-qa-v2.mjs"
+      ],
+      "start": "2026-10-15T19:51:29.255885+00:00",
+      "loadStart": [
+        8.5244140625,
+        10.30224609375,
+        10.68359375
+      ],
+      "sourceManifest": "runs/qa-v2-syntax/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 52113,
+      "pgid": 52113,
+      "end": "2026-10-15T19:51:29.297163+00:00",
+      "wallSeconds": 0.041314125061035156,
+      "loadEnd": [
+        8.5244140625,
+        10.30224609375,
+        10.68359375
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "qa-v2-syntax",
+      "rawLog": "runs/qa-v2-syntax/raw.log",
+      "receipt": "runs/qa-v2-syntax/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T19:49:41.409170+00:00",
+      "loadStart": [
+        7.52978515625,
+        10.93359375,
+        10.9306640625
+      ],
+      "sourceManifest": "runs/review-ack03/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 42705,
+      "pgid": 42705,
+      "end": "2026-10-15T19:50:47.824262+00:00",
+      "wallSeconds": 66.4151291847229,
+      "loadEnd": [
+        8.96142578125,
+        10.66015625,
+        10.8251953125
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "review-ack03",
+      "rawLog": "runs/review-ack03/raw.log",
+      "receipt": "runs/review-ack03/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T20:12:57.104663+00:00",
+      "loadStart": [
+        7.96533203125,
+        9.22314453125,
+        10.3125
+      ],
+      "sourceManifest": "runs/review-diagnostic-final/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 16915,
+      "pgid": 16915,
+      "end": "2026-10-15T20:14:01.634559+00:00",
+      "wallSeconds": 64.52994203567505,
+      "loadEnd": [
+        7.5859375,
+        8.87353515625,
+        10.09912109375
+      ],
+      "exit": 1,
+      "wait": "subprocess.wait actual completion",
+      "name": "review-diagnostic-final",
+      "rawLog": "runs/review-diagnostic-final/raw.log",
+      "receipt": "runs/review-diagnostic-final/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T20:14:57.410274+00:00",
+      "loadStart": [
+        7.46533203125,
+        8.56982421875,
+        9.904296875
+      ],
+      "sourceManifest": "runs/review-diagnostic-green/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 19150,
+      "pgid": 19150,
+      "end": "2026-10-15T20:16:01.238215+00:00",
+      "wallSeconds": 63.82798218727112,
+      "loadEnd": [
+        25.64697265625,
+        13.2802734375,
+        11.54443359375
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "review-diagnostic-green",
+      "rawLog": "runs/review-diagnostic-green/raw.log",
+      "receipt": "runs/review-diagnostic-green/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T19:41:28.106360+00:00",
+      "loadStart": [
+        7.0703125,
+        9.27392578125,
+        9.6650390625
+      ],
+      "sourceManifest": "runs/review-final/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 88762,
+      "pgid": 88762,
+      "end": "2026-10-15T19:42:33.443206+00:00",
+      "wallSeconds": 65.33689308166504,
+      "loadEnd": [
+        8.01513671875,
+        9.14892578125,
+        9.58935546875
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "review-final",
+      "rawLog": "runs/review-final/raw.log",
+      "receipt": "runs/review-final/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T19:26:23.672939+00:00",
+      "loadStart": [
+        17.42041015625,
+        12.06640625,
+        10.2138671875
+      ],
+      "sourceManifest": "runs/review-first/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 29261,
+      "pgid": 29261,
+      "end": "2026-10-15T19:27:28.861087+00:00",
+      "wallSeconds": 65.18818688392639,
+      "loadEnd": [
+        14.09814453125,
+        12.13427734375,
+        10.3759765625
+      ],
+      "exit": 2,
+      "wait": "subprocess.wait actual completion",
+      "name": "review-first",
+      "rawLog": "runs/review-first/raw.log",
+      "receipt": "runs/review-first/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T19:30:16.903983+00:00",
+      "loadStart": [
+        7.4765625,
+        10.2685546875,
+        9.9326171875
+      ],
+      "sourceManifest": "runs/review-fixed/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 53796,
+      "pgid": 53796,
+      "end": "2026-10-15T19:31:21.453380+00:00",
+      "wallSeconds": 64.54943704605103,
+      "loadEnd": [
+        8.337890625,
+        9.98388671875,
+        9.8486328125
+      ],
+      "exit": 2,
+      "wait": "subprocess.wait actual completion",
+      "name": "review-fixed",
+      "rawLog": "runs/review-fixed/raw.log",
+      "receipt": "runs/review-fixed/run.json"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T19:32:49.644844+00:00",
+      "loadStart": [
+        8.6708984375,
+        9.6474609375,
+        9.72998046875
+      ],
+      "sourceManifest": "runs/review-green/source.json",
+      "originalDispatch": "2026-10-15T18:49:49.003Z",
+      "sampling": "UNKNOWN",
+      "pid": 84535,
+      "pgid": 84535,
+      "end": "2026-10-15T19:34:06.066848+00:00",
+      "wallSeconds": 76.42205166816711,
+      "loadEnd": [
+        10.34326171875,
+        10.0498046875,
+        9.880859375
+      ],
+      "exit": 0,
+      "wait": "subprocess.wait actual completion",
+      "name": "review-green",
+      "rawLog": "runs/review-green/raw.log",
+      "receipt": "runs/review-green/run.json"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "run": "baseline-own",
+      "start": "2026-10-15T19:18:25.293460+00:00",
+      "end": "2026-10-15T19:18:33.602318+00:00",
+      "loadStart": [
+        14.90234375,
+        8.97509765625,
+        8.82177734375
+      ],
+      "loadEnd": [
+        18.73193359375,
+        9.9814453125,
+        9.18017578125
+      ]
+    },
+    {
+      "run": "browser-dom-diagnostic",
+      "start": "2026-10-15T19:55:01.589449+00:00",
+      "end": "2026-10-15T19:55:31.865212+00:00",
+      "loadStart": [
+        19.869140625,
+        12.98486328125,
+        11.65380859375
+      ],
+      "loadEnd": [
+        21.4326171875,
+        14.0458984375,
+        12.08544921875
+      ]
+    },
+    {
+      "run": "browser-first",
+      "start": "2026-10-15T19:36:39.784025+00:00",
+      "end": "2026-10-15T19:38:11.596526+00:00",
+      "loadStart": [
+        11.8994140625,
+        9.900390625,
+        9.78515625
+      ],
+      "loadEnd": [
+        14.05322265625,
+        11.244140625,
+        10.318359375
+      ]
+    },
+    {
+      "run": "browser-save-diagnostic",
+      "start": "2026-10-15T19:57:38.712719+00:00",
+      "end": "2026-10-15T19:57:57.989453+00:00",
+      "loadStart": [
+        11.55908203125,
+        12.81689453125,
+        11.8642578125
+      ],
+      "loadEnd": [
+        10.85107421875,
+        12.58251953125,
+        11.80224609375
+      ]
+    },
+    {
+      "run": "browser-v2",
+      "start": "2026-10-15T19:51:36.407872+00:00",
+      "end": "2026-10-15T19:52:06.077495+00:00",
+      "loadStart": [
+        9.02294921875,
+        10.3427734375,
+        10.69287109375
+      ],
+      "loadEnd": [
+        12.7529296875,
+        11.1845703125,
+        10.98876953125
+      ]
+    },
+    {
+      "run": "browser-v3",
+      "start": "2026-10-15T19:58:40.654256+00:00",
+      "end": "2026-10-15T19:58:51.841794+00:00",
+      "loadStart": [
+        10.2099609375,
+        12.18408203125,
+        11.6953125
+      ],
+      "loadEnd": [
+        9.6357421875,
+        11.99609375,
+        11.6337890625
+      ]
+    },
+    {
+      "run": "browser-v4",
+      "start": "2026-10-15T19:59:42.675675+00:00",
+      "end": "2026-10-15T20:00:35.168607+00:00",
+      "loadStart": [
+        10.8154296875,
+        11.9375,
+        11.62939453125
+      ],
+      "loadEnd": [
+        10.23583984375,
+        11.6904296875,
+        11.5615234375
+      ]
+    },
+    {
+      "run": "controls-complete",
+      "start": "2026-10-15T19:29:07.987938+00:00",
+      "end": "2026-10-15T19:29:15.618387+00:00",
+      "loadStart": [
+        9.81494140625,
+        11.302734375,
+        10.2421875
+      ],
+      "loadEnd": [
+        9.46826171875,
+        11.17724609375,
+        10.2099609375
+      ]
+    },
+    {
+      "run": "controls-first",
+      "start": "2026-10-15T19:25:43.544292+00:00",
+      "end": "2026-10-15T19:25:49.891631+00:00",
+      "loadStart": [
+        20.49169921875,
+        11.65771484375,
+        9.98291015625
+      ],
+      "loadEnd": [
+        21.4130859375,
+        11.9951171875,
+        10.11181640625
+      ]
+    },
+    {
+      "run": "copiable-design-counterexample",
+      "start": "2026-10-15T19:44:46.634881+00:00",
+      "end": "2026-10-15T19:44:53.217197+00:00",
+      "loadStart": [
+        22.2568359375,
+        14.7607421875,
+        11.7626953125
+      ],
+      "loadEnd": [
+        21.27490234375,
+        14.681640625,
+        11.751953125
+      ]
+    },
+    {
+      "run": "copiable-design-counterexample-both",
+      "start": "2026-10-15T19:46:00.960421+00:00",
+      "end": "2026-10-15T19:46:06.731071+00:00",
+      "loadStart": [
+        15.025390625,
+        14.17578125,
+        11.78955078125
+      ],
+      "loadEnd": [
+        14.70263671875,
+        14.123046875,
+        11.78466796875
+      ]
+    },
+    {
+      "run": "diagnostic-applicability-counterexample",
+      "start": "2026-10-15T20:09:51.181789+00:00",
+      "end": "2026-10-15T20:09:56.675939+00:00",
+      "loadStart": [
+        9.29248046875,
+        10.5078125,
+        10.9619140625
+      ],
+      "loadEnd": [
+        9.10888671875,
+        10.44921875,
+        10.9384765625
+      ]
+    },
+    {
+      "run": "diagnostic-control-lint",
+      "start": "2026-10-15T20:14:22.461721+00:00",
+      "end": "2026-10-15T20:14:25.375393+00:00",
+      "loadStart": [
+        6.94140625,
+        8.63916015625,
+        9.9853515625
+      ],
+      "loadEnd": [
+        7.34619140625,
+        8.69482421875,
+        9.9970703125
+      ]
+    },
+    {
+      "run": "first-core",
+      "start": "2026-10-15T19:22:28.336388+00:00",
+      "end": "2026-10-15T19:22:34.805241+00:00",
+      "loadStart": [
+        7.94921875,
+        9.267578125,
+        9.126953125
+      ],
+      "loadEnd": [
+        8.61669921875,
+        9.35888671875,
+        9.16015625
+      ]
+    },
+    {
+      "run": "focused-ack03",
+      "start": "2026-10-15T19:46:32.756085+00:00",
+      "end": "2026-10-15T19:46:38.627719+00:00",
+      "loadStart": [
+        12.8994140625,
+        13.7431640625,
+        11.71435546875
+      ],
+      "loadEnd": [
+        12.5869140625,
+        13.6640625,
+        11.6982421875
+      ]
+    },
+    {
+      "run": "focused-diagnostic-control-final",
+      "start": "2026-10-15T20:14:34.867852+00:00",
+      "end": "2026-10-15T20:14:39.954506+00:00",
+      "loadStart": [
+        7.078125,
+        8.61669921875,
+        9.9619140625
+      ],
+      "loadEnd": [
+        6.75146484375,
+        8.5234375,
+        9.9208984375
+      ]
+    },
+    {
+      "run": "focused-diagnostic-final",
+      "start": "2026-10-15T20:10:59.841744+00:00",
+      "end": "2026-10-15T20:11:06.187262+00:00",
+      "loadStart": [
+        7.55029296875,
+        9.7841796875,
+        10.65576171875
+      ],
+      "loadEnd": [
+        8.09912109375,
+        9.82470703125,
+        10.65966796875
+      ]
+    },
+    {
+      "run": "focused-diagnostic-green",
+      "start": "2026-10-15T20:12:24.821266+00:00",
+      "end": "2026-10-15T20:12:30.332780+00:00",
+      "loadStart": [
+        9.22900390625,
+        9.57421875,
+        10.4775390625
+      ],
+      "loadEnd": [
+        9.03955078125,
+        9.52197265625,
+        10.4482421875
+      ]
+    },
+    {
+      "run": "focused-final",
+      "start": "2026-10-15T19:40:26.882372+00:00",
+      "end": "2026-10-15T19:40:32.791982+00:00",
+      "loadStart": [
+        8.15966796875,
+        9.83740234375,
+        9.876953125
+      ],
+      "loadEnd": [
+        7.986328125,
+        9.7734375,
+        9.85400390625
+      ]
+    },
+    {
+      "run": "focused-green",
+      "start": "2026-10-15T19:31:54.824022+00:00",
+      "end": "2026-10-15T19:32:00.469908+00:00",
+      "loadStart": [
+        8.76904296875,
+        9.91845703125,
+        9.8291015625
+      ],
+      "loadEnd": [
+        9.66796875,
+        10.08544921875,
+        9.888671875
+      ]
+    },
+    {
+      "run": "focused-scope-restored",
+      "start": "2026-10-15T19:48:01.334224+00:00",
+      "end": "2026-10-15T19:48:10.007428+00:00",
+      "loadStart": [
+        8.53662109375,
+        12.11669921875,
+        11.291015625
+      ],
+      "loadEnd": [
+        9.25439453125,
+        12.14697265625,
+        11.310546875
+      ]
+    },
+    {
+      "run": "gamble-guard-control",
+      "start": "2026-10-15T19:39:46.316437+00:00",
+      "end": "2026-10-15T19:39:52.734157+00:00",
+      "loadStart": [
+        9.3095703125,
+        10.21923828125,
+        10.0068359375
+      ],
+      "loadEnd": [
+        9.44482421875,
+        10.23193359375,
+        10.01220703125
+      ]
+    },
+    {
+      "run": "heavy-admission",
+      "start": "2026-10-15T20:00:59.003002+00:00",
+      "end": "2026-10-15T20:08:41.177394+00:00",
+      "loadStart": [
+        9.12646484375,
+        11.3515625,
+        11.44287109375
+      ],
+      "loadEnd": [
+        12.1787109375,
+        11.23193359375,
+        11.2421875
+      ]
+    },
+    {
+      "run": "heavy-admission-diagnostic-final",
+      "start": "2026-10-15T20:16:13.325833+00:00",
+      "end": "2026-10-15T20:18:29.254547+00:00",
+      "loadStart": [
+        26.98828125,
+        13.96435546875,
+        11.806640625
+      ],
+      "loadEnd": [
+        11.8037109375,
+        13.34521484375,
+        11.93408203125
+      ]
+    },
+    {
+      "run": "heavy-full",
+      "start": "2026-10-15T20:06:27.434266+00:00",
+      "end": "2026-10-15T20:08:41.167759+00:00",
+      "loadStart": [
+        11.587890625,
+        11.06494140625,
+        11.216796875
+      ],
+      "loadEnd": [
+        12.1787109375,
+        11.23193359375,
+        11.2421875
+      ]
+    },
+    {
+      "run": "heavy-full-diagnostic-final",
+      "start": "2026-10-15T20:16:13.520924+00:00",
+      "end": "2026-10-15T20:18:29.245694+00:00",
+      "loadStart": [
+        26.98828125,
+        13.96435546875,
+        11.806640625
+      ],
+      "loadEnd": [
+        11.8037109375,
+        13.34521484375,
+        11.93408203125
+      ]
+    },
+    {
+      "run": "knip-ack03",
+      "start": "2026-10-15T19:49:41.409488+00:00",
+      "end": "2026-10-15T19:49:47.738389+00:00",
+      "loadStart": [
+        7.52978515625,
+        10.93359375,
+        10.9306640625
+      ],
+      "loadEnd": [
+        8.1279296875,
+        11.0009765625,
+        10.9541015625
+      ]
+    },
+    {
+      "run": "knip-diagnostic-final",
+      "start": "2026-10-15T20:12:57.104747+00:00",
+      "end": "2026-10-15T20:13:04.091134+00:00",
+      "loadStart": [
+        7.96533203125,
+        9.22314453125,
+        10.3125
+      ],
+      "loadEnd": [
+        7.8076171875,
+        9.16943359375,
+        10.287109375
+      ]
+    },
+    {
+      "run": "knip-diagnostic-green",
+      "start": "2026-10-15T20:14:57.410273+00:00",
+      "end": "2026-10-15T20:15:02.147486+00:00",
+      "loadStart": [
+        7.46533203125,
+        8.56982421875,
+        9.904296875
+      ],
+      "loadEnd": [
+        8.46875,
+        8.75927734375,
+        9.96337890625
+      ]
+    },
+    {
+      "run": "knip-final",
+      "start": "2026-10-15T19:43:09.988060+00:00",
+      "end": "2026-10-15T19:43:14.820957+00:00",
+      "loadStart": [
+        11.3837890625,
+        9.75146484375,
+        9.7822265625
+      ],
+      "loadEnd": [
+        10.95263671875,
+        9.68896484375,
+        9.759765625
+      ]
+    },
+    {
+      "run": "knip-first",
+      "start": "2026-10-15T19:32:49.644923+00:00",
+      "end": "2026-10-15T19:32:57.068686+00:00",
+      "loadStart": [
+        8.6708984375,
+        9.6474609375,
+        9.72998046875
+      ],
+      "loadEnd": [
+        9.41748046875,
+        9.78564453125,
+        9.7783203125
+      ]
+    },
+    {
+      "run": "qa-v2-syntax",
+      "start": "2026-10-15T19:51:29.255885+00:00",
+      "end": "2026-10-15T19:51:29.297163+00:00",
+      "loadStart": [
+        8.5244140625,
+        10.30224609375,
+        10.68359375
+      ],
+      "loadEnd": [
+        8.5244140625,
+        10.30224609375,
+        10.68359375
+      ]
+    },
+    {
+      "run": "review-ack03",
+      "start": "2026-10-15T19:49:41.409170+00:00",
+      "end": "2026-10-15T19:50:47.824262+00:00",
+      "loadStart": [
+        7.52978515625,
+        10.93359375,
+        10.9306640625
+      ],
+      "loadEnd": [
+        8.96142578125,
+        10.66015625,
+        10.8251953125
+      ]
+    },
+    {
+      "run": "review-diagnostic-final",
+      "start": "2026-10-15T20:12:57.104663+00:00",
+      "end": "2026-10-15T20:14:01.634559+00:00",
+      "loadStart": [
+        7.96533203125,
+        9.22314453125,
+        10.3125
+      ],
+      "loadEnd": [
+        7.5859375,
+        8.87353515625,
+        10.09912109375
+      ]
+    },
+    {
+      "run": "review-diagnostic-green",
+      "start": "2026-10-15T20:14:57.410274+00:00",
+      "end": "2026-10-15T20:16:01.238215+00:00",
+      "loadStart": [
+        7.46533203125,
+        8.56982421875,
+        9.904296875
+      ],
+      "loadEnd": [
+        25.64697265625,
+        13.2802734375,
+        11.54443359375
+      ]
+    },
+    {
+      "run": "review-final",
+      "start": "2026-10-15T19:41:28.106360+00:00",
+      "end": "2026-10-15T19:42:33.443206+00:00",
+      "loadStart": [
+        7.0703125,
+        9.27392578125,
+        9.6650390625
+      ],
+      "loadEnd": [
+        8.01513671875,
+        9.14892578125,
+        9.58935546875
+      ]
+    },
+    {
+      "run": "review-first",
+      "start": "2026-10-15T19:26:23.672939+00:00",
+      "end": "2026-10-15T19:27:28.861087+00:00",
+      "loadStart": [
+        17.42041015625,
+        12.06640625,
+        10.2138671875
+      ],
+      "loadEnd": [
+        14.09814453125,
+        12.13427734375,
+        10.3759765625
+      ]
+    },
+    {
+      "run": "review-fixed",
+      "start": "2026-10-15T19:30:16.903983+00:00",
+      "end": "2026-10-15T19:31:21.453380+00:00",
+      "loadStart": [
+        7.4765625,
+        10.2685546875,
+        9.9326171875
+      ],
+      "loadEnd": [
+        8.337890625,
+        9.98388671875,
+        9.8486328125
+      ]
+    },
+    {
+      "run": "review-green",
+      "start": "2026-10-15T19:32:49.644844+00:00",
+      "end": "2026-10-15T19:34:06.066848+00:00",
+      "loadStart": [
+        8.6708984375,
+        9.6474609375,
+        9.72998046875
+      ],
+      "loadEnd": [
+        10.34326171875,
+        10.0498046875,
+        9.880859375
+      ]
+    }
+  ],
+  "failedEpochs": [
+    {
+      "run": "baseline-own",
+      "exit": 1,
+      "rawLog": "runs/baseline-own/raw.log",
+      "sourceManifest": "runs/baseline-own/source.json"
+    },
+    {
+      "run": "browser-first",
+      "exit": 1,
+      "rawLog": "runs/browser-first/raw.log",
+      "sourceManifest": "runs/browser-first/source.json"
+    },
+    {
+      "run": "browser-save-diagnostic",
+      "exit": 2,
+      "rawLog": "runs/browser-save-diagnostic/raw.log",
+      "sourceManifest": "runs/browser-save-diagnostic/source.json"
+    },
+    {
+      "run": "browser-v2",
+      "exit": 2,
+      "rawLog": "runs/browser-v2/raw.log",
+      "sourceManifest": "runs/browser-v2/source.json"
+    },
+    {
+      "run": "browser-v3",
+      "exit": 2,
+      "rawLog": "runs/browser-v3/raw.log",
+      "sourceManifest": "runs/browser-v3/source.json"
+    },
+    {
+      "run": "controls-complete",
+      "exit": 1,
+      "rawLog": "runs/controls-complete/raw.log",
+      "sourceManifest": "runs/controls-complete/source.json"
+    },
+    {
+      "run": "controls-first",
+      "exit": 1,
+      "rawLog": "runs/controls-first/raw.log",
+      "sourceManifest": "runs/controls-first/source.json"
+    },
+    {
+      "run": "copiable-design-counterexample",
+      "exit": 1,
+      "rawLog": "runs/copiable-design-counterexample/raw.log",
+      "sourceManifest": "runs/copiable-design-counterexample/source.json"
+    },
+    {
+      "run": "copiable-design-counterexample-both",
+      "exit": 1,
+      "rawLog": "runs/copiable-design-counterexample-both/raw.log",
+      "sourceManifest": "runs/copiable-design-counterexample-both/source.json"
+    },
+    {
+      "run": "diagnostic-applicability-counterexample",
+      "exit": 1,
+      "rawLog": "runs/diagnostic-applicability-counterexample/raw.log",
+      "sourceManifest": "runs/diagnostic-applicability-counterexample/source.json"
+    },
+    {
+      "run": "focused-diagnostic-final",
+      "exit": 1,
+      "rawLog": "runs/focused-diagnostic-final/raw.log",
+      "sourceManifest": "runs/focused-diagnostic-final/source.json"
+    },
+    {
+      "run": "gamble-guard-control",
+      "exit": 1,
+      "rawLog": "runs/gamble-guard-control/raw.log",
+      "sourceManifest": "runs/gamble-guard-control/source.json"
+    },
+    {
+      "run": "review-diagnostic-final",
+      "exit": 1,
+      "rawLog": "runs/review-diagnostic-final/raw.log",
+      "sourceManifest": "runs/review-diagnostic-final/source.json"
+    },
+    {
+      "run": "review-first",
+      "exit": 2,
+      "rawLog": "runs/review-first/raw.log",
+      "sourceManifest": "runs/review-first/source.json"
+    },
+    {
+      "run": "review-fixed",
+      "exit": 2,
+      "rawLog": "runs/review-fixed/raw.log",
+      "sourceManifest": "runs/review-fixed/source.json"
+    }
+  ],
+  "qa": {
+    "bead": "hv-umm2.757",
+    "scenario": "757-qa-v4.mjs",
+    "scenarioSha256": "379d748b97536d91a2f1c8529787ac6c42edee99d764a63fcb0afde40a763037",
+    "plan": "qa-source-caller-plan-v4.json",
+    "result": "PASS",
+    "invocation": "run-LaNceF",
+    "sourceEpoch": "Immutable browser-v4 ACK03 epoch; after ACK04 only runtime change is exact reducer diagnostic applicableForms property, plus own synthetic log assertions. All UI/provider/state-transition bytes are identical; parent explicitly admits no redundant browser rerun solely for this diagnostic expression.",
+    "viewports": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        390,
+        844
+      ]
+    },
+    "captures": [
+      "desktop-complete-record.png",
+      "desktop-selected-history.png",
+      "desktop-copied-deck.png",
+      "mobile-complete-record.png",
+      "mobile-selected-history.png",
+      "mobile-copied-deck.png"
+    ],
+    "assertions": [
+      "Actual public Save downloads and Load input/parser/LOAD_STATE with validateRecord",
+      "Full Empowered/Kindled/Kindled tooltip title and description order",
+      "Rendered cost1 and spark6 on original and independent physical copy, including after reload",
+      "Four-sided viewport geometry, actual selected-card visibility, exact origin and viewport",
+      "Physical duplicate preserves record and permanent modifier with a new physical identity",
+      "Save/reload preserves both records; same-primary administrative replacement clears only original record; final reload preserves reset",
+      "Empty Caps buffers for both viewports;42 actual journey-log rows per viewport; prompt and file-input adapters restored and inputs removed"
+    ],
+    "qualification": [
+      "Native filename prompt rendering/acceptance and OS file chooser UI are adapted at the scratch scenario boundary and are untested. Public Save/Load handlers, download, actual hidden input/listeners, parser and LOAD_STATE are exercised.",
+      "Native tooltip painting is not separately claimed; actual title/description attributes are asserted.",
+      "Save toast is present in deck captures. These captures establish the changed record projection and workflow; no layout source changes are claimed.",
+      "Original wrapper-readiness failure and subsequent native modal early-return failures are retained as failed QA setup/protocol attempts, not feature passes.",
+      "The actual diagnostic refutes a display:contents explanation: duplication offer wrapper is display:block with positive geometry matching CardView.",
+      "Parent fresh core/cold visual review is pending after author terminal.",
+      "Final source is not claimed wholly hash-identical to this browser epoch. Exact ACK04 log-only runtime difference is reconstructed and verified in final-commit.json; all UI/provider/state-transition bytes are identical.",
+      "The two full unsafe scenario responses are retained (v4 raw3 and14). The browser_close HTTP200 mirror clone aborted after transport closure; that mirrored body is incomplete and is not claimed as a close failure. Supported runner/client requires successful original browser_close before cleanup completion and owner clearing; actual v4 exit0 confirms that boundary, independently source-verified by parent. Not all raw MCP response bodies are complete."
+    ],
+    "custody": {
+      "slot": 0,
+      "port": 5174,
+      "serverPgid": 92605,
+      "runnerPid": 90489,
+      "cleanup": "browser-v4-cleanup.json records absent own groups/runner and free5174 after actual runner completion",
+      "runtimeSourceWritesWhileServing": false
+    },
+    "retainedArtifactDirectory": "artifacts/qa/hv-umm2.757/author",
+    "failedAttempts": [
+      "browser-first",
+      "browser-v2",
+      "browser-save-diagnostic",
+      "browser-v3"
+    ],
+    "successfulDiagnostic": "browser-dom-diagnostic",
+    "fullOwnMcpResponses": [
+      "qa-mcp-dom-raw",
+      "qa-mcp-save-raw",
+      "qa-mcp-v3-raw",
+      "qa-mcp-v4-raw"
+    ],
+    "missingFullResponseQualification": "browser-v2 retains only runner first300-character error and raw logs; its full native response was not captured. Later owned diagnostic captures the exact native prompt boundary independently.",
+    "runReceipt": "runs/browser-v4/run.json",
+    "rawReport": "757-qa-v4.result.json",
+    "actualScenarioSeconds": 40.298,
+    "wallSeconds": 52.49297523498535,
+    "error": null,
+    "caps": []
+  },
+  "qualifications": [
+    "Original Stage1 coverage claim was premature. Parent tool-only audit excluded whole clipped calls;18paths/1338semanticlines required actual literal rereads. Immutable original proposal/manifest and source-bound addendum retained. Final parent audit credited354hashes/116semanticpaths/13690lines/252completeactualreads/zero gaps before source grant.",
+    "Initial baseline65tests had9 public behavioral failures plus1 missing optional capability failure; setup/TypeScript failure is not behavioral RED. All7 baseline new contract/fixture files remain byte-identical. Historical5 runner bytes gained ACK02 imports.",
+    "Post-API controls are additional acceptance checks, not the original RED baseline. Failed own test setup/TS/lint/direct reducer containment assumptions retained with source epochs. Public fold devMode:false is actual exception containment boundary.",
+    "ACK03 refutes parent-adopted intersection with legacy post-mod forms. The first3-failure loop did not reach the inverse case; later5-failure separate cases prove both actors and both type-change directions plus empty catalog before correction.",
+    "An initially incidental private operationSteps type-narrowing hunk was disclosed and restored byte-identically through its next private-function delimiter. Only admitted display loop/call remains changed; parent independent73-line base comparison retained.",
+    "Engine mechanics stay read-only. New-history canonical display projects current actual engine/public contract values, including Eventnull and null-spark Character0/no-bonus. This is compatibility agreement, not a new general D39 ruling.",
+    "CardData replay supplies presentation transforms/primitives, not DSL validation. Actual production content engine plus explicit validateRecord capability certifies present histories; absent records preserve legacy branches and bytes.",
+    "A final public ReducerLogRecord counterexample failed for both actors and both type-change directions: actual chosen copiable form was absent from the legacy applicability set in the diagnostic. The admitted diagnostic-only conditional projects the writer-selected applicability. The first postrepair focused run retained2 failures because my added Event assertion expected onlyInspired; the lawful synthetic current set is Inspired/Enduring/Hastened. That control expectation was corrected. The subsequent ordinary review passed all9161 tests/types/cycles but caught an unsafe-any assignment in my nested asymmetric matcher; I replaced only that added test matcher with an explicit public transformation-record comparison, passed targeted lint, then reran focused acceptance before final aggregates. Production stayed unchanged. Final controls are not claimed byte-identical to the4-fail counterexample; both failed epochs and exact reconstructed source bytes are retained. Completed pre-diagnostic full review remains a separate successful source epoch.",
+    "The final pre-heavy custody probe passed all prior owned-group assertions, then its overstrict global5174-free predicate failed at line5 because an unattributed transient listener reused the port. The same outer call then launched heavy without branching on the first tool exit1. This unchecked sequential launch is retained; future dependent custody/commit steps explicitly gate on exit status. Follow-up reads found that listener absent. No foreign cleanup occurred; actual ownbrowser/server closure is retained and final own-group checks are separate.",
+    "No renderer layout source changes, reaction drain/FIFO/Glow activation, normative invention, native/TG/delivery action, helper, deploy or image commit is claimed. Parent fresh core/cold visual review and certified delivery remain pending."
+  ]
+}

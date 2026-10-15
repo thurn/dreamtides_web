@@ -1,3 +1,4 @@
+import { buildDeckEntryTransfigurationDisplay } from "../../transfiguration/deck-entry-transfigurations";
 import type { CardData, Rarity } from "../../types/cards";
 import type { JourneySeed } from "../../types/journey-seed";
 import type {
@@ -26,7 +27,6 @@ import {
   applyDeckEntryCardModification,
   resolveDeckEntryCard,
 } from "../../card-type-change";
-import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
@@ -713,11 +713,7 @@ function normalizePlayerDeckCard(
   );
   const transfigurationDisplay = (() => {
     if (entry.transfiguration === null) return undefined;
-    const transfigured = buildTransfigurationDisplay(
-      transfigurationData,
-      card,
-      entry.transfiguration,
-    );
+    const transfigured = buildDeckEntryTransfigurationDisplay(transfigurationData, card, entry)!;
     const markedCard = applyCardStatOverride(
       applyCardSparkBonus(
         applyDeckEntryCardModification(
@@ -785,6 +781,7 @@ function freezeBattleDeckCardDefinition(
       : {
           transfigurationDisplay: Object.freeze({
             ...definition.transfigurationDisplay,
+            ...(definition.transfigurationDisplay.applications === undefined ? {} : { applications: Object.freeze(definition.transfigurationDisplay.applications.map(step => Object.freeze({ ...step, form: Object.freeze({ ...step.form }), application: Object.freeze(step.application.form === "Perfected" ? { ...step.application, constituents: Object.freeze([...step.application.constituents]) } : { ...step.application }), ...(step.constituents === undefined ? {} : { constituents: Object.freeze(step.constituents.map(form => Object.freeze({ ...form }))) }) }))) }),
           }),
         }),
   });

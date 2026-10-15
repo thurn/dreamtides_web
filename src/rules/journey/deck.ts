@@ -1,3 +1,5 @@
+import { clearDeckEntryTransfigurations } from "../../transfiguration/deck-entry-transfigurations";
+import { copyTransfigurationApplications } from "../../engine/transfiguration-application-data";
 import type { JourneyPurgeTransition } from "../../types/journey";
 // Pure deck, transfiguration, and dreamsign reducer cases.
 //
@@ -250,6 +252,7 @@ export function duplicateDeckEntry(
     entryId: mintEntryId(journey.deck, ctx.seq, 0),
     cardNumber: entry.cardNumber,
     transfiguration: entry.transfiguration,
+    ...(entry.transfigurationApplications === undefined ? {} : { transfigurationApplications: copyTransfigurationApplications(entry.transfigurationApplications) }),
     ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
     ...(entry.keywordModification == null
       ? {}
@@ -445,7 +448,7 @@ export function transfigureCard(
     if (transfiguration === null) return null;
   }
   return replaceEntry(journey, entryId, (entry) => ({
-    ...entry,
+    ...clearDeckEntryTransfigurations(entry),
     transfiguration,
   }));
 }

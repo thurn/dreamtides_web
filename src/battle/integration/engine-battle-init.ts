@@ -7,6 +7,8 @@
 //
 // Every input is a UUID; card names never reach the engine.
 
+import { isDeckEntryTransfigurationRecord } from "../../transfiguration/deck-entry-transfigurations";
+import { copyTransfigurationApplications } from "../../engine/transfiguration-application-data";
 import type {
   BattleInit as EngineBattleInit,
   DeckEntry as EngineDeckEntry,
@@ -138,6 +140,11 @@ export function engineDeckEntry(
   card: CardData,
   _transfigurationData: TransfigurationData,
 ): EngineDeckEntry {
+  if ("transfigurationApplications" in entry) {
+    if (!isDeckEntryTransfigurationRecord(entry) || card.cardNumber !== entry.cardNumber) throw new Error("Invalid journey transfiguration bridge record");
+    const deckMods = deckModsOf(entry);
+    return { cardId: card.id, transfigurationApplications: copyTransfigurationApplications(entry.transfigurationApplications!), ...(deckMods === null ? {} : { deckMods }) };
+  }
   const transfiguration = entry.transfiguration;
   const amplified = transfiguration === "Amplified";
   const deckMods = deckModsOf(entry);

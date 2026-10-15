@@ -104,7 +104,7 @@ export function buildAuguryDeckSnapshot(
         deckCard.deckEntry.typeChange?.predicateId ?? "",
         deckCard.deckEntry.keywordModification === undefined ? "" : "kw",
         deckCard.deckEntry.isBane ? "nightmare" : "",
-      ].join(":"),
+      ].join(":") + (deckCard.deckEntry.transfigurationApplications === undefined ? "" : `:applications=${JSON.stringify(deckCard.deckEntry.transfigurationApplications)}`),
     )
     .sort()
     .join("|");

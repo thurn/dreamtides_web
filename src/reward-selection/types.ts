@@ -167,6 +167,7 @@ export interface RewardSelectionTrace {
     cardUuid: CardId;
     cardNumber: number;
     transfiguration: TransfigurationType | null;
+    transfigurationApplications?: readonly import("../engine/dsl/types").TransfigurationApplication[];
   }[];
   effectiveDeckDigest: StableDigest;
 }

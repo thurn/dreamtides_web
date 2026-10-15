@@ -1,3 +1,4 @@
+import { transfigurationDisplayName, transfigurationDisplayDescription } from "../../../runtime/transfiguration-display";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import "./CardView.css";
@@ -1071,8 +1072,8 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       {transfiguration !== undefined ? (
         <i
           className={GLYPHS[transfiguration.form.glyph]}
-          aria-label={`${transfiguration.form.name} Transfiguration`}
-          title={`${transfiguration.form.name} Transfiguration`}
+          aria-label={`${transfigurationDisplayName(transfiguration)} Transfiguration`}
+          title={transfiguration.applications === undefined ? `${transfigurationDisplayName(transfiguration)} Transfiguration` : `${transfigurationDisplayName(transfiguration)}\n${transfigurationDisplayDescription(transfiguration)}`}
           style={{
             flex: "0 0 auto",
             marginLeft: "0.35em",
@@ -1470,7 +1471,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           {rulesTextChanged && transfiguration !== undefined ? (
             <span
               data-card-rules-text-change={transfiguration?.type}
-              title={`Rules text changed by ${transfiguration.form.name} Transfiguration`}
+              title={`Rules text changed by ${transfigurationDisplayName(transfiguration)} Transfiguration`}
               style={{
                 position: "absolute",
                 right:
@@ -1484,7 +1485,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
             >
               <CardChangeBadge
                 sizeVar="var(--cv-transfiguration-change-badge-size)"
-                ariaLabel={`Rules text changed by ${transfiguration.form.name} Transfiguration`}
+                ariaLabel={`Rules text changed by ${transfigurationDisplayName(transfiguration)} Transfiguration`}
               />
             </span>
           ) : null}

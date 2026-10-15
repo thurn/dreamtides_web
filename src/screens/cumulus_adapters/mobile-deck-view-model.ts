@@ -1,3 +1,4 @@
+import { buildDeckEntryTransfigurationDisplay } from "../../transfiguration/deck-entry-transfigurations";
 import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 // Pure view-model builder for the mobile deck viewer. Resolves each deck entry
 // to the card the player actually holds — transfiguration, type/keyword
@@ -11,6 +12,7 @@ import type { CardSubtype } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import {
+  resolveDeckEntryCard,
   applyCardSparkBonus,
   applyCardStatOverride,
   applyDeckEntryCardModification,
@@ -39,6 +41,10 @@ export function toDeckCardView(
   const base = cardDatabase.get(entry.cardNumber);
   if (base === undefined) return null;
 
+  if (entry.transfigurationApplications !== undefined) {
+    const transfigured = buildDeckEntryTransfigurationDisplay(transfigurationData, base, entry)!;
+    return { entryId: entry.entryId, model: remapGameCardModelTypes({ cardId: base.id, displaySnapshot: resolveDeckEntryCard(transfigurationData, base, entry), transfiguration: transfigured.display }, typeRemap), isBane: entry.isBane };
+  }
   const modified = applyDeckEntryCardModification(base, {
     typeChange: entry.typeChange,
     keywords: entry.keywordModification,

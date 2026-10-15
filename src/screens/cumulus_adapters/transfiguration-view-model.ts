@@ -1,6 +1,8 @@
+import { resolveDeckEntryCard } from "../../card-type-change";
 // Pure view-model builder for Durgan Forgehammer's standard Cumulus
 // Transfiguration site.
 
+import { buildDeckEntryTransfigurationDisplay } from "../../transfiguration/deck-entry-transfigurations";
 import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
@@ -121,16 +123,12 @@ export function buildTransfigurationCandidates(
     if (entry.transfiguration === null) continue;
     const card = cardDatabase.get(entry.cardNumber);
     if (card === undefined) continue;
-    const reforged = buildTransfigurationDisplay(
-      transfigurationData,
-      card,
-      entry.transfiguration,
-    );
+    const reforged = buildDeckEntryTransfigurationDisplay(transfigurationData, card, entry)!;
     wholeDeck.push({
       entryId: entry.entryId,
       model: remapGameCardModelTypes({
         cardId: card.id,
-        displaySnapshot: reforged.card,
+        displaySnapshot: entry.transfigurationApplications === undefined ? reforged.card : resolveDeckEntryCard(transfigurationData, card, entry),
         transfiguration: reforged.display,
       }, state.typeRemap),
       availability: "reforged",

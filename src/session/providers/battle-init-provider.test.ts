@@ -1,3 +1,5 @@
+import "./journey-transfiguration-record-controls.contracts";
+import "./journey-transfiguration-record.contracts";
 // Contracts of the journey battle-init build on synthetic journeys: the
 // preview equals the folded init, and the engine init carries every
 // next-battle effect and deck-entry modification (D39), checked against the

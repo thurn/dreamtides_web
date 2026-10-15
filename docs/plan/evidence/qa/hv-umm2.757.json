@@ -1,0 +1,75 @@
+{
+  "bead": "hv-umm2.757",
+  "scenario": "757-qa-v4.mjs",
+  "scenarioSha256": "379d748b97536d91a2f1c8529787ac6c42edee99d764a63fcb0afde40a763037",
+  "plan": "qa-source-caller-plan-v4.json",
+  "result": "PASS",
+  "invocation": "run-LaNceF",
+  "sourceEpoch": "Immutable browser-v4 ACK03 epoch; after ACK04 only runtime change is exact reducer diagnostic applicableForms property, plus own synthetic log assertions. All UI/provider/state-transition bytes are identical; parent explicitly admits no redundant browser rerun solely for this diagnostic expression.",
+  "viewports": {
+    "desktop": [
+      1440,
+      900
+    ],
+    "mobile": [
+      390,
+      844
+    ]
+  },
+  "captures": [
+    "desktop-complete-record.png",
+    "desktop-selected-history.png",
+    "desktop-copied-deck.png",
+    "mobile-complete-record.png",
+    "mobile-selected-history.png",
+    "mobile-copied-deck.png"
+  ],
+  "assertions": [
+    "Actual public Save downloads and Load input/parser/LOAD_STATE with validateRecord",
+    "Full Empowered/Kindled/Kindled tooltip title and description order",
+    "Rendered cost1 and spark6 on original and independent physical copy, including after reload",
+    "Four-sided viewport geometry, actual selected-card visibility, exact origin and viewport",
+    "Physical duplicate preserves record and permanent modifier with a new physical identity",
+    "Save/reload preserves both records; same-primary administrative replacement clears only original record; final reload preserves reset",
+    "Empty Caps buffers for both viewports;42 actual journey-log rows per viewport; prompt and file-input adapters restored and inputs removed"
+  ],
+  "qualification": [
+    "Native filename prompt rendering/acceptance and OS file chooser UI are adapted at the scratch scenario boundary and are untested. Public Save/Load handlers, download, actual hidden input/listeners, parser and LOAD_STATE are exercised.",
+    "Native tooltip painting is not separately claimed; actual title/description attributes are asserted.",
+    "Save toast is present in deck captures. These captures establish the changed record projection and workflow; no layout source changes are claimed.",
+    "Original wrapper-readiness failure and subsequent native modal early-return failures are retained as failed QA setup/protocol attempts, not feature passes.",
+    "The actual diagnostic refutes a display:contents explanation: duplication offer wrapper is display:block with positive geometry matching CardView.",
+    "Parent fresh core/cold visual review is pending after author terminal.",
+    "Final source is not claimed wholly hash-identical to this browser epoch. Exact ACK04 log-only runtime difference is reconstructed and verified in final-commit.json; all UI/provider/state-transition bytes are identical.",
+    "The two full unsafe scenario responses are retained (v4 raw3 and14). The browser_close HTTP200 mirror clone aborted after transport closure; that mirrored body is incomplete and is not claimed as a close failure. Supported runner/client requires successful original browser_close before cleanup completion and owner clearing; actual v4 exit0 confirms that boundary, independently source-verified by parent. Not all raw MCP response bodies are complete."
+  ],
+  "custody": {
+    "slot": 0,
+    "port": 5174,
+    "serverPgid": 92605,
+    "runnerPid": 90489,
+    "cleanup": "browser-v4-cleanup.json records absent own groups/runner and free5174 after actual runner completion",
+    "runtimeSourceWritesWhileServing": false
+  },
+  "retainedArtifactDirectory": "artifacts/qa/hv-umm2.757/author",
+  "failedAttempts": [
+    "browser-first",
+    "browser-v2",
+    "browser-save-diagnostic",
+    "browser-v3"
+  ],
+  "successfulDiagnostic": "browser-dom-diagnostic",
+  "fullOwnMcpResponses": [
+    "qa-mcp-dom-raw",
+    "qa-mcp-save-raw",
+    "qa-mcp-v3-raw",
+    "qa-mcp-v4-raw"
+  ],
+  "missingFullResponseQualification": "browser-v2 retains only runner first300-character error and raw logs; its full native response was not captured. Later owned diagnostic captures the exact native prompt boundary independently.",
+  "runReceipt": "runs/browser-v4/run.json",
+  "rawReport": "757-qa-v4.result.json",
+  "actualScenarioSeconds": 40.298,
+  "wallSeconds": 52.49297523498535,
+  "error": null,
+  "caps": []
+}

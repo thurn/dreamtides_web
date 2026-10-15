@@ -1,3 +1,4 @@
+import { resolveDeckEntryTransfigurations } from "./transfiguration/deck-entry-transfigurations";
 import type { CardData } from "./types/cards";
 import type {
   CardKeywordModification,
@@ -5,7 +6,6 @@ import type {
   DeckEntry,
   DeckEntryCardModification,
 } from "./types/journey";
-import { applyTransfigurationToCard } from "./transfiguration/transfiguration-logic";
 import type { TransfigurationData } from "./types/transfiguration-data";
 
 type CardTypeFields = Pick<CardData, "cardType" | "subtype">;
@@ -183,20 +183,17 @@ export function resolveDeckEntryCard(
   card: CardData,
   entry: DeckEntry,
 ): CardData {
-  const transfigured =
-    entry.transfiguration === null
-      ? card
-      : applyTransfigurationToCard(
-          transfigurationData,
-          card,
-          entry.transfiguration,
-        );
+  const transfigured = resolveDeckEntryTransfigurations(transfigurationData, card, entry);
   const modified = applyDeckEntryCardModification(transfigured, {
     typeChange: entry.typeChange,
     keywords: entry.keywordModification,
   });
-  return applyCardStatOverride(
-    applyCardSparkBonus(modified, entry.sparkBonus),
-    entry.statOverride,
-  );
+  const boosted = applyCardSparkBonus(modified, entry.sparkBonus);
+  // History projections match instanceCard's existing post-mod type/spark contract.
+  const canonical = entry.transfigurationApplications === undefined ? boosted : modified.cardType === "Event"
+    ? { ...boosted, spark: null, sparkVariable: false }
+    : transfigured.spark === null && transfigured.sparkVariable !== true
+      ? { ...boosted, spark: 0, sparkVariable: false }
+      : { ...boosted, sparkVariable: transfigured.sparkVariable === true && transfigured.spark === null };
+  return applyCardStatOverride(canonical, entry.statOverride);
 }

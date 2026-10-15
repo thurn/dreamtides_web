@@ -1,3 +1,6 @@
+import "./journey-transfiguration-record-controls.contracts";
+import "./journey-transfiguration-record.contracts";
+import "./journey-transfiguration-record-ingress.contracts";
 import { EVENT_CARD_SUBTYPE } from "../../types/card-identity";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseDeckEntryId, parseCardTypeChangePredicateId } from "../../types/identifiers";

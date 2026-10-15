@@ -1,3 +1,5 @@
+import "./journey-transfiguration-record-recovery.contracts";
+import "./journey-transfiguration-record-persistence.contracts";
 // Local-first log contracts: a game written through to storage reopens to the
 // identical fold — fresh, mid-journey, mid-battle, from a checkpoint or from
 // genesis — and a journey save file loads into an equal journey; a failed

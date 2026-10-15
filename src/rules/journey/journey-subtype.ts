@@ -1,3 +1,4 @@
+import { validJourneyTransfigurationRecord } from "./journey-transfiguration";
 import { cardIdFromUnknown, cardSubtypeFromUnknown, type CardSubtype } from "../../types/card-identity";
 import { deckEntryIdFromUnknown, dreamsignIdFromUnknown, cardTypeChangePredicateIdFromUnknown, parseCardTypeChangePredicateId, siteIdFromUnknown } from "../../types/identifiers";
 import type { DeckEntry, JourneyDreamsignSubtypeChoice, JourneyModifierBefore, JourneyState, JourneySubtypeResume, JourneySuspendedBattle } from "../../types/journey";
@@ -52,6 +53,7 @@ function validEntries(value: unknown): value is readonly DeckEntry[] {
     if (entry.keywordModification != null && (!record(entry.keywordModification) || entry.keywordModification.fast !== undefined && typeof entry.keywordModification.fast !== "boolean" || ["energyCostReduction", "reclaim", "setReclaim"].some(key => entry.keywordModification != null && record(entry.keywordModification) && entry.keywordModification[key] !== undefined && (typeof entry.keywordModification[key] !== "number" || !Number.isFinite(entry.keywordModification[key]))))) return false;
     if (entry.statOverride !== undefined && (!record(entry.statOverride) || ["energyCost", "spark"].some(key => record(entry.statOverride) && entry.statOverride[key] !== undefined && (typeof entry.statOverride[key] !== "number" || !Number.isFinite(entry.statOverride[key]))))) return false;
     if (entry.typeChange != null && (!record(entry.typeChange) || cardTypeChangePredicateIdFromUnknown(entry.typeChange.predicateId) === null || !["Character", "Event"].includes(String(entry.typeChange.cardType)) || cardSubtypeFromUnknown(entry.typeChange.subtype) === null || typeof entry.typeChange.label !== "string")) return false;
+    if (!validJourneyTransfigurationRecord(entry)) return false;
     seen.add(entry.entryId);
     return journeyTransfigurationCard(entry as unknown as DeckEntry) !== null;
   });

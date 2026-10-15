@@ -1,3 +1,4 @@
+import { validJourneyTransfigurationRecords } from "./journey-transfiguration";
 import { validShopReplenishmentRuntime } from "./journey-shop";
 import { validCommittedPurgePrevention } from "./journey-committed-purge-state";
 import { assertBeforeBattlePurgeCheckpoint } from "./journey-before-battle-purge";
@@ -453,9 +454,9 @@ export function loadState(
  *     live effect tables and whose cursors address real positions in that
  *     script.
  *
- * Content values (whether a card id names a catalog card, costs, pool
- * contents) are NOT asserted — only shape and the fold invariants — so the
- * check is resilient to catalog edits.
+ * Legacy entries retain the existing shape and invariant compatibility path.
+ * Complete transfiguration histories additionally require semantic validation
+ * by the registered content provider before this snapshot is accepted.
  */
 export function validateLoadedState(
   state: FoldState,
@@ -546,6 +547,7 @@ function hasValidAtlasSites(atlas: Record<string, unknown>): boolean {
  * match their canonical UUID through the registered deck content provider.
  */
 function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry): value is JourneyState {
+  if (!validJourneyTransfigurationRecords(value)) return false;
   if (!isRecord(value)) return false;
   const numberKeys = ["essence", "maxDreamsigns", "completionLevel"];
   for (const key of numberKeys) {

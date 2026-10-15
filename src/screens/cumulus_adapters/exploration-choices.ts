@@ -1,6 +1,7 @@
 // Card, Dreamsign, and Avatar choice views and authored action parameters
 // shared by the Exploration action and resolution view models.
 
+import { buildDeckEntryTransfigurationDisplay } from "../../transfiguration/deck-entry-transfigurations";
 import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
@@ -13,7 +14,6 @@ import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 import type { CardSubtype } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
-import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { DreamsignId } from "../../types/identifiers";
 import type { AvatarId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
@@ -64,11 +64,7 @@ export function deckCardChoice(
   const transfiguration =
     entry.transfiguration === null
       ? undefined
-      : buildTransfigurationDisplay(
-          content.transfigurationData,
-          base,
-          entry.transfiguration,
-        ).display;
+      : buildDeckEntryTransfigurationDisplay(content.transfigurationData, base, entry)!.display;
   return {
     entryId: entry.entryId,
     model: remapGameCardModelTypes({

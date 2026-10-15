@@ -11,6 +11,8 @@
 // module. `transfiguration-logic.ts` re-exports every symbol below, so its
 // existing consumers are unaffected.
 
+import type { TransfigurationApplication } from "../engine/dsl/types";
+import type { TransfigurationPresentation } from "../types/transfiguration-data";
 import type { TransfigurationType } from "../types/journey";
 import type { TransfigurationFormDefinition } from "../types/transfiguration-data";
 
@@ -21,6 +23,7 @@ import type { TransfigurationFormDefinition } from "../types/transfiguration-dat
  */
 export interface CardTransfigurationDisplay {
   readonly type: TransfigurationType;
+  readonly applications?: readonly { readonly application: TransfigurationApplication; readonly form: TransfigurationPresentation; readonly constituents?: readonly TransfigurationPresentation[] }[];
   readonly form: Pick<
     TransfigurationFormDefinition,
     "name" | "description" | "glyph" | "accentColor" | "tintColor"
@@ -37,4 +40,12 @@ export interface CardTransfigurationDisplay {
   readonly sparkChangeName: string | null;
   /** True when the card gained Fast (Hastened); tints the speed bolt. */
   readonly fastChanged: boolean;
+}
+
+/** Authored descriptions in complete application order, including repeated occasions. */
+export function transfigurationDisplayName(display: CardTransfigurationDisplay): string {
+  return display.applications?.map(step => step.form.name).join(" → ") ?? display.form.name;
+}
+export function transfigurationDisplayDescription(display: CardTransfigurationDisplay): string {
+  return display.applications?.map(step => `${step.form.name}: ${step.form.description}${step.constituents === undefined ? "" : ` (${step.constituents.map(form => form.name).join(", ")})`}`).join("\n") ?? display.form.description;
 }

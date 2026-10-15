@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.757",
+  "phase": 5,
+  "implementMin": 90.84707198333334,
+  "implementWindow": {
+    "start": "2026-10-15T18:49:49.003000+00:00",
+    "end": "2026-10-15T20:20:39.827319+00:00"
+  },
+  "localValidationS": {
+    "focused": 5.08669900894165,
+    "review": 63.82798218727112,
+    "knip": 4.737260103225708,
+    "full": 135.72482085227966,
+    "browser": 52.49297523498535
+  },
+  "hostLoad": 26.98828125,
+  "testDelta": {
+    "files": 11,
+    "lines": 526,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "tool-output-truncation",
+      "minutes": 1.15892525,
+      "note": "Parent-required explicit small rework receipt: premature Stage1 semantic coverage excluded whole clipped outer tool results;18paths/1338lines repaired in separate literal untruncated outputs,19:07:31.415974Z\u201319:08:40.951489Z. This is measured literal-read repair wall time, not the full audit/coordination interval or CPU. Original packet and limited proof retained."
+    }
+  ]
+}

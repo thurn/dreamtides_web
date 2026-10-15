@@ -1,3 +1,5 @@
+import "./journey-transfiguration-record-controls.contracts";
+import "./journey-transfiguration-record.contracts";
 import { expect, it } from "vitest";
 import { createEngineCardModels } from "./engine-card-model";
 import { createEngine } from "../../engine";

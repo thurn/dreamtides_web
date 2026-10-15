@@ -1,9 +1,9 @@
+import { buildDeckEntryTransfigurationDisplay } from "../../transfiguration/deck-entry-transfigurations";
 import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import type { CardData } from "../../types/cards";
 import type { DreamsignTemplate } from "../../types/content";
 import type { JourneyState } from "../../types/journey";
 import { resolveDeckEntryCard } from "../../card-type-change";
-import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type {
   JourneyDebugEditorView,
@@ -76,11 +76,7 @@ export function buildJourneyDebugEditorView(
                 ...(entry.transfiguration === null || base === undefined
                   ? {}
                   : {
-                      transfiguration: buildTransfigurationDisplay(
-                        transfigurationData,
-                        base,
-                        entry.transfiguration,
-                      ).display,
+                      transfiguration: buildDeckEntryTransfigurationDisplay(transfigurationData, base, entry)!.display,
                     }),
               }, state.typeRemap),
       };

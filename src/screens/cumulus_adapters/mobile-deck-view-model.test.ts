@@ -1,3 +1,5 @@
+import "./journey-transfiguration-record-controls.contracts";
+import "./journey-transfiguration-record.contracts";
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { testCardId } from "../../types/test-identities";
