@@ -1,0 +1,238 @@
+{
+  "bead": "hv-umm2.632",
+  "base": "e1bf6a2b3a743035ea450cc2aac671a45e5f22eb",
+  "scope": "One private plain synthetic contract module; zero runner/production/API/catalog/fixture changes; no production UUID authored.",
+  "proposal": {
+    "path": "/tmp/dreamtides-632-01a13a7a/proposal.md",
+    "sha256": "227612a68a13f73656704d42508ba8fd45d497f61e644b60043d1be1dee74e48",
+    "sourceBindings": "/tmp/dreamtides-632-01a13a7a/source-bindings.json"
+  },
+  "moduleSHA256": "8d5e0ceec65dfd526ab18a45fdafd903f1b7847fcb46f9ac3ac812506b7c6721",
+  "publicPath": "Actual reduce_deck_entry_energy_cost DTO -> applyJourneyRewardEffect -> engineDeckEntry/createEngineBattleInit -> public createEngine/createFoldAdapter initialization, legal actions, payments, zones, traits and replay.",
+  "enemyQualification": "The production journey mapper maps player only; synthetic enemy contracts seat its complete unchanged mapped deck on enemy through public BattleInit, with matching prepared setup. No enemy journey DTO mapper is asserted.",
+  "contracts": [
+    "Actual repeated DTO accumulation and ordinary deal; UUID/physical copy/actor isolation and immutable printing.",
+    "Fixed, multiple-orb, zero floor, pure-X/fixed-plus-X payment, legality at and below minimum; copiable-cost filters.",
+    "Mandatory additional energy and distinct discard survive base floor; insufficient-resource refusal.",
+    "All9 delivered forms, original eligibility and forms-before-reduction order; type/Fast/Reclaim/spark stacking, actual trigger/draw/activation/void payments.",
+    "Permanent physical lifetime through return/replay/turn and fresh battle; clone/JSON outcome equality.",
+    "Actual cancellable precommit payment; competing/wrong/stale/illegal intents; cold retry/reload/replay and one committed debit.",
+    "Invalid DTO target/amount and partial composite refuse atomically; missing init mapping refuses."
+  ],
+  "failureCategories": {
+    "droppedDTO": "Tuple, physical state and actual payment anchors.",
+    "wrongSideVariantType": "Both actors, same-UUID neighbor and opposite-side controls; stronger variants and Event conversion.",
+    "orderPayment": "Empowered/Perfected fixed5 -> floor2 -> minus1=1; fixed/X/multi-orb/extra/activation payment anchors.",
+    "invalidStaleReplay": "Real public reward refusal and fold cancel, competing actors, stale/illegal answers, cold replay and duplicate answer refusal.",
+    "originalAcceptance": "Ownership proof below; no mutable production card-count test substitutes for final acceptance."
+  },
+  "preservedAcceptance": {
+    "owner": "hv-umm2.281",
+    "retained": "Full filed42 UUID union,complete recipes,at least20 stratified eligible cards on EACH controller and one judgment per kind; weighted300/preflight/sweep/D21/coverage and original final joins. This is synthetic preparation only.",
+    "peer754": "Optional chronology remains separate; these contracts use delivered legacy tuples and have no new754 API dependency."
+  },
+  "validationScope": "Focused existing runner,ordinary review,Knip,evidence schema and whitespace. No new state/API/primitive/route/config/infrastructure: no heavy full review,weighted production fuzz,browser,UI or new formal review obligation.",
+  "reviewApplicability": "632 is neither core-review nor phase gate. Source-first auditor is not an independent review; permanent fresh fork:none Codex review applies to any later required review.",
+  "clock": {
+    "start": "2026-10-15T17:44:27.036967Z",
+    "includes": "All setup,read-only audit,admission/coordination,authoring,checks/evidence and Git tail.",
+    "cutoff": "2026-10-15T17:59:28.818875+00:00",
+    "qualification": "Immediate precommit evidence cutoff; actual subsequent schema/stage/whitespace/Git start/end/PID/elapsed recorded separately after commit without amending immutable source."
+  },
+  "resources": {
+    "servers": 0,
+    "browserContexts": 0,
+    "heavyCommands": 0,
+    "cleanup": "All five recorded check process groups absent in exact ps group inspection; no servers, browsers, heavy jobs or runtime sessions."
+  },
+  "receiptCustody": {
+    "directory": "/tmp/dreamtides-632-01a13a7a",
+    "sourceManifests": "Every validation captures cached plus untracked nonignored files before process; new module included from first run.",
+    "initialLoadFieldCorrection": "focus1 receipt remains unchanged: its loadAtStart field was sampled at process completion and is an end observation. Later runner captures separate true loadAtStart and loadAtEnd. No performance comparison uses the initial mislabeled sample."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful review2 typecheck/lint/test-related start at 2026-10-15T17:58:28.681Z",
+        "qualification": "Actual review log one-minute load11.9150390625; no comparable-load performance claim."
+      }
+    }
+  },
+  "checks": [
+    {
+      "name": "focus1",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "synthetic permanent cost-reduction|cost-reduction reward refusal"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-632",
+      "start": "2026-10-15T17:56:59.519099+00:00",
+      "end": "2026-10-15T17:57:06.516975+00:00",
+      "elapsedS": 6.997643375012558,
+      "pid": 99698,
+      "pgid": 99698,
+      "exit": 0,
+      "workers": 2,
+      "log": "/tmp/dreamtides-632-01a13a7a/focus1.log",
+      "logSHA256": "41b57e692c8ebc98646ef3fe3954b9b629044d0572fca29a1f28f5082463cd0a",
+      "sourceManifest": "/tmp/dreamtides-632-01a13a7a/focus1.source.json",
+      "sourceManifestSHA256": "9798985491d80505133e54b7d1fcd865ce32a1681eb96c2af5a97676ae76e931",
+      "qualification": "Manifest includes cached and untracked nonignored paths before command. No source exclusion for newly authored module.",
+      "loadAtStart": [
+        15.2548828125,
+        13.716796875,
+        12.05078125
+      ]
+    },
+    {
+      "name": "focus-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-632",
+      "start": "2026-10-15T17:57:27.238514+00:00",
+      "end": "2026-10-15T17:57:33.752132+00:00",
+      "elapsedS": 6.51339266699506,
+      "pid": 2198,
+      "pgid": 2198,
+      "exit": 0,
+      "workers": 2,
+      "log": "/tmp/dreamtides-632-01a13a7a/focus-final.log",
+      "logSHA256": "be1a1c1fdd52080368ff40053afd648b3556acc8bbd93b0573cc8d2b61a77167",
+      "sourceManifest": "/tmp/dreamtides-632-01a13a7a/focus-final.source.json",
+      "sourceManifestSHA256": "9798985491d80505133e54b7d1fcd865ce32a1681eb96c2af5a97676ae76e931",
+      "qualification": "Manifest includes cached and untracked nonignored paths before command. No source exclusion for newly authored module.",
+      "loadAtStart": [
+        13.87451171875,
+        13.50634765625,
+        12.013671875
+      ],
+      "loadAtEnd": [
+        13.48388671875,
+        13.43115234375,
+        11.99560546875
+      ]
+    },
+    {
+      "name": "review1",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-632",
+      "start": "2026-10-15T17:57:59.477828+00:00",
+      "end": "2026-10-15T17:58:20.152756+00:00",
+      "elapsedS": 20.6745268329978,
+      "pid": 4508,
+      "pgid": 4508,
+      "exit": 2,
+      "workers": 2,
+      "log": "/tmp/dreamtides-632-01a13a7a/review1.log",
+      "logSHA256": "b4e3057cfd10210b4f6358ba462b45071e45e1411eafa28f7d8bd1b76c1d364b",
+      "sourceManifest": "/tmp/dreamtides-632-01a13a7a/review1.source.json",
+      "sourceManifestSHA256": "dc046412675b8fc44ec8fbd7eebcc18f4b92f2f730464349d0ca22d2d65a7aa4",
+      "qualification": "Manifest includes cached and untracked nonignored paths before command. No source exclusion for newly authored module.",
+      "loadAtStart": [
+        10.93896484375,
+        12.8154296875,
+        11.8212890625
+      ],
+      "loadAtEnd": [
+        12.1689453125,
+        12.99853515625,
+        11.9111328125
+      ]
+    },
+    {
+      "name": "review2",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-632",
+      "start": "2026-10-15T17:58:25.775950+00:00",
+      "end": "2026-10-15T17:58:42.605738+00:00",
+      "elapsedS": 16.829259332967922,
+      "pid": 6246,
+      "pgid": 6246,
+      "exit": 0,
+      "workers": 2,
+      "log": "/tmp/dreamtides-632-01a13a7a/review2.log",
+      "logSHA256": "128679b911d2cabf307757c7bc0269d348b7902f49a29d98bedfb441ae11efda",
+      "sourceManifest": "/tmp/dreamtides-632-01a13a7a/review2.source.json",
+      "sourceManifestSHA256": "fe5cd2dcd7d36a962f13da7297596dddfc147a691d36e73126016f147be46ba6",
+      "qualification": "Manifest includes cached and untracked nonignored paths before command. No source exclusion for newly authored module.",
+      "loadAtStart": [
+        11.9150390625,
+        12.93212890625,
+        11.89404296875
+      ],
+      "loadAtEnd": [
+        12.74072265625,
+        13.0654296875,
+        11.958984375
+      ]
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cost-reduction-632",
+      "start": "2026-10-15T17:58:52.723326+00:00",
+      "end": "2026-10-15T17:58:59.238431+00:00",
+      "elapsedS": 6.514799875032622,
+      "pid": 8199,
+      "pgid": 8199,
+      "exit": 0,
+      "workers": 2,
+      "log": "/tmp/dreamtides-632-01a13a7a/knip.log",
+      "logSHA256": "cb9b7779ea5e683b6c3f0a75b2fd4e5b9f4203793b42e7c8d8fbd3c0c40b11bd",
+      "sourceManifest": "/tmp/dreamtides-632-01a13a7a/knip.source.json",
+      "sourceManifestSHA256": "fe5cd2dcd7d36a962f13da7297596dddfc147a691d36e73126016f147be46ba6",
+      "qualification": "Manifest includes cached and untracked nonignored paths before command. No source exclusion for newly authored module.",
+      "loadAtStart": [
+        12.2197265625,
+        12.9462890625,
+        11.9296875
+      ],
+      "loadAtEnd": [
+        11.64111328125,
+        12.81396484375,
+        11.888671875
+      ]
+    }
+  ],
+  "checkDisposition": "focus1 own73 passed; focus-final entire runner164 passed; review1 failed solely unused CardCost type import (lint/typecheck), corrected within own module; review2 all steps and164 tests passed; Knip passed. No semantic implementation repair or unchanged aggregate retry.",
+  "testDelta": {
+    "plainContractModules": 1,
+    "lines": 277,
+    "tests": 73,
+    "existingRunnerTestsAfter": 164,
+    "jsdomFiles": 0
+  },
+  "scopeProof": {
+    "base": "e1bf6a2b3a743035ea450cc2aac671a45e5f22eb",
+    "baseEntries": 5803,
+    "changedExistingBaseEntries": [],
+    "newPaths": [
+      "docs/plan/evidence/friction/hv-umm2.632.json",
+      "docs/plan/evidence/measurements/hv-umm2.632.json",
+      "src/battle/integration/deck-mods/cost-reduction.contracts.ts"
+    ],
+    "moduleLines": 277
+  },
+  "modelSamplingCPU": "UNKNOWN",
+  "finalChecks": "Final evidence timing/receipt refresh is followed by schema and working/staged whitespace checks. Those post-refresh receipts and actual Git tail remain in scratch without recursive evidence rewriting."
+}
