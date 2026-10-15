@@ -18,7 +18,7 @@ export function designateChallengers(ctx: StepContext): void {
   const challengers = state.sides[side].frontRank.filter(
     (id): id is InstanceId => id !== null && !instanceOf(state, id).status.exhausted,
   );
-  state.challenge = { challengers, blockers: {} };
+  state.challenge = { challengers, blockers: {}, scoring: { scorers: [], settled: false } };
   ctx.emit({ kind: "challengersDesignated", side, challengers });
 }
 
@@ -99,6 +99,25 @@ export function challengeRoleOf(
   return roles?.blocker === id ? "blocker" : null;
 }
 
+/** Captures positive scoring before subsequent reactions can move or change its character. */
+function recordScorer(ctx: StepContext, challenger: InstanceId, points: number): void {
+  const scoring = ctx.state.challenge?.scoring;
+  if (points > 0 && scoring !== undefined && !scoring.settled && !scoring.scorers.some(entry => entry.instance === challenger)) {
+    scoring.scorers.push({ instance: challenger, controller: instanceOf(ctx.state, challenger).controller });
+  }
+}
+
+/** Settles each captured controller's group once, at the final lane's boundary. */
+export function settleScoreGroups(ctx: StepContext): void {
+  const scoring = ctx.state.challenge?.scoring;
+  if (scoring === undefined || scoring.settled || ctx.state.result !== null) return;
+  scoring.settled = true;
+  for (const side of ["player", "enemy"] as const) {
+    const count = scoring.scorers.filter(entry => entry.controller === side).length;
+    if (count > 0) ctx.emit({ kind: "scoreGroup", side, count });
+  }
+}
+
 /** Resolves one front-rank lane's `laneRoles`. */
 export function resolveLane(ctx: StepContext, lane: number): void {
   const { state, catalog } = ctx;
@@ -111,6 +130,7 @@ export function resolveLane(ctx: StepContext, lane: number): void {
   const defending: Side = opponent(active);
   const challengerSpark = effectiveSpark(state, catalog, challenger);
   if (blocker === null) {
+    recordScorer(ctx, challenger, challengerSpark);
     gainPoints(ctx, active, challengerSpark, "challenge");
     ctx.emit({
       kind: "laneResolved",
@@ -144,6 +164,7 @@ export function resolveLane(ctx: StepContext, lane: number): void {
       : challengerDissolves && !blockerDissolves
         ? defending
         : null;
+  recordScorer(ctx, challenger, scored);
   gainPoints(ctx, active, scored, "challenge");
   ctx.emit({
     kind: "laneResolved",

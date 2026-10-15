@@ -1,3 +1,4 @@
+import { hasUnknownScoreGroup } from "./score-group-state";
 // Immutable battle display metadata and engine slices, plus load validation.
 import type { EngineCatalog } from "../../engine/catalog";
 import { hasInvalidJourneyDeckSparkOrigins } from "./journey-deck-spark-state";
@@ -111,7 +112,7 @@ export type TutorialBattlePresentation = OpponentPlayPresentation | DreamwellRev
 export function parseEngineBattleFold(value: unknown, catalog?: EngineCatalog): EngineBattleFold | null {
   if (!isPlainRecord(value) || !isEngineBattleInit(value.init) || !isBattleSlice(value.slice, true)) return null;
   const fold = value as unknown as EngineBattleFold;
-  return hasConsistentDraftPools(fold) && !hasInvalidJourneyDeckSparkOrigins(fold, catalog) ? fold : null;
+  return hasConsistentDraftPools(fold) && !hasInvalidJourneyDeckSparkOrigins(fold, catalog) && !hasUnknownScoreGroup(fold, catalog) ? fold : null;
 }
 
 function hasConsistentDraftPools(fold: EngineBattleFold): boolean {
@@ -1267,10 +1268,18 @@ function isDreamwellState(value: unknown): boolean {
   );
 }
 
+function isChallengeScoring(value: unknown): boolean {
+  if (!isPlainRecord(value) || !hasOnlyFields(value, ["scorers", "settled"]) || !isBoolean(value.settled) ||
+      !isArrayOf(value.scorers, entry => isPlainRecord(entry) && hasOnlyFields(entry, ["instance", "controller"]) && isInstanceId(entry.instance) && isSide(entry.controller))) return false;
+  const entries = value.scorers as { instance: InstanceId }[];
+  return new Set(entries.map(entry => entry.instance)).size === entries.length;
+}
+
 function isChallengeState(value: unknown): boolean {
   return (
     isPlainRecord(value) &&
     isArrayOf(value.challengers, isInstanceId) &&
+    optional(isChallengeScoring)(value.scoring) &&
     (value.unpairedBlockers === undefined || isArrayOf(value.unpairedBlockers, isInstanceId)) &&
     isPlainRecord(value.blockers) &&
     Object.entries(value.blockers).every(

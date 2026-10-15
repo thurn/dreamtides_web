@@ -641,6 +641,18 @@ occasion and does not change the challenge award captured by other scoring
 abilities. An unpaired 0✦ character, a flat point gain, and Fatigue do not
 trigger it.
 
+**Scoring groups:** Characters that score positive ⍟ during one Challenge form a
+group for the player who controlled each as it scored. Each distinct character
+counts once, including one that subsequently leaves play or changes controller.
+After the final lane resolves, including its dissolutions, an ability reading
+“When 2 or more characters you control score ⍟” triggers once if that player's
+captured group contains at least two characters. The ability works for its source's
+controller at that boundary. Earlier lanes' triggered abilities resolve before
+later lanes; the final lane's abilities and the group ability then resolve in
+queue order. A new Challenge starts a fresh group. Flat point gains, Fatigue,
+additional challenge points, and characters scoring 0⍟ do not join the group.
+A battle ending before the final lane produces no settled scoring group.
+
 **Challenge phase resolution:** Each front-rank lane is resolved in turn, left to
 right:
 

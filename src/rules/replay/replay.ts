@@ -1,3 +1,4 @@
+import { assertScoreGroupCheckpoint } from "../battle/score-group-state";
 // The replay harness: the canonical game EngineConfig plus a one-call log
 // replayer used by the fixture regression net and by src/session/.
 //
@@ -46,6 +47,7 @@ export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
   decode: (raw) => {
     const state: unknown = JSON.parse(raw);
     assertJourneyDeckSparkCheckpoint(state);
+    assertScoreGroupCheckpoint(state);
     return state as FoldState;
   },
   hash: hashState,

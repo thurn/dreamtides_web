@@ -321,7 +321,8 @@ interface PoolCreatedHandView {
 }
 
 /** Turn-long designations, with unidentified observed cards related only by anonymous members. */
-interface ChallengeView extends Readonly<Omit<ChallengeState, "unpairedBlockers">> {
+interface ChallengeView extends Readonly<Omit<ChallengeState, "unpairedBlockers" | "scoring">> {
+  readonly scoring?: { readonly settled: boolean; readonly scorers: readonly { readonly instance: InstanceId | { readonly member: number } | null; readonly controller: Side }[] };
   readonly hidden?: {
     readonly challengers: readonly { readonly index: number; readonly member: number }[];
     readonly blockers: readonly {
@@ -619,6 +620,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     // Paired bindings precede unpaired membership in every projected view.
     hiddenBlockers.sort((left, right) => Number(left.challenger === null) - Number(right.challenger === null));
     return { challengers, blockers,
+      ...(state.challenge.scoring === undefined ? {} : { scoring: { settled: state.challenge.scoring.settled,
+        scorers: state.challenge.scoring.scorers.map(entry => ({ controller: entry.controller, instance: reference(entry.instance) })) } }),
       ...(hiddenChallengers.length + hiddenBlockers.length === 0 ? {} : { hidden: { challengers: hiddenChallengers, blockers: hiddenBlockers } }) };
   })();
   const poolCreatedHands: Record<Side, PoolCreatedHandView[]> = { player: [], enemy: [] };

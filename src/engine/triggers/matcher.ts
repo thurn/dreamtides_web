@@ -90,6 +90,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   dissolve: ["dissolved"],
   gainsSpark: ["sparkGained"],
   scores: ["laneResolved"],
+  scoreGroup: ["scoreGroup"],
   opponentScores: ["laneResolved"],
   removesEnemy: ["dissolved", "banished", "ceasedToExist"],
   leavesVoid: ["leftVoid"],
@@ -438,6 +439,8 @@ function matchKind(
         subjectMatches(state, catalog, trigger.subject, event.instance, listener)
         ? { subject: event.instance, gain: { amount: event.amount, expiry: event.expiry } }
         : null;
+    case "scoreGroup":
+      return event.kind === "scoreGroup" && event.side === resolvePlayer(you, trigger.player) && event.count >= trigger.count ? NO_SUBJECT : null;
     case "scores":
       return event.kind === "laneResolved" &&
         event.scored > 0 &&

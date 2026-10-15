@@ -1,4 +1,7 @@
 import { dreamsign } from "../define";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { triggered, whenScoreGroup } from "../../engine/dsl/triggers";
+import { sequence, draw, discard } from "../../engine/effects/primitives";
 
 export default dreamsign({
   id: "055f211d-aa51-49eb-9162-190a946b1614",
@@ -14,5 +17,6 @@ export default dreamsign({
     "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5",
   ],
   tags: ["J15", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(whenScoreGroup(2), sequence(draw(1), discard(1)))],
+  verifiedText: expectedVerifiedText("When 2 or more characters you control score ⍟, draw a card, then discard a card."),
 });

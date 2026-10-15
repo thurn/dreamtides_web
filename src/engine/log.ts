@@ -16,6 +16,7 @@
  * | an answer to it | `engine.promptAnswered` |
  * | a cancel | `engine.promptCancelled` |
  * | `triggerQueued`, `triggerResolved` events | `engine.trigger` |
+ * | a settled `scoreGroup` event | `engine.scoreGroup`, with side and positive count |
  * | a new loop on offer; `loopStarted`, `loopEnded` events | `engine.loop` |
  * | random-stream counters advanced by a step | `engine.rng`, one per stream |
  * | a bonus-attributed `cardCopied` event | `engine.copyBonus`, with its primary, physical modifier source and captured ability origin |
@@ -52,6 +53,7 @@ interface RecordBase {
 }
 
 export type EngineLogRecord =
+  | (RecordBase & { readonly event: "engine.scoreGroup"; readonly detail: EventOf<"scoreGroup"> })
   | (RecordBase & {
       readonly event: "engine.battleStarted";
       readonly init: BattleInit;
@@ -126,6 +128,8 @@ export function engineLogLine(record: EngineLogRecord, gameId: GameId, timestamp
 /** The record an engine event maps to, or `null` for an event the log leaves to replay. */
 export function eventLogRecord(event: EngineEvent, version: number): EngineLogRecord | null {
   switch (event.kind) {
+    case "scoreGroup":
+      return { event: "engine.scoreGroup", version, detail: event };
     case "cardCopied":
       return event.bonusFrom === undefined ? null : { event: "engine.copyBonus", version, detail: { ...event, bonusFrom: event.bonusFrom } };
     case "triggerQueued":

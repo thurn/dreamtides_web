@@ -837,7 +837,19 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
         pair(entry.challenger === null ? null : resolve(entry.challenger), resolve(entry.blocker));
       }
     }
-    return { challengers, blockers, ...(unpairedBlockers.length === 0 ? {} : { unpairedBlockers }) };
+    const scoring = shown.scoring === undefined ? undefined : (() => {
+      if (typeof shown.scoring.settled !== "boolean" || !Array.isArray(shown.scoring.scorers)) throw new Error("Cannot determinize an invalid scoring cohort");
+      const ids = new Set<InstanceId>();
+      const scorers = shown.scoring.scorers.map((entry: { readonly instance: InstanceId | { readonly member: number } | null; readonly controller: Side }) => {
+        if (entry.controller !== "player" && entry.controller !== "enemy") throw new Error("Cannot determinize an invalid scoring controller");
+        const instance: InstanceId = entry.instance === null ? `i${next++}` : resolve(entry.instance);
+        if (ids.has(instance)) throw new Error("Cannot determinize duplicate scorers");
+        ids.add(instance);
+        return { instance, controller: entry.controller };
+      });
+      return { settled: shown.scoring.settled, scorers };
+    })();
+    return { challengers, blockers, ...(scoring === undefined ? {} : { scoring }), ...(unpairedBlockers.length === 0 ? {} : { unpairedBlockers }) };
   })();
   const clock = Math.max(0, ...Object.values(instances).map((instance) => instance.enteredZoneAt), ...view.floating.map((effect) => effect.timestamp));
   const state: BattleState = {

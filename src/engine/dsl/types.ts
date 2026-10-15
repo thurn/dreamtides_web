@@ -758,6 +758,8 @@ export type Trigger =
   | { readonly on: "gainsSpark"; readonly subject: TriggerSubject }
   /** "When … scores ⍟": a challenge converts the character's spark into points. */
   | { readonly on: "scores"; readonly subject: TriggerSubject }
+  /** One settled Challenge cohort of distinct positive scorers. */
+  | { readonly on: "scoreGroup"; readonly count: number; readonly player: PlayerRef }
   /** "When the opponent scores ⍟": a character the opponent controls scores. */
   | { readonly on: "opponentScores" }
   /** "When you dissolve or banish an enemy", or a character you control dissolves one in a challenge. */

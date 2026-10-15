@@ -236,6 +236,12 @@ export function whenScores(subject: TriggerSubject = "self"): Trigger {
   return { on: "scores", subject };
 }
 
+/** "When `count` or more characters you control score": one settled Challenge group. */
+export function whenScoreGroup(count: number, player: PlayerRef = "you"): Trigger {
+  if (!Number.isSafeInteger(count) || count < 1) throw new Error("A scoring group needs a positive safe count");
+  return { on: "scoreGroup", count, player };
+}
+
 export function whenOpponentScores(): Trigger {
   return { on: "opponentScores" };
 }

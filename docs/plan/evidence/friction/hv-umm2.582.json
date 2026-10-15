@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.582",
+  "phase": 5,
+  "implementMin": 41.637161,
+  "implementWindow": {
+    "start": "2026-10-14T23:18:33.075000+00:00",
+    "end": "2026-10-15T00:00:11.304660+00:00"
+  },
+  "localValidationS": {
+    "review": 55.798589916026685,
+    "focused": 47.359130541968625,
+    "fuzz": 400.5526270829723,
+    "fullReview": 148.0312562920153,
+    "browserQA": 183.27149291697424,
+    "knip": 4.319913166982587
+  },
+  "hostLoad": 6.60986328125,
+  "testDelta": {
+    "files": 1,
+    "lines": 345,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 9.2584302,
+      "note": "Full first-attempt\u2192both-viewport PASS correction interval, including four retained caller failures, parent coordination and useful partial source/UUID proof. First move was canonical; second gesture failed. Existing All Forward worked. A disabled preselection Submit failed the visibility premise; actual candidate geometry and normal answer helper completed the workflow. This is elapsed coordination/verification time, not productive editing CPU."
+    }
+  ]
+}

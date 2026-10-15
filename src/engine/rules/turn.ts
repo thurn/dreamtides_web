@@ -161,6 +161,7 @@ function resetForTurn(ctx: StepContext, side: Side): void {
   const { state } = ctx;
   state.turn.sideTurns[side] += 1;
   state.turnLog = emptyTurnLog();
+  if (state.challenge !== null) delete state.challenge.scoring;
   state.oncePerTurn = [];
 }
 

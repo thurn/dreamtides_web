@@ -51,7 +51,7 @@ function namedRenewals(trigger: Trigger): readonly NamedTrigger[] {
     case "either": return trigger.triggers.flatMap(namedRenewals);
     // Copy occasions renew through the independently proved event-copy kernel below;
     // named-admission observers are excluded by its interference checks.
-    case "copy": case "namedAbilityTriggered": return [];
+    case "copy": case "namedAbilityTriggered": case "scoreGroup": return [];
     case "play": case "materialize": case "draw": case "foresee": case "handBecomesEmpty": case "discardBatch":
     case "discard": case "erode": case "reclaim": case "abandon": case "leavesPlay":
     case "returnToHand": case "dissolve": case "gainsSpark": case "scores": case "opponentScores":

@@ -780,7 +780,15 @@ export interface TurnState {
   endingCleanup?: true;
 }
 
+/** Positive physical scoring provenance captured across one Challenge. */
+export interface ChallengeScoring {
+  scorers: { readonly instance: InstanceId; readonly controller: Side }[];
+  settled: boolean;
+}
+
 export interface ChallengeState {
+  /** Absent in legacy snapshots whose scoring provenance is unknown. */
+  scoring?: ChallengeScoring;
   /** Designated at the end of Day. */
   challengers: InstanceId[];
   /** Designated at the end of Dusk: challenger → blocker. */

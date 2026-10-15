@@ -168,6 +168,7 @@ describe("presentation completeness", () => {
     promptAutoAnswered: "a notice shows it",
     resolved: "the card travels; its effects are logged",
     triggerQueued: "its resolution is logged",
+    scoreGroup: "each scoring lane and the resulting ability resolution are logged",
   };
   /**
    * The kinds of event the human sees that log a line and that present an
