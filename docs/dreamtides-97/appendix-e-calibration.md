@@ -1,11 +1,11 @@
 # Appendix E: Acquisition-rate calibration
 
-The design goal (Q1) is that a D97 player acquires cards at Shandalar's rate.
-This appendix sets out:
+The design goal is that a D97 player acquires cards at about Shandalar's rate
+per battle. This appendix sets out:
 
 - the reference figures from the research;
 - how D97's bundle budget was calibrated against them;
-- expected per-campaign card, Essence and amulet ledgers;
+- expected per-run card, Essence and amulet ledgers;
 - what to measure in simulation and playtest.
 
 Every expected value here comes from a stated model, not from play; treat it
@@ -32,6 +32,10 @@ not measured averages. Their ledgers:
 | Gold income, including starting gold | 2,440 | 1,900 | 1,840 |
 | Amulets received, including starting amulets | 22 | 15 | 6 |
 
+The Magician journey acquires 113 copies over 59 matches: **1.92 copies per
+battle**. Only 21 of its 55 wins pay a bundle; the rest are dungeon and castle
+fights that pay treasure, castle picks or nothing.
+
 Structural facts from the decompilation that the ledgers rely on:
 
 - ordinary budgets of 4 early, 4–7 at tiers 6–8, 8 at tier 12, 10 at tier 16
@@ -42,182 +46,175 @@ Structural facts from the decompilation that the ledgers rely on:
 - five castles of three picks each;
 - at most three treasures per dungeon.
 
-The journeys award amulets more often than budget ÷ 40 gives, since their drops
-are authored; D97 targets the formula, not the journeys.
-
 ## E2. Victory bundle size
 
 Shandalar's original card and rarity data isn't in the decompilation, so the
-research report models bundles with a reference curve. The first card (the
+research report models bundles with a reference curve: the first card (the
 stake) costs 2 points, and each later card costs 1, 2 or 3 with equal
-probability, a mean of 2.0. D97 computes its curve from real campaign pools,
-measured over 32 Avatars × 20 seeds. Their copy-weighted mix is 44% Common,
-44% Uncommon and 12% Rare, a mean cost of about 1.67, because Commons and
-Uncommons dominate.
+probability. D97 computes its curve from real pools, measured over 32 Avatars
+× 20 seeds. Their copy-weighted mix is 44% Common, 44% Uncommon and 12% Rare, a
+mean cost of about 1.67.
 
-| Budget | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Shandalar reference `E[N]` | 2.00 | 2.33 | 2.78 | 3.37 | 3.83 | 4.33 | 4.84 | 5.33 |
-| D97 `E[N]` (mean over pools) | 2.08 | 2.67 | 3.27 | 3.87 | 4.47 | 5.07 | 5.66 | 6.26 |
-| D97 5th–95th percentile | 1.84–2.32 | 2.36–3.02 | 2.85–3.71 | 3.38–4.41 | 3.88–5.10 | 4.39–5.80 | 4.91–6.49 | 5.41–7.19 |
+| Budget | 1 | 2 | 3 | 4 | 5 | 6 |
+| --- | --- | --- | --- | --- | --- | --- |
+| D97 `E[N]` (mean over pools) | 1.00 | 1.44 | 2.08 | 2.67 | 3.27 | 3.87 |
+| D97 5th–95th percentile | — | — | 1.84–2.32 | 2.36–3.02 | 2.85–3.71 | 3.38–4.41 |
 
-At equal budgets D97 bundles run 15–20% larger. Shandalar's typical monster has
-base strength 2 (`S = 2 + ⌊T/2⌋`). D97 uses base strength **1**
-(`S = 1 + ⌊T/2⌋`), which puts a tier-`T` D97 bundle on the reference curve for
-the same tier:
+Budgets 3 and up are measured over pools. Budgets 1 and 2 follow from the mean
+mix: a budget of 1 pays exactly the stake, and a budget of 2 adds a second card
+when the stake is a Common.
 
-| Tier | Shandalar budget | Reference `E[N]` | D97 budget | D97 `E[N]` | Difference |
-| --- | --- | --- | --- | --- | --- |
-| 4 | 4 | 2.33 | 3 | 2.08 | −11% |
-| 6 | 5 | 2.78 | 4 | 2.67 | −4% |
-| 8 | 6 | 3.37 | 5 | 3.27 | −3% |
-| 10–11 | 7 | 3.83 | 6 | 3.87 | +1% |
-| 12–13 | 8 | 4.33 | 7 | 4.47 | +3% |
-| 14 | 9 | 4.84 | 8 | 5.06 | +5% |
-| 16 | 10 | 5.33 | 9 | 5.66 | +6% |
-| 18 | 11 | 5.83 | 10 | 6.26 | +7% |
+**Why the budget is `floor(T / 4)`.** In Shandalar about half the battles pay
+no bundle. In D97 every challenger win pays one, and challengers make up about
+two thirds of a run's battles. Keeping Shandalar's per-bundle budget
+(`2 + floor(T / 2)`) would pay about 3 copies per challenger win, roughly 100
+copies from bundles alone. A budget of `floor(T / 4)` pays a mean of 1.43 per
+win, about 47 copies over a run, which keeps the per-battle rate near
+Shandalar's:
 
-Weighted by the spawn table (Appendix B §B6), the per-win mean is 2.45 at
-`v = 0` and 3.61 at `v ≥ 8`. Under the same table, the reference curve gives
-2.63 and 3.60: D97 is 7% lower at `v = 0`, within 3% from `v = 2`, and equal
-from `v = 8`. The amulet drop keeps Shandalar's budget, `(2 + ⌊T/2⌋)/40`, so
-amulet income is unaffected by the calibration.
+| Tier | 4–6 | 8–10 | 12–14 |
+| --- | --- | --- | --- |
+| Budget | 1 | 2 | 3 |
+| `E[N]` | 1.00 | 1.44 | 2.08 |
+| What it pays | The opponent's stake | The stake, often with one pool card | The stake and one or two pool cards |
 
-**Lever.** If playtests find bundles too large or small, change the base
-strength `β`, not the cost points. Cost points also drive shop ceilings and
-merchant prices.
+Early wins pay only the opponent's stake, which comes from outside the
+player's pool, plus the extra.
 
-## E3. Expected card ledger (Magician)
+**Lever.** If playtests find bundles too large or small, change `β` in
+`S = β + floor(T / 4)`. Each step of `β` adds about 0.5 copies per win, about 17
+per run. Cost points also drive trader ceilings and merchant prices, so they
+stay fixed.
 
-**Model inputs.** Replace each with measurements as they arrive:
+## E3. Expected card ledger
 
-- 27 ordinary encounters fought (24 wins, 3 losses), about five wins per realm,
-  so `v` runs 0–5 in each realm and the mean bundle is 2.95;
-- 3 bundles traded for clues;
-- about 10 lairs entered, split 40/30/30;
-- a 70% win rate in rare-card duels, with a mean prize of 2.75 Rares;
-- 2–3 dungeon expeditions and 5 castles;
-- 4 quests, 1 tribute and 2 Duplication purchases;
-- 16 card-shop purchases;
-- specialty purchases limited by amulet income (E5), at 1.8 amulets per card;
-- 30 sales;
-- stake losses: 3 ordinary, plus 1–2 in dungeons and castles;
-- 1 delivery.
+**Model inputs** for a successful run. Replace each with measurements as they
+arrive:
+
+- 58 battles:
+  - 38 challengers: 33 wins and 5 losses, with wins by tier of 4 at tier 4,
+    7 at 6, 8 at 8, 7 at 10, 5 at 12 and 2 at 14;
+  - 10 guardians: 3 Avatar guardian wins, 5 incarnation wins and 2 losses;
+  - 3 in Limbo: one incarnation challenger and Apollyon, with half a loss each;
+  - 4 Legendary keeper battles: 3 wins and 1 loss;
+  - 3 prize duels: 2 wins, with a mean prize of 2.75 Rares;
+- about 14 chests opened;
+- 14 trader and Card Shop purchases, out of about 35 offers;
+- 10 amulet merchant purchases (E5);
+- about 15 quests completed;
+- 2 Duplications, and 3 Transfigurations;
+- sales as the balancing item of the Essence ledger (E4).
 
 | Channel | Expected copies | Range |
 | --- | --- | --- |
 | Starting collection | 32 | 32 |
-| Retained victory bundles (21 × 2.95) | +62 | 55–68 |
-| Spoils duplicates | +0.6 | 0–2 |
-| Lair ordinary finds | +4 | 2–6 |
-| Lair Dreamtides events (Exploration, Augury) | +2 | 1–4 |
-| Lair specials (rare duels, merchants) | +2.9 | 0–6 |
-| Dungeon treasure | +7 | 5–9 |
-| Castle picks | +15 | 15 |
-| Bounty picks and tribute | +2.5 | 1–4 |
+| Victory bundles, stakes included (33 wins) | +47 | 40–55 |
+| Guardian stakes and picks (3 × 3 + 5 × 4 + 1 × 4) | +33 | 28–38 |
+| Legendary dream | +3 | 2–6 |
+| Prize duels | +5.5 | 3–8 |
+| Chests | +7 | 5–9 |
+| Trader and Card Shop purchases | +14 | 10–18 |
+| Amulet merchant purchases | +10 | 7–12 |
+| Quest picks | +3 | 2–5 |
 | Duplication | +2 | 0–4 |
-| Card-shop purchases | +16 | 12–20 |
-| Specialty merchant purchases | +7.5 | 5–10 |
-| Sales | −30 | −25 to −40 |
-| Stake losses | −4.5 | −2 to −7 |
-| Deliveries | −1 | 0 to −2 |
-| **Final collection** | **≈ 118** | **100–125** |
+| Site outcomes (Exploration, Augury) | +2 | 1–4 |
+| Sales | −8 | −5 to −20 |
+| Stake losses | −8.5 | −5 to −12 |
+| Deliveries | −2 | −1 to −3 |
+| **Final collection** | **≈ 140** | **120–150** |
 
-That is gross acquisition of about 122 copies against Shandalar Magician's
-113, a net of about +86 against +76, and a final collection of about 118 against
-116.
+Gross acquisition is about 126 copies over 58 battles, **2.18 per battle**,
+13% above Shandalar Magician's 1.92. The final collection is about 20% larger
+than Shandalar's 116, for two reasons:
 
-The D97 starter is 8 cards smaller, since it has no lands, and at Magician 5 of
-its 32 cards are Starter cards. Its bundles carry no lands either, so a larger
-share of D97's inflow is playable spells. The tuning target is the gross rate
-per win and the final collection size, which match.
+- **Guardian picks.** Eight to nine guardian wins pay 33 copies, against
+  Shandalar's 15 castle picks.
+- **Fewer sales.** Purses fund part of the player's spending, and D97 has no
+  world magic or food to buy, so players sell about 8 cards instead of 32.
 
-**Pool saturation.** Every random channel draws from the same ~100-card pool. A
-simulated sequence of 150 copy-weighted draws at allowance 2 ends owning
-copies of about 87% of the pool's identities. Late in a campaign, random
-channels mostly offer second copies or cards already sold. Exact channels
-(merchants, castles, treasure) and Essence from sales then carry more of the
-player's progress than they did in Shandalar, whose open card catalog never
-saturates.
+Both follow from interview decisions (R25, R38). If playtests find the
+collection too large, the levers, in order of preference, are the chest card
+weight, trader slot counts, quest pick rewards and Essence purse sizes.
 
-## E4. Expected Essence ledger (Magician)
+**Pool saturation.** Every pool-drawn channel draws from about 101 cards. Late
+in a run, random channels mostly offer second copies. Stakes, guardian picks,
+amulet merchants and Avatar switches are the channels that keep offering new
+identities; measure their share by run phase.
+
+## E4. Expected Essence ledger
 
 | Income | Expected | Spending | Expected |
 | --- | --- | --- | --- |
-| Starting Essence | 200 | Card-shop purchases (16 × 50) | 800 |
-| Sales (30 × 40) | 1,200 | Transfigurations (5 × 45) | 225 |
-| Cash chests (1.5 × 244) | 366 | Duplication (2 × 60) | 120 |
-| Lair windfalls (0.25 × 500, mostly early) | 95 | Dreamsign Bazaar (3 × 100) | 300 |
-| Essence lair events, Exploration | 75 | World magic (1.5 × 450) | 675 |
-| Tribute | 50 | Lair merchants and amulet vendors | 160 |
-| Gamble (net of stakes) | 20 | | |
-| **Total** | **≈ 2,000** | **Total** | **≈ 2,280** |
+| Starting Essence | 200 | Trader and Card Shop purchases (14 × 55) | 770 |
+| Purses (24.75 × 14.4) | 356 | Transfigurations (3 × 45) | 135 |
+| Essence chests (3.5 × 87.5) | 306 | Duplication (2 × 60) | 120 |
+| Quest rewards | 290 | Dreamsign Bazaar (3 × 100) | 300 |
+| Essence site outcomes and Gamble, net | 100 | Amulet changer (1 × 250) | 250 |
+| Sales (8 × 40) | 320 | | |
+| **Total** | **≈ 1,570** | **Total** | **≈ 1,575** |
 
-The model ends about 280 Essence short. The intended consequence is
-Shandalar's own tension: players sell more cards, skip a world magic
-Dreamsign, or buy fewer shop cards. Shandalar Magician's ledger earns 1,900 and
-spends 1,270, of which 395 is food. In D97, services, Dreamsigns and world magic
-take food's place as sinks.
+Sales are the balancing item: income before sales falls about 320 Essence
+short of the modeled spending, so the player sells about 8 cards. Shandalar
+Magician's ledger earns 1,900 and spends 1,270, of which 395 is food.
 
 **Levers, in order of preference:**
 
-1. world magic and Bazaar prices;
-2. cash chest gold;
-3. the Essence lair weight;
-4. the sale formula. This is last because it also sets the arbitrage rate.
+1. the amulet changer price;
+2. chest Essence;
+3. purse sizes;
+4. the sale formula, last because it also sets what loot is worth.
 
-## E5. Expected amulet ledger (Magician)
+## E5. Expected amulet ledger
 
 | Source | Expected | Sink | Expected |
 | --- | --- | --- | --- |
-| Starting amulets | 3 | Specialty merchant purchases (about 7.5 cards) | 13.5 |
-| Victory drops (24 × 0.14) | 3.4 | World magic burns (3 uses × 1/3) | 1 |
-| Travel, delivery and village bounty quests | 2.5 | | |
-| Cash chests (1.5 × 2.5) | 3.75 | | |
-| Lair amulet treasure and vendors | 1.5 | | |
-| **Total** | **≈ 14** | **Total** | **≈ 14.5** |
+| Starting amulets | 2 | Amulet merchant purchases (10 cards × 1.8) | 18 |
+| Challenger extras (33 × 1/4) | 8.25 | Amulet tolls | 2 |
+| Quests (2 collector requests, 2 trials, others) | 7 | | |
+| Chests (14 × 1/4) | 3.5 | | |
+| Amulet changer | 1 | | |
+| **Total** | **≈ 21.75** | **Total** | **≈ 20** |
 
-Shandalar Magician's journey receives 15 and spends 15. Because amulets belong
-to five realms and are spent only at their own realm's merchants, the expected
-purchase count is lower than the raw total suggests. Some amulets wait for the
-right town.
+Shandalar Magician's journey receives 15 and spends 15. D97's amulets buy from
+resonance cores the reward pool doesn't reach, so more of the D97 supply
+flows through them. Because each amulet is spent only at its own resonance's
+merchants, a couple usually wait for the right merchant or a toll.
 
 ## E6. Measurement plan
 
-**Logs.** D97 logs every economy event with UUIDs (README, "Logging").
-Simulation and playtest reports should give each metric per difficulty, per
-castle count (campaign phase), and per encounter type and tier:
+**Logs.** D97 logs every economy and network event with UUIDs (Appendix B
+§B15). Simulation and playtest reports should give each metric by run phase
+(incarnations beaten) and by encounter type and tier:
 
 - copies acquired per battle fought, and per win, by channel;
-- gross, net and distinct-identity collection growth, and the share of the
-  campaign pool owned, by campaign phase;
-- per pool: slice sizes, joined facet count, Rare count, and how often strict
-  draws repeat a card;
+- gross, net and distinct-identity collection growth, and the share of
+  acquired identities from outside the current reward pool;
+- reward pools dealt per run (Avatar switches) and the timing of each switch;
 - active-deck turnover, the share of acquired copies that are ever equipped,
   and the time from acquisition to equipping;
-- clue uptake (the share of clue offers taken) and bundle size when declined;
-- time from a target card's first sighting (shop, merchant catalog, clue
-  journal) to its acquisition, including the slowest decile;
-- Essence and amulets by source and sink, the sale arbitrage rate (Essence
-  from sales of cards outside the realm's featured slice), and the stock of
-  unspent amulets by realm;
-- win rate by tier and by head-start difference;
+- Essence and amulets by source and sink, cards sold, and unspent amulets by
+  resonance;
+- win rate by tier and by head-start difference; rematch counts;
 - stake losses by rarity and by modification;
-- sieges started, defended and lost, and towns held at the end;
-- campaign length in battles, clock units and wall time.
+- dreams entered, doors traversed, waypoints activated and fast travels; the
+  order in which incarnations fell;
+- quests accepted and completed by kind; sage hints by kind;
+- run length in battles and wall time.
 
-**Simulation first.** A headless campaign simulator can tune the levers above
-before playtests. It replays the event log with scripted travel, shopping and
-clue policies, and resolves battles from a win-rate model by tier and head
-start. Its job is to produce distributions around the expected ledgers in E3–E5.
+**Simulation first.** A headless run simulator can tune the levers above before
+playtests. It replays the event log with scripted exploration, shopping and
+challenge policies, and resolves battles from a win-rate model by tier and head
+start. Its job is to produce distributions around the expected ledgers in
+E3–E5.
 
-**Acceptance targets** for a successful Magician campaign:
+**Acceptance targets** for a successful run:
 
 | Metric | Target |
 | --- | --- |
-| Final collection | 100–125 copies |
-| Gross acquisitions per ordinary win, including the bundle and its share of incidental channels | 3.0–3.6 |
-| Retained bundle copies | 55–68 |
-| Amulet income | 12–18 |
-| Essence income | 1,800–2,400 |
-| Campaign length | 55–65 battles |
+| Gross acquisitions per battle | 1.9–2.3 |
+| Final collection | 120–150 copies |
+| Victory bundle copies, stakes included | 40–55 |
+| Copies from outside the reward pool at its deal | 25% or more |
+| Amulet income | 16–24 |
+| Essence income | 1,300–1,900 |
+| Run length | 55–65 battles |

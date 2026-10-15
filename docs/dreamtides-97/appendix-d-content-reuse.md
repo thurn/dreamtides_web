@@ -1,10 +1,10 @@
 # Appendix D: Reusing Dreamtides content
 
-D97 reuses the existing catalogs and algorithms: cards, the tides4 pool,
-Avatars, Dreamsigns, transfigurations, the opponent deck builder, Apollyon and
-the site encounters. This appendix gives every piece of reused content its D97
-home, and lists what D97 adapts or leaves out. Content is always identified by
-UUID; names here are for reading.
+D97 reuses the existing catalogs and algorithms: cards, tides and the tides4
+pool, Avatars, Dreamsigns, transfigurations, the opponent deck builder,
+Apollyon and the site encounters. This appendix gives every piece of reused
+content its D97 home, and lists what D97 adapts or leaves out. Content is
+always identified by UUID; names here are for reading.
 
 [Back to the design overview](README.md)
 
@@ -12,68 +12,64 @@ UUID; names here are for reading.
 
 | Content | D97 home |
 | --- | --- |
-| tides4 pool algorithm | Deals the fixed campaign pool, the only source of supply (Q34) |
-| Pool cards (about 101 per campaign) | Collection, shops, bundles, lairs, merchants, castle picks |
-| Legendary cards (8) | Dungeon treasure only, from the whole catalog (Q39) |
-| Starter cards (10) | Difficulty dilution of the starting collection and safety-net padding |
+| tides4 pool algorithm | Deals the reward pool for the current Avatar, and every opponent's pool |
+| Supply cards (509) | The reward pool, opponent stakes, guardian picks, resonance cores and the Legendary dream |
+| Legendary cards (8) | Legendary dream stakes only |
+| Starter cards (10) | Starting-collection dilution and safety-net padding |
 | Special and Tutorial cards | Not used |
-| Opponent deck builder | Monster decks and the player's starting collection (Q42) |
-| Avatars (32) | Player choice; realm rosters of monsters (Q44) |
-| Tides | The pool's slices: signature core and facets (Q41) |
-| Resonance | Cosmetic: realm names, art and amulet names |
+| Opponent deck builder | Every opponent's deck, and the player's starting collection |
+| Avatars (32) | Player choice; Avatar characters as guardians, friendly quest givers and challengers; deck sources for generic characters |
+| Tides | The reward pool's structure; the affinity space for decks and picks |
+| Resonance | Tide labels on the Avatar select screen; the five amulets and resonance cores |
 | Rarity | Visible supply tier and economy costs |
-| Transfigurations (9) | Town service, lair events, treasure, opponent knobs |
+| Transfigurations (9) | The Transfiguration site, other site outcomes, opponent knobs |
 | Dreamsigns (153) | Battle and journey effects, filtered (D6) |
-| Dream Guides (10) | Service hosts; one home city each (D2) |
-| Apollyon incarnations (10) | Castle lords and the final battle (Appendix C) |
-| Site types (14) | Settlement services, lair events, or not used (D3) |
+| Dream Guides (10) | Wandering site hosts with home tilesets (D2) |
+| Dreamscapes (10) | Tilesets: the guides' home tilesets |
+| Apollyon incarnations (10) | Five guardians and five Limbo challengers per run (Appendix C) |
+| Site types (14) | Guide sites, traders, or not used (D3) |
 | Battle rules | Unchanged (`docs/rules.md`) |
 
 ## D2. Dream Guides
 
-Each guide belongs to one realm and has a **home city** named after their home
-dreamscape. Guides are seated two per realm by the realm's cosmetic resonance,
-following each guide's affiliation where it's clear:
+Each guide wanders between dreams, keeps their authored dialogue, and has a
+home tileset named for their home dreamscape (Appendix B §B11).
 
-| Guide | Home city | Realm (cosmetic) | Role in D97 | Enhanced at home |
-| --- | --- | --- | --- | --- |
-| Tobias Tanglefur | Tumbleleaf Village | Wild | Card shops | +1 slot; slot ceilings start at Uncommon |
-| Aldric, the Seer | Wilderveil | Wild | Augury lair events | Augury as a service on cooldown |
-| Amunet, the Tomb-Keeper | Pharaoh's Gate | Ember | Dreamsign Bazaars | Restock delay halved |
-| Gravok | Farpoint Station | Ember | Gamble lair events | Gamble as a service on cooldown, at enhanced stakes |
-| Sigrún | Winterwake Fjords | Vision | Dreamsign Revelation lair events | Revelation (1 of 4) as a service on cooldown |
-| Durgan Forgehammer | Frostforge | Vision | Transfiguration services | Any owned copy, any eligible form |
-| Deacon Holt | Hope's End | Valor | Duplication services | Any owned copy |
-| Master Takeshi | Tsukiren | Valor | Bounties | Always offers a bounty paying an exact card from any slice of the pool |
-| Maddox | The Rust Expanse | Shadow | Random Site lair events | Random Site (choose 1 of 3) as a service on cooldown |
-| "Layaway" | Grid City | Shadow | Exploration lair events | Exploration as a service on cooldown |
+| Guide | Home tileset | Site in D97 | Enhanced |
+| --- | --- | --- | --- |
+| Tobias Tanglefur | Tumbleleaf Village | Card Shop | +1 slot; slot ceilings start at Uncommon |
+| Amunet, the Tomb-Keeper | Pharaoh's Gate | Dreamsign Bazaar | 4 Dreamsigns |
+| Sigrún | Winterwake Fjords | Dreamsign Revelation (1 of 3) | 1 of 4 |
+| Durgan Forgehammer | Frostforge | Transfiguration | Any owned copy, any eligible form |
+| Deacon Holt | Hope's End | Duplication | Any owned copy |
+| Master Takeshi | Tsukiren | Handicap trial quest (Appendix B §B13) | The trial pays an exact pick from 5 eligible pool cards instead of 3 |
+| Aldric, the Seer | Wilderveil | Augury | Bigger rewards curated to the deck |
+| Maddox | The Rust Expanse | Random Site | Choose one of three distinct enhanced sites |
+| Gravok | Farpoint Station | Gamble | No initial fee, bigger payouts |
+| "Layaway" | Grid City | Exploration | Enhanced Exploration |
 
-Home-city services use the merchant cooldown, `18 × (d + 3)` clock units.
-Guide dialogue keeps its existing authored lines. Affiliations remain flavor,
-as in the journey mode, where affiliation weights are not applied.
+Affiliations remain flavor: affiliation weights are not applied.
 
 ## D3. Site types
 
 | Site | D97 home | Adaptation |
 | --- | --- | --- |
-| Battle | Overworld monsters, sieges, liberation, dungeons, castles, final battle | Tier knobs replace completion levels (Appendix B §B7) |
+| Battle | Challengers, guardians, keepers, prize duelists, Limbo | Tiers replace completion levels (Appendix B §B7) |
 | Draft | Not used | — |
-| Essence | Lair event | 200–300 Essence |
-| Dreamsign Reward | Lair event | One Dreamsign from the D97 pool; Rosemary enhances it |
-| Card Shop | Every settlement | Shandalar stock and prices, drawn from the campaign pool (Appendix A §A4–A6) |
-| Dreamsign Bazaar | Town and city service | Persistent stock, rarity prices (Appendix A §A11) |
-| Dreamsign Revelation | Lair event; Sigrún's home | 1 of 3 (1 of 4 enhanced) |
-| Transfiguration | Town and city service | Existing offers and form prices |
-| Duplication | Town and city service | Priced at the local buy quote |
+| Essence | Random Site and Exploration outcomes | 200–300 Essence |
+| Dreamsign Reward | Exploration and Augury outcomes | One Dreamsign from the D97 pool; Rosemary enhances it |
+| Card Shop | Traders everywhere; Tobias's guide site | Shandalar stock and prices, drawn from the reward pool (Appendix A §A4–A6) |
+| Dreamsign Bazaar | Amunet's guide site | Rarity prices (Appendix A §A11) |
+| Dreamsign Revelation | Sigrún's guide site | 1 of 3 (1 of 4 enhanced) |
+| Transfiguration | Durgan's guide site | Existing offers and form prices |
+| Duplication | Holt's guide site | Priced at the local buy quote |
 | Purge | Not used | — |
-| Augury | Lair event; Aldric's home | Filtered archetypes (D5) |
-| Random Site | Lair event; Maddox's home | Conceals one enhanced D97 site: Transfiguration, Duplication, Dreamsign Bazaar, Dreamsign Revelation, Augury, Gamble, Exploration or Essence |
-| Gamble | Lair event; Gravok's home | Unchanged games and payouts, except Four-Suit Reprise (below) |
-| Exploration | Lair event; Layaway's home | Filtered and adapted actions (D4) |
+| Augury | Aldric's guide site | Filtered archetypes (D5) |
+| Random Site | Maddox's guide site | Conceals one enhanced site of another guide: Card Shop, Transfiguration, Duplication, Dreamsign Bazaar, Dreamsign Revelation, Augury, Gamble, Exploration or Essence |
+| Gamble | Gravok's guide site | Unchanged games and payouts, except Four-Suit Reprise (below) |
+| Exploration | Layaway's guide site | Filtered and adapted actions (D4) |
 
-**Lair versions** of sites run their standard behavior once. **Service
-versions** follow Appendix A §A11. Every card a site grants comes from the
-campaign pool.
+Every card a site grants comes from the reward pool.
 
 **Four-Suit Reprise.** Its Clubs result (purge the targeted card) is replaced
 by a free redraw. Spades (free transfiguration), Diamonds (+100 Essence) and
@@ -82,12 +78,13 @@ Hearts (duplicate the card) are unchanged.
 ## D4. Exploration
 
 **Selection.** Exploration keeps its selection rule: shuffle the encounters by
-campaign seed and lair UUID, and take the first encounter whose two actions can
+run seed and site UUID, and take the first encounter whose two actions can
 both be prepared. D97 marks an action unpreparable when its effect:
 
 - removes, purges or destroys owned copies;
 - grants or involves Nightmare;
-- refers to drafting, the Dream Atlas or dreamscapes with no adaptation below.
+- chooses or swaps the Avatar;
+- refers to drafting or the journey's map with no adaptation below.
 
 Encounters with such an action are skipped, so the player never sees a
 half-usable encounter. Curled Tail's reroll works as authored. The encounter's
@@ -97,14 +94,13 @@ full-art source card can be any catalog card; it is illustration, not supply.
 
 | Effect family | D97 behavior |
 | --- | --- |
-| Card grants (draft-card pick 1 of 4, take-cards, choose-pack, transfigured-card-draft, copy-offered-deck-card) | New copies enter reserve. Offers draw from the campaign pool with the action's existing selection policy, respecting the copy allowance |
+| Card grants (draft-card pick 1 of 4, take-cards, choose-pack, transfigured-card-draft, copy-offered-deck-card) | New copies enter reserve. Offers draw from the reward pool with the action's existing selection policy, respecting the copy allowance |
 | Deck-wide changes (increase-spark-all, make-fast-all and similar) | Apply to the copies in the active deck at that moment; the changes stay on those copies |
 | Single-card changes (transfigure-selected and similar) | Choose among owned copies in the active deck |
 | Next-battle modifiers (opening hand, starting energy) | Apply to the next battle |
-| Essence (double-essence, lose-half-essence-and-free-purchases) | As authored; free purchases apply at the next card shop |
+| Essence (double-essence, lose-half-essence-and-free-purchases) | As authored; free purchases apply at the next trader |
 | Dreamsigns (gain-offered-dreamsign, replace-all-dreamsigns-random) | As authored, from the D97 pool, with the cap's replacement flow |
-| Add a site (add-site, choose-site-type) | Spawns a single-use lair holding that site within 6 tiles, priced as a town of the realm |
-| Avatar choice (choose-avatar) | Swaps the Avatar; the campaign pool is unchanged |
+| Add a site (add-site, choose-site-type) | Places a one-use guide site in the current dream, priced at its band |
 
 **Unpreparable** (encounters containing one are skipped):
 
@@ -112,6 +108,7 @@ full-art source card can be any catalog card; it is illustration, not supply.
 - purge-for-essence;
 - purge-and-copy;
 - reduce-cost-all-and-gain-nightmares;
+- choose-avatar;
 - every other removal or Nightmare action.
 
 ## D5. Augury
@@ -121,37 +118,35 @@ archetypes:
 
 | Archetype | D97 |
 | --- | --- |
-| fit_card_grant, fit_card_draft, copies_draft, strong_card, category_draft_known, card_bundle, transfigured_draft | Kept. Candidates come from the campaign pool. Affinity uses the active deck; "already owned" uses the collection |
+| fit_card_grant, fit_card_draft, copies_draft, strong_card, category_draft_known, card_bundle, transfigured_draft | Kept. Candidates come from the reward pool. Affinity uses the active deck; "already owned" uses the collection |
 | transfigure | Kept; targets an active-deck copy |
 | duplicate | Kept; the copy is plain and free |
 | dreamsign | Kept |
-| add_site | Spawns a single-use lair holding a Card Shop, Transfiguration or Duplication site, priced as a town of the realm |
+| add_site | Places a one-use Card Shop, Transfiguration or Duplication site in the current dream, priced at its band |
 | purge | Not used |
 | starter_transfigure | Not used |
 
 ## D6. Dreamsigns
 
 **The D97 pool** holds live, authored Dreamsigns whose effects have D97
-meaning, plus the ten world magic Dreamsigns (Appendix A §A12). World magic is
-sold only at its assigned settlements. Pending Dreamsigns join the pool when
-authored. The 12-held cap and its replacement flow are unchanged, and a player
-holds at most one copy of each Dreamsign.
+meaning. Pending Dreamsigns join it when authored. The 12-held cap and its
+replacement flow are unchanged, and a player holds at most one copy of each
+Dreamsign.
 
 **Scaling rule.** A journey effect that triggers "after each battle" was tuned
-for a seven-battle run; a D97 campaign has about sixty battles. In D97 such
-effects trigger after each castle victory and each completed dungeon expedition
-instead, about 10–15 times per campaign.
+for a seven-battle run; a D97 run has about sixty battles. In D97 such effects
+trigger after each guardian victory instead, about 8–10 times per run.
 
 | Dreamsign | Status | D97 treatment |
 | --- | --- | --- |
 | Battle-only Dreamsigns | live | Unchanged |
-| Banded Worm | live | 20% of current Essence on first entering each realm |
-| Star Badge, Pearl Shell | live | Apply to Essence lair events |
-| Rosemary | live | Enhances Dreamsign Reward and Revelation lair events |
-| Leaf Ledger | live | Two transfigurations per Transfiguration session |
+| Banded Worm | live | 20% of current Essence on first entering each incarnation dream |
+| Star Badge, Pearl Shell | live | Apply to Essence site outcomes and Essence chests |
+| Rosemary | live | Enhances Dreamsign Reward outcomes and Revelation sites |
+| Leaf Ledger | live | Two transfigurations per Transfiguration site |
 | Spell Tome | live | Unchanged: transfiguring an Event adds a plain copy |
-| Green Slime | live | Scaling rule: after each castle victory or completed expedition |
-| Blue Crystal | live | Each copy bought at a card shop gains a random applicable transfiguration |
+| Green Slime | live | Scaling rule: after each guardian victory |
+| Blue Crystal | live | Each copy bought from a trader gains a random applicable transfiguration |
 | Brown Acorn | live | Each acquired Warrior copy gains +1 spark |
 | Curled Tail | live | Unchanged |
 | Clam Shell, Sea Urchin | live | Excluded (draft) |
@@ -159,26 +154,26 @@ instead, about 10–15 times per campaign.
 | Raven Skull | live | Excluded (Nightmare) |
 | Rainbow Mushroom | live | Excluded (dreamscape sites) |
 | Scorpion, Paired Teeth, Tortoise Shell, Mushroom Caps, Twisted Herbs, Witch Coin | pending | Excluded (purge, draft, Nightmare or paid restock) |
-| Shop and Bazaar modifiers (Charm Staff, Cracked Mirror, Cracked Orb, Purple Crystal, Red Shard) | pending | Apply to card shop and Bazaar purchases when authored |
-| Transfiguration modifiers (Glow Pouch, Glowing Crystal, White Rat, Rainbow Jellyfish, Star Anise) | pending | Apply to the Transfiguration service when authored |
+| Shop and Bazaar modifiers (Charm Staff, Cracked Mirror, Cracked Orb, Purple Crystal, Red Shard) | pending | Apply to trader, Card Shop and Bazaar purchases when authored |
+| Transfiguration modifiers (Glow Pouch, Glowing Crystal, White Rat, Rainbow Jellyfish, Star Anise) | pending | Apply to the Transfiguration site when authored |
 | Red Cheese, Spider | pending | Scaling rule when authored |
 | Spiral Shell | pending | Duplication yields 2 copies instead of 4 when authored |
-| Carved Bone, Mortal Skull | pending | Unchanged when authored. Their Essence-per-kill income is a deliberate Dreamsign exception to battles paying no Essence |
+| Carved Bone, Mortal Skull | pending | Unchanged when authored; their Essence per kill adds to purses |
 
 **Opponent Dreamsigns** come only from live Dreamsigns with battle effects.
 
 ## D7. Avatars
 
-- **Player.** All 32 Avatars are selectable, and the choice deals the campaign
-  pool. The selection screen marks the nine without a live ability.
-- **Monsters.** Every Avatar except the player's lives in realm rosters:
-  - signatured Avatars live in the realms featuring their facets;
-  - signatureless Avatars live in the home realm, borrowing the player's
-    archetype, and top up thin rosters (Appendix B §B7).
-
-  An Avatar can belong to several facet realms.
-- **Avatar swaps.** Exploration's choose-Avatar actions (four encounters) swap
-  the player's Avatar without changing the pool or the rosters.
+- **Player.** All 32 Avatars are selectable, and the choice deals the reward
+  pool. The selection screen shows each Avatar's tides as resonance-colored
+  pills, as in the journey, and marks the nine without a live ability.
+- **Characters.** Each Avatar other than the player's starting Avatar appears
+  at most once per run, as a guardian, a friendly quest giver or a challenger
+  (Appendix B §B6).
+- **Unlocks.** Completing a friendly Avatar character's quest adds it to the
+  roster (Appendix B §B14). Switching re-deals the reward pool.
+- **Deck sources.** Generic characters and Legendary keepers build their decks
+  from a deck-source Avatar's pool, without its ability.
 
 ## D8. Transfigurations
 
@@ -187,24 +182,22 @@ modification on an owned copy, at most one per copy.
 
 **Sources:**
 
-- the Transfiguration service;
+- the Transfiguration site;
 - Gamble's Spades result;
 - Augury and Exploration;
 - Green Slime and Blue Crystal;
-- Perfected treasure (Appendix C §C2);
 - opponent decks at higher tiers (Appendix B §B7).
 
-Transfigurations never change buy or sale prices (Appendix A §A4), and
-Duplication copies are plain.
+Transfigurations never change buy or sale prices (Appendix A §A4). Duplication
+copies, won stakes and guardian picks are plain.
 
 ## D9. Content D97 does not use
 
 - Draft sites, draft offers and the draft engine's remaining-copies bag. The
-  pool is dealt once and drawn from as an unlimited catalog (Q35).
-- The Dream Atlas, dreamscape nodes, Firstlight Meadow and Limbo.
-- Completion levels, the seven-battle structure and battle Essence rewards.
-- Resonance as a mechanic. It is presentation only (Q34–Q36).
-- Purge sites, card-removal outcomes, Nightmare and Bane effects (Q27).
+  reward pool is drawn from as an unlimited catalog.
+- The journey's layered atlas, dreamscape site lists, completion levels, the
+  seven-battle structure and Firstlight Meadow.
+- Purge sites, card-removal outcomes, Nightmare and Bane effects.
 - The Dreamsigns excluded in D6.
 - The Special card Contemplation as a supply card. It remains available as the
   token created by Seer of the Fallen.
