@@ -30,6 +30,7 @@ import {
 import { mintEntryId } from "./deck";
 import { findSite } from "./sites";
 import { draftOfferCount } from "./journey-draft";
+import { journeyTransfigurationCard } from "./journey-transfiguration";
 import type { JourneyModifierRegistry } from "./modifier-registry";
 import type { CardId } from "../../types/card-identity";
 import { cardIdFromUnknown } from "../../types/card-identity";
@@ -187,6 +188,14 @@ export function pickDraftCard(
   // Advance the draft on a clone so a bounce (from a thrown engine error, which
   // the root reducer catches) never leaves a half-mutated live state.
   const nextDraftState = structuredClone(draftState);
+  if (nextDraftState.siteFirstEventEntryId === undefined) nextDraftState.siteFirstEventEntryId = null;
+  if (nextDraftState.siteFirstEventEntryId === null) {
+    // Fresh picks have no D39 type modification; offered forms preserve type.
+    const cardType = journeyTransfigurationCard(entry)?.cardType ??
+      provider.cardDatabase().get(entry.cardNumber)?.cardType;
+    if (cardType === undefined) return null;
+    if (cardType === "Event") nextDraftState.siteFirstEventEntryId = entry.entryId;
+  }
   const baseConfig = provider.draftConfigFor(nextDraftState);
   if (baseConfig === undefined) return null;
   const config = { ...baseConfig, packSize: draftOfferCount(journey, baseConfig.packSize, modifiers) };
@@ -253,6 +262,7 @@ export function enterDraftSite(
   if (draftState.activeSiteId === siteId) return null;
 
   const nextDraftState = structuredClone(draftState);
+  nextDraftState.siteFirstEventEntryId = null;
   const baseConfig = provider.draftConfigFor(nextDraftState);
   if (baseConfig === undefined) return null;
   const config = { ...baseConfig, packSize: draftOfferCount(journey, baseConfig.packSize, modifiers) };

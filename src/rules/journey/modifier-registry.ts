@@ -202,7 +202,10 @@ export function createJourneyModifierRegistry(
         if (source.definition?.journeyDeckEntry !== undefined) continue;
         if (source.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent") { reactCopy(source); continue; }
         const previous = next;
-        if (invoke(source, [])) gainWave(previous);
+        if (invoke(source, [])) {
+          if (source.definition?.journeyDraft?.kind === "firstDraftEventTransfiguration") transformed.push(...journeyTransfigurationOccurrences(previous, next));
+          gainWave(previous);
+        }
       }
       // A Crystal form can appear after an earlier held Tome. Each concrete
       // transformation is consumed once by each Tome; preformed copies supply

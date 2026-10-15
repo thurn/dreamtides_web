@@ -1,0 +1,388 @@
+{
+  "bead": "hv-umm2.727",
+  "base": "258e4aef339388a3ffd49fb21340c27ac9aab703",
+  "dispatch": {
+    "helper": "/root/first_draft_event727",
+    "fork_turns": "none",
+    "utc": "2026-10-15T07:16:44.300Z",
+    "hostFile": "/Users/dthurn/.codex/sessions/2026/10/10/rollout-2026-10-10T20-08-54-01a128ef-4fc7-7a52-8a19-816921410323.jsonl",
+    "ordinal": 80081,
+    "rawEventSHA256": "3356368f16b99244af65c86e491deb4626a84ea99d27a72b59835f0c5f06f547",
+    "taskName": "first_draft_event727",
+    "base": "258e4aef339388a3ffd49fb21340c27ac9aab703",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+    "scopeSHA256": "013dcff7e66b199c88cd0d0a67314663a1ddbed2a48fc631216d6be3524dd22a",
+    "sampling": "UNKNOWN",
+    "parentSetup": "Native claim/readiness/capacity/TGcreation/baseline/doctor before helper dispatch remains separate actual parent cost; helper inclusive clock begins exact structured spawn call and never resets."
+  },
+  "implementWindow": {
+    "start": "2026-10-15T07:16:44.300Z",
+    "end": "2026-10-15T07:31:25.679322+00:00"
+  },
+  "windowEndpoint": {
+    "scope": "Actual evidence-write cutoff before Git; final actual Git end and cutoff gap retained externally in worker-commit-01 receipt and final-proof-v01.json. Includes research, coordination, queue waits, failed checks and validation. No postcommit edits.",
+    "model": "UNKNOWN",
+    "samplingStart": "UNKNOWN",
+    "modelCpu": "UNKNOWN",
+    "modelQueue": "UNKNOWN"
+  },
+  "sourceFirstInventory": "/tmp/worker727-20261015/source-first-v01.json",
+  "classificationResolution": "/tmp/worker727-20261015/classification-resolution-v01.json",
+  "testDelta": {
+    "files": 1,
+    "lines": 283,
+    "jsdomFiles": 0
+  },
+  "testSupportDelta": {
+    "newContractFiles": 1,
+    "newFixtureFiles": 0,
+    "newSupportFiles": 0,
+    "jsdomFiles": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Starting one-minute load for worker-review-01"
+      }
+    }
+  },
+  "commands": {
+    "worker-counterfactual-marker-01": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/rules/journey/journey-draft-first-event.test.ts",
+        "-t",
+        "tracks source-absent Events"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:25:25.470280+00:00",
+      "end": "2026-10-15T07:25:28.868877+00:00",
+      "exit": 1,
+      "wallSeconds": 3.3981466660043225,
+      "pid": 55284,
+      "pgid": 55284,
+      "load": "{ 23.98 16.78 14.34 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-counterfactual-occurrence-01": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/rules/journey/journey-draft-first-event.test.ts",
+        "-t",
+        "delivers one genuine transformation"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:25:32.059203+00:00",
+      "end": "2026-10-15T07:25:35.089230+00:00",
+      "exit": 1,
+      "wallSeconds": 3.0299129170016386,
+      "pid": 64369,
+      "pgid": 64369,
+      "load": "{ 23.42 16.78 14.36 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-counterfactual-savedguard-01": {
+      "argv": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/rules/journey/journey-draft-first-event.test.ts",
+        "-t",
+        "rejects indeterminate"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:25:28.940697+00:00",
+      "end": "2026-10-15T07:25:31.987729+00:00",
+      "exit": 1,
+      "wallSeconds": 3.0469040839816444,
+      "pid": 57832,
+      "pgid": 57832,
+      "load": "{ 23.42 16.78 14.36 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-focused-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft-first-event.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:22:23.280525+00:00",
+      "end": "2026-10-15T07:22:29.235119+00:00",
+      "exit": 1,
+      "wallSeconds": 5.954472582961898,
+      "pid": 44393,
+      "pgid": 44393,
+      "load": "{ 9.41 13.92 13.19 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-focused-02": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft-first-event.test.ts",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/draft.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:23:13.526218+00:00",
+      "end": "2026-10-15T07:23:22.944326+00:00",
+      "exit": 1,
+      "wallSeconds": 9.417789832979906,
+      "pid": 48054,
+      "pgid": 48054,
+      "load": "{ 7.73 12.77 12.81 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-focused-03": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft-first-event.test.ts",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/draft.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:23:49.266416+00:00",
+      "end": "2026-10-15T07:23:59.674766+00:00",
+      "exit": 1,
+      "wallSeconds": 10.408172916970216,
+      "pid": 50601,
+      "pgid": 50601,
+      "load": "{ 9.43 12.55 12.72 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-focused-04": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft-first-event.test.ts",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/draft.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-deck-entry.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:24:49.581173+00:00",
+      "end": "2026-10-15T07:24:59.567530+00:00",
+      "exit": 0,
+      "wallSeconds": 9.985971459012944,
+      "pid": 12228,
+      "pgid": 12228,
+      "load": "{ 22.55 15.69 13.88 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-full-01": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/worker727-20261015/heavy-inner.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:28:00.387405+00:00",
+      "end": "2026-10-15T07:29:54.081062+00:00",
+      "exit": 0,
+      "wallSeconds": 113.69255795900244,
+      "pid": 84577,
+      "pgid": 84577,
+      "load": "{ 9.92 13.99 13.65 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-install-01": {
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:16:59.912970+00:00",
+      "end": "2026-10-15T07:17:02.630787+00:00",
+      "exit": 0,
+      "wallSeconds": 2.717657916015014,
+      "pid": 80995,
+      "pgid": 80995,
+      "load": "{ 14.52 13.69 12.55 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-knip-01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:27:38.831898+00:00",
+      "end": "2026-10-15T07:27:46.430868+00:00",
+      "exit": 0,
+      "wallSeconds": 7.598824416985735,
+      "pid": 83042,
+      "pgid": 83042,
+      "load": "{ 10.97 14.46 13.80 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-lint-01": {
+      "argv": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:24:29.122361+00:00",
+      "end": "2026-10-15T07:24:42.498573+00:00",
+      "exit": 1,
+      "wallSeconds": 13.376037292007823,
+      "pid": 1371,
+      "pgid": 1371,
+      "load": "{ 19.19 14.63 13.47 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-review-01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:26:43.973929+00:00",
+      "end": "2026-10-15T07:27:23.950509+00:00",
+      "exit": 0,
+      "wallSeconds": 39.976165500003844,
+      "pid": 79031,
+      "pgid": 79031,
+      "load": "{ 13.78 15.60 14.14 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-type-01": {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:20:19.843132+00:00",
+      "end": "2026-10-15T07:20:38.717123+00:00",
+      "exit": 2,
+      "wallSeconds": 18.873733500018716,
+      "pid": 76498,
+      "pgid": 76498,
+      "load": "{ 19.68 15.68 13.54 }",
+      "groupRemainingAtExit": []
+    },
+    "worker-type-02": {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-first-draft-event727",
+      "start": "2026-10-15T07:23:24.527604+00:00",
+      "end": "2026-10-15T07:23:33.349712+00:00",
+      "exit": 0,
+      "wallSeconds": 8.821769709000364,
+      "pid": 48749,
+      "pgid": 48749,
+      "load": "{ 7.62 12.58 12.74 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "counterfactuals": [
+    {
+      "case": "marker",
+      "source": "src/rules/journey/draft.ts",
+      "beforeSHA256": "a51990ee69f79f0d3b131a4329934fec2b2f18684ec9d4e3de508f5b6afbd508",
+      "mutantSHA256": "4e77d950b56923ebe31e686568a9c38d0ee820b3a0f63dfbd220b659abfde425",
+      "restoredSHA256": "a51990ee69f79f0d3b131a4329934fec2b2f18684ec9d4e3de508f5b6afbd508",
+      "exit": 1,
+      "pattern": "tracks source-absent Events",
+      "at": "2026-10-15T07:25:28.918417+00:00"
+    },
+    {
+      "case": "savedguard",
+      "source": "src/rules/journey/lifecycle.ts",
+      "beforeSHA256": "c622649a0c666704783acdf779ee93bf16ab1b4b65ba947690548a31fc579f71",
+      "mutantSHA256": "8fa5665d5265d06cdc5856391694aa8be7a5f996048a9efacac964e2b0380917",
+      "restoredSHA256": "c622649a0c666704783acdf779ee93bf16ab1b4b65ba947690548a31fc579f71",
+      "exit": 1,
+      "pattern": "rejects indeterminate",
+      "at": "2026-10-15T07:25:32.036290+00:00"
+    },
+    {
+      "case": "occurrence",
+      "source": "src/rules/journey/modifier-registry.ts",
+      "beforeSHA256": "5baa25c71ecacfbbce4f55380eda16d032b9239276188dd89759aba9d89d9f12",
+      "mutantSHA256": "9ec4606caecd70270e289db64adb841deb387943655fc9982bb3a36ee99b7c67",
+      "restoredSHA256": "5baa25c71ecacfbbce4f55380eda16d032b9239276188dd89759aba9d89d9f12",
+      "exit": 1,
+      "pattern": "delivers one genuine transformation",
+      "at": "2026-10-15T07:25:35.135030+00:00"
+    }
+  ],
+  "productSourceSHA256": {
+    "docs/rules.md": "98c89d2b9b07edbe3d825dc932497633072646ab9501418869cc9f565c4f86f4",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.727-1.md": "5adc988e8c8e76692b35f5fc8520503a1b81f46fd640f1469dd7cc3e88f14d01",
+    "src/types/draft.ts": "1b166efbfe60c446016f3881e9146bfb6a5ad5db4e370e4b73a6d1aef065d944",
+    "src/types/journey.ts": "6a83fb09b0a2ad9ec96044d7128b43d0cd9f42274fda70244f58df5570c96b8f",
+    "src/rules/journey/draft.ts": "a51990ee69f79f0d3b131a4329934fec2b2f18684ec9d4e3de508f5b6afbd508",
+    "src/rules/journey/journey-draft.ts": "12361cba40668da145988129045ee514c1ea4241b9fa807c916911ddba3475b5",
+    "src/rules/journey/lifecycle.ts": "c622649a0c666704783acdf779ee93bf16ab1b4b65ba947690548a31fc579f71",
+    "src/rules/journey/modifier-registry.ts": "5baa25c71ecacfbbce4f55380eda16d032b9239276188dd89759aba9d89d9f12",
+    "src/rules/journey/journey-draft-first-event.test.ts": "cb95b14c7dcfce1cd16245fefe233ca391b85310e043c8acda6db1974133bdc2"
+  },
+  "productSourceManifestSHA256": "c2fdebab39a100d9098c292b9ad510416ceb3ad7bfac0c80f24a0559f4917eb0",
+  "qa": {
+    "browser": "Not required for this nonvisual saved-history/capability prerequisite; actual production UUID, site/P8, browser and whole 5.6 acceptance retained by hv-umm2.271.",
+    "runtimeProviders": "All test-registered providers clear in afterEach; no servers/browser contexts started. Every retained command receipt records process-group settlement."
+  },
+  "failurePaths": {
+    "midStepAndPartialWrite": "rolls back entry/history/log on six provider/next-offer failure modes, then retries and replays the successful event",
+    "reload": "real event-log reconstruction plus explicit LOAD_STATE and purge/reroll retained marker contracts",
+    "invalidOrStaleInput": "invalid UUID/pack/duplicate/concurrent windows atomically; malformed imported history atomically",
+    "concurrentActors": "unknown and intervening PICK_DRAFT_CARD windows bounce via existing CAS"
+  },
+  "failuresRetained": "worker-type-01: explicit callback return type and ES library hasOwn compatibility corrected; worker-focused-01: unknown purge event fixture corrected; worker-focused-02/03: synthetic new-visit selection intentionally hit ineligible number 3, fixed with explicit deterministic eligible draw; worker-lint-01: JSON any annotations corrected. Counterfactual failures are intentional.",
+  "preExistingIssues": "No in-scope discovery requiring a pre-existing issue file. Workspace preparation emits cached missing-art warnings, then restores all 564 card, 32 avatar, 153 Dreamsign, 226 journey and 521 exploration asset links.",
+  "independentParentAudits": [
+    "/tmp/root727-20261015/source-independent-audit-v01.json",
+    "/tmp/root727-20261015/counterfactual-independent-audit-v01.json"
+  ],
+  "positiveSourceBinding": {
+    "freeze": "/tmp/worker727-20261015/product-freeze-v01.json",
+    "manifestSHA256": "c2fdebab39a100d9098c292b9ad510416ceb3ad7bfac0c80f24a0559f4917eb0",
+    "checks": [
+      "worker-review-01",
+      "worker-knip-01",
+      "worker-full-01"
+    ],
+    "unchangedProduct": "All nine paths verified against this manifest before final staging."
+  },
+  "heavy": {
+    "start": "2026-10-15T07:28:00.412810+00:00",
+    "monotonicStart": 294816.603982291,
+    "pid": 84578,
+    "pgid": 84577,
+    "load": "{ 9.92 13.99 13.65 }",
+    "workers": "2",
+    "argv": [
+      "npm",
+      "run",
+      "review:full"
+    ],
+    "end": "2026-10-15T07:29:54.077007+00:00",
+    "monotonicEnd": 294930.267080666,
+    "wallSeconds": 113.66309858398745,
+    "exit": 0,
+    "outerStart": "2026-10-15T07:28:00.387405+00:00",
+    "outerEnd": "2026-10-15T07:29:54.081062+00:00",
+    "outerWallSeconds": 113.69255795900244,
+    "lockAndLaunchWaitSeconds": 0.025405,
+    "queueScope": "Measured elapsed before the first instruction after lock acquisition, including lock/process launch overhead; no pure scheduler queue inference."
+  }
+}

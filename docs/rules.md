@@ -155,6 +155,30 @@ a debug reroll retains the current offer's quoted count. Offers contain
 unique cards, and cards already shown at this site remain excluded. The final
 pick prepares no additional offer.
 
+The first successful Event pick in each concrete Draft visit consumes that
+visit's first-Event opportunity, regardless of held Dreamsigns, an existing
+form, or eligibility for a specified form. Character picks and rejected picks
+do not consume it. A held first-Event transfiguration clause assigns exactly
+its specified form to that physical entry only when the entry is unformed and
+its current effective Event characteristics permit the form. It chooses no
+replacement and makes no random draw. Receiving an already formed entry is
+not a transfiguration; a genuine assignment supplies one transfiguration
+occasion for each held Event-copy clause, and those formed copies supply none.
+The visit records the first Event's physical entry identity even if that entry
+is later purged or replaced. Reroll, reload, source loss, and reacquisition
+retain the opportunity's consumed status; a separate Draft entry resets it.
+An explicit saved-state import may omit this history only for an inactive or
+zero-pick visit. An active visit with completed picks and absent first-Event
+history is indeterminate and is rejected atomically. Present history uses a
+valid physical entry identity or an explicit unconsumed value, coherent with
+the visit's pick progression; it does not require the original entry to remain
+in the deck. Event-log replay reconstructs this history from successful picks.
+A freshly picked entry's type comes from its effective characteristics; when
+that resolver is unavailable, its Draft catalog type establishes the history
+because a fresh pick has no type modification and offered forms preserve type.
+An unknown type refuses the pick. Assigning the fixed form requires effective
+eligibility metadata independently of that classification.
+
 A Dreamsign that enhances Dreamsign and Dreamsign draft sites applies to free
 Reward and Dreamsign Revelation sites. Holding it enhances an unvisited site
 whose runtime is unprepared. Losing it before preparation ends that targeted

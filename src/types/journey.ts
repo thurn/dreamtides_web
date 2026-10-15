@@ -305,12 +305,13 @@ export type JourneyPurgeChoice =
   | { readonly kind: "essenceSite"; readonly siteId: SiteId;
       readonly dreamsignId: DreamsignId; readonly heldIndex: number; readonly count: number };
 
-/** Catalog clauses that increase each newly prepared Draft offer. */
-export interface JourneyDraftEffect {
-  readonly kind: "additionalDraftChoices";
-  readonly additionalCards: number;
-  readonly minimumEssence?: number;
-}
+/** Bounded catalog clauses for fresh Draft offers and the visit's first Event. */
+export type JourneyDraftEffect =
+  | { readonly kind: "additionalDraftChoices";
+      readonly additionalCards: number;
+      readonly minimumEssence?: number }
+  | { readonly kind: "firstDraftEventTransfiguration";
+      readonly type: TransfigurationType };
 
 /** Bounded catalog clauses consumed by shop stock, Restock and card purchases. */
 export type JourneyShopEffect =

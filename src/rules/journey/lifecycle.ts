@@ -35,7 +35,7 @@ import {
 import { SITE_TYPES } from "../../types/site-type";
 
 import type { AvatarId } from "../../types/identifiers";
-import { parseSiteId } from "../../types/identifiers";
+import { parseSiteId, deckEntryIdFromUnknown } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseAvatarId } from "../../types/identifiers";
 import { dreamsignIdFromUnknown, siteIdFromUnknown } from "../../types/identifiers";
@@ -597,6 +597,18 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
   for (const key of ["avatar", "resolvedPackage", "draftState"]) {
     const field = value[key];
     if (field !== null && !isRecord(field)) return false;
+  }
+  if (isRecord(value.draftState)) {
+    const draft = value.draftState;
+    const marker = draft.siteFirstEventEntryId;
+    if (marker === undefined) {
+      if (draft.activeSiteId !== null && draft.sitePicksCompleted !== 0) return false;
+    } else {
+      if (typeof draft.sitePicksCompleted !== "number" || !Number.isSafeInteger(draft.sitePicksCompleted) || draft.sitePicksCompleted < 0 ||
+        typeof draft.pickNumber !== "number" || !Number.isSafeInteger(draft.pickNumber) || draft.pickNumber <= draft.sitePicksCompleted ||
+        (draft.activeSiteId !== null && siteIdFromUnknown(draft.activeSiteId) === null)) return false;
+      if (marker !== null && (deckEntryIdFromUnknown(marker) === null || draft.activeSiteId === null || draft.sitePicksCompleted === 0)) return false;
+    }
   }
   if (isRecord(value.draftState) && value.draftState.currentOfferCount !== undefined &&
     (typeof value.draftState.currentOfferCount !== "number" ||

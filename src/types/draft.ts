@@ -1,5 +1,5 @@
 import type { DraftRarityCap } from "./draft-data";
-import type { AffiliationId, ExplorationActionId, SiteId } from "./identifiers";
+import type { AffiliationId, DeckEntryId, ExplorationActionId, SiteId } from "./identifiers";
 
 /** JSON object key carrying a canonical decimal card number. */
 export type SerializedCardNumber = `${number}`;
@@ -83,6 +83,8 @@ export interface DraftState {
   pickNumber: number;
   /** Number of player picks completed in the current draft site visit. */
   sitePicksCompleted: number;
+  /** First successful Event pick in this visit; retained after that entry leaves. */
+  siteFirstEventEntryId?: DeckEntryId | null;
   /**
    * Card numbers that have appeared in any offer during the current draft site
    * visit. A card shown once is never shown again for the rest of the visit, so
