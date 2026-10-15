@@ -2155,6 +2155,31 @@ its effect through the interpreter. An additional draw refills immediately;
 its bonus waits until the current effect finishes. Pending and vanilla
 definitions apply their energy effect. Figments are catalog entries.
 
+### Current-turn last references
+
+`lastPlayed({ cardType: "character", subtype }, player = "you")` selects the
+latest matching actual play from the current turn, using its captured effective
+type and subtype. `PlayedCard.copiable` retains only the public Printing/Variant
+pair; `materializeFigmentCopy` constructs its C5 copy from that pair even after
+the original ceases. A legacy record without the pair can use its exact live
+physical card; an unknown ceased legacy record supplies no copy. Other card
+operations name that reference only while its physical card exists.
+
+The pair is public historical play information. Current physical aliases remain
+hidden independently, and anonymous history IDs are reserved before hidden cards
+are sampled. Existing turn-log cloning, structural hashing, JSON serialization,
+view copying and determinization transport the pair. Saved loading validates its
+exact data shape and agreement with the same live physical card's Printing/Variant
+pair when both are present. Absent legacy pairs and ceased physical cards remain
+valid. Each ordinary or extra turn starts fresh history.
+
+`lastMaterialized(player = "you")` is a resolving character reference. It reads
+the latest actual materialization before testing current in-play character type
+and control, with no earlier-member substitution. The existing exact bounded
+condition `thisTurn(materializedThisTurn(), 2, 2)` expresses Belladonna's
+intervening-if condition. Its content owner composes that condition with
+`rematerialize(lastMaterialized())`.
+
 ## Transfigurations
 
 Phase 5.7a builds these transforms. Until then the engine `Variant` carries

@@ -2169,6 +2169,25 @@ Historical counts are public. A historical physical identity is shown only
 while that observer can identify its current card; hidden historical identities
 do not identify sampled hidden cards.
 
+### Last current-turn references
+
+The last warrior you played this turn is the latest character you actually
+played during the current turn that was a warrior as it was played. A character
+with all character types qualifies. Copying that card uses its copiable printing
+and variant, including when it has moved or ceased to exist; it does not copy
+gained spark, counters, statuses, or other continuous changes. A prevented
+committed play counts, and a stack copy or a character materialized without being
+played does not. With no matching play, no copy is materialized.
+
+"If you materialized 2 characters this turn" means exactly two successful
+materialization occasions, including figments and rematerializations. An
+end-of-turn ability with that condition checks it as it triggers and again as it
+resolves. "Rematerialize the last one" refers to the physical character of the
+latest actual materialization by that player this turn. It applies only while
+that character is in play, is a character, and remains under that player's
+control. If it is ineligible, nothing is rematerialized; an earlier character is
+not selected instead.
+
 ### Current-zone discarded membership
 
 "Cards in your void which were discarded this turn" names each physical card

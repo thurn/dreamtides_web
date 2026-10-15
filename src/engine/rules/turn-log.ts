@@ -6,9 +6,11 @@
  * a total and each observer's known lower bound.
  */
 import { instanceCard, type EngineCatalog } from "../catalog";
-import { characteristicsOf, copiableCostOf } from "../continuous/characteristics";
+import { characteristicsOf, copiableCostOf, playedMatchesFilter } from "../continuous/characteristics";
+import type { LastPlayedSpec } from "../dsl/types";
+import { copyJson } from "../state/clone";
 import type { InstanceId, Side } from "../state/ids";
-import type { BattleState, MaterializedCard, TurnDeparture, TurnLog } from "../state/types";
+import type { BattleState, MaterializedCard, PlayedCard, TurnDeparture, TurnLog } from "../state/types";
 
 export function emptyTurnLog(): TurnLog {
   return { discarded: { player: 0, enemy: 0 }, leftPlay: { player: [], enemy: [] }, dissolved: { player: [], enemy: [] }, abandoned: { player: [], enemy: [] }, played: { player: [], enemy: [] }, drawn: { player: 0, enemy: 0 }, materialized: { player: [], enemy: [] } };
@@ -25,7 +27,14 @@ export function emptyTurnLog(): TurnLog {
  */
 export function recordPlayed(state: BattleState, catalog: EngineCatalog, side: Side, card: InstanceId): void {
   const { cardType, subtype, allTypes, spark, namedTriggers } = characteristicsOf(state, catalog, card);
-  state.turnLog.played[side].push({ instance: card, cardType, subtype, allTypes, namedTriggers: [...namedTriggers], cost: copiableCostOf(state, catalog, card), spark, speed: instanceCard(catalog, state.instances[card]).speed });
+  const { printing, variant } = state.instances[card];
+  state.turnLog.played[side].push({ instance: card, cardType, subtype, allTypes, namedTriggers: [...namedTriggers], cost: copiableCostOf(state, catalog, card), spark, speed: instanceCard(catalog, state.instances[card]).speed, copiable: copyJson({ printing, variant }) });
+}
+
+/** Select the latest actual matching play before considering its current physical survival. */
+export function lastPlayedCharacter(state: BattleState, catalog: EngineCatalog, side: Side, filter: LastPlayedSpec["filter"]): PlayedCard | undefined {
+  const matches = state.turnLog.played[side].filter(card => playedMatchesFilter(state, catalog, card, filter));
+  return matches[matches.length - 1];
 }
 
 /** Records that `side` drew a card, before its "when you draw" triggers match. */

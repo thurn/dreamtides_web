@@ -10,7 +10,7 @@ import { chooseForCopy, purposeOf } from "../effects/interpreter";
 import { abilityOrigin, inPlaySources, instanceOrigin, originAbilities } from "./activation";
 import type { EventOf } from "../events";
 import type { InstanceId, Side } from "../state/ids";
-import type { HandCopyContext, Printing } from "../state/types";
+import type { CardInstance, HandCopyContext, Printing } from "../state/types";
 import { sidesBlindTo } from "../view/knowledge";
 import type { StepContext } from "../steps/types";
 import { createFigments } from "./figments";
@@ -113,6 +113,11 @@ function figmentCopyPrinting(printing: Printing, zeroSpark: boolean): Printing {
  */
 export function createFigmentCopy(ctx: StepContext, of: InstanceId, side: Side, zeroSpark: boolean, temporary: boolean): InstanceId | null {
   const source = instanceOf(ctx.state, of);
+  return createFigmentCopyFromValues(ctx, source, side, zeroSpark, temporary);
+}
+
+/** C5 figment construction from a current play's retained copiable values, including after cessation. */
+export function createFigmentCopyFromValues(ctx: StepContext, source: Pick<CardInstance, "printing" | "variant">, side: Side, zeroSpark: boolean, temporary: boolean): InstanceId | null {
   const [copy] = createFigments(ctx, side, figmentCopyPrinting(source.printing, zeroSpark), source.variant, 1);
   if (copy === undefined) return null;
   if (temporary) {

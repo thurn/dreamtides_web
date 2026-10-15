@@ -1,4 +1,5 @@
 import { matchesCurrentTurnMembership } from "../dsl/selectors";
+import { lastPlayedCharacter, materializedThisTurn } from "../rules/turn-log";
 import type { LinkedSourceContext } from "../state/types";
 import { linkedSourceContext } from "../rules/linked-banish";
 import type { EngineCatalog } from "../catalog";
@@ -680,6 +681,14 @@ function resolveRandomCharacters(ctx: StepContext, ref: RandomCharacterSpec, env
  */
 export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: EffectEnv): InstanceId[] {
   switch (ref.kind) {
+    case "lastMaterialized": {
+      const side = resolvePlayer(env.controller, ref.player);
+      const materializations = materializedThisTurn(ctx.state, side);
+      const latest = materializations[materializations.length - 1];
+      if (latest === undefined) return [];
+      const instance = ctx.state.instances[latest.instance];
+      return instance?.zone === "play" && instance.controller === side && characteristicsOf(ctx.state, ctx.catalog, latest.instance).cardType === "character" ? [latest.instance] : [];
+    }
     case "highestSpark":
       return resolveHighestSpark(ctx, env);
     case "randomCharacter":
@@ -816,6 +825,10 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
  */
 export function resolveCards(ctx: StepContext, ref: CardRef | CapturedCardsSpec, env: EffectEnv): InstanceId[] {
   switch (ref.kind) {
+    case "lastPlayed": {
+      const latest = lastPlayedCharacter(ctx.state, ctx.catalog, resolvePlayer(env.controller, ref.player), ref.filter);
+      return latest !== undefined && ctx.state.instances[latest.instance] !== undefined ? [latest.instance] : [];
+    }
     case "captured": {
       if (env.captured === null) throw new Error("A captured card reference resolved outside withMaterialized");
       return env.captured.filter((id) => ctx.state.instances[id]?.zone === "play");

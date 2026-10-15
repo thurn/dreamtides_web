@@ -37,6 +37,8 @@ import {
   event,
   fromVoid,
   highestSpark,
+  lastPlayed,
+  lastMaterialized,
   staticAbility,
   target,
 } from "./dsl/builders";
@@ -140,7 +142,7 @@ function primitiveFailures(abilities: readonly Ability[]): string[] {
   });
 }
 
-const PLAY_TIME_REFERENCES: readonly unknown[] = ["target", "stackTarget", "subject", "highestSpark"];
+const PLAY_TIME_REFERENCES: readonly unknown[] = ["target", "stackTarget", "subject", "highestSpark", "lastPlayed", "lastMaterialized"];
 
 /**
  * The play-time target, triggering-card and resolving source-spark references a static ability's
@@ -261,6 +263,8 @@ describe("content gates", () => {
     expect(staticReferenceFailures([staticAbility(sparkModifier(target(characterYouControl()), 1))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(sparkModifier(triggeringCard(), 1))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(sparkModifier(highestSpark(), 1))])).toHaveLength(1);
+    expect(staticReferenceFailures([staticAbility(sparkModifier(lastMaterialized(), 1))])).toHaveLength(1);
+    expect(staticReferenceFailures([staticAbility(createCopyInHand(lastPlayed({ cardType: "character", subtype: "Warrior" })))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(createCopyInHand(fromVoid()))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(sparkModifier(all(characterYouControl()), thisCharacterSpark()))])).toHaveLength(1);
   });

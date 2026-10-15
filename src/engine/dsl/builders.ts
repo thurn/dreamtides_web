@@ -31,6 +31,8 @@ import type {
   EventCopyModifierAbility,
   FunctionalZone,
   Keyword,
+  LastMaterializedSpec,
+  LastPlayedSpec,
   MovedCardRef,
   NamedTrigger,
   OptionalCost,
@@ -655,4 +657,14 @@ export function discardedIn(zone: CountedZone, filter: CardFilter = {}, player: 
 /** Current-zone physical cards the selected player abandoned this turn, once each in zone order. */
 export function abandonedIn(zone: CountedZone, filter: CardFilter = {}, player: PlayerRef = "you"): ZoneEverySpec {
   return { ...everyIn(zone, filter, { player }), thisTurn: "abandoned" };
+}
+
+/** The last actual matching character play this turn; figment copying retains its copiable values after cessation. */
+export function lastPlayed(filter: LastPlayedSpec["filter"], player: PlayerRef = "you"): LastPlayedSpec {
+  return { kind: "lastPlayed", filter, player };
+}
+
+/** The latest materialization this turn, without substituting an earlier surviving character. */
+export function lastMaterialized(player: PlayerRef = "you"): LastMaterializedSpec {
+  return { kind: "lastMaterialized", player };
 }

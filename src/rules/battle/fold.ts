@@ -1,4 +1,5 @@
 import { hasUnknownScoreGroup } from "./score-group-state";
+import { canonicalHash } from "../../engine/state/hash";
 // Immutable battle display metadata and engine slices, plus load validation.
 import type { EngineCatalog } from "../../engine/catalog";
 import { hasInvalidJourneyDeckSparkOrigins } from "./journey-deck-spark-state";
@@ -739,6 +740,7 @@ function isBattleState(value: unknown): boolean {
     hasMirroredGainedAbilities(value) &&
     hasConsistentLinkedBanish(value) &&
     hasConsistentPoolCandidates(value) &&
+    hasConsistentPlayedCopiable(value) &&
     (() => {
       const state = value as unknown as BattleState;
       return state.triggerQueue.every(trigger => {
@@ -1239,6 +1241,27 @@ function isFirstOccurrences(value: unknown): boolean {
     (sets[side] as unknown[]).every(named => (actual[side] as unknown[]).includes(named))));
 }
 
+/** A current play's retained C5 values, without mutable status or hidden physical aliases. */
+function hasConsistentPlayedCopiable(value: Record<string, unknown>): boolean {
+  const state = value as unknown as BattleState;
+  return SIDES.every(side => state.turnLog.played[side].every(played => {
+    const instance = state.instances[played.instance];
+    return played.copiable === undefined || instance === undefined || canonicalHash(played.copiable) === canonicalHash({ printing: instance.printing, variant: instance.variant });
+  }));
+}
+
+/** Exact data shape of a play's retained copiable values. */
+function isPlayedCopiable(value: unknown): boolean {
+  if (!isPlainRecord(value) || Object.keys(value).some(key => key !== "printing" && key !== "variant") ||
+    !isPrinting(value.printing) || !isPlainRecord(value.printing) || !isVariant(value.variant) || !isPlainRecord(value.variant)) return false;
+  const printingKeys = value.printing.kind === "figment" ? ["kind", "figment", "spark"] : value.printing.kind === "figmentCopy" ? ["kind", "cardId", "spark"] : ["kind", "cardId"];
+  if (Object.keys(value.printing).some(key => !printingKeys.includes(key)) ||
+    Object.keys(value.variant).some(key => !["amplified", "transfigurations", "deckMods"].includes(key))) return false;
+  const mods = value.variant.deckMods;
+  return mods === undefined || isPlainRecord(mods) && Object.keys(mods).every(key => ["sparkBonus", "costReduction", "fast", "reclaim", "typeChange"].includes(key)) &&
+    (mods.typeChange === null || isPlainRecord(mods.typeChange) && Object.keys(mods.typeChange).every(key => key === "cardType" || key === "subtype"));
+}
+
 function isTurnLog(value: unknown): boolean {
   const departures = optional(sideRecord(arrayOf(card => isPlainRecord(card) && isInstanceId(card.instance) && isCardKind(card.cardType))));
   return (
@@ -1254,6 +1277,7 @@ function isTurnLog(value: unknown): boolean {
           isCardKind(played.cardType) &&
           isString(played.subtype) &&
           isBoolean(played.allTypes) &&
+          optional(isPlayedCopiable)(played.copiable) &&
           optional(arrayOf(isNamedTrigger))(played.namedTriggers) &&
           // A saved record may omit its captured cost, spark and speed.
           optional(isIndex)(played.cost) &&

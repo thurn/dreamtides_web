@@ -1,4 +1,7 @@
 import { avatar } from "../define";
+import { activated, energy, exhaustSelf, lastPlayed } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { materializeFigmentCopy } from "../../engine/effects/primitives/materialize-figment-copy";
 
 export default avatar({
   name: "Tensho",
@@ -42,5 +45,6 @@ export default avatar({
     "4b2f044c-0afe-432a-a121-2ea785bb1182",
     "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
   ],
-  pending: true,
+  abilities: () => [activated([energy(2), exhaustSelf()], materializeFigmentCopy(lastPlayed({ cardType: "character", subtype: "Warrior" }), { zeroSpark: true }))],
+  verifiedText: expectedVerifiedText("2●, ☾: Materialize a 0✦ figment copy of the last warrior you played this turn."),
 });

@@ -1,0 +1,3090 @@
+{
+  "bead": "hv-umm2.220",
+  "entityUuids": [
+    "bf72adff-7d74-4be8-9b93-1db7ba13a1db"
+  ],
+  "baseCommit": "8685a75f75cd3849c27e13155e93fc14ecd7e998",
+  "implementWindow": {
+    "start": "2026-10-15T01:46:56.705Z",
+    "end": "2026-10-15T03:25:20.413398+00:00"
+  },
+  "implementMin": 98.39513996666666,
+  "measurementScope": "Inclusive implementer dispatch through pre-Git cutoff: research, source-first policy/RD work, coordination/admission waits, checks, interruptions, QA, cleanup and evidence packaging. Parent claim/setup excluded and listed separately. Final timestamp-only refresh occurs immediately before automatic-date Git; actual Git/review/delivery tail is external.",
+  "dispatch": {
+    "toolCall": "call_124800231723407a95f741e7249c3742",
+    "proof": "actual-dispatch-native-log-proof.json",
+    "proofSHA256": "94933edf0d0bd3532d49c1478976cc1b66c7c7aa4e4cfb30b6b4c3702b8ca968"
+  },
+  "parentSetupSeparateSeconds": {
+    "install": 2.45016,
+    "prepareWorkspace": 3.712506,
+    "doctor": 1.736842
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "recovery-review-01 start; actual collector os.getloadavg()[0], Darwin one-minute system load; no unrelated-load or performance claim"
+      },
+      "testDelta": {
+        "measuredFor": "One new eager plain contract module 390 lines plus 4 net lines each in existing content gate and inventory synthetic test fixture; replay JSON hash is fixture data, separately recorded. No jsdom additions."
+      },
+      "localValidationS": {
+        "measuredFor": "Sum of actual inclusive collector walls by explicit category, including failures and six assertion-red mutants. Canonical intentional writes excluded; repeat determinism check included as focused. Browser total includes native admission/startup/scenario/cleanup; separate native timings below. Final timestamp/schema/Git tail external."
+      }
+    }
+  },
+  "localValidationS": {
+    "focused": 173.04802029096754,
+    "review": 494.62628233403666,
+    "knip": 13.592007957980968,
+    "fuzz": 547.3803004170186,
+    "preflight": 3.0997914579929784,
+    "browser": 34.39731895795558,
+    "schema": 0.07755466602975503
+  },
+  "hostLoadSamples": [
+    {
+      "label": "baseline-history-01",
+      "started": "2026-10-15T02:06:54.221811+00:00",
+      "load": [
+        15.8681640625,
+        12.0400390625,
+        10.3603515625
+      ]
+    },
+    {
+      "label": "baseline-history-02",
+      "started": "2026-10-15T02:10:05.375136+00:00",
+      "load": [
+        6.20849609375,
+        9.31689453125,
+        9.54296875
+      ]
+    },
+    {
+      "label": "focused-contracts-gates-01",
+      "started": "2026-10-15T02:18:20.947121+00:00",
+      "load": [
+        16.1591796875,
+        13.45263671875,
+        11.2822265625
+      ]
+    },
+    {
+      "label": "focused-contracts-gates-02",
+      "started": "2026-10-15T02:21:05.036172+00:00",
+      "load": [
+        18.35595703125,
+        15.921875,
+        12.68310546875
+      ]
+    },
+    {
+      "label": "focused-inventory-replay-01",
+      "started": "2026-10-15T02:30:28.263441+00:00",
+      "load": [
+        10.31787109375,
+        12.36669921875,
+        12.36083984375
+      ]
+    },
+    {
+      "label": "review-quick-01",
+      "started": "2026-10-15T02:19:03.468353+00:00",
+      "load": [
+        15.0380859375,
+        13.46630859375,
+        11.3828125
+      ]
+    },
+    {
+      "label": "review-quick-02",
+      "started": "2026-10-15T02:21:38.839267+00:00",
+      "load": [
+        18.033203125,
+        16.095703125,
+        12.85888671875
+      ]
+    },
+    {
+      "label": "review-quick-03",
+      "started": "2026-10-15T02:30:45.969656+00:00",
+      "load": [
+        9.22900390625,
+        11.98583984375,
+        12.2236328125
+      ]
+    },
+    {
+      "label": "knip-own-01",
+      "started": "2026-10-15T02:31:56.403384+00:00",
+      "load": [
+        13.890625,
+        12.47265625,
+        12.3662109375
+      ]
+    },
+    {
+      "label": "review-full-01",
+      "started": "2026-10-15T02:32:12.055455+00:00",
+      "load": [
+        13.78271484375,
+        12.52783203125,
+        12.3876953125
+      ]
+    },
+    {
+      "label": "weighted300-01",
+      "started": "2026-10-15T02:34:14.647528+00:00",
+      "load": [
+        18.87451171875,
+        13.82373046875,
+        12.861328125
+      ]
+    },
+    {
+      "label": "avatar-preflight-01",
+      "started": "2026-10-15T02:43:57.486676+00:00",
+      "load": [
+        9.85546875,
+        15.60400390625,
+        14.68701171875
+      ]
+    },
+    {
+      "label": "replay-pair-probe-01",
+      "started": "2026-10-15T02:28:30.254352+00:00",
+      "load": [
+        11.25439453125,
+        12.6796875,
+        12.4208984375
+      ]
+    },
+    {
+      "label": "replay-pair-probe-02",
+      "started": "2026-10-15T02:29:48.775867+00:00",
+      "load": [
+        12.18408203125,
+        12.884765625,
+        12.5322265625
+      ]
+    },
+    {
+      "label": "replay-canonical-repeat-02",
+      "started": "2026-10-15T02:30:20.806020+00:00",
+      "load": [
+        10.69384765625,
+        12.474609375,
+        12.3984375
+      ]
+    },
+    {
+      "label": "native-avatar-sweep-01",
+      "started": "2026-10-15T02:49:44.269050+00:00",
+      "load": [
+        10.40283203125,
+        12.88232421875,
+        13.59326171875
+      ]
+    },
+    {
+      "label": "native-tensho-workflow-01",
+      "started": "2026-10-15T02:50:10.735797+00:00",
+      "load": [
+        9.38232421875,
+        12.44921875,
+        13.41357421875
+      ]
+    },
+    {
+      "label": "evidence-schema-01",
+      "started": "2026-10-15T02:57:55.262640+00:00",
+      "load": [
+        4.958984375,
+        6.9970703125,
+        10.25830078125
+      ]
+    },
+    {
+      "label": "review-quick-04",
+      "started": "2026-10-15T02:58:02.091142+00:00",
+      "load": [
+        5.75244140625,
+        7.0966796875,
+        10.2548828125
+      ]
+    },
+    {
+      "label": "knip-own-02",
+      "started": "2026-10-15T02:59:17.078440+00:00",
+      "load": [
+        6.71875,
+        7.10009765625,
+        9.98779296875
+      ]
+    },
+    {
+      "label": "mutant-04-latest-played-first",
+      "started": "2026-10-15T02:16:47.087105+00:00",
+      "load": [
+        15.58447265625,
+        13.05712890625,
+        10.93994140625
+      ]
+    },
+    {
+      "label": "mutant-04-missing-play-pair",
+      "started": "2026-10-15T02:16:55.900039+00:00",
+      "load": [
+        14.34423828125,
+        12.8740234375,
+        10.8994140625
+      ]
+    },
+    {
+      "label": "mutant-04-old-c5-ordering",
+      "started": "2026-10-15T02:17:03.919643+00:00",
+      "load": [
+        14.076171875,
+        12.8427734375,
+        10.89990234375
+      ]
+    },
+    {
+      "label": "mutant-04-latest-materialized-survivor",
+      "started": "2026-10-15T02:17:12.640998+00:00",
+      "load": [
+        12.84033203125,
+        12.6171875,
+        10.84228515625
+      ]
+    },
+    {
+      "label": "mutant-04-live-pair-correlation-bypass",
+      "started": "2026-10-15T02:17:20.758596+00:00",
+      "load": [
+        11.94189453125,
+        12.43212890625,
+        10.796875
+      ]
+    },
+    {
+      "label": "mutant-04-pair-shape-bypass",
+      "started": "2026-10-15T02:17:32.660550+00:00",
+      "load": [
+        12.6708984375,
+        12.56689453125,
+        10.86328125
+      ]
+    },
+    {
+      "label": "recovery-replay-pair-probe-01",
+      "started": "2026-10-15T03:16:07.598358+00:00",
+      "load": [
+        6.30078125,
+        9.052734375,
+        10.35400390625
+      ]
+    },
+    {
+      "label": "recovery-replay-canonical-repeat-01",
+      "started": "2026-10-15T03:20:11.518072+00:00",
+      "load": [
+        8.78369140625,
+        8.392578125,
+        9.7138671875
+      ]
+    },
+    {
+      "label": "recovery-focused-01",
+      "started": "2026-10-15T03:20:17.800981+00:00",
+      "load": [
+        8.48046875,
+        8.3359375,
+        9.68603515625
+      ]
+    },
+    {
+      "label": "recovery-review-01",
+      "started": "2026-10-15T03:20:42.802497+00:00",
+      "load": [
+        7.24365234375,
+        8.06494140625,
+        9.548828125
+      ]
+    },
+    {
+      "label": "recovery-knip-01",
+      "started": "2026-10-15T03:21:51.097310+00:00",
+      "load": [
+        7.01806640625,
+        7.94921875,
+        9.3955078125
+      ]
+    }
+  ],
+  "testDelta": {
+    "files": 1,
+    "lines": 398,
+    "jsdomFiles": 0
+  },
+  "syntheticContracts": {
+    "module": "src/engine/effects/primitives/contracts/history-refs.contracts.ts",
+    "lines": 390,
+    "newCases": 30,
+    "actors": [
+      "player",
+      "enemy"
+    ],
+    "shape": "One coherent plain module, no shared runner/config, sibling fixture framework, or entity scenario. D20 composition requires no additional scenario.",
+    "coverage": [
+      "latest matching actual character play, duplicate card UUID physical IDs and nonmatching later plays",
+      "created-source cessation, retained pair, valid legacy live fallback and unknown ceased no earlier fallback",
+      "played versus unplayed materialization/stack copy/prevented committed play",
+      "immutable variant, effective type/allTypes as-played/remapped subtype, cost and own abilities, physical zero and ordinary null controls",
+      "latest actual materialization before current eligibility, departure/cease/control loss/no earlier substitution and actual reentry order",
+      "exactly two materializations, intervening-if admission/resolution recheck, extra-turn reset, existing abandoned physical membership",
+      "clone, structural hash, public LOAD, concealed physical alias, both-viewer determinization and resolving both references in samples",
+      "same-live pair equality and independent malformed ceased tuple rejection",
+      "pending/reload/cold replay, stale/invalid/concurrent/duplicate actions, midstep rollback",
+      "avatar energy/exhaustion/capacity response race and explicit nonzero capacity shares; resolving reference static rejection"
+    ]
+  },
+  "readOnlyTransportProved": [
+    "src/engine/state/clone.ts",
+    "src/engine/state/hash.ts",
+    "src/engine/view/view.ts",
+    "src/engine/view/determinize.ts"
+  ],
+  "rulesDecisions": [
+    "RD-hv-umm2.220-1",
+    "RD-hv-umm2.220-2"
+  ],
+  "normativeScope": "D10.5 exactly 2 is a binding design judgment, not D10.3 unchanged Rust text. Current official2026-09-25 CR603.4 supports intervening-if recheck only. C5 pair is immutable Printing/Variant, not gained effective layers/status. Current-turn only: generated Dreamcatcher historyRefs projection supplies no previous-turn reader; native 622 prerequisite and 248 final join remain. Canonical avatar repartition changes no native 220 UUID/graph.",
+  "inventoryAudit": {
+    "base": "8685a75f75cd3849c27e13155e93fc14ecd7e998",
+    "entities": 1209,
+    "identitySetAndNonderivedFieldsUnchanged": true,
+    "changedEntities": [
+      {
+        "id": "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa",
+        "fields": [
+          "status"
+        ]
+      },
+      {
+        "id": "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+        "fields": [
+          "requiredPrimitives",
+          "routing",
+          "rulesDecisions",
+          "status"
+        ]
+      },
+      {
+        "id": "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+        "fields": [
+          "routing"
+        ]
+      },
+      {
+        "id": "7ec00da2-2b2d-4613-9a2a-8611d38199ca",
+        "fields": [
+          "requiredPrimitives"
+        ]
+      },
+      {
+        "id": "b765f6bb-0b8a-4847-ada4-477b9493e3ad",
+        "fields": [
+          "requiredPrimitives"
+        ]
+      },
+      {
+        "id": "d76684c3-797e-44ae-a2ba-333e77d46a4d",
+        "fields": [
+          "cardIssues",
+          "requiredPrimitives",
+          "rulesDecisions"
+        ]
+      },
+      {
+        "id": "22adf539-d2c9-4f33-9416-159d03a220ad",
+        "fields": [
+          "requiredPrimitives",
+          "routing"
+        ]
+      },
+      {
+        "id": "980d283a-9558-4b66-84a0-fcb91fdf4ceb",
+        "fields": [
+          "requiredPrimitives",
+          "routing"
+        ]
+      },
+      {
+        "id": "eb4cfc5f-237a-47cd-9215-7cce3f15583f",
+        "fields": [
+          "routing"
+        ]
+      },
+      {
+        "id": "f0ff63b4-424b-4ae9-81d5-a4f6546afa3f",
+        "fields": [
+          "routing"
+        ]
+      }
+    ],
+    "onlyAuthoredEntitySourceChanged": [
+      "bf72adff-7d74-4be8-9b93-1db7ba13a1db"
+    ],
+    "inventorySHA256": "c4880d724e7e50a45ea026cac9396d0fc83340bf25f8c347c9cf39d25654b364",
+    "primitiveDeltas": [
+      {
+        "before": {
+          "name": "costModifierActivated",
+          "kind": "extension",
+          "module": "src/engine/effects/primitives/cost-modifier.ts",
+          "exists": false,
+          "usedBy": 2,
+          "introducedBy": "prim-cost-modifier-activated",
+          "note": "cost modifiers on activated abilities (engine gap noted by 3.7)"
+        },
+        "after": {
+          "name": "costModifierActivated",
+          "kind": "extension",
+          "module": "src/engine/effects/primitives/cost-modifier.ts",
+          "exists": true,
+          "usedBy": 2,
+          "introducedBy": null,
+          "note": "cost modifiers on activated abilities (engine gap noted by 3.7)"
+        }
+      },
+      {
+        "before": {
+          "name": "historyRefs",
+          "kind": "dsl",
+          "module": "src/engine/effects/types.ts",
+          "exists": false,
+          "usedBy": 4,
+          "introducedBy": "prim-history-refs",
+          "note": "\"the last warrior you played\" (engine gap noted by hv-7x4l.8 (3.8))",
+          "forms": [
+            {
+              "module": "src/engine/effects/types.ts",
+              "symbol": "CardRef",
+              "kind": "form",
+              "member": "lastPlayed",
+              "pending": "member"
+            }
+          ]
+        },
+        "after": {
+          "name": "historyRefs",
+          "kind": "dsl",
+          "module": "src/engine/effects/types.ts",
+          "exists": true,
+          "usedBy": 4,
+          "introducedBy": null,
+          "note": "\"the last warrior you played\" (engine gap noted by hv-7x4l.8 (3.8))",
+          "forms": [
+            {
+              "module": "src/engine/effects/types.ts",
+              "symbol": "CardRef",
+              "kind": "form",
+              "member": "lastPlayed"
+            },
+            {
+              "module": "src/engine/dsl/types.ts",
+              "symbol": "CharacterRef",
+              "kind": "form",
+              "member": "lastMaterialized"
+            },
+            {
+              "module": "src/engine/dsl/builders.ts",
+              "symbol": "lastPlayed",
+              "kind": "builder"
+            },
+            {
+              "module": "src/engine/dsl/builders.ts",
+              "symbol": "lastMaterialized",
+              "kind": "builder"
+            }
+          ]
+        }
+      }
+    ],
+    "currentTurnOnly": true,
+    "previousTurn622StillRequired": true,
+    "canonicalProjectionDoesNotAlterNativeUUIDScope": true,
+    "auditMethodCorrection": "Primitive rows matched by API symbol after initial positional comparison included sorting shifts; no source or generator change."
+  },
+  "canonicalReplayCausality": {
+    "actual": [
+      {
+        "name": "journey-only",
+        "providerSet": "synthetic-deterministic-v1",
+        "events": 6,
+        "stampedHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+        "actualHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+        "projectedHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+        "removed": [],
+        "outcomes": [
+          {
+            "seq": 1,
+            "outcome": "applied"
+          },
+          {
+            "seq": 2,
+            "outcome": "applied"
+          },
+          {
+            "seq": 3,
+            "outcome": "applied"
+          },
+          {
+            "seq": 4,
+            "outcome": "applied"
+          },
+          {
+            "seq": 5,
+            "outcome": "applied"
+          },
+          {
+            "seq": 6,
+            "outcome": "applied"
+          }
+        ]
+      },
+      {
+        "name": "battle",
+        "providerSet": "synthetic-deterministic-v1",
+        "events": 8,
+        "stampedHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+        "actualHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+        "projectedHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+        "removed": [],
+        "outcomes": [
+          {
+            "seq": 1,
+            "outcome": "applied"
+          },
+          {
+            "seq": 2,
+            "outcome": "applied"
+          },
+          {
+            "seq": 3,
+            "outcome": "applied"
+          },
+          {
+            "seq": 4,
+            "outcome": "applied"
+          },
+          {
+            "seq": 5,
+            "outcome": "applied"
+          },
+          {
+            "seq": 6,
+            "outcome": "applied"
+          },
+          {
+            "seq": 7,
+            "outcome": "applied"
+          },
+          {
+            "seq": 8,
+            "outcome": "applied"
+          }
+        ]
+      },
+      {
+        "name": "adversarial",
+        "providerSet": "synthetic-deterministic-v1",
+        "events": 12,
+        "stampedHash": "fa0018ec394367d9c77fd5bebc1169d6b479ddfac2d2428fe825c2866158d5e3",
+        "actualHash": "718249836cdd521f15e8848192265459834d65e8936d6e6f922a30a4013ac300",
+        "projectedHash": "fa0018ec394367d9c77fd5bebc1169d6b479ddfac2d2428fe825c2866158d5e3",
+        "removed": [
+          {
+            "path": "battle.engine.slice.committed.turnLog.played.player[0].copiable",
+            "instance": "i4",
+            "pair": {
+              "printing": {
+                "kind": "card",
+                "cardId": "5e5e5e5e-0000-4000-8000-0000000000d9"
+              },
+              "variant": {
+                "amplified": false
+              }
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "seq": 1,
+            "outcome": "applied"
+          },
+          {
+            "seq": 2,
+            "outcome": "applied"
+          },
+          {
+            "seq": 3,
+            "outcome": "bounced"
+          },
+          {
+            "seq": 4,
+            "outcome": "applied"
+          },
+          {
+            "seq": 5,
+            "outcome": "applied"
+          },
+          {
+            "seq": 6,
+            "outcome": "bounced"
+          },
+          {
+            "seq": 7,
+            "outcome": "applied"
+          },
+          {
+            "seq": 8,
+            "outcome": "applied"
+          },
+          {
+            "seq": 9,
+            "outcome": "applied"
+          },
+          {
+            "seq": 10,
+            "outcome": "applied"
+          },
+          {
+            "seq": 11,
+            "outcome": "applied"
+          },
+          {
+            "seq": 12,
+            "outcome": "bounced"
+          }
+        ]
+      }
+    ],
+    "scope": "Against combined current source and new base8685 fixture: deleting only played.player[0].copiable from cloned whole public state recovers exact fa0018ec\u2026 from71824983\u2026. No loop/signature/peer data projection. All12 adversarial outcomes/genesis/events/providerSet and other2 whole states unchanged; canonical generator twice byte-identical.",
+    "parentAudit": {
+      "path": "conflict-recovery-01/integration/parent-integration-causality-audit.json",
+      "sha256": "ca985439cf9bd4831dc03a9ac2cc1887a4392e9a5adb75aa6fdd9af97d0132e4"
+    }
+  },
+  "checks": [
+    {
+      "label": "baseline-history-01",
+      "receiptSHA256": "51050bcb708fa48fb689c38f49749b2960204e2b55f3636c7fa24e9a1761063f",
+      "receipt": {
+        "started": "2026-10-15T02:06:54.221811+00:00",
+        "pid": 52238,
+        "pgid": 52238,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          15.8681640625,
+          12.0400390625,
+          10.3603515625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:07:01.624457+00:00",
+        "elapsedSeconds": 7.402496125025209,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "bc163d36cde85675fd896724c09a946d03f928c6e374372b8919c95e22754db1",
+        "afterSHA256": "bc163d36cde85675fd896724c09a946d03f928c6e374372b8919c95e22754db1",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "ab4fb766389376b87262bd748f2f42375f055605ba0c9dba721c38ef7dd2777c",
+        "stderrSHA256": "e237afa77c2648b73af54aefd84a45bb1c2da43e4ee066f32a1071cef9fa713a"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "baseline-history-02",
+      "receiptSHA256": "563382f64edc74b4b3cb4fd263514503e63fe7182461a4b11279207c2d5c7463",
+      "receipt": {
+        "started": "2026-10-15T02:10:05.375136+00:00",
+        "pid": 66760,
+        "pgid": 66760,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          6.20849609375,
+          9.31689453125,
+          9.54296875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:10:13.857701+00:00",
+        "elapsedSeconds": 8.482426332950126,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "b7be33b27754933bc2cacfa0011d9298903110fd8239d8f50a78efd034bb0b7b",
+        "afterSHA256": "b7be33b27754933bc2cacfa0011d9298903110fd8239d8f50a78efd034bb0b7b",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "662d0ea109a097ded2b645878a93905bc3929aaec0a1da638644a79868b7f045",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "focused-contracts-gates-01",
+      "receiptSHA256": "aac0c35227abdbb8095e9d51954b52e9da057d76836926a28e55bee731f008f7",
+      "receipt": {
+        "started": "2026-10-15T02:18:20.947121+00:00",
+        "pid": 27549,
+        "pgid": 27549,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/content-gates.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          16.1591796875,
+          13.45263671875,
+          11.2822265625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:18:53.454916+00:00",
+        "elapsedSeconds": 32.50753474998055,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "420db5c6341b426f5f60e913eaef9a9d2578c95b3960a8d25546723745983ec7",
+        "afterSHA256": "420db5c6341b426f5f60e913eaef9a9d2578c95b3960a8d25546723745983ec7",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "f21f936633a14530f355fdb5952f646fc65399a5def826a71aaa58441ea89a5c",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "focused-contracts-gates-02",
+      "receiptSHA256": "e6439f4560ef809b9662fd4d2c6317c2ffdea085ad4ac5cd622c6e8b39966a28",
+      "receipt": {
+        "started": "2026-10-15T02:21:05.036172+00:00",
+        "pid": 90420,
+        "pgid": 90420,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/content-gates.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          18.35595703125,
+          15.921875,
+          12.68310546875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:21:30.780867+00:00",
+        "elapsedSeconds": 25.744509665993974,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "a4a857673d38ff1341795a043e109d9490c33f9f93461fcca2157c975ab74a67",
+        "afterSHA256": "a4a857673d38ff1341795a043e109d9490c33f9f93461fcca2157c975ab74a67",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "9c480162ed0f144e822b3bf201697d7ef510e1f321733f40576ce7df950120df",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "focused-inventory-replay-01",
+      "receiptSHA256": "b708a03db6dc28964edc9d7421b0f6ad6aba1b43d812f49e4459969d315a3421",
+      "receipt": {
+        "started": "2026-10-15T02:30:28.263441+00:00",
+        "pid": 96467,
+        "pgid": 96467,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "scripts/content-inventory.test.ts",
+          "src/rules/replay/replay.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          10.31787109375,
+          12.36669921875,
+          12.36083984375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:30:37.270171+00:00",
+        "elapsedSeconds": 9.00660920899827,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "afterSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "ab47655fc64e24f204603a083841cb27369ee57b81e072e95600b30e4d8efc63",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "review-quick-01",
+      "receiptSHA256": "212a9746bee5f4c76aa75e30fe6f9f62fdcc513d59a89919665de862464fcba1",
+      "receipt": {
+        "started": "2026-10-15T02:19:03.468353+00:00",
+        "pid": 75617,
+        "pgid": 75617,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          15.0380859375,
+          13.46630859375,
+          11.3828125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:20:45.915580+00:00",
+        "elapsedSeconds": 102.44687370798783,
+        "exitCode": 2,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "420db5c6341b426f5f60e913eaef9a9d2578c95b3960a8d25546723745983ec7",
+        "afterSHA256": "420db5c6341b426f5f60e913eaef9a9d2578c95b3960a8d25546723745983ec7",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "d09c71c648a1578f2414e0f2edbeba3203855f3481c86942f21657a28e61ee62",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "review-quick-02",
+      "receiptSHA256": "d42855cb2581fe24c75bba9de846397d05377b9e37fb6c247af0e21503c8e5c4",
+      "receipt": {
+        "started": "2026-10-15T02:21:38.839267+00:00",
+        "pid": 93291,
+        "pgid": 93291,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          18.033203125,
+          16.095703125,
+          12.85888671875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:23:01.144904+00:00",
+        "elapsedSeconds": 82.30531741701998,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "a4a857673d38ff1341795a043e109d9490c33f9f93461fcca2157c975ab74a67",
+        "afterSHA256": "a4a857673d38ff1341795a043e109d9490c33f9f93461fcca2157c975ab74a67",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "8b627e6a88fbd2c866c117f719f4dfe6210a543066501e069dd5923e62ec8f69",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "review-quick-03",
+      "receiptSHA256": "97674b1cf1f56858a61132b68c9f16e69ce29109462f00e16829109fd0dfc7d3",
+      "receipt": {
+        "started": "2026-10-15T02:30:45.969656+00:00",
+        "pid": 97868,
+        "pgid": 97868,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          9.22900390625,
+          11.98583984375,
+          12.2236328125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:31:52.580608+00:00",
+        "elapsedSeconds": 66.61073120805668,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "afterSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "aa31729590abfe23de9d3554dd0d62e3e8c0698e2bf79816747b29603b65f356",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "knip-own-01",
+      "receiptSHA256": "dea8c2fbb441e3b273f51ba22ea739f83574b37fd11ef1ee711272e8c311069e",
+      "receipt": {
+        "started": "2026-10-15T02:31:56.403384+00:00",
+        "pid": 3535,
+        "pgid": 3535,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          13.890625,
+          12.47265625,
+          12.3662109375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:32:01.780846+00:00",
+        "elapsedSeconds": 5.3773255830165,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "afterSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "20eb77038e12411830c1481e72c32373ae4c458fd6540d4bec3b8b6c32078555",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "review-full-01",
+      "receiptSHA256": "1652fd3cbaf1780c877adb97c98b56a9b9feeee9f3c407775f2c350ca309696c",
+      "receipt": {
+        "started": "2026-10-15T02:32:12.055455+00:00",
+        "pid": 31523,
+        "pgid": 31523,
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          13.78271484375,
+          12.52783203125,
+          12.3876953125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:34:10.356641+00:00",
+        "elapsedSeconds": 118.30084612499923,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "afterSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "a2f4c676858df982a9b62bcb8ba5558a1a99790bf71434a4c356cffe7d239a00",
+        "stderrSHA256": "cdede346cfacef70781ca74e3d5917145457bf6cdb6fb7ca43551478b7394a41"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "weighted300-01",
+      "receiptSHA256": "243735aac5c3fc673ce0c4573ca11b350d270bd6a56dad3d77a8cdae699c0f6c",
+      "receipt": {
+        "started": "2026-10-15T02:34:14.647528+00:00",
+        "pid": 2641,
+        "pgid": 2641,
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "bf72adff-7d74-4be8-9b93-1db7ba13a1db"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          18.87451171875,
+          13.82373046875,
+          12.861328125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:43:22.079285+00:00",
+        "elapsedSeconds": 547.3803004170186,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "afterSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "19c81acf6a0b41af739b32ab39eff8e780acf528019a5c52eae61694dc9ad68f",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "avatar-preflight-01",
+      "receiptSHA256": "2d2f3e6572fd5538c519d4379b7f6a68a010474f36f871ba12170eca627df8d9",
+      "receipt": {
+        "started": "2026-10-15T02:43:57.486676+00:00",
+        "pid": 80995,
+        "pgid": 80995,
+        "command": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--avatars",
+          "bf72adff-7d74-4be8-9b93-1db7ba13a1db"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          9.85546875,
+          15.60400390625,
+          14.68701171875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:44:00.586653+00:00",
+        "elapsedSeconds": 3.0997914579929784,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "afterSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "9ac44e1421a66cf9d089e712805a34005d7f66e41c2dbfdfadc039c9335c37e8",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "replay-pair-probe-01",
+      "receiptSHA256": "21708e06f4545d7c3f273b3f11c495b16f2783547a34a79ed70762fe4a17cfa5",
+      "receipt": {
+        "started": "2026-10-15T02:28:30.254352+00:00",
+        "pid": 29020,
+        "pgid": 29020,
+        "command": [
+          "npx",
+          "--no-install",
+          "tsx",
+          "/tmp/root-220/replay-pair-probe.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          11.25439453125,
+          12.6796875,
+          12.4208984375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:28:34.699085+00:00",
+        "elapsedSeconds": 4.4446181249804795,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "a4a857673d38ff1341795a043e109d9490c33f9f93461fcca2157c975ab74a67",
+        "afterSHA256": "a4a857673d38ff1341795a043e109d9490c33f9f93461fcca2157c975ab74a67",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "7742d27114645545d801e3034e62b6ef48e0a35a25a195590c7d4e6bd611da8d"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "replay-pair-probe-02",
+      "receiptSHA256": "b44b94c771018c47f145dac722ccac1890d556c361a8d7afc96dc3ba0b32caa3",
+      "receipt": {
+        "started": "2026-10-15T02:29:48.775867+00:00",
+        "pid": 93179,
+        "pgid": 93179,
+        "command": [
+          "npx",
+          "--no-install",
+          "tsx",
+          "/tmp/root-220/replay-pair-probe.mts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          12.18408203125,
+          12.884765625,
+          12.5322265625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:29:50.782599+00:00",
+        "elapsedSeconds": 2.0065826249774545,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "df719d1eaac3f3c06f4757a9d701be52e0a34aa1199729a73eb4cc47d6bcdb7c",
+        "afterSHA256": "df719d1eaac3f3c06f4757a9d701be52e0a34aa1199729a73eb4cc47d6bcdb7c",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "a1acce54c231a43fecbe242d3f861f614a8455f6a256e54b24a04a3204692d5f",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "replay-canonical-repeat-02",
+      "receiptSHA256": "cf9b9f7622d268b8bd9f50935f073030dacaa1fa5ede3e83ae8cba6dbcf4c933",
+      "receipt": {
+        "started": "2026-10-15T02:30:20.806020+00:00",
+        "pid": 95971,
+        "pgid": 95971,
+        "command": [
+          "npm",
+          "run",
+          "regenerate-replay-fixtures"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          10.69384765625,
+          12.474609375,
+          12.3984375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:30:22.237124+00:00",
+        "elapsedSeconds": 1.430997625051532,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "afterSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "a392dc5c41e9ac8515d13732bc1f6b83fbd4320f5adb96b7389a8c4b6ff07b76",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "native-avatar-sweep-01",
+      "receiptSHA256": "2723ef15365ee588486b49719286c6c9087e0152aa3ec639a9e224e895ee0850",
+      "receipt": {
+        "started": "2026-10-15T02:49:44.269050+00:00",
+        "pid": 62210,
+        "pgid": 62210,
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.220",
+          "--avatars",
+          "bf72adff-7d74-4be8-9b93-1db7ba13a1db"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          10.40283203125,
+          12.88232421875,
+          13.59326171875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "permittedLedgerAppend": {
+          "path": "docs/plan/evidence/qa-ledger/hv-umm2.220.jsonl",
+          "beforeBytes": 0,
+          "afterBytes": 15703,
+          "prefixPreserved": true,
+          "validScopedRows": true,
+          "appendedRows": 20
+        },
+        "unexpectedSourceChanged": [],
+        "ended": "2026-10-15T02:49:55.266699+00:00",
+        "elapsedSeconds": 10.997320249967743,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [
+          "docs/plan/evidence/qa-ledger/hv-umm2.220.jsonl"
+        ],
+        "manifestFiles": 5285,
+        "beforeSHA256": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+        "afterSHA256": "4e41baa9c429c069ebbba8a3a08e08c4884c79bd2cd280e0f9c1e6d93e7554b8",
+        "collectorBeforeSHA256": "e64a97f6c52d556e6bb71c806450817e8f1b3f725e33adb6d1df126423b7667d",
+        "collectorAfterSHA256": "e64a97f6c52d556e6bb71c806450817e8f1b3f725e33adb6d1df126423b7667d",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "07cbcb4fa9fc89c6a7bdd7b6fc82f71393adcc68997f4310b1cefb2134f59047"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "native-tensho-workflow-01",
+      "receiptSHA256": "0ad0c44204e6be764a9f95c96092b93ea55a8434707dd2c5c5c34064f2da09ba",
+      "receipt": {
+        "started": "2026-10-15T02:50:10.735797+00:00",
+        "pid": 64088,
+        "pgid": 64088,
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root-220/tensho-history-workflow.mjs",
+          "--bead",
+          "hv-umm2.220",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "180"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          9.38232421875,
+          12.44921875,
+          13.41357421875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:50:34.136371+00:00",
+        "elapsedSeconds": 23.399998707987834,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5286,
+        "beforeSHA256": "4e41baa9c429c069ebbba8a3a08e08c4884c79bd2cd280e0f9c1e6d93e7554b8",
+        "afterSHA256": "4e41baa9c429c069ebbba8a3a08e08c4884c79bd2cd280e0f9c1e6d93e7554b8",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "68055daa4f94055a99d8c53cf5c7c21edb67c9890742c1a93016db18bada2c79",
+        "stderrSHA256": "448f82c49ad0573dfe7625aeb28812f2645ce9eefd0fecaba032a0248dbc16ec"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "evidence-schema-01",
+      "receiptSHA256": "73d86967d60d0090127082d5e251198f459e02efaacb28a63d68539a377f4ef0",
+      "receipt": {
+        "started": "2026-10-15T02:57:55.262640+00:00",
+        "pid": 84996,
+        "pgid": 84996,
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          4.958984375,
+          6.9970703125,
+          10.25830078125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:57:55.340342+00:00",
+        "elapsedSeconds": 0.07755466602975503,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5289,
+        "beforeSHA256": "8db9c7cacad55c0eda651d033706049cb8b10569474ff600c9b7dcfd11243982",
+        "afterSHA256": "8db9c7cacad55c0eda651d033706049cb8b10569474ff600c9b7dcfd11243982",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "95768c1fcb2ff4dc31fb63063441b4214feaf90ccd36ad17e2bf2395b6eeaef5",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "review-quick-04",
+      "receiptSHA256": "58abf12b76c03881b510a7a21861491e1a77e48040c4c572d96e9d26fbaad4a6",
+      "receipt": {
+        "started": "2026-10-15T02:58:02.091142+00:00",
+        "pid": 85175,
+        "pgid": 85175,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          5.75244140625,
+          7.0966796875,
+          10.2548828125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:59:04.528812+00:00",
+        "elapsedSeconds": 62.43637695896905,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5289,
+        "beforeSHA256": "8db9c7cacad55c0eda651d033706049cb8b10569474ff600c9b7dcfd11243982",
+        "afterSHA256": "8db9c7cacad55c0eda651d033706049cb8b10569474ff600c9b7dcfd11243982",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "0399f7f9d1aeaad08b38596b45ec572517b46a73761123a07b4b0e8b875e086e",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "knip-own-02",
+      "receiptSHA256": "4bc08b80332e31d6608c6f466a82311aece1d33248cadbe0f0514ad2980615a6",
+      "receipt": {
+        "started": "2026-10-15T02:59:17.078440+00:00",
+        "pid": 87269,
+        "pgid": 87269,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          6.71875,
+          7.10009765625,
+          9.98779296875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:59:21.139456+00:00",
+        "elapsedSeconds": 4.060811207978986,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5289,
+        "beforeSHA256": "8db9c7cacad55c0eda651d033706049cb8b10569474ff600c9b7dcfd11243982",
+        "afterSHA256": "8db9c7cacad55c0eda651d033706049cb8b10569474ff600c9b7dcfd11243982",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "daf123e6b42fabf64100544a1ef174275537da8b094c20cf5adc88b46a460d07",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "mutant-04-latest-played-first",
+      "receiptSHA256": "e2c092ccdb1cbbecc163b2b591b18fd86fab89787231a95af8d0fc62181c1812",
+      "receipt": {
+        "started": "2026-10-15T02:16:47.087105+00:00",
+        "pid": 6311,
+        "pgid": 6311,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*retains a created latest warrior after cessation"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          15.58447265625,
+          13.05712890625,
+          10.93994140625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:16:54.881174+00:00",
+        "elapsedSeconds": 7.793881958001293,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "7c8e1c2854f1fa4d1bb007e3201a1b45f5a4fc9df37b353d59d3f2ae81222e4a",
+        "afterSHA256": "7c8e1c2854f1fa4d1bb007e3201a1b45f5a4fc9df37b353d59d3f2ae81222e4a",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "608e90dd747f91b6c1ed6fa4e230f53f2402f8ca47a080a58807fa72e9d08d3c",
+        "stderrSHA256": "3a2cd395e2f98e0ce938d8875bf132e07946fe822b00b366a16f1c76bc6d1f4c"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "mutant-04-missing-play-pair",
+      "receiptSHA256": "30fca2404a274465723b90c6e11df115bef6e9f73fa0e5bc5b58ce2f4c34e6f4",
+      "receipt": {
+        "started": "2026-10-15T02:16:55.900039+00:00",
+        "pid": 8767,
+        "pgid": 8767,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*retains a created latest warrior after cessation"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          14.34423828125,
+          12.8740234375,
+          10.8994140625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:17:03.082383+00:00",
+        "elapsedSeconds": 7.182131582987495,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "44f5f9524a3d2769b746477fd8465c559625bbc89c4d04062c19d39c627b200a",
+        "afterSHA256": "44f5f9524a3d2769b746477fd8465c559625bbc89c4d04062c19d39c627b200a",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "603537b532151f680c3efff09b4f2a0cb11b5240ba0f10d3b6c5261454283c8f",
+        "stderrSHA256": "3f75b49863c27574f850388666f7c7a89bed3ce706bfb16e98909379aee9770a"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "mutant-04-old-c5-ordering",
+      "receiptSHA256": "a5a999dcdd93d7f5e5627d8feaa6c3aa0915ed885e2ca8860280969af7c700ac",
+      "receipt": {
+        "started": "2026-10-15T02:17:03.919643+00:00",
+        "pid": 9924,
+        "pgid": 9924,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*(copies immutable variant values|enforces avatar exhaustion)"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          14.076171875,
+          12.8427734375,
+          10.89990234375
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:17:11.744912+00:00",
+        "elapsedSeconds": 7.825101458991412,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "0e8df5878c04e20f46dc00f3c8ae1a35f6444baf77a2cd9eca475ae132e3246f",
+        "afterSHA256": "0e8df5878c04e20f46dc00f3c8ae1a35f6444baf77a2cd9eca475ae132e3246f",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "45b9eef15dc0a21fd790ceddba975e5218a389c2fcdb762a0ebf015605cb7713",
+        "stderrSHA256": "0f900a2c48100fb186aca61dba8cdea0f1709f5298247efd22a7f9004491e1c6"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "mutant-04-latest-materialized-survivor",
+      "receiptSHA256": "06c844e84d76f593cd083bbd0e668dd6cde6eb200c4c8116e1e7aa48c868109f",
+      "receipt": {
+        "started": "2026-10-15T02:17:12.640998+00:00",
+        "pid": 10949,
+        "pgid": 10949,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*selects the latest materialized physical member"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          12.84033203125,
+          12.6171875,
+          10.84228515625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:17:19.884830+00:00",
+        "elapsedSeconds": 7.243681083025876,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "dd93aa24bc091a6b8dc31f18e2b6a11fb2a4c73fc7412eddbfe2db508b084dc2",
+        "afterSHA256": "dd93aa24bc091a6b8dc31f18e2b6a11fb2a4c73fc7412eddbfe2db508b084dc2",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "d1528040de8017289b208dd23a180964338e44c612e2b2ea69167b6121433a5f",
+        "stderrSHA256": "f0332ed736b3491d32d8b82259bb60af1e2450aff04dcbf58b6e2b7c92f0b637"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "mutant-04-live-pair-correlation-bypass",
+      "receiptSHA256": "e5f12f80255e559ea031cfb21424d6e4b9b281a31262d23dcea3eb87ccd5a0f0",
+      "receipt": {
+        "started": "2026-10-15T02:17:20.758596+00:00",
+        "pid": 12144,
+        "pgid": 12144,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*loads valid legacy pairs conservatively"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          11.94189453125,
+          12.43212890625,
+          10.796875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:17:31.360991+00:00",
+        "elapsedSeconds": 10.602248916984536,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "1fba8e5f9a434a022f8298bf6e257a895c0fcacb06ede9249b08aed7926a5fe8",
+        "afterSHA256": "1fba8e5f9a434a022f8298bf6e257a895c0fcacb06ede9249b08aed7926a5fe8",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "53c2b9ca1c40f4a5eff84f1955fc2c14e204abdbaaf42fceb060f5f8c00914be",
+        "stderrSHA256": "bd060d2db09f1a607ae8dcc7a059f122682c9ca705504e48ba5dc2e3f7acbf36"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "mutant-04-pair-shape-bypass",
+      "receiptSHA256": "77b0371ab9f0fdd03069ab3f71113a7be763ae7bd59ed828840526ea81b0aa09",
+      "receipt": {
+        "started": "2026-10-15T02:17:32.660550+00:00",
+        "pid": 13015,
+        "pgid": 13015,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*retains a created latest warrior after cessation"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          12.6708984375,
+          12.56689453125,
+          10.86328125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T02:17:48.463574+00:00",
+        "elapsedSeconds": 15.802831250010058,
+        "exitCode": 1,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5285,
+        "beforeSHA256": "831bbefcfcf0751cdf79c3087800ae2dd9e4f16199f1d6ab35fe57ec0a523709",
+        "afterSHA256": "831bbefcfcf0751cdf79c3087800ae2dd9e4f16199f1d6ab35fe57ec0a523709",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "970d3821e11c838dc0d6a5a33f58c12a66a9c9e0adf7624b647d5a5bc5771c68",
+        "stderrSHA256": "cd6c039bbb7215ebaee26e67250d1e721f10f6fcee11aed652de5f9154527c8c"
+      },
+      "sourceQualification": "Original implementation epoch leading to f011; receipt and source manifests retain exact historical bindings, not integrated-base validation."
+    },
+    {
+      "label": "recovery-replay-pair-probe-01",
+      "receiptSHA256": "2c2f3cc78ac877db0cabebd0447be71265bde5f680645657210d6d04f692edb4",
+      "receipt": {
+        "started": "2026-10-15T03:16:07.598358+00:00",
+        "pid": 31193,
+        "pgid": 31193,
+        "command": [
+          "npx",
+          "--no-install",
+          "tsx",
+          "/tmp/root-220/conflict-recovery-01/integration/integrated-replay-pair-probe.mts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          6.30078125,
+          9.052734375,
+          10.35400390625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T03:16:11.187383+00:00",
+        "elapsedSeconds": 3.588853500026744,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5345,
+        "beforeSHA256": "cb2543cc9212b2e02b50dad6a719a84bc842e51c67ad4a1ce8dadbb67b24a887",
+        "afterSHA256": "cb2543cc9212b2e02b50dad6a719a84bc842e51c67ad4a1ce8dadbb67b24a887",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "96748e54a24bd2938b5425af103616673e584561a3e07212d1708502b3d27790",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "qualification": "Combined source on base8685; 5345-key source-fixed integration epoch. No heavy/fuzz/browser repetition."
+    },
+    {
+      "label": "recovery-replay-canonical-repeat-01",
+      "receiptSHA256": "7cb4a64e8c9f37e0e51f23157ea427b2b5e8b05739ce757282765a7d315d3c00",
+      "receipt": {
+        "started": "2026-10-15T03:20:11.518072+00:00",
+        "pid": 24502,
+        "pgid": 24502,
+        "command": [
+          "npm",
+          "run",
+          "regenerate-replay-fixtures"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          8.78369140625,
+          8.392578125,
+          9.7138671875
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T03:20:13.005667+00:00",
+        "elapsedSeconds": 1.4874362080008723,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5345,
+        "beforeSHA256": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b",
+        "afterSHA256": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "43bc7c77c6bd9e44fd82ba1f55bea2012e65ecea5c4355b63f2983ff70b572f7",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "qualification": "Combined source on base8685; 5345-key source-fixed integration epoch. No heavy/fuzz/browser repetition."
+    },
+    {
+      "label": "recovery-focused-01",
+      "receiptSHA256": "c042dc7d125452111850a61a9bdcd3b6e398cc3f95157f5ebbde4b7a1523cfd5",
+      "receipt": {
+        "started": "2026-10-15T03:20:17.800981+00:00",
+        "pid": 24688,
+        "pgid": 24688,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/content-gates.test.ts",
+          "scripts/content-inventory.test.ts",
+          "src/rules/replay/replay.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          8.48046875,
+          8.3359375,
+          9.68603515625
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T03:20:38.297734+00:00",
+        "elapsedSeconds": 20.49607987498166,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5345,
+        "beforeSHA256": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b",
+        "afterSHA256": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "d4311da756f9ed3cf25091cba5604ac9695d60ee89b19fe9c96440c7a26e1bbe",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "qualification": "Combined source on base8685; 5345-key source-fixed integration epoch. No heavy/fuzz/browser repetition."
+    },
+    {
+      "label": "recovery-review-01",
+      "receiptSHA256": "047d23b0e11ed2fef67e907df3ebcf9d01587132ea2d2cf60300efba9e2e5176",
+      "receipt": {
+        "started": "2026-10-15T03:20:42.802497+00:00",
+        "pid": 25616,
+        "pgid": 25616,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          7.24365234375,
+          8.06494140625,
+          9.548828125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T03:21:45.329569+00:00",
+        "elapsedSeconds": 62.526136917003896,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5345,
+        "beforeSHA256": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b",
+        "afterSHA256": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "b712a3e66770abdcd3712b792d5db0aaa2d523a84e76063a75bd1b8177ec8cb8",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "qualification": "Combined source on base8685; 5345-key source-fixed integration epoch. No heavy/fuzz/browser repetition."
+    },
+    {
+      "label": "recovery-knip-01",
+      "receiptSHA256": "3f60af262fe8a4bdfd7f2845c1718050f3368f134fb0cc278b7b1d08de39c695",
+      "receipt": {
+        "started": "2026-10-15T03:21:51.097310+00:00",
+        "pid": 27727,
+        "pgid": 27727,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/current-history-220",
+        "hostLoad": [
+          7.01806640625,
+          7.94921875,
+          9.3955078125
+        ],
+        "JOURNEY_TEST_WORKERS": "2",
+        "ended": "2026-10-15T03:21:55.251333+00:00",
+        "elapsedSeconds": 4.153871166985482,
+        "exitCode": 0,
+        "timedOut": false,
+        "cleanup": [],
+        "childReaped": true,
+        "remainingGroup": false,
+        "sourceChanged": [],
+        "manifestFiles": 5345,
+        "beforeSHA256": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b",
+        "afterSHA256": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b",
+        "collectorBeforeSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "collectorAfterSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+        "stdoutSHA256": "ccad8e658f01bc7cb9bd975529350098abb2aad922e12f87e7498bf7d16123f3",
+        "stderrSHA256": "7830b15fffcebeeb24d75ede03eed9e4ec92eac5f14a261dcc1e6f32a6cbafba"
+      },
+      "qualification": "Combined source on base8685; 5345-key source-fixed integration epoch. No heavy/fuzz/browser repetition."
+    }
+  ],
+  "intentionalWrites": [
+    {
+      "label": "inventory-write-01",
+      "receiptSHA256": "9aca5096b70d45ed37bfdb1ac47ff72d329308492e2b3646ebc2c31fb751851a",
+      "receipt": {
+        "purpose": "intentional admitted canonical inventory regeneration, not immutable validation",
+        "command": [
+          "npx",
+          "--no-install",
+          "tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "started": "2026-10-15T02:06:35.907544+00:00",
+        "ended": "2026-10-15T02:06:38.923899+00:00",
+        "elapsedSeconds": 3.0161734580178745,
+        "exitCode": 0,
+        "changedPaths": [
+          "docs/plan/evidence/content-inventory.json"
+        ]
+      },
+      "qualification": "Intentional admitted canonical output write, not immutable validation."
+    },
+    {
+      "label": "replay-canonical-write-01",
+      "receiptSHA256": "039435c2f8bb5f4d6acb1163b9d2afb189ceffa0f047300508feae13d6735977",
+      "receipt": {
+        "purpose": "Intentional admitted canonical replay finalHash write, not immutable validation",
+        "command": [
+          "npm",
+          "run",
+          "regenerate-replay-fixtures"
+        ],
+        "started": "2026-10-15T02:30:09.148767+00:00",
+        "ended": "2026-10-15T02:30:10.789873+00:00",
+        "elapsedSeconds": 1.6409689579741098,
+        "exitCode": 0,
+        "pid": 95182,
+        "pgid": 95182,
+        "childReaped": true,
+        "remainingGroup": false,
+        "intentionalChangedPaths": [
+          "src/rules/replay/fixtures/adversarial.json"
+        ],
+        "audit": {
+          "src/rules/replay/fixtures/journey-only.json": {
+            "byteIdentical": true,
+            "beforeSHA256": "ce7fa21dd3a296a62ffc8962fdcb620a20253b4c34abf468d83e657bd12f7009",
+            "afterSHA256": "ce7fa21dd3a296a62ffc8962fdcb620a20253b4c34abf468d83e657bd12f7009",
+            "providerSetUnchanged": true,
+            "genesisUnchanged": true,
+            "eventsUnchanged": true,
+            "beforeFinalHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+            "afterFinalHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b"
+          },
+          "src/rules/replay/fixtures/battle.json": {
+            "byteIdentical": true,
+            "beforeSHA256": "df63b8e683eb1c845d074ef16500eb61f83dd03e2ae1fb20136c3c3bbb5543f1",
+            "afterSHA256": "df63b8e683eb1c845d074ef16500eb61f83dd03e2ae1fb20136c3c3bbb5543f1",
+            "providerSetUnchanged": true,
+            "genesisUnchanged": true,
+            "eventsUnchanged": true,
+            "beforeFinalHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+            "afterFinalHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78"
+          },
+          "src/rules/replay/fixtures/adversarial.json": {
+            "byteIdentical": false,
+            "beforeSHA256": "952eb5bed1ebbc5fa0f3bef44c86a162868c90280a7eaae9ec4738a57b443218",
+            "afterSHA256": "9ca15ad06a8407ed94b3e46e8a228144c44f6a8741d65906d3bc888103e41c6f",
+            "providerSetUnchanged": true,
+            "genesisUnchanged": true,
+            "eventsUnchanged": true,
+            "beforeFinalHash": "08a51a3cca13cb6b70e97c63e1884b5a1485c64bae340b424148de219d72d9e2",
+            "afterFinalHash": "11048367f6bb689a1367e67094f3dbe1d500b3f35c7db5ee4ec750cf91aab19a"
+          }
+        }
+      },
+      "qualification": "Intentional admitted canonical output write, not immutable validation."
+    },
+    {
+      "label": "recovery-inventory-canonical-write-01",
+      "receiptSHA256": "f7bca7bb4e947c0522b89627ea9e71ab7717c1b4f02ae89973ad44a7928505ab",
+      "receipt": {
+        "purpose": "Intentional canonical derived-output integration write; not immutable acceptance",
+        "started": "2026-10-15T03:17:16.180898+00:00",
+        "ended": "2026-10-15T03:17:20.895549+00:00",
+        "command": [
+          "npx",
+          "--no-install",
+          "tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "elapsedSeconds": 4.7144276250037365,
+        "exitCode": 0,
+        "pid": 64217,
+        "pgid": 64217,
+        "childReaped": true,
+        "remainingGroup": false,
+        "manifestKeys": 5345,
+        "intentionalChangedPaths": [
+          "docs/plan/evidence/content-inventory.json"
+        ],
+        "beforeManifestSHA256": "cb2543cc9212b2e02b50dad6a719a84bc842e51c67ad4a1ce8dadbb67b24a887",
+        "afterManifestSHA256": "33a49c9e544b75b68a39b6c8fbc42db3c7c552aeb11d0cb3f1c374351c036091",
+        "stdoutSHA256": "7e1b63e75e7539f164c176122549f7048d5d29a2e714f8ca8e52f0a96adca6b2",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "audit": {
+          "docs/plan/evidence/content-inventory.json": {
+            "beforeSHA256": "e75f524774a68a8c970d67e28a2f41a906b73e69689af969d296acce698861ab",
+            "afterSHA256": "c4880d724e7e50a45ea026cac9396d0fc83340bf25f8c347c9cf39d25654b364",
+            "byteIdentical": false
+          }
+        }
+      },
+      "qualification": "Intentional combined-source canonical write; no immutable-check claim."
+    },
+    {
+      "label": "recovery-replay-canonical-write-01",
+      "receiptSHA256": "e1a60f860ecdf06744315a3ef1d7af27ffa232dada1113ce59340a51866eabdd",
+      "receipt": {
+        "purpose": "Intentional canonical derived-output integration write; not immutable acceptance",
+        "started": "2026-10-15T03:20:00.974823+00:00",
+        "ended": "2026-10-15T03:20:02.734469+00:00",
+        "command": [
+          "npm",
+          "run",
+          "regenerate-replay-fixtures"
+        ],
+        "elapsedSeconds": 1.7595232090097852,
+        "exitCode": 0,
+        "pid": 24218,
+        "pgid": 24218,
+        "childReaped": true,
+        "remainingGroup": false,
+        "manifestKeys": 5345,
+        "intentionalChangedPaths": [
+          "src/rules/replay/fixtures/adversarial.json"
+        ],
+        "beforeManifestSHA256": "33a49c9e544b75b68a39b6c8fbc42db3c7c552aeb11d0cb3f1c374351c036091",
+        "afterManifestSHA256": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b",
+        "stdoutSHA256": "43bc7c77c6bd9e44fd82ba1f55bea2012e65ecea5c4355b63f2983ff70b572f7",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "audit": {
+          "src/rules/replay/fixtures/journey-only.json": {
+            "beforeSHA256": "ce7fa21dd3a296a62ffc8962fdcb620a20253b4c34abf468d83e657bd12f7009",
+            "afterSHA256": "ce7fa21dd3a296a62ffc8962fdcb620a20253b4c34abf468d83e657bd12f7009",
+            "byteIdentical": true,
+            "providerSetUnchanged": true,
+            "genesisUnchanged": true,
+            "eventsUnchanged": true,
+            "beforeFinalHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+            "afterFinalHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+            "onlyFinalHashChanged": true
+          },
+          "src/rules/replay/fixtures/battle.json": {
+            "beforeSHA256": "df63b8e683eb1c845d074ef16500eb61f83dd03e2ae1fb20136c3c3bbb5543f1",
+            "afterSHA256": "df63b8e683eb1c845d074ef16500eb61f83dd03e2ae1fb20136c3c3bbb5543f1",
+            "byteIdentical": true,
+            "providerSetUnchanged": true,
+            "genesisUnchanged": true,
+            "eventsUnchanged": true,
+            "beforeFinalHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+            "afterFinalHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+            "onlyFinalHashChanged": true
+          },
+          "src/rules/replay/fixtures/adversarial.json": {
+            "beforeSHA256": "3b00c2505d90b399c032c0947b1636c5da1fafb1bbd552a9df85152f9addc5c3",
+            "afterSHA256": "565ef3b4bbb082d21f87dd5333a05331cdab812a08300a134739af786b35eeb4",
+            "byteIdentical": false,
+            "providerSetUnchanged": true,
+            "genesisUnchanged": true,
+            "eventsUnchanged": true,
+            "beforeFinalHash": "fa0018ec394367d9c77fd5bebc1169d6b479ddfac2d2428fe825c2866158d5e3",
+            "afterFinalHash": "718249836cdd521f15e8848192265459834d65e8936d6e6f922a30a4013ac300",
+            "onlyFinalHashChanged": true
+          }
+        }
+      },
+      "qualification": "Intentional combined-source canonical write; no immutable-check claim."
+    }
+  ],
+  "causalNegatives": [
+    {
+      "cause": "latest-played-first",
+      "observation": "Wrong source card UUID: earlier \u2026220001 instead of latest \u2026220002.",
+      "receipt": "mutant-04-latest-played-first.receipt.json",
+      "restoration": {
+        "label": "mutant-04-latest-played-first",
+        "started": "2026-10-15T02:16:46.583068+00:00",
+        "path": "src/engine/rules/turn-log.ts",
+        "sourceBeforeSHA256": "1fee3359e7fc3d7896f0852f94aacde75fa44b84e748f6a7aaf8b853fa666e6f",
+        "sourceMutatedSHA256": "e827cad8e1f58d31d6e5a2f3d657e8ce9a90b5a072f9ee5ae267898bd18dbee0",
+        "contractSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+        "publicAssertion": "Latest A/B/A matrix and created latest B cessation case must observe expected public copy printing; choosing earliest fails actual values.",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*retains a created latest warrior after cessation"
+        ],
+        "intentionalSourceChanged": [
+          "src/engine/rules/turn-log.ts"
+        ],
+        "collectorExitCode": 1,
+        "restoredManifestEqual": true,
+        "restoredSourceSHA256": "1fee3359e7fc3d7896f0852f94aacde75fa44b84e748f6a7aaf8b853fa666e6f",
+        "ended": "2026-10-15T02:16:55.228666+00:00"
+      },
+      "testsFrozenSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+      "qualification": "Actual assertion-red on original source epoch; all 5285-key manifests restored exactly. Supported indexing-only repair later passed fresh owning contracts/gates; no claim that old hashes are final hashes."
+    },
+    {
+      "cause": "missing-play-pair",
+      "observation": "Created-source cessation yields zero copies instead of one.",
+      "receipt": "mutant-04-missing-play-pair.receipt.json",
+      "restoration": {
+        "label": "mutant-04-missing-play-pair",
+        "started": "2026-10-15T02:16:55.229238+00:00",
+        "path": "src/engine/rules/turn-log.ts",
+        "sourceBeforeSHA256": "1fee3359e7fc3d7896f0852f94aacde75fa44b84e748f6a7aaf8b853fa666e6f",
+        "sourceMutatedSHA256": "43542bb9945f53c039ff19703dd850559db8dadcf85e9e6d19792550665a2eb6",
+        "contractSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+        "publicAssertion": "Created latest B ceases; public copy must still materialize B, so missing retention causes created output length assertion failure. Optional pair preserves runtime setup.",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*retains a created latest warrior after cessation"
+        ],
+        "intentionalSourceChanged": [
+          "src/engine/rules/turn-log.ts"
+        ],
+        "collectorExitCode": 1,
+        "restoredManifestEqual": true,
+        "restoredSourceSHA256": "1fee3359e7fc3d7896f0852f94aacde75fa44b84e748f6a7aaf8b853fa666e6f",
+        "ended": "2026-10-15T02:17:03.406360+00:00"
+      },
+      "testsFrozenSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+      "qualification": "Actual assertion-red on original source epoch; all 5285-key manifests restored exactly. Supported indexing-only repair later passed fresh owning contracts/gates; no claim that old hashes are final hashes."
+    },
+    {
+      "cause": "old-c5-ordering",
+      "observation": "Observed spark 3 instead of 0; capacity shares 11,10 instead of 8,7.",
+      "receipt": "mutant-04-old-c5-ordering.receipt.json",
+      "restoration": {
+        "label": "mutant-04-old-c5-ordering",
+        "started": "2026-10-15T02:17:03.406976+00:00",
+        "path": "src/engine/catalog.ts",
+        "sourceBeforeSHA256": "69a101bde891043c793b75ecba50eada05ddbcbefb7f61223904e77b1e65ce96",
+        "sourceMutatedSHA256": "cf0b03f472be9e75af4316d83da6a39fa36359207527ae709604499e14e5e63e",
+        "contractSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+        "publicAssertion": "Retained and physical explicit-zero variant copies must observe spark0; original cause yields3. Explicit nonzero capacity-share control also discriminates; ordinary null copy remains4.",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*(copies immutable variant values|enforces avatar exhaustion)"
+        ],
+        "intentionalSourceChanged": [
+          "src/engine/catalog.ts"
+        ],
+        "collectorExitCode": 1,
+        "restoredManifestEqual": true,
+        "restoredSourceSHA256": "69a101bde891043c793b75ecba50eada05ddbcbefb7f61223904e77b1e65ce96",
+        "ended": "2026-10-15T02:17:12.102485+00:00"
+      },
+      "testsFrozenSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+      "qualification": "Actual assertion-red on original source epoch; all 5285-key manifests restored exactly. Supported indexing-only repair later passed fresh owning contracts/gates; no claim that old hashes are final hashes."
+    },
+    {
+      "cause": "latest-materialized-survivor",
+      "observation": "Earlier physical member rematerializes instead of an empty event list.",
+      "receipt": "mutant-04-latest-materialized-survivor.receipt.json",
+      "restoration": {
+        "label": "mutant-04-latest-materialized-survivor",
+        "started": "2026-10-15T02:17:12.103100+00:00",
+        "path": "src/engine/effects/interpreter.ts",
+        "sourceBeforeSHA256": "45642ffcdba653541db9c4a07263426110e90123965db4a9fc0f9614ffdf35af",
+        "sourceMutatedSHA256": "7aa266b8df120291cd4c9167879d8053bcfcebac8030d512cb053954774aff92",
+        "contractSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+        "publicAssertion": "Departed/ceased latest with earlier survivor must emit no rematerialized event; filtering eligibility before latest substitutes earlier and fails event assertion.",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*selects the latest materialized physical member"
+        ],
+        "intentionalSourceChanged": [
+          "src/engine/effects/interpreter.ts"
+        ],
+        "collectorExitCode": 1,
+        "restoredManifestEqual": true,
+        "restoredSourceSHA256": "45642ffcdba653541db9c4a07263426110e90123965db4a9fc0f9614ffdf35af",
+        "ended": "2026-10-15T02:17:20.240323+00:00"
+      },
+      "testsFrozenSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+      "qualification": "Actual assertion-red on original source epoch; all 5285-key manifests restored exactly. Supported indexing-only repair later passed fresh owning contracts/gates; no claim that old hashes are final hashes."
+    },
+    {
+      "cause": "live-pair-correlation-bypass",
+      "observation": "Valid-shaped same-live pair mismatch LOAD accepted instead of null.",
+      "receipt": "mutant-04-live-pair-correlation-bypass.receipt.json",
+      "restoration": {
+        "label": "mutant-04-live-pair-correlation-bypass",
+        "started": "2026-10-15T02:17:20.240909+00:00",
+        "path": "src/rules/battle/fold.ts",
+        "sourceBeforeSHA256": "5e92ed5e3295c93379fe68b1a96fa3c1b1428e32086101b3b0d45e78cdbfe945",
+        "sourceMutatedSHA256": "159eafd3004161397e714c42658e978022e9ca60bcd64b068110db394b6e84e3",
+        "contractSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+        "publicAssertion": "Independent valid-shaped printing UUID and variant mismatch public LOAD must return null; bypass accepts same-live mismatch and fails null assertion.",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*loads valid legacy pairs conservatively"
+        ],
+        "intentionalSourceChanged": [
+          "src/rules/battle/fold.ts"
+        ],
+        "collectorExitCode": 1,
+        "restoredManifestEqual": true,
+        "restoredSourceSHA256": "5e92ed5e3295c93379fe68b1a96fa3c1b1428e32086101b3b0d45e78cdbfe945",
+        "ended": "2026-10-15T02:17:31.920979+00:00"
+      },
+      "testsFrozenSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+      "qualification": "Actual assertion-red on original source epoch; all 5285-key manifests restored exactly. Supported indexing-only repair later passed fresh owning contracts/gates; no claim that old hashes are final hashes."
+    },
+    {
+      "cause": "pair-shape-bypass",
+      "observation": "Malformed ceased tuple LOAD accepted instead of null, independently of live correlation.",
+      "receipt": "mutant-04-pair-shape-bypass.receipt.json",
+      "restoration": {
+        "label": "mutant-04-pair-shape-bypass",
+        "started": "2026-10-15T02:17:31.922097+00:00",
+        "path": "src/rules/battle/fold.ts",
+        "sourceBeforeSHA256": "5e92ed5e3295c93379fe68b1a96fa3c1b1428e32086101b3b0d45e78cdbfe945",
+        "sourceMutatedSHA256": "8e1951d3b7572e560d507c7ccbad2be6f86e86e9762f0aee13e74cec2914c9c9",
+        "contractSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+        "publicAssertion": "Malformed ceased pair has no live source; correlation cannot reject it. Public LOAD must return null, so shape bypass fails null assertion independently.",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "historyRefs.*retains a created latest warrior after cessation"
+        ],
+        "intentionalSourceChanged": [
+          "src/rules/battle/fold.ts"
+        ],
+        "collectorExitCode": 1,
+        "restoredManifestEqual": true,
+        "restoredSourceSHA256": "5e92ed5e3295c93379fe68b1a96fa3c1b1428e32086101b3b0d45e78cdbfe945",
+        "ended": "2026-10-15T02:17:49.368654+00:00"
+      },
+      "testsFrozenSHA256": "2475f8beacc08784ed3c791a544dabf9b7248861478f717274bbedd8f8e9f87f",
+      "qualification": "Actual assertion-red on original source epoch; all 5285-key manifests restored exactly. Supported indexing-only repair later passed fresh owning contracts/gates; no claim that old hashes are final hashes."
+    }
+  ],
+  "retainedFailuresAndCallerErrors": [
+    {
+      "epoch": "baseline-history-01",
+      "classification": "Introduced synthetic expectation normalization mismatch",
+      "actual": "28 pass / 2 fail; copied variant includes canonical transfigurations:[] while raw input omitted it. Fixed to compare actual source variant and retain explicit fields; not a product/counterfactual failure."
+    },
+    {
+      "epoch": "review-quick-01",
+      "classification": "Introduced compatibility plus required fixture fallout",
+      "actual": "Eight application TS errors from unsupported Array.at; 30 lint cascade errors; four related-test failures (two synthetic inventory fixture, two adversarial replay stamp). Node typecheck/import-cycle passed; full terminal receipt retained."
+    },
+    {
+      "epoch": "review-quick-02",
+      "classification": "Required fixture fallout after supported indexing correction",
+      "actual": "Both typechecks/lint/cycles passed; the same four real fixture assertions failed. No heavy check ran on known failing source."
+    },
+    {
+      "epoch": "replay-pair-probe-01",
+      "classification": "Scratch caller setup failure, no replay assertion executed",
+      "actual": "Outside-package .ts was transformed as CJS and imported top-level await failed. Explicit ESM .mts byte-identical caller variation passed; not causal/product proof."
+    },
+    {
+      "epoch": "mutant-03-latest-played-first",
+      "classification": "Interrupted scratch orchestration before any acceptance test",
+      "actual": "Per-path loop accidentally recomputed whole manifest repeatedly. Only verified own PID85506 interrupted (terminal130); finally restored full manifest. Initial exact pkill pattern matched no process (exit1). No mutant03 acceptance test began; no causal proof claimed."
+    },
+    {
+      "epoch": "scratch inventory audits",
+      "classification": "Two read/schema caller errors",
+      "actual": "entity.uuid assumption raised KeyError; explicit source status assumption raised AssertionError because source uses pending/vanilla/abilities. Corrected ID-only audit proves 1209 unchanged identities and immutable printed/data fields. No product issue."
+    },
+    {
+      "epoch": "source discovery",
+      "classification": "Read-only path/glob operational errors",
+      "actual": "Several guessed file paths and unmatched zsh globs failed before reads; corrected by rg file discovery. Exact aggregate count/duration is not claimed; no product issue, runtime success, or source change inferred."
+    },
+    {
+      "epoch": "parent claim extractor",
+      "classification": "Parent read-only extraction error",
+      "actual": "Dependency field assumption raised KeyError; fresh native read independently proved all 41 completed blockers. Separate parent setup, not an implementation product failure."
+    }
+  ],
+  "failureAndRecoveryPaths": [
+    {
+      "path": "midstep error",
+      "proof": "Owning both-side contract rolls back a copy produced before a later sequence error: committed hash unchanged, no committed copy, pending prefix replay remains the same."
+    },
+    {
+      "path": "reload/restart",
+      "proof": "Owning cold fold adapter reproduces pending display and complete outcome/events; authentic saved current/history pair LOAD and clone/hash/view/determinize tested for both actors. Native desktop/mobile reload reproduces full committed output/history and same persisted game."
+    },
+    {
+      "path": "partial write",
+      "proof": "No new persistence writer or boundary introduced: existing fold uses private step work and atomic committed slice. Suspended display output and subsequent error rollback are public-test proved. No new file/database partial-write test added because copying/ref selection only transforms the existing transactional state."
+    },
+    {
+      "path": "invalid/stale input",
+      "proof": "Both-side saved LOAD rejects malformed ceased tuples and same-live valid-shaped Printing/Variant mismatches; legacy absent and authentic moved/ceased/determinized records accepted. Wrong-side/stale prompt and invalid answer bounce with unchanged committed hash."
+    },
+    {
+      "path": "concurrent actors/duplicate input",
+      "proof": "While suspended, a concurrent battle action and wrong actor answer bounce; duplicate accepted-answer intent bounces after commit. Existing synthetic adversarial12-event race transcript preserves applied/bounced outcomes and deterministic replay."
+    }
+  ],
+  "qa": {
+    "d21": {
+      "firstByte": 69,
+      "sampled": false,
+      "newPromptKind": false,
+      "newStatusKind": false,
+      "newVisualKind": false,
+      "requiredJudgedSample": false
+    },
+    "defaultPreflight": {
+      "pass": 2,
+      "skip": 18,
+      "fail": 0,
+      "exerciseBothSides": false
+    },
+    "defaultSweep": {
+      "pass": 2,
+      "skip": 18,
+      "attempts": 20,
+      "scope": "Both-seat/all10-variant initialization; base eligible only; initialization is not effect exercise.",
+      "ledgerPrefixRows": 20,
+      "ledgerPrefixBytes": 15703,
+      "ledgerPrefixSHA256": "2e78df53c9e348d566bc13896f752731c6cbec51d592a171fdf6a31f672deb85",
+      "invocation": "invocations/sweep-BfIV2d"
+    },
+    "authored": {
+      "scope": "Player desktop and mobile actual interaction; both-controller semantics additionally exercised by synthetic contracts and weighted300.",
+      "mode": "authored/proportional, not mandatory D21 sample or independent QA-subagent judgment",
+      "invocation": "invocations/run-JkOlXb",
+      "firstAttemptPassed": true,
+      "reportOk": true,
+      "caps": [],
+      "viewportResults": {
+        "desktop": {
+          "avatar": "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+          "controller": "player",
+          "source": {
+            "instance": "i51",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+          },
+          "copy": {
+            "id": "i52",
+            "printing": {
+              "kind": "figmentCopy",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000002",
+              "spark": 0
+            },
+            "owner": "player",
+            "journeyDeck": false,
+            "controller": "player",
+            "zone": "play",
+            "variant": {
+              "amplified": false
+            },
+            "status": {
+              "exhausted": true,
+              "gainedSpark": 0,
+              "counters": 0,
+              "created": true,
+              "reclaimed": false,
+              "playedViaReclaim": false,
+              "offering": false,
+              "ephemeral": false,
+              "x": null
+            },
+            "enteredZoneAt": 14
+          },
+          "energyBefore": 9,
+          "energyAfter": 7,
+          "activation": [
+            {
+              "seq": 4,
+              "index": 3,
+              "kind": "abilityResolved",
+              "instance": null,
+              "event": {
+                "kind": "abilityResolved",
+                "side": "player",
+                "source": {
+                  "kind": "avatar",
+                  "side": "player"
+                },
+                "ability": 0
+              },
+              "cards": {}
+            }
+          ],
+          "materialized": [
+            {
+              "seq": 4,
+              "index": 5,
+              "kind": "materialized",
+              "instance": "i52",
+              "event": {
+                "kind": "materialized",
+                "instance": "i52",
+                "side": "player",
+                "slot": {
+                  "rank": "back",
+                  "index": 1
+                }
+              },
+              "cards": {
+                "i52": null
+              }
+            }
+          ],
+          "geometry": {
+            "x": 348,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "hit": true,
+            "spark": 0
+          },
+          "logs": {
+            "gameId": "pedo3t",
+            "rows": 36,
+            "played": true,
+            "activated": true
+          },
+          "reload": {
+            "gameId": "pedo3t",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "exactCommittedState": true
+          }
+        },
+        "mobile": {
+          "avatar": "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+          "controller": "player",
+          "source": {
+            "instance": "i51",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+          },
+          "copy": {
+            "id": "i52",
+            "printing": {
+              "kind": "figmentCopy",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000002",
+              "spark": 0
+            },
+            "owner": "player",
+            "journeyDeck": false,
+            "controller": "player",
+            "zone": "play",
+            "variant": {
+              "amplified": false
+            },
+            "status": {
+              "exhausted": true,
+              "gainedSpark": 0,
+              "counters": 0,
+              "created": true,
+              "reclaimed": false,
+              "playedViaReclaim": false,
+              "offering": false,
+              "ephemeral": false,
+              "x": null
+            },
+            "enteredZoneAt": 14
+          },
+          "energyBefore": 9,
+          "energyAfter": 7,
+          "activation": [
+            {
+              "seq": 4,
+              "index": 3,
+              "kind": "abilityResolved",
+              "instance": null,
+              "event": {
+                "kind": "abilityResolved",
+                "side": "player",
+                "source": {
+                  "kind": "avatar",
+                  "side": "player"
+                },
+                "ability": 0
+              },
+              "cards": {}
+            }
+          ],
+          "materialized": [
+            {
+              "seq": 4,
+              "index": 5,
+              "kind": "materialized",
+              "instance": "i52",
+              "event": {
+                "kind": "materialized",
+                "instance": "i52",
+                "side": "player",
+                "slot": {
+                  "rank": "back",
+                  "index": 1
+                }
+              },
+              "cards": {
+                "i52": null
+              }
+            }
+          ],
+          "geometry": {
+            "x": 81.265625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "hit": true,
+            "spark": 0
+          },
+          "logs": {
+            "gameId": "euz4ta",
+            "rows": 36,
+            "played": true,
+            "activated": true
+          },
+          "reload": {
+            "gameId": "euz4ta",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "exactCommittedState": true
+          }
+        }
+      },
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "filename": "tensho-history-workflow-desktop.jsonl",
+          "rows": 39,
+          "gameId": "pedo3t"
+        },
+        {
+          "viewport": "mobile",
+          "filename": "tensho-history-workflow-mobile.jsonl",
+          "rows": 39,
+          "gameId": "euz4ta"
+        }
+      ],
+      "captures": [
+        {
+          "filename": "tensho-desktop-activation.png",
+          "cssViewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "pixelScale": 2
+        },
+        {
+          "filename": "tensho-desktop-copy.png",
+          "cssViewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "pixelScale": 2
+        },
+        {
+          "filename": "tensho-mobile-activation.png",
+          "cssViewport": {
+            "width": 390,
+            "height": 844
+          },
+          "pixelScale": 2
+        },
+        {
+          "filename": "tensho-mobile-copy.png",
+          "cssViewport": {
+            "width": 390,
+            "height": 844
+          },
+          "pixelScale": 2
+        }
+      ],
+      "imageInspection": "All four captures actually viewed by implementer and independently by parent: chooser controls readable/usable, copied0 visible beside source1, no clipping defect. Synthetic plain card faces are expected fixture rendering.",
+      "nativeWallMs": {
+        "browserLeaseWait": 7,
+        "serve": 2267,
+        "scenario": 20630,
+        "total": 22956
+      }
+    },
+    "resourceSettlement": {
+      "nativeSweep": {
+        "port": 5174,
+        "serverPG": 62255,
+        "portFree": true
+      },
+      "authored": {
+        "port": 5174,
+        "slot": 0,
+        "serverPG": 64141,
+        "portFree": true
+      },
+      "parentAudit": "parent-browser-resource-audit.json",
+      "parentAuditSHA256": "25d5cb0fd7ef948e20b0463589ac0598440d6af0f44baf9c3e1052e627eb0543",
+      "allFiveOwnGroupsAbsent": [
+        60678,
+        62210,
+        62255,
+        64088,
+        64141
+      ],
+      "observerStoppedNormally": true,
+      "ownershipTokensAbsent": true,
+      "qualification": "Native runner closes only its own session/server/provider. Parent watcher is read-only and separately stopped; no direct browser/process teardown by helper."
+    },
+    "sourceCommit": "f0114a8012088a2d7f2991d46f7b92e5a39a8745",
+    "integratedSourceQualification": "Original22ledger rows and all4 captures/logs unchanged; no browser rerun on base8685. Both-side public history contracts rerun in recovery-focused-01; original heavy/fuzz/browser evidence remains boundf011."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 106626,
+    "failures": 0,
+    "targetUuid": "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+    "included": 600,
+    "exercised": 330,
+    "reportedWallSeconds": 545.8,
+    "reportedCpuSeconds": 574.3,
+    "collectorWallSeconds": 547.3803004170186,
+    "cpuScope": "Fuzzer-reported process CPU only; model/agent CPU unknown.",
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "noPerformanceClaim": true,
+    "sourceCommit": "f0114a8012088a2d7f2991d46f7b92e5a39a8745"
+  },
+  "preExisting": "Exact original catalog instanceCard explicit-spark-before-variant cause, admitted bounded fix; old-order cause mutant observes3 instead of0 and shares11,10 instead of8,7. Own pre-existing file records it.",
+  "sourceEpochs": {
+    "stage1ProposalSHA256": "1eb6762c2db55ec7999b6882c1c582165ac03fd8294f85449c2230a0e200ef38",
+    "originalGreenOwningManifest": "b7be33b27754933bc2cacfa0011d9298903110fd8239d8f50a78efd034bb0b7b",
+    "mutantRestoredManifest": "420db5c6341b426f5f60e913eaef9a9d2578c95b3960a8d25546723745983ec7",
+    "supportedIndexingGreenManifest": "a4a857673d38ff1341795a043e109d9490c33f9f93461fcca2157c975ab74a67",
+    "fixtureRepairedFullReviewFuzzManifest": "250c7285ffba2a4fcc4ad5f4efd86642d8fbd8590e585e8876d8cebd518d7587",
+    "postBrowserManifest": "4e41baa9c429c069ebbba8a3a08e08c4884c79bd2cd280e0f9c1e6d93e7554b8",
+    "collectorSHA256": "0a4b6730f574d2607e41b0f00b588611f45bf327748add439aa6cfa376782c9c",
+    "integratedBase": "8685a75f75cd3849c27e13155e93fc14ecd7e998",
+    "integratedSourceGreenManifest": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b"
+  },
+  "remainingSessionDuties": "Parent alone owns a fresh read-only cold Codex subagent review of the final integrated commit (fork_turns:none), then native candidate/approval/promotion and final cadence/tag census. Original155-input packet was frozen and never reviewed; no220source review has yet launched. No Claude/reset wait or fallback plan. Temporary parking/checkpoint commits must never be candidates.",
+  "unknowns": {
+    "modelCpuSeconds": null,
+    "exactAdmissionWaitTotalSeconds": null,
+    "operationalReadErrorCount": null
+  },
+  "frictionQualification": "Measured integration-conflict envelope is inclusive mixed recovery wall time, not pure lost time. Earlier ordinary failures retain exact receipts; unknown model CPU/admission wait remain unknown.",
+  "originalSourceEvidence": {
+    "sourceCommit": "f0114a8012088a2d7f2991d46f7b92e5a39a8745",
+    "baseCommit": "53e88efa62b282cc6b82e9120da049e7367675f1",
+    "implementWindow": {
+      "start": "2026-10-15T01:46:56.705Z",
+      "end": "2026-10-15T03:04:20.932549+00:00"
+    },
+    "implementMin": 77.40379248333333,
+    "inventoryAudit": {
+      "purpose": "Read-only ID-keyed canonical delta audit; entity names never used as keys",
+      "entityCount": 1209,
+      "entityIdentitySetUnchanged": true,
+      "allImmutablePrintedAndDataFieldsUnchanged": true,
+      "generatedEntityDeltas": [
+        {
+          "id": "c97b0a5b-64d0-480f-8db7-3fde93738d86",
+          "fields": [
+            "rulesDecisions",
+            "status"
+          ],
+          "module": "src/content/cards/vaultbreaker-c97b0a5b.ts",
+          "sourceSHA256": "ccd7648a103c06e474a96a3675dc0b81968c5db837d9b79443e4df85150c1aba",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "authored"
+        },
+        {
+          "id": "cd4d689d-1442-4a19-8e6a-182b425d066d",
+          "fields": [
+            "status"
+          ],
+          "module": "src/content/cards/hungering-mass-cd4d689d.ts",
+          "sourceSHA256": "d0132ed77564787d70b230c5484893e0dfd7d4abb5fe4e625190ec2c2b09f841",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "authored"
+        },
+        {
+          "id": "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+          "fields": [
+            "requiredPrimitives",
+            "routing",
+            "rulesDecisions",
+            "status"
+          ],
+          "module": "src/content/avatars/tensho-bf72adff.ts",
+          "sourceSHA256": "3cd64eb093d4d4b587a7d792ad2314e34d145a99807f0b3d996f8074251f5b72",
+          "sourceSameAsHEAD": false,
+          "sourceStatus": "authored"
+        },
+        {
+          "id": "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+          "fields": [
+            "routing"
+          ],
+          "module": "src/content/avatars/eldrik-bfc40414.ts",
+          "sourceSHA256": "03cd6c30cb829ae738b90b04fcdef27863e07823c8eef2268ce0c1b58cb1b7c0",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "authored"
+        },
+        {
+          "id": "055f211d-aa51-49eb-9162-190a946b1614",
+          "fields": [
+            "rulesDecisions",
+            "status"
+          ],
+          "module": "src/content/dreamsigns/root-staff-055f211d.ts",
+          "sourceSHA256": "fd84e7120d3b78e613fe34f663cd53b77d509b680283436da6095d73699fd3cf",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "authored"
+        },
+        {
+          "id": "4a91c56c-d828-482a-a46c-1299d69fa011",
+          "fields": [
+            "cardIssues"
+          ],
+          "module": "src/content/dreamsigns/bestiary-4a91c56c.ts",
+          "sourceSHA256": "9d99bcdea8ad289c3f0f216cde0c52dcc30a0950550e8e140f9ecea8260ef910",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "authored"
+        },
+        {
+          "id": "553d2317-32f9-47bc-bae0-5018ca26d56a",
+          "fields": [
+            "status"
+          ],
+          "module": "src/content/dreamsigns/egg-nest-553d2317.ts",
+          "sourceSHA256": "20716eb9fa6f526f139232bf7ef84454a02c1f14dc38d6b5976f641ddd311838",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "authored"
+        },
+        {
+          "id": "7ec00da2-2b2d-4613-9a2a-8611d38199ca",
+          "fields": [
+            "requiredPrimitives"
+          ],
+          "module": "src/content/dreamsigns/dreamcatcher-7ec00da2.ts",
+          "sourceSHA256": "1b9811c5df6fadb90f812b774b4d99164d019a66371804f6df3b1965561e7c85",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "pending"
+        },
+        {
+          "id": "86f64a29-7338-4759-81da-4c7656e543d2",
+          "fields": [
+            "status"
+          ],
+          "module": "src/content/dreamsigns/spice-blossoms-86f64a29.ts",
+          "sourceSHA256": "4edba40825a07cf649d2d58538a59af90319ed134e9965600fe929a506fa77a0",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "authored"
+        },
+        {
+          "id": "b765f6bb-0b8a-4847-ada4-477b9493e3ad",
+          "fields": [
+            "requiredPrimitives"
+          ],
+          "module": "src/content/dreamsigns/flower-petals-b765f6bb.ts",
+          "sourceSHA256": "c360395dda8b7151a763a81280af6d58903779903c7b97c97a6a4174687f291e",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "pending"
+        },
+        {
+          "id": "d76684c3-797e-44ae-a2ba-333e77d46a4d",
+          "fields": [
+            "cardIssues",
+            "requiredPrimitives",
+            "rulesDecisions"
+          ],
+          "module": "src/content/dreamsigns/belladonna-d76684c3.ts",
+          "sourceSHA256": "3f74dc12edf1a4909c797a76fce8bcfd89fbd7025153806c5ef18b0b686c7ab6",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "pending"
+        },
+        {
+          "id": "ede46f71-aa77-4b12-9824-0d3706da6a22",
+          "fields": [
+            "cardIssues",
+            "correction",
+            "requiredPrimitives",
+            "rulesDecisions",
+            "status",
+            "tags"
+          ],
+          "module": "src/content/dreamsigns/crystal-orb-ede46f71.ts",
+          "sourceSHA256": "9010e84de5f8124139afcda42b0c0fa6e453235dba71b2c4595d9701a23681fd",
+          "sourceSameAsHEAD": true,
+          "sourceStatus": "authored"
+        }
+      ],
+      "addedPrimitiveKeys": [
+        "firstMaterializationKeyword"
+      ],
+      "removedPrimitiveKeys": [],
+      "changedPrimitiveKeys": [
+        "grant",
+        "historyRefs"
+      ],
+      "canonicalSHA256": "3082412c650ab5ad6cd0767c64fad90c6c865b2a98b25d22dadc6a6bc2865a1a",
+      "generatorSHA256": "2f10dd67b631296bb7ed27c406f3877b45a1c6187fdfa5cd151cbe21e41dc7a2",
+      "notes": [
+        "Canonical projection replaces prim-history-refs planning bead with avatars-08 and repartitions avatars-07/08; native scope unchanged.",
+        "Six peer pending-to-authored statuses already exist in base source; regenerated output catches up.",
+        "firstMaterializationKeyword is existing source-backed capability absent from base generated output.",
+        "No peer entity source differs from HEAD; only Tensho differs.",
+        "Source statuses follow generator statusOf at1076: pending true, vanilla true, otherwise authored.",
+        "Initial scratch attempts assumed entity.uuid then explicit source status; they failed with KeyError and AssertionError before saving. Actual source uses id and ContentStatus pending/vanilla/abilities. Both operational errors retained."
+      ]
+    },
+    "canonicalReplayCausality": {
+      "actual": [
+        {
+          "name": "journey-only",
+          "providerSet": "synthetic-deterministic-v1",
+          "events": 6,
+          "stampedHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+          "actualHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+          "projectedHash": "0b59658e2102888f98b02a43e38ee6d42e2cad46cd25038e911be5ef747ca44b",
+          "removed": [],
+          "outcomes": [
+            {
+              "seq": 1,
+              "outcome": "applied"
+            },
+            {
+              "seq": 2,
+              "outcome": "applied"
+            },
+            {
+              "seq": 3,
+              "outcome": "applied"
+            },
+            {
+              "seq": 4,
+              "outcome": "applied"
+            },
+            {
+              "seq": 5,
+              "outcome": "applied"
+            },
+            {
+              "seq": 6,
+              "outcome": "applied"
+            }
+          ]
+        },
+        {
+          "name": "battle",
+          "providerSet": "synthetic-deterministic-v1",
+          "events": 8,
+          "stampedHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+          "actualHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+          "projectedHash": "67bcd5ee2c3bf98cf77c53ec18753336bc974fedb28903eef70496dd9942fb78",
+          "removed": [],
+          "outcomes": [
+            {
+              "seq": 1,
+              "outcome": "applied"
+            },
+            {
+              "seq": 2,
+              "outcome": "applied"
+            },
+            {
+              "seq": 3,
+              "outcome": "applied"
+            },
+            {
+              "seq": 4,
+              "outcome": "applied"
+            },
+            {
+              "seq": 5,
+              "outcome": "applied"
+            },
+            {
+              "seq": 6,
+              "outcome": "applied"
+            },
+            {
+              "seq": 7,
+              "outcome": "applied"
+            },
+            {
+              "seq": 8,
+              "outcome": "applied"
+            }
+          ]
+        },
+        {
+          "name": "adversarial",
+          "providerSet": "synthetic-deterministic-v1",
+          "events": 12,
+          "stampedHash": "08a51a3cca13cb6b70e97c63e1884b5a1485c64bae340b424148de219d72d9e2",
+          "actualHash": "11048367f6bb689a1367e67094f3dbe1d500b3f35c7db5ee4ec750cf91aab19a",
+          "projectedHash": "08a51a3cca13cb6b70e97c63e1884b5a1485c64bae340b424148de219d72d9e2",
+          "removed": [
+            {
+              "path": "battle.engine.slice.committed.turnLog.played.player[0].copiable",
+              "instance": "i4",
+              "pair": {
+                "printing": {
+                  "kind": "card",
+                  "cardId": "5e5e5e5e-0000-4000-8000-0000000000d9"
+                },
+                "variant": {
+                  "amplified": false
+                }
+              }
+            }
+          ],
+          "outcomes": [
+            {
+              "seq": 1,
+              "outcome": "applied"
+            },
+            {
+              "seq": 2,
+              "outcome": "applied"
+            },
+            {
+              "seq": 3,
+              "outcome": "bounced"
+            },
+            {
+              "seq": 4,
+              "outcome": "applied"
+            },
+            {
+              "seq": 5,
+              "outcome": "applied"
+            },
+            {
+              "seq": 6,
+              "outcome": "bounced"
+            },
+            {
+              "seq": 7,
+              "outcome": "applied"
+            },
+            {
+              "seq": 8,
+              "outcome": "applied"
+            },
+            {
+              "seq": 9,
+              "outcome": "applied"
+            },
+            {
+              "seq": 10,
+              "outcome": "applied"
+            },
+            {
+              "seq": 11,
+              "outcome": "applied"
+            },
+            {
+              "seq": 12,
+              "outcome": "bounced"
+            }
+          ]
+        }
+      ],
+      "scope": "Existing synthetic providers, immutable genesis/events/providerSet, codec and canonical hash unchanged. Only one cloned current played.copiable field deletion recovers exact old stamp; no loop/signature substitution. Unchanged canonical generator twice; only adversarial finalHash changes; other 2 bytes identical.",
+      "parentIndependentAuditSHA256": "53caeb7588f19456673cf1eded5af2e14abec5201735bb8efc0293137577f205"
+    },
+    "qualification": "Original full review, six causal mutants, exact weighted300, Node preflight, native sweep and authored desktop/mobile captures remain historical f011 evidence. Integrated source is validated by focused integration, review and Knip; these earlier checks were not repeated."
+  },
+  "integrationRecovery": {
+    "originalSourceCommit": "f0114a8012088a2d7f2991d46f7b92e5a39a8745",
+    "originalCandidate": "01a13d87-7ff4-7db2-b1c9-9c0f484bfe07",
+    "candidateResult": "MERGE-CONFLICT in exactly generatedinventory, inventory synthetic fixtures, fold and adversarial fixture. No CI generation or approval.",
+    "diagnosis": "One explicit nonretryable unsupported native diagnose; one cleanly rolled-back native update. Parent Doctor healthy.",
+    "parkedTemporaryCommit": "907fcc6d0ff0d018b5f3f98e7dbc220f2a33d835",
+    "updatedIncompleteCheckpoint": "a33ee3bd13ee22b84d1a2a21651f6aaec58b8809",
+    "integratedBase": "8685a75f75cd3849c27e13155e93fc14ecd7e998",
+    "temporaryCheckpointsNeverSubmitted": true,
+    "recoveryWindow": {
+      "start": "2026-10-15T03:07:36.407677+00:00",
+      "end": "2026-10-15T03:21:55.251333+00:00",
+      "minutes": 14.314060933333334,
+      "scope": "Actual candidate terminal03:07:36.407677Z through integrated Knip terminal 2026-10-15T03:21:55.251333+00:00: inclusive recovery envelope covering unsupported native diagnosis, clean update rollback, four-path parking, successful parent native update, peer-preserving own hunk integration, pair-only public hash proof, canonical generation/repeat and focused/review/Knip. Parent concurrently completed its separate debt audit during part of this interval. Mixed coordination/diagnosis/check wall time; no claim of pure lost time, editing time, lock wait or CPU."
+    },
+    "preservedPeerBehavior": [
+      "firstTimeEachTurn synthetic inventory cases and isFirstOccurrences guard",
+      "alternative-cost/reclaim exclusivity, awakened marker, status and activated-cost-route fold validation",
+      "all other landed source bytes"
+    ],
+    "ownBodyIntegrationAudit": {
+      "at": "2026-10-15T03:15:50.232211+00:00",
+      "originalSource": "f0114a8012088a2d7f2991d46f7b92e5a39a8745",
+      "originalBase": "53e88efa62b282cc6b82e9120da049e7367675f1",
+      "updatedCheckpoint": "a33ee3bd13ee22b84d1a2a21651f6aaec58b8809",
+      "integratedBase": "8685a75f75cd3849c27e13155e93fc14ecd7e998",
+      "initialManifestSHA256": "eff99b7e0c9dabda10a3855a1a30453a0abdbd4df93aa29a0924a63370418518",
+      "paths": {
+        "docs/plan/evidence/content-inventory.json": {
+          "peerInputSHA256": "e75f524774a68a8c970d67e28a2f41a906b73e69689af969d296acce698861ab",
+          "savedOriginalBaseSHA256": "2da71dcf35c12a8d25ea140d635e998e96fa635cf33b672fe6c591838e3e27c2",
+          "savedOwnSourceSHA256": "3082412c650ab5ad6cd0767c64fad90c6c865b2a98b25d22dadc6a6bc2865a1a",
+          "unchangedPendingCanonicalProof": true
+        },
+        "scripts/content-inventory.test.ts": {
+          "peerInputSHA256": "54c59fce588e5f26bc31650731667324bb17bd27749c3d0a2ee822c8924c622a",
+          "savedOriginalBaseSHA256": "b2d0e0c1ca112172970c6c2592073f1d4e52af8f82d25a896d9dde9eadea155f",
+          "savedOwnSourceSHA256": "410fb56c8cb72d486c4e359f7e706a4d7ba15f8414716b099f09bd950033d0d0",
+          "combinedSHA256": "5657661c202077f9bcd7dc5eb0ade3f8a86e75b7efb838482b51c46d4c95b4bb",
+          "ownAdditionsOnlyReversalEqualsPeerBytes": true,
+          "ownOperations": 3
+        },
+        "src/rules/battle/fold.ts": {
+          "peerInputSHA256": "9eed68ee81957e90ba01775d63cfcacad77a0a22597d30d330ea6b6ab327ef13",
+          "savedOriginalBaseSHA256": "78ac7a1edc2d2433bc46fb6f760123b47fd0a79fbd22b4b5a99896828d89c4d5",
+          "savedOwnSourceSHA256": "5e92ed5e3295c93379fe68b1a96fa3c1b1428e32086101b3b0d45e78cdbfe945",
+          "combinedSHA256": "339a1adee496033fcf8e3a9d2ef2d4fbaeec57a953209afd4e07948633d0979f",
+          "ownAdditionsOnlyReversalEqualsPeerBytes": true,
+          "ownOperations": 4
+        },
+        "src/rules/replay/fixtures/adversarial.json": {
+          "peerInputSHA256": "3b00c2505d90b399c032c0947b1636c5da1fafb1bbd552a9df85152f9addc5c3",
+          "savedOriginalBaseSHA256": "952eb5bed1ebbc5fa0f3bef44c86a162868c90280a7eaae9ec4738a57b443218",
+          "savedOwnSourceSHA256": "9ca15ad06a8407ed94b3e46e8a228144c44f6a8741d65906d3bc888103e41c6f",
+          "unchangedPendingCanonicalProof": true
+        }
+      }
+    },
+    "originalQALedger22RowsByteExact": true,
+    "originalQALedgerSHA256": "503e685a534013ddff65e8b20266412622ee23148676ecf7f7b2e65eaec8e792",
+    "integrationTests": {
+      "focusedFiles": 4,
+      "focusedTests": 5424,
+      "relatedReviewFiles": 306,
+      "relatedReviewTests": 9108
+    },
+    "sourceFixedIntegrationManifestSHA256": "38f60574ae1d8c3742be924b06c894bb19bb87f8c75f59dc4ca907a0e821335b",
+    "noNewSemanticBehaviorOrPrivateProjection": true
+  },
+  "failureAndRecoveryContractNames": {
+    "module": "src/engine/effects/primitives/contracts/history-refs.contracts.ts",
+    "actors": [
+      "player",
+      "enemy"
+    ],
+    "names": [
+      "rolls back a midstep error after new copy output and can replay the same published prefix for %s",
+      "keeps history transactional across suspended reload, wrong-side, stale, duplicate and concurrent intents for %s",
+      "preserves captured values through cloning, hashing, LOAD, concealment and both viewers' sampling for %s",
+      "loads valid legacy pairs conservatively and rejects malformed or live-conflicting retained values for %s",
+      "retains a created latest warrior after cessation without substituting an earlier survivor for %s"
+    ],
+    "partialWriteReason": "No new persistence writer or boundary; existing private work and atomic fold. Public rollback and cold pending replay exercised; no database fault injection added."
+  }
+}

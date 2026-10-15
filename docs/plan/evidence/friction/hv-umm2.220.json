@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.220",
+  "phase": 5,
+  "implementMin": 98.39513996666666,
+  "implementWindow": {
+    "start": "2026-10-15T01:46:56.705Z",
+    "end": "2026-10-15T03:25:20.413398+00:00"
+  },
+  "localValidationS": {
+    "focused": 173.04802029096754,
+    "review": 494.62628233403666,
+    "knip": 13.592007957980968,
+    "fuzz": 547.3803004170186,
+    "preflight": 3.0997914579929784,
+    "browser": 34.39731895795558,
+    "schema": 0.07755466602975503
+  },
+  "hostLoad": 7.24365234375,
+  "testDelta": {
+    "files": 1,
+    "lines": 398,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "integration-conflict",
+      "minutes": 14.314060933333334,
+      "note": "Actual candidate terminal03:07:36.407677Z through integrated Knip terminal 2026-10-15T03:21:55.251333+00:00: inclusive recovery envelope covering unsupported native diagnosis, clean update rollback, four-path parking, successful parent native update, peer-preserving own hunk integration, pair-only public hash proof, canonical generation/repeat and focused/review/Knip. Parent concurrently completed its separate debt audit during part of this interval. Mixed coordination/diagnosis/check wall time; no claim of pure lost time, editing time, lock wait or CPU."
+    }
+  ]
+}

@@ -660,6 +660,8 @@ export interface SparkGain {
  * had as it was played (RD-hv-7x4l.34-1).
  */
 export interface PlayedCard {
+  /** Public copiable values as played, retained independently of the physical card's survival. */
+  readonly copiable?: Pick<CardInstance, "printing" | "variant">;
   /** Named triggers as played; missing legacy abilities are unknown and match no ability filter. */
   readonly namedTriggers?: readonly NamedTrigger[];
   readonly instance: InstanceId;

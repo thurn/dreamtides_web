@@ -1,4 +1,6 @@
-import { createFigmentCopy } from "../../rules/copies";
+import { createFigmentCopy, createFigmentCopyFromValues } from "../../rules/copies";
+import { lastPlayedCharacter } from "../../rules/turn-log";
+import { resolvePlayer } from "../../dsl/selectors";
 import { resolveCards } from "../interpreter";
 import { type CardRef, cardTarget, definePrimitive } from "../types";
 
@@ -18,6 +20,12 @@ export const materializeFigmentCopyPrimitive = definePrimitive<MaterializeFigmen
   entersPlay: true,
   targets: (node) => cardTarget(node.of),
   resolve(ctx, node, env) {
+    if (node.of.kind === "lastPlayed") {
+      const latest = lastPlayedCharacter(ctx.state, ctx.catalog, resolvePlayer(env.controller, node.of.player), node.of.filter);
+      const source = latest?.copiable ?? (latest === undefined ? undefined : ctx.state.instances[latest.instance]);
+      if (source !== undefined) createFigmentCopyFromValues(ctx, source, env.controller, node.zeroSpark, node.untilEndOfTurn);
+      return;
+    }
     for (const id of resolveCards(ctx, node.of, env)) createFigmentCopy(ctx, id, env.controller, node.zeroSpark, node.untilEndOfTurn);
   },
 });

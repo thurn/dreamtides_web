@@ -147,6 +147,7 @@ const completeAuthoringFixtures = new Map<string, string>([
     export function controls() {} export function costPaid() {}
     export function randomIn() {} export function countCards() {}
     export function costOf() {} export function conditionCardCounts() {}
+    export function lastPlayed() {} export function lastMaterialized() {}
     export function pointsCost() {} export function giveOpponentPointsCost() {} export function returnCost() {}
     export function discardHandCost() {} export function discardCostFilter() {}
     export function banishXCost() {} export function banishFromAnyVoidCost() {}
@@ -167,6 +168,7 @@ const completeAuthoringFixtures = new Map<string, string>([
       | { tag: "reclaim" } | { tag: "returnToHand" } | { tag: "erode" }
       | { tag: "foresee" } | { tag: "copy" } | { tag: "removesEnemy" }
       | { tag: "handBecomesEmpty"; firstTimeEachTurn?: true } | { tag: "namedAbilityTriggered"; firstTimeEachTurn?: true };
+    export type CharacterRef = { tag: "lastMaterialized" };
     export type FunctionalZone = "hand" | "void" | "deck";
     export interface ActivatedAbility { oncePerTurn?: boolean; zone?: FunctionalZone }
     export type Speed = "standard" | "fast";
@@ -278,6 +280,8 @@ minimalSources.set(scopedModule("firstTimeEachTurn", triggersModule), "export fu
 minimalSources.set(scopedModule("whenRemovesEnemyTrigger", triggersModule),
   "export function whenRemovesEnemy() {} export function whenDissolvesEnemyInChallenge() {}");
 minimalSources.set(scopedModule("whenForeseeTrigger", triggersModule), "export function whenForesee() {}");
+minimalSources.set(scopedModule("historyRefs", typesModule), 'export type CharacterRef = { kind: "lastMaterialized" };');
+minimalSources.set(scopedModule("historyRefs", buildersModule), "export function lastPlayed() {} export function lastMaterialized() {}");
 const minimalResolver = inventoryCapabilityResolver(minimalSources);
 
 const intendedResolver = inventoryCapabilityResolver(completeAuthoringFixtures);

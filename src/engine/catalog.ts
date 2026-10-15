@@ -188,7 +188,10 @@ export function instanceCard(
 ): PrintedCard {
   const printed = printedCard(catalog, instance.printing);
   const mods = instance.variant.deckMods;
-  return mods === undefined ? printed : modifiedCard(printed, mods);
+  const card = mods === undefined ? printed : modifiedCard(printed, mods);
+  return instance.printing.kind === "figmentCopy" && instance.printing.spark !== null && card.cardType === "character"
+    ? { ...card, spark: instance.printing.spark }
+    : card;
 }
 
 function modifiedCard(card: PrintedCard, mods: DeckMods): PrintedCard {

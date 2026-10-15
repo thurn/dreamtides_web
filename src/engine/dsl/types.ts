@@ -222,8 +222,21 @@ export interface HighestSparkSpec {
   readonly kind: "highestSpark";
 }
 
+/** The latest actual character play of this subtype in the current turn. */
+export interface LastPlayedSpec {
+  readonly kind: "lastPlayed";
+  readonly player: PlayerRef;
+  readonly filter: { readonly cardType: "character"; readonly subtype: CardSubtype };
+}
+
+/** The latest actual materialization's physical character, while still controlled in play. */
+export interface LastMaterializedSpec {
+  readonly kind: "lastMaterialized";
+  readonly player: PlayerRef;
+}
+
 /** The characters a character effect applies to. */
-export type CharacterRef = TargetSpec | AllSpec | SelfSpec | SubjectSpec | SupportedSpec | RandomCharacterSpec | HighestSparkSpec;
+export type CharacterRef = TargetSpec | AllSpec | SelfSpec | SubjectSpec | SupportedSpec | RandomCharacterSpec | HighestSparkSpec | LastMaterializedSpec;
 
 /**
  * Cards in one of a player's decks, hands, or voids that an effect names

@@ -9,6 +9,7 @@ import type {
   CardFilter,
   PlayerRef,
   CharacterRef,
+  LastPlayedSpec,
   PlayTimeTarget,
   SelfSpec,
   StackTargetSpec,
@@ -24,7 +25,7 @@ import type {
  * on the stack, the card the triggering event concerns ("copy it"), the
  * source in whatever zone it is, or cards in a deck, hand, or void.
  */
-export type CardRef = TargetSpec | StackTargetSpec | SubjectSpec | SelfSpec | ZoneCardSpec;
+export type CardRef = TargetSpec | StackTargetSpec | SubjectSpec | SelfSpec | ZoneCardSpec | LastPlayedSpec;
 
 /**
  * "Them" after a materialize (`withMaterialized`): the characters the nearest

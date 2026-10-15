@@ -1,0 +1,3 @@
+# hv-umm2.220 pre-existing source findings
+
+- `src/engine/catalog.ts`, `instanceCard`/`modifiedCard`: An explicit figment-copy spark override was read before the copied variant's deck-entry spark bonus, so a nominal zero-spark copy could have positive base spark and a capacity share could acquire the bonus again. The bounded admitted correction applies the explicit override after the existing variant modifications, preserving ordinary null-override copies, subtype, cost, speed, abilities and capacity allocation. Owning synthetic contracts provide physical and retained controls; actual verification receipts are recorded in this bead's measurements.
