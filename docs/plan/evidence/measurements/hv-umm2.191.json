@@ -1,0 +1,190 @@
+{
+  "bead": "hv-umm2.191",
+  "dispatchStart": "2026-10-15T00:29:25.204929+00:00",
+  "preGitCutoff": "2026-10-15T01:12:06.390186+00:00",
+  "actualFutureGitEndpoint": "UNKNOWN; external final-commit-receipt.json supplies actual end and inclusive tail",
+  "scope": {
+    "productionGrossLines": 22,
+    "newAPIs": [],
+    "fallout": [],
+    "metadataAudit": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/metadata-verification.json",
+      "sha256": "ae999b6b99aa6a235285a72490cb9a7ecae5a3d3a9ca8c1fa9a13c597377c7b2"
+    },
+    "child683": "Two leaves plus cards-ready-191.scenarios.ts unchanged read-only",
+    "testDelta": {
+      "files": 1,
+      "lines": 99,
+      "jsdomFiles": 0,
+      "configuredEntrypoints": 0
+    },
+    "reviewPolicy": "Composition, no core label, below100 non-test gross; no local cold review/full required. Child683 reviewed independently."
+  },
+  "checks": {
+    "receipts": [
+      {"label":"focused","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/focused.receipt.json","sha256":"43dcd3d944ebefca40758d275ed8904d6d62ac1b724a76f204f25e27fb1e5c75","exit":1,"start":"2026-10-15T00:36:26.913279+00:00","end":"2026-10-15T00:36:34.217856+00:00","wallS":7.304483833024278,"pgid":61968,"stdoutSHA256":"f2fabbfb9124dd3ee799a72f0ca1456d4d801ae9bdc9c6c1fc8deb849518cedb"},
+      {"label":"focused-repair","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/focused-repair.receipt.json","sha256":"b72b649951ae45c24193aae7425189f4fee3501b7e127455eaaca7e24dbe92be","exit":0,"start":"2026-10-15T00:36:47.108690+00:00","end":"2026-10-15T00:36:52.844512+00:00","wallS":5.735697333002463,"pgid":63406,"stdoutSHA256":"2714453857a3c04e7769f992e731a39c5cc5a5e4222008f6b13112b75cc9f8a4"},
+      {"label":"focused-final","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/focused-final.receipt.json","sha256":"7f424abba65e58313c08e3e4c4baafd5252137395c5198d9de2c3fe0d5a8afca","exit":0,"start":"2026-10-15T00:37:18.371222+00:00","end":"2026-10-15T00:37:24.078897+00:00","wallS":5.7075580839882605,"pgid":65867,"stdoutSHA256":"c474868134d2c6c73d97b9cae2a503aa61052f2ab32266014cd3c21947c28b65"},
+      {"label":"entities-after","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/entities-after.receipt.json","sha256":"4b5e3a4a7a43ee5c3f0789805dc060d1fa043e6395a62b4aee93162795ae9729","exit":0,"start":"2026-10-15T00:37:12.305075+00:00","end":"2026-10-15T00:37:13.339408+00:00","wallS":1.0342485830187798,"pgid":65472,"stdoutSHA256":"dfe92d53d3e2ab09e2579dd56fa8a1716b5876cda7971d1b8d37b3c0aad78245"},
+      {"label":"review","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/review.receipt.json","sha256":"5535859beba66e8191d8719b9997a02beb3d6bcc1a28071476d8e120eb8376d9","exit":0,"start":"2026-10-15T00:37:27.660869+00:00","end":"2026-10-15T00:38:39.112014+00:00","wallS":71.45041137502994,"pgid":66518,"stdoutSHA256":"229cf52886d78a3c7d77453fcc068b8fe4bff651ac36afd975cd30ac68f07ebb"},
+      {"label":"knip","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/knip.receipt.json","sha256":"c47fe22fb92a33cc333c7cbb9351ed67aae7746ada638b2f59da891a819306b6","exit":0,"start":"2026-10-15T00:39:05.001886+00:00","end":"2026-10-15T00:39:10.566350+00:00","wallS":5.5643313330365345,"pgid":4558,"stdoutSHA256":"0aacbf80d10cfd4112fe2132c5722ee6efba6b6f65771d0fb082a8499fe3848e"},
+      {"label":"weighted300","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/weighted300.receipt.json","sha256":"cff83522f16ee93ed3abc62d6c7653d5a12e7305e8c04a7d19574efa3c7ed54b","exit":0,"start":"2026-10-15T00:39:16.294470+00:00","end":"2026-10-15T00:46:59.620437+00:00","wallS":463.2963992499863,"pgid":5659,"stdoutSHA256":"fd7148f4e29ad8065a1a27ec7b3c839e09d918169cbeeafb870858c71f7df9b2"},
+      {"label":"preflight","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/preflight.receipt.json","sha256":"1e4ef2b99a77ee6a321eb7b94af566c12a283ee48e8a0e37ce7ed9ccac8cf57e","exit":0,"start":"2026-10-15T00:46:22.932911+00:00","end":"2026-10-15T00:46:25.141355+00:00","wallS":2.2082643750472926,"pgid":89433,"stdoutSHA256":"38bc4092606c74a2d9635c66f5316c40ab44daff3ce162dba21a92580352bc4f"},
+      {"label":"sweep","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/sweep.receipt.json","sha256":"1313c7d160ebfb4695123f148bed3579eededc0f5b8d0efcccf7b9e7a62e1863","exit":0,"start":"2026-10-15T00:48:09.574121+00:00","end":"2026-10-15T00:53:37.420841+00:00","wallS":327.8410224579857,"pgid":96157,"stdoutSHA256":"dc724bfdcd2c0222964f6a236cf2f80f1544ec8a73061ab0bdde1a9e03a6b700"},
+      {"label":"judged-nullifier-player","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/judged-nullifier-player.receipt.json","sha256":"3b5d27c85e5928d564cebd2cedd83d2600b3c927ca891597cbc11644e2818458","exit":1,"start":"2026-10-15T00:54:15.793307+00:00","end":"2026-10-15T00:54:25.373706+00:00","wallS":9.580143041966949,"pgid":72066,"stdoutSHA256":"7c3bb364d9e364fff5687964cd33b906266fb62b657f10e8a3dd63f13fb27fbb"},
+      {"label":"qa-owner-observer","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/qa-owner-observer.receipt.json","sha256":"67e8e339f6b9b21aa76d4bc2afaffdbfead8bd0ac645c3ca0f8abb738b7d8c2b","exit":0,"start":"2026-10-15T00:48:08.425494+00:00","end":"2026-10-15T00:54:41.178057+00:00","wallS":392.74540008301847,"pgid":96101,"stdoutSHA256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      {"label":"judged-nullifier-player-recovery1","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/judged-nullifier-player-recovery1.receipt.json","sha256":"47f23a7c21ec2153c16966a105b5f4ed62a6c217198ea92d61030a1380f639ac","exit":0,"start":"2026-10-15T00:57:04.488324+00:00","end":"2026-10-15T00:57:43.277395+00:00","wallS":38.78833608399145,"pgid":80862,"stdoutSHA256":"0c31b37139199cd875177df9cd203b484adfd76dbba6a1cc2c90e3617a6f185c"},
+      {"label":"judged-nullifier-enemy","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/judged-nullifier-enemy.receipt.json","sha256":"fe86521995123186ea72b48d1a27baddb1b0bcc6da06512b9a537387556553ad","exit":0,"start":"2026-10-15T00:58:05.370209+00:00","end":"2026-10-15T00:59:16.412039+00:00","wallS":71.04055095801596,"pgid":82224,"stdoutSHA256":"2dbc1d12cd500134f039fb8b05971bf9d0e6560c1bc50b984f470067be8d0e66"},
+      {"label":"judged-vaultbreaker-player","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/judged-vaultbreaker-player.receipt.json","sha256":"fb3be2fc3bcaf3f56e7b95df6d09b886aa2660bc851ef80edb6f37e6e29e2d02","exit":0,"start":"2026-10-15T01:01:28.320817+00:00","end":"2026-10-15T01:02:13.027098+00:00","wallS":44.70541299995966,"pgid":52653,"stdoutSHA256":"86b54104f49904d2c45f4e3e3e902755a8264f90731d865f5d39ecaa1b116f59"},
+      {"label":"judged-vaultbreaker-enemy","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/judged-vaultbreaker-enemy.receipt.json","sha256":"7ce19176f5c77158995058a97ed6a9422050e57574cd71c3ed8c48db1002eb1a","exit":0,"start":"2026-10-15T01:02:23.280168+00:00","end":"2026-10-15T01:02:55.863596+00:00","wallS":32.582777332980186,"pgid":56478,"stdoutSHA256":"4ebecc3a3e4d9e9d8093da66f6480e1eeb6eeea6f90cc192bcca2b409cd60e24"},
+      {"label":"qa-recovery1-owner-observer","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/qa-recovery1-owner-observer.receipt.json","sha256":"4251a122b9842e50320ce97cbc91d8fb7555a8f5002505b2e4f519aa262e2d29","exit":0,"start":"2026-10-15T00:57:03.335562+00:00","end":"2026-10-15T01:03:09.572697+00:00","wallS":366.23074991599424,"pgid":80841,"stdoutSHA256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+    ],
+    "focusedFinal": {
+      "tests": 574,
+      "files": 3,
+      "privateD20Cases": 6
+    },
+    "review": {
+      "tests": 8017,
+      "files": 255,
+      "typecheck": 0,
+      "lint": 0,
+      "cycles": 0
+    },
+    "reviewPrepareHostLoad": {
+      "value": 18.28271484375,
+      "at": "2026-10-15T00:37:27.872Z",
+      "scope": "Actual review prepare start; not every command load"
+    },
+    "weighted300": {
+      "games": 300,
+      "steps": 101789,
+      "failures": 0,
+      "reportedWallS": 446.3,
+      "inclusiveS": 463.296399,
+      "included": [615,618,621,617],
+      "exercised": [108,141,41,136],
+      "exactKernelLockWait": "UNKNOWN",
+      "settlement": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/weighted-final-settlement.json",
+        "sha256": "5bf0a0499b5f9736a292cd7383f598871dc5526559a5445817f84feadbbdb55f"
+      }
+    },
+    "preflight": {
+      "unique": 80,
+      "pass": 36,
+      "ineligibleSkip": 44,
+      "fail": 0
+    },
+    "CF": "Not applicable: supported leaf composition only; no primitive implementation changed.",
+    "firstFocusedFailure": "2FAIL572PASS: own scenario read nonexistent effectStarted.changes; corrected public singular change. Repair574PASS, then final574PASS after actual Mass play+activation energy assertion. Original receipts retained."
+  },
+  "failureFamilies": {
+    "controllerHistory": "Mass own departure positive and no-departure/opponent-only negative, both actors/base+amplified.",
+    "physicalIdentity": "Vault exact physical source versus same-UUID decoy; repeated reduction only source and actual reduced payment, both actors.",
+    "costAndEffect": "Mass pays observed play cost plus activation1, Abandon and Foresee before Night; exact ethereal1/2 result.",
+    "cancelStaleReplay": "Human chooser/cost cancellation and restored pending/settled reload proved in QA. Existing627 primitive public contracts supply defensive stale/privacy/holder/rollback coverage; not duplicated.",
+    "runtimeFailure": "Initial QA wrong DOM attribute owner retained; bounded caller-only repair. No product failure or source repair inferred."
+  },
+  "QA": {
+    "frozenManifest": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/qa-frozen-manifest.json",
+      "sha256": "195f1c93a83ed629922132716f1f18fd9d4ea229da34d286409e1052f19f3e0a"
+    },
+    "checkpoint": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/qa-final-checkpoint.json",
+      "sha256": "caf68bee185e13ef6b67a0fdbe98e90c669b72ec348b2d38d646dbdd0a319ae7"
+    },
+    "acceptance": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/qa-acceptance-native-ack.json",
+      "sha256": "b3197c2b5ccf3db234865d349c7582adfd2a8b536dbea3de19a1deedd8b3ca47"
+    },
+    "sweep": {
+      "invocation": "sweep-mypPVT",
+      "requested": 80,
+      "pass": 36,
+      "skipIneligible": 44,
+      "fail": 0,
+      "originalLedger": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/sweep-original-ledger.jsonl",
+        "sha256": "e526cce111f89f58847ebfb64cc477f41421a2ecad05f4167df4f96cdac0bc45"
+      },
+      "noPerCellNativeJSONL": "Standard shared sweep does not request exportGameLog."
+    },
+    "judgedCounts": {
+      "actual": 17,
+      "pass": 16,
+      "retainedFail": 1,
+      "latestRequiredPass": 16,
+      "captures": 20
+    },
+    "reports": [
+      {"invocation":"run-YVobiL","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-YVobiL/judged-nullifier.result.json","sha256":"0e76c981117fc2b8d71fe71f7cbaac66058173b8976178138ad94878e6974468","ok":false,"nativeExports":[{"viewport":"desktop","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-YVobiL/judged-nullifier-desktop.jsonl","gameId":"mecufp","selectedBy":"url","rows":23,"reason":null,"sha256":"5229d22719869a2103f63a1eb886effa3e8b92759c32cbbf04891fa67347f7d3"}]},
+      {"invocation":"run-PuigK0","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-PuigK0/judged-nullifier.result.json","sha256":"e74aa41526198a34c156dba0dd514b115e222bebe84a348ff994ad5e2f57bfd3","ok":true,"nativeExports":[{"viewport":"desktop","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-PuigK0/judged-nullifier-desktop.jsonl","gameId":"vfdd3v","selectedBy":"url","rows":36,"reason":null,"sha256":"434768054e1a75495ef4017d79095d44cb539208a4cf916bb4b09520b201ecc4"},{"viewport":"mobile","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-PuigK0/judged-nullifier-mobile.jsonl","gameId":"k7c3ir","selectedBy":"url","rows":36,"reason":null,"sha256":"d2c6c44ccee8623ba2903d821d736e16dc2280762f20ac3df3d11a9025d7fdea"}]},
+      {"invocation":"run-r51dtM","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-r51dtM/judged-nullifier.result.json","sha256":"85052be0d73af331181fc77f1f2766bf37fed10ad1a77c471756792e491c4c37","ok":true,"nativeExports":[{"viewport":"desktop","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-r51dtM/judged-nullifier-desktop.jsonl","gameId":"htj96t","selectedBy":"url","rows":35,"reason":null,"sha256":"0bf966346f943042b21638fff8145a574af3699a198b72eae4f635b959e5cbb0"},{"viewport":"mobile","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-r51dtM/judged-nullifier-mobile.jsonl","gameId":"t34dpu","selectedBy":"url","rows":35,"reason":null,"sha256":"e3afe2f99ec99a0d0724b36e73a85e2e9aed01c416b37403a6d99105b43d668e"}]},
+      {"invocation":"run-ZsBaKp","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-ZsBaKp/judged-vaultbreaker.result.json","sha256":"427c0a993db67d592f11a43e7a5a6824293429d25aef8d45a2dfbe8db040b5bc","ok":true,"nativeExports":[{"viewport":"desktop","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-ZsBaKp/judged-vaultbreaker-desktop.jsonl","gameId":"m26ufp","selectedBy":"url","rows":63,"reason":null,"sha256":"6127515ccd5b1d83aabd060d7c1f6d55365a37171783c3761a443100399e1f14"},{"viewport":"mobile","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-ZsBaKp/judged-vaultbreaker-mobile.jsonl","gameId":"8tarmr","selectedBy":"url","rows":59,"reason":null,"sha256":"e052363793fa2f06d9cc85608e84fdb7868709ce91a5349d4b38c5fd01f68001"}]},
+      {"invocation":"run-vgL8nR","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-vgL8nR/judged-vaultbreaker.result.json","sha256":"e758871ea9170fbf1e034cf277857f04d5315684a4c1e19262d5680ef247b51a","ok":true,"nativeExports":[{"viewport":"desktop","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-vgL8nR/judged-vaultbreaker-desktop.jsonl","gameId":"sfhbky","selectedBy":"url","rows":51,"reason":null,"sha256":"80dd39551802876c6377d7316221d73fc4ebc09c021509755a293fcb29280193"},{"viewport":"mobile","path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.191/invocations/run-vgL8nR/judged-vaultbreaker-mobile.jsonl","gameId":"ca4tez","selectedBy":"url","rows":51,"reason":null,"sha256":"9db7c65ed6cd26eefc85f53f91d07e08a56c3f0bdf22f09c8d966bfe3d26c2f7"}]}
+    ],
+    "callers": {
+      "initial": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/judged-nullifier.before-justiciar1.mjs",
+        "sha256": "949da5167357c336f8464015a5f8fb72344348f841f2ae4aeb95c2bca386a83f"
+      },
+      "corrected": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/judged-nullifier.mjs",
+        "sha256": "5b2496a55663ea80cdc81a2484360ed448fe2a96c8d3814e9144c2eed601bfc4"
+      },
+      "vault": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/judged-vaultbreaker.mjs",
+        "sha256": "69e30bd6f4a8c94af2b744f1e0b43f091a3d17f37151020b2c1135a4410d9dee"
+      },
+      "repair": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/justiciar1-caller-repair-receipt.json",
+        "sha256": "53a39d365fe532d1d319be9cc95bed1e7c41635927b1feb26f51f32add501834"
+      }
+    },
+    "ledger": {
+      "path": "/Users/dthurn/dreamtides_web/.worktrees/cards79-191-root/docs/plan/evidence/qa-ledger/hv-umm2.191.jsonl",
+      "sha256": "bc910ebb5fa3a5dc368e7e180202f5beaf5ee06fd26abe5239cf5cace272b8e8",
+      "rows": 97,
+      "original80BytesPreserved": true
+    },
+    "D21": [
+      {"uuid":"21965e95-0c8c-470c-a1e1-06d7b87a8d00","firstByte":107,"sampled":false},
+      {"uuid":"cd4d689d-1442-4a19-8e6a-182b425d066d","firstByte":129,"sampled":false},
+      {"uuid":"c97b0a5b-64d0-480f-8db7-3fde93738d86","firstByte":115,"sampled":false},
+      {"uuid":"6da831c8-6fda-4078-9f2b-873db2416aad","firstByte":18,"sampled":true}
+    ],
+    "rootReviews": [
+      {"path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/parent-nullifier-visual-state-review.json","sha256":"9faddc465a78a8edd2bc774f31a1f74299280e2adfae34fd0dc788f846b1bbe7"},
+      {"path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/parent-vaultbreaker-visual-state-review.json","sha256":"21d48961c6fb5335c26f99bbfcf77e84bff8693e31ab5b522cb2f49d4f1db495"},
+      {"path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/parent-vault-review-observation-correction.json","sha256":"53334ad2237482bf222c10eb860389dcb0636300448fdb8256f463e2461d52cf"}
+    ],
+    "qualifications": ["D21 Nullifier required; Vault extra first-consumer workflow judged both actors/desktop/mobile. No new prompt/status/visual forms.","Eight successful last-step-per-viewport native exports plus original failed export; earlier Nullifier payer-scene reads are carried, not native extra exports. Standard sweep exports no per-cell JSONL.","Scripted enemy workflow proves declared actions, not AI-policy choices.","Original failed DOM attributes were not captured; repaired caller observed child:null/wrapper:true. No product source changed.","Root first read-only audit asserted against emptied postReload probe.events; corrected to paid/beforeReload carried events and persisted engine.revealed/action. No QA rerun."]
+  },
+  "resources": {
+    "liveSessions": [
+      {"pid":96157,"providerState":"active","mcpExecutionCompleted":null,"mcpSessionId":"8361dd01-a49c-4462-bb12-824399b75698","mcpUrl":"http://localhost:8931/mcp","mcpProtocolVersion":"2025-11-25"},
+      {"pid":72066,"providerState":"active","mcpExecutionCompleted":null,"mcpSessionId":"dfdc10f6-8b25-4055-8bd2-f0abc8435449","mcpUrl":"http://localhost:8931/mcp","mcpProtocolVersion":"2025-11-25"},
+      {"pid":80862,"providerState":"active","mcpExecutionCompleted":null,"mcpSessionId":"d80abeb2-691a-44e1-a99a-01e0025c16d5","mcpUrl":"http://localhost:8931/mcp","mcpProtocolVersion":"2025-11-25"},
+      {"pid":82224,"providerState":"active","mcpExecutionCompleted":null,"mcpSessionId":"91ee9ec1-25fc-4e54-acb9-784f8a6a8250","mcpUrl":"http://localhost:8931/mcp","mcpProtocolVersion":"2025-11-25"},
+      {"pid":52653,"providerState":"execution-completed","mcpExecutionCompleted":true,"mcpSessionId":"dd61e8d8-6cbc-4acb-bf45-2c861e408dc5","mcpUrl":"http://localhost:8931/mcp","mcpProtocolVersion":"2025-11-25"},
+      {"pid":56478,"providerState":"active","mcpExecutionCompleted":null,"mcpSessionId":"0fb5d8a4-5ebe-4562-b8ee-519931f287de","mcpUrl":"http://localhost:8931/mcp","mcpProtocolVersion":"2025-11-25"}
+    ],
+    "groupsAbsent": [52653,52738,56478,56558,72066,72103,80841,80862,80892,82224,82255,96101,96157,96196],
+    "rawIndex": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/qa-live-owners.jsonl",
+      "sha256": "f15d0d4a625108d3de234271f05941a873f1a90ae7ee0651a751234bc867d481"
+    },
+    "audit": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/parent-qa-resource-audit.json",
+      "sha256": "372479d7069282e38205dc2a52566166ffe3a93da202607e7107c6c8e4b3afe7"
+    },
+    "observers": [
+      {"path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/qa-owner-observer.receipt.json","sha256":"67e8e339f6b9b21aa76d4bc2afaffdbfead8bd0ac645c3ca0f8abb738b7d8c2b"},
+      {"path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards79-191/qa-recovery1-owner-observer.receipt.json","sha256":"4251a122b9842e50320ce97cbc91d8fb7555a8f5002505b2e4f519aa262e2d29"}
+    ],
+    "closure": "Six live native session identities retained. Only Vaultplayer last image includes execution-completed:true; other five active/null before close/clear. Terminal receipts, normal runScenario/screenshotRuntime RPC close implementation, owner/server clear and group absence prove settlement; no HTTP DELETE claim. All collectors collected; foreign resources untouched."
+  },
+  "timingQualification": "Inclusive original dispatch includes setup/research/coordination/checks/failures/waits/QA/cleanup/evidence. Pre-Git endpoint is measured cutoff only, actual Git end external. No individual friction cause evidenced above10min; no tag inferred from total elapsed."
+}

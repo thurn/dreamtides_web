@@ -1,3 +1,6 @@
+import { abandonCost, activated, revealSourceCost, self } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { changeCardCost } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 396,
   art: { x: 0, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([abandonCost(), revealSourceCost()], changeCardCost(self(), { reduce: 1 }), { zone: "hand" })],
+  verifiedText: expectedVerifiedText("Abandon a character, reveal this card from your hand: Reduce the cost of this card by 1●."),
 });

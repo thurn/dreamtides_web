@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.191",
+  "phase": 5,
+  "implementMin": 42.68642095,
+  "implementWindow": {
+    "start": "2026-10-15T00:29:25.204929+00:00",
+    "end": "2026-10-15T01:12:06.390186+00:00"
+  },
+  "localValidationS": {
+    "focused": 7.304483833024278,
+    "focused-repair": 5.735697333002463,
+    "focused-final": 5.7075580839882605,
+    "entities-after": 1.0342485830187798,
+    "review": 71.45041137502994,
+    "knip": 5.5643313330365345,
+    "weighted300": 463.2963992499863,
+    "preflight": 2.2082643750472926,
+    "sweep": 327.8410224579857,
+    "judged-nullifier-player": 9.580143041966949,
+    "judged-nullifier-player-recovery1": 38.78833608399145,
+    "judged-nullifier-enemy": 71.04055095801596,
+    "judged-vaultbreaker-player": 44.70541299995966,
+    "judged-vaultbreaker-enemy": 32.582777332980186
+  },
+  "hostLoad": 18.28271484375,
+  "testDelta": {
+    "files": 1,
+    "lines": 99,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "friction": []
+}
