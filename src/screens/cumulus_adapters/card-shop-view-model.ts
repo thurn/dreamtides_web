@@ -1,4 +1,4 @@
-import { shopRestockQuote } from "../../rules/journey/journey-shop";
+import { shopCardPurchaseQuote, shopRestockQuote } from "../../rules/journey/journey-shop";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 // Pure view-model builder for Tobias Tanglefur's Cumulus Card Shop.
 
@@ -64,6 +64,8 @@ export function buildCardShopOffers(
   cardDatabase: ReadonlyMap<number, CardData>,
   essence: number,
   priceModifiers: ShopPriceModifiers,
+  liveQuote?: { readonly journey: Pick<JourneyState, "dreamsigns" | "shopModifiers">; readonly site: SiteState;
+    readonly registry?: Pick<JourneyModifierRegistry, "lookup"> },
 ): CardShopOfferView[] {
   const offers: CardShopOfferView[] = [];
   runtime.slots.forEach((slot, slotIndex) => {
@@ -78,7 +80,8 @@ export function buildCardShopOffers(
             card,
             slot.transfiguration,
           );
-    const price = effectivePrice(slot, priceModifiers);
+    const price = liveQuote === undefined ? effectivePrice(slot, priceModifiers) :
+      shopCardPurchaseQuote(liveQuote.journey, runtime, liveQuote.site, slot, liveQuote.registry ?? journeyModifierRegistry).pricePaid;
     offers.push({
       entryId: parseDeckEntryId(`shop-slot-${String(slotIndex)}-${card.id}`),
       slotIndex,
@@ -173,6 +176,7 @@ export function buildCardShopSiteView(params: {
   economyData: EconomyData;
   transfigurationData: TransfigurationData;
   sitesData: SitesData;
+  registry?: Pick<JourneyModifierRegistry, "lookup">;
 }): CardShopSiteView {
   const priceModifiers: ShopPriceModifiers = {
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
@@ -200,6 +204,7 @@ export function buildCardShopSiteView(params: {
       params.cardDatabase,
       params.state.essence,
       priceModifiers,
+      { journey: params.state, site: params.site, registry: params.registry },
     ),
     restock: buildCardShopRestock(
       params.economyData.shop.reroll,
@@ -207,6 +212,7 @@ export function buildCardShopSiteView(params: {
       params.site,
       params.state.essence,
       params.state,
+      params.registry,
     ),
     freePurchaseStatus: buildShopFreePurchaseStatus(
       params.runtime,

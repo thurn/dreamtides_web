@@ -1,4 +1,4 @@
-import { shopRestockQuote, transfigureShopPurchase } from "./journey-shop";
+import { shopCardPurchaseQuote, shopRestockQuote, transfigureShopPurchase } from "./journey-shop";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "./modifier-registry";
 import type { JourneyPurgeTransition } from "../../types/journey";
 // Pure shop / augury / modifier reducer cases.
@@ -25,7 +25,6 @@ import type { JourneyPurgeTransition } from "../../types/journey";
 import type { EventContext } from "../../eventlog/types";
 import { isNightmareCardId } from "../../data/nightmare";
 import { getDeckContentProvider } from "./deck";
-import { effectivePrice } from "../../shop/shop-generator";
 import type {
   BattleModifier,
   DeckEntry,
@@ -218,14 +217,8 @@ export function buyShopSlot(
     return null;
   }
   const freeNextShopSource = runtime.freePurchaseSource;
-  const priceBeforeFree = effectivePrice(slot, {
-    essenceDiscountPercent: journey.shopModifiers.essenceDiscountPercent,
-  });
-  const pricePaid = effectivePrice(slot, {
-    essenceDiscountPercent: journey.shopModifiers.essenceDiscountPercent,
-    freePurchase:
-      freeNextShopSource !== undefined || freePurchaseModifier !== undefined,
-  });
+  const quote = shopCardPurchaseQuote(journey, runtime, site, slot, modifiers);
+  const { priceBeforeFree, pricePaid } = quote;
   if (pricePaid > journey.essence) return null;
 
   let next: JourneyState;
@@ -238,7 +231,7 @@ export function buyShopSlot(
       transfiguration: slot.transfiguration ?? null,
       isBane: false,
     };
-    const prepared = transfigureShopPurchase(journey, site, entry, modifiers, ctx.rng);
+    const prepared = transfigureShopPurchase(journey, site, entry, modifiers, ctx.rng, runtime);
     if (prepared === null) return null;
     item = {
       kind: "card",
@@ -332,6 +325,7 @@ export function buyShopSlot(
         item,
         priceBeforeFree,
         pricePaid,
+        ...(quote.discounts.length === 0 ? {} : { firstCardPurchaseDiscounts: quote.discounts }),
         essenceBefore: journey.essence,
         essenceAfter: next.essence,
         ...(freeNextShopSource === undefined ? {} : { freeNextShopSource }),

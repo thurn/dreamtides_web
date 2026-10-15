@@ -316,7 +316,8 @@ export interface JourneyDraftEffect {
 export type JourneyShopEffect =
   | { readonly kind: "additionalOptions"; readonly amount: number }
   | { readonly kind: "firstRestockFree" }
-  | { readonly kind: "purchasedCardTransfiguration" };
+  | { readonly kind: "purchasedCardTransfiguration" }
+  | { readonly kind: "firstCardPurchase"; readonly discountPercent: number };
 
 /** Diagnostic result of a successful purchased-card form assignment. */
 export interface JourneyShopPurchaseTransfiguration {
@@ -523,6 +524,12 @@ export interface ShopPurchaseResult {
         readonly dreamsignId: DreamsignId;
         readonly replacedDreamsignId?: DreamsignId;
       };
+  /** Physical held sources contributing to this first successful card quote. */
+  readonly firstCardPurchaseDiscounts?: readonly {
+    readonly dreamsignId: DreamsignId;
+    readonly heldIndex: number;
+    readonly discountPercent: number;
+  }[];
   /** Effective price after ordinary discounts but before a free modifier. */
   readonly priceBeforeFree: number;
   /** Exact Essence charged by this purchase. */

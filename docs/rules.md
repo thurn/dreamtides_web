@@ -3430,6 +3430,22 @@ an original deck entry. The validated purchase retains its ordinary price,
 free-purchase charges and physical purchase receipt.
 
 
+A first-card-purchase source applies to the first successful card purchase in
+each Card Shop visit, including an enhanced Card Shop. The visit's persistent
+purchase history determines that ordinal. A successful free purchase, a card
+already carrying a form, and a purchase whose card gain is prevented each
+consume it. Rejected attempts and Dreamsign purchases do not. Restocking,
+refilling a shelf, losing a source, or acquiring a source do not reset that
+history; a different site has its own history. Each currently held physical
+source adds its printed discount percentage to the ordinary additive discounts,
+with the ordinary price clamp and rounding. Free-purchase effects apply last
+and successful purchases consume their queued free charge. Sources granting a
+form on all card purchases and sources granting one on the first purchase are
+considered in held order; the first applicable source supplies one initial
+form. Every first-card source contributes its discount independently of which
+source supplies that form.
+
+
 ## Journey Duplication Effects
 
 Duplicating a journey card creates a fresh physical deck entry with that selected

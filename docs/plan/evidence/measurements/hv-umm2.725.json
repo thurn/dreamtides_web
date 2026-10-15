@@ -1,0 +1,245 @@
+{
+  "bead": "hv-umm2.725",
+  "base": "a0b763956d914cfa72ae1c6281a943d671c20a2d",
+  "dispatch": {
+    "at": "2026-10-15T07:04:39.223000+00:00",
+    "journalOrdinal": 43926,
+    "callId": "call_8fb737259d684870a1efc68ffa6cdd4c",
+    "samplingStart": "UNKNOWN"
+  },
+  "claimACK": "2026-10-15T07:03:06.912696+00:00",
+  "timingCutoff": {
+    "at": "2026-10-15T07:16:49.176965+00:00",
+    "qualification": "Precommit evidence cutoff, refreshed after parent packaging ACK before one normal automatic-date commit. Exact Git endpoint is retained externally; no postcommit tracked rewrite."
+  },
+  "windowPolicy": "Original helper dispatch through all research, edits, corrections, checks, evidence, parent audit and normal Git; elapsed wall time, no speed claim. Claim/setup recorded separately.",
+  "checks": {
+    "focused-1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-first-card-purchase.test.ts",
+        "src/screens/cumulus_adapters/card-shop-first-card-view-model.test.ts",
+        "src/rules/journey/journey-shop.test.ts",
+        "src/screens/cumulus_adapters/journey-shop-quotes.test.ts",
+        "src/screens/cumulus_adapters/shop-view-model.test.ts"
+      ],
+      "start": "2026-10-15T07:09:08.604533+00:00",
+      "end": "2026-10-15T07:09:20.265017+00:00",
+      "wallS": 11.660268375009764,
+      "exit": 1,
+      "pid": 71824,
+      "pgid": 71824,
+      "groupAbsent": true,
+      "hostLoad": "{ 18.54 14.00 11.92 }"
+    },
+    "review-1": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T07:09:48.042495+00:00",
+      "end": "2026-10-15T07:10:29.227055+00:00",
+      "wallS": 41.18409616698045,
+      "exit": 2,
+      "pid": 81918,
+      "pgid": 81918,
+      "groupAbsent": true,
+      "hostLoad": "{ 14.16 13.45 11.81 }"
+    },
+    "schema-1": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T07:13:44.381645+00:00",
+      "end": "2026-10-15T07:13:44.477976+00:00",
+      "wallS": 0.0962038750294596,
+      "exit": 0,
+      "pid": 31175,
+      "pgid": 31175,
+      "groupAbsent": true,
+      "hostLoad": "{ 15.62 13.68 12.23 }"
+    },
+    "typecheck-1": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-10-15T07:11:51.692989+00:00",
+      "end": "2026-10-15T07:11:57.314181+00:00",
+      "wallS": 5.621019083017018,
+      "exit": 0,
+      "pid": 90727,
+      "pgid": 90727,
+      "groupAbsent": true,
+      "hostLoad": "{ 12.23 12.94 11.82 }"
+    },
+    "knip-1": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T07:12:09.812061+00:00",
+      "end": "2026-10-15T07:12:17.126658+00:00",
+      "wallS": 7.314419625035953,
+      "exit": 0,
+      "pid": 91974,
+      "pgid": 91974,
+      "groupAbsent": true,
+      "hostLoad": "{ 13.49 13.17 11.92 }"
+    },
+    "whitespace-1": {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "start": "2026-10-15T07:13:44.541580+00:00",
+      "end": "2026-10-15T07:13:44.556512+00:00",
+      "wallS": 0.014825874997768551,
+      "exit": 0,
+      "pid": 31203,
+      "pgid": 31203,
+      "groupAbsent": true,
+      "hostLoad": "{ 15.62 13.68 12.23 }"
+    },
+    "review-3": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T07:12:08.667201+00:00",
+      "end": "2026-10-15T07:12:50.282189+00:00",
+      "wallS": 41.614499041985255,
+      "exit": 0,
+      "pid": 91843,
+      "pgid": 91843,
+      "groupAbsent": true,
+      "hostLoad": "{ 13.49 13.17 11.92 }"
+    },
+    "focused-2": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-first-card-purchase.test.ts",
+        "src/screens/cumulus_adapters/card-shop-first-card-view-model.test.ts",
+        "src/rules/journey/journey-shop.test.ts",
+        "src/screens/cumulus_adapters/journey-shop-quotes.test.ts",
+        "src/screens/cumulus_adapters/shop-view-model.test.ts"
+      ],
+      "start": "2026-10-15T07:09:32.753112+00:00",
+      "end": "2026-10-15T07:09:39.223981+00:00",
+      "wallS": 6.470681166974828,
+      "exit": 0,
+      "pid": 80541,
+      "pgid": 80541,
+      "groupAbsent": true,
+      "hostLoad": "{ 15.70 13.70 11.87 }"
+    },
+    "review-2": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T07:10:49.931889+00:00",
+      "end": "2026-10-15T07:11:29.326242+00:00",
+      "wallS": 39.39389166701585,
+      "exit": 2,
+      "pid": 86524,
+      "pgid": 86524,
+      "groupAbsent": true,
+      "hostLoad": "{ 10.40 12.58 11.60 }"
+    }
+  },
+  "hostLoadSamples": {
+    "focused-1": "{ 18.54 14.00 11.92 }",
+    "review-1": "{ 14.16 13.45 11.81 }",
+    "schema-1": "{ 15.62 13.68 12.23 }",
+    "typecheck-1": "{ 12.23 12.94 11.82 }",
+    "knip-1": "{ 13.49 13.17 11.92 }",
+    "whitespace-1": "{ 15.62 13.68 12.23 }",
+    "review-3": "{ 13.49 13.17 11.92 }",
+    "focused-2": "{ 15.70 13.70 11.87 }",
+    "review-2": "{ 10.40 12.58 11.60 }"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-3 starting host load"
+      }
+    }
+  },
+  "functionalHashes": {
+    "docs/rules.md": "e7fe2f4bcb9b129b0c1be692bd6cc7c41a650ab7edc73edb9a80eeb66710a6a2",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.725-1.md": "648ae092bbf1e092bad27cae013a053731f15173560e48a44cc57488f7286215",
+    "src/types/journey.ts": "536434803b33eccbec2a13b9544187fd4adba0aa5734aeca99e881728369f822",
+    "src/rules/journey/journey-shop.ts": "98e9ff556e8703e7fdaccd60615cd725982dfc37a0b96f265fe25b0197e23d90",
+    "src/rules/journey/shop.ts": "c1f306d8d61ceffd6046a6999fe5658098db2f1cac90bfc61a0bb55b3e5bd3b1",
+    "src/screens/cumulus_adapters/card-shop-view-model.ts": "16cc15546a88603097c264c119466436df752b86b98c7838434282ee4bda44d5",
+    "src/rules/journey/journey-first-card-purchase.test.ts": "e978f68a13a1f620bd87204a9e61c6b84609f10dd706638d86e0610c77f1d393",
+    "src/screens/cumulus_adapters/card-shop-first-card-view-model.test.ts": "6b90aaf4a21bd4f8212eeada83079aeb6395e6952935234043aaa76e07fcc54f"
+  },
+  "sourceGuard": {
+    "initialTracked": 5503,
+    "changedInitialPaths": [
+      "docs/rules.md",
+      "src/rules/journey/journey-shop.ts",
+      "src/rules/journey/shop.ts",
+      "src/screens/cumulus_adapters/card-shop-view-model.ts",
+      "src/types/journey.ts"
+    ],
+    "allOtherInitialPathsByteExact": 5498,
+    "readOnlyBodiesByteExact": {
+      "shopStockCounts": "e129981bace974262ba0af0d35b65000f8d6fb04305b4bc4ba34b583da9d3518",
+      "shopRestockQuote": "93fcd2fbbdeb66fede0786996502e224cf99fa24b01f517a45180381c74328f3",
+      "shop.ts from REROLL_SHOP through EOF": "afd6371476eb2949c28304e4bf2a32c43d8e7118dedd9df793d677ea1e0ff1dd",
+      "resolveCardShopGuide": "57cc641198a976b4eeed0d9226a2523af2ba00ae084d1464ee5bfa48f11c2635",
+      "buildCardShopGuideView": "93e2cf127617915e19cdd19cd1e382a4f444e40fa51ac334b871d73a92737847",
+      "buildCardShopRestock": "2ab3379fe29b73fa75cb1e28342e555a4e341aeb9771062cd48278d9fbf1a772",
+      "buildCardShopDebugState": "f07a5dd2377a0c879fc9463e65298d27dadd3d63bfe01adea2fa919d56a77fc7",
+      "buildCardShopTransfiguredOfferLog": "d3dc665cc74273c65865414f97e04d27cb206c377858aed5065efe7dfd2583d7"
+    }
+  },
+  "testDelta": {
+    "files": 2,
+    "lines": 283,
+    "jsdomFiles": 0
+  },
+  "configuredTestEntrypointDelta": 2,
+  "qa": {
+    "browser": "Not run: bounded capability has no enabled production catalog source; original hv-umm2.273 retains all actual four-UUID P8 site QA, weighted-recipe applicability, ledger, coverage and final acceptance. Existing screen components, styling, copy and navigation are unchanged.",
+    "heavy": "No local full/fuzz command: no engine, test infrastructure, repository configuration or cross-cutting architecture edit."
+  },
+  "failuresAndCorrections": [
+    "focused-1: fixture expected unused all-purchase form source to log; corrected expectation to selected-source contract, no production change.",
+    "review-1: new-test readonly assignment, intervening record shape, and Array.at typing; immutable fixture construction and supported contracts used.",
+    "review-2: remaining readonly parent property assignments replaced by immutable whole fixture construction; dedicated typecheck passed before review-3."
+  ],
+  "failurePaths": {
+    "errorMidStep": "rolls back provider failure and a late hook error with payment, charges, receipts and source logs",
+    "reloadRestart": "replays exactly through every serialized successful receipt boundary",
+    "partialWrite": "same late-hook test asserts whole prior state and absent public log records; fold is synchronous, no new IO or asynchronous intermediate persistence",
+    "invalidStaleCancel": "leaves the ordinal and resources intact for poor, malformed, stale, cancelled and partner-conflicting attempts; cancellation before submission emits no event and no state transition",
+    "concurrentActors": "accepts one concurrent partner purchase from a shared head"
+  },
+  "resources": {
+    "processReceipts": "/tmp/725-validation/*.json; every child actually waited and own PG absence checked",
+    "browserServerProviderProcessesStarted": 0,
+    "testProviderCleanup": "afterEach clearGameProviders",
+    "parentOwns": "fresh read-only Codex core review and native Tollgate delivery"
+  },
+  "productionUUIDsAuthored": [],
+  "falloutFiles": [],
+  "pending": "Parent source packaging audit, normal commit, fresh Codex core review, native certification/promotion/cleanup.",
+  "packagingCorrection": "Parent requested no no-issue pre-existing file; own newly staged document removed. Initial git rm refused staged-new removal; exact git rm -f removed only that new path. Functional hashes unchanged."
+}

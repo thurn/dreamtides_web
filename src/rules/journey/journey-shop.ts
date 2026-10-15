@@ -1,7 +1,8 @@
+import { effectivePrice } from "../../shop/shop-generator";
 import { rerollCost } from "../../shop/shop-pricing";
 import type { EconomyData } from "../../types/economy-data";
 import type { DreamsignId } from "../../types/identifiers";
-import type { DeckEntry, JourneyShopEffect, JourneyShopPurchaseTransfiguration, JourneyState, ShopSiteRuntime, SiteState } from "../../types/journey";
+import type { DeckEntry, JourneyShopEffect, JourneyShopPurchaseTransfiguration, JourneyState, ShopSiteRuntime, SiteState, RuntimeShopSlot, ShopPurchaseResult } from "../../types/journey";
 import { journeyTransfigurationCard } from "./journey-transfiguration";
 import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
 
@@ -31,12 +32,35 @@ export function shopRestockQuote(journey: Pick<JourneyState, "dreamsigns" | "sho
   return { useFreeReroll, price: useFreeReroll || firstFree ? 0 : rerollCost(config, runtime.rerollCount, site.isEnhanced) };
 }
 
+/** Live pricing uses successful physical card receipts, independently of shelf changes. */
+export function shopCardPurchaseQuote(journey: Pick<JourneyState, "dreamsigns" | "shopModifiers">,
+  runtime: ShopSiteRuntime, site: SiteState, slot: RuntimeShopSlot, registry: Lookup) {
+  const firstCardPurchase = site.type === "Shop" && slot.itemType === "card" &&
+    !runtime.purchaseHistory.some((receipt) => receipt.item.kind === "card");
+  const discounts: NonNullable<ShopPurchaseResult["firstCardPurchaseDiscounts"]>[number][] = [];
+  if (firstCardPurchase) journey.dreamsigns.forEach((sign, heldIndex) => {
+    const effect = registry.lookup(sign.id)?.journeyShop;
+    if (effect?.kind === "firstCardPurchase") discounts.push({ dreamsignId: sign.id, heldIndex, discountPercent: effect.discountPercent });
+  });
+  const essenceDiscountPercent = Math.max(0, journey.shopModifiers.essenceDiscountPercent) +
+    discounts.reduce((sum, source) => sum + source.discountPercent, 0);
+  return { firstCardPurchase, discounts,
+    priceBeforeFree: effectivePrice(slot, { essenceDiscountPercent }),
+    pricePaid: effectivePrice(slot, { essenceDiscountPercent,
+      freePurchase: runtime.freePurchaseSource !== undefined || (journey.shopModifiers.freePurchaseModifiers?.length ?? 0) > 0 }),
+  };
+}
+
 /** Prepare the exact physical purchase before any post-domain gain observers. */
 export function transfigureShopPurchase(journey: Pick<JourneyState, "dreamsigns">, site: SiteState,
-  entry: DeckEntry, registry: Lookup, rng: (index: number) => number):
+  entry: DeckEntry, registry: Lookup, rng: (index: number) => number, runtime?: ShopSiteRuntime):
   { readonly entry: DeckEntry; readonly application?: JourneyShopPurchaseTransfiguration } | null {
   if (site.type !== "Shop" || entry.transfiguration !== null) return { entry };
-  const heldIndex = journey.dreamsigns.findIndex((sign) => registry.lookup(sign.id)?.journeyShop?.kind === "purchasedCardTransfiguration");
+  const firstCardPurchase = runtime !== undefined && !runtime.purchaseHistory.some((receipt) => receipt.item.kind === "card");
+  const heldIndex = journey.dreamsigns.findIndex((sign) => {
+    const kind = registry.lookup(sign.id)?.journeyShop?.kind;
+    return kind === "purchasedCardTransfiguration" || kind === "firstCardPurchase" && firstCardPurchase;
+  });
   if (heldIndex < 0) return { entry };
   const card = journeyTransfigurationCard(entry);
   if (card === null) return null;
@@ -53,6 +77,7 @@ export function transfigureShopPurchase(journey: Pick<JourneyState, "dreamsigns"
 /** Register one bounded clause and report only successful matching operations. */
 export function journeyShop(dreamsignId: DreamsignId, descriptor: JourneyShopEffect): JourneyModifierDefinition {
   if (descriptor.kind !== "firstRestockFree" && descriptor.kind !== "purchasedCardTransfiguration" &&
+    !(descriptor.kind === "firstCardPurchase" && Number.isFinite(descriptor.discountPercent) && descriptor.discountPercent >= 0 && descriptor.discountPercent <= 100) &&
     (descriptor.kind !== "additionalOptions" || !Number.isSafeInteger(descriptor.amount) || descriptor.amount < 1)) {
     throw new RangeError("Invalid journeyShop catalog clause.");
   }
@@ -62,6 +87,19 @@ export function journeyShop(dreamsignId: DreamsignId, descriptor: JourneyShopEff
       if (siteId === null) return null;
       const old = before.siteRuntime[siteId], runtime = journey.siteRuntime[siteId];
       if (runtime?.kind !== "shop") return null;
+      if (effect.kind === "firstCardPurchase") {
+        if (eventType !== "BUY_SHOP_SLOT" || old?.kind !== "shop" || runtime.purchaseHistory.length !== old.purchaseHistory.length + 1) return null;
+        const receipt = runtime.purchaseHistory[runtime.purchaseHistory.length - 1];
+        const discount = receipt.firstCardPurchaseDiscounts?.find((source) => source.dreamsignId === dreamsignId && source.heldIndex === heldIndex);
+        if (receipt.eventSeq !== seq || receipt.item.kind !== "card" || discount === undefined) return null;
+        const slot = old.slots[receipt.slotIndex];
+        const application = receipt.item.journeyShopTransfiguration;
+        return { journey,
+          before: { basePrice: slot.basePrice, slotDiscountPercent: slot.discountPercent,
+            essenceDiscountPercent: before.shopModifiers.essenceDiscountPercent, discountPercent: discount.discountPercent },
+          after: { priceBeforeFree: receipt.priceBeforeFree, pricePaid: receipt.pricePaid, essence: receipt.essenceAfter },
+          target: { siteIds: [siteId], ...(application?.dreamsignId === dreamsignId && application.heldIndex === heldIndex ? { transfigurations: [application] } : {}) } };
+      }
       if (effect.kind === "purchasedCardTransfiguration") {
         if (eventType !== "BUY_SHOP_SLOT" || old?.kind !== "shop" || runtime.purchaseHistory.length !== old.purchaseHistory.length + 1) return null;
         const receipt = runtime.purchaseHistory[runtime.purchaseHistory.length - 1];
