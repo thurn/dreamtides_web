@@ -1,6 +1,11 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import type { JourneyDuplicationEffect } from "../../types/journey";
 import { dreamsign } from "../define";
 
+export const journeyDuplicationEffect = { kind: "duplicationSiteCopies", copies: 4 } as const satisfies JourneyDuplicationEffect;
+
 export default dreamsign({
+  journeyDuplication: journeyDuplicationEffect,
   id: "da7e4b45-9106-4116-bc1c-3aec8885396b",
   name: "Spiral Shell",
   imageName: "shell 2.png",
@@ -10,5 +15,6 @@ export default dreamsign({
   rarity: "Common",
   tideIds: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
   tags: ["J16", "Tag OK"],
-  pending: true,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("At duplication sites, you always gain 4 copies of the selected card."),
 });

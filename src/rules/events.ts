@@ -130,6 +130,7 @@ export interface EventPayloads {
     source?: unknown;
   };
   REMOVE_DECK_ENTRY: { entryId: DeckEntryId };
+  RESOLVE_JOURNEY_DUPLICATION: { siteId: SiteId; dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; earnedSeq: number; entryId: DeckEntryId | null };
   RESOLVE_JOURNEY_TRANSFIGURATION: { siteId: SiteId; dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; entryIds: DeckEntryId[] };
   RESOLVE_AFTER_BATTLE_DREAMSIGN: { siteId: SiteId; dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; earnedSeq: number; offeredDreamsignId: DreamsignId | null; purgeIndex?: number };
   RESOLVE_DREAMSIGN_COPY: { sourceDreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; permissionSeq: number; targetHeldIndex: number; expectedTargetDreamsignId: DreamsignId };
@@ -402,6 +403,7 @@ const EVENT_INTENT_CLASSES = {
   DISMISS_STARTING_DECK_POPUP: "gameplay",
   ADD_CARD: "gameplay",
   REMOVE_DECK_ENTRY: "gameplay",
+  RESOLVE_JOURNEY_DUPLICATION: "gameplay",
   RESOLVE_JOURNEY_TRANSFIGURATION: "gameplay",
   RESOLVE_AFTER_BATTLE_DREAMSIGN: "gameplay",
   RESOLVE_DREAMSIGN_COPY: "gameplay",
@@ -538,6 +540,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   DISMISS_STARTING_DECK_POPUP: true,
   ADD_CARD: true,
   REMOVE_DECK_ENTRY: true,
+  RESOLVE_JOURNEY_DUPLICATION: true,
   RESOLVE_JOURNEY_TRANSFIGURATION: true,
   RESOLVE_AFTER_BATTLE_DREAMSIGN: true,
   RESOLVE_DREAMSIGN_COPY: true,

@@ -1,6 +1,11 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import type { JourneyDuplicationEffect } from "../../types/journey";
 import { dreamsign } from "../define";
 
+export const journeyDuplicationEffect = { kind: "firstCardPurchaseDuplication" } as const satisfies JourneyDuplicationEffect;
+
 export default dreamsign({
+  journeyDuplication: journeyDuplicationEffect,
   id: "1cf06f9b-d698-434b-8e36-8a47206f4c0c",
   name: "Cracked Mirror",
   imageName: "mirror.png",
@@ -11,5 +16,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
   tags: ["J15", "Tag OK"],
-  pending: true,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("The first card you purchase from each shop site is duplicated."),
 });

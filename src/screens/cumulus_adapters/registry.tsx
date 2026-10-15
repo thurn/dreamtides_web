@@ -1,3 +1,4 @@
+import { JourneyDuplicationScreenAdapter } from "./JourneyDuplicationScreenAdapter";
 import { JourneyDreamsignScreenAdapter } from "./JourneyDreamsignScreenAdapter";
 // The exhaustive production registry. Each screen entry renders an adapter
 // outside `src/cumulus/` that owns journey state and supplies a pure Cumulus
@@ -37,6 +38,8 @@ export function screenFor(screen: NonSiteScreen): ReactNode {
   switch (screen.type) {
     case "journeyDreamsign":
       return <JourneyDreamsignScreenAdapter />;
+    case "journeyDuplication":
+      return <JourneyDuplicationScreenAdapter />;
     case "journeyTransfiguration":
       return <JourneyTransfigurationScreenAdapter />;
     case "journeyPurge":

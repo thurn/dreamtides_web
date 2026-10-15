@@ -1,3 +1,4 @@
+import { validJourneyDuplicationScreen } from "./journey-duplication";
 import type { ReducerLogRecord } from "../../eventlog/types";
 import { parseBattleId, dreamsignIdFromUnknown, siteIdFromUnknown, type DreamsignId, type SiteId } from "../../types/identifiers";
 import type { AfterBattleJourneyChoice, JourneyDreamsignCopyChoice, JourneyDreamsignGain, JourneyOnGainEffect, JourneyState, JourneySuspendedBattle, JourneyTransfigurationOccurrence, Screen } from "../../types/journey";
@@ -92,6 +93,8 @@ export function validJourneyDreamsignScreen(screen: unknown, journey: JourneySta
     if (current.kind !== "dreamsign") return false;
   } else if (continuation.type === "journeyPurge") {
     if (!validJourneyPurgeScreen(continuation, journey, registry)) return false;
+  } else if (continuation.type === "journeyDuplication") {
+    if (!validJourneyDuplicationScreen(continuation, journey, registry)) return false;
   } else if (continuation.type === "journeyTransfiguration") {
     if (!validJourneyTransfigurationScreen(continuation, journey, registry)) return false;
   } else if (continuation.type === "site" ? siteIdFromUnknown(continuation.siteId) === null : !["journeyStart", "atlas", "dreamscape", "journeyComplete", "journeyFailed", "journeyPurge", "journeyTransfiguration"].includes(String(continuation.type))) return false;

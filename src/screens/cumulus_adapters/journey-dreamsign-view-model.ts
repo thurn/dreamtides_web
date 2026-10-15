@@ -9,7 +9,7 @@ export function buildJourneyDreamsignView(journey: JourneyState, content: Journe
   if (journey.screen.type !== "journeyDreamsign") return null;
   const choice = journey.screen.choice;
   const continuation = choice.kind === "copy" ? choice.continuation : journey.screen;
-  const siteId = continuation.type === "site" ? continuation.siteId : choice.kind === "afterBattle" ? choice.siteId : continuation.type === "journeyPurge" || continuation.type === "journeyTransfiguration" ? continuation.choice.siteId : continuation.type === "journeyDreamsign" && continuation.choice.kind === "afterBattle" ? continuation.choice.siteId : null;
+  const siteId = continuation.type === "site" ? continuation.siteId : choice.kind === "afterBattle" ? choice.siteId : continuation.type === "journeyPurge" || continuation.type === "journeyTransfiguration" || continuation.type === "journeyDuplication" ? continuation.choice.siteId : continuation.type === "journeyDreamsign" && continuation.choice.kind === "afterBattle" ? continuation.choice.siteId : null;
   const node = siteId === null ? journey.currentDreamscape === null ? null : journey.atlas.nodes[journey.currentDreamscape] ?? null : Object.values(journey.atlas.nodes).find((candidate) => candidate.sites.some((site) => site.id === siteId)) ?? null;
   // Standalone tutorial/genesis choices use existing catalog atmosphere, never a fabricated gameplay site.
   const scene = dreamscapeSceneRef(node ?? { dreamscapeId: content.dreamscapes[0]?.id ?? null }, content);

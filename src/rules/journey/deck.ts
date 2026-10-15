@@ -240,7 +240,7 @@ export function removeDeckEntry(
 export function duplicateDeckEntry(
   journey: JourneyState,
   payload: Record<string, unknown>,
-  ctx: EventContext,
+  ctx: Pick<EventContext, "seq">,
 ): JourneyState | null {
   const entryId = deckEntryIdFromUnknown(payload.entryId);
   if (entryId === null) return null;

@@ -132,6 +132,7 @@ export interface GameActions {
   removeDeckEntry: (entryId: DeckEntryId) => Promise<number>;
   resolveAfterBattleDreamsign: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, earnedSeq: number, offeredDreamsignId: DreamsignId | null, purgeIndex?: number) => Promise<number>;
   resolveDreamsignCopy: (sourceDreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, targetHeldIndex: number, expectedTargetDreamsignId: DreamsignId) => Promise<number>;
+  resolveJourneyDuplication: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, earnedSeq: number, entryId: DeckEntryId | null) => Promise<number>;
   resolveJourneyTransfiguration: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => Promise<number>;
   resolveJourneyPurge: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => Promise<number>;
   purgeDeckCards: (
@@ -530,6 +531,8 @@ export function makeActions(append: AppendFn): GameActions {
       emit("RESOLVE_AFTER_BATTLE_DREAMSIGN", { siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, offeredDreamsignId, ...(purgeIndex === undefined ? {} : { purgeIndex }) }),
     resolveDreamsignCopy: (sourceDreamsignId, heldIndex, choiceIndex, permissionSeq, targetHeldIndex, expectedTargetDreamsignId) =>
       emit("RESOLVE_DREAMSIGN_COPY", { sourceDreamsignId, heldIndex, choiceIndex, permissionSeq, targetHeldIndex, expectedTargetDreamsignId }),
+    resolveJourneyDuplication: (siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, entryId) =>
+      emit("RESOLVE_JOURNEY_DUPLICATION", { siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, entryId }),
     resolveJourneyTransfiguration: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>
       emit("RESOLVE_JOURNEY_TRANSFIGURATION", { siteId, dreamsignId, heldIndex, choiceIndex, entryIds: [...entryIds] }),
     resolveJourneyPurge: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>

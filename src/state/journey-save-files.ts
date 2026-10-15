@@ -31,6 +31,7 @@ const JOURNEY_SCREEN_TYPES = [
   "journeyDreamsign",
   "journeyPurge",
   "journeyTransfiguration",
+  "journeyDuplication",
   "journeyStart",
   "atlas",
   "dreamscape",

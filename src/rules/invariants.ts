@@ -1,3 +1,4 @@
+import { validJourneyDuplicationScreen } from "./journey/journey-duplication";
 import { validJourneyDreamsignScreen, validDreamsignBattleBinding } from "./journey/journey-on-gain";
 import { validJourneyTransfigurationScreen } from "./journey/journey-transfiguration";
 import { validJourneyPurgeScreen } from "./journey/journey-purge";
@@ -39,12 +40,12 @@ export function foldInvariantViolations(
   const signChoice = state.journey.screen.type === "journeyDreamsign" ? state.journey.screen.choice : null;
   const displayed = signChoice?.kind === "copy" ? signChoice.continuation : state.journey.screen;
   const projected = { ...state.journey, screen: displayed };
-  const pending = displayed.type === "journeyPurge" || displayed.type === "journeyTransfiguration" ? displayed : null;
+  const pending = displayed.type === "journeyPurge" || displayed.type === "journeyTransfiguration" || displayed.type === "journeyDuplication" ? displayed : null;
   const earned = displayed.type === "journeyDreamsign" && displayed.choice.kind === "afterBattle" ? displayed.choice : pending?.choice.kind === "afterBattle" ? pending.choice : null;
   const journey = earned === null ? projected : { ...projected, screen: { type: earned.returnTo } };
   const violations: FoldInvariantViolation[] = [];
   if (signChoice !== null && (!validJourneyDreamsignScreen(state.journey.screen, state.journey, registry) || !validDreamsignBattleBinding(state.journey, state.battle))) violations.push({ code: "journey_dreamsign_choice_inconsistent", detail: signChoice.kind });
-  if (pending !== null && (state.battle !== null || !(pending.type === "journeyPurge" ? validJourneyPurgeScreen(pending, projected, registry) : validJourneyTransfigurationScreen(pending, projected, registry)))) {
+  if (pending !== null && (state.battle !== null || !(pending.type === "journeyDuplication" ? validJourneyDuplicationScreen(pending, projected, registry) : pending.type === "journeyPurge" ? validJourneyPurgeScreen(pending, projected, registry) : validJourneyTransfigurationScreen(pending, projected, registry)))) {
     violations.push({ code: "journey_purge_choice_inconsistent", detail: pending.choice.siteId });
   }
   if (signChoice?.kind === "copy" && signChoice.suspendedBattle?.mode === "tutorial" && (state.frontDoor.phase !== "tutorial" || state.battle?.mode.kind !== "tutorial" || state.frontDoor.tutorial?.runId !== state.battle.mode.tutorialRunId)) violations.push({ code: "journey_copy_tutorial_mismatch", detail: "tutorial" });

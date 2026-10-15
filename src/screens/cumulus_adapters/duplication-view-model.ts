@@ -1,5 +1,8 @@
 // Pure view-model builder for the Cumulus Duplication site.
 
+import { duplicationSiteQuote } from "../../rules/journey/journey-duplication";
+import { journeyModifierRegistry } from "../../rules/journey/modifier-registry";
+import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   DuplicationCardView,
@@ -89,6 +92,7 @@ export function buildDuplicationSiteView(params: {
   transfigurationData: TransfigurationData;
 }): DuplicationSiteView {
   const { scene } = params;
+  const count = duplicationSiteQuote(params.state, journeyModifierRegistry).copies;
   return {
     siteId: params.site.id,
     scene,
@@ -96,6 +100,8 @@ export function buildDuplicationSiteView(params: {
     ready: params.runtime !== null,
     alreadyAccepted: (params.runtime?.acceptedEntryIds.length ?? 0) > 0,
     isEnhanced: params.site.isEnhanced,
+    copyInstruction: count > 1
+      ? JOURNEY_SITE_MESSAGES.duplicationSiteCopies(count) : undefined,
     cards: buildDuplicationCards(
       params.transfigurationData,
       params.state,

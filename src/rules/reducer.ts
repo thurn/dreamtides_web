@@ -1,3 +1,5 @@
+import { duplicationSiteQuote, journeyDuplicationRecord, resolveJourneyDuplication } from "./journey/journey-duplication";
+import { deckEntryIdFromUnknown } from "../types/identifiers";
 import { journeyDreamsignGains } from "./journey/journey-dreamsign-gains";
 import { resolveAfterBattleDreamsign, resolveDreamsignCopy, validDreamsignCopyIntent } from "./journey/journey-on-gain";
 import { essencePurgeSource, essenceReplacementSource } from "./journey/journey-essence";
@@ -326,6 +328,8 @@ export function routeDomain(
   ) {
     return bounce(state);
   }
+  if (journey.screen.type === "journeyDuplication" && isGameplayEventType(type) &&
+    type !== "RESOLVE_JOURNEY_DUPLICATION" && type !== "ADD_DREAMSIGN" && type !== "REMOVE_DREAMSIGN") return bounce(state);
   const preparationSiteId = siteIdFromUnknown(payload.siteId);
   if ((type === "OPEN_SITE" || type === "ACCEPT_ESSENCE") && preparationSiteId !== null &&
     journey.siteRuntime[preparationSiteId] === undefined && sites.findSite(journey, preparationSiteId)?.type === "Essence" &&
@@ -429,6 +433,15 @@ export function routeDomain(
       const result = journeyCase(state, resolveAfterBattleDreamsign(journey, payload, modifiers));
       return result.outcome === "bounced" ? result : { ...result, logRecords: [{ event: "journey_dreamsign_choice_resolved", fields: { siteId: payload.siteId, dreamsignId: payload.dreamsignId, heldIndex: payload.heldIndex, choiceIndex: payload.choiceIndex, earnedSeq: payload.earnedSeq, offeredDreamsignId: payload.offeredDreamsignId, purgeIndex: payload.purgeIndex ?? null } }] };
     }
+    case "RESOLVE_JOURNEY_DUPLICATION": {
+      const result = journeyCase(state, resolveJourneyDuplication(journey, payload, ctx.seq, modifiers));
+      if (result.outcome !== "applied" || journey.screen.type !== "journeyDuplication") return result;
+      const choice = journey.screen.choice, source = choice.sources[choice.index];
+      return { ...result, logRecords: [journeyDuplicationRecord(journey, result.state.journey, {
+        siteId: choice.siteId, selectedEntryId: deckEntryIdFromUnknown(payload.entryId), dreamsignId: source.dreamsignId,
+        heldIndex: source.heldIndex, choiceIndex: choice.index, ...(source.kind === "duplication" ? { earnedSeq: source.earnedSeq } : {}),
+      })] };
+    }
     case "RESOLVE_JOURNEY_TRANSFIGURATION":
       return journeyCase(state, resolveJourneyTransfiguration(journey, payload, ctx, modifiers));
     case "RESOLVE_JOURNEY_PURGE": {
@@ -465,11 +478,15 @@ export function routeDomain(
         state,
         sites.acceptTransfigurationChoice(journey, payload),
       );
-    case "ACCEPT_DUPLICATION_CHOICE":
-      return journeyCase(
-        state,
-        sites.acceptDuplicationChoice(journey, payload, ctx),
-      );
+    case "ACCEPT_DUPLICATION_CHOICE": {
+      const result = journeyCase(state, sites.acceptDuplicationChoice(journey, payload, ctx, modifiers));
+      const siteId = siteIdFromUnknown(payload.siteId);
+      if (result.outcome !== "applied" || siteId === null) return result;
+      const quote = duplicationSiteQuote(journey, modifiers);
+      return { ...result, logRecords: [journeyDuplicationRecord(journey, result.state.journey, {
+        siteId, selectedEntryId: deckEntryIdFromUnknown(payload.entryId), dreamsignId: quote.dreamsignId, heldIndex: quote.heldIndex,
+      })] };
+    }
 
     // --- sites ---
     case "OPEN_SITE": {

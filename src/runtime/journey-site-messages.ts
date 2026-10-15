@@ -1,5 +1,9 @@
 /** Player-facing journey copy shared by screen builders and Cumulus controls. */
 export const JOURNEY_SITE_MESSAGES = {
+  duplicationTitle: "Duplicate a Card",
+  duplicationInstruction: "You may duplicate one card after this battle.",
+  duplicateCard: "Duplicate",
+  duplicationSiteCopies: (copies: number) => `Gain ${String(copies)} copies of the selected card.`,
   dreamsignCopyTitle: "Become a Copy",
   dreamsignCopyInstruction: "Choose another Dreamsign you own.",
   dreamsignOfferTitle: "A Dreamsign Awaits",

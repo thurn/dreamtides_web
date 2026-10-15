@@ -1,5 +1,7 @@
 // Wiring-only adapter for the Cumulus Duplication site.
 
+import { duplicationSiteQuote } from "../../rules/journey/journey-duplication";
+import { journeyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { useCallback, useEffect } from "react";
 import { DuplicationSiteScreen } from "../../cumulus/screens/DuplicationSiteScreen";
 import { logEvent, logEventOnce } from "../../logging";
@@ -101,14 +103,15 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
         (candidate) => candidate.entryId === entryId,
       );
       if (entry === undefined || !runtime.entryIds.includes(entryId)) return;
-      logEvent("duplication_completed", {
+      const count = duplicationSiteQuote(state, journeyModifierRegistry).copies;
+      logEvent("duplication_requested", {
         siteId: site.id,
         entryId,
         cardId: journeyContent.cardDatabase.get(entry.cardNumber)?.id ?? null,
-        copyCount: 1,
+        requestedCopyCount: count,
         isEnhanced: site.isEnhanced,
         deckSizeBefore: state.deck.length,
-        deckSizeAfter: state.deck.length + 1,
+        expectedDeckSizeAfter: state.deck.length + count,
         currentDreamscape: state.currentDreamscape,
         completionLevel: state.completionLevel,
       });

@@ -3330,3 +3330,41 @@ without a form or draw. Multiple sources cannot replace an existing form.
 Receiving this preformed card is a gain, not a new transformation occurrence on
 an original deck entry. The validated purchase retains its ordinary price,
 free-purchase charges and physical purchase receipt.
+
+
+## Journey Duplication Effects
+
+Duplicating a journey card creates a fresh physical deck entry with that selected
+entry's current card identity, transfiguration, permanent type and keyword
+changes, spark bonus, and Bane status. Debug stat overrides are separate from
+these copiable values. The original entry remains. Each new copy is a card gain
+and receives its own applicable added-card effects. Receiving a copy already
+carrying a transfiguration provides no new transfiguration occurrence.
+
+The first card purchased from each shop site is its first successful card
+purchase, identified by that visit's persistent purchase history. Dreamsign
+purchases and rejected attempts do not count. Restocking preserves the history.
+Each source held after that purchase duplicates its current purchased physical
+entry once, including its settled form and permanent modifications. A source
+gained after the first card purchase grants no copy for a later purchase. If an
+addition prohibition prevents the purchased entry, there is no entry to copy;
+the successful purchase and its payment still consume that visit's first card.
+
+A replacement of the number of cards gained at a Duplication site grants its
+printed number of new copies of the selected current entry. Multiple replacement
+sources set that same number. Holdings at successful acceptance determine the
+replacement; opening the site does not freeze a copy count. All requested copies
+are one addition batch, so they use the same resulting deck size for a gain
+threshold. A prohibition may prevent individual additions while the accepted
+selection and site continuation remain committed.
+
+An optional duplication after each battle is earned once per held physical
+source in the shared held order with earned purge, transfiguration and Dreamsign
+choices, including victory, final victory, defeat and draw. Each permission
+allows declining or copying one current physical deck entry without an Essence
+cost. Earned permissions survive source loss and reload; later source gains do
+not add permissions to that battle. Each choice is bound to its original battle
+site, source, held position, earned event and cursor. Finishing the earned queue
+restores its exact Atlas, completed or failed route with the battle's committed
+reward and failure summary. Invalid, stale and competing choices change neither
+the deck nor the earned cursor.

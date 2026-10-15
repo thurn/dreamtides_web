@@ -35,7 +35,6 @@ import type {
   RewardSiteRuntime,
   EnhancedDreamsignRewardOffer,
   JourneyPurgeTransition,
-  DeckEntry,
   ExplorationSiteRuntime,
   AugurySiteRuntime,
   JourneyState,
@@ -46,7 +45,8 @@ import type {
   TransfigurationType,
   TransfiguredSiteOfferModifier,
 } from "../../types/journey";
-import { mintEntryId } from "./deck";
+import { duplicateDeckEntry } from "./deck";
+import { duplicationSiteQuote } from "./journey-duplication";
 import { projectJourneySite } from "./journey-sites";
 import { essenceReplacementSource, essencePurgeSource } from "./journey-essence";
 import type { JourneyModifierRegistry } from "./modifier-registry";
@@ -935,8 +935,9 @@ export function acceptTransfigurationChoice(
 }
 
 /**
- * `ACCEPT_DUPLICATION_CHOICE { siteId, entryId }` appends one plain copy of the
- * chosen deck entry's card (a fresh seq-deterministic entry id), records the
+ * `ACCEPT_DUPLICATION_CHOICE { siteId, entryId }` appends the live quoted count
+ * of copies carrying the selected entry's production modifications, each with
+ * a fresh seq-deterministic entry id, and records the
  * accepted entry, and completes the site. Bounces on a missing runtime, a wrong
  * kind/choiceKind, an already-accepted site, an entry not offered, or a stale
  * entry id.
@@ -945,6 +946,7 @@ export function acceptDuplicationChoice(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  modifiers?: Pick<JourneyModifierRegistry, "lookup">,
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   const entryId = deckEntryIdFromUnknown(payload.entryId);
@@ -963,13 +965,13 @@ export function acceptDuplicationChoice(
   const entry = journey.deck.find((candidate) => candidate.entryId === entryId);
   if (entry === undefined) return null;
 
-  const copy: DeckEntry = {
-    entryId: mintEntryId(journey.deck, ctx.seq, 0),
-    cardNumber: entry.cardNumber,
-    transfiguration: null,
-    isBane: false,
-  };
-  const next: JourneyState = { ...journey, deck: [...journey.deck, copy] };
+  let next = journey;
+  const count = duplicationSiteQuote(journey, modifiers).copies;
+  for (let i = 0; i < count; i++) {
+    const copied = duplicateDeckEntry(next, { entryId }, ctx);
+    if (copied === null) return null;
+    next = copied;
+  }
   return completeAndReturn(
     withRuntime(next, siteId, { ...runtime, acceptedEntryIds: [entryId] }),
     siteId,

@@ -34,6 +34,8 @@ export interface DuplicationSiteView {
   alreadyAccepted: boolean;
   /** Whether this site offers the whole deck. */
   isEnhanced: boolean;
+  /** Printed replacement count instruction, when the ordinary count is replaced. */
+  copyInstruction?: string;
   /** Persisted duplication choices in offer order. */
   cards: readonly DuplicationCardView[];
 }
@@ -108,9 +110,9 @@ export function DuplicationSiteScreen({
               subtitle={
                 !view.ready
                   ? "Gathering possibilities…"
-                  : view.isEnhanced
+                  : view.copyInstruction ?? (view.isEnhanced
                     ? "Choose any card to copy"
-                    : "Choose a card to copy"
+                    : "Choose a card to copy")
               }
               footerActions={[
                 {

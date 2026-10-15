@@ -1,3 +1,4 @@
+import { validJourneyDuplicationScreen } from "./journey-duplication";
 import { validJourneyDreamsignScreen, validDreamsignBattleBinding } from "./journey-on-gain";
 import { getDeckContentProvider } from "./deck";
 import { validPreventedNightmareGains } from "./journey-deck-entry";
@@ -465,7 +466,7 @@ export function validateLoadedState(
     return null;
   if (before.draftState != null && snapshot.draftState == null) return null;
 
-  if ((snapshot.screen.type === "journeyPurge" || snapshot.screen.type === "journeyTransfiguration") && payload.battle != null) return null;
+  if ((snapshot.screen.type === "journeyPurge" || snapshot.screen.type === "journeyTransfiguration" || snapshot.screen.type === "journeyDuplication") && payload.battle != null) return null;
   let battle: BattleFoldState | null = null;
   if ("battle" in payload && payload.battle != null) {
     battle = asValidBattleFoldState(payload.battle);
@@ -613,6 +614,7 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
       typeof permission.heldIndex !== "number" || !Number.isSafeInteger(permission.heldIndex) || permission.heldIndex < 0 ||
       !Array.isArray(runtime.acceptedEntryIds) || runtime.acceptedEntryIds.length > effect.count || new Set(runtime.acceptedEntryIds).size !== runtime.acceptedEntryIds.length) return false;
   }
+  if (value.screen.type === "journeyDuplication" && !validJourneyDuplicationScreen(value.screen, value as unknown as JourneyState, registry)) return false;
   if (value.screen.type === "journeyDreamsign" && !validJourneyDreamsignScreen(value.screen, value as unknown as JourneyState, registry)) return false;
   if (value.screen.type === "journeyTransfiguration" && !validJourneyTransfigurationScreen(value.screen, value as unknown as JourneyState, registry)) return false;
   if (value.screen.type === "journeyPurge" && !validJourneyPurgeScreen(value.screen, value as unknown as JourneyState, registry)) return false;

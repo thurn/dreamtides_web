@@ -16,7 +16,7 @@ const record = (value: unknown): value is Record<string, unknown> =>
 export function currentPurgeSource(choice: JourneyPurgeChoice): AfterBattlePurgeSource | undefined {
   const source = choice.kind === "afterBattle" ? choice.sources[choice.index] :
     { dreamsignId: choice.dreamsignId, heldIndex: choice.heldIndex, maxCount: choice.count };
-  return source?.kind === "transfiguration" || source?.kind === "dreamsign" ? undefined : source;
+  return source?.kind === "transfiguration" || source?.kind === "dreamsign" || source?.kind === "duplication" ? undefined : source;
 }
 
 /** Strict purpose shape and saved continuation checks, independent of catalog defaults. */

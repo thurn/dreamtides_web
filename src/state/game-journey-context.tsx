@@ -221,6 +221,8 @@ export function GameJourneyProvider({
         dispatch(actions.resolveAfterBattleDreamsign(siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, offeredDreamsignId, purgeIndex)),
       resolveDreamsignCopy: (sourceDreamsignId, heldIndex, choiceIndex, permissionSeq, targetHeldIndex, expectedTargetDreamsignId) =>
         dispatch(actions.resolveDreamsignCopy(sourceDreamsignId, heldIndex, choiceIndex, permissionSeq, targetHeldIndex, expectedTargetDreamsignId)),
+      resolveJourneyDuplication: (siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, entryId) =>
+        dispatch(actions.resolveJourneyDuplication(siteId, dreamsignId, heldIndex, choiceIndex, earnedSeq, entryId)),
       resolveJourneyTransfiguration: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>
         dispatch(actions.resolveJourneyTransfiguration(siteId, dreamsignId, heldIndex, choiceIndex, entryIds)),
       resolveJourneyPurge: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>

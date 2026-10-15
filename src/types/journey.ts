@@ -220,6 +220,18 @@ export interface PreventedNightmareGain {
   readonly heldIndex: number;
 }
 
+export type JourneyDuplicationEffect =
+  | { readonly kind: "afterBattleDuplication" }
+  | { readonly kind: "firstCardPurchaseDuplication" }
+  | { readonly kind: "duplicationSiteCopies"; readonly copies: number };
+
+export interface AfterBattleDuplicationSource {
+  readonly kind: "duplication";
+  readonly dreamsignId: DreamsignId;
+  readonly heldIndex: number;
+  readonly earnedSeq: number;
+}
+
 export type JourneyTransfigurationEffect =
   | { readonly kind: "copyTransfiguredEvent" }
   | { readonly kind: "afterBattleTransfiguration"; readonly maxCount: number };
@@ -258,7 +270,7 @@ export interface JourneyDreamsignCopyChoice {
 export interface AfterBattleJourneyChoice {
   readonly kind: "afterBattle";
   readonly siteId: SiteId;
-  readonly sources: readonly (AfterBattlePurgeSource | AfterBattleTransfigurationSource | AfterBattleDreamsignSource)[];
+  readonly sources: readonly (AfterBattlePurgeSource | AfterBattleTransfigurationSource | AfterBattleDreamsignSource | AfterBattleDuplicationSource)[];
   readonly index: number;
   readonly returnTo: "atlas" | "journeyComplete" | "journeyFailed";
 }
@@ -1304,6 +1316,7 @@ export type Screen =
   | { type: "journeyDreamsign"; readonly choice: AfterBattleJourneyChoice | JourneyDreamsignCopyChoice }
   | { type: "journeyPurge"; readonly choice: JourneyPurgeChoice }
   | { type: "journeyTransfiguration"; readonly choice: AfterBattleJourneyChoice }
+  | { type: "journeyDuplication"; readonly choice: AfterBattleJourneyChoice }
   | { type: "atlas" }
   | { type: "dreamscape" }
   | { type: "site"; siteId: SiteId }

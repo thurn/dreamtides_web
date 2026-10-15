@@ -1,22 +1,24 @@
-import type { AfterBattleJourneyChoice, AfterBattleDreamsignSource, AfterBattlePurgeSource, AfterBattleTransfigurationSource, JourneyState, Screen } from "../../types/journey";
+import type { AfterBattleJourneyChoice, AfterBattleDuplicationSource, AfterBattleDreamsignSource, AfterBattlePurgeSource, AfterBattleTransfigurationSource, JourneyState, Screen } from "../../types/journey";
 import { dreamsignIdFromUnknown, siteIdFromUnknown } from "../../types/identifiers";
 import type { JourneyModifierRegistry } from "./modifier-registry";
 import { findSite } from "./sites";
 
 export function afterBattleChoice(screen: Screen): AfterBattleJourneyChoice | null {
+  if (screen.type === "journeyDuplication") return screen.choice;
   if (screen.type === "journeyTransfiguration") return screen.choice;
   if (screen.type === "journeyDreamsign" && screen.choice.kind === "afterBattle") return screen.choice;
   return screen.type === "journeyPurge" && screen.choice.kind === "afterBattle" ? screen.choice : null;
 }
 
-/** Three concrete earned purposes share the battle's original terminal route. */
+/** Four concrete earned purposes share the battle's original terminal route. */
 export function afterBattleScreen(choice: AfterBattleJourneyChoice): Screen {
+  if (choice.sources[choice.index]?.kind === "duplication") return { type: "journeyDuplication", choice };
   return choice.sources[choice.index]?.kind === "dreamsign" ? { type: "journeyDreamsign", choice } : choice.sources[choice.index]?.kind === "transfiguration"
     ? { type: "journeyTransfiguration", choice } : { type: "journeyPurge", choice };
 }
 
 export function appendAfterBattleSource(journey: JourneyState, siteId: AfterBattleJourneyChoice["siteId"],
-  source: AfterBattlePurgeSource | AfterBattleTransfigurationSource | AfterBattleDreamsignSource): JourneyState | null {
+  source: AfterBattlePurgeSource | AfterBattleTransfigurationSource | AfterBattleDreamsignSource | AfterBattleDuplicationSource): JourneyState | null {
   const previous = afterBattleChoice(journey.screen);
   if (previous === null && journey.screen.type !== "atlas" && journey.screen.type !== "journeyComplete" && journey.screen.type !== "journeyFailed") return null;
   const returnTo = previous?.returnTo ?? journey.screen.type as AfterBattleJourneyChoice["returnTo"];
@@ -32,7 +34,7 @@ export function advanceAfterBattle(journey: JourneyState, choice: AfterBattleJou
 const record = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const index = (value: unknown): value is number => typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
 
-/** Validate the saved three-kind permission independently of current holdings. */
+/** Validate the saved four-kind permission independently of current holdings. */
 export function validAfterBattleChoice(value: unknown, journey: JourneyState, registry: JourneyModifierRegistry): boolean {
   if (!record(value) || value.kind !== "afterBattle" || siteIdFromUnknown(value.siteId) === null ||
     !Array.isArray(value.sources) || value.sources.length === 0 || !index(value.index) || value.index >= value.sources.length ||
@@ -52,6 +54,8 @@ export function validAfterBattleChoice(value: unknown, journey: JourneyState, re
       const offered = source.offeredDreamsigns.map((sign) => record(sign) && dreamsignIdFromUnknown(sign.id) !== null && typeof sign.name === "string" && typeof sign.effectDescription === "string" && (sign.imageName === undefined || typeof sign.imageName === "string") && (sign.imageAlt === undefined || typeof sign.imageAlt === "string") ? dreamsignIdFromUnknown(sign.id) : null);
       const remaining = source.remainingPoolIds.map(dreamsignIdFromUnknown);
       if (offered.some((id) => id === null) || new Set(offered).size !== offered.length || remaining.some((id) => id === null || offered.includes(id)) || new Set(remaining).size !== remaining.length) return false;
+    } else if (source.kind === "duplication") {
+      if (definition?.journeyDuplication?.kind !== "afterBattleDuplication" || !index(source.earnedSeq)) return false;
     } else if (!index(source.maxCount) || source.maxCount < 1) return false;
     else if (source.kind === "transfiguration") {
       const effect = definition?.journeyTransfiguration;
