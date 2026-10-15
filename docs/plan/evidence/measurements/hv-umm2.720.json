@@ -1,0 +1,2206 @@
+{
+  "bead": "hv-umm2.720",
+  "phase": 5,
+  "base": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+  "source": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+  "previousRetrospective": "hv-umm2.710",
+  "clock": {
+    "implementWindow": {
+      "start": "2026-10-15T05:22:17.806042+00:00",
+      "end": "2026-10-15T05:32:58.669021+00:00"
+    },
+    "implementMin": 10.68104965,
+    "basis": "Conservative parent audit/source-freeze start through current pre-Git evidence cutoff; includes resumed preparation, fresh Sage dispatch, all waits, verification and packaging. Exact automatic Git completion and cutoff tail are retained externally after commit, without tracked rewrite.",
+    "actualSageDispatch": {
+      "timestamp": "2026-10-15T05:24:50.412Z",
+      "ordinal": 58651,
+      "call_id": "call_bb17c562fef345698a9942c2a9b80175",
+      "nativeJournal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl",
+      "recordSHA256": "845601f99fb1b100dd9fc57ecb025470e34a3d642ac3b4281685b04a9bc03ee2"
+    },
+    "sampling": "UNKNOWN; gross elapsed is not productive CPU or pure waiting."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "sourceManifest": [
+    {
+      "path": "AGENTS.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+      "bytes": 8068,
+      "kind": "common"
+    },
+    {
+      "path": "README.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "e17ead6e7744306943fb2e4efd64a33b8adc6183065e1ef52c765a092c4d4214",
+      "bytes": 67872,
+      "kind": "common"
+    },
+    {
+      "path": "docs/plan/README.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+      "bytes": 18782,
+      "kind": "common"
+    },
+    {
+      "path": "docs/plan/workflow.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "711d807bba2675ba8519bb9219e6eb78f78d0ec450d08834fa950c5bb44b759e",
+      "bytes": 101393,
+      "kind": "common"
+    },
+    {
+      "path": "docs/plan/decisions.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+      "bytes": 51785,
+      "kind": "common"
+    },
+    {
+      "path": "docs/plan/phase-5-content.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "dd795dc77fb0a98456443a546c9f84d48ecbb163ef45f0f2c55e8fdb9cc5c2ec",
+      "bytes": 35482,
+      "kind": "common"
+    },
+    {
+      "path": "docs/plan/evidence/metrics.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "515a6ffbd6de852537c1d6f27e9e6d9ba7a4d66cb800e6a03355b0fc38452b41",
+      "bytes": 73446,
+      "kind": "common"
+    },
+    {
+      "path": "docs/plan/evidence/friction-tags.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "0edbf5483483c7ea443f0316c98970b5c8f1f2ed3afbf557f1d2b4f8349cb266",
+      "bytes": 25963,
+      "kind": "common"
+    },
+    {
+      "path": "docs/plan/evidence/friction.jsonl",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "60d54f02639c4b15b5ce1236e72d70632e09f5df6a8c611b08edfa49c6eebbc7",
+      "bytes": 5175,
+      "kind": "common"
+    },
+    {
+      "path": "docs/plan/evidence/introspection.jsonl",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "d7c4a4ff6e97a06daa31a95ece6f5644da7e04d827c3b97a45b167d61ba25979",
+      "bytes": 24426,
+      "kind": "common"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.710.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "723ad7b69f06c7b278d1fd3e979d11ecb2fada6e8593eb1d3b572a73a48be628",
+      "bytes": 125364,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.710.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "8c2507ed1ec4a2263fb91edf4f0c4c9eaba56f0269fb3cf28dd64e83a9e3cfa4",
+      "bytes": 6995,
+      "kind": "cohort"
+    },
+    {
+      "path": "scripts/friction-triggers.mjs",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "ffa59d3d37a0ab0ce4bf4c1ca6afb317399ce7c7e621eca1fe5d9c51ffc821ef",
+      "bytes": 20982,
+      "kind": "common"
+    },
+    {
+      "path": "scripts/review.mjs",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+      "bytes": 16054,
+      "kind": "common"
+    },
+    {
+      "path": "scripts/review-related-tests.mjs",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "11fc48aa92935b6a5ceb7992175d18c0b29e70b9cd2c1054e50ec39147e1cd36",
+      "bytes": 2088,
+      "kind": "common"
+    },
+    {
+      "path": "package.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+      "bytes": 2249,
+      "kind": "common"
+    },
+    {
+      "path": "vitest.config.ts",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+      "bytes": 3911,
+      "kind": "common"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.192.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "99ef2b9044217d3b3f193b61ddde79e5dc73836b68a88ca4e075996e785fdddb",
+      "bytes": 1141,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.192.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "e0530740118edb8fd4ea963758d4f4514414c0d8054386c066f2919e7f027439",
+      "bytes": 46332,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.192.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "dc11585cfee2a07784abc0268b3c67de63f5a60c80a305f3186e6b54ed848a85",
+      "bytes": 4453,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.192.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "78a3852de28b8eb7e481d7f5b4387d9c242408b29fc0716553feeb1f45746682",
+      "bytes": 3404,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.196.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "50066ae0d9cd370069ed1597bcf59133d00b9eab4bbdedc7a59a76f74236d168",
+      "bytes": 641,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.196.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "0cf11a69482faad6d5a5d226dd3fc227b348a9d922a48090ae6866df980a69a3",
+      "bytes": 38502,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.196.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "77787828d7929d87b9e4f7624206e7979276a81252d9ce1d1e6c7a9ae6fe12a9",
+      "bytes": 2613,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.220.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "438efa5c5f0f2d131197b7229dfef83fec32b3805ca49e8ff603efcb7e154581",
+      "bytes": 1249,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.220.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "8a62ccf72dd4a52035604752dac37a7c3f27593c1dad3feee6e3ec0384ff8f37",
+      "bytes": 124638,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.220.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "e948d9a6002c6c400babf561e2505ba559049042a1fec85f8ba8e59980f2c4d8",
+      "bytes": 8152,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.220.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "7aa9d82c213fa257c27c81a2331106a6fd412f2fd3c69da4a898f0c6532edeb4",
+      "bytes": 656,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.250.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "44b5c899184bc1f5e865c1ff48dab8f6ff0e552b35fd49b18535a1fd9a4e1cf7",
+      "bytes": 522,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.250.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "77cd6d6d15e8cefb101ea8cd2c3dd5ebaca3c78ae62b523797d9509310757f80",
+      "bytes": 16830,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.250.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "d94cbc6b589bb725ae3336104fa16cb3f1b3b5d322b287a78d04bbb2c2849fd7",
+      "bytes": 2924,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.250.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "a8af76ce0a6a5f3f868fed20dfbf63511296982c479714381040ad4e05317885",
+      "bytes": 971,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.252.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "f6f6fc1f36db5cb7436480f718a027c567eef4295a82ecd35d2e5b7bdcee3c76",
+      "bytes": 639,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.252.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "f1ee60a36fbe74a41bc7758b87b273c30e6e4990aab9513d7e35f89cda5798bb",
+      "bytes": 18440,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.266.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "093fb6f45eccd9e9aa76983be32afb5d232566a31574b476e2b85c8d14e33f82",
+      "bytes": 604,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.266.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "dffc968308d99f652fb724fe0b96955a1402e0e7515dc3fe07e98f11a5d162bd",
+      "bytes": 95510,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.266.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "0709d322df7eb9f5e7cccd74b08175eb8b032b42d220fedbb453917049dc1e46",
+      "bytes": 6462,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.266.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "1f8cb865f977f5364b8614d477af341dae9c465b88a7733c454c5eb05bf271ab",
+      "bytes": 1692,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.268.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "abf2b4acc88ff4d95e56b0853870a4d2720f41efb83b73a601e950c7e3b006e0",
+      "bytes": 606,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.268.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "c933d36b9d2bbceb1ab9153b4985d53e7ca3a17e141223a5bf3083fd3cc4d0c6",
+      "bytes": 65069,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.268.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "a70fb1689735dcf917b5fd5889bd8be6cdda593109f81e396a8132e7fce768e3",
+      "bytes": 5510,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.268.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "c4295322e91da37fd1e703823372d6d1be8940aad7d627c43a646613f6acf76f",
+      "bytes": 399,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.610.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "3a927dac84b1a4548176c53d2edfd9d5447b38407c192a2d559e06e8e84d8942",
+      "bytes": 798,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.610.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "d0fed51f10f83e9357498ab88a37aa2a79aadfe14eba84899b8ebca394d57fa0",
+      "bytes": 22771,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.615.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "0361e981c39004aa9805c528ea0664231d408c867a0737798bc9e01a3885a904",
+      "bytes": 1160,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.615.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "22688b64d86617d1a8d53b9c9db860989f247c4f36d87baf66878a91e868eb1b",
+      "bytes": 46769,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.615.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "12a408f7a1f4bc22d15533286f0a8b000ca01ccada5e4c5ffc7be0b31a88bc66",
+      "bytes": 7304,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.615.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "41e867200cb7896a6005c784345f48f51e176b325c9df90a0e76bbeee49d7391",
+      "bytes": 1342,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.616.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "4be08b39e99db9fea938bfeac5563b30e8d052c9b5468a5e23c436cf38755989",
+      "bytes": 1462,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.616.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "4af75dc7464a8fb90a44608efcaf0645a5945eec7fc8853ead76beb198366ae6",
+      "bytes": 21993,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.618.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "1ecf5277f00a9b2f125320191764efd4d577c9ce21a928d454f3d585cd147a41",
+      "bytes": 567,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.618.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "2329d8884354beeb4a1949733cdb5523da9e1fd59a4aa3012f0b6d1bad0ea0af",
+      "bytes": 43172,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.618.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "43764914733ed9718841e7e909fec6e851df593ae5dee371c2dfeacd21ab1c0f",
+      "bytes": 3566,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.622.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "d7a8e7b8f9a9c42821c4b599f9415dee4e1a197c13c583b2f79d6ef2280a2461",
+      "bytes": 1336,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.622.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "b46f90ab12ee0d47f40f9d56b50f200b76b78a3744b787e08b0c6e1d0441422d",
+      "bytes": 22091,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.623.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "d30b868caa05eddd4d7dd78db5f090cf600f9d1c8908ab3b493747e9bdd71a90",
+      "bytes": 1827,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.623.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "733d2e519905f041a37f5cd6cc632ad4b9b0ec5d583505fc0964b82a59f9f9bb",
+      "bytes": 128522,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.623.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "0199acb31bd1fb201c1c970451c5b5300eab10f13d756b76c521077760faa7eb",
+      "bytes": 8535,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.623.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "a97b23dd7070b17f29cd06f7dcb72da53479b7c6659f47c184b6f2e75ca53f41",
+      "bytes": 957,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.630.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "518e80336280474d56c71eefe0c84beae993f7836674f29625edae89cf358818",
+      "bytes": 770,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.630.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "bcbd3b5f6de4195a32f742f22e93f676f551c5c20753bdd0f6d3b0abe29c7840",
+      "bytes": 15946,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.630.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "852698028df2e6ae7d741e4307159adca4dd85b6aeffb1806c83b451a247949d",
+      "bytes": 3616,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.698.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "f464fb46fa282c6941b735be9150f7eec5c3b16025cbf849c7e43c181237cc4b",
+      "bytes": 1818,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.698.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "abd9c098d0f3a14d087588de6628df421f349ba3c40e846f799fbb315cb71462",
+      "bytes": 70833,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.698.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "5c18405adb94ffa94d3f619adc3edd2cf60f6e2f61079ab9e12260129031406f",
+      "bytes": 1277,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.705.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "e25dc9dcc2c48b05cfdb526ff3ae3e6affad8af1484cbc533cfa9ff56ffcb680",
+      "bytes": 996,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.705.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "c02f96589afe726ad05c3b4601947a273471a90d27973e70a871d4e2bbb97e04",
+      "bytes": 54258,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.705.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "3ae5255b6189a04dc4c1217bfe24eca8b018781b553e636aaeaae6b8abc82092",
+      "bytes": 3620,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.705.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "be13530f84a6b27db0b06b66fcf930c33b99b73e0edd31de5cbbf7da55512624",
+      "bytes": 845,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.707.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "be9f10eb70a91c95156f1dfc183aeb996cf1b8251c17710caedc05332ca6e8b1",
+      "bytes": 500,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.707.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "4016d6c0e82bc7556c304ff36f46b3e9245673d5c2c18db821a5d82dd22496f9",
+      "bytes": 35301,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.707.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "a6e2d484e1fd7eaa11d0893a098e52738dabc750e1e9ab9b81fe5cfdaaf57668",
+      "bytes": 831,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.710.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "3b7d9d24199310cc378b0421be9e400ab609c89445c98d7147614ddbc944a2ed",
+      "bytes": 401,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.712.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "740a1b4ff17f8b2ae05ec5810ca9ec785f6c4868ddd396452f19cd4d82afc87e",
+      "bytes": 708,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.712.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "082f1915c3e9a5673d542f8ccef3b1b14f2061b3c1bae84602826ddb7dbacec9",
+      "bytes": 18098,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.712.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "e139331443c73c821be8e3374f913e4bc4fe3af18944add8817eb37bfc9bbc1a",
+      "bytes": 2259,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.712.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "a502faacc0c1660b2a25d5d05578db155ecd0d987f0bd7ed24c4aefef2d477bc",
+      "bytes": 997,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.713.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "bca8293fd20028ba6579f9acff7925e82321c051346f77938c16e15de3a3d698",
+      "bytes": 521,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.713.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "0c54f5778f5a22420e6b9111236d7c743cc8655028cd65cf0eb97e49f800b99e",
+      "bytes": 23896,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.713.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "6175eab6d9f11989aae4974b5746bb5babb8ba0f2d72cf4eb20968add0c90ad8",
+      "bytes": 3800,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.714.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "e49bf20f3a6a8a74d02e2cc8973b4458dc32f84948d3f7246e02039456d04418",
+      "bytes": 432,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.714.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "be1e38bed5ecbc50d8b2964ecbba98e3ce20ef27ac8772e691adf454f814ffdf",
+      "bytes": 35098,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.714.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "2c43f55c6ef4b333414ccc09ee80f3b1df5dc47d0cff8e1b47ff11594b4de5ef",
+      "bytes": 3357,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.715.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "2d14c253bd0060dc685e736a372a7c898eedf51dc046e1c924d43418f02bf057",
+      "bytes": 434,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.715.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "359536159bb7ba5e3f9eb5eb3de9a6261c5de5b7658ee4ba3a07a28d2d866703",
+      "bytes": 7229,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.715.md",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "d7b4cff88f9fc18cf299f2a3cb488102c521a99f5abd3704924546a2154679a0",
+      "bytes": 1777,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.716.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "b54ab03c0d727cd7ed810a3803c352cba9bdebed834a1c11334e5f9542a45486",
+      "bytes": 612,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.716.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "3ba7e9c834eed0ff4a40c010c0f73550a6ed7519b0fe1def9e11c37587b456dc",
+      "bytes": 10871,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.717.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "35a9e116476a3a33cfad21d8368c039f1b6b30fe7060ebe50b3d95b5c632a3e9",
+      "bytes": 624,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.717.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "f87f06da5d483eb74759de9944f34ba14356929e00b8488fe3389809b5cfd27f",
+      "bytes": 10971,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.719.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "aa3af1bd7c11023601cc095fca17a948dccc5764b260fab00104c9dfbcba2886",
+      "bytes": 625,
+      "kind": "cohort"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.719.json",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "sha256": "79dc3255d0352a6acc1b07062d6601da63884ebb656b64f6dcb71ec72f8e8849",
+      "bytes": 11077,
+      "kind": "cohort"
+    },
+    {
+      "path": "/tmp/root-retro-since-710/inputs/tollgate-history.json",
+      "sourceObject": null,
+      "sha256": "4ad4967532daf4e85bc38f46a73529404cac88332f4dcd1d567aeaaea77cd697",
+      "bytes": 691473,
+      "kind": "native snapshot or derived exact project selection"
+    },
+    {
+      "path": "/tmp/root-retro-since-710/inputs/native-intended.json",
+      "sourceObject": null,
+      "sha256": "c361702362907e7e57895da8d64c5e224fa638b5c892c6d7e3742f55ceee55ca",
+      "bytes": 5292838,
+      "kind": "native snapshot or derived exact project selection"
+    },
+    {
+      "path": "/tmp/root-retro-since-710/inputs/release-status.json",
+      "sourceObject": null,
+      "sha256": "3d8a54faef482831772a284b836eed83c233fb63c110dbccae6585f8771122ef",
+      "bytes": 25277,
+      "kind": "native snapshot or derived exact project selection"
+    },
+    {
+      "path": "/tmp/root-retro-since-710/inputs/native-admitted.json",
+      "sourceObject": null,
+      "sha256": "40304ca90d57b7a826a424a57944a6ef152c329f18cdb26b398c4d7bc41f49c2",
+      "bytes": 11891256,
+      "kind": "native snapshot or derived exact project selection"
+    },
+    {
+      "path": "/tmp/root-retro-since-710/inputs/doctor.json",
+      "sourceObject": null,
+      "sha256": "eeee5e3b41c0cda50c81241932c556bd7694439ba8adffab2f5b8dec15319f46",
+      "bytes": 2079,
+      "kind": "native snapshot or derived exact project selection"
+    },
+    {
+      "path": "/tmp/root-retro-since-710/inputs/unfinished-native.json",
+      "sourceObject": null,
+      "sha256": "10ab7806725d292ea091ed8eafb93e81f255d9beae6af37a63198b8b65783cc9",
+      "bytes": 850954,
+      "kind": "native snapshot or derived exact project selection"
+    },
+    {
+      "path": "/tmp/root-retro-since-710/inputs/selected-native.json",
+      "sourceObject": null,
+      "sha256": "319feb286238efa04bb9c43e294c718e6459005b63943fcaeb23248c6297ff05",
+      "bytes": 601844,
+      "kind": "native snapshot or derived exact project selection"
+    }
+  ],
+  "audit": {
+    "bead": "hv-umm2.720",
+    "role": "fresh read-only Sage evidence audit; not code review",
+    "findings": [],
+    "newImprovementProposal": null,
+    "conclusion": "No confirmed uncovered recurring cause. Preserve current canonical remedies and original acceptance. No metrics/budget revision, source/historical correction or precision-only bead justified.",
+    "freeze": {
+      "auditStart": "2026-10-15T05:22:17.806042+00:00",
+      "freezeEnd": "2026-10-15T05:22:25.060771+00:00",
+      "sourceObject": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+      "previous": "hv-umm2.710",
+      "cohort": [
+        "hv-umm2.192",
+        "hv-umm2.196",
+        "hv-umm2.220",
+        "hv-umm2.250",
+        "hv-umm2.252",
+        "hv-umm2.266",
+        "hv-umm2.268",
+        "hv-umm2.610",
+        "hv-umm2.615",
+        "hv-umm2.616",
+        "hv-umm2.618",
+        "hv-umm2.622",
+        "hv-umm2.623",
+        "hv-umm2.630",
+        "hv-umm2.698",
+        "hv-umm2.705",
+        "hv-umm2.707",
+        "hv-umm2.710",
+        "hv-umm2.712",
+        "hv-umm2.713",
+        "hv-umm2.714",
+        "hv-umm2.715",
+        "hv-umm2.716",
+        "hv-umm2.717",
+        "hv-umm2.719"
+      ],
+      "cohortCount": 25
+    },
+    "hashValidation": {
+      "inputs": 99,
+      "allMatch": true
+    },
+    "coverage": {
+      "manifest": "input-manifest.json",
+      "verifiedInputCount": 99,
+      "allHashesAndBytesMatch": true,
+      "cohortReadScope": "All25 friction and25 pairedmeasurementJSON parsed. Relevant timing/failure/provenance/resource/review sections, allavailablepairednarratives/preexistingreports inspected. Bindingpolicy currentcanonicalnative and exactcandidate/release receipts inspected. Large snapshots limited to relevant records; unrelated records not semantically audited."
+    },
+    "supplementalProvenance": [
+      {
+        "path": "/tmp/root-retro-since-710/candidate-status-manifest.json",
+        "sha256": "57453fb96f20f9a7405191f66266c5c3a6acf373a681f93559dc49487fdd2dfa",
+        "qualification": "Later read-only observation, separate from frozen99"
+      },
+      {
+        "path": "/tmp/root-retro-since-710/candidate-status-supplement-manifest.json",
+        "sha256": "acb3fdfb5b1e0cf3f80d9fcdc83f6f10acd47e995ef568458e1a3ef7b8c7dd00",
+        "qualification": "Later read-only observation, separate from frozen99"
+      },
+      {
+        "path": "/tmp/root-retro-since-710/parent-native-outcomes.json",
+        "sha256": "0d46f726525ca9ea8d222a954f23d24ff69a0e2be4f0e6a5ef0e34864c6718ee",
+        "qualification": "Later read-only observation, separate from frozen99"
+      }
+    ],
+    "perBead": [
+      {
+        "id": "hv-umm2.192",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 74.20644999999999,
+          "hostLoad": 9.150390625,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [
+          {
+            "tag": "determinization-fidelity",
+            "minutes": 32.521304316666665
+          }
+        ],
+        "candidate": {
+          "candidate": "01a13d59-d154-7ab2-ade3-e272d85a830a",
+          "source": "0cb3103b762f6e36e01224129dea250eb9303da9",
+          "tested": "84d6670ffd6484d72d38eb8705a2c194b1dfb8f0",
+          "certificate": "01a13d5c-a532-79d3-879e-b4f46a4d28b4",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 182.717,
+          "statusPath": "candidate-status/01a13d59-d154-7ab2-ade3-e272d85a830a.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.192/notes/line-38",
+          "inputs/selected-native.json#hv-umm2.192/notes/line-39"
+        ],
+        "review": {
+          "state": "not required for bounded noncore content/test/evidence scope",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.192/notes/line-39"
+          ]
+        },
+        "disposition": "Original1/300 hidden materialization-grant fidelity failure reproduced; comparator repair703 delivered and current fresh-Codex review complete. Repaired full300 succeeds; logging observation uses existing709. The32.521min friction is mixed diagnosis/admission/repair/dormant wait.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.192.json",
+          "docs/plan/evidence/measurements/hv-umm2.192.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.196",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 19.84465571666667,
+          "hostLoad": 17.6,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13d85-5505-7141-ba57-e9c06e0e0307",
+          "source": "541023a4d2fd0e18e994c4bc5ab2bfd2f02611c6",
+          "tested": "8685a75f75cd3849c27e13155e93fc14ecd7e998",
+          "certificate": "01a13d86-ea54-77a2-835e-ed0a810e9b2a",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 101.751,
+          "statusPath": "candidate-status/01a13d85-5505-7141-ba57-e9c06e0e0307.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.196/notes/line-8"
+        ],
+        "review": {
+          "state": "not required for bounded noncore content/test/evidence scope",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.196/notes/line-7"
+          ]
+        },
+        "disposition": "Original four-UUID acceptance complete. Three failed live callers/monitor assumptions retained; public source routes and final16effective browser cases pass. Existing browser caller/readiness remedy308/391 applies.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.196.json",
+          "docs/plan/evidence/measurements/hv-umm2.196.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.220",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 98.39513996666666,
+          "hostLoad": 7.24365234375,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [
+          {
+            "tag": "integration-conflict",
+            "minutes": 14.314060933333334
+          }
+        ],
+        "candidate": {
+          "candidate": "01a13d98-35ce-7952-b91c-52a0ac47b01e",
+          "source": "615054fd12d39e1d15a2720155ac9dea35740d38",
+          "tested": "615054fd12d39e1d15a2720155ac9dea35740d38",
+          "certificate": "01a13d99-b736-7000-b40c-81a6c8f32577",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 96.821,
+          "statusPath": "candidate-status/01a13d98-35ce-7952-b91c-52a0ac47b01e.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.220/notes/line-45"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.220/notes/line-46"
+          ]
+        },
+        "disposition": "Original rejected merge-conflict candidate replaced with certified integrated source; combined contracts/canonical causality checks pass. Existing713 integration disposition applies. Fresh163-chunk Codex review complete/no findings.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.220.json",
+          "docs/plan/evidence/measurements/hv-umm2.220.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.250",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 28.465918616666666,
+          "hostLoad": 13.3671875,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13dd7-1571-7470-bb68-bce8c2515630",
+          "source": "00a7f542e3a3d123f2c1095044fb0eccbe84baf5",
+          "tested": "d614f2258f7aa864911dadd34e2b02880e0216cd",
+          "certificate": "01a13dda-0989-7f03-8a72-077501ac47db",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 99.804,
+          "statusPath": "candidate-status/01a13dd7-1571-7470-bb68-bce8c2515630.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.250/notes/line-4"
+        ],
+        "review": {
+          "state": "not required for bounded noncore content/test/evidence scope",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.250/notes/line-4"
+          ]
+        },
+        "disposition": "Two judged caller mistakes corrected on unchanged source. Existing308/391 helper protocol applies; mandatory sampledCactus player proof retained, enemyactualdiscount qualified outside judgedworkflow. Weighted300 is distinct from gate/release workload.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.250.json",
+          "docs/plan/evidence/measurements/hv-umm2.250.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.252",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 23.115021433333332,
+          "hostLoad": 4.85791015625,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13d55-a65f-7512-ab0a-1f96874f1326",
+          "source": "dbbe2500e32625897424894346c6e2cd76e6e498",
+          "tested": "27b273d6253bfbb028d84a312b6f1b04f33bfc35",
+          "certificate": "01a13d57-496e-7f30-8dd6-20d0fbf3e522",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 105.364,
+          "statusPath": "candidate-status/01a13d55-a65f-7512-ab0a-1f96874f1326.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.252/notes/line-10",
+          "inputs/selected-native.json#hv-umm2.252/notes/line-11"
+        ],
+        "review": {
+          "state": "not required for bounded noncore content/test/evidence scope",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.252/notes/line-11"
+          ]
+        },
+        "disposition": "Optional-child-scenario existence assumption corrected by source/native D20 provenance. Weighted300 onepass,10eligible/90skip sweep; no new UI surface or core review required.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.252.json",
+          "docs/plan/evidence/measurements/hv-umm2.252.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.266",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 67.12353643333333,
+          "hostLoad": 10.33,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13db0-87fc-7312-8e0f-3ad54d5159f9",
+          "source": "586abbe43b2b2d3e44c669f242eb2df7cd96ed72",
+          "tested": "60c227afbe848db6c8bd72465cdd8eece908825d",
+          "certificate": "01a13db8-8397-75e0-9a06-1f430af02827",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 117.437,
+          "statusPath": "candidate-status/01a13db0-87fc-7312-8e0f-3ad54d5159f9.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "native-comments/hv-umm2.266.json#comment-01a13db5-dba6-77d7-8096-ca0d5b91d4cf",
+          "native-comments/hv-umm2.266.json#comment-01a13db9-af13-7e1d-9bca-f00ea80d39d1"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "native-comments/hv-umm2.266.json#comment-01a13dcb-875e-7121-8318-f58c15bb1c20"
+          ]
+        },
+        "disposition": "Actual expanded mobile Bazaar failure correctly retained and canonically repaired714; original acceptance QA join now passed. Journey-only literal weightedguard0games, finite300syntheticjourneycoverage honestly distinct. Current61-input Codexreview complete/no findings.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.266.json",
+          "docs/plan/evidence/measurements/hv-umm2.266.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.268",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 41.361015849999994,
+          "hostLoad": 6.57,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13df7-353b-7622-aad3-d5c48bd0f4ff",
+          "source": "6f9065e93c36680310852bb766b6eed902ca6595",
+          "tested": "3da0a072dd23647b015956c5417a05df8c088ac3",
+          "certificate": "01a13df9-1ad4-7ab2-a52e-b4c996482ee6",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 118.401,
+          "statusPath": "candidate-status/01a13df7-353b-7622-aad3-d5c48bd0f4ff.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "native-comments/hv-umm2.268.json#comment-01a13df8-611d-7c87-b776-012731a4e1f0",
+          "native-comments/hv-umm2.268.json#comment-01a13dfa-bedc-7947-bc5f-4a4ca089bfa7"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "native-comments/hv-umm2.268.json#comment-01a13e00-6490-75a1-934f-c25411deb914"
+          ]
+        },
+        "disposition": "Original three-UUID clauses, public journeycontracts,300syntheticseededdriver and32realbrowsercontexts complete; literalweightedguard0games qualified. Existing duplicate copier issue repaired within admitted scope.77text/11image coldreview complete/no findings.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.268.json",
+          "docs/plan/evidence/measurements/hv-umm2.268.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.610",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 20.1348834,
+          "hostLoad": 26.10400390625,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13d6f-4399-7af0-9b9e-b5391216190e",
+          "source": "db0688db79d52cdc1433aa5c1ebac430d9b189a1",
+          "tested": "eb953de2df5a379785b6fdbf1bb86db2066dee1d",
+          "certificate": "01a13d70-e460-7481-a348-a9cdc2778b31",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 104.478,
+          "statusPath": "candidate-status/01a13d6f-4399-7af0-9b9e-b5391216190e.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.610/notes/line-13",
+          "inputs/selected-native.json#hv-umm2.610/notes/line-14"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.610/notes/line-19"
+          ]
+        },
+        "disposition": "Own fixture assumptions corrected, final controls and new DSL/public boundaries validated; production246 full acceptance remains separate. Historical429 debt discharged by27-input fresh Codex review/no findings.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.610.json",
+          "docs/plan/evidence/measurements/hv-umm2.610.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.615",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 126.22503216666668,
+          "hostLoad": 18.0361328125,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [
+          {
+            "tag": "integration-conflict",
+            "minutes": 21.141261366666665
+          }
+        ],
+        "candidate": {
+          "candidate": "01a13dd3-2a5c-7482-b5cd-3082ff9a06e8",
+          "source": "677303e43348ec8484f2adf1b9411bad31d9b7a6",
+          "tested": "a4de1b08b45b0e5c366a8cef22b39ae49a227bf5",
+          "certificate": "01a13dd6-916a-7f82-9c47-b464f346600b",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 102.679,
+          "statusPath": "candidate-status/01a13dd3-2a5c-7482-b5cd-3082ff9a06e8.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.615/notes/line-49",
+          "inputs/selected-native.json#hv-umm2.615/notes/line-50"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.615/notes/line-51"
+          ]
+        },
+        "disposition": "Ordinary peer integration repaired under parent-owned update; preserved peer/source contracts plus2jointcontrols. Existing713/behavioralserialization applies. Final125chunkreview complete/no findings. Conservative originalownership/gap window is not currentproductive time.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.615.json",
+          "docs/plan/evidence/measurements/hv-umm2.615.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.616",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 64.8845161,
+          "hostLoad": 9.662109375,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13db2-b033-7322-a987-3a3d9889b8f5",
+          "source": "f0ead1bbd938e9e656eaf42df230491e6f81b36a",
+          "tested": "0e30f21281994cfff203e00596b72d075c71cafa",
+          "certificate": "01a13db4-aa18-7841-8b6f-a9f01ea10e09",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 113.958,
+          "statusPath": "candidate-status/01a13db2-b033-7322-a987-3a3d9889b8f5.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.616/notes/line-16",
+          "inputs/selected-native.json#hv-umm2.616/notes/line-17"
+        ],
+        "review": {
+          "state": "complete; four accepted P2 findings, canonical repair716 completed",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.616/notes/line-18"
+          ]
+        },
+        "disposition": "Fresh36-input review accepted four real P2s; canonical716 then717/719 repairs and broken-base witnesses retain original257/258 acceptance. ExistingD18 follow-up workflow functions; no duplicate fix.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.616.json",
+          "docs/plan/evidence/measurements/hv-umm2.616.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.618",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 39.847653183333335,
+          "hostLoad": 11.26220703125,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13ddc-8666-7ee0-93e4-38087f566bab",
+          "source": "f3a75a0330c263f3bbb9c3066db79eaf4015feee",
+          "tested": "29f6decf5ff6fbaf5ca8a6a3551de68b6a1074ff",
+          "certificate": "01a13dde-1134-73f0-b6b3-8d274bff8f3c",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 99.309,
+          "statusPath": "candidate-status/01a13ddc-8666-7ee0-93e4-38087f566bab.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.618/notes/line-27",
+          "inputs/selected-native.json#hv-umm2.618/notes/line-28"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.618/notes/line-29"
+          ]
+        },
+        "disposition": "Opening-hand capability/failurepaths/counterfactuals complete; required101-input freshCodexreview complete/no findings. Consumer257 fullrecipe and actualUI acceptance remain separate. Full outer189.605s mixes67.236s prepare-startadmission/startup with122.370s execution/teardown.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.618.json",
+          "docs/plan/evidence/measurements/hv-umm2.618.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.622",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 35.30818441666667,
+          "hostLoad": 14.08,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13dfa-5d36-7f01-ba3e-c7dac0f81650",
+          "source": "bc4409597ba41e1ecc8b5f96a084c5a7220c3046",
+          "tested": "61b19c065f93681cf227ba544005fd94e02bded1",
+          "certificate": "01a13dfc-014a-7630-be25-ce141ecf4c4f",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 105.503,
+          "statusPath": "candidate-status/01a13dfa-5d36-7f01-ba3e-c7dac0f81650.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.622/notes/line-23",
+          "inputs/selected-native.json#hv-umm2.622/notes/line-24"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.622/notes/line-25"
+          ]
+        },
+        "disposition": "Combined source and derived replayfixture causal restoration verified by source receipts; final127chunkfreshCodexreview complete/no findings. Original248 fullconsumer acceptance remains separate.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.622.json",
+          "docs/plan/evidence/measurements/hv-umm2.622.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.623",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 60.15399028333333,
+          "hostLoad": 10.67333984375,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13dd1-8148-7b92-b4b8-b82a46c258ae",
+          "source": "ce686e89ea3b1cfc00608715b29de852a478b826",
+          "tested": "50df51804bd70bc112c66933f3101c0ac23a2a8f",
+          "certificate": "01a13dd4-fe57-7ff3-9ea5-d1d7d0c799d7",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 98.187,
+          "statusPath": "candidate-status/01a13dd1-8148-7b92-b4b8-b82a46c258ae.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.623/notes/line-14"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.623/notes/line-15"
+          ]
+        },
+        "disposition": "Originalheavy/fuzz source epochs preserved; finalcombinedfocused42/review/Knip pass after incorrect selector recovered. Final148input/285chunkreview complete/no findings. Existing713 peer-preserving update and local-edit-correction disposition apply.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.623.json",
+          "docs/plan/evidence/measurements/hv-umm2.623.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.630",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 41.421472533333336,
+          "hostLoad": 16.99,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [
+          {
+            "tag": "local-edit-correction",
+            "minutes": 12.357356166666667
+          }
+        ],
+        "candidate": {
+          "candidate": "01a13d6d-5502-71a2-8978-62956df275fd",
+          "source": "8ad20f514190538cc760b53f68cff79a3bf5cbe1",
+          "tested": "b0e29829e32562dd7ce4aff91c668b69bfd8e770",
+          "certificate": "01a13d6f-0b78-7cb3-bc2c-04fc86b071f8",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 109.822,
+          "statusPath": "candidate-status/01a13d6d-5502-71a2-8978-62956df275fd.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "native-comments/hv-umm2.630.json#comment-01a13d6d-c8fe-7e21-a39f-fcf89008a110",
+          "native-comments/hv-umm2.630.json#comment-01a13d6f-7b7b-7a7b-88a2-3318cf29e061"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "native-comments/hv-umm2.630.json#comment-01a13d8e-ef8e-7a02-b974-a004b3769b69"
+          ]
+        },
+        "disposition": "Gross12.357min local fixture/type/stale-ID/coldcontinuation corrections; existing local-edit-correction disposition applies. Current51-input freshCodexreview complete/no findings, old429 failures historical.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.630.json",
+          "docs/plan/evidence/measurements/hv-umm2.630.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.698",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 177.53268905000002,
+          "hostLoad": 19.40625,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [
+          {
+            "tag": "own-play-method-order",
+            "minutes": 0.24367472778443092
+          },
+          {
+            "tag": "history-pair-order",
+            "minutes": 0.3975749701339131
+          }
+        ],
+        "candidate": {
+          "candidate": "01a13d63-9f6e-75e0-a6ed-f75d73c43363",
+          "source": "e21beb5ca86b55f08c4c7537bfad091d6876e67b",
+          "tested": "e21beb5ca86b55f08c4c7537bfad091d6876e67b",
+          "certificate": "01a13d65-16af-7593-be08-c075c98ebbbf",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 94.053,
+          "statusPath": "candidate-status/01a13d63-9f6e-75e0-a6ed-f75d73c43363.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.698/notes/line-45",
+          "inputs/selected-native.json#hv-umm2.698/notes/line-47"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.698/notes/line-49"
+          ]
+        },
+        "disposition": "Original177.533min grosswindow includes recovery/checks/waits, not isolatedproductive time. Own/historypair ordering corrections validated. Current698 review completed through closedcompleted711 with207chunks/no findings; historical429 debt discharged.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.698.json",
+          "docs/plan/evidence/measurements/hv-umm2.698.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.705",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 71.35792303333332,
+          "hostLoad": 9.94287109375,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [
+          {
+            "tag": "integration-conflict",
+            "minutes": 11.379346483333334
+          }
+        ],
+        "candidate": {
+          "candidate": "01a13db2-e4f0-7a13-af91-1f6436666ef9",
+          "source": "a83d105675719211aac52b7f52334aa7ae7ed86c",
+          "tested": "790d7590fe816a45f98219dd0396816e8fe46f33",
+          "certificate": "01a13db6-a321-7dc0-9dee-a75977e551ea",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 122.445,
+          "statusPath": "candidate-status/01a13db2-e4f0-7a13-af91-1f6436666ef9.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "native-comments/hv-umm2.705.json#comment-01a13db5-9d94-715f-bbd4-bb63360cfb9f",
+          "native-comments/hv-umm2.705.json#comment-01a13db8-1bfb-7704-bd14-4a245205f256"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "native-comments/hv-umm2.705.json#comment-01a13dbe-170a-71ec-bb7b-74448cd98486"
+          ]
+        },
+        "disposition": "Six ordinary textual/generatedconflicts with finalpeerpreserving update and distinctold/full/fuzz vscombinedepochs. Existing713 disposition applies. Final69input/400receipt Codex review complete/no findings.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.705.json",
+          "docs/plan/evidence/measurements/hv-umm2.705.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.707",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 125.68753693333333,
+          "hostLoad": 20.12,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13d69-282f-7f92-9752-a1179391c68b",
+          "source": "c6c686b019745af6468a214aaeab7e4d9c10f015",
+          "tested": "e1d334d3eb0bd8a013d91a1fefa213114aecdb58",
+          "certificate": "01a13d6a-dc28-7241-99d0-53d61f888eae",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 109.627,
+          "statusPath": "candidate-status/01a13d69-282f-7f92-9752-a1179391c68b.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.707/notes/line-4"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "native-comments/hv-umm2.707.json#comment-01a13d88-b9e6-73ef-a616-fa7917691e7b"
+          ]
+        },
+        "disposition": "Historicaltwo429zeroread failures preserved;36input/188receipt freshCodex review complete/no findings. Mobilechooserlonglabel preexistingrecord retained without productcause expansion; original275/UI acceptances separate.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.707.json",
+          "docs/plan/evidence/measurements/hv-umm2.707.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.710",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 18.5930361,
+          "hostLoad": 9.22900390625,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13d68-ada8-70d1-a24e-a73938882879",
+          "source": "1e4a26306a43199c22fde1c7de05268a884d8e05",
+          "tested": "05efe4f46e3fade0333470d652099959512898e8",
+          "certificate": "01a13d69-0c17-7530-8795-a34940fb0a41",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 22.298,
+          "statusPath": "candidate-status/01a13d68-ada8-70d1-a24e-a73938882879.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "native-comments/hv-umm2.710.json#comment-01a13d6a-59ab-7933-9d52-d9a55c87af55"
+        ],
+        "review": {
+          "state": "not required for bounded noncore content/test/evidence scope",
+          "evidence": [
+            "native-comments/hv-umm2.710.json#comment-01a13d6a-59ab-7933-9d52-d9a55c87af55"
+          ]
+        },
+        "disposition": "Previous source-bound retrospective evidence with exact25priorcoverage/corrections. Its eight historicalreviewdebts are dated observations; current outcomes require each nativecurrentreceipt. Own review/Knip evidence-onlycosts qualify.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.710.json",
+          "docs/plan/evidence/measurements/hv-umm2.710.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.712",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 11.540276166666667,
+          "hostLoad": 5.19384765625,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13da5-6d1e-75e1-8887-c574e5c3beee",
+          "source": "1558c56b96651776ac6de8ef6ec069f79b6f3ba9",
+          "tested": "ff2531dc0862024a0cfe495ed0d4b2888e318512",
+          "certificate": "01a13da6-0008-7860-a2d9-3f5b814b268f",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 35.752,
+          "statusPath": "candidate-status/01a13da5-6d1e-75e1-8887-c574e5c3beee.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.712/notes/line-12",
+          "inputs/selected-native.json#hv-umm2.712/notes/line-13"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.712/notes/line-14"
+          ]
+        },
+        "disposition": "Actual stale/wrong-side answer witnesses and two guardfaults distinguish contracts; fresh42inputreview complete/no findings. Preexistingmutableproductionfixture canonically repaired715; no repeated fix.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.712.json",
+          "docs/plan/evidence/measurements/hv-umm2.712.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.713",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 5.6492286,
+          "hostLoad": 10.4287109375,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13dab-a631-7161-8f48-68d06a8bb139",
+          "source": "a7fd56f60a0866033b7b1f2c4af30b8d5ca882dd",
+          "tested": "2327d24778810fb760c60662de502d70ed57951e",
+          "certificate": "01a13dac-0f7e-7993-ac87-8ec82bc61695",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 25.033,
+          "statusPath": "candidate-status/01a13dab-a631-7161-8f48-68d06a8bb139.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.713/notes/line-4",
+          "inputs/selected-native.json#hv-umm2.713/notes/line-5"
+        ],
+        "review": {
+          "state": "not required for bounded noncore content/test/evidence scope",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.713/notes/line-5"
+          ]
+        },
+        "disposition": "Canonical integration-conflict audit established distinct composable additions, current update/rollback/parking/reapplication rules sufficient. No blanket filename serialization or newfix.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.713.json",
+          "docs/plan/evidence/measurements/hv-umm2.713.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.714",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 14.881606683333333,
+          "hostLoad": 9.41,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13dc9-abce-7280-960e-2e7e5d821e0f",
+          "source": "9b0838d2ca4cd4a27c0e9f0c458ce3b16ab46dd2",
+          "tested": "9b0838d2ca4cd4a27c0e9f0c458ce3b16ab46dd2",
+          "certificate": "01a13dca-27a9-7de0-9823-b83a21891e0c",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 29.613,
+          "statusPath": "candidate-status/01a13dc9-abce-7280-960e-2e7e5d821e0f.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "native-comments/hv-umm2.714.json#comment-01a13dca-d5c7-70d2-8805-0e1d9fd988b8",
+          "native-comments/hv-umm2.714.json#comment-01a13dcb-4c4d-791c-9365-e4121bf5dbd3"
+        ],
+        "review": {
+          "state": "complete; no actionable findings",
+          "evidence": [
+            "native-comments/hv-umm2.714.json#comment-01a13dd0-8dc5-76ed-bba0-c536d0bc4a9c"
+          ]
+        },
+        "disposition": "Exact8styledeclarations repair verifiedmobileclipping.12normal/enhancedviewport/copy workflows,288geometrychecks,36contextrows and37inputcoldreview complete/no findings. Original266failurebytes retained.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.714.json",
+          "docs/plan/evidence/measurements/hv-umm2.714.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.715",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 4.9328696,
+          "hostLoad": 10.59130859375,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13db1-d8ca-7160-a416-ad695dac184a",
+          "source": "a70d36a2fbab7129331aef604259b43c17b8527d",
+          "tested": "a75b4c5425436cf4d15d9976f09be584691bfc75",
+          "certificate": "01a13db2-78c8-7b12-9c21-bc4b03e7f7f3",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 36.445,
+          "statusPath": "candidate-status/01a13db1-d8ca-7160-a416-ad695dac184a.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.715/notes/line-5",
+          "inputs/selected-native.json#hv-umm2.715/notes/line-6"
+        ],
+        "review": {
+          "state": "not required for bounded noncore content/test/evidence scope",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.715/notes/line-6"
+          ]
+        },
+        "disposition": "Local syntheticscoringfixture preserves alltestcallbacks/pendinganswerbody;31focusedcases/review/Knip passed, no newtestcase/module. Existing712followup complete; no further improvement.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.715.json",
+          "docs/plan/evidence/measurements/hv-umm2.715.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.716",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 28.1579304,
+          "hostLoad": 14.0205078125,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13dd6-dca1-73a2-ba87-02744c6fd1c5",
+          "source": "d71d66be07eccc8d88151dd6428da0bca39a9496",
+          "tested": "f21c773d28c30c56a17c0c321ca226d33cde2b76",
+          "certificate": "01a13dd8-7241-7ec2-aecd-77e14ed077e7",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 101.973,
+          "statusPath": "candidate-status/01a13dd6-dca1-73a2-ba87-02744c6fd1c5.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.716/notes/line-8",
+          "inputs/selected-native.json#hv-umm2.716/notes/line-9"
+        ],
+        "review": {
+          "state": "complete; one accepted P2 finding, canonical repair717 completed",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.716/notes/line-10"
+          ]
+        },
+        "disposition": "Four616 accepted findings repaired with16broken-basefailures/2positivecontrols. Requiredfreshreview complete; oneP2historicaleligibility repaired717. Full618.142s includes admission lowerbound380.505s, exactkernelwaitunknown.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.716.json",
+          "docs/plan/evidence/measurements/hv-umm2.716.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.717",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 11.476802333333334,
+          "hostLoad": 11.59912109375,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13deb-e14a-7ae2-a8d8-759ab8c6aeb6",
+          "source": "0112bc856ef983364ca69016b3d0c44749ff4131",
+          "tested": "0112bc856ef983364ca69016b3d0c44749ff4131",
+          "certificate": "01a13ded-b223-70f1-a1ba-66e4bb40e6f8",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 116.563,
+          "statusPath": "candidate-status/01a13deb-e14a-7ae2-a8d8-759ab8c6aeb6.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.717/notes/line-6",
+          "inputs/selected-native.json#hv-umm2.717/notes/line-7"
+        ],
+        "review": {
+          "state": "complete; one accepted P2 finding, canonical repair719 completed",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.717/notes/line-7"
+          ]
+        },
+        "disposition": "Fourbroken-basefails/4holdercontrols validate knownsubjecthistorical eligibility repair; requiredfresh23inputreview accepts compatibleoccasioncontroller P2 repaired719. Ordinaryreview56.411/full178.803s mixedload, no speedclaim.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.717.json",
+          "docs/plan/evidence/measurements/hv-umm2.717.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      },
+      {
+        "id": "hv-umm2.719",
+        "status": "closed",
+        "resolution": "completed",
+        "timing": {
+          "storedImplementMin": 10.730380866666668,
+          "hostLoad": 19.23876953125,
+          "allCommandValues": "friction-summary.json; exact frozen per-bead inputs"
+        },
+        "friction": [],
+        "candidate": {
+          "candidate": "01a13dfb-7da2-7c82-a8d7-9262462c746a",
+          "source": "1d7f6029a9ea05baf5202edd1f43b849a12e9d53",
+          "tested": "5a270b2e22ed467a7adcdd390a62867d70ea99ca",
+          "certificate": "01a13dfd-a2c8-7150-9430-fdd4654f305a",
+          "state": "promoted",
+          "cleanup": "completed",
+          "gateS": 101.82,
+          "statusPath": "candidate-status/01a13dfb-7da2-7c82-a8d7-9262462c746a.json",
+          "statusHashRef": "candidate-status-manifest.json or candidate-status-supplement-manifest.json"
+        },
+        "candidateProvenance": [
+          "inputs/selected-native.json#hv-umm2.719/notes/line-6",
+          "inputs/selected-native.json#hv-umm2.719/notes/line-7"
+        ],
+        "review": {
+          "state": "complete; no patch finding; independent pre-existing unchanged matcher repair721 remains in_progress",
+          "evidence": [
+            "inputs/selected-native.json#hv-umm2.719/notes/line-7"
+          ]
+        },
+        "disposition": "Fourbroken-basefails/4controls validate compatibleoccasioncontroller repair; requiredfresh24inputreview complete/no patchfinding. Independentcrossbranchmatcher721filed, remainscurrentcanonicalwork; no newduplicate.",
+        "sourceRefs": [
+          "docs/plan/evidence/friction/hv-umm2.719.json",
+          "docs/plan/evidence/measurements/hv-umm2.719.json"
+        ],
+        "sourceHashes": "input-manifest.json exact entries"
+      }
+    ],
+    "nativeCandidateSummary": {
+      "finalPromotedCleaned": 25,
+      "freshVotingSteps": 50,
+      "allVotingSuccessful": true,
+      "gateStepSumS": {
+        "n": 25,
+        "median": 101.973,
+        "min": 22.298,
+        "max": 182.717
+      },
+      "gateOver90S": 20,
+      "dependenciesS": {
+        "n": 25,
+        "median": 4.87,
+        "min": 4.253,
+        "max": 6.956
+      },
+      "reviewGateS": {
+        "n": 25,
+        "median": 97.512,
+        "min": 17.098,
+        "max": 175.761
+      },
+      "rejectedObservedCandidates": [
+        {
+          "candidate": "01a13d87-7ff4-7db2-b1c9-9c0f484bfe07",
+          "beads": [
+            "hv-umm2.220"
+          ],
+          "state": "merge-conflict",
+          "source": "f0114a8012088a2d7f2991d46f7b92e5a39a8745",
+          "reason": "candidate could not be constructed on promoted `staging` 8685a75f75cd3849c27e13155e93fc14ecd7e998: applying source f0114a8012088a2d7f2991d46f7b92e5a39a8745 (source base 53e88efa62b282cc6b82e9120da049e7367675f1) produced merge conflicts in [\"docs/plan/evidence/content-inventory.json\", \"scripts/content-inventory.test.ts\", \"src/rules/battle/fold.ts\", \"src/rules/replay/fixtures/adversarial.json\"]. Rebase the single task commit onto the latest promoted `staging` 8685a75f75cd3849c27e13155e93fc14ecd7e998, resolve and regenerate, then resubmit"
+        },
+        {
+          "candidate": "01a13dbf-8d5c-7eb0-a011-5d550c387c75",
+          "beads": [
+            "hv-umm2.615"
+          ],
+          "state": "merge-conflict",
+          "source": "18c90c4769d794778f58a5974874c94a191805fc",
+          "reason": "candidate could not be constructed on promoted `staging` 60c227afbe848db6c8bd72465cdd8eece908825d: applying source 18c90c4769d794778f58a5974874c94a191805fc (source base 2327d24778810fb760c60662de502d70ed57951e) produced merge conflicts in [\"src/engine/events/kinds/trigger-queued.ts\", \"src/engine/triggers/matcher.ts\", \"src/engine/view/determinize.ts\"]. Rebase the single task commit onto the latest promoted `staging` 60c227afbe848db6c8bd72465cdd8eece908825d, resolve and regenerate, then resubmit"
+        }
+      ],
+      "foreignTokenExcluded": {
+        "candidate": "01a13d11-434c-7903-ac10-d4ba1ce42bdf",
+        "actualSourceBead": "hv-umm2.709",
+        "qualification": "Appeared in192notes but not its finalcandidate; matchedsource-trailer excluded it."
+      },
+      "qualification": "Exact final provenance independently derives from native deliverednotes/comment/metadata, promotedstatus and actualsourceBeadtrailer. Finalsteps exclude queue/approval/promotion/release. No arbitraryUUID inference."
+    },
+    "boundedHistory": {
+      "events": 500,
+      "sequenceFirst": 30627,
+      "sequenceLast": 31126,
+      "start": "2026-10-15T02:53:37.522937+00:00",
+      "end": "2026-10-15T05:21:54.340823+00:00",
+      "kinds": {
+        "queue.item-updated": 154,
+        "release.run-passed": 14,
+        "release.advanced": 14,
+        "release.pushed": 14,
+        "remote.pull-completed": 148,
+        "worktree.created": 22,
+        "candidate.created": 25,
+        "candidate.promotion-authorized": 20,
+        "user-master.synchronized": 20,
+        "promotion.completed": 20,
+        "source.cleanup-completed": 20,
+        "release.run-queued": 19,
+        "worktree.updated": 4,
+        "release.run-superseded": 5,
+        "worktree.removed": 1
+      },
+      "qualification": "Starts after710closed02:35:42; not full since710interval. No observed release failure in this boundedwindow; historical earlierfailedrelease retained in710, not erased."
+    },
+    "release": {
+      "stepSumS": {
+        "n": 14,
+        "median": 469.855,
+        "min": 413.789,
+        "max": 531.366
+      },
+      "nativeElapsedS": {
+        "n": 14,
+        "median": 469.993,
+        "min": 413.91,
+        "max": 531.543
+      },
+      "over450StepSum": 11,
+      "components": {
+        "dependencies": {
+          "n": 14,
+          "median": 4.636,
+          "min": 4.379,
+          "max": 5.796
+        },
+        "review-full": {
+          "n": 14,
+          "median": 133.3185,
+          "min": 115.233,
+          "max": 155.548
+        },
+        "fuzz": {
+          "n": 14,
+          "median": 332.1435,
+          "min": 293.223,
+          "max": 379.156
+        }
+      },
+      "qualification": "14 actual passed release IDs from bounded500eventhistory matched exact frozenrelease-statusruns; no fullinterval completeness. Component sums exclude queue/promotion/publication. Mixedload,200gamefuzz not300weightedcontent."
+    },
+    "releaseRunEvidence": [
+      {
+        "item": "01a13df6-2a33-7e01-8430-310ab2b595f8",
+        "elapsedS": 531.543,
+        "stepSumS": 531.366
+      },
+      {
+        "item": "01a13ded-c7f3-71e3-a18a-2dba62e4cfad",
+        "elapsedS": 487.154,
+        "stepSumS": 486.995
+      },
+      {
+        "item": "01a13dde-23b8-77f0-a7ec-f084e560646e",
+        "elapsedS": 498.592,
+        "stepSumS": 498.434
+      },
+      {
+        "item": "01a13dda-1b6f-7a10-b9ae-bf3cdffc1a7c",
+        "elapsedS": 454.258,
+        "stepSumS": 454.106
+      },
+      {
+        "item": "01a13dd6-afdc-7040-a260-4eea7351350b",
+        "elapsedS": 469.268,
+        "stepSumS": 469.113
+      },
+      {
+        "item": "01a13dca-60e6-7980-a901-14124f8c4679",
+        "elapsedS": 492.102,
+        "stepSumS": 491.97
+      },
+      {
+        "item": "01a13db8-9320-7902-bb73-c6b43032991b",
+        "elapsedS": 452.616,
+        "stepSumS": 452.456
+      },
+      {
+        "item": "01a13db2-8b9d-7721-b9fc-4245e0a51677",
+        "elapsedS": 492.98,
+        "stepSumS": 492.831
+      },
+      {
+        "item": "01a13dac-26a1-7433-9feb-5627dc30636d",
+        "elapsedS": 475.501,
+        "stepSumS": 475.353
+      },
+      {
+        "item": "01a13da6-113a-72e3-8ed0-9a415bf43de6",
+        "elapsedS": 470.718,
+        "stepSumS": 470.597
+      },
+      {
+        "item": "01a13d9a-1195-7700-8f3f-f4b4d56a1c6d",
+        "elapsedS": 413.91,
+        "stepSumS": 413.789
+      },
+      {
+        "item": "01a13d86-fa83-7bc2-8af8-28d108714592",
+        "elapsedS": 436.568,
+        "stepSumS": 436.417
+      },
+      {
+        "item": "01a13d82-c345-7a61-8aa9-1c863b8fa2ec",
+        "elapsedS": 461.192,
+        "stepSumS": 461.038
+      },
+      {
+        "item": "01a13d70-f855-7471-8505-32e2a8800fed",
+        "elapsedS": 442.809,
+        "stepSumS": 442.672
+      }
+    ],
+    "releaseAtFreeze": {
+      "release_state": "pending",
+      "lag": {
+        "commits": 3,
+        "since": [
+          2026,
+          288,
+          5,
+          8,
+          22,
+          623988000,
+          0,
+          0,
+          0
+        ]
+      },
+      "release_block_reasons": [],
+      "promotion_pause": null,
+      "active_run": {
+        "item_id": "01a13dfd-b286-7ed1-aaac-b36564130220",
+        "state": "running",
+        "terminal_reason": null,
+        "target_oid": {
+          "format": "sha1",
+          "bytes": "5a270b2e22ed467a7adcdd390a62867d70ea99ca"
+        },
+        "range": {
+          "from": {
+            "format": "sha1",
+            "bytes": "0112bc856ef983364ca69016b3d0c44749ff4131"
+          },
+          "to": {
+            "format": "sha1",
+            "bytes": "5a270b2e22ed467a7adcdd390a62867d70ea99ca"
+          }
+        },
+        "failing_steps": [],
+        "steps": [],
+        "retry_of_item_id": null,
+        "buildset_id": "01a13dfe-487f-72d3-b576-bcdf30d4ab7d",
+        "elapsed_ms": 306215
+      }
+    },
+    "storedTimingSummary": {
+      "overlappingGrossWindowSumMin": 1221.0277498666667,
+      "hostLoadRange": [
+        4.85791015625,
+        26.10400390625
+      ],
+      "literalReview": {
+        "n": 22,
+        "median": 66.63680402052705,
+        "min": 0.38972904201364145,
+        "max": 494.62628233403666
+      },
+      "literalFocused": {
+        "n": 14,
+        "median": 10.488852770999074,
+        "min": 4.820512125035748,
+        "max": 173.04802029096754
+      },
+      "literalKnip": {
+        "n": 23,
+        "median": 6.569341624970548,
+        "min": 4.070888540998567,
+        "max": 13.592007957980968
+      },
+      "qualification": "Literal named keys only; aggregate or distinctsourceepochs intentionally not relabeled finals. Sum is not projectelapsed or productiveCPU. CPU/sampling/criticalpath/laneidle unknown."
+    },
+    "comparisons": {
+      "previous710": {
+        "gate25MedianS": 99.998,
+        "release15MedianS": 444.286,
+        "source": "docs/plan/evidence/measurements/hv-umm2.710.md"
+      },
+      "currentGateMedianS": 101.973,
+      "currentRelease14StepMedianS": 469.855,
+      "qualification": "Differentselections,sourcegrowth,load/cache/queues and incompleteinterval; descriptive only, no causal slowdown/speedup or comparablelowload budgetverdict. Targets gate60s/release300s/defaultfuzz60s remain binding; gate46 owns controlledD19/currentmeasurement and justifiedtestcut."
+    },
+    "currentReviewState": {
+      "cohortRequiredReviewsComplete": true,
+      "currentCohortReviewDebt": [],
+      "historical429": "Retained actualzero-read provider failures and previouspending states; permanenthumanfreshCodexpolicyoverrides oldClauderouting. A policyupdatealone is not reviewcompletion; actual laternativecompleteaccounts used.",
+      "review711": "Frozen native-admitted/intended711closed/completed/review_statecomplete;698current207chunkreviewcomplete/no findings. Not an unfinishedduty.",
+      "acceptedFindings": "616fourP2\u2192716;716oneP2\u2192717;717oneP2\u2192719; allboundedrepairsdelivered.719patchno findings; separateunchangedmatcher721in_progress."
+    },
+    "canonicalDispositions": [
+      {
+        "cause": "ordinary integration collisions",
+        "refs": [
+          "hv-umm2.713",
+          "introspection.jsonl#integration-conflict/phase-5",
+          "workflow.md#updating-a-worktree"
+        ],
+        "reason": "Current220/615/705/623 recoveries preserve peer bodies and originalepochs; precise sourceoverlap alone does not establish incompatiblebehavior or filenameordering."
+      },
+      {
+        "cause": "heavy admission/startup/load",
+        "refs": [
+          "hv-lf7t",
+          "decisions.md#d17-machine-resources",
+          "metrics.md#budgets"
+        ],
+        "reason": "D17intentionalheavyserialization; observedouter-inner envelopes do not establish kernelqueue or causalschedulerdefect.192144.738soverhead;250905.581soutervs569.4sreportedengine/598.1sCPU;266422.901soutervs1.597s0gameguard;26884.538soutervs1.513s0gameguard;61867.236spreparestart;716>=380.505spreexecution."
+      },
+      {
+        "cause": "browser caller/readiness failures",
+        "refs": [
+          "hv-umm2.308",
+          "hv-umm2.391",
+          "hv-umm2.428"
+        ],
+        "reason": "196caller/monitor,250physicaldiscard/voidchooser,266structuredClone/fileinput,714shelfsettlement and268earnedsetup are concretecallerassumptions or supportedreadiness qualification; no singleunresolvedhelperdefect proven."
+      },
+      {
+        "cause": "fixture/static/caller corrections",
+        "refs": [
+          "introspection.jsonl#local-edit-correction/phase-5",
+          "hv-umm2.715"
+        ],
+        "reason": "630gross12.357min and ownfixture/type failures elsewhere are selfcorrecteddevelopment, not recurringcommonunresolvedproductcause.712productionfixture has delivered715remedy."
+      },
+      {
+        "cause": "review scope/429/followups",
+        "refs": [
+          "decisions.md#d18-review-cadence",
+          "workflow.md#reviews",
+          "hv-umm2.721"
+        ],
+        "reason": "Requiredtruncations finished under immutablepackets; currentcompleteaccounts keep historicalerrors. Acceptedfindings canonicallyfiled and actualbroken-basewitnesses retained; independent721notduplicated."
+      },
+      {
+        "cause": "purejourney battlefuzz applicability",
+        "refs": [
+          "phase-5-content.md#56-dreamsigns-journey-effects-p8",
+          "native-comments/hv-umm2.266.json",
+          "native-comments/hv-umm2.268.json"
+        ],
+        "reason": "Literalweightedguards actual0games, retained once; specificP8syntheticjourney/publicfold/browseracceptances qualified. No passingbattle300, fulljourney or acceptancewaiver inferred."
+      }
+    ],
+    "limitations": [
+      "This audit does not execute tests/build/browser/provider/code review.",
+      "Parsed full25pairedJSONs and inspected relevant scope/timing/failure/resource/review/provenance fields and all available pairednarratives/preexisting reports. Hashvalidation alone is not called semanticreview; large99native snapshots only relevantcohort/canonicalrecords inspected.",
+      "Source hashes authenticate frozen inputs, not every referenced externalrawQA/process/reviewerartifact; native verification accounts are attributed to their authors.",
+      "No currentcontrolledlowload D19measurement, CPUcausalcomparison, exactkernellockwait, samplingstart or fullsince710history supplied.",
+      "Freeze cohort immutable; laterlandedfriction excluded. Supplementnativeobservations explicitlyseparate."
+    ]
+  },
+  "parentVerification": {
+    "at": "2026-10-15T05:31:23.677799+00:00",
+    "frozenInputsVerified": 99,
+    "exactCohortRowsVerified": 25,
+    "exactSourceTrailersAndCertificatesVerified": 25,
+    "votingStepsVerified": 50,
+    "exactBoundedSuccessfulReleaseRowsVerified": 14,
+    "gateMedianS": 101.973,
+    "releaseMedianS": 469.855,
+    "nativeReviewAccounts": "Read relevant completion notes/comments and frozen current state, attributed; no new raw reviewer transcript audit",
+    "findings": [],
+    "filedIDs": [],
+    "sourceUnchangedBeforeWriteProof": "parent-before-write-audit.json",
+    "sageReportSHA256": "08b4671cf31bdf39f21ce6ad31e79a8c6b9dc7b6bf69eb70faaa63de065f0aaf",
+    "sageMarkdownSHA256": "2fd96d22bd1cb895b6469a1a18440dccb5a57d9ec0ce9ad36169f86c57966cbd"
+  },
+  "references": {
+    "input-manifest.json": {
+      "sha256": "9d57a16d3fdb36f43556d80f014b474575763add6a800e634629fd8cc09d0bd8",
+      "bytes": 33825
+    },
+    "supplement-reference-manifest.json": {
+      "sha256": "c91972c09ba0d3d1801cd04603af9278d04259049aa6a4a1b9a07970769581ef",
+      "bytes": 2675
+    },
+    "parent-native-outcomes.json": {
+      "sha256": "0d46f726525ca9ea8d222a954f23d24ff69a0e2be4f0e6a5ef0e34864c6718ee",
+      "bytes": 36163
+    },
+    "parent-sage-audit.json": {
+      "sha256": "16788bd52302becaca06f56efb342c5a26c53795637dc54774b5b52147fa3c7c",
+      "bytes": 730
+    },
+    "sage-report.json": {
+      "sha256": "08b4671cf31bdf39f21ce6ad31e79a8c6b9dc7b6bf69eb70faaa63de065f0aaf",
+      "bytes": 57700
+    },
+    "sage-report.md": {
+      "sha256": "2fd96d22bd1cb895b6469a1a18440dccb5a57d9ec0ce9ad36169f86c57966cbd",
+      "bytes": 6264
+    },
+    "sage-dispatch.json": {
+      "sha256": "737ac31b1b4cfb5d66a127143c670d0b225a10dc069cdc91974b1372f34cae08",
+      "bytes": 340
+    },
+    "parent-before-write-audit.json": {
+      "sha256": "3f8b00e82a8e1807548e042bd3e94761743f84326796bbe9f06deca4ec0d984c",
+      "bytes": 178
+    }
+  },
+  "referenceRoot": "artifacts/qa/hv-umm2.720/receipts (ignored permanent delivery archive); relative references also retained in /tmp/root-retro-since-710",
+  "localValidation": {
+    "review": {
+      "elapsedS": 0.3136733749997802,
+      "exit": 0,
+      "receipt": "/tmp/root-retro-since-710/review.receipt.json",
+      "receiptSHA256": "8a9672c6659737485cc29092a53b098b066c1ff361ab9a38055987588dbb710c",
+      "stdoutSHA256": "79ff1fc301946e2ee772ccfdaab88066a9d11e32d60df77d13f1bc291ce905da",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "knip": {
+      "elapsedS": 6.437988790974487,
+      "exit": 0,
+      "receipt": "/tmp/root-retro-since-710/knip.receipt.json",
+      "receiptSHA256": "3aacff965c92f7cac0723dffb7893f756662cac70f95da22916e85b96744e3ab",
+      "stdoutSHA256": "1d97cd3fe0fe86b16da872f8d7e2b1a2f32ccfeaf5388a5c2b8137e5ef1a4f86",
+      "stderrSHA256": "8b86a691073bdfeb8f74a67f901fa8996caf3b69164eafff835ba40b395ab134"
+    },
+    "schema": {
+      "elapsedS": 0.09673695801757276,
+      "exit": 0,
+      "receipt": "/tmp/root-retro-since-710/schema.receipt.json",
+      "receiptSHA256": "4b0be826dbdd751a4ea57355c3814204e269c3fdbaf2163a6fbbf819d64dbb1f",
+      "stdoutSHA256": "5e8adb6a94318eeeb9bd63b90953c36317153a27b688d1e2cdcffbf516e3b6e8",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "triggers": {
+      "elapsedS": 0.21112579200416803,
+      "exit": 0,
+      "receipt": "/tmp/root-retro-since-710/triggers.receipt.json",
+      "receiptSHA256": "1b1fe2a661588685ffb8624c520b01a015c7439eeedaaaa4edafe4f9055e58a8",
+      "stdoutSHA256": "57ddd233dea85d645e5e99eae20ea21b94a9cfc736425495c8c91f9739d7674e",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "whitespace": {
+      "elapsedS": 0.02099312504287809,
+      "exit": 0,
+      "receipt": "/tmp/root-retro-since-710/whitespace.receipt.json",
+      "receiptSHA256": "19677479529debd4e2bbf6530e33fb1f6d24a4edaf5e4efd865f901ce138874e",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "localValidationQualification": "Review selected friction-record validation only (932 records/41 historical unknowns), no runtime tests. Knip elapsed includes workspace preparation and local-asset restoration; temporary missing-art cache warnings are retained, terminal checks passed. No runtime/art defect is established by this evidence-only task.",
+  "filedImprovementIDs": [],
+  "budgetRevision": null,
+  "historicalCorrections": [],
+  "reviewRequirement": "Evidence-only non-gate retrospective; no standalone code review required. Existing required cohort review outcomes are attributed in audit, phase-gate review remains separately required.",
+  "runtimeResources": "Sole Sage helper terminal; no browser/server/provider/heavy process started. Local check groups are recorded in external receipts and verified absent before commit.",
+  "parentReadCorrections": [
+    "Provisional192 native candidate token actually belonged709; actual source Bead trailer rejected it before selecting25 correct finals. First readonly assertion failed without side effects, corrected classification retained.",
+    "A history shape inspection accidentally printed list contents rather than keys; bounded later summary used500events and exact first/last timestamps, no native mutation or inferred full interval."
+  ]
+}
