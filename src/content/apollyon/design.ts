@@ -7,6 +7,9 @@ import { parseApollyonIncarnationId } from "../../types/identifiers";
 import type { ApollyonIncarnationId } from "../../types/identifiers";
 import type { Uuid } from "../define";
 import type { ApollyonDesign } from "./types";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { spiritAnimalAspectAbilities } from "./aspects/aspect-1380edc9-09ed-44df-ad09-ab4cbfc081b5";
+import { secondEventAspectAbilities } from "./aspects/aspect-3fe26475-8023-46d3-b13b-86673b92e3d0";
 
 export const APOLLYON_BATTLE_DESIGN = {
   legacyDefaultIncarnationId: parseApollyonIncarnationId("80b6296d-840e-4ed7-b684-5aadc0981bf4"),
@@ -14,7 +17,7 @@ export const APOLLYON_BATTLE_DESIGN = {
 
 export const APOLLYON_DESIGNS: ReadonlyMap<ApollyonIncarnationId, ApollyonDesign<Uuid, Uuid, Uuid, Uuid>> = new Map([
   [parseApollyonIncarnationId("1380edc9-09ed-44df-ad09-ab4cbfc081b5"), {
-    aspect: { id: "395f7a98-d40a-4b42-a4c6-6f38648255f7", renderedText: "Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal figment.", proposedAbilities: () => [triggered(whenYouPlay({ subtype: "Spirit Animal" }), p.materializeFigments(parseFigmentId("1745ab81-c8a9-4601-a3db-7dbcfa138c11"), 1, { spark: 1 }), { oncePerTurn: true })], pending: true },
+    aspect: { id: "395f7a98-d40a-4b42-a4c6-6f38648255f7", renderedText: "Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal figment.", proposedAbilities: () => [triggered(whenYouPlay({ subtype: "Spirit Animal" }), p.materializeFigments(parseFigmentId("1745ab81-c8a9-4601-a3db-7dbcfa138c11"), 1, { spark: 1 }), { oncePerTurn: true })], abilities: spiritAnimalAspectAbilities, verifiedText: expectedVerifiedText("Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal figment.") },
     deckRecipe: {
       poolAvatarId: "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
       archetypeTideIds: ["e03f4d87-bc6c-46f9-9c08-bef7b59a9f70", "93314ceb-4c33-45e0-8ee3-c53d6e6ea21e"],
@@ -23,7 +26,7 @@ export const APOLLYON_DESIGNS: ReadonlyMap<ApollyonIncarnationId, ApollyonDesign
     dreamsignIds: ["3a22a33f-5682-4d00-b0ec-86e43b6ed9df"],
   }],
   [parseApollyonIncarnationId("3fe26475-8023-46d3-b13b-86673b92e3d0"), {
-    aspect: { id: "5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef", renderedText: "When you play your second event each turn, copy it.", proposedAbilities: () => [triggered(whenYouPlay({ cardType: "event" }, 2), p.copyCard(triggeringCard()))], pending: true },
+    aspect: { id: "5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef", renderedText: "When you play your second event each turn, copy it.", proposedAbilities: () => [triggered(whenYouPlay({ cardType: "event" }, 2), p.copyCard(triggeringCard()))], abilities: secondEventAspectAbilities, verifiedText: expectedVerifiedText("When you play your second event each turn, copy it.") },
     deckRecipe: {
       poolAvatarId: "f6208407-c4e9-42ac-b533-346704f5e39e",
       archetypeTideIds: ["e6863f55-50e7-4c7b-b118-609b5fc5c005", "1ad97f42-6157-45b3-8290-e27219c7888a"],

@@ -253,16 +253,17 @@ signature cards, one Dreamsign and archetype tide bias are defined alongside
 its provisional DSL specification in `src/content/apollyon/design.ts`.
 
 **Provisional design.** The battle construction and recipes are active. Each
-Aspect has a separate `proposedAbilities` specification and a `pending`
-live definition, so the engine gives it an empty ability list. Pair-authoring
-work adopts and verifies each specification as live abilities; the subsequent
-sanity work measures 50 Greedy-vs-Greedy games per incarnation against layer-6
-decks. These designs carry no balance or win-rate claim.
+Aspect keeps its separate `proposedAbilities` specification. Verified pairs
+have live abilities and matching `verifiedText`; pending pairs receive an
+empty live ability list. Ravening and Catastrophe are verified live Aspects.
+Pair-authoring work verifies the other pairs; the subsequent sanity work
+measures 50 Greedy-vs-Greedy games per incarnation against layer-6 decks.
+These designs carry no balance or win-rate claim.
 
 | Incarnation UUID and Aspect | Proposed emblem ability | Design rationale and deck focus |
 | --- | --- | --- |
-| `1380edc9-09ed-44df-ad09-ab4cbfc081b5` — World's End / Ravening | Once per turn, playing a spirit animal materializes a 1✦ spirit animal figment. | Bounded pack growth turns animals into a chorus. The Grath pool and Stampede/One Pack tides emphasize swarm support; Dreamborne Leviathan, Ghostlight Wolves and Emerald Guardian are signatures, with Magic Fish sustaining the pack. |
-| `3fe26475-8023-46d3-b13b-86673b92e3d0` — End of Causality / Catastrophe | Copy the second event played each turn. | A finite event echo supplies storm tempo. Copies are not played cards. Ovanel's pool and Gathering Tempest/Doubling Current bias support Echoes of the Journey, Echo Architect and Echoes of Eternity; Witch Hat provides cards rather than another copy trigger. |
+| `1380edc9-09ed-44df-ad09-ab4cbfc081b5` — World's End / Ravening | **Verified live.** Once per turn, playing a spirit animal materializes a 1✦ spirit animal figment. | Bounded pack growth turns animals into a chorus. The Grath pool and Stampede/One Pack tides emphasize swarm support; Dreamborne Leviathan, Ghostlight Wolves and Emerald Guardian are signatures, with Magic Fish sustaining the pack. |
+| `3fe26475-8023-46d3-b13b-86673b92e3d0` — End of Causality / Catastrophe | **Verified live.** Copy the second event played each turn. | A finite event echo supplies storm tempo. Copies are not played cards. Ovanel's pool and Gathering Tempest/Doubling Current bias support Echoes of the Journey, Echo Architect and Echoes of Eternity; Witch Hat provides cards rather than another copy trigger. |
 | `80b6296d-840e-4ed7-b684-5aadc0981bf4` — Doom of Humanity / Slaughter | Warriors you control have +1✦. | A continuous strength bonus rewards gathered ranks and support geometry. Eldrik's pool and Drums of War/Sundering Vanguard favor Dawn Commander, Warrior's Path and Winter Harbinger, with Ivory Claw replenishment. |
 | `ac116276-5569-491b-85c9-e192823bddae` — Butcher / Hunger | Once per turn, abandoning a character draws a card. | Sacrifice feeds another survivor without an automatic sacrifice loop. Kragg's pool and Rite of the Swarm/Cull's Bounty support Corrupted Host, Soulkindler and Tidewreck Navigator; Shadow Droplet supplies survivor reclaim. |
 | `57c65dfd-a125-440e-a410-c8c4a314b1d1` — Last Word / Haunting | Dawn returns a random ≤2● cost character from your void to hand. | The cheap host keeps returning but pays to reenter play. Seraveth's pool and Hunger of the Deep/Unending Host favor Sunrise Strummer, Void Salvager and Voidsire; Mandrake Root reinforces smaller-character recovery. |

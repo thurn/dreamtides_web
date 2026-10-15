@@ -1,0 +1,866 @@
+{
+  "interruptionRecovery": {
+    "originalSecondBatchReceipt": {
+      "name": "greedy20b",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/greedy-inner-b.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+      "start": "2026-10-15T12:20:30.167416+00:00",
+      "supervisorPid": 87145,
+      "hostLoad": [
+        5.7275390625,
+        6.82763671875,
+        7.87353515625
+      ],
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "pid": 87153,
+      "pgid": 87153
+    },
+    "originalSecondBatchTerminalExit": "Unknown; supervisor lost after user interruption. Exact surviving unadmitted waiter was settled separately by parent. No fabricated command end or exit.",
+    "acceptedGameCredit": 0,
+    "parentSettlement": {
+      "before": {
+        "at": "2026-10-15T12:35:56.047872+00:00",
+        "pid": 87153,
+        "pgid": 87153,
+        "birth": "Thu Oct 15 05:20:30 2026",
+        "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock python3 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/greedy-inner-b.py",
+        "supervisor87145Absent": true,
+        "admissionAbsent": true,
+        "engineIdentityAbsent": true,
+        "acceptedOrdinals": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "reason": "User interruption ended implementation helper and command supervisor. Exact owned orphan lock waiter remains; stop only this unadmitted process group before fresh custody. Existing completed20 remain accepted."
+      },
+      "after": {
+        "at": "2026-10-15T12:35:56.052446+00:00",
+        "orphanCommand": null,
+        "orphanState": null,
+        "admissionPresent": false,
+        "engineIdentityPresent": false,
+        "acceptedOrdinals": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "signal": "SIGTERM",
+        "qualification": "No normal supervisor terminal exit receipt can exist after its process was lost. This is explicit parent interruption settlement, not a fabricated command exit."
+      },
+      "archive": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/interruption-recovery/20261015T123556Z",
+      "zeroGameCredit": true,
+      "recovery": "Exact owned unadmitted waiter settled after lost supervisor; preserve all original bytes/unknown terminal exit, then separately supervised remaining20 only. Original implementation dispatch11:52:31.311Z unchanged, no acceptance waived, no shared or foreign process touched."
+    },
+    "archive": "interruption-recovery/20261015T123556Z/",
+    "resumedSecondBatch": "greedy20b-resume1.receipt.json",
+    "prior20PrefixBytes": 16440,
+    "prior20PrefixSha256": "272bed6839df1115667cc53c53e224e684a9780cf8ff2da022c9d7f3fd216960",
+    "windowQualification": "Original dispatch remains the start; interruptions, recovery and both queues are included in inclusive wall time. Recovery windows and validation timings are nested observations, not additive CPU or project time."
+  },
+  "bead": "hv-umm2.290",
+  "base": "031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2",
+  "dispatch": {
+    "actualFirst": "2026-10-15T11:52:31.311Z",
+    "parentPreparation": {
+      "claim": "2026-10-15T11:48:36Z",
+      "firstDispatch": "2026-10-15T11:52:31.311Z",
+      "claimToFirstDispatchMin": 3.92185,
+      "qualification": "Native claim updated_at may have only seconds precision; parent setup, full scope/body/dependency audit, own worktree/install and dispatch preparation are separate from helper implementWindow. No productive CPU claim."
+    },
+    "qualification": "Original dispatch through final Git includes research, caller corrections, all validation/admission waits, evidence and cleanup; model CPU unknown. Parent preparation is separate."
+  },
+  "endpoint": {
+    "at": "2026-10-15T12:49:24.167998+00:00",
+    "qualification": "Fresh precommit cutoff immediately before final schema, whitespace, exact staging and one Git commit. Actual Git start/end and cutoff-to-commit gap retained in git.receipt.json; parent independently verifies inclusive endpoint."
+  },
+  "scope": {
+    "at": "2026-10-15T12:04:08.497386+00:00",
+    "base": "031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2",
+    "productionMap": "exact two entry values and3additiveimports only; allotherbytesidentical",
+    "recipesAndDreamsigns": "both exact original designed recipe/Dreamsign bodies unchanged",
+    "documentation": "existing introductory Aspect-status paragraph andtwo exactincarnationrows only; allotherbytesidentical",
+    "testDelta": {
+      "modules": 0,
+      "supportFiles": 0,
+      "scenarioModules": 0,
+      "configuredEntrypoints": 0
+    },
+    "diffNumstat": "8\t7\tdocs/design.md\n5\t2\tsrc/content/apollyon/design.ts\n"
+  },
+  "sourceFreeze": {
+    "file": "source-freeze.json",
+    "sha256": "09562cd0175c9f945c2000138035af9d722a514512d4593fb1190a347826881d",
+    "paths": 2622,
+    "finalAllHashesMatch": true
+  },
+  "provisionalD6": {
+    "incarnations": [
+      "1380edc9-09ed-44df-ad09-ab4cbfc081b5",
+      "3fe26475-8023-46d3-b13b-86673b92e3d0"
+    ],
+    "aspects": [
+      "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+      "5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef"
+    ],
+    "recipesDreamsigns": "Exact designed entries retained; actual production recipes use all three signatures plus27randomfillcards. Early-layer public controls exercise Starter dilution with exact signatures preserved;40actualfinalbossgames use authentic starter-player decks. No balance/winrate/strength claim.",
+    "sanityJoin": "hv-umm2.295 retains50EACH/frozenpool/champion acceptance"
+  },
+  "D20": {
+    "scenarioModuleDelta": 0,
+    "reason": "Direct adoption of delivered640functions; existing synthetic permanent-emblem contracts cover both actors, play-vs-materialization/response, once/reset/effective types/capacity, second-event copy/targets/X/optionalpayment/variant/prompt cancellation/reload/stale/foreign/refusal/rollback. No added primitive or behavior beyond composition."
+  },
+  "D21": {
+    "firstByte": {
+      "1380edc9-09ed-44df-ad09-ab4cbfc081b5": 237,
+      "3fe26475-8023-46d3-b13b-86673b92e3d0": 64
+    },
+    "sampled": {
+      "1380edc9-09ed-44df-ad09-ab4cbfc081b5": false,
+      "3fe26475-8023-46d3-b13b-86673b92e3d0": false
+    },
+    "newPrimitivePromptStatusVisualSurface": false,
+    "actualBossBrowserWorkflows": {
+      "verified": "2026-10-15T12:04:40.541485+00:00",
+      "sourceFreezeSha256": "09562cd0175c9f945c2000138035af9d722a514512d4593fb1190a347826881d",
+      "accepted": [
+        {
+          "label": "boss-2-v2",
+          "incarnationId": "1380edc9-09ed-44df-ad09-ab4cbfc081b5",
+          "aspectId": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "dreamsignIds": [
+            "3a22a33f-5682-4d00-b0ec-86e43b6ed9df"
+          ],
+          "sourceReportSha256": "835819d203557746d21ac06735fc9ebbe722eb0d74e4cbd3101713bbb0881ae2",
+          "gameId": "tz4z6z",
+          "nativeRows": 151,
+          "nativeLog": "invocations/run-mjsFdD/boss-2-v2-desktop.jsonl",
+          "nativeSha256": "65258459bdc1666a9a52bd17a7e575d2642d4ad2eccede363e85a0ea13cb96e7",
+          "queue": {
+            "seq": 13,
+            "index": 2,
+            "kind": "triggerQueued",
+            "instance": null,
+            "event": {
+              "kind": "triggerQueued",
+              "source": {
+                "kind": "avatar",
+                "side": "enemy"
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "subject": "i31"
+            }
+          },
+          "trigger": {
+            "seq": 13,
+            "index": 4,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "avatar",
+                "side": "enemy"
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "effect": {
+            "id": "i62",
+            "printing": {
+              "kind": "figment",
+              "figment": "1745ab81-c8a9-4601-a3db-7dbcfa138c11",
+              "spark": 1
+            },
+            "owner": "enemy",
+            "journeyDeck": false,
+            "controller": "enemy",
+            "zone": "play",
+            "variant": {
+              "amplified": false
+            },
+            "status": {
+              "exhausted": true,
+              "gainedSpark": 0,
+              "counters": 0,
+              "created": true,
+              "reclaimed": false,
+              "playedViaReclaim": false,
+              "playedViaAlternativeCost": false,
+              "offering": false,
+              "ephemeral": false,
+              "x": null
+            },
+            "enteredZoneAt": 16
+          },
+          "qualification": "The original report auxiliary queued field selected a Dreamwell by null node. This source-scoped audit derives the exact Avatar queue from the preserved same raw events; original report remains unchanged.",
+          "mcpSessionId": "84dea860-f334-460f-bc49-2c69a5a616c0",
+          "serverPid": 41103,
+          "port": 5274,
+          "runnerPid": 41069,
+          "ownerRecordAbsent": true,
+          "runnerAndServerGroupAbsent": true,
+          "positiveGeometry": true,
+          "caps": []
+        },
+        {
+          "label": "boss-23",
+          "incarnationId": "3fe26475-8023-46d3-b13b-86673b92e3d0",
+          "aspectId": "5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef",
+          "dreamsignIds": [
+            "268341c7-bb5b-49fb-ad8d-a792b7d631a0"
+          ],
+          "sourceReportSha256": "dab4a5eb930d067ea359d3251aa215d195d7d7c7dc831855b2627e6c0cc56c2a",
+          "gameId": "zof35a",
+          "nativeRows": 245,
+          "nativeLog": "invocations/run-IsICEt/boss-23-desktop.jsonl",
+          "nativeSha256": "2dd9f89be964073bb4dd06e0d12e83d6e06d34955e108671a01011716fb81249",
+          "queue": {
+            "seq": 34,
+            "index": 2,
+            "kind": "triggerQueued",
+            "instance": null,
+            "event": {
+              "kind": "triggerQueued",
+              "source": {
+                "kind": "avatar",
+                "side": "enemy"
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "subject": "i45"
+            }
+          },
+          "trigger": {
+            "seq": 34,
+            "index": 4,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "avatar",
+                "side": "enemy"
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "effect": {
+            "seq": 34,
+            "index": 6,
+            "kind": "cardCopied",
+            "instance": null,
+            "event": {
+              "kind": "cardCopied",
+              "side": "enemy",
+              "original": "i45",
+              "copy": "i61"
+            }
+          },
+          "qualification": "Caller queued field also matches exact source-scoped queue.",
+          "mcpSessionId": "6b61e04e-2dd3-4f74-b23d-bb0092253ce4",
+          "serverPid": 45383,
+          "port": 5274,
+          "runnerPid": 45349,
+          "ownerRecordAbsent": true,
+          "runnerAndServerGroupAbsent": true,
+          "positiveGeometry": true,
+          "caps": []
+        }
+      ],
+      "historicalFailure": "browser-preview-caller-failure/disposition.json; original83-row pre-BeginBattle export preserved, no workflow credit"
+    },
+    "genericCardLab": "Incarnation UUIDs are outside generic card/roster Avatar labs; unchanged actual battle7 route supplies both exact seededbossworkflows. No unsupported card/Avatar selector invocation.",
+    "pixels": "No presentation change or screenshot claim"
+  },
+  "validation": {
+    "receipts": {
+      "focused": {
+        "name": "focused",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/battle/integration/apollyon-aspects/pair-290.test.ts",
+          "src/battle/integration/apollyon-init.test.ts",
+          "src/engine/content-gates.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T11:54:24.411923+00:00",
+        "supervisorPid": 57044,
+        "hostLoad": [
+          5.755859375,
+          9.58251953125,
+          10.7177734375
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 57055,
+        "pgid": 57055,
+        "end": "2026-10-15T11:54:30.759163+00:00",
+        "exit": 0,
+        "wallSeconds": 6.347115499956999,
+        "stdoutSha256": "2383ee901c2ccf945e4e2ee072ba2f8bf23118cb456421707e90a02714b13130",
+        "stderrSha256": "9f2edff3d848a33f40a1e3bfc5a914867543dd969e8b470ffb64cafedc550abe",
+        "groupRemaining": []
+      },
+      "knip": {
+        "name": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T11:59:13.337899+00:00",
+        "supervisorPid": 33226,
+        "hostLoad": [
+          6.296875,
+          9.00439453125,
+          10.24169921875
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 33236,
+        "pgid": 33236,
+        "end": "2026-10-15T11:59:18.407669+00:00",
+        "exit": 0,
+        "wallSeconds": 5.0696296250098385,
+        "stdoutSha256": "83ef62c526f99feb8758168b520fdd0385595dfdbeee0bf51abc9f995afb2c67",
+        "stderrSha256": "9f2edff3d848a33f40a1e3bfc5a914867543dd969e8b470ffb64cafedc550abe",
+        "groupRemaining": []
+      },
+      "review": {
+        "name": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T12:00:31.109305+00:00",
+        "supervisorPid": 38285,
+        "hostLoad": [
+          5.49072265625,
+          8.16650390625,
+          9.81787109375
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 38297,
+        "pgid": 38297,
+        "end": "2026-10-15T12:01:42.521603+00:00",
+        "exit": 0,
+        "wallSeconds": 71.41167341696564,
+        "stdoutSha256": "65bdbc69edcdc9c86df603780c29bd3841f76e5c1b7c5a05be5d5a6e4e4e3abc",
+        "stderrSha256": "9f2edff3d848a33f40a1e3bfc5a914867543dd969e8b470ffb64cafedc550abe",
+        "groupRemaining": []
+      },
+      "weighted300": {
+        "name": "weighted300",
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/fuzz-inner.py"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T11:54:23.253811+00:00",
+        "supervisorPid": 56955,
+        "hostLoad": [
+          5.755859375,
+          9.58251953125,
+          10.7177734375
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 56965,
+        "pgid": 56965,
+        "end": "2026-10-15T12:14:42.691006+00:00",
+        "exit": 0,
+        "wallSeconds": 1219.4272449169657,
+        "stdoutSha256": "bdf274a04ac3bb825a7b92da37a694c786fe7cc71ce2aff138dd586453580084",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "groupRemaining": []
+      },
+      "greedy40": {
+        "name": "greedy40",
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/greedy-inner.py"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T11:57:44.786596+00:00",
+        "supervisorPid": 27290,
+        "hostLoad": [
+          9.13623046875,
+          10.130859375,
+          10.734375
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 27302,
+        "pgid": 27302,
+        "end": "2026-10-15T12:20:20.026643+00:00",
+        "exit": 0,
+        "wallSeconds": 1355.229014749988,
+        "stdoutSha256": "862e7918d5d8f77740f4cce7d6f0ba64cb2cb1d43a12ee79d9a4cb56bb0cfd6c",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "groupRemaining": []
+      },
+      "greedy20b-resume1": {
+        "name": "greedy20b-resume1",
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/greedy-inner-b-resume1.py"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T12:38:56.953990+00:00",
+        "supervisorPid": 12999,
+        "hostLoad": [
+          4.021484375,
+          5.9052734375,
+          6.546875
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 13007,
+        "pgid": 13007,
+        "end": "2026-10-15T12:49:16.567060+00:00",
+        "exit": 0,
+        "wallSeconds": 619.6069206669927,
+        "stdoutSha256": "00ed2f1f73e1ccf74db5cc72960b4db5cff58e19071977fd436c86fc8f7c5173",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "groupRemaining": []
+      },
+      "browser-2": {
+        "name": "browser-2",
+        "argv": [
+          "node",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/browser-caller.mjs",
+          "2",
+          "1380edc9-09ed-44df-ad09-ab4cbfc081b5",
+          "395f7a98-d40a-4b42-a4c6-6f38648255f7"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T12:00:29.933276+00:00",
+        "supervisorPid": 38170,
+        "hostLoad": [
+          5.49072265625,
+          8.16650390625,
+          9.81787109375
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 38180,
+        "pgid": 38180,
+        "end": "2026-10-15T12:00:38.079910+00:00",
+        "exit": 1,
+        "wallSeconds": 8.146488208964001,
+        "stdoutSha256": "ce65e02ed2a61864ee4d019d67e0b760c2e5a896d503d7f15e460baff34ceb3f",
+        "stderrSha256": "62fdc8c830efe661d0b9e201134ca374181b689d12e466cbe7129b9bda310c29",
+        "groupRemaining": []
+      },
+      "browser-2-v2": {
+        "name": "browser-2-v2",
+        "argv": [
+          "node",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/browser-caller.mjs",
+          "2",
+          "1380edc9-09ed-44df-ad09-ab4cbfc081b5",
+          "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "-v2"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T12:01:16.286964+00:00",
+        "supervisorPid": 41057,
+        "hostLoad": [
+          6.93310546875,
+          8.18408203125,
+          9.7392578125
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 41069,
+        "pgid": 41069,
+        "end": "2026-10-15T12:01:55.126056+00:00",
+        "exit": 0,
+        "wallSeconds": 38.838678708008956,
+        "stdoutSha256": "9d59d75be0e7138751add56662263ef24051b74f818511999ea54a797267f42e",
+        "stderrSha256": "ff06ea132019005616a301a48d4c56be4186703608d22ad471f534ddbe995d21",
+        "groupRemaining": []
+      },
+      "browser-23": {
+        "name": "browser-23",
+        "argv": [
+          "node",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/browser-caller.mjs",
+          "23",
+          "3fe26475-8023-46d3-b13b-86673b92e3d0",
+          "5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T12:02:29.213928+00:00",
+        "supervisorPid": 45337,
+        "hostLoad": [
+          8.1416015625,
+          8.4306640625,
+          9.70849609375
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 45349,
+        "pgid": 45349,
+        "end": "2026-10-15T12:03:48.178775+00:00",
+        "exit": 0,
+        "wallSeconds": 78.96412075002445,
+        "stdoutSha256": "63b4f8547eb1ee4a90c743fdd83f33f3c4eb9a8d5012b61002021e5299a42964",
+        "stderrSha256": "13bff3ec748f8fe8d4b90d7ff96764f293634bd253705c2881b87e314b62ea61",
+        "groupRemaining": []
+      },
+      "select-seeds": {
+        "name": "select-seeds",
+        "argv": [
+          "node",
+          "--import",
+          "tsx",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/select-seeds.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T11:55:29.512158+00:00",
+        "supervisorPid": 61328,
+        "hostLoad": [
+          7.64892578125,
+          9.22900390625,
+          10.4912109375
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 61340,
+        "pgid": 61340,
+        "end": "2026-10-15T11:55:31.687549+00:00",
+        "exit": 1,
+        "wallSeconds": 2.175300332950428,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "afaa2242ded91d9315ebc466421f2f740586725e7fdce03a71772f0c9424f08c",
+        "groupRemaining": []
+      },
+      "select-seeds-v2": {
+        "name": "select-seeds-v2",
+        "argv": [
+          "node",
+          "--import",
+          "tsx",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/select-seeds-v2.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T11:55:59.503318+00:00",
+        "supervisorPid": 63498,
+        "hostLoad": [
+          12.8662109375,
+          10.4013671875,
+          10.87548828125
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 63510,
+        "pgid": 63510,
+        "end": "2026-10-15T11:56:01.747382+00:00",
+        "exit": 1,
+        "wallSeconds": 2.2439169170102105,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "66981eafc2312ee06431c128d738e11b738e51d14748feda22f58579c9a76457",
+        "groupRemaining": []
+      },
+      "select-seeds-v3": {
+        "name": "select-seeds-v3",
+        "argv": [
+          "node",
+          "--import",
+          "tsx",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.290/select-seeds-v3.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-pair290",
+        "start": "2026-10-15T11:56:32.305255+00:00",
+        "supervisorPid": 21771,
+        "hostLoad": [
+          13.185546875,
+          10.75244140625,
+          10.982421875
+        ],
+        "env": {
+          "JOURNEY_TEST_WORKERS": "2"
+        },
+        "pid": 21782,
+        "pgid": 21782,
+        "end": "2026-10-15T11:56:34.213229+00:00",
+        "exit": 0,
+        "wallSeconds": 1.9078412090311758,
+        "stdoutSha256": "f26cbed20beeaaf883fc3683f407d9c9d2dff90d896639a46a88fa41f503a5a3",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "groupRemaining": []
+      }
+    },
+    "focused": {
+      "modules": 3,
+      "cases": 59
+    },
+    "review": {
+      "modules": 282,
+      "cases": 9123,
+      "vitestWallS": 58.96,
+      "scope": "npm review selected all related modules; no local review:full required for this bounded content adoption"
+    },
+    "weighted": {
+      "summary": "fuzz:engine 300 games, 78215 steps, 1215.8 s wall, 1299.5 s CPU (0.2 games/s wall, 0.2 games/s CPU); prompts 6494; interactive re-runs 663 (17.866 ms each); feasibility bounded {\"legality\":0,\"prompts\":2}; results {\"player\":160,\"enemy\":138,\"draw\":2}; failures 0",
+      "targets": [
+        {
+          "kind": "avatar",
+          "uuid": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+          "included": 300,
+          "exercised": 36
+        },
+        {
+          "kind": "avatar",
+          "uuid": "5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef",
+          "included": 300,
+          "exercised": 544
+        }
+      ],
+      "fullProductionPoolPlusExistingSynthetics": true,
+      "defaultInteractiveEvery": 10,
+      "stepInvariantsFinalHashes": true
+    },
+    "greedy": {
+      "completed": 40,
+      "perIncarnation": 20,
+      "batches": [
+        {
+          "file": "greedy40.receipt.json",
+          "actualGames": 20,
+          "incarnationId": "1380edc9-09ed-44df-ad09-ab4cbfc081b5"
+        },
+        {
+          "file": "greedy20b-resume1.receipt.json",
+          "actualGames": 20,
+          "incarnationId": "3fe26475-8023-46d3-b13b-86673b92e3d0"
+        }
+      ],
+      "defaultBudgets": {
+        "turnPlanning": {
+          "iterations": 256
+        },
+        "response": {
+          "iterations": 64
+        }
+      },
+      "stepChecks": 416727,
+      "stepCheckQualification": "Counts invariant observer calls for real engine steps and Greedy hypothetical Engine.apply/createBattle operations; actual per-game actions/answers and native logs are retained separately. Replay uses the unchanged original engine.",
+      "allGamesFinalHashReplayed": true,
+      "selection": "Natural seeded atlas chooses each exact incarnation; real production battle-init provider and full production catalog, reachable layer6boss state using documented QA scene staging; no game-state/debug injection",
+      "actualActions": 2796,
+      "actualDecisions": 2508,
+      "actualAspectResolutions": 100,
+      "nodeLogQualification": "Node Greedy games retain complete actual construction and engine action/decision logs; these are distinct from the two browser workflows and are not IndexedDB exports.",
+      "sourceCaller": "greedy-smoke.ts",
+      "callerSha256": "fed76d38a68aae8a0bb30facbcfc8f1241f92b4a3736f452f98d93494428f65a",
+      "perGameLogs": "greedy-00.jsonl through greedy-39.jsonl, full source/init/actions/answers/results in paired JSON files"
+    },
+    "admissions": {
+      "weighted300": {
+        "admitted": "2026-10-15T11:54:23.276117+00:00",
+        "pid": 56966,
+        "pgid": 56965
+      },
+      "greedy40": {
+        "admitted": "2026-10-15T12:14:42.712063+00:00",
+        "pid": 81176,
+        "pgid": 27302
+      },
+      "greedy20b-resume1": {
+        "admitted": "2026-10-15T12:43:32.702475+00:00",
+        "pid": 24149,
+        "pgid": 13007
+      }
+    },
+    "observedPreAdmissionLatencyS": {
+      "weighted300": 0.022306,
+      "greedy40": 1017.925467,
+      "greedy20b-resume1": 275.748485
+    }
+  },
+  "preExisting": "pre-existing/hv-umm2.290.md; install 17 observations and two preserved zero-game Vite-only Node entry probes",
+  "callerCorrections": {
+    "previewFailure": "browser-preview-caller-failure/disposition.json, original83native rows retained; precise public descriptor assertion repair",
+    "queuedSelector": "Ravening original auxiliary field retains Dreamwell mismatch; actual correctAvatar rawqueue/native detail andphysicalfigment independently audited without newbrowserrun",
+    "repro": "greedy-repro-correction.json; fixed exactincarnationargument beforeadmission, zeroacceptedgame rows then"
+  },
+  "resources": {
+    "browser": {
+      "observed": "2026-10-15T12:06:56.313742+00:00",
+      "contexts": [
+        {
+          "label": "boss-2",
+          "ownerRecordSha256": "4294faebbf535c9fb3da8df47de572cc59398e45535328a0b64dd22a4e4e0d59",
+          "mcpSessionId": "8d825828-50ab-4ef3-9993-42cdb64c74ed",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25",
+          "slot": 1,
+          "port": 5274,
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "recordAbsent": true,
+          "processChecks": {
+            "38180": {
+              "pid": [],
+              "pgid": []
+            },
+            "38213": {
+              "pid": [],
+              "pgid": []
+            }
+          }
+        },
+        {
+          "label": "boss-2-v2",
+          "ownerRecordSha256": "63cc7c7a50f6398e7f6dd829bce5f385b577686b5117532e6d37cac3e3c7eee9",
+          "mcpSessionId": "84dea860-f334-460f-bc49-2c69a5a616c0",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25",
+          "slot": 1,
+          "port": 5274,
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "recordAbsent": true,
+          "processChecks": {
+            "41069": {
+              "pid": [],
+              "pgid": []
+            },
+            "41103": {
+              "pid": [],
+              "pgid": []
+            }
+          }
+        },
+        {
+          "label": "boss-23",
+          "ownerRecordSha256": "14680fc64ccd9bfacc00f9a6c2b60043bd690aa4a9e9bb4af802d41763682c2f",
+          "mcpSessionId": "6b61e04e-2dd3-4f74-b23d-bb0092253ce4",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25",
+          "slot": 1,
+          "port": 5274,
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "recordAbsent": true,
+          "processChecks": {
+            "45349": {
+              "pid": [],
+              "pgid": []
+            },
+            "45383": {
+              "pid": [],
+              "pgid": []
+            }
+          }
+        }
+      ],
+      "qualification": "Each own public session.close returned normally, and corresponding exact ownership record was cleared through native provider completion. Shared provider/server resources owned by peers were not inspected or changed."
+    },
+    "heavyAndCommandGroups": "All successfully supervised recorded outer groups and engine groups absent; interrupted second-batch supervisor terminal exit remains unknown and its exact unadmitted waiter was separately settled; no owned long-lived runtime retained. Each1800sbudget starts inside actualheavyadmission; separately admitted20gameGreedybatches.",
+    "foreignResources": "Untouched"
+  },
+  "artifactManifest": {
+    "file": "final-artifact-manifest.json",
+    "sha256": "d609d1f1aa087bc0df89e175b09f3ee21482eaeac28cf68c63c751d07d6a76b5",
+    "files": 189
+  },
+  "testDelta": {
+    "testModules": 0,
+    "testLines": 0,
+    "supportFiles": 0,
+    "scenarioModules": 0,
+    "configuredEntrypoints": 0,
+    "jsdomFiles": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review start",
+        "at": "2026-10-15T12:00:31.109305+00:00"
+      }
+    }
+  },
+  "RDCardIssues": {
+    "newRulesDecision": false,
+    "engineContentFailuresObserved": false,
+    "noUnknownFailureReclassification": true
+  }
+}

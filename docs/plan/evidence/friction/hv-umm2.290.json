@@ -1,0 +1,37 @@
+{
+  "bead": "hv-umm2.290",
+  "phase": 5,
+  "implementMin": 56.88094996666667,
+  "implementWindow": {
+    "start": "2026-10-15T11:52:31.311000+00:00",
+    "end": "2026-10-15T12:49:24.167998+00:00"
+  },
+  "localValidationS": {
+    "focused": 6.347115499956999,
+    "knip": 5.0696296250098385,
+    "review": 71.41167341696564,
+    "weighted300": 1219.4272449169657,
+    "greedy40": 1355.229014749988,
+    "greedy20b-resume1": 619.6069206669927,
+    "browser-2-v2": 38.838678708008956,
+    "browser-23": 78.96412075002445
+  },
+  "hostLoad": 5.49072265625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "weighted-fuzz-duration",
+      "minutes": 20.323787415282762,
+      "note": "Actual weighted300 whole-command elapsed, with real engine CPU/wall summary retained separately; includes admission/startup and is not model time or a performance claim."
+    },
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 21.561232533333335,
+      "note": "Sum of observed Greedy outer-start to actual-admission latencies. The first waiter includes this same bead's serialized weighted fuzz; intervals include startup/scheduling and are not pure kernel lock wait, foreign contention or productive CPU."
+    }
+  ]
+}
