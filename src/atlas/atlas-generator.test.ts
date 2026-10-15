@@ -14,7 +14,7 @@ import { makeRng } from "../draft/pool/rng";
 import { setLogSink, type LogEntry } from "../logging";
 import type { SiteState, SiteType } from "../types/journey";
 import { LayerName, layerAtOrdinal, layerOrdinal } from "../types/layer-name";
-import type { AtlasFillProfileId } from "../types/identifiers";
+import { parseAtlasNodeId, type AtlasFillProfileId } from "../types/identifiers";
 import { testJourneyMutationSource } from "../types/test-identities";
 import {
   DREAMSCAPES,
@@ -54,6 +54,44 @@ function captureEvents<T>(
   setLogSink(null);
   return { result, entries };
 }
+
+describe("atlas reveal log identity", () => {
+  it.each([
+    ["normal", DREAMSCAPES],
+    ["starter-only", DREAMSCAPES.filter((dreamscape) => dreamscape.isStarter)],
+  ] as const)("logs UUIDs or null without display metadata for %s catalogs", (_, dreamscapes) => {
+    const atlasData = makeSyntheticAtlasData();
+    atlasData.graph.bonusReveal = {
+      ...atlasData.graph.bonusReveal,
+      min: 1,
+      max: 1,
+      mode: 1,
+    };
+    const { result: atlas, entries } = captureEvents("atlas_node_revealed", () =>
+      generateInitialAtlas(0, {}, buildContext({ atlasData, dreamscapes }), {
+        logEvents: true,
+        rng: makeRng(1),
+      }),
+    );
+    expect(new Set(entries.map((entry) => entry.nodeRole))).toEqual(
+      new Set(["starter", "standard", "boss"]),
+    );
+    for (const entry of entries) {
+      const node = atlas.nodes[parseAtlasNodeId(String(entry.nodeId))];
+      expect(entry.dreamscapeId).toBe(node.dreamscapeId);
+      if (entry.nodeRole === "starter") {
+        expect(entry.dreamscapeId).toBe(STARTER?.id);
+      } else if (entry.nodeRole === "boss") {
+        expect(entry.dreamscapeId).toBe(atlasData.boss.dreamscapeId);
+      } else {
+        const normalIds = dreamscapes.filter((dreamscape) => !dreamscape.isStarter)
+          .map((dreamscape) => dreamscape.id);
+        expect(normalIds.length === 0 ? [null] : normalIds).toContain(entry.dreamscapeId);
+      }
+      expect(entry).not.toHaveProperty("dreamscapeName");
+    }
+  });
+});
 
 describe("generateSiteComposition", () => {
   function compose(

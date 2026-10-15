@@ -1057,14 +1057,35 @@
     "sourceQualification": "All5235 initial keys unchanged throughout source-free implementation; only five new own evidence files. Metadata added after review/Knip is reviewed by exact final schema/whitespace; no runtime source changed."
   },
   "externalPreExisting": {
-    "canonicalBead": "hv-umm2.708",
+    "canonicalBead": "hv-umm2.703",
     "releaseRun": "01a13cdd-ef8b-7421-b5dd-4c5c22ae5c1f",
     "buildset": "01a13cdf-83b0-7132-b165-03543cde2e8a",
     "testedOID": "8fee862c17ada458e7e14346b95c612d1583193d",
     "exactFailure": "fuzz-46 beforeaction42/afterstep124: extra floating effect e14 bothviewers",
     "source": "Parent native release-log inspection; no own reproduction/cause attribution or current weighted300 resolution inferred.",
     "native708SHA256": "89383df2efd11f70d2aa434f89ed7a20be1f26ceec922565555c4427da48b12e",
-    "rawParentLogSHA256": "9e7060af2a9fb0fecf4334d3225791fb86709bd9b73349cad4ab59f4c447aa42"
+    "rawParentLogSHA256": "9e7060af2a9fb0fecf4334d3225791fb86709bd9b73349cad4ab59f4c447aa42",
+    "observedFiling": {
+      "bead": "hv-umm2.708",
+      "observedOpenAt": "2026-10-15T00:20:24Z",
+      "qualification": "Historical native filing/provenance retained; duplicate closure is identified separately."
+    },
+    "currentResolution": {
+      "verifiedAt": "2026-10-15T00:56:02.977864+00:00",
+      "nativeProofSHA256": "d4c689eba7bad7379f707ce49568b8c287cfcdbe7aeb3bed9829af39228941fa",
+      "canonicalRepair": "hv-umm2.703",
+      "source": "991fba83ea803913515bf0ee85b0d5634cbdf48f",
+      "tested": "1e0398642e3fb530abdeaa7cf35fa3b74578e1f6",
+      "candidate": "01a13ce3-e9ac-70c1-b693-658e321cf310",
+      "certificate": "01a13ce4-7d80-7733-ba92-7d41326308e2",
+      "checkoutVerified": true,
+      "promoted": true,
+      "cleanupComplete": true,
+      "703NativeResolution": "completed",
+      "708NativeResolution": "cancelled duplicate of703",
+      "708ClosedAt": "2026-10-15T00:28:47Z",
+      "causeQualification": "708nativeclosure verified exacthistoricalfuzz46failure and isolated703 comparatorfix. No assertiongameplaybug;703coldreviewstilldebt underD18, notclaimedcomplete."
+    }
   },
   "readOnlyAttemptQualifications": [
     "Stage1 rg included two nonexistent guessed filenames, exited2; actual paths subsequently resolved by rg --files, no source/runtime effects.",

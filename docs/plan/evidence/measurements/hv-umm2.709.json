@@ -1,0 +1,364 @@
+{
+  "bead": "hv-umm2.709",
+  "sourceBase": "ed4d6273ab60df783ac4c365418f5041f087e811",
+  "firstDispatch": "2026-10-15T00:52:02.306Z",
+  "dispatchAcknowledged": "2026-10-15T00:52:03.515Z",
+  "dispatchProofSHA256": "8e5b84aa4faf44e19aa44161667ff51b24727f29d34ace71409894cc74ecb378",
+  "modelSampling": "UNKNOWN; elapsed dispatch window includes source audit, coordination, checks and waits, not productive CPU.",
+  "claimAndSetup": "Parent performed claim/setup before dispatch: install3.222171s, prepare5.194632s, Doctor4.440472s all0; not repeated.",
+  "proposalSHA256": "ad2e75dad3a5f1bce1fa8329176e187372c38853f176c5926f15a756800695f4",
+  "productionScope": {
+    "grossLines": 3,
+    "added": 0,
+    "deleted": 3,
+    "boundary": "revealNodeDreamscape atlas_node_revealed dreamscapeName property only; retained UUID/null and all other fields/state/RNG/UI unchanged"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 38,
+    "jsdomFiles": 0
+  },
+  "configuredTestEntrypointDelta": 0,
+  "plainContractModuleDelta": 0,
+  "checks": {
+    "before-reveal-v1": {
+      "started": "2026-10-15T00:54:58.022236+00:00",
+      "pid": 74799,
+      "pgid": 74799,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/atlas/atlas-generator.test.ts",
+        "-t",
+        "logs UUIDs or null without display metadata"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/atlas-reveal-uuid-709",
+      "hostLoad": [
+        7.607421875,
+        10.9033203125,
+        12.630859375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:55:04.198770+00:00",
+      "elapsedSeconds": 6.176290959003381,
+      "exitCode": 1,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5255,
+      "beforeSHA256": "93fa4cd2debaeb8547ad1bf23f9b771cb81dd8996a1136aa0d08e70fb0772fd3",
+      "afterSHA256": "93fa4cd2debaeb8547ad1bf23f9b771cb81dd8996a1136aa0d08e70fb0772fd3",
+      "collectorBeforeSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "collectorAfterSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "stdoutSHA256": "b654bc4a41b94fe4bf3a847d8c081966024e106ed733e464ff3a802bf3e1042d",
+      "stderrSHA256": "2d3e932482f299d775279ff9ff9f876a383683c29e51fb9b55abda79c87d0268"
+    },
+    "focused-v1": {
+      "started": "2026-10-15T00:55:08.925869+00:00",
+      "pid": 75666,
+      "pgid": 75666,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/atlas/atlas-generator.test.ts",
+        "src/atlas/atlas-generator-graph.test.ts",
+        "src/atlas/atlas-generator-sites.test.ts",
+        "src/atlas/atlas-generator-progress.test.ts",
+        "src/atlas/atlas-reachability.test.ts",
+        "src/logging.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/atlas-reveal-uuid-709",
+      "hostLoad": [
+        7.50732421875,
+        10.77392578125,
+        12.564453125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:55:14.864305+00:00",
+      "elapsedSeconds": 5.938211374974344,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5255,
+      "beforeSHA256": "9abd62603208d7d2b6df55a89e5cfb0bbdac4d835b59e34a6b0b9227a5b73dbc",
+      "afterSHA256": "9abd62603208d7d2b6df55a89e5cfb0bbdac4d835b59e34a6b0b9227a5b73dbc",
+      "collectorBeforeSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "collectorAfterSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "stdoutSHA256": "99732ea3b2e93159e5064ebed3b87e2f0dabff571e714fa6e008e2edd55dbbdc",
+      "stderrSHA256": "6d73261c6e3894c06015f91c91b6eafe87386f095793ba72f18937fd74774d91"
+    },
+    "review-v1": {
+      "started": "2026-10-15T00:56:03.297656+00:00",
+      "pid": 79135,
+      "pgid": 79135,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/atlas-reveal-uuid-709",
+      "hostLoad": [
+        7.583984375,
+        10.2802734375,
+        12.26953125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:56:25.817849+00:00",
+      "elapsedSeconds": 22.519635582983028,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5258,
+      "beforeSHA256": "5823b11939118e22be44a6891f82ad8170d31f0afd0a33d12ea7f6270d7b54b2",
+      "afterSHA256": "5823b11939118e22be44a6891f82ad8170d31f0afd0a33d12ea7f6270d7b54b2",
+      "collectorBeforeSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "collectorAfterSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "stdoutSHA256": "1ce7eb0322efad7d321642bc0de632d2ac72dc1f2555b9c02d0758a2ca799345",
+      "stderrSHA256": "6d73261c6e3894c06015f91c91b6eafe87386f095793ba72f18937fd74774d91"
+    },
+    "knip-v1": {
+      "started": "2026-10-15T00:56:32.905598+00:00",
+      "pid": 79857,
+      "pgid": 79857,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/atlas-reveal-uuid-709",
+      "hostLoad": [
+        7.57080078125,
+        10.01416015625,
+        12.10302734375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:56:37.611851+00:00",
+      "elapsedSeconds": 4.706047874991782,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5258,
+      "beforeSHA256": "5823b11939118e22be44a6891f82ad8170d31f0afd0a33d12ea7f6270d7b54b2",
+      "afterSHA256": "5823b11939118e22be44a6891f82ad8170d31f0afd0a33d12ea7f6270d7b54b2",
+      "collectorBeforeSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "collectorAfterSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "stdoutSHA256": "9efa69d2f2dd35d7d5c030f5cde81a68b2a01efa04c39dca0baaf5487708b8b4",
+      "stderrSHA256": "6d73261c6e3894c06015f91c91b6eafe87386f095793ba72f18937fd74774d91"
+    },
+    "schema-v1": {
+      "started": "2026-10-15T00:56:54.267730+00:00",
+      "pid": 80688,
+      "pgid": 80688,
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/atlas-reveal-uuid-709",
+      "hostLoad": [
+        7.33154296875,
+        9.8017578125,
+        11.9775390625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:56:54.358811+00:00",
+      "elapsedSeconds": 0.09097991598537192,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5258,
+      "beforeSHA256": "e50714a47ac0242cccbf23eb2f7635f7f55fb82c8a501e7305f38b136841dbf9",
+      "afterSHA256": "e50714a47ac0242cccbf23eb2f7635f7f55fb82c8a501e7305f38b136841dbf9",
+      "collectorBeforeSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "collectorAfterSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "stdoutSHA256": "b9e46029e45dea6bcd57aeb6eefed2c0dd9accee3e5658cdb0bb5c163a016a2a",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "triggers-v1": {
+      "started": "2026-10-15T00:56:54.267689+00:00",
+      "pid": 80687,
+      "pgid": 80687,
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/atlas-reveal-uuid-709",
+      "hostLoad": [
+        7.33154296875,
+        9.8017578125,
+        11.9775390625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:56:54.478938+00:00",
+      "elapsedSeconds": 0.211134499986656,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5258,
+      "beforeSHA256": "e50714a47ac0242cccbf23eb2f7635f7f55fb82c8a501e7305f38b136841dbf9",
+      "afterSHA256": "e50714a47ac0242cccbf23eb2f7635f7f55fb82c8a501e7305f38b136841dbf9",
+      "collectorBeforeSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "collectorAfterSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "stdoutSHA256": "4f06fa9fdab49ba3bef3b42069a1f89e814ace87de82569fce8b0a73f3d0b32e",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "whitespace-v1": {
+      "started": "2026-10-15T00:56:54.267701+00:00",
+      "pid": 80686,
+      "pgid": 80686,
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/atlas-reveal-uuid-709",
+      "hostLoad": [
+        7.33154296875,
+        9.8017578125,
+        11.9775390625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-15T00:56:54.280697+00:00",
+      "elapsedSeconds": 0.01287104096263647,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 5258,
+      "beforeSHA256": "e50714a47ac0242cccbf23eb2f7635f7f55fb82c8a501e7305f38b136841dbf9",
+      "afterSHA256": "e50714a47ac0242cccbf23eb2f7635f7f55fb82c8a501e7305f38b136841dbf9",
+      "collectorBeforeSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "collectorAfterSHA256": "2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "hostLoadSamples": {
+    "before-reveal-v1": [
+      7.607421875,
+      10.9033203125,
+      12.630859375
+    ],
+    "focused-v1": [
+      7.50732421875,
+      10.77392578125,
+      12.564453125
+    ],
+    "review-v1": [
+      7.583984375,
+      10.2802734375,
+      12.26953125
+    ],
+    "knip-v1": [
+      7.57080078125,
+      10.01416015625,
+      12.10302734375
+    ],
+    "schema-v1": [
+      7.33154296875,
+      9.8017578125,
+      11.9775390625
+    ],
+    "triggers-v1": [
+      7.33154296875,
+      9.8017578125,
+      11.9775390625
+    ],
+    "whitespace-v1": [
+      7.33154296875,
+      9.8017578125,
+      11.9775390625
+    ]
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v1 starting1minute host load (7.583984375); per-step samples retain their actual scope."
+      }
+    }
+  },
+  "regressionProof": "Two actual before-change property-absence assertion failures on unchanged production. No setup failure. Six focused suites pass after exact3line removal; no counterfactual or duplicate green run needed.",
+  "sourceEpochPolicy": "Strict collector2973ac82f0192afc39b452c3f4454414ea8bf299ee03343f7386b4079a4624c1; actual hash is recorded verbatim in receipts. Two workers. All source bytes fixed during every check; all terminal children reaped and PGs absent.",
+  "fiveFailurePaths": {
+    "midStepError": "No new transition; existing logging.test.ts throwing-sink contract passes unchanged best-effort transport.",
+    "reloadRestart": "No new recovery transition; UUID/null identity and atlas state unchanged; existing seeded atlas/progress controls pass.",
+    "partialWrite": "No writer/transaction added; persistence transport unchanged and read-only.",
+    "invalidStaleInput": "No validation/selection change; new public log contract includes null standard plus starter/normal/boss identities.",
+    "concurrentActors": "No shared-state/lock/CAS change; no new concurrency test applies."
+  },
+  "prior247Disposition": {
+    "files": [
+      "docs/plan/evidence/pre-existing/hv-umm2.247.md",
+      "docs/plan/evidence/measurements/hv-umm2.247.md",
+      "docs/plan/evidence/measurements/hv-umm2.247.json"
+    ],
+    "preservationProofSHA256": "efcf1ef9cf31808d6204dcaf6e3ca4be9bc4d868bb7c34bc1afda71e99fcd2b4",
+    "nativeProofSHA256": "d4c689eba7bad7379f707ce49568b8c287cfcdbe7aeb3bed9829af39228941fa",
+    "canonicalRepair": "hv-umm2.703",
+    "historicalObservedFiling": "hv-umm2.708",
+    "coreReview": "703 normal cold review remains debt; certified comparator repair is not gameplay-cause attribution or247 weighted-workload proof."
+  },
+  "coreReview": {
+    "required": false,
+    "basis": "3 gross non-test lines, not a phase core-review bead; default substantial threshold not crossed. Parent separately owns6nkw debt."
+  },
+  "resourcePolicy": {
+    "heavy": false,
+    "browser": false,
+    "fullOrFuzz": false,
+    "reason": "Logging metadata deletion and bounded existing synthetic contract; no UI/presentation/testinfra/architecture change.",
+    "longLivedProcesses": []
+  },
+  "readOnlyAttemptQualifications": [
+    "Existing review workspace materialization reports missing-art warnings while relocating optional linked assets, then restores assets; checks retain complete stderr. No source changes or browser evidence inferred."
+  ],
+  "timingCutoff": {
+    "at": "2026-10-15T00:58:06.904663+00:00",
+    "inclusiveMinutes": 6.076644383333333,
+    "qualification": "Finalizer refreshes immediately before automatic Git; external receipt retains exact commit/tail. No forced dates/postcommit rewrite."
+  },
+  "stage": "Final source and evidence prepared; mandatory focused/review/Knip/schema/triggers/whitespace passed. Parent exact freeze ACK, automatic commit and certification remain separate.",
+  "focused": {
+    "testFiles": 6,
+    "passed": 56,
+    "seconds": 5.938211374974344
+  },
+  "review": {
+    "passed": 553,
+    "testFiles": 35,
+    "seconds": 22.519635582983028,
+    "scope": "diff-aware lint, main/node types, import cycles, friction schema and related tests; no full suite"
+  },
+  "resourceAuditSHA256": "24411606477c547d8aa391c889143fda91893d613fcf3c82ce2e3eb24b775575",
+  "finalization": {
+    "allowedClockRefresh": [
+      "friction.implementWindow.end",
+      "friction.implementMin",
+      "measurements.timingCutoff.at",
+      "measurements.timingCutoff.inclusiveMinutes"
+    ],
+    "policy": "Exact freeze before parent internal ACK; single automatic-date ConventionalCommit; final schema/staged whitespace and Git receipts external. No postcommit tracked rewrite."
+  }
+}

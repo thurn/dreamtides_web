@@ -966,9 +966,6 @@ function revealNodeDreamscape(state: AtlasState, nodeId: AtlasNodeId): void {
       dreamscapeId: isBoss
         ? state.context.atlasData.boss.dreamscapeId
         : (dreamscape?.id ?? null),
-      dreamscapeName: isBoss
-        ? state.context.atlasData.boss.place
-        : (dreamscape?.name ?? null),
       nodeRole: layerRule.role,
       signatureSite: dreamscape?.signatureSite ?? null,
       enhancedSiteType,

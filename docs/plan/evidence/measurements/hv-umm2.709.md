@@ -1,0 +1,13 @@
+# hv-umm2.709 validation evidence
+
+The bounded logging contract identifies each revealed dreamscape through its existing UUID/null. Production diff is three deleted metadata lines in one payload; generator selection, RNG, state, all other fields and UI copy retain their bytes. No new runtime feature, schema or transition.
+
+Two parameterized synthetic log-sink cases use normal and starter-only catalogs, with an explicitly configured one-node bonus reveal. They cover starter, standard, boss and null identities against returned nodes, with display metadata excluded. No default random selection, event order/count, production data, UI text, timing or statistical assertion. Existing test module only; configured test entrypoints0, added modules0, jsdom0.
+
+Before-change run before-reveal-v1: two actual forbidden-property assertion failures, seven unrelated cases skipped, 6.176291s. Production was unchanged. After exact deletion, six existing atlas/logging suites pass56tests in5.938211s; actual counts and raw receipts are retained. Strict collector holds all source bytes fixed per epoch and records terminal child/PG settlement. No redundant counterfactual or repeated green run.
+
+Prior own247's three admitted evidence files carry a dated current703 canonical repair, historical708 open-filing/duplicate-cancellation provenance, and native source/tested/certificate bindings. All old numbers, timings, raw checks, UUIDs and workload qualifications are preserved.703 cold core review remains outstanding debt; comparator certification is not a gameplay-bug claim.247's QA ledger and friction remain byte exact.
+
+No browser/heavy/full/fuzz applies to this log metadata boundary. Existing throwing-sink and deterministic atlas/progression/site controls cover the unchanged adjacent behavior. Five-path applicability and exact source/check epochs are structured in the companion JSON. Parent alone owns candidate, certification, cleanup and creator192 repair disposition.
+
+Actual helper dispatch starts2026-10-15T00:52:02.306Z (ACK00:52:03.515Z); includes audit, coordination, validation and waits. Parent setup precedes dispatch; model sampling/CPU unknown. Final cutoff is refreshed before normal automatic-date Git, with external Git/tail receipt and no postcommit tracked rewrite. Required review passed553related tests/35files with lint, main/node types, import cycles and friction schema in22.519636s; then Knip passed4.706048s. Review starting1minute host load7.583984375 is an observation, not a controlled performance result. Final schema/trigger/whitespace and parent freeze checks precede Git; refreshed-clock schema and staged whitespace receipts remain external.

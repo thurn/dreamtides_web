@@ -1,5 +1,7 @@
 # hv-umm2.247 validation evidence
 
+Current disposition verified 2026-10-15T00:56:02.977864+00:00: canonical repair hv-umm2.703 is completed and certified at source `991fba83ea803913515bf0ee85b0d5634cbdf48f`, tested `1e0398642e3fb530abdeaa7cf35fa3b74578e1f6`, candidate `01a13ce3-e9ac-70c1-b693-658e321cf310`, certificate `01a13ce4-7d80-7733-ba92-7d41326308e2`; promotion and automatic cleanup are confirmed. The original hv-umm2.708 filing was observed open at2026-10-15T00:20:24Z and was cancelled as a duplicate of703 at2026-10-15T00:28:47Z. This identifies the comparator repair; it does not attribute a gameplay defect or make247's different weighted300 workload proof of that repair.703's normal cold core review remains outstanding debt. Native resolution proof SHA256 `d4c689eba7bad7379f707ce49568b8c287cfcdbe7aeb3bed9829af39228941fa`. This dated disposition preserves the historical observation and measurements below.
+
 Source base: `c1b13bdd8466755978c6993727a3db8340969567`. Original five-UUID acceptance consumes the four child664 leaves and Berries' existing C4 primitive read-only. Every printed battle clause is authored with verifiedText; this original writes evidence only. Its eleven blocking prerequisites are closed/completed; the open parent epic is separate.
 
 D20 requires no new scenario module. Each ability is one existing primitive composition; child664 intentionally delivered no optional scenario. Current C4 contracts cover original physical provenance across zones/costs/created copies, knowledge and independent checkpoint boundaries. No production, test, registry, catalog, rules or other bead evidence edit. Test delta: files0, lines0, jsdom0; plain scenario modules0 and configured test entrypoints0. No new primitive/RD/card issue.
@@ -14,7 +16,7 @@ Fresh native sweep `invocations/sweep-ZRcI9B`:100effective cells,10basepass/90in
 
 Actual slot1, port5274, runnerPG61182/serverPG61231. One native session, no lease yields; native browser lease wait6ms, cleanup343.198ms. Native terminal0/awaited session cleanup reports port free; all recorded groups absent and own owner/server records absent. Shared service/peer resources untouched. No screenshots required by D21 (firstbytes223/214/35/162/199 all unsampled; no new surface).
 
-The parent encountered earlier release fuzz46 extra floating e14 at action42/step124, exact tested8fee862c17ada458e7e14346b95c612d1583193d. Canonical peer hv-umm2.708 owns diagnosis/repair. Own pre-existing evidence preserves source/range with no duplicate fix or causal attribution.
+The parent encountered earlier release fuzz46 extra floating e14 at action42/step124, exact tested8fee862c17ada458e7e14346b95c612d1583193d. The historical open filing at this observation was hv-umm2.708. Own pre-existing evidence preserves source/range with no duplicate fix or causal attribution.
 
 Timing starts at actual helper dispatch2026-10-15T00:18:45.998Z, ACK00:18:47.128Z. Research, coordination and waits are included; claim/setup precede dispatch. Parent setup's missing prepare:workspace script failure is retained separately from successful prepare-workspace. Model sampling/CPU unknown. The finalizer updates cutoff before automatic Git; final Git/tail is retained outside the source commit. No forced dates/postcommit tracked rewrite.
 
