@@ -1,0 +1,311 @@
+{
+  "bead": "hv-umm2.750",
+  "base": "16477356526f24e645a29dd6b13f5b1b25003b41",
+  "scope": "Evidence-only acceptance follow-up for the first authored Apollyon pair. Phase5 recipe7 canonical avatar preflight/sweep; all source/test/config/catalog/driver behavior unchanged.",
+  "identities": [
+    {
+      "incarnationId": "1380edc9-09ed-44df-ad09-ab4cbfc081b5",
+      "aspectAvatarId": "395f7a98-d40a-4b42-a4c6-6f38648255f7"
+    },
+    {
+      "incarnationId": "3fe26475-8023-46d3-b13b-86673b92e3d0",
+      "aspectAvatarId": "5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef"
+    }
+  ],
+  "acceptance": {
+    "at": "2026-10-15T13:51:34.943220+00:00",
+    "source": "16477356526f24e645a29dd6b13f5b1b25003b41",
+    "frozenPathsUnchanged": 5723,
+    "preflightCounts": {
+      "pass": 4,
+      "pending": 0,
+      "skip": 36,
+      "fail": 0
+    },
+    "sweepCounts": {
+      "pass": 4,
+      "skip": 36
+    },
+    "rawAttempts": 40,
+    "uniqueCells": 40,
+    "positiveReports": [
+      {
+        "uuid": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+        "controller": "player",
+        "variant": "base",
+        "report": "invocations/sweep-zENE26/run-SrHGfN/sweep-395f7a98-d40a-4b42-a4c6-6f38648255f7-base-player-attempt-1.result.json",
+        "reportSHA256": "e409a9bc9794acb7d546fdcbbc96a99b52e8fb6b96ef9f3a1fff0fc6e7375ec6",
+        "nativeGameId": "nm559m",
+        "nativeRows": 23,
+        "export": "invocations/sweep-zENE26/run-SrHGfN/sweep-395f7a98-d40a-4b42-a4c6-6f38648255f7-base-player-attempt-1.jsonl",
+        "exportSHA256": "a3f066081706100551d27832b1534700065165755c887c1dd9e37227543b25b8",
+        "exercised": false,
+        "caps": [],
+        "initializationIntentKey": "qa-bootstrap:card-lab-avatar:395f7a98-d40a-4b42-a4c6-6f38648255f7:base:player"
+      },
+      {
+        "uuid": "395f7a98-d40a-4b42-a4c6-6f38648255f7",
+        "controller": "enemy",
+        "variant": "base",
+        "report": "invocations/sweep-zENE26/run-SrHGfN/sweep-395f7a98-d40a-4b42-a4c6-6f38648255f7-base-enemy-attempt-1.result.json",
+        "reportSHA256": "b8a4d72fc37aebd660ddb6764d0928d2924118310ce67e41797f494a6ca0a08d",
+        "nativeGameId": "y8jjkt",
+        "nativeRows": 23,
+        "export": "invocations/sweep-zENE26/run-SrHGfN/sweep-395f7a98-d40a-4b42-a4c6-6f38648255f7-base-enemy-attempt-1.jsonl",
+        "exportSHA256": "aef47bcc48cccd2569a091dc6f7d499a4141db3df50044087701559111623873",
+        "exercised": false,
+        "caps": [],
+        "initializationIntentKey": "qa-bootstrap:card-lab-avatar:395f7a98-d40a-4b42-a4c6-6f38648255f7:base:enemy"
+      },
+      {
+        "uuid": "5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef",
+        "controller": "player",
+        "variant": "base",
+        "report": "invocations/sweep-zENE26/run-SrHGfN/sweep-5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef-base-player-attempt-1.result.json",
+        "reportSHA256": "987ab385cf9fc45c0c3999e4349770d605e077a913bec5d971e85e4c8beb79ed",
+        "nativeGameId": "rsguxk",
+        "nativeRows": 23,
+        "export": "invocations/sweep-zENE26/run-SrHGfN/sweep-5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef-base-player-attempt-1.jsonl",
+        "exportSHA256": "e1fcf3872c2117f39fd5c032c51ecafd9fb36a488fd723a3bf5939d87b0c8198",
+        "exercised": false,
+        "caps": [],
+        "initializationIntentKey": "qa-bootstrap:card-lab-avatar:5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef:base:player"
+      },
+      {
+        "uuid": "5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef",
+        "controller": "enemy",
+        "variant": "base",
+        "report": "invocations/sweep-zENE26/run-SrHGfN/sweep-5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef-base-enemy-attempt-1.result.json",
+        "reportSHA256": "9e3ebb90675dcc6c8221ef3ee5032139a4da41aae1ba48ee69f2a1d8b1a6bbf9",
+        "nativeGameId": "ge26dq",
+        "nativeRows": 23,
+        "export": "invocations/sweep-zENE26/run-SrHGfN/sweep-5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef-base-enemy-attempt-1.jsonl",
+        "exportSHA256": "5c3c56b5e6ede64f749353ec65a987bea47ce01faafc81e619f70fe23a81c9b3",
+        "exercised": false,
+        "caps": [],
+        "initializationIntentKey": "qa-bootstrap:card-lab-avatar:5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef:base:enemy"
+      }
+    ],
+    "uniqueNativeGames": 4,
+    "nativeRows": 92,
+    "observedTriggerExercise": false,
+    "allCapsEmpty": true,
+    "allErrorsNull": true,
+    "pixelsOrScreenshotsClaimed": false
+  },
+  "caller": {
+    "originalSHA256": "e47a10d104a7bd1d9a11308067723413810c87c7607e17cd38ebd01c1a2995dd",
+    "observedSHA256": "4e95aab8d99ab8d66320335dadfcd0df005d6783b35f21ca06d9a6942a6a0c48",
+    "diffSHA256": "35a7c6751f3b1fdaea096d02f4a4f2cd3c05e18849af3252f28db280653c10c3",
+    "changes": [
+      "3 absolute import rebases",
+      "owned worktree repoRoot literal",
+      "existing exportGameLog metadata",
+      "save returned gameLog.lines"
+    ],
+    "scenarioAndVerdictAndRetryAndTimeoutAndLease": "unchanged"
+  },
+  "sourceEligibility": "scripts/qa/lab-preflight.ts avatar loop skips every non-base variant. src/runtime/qa-scenes.ts resolveCardLab avatar branch admits loaded selectable Avatars or incarnation.aspect.id and exposes eligibleVariants=[base]. card-sweep consumes that base-report eligibility for unchanged source-ineligible variant skip rows.",
+  "checks": {
+    "preflight": {
+      "label": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--avatars",
+        "395f7a98-d40a-4b42-a4c6-6f38648255f7,5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-lab750",
+      "start": "2026-10-15T13:50:06.888247+00:00",
+      "loadStart": [
+        6.4541015625,
+        9.1015625,
+        9.40673828125
+      ],
+      "custodianPid": 305,
+      "pid": 319,
+      "pgid": 319,
+      "end": "2026-10-15T13:50:09.777731+00:00",
+      "elapsedS": 2.887330416997429,
+      "exit": 0,
+      "loadEnd": [
+        6.65771484375,
+        9.099609375,
+        9.404296875
+      ],
+      "postCommandProcessGroup": []
+    },
+    "sweep": {
+      "label": "sweep",
+      "argv": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.750/card-sweep.observed.mjs",
+        "--bead",
+        "hv-umm2.750",
+        "--avatars",
+        "395f7a98-d40a-4b42-a4c6-6f38648255f7,5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-lab750",
+      "start": "2026-10-15T13:50:18.537131+00:00",
+      "loadStart": [
+        6.4697265625,
+        8.97998046875,
+        9.3583984375
+      ],
+      "custodianPid": 1350,
+      "pid": 1360,
+      "pgid": 1360,
+      "end": "2026-10-15T13:50:33.734780+00:00",
+      "elapsedS": 15.19536725000944,
+      "exit": 0,
+      "loadEnd": [
+        7.4677734375,
+        9.0908203125,
+        9.3916015625
+      ],
+      "postCommandProcessGroup": []
+    },
+    "review": {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-lab750",
+      "start": "2026-10-15T13:52:28.214274+00:00",
+      "loadStart": [
+        5.83837890625,
+        8.0537109375,
+        8.9443359375
+      ],
+      "custodianPid": 11440,
+      "pid": 11455,
+      "pgid": 11455,
+      "end": "2026-10-15T13:52:28.531998+00:00",
+      "elapsedS": 0.3158122090389952,
+      "exit": 0,
+      "loadEnd": [
+        5.83837890625,
+        8.0537109375,
+        8.9443359375
+      ],
+      "postCommandProcessGroup": [],
+      "qualification": "Whole ordinary-review command:4 evidence paths, friction schema validation only;980 records valid/41 historical unknown measurements;0 tests executed. No full-suite claim."
+    },
+    "knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-lab750",
+      "start": "2026-10-15T13:52:33.210067+00:00",
+      "loadStart": [
+        6.97216796875,
+        8.251953125,
+        9.0087890625
+      ],
+      "custodianPid": 11952,
+      "pid": 11967,
+      "pgid": 11967,
+      "end": "2026-10-15T13:52:39.392580+00:00",
+      "elapsedS": 6.179150166979525,
+      "exit": 0,
+      "loadEnd": [
+        7.45458984375,
+        8.33056640625,
+        9.03173828125
+      ],
+      "postCommandProcessGroup": [],
+      "qualification": "Whole Knip command passed; no unused code introduced by evidence-only diff."
+    }
+  },
+  "resources": {
+    "at": "2026-10-15T13:52:28.156113+00:00",
+    "observedPidsAndGroups": [
+      305,
+      319,
+      1350,
+      1360,
+      1417
+    ],
+    "remaining": [],
+    "activeOwnedRecords": [],
+    "recordedPort": 5274,
+    "recordedPortCurrentlyFree": true,
+    "nativeServerProcessGroup": 1417,
+    "nativeMcpSessionId": "16757b51-1db1-4653-8940-276ebe2c31a2",
+    "slot": 1,
+    "normalCleanup": "Canonical runner exit0 after normal provider/server/lease closure; stderr records server group1417 cleanup and portfree. Observer captured active provider identity and subsequent record absence. Fresh observed known PID/group absence retained.",
+    "observationLimits": [
+      "Runner birth-qualified by ps lstart; separate server launcher birth and full server-record image were not captured by observer bead-field filter. Native server group/port and terminal cleanup are captured; no fabricated birth or separate mcpExecutionCompleted receipt."
+    ],
+    "foreignAndSharedResources": "untouched",
+    "finalVerification": {
+      "at": "2026-10-15T13:53:45.573233+00:00",
+      "knownPidsAndGroups": [
+        305,
+        319,
+        1350,
+        1360,
+        11440,
+        11455,
+        11952,
+        11967,
+        1417
+      ],
+      "remaining": [],
+      "activeOwnedRecords": [],
+      "allPersistentOwnedResourcesSettledBeforeGit": true,
+      "observationLimitRetained": true
+    }
+  },
+  "testDeltaInterpretation": {
+    "dedicatedModules": 0,
+    "configuredEntrypoints": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "nonTestCodeChanged": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Whole ordinary-review starting one-minute OS load at2026-10-15T13:52:28.214274+00:00"
+      },
+      "implementWindow": {
+        "measuredFor": "Actual helper first dispatch through fresh precommit cutoff, inclusive source research, coordination, every command/queue/check/custody/evidence. Actual Git endpoint retained separately in ignored final Git receipt; normal author/committer dates."
+      }
+    }
+  },
+  "parentPreparation": {
+    "claim": "2026-10-15T13:46:49Z",
+    "firstDispatch": "2026-10-15T13:48:38.672Z",
+    "claimToFirstDispatchMin": 1.8278666666666665,
+    "qualification": "Parent setup/read-onlyscope audit/ownworktree/npm/brief separate from helper implementation; nativeclaim maysecondsresolution, no productiveCPUclaim."
+  },
+  "qualifications": [
+    "Earlier hv-umm2.290 delivered source and weighted300,20Greedy games per incarnation, full recipes/Starter and two actual boss workflows remain qualified to their original source. Its closed acceptance account has a canonical recipe7 lab omission, addressed here; those earlier runs are not rerun or attributed to this source.",
+    "This lab observes correct authored Aspect UUID/controller initialization and normal first Day. All four preflight/browser exercised flags are false; this is not proof that every Aspect trigger fired. Earlier real boss effect proofs remain separately source-qualified.",
+    "No new display surface or D21 sample in this acceptance-only task; no screenshot or pixel judgment claimed.",
+    "40 effective/raw cells at each stage:4basepass36source-ineligible skip; no failed attempts, pending, retries or unknown outcomes. Source-specific observations are not mutable-data CI assertions.",
+    "Full four native persisted JSONL exports contain92rows and equal report.gameLog.lines exactly; native applied LOAD_STATE intentKey/debug_card_lab_loaded metadata match exact cell.",
+    "Canonical terminal CLI is observer-qualified for public native log export; scenario, fixture, verdict, deadline, retry and lease behavior unchanged.",
+    "No heavy command/full suite/fuzz/tournament executed for this evidence-only acceptance follow-up.",
+    "Required cold code review trigger absent for0code/noncore/nonphase-gate diff; no code review claimed.",
+    "No product issue inferred from the initial source-read path typo; no runtime failure occurred.",
+    "17 npm install audit observations (9moderate,7high,1critical) are preserved as pre-existing; no dependency mutation requested."
+  ],
+  "rawArchive": "artifacts/qa/hv-umm2.750/",
+  "artifactManifest": "artifact-manifest.json:immutable raw/check/caller/source/resource files; excludes itself and later final Git/handoff receipts.",
+  "finalGitReceipt": "final-git.receipt.json (post-manifest, actual normal-date Git invocation and inclusive first-dispatch-to-Git endpoint)",
+  "finalSourceBindings": {
+    "at": "2026-10-15T13:53:45.533531+00:00",
+    "unchangedRegularPaths": 5723,
+    "source": "16477356526f24e645a29dd6b13f5b1b25003b41",
+    "manifestSHA256": "2f46a794bdf54dc818c3c30ca5be04611cd687f68f04ac86d3db713ea9d1e13a"
+  }
+}
