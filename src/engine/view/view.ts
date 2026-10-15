@@ -205,7 +205,7 @@ export interface FloatingEffectView {
  * could not identify as the ability triggered or cannot identify now
  * (`seesSubject`).
  */
-export type AbandonedNamedView = { readonly hidden: true } | {
+export type AbandonedNamedView = ({ readonly hidden: true } | {
   readonly source: InstanceId | null;
   readonly anonymousSource?: { readonly member: number; readonly owner: Side } | { readonly ceased: number };
   readonly origin: import("../state/types").AbandonedNamedBinding["origin"];
@@ -218,7 +218,7 @@ export type AbandonedNamedView = { readonly hidden: true } | {
     readonly linkedSource?: Omit<LinkedSourceContext, "source">;
 
   })[];
-};
+}) & { readonly reader?: { readonly ceased: number } };
 
 export interface QueuedTriggerView {
   readonly abandonedNamed?: AbandonedNamedView;
@@ -579,11 +579,12 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         : observed !== undefined && !sourceSeen && typeof record.source === "string"
           ? { rememberedSource: anonymousSource(record.source) } : {}) };
   });
-  const abandonedView = (binding: import("../state/types").AbandonedNamedBinding): AbandonedNamedView => {
-    if (!binding.observedBy.includes(viewer)) return { hidden: true };
+  const abandonedView = (binding: import("../state/types").AbandonedNamedBinding, source: AbilitySource): AbandonedNamedView => {
+    const reader = typeof source === "string" && state.instances[source] === undefined ? { reader: { ceased: memberFor(source) } } : {};
+    if (!binding.observedBy.includes(viewer)) return { hidden: true, ...reader };
     const seen = visible(binding.source);
     const withoutSource = ({ source: _source, ...context }: LinkedSourceContext) => copy(context);
-    return { source: seen ? binding.source : null, origin: copy(binding.origin), controller: binding.controller,
+    return { ...reader, source: seen ? binding.source : null, origin: copy(binding.origin), controller: binding.controller,
       ...(!seen ? { anonymousSource: state.instances[binding.source] === undefined ? { ceased: memberFor(binding.source) }
         : { member: memberFor(binding.source), owner: state.instances[binding.source].owner } } : {}),
       linked: liveLinkedBanished(state).filter(record => binding.entries.some(entry => entry.linkedSource !== undefined &&
@@ -604,7 +605,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     const causeKnown = originSeen;
     return {
       ...(!instructionSeen ? {} : { repeated: trigger.repeated.named }),
-      ...(trigger.abandonedNamed === undefined || !originSeen ? {} : { abandonedNamed: abandonedView(trigger.abandonedNamed) }),
+      ...(trigger.abandonedNamed === undefined || !originSeen ? {} : { abandonedNamed: abandonedView(trigger.abandonedNamed, trigger.source) }),
       ...(trigger.triggeringAbility === undefined || !originSeen ? {} : { triggeringAbility: {
         named: trigger.triggeringAbility.named, occurrence: queuedView(trigger.triggeringAbility.occurrence, trigger.triggeringAbility.observedBy ?? []),
       } }),

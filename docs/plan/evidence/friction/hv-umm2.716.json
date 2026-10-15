@@ -1,0 +1,25 @@
+{
+  "bead": "hv-umm2.716",
+  "phase": 5,
+  "implementMin": 28.1579304,
+  "implementWindow": {
+    "start": "2026-10-15T04:04:06.626250+00:00",
+    "end": "2026-10-15T04:32:16.102074+00:00"
+  },
+  "localValidationS": {
+    "regression-broken-base": 8.863498583028559,
+    "regression-repaired": 7.173068875039462,
+    "integration": 24.100969374994747,
+    "review": 82.04706374998204,
+    "knip": 9.04294904199196,
+    "review-full": 618.1415792089538
+  },
+  "hostLoad": 14.0205078125,
+  "testDelta": {
+    "files": 0,
+    "lines": 77,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "friction": []
+}

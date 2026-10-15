@@ -1,0 +1,207 @@
+{
+  "bead": "hv-umm2.716",
+  "base": "60c227afbe848db6c8bd72465cdd8eece908825d",
+  "timing": {
+    "claimCall": "2026-10-15T04:04:06.626250+00:00",
+    "claimAck": "2026-10-15T04:04:06.740732+00:00",
+    "preGitCutoff": "2026-10-15T04:32:16.102074+00:00",
+    "actualGitEnd": "UNKNOWN before Git; external final-commit-receipt.json supplies actual endpoint and tail",
+    "inclusiveThroughCutoffS": 1689.475824,
+    "scope": "Includes setup, source research, parent coordination/admission, implementation, broken-base and passing checks, cleanup and packaging. Clock never reset."
+  },
+  "authority": {
+    "grant": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/exact-write-grant.txt",
+      "sha256": "0ad6825981d825b61683d68dd93328337d34afa14664ddc46743a94fc87f9027"
+    },
+    "nativeAck": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/exact-write-native-ack.json",
+      "sha256": "a6f898c975593408fa9d63bf5b29ebd27417033b05cc6f6fa27e60642cfd8083"
+    },
+    "sourceFirstProposal": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/source-first-proposal.md",
+      "sha256": "ae9e9f4001487103004b3495b339f507373a6c58a17c805d21dc5e8f37cc04d9"
+    }
+  },
+  "source": {
+    "finalManifest": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/final-source-manifest.json",
+      "sha256": "8fa45c84ea659ff05b2a769cdb3012910e2cd5256742075aeb1b6e093d448e80"
+    },
+    "historicalSourceFirst": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/source-first-manifest.json",
+      "sha256": "44b8de6fc7082378c17eb3d4765081a86469a377131ff50ee2f8ae70cce01b4a"
+    },
+    "changedOwnPaths": 5,
+    "oldMatcherFunctionsPreserved": 10,
+    "readOnlyDependenciesPreserved": 8,
+    "classification": "Repair of retained abandoned named view/reconstruction, once admission and nested linked obligations. No authoritative state/rules/content/UI/config/entrypoint changes. Parent owns fresh read-only Codex core review after terminal commit."
+  },
+  "testDelta": {
+    "physicalPlainModules": 0,
+    "netLines": 77,
+    "configuredEntrypoints": 0,
+    "jsdomFiles": 0,
+    "contractLines": 440,
+    "previousCases": 56,
+    "newCases": 18,
+    "finalOwnCases": 74
+  },
+  "checks": [
+    {
+      "label": "regression-broken-base",
+      "exit": 1,
+      "seconds": 8.863498583028559,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/regression-broken-base.receipt.json",
+        "sha256": "dfd50b9605eaf059831fdb2259129e97a89466043fde2c7dfb2a9dc4d5dc3e27"
+      },
+      "stdoutSHA256": "77a6d6582b1e6a4ecee8d07dc248e97687fe855d7b7fb2109e07f8e581d8958f",
+      "results": [
+        "Test Files  1 failed (1)",
+        "Tests  16 failed | 2 passed | 5418 skipped (5436)"
+      ]
+    },
+    {
+      "label": "regression-repaired",
+      "exit": 0,
+      "seconds": 7.173068875039462,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/regression-repaired.receipt.json",
+        "sha256": "fea31049a0afb51ef2c30de89c6c29426670dd01b6343695620f84a21635d2ca"
+      },
+      "stdoutSHA256": "102cf39471f2dd60cebbad9aca6b046e99c905b725aa143b22aab6ad85ef53f5",
+      "results": [
+        "Test Files  1 passed (1)",
+        "Tests  74 passed | 5362 skipped (5436)"
+      ]
+    },
+    {
+      "label": "integration",
+      "exit": 0,
+      "seconds": 24.100969374994747,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/integration.receipt.json",
+        "sha256": "282152e6b60669df5af24fc88ed1ff574b6176198fbf4795f77ee5ab68b258af"
+      },
+      "stdoutSHA256": "1f854d701603a924af97a3343cfd0565faec64583307467b317c528ced40f124",
+      "results": [
+        "Test Files  7 passed (7)",
+        "Tests  5555 passed (5555)"
+      ]
+    },
+    {
+      "label": "review",
+      "exit": 0,
+      "seconds": 82.04706374998204,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/review.receipt.json",
+        "sha256": "1e2eecacf976c87bbae81e708e9f170a84272bb0abaa39b9826831536cdda962"
+      },
+      "stdoutSHA256": "5cbe6746bea97880766be3f9991b421ada30c78070659316de225314d8dd4eb0",
+      "results": [
+        "Test Files  308 passed (308)",
+        "Tests  9267 passed (9267)"
+      ]
+    },
+    {
+      "label": "knip",
+      "exit": 0,
+      "seconds": 9.04294904199196,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/knip.receipt.json",
+        "sha256": "715ddeb4b9a9e92e21178cb4870f3405bf8f53ad3ec1d41ab5600e743b7e1bc9"
+      },
+      "stdoutSHA256": "56b5db8e9822ca640e15975d468e96426ca809b8a10b7d4bbfb027f50fedb2ce",
+      "results": []
+    },
+    {
+      "label": "review-full",
+      "exit": 0,
+      "seconds": 618.1415792089538,
+      "receipt": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/review-full.receipt.json",
+        "sha256": "4e86a4c01d8095ea0b99502c40df889415eb89c238a66414e4b24c6d5dfa83f0"
+      },
+      "stdoutSHA256": "c799aa12241b01a8037e4fadba482e614cf73e85e43409a7ea16556ab9a4fd0c",
+      "results": [
+        "Test Files  389 passed (389)",
+        "Tests  10276 passed (10276)"
+      ]
+    }
+  ],
+  "regressions": [
+    {
+      "finding": "F1",
+      "cases": 8,
+      "broken": "8 runtime failures: Anonymous source belongs only to a captured cause",
+      "positive": "Both actors and both viewers reconstruct an extant hidden or ceased physical self-reader, preserve source/referent equality, round-trip views/save, and execute the retained child for score3."
+    },
+    {
+      "finding": "F2",
+      "cases": 2,
+      "broken": "2 result failures: score6 instead of3",
+      "positive": "An ordinary nonnamed abandoned branch spends the expired gained once occurrence. Two held readers with repeated Dawn requests cannot admit it again, for either actor."
+    },
+    {
+      "finding": "F3",
+      "cases": 4,
+      "broken": "4 cases fail cycleHash normalization and actual paired-return hand0 instead of1",
+      "positive": "After direct optional decline, only nested observer cause owes an acquired linked pair. Both viewers retain and execute it for either actor, returning the physical paired card without a draw. Consistent token-renaming is an explicit representation fixture; paired execution is separately observed."
+    },
+    {
+      "finding": "F4",
+      "cases": 4,
+      "broken": "2 opponent-view runtime failures: No compatible abandoned referent domain; 2 holder-view controls pass",
+      "positive": "A vanilla abandoned character with no matching named abilities remains a valid empty binding when its hidden reader becomes public. Both viewers keep the observed physical subject fixed and enqueue no child; event decoy is incompatible."
+    }
+  ],
+  "failures": {
+    "brokenBase": {
+      "pass": 2,
+      "fail": 16,
+      "qualification": "All four non-test repair paths matched base bytes before and after this run. All failures are genuine existing defects; no fixture corrections were required."
+    },
+    "typeOnlyFollowup": "After first repaired focus, annotate InstanceId and LinkedBanishedCards return type and explain private sampling; integration/review/full bind final source. No second focused aggregate was needed.",
+    "artificialCounterfactuals": 0
+  },
+  "failureFamilies": {
+    "identityAndPrivacy": "Existing blind-reader indistinguishability and known-reader/unknown-referent execution plus new physical self-alias and empty-domain controls. Alias metadata only accompanies an already identifiable reader; no UUID/name equality heuristic.",
+    "ordinaryAdmission": "Actual local pre-observer admissions spend exact departure/index/acquisition once receipts from any branch; only same-departure Dissolved admissions confirm the Dissolved extra.",
+    "nestedObligation": "Existing captured cause chain traversed only for own retained contexts; old nested data and top-level linkedSource behavior preserved. Both-view sampled/save execution and cycleHash representation test.",
+    "reloadAndAtomicity": "All previous56 contracts retained, covering save/hash/clone/reconstructed replay, stale/no-pending/foreign/concurrent answers, optional refusal, planning cancellation, partial resolution rollback and detached raw-event snapshots. No invented prompt transition for static reconstruction.",
+    "samplingLimits": "Genuinely unobserved departure details are sampled from compatible copiable character/filter tuples. An observed physical subject is never replaced. Historical unobserved continuous modifications are not asserted as known facts."
+  },
+  "qa": {
+    "disposition": "Source-only engine repair; public synthetic contracts, seven-suite integration and one locked full architecture check. No feature browser/provider, LAB, captures, production fuzz or native exports. Full-check temporary fake servers/providers are infrastructure fixtures.",
+    "productionUUIDsTransferred": [],
+    "originalAcceptanceOwners": [
+      "hv-umm2.257",
+      "hv-umm2.258"
+    ],
+    "originalRecipe": "Original owners retain full entity authoring, weighted300/preflight/sweep/D21/final acceptance; this repair transfers none of it."
+  },
+  "resources": {
+    "settlement": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/resource-settlement.json",
+      "sha256": "56d8662a6c92ade637a1a65756a3c40e785d54ca96b085df526e3c41473f5dec"
+    },
+    "heavyProgress": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/review-full-progress.jsonl",
+      "sha256": "d5bf4c1f665c1a6332825795daecfe16652ac6b424e18847a3fc7f28f7888219"
+    },
+    "observedPreExecutionLowerBoundS": 380.50467,
+    "live": [],
+    "qualification": "Recorded command groups and all actual full-check reported fixture groups absent. Handles collected. No foreign groups signalled; exact kernel lock wait is unknown."
+  },
+  "provenance": {
+    "setupInstall": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/npm-install.receipt.json",
+      "sha256": "5e7ea3bc6f5bd01e9c5f91c8d78006cb9984fe91d8741209359bfa9cd28cb2e8"
+    },
+    "claim": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/abandoned-named716/claim-time.json",
+      "sha256": "26f2d4a30c4238f7adec7d9704e5738306e30ec8ce46bc86e01b649b923471a5"
+    }
+  }
+}

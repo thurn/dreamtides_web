@@ -908,7 +908,7 @@ export function matchEvent(ctx: StepContext, event: EngineEvent): void {
     admitted.push(...matchFloating(ctx, side, event, armed, undefined, firstHandEmpty));
   }
   if (event.kind === "leftPlay") armLookbacks(ctx, event, departing);
-  if (event.kind === "dissolved" && armed.abandonedNamed !== undefined) confirmAbandonedNamed(ctx, armed, admitted);
+  if (isLookbackEvent(event) && armed.abandonedNamed !== undefined) confirmAbandonedNamed(ctx, armed, admitted, event.kind);
   queueDawnReactions(ctx, beforeDawn);
   observeNamedAdmissions(ctx, admitted, (entry) => matchNamedAdmission(ctx, entry), () => hasNamedAdmissionObserver(ctx));
 }
@@ -1009,15 +1009,21 @@ function spendAbandonedNamed(ctx: StepContext, binding: AbandonedNamedBinding, e
 }
 
 /** Actual ordinary admissions confirm this departure; no raw event or arbitrary queue scan can supply one. */
-function confirmAbandonedNamed(ctx: StepContext, armed: ArmedTriggers, admitted: readonly NamedAdmission[]): void {
+function confirmAbandonedNamed(ctx: StepContext, armed: ArmedTriggers, admitted: readonly NamedAdmission[], event: LookbackEventKind): void {
   const binding = armed.abandonedNamed!;
   for (const admission of admitted) {
     const queued = admission.queued;
-    if (queued.source !== binding.source || queued.node !== null || !hasNamedTrigger(admission.trigger, "dissolved")) continue;
+    if (queued.source !== binding.source || queued.node !== null) continue;
+    const departed = ctx.departedSourceObjects.get(binding.source);
+    if (departed === undefined) continue;
+    const occurrence = linkedSourceContext(ctx, queued.source, queued.origin, queued.ability) ??
+      { source: binding.source, enteredPlayAt: departed.enteredPlayAt, ability: queued.ability };
     for (const reader of [binding, ...armed.namedReaders ?? []]) for (const entry of reader.entries) {
-      if (entry.ability !== queued.ability) continue;
-      if (entry.named === "dissolved") entry.confirmed = true;
-      const definition = originAbilities(ctx.catalog, binding.origin)[entry.ability];
+      if (entry.ability !== queued.ability || entry.occurrence.source !== occurrence.source ||
+        entry.occurrence.enteredPlayAt !== occurrence.enteredPlayAt || entry.occurrence.gainedFrom !== occurrence.gainedFrom ||
+        entry.occurrence.ability !== occurrence.ability) continue;
+      if (event === "dissolved" && hasNamedTrigger(admission.trigger, "dissolved") && entry.named === "dissolved") entry.confirmed = true;
+      const definition = originAbilities(ctx.catalog, queued.origin)[queued.ability];
       if (definition?.kind === "triggered" && definition.oncePerTurn === true) spendAbandonedNamed(ctx, reader, entry);
     }
   }

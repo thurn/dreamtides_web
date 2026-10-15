@@ -166,7 +166,7 @@ function shownOccurrences(queue: readonly QueuedTriggerView[]): QueuedTriggerVie
 
 /** Every identified pending source is retained, including a withheld historical body. */
 function retainsQueued(trigger: QueuedTriggerView): boolean {
-  return trigger.source !== null || trigger.repeated !== undefined || trigger.triggeringAbility !== undefined;
+  return trigger.source !== null || trigger.repeated !== undefined || trigger.triggeringAbility !== undefined || trigger.abandonedNamed !== undefined;
 }
 
 /** Concrete queued/captured pairs let private restoration replace only its own occurrence. */
@@ -746,6 +746,12 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     return { named: observer.named, occurrence, observedBy: [], readerObservedBy: [] };
   };
   const abandonedCeased = new Map<number, InstanceId>();
+  const ceasedAbandoned = (member: number): InstanceId => {
+    if (!Number.isSafeInteger(member) || member < 0) throw new Error("Invalid abandoned ceased member");
+    const source: InstanceId = abandonedCeased.get(member) ?? `i${next++}`;
+    abandonedCeased.set(member, source);
+    return source;
+  };
   const restoredLinked: import("../state/types").LinkedBanishedCards[] = [];
   const restoreAbandoned = (shown: QueuedTriggerView, origin: QueuedTrigger["origin"]): QueuedTrigger["abandonedNamed"] => {
     if (shown.kind !== undefined) {
@@ -765,8 +771,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
         const anonymous = binding.anonymousSource;
         if (anonymous === undefined) throw new Error("Missing abandoned referent alias");
         if ("ceased" in anonymous) {
-          source = abandonedCeased.get(anonymous.ceased) ?? `i${next++}`;
-          abandonedCeased.set(anonymous.ceased, source);
+          source = ceasedAbandoned(anonymous.ceased);
         } else source = assigned.get(anonymous.member) ?? null;
       }
       if (source === null) throw new Error("Missing abandoned referent member");
@@ -784,13 +789,21 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     }
     // Omitted blind-reader metadata carries no new-op classification. Only the actually sampled body asks for it.
     const branches = (trigger: Trigger): Extract<Trigger, { on: "abandon" }>[] => trigger.on === "either" ? trigger.triggers.flatMap(branches) : trigger.on === "abandon" ? [trigger] : [];
-    const controllers = branches(triggerBody(catalog, origin, shown.ability, shown.node).trigger).map(trigger => resolvePlayer(shown.controller, trigger.player));
-    if (controllers.length === 0) return undefined;
-    const controller = controllers[Math.floor(random() * controllers.length)];
-    const candidates = Object.values(instances).filter(instance => (shown.subject === null || instance.id === shown.subject) && originAbilities(catalog, historicalOrigin(instance, 0)).some(ability =>
-      ability.kind === "triggered" && requested.some(named => hasNamedTrigger(ability.trigger, named) && (named === "dissolved" || worksInZone(ability.zone, "play")))));
-    const candidate = candidates[Math.floor(random() * candidates.length)];
-    if (candidate === undefined) throw new Error("No compatible abandoned referent domain");
+    const occasions = branches(triggerBody(catalog, origin, shown.ability, shown.node).trigger);
+    if (occasions.length === 0) return undefined;
+    // Unobserved departure changes are sampled from compatible copiable tuples; an observed physical subject stays fixed.
+    const candidates = occasions.flatMap(occasion => Object.values(instances).flatMap(instance => {
+      if (shown.subject !== null && instance.id !== shown.subject) return [];
+      const card = instanceCard(catalog, instance);
+      const facts: FilterSubject = { cardType: card.cardType, subtype: card.subtype, allTypes: false,
+        cost: fixedEnergy(card.costs), spark: card.spark === "x" ? 0 : card.spark ?? 0, speed: card.speed,
+        namedTriggers: namedTriggersOf(originAbilities(catalog, historicalOrigin(instance, 0))) };
+      return facts.cardType === "character" && matchesFilter(facts, occasion.filter)
+        ? [{ candidate: instance, controller: resolvePlayer(shown.controller, occasion.player) }] : [];
+    }));
+    const selected = candidates[Math.floor(random() * candidates.length)];
+    if (selected === undefined) throw new Error("No compatible abandoned referent domain");
+    const { candidate, controller } = selected;
     const candidateOrigin = historicalOrigin(candidate, 0);
     if (candidateOrigin.kind !== "card" && candidateOrigin.kind !== "figment") throw new Error("Invalid abandoned referent origin");
     return { source: candidate.id, origin: candidateOrigin, controller, observedBy: [], readerObservedBy: [],
@@ -803,13 +816,18 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
   };
   const restoreQueued = (shown: QueuedTriggerView, named?: import("../dsl/types").NamedTrigger): QueuedTrigger | null => {
     named ??= shown.repeated;
-    const knownReader = shown.triggeringAbility !== undefined && shown.origin !== null;
+    const knownReader = (shown.triggeringAbility !== undefined || shown.abandonedNamed !== undefined) && shown.origin !== null;
+    const reader = shown.abandonedNamed?.reader;
+    if (reader !== undefined && (shown.origin === null || shown.source !== null || shown.anonymousSource === undefined ||
+      !("ceased" in shown.anonymousSource) || Object.keys(reader).some(key => key !== "ceased"))) throw new Error("Invalid abandoned reader alias");
     if (named === undefined && !knownReader && shown.anonymousSource !== undefined) throw new Error("Anonymous source belongs only to a captured cause");
     let identity: Pick<QueuedTrigger, "source" | "origin"> | null;
     if ((named !== undefined || knownReader) && shown.source === null && shown.origin !== null) {
       const anonymous = shown.anonymousSource;
       if (anonymous === undefined) throw new Error("Cannot determinize known cause without anonymous source");
-      const source: InstanceId | undefined = "ceased" in anonymous ? `i${next++}` : assigned.get(anonymous.member);
+      const source: InstanceId | undefined = "ceased" in anonymous
+        ? reader === undefined ? `i${next++}` : ceasedAbandoned(reader.ceased)
+        : assigned.get(anonymous.member);
       if (source === undefined) throw new Error("Cannot determinize missing cause member");
       identity = { source, origin: copy(shown.origin) };
     } else identity = shown.source !== null && shown.origin !== null

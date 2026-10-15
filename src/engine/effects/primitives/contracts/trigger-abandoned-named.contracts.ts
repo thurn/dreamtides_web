@@ -9,8 +9,9 @@ import { createEngine } from "../../../engine";
 import { eventSeenBy, type EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { cloneState } from "../../../state/clone";
+import { cycleHash } from "../../../loops/signature";
 import { stateHash, serializeState, deserializeState } from "../../../state/hash";
-import type { BattleState } from "../../../state/types";
+import type { BattleState, LinkedBanishedCards } from "../../../state/types";
 import { SIDES, opponent, parseFigmentId, type Side, type InstanceId } from "../../../state/ids";
 import { runStep } from "../../../steps/runner";
 import type { Step } from "../../../steps/kinds";
@@ -359,5 +360,81 @@ describe("triggerAbandonedNamed retained origin", () => {
     if (out.kind !== "done") throw new Error("Unexpected suspension");
     expect(out.events.map(event => JSON.stringify(event))).toEqual(emitted);
     expect(drain(w, out.state).sides[side].score).toBe(limited ? 2 : 6);
+  });
+});
+
+
+describe("716 regression", () => {
+  it.each(SIDES.flatMap(side => SIDES.flatMap(viewer => [false, true].map(ceased => ({ side, viewer, ceased })))))("F1 same physical self reader $side/$viewer ceased=$ceased", ({ side, viewer, ceased }) => {
+    const target = card(100, () => [activated([], p.sequence(p.abandon("you", { subtype: "Mage" }),
+      ...(ceased ? [] : [p.shuffleInto([everyIn("void", { subtype: "Mage" })])]))),
+      triggered(whenAbandon("you", { subtype: "Mage" }), named("dawn")), triggered(onDawn(), p.gainPoints(3))], "Mage");
+    const w = world(side, [target], { back: ceased ? [] : [target.id] });
+    const id = ceased ? placeFigment(w.state, side, { rank: "back", index: 0 }, { kind: "figmentCopy", cardId: target.id, spark: null }) : w.ids[side].back[0]!;
+    const out = activate(w, id).state, shown = w.engine.view(out, viewer);
+    expect(out.triggerQueue[0].source).toBe(out.triggerQueue[0].abandonedNamed!.source);
+    const sampled = w.engine.determinize(shown, lists(w), () => .2);
+    expect(sampled.triggerQueue[0].source).toBe(sampled.triggerQueue[0].abandonedNamed!.source);
+    expect(comparableView(w.engine.view(sampled, viewer))).toEqual(comparableView(shown));
+    const loaded = saved(slice(sampled));
+    expect(loaded).not.toBeNull();
+    expect(drain(w, loaded!.committed).sides[side].score).toBe(3);
+    expect(drain(w, out).sides[side].score).toBe(3);
+  });
+
+  it.each(SIDES)("F2 %s ordinary abandoned branch spends an expired gained once occurrence", side => {
+    const donor = card(101, () => [triggered(either(onDawn(), whenAbandon("you", { subtype: "Mage" })), p.gainPoints(3), { oncePerTurn: true })], "Explorer");
+    const target = card(102, () => [activated([], p.sequence(p.gainAbilities(p.banishCards([everyIn("void")])), p.abandon("you", { subtype: "Mage" })))], "Mage");
+    const watch = reader(103, p.sequence(named("dawn"), named("dawn")));
+    const w = world(side, [donor, target, watch], { back: [target.id, watch.id, watch.id], void: [donor.id] });
+    const out = activate(w, w.ids[side].back[0]!);
+    expect(queued(out.events).filter(event => event.source === w.ids[side].back[0])).toHaveLength(1);
+    expect(drain(w, out.state).sides[side].score).toBe(3);
+  });
+
+  it.each(SIDES.flatMap(side => SIDES.map(viewer => ({ side, viewer }))))("F3 only nested acquired paired obligation $side/$viewer", ({ side, viewer }) => {
+    const donor = card(104, () => [triggered(onMaterialized(), p.lookAtTopBanish(1)), triggered(onDawn(), p.putLinkedBanishedInHand())], "Explorer");
+    const target = card(105, () => [activated([], p.sequence(p.gainAbilities(p.banishCards([everyIn("void")])), p.triggerAbility(self(), "materialized")))], "Mage");
+    const watch = card(106, () => [triggered(either(whenAbandon("you", { subtype: "Mage" }), onDawn()), p.optional(named("dawn")))]);
+    const observe = card(107, () => [triggered(whenNamedAbilityTriggered("dawn"), p.repeatTriggeringAbility(), { oncePerTurn: true })]);
+    const w = world(side, [donor, target, watch, observe, starter], { back: [watch.id, observe.id, starter.id], void: [donor.id] });
+    const id = placeFigment(w.state, side, { rank: "back", index: 3 }, { kind: "figmentCopy", cardId: target.id, spark: null });
+    const held = drain(w, activate(w, id).state);
+    const abandoned = activate(w, w.ids[side].back[2]!, 0, held).state;
+    const onlyNested = step(w, abandoned, { kind: "resolveTrigger" }, [false]).state;
+    expect(onlyNested.triggerQueue).toHaveLength(1);
+    expect(onlyNested.triggerQueue[0].abandonedNamed).toBeUndefined();
+    const renamed = cloneState(onlyNested), binding = renamed.triggerQueue[0].triggeringAbility!.occurrence.abandonedNamed!;
+    for (const entry of binding.entries) for (const context of [entry.occurrence, ...(entry.linkedSource === undefined ? [] : [entry.linkedSource])]) {
+      Object.assign(context, { enteredPlayAt: context.enteredPlayAt + 17, gainedFrom: `e${Number(context.gainedFrom!.slice(1)) + 17}` });
+    }
+    renamed.linkedBanished = renamed.linkedBanished!.map((record): LinkedBanishedCards => ({ ...record, enteredPlayAt: record.enteredPlayAt + 17, gainedFrom: `e${Number(record.gainedFrom!.slice(1)) + 17}` }));
+    expect.soft(cycleHash(renamed)).toBe(cycleHash(onlyNested));
+    const shown = w.engine.view(onlyNested, viewer), sampled = w.engine.determinize(shown, lists(w), () => .3);
+    expect(comparableView(w.engine.view(sampled, viewer))).toEqual(comparableView(shown));
+    for (const state of [onlyNested, saved(slice(sampled))!.committed]) {
+      const repeat = step(w, state, { kind: "resolveTrigger" }).state;
+      const accepted = step(w, repeat, { kind: "resolveTrigger" }, [true]).state;
+      const done = drain(w, accepted);
+      expect(done.sides[side].hand).toHaveLength(1);
+      expect(done.instances[done.sides[side].hand[0]].printing).toEqual(w.state.instances[w.ids[side].deck[0]].printing);
+      expect(done.turnLog.drawn[side]).toBe(0);
+    }
+  });
+
+  it.each(SIDES.flatMap(side => SIDES.map(viewer => ({ side, viewer }))))("F4 empty named set with late-public reader $side/$viewer", ({ side, viewer }) => {
+    const target = card(108, () => [], "Mage");
+    const hidden = card(109, () => [triggered(whenAbandon("you", { subtype: "Mage" }), named("dawn"), { zone: "any" })], "Explorer");
+    const start = card(110, () => [activated([], p.sequence(p.abandon("you", { subtype: "Mage" }), p.materialize(everyIn("hand", { subtype: "Explorer" }))))]);
+    const w = world(side, [target, hidden, start], { back: [target.id, start.id], hand: [hidden.id, v.event0.id] });
+    const out = activate(w, w.ids[side].back[1]!).state, shown = w.engine.view(out, viewer);
+    const sampled = w.engine.determinize(shown, lists(w), () => .2);
+    expect(sampled.triggerQueue[0].abandonedNamed!.source).toBe(w.ids[side].back[0]);
+    expect(sampled.triggerQueue[0].abandonedNamed!.entries).toEqual([]);
+    expect(comparableView(w.engine.view(sampled, viewer))).toEqual(comparableView(shown));
+    const result = step(w, saved(slice(sampled))!.committed, { kind: "resolveTrigger" });
+    expect(queued(result.events)).toEqual([]);
+    expect(result.state.sides[side].score).toBe(0);
+    expect(drain(w, out).sides[side].score).toBe(0);
   });
 });
