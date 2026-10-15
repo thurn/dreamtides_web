@@ -1,3 +1,4 @@
+import type { JourneyShopSlotReplacement, ShopReplacementItem } from "../../types/journey";
 // Pure site-runtime reducer cases.
 //
 // This module owns the journey's per-site runtime: it generates each site's
@@ -143,6 +144,15 @@ export interface SiteContentProvider {
    * Returns the regenerated slots + Dreamsign pool + draft state, or `null` to
    * bounce.
    */
+  /** Prepare exactly one purchase vacancy; null result refuses, null slot exhausts. */
+  replacePurchasedShopSlot?(input: {
+    journey: JourneyState;
+    site: SiteState;
+    slotIndex: number;
+    purchasedSlot: RuntimeShopSlot;
+    random: () => number;
+  }): ShopSlotReplacementResult | null;
+
   rerollShop(input: {
     journey: JourneyState;
     site: SiteState;
@@ -190,6 +200,18 @@ export interface ShopRerollResult {
   remainingDreamsignPoolIds: DreamsignId[];
   remainingDreamsignPool: DreamsignId[];
   draftState: DraftState | null;
+}
+
+/** One consumed stock draw, distinct from a whole-shelf Restock. */
+export interface ShopSlotReplacementResult {
+  slot: RuntimeShopSlot | null;
+  purchasedItem: ShopReplacementItem;
+  replacementItem: ShopReplacementItem | null;
+  remainingDreamsignPoolIds: DreamsignId[];
+  remainingDreamsignPool: DreamsignId[];
+  draftState: DraftState | null;
+  draftSupplyBefore: JourneyShopSlotReplacement["draftSupplyBefore"];
+  draftSupplyAfter: JourneyShopSlotReplacement["draftSupplyAfter"];
 }
 
 let contentProvider: SiteContentProvider | null = null;

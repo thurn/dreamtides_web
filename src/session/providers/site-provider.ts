@@ -1,3 +1,5 @@
+import type { ShopReplacementItem, JourneyShopSlotReplacement } from "../../types/journey";
+import type { ShopSlotReplacementResult } from "../../rules/journey/sites";
 import { shopStockCounts } from "../../rules/journey/journey-shop";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import type { JourneyPurgeTransition } from "../../types/journey";
@@ -110,6 +112,19 @@ function coerceAuguryChoice(value: unknown): AuguryChoice | undefined {
 
 function shopSourceDraftState(journey: JourneyState): DraftState | null {
   return journey.draftState;
+}
+
+function shopReplacementItem(slot: RuntimeShopSlot, content: JourneyContent): ShopReplacementItem {
+  if (slot.itemType === "dreamsign") return { kind: "dreamsign", dreamsignId: slot.dreamsign.id };
+  const card = content.cardDatabase.get(slot.cardNumber);
+  if (card === undefined) throw new Error("Shop replacement card metadata is unavailable.");
+  return { kind: "card", cardId: card.id, cardNumber: slot.cardNumber, transfiguration: slot.transfiguration ?? null };
+}
+
+function shopReplacementSupply(state: DraftState | null): JourneyShopSlotReplacement["draftSupplyBefore"] {
+  if (state === null) return { mode: null };
+  const counts = Object.values(state.remainingCopiesByCard).filter((count) => count > 0);
+  return { mode: state.mode, distinctRemaining: counts.length, copiesRemaining: counts.reduce((sum, count) => sum + count, 0) };
 }
 
 /** A uniform rng shuffle (no ambient `Math.random`). */
@@ -939,6 +954,33 @@ export function createSiteContentProvider(
         rerollCount: explorationRerollCount(runtime) + 1,
       },
     ),
+    replacePurchasedShopSlot: ({ journey, site, purchasedSlot, slotIndex, random }): ShopSlotReplacementResult | null => {
+      const runtime = journey.siteRuntime[site.id];
+      if ((site.type !== "Shop" && site.type !== "DreamsignBazaar") || runtime?.kind !== "shop" ||
+        !Number.isSafeInteger(slotIndex) || slotIndex < 0 || runtime.slots[slotIndex]?.purchased !== true) return null;
+      const isBazaar = site.type === "DreamsignBazaar";
+      if (!isBazaar && journey.draftState === null) throw new Error("Shop replacement draft source is unavailable.");
+      const regenerationPool = dreamsignRegenerationPoolIds(journey);
+      if (isBazaar) {
+        const templates = new Set(content.dreamsignTemplates.map(({ id }) => id));
+        if ([...journey.remainingDreamsignPool, ...regenerationPool].some((id) => !templates.has(id))) {
+          throw new Error("Shop replacement Dreamsign metadata is unavailable.");
+        }
+      }
+      const purchasedItem = shopReplacementItem(purchasedSlot, content);
+      const generated = generateShopInventory({ economy: content.economyData.shop, cardDatabase: content.cardDatabase,
+        draftState: isBazaar ? null : shopSourceDraftState(journey), remainingDreamsignPoolIds: journey.remainingDreamsignPool,
+        dreamsignTemplates: content.dreamsignTemplates, dreamsignRegenerationPoolIds: regenerationPool,
+        cardCount: isBazaar ? 0 : 1, dreamsignCount: isBazaar ? 1 : 0, rng: random });
+      if (generated.reconstructionLog.cardsMissingFromDatabase > 0) throw new Error("Shop replacement selected card metadata is unavailable.");
+      const slots = shopSlotsToRuntime(generated.slots);
+      const slot = (runtime.transfiguredOfferSource === undefined ? slots : transfigureShopSlots(slots, content, random))[0] ?? null;
+      const draftState = generated.draftState ?? journey.draftState;
+      return { slot, purchasedItem, replacementItem: slot === null ? null : shopReplacementItem(slot, content),
+        remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds.map(parseDreamsignId),
+        remainingDreamsignPool: generated.remainingDreamsignPoolIds.map(parseDreamsignId), draftState,
+        draftSupplyBefore: shopReplacementSupply(journey.draftState), draftSupplyAfter: shopReplacementSupply(draftState) };
+    },
     rerollShop: ({ journey, site, rng }): ShopRerollResult | null => {
       const stream = streamFromKeyed(rng);
       const isBazaar = site.type === "DreamsignBazaar";

@@ -361,7 +361,7 @@ export function generateShopInventory(
       });
     }
     spentDreamsignPoolIds.push(...draw.offeredIds);
-    remainingPool = remainingPool.filter((id) => !draw.offeredIds.includes(id));
+    remainingPool = [...draw.remainingDreamsignPool];
   }
 
   const discountCount = weightedValue(economy.discounts.slotCounts, rng);

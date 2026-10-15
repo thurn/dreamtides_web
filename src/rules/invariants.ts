@@ -1,3 +1,4 @@
+import { validShopReplenishmentRuntime } from "./journey/journey-shop";
 import { validStarterPurgeScreen, validStarterBattleBinding } from "./journey/journey-starter-acquisition";
 import { validJourneyDuplicationScreen } from "./journey/journey-duplication";
 import { validJourneyDreamsignScreen, validDreamsignBattleBinding } from "./journey/journey-on-gain";
@@ -74,6 +75,10 @@ export function foldInvariantViolations(
         detail: siteId,
       });
     }
+  }
+
+  for (const [siteId, runtime] of Object.entries(journey.siteRuntime)) {
+    if (!validShopReplenishmentRuntime(runtime)) violations.push({ code: "journey_shop_replenishment_inconsistent", detail: siteId });
   }
 
   if (journey.runId === null) return violations;

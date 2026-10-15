@@ -55,6 +55,7 @@ export function buildShopPurchaseLogs(
 ) {
   return purchaseHistory.map((receipt) => ({
     eventSeq: receipt.eventSeq,
+    ...(receipt.expectedOffer === undefined ? {} : { expectedOffer: receipt.expectedOffer }),
     siteId: receipt.siteId,
     slotIndex: receipt.slotIndex,
     item:

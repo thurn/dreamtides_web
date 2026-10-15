@@ -136,6 +136,25 @@ describe("generateShopInventory", () => {
     ).toBe(2);
   });
 
+  it("retains regenerated unoffered Dreamsign supply for the next draw", () => {
+    const templates = [...DREAMSIGN_TEMPLATES, { ...DREAMSIGN_TEMPLATES[0], id: testDreamsignId("dreamsign-3") }];
+    const ids = templates.map(({ id }) => id);
+    for (const regeneration of [ids, [...ids].reverse()]) {
+      const options = { cardDatabase: db, draftState: null, remainingDreamsignPoolIds: [],
+        dreamsignTemplates: templates, dreamsignRegenerationPoolIds: regeneration,
+        cardCount: 0, dreamsignCount: 1, rng: () => 0 };
+      const first = generateShopInventory(options);
+      expect(first.spentDreamsignPoolIds).toHaveLength(1);
+      expect(first.remainingDreamsignPoolIds).toEqual(regeneration.filter((id) => !first.spentDreamsignPoolIds.includes(id)));
+      const second = generateShopInventory({ ...options, remainingDreamsignPoolIds: first.remainingDreamsignPoolIds });
+      expect(second.spentDreamsignPoolIds).toHaveLength(1);
+      expect(second.spentDreamsignPoolIds[0]).not.toBe(first.spentDreamsignPoolIds[0]);
+      expect(second.remainingDreamsignPoolIds).toEqual(first.remainingDreamsignPoolIds.filter((id) => !second.spentDreamsignPoolIds.includes(id)));
+      expect(second.remainingDreamsignPoolIds).toHaveLength(1);
+      expect(options.remainingDreamsignPoolIds).toEqual([]);
+    }
+  });
+
   it("dreamsign slots are priced in essence", () => {
     const result = generateShopInventory({
       cardDatabase: db,

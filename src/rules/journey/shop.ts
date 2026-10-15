@@ -1,4 +1,4 @@
-import { shopCardPurchaseQuote, shopRestockQuote, transfigureShopPurchase } from "./journey-shop";
+import { shopOfferRevision, validShopReplenishmentRuntime, shopCardPurchaseQuote, shopRestockQuote, transfigureShopPurchase } from "./journey-shop";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "./modifier-registry";
 import type { JourneyPurgeTransition } from "../../types/journey";
 // Pure shop / augury / modifier reducer cases.
@@ -199,6 +199,25 @@ export function buyShopSlot(
   const purgeIndex =
     payload.purgeIndex === undefined ? undefined : integer(payload.purgeIndex);
   if (payload.purgeIndex !== undefined && purgeIndex === null) return null;
+  if (!validShopReplenishmentRuntime(runtime)) return null;
+  if (slot.itemType === "dreamsign" && (purgeIndex !== undefined && purgeIndex !== null
+    ? journey.dreamsigns[purgeIndex] === undefined
+    : journey.dreamsigns.length >= journey.maxDreamsigns)) return null;
+  const postPurchaseSigns = slot.itemType === "card" ? journey.dreamsigns :
+    purgeIndex === undefined || purgeIndex === null ? [...journey.dreamsigns, slot.dreamsign] :
+      journey.dreamsigns.map((sign, index) => index === purgeIndex ? slot.dreamsign : sign);
+  const needsRevision = runtime.purchaseHistory.some((receipt) => receipt.slotReplacement !== undefined) ||
+    postPurchaseSigns.some((sign) => modifiers.lookup(sign.id)?.journeyShop?.kind === "replacePurchasedItem");
+  const expected = payload.expectedOffer;
+  if (expected === undefined && needsRevision) return null;
+  if (expected !== undefined) {
+    if (typeof expected !== "object" || expected === null || Array.isArray(expected)) return null;
+    const fields = expected as Record<string, unknown>;
+    if (Object.keys(fields).length !== 2 || typeof fields.purchaseCount !== "number" || fields.purchaseCount < 0 ||
+      typeof fields.rerollCount !== "number" || fields.rerollCount < 0 || !Number.isSafeInteger(fields.purchaseCount) || !Number.isSafeInteger(fields.rerollCount) ||
+      fields.purchaseCount !== runtime.purchaseHistory.length || fields.rerollCount !== runtime.rerollCount ||
+      journey.screen.type !== "site" || journey.screen.siteId !== siteId) return null;
+  }
 
   const queuedFreePurchases = journey.shopModifiers.freePurchaseModifiers ?? [];
   const freePurchaseModifier = queuedFreePurchases[0];
@@ -320,6 +339,7 @@ export function buyShopSlot(
       ...(runtime.purchaseHistory ?? []),
       {
         eventSeq: ctx.seq,
+        ...(expected === undefined ? {} : { expectedOffer: shopOfferRevision(runtime) }),
         siteId,
         slotIndex,
         item,

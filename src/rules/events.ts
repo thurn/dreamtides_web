@@ -1,3 +1,4 @@
+import type { ShopOfferRevision } from "../types/journey";
 import type {
   AtlasNodeId,
   AuguryArchetypeId,
@@ -267,7 +268,7 @@ export interface EventPayloads {
   // --- augury & shop ---
   ACCEPT_AUGURY_OFFER: { siteId: SiteId } & AuguryAcceptPayload;
   DECLINE_AUGURY: { siteId: SiteId } & AuguryDeclinePayload;
-  BUY_SHOP_SLOT: { siteId: SiteId; slotIndex: number; purgeIndex?: number };
+  BUY_SHOP_SLOT: { siteId: SiteId; slotIndex: number; purgeIndex?: number; expectedOffer?: ShopOfferRevision };
   REROLL_SHOP: { siteId: SiteId };
   GRANT_FREE_REROLLS: { count: number };
   APPLY_SHOP_DISCOUNT: { percent: number };

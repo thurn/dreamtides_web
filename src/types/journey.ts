@@ -349,6 +349,7 @@ export type JourneyDraftEffect =
 export type JourneyShopEffect =
   | { readonly kind: "additionalOptions"; readonly amount: number }
   | { readonly kind: "firstRestockFree" }
+  | { readonly kind: "replacePurchasedItem" }
   | { readonly kind: "purchasedCardTransfiguration" }
   | { readonly kind: "firstCardPurchase"; readonly discountPercent: number };
 
@@ -540,8 +541,39 @@ export interface FreePurchaseModifier extends ExplorationModifierSource {
   readonly remainingCount: number;
 }
 
+/** Identity of a shelf generation, including repeated UUID offers. */
+export interface ShopOfferRevision {
+  readonly purchaseCount: number;
+  readonly rerollCount: number;
+}
+
+/** UUID identity and prepared form of one concrete shop offer. */
+export type ShopReplacementItem =
+  | { readonly kind: "card"; readonly cardId: CardId; readonly cardNumber: number;
+      readonly transfiguration: TransfigurationType | null }
+  | { readonly kind: "dreamsign"; readonly dreamsignId: DreamsignId };
+
+/** Exact purchase-bound stock reaction, retained through source loss. */
+export interface JourneyShopSlotReplacement {
+  readonly dreamsignId: DreamsignId;
+  readonly heldIndex: number;
+  readonly revisionBefore: ShopOfferRevision;
+  readonly revisionAfter: ShopOfferRevision;
+  readonly purchased: ShopReplacementItem;
+  readonly replacement: { readonly item: ShopReplacementItem;
+    readonly basePrice: number; readonly discountPercent: number } | null;
+  readonly drawIndices: readonly number[];
+  readonly remainingDreamsignPoolBefore: readonly DreamsignId[];
+  readonly remainingDreamsignPoolAfter: readonly DreamsignId[];
+  readonly draftSupplyBefore: { readonly mode: DraftState["mode"] | null;
+    readonly distinctRemaining?: number; readonly copiesRemaining?: number };
+  readonly draftSupplyAfter: JourneyShopSlotReplacement["draftSupplyBefore"];
+}
+
 /** Exact persisted result of one successful Shop or Dreamsign Bazaar buy. */
 export interface ShopPurchaseResult {
+  readonly expectedOffer?: ShopOfferRevision;
+  readonly slotReplacement?: JourneyShopSlotReplacement;
   readonly eventSeq: number;
   readonly siteId: SiteId;
   readonly slotIndex: number;

@@ -1,0 +1,2634 @@
+{
+  "bead": "hv-umm2.728",
+  "base": "d0710c77c428f7e81665605ed543d047bf5131c4",
+  "dispatch": {
+    "at": "2026-10-15T07:29:16.279Z",
+    "journalOrdinal": 44287,
+    "callId": "call_2f1996c952534a68a6a4a33c4f27c3ee",
+    "samplingStart": "UNKNOWN"
+  },
+  "claimACK": "2026-10-15T07:27:06.842649Z",
+  "timingCutoff": {
+    "at": "2026-10-15T09:14:03.394510+00:00",
+    "qualification": "Final pre-amend cutoff after parent exact repair packaging ACK, immediately before schema/whitespace/stage/one normal automatic-date Git commit. Actual Git bracket retained externally in integration-final-commit.json; tail included externally, with no postcommit tracked rewrite."
+  },
+  "windowPolicy": "Original actual dispatch through Stage1, parent waits, edits, checks, QA, evidence, parent audit and actual Git. Claim/setup separate; elapsed wall time without performance comparison.",
+  "checks": {
+    "focused-1-receipt": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-shop-replenishment.test.ts",
+        "src/session/providers/shop-slot-replacement.test.ts",
+        "src/shop/shop-generator-inventory.test.ts",
+        "src/session/actions-payloads.test.ts"
+      ],
+      "workers": 2,
+      "startReview": "2026-10-15T07:52:51.221Z",
+      "endReview": "2026-10-15T07:53:02Z approximate from terminal stage times",
+      "exit": 1,
+      "tests": {
+        "passed": 44,
+        "failed": 2
+      },
+      "toolSession": 91894,
+      "rawOutput": "retained tool journal, includes complete two failures and terminal; prepare asset warning prefix truncated by tool output budget",
+      "sourceEpoch": "focused-1-source.json",
+      "failures": [
+        "test fixture used unsupported copyFirstPurchase descriptor",
+        "resumed event fixture named basedOnSeq0 before compacted prefix horizon1"
+      ]
+    },
+    "focused-2": {
+      "label": "focused-2",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-shop-replenishment.test.ts",
+        "src/session/providers/shop-slot-replacement.test.ts",
+        "src/shop/shop-generator-inventory.test.ts",
+        "src/session/actions-payloads.test.ts"
+      ],
+      "pid": 72020,
+      "pgid": 72020,
+      "start": "2026-10-15T07:54:04.711678+00:00",
+      "end": "2026-10-15T07:54:12.084796+00:00",
+      "wallS": 7.372668124968186,
+      "cpuUserS": 6.18461,
+      "cpuSystemS": 2.270682,
+      "hostLoadStart": [
+        5.95556640625,
+        8.02197265625,
+        10.177734375
+      ],
+      "hostLoadEnd": [
+        6.0390625,
+        8.0048828125,
+        10.15869140625
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/focused-2-source.json",
+      "log": "/tmp/728-checks/focused-2.log",
+      "logSha256": "04b212d797f5fa692695b6935dbbc58a665431d43f9c45e12252fb439135aab2"
+    },
+    "focused-3": {
+      "label": "focused-3",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/rules/journey/journey-shop-replenishment.test.ts",
+        "src/session/providers/shop-slot-replacement.test.ts",
+        "src/shop/shop-generator-inventory.test.ts",
+        "src/session/actions-payloads.test.ts"
+      ],
+      "pid": 78067,
+      "pgid": 78067,
+      "start": "2026-10-15T08:03:19.258756+00:00",
+      "end": "2026-10-15T08:03:22.280093+00:00",
+      "wallS": 3.0209463339997455,
+      "cpuUserS": 4.414304,
+      "cpuSystemS": 0.9686809999999999,
+      "hostLoadStart": [
+        14.28759765625,
+        8.3525390625,
+        8.6884765625
+      ],
+      "hostLoadEnd": [
+        13.94384765625,
+        8.3798828125,
+        8.69580078125
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/focused-3-source.json",
+      "log": "/tmp/728-checks/focused-3.log",
+      "logSha256": "39f4e8bb4b2431fe7c6f9283c10b981190c51a297bbcf972ad5da8547e2f7d56"
+    },
+    "full-1": {
+      "label": "full-1",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 80251,
+      "pgid": 80251,
+      "start": "2026-10-15T07:58:15.500252+00:00",
+      "end": "2026-10-15T08:00:02.110905+00:00",
+      "wallS": 106.60863187501673,
+      "cpuUserS": 238.597895,
+      "cpuSystemS": 24.909036,
+      "hostLoadStart": [
+        2.90576171875,
+        5.52490234375,
+        8.5458984375
+      ],
+      "hostLoadEnd": [
+        4.6064453125,
+        5.4921875,
+        8.189453125
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/full-1-source.json",
+      "log": "/tmp/728-checks/full-1.log",
+      "logSha256": "5629f8d83462c3d40ee0cc80f41b1481cb6e4f81d6d933a1f246ea44df5f56c6"
+    },
+    "knip-1": {
+      "label": "knip-1",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 79289,
+      "pgid": 79289,
+      "start": "2026-10-15T07:57:27.190286+00:00",
+      "end": "2026-10-15T07:57:32.920673+00:00",
+      "wallS": 5.730092332989443,
+      "cpuUserS": 3.925738,
+      "cpuSystemS": 1.897261,
+      "hostLoadStart": [
+        3.36474609375,
+        6.0625,
+        8.908203125
+      ],
+      "hostLoadEnd": [
+        3.25537109375,
+        5.99462890625,
+        8.86767578125
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/knip-1-source.json",
+      "log": "/tmp/728-checks/knip-1.log",
+      "logSha256": "fa77dc989a1c05a4577c854f5636ecc4b4d07553629c40aabb9da7ddfd1056d3"
+    },
+    "qa-1": {
+      "label": "qa-1",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.728/shop-offer-protocol.mjs",
+        "--bead",
+        "hv-umm2.728",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 80129,
+      "pgid": 80129,
+      "start": "2026-10-15T08:04:33.296439+00:00",
+      "end": "2026-10-15T08:04:54.763606+00:00",
+      "wallS": 21.466566874994896,
+      "cpuUserS": 5.415925,
+      "cpuSystemS": 3.225125,
+      "hostLoadStart": [
+        6.9990234375,
+        7.46728515625,
+        8.32568359375
+      ],
+      "hostLoadEnd": [
+        5.94189453125,
+        7.19384765625,
+        8.20703125
+      ],
+      "exit": 1,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/qa-1-source.json",
+      "log": "/tmp/728-checks/qa-1.log",
+      "logSha256": "90d78be84f8f6c195d5c04b73a22446cadc831a55d4fc43e37af3db1d082ee54"
+    },
+    "qa-2": {
+      "label": "qa-2",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.728/shop-offer-protocol.mjs",
+        "--bead",
+        "hv-umm2.728",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 81683,
+      "pgid": 81683,
+      "start": "2026-10-15T08:06:03.849197+00:00",
+      "end": "2026-10-15T08:08:55.029765+00:00",
+      "wallS": 171.17748308298178,
+      "cpuUserS": 7.577019,
+      "cpuSystemS": 3.673618,
+      "hostLoadStart": [
+        3.20703125,
+        6.10595703125,
+        7.71337890625
+      ],
+      "hostLoadEnd": [
+        15.48486328125,
+        9.3427734375,
+        8.66064453125
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/qa-2-source.json",
+      "log": "/tmp/728-checks/qa-2.log",
+      "logSha256": "2a306b19b7634829bf60e3305aef17b113abd491b24d946eca304b5ea0d94b27"
+    },
+    "review-1": {
+      "label": "review-1",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 75158,
+      "pgid": 75158,
+      "start": "2026-10-15T07:54:50.865168+00:00",
+      "end": "2026-10-15T07:55:33.692894+00:00",
+      "wallS": 42.826848333003,
+      "cpuUserS": 94.733808,
+      "cpuSystemS": 10.045867000000001,
+      "hostLoadStart": [
+        5.26123046875,
+        7.57470703125,
+        9.90234375
+      ],
+      "hostLoadEnd": [
+        5.14990234375,
+        7.30078125,
+        9.69677734375
+      ],
+      "exit": 2,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/review-1-source.json",
+      "log": "/tmp/728-checks/review-1.log",
+      "logSha256": "f70f9dcd3f5ee29b148165e18d7ea3a7c188353467f81c9422d1cf1d924d24bc"
+    },
+    "review-2": {
+      "label": "review-2",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 77751,
+      "pgid": 77751,
+      "start": "2026-10-15T07:56:02.964784+00:00",
+      "end": "2026-10-15T07:56:36.740402+00:00",
+      "wallS": 33.77486233296804,
+      "cpuUserS": 88.23268900000001,
+      "cpuSystemS": 8.645902999999999,
+      "hostLoadStart": [
+        4.1650390625,
+        6.8564453125,
+        9.4521484375
+      ],
+      "hostLoadEnd": [
+        5.08984375,
+        6.8037109375,
+        9.328125
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/review-2-source.json",
+      "log": "/tmp/728-checks/review-2.log",
+      "logSha256": "a8d81aec0d8b9cf5cd71ca87c08bcb21746fbafd5f8670b9b991a5d40a7206a1"
+    },
+    "review-3": {
+      "label": "review-3",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 17129,
+      "pgid": 17129,
+      "start": "2026-10-15T08:02:02.588834+00:00",
+      "end": "2026-10-15T08:02:48.086613+00:00",
+      "wallS": 45.49683916696813,
+      "cpuUserS": 100.249883,
+      "cpuSystemS": 12.10582,
+      "hostLoadStart": [
+        2.60302734375,
+        4.3857421875,
+        7.388671875
+      ],
+      "hostLoadEnd": [
+        16.7138671875,
+        8.11181640625,
+        8.61865234375
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/review-3-source.json",
+      "log": "/tmp/728-checks/review-3.log",
+      "logSha256": "36ff335c09e1efcb256d375ddd761c5657f06a86fec76eec9c7618c82b432682"
+    },
+    "typecheck-1": {
+      "label": "typecheck-1",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 72964,
+      "pgid": 72964,
+      "start": "2026-10-15T07:54:19.229072+00:00",
+      "end": "2026-10-15T07:54:33.691422+00:00",
+      "wallS": 14.461920749978162,
+      "cpuUserS": 27.144758,
+      "cpuSystemS": 2.147049,
+      "hostLoadStart": [
+        6.03564453125,
+        7.97119140625,
+        10.13427734375
+      ],
+      "hostLoadEnd": [
+        5.97802734375,
+        7.8583984375,
+        10.0556640625
+      ],
+      "exit": 2,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/typecheck-1-source.json",
+      "log": "/tmp/728-checks/typecheck-1.log",
+      "logSha256": "0c023a701b73fb12372ba71ef6e509f084505e60b84c9eae1d36fdcdcade4e1f"
+    },
+    "schema-1": {
+      "label": "schema-1",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 70627,
+      "pgid": 70627,
+      "start": "2026-10-15T08:15:22.097151+00:00",
+      "end": "2026-10-15T08:15:22.167549+00:00",
+      "wallS": 0.07021783298114315,
+      "cpuUserS": 0.055368999999999995,
+      "cpuSystemS": 0.020005999999999996,
+      "hostLoadStart": [
+        4.92919921875,
+        6.49169921875,
+        7.5
+      ],
+      "hostLoadEnd": [
+        4.92919921875,
+        6.49169921875,
+        7.5
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/schema-1-source.json",
+      "log": "/tmp/728-checks/schema-1.log",
+      "logSha256": "c216b5164e1dc302602c0ed8cee617982339f276b8c05318f807ee4753f970d1"
+    },
+    "schema-2": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T08:17:25.248412+00:00",
+      "end": "2026-10-15T08:17:25.393186+00:00",
+      "wallS": 0.1448025000281632,
+      "exit": 0,
+      "pid": 73593,
+      "pgid": 73593,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "hostLoadStart": [
+        5.52978515625,
+        6.140625,
+        7.22216796875
+      ],
+      "logSha256": "c216b5164e1dc302602c0ed8cee617982339f276b8c05318f807ee4753f970d1"
+    },
+    "focused-4": {
+      "label": "focused-4",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-shop-replenishment.test.ts",
+        "src/session/providers/shop-slot-replacement.test.ts",
+        "src/shop/shop-generator-inventory.test.ts",
+        "src/session/actions-payloads.test.ts"
+      ],
+      "pid": 18570,
+      "pgid": 18570,
+      "start": "2026-10-15T08:26:36.770440+00:00",
+      "end": "2026-10-15T08:26:44.436346+00:00",
+      "wallS": 7.665658624959178,
+      "cpuUserS": 6.22164,
+      "cpuSystemS": 2.506734,
+      "hostLoadStart": [
+        3.9794921875,
+        4.49072265625,
+        5.75341796875
+      ],
+      "hostLoadEnd": [
+        4.06103515625,
+        4.4990234375,
+        5.74853515625
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/focused-4-source.json",
+      "log": "/tmp/728-checks/focused-4.log",
+      "logSha256": "9dbe1e9fde2df1e128deccfbff0a1cc1202751d82d384e6c85e1c98f1daba27d"
+    },
+    "review-4": {
+      "label": "review-4",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 19223,
+      "pgid": 19223,
+      "start": "2026-10-15T08:26:54.644006+00:00",
+      "end": "2026-10-15T08:27:29.570754+00:00",
+      "wallS": 34.92617825005436,
+      "cpuUserS": 95.996623,
+      "cpuSystemS": 9.480538000000001,
+      "hostLoadStart": [
+        4.2109375,
+        4.515625,
+        5.73974609375
+      ],
+      "hostLoadEnd": [
+        4.88916015625,
+        4.697265625,
+        5.7587890625
+      ],
+      "exit": 2,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/review-4-source.json",
+      "log": "/tmp/728-checks/review-4.log",
+      "logSha256": "b716a85caaad60575126598003e6d51d3aeaeba245b982c8dc67b2d7d7313357"
+    },
+    "review-5": {
+      "label": "review-5",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 20304,
+      "pgid": 20304,
+      "start": "2026-10-15T08:27:44.748361+00:00",
+      "end": "2026-10-15T08:28:24.836398+00:00",
+      "wallS": 40.08729062502971,
+      "cpuUserS": 91.900764,
+      "cpuSystemS": 11.021870999999999,
+      "hostLoadStart": [
+        4.4892578125,
+        4.6142578125,
+        5.7099609375
+      ],
+      "hostLoadEnd": [
+        5.3798828125,
+        4.81982421875,
+        5.7333984375
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/review-5-source.json",
+      "log": "/tmp/728-checks/review-5.log",
+      "logSha256": "f1c9a8be1f2e48298a30f65b878c3f8db07c025e6118e9da5e12895ec426793a"
+    },
+    "knip-2": {
+      "label": "knip-2",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 21470,
+      "pgid": 21470,
+      "start": "2026-10-15T08:28:35.798569+00:00",
+      "end": "2026-10-15T08:28:42.182503+00:00",
+      "wallS": 6.38353587500751,
+      "cpuUserS": 3.934757,
+      "cpuSystemS": 2.043575,
+      "hostLoadStart": [
+        5.314453125,
+        4.8251953125,
+        5.724609375
+      ],
+      "hostLoadEnd": [
+        5.6337890625,
+        4.912109375,
+        5.7451171875
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/knip-2-source.json",
+      "log": "/tmp/728-checks/knip-2.log",
+      "logSha256": "e06e6c78c9d2d424839c66d0a0a4fd895768c28310a90114821c6456411e9212"
+    },
+    "schema-3": {
+      "label": "schema-3",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 22790,
+      "pgid": 22790,
+      "start": "2026-10-15T08:29:31.996968+00:00",
+      "end": "2026-10-15T08:29:32.061493+00:00",
+      "wallS": 0.06436470901826397,
+      "cpuUserS": 0.051691,
+      "cpuSystemS": 0.016956,
+      "hostLoadStart": [
+        3.7958984375,
+        4.52099609375,
+        5.5517578125
+      ],
+      "hostLoadEnd": [
+        3.7958984375,
+        4.52099609375,
+        5.5517578125
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/schema-3-source.json",
+      "log": "/tmp/728-checks/schema-3.log",
+      "logSha256": "c216b5164e1dc302602c0ed8cee617982339f276b8c05318f807ee4753f970d1"
+    },
+    "schema-4": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T08:31:08.034254+00:00",
+      "end": "2026-10-15T08:31:08.105039+00:00",
+      "wallS": 0.0708072500419803,
+      "exit": 0,
+      "pid": 25169,
+      "pgid": 25169,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "hostLoadStart": [
+        4.34765625,
+        4.4609375,
+        5.4130859375
+      ],
+      "logSha256": "c216b5164e1dc302602c0ed8cee617982339f276b8c05318f807ee4753f970d1"
+    },
+    "schema-5": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T08:31:36.711009+00:00",
+      "end": "2026-10-15T08:31:36.779731+00:00",
+      "wallS": 0.068733083026018,
+      "exit": 0,
+      "pid": 25597,
+      "pgid": 25597,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "hostLoadStart": [
+        3.6806640625,
+        4.29443359375,
+        5.32470703125
+      ],
+      "logSha256": "c216b5164e1dc302602c0ed8cee617982339f276b8c05318f807ee4753f970d1"
+    },
+    "focused-5": {
+      "label": "focused-5",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-shop-replenishment.test.ts",
+        "src/session/providers/shop-slot-replacement.test.ts",
+        "src/shop/shop-generator-inventory.test.ts",
+        "src/session/actions-payloads.test.ts"
+      ],
+      "pid": 43162,
+      "pgid": 43162,
+      "start": "2026-10-15T08:47:36.139892+00:00",
+      "end": "2026-10-15T08:47:43.514091+00:00",
+      "wallS": 7.373942165984772,
+      "cpuUserS": 7.072483,
+      "cpuSystemS": 2.820729,
+      "hostLoadStart": [
+        14.7353515625,
+        9.97998046875,
+        7.078125
+      ],
+      "hostLoadEnd": [
+        13.7666015625,
+        9.93017578125,
+        7.09423828125
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/focused-5-source.json",
+      "log": "/tmp/728-checks/focused-5.log",
+      "logSha256": "234db3e49a3d355d9c557034a413675487f24fd2f3ef347083feca7db6d7c481"
+    },
+    "review-6": {
+      "label": "review-6",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 44979,
+      "pgid": 44979,
+      "start": "2026-10-15T08:47:52.723481+00:00",
+      "end": "2026-10-15T08:48:35.486047+00:00",
+      "wallS": 42.761889666027855,
+      "cpuUserS": 100.19199,
+      "cpuSystemS": 12.079772,
+      "hostLoadStart": [
+        13.3046875,
+        9.89794921875,
+        7.09912109375
+      ],
+      "hostLoadEnd": [
+        11.27880859375,
+        9.90771484375,
+        7.2490234375
+      ],
+      "exit": 2,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/review-6-source.json",
+      "log": "/tmp/728-checks/review-6.log",
+      "logSha256": "dd906a8141054799f17d3581be25cdd1e9b87d431c4c19f9d7dcec380bc60f34"
+    },
+    "review-7": {
+      "label": "review-7",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 48500,
+      "pgid": 48500,
+      "start": "2026-10-15T08:48:51.088388+00:00",
+      "end": "2026-10-15T08:49:30.694229+00:00",
+      "wallS": 39.60756745800609,
+      "cpuUserS": 95.561736,
+      "cpuSystemS": 10.986305000000002,
+      "hostLoadStart": [
+        10.447265625,
+        9.79638671875,
+        7.25537109375
+      ],
+      "hostLoadEnd": [
+        9.126953125,
+        9.587890625,
+        7.29833984375
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/review-7-source.json",
+      "log": "/tmp/728-checks/review-7.log",
+      "logSha256": "a1669fae8db689b5be975bc30172bb6f90e0296ee423de9c5e3baa63f6c316c6"
+    },
+    "knip-3": {
+      "label": "knip-3",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 54345,
+      "pgid": 54345,
+      "start": "2026-10-15T08:50:03.159603+00:00",
+      "end": "2026-10-15T08:50:08.687275+00:00",
+      "wallS": 5.527522334014066,
+      "cpuUserS": 4.727831,
+      "cpuSystemS": 1.8880469999999998,
+      "hostLoadStart": [
+        7.75244140625,
+        9.177734375,
+        7.23974609375
+      ],
+      "hostLoadEnd": [
+        8.17236328125,
+        9.24072265625,
+        7.2734375
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/knip-3-source.json",
+      "log": "/tmp/728-checks/knip-3.log",
+      "logSha256": "216260103b7250fc30e3cdebe37b9d1a39ee9ee8d18fcf8adfa737ebdf8de333"
+    },
+    "schema-6": {
+      "label": "schema-6",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 56023,
+      "pgid": 56023,
+      "start": "2026-10-15T08:50:29.101093+00:00",
+      "end": "2026-10-15T08:50:29.169397+00:00",
+      "wallS": 0.06812966597499326,
+      "cpuUserS": 0.055296,
+      "cpuSystemS": 0.018393,
+      "hostLoadStart": [
+        7.5732421875,
+        9.04345703125,
+        7.248046875
+      ],
+      "hostLoadEnd": [
+        7.5732421875,
+        9.04345703125,
+        7.248046875
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/schema-6-source.json",
+      "log": "/tmp/728-checks/schema-6.log",
+      "logSha256": "c216b5164e1dc302602c0ed8cee617982339f276b8c05318f807ee4753f970d1"
+    },
+    "schema-7": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T08:52:20.977114+00:00",
+      "end": "2026-10-15T08:52:21.048320+00:00",
+      "wallS": 0.07123724999837577,
+      "exit": 0,
+      "pid": 63698,
+      "pgid": 63698,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "hostLoadStart": [
+        6.6328125,
+        8.36083984375,
+        7.19921875
+      ],
+      "logSha256": "c216b5164e1dc302602c0ed8cee617982339f276b8c05318f807ee4753f970d1"
+    },
+    "focused-6": {
+      "label": "focused-6",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-shop-replenishment.test.ts",
+        "src/session/providers/shop-slot-replacement.test.ts",
+        "src/shop/shop-generator-inventory.test.ts",
+        "src/session/actions-payloads.test.ts"
+      ],
+      "pid": 21497,
+      "pgid": 21497,
+      "start": "2026-10-15T09:07:59.016695+00:00",
+      "end": "2026-10-15T09:08:09.037806+00:00",
+      "wallS": 10.020726166956592,
+      "cpuUserS": 6.6937999999999995,
+      "cpuSystemS": 2.68689,
+      "hostLoadStart": [
+        8.5810546875,
+        12.31787109375,
+        11.28662109375
+      ],
+      "hostLoadEnd": [
+        8.34375,
+        12.142578125,
+        11.23583984375
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/focused-6-source.json",
+      "log": "/tmp/728-checks/focused-6.log",
+      "logSha256": "a3f2b189f74df5d36c750f2aa7fe8cb2772abb2882c72d1083419d914fb4b1bc"
+    },
+    "review-8": {
+      "label": "review-8",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 23932,
+      "pgid": 23932,
+      "start": "2026-10-15T09:08:34.136136+00:00",
+      "end": "2026-10-15T09:09:18.118659+00:00",
+      "wallS": 43.98199866700452,
+      "cpuUserS": 128.165231,
+      "cpuSystemS": 12.565801,
+      "hostLoadStart": [
+        7.02099609375,
+        11.5341796875,
+        11.0419921875
+      ],
+      "hostLoadEnd": [
+        8.07568359375,
+        11.244140625,
+        10.95703125
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/review-8-source.json",
+      "log": "/tmp/728-checks/review-8.log",
+      "logSha256": "8a92c0d3ca572f2e792d5932b2108475801cb9c3394e1e387522d013712c6b65"
+    },
+    "knip-4": {
+      "label": "knip-4",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 29562,
+      "pgid": 29562,
+      "start": "2026-10-15T09:10:01.679418+00:00",
+      "end": "2026-10-15T09:10:06.012822+00:00",
+      "wallS": 4.333177416992839,
+      "cpuUserS": 4.214458,
+      "cpuSystemS": 1.535652,
+      "hostLoadStart": [
+        8.1923828125,
+        10.88330078125,
+        10.84130859375
+      ],
+      "hostLoadEnd": [
+        8.7373046875,
+        10.951171875,
+        10.865234375
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/knip-4-source.json",
+      "log": "/tmp/728-checks/knip-4.log",
+      "logSha256": "c7be463325186564ff74d7897baae10aa138f9b064685729907bfc88374094ef"
+    },
+    "schema-8": {
+      "label": "schema-8",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 32501,
+      "pgid": 32501,
+      "start": "2026-10-15T09:10:45.361578+00:00",
+      "end": "2026-10-15T09:10:45.466715+00:00",
+      "wallS": 0.10480883397394791,
+      "cpuUserS": 0.065878,
+      "cpuSystemS": 0.038865,
+      "hostLoadStart": [
+        18.1025390625,
+        12.70947265625,
+        11.490234375
+      ],
+      "hostLoadEnd": [
+        18.1025390625,
+        12.70947265625,
+        11.490234375
+      ],
+      "exit": 0,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "sourceManifest": "/tmp/728-checks/schema-8-source.json",
+      "log": "/tmp/728-checks/schema-8.log",
+      "logSha256": "3f03e7d6fb3c777ad3c1ed03b29bc0b05e5116aea203ac25e689a5ecf76ca728"
+    },
+    "schema-9": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-15T09:14:03.396062+00:00",
+      "end": "2026-10-15T09:14:03.531941+00:00",
+      "wallS": 0.13590787502471358,
+      "exit": 0,
+      "pid": 1708,
+      "pgid": 1708,
+      "processWaitTerminal": true,
+      "processGroupAbsent": true,
+      "hostLoadStart": [
+        9.201171875,
+        11.94873046875,
+        11.53466796875
+      ],
+      "logSha256": "3f03e7d6fb3c777ad3c1ed03b29bc0b05e5116aea203ac25e689a5ecf76ca728"
+    }
+  },
+  "rawReceipts": "artifacts/qa/hv-umm2.728/receipts/ (primary ignored capture directory)",
+  "hostLoadSamples": {
+    "focused-1-receipt": {
+      "start": null,
+      "end": null
+    },
+    "focused-2": {
+      "start": [
+        5.95556640625,
+        8.02197265625,
+        10.177734375
+      ],
+      "end": [
+        6.0390625,
+        8.0048828125,
+        10.15869140625
+      ]
+    },
+    "focused-3": {
+      "start": [
+        14.28759765625,
+        8.3525390625,
+        8.6884765625
+      ],
+      "end": [
+        13.94384765625,
+        8.3798828125,
+        8.69580078125
+      ]
+    },
+    "full-1": {
+      "start": [
+        2.90576171875,
+        5.52490234375,
+        8.5458984375
+      ],
+      "end": [
+        4.6064453125,
+        5.4921875,
+        8.189453125
+      ]
+    },
+    "knip-1": {
+      "start": [
+        3.36474609375,
+        6.0625,
+        8.908203125
+      ],
+      "end": [
+        3.25537109375,
+        5.99462890625,
+        8.86767578125
+      ]
+    },
+    "qa-1": {
+      "start": [
+        6.9990234375,
+        7.46728515625,
+        8.32568359375
+      ],
+      "end": [
+        5.94189453125,
+        7.19384765625,
+        8.20703125
+      ]
+    },
+    "qa-2": {
+      "start": [
+        3.20703125,
+        6.10595703125,
+        7.71337890625
+      ],
+      "end": [
+        15.48486328125,
+        9.3427734375,
+        8.66064453125
+      ]
+    },
+    "review-1": {
+      "start": [
+        5.26123046875,
+        7.57470703125,
+        9.90234375
+      ],
+      "end": [
+        5.14990234375,
+        7.30078125,
+        9.69677734375
+      ]
+    },
+    "review-2": {
+      "start": [
+        4.1650390625,
+        6.8564453125,
+        9.4521484375
+      ],
+      "end": [
+        5.08984375,
+        6.8037109375,
+        9.328125
+      ]
+    },
+    "review-3": {
+      "start": [
+        2.60302734375,
+        4.3857421875,
+        7.388671875
+      ],
+      "end": [
+        16.7138671875,
+        8.11181640625,
+        8.61865234375
+      ]
+    },
+    "typecheck-1": {
+      "start": [
+        6.03564453125,
+        7.97119140625,
+        10.13427734375
+      ],
+      "end": [
+        5.97802734375,
+        7.8583984375,
+        10.0556640625
+      ]
+    },
+    "schema-1": {
+      "start": [
+        4.92919921875,
+        6.49169921875,
+        7.5
+      ],
+      "end": [
+        4.92919921875,
+        6.49169921875,
+        7.5
+      ]
+    },
+    "focused-4": {
+      "start": [
+        3.9794921875,
+        4.49072265625,
+        5.75341796875
+      ],
+      "end": [
+        4.06103515625,
+        4.4990234375,
+        5.74853515625
+      ]
+    },
+    "review-4": {
+      "start": [
+        4.2109375,
+        4.515625,
+        5.73974609375
+      ],
+      "end": [
+        4.88916015625,
+        4.697265625,
+        5.7587890625
+      ]
+    },
+    "review-5": {
+      "start": [
+        4.4892578125,
+        4.6142578125,
+        5.7099609375
+      ],
+      "end": [
+        5.3798828125,
+        4.81982421875,
+        5.7333984375
+      ]
+    },
+    "knip-2": {
+      "start": [
+        5.314453125,
+        4.8251953125,
+        5.724609375
+      ],
+      "end": [
+        5.6337890625,
+        4.912109375,
+        5.7451171875
+      ]
+    },
+    "schema-3": {
+      "start": [
+        3.7958984375,
+        4.52099609375,
+        5.5517578125
+      ],
+      "end": [
+        3.7958984375,
+        4.52099609375,
+        5.5517578125
+      ]
+    },
+    "focused-5": {
+      "start": [
+        14.7353515625,
+        9.97998046875,
+        7.078125
+      ],
+      "end": [
+        13.7666015625,
+        9.93017578125,
+        7.09423828125
+      ]
+    },
+    "review-6": {
+      "start": [
+        13.3046875,
+        9.89794921875,
+        7.09912109375
+      ],
+      "end": [
+        11.27880859375,
+        9.90771484375,
+        7.2490234375
+      ]
+    },
+    "review-7": {
+      "start": [
+        10.447265625,
+        9.79638671875,
+        7.25537109375
+      ],
+      "end": [
+        9.126953125,
+        9.587890625,
+        7.29833984375
+      ]
+    },
+    "knip-3": {
+      "start": [
+        7.75244140625,
+        9.177734375,
+        7.23974609375
+      ],
+      "end": [
+        8.17236328125,
+        9.24072265625,
+        7.2734375
+      ]
+    },
+    "schema-6": {
+      "start": [
+        7.5732421875,
+        9.04345703125,
+        7.248046875
+      ],
+      "end": [
+        7.5732421875,
+        9.04345703125,
+        7.248046875
+      ]
+    },
+    "focused-6": {
+      "start": [
+        8.5810546875,
+        12.31787109375,
+        11.28662109375
+      ],
+      "end": [
+        8.34375,
+        12.142578125,
+        11.23583984375
+      ]
+    },
+    "review-8": {
+      "start": [
+        7.02099609375,
+        11.5341796875,
+        11.0419921875
+      ],
+      "end": [
+        8.07568359375,
+        11.244140625,
+        10.95703125
+      ]
+    },
+    "knip-4": {
+      "start": [
+        8.1923828125,
+        10.88330078125,
+        10.84130859375
+      ],
+      "end": [
+        8.7373046875,
+        10.951171875,
+        10.865234375
+      ]
+    },
+    "schema-8": {
+      "start": [
+        18.1025390625,
+        12.70947265625,
+        11.490234375
+      ],
+      "end": [
+        18.1025390625,
+        12.70947265625,
+        11.490234375
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Entire final integrated ordinary review8, process-start1-minute host load7.02099609375, end8.07568359375. Actual window2026-10-15T09:08:34.136136+00:00\u20132026-10-15T09:09:18.118659+00:00; sampled endpoints, not average/isolated benchmark."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 2,
+    "lines": 475,
+    "jsdomFiles": 0
+  },
+  "configuredTestEntrypointDelta": 2,
+  "ownTestLines": {
+    "src/rules/journey/journey-shop-replenishment.test.ts": 326,
+    "src/session/providers/shop-slot-replacement.test.ts": 119
+  },
+  "frozenSource": {
+    "manifest": "receipts/728-browser-source-ready.json",
+    "bindings": 5547,
+    "postCleanupMismatches": [],
+    "functionalHashes": {
+      "src/rules/events.ts": "08f729e06b1a2ea290e688663ab91c0729483d4df73007df3fc54bb4f2adf3d2",
+      "src/rules/invariants.ts": "c2ec9bc3e184cf78629243e645bd9f63591ec1dd93abd71ceb2212bd5a048551",
+      "src/rules/journey/journey-shop.ts": "15bd688a25abbee6206947ecbc77591bc5f0be0ad30c880a8c41b4ada3221309",
+      "src/rules/journey/lifecycle.ts": "78a3326ac4b8fbe54a4185c6a2efa5e2b86fcaeb577e0a451379ebb5331d47bd",
+      "src/rules/journey/modifier-registry.ts": "2fc41d4ab2fb329b1529a7fb37e3324a04727a9cd90d968d0ae17865dded1e85",
+      "src/rules/journey/shop.ts": "84bd94e7f857cbb99bbe73d5b253dccb24b5ab84106e2960bdc5884b37db866d",
+      "src/rules/journey/sites.ts": "6795eb5d523dcc7fc6192ec70e36f362a53765718e4b001f9845e1d4ec866cca",
+      "src/rules/replay/replay.ts": "8eed2e7cbe4ef1505410aa8954efd6b07d19f53d8f4562095230d74fe206dfcf",
+      "src/screens/cumulus_adapters/CardShopSiteScreenAdapter.tsx": "f933336843104f6257754ab9574e0597b7aea6294f38bfecee88f10ff606c804",
+      "src/screens/cumulus_adapters/DreamsignBazaarSiteScreenAdapter.tsx": "622a0e905ad5b5b52c4fba3680b2e3de4e7f2eede3c143afac1dcd5c6ddff234",
+      "src/screens/cumulus_adapters/shop-purchase-logging-view-model.ts": "e7497cee42b56c274871b57967ed480be7282e0908510e7b2a267bb9802a67af",
+      "src/session/actions-payloads.test.ts": "ae7db14a44f34c41b99fe6f489a1aee8cc72c28cefb42195b71136ba80025503",
+      "src/session/actions.ts": "9ae145ca1c5df9143c9a9d20f7597d019758f23861eb094faa27550b76889214",
+      "src/session/providers/site-provider.ts": "da5ae6326ff7e2b34660de66b5f537563336479615a5c731a3a68fc2ec532db9",
+      "src/shop/shop-generator-inventory.test.ts": "17ae17a2617d0c92ae9b5aaddf962866fc5df8b2cd1ee9bb45d4cebf05e0944a",
+      "src/shop/shop-generator.ts": "6661d0d9e5dad1d5c5028e938e4a13922046bc904d038f71443cd7fa0c5e64f1",
+      "src/state/game-journey-context.tsx": "91bfd5b3a8c464018e9ac73eead00b25f3d8f246aabc7abd2f426e3fc812b567",
+      "src/state/journey-context.tsx": "7f841ee37be19ac2eeab653828d24359a722cf3a42e8862c597775dc9c4dc72f",
+      "src/types/journey.ts": "7079e93650ad054e8964de09e333a4fd44c0246bcab35baefba4b8f55c219254",
+      "src/rules/journey/journey-shop-replenishment.test.ts": "d8731b19751a70ca1d455d68b5d0441f4481567e93fee8853d987ac109d6b2f3",
+      "src/session/providers/shop-slot-replacement.test.ts": "ec5989f2c1e9cd764e5e2ed6cf10ad95b2e8d240374aff9484bd6bac51199ddd"
+    }
+  },
+  "heavyQualification": "Historical original08b epoch only: ONE locked workers2 full1 passed10781tests405files. Three-template fixture amendment was finalfocus/review3 validated. Later guard-only review1 repair has focused4/review5/Knip2 evidence; no full/browser repeat. Subsequent R3 structural boundary repair has focused5/review7/Knip3 evidence only.",
+  "failuresAndCorrections": [
+    "focused1: unsupported synthetic copy descriptor and compacted-prefix basedOnSeq fixture corrected; complete failures in tool journal, prep warning prefix truncated. No standalone full raw first output retained.",
+    "typecheck1/review1: own readonly fixture and vi.fn tuple typing corrected using immutable construction and typed EventContext rng.",
+    "QA1: zero-height root wait after navigation corrected in exactly two ignored-driver lines after full cleanup; QA2 passed all8 cases.",
+    "Review4 after review1 repair: all7136related tests passed, but one newly added crossed-category snapshot fixture assigned a readonly item property. Replaced with immutable nested snapshot construction; exact final review5 passes.",
+    "Review6 after R3: all7139related tests passed, but computed synthetic form inferred string and negative-provider test carried unnecessary type assertion. Literal const annotation/removal fixed these test-only static errors; review7 exact final source passes."
+  ],
+  "qa": {
+    "invocation": "run-p9Zg0K",
+    "reportSHA256": "38f60a47c6300507c9d1636a2a2bc9c0852a31b4ff7755a150ef523b7f01f7b8",
+    "driverSHA256": "a3ba9eac758892ec0a853374ab2bb2799085331dab2b1637a7f11c34e4f3523d",
+    "cases": [
+      {
+        "route": "shop",
+        "viewport": "desktop",
+        "gameId": "icvmq9",
+        "gameLog": "invocations/run-p9Zg0K/shop-desktop-icvmq9.jsonl",
+        "gameLogSHA256": "3d2798e2dba09a75e27cdb013ed5246c0cac3418f8afc554ab4cc50272701615",
+        "rows": 40,
+        "receipts": [
+          {
+            "gameId": "icvmq9",
+            "siteType": "Shop",
+            "eventSeq": 3,
+            "expectedOffer": {
+              "purchaseCount": 0,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 1,
+            "item": {
+              "kind": "card",
+              "cardId": "01298848-1ebb-48a1-b00b-d7e0af890870",
+              "cardNumber": 111,
+              "gainedEntryId": "deck-3-0"
+            },
+            "priceBeforeFree": 10,
+            "chargedPrice": 10,
+            "essenceBefore": 200,
+            "essenceAfter": 190,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:06:23.728Z",
+            "event": "shop_item_purchased",
+            "seq": 5
+          },
+          {
+            "gameId": "icvmq9",
+            "siteType": "Shop",
+            "eventSeq": 5,
+            "expectedOffer": {
+              "purchaseCount": 1,
+              "rerollCount": 1
+            },
+            "siteId": "site-1",
+            "slotIndex": 0,
+            "item": {
+              "kind": "card",
+              "cardId": "f0165a60-df1c-41db-87bb-a784c26835a5",
+              "cardNumber": 409,
+              "gainedEntryId": "deck-5-0"
+            },
+            "priceBeforeFree": 10,
+            "chargedPrice": 10,
+            "essenceBefore": 140,
+            "essenceAfter": 130,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:06:23.730Z",
+            "event": "shop_item_purchased",
+            "seq": 6
+          }
+        ],
+        "capacity": null,
+        "held": [],
+        "finalHeld": [],
+        "canceled": false,
+        "pendingReload": false,
+        "screens": [
+          "shop-desktop-purchased.png",
+          "shop-desktop-settled.png"
+        ]
+      },
+      {
+        "route": "shop-enhanced",
+        "viewport": "desktop",
+        "gameId": "tmc8fk",
+        "gameLog": "invocations/run-p9Zg0K/shop-enhanced-desktop-tmc8fk.jsonl",
+        "gameLogSHA256": "60f87648337b779f5b1b8451b6ce98c2eb208ef23b24020bb704fd32d10f725f",
+        "rows": 38,
+        "receipts": [
+          {
+            "gameId": "tmc8fk",
+            "siteType": "Shop",
+            "eventSeq": 3,
+            "expectedOffer": {
+              "purchaseCount": 0,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 4,
+            "item": {
+              "kind": "card",
+              "cardId": "1750c85c-f547-4d21-b7e3-9e5c5fcb3171",
+              "cardNumber": 164,
+              "gainedEntryId": "deck-3-0"
+            },
+            "priceBeforeFree": 40,
+            "chargedPrice": 40,
+            "essenceBefore": 200,
+            "essenceAfter": 160,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:06:38.999Z",
+            "event": "shop_item_purchased",
+            "seq": 5
+          },
+          {
+            "gameId": "tmc8fk",
+            "siteType": "Shop",
+            "eventSeq": 5,
+            "expectedOffer": {
+              "purchaseCount": 1,
+              "rerollCount": 1
+            },
+            "siteId": "site-1",
+            "slotIndex": 3,
+            "item": {
+              "kind": "card",
+              "cardId": "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
+              "cardNumber": 6,
+              "gainedEntryId": "deck-5-0"
+            },
+            "priceBeforeFree": 10,
+            "chargedPrice": 10,
+            "essenceBefore": 160,
+            "essenceAfter": 150,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:06:39.001Z",
+            "event": "shop_item_purchased",
+            "seq": 6
+          }
+        ],
+        "capacity": null,
+        "held": [],
+        "finalHeld": [],
+        "canceled": false,
+        "pendingReload": false,
+        "screens": [
+          "shop-enhanced-desktop-purchased.png",
+          "shop-enhanced-desktop-settled.png"
+        ]
+      },
+      {
+        "route": "dreamsignbazaar",
+        "viewport": "desktop",
+        "gameId": "t7566t",
+        "gameLog": "invocations/run-p9Zg0K/dreamsignbazaar-desktop-t7566t.jsonl",
+        "gameLogSHA256": "8c433841d88bd016809cacf440731663601f88fecfd96ff571842def22df9927",
+        "rows": 71,
+        "receipts": [
+          {
+            "gameId": "t7566t",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 3,
+            "expectedOffer": {
+              "purchaseCount": 0,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 2,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "2059aa74-8897-4c76-833f-ddef7d34346c",
+              "replacedDreamsignId": null
+            },
+            "priceBeforeFree": 15,
+            "chargedPrice": 15,
+            "essenceBefore": 200,
+            "essenceAfter": 185,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:07:00.416Z",
+            "event": "shop_item_purchased",
+            "seq": 5
+          },
+          {
+            "gameId": "t7566t",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 4,
+            "expectedOffer": {
+              "purchaseCount": 1,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 1,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "05f69d01-f8a3-4044-b7cd-0bfd9ed980cd",
+              "replacedDreamsignId": null
+            },
+            "priceBeforeFree": 35,
+            "chargedPrice": 35,
+            "essenceBefore": 185,
+            "essenceAfter": 150,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:07:00.418Z",
+            "event": "shop_item_purchased",
+            "seq": 6
+          },
+          {
+            "gameId": "t7566t",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 16,
+            "expectedOffer": {
+              "purchaseCount": 2,
+              "rerollCount": 1
+            },
+            "siteId": "site-1",
+            "slotIndex": 1,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "08a3983a-1b95-4d2e-a445-9d8dc2b8fca7",
+              "replacedDreamsignId": "2059aa74-8897-4c76-833f-ddef7d34346c"
+            },
+            "priceBeforeFree": 35,
+            "chargedPrice": 35,
+            "essenceBefore": 100,
+            "essenceAfter": 65,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:07:00.419Z",
+            "event": "shop_item_purchased",
+            "seq": 7
+          }
+        ],
+        "capacity": 2,
+        "held": [
+          "2059aa74-8897-4c76-833f-ddef7d34346c",
+          "05f69d01-f8a3-4044-b7cd-0bfd9ed980cd"
+        ],
+        "finalHeld": [
+          "08a3983a-1b95-4d2e-a445-9d8dc2b8fca7",
+          "05f69d01-f8a3-4044-b7cd-0bfd9ed980cd"
+        ],
+        "canceled": true,
+        "pendingReload": true,
+        "screens": [
+          "dreamsignbazaar-desktop-purchased.png",
+          "dreamsignbazaar-desktop-pending.png",
+          "dreamsignbazaar-desktop-settled.png"
+        ]
+      },
+      {
+        "route": "dreamsignbazaar-enhanced",
+        "viewport": "desktop",
+        "gameId": "mz6tqu",
+        "gameLog": "invocations/run-p9Zg0K/dreamsignbazaar-enhanced-desktop-mz6tqu.jsonl",
+        "gameLogSHA256": "f6150d286d037ddcd600564dd1fd9142670ee8a908e9d58d0be59297f98aea4a",
+        "rows": 70,
+        "receipts": [
+          {
+            "gameId": "mz6tqu",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 3,
+            "expectedOffer": {
+              "purchaseCount": 0,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 1,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "293a610d-ea75-4974-88da-13e4c86f248f",
+              "replacedDreamsignId": null
+            },
+            "priceBeforeFree": 15,
+            "chargedPrice": 15,
+            "essenceBefore": 200,
+            "essenceAfter": 185,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:07:23.787Z",
+            "event": "shop_item_purchased",
+            "seq": 5
+          },
+          {
+            "gameId": "mz6tqu",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 4,
+            "expectedOffer": {
+              "purchaseCount": 1,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 0,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "b3403800-7004-4775-915b-a19840e416b0",
+              "replacedDreamsignId": null
+            },
+            "priceBeforeFree": 50,
+            "chargedPrice": 50,
+            "essenceBefore": 185,
+            "essenceAfter": 135,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:07:23.788Z",
+            "event": "shop_item_purchased",
+            "seq": 6
+          },
+          {
+            "gameId": "mz6tqu",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 16,
+            "expectedOffer": {
+              "purchaseCount": 2,
+              "rerollCount": 1
+            },
+            "siteId": "site-1",
+            "slotIndex": 1,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "4dc47625-73bd-4518-a4ef-29dda2171594",
+              "replacedDreamsignId": "293a610d-ea75-4974-88da-13e4c86f248f"
+            },
+            "priceBeforeFree": 15,
+            "chargedPrice": 15,
+            "essenceBefore": 135,
+            "essenceAfter": 120,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:07:23.790Z",
+            "event": "shop_item_purchased",
+            "seq": 7
+          }
+        ],
+        "capacity": 2,
+        "held": [
+          "293a610d-ea75-4974-88da-13e4c86f248f",
+          "b3403800-7004-4775-915b-a19840e416b0"
+        ],
+        "finalHeld": [
+          "4dc47625-73bd-4518-a4ef-29dda2171594",
+          "b3403800-7004-4775-915b-a19840e416b0"
+        ],
+        "canceled": true,
+        "pendingReload": true,
+        "screens": [
+          "dreamsignbazaar-enhanced-desktop-purchased.png",
+          "dreamsignbazaar-enhanced-desktop-pending.png",
+          "dreamsignbazaar-enhanced-desktop-settled.png"
+        ]
+      },
+      {
+        "route": "shop",
+        "viewport": "mobile",
+        "gameId": "4aapp3",
+        "gameLog": "invocations/run-p9Zg0K/shop-mobile-4aapp3.jsonl",
+        "gameLogSHA256": "6c7ab0231514b7e552462b3eb07d0e7397c413e878e4187363d15abf72afe60b",
+        "rows": 38,
+        "receipts": [
+          {
+            "gameId": "4aapp3",
+            "siteType": "Shop",
+            "eventSeq": 3,
+            "expectedOffer": {
+              "purchaseCount": 0,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 3,
+            "item": {
+              "kind": "card",
+              "cardId": "7762759b-c1df-4c86-9dbb-a49d152f3616",
+              "cardNumber": 282,
+              "gainedEntryId": "deck-3-0"
+            },
+            "priceBeforeFree": 20,
+            "chargedPrice": 20,
+            "essenceBefore": 200,
+            "essenceAfter": 180,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:07:34.768Z",
+            "event": "shop_item_purchased",
+            "seq": 5
+          },
+          {
+            "gameId": "4aapp3",
+            "siteType": "Shop",
+            "eventSeq": 5,
+            "expectedOffer": {
+              "purchaseCount": 1,
+              "rerollCount": 1
+            },
+            "siteId": "site-1",
+            "slotIndex": 0,
+            "item": {
+              "kind": "card",
+              "cardId": "5a747998-7219-4e23-be42-b8cb3be12348",
+              "cardNumber": 73,
+              "gainedEntryId": "deck-5-0"
+            },
+            "priceBeforeFree": 10,
+            "chargedPrice": 10,
+            "essenceBefore": 130,
+            "essenceAfter": 120,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:07:34.769Z",
+            "event": "shop_item_purchased",
+            "seq": 6
+          }
+        ],
+        "capacity": null,
+        "held": [],
+        "finalHeld": [],
+        "canceled": false,
+        "pendingReload": false,
+        "screens": [
+          "shop-mobile-purchased.png",
+          "shop-mobile-settled.png"
+        ]
+      },
+      {
+        "route": "shop-enhanced",
+        "viewport": "mobile",
+        "gameId": "949wij",
+        "gameLog": "invocations/run-p9Zg0K/shop-enhanced-mobile-949wij.jsonl",
+        "gameLogSHA256": "4c0d8e89397bbea1bd7ab217c801ac6eee592465b2586a94ae1ba0a9caeb7265",
+        "rows": 41,
+        "receipts": [
+          {
+            "gameId": "949wij",
+            "siteType": "Shop",
+            "eventSeq": 3,
+            "expectedOffer": {
+              "purchaseCount": 0,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 0,
+            "item": {
+              "kind": "card",
+              "cardId": "625fe37e-8059-481c-99fd-109fd02ceedd",
+              "cardNumber": 331,
+              "gainedEntryId": "deck-3-0"
+            },
+            "priceBeforeFree": 60,
+            "chargedPrice": 60,
+            "essenceBefore": 200,
+            "essenceAfter": 140,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:08:11.969Z",
+            "event": "shop_item_purchased",
+            "seq": 5
+          },
+          {
+            "gameId": "949wij",
+            "siteType": "Shop",
+            "eventSeq": 5,
+            "expectedOffer": {
+              "purchaseCount": 1,
+              "rerollCount": 1
+            },
+            "siteId": "site-1",
+            "slotIndex": 0,
+            "item": {
+              "kind": "card",
+              "cardId": "34ea77a8-66e4-49b8-a934-a9d95cb74376",
+              "cardNumber": 135,
+              "gainedEntryId": "deck-5-0"
+            },
+            "priceBeforeFree": 50,
+            "chargedPrice": 50,
+            "essenceBefore": 140,
+            "essenceAfter": 90,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:08:11.971Z",
+            "event": "shop_item_purchased",
+            "seq": 6
+          }
+        ],
+        "capacity": null,
+        "held": [],
+        "finalHeld": [],
+        "canceled": false,
+        "pendingReload": false,
+        "screens": [
+          "shop-enhanced-mobile-purchased.png",
+          "shop-enhanced-mobile-settled.png"
+        ]
+      },
+      {
+        "route": "dreamsignbazaar",
+        "viewport": "mobile",
+        "gameId": "heb9g3",
+        "gameLog": "invocations/run-p9Zg0K/dreamsignbazaar-mobile-heb9g3.jsonl",
+        "gameLogSHA256": "075c6cd0424aaff231c9562ee56a7b0d29ede9e846abf9bd7c995876d0a49c42",
+        "rows": 72,
+        "receipts": [
+          {
+            "gameId": "heb9g3",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 3,
+            "expectedOffer": {
+              "purchaseCount": 0,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 0,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "dec81fa2-7865-448c-95bc-622b884cea9e",
+              "replacedDreamsignId": null
+            },
+            "priceBeforeFree": 10,
+            "chargedPrice": 10,
+            "essenceBefore": 200,
+            "essenceAfter": 190,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:08:34.834Z",
+            "event": "shop_item_purchased",
+            "seq": 5
+          },
+          {
+            "gameId": "heb9g3",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 4,
+            "expectedOffer": {
+              "purchaseCount": 1,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 1,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+              "replacedDreamsignId": null
+            },
+            "priceBeforeFree": 50,
+            "chargedPrice": 50,
+            "essenceBefore": 190,
+            "essenceAfter": 140,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:08:34.836Z",
+            "event": "shop_item_purchased",
+            "seq": 6
+          },
+          {
+            "gameId": "heb9g3",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 16,
+            "expectedOffer": {
+              "purchaseCount": 2,
+              "rerollCount": 1
+            },
+            "siteId": "site-1",
+            "slotIndex": 2,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "4a9f95d5-b72d-4ee8-8d29-b05646edc23d",
+              "replacedDreamsignId": "dec81fa2-7865-448c-95bc-622b884cea9e"
+            },
+            "priceBeforeFree": 10,
+            "chargedPrice": 10,
+            "essenceBefore": 90,
+            "essenceAfter": 80,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:08:34.837Z",
+            "event": "shop_item_purchased",
+            "seq": 7
+          }
+        ],
+        "capacity": 2,
+        "held": [
+          "dec81fa2-7865-448c-95bc-622b884cea9e",
+          "64a28f37-54a4-4152-8c72-2ebc61e19aac"
+        ],
+        "finalHeld": [
+          "4a9f95d5-b72d-4ee8-8d29-b05646edc23d",
+          "64a28f37-54a4-4152-8c72-2ebc61e19aac"
+        ],
+        "canceled": true,
+        "pendingReload": true,
+        "screens": [
+          "dreamsignbazaar-mobile-purchased.png",
+          "dreamsignbazaar-mobile-pending.png",
+          "dreamsignbazaar-mobile-settled.png"
+        ]
+      },
+      {
+        "route": "dreamsignbazaar-enhanced",
+        "viewport": "mobile",
+        "gameId": "y5c9ek",
+        "gameLog": "invocations/run-p9Zg0K/dreamsignbazaar-enhanced-mobile-y5c9ek.jsonl",
+        "gameLogSHA256": "e6a9e5e23abc7f025ca1b4c49e0c3034797cd69bd01c9e1687828cf96a8b730f",
+        "rows": 70,
+        "receipts": [
+          {
+            "gameId": "y5c9ek",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 3,
+            "expectedOffer": {
+              "purchaseCount": 0,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 0,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "15fd5a22-a786-48e3-99b0-919e810b3eba",
+              "replacedDreamsignId": null
+            },
+            "priceBeforeFree": 50,
+            "chargedPrice": 50,
+            "essenceBefore": 200,
+            "essenceAfter": 150,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:08:53.292Z",
+            "event": "shop_item_purchased",
+            "seq": 5
+          },
+          {
+            "gameId": "y5c9ek",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 4,
+            "expectedOffer": {
+              "purchaseCount": 1,
+              "rerollCount": 0
+            },
+            "siteId": "site-1",
+            "slotIndex": 1,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+              "replacedDreamsignId": null
+            },
+            "priceBeforeFree": 50,
+            "chargedPrice": 50,
+            "essenceBefore": 150,
+            "essenceAfter": 100,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:08:53.294Z",
+            "event": "shop_item_purchased",
+            "seq": 6
+          },
+          {
+            "gameId": "y5c9ek",
+            "siteType": "DreamsignBazaar",
+            "eventSeq": 16,
+            "expectedOffer": {
+              "purchaseCount": 2,
+              "rerollCount": 1
+            },
+            "siteId": "site-1",
+            "slotIndex": 0,
+            "item": {
+              "kind": "dreamsign",
+              "dreamsignId": "4a91c56c-d828-482a-a46c-1299d69fa011",
+              "replacedDreamsignId": "15fd5a22-a786-48e3-99b0-919e810b3eba"
+            },
+            "priceBeforeFree": 20,
+            "chargedPrice": 20,
+            "essenceBefore": 100,
+            "essenceAfter": 80,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-15T08:08:53.296Z",
+            "event": "shop_item_purchased",
+            "seq": 7
+          }
+        ],
+        "capacity": 2,
+        "held": [
+          "15fd5a22-a786-48e3-99b0-919e810b3eba",
+          "c2af5460-e61f-409b-9b86-6ac7db34d748"
+        ],
+        "finalHeld": [
+          "4a91c56c-d828-482a-a46c-1299d69fa011",
+          "c2af5460-e61f-409b-9b86-6ac7db34d748"
+        ],
+        "canceled": true,
+        "pendingReload": true,
+        "screens": [
+          "dreamsignbazaar-enhanced-mobile-purchased.png",
+          "dreamsignbazaar-enhanced-mobile-pending.png",
+          "dreamsignbazaar-enhanced-mobile-settled.png"
+        ]
+      }
+    ],
+    "images": [
+      {
+        "filename": "shop-desktop-purchased.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "eaa043b3bd24fd56e7348f3ca3cfec184f9b2c143a55a47910d981c1afe88295",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "shop-enhanced-mobile-purchased.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "1335c33235112778289c09b140c0cd95d509b60385ae3bf90f0ce8b05d44a251",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-enhanced-mobile-purchased.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "dfc4f3a5bd08ecc7b3f9da4f68f8e4789b5cdedb195d3bd4e5e68e3d4800f499",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "shop-mobile-purchased.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "f01f784a0c8dc09839d50098b3d05a9cf7b630aef738c5785d9c6e084a2df322",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-enhanced-desktop-settled.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "3738d16eeddcf3089381268a3f22e6c2bc4d29cbefd21b17e90a0452f34f2ab2",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-enhanced-desktop-pending.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "059aa87568bb334c642663a9a99d4c57785dffe802d2ecb021fb8d39b9d69436",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-enhanced-desktop-purchased.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "851558275902c28f2765a8f1c4df9998e3026bec59941c457bf878a6ab5c7131",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "shop-enhanced-desktop-settled.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "23ced39ad4dd4165a054be9877c6400bbb93c5649b18066260771dda4d00c5b7",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "shop-desktop-settled.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "27ff71e724858e6eb42a539370d560695f9e541f7d8a37ff7c48ee34da3ffaf3",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-enhanced-mobile-settled.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "480847757518304e48a51670a4f04c56c3eda97cffda642593817347c086be34",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-desktop-purchased.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "8bb1a095cdc2d2e189906adb9e29fa8653d11e5941b4b22c88b6f351e55a08b8",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-enhanced-mobile-pending.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "dbf726373d1f27868811c2edbbfecabcdee36d84433a74dd5a237e60b71b01a6",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-mobile-settled.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "3c81cdff95e0290e8568cffcb3380fea9479f620ffc98e5515f7610056dfa63c",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-mobile-purchased.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "c63d5cb3196ed1e36ac22205de40ff16316006b5318e8ca9cbe49249ae908111",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "shop-enhanced-mobile-settled.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "e561d19b63940f3d9ead27577a882ee32a5daca2d5288708fce413f070cdb8fe",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "shop-enhanced-desktop-purchased.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "230f05cba7bf88b8a618cd68963935251def6f645bdbe28f9e57cdedcbc0901f",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-mobile-pending.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "ae1438012d7b7cf6b2fb4f72329fb09fa6aaa0707657433f5d9e700d4699071b",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-desktop-pending.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "ea69e82703ddf47e1748a1d22ac0b05344b751f2779f105963425e70f65e114b",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "shop-mobile-settled.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "e9b509e3e643daa87f7a9ea3c54fdbfb2d6f1293946e7fde058f98d66e2122c6",
+        "individualVisualInspection": true
+      },
+      {
+        "filename": "dreamsignbazaar-desktop-settled.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "2bd5fce5b6fc086d7294eba9caefec49332422508497dbfc12a96f35cd1cbc5f",
+        "individualVisualInspection": true
+      }
+    ],
+    "caps": [],
+    "geometry": "Actual chosen offer/confirm revealed, rect reread, center elementFromPoint hits chosen button or descendant and lies in viewport. Native notes retain exact values.",
+    "visual": "All20 actual2x images individually inspected; mobile pending title/menu overlap recorded in own pre-existing file, controls clear.",
+    "automaticRefillExercised": false,
+    "productionJoin": "hv-umm2.273 retains positive registered Charm Staff/P8/all4 production UUID final acceptance.",
+    "sourceOID": "08b76e248752952bed115f20078a4ed7a6c6eb2c",
+    "epochQualification": "Eight actual source-free callback cases and20captures belong to historical original08b product epoch; later R1/R2 and R3 provider/saved guards validated by their focused/review/Knip receipts, no browser repeat."
+  },
+  "resources": {
+    "qa1Cleanup": "receipts/qa-1-cleanup.json",
+    "qa2Cleanup": "receipts/qa-2-cleanup.json",
+    "activeMCPRecord": "receipts/qa-2-provider-record-active.json",
+    "contextSettlement": "Successful native awaited shutdown plus confirmed-only owner-record clearing; raw browser_close response not separately retained. Wrapper/server PG absence, owner/server/provider record absence, free port5274 and output/server-log FD absence explicitly observed.",
+    "parentOwns": "Fresh independent cold Codex review; native certification/promotion/cleanup."
+  },
+  "failureContracts": {
+    "errorMidStep": "Missing/null/throw/malformed provider and later-hook error retain prior atomic state/payment/charges/logs.",
+    "restart": "JSON save/load/checkpoint replay and continuation, accepted/invalid receipts; browser reload after buy and cap confirmation.",
+    "staleInvalidCancel": "Rejected revision/active-site/cap/poor/malformed attempts consume no RNG; UI cancel and pending reload submit no purchase.",
+    "concurrency": "Same-actor stale expectedOffer plus partner CAS prevent repeated acceptance.",
+    "globalRNG": "Domain purchase/form/acquisition waves and final refill continue supplied global draw indices."
+  },
+  "productionUUIDsAuthored": [],
+  "falloutFiles": [],
+  "pending": "Parent new fresh cold Codex review4 on finalbase/head detached snapshot and native certified delivery.",
+  "reviewRepair": {
+    "historicalSourceOID": "08b76e248752952bed115f20078a4ed7a6c6eb2c",
+    "review1": "Parent-verified fresh Codex read-only review1, complete36calls/83scopeinputs/2675patch lines; immutable original inputs retained primary receipts/parent/core-review1.",
+    "findings": {
+      "R1": "Reject null returned CardShop draft even when result is otherwise valid, including exhaustion. Tests assert atomic public-fold rollback and no partial logs; valid exhausted nonnull draft retained by hook and real provider.",
+      "R2": "Saved nonnull replacement category must equal purchased category. Both crossed mutations rejected by public LOAD_STATE and checkpoint decode; valid snapshots accepted."
+    },
+    "productDelta": "Only two existing validators in journey-shop.ts, one category comparison and one null CardShop guard. Synthetic fixtures now supply valid draft + truthful summaries.",
+    "sourceHashes": {
+      "src/rules/journey/journey-shop-replenishment.test.ts": "2563e4deb50f4f0ebc87dd58d7282e2e3842feccbd9eac093f693f2ba0d0af7d",
+      "src/rules/journey/journey-shop.ts": "576ba1b7d108973ed4bb99b11f83dda1540cad0173f249d47c6630089cb2ce16",
+      "src/session/providers/shop-slot-replacement.test.ts": "43fe229f164beeab68be5b986da5dc99b56aeb59535a5cf956e72e99c745d652"
+    },
+    "validation": "Focused4 passes50/4. Final review5 passes7136/131 plus alltype/lint/cycle/schema checks, Knip2 passes. Review4 passed7136tests but failed own readonly crossed-snapshot mutation; immutable construction corrected before review5.",
+    "focusedEpochQualification": "focused4 precedes only the immutable crossed-snapshot fixture rewrite; final review5 covers the exact final fixture and both guards.",
+    "historicalValidation": "ONE full1 and all8 browser cases cover original08b source epoch; guard-only repair is validated by focused4/review5/Knip2. No claim of repeated full/browser validation and no new runtime.",
+    "pending": "Historical review1 R1/R2 repairs validated at3d632; subsequent R3 boundary repair separately recorded.",
+    "validatedAtSourceOID": "3d6320db2c3a11782509e0704d688a1427df5170"
+  },
+  "review2Repair": {
+    "priorSourceOID": "3d6320db2c3a11782509e0704d688a1427df5170",
+    "finding": "R3: malformed nonnull returned draft supply/required metadata accepted by shallow result check. Parent verified fresh review2 after required completion reads; old80input packet and2999line patch preserved primary receipts/parent/core-review2.",
+    "authority": "Read-only Stage1 proposal433d4d986de6dfce8bff4fbc10082e0571fe509ec60fd7bf25850900a54da935; exact parent R3WRITEACK08:44:55.362041Z.",
+    "productScope": "Exactly3privatehelpers, existing canonical hash/JSON-safety and typed key imports, single replacement draft predicate; oldnull/categoryguards retained. No newmodule/export/globalDraftschema/selectionalgorithm.",
+    "guardContract": "Plain canonical nonnegative safeinteger card copy keys/counts, safe sums, remaining keys/counts bounded by fixed pool, JSON safe result, every nonremaining metadata/fixedpool canonically equal trusted before, and before/after summaries derived exactly from actual maps. Bazaar retains draft identity including null.",
+    "negativeContracts": "Public fold rejects missing required/optional defined metadata, wrong mode, invalid keys/counts/totals/bounds/fixed drift, changed/reordered array/optional metadata, nonplain/nonfinite/undefined/function/symbol/cyclic data and syntactically valid mismatched summaries. Whole prior state/payment/charges/history and absent partial logs asserted; input immutable.",
+    "positiveContracts": "Canonical object order differs safely, full optional metadata retained, remaining-only spend and regeneration accepted, zero/empty fixed exhaustion retains nonnull state, null Bazaar accepted; actual real CardShop provider fold spends/regenerates one count with all optional metadata unchanged.",
+    "sourceHashes": {
+      "src/rules/journey/journey-shop-replenishment.test.ts": "065e1c43eedd3aaf76f941a3d6ff7a614da7b4e7ec8e2059871a21fdde55936d",
+      "src/rules/journey/journey-shop.ts": "b21590b701fa82085ec16ee436731bf0d2adcabdbc2224dfc15166f78b768307",
+      "src/session/providers/shop-slot-replacement.test.ts": "8e2025e42ff425095e48d147cdfc4a0b347c471b5547aff042585b4c1bc663bf"
+    },
+    "validation": "Focused5 passes53tests4files. Review7 passes7139tests131files/allstatic checks; Knip3 passes. Review6 tests passed but two own fixture static errors (literal inference and unnecessary assertion) corrected before final review7; production source unchanged.",
+    "focusedEpochQualification": "Focused5 precedes only literal-type annotation/removal of unnecessary test assertion; review7 covers exact final typedfixtures and provider boundary.",
+    "noNewRuntime": true,
+    "historicalFullBrowserEpoch": "08b76e248752952bed115f20078a4ed7a6c6eb2c only; no full/browser repeat for guard repairs.",
+    "pending": "Parent source/evidence audit and amend ACK, then parent new fresh complete-source Codex review3."
+  },
+  "originalBase": "443cd6806bbe3b9f60af67acaca26a12b3bacf1e",
+  "integration": {
+    "base": "d0710c77c428f7e81665605ed543d047bf5131c4",
+    "priorFinalSourceOID": "0b0b14e3c20b4feef9b2ab6e236c98bd31f72d12",
+    "freshReview3": "Parent verified fresh cold Codex review3 successful/no findings after scope completion; historical83inputs preserved primary core-review3.",
+    "priorCandidate": {
+      "id": "01a13ecc-4213-7912-bbc0-cfd03435eb85",
+      "disposition": "Terminal merge-conflict before generation/CI; no approval. Cancel reported already terminal/no action; unprepared-generation diagnose inapplicable. No certification or promotion claim."
+    },
+    "failedUpdate": "Parent-only first native update failed its Git rebase and cleanly rolled back original0b source/base443; Doctor healthy/no pending update block, per parent evidence.",
+    "park": {
+      "stage": "PARK ONLY TEMPORARY NEVER SUBMIT",
+      "priorHead": "0b0b14e3c20b4feef9b2ab6e236c98bd31f72d12",
+      "checkpointHead": "faaa0a8a828489ca2a027882e3748c2b71b49b6e",
+      "base": "443cd6806bbe3b9f60af67acaca26a12b3bacf1e",
+      "originalDispatch": "2026-10-15T07:29:16.279Z",
+      "pathsRestored": [
+        "src/rules/journey/lifecycle.ts",
+        "src/rules/replay/replay.ts"
+      ],
+      "other26BlobsUnchanged": {
+        "docs/plan/evidence/friction/hv-umm2.728.json": "647f78c4311f4e690d4826687f08433a421ec392ba3f3ab81b98279c6f128062",
+        "docs/plan/evidence/measurements/hv-umm2.728.json": "8260d014882631fb8ab1ef8c4b8c2d11c19e5857fe3e89ab8749aedf3103e530",
+        "docs/plan/evidence/measurements/hv-umm2.728.md": "3c9003f6e10fc469a4e220c3049ba63dc9b6964068e4a5ffae11ea977cca651b",
+        "docs/plan/evidence/pre-existing/hv-umm2.728.md": "1586d2e8903159fecb5e67915df3219e870865e9cefbc5a44361fe197fa3cd5f",
+        "docs/plan/evidence/qa-ledger/hv-umm2.728.jsonl": "0353d8122659b86e2c15d91a12a1d2e92e997d7240f85c0e882b84f76878c1f9",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.728-1.md": "a791ca87a9c1090c4e45fc27bc4e7a510422392046de43f6445b5cbd46697277",
+        "docs/rules.md": "9a44a6f1416d3f3192448c112d71e9df4b4f5829bfad7935eea60ff902a394c5",
+        "src/rules/events.ts": "08f729e06b1a2ea290e688663ab91c0729483d4df73007df3fc54bb4f2adf3d2",
+        "src/rules/invariants.ts": "c2ec9bc3e184cf78629243e645bd9f63591ec1dd93abd71ceb2212bd5a048551",
+        "src/rules/journey/journey-shop-replenishment.test.ts": "065e1c43eedd3aaf76f941a3d6ff7a614da7b4e7ec8e2059871a21fdde55936d",
+        "src/rules/journey/journey-shop.ts": "b21590b701fa82085ec16ee436731bf0d2adcabdbc2224dfc15166f78b768307",
+        "src/rules/journey/modifier-registry.ts": "2fc41d4ab2fb329b1529a7fb37e3324a04727a9cd90d968d0ae17865dded1e85",
+        "src/rules/journey/shop.ts": "84bd94e7f857cbb99bbe73d5b253dccb24b5ab84106e2960bdc5884b37db866d",
+        "src/rules/journey/sites.ts": "6795eb5d523dcc7fc6192ec70e36f362a53765718e4b001f9845e1d4ec866cca",
+        "src/screens/cumulus_adapters/CardShopSiteScreenAdapter.tsx": "f933336843104f6257754ab9574e0597b7aea6294f38bfecee88f10ff606c804",
+        "src/screens/cumulus_adapters/DreamsignBazaarSiteScreenAdapter.tsx": "622a0e905ad5b5b52c4fba3680b2e3de4e7f2eede3c143afac1dcd5c6ddff234",
+        "src/screens/cumulus_adapters/shop-purchase-logging-view-model.ts": "e7497cee42b56c274871b57967ed480be7282e0908510e7b2a267bb9802a67af",
+        "src/session/actions-payloads.test.ts": "ae7db14a44f34c41b99fe6f489a1aee8cc72c28cefb42195b71136ba80025503",
+        "src/session/actions.ts": "9ae145ca1c5df9143c9a9d20f7597d019758f23861eb094faa27550b76889214",
+        "src/session/providers/shop-slot-replacement.test.ts": "8e2025e42ff425095e48d147cdfc4a0b347c471b5547aff042585b4c1bc663bf",
+        "src/session/providers/site-provider.ts": "da5ae6326ff7e2b34660de66b5f537563336479615a5c731a3a68fc2ec532db9",
+        "src/shop/shop-generator-inventory.test.ts": "17ae17a2617d0c92ae9b5aaddf962866fc5df8b2cd1ee9bb45d4cebf05e0944a",
+        "src/shop/shop-generator.ts": "6661d0d9e5dad1d5c5028e938e4a13922046bc904d038f71443cd7fa0c5e64f1",
+        "src/state/game-journey-context.tsx": "91bfd5b3a8c464018e9ac73eead00b25f3d8f246aabc7abd2f426e3fc812b567",
+        "src/state/journey-context.tsx": "7f841ee37be19ac2eeab653828d24359a722cf3a42e8862c597775dc9c4dc72f",
+        "src/types/journey.ts": "7079e93650ad054e8964de09e333a4fd44c0246bcab35baefba4b8f55c219254"
+      },
+      "stageProcess": {
+        "argv": [
+          "git",
+          "add",
+          "--",
+          "src/rules/journey/lifecycle.ts",
+          "src/rules/replay/replay.ts"
+        ],
+        "pid": 50943,
+        "pgid": 50943,
+        "start": "2026-10-15T09:05:21.513993+00:00",
+        "end": "2026-10-15T09:05:21.522331+00:00",
+        "wallS": 0.008210457977838814,
+        "exit": 0,
+        "actualWait": true,
+        "processGroupAbsent": true,
+        "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "gitAmend": {
+        "argv": [
+          "git",
+          "commit",
+          "--amend",
+          "--file",
+          "/tmp/728-integration/park-commit-message.txt"
+        ],
+        "pid": 50946,
+        "pgid": 50946,
+        "start": "2026-10-15T09:05:21.528750+00:00",
+        "end": "2026-10-15T09:05:21.563375+00:00",
+        "wallS": 0.03463000000920147,
+        "exit": 0,
+        "actualWait": true,
+        "processGroupAbsent": true,
+        "logSHA256": "4dc39c780e5941af595beeb15b90d51ab3d678b3689dd7c26a9b264c37df9f71"
+      },
+      "automaticGitDates": [
+        "2026-10-15T01:17:25-07:00",
+        "2026-10-15T02:05:21-07:00"
+      ],
+      "clean": true,
+      "commitCount": "1",
+      "pending": "Parent-only native update; stop helper until explicitly resumed."
+    },
+    "successfulUpdate": {
+      "at": "2026-10-15T09:06:31.382388+00:00",
+      "temporaryNeverSubmitHead": "f7e41ca5a2d0ad3886d060165444207c98fe891e",
+      "base": "d0710c77c428f7e81665605ed543d047bf5131c4",
+      "parentEqualsObservedStaging": true,
+      "clean": true,
+      "noRebaseInProgress": true,
+      "doctorHealthy": true,
+      "noPendingWorktreeUpdateBlock": true,
+      "updatedPeerFilesCaptured": [
+        "src/rules/journey/lifecycle.ts",
+        "src/rules/replay/replay.ts"
+      ]
+    },
+    "temporaryBridgeNeverSubmit": "f7e41ca5a2d0ad3886d060165444207c98fe891e; checkpoint parked2files, parent native update rebased other26, helper reintroduced only2saved own deltas. Final normal amend retires bridge title and restores all28ownpaths.",
+    "sourcePreservation": {
+      "base": "d0710c77c428f7e81665605ed543d047bf5131c4",
+      "bridgeHead": "f7e41ca5a2d0ad3886d060165444207c98fe891e",
+      "combinedPeerFiles": {
+        "src/rules/journey/lifecycle.ts": {
+          "peerSHA256": "a1cc8b712a4ce1a0c16faf302365632401dadbc25a565d440a8a874b47a2ce19",
+          "combinedSHA256": "f89f6bd227284a377150fe5fef3fdfc108157146ff1f51498fd2b27b5bbe352d",
+          "ownDeltaReverseRestoresPeerExact": true
+        },
+        "src/rules/replay/replay.ts": {
+          "peerSHA256": "b701d4cf6d6fd9432b31acd5682999c62a8bad59c4e282becf5f17b25c1c3cad",
+          "combinedSHA256": "cf1a383957df942738fa20d3e6ad06bd65df18d316248a1e6e30e9bbda3851e2",
+          "ownDeltaReverseRestoresPeerExact": true
+        }
+      },
+      "other26OwnedPaths": {
+        "docs/plan/evidence/friction/hv-umm2.728.json": {
+          "oldOwnedSHA256": "647f78c4311f4e690d4826687f08433a421ec392ba3f3ab81b98279c6f128062",
+          "currentSHA256": "647f78c4311f4e690d4826687f08433a421ec392ba3f3ab81b98279c6f128062",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "647f78c4311f4e690d4826687f08433a421ec392ba3f3ab81b98279c6f128062",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "docs/plan/evidence/measurements/hv-umm2.728.json": {
+          "oldOwnedSHA256": "8260d014882631fb8ab1ef8c4b8c2d11c19e5857fe3e89ab8749aedf3103e530",
+          "currentSHA256": "8260d014882631fb8ab1ef8c4b8c2d11c19e5857fe3e89ab8749aedf3103e530",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "8260d014882631fb8ab1ef8c4b8c2d11c19e5857fe3e89ab8749aedf3103e530",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "docs/plan/evidence/measurements/hv-umm2.728.md": {
+          "oldOwnedSHA256": "3c9003f6e10fc469a4e220c3049ba63dc9b6964068e4a5ffae11ea977cca651b",
+          "currentSHA256": "3c9003f6e10fc469a4e220c3049ba63dc9b6964068e4a5ffae11ea977cca651b",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "3c9003f6e10fc469a4e220c3049ba63dc9b6964068e4a5ffae11ea977cca651b",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "docs/plan/evidence/pre-existing/hv-umm2.728.md": {
+          "oldOwnedSHA256": "1586d2e8903159fecb5e67915df3219e870865e9cefbc5a44361fe197fa3cd5f",
+          "currentSHA256": "1586d2e8903159fecb5e67915df3219e870865e9cefbc5a44361fe197fa3cd5f",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "1586d2e8903159fecb5e67915df3219e870865e9cefbc5a44361fe197fa3cd5f",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "docs/plan/evidence/qa-ledger/hv-umm2.728.jsonl": {
+          "oldOwnedSHA256": "0353d8122659b86e2c15d91a12a1d2e92e997d7240f85c0e882b84f76878c1f9",
+          "currentSHA256": "0353d8122659b86e2c15d91a12a1d2e92e997d7240f85c0e882b84f76878c1f9",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "0353d8122659b86e2c15d91a12a1d2e92e997d7240f85c0e882b84f76878c1f9",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.728-1.md": {
+          "oldOwnedSHA256": "a791ca87a9c1090c4e45fc27bc4e7a510422392046de43f6445b5cbd46697277",
+          "currentSHA256": "a791ca87a9c1090c4e45fc27bc4e7a510422392046de43f6445b5cbd46697277",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "a791ca87a9c1090c4e45fc27bc4e7a510422392046de43f6445b5cbd46697277",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "docs/rules.md": {
+          "oldOwnedSHA256": "9a44a6f1416d3f3192448c112d71e9df4b4f5829bfad7935eea60ff902a394c5",
+          "currentSHA256": "631b00f9ec6f172a9145677cbc3fc5a9e79f5865be8bc6393201568a18cbf47d",
+          "exactBlobEqual": false,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "631b00f9ec6f172a9145677cbc3fc5a9e79f5865be8bc6393201568a18cbf47d",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/rules/events.ts": {
+          "oldOwnedSHA256": "08f729e06b1a2ea290e688663ab91c0729483d4df73007df3fc54bb4f2adf3d2",
+          "currentSHA256": "98a2f9a4da4fce156826969aa59a75e00bfa59f88eb5eb4cd3a915bec4970f72",
+          "exactBlobEqual": false,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "98a2f9a4da4fce156826969aa59a75e00bfa59f88eb5eb4cd3a915bec4970f72",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/rules/invariants.ts": {
+          "oldOwnedSHA256": "c2ec9bc3e184cf78629243e645bd9f63591ec1dd93abd71ceb2212bd5a048551",
+          "currentSHA256": "c2ec9bc3e184cf78629243e645bd9f63591ec1dd93abd71ceb2212bd5a048551",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "c2ec9bc3e184cf78629243e645bd9f63591ec1dd93abd71ceb2212bd5a048551",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/rules/journey/journey-shop-replenishment.test.ts": {
+          "oldOwnedSHA256": "065e1c43eedd3aaf76f941a3d6ff7a614da7b4e7ec8e2059871a21fdde55936d",
+          "currentSHA256": "065e1c43eedd3aaf76f941a3d6ff7a614da7b4e7ec8e2059871a21fdde55936d",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "065e1c43eedd3aaf76f941a3d6ff7a614da7b4e7ec8e2059871a21fdde55936d",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/rules/journey/journey-shop.ts": {
+          "oldOwnedSHA256": "b21590b701fa82085ec16ee436731bf0d2adcabdbc2224dfc15166f78b768307",
+          "currentSHA256": "b21590b701fa82085ec16ee436731bf0d2adcabdbc2224dfc15166f78b768307",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "b21590b701fa82085ec16ee436731bf0d2adcabdbc2224dfc15166f78b768307",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/rules/journey/modifier-registry.ts": {
+          "oldOwnedSHA256": "2fc41d4ab2fb329b1529a7fb37e3324a04727a9cd90d968d0ae17865dded1e85",
+          "currentSHA256": "fef05ef4b5c50cc2de497b41e51b66bc34472e402a161188b3107c8a1d7e7684",
+          "exactBlobEqual": false,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "fef05ef4b5c50cc2de497b41e51b66bc34472e402a161188b3107c8a1d7e7684",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/rules/journey/shop.ts": {
+          "oldOwnedSHA256": "84bd94e7f857cbb99bbe73d5b253dccb24b5ab84106e2960bdc5884b37db866d",
+          "currentSHA256": "84bd94e7f857cbb99bbe73d5b253dccb24b5ab84106e2960bdc5884b37db866d",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "84bd94e7f857cbb99bbe73d5b253dccb24b5ab84106e2960bdc5884b37db866d",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/rules/journey/sites.ts": {
+          "oldOwnedSHA256": "6795eb5d523dcc7fc6192ec70e36f362a53765718e4b001f9845e1d4ec866cca",
+          "currentSHA256": "6795eb5d523dcc7fc6192ec70e36f362a53765718e4b001f9845e1d4ec866cca",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "6795eb5d523dcc7fc6192ec70e36f362a53765718e4b001f9845e1d4ec866cca",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/screens/cumulus_adapters/CardShopSiteScreenAdapter.tsx": {
+          "oldOwnedSHA256": "f933336843104f6257754ab9574e0597b7aea6294f38bfecee88f10ff606c804",
+          "currentSHA256": "f933336843104f6257754ab9574e0597b7aea6294f38bfecee88f10ff606c804",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "f933336843104f6257754ab9574e0597b7aea6294f38bfecee88f10ff606c804",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/screens/cumulus_adapters/DreamsignBazaarSiteScreenAdapter.tsx": {
+          "oldOwnedSHA256": "622a0e905ad5b5b52c4fba3680b2e3de4e7f2eede3c143afac1dcd5c6ddff234",
+          "currentSHA256": "622a0e905ad5b5b52c4fba3680b2e3de4e7f2eede3c143afac1dcd5c6ddff234",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "622a0e905ad5b5b52c4fba3680b2e3de4e7f2eede3c143afac1dcd5c6ddff234",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/screens/cumulus_adapters/shop-purchase-logging-view-model.ts": {
+          "oldOwnedSHA256": "e7497cee42b56c274871b57967ed480be7282e0908510e7b2a267bb9802a67af",
+          "currentSHA256": "e7497cee42b56c274871b57967ed480be7282e0908510e7b2a267bb9802a67af",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "e7497cee42b56c274871b57967ed480be7282e0908510e7b2a267bb9802a67af",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/session/actions-payloads.test.ts": {
+          "oldOwnedSHA256": "ae7db14a44f34c41b99fe6f489a1aee8cc72c28cefb42195b71136ba80025503",
+          "currentSHA256": "07698cb9715b2bd08e2ce6e86f632b82e4bc0fd3d9b2c8670191bd3adde5ee38",
+          "exactBlobEqual": false,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "07698cb9715b2bd08e2ce6e86f632b82e4bc0fd3d9b2c8670191bd3adde5ee38",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/session/actions.ts": {
+          "oldOwnedSHA256": "9ae145ca1c5df9143c9a9d20f7597d019758f23861eb094faa27550b76889214",
+          "currentSHA256": "e04fd02dad0f666705727f90b62a7f3baf4e7e10b8ee7980ba5542834134add7",
+          "exactBlobEqual": false,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "e04fd02dad0f666705727f90b62a7f3baf4e7e10b8ee7980ba5542834134add7",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/session/providers/shop-slot-replacement.test.ts": {
+          "oldOwnedSHA256": "8e2025e42ff425095e48d147cdfc4a0b347c471b5547aff042585b4c1bc663bf",
+          "currentSHA256": "8e2025e42ff425095e48d147cdfc4a0b347c471b5547aff042585b4c1bc663bf",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "8e2025e42ff425095e48d147cdfc4a0b347c471b5547aff042585b4c1bc663bf",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/session/providers/site-provider.ts": {
+          "oldOwnedSHA256": "da5ae6326ff7e2b34660de66b5f537563336479615a5c731a3a68fc2ec532db9",
+          "currentSHA256": "da5ae6326ff7e2b34660de66b5f537563336479615a5c731a3a68fc2ec532db9",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "da5ae6326ff7e2b34660de66b5f537563336479615a5c731a3a68fc2ec532db9",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/shop/shop-generator-inventory.test.ts": {
+          "oldOwnedSHA256": "17ae17a2617d0c92ae9b5aaddf962866fc5df8b2cd1ee9bb45d4cebf05e0944a",
+          "currentSHA256": "17ae17a2617d0c92ae9b5aaddf962866fc5df8b2cd1ee9bb45d4cebf05e0944a",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "17ae17a2617d0c92ae9b5aaddf962866fc5df8b2cd1ee9bb45d4cebf05e0944a",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/shop/shop-generator.ts": {
+          "oldOwnedSHA256": "6661d0d9e5dad1d5c5028e938e4a13922046bc904d038f71443cd7fa0c5e64f1",
+          "currentSHA256": "6661d0d9e5dad1d5c5028e938e4a13922046bc904d038f71443cd7fa0c5e64f1",
+          "exactBlobEqual": true,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "6661d0d9e5dad1d5c5028e938e4a13922046bc904d038f71443cd7fa0c5e64f1",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/state/game-journey-context.tsx": {
+          "oldOwnedSHA256": "91bfd5b3a8c464018e9ac73eead00b25f3d8f246aabc7abd2f426e3fc812b567",
+          "currentSHA256": "dc3d90bef53f9cdaaf9b760b7a7702209b6ce75e48a16c4a2fb749cd227d7cfd",
+          "exactBlobEqual": false,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "dc3d90bef53f9cdaaf9b760b7a7702209b6ce75e48a16c4a2fb749cd227d7cfd",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/state/journey-context.tsx": {
+          "oldOwnedSHA256": "7f841ee37be19ac2eeab653828d24359a722cf3a42e8862c597775dc9c4dc72f",
+          "currentSHA256": "943995be7e013f241de506d72f4f5a4fdb3d1f6103cd31dd74a064e4f5624e14",
+          "exactBlobEqual": false,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "943995be7e013f241de506d72f4f5a4fdb3d1f6103cd31dd74a064e4f5624e14",
+          "matchesExpectedMergedOwnedDelta": true
+        },
+        "src/types/journey.ts": {
+          "oldOwnedSHA256": "7079e93650ad054e8964de09e333a4fd44c0246bcab35baefba4b8f55c219254",
+          "currentSHA256": "c91c8f3a66f7170a2d39d56e3acde5c38268c5f010bf7409a99ad687f74698e1",
+          "exactBlobEqual": false,
+          "threeWayMergeExit": 0,
+          "expectedNewBaseOwnMergeSHA256": "c91c8f3a66f7170a2d39d56e3acde5c38268c5f010bf7409a99ad687f74698e1",
+          "matchesExpectedMergedOwnedDelta": true
+        }
+      },
+      "dependencyFilesChangedBetweenBases": []
+    },
+    "parentOwnHunksProof": {
+      "at": "2026-10-15T09:08:04.571641+00:00",
+      "temporaryHead": "f7e41ca5a2d0ad3886d060165444207c98fe891e",
+      "oldSource": "0b0b14e3c20b4feef9b2ab6e236c98bd31f72d12",
+      "oldBase": "443cd6806bbe3b9f60af67acaca26a12b3bacf1e",
+      "sameOwnBlobs": [
+        "docs/plan/evidence/friction/hv-umm2.728.json",
+        "docs/plan/evidence/measurements/hv-umm2.728.json",
+        "docs/plan/evidence/measurements/hv-umm2.728.md",
+        "docs/plan/evidence/pre-existing/hv-umm2.728.md",
+        "docs/plan/evidence/qa-ledger/hv-umm2.728.jsonl",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.728-1.md",
+        "src/rules/invariants.ts",
+        "src/rules/journey/journey-shop-replenishment.test.ts",
+        "src/rules/journey/journey-shop.ts",
+        "src/rules/journey/shop.ts",
+        "src/rules/journey/sites.ts",
+        "src/screens/cumulus_adapters/CardShopSiteScreenAdapter.tsx",
+        "src/screens/cumulus_adapters/DreamsignBazaarSiteScreenAdapter.tsx",
+        "src/screens/cumulus_adapters/shop-purchase-logging-view-model.ts",
+        "src/session/providers/shop-slot-replacement.test.ts",
+        "src/session/providers/site-provider.ts",
+        "src/shop/shop-generator-inventory.test.ts",
+        "src/shop/shop-generator.ts"
+      ],
+      "mergedOwnExactHunksReverseCheck": [
+        "docs/rules.md",
+        "src/rules/events.ts",
+        "src/rules/journey/modifier-registry.ts",
+        "src/session/actions-payloads.test.ts",
+        "src/session/actions.ts",
+        "src/state/game-journey-context.tsx",
+        "src/state/journey-context.tsx",
+        "src/types/journey.ts"
+      ],
+      "failures": [],
+      "parkedPathsExcluded": [
+        "src/rules/journey/lifecycle.ts",
+        "src/rules/replay/replay.ts"
+      ]
+    },
+    "combinedScope": "Lifecycle existing new committed/prebattle/Draft first-event guards and replay committed/prebattle/realregistry preserved. Own Shop load guard/import and compacted checkpoint guard/import additive only; reverse own additions reconstructs updated peer bytes exactly.",
+    "validation": "Focused6 passes53tests4files; integrated review8/Knip4 terminal green. Actual counts and raw epochs in receipts. package.json/package-lock identical between old/newbases; noinstall.",
+    "runtime": "No browser/server/provider runtime or repeated full suite for additive integration; original full/browser stay historical original08b/base443.",
+    "pending": "Parent exact source/evidence audit and final amend ACK, then NEW fresh cold Codex review4 against finalbase/head in detached snapshot per workflow; native delivery parent-only.",
+    "nativeParentUpdateReceipts": {
+      "update-1-receipt.json": {
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/shop-slot-refill-728-root",
+        "argv": [
+          "/Users/dthurn/.local/bin/tg",
+          "--no-launch",
+          "--json",
+          "update"
+        ],
+        "started": "2026-10-15T09:04:00.418501+00:00",
+        "pid": 45199,
+        "pgid": 45199,
+        "ended": "2026-10-15T09:04:00.988419+00:00",
+        "seconds": 0.5697900420054793,
+        "exitCode": 5,
+        "actualWait": true,
+        "groupAbsent": true
+      },
+      "update-2-receipt.json": {
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/shop-slot-refill-728-root",
+        "argv": [
+          "/Users/dthurn/.local/bin/tg",
+          "--no-launch",
+          "--json",
+          "update"
+        ],
+        "started": "2026-10-15T09:05:53.575719+00:00",
+        "pid": 54838,
+        "pgid": 54838,
+        "ended": "2026-10-15T09:05:55.680081+00:00",
+        "seconds": 2.1042089170077816,
+        "exitCode": 0,
+        "actualWait": true,
+        "groupAbsent": true
+      }
+    }
+  }
+}

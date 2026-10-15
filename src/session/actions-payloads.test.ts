@@ -262,6 +262,17 @@ describe("game actions facade", () => {
     ]);
   });
 
+  it("retains the captured shop offer with both purchase callback forms", () => {
+    const captured: EventDraft[] = [];
+    const actions = makeActions((draft) => { captured.push(draft); return Promise.resolve(captured.length); });
+    const siteId = parseSiteId("shop-offer"), expectedOffer = { purchaseCount: 3, rerollCount: 1 };
+    void actions.buyShopSlot(siteId, 2, undefined, expectedOffer);
+    void actions.buyShopSlot(siteId, 2, 0, expectedOffer);
+    expect(captured.map((draft) => draft.payload)).toEqual([
+      { siteId, slotIndex: 2, expectedOffer }, { siteId, slotIndex: 2, purgeIndex: 0, expectedOffer },
+    ]);
+  });
+
   it("writes optional journey fields in the order the replay log stores them", () => {
     const captured: EventDraft[] = [];
     const actions = makeActions((draft) => {

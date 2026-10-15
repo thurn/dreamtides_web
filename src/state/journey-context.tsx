@@ -1,3 +1,4 @@
+import type { ShopOfferRevision } from "../types/journey";
 import { createContext, useContext, type ReactNode } from "react";
 import type { JourneyContent } from "../data/journey-content";
 import type { CardData } from "../types/cards";
@@ -179,7 +180,7 @@ export interface JourneyMutations {
    * replace; without it the mutation no-ops at the cap so the UI can prompt a
    * purge.
    */
-  buyShopSlot: (siteId: SiteId, slotIndex: number, purgeIndex?: number) => void;
+  buyShopSlot: (siteId: SiteId, slotIndex: number, purgeIndex?: number, expectedOffer?: ShopOfferRevision) => void;
   rerollShop: (site: SiteState) => void;
   ensureCardChoiceRuntime: (
     siteId: SiteId,

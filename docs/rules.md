@@ -3490,6 +3490,36 @@ form. Every first-card source contributes its discount independently of which
 source supplies that form.
 
 
+A source that replaces an item after a shop purchase fills only the position
+vacated by that successful purchase, with one item of the site's ordinary ware
+category. Card Shops offer cards and Dreamsign Bazaars offer Dreamsigns,
+including their enhanced forms. The replacement belongs to the same purchase
+transaction and uses the site's ordinary stock generation and prepared
+transfiguration rules. It creates neither another purchase nor a Restock, and
+consumes no Restock allowance or charge. Sources held immediately after the
+domain purchase determine the reaction in physical held order. The first
+applicable source fills the vacancy; additional sources share that replacement.
+Buying the source itself can supply the reaction; a source replaced by that
+purchase does not. Exhausted eligible supply leaves the purchased position
+unavailable and records that outcome. Unavailable required content or a provider
+exception fails the transaction atomically. Prepared stock, purchase history
+and recorded replacement provenance persist through source loss and reload.
+When the stock draw rebuilds an exhausted Dreamsign pool from the run's fixed
+pool, selected UUIDs are spent from that rebuilt pool and its unoffered remainder
+is retained.
+
+A purchase identifies the current offer by site, position, successful purchase
+count and successful Restock count. A mismatching supplied revision is rejected
+before payment or random draws. A purchase that can replenish its position, or
+any purchase in a visit with recorded replenishment, requires that revision.
+A historic purchase without a revision retains its ordinary behavior only when
+the visit has no recorded replenishment and its post-purchase holdings supply
+no replenishment source. A supplied revision also requires the exact active
+site. A pending capacity replacement retains its captured offer and revision;
+cancellation submits no purchase, and reloading dismisses that uncommitted
+selection.
+
+
 ## Journey Duplication Effects
 
 Duplicating a journey card creates a fresh physical deck entry with that selected

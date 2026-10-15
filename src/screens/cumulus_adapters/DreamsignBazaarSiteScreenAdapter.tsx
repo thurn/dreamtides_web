@@ -1,3 +1,5 @@
+import { shopOfferRevision } from "../../rules/journey/journey-shop";
+import type { Dreamsign, ShopOfferRevision } from "../../types/journey";
 // Adapter for Amunet's Cumulus Dreamsign Bazaar. Wiring only.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -35,13 +37,11 @@ export function DreamsignBazaarSiteScreenAdapter({
     site?.randomSite?.presentingGuideId,
   );
   const guideLine = useGuideDialogue(guide, "site");
-  const [pendingSlotIndex, setPendingSlotIndex] = useState<number | null>(null);
-  const pendingDreamsign =
-    pendingSlotIndex === null || shopRuntime === null
-      ? null
-      : shopRuntime.slots[pendingSlotIndex]?.itemType === "dreamsign"
-        ? shopRuntime.slots[pendingSlotIndex].dreamsign
-        : null;
+  const [pendingOffer, setPendingOffer] = useState<{
+    siteId: SiteId; slotIndex: number; dreamsign: Dreamsign;
+    expectedOffer: ShopOfferRevision;
+  } | null>(null);
+  const pendingDreamsign = pendingOffer?.siteId === siteId ? pendingOffer.dreamsign : null;
   const view = useMemo(
     () =>
       site === null || shopRuntime === null
@@ -129,10 +129,10 @@ export function DreamsignBazaarSiteScreenAdapter({
       const slot = shopRuntime.slots[slotIndex];
       if (slot?.itemType !== "dreamsign") return;
       if (state.dreamsigns.length >= state.maxDreamsigns) {
-        setPendingSlotIndex(slotIndex);
+        setPendingOffer({ siteId: site.id, slotIndex, dreamsign: slot.dreamsign, expectedOffer: shopOfferRevision(shopRuntime) });
         return;
       }
-      mutations.buyShopSlot(site.id, slotIndex);
+      mutations.buyShopSlot(site.id, slotIndex, undefined, shopOfferRevision(shopRuntime));
     },
     [
       mutations,
@@ -144,15 +144,15 @@ export function DreamsignBazaarSiteScreenAdapter({
   );
   const handlePurge = useCallback(
     (dreamsignId: DreamsignId) => {
-      if (site === null || pendingSlotIndex === null) return;
+      if (site === null || pendingOffer === null || pendingOffer.siteId !== site.id) return;
       const purgeIndex = state.dreamsigns.findIndex(
         (dreamsign) => dreamsign.id === dreamsignId,
       );
       if (purgeIndex < 0) return;
-      mutations.buyShopSlot(site.id, pendingSlotIndex, purgeIndex);
-      setPendingSlotIndex(null);
+      mutations.buyShopSlot(pendingOffer.siteId, pendingOffer.slotIndex, purgeIndex, pendingOffer.expectedOffer);
+      setPendingOffer(null);
     },
-    [mutations, pendingSlotIndex, site, state.dreamsigns],
+    [mutations, pendingOffer, site, state.dreamsigns],
   );
   const handleRestock = useCallback(() => {
     if (site !== null) mutations.rerollShop(site);
@@ -172,7 +172,7 @@ export function DreamsignBazaarSiteScreenAdapter({
       view={view}
       onBuy={handleBuy}
       onPurge={handlePurge}
-      onCancelPurge={() => setPendingSlotIndex(null)}
+      onCancelPurge={() => setPendingOffer(null)}
       onRestock={handleRestock}
       onClose={handleClose}
     />

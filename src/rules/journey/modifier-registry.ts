@@ -86,6 +86,7 @@ export interface JourneyModifierDefinition {
     readonly after: Readonly<Record<string, number>>;
     readonly target?: {
       readonly siteIds: readonly SiteId[];
+      readonly shopReplacements?: readonly import("../../types/journey").JourneyShopSlotReplacement[];
       readonly prevented?: readonly import("../../types/journey").PreventedNightmareGain[];
       readonly sparkChanges?: readonly { readonly entryId: import("../../types/identifiers").DeckEntryId; readonly cardId: CardId; readonly before: number; readonly after: number }[];
       readonly nodeId?: AtlasNodeId;

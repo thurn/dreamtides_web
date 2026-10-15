@@ -1,3 +1,4 @@
+import { shopOfferRevision } from "../../rules/journey/journey-shop";
 import { useCallback, useEffect, useMemo } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
@@ -139,8 +140,8 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
 
   const handleBuy = useCallback(
     (slotIndex: number) =>
-      site !== null && mutations.buyShopSlot(site.id, slotIndex),
-    [mutations, site],
+      site !== null && shopRuntime !== null && mutations.buyShopSlot(site.id, slotIndex, undefined, shopOfferRevision(shopRuntime)),
+    [mutations, site, shopRuntime],
   );
   const handleRestock = useCallback(() => {
     if (site === null) return;

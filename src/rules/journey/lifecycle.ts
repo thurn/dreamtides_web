@@ -1,3 +1,4 @@
+import { validShopReplenishmentRuntime } from "./journey-shop";
 import { validCommittedPurgePrevention } from "./journey-committed-purge-state";
 import { assertBeforeBattlePurgeCheckpoint } from "./journey-before-battle-purge";
 import { validStarterPurgeScreen, validStarterBattleBinding } from "./journey-starter-acquisition";
@@ -580,7 +581,7 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
     if (
       isRecord(runtime) &&
       runtime.kind === "shop" &&
-      !Array.isArray(runtime.purchaseHistory)
+      (!Array.isArray(runtime.purchaseHistory) || !validShopReplenishmentRuntime(runtime))
     ) {
       return false;
     }

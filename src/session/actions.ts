@@ -1,3 +1,4 @@
+import type { ShopOfferRevision } from "../types/journey";
 // The game actions facade: one named creator per rules-layer event type.
 //
 // Every creator builds a single event's `{ type, payload }` draft (UUIDs and
@@ -310,6 +311,7 @@ export interface GameActions {
     siteId: SiteId,
     slotIndex: number,
     purgeIndex?: number,
+    expectedOffer?: ShopOfferRevision,
   ) => Promise<number>;
   rerollShop: (siteId: SiteId) => Promise<number>;
   grantFreeRerolls: (count: number) => Promise<number>;
@@ -751,11 +753,12 @@ export function makeActions(append: AppendFn): GameActions {
       emit("ACCEPT_AUGURY_OFFER", { siteId, ...request }),
     declineAugury: (siteId, request) =>
       emit("DECLINE_AUGURY", { siteId, ...request }),
-    buyShopSlot: (siteId, slotIndex, purgeIndex) =>
+    buyShopSlot: (siteId, slotIndex, purgeIndex, expectedOffer) =>
       emit("BUY_SHOP_SLOT", {
         siteId,
         slotIndex,
         ...(purgeIndex === undefined ? {} : { purgeIndex }),
+        ...(expectedOffer === undefined ? {} : { expectedOffer }),
       }),
     rerollShop: (siteId) => emit("REROLL_SHOP", { siteId }),
     grantFreeRerolls: (count) => emit("GRANT_FREE_REROLLS", { count }),

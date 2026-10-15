@@ -480,8 +480,8 @@ export function GameJourneyProvider({
       },
 
       // ---- shop ----
-      buyShopSlot: (siteId, slotIndex, purgeIndex) =>
-        dispatch(actions.buyShopSlot(siteId, slotIndex, purgeIndex)),
+      buyShopSlot: (siteId, slotIndex, purgeIndex, expectedOffer) =>
+        dispatch(actions.buyShopSlot(siteId, slotIndex, purgeIndex, expectedOffer)),
       rerollShop: (site) => dispatch(actions.rerollShop(site.id)),
       grantFreeShopRerolls: (count) =>
         dispatch(actions.grantFreeRerolls(count)),

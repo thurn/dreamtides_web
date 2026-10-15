@@ -1,3 +1,9 @@
+import { hashState, assertJsonSafe } from "../../eventlog/hash";
+import { serializeCardNumber, type DraftPoolCopiesByCard, type DraftState } from "../../types/draft";
+import { cardIdFromUnknown } from "../../types/card-identity";
+import { dreamsignIdFromUnknown } from "../../types/identifiers";
+import type { JourneyShopSlotReplacement, ShopOfferRevision, ShopReplacementItem } from "../../types/journey";
+import { findSite, getSiteContentProvider } from "./sites";
 import { effectivePrice } from "../../shop/shop-generator";
 import { rerollCost } from "../../shop/shop-pricing";
 import type { EconomyData } from "../../types/economy-data";
@@ -74,16 +80,167 @@ export function transfigureShopPurchase(journey: Pick<JourneyState, "dreamsigns"
   } };
 }
 
+const record = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+const ordinal = (value: unknown): value is number =>
+  typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+const forms: ReadonlySet<string> = new Set(["Empowered", "Amplified", "Kindled", "Inspired", "Enduring", "Hastened", "Resonant", "Attuned", "Perfected"]);
+const revision = (value: unknown): value is ShopOfferRevision => record(value) &&
+  Object.keys(value).length === 2 && ordinal(value.purchaseCount) && ordinal(value.rerollCount);
+const itemIdentity = (value: unknown): value is ShopReplacementItem => record(value) &&
+  (value.kind === "dreamsign" ? dreamsignIdFromUnknown(value.dreamsignId) !== null :
+    value.kind === "card" && cardIdFromUnknown(value.cardId) !== null && ordinal(value.cardNumber) &&
+    (value.transfiguration === null || typeof value.transfiguration === "string" && forms.has(value.transfiguration)));
+const poolIds = (value: unknown): boolean => Array.isArray(value) && value.every((id) => dreamsignIdFromUnknown(id) !== null);
+const supply = (value: unknown): boolean => record(value) && (value.mode === null
+  ? value.distinctRemaining === undefined && value.copiesRemaining === undefined
+  : value.mode === "tides4" && ordinal(value.distinctRemaining) && ordinal(value.copiesRemaining) && value.distinctRemaining <= value.copiesRemaining);
+
+/** Validate the exact copy-map boundary returned by the one-slot provider. */
+function shopDraftCopies(value: unknown): value is DraftPoolCopiesByCard {
+  if (!record(value) || Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) return false;
+  let total = 0;
+  for (const [key, count] of Object.entries(value)) {
+    const number = Number(key);
+    if (!ordinal(number) || serializeCardNumber(number) !== key || !ordinal(count)) return false;
+    total += count;
+    if (!Number.isSafeInteger(total)) return false;
+  }
+  return true;
+}
+
+function shopDraftSupply(state: Pick<DraftState, "mode" | "remainingCopiesByCard"> | null): JourneyShopSlotReplacement["draftSupplyBefore"] {
+  if (state === null) return { mode: null };
+  const counts = Object.values(state.remainingCopiesByCard).filter((count) => count > 0);
+  return { mode: state.mode, distinctRemaining: counts.length, copiesRemaining: counts.reduce((sum, count) => sum + count, 0) };
+}
+
+/** A Shop draw may change only remaining copies; Bazaar keeps its exact draft. */
+function validShopReplacementDraft(before: DraftState | null, after: unknown, bazaar: boolean, reportedBefore: unknown, reportedAfter: unknown): boolean {
+  if (!supply(reportedBefore) || !supply(reportedAfter) || (bazaar ? after !== before : before === null || after === null)) return false;
+  assertJsonSafe({ draftState: after, reportedBefore, reportedAfter }, "shopReplacement");
+  if (before === null || after === null) return before === null && after === null &&
+    hashState(reportedBefore) === hashState(shopDraftSupply(null)) && hashState(reportedAfter) === hashState(shopDraftSupply(null));
+  if (!record(after) || Object.getPrototypeOf(after) !== Object.prototype && Object.getPrototypeOf(after) !== null ||
+    before.mode !== "tides4" || after.mode !== "tides4" || !shopDraftCopies(before.draftPoolCopiesByCard) ||
+    !shopDraftCopies(before.remainingCopiesByCard) || !shopDraftCopies(after.draftPoolCopiesByCard) || !shopDraftCopies(after.remainingCopiesByCard)) return false;
+  for (const copies of [before.remainingCopiesByCard, after.remainingCopiesByCard]) {
+    if (Object.entries(copies).some(([key, count]) => !Object.prototype.hasOwnProperty.call(before.draftPoolCopiesByCard, key) ||
+      count > before.draftPoolCopiesByCard[serializeCardNumber(Number(key))])) return false;
+  }
+  return hashState({ ...before, remainingCopiesByCard: null }) === hashState({ ...after, remainingCopiesByCard: null }) &&
+    hashState(reportedBefore) === hashState(shopDraftSupply(before)) &&
+    hashState(reportedAfter) === hashState(shopDraftSupply({ mode: "tides4", remainingCopiesByCard: after.remainingCopiesByCard }));
+}
+
+/** Stable identity of the rendered shelf, including Restocks without purchases. */
+export function shopOfferRevision(runtime: Pick<ShopSiteRuntime, "purchaseHistory" | "rerollCount">): ShopOfferRevision {
+  if (!Array.isArray(runtime.purchaseHistory) || !ordinal(runtime.rerollCount)) throw new Error("Invalid shop offer revision.");
+  return { purchaseCount: runtime.purchaseHistory.length, rerollCount: runtime.rerollCount };
+}
+
+/** Validate only this protocol's optional receipt fields; legacy absence is stable. */
+export function validShopReplenishmentRuntime(value: unknown): boolean {
+  if (!record(value) || value.kind !== "shop") return true;
+  if (!Array.isArray(value.purchaseHistory)) return false;
+  for (const [index, receipt] of value.purchaseHistory.entries()) {
+    if (!record(receipt)) continue;
+    const expected = receipt.expectedOffer;
+    if (expected !== undefined && (!revision(expected) || expected.purchaseCount !== index ||
+      !ordinal(value.rerollCount) || expected.rerollCount > value.rerollCount)) return false;
+    const applied = receipt.slotReplacement;
+    if (applied === undefined) continue;
+    if (!record(applied) || !revision(expected) || !revision(applied.revisionBefore) || !revision(applied.revisionAfter) ||
+      applied.revisionBefore.purchaseCount !== expected.purchaseCount || applied.revisionBefore.rerollCount !== expected.rerollCount ||
+      applied.revisionAfter.purchaseCount !== index + 1 || applied.revisionAfter.rerollCount !== expected.rerollCount ||
+      dreamsignIdFromUnknown(applied.dreamsignId) === null || !ordinal(applied.heldIndex) ||
+      !ordinal(receipt.eventSeq) || !ordinal(receipt.slotIndex) || !itemIdentity(applied.purchased) || !record(receipt.item) ||
+      (applied.purchased.kind === "card" ? receipt.item.kind !== "card" || receipt.item.cardNumber !== applied.purchased.cardNumber
+        : receipt.item.kind !== "dreamsign" || receipt.item.dreamsignId !== applied.purchased.dreamsignId) ||
+      !Array.isArray(applied.drawIndices) || applied.drawIndices.some((n, i, all) => !ordinal(n) || i > 0 && n <= all[i - 1]) ||
+      !poolIds(applied.remainingDreamsignPoolBefore) || !poolIds(applied.remainingDreamsignPoolAfter) ||
+      !supply(applied.draftSupplyBefore) || !supply(applied.draftSupplyAfter)) return false;
+    const replacement = applied.replacement;
+    if (replacement !== null && (!record(replacement) || !itemIdentity(replacement.item) || replacement.item.kind !== applied.purchased.kind ||
+      typeof replacement.basePrice !== "number" || !Number.isFinite(replacement.basePrice) || replacement.basePrice < 0 ||
+      typeof replacement.discountPercent !== "number" || !Number.isFinite(replacement.discountPercent) || replacement.discountPercent < 0 || replacement.discountPercent > 100)) return false;
+  }
+  return true;
+}
+
+/** Optional receipt provenance survives the compacted-state JSON boundary. */
+export function assertShopReplenishmentCheckpoint(state: unknown): void {
+  if (!record(state) || !record(state.journey) || !record(state.journey.siteRuntime)) return;
+  if (Object.values(state.journey.siteRuntime).some((runtime) => !validShopReplenishmentRuntime(runtime))) {
+    throw new Error("Invalid shop replenishment checkpoint.");
+  }
+}
+
+function sameSlotItem(slot: RuntimeShopSlot, item: ShopReplacementItem): boolean {
+  return slot.itemType === "card" ? item.kind === "card" && item.cardNumber === slot.cardNumber &&
+    item.transfiguration === (slot.transfiguration ?? null) : item.kind === "dreamsign" && item.dreamsignId === slot.dreamsign.id;
+}
+
+function replacePurchasedItem(input: Parameters<JourneyModifierDefinition["afterJourneyEvent"]>[0], dreamsignId: DreamsignId): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+  const { before, journey, eventType, siteId, seq, heldIndex, random } = input;
+  if (eventType !== "BUY_SHOP_SLOT" || siteId === null) return null;
+  const old = before.siteRuntime[siteId], runtime = journey.siteRuntime[siteId];
+  if (old?.kind !== "shop" || runtime?.kind !== "shop" || runtime.purchaseHistory.length !== old.purchaseHistory.length + 1) return null;
+  const receipt = runtime.purchaseHistory[runtime.purchaseHistory.length - 1];
+  if (receipt.eventSeq !== seq || receipt.siteId !== siteId || receipt.slotReplacement !== undefined) return null;
+  const purchasedSlot = old.slots[receipt.slotIndex], vacancy = runtime.slots[receipt.slotIndex];
+  if (purchasedSlot === undefined || purchasedSlot.purchased || vacancy === undefined || !vacancy.purchased) return null;
+  const site = findSite(journey, siteId), provider = getSiteContentProvider();
+  if (site === null || (site.type !== "Shop" && site.type !== "DreamsignBazaar") || provider?.replacePurchasedShopSlot === undefined || !revision(receipt.expectedOffer)) {
+    throw new Error("Required purchased-slot replacement content is unavailable.");
+  }
+  const drawIndices: number[] = [];
+  const result = provider.replacePurchasedShopSlot({ journey, site, slotIndex: receipt.slotIndex, purchasedSlot, random: () => {
+    const draw = random();
+    if (!ordinal(draw.drawIndex) || !Number.isFinite(draw.value) || draw.value < 0 || draw.value >= 1) throw new RangeError("Invalid shop replacement draw.");
+    drawIndices.push(draw.drawIndex); return draw.value;
+  } });
+  if (result === null || !itemIdentity(result.purchasedItem) || !sameSlotItem(purchasedSlot, result.purchasedItem) ||
+    !poolIds(result.remainingDreamsignPoolIds) || !poolIds(result.remainingDreamsignPool) ||
+    result.remainingDreamsignPoolIds.length !== result.remainingDreamsignPool.length || result.remainingDreamsignPoolIds.some((id, i) => id !== result.remainingDreamsignPool[i]) ||
+    !validShopReplacementDraft(journey.draftState, result.draftState, site.type === "DreamsignBazaar", result.draftSupplyBefore, result.draftSupplyAfter) ||
+    (site.type === "Shop" && result.draftState === null) ||
+    (site.type === "DreamsignBazaar" && result.draftState !== journey.draftState) ||
+    (result.slot === null ? result.replacementItem !== null : !record(result.slot) || result.slot.purchased !== false ||
+      result.slot.itemType !== (site.type === "Shop" ? "card" : "dreamsign") || !itemIdentity(result.replacementItem) || !sameSlotItem(result.slot, result.replacementItem))) {
+    throw new Error("Invalid purchased-slot replacement result.");
+  }
+  const applied: JourneyShopSlotReplacement = {
+    dreamsignId, heldIndex, revisionBefore: { ...receipt.expectedOffer }, revisionAfter: shopOfferRevision(runtime),
+    purchased: result.purchasedItem,
+    replacement: result.slot === null ? null : { item: result.replacementItem!, basePrice: result.slot.basePrice, discountPercent: result.slot.discountPercent },
+    drawIndices, remainingDreamsignPoolBefore: [...journey.remainingDreamsignPool], remainingDreamsignPoolAfter: [...result.remainingDreamsignPool],
+    draftSupplyBefore: result.draftSupplyBefore, draftSupplyAfter: result.draftSupplyAfter,
+  };
+  const nextRuntime: ShopSiteRuntime = { ...runtime,
+    slots: runtime.slots.map((slot, i) => i === receipt.slotIndex && result.slot !== null ? result.slot : slot),
+    remainingDreamsignPoolIds: [...result.remainingDreamsignPoolIds],
+    purchaseHistory: [...runtime.purchaseHistory.slice(0, -1), { ...receipt, slotReplacement: applied }],
+  };
+  if (!validShopReplenishmentRuntime(nextRuntime)) throw new Error("Invalid shop replacement receipt.");
+  return { journey: { ...journey, draftState: result.draftState, remainingDreamsignPool: [...result.remainingDreamsignPool],
+    siteRuntime: { ...journey.siteRuntime, [siteId]: nextRuntime } },
+    before: { vacantPositions: 1 }, after: { vacantPositions: result.slot === null ? 1 : 0, replenishedPositions: result.slot === null ? 0 : 1 },
+    target: { siteIds: [siteId], shopReplacements: [applied] } };
+}
+
 /** Register one bounded clause and report only successful matching operations. */
 export function journeyShop(dreamsignId: DreamsignId, descriptor: JourneyShopEffect): JourneyModifierDefinition {
-  if (descriptor.kind !== "firstRestockFree" && descriptor.kind !== "purchasedCardTransfiguration" &&
+  if (descriptor.kind !== "firstRestockFree" && descriptor.kind !== "purchasedCardTransfiguration" && descriptor.kind !== "replacePurchasedItem" &&
     !(descriptor.kind === "firstCardPurchase" && Number.isFinite(descriptor.discountPercent) && descriptor.discountPercent >= 0 && descriptor.discountPercent <= 100) &&
     (descriptor.kind !== "additionalOptions" || !Number.isSafeInteger(descriptor.amount) || descriptor.amount < 1)) {
     throw new RangeError("Invalid journeyShop catalog clause.");
   }
   const effect = Object.freeze({ ...descriptor });
   return { dreamsignId, journeyShop: effect,
-    afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, seq, lookup }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+    afterJourneyEvent(input): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+      if (effect.kind === "replacePurchasedItem") return replacePurchasedItem(input, dreamsignId);
+      const { before, journey, eventType, heldIndex, siteId, seq, lookup } = input;
       if (siteId === null) return null;
       const old = before.siteRuntime[siteId], runtime = journey.siteRuntime[siteId];
       if (runtime?.kind !== "shop") return null;
