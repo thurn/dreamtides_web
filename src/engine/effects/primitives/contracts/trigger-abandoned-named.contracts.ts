@@ -438,3 +438,29 @@ describe("716 regression", () => {
     expect(drain(w, out).sides[side].score).toBe(0);
   });
 });
+
+
+describe("717 regression", () => {
+  it.each(SIDES.flatMap(side => SIDES.flatMap(viewer => (["allTypes", "spark"] as const).map(mode => ({ side, viewer, mode })))))("historical effective eligibility $side/$viewer $mode", ({ side, viewer, mode }) => {
+    const filter = mode === "allTypes" ? { subtype: "Mage" as const } : { sparkAtLeast: 5 };
+    const change = mode === "allTypes" ? p.giveAllTypes(self(), "whileSourceInPlay") : p.gainSpark(self(), 4, "whileSourceInPlay");
+    const sourceCard = { ...card(111, () => [activated([], p.sequence(change, p.abandon("you", filter),
+      p.materialize(everyIn("hand", { subtype: "Explorer" })))), triggered(onDawn(), p.gainPoints(3))]), spark: 1 };
+    const hidden = card(112, () => [triggered(whenAbandon("you", filter), named("dawn"), { zone: "any" })], "Explorer");
+    const w = world(side, [sourceCard, hidden], { back: [sourceCard.id], hand: [hidden.id, v.event0.id] });
+    const source = w.ids[side].back[0]!, out = activate(w, source).state;
+    expect(out.instances[source].zone).toBe("void");
+    expect(out.triggerQueue).toHaveLength(1);
+    const shown = w.engine.view(out, viewer);
+    expect(shown.triggerQueue[0].subject).toBe(source);
+    const sampled = w.engine.determinize(shown, lists(w), () => .2);
+    expect(sampled.triggerQueue[0].abandonedNamed!.source).toBe(source);
+    expect(sampled.triggerQueue[0].abandonedNamed!.controller).toBe(side);
+    expect(sampled.instances[source].printing).toEqual({ kind: "card", cardId: sourceCard.id });
+    expect(comparableView(w.engine.view(sampled, viewer))).toEqual(comparableView(shown));
+    const child = step(w, saved(slice(sampled))!.committed, { kind: "resolveTrigger" });
+    expect(queued(child.events).map(event => event.source)).toEqual([source]);
+    expect(drain(w, child.state).sides[side].score).toBe(3);
+    expect(drain(w, out).sides[side].score).toBe(3);
+  });
+});
