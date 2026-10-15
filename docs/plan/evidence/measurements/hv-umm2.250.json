@@ -1,0 +1,444 @@
+{
+  "bead": "hv-umm2.250",
+  "base": "60c227afbe848db6c8bd72465cdd8eece908825d",
+  "rootEarliestStart": "2026-10-15T04:05:26.526963Z",
+  "helperDispatch": {
+    "actualParentBeforeDispatch": "2026-10-15T04:12:34.428005+00:00",
+    "rootEarliestStart": "2026-10-15T04:05:26.526963Z"
+  },
+  "entities": [
+    "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+    "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+    "5190a8b8-25a0-4c60-a4de-2e2c5a73af77",
+    "278ec1ab-f532-4862-84ae-63df5e49548c"
+  ],
+  "sourceBudget": {
+    "leafModules": 2,
+    "addedRuntimeLines": 10,
+    "deletedRuntimeLines": 2,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "newPrimitive": [],
+    "compilerFallout": []
+  },
+  "composition": {
+    "5190a8b8-25a0-4c60-a4de-2e2c5a73af77": "staticAbility(costModifierNth(\"you\", {}, 1, { reduce: 1 }, { from: \"void\" }), { while: thisTurn(discardedThisTurn()) })",
+    "278ec1ab-f532-4862-84ae-63df5e49548c": "staticAbility(costModifierNth(\"you\", { cardType: \"character\" }, 2, { reduce: 1 }))"
+  },
+  "D20": "No scenario: static current-turn condition and nth/origin cost forms have public synthetic coverage for both actors, false-condition historical plays, matching filters, copies, ordinary/extra turn reset, route payment, cancellation and saved reload. Composition adds no state or interacting ability beyond those contracts.",
+  "D21": {
+    "sample": "SHA256 first UUID byte<26",
+    "bytes": [
+      48,
+      165,
+      0,
+      26
+    ],
+    "sampled": [
+      "5190a8b8-25a0-4c60-a4de-2e2c5a73af77"
+    ],
+    "newPromptsStatusesEffects": []
+  },
+  "rulings": [
+    "RD-hv-umm2.104-1",
+    "RD-hv-umm2.513-1",
+    "RD-hv-umm2.705-1"
+  ],
+  "newRD": [],
+  "cardIssues": [],
+  "fullAcceptanceJoin": {
+    "child": "hv-umm2.667",
+    "certifiedSource": "81d5290c694fd64f32619366105f081ba219c5f5",
+    "tested": "baf82441a800b74e79d70388524dd511fdf50fca",
+    "certificate": "01a138eb-8684-7dd2-a063-9f9d2c71a553",
+    "qualifier": "Child authored Amanita/Charm; its two leaves and QA evidence consumed read-only. Original parent performs unchanged whole4UUID final recipe. Child private scenario absent consistent with D20 zero scenarios."
+  },
+  "failedCallers": [
+    {
+      "run": "run-78mwJY",
+      "kind": "QA caller assumption",
+      "cause": "Sole staged hand instance i56 was selected as first legal discard, then caller incorrectly tried to play it from hand. Retained persisted promptAnswered/action proves actual destination.",
+      "repair": "Separate exact physical fodder, UI-select candidate and submit, assert control subject remains hand.",
+      "caps": []
+    },
+    {
+      "run": "run-eIMfUI",
+      "kind": "QA caller assumption",
+      "cause": "Clicking playable void pile opens local ability chooser. Caller incorrectly waited directly for browser tile. Exact EngineBattleScreen onZoneOpen/chooserOptions source settles View Your Void step.",
+      "repair": "Explicit rendered chooser browse option, browser marker then physical tile.",
+      "caps": []
+    }
+  ],
+  "limits": [
+    "Preflight/sweep Dreamsign base passes prove first-turn initialization, not content-specific cost exercise.",
+    "Weighted fuzzer inclusion/exercise is reachability/invariant evidence, not exhaustive printed-clause proof.",
+    "Runtime/public synthetic contracts supply routes/copies/cancellation/saved provenance and both-controller semantics.",
+    "No local full review needed: two leaf compositions only; ordinary review and Knip required.",
+    "No mandatory cold code review: noncore ten added runtime lines; parent verified source scope."
+  ],
+  "status": "Source and required focused/ordinary/Knip/weighted300/preflight/sweep/judged validation pass; final schema and exact commit endpoint retained externally; root alone submits and promotes.",
+  "sourceSha256": {
+    "src/content/dreamsigns/cactus-5190a8b8.ts": "2eab011fe4e03e9abf878f406d449b1cc23b00195b3e633bcfb9b551d77d3cca",
+    "src/content/dreamsigns/pyramid-relic-278ec1ab.ts": "14c963c391c30ebf3da3df247bc2b10ac7eac12534144274e9cdcf4ccb36f3f4"
+  },
+  "QA": {
+    "preflight": {
+      "pass": 8,
+      "skip": 72,
+      "fail": 0
+    },
+    "sweep": {
+      "pass": 8,
+      "skip": 72,
+      "fail": 0,
+      "invocation": "sweep-VaCEND",
+      "qualifier": "Dreamsign base initialization, not content-specific effect exercise."
+    },
+    "judged": {
+      "pass": 2,
+      "callerFailuresRetained": 2,
+      "productFailures": 0,
+      "invocation": "run-8F25Dw",
+      "caps": [],
+      "gameRows": 266,
+      "perViewport": {
+        "desktop": {
+          "gameId": "bjwbkx",
+          "handPaid": 3,
+          "voidPaid": [
+            2,
+            3,
+            3
+          ],
+          "reload": true,
+          "cancelled": true,
+          "geometry": {
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "inside": true,
+            "scrollWidth": 1440,
+            "innerWidth": 1440
+          },
+          "cancelGeometry": {
+            "width": 88.375,
+            "height": 42,
+            "hit": true,
+            "inside": true
+          }
+        },
+        "mobile": {
+          "gameId": "dwfdm6",
+          "handPaid": 3,
+          "voidPaid": [
+            2,
+            3,
+            3
+          ],
+          "reload": true,
+          "cancelled": true,
+          "geometry": {
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "inside": true,
+            "scrollWidth": 390,
+            "innerWidth": 390
+          },
+          "cancelGeometry": {
+            "width": 88.375,
+            "height": 42,
+            "hit": true,
+            "inside": true
+          }
+        }
+      },
+      "screens": [
+        "cactus-discard-prompt-desktop.png",
+        "cactus-settled-desktop.png",
+        "cactus-settled-mobile.png"
+      ],
+      "visualInspection": "All three captures viewed: discard banner and cancel remain visible; desktop and mobile settled phase controls and board fit their viewport. Hand fan crops at intentional viewport edge. No claim of a wider UI redesign or enemy actual discounted play.",
+      "visualInspectionBy": "Implementing Codex agent viewed all three accepted captures; parent independently viewed desktop prompt and mobile settled. No human visual inspection was supplied."
+    }
+  },
+  "commands": {
+    "focused": {
+      "start": "2026-10-15T04:14:18.464462+00:00",
+      "end": "2026-10-15T04:14:40.897164+00:00",
+      "elapsedS": 22.43255924998084,
+      "hostLoad": 4.7353515625,
+      "pid": 11101,
+      "pgid": 11101,
+      "exitCode": 0,
+      "timedOut": false,
+      "terminalObservedLive": [],
+      "terminalOriginalGroup": []
+    },
+    "preflight": {
+      "start": "2026-10-15T04:14:47.598757+00:00",
+      "end": "2026-10-15T04:14:49.206103+00:00",
+      "elapsedS": 1.6073645839933306,
+      "hostLoad": 4.50048828125,
+      "pid": 11959,
+      "pgid": 11959,
+      "exitCode": 0,
+      "timedOut": false,
+      "terminalObservedLive": [],
+      "terminalOriginalGroup": []
+    },
+    "sweep": {
+      "start": "2026-10-15T04:15:15.801279+00:00",
+      "end": "2026-10-15T04:15:53.550341+00:00",
+      "elapsedS": 37.74881200003438,
+      "hostLoad": 4.45361328125,
+      "pid": 12863,
+      "pgid": 12863,
+      "exitCode": 0,
+      "timedOut": false,
+      "terminalObservedLive": [],
+      "terminalOriginalGroup": []
+    },
+    "judged": {
+      "start": "2026-10-15T04:17:18.033189+00:00",
+      "end": "2026-10-15T04:17:30.217398+00:00",
+      "elapsedS": 12.184160458971746,
+      "hostLoad": 5.572265625,
+      "pid": 16677,
+      "pgid": 16677,
+      "exitCode": 1,
+      "timedOut": false,
+      "terminalObservedLive": [],
+      "terminalOriginalGroup": []
+    },
+    "judged2": {
+      "start": "2026-10-15T04:18:40.717580+00:00",
+      "end": "2026-10-15T04:19:27.669467+00:00",
+      "elapsedS": 46.9515574160032,
+      "hostLoad": 5.20361328125,
+      "pid": 19104,
+      "pgid": 19104,
+      "exitCode": 1,
+      "timedOut": false,
+      "terminalObservedLive": [],
+      "terminalOriginalGroup": []
+    },
+    "judged3": {
+      "start": "2026-10-15T04:20:33.832140+00:00",
+      "end": "2026-10-15T04:22:15.903062+00:00",
+      "elapsedS": 102.07019008300267,
+      "hostLoad": 18.06103515625,
+      "pid": 24650,
+      "pgid": 24650,
+      "exitCode": 0,
+      "timedOut": false,
+      "terminalObservedLive": [],
+      "terminalOriginalGroup": []
+    },
+    "review": {
+      "start": "2026-10-15T04:23:58.783208+00:00",
+      "end": "2026-10-15T04:25:04.717946+00:00",
+      "elapsedS": 65.93426770804217,
+      "hostLoad": 13.3671875,
+      "pid": 96616,
+      "pgid": 96616,
+      "exitCode": 0,
+      "timedOut": false,
+      "terminalObservedLive": [],
+      "terminalOriginalGroup": []
+    },
+    "knip": {
+      "start": "2026-10-15T04:25:44.138467+00:00",
+      "end": "2026-10-15T04:25:50.707828+00:00",
+      "elapsedS": 6.569341624970548,
+      "hostLoad": 11.56689453125,
+      "pid": 4791,
+      "pgid": 4791,
+      "exitCode": 0,
+      "timedOut": false,
+      "terminalObservedLive": [],
+      "terminalOriginalGroup": []
+    },
+    "fuzz": {
+      "start": "2026-10-15T04:14:43.726713+00:00",
+      "end": "2026-10-15T04:29:49.309110+00:00",
+      "elapsedS": 905.580967832997,
+      "hostLoad": 4.63134765625,
+      "pid": 11864,
+      "pgid": 11864,
+      "exitCode": 0,
+      "timedOut": false,
+      "terminalObservedLive": [],
+      "terminalOriginalGroup": []
+    },
+    "amendSchema": {
+      "start": "2026-10-15T04:33:16.627593+00:00",
+      "end": "2026-10-15T04:33:17.039364+00:00",
+      "elapsedS": 0.41179837501840666,
+      "hostLoad": 13.779296875,
+      "pid": 87687,
+      "pgid": 87687,
+      "exitCode": 0,
+      "timedOut": false,
+      "terminalObservedLive": [],
+      "terminalOriginalGroup": []
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Ordinary review start, 2026-10-15T04:24:00.787Z, measured1-minute load13.3671875; each other command has its own actual hostLoad."
+      }
+    }
+  },
+  "audit": "Ignored bead QA audit/ stores finite command plans, positive held-G process birth-to-terminal receipts, exact caller sources, source audit and failed outputs; invocation directories store raw reports/game exports/captures.",
+  "ordinaryReview": {
+    "relatedTests": 8411,
+    "files": 257,
+    "typechecks": "pass",
+    "lint": "pass",
+    "importCycles": "pass",
+    "frictionSchema": "pass",
+    "fullRequired": false,
+    "reason": "Pure existing-form content composition; no infrastructure/config/cross-cutting architecture change."
+  },
+  "knip": "pass",
+  "preCommitRecordCorrections": [
+    "Two QA notes used Human visual inspection; parent caught this evidence wording and it was corrected to Implementing agent visual inspection before commit."
+  ],
+  "fuzz": {
+    "summary": "fuzz:engine 300 games, 100253 steps, 569.4 s wall, 598.1 s CPU (0.5 games/s wall, 0.5 games/s CPU); prompts 7402; interactive re-runs 775 (8.989 ms each); feasibility bounded {\"legality\":0,\"prompts\":4}; results {\"player\":159,\"enemy\":140,\"draw\":1}; failures 0",
+    "targets": [
+      {
+        "kind": "dreamsign",
+        "uuid": "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+        "included": 600,
+        "exercised": 1115
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+        "included": 600,
+        "exercised": 141
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "5190a8b8-25a0-4c60-a4de-2e2c5a73af77",
+        "included": 600,
+        "exercised": 0
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "278ec1ab-f532-4862-84ae-63df5e49548c",
+        "included": 600,
+        "exercised": 0
+      }
+    ],
+    "games": 300,
+    "steps": 100253,
+    "prompts": 7402,
+    "interactiveReRuns": 775,
+    "failures": 0,
+    "reportedExecutionWallS": 569.4,
+    "reportedExecutionCPUS": 598.1,
+    "wrapperWallS": 905.580967832997,
+    "residualWallS": 336.180967832997,
+    "residualQualifier": "Wrapper less rounded engine-reported execution: heavy-slot wait plus npm/catalog startup, monitoring and teardown; not an exact lock-wait measurement. Own execution process birth04:20:17Z is second-precision evidence.",
+    "executionBirth": "2026-10-15T04:20:17Z",
+    "executionBirthPrecision": "1second ps lstart",
+    "scope": "All four UUIDs requested and included600each. Resolved-emblem exercise counters1115/141/0/0; zero counters for static Cactus/Pyramid do not establish their payment behavior. Cactus actual UI and existing nth public contracts supply separate payment/ordinal evidence.",
+    "fullRequired": false
+  },
+  "resources": {
+    "at": "2026-10-15T04:31:23.219089+00:00",
+    "ownedCommands": [
+      "focused",
+      "preflight",
+      "sweep",
+      "judged",
+      "judged2",
+      "judged3",
+      "review",
+      "knip",
+      "fuzz"
+    ],
+    "positiveObservedIdentityCount": 99,
+    "ownedProcessGroups": [
+      4791,
+      11101,
+      11864,
+      11959,
+      12863,
+      12880,
+      12887,
+      12894,
+      12896,
+      16677,
+      16701,
+      16709,
+      16717,
+      16719,
+      19104,
+      19120,
+      19128,
+      19135,
+      19137,
+      24650,
+      24665,
+      24672,
+      24679,
+      24682,
+      96616
+    ],
+    "sameBirthRemaining": [],
+    "groupRowsRemaining": [],
+    "browserServerGroups": [
+      12896,
+      16719,
+      19137,
+      24682
+    ],
+    "sharedProvider": "Never started/stopped/reconfigured; each runner confirmed own isolated browser close via successful native close/owner protocol.",
+    "monitorScope": "200ms sampled positive originalPG/parent-chain identity rows plus final full kernel census of all positively owned PGs. No claim that sub200ms historical children were individually sampled."
+  },
+  "frictionWindow": {
+    "start": "2026-10-15T04:05:26.526963+00:00",
+    "endCutoffImmediatelyBeforeFinalEvidenceWriteAndAmend": "2026-10-15T04:33:54.482080+00:00",
+    "elapsedMinAtCutoff": 28.465918616666666,
+    "originalSource": "2e0f0d51e7f34f496cba619db28383943646acce",
+    "originalGitReturnEndpoint": "2026-10-15T04:31:51.430256+00:00",
+    "originalInclusiveImplementMin": 26.415054883333333,
+    "originalCutoffTailS": 28.210124,
+    "originalTailIncluded": true,
+    "originalWindowRecord": {
+      "start": "2026-10-15T04:05:26.526963+00:00",
+      "endCutoffBeforeFinalSchemaAndCommit": "2026-10-15T04:31:23.220132+00:00",
+      "elapsedMinAtCutoff": 25.94488615,
+      "actualGitCommitEndpoint": "External commit-endpoint.json in ignored QA audit records the actual Git return endpoint, cutoff tail and complete inclusive root-start wall window; no clock reset.",
+      "qualification": "Tracked friction end is a precommit cutoff within the schema one-minute tolerance of actual commit; exact endpoint supplied by external receipt."
+    },
+    "actualFinalGitReturnEndpoint": "final-amend-endpoint.json in ignored QA audit; captures actual final Git return and unavoidable local write/stage/check/amend tail.",
+    "qualification": "Includes all elapsed work from earliest root start through final amend preparation, including original28.210124s tail, parent verification and follow-up timing repair. Full schema completed before timing write; exact offset/start/end/minutes consistency checked in-process after numeric update."
+  },
+  "validationSourceQualification": {
+    "originalValidatedSource": "2e0f0d51e7f34f496cba619db28383943646acce",
+    "base": "60c227afbe848db6c8bd72465cdd8eece908825d",
+    "leafSha256": {
+      "src/content/dreamsigns/cactus-5190a8b8.ts": "2eab011fe4e03e9abf878f406d449b1cc23b00195b3e633bcfb9b551d77d3cca",
+      "src/content/dreamsigns/pyramid-relic-278ec1ab.ts": "14c963c391c30ebf3da3df247bc2b10ac7eac12534144274e9cdcf4ccb36f3f4"
+    },
+    "preservedOriginalSevenBlobs": {
+      "docs/plan/evidence/friction/hv-umm2.250.json": "ca0b05d7b2029d1919ae541009c7c3f27796f190",
+      "docs/plan/evidence/measurements/hv-umm2.250.json": "f081ad4140c7bd9dd2ccd6ff964e143d88f1f5b3",
+      "docs/plan/evidence/measurements/hv-umm2.250.md": "c6deae9cc506f0701ca7a8df33647b0a204f378b",
+      "docs/plan/evidence/pre-existing/hv-umm2.250.md": "84af5e00de7584de5ebb82f802e11c565b395e9d",
+      "docs/plan/evidence/qa-ledger/hv-umm2.250.jsonl": "562f1ac52a0e6a3fc8ad8b3c19bbfdf2d7906d44",
+      "src/content/dreamsigns/cactus-5190a8b8.ts": "156f33de2ce3102b0ad5b1ecfacb9dea4449d9de",
+      "src/content/dreamsigns/pyramid-relic-278ec1ab.ts": "de03fa59c80264bb92a151348e0fa9a51b3077bd"
+    },
+    "effect": "Evidence-only timing amend; original focused/review/Knip/weighted/preflight/sweep/judged scopes and results retain their original exact source qualifications; no behavioral rerun claimed."
+  }
+}
