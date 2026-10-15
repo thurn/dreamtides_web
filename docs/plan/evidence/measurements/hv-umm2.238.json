@@ -1,0 +1,179 @@
+{
+  "bead": "hv-umm2.238",
+  "dispatchStart": "2026-10-15T01:18:50.886927+00:00",
+  "preGitCutoff": "2026-10-15T01:45:22.464424+00:00",
+  "actualFutureGitEndpoint": "UNKNOWN; external final-commit-receipt.json records actualGitend/tail/inclusive interval",
+  "scope": {
+    "changedSource": ["src/content/dreamsigns/potion-mortar-26786698.ts"],
+    "newAPIs": [],
+    "fallout": [],
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0,
+      "configuredEntrypoints": 0
+    },
+    "D20": "Exact existing613 synthetic Dawn/current-hand setter composition covers bothactors/privacy/RNG/payment/Ending/reload/error; no new scenario. Child65926scenarios unchanged;582actualStaff leaf contract retained.",
+    "metadataAudit": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/metadata-verification.json",
+      "sha256": "7551eddcae07e1a56b3f639ba5b8d8cd0e660e53e49290d6c1bed8aed3217d69"
+    },
+    "sourceManifest": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/qa-frozen-manifest.json",
+      "sha256": "6010fbcedbce00374a7d08dab461f23d6557b94da90d5bdae82888fc5a671a67"
+    },
+    "reviewPolicy": "Supported leaf composition7gross, no core/newform; ordinaryreview/Knip, no full/coldreview/CF.",
+    "metadataFinalAudit": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/metadata-final-verification.json",
+      "sha256": "0ce9e8b97635bbc34ae78542ce442eb364298d9449426ee5d09e3b86e324c465"
+    }
+  },
+  "checks": {
+    "receipts": [
+      {"label":"focused","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/focused.receipt.json","sha256":"962a8a0283a389db6826fe8453f866cd08aac9d0ca07169a789c6e2411e1cfca","start":"2026-10-15T01:24:50.550807+00:00","end":"2026-10-15T01:24:59.899659+00:00","wallS":9.348684791009873,"pgid":20897,"exit":0,"hostLoadStart":[10.8740234375,10.41357421875,10.40478515625],"stdoutSHA256":"239050d6b1fb423d55aa6dd8e0329fd91e747049707a78aa95423d40750c4789"},
+      {"label":"entities-after","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/entities-after.receipt.json","sha256":"6ec12bf54d2b3f5047b277f3cc0e4c461d2ae90019b49b713f3e235a21dddfd9","start":"2026-10-15T01:25:09.030929+00:00","end":"2026-10-15T01:25:10.326020+00:00","wallS":1.2949707910302095,"pgid":22182,"exit":0,"hostLoadStart":[14.65185546875,11.294921875,10.7197265625],"stdoutSHA256":"7ff59777fed131ade3ae6070238097d923cd65491bc54f65af74c782e679a01a"},
+      {"label":"review","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/review.receipt.json","sha256":"edfadcdb73114cf77df251b30f6a5f8ae0b80b89483760efb3cb0e8a0a8f8757","start":"2026-10-15T01:25:10.360624+00:00","end":"2026-10-15T01:26:13.976560+00:00","wallS":63.615294500021264,"pgid":22289,"exit":0,"hostLoadStart":[14.65185546875,11.294921875,10.7197265625],"stdoutSHA256":"01be017070ca77e1535a69f3262e16b71712e0309030c43e28bd060941abc953"},
+      {"label":"knip","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/knip.receipt.json","sha256":"4284dfc09bfeea01fd6a282d850ddfdd4954fe4ac9092e55d04e3b7d2ae89ead","start":"2026-10-15T01:26:18.621738+00:00","end":"2026-10-15T01:26:23.585862+00:00","wallS":4.9639851250103675,"pgid":82293,"exit":0,"hostLoadStart":[11.1357421875,11.0595703125,10.68310546875],"stdoutSHA256":"89944e60419417a6a180d89cb80a9146c9d9b91edf20878b8a6f3d168cd9c3b9"},
+      {"label":"preflight","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/preflight.receipt.json","sha256":"690dec28dfe2c92604d67dba7e6f9f4d6fc2653f56d716f84c2e8703514afe37","start":"2026-10-15T01:26:39.600685+00:00","end":"2026-10-15T01:26:41.423108+00:00","wallS":1.8223436250118539,"pgid":84220,"exit":0,"hostLoadStart":[10.0791015625,10.82666015625,10.60791015625],"stdoutSHA256":"0fd6ef0a27734e9e1315e96a93361e1a3123b3d6002e8240bf22efcf1c864c47"},
+      {"label":"sweep","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/sweep.receipt.json","sha256":"1089b2b99f53c3532bafe8d337844475e1ba255e150c8179860297f088d55d90","start":"2026-10-15T01:29:01.613968+00:00","end":"2026-10-15T01:29:37.570585+00:00","wallS":35.956219832994975,"pgid":92766,"exit":0,"hostLoadStart":[8.08740234375,9.7001953125,10.17626953125],"stdoutSHA256":"7f6fc3394345c170fec1384f6c220e8bcf39bd7e211b7205254cb5994799e6dd"},
+      {"label":"qa-owner-observer","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/qa-owner-observer.receipt.json","sha256":"b4bb60872b0fb5fd30eb84cd491118bfccaec516b89c34ab76a5654053302e9a","start":"2026-10-15T01:28:53.500920+00:00","end":"2026-10-15T01:29:43.390802+00:00","wallS":49.88936391699826,"pgid":92350,"exit":0,"hostLoadStart":[8.443359375,9.796875,10.212890625],"stdoutSHA256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      {"label":"weighted300","path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/weighted300.receipt.json","sha256":"a48a217b42e45b25f1d1830609517c3ee26ab575fef151069b60e57949749ba7","start":"2026-10-15T01:26:31.946464+00:00","end":"2026-10-15T01:44:38.952146+00:00","wallS":1086.9961404589703,"pgid":83715,"exit":0,"hostLoadStart":[10.34716796875,10.8916015625,10.62939453125],"stdoutSHA256":"cee7b09f840dc2665c0419ab3ec3388ac3af6a03cc17a900d28c8de7677e5d7f"}
+    ],
+    "focused": {
+      "tests": 559,
+      "files": 2
+    },
+    "review": {
+      "tests": 8033,
+      "files": 255,
+      "typecheck": 0,
+      "lint": 0,
+      "cycles": 0
+    },
+    "weighted300": {
+      "games": 300,
+      "steps": 94878,
+      "reportedWallS": 451.8,
+      "reportedCPUS": 480.9,
+      "failures": 0,
+      "inclusiveCommandS": 1086.9961404589703,
+      "targets": [
+        {"kind":"dreamsign","uuid":"26786698-fdf2-493d-905b-4273a20586c9","included":600,"exercised":2446},
+        {"kind":"dreamsign","uuid":"62e1a588-f719-415c-9434-80aa08ce2e6a","included":600,"exercised":649},
+        {"kind":"dreamsign","uuid":"1a524712-ef7e-43d9-bd79-5dea5250bf08","included":600,"exercised":2442},
+        {"kind":"dreamsign","uuid":"055f211d-aa51-49eb-9162-190a946b1614","included":600,"exercised":96},
+        {"kind":"dreamsign","uuid":"9d134dfc-4643-47f3-a7ec-ea770587cea1","included":600,"exercised":1446}
+      ],
+      "targetCountUnits": "included counts initialized held copies; exercised counts abilityActivated/applied triggerResolved side-index origins and copied-origin events, not per-game or full-clause frequency guarantee",
+      "exactKernelWait": "UNKNOWN; inclusive command includes shared slot wait",
+      "waitLowerBoundObservation": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/parent-weighted-progress-observation.json",
+        "sha256": "bf7d9f227229edd17a2bf3fe821b3bc5a28423a104abea28d14daff98b00a944"
+      },
+      "executionObservation": {
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/weighted-execution-observation.json",
+        "sha256": "6ee95a72e2ce24c514ebf3ece528657b5184d3143ffd9e8759584020a7c6969f"
+      },
+      "collector32152": "Collected exit0 before finalization"
+    }
+  },
+  "QA": {
+    "nativeAcceptance": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/qa-acceptance-native-ack.json",
+      "sha256": "ef203ce1fafd83b6d11e0115dde6262d6384ba2fc916410fa5ff7a8c177fd1df"
+    },
+    "rootAcceptance": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/parent-sweep-acceptance.json",
+      "sha256": "5cc96fd50336e269b26d5cc8d7041232883a8c930692a9422eae331f8b225646"
+    },
+    "preflightAcceptance": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/parent-preflight-acceptance.json",
+      "sha256": "063ebb8844321a241a29195178eaf04ace4c2e97638f5539f94d53b7ff5355f8"
+    },
+    "frozenManifest": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/qa-frozen-manifest.json",
+      "sha256": "6010fbcedbce00374a7d08dab461f23d6557b94da90d5bdae82888fc5a671a67"
+    },
+    "checkpoint": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/qa-settlement-checkpoint.json",
+      "sha256": "ad2e31f395d7984972622628eeb4775efaa4e86a93b6cabd1566483035c80e22"
+    },
+    "summary": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/summary.json",
+      "sha256": "88588f58e61e3129a7ff0bb66894c368a59309d517dfdd47ae420e3f7b0124b3",
+      "counts": {
+        "pass": 10,
+        "skip": 90
+      },
+      "attemptCounts": {
+        "pass": 10,
+        "skip": 90
+      },
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 4117,
+        "scenario": 31182.088376000003,
+        "cleanup": 394.26516699999775,
+        "execution": 35758.119666000006,
+        "total": 35763.119666000006
+      }
+    },
+    "ledger": {
+      "path": "/Users/dthurn/dreamtides_web/.worktrees/dreamsigns238-root/docs/plan/evidence/qa-ledger/hv-umm2.238.jsonl",
+      "sha256": "c27080fb6189966274804d7dfbba68d28e58014dcb801ac7b7841f2510925d5d",
+      "rows": 100
+    },
+    "reports": [
+      {"path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/run-hx6yof/sweep-26786698-fdf2-493d-905b-4273a20586c9-base-player-attempt-1.result.json","sha256":"9302f203e45f45cf72311fd64b236fc473a3b6388b3e7c3b95bc60844baba2ee","uuid":"26786698-fdf2-493d-905b-4273a20586c9","side":"player","exercised":true},
+      {"path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/run-hx6yof/sweep-26786698-fdf2-493d-905b-4273a20586c9-base-enemy-attempt-1.result.json","sha256":"55a37f47e4b93a4daf6271c2a85428439d65cd94d4269d8f7abb78782d373f81","uuid":"26786698-fdf2-493d-905b-4273a20586c9","side":"enemy","exercised":true},
+      {"path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/run-hx6yof/sweep-62e1a588-f719-415c-9434-80aa08ce2e6a-base-player-attempt-1.result.json","sha256":"aff8c2d9058fcecc20cdd329c06378371022d706ad25fb21d91246c9561fa2cf","uuid":"62e1a588-f719-415c-9434-80aa08ce2e6a","side":"player","exercised":false},
+      {"path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/run-hx6yof/sweep-62e1a588-f719-415c-9434-80aa08ce2e6a-base-enemy-attempt-1.result.json","sha256":"4f4d88fd9f07f70a856401055b01a743d3c490880b533abdf53f4b62f691da6a","uuid":"62e1a588-f719-415c-9434-80aa08ce2e6a","side":"enemy","exercised":false},
+      {"path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/run-hx6yof/sweep-1a524712-ef7e-43d9-bd79-5dea5250bf08-base-player-attempt-1.result.json","sha256":"d7503c8a7f181db3935989aeaa240ba7199a9c24ad0a440f06208dabf8611892","uuid":"1a524712-ef7e-43d9-bd79-5dea5250bf08","side":"player","exercised":true},
+      {"path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/run-hx6yof/sweep-1a524712-ef7e-43d9-bd79-5dea5250bf08-base-enemy-attempt-1.result.json","sha256":"0a6d2d11cbcf67617eaaa50ef22e1b25f5be896a31d68bd2aba258fa1e4733ae","uuid":"1a524712-ef7e-43d9-bd79-5dea5250bf08","side":"enemy","exercised":true},
+      {"path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/run-hx6yof/sweep-055f211d-aa51-49eb-9162-190a946b1614-base-player-attempt-1.result.json","sha256":"e63cc688621eb46f4cd3e29164d7b8d26c41ff5f7c838440022dffa4e7b964de","uuid":"055f211d-aa51-49eb-9162-190a946b1614","side":"player","exercised":false},
+      {"path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/run-hx6yof/sweep-055f211d-aa51-49eb-9162-190a946b1614-base-enemy-attempt-1.result.json","sha256":"42b157212dc476c890527950ad615ced54da397c1e0d15965174b67015ff8ab7","uuid":"055f211d-aa51-49eb-9162-190a946b1614","side":"enemy","exercised":false},
+      {"path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/run-hx6yof/sweep-9d134dfc-4643-47f3-a7ec-ea770587cea1-base-player-attempt-1.result.json","sha256":"e31a93eed6420a377b10a6e670cd18023edfa14264184279a1159afcddcb4174","uuid":"9d134dfc-4643-47f3-a7ec-ea770587cea1","side":"player","exercised":false},
+      {"path":"/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.238/invocations/sweep-p9N00V/run-hx6yof/sweep-9d134dfc-4643-47f3-a7ec-ea770587cea1-base-enemy-attempt-1.result.json","sha256":"de16c6aa125c1ec2b7e8455f2a9e1eee027744b56cac91851c0242c7eb619327","uuid":"9d134dfc-4643-47f3-a7ec-ea770587cea1","side":"enemy","exercised":false}
+    ],
+    "D21": [
+      {"uuid":"26786698-fdf2-493d-905b-4273a20586c9","firstByte":62,"sampled":false,"newPromptStatusVisual":false,"judgedRequired":false},
+      {"uuid":"62e1a588-f719-415c-9434-80aa08ce2e6a","firstByte":246,"sampled":false,"newPromptStatusVisual":false,"judgedRequired":false},
+      {"uuid":"1a524712-ef7e-43d9-bd79-5dea5250bf08","firstByte":41,"sampled":false,"newPromptStatusVisual":false,"judgedRequired":false},
+      {"uuid":"055f211d-aa51-49eb-9162-190a946b1614","firstByte":200,"sampled":false,"newPromptStatusVisual":false,"judgedRequired":false},
+      {"uuid":"9d134dfc-4643-47f3-a7ec-ea770587cea1","firstByte":56,"sampled":false,"newPromptStatusVisual":false,"judgedRequired":false}
+    ],
+    "qualifications": ["All100requested cells are10basePASS90ineligibleSKIP, not100passes.","Only Mortar/Horn Dawn exercised here; RedPin/Staff/Leaf initialize correctly without false action/scoring proof. Their existing contracts/child scenario and weighted acceptance retain semantics.","Standard shared sweep no per-cell gameLog export; no invented nativeJSONL/physicalIDs/gameIDs. No captures/judgment quota under D21.","One literal LIVE SDK session archived; last owner image active/mcpExecutionCompleted:null, no literal completion marker observed. Normal close/ownerclear/servergroup settlement supported raw receipts/current runner source; no HTTP DELETE claim."]
+  },
+  "resources": {
+    "liveSessions": [
+      {"token":"f2445ee3-0d7e-4f65-8188-b48d347bf56d","pid":92766,"bead":"hv-umm2.238","checkout":"/Users/dthurn/dreamtides_web/.worktrees/dreamsigns238-root","label":"card-sweep","slot":1,"port":5274,"startedAt":"2026-10-15T01:29:05.954Z","providerState":"active","mcpSessionId":"27d56800-3431-4b75-b856-46fd6e365fd8","mcpUrl":"http://localhost:8931/mcp","mcpProtocolVersion":"2025-11-25","mcpExecutionCompleted":null,"archive":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/qa-live-archives/owner-slot1-db9e18fcf5d801e1a5e7722b37778b913ac526d160a7255a38bbeb6050d86a7c.json","archiveSHA256":"db9e18fcf5d801e1a5e7722b37778b913ac526d160a7255a38bbeb6050d86a7c","observedAt":"2026-10-15T01:29:05.997032+00:00"}
+    ],
+    "ownRuntime": [
+      {"label":"focused","pgid":20897,"port":null,"settled":true},
+      {"label":"entities-after","pgid":22182,"port":null,"settled":true},
+      {"label":"review","pgid":22289,"port":null,"settled":true},
+      {"label":"knip","pgid":82293,"port":null,"settled":true},
+      {"label":"preflight","pgid":84220,"port":null,"settled":true},
+      {"label":"sweep","pgid":92766,"port":5274,"settled":true},
+      {"label":"qa-owner-observer","pgid":92350,"port":null,"settled":true},
+      {"label":"QAserver","pgid":92856,"port":5274,"settled":true},
+      {"label":"weighted300","pgid":83715,"port":null,"settled":true}
+    ],
+    "rawIndex": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/qa-live-owners.jsonl",
+      "sha256": "3998b3dba539fe8188e113c3727c43eda8fa77b8a4eec5000090e716641fb07d"
+    },
+    "serverBirthArchives": [
+      {"path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/qa-live-archives/server-slot1-fe4879312055acb49b4acf95bd21598d37451cd472c635b16ea20dfbf720c914.json","sha256":"fe4879312055acb49b4acf95bd21598d37451cd472c635b16ea20dfbf720c914"},
+      {"path":"/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsigns238/qa-live-archives/server-slot1-448d233d7a444835f38f3be768b612870037fc3870d78ee4f81532062304455a.json","sha256":"448d233d7a444835f38f3be768b612870037fc3870d78ee4f81532062304455a"}
+    ],
+    "closure": "Sweep55557/observer88106 collected0; own QA92766/92856/92350 absent/recordsclear. Last literal active/null before browserclose, not observed execution-completed:true. Existing normal close drains RPC and confirms browser_close before owner clear/serverstop/lease release; no HTTP DELETE/reconciliation/foreigneffects. Weighted83715 and all validation groups absent; original weighted collector32152 collected, no runtime remains.",
+    "allOwnGroupsAbsent": [92766,92856,92350,92934,20897,22182,22289,82293,84220,83715]
+  },
+  "failurePaths": "No new transition. Existing613/580/582 public synthetic contracts provide mid-step rollback/partial-publication/reload/stale/wrong-side/competing/cancel/privacy/lifecycle proof. No tests or fault injections added here.",
+  "actualFailures": [],
+  "timingQualification": "Original current claim ACK includes setup/research/coordination/allchecks/sharedheavywait/QA/cleanup/evidence through actualGit. Native historicalstarted_at not currentclock. Hostload is per-command receipt start, no performance claim. Raw provider last active/null is qualified, not literal completiontrue.",
+  "preExisting": "No newly observed issue requiring own pre-existing file in current minimal standard sweep; inherited log-format findings are not re-encountered because sweep does not export logs."
+}

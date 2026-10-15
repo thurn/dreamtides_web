@@ -1,0 +1,32 @@
+{
+  "bead": "hv-umm2.238",
+  "phase": 5,
+  "implementMin": 26.526291616666665,
+  "implementWindow": {
+    "start": "2026-10-15T01:18:50.886927+00:00",
+    "end": "2026-10-15T01:45:22.464424+00:00"
+  },
+  "localValidationS": {
+    "focused": 9.348684791009873,
+    "entities-after": 1.2949707910302095,
+    "review": 63.615294500021264,
+    "knip": 4.9639851250103675,
+    "preflight": 1.8223436250118539,
+    "sweep": 35.956219832994975,
+    "weighted300Inclusive": 1086.9961404589703
+  },
+  "hostLoad": 14.65185546875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 10.26,
+      "note": "Observed lower bound before execution: own PG83715 only lockf/CPU0/stdout0 at2026-10-15T01:36:47.552190Z after01:26:31.946464Z launch, parent-weighted-progress-observation.json. Exact kernel lock-wait duration UNKNOWN; shared-capacity contention, no defect or foreign-owner cause inferred, no second invocation."
+    }
+  ]
+}
