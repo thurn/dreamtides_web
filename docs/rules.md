@@ -3245,6 +3245,10 @@ unavoidable also start a new run. A forced choice preserves the count.
 Repetitions of an optional loop are the player's own actions, so they never
 make a mandatory loop either.
 
+## Deck-entry Card-type Changes
+
+A permanent deck-entry card-type change preserves the card's transformed authored abilities, including their conditions, costs and functional zones. The changed type determines whether it resolves as a Character or an Event. If the transformed printing has no spark, changing it into a Character gives it base spark 0 and its permanent deck-entry spark bonus does not apply. A card changed into an Event has no spark. Later spark gained in battle and applicable continuous effects follow their ordinary rules.
+
 ## Transfigurations
 
 A transfiguration changes a physical deck entry's copiable values before its

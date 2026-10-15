@@ -1,0 +1,349 @@
+{
+  "bead": "hv-umm2.636",
+  "baseOid": "e7d7918ef29bb8b72b2a47396cf9db8f34d68e25",
+  "claimUtc": "2026-10-15T21:40:16.139761+00:00",
+  "evidenceCutoffUtc": "2026-10-15T22:11:22.394793+00:00",
+  "windowQualification": "Inclusive original claim through this actual final evidence cutoff, including setup, all source/read repair, coordination, waits, authoring, checks, collection and archive. Actual subsequent Git invocation/completion and cutoff-to-Git gap are recorded in final-git-v01 without forecasting an endpoint.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-01 command start"
+      },
+      "implementWindow": {
+        "measuredFor": "original claim through actual final evidence cutoff; actual cutoff-to-Git interval retained separately in final-git-v01"
+      }
+    }
+  },
+  "proofSourceDirectory": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/card-type-contract636",
+  "proofQualification": "Immutable acceptance-v01 holds the exact original75 proofManifest files, preGitpacket, parentverification, archive/Gitauthority and six frozen source payloads, all hash-verified. The earlier evidence cutoff remains in cutoffHistory. Final Git receipts and committed final evidence are retained separately under final-git-v01; actual endpoint is recorded after Git.",
+  "sourceReads": {
+    "stage1": {
+      "file": "source-read-ledger.stage1.json",
+      "sha256": "bc7b7cee15bdb4696c4b62a077c8a6dabea07cfd84dd60a0fb760a0a01dffe57"
+    },
+    "supplement": {
+      "file": "source-read-ledger.v3.json",
+      "sha256": "1823094c6167c83983eaba4589aee036ee648c196b49fce28c7c9f78fd994541"
+    },
+    "qualification": "Exact ordinary line ranges, source/blob hashes, EOF and actual returned tool chunks; clipped calls excluded and repaired. Historical/native selectors are selected-only. Earlier per-read UTC was not captured and stays UNKNOWN; validation timestamps are captured."
+  },
+  "authority": {
+    "nativeWriteCheckReceiptSha256": "7f813e69f2ef13bdefbf97f0e3a87c3b2b3ff4f35c8a30b1b0d7c3f3622e53df",
+    "ruleParagraphSha256": "32b83a75cdceb4eca38e26043c21d892e8d31b00f0e045bbc29c6225a5413aed",
+    "scope": "New private synthetic contract, one additive normative paragraph, own RD/friction/measurements/pre-existing only; eager runner and production bodies unchanged."
+  },
+  "validation": [
+    {
+      "label": "focused-01",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "startUtc": "2026-10-15T21:57:22.504160+00:00",
+      "endUtc": "2026-10-15T21:57:32.658213+00:00",
+      "pid": 39672,
+      "pgid": 39672,
+      "exit": 1,
+      "wallS": 10.15374800004065,
+      "cpuUserS": 10.32385,
+      "cpuSystemS": 2.794278,
+      "hostLoadStart": "{ 11.81 10.04 10.20 }",
+      "receipt": "focused-01.receipt.json",
+      "receiptSha256": "81a7ee81722cce2d50299cc48108c7a955e21d9193b47ad35d400e3c2d1226fb",
+      "logSha256": "8ce0b8959ca64fe5c1a37805f582958c38e9347f6d2f37d359645a73755287ab",
+      "timeLogSha256": "48adeb4763d4436e7e94953ed2413b7e4a64283a4ad9f924a355a16f5205c3c8"
+    },
+    {
+      "label": "focused-02",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "startUtc": "2026-10-15T21:58:37.794983+00:00",
+      "endUtc": "2026-10-15T21:58:49.522456+00:00",
+      "pid": 45432,
+      "pgid": 45432,
+      "exit": 0,
+      "wallS": 11.72710099996766,
+      "cpuUserS": 10.28329,
+      "cpuSystemS": 2.990612,
+      "hostLoadStart": "{ 11.02 10.11 10.21 }",
+      "receipt": "focused-02.receipt.json",
+      "receiptSha256": "7e89dd9e5e1dcfd06c54765c09af9c676ddb34dedf2ca0e2270e55753af26777",
+      "logSha256": "3bc3907a7cc03d7baba896490694429c9a4e8724328e7f2f9bd3fde55764dfd5",
+      "timeLogSha256": "c5a734548a494ee43cfd620e499d206017ec9bcb8a4ab9214129d96d3c78b647"
+    },
+    {
+      "label": "focused-03",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "startUtc": "2026-10-15T22:02:02.437808+00:00",
+      "endUtc": "2026-10-15T22:02:10.458879+00:00",
+      "pid": 65919,
+      "pgid": 65919,
+      "exit": 0,
+      "wallS": 8.020836042007431,
+      "cpuUserS": 8.820583,
+      "cpuSystemS": 2.178299,
+      "hostLoadStart": "{ 8.51 9.59 10.00 }",
+      "receipt": "focused-03.receipt.json",
+      "receiptSha256": "d10ac561979da5e71a94212252a70add1e43bc9c0836d405e43d696f349ed52a",
+      "logSha256": "622ddb56dd8dd7fac07bdceed65f359bd429439522400823d0e0691031ff6094",
+      "timeLogSha256": "a85d53176b542f5a7bf2bb837a77f37fe83321874a4f87a51b10af91d9c63ed3"
+    },
+    {
+      "label": "knip-01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUtc": "2026-10-15T22:04:31.431032+00:00",
+      "endUtc": "2026-10-15T22:04:36.161688+00:00",
+      "pid": 83954,
+      "pgid": 83954,
+      "exit": 0,
+      "wallS": 4.730491833004635,
+      "cpuUserS": 4.068194,
+      "cpuSystemS": 1.371412,
+      "hostLoadStart": "{ 7.61 8.87 9.64 }",
+      "receipt": "knip-01.receipt.json",
+      "receiptSha256": "1d3cfaa0782df33e5eab2f88c694a546f6c573f7071546bdcc75b2add9414012",
+      "logSha256": "908593ef329ce2b94b303fae4ba3ee365fc0ae6249cb6f207e8227c82270d318",
+      "timeLogSha256": "e0b90d30075cd058e8a57fd0a3562529a6f9ca91fbbb41b580650072ea8ad8de"
+    },
+    {
+      "label": "review-01",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-15T22:03:55.478710+00:00",
+      "endUtc": "2026-10-15T22:04:12.667626+00:00",
+      "pid": 80315,
+      "pgid": 80315,
+      "exit": 0,
+      "wallS": 17.188543917029165,
+      "cpuUserS": 55.281394,
+      "cpuSystemS": 6.925917,
+      "hostLoadStart": "{ 7.64 8.99 9.71 }",
+      "receipt": "review-01.receipt.json",
+      "receiptSha256": "3fa04f36605b284e88a24a23030099b7138a7e4ef32742781b6010c824f813b0",
+      "logSha256": "f3d41eb994a0e2bc14d0d801757752e11baa31bdf258c20338c4c832a2ed39ef",
+      "timeLogSha256": "9d3bfa8f029cd3c1a5f4461ec0accf8bf3b67da9b389c63865f1ccd6621265d7"
+    },
+    {
+      "label": "sensitivity-01",
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "carries exactly the declared physical entry"
+      ],
+      "startUtc": "2026-10-15T21:59:31.590830+00:00",
+      "endUtc": "2026-10-15T21:59:35.402622+00:00",
+      "pid": 51519,
+      "pgid": 51519,
+      "exit": 1,
+      "wallS": 3.8116496659931727,
+      "cpuUserS": 4.187944000000001,
+      "cpuSystemS": 0.973152,
+      "hostLoadStart": "{ 11.48 10.49 10.35 }",
+      "receipt": "sensitivity-01.receipt.json",
+      "receiptSha256": "28071579baf583f10b73d4f05be8222ad98cfe3c48bf04a07dc8f4d6a68f2dfb",
+      "logSha256": "39088d7c3efa12b51837e8f51a9f51e199c75696baf6fdd6ad36bca377d3e474",
+      "timeLogSha256": "a6132c1df1477b92ede62d56013fd305320779c93abba1ad272970d0fcfefec1"
+    },
+    {
+      "label": "sensitivity-02",
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "carries exactly the declared physical entry"
+      ],
+      "startUtc": "2026-10-15T22:00:00.230057+00:00",
+      "endUtc": "2026-10-15T22:00:02.832898+00:00",
+      "pid": 54424,
+      "pgid": 54424,
+      "exit": 1,
+      "wallS": 2.602729417034425,
+      "cpuUserS": 3.3263380000000002,
+      "cpuSystemS": 0.713739,
+      "hostLoadStart": "{ 10.13 10.26 10.27 }",
+      "receipt": "sensitivity-02.receipt.json",
+      "receiptSha256": "100ed42750de982078bcefe411c640f1b3235f71695d5cfbf817ff187320faba",
+      "logSha256": "bdae7189b6cef8979cc72bff879feb4d9499b00014304683b2d24c7607f488ed",
+      "timeLogSha256": "fb8e47f1017549f231ed45e95a23f44bc6bf000ae72552c46d22c62781f1400b"
+    },
+    {
+      "label": "sensitivity-03",
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "src/battle/integration/deck-mods.test.ts",
+        "-t",
+        "preserves chronological and repeated applications"
+      ],
+      "startUtc": "2026-10-15T22:00:47.609860+00:00",
+      "endUtc": "2026-10-15T22:00:50.193337+00:00",
+      "pid": 58094,
+      "pgid": 58094,
+      "exit": 1,
+      "wallS": 2.5833500000298955,
+      "cpuUserS": 3.344381,
+      "cpuSystemS": 0.703708,
+      "hostLoadStart": "{ 10.03 10.17 10.23 }",
+      "receipt": "sensitivity-03.receipt.json",
+      "receiptSha256": "71266b1d4d2e2a864b6fb316000b99ae229aab535081d84bdc539caf1e261b50",
+      "logSha256": "91422734d902e0a3c3e116fe182b78fe9555b88e13ffc4a7bdcbdcecb33b2180",
+      "timeLogSha256": "6e7da99b789600508c81b7507a786adbc86f7923943b8ee08ff8e62703cac136"
+    }
+  ],
+  "commandTimingQualification": "Wall is full wrapper invocation; RUSAGE CPU includes ps identity observation. Exact /usr/bin/time child-family user/system, real time, memory and raw hashes are retained per receipt/time log. No performance claim or timing assertion. Commands use two Vitest workers and take no heavy slot.",
+  "focusedQualification": {
+    "first": "focused-01:7 fixture expectation failures /589. Hidden deck alias correctly absent; one-candidate prompts automatically answered. Repaired own fixtures only.",
+    "baseline": "focused-02:589/589 pass after fixture repair.",
+    "final": "focused-03:591/591 pass after3 probe restores and two retained play-condition cases.81 new cases,510 existing runner cases.",
+    "visibility": "Normal shuffle/deal tracks constructor-derived physical input-slot identity, asserts effective definition, and asserts concealed deck alias privacy. Both-actor proof seats the public journey-player DTO on each engine actor; no enemy journey producer claim."
+  },
+  "sensitivity": [
+    {
+      "input": {
+        "startUtc": "2026-10-15T21:59:31.565206+00:00",
+        "qualification": "own fixture-input surrogate, not production mutant",
+        "change": "drop subject typeChange at input DTO seating",
+        "baselineSha256": "247d7cb095bdedf8c568774cd9b7a3e4d0e230c79b4aa47f5741df2796293303",
+        "inputSha256": "2c5a874fd9c3ee8ef3ee423ffc45a9cb3e67b73cf6c57f10edfec9ef5d9fa46f"
+      },
+      "inputReceiptSha256": "67dbbd292631322f6a81c578b02eb8b85947532a14ff30ee55409ab0a21d14f3",
+      "red": {
+        "receipt": "sensitivity-01.receipt.json",
+        "sha256": "28071579baf583f10b73d4f05be8222ad98cfe3c48bf04a07dc8f4d6a68f2dfb",
+        "exit": 1,
+        "result": "2 failed,587 skipped; BOTH actors"
+      },
+      "restore": {
+        "restoreUtc": "2026-10-15T22:00:00.206365+00:00",
+        "restoredSha256": "247d7cb095bdedf8c568774cd9b7a3e4d0e230c79b4aa47f5741df2796293303"
+      },
+      "restoreReceiptSha256": "087044cf979e6870d8a60af02b23eff9d6cb42668ad09a5e4e8ac8329233257a",
+      "qualification": "Secondary fixture-input surrogate only; actual RED and exact prior-byte restore, no production-mutant score."
+    },
+    {
+      "input": {
+        "startUtc": "2026-10-15T22:00:00.206922+00:00",
+        "qualification": "own fixture-input surrogate, not production mutant",
+        "change": "redirect subject typeChange to same-UUID adjacent physical input",
+        "baselineSha256": "247d7cb095bdedf8c568774cd9b7a3e4d0e230c79b4aa47f5741df2796293303",
+        "inputSha256": "d6c1961993ff7e179408c50879de1d9f9a1b44a194d99322be9b831b948c7d36"
+      },
+      "inputReceiptSha256": "b7cb35f5ff8bcd40c8bd88a2d18a35a0d686d1936304744f2190c27b8b0cf327",
+      "red": {
+        "receipt": "sensitivity-02.receipt.json",
+        "sha256": "100ed42750de982078bcefe411c640f1b3235f71695d5cfbf817ff187320faba",
+        "exit": 1,
+        "result": "2 failed,587 skipped; BOTH actors"
+      },
+      "restore": {
+        "restoreUtc": "2026-10-15T22:00:47.586488+00:00",
+        "restoredSha256": "247d7cb095bdedf8c568774cd9b7a3e4d0e230c79b4aa47f5741df2796293303"
+      },
+      "restoreReceiptSha256": "be36bd55674fec54944ddcd3ce6e70504d69d3502c2808077cc7688e9fe9d267",
+      "qualification": "Secondary fixture-input surrogate only; actual RED and exact prior-byte restore, no production-mutant score."
+    },
+    {
+      "input": {
+        "startUtc": "2026-10-15T22:00:47.586862+00:00",
+        "qualification": "own fixture-input surrogate, not production mutant",
+        "change": "reverse supplied chronological form application sequence",
+        "baselineSha256": "247d7cb095bdedf8c568774cd9b7a3e4d0e230c79b4aa47f5741df2796293303",
+        "inputSha256": "3ff86b0df31664238c02545eac1539fb36eee6f1c77eb5193f801eb979d9935c"
+      },
+      "inputReceiptSha256": "03295697550fe3a9e69592c0c5f25c7ee5f17388f9185174aceac6acf2ca11a0",
+      "red": {
+        "receipt": "sensitivity-03.receipt.json",
+        "sha256": "71266b1d4d2e2a864b6fb316000b99ae229aab535081d84bdc539caf1e261b50",
+        "exit": 1,
+        "result": "2 failed,587 skipped; BOTH actors"
+      },
+      "restore": {
+        "restoreUtc": "2026-10-15T22:02:02.414547+00:00",
+        "restoredSha256": "247d7cb095bdedf8c568774cd9b7a3e4d0e230c79b4aa47f5741df2796293303"
+      },
+      "restoreReceiptSha256": "1830f61bb78976a5173131da57132132631ebe6a795e2407885fe5e2033be2c1",
+      "qualification": "Secondary fixture-input surrogate only; actual RED and exact prior-byte restore, no production-mutant score."
+    }
+  ],
+  "setup": {
+    "npmInstallReceipt": "npm-install.receipt.json",
+    "sha256": "d3441f62eba9961ed81a3709307847058a254a8066e52e2d3e1bfc0af68064d5",
+    "observedInstallSummary": "388 added/390 audited;17 reported vulnerabilities:9 moderate,7 high,1 critical. Install output only, no independent audit/dependency repair. Parent setup child PID/birth were not retained.",
+    "workspacePreparation": "Focused npm test preparation emits expected missing-art warnings in isolated local-asset cache; each owning command restores its local assets and completes. Generated token/art materializations excluded from source writer scope."
+  },
+  "failurePaths": {
+    "errorMidstep": "Corrupt saved public recorded answer yields engine_error, clears inFlight and preserves committed state.",
+    "reloadRestart": "Cold fold resumes pending payment; clone/JSON reload and fresh-engine repeated init retain outcomes/hash.",
+    "partialWrite": "Optional payment remains uncommitted; cancel/retry and invalid reward composite retain input. New test-only module adds no persistence writer.",
+    "invalidStale": "Foreign actor/entry/UUID/number/fromzone, stale or malformed Exploration/prompt input and mixed history refuse without input mutation.",
+    "concurrentActors": "Competing action during pending payment, foreign answers and duplicate committed answer bounce.",
+    "recovery": "Cancellation retry has fresh prompt identity; corrupted pending answer recovers at committed boundary."
+  },
+  "originalAcceptance": {
+    "owner": "hv-umm2.285",
+    "productionUuid": "b59b7e6a-aa32-428a-9397-06766ebe9b7d",
+    "authoredProductionUUIDs": [],
+    "retained": "Original real\u226520 stratified eligible cards on each controller, one judgment, weighted300/preflight/sweep/D21/coverage and final joins remain original. Synthetic tests are no real-content acceptance substitute."
+  },
+  "reviewScope": "Plain eagerly consumed synthetic module plus additive D10 documentation; no infrastructure, cross-cutting state, UI, browser, fuzz or heavy command. Formal review routing remains parent-owned.",
+  "resourceQualification": "No dev server, browser context or heavy lock. Each exact recorded synchronous check family is awaited to terminal; final process absence proof provided separately.",
+  "trackedGuard": {
+    "file": "tracked-guard.pre-review.json",
+    "sha256": "f51b7800a00b65252cd796b888a39f2c1ccc018f835b14cecd550675ebda9615",
+    "checkedCount": 5891,
+    "changed": "docs/rules.md only among original tracked payloads; own new paths are separately inventoried."
+  },
+  "cutoffHistory": [
+    {
+      "cutoffUtc": "2026-10-15T22:06:01.843846+00:00",
+      "qualification": "Frozen acceptance-v01 source payloads before final delivery metadata updates",
+      "archiveManifestSha256": "caea9b7597641574c2571e1c4e3348e9a73ac9e1e148eb226b24bd88bcf7ff24"
+    },
+    {
+      "cutoffUtc": "2026-10-15T22:09:51.446019+00:00",
+      "qualification": "First final-delivery metadata cutoff, before staged EOF whitespace repair; failed command receipt retained",
+      "archiveManifestSha256": "caea9b7597641574c2571e1c4e3348e9a73ac9e1e148eb226b24bd88bcf7ff24"
+    },
+    {
+      "cutoffUtc": "2026-10-15T22:11:02.299405+00:00",
+      "qualification": "First final-delivery metadata cutoff, before staged EOF whitespace repair; failed command receipt retained",
+      "archiveManifestSha256": "caea9b7597641574c2571e1c4e3348e9a73ac9e1e148eb226b24bd88bcf7ff24"
+    }
+  ],
+  "proofArchiveDirectory": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.636/acceptance-v01",
+  "proofArchiveManifestSha256": "caea9b7597641574c2571e1c4e3348e9a73ac9e1e148eb226b24bd88bcf7ff24",
+  "deliveryWhitespaceRepair": {
+    "observedUtc": "2026-10-15T22:11:02.275344+00:00",
+    "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-card-type-contract636-root/docs/plan/evidence/rules-decisions/RD-hv-umm2.636-1.md",
+    "beforeSha256": "16d552cdd91c6ba580dd170bfb1895e6b96fba8751ff027dba9ec5d950e8647b",
+    "afterSha256": "03a0be7ff0a86a071bec0a30feb11682500a4c808ef369dd44bfa0c96f419e80",
+    "bytesRemoved": 1,
+    "semanticTextIdentical": true,
+    "failedReceipt": "delivery-staged-whitespace.receipt.json",
+    "failedReceiptSha256": "f384f3f9ffb4881e5ea69330c0052eae724ed725e79f54baccada2b7d3799653",
+    "authorityReceipt": "native-git-whitespace-02.receipt.json",
+    "authorityReceiptSha256": "a269c3664d397ed2009c423a44667627cb872d33f8d9fd3fb2317ddee2ddb183",
+    "qualification": "Only extra terminal blank line removed. Immutable acceptance-v01 preserves original frozen RD bytes. Corrected final RD is bound by final-git-v01."
+  }
+}
