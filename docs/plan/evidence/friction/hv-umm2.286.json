@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.286",
+  "phase": 5,
+  "implementMin": 89.31350761666666,
+  "implementWindow": {
+    "start": "2026-10-15T17:27:19.571Z",
+    "end": "2026-10-15T18:56:38.381457+00:00"
+  },
+  "localValidationS": {
+    "review": 0.4126572909881361,
+    "focused": 7.630352624983061,
+    "fuzz": 1399.7183301249752
+  },
+  "hostLoad": 8.43,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 12.295333333333334,
+      "note": "Four actual enclosing parent justiciar role intervals,737.720s total, retained in parent-justiciar-provenance.json. Module-fetch causes remain unknown; networkidle control timed out; per-cell isolation preserved passes; later OS-confirmed provider OOM required exact-owned-record incident archival. This is measured root contribution wall, not CPU or total incident duration; pre-title diagnosis is included in original implementation window."
+    }
+  ]
+}

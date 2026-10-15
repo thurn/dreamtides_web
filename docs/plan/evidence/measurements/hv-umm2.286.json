@@ -1,0 +1,200 @@
+{
+  "bead": "hv-umm2.286",
+  "scope": "Evidence-only original next-battle opening-hand acceptance",
+  "sourceBase": "783bbe301f06320d12ea369425913253239aba9c",
+  "qaLedgerCommitMergeBase": "783bbe301f06320d12ea369425913253239aba9c",
+  "implementDispatch": "2026-10-15T17:27:19.571Z",
+  "evidenceCutoff": "2026-10-15T18:56:38.381457+00:00",
+  "status": "acceptance_verified_source_evidence",
+  "clockQualification": "The original helper dispatch is 2026-10-15T17:27:19.571Z. This final pre-commit metadata cutoff includes all research, parent justiciar diagnosis/contributions, coordination, waits and checks. The actual external git-commit receipt supplies true Git completion, CPU and the short remaining tail; no future commit timestamp is fabricated.",
+  "sourceProof": "final-v02/source-proof.json",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.286",
+  "artifactManifest": "final-v02/artifact-manifest.json",
+  "generationAndFinalTailIndex": "final-v02/generation-index.json",
+  "acceptanceJoin": "final-v02/acceptance-join.json",
+  "resourceProof": "final-v02/resources.json",
+  "actualCommandReceipts": "final-v02/command-receipts.json",
+  "parentProofs": "final-v02/parent-proof-index.json",
+  "parentJusticiarProvenance": {
+    "path": "parent-justiciar-provenance.json",
+    "sha256": "680308c7517b7a0efd5ba436e1d5dad31a56601e4d2094609d319f49e0af2ea1",
+    "totalEnclosingWallS": 737.72,
+    "intervalDefinition": "Enclosing functions.exec start for firetitle through enclosing restoretitle toolcompletion. Actual nested UI mutations lie inside these recorded bounds. Formalroleintervals exclude earlier pre-title skillread/diagnosis; ALL parent/helpercoordination/wait/diagnosis remains in original inclusive helper dispatch→Git wall. These are root contribution wall intervals, NOT helper or parent CPU."
+  },
+  "parentSetupProvenance": "parent-setup-provenance.json",
+  "coverage": {
+    "authoredActions": 67,
+    "ordinaryActions": 66,
+    "filteredActions": 1,
+    "publicDealComparisons": 134,
+    "controlledDesktopObservations": 40,
+    "uniqueRealBaseUuidsEachController": 20,
+    "extraMobileObservations": 1,
+    "genuineWorkflows": 1,
+    "positiveNativeGames": 42,
+    "positiveNativeLogRows": 2051,
+    "epochs": {
+      "v04Desktop": 4,
+      "v05Desktop": 6,
+      "v07Desktop": 18,
+      "v08Desktop": 12,
+      "v08Mobile": 1,
+      "v04Genuine": 1
+    }
+  },
+  "validation": {
+    "focused": {
+      "receipt": "validation-v01/focused.receipt.json",
+      "exit": 0,
+      "tests": 97,
+      "modules": 3,
+      "wallS": 7.630352624983061
+    },
+    "review": {
+      "receipt": "validation-v01/review.receipt.json",
+      "exit": 0,
+      "wallS": 0.384121207986027,
+      "scope": "Initial3ownuntracked evidence scaffolds/docs-aware friction schema only; finalownwrittenrecords get final normal review/schema separately."
+    },
+    "knip": {
+      "receipt": "validation-v01/knip.receipt.json",
+      "exit": 0,
+      "wallS": 4.8899536250391975
+    },
+    "weighted300": {
+      "receipt": "heavy-v02/heavy-inner.receipt.json",
+      "exit": 0,
+      "games": 300,
+      "steps": 66153,
+      "prompts": 5383,
+      "interactiveReruns": 551,
+      "failures": 0,
+      "wallS": 1399.7183301249752,
+      "cpuUserS": 1460.3205460000001,
+      "cpuSystemS": 10.842753,
+      "scope": "CPU/wall include owned birth/ps/cleanup observations; not a pure-engine benchmark. Execution deadline includes Popen and initial ps observation after source validation and lock admission."
+    },
+    "labPreflight": {
+      "receipt": "validation-v01/lab-preflight.receipt.json",
+      "passed": 40,
+      "failed": 0,
+      "pending": 0,
+      "skipped": 0,
+      "qualification": "Canonical fixture control without nextBattle; no modifier/D21credit."
+    },
+    "finalReview": {
+      "receipt": "final-v02/review.receipt.json",
+      "exit": 0,
+      "wallS": 0.4126572909881361,
+      "cpuUserS": 0.231353,
+      "cpuSystemS": 0.23290899999999998,
+      "scope": "All four final own evidence files; docs-aware friction-record schema check, 996 records / 41 historical unknowns. No related-code lint/type/test credit."
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Immediately before final normal docs-aware review of all four own evidence records; all own heavy/browser runtimes settled.",
+        "artifact": "final-v02/final-review-load.json"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-15T17:55:45.935214+00:00",
+      "oneMinute": 25.35,
+      "measuredFor": "Immediately before required normal docs-aware review; concurrent own weighted300 running, no comparable-load/performance claim."
+    },
+    {
+      "at": "2026-10-15T18:52:48.315175+00:00",
+      "oneMinute": 8.43,
+      "raw": "{ 8.43 9.26 9.22 }",
+      "measuredFor": "Immediately before final normal docs-aware review of all four own evidence records; all own heavy/browser runtimes settled."
+    }
+  ],
+  "sourceAndQaLimits": [
+    "The exact 67 filed UUIDs identify exploration actions/effects and join their actual encounter cardId. They are not engine-card fuzz targets.",
+    "All 67 authored actions use the current actual providers, receipts and typed public no-setup initialization: 66 ordinary actions and one Event-filtered action, each count 2 with lifetime 1, and 134 controller-specific deal comparisons. This Node evidence supplements the UI matrix.",
+    "The UI join contains 4 v04, 6 v05, 18 v07 and 12 v08 desktop observations: 20 unique real base card UUIDs on each controller. One v08 mobile observation and the separate v04 genuine encounter workflow complete the observed matrix. These are immutable source-bound observations across epochs.",
+    "The specific nextBattle DTO exists before true no-setup public engine start. Baseline and actual bonus-group comparisons establish physical-source attribution before openingHandCompleted and distinguish first-turn draws. The stock card-lab setup bypasses opening draws, so the audited caller resumes the normal battle renderer from the actual saved native game.",
+    "The canonical default play function is not embedded or reported as executed. The separate audited scenario preserves public QA play, resolution, Caps and payment guards with its internal 60000 ms deadline.",
+    "Controlled fixtures use full real deck entries, public debug energy and targets, and enemy declared-script metadata without setup. The enemy source is played by the normal AI. Administrative journey modifiers are controlled fixtures; an earned enemy encounter reward is not claimed.",
+    "The sampled physical source is genuinely bonus-dealt before debug preparation and is not inserted after the draw. Actual setup, load and event hashes retain the complete physical variant and effective values. The UI sample uses base variants. Printed ability strata do not assert that every activated or triggered ability fired.",
+    "The genuine workflow discloses the initial goto and pre-choice sibling-visitation-only LOAD_STATE. The actual UI choice, receipt and BEGIN_BATTLE earn and deal the filtered reward. Both administrative loads precede the reward; no state or effect is inserted after reward selection.",
+    "The source resolved event is observed in its mounted probe before reload. Reload verification compares the complete physical/effective tuple, original persisted event inventory and native game identity rather than requiring an old live event in a new probe.",
+    "Lifetime checks use explicit administrative DEBUG terminal victory followed by ordinary END_BATTLE, duplicate refusal, full persisted replay/hash and a fresh UI head with zero replay errors. Natural battle victory or a complete journey is not claimed.",
+    "A new weighted 300-game run passed on the current 2681-file functional freeze. Current Apollyon design uses authored aspect factories relative to historical 275/279 sources, so prior run reuse was not credited. The fuzzer weights 20 real card UUIDs and random entry variants, but its initializer does not supply nextBattle. Specific DTO evidence comes from the contracts, public provider checks, controlled UI and genuine workflow.",
+    "The positive Node v06 output blobs were overwritten before preservation. Its caller, receipt and stdout remain, with zero retained-output credit. Only uniquely named Node v07 blobs are authoritative; the retention incident and actual measured cost remain in the artifact history.",
+    "The v03 atlas-wrapper visibility negative was corrected to the existing visible child. Actual failed DOM geometry was not captured. The causes of v04/v05 App.tsx module-fetch failures remain unknown and are not attributed to the later OOM. The v06 networkidle control is a negative operational control, distinct from a reproduced app failure.",
+    "The original v07 cell 29 lost transport during the shared provider 11452 fatal OOM/SIGABRT. That call has no returned result, native per-game export or Caps credit. Development-log observations are supplemental only. The exact unconfirmed own record was archived under the canonical slot lock after concrete OS/provider/browser absence proof, preserving its original bytes and completion flag. This is distinct from successful browser_close reconciliation.",
+    "Four parent same-task justiciar intervals total 737.720 seconds of enclosing role bounds. They are wall intervals, separate from helper-command CPU. All diagnosis, coordination, waits, authoring, verification and Git tail remain in the original inclusive implementation window.",
+    "There are 35 standard canonical closures and one OS-death incident archive across 36 own runtime records. The task performs no shared service or global configuration reset, foreign-record mutation or foreign-process kill.",
+    "Desktop and genuine captures are 2880 by 1800 pixels; mobile is 780 by 1688 pixels, all at 2x density. Board rows, avatars, decks and NextPhase fit the observed width. Hand-card lower text is clipped by the viewport. Complete card text or all vertical content is not asserted.",
+    "Normal review is docs-aware and covers evidence records; it does not provide related-code lint/type/test credit. The separate existing 97 tests in three modules and Knip passed. Test delta is zero; production, test, configuration, catalog and script bodies are unchanged.",
+    "Some early and read-only commands lack measured per-command CPU/wall data; those values remain unknown. Nested command receipts overlap and are not additive totals. Heavy-start load was not sampled, so no comparable-load or pure-engine performance claim is made.",
+    "Frozen packet helper metadata omits the existing qa.click used by the genuine flow and Qa.page on/off used by passive diagnostics. Their actual source/API was audited before runtime.",
+    "Packaging v01 failed before evidence writes because an assertion guessed event-filtered instead of the actual frozen branch label event. The measured failure and earlier pre-launch output-directory error remain retained. The versioned v02 assertion checks the actual field and count without changing any runtime acceptance guard."
+  ],
+  "visualJudgments": [
+    {
+      "kind": "ordinary opening-hand bonus",
+      "observer": "implementation helper and parent executor",
+      "uuid": "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+      "viewport": [
+        1440,
+        900
+      ],
+      "pixels": [
+        2880,
+        1800
+      ],
+      "screen": "opening-01-player-desktop-resolved.png",
+      "verdict": "pass",
+      "notes": "Resolved source is visible on the near board beside the declared target characters. Board rows, avatars, decks and NextPhase control fit the viewport width. Six remaining hand cards are visible; lower card text extends below the viewport."
+    },
+    {
+      "kind": "event-filtered opening-hand bonus",
+      "observer": "implementation helper and parent executor",
+      "uuid": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+      "viewport": [
+        390,
+        844
+      ],
+      "pixels": [
+        780,
+        1688
+      ],
+      "screen": "opening-mobile-filtered-extra-mobile-resolved.png",
+      "verdict": "pass",
+      "notes": "Both board rows, avatars, decks, seven-card hand fan and NextPhase control are visible within the observed width. The resolved Event is represented in the near void. Lower hand-card text is clipped by the viewport; complete vertical card text is not asserted."
+    },
+    {
+      "kind": "genuine encounter bonus deal",
+      "observer": "parent executor",
+      "viewport": [
+        1440,
+        900
+      ],
+      "pixels": [
+        2880,
+        1800
+      ],
+      "screen": "opening-genuine-encounter-next-battle-desktop.png",
+      "verdict": "pass",
+      "notes": "Seven near-hand cards, five opposing card backs, battlefield, avatars, decks and NextPhase control are visible. UUID, filter, order and lifetime conclusions use native/source/DOM proof rather than displayed names."
+    }
+  ],
+  "reviewPolicy": {
+    "assessor": "parent executor",
+    "assessment": "Evidence-only native browser/heavy acceptance task, zero production/test delta and not a phase gate. Current phase-5 core review applies to new primitives/prompts; no cold review required for this bead.",
+    "source": "docs/plan/phase-5-content.md:112"
+  },
+  "finalMetadataQualification": "The immutable QA manifest binds settled QA artifacts. READY, metadata refresh and actual Git tail are bound separately after process settlement; no future commit end is fabricated.",
+  "externalActualGitReceipt": "final-v02/git-commit.receipt.json",
+  "finalGitTailIndex": "final-v02/tail-delivery-index.json"
+}

@@ -1,0 +1,9 @@
+# hv-umm2.286 observations
+
+Parent-owned fresh worktree dependency setup reported 17 advisory vulnerabilities (9 moderate, 7 high, 1 critical) across 390 audited packages. Setup exited 0 in 2.626349917 seconds, with user CPU 2.018924 seconds and system CPU 3.789430 seconds. `parent-setup-provenance.json` retains the exact parent receipt and hash. Setup occurred before the original helper dispatch and has a separate measurement scope. This evidence-only task changes no dependency.
+
+The focused verification and Knip preparation emitted 259 missing-art warning lines (259 distinct paths) while using the temporary review-local asset materialization. Both commands exited 0; restoration reported 564 card images, 32 avatar portraits and cutouts, 153 Dreamsign images and 521 Exploration images linked. `validation-v01/asset-warnings.json` retains all paths and raw stream hashes. This does not establish a production image-loading defect.
+
+Two browser attempts recorded dynamic App.tsx module-fetch rejections during final consumed-state UI reopening. Their causes remain unknown; the retained v04/v05 negatives are separate from the later provider OOM. A networkidle control timed out with entry-module responses 200 and an empty error buffer. Subsequent observations use disclosed per-cell canonical context/server isolation.
+
+The shared Playwright provider process 11452 suffered an OS-confirmed fatal JavaScript heap OOM/SIGABRT at 2026-10-15 18:32:34 UTC during the original v07 cell29 call. That call has no returned acceptance result, native per-game export or Caps credit. `provider-recovery-v01/` retains the death proof, original unconfirmed owned record, standard reconciliation refusal and exact owned-record incident archival under the canonical slot lock. The parent used bounded same-task justiciar authority; no shared service restart, global configuration change or foreign resource mutation was performed.
