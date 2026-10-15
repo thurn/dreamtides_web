@@ -2633,13 +2633,16 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     reconciles the sample with the characteristics the view shows its cards
     having (`characteristicsView`, shared with `view`). Only when a hidden
     card has such an ability does it run: it descends on a distance (type,
-    keyword, spark, and cost differences summed over the cards the view
-    shows), each move swapping one such card with a hidden card of the same
-    owner in its side's other hidden zone, dating it just before or after a
-    keyword or base-spark change, or both, and stops at distance 0 or when
-    no move brings the sample closer. Matching characteristics match each
-    card's cost with X counted as 0, so the viewer's legal actions in a
-    sample are those of the state it viewed, unless a cost reduction that a
+    keyword, spark, and normal cost differences, plus a presence mismatch
+    for an optional Reclaim quote or the absolute difference between signed
+    quotes when both are present, summed over the cards the view shows).
+    Each move swaps one such card with a hidden card of the same owner in
+    its side's other hidden zone, dates it at 0 or at or just after a keyword
+    or base-spark change (also a cost-layer change when the view shows an
+    available Reclaim quote), or both, and stops at distance 0 or when no
+    move brings the sample closer. Matching characteristics match each
+    card's normal copiable cost with X counted as 0, so the viewer's legal
+    actions in a sample are those of the state it viewed, unless a cost reduction that a
     cost of 0 absorbs would lower what an X play costs there. A view
     that no deal explains, such as one whose floating effect from a source
     the viewer cannot see was left out, keeps the closest sample found. The

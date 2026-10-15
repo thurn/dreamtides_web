@@ -991,7 +991,9 @@ function identity({ printing, variant }: CardInstance): string {
 /**
  * How far a card's characteristics are from those the view shows: a count
  * of differing types and keywords (1 for the same keywords in another
- * order) plus the spark and cost differences. 0 exactly when they are equal.
+ * order) plus the spark and normal cost differences. An optional Reclaim
+ * quote contributes 1 for a presence mismatch, or the absolute difference
+ * between the signed quotes when both are present. 0 exactly when they are equal.
  */
 function difference(seen: CharacteristicsView, sampled: CharacteristicsView): number {
   const missing =
@@ -1037,7 +1039,8 @@ function distance(state: BattleState, view: BattleView, catalog: EngineCatalog):
  * card with a hidden card of the same owner in its side's other hidden zone
  * (the first card with no such ability, or the first of each other card
  * with one); dates it at 0, or at or just after the timestamp of a keyword
- * or base-spark change, so it applies just before or just after that
+ * or base-spark change, or a cost-layer change when the view shows an
+ * available Reclaim quote, so it applies just before or just after that
  * change; or does both. It takes the
  * first move that brings the state closer and stops at distance 0 or when
  * no move does, so a view no hidden card explains (a floating effect whose

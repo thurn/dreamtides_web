@@ -1,0 +1,195 @@
+{
+  "bead": "hv-umm2.706",
+  "base": "13dc7960c17f9bf2b645ec7966b80361b94d0a9f",
+  "window": {
+    "dispatch": "2026-10-15T00:27:55.187Z",
+    "samplingStart": "UNKNOWN",
+    "rootClaim": "2026-10-15T00:27:06Z",
+    "precommitCutoff": "2026-10-15T00:30:33.035391+00:00",
+    "scope": "Gross dispatch through automatic Git, including research, coordination and validation; exact commit endpoints and cutoff tail retained externally."
+  },
+  "sourceWrite": {
+    "firstSourceWrite": "2026-10-15T00:28:27.565639+00:00",
+    "end": "2026-10-15T00:28:27.566894+00:00"
+  },
+  "checks": {
+    "install": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-measurement-docs-706",
+      "start": "2026-10-15T00:27:41.376210+00:00",
+      "end": "2026-10-15T00:27:44.426087+00:00",
+      "pid": 46117,
+      "pgid": 46117,
+      "exitCode": 0,
+      "wallSeconds": 3.0498998750117607,
+      "cpuSeconds": {
+        "user": 2.113172,
+        "system": 4.324659
+      },
+      "startLoad": [
+        18.5,
+        16.41015625,
+        15.8662109375
+      ],
+      "endLoad": [
+        21.8232421875,
+        17.1337890625,
+        16.12451171875
+      ]
+    },
+    "review": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-measurement-docs-706",
+      "start": "2026-10-15T00:28:51.981241+00:00",
+      "end": "2026-10-15T00:29:41.218170+00:00",
+      "pid": 56233,
+      "pgid": 56233,
+      "exitCode": 0,
+      "wallSeconds": 49.236613792018034,
+      "cpuSeconds": {
+        "user": 123.91609,
+        "system": 13.960121
+      },
+      "startLoad": [
+        13.45458984375,
+        15.69189453125,
+        15.66162109375
+      ],
+      "endLoad": [
+        13.27880859375,
+        15.21826171875,
+        15.48193359375
+      ]
+    },
+    "knip": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-measurement-docs-706",
+      "start": "2026-10-15T00:29:46.621774+00:00",
+      "end": "2026-10-15T00:29:51.579142+00:00",
+      "pid": 60052,
+      "pgid": 60052,
+      "exitCode": 0,
+      "wallSeconds": 4.957365458016284,
+      "cpuSeconds": {
+        "user": 4.212433,
+        "system": 1.412183
+      },
+      "startLoad": [
+        12.77587890625,
+        15.08154296875,
+        15.43212890625
+      ],
+      "endLoad": [
+        12.31298828125,
+        14.947265625,
+        15.38232421875
+      ]
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-measurement-docs-706",
+      "start": "2026-10-15T00:30:24.304962+00:00",
+      "end": "2026-10-15T00:30:24.434245+00:00",
+      "pid": 62719,
+      "pgid": 62719,
+      "exitCode": 0,
+      "wallSeconds": 0.12932179198833182,
+      "cpuSeconds": {
+        "user": 0.061954999999999996,
+        "system": 0.030143
+      },
+      "startLoad": [
+        9.58349609375,
+        14.02783203125,
+        15.033203125
+      ],
+      "endLoad": [
+        9.69677734375,
+        13.9775390625,
+        15.00927734375
+      ]
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "verificationScope": "Two admitted JSDoc bodies and one D22 paragraph; no executable code or test edits. Ordinary review and sequential Knip; no full, fuzz or browser run.",
+  "commentOnlyProof": {
+    "path": "src/engine/view/determinize.ts",
+    "base": "13dc7960c17f9bf2b645ec7966b80361b94d0a9f",
+    "method": "TypeScript parsed source printer with removeComments:true",
+    "equal": true,
+    "syntaxSha256": "6be939d0695e3b1863563ef5a9e43ed98fe243958987f1c696e13036cd90adf6",
+    "checkedAt": "2026-10-15T00:28:51.953Z"
+  },
+  "hostLoadSamples": [
+    {
+      "command": [
+        "sysctl",
+        "-n",
+        "vm.loadavg"
+      ],
+      "timestamp": "2026-10-15T00:29:16.225753+00:00",
+      "stdout": "{ 12.82 15.32 15.53 }",
+      "hostLoad": 12.82,
+      "measuredFor": "ordinary review in progress; sampled after startup, not the start value"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "sysctl one-minute load during ordinary review after startup; timestamp and output in hostLoadSamples"
+      }
+    }
+  },
+  "sourceFiles": {
+    "src/engine/view/determinize.ts": {
+      "baseSha256": "fd56a2383ceebfac5b6f8c54826245f52d5abd5650c438ef57afaf8eacd43e43",
+      "sha256": "0a396ea291cd4c1afb81f989c96dddfa6f132ed31d8698526d1f6503ed4f1818"
+    },
+    "docs/plan/engine-design.md": {
+      "baseSha256": "084e706359ffef69fd32101e59e2bb845792c570448a550a960af3db6a8801cf",
+      "sha256": "ecc69c327475c2129dd16f4420d79a6ba774f65ffcbf2f0aab4636313224570d"
+    }
+  },
+  "reviewResult": {
+    "files": 118,
+    "tests": 7356,
+    "exitCode": 0,
+    "stderrQualification": "Asset restoration fixture warnings in the isolated review cache; final local restoration completed and review passed. No source asset defect established."
+  },
+  "resourceDisposition": {
+    "checkedAt": "2026-10-15T00:30:24.265735+00:00",
+    "ownedCommandProcessGroups": [
+      46117,
+      56233,
+      60052
+    ],
+    "remainingProcesses": [],
+    "browser": "not started",
+    "server": "not started",
+    "heavy": "not started"
+  },
+  "measurementQualification": "Command wall time includes startup and any admission; CPU/load are recorded independently. No performance comparison or speed claim."
+}
